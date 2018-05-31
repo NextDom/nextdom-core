@@ -1,0 +1,31 @@
+---
+langs: [fr_FR,en_US,es_ES,de_DE] 
+baseurl: "/"
+sass:
+  sass_dir: assets/css
+  style: compressed
+markdown: kramdown
+permalink: /404.html
+kramdown:
+  input: GFM
+  hard_wrap: false
+highlighter: rouge
+gems:
+- jekyll-paginate
+- jekyll-seo-tag
+exclude:
+- vendor
+plugins:
+- jekyll-seo-tag
+title: "Documentation NextDom"
+description: "Ceci est la documentation, lier à la solution domotique NextDom."
+author: "NextDom"
+image: https://www.nextdom.com/site/logo.png
+twitter:
+  username: NextDom_domotic
+social:
+  name: NextDom
+  links:
+    - https://twitter.com/NextDom_domotic
+    - https://www.facebook.com/NextDom-249936178537210/
+    - https://github.com/nextdom

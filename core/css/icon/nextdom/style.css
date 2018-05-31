@@ -1,0 +1,178 @@
+@font-face {
+	font-family: 'nextdom';
+	src:url('fonts/nextdom.eot');
+	src:url('fonts/nextdom.eot') format('embedded-opentype'),
+		url('fonts/nextdom.woff') format('woff'),
+		url('fonts/nextdom.ttf') format('truetype'),
+		url('fonts/nextdom.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="nextdom-"], [class*=" nextdom-"] {
+	font-family: 'nextdom';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.nextdom-alors:before {
+	content: "\e628";
+}
+.nextdom-si:before {
+	content: "\e629";
+}
+.nextdom-cafetiere_off:before {
+	content: "\e62a";
+}
+.nextdom-cafetiere_on:before {
+	content: "\e62b";
+}
+.nextdom-clap_cinema:before {
+	content: "\e62c";
+}
+.nextdom-portail_coulissant_demi_d:before {
+	content: "\e62d";
+}
+.nextdom-portail_coulissant_demi_g:before {
+	content: "\e62e";
+}
+.nextdom-portail_coulissant_ferme:before {
+	content: "\e62f";
+}
+.nextdom-portail_coulissant_ouvert_d:before {
+	content: "\e630";
+}
+.nextdom-portail_coulissant_ouvert_g:before {
+	content: "\e631";
+}
+.nextdom-ventilo:before {
+	content: "\e632";
+}
+.nextdom-alerte:before {
+	content: "\e600";
+}
+.nextdom-alerte2:before {
+	content: "\e601";
+}
+.nextdom-batterie0:before {
+	content: "\e602";
+}
+.nextdom-batterie1:before {
+	content: "\e603";
+}
+.nextdom-batterie2:before {
+	content: "\e604";
+}
+.nextdom-batterie3:before {
+	content: "\e605";
+}
+.nextdom-bell:before {
+	content: "\e606";
+}
+.nextdom-choc:before {
+	content: "\e607";
+}
+.nextdom-eau:before {
+	content: "\e608";
+}
+.nextdom-fenetre-ferme:before {
+	content: "\e609";
+}
+.nextdom-fenetre-ouverte:before {
+	content: "\e60a";
+}
+.nextdom-feu:before {
+	content: "\e60b";
+}
+.nextdom-garage-ferme:before {
+	content: "\e60c";
+}
+.nextdom-garage-ouvert:before {
+	content: "\e60d";
+}
+.nextdom-lock-ferme:before {
+	content: "\e60e";
+}
+.nextdom-lock-ouvert:before {
+	content: "\e60f";
+}
+.nextdom-lumiere-off:before {
+	content: "\e610";
+}
+.nextdom-lumiere-on:before {
+	content: "\e611";
+}
+.nextdom-mouvement:before {
+	content: "\e612";
+}
+.nextdom-no-bell:before {
+	content: "\e613";
+}
+.nextdom-off:before {
+	content: "\e614";
+}
+.nextdom-on:before {
+	content: "\e615";
+}
+.nextdom-pilote-conf:before {
+	content: "\e616";
+}
+.nextdom-pilote-eco:before {
+	content: "\e617";
+}
+.nextdom-pilote-hg:before {
+	content: "\e618";
+}
+.nextdom-pilote-off:before {
+	content: "\e619";
+}
+.nextdom-portail_ferme:before {
+	content: "\e61a";
+}
+.nextdom-portail_ouvert:before {
+	content: "\e61b";
+}
+.nextdom-porte-ferme:before {
+	content: "\e61c";
+}
+.nextdom-porte-ouverte:before {
+	content: "\e61d";
+}
+.nextdom-prise:before {
+	content: "\e61e";
+}
+.nextdom-sirene:before {
+	content: "\e61f";
+}
+.nextdom-surveillance1:before {
+	content: "\e620";
+}
+.nextdom-thermo-chaud:before {
+	content: "\e621";
+}
+.nextdom-thermo-froid:before {
+	content: "\e622";
+}
+.nextdom-thermo-moyen:before {
+	content: "\e623";
+}
+.nextdom-thermometre-celcius:before {
+	content: "\e624";
+}
+.nextdom-thermometre:before {
+	content: "\e625";
+}
+.nextdom-volet-ferme:before {
+	content: "\e626";
+}
+.nextdom-volet-ouvert:before {
+	content: "\e627";
+}
