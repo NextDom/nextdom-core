@@ -69,6 +69,13 @@ class cmd {
 		return $_inputs;
 	}
 
+	/**
+	 * Obtenir une commande a partir de son identifiant
+	 *
+	 * @param mixed $_id Identifiant de la commande.
+	 *
+	 * @return Objet de la commande
+	 */
 	public static function byId($_id) {
 		if ($_id == '') {
 			return;
