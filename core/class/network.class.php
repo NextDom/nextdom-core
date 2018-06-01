@@ -31,6 +31,14 @@ class network {
 		if (count($nextdom_ips) != 4) {
 			return 'external';
 		}
+		if (config::byKey('network::localip') != '') {
+			$localIps = explode(';', config::byKey('network::localip'));
+			foreach ($localIps as $localIp) {
+				if (netMatch($localIp, $client_ip)) {
+					return 'internal';
+				}
+			}
+		}
 		$match = $nextdom_ips[0] . '.' . $nextdom_ips[1] . '.' . $nextdom_ips[2] . '.*';
 		return netMatch($match, $client_ip) ? 'internal' : 'external';
 	}

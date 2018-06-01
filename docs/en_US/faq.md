@@ -64,51 +64,59 @@ recommended to modify these identifiers for more security.
 Can we put NextDom in https?
 ================================
 
-Yes: \ * Either you have a power pack or more, in which case you
-Just use the NextDom DNS. \ * Either have a DNS and you know
-set up a valid certificate, in this case it is an installation
-standard of a certificate.
+Oui : Soit vous avez un pack power ou plus, dans ce cas il vous
+suffit d’utiliser le [DNS NextDom](https://nextdom.github.io/documentation/howto/fr_FR/mise_en_place_dns_nextdom). Soit avec un DNS et vous savez mettre en place un certificat valide, dans ce cas c’est une installation standard d’un certificat.
 
-How to flatten rights?
+Comment se connecter en SSH ?
+=============================
+
+Voila une [documentation](https://www.alsacreations.com/tuto/lire/612-Premiere-connexion-SSH.html), partie "Sous Windows : Putty". Le "hostname" étant l'ip de votre NextDom, les identifiants étant :
+
+- Username : "root", password : "Mnextdom96"
+- Username : "nextdom", password : "Mnextdom96"
+- Ou ce que vous avez mis à l'installation si vous êtes en DIY
+
+A noter que lorsque vous ecrirez le mot de passe vous ne verrez rien s'ecrire à l'écran c'est normal.
+
+Comment remettre à plat les droits ? 
 ====================================
 
-In SSH do:
+En SSH faites :
 
-`` `{.bash}
+``` {.bash}
 sudo su -
-chmod -R 775 / var / www / html
-chown -R www-data: www-data / var / www / html
-`` `
+chmod -R 775 /var/www/html
+chown -R www-data:www-data /var/www/html
+```
 
-Where are the NextDom backups?
+Où se trouvent les sauvegardes de NextDom ? 
 ==========================================
 
-They are in the folder / var / www / html / backup
+Elles sont dans le dossier /var/www/html/backup
 
-How to update NextDom in SSH?
+Comment mettre à jour NextDom en SSH ? 
 =====================================
 
-In SSH do:
+En SSH faites :
 
-`` `{.bash}
+``` {.bash}
 sudo su -
 php /var/www/html/install/update.php
-chmod -R 775 / var / www / html
-chown -R www-data: www-data / var / www / html
-`` `
+chmod -R 775 /var/www/html
+chown -R www-data:www-data /var/www/html
+```
 
-Is Webapp compatible with Symbian?
+La Webapp est-elle compatible Symbian ? 
 =======================================
 
-The webapp requires a smartphone that supports HTML5 and CSS3. She
-is therefore not compatible with Symbian.
+La webapp nécessite un smartphone supportant le HTML5 et le CSS3. Elle n’est donc malheureusement pas compatible Symbian.
 
-On which platforms can NextDom work?
-================================================== ==
+Sur quelles plateformes NextDom peut-il fonctionner ? 
+====================================================
 
-For NextDom to work, you need a linux platform with rights
-root or docker type system. So it does not work on a
-pure android platform.
+Pour que NextDom fonctionne, il faut une plateforme linux avec les droits
+root ou un système type docker. Il ne fonctionne donc pas sur une
+plateforme android pure.
 
 Je ne peux mettre à jour certain plugin "Echec lors du téléchargement du fichier. Veuillez réessayer plus tard (taille inférieure à 100 octets)..." ? 
 ====================================================
@@ -119,6 +127,7 @@ Cela peut etre du à plusieurs chose, il faut :
 - Vérifier que le compte market à bien acheté le plugin en question
 - Vérifier que vous avez bien de la place sur NextDom (la page santé vous l'indiquera)
 - Vérifier que votre version de NextDom est bien compatible avec le plugin
+- Vérifiez que votre NextDom est toujours correctement connecté au market (Dans la configuration de NextDom, onglet mise à jour)
 
 J’ai une page blanche 
 =====================
@@ -152,7 +161,7 @@ sudo sed -i -e "s/#PASSWORD#/${bdd_password}/g" core/config/common.config.php
 sudo chown www-data:www-data core/config/common.config.php
 ```
 
-J’ai des {{…​}} partout 
+J’ai des \{\{…​\}\} partout 
 =======================
 
 La cause la plus fréquente est l’utilisation d’un plugin en version beta
@@ -170,7 +179,7 @@ Je n’ai plus accès à NextDom, ni par l’interface web ni en console par SSH
 
 Cette erreur n’est pas due à NextDom, mais à un problème avec le système.
 Si celui-ci persiste suite à une réinstallation, il est conseillé de
-voir avec le SAV pour un souci hardware.
+voir avec le SAV pour un souci hardware. Voici la [documentation](https://nextdom.github.io/documentation/howto/fr_FR/recovery_mode_nextdom_smart) pour la Smart
 
 Mon scénario ne s’arrête plus/pas 
 =================================
@@ -202,6 +211,8 @@ courants sont :
 
 -   Problème de corruption de fichier(s), ce qui arrive souvent suite à
     un arrêt non propre de NextDom (coupure de courant)
+
+-   Soucis mémoire, le systeme manque de mémoire et tue le process le plus consommateur (souvent la base de données). Cela peut se voir dans l'administration de l'OS puis dmesg, vous devez voir un kill par "oom". Si c'est le cas il faut réduire la consommation de nextdom en désactivant des plugins.
 
 Malheureusement, il n’y a pas beaucoup de solution si c’est le deuxième
 cas, le mieux étant de récupérer une sauvegarde (disponible dans
@@ -248,7 +259,7 @@ Si vous etes en DIY et sous Debian 9 ou plus, vérifiez qu'il n'y a pas eu une m
 mkdir /etc/systemd/system/apache2.service.d
 echo "[Service]" > /etc/systemd/system/apache2.service.d/privatetmp.conf
 echo "PrivateTmp=no" >> /etc/systemd/system/apache2.service.d/privatetmp.conf
-```
+``` 
 
 J'ai un soucis d'heure sur mes historiques
 =========================================
@@ -267,14 +278,20 @@ Ca veut dire que NextDom n'arrive pas a backuper la base de donnée ce qu'i peut
 - une table de la base corrompu => la c'est mal partie il faut voir pour essayer de réparer et si ca marche pas repartir du dernier bon backup (si vous etês sur garde SD c'est le bon moment pour la changer)
 - pas assez de place sur le filesystem => regarder la page santé celle-ci peut vous l'indiquer
 
+
 Je n'arrive plus a me connecter a mon NextDom
 =========================================
 Depuis NextDom 3.2 il n'est plus possible de se connecter avec admin/admin à distance pour des raison evidente de sécurité. Les identifiants admin/admin ne marche plus que en local. Attention si vous passer par le DNS même en local vous êtes forcement identifié comme à distance. Autre point par defaut seul les ip sur 192.168.*.* ou 127.0.0.1 sont reconnu comme local. Cela se configure dans l'administration de NextDom partie sécurité puis IP "blanche". Si malgrès tout ca vous n'arrivez toujours pas à vous connecter il faut utiliser la procedure de remise à zéro de mot de passe (voir dans les tuto/how to)
 
-J'ai des erreurs de type "Class 'eqLogic' not found", des fichiers semblent etre manquant
+J'ai des erreurs de type "Class 'eqLogic' not found", des fichiers semblent etre manquant ou j'ai une page blanche
 =========================================
 C'est une erreur assez grave le plus simple est de faire 
-mkdir -p /root/tmp/cd /root/tmp;wget https://github.com/nextdom/core/archive/master.zip
+
+``` 
+mkdir -p /root/tmp/
+cd /root/tmp
+wget https://github.com/nextdom/core/archive/master.zip
 unzip master.zip
-ensuite aller dans le dossier extrait
-puis copier tous les fichier dans /var/www/html
+cp -R /root/tmp/core-master/* /var/www/html
+rm -rf /root/tmp/core-master
+```
