@@ -46,6 +46,14 @@ try {
 	} catch (Exception $e) {
 		echo '***ERREUR*** ' . $e->getMessage();
 	}
+	
+	try {
+		echo 'Vérifiez les droits sur les fichiers...';
+		nextdom::cleanFileSytemRight();
+		echo "OK\n";
+	} catch (Exception $e) {
+		echo "NOK\n";
+	}
 
 	global $CONFIG;
 	$nextdom_dir = realpath(dirname(__FILE__) . '/..');
