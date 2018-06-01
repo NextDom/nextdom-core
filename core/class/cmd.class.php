@@ -1052,20 +1052,25 @@ class cmd {
 			'#hideCmdName#' => '',
 		);
 		if ($this->getConfiguration('listValue', '') != '') {
-			$listOption = '<option value="">Aucun</option>';
+			$listOption = '';
 			$elements = explode(';', $this->getConfiguration('listValue', ''));
+			$foundSelect = false;
 			foreach ($elements as $element) {
 				$coupleArray = explode('|', $element);
 				$cmdValue = $this->getCmdValue();
 				if (is_object($cmdValue) && $cmdValue->getType() == 'info') {
 					if ($cmdValue->execCmd() == $coupleArray[0]) {
 						$listOption .= '<option value="' . $coupleArray[0] . '" selected>' . $coupleArray[1] . '</option>';
+						$foundSelect = true;
 					} else {
 						$listOption .= '<option value="' . $coupleArray[0] . '">' . $coupleArray[1] . '</option>';
 					}
 				} else {
 					$listOption .= '<option value="' . $coupleArray[0] . '">' . $coupleArray[1] . '</option>';
 				}
+			}
+			if (!$foundSelect) {
+				$listOption = '<option value="">Aucun</option>' . $listOption;
 			}
 			$replace['#listValue#'] = $listOption;
 		}
@@ -1241,6 +1246,8 @@ class cmd {
 		} else if ($this->getSubType() == 'binary' && $this->getDisplay('invertBinary') == 1) {
 			$display_value = ($value == 1) ? 0 : 1;
 		} else if ($this->getSubType() == 'numeric' && trim($value) === '') {
+			$display_value = 0;
+		} else if ($this->getSubType() == 'binary' && trim($value) === '') {
 			$display_value = 0;
 		}
 		if ($repeat && $this->getConfiguration('repeatEventManagement', 'auto') == 'never') {
