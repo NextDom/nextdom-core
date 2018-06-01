@@ -28,6 +28,10 @@ class ComposerStaticInitc7412053f01762e82bf4bede3f471ac6
             'Psr\\Http\\Message\\' => 17,
             'PragmaRX\\Google2FA\\' => 19,
         ),
+        'N' => 
+        array (
+            'NextDom\\' => 8,
+        ),
         'M' => 
         array (
             'Monolog\\' => 8,
@@ -85,6 +89,10 @@ class ComposerStaticInitc7412053f01762e82bf4bede3f471ac6
         'PragmaRX\\Google2FA\\' => 
         array (
             0 => __DIR__ . '/..' . '/pragmarx/google2fa/src',
+        ),
+        'NextDom\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/core/class',
         ),
         'Monolog\\' => 
         array (
