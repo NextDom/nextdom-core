@@ -1,6 +1,23 @@
 Changelog
 =========
 
+3.2.8
+=====
+
+- Correction de bugs
+- Ajout d'une option dans l'administration de NextDom pour préciser la plage d'ip local (utile dans les installations type docker)
+- Correction d'un bug sur le calcul d'utilisation des variables
+- Ajout d'un indicateur sur la page santé donnant le nombre de processus tué par manque de mémoire (indique globalement que le nextdom est trop chargé)
+- Amélioration de l'éditeur de fichier
+
+3.2.7
+=====
+
+- Correction de bugs
+- Mise à jour de la docs
+- Possibilité d'utiliser les tags dans les conditions des blocs "A" et "DANS"
+- Correction du bugs des catégories market pour les widgets/scripts/scénarios...
+
 3.2.6
 =====
 
@@ -110,7 +127,7 @@ Changelog
 -   JEED-77 : Ajout de la gestion des variables dans l’API http
 
 -   JEED-78 : ajout de la fonction tag pour les scénarios. Attention il
-    faut dans les scénarios utilisant les tags passer de *montag*
+    faut dans les scénarios utilisant les tags passer de #montag#
     à tag(montag)
 
 -   JEED-124 : Corriger la gestion des timeouts des scénarios

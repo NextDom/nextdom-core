@@ -63,7 +63,9 @@ nextdom.object.all = function(_params) {
     var paramsRequired = [];
     var paramsSpecifics = {
         pre_success: function(data) {
-            nextdom.object.cache.all = data.result;
+            if(!isset(_params.onlyHasEqLogic)){
+                nextdom.object.cache.all = data.result;
+            }
             return data;
         }
     };
@@ -74,7 +76,7 @@ nextdom.object.all = function(_params) {
         return;
     }
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    if (isset(nextdom.object.cache.all)) {
+    if (isset(nextdom.object.cache.all) && !isset(_params.onlyHasEqLogic)) {
         params.success(nextdom.object.cache.all);
         return;
     }
@@ -82,6 +84,8 @@ nextdom.object.all = function(_params) {
     paramsAJAX.url = 'core/ajax/object.ajax.php';
     paramsAJAX.data = {
         action: 'all',
+        onlyHasEqLogic : _params.onlyHasEqLogic || '',
+        searchOnchild : _params.searchOnchild || '1'
     };
     $.ajax(paramsAJAX);
 };
