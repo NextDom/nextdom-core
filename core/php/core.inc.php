@@ -15,15 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
+define ('NEXTDOM_ROOT', realpath(__DIR__.'/../..'));
 date_default_timezone_set('Europe/Brussels');
-require_once dirname(__FILE__) . '/../../vendor/autoload.php';
-require_once dirname(__FILE__) . '/../config/common.config.php';
-require_once dirname(__FILE__) . '/../class/DB.class.php';
-require_once dirname(__FILE__) . '/../class/config.class.php';
-require_once dirname(__FILE__) . '/../class/nextdom.class.php';
-require_once dirname(__FILE__) . '/../class/plugin.class.php';
-require_once dirname(__FILE__) . '/../class/translate.class.php';
-require_once dirname(__FILE__) . '/utils.inc.php';
+require_once NEXTDOM_ROOT.'/vendor/autoload.php'; // NEXTDOM
+require_once NEXTDOM_ROOT.'/core/config/common.config.php'; // NEXTDOM
+require_once NEXTDOM_ROOT.'/core/class/DB.class.php'; // NEXTDOM
+require_once NEXTDOM_ROOT.'/core/class/config.class.php'; // NEXTDOM
+require_once NEXTDOM_ROOT.'/core/class/nextdom.class.php'; // NEXTDOM
+require_once NEXTDOM_ROOT.'/core/class/jeedom.class.php'; // NEXTDOM
+require_once NEXTDOM_ROOT.'/core/class/plugin.class.php'; // NEXTDOM
+require_once NEXTDOM_ROOT.'/core/class/translate.class.php'; // NEXTDOM
+require_once NEXTDOM_ROOT.'/core/php/utils.inc.php'; // NEXTDOM
 include_file('core', 'nextdom', 'config');
 include_file('core', 'compatibility', 'config');
 include_file('core', 'utils', 'class');
