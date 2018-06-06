@@ -20,6 +20,7 @@ require_once(__DIR__.'/vendor/autoload.php');
 require_once(__DIR__.'/core/php/utils.inc.php');
 
 use NextDom\Helper\Status;
+use NextDom\Helper\Client;
 
 try {
     // Test si l'installation doit être lancée
@@ -29,7 +30,7 @@ try {
 
     if (!isset($_GET['v'])) {
         $getParams = 'd';
-        if (\NextDom\ClientHelper::isMobile()) {
+        if (Client::isMobile()) {
             $getParams = 'm';
         }
         foreach ($_GET AS $var => $value) {
