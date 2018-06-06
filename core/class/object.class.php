@@ -16,11 +16,10 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
 
-class object {
-    /*     * *************************Attributs****************************** */
+class object
+{
 
     private $id;
     private $name;
@@ -30,73 +29,109 @@ class object {
     private $configuration;
     private $display;
 
-    /*     * ***********************Méthodes statiques*************************** */
-
-    public static function byId($_id) {
-        if ($_id == '') {
+    /**
+     * @param $id
+     * @return array|mixed|null|void
+     * @throws Exception
+     */
+    public static function byId($id)
+    {
+        if ($id == '') {
             return;
         }
         $values = array(
-            'id' => $_id,
+            'id' => $id,
         );
         $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
                 FROM object
                 WHERE id=:id';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, __CLASS__);
     }
 
-    public static function byName($_name) {
+    /**
+     * @param $name
+     * @return array|mixed|null
+     * @throws Exception
+     */
+    public static function byName($name)
+    {
         $values = array(
-            'name' => $_name,
+            'name' => $name,
         );
         $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
                 FROM object
                 WHERE name=:name';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, __CLASS__);
     }
 
-    public static function all($_onlyVisible = false) {
+    /**
+     * @param bool $onlyVisible
+     * @return array|mixed|null
+     * @throws Exception
+     */
+    public static function all($onlyVisible = false)
+    {
         $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
                 FROM object ';
-        if ($_onlyVisible) {
+        if ($onlyVisible) {
             $sql .= ' WhERE isVisible = 1';
         }
         $sql .= ' ORDER BY position,name,father_id';
-        return DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
+        return DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, __CLASS__);
     }
 
-    public static function rootObject($_all = false, $_onlyVisible = false) {
+    /**
+     * @param bool $all
+     * @param bool $onlyVisible
+     * @return array|mixed|null
+     * @throws Exception
+     */
+    public static function rootObject($all = false, $onlyVisible = false)
+    {
         $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
                 FROM object
                 WHERE father_id IS NULL';
-        if ($_onlyVisible) {
+        if ($onlyVisible) {
             $sql .= ' AND isVisible = 1';
         }
         $sql .= ' ORDER BY position';
-        if ($_all === false) {
+        if ($all === false) {
             $sql .= ' LIMIT 1';
-            return DB::Prepare($sql, array(), DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+            return DB::Prepare($sql, array(), DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, __CLASS__);
         }
-        return DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
+        return DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, __CLASS__);
     }
 
-    public static function buildTree($_object = null, $_visible = true) {
+    /**
+     * @param null $_object
+     * @param bool $visible
+     * @return array
+     * @throws Exception.
+     */
+    public static function buildTree($_object = null, $visible = true)
+    {
         $return = array();
         if (!is_object($_object)) {
-            $object_list = self::rootObject(true, $_visible);
+            $object_list = self::rootObject(true, $visible);
         } else {
-            $object_list = $_object->getChild($_visible);
+            $object_list = $_object->getChild($visible);
         }
         if (is_array($object_list) && count($object_list) > 0) {
             foreach ($object_list as $object) {
                 $return[] = $object;
-                $return = array_merge($return, self::buildTree($object, $_visible));
+                $return = array_merge($return, self::buildTree($object, $visible));
             }
         }
         return $return;
     }
 
-    public static function fullData($_restrict = array()) {
+    /**
+     * @param array $_restrict
+     * @return array
+     * @throws Exception
+     */
+    public static function fullData($_restrict = array())
+    {
         $return = array();
         foreach (object::all(true) as $object) {
             if (!isset($_restrict['object']) || !is_array($_restrict['object']) || isset($_restrict['object'][$object->getId()])) {
@@ -124,17 +159,24 @@ class object {
         return $return;
     }
 
-    public static function searchConfiguration($_search) {
+    /**
+     * @param $_search
+     * @return array|mixed|null
+     * @throws Exception
+     */
+    public static function searchConfiguration($_search)
+    {
         $values = array(
             'configuration' => '%' . $_search . '%',
         );
         $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
         FROM object
         WHERE `configuration` LIKE :configuration';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
+        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, __CLASS__);
     }
 
-    public static function deadCmd() {
+    public static function deadCmd()
+    {
         $return = array();
         foreach (object::all() as $object) {
             foreach ($object->getConfiguration('summary', '') as $key => $summary) {
@@ -148,8 +190,13 @@ class object {
         return $return;
     }
 
-    public static function checkSummaryUpdate($_cmd_id) {
-        $objects = self::searchConfiguration('#' . $_cmd_id . '#');
+    /**
+     * @param string $cmdId
+     * @throws Exception
+     */
+    public static function checkSummaryUpdate(string $cmdId)
+    {
+        $objects = self::searchConfiguration('#' . $cmdId . '#');
         if (count($objects) == 0) {
             return;
         }
@@ -165,7 +212,7 @@ class object {
                 foreach ($summary as $cmd_info) {
                     preg_match_all("/#([0-9]*)#/", $cmd_info['cmd'], $matches);
                     foreach ($matches[1] as $cmd_id) {
-                        if ($cmd_id == $_cmd_id) {
+                        if ($cmd_id == $cmdId) {
                             $value = $object->getSummary($key);
                             $event['keys'][$key] = array('value' => $value);
                             $toRefreshCmd[] = array('key' => $key, 'object' => $object, 'value' => $value);
@@ -229,18 +276,24 @@ class object {
         }
     }
 
-    public static function getGlobalSummary($_key) {
-        if ($_key == '') {
+    /**
+     * @param $key
+     * @return float|null|string
+     * @throws Exception
+     */
+    public static function getGlobalSummary($key)
+    {
+        if ($key == '') {
             return null;
         }
         $def = config::byKey('object:summary');
         $objects = self::all();
         $value = array();
         foreach ($objects as $object) {
-            if ($object->getConfiguration('summary::global::' . $_key, 0) == 0) {
+            if ($object->getConfiguration('summary::global::' . $key, 0) == 0) {
                 continue;
             }
-            $result = $object->getSummary($_key, true);
+            $result = $object->getSummary($key, true);
             if ($result === null || !is_array($result)) {
                 continue;
             }
@@ -249,17 +302,23 @@ class object {
         if (count($value) == 0) {
             return null;
         }
-        if ($def[$_key]['calcul'] == 'text') {
+        if ($def[$key]['calcul'] == 'text') {
             return trim(implode(',', $value), ',');
         }
-        return round(nextdom::calculStat($def[$_key]['calcul'], $value), 1);
+        return round(nextdom::calculStat($def[$key]['calcul'], $value), 1);
     }
 
-    public static function getGlobalHtmlSummary($_version = 'desktop') {
+    /**
+     * @param string $version
+     * @return string
+     * @throws Exception
+     */
+    public static function getGlobalHtmlSummary($version = 'desktop')
+    {
         $objects = self::all();
-        $def = config::byKey('object:summary');
-        $values = array();
-        $return = '<span class="objectSummaryglobal" data-version="' . $_version . '">';
+        $def     = config::byKey('object:summary');
+        $values  = array();
+        $return  = '<span class="objectSummaryglobal" data-version="' . $version . '">';
         foreach ($def as $key => $value) {
             foreach ($objects as $object) {
                 if ($object->getConfiguration('summary::global::' . $key, 0) == 0) {
@@ -275,7 +334,7 @@ class object {
                 $values[$key] = array_merge($values[$key], $result);
             }
         }
-        $margin = ($_version == 'desktop') ? 4 : 2;
+        $margin = ($version == 'desktop') ? 4 : 2;
 
         foreach ($values as $key => $value) {
             if (count($value) == 0) {
@@ -300,12 +359,17 @@ class object {
         return trim($return) . '</span>';
     }
 
-    public static function createSummaryToVirtual($_key = '') {
-        if ($_key == '') {
+    /**
+     * @param string $key
+     * @throws Exception
+     */
+    public static function createSummaryToVirtual($key = '')
+    {
+        if ($key == '') {
             return;
         }
         $def = config::byKey('object:summary');
-        if (!isset($def[$_key])) {
+        if (!isset($def[$key])) {
             return;
         }
         try {
@@ -323,7 +387,7 @@ class object {
                 sleep(2);
                 $plugin = plugin::byId('virtual');
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $update = update::byLogicalId('virtual');
             if (!is_object($update)) {
                 $update = new update();
@@ -340,10 +404,10 @@ class object {
             $plugin->setIsEnable(1);
         }
         if (!is_object($plugin)) {
-            throw new Exception(__('Le plugin virtuel doit être installé', __FILE__));
+            throw new \Exception(__('Le plugin virtuel doit être installé', __FILE__));
         }
         if (!$plugin->isActive()) {
-            throw new Exception(__('Le plugin virtuel doit être actif', __FILE__));
+            throw new \Exception(__('Le plugin virtuel doit être actif', __FILE__));
         }
 
         $virtual = eqLogic::byLogicalId('summaryglobal', 'virtual');
@@ -357,21 +421,21 @@ class object {
         $virtual->setLogicalId('summaryglobal');
         $virtual->setEqType_name('virtual');
         $virtual->save();
-        $cmd = $virtual->getCmd('info', $_key);
+        $cmd = $virtual->getCmd('info', $key);
         if (!is_object($cmd)) {
             $cmd = new virtualCmd();
-            $cmd->setName($def[$_key]['name']);
+            $cmd->setName($def[$key]['name']);
             $cmd->setIsHistorized(1);
         }
         $cmd->setEqLogic_id($virtual->getId());
-        $cmd->setLogicalId($_key);
+        $cmd->setLogicalId($key);
         $cmd->setType('info');
-        if ($def[$_key]['calcul'] == 'text') {
+        if ($def[$key]['calcul'] == 'text') {
             $cmd->setSubtype('string');
         } else {
             $cmd->setSubtype('numeric');
         }
-        $cmd->setUnite($def[$_key]['unit']);
+        $cmd->setUnite($def[$key]['unit']);
         $cmd->save();
 
         foreach (object::all() as $object) {
@@ -379,7 +443,7 @@ class object {
             if (!is_array($summaries)) {
                 continue;
             }
-            if (!isset($summaries[$_key]) || !is_array($summaries[$_key]) || count($summaries[$_key]) == 0) {
+            if (!isset($summaries[$key]) || !is_array($summaries[$key]) || count($summaries[$key]) == 0) {
                 continue;
             }
             $virtual = eqLogic::byLogicalId('summary' . $object->getId(), 'virtual');
@@ -396,41 +460,48 @@ class object {
             $virtual->save();
             $object->setConfiguration('summary_virtual_id', $virtual->getId());
             $object->save();
-            $cmd = $virtual->getCmd('info', $_key);
+            $cmd = $virtual->getCmd('info', $key);
             if (!is_object($cmd)) {
                 $cmd = new virtualCmd();
-                $cmd->setName($def[$_key]['name']);
+                $cmd->setName($def[$key]['name']);
                 $cmd->setIsHistorized(1);
             }
             $cmd->setEqLogic_id($virtual->getId());
-            $cmd->setLogicalId($_key);
+            $cmd->setLogicalId($key);
             $cmd->setType('info');
-            if ($def[$_key]['calcul'] == 'text') {
+            if ($def[$key]['calcul'] == 'text') {
                 $cmd->setSubtype('string');
             } else {
                 $cmd->setSubtype('numeric');
             }
-            $cmd->setUnite($def[$_key]['unit']);
+            $cmd->setUnite($def[$key]['unit']);
             $cmd->save();
         }
     }
 
-    /*     * *********************Méthodes d'instance************************* */
-
-    public function checkTreeConsistency($_fathers = array()) {
+    /**
+     * @param array $fathers
+     * @throws Exception
+     */
+    public function checkTreeConsistency($fathers = array())
+    {
         $father = $this->getFather();
         if (!is_object($father)) {
             return;
         }
-        if (in_array($this->getFather_id(), $_fathers)) {
+        if (in_array($this->getFather_id(), $fathers)) {
             throw new Exception(__('Problème dans l\'arbre des objets', __FILE__));
         }
-        $_fathers[] = $this->getId();
+        $fathers[] = $this->getId();
 
-        $father->checkTreeConsistency($_fathers);
+        $father->checkTreeConsistency($fathers);
     }
 
-    public function preSave() {
+    /**
+     * @throws Exception
+     */
+    public function preSave()
+    {
         if (is_numeric($this->getFather_id()) && $this->getFather_id() == $this->getId()) {
             throw new Exception(__('L\'objet ne peut pas être son propre père', __FILE__));
         }
@@ -450,11 +521,21 @@ class object {
         }
     }
 
-    public function save() {
+    /**
+     * @return bool
+     */
+    public function save()
+    {
         return DB::save($this);
     }
 
-    public function getChild($_visible = true) {
+    /**
+     * @param bool $_visible
+     * @return array|mixed|null
+     * @throws Exception
+     */
+    public function getChild($_visible = true)
+    {
         $values = array(
             'id' => $this->id,
         );
@@ -468,7 +549,11 @@ class object {
         return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
     }
 
-    public function getChilds() {
+    /**
+     * @return array
+     */
+    public function getChilds()
+    {
         $return = array();
         foreach ($this->getChild() as $child) {
             $return[] = $child;
@@ -477,14 +562,23 @@ class object {
         return $return;
     }
 
-    public function getEqLogic($_onlyEnable = true, $_onlyVisible = false, $_eqType_name = null, $_logicalId = null, $_searchOnchild = false) {
+    /**
+     * @param bool $_onlyEnable
+     * @param bool $_onlyVisible
+     * @param null $_eqType_name
+     * @param null $_logicalId
+     * @param bool $searchOnchild
+     * @return array|mixed
+     */
+    public function getEqLogic($_onlyEnable = true, $_onlyVisible = false, $_eqType_name = null, $_logicalId = null, $searchOnchild = false)
+    {
         $eqLogics = eqLogic::byObjectId($this->getId(), $_onlyEnable, $_onlyVisible, $_eqType_name, $_logicalId);
         if (is_array($eqLogics)) {
             foreach ($eqLogics as &$eqLogic) {
                 $eqLogic->setObject($this);
             }
         }
-        if ($_searchOnchild) {
+        if ($searchOnchild) {
             $child_object = jeeObject::buildTree($this);
             if (count($child_object) > 0) {
                 foreach ($child_object as $object) {
@@ -495,7 +589,17 @@ class object {
         return $eqLogics;
     }
 
-    public function getEqLogicBySummary($_summary = '', $_onlyEnable = true, $_onlyVisible = false, $_eqType_name = null, $_logicalId = null) {
+    /**
+     * @param string $_summary
+     * @param bool $_onlyEnable
+     * @param bool $_onlyVisible
+     * @param null $_eqType_name
+     * @param null $_logicalId
+     * @return array|null
+     * @throws Exception
+     */
+    public function getEqLogicBySummary($_summary = '', $_onlyEnable = true, $_onlyVisible = false, $_eqType_name = null, $_logicalId = null)
+    {
         $def = config::byKey('object:summary');
         if ($_summary == '' || !isset($def[$_summary])) {
             return null;
@@ -524,23 +628,39 @@ class object {
         return $return;
     }
 
-    public function getScenario($_onlyEnable = true, $_onlyVisible = false) {
+    /**
+     * @param bool $_onlyEnable
+     * @param bool $_onlyVisible
+     * @return type
+     */
+    public function getScenario($_onlyEnable = true, $_onlyVisible = false)
+    {
         return scenario::byObjectId($this->getId(), $_onlyEnable, $_onlyVisible);
     }
 
-    public function preRemove() {
+    /**
+     *
+     */
+    public function preRemove()
+    {
         dataStore::removeByTypeLinkId('object', $this->getId());
     }
 
-    public function remove() {
+    /**
+     * @return bool
+     */
+    public function remove()
+    {
         return DB::remove($this);
     }
 
-    public function getFather() {
+    public function getFather()
+    {
         return self::byId($this->getFather_id());
     }
 
-    public function parentNumber() {
+    public function parentNumber()
+    {
         $father = $this->getFather();
         if (!is_object($father)) {
             return 0;
@@ -556,7 +676,13 @@ class object {
         return 0;
     }
 
-    public function getHumanName($_tag = false, $_prettify = false) {
+    /**
+     * @param bool $_tag
+     * @param bool $_prettify
+     * @return string
+     */
+    public function getHumanName($_tag = false, $_prettify = false)
+    {
         if ($_tag) {
             if ($_prettify) {
                 if ($this->getDisplay('tagColor') != '') {
@@ -572,7 +698,14 @@ class object {
         }
     }
 
-    public function getSummary($_key = '', $_raw = false) {
+    /**
+     * @param string $_key
+     * @param bool $_raw
+     * @return array|float|null|string
+     * @throws ReflectionException
+     */
+    public function getSummary($_key = '', $_raw = false)
+    {
         $def = config::byKey('object:summary');
         if ($_key == '' || !isset($def[$_key])) {
             return null;
@@ -607,7 +740,13 @@ class object {
         return round(nextdom::calculStat($def[$_key]['calcul'], $values), 1);
     }
 
-    public function getHtmlSummary($_version = 'desktop') {
+    /**
+     * @param string $_version
+     * @return string
+     * @throws ReflectionException
+     */
+    public function getHtmlSummary($_version = 'desktop')
+    {
         $return = '<span class="objectSummary' . $this->getId() . '" data-version="' . $_version . '">';
         foreach (config::byKey('object:summary') as $key => $value) {
             if ($this->getConfiguration('summary::hide::' . $_version . '::' . $key, 0) == 1) {
@@ -632,7 +771,15 @@ class object {
         return trim($return) . '</span>';
     }
 
-    public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = null) {
+    /**
+     * @param array $_data
+     * @param int $_level
+     * @param null $_drill
+     * @return array|void
+     * @throws Exception
+     */
+    public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = null)
+    {
         if ($_drill === null) {
             $_drill = config::byKey('graphlink::object::drill');
         }
@@ -667,91 +814,106 @@ class object {
         return $_data;
     }
 
-    public function getUse() {
+    public function getUse()
+    {
         $json = nextdom::fromHumanReadable(json_encode(utils::o2a($this)));
         return nextdom::getTypeUse($json);
     }
 
-    /*     * **********************Getteur Setteur*************************** */
-
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function getFather_id($_default = null) {
+    public function getFather_id($_default = null)
+    {
         if ($this->father_id == '' || !is_numeric($this->father_id)) {
             return $_default;
         }
         return $this->father_id;
     }
 
-    public function getIsVisible($_default = null) {
+    public function getIsVisible($_default = null)
+    {
         if ($this->isVisible == '' || !is_numeric($this->isVisible)) {
             return $_default;
         }
         return $this->isVisible;
     }
 
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
         return $this;
     }
 
-    public function setName($name) {
+    public function setName($name)
+    {
         $name = str_replace(array('&', '#', ']', '[', '%'), '', $name);
         $this->name = $name;
         return $this;
     }
 
-    public function setFather_id($father_id = null) {
+    public function setFather_id($father_id = null)
+    {
         $this->father_id = ($father_id == '') ? null : $father_id;
         return $this;
     }
 
-    public function setIsVisible($isVisible) {
+    public function setIsVisible($isVisible)
+    {
         $this->isVisible = $isVisible;
         return $this;
     }
 
-    public function getPosition($_default = null) {
+    public function getPosition($_default = null)
+    {
         if ($this->position == '' || !is_numeric($this->position)) {
             return $_default;
         }
         return $this->position;
     }
 
-    public function setPosition($position) {
+    public function setPosition($position)
+    {
         $this->position = $position;
         return $this;
     }
 
-    public function getConfiguration($_key = '', $_default = '') {
+    public function getConfiguration($_key = '', $_default = '')
+    {
         return utils::getJsonAttr($this->configuration, $_key, $_default);
     }
 
-    public function setConfiguration($_key, $_value) {
+    public function setConfiguration($_key, $_value)
+    {
         $this->configuration = utils::setJsonAttr($this->configuration, $_key, $_value);
         return $this;
     }
 
-    public function getDisplay($_key = '', $_default = '') {
+    public function getDisplay($_key = '', $_default = '')
+    {
         return utils::getJsonAttr($this->display, $_key, $_default);
     }
 
-    public function setDisplay($_key, $_value) {
+    public function setDisplay($_key, $_value)
+    {
         $this->display = utils::setJsonAttr($this->display, $_key, $_value);
         return $this;
     }
 
-    public function getCache($_key = '', $_default = '') {
+    public function getCache($_key = '', $_default = '')
+    {
         return utils::getJsonAttr(cache::byKey('objectCacheAttr' . $this->getId())->getValue(), $_key, $_default);
     }
 
-    public function setCache($_key, $_value = null) {
+    public function setCache($_key, $_value = null)
+    {
         cache::set('objectCacheAttr' . $this->getId(), utils::setJsonAttr(cache::byKey('objectCacheAttr' . $this->getId())->getValue(), $_key, $_value));
     }
 
