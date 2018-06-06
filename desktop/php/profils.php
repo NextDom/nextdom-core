@@ -1,19 +1,19 @@
 <?php
 if (!isConnect()) {
-	throw new Exception('{{Error 401 Unauthorized');
+    throw new Exception('{{Error 401 Unauthorized');
 }
 @session_start();
 $_SESSION['user']->refresh();
 @session_write_close();
 $homePage = array(
-	'core::dashboard' => '{{Dashboard}}',
-	'core::view' => '{{Vue}}',
-	'core::plan' => '{{Design}}',
+    'core::dashboard' => '{{Dashboard}}',
+    'core::view' => '{{Vue}}',
+    'core::plan' => '{{Design}}',
 );
 foreach (plugin::listPlugin() as $pluginList) {
-	if ($pluginList->isActive() == 1 && $pluginList->getDisplay() != '') {
-		$homePage[$pluginList->getId() . '::' . $pluginList->getDisplay()] = $pluginList->getName();
-	}
+    if ($pluginList->isActive() == 1 && $pluginList->getDisplay() != '') {
+        $homePage[$pluginList->getId() . '::' . $pluginList->getDisplay()] = $pluginList->getName();
+    }
 }
 ?>
 <div style="margin-top: 5px;">
@@ -38,9 +38,9 @@ foreach (plugin::listPlugin() as $pluginList) {
                 <option value="">Défaut</option>
                 <?php
 foreach (ls(dirname(__FILE__) . '/../../core/themes') as $dir) {
-	if (is_dir(dirname(__FILE__) . '/../../core/themes/' . $dir . '/desktop')) {
-		echo '<option value="' . trim($dir, '/') . '">' . ucfirst(str_replace('_', ' ', trim($dir, '/'))) . '</option>';
-	}
+    if (is_dir(dirname(__FILE__) . '/../../core/themes/' . $dir . '/desktop')) {
+        echo '<option value="' . trim($dir, '/') . '">' . ucfirst(str_replace('_', ' ', trim($dir, '/'))) . '</option>';
+    }
 }
 ?>
             </select>
@@ -52,9 +52,9 @@ foreach (ls(dirname(__FILE__) . '/../../core/themes') as $dir) {
             <select class="userAttr form-control" data-l1key="options" data-l2key="mobile_theme_color">
               <?php
 foreach (ls(dirname(__FILE__) . '/../../core/themes') as $dir) {
-	if (is_dir(dirname(__FILE__) . '/../../core/themes/' . $dir . '/mobile')) {
-		echo '<option value="' . trim($dir, '/') . '">' . ucfirst(str_replace('_', ' ', trim($dir, '/'))) . '</option>';
-	}
+    if (is_dir(dirname(__FILE__) . '/../../core/themes/' . $dir . '/mobile')) {
+        echo '<option value="' . trim($dir, '/') . '">' . ucfirst(str_replace('_', ' ', trim($dir, '/'))) . '</option>';
+    }
 }
 ?>
           </select>
@@ -94,12 +94,12 @@ foreach (ls(dirname(__FILE__) . '/../../core/themes') as $dir) {
       </div>
       <?php
 foreach (nextdom::getConfiguration('eqLogic:displayType') as $key => $value) {
-	echo '<div class="form-group">';
-	echo '<label class="col-sm-3 control-label">{{Opacité par des widgets}} ' . $value['name'] . '</label>';
-	echo '<div class="col-sm-3">';
-	echo '<input type="number" min="0" max="1" class="userAttr form-control" data-l1key="options" data-l2key="widget::background-opacity::' . $key . '"/>';
-	echo '</div>';
-	echo '</div>';
+    echo '<div class="form-group">';
+    echo '<label class="col-sm-3 control-label">{{Opacité par des widgets}} ' . $value['name'] . '</label>';
+    echo '<div class="col-sm-3">';
+    echo '<input type="number" min="0" max="1" class="userAttr form-control" data-l1key="options" data-l2key="widget::background-opacity::' . $key . '"/>';
+    echo '</div>';
+    echo '</div>';
 }
 ?>
    </fieldset>
@@ -132,7 +132,7 @@ foreach (nextdom::getConfiguration('eqLogic:displayType') as $key => $value) {
           <select class="userAttr form-control" data-l1key="options" data-l2key="homePage">
             <?php
 foreach ($homePage as $key => $value) {
-	echo "<option value='$key'>$value</option>";
+    echo "<option value='$key'>$value</option>";
 }
 ?>
          </select>
@@ -143,7 +143,7 @@ foreach ($homePage as $key => $value) {
           <option value="home">{{Accueil}}</option>
           <?php
 foreach ($homePage as $key => $value) {
-	echo "<option value='$key'>$value</option>";
+    echo "<option value='$key'>$value</option>";
 }
 ?>
        </select>
@@ -160,7 +160,7 @@ foreach ($homePage as $key => $value) {
       <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardObject">
         <?php
 foreach (object::all() as $object) {
-	echo "<option value='" . $object->getId() . "'>" . $object->getName() . "</option>";
+    echo "<option value='" . $object->getId() . "'>" . $object->getName() . "</option>";
 }
 ?>
      </select>
@@ -171,7 +171,7 @@ foreach (object::all() as $object) {
       <option value='all'>{{Tout}}</option>
       <?php
 foreach (object::all() as $object) {
-	echo "<option value='" . $object->getId() . "'>" . $object->getName() . "</option>";
+    echo "<option value='" . $object->getId() . "'>" . $object->getName() . "</option>";
 }
 ?>
    </select>
@@ -188,7 +188,7 @@ foreach (object::all() as $object) {
       <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDesktopView">
         <?php
 foreach (view::all() as $view) {
-	echo "<option value='" . $view->getId() . "'>" . $view->getName() . "</option>";
+    echo "<option value='" . $view->getId() . "'>" . $view->getName() . "</option>";
 }
 ?>
      </select>
@@ -198,7 +198,7 @@ foreach (view::all() as $view) {
     <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobileView">
       <?php
 foreach (view::all() as $view) {
-	echo "<option value='" . $view->getId() . "'>" . $view->getName() . "</option>";
+    echo "<option value='" . $view->getId() . "'>" . $view->getName() . "</option>";
 }
 ?>
    </select>
@@ -215,7 +215,7 @@ foreach (view::all() as $view) {
         <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardPlan">
           <?php
 foreach (planHeader::all() as $plan) {
-	echo "<option value='" . $plan->getId() . "'>" . $plan->getName() . "</option>";
+    echo "<option value='" . $plan->getId() . "'>" . $plan->getName() . "</option>";
 }
 ?>
        </select>
@@ -225,7 +225,7 @@ foreach (planHeader::all() as $plan) {
       <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobilePlan">
         <?php
 foreach (planHeader::all() as $plan) {
-	echo "<option value='" . $plan->getId() . "'>" . $plan->getName() . "</option>";
+    echo "<option value='" . $plan->getId() . "'>" . $plan->getName() . "</option>";
 }
 ?>
      </select>
@@ -274,7 +274,7 @@ foreach (planHeader::all() as $plan) {
   <form class="form-horizontal">
     <fieldset>
       <?php if (config::byKey('sso:allowRemoteUser') != 1) {
-	?>
+    ?>
        <div class="form-group">
         <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{Authentification en 2 étapes}}</label>
         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
@@ -282,13 +282,13 @@ foreach (planHeader::all() as $plan) {
        </div>
        <?php
 if ($_SESSION['user']->getOptions('twoFactorAuthentification', 0) == 1) {
-		?>
+        ?>
         <label class="col-lg-1 col-md-2 col-sm-2 col-xs-2 control-label">{{Actif}}</label>
         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
          <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="twoFactorAuthentification" />
        </div>
        <?php }
-	?>
+    ?>
      </div>
 
      <div class="form-group">
@@ -332,15 +332,15 @@ cleanSession();
 $cache = cache::byKey('current_sessions');
 $sessions = $cache->getValue(array());
 foreach ($sessions as $id => $session) {
-	if ($session['user_id'] != $_SESSION['user']->getId()) {
-		continue;
-	}
-	echo '<tr data-id="' . $id . '">';
-	echo '<td>' . $id . '</td>';
-	echo '<td>' . $session['ip'] . '</td>';
-	echo '<td>' . $session['datetime'] . '</td>';
-	echo '<td><a class="btn btn-xs btn-warning bt_deleteSession"><i class="fa fa-sign-out"></i> {{Déconnecter}}</a></td>';
-	echo '</tr>';
+    if ($session['user_id'] != $_SESSION['user']->getId()) {
+        continue;
+    }
+    echo '<tr data-id="' . $id . '">';
+    echo '<td>' . $id . '</td>';
+    echo '<td>' . $session['ip'] . '</td>';
+    echo '<td>' . $session['datetime'] . '</td>';
+    echo '<td><a class="btn btn-xs btn-warning bt_deleteSession"><i class="fa fa-sign-out"></i> {{Déconnecter}}</a></td>';
+    echo '</tr>';
 }
 ?>
                </tbody>
@@ -363,20 +363,20 @@ foreach ($sessions as $id => $session) {
       <tbody>
         <?php
 foreach ($_SESSION['user']->getOptions('registerDevice') as $key => $value) {
-	echo '<tr data-key="' . $key . '">';
-	echo '<td>';
-	echo substr($key, 0, 10) . '...';
-	echo '</td>';
-	echo '<td>';
-	echo $value['ip'];
-	echo '</td>';
-	echo '<td>';
-	echo $value['datetime'];
-	echo '</td>';
-	echo '<td>';
-	echo '<a class="btn btn-warning btn-xs bt_removeRegisterDevice"><i class="fa fa-trash"></i> {{Supprimer}}</a>';
-	echo '</td>';
-	echo '</tr>';
+    echo '<tr data-key="' . $key . '">';
+    echo '<td>';
+    echo substr($key, 0, 10) . '...';
+    echo '</td>';
+    echo '<td>';
+    echo $value['ip'];
+    echo '</td>';
+    echo '<td>';
+    echo $value['datetime'];
+    echo '</td>';
+    echo '<td>';
+    echo '<a class="btn btn-warning btn-xs bt_removeRegisterDevice"><i class="fa fa-trash"></i> {{Supprimer}}</a>';
+    echo '</td>';
+    echo '</tr>';
 }
 
 ?>

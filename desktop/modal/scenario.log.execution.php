@@ -1,10 +1,10 @@
 <?php
 if (!isConnect()) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 $scenario = scenario::byId(init('scenario_id'));
 if (!is_object($scenario)) {
-	throw new Exception(__('Aucun scénario ne correspondant à : ', __FILE__) . init('scenario_id'));
+    throw new Exception(__('Aucun scénario ne correspondant à : ', __FILE__) . init('scenario_id'));
 }
 sendVarToJs('scenarioLog_scenario_id', init('scenario_id'));
 ?>

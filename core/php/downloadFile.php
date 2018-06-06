@@ -16,64 +16,64 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 try {
-	require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
-	include_file('core', 'authentification', 'php');
-	if (!isConnect() && !nextdom::apiAccess(init('apikey'))) {
-		throw new Exception(__('401 - Accès non autorisé', __FILE__));
-	}
-	$pathfile = realpath(calculPath(urldecode(init('pathfile'))));
-	if ($pathfile === false) {
-		throw new Exception(__('401 - Accès non autorisé', __FILE__));
-	}
-	if (strpos($pathfile, '.php') !== false) {
-		throw new Exception(__('401 - Accès non autorisé', __FILE__));
-	}
-	$rootPath = realpath(dirname(__FILE__) . '/../../');
-	if (strpos($pathfile, $rootPath) === false) {
-		if (config::byKey('recordDir', 'camera') != '' && substr(config::byKey('recordDir', 'camera'), 0, 1) == '/') {
-			$cameraPath = realpath(config::byKey('recordDir', 'camera'));
-			if (strpos($pathfile, $cameraPath) === false) {
-				throw new Exception(__('401 - Accès non autorisé', __FILE__));
-			}
-		} else {
-			throw new Exception(__('401 - Accès non autorisé', __FILE__));
-		}
-	}
-	if (!isConnect('admin')) {
-		$adminFiles = array('log', 'backup', '.sql', 'scenario', '.tar', '.gz');
-		foreach ($adminFiles as $adminFile) {
-			if (strpos($pathfile, $adminFile) !== false) {
-				throw new Exception(__('401 - Accès non autorisé', __FILE__));
-			}
-		}
-	}
-	if (strpos($pathfile, '*') === false) {
-		if (!file_exists($pathfile)) {
-			throw new Exception(__('Fichier non trouvé : ', __FILE__) . $pathfile);
-		}
-	} elseif (is_dir(str_replace('*', '', $pathfile))) {
-		if (!isConnect('admin')) {
-			throw new Exception(__('401 - Accès non autorisé', __FILE__));
-		}
-		system('cd ' . dirname($pathfile) . ';tar cfz ' . nextdom::getTmpFolder('downloads') . '/archive.tar.gz * > /dev/null 2>&1');
-		$pathfile = nextdom::getTmpFolder('downloads') . '/archive.tar.gz';
-	} else {
-		if (!isConnect('admin')) {
-			throw new Exception(__('401 - Accès non autorisé', __FILE__));
-		}
-		$pattern = array_pop(explode('/', $pathfile));
-		system('cd ' . dirname($pathfile) . ';tar cfz ' . nextdom::getTmpFolder('downloads') . '/archive.tar.gz ' . $pattern . '> /dev/null 2>&1');
-		$pathfile = nextdom::getTmpFolder('downloads') . '/archive.tar.gz';
-	}
-	$path_parts = pathinfo($pathfile);
-	header('Content-Type: application/octet-stream');
-	header('Content-Disposition: attachment; filename=' . $path_parts['basename']);
-	readfile($pathfile);
-	if (file_exists(nextdom::getTmpFolder('downloads') . '/archive.tar.gz')) {
-		unlink(nextdom::getTmpFolder('downloads') . '/archive.tar.gz');
-	}
-	exit;
+    require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+    include_file('core', 'authentification', 'php');
+    if (!isConnect() && !nextdom::apiAccess(init('apikey'))) {
+        throw new Exception(__('401 - Accès non autorisé', __FILE__));
+    }
+    $pathfile = realpath(calculPath(urldecode(init('pathfile'))));
+    if ($pathfile === false) {
+        throw new Exception(__('401 - Accès non autorisé', __FILE__));
+    }
+    if (strpos($pathfile, '.php') !== false) {
+        throw new Exception(__('401 - Accès non autorisé', __FILE__));
+    }
+    $rootPath = realpath(dirname(__FILE__) . '/../../');
+    if (strpos($pathfile, $rootPath) === false) {
+        if (config::byKey('recordDir', 'camera') != '' && substr(config::byKey('recordDir', 'camera'), 0, 1) == '/') {
+            $cameraPath = realpath(config::byKey('recordDir', 'camera'));
+            if (strpos($pathfile, $cameraPath) === false) {
+                throw new Exception(__('401 - Accès non autorisé', __FILE__));
+            }
+        } else {
+            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+        }
+    }
+    if (!isConnect('admin')) {
+        $adminFiles = array('log', 'backup', '.sql', 'scenario', '.tar', '.gz');
+        foreach ($adminFiles as $adminFile) {
+            if (strpos($pathfile, $adminFile) !== false) {
+                throw new Exception(__('401 - Accès non autorisé', __FILE__));
+            }
+        }
+    }
+    if (strpos($pathfile, '*') === false) {
+        if (!file_exists($pathfile)) {
+            throw new Exception(__('Fichier non trouvé : ', __FILE__) . $pathfile);
+        }
+    } elseif (is_dir(str_replace('*', '', $pathfile))) {
+        if (!isConnect('admin')) {
+            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+        }
+        system('cd ' . dirname($pathfile) . ';tar cfz ' . nextdom::getTmpFolder('downloads') . '/archive.tar.gz * > /dev/null 2>&1');
+        $pathfile = nextdom::getTmpFolder('downloads') . '/archive.tar.gz';
+    } else {
+        if (!isConnect('admin')) {
+            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+        }
+        $pattern = array_pop(explode('/', $pathfile));
+        system('cd ' . dirname($pathfile) . ';tar cfz ' . nextdom::getTmpFolder('downloads') . '/archive.tar.gz ' . $pattern . '> /dev/null 2>&1');
+        $pathfile = nextdom::getTmpFolder('downloads') . '/archive.tar.gz';
+    }
+    $path_parts = pathinfo($pathfile);
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename=' . $path_parts['basename']);
+    readfile($pathfile);
+    if (file_exists(nextdom::getTmpFolder('downloads') . '/archive.tar.gz')) {
+        unlink(nextdom::getTmpFolder('downloads') . '/archive.tar.gz');
+    }
+    exit;
 } catch (Exception $e) {
-	echo $e->getMessage();
+    echo $e->getMessage();
 }
 

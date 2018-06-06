@@ -17,22 +17,22 @@
  */
 
 try {
-	require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
-	include_file('core', 'authentification', 'php');
+    require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+    include_file('core', 'authentification', 'php');
 
-	if (!isConnect()) {
-		throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
-	}
+    if (!isConnect()) {
+        throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
+    }
 
-	ajax::init();
+    ajax::init();
 
-	if (init('action') == 'changes') {
-		ajax::success(event::changes(init('datetime', 0), 59));
-	}
+    if (init('action') == 'changes') {
+        ajax::success(event::changes(init('datetime', 0), 59));
+    }
 
-	throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
+    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
 /*     * *********Catch exeption*************** */
 } catch (Exception $e) {
-	ajax::error(displayException($e), $e->getCode());
+    ajax::error(displayException($e), $e->getCode());
 }
 ?>

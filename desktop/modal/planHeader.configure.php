@@ -1,11 +1,11 @@
 <?php
 if (!isConnect('admin')) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 
 $planHeader = planHeader::byId(init('planHeader_id'));
 if (!is_object($planHeader)) {
-	throw new Exception('Impossible de trouver le plan');
+    throw new Exception('Impossible de trouver le plan');
 }
 sendVarToJS('id', $planHeader->getId());
 sendVarToJS('planHeader', utils::o2a($planHeader));

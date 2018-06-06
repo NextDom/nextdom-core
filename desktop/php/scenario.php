@@ -1,6 +1,6 @@
 <?php
 if (!isConnect('admin')) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 
 $scenarios = array();
@@ -8,9 +8,9 @@ $totalScenario = scenario::all();
 $scenarios[-1] = scenario::all(null);
 $scenarioListGroup = scenario::listGroup();
 if (is_array($scenarioListGroup)) {
-	foreach ($scenarioListGroup as $group) {
-		$scenarios[$group['group']] = scenario::all($group['group']);
-	}
+    foreach ($scenarioListGroup as $group) {
+        $scenarios[$group['group']] = scenario::all($group['group']);
+    }
 }
 ?>
 <style>
@@ -28,33 +28,33 @@ if (is_array($scenarioListGroup)) {
       <div id="div_tree">
         <ul id="ul_scenario" >
           <?php if (count($scenarios[-1]) > 0) {
-	?>
+    ?>
            <li data-jstree='{"opened":true}'>
             <?php
 echo '<a>Aucun - ' . count($scenarios[-1]) . ' scénario(s)</a>';
-	echo '<ul>';
-	foreach ($scenarios[-1] as $scenario) {
-		echo '<li data-jstree=\'{"opened":true,"icon":"' . $scenario->getIcon(true) . '"}\'>';
-		echo ' <a class="li_scenario" id="scenario' . $scenario->getId() . '" data-scenario_id="' . $scenario->getId() . '">' . $scenario->getHumanName(false, true) . '</a>';
-		echo '</li>';
-	}
-	?>
+    echo '<ul>';
+    foreach ($scenarios[-1] as $scenario) {
+        echo '<li data-jstree=\'{"opened":true,"icon":"' . $scenario->getIcon(true) . '"}\'>';
+        echo ' <a class="li_scenario" id="scenario' . $scenario->getId() . '" data-scenario_id="' . $scenario->getId() . '">' . $scenario->getHumanName(false, true) . '</a>';
+        echo '</li>';
+    }
+    ?>
           </ul>
           <?php
 }
 foreach ($scenarioListGroup as $group) {
-	if ($group['group'] != '') {
-		echo '<li data-jstree=\'{"opened":true}\'>';
-		echo '<a>' . $group['group'] . ' - ' . count($scenarios[$group['group']]) . ' scénario(s)</a>';
-		echo '<ul>';
-		foreach ($scenarios[$group['group']] as $scenario) {
-			echo '<li data-jstree=\'{"opened":true,"icon":"' . $scenario->getIcon(true) . '"}\'>';
-			echo ' <a class="li_scenario" id="scenario' . $scenario->getId() . '" data-scenario_id="' . $scenario->getId() . '">' . $scenario->getHumanName(false, true) . '</a>';
-			echo '</li>';
-		}
-		echo '</ul>';
-		echo '</li>';
-	}
+    if ($group['group'] != '') {
+        echo '<li data-jstree=\'{"opened":true}\'>';
+        echo '<a>' . $group['group'] . ' - ' . count($scenarios[$group['group']]) . ' scénario(s)</a>';
+        echo '<ul>';
+        foreach ($scenarios[$group['group']] as $scenario) {
+            echo '<li data-jstree=\'{"opened":true,"icon":"' . $scenario->getIcon(true) . '"}\'>';
+            echo ' <a class="li_scenario" id="scenario' . $scenario->getId() . '" data-scenario_id="' . $scenario->getId() . '">' . $scenario->getHumanName(false, true) . '</a>';
+            echo '</li>';
+        }
+        echo '</ul>';
+        echo '</li>';
+    }
 }
 ?>
    </ul>
@@ -107,62 +107,62 @@ foreach ($scenarioListGroup as $group) {
 <legend><i class="icon nextdom-clap_cinema"></i>  {{Mes scénarios}}</legend>
 <?php
 if (count($totalScenario) == 0) {
-	echo "<br/><br/><br/><center><span style='color:#767676;font-size:1.2em;font-weight: bold;'>Vous n'avez encore aucun scénario. Cliquez sur ajouter pour commencer</span></center>";
+    echo "<br/><br/><br/><center><span style='color:#767676;font-size:1.2em;font-weight: bold;'>Vous n'avez encore aucun scénario. Cliquez sur ajouter pour commencer</span></center>";
 } else {
-	echo '<input class="form-control" placeholder="{{Rechercher}}" style="margin-bottom:4px;" id="in_searchScenario" />';
-	echo '<div class="panel-group" id="accordionScenar">';
-	if (count($scenarios[-1]) > 0) {
-		echo '<div class="panel panel-default">';
-		echo '<div class="panel-heading">';
-		echo '<h3 class="panel-title">';
-		echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none" style="text-decoration:none;">Aucun - ' . count($scenarios[-1]) . ' scénario(s)</a>';
-		echo '</h3>';
-		echo '</div>';
-		echo '<div id="config_none" class="panel-collapse collapse">';
-		echo '<div class="panel-body">';
-		echo '<div class="scenarioListContainer">';
-		foreach ($scenarios[-1] as $scenario) {
-			$opacity = ($scenario->getIsActive()) ? '' : nextdom::getConfiguration('eqLogic:style:noactive');
-			echo '<div class="scenarioDisplayCard cursor" data-scenario_id="' . $scenario->getId() . '" style="text-align: center; background-color : #ffffff; min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
-			echo '<img src="core/img/scenario.png" height="90" width="85" />';
-			echo "<br>";
-			echo '<span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">' . $scenario->getHumanName(true, true, true, true) . '</span>';
-			echo '</div>';
-		}
-		echo '</div>';
-		echo '</div>';
-		echo '</div>';
-		echo '</div>';
-	}
-	$i = 0;
-	foreach ($scenarioListGroup as $group) {
-		if ($group['group'] == '') {
-			continue;
-		}
-		echo '<div class="panel panel-default">';
-		echo '<div class="panel-heading">';
-		echo '<h3 class="panel-title">';
-		echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_' . $i . '" style="text-decoration:none;">' . $group['group'] . ' - ' . count($scenarios[$group['group']]) . ' scénario(s)</a>';
-		echo '</h3>';
-		echo '</div>';
-		echo '<div id="config_' . $i . '" class="panel-collapse collapse">';
-		echo '<div class="panel-body">';
-		echo '<div class="scenarioListContainer">';
-		foreach ($scenarios[$group['group']] as $scenario) {
-			$opacity = ($scenario->getIsActive()) ? '' : nextdom::getConfiguration('eqLogic:style:noactive');
-			echo '<div class="scenarioDisplayCard cursor" data-scenario_id="' . $scenario->getId() . '" style="text-align: center; background-color : #ffffff; min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
-			echo '<img src="core/img/scenario.png" height="90" width="85" />';
-			echo "<br>";
-			echo '<span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">' . $scenario->getHumanName(true, true, true, true) . '</span>';
-			echo '</div>';
-		}
-		echo '</div>';
-		echo '</div>';
-		echo '</div>';
-		echo '</div>';
-		$i += 1;
-	}
-	echo '</div>';
+    echo '<input class="form-control" placeholder="{{Rechercher}}" style="margin-bottom:4px;" id="in_searchScenario" />';
+    echo '<div class="panel-group" id="accordionScenar">';
+    if (count($scenarios[-1]) > 0) {
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-heading">';
+        echo '<h3 class="panel-title">';
+        echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none" style="text-decoration:none;">Aucun - ' . count($scenarios[-1]) . ' scénario(s)</a>';
+        echo '</h3>';
+        echo '</div>';
+        echo '<div id="config_none" class="panel-collapse collapse">';
+        echo '<div class="panel-body">';
+        echo '<div class="scenarioListContainer">';
+        foreach ($scenarios[-1] as $scenario) {
+            $opacity = ($scenario->getIsActive()) ? '' : nextdom::getConfiguration('eqLogic:style:noactive');
+            echo '<div class="scenarioDisplayCard cursor" data-scenario_id="' . $scenario->getId() . '" style="text-align: center; background-color : #ffffff; min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
+            echo '<img src="core/img/scenario.png" height="90" width="85" />';
+            echo "<br>";
+            echo '<span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">' . $scenario->getHumanName(true, true, true, true) . '</span>';
+            echo '</div>';
+        }
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+    }
+    $i = 0;
+    foreach ($scenarioListGroup as $group) {
+        if ($group['group'] == '') {
+            continue;
+        }
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-heading">';
+        echo '<h3 class="panel-title">';
+        echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_' . $i . '" style="text-decoration:none;">' . $group['group'] . ' - ' . count($scenarios[$group['group']]) . ' scénario(s)</a>';
+        echo '</h3>';
+        echo '</div>';
+        echo '<div id="config_' . $i . '" class="panel-collapse collapse">';
+        echo '<div class="panel-body">';
+        echo '<div class="scenarioListContainer">';
+        foreach ($scenarios[$group['group']] as $scenario) {
+            $opacity = ($scenario->getIsActive()) ? '' : nextdom::getConfiguration('eqLogic:style:noactive');
+            echo '<div class="scenarioDisplayCard cursor" data-scenario_id="' . $scenario->getId() . '" style="text-align: center; background-color : #ffffff; min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
+            echo '<img src="core/img/scenario.png" height="90" width="85" />';
+            echo "<br>";
+            echo '<span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">' . $scenario->getHumanName(true, true, true, true) . '</span>';
+            echo '</div>';
+        }
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+        $i += 1;
+    }
+    echo '</div>';
 }
 ?>
 </div>
@@ -228,7 +228,7 @@ if (count($totalScenario) == 0) {
                 <option value="">{{Aucun}}</option>
                 <?php
 foreach (object::all() as $object) {
-	echo '<option value="' . $object->getId() . '">' . $object->getName() . '</option>';
+    echo '<option value="' . $object->getId() . '">' . $object->getName() . '</option>';
 }
 ?>
              </select>

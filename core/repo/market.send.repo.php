@@ -1,32 +1,32 @@
 <?php
 if (!isConnect('admin')) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 sendVarToJS('market_display_info', array(
-	'logicalId' => init('logicalId'),
-	'name' => init('name'),
+    'logicalId' => init('logicalId'),
+    'name' => init('name'),
 ));
 sendVarToJS('market_type', init('type'));
 try {
-	if (init('logicalId') != '' && init('type') != '') {
-		$market = repo_market::byLogicalIdAndType(init('logicalId'), init('type'));
-	}
+    if (init('logicalId') != '' && init('type') != '') {
+        $market = repo_market::byLogicalIdAndType(init('logicalId'), init('type'));
+    }
 } catch (Exception $e) {
-	$market = null;
+    $market = null;
 }
 if (is_object($market) && !$market->getIsAuthor()) {
-	throw new Exception('{{Vous n\'êtes pas l\'auteur du plugin}}');
+    throw new Exception('{{Vous n\'êtes pas l\'auteur du plugin}}');
 }
 
 if (init('type') == 'plugin') {
-	$plugin = plugin::byId(init('logicalId'));
-	if (!is_object($plugin)) {
-		throw new Exception('{{Le plugin :}} ' . init('logicalId') . ' {{est introuvable}}');
-	}
-	$plugin_info = utils::o2a($plugin);
-	$plugin_info['logicalId'] = $plugin_info['id'];
-	unset($plugin_info['id']);
-	sendVarToJS('market_display_info', $plugin_info);
+    $plugin = plugin::byId(init('logicalId'));
+    if (!is_object($plugin)) {
+        throw new Exception('{{Le plugin :}} ' . init('logicalId') . ' {{est introuvable}}');
+    }
+    $plugin_info = utils::o2a($plugin);
+    $plugin_info['logicalId'] = $plugin_info['id'];
+    unset($plugin_info['id']);
+    sendVarToJS('market_display_info', $plugin_info);
 }
 ?>
 
@@ -212,7 +212,7 @@ if (init('type') == 'plugin') {
 </form>
 <?php
 if (is_object($market)) {
-	sendVarToJS('market_display_info', utils::o2a($market));
+    sendVarToJS('market_display_info', utils::o2a($market));
 }
 ?>
 <script>

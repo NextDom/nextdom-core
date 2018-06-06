@@ -1,6 +1,6 @@
 <?php
 if (!isConnect('admin')) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 global $NEXTDOM_INTERNAL_CONFIG;
 sendVarToJS('sel_plugin_id', init('id', '-1'));
@@ -16,22 +16,22 @@ $plugins_list = plugin::listPlugin(false, true);
        <li class="filter" style="margin-bottom: 5px;margin-top: 5px;"><input class="filter form-control input-sm" placeholder="{{Rechercher}}" style="width: 100%"/></li>
        <?php
 foreach ($plugins_list as $category_name => $category) {
-	$icon = '';
-	if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]) && isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]['icon'])) {
-		$icon = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]['icon'];
-	}
-	$name = $category_name;
-	if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]) && isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]['name'])) {
-		$name = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]['name'];
-	}
-	echo '<li><i class="fa ' . $icon . '"></i> ' . $name . '</li>';
-	foreach ($category as $plugin) {
-		$opacity = ($plugin->isActive()) ? '' : nextdom::getConfiguration('eqLogic:style:noactive');
-		echo '<li class="cursor li_plugin" data-pluginPath="' . $plugin->getFilepath() . '" data-plugin_id="' . $plugin->getId() . '" style="' . $opacity . '"><a>';
-		echo '<img class="img-responsive" style="width : 20px;display:inline-block;" src="' . $plugin->getPathImgIcon() . '" /> ';
-		echo $plugin->getName();
-		echo '</a></li>';
-	}
+    $icon = '';
+    if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]) && isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]['icon'])) {
+        $icon = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]['icon'];
+    }
+    $name = $category_name;
+    if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]) && isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]['name'])) {
+        $name = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]['name'];
+    }
+    echo '<li><i class="fa ' . $icon . '"></i> ' . $name . '</li>';
+    foreach ($category as $plugin) {
+        $opacity = ($plugin->isActive()) ? '' : nextdom::getConfiguration('eqLogic:style:noactive');
+        echo '<li class="cursor li_plugin" data-pluginPath="' . $plugin->getFilepath() . '" data-plugin_id="' . $plugin->getId() . '" style="' . $opacity . '"><a>';
+        echo '<img class="img-responsive" style="width : 20px;display:inline-block;" src="' . $plugin->getPathImgIcon() . '" /> ';
+        echo $plugin->getName();
+        echo '</a></li>';
+    }
 }
 ?>
     </ul>
@@ -49,13 +49,13 @@ foreach ($plugins_list as $category_name => $category) {
   </div>
    <?php
 foreach (update::listRepo() as $key => $value) {
-	if (!$value['enable']) {
-		continue;
-	}
-	if (!isset($value['scope']['hasStore']) || !$value['scope']['hasStore']) {
-		continue;
-	}
-	echo '<div class="cursor displayStore" data-repo="' . $key . '" style="background-color : #ffffff; height : 130px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
+    if (!$value['enable']) {
+        continue;
+    }
+    if (!isset($value['scope']['hasStore']) || !$value['scope']['hasStore']) {
+        continue;
+    }
+    echo '<div class="cursor displayStore" data-repo="' . $key . '" style="background-color : #ffffff; height : 130px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
     <center>
       <i class="fa fa-shopping-cart" style="font-size : 6em;color:#94ca02;"></i>
     </center>
@@ -69,13 +69,13 @@ foreach (update::listRepo() as $key => $value) {
 <div class="pluginListContainer">
 <?php
 foreach (plugin::listPlugin() as $plugin) {
-	$opacity = ($plugin->isActive()) ? '' : nextdom::getConfiguration('eqLogic:style:noactive');
-	echo '<div class="pluginDisplayCard cursor" data-pluginPath="' . $plugin->getFilepath() . '" data-plugin_id="' . $plugin->getId() . '" style="background-color : #ffffff; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
-	echo '<center>';
-	echo '<img class="img-responsive" style="width : 120px;" src="' . $plugin->getPathImgIcon() . '" />';
-	echo '</center>';
-	echo '<span style="display:none;" class="name">' . $plugin->getName() . '</span>';
-	echo '</div>';
+    $opacity = ($plugin->isActive()) ? '' : nextdom::getConfiguration('eqLogic:style:noactive');
+    echo '<div class="pluginDisplayCard cursor" data-pluginPath="' . $plugin->getFilepath() . '" data-plugin_id="' . $plugin->getId() . '" style="background-color : #ffffff; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
+    echo '<center>';
+    echo '<img class="img-responsive" style="width : 120px;" src="' . $plugin->getPathImgIcon() . '" />';
+    echo '</center>';
+    echo '<span style="display:none;" class="name">' . $plugin->getName() . '</span>';
+    echo '</div>';
 }
 ?>
 </div>

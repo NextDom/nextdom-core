@@ -309,7 +309,7 @@ if (isset(nextdom_langage)) {
         $.hideAlert();
         bootbox.confirm('{{Etes-vous sûr de vouloir arrêter le système ?}}', function (result) {
             if (result) {
-            	window.location.href = 'index.php?v=d&p=shutdown';
+                window.location.href = 'index.php?v=d&p=shutdown';
             }
         });
     });
@@ -318,7 +318,7 @@ if (isset(nextdom_langage)) {
         $.hideAlert();
         bootbox.confirm('{{Etes-vous sûr de vouloir redémarrer le système ?}}', function (result) {
             if (result) {
-            	window.location.href = 'index.php?v=d&p=reboot';
+                window.location.href = 'index.php?v=d&p=reboot';
             }
         });
     });

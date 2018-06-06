@@ -1,16 +1,16 @@
     <?php
 if (!isConnect('admin')) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 $cmd = cmd::byId(init('cmd_id'));
 if (!is_object($cmd)) {
-	throw new Exception('Commande non trouvé : ' . init('cmd_id'));
+    throw new Exception('Commande non trouvé : ' . init('cmd_id'));
 }
 $cmdInfo = nextdom::toHumanReadable(utils::o2a($cmd));
 foreach (array('dashboard', 'mobile', 'dview', 'mview', 'dplan') as $value) {
-	if (!isset($cmdInfo['html'][$value]) || $cmdInfo['html'][$value] == '') {
-		$cmdInfo['html'][$value] = $cmd->getWidgetTemplateCode($value);
-	}
+    if (!isset($cmdInfo['html'][$value]) || $cmdInfo['html'][$value] == '') {
+        $cmdInfo['html'][$value] = $cmd->getWidgetTemplateCode($value);
+    }
 }
 global $NEXTDOM_INTERNAL_CONFIG;
 sendVarToJS('cmdInfo', $cmdInfo);
@@ -34,12 +34,12 @@ $cmd_widgetMobile = cmd::availableWidget('mobile');
       <?php }
 ?>
       <?php if ($cmd->widgetPossibility('custom')) {
-	?>
+    ?>
        <li role="presentation"><a href="#cmd_display" aria-controls="messages" role="tab" data-toggle="tab"><i class="fa fa-desktop"></i> {{Affichage}}</a></li>
        <?php }
 ?>
        <?php if ($cmd->widgetPossibility('custom::htmlCode')) {
-	?>
+    ?>
          <li role="presentation"><a href="#cmd_html" aria-controls="messages" role="tab" data-toggle="tab"><i class="fa fa-code-fork"></i> {{Code}}</a></li>
          <?php }
 ?>
@@ -89,17 +89,17 @@ $cmd_widgetMobile = cmd::availableWidget('mobile');
                     </div>
                   </div>
                   <?php if ($cmd->getType() == 'action' && $cmd->getSubtype() == 'select') {
-	?>
+    ?>
                    <div class="form-group">
                     <label class="col-xs-4 control-label">{{Valeurs possibles}}</label>
                     <div class="col-xs-8">
                       <?php
 $elements = explode(';', $cmd->getConfiguration('listValue', ''));
-	foreach ($elements as $element) {
-		$coupleArray = explode('|', $element);
-		echo $coupleArray[1] . ' => ' . $coupleArray[0] . '<br/>';
-	}
-	?>
+    foreach ($elements as $element) {
+        $coupleArray = explode('|', $element);
+        echo $coupleArray[1] . ' => ' . $coupleArray[0] . '<br/>';
+    }
+    ?>
                     </div>
                   </div>
                   <?php }?>
@@ -188,11 +188,11 @@ $usedBy = $cmd->getUsedBy();
           <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
             <?php
 foreach ($usedBy['eqLogic'] as $usedByEqLogic) {
-	if ($usedByEqLogic->getIsEnable() != 1) {
-		echo '<span class="label label-default cursor"><a href="' . $usedByEqLogic->getLinkToConfiguration() . '" style="color : white;">' . $usedByEqLogic->getHumanName() . '</a></span><br/>';
-	} else {
-		echo '<span class="label label-primary cursor"><a href="' . $usedByEqLogic->getLinkToConfiguration() . '" style="color : white;">' . $usedByEqLogic->getHumanName() . '</a></span><br/>';
-	}
+    if ($usedByEqLogic->getIsEnable() != 1) {
+        echo '<span class="label label-default cursor"><a href="' . $usedByEqLogic->getLinkToConfiguration() . '" style="color : white;">' . $usedByEqLogic->getHumanName() . '</a></span><br/>';
+    } else {
+        echo '<span class="label label-primary cursor"><a href="' . $usedByEqLogic->getLinkToConfiguration() . '" style="color : white;">' . $usedByEqLogic->getHumanName() . '</a></span><br/>';
+    }
 }
 ?>
         </div>
@@ -202,7 +202,7 @@ foreach ($usedBy['eqLogic'] as $usedByEqLogic) {
         <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
           <?php
 foreach ($usedBy['cmd'] as $usedByCmd) {
-	echo '<span class="label label-primary cursor"><a href="' . $usedByCmd->getEqLogic()->getLinkToConfiguration() . '" style="color : white;">' . $usedByCmd->getHumanName() . '</a></span><br/>';
+    echo '<span class="label label-primary cursor"><a href="' . $usedByCmd->getEqLogic()->getLinkToConfiguration() . '" style="color : white;">' . $usedByCmd->getHumanName() . '</a></span><br/>';
 }
 ?>
        </div>
@@ -212,11 +212,11 @@ foreach ($usedBy['cmd'] as $usedByCmd) {
       <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
         <?php
 foreach ($usedBy['scenario'] as $usedByScenario) {
-	if ($usedByScenario->getIsActive() != 1) {
-		echo '<span class="label label-default cursor"><a href="' . $usedByScenario->getLinkToConfiguration() . '" style="color : white;">' . $usedByScenario->getHumanName() . '</a></span><br/>';
-	} else {
-		echo '<span class="label label-primary cursor"><a href="' . $usedByScenario->getLinkToConfiguration() . '" style="color : white;">' . $usedByScenario->getHumanName() . '</a></span><br/>';
-	}
+    if ($usedByScenario->getIsActive() != 1) {
+        echo '<span class="label label-default cursor"><a href="' . $usedByScenario->getLinkToConfiguration() . '" style="color : white;">' . $usedByScenario->getHumanName() . '</a></span><br/>';
+    } else {
+        echo '<span class="label label-primary cursor"><a href="' . $usedByScenario->getLinkToConfiguration() . '" style="color : white;">' . $usedByScenario->getHumanName() . '</a></span><br/>';
+    }
 }
 ?>
     </div>
@@ -230,7 +230,7 @@ foreach ($usedBy['scenario'] as $usedByScenario) {
     <fieldset>
 
       <?php if ($cmd->getType() == 'info' && ($cmd->getSubType() == 'numeric' || $cmd->getSubType() == 'binary')) {
-	?>
+    ?>
        <legend><i class="fa fa-table"></i> {{Calcul et arrondi}}</legend>
        <div class="form-group">
         <label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{Formule de calcul (#value# pour la valeur)}}</label>
@@ -246,7 +246,7 @@ foreach ($usedBy['scenario'] as $usedByScenario) {
         </div>
       </div>
       <?php }
-	?>
+    ?>
       <?php }
 ?>
     </fieldset>
@@ -262,32 +262,32 @@ foreach ($usedBy['scenario'] as $usedByScenario) {
             <?php
 $groups = array();
 foreach (nextdom::getConfiguration('cmd::generic_type') as $key => $info) {
-	if ($cmd->getType() == 'info' && $info['type'] == 'Action') {
-		continue;
-	} elseif ($cmd->getType() == 'action' && $info['type'] == 'Info') {
-		continue;
-	} elseif (isset($info['ignore']) && $info['ignore']) {
-		continue;
-	}
-	$info['key'] = $key;
-	if (!isset($groups[$info['family']])) {
-		$groups[$info['family']][0] = $info;
-	} else {
-		array_push($groups[$info['family']], $info);
-	}
+    if ($cmd->getType() == 'info' && $info['type'] == 'Action') {
+        continue;
+    } elseif ($cmd->getType() == 'action' && $info['type'] == 'Info') {
+        continue;
+    } elseif (isset($info['ignore']) && $info['ignore']) {
+        continue;
+    }
+    $info['key'] = $key;
+    if (!isset($groups[$info['family']])) {
+        $groups[$info['family']][0] = $info;
+    } else {
+        array_push($groups[$info['family']], $info);
+    }
 }
 ksort($groups);
 foreach ($groups as $group) {
-	usort($group, function ($a, $b) {
-		return strcmp($a['name'], $b['name']);
-	});
-	foreach ($group as $key => $info) {
-		if ($key == 0) {
-			echo '<optgroup label="{{' . $info['family'] . '}}">';
-		}
-		echo '<option value="' . $info['key'] . '">' . $info['name'] . '</option>';
-	}
-	echo '</optgroup>';
+    usort($group, function ($a, $b) {
+        return strcmp($a['name'], $b['name']);
+    });
+    foreach ($group as $key => $info) {
+        if ($key == 0) {
+            echo '<optgroup label="{{' . $info['family'] . '}}">';
+        }
+        echo '<option value="' . $info['key'] . '">' . $info['name'] . '</option>';
+    }
+    echo '</optgroup>';
 }
 ?>
      </select>
@@ -317,7 +317,7 @@ foreach ($groups as $group) {
 <?php }
 ?>
 <?php if ($cmd->getType() == 'info') {
-	?>
+    ?>
  <form class="form-horizontal">
   <fieldset>
    <legend><i class="fa fa-sign-out"></i> {{Action sur la valeur}}</legend>
@@ -360,7 +360,7 @@ foreach ($groups as $group) {
 <?php }
 ?>
 <?php if ($cmd->getType() == 'action') {
-	?>
+    ?>
  <form class="form-horizontal">
   <fieldset>
    <legend><i class="fa fa-sign-out"></i> {{Action avant exécution de la commande}}</legend>
@@ -401,7 +401,7 @@ foreach ($groups as $group) {
 <?php }?>
 
 <?php if ($cmd->getType() == 'info' && $NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['visible']) {
-	?>
+    ?>
  <form class="form-horizontal">
   <fieldset>
    <legend><i class="fa fa-bar-chart-o"></i> {{Historique}}</legend>
@@ -424,7 +424,7 @@ foreach ($groups as $group) {
     </div>
   </div>
   <?php }
-	?>
+    ?>
   <div class="form-group">
     <label class="col-lg-3 col-md-3 col-sm-3 col-xs-6 control-label">{{Purger l'historique si plus vieux que }}</label>
     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
@@ -447,7 +447,7 @@ foreach ($groups as $group) {
   </div>
 </div>
 <?php }
-	?>
+    ?>
 </fieldset>
 </form>
 <?php }
@@ -501,7 +501,7 @@ foreach ($groups as $group) {
 ?>
 </div>
 <?php if ($cmd->widgetPossibility('custom::htmlCode')) {
-	?>
+    ?>
   <div role="tabpanel" class="tab-pane" id="cmd_html">
     <br/>
     <a class="btn btn-warning btn-sm pull-right" id="bt_reinitHtmlCode" style="position:relative;top:-3px;"><i class="fa fa-times"></i> {{Réinitialiser la personnalisation}}</a>
@@ -589,39 +589,39 @@ foreach ($groups as $group) {
 <?php }
 ?>
 <?php if ($cmd->getType() == 'info') {
-	?>
+    ?>
   <div role="tabpanel" class="tab-pane" id="cmd_alert">
     <br/>
     <?php
 foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
-		if (!$value['check']) {
-			continue;
-		}
-		echo '<form class="form-horizontal">';
-		echo '<fieldset>';
-		echo '<legend><i class="' . $value['name'] . '"></i> {{Niveau}} ' . $value['name'] . '</legend>';
-		echo '<div class="form-group">';
-		echo '<label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{En}} ' . $value['name'] . ' {{si (#value# pour la valeur)}}</label>';
-		echo '<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">';
-		echo '<input class="cmdAttr form-control" data-l1key="alert" data-l2key="' . $level . 'if" />';
-		echo '</div>';
-		echo '</div>';
-		echo '<div class="form-group">';
-		echo '<label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{Pendant plus de (en min, laisser vide pour immédiat)}}</label>';
-		echo '<div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">';
-		echo '<input type="number" class="cmdAttr form-control" data-l1key="alert" data-l2key="' . $level . 'during" />';
-		echo '</div>';
-		echo '</div>';
-		echo '</fieldset>';
-		echo '</form>';
-	}
-	?>
+        if (!$value['check']) {
+            continue;
+        }
+        echo '<form class="form-horizontal">';
+        echo '<fieldset>';
+        echo '<legend><i class="' . $value['name'] . '"></i> {{Niveau}} ' . $value['name'] . '</legend>';
+        echo '<div class="form-group">';
+        echo '<label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{En}} ' . $value['name'] . ' {{si (#value# pour la valeur)}}</label>';
+        echo '<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">';
+        echo '<input class="cmdAttr form-control" data-l1key="alert" data-l2key="' . $level . 'if" />';
+        echo '</div>';
+        echo '</div>';
+        echo '<div class="form-group">';
+        echo '<label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{Pendant plus de (en min, laisser vide pour immédiat)}}</label>';
+        echo '<div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">';
+        echo '<input type="number" class="cmdAttr form-control" data-l1key="alert" data-l2key="' . $level . 'during" />';
+        echo '</div>';
+        echo '</div>';
+        echo '</fieldset>';
+        echo '</form>';
+    }
+    ?>
  </div>
  <?php }
 ?>
 
  <?php if ($cmd->widgetPossibility('custom')) {
-	?>
+    ?>
    <div role="tabpanel" class="tab-pane" id="cmd_display">
     <br/>
     <legend><i class="fa fa-tint"></i> {{Widget}}</legend>
@@ -631,123 +631,123 @@ foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
           <th></th>
           <?php
 foreach (nextdom::getConfiguration('eqLogic:displayType') as $key => $value) {
-		echo '<th>{{' . $value['name'] . '}}</th>';
-	}
-	?>
+        echo '<th>{{' . $value['name'] . '}}</th>';
+    }
+    ?>
         </tr>
       </thead>
       <tbody>
        <?php if ($cmd->widgetPossibility('custom::widget')) {
-		?>
+        ?>
         <tr>
           <td>{{Widget}}</td>
           <td colspan="3">
            <?php if ($cmd->widgetPossibility('custom::widget::dashboard')) {
-			?>
+            ?>
              <select class="form-control cmdAttr" data-l1key="template" data-l2key="dashboard">
               <option value="default">defaut (core)</option>';
               <?php
 if (is_array($cmd_widgetDashboard[$cmd->getType()]) && is_array($cmd_widgetDashboard[$cmd->getType()][$cmd->getSubType()]) && count($cmd_widgetDashboard[$cmd->getType()][$cmd->getSubType()]) > 0) {
-				foreach ($cmd_widgetDashboard[$cmd->getType()][$cmd->getSubType()] as $widget) {
-					if ($widget['name'] == 'default') {
-						continue;
-					}
-					echo '<option value="' . $widget['name'] . '">' . $widget['name'] . ' (' . $widget['location'] . ')</option>';
-				}
-			}
-			?>
+                foreach ($cmd_widgetDashboard[$cmd->getType()][$cmd->getSubType()] as $widget) {
+                    if ($widget['name'] == 'default') {
+                        continue;
+                    }
+                    echo '<option value="' . $widget['name'] . '">' . $widget['name'] . ' (' . $widget['location'] . ')</option>';
+                }
+            }
+            ?>
           </select>
           <?php }
-		?>
+        ?>
         </td>
         <td>
          <?php if ($cmd->widgetPossibility('custom::widget::mobile')) {
-			?>
+            ?>
            <select class="form-control cmdAttr" data-l1key="template" data-l2key="mobile">
             <option value="default">defaut (core)</option>';
             <?php
 if (is_array($cmd_widgetMobile[$cmd->getType()]) && is_array($cmd_widgetMobile[$cmd->getType()][$cmd->getSubType()]) && count($cmd_widgetMobile[$cmd->getType()][$cmd->getSubType()]) > 0) {
-				foreach ($cmd_widgetMobile[$cmd->getType()][$cmd->getSubType()] as $widget) {
-					if ($widget['name'] == 'default') {
-						continue;
-					}
-					echo '<option value="' . $widget['name'] . '">' . $widget['name'] . ' (' . $widget['location'] . ')</option>';
-				}
-			}
-			?>
+                foreach ($cmd_widgetMobile[$cmd->getType()][$cmd->getSubType()] as $widget) {
+                    if ($widget['name'] == 'default') {
+                        continue;
+                    }
+                    echo '<option value="' . $widget['name'] . '">' . $widget['name'] . ' (' . $widget['location'] . ')</option>';
+                }
+            }
+            ?>
         </select>
         <?php }
-		?>
+        ?>
       </td>
     </tr>
     <?php }
-	?>
+    ?>
     <?php if ($cmd->widgetPossibility('custom::visibility')) {
-		?>
+        ?>
       <tr>
         <td>{{Visible}}</td>
         <?php
 foreach (nextdom::getConfiguration('eqLogic:displayType') as $key => $value) {
-			echo '<td>';
-			if ($cmd->widgetPossibility('custom::visibility::' . $key)) {
-				echo '<input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showOn' . $key . '" checked />';
-			}
-			echo '</td>';
-		}
-		?>
+            echo '<td>';
+            if ($cmd->widgetPossibility('custom::visibility::' . $key)) {
+                echo '<input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showOn' . $key . '" checked />';
+            }
+            echo '</td>';
+        }
+        ?>
     </tr>
     <?php }
-	?>
+    ?>
     <?php if ($cmd->widgetPossibility('custom::displayName')) {
-		?>
+        ?>
       <tr>
         <td>{{Afficher le nom}}</td>
         <?php
 foreach (nextdom::getConfiguration('eqLogic:displayType') as $key => $value) {
-			echo '<td>';
-			if ($cmd->widgetPossibility('custom::displayName::' . $key)) {
-				echo '<input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showNameOn' . $key . '" checked />';
-			}
-			echo '</td>';
-		}
-		?>
+            echo '<td>';
+            if ($cmd->widgetPossibility('custom::displayName::' . $key)) {
+                echo '<input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showNameOn' . $key . '" checked />';
+            }
+            echo '</td>';
+        }
+        ?>
     </tr>
     <?php }
-	?>
+    ?>
     <?php if ($cmd->widgetPossibility('custom::displayIconAndName')) {
-		?>
+        ?>
       <tr>
         <td>{{Afficher le nom ET l'icône}}</td>
         <?php
 foreach (nextdom::getConfiguration('eqLogic:displayType') as $key => $value) {
-			echo '<td>';
-			if ($cmd->widgetPossibility('custom::displayIconAndName::' . $key)) {
-				echo '<input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showIconAndName' . $key . '" />';
-			}
-			echo '</td>';
-		}
-		?>
+            echo '<td>';
+            if ($cmd->widgetPossibility('custom::displayIconAndName::' . $key)) {
+                echo '<input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showIconAndName' . $key . '" />';
+            }
+            echo '</td>';
+        }
+        ?>
     </tr>
     <?php }
-	?>
+    ?>
     <?php if (config::byKey('displayStatsWidget') == 1 && $cmd->getSubType() != 'string' && $cmd->widgetPossibility('custom::displayStats')) {
 
-		?>
+        ?>
       <tr>
         <td>{{Afficher les statistiques}}</td>
         <?php
 foreach (nextdom::getConfiguration('eqLogic:displayType') as $key => $value) {
-			echo '<td>';
-			if ($cmd->widgetPossibility('custom::displayStats::' . $key)) {
-				echo '<input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showStatsOn' . $key . '" checked />';
-			}
-			echo '</td>';
-		}
-		?>
+            echo '<td>';
+            if ($cmd->widgetPossibility('custom::displayStats::' . $key)) {
+                echo '<input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showStatsOn' . $key . '" checked />';
+            }
+            echo '</td>';
+        }
+        ?>
     </tr>
     <?php
 }
-	?>
+    ?>
 </tbody>
 </table>
 
@@ -764,7 +764,7 @@ foreach (nextdom::getConfiguration('eqLogic:displayType') as $key => $value) {
 
 <br/><br/>
 <?php if ($cmd->widgetPossibility('custom::optionalParameters')) {
-		?>
+        ?>
   <legend><i class="fa fa-pencil-square-o"></i> {{Paramètres optionnels widget}} <a class="btn btn-success btn-xs pull-right" id="bt_addWidgetParametersCmd"><i class="fa fa-plus-circle"></i> Ajouter</a></legend>
   <table class="table table-bordered table-condensed" id="table_widgetParametersCmd">
     <thead class="table table-bordered">
@@ -777,26 +777,26 @@ foreach (nextdom::getConfiguration('eqLogic:displayType') as $key => $value) {
     <tbody>
       <?php
 if ($cmd->getDisplay('parameters') != '') {
-			foreach ($cmd->getDisplay('parameters') as $key => $value) {
-				echo '<tr>';
-				echo '<td>';
-				echo '<input class="form-control key" value="' . $key . '" />';
-				echo '</td>';
-				echo '<td>';
-				echo '<input class="form-control value" value="' . $value . '" />';
-				echo '</td>';
-				echo '<td>';
-				echo '<a class="btn btn-danger btn-xs removeWidgetParameter"><i class="fa fa-times"></i> Supprimer</a>';
-				echo '</td>';
-				echo '</tr>';
-			}
-		}
-		?>
+            foreach ($cmd->getDisplay('parameters') as $key => $value) {
+                echo '<tr>';
+                echo '<td>';
+                echo '<input class="form-control key" value="' . $key . '" />';
+                echo '</td>';
+                echo '<td>';
+                echo '<input class="form-control value" value="' . $value . '" />';
+                echo '</td>';
+                echo '<td>';
+                echo '<a class="btn btn-danger btn-xs removeWidgetParameter"><i class="fa fa-times"></i> Supprimer</a>';
+                echo '</td>';
+                echo '</tr>';
+            }
+        }
+        ?>
   </tbody>
 </table>
 <?php
 }
-	?>
+    ?>
 </div>
 <?php }
 ?>

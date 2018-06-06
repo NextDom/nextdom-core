@@ -16,16 +16,16 @@
  */
 
  $('.bt_configurationPlugin').on('click',function(){
- 	$('#md_modal').dialog({title: "{{Configuration du plugin}}"});
- 	$("#md_modal").load('index.php?v=d&p=plugin&ajax=1&id='+$(this).attr('data-pluginid')).dialog('open');
+     $('#md_modal').dialog({title: "{{Configuration du plugin}}"});
+     $("#md_modal").load('index.php?v=d&p=plugin&ajax=1&id='+$(this).attr('data-pluginid')).dialog('open');
  });
  
  $('.bt_healthSpecific').on('click', function () {
- 	$('#md_modal').dialog({title: "{{Santé}} " + $(this).attr('data-pluginname')});
- 	$('#md_modal').load('index.php?v=d&plugin='+$(this).attr('data-pluginid')+'&modal=health').dialog('open');
+     $('#md_modal').dialog({title: "{{Santé}} " + $(this).attr('data-pluginname')});
+     $('#md_modal').load('index.php?v=d&plugin='+$(this).attr('data-pluginid')+'&modal=health').dialog('open');
  });
 
  $('#bt_benchmarkNextDom').on('click',function(){
- 	$('#md_modal').dialog({title: "{{NextDom benchmark}}"});
- 	$("#md_modal").load('index.php?v=d&modal=nextdom.benchmark').dialog('open');
+     $('#md_modal').dialog({title: "{{NextDom benchmark}}"});
+     $("#md_modal").load('index.php?v=d&modal=nextdom.benchmark').dialog('open');
  });

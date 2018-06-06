@@ -1,6 +1,6 @@
     <?php
 if (!isConnect('admin')) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 ?>
    <div style="display: none;" id="md_cmdConfigureHistory"></div>
@@ -25,11 +25,11 @@ if (!isConnect('admin')) {
     <?php
 $list_cmd = array();
 foreach (cmd::all() as $cmd) {
-	$info_cmd = utils::o2a($cmd);
-	$info_cmd['humanName'] = $cmd->getHumanName(true);
-	$eqLogic = $cmd->getEqLogic();
-	$info_cmd['plugins'] = $eqLogic->getEqType_name();
-	$list_cmd[] = $info_cmd;
+    $info_cmd = utils::o2a($cmd);
+    $info_cmd['humanName'] = $cmd->getHumanName(true);
+    $eqLogic = $cmd->getEqLogic();
+    $info_cmd['plugins'] = $eqLogic->getEqType_name();
+    $list_cmd[] = $info_cmd;
 }
 sendVarToJs('cmds_history_configure', $list_cmd);
 ?>
@@ -134,15 +134,15 @@ $('#bt_cmdConfigureCmdHistoryApply').on('click',function(){
 
 $('#bt_canceltimeline').on('click',function(){
   $('.cmdAttr[data-l1key=configuration][data-l2key="timeline::enable"]:visible').each(function(){
-	$(this).prop('checked', false);
-	$(this).closest('tr').attr('data-change','1');
+    $(this).prop('checked', false);
+    $(this).closest('tr').attr('data-change','1');
   });
 });
 
 $('#bt_applytimeline').on('click',function(){
   $('.cmdAttr[data-l1key=configuration][data-l2key="timeline::enable"]:visible').each(function(){
-	$(this).prop('checked', true);
-	 $(this).closest('tr').attr('data-change','1');
+    $(this).prop('checked', true);
+     $(this).closest('tr').attr('data-change','1');
   });
 });
 

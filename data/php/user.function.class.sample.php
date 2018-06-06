@@ -21,8 +21,8 @@ require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
 
 class userFunction {
 
-	public static function plop($_arg1 = '') {
-		return 'Argument 1 : ' . $_arg1;
-	}
+    public static function plop($_arg1 = '') {
+        return 'Argument 1 : ' . $_arg1;
+    }
 
 }

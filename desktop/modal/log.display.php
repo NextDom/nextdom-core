@@ -16,7 +16,7 @@
  */
 
 if (!isConnect('admin')) {
-	throw new Exception('401 Unauthorized');
+    throw new Exception('401 Unauthorized');
 }
 sendVarToJS('log_display_name', init('log', 'event'));
 sendVarToJS('log_default_search', init('search', ''));
@@ -29,26 +29,26 @@ sendVarToJS('log_default_search', init('search', ''));
 <br/><br/><br/>
 <pre id='pre_eventlog' style='overflow: auto; height: calc(100% - 65px);with:90%;'></pre>
 <script>
-	nextdom.log.autoupdate({
-		log : log_display_name,
-		default_search : log_default_search,
-		display : $('#pre_eventlog'),
-		search : $('#in_eventLogSearch'),
-		control : $('#bt_eventLogStopStart'),
-	});
+    nextdom.log.autoupdate({
+        log : log_display_name,
+        default_search : log_default_search,
+        display : $('#pre_eventlog'),
+        search : $('#in_eventLogSearch'),
+        control : $('#bt_eventLogStopStart'),
+    });
 
-	$("#bt_logdisplayclearLog").on('click', function(event) {
-		nextdom.log.clear({
-			log : log_display_name,
-		});
-	});
+    $("#bt_logdisplayclearLog").on('click', function(event) {
+        nextdom.log.clear({
+            log : log_display_name,
+        });
+    });
 
-	$("#bt_logdisplayremoveLog").on('click', function(event) {
-		nextdom.log.remove({
-			log : log_display_name,
-		});
-	});
-	$('#bt_logdisplaydownloadLog').click(function() {
-		window.open('core/php/downloadFile.php?pathfile=log/' + log_display_name, "_blank", null);
-	});
+    $("#bt_logdisplayremoveLog").on('click', function(event) {
+        nextdom.log.remove({
+            log : log_display_name,
+        });
+    });
+    $('#bt_logdisplaydownloadLog').click(function() {
+        window.open('core/php/downloadFile.php?pathfile=log/' + log_display_name, "_blank", null);
+    });
 </script>

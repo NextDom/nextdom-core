@@ -1,6 +1,6 @@
 <?php
 if (!isConnect()) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 include_file('3rdparty', 'jquery.tablesorter/theme.bootstrap', 'css');
 include_file('3rdparty', 'jquery.tablesorter/jquery.tablesorter.min', 'js');
@@ -120,7 +120,7 @@ sendVarToJS('dataStore_link_id', init('link_id', -1));
                 for(var j in data[i].usedBy.cmd){
                     tr += '<span class="label label-primary">'+data[i].usedBy.cmd[j]+'</span> ';
                 }
-		for(var j in data[i].usedBy.interactDef){
+        for(var j in data[i].usedBy.interactDef){
                     tr += '<span class="label label-primary">'+data[i].usedBy.interactDef[j]+'</span> ';
                 }
                 tr += '</td>';

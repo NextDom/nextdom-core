@@ -17,30 +17,30 @@
  */
 
 try {
-	require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
-	include_file('core', 'authentification', 'php');
+    require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+    include_file('core', 'authentification', 'php');
 
-	if (!isConnect('admin')) {
-		throw new Exception(__('401 - Accès non autorisé', __FILE__));
-	}
+    if (!isConnect('admin')) {
+        throw new Exception(__('401 - Accès non autorisé', __FILE__));
+    }
 
-	ajax::init();
+    ajax::init();
 
-	if (init('action') == 'restartDns') {
-		config::save('market::allowDNS', 1);
-		network::dns_start();
-		ajax::success();
-	}
+    if (init('action') == 'restartDns') {
+        config::save('market::allowDNS', 1);
+        network::dns_start();
+        ajax::success();
+    }
 
-	if (init('action') == 'stopDns') {
-		config::save('market::allowDNS', 0);
-		network::dns_stop();
-		ajax::success();
-	}
+    if (init('action') == 'stopDns') {
+        config::save('market::allowDNS', 0);
+        network::dns_stop();
+        ajax::success();
+    }
 
-	throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-	/*     * *********Catch exeption*************** */
+    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
+    /*     * *********Catch exeption*************** */
 } catch (Exception $e) {
-	ajax::error(displayException($e), $e->getCode());
+    ajax::error(displayException($e), $e->getCode());
 }
 ?>

@@ -17,36 +17,36 @@
  */
 
 try {
-	require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
-	include_file('core', 'authentification', 'php');
+    require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+    include_file('core', 'authentification', 'php');
 
-	if (!isConnect('admin')) {
-		throw new Exception(__('401 - Accès non autorisé', __FILE__));
-	}
+    if (!isConnect('admin')) {
+        throw new Exception(__('401 - Accès non autorisé', __FILE__));
+    }
 
-	ajax::init();
+    ajax::init();
 
-	if (init('action') == 'clear') {
-		log::clear(init('log'));
-		ajax::success();
-	}
+    if (init('action') == 'clear') {
+        log::clear(init('log'));
+        ajax::success();
+    }
 
-	if (init('action') == 'remove') {
-		log::remove(init('log'));
-		ajax::success();
-	}
+    if (init('action') == 'remove') {
+        log::remove(init('log'));
+        ajax::success();
+    }
 
-	if (init('action') == 'removeAll') {
-		log::removeAll();
-		ajax::success();
-	}
+    if (init('action') == 'removeAll') {
+        log::removeAll();
+        ajax::success();
+    }
 
-	if (init('action') == 'get') {
-		ajax::success(log::get(init('log'), init('start', 0), init('nbLine', 99999)));
-	}
+    if (init('action') == 'get') {
+        ajax::success(log::get(init('log'), init('start', 0), init('nbLine', 99999)));
+    }
 
-	throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-	/*     * *********Catch exeption*************** */
+    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
+    /*     * *********Catch exeption*************** */
 } catch (Exception $e) {
-	ajax::error(displayException($e), $e->getCode());
+    ajax::error(displayException($e), $e->getCode());
 }

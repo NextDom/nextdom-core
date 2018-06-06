@@ -21,100 +21,100 @@
 require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
 
 class repo_url {
-	/*     * *************************Attributs****************************** */
+    /*     * *************************Attributs****************************** */
 
-	public static $_name = 'URL';
+    public static $_name = 'URL';
 
-	public static $_scope = array(
-		'plugin' => true,
-		'backup' => false,
-		'hasConfiguration' => true,
-		'core' => true,
-	);
+    public static $_scope = array(
+        'plugin' => true,
+        'backup' => false,
+        'hasConfiguration' => true,
+        'core' => true,
+    );
 
-	public static $_configuration = array(
-		'parameters_for_add' => array(
-			'url' => array(
-				'name' => 'URL du fichier ZIP',
-				'type' => 'input',
-			),
-		),
-		'configuration' => array(
-			'core::url' => array(
-				'name' => 'URL core NextDom',
-				'type' => 'input',
-			),
-			'core::version' => array(
-				'name' => 'URL version core NextDom',
-				'type' => 'input',
-			),
-		),
-	);
+    public static $_configuration = array(
+        'parameters_for_add' => array(
+            'url' => array(
+                'name' => 'URL du fichier ZIP',
+                'type' => 'input',
+            ),
+        ),
+        'configuration' => array(
+            'core::url' => array(
+                'name' => 'URL core NextDom',
+                'type' => 'input',
+            ),
+            'core::version' => array(
+                'name' => 'URL version core NextDom',
+                'type' => 'input',
+            ),
+        ),
+    );
 
-	/*     * ***********************Méthodes statiques*************************** */
+    /*     * ***********************Méthodes statiques*************************** */
 
-	public static function checkUpdate($_update) {
+    public static function checkUpdate($_update) {
 
-	}
+    }
 
-	public static function downloadObject($_update) {
-		$tmp_dir = nextdom::getTmpFolder('url');
-		$tmp = $tmp_dir . '/' . $_update->getLogicalId() . '.zip';
-		if (file_exists($tmp)) {
-			unlink($tmp);
-		}
-		if (!is_writable($tmp_dir)) {
-			exec(system::getCmdSudo() . 'chmod 777 -R ' . $tmp);
-		}
-		if (!is_writable($tmp_dir)) {
-			throw new Exception(__('Impossible d\'écrire dans le répertoire : ', __FILE__) . $tmp . __('. Exécuter la commande suivante en SSH : sudo chmod 777 -R ', __FILE__) . $tmp_dir);
-		}
-		exec('wget --no-check-certificate --progress=dot --dot=mega ' . $_update->getConfiguration('url') . ' -O ' . $tmp);
-		log::add('update', 'alert', $result);
-		return array('path' => $tmp, 'localVersion' => date('Y-m-d H:i:s'));
-	}
+    public static function downloadObject($_update) {
+        $tmp_dir = nextdom::getTmpFolder('url');
+        $tmp = $tmp_dir . '/' . $_update->getLogicalId() . '.zip';
+        if (file_exists($tmp)) {
+            unlink($tmp);
+        }
+        if (!is_writable($tmp_dir)) {
+            exec(system::getCmdSudo() . 'chmod 777 -R ' . $tmp);
+        }
+        if (!is_writable($tmp_dir)) {
+            throw new Exception(__('Impossible d\'écrire dans le répertoire : ', __FILE__) . $tmp . __('. Exécuter la commande suivante en SSH : sudo chmod 777 -R ', __FILE__) . $tmp_dir);
+        }
+        exec('wget --no-check-certificate --progress=dot --dot=mega ' . $_update->getConfiguration('url') . ' -O ' . $tmp);
+        log::add('update', 'alert', $result);
+        return array('path' => $tmp, 'localVersion' => date('Y-m-d H:i:s'));
+    }
 
-	public static function deleteObjet($_update) {
+    public static function deleteObjet($_update) {
 
-	}
+    }
 
-	public static function objectInfo($_update) {
-		return array(
-			'doc' => '',
-			'changelog' => '',
-		);
-	}
+    public static function objectInfo($_update) {
+        return array(
+            'doc' => '',
+            'changelog' => '',
+        );
+    }
 
-	public static function downloadCore($_path) {
-		exec('wget --no-check-certificate --progress=dot --dot=mega ' . config::byKey('url::core::url') . ' -O ' . $_path);
-		return;
-	}
+    public static function downloadCore($_path) {
+        exec('wget --no-check-certificate --progress=dot --dot=mega ' . config::byKey('url::core::url') . ' -O ' . $_path);
+        return;
+    }
 
-	public static function versionCore() {
-		if (config::byKey('url::core::version') == '') {
-			return null;
-		}
-		try {
-			if (file_exists(nextdom::getTmpFolder('url') . '/version')) {
-				com_shell::execute(system::getCmdSudo() . 'rm /tmp/nextdom_version');
-			}
-			exec('wget --no-check-certificate --progress=dot --dot=mega ' . config::byKey('url::core::version') . ' -O /tmp/nextdom_version');
-			if (!file_exists(nextdom::getTmpFolder('url') . '/version')) {
-				return null;
-			}
-			$version = trim(file_get_contents(nextdom::getTmpFolder('url') . '/version'));
-			com_shell::execute(system::getCmdSudo() . 'rm ' . nextdom::getTmpFolder('url') . '/version');
-			return $version;
-		} catch (Exception $e) {
+    public static function versionCore() {
+        if (config::byKey('url::core::version') == '') {
+            return null;
+        }
+        try {
+            if (file_exists(nextdom::getTmpFolder('url') . '/version')) {
+                com_shell::execute(system::getCmdSudo() . 'rm /tmp/nextdom_version');
+            }
+            exec('wget --no-check-certificate --progress=dot --dot=mega ' . config::byKey('url::core::version') . ' -O /tmp/nextdom_version');
+            if (!file_exists(nextdom::getTmpFolder('url') . '/version')) {
+                return null;
+            }
+            $version = trim(file_get_contents(nextdom::getTmpFolder('url') . '/version'));
+            com_shell::execute(system::getCmdSudo() . 'rm ' . nextdom::getTmpFolder('url') . '/version');
+            return $version;
+        } catch (Exception $e) {
 
-		} catch (Error $e) {
+        } catch (Error $e) {
 
-		}
-		return null;
-	}
+        }
+        return null;
+    }
 
-	/*     * *********************Methode d'instance************************* */
+    /*     * *********************Methode d'instance************************* */
 
-	/*     * **********************Getteur Setteur*************************** */
+    /*     * **********************Getteur Setteur*************************** */
 
 }

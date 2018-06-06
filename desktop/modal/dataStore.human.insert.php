@@ -1,6 +1,6 @@
 <?php
 if (!isConnect()) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 ?>
 <table class="table table-condensed table-bordered" id="table_mod_insertDataSotreValue">
@@ -15,7 +15,7 @@ if (!isConnect()) {
             <select class='form-control'>
                     <?php
 foreach (dataStore::byTypeLinkId(init('type', 'scenario')) as $dataStore) {
-	echo '<option value="' . $dataStore->getKey() . '">' . $dataStore->getKey() . '</option>';
+    echo '<option value="' . $dataStore->getKey() . '">' . $dataStore->getKey() . '</option>';
 }
 
 ?>

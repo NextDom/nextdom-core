@@ -17,31 +17,31 @@
  */
 
 try {
-	require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
-	include_file('core', 'authentification', 'php');
+    require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+    include_file('core', 'authentification', 'php');
 
-	if (!isConnect('admin')) {
-		throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
-	}
+    if (!isConnect('admin')) {
+        throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
+    }
 
-	ajax::init(true);
+    ajax::init(true);
 
-	if (init('action') == 'flush') {
-		cache::flush();
-		ajax::success();
-	}
+    if (init('action') == 'flush') {
+        cache::flush();
+        ajax::success();
+    }
 
-	if (init('action') == 'clean') {
-		cache::clean();
-		ajax::success();
-	}
+    if (init('action') == 'clean') {
+        cache::clean();
+        ajax::success();
+    }
 
-	if (init('action') == 'stats') {
-		ajax::success(cache::stats());
-	}
+    if (init('action') == 'stats') {
+        ajax::success(cache::stats());
+    }
 
-	throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-	/*     * *********Catch exeption*************** */
+    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
+    /*     * *********Catch exeption*************** */
 } catch (Exception $e) {
-	ajax::error(displayException($e), $e->getCode());
+    ajax::error(displayException($e), $e->getCode());
 }

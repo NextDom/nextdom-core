@@ -1,10 +1,10 @@
 <?php
 if (!isConnect()) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 $date = array(
-	'start' => init('startDate', date('Y-m-d', strtotime(config::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d')))),
-	'end' => init('endDate', date('Y-m-d')),
+    'start' => init('startDate', date('Y-m-d', strtotime(config::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d')))),
+    'end' => init('endDate', date('Y-m-d')),
 );
 ?>
     <div class="md_history">
@@ -38,14 +38,14 @@ $date = array(
 
         <?php
 if (init('derive', 0) == 1) {
-	echo '<span class="pull-right">{{Variation}} <input type="checkbox" id="toto" class="cb_derive" checked /></span>';
+    echo '<span class="pull-right">{{Variation}} <input type="checkbox" id="toto" class="cb_derive" checked /></span>';
 } else {
-	echo '<span class="pull-right">{{Variation}} <input type="checkbox" id="toto" class="cb_derive" /></span>';
+    echo '<span class="pull-right">{{Variation}} <input type="checkbox" id="toto" class="cb_derive" /></span>';
 }
 if (init('step', 0) == 1) {
-	echo '<span class="pull-right">{{Escalier}} <input type="checkbox" class="cb_step" checked /></span>';
+    echo '<span class="pull-right">{{Escalier}} <input type="checkbox" class="cb_step" checked /></span>';
 } else {
-	echo '<span class="pull-right">{{Escalier}} <input type="checkbox" class="cb_step" /></span>';
+    echo '<span class="pull-right">{{Escalier}} <input type="checkbox" class="cb_step" /></span>';
 }
 ?>
        <center><div id="div_historyChart"></div></center>

@@ -1,6 +1,6 @@
 <?php
 if (!isConnect('admin')) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 ?>
 
@@ -9,9 +9,9 @@ if (!isConnect('admin')) {
 <a class="btn btn-default pull-right" id="bt_refreshCron" style="margin-top: 5px;"><i class="fa fa-refresh"></i> {{Rafraîchir}}</a>
 <?php
 if (config::byKey('enableCron') == 0) {
-	echo '<a class="btn btn-success pull-right" id="bt_changeCronState" data-state="1" style="margin-top: 5px;"><i class="fa fa-check"></i> {{Activer le système cron}}</a>';
+    echo '<a class="btn btn-success pull-right" id="bt_changeCronState" data-state="1" style="margin-top: 5px;"><i class="fa fa-check"></i> {{Activer le système cron}}</a>';
 } else {
-	echo '<a class="btn btn-danger pull-right" id="bt_changeCronState" data-state="0" style="margin-top: 5px;"><i class="fa fa-times"></i> {{Désactiver le système cron}}</a>';
+    echo '<a class="btn btn-danger pull-right" id="bt_changeCronState" data-state="0" style="margin-top: 5px;"><i class="fa fa-times"></i> {{Désactiver le système cron}}</a>';
 }
 ?>
 <br/><br/>

@@ -20,134 +20,134 @@
 require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
 
 class com_shell {
-	/*     * ***********************Attributs************************* */
+    /*     * ***********************Attributs************************* */
 
-	private static $instance;
+    private static $instance;
 
-	private $cmds = array();
-	private $background;
-	private $cache = array();
-	private $history = array();
+    private $cmds = array();
+    private $background;
+    private $cache = array();
+    private $history = array();
 
-	/*     * ********************Functions static********************* */
+    /*     * ********************Functions static********************* */
 
         /**
          * @access public
          * @param type $_cmd
          * @param type $_background
          */
-	public function __construct($_cmd = null, $_background = false) {
-		$this->setBackground($_background);
-		if ($_cmd !== null) {
-			$this->addCmd($_cmd);
-		}
-	}
+    public function __construct($_cmd = null, $_background = false) {
+        $this->setBackground($_background);
+        if ($_cmd !== null) {
+            $this->addCmd($_cmd);
+        }
+    }
 
-	/**
-	 * Get the instance of com_shell
-	 * @return com_shell
-	 */
-	public static function getInstance() {
-		if (self::$instance === null) {
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
+    /**
+     * Get the instance of com_shell
+     * @return com_shell
+     */
+    public static function getInstance() {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
 
-	/**
-	 * Execute a command
-	 * @param string $_cmd
-	 * @param bool $_background
-	 */
-	public static function execute($_cmd, $_background = false) {
-		$shell = self::getInstance();
-		$shell->clear();
-		$shell->addCmd($_cmd, $_background);
-		return $shell->exec();
-	}
+    /**
+     * Execute a command
+     * @param string $_cmd
+     * @param bool $_background
+     */
+    public static function execute($_cmd, $_background = false) {
+        $shell = self::getInstance();
+        $shell->clear();
+        $shell->addCmd($_cmd, $_background);
+        return $shell->exec();
+    }
 
-	/**
-	 * Test if a command exists
-	 * @param string $_cmd
-	 * @return boolean
-	 */
-	public static function commandExists($_cmd) {
-		$fp = popen("which " . $_cmd, "r");
-		$value = fgets($fp, 255);
-		$exists = !empty($value);
-		pclose($fp);
-		return $exists;
-	}
+    /**
+     * Test if a command exists
+     * @param string $_cmd
+     * @return boolean
+     */
+    public static function commandExists($_cmd) {
+        $fp = popen("which " . $_cmd, "r");
+        $value = fgets($fp, 255);
+        $exists = !empty($value);
+        pclose($fp);
+        return $exists;
+    }
 
-	/*     * ************* Functions ************************************ */
+    /*     * ************* Functions ************************************ */
 
-	/**
-	 * Execute commands
-	 * @throws Exception
-	 * @return string
-	 */
-	public function exec() {
-		$output = array();
-		$retval = 0;
-		$return = array();
-		foreach ($this->cmds as $cmd) {
-			exec($cmd, $output, $retval);
-			$return[] = implode("\n", $output);
-			if ($retval != 0) {
-				throw new Exception('Erreur dans l\'exécution du terminal, la valeur retournée est : ' . $retval . '. Détails : ' . print_r($return, true));
-			}
-			$this->history[] = $cmd;
-		}
-		$this->cmds = $this->cache;
-		$this->cache = array();
-		return implode("\n", $return);
-	}
+    /**
+     * Execute commands
+     * @throws Exception
+     * @return string
+     */
+    public function exec() {
+        $output = array();
+        $retval = 0;
+        $return = array();
+        foreach ($this->cmds as $cmd) {
+            exec($cmd, $output, $retval);
+            $return[] = implode("\n", $output);
+            if ($retval != 0) {
+                throw new Exception('Erreur dans l\'exécution du terminal, la valeur retournée est : ' . $retval . '. Détails : ' . print_r($return, true));
+            }
+            $this->history[] = $cmd;
+        }
+        $this->cmds = $this->cache;
+        $this->cache = array();
+        return implode("\n", $return);
+    }
 
-	/**
-	 * @deprecated Replaced by com_shell::commandExists
-	 * @param string $_cmd
-	 * @return boolean
-	 */
-	public function commandExist($_cmd) {
-		return self::commandExists($_cmd);
-	}
+    /**
+     * @deprecated Replaced by com_shell::commandExists
+     * @param string $_cmd
+     * @return boolean
+     */
+    public function commandExist($_cmd) {
+        return self::commandExists($_cmd);
+    }
 
-	public function clear() {
-		$this->cache = array_merge($this->cache, $this->cmds);
-		$this->cmds = array();
-	}
+    public function clear() {
+        $this->cache = array_merge($this->cache, $this->cmds);
+        $this->cmds = array();
+    }
 
-	public function clearHistory() {
-		$this->history = array();
-	}
+    public function clearHistory() {
+        $this->history = array();
+    }
 
-	/*     * **********************Getteur Setteur*************************** */
+    /*     * **********************Getteur Setteur*************************** */
 
-	public function getCmd() {
-		return implode("\n", $this->cmds);
-	}
+    public function getCmd() {
+        return implode("\n", $this->cmds);
+    }
 
-	public function addCmd($_cmd, $_background = null) {
-		$bg = ($_background === null) ? $this->getBackground() : $_background;
-		$add = $bg ? ' >> /dev/null 2>&1 &' : '';
-		$this->cmds[] = $_cmd . $add;
-		return true;
-	}
+    public function addCmd($_cmd, $_background = null) {
+        $bg = ($_background === null) ? $this->getBackground() : $_background;
+        $add = $bg ? ' >> /dev/null 2>&1 &' : '';
+        $this->cmds[] = $_cmd . $add;
+        return true;
+    }
 
-	public function setBackground($background) {
-		$this->background = $background;
-		return $this;
-	}
+    public function setBackground($background) {
+        $this->background = $background;
+        return $this;
+    }
 
-	public function getBackground() {
-		return $this->background;
-	}
+    public function getBackground() {
+        return $this->background;
+    }
 
-	/**
-	 * Get the history of commands
-	 * @return array
-	 */
-	public function getHistory() {
-		return $this->history;
-	}
+    /**
+     * Get the history of commands
+     * @return array
+     */
+    public function getHistory() {
+        return $this->history;
+    }
 }

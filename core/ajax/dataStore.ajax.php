@@ -17,77 +17,77 @@
  */
 
 try {
-	require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
-	include_file('core', 'authentification', 'php');
+    require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+    include_file('core', 'authentification', 'php');
 
-	if (!isConnect()) {
-		throw new Exception(__('401 - Accès non autorisé', __FILE__));
-	}
+    if (!isConnect()) {
+        throw new Exception(__('401 - Accès non autorisé', __FILE__));
+    }
 
-	ajax::init();
+    ajax::init();
 
-	if (init('action') == 'remove') {
-		$dataStore = dataStore::byId(init('id'));
-		if (!is_object($dataStore)) {
-			throw new Exception(__('Dépôt de données inconnu. Vérifiez l\'ID : ', __FILE__) . init('id'));
-		}
-		$dataStore->remove();
-		ajax::success();
-	}
+    if (init('action') == 'remove') {
+        $dataStore = dataStore::byId(init('id'));
+        if (!is_object($dataStore)) {
+            throw new Exception(__('Dépôt de données inconnu. Vérifiez l\'ID : ', __FILE__) . init('id'));
+        }
+        $dataStore->remove();
+        ajax::success();
+    }
 
-	if (init('action') == 'save') {
-		if (init('id') == '') {
-			$dataStore = new dataStore();
-			$dataStore->setKey(init('key'));
-			$dataStore->setLink_id(init('link_id'));
-			$dataStore->setType(init('type'));
-		} else {
-			$dataStore = dataStore::byId(init('id'));
-		}
-		if (!is_object($dataStore)) {
-			throw new Exception(__('Dépôt de données inconnu. Vérifiez l\'ID : ', __FILE__) . init('id'));
-		}
-		$dataStore->setValue(init('value'));
-		$dataStore->save();
-		ajax::success();
-	}
+    if (init('action') == 'save') {
+        if (init('id') == '') {
+            $dataStore = new dataStore();
+            $dataStore->setKey(init('key'));
+            $dataStore->setLink_id(init('link_id'));
+            $dataStore->setType(init('type'));
+        } else {
+            $dataStore = dataStore::byId(init('id'));
+        }
+        if (!is_object($dataStore)) {
+            throw new Exception(__('Dépôt de données inconnu. Vérifiez l\'ID : ', __FILE__) . init('id'));
+        }
+        $dataStore->setValue(init('value'));
+        $dataStore->save();
+        ajax::success();
+    }
 
-	if (init('action') == 'all') {
-		$dataStores = dataStore::byTypeLinkId(init('type'));
-		$return = array();
-		if (init('usedBy') == 1) {
-			foreach ($dataStores as $datastore) {
-				$info_datastore = utils::o2a($datastore);
-				$info_datastore['usedBy'] = array(
-					'scenario' => array(),
-					'eqLogic' => array(),
-					'cmd' => array(),
-					'interactDef' => array(),
-				);
-				$usedBy = $datastore->getUsedBy();
-				foreach ($usedBy['scenario'] as $scenario) {
-					$info_datastore['usedBy']['scenario'][] = $scenario->getHumanName();
-				}
-				foreach ($usedBy['eqLogic'] as $eqLogic) {
-					$info_datastore['usedBy']['eqLogic'][] = $eqLogic->getHumanName();
-				}
-				foreach ($usedBy['cmd'] as $cmd) {
-					$info_datastore['usedBy']['cmd'][] = $cmd->getHumanName();
-				}
-				foreach ($usedBy['interactDef'] as $interactDef) {
-					$info_datastore['usedBy']['interactDef'][] = $interactDef->getHumanName();
-				}
-				$return[] = $info_datastore;
-			}
-		} else {
-			$return = utils::o2a($dataStore);
-		}
-		ajax::success($return);
-	}
+    if (init('action') == 'all') {
+        $dataStores = dataStore::byTypeLinkId(init('type'));
+        $return = array();
+        if (init('usedBy') == 1) {
+            foreach ($dataStores as $datastore) {
+                $info_datastore = utils::o2a($datastore);
+                $info_datastore['usedBy'] = array(
+                    'scenario' => array(),
+                    'eqLogic' => array(),
+                    'cmd' => array(),
+                    'interactDef' => array(),
+                );
+                $usedBy = $datastore->getUsedBy();
+                foreach ($usedBy['scenario'] as $scenario) {
+                    $info_datastore['usedBy']['scenario'][] = $scenario->getHumanName();
+                }
+                foreach ($usedBy['eqLogic'] as $eqLogic) {
+                    $info_datastore['usedBy']['eqLogic'][] = $eqLogic->getHumanName();
+                }
+                foreach ($usedBy['cmd'] as $cmd) {
+                    $info_datastore['usedBy']['cmd'][] = $cmd->getHumanName();
+                }
+                foreach ($usedBy['interactDef'] as $interactDef) {
+                    $info_datastore['usedBy']['interactDef'][] = $interactDef->getHumanName();
+                }
+                $return[] = $info_datastore;
+            }
+        } else {
+            $return = utils::o2a($dataStore);
+        }
+        ajax::success($return);
+    }
 
-	throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-	/*     * *********Catch exeption*************** */
+    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
+    /*     * *********Catch exeption*************** */
 } catch (Exception $e) {
-	ajax::error(displayException($e), $e->getCode());
+    ajax::error(displayException($e), $e->getCode());
 }
 ?>

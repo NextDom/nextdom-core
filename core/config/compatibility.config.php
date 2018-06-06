@@ -18,9 +18,9 @@
 
 global $NEXTDOM_COMPATIBILIY_CONFIG;
 $NEXTDOM_COMPATIBILIY_CONFIG = array(
-	'miniplus' => array('wifi', 'ipfix', 'systemUpdate'),
-	'smart' => array('systemUpdate'),
-	'rpi' => array(),
-	'docker' => array(),
-	'diy' => array(),
+    'miniplus' => array('wifi', 'ipfix', 'systemUpdate'),
+    'smart' => array('systemUpdate'),
+    'rpi' => array(),
+    'docker' => array(),
+    'diy' => array(),
 );

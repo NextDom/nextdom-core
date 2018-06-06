@@ -1,10 +1,10 @@
 <?php
 if (!isConnect('admin')) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 $scenario = scenario::byId(init('scenario_id'));
 if (!is_object($scenario)) {
-	throw new Exception('Scénario non trouvé : ' . init('scenario_id'));
+    throw new Exception('Scénario non trouvé : ' . init('scenario_id'));
 }
 sendVarToJS('scenario_template_id', init('scenario_id'));
 ?>
@@ -23,13 +23,13 @@ sendVarToJS('scenario_template_id', init('scenario_id'));
         <br/>
 <?php
 foreach (update::listRepo() as $key => $value) {
-	if (!$value['enable']) {
-		continue;
-	}
-	if (!isset($value['scope']['hasScenarioStore']) || !$value['scope']['hasScenarioStore']) {
-		continue;
-	}
-	echo '<center><a class="btn btn-default bt_scenarioTemplateDisplayStore" style="width : 91%" data-repo="' . $key . '"><i class="fa fa-shopping-cart"></i> ' . $value['name'] . '</a></center><br/>';
+    if (!$value['enable']) {
+        continue;
+    }
+    if (!isset($value['scope']['hasScenarioStore']) || !$value['scope']['hasScenarioStore']) {
+        continue;
+    }
+    echo '<center><a class="btn btn-default bt_scenarioTemplateDisplayStore" style="width : 91%" data-repo="' . $key . '"><i class="fa fa-shopping-cart"></i> ' . $value['name'] . '</a></center><br/>';
 }
 ?>
         <div class="form-group" style="position:relative;left : -5px;">
@@ -53,13 +53,13 @@ foreach (update::listRepo() as $key => $value) {
             <div class="col-xs-6">
             <?php
 foreach (update::listRepo() as $key => $value) {
-	if (!$value['enable']) {
-		continue;
-	}
-	if (!isset($value['scope']['hasScenarioStore']) || !$value['scope']['hasScenarioStore']) {
-		continue;
-	}
-	echo '<a class="btn btn-warning bt_scenarioTemplateShare" data-repo="' . $key . '"><i class="fa fa-cloud-upload"></i> {{Partager sur}} ' . $value['name'] . '</a>';
+    if (!$value['enable']) {
+        continue;
+    }
+    if (!isset($value['scope']['hasScenarioStore']) || !$value['scope']['hasScenarioStore']) {
+        continue;
+    }
+    echo '<a class="btn btn-warning bt_scenarioTemplateShare" data-repo="' . $key . '"><i class="fa fa-cloud-upload"></i> {{Partager sur}} ' . $value['name'] . '</a>';
 }
 ?>
                 <a class='btn btn-danger' id='bt_scenarioTemplateRemove'><i class="fa fa-times"></i> {{Supprimer}}</a>

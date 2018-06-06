@@ -1,6 +1,6 @@
 <?php
 if (!isConnect('admin')) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 ?>
 <div id="backup">
@@ -75,60 +75,60 @@ if (!isConnect('admin')) {
             <?php
 
 foreach (update::listRepo() as $rkey => $value) {
-	if ($value['scope']['backup'] === false) {
-		continue;
-	}
-	if ($value['enable'] == 0) {
-		continue;
-	}
-	$class = 'repo_' . $rkey;
-	echo '<legend><i class="fa fa-cloud"></i> {{Sauvegardes}} ' . $value['name'] . '</legend>';
-	echo '<form class="form-horizontal repo">';
-	echo '<fieldset>';
-	echo '<div class="form-group">';
-	echo '<label class="col-sm-4 col-xs-6 control-label">{{Envoi des sauvegardes}}</label>';
-	echo '<div class="col-sm-4 col-xs-6">';
-	echo '<input type="checkbox" class="configKey" data-l1key="' . $rkey . '::cloudUpload" />';
-	echo '</div>';
-	echo '</div>';
-	if ($class == 'repo_market') {
-		echo '<div class="form-group">';
-		echo '<label class="col-sm-4 col-xs-6 control-label">{{Envoyer la sauvegarde locale sélectionnée}}</label>';
-		echo '<div class="col-sm-4 col-xs-6">';
-		echo '<a class="btn btn-success bt_uploadCloudBackup" data-repo="' . $rkey . '"> <i class="fa fa-file"></i> {{Envoyer}}</a>';
-		echo '</div>';
-		echo '</div>';
-	}
-	try {
-		$listeCloudBackup = $class::listeBackup();
-	} catch (Exception $e) {
-		$listeCloudBackup = array();
-		echo '<div class="alert alert-danger">' . $e->getMessage() . '</div>';
-	}
-	echo '<div class="form-group">';
-	echo '<label class="col-sm-4 col-xs-6 control-label">{{Sauvegardes disponibles}}</label>';
-	echo '<div class="col-sm-6 col-xs-6">';
-	echo '<select class="form-control sel_restoreCloudBackup">';
-	try {
-		foreach ($listeCloudBackup as $key => $backup) {
-			if (is_numeric($key)) {
-				echo '<option>' . $backup . '</option>';
-			}
-		}
-	} catch (Exception $e) {
+    if ($value['scope']['backup'] === false) {
+        continue;
+    }
+    if ($value['enable'] == 0) {
+        continue;
+    }
+    $class = 'repo_' . $rkey;
+    echo '<legend><i class="fa fa-cloud"></i> {{Sauvegardes}} ' . $value['name'] . '</legend>';
+    echo '<form class="form-horizontal repo">';
+    echo '<fieldset>';
+    echo '<div class="form-group">';
+    echo '<label class="col-sm-4 col-xs-6 control-label">{{Envoi des sauvegardes}}</label>';
+    echo '<div class="col-sm-4 col-xs-6">';
+    echo '<input type="checkbox" class="configKey" data-l1key="' . $rkey . '::cloudUpload" />';
+    echo '</div>';
+    echo '</div>';
+    if ($class == 'repo_market') {
+        echo '<div class="form-group">';
+        echo '<label class="col-sm-4 col-xs-6 control-label">{{Envoyer la sauvegarde locale sélectionnée}}</label>';
+        echo '<div class="col-sm-4 col-xs-6">';
+        echo '<a class="btn btn-success bt_uploadCloudBackup" data-repo="' . $rkey . '"> <i class="fa fa-file"></i> {{Envoyer}}</a>';
+        echo '</div>';
+        echo '</div>';
+    }
+    try {
+        $listeCloudBackup = $class::listeBackup();
+    } catch (Exception $e) {
+        $listeCloudBackup = array();
+        echo '<div class="alert alert-danger">' . $e->getMessage() . '</div>';
+    }
+    echo '<div class="form-group">';
+    echo '<label class="col-sm-4 col-xs-6 control-label">{{Sauvegardes disponibles}}</label>';
+    echo '<div class="col-sm-6 col-xs-6">';
+    echo '<select class="form-control sel_restoreCloudBackup">';
+    try {
+        foreach ($listeCloudBackup as $key => $backup) {
+            if (is_numeric($key)) {
+                echo '<option>' . $backup . '</option>';
+            }
+        }
+    } catch (Exception $e) {
 
-	}
-	echo '</select>';
-	echo '</div>';
-	echo '</div>';
-	echo '<div class="form-group">';
-	echo '<label class="col-sm-4 col-xs-6 control-label">{{Restaurer la sauvegarde}}</label>';
-	echo '<div class="col-sm-4 col-xs-6">';
-	echo '<a class="btn btn-warning bt_restoreRepoBackup" data-repo="' . $rkey . '"><i class="fa fa-refresh fa-spin" style="display : none;"></i> <i class="fa fa-file"></i> {{Restaurer}}</a>';
-	echo '</div>';
-	echo '</div>';
-	echo '</fieldset>';
-	echo '</form>';
+    }
+    echo '</select>';
+    echo '</div>';
+    echo '</div>';
+    echo '<div class="form-group">';
+    echo '<label class="col-sm-4 col-xs-6 control-label">{{Restaurer la sauvegarde}}</label>';
+    echo '<div class="col-sm-4 col-xs-6">';
+    echo '<a class="btn btn-warning bt_restoreRepoBackup" data-repo="' . $rkey . '"><i class="fa fa-refresh fa-spin" style="display : none;"></i> <i class="fa fa-file"></i> {{Restaurer}}</a>';
+    echo '</div>';
+    echo '</div>';
+    echo '</fieldset>';
+    echo '</form>';
 }
 ?>
 

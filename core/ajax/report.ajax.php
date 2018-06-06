@@ -18,54 +18,54 @@
 
 try {
 
-	require_once dirname(__FILE__) . '/../php/core.inc.php';
-	include_file('core', 'authentification', 'php');
+    require_once dirname(__FILE__) . '/../php/core.inc.php';
+    include_file('core', 'authentification', 'php');
 
-	if (!isConnect('admin')) {
-		throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
-	}
+    if (!isConnect('admin')) {
+        throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
+    }
 
-	ajax::init(true);
+    ajax::init(true);
 
-	if (init('action') == 'list') {
-		$return = array();
-		$path = dirname(__FILE__) . '/../../data/report/' . init('type') . '/' . init('id') . '/';
-		foreach (ls($path, '*') as $value) {
-			$return[$value] = array('name' => $value);
-		}
-		ajax::success($return);
-	}
+    if (init('action') == 'list') {
+        $return = array();
+        $path = dirname(__FILE__) . '/../../data/report/' . init('type') . '/' . init('id') . '/';
+        foreach (ls($path, '*') as $value) {
+            $return[$value] = array('name' => $value);
+        }
+        ajax::success($return);
+    }
 
-	if (init('action') == 'get') {
-		$path = dirname(__FILE__) . '/../../data/report/' . init('type') . '/' . init('id') . '/' . init('report');
-		$return = pathinfo($path);
-		$return['path'] = $path;
-		$return['type'] = init('type');
-		$return['id'] = init('id');
-		ajax::success($return);
-	}
+    if (init('action') == 'get') {
+        $path = dirname(__FILE__) . '/../../data/report/' . init('type') . '/' . init('id') . '/' . init('report');
+        $return = pathinfo($path);
+        $return['path'] = $path;
+        $return['type'] = init('type');
+        $return['id'] = init('id');
+        ajax::success($return);
+    }
 
-	if (init('action') == 'remove') {
-		$path = dirname(__FILE__) . '/../../data/report/' . init('type') . '/' . init('id') . '/' . init('report');
-		if (file_exists($path)) {
-			unlink($path);
-		}
-		if (file_exists($path)) {
-			throw new Exception(__('Impossible de supprimer : ', __FILE__) . $path);
-		}
-		ajax::success();
-	}
+    if (init('action') == 'remove') {
+        $path = dirname(__FILE__) . '/../../data/report/' . init('type') . '/' . init('id') . '/' . init('report');
+        if (file_exists($path)) {
+            unlink($path);
+        }
+        if (file_exists($path)) {
+            throw new Exception(__('Impossible de supprimer : ', __FILE__) . $path);
+        }
+        ajax::success();
+    }
 
-	if (init('action') == 'removeAll') {
-		$path = dirname(__FILE__) . '/../../data/report/' . init('type') . '/' . init('id') . '/';
-		foreach (ls($path, '*') as $value) {
-			unlink($path . $value);
-		}
-		ajax::success($return);
-	}
+    if (init('action') == 'removeAll') {
+        $path = dirname(__FILE__) . '/../../data/report/' . init('type') . '/' . init('id') . '/';
+        foreach (ls($path, '*') as $value) {
+            unlink($path . $value);
+        }
+        ajax::success($return);
+    }
 
-	throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-	/*     * *********Catch exeption*************** */
+    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
+    /*     * *********Catch exeption*************** */
 } catch (Exception $e) {
-	ajax::error(displayException($e), $e->getCode());
+    ajax::error(displayException($e), $e->getCode());
 }

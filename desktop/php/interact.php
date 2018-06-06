@@ -1,15 +1,15 @@
 <?php
 if (!isConnect('admin')) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 $interacts = array();
 $totalInteract = interactDef::all();
 $interacts[-1] = interactDef::all(null);
 $interactListGroup = interactDef::listGroup();
 if (is_array($interactListGroup)) {
-	foreach ($interactListGroup as $group) {
-		$interacts[$group['group']] = interactDef::all($group['group']);
-	}
+    foreach ($interactListGroup as $group) {
+        $interacts[$group['group']] = interactDef::all($group['group']);
+    }
 }
 ?>
 
@@ -24,33 +24,33 @@ if (is_array($interactListGroup)) {
       <div id="div_tree">
        <ul id="ul_interact" >
         <?php if (count($interacts[-1]) > 0) {
-	?>
+    ?>
          <li data-jstree='{"opened":true}'>
           <?php
 echo '<a>Aucune - ' . count($interacts[-1]) . ' interaction(s)</a>';
-	echo '<ul>';
-	foreach ($interacts[-1] as $interact) {
-		echo '<li data-jstree=\'{"opened":true,"icon":""}\'>';
-		echo ' <a class="li_interact" id="interact' . $interact->getId() . '" data-interact_id="' . $interact->getId() . '" title="{{Interaction ID :}} ' . $interact->getId() . '">' . $interact->getHumanName(false, true) . '</a>';
-		echo '</li>';
-	}
-	?>
+    echo '<ul>';
+    foreach ($interacts[-1] as $interact) {
+        echo '<li data-jstree=\'{"opened":true,"icon":""}\'>';
+        echo ' <a class="li_interact" id="interact' . $interact->getId() . '" data-interact_id="' . $interact->getId() . '" title="{{Interaction ID :}} ' . $interact->getId() . '">' . $interact->getHumanName(false, true) . '</a>';
+        echo '</li>';
+    }
+    ?>
         </ul>
         <?php
 }
 foreach ($interactListGroup as $group) {
-	if ($group['group'] != '') {
-		echo '<li data-jstree=\'{"opened":true}\'>';
-		echo '<a>' . $group['group'] . ' - ' . count($interacts[$group['group']]) . ' interaction(s)</a>';
-		echo '<ul>';
-		foreach ($interacts[$group['group']] as $interact) {
-			echo '<li data-jstree=\'{"opened":true,"icon":""}\'>';
-			echo ' <a class="li_interact" id="interact' . $interact->getId() . '" data-interact_id="' . $interact->getId() . '" title="{{Interaction ID :}} ' . $interact->getId() . '">' . $interact->getHumanName(false, true) . '</a>';
-			echo '</li>';
-		}
-		echo '</ul>';
-		echo '</li>';
-	}
+    if ($group['group'] != '') {
+        echo '<li data-jstree=\'{"opened":true}\'>';
+        echo '<a>' . $group['group'] . ' - ' . count($interacts[$group['group']]) . ' interaction(s)</a>';
+        echo '<ul>';
+        foreach ($interacts[$group['group']] as $interact) {
+            echo '<li data-jstree=\'{"opened":true,"icon":""}\'>';
+            echo ' <a class="li_interact" id="interact' . $interact->getId() . '" data-interact_id="' . $interact->getId() . '" title="{{Interaction ID :}} ' . $interact->getId() . '">' . $interact->getHumanName(false, true) . '</a>';
+            echo '</li>';
+        }
+        echo '</ul>';
+        echo '</li>';
+    }
 }
 ?>
  </ul>
@@ -83,61 +83,61 @@ foreach ($interactListGroup as $group) {
 <legend><i class="fa fa-comments-o"></i>  {{Mes interactions}}</legend>
 <?php
 if (count($totalInteract) == 0) {
-	echo "<br/><br/><br/><center><span style='color:#767676;font-size:1.2em;font-weight: bold;'>Vous n'avez encore aucune interaction. Cliquez sur ajouter pour commencer.</span></center>";
+    echo "<br/><br/><br/><center><span style='color:#767676;font-size:1.2em;font-weight: bold;'>Vous n'avez encore aucune interaction. Cliquez sur ajouter pour commencer.</span></center>";
 } else {
-	echo '<input class="form-control" placeholder="{{Rechercher}}" style="margin-bottom:4px;" id="in_searchInteract" />';
-	echo '<div class="panel-group" id="accordionInteract">';
-	if (count($interacts[-1]) > 0) {
-		echo '<div class="panel panel-default">';
-		echo '<div class="panel-heading">';
-		echo '<h3 class="panel-title">';
-		echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_aucun" style="text-decoration:none;">Aucun - ' . count($interacts[-1]) . ' interaction(s)</a>';
-		echo '</h3>';
-		echo '</div>';
-		echo '<div id="config_aucun" class="panel-collapse collapse">';
-		echo '<div class="panel-body">';
-		echo '<div class="interactListContainer">';
-		foreach ($interacts[-1] as $interact) {
-			$opacity = ($interact->getEnable()) ? '' : nextdom::getConfiguration('eqLogic:style:noactive');
-			echo '<div class="interactDisplayCard cursor" data-interact_id="' . $interact->getId() . '" style="text-align: center; background-color : #ffffff; min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
-			echo '<img src="core/img/interaction.png" height="90" width="85" />';
-			echo "<br>";
-			echo '<span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">' . $interact->getHumanName(true, true, true, true) . '</span>';
-			echo '</div>';
-		}
-		echo '</div>';
-		echo '</div>';
-		echo '</div>';
-		echo '</div>';
-	}
-	$i = 0;
-	foreach ($interactListGroup as $group) {
-		if ($group['group'] != '') {
-			echo '<div class="panel panel-default">';
-			echo '<div class="panel-heading">';
-			echo '<h3 class="panel-title">';
-			echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_' . $i . '" style="text-decoration:none;">' . $group['group'] . ' - ' . count($interacts[$group['group']]) . ' interaction(s)</a>';
-			echo '</h3>';
-			echo '</div>';
-			echo '<div id="config_' . $i . '" class="panel-collapse collapse">';
-			echo '<div class="panel-body">';
-			echo '<div class="interactListContainer">';
-			foreach ($interacts[$group['group']] as $interact) {
-				$opacity = ($interact->getEnable()) ? '' : nextdom::getConfiguration('eqLogic:style:noactive');
-				echo '<div class="interactDisplayCard cursor" data-interact_id="' . $interact->getId() . '" style="text-align: center; background-color : #ffffff; min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
-				echo '<img src="core/img/interaction.png" height="90" width="85" />';
-				echo "<br>";
-				echo '<span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">' . $interact->getHumanName(true, true, true, true) . '</span>';
-				echo '</div>';
-			}
-			echo '</div>';
-			echo '</div>';
-			echo '</div>';
-			echo '</div>';
-		}
-		$i += 1;
-	}
-	echo '</div>';
+    echo '<input class="form-control" placeholder="{{Rechercher}}" style="margin-bottom:4px;" id="in_searchInteract" />';
+    echo '<div class="panel-group" id="accordionInteract">';
+    if (count($interacts[-1]) > 0) {
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-heading">';
+        echo '<h3 class="panel-title">';
+        echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_aucun" style="text-decoration:none;">Aucun - ' . count($interacts[-1]) . ' interaction(s)</a>';
+        echo '</h3>';
+        echo '</div>';
+        echo '<div id="config_aucun" class="panel-collapse collapse">';
+        echo '<div class="panel-body">';
+        echo '<div class="interactListContainer">';
+        foreach ($interacts[-1] as $interact) {
+            $opacity = ($interact->getEnable()) ? '' : nextdom::getConfiguration('eqLogic:style:noactive');
+            echo '<div class="interactDisplayCard cursor" data-interact_id="' . $interact->getId() . '" style="text-align: center; background-color : #ffffff; min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
+            echo '<img src="core/img/interaction.png" height="90" width="85" />';
+            echo "<br>";
+            echo '<span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">' . $interact->getHumanName(true, true, true, true) . '</span>';
+            echo '</div>';
+        }
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+    }
+    $i = 0;
+    foreach ($interactListGroup as $group) {
+        if ($group['group'] != '') {
+            echo '<div class="panel panel-default">';
+            echo '<div class="panel-heading">';
+            echo '<h3 class="panel-title">';
+            echo '<a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_' . $i . '" style="text-decoration:none;">' . $group['group'] . ' - ' . count($interacts[$group['group']]) . ' interaction(s)</a>';
+            echo '</h3>';
+            echo '</div>';
+            echo '<div id="config_' . $i . '" class="panel-collapse collapse">';
+            echo '<div class="panel-body">';
+            echo '<div class="interactListContainer">';
+            foreach ($interacts[$group['group']] as $interact) {
+                $opacity = ($interact->getEnable()) ? '' : nextdom::getConfiguration('eqLogic:style:noactive');
+                echo '<div class="interactDisplayCard cursor" data-interact_id="' . $interact->getId() . '" style="text-align: center; background-color : #ffffff; min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
+                echo '<img src="core/img/interaction.png" height="90" width="85" />';
+                echo "<br>";
+                echo '<span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">' . $interact->getHumanName(true, true, true, true) . '</span>';
+                echo '</div>';
+            }
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+        }
+        $i += 1;
+    }
+    echo '</div>';
 }
 ?>
 </div>
@@ -249,7 +249,7 @@ if (count($totalInteract) == 0) {
           <div class="col-sm-9">
             <?php
 foreach (nextdom::getConfiguration('cmd:type') as $id => $type) {
-	echo '<label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="type" data-l3key="' . $id . '" checked="true" />' . $type['name'] . '</label> ';
+    echo '<label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="type" data-l3key="' . $id . '" checked="true" />' . $type['name'] . '</label> ';
 }
 ?>
          </div>
@@ -259,9 +259,9 @@ foreach (nextdom::getConfiguration('cmd:type') as $id => $type) {
         <div class="col-sm-9">
           <?php
 foreach (nextdom::getConfiguration('cmd:type') as $type) {
-	foreach ($type['subtype'] as $id => $subtype) {
-		echo '<label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="subtype" data-l3key="' . $id . '" checked="true" />' . $subtype['name'] . '</label> ';
-	}
+    foreach ($type['subtype'] as $id => $subtype) {
+        echo '<label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="subtype" data-l3key="' . $id . '" checked="true" />' . $subtype['name'] . '</label> ';
+    }
 }
 ?>
       </div>
@@ -272,10 +272,10 @@ foreach (nextdom::getConfiguration('cmd:type') as $type) {
         <label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="unite" data-l3key="none" checked="true" />{{Sans unité}}</label>
         <?php
 foreach (cmd::allUnite() as $unite) {
-	if (trim($unite['unite']) == '') {
-		continue;
-	}
-	echo '<label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="unite" data-l3key="' . $unite['unite'] . '" checked="true" />' . $unite['unite'] . '</label> ';
+    if (trim($unite['unite']) == '') {
+        continue;
+    }
+    echo '<label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="unite" data-l3key="' . $unite['unite'] . '" checked="true" />' . $unite['unite'] . '</label> ';
 }
 ?>
     </div>
@@ -285,7 +285,7 @@ foreach (cmd::allUnite() as $unite) {
     <div class="col-sm-9">
       <?php
 foreach (object::all() as $object) {
-	echo '<label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="object" data-l3key="' . $object->getId() . '" checked="true" />' . $object->getName() . '</label> ';
+    echo '<label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="object" data-l3key="' . $object->getId() . '" checked="true" />' . $object->getName() . '</label> ';
 }
 ?>
    </div>
@@ -295,7 +295,7 @@ foreach (object::all() as $object) {
   <div class="col-sm-9">
     <?php
 foreach (eqLogic::allType() as $type) {
-	echo '<label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="plugin" data-l3key="' . $type['type'] . '" checked="true" />' . $type['type'] . '</label> ';
+    echo '<label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="plugin" data-l3key="' . $type['type'] . '" checked="true" />' . $type['type'] . '</label> ';
 }
 ?>
  </div>
@@ -307,7 +307,7 @@ foreach (eqLogic::allType() as $type) {
     <?php
 echo '<label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="category" data-l3key="noCategory" checked="true" />{{Sans catégorie}}</label> ';
 foreach (nextdom::getConfiguration('eqLogic:category') as $id => $category) {
-	echo '<label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="category" data-l3key="' . $id . '" checked="true" />' . $category['name'] . '</label> ';
+    echo '<label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="category" data-l3key="' . $id . '" checked="true" />' . $category['name'] . '</label> ';
 }
 ?>
  </div>
@@ -317,7 +317,7 @@ foreach (nextdom::getConfiguration('eqLogic:category') as $id => $category) {
   <div class="col-sm-9">
    <?php
 foreach (array('object' => 'Objets', 'eqlogic' => 'Equipements', 'cmd' => 'Commandes') as $id => $name) {
-	echo '<label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="visible" data-l3key="' . $id . '" />' . $name . '</label> ';
+    echo '<label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="visible" data-l3key="' . $id . '" />' . $name . '</label> ';
 }
 ?>
  </div>
@@ -329,7 +329,7 @@ foreach (array('object' => 'Objets', 'eqlogic' => 'Equipements', 'cmd' => 'Comma
       <option value="all">{{Tous}}</option>
       <?php
 foreach (eqLogic::all() as $eqLogic) {
-	echo '<option value="' . $eqLogic->getId() . '" >' . $eqLogic->getHumanName() . '</option>';
+    echo '<option value="' . $eqLogic->getId() . '" >' . $eqLogic->getHumanName() . '</option>';
 }
 ?>
    </select>

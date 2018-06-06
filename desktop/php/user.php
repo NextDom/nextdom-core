@@ -1,6 +1,6 @@
 <?php
 if (!isConnect('admin')) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 sendVarToJS('ldapEnable', config::byKey('ldap::enable'));
 ?>
@@ -13,13 +13,13 @@ sendVarToJS('ldapEnable', config::byKey('ldap::enable'));
     <legend><i class="icon personne-toilet1"></i>  {{Liste des utilisateurs}}
       <a class="btn btn-success btn-xs pull-right" id="bt_saveUser"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>
       <?php if (config::byKey('ldap::enable') != '1') {
-	$user = user::byLogin('nextdom_support');
-	if (!is_object($user)) {
-		echo ' <a class="btn btn-success btn-xs pull-right" id="bt_supportAccess" data-enable="1"><i class="fa fa-user"></i> {{Activer accès support}}</a>';
-	} else {
-		echo ' <a class="btn btn-danger btn-xs pull-right" id="bt_supportAccess" data-enable="0"><i class="fa fa-user"></i> {{Désactiver accès support}}</a>';
-	}
-	?>
+    $user = user::byLogin('nextdom_support');
+    if (!is_object($user)) {
+        echo ' <a class="btn btn-success btn-xs pull-right" id="bt_supportAccess" data-enable="1"><i class="fa fa-user"></i> {{Activer accès support}}</a>';
+    } else {
+        echo ' <a class="btn btn-danger btn-xs pull-right" id="bt_supportAccess" data-enable="0"><i class="fa fa-user"></i> {{Désactiver accès support}}</a>';
+    }
+    ?>
 
        <a class="btn btn-warning btn-xs  pull-right" id="bt_addUser"><i class="fa fa-plus-circle"></i> {{Ajouter un utilisateur}}</a>
        <?php }
@@ -55,15 +55,15 @@ cleanSession();
 $cache = cache::byKey('current_sessions');
 $sessions = $cache->getValue(array());
 if(is_array($sessions) && count($sessions) > 0){
-	foreach ($sessions as $id => $session) {
-		echo '<tr data-id="' . $id . '">';
-		echo '<td>' . $id . '</td>';
-		echo '<td>' . $session['login'] . '</td>';
-		echo '<td>' . $session['ip'] . '</td>';
-		echo '<td>' . $session['datetime'] . '</td>';
-		echo '<td><a class="btn btn-xs btn-warning bt_deleteSession"><i class="fa fa-sign-out"></i> {{Déconnecter}}</a></td>';
-		echo '</tr>';
-	}
+    foreach ($sessions as $id => $session) {
+        echo '<tr data-id="' . $id . '">';
+        echo '<td>' . $id . '</td>';
+        echo '<td>' . $session['login'] . '</td>';
+        echo '<td>' . $session['ip'] . '</td>';
+        echo '<td>' . $session['datetime'] . '</td>';
+        echo '<td><a class="btn btn-xs btn-warning bt_deleteSession"><i class="fa fa-sign-out"></i> {{Déconnecter}}</a></td>';
+        echo '</tr>';
+    }
 }
 ?>
      </tbody>
@@ -86,28 +86,28 @@ if(is_array($sessions) && count($sessions) > 0){
       <tbody>
         <?php
 foreach (user::all() as $user) {
-	if (!is_array($user->getOptions('registerDevice')) || count($user->getOptions('registerDevice')) == 0) {
-		continue;
-	}
-	foreach ($user->getOptions('registerDevice') as $key => $value) {
-		echo '<tr data-key="' . $key . '" data-user_id="' . $user->getId() . '">';
-		echo '<td>';
-		echo substr($key, 0, 10) . '...';
-		echo '</td>';
-		echo '<td>';
-		echo $user->getLogin();
-		echo '</td>';
-		echo '<td>';
-		echo $value['ip'];
-		echo '</td>';
-		echo '<td>';
-		echo $value['datetime'];
-		echo '</td>';
-		echo '<td>';
-		echo '<a class="btn btn-warning btn-xs bt_removeRegisterDevice"><i class="fa fa-trash"></i> {{Supprimer}}</a>';
-		echo '</td>';
-		echo '</tr>';
-	}
+    if (!is_array($user->getOptions('registerDevice')) || count($user->getOptions('registerDevice')) == 0) {
+        continue;
+    }
+    foreach ($user->getOptions('registerDevice') as $key => $value) {
+        echo '<tr data-key="' . $key . '" data-user_id="' . $user->getId() . '">';
+        echo '<td>';
+        echo substr($key, 0, 10) . '...';
+        echo '</td>';
+        echo '<td>';
+        echo $user->getLogin();
+        echo '</td>';
+        echo '<td>';
+        echo $value['ip'];
+        echo '</td>';
+        echo '<td>';
+        echo $value['datetime'];
+        echo '</td>';
+        echo '<td>';
+        echo '<a class="btn btn-warning btn-xs bt_removeRegisterDevice"><i class="fa fa-trash"></i> {{Supprimer}}</a>';
+        echo '</td>';
+        echo '</tr>';
+    }
 }
 ?>
     </tbody>

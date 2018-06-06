@@ -1,10 +1,10 @@
 <?php
 if (!isConnect('admin')) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 $plan = plan::byId(init('id'));
 if (!is_object($plan)) {
-	throw new Exception('Impossible de trouver le design');
+    throw new Exception('Impossible de trouver le design');
 }
 $link = $plan->getLink();
 sendVarToJS('id', $plan->getId());
@@ -142,7 +142,7 @@ sendVarToJS('id', $plan->getId());
       <option value="0">{{Général}}</option>
       <?php
 foreach (object::all() as $object) {
-	echo '<option value="' . $object->getId() . '">' . $object->getName() . '</option>';
+    echo '<option value="' . $object->getId() . '">' . $object->getName() . '</option>';
 }
 ?>
    </select>
@@ -154,7 +154,7 @@ foreach (object::all() as $object) {
     <select class="form-control planAttr" data-l1key="link_id">
       <?php
 foreach (view::all() as $view) {
-	echo '<option value="' . $view->getId() . '">' . $view->getName() . '</option>';
+    echo '<option value="' . $view->getId() . '">' . $view->getName() . '</option>';
 }
 ?>
    </select>
@@ -166,7 +166,7 @@ foreach (view::all() as $view) {
     <select class="form-control planAttr" data-l1key="link_id">
       <?php
 foreach (planHeader::all() as $plan) {
-	echo '<option value="' . $plan->getId() . '">' . $plan->getName() . '</option>';
+    echo '<option value="' . $plan->getId() . '">' . $plan->getName() . '</option>';
 }
 ?>
    </select>

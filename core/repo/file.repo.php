@@ -21,48 +21,48 @@
 require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
 
 class repo_file {
-	/*     * *************************Attributs****************************** */
+    /*     * *************************Attributs****************************** */
 
-	public static $_name = 'Fichier';
+    public static $_name = 'Fichier';
 
-	public static $_scope = array(
-		'plugin' => true,
-		'backup' => false,
-		'hasConfiguration' => false,
-	);
+    public static $_scope = array(
+        'plugin' => true,
+        'backup' => false,
+        'hasConfiguration' => false,
+    );
 
-	public static $_configuration = array(
-		'parameters_for_add' => array(
-			'path' => array(
-				'name' => 'Chemin',
-				'type' => 'file',
-			),
-		),
-	);
+    public static $_configuration = array(
+        'parameters_for_add' => array(
+            'path' => array(
+                'name' => 'Chemin',
+                'type' => 'file',
+            ),
+        ),
+    );
 
-	/*     * ***********************Méthodes statiques*************************** */
+    /*     * ***********************Méthodes statiques*************************** */
 
-	public static function checkUpdate($_update) {
+    public static function checkUpdate($_update) {
 
-	}
+    }
 
-	public static function downloadObject($_update) {
-		return array('localVersion' => date('Y-m-d H:i:s'), 'path' => $_update->getConfiguration('path'));
-	}
+    public static function downloadObject($_update) {
+        return array('localVersion' => date('Y-m-d H:i:s'), 'path' => $_update->getConfiguration('path'));
+    }
 
-	public static function deleteObjet($_update) {
+    public static function deleteObjet($_update) {
 
-	}
+    }
 
-	public static function objectInfo($_update) {
-		return array(
-			'doc' => '',
-			'changelog' => '',
-		);
-	}
+    public static function objectInfo($_update) {
+        return array(
+            'doc' => '',
+            'changelog' => '',
+        );
+    }
 
-	/*     * *********************Methode d'instance************************* */
+    /*     * *********************Methode d'instance************************* */
 
-	/*     * **********************Getteur Setteur*************************** */
+    /*     * **********************Getteur Setteur*************************** */
 
 }

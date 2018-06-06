@@ -1,10 +1,10 @@
 <?php
 if (!isConnect('admin')) {
-	throw new Exception('{{401 - Accès non autorisé}}');
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
 ?>
 <div class="alert alert-warning" id="div_spanAlertMessage">
-    {{Attention : tout ce que vous écrivez ici est global et inclus sur toutes les pages. La moindre erreur peut rendre votre NextDom non fonctionel.}}
+   {{Attention : tout ce que vous écrivez ici est global et inclus sur toutes les pages. La moindre erreur peut rendre votre}} <?php echo config::byKey('product_name'); ?> {{non fonctionel.}}
     <span class="pull-right">
     {{Activer}} : <input type="checkbox" class="configKey" data-l1key="enableCustomCss" checked />
    </span>
@@ -23,7 +23,7 @@ if (!isConnect('admin')) {
                     </legend>
                     <textarea id='ta_jsDesktopContent'><?php
 if (file_exists(dirname(__FILE__) . '/../custom/custom.js')) {
-	echo trim(file_get_contents(dirname(__FILE__) . '/../custom/custom.js'));
+    echo trim(file_get_contents(dirname(__FILE__) . '/../custom/custom.js'));
 }
 ?></textarea>
                    </div>
@@ -33,7 +33,7 @@ if (file_exists(dirname(__FILE__) . '/../custom/custom.js')) {
                     </legend>
                     <textarea id='ta_cssDesktopContent' style='height:auto;'><?php
 if (file_exists(dirname(__FILE__) . '/../custom/custom.css')) {
-	echo trim(file_get_contents(dirname(__FILE__) . '/../custom/custom.css'));
+    echo trim(file_get_contents(dirname(__FILE__) . '/../custom/custom.css'));
 }
 ?></textarea>
                    </div>
@@ -48,7 +48,7 @@ if (file_exists(dirname(__FILE__) . '/../custom/custom.css')) {
                     </legend>
                     <textarea id='ta_jsMobileContent' style='height:auto;'><?php
 if (file_exists(dirname(__FILE__) . '/../../mobile/custom/custom.js')) {
-	echo trim(file_get_contents(dirname(__FILE__) . '/../../mobile/custom/custom.js'));
+    echo trim(file_get_contents(dirname(__FILE__) . '/../../mobile/custom/custom.js'));
 }
 ?></textarea>
                    </div>
@@ -58,7 +58,7 @@ if (file_exists(dirname(__FILE__) . '/../../mobile/custom/custom.js')) {
                     </legend>
                     <textarea id='ta_cssMobileContent' style='height:auto;'><?php
 if (file_exists(dirname(__FILE__) . '/../../mobile/custom/custom.css')) {
-	echo trim(file_get_contents(dirname(__FILE__) . '/../../mobile/custom/custom.css'));
+    echo trim(file_get_contents(dirname(__FILE__) . '/../../mobile/custom/custom.css'));
 }
 ?></textarea>
                    </div>

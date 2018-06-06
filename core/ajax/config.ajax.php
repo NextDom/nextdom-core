@@ -17,87 +17,87 @@
  */
 
 try {
-	require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
-	include_file('core', 'authentification', 'php');
+    require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+    include_file('core', 'authentification', 'php');
 
-	if (!isConnect()) {
-		throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
-	}
+    if (!isConnect()) {
+        throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
+    }
 
-	ajax::init();
+    ajax::init();
 
-	if (init('action') == 'genApiKey') {
-		if (!isConnect('admin')) {
-			throw new Exception(__('401 - Accès non autorisé', __FILE__));
-		}
-		if (init('plugin') == 'core') {
-			config::save('api', config::genKey());
-			ajax::success(config::byKey('api'));
-		} else if (init('plugin') == 'pro') {
-			config::save('apipro', config::genKey());
-			ajax::success(config::byKey('apipro'));
-		} else {
-			config::save('api', config::genKey(), init('plugin'));
-			ajax::success(config::byKey('api', init('plugin')));
-		}
-	}
+    if (init('action') == 'genApiKey') {
+        if (!isConnect('admin')) {
+            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+        }
+        if (init('plugin') == 'core') {
+            config::save('api', config::genKey());
+            ajax::success(config::byKey('api'));
+        } else if (init('plugin') == 'pro') {
+            config::save('apipro', config::genKey());
+            ajax::success(config::byKey('apipro'));
+        } else {
+            config::save('api', config::genKey(), init('plugin'));
+            ajax::success(config::byKey('api', init('plugin')));
+        }
+    }
 
-	if (init('action') == 'getKey') {
-		$keys = init('key');
-		if ($keys == '') {
-			throw new Exception(__('Aucune clef demandée', __FILE__));
-		}
-		if (is_json($keys)) {
-			$keys = json_decode($keys, true);
-			$configs = config::byKeys(array_keys($keys), init('plugin', 'core'));
-			$return = array();
-			foreach ($keys as $key => $value) {
-				$return[$key] = nextdom::toHumanReadable($configs[$key]);
-			}
-			if (init('convertToHumanReadable', 0)) {
-				$return = nextdom::toHumanReadable($return);
-			}
-			ajax::success($return);
-		} else {
-			$return = config::byKey($keys, init('plugin', 'core'));
-			if (init('convertToHumanReadable', 0)) {
-				$return = nextdom::toHumanReadable($return);
-			}
-			ajax::success($return);
-		}
-	}
+    if (init('action') == 'getKey') {
+        $keys = init('key');
+        if ($keys == '') {
+            throw new Exception(__('Aucune clef demandée', __FILE__));
+        }
+        if (is_json($keys)) {
+            $keys = json_decode($keys, true);
+            $configs = config::byKeys(array_keys($keys), init('plugin', 'core'));
+            $return = array();
+            foreach ($keys as $key => $value) {
+                $return[$key] = nextdom::toHumanReadable($configs[$key]);
+            }
+            if (init('convertToHumanReadable', 0)) {
+                $return = nextdom::toHumanReadable($return);
+            }
+            ajax::success($return);
+        } else {
+            $return = config::byKey($keys, init('plugin', 'core'));
+            if (init('convertToHumanReadable', 0)) {
+                $return = nextdom::toHumanReadable($return);
+            }
+            ajax::success($return);
+        }
+    }
 
-	if (init('action') == 'addKey') {
-		if (!isConnect('admin')) {
-			throw new Exception(__('401 - Accès non autorisé', __FILE__));
-		}
-		$values = json_decode(init('value'), true);
-		foreach ($values as $key => $value) {
-			config::save($key, nextdom::fromHumanReadable($value), init('plugin', 'core'));
-		}
-		ajax::success();
-	}
+    if (init('action') == 'addKey') {
+        if (!isConnect('admin')) {
+            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+        }
+        $values = json_decode(init('value'), true);
+        foreach ($values as $key => $value) {
+            config::save($key, nextdom::fromHumanReadable($value), init('plugin', 'core'));
+        }
+        ajax::success();
+    }
 
-	if (init('action') == 'removeKey') {
-		$keys = init('key');
-		if ($keys == '') {
-			throw new Exception(__('Aucune clef demandée', __FILE__));
-		}
-		if (is_json($keys)) {
-			$keys = json_decode($keys, true);
-			$return = array();
-			foreach ($keys as $key => $value) {
-				config::remove($key, init('plugin', 'core'));
-			}
-		} else {
-			config::remove(init('key'), init('plugin', 'core'));
-		}
-		ajax::success();
-	}
+    if (init('action') == 'removeKey') {
+        $keys = init('key');
+        if ($keys == '') {
+            throw new Exception(__('Aucune clef demandée', __FILE__));
+        }
+        if (is_json($keys)) {
+            $keys = json_decode($keys, true);
+            $return = array();
+            foreach ($keys as $key => $value) {
+                config::remove($key, init('plugin', 'core'));
+            }
+        } else {
+            config::remove(init('key'), init('plugin', 'core'));
+        }
+        ajax::success();
+    }
 
-	throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
+    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
 /*     * *********Catch exeption*************** */
 } catch (Exception $e) {
-	ajax::error(displayException($e), $e->getCode());
+    ajax::error(displayException($e), $e->getCode());
 }
 ?>
