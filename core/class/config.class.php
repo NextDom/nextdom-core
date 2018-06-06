@@ -19,7 +19,8 @@
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
 
-class config {
+class config
+{
     /*     * *************************Attributs****************************** */
 
     private static $defaultConfiguration = array();
@@ -27,7 +28,8 @@ class config {
 
     /*     * ***********************Methode static*************************** */
 
-    public static function getDefaultConfiguration($_plugin = 'core') {
+    public static function getDefaultConfiguration($_plugin = 'core')
+    {
         if (!isset(self::$defaultConfiguration[$_plugin])) {
             if ($_plugin == 'core') {
                 self::$defaultConfiguration[$_plugin] = parse_ini_file(dirname(__FILE__) . '/../../core/config/default.config.ini', true);
@@ -46,43 +48,46 @@ class config {
         }
         return self::$defaultConfiguration[$_plugin];
     }
-        /**
-     * Ajoute une clef à la config
-         * @param string $_key
-         * @param string | object | array $_value
-         * @param string $_plugin
-         * @return boolean
-         */
-    public static function save($_key, $_value, $_plugin = 'core') {
-        if (is_object($_value) || is_array($_value)) {
-            $_value = json_encode($_value, JSON_UNESCAPED_UNICODE);
+
+    /**
+     * @abstract Ajoute une clef à la config
+     * @param $key
+     * @param $value
+     * @param string $plugin
+     * @return bool
+     * @throws Exception
+     */
+    public static function save($key, $value, $plugin = 'core')
+    {
+        if (is_object($value) || is_array($value)) {
+            $value = json_encode($value, JSON_UNESCAPED_UNICODE);
         }
-        if (isset(self::$cache[$_plugin . '::' . $_key])) {
-            unset(self::$cache[$_plugin . '::' . $_key]);
+        if (isset(self::$cache[$plugin . '::' . $key])) {
+            unset(self::$cache[$plugin . '::' . $key]);
         }
-        $defaultConfiguration = self::getDefaultConfiguration($_plugin);
-        if (isset($defaultConfiguration[$_plugin][$_key]) && $_value == $defaultConfiguration[$_plugin][$_key]) {
-            self::remove($_key, $_plugin);
+        $defaultConfiguration = self::getDefaultConfiguration($plugin);
+        if (isset($defaultConfiguration[$plugin][$key]) && $value == $defaultConfiguration[$plugin][$key]) {
+            self::remove($key, $plugin);
             return true;
         }
-        if ($_plugin == 'core') {
-            $nextdomConfig = nextdom::getConfiguration($_key, true);
-            if ($nextdomConfig != '' && $nextdomConfig == $_value) {
-                self::remove($_key);
+        if ($plugin == 'core') {
+            $nextdomConfig = nextdom::getConfiguration($key, true);
+            if ($nextdomConfig != '' && $nextdomConfig == $value) {
+                self::remove($key);
                 return true;
             }
         }
 
-        $class = ($_plugin == 'core') ? 'config' : $_plugin;
+        $class = ($plugin == 'core') ? 'config' : $plugin;
 
-        $function = 'preConfig_' . str_replace(array('::', ':'), '_', $_key);
+        $function = 'preConfig_' . str_replace(array('::', ':'), '_', $key);
         if (method_exists($class, $function)) {
-            $_value = $class::$function($_value);
+            $value = $class::$function($value);
         }
         $values = array(
-            'plugin' => $_plugin,
-            'key' => $_key,
-            'value' => $_value,
+            'plugin' => $plugin,
+            'key' => $key,
+            'value' => $value,
         );
         $sql = 'REPLACE config
                 SET `key`=:key,
@@ -90,18 +95,21 @@ class config {
                      plugin=:plugin';
         DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW);
 
-        $function = 'postConfig_' . str_replace(array('::', ':'), '_', $_key);
+        $function = 'postConfig_' . str_replace(array('::', ':'), '_', $key);
         if (method_exists($class, $function)) {
-            $class::$function($_value);
+            $class::$function($value);
         }
     }
 
     /**
      * Supprime une clef de la config
-     * @param string $_key nom de la clef à supprimer
-     * @return boolean vrai si ok faux sinon
+     * @param $_key nom de la clef à supprimer
+     * @param string $_plugin
+     * @return array|mixed|null boolean vrai si ok faux sinon
+     * @throws Exception
      */
-    public static function remove($_key, $_plugin = 'core') {
+    public static function remove($_key, $_plugin = 'core')
+    {
         if ($_key == "*" && $_plugin != 'core') {
             $values = array(
                 'plugin' => $_plugin,
@@ -129,7 +137,8 @@ class config {
      * @param string $_key nom de la clef dont on veut la valeur
      * @return string valeur de la clef
      */
-    public static function byKey($_key, $_plugin = 'core', $_default = '', $_forceFresh = false) {
+    public static function byKey($_key, $_plugin = 'core', $_default = '', $_forceFresh = false)
+    {
         if (!$_forceFresh && isset(self::$cache[$_plugin . '::' . $_key])) {
             return self::$cache[$_plugin . '::' . $_key];
         }
@@ -159,7 +168,8 @@ class config {
         return isset(self::$cache[$_plugin . '::' . $_key]) ? self::$cache[$_plugin . '::' . $_key] : '';
     }
 
-    public static function byKeys($_keys, $_plugin = 'core', $_default = '') {
+    public static function byKeys($_keys, $_plugin = 'core', $_default = '')
+    {
         if (!is_array($_keys) || count($_keys) == 0) {
             return array();
         }
@@ -200,7 +210,8 @@ class config {
         return $return;
     }
 
-    public static function searchKey($_key, $_plugin = 'core') {
+    public static function searchKey($_key, $_plugin = 'core')
+    {
         $values = array(
             'plugin' => $_plugin,
             'key' => '%' . $_key . '%',
@@ -218,10 +229,15 @@ class config {
         return $results;
     }
 
-    public static function genKey($_car = 32) {
+    /**
+     * @param int $car
+     * @return string
+     */
+    public static function genKey(int $car = 32)
+    {
         $key = '';
         $chaine = "abcdefghijklmnpqrstuvwxy1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        for ($i = 0; $i < $_car; $i++) {
+        for ($i = 0; $i < $car; $i++) {
             if (function_exists('random_int')) {
                 $key .= $chaine[random_int(0, strlen($chaine) - 1)];
             } else {
@@ -231,7 +247,12 @@ class config {
         return $key;
     }
 
-    public static function getPluginEnable() {
+    /**
+     * @return array
+     * @throws Exception
+     */
+    public static function getPluginEnable(): array
+    {
         $sql = 'SELECT `value`,`plugin`
                 FROM config
                 WHERE `key`=\'active\'';
@@ -243,7 +264,12 @@ class config {
         return $return;
     }
 
-    public static function getLogLevelPlugin() {
+    /**
+     * @return array
+     * @throws Exception
+     */
+    public static function getLogLevelPlugin(): array
+    {
         $sql = 'SELECT `value`,`key`
                 FROM config
                 WHERE `key` LIKE \'log::level::%\'';
@@ -259,10 +285,13 @@ class config {
         return $return;
     }
 
-    /*     * *********************Action sur config************************* */
-
-    public static function postConfig_market_allowDNS($_value) {
-        if ($_value == 1) {
+    /**
+     * @param $value
+     * @throws Exception
+     */
+    public static function postConfig_market_allowDNS($value)
+    {
+        if ($value == 1) {
             if (!network::dns_run()) {
                 network::dns_start();
             }
@@ -273,9 +302,6 @@ class config {
         }
     }
 
-    /*     * *********************Methode d'instance************************* */
-
-    /*     * **********************Getteur Setteur*************************** */
 }
 
 
