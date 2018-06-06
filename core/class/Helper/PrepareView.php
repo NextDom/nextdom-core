@@ -56,8 +56,12 @@ class PrepareView
 
     /**
      * Initialise les informations nécessaires au menu
+     *
+     * @param array $internalConfig Configuration interne de NextDom
+     *
+     * @return object Plugin courant
      */
-    public static function initMenus($internalConfig)
+    public static function initMenus(array $internalConfig)
     {
         global $title;
         global $eventjs_plugin;
@@ -96,6 +100,17 @@ class PrepareView
             }
         }
         return $plugin;
+    }
+
+    /**
+     * Afficher un message d'erreur
+     *
+     * @param string $msg Message de l'erreur
+     *
+     * @return string Code HTML du message d'erreur
+     */
+    public static function showAlertMessage($msg) {
+        echo '<div class="alert alert-danger">'.$msg.'</div>';
     }
 
     /**

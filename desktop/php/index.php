@@ -94,7 +94,7 @@ if (!Status::isConnect()) {
             <?php
             try {
                 if (!nextdom::isStarted()) {
-                    echo '<div class="alert alert-danger">{{NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.}}</div>';
+                    PrepareView::showAlertMessage('{{NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.}}');
                 }
                 if ($plugin !== null && is_object($plugin)) {
                     include_file('desktop', $page, 'php', $plugin->getId());
@@ -103,14 +103,10 @@ if (!Status::isConnect()) {
                 }
             } catch (Exception $e) {
                 ob_end_clean();
-                echo '<div class="alert alert-danger div_alert">';
-                echo displayException($e);
-                echo '</div>';
+                PrepareView::showAlertMessage(displayException($e));
             } catch (Error $e) {
                 ob_end_clean();
-                echo '<div class="alert alert-danger div_alert">';
-                echo displayException($e);
-                echo '</div>';
+                PrepareView::showAlertMessage(displayException($e));
             }
             ?>
         </div>
