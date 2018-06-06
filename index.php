@@ -16,19 +16,22 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once(__DIR__.'/vendor/autoload.php');
-require_once(__DIR__.'/core/php/utils.inc.php');
+require_once(__DIR__ . '/vendor/autoload.php');
+require_once(__DIR__ . '/core/php/utils.inc.php');
 
 use NextDom\Helper\Status;
 use NextDom\Helper\Client;
+use NextDom\Helper\Router;
 
 try {
     // Test si l'installation doit être lancée
     if (!file_exists(dirname(__FILE__) . '/core/config/common.config.php')) {
         header("location: install/setup.php");
     }
-
-    if (!isset($_GET['v'])) {
+    // Paramètre v = Type de vue (mobile = m, desktop = d)
+    // Redirection initiale
+    $viewType = init('v', false);
+    if ($viewType === false) {
         $getParams = 'd';
         if (Client::isMobile()) {
             $getParams = 'm';
@@ -36,66 +39,19 @@ try {
         foreach ($_GET AS $var => $value) {
             $getParams .= '&' . $var . '=' . $value;
         }
+        // Réécrit l'url et recharge la page pour le bon device
         $url = 'index.php?v=' . trim($getParams, '&');
         redirect($url);
         die();
     }
-    // Configuration des variables d'état
+
     require_once __DIR__ . "/core/php/core.inc.php";
     Status::initRescueModeState();
-    $vParam = init('v', '');
-    if ($vParam == 'd') {
-        if (isset($_GET['modal'])) {
-            try {
-                include_file('core', 'authentification', 'php');
-                include_file('desktop', init('modal'), 'modal', init('plugin'));
-            } catch (Exception $e) {
-                ob_end_clean();
-                echo '<div class="alert alert-danger div_alert">';
-                echo translate::exec(displayException($e), 'desktop/' . init('p') . '.php');
-                echo '</div>';
-            } catch (Error $e) {
-                ob_end_clean();
-                echo '<div class="alert alert-danger div_alert">';
-                echo translate::exec(displayException($e), 'desktop/' . init('p') . '.php');
-                echo '</div>';
-            }
-        } elseif (isset($_GET['configure'])) {
-            include_file('core', 'authentification', 'php');
-            include_file('plugin_info', 'configuration', 'configuration', init('plugin'));
-        } elseif (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
-            try {
-                include_file('core', 'authentification', 'php');
-                include_file('desktop', init('p'), 'php', init('m'));
-            } catch (Exception $e) {
-                ob_end_clean();
-                echo '<div class="alert alert-danger div_alert">';
-                echo translate::exec(displayException($e), 'desktop/' . init('p') . '.php');
-                echo '</div>';
-            } catch (Error $e) {
-                ob_end_clean();
-                echo '<div class="alert alert-danger div_alert">';
-                echo translate::exec(displayException($e), 'desktop/' . init('p') . '.php');
-                echo '</div>';
-            }
-        } else {
-            include_file('desktop', 'index', 'php');
-        }
-    } elseif ($vParam == 'm') {
-        $_fn = 'index';
-        $_type = 'html';
-        $_plugin = '';
-        if (isset($_GET['modal'])) {
-            $_fn = init('modal');
-            $_type = 'modalhtml';
-            $_plugin = init('plugin');
-        } elseif (isset($_GET['p']) && isset($_GET['ajax'])) {
-            $_fn = $_GET['p'];
-            $_plugin = isset($_GET['m']) ? $_GET['m'] : $_plugin;
-        }
-        include_file('mobile', $_fn, $_type, $_plugin);
-    } else {
-        echo "Erreur : veuillez contacter l'administrateur";
+    // Affichage
+    $router = new Router($viewType);
+    $result = $router->show();
+    if (!$result) {
+        throw new Exception('Erreur : veuillez contacter l\'administrateur');
     }
 } catch (Exception $e) {
     echo $e->getMessage();
