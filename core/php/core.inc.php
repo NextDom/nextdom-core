@@ -16,87 +16,82 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 define ('NEXTDOM_ROOT', realpath(__DIR__.'/../..'));
+require_once(NEXTDOM_ROOT.'/core/class/NextDomStatus.php');
+
 date_default_timezone_set('Europe/Brussels');
-require_once NEXTDOM_ROOT.'/vendor/autoload.php'; // NEXTDOM
-require_once NEXTDOM_ROOT.'/core/config/common.config.php'; // NEXTDOM
-require_once NEXTDOM_ROOT.'/core/class/DB.class.php'; // NEXTDOM
-require_once NEXTDOM_ROOT.'/core/class/config.class.php'; // NEXTDOM
-require_once NEXTDOM_ROOT.'/core/class/nextdom.class.php'; // NEXTDOM
-require_once NEXTDOM_ROOT.'/core/class/jeedom.class.php'; // NEXTDOM
-require_once NEXTDOM_ROOT.'/core/class/plugin.class.php'; // NEXTDOM
-require_once NEXTDOM_ROOT.'/core/class/translate.class.php'; // NEXTDOM
-require_once NEXTDOM_ROOT.'/core/php/utils.inc.php'; // NEXTDOM
+require_once NEXTDOM_ROOT.'/vendor/autoload.php';
+require_once NEXTDOM_ROOT.'/core/config/common.config.php';
+require_once NEXTDOM_ROOT.'/core/class/DB.class.php';
+require_once NEXTDOM_ROOT.'/core/class/config.class.php';
+require_once NEXTDOM_ROOT.'/core/class/nextdom.class.php';
+require_once NEXTDOM_ROOT.'/core/class/jeedom.class.php';
+require_once NEXTDOM_ROOT.'/core/class/plugin.class.php';
+require_once NEXTDOM_ROOT.'/core/class/translate.class.php';
+require_once NEXTDOM_ROOT.'/core/php/utils.inc.php';
 include_file('core', 'nextdom', 'config');
 include_file('core', 'compatibility', 'config');
 include_file('core', 'utils', 'class');
 include_file('core', 'log', 'class');
 
 try {
-	$configs = config::byKeys(array('timezone', 'log::level'));
-	if (isset($configs['timezone'])) {
-		date_default_timezone_set($configs['timezone']);
-	}
+    $configs = config::byKeys(array('timezone', 'log::level'));
+    if (isset($configs['timezone'])) {
+        date_default_timezone_set($configs['timezone']);
+    }
 } catch (Exception $e) {
-
 } catch (Error $e) {
-
 }
 
 try {
-	if (isset($configs['log::level'])) {
-		log::define_error_reporting($configs['log::level']);
-	}
+    if (isset($configs['log::level'])) {
+        log::define_error_reporting($configs['log::level']);
+    }
 } catch (Exception $e) {
-
 } catch (Error $e) {
-
 }
 
-function nextdomCoreAutoload($classname) {
-	try {
-		include_file('core', $classname, 'class');
-	} catch (Exception $e) {
-
-	} catch (Error $e) {
-
-	}
+function nextdomCoreAutoload($classname)
+{
+    try {
+        include_file('core', $classname, 'class');
+    } catch (Exception $e) {
+    } catch (Error $e) {
+    }
 }
 
-function nextdomPluginAutoload($_classname) {
-	$classname = str_replace(array('Real', 'Cmd'), '', $_classname);
-	$plugin_active = config::byKey('active', $classname, null);
-	if ($plugin_active === null || $plugin_active == '') {
-		$classname = explode('_', $classname)[0];
-		$plugin_active = config::byKey('active', $classname, null);
-	}
-	try {
-		if ($plugin_active == 1) {
-			include_file('core', $classname, 'class', $classname);
-		}
-	} catch (Exception $e) {
-
-	} catch (Error $e) {
-
-	}
+function nextdomPluginAutoload($_classname)
+{
+    $classname = str_replace(array('Real', 'Cmd'), '', $_classname);
+    $plugin_active = config::byKey('active', $classname, null);
+    if (null === $plugin_active || '' == $plugin_active) {
+        $classname = explode('_', $classname)[0];
+        $plugin_active = config::byKey('active', $classname, null);
+    }
+    try {
+        if (1 == $plugin_active) {
+            include_file('core', $classname, 'class', $classname);
+        }
+    } catch (Exception $e) {
+    } catch (Error $e) {
+    }
 }
 
-function nextdomOtherAutoload($classname) {
-	try {
-		include_file('core', substr($classname, 4), 'com');
-		return;
-	} catch (Exception $e) {
+function nextdomOtherAutoload($classname)
+{
+    try {
+        include_file('core', substr($classname, 4), 'com');
 
-	} catch (Error $e) {
+        return;
+    } catch (Exception $e) {
+    } catch (Error $e) {
+    }
+    try {
+        include_file('core', substr($classname, 5), 'repo');
 
-	}
-	try {
-		include_file('core', substr($classname, 5), 'repo');
-		return;
-	} catch (Exception $e) {
-
-	} catch (Error $e) {
-
-	}
+        return;
+    } catch (Exception $e) {
+    } catch (Error $e) {
+    }
 }
 spl_autoload_register('nextdomOtherAutoload', true, true);
 spl_autoload_register('nextdomPluginAutoload', true, true);
