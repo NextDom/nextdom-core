@@ -13,7 +13,7 @@ use NextDom\NextDomUtils;
 if (Status::isRecueMode() && !in_array(init('p'), array('custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system'))) {
     $_GET['p'] = 'system';
 }
-\include_file('core', 'authentification', 'php');
+include_file('core', 'authentification', 'php');
 Status::initConnectState();
 
 $configs = config::byKeys(array('enableCustomCss', 'language', 'nextdom::firstUse'));

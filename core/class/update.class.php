@@ -19,6 +19,8 @@
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
 
+use NextDom\Helper\JeedomToNextDom;
+
 class update {
     /*     * *************************Attributs****************************** */
 
@@ -323,6 +325,7 @@ class update {
                         }
                         $zip->close();
                         unlink($tmp);
+                        JeedomToNextDom::convertPlugin($cibDir);
                         try {
                             if (file_exists(dirname(__FILE__) . '/../../plugins/' . $this->getLogicalId() . '/doc')) {
                                 shell_exec('sudo rm -rf ' . dirname(__FILE__) . '/../../plugins/' . $this->getLogicalId() . '/doc');
