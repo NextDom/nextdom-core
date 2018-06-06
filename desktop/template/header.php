@@ -16,7 +16,7 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use NextDom\NextDomStatus;
+use NextDom\Helper\Status;
 
 global $title;
 global $language;
@@ -45,11 +45,11 @@ $themeDir = NEXTDOM_ROOT . 'core/themes/'
     </script>
     <?php
     // CSS
-    if (!NextDomStatus::isConnect()) {
+    if (!Status::isConnect()) {
         include_file('3rdparty', 'bootstrap/css/bootstrap.min', 'css');
     } else {
         $cssBootstrapToAdd = true;
-        if (!NextDomStatus::isRecueMode()) {
+        if (!Status::isRecueMode()) {
             $defaultBootstrapTheme = config::byKey('default_bootstrap_theme');
             if (file_exists($themeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.css')) {
                 include_file('core', $bootstrapTheme . '/desktop/' . $bootstrapTheme, 'themes.css');
@@ -131,7 +131,7 @@ $themeDir = NEXTDOM_ROOT . 'core/themes/'
     include_file('3rdparty', 'jquery.cron/jquery.cron.min', 'js');
     include_file('3rdparty', 'jquery.contextMenu/jquery.contextMenu.min', 'js');
     include_file('3rdparty', 'autosize/autosize.min', 'js');
-    if (!NextDomStatus::isRecueMode() && $configs['enableCustomCss'] == 1) {
+    if (!Status::isRecueMode() && $configs['enableCustomCss'] == 1) {
         if (file_exists(NEXTDOM_ROOT.'/desktop/custom/custom.css')) {
             include_file('desktop', '', 'custom.css');
         }
@@ -140,13 +140,13 @@ $themeDir = NEXTDOM_ROOT . 'core/themes/'
         }
     }
     try {
-        if (NextDomStatus::isConnect()) {
-            if (!NextDomStatus::isRecueMode() && is_dir($themeDir . $bootstrapTheme . '/desktop')) {
+        if (Status::isConnect()) {
+            if (!Status::isRecueMode() && is_dir($themeDir . $bootstrapTheme . '/desktop')) {
                 if (file_exists($themeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.js')) {
                     include_file('core', $bootstrapTheme . '/desktop/' . $bootstrapTheme, 'themes.js');
                 }
             }
-            if (!NextDomStatus::isRecueMode() && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
+            if (!Status::isRecueMode() && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
                 try {
                     if (is_dir($themeDir . $bootstrapTheme . '/desktop')) {
                         if (file_exists($themeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.js')) {
@@ -156,7 +156,7 @@ $themeDir = NEXTDOM_ROOT . 'core/themes/'
                 } catch (Exception $e) {
 
                 }
-                if (!NextDomStatus::isRecueMode() && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
+                if (!Status::isRecueMode() && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
                     try {
                         include_file('3rdparty', 'highstock/themes/' . $_SESSION['user']->getOptions('desktop_highcharts_theme'), 'js');
                     } catch (Exception $e) {

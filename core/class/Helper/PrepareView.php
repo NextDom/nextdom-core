@@ -17,6 +17,8 @@
 
 namespace NextDom\Helper;
 
+use NextDom\Helper\Status;
+
 /**
  * Classe de support à l'affichage des contenus HTML
  */
@@ -45,7 +47,7 @@ class PrepareView
      */
     public static function showMenu()
     {
-        if (NextDomStatus::isRecueMode()) {
+        if (Status::isRecueMode()) {
             require_once(NEXTDOM_ROOT . '/desktop/template/menuRescue.php');
         } else {
             require_once(NEXTDOM_ROOT . '/desktop/template/menu.php');

@@ -16,7 +16,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 define ('NEXTDOM_ROOT', realpath(__DIR__.'/../..'));
-require_once(NEXTDOM_ROOT.'/core/class/NextDomStatus.php');
 
 date_default_timezone_set('Europe/Brussels');
 require_once NEXTDOM_ROOT.'/vendor/autoload.php';

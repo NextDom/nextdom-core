@@ -16,13 +16,13 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use NextDom\HTMLHelper;
-use NextDom\NextDomStatus;
+use NextDom\Helper\PrepareView;
+use NextDom\Helper\Status;
 
 global $homeLink;
 
-$pluginMenu = HTMLHelper::getPluginMenu();
-$panelMenu = HTMLHelper::getPanelMenu();
+$pluginMenu = PrepareView::getPluginMenu();
+$panelMenu = PrepareView::getPanelMenu();
 ?>
 <header id="nextdom-header" class="navbar navbar-fixed-top navbar-default reportModeHidden">
     <div class="container-fluid">
@@ -91,7 +91,7 @@ $panelMenu = HTMLHelper::getPanelMenu();
                         <li><a href="index.php?v=d&p=history"><i class="fa fa-bar-chart-o"></i>
                                 {{Historique}}</a></li>
                         <?php
-                        if (NextDomStatus::isConnectAdmin()) {
+                        if (Status::isConnectAdmin()) {
                             ?>
                             <li><a href="index.php?v=d&p=report"><i class="fa fa-newspaper-o"></i>
                                     {{Rapport}}</a></li>
@@ -102,7 +102,7 @@ $panelMenu = HTMLHelper::getPanelMenu();
                         <li><a href="#" id="bt_showEventInRealTime"><i class="fa fa-tachometer"></i> {{Temps
                                 réel}}</a></li>
                         <?php
-                        if (NextDomStatus::isConnectAdmin()) {
+                        if (Status::isConnectAdmin()) {
                             ?>
                             <li><a href="index.php?v=d&p=log"><i class="fa fa-file-o"></i> {{Logs}}</a></li>
                             <li><a href="index.php?v=d&p=eqAnalyse"><i class="fa fa-battery-full"></i>
@@ -115,7 +115,7 @@ $panelMenu = HTMLHelper::getPanelMenu();
                     </ul>
                 </li>
                 <?php
-                if (NextDomStatus::isConnectAdmin()) {
+                if (Status::isConnectAdmin()) {
                     ?>
                     <li class="dropdown cursor">
                         <a data-toggle="dropdown"><i class="fa fa-wrench"></i> <span
@@ -175,7 +175,7 @@ $panelMenu = HTMLHelper::getPanelMenu();
                                 <span class="badge" id="span_nbUpdate" title="{{Nombre de mises à jour}}"
                                       style="<?php echo $displayUpdate; ?>"><?php echo $nbUpdate; ?></span></a>
                 </li>
-                <?php if (NextDomStatus::isConnectAdmin()) {
+                <?php if (Status::isConnectAdmin()) {
                     ?>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i
@@ -229,7 +229,7 @@ $panelMenu = HTMLHelper::getPanelMenu();
                        data-page="<?php echo init('p'); ?>" title="{{Aide sur la page en cours}}"><i
                             class="fa fa-question-circle"></i></a>
                 </li>
-                <?php if (NextDomStatus::isConnectAdmin()) {
+                <?php if (Status::isConnectAdmin()) {
                     ?>
                     <li>
                         <?php if (isset($plugin) && is_object($plugin) && $plugin->getIssue() != '') {

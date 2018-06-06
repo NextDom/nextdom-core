@@ -19,7 +19,7 @@
 require_once(__DIR__.'/vendor/autoload.php');
 require_once(__DIR__.'/core/php/utils.inc.php');
 
-use NextDom\NextDomStatus;
+use NextDom\Helper\Status;
 
 try {
     // Test si l'installation doit être lancée
@@ -41,7 +41,7 @@ try {
     }
     // Configuration des variables d'état
     require_once __DIR__ . "/core/php/core.inc.php";
-    NextDomStatus::initRescueModeState();
+    Status::initRescueModeState();
     $vParam = init('v', '');
     if ($vParam == 'd') {
         if (isset($_GET['modal'])) {

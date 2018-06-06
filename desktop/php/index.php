@@ -6,22 +6,20 @@ global $title;
 global $language;
 global $eventjs_plugin;
 
-use NextDom\HTMLHelper;
-use NextDom\NextDomStatus;
+use NextDom\Helper\PrepareView;
+use NextDom\Helper\Status;
 use NextDom\NextDomUtils;
 
-require_once(NEXTDOM_ROOT.'/core/class/HTMLHelper.php');
-
-if (NextDomStatus::isRecueMode() && !in_array(init('p'), array('custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system'))) {
+if (Status::isRecueMode() && !in_array(init('p'), array('custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system'))) {
     $_GET['p'] = 'system';
 }
 \include_file('core', 'authentification', 'php');
-NextDomStatus::initConnectState();
+Status::initConnectState();
 
 $configs = config::byKeys(array('enableCustomCss', 'language', 'nextdom::firstUse'));
 
 // Détermine la page courante
-if (NextDomStatus::isConnect()) {
+if (Status::isConnect()) {
     $homePage = explode('::', $_SESSION['user']->getOptions('homePage', 'core::dashboard'));
     if (count($homePage) == 2) {
         if ($homePage[0] == 'core') {
@@ -36,18 +34,18 @@ if (NextDomStatus::isConnect()) {
         $homeLink = 'index.php?v=d&p=dashboard';
     }
 }
-if (NextDomStatus::isRecueMode()) {
+if (Status::isRecueMode()) {
     $homeLink = 'index.php?v=d&p=system&rescue=1';
 }
 
 // Informations générales
 $eventjs_plugin = [];
 $title = 'NextDom';
-if (init('p') == '' && NextDomStatus::isConnect()) {
+if (init('p') == '' && Status::isConnect()) {
     redirect($homeLink);
 }
 $page = '';
-if (NextDomStatus::isConnect() && init('p') != '') {
+if (Status::isConnect() && init('p') != '') {
     $page = init('p');
     $title = ucfirst($page) . ' - ' . $title;
 }
@@ -55,18 +53,18 @@ $language = $configs['language'];
 
 // Initialisation des plugins
 $plugin = null;
-if (!NextDomStatus::isRecueMode()) {
-    $plugin = HTMLHelper::initMenus($NEXTDOM_INTERNAL_CONFIG);
+if (!Status::isRecueMode()) {
+    $plugin = PrepareView::initMenus($NEXTDOM_INTERNAL_CONFIG);
 }
 
-HTMLHelper::showHeader();
+PrepareView::showHeader();
 
 // Affichage du contenu
 ?>
 <body>
 <?php
 // Affichage de l'écran de connexion
-if (!NextDomStatus::isConnect()) {
+if (!Status::isConnect()) {
     include_file('desktop', 'connection', 'php');
 } else {
     // Affichage normal d'une page
@@ -74,7 +72,7 @@ if (!NextDomStatus::isConnect()) {
     NextDomUtils::sendVarsToJS(array(
             'userProfils' => $_SESSION['user']->getOptions(),
             'user_id' => $_SESSION['user']->getId(),
-            'user_isAdmin' => NextDomStatus::isConnectAdmin(),
+            'user_isAdmin' => Status::isConnectAdmin(),
             'user_login' =>  $_SESSION['user']->getLogin(),
             'nextdom_firstUse' => $configs['nextdom::firstUse']
     ));
@@ -88,7 +86,7 @@ if (!NextDomStatus::isConnect()) {
             }
         }
     }
-    HTMLHelper::showMenu();
+    PrepareView::showMenu();
     ?>
     <main class="container-fluid" id="div_mainContainer">
         <div id="div_alert"></div>
