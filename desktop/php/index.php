@@ -8,7 +8,7 @@ global $eventjs_plugin;
 
 use NextDom\Helper\PrepareView;
 use NextDom\Helper\Status;
-use NextDom\NextDomUtils;
+use NextDom\Helper\Utils;
 
 if (Status::isRecueMode() && !in_array(init('p'), array('custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system'))) {
     $_GET['p'] = 'system';
@@ -69,7 +69,7 @@ if (!Status::isConnect()) {
 } else {
     // Affichage normal d'une page
     include_file('desktop', 'nextdom', 'css');
-    NextDomUtils::sendVarsToJS(array(
+    Utils::sendVarsToJS(array(
         'userProfils' => $_SESSION['user']->getOptions(),
         'user_id' => $_SESSION['user']->getId(),
         'user_isAdmin' => Status::isConnectAdmin(),

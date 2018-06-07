@@ -17,6 +17,7 @@
  */
 
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use NextDom\Helper\Utils;
 
 /**
  * Inclut un fichier à partir de son type et son nom.
@@ -140,10 +141,11 @@ function init($_name, $_default = '')
  *
  * @param string $_varName Nom de la variable dans le code HTML
  * @param mixed $_value Valeur de la variable
- * @param boolean $_showScriptTag Afficher la balise <script>
  */
-function sendVarToJS($_varName, $_value, $_showScriptTag = true)
+function sendVarToJS($_varName, $_value)
 {
+    Utils::sendVarToJs($_varName, $_value);
+    /*
     $value = '';
     if (is_array($_value)) {
         $value = 'jQuery.parseJSON("' . addslashes(json_encode($_value, JSON_UNESCAPED_UNICODE)) . '")';
@@ -155,7 +157,7 @@ function sendVarToJS($_varName, $_value, $_showScriptTag = true)
         echo "<script>var $_varName = $value;</script>";
     } else {
         echo "var $_varName = $value;\n";
-    }
+    }*/
 }
 
 function resizeImage($contents, $width, $height)
