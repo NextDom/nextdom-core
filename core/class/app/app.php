@@ -18,15 +18,8 @@
 use NextDom\Singletons\ConnectDb;
 use NextDom\Exceptions\DbException;
 use NextDom\src\DAO\CmdDAO;
-$app = [];
 
-$app['db'] = function () {
-    try {
-        return ConnectDb::getInstance();
-    } catch (DbException $exc) {
-        throw new \Exception('Erreur de chargement de la class --> ' . ConnectDb::class . ' Message -->' . $exc->getMessage());
-    }
-};
+$app = [];
 
 ////////////////////////////////
 ////        NextDom DAO    /////
@@ -36,6 +29,8 @@ $app['db'] = function () {
  * @param $app
  * @return \NextDom\src\DAO\CmdDAO
  */
-$app['DAO.Cmd'] = function($app){
-    return new CmdDAO($app['db']::getInstance());
+$app['DAO.Cmd'] = function () {
+
+    $cmdDAO = new CmdDAO(ConnectDb::getInstance());
+    return $cmdDAO;
 };
