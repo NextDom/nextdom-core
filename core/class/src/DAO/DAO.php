@@ -8,9 +8,8 @@
 
 namespace NextDom\src\DAO;
 
-use NextDom\Interfaces\DAOInterface;
 
-abstract class DAO implements DAOInterface
+abstract class DAO
 {
     /**
      * Database connection
@@ -43,19 +42,6 @@ abstract class DAO implements DAOInterface
      * Must be overridden by child classes.
      */
     protected abstract function buildDomainObject(array $row);
-
-    /**
-     * @param array $array
-     * @return array
-     */
-    public function buildListDomainObject(array $array): array
-    {
-        $list = [];
-        foreach ($array as $row) {
-            $list[] = $this->buildDomainObject($row);
-        }
-        return $list;
-    }
 
 
 }
