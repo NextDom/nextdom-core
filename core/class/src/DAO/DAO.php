@@ -6,7 +6,57 @@
  * Time: 20:59
  */
 
-abstract class DAO
+namespace NextDom\src\DAO;
+
+use NextDom\Interfaces\DAOInterface;
+
+abstract class DAO implements DAOInterface
 {
+    /**
+     * Database connection
+     *
+     */
+    private $db;
+
+    /**
+     * Constructor
+     *
+     * @param db
+     */
+    public function __construct(\PDO $db)
+    {
+        $this->db = $db;
+    }
+
+    /**
+     * Grants access to the database connection object
+     *
+     * @return db
+     */
+    protected function getDb()
+    {
+        return $this->db;
+    }
+
+    /**
+     * Builds a domain object from a DB row.
+     * Must be overridden by child classes.
+     */
+    protected abstract function buildDomainObject(array $row);
+
+    /**
+     *
+     * @param array $configurationExercice
+     * @return array
+     */
+    public function buildListDomainObject(array $array): array
+    {
+        $list = [];
+        foreach ($array as $row) {
+            $list[] = $this->buildDomainObject($row);
+        }
+        return $list;
+    }
+
 
 }
