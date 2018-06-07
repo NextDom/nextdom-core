@@ -62,4 +62,75 @@ class Utils
         }
         return "var $varName = $jsVarValue;\n";
     }
+
+    /**
+     * Rediriger vers un autre url
+     *
+     * @param $url URL cible
+     * @param null $forceType Forcage si 'JS' TODO: ???
+     */
+    public static function redirect($url, $forceType = null) {
+        if ($forceType == 'JS' || headers_sent() || isset($_GET['ajax'])) {
+            echo '<script type="text/javascript">';
+            echo "window.location.href='$url';";
+            echo '</script>';
+        } else {
+            exit(header("Location: $url"));
+        }
+    }
+
+    /**
+     * Test si l'utilisateur est connecté avec certains droits
+     *
+     * @param string $rights Droits à tester (admin)
+     *
+     * @return boolean True si l'utilisateur est connecté avec les droits demandés
+     */
+    public static function isConnect($rights = '')
+    {
+        $rightsKey = 'isConnect::' . $rights;
+        $isSetSessionUser = isset($_SESSION['user']);
+        $result = false;
+        
+        if ($isSetSessionUser && isset($GLOBALS[$rightsKey]) && $GLOBALS[$rightsKey]) {
+            $result = $GLOBALS[$rightsKey];
+        }
+        else {
+            if (session_status() == PHP_SESSION_DISABLED || !isset($_SESSION) || !$isSetSessionUser) {
+                $result = false;
+            } elseif ($isSetSessionUser && is_object($_SESSION['user']) && $_SESSION['user']->is_Connected()) {
+                if ($rights !== '') {
+                    if ($_SESSION['user']->getProfils() == $rights) {
+                        $result = true;
+                    }
+                } else {
+                    $result = true;
+                }
+            }
+            $GLOBALS[$rightsKey] = $result;
+        }
+        return $result;
+    }
+
+    /**
+     * Obtenir une variable passée en paramètre
+     *
+     * @param string $_name Nom de la variable
+     * @param mixed $_default Valeur par défaut
+     *
+     * @return mixed Valeur de la variable
+     */
+    public static function init($_name, $_default = '')
+    {
+        if (isset($_GET[$_name])) {
+            return $_GET[$_name];
+        }
+        if (isset($_POST[$_name])) {
+            return $_POST[$_name];
+        }
+        if (isset($_REQUEST[$_name])) {
+            return $_REQUEST[$_name];
+        }
+        return $_default;
+    }
 }

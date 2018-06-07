@@ -124,16 +124,7 @@ function template_replace($_array, $_subject)
  */
 function init($_name, $_default = '')
 {
-    if (isset($_GET[$_name])) {
-        return $_GET[$_name];
-    }
-    if (isset($_POST[$_name])) {
-        return $_POST[$_name];
-    }
-    if (isset($_REQUEST[$_name])) {
-        return $_REQUEST[$_name];
-    }
-    return $_default;
+    return Utils::init($_name, $_default);
 }
 
 /**
@@ -198,14 +189,7 @@ function getmicrotime()
 
 function redirect($_url, $_forceType = null)
 {
-    if ($_forceType == 'JS' || headers_sent() || isset($_GET['ajax'])) {
-        echo '<script type="text/javascript">';
-        echo "window.location.href='$_url';";
-        echo '</script>';
-    } else {
-        exit(header("Location: $_url"));
-    }
-    return;
+    Utils::redirect($_url, $_forceType);
 }
 
 function convertDuration($time)
@@ -1009,20 +993,7 @@ function sanitizeAccent($_message)
 
 function isConnect($_right = '')
 {
-    if (isset($_SESSION['user']) && isset($GLOBALS['isConnect::' . $_right]) && $GLOBALS['isConnect::' . $_right]) {
-        return $GLOBALS['isConnect::' . $_right];
-    }
-    $GLOBALS['isConnect::' . $_right] = false;
-    if (session_status() == PHP_SESSION_DISABLED || !isset($_SESSION) || !isset($_SESSION['user'])) {
-        $GLOBALS['isConnect::' . $_right] = false;
-    } else if (isset($_SESSION['user']) && is_object($_SESSION['user']) && $_SESSION['user']->is_Connected()) {
-        if ($_right != '') {
-            $GLOBALS['isConnect::' . $_right] = ($_SESSION['user']->getProfils() == $_right);
-        } else {
-            $GLOBALS['isConnect::' . $_right] = true;
-        }
-    }
-    return $GLOBALS['isConnect::' . $_right];
+    return Utils::isConnect($_right);
 }
 
 function ZipErrorMessage($code)
