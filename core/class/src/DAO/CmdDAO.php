@@ -24,6 +24,14 @@ class CmdDAO extends DAO implements DAOInterface
 
 {
 
+    /**
+     * @param int $id
+     * @return db
+     */
+    public function getCmdById(int $id)
+    {
+        return  $this->getDb();
+    }
 
     /**
      * @param array $row

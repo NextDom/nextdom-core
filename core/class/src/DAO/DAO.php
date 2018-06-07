@@ -17,7 +17,6 @@
 
 namespace NextDom\src\DAO;
 
-
 abstract class DAO
 {
     /**
