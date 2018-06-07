@@ -30,7 +30,6 @@ abstract class DAO implements DAOInterface
 
     /**
      * Grants access to the database connection object
-     *
      * @return db
      */
     protected function getDb()
@@ -39,14 +38,14 @@ abstract class DAO implements DAOInterface
     }
 
     /**
+     * @param array $row
      * Builds a domain object from a DB row.
      * Must be overridden by child classes.
      */
     protected abstract function buildDomainObject(array $row);
 
     /**
-     *
-     * @param array $configurationExercice
+     * @param array $array
      * @return array
      */
     public function buildListDomainObject(array $array): array
