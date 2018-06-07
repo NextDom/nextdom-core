@@ -23,33 +23,18 @@ use NextDom\Exceptions\DbException;
 class ConnectDb
 {
 
-    private $host;
-    
-    private $port;
-    
-    private $dbName;
-    
-    private $userName;
-    
-    private $password;
     /**
      * @var
      */
     private static $instance;
 
-    /**
-     * ConnectDb constructor.
-     */
-    private function __construct(){
-
-    }
 
     /**
      * @name connectPDO()
      * @access private
      * @return object or DbException
      */
-    private function connectPDO()
+    private static function connectPDO()
     {
         global $CONFIG;
 
@@ -72,65 +57,9 @@ class ConnectDb
     public static function getInstance()
     {
         if (is_null(self::$instance)) {
-            self::$instance = new ConnectDb();
-            self::$instance->connectPDO();
+           self::$instance = self::connectPDO();
         }
         return self::$instance;
-    }
-
-    public function getHost(): string
-    {
-        return $this->host;
-    }
-
-    public function getPort(): string
-    {
-        return $this->port;
-    }
-
-    public function getDbName(): string
-    {
-        return $this->dbName;
-    }
-
-    public function getUserName(): string
-    {
-        return $this->userName;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    public function setHost(string $host)
-    {
-        $this->host = $host;
-        return $this;
-    }
-
-    public function setPort(string $port)
-    {
-        $this->port = $port;
-        return $this;
-    }
-
-    public function setDbName(string $dbName)
-    {
-        $this->dbName = $dbName;
-        return $this;
-    }
-
-    public function setUserName(string $userName)
-    {
-        $this->userName = $userName;
-        return $this;
-    }
-
-    public function setPassword(string $password)
-    {
-        $this->password = $password;
-        return $this;
     }
 
 }

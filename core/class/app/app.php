@@ -16,36 +16,21 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
  
-
-global $CONFIG;
- 
 $app = [];
 
-$app['db'] = function($CONFIG) {
-    // TU CONNECTES AVANT D'AVOIR LES INFOS
-    \NextDom\Singletons\ConnectDb::getInstance()
-            ->setHost($CONFIG['db']['host'])
-            ->setPort($CONFIG['db']['port'])
-            ->setDbName($CONFIG['db']['dbname'])
-            ->setUserName($CONFIG['db']['username'])
-            ->setPassword($CONFIG['db']['password'])
-    ;
-    echo "JAMAIS APPELE";
-    var_dump(\NextDom\Singletons\ConnectDb::getInstance());
+$app['db'] = function() {
     return \NextDom\Singletons\ConnectDb::getInstance();
 };
-
-\NextDom\Singletons\ConnectDb::getInstance();
-//var_dump($CONFIG);
+ 
 ////////////////////////////////
 ////        NextDom DAO    /////
 ////////////////////////////////
+ 
 /**
  * @param $app
  * @return \NextDom\src\DAO\CmdDAO
  */
 $app['DAO.Cmd'] = function ($app) {
-
-    return new NextDom\src\DAO\CmdDAO($app['db']::getInstance());
+    return new NextDom\src\DAO\CmdDAO($app['db']);
 };
 

@@ -27,8 +27,7 @@ require_once NEXTDOM_ROOT.'/core/class/jeedom.class.php';
 require_once NEXTDOM_ROOT.'/core/class/plugin.class.php';
 require_once NEXTDOM_ROOT.'/core/class/translate.class.php';
 require_once NEXTDOM_ROOT.'/core/php/utils.inc.php';
-require_once(NEXTDOM_ROOT . '/core/class/app/app.php');
-var_dump($app['DAO.Cmd']);
+
 include_file('core', 'nextdom', 'config');
 include_file('core', 'compatibility', 'config');
 include_file('core', 'utils', 'class');
@@ -97,3 +96,5 @@ function nextdomOtherAutoload($classname)
 spl_autoload_register('nextdomOtherAutoload', true, true);
 spl_autoload_register('nextdomPluginAutoload', true, true);
 spl_autoload_register('nextdomCoreAutoload', true, true);
+require_once(NEXTDOM_ROOT . '/core/class/app/app.php');
+var_dump($app['DAO.Cmd']);
