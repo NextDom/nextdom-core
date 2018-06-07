@@ -8,7 +8,6 @@
 
 namespace NextDom\src\DAO;
 
-
 use NextDom\Interfaces\DAOInterface;
 use NextDom\src\Domaine\Cmd;
 
