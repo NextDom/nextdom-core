@@ -17,11 +17,11 @@
  */
 
 require_once(__DIR__ . '/vendor/autoload.php');
-require_once(__DIR__ . '/core/php/utils.inc.php');
 
 use NextDom\Helper\Status;
 use NextDom\Helper\Client;
 use NextDom\Helper\Router;
+use NextDom\Helper\Utils;
 
 try {
     // Test si l'installation doit être lancée
@@ -29,8 +29,9 @@ try {
         header("location: install/setup.php");
     }
     // Paramètre v = Type de vue (mobile = m, desktop = d)
+
     // Redirection initiale
-    $viewType = init('v', false);
+    $viewType = Utils::init('v', false);
     if ($viewType === false) {
         $getParams = 'd';
         if (Client::isMobile()) {
@@ -41,17 +42,18 @@ try {
         }
         // Réécrit l'url et recharge la page pour le bon device
         $url = 'index.php?v=' . trim($getParams, '&');
-        redirect($url);
+        Utils::redirect($url);
         die();
     }
-
-    require_once __DIR__ . "/core/php/core.inc.php";
-    Status::initRescueModeState();
-    // Affichage
-    $router = new Router($viewType);
-    $result = $router->show();
-    if (!$result) {
-        throw new Exception('Erreur : veuillez contacter l\'administrateur');
+    else {
+        require_once __DIR__ . "/core/php/core.inc.php";
+        Status::initRescueModeState();
+        // Affichage
+        $router = new Router($viewType);
+        $result = $router->show();
+        if (!$result) {
+            throw new Exception('Erreur : veuillez contacter l\'administrateur');
+        }
     }
 } catch (Exception $e) {
     echo $e->getMessage();
