@@ -21,65 +21,73 @@ namespace NextDom\Helper;
 /**
  * Classe temporaire pour stocker différents états.
  */
-class Status 
+class Status
 {
-  /**
-   * @var bool Statut de la connexion de l'utilisateur
-   */
-  private static $connectState = false;
+    /**
+     * @var bool Statut de la connexion de l'utilisateur
+     */
+    private static $connectState = false;
 
-  /**
-   * @var bool Statut de la connexion de l'utilisateur en administrateur
-   */
-  private static $connectAdminState = false;
+    /**
+     * @var bool Statut de la connexion de l'utilisateur en administrateur
+     */
+    private static $connectAdminState = false;
 
-  /**
-   * @var bool Statut du mode récupération
-   */
-  private static $rescueMode = false;
+    /**
+     * @var bool Statut du mode récupération
+     */
+    private static $rescueMode = false;
 
-  /**
-   * Initialiser le statut du mode récupération
-   */
-  public static function initRescueModeState() {
-    if (\init('rescue', 0) == 1) {
-      self::$rescueMode = true;
+    /**
+     * Initialiser le statut du mode récupération
+     */
+    public static function initRescueModeState()
+    {
+        if (\init('rescue', 0) == 1) {
+            self::$rescueMode = true;
+        }
     }
-  }
 
-  /**
-   * Initialiser le statut de la connexion de l'utilisateur
-   */
-  public static function initConnectState() 
-  {
-    self::$connectState = \isConnect();
-    self::$connectAdminState = \isConnect('admin');
-  }
+    /**
+     * Initialiser le statut de la connexion de l'utilisateur
+     */
+    public static function initConnectState()
+    {
+        self::$connectState = \isConnect();
+        self::$connectAdminState = \isConnect('admin');
+    }
 
-  /**
-   * Obtenir le statut de la connexion de l'utilisateur
-   * @return bool Statut de la connexion de l'utilisateur
-   */
-  public static function isConnect() 
-  {
-    return self::$connectState;
-  }
+    /**
+     * Obtenir le statut de la connexion de l'utilisateur
+     * @return bool Statut de la connexion de l'utilisateur
+     */
+    public static function isConnect()
+    {
+        return self::$connectState;
+    }
 
-  /**
-   * Obtenir le statut de la connexion de l'utilisateur en administrateur
-   * @return bool Statut de la connexion de l'utilisateur en administrateur
-   */
-  public static function isConnectAdmin() 
-  {
-    return self::$connectAdminState;
-  }
+    public static function isConnectedOrFail()
+    {
+        if (!self::$connectState) {
+            throw new \Exception(__('401 - Accès non autorisé', 'system'));
+        }
+    }
 
-  /**
-   * Obtenir le statut du mode récupération
-   * @return bool Statut du mode récupération
-   */
-  public static function isRecueMode() 
-  {
-    return self::$rescueMode;
-  }
+    /**
+     * Obtenir le statut de la connexion de l'utilisateur en administrateur
+     * @return bool Statut de la connexion de l'utilisateur en administrateur
+     */
+    public static function isConnectAdmin()
+    {
+        return self::$connectAdminState;
+    }
+
+    /**
+     * Obtenir le statut du mode récupération
+     * @return bool Statut du mode récupération
+     */
+    public static function isRecueMode()
+    {
+        return self::$rescueMode;
+    }
 }

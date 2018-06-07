@@ -1,4 +1,7 @@
 {
+    "system": {
+        "401 - Accès non autorisé": "401 - Ulaşım yetkisiz"
+    },
     "core/class/cmd.class.php": {
         "Evènement sur la commande ": "Komuta olayı",
         " valeur : ": "değer :",

@@ -40,7 +40,7 @@ class Utils
     {
         echo "<script>\n";
         foreach ($listOfVarsWithValues as $varName => $value) {
-            self::getVarInJs($varName, $value);
+            echo self::getVarInJs($varName, $value);
         }
         echo "</script>\n";
     }
