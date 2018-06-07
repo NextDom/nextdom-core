@@ -17,6 +17,7 @@
  */
 
 require_once(__DIR__.'/vendor/autoload.php');
+require_once(__DIR__.'/core/php/utils.inc.php');
 
 use NextDom\Helper\Status;
 use NextDom\Helper\Client;

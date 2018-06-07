@@ -19,33 +19,44 @@ namespace NextDom\Singletons;
 
 use NextDom\Exceptions\DbException;
 
+
 class ConnectDb
 {
 
-    /**
-     * Instance de la classe PDO
-     *
-     * @var PDO
-     * @access private
-     */
-    private $PDOInstance = null;
+    private $host;
+    
+    private $port;
+    
+    private $dbName;
+    
+    private $userName;
+    
+    private $password;
     /**
      * @var
      */
     private static $instance;
 
     /**
-     * @name __construct()
+     * ConnectDb constructor.
+     */
+    private function __construct(){
+
+    }
+
+    /**
+     * @name connectPDO()
      * @access private
      * @return object or DbException
      */
-    private function __construct()
+    private static function connectPDO()
     {
-        global $CONFIG;
 
         try {
-            $this->PDOInstance = new \PDO('mysql:host=' . $CONFIG['db']['host'] . ';port=' . $CONFIG['db']['port'] . ';dbname=' . $CONFIG['db']['dbname'], $CONFIG['db']['username'], $CONFIG['db']['password']);
-            $this->PDOInstance->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+            $pdo = new \PDO('mysql:host=' . $this->getHost() . ';port=' . $this->getPort() . ';dbname=' . $this->getDbName(), $this->getUserName(), $this->getPassword());
+            $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            return $pdo;
 
         } catch (\PDOException $exc) {
             throw new DbException('PDO Error : ' . $exc->getMessage(), 500);
@@ -58,10 +69,65 @@ class ConnectDb
      */
     public static function getInstance()
     {
-        if (self::$instance === null) {
-            self::$instance = new self();
+        if (is_null(self::$instance)) {
+            self::$instance = self::connectPDO();
         }
         return self::$instance;
+    }
+
+    public function getHost(): string
+    {
+        return $this->host;
+    }
+
+    public function getPort(): string
+    {
+        return $this->port;
+    }
+
+    public function getDbName(): string
+    {
+        return $this->dbName;
+    }
+
+    public function getUserName(): string
+    {
+        return $this->userName;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setHost(string $host)
+    {
+        $this->host = $host;
+        return $this;
+    }
+
+    public function setPort(string $port)
+    {
+        $this->port = $port;
+        return $this;
+    }
+
+    public function setDbName(string $dbName)
+    {
+        $this->dbName = $dbName;
+        return $this;
+    }
+
+    public function setUserName(string $userName)
+    {
+        $this->userName = $userName;
+        return $this;
+    }
+
+    public function setPassword(string $password)
+    {
+        $this->password = $password;
+        return $this;
     }
 
 }
