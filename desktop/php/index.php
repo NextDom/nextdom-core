@@ -70,11 +70,11 @@ if (!Status::isConnect()) {
     // Affichage normal d'une page
     include_file('desktop', 'nextdom', 'css');
     NextDomUtils::sendVarsToJS(array(
-            'userProfils' => $_SESSION['user']->getOptions(),
-            'user_id' => $_SESSION['user']->getId(),
-            'user_isAdmin' => Status::isConnectAdmin(),
-            'user_login' =>  $_SESSION['user']->getLogin(),
-            'nextdom_firstUse' => $configs['nextdom::firstUse']
+        'userProfils' => $_SESSION['user']->getOptions(),
+        'user_id' => $_SESSION['user']->getId(),
+        'user_isAdmin' => Status::isConnectAdmin(),
+        'user_login' => $_SESSION['user']->getLogin(),
+        'nextdom_firstUse' => $configs['nextdom::firstUse']
     ));
 
     if (count($eventjs_plugin) > 0) {

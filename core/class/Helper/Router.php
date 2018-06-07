@@ -72,7 +72,7 @@ class Router
         } elseif (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
             $this->ajaxQuery();
         } else {
-            include_file('desktop', 'index', 'php');
+            \include_file('desktop', 'index', 'php');
         }
     }
 
@@ -83,17 +83,17 @@ class Router
      */
     private function showModal() {
         try {
-            include_file('core', 'authentification', 'php');
-            include_file('desktop', init('modal'), 'modal', init('plugin'));
+            \include_file('core', 'authentification', 'php');
+            \include_file('desktop', init('modal'), 'modal', \init('plugin'));
         } catch (Exception $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
-            echo translate::exec(displayException($e), 'desktop/' . init('p') . '.php');
+            echo \translate::exec(\displayException($e), 'desktop/' . \init('p') . '.php');
             echo '</div>';
         } catch (Error $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
-            echo translate::exec(displayException($e), 'desktop/' . init('p') . '.php');
+            echo \translate::exec(\displayException($e), 'desktop/' . \init('p') . '.php');
             echo '</div>';
         }
     }
@@ -104,8 +104,8 @@ class Router
      * @throws \ExceptionAffichage
      */
     private function showConfiguration() {
-        include_file('core', 'authentification', 'php');
-        include_file('plugin_info', 'configuration', 'configuration', init('plugin'));
+        \include_file('core', 'authentification', 'php');
+        \include_file('plugin_info', 'configuration', 'configuration', init('plugin'));
     }
 
     /**
@@ -115,14 +115,14 @@ class Router
      */
     private function ajaxQuery() {
         try {
-            include_file('core', 'authentification', 'php');
-            include_file('desktop', init('p'), 'php', init('m'));
-        } catch (Exception $e) {
+            \include_file('core', 'authentification', 'php');
+            \include_file('desktop', init('p'), 'php', init('m'));
+        } catch (\Exception $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
-            echo translate::exec(displayException($e), 'desktop/' . init('p') . '.php');
+            echo \translate::exec(displayException($e), 'desktop/' . init('p') . '.php');
             echo '</div>';
-        } catch (Error $e) {
+        } catch (\Error $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
             echo \translate::exec(displayException($e), 'desktop/' . init('p') . '.php');
@@ -139,15 +139,15 @@ class Router
         $filename = 'index';
         $type = 'html';
         $plugin = '';
-        $modal = init('modal', false);
+        $modal = \init('modal', false);
         if ($modal !== false) {
             $filename = $modal;
             $type = 'modalhtml';
-            $plugin = init('plugin');
+            $plugin = \init('plugin');
         } elseif (isset($_GET['p']) && isset($_GET['ajax'])) {
             $filename = $_GET['p'];
             $plugin = isset($_GET['m']) ? $_GET['m'] : $plugin;
         }
-        include_file('mobile', $filename, $type, $plugin);
+        \include_file('mobile', $filename, $type, $plugin);
     }
 }
