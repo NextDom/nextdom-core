@@ -22,22 +22,24 @@ global $CONFIG;
 $app = [];
 
 $app['db'] = function($CONFIG) {
-    $connect = (new \NextDom\Singletons\ConnectDb())
+    // TU CONNECTES AVANT D'AVOIR LES INFOS
+    \NextDom\Singletons\ConnectDb::getInstance()
             ->setHost($CONFIG['db']['host'])
             ->setPort($CONFIG['db']['port'])
             ->setDbName($CONFIG['db']['dbname'])
             ->setUserName($CONFIG['db']['username'])
             ->setPassword($CONFIG['db']['password'])
     ;
-    var_dump($CONFIG,$connect);
-    return $connect::getInstance();
+    echo "JAMAIS APPELE";
+    var_dump(\NextDom\Singletons\ConnectDb::getInstance());
+    return \NextDom\Singletons\ConnectDb::getInstance();
 };
 
-var_dump($CONFIG);
+\NextDom\Singletons\ConnectDb::getInstance();
+//var_dump($CONFIG);
 ////////////////////////////////
 ////        NextDom DAO    /////
 ////////////////////////////////
-
 /**
  * @param $app
  * @return \NextDom\src\DAO\CmdDAO
@@ -46,3 +48,4 @@ $app['DAO.Cmd'] = function ($app) {
 
     return new NextDom\src\DAO\CmdDAO($app['db']::getInstance());
 };
+
