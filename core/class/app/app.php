@@ -16,11 +16,11 @@ $app['db'] = function () {
 ////////////////////////////////
 ////        NextDom DAO    /////
 ////////////////////////////////
-///
+
 /**
  * @param $app
  * @return \NextDom\src\DAO\CmdDAO
  */
 $app['DAO.Cmd'] = function($app){
-    return (new NextDom\src\DAO\CmdDAO($app['db']));
+    return new NextDom\src\DAO\CmdDAO($app['db']);
 };
