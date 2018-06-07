@@ -18,6 +18,9 @@
 
 require_once(__DIR__.'/vendor/autoload.php');
 require_once(__DIR__.'/core/php/utils.inc.php');
+require_once(__DIR__ . '/core/class/app/app.php');
+
+var_dump($app['DAO.Cmd']);
 
 use NextDom\Helper\Status;
 use NextDom\Helper\Client;

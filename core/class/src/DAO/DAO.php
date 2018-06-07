@@ -15,23 +15,23 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\src\DAO;
+namespace NextDom\Src\DAO;
 
 abstract class DAO
 {
     /**
      * Database connection
      *
+     * @var db
      */
-    private $db;
+    protected $db;
 
     /**
      * Constructor
      *
      * @param db
      */
-    public function __construct(\PDO $db)
-    {
+    public function __construct(\PDO $db) {
         $this->db = $db;
     }
 

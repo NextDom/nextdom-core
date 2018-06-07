@@ -15,15 +15,23 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\src\DAO;
+namespace NextDom\Src\DAO;
 
 use NextDom\Interfaces\DAOInterface;
-use NextDom\src\Domaine\Cmd;
+use NextDom\Src\Domaine\Cmd;
 
 class CmdDAO extends DAO implements DAOInterface
 
 {
 
+    /**
+     *
+     * @param type $db
+     */
+    public function __construct($db)
+    {
+        parent::__construct($db);
+    }
     /**
      * @param int $id
      * @return db
