@@ -14,7 +14,7 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\Src\DAO;
+namespace NextDom\src\DAO;
 
 abstract class DAO
 {

@@ -15,10 +15,10 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\Src\DAO;
+namespace NextDom\src\DAO;
 
 use NextDom\Interfaces\DAOInterface;
-use NextDom\Src\Domaine\Cmd;
+use NextDom\src\Domaine\Cmd;
 
 class CmdDAO extends DAO implements DAOInterface
 
@@ -46,7 +46,7 @@ class CmdDAO extends DAO implements DAOInterface
      * Builds a domain object from a DB row.
      * Must be overridden by child classes.
      */
-    protected function buildDomainObject(array $row): Cmd
+    protected function buildDomainObject(array $row)
     {
         $cmd = (new Cmd())
             ->setId($row['id'])
@@ -82,6 +82,8 @@ class CmdDAO extends DAO implements DAOInterface
         }
         return $list;
     }
+
+
 
 }
  
