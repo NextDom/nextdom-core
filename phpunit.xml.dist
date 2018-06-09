@@ -1,5 +1,5 @@
-<phpunit bootstrap="./tests/bootstrap.php" colors="true">
+<phpunit bootstrap="./nextdom_tests/bootstrap.php" colors="true">
     <testsuite>
-        <directory suffix="Test.php">./tests</directory>
+        <directory suffix="Test.php">./nextdom_tests</directory>
     </testsuite>
 </phpunit>
