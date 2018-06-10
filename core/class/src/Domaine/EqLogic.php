@@ -116,12 +116,12 @@ class EqLogic
      */
     private $comment;
 
-    public function getId()
+    public function getId() 
     {
         return $this->id;
     }
 
-    public function getName()
+    public function getName() 
     {
         return $this->name;
     }
@@ -196,13 +196,13 @@ class EqLogic
         return $this->comment;
     }
 
-    public function setId($id)
+    public function setId( int $id)
     {
         $this->id = $id;
         return $this;
     }
 
-    public function setName($name)
+    public function setName( string $name)
     {
         $this->name = $name;
         return $this;
@@ -226,7 +226,7 @@ class EqLogic
         return $this;
     }
 
-    public function setEqTypeName($eqTypeName)
+    public function setEqTypeName( string $eqTypeName)
     {
         $this->eqTypeName = $eqTypeName;
         return $this;
