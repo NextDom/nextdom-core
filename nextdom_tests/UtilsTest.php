@@ -8,6 +8,20 @@
 
 use NextDom\Helper\Utils;
 
+// TODO: Utiliser la vraie classe
+class UserMock {
+    public $isConnectedResult = true;
+    public $getProfilsResult = '';
+
+    public function is_connected() {
+        return $this->isConnectedResult;
+    }
+
+    public function getProfils() {
+        return $this->getProfilsResult;
+    }
+}
+
 class UtilsTest extends PHPUnit_Framework_TestCase
 {
     public function testInitWithoutDataWithoutDefault()
@@ -131,9 +145,102 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('<script type="text/javascript">window.location.href="http://www.nextdom.org"</script>', $result);
     }
 
-    public function testIsConnect()
+    public function testIsConnectWithoutRightsWithoutData()
     {
-
+        $result = Utils::isConnect();
+        $this->assertFalse($result);
+        $this->assertFalse($GLOBALS['isConnect::']);
     }
 
+    public function testIsConnectWithoutRightsWithEmptySession()
+    {
+        $_SESSION = [];
+        $result = Utils::isConnect();
+        $this->assertFalse($result);
+        $this->assertFalse($GLOBALS['isConnect::']);
+    }
+
+    public function testIsConnectWithoutRightsWithSessionUserEmpty()
+    {
+        $_SESSION = [];
+        $_SESSION['user'] = null;
+        $result = Utils::isConnect();
+        $this->assertFalse($result);
+        $this->assertFalse($GLOBALS['isConnect::']);
+    }
+
+    public function testIsConnectWithoutRightsWithSessionUserConnected()
+    {
+        $_SESSION = [];
+        $_SESSION['user'] = new UserMock();
+        $_SESSION['user']->isConnectedResult = true;
+        $result = Utils::isConnect();
+        $this->assertTrue($result);
+        $this->assertTrue($GLOBALS['isConnect::']);
+    }
+
+    public function testIsConnectWithoutRightsWithSessionUserDisconnected()
+    {
+        $_SESSION = [];
+        $_SESSION['user'] = new UserMock();
+        $_SESSION['user']->isConnectedResult = false;
+        $result = Utils::isConnect();
+        $this->assertFalse($result);
+        $this->assertFalse($GLOBALS['isConnect::']);
+    }
+
+    public function testIsConnectWithRightsWithoutData()
+    {
+        $result = Utils::isConnect('admin');
+        $this->assertFalse($result);
+        $this->assertFalse($GLOBALS['isConnect::admin']);
+    }
+
+    public function testIsConnectWithRightsWithEmptySession()
+    {
+        $_SESSION = [];
+        $result = Utils::isConnect('admin');
+        $this->assertFalse($result);
+        $this->assertFalse($GLOBALS['isConnect::admin']);
+    }
+
+    public function testIsConnectWithRightsWithSessionUserEmpty()
+    {
+        $_SESSION = [];
+        $_SESSION['user'] = null;
+        $result = Utils::isConnect('admin');
+        $this->assertFalse($result);
+        $this->assertFalse($GLOBALS['isConnect::admin']);
+    }
+
+    public function testIsConnectWithRightsWithSessionUserConnectedNoRights()
+    {
+        $_SESSION = [];
+        $_SESSION['user'] = new UserMock();
+        $_SESSION['user']->isConnectedResult = true;
+        $result = Utils::isConnect('admin');
+        $this->assertFalse($result);
+        $this->assertFalse($GLOBALS['isConnect::admin']);
+    }
+
+    public function testIsConnectWithRightsWithSessionUserConnectedWithRights()
+    {
+        $_SESSION = [];
+        $_SESSION['user'] = new UserMock();
+        $_SESSION['user']->isConnectedResult = true;
+        $_SESSION['user']->getProfilsResult = 'admin';
+        $result = Utils::isConnect('admin');
+        $this->assertTrue($result);
+        $this->assertTrue($GLOBALS['isConnect::admin']);
+    }
+
+    public function testIsConnectWithRightsWithSessionUserDisconnected()
+    {
+        $_SESSION = [];
+        $_SESSION['user'] = new UserMock();
+        $_SESSION['user']->isConnectedResult = false;
+        $result = Utils::isConnect('admin');
+        $this->assertFalse($result);
+        $this->assertFalse($GLOBALS['isConnect::admin']);
+    }
 }

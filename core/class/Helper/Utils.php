@@ -25,10 +25,11 @@ class Utils
      * @param string $_varName Nom de la variable dans le code HTML
      * @param mixed $_value Valeur de la variable
      */
-    public static function sendVarToJs($varName, $varValue) {
-        echo "<script>\n";
-        echo self::getVarInJs($varName, $varValue);
-        echo "</script>\n";
+    public static function sendVarToJs($varName, $varValue)
+    {
+        echo "<script>" .
+            self::getVarInJs($varName, $varValue) .
+            "</script>\n";
     }
 
     /**
@@ -40,7 +41,7 @@ class Utils
     {
         echo "<script>\n";
         foreach ($listOfVarsWithValues as $varName => $value) {
-            echo self::getVarInJs($varName, $value);
+            echo self::getVarInJs($varName, $value)."\n";
         }
         echo "</script>\n";
     }
@@ -53,14 +54,15 @@ class Utils
      *
      * @return string Déclaration javascript
      */
-    private static function getVarInJs($varName, $varValue) {
+    private static function getVarInJs($varName, $varValue)
+    {
         $jsVarValue = '';
         if (is_array($varValue)) {
             $jsVarValue = 'jQuery.parseJSON("' . addslashes(json_encode($varValue, JSON_UNESCAPED_UNICODE)) . '")';
         } else {
             $jsVarValue = '"' . $varValue . '"';
         }
-        return "var $varName = $jsVarValue;\n";
+        return "var $varName = $jsVarValue;";
     }
 
     /**
@@ -69,11 +71,10 @@ class Utils
      * @param $url URL cible
      * @param null $forceType Forcage si 'JS' TODO: ???
      */
-    public static function redirect($url, $forceType = null) {
+    public static function redirect($url, $forceType = null)
+    {
         if ($forceType == 'JS' || headers_sent() || isset($_GET['ajax'])) {
-            echo '<script type="text/javascript">';
-            echo "window.location.href='$url';";
-            echo '</script>';
+            echo '<script type="text/javascript">window.location.href="'.$url.'"</script>';
         } else {
             exit(header("Location: $url"));
         }
@@ -91,12 +92,11 @@ class Utils
         $rightsKey = 'isConnect::' . $rights;
         $isSetSessionUser = isset($_SESSION['user']);
         $result = false;
-        
+
         if ($isSetSessionUser && isset($GLOBALS[$rightsKey]) && $GLOBALS[$rightsKey]) {
             $result = $GLOBALS[$rightsKey];
-        }
-        else {
-            if (session_status() == PHP_SESSION_DISABLED || !isset($_SESSION) || !$isSetSessionUser) {
+        } else {
+            if (session_status() == PHP_SESSION_DISABLED || !$isSetSessionUser) {
                 $result = false;
             } elseif ($isSetSessionUser && is_object($_SESSION['user']) && $_SESSION['user']->is_Connected()) {
                 if ($rights !== '') {
