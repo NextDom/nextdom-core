@@ -1,6 +1,6 @@
 <?php
+
 /* This file is part of NextDom.
- *
  * NextDom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,41 +15,9 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\Src\DAO;
+namespace NextDom\src\Domaine;
 
-abstract class DAO
+class EqLogic
 {
-    /**
-     * Database connection
-     *
-     * @var db
-     */
-    protected $db;
-
-    /**
-     * Constructor
-     *
-     * @param db
-     */
-    public function __construct(\PDO $db) {
-        $this->db = $db;
-    }
-
-    /**
-     * Grants access to the database connection object
-     * @return db
-     */
-    protected function getDb()
-    {
-        return $this->db;
-    }
-
-    /**
-     * @param array $row
-     * Builds a domain object from a DB row.
-     * Must be overridden by child classes.
-     */
-    protected abstract function buildDomainObject(array $row);
-
-
+    //put your code here
 }

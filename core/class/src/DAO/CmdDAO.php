@@ -18,20 +18,13 @@
 namespace NextDom\src\DAO;
 
 use NextDom\Interfaces\DAOInterface;
+use NextDom\Interfaces\SaveDAOInterface;
 use NextDom\src\Domaine\Cmd;
 
-class CmdDAO extends DAO implements DAOInterface
 
+class CmdDAO extends DAO implements DAOInterface, SaveDAOInterface
 {
 
-    /**
-     *
-     * @param type $db
-     */
-    public function __construct($db)
-    {
-        parent::__construct($db);
-    }
     /**
      * @param int $id
      * @return db
@@ -41,6 +34,7 @@ class CmdDAO extends DAO implements DAOInterface
         return  $this->getDb();
     }
 
+    
     /**
      * @param array $row
      * Builds a domain object from a DB row.
@@ -83,7 +77,7 @@ class CmdDAO extends DAO implements DAOInterface
         return $list;
     }
 
-
+    
 
 }
  

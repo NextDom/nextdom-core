@@ -17,12 +17,59 @@
 
 namespace NextDom\src\Domaine;
 
-/**
- * Description of Config
- *
- * @author lucsanchez
- */
+
 class Config
 {
-    //put your code here
+    /**
+     *
+     * @var string
+     */
+    private $plugin;
+    
+    /**
+     *
+     * @var string
+     */
+    private $key;
+    
+    /**
+     *
+     * @var string
+     */
+    private $value;
+    
+    public function getPlugin()
+    {
+        return $this->plugin;
+    }
+
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    public function setPlugin( string $plugin) : Config
+    {
+        $this->plugin = $plugin;
+        return $this;
+    }
+
+    public function setKey( string $key) : Config
+    {
+        $this->key = $key;
+        return $this;
+    }
+
+    public function setValue($value) : Config
+    {
+        $this->value = $value;
+        return $this;
+    }
+
+    
 }
