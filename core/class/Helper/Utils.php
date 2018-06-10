@@ -133,4 +133,26 @@ class Utils
         }
         return $_default;
     }
+
+    /**
+     * Obtenir le contenu d'un fichier template
+     *
+     * @param string $folder Répertoire dans lequel se trouve le fichier de template
+     * @param string $version Version du template
+     * @param string $filename Nom du fichier
+     * @param string $pluginId Identifiant du plugin
+     *
+     * @return string Contenu du fichier ou une chaine vide.
+     */
+    public static function getTemplateFilecontent($folder, $version, $filename, $pluginId = '') {
+        $result = '';
+        $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
+        if ($pluginId == '') {
+            $filePath = NEXTDOM_ROOT . '/' . $folder . '/template/' . $version . '/' . $filename . '.html';
+        }
+        if (file_exists($filePath)) {
+            $result = file_get_contents($filePath);
+        }
+        return $result;
+    }
 }

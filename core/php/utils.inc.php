@@ -89,25 +89,9 @@ function include_file($_folder, $_filename, $_type, $_plugin = '')
     }
 }
 
-/**
- * ???? Obtenir le template ????
- *
- * @param string $_folder
- * @param string $_version
- * @param string $_filename
- * @param string $_plugin
- * @return string
- */
 function getTemplate($_folder, $_version, $_filename, $_plugin = '')
 {
-    $result = NEXTDOM_ROOT . '/plugins/' . $_plugin . '/core/template/' . $_version . '/' . $_filename . '.html';
-    if ($_plugin == '') {
-        $result = NEXTDOM_ROOT . '/core/' . $_folder . '/template/' . $_version . '/' . $_filename . '.html';
-    }
-    if (!file_exists($result)) {
-        $result = '';
-    }
-    return $result;
+    return Utils::getTemplateFilecontent($_folder, $_version, $_filename, $_plugin);
 }
 
 function template_replace($_array, $_subject)
@@ -115,40 +99,14 @@ function template_replace($_array, $_subject)
     return str_replace(array_keys($_array), array_values($_array), $_subject);
 }
 
-/**
- * Obtenir une variable passée en paramètre
- *
- * @param string $_name
- * @param mixed $_default
- * @return string
- */
 function init($_name, $_default = '')
 {
     return Utils::init($_name, $_default);
 }
 
-/**
- * Ajouter une variable Javascript au code HTML
- *
- * @param string $_varName Nom de la variable dans le code HTML
- * @param mixed $_value Valeur de la variable
- */
 function sendVarToJS($_varName, $_value)
 {
     Utils::sendVarToJs($_varName, $_value);
-    /*
-    $value = '';
-    if (is_array($_value)) {
-        $value = 'jQuery.parseJSON("' . addslashes(json_encode($_value, JSON_UNESCAPED_UNICODE)) . '")';
-    } else {
-        $value = '"' . $_value . '"';
-    }
-
-    if ($_showScriptTag) {
-        echo "<script>var $_varName = $value;</script>";
-    } else {
-        echo "var $_varName = $value;\n";
-    }*/
 }
 
 function resizeImage($contents, $width, $height)
@@ -318,7 +276,7 @@ function hadFileRight($_allowPath, $_path)
 /**
  * Obtenir la version de NextDom installée
  *
- * TODO: Supprimer l'argument
+ * TODO: Supprimer l'argument ?
  *
  * @param string $_name Nom de ?
  * @return string Version de NextDom
