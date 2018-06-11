@@ -1,31 +1,34 @@
 <?php
-if (!isConnect('admin')) {
-    throw new Exception('{{401 - Accès non autorisé}}');
-}
 
-require_once NEXTDOM_ROOT . '/core/repo/Market/AmfjMarket.class.php';
+namespace NextDom;
 
-$plugin = plugin::byId('AlternativeMarketForJeedom');
-$eqLogics = eqLogic::byType($plugin->getId(), true);
-\usort($eqLogics, array('AlternativeMarketForJeedom', 'cmpByOrder'));
+use NextDom\Helper\Status;
+use NextDom\Helper\DataStorage;
+use NextDom\Helper\Utils;
 
+Status::initConnectState();
+Status::isConnectedAdminOrFail();
+
+global $NEXTDOM_INTERNAL_CONFIG;
 $sourcesList = array();
-foreach ($eqLogics as $eqLogic) {
-    $source = [];
-    $source['id'] = $eqLogic->getId();
-    $source['name'] = $eqLogic->getName();
-    $source['type'] = $eqLogic->getConfiguration()['type'];
-    $source['data'] = $eqLogic->getConfiguration()['data'];
-    array_push($sourcesList, $source);
+foreach ($NEXTDOM_INTERNAL_CONFIG['nextdom_market']['sources'] as $source) {
+    // TODO: Limiter les requêtes
+    if (\config::byKey('nextdom_market::' . $source['code']) == 1) {
+        $sourcesList[] = $source;
+    }
 }
-sendVarToJs('sourcesList', $sourcesList);
-sendVarToJs('moreInformationsStr', __("Plus d'informations", __FILE__));
-sendVarToJs('updateStr', __("Mettre à jour", __FILE__));
-sendVarToJs('updateAllStr', __("Voulez-vous mettre à jour tous les plugins ?", __FILE__));
-sendVarToJs('updateThisStr', __("Voulez-vous mettre à jour ce plugin ?", __FILE__));
-sendVarToJs('installedPluginStr', __("Plugin installé", __FILE__));
-sendVarToJs('updateAvailableStr', __("Mise à jour disponible", __FILE__));
 
+Utils::sendVarsToJS(
+    array(
+        'sourcesList' => $sourcesList,
+        'moreInformationsStr' => __("Plus d'informations", __FILE__),
+        'updateStr' => __("Mettre à jour", __FILE__),
+        'updateAllStr' => __("Voulez-vous mettre à jour tous les plugins ?", __FILE__),
+        'updateThisStr' => __("Voulez-vous mettre à jour ce plugin ?", __FILE__),
+        'installedPluginStr' => __("Plugin installé", __FILE__),
+        'updateAvailableStr' => __("Mise à jour disponible", __FILE__)
+    )
+);
 
 // Affichage d'un message à un utilisateur
 if (isset($_GET['message'])) {
@@ -40,9 +43,8 @@ if (isset($_GET['message'])) {
     }
 }
 
-include_file('desktop', 'AlternativeMarketForJeedom', 'js', 'AlternativeMarketForJeedom');
-include_file('desktop', 'AlternativeMarketForJeedom', 'css', 'AlternativeMarketForJeedom');
-include_file('core', 'plugin.template', 'js');
+\include_file('desktop', 'market', 'js');
+\include_file('desktop', 'market', 'css');
 
 ?>
 <div class="row">
@@ -51,12 +53,12 @@ include_file('core', 'plugin.template', 'js');
                     src="plugins/AlternativeMarketForJeedom/resources/NextDomSquareRound.png" alt="Site NextDom"/></a>
     </div>
     <div class="col-sm-12 col-md-11">
-        <?php if (count($eqLogics) > 1 && config::byKey('show-sources-filters', 'AlternativeMarketForJeedom')) : ?>
+        <?php if (count($sourcesList) > 1 && \config::byKey('show-sources-filters', 'AlternativeMarketForJeedom')) : ?>
             <div class="market-filters row">
                 <div id="market-filter-src" class="btn-group col-sm-12">
                     <?php
-                    foreach ($eqLogics as $eqLogic) {
-                        $name = $eqLogic->getName();
+                    foreach ($sourcesList as $source) {
+                        $name = $source['name'];
                         echo '<button type="button" class="btn btn-primary" data-source="' . $name . '">' . $name . '</button >';
                     }
                     ?>

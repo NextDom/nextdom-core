@@ -1,0 +1,209 @@
+
+.config-form [type="checkbox"]:not(:checked),
+.config-form [type="checkbox"]:checked {
+    display: none;
+}
+
+.config-form [type="checkbox"]:not(:checked) + label,
+.config-form [type="checkbox"]:checked + label {
+    position: relative;
+    padding-left: 75px;
+    cursor: pointer;
+}
+
+.config-form [type="checkbox"]:not(:checked) + label:before,
+.config-form [type="checkbox"]:checked + label:before,
+.config-form [type="checkbox"]:not(:checked) + label:after,
+.config-form [type="checkbox"]:checked + label:after {
+    content: '';
+    position: absolute;
+}
+
+.config-form [type="checkbox"]:not(:checked) + label:before,
+.config-form [type="checkbox"]:checked + label:before {
+    left: 0;
+    top: -3px;
+    width: 65px;
+    height: 30px;
+    background: #DDDDDD;
+    border-radius: 15px;
+    -webkit-transition: background-color .2s;
+    -moz-transition: background-color .2s;
+    -ms-transition: background-color .2s;
+    transition: background-color .2s;
+}
+
+#sources-list [type="checkbox"]:not(:checked) + label:before,
+#sources-list [type="checkbox"]:checked + label:before {
+    top: -10px;
+}
+
+#sources-list [type="checkbox"]:not(:checked) + label:after,
+#sources-list [type="checkbox"]:checked + label:after {
+    top: -5px;
+}
+
+#sources-list [type="checkbox"]:checked + label:after {
+    top: -5px;
+}
+
+.config-form [type="checkbox"]:not(:checked) + label:after,
+.config-form [type="checkbox"]:checked + label:after {
+    width: 20px;
+    height: 20px;
+    -webkit-transition: all .2s;
+    -moz-transition: all .2s;
+    -ms-transition: all .2s;
+    transition: all .2s;
+    border-radius: 50%;
+    background: #d9534f;
+    top: 2px;
+    left: 5px;
+}
+
+/* on checked */
+.config-form [type="checkbox"]:checked + label:before {
+    background: #DDDDDD;
+}
+
+.config-form [type="checkbox"]:checked + label:after {
+    background: #62c462;
+    top: 2px;
+    left: 40px;
+}
+
+.config-form [type="checkbox"]:checked + label .ui,
+.config-form [type="checkbox"]:not(:checked) + label .ui:before,
+.config-form [type="checkbox"]:checked + label .ui:after {
+    position: absolute;
+    left: 6px;
+    width: 65px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 22px;
+    -webkit-transition: all .2s;
+    -moz-transition: all .2s;
+    -ms-transition: all .2s;
+    transition: all .2s;
+}
+
+.config-form [type="checkbox"]:not(:checked) + label .ui:before {
+    content: "no";
+    left: 32px
+}
+
+.config-form [type="checkbox"]:checked + label .ui:after {
+    content: "yes";
+    color: #62c462;
+}
+
+.config-form [type="checkbox"]:focus + label:before {
+    border: 1px dashed #777;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-top: -1px;
+}
+
+.config-form label {
+    margin-bottom: 10px;
+}
+
+#amfj-config .control-label sup {
+    font-size: 1em;
+    color: grey;
+}
+
+#config-modal h3 {
+    text-align: center;
+}
+
+#shortcuts {
+}
+
+#shortcuts button {
+    border-radius: 2em;
+}
+
+#config-modal .btn-config-market{
+    background-color: #33B8CC;
+    min-width: 100px;
+    min-height: 100px;
+    margin-right: 10px;
+}
+
+#config-modal .btn-config-market img {
+    width: 50px;
+    height: 50px;
+}
+
+#config-modal .btn-config-market span {
+    color: white;
+}
+
+#github-list-container {
+    margin-top: 1.5em;
+}
+
+#sources-list .list-button {
+    padding: 0;
+}
+
+#sources-list .list-button button {
+
+    height: 100%;
+    width: 100%;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+#sources-list-save{
+    margin-top: 10px;
+}
+
+.btn-nextdom {
+    color: #fff;
+    background-color: #33B8CC !important;
+    border-color: #33B8CC !important;
+}
+
+#disclaimer-modal .alert .col-md-2 {
+    text-align: right;
+}
+
+#disclaimer-modal .alert .row {
+    display: table;
+}
+
+#disclaimer-modal .alert .row>span {
+    display: table-cell;
+    float: none;
+    vertical-align: middle;
+}
+
+#disclaimer-modal .alert i {
+    padding-left: 0.2em;
+}
+
+#disclaimer-modal .alert p {
+    padding-left: 2em;
+}
+
+#choices-row button {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    line-height: 1em;
+    height: 2.2em;
+    font-size: 1.5em;
+}
+
+#nextdom-modal li {
+    font-size: 1.2em;
+}
+
+#nextdom-modal .list-group {
+    margin-bottom: 0 !important;
+}

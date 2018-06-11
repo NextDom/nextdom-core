@@ -19,7 +19,6 @@
 /* * ***************************Includes********************************* */
 
 require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
-require_once('NextDomMarketItem.php');
 
 class repo_nextdom_market {
     /*     * *************************Attributs****************************** */
@@ -39,18 +38,14 @@ class repo_nextdom_market {
 
     public static $_configuration = array(
         'configuration' => array(
-            'address' => array(
-                'name' => 'Adresse',
-                'type' => 'input',
+            'nextdom_stable' => array(
+                'name' => 'NextDom Stable',
+                'type' => 'checkbox',
             ),
-            'username' => array(
-                'name' => 'Nom d\'utilisateur',
-                'type' => 'input',
-            ),
-            'password' => array(
-                'name' => 'Mot de passe',
-                'type' => 'password',
-            ),
+            'nextdom_draft' => array(
+                'name' => 'NextDom Draft',
+                'type' => 'checkbox',
+            )
         ),
         'parameters_for_add' => array(
             'version' => array(

@@ -1,0 +1,285 @@
+#logo-nextdom img {
+    width: 100%;
+    margin-top: 2rem;
+    max-width: 7em;
+    float: right;
+}
+
+.market-filters {
+    margin-top: 2rem;
+}
+
+#market-div {
+    margin-top: 2rem;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+#admin-buttons {
+    float: right;
+}
+
+#market-div .media-container {
+    margin: 0;
+    padding: 1rem;
+}
+
+#market-div .media {
+    position: relative;
+    height: 200px;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    border: 1px solid #CCCCCC;
+    background-color: rgba(220, 220, 220, 0.2);
+    margin: 0;
+    border-radius: 5px;
+    padding: 1.2em;
+    /** Fix pour darksobre **/
+    width: 100%;
+}
+
+#market-div .media-left {
+    margin-right: 1em;
+}
+
+#market-div .media .installed-marker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-top: 3em solid #33B8CC;
+    border-right: 3em solid transparent;
+}
+
+#market-div .media .installed-marker i {
+    position: absolute;
+    top: -2.5em;
+    left: 0.5em;
+    color: white;
+}
+
+#market-div .media .update-marker {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-top: 3em solid #33B8CC;
+    border-left: 3em solid transparent;
+}
+
+#market-div .media .update-marker i {
+    position: absolute;
+    top: -2.5em;
+    right: 0.5em;
+    color: white;
+}
+
+.ui-tooltip {
+    transform: translateY(-4.5em);
+}
+
+#market-div .media img {
+    height: 100px;
+}
+
+#market-div .media h4 {
+    text-transform: capitalize;
+    text-align: center;
+    margin-top: 0 !important;
+}
+
+#market-div .media-body {
+    width: 100%;
+}
+
+#market-div .media-body p {
+    text-align: justify;
+    height: 6em;
+    overflow: hidden;
+    position: relative;
+    line-height: 1.5em;
+    font-size: 1em;
+}
+
+#market-div .media:hover {
+    cursor: pointer;
+}
+
+#market-div button {
+    color: white;
+    border: none;
+    float: right;
+    border-top-left-radius: 0.3em;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+    background-image: linear-gradient(to right, #40535e, #40535e 50%, #33B8CC 50%, #33B8CC);
+    background-size: 202% 100%;
+    background-position: 0 0;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -ms-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    font-size: 1em;
+    line-height: 2em;
+    padding: 0 1em 0 1em;
+}
+
+#market-div .media:hover button {
+    background-position: 100% 0;
+    color: white;
+}
+
+#market-div .gitid {
+    position: absolute;
+    bottom: 0;
+    background-color: #33B8CC;
+    line-height: 2em;
+    padding-left: 1em;
+    padding-right: 1em;
+    color: white;
+    left: 0;
+    border-top-right-radius: 5px;
+    font-size: 1em;
+}
+
+#market-div .media-left {
+    padding-right: 1.2em;
+}
+
+#mass-update {
+    display: none;
+}
+
+.market-filters .btn-primary,
+#plugin-modal .btn-primary {
+    background-color: #33B8CC !important;
+    border-color: #33B8CC !important;
+    background-image: none;
+}
+
+.market-filters .btn-secondary {
+    color: black;
+}
+
+#plugin-modal .btn-success {
+    background-color: #5cb85c !important;
+    border: #5cb85c !important;
+    background-image: none !important;
+}
+
+#plugin-modal .btn-warning {
+    background-color: #f0ad4e !important;
+    border: #f0ad4e !important;
+    background-image: none !important;
+}
+
+#plugin-modal p,
+#plugin-modal h3 {
+    color: black;
+}
+
+#div_pluginAlternativeMarketForJeedomAlert {
+    /*    height: 100%;*/
+    display: none;
+}
+
+#md_modal {
+    padding: 0;
+}
+
+#plugin-modal .row {
+    margin: 0;
+}
+
+#plugin-modal-header {
+    min-height: 20em;
+}
+
+#plugin-modal-header > div {
+    height: 100%;
+    padding: 1em;
+}
+
+#plugin-modal-header #description {
+    padding-top: 1em;
+    clear: both;
+}
+
+#plugin-modal-header {
+    background-color: #FFFFFF;
+}
+
+#plugin-modal-header .left-pane img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#plugin-modal-header .left-pane img {
+    margin-top: 1em;
+    width: 14em;
+}
+
+#plugin-modal-header .button-item {
+    float: left;
+    margin-right: 1em;
+    margin-top: 1em;
+}
+
+#plugin-modal-header .btn {
+    font-size: 1.5em;
+}
+
+#plugin-modal-body {
+    background-color: #EAEAEA;
+}
+
+#plugin-modal-body,
+#plugin-modal-footer {
+    padding-top: 10px;
+}
+
+#plugin-modal .right-pane .help-block {
+    color: #c0c0c0;
+}
+
+#gitid-list li .btn {
+    border: none;
+}
+
+#add-git i {
+    font-size: 14px;
+    line-height: 20px;
+}
+
+#plugin-modal .hidden-btn {
+    display: none;
+}
+
+#plugin-modal .list-title {
+    font-weight: bold;
+}
+
+#plugin-screenshots {
+    display: none;
+}
+
+#plugin-modal-screenshots .carousel-inner>.item>a>img, .carousel-inner>.item>img {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 70%;
+}
+
+#plugin-modal-footer {
+    text-align: right;
+    margin-right: 0.5em;
+}
+
+.modal-content button.close {
+    margin-top: -25px;
+}

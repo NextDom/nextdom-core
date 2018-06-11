@@ -66,9 +66,26 @@ class Status
         return self::$connectState;
     }
 
+    /**
+     * Test si l'utilisateur est connecté et lève une exception si ce n'est pas le cas.
+     *
+     * @throws \Exception
+     */
     public static function isConnectedOrFail()
     {
         if (!self::$connectState) {
+            throw new \Exception(__('401 - Accès non autorisé', 'system'));
+        }
+    }
+
+    /**
+     * Test si l'utilisateur est connecté avec les droits admin et lève une exception si ce n'est pas le cas.
+     *
+     * @throws \Exception
+     */
+    public static function isConnectedAdminOrFail()
+    {
+        if (!self::$connectAdminState) {
             throw new \Exception(__('401 - Accès non autorisé', 'system'));
         }
     }
