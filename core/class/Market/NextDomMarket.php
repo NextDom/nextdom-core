@@ -18,8 +18,7 @@
 namespace NextDom\Market;
 
 use NextDom\Helper\DataStorage;
-use NextDom\Market\DownloadManager;
-use NextDom\Market\MarketItem;
+use NextDom\Market\GitManager;
 
 class NextDomMarket
 {
@@ -47,7 +46,7 @@ class NextDomMarket
     {
         DownloadManager::init();
         $this->source = $source;
-        $this->dataStorage = new DataStorage('amfj');
+        $this->dataStorage = new DataStorage('market');
     }
 
     /**
@@ -56,7 +55,7 @@ class NextDomMarket
      * @param bool $force Forcer la mise à jour
      *
      * @return True si une mise à jour a été réalisée
-     * @throws Exception
+     * @throws \Exception
      */
     public function refresh($force = false)
     {
@@ -78,12 +77,12 @@ class NextDomMarket
      *
      * @param bool $force Forcer la mise à jour
      * @return bool True si un rafraichissement a eu lieu
-     * @throws Exception
+     * @throws \Exception
      */
     public function refreshGitHub($force)
     {
         $result = false;
-        $gitManager = new MarketGitManager($this->source['data']);
+        $gitManager = new GitManager($this->source['data']);
         if ($force || $this->isUpdateNeeded($this->source['data'])) {
             $result = $gitManager->updateRepositoriesList();
         }
@@ -148,13 +147,13 @@ class NextDomMarket
     /**
      * Obtenir la liste des éléments du dépot
      *
-     * @return AmfjMarketItem[] Liste des éléments
+     * @return MarketItem[] Liste des éléments
      */
     public function getItems()
     {
         $result = array();
         if ($this->source['type'] == 'github') {
-            $gitManager = new MarketGitManager($this->source['data']);
+            $gitManager = new GitManager($this->source['data']);
             $result = $gitManager->getItems($this->source['name']);
         } else if ($this->source['type'] == 'json') {
             $result = $this->getItemsFromJson();
@@ -165,14 +164,14 @@ class NextDomMarket
     /**
      * Obtenir les éléments d'une source JSON
      *
-     * @return AmfjMarketItem[] Liste des éléments
+     * @return MarketItem[] Liste des éléments
      */
     public function getItemsFromJson()
     {
         $result = array();
         $plugins = $this->dataStorage->getJsonData('repo_data_' . $this->source['name']);
         foreach ($plugins as $plugin) {
-            $marketItem = AmfjMarketItem::createFromCache($this->source['name'], $plugin['gitId'] . '/' . $plugin['repository']);
+            $marketItem = MarketItem::createFromCache($this->source['name'], $plugin['gitId'] . '/' . $plugin['repository']);
             array_push($result, $marketItem);
         }
         return $result;

@@ -130,7 +130,7 @@ class DataStorage
     public function addRawData($code, $data)
     {
         $statement = \DB::getConnection()->prepare("INSERT INTO `" . $this->dataTableName . "` (`code`, `data`) VALUES (?, ?)");
-        $statement->execute(array($code, $data));
+        $result = $statement->execute(array($code, $data));
     }
 
     /**

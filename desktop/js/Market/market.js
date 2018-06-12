@@ -316,7 +316,7 @@ function getItemHtml(item) {
 
     var iconPath = item['iconPath'];
     if (item['iconPath'] === false) {
-        iconPath = 'plugins/AlternativeMarketForJeedom/resources/wait_icon.png';
+        iconPath = 'core/img/wait_icon.png';
     }
     // Préparation du code
     var result = '' +
@@ -354,7 +354,7 @@ function getItemHtml(item) {
 function showPluginModal(pluginData, iconPath) {
     var modal = $('#md_modal');
     modal.dialog({title: pluginData['name']});
-    modal.load('index.php?v=d&plugin=AlternativeMarketForJeedom&modal=plugin.AlternativeMarketForJeedom').dialog('open');
+    modal.load('index.php?v=d&modal=plugin.Market').dialog('open');
     currentPlugin = pluginData;
     currentPlugin['iconPath'] = iconPath;
 }

@@ -349,13 +349,13 @@ class MarketItem
     {
         $iconFilename = \str_replace('/', '_', $this->fullName) . '.png';
         $iconUrl = 'https://raw.githubusercontent.com/' . $this->fullName . '/' . $this->defaultBranch . '/plugin_info/' . $this->id . '_icon.png';
-        $targetPath = \dirname(__FILE__) . '/../../cache/' . $iconFilename;
+        $targetPath = NEXTDOM_ROOT.'/market_cache/' . $iconFilename;
         DownloadManager::downloadBinary($iconUrl, $targetPath);
         if (\filesize($targetPath) < 100) {
             \unlink($targetPath);
-            $this->iconPath = 'plugins/AlternativeMarketForJeedom/resources/unknown_icon.png';
+            $this->iconPath = '/core/img/unknown_icon.png';
         } else {
-            $this->iconPath = 'plugins/AlternativeMarketForJeedom/cache/' . $iconFilename;
+            $this->iconPath = '/market_cache/' . $iconFilename;
         }
         $this->writeCache();
     }

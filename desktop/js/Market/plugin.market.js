@@ -93,7 +93,7 @@ function initInstallationButtons() {
  */
 function initBranchesUpdate(defaultBranchChoice) {
     $.post({
-        url: 'plugins/AlternativeMarketForJeedom/core/ajax/AlternativeMarketForJeedom.ajax.php',
+        url: 'core/ajax/Market/Ajax/NextDomMarketAjax.php',
         data: {
             action: 'get',
             params: 'branches',

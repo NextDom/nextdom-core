@@ -15,7 +15,7 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom;
+namespace NextDom\Market;
 
 use NextDom\Helper\DataStorage;
 use NextDom\Market\DownloadManager;

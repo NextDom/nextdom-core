@@ -17,6 +17,7 @@
 
 namespace NextDom\Market\Ajax;
 
+use NextDom\Market\DownloadManager;
 use NextDom\Market\NextDomMarket;
 use NextDom\Market\MarketItem;
 
@@ -142,9 +143,6 @@ class MarketAjaxParser
                     $idList = [];
 //                    $showDuplicates = \config::byKey('show-duplicates', 'AlternativeMarketForJeedom');
                     $showDuplicates = false;
-                    ob_start();
-                    var_dump($data);
-                    error_log(strip_tags(ob_get_clean()));
                     foreach ($data as $source) {
                         $market = new NextDomMarket($source);
                         // Obtenir la liste complète
@@ -173,7 +171,7 @@ class MarketAjaxParser
                 break;
             case 'branches':
                 if (is_array($data)) {
-                    MarketDownloadManager::init();
+                    DownloadManager::init();
                     $marketItem = MarketItem::createFromCache($data['sourceName'], $data['fullName']);
                     if ($marketItem->downloadBranchesInformations()) {
                         $result = $marketItem->getBranchesList();
@@ -184,7 +182,7 @@ class MarketAjaxParser
                 break;
             case 'icon':
                 if (is_array($data)) {
-                    MarketDownloadManager::init();
+                    DownloadManager::init();
                     $marketItem = MarketItem::createFromCache($data['sourceName'], $data['fullName']);
                     $path = $marketItem->getIconPath();
                     if ($path !== false) {
