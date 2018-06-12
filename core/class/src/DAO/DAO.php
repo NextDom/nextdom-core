@@ -16,7 +16,7 @@
 
 namespace NextDom\src\DAO;
 
-abstract class DAO
+abstract class DAO implements DAOInterface, SaveDAOInterface
 {
     /**
      * Database connection
@@ -49,7 +49,6 @@ abstract class DAO
      * Must be overridden by child classes.
      */
     protected abstract function buildDomainObject(array $row);
-
 
     /**
      * Find All object from a DB row.

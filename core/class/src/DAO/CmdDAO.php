@@ -22,7 +22,7 @@ use NextDom\Interfaces\SaveDAOInterface;
 use NextDom\src\Domaine\Cmd;
 
 
-class CmdDAO extends DAO implements DAOInterface, SaveDAOInterface
+class CmdDAO extends DAO
 {
 
     /**
@@ -34,7 +34,10 @@ class CmdDAO extends DAO implements DAOInterface, SaveDAOInterface
         return  $this->getDb();
     }
 
-    
+    public function save(){
+
+    }
+
     /**
      * @param array $row
      * Builds a domain object from a DB row.

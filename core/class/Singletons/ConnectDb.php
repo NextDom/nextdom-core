@@ -23,18 +23,11 @@ use NextDom\Exceptions\DbException;
 class ConnectDb
 {
 
-    /**
-     * @var
-     */
-    private static $instance;
+    // Hold the class instance.
+    private static $instance = null;
+    private $connection;
 
-
-    /**
-     * @name connectPDO()
-     * @access private
-     * @return object or DbException
-     */
-    private static function connectPDO()
+    private function __construct()
     {
         global $CONFIG;
 
@@ -42,7 +35,7 @@ class ConnectDb
 
             $pdo = new \PDO('mysql:host=' . $CONFIG['db']['host'] . ';port=' . $CONFIG['db']['port'] . ';dbname=' . $CONFIG['db']['dbname'], $CONFIG['db']['username'], $CONFIG['db']['password']);
             $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            var_dump($pdo);
+
             return $pdo;
 
         } catch (\PDOException $exc) {
@@ -50,16 +43,18 @@ class ConnectDb
         }
     }
 
-    /**
-     * @name getInstance()
-     * @return instance of DB
-     */
     public static function getInstance()
     {
-        if (is_null(self::$instance)) {
-           self::$instance = self::connectPDO();
+        if (!self::$instance) {
+            self::$instance = new Self();
         }
+
         return self::$instance;
+    }
+
+    public function getConnection()
+    {
+        return $this->connection;
     }
 
 }

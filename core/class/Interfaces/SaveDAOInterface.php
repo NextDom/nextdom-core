@@ -18,10 +18,7 @@
 
 namespace NextDom\Interfaces;
 
-/**
- *
- * @author lucsanchez
- */
+
 interface SaveDAOInterface
 {
 
