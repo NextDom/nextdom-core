@@ -18,7 +18,7 @@
 namespace NextDom\src\Domaine;
 
 
-class ScenarioElement
+class ScenarioSubElement
 {
     /**
      * @var int
@@ -31,9 +31,19 @@ class ScenarioElement
     private $order;
 
     /**
+     * @var int
+     */
+    private $scenarioElementId;
+
+    /**
      * @var string
      */
     private $type;
+
+    /**
+     * @var string
+     */
+    private $subtype;
 
     /**
      * @var string
@@ -60,9 +70,9 @@ class ScenarioElement
 
     /**
      * @param int $id
-     * @return ScenarioElement
+     * @return ScenarioSubElement
      */
-    public function setId(int $id): ScenarioElement
+    public function setId(int $id): ScenarioSubElement
     {
         $this->id = $id;
         return $this;
@@ -78,11 +88,29 @@ class ScenarioElement
 
     /**
      * @param int $order
-     * @return ScenarioElement
+     * @return ScenarioSubElement
      */
-    public function setOrder(int $order): ScenarioElement
+    public function setOrder($order): ScenarioSubElement
     {
         $this->order = $order;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getScenarioElementId(): int
+    {
+        return $this->scenarioElementId;
+    }
+
+    /**
+     * @param int $scenarioElementId
+     * @return ScenarioSubElement
+     */
+    public function setScenarioElementId(int $scenarioElementId): ScenarioSubElement
+    {
+        $this->scenarioElementId = $scenarioElementId;
         return $this;
     }
 
@@ -96,11 +124,29 @@ class ScenarioElement
 
     /**
      * @param string $type
-     * @return ScenarioElement
+     * @return ScenarioSubElement
      */
-    public function setType($type): ScenarioElement
+    public function setType($type): ScenarioSubElement
     {
         $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubtype(): string
+    {
+        return $this->subtype;
+    }
+
+    /**
+     * @param string $subtype
+     * @return ScenarioSubElement
+     */
+    public function setSubtype($subtype): ScenarioSubElement
+    {
+        $this->subtype = $subtype;
         return $this;
     }
 
@@ -114,9 +160,9 @@ class ScenarioElement
 
     /**
      * @param string $name
-     * @return ScenarioElement
+     * @return ScenarioSubElement
      */
-    public function setName($name): ScenarioElement
+    public function setName($name): ScenarioSubElement
     {
         $this->name = $name;
         return $this;
@@ -132,9 +178,9 @@ class ScenarioElement
 
     /**
      * @param string $options
-     * @return ScenarioElement
+     * @return ScenarioSubElement
      */
-    public function setOptions($options): ScenarioElement
+    public function setOptions($options): ScenarioSubElement
     {
         $this->options = $options;
         return $this;
@@ -150,9 +196,9 @@ class ScenarioElement
 
     /**
      * @param string $log
-     * @return ScenarioElement
+     * @return ScenarioSubElement
      */
-    public function setLog($log): ScenarioElement
+    public function setLog($log): ScenarioSubElement
     {
         $this->log = $log;
         return $this;
