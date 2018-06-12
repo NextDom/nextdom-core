@@ -51,4 +51,11 @@ abstract class DAO
     protected abstract function buildDomainObject(array $row);
 
 
+    /**
+     * Find All object from a DB row.
+     */
+    public function findAllBy($columnName, $value) {
+       //todo
+
+    }
 }
