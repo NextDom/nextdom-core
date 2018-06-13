@@ -28,12 +28,12 @@ class repo_nextdom_market
 
     public static $_scope = array(
         'plugin' => true,
-        'backup' => true,
+        'backup' => false,
         'hasConfiguration' => true,
         'proxy' => true,
-        'sendPlugin' => true,
+        'sendPlugin' => false,
         'hasStore' => true,
-        'hasScenarioStore' => true,
+        'hasScenarioStore' => false,
         'test' => true,
     );
 

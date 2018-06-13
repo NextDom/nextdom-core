@@ -49,27 +49,4 @@ class AlternativeMarketForJeedom extends eqLogic
         }
         return $result;
     }
-
-    /**
-     * Met à jour la liste tous les jours
-     */
-    public static function cronDaily()
-    {
-        NextDomMarketDownloadManager::init();
-
-        $plugin = plugin::byId('AlternativeMarketForJeedom');
-        $eqLogics = eqLogic::byType($plugin->getId(), true);
-
-        foreach ($eqLogics as $eqLogic) {
-            $source = [];
-            $source['name'] = $eqLogic->getName();
-            $source['type'] = $eqLogic->getConfiguration('type');
-            $source['data'] = $eqLogic->getConfiguration('data');
-            $market = new AmfjMarket($source);
-            $market->refresh(true);
-            foreach ($market->getItems() as $marketItem) {
-                $marketItem->downloadIcon();
-            }
-        }
-    }
 }
