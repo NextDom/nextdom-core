@@ -194,4 +194,18 @@ class DataStorage
         $statement = \DB::getConnection()->prepare("DELETE FROM `".$this->dataTableName."` WHERE `code` LIKE ?");
         $statement->execute(array($code));
     }
+
+    /**
+     * Obtenir toutes données ayant un préfix commun.
+     *
+     * @param string $prefix Préfixe des clés.
+     *
+     * @return array Liste des résultats
+     */
+    public function getAllByPrefix($prefix) {
+        $statement = DB::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
+        $statement->execute(array($prefix.'%'));
+        $returnValue = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $returnValue;
+    }
 }

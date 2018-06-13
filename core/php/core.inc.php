@@ -15,15 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
+define ('NEXTDOM_ROOT', realpath(__DIR__.'/../..'));
+
 date_default_timezone_set('Europe/Brussels');
-require_once dirname(__FILE__) . '/../../vendor/autoload.php';
-require_once dirname(__FILE__) . '/../config/common.config.php';
-require_once dirname(__FILE__) . '/../class/DB.class.php';
-require_once dirname(__FILE__) . '/../class/config.class.php';
-require_once dirname(__FILE__) . '/../class/nextdom.class.php';
-require_once dirname(__FILE__) . '/../class/plugin.class.php';
-require_once dirname(__FILE__) . '/../class/translate.class.php';
-require_once dirname(__FILE__) . '/utils.inc.php';
+require_once NEXTDOM_ROOT.'/vendor/autoload.php';
+require_once NEXTDOM_ROOT.'/core/config/common.config.php';
+require_once NEXTDOM_ROOT.'/core/class/DB.class.php';
+require_once NEXTDOM_ROOT.'/core/class/config.class.php';
+require_once NEXTDOM_ROOT.'/core/class/nextdom.class.php';
+require_once NEXTDOM_ROOT.'/core/class/jeedom.class.php';
+require_once NEXTDOM_ROOT.'/core/class/plugin.class.php';
+require_once NEXTDOM_ROOT.'/core/class/translate.class.php';
+require_once NEXTDOM_ROOT.'/core/php/utils.inc.php';
 include_file('core', 'nextdom', 'config');
 include_file('core', 'compatibility', 'config');
 include_file('core', 'utils', 'class');
@@ -35,9 +38,7 @@ try {
         date_default_timezone_set($configs['timezone']);
     }
 } catch (Exception $e) {
-
 } catch (Error $e) {
-
 }
 
 try {
@@ -45,55 +46,50 @@ try {
         log::define_error_reporting($configs['log::level']);
     }
 } catch (Exception $e) {
-
 } catch (Error $e) {
-
 }
 
-function nextdomCoreAutoload($classname) {
+function nextdomCoreAutoload($classname)
+{
     try {
         include_file('core', $classname, 'class');
     } catch (Exception $e) {
-
     } catch (Error $e) {
-
     }
 }
 
-function nextdomPluginAutoload($_classname) {
+function nextdomPluginAutoload($_classname)
+{
     $classname = str_replace(array('Real', 'Cmd'), '', $_classname);
     $plugin_active = config::byKey('active', $classname, null);
-    if ($plugin_active === null || $plugin_active == '') {
+    if (null === $plugin_active || '' == $plugin_active) {
         $classname = explode('_', $classname)[0];
         $plugin_active = config::byKey('active', $classname, null);
     }
     try {
-        if ($plugin_active == 1) {
+        if (1 == $plugin_active) {
             include_file('core', $classname, 'class', $classname);
         }
     } catch (Exception $e) {
-
     } catch (Error $e) {
-
     }
 }
 
-function nextdomOtherAutoload($classname) {
+function nextdomOtherAutoload($classname)
+{
     try {
         include_file('core', substr($classname, 4), 'com');
+
         return;
     } catch (Exception $e) {
-
     } catch (Error $e) {
-
     }
     try {
         include_file('core', substr($classname, 5), 'repo');
+
         return;
     } catch (Exception $e) {
-
     } catch (Error $e) {
-
     }
 }
 spl_autoload_register('nextdomOtherAutoload', true, true);
