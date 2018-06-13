@@ -20,6 +20,7 @@ foreach ($NEXTDOM_INTERNAL_CONFIG['nextdom_market']['sources'] as $source) {
 
 Utils::sendVarsToJS(
     array(
+        'github' => \config::byKey('github::enable'),
         'sourcesList' => $sourcesList,
         'moreInformationsStr' => __("Plus d'informations", __FILE__),
         'updateStr' => __("Mettre à jour", __FILE__),
@@ -39,7 +40,7 @@ if (isset($_GET['message'])) {
 
     $messageIndex = intval($_GET['message']);
     if ($messageIndex < count($messages)) {
-        message::add('AlternativeMarketForJeedom', $messages[$messageIndex]);
+        \message::add('core', $messages[$messageIndex]);
     }
 }
 
@@ -49,7 +50,7 @@ if (isset($_GET['message'])) {
 ?>
 <div class="row">
     <div class="col-sm-12 col-md-12">
-        <?php if (count($sourcesList) > 1 && \config::byKey('show-sources-filters', 'AlternativeMarketForJeedom')) : ?>
+        <?php if (count($sourcesList) > 1 && \config::byKey('nextdom_market::show_sources_filters')) : ?>
             <div class="market-filters row">
                 <div id="market-filter-src" class="btn-group col-sm-12">
                     <?php
@@ -93,8 +94,6 @@ if (isset($_GET['message'])) {
             </div>
             <div class="form-group col-sm-12 col-md-6 col-lg-4">
                 <div id="admin-buttons" class="btn-group">
-                    <a href="index.php?v=d&p=plugin&id=AlternativeMarketForJeedom" class="btn btn-primary"><i
-                                class="fa fa-wrench"></i> {{Configurer}}</a>
                     <button id="mass-update" class="btn btn-primary">
                         <i class="fa fa-download"></i> {{Mise(s) à jour}}
                         <span class="badge">0</span>

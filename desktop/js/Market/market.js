@@ -17,6 +17,10 @@ $(document).ready(function () {
  * Initialise les évènements
  */
 function initEvents() {
+    if (github != '1') {
+        console.log('coucou');
+        $('#div_alert').showAlert({message: 'Erreur', level: 'danger'});
+    }
     $('#market-filter-src button').click(function () {
         var source = $(this).data('source');
         if (isActive($(this))) {

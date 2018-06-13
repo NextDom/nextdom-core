@@ -46,21 +46,19 @@ class repo_nextdom_market
             'nextdom_draft' => array(
                 'name' => 'NextDom Draft',
                 'type' => 'checkbox',
-            )
-        ),
-        'parameters_for_add' => array(
-            'version' => array(
-                'name' => 'Version : beta, release, stable',
-                'type' => 'input',
             ),
-        ),
+            'show_sources_filters' => array(
+                'name' => 'Afficher les filtres des sources',
+                'type' => 'checkbox',
+            ),
+        )
     );
 
     /*     * ***********************Méthodes statiques*************************** */
 
     public static function checkUpdate(&$_update)
     {
-
+        // Jamais appelé, Passe par le repo GitHub
     }
 
     public static function getInfo($_logicalId, $_version = 'stable')

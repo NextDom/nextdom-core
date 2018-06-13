@@ -128,6 +128,19 @@ try {
     $cron->setTimeout(60);
     $cron->save();
 
+    $cron = cron::byClassAndFunction('nextdom', 'updateMarket');
+    if (!is_object($cron)) {
+        echo "Create nextdom::updateMarket\n";
+        $cron = new cron();
+    }
+    $cron->setClass('nextdom');
+    $cron->setFunction('updateMarket');
+    $cron->setSchedule(rand(10, 59) . ' 0' . rand(0, 7) . ' * * *');
+    $cron->setEnable(1);
+    $cron->setDeamon(0);
+    $cron->setTimeout(60);
+    $cron->save();
+
     $cron = cron::byClassAndFunction('plugin', 'cronHourly');
     if (!is_object($cron)) {
         echo "Create plugin::cronHourly\n";
