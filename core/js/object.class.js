@@ -122,6 +122,9 @@ nextdom.object.remove = function(_params) {
             if (isset(nextdom.object.cache.getEqLogic[_params.id])) {
                 delete nextdom.object.cache.getEqLogic[_params.id];
             }
+            if(isset(nextdom.object.cache.byId[_params.id])){
+                delete nextdom.object.cache.byId[_params.id];
+            }
             return data;
         }
     };
@@ -148,8 +151,11 @@ nextdom.object.save = function(_params) {
             if (isset(nextdom.object.cache.all)) {
                 delete nextdom.object.cache.all;
             }
-            if (isset(nextdom.object.cache.getEqLogic[_params.id])) {
-                delete nextdom.object.cache.getEqLogic[_params.id];
+            if (isset(nextdom.object.cache.getEqLogic[data.result.id])) {
+                delete nextdom.object.cache.getEqLogic[data.result.id];
+            }
+            if(isset(nextdom.object.cache.byId[data.result.id])){
+                delete nextdom.object.cache.byId[data.result.id];
             }
             return data;
         }

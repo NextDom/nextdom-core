@@ -16,29 +16,24 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once __DIR__ . '/../../core/php/core.inc.php';
+/* * ***************************Includes********************************* */
+require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
 
-class ajax
-{
+class ajax {
+    /*     * *************************Attributs****************************** */
 
-    /**
-     * @param bool $checkToken
-     */
-    public static function init($checkToken = true)
-    {
+    /*     * *********************Methode static ************************* */
+
+    public static function init($_checkToken = true) {
         if (!headers_sent()) {
             header('Content-Type: application/json');
         }
-        if ($checkToken && init('nextdom_token') != self::getToken()) {
+        if ($_checkToken && init('nextdom_token') != self::getToken()) {
             self::error(__('Token d\'accès invalide', __FILE__));
         }
     }
 
-    /**
-     * @return string
-     */
-    public static function getToken()
-    {
+    public static function getToken() {
         if (session_status() == PHP_SESSION_NONE) {
             @session_start();
             @session_write_close();
@@ -51,40 +46,26 @@ class ajax
         return $_SESSION['nextdom_token'];
     }
 
-    /**
-     * @param string $data
-     */
-    public static function success($data = '')
-    {
-        echo self::getResponse($data);
+    public static function success($_data = '') {
+        echo self::getResponse($_data);
         die();
     }
 
-    /**
-     * @param string $data
-     * @param int $errorCode
-     */
-    public static function error($data = '', $_errorCode = 0)
-    {
-        echo self::getResponse($data, $_errorCode);
+    public static function error($_data = '', $_errorCode = 0) {
+        echo self::getResponse($_data, $_errorCode);
         die();
     }
 
-    /**
-     * @param string $data
-     * @param null $errorCode
-     * @return string
-     */
-    public static function getResponse($data = '', $errorCode = null)
-    {
-        $isError = !(null === $errorCode);
+    public static function getResponse($_data = '', $_errorCode = null) {
+        $isError = !(null === $_errorCode);
         $return = array(
             'state' => $isError ? 'error' : 'ok',
-            'result' => $data,
+            'result' => $_data,
         );
         if ($isError) {
-            $return['code'] = $errorCode;
+            $return['code'] = $_errorCode;
         }
         return json_encode($return, JSON_UNESCAPED_UNICODE);
     }
+    /*     * **********************Getteur Setteur*************************** */
 }

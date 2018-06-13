@@ -16,10 +16,11 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once __DIR__ . '/../../core/php/core.inc.php';
+/* * ***************************Includes********************************* */
+require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
 
-class cache
-{
+class cache {
+    /*     * *************************Attributs****************************** */
 
     private static $cache = null;
 
@@ -29,11 +30,9 @@ class cache
     private $datetime;
     private $options = null;
 
-    /**
-     * @return string
-     */
-    public static function getFolder()
-    {
+    /*     * ***********************Methode static*************************** */
+
+    public static function getFolder() {
         $return = nextdom::getTmpFolder('cache');
         if (!file_exists($return)) {
             mkdir($return, 0777);
@@ -41,45 +40,28 @@ class cache
         return $return;
     }
 
-    /**
-     * @param $key
-     * @param $value
-     * @param int $lifetime
-     * @param null $options
-     * @return mixed
-     */
-    public static function set($key, $value, $lifetime = 0, $options = null)
-    {
-        if ($lifetime < 0) {
-            $lifetime = 0;
+    public static function set($_key, $_value, $_lifetime = 0, $_options = null) {
+        if ($_lifetime < 0) {
+            $_lifetime = 0;
         }
         $cache = (new self())
-            ->setKey($key)
-            ->setValue($value)
-            ->setLifetime($lifetime);
-        if ($options !== null) {
-            $cache->options = json_encode($options, JSON_UNESCAPED_UNICODE);
+            ->setKey($_key)
+            ->setValue($_value)
+            ->setLifetime($_lifetime);
+        if ($_options !== null) {
+            $cache->options = json_encode($_options, JSON_UNESCAPED_UNICODE);
         }
         return $cache->save();
     }
 
-    /**
-     * @param $_key
-     */
-    public static function delete($_key)
-    {
+    public static function delete($_key) {
         $cache = cache::byKey($_key);
         if (is_object($cache)) {
             $cache->remove();
         }
     }
 
-    /**
-     * @param bool $details
-     * @return mixed
-     */
-    public static function stats($details = false)
-    {
+    public static function stats($_details = false) {
         $return = self::getCache()->getStats();
         $return['count'] = __('Inconnu', __FILE__);
         if (config::byKey('cache::engine') == 'FilesystemCache') {
@@ -93,13 +75,13 @@ class cache
                 }
             }
         }
-        if ($details) {
+        if ($_details) {
             $re = '/s:\d*:(.*?);s:\d*:"(.*?)";s/';
             $result = array();
             foreach (ls(self::getFolder()) as $folder) {
                 foreach (ls(self::getFolder() . '/' . $folder) as $file) {
                     $path = self::getFolder() . '/' . $folder . '/' . $file;
-                    $str = (string)str_replace("\n", '', file_get_contents($path));
+                    $str = (string) str_replace("\n", '', file_get_contents($path));
                     preg_match_all($re, $str, $matches);
                     if (!isset($matches[2]) || !isset($matches[2][0]) || trim($matches[2][0]) == '') {
                         continue;
@@ -111,15 +93,13 @@ class cache
         }
         return $return;
     }
-
     /**
      * @name getCache()
      * @access public
      * @static
-     *  @return \Doctrine\Common\Cache\FilesystemCache|\Doctrine\Common\Cache\MemcachedCache|\Doctrine\Common\Cache\RedisCache|null
+     * @return type
      */
-    public static function getCache()
-    {
+    public static function getCache() {
         if (self::$cache !== null) {
             return self::$cache;
         }
@@ -159,51 +139,34 @@ class cache
     }
 
     /**
-     * @param $key
-     * @return cache|false|mixed
+     *
+     * @param type $_key
+     * @return type
      */
-    public static function byKey($key)
-    {
-        $cache = self::getCache()->fetch($key);
+    public static function byKey($_key) {
+        $cache = self::getCache()->fetch($_key);
         if (!is_object($cache)) {
             $cache = (new self())
-                ->setKey($key)
+                ->setKey($_key)
                 ->setDatetime(date('Y-m-d H:i:s'));
         }
         return $cache;
     }
 
-    /**
-     * @param $key
-     * @return bool
-     */
-    public static function exist($key)
-    {
-        return is_object(self::getCache()->fetch($key));
+    public static function exist($_key) {
+        return is_object(self::getCache()->fetch($_key));
     }
 
-    /**
-     *
-     */
-    public static function flush()
-    {
+    public static function flush() {
         self::getCache()->deleteAll();
         shell_exec('rm -rf ' . self::getFolder() . ' 2>&1 > /dev/null');
     }
 
-    /**
-     * @return array
-     */
-    public static function search()
-    {
+    public static function search() {
         return array();
     }
 
-    /**
-     *
-     */
-    public static function persist()
-    {
+    public static function persist() {
         switch (config::byKey('cache::engine')) {
             case 'FilesystemCache':
                 $cache_dir = self::getFolder();
@@ -222,15 +185,11 @@ class cache
 
     }
 
-    /**
-     * @return bool
-     */
-    public static function isPersistOk() :bool
-    {
+    public static function isPersistOk() {
         if (config::byKey('cache::engine') != 'FilesystemCache' && config::byKey('cache::engine') != 'PhpFileCache') {
             return true;
         }
-        $filename = __DIR__ . '/../../cache.tar.gz';
+        $filename = dirname(__FILE__) . '/../../cache.tar.gz';
         if (!file_exists($filename)) {
             return false;
         }
@@ -240,11 +199,7 @@ class cache
         return true;
     }
 
-    /**
-     *
-     */
-    public static function restore()
-    {
+    public static function restore() {
         switch (config::byKey('cache::engine')) {
             case 'FilesystemCache':
                 $cache_dir = self::getFolder();
@@ -269,11 +224,7 @@ class cache
         com_shell::execute($cmd);
     }
 
-    /**
-     *
-     */
-    public static function clean()
-    {
+    public static function clean() {
         if (config::byKey('cache::engine') != 'FilesystemCache') {
             return;
         }
@@ -286,7 +237,7 @@ class cache
                     unlink($path);
                     continue;
                 }
-                $str = (string)str_replace("\n", '', file_get_contents($path));
+                $str = (string) str_replace("\n", '', file_get_contents($path));
                 preg_match_all($re, $str, $matches);
                 if (!isset($matches[2]) || !isset($matches[2][0]) || trim($matches[2][0]) == '') {
                     continue;
@@ -294,15 +245,14 @@ class cache
                 $result[] = $matches[2][0];
             }
         }
-
         $cleanCache = array(
-            'cmdCacheAttr'      => 'cmd',
-            'cmd'               => 'cmd',
-            'eqLogicCacheAttr'  => 'eqLogic',
+            'cmdCacheAttr' => 'cmd',
+            'cmd' => 'cmd',
+            'eqLogicCacheAttr' => 'eqLogic',
             'eqLogicStatusAttr' => 'eqLogic',
             'scenarioCacheAttr' => 'scenario',
-            'cronCacheAttr'     => 'cron',
-            'cron'              => 'cron',
+            'cronCacheAttr' => 'cron',
+            'cron' => 'cron',
         );
         foreach ($result as $key) {
             $matches = null;
@@ -410,11 +360,9 @@ class cache
         }
     }
 
-    /**
-     * @return bool
-     */
-    public function save()
-    {
+    /*     * *********************Methode d'instance************************* */
+
+    public function save() {
         $this->setDatetime(date('Y-m-d H:i:s'));
         if ($this->getLifetime() == 0) {
             return self::getCache()->save($this->getKey(), $this);
@@ -423,92 +371,62 @@ class cache
         }
     }
 
-    /**
-     *
-     */
-    public function remove()
-    {
+    public function remove() {
         try {
             self::getCache()->delete($this->getKey());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
 
         }
     }
 
-    /**
-     * @return bool
-     */
-    public function hasExpired()
-    {
+    public function hasExpired() {
         return true;
     }
 
-    public function getKey()
-    {
+    /*     * **********************Getteur Setteur*************************** */
+
+    public function getKey() {
         return $this->key;
     }
 
-    /**
-     * @param $key
-     * @return $this
-     */
-    public function setKey($key)
-    {
+    public function setKey($key) {
         $this->key = $key;
         return $this;
     }
 
-    public function getValue($_default = '')
-    {
+    public function getValue($_default = '') {
         return ($this->value === null || (is_string($this->value) && trim($this->value) === '')) ? $_default : $this->value;
     }
 
-    public function setValue($value)
-    {
+    public function setValue($value) {
         $this->value = $value;
         return $this;
     }
 
-    public function getLifetime()
-    {
+    public function getLifetime() {
         return $this->lifetime;
     }
 
-    public function setLifetime($lifetime)
-    {
+    public function setLifetime($lifetime) {
         $this->lifetime = $lifetime;
         return $this;
     }
 
-    public function getDatetime()
-    {
+    public function getDatetime() {
         return $this->datetime;
     }
 
-    public function setDatetime($datetime)
-    {
+    public function setDatetime($datetime) {
         $this->datetime = $datetime;
         return $this;
     }
 
-    /**
-     * @param string $key
-     * @param string $default
-     * @return mixed|string
-     */
-    public function getOptions($key = '', $default = '')
-    {
-        return utils::getJsonAttr($this->options, $key, $default);
+    public function getOptions($_key = '', $_default = '') {
+        return utils::getJsonAttr($this->options, $_key, $_default);
     }
 
-    /**
-     * @param $key
-     * @param null $value
-     * @return $this
-     */
-    public function setOptions($key, $value = null)
-    {
-        $this->options = utils::setJsonAttr($this->options, $key, $value);
+    public function setOptions($_key, $_value = null) {
+        $this->options = utils::setJsonAttr($this->options, $_key, $_value);
         return $this;
     }
 

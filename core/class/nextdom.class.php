@@ -19,22 +19,18 @@
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
 global $NEXTDOM_INTERNAL_CONFIG;
-
-class nextdom
-{
+class nextdom {
     /*     * *************************Attributs****************************** */
 
     private static $nextdomConfiguration;
 
     /*     * ***********************Methode static*************************** */
 
-    public static function addTimelineEvent($_event)
-    {
+    public static function addTimelineEvent($_event) {
         file_put_contents(dirname(__FILE__) . '/../../data/timeline.json', json_encode($_event) . "\n", FILE_APPEND);
     }
 
-    public static function getTimelineEvent()
-    {
+    public static function getTimelineEvent() {
         $path = dirname(__FILE__) . '/../../data/timeline.json';
         if (!file_exists($path)) {
             return array();
@@ -48,15 +44,13 @@ class nextdom
         return $result;
     }
 
-    public static function removeTimelineEvent()
-    {
+    public static function removeTimelineEvent() {
         $path = dirname(__FILE__) . '/../../data/timeline.json';
         com_shell::execute(system::getCmdSudo() . 'chmod 777 ' . $path . ' > /dev/null 2>&1;');
         unlink($path);
     }
 
-    public static function deadCmd()
-    {
+    public static function deadCmd() {
         global $NEXTDOM_INTERNAL_CONFIG;
         $return = array();
         $cmd = config::byKey('interact::warnme::defaultreturncmd', 'core', '');
@@ -83,8 +77,7 @@ class nextdom
         return $return;
     }
 
-    public static function health()
-    {
+    public static function health() {
         $return = array();
         $nbNeedUpdate = update::nbNeedUpdate();
         $state = ($nbNeedUpdate == 0) ? true : false;
@@ -204,13 +197,13 @@ class nextdom
             'result' => $value . ' %',
             'comment' => '',
         );
-
+        
         $value = shell_exec('sudo dmesg | grep oom | wc -l');
         $return[] = array(
             'name' => __('Mémoire suffisante', __FILE__),
             'state' => ($value == 0),
             'result' => $value,
-            'comment' => __('Nombre de processus tué par le noyaux pour manque de mémoire', __FILE__),
+            'comment' => ($value == 0) ? '' : __('Nombre de processus tué par le noyaux pour manque de mémoire. Votre système manque de mémoire. Essayez de reduire le nombre de plugins ou les scénarios', __FILE__),
         );
 
         if ($values['SwapTotal'] != 0 && $values['SwapTotal'] !== null) {
@@ -278,7 +271,7 @@ class nextdom
             'result' => ($state) ? __('OK', __FILE__) : __('NOK', __FILE__),
             'comment' => ($state) ? '' : __('Veuillez désactiver le private tmp d\'Apache (NextDom ne peut marcher avec). Voir ', __FILE__) . '<a href="https://nextdom.github.io/core/fr_FR/faq#tocAnchor-1-29" target="_blank">' . __('ici', __FILE__) . '</a>',
         );
-
+        
         foreach (update::listRepo() as $repo) {
             if (!$repo['enable']) {
                 continue;
@@ -292,15 +285,13 @@ class nextdom
         return $return;
     }
 
-    public static function sick()
-    {
+    public static function sick() {
         $cmd = dirname(__FILE__) . '/../../sick.php';
         $cmd .= ' >> ' . log::getPathToLog('sick') . ' 2>&1';
         system::php($cmd);
     }
 
-    public static function getApiKey($_plugin = 'core')
-    {
+    public static function getApiKey($_plugin = 'core') {
         if ($_plugin == 'apipro') {
             if (config::byKey('apipro') == '') {
                 config::save('apipro', config::genKey());
@@ -313,8 +304,7 @@ class nextdom
         return config::byKey('api', $_plugin);
     }
 
-    public static function apiModeResult($_mode = 'enable')
-    {
+    public static function apiModeResult($_mode = 'enable') {
         switch ($_mode) {
             case 'disable':
                 return false;
@@ -342,8 +332,7 @@ class nextdom
         return true;
     }
 
-    public static function apiAccess($_apikey = '', $_plugin = 'core')
-    {
+    public static function apiAccess($_apikey = '', $_plugin = 'core') {
         if (trim($_apikey) == '') {
             return false;
         }
@@ -367,8 +356,7 @@ class nextdom
         return false;
     }
 
-    public static function isOk()
-    {
+    public static function isOk() {
         if (!self::isStarted()) {
             return false;
         }
@@ -389,8 +377,7 @@ class nextdom
 
     /*************************************************USB********************************************************/
 
-    public static function getUsbMapping($_name = '', $_getGPIO = false)
-    {
+    public static function getUsbMapping($_name = '', $_getGPIO = false) {
         $cache = cache::byKey('nextdom::usbMapping');
         if (!is_json($cache->getValue()) || $_name == '') {
             $usbMapping = array();
@@ -463,8 +450,7 @@ class nextdom
         return $usbMapping;
     }
 
-    public static function getBluetoothMapping($_name = '')
-    {
+    public static function getBluetoothMapping($_name = '') {
         $cache = cache::byKey('nextdom::bluetoothMapping');
         if (!is_json($cache->getValue()) || $_name == '') {
             $bluetoothMapping = array();
@@ -497,8 +483,7 @@ class nextdom
 
     /********************************************BACKUP*****************************************************************/
 
-    public static function backup($_background = false)
-    {
+    public static function backup($_background = false) {
         if ($_background) {
             log::clear('backup');
             $cmd = dirname(__FILE__) . '/../../install/backup.php';
@@ -509,8 +494,7 @@ class nextdom
         }
     }
 
-    public static function listBackup()
-    {
+    public static function listBackup() {
         if (substr(config::byKey('backup::path'), 0, 1) != '/') {
             $backup_dir = dirname(__FILE__) . '/../../' . config::byKey('backup::path');
         } else {
@@ -524,8 +508,7 @@ class nextdom
         return $return;
     }
 
-    public static function removeBackup($_backup)
-    {
+    public static function removeBackup($_backup) {
         if (file_exists($_backup)) {
             unlink($_backup);
         } else {
@@ -533,8 +516,7 @@ class nextdom
         }
     }
 
-    public static function restore($_backup = '', $_background = false)
-    {
+    public static function restore($_backup = '', $_background = false) {
         if ($_background) {
             log::clear('restore');
             $cmd = dirname(__FILE__) . '/../../install/restore.php "backup=' . $_backup . '"';
@@ -549,8 +531,7 @@ class nextdom
 
     /****************************UPDATE*****************************************************************/
 
-    public static function update($_options = array())
-    {
+    public static function update($_options = array()) {
         log::clear('update');
         $params = '';
         if (count($_options) > 0) {
@@ -565,8 +546,7 @@ class nextdom
 
     /****************************CONFIGURATION MANAGEMENT*****************************************************************/
 
-    public static function getConfiguration($_key = '', $_default = false)
-    {
+    public static function getConfiguration($_key = '', $_default = false) {
         global $NEXTDOM_INTERNAL_CONFIG;
         if ($_key == '') {
             return $NEXTDOM_INTERNAL_CONFIG;
@@ -592,8 +572,7 @@ class nextdom
         return self::$nextdomConfiguration[$_key];
     }
 
-    private static function checkValueInconfiguration($_key, $_value)
-    {
+    private static function checkValueInconfiguration($_key, $_value) {
         if (!is_array(self::$nextdomConfiguration)) {
             self::$nextdomConfiguration = array();
         }
@@ -612,8 +591,7 @@ class nextdom
         }
     }
 
-    public static function version()
-    {
+    public static function version() {
         if (file_exists(dirname(__FILE__) . '/../config/version')) {
             return trim(file_get_contents(dirname(__FILE__) . '/../config/version'));
         }
@@ -622,8 +600,7 @@ class nextdom
 
     /**********************START AND DATE MANAGEMENT*************************************************************/
 
-    public static function stop()
-    {
+    public static function stop() {
         echo "Disable all task";
         config::save('enableCron', 0);
         foreach (cron::all() as $cron) {
@@ -671,8 +648,7 @@ class nextdom
         echo " OK\n";
     }
 
-    public static function start()
-    {
+    public static function start() {
         try {
             /*             * *********Réactivation des scénarios**************** */
             echo "Enable scenario : ";
@@ -697,8 +673,7 @@ class nextdom
         }
     }
 
-    public static function isStarted()
-    {
+    public static function isStarted() {
         return file_exists(self::getTmpFolder() . '/started');
     }
 
@@ -706,8 +681,7 @@ class nextdom
      *
      * @return boolean
      */
-    public static function isDateOk()
-    {
+    public static function isDateOk() {
         if (config::byKey('ignoreHourCheck') == 1) {
             return true;
         }
@@ -735,15 +709,13 @@ class nextdom
         return true;
     }
 
-    public static function event($_event, $_forceSyncMode = false)
-    {
+    public static function event($_event, $_forceSyncMode = false) {
         scenario::check($_event, $_forceSyncMode);
     }
 
     /*****************************************CRON NEXTDOM****************************************************************/
 
-    public static function cron5()
-    {
+    public static function cron5() {
         try {
             network::cron5();
         } catch (Exception $e) {
@@ -772,8 +744,7 @@ class nextdom
         }
     }
 
-    public static function cron()
-    {
+    public static function cron() {
         if (!self::isStarted()) {
             echo date('Y-m-d H:i:s') . ' starting NextDom';
             log::add('starting', 'debug', __('Démarrage de nextdom', __FILE__));
@@ -895,8 +866,7 @@ class nextdom
         self::isDateOk();
     }
 
-    public static function cronDaily()
-    {
+    public static function cronDaily() {
         try {
             scenario::cleanTable();
             scenario::consystencyCheck();
@@ -912,8 +882,7 @@ class nextdom
         }
     }
 
-    public static function cronHourly()
-    {
+    public static function cronHourly() {
         try {
             cache::set('hour', date('Y-m-d H:i:s'));
         } catch (Exception $e) {
@@ -957,8 +926,7 @@ class nextdom
 
     /*************************************************************************************/
 
-    public static function replaceTag(array $_replaces)
-    {
+    public static function replaceTag(array $_replaces) {
         $datas = array();
         foreach ($_replaces as $key => $value) {
             $datas = array_merge($datas, cmd::searchConfiguration($key));
@@ -979,20 +947,17 @@ class nextdom
 
     /***************************************THREAD MANGEMENT**********************************************/
 
-    public static function checkOngoingThread($_cmd)
-    {
+    public static function checkOngoingThread($_cmd) {
         return shell_exec('(ps ax || ps w) | grep "' . $_cmd . '$" | grep -v "grep" | wc -l');
     }
 
-    public static function retrievePidThread($_cmd)
-    {
+    public static function retrievePidThread($_cmd) {
         return shell_exec('(ps ax || ps w) | grep "' . $_cmd . '$" | grep -v "grep" | awk \'{print $1}\'');
     }
 
     /******************************************UTILS******************************************************/
 
-    public static function versionAlias($_version, $_lightMode = true)
-    {
+    public static function versionAlias($_version, $_lightMode = true) {
         if (!$_lightMode) {
             if ($_version == 'dplan') {
                 return 'plan';
@@ -1010,18 +975,15 @@ class nextdom
         return (isset($alias[$_version])) ? $alias[$_version] : $_version;
     }
 
-    public static function toHumanReadable($_input)
-    {
+    public static function toHumanReadable($_input) {
         return scenario::toHumanReadable(eqLogic::toHumanReadable(cmd::cmdToHumanReadable($_input)));
     }
 
-    public static function fromHumanReadable($_input)
-    {
+    public static function fromHumanReadable($_input) {
         return scenario::fromHumanReadable(eqLogic::fromHumanReadable(cmd::humanReadableToCmd($_input)));
     }
 
-    public static function evaluateExpression($_input, $_scenario = null)
-    {
+    public static function evaluateExpression($_input, $_scenario = null) {
         try {
             $_input = scenarioExpression::setTags($_input, $_scenario, true);
             $result = evaluate($_input);
@@ -1034,8 +996,7 @@ class nextdom
         }
     }
 
-    public static function calculStat($_calcul, $_values)
-    {
+    public static function calculStat($_calcul, $_values) {
         switch ($_calcul) {
             case 'sum':
                 return array_sum($_values);
@@ -1047,8 +1008,7 @@ class nextdom
         return null;
     }
 
-    public static function getTypeUse($_string = '')
-    {
+    public static function getTypeUse($_string = '') {
         $return = array('cmd' => array(), 'scenario' => array(), 'eqLogic' => array(), 'dataStore' => array(), 'plan' => array(), 'view' => array());
         preg_match_all("/#([0-9]*)#/", $_string, $matches);
         foreach ($matches[1] as $cmd_id) {
@@ -1143,8 +1103,7 @@ class nextdom
 
     /******************************SYSTEM MANAGEMENT**********************************************************/
 
-    public static function haltSystem()
-    {
+    public static function haltSystem() {
         plugin::stop();
         cache::persist();
         if (self::isCapable('sudo')) {
@@ -1154,8 +1113,7 @@ class nextdom
         }
     }
 
-    public static function rebootSystem()
-    {
+    public static function rebootSystem() {
         plugin::stop();
         cache::persist();
         if (self::isCapable('sudo')) {
@@ -1165,13 +1123,11 @@ class nextdom
         }
     }
 
-    public static function forceSyncHour()
-    {
+    public static function forceSyncHour() {
         shell_exec(system::getCmdSudo() . 'service ntp stop;' . system::getCmdSudo() . 'ntpdate -s ' . config::byKey('ntp::optionalServer', 'core', '0.debian.pool.ntp.org') . ';' . system::getCmdSudo() . 'service ntp start');
     }
 
-    public static function cleanFileSytemRight()
-    {
+    public static function cleanFileSytemRight() {
         $processUser = system::get('www-uid');
         $processGroup = system::get('www-gid');
         if ($processUser == '') {
@@ -1186,14 +1142,12 @@ class nextdom
         exec(system::getCmdSudo() . 'chown -R ' . $processUser . ':' . $processGroup . ' ' . $path . ';' . system::getCmdSudo() . 'chmod 775 -R ' . $path);
     }
 
-    public static function checkSpaceLeft()
-    {
+    public static function checkSpaceLeft() {
         $path = dirname(__FILE__) . '/../../';
         return round(disk_free_space($path) / disk_total_space($path) * 100);
     }
 
-    public static function getTmpFolder($_plugin = null)
-    {
+    public static function getTmpFolder($_plugin = null) {
         $return = '/' . trim(config::byKey('folder::tmp'), '/');
         if ($_plugin !== null) {
             $return .= '/' . $_plugin;
@@ -1204,10 +1158,9 @@ class nextdom
         return $return;
     }
 
-    /*     * ******************hardware management*************************** */
+/*     * ******************hardware management*************************** */
 
-    public static function getHardwareKey()
-    {
+    public static function getHardwareKey() {
         $return = config::byKey('nextdom::installKey');
         if ($return == '') {
             $return = substr(sha512(microtime() . config::genKey()), 0, 63);
@@ -1216,8 +1169,7 @@ class nextdom
         return $return;
     }
 
-    public static function getHardwareName()
-    {
+    public static function getHardwareName() {
         if (config::byKey('hardware_name') != '') {
             return config::byKey('hardware_name');
         }
@@ -1237,8 +1189,7 @@ class nextdom
         return config::byKey('hardware_name');
     }
 
-    public static function isCapable($_function, $_forceRefresh = false)
-    {
+    public static function isCapable($_function, $_forceRefresh = false) {
         global $NEXTDOM_COMPATIBILIY_CONFIG;
         if ($_function == 'sudo') {
             if (!$_forceRefresh) {
@@ -1263,8 +1214,7 @@ class nextdom
 
     /*     * ******************Benchmark*************************** */
 
-    public static function benchmark()
-    {
+    public static function benchmark() {
         $return = array();
 
         $param = array('cache_write' => 5000, 'cache_read' => 5000, 'database_write_delete' => 1000, 'database_update' => 1000, 'database_replace' => 1000, 'database_read' => 50000, 'subprocess' => 200);
@@ -1349,31 +1299,4 @@ class nextdom
         return $return;
     }
 
-    /**
-     * TODO: A ne pas laisser comme ça :)
-     * @throws Exception
-     */
-    public static function updateMarket()
-    {
-        global $NEXTDOM_INTERNAL_CONFIG;
-        require_once __DIR__.'/Market/DownloadManager.php';
-        require_once __DIR__.'/Market/NextDomMarket.php';
-        \NextDom\Market\DownloadManager::init();
-
-        $sourcesList = array();
-        foreach ($NEXTDOM_INTERNAL_CONFIG['nextdom_market']['sources'] as $source) {
-            // TODO: Limiter les requêtes
-            if (\config::byKey('nextdom_market::' . $source['code']) == 1) {
-                $sourcesList[] = $source;
-            }
-        }
-
-        foreach ($sourcesList as $source) {
-            $market = new \NextDom\Market\NextDomMarket($source);
-            $market->refresh(true);
-            foreach ($market->getItems() as $marketItem) {
-                $marketItem->downloadIcon();
-            }
-        }
-    }
 }
