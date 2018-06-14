@@ -25,15 +25,18 @@ class Client
      */
     public static function isMobile()
     {
-        $useragent = (isset($_SERVER["HTTP_USER_AGENT"])) ? $_SERVER["HTTP_USER_AGENT"] : 'none';
+        $userAgent = 'none';
+        if (isset($_SERVER["HTTP_USER_AGENT"])) {
+            $userAgent = $_SERVER["HTTP_USER_AGENT"];
+        }
         $result = false;
-        if (stristr($useragent, "Android") ||
-            strpos($useragent, "iPod") ||
-            strpos($useragent, "iPhone") ||
-            strpos($useragent, "Mobile") ||
-            strpos($useragent, "WebOS") ||
-            strpos($useragent, "mobile") ||
-            strpos($useragent, "hp-tablet")) {
+        if (stristr($userAgent, "Android") ||
+            strpos($userAgent, "iPod") ||
+            strpos($userAgent, "iPhone") ||
+            strpos($userAgent, "Mobile") ||
+            strpos($userAgent, "WebOS") ||
+            strpos($userAgent, "mobile") ||
+            strpos($userAgent, "hp-tablet")) {
             $result = true;
         }
         return $result;

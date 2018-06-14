@@ -70,7 +70,7 @@ class Router
         } elseif (isset($_GET['configure'])) {
             $this->showConfiguration();
         } elseif (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
-            $this->ajaxQuery();
+            $this->ajaxGetContent();
         } else {
             \include_file('desktop', 'index', 'php');
         }
@@ -113,7 +113,7 @@ class Router
      *
      * @throws \Exception
      */
-    private function ajaxQuery() {
+    private function ajaxGetContent() {
         try {
             \include_file('core', 'authentification', 'php');
             \include_file('desktop', init('p'), 'php', init('m'));
