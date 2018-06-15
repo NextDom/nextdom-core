@@ -1,4 +1,5 @@
 <?php
+
 /* This file is part of NextDom.
  *
  * NextDom is free software: you can redistribute it and/or modify
@@ -19,42 +20,34 @@ namespace NextDom\Singletons;
 
 use NextDom\Exceptions\DbException;
 
-
 class ConnectDb
 {
 
     // Hold the class instance.
-    private static $instance = null;
-    private $connection;
+    private static $connection;
+    private static $init = false;
 
-    private function __construct()
+    /**
+     * 
+     * @global type $CONFIG
+     * @return type
+     * @throws DbException
+     */
+    public static function getConnection()
     {
-        global $CONFIG;
+        if (!self::$init) {
+            global $CONFIG;
 
-        try {
+            try {
 
-            $pdo = new \PDO('mysql:host=' . $CONFIG['db']['host'] . ';port=' . $CONFIG['db']['port'] . ';dbname=' . $CONFIG['db']['dbname'], $CONFIG['db']['username'], $CONFIG['db']['password']);
-            $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-
-            return $pdo;
-
-        } catch (\PDOException $exc) {
-            throw new DbException('PDO Error : ' . $exc->getMessage(), 500);
+                self::$connection = new \PDO('mysql:host=' . $CONFIG['db']['host'] . ';port=' . $CONFIG['db']['port'] . ';dbname=' . $CONFIG['db']['dbname'], $CONFIG['db']['username'], $CONFIG['db']['password']);
+                self::$connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            } catch (\PDOException $exc) {
+                throw new DbException('PDO Error : ' . $exc->getMessage(), 500);
+            }
+            self::$init = true;
         }
-    }
-
-    public static function getInstance()
-    {
-        if (!self::$instance) {
-            self::$instance = new Self();
-        }
-
-        return self::$instance;
-    }
-
-    public function getConnection()
-    {
-        return $this->connection;
+        return self::$connection;
     }
 
 }

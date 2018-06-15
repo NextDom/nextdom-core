@@ -20,5 +20,5 @@ namespace NextDom\Interfaces;
 
 interface DAOInterface
 {
-    public function buildListDomaineObject(array $array) :array;
+    public function buildListDomainObject(array $array) :array;
 }

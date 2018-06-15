@@ -16,7 +16,10 @@
 
 namespace NextDom\src\DAO;
 
-abstract class DAO implements DAOInterface, SaveDAOInterface
+
+use NextDom\Interfaces\DAOInterface;
+
+abstract class DAO implements DAOInterface
 {
     /**
      * Database connection

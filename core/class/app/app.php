@@ -15,22 +15,26 @@
  * You should have received a copy of the GNU General Public License
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
+
 $app = [];
 
 $app['db'] = function() {
-    return \NextDom\Singletons\ConnectDb::getInstance();
+//    $instance = \NextDom\Singletons\ConnectDb::getInstance();
+    return \NextDom\Singletons\ConnectDb::getConnection();
 };
- 
+
+
+
 ////////////////////////////////
 ////        NextDom DAO    /////
 ////////////////////////////////
- 
+
 /**
  * @param $app
  * @return \NextDom\src\DAO\CmdDAO
  */
-$app['DAO.Cmd'] = function ($app) {
-    return new NextDom\src\DAO\CmdDAO($app['db']);
+$app['DAO.Cmd'] = function () use ($app) {
+    return new NextDom\src\DAO\CmdDAO($app['db']());
 };
 
