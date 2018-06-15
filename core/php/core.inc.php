@@ -18,15 +18,17 @@
 define ('NEXTDOM_ROOT', realpath(__DIR__.'/../..'));
 
 date_default_timezone_set('Europe/Brussels');
-require_once NEXTDOM_ROOT.'/vendor/autoload.php';
 require_once NEXTDOM_ROOT.'/core/config/common.config.php';
+require_once NEXTDOM_ROOT.'/vendor/autoload.php';
 require_once NEXTDOM_ROOT.'/core/class/DB.class.php';
 require_once NEXTDOM_ROOT.'/core/class/config.class.php';
+require_once NEXTDOM_ROOT.'/core/class/app/app.php';
 require_once NEXTDOM_ROOT.'/core/class/nextdom.class.php';
 require_once NEXTDOM_ROOT.'/core/class/jeedom.class.php';
 require_once NEXTDOM_ROOT.'/core/class/plugin.class.php';
 require_once NEXTDOM_ROOT.'/core/class/translate.class.php';
 require_once NEXTDOM_ROOT.'/core/php/utils.inc.php';
+
 include_file('core', 'nextdom', 'config');
 include_file('core', 'compatibility', 'config');
 include_file('core', 'utils', 'class');

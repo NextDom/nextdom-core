@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace NextDom\Exception;
 
-class DbException extends \Exception
+namespace NextDom\Interfaces;
+
+
+interface DAOInterface
 {
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* This file is part of NextDom.
  *
  * NextDom is free software: you can redistribute it and/or modify
@@ -14,9 +15,26 @@
  * You should have received a copy of the GNU General Public License
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace NextDom\Exception;
 
-class CoreException extends \Exception
-{
 
-}
+$app = [];
+
+$app['db'] = function() {
+//    $instance = \NextDom\Singletons\ConnectDb::getInstance();
+    return \NextDom\Singletons\ConnectDb::getConnection();
+};
+
+
+
+////////////////////////////////
+////        NextDom DAO    /////
+////////////////////////////////
+
+/**
+ * @param $app
+ * @return \NextDom\src\DAO\CmdDAO
+ */
+$app['DAO.Cmd'] = function () use ($app) {
+    return new NextDom\src\DAO\CmdDAO($app['db']());
+};
+

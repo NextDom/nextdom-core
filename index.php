@@ -15,8 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
-
-require_once(__DIR__ . '/vendor/autoload.php');
+//use NextDom;
+require_once(__DIR__.'/vendor/autoload.php');
+require_once(__DIR__.'/core/php/utils.inc.php');
 
 use NextDom\Helper\Status;
 use NextDom\Helper\Client;
@@ -58,3 +59,5 @@ try {
 } catch (Exception $e) {
     echo $e->getMessage();
 }
+
+ 
