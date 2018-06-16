@@ -41,6 +41,7 @@ if (Status::isRecueMode()) {
 // Informations générales
 $eventjs_plugin = [];
 $title = 'NextDom';
+//TODO: Tests à revoir
 if (init('p') == '' && Status::isConnect()) {
     redirect($homeLink);
 }
