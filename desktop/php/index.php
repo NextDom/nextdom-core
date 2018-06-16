@@ -5,6 +5,7 @@ global $homeLink;
 global $title;
 global $language;
 global $eventjs_plugin;
+global $configs;
 
 use NextDom\Helpers\PrepareView;
 use NextDom\Helpers\Status;

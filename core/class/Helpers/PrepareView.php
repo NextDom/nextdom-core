@@ -89,7 +89,7 @@ class PrepareView
                     }
                     self::$pluginMenu .= '<li class="plugin-item"><a href="index.php?v=d&m=' . $pluginItem->getId() . '&p=' . $pluginItem->getIndex() . '"><img class="img-responsive" src="' . $pluginItem->getPathImgIcon() . '" /> ' . $pluginItem->getName() . '</a></li>';
                     // TODO: C'est quoi ?
-                    if ($pluginItem->getDisplay() != '' && config::bykey('displayDesktopPanel', $pluginItem->getId(), 0) != 0) {
+                    if ($pluginItem->getDisplay() != '' && \config::bykey('displayDesktopPanel', $pluginItem->getId(), 0) != 0) {
                         self::$panelMenu .= '<li class="plugin-item"><a href="index.php?v=d&m=' . $pluginItem->getId() . '&p=' . $pluginItem->getDisplay() . '"><img class="img-responsive" src="' . $pluginItem->getPathImgIcon() . '" /> ' . $pluginItem->getName() . '</a></li>';
                     }
                     if ($pluginItem->getEventjs() == 1) {

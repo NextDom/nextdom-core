@@ -20,6 +20,7 @@ use NextDom\Helpers\Status;
 
 global $title;
 global $language;
+global $configs;
 
 $bootstrapTheme = '';
 if (isset($_SESSION['user'])) {
