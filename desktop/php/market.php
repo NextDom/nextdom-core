@@ -2,9 +2,9 @@
 
 namespace NextDom;
 
-use NextDom\Helper\Status;
-use NextDom\Helper\DataStorage;
-use NextDom\Helper\Utils;
+use NextDom\Helpers\Status;
+use NextDom\Helpers\DataStorage;
+use NextDom\Helpers\Utils;
 
 Status::initConnectState();
 Status::isConnectedAdminOrFail();

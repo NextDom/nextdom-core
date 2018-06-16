@@ -6,9 +6,9 @@ global $title;
 global $language;
 global $eventjs_plugin;
 
-use NextDom\Helper\PrepareView;
-use NextDom\Helper\Status;
-use NextDom\Helper\Utils;
+use NextDom\Helpers\PrepareView;
+use NextDom\Helpers\Status;
+use NextDom\Helpers\Utils;
 
 if (Status::isRecueMode() && !in_array(init('p'), array('custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system'))) {
     $_GET['p'] = 'system';

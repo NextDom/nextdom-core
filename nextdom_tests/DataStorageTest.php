@@ -17,7 +17,7 @@
  */
 
 use PHPUnit\Framework\TestCase;
-use NextDom\Helper\DataStorage;
+use NextDom\Helpers\DataStorage;
 
 require_once(__DIR__ . '/../core/class/DB.class.php');
 

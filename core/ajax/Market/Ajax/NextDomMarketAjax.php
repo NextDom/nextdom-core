@@ -18,8 +18,8 @@
 
 namespace NextDom\Ajax;
 
-use NextDom\Helper\Status;
-use NextDom\Helper\Utils;
+use NextDom\Helpers\Status;
+use NextDom\Helpers\Utils;
 use NextDom\Market\Ajax\MarketAjaxParser;
 
 header('Content-Type: application/json');

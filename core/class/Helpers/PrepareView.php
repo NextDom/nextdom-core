@@ -15,9 +15,9 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\Helper;
+namespace NextDom\Helpers;
 
-use NextDom\Helper\Status;
+use NextDom\Helpers\Status;
 
 /**
  * Classe de support à l'affichage des contenus HTML

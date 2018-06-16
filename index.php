@@ -19,10 +19,10 @@
 require_once(__DIR__.'/vendor/autoload.php');
 require_once(__DIR__.'/core/php/utils.inc.php');
 
-use NextDom\Helper\Status;
-use NextDom\Helper\Client;
-use NextDom\Helper\Router;
-use NextDom\Helper\Utils;
+use NextDom\Helpers\Status;
+use NextDom\Helpers\Client;
+use NextDom\Helpers\Router;
+use NextDom\Helpers\Utils;
 
 try {
     // Test si l'installation doit être lancée

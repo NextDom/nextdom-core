@@ -16,7 +16,7 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use NextDom\Helper\Status;
+use NextDom\Helpers\Status;
 
 global $title;
 global $language;

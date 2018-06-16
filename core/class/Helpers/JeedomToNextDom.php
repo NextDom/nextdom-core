@@ -15,7 +15,7 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\Helper;
+namespace NextDom\Helpers;
 
 /**
  * Assistant regroupant les méthodes nécessaires à la conversion

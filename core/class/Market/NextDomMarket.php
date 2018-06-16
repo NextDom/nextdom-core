@@ -17,7 +17,7 @@
 
 namespace NextDom\Market;
 
-use NextDom\Helper\DataStorage;
+use NextDom\Helpers\DataStorage;
 use NextDom\Market\GitManager;
 
 class NextDomMarket

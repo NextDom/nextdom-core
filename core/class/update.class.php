@@ -19,7 +19,7 @@
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
 
-use NextDom\Helper\JeedomToNextDom;
+use NextDom\Helpers\JeedomToNextDom;
 
 class update {
     /*     * *************************Attributs****************************** */

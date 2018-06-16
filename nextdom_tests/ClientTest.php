@@ -15,7 +15,7 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use NextDom\Helper\Client;
+use NextDom\Helpers\Client;
 
 class ClientTest extends PHPUnit_Framework_TestCase
 {

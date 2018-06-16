@@ -16,7 +16,7 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\Helper;
+namespace NextDom\Helpers;
 
 /**
  * Classe de gestion du stockage des données

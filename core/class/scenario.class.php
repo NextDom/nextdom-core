@@ -21,7 +21,7 @@ use NextDom\Managers\ScenarioManager;
 /* * ***************************Includes********************************* */
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
-class scenario extends ScenarioManager
+class scenario
 {
     /*     * *************************Attributs****************************** */
 
@@ -58,12 +58,12 @@ class scenario extends ScenarioManager
      */
     public static function byId($_id)
     {
-        return parent::byId($_id);
+        return ScenarioManager::byId($_id);
     }
 
     public static function byString($_string)
     {
-        return parent::byString($_string, __('La commande n\'a pas pu être trouvée : ', __FILE__));
+        return ScenarioManager::byString($_string, __('La commande n\'a pas pu être trouvée : ', __FILE__));
     }
 
     /**
@@ -72,7 +72,7 @@ class scenario extends ScenarioManager
      */
     public static function all($_group = '', $_type = null)
     {
-        return parent::all($_group, $_type);
+        return ScenarioManager::all($_group, $_type);
     }
 
     /**
@@ -81,7 +81,7 @@ class scenario extends ScenarioManager
      */
     public static function schedule()
     {
-        return parent::schedule();
+        return ScenarioManager::schedule();
     }
 
     /**
@@ -91,7 +91,7 @@ class scenario extends ScenarioManager
      */
     public static function listGroup($_group = null)
     {
-        return parent::listGroup($_group);
+        return ScenarioManager::listGroup($_group);
     }
 
     /**
@@ -101,7 +101,7 @@ class scenario extends ScenarioManager
      */
     public static function byTrigger($_cmd_id, $_onlyEnable = true)
     {
-        return parent::byTrigger($_cmd_id, $_onlyEnable);
+        return ScenarioManager::byTrigger($_cmd_id, $_onlyEnable);
     }
 
     /**
@@ -111,7 +111,7 @@ class scenario extends ScenarioManager
      */
     public static function byElement($_element_id)
     {
-        return parent::byElement($_element_id);
+        return ScenarioManager::byElement($_element_id);
     }
 
     /**
@@ -123,7 +123,7 @@ class scenario extends ScenarioManager
      */
     public static function byObjectId($_object_id, $_onlyEnable = true, $_onlyVisible = false)
     {
-        return parent::byObjectId($_object_id, $_onlyEnable, $_onlyVisible);
+        return ScenarioManager::byObjectId($_object_id, $_onlyEnable, $_onlyVisible);
     }
 
     /**
@@ -134,12 +134,12 @@ class scenario extends ScenarioManager
      */
     public static function check($_event = null, $_forceSyncMode = false)
     {
-        return parent::check($_event, $_forceSyncMode, __FILE__);
+        return ScenarioManager::check($_event, $_forceSyncMode, __FILE__);
     }
 
     public static function control()
     {
-        parent::control(__FILE__);
+        ScenarioManager::control(__FILE__);
     }
 
     /**
@@ -149,7 +149,7 @@ class scenario extends ScenarioManager
      */
     public static function doIn($_options)
     {
-        parent::doIn($_options, __FILE__);
+        ScenarioManager::doIn($_options, __FILE__);
     }
 
     /**
@@ -157,7 +157,7 @@ class scenario extends ScenarioManager
      */
     public static function cleanTable()
     {
-        parent::cleanTable();
+        ScenarioManager::cleanTable();
     }
 
     /**
@@ -165,7 +165,7 @@ class scenario extends ScenarioManager
      */
     public static function consystencyCheck($_needsReturn = false)
     {
-        parent::consystencyCheck($_needsReturn, __FILE__);
+        ScenarioManager::consystencyCheck($_needsReturn, __FILE__);
     }
 
     /**
@@ -177,7 +177,7 @@ class scenario extends ScenarioManager
      */
     public static function byObjectNameGroupNameScenarioName($_object_name, $_group_name, $_scenario_name)
     {
-        parent::byObjectNameGroupNameScenarioName($_object_name, $_group_name, $_scenario_name);
+        ScenarioManager::byObjectNameGroupNameScenarioName($_object_name, $_group_name, $_scenario_name);
     }
 
     /**
@@ -187,7 +187,7 @@ class scenario extends ScenarioManager
      */
     public static function toHumanReadable($_input)
     {
-        return parent::toHumanReadable($_input);
+        return ScenarioManager::toHumanReadable($_input);
     }
 
     /**
@@ -197,7 +197,7 @@ class scenario extends ScenarioManager
      */
     public static function fromHumanReadable($_input)
     {
-        return parent::fromHumanReadable($_input);
+        return ScenarioManager::fromHumanReadable($_input);
     }
 
     /**
@@ -207,7 +207,7 @@ class scenario extends ScenarioManager
      */
     public static function searchByUse($searchs)
     {
-        return parent::searchByUse($searchs);
+        return ScenarioManager::searchByUse($searchs);
     }
 
     /**
@@ -217,14 +217,14 @@ class scenario extends ScenarioManager
      */
     public static function getTemplate($_template = '')
     {
-        return parent::getTemplate($_template);
+        return ScenarioManager::getTemplate($_template);
     }
 
     /*     * *************************MARKET**************************************** */
 
     public static function shareOnMarket(&$market)
     {
-        return parent::shareOnMarket($market, __FILE);
+        return ScenarioManager::shareOnMarket($market, __FILE);
     }
 
     /**
@@ -235,7 +235,7 @@ class scenario extends ScenarioManager
      */
     public static function getFromMarket(&$market, $_path)
     {
-        parent::getFromMarket($market, $_path, __FILE__);
+        ScenarioManager::getFromMarket($market, $_path, __FILE__);
     }
 
     public static function removeFromMarket(&$market)
@@ -245,12 +245,12 @@ class scenario extends ScenarioManager
 
     public static function listMarketObject()
     {
-        return parent::listMarketObject();
+        return ScenarioManager::listMarketObject();
     }
 
     public static function timelineDisplay($_event)
     {
-        return parent::timelineDisplay($_event);
+        return ScenarioManager::timelineDisplay($_event);
     }
 
     /*     * *********************Méthodes d'instance************************* */

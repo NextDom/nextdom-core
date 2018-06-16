@@ -15,7 +15,7 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use NextDom\Helper\Utils;
+use NextDom\Helpers\Utils;
 
 // TODO: Utiliser la vraie classe
 class UserMock {

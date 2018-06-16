@@ -17,7 +17,7 @@
 
 namespace NextDom\Market;
 
-use NextDom\Helper\DataStorage;
+use NextDom\Helpers\DataStorage;
 
 class MarketItem
 {

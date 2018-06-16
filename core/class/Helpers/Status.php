@@ -16,7 +16,7 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\Helper;
+namespace NextDom\Helpers;
 
 /**
  * Classe temporaire pour stocker différents états.

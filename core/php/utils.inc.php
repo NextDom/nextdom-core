@@ -17,7 +17,7 @@
  */
 
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use NextDom\Helper\Utils;
+use NextDom\Helpers\Utils;
 
 /**
  * Inclut un fichier à partir de son type et son nom.

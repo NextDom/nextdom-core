@@ -16,8 +16,8 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use NextDom\Helper\PrepareView;
-use NextDom\Helper\Status;
+use NextDom\Helpers\PrepareView;
+use NextDom\Helpers\Status;
 
 global $homeLink;
 

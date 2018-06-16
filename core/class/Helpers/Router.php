@@ -15,7 +15,7 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\Helper;
+namespace NextDom\Helpers;
 
 /**
  * Aiguillage de l'affichage
