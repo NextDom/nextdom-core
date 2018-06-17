@@ -62,6 +62,6 @@ class translate {
     /*     * *********************Methode d'instance************************* */
 }
 
-function __($_content, $_name, $_backslash = false) {
+function __($_content, $_name = '', $_backslash = false) {
     return \NextDom\Helpers\Translate::sentence($_content, $_name, $_backslash);
 }

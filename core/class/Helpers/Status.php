@@ -74,7 +74,7 @@ class Status
     public static function isConnectedOrFail()
     {
         if (!self::$connectState) {
-            throw new \Exception(__('401 - Accès non autorisé', 'system'));
+            throw new \Exception(__('core.error-401'));
         }
     }
 
@@ -86,7 +86,7 @@ class Status
     public static function isConnectedAdminOrFail()
     {
         if (!self::$connectAdminState) {
-            throw new \Exception(__('401 - Accès non autorisé', 'system'));
+            throw new \Exception(__('core.error-401'));
         }
     }
 
