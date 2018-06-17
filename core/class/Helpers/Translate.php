@@ -43,7 +43,11 @@ class Translate
         $result = $defaultValue;
         // Lecture et mise en cache de la configuration
         if (self::$config === null) {
-            self::$config = \config::byKeys(array('language', 'generateTranslation'));
+            self::$config = \config::byKeys(array('language', 'generateTranslation'), array('language' => 'fr_FR'));
+            // TODO: Voir pourquoi la valeur par défaut ne foncitonne pas
+            if (self::$config['language'] == '') {
+                self::$config['language'] = 'fr_FR';
+            }
         }
         // Recherche de l'information
         if (isset(self::$config[$informationKey])) {
@@ -132,7 +136,6 @@ class Translate
         preg_match_all("/{{(.*?)}}/s", $content, $matches);
         if ($oldTranslationMode) {
             foreach ($matches[1] as $text) {
-                error_log($text);
                 if (trim($text) == '') {
                     $replace["{{" . $text . "}}"] = $text;
                 }
