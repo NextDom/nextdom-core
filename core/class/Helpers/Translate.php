@@ -43,11 +43,7 @@ class Translate
         $result = $defaultValue;
         // Lecture et mise en cache de la configuration
         if (self::$config === null) {
-            self::$config = \config::byKeys(array('language', 'generateTranslation'));
-            // TODO: Voir pourquoi la valeur par défaut ne foncitonne pas
-            if (self::$config['language'] == '') {
-                self::$config['language'] = 'fr_FR';
-            }
+            self::$config = \config::byKeys(array('language', 'generateTranslation'), 'core', array('language' => 'fr_FR'));
         }
         // Recherche de l'information
         if (isset(self::$config[$informationKey])) {
