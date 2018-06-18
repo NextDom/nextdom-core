@@ -32,8 +32,8 @@ try {
     // Paramètre v = Type de vue (mobile = m, desktop = d)
 
     // Redirection initiale
-    $viewType = Utils::init('v', false);
-    if ($viewType === false) {
+    $viewType = Utils::init('v', '');
+    if ($viewType === '') {
         $getParams = 'd';
         if (Client::isMobile()) {
             $getParams = 'm';
