@@ -25,7 +25,11 @@ class Utils
      * @param string $varName Nom de la variable dans le code HTML
      * @param mixed $value Valeur de la variable
      */
+<<<<<<< HEAD:core/src/Helpers/Utils.php
     public static function sendVarToJs(string $varName, $varValue)
+=======
+    public static function sendVarToJs(string $varName, $varValue):string
+>>>>>>> develop:core/class/Helpers/Utils.php
     {
         echo "<script>" .
             self::getVarInJs($varName, $varValue) .
@@ -37,7 +41,7 @@ class Utils
      *
      * @param array $listOfVarsWithValues Liste des variables 'nom' => 'valeur'
      */
-    public static function sendVarsToJS(array $listOfVarsWithValues)
+    public static function sendVarsToJS(array $listOfVarsWithValues):string
     {
         echo "<script>\n";
         foreach ($listOfVarsWithValues as $varName => $value) {
@@ -54,7 +58,11 @@ class Utils
      *
      * @return string Déclaration javascript
      */
+<<<<<<< HEAD:core/src/Helpers/Utils.php
     private static function getVarInJs(string $varName, $varValue) : string
+=======
+    private static function getVarInJs(string $varName, $varValue)
+>>>>>>> develop:core/class/Helpers/Utils.php
     {
         $jsVarValue = '';
         if (is_array($varValue)) {
@@ -120,7 +128,11 @@ class Utils
      *
      * @return mixed Valeur de la variable
      */
+<<<<<<< HEAD:core/src/Helpers/Utils.php
     public static function init(string $_name, string $_default = '') : string
+=======
+    public static function init(string $_name, $_default = '')
+>>>>>>> develop:core/class/Helpers/Utils.php
     {
         if (isset($_GET[$_name])) {
             return $_GET[$_name];
@@ -144,7 +156,12 @@ class Utils
      *
      * @return string Contenu du fichier ou une chaine vide.
      */
+<<<<<<< HEAD:core/src/Helpers/Utils.php
     public static function getTemplateFilecontent(string $folder, string $version, string $filename, string $pluginId = '') : string {
+=======
+    public static function getTemplateFilecontent(string $folder,string $version,string $filename,string $pluginId = '') 
+    {
+>>>>>>> develop:core/class/Helpers/Utils.php
         $result = '';
         $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
         if ($pluginId == '') {

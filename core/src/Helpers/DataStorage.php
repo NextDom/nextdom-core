@@ -80,7 +80,7 @@ class DataStorage
      *
      * @param string $code Code de la donnée
      */
-    public function deleteData($code)
+    public function deleteData(string $code)
     {
         $statement = \DB::getConnection()->prepare("DELETE FROM `" . $this->dataTableName . "` WHERE `code` = ?");
         $statement->execute(array($code));
@@ -93,7 +93,7 @@ class DataStorage
      *
      * @return mixed Données correspondant au code.
      */
-    public function getRawData($code)
+    public function getRawData(string $code)
     {
         $returnValue = null;
         $statement = \DB::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` = ?");
@@ -112,7 +112,11 @@ class DataStorage
      *
      * @return bool True si la données existe
      */
+<<<<<<< HEAD:core/src/Helpers/DataStorage.php
     public function isDataExists(string $code) : bool
+=======
+    public function isDataExists(string $code)
+>>>>>>> develop:core/class/Helpers/DataStorage.php
     {
         $result = false;
         if ($this->getRawData($code) !== null) {
@@ -127,7 +131,11 @@ class DataStorage
      * @param string $code Codes des données
      * @param string $data Données brutes
      */
+<<<<<<< HEAD:core/src/Helpers/DataStorage.php
     public function addRawData(string $code, $data)
+=======
+    public function addRawData(string $code, string $data)
+>>>>>>> develop:core/class/Helpers/DataStorage.php
     {
         $statement = \DB::getConnection()->prepare("INSERT INTO `" . $this->dataTableName . "` (`code`, `data`) VALUES (?, ?)");
         $statement->execute(array($code, $data));
@@ -180,7 +188,11 @@ class DataStorage
      *
      * @return array Tableau de données.
      */
+<<<<<<< HEAD:core/src/Helpers/DataStorage.php
     public function getJsonData(string $code) : array
+=======
+    public function getJsonData(string $code)
+>>>>>>> develop:core/class/Helpers/DataStorage.php
     {
         return \json_decode($this->getRawData($code), true);
     }
@@ -202,10 +214,16 @@ class DataStorage
      *
      * @return array Liste des résultats
      */
+<<<<<<< HEAD:core/src/Helpers/DataStorage.php
     public function getAllByPrefix(string $prefix) : array {
         $statement = DB::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
+=======
+    public function getAllByPrefix(string $prefix) :array
+    {
+        $statement = \DB::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
+>>>>>>> develop:core/class/Helpers/DataStorage.php
         $statement->execute(array($prefix.'%'));
-        $returnValue = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $returnValue = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $returnValue;
     }
 }

@@ -51,7 +51,7 @@ class ScenarioManager
      *
      * @throws \Exception
      */
-    public static function byId($id)
+    public static function byId(int $id)
     {
         $values = array('id' => $id);
         $sql = 'SELECT ' . \DB::buildField(ScenarioManager::CLASS_NAME) . ' FROM ' . ScenarioManager::DB_CLASS_NAME . ' WHERE id = :id';
@@ -67,7 +67,7 @@ class ScenarioManager
      *
      * @throws \Exception
      */
-    public static function byString($scenarioName, $commandNotFoundString)
+    public static function byString(string $scenarioName, $commandNotFoundString)
     {
         $scenario = self::byId(str_replace('#scenario', '', self::fromHumanReadable($scenarioName)));
         if (!is_object($scenario)) {
@@ -84,7 +84,7 @@ class ScenarioManager
      *
      * @return [scenario] Liste des objets scenario
      */
-    public static function all($groupName = '', $type = null)
+    public static function all($groupName = '', $type = null):array
     {
         $values = array();
         $result1 = null;
@@ -165,7 +165,7 @@ class ScenarioManager
      *
      * @return [] Liste des scénarios
      */
-    public static function byTrigger($cmdId, $onlyEnabled = true)
+    public static function byTrigger(string $cmdId, $onlyEnabled = true)
     {
         $values = array('cmd_id' => '%#' . $cmdId . '#%');
         $sql = 'SELECT ' . \DB::buildField(ScenarioManager::DB_CLASS_NAME) . '
@@ -183,7 +183,7 @@ class ScenarioManager
      * @param $elementId
      * @return mixed
      */
-    public static function byElement($elementId)
+    public static function byElement(string $elementId)
     {
         // TODO: Vérifier, bizarre les guillemets dans le like
         $values = array(
@@ -286,7 +286,7 @@ class ScenarioManager
      *
      * @param string $forTranslationFile Fichier nécessaire à la traduction
      */
-    public static function control($forTranslationFile)
+    public static function control(string $forTranslationFile)
     {
         foreach (self::all() as $scenario) {
             if ($scenario->getState() != 'in progress') {
@@ -314,7 +314,7 @@ class ScenarioManager
      *
      * @throws \Exception
      */
-    public static function doIn($options, $forTranslationFile)
+    public static function doIn(array $options, $forTranslationFile)
     {
         $scenario = self::byId($options['scenario_id']);
         if (is_object($scenario)) {
@@ -346,7 +346,7 @@ class ScenarioManager
     public static function cleanTable()
     {
         $ids = array(
-            'element' => array(),
+            'element'    => array(),
             'subelement' => array(),
             'expression' => array(),
         );
@@ -580,7 +580,7 @@ class ScenarioManager
      * @param $searchs
      * @return array
      */
-    public static function searchByUse($searchs)
+    public static function searchByUse(array $searchs)
     {
         $return = array();
         $expressions = array();
@@ -697,10 +697,10 @@ class ScenarioManager
 
     /**
      * TODO: Le CSS C'est pour les faibles
-     * @param $event
+     * @param array $event
      * @return array|null
      */
-    public static function timelineDisplay($event)
+    public static function timelineDisplay(array $event)
     {
         $return = array();
         $return['date'] = $event['datetime'];
