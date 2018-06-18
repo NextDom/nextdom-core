@@ -1,5 +1,6 @@
 <?php
 /* This file is part of NextDom.
+ *
  * NextDom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -14,10 +15,10 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\src\Domaine;
+namespace NextDom\src\Models\Domaine;
 
 
-class Plan
+class User
 {
     /**
      * @var int
@@ -25,39 +26,39 @@ class Plan
     private $id;
 
     /**
-     * @var int
+     * @var string
      */
-    private $planHeaderId;
+    private $login;
 
     /**
      * @var string
      */
-    private $linkType;
-
-    /**
-     * @var int
-     */
-    private $linkId;
+    private $profils;
 
     /**
      * @var string
      */
-    private $position;
+    private $password;
 
     /**
      * @var string
      */
-    private $display;
+    private $options;
 
     /**
      * @var string
      */
-    private $css;
+    private $hash;
 
     /**
      * @var string
      */
-    private $configuration;
+    private $rights;
+
+    /**
+     * @var string
+     */
+    private $enable;
 
     /**
      * @return int
@@ -69,139 +70,137 @@ class Plan
 
     /**
      * @param int $id
-     * @return Plan
+     * @return User
      */
-    public function setId(int $id): Plan
+    public function setId(int $id): User
     {
         $this->id = $id;
         return $this;
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getPlanHeaderId(): int
+    public function getLogin(): string
     {
-        return $this->planHeaderId;
+        return $this->login;
     }
 
     /**
-     * @param int $planHeaderId
-     * @return Plan
+     * @param string $login
+     * @return User
      */
-    public function setPlanHeaderId(int $planHeaderId): Plan
+    public function setLogin(string $login): User
     {
-        $this->planHeaderId = $planHeaderId;
+        $this->login = $login;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getLinkType(): string
+    public function getProfils(): string
     {
-        return $this->linkType;
+        return $this->profils;
     }
 
     /**
-     * @param string $linkType
-     * @return Plan
+     * @param string $profils
+     * @return User
      */
-    public function setLinkType($linkType): Plan
+    public function setProfils(string $profils): User
     {
-        $this->linkType = $linkType;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLinkId(): int
-    {
-        return $this->linkId;
-    }
-
-    /**
-     * @param int $linkId
-     * @return Plan
-     */
-    public function setLinkId($linkId): Plan
-    {
-        $this->linkId = $linkId;
+        $this->profils = $profils;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getPosition(): string
+    public function getPassword(): string
     {
-        return $this->position;
+        return $this->password;
     }
 
     /**
-     * @param string $position
-     * @return Plan
+     * @param string $password
+     * @return User
      */
-    public function setPosition($position): Plan
+    public function setPassword($password): User
     {
-        $this->position = $position;
+        $this->password = $password;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getDisplay(): string
+    public function getOptions(): string
     {
-        return $this->display;
+        return $this->options;
     }
 
     /**
-     * @param string $display
-     * @return Plan
+     * @param string $options
+     * @return User
      */
-    public function setDisplay($display): Plan
+    public function setOptions($options): User
     {
-        $this->display = $display;
+        $this->options = $options;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getCss(): string
+    public function getHash(): string
     {
-        return $this->css;
+        return $this->hash;
     }
 
     /**
-     * @param string $css
-     * @return Plan
+     * @param string $hash
+     * @return User
      */
-    public function setCss($css): Plan
+    public function setHash($hash): User
     {
-        $this->css = $css;
+        $this->hash = $hash;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getConfiguration(): string
+    public function getRights(): string
     {
-        return $this->configuration;
+        return $this->rights;
     }
 
     /**
-     * @param string $configuration
-     * @return Plan
+     * @param string $rights
+     * @return User
      */
-    public function setConfiguration($configuration): Plan
+    public function setRights($rights): User
     {
-        $this->configuration = $configuration;
+        $this->rights = $rights;
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getEnable(): string
+    {
+        return $this->enable;
+    }
 
+    /**
+     * @param string $enable
+     * @return User
+     */
+    public function setEnable($enable): User
+    {
+        $this->enable = $enable;
+        return $this;
+    }
 }

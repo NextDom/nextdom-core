@@ -1,6 +1,5 @@
 <?php
 /* This file is part of NextDom.
- *
  * NextDom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,100 +14,78 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\src\Domaine;
+
+namespace NextDom\src\Models\Domaine;
 
 
-class View
+class HistoryArch
 {
     /**
      * @var int
      */
-    private $id;
+    private $cmdId;
 
     /**
      * @var string
      */
-    private $name;
+    private $datetime;
 
     /**
      * @var string
      */
-    private $display;
-
-    /**
-     * @var string
-     */
-    private $order;
+    private $value;
 
     /**
      * @return int
      */
-    public function getId(): int
+    public function getCmdId(): int
     {
-        return $this->id;
+        return $this->cmdId;
     }
 
     /**
-     * @param int $id
-     * @return View
+     * @param int $cmdId
+     * @return History
      */
-    public function setId(int $id): View
+    public function setCmdId(int $cmdId): HistoryArch
     {
-        $this->id = $id;
+        $this->cmdId = $cmdId;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getName(): string
+    public function getDatetime(): string
     {
-        return $this->name;
+        return $this->datetime;
     }
 
     /**
-     * @param string $name
-     * @return View
+     * @param string $datetime
+     * @return History
      */
-    public function setName($name): View
+    public function setDatetime(string $datetime): HistoryArch
     {
-        $this->name = $name;
+        $this->datetime = $datetime;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getDisplay(): string
+    public function getValue()
     {
-        return $this->display;
+        return $this->value;
     }
 
     /**
-     * @param string $display
-     * @return View
+     * @param string $value
+     * @return History
      */
-    public function setDisplay($display): View
+    public function setValue(string $value): HistoryArch
     {
-        $this->display = $display;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOrder(): string
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param string $order
-     * @return View
-     */
-    public function setOrder($order): View
-    {
-        $this->order = $order;
+        $this->value = $value;
         return $this;
     }
 

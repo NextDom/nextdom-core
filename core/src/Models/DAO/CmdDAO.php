@@ -16,9 +16,9 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\src\DAO;
+namespace NextDom\src\Models\DAO;
 
-use NextDom\src\Domaine\Cmd;
+use NextDom\src\Models\Domaine\Cmd;
 
 class CmdDAO extends DAO
 {

@@ -15,7 +15,7 @@
  */
 
 
-namespace NextDom\src\Domaine;
+namespace NextDom\src\Models\Domaine;
 
 
 class Scenario

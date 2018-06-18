@@ -1,5 +1,4 @@
 <?php
-
 /* This file is part of NextDom.
  * NextDom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,18 +14,22 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\src\Domaine;
+namespace NextDom\src\Models\Domaine;
 
-class EqReal
+
+class Message
 {
     /**
-     *
      * @var int
      */
     private $id;
-    
+
     /**
-     *
+     * @var string
+     */
+    private $date;
+
+    /**
      * @var string
      */
     private $logicalId;
@@ -34,36 +37,31 @@ class EqReal
     /**
      * @var string
      */
-    private $name;
+    private $plugin;
 
     /**
      * @var string
      */
-    private $type;
+    private $message;
 
     /**
      * @var string
      */
-    private $configuration;
-
-    /**
-     * @var string
-     */
-    private $cat;
+    private $action;
 
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
      * @param int $id
-     * @return EqReal
+     * @return Message
      */
-    public function setId( int $id) : EqReal
+    public function setId(int $id): Message
     {
         $this->id = $id;
         return $this;
@@ -72,16 +70,34 @@ class EqReal
     /**
      * @return string
      */
-    public function getLogicalId()
+    public function getDate(): string
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param string $date
+     * @return Message
+     */
+    public function setDate(string $date): Message
+    {
+        $this->date = $date;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogicalId(): string
     {
         return $this->logicalId;
     }
 
     /**
      * @param string $logicalId
-     * @return EqReal
+     * @return Message
      */
-    public function setLogicalId($logicalId) : EqReal
+    public function setLogicalId($logicalId): Message
     {
         $this->logicalId = $logicalId;
         return $this;
@@ -90,72 +106,54 @@ class EqReal
     /**
      * @return string
      */
-    public function getName()
+    public function getPlugin(): string
     {
-        return $this->name;
+        return $this->plugin;
     }
 
     /**
-     * @param string $name
-     * @return EqReal
+     * @param string $plugin
+     * @return Message
      */
-    public function setName($name) : EqReal
+    public function setPlugin(string $plugin): Message
     {
-        $this->name = $name;
+        $this->plugin = $plugin;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getType()
+    public function getMessage(): string
     {
-        return $this->type;
+        return $this->message;
     }
 
     /**
-     * @param string $type
-     * @return EqReal
+     * @param string $message
+     * @return Message
      */
-    public function setType($type) : EqReal
+    public function setMessage($message): Message
     {
-        $this->type = $type;
+        $this->message = $message;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getConfiguration()
+    public function getAction(): string
     {
-        return $this->configuration;
+        return $this->action;
     }
 
     /**
-     * @param string $configuration
-     * @return EqReal
+     * @param string $action
+     * @return Message
      */
-    public function setConfiguration(string $configuration) : EqReal
+    public function setAction($action): Message
     {
-        $this->configuration = $configuration;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCat()
-    {
-        return $this->cat;
-    }
-
-    /**
-     * @param string $cat
-     * @return EqReal
-     */
-    public function setCat($cat) : EqReal
-    {
-        $this->cat = $cat;
+        $this->action = $action;
         return $this;
     }
 

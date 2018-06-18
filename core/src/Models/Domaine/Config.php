@@ -1,4 +1,5 @@
 <?php
+
 /* This file is part of NextDom.
  * NextDom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,80 +15,61 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace NextDom\src\Models\Domaine;
 
-namespace NextDom\src\Domaine;
 
-
-class HistoryArch
+class Config
 {
     /**
-     * @var int
-     */
-    private $cmdId;
-
-    /**
+     *
      * @var string
      */
-    private $datetime;
-
+    private $plugin;
+    
     /**
+     *
+     * @var string
+     */
+    private $key;
+    
+    /**
+     *
      * @var string
      */
     private $value;
-
-    /**
-     * @return int
-     */
-    public function getCmdId(): int
+    
+    public function getPlugin()
     {
-        return $this->cmdId;
+        return $this->plugin;
     }
 
-    /**
-     * @param int $cmdId
-     * @return History
-     */
-    public function setCmdId(int $cmdId): HistoryArch
+    public function getKey()
     {
-        $this->cmdId = $cmdId;
-        return $this;
+        return $this->key;
     }
 
-    /**
-     * @return string
-     */
-    public function getDatetime(): string
-    {
-        return $this->datetime;
-    }
-
-    /**
-     * @param string $datetime
-     * @return History
-     */
-    public function setDatetime(string $datetime): HistoryArch
-    {
-        $this->datetime = $datetime;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
     public function getValue()
     {
         return $this->value;
     }
 
-    /**
-     * @param string $value
-     * @return History
-     */
-    public function setValue(string $value): HistoryArch
+    public function setPlugin( string $plugin) : Config
+    {
+        $this->plugin = $plugin;
+        return $this;
+    }
+
+    public function setKey( string $key) : Config
+    {
+        $this->key = $key;
+        return $this;
+    }
+
+    public function setValue($value) : Config
     {
         $this->value = $value;
         return $this;
     }
 
-
+    
 }

@@ -14,10 +14,11 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\src\Domaine;
+
+namespace NextDom\src\Models\Domaine;
 
 
-class Listener
+class ScenarioElement
 {
     /**
      * @var int
@@ -25,24 +26,29 @@ class Listener
     private $id;
 
     /**
-     * @var string
+     * @var int
      */
-    private $event;
+    private $order;
 
     /**
      * @var string
      */
-    private $class;
+    private $type;
 
     /**
      * @var string
      */
-    private $function;
+    private $name;
 
     /**
      * @var string
      */
-    private $option;
+    private $options;
+
+    /**
+     * @var string
+     */
+    private $log;
 
     /**
      * @return int
@@ -54,83 +60,101 @@ class Listener
 
     /**
      * @param int $id
-     * @return Listener
+     * @return ScenarioElement
      */
-    public function setId(int $id): Listener
+    public function setId(int $id): ScenarioElement
     {
         $this->id = $id;
         return $this;
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getEvent(): string
+    public function getOrder(): int
     {
-        return $this->event;
+        return $this->order;
     }
 
     /**
-     * @param string $event
-     * @return Listener
+     * @param int $order
+     * @return ScenarioElement
      */
-    public function setEvent($event): Listener
+    public function setOrder(int $order): ScenarioElement
     {
-        $this->event = $event;
+        $this->order = $order;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getClass(): string
+    public function getType(): string
     {
-        return $this->class;
+        return $this->type;
     }
 
     /**
-     * @param string $class
-     * @return Listener
+     * @param string $type
+     * @return ScenarioElement
      */
-    public function setClass($class): Listener
+    public function setType($type): ScenarioElement
     {
-        $this->class = $class;
+        $this->type = $type;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getFunction(): string
+    public function getName(): string
     {
-        return $this->function;
+        return $this->name;
     }
 
     /**
-     * @param string $function
-     * @return Listener
+     * @param string $name
+     * @return ScenarioElement
      */
-    public function setFunction($function): Listener
+    public function setName($name): ScenarioElement
     {
-        $this->function = $function;
+        $this->name = $name;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getOption(): string
+    public function getOptions(): string
     {
-        return $this->option;
+        return $this->options;
     }
 
     /**
-     * @param string $option
-     * @return Listener
+     * @param string $options
+     * @return ScenarioElement
      */
-    public function setOption($option): Listener
+    public function setOptions($options): ScenarioElement
     {
-        $this->option = $option;
+        $this->options = $options;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLog(): string
+    {
+        return $this->log;
+    }
+
+    /**
+     * @param string $log
+     * @return ScenarioElement
+     */
+    public function setLog($log): ScenarioElement
+    {
+        $this->log = $log;
         return $this;
     }
 

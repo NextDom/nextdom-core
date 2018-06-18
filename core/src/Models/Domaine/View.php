@@ -1,5 +1,6 @@
 <?php
 /* This file is part of NextDom.
+ *
  * NextDom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -14,26 +15,15 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace NextDom\src\Models\Domaine;
 
-namespace NextDom\src\Domaine;
 
-
-class ScenarioElement
+class View
 {
     /**
      * @var int
      */
     private $id;
-
-    /**
-     * @var int
-     */
-    private $order;
-
-    /**
-     * @var string
-     */
-    private $type;
 
     /**
      * @var string
@@ -43,12 +33,12 @@ class ScenarioElement
     /**
      * @var string
      */
-    private $options;
+    private $display;
 
     /**
      * @var string
      */
-    private $log;
+    private $order;
 
     /**
      * @return int
@@ -60,47 +50,11 @@ class ScenarioElement
 
     /**
      * @param int $id
-     * @return ScenarioElement
+     * @return View
      */
-    public function setId(int $id): ScenarioElement
+    public function setId(int $id): View
     {
         $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOrder(): int
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param int $order
-     * @return ScenarioElement
-     */
-    public function setOrder(int $order): ScenarioElement
-    {
-        $this->order = $order;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param string $type
-     * @return ScenarioElement
-     */
-    public function setType($type): ScenarioElement
-    {
-        $this->type = $type;
         return $this;
     }
 
@@ -114,9 +68,9 @@ class ScenarioElement
 
     /**
      * @param string $name
-     * @return ScenarioElement
+     * @return View
      */
-    public function setName($name): ScenarioElement
+    public function setName($name): View
     {
         $this->name = $name;
         return $this;
@@ -125,36 +79,36 @@ class ScenarioElement
     /**
      * @return string
      */
-    public function getOptions(): string
+    public function getDisplay(): string
     {
-        return $this->options;
+        return $this->display;
     }
 
     /**
-     * @param string $options
-     * @return ScenarioElement
+     * @param string $display
+     * @return View
      */
-    public function setOptions($options): ScenarioElement
+    public function setDisplay($display): View
     {
-        $this->options = $options;
+        $this->display = $display;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getLog(): string
+    public function getOrder(): string
     {
-        return $this->log;
+        return $this->order;
     }
 
     /**
-     * @param string $log
-     * @return ScenarioElement
+     * @param string $order
+     * @return View
      */
-    public function setLog($log): ScenarioElement
+    public function setOrder($order): View
     {
-        $this->log = $log;
+        $this->order = $order;
         return $this;
     }
 
