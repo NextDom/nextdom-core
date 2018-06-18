@@ -112,11 +112,7 @@ class DataStorage
      *
      * @return bool True si la données existe
      */
-<<<<<<< HEAD:core/src/Helpers/DataStorage.php
     public function isDataExists(string $code) : bool
-=======
-    public function isDataExists(string $code)
->>>>>>> develop:core/class/Helpers/DataStorage.php
     {
         $result = false;
         if ($this->getRawData($code) !== null) {
@@ -131,11 +127,7 @@ class DataStorage
      * @param string $code Codes des données
      * @param string $data Données brutes
      */
-<<<<<<< HEAD:core/src/Helpers/DataStorage.php
     public function addRawData(string $code, $data)
-=======
-    public function addRawData(string $code, string $data)
->>>>>>> develop:core/class/Helpers/DataStorage.php
     {
         $statement = \DB::getConnection()->prepare("INSERT INTO `" . $this->dataTableName . "` (`code`, `data`) VALUES (?, ?)");
         $statement->execute(array($code, $data));
@@ -188,11 +180,7 @@ class DataStorage
      *
      * @return array Tableau de données.
      */
-<<<<<<< HEAD:core/src/Helpers/DataStorage.php
     public function getJsonData(string $code) : array
-=======
-    public function getJsonData(string $code)
->>>>>>> develop:core/class/Helpers/DataStorage.php
     {
         return \json_decode($this->getRawData($code), true);
     }
@@ -214,14 +202,9 @@ class DataStorage
      *
      * @return array Liste des résultats
      */
-<<<<<<< HEAD:core/src/Helpers/DataStorage.php
-    public function getAllByPrefix(string $prefix) : array {
-        $statement = DB::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
-=======
     public function getAllByPrefix(string $prefix) :array
     {
         $statement = \DB::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
->>>>>>> develop:core/class/Helpers/DataStorage.php
         $statement->execute(array($prefix.'%'));
         $returnValue = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $returnValue;

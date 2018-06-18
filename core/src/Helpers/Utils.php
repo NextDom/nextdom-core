@@ -25,11 +25,7 @@ class Utils
      * @param string $varName Nom de la variable dans le code HTML
      * @param mixed $value Valeur de la variable
      */
-<<<<<<< HEAD:core/src/Helpers/Utils.php
     public static function sendVarToJs(string $varName, $varValue)
-=======
-    public static function sendVarToJs(string $varName, $varValue):string
->>>>>>> develop:core/class/Helpers/Utils.php
     {
         echo "<script>" .
             self::getVarInJs($varName, $varValue) .
@@ -41,11 +37,11 @@ class Utils
      *
      * @param array $listOfVarsWithValues Liste des variables 'nom' => 'valeur'
      */
-    public static function sendVarsToJS(array $listOfVarsWithValues):string
+    public static function sendVarsToJS(array $listOfVarsWithValues)
     {
         echo "<script>\n";
         foreach ($listOfVarsWithValues as $varName => $value) {
-            echo self::getVarInJs($varName, $value)."\n";
+            echo self::getVarInJs($varName, $value) . "\n";
         }
         echo "</script>\n";
     }
@@ -58,11 +54,7 @@ class Utils
      *
      * @return string Déclaration javascript
      */
-<<<<<<< HEAD:core/src/Helpers/Utils.php
-    private static function getVarInJs(string $varName, $varValue) : string
-=======
-    private static function getVarInJs(string $varName, $varValue)
->>>>>>> develop:core/class/Helpers/Utils.php
+    private static function getVarInJs(string $varName, $varValue): string
     {
         $jsVarValue = '';
         if (is_array($varValue)) {
@@ -82,7 +74,7 @@ class Utils
     public static function redirect(string $url, $forceType = null)
     {
         if ($forceType == 'JS' || headers_sent() || isset($_GET['ajax'])) {
-            echo '<script type="text/javascript">window.location.href="'.$url.'"</script>';
+            echo '<script type="text/javascript">window.location.href="' . $url . '"</script>';
         } else {
             exit(header("Location: $url"));
         }
@@ -95,7 +87,7 @@ class Utils
      *
      * @return boolean True si l'utilisateur est connecté avec les droits demandés
      */
-    public static function isConnect(string $rights = '') : bool
+    public static function isConnect(string $rights = ''): bool
     {
         $rightsKey = 'isConnect::' . $rights;
         $isSetSessionUser = isset($_SESSION['user']);
@@ -123,31 +115,27 @@ class Utils
     /**
      * Obtenir une variable passée en paramètre
      *
-     * @param string $_name Nom de la variable
-     * @param mixed $_default Valeur par défaut
+     * @param string $name Nom de la variable
+     * @param mixed $default Valeur par défaut
      *
      * @return mixed Valeur de la variable
      */
-<<<<<<< HEAD:core/src/Helpers/Utils.php
-    public static function init(string $_name, string $_default = '') : string
-=======
-    public static function init(string $_name, $_default = '')
->>>>>>> develop:core/class/Helpers/Utils.php
+    public static function init(string $name, string $default = ''): string
     {
-        if (isset($_GET[$_name])) {
-            return $_GET[$_name];
+        if (isset($_GET[$name])) {
+            return $_GET[$name];
         }
-        if (isset($_POST[$_name])) {
-            return $_POST[$_name];
+        if (isset($_POST[$name])) {
+            return $_POST[$name];
         }
-        if (isset($_REQUEST[$_name])) {
-            return $_REQUEST[$_name];
+        if (isset($_REQUEST[$name])) {
+            return $_REQUEST[$name];
         }
-        return $_default;
+        return $default;
     }
 
     /**
-     * Obtenir le contenu d'un fichier template
+     * Obtenir le contenu d'un fichier template.
      *
      * @param string $folder Répertoire dans lequel se trouve le fichier de template
      * @param string $version Version du template
@@ -156,12 +144,8 @@ class Utils
      *
      * @return string Contenu du fichier ou une chaine vide.
      */
-<<<<<<< HEAD:core/src/Helpers/Utils.php
-    public static function getTemplateFilecontent(string $folder, string $version, string $filename, string $pluginId = '') : string {
-=======
-    public static function getTemplateFilecontent(string $folder,string $version,string $filename,string $pluginId = '') 
+    public static function getTemplateFilecontent(string $folder, string $version, string $filename, string $pluginId = ''): string
     {
->>>>>>> develop:core/class/Helpers/Utils.php
         $result = '';
         $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
         if ($pluginId == '') {

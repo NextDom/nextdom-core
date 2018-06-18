@@ -83,11 +83,7 @@ class Translate
      * TODO: Même celles de tous les plugins. Les plugins sont chargés à l'ancienne
      * @return array Données chargées
      */
-<<<<<<< HEAD:core/src/Helpers/Translate.php
     public static function loadTranslation() : array
-=======
-    public static function loadTranslation():array
->>>>>>> develop:core/class/Helpers/Translate.php
     {
         $result = array();
         $language = self::getLanguage();
@@ -220,11 +216,7 @@ class Translate
      *
      * @return string Chemin vers le fichier
      */
-<<<<<<< HEAD:core/src/Helpers/Translate.php
     public static function getPathTranslationFile(string $language) : string
-=======
-    public static function getPathTranslationFile(string $language) :string
->>>>>>> develop:core/class/Helpers/Translate.php
     {
         //return __DIR__ . '/../i18n/' . $language . '.json';
         return NEXTDOM_ROOT . '/translations/' . $language . '.yml';
