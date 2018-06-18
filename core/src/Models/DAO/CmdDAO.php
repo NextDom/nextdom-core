@@ -25,6 +25,11 @@ class CmdDAO extends DAO
 
     private $tableName = 'cmd';
 
+    /**
+     * 
+     * @param Cmd $cmd
+     * @return Cmd
+     */
     public function save(Cmd $cmd): Cmd
     {
         $cmdData = [
@@ -55,20 +60,20 @@ class CmdDAO extends DAO
                     . ' VALUES '
                     . '(:eqType, :logicalId, :generic_type, :order, :name, :configuration, :template, :isHistorized, :type, :subType, :unite, :display, :isVisible, :value, :html, :alert)'
                     . 'where'
-                    . 'id = ' . $cmd->getId() .';';
+                    . 'id = ' . $cmd->getId() . ';';
             $update = $this->db->prepare($sql);
             $update->execute($cmdData);
         } else {
             $sql    = 'INSERT INTO '
                     . $this->tableName .
-                     '(eqType, logicalId, generic_type, order, name, configuration, template, isHistorized, type, subType, unite, display, isVisible, value, html, alert)'
+                    '(eqType, logicalId, generic_type, order, name, configuration, template, isHistorized, type, subType, unite, display, isVisible, value, html, alert)'
                     . ' VALUES '
                     . '(:eqType, :logicalId, :generic_type, :order, :name, :configuration, :template, :isHistorized, :type, :subType, :unite, :display, :isVisible, :value, :html, :alert)';
             $insert = $this->db->prepare($sql);
             $insert->execute($cmdData);
             $cmd->setId($insert->lastInsertId());
         }
-        
+
         return $cmd;
     }
 
@@ -99,19 +104,6 @@ class CmdDAO extends DAO
                 ->setHtml($row['html'])
                 ->setAlert($row['alert']);
         return $cmd;
-    }
-
-    /**
-     * @param array $array
-     * @return array
-     */
-    public function buildListDomainObject(array $array): array
-    {
-        $list = [];
-        foreach ($array as $row) {
-            $list[] = $this->buildDomainObject($row);
-        }
-        return $list;
     }
 
 }

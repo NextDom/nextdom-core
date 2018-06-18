@@ -1,4 +1,5 @@
 <?php
+
 /* This file is part of NextDom.
  *
  * NextDom is free software: you can redistribute it and/or modify
@@ -16,11 +17,11 @@
 
 namespace NextDom\src\Models\DAO;
 
-
 use NextDom\Interfaces\DAOInterface;
 
 abstract class DAO implements DAOInterface
 {
+
     /**
      * Database connection
      *
@@ -33,7 +34,8 @@ abstract class DAO implements DAOInterface
      *
      * @param db
      */
-    public function __construct(\PDO $db) {
+    public function __construct(\PDO $db)
+    {
         $this->db = $db;
     }
 
@@ -45,19 +47,19 @@ abstract class DAO implements DAOInterface
     {
         return $this->db;
     }
-
+ 
     /**
-     * @param array $row
-     * Builds a domain object from a DB row.
-     * Must be overridden by child classes.
+     * 
+     * @param array $array
+     * @return array
      */
-    protected abstract function buildDomainObject(array $row);
-
-    /**
-     * Find All object from a DB row.
-     */
-    public function findAllBy($columnName, $value) {
-       //todo
-
+    protected function buildListDomainObject(array $array): array
+    {
+        $list = [];
+        foreach ($array as $row) {
+            $list[] = $this->buildDomainObject($row);
+        }
+        return $list;
     }
+
 }
