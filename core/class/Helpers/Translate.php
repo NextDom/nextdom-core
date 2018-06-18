@@ -71,7 +71,7 @@ class Translate
      * TODO: Même celles de tous les plugins. Les plugins sont chargés à l'ancienne
      * @return array Données chargées
      */
-    public static function loadTranslation()
+    public static function loadTranslation():array
     {
         $result = array();
         $language = self::getLanguage();
@@ -204,7 +204,7 @@ class Translate
      *
      * @return string Chemin vers le fichier
      */
-    public static function getPathTranslationFile($language)
+    public static function getPathTranslationFile(string $language) :string
     {
         //return __DIR__ . '/../i18n/' . $language . '.json';
         return NEXTDOM_ROOT . '/translations/' . $language . '.yml';
