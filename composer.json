@@ -29,7 +29,10 @@
     ],
     "autoload": {
         "psr-4": {
-            "NextDom\\": "core/class"
+            "NextDom\\": [
+                "core/class",
+                "core/src"
+            ]
         }
     }
 }
