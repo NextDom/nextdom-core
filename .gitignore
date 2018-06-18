@@ -18,3 +18,6 @@ Thumbs.db
 .DS_Store
 /.buildpath
 cache.tar.gz
+
+vendor/*
+composer.*
