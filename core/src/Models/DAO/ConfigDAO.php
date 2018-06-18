@@ -16,23 +16,29 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 namespace NextDom\src\Models\DAO;
 
 use NextDom\src\Models\Domaine\Config;
 
 class ConfigDAO extends DAO
 {
-    private $tableName = 'config';
-    
-    protected function buildDomainObject(array $row)
-    {
-        
-    }
 
-    public function buildListDomainObject(array $array): array
+    private $tableName = 'config';
+
+    /**
+     * 
+     * @param array $row
+     * @return Config
+     */
+    protected function buildDomainObject(array $row): Config
     {
-        
+        $dataConfig = (new Config())
+                ->setPlugin($row)
+                ->setKey($row)
+                ->setValue($row)
+        ;
+
+        return $dataConfig;
     }
 
 }
