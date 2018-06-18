@@ -19,25 +19,27 @@
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
 
+// use NextDom\Managers\PluginManager;
+
 class plugin {
     /*     * *************************Attributs****************************** */
 
     private $id;
-    private $name;
-    private $description;
-    private $license;
-    private $installation;
-    private $author;
-    private $require;
-    private $category;
+    private $name = '';
+    private $description = '';
+    private $license = '';
+    private $installation = '';
+    private $author = '';
+    private $require = '';
+    private $category = '';
     private $filepath;
     private $index;
-    private $display;
+    private $display = '';
     private $mobile;
-    private $eventjs;
-    private $hasDependency;
-    private $maxDependancyInstallTime;
-    private $hasOwnDeamon;
+    private $eventjs = 0;
+    private $hasDependency = 0;
+    private $maxDependancyInstallTime = 30;
+    private $hasOwnDeamon = 0;
     private $issue = '';
     private $changelog = '';
     private $documentation = '';
@@ -48,6 +50,96 @@ class plugin {
     private static $_enable = null;
 
     /*     * ***********************Méthodes statiques*************************** */
+    public function initPluginFromData($data) {
+        global $NEXTDOM_INTERNAL_CONFIG;
+        $this->setId($data['id']);
+        $this->setName($data['name']);
+        if (isset($data['description'])) {
+            $this->description = $data['description'];
+        }
+        if (isset($data['licence'])) {
+            $this->license = $data['licence'];
+        }
+        if (isset($data['license'])) {
+            $this->license = $data['lisense'];
+        }
+        if (isset($data['author'])) {
+            $this->author = $data['author'];
+        }
+        if (isset($data['installation'])) {
+            $this->installation = $data['installation'];
+        }
+        if (isset($data['hasDependency'])) {
+            $this->hasDependency = $data['hasDependency'];
+        }
+        if (isset($data['hasOwnDeamon'])) {
+            $this->hasOwnDeamon = $data['hasOwnDeamon'];
+        }
+        if (isset($data['maxDependancyInstallTime'])) {
+            $this->maxDependancyInstallTime = $data['maxDependancyInstallTime'];
+        }
+        if (isset($data['eventjs'])) {
+            $this->eventjs = $data['eventjs'];
+        }
+        if (isset($data['require'])) {
+            $this->require = $data['require'];
+        }
+        if (isset($data['category'])) {
+            $this->category = $data['category'];
+        }
+        $this->filepath = $this->id;
+        if (isset($data['index'])) {
+            $this->index = $data['index'];
+        }
+        else {
+            $this->index = $this->id;
+        }
+        if (isset($data['display'])) {
+            $this->display = $data['display'];
+        }
+        if (isset($data['issue'])) {
+            $this->issue = $data['issue'];
+        }
+        if (isset($data['changelog'])) {
+            $this->changelog = str_replace('#language#', config::byKey('language', 'core', 'fr_FR'), $data['changelog']);
+        }
+        if (isset($data['documentation'])) {
+            $this->documentation = str_replace('#language#', config::byKey('language', 'core', 'fr_FR'), $data['documentation']);
+        }
+        $this->mobile = '';
+        if (file_exists(dirname(__FILE__) . '/../../plugins/' . $data['id'] . '/mobile/html')) {
+            $this->mobile = (isset($data['mobile'])) ? $data['mobile'] : $data['id'];
+        }
+        if (isset($data['include'])) {
+            $this->include = array(
+                'file' => $data['include']['file'],
+                'type' => $data['include']['type'],
+            );
+        } else {
+            $this->include = array(
+                'file' => $data['id'],
+                'type' => 'class',
+            );
+        }
+        $this->functionality['interact'] = method_exists($this->getId(), 'interact');
+        $plugin->functionality['cron'] = method_exists($plugin->getId(), 'cron');
+        $plugin->functionality['cron5'] = method_exists($plugin->getId(), 'cron5');
+        $plugin->functionality['cron15'] = method_exists($plugin->getId(), 'cron15');
+        $plugin->functionality['cron30'] = method_exists($plugin->getId(), 'cron30');
+        $plugin->functionality['cronHourly'] = method_exists($plugin->getId(), 'cronHourly');
+        $plugin->functionality['cronDaily'] = method_exists($plugin->getId(), 'cronDaily');
+        if (!isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$plugin->category])) {
+            foreach ($NEXTDOM_INTERNAL_CONFIG['plugin']['category'] as $key => $value) {
+                if (!isset($value['alias'])) {
+                    continue;
+                }
+                if (in_array($plugin->category, $value['alias'])) {
+                    $plugin->category = $key;
+                    break;
+                }
+            }
+        }
+    }
 
     public static function byId($_id) {
         global $NEXTDOM_INTERNAL_CONFIG;
@@ -950,6 +1042,118 @@ class plugin {
     public function setDocumentation($documentation) {
         $this->documentation = $documentation;
         return $this;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @param mixed $license
+     */
+    public function setLicense($license)
+    {
+        $this->license = $license;
+    }
+
+    /**
+     * @param mixed $installation
+     */
+    public function setInstallation($installation)
+    {
+        $this->installation = $installation;
+    }
+
+    /**
+     * @param mixed $author
+     */
+    public function setAuthor($author)
+    {
+        $this->author = $author;
+    }
+
+    /**
+     * @param mixed $require
+     */
+    public function setRequire($require)
+    {
+        $this->require = $require;
+    }
+
+    /**
+     * @param mixed $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+    }
+
+    /**
+     * @param mixed $filepath
+     */
+    public function setFilepath($filepath)
+    {
+        $this->filepath = $filepath;
+    }
+
+    /**
+     * @param mixed $index
+     */
+    public function setIndex($index)
+    {
+        $this->index = $index;
+    }
+
+    /**
+     * @param mixed $hasOwnDeamon
+     */
+    public function setHasOwnDeamon($hasOwnDeamon)
+    {
+        $this->hasOwnDeamon = $hasOwnDeamon;
+    }
+
+    /**
+     * @param array $info
+     */
+    public function setInfo($info)
+    {
+        $this->info = $info;
+    }
+
+    /**
+     * @param array $include
+     */
+    public function setInclude($include)
+    {
+        $this->include = $include;
+    }
+
+    /**
+     * @param array $functionality
+     */
+    public function setFunctionality($functionality)
+    {
+        $this->functionality = $functionality;
     }
 
 }

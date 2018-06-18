@@ -135,7 +135,7 @@ class ComposerStaticInitc7412053f01762e82bf4bede3f471ac6
         ),
         'NextDom\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/core/src',
+            0 => __DIR__ . '/../..' . '/core/class',
         ),
         'Monolog\\' => 
         array (
