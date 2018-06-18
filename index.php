@@ -53,10 +53,10 @@ try {
         $router = new Router($viewType);
         $result = $router->show();
         if (!$result) {
-            throw new Exception('Erreur : veuillez contacter l\'administrateur');
+            throw new \Exception('Erreur : veuillez contacter l\'administrateur');
         }
     }
-} catch (Exception $e) {
+} catch (\Exception $e) {
     echo $e->getMessage();
 }
 
