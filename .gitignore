@@ -19,5 +19,5 @@ Thumbs.db
 /.buildpath
 cache.tar.gz
 
-vendor/*
+vendor
 composer.*
