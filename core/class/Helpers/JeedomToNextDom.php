@@ -29,7 +29,7 @@ class JeedomToNextDom
      *
      * @param string $pluginDirectory Répertoire du plugin
      */
-    public static function convertPlugin($pluginDirectory)
+    public static function convertPlugin(string $pluginDirectory)
     {
         $script = array(
             "grep -rl $pluginDirectory -e jeedom | xargs sed -i 's/jeedom/nextdom/g'",
