@@ -23,18 +23,53 @@ use NextDom\src\Models\Domaine\Cmd;
 class CmdDAO extends DAO
 {
 
-    /**
-     * @param int $id
-     * @return db
-     */
-    public function getCmdById(int $id)
-    {
-        return $this->getDb();
-    }
+    private $tableName = 'cmd';
 
-    public function save()
+    public function save(Cmd $cmd): Cmd
     {
+        $cmdData = [
+            ':eqType'        => $cmd->getEqType(),
+            ':logicalId'     => $cmd->getLogicalId(),
+            ':generic_type'  => $cmd->getGenericType(),
+            ':order'         => $cmd->getOrder(),
+            ':name'          => $cmd->getName(),
+            ':configuration' => $cmd->getConfiguration(),
+            ':template'      => $cmd->getTemplate(),
+            ':isHistorized'  => $cmd->getisHistorized(),
+            ':type'          => $cmd->getType(),
+            ':subType'       => $cmd->getSubType(),
+            ':unite'         => $cmd->getUnite(),
+            ':display'       => $cmd->getDisplay(),
+            ':isVisible'     => $cmd->getisVisible(),
+            ':value'         => $cmd->getValue(),
+            ':html'          => $cmd->getHtml(),
+            ':alert'         => $cmd->getAlert(),
+        ];
+
+        implode(',', $cmdData);
+
+        if ($cmd->getId() !== null) {
+            $sql    = 'UPDATE SET '
+                    . $this->tableName .
+                    '(eqType, logicalId, generic_type, order, name, configuration, template, isHistorized, type, subType, unite, display, isVisible, value, html, alert)'
+                    . ' VALUES '
+                    . '(:eqType, :logicalId, :generic_type, :order, :name, :configuration, :template, :isHistorized, :type, :subType, :unite, :display, :isVisible, :value, :html, :alert)'
+                    . 'where'
+                    . 'id = ' . $cmd->getId() .';';
+            $update = $this->db->prepare($sql);
+            $update->execute($cmdData);
+        } else {
+            $sql    = 'INSERT INTO '
+                    . $this->tableName .
+                     '(eqType, logicalId, generic_type, order, name, configuration, template, isHistorized, type, subType, unite, display, isVisible, value, html, alert)'
+                    . ' VALUES '
+                    . '(:eqType, :logicalId, :generic_type, :order, :name, :configuration, :template, :isHistorized, :type, :subType, :unite, :display, :isVisible, :value, :html, :alert)';
+            $insert = $this->db->prepare($sql);
+            $insert->execute($cmdData);
+            $cmd->setId($insert->lastInsertId());
+        }
         
+        return $cmd;
     }
 
     /**
