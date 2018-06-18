@@ -47,8 +47,8 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $_GET = [];
         $_POST = [];
         $_REQUEST = [];
-        $toTest = Utils::init('Name', false);
-        $this->assertFalse($toTest);
+        $toTest = Utils::init('Name', '');
+        $this->assertEquals('', $toTest);
     }
 
     public function testInitWithDataGetOnly()
@@ -56,7 +56,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $_GET = ['Name' => 'Result'];
         $_POST = [];
         $_REQUEST = [];
-        $toTest = Utils::init('Name', false);
+        $toTest = Utils::init('Name', '');
         $this->assertEquals('Result', $toTest);
     }
 
@@ -65,7 +65,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $_GET = [];
         $_POST = ['Name' => 'Result'];
         $_REQUEST = [];
-        $toTest = Utils::init('Name', false);
+        $toTest = Utils::init('Name', '');
         $this->assertEquals('Result', $toTest);
     }
 
@@ -74,7 +74,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $_GET = [];
         $_POST = [];
         $_REQUEST = ['Name' => 'Result'];
-        $toTest = Utils::init('Name', false);
+        $toTest = Utils::init('Name', '');
         $this->assertEquals('Result', $toTest);
     }
 
@@ -83,7 +83,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $_GET = ['Name' => 'GET'];
         $_POST = ['Name' => 'POST'];
         $_REQUEST = [];
-        $toTest = Utils::init('Name', false);
+        $toTest = Utils::init('Name', '');
         $this->assertEquals('GET', $toTest);
     }
 
@@ -92,7 +92,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $_GET = ['Name' => 'GET'];
         $_POST = [];
         $_REQUEST = ['Name' => 'REQUEST'];
-        $toTest = Utils::init('Name', false);
+        $toTest = Utils::init('Name', '');
         $this->assertEquals('GET', $toTest);
     }
 
@@ -101,7 +101,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $_GET = [];
         $_POST = ['Name' => 'POST'];
         $_REQUEST = ['Name' => 'REQUEST'];
-        $toTest = Utils::init('Name', false);
+        $toTest = Utils::init('Name', '');
         $this->assertEquals('POST', $toTest);
     }
 
@@ -110,7 +110,7 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $_GET = ['Name' => 'GET'];
         $_POST = ['Name' => 'POST'];
         $_REQUEST = ['Name' => 'REQUEST'];
-        $toTest = Utils::init('Name', false);
+        $toTest = Utils::init('Name', '');
         $this->assertEquals('GET', $toTest);
     }
 

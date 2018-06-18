@@ -109,7 +109,7 @@ class PrepareView
      *
      * @return string Code HTML du message d'erreur
      */
-    public static function showAlertMessage($msg) {
+    public static function showAlertMessage(string $msg) {
         echo '<div class="alert alert-danger">'.$msg.'</div>';
     }
 

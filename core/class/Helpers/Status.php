@@ -61,7 +61,7 @@ class Status
      * Obtenir le statut de la connexion de l'utilisateur
      * @return bool Statut de la connexion de l'utilisateur
      */
-    public static function isConnect()
+    public static function isConnect() : bool
     {
         return self::$connectState;
     }
@@ -71,11 +71,12 @@ class Status
      *
      * @throws \Exception
      */
-    public static function isConnectedOrFail()
+    public static function isConnectedOrFail() : bool
     {
         if (!self::$connectState) {
             throw new \Exception(__('core.error-401'));
         }
+        return self::isConnect();
     }
 
     /**
@@ -83,18 +84,19 @@ class Status
      *
      * @throws \Exception
      */
-    public static function isConnectedAdminOrFail()
+    public static function isConnectedAdminOrFail() : bool
     {
         if (!self::$connectAdminState) {
             throw new \Exception(__('core.error-401'));
         }
+        return self::isConnectAdmin();
     }
 
     /**
      * Obtenir le statut de la connexion de l'utilisateur en administrateur
      * @return bool Statut de la connexion de l'utilisateur en administrateur
      */
-    public static function isConnectAdmin()
+    public static function isConnectAdmin() : bool
     {
         return self::$connectAdminState;
     }
@@ -103,7 +105,7 @@ class Status
      * Obtenir le statut du mode récupération
      * @return bool Statut du mode récupération
      */
-    public static function isRecueMode()
+    public static function isRecueMode() : bool
     {
         return self::$rescueMode;
     }

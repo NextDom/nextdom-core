@@ -34,7 +34,7 @@ class DataStorage
      *
      * @param string $dataTableName Nom de la table des données.
      */
-    public function __construct($dataTableName)
+    public function __construct(string $dataTableName)
     {
         $this->dataTableName = 'data_' . $dataTableName;
     }
@@ -44,7 +44,7 @@ class DataStorage
      *
      * @return bool True si la table exists
      */
-    public function isDataTableExists()
+    public function isDataTableExists() : bool
     {
         $returnValue = false;
         $statement = \DB::getConnection()->prepare("SHOW TABLES LIKE ?");
@@ -112,7 +112,7 @@ class DataStorage
      *
      * @return bool True si la données existe
      */
-    public function isDataExists($code)
+    public function isDataExists(string $code) : bool
     {
         $result = false;
         if ($this->getRawData($code) !== null) {
@@ -127,7 +127,7 @@ class DataStorage
      * @param string $code Codes des données
      * @param string $data Données brutes
      */
-    public function addRawData($code, $data)
+    public function addRawData(string $code, $data)
     {
         $statement = \DB::getConnection()->prepare("INSERT INTO `" . $this->dataTableName . "` (`code`, `data`) VALUES (?, ?)");
         $statement->execute(array($code, $data));
@@ -139,7 +139,7 @@ class DataStorage
      * @param string $code Codes des données
      * @param mixed $data Données brutes
      */
-    public function updateRawData($code, $data)
+    public function updateRawData(string $code, $data)
     {
         $statement = \DB::getConnection()->prepare("UPDATE `" . $this->dataTableName . "` SET `data` = ? WHERE `code` = ?");
         $statement->execute(array($data, $code));
@@ -153,7 +153,7 @@ class DataStorage
      * @param string $code Code des données.
      * @param mixed $data Données brutes
      */
-    public function storeRawData($code, $data)
+    public function storeRawData(string $code, $data)
     {
         if ($this->isDataExists($code)) {
             $this->updateRawData($code, $data);
@@ -168,7 +168,7 @@ class DataStorage
      * @param string $code Code des données
      * @param array $jsonData Données au format JSON
      */
-    public function storeJsonData($code, $jsonData)
+    public function storeJsonData(string $code, array $jsonData)
     {
         $this->storeRawData($code, \json_encode($jsonData));
     }
@@ -180,7 +180,7 @@ class DataStorage
      *
      * @return array Tableau de données.
      */
-    public function getJsonData($code)
+    public function getJsonData(string $code) : array
     {
         return \json_decode($this->getRawData($code), true);
     }
@@ -190,7 +190,7 @@ class DataStorage
      *
      * @param string $code Code de la données à supprimer
      */
-    public function remove($code) {
+    public function remove(string $code) {
         $statement = \DB::getConnection()->prepare("DELETE FROM `".$this->dataTableName."` WHERE `code` LIKE ?");
         $statement->execute(array($code));
     }
@@ -202,7 +202,7 @@ class DataStorage
      *
      * @return array Liste des résultats
      */
-    public function getAllByPrefix($prefix) {
+    public function getAllByPrefix(string $prefix) : array {
         $statement = DB::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
         $statement->execute(array($prefix.'%'));
         $returnValue = $statement->fetchAll(PDO::FETCH_ASSOC);

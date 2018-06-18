@@ -22,9 +22,21 @@ use Symfony\Component\Translation\Loader\YamlFileLoader;
 
 class Translate
 {
+    /**
+     * @var array Données de traduction
+     */
     protected static $translation;
+    /**
+     * @var bool Etat du chargement des traductions
+     */
     protected static $translationLoaded = false;
+    /**
+     * @var string Langage par défaut
+     */
     protected static $language = null;
+    /**
+     * @var Translator Outil de traduction
+     */
     protected static $translator = null;
     /**
      * @var array Informations de la configuration
@@ -38,7 +50,7 @@ class Translate
      * @param string $defaultValue
      * @return mixed|string
      */
-    public static function getConfig($informationKey, $defaultValue = '')
+    public static function getConfig(string $informationKey, string $defaultValue = '') : string
     {
         $result = $defaultValue;
         // Lecture et mise en cache de la configuration
@@ -58,7 +70,7 @@ class Translate
      *
      * @return string Langue
      */
-    public static function getLanguage()
+    public static function getLanguage() : string
     {
         if (self::$language === null) {
             self::$language = self::getConfig('language', 'fr_FR');
@@ -71,7 +83,7 @@ class Translate
      * TODO: Même celles de tous les plugins. Les plugins sont chargés à l'ancienne
      * @return array Données chargées
      */
-    public static function loadTranslation()
+    public static function loadTranslation() : array
     {
         $result = array();
         $language = self::getLanguage();
@@ -92,7 +104,7 @@ class Translate
      *
      * @return mixed
      */
-    public static function getTranslation()
+    public static function getTranslation() : array
     {
         // Test si les traductions ont été mises en cache
         if (!self::$translationLoaded) {
@@ -112,7 +124,7 @@ class Translate
      * @param bool $_backslash TODO: Comprendre à quoi ça sert
      * @return string Texte traduit
      */
-    public static function exec($content, $filename = '', $_backslash = false)
+    public static function exec(string $content, string $filename = '', bool $_backslash = false) : string
     {
         if ($content == '') {// || $filename == '') {
             return '';
@@ -181,7 +193,7 @@ class Translate
      *
      * @return string Phrase traduite
      */
-    public static function sentence($sentenceToTranslate, $filename, $backslash = false)
+    public static function sentence(string $sentenceToTranslate, string $filename, bool $backslash = false) : string
     {
         $result = '';
         // Ancienne méthode
@@ -204,7 +216,7 @@ class Translate
      *
      * @return string Chemin vers le fichier
      */
-    public static function getPathTranslationFile($language)
+    public static function getPathTranslationFile(string $language) : string
     {
         //return __DIR__ . '/../i18n/' . $language . '.json';
         return NEXTDOM_ROOT . '/translations/' . $language . '.yml';
@@ -245,9 +257,9 @@ class Translate
     /**
      * Définir la langue
      *
-     * @param $language Langue
+     * @param string $language Langue
      */
-    public static function setLanguage($language)
+    public static function setLanguage(string $language)
     {
         self::$language = $language;
     }

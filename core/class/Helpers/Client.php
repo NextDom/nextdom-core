@@ -23,7 +23,7 @@ class Client
      *
      * @return bool True si un navigateur mobile est détecté
      */
-    public static function isMobile()
+    public static function isMobile() : bool
     {
         $userAgent = 'none';
         if (isset($_SERVER["HTTP_USER_AGENT"])) {
