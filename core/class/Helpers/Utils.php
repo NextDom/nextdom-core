@@ -25,7 +25,7 @@ class Utils
      * @param string $varName Nom de la variable dans le code HTML
      * @param mixed $value Valeur de la variable
      */
-    public static function sendVarToJs($varName, $varValue)
+    public static function sendVarToJs(string $varName, $varValue):string
     {
         echo "<script>" .
             self::getVarInJs($varName, $varValue) .
@@ -37,7 +37,7 @@ class Utils
      *
      * @param array $listOfVarsWithValues Liste des variables 'nom' => 'valeur'
      */
-    public static function sendVarsToJS(array $listOfVarsWithValues)
+    public static function sendVarsToJS(array $listOfVarsWithValues):string
     {
         echo "<script>\n";
         foreach ($listOfVarsWithValues as $varName => $value) {
@@ -54,7 +54,7 @@ class Utils
      *
      * @return string Déclaration javascript
      */
-    private static function getVarInJs($varName, $varValue)
+    private static function getVarInJs(string $varName, $varValue)
     {
         $jsVarValue = '';
         if (is_array($varValue)) {
@@ -71,7 +71,7 @@ class Utils
      * @param $url URL cible
      * @param null $forceType Forcage si 'JS' TODO: ???
      */
-    public static function redirect($url, $forceType = null)
+    public static function redirect(string $url, $forceType = null)
     {
         if ($forceType == 'JS' || headers_sent() || isset($_GET['ajax'])) {
             echo '<script type="text/javascript">window.location.href="'.$url.'"</script>';
@@ -120,7 +120,7 @@ class Utils
      *
      * @return mixed Valeur de la variable
      */
-    public static function init($_name, $_default = '')
+    public static function init(string $_name, $_default = '')
     {
         if (isset($_GET[$_name])) {
             return $_GET[$_name];
@@ -144,7 +144,8 @@ class Utils
      *
      * @return string Contenu du fichier ou une chaine vide.
      */
-    public static function getTemplateFilecontent($folder, $version, $filename, $pluginId = '') {
+    public static function getTemplateFilecontent(string $folder,string $version,string $filename,string $pluginId = '') 
+    {
         $result = '';
         $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
         if ($pluginId == '') {
