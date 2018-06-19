@@ -19,7 +19,7 @@
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
 
-// use NextDom\Managers\PluginManager;
+use NextDom\Managers\PluginManager;
 
 class plugin {
     /*     * *************************Attributs****************************** */
@@ -122,356 +122,75 @@ class plugin {
             );
         }
         $this->functionality['interact'] = method_exists($this->getId(), 'interact');
-        $plugin->functionality['cron'] = method_exists($plugin->getId(), 'cron');
-        $plugin->functionality['cron5'] = method_exists($plugin->getId(), 'cron5');
-        $plugin->functionality['cron15'] = method_exists($plugin->getId(), 'cron15');
-        $plugin->functionality['cron30'] = method_exists($plugin->getId(), 'cron30');
-        $plugin->functionality['cronHourly'] = method_exists($plugin->getId(), 'cronHourly');
-        $plugin->functionality['cronDaily'] = method_exists($plugin->getId(), 'cronDaily');
-        if (!isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$plugin->category])) {
-            foreach ($NEXTDOM_INTERNAL_CONFIG['plugin']['category'] as $key => $value) {
-                if (!isset($value['alias'])) {
-                    continue;
-                }
-                if (in_array($plugin->category, $value['alias'])) {
-                    $plugin->category = $key;
-                    break;
-                }
-            }
-        }
+        $this->functionality['cron'] = method_exists($this->getId(), 'cron');
+        $this->functionality['cron5'] = method_exists($this->getId(), 'cron5');
+        $this->functionality['cron15'] = method_exists($this->getId(), 'cron15');
+        $this->functionality['cron30'] = method_exists($this->getId(), 'cron30');
+        $this->functionality['cronHourly'] = method_exists($this->getId(), 'cronHourly');
+        $this->functionality['cronDaily'] = method_exists($this->getId(), 'cronDaily');
     }
 
     public static function byId($_id) {
-        global $NEXTDOM_INTERNAL_CONFIG;
-        if (is_string($_id) && isset(self::$_cache[$_id])) {
-            return self::$_cache[$_id];
-        }
-        if (!file_exists($_id) || strpos($_id, '/') === false) {
-            $_id = self::getPathById($_id);
-        }
-        if (!file_exists($_id)) {
-            throw new Exception('Plugin introuvable : ' . $_id);
-        }
-        $data = json_decode(file_get_contents($_id), true);
-        if (!is_array($data)) {
-            throw new Exception('Plugin introuvable (json invalide) : ' . $_id . ' => ' . print_r($data, true));
-        }
-        $plugin = new plugin();
-        $plugin->id = $data['id'];
-        $plugin->name = $data['name'];
-        $plugin->description = (isset($data['description'])) ? $data['description'] : '';
-        $plugin->license = (isset($data['licence'])) ? $data['licence'] : '';
-        $plugin->license = (isset($data['license'])) ? $data['license'] : $plugin->license;
-        $plugin->author = (isset($data['author'])) ? $data['author'] : '';
-        $plugin->installation = (isset($data['installation'])) ? $data['installation'] : '';
-        $plugin->hasDependency = (isset($data['hasDependency'])) ? $data['hasDependency'] : 0;
-        $plugin->hasOwnDeamon = (isset($data['hasOwnDeamon'])) ? $data['hasOwnDeamon'] : 0;
-        $plugin->maxDependancyInstallTime = (isset($data['maxDependancyInstallTime'])) ? $data['maxDependancyInstallTime'] : 30;
-        $plugin->eventjs = (isset($data['eventjs'])) ? $data['eventjs'] : 0;
-        $plugin->require = (isset($data['require'])) ? $data['require'] : '';
-        $plugin->category = (isset($data['category'])) ? $data['category'] : '';
-        $plugin->filepath = $_id;
-        $plugin->index = (isset($data['index'])) ? $data['index'] : $data['id'];
-        $plugin->display = (isset($data['display'])) ? $data['display'] : '';
-        $plugin->issue = (isset($data['issue'])) ? $data['issue'] : '';
-        $plugin->changelog = (isset($data['changelog'])) ? str_replace('#language#', config::byKey('language', 'core', 'fr_FR'), $data['changelog']) : '';
-        $plugin->documentation = (isset($data['documentation'])) ? str_replace('#language#', config::byKey('language', 'core', 'fr_FR'), $data['documentation']) : '';
-        $plugin->mobile = '';
-        if (file_exists(dirname(__FILE__) . '/../../plugins/' . $data['id'] . '/mobile/html')) {
-            $plugin->mobile = (isset($data['mobile'])) ? $data['mobile'] : $data['id'];
-        }
-        if (isset($data['include'])) {
-            $plugin->include = array(
-                'file' => $data['include']['file'],
-                'type' => $data['include']['type'],
-            );
-        } else {
-            $plugin->include = array(
-                'file' => $data['id'],
-                'type' => 'class',
-            );
-        }
-        $plugin->functionality['interact'] = method_exists($plugin->getId(), 'interact');
-        $plugin->functionality['cron'] = method_exists($plugin->getId(), 'cron');
-        $plugin->functionality['cron5'] = method_exists($plugin->getId(), 'cron5');
-        $plugin->functionality['cron15'] = method_exists($plugin->getId(), 'cron15');
-        $plugin->functionality['cron30'] = method_exists($plugin->getId(), 'cron30');
-        $plugin->functionality['cronHourly'] = method_exists($plugin->getId(), 'cronHourly');
-        $plugin->functionality['cronDaily'] = method_exists($plugin->getId(), 'cronDaily');
-        if (!isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$plugin->category])) {
-            foreach ($NEXTDOM_INTERNAL_CONFIG['plugin']['category'] as $key => $value) {
-                if (!isset($value['alias'])) {
-                    continue;
-                }
-                if (in_array($plugin->category, $value['alias'])) {
-                    $plugin->category = $key;
-                    break;
-                }
-            }
-        }
-        self::$_cache[$plugin->id] = $plugin;
-        return $plugin;
+        return PluginManager::byId($_id);
     }
 
     public static function getPathById($_id) {
-        return dirname(__FILE__) . '/../../plugins/' . $_id . '/plugin_info/info.json';
+        return PluginManager::getPathById($_id);
     }
 
+    public static function listPlugin($_activateOnly = false, $_orderByCaterogy = false, $_translate = true, $_nameOnly = false) {
+        return PluginManager::listPlugin($_activateOnly, $_orderByCaterogy, $_nameOnly);
+    }
+
+    public static function orderPlugin($a, $b) {
+        return PluginManager::orderPlug in($a, $b);
+    }
+
+    public static function cron() {
+        PluginManager::cron();
+    }
+
+    public static function cron5() {
+        PluginManager::cron5();
+    }
+
+    public static function cron15() {
+        PluginManager::cron15();
+    }
+
+    public static function cron30() {
+        PluginManager::cron30();
+    }
+
+    public static function cronDaily() {
+        PluginManager::cronDaily();
+    }
+
+    public static function cronHourly() {
+        PluginManager::cronHourly();
+    }
+
+    public static function start() {
+        PluginManager::start();
+    }
+
+    public static function stop() {
+        PluginManager::stop();
+    }
+
+    public static function checkDeamon() {
+        PluginManager::checkDeamon();
+    }
+
+    /*     * *********************Méthodes d'instance************************* */
+
     public function getPathToConfigurationById() {
-        if (file_exists(dirname(__FILE__) . '/../../plugins/' . $this->id . '/plugin_info/configuration.php')) {
+        if (file_exists(__DIR__ . '/../../plugins/' . $this->id . '/plugin_info/configuration.php')) {
             return 'plugins/' . $this->id . '/plugin_info/configuration.php';
         } else {
             return '';
         }
     }
-
-    public static function listPlugin($_activateOnly = false, $_orderByCaterogy = false, $_translate = true, $_nameOnly = false) {
-        $listPlugin = array();
-        if ($_activateOnly) {
-            $sql = "SELECT plugin
-            FROM config
-            WHERE `key`='active'
-            AND `value`='1'";
-            $results = DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL);
-            if ($_nameOnly) {
-                foreach ($results as $result) {
-                    $listPlugin[] = $result['plugin'];
-                }
-                return $listPlugin;
-            }
-            foreach ($results as $result) {
-                try {
-                    $listPlugin[] = plugin::byId($result['plugin']);
-                } catch (Exception $e) {
-                    log::add('plugin', 'error', $e->getMessage(), 'pluginNotFound::' . $result['plugin']);
-                } catch (Error $e) {
-                    log::add('plugin', 'error', $e->getMessage(), 'pluginNotFound::' . $result['plugin']);
-                }
-            }
-        } else {
-            $rootPluginPath = dirname(__FILE__) . '/../../plugins';
-            foreach (ls($rootPluginPath, '*') as $dirPlugin) {
-                if (is_dir($rootPluginPath . '/' . $dirPlugin)) {
-                    $pathInfoPlugin = $rootPluginPath . '/' . $dirPlugin . 'plugin_info/info.json';
-                    if (!file_exists($pathInfoPlugin)) {
-                        continue;
-                    }
-                    try {
-                        $listPlugin[] = plugin::byId($pathInfoPlugin);
-                    } catch (Exception $e) {
-                        log::add('plugin', 'error', $e->getMessage(), 'pluginNotFound::' . $pathInfoPlugin);
-                    } catch (Error $e) {
-                        log::add('plugin', 'error', $e->getMessage(), 'pluginNotFound::' . $pathInfoPlugin);
-                    }
-                }
-            }
-        }
-        if ($_orderByCaterogy) {
-            $return = array();
-            if (count($listPlugin) > 0) {
-                foreach ($listPlugin as $plugin) {
-                    $category = $plugin->getCategory();
-                    if ($category == '') {
-                        $category = __('Autre', __FILE__);
-                    }
-                    if (!isset($return[$category])) {
-                        $return[$category] = array();
-                    }
-                    $return[$category][] = $plugin;
-                }
-                foreach ($return as &$category) {
-                    usort($category, 'plugin::orderPlugin');
-                }
-                ksort($return);
-            }
-            return $return;
-        } else {
-            if (isset($listPlugin) && is_array($listPlugin) && count($listPlugin) > 0) {
-                usort($listPlugin, 'plugin::orderPlugin');
-                return $listPlugin;
-            } else {
-                return array();
-            }
-        }
-    }
-
-    public static function orderPlugin($a, $b) {
-        $al = strtolower($a->name);
-        $bl = strtolower($b->name);
-        if ($al == $bl) {
-            return 0;
-        }
-        return ($al > $bl) ? +1 : -1;
-    }
-
-    public static function cron() {
-        foreach (self::listPlugin(true) as $plugin) {
-            if (method_exists($plugin->getId(), 'cron')) {
-                if (config::byKey('functionality::cron::enable', $plugin->getId(), 1) == 0) {
-                    continue;
-                }
-                $plugin_id = $plugin->getId();
-                try {
-                    $plugin_id::cron();
-                } catch (Exception $e) {
-                    log::add($plugin_id, 'error', __('Erreur sur la fonction cron du plugin : ', __FILE__) . $e->getMessage());
-                } catch (Error $e) {
-                    log::add($plugin_id, 'error', __('Erreur sur la fonction cron du plugin : ', __FILE__) . $e->getMessage());
-                }
-            }
-        }
-    }
-
-    public static function cron5() {
-        foreach (self::listPlugin(true) as $plugin) {
-            if (method_exists($plugin->getId(), 'cron5')) {
-                if (config::byKey('functionality::cron5::enable', $plugin->getId(), 1) == 0) {
-                    continue;
-                }
-                $plugin_id = $plugin->getId();
-                try {
-                    $plugin_id::cron5();
-                } catch (Exception $e) {
-                    log::add($plugin_id, 'error', __('Erreur sur la fonction cron5 du plugin : ', __FILE__) . $e->getMessage());
-                } catch (Error $e) {
-                    log::add($plugin_id, 'error', __('Erreur sur la fonction cron5 du plugin : ', __FILE__) . $e->getMessage());
-                }
-            }
-        }
-    }
-
-    public static function cron15() {
-        foreach (self::listPlugin(true) as $plugin) {
-            if (method_exists($plugin->getId(), 'cron15')) {
-                if (config::byKey('functionality::cron15::enable', $plugin->getId(), 1) == 0) {
-                    continue;
-                }
-                $plugin_id = $plugin->getId();
-                try {
-                    $plugin_id::cron15();
-                } catch (Exception $e) {
-                    log::add($plugin_id, 'error', __('Erreur sur la fonction cron15 du plugin : ', __FILE__) . $e->getMessage());
-                } catch (Error $e) {
-                    log::add($plugin_id, 'error', __('Erreur sur la fonction cron15 du plugin : ', __FILE__) . $e->getMessage());
-                }
-            }
-        }
-    }
-
-    public static function cron30() {
-        foreach (self::listPlugin(true) as $plugin) {
-            if (method_exists($plugin->getId(), 'cron30')) {
-                if (config::byKey('functionality::cron30::enable', $plugin->getId(), 1) == 0) {
-                    continue;
-                }
-                $plugin_id = $plugin->getId();
-                try {
-                    $plugin_id::cron30();
-                } catch (Exception $e) {
-                    log::add($plugin_id, 'error', __('Erreur sur la fonction cron30 du plugin : ', __FILE__) . $e->getMessage());
-                } catch (Error $e) {
-                    log::add($plugin_id, 'error', __('Erreur sur la fonction cron30 du plugin : ', __FILE__) . $e->getMessage());
-                }
-            }
-        }
-    }
-
-    public static function cronDaily() {
-        foreach (self::listPlugin(true) as $plugin) {
-            if (method_exists($plugin->getId(), 'cronDaily')) {
-                if (config::byKey('functionality::cronDaily::enable', $plugin->getId(), 1) == 0) {
-                    continue;
-                }
-                $plugin_id = $plugin->getId();
-                try {
-                    $plugin_id::cronDaily();
-                } catch (Exception $e) {
-                    log::add($plugin_id, 'error', __('Erreur sur la fonction cronDaily du plugin : ', __FILE__) . $e->getMessage());
-                } catch (Error $e) {
-                    log::add($plugin_id, 'error', __('Erreur sur la fonction cronDaily du plugin : ', __FILE__) . $e->getMessage());
-                }
-            }
-        }
-    }
-
-    public static function cronHourly() {
-        foreach (self::listPlugin(true) as $plugin) {
-            if (method_exists($plugin->getId(), 'cronHourly')) {
-                if (config::byKey('functionality::cronHourly::enable', $plugin->getId(), 1) == 0) {
-                    continue;
-                }
-                $plugin_id = $plugin->getId();
-                try {
-                    $plugin_id::cronHourly();
-                } catch (Exception $e) {
-                    log::add($plugin_id, 'error', __('Erreur sur la fonction cronHourly du plugin : ', __FILE__) . $e->getMessage());
-                } catch (Error $e) {
-                    log::add($plugin_id, 'error', __('Erreur sur la fonction cronHourly du plugin : ', __FILE__) . $e->getMessage());
-                }
-            }
-        }
-    }
-
-    public static function start() {
-        foreach (self::listPlugin(true) as $plugin) {
-            $plugin->deamon_start(false, true);
-            if (method_exists($plugin->getId(), 'start')) {
-                $plugin_id = $plugin->getId();
-                try {
-                    $plugin_id::start();
-                } catch (Exception $e) {
-                    log::add($plugin_id, 'error', __('Erreur sur la fonction start du plugin : ', __FILE__) . $e->getMessage());
-                } catch (Error $e) {
-                    log::add($plugin_id, 'error', __('Erreur sur la fonction start du plugin : ', __FILE__) . $e->getMessage());
-                }
-            }
-        }
-    }
-
-    public static function stop() {
-        foreach (self::listPlugin(true) as $plugin) {
-            $plugin->deamon_stop();
-            if (method_exists($plugin->getId(), 'stop')) {
-                $plugin_id = $plugin->getId();
-                try {
-                    $plugin_id::stop();
-                } catch (Exception $e) {
-                    log::add($plugin_id, 'error', __('Erreur sur la fonction stop du plugin : ', __FILE__) . $e->getMessage());
-                } catch (Error $e) {
-                    log::add($plugin_id, 'error', __('Erreur sur la fonction stop du plugin : ', __FILE__) . $e->getMessage());
-                }
-            }
-        }
-    }
-
-    public static function checkDeamon() {
-        foreach (self::listPlugin(true) as $plugin) {
-            if (config::byKey('deamonAutoMode', $plugin->getId(), 1) != 1) {
-                continue;
-            }
-            $dependancy_info = $plugin->dependancy_info();
-            if ($dependancy_info['state'] == 'nok') {
-                try {
-                    $plugin->dependancy_install();
-                } catch (Exception $e) {
-
-                }
-            } else if ($dependancy_info['state'] == 'in_progress' && $dependancy_info['duration'] > $plugin->getMaxDependancyInstallTime()) {
-                if (isset($dependancy_info['progress_file']) && file_exists($dependancy_info['progress_file'])) {
-                    shell_exec('rm ' . $dependancy_info['progress_file']);
-                }
-                config::save('deamonAutoMode', 0, $plugin->getId());
-                log::add($plugin->getId(), 'error', __('Attention : l\'installation des dépendances a dépassé le temps maximum autorisé : ', __FILE__) . $plugin->getMaxDependancyInstallTime() . 'min');
-            }
-            try {
-                $plugin->deamon_start(false, true);
-            } catch (Exception $e) {
-
-            }
-        }
-    }
-
-    /*     * *********************Méthodes d'instance************************* */
 
     public function report($_format = 'pdf', $_parameters = array()) {
         if ($this->getDisplay() == '') {
