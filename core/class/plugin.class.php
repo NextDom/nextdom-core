@@ -143,7 +143,7 @@ class plugin {
     }
 
     public static function orderPlugin($a, $b) {
-        return PluginManager::orderPlug in($a, $b);
+        return PluginManager::orderPlugin($a, $b);
     }
 
     public static function cron() {
