@@ -16,7 +16,7 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\Ajax;
+namespace NextDom\Market\Ajax;
 
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;

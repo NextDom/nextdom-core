@@ -32,6 +32,7 @@
             "NextDom\\": [
                 "core/class",
                 "core/src"
+                "core/ajax/"
             ]
         }
     }
