@@ -121,7 +121,7 @@ class Utils
      *
      * @return mixed Valeur de la variable
      */
-    public static function init(string $name, string $default = '')
+    public static function init(string $name, $default = '')
     {
         if (isset($_GET[$name])) {
             return $_GET[$name];
