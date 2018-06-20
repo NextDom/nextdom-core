@@ -17,12 +17,11 @@
 
 namespace NextDom\Enums;
 
-class PluginManagerCronEnum extends Enum
+abstract class Enum
 {
-    const CRON = 'cron';
-    const CRON_5 = 'cron5';
-    const CRON_15 = 'cron';
-    const CRON_30 = 'cron5';
-    const CRON_DAILY = 'cron';
-    const CRON_HOURLY = 'cron5';
+    public static function getConstants(): array
+    {
+        $reflectionClass = new \ReflectionClass(get_called_class());
+        return $reflectionClass->getConstants();
+    }
 }

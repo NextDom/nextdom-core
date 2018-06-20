@@ -209,7 +209,6 @@ class PluginManager
      */
     private static function startCronTask(string $cronType = '')
     {
-        error_log('coucuo');
         foreach (self::listPlugin(true) as $plugin) {
             if (method_exists($plugin->getId(), $cronType)) {
                 if (\config::byKey('functionality::cron::enable', $plugin->getId(), 1) == 1) {

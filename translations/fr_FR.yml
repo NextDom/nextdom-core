@@ -1,6 +1,7 @@
 # Nouveau format
 core:
   error-401: 401 - Accès non autorisé
+  error-ajax: Requête Ajax inconnue
 # Ancien format
 "401 - Accès non autorisé": "401 - Accès non autorisé"
 "Aucune méthode correspondante à : ": "Aucune méthode correspondante à : "
