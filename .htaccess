@@ -1,5 +1,5 @@
 ServerSignature Off
-Options -Indexes
+Options -Indexes +FollowSymLinks
 
 <ifModule mod_gzip.c>
 	mod_gzip_on Yes
@@ -120,3 +120,7 @@ Options -Indexes
 	satisfy all
 </Files>
 
+RewriteEngine on
+RewriteBase /core/ajax
+RewriteCond %{REQUEST_FILENAME} ^(.*).ajax.php
+RewriteRule core/ajax/(.+)\.ajax\.php /core/ajax/ajax-router.php?ajax-action=$1 [L]
