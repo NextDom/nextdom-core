@@ -365,6 +365,14 @@ if [ ${HTML_OUTPUT} -eq 1 ]; then
 fi
 
 echo "${JAUNE}Bienvenue dans l'installateur de NextDom${NORMAL}"
+echo "
+echo "███╗   ██╗███████╗██╗  ██╗████████╗██████╗  ██████╗ ███╗   ███╗";
+echo "████╗  ██║██╔════╝╚██╗██╔╝╚══██╔══╝██╔══██╗██╔═══██╗████╗ ████║";
+echo "██╔██╗ ██║█████╗   ╚███╔╝    ██║   ██║  ██║██║   ██║██╔████╔██║";
+echo "██║╚██╗██║██╔══╝   ██╔██╗    ██║   ██║  ██║██║   ██║██║╚██╔╝██║";
+echo "██║ ╚████║███████╗██╔╝ ██╗   ██║   ██████╔╝╚██████╔╝██║ ╚═╝ ██║";
+echo "╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═════╝  ╚═════╝ ╚═╝     ╚═╝";
+echo "                                                               ";
 echo "${JAUNE}Version d'installation de NextDom : ${VERSION}${NORMAL}"
 echo "${JAUNE}Dossier principal du serveur web : ${WEBSERVER_HOME}${NORMAL}"
 
