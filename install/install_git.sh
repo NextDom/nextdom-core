@@ -16,6 +16,13 @@ if [ $(id -u) != 0 ] ; then
     exit 1
 fi
 
+if [ -z "$1" ] ; then
+    echo "Veuillez saisir votre identifiant github dans les arguments de la commande"
+    echo "exemple: sudo ./install.sh username"
+    exit 1
+fi
+
+
 apt_install() {
   apt-get -y install "$@"
   if [ $? -ne 0 ]; then
