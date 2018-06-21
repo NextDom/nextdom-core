@@ -1,5 +1,6 @@
 #!/bin/sh
 GITUSERNAME=$1
+DEBUG=$2
 VERT="\\033[1;32m"
 NORMAL="\\033[0;39m"
 ROUGE="\\033[1;31m"
@@ -22,6 +23,11 @@ if [ -z "$1" ] ; then
     exit 1
 fi
 
+if [ -z "$2" ] ; then
+DEBUG="output.txt"
+else
+DEBUG=""
+fi
 
 apt_install() {
   apt-get -y install "$@"
@@ -43,29 +49,29 @@ step_1_upgrade() {
 	echo "---------------------------------------------------------------------"
 	echo "${CYAN}Commence l'étape 1 de la révision${NORMAL}"
 
-	apt-get update
-	apt-get -f install
-	apt-get -y dist-upgrade
+	apt-get update >${DEBUG}
+	apt-get -f install >>${DEBUG}
+	apt-get -y dist-upgrade >>${DEBUG}
 	echo "${VERT}étape 1 de la révision réussie${NORMAL}"
 }
 
 step_2_mainpackage() {
 	echo "---------------------------------------------------------------------"
 	echo "${CYAN}Commence l'étape 2 paquet principal${NORMAL}"
-	apt_install ntp ca-certificates unzip curl sudo cron
-	apt-get -y install locate tar telnet wget logrotate fail2ban dos2unix ntpdate htop iotop vim iftop smbclient
-	apt-get -y install git python python-pip
-	apt-get -y install software-properties-common
-	apt-get -y install libexpat1 ssl-cert
-	apt-get -y install apt-transport-https
-	apt-get -y install xvfb cutycapt xauth
-	add-apt-repository non-free
-	apt-get update
-	apt-get -y install libav-tools
-	apt-get -y install libsox-fmt-mp3 sox libttspico-utils
-	apt-get -y install espeak
-	apt-get -y install mbrola
-	apt-get -y remove brltty
+	apt_install ntp ca-certificates unzip curl sudo cron >>${DEBUG}
+	apt-get -y install locate tar telnet wget logrotate fail2ban dos2unix ntpdate htop iotop vim iftop smbclient >>${DEBUG}
+	apt-get -y install git python python-pip >>${DEBUG}
+	apt-get -y install software-properties-common >>${DEBUG}
+	apt-get -y install libexpat1 ssl-cert >>${DEBUG}
+	apt-get -y install apt-transport-https >>${DEBUG}
+	apt-get -y install xvfb cutycapt xauth >>${DEBUG}
+	add-apt-repository non-free >>${DEBUG}
+	apt-get update >>${DEBUG}
+	apt-get -y install libav-tools >>${DEBUG}
+	apt-get -y install libsox-fmt-mp3 sox libttspico-utils >>${DEBUG}
+	apt-get -y install espeak >>${DEBUG}
+	apt-get -y install mbrola >>${DEBUG}
+	apt-get -y remove brltty >>${DEBUG}
 	echo "${VERT}étape 2 paquet principal réussie${NORMAL}"
 }
 
@@ -74,7 +80,7 @@ step_3_database() {
 	echo "${CYAN}Commence l'étape 3 base de données${NORMAL}"
 	echo "mysql-server mysql-server/root_password password ${MYSQL_ROOT_PASSWD}" | debconf-set-selections
 	echo "mysql-server mysql-server/root_password_again password ${MYSQL_ROOT_PASSWD}" | debconf-set-selections
-	apt_install mysql-client mysql-common mysql-server
+	apt_install mysql-client mysql-common mysql-server >>${DEBUG}
 
 	mysqladmin -u root password ${MYSQL_ROOT_PASSWD}
 
@@ -102,20 +108,20 @@ step_3_database() {
 step_4_apache() {
 	echo "---------------------------------------------------------------------"
 	echo "${CYAN}Commence l'étape 4 apache${NORMAL}"
-	apt_install apache2 apache2-utils libexpat1 ssl-cert
-	a2enmod rewrite
+	apt_install apache2 apache2-utils libexpat1 ssl-cert >>${DEBUG}
+	a2enmod rewrite >>${DEBUG}
 	echo "${VERT}étape 4 apache réussie${NORMAL}"
 }
 
 step_5_php() {
 	echo "---------------------------------------------------------------------"
 	echo "${CYAN}Commence l'étape 5 php${NORMAL}"
-	apt-get -y install php7.0 php7.0-curl php7.0-gd php7.0-imap php7.0-json php7.0-mcrypt php7.0-mysql php7.0-xml php7.0-opcache php7.0-soap php7.0-xmlrpc libapache2-mod-php7.0 php7.0-common php7.0-dev php7.0-zip php7.0-ssh2 php7.0-mbstring composer
+	apt-get -y install php7.0 php7.0-curl php7.0-gd php7.0-imap php7.0-json php7.0-mcrypt php7.0-mysql php7.0-xml php7.0-opcache php7.0-soap php7.0-xmlrpc libapache2-mod-php7.0 php7.0-common php7.0-dev php7.0-zip php7.0-ssh2 php7.0-mbstring composer >>${DEBUG}
 	if [ $? -ne 0 ]; then
-		apt_install libapache2-mod-php5 php5 php5-common php5-curl php5-dev php5-gd php5-json php5-memcached php5-mysqlnd php5-cli php5-ssh2 php5-redis php5-mbstring composer
-		apt_install php5-ldap
+		apt_install libapache2-mod-php5 php5 php5-common php5-curl php5-dev php5-gd php5-json php5-memcached php5-mysqlnd php5-cli php5-ssh2 php5-redis php5-mbstring composer >>${DEBUG}
+		apt_install php5-ldap >>${DEBUG}
 	else
-		apt-get -y install php7.0-ldap
+		apt-get -y install php7.0-ldap >>${DEBUG}
 	fi
 	echo "${VERT}étape 5 php réussie${NORMAL}"
 }
@@ -131,22 +137,22 @@ step_6_nextdom_download() {
 step_7_nextdom_customization() {
 	echo "---------------------------------------------------------------------"
 	echo "${CYAN}Commence l'étape 7 personnalisation de nextdom${NORMAL}"
-	cp ${WEBSERVER_HOME}/install/apache_security /etc/apache2/conf-available/security.conf
-	rm /etc/apache2/conf-enabled/security.conf > /dev/null 2>&1
-	ln -s /etc/apache2/conf-available/security.conf /etc/apache2/conf-enabled/
+	cp ${WEBSERVER_HOME}/install/apache_security /etc/apache2/conf-available/security.conf >>${DEBUG}
+	rm /etc/apache2/conf-enabled/security.conf > /dev/null 2>&1 >>${DEBUG}
+	ln -s /etc/apache2/conf-available/security.conf /etc/apache2/conf-enabled/ >>${DEBUG}
 
-	cp ${WEBSERVER_HOME}/install/apache_default /etc/apache2/sites-available/000-default.conf
-	rm /etc/apache2/sites-enabled/000-default.conf > /dev/null 2>&1
-	ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/
+	cp ${WEBSERVER_HOME}/install/apache_default /etc/apache2/sites-available/000-default.conf >>${DEBUG}
+	rm /etc/apache2/sites-enabled/000-default.conf > /dev/null 2>&1 >>${DEBUG}
+	ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/ >>${DEBUG}
 
-	rm /etc/apache2/conf-available/other-vhosts-access-log.conf > /dev/null 2>&1
-	rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf > /dev/null 2>&1
+	rm /etc/apache2/conf-available/other-vhosts-access-log.conf > /dev/null 2>&1 >>${DEBUG}
+	rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf > /dev/null 2>&1 >>${DEBUG}
 
-	mkdir /etc/systemd/system/apache2.service.d
+	mkdir /etc/systemd/system/apache2.service.d >>${DEBUG}
 	echo "[Service]" > /etc/systemd/system/apache2.service.d/privatetmp.conf
 	echo "PrivateTmp=no" >> /etc/systemd/system/apache2.service.d/privatetmp.conf
 
-	systemctl daemon-reload
+	systemctl daemon-reload >>${DEBUG}
 
 	for file in $(find / -iname php.ini -type f); do
 		echo "Update php file ${file}"
@@ -176,10 +182,10 @@ step_7_nextdom_customization() {
 		done
 	done
 
-	a2dismod status
+	a2dismod status >>${DEBUG}
 	systemctl restart apache2 > /dev/null 2>&1
 	if [ $? -ne 0 ]; then
-		service apache2 restart
+		service apache2 restart >>${DEBUG}
 		if [ $? -ne 0 ]; then
     		echo "${ROUGE}Ne peut redémarrer apache - Annulation${NORMAL}"
     		exit 1
@@ -252,11 +258,11 @@ step_9_nextdom_installation() {
 	chmod 777 -R /tmp/nextdom
 	chown www-data:www-data -R /tmp/nextdom
 	cd ${WEBSERVER_HOME}
-	php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-	php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-	php composer-setup.php
-	php -r "unlink('composer-setup.php');"
-	php composer.phar require symfony/translation
+	php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" >>${DEBUG}
+	php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" >>${DEBUG}
+	php composer-setup.php >>${DEBUG}
+	php -r "unlink('composer-setup.php');" >>${DEBUG}
+	php composer.phar require symfony/translation >>${DEBUG}
 	composer install
 	php ${WEBSERVER_HOME}/install/install.php mode=force
 	if [ $? -ne 0 ]; then
