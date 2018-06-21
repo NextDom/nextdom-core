@@ -96,6 +96,7 @@ step_4_apache() {
 	echo "---------------------------------------------------------------------"
 	echo "${JAUNE}Commence l'étape 4 apache${NORMAL}"
 	apt_install apache2 apache2-utils libexpat1 ssl-cert
+	a2enmod rewrite
 	echo "${VERT}étape 4 apache réussie${NORMAL}"
 }
 
