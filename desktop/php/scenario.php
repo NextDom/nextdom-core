@@ -15,7 +15,7 @@ if (is_array($scenarioListGroup)) {
 ?>
 <style>
 .expressions .sortable-placeholder{
-  background-color: #94CA02;
+  background-color: #33B8CC;
 }
 </style>
 <div style="position : fixed;height:100%;width:15px;top:50px;left:0px;z-index:998;background-color:#f6f6f6;" class="div_smallSideBar" id="bt_displayScenarioList"><i class="fa fa-arrow-circle-o-right" style="color : #b6b6b6;"></i></div>
@@ -66,9 +66,9 @@ foreach ($scenarioListGroup as $group) {
  <div class="scenarioListContainer">
    <legend><i class="fa fa-cog"></i>  {{Gestion}}</legend>
    <div class="cursor" id="bt_addScenario2" style="text-align: center; background-color : #ffffff; height : 130px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 170px;margin-left : 10px;" >
-    <i class="fa fa-plus-circle" style="font-size : 6em;color:#94ca02;"></i>
+    <i class="fa fa-plus-circle" style="font-size : 6em;color:#33B8CC;"></i>
     <br>
-    <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#94ca02">{{Ajouter}}</span>
+    <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#33B8CC">{{Ajouter}}</span>
   </div>
   <?php if (config::byKey('enableScenario') == 0) {?>
     <div class="cursor" id="bt_changeAllScenarioState2" data-state="1" style="text-align: center; background-color : #ffffff; height : 130px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 170px;margin-left : 10px;" >

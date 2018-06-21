@@ -35,9 +35,9 @@ foreach ($allObject as $object) {
      <div class="cursor" id="bt_addObject2" style="background-color : #ffffff; height : 160px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
        <br/>
        <center style='margin-top:-14px;'>
-         <i class="fa fa-plus-circle" style="font-size : 6em;color:#94ca02;margin-top:5px;"></i>
+         <i class="fa fa-plus-circle" style="font-size : 6em;color:#33B8CC;margin-top:5px;"></i>
        </center>
-       <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#94ca02"><center>Ajouter</center></span>
+       <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#33B8CC"><center>Ajouter</center></span>
      </div>
      <div class="cursor bt_showObjectSummary" style="text-align: center; background-color : #ffffff; height : 160px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
       <br/>

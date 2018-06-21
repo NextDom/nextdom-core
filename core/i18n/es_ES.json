@@ -1,7 +1,4 @@
 {
-    "system": {
-        "401 - Accès non autorisé": "401 - Acceso no autorizado"
-    },
     "core/class/cmd.class.php": {
         "Evènement sur la commande ": "Evento sobre el comando",
         " valeur : ": "Valor :",

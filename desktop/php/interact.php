@@ -62,9 +62,9 @@ foreach ($interactListGroup as $group) {
    <legend><i class="fa fa-cog"></i>  {{Gestion}}</legend>
    <div class="cursor" id="bt_addInteract2" style="background-color : #ffffff; height : 120px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 140px;margin-left : 10px;" >
      <center>
-      <i class="fa fa-plus-circle" style="font-size : 6em;color:#94ca02;"></i>
+      <i class="fa fa-plus-circle" style="font-size : 6em;color:#33B8CC;"></i>
     </center>
-    <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#94ca02"><center>{{Ajouter}}</center></span>
+    <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#33B8CC"><center>{{Ajouter}}</center></span>
   </div>
   <div class="cursor" id="bt_regenerateInteract2" style="background-color : #ffffff; height : 120px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 140px;margin-left : 10px;" >
    <center>

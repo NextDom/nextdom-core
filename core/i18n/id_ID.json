@@ -1,7 +1,4 @@
 {
-    "system": {
-        "401 - Accès non autorisé": "401 - Akses tidak sah"
-    },
     "core/class/cmd.class.php": {
         "Evènement sur la commande ": "Event pada perintah",
         " valeur : ": "Nilai",
