@@ -64,12 +64,12 @@ function nextdomPluginAutoload($_classname)
 {
     $classname = str_replace(array('Real', 'Cmd'), '', $_classname);
     $plugin_active = config::byKey('active', $classname, null);
-    if (null === $plugin_active || '' == $plugin_active) {
+    if ($plugin_active === null || $plugin_active == '') {
         $classname = explode('_', $classname)[0];
         $plugin_active = config::byKey('active', $classname, null);
     }
     try {
-        if (1 == $plugin_active) {
+        if ($plugin_active == 1) {
             include_file('core', $classname, 'class', $classname);
         }
     } catch (Exception $e) {
