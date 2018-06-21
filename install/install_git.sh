@@ -41,7 +41,7 @@ mysql_sql() {
 
 step_1_upgrade() {
 	echo "---------------------------------------------------------------------"
-	echo "${JAUNE}Commence l'étape 1 de la révision${NORMAL}"
+	echo "${CYAN}Commence l'étape 1 de la révision${NORMAL}"
 
 	apt-get update
 	apt-get -f install
@@ -51,7 +51,7 @@ step_1_upgrade() {
 
 step_2_mainpackage() {
 	echo "---------------------------------------------------------------------"
-	echo "${JAUNE}Commence l'étape 2 paquet principal${NORMAL}"
+	echo "${CYAN}Commence l'étape 2 paquet principal${NORMAL}"
 	apt_install ntp ca-certificates unzip curl sudo cron
 	apt-get -y install locate tar telnet wget logrotate fail2ban dos2unix ntpdate htop iotop vim iftop smbclient
 	apt-get -y install git python python-pip
@@ -71,7 +71,7 @@ step_2_mainpackage() {
 
 step_3_database() {
 	echo "---------------------------------------------------------------------"
-	echo "${JAUNE}Commence l'étape 3 base de données${NORMAL}"
+	echo "${CYAN}Commence l'étape 3 base de données${NORMAL}"
 	echo "mysql-server mysql-server/root_password password ${MYSQL_ROOT_PASSWD}" | debconf-set-selections
 	echo "mysql-server mysql-server/root_password_again password ${MYSQL_ROOT_PASSWD}" | debconf-set-selections
 	apt_install mysql-client mysql-common mysql-server
@@ -101,7 +101,7 @@ step_3_database() {
 
 step_4_apache() {
 	echo "---------------------------------------------------------------------"
-	echo "${JAUNE}Commence l'étape 4 apache${NORMAL}"
+	echo "${CYAN}Commence l'étape 4 apache${NORMAL}"
 	apt_install apache2 apache2-utils libexpat1 ssl-cert
 	a2enmod rewrite
 	echo "${VERT}étape 4 apache réussie${NORMAL}"
@@ -109,7 +109,7 @@ step_4_apache() {
 
 step_5_php() {
 	echo "---------------------------------------------------------------------"
-	echo "${JAUNE}Commence l'étape 5 php${NORMAL}"
+	echo "${CYAN}Commence l'étape 5 php${NORMAL}"
 	apt-get -y install php7.0 php7.0-curl php7.0-gd php7.0-imap php7.0-json php7.0-mcrypt php7.0-mysql php7.0-xml php7.0-opcache php7.0-soap php7.0-xmlrpc libapache2-mod-php7.0 php7.0-common php7.0-dev php7.0-zip php7.0-ssh2 php7.0-mbstring composer
 	if [ $? -ne 0 ]; then
 		apt_install libapache2-mod-php5 php5 php5-common php5-curl php5-dev php5-gd php5-json php5-memcached php5-mysqlnd php5-cli php5-ssh2 php5-redis php5-mbstring composer
@@ -122,7 +122,7 @@ step_5_php() {
 
 step_6_nextdom_download() {
 	echo "---------------------------------------------------------------------"
-	echo "${JAUNE}Commence l'étape 6 téléchargement de nextdom${NORMAL}"
+	echo "${CYAN}Commence l'étape 6 téléchargement de nextdom${NORMAL}"
     cd  ${WEBSERVER_HOME}
     git clone https://${GITUSERNAME}@github.com/sylvaner/nextdom-core .
 	echo "${VERT}étape 6 téléchargement de nextdom réussie${NORMAL}"
@@ -130,7 +130,7 @@ step_6_nextdom_download() {
 
 step_7_nextdom_customization() {
 	echo "---------------------------------------------------------------------"
-	echo "${JAUNE}Commence l'étape 7 personnalisation de nextdom${NORMAL}"
+	echo "${CYAN}Commence l'étape 7 personnalisation de nextdom${NORMAL}"
 	cp ${WEBSERVER_HOME}/install/apache_security /etc/apache2/conf-available/security.conf
 	rm /etc/apache2/conf-enabled/security.conf > /dev/null 2>&1
 	ln -s /etc/apache2/conf-available/security.conf /etc/apache2/conf-enabled/
@@ -228,7 +228,7 @@ step_7_nextdom_customization() {
 
 step_8_nextdom_configuration() {
 	echo "---------------------------------------------------------------------"
-	echo "${JAUNE}commence l'étape 8 configuration de nextdom${NORMAL}"
+	echo "${CYAN}commence l'étape 8 configuration de nextdom${NORMAL}"
 	echo "DROP USER 'nextdom'@'localhost';" | mysql -uroot -p${MYSQL_ROOT_PASSWD} > /dev/null 2>&1
 	mysql_sql "CREATE USER 'nextdom'@'localhost' IDENTIFIED BY '${MYSQL_NEXTDOM_PASSWD}';"
 	mysql_sql "DROP DATABASE IF EXISTS nextdom;"
@@ -247,7 +247,7 @@ step_8_nextdom_configuration() {
 
 step_9_nextdom_installation() {
 	echo "---------------------------------------------------------------------"
-	echo "${JAUNE}Commence l'étape 9 installation de nextdom${NORMAL}"
+	echo "${CYAN}Commence l'étape 9 installation de nextdom${NORMAL}"
 	mkdir -p /tmp/nextdom
 	chmod 777 -R /tmp/nextdom
 	chown www-data:www-data -R /tmp/nextdom
@@ -268,7 +268,7 @@ step_9_nextdom_installation() {
 
 step_10_nextdom_post() {
 	echo "---------------------------------------------------------------------"
-	echo "${JAUNE}Commence l'étape 10 post nextdom${NORMAL}"
+	echo "${CYAN}Commence l'étape 10 post nextdom${NORMAL}"
 	if [ $(crontab -l | grep nextdom | wc -l) -ne 0 ];then
 		(echo crontab -l | grep -v "nextdom") | crontab -
 
@@ -305,7 +305,7 @@ step_10_nextdom_post() {
 
 step_11_nextdom_check() {
 	echo "---------------------------------------------------------------------"
-	echo "${JAUNE}Commence l'étape 11 vérification de nextdom${NORMAL}"
+	echo "${CYAN}Commence l'étape 11 vérification de nextdom${NORMAL}"
 	php ${WEBSERVER_HOME}/sick.php
 	chmod 777 -R /tmp/nextdom
 	chown www-data:www-data -R /tmp/nextdom
@@ -379,13 +379,13 @@ echo "██║╚██╗██║██╔══╝   ██╔██╗    �
 echo "██║ ╚████║███████╗██╔╝ ██╗   ██║   ██████╔╝╚██████╔╝██║ ╚═╝ ██║"
 echo "╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═════╝  ╚═════╝ ╚═╝     ╚═╝"
 echo "                                                               "
-echo "${JAUNE}Bienvenue dans l'installateur de NextDom${NORMAL}"
-echo "${JAUNE}Version d'installation de NextDom : ${VERSION}${NORMAL}"
-echo "${JAUNE}Dossier principal du serveur web : ${WEBSERVER_HOME}${NORMAL}"
+echo "${CYAN}Bienvenue dans l'installateur de NextDom${NORMAL}"
+echo "${CYAN}Version d'installation de NextDom : ${VERSION}${NORMAL}"
+echo "${CYAN}Dossier principal du serveur web : ${WEBSERVER_HOME}${NORMAL}"
 
 case ${STEP} in
    0)
-	echo "${JAUNE}Commence toutes les étapes de l'installation${NORMAL}"
+	echo "${CYAN}Commence toutes les étapes de l'installation${NORMAL}"
 	step_1_upgrade
 	step_2_mainpackage
 	step_3_database
