@@ -1,4 +1,5 @@
 #!/bin/sh
+GITTOKEN=$1
 VERT="\\033[1;32m"
 NORMAL="\\033[0;39m"
 ROUGE="\\033[1;31m"
@@ -101,9 +102,9 @@ step_4_apache() {
 step_5_php() {
 	echo "---------------------------------------------------------------------"
 	echo "${JAUNE}Commence l'étape 5 php${NORMAL}"
-	apt-get -y install php7.0 php7.0-curl php7.0-gd php7.0-imap php7.0-json php7.0-mcrypt php7.0-mysql php7.0-xml php7.0-opcache php7.0-soap php7.0-xmlrpc libapache2-mod-php7.0 php7.0-common php7.0-dev php7.0-zip php7.0-ssh2 php7.0-mbstring
+	apt-get -y install php7.0 php7.0-curl php7.0-gd php7.0-imap php7.0-json php7.0-mcrypt php7.0-mysql php7.0-xml php7.0-opcache php7.0-soap php7.0-xmlrpc libapache2-mod-php7.0 php7.0-common php7.0-dev php7.0-zip php7.0-ssh2 php7.0-mbstring composer
 	if [ $? -ne 0 ]; then
-		apt_install libapache2-mod-php5 php5 php5-common php5-curl php5-dev php5-gd php5-json php5-memcached php5-mysqlnd php5-cli php5-ssh2 php5-redis php5-mbstring
+		apt_install libapache2-mod-php5 php5 php5-common php5-curl php5-dev php5-gd php5-json php5-memcached php5-mysqlnd php5-cli php5-ssh2 php5-redis php5-mbstring composer
 		apt_install php5-ldap
 	else
 		apt-get -y install php7.0-ldap
@@ -114,7 +115,7 @@ step_5_php() {
 step_6_nextdom_download() {
 	echo "---------------------------------------------------------------------"
 	echo "${JAUNE}Commence l'étape 6 téléchargement de nextdom${NORMAL}"
-	wget https://github.com/nextdom/core/archive/${VERSION}.zip -O /tmp/nextdom.zip
+	wget https://codeload.github.com/Sylvaner/nextdom-core/zip/${VERSION}?token=${GITTOKEN} -O /tmp/nextdom.zip
 	if [ $? -ne 0 ]; then
 		echo "${JAUNE}Ne peut télécharger NextDom depuis github. Utilisez la version de déploiement si elle existe${NORMAL}"
 		if [ -f /root/nextdom.zip ]; then
@@ -133,9 +134,9 @@ step_6_nextdom_download() {
     	echo "${ROUGE}Ne peut décompresser l'archive - Annulation${NORMAL}"
     	exit 1
   	fi
-	cp -R /root/core-*/* ${WEBSERVER_HOME}
-	cp -R /root/core-*/.[^.]* ${WEBSERVER_HOME}
-	rm -rf /root/core-* > /dev/null 2>&1
+	cp -R /root/*core-*/* ${WEBSERVER_HOME}
+	cp -R /root/*core-*/.[^.]* ${WEBSERVER_HOME}
+	rm -rf /root/*core-* > /dev/null 2>&1
 	rm /tmp/nextdom.zip
 	echo "${VERT}étape 6 téléchargement de nextdom réussie${NORMAL}"
 }
@@ -263,6 +264,13 @@ step_9_nextdom_installation() {
 	mkdir -p /tmp/nextdom
 	chmod 777 -R /tmp/nextdom
 	chown www-data:www-data -R /tmp/nextdom
+	cd ${WEBSERVER_HOME}
+	php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+	php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+	php composer-setup.php
+	php -r "unlink('composer-setup.php');"
+	php composer.phar require symfony/translation
+	composer install
 	php ${WEBSERVER_HOME}/install/install.php mode=force
 	if [ $? -ne 0 ]; then
     	echo "${ROUGE}Ne peut installer nextdom - Annulation${NORMAL}"
@@ -335,7 +343,7 @@ distrib_1_spe(){
 }
 
 STEP=0
-VERSION=master
+VERSION=develop
 WEBSERVER_HOME=/var/www/html
 HTML_OUTPUT=0
 MYSQL_ROOT_PASSWD=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)
