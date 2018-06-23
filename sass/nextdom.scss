@@ -1,0 +1,59 @@
+@import "_colors.scss";
+/* This file is part of NextDom.
+ *
+ * NextDom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * NextDom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#nextdom-header {
+    margin-bottom: 0px !important;
+    .navbar-brand {
+        position: relative;
+        top: -5px;
+    }
+}
+
+#dashboard-submenu {
+    height: auto;
+    max-height: 600px;
+    overflow-x: hidden;
+}
+
+.plugin-item {
+    padding-right: 10px;
+    .img-responsive {
+        width: 20px;
+        display: inline-block;
+    }
+}
+
+#bt_messageModal > span {
+    background-color: #ec971f;
+}
+
+#span_nbUpdate {
+    background-color: #c9302c;
+}
+
+.default-cursor {
+    cursor: default;
+}
+
+#div_alert {
+    display: none;
+    width: 100%;
+}
+
+#md_pageHelp {
+    display: none;
+}

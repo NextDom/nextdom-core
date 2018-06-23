@@ -1,0 +1,28 @@
+ .highcharts-data-table {
+  th {
+    border-bottom-width: 2px;
+    border: 1px solid #ddd;
+    padding: 5px;
+    vertical-align: bottom;
+    line-height: 1.42857143;
+    text-align: left;
+    font-weight: bold;
+  }
+  tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+  }
+  td {
+    border: 1px solid #ddd;
+    padding: 5px;
+    line-height: 1.42857143;
+    vertical-align: top;
+  }
+}
+
+.highcharts-table-caption {
+  display: none;
+}
+
+
