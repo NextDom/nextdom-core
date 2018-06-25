@@ -1,7 +1,50 @@
 # Nouveau format
+str:
+  OK: OK
+  NOK: NOK
 core:
   error-401: 401 - Accès non autorisé
   error-ajax: Requête Ajax inconnue
+  api-connection: "Connexion par API de l'utilisateur : "
+  enable-tasks: Activer toutes les tâches cron
+  disable-tasks: Désactiver toutes les tâches cron
+  disable-cron-master: Arrêter la tâche cron principale...
+  enable-all-scenarios: Activer tous les scénarios
+  disable-all-scenarios: Désactiver tous les scénarios
+  incorrect-sys-date: "La date du système est incorrect (avant %s ou après %s) : "
+health:
+  update-to-date: Système à jour
+  cron-enabled: Cron actif
+  cron-disabled: "Erreur cron : les crons sont désactivés. Allez dans Administration -> Moteur de tâches pour les réactiver"
+  scenario-enabled: Scénario actif
+  scenario-disabled: "Erreur scénario : tous les scénarios sont désactivés. Allez dans Outils -> Scénarios pour les réactiver"
+  jeedom-started: Démarré
+  system-date: Date système (dernière heure enregistrée)
+  system-date-error: Si la derniere heure enregistrée est fausse, il faut la remettre à zéro <a href="index.php?v=d&p=administration">ici</a>
+  default-authentication: Authentification par défaut
+  authentication-error: "Attention : vous avez toujours l'utilisateur admin/admin de configuré, cela représente une grave faille de sécurité, aller <a href=\"index.php?v=d&p=user\">ici</a> pour modifier le mot de passe de l'utilisateur admin"
+  sudo-rights: Droits sudo
+  sudo-error: Appliquez les droits root à Jeedom
+  jeedom-version: Version Jeedom
+  php-version: Version PHP
+  php-error: Si vous êtes en version 5.4.x on vous indiquera quand la version 5.5 sera obligatoire
+  os-version: Version OS
+  database-version: Version database
+  harddisk-freespace: Espace disque libre
+  available-memory: Mémoire disponible
+  enough-memory: Mémoire suffisante
+  processes-killed: Nombre de processus tué par le noyaux pour manque de mémoire. Votre système manque de mémoire. Essayez de reduire le nombre de plugins ou les scénarios
+  available-swap: Swap disponible
+  unknown: Inconnue
+  load: Charge
+  internal-network-conf: Configuration réseau interne
+  external-network-conf: Configuration réseau externe
+  network-config: Allez sur Administration -> Configuration -> Réseaux, puis configurez correctement la partie réseau
+  cache-persistence: Persistance du cache
+  cache-not-saved: Votre cache n'est pas sauvegardé. En cas de redémarrage, certaines informations peuvent être perdues. Essayez de lancer (à partir du moteur de tâches) la tâche cache::persist.
+  apache-private-tmp: Apache private tmp
+  apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (Jeedom ne peut marcher avec). Voir <a href="https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29" target="_blank">ici</a>
+
 # Ancien format
 "401 - Accès non autorisé": "401 - Accès non autorisé"
 "Aucune méthode correspondante à : ": "Aucune méthode correspondante à : "
