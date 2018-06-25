@@ -38,13 +38,22 @@ use NextDom\Enums\PluginManagerCronEnum;
 
 class PluginManager
 {
-    private static $_cache = array();
-    private static $_enable = null;
+    private static $cache = array();
+    private static $enabled = array();
 
+    /**
+     * Obtenir un plugin à partir de son identifiant
+     *
+     * @param string $id Identifiant du plugin
+     *
+     * @return mixed|\plugin Plugin
+     *
+     * @throws \Exception
+     */
     public static function byId($id)
     {
-        if (is_string($id) && isset(self::$_cache[$id])) {
-            return self::$_cache[$id];
+        if (is_string($id) && isset(self::$cache[$id])) {
+            return self::$cache[$id];
         }
         if (!file_exists($id) || strpos($id, '/') === false) {
             $id = self::getPathById($id);
@@ -59,7 +68,7 @@ class PluginManager
         $plugin = new \plugin();
         $plugin->initPluginFromData($data);
 
-        self::$_cache[$plugin->getId()] = $plugin;
+        self::$cache[$plugin->getId()] = $plugin;
         return $plugin;
     }
 
@@ -169,32 +178,61 @@ class PluginManager
         return strcmp(strtolower($firstPlugin->getName()), strtolower($secondPluginName->getName()));
     }
 
+    /**
+     * Tâche exécutée toutes les minutes
+     *
+     * @throws \Exception
+     */
     public static function cron()
     {
         self::startCronTask(PluginManagerCronEnum::CRON);
     }
 
+    /**
+     * Tâche exécutée toutes les 5 minutes
+     *
+     * @throws \Exception
+     */
     public static function cron5()
     {
         self::startCronTask(PluginManagerCronEnum::CRON_5);
     }
 
+    /**
+     * Tâche exécutée toutes les 15 minutes
+     *
+     * @throws \Exception
+     */
     public static function cron15()
     {
-        error_log('coucou');
         self::startCronTask(PluginManagerCronEnum::CRON_15);
     }
 
+    /**
+     * Tâche exécutée toutes les 30 minutes
+     *
+     * @throws \Exception
+     */
     public static function cron30()
     {
         self::startCronTask(PluginManagerCronEnum::CRON_30);
     }
 
+    /**
+     * Tâche exécutée tous les jours
+     *
+     * @throws \Exception
+     */
     public static function cronDaily()
     {
         self::startCronTask(PluginManagerCronEnum::CRON_DAILY);
     }
 
+    /**
+     * Tâche exécutée toutes les heures
+     *
+     * @throws \Exception
+     */
     public static function cronHourly()
     {
         self::startCronTask(PluginManagerCronEnum::CRON_HOURLY);
@@ -267,6 +305,11 @@ class PluginManager
         }
     }
 
+    /**
+     * Test le daemon TODO ??
+     *
+     * @throws \Exception
+     */
     public static function checkDeamon() {
         foreach (self::listPlugin(true) as $plugin) {
             if (\config::byKey('deamonAutoMode', $plugin->getId(), 1) != 1) {
@@ -294,4 +337,19 @@ class PluginManager
         }
     }
 
+    /**
+     * Test si le plugin est actif
+     * TODO: Doit passer en static
+     * @return int
+     */
+    public static function isActive($id) {
+        $result = 0;
+        if (self::$enabled === null) {
+            self::$enabled = \config::getPluginEnable();
+        }
+        if (isset(self::$enabled[$id])) {
+            $result = self::$enabled[$id];
+        }
+        return $result;
+    }
 }

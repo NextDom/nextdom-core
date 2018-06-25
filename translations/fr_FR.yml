@@ -44,7 +44,8 @@ health:
   cache-not-saved: Votre cache n'est pas sauvegardé. En cas de redémarrage, certaines informations peuvent être perdues. Essayez de lancer (à partir du moteur de tâches) la tâche cache::persist.
   apache-private-tmp: Apache private tmp
   apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (Jeedom ne peut marcher avec). Voir <a href="https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29" target="_blank">ici</a>
-
+plugin:
+  cant-report: Vous ne pouvez pas faire de rapport sur un plugin sans panneau
 # Ancien format
 "401 - Accès non autorisé": "401 - Accès non autorisé"
 "Aucune méthode correspondante à : ": "Aucune méthode correspondante à : "
