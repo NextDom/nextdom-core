@@ -21,8 +21,8 @@ class PluginManagerCronEnum extends Enum
 {
     const CRON = 'cron';
     const CRON_5 = 'cron5';
-    const CRON_15 = 'cron';
-    const CRON_30 = 'cron5';
-    const CRON_DAILY = 'cron';
-    const CRON_HOURLY = 'cron5';
+    const CRON_15 = 'cron15';
+    const CRON_30 = 'cron30';
+    const CRON_DAILY = 'cronDaily';
+    const CRON_HOURLY = 'cronHourly';
 }

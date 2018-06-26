@@ -748,8 +748,8 @@ class nextdom
      */
     public static function version()
     {
-        if (file_exists(NEXTDOM_ROOT . '/config/version')) {
-            return trim(file_get_contents(NEXTDOM_ROOT . '/config/version'));
+        if (file_exists(NEXTDOM_ROOT . '/core/config/version')) {
+            return trim(file_get_contents(NEXTDOM_ROOT . '/core/config/version'));
         }
         return '';
     }

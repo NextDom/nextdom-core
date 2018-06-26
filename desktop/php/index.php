@@ -11,7 +11,7 @@ use NextDom\Helpers\PrepareView;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 
-if (Status::isRecueMode() && !in_array(init('p'), array('custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system'))) {
+if (Status::isRescueMode() && !in_array(init('p'), array('custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system'))) {
     $_GET['p'] = 'system';
 }
 include_file('core', 'authentification', 'php');
@@ -35,7 +35,7 @@ if (Status::isConnect()) {
         $homeLink = 'index.php?v=d&p=dashboard';
     }
 }
-if (Status::isRecueMode()) {
+if (Status::isRescueMode()) {
     $homeLink = 'index.php?v=d&p=system&rescue=1';
 }
 
@@ -55,7 +55,7 @@ $language = $configs['language'];
 
 // Initialisation des plugins
 $plugin = null;
-if (!Status::isRecueMode()) {
+if (!Status::isRescueMode()) {
     $plugin = PrepareView::initMenus($NEXTDOM_INTERNAL_CONFIG);
 }
 

@@ -28,7 +28,7 @@ $panelMenu = PrepareView::getPanelMenu();
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="<?php echo $homeLink; ?>">
-                <img src="core/img/logo-nextdom-grand-nom-couleur.svg" height="30"/>
+                <img src="<?php echo config::byKey('product_image') ?>" height="30"/>
             </a>
             <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">{{Toggle navigation}}</span>

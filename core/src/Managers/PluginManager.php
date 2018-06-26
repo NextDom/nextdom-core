@@ -67,7 +67,6 @@ class PluginManager
         }
         $plugin = new \plugin();
         $plugin->initPluginFromData($data);
-
         self::$cache[$plugin->getId()] = $plugin;
         return $plugin;
     }
@@ -247,10 +246,16 @@ class PluginManager
      */
     private static function startCronTask(string $cronType = '')
     {
+        $cache = \cache::byKey('plugin::' . $cronType . '::inprogress');
+        if ($cache->getValue(0) > 3) {
+            \message::add('core', __('La tache plugin::' . $cronType . ' n\'arrive pas à finir à cause du plugin : ') . \cache::byKey('plugin::'.$cronType.'::last')->getValue() . __(' nous vous conseillons de désactiver le plugin et de contacter l\'auteur'));
+        }
+        \cache::set('plugin::'.$cronType.'::inprogress', $cache->getValue(0) + 1);
         foreach (self::listPlugin(true) as $plugin) {
             if (method_exists($plugin->getId(), $cronType)) {
                 if (\config::byKey('functionality::cron::enable', $plugin->getId(), 1) == 1) {
                     $pluginId = $plugin->getId();
+                    \cache::set('plugin::'.$cronType.'::last', $pluginId);
                     try {
                         $pluginId::$cronType();
                     } catch (\Exception $e) {
@@ -261,6 +266,7 @@ class PluginManager
                 }
             }
         }
+        \cache::set('plugin::'.$cronType.'::inprogress', 0);
     }
 
     /**
@@ -268,7 +274,8 @@ class PluginManager
      *
      * @throws \Exception
      */
-    public static function start() {
+    public static function start()
+    {
         foreach (self::listPlugin(true) as $plugin) {
             $plugin->deamon_start(false, true);
             if (method_exists($plugin->getId(), 'start')) {
@@ -289,7 +296,8 @@ class PluginManager
      *
      * @throws \Exception
      */
-    public static function stop() {
+    public static function stop()
+    {
         foreach (self::listPlugin(true) as $plugin) {
             $plugin->deamon_stop();
             if (method_exists($plugin->getId(), 'stop')) {
@@ -310,7 +318,8 @@ class PluginManager
      *
      * @throws \Exception
      */
-    public static function checkDeamon() {
+    public static function checkDeamon()
+    {
         foreach (self::listPlugin(true) as $plugin) {
             if (\config::byKey('deamonAutoMode', $plugin->getId(), 1) != 1) {
                 continue;
@@ -342,7 +351,8 @@ class PluginManager
      * TODO: Doit passer en static
      * @return int
      */
-    public static function isActive($id) {
+    public static function isActive($id)
+    {
         $result = 0;
         if (self::$enabled === null) {
             self::$enabled = \config::getPluginEnable();

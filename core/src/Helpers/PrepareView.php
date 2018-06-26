@@ -47,7 +47,7 @@ class PrepareView
      */
     public static function showMenu()
     {
-        if (Status::isRecueMode()) {
+        if (Status::isRescueMode()) {
             require_once(NEXTDOM_ROOT . '/desktop/template/menuRescue.php');
         } else {
             require_once(NEXTDOM_ROOT . '/desktop/template/menu.php');

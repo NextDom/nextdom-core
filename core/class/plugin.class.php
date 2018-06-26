@@ -114,7 +114,6 @@ class plugin
 
     public function initPluginFromData($data)
     {
-        global $NEXTDOM_INTERNAL_CONFIG;
         $this->setId($data['id']);
         $this->setName($data['name']);
         if (isset($data['description'])) {
@@ -739,6 +738,30 @@ class plugin
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Définir l'identifiant
+     * @param $id Identifiant du plugin
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Définir le nom
+     *
+     * @param string $id Nom du plugin
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     /**

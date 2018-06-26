@@ -35,55 +35,55 @@ class update {
     private $_changeUpdate = false;
 
     public static function checkAllUpdate($_filter = '', $_findNewObject = true) {
-        UpdateManager::checkAllUpdate($_filter, $_findNewObject);
+        return UpdateManager::checkAllUpdate($_filter, $_findNewObject);
     }
 
     public static function listRepo() {
-        UpdateManager::listRepo();
+        return UpdateManager::listRepo();
     }
 
     public static function repoById($_id) {
-        UpdateManager::repoById($_id);
+        return UpdateManager::repoById($_id);
     }
 
     public static function updateAll($_filter = '') {
-        UpdateManager::updateAll($_filter);
+        return UpdateManager::updateAll($_filter);
     }
 
     public static function byId($_id) {
-        UpdateManager::byId($_id);
+        return UpdateManager::byId($_id);
     }
 
     public static function byStatus($_status) {
-        UpdateManager::byStatus($_status);
+        return UpdateManager::byStatus($_status);
     }
 
     public static function byLogicalId($_logicalId) {
-        UpdateManager::byLogicalId($_logicalId);
+        return UpdateManager::byLogicalId($_logicalId);
     }
 
     public static function byType($_type) {
-        UpdateManager::byType($_type);
+        return UpdateManager::byType($_type);
     }
 
     public static function byTypeAndLogicalId($_type, $_logicalId) {
-        UpdateManager::byTypeAndLogicalId($_type, $_logicalId);
+        return UpdateManager::byTypeAndLogicalId($_type, $_logicalId);
     }
 
     public static function all($_filter = '') {
-        UpdateManager::all($_filter);
+        return UpdateManager::all($_filter);
     }
 
     public static function nbNeedUpdate() {
-        UpdateManager::nbNeedUpdate();
+        return UpdateManager::nbNeedUpdate();
     }
 
     public static function findNewUpdateObject() {
-        UpdateManager::findNewUpdateObject();
+        return UpdateManager::findNewUpdateObject();
     }
 
     public static function listCoreUpdate() {
-        UpdateManager::listCoreUpdate();
+        return UpdateManager::listCoreUpdate();
     }
 
     /**

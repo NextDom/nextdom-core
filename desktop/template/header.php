@@ -32,7 +32,7 @@ $themeDir = NEXTDOM_ROOT . 'core/themes/'
 <head>
     <meta charset="utf-8">
     <title><?php echo $title; ?></title>
-    <link rel="shortcut icon" href="core/img/logo-nextdom-sans-nom-couleur-25x25.png">
+    <link rel="shortcut icon" href="<?php echo config::byKey('product_icon') ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -47,10 +47,14 @@ $themeDir = NEXTDOM_ROOT . 'core/themes/'
     <?php
     // CSS
     if (!Status::isConnect()) {
-        include_file('3rdparty', 'bootstrap/css/bootstrap.min', 'css');
+        if (!Status::initRescueModeState() && file_exists($themeDir . config::byKey('default_bootstrap_theme') . '/desktop/' . config::byKey('default_bootstrap_theme') . '.css')) {
+            include_file('core', config::byKey('default_bootstrap_theme') . '/desktop/' . config::byKey('default_bootstrap_theme'), 'themes.css');
+        } else {
+            include_file('3rdparty', 'bootstrap/css/bootstrap.min', 'css');
+        }
     } else {
         $cssBootstrapToAdd = true;
-        if (!Status::isRecueMode()) {
+        if (!Status::isRescueMode()) {
             $defaultBootstrapTheme = config::byKey('default_bootstrap_theme');
             if (file_exists($themeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.css')) {
                 include_file('core', $bootstrapTheme . '/desktop/' . $bootstrapTheme, 'themes.css');
@@ -85,6 +89,7 @@ $themeDir = NEXTDOM_ROOT . 'core/themes/'
     include_file('3rdparty', 'jquery/jquery.min', 'js');
     ?>
     <script>
+        NEXTDOM_PRODUCT_NAME='<?php echo config::byKey('product_name') ?>';
         NEXTDOM_AJAX_TOKEN = '<?php echo ajax::getToken() ?>';
         $.ajaxSetup({
             type: "POST",
@@ -132,7 +137,7 @@ $themeDir = NEXTDOM_ROOT . 'core/themes/'
     include_file('3rdparty', 'jquery.cron/jquery.cron.min', 'js');
     include_file('3rdparty', 'jquery.contextMenu/jquery.contextMenu.min', 'js');
     include_file('3rdparty', 'autosize/autosize.min', 'js');
-    if (!Status::isRecueMode() && $configs['enableCustomCss'] == 1) {
+    if (!Status::isRescueMode() && $configs['enableCustomCss'] == 1) {
         if (file_exists(NEXTDOM_ROOT.'/desktop/custom/custom.css')) {
             include_file('desktop', '', 'custom.css');
         }
@@ -142,12 +147,12 @@ $themeDir = NEXTDOM_ROOT . 'core/themes/'
     }
     try {
         if (Status::isConnect()) {
-            if (!Status::isRecueMode() && is_dir($themeDir . $bootstrapTheme . '/desktop')) {
+            if (!Status::isRescueMode() && is_dir($themeDir . $bootstrapTheme . '/desktop')) {
                 if (file_exists($themeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.js')) {
                     include_file('core', $bootstrapTheme . '/desktop/' . $bootstrapTheme, 'themes.js');
                 }
             }
-            if (!Status::isRecueMode() && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
+            if (!Status::isRescueMode() && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
                 try {
                     if (is_dir($themeDir . $bootstrapTheme . '/desktop')) {
                         if (file_exists($themeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.js')) {
@@ -157,7 +162,7 @@ $themeDir = NEXTDOM_ROOT . 'core/themes/'
                 } catch (Exception $e) {
 
                 }
-                if (!Status::isRecueMode() && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
+                if (!Status::isRescueMode() && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
                     try {
                         include_file('3rdparty', 'highstock/themes/' . $_SESSION['user']->getOptions('desktop_highcharts_theme'), 'js');
                     } catch (Exception $e) {
