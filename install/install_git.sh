@@ -21,7 +21,13 @@ fi
 
 if [ -z "$1" ] ; then
     echo "Veuillez saisir votre identifiant github dans les arguments de la commande"
-    echo "exemple: sudo ./install.sh username"
+    echo "exemple: sudo ./install.sh username password"
+    exit 1
+fi
+
+if [ -z "$2" ] ; then
+    echo "Veuillez saisir votre password github dans les arguments de la commande"
+    echo "exemple: sudo ./install.sh username password"
     exit 1
 fi
 
@@ -117,6 +123,8 @@ step_5_php() {
 }
 
 step_6_nextdom_download() {
+    mkdir -p ${WEBSERVER_HOME}
+	find ${WEBSERVER_HOME} ! -name 'index.html' -type f -exec rm -rf {} +
     cd  ${WEBSERVER_HOME}
     if [ "$(ls -A  ${WEBSERVER_HOME})" ]; then
         git fetch --all
