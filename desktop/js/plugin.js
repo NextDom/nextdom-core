@@ -402,14 +402,8 @@ $("#bt_savePluginConfig").on('click', function (event) {
 });
 
 $('.displayStore').on('click', function () {
-    var repo = $(this).attr('data-repo');
-    if (repo.indexOf('nextdom') === -1) {
-        $('#md_modal').dialog({title: "{{Market}}"});
-        $('#md_modal').load('index.php?v=d&modal=update.list').dialog('open');
-    }
-    else {
-        loadPage('index.php?v=d&p=market&type=core');
-    }
+  $('#md_modal').dialog({title: "{{Market}}"});
+  $('#md_modal').load('index.php?v=d&modal=update.list&type=plugin&repo='+$(this).attr('data-repo')).dialog('open');
 });
 
 $('#div_pageContainer').delegate('.sendPluginTo', 'click', function () {

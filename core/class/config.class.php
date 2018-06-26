@@ -147,7 +147,7 @@ class config {
             if (isset($defaultConfiguration[$_plugin][$_key])) {
                 self::$cache[$_plugin . '::' . $_key] = $defaultConfiguration[$_plugin][$_key];
             }
-            elseif ($_default !== '') {
+            if ($_default !== '') {
                 self::$cache[$_plugin . '::' . $_key] = $_default;
             }
         } else {
