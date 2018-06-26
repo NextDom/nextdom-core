@@ -14,7 +14,7 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\src\Models\Domaine;
+namespace NextDom\Models\Domaine;
 
 
 class Cmd

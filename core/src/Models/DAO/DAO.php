@@ -15,7 +15,7 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\src\Models\DAO;
+namespace NextDom\Models\DAO;
 
 use NextDom\Interfaces\DAOInterface;
 
@@ -47,7 +47,7 @@ abstract class DAO implements DAOInterface
     {
         return $this->db;
     }
- 
+
     /**
      * 
      * @param array $array

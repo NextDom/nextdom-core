@@ -30,11 +30,16 @@ $app['db'] = function() {
 ////        NextDom DAO    /////
 ////////////////////////////////
 
+//TODO: appelez même si inutilisé ???
+
 /**
  * @param $app
- * @return \NextDom\src\DAO\CmdDAO
+ * @return \NextDom\Models\DAO\CmdDAO
  */
 $app['DAO.Cmd'] = function () use ($app) {
-    return new NextDom\src\DAO\CmdDAO($app['db']());
+    return new NextDom\Models\DAO\CmdDAO($app['db']());
+};
+$app['DAO.Fragment'] = function() use ($app) {
+    return new NextDom\Models\DAO\FragmentDAO($app['db']());
 };
 
