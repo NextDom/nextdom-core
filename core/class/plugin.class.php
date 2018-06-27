@@ -45,7 +45,6 @@ class plugin
     private $info = array();
     private $include = array();
     private $functionality = array();
-    private static $enabled = null;
 
     public static function byId($_id)
     {

@@ -39,7 +39,7 @@ use NextDom\Enums\PluginManagerCronEnum;
 class PluginManager
 {
     private static $cache = array();
-    private static $enabled = array();
+    private static $enabledPlugins = null;
 
     /**
      * Obtenir un plugin à partir de son identifiant
@@ -354,11 +354,11 @@ class PluginManager
     public static function isActive($id)
     {
         $result = 0;
-        if (self::$enabled === null) {
-            self::$enabled = \config::getPluginEnable();
+        if (self::$enabledPlugins === null) {
+            self::$enabledPlugins = \config::getPluginEnable();
         }
-        if (isset(self::$enabled[$id])) {
-            $result = self::$enabled[$id];
+        if (isset(self::$enabledPlugins[$id])) {
+            $result = self::$enabledPlugins[$id];
         }
         return $result;
     }
