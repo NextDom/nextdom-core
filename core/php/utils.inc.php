@@ -889,19 +889,19 @@ function getIpFromString($_string)
     return $_string;
 }
 
+/**
+ * TODO: Stocker la version évaluée
+ *
+ * @param $_string
+ * @return string
+ */
 function evaluate($_string)
 {
     if (!isset($GLOBALS['ExpressionLanguage'])) {
         $GLOBALS['ExpressionLanguage'] = new ExpressionLanguage();
     }
-    $expr = str_replace(array(' et ', ' ET ', ' AND ', ' and ', ' ou ', ' OR ', ' or ', ' OU '), array(' && ', ' && ', ' && ', ' && ', ' || ', ' || ', ' || ', ' || '), $_string);
-    $expr = str_replace('==', '=', $expr);
-    $expr = str_replace('=', '==', $expr);
-    $expr = str_replace('<==', '<=', $expr);
-    $expr = str_replace('>==', '>=', $expr);
-    $expr = str_replace('!==', '!=', $expr);
-    $expr = str_replace('!===', '!==', $expr);
-    $expr = str_replace('====', '===', $expr);
+    $expr = Utils::transformExpressionForEvaluation($_string);
+
     try {
         return $GLOBALS['ExpressionLanguage']->evaluate($expr);
     } catch (Exception $e) {

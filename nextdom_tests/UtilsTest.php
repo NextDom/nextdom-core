@@ -252,4 +252,65 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($result);
         $this->assertFalse($GLOBALS['isConnect::admin']);
     }
+
+    public function testEvaluateWithObject() {
+        $result = Utils::transformExpressionForEvaluation('#[Buanderie][Lumiere buanderie][Etat]# == 0');
+        $this->assertEquals('#[Buanderie][Lumiere buanderie][Etat]#==0', $result);
+
+    }
+
+    public function testEvaluateSimpleWithoutSpace() {
+        $result = Utils::transformExpressionForEvaluation('#[Buanderie][Lumiere buanderie][Etat]#==0');
+        $this->assertEquals('#[Buanderie][Lumiere buanderie][Etat]#==0', $result);
+    }
+
+    public function testEvaluateSimpleWithOneSpace() {
+        $result = Utils::transformExpressionForEvaluation('#[Buanderie][Lumiere buanderie][Etat]# ==0');
+        $this->assertEquals('#[Buanderie][Lumiere buanderie][Etat]#==0', $result);
+        $result = Utils::transformExpressionForEvaluation('#[Buanderie][Lumiere buanderie][Etat]#== 0');
+        $this->assertEquals('#[Buanderie][Lumiere buanderie][Etat]#==0', $result);
+    }
+
+    public function testEvaluateSimpleWithNextDomVar() {
+        $result = Utils::transformExpressionForEvaluation('#time# >= 2300 OR #time# < 0800');
+        $this->assertEquals('#time#>=2300||#time#<0800', $result);
+    }
+
+    public function testEvaluateSimpleWithOneEqual() {
+        $result = Utils::transformExpressionForEvaluation('#[Buanderie][Lumiere buanderie][Etat]# = 0');
+        $this->assertEquals('#[Buanderie][Lumiere buanderie][Etat]#==0', $result);
+    }
+
+    public function testEvaluateSimpleWithFunc() {
+        $result = Utils::transformExpressionForEvaluation('variable(commut_switch_bathroom) == 0');
+        $this->assertEquals('variable(commut_switch_bathroom)==0', $result);
+    }
+
+    public function testEvaluateComplex() {
+        $result = Utils::transformExpressionForEvaluation('#[Escaliers RDC][Detecteur RDC][Présence]# == 1 OR #[Escaliers 1er][Détecteur de mouvement 1er][Présence]# == 1');
+        $this->assertEquals('#[Escaliers RDC][Detecteur RDC][Présence]#==1||#[Escaliers 1er][Détecteur de mouvement 1er][Présence]#==1', $result);
+
+    }
+
+    public function testEvaluateComplexOr() {
+        $result = Utils::transformExpressionForEvaluation('"Test ou piege" OU "TEST ET PIEGE"');
+        $this->assertEquals('"Test ou piege"||"TEST ET PIEGE"', $result);
+
+    }
+
+    public function testEvaluateComplexAnd() {
+        $result = Utils::transformExpressionForEvaluation('"Test ou piege" ET "TEST ET PIEGE"');
+        $this->assertEquals('"Test ou piege"&&"TEST ET PIEGE"', $result);
+
+    }
+
+    public function testEvaluateNegation() {
+        $result = Utils::transformExpressionForEvaluation('variable(commut_switch_bathroom) !== 0');
+        $this->assertEquals('variable(commut_switch_bathroom)!=0', $result);
+    }
+
+    public function testEvaluateParenthesis() {
+        $result = Utils::transformExpressionForEvaluation('variable(PhraseQuestion) == "NON" OU (#ObjetTest# != "Push" ET #[Organisation][Mode Notifications][Mode]# != "Tous")');
+        $this->assertEquals('variable(PhraseQuestion)=="NON"||(#ObjetTest#!="Push"&&#[Organisation][Mode Notifications][Mode]#!="Tous")', $result);
+    }
 }

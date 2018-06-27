@@ -18,6 +18,7 @@
 namespace NextDom\Market;
 
 use NextDom\Helpers\DataStorage;
+use NextDom\Managers\UpdateManager;
 
 class MarketItem
 {
@@ -391,7 +392,7 @@ class MarketItem
      */
     private function initUpdateData()
     {
-        $this->updateData = \update::byLogicalId($this->id);
+        $this->updateData = UpdateManager::byLogicalId($this->id);
     }
 
     /**

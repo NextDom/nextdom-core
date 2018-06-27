@@ -112,7 +112,7 @@ class PluginManager
             } else {
                 foreach ($queryResults as $row) {
                     try {
-                        $listPlugin[] = \plugin::byId($row['plugin']);
+                        $listPlugin[] = self::byId($row['plugin']);
                     } catch (\Exception $e) {
                         \log::add('plugin', 'error', $e->getMessage(), 'pluginNotFound::' . $row['plugin']);
                     } catch (\Error $e) {
@@ -127,7 +127,7 @@ class PluginManager
                     $pathInfoPlugin = $rootPluginPath . '/' . $dirPlugin . 'plugin_info/info.json';
                     if (file_exists($pathInfoPlugin)) {
                         try {
-                            $listPlugin[] = \plugin::byId($pathInfoPlugin);
+                            $listPlugin[] = self::byId($pathInfoPlugin);
                         } catch (\Exception $e) {
                             \log::add('plugin', 'error', $e->getMessage(), 'pluginNotFound::' . $pathInfoPlugin);
                         } catch (\Error $e) {

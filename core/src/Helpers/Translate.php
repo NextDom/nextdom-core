@@ -17,6 +17,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Managers\PluginManager;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 
@@ -92,7 +93,7 @@ class Translate
             self::$translator = new Translator($language);
             self::$translator->addLoader('yaml', new YamlFileLoader());
             self::$translator->addResource('yaml', $filename, $language);
-            foreach (\plugin::listPlugin(false, false, false) as $plugin) {
+            foreach (PluginManager::listPlugin(false, false, false) as $plugin) {
                 $result = array_merge($result, $plugin->getTranslation($language));
             }
         }
@@ -244,7 +245,7 @@ class Translate
         file_put_contents(self::getPathTranslationFile(self::getLanguage()), json_encode($core, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
         foreach ($plugins as $plugin_name => $translation) {
             try {
-                $plugin = \plugin::byId($plugin_name);
+                $plugin = PluginManager::byId($plugin_name);
                 $plugin->saveTranslation(self::getLanguage(), $translation);
             } catch (\Exception $e) {
 

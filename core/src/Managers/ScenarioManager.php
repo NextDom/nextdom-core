@@ -699,7 +699,7 @@ class ScenarioManager
         $return['date'] = $event['datetime'];
         $return['group'] = 'scenario';
         $return['type'] = $event['type'];
-        $scenario = \scenario::byId($event['id']);
+        $scenario = self::byId($event['id']);
         if (!is_object($scenario)) {
             return null;
         }
