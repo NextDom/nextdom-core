@@ -72,7 +72,7 @@ class Router
         } elseif (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
             $this->ajaxGetContent();
         } else {
-            \include_file('desktop', 'index', 'php');
+            \include_file('desktop', 'index', 'php', '', true);
         }
     }
 
@@ -84,7 +84,7 @@ class Router
     private function showModal() {
         try {
             \include_file('core', 'authentification', 'php');
-            \include_file('desktop', init('modal'), 'modal', \init('plugin'));
+            \include_file('desktop', init('modal'), 'modal', \init('plugin'), true);
         } catch (Exception $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
@@ -116,7 +116,7 @@ class Router
     private function ajaxGetContent() {
         try {
             \include_file('core', 'authentification', 'php');
-            \include_file('desktop', init('p'), 'php', init('m'));
+            \include_file('desktop', init('p'), 'php', init('m'), true);
         } catch (\Exception $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';

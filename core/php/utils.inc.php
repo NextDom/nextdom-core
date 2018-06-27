@@ -28,7 +28,7 @@ use NextDom\Helpers\Utils;
  * @param string $_plugin Nom du plugin ou vide pour le core
  * @throws Exception
  */
-function include_file($_folder, $_filename, $_type, $_plugin = '')
+function include_file($_folder, $_filename, $_type, $_plugin = '', $translate = false)
 {
     // Aucune particularité pour les 3rdparty
     if ($_folder == '3rdparty') {
@@ -75,7 +75,12 @@ function include_file($_folder, $_filename, $_type, $_plugin = '')
             if (init('rescue', 0) == 1) {
                 echo str_replace(array('{{', '}}'), '', ob_get_clean());
             } else {
-                echo translate::exec(ob_get_clean(), $_folder . '/' . $_filename);
+                if ($translate) {
+                    echo translate::exec(ob_get_clean(), $_folder . '/' . $_filename);
+                }
+                else {
+                    echo ob_get_clean();
+                }
             }
         } else {
             require_once $path;
