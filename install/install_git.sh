@@ -1,7 +1,5 @@
 #!/bin/bash
-GITUSERNAME=$1
-PASSWORD=$2
-DEBUG=$3
+DEBUG=$1
 VERT="\\033[1;32m"
 NORMAL="\\033[0;39m"
 ROUGE="\\033[1;31m"
@@ -16,18 +14,6 @@ clear
 if [ $(id -u) != 0 ] ; then
     echo "Les droits de super-utilisateur (root) sont requis pour installer NextDom"
     echo "Veuillez lancer 'sudo $0' ou connectez-vous en tant que root, puis relancez $0"
-    exit 1
-fi
-
-if [ -z "$1" ] ; then
-    echo "Veuillez saisir votre identifiant github dans les arguments de la commande"
-    echo "exemple: sudo ./install.sh username password"
-    exit 1
-fi
-
-if [ -z "$2" ] ; then
-    echo "Veuillez saisir votre password github dans les arguments de la commande"
-    echo "exemple: sudo ./install.sh username password"
     exit 1
 fi
 
@@ -374,12 +360,11 @@ displaylogo()
     echo "██║ ╚████║███████╗██╔╝ ██╗   ██║   ██████╔╝╚██████╔╝██║ ╚═╝ ██║                     "
     echo "╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═════╝  ╚═════╝ ╚═╝     ╚═╝                     "
     echo "                                                                                    "
-}
 
-displaylogo
 printf "${CYAN}Bienvenue dans l'installateur de NextDom${NORMAL}                        \n"
 printf "${CYAN}Version d'installation de NextDom : ${VERSION}${NORMAL}                  \n"
 printf "${CYAN}Dossier principal du serveur web : ${WEBSERVER_HOME}${NORMAL}            \n"
+}
 
 progress()
 {
@@ -409,6 +394,7 @@ progress()
     if [ $PARAM_PROGRESS = 100 ]; then echo -ne "[##########################] (100%) $PARAM_PHASE \r \n" ; distrib_1_spe; fi;
 }
 
+displaylogo
 printf "${CYAN}Avancement de l'installation${NORMAL}               \n"
 progress 0 "upgrade du system                                                 "
 progress 5  "upgrade du system                                                 "
