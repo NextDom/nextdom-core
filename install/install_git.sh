@@ -117,7 +117,7 @@ step_6_nextdom_download() {
         git reset --hard origin/${VERSION} > ${DEBUG} 2>&1
         git pull origin ${VERSION} > ${DEBUG} 2>&1
     else
-        git clone --quiet https://${GITUSERNAME}:${PASSWORD}@github.com/sylvaner/nextdom-core . > ${DEBUG} 2>&1
+        git clone --quiet https://github.com/sylvaner/nextdom-core . > ${DEBUG} 2>&1
         
     fi
 }
