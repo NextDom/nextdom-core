@@ -85,12 +85,12 @@ class Router
         try {
             \include_file('core', 'authentification', 'php');
             \include_file('desktop', init('modal'), 'modal', \init('plugin'), true);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
             echo \translate::exec(\displayException($e), 'desktop/' . \init('p') . '.php');
             echo '</div>';
-        } catch (Error $e) {
+        } catch (\Error $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
             echo \translate::exec(\displayException($e), 'desktop/' . \init('p') . '.php');
@@ -148,6 +148,6 @@ class Router
             $filename = $_GET['p'];
             $plugin = isset($_GET['m']) ? $_GET['m'] : $plugin;
         }
-        \include_file('mobile', $filename, $type, $plugin);
+        include_file('mobile', $filename, $type, $plugin);
     }
 }
