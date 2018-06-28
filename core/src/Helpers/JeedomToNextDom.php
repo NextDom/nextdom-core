@@ -39,7 +39,16 @@ class JeedomToNextDom
             "grep -rl $pluginDirectory -e \"This file is part of NextDom\" | xargs sed -i 's/This file is part of NextDom/This file is part of Jeedom/g'",
             "grep -rl $pluginDirectory -e \"NextDom is free software\" | xargs sed -i 's/NextDom is free software/Jeedom is free software/g'",
             "grep -rl $pluginDirectory -e \"NextDom is distributed\" | xargs sed -i 's/NextDom is distributed/Jeedom is distributed/g'",
-            "grep -rl $pluginDirectory -e \"along with NextDom\" | xargs sed -i 's/along with NextDom/along with Jeedom/g'");
+            "grep -rl $pluginDirectory -e \"along with NextDom\" | xargs sed -i 's/along with NextDom/along with Jeedom/g'",
+            "find $pluginDirectory -type d -name *jeedom* -exec rename s/jeedom/nextdom/ {} \;",
+            "find $pluginDirectory -type d -name *jeedom* -exec rename s/jeedom/nextdom/ {} \;",
+            "find $pluginDirectory -type d -name *Jeedom* -exec rename s/Jeedom/NextDom/ {} \;",
+            "find $pluginDirectory -type d -name *Jeedom* -exec rename s/Jeedom/NextDom/ {} \;",
+            "find $pluginDirectory -type d -name *JEEDOM* -exec rename s/JEEDOM/NEXTDOM/ {} \;",
+            "find $pluginDirectory -type d -name *JEEDOM* -exec rename s/JEEDOM/NEXTDOM/ {} \;",
+            "find $pluginDirectory -type f -name *jeedom* -exec rename s/jeedom/nextdom/ {} \;",
+            "find $pluginDirectory -type f -name *Jeedom* -exec rename s/Jeedom/NextDom/ {} \;",
+            "find $pluginDirectory -type f -name *JEEDOM* -exec rename s/JEEDOM/NEXTDOM/ {} \;");
         foreach ($script as $scriptCommand) {
             exec(\system::getCmdSudo().' '.$scriptCommand);
         }
