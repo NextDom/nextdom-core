@@ -68,19 +68,20 @@ class ScenarioSubElementManager
      */
     public static function byScenarioElementId($scenarioElementId, $filterByType = '')
     {
-        $values = array('scenarioElement_id' => $scenarioElementId);
+        $values = array(
+            'scenarioElement_id' => $scenarioElementId,
+        );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE scenarioElement_id = :scenarioElement_id ';
+                WHERE scenarioElement_id=:scenarioElement_id ';
         if ($filterByType != '') {
             $values['type'] = $filterByType;
-            $sql .= 'AND `type` = :type ';
+            $sql .= ' AND type=:type ';
+            return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        } else {
+            $sql .= ' ORDER BY `order`';
+            return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
         }
-        else {
-            $sql .= 'ORDER BY `order`';
-        }
-
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
 }

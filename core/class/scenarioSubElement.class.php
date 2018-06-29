@@ -22,8 +22,6 @@ require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
 use NextDom\Managers\ScenarioSubElementManager;
 
 class scenarioSubElement {
-    /*     * *************************Attributs****************************** */
-
     private $id;
     private $name;
     private $scenarioElement_id;
@@ -40,8 +38,6 @@ class scenarioSubElement {
     public static function byScenarioElementId($_scenarioElementId, $_type = '') {
         return ScenarioSubElementManager::byScenarioElementId($_scenarioElementId, $_type);
     }
-
-    /*     * *********************Methode d'instance************************* */
 
     public function execute(&$_scenario = null) {
         if ($_scenario !== null && !$_scenario->getDo()) {
