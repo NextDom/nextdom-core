@@ -283,6 +283,8 @@ step_10_nextdom_post() {
             echo 'tmpfs        /tmp/nextdom            tmpfs  defaults,size=128M                                       0 0' >>  /etc/fstab
         fi
     fi
+    cd ${WEBSERVER_HOME} > ${DEBUG} 2>&1
+    ./gen_compress.sh > ${DEBUG} 2>&1
 }
 
 step_11_nextdom_check() {
