@@ -6,8 +6,10 @@ pip install jsmin
 mkdir -p css
 mkdir -p js
 
-sed -i 's/url[(]"images/url^("\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images/g' css/nextdom.css
-sed -i 's/url[(]"images/url^("\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images/g' css/nextdom.min.css
+sed -i 's/url[(]"images/url("\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images/g' css/nextdom.css
+sed -i 's/url[(]"images/url("\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images/g' css/nextdom.min.css
+
+sed -i 's/url[(]"images/url("\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images/g' css/nextdom.min.css
 
 sed -i 's/NotoSans-Regular\.ttf/\/3rdparty\/font-noto\/NotoSans-Regular\.ttf/g' css/nextdom.css
 sed -i 's/NotoSans-Italic\.ttf/\/3rdparty\/font-noto\/NotoSans-Italic\.ttf/g' css/nextdom.css

@@ -4478,7 +4478,6 @@ div.wijmo-wijmenu .wijmo-wijmenu-child .wijmo-wijmenu-text {
     height: 100%;
     opacity: 0.4;
     filter: alpha(opacity=40);
-    background-image: url(3rdparty\jquery.utils\gritter.png);
     background-repeat: repeat;
     z-index: 99998;
 }
