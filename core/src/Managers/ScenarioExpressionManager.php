@@ -715,7 +715,15 @@ class ScenarioExpressionManager
         return \history::stateChanges($cmd_id, $value, $startDate, $_endDate);
     }
 
-    public static function duration($cmdId, $_value, $_period = '1 hour')
+    /**
+     * TODO: Durée de ?
+     *
+     * @param $cmdId
+     * @param $value
+     * @param string $period
+     * @return float|string
+     */
+    public static function duration($cmdId, $value, $period = '1 hour')
     {
         $cmd_id = str_replace('#', '', $cmdId);
         if (!is_numeric($cmd_id)) {
@@ -726,17 +734,17 @@ class ScenarioExpressionManager
             return '';
         }
 
-        if (str_word_count($_period) == 1 && is_numeric(trim($_period)[0])) {
-            $_startDate = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . $_period));
+        if (str_word_count($period) == 1 && is_numeric(trim($period)[0])) {
+            $_startDate = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . $period));
         } else {
-            $_startDate = date('Y-m-d H:i:s', strtotime($_period));
+            $_startDate = date('Y-m-d H:i:s', strtotime($period));
             if ($_startDate == date('Y-m-d H:i:s', strtotime(0))) {
                 return '';
             }
         }
         $_endDate = date('Y-m-d H:i:s');
-        $_value = str_replace(',', '.', $_value);
-        $_decimal = strlen(substr(strrchr($_value, "."), 1));
+        $value = str_replace(',', '.', $value);
+        $_decimal = strlen(substr(strrchr($value, "."), 1));
 
         $histories = $cmd->getHistory();
 
@@ -751,11 +759,11 @@ class ScenarioExpressionManager
         foreach ($histories as $history) {
             if ($history->getDatetime() >= $_startDate) {
                 if ($history->getDatetime() <= $_endDate) {
-                    if ($lastValue == $_value) {
+                    if ($lastValue == $value) {
                         $duration = $duration + (strtotime($history->getDatetime()) - $lastDuration);
                     }
                 } else {
-                    if ($lastValue == $_value) {
+                    if ($lastValue == $value) {
                         $duration = $duration + (strtotime($_endDate) - $lastDuration);
                     }
                     break;
@@ -766,13 +774,22 @@ class ScenarioExpressionManager
             }
             $lastValue = round($history->getValue(), $_decimal);
         }
-        if ($lastValue == $_value && $lastDuration <= strtotime($_endDate)) {
+        if ($lastValue == $value && $lastDuration <= strtotime($_endDate)) {
             $duration = $duration + (strtotime($_endDate) - $lastDuration);
         }
         return floor($duration / 60);
     }
 
-    public static function durationBetween($cmdId, $_value, $_startDate, $_endDate)
+    /**
+     * TODO: Durée entre ?
+     *
+     * @param $cmdId
+     * @param $value
+     * @param $startDate
+     * @param $endDate
+     * @return float|string
+     */
+    public static function durationBetween($cmdId, $value, $startDate, $endDate)
     {
         if (!is_numeric(str_replace('#', '', $cmdId))) {
             $cmd = \cmd::byId(str_replace('#', '', \cmd::humanReadableToCmd($cmdId)));
@@ -783,10 +800,10 @@ class ScenarioExpressionManager
             return '';
         }
 
-        $_startDate = date('Y-m-d H:i:s', strtotime(self::setTags($_startDate)));
-        $_endDate = date('Y-m-d H:i:s', strtotime(self::setTags($_endDate)));
-        $_value = str_replace(',', '.', $_value);
-        $_decimal = strlen(substr(strrchr($_value, "."), 1));
+        $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
+        $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
+        $value = str_replace(',', '.', $value);
+        $_decimal = strlen(substr(strrchr($value, "."), 1));
 
         $histories = $cmd->getHistory();
 
@@ -795,144 +812,234 @@ class ScenarioExpressionManager
         $lastValue = $histories[0]->getValue();
 
         foreach ($histories as $history) {
-            if ($history->getDatetime() >= $_startDate) {
-                if ($history->getDatetime() <= $_endDate) {
-                    if ($lastValue == $_value) {
+            if ($history->getDatetime() >= $startDate) {
+                if ($history->getDatetime() <= $endDate) {
+                    if ($lastValue == $value) {
                         $duration = $duration + (strtotime($history->getDatetime()) - $lastDuration);
                     }
                 } else {
-                    if ($lastValue == $_value) {
-                        $duration = $duration + (strtotime($_endDate) - $lastDuration);
+                    if ($lastValue == $value) {
+                        $duration = $duration + (strtotime($endDate) - $lastDuration);
                     }
                     break;
                 }
                 $lastDuration = strtotime($history->getDatetime());
             } else {
-                $lastDuration = strtotime($_startDate);
+                $lastDuration = strtotime($startDate);
             }
             $lastValue = round($history->getValue(), $_decimal);
         }
-        if ($lastValue == $_value && $lastDuration <= strtotime($_endDate)) {
-            $duration = $duration + (strtotime($_endDate) - $lastDuration);
+        if ($lastValue == $value && $lastDuration <= strtotime($endDate)) {
+            $duration = $duration + (strtotime($endDate) - $lastDuration);
         }
         return floor($duration / 60);
     }
 
-    public static function lastBetween($cmdId, $_startDate, $_endDate)
+    /**
+     * TODO: Dernier entre deux dates ???
+     *
+     * @param $cmdId
+     * @param $startDate
+     * @param $endDate
+     * @return float|string
+     */
+    public static function lastBetween($cmdId, $startDate, $endDate)
     {
         $cmd = \cmd::byId(trim(str_replace('#', '', $cmdId)));
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
         }
-        $_startDate = date('Y-m-d H:i:s', strtotime(self::setTags($_startDate)));
-        $_endDate = date('Y-m-d H:i:s', strtotime(self::setTags($_endDate)));
-        $historyStatistique = $cmd->getStatistique($_startDate, $_endDate);
+        $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
+        $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
+        $historyStatistique = $cmd->getStatistique($startDate, $endDate);
         return round($historyStatistique['last'], 1);
     }
 
-    public static function statistics($cmdId, $_calc, $_period = '1 hour')
+    /**
+     * TODO: Statistiques de quelque chose
+     *
+     * @param $cmdId
+     * @param $calc
+     * @param string $period
+     * @return string
+     */
+    public static function statistics($cmdId, $calc, $period = '1 hour')
     {
 
         $cmd = \cmd::byId(trim(str_replace('#', '', $cmdId)));
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
         }
-        if (str_word_count($_period) == 1 && is_numeric(trim($_period)[0])) {
-            $startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . $_period));
+        if (str_word_count($period) == 1 && is_numeric(trim($period)[0])) {
+            $startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . $period));
         } else {
-            $startHist = date('Y-m-d H:i:s', strtotime($_period));
+            $startHist = date('Y-m-d H:i:s', strtotime($period));
             if ($startHist == date('Y-m-d H:i:s', strtotime(0))) {
                 return '';
             }
         }
-        $_calc = str_replace(' ', '', $_calc);
+        $calc = str_replace(' ', '', $calc);
         $historyStatistique = $cmd->getStatistique($startHist, date('Y-m-d H:i:s'));
         if ($historyStatistique['min'] == '') {
             return $cmd->execCmd();
         }
-        return $historyStatistique[$_calc];
+        return $historyStatistique[$calc];
     }
 
-    public static function statisticsBetween($cmdId, $_calc, $_startDate, $_endDate)
+    /**
+     * TODO: Statistiques de quelque chose entre deux dates
+     *
+     * @param $cmdId
+     * @param $calc
+     * @param $startDate
+     * @param $endDate
+     * @return string
+     */
+    public static function statisticsBetween($cmdId, $calc, $startDate, $endDate)
     {
         $cmd = \cmd::byId(trim(str_replace('#', '', $cmdId)));
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
         }
-        $_calc = str_replace(' ', '', $_calc);
-        $_startDate = date('Y-m-d H:i:s', strtotime(self::setTags($_startDate)));
-        $_endDate = date('Y-m-d H:i:s', strtotime(self::setTags($_endDate)));
-        $historyStatistique = $cmd->getStatistique(self::setTags($_startDate), self::setTags($_endDate));
-        return $historyStatistique[$_calc];
+        $calc = str_replace(' ', '', $calc);
+        $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
+        $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
+        $historyStatistique = $cmd->getStatistique(self::setTags($startDate), self::setTags($endDate));
+        return $historyStatistique[$calc];
     }
 
-    public static function variable($_name, $_default = '')
+    /**
+     * Obtenir la valeur d'une variable
+     *
+     * @param $name
+     * @param string $defaultValue Valeur par défaut
+     * @return string
+     */
+    public static function variable($name, $defaultValue = '')
     {
-        $_name = trim(trim(trim($_name), '"'));
-        $dataStore = \dataStore::byTypeLinkIdKey('scenario', -1, trim($_name));
+        // TODO: Yolo sur les trims
+        $name = trim(trim(trim($name), '"'));
+        $dataStore = \dataStore::byTypeLinkIdKey('scenario', -1, trim($name));
         if (is_object($dataStore)) {
-            $value = $dataStore->getValue($_default);
+            $value = $dataStore->getValue($defaultValue);
             return $value;
         }
-        return $_default;
+        return $defaultValue;
     }
 
-    public static function stateDuration($cmdId, $_value = null)
+    /**
+     * Obtenir la durée d'un état
+     *
+     * @param $cmdId
+     * @param null $value
+     * @return false|int
+     * @throws \Exception
+     */
+    public static function stateDuration($cmdId, $value = null)
     {
-        return \history::stateDuration(str_replace('#', '', $cmdId), $_value);
+        return \history::stateDuration(str_replace('#', '', $cmdId), $value);
     }
 
-    public static function lastChangeStateDuration($cmdId, $_value)
+    /**
+     * TODO: Dernier changement de la durée de ???
+     *
+     * @param $cmdId
+     * @param $value
+     * @return false|int
+     * @throws \Exception
+     */
+    public static function lastChangeStateDuration($cmdId, $value)
     {
-        return \history::lastChangeStateDuration(str_replace('#', '', $cmdId), $_value);
+        return \history::lastChangeStateDuration(str_replace('#', '', $cmdId), $value);
     }
 
-    public static function odd($_value)
+    /**
+     * Tester si une valeur est paire
+     * TODO: Changer en binaire le résultat
+     *
+     * @param mixed $value
+     *
+     * @return int 1 si $value est pair, sinon 0
+     */
+    public static function odd($value)
     {
-        $_value = intval(evaluate(self::setTags($_value)));
-        return ($_value % 2) ? 1 : 0;
+        $value = intval(evaluate(self::setTags($value)));
+        if ($value % 2) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
     }
 
-    public static function lastScenarioExecution($_scenario_id)
+    /**
+     * Obtenir l'interval de temps depuis lequel le scénario s'est exécuté
+     *
+     * @param $scenarioId Identifiant du scénario
+     * @return false|int
+     * @throws \Exception
+     */
+    public static function lastScenarioExecution($scenarioId)
     {
-        $scenario = ScenarioManager::byId(str_replace(array('#scenario', '#'), '', $_scenario_id));
+        $scenario = ScenarioManager::byId(str_replace(array('#scenario', '#'), '', $scenarioId));
         if (!is_object($scenario)) {
             return 0;
         }
         return strtotime('now') - strtotime($scenario->getLastLaunch());
     }
 
-    public static function collectDate($_cmd, $_format = 'Y-m-d H:i:s')
+    /**
+     * TODO: Collecter une date
+     *
+     * @param $cmd
+     * @param string $format
+     * @return false|int|string
+     */
+    public static function collectDate($cmd, $format = 'Y-m-d H:i:s')
     {
-        $cmd = \cmd::byId(trim(str_replace('#', '', $_cmd)));
-        if (!is_object($cmd)) {
+        $cmdObj = \cmd::byId(trim(str_replace('#', '', $cmd)));
+        if (!is_object($cmdObj)) {
             return -1;
         }
-        if ($cmd->getType() != 'info') {
+        if ($cmdObj->getType() != 'info') {
             return -2;
         }
-        $cmd->execCmd();
-        return date($_format, strtotime($cmd->getCollectDate()));
+        $cmdObj->execCmd();
+        return date($format, strtotime($cmdObj->getCollectDate()));
     }
 
-    public static function valueDate($cmdId, $_format = 'Y-m-d H:i:s')
+    /**
+     * TODO: Valeur d'une date
+     *
+     * @param $cmdId
+     * @param string $format
+     * @return false|string
+     */
+    public static function valueDate($cmdId, $format = 'Y-m-d H:i:s')
     {
         $cmd = \cmd::byId(trim(str_replace('#', '', $cmdId)));
         if (!is_object($cmd)) {
             return '';
         }
         $cmd->execCmd();
-        return date($_format, strtotime($cmd->getValueDate()));
+        return date($format, strtotime($cmd->getValueDate()));
     }
 
-    public static function randomColor($_rangeLower, $_rangeHighter)
+    /**
+     * Obtenir une couleur aléatoire
+     *
+     * @param $rangeLower
+     * @param $rangeHighter
+     * @return string
+     */
+    public static function randomColor($rangeLower, $rangeHighter)
     {
-        $value = rand($_rangeLower, $_rangeHighter);
+        $value = rand($rangeLower, $rangeHighter);
         $color_range = 85;
         $color = new stdClass();
-        $color->red = $_rangeLower;
-        $color->green = $_rangeLower;
-        $color->blue = $_rangeLower;
+        $color->red = $rangeLower;
+        $color->green = $rangeLower;
+        $color->blue = $rangeLower;
         if ($value < $color_range * 1) {
             $color->red += $color_range - $value;
             $color->green += $value;
@@ -952,23 +1059,36 @@ class ScenarioExpressionManager
         return '#' . $color->red . $color->green . $color->blue;
     }
 
-    public static function trigger($_name = '', &$_scenario = null)
+    /**
+     * TODO ????
+     *
+     * @param string $name
+     * @param null $scenario
+     * @return int
+     */
+    public static function trigger($name = '', &$scenario = null)
     {
-        if ($_scenario !== null) {
-            if (trim($_name) == '') {
-                return $_scenario->getRealTrigger();
+        if ($scenario !== null) {
+            if (trim($name) == '') {
+                return $scenario->getRealTrigger();
             }
-            if ($_name == $_scenario->getRealTrigger()) {
+            if ($name == $scenario->getRealTrigger()) {
                 return 1;
             }
         }
         return 0;
     }
 
-    public static function triggerValue(&$_scenario = null)
+    /**
+     * TODO ????
+     *
+     * @param null $scenario
+     * @return bool
+     */
+    public static function triggerValue(&$scenario = null)
     {
-        if ($_scenario !== null) {
-            $cmd = \cmd::byId(str_replace('#', '', $_scenario->getRealTrigger()));
+        if ($scenario !== null) {
+            $cmd = \cmd::byId(str_replace('#', '', $scenario->getRealTrigger()));
             if (is_object($cmd)) {
                 return $cmd->execCmd();
             }
@@ -976,100 +1096,140 @@ class ScenarioExpressionManager
         return false;
     }
 
-    public static function round($_value, $_decimal = 0)
+    /**
+     * Arrondir une valeur
+     *
+     * @param mixed $value Valeur à arrondir
+     * @param int $decimal Nombre de décimales
+     *
+     * @return float Valeur arrondie.
+     */
+    public static function round($value, $decimal = 0)
     {
-        $_value = self::setTags($_value);
+        $value = self::setTags($value);
         try {
-            $result = evaluate($_value);
+            $result = evaluate($value);
             if (is_string($result)) {
-                $result = $_value;
+                $result = $value;
             }
         } catch (\Exception $e) {
-            $result = $_value;
+            $result = $value;
         }
-        if ($_decimal == 0) {
+        if ($decimal == 0) {
             return ceil(floatval(str_replace(',', '.', $result)));
         } else {
-            return round(floatval(str_replace(',', '.', $result)), $_decimal);
+            return round(floatval(str_replace(',', '.', $result)), $decimal);
         }
     }
 
-    public static function time_op($_time, $_value)
+    /**
+     * TODO:? ???
+     *
+     * @param $time
+     * @param $value
+     * @return int|string
+     * @throws \Exception
+     */
+    public static function time_op($time, $value)
     {
-        $_time = self::setTags($_time);
-        $_value = self::setTags($_value);
-        $_time = ltrim($_time, 0);
-        switch (strlen($_time)) {
+        $time = self::setTags($time);
+        $value = self::setTags($value);
+        $time = ltrim($time, 0);
+        switch (strlen($time)) {
             case 1:
-                $date = \DateTime::createFromFormat('Gi', '000' . intval(trim($_time)));
+                $date = \DateTime::createFromFormat('Gi', '000' . intval(trim($time)));
                 break;
             case 2:
-                $date = \DateTime::createFromFormat('Gi', '00' . intval(trim($_time)));
+                $date = \DateTime::createFromFormat('Gi', '00' . intval(trim($time)));
                 break;
             case 3:
-                $date = \DateTime::createFromFormat('Gi', '0' . intval(trim($_time)));
+                $date = \DateTime::createFromFormat('Gi', '0' . intval(trim($time)));
                 break;
             default:
-                $date = \DateTime::createFromFormat('Gi', intval(trim($_time)));
+                $date = \DateTime::createFromFormat('Gi', intval(trim($time)));
                 break;
         }
         if ($date === false) {
             return -1;
         }
-        if ($_value > 0) {
-            $date->add(new \DateInterval('PT' . abs($_value) . 'M'));
+        if ($value > 0) {
+            $date->add(new \DateInterval('PT' . abs($value) . 'M'));
         } else {
-            $date->sub(new \DateInterval('PT' . abs($_value) . 'M'));
+            $date->sub(new \DateInterval('PT' . abs($value) . 'M'));
         }
         return $date->format('Gi');
     }
 
-    public static function time_between($_time, $_start, $_end)
+    /**
+     * Tester si une date se trouve dans un interval
+     *
+     * @param $time
+     * @param $startInverval
+     * @param $endInterval
+     *
+     * @return int TODO: 0, 1
+     */
+    public static function time_between($time, $startInverval, $endInterval)
     {
-        $_time = self::setTags($_time);
-        $_start = self::setTags($_start);
-        $_end = self::setTags($_end);
-        if ($_start < $_end) {
-            $result = (($_time >= $_start) && ($_time < $_end)) ? 1 : 0;
+        $time = self::setTags($time);
+        $startInverval = self::setTags($startInverval);
+        $endInterval = self::setTags($endInterval);
+        if ($startInverval < $endInterval) {
+            $result = (($time >= $startInverval) && ($time < $endInterval)) ? 1 : 0;
         } else {
-            $result = (($_time >= $_start) || ($_time < $_end)) ? 1 : 0;
+            $result = (($time >= $startInverval) || ($time < $endInterval)) ? 1 : 0;
         }
         return $result;
     }
 
-    public static function time_diff($_date1, $_date2, $_format = 'd')
+    /**
+     * Obtenir l'interval entre deux dates
+     *
+     * @param strin $date1Str Première date au format texte
+     * @param string $date2Str Seconde date au format texte
+     * @param string $intervalFormat Format de l'interval (s : secondes, m : minutes, h : heures, d : jours)
+     *
+     * @return float|int|string
+     */
+    public static function time_diff($date1Str, $date2Str, $intervalFormat = 'd')
     {
-        $date1 = new \DateTime($_date1);
-        $date2 = new \DateTime($_date2);
+        $date1 = new \DateTime($date1Str);
+        $date2 = new \DateTime($date2Str);
         $interval = $date1->diff($date2);
-        if ($_format == 's') {
+        if ($intervalFormat == 's') {
             return $interval->format('%s') + 60 * $interval->format('%m') + 3600 * $interval->format('%h') + 86400 * $interval->format('%a');
         }
-        if ($_format == 'm') {
+        if ($intervalFormat == 'm') {
             return $interval->format('%i') + 60 * $interval->format('%h') + 1440 * $interval->format('%a');
         }
-        if ($_format == 'h') {
+        if ($intervalFormat == 'h') {
             return $interval->format('%h') + 24 * $interval->format('%a');
         }
         return $interval->format('%a');
     }
 
-    public static function time($_value)
+    /**
+     * TODO: L'heure mais ça à l'air plus compliqué que ça
+     *
+     * @param $value
+     * @return int|mixed|string
+     */
+    public static function time($value)
     {
-        $_value = self::setTags($_value);
+        $value = self::setTags($value);
         try {
-            $result = evaluate($_value);
+            $result = evaluate($value);
             if (is_string($result)) {
-                $result = $_value;
+                $result = $value;
             }
         } catch (\Exception $e) {
-            $result = $_value;
+            $result = $value;
         }
         if ($result < 0) {
             return -1;
         }
         if (($result % 100) > 59) {
-            if (strpos($_value, '-') !== false) {
+            if (strpos($value, '-') !== false) {
                 $result -= 40;
             } else {
                 $result += 40;
@@ -1079,21 +1239,34 @@ class ScenarioExpressionManager
         return $result;
     }
 
-    public static function formatTime($_time)
+    /**
+     * TODO: Formate l'heure
+     *
+     * @param $time
+     * @return string
+     */
+    public static function formatTime($time)
     {
-        $_time = self::setTags($_time);
-        if (strlen($_time) > 3) {
-            return substr($_time, 0, 2) . 'h' . substr($_time, 2, 2);
-        } elseif (strlen($_time) > 2) {
-            return substr($_time, 0, 1) . 'h' . substr($_time, 1, 2);
-        } elseif (strlen($_time) > 1) {
-            return '00h' . substr($_time, 0, 2);
+        $time = self::setTags($time);
+        if (strlen($time) > 3) {
+            return substr($time, 0, 2) . 'h' . substr($time, 2, 2);
+        } elseif (strlen($time) > 2) {
+            return substr($time, 0, 1) . 'h' . substr($time, 1, 2);
+        } elseif (strlen($time) > 1) {
+            return '00h' . substr($time, 0, 2);
         } else {
-            return '00h0' . substr($_time, 0, 1);
+            return '00h0' . substr($time, 0, 1);
         }
     }
 
-    public static function name($_type, $cmdId)
+    /**
+     * TODO: My name is Bond, James Bond
+     *
+     * @param $type
+     * @param $cmdId
+     * @return string
+     */
+    public static function name($type, $cmdId)
     {
         $cmd = \cmd::byId(str_replace('#', '', $cmdId));
         if (!is_object($cmd)) {
@@ -1102,7 +1275,7 @@ class ScenarioExpressionManager
         if (!is_object($cmd)) {
             return __('Commande non trouvée', __FILE__);
         }
-        switch ($_type) {
+        switch ($type) {
             case 'cmd':
                 return $cmd->getName();
             case 'eqLogic':
@@ -1117,10 +1290,16 @@ class ScenarioExpressionManager
         return __('Type inconnu', __FILE__);
     }
 
-    public static function getRequestTags($_expression)
+    /**
+     * TODO: Je demande des tags
+     *
+     * @param $expression
+     * @return array
+     */
+    public static function getRequestTags($expression)
     {
         $return = array();
-        preg_match_all("/#([a-zA-Z0-9]*)#/", $_expression, $matches);
+        preg_match_all("/#([a-zA-Z0-9]*)#/", $expression, $matches);
         if (count($matches) == 0) {
             return $return;
         }
@@ -1189,6 +1368,14 @@ class ScenarioExpressionManager
         return $return;
     }
 
+    /**
+     * TODO: Un tag
+     *
+     * @param null $_scenario
+     * @param $_name
+     * @param string $_default
+     * @return string
+     */
     public static function tag(&$_scenario = null, $_name, $_default = '')
     {
         if ($_scenario === null) {
@@ -1201,29 +1388,38 @@ class ScenarioExpressionManager
         return '"' . $_default . '"';
     }
 
-    public static function setTags($_expression, &$_scenario = null, $_quote = false, $_nbCall = 0)
+    /**
+     * TODO Faut bien les définir les tags
+     *
+     * @param $expression
+     * @param null $scenario
+     * @param bool $quote
+     * @param int $nbCall
+     * @return mixed
+     */
+    public static function setTags($expression, &$scenario = null, $quote = false, $nbCall = 0)
     {
-        if (file_exists(dirname(__FILE__) . '/../../data/php/user.function.class.php')) {
-            require_once dirname(__FILE__) . '/../../data/php/user.function.class.php';
+        if (file_exists(__DIR__ . '/../../data/php/user.function.class.php')) {
+            require_once __DIR__ . '/../../data/php/user.function.class.php';
         }
-        if ($_nbCall > 10) {
-            return $_expression;
+        if ($nbCall > 10) {
+            return $expression;
         }
-        $replace1 = self::getRequestTags($_expression);
-        if ($_scenario !== null && count($_scenario->getTags()) > 0) {
-            $replace1 = array_merge($replace1, $_scenario->getTags());
+        $replace1 = self::getRequestTags($expression);
+        if ($scenario !== null && count($scenario->getTags()) > 0) {
+            $replace1 = array_merge($replace1, $scenario->getTags());
         }
 
-        if (is_object($_scenario)) {
-            $cmd = \cmd::byId(str_replace('#', '', $_scenario->getRealTrigger()));
+        if (is_object($scenario)) {
+            $cmd = \cmd::byId(str_replace('#', '', $scenario->getRealTrigger()));
             if (is_object($cmd)) {
                 $replace1['#trigger#'] = $cmd->getHumanName();
                 $replace1['#trigger_value#'] = $cmd->execCmd();
             } else {
-                $replace1['#trigger#'] = $_scenario->getRealTrigger();
+                $replace1['#trigger#'] = $scenario->getRealTrigger();
             }
         }
-        if ($_quote) {
+        if ($quote) {
             foreach ($replace1 as &$value) {
                 if (strpos($value, ' ') !== false || preg_match("/[a-zA-Z]/", $value) || $value === '') {
                     $value = '"' . trim($value, '"') . '"';
@@ -1231,30 +1427,30 @@ class ScenarioExpressionManager
             }
         }
         $replace2 = array();
-        if (!is_string($_expression)) {
-            return $_expression;
+        if (!is_string($expression)) {
+            return $expression;
         }
-        preg_match_all("/([a-zA-Z][a-zA-Z_]*?)\((.*?)\)/", $_expression, $matches, PREG_SET_ORDER);
+        preg_match_all("/([a-zA-Z][a-zA-Z_]*?)\((.*?)\)/", $expression, $matches, PREG_SET_ORDER);
         if (is_array($matches)) {
             foreach ($matches as $match) {
                 $function = $match[1];
                 $replace_string = $match[0];
                 if (substr_count($match[2], '(') != substr_count($match[2], ')')) {
-                    $pos = strpos($_expression, $match[2]) + strlen($match[2]);
+                    $pos = strpos($expression, $match[2]) + strlen($match[2]);
                     while (substr_count($match[2], '(') > substr_count($match[2], ')')) {
-                        $match[2] .= $_expression[$pos];
+                        $match[2] .= $expression[$pos];
                         $pos++;
-                        if ($pos > strlen($_expression)) {
+                        if ($pos > strlen($expression)) {
                             break;
                         }
                     }
-                    $arguments = self::setTags($match[2], $_scenario, $_quote, $_nbCall++);
-                    $result = str_replace($match[2], $arguments, $_expression);
+                    $arguments = self::setTags($match[2], $scenario, $quote, $nbCall++);
+                    $result = str_replace($match[2], $arguments, $expression);
                     while (substr_count($result, '(') > substr_count($result, ')')) {
                         $result .= ')';
                     }
-                    $result = self::setTags($result, $_scenario, $_quote, $_nbCall++);
-                    return \cmd::cmdToValue(str_replace(array_keys($replace1), array_values($replace1), $result), $_quote);
+                    $result = self::setTags($result, $scenario, $quote, $nbCall++);
+                    return \cmd::cmdToValue(str_replace(array_keys($replace1), array_values($replace1), $result), $quote);
                 } else {
                     $arguments = explode(',', $match[2]);
                 }
@@ -1263,9 +1459,9 @@ class ScenarioExpressionManager
                         if (!isset($arguments[0])) {
                             $arguments[0] = '';
                         }
-                        $replace2[$replace_string] = self::trigger($arguments[0], $_scenario);
+                        $replace2[$replace_string] = self::trigger($arguments[0], $scenario);
                     } elseif ($function == 'triggerValue') {
-                        $replace2[$replace_string] = self::triggerValue($_scenario);
+                        $replace2[$replace_string] = self::triggerValue($scenario);
                     } elseif ($function == 'tag') {
                         if (!isset($arguments[0])) {
                             $arguments[0] = '';
@@ -1273,7 +1469,7 @@ class ScenarioExpressionManager
                         if (!isset($arguments[1])) {
                             $arguments[1] = '';
                         }
-                        $replace2[$replace_string] = self::tag($_scenario, $arguments[0], $arguments[1]);
+                        $replace2[$replace_string] = self::tag($scenario, $arguments[0], $arguments[1]);
                     } else {
                         $replace2[$replace_string] = call_user_func_array(__CLASS__ . "::" . $function, $arguments);
                     }
@@ -1282,27 +1478,35 @@ class ScenarioExpressionManager
                 } else {
                     if (function_exists($function)) {
                         foreach ($arguments as &$argument) {
-                            $argument = trim(evaluate(self::setTags($argument, $_scenario, $_quote)));
+                            $argument = trim(evaluate(self::setTags($argument, $scenario, $quote)));
                         }
                         $replace2[$replace_string] = call_user_func_array($function, $arguments);
                     }
                 }
-                if ($_quote && isset($replace2[$replace_string]) && (strpos($replace2[$replace_string], ' ') !== false || preg_match("/[a-zA-Z#]/", $replace2[$replace_string]) || $replace2[$replace_string] === '')) {
+                if ($quote && isset($replace2[$replace_string]) && (strpos($replace2[$replace_string], ' ') !== false || preg_match("/[a-zA-Z#]/", $replace2[$replace_string]) || $replace2[$replace_string] === '')) {
                     $replace2[$replace_string] = '"' . trim($replace2[$replace_string], '"') . '"';
                 }
             }
         }
-        $return = \cmd::cmdToValue(str_replace(array_keys($replace1), array_values($replace1), str_replace(array_keys($replace2), array_values($replace2), $_expression)), $_quote);
+        $return = \cmd::cmdToValue(str_replace(array_keys($replace1), array_values($replace1), str_replace(array_keys($replace2), array_values($replace2), $expression)), $quote);
         return $return;
     }
 
-    public static function createAndExec($_type, $_cmd, $_options = null)
+    /**
+     * TODO: Créé et exécute un truc
+     *
+     * @param $type
+     * @param $cmd
+     * @param null $options
+     * @return mixed
+     */
+    public static function createAndExec($type, $cmd, $options = null)
     {
         $scenarioExpression = new self();
-        $scenarioExpression->setType($_type);
-        $scenarioExpression->setExpression($_cmd);
-        if (is_array($_options)) {
-            foreach ($_options as $key => $value) {
+        $scenarioExpression->setType($type);
+        $scenarioExpression->setExpression($cmd);
+        if (is_array($options)) {
+            foreach ($options as $key => $value) {
                 $scenarioExpression->setOptions($key, $value);
             }
         }

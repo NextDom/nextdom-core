@@ -16,6 +16,30 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+Chemin d'un scénario
+scenario->launch(trigger, message, forceSyncMode);
+ - Test si le scénario est activé
+ - Si mode syncmode
+   - scenario->execute(trigger, message)
+   Sinon
+     - Fait un truc avec les tags
+     - lancement en mode asynchrone avec jeeScenario en ligne de commande scenarioId, trigger, message
+
+scenario->execute(trigger, message)
+ - Fait un truc avec les tags
+ - Test si le scenario est actif
+ - Vérifie la date !!!! Peut amener un délai de 3s
+ - Récupère la commande du trigger
+ - Fait des trucs et des bidules avec une histoire de timeline
+ - Fait des trucs encore plus bizarres
+ - Boucle sur les éléments
+   - Appel récursif à cette commande !!!! et recheck tout le merdier
+   - Break si $this->getDo() sur l'élément
+ - Fait encore un truc bizarre avec le PID
+ */
+
+
 use NextDom\Managers\ScenarioManager;
 
 /* * ***************************Includes********************************* */

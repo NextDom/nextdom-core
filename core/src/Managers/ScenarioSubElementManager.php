@@ -74,7 +74,7 @@ class ScenarioSubElementManager
                 WHERE scenarioElement_id = :scenarioElement_id ';
         if ($filterByType != '') {
             $values['type'] = $filterByType;
-            $sql .= 'AND type = :type ';
+            $sql .= 'AND `type` = :type ';
         }
         else {
             $sql .= 'ORDER BY `order`';

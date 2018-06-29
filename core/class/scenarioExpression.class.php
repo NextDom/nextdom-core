@@ -230,8 +230,6 @@ class scenarioExpression {
         return ScenarioExpressionManager::createAndExec($_type, $_cmd, $_options);
     }
 
-/*     * *********************Methode d'instance************************* */
-
     public function checkBackground() {
         if ($this->getOptions('background', 0) == 0) {
             return;
