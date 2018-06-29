@@ -232,11 +232,10 @@ class ScenarioManager
      *
      * @param event $event Evènement déclencheur
      * @param bool $forceSyncMode Forcer le mode synchrone
-     * @param string $forTranslationFile Fichier nécessaire à la traduction
      *
      * @return bool Renvoie toujours true //TODO: A voir
      */
-    public static function check($event = null, $forceSyncMode = false, $forTranslationFile)
+    public static function check($event = null, $forceSyncMode = false)
     {
         $message = '';
         if ($event !== null) {
@@ -244,11 +243,11 @@ class ScenarioManager
             if (is_object($event)) {
                 $eventScenarios = self::byTrigger($event->getId());
                 $trigger = '#' . $event->getId() . '#';
-                $message = __('Scénario exécuté automatiquement sur événement venant de : ', $forTranslationFile) . $event->getHumanName();
+                $message = __('Scénario exécuté automatiquement sur événement venant de : ') . $event->getHumanName();
             } else {
                 $eventScenarios = self::byTrigger($event);
                 $trigger = $event;
-                $message = __('Scénario exécuté sur événement : #', $forTranslationFile) . $event . '#';
+                $message = __('Scénario exécuté sur événement : #') . $event . '#';
             }
             if (is_array($eventScenarios) && count($eventScenarios) > 0) {
                 foreach ($eventScenarios as $scenario) {
@@ -258,7 +257,7 @@ class ScenarioManager
                 }
             }
         } else {
-            $message = __('Scénario exécuté automatiquement sur programmation', $forTranslationFile);
+            $message = __('Scénario exécuté automatiquement sur programmation');
             $scenarios = self::schedule();
             $trigger = 'schedule';
             if (\nextdom::isDateOk()) {
@@ -284,9 +283,8 @@ class ScenarioManager
     /**
      * Contrôle des scénarios // TODO: ???
      *
-     * @param string $forTranslationFile Fichier nécessaire à la traduction
      */
-    public static function control(string $forTranslationFile)
+    public static function control()
     {
         foreach (self::all() as $scenario) {
             if ($scenario->getState() != 'in progress') {
@@ -300,7 +298,7 @@ class ScenarioManager
             // TODO: Optimisation
             if (is_numeric($scenario->getTimeout()) && $scenario->getTimeout() != '' && $scenario->getTimeout() != 0 && $runtime > $scenario->getTimeout()) {
                 $scenario->stop();
-                $scenario->setLog(__('Arret du scénario car il a dépassé son temps de timeout : ', $forTranslationFile) . $scenario->getTimeout() . 's');
+                $scenario->setLog(__('Arret du scénario car il a dépassé son temps de timeout : ') . $scenario->getTimeout() . 's');
                 $scenario->persistLog();
             }
         }
@@ -310,30 +308,29 @@ class ScenarioManager
      * Fait dedans ??? TODO: Trouver un nom explicite
      *
      * @param array $options ???
-     * @param string $forTranslationFile Fichier nécessaire à la traduction
      *
      * @throws \Exception
      */
-    public static function doIn(array $options, $forTranslationFile)
+    public static function doIn(array $options)
     {
         $scenario = self::byId($options['scenario_id']);
         if (is_object($scenario)) {
             if ($scenario->getIsActive() == 0) {
-                $scenario->setLog(__('Scénario désactivé non lancement de la sous tâche', $forTranslationFile));
+                $scenario->setLog(__('Scénario désactivé non lancement de la sous tâche'));
                 $scenario->persistLog();
             } else {
                 $scenarioElement = scenarioElement::byId($options['scenarioElement_id']);
-                $scenario->setLog(__('************Lancement sous tâche**************', $forTranslationFile));
+                $scenario->setLog(__('************Lancement sous tâche**************'));
                 if (isset($options['tags']) && is_array($options['tags']) && count($options['tags']) > 0) {
                     $scenario->setTags($options['tags']);
-                    $scenario->setLog(__('Tags : ', $forTranslationFile) . json_encode($scenario->getTags()));
+                    $scenario->setLog(__('Tags : ') . json_encode($scenario->getTags()));
                 }
                 if (is_object($scenarioElement)) {
                     if (is_numeric($options['second']) && $options['second'] > 0) {
                         sleep($options['second']);
                     }
                     $scenarioElement->getSubElement('do')->execute($scenario);
-                    $scenario->setLog(__('************FIN sous tâche**************', $forTranslationFile));
+                    $scenario->setLog(__('************FIN sous tâche**************'));
                     $scenario->persistLog();
                 }
             }
@@ -379,11 +376,10 @@ class ScenarioManager
      * Test la validité des scénarios TODO: Je suppose
      *
      * @param bool $needsReturn Argument à virer
-     * @param string $forTranslationFile Fichier nécessaire à la traduction
      *
      * @return array
      */
-    public static function consystencyCheck($needsReturn = false, $forTranslationFile)
+    public static function consystencyCheck($needsReturn = false)
     {
         $return = array();
         foreach (self::all() as $scenario) {
@@ -403,7 +399,7 @@ class ScenarioManager
                         if ($needsReturn) {
                             $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Déclencheur du scénario', 'who' => '#' . $cmd_id . '#');
                         } else {
-                            \log::add('scenario', 'error', __('Un déclencheur du scénario : ', $forTranslationFile) . $scenario->getHumanName() . __(' est introuvable', $forTranslationFile));
+                            \log::add('scenario', 'error', __('Un déclencheur du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
                         }
                     }
                 }
@@ -418,7 +414,7 @@ class ScenarioManager
                     if ($needsReturn) {
                         $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Utilisé dans le scénario', 'who' => '#' . $cmd_id . '#');
                     } else {
-                        \log::add('scenario', 'error', __('Une commande du scénario : ', $forTranslationFile) . $scenario->getHumanName() . __(' est introuvable', $forTranslationFile));
+                        \log::add('scenario', 'error', __('Une commande du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
                     }
                 }
             }
@@ -434,11 +430,10 @@ class ScenarioManager
      * @param $objectName
      * @param $groupName
      * @param $scenarioName
-     * @param string $forTranslationFile Fichier nécessaire à la traduction
      *
      * @return mixed
      */
-    public static function byObjectNameGroupNameScenarioName($objectName, $groupName, $scenarioName, $forTranslationFile)
+    public static function byObjectNameGroupNameScenarioName($objectName, $groupName, $scenarioName)
     {
         $values = array(
             'scenario_name' => html_entity_decode($scenarioName),
@@ -447,9 +442,9 @@ class ScenarioManager
         $sql = 'SELECT ' . \DB::buildField(ScenarioManager::CLASS_NAME, 's') . '
                 FROM ' . ScenarioManager::DB_CLASS_NAME . ' s ';
 
-        if ($objectName == __('Aucun', $forTranslationFile)) {
+        if ($objectName == __('Aucun')) {
             $sql .= 'WHERE s.name=:scenario_name ';
-            if ($groupName == __('Aucun', $forTranslationFile)) {
+            if ($groupName == __('Aucun')) {
                 $sql .= 'AND (`group` IS NULL OR `group` = ""  OR `group` = "Aucun" OR `group` = "None")
                          AND s.object_id IS NULL';
             } else {
@@ -462,7 +457,7 @@ class ScenarioManager
             $sql .= 'INNER JOIN object ob ON s.object_id=ob.id
                      WHERE s.name = :scenario_name
                      AND ob.name = :object_name ';
-            if ($groupName == __('Aucun', $forTranslationFile)) {
+            if ($groupName == __('Aucun')) {
                 $sql .= 'AND (`group` IS NULL OR `group` = ""  OR `group` = "Aucun" OR `group` = "None")';
             } else {
                 $values['group_name'] = $groupName;
@@ -640,13 +635,12 @@ class ScenarioManager
      * TODO:
      *
      * @param $market
-     * @param string $forTranslationFile Fichier nécessaire à la traduction
      *
      * @return string
      *
      * @throws \Exception
      */
-    public static function shareOnMarket(&$market, $forTranslationFile)
+    public static function shareOnMarket(&$market)
     {
         $moduleFile = dirname(__FILE__) . '/../../config/scenario/' . $market->getLogicalId() . '.json';
         if (!file_exists($moduleFile)) {
@@ -655,11 +649,11 @@ class ScenarioManager
         $tmp = \nextdom::getTmpFolder('market') . '/' . $market->getLogicalId() . '.zip';
         if (file_exists($tmp)) {
             if (!unlink($tmp)) {
-                throw new \Exception(__('Impossible de supprimer : ', $forTranslationFile) . $tmp . __('. Vérifiez les droits', $forTranslationFile));
+                throw new \Exception(__('Impossible de supprimer : ') . $tmp . __('. Vérifiez les droits'));
             }
         }
         if (!\create_zip($moduleFile, $tmp)) {
-            throw new \Exception(__('Echec de création du zip. Répertoire source : ', $forTranslationFile) . $moduleFile . __(' / Répertoire cible : ', $forTranslationFile) . $tmp);
+            throw new \Exception(__('Echec de création du zip. Répertoire source : ') . $moduleFile . __(' / Répertoire cible : ') . $tmp);
         }
         return $tmp;
     }
@@ -668,10 +662,9 @@ class ScenarioManager
      * TODO:
      * @param type $market
      * @param type $path
-     * @param string $forTranslationFile Fichier nécessaire à la traduction
      * @throws Exception
      */
-    public static function getFromMarket(&$market, $path, $forTranslationFile)
+    public static function getFromMarket(&$market, $path)
     {
         $cibDir = __DIR__ . '/../../config/scenario/';
         if (!file_exists($cibDir)) {
@@ -682,7 +675,7 @@ class ScenarioManager
             $zip->extractTo($cibDir . '/');
             $zip->close();
         } else {
-            throw new \Exception('Impossible de décompresser l\'archive zip : ' . $forTranslationFile);
+            throw new \Exception('Impossible de décompresser l\'archive zip : ' . $path);
         }
     }
 
@@ -706,7 +699,7 @@ class ScenarioManager
         $return['date'] = $event['datetime'];
         $return['group'] = 'scenario';
         $return['type'] = $event['type'];
-        $scenario = \scenario::byId($event['id']);
+        $scenario = self::byId($event['id']);
         if (!is_object($scenario)) {
             return null;
         }

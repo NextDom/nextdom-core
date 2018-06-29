@@ -16,9 +16,9 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\src\Models\DAO;
+namespace NextDom\Models\DAO;
 
-use NextDom\src\Models\Domaine\Config;
+use NextDom\Models\Domaine\Config;
 
 class ConfigDAO extends DAO
 {

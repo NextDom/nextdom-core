@@ -157,4 +157,51 @@ class Utils
         }
         return $result;
     }
+
+    /**
+     * Transforme une expression lisible en une expression analysable
+     *
+     * @param string $expression Expression lisible
+     *
+     * @return string Expression transformée
+     */
+    public static function transformExpressionForEvaluation(string $expression):string {
+
+        $result = $expression;
+        $replaceMap = [
+            '==' => '==',
+            '=' => '==',
+            '>=' => '>=',
+            '<=' => '<=',
+            '<==' => '<=',
+            '>==' => '>=',
+            '===' => '==',
+            '!==' => '!=',
+            '!=' => '!=',
+            'OR' => '||',
+            'OU' => '||',
+            'or' => '||',
+            'ou' => '||',
+            '||' => '||',
+            'AND' => '&&',
+            'ET' => '&&',
+            'and' => '&&',
+            'et' => '&&',
+            '&&' => '&&',
+            '<' => '<',
+            '>' => '>',
+            '' => ''
+        ];
+        preg_match_all('/(\#.*?\#|\w+\(.*?\)|".*?"|\'.*?\'|\d+|\(|\))(?:[ ]*([!>=<adenortu]+)[ ]*)*/i', $expression, $preg_output);
+        if (count($preg_output) > 2) {
+            $result = '';
+            $exprIndex = 0;
+            foreach ($preg_output[1] as $expr) {
+                $result .= $expr.$replaceMap[$preg_output[2][$exprIndex++]];
+            }
+        }
+        return $result;
+    }
+
+
 }

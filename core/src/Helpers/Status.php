@@ -105,7 +105,7 @@ class Status
      * Obtenir le statut du mode récupération
      * @return bool Statut du mode récupération
      */
-    public static function isRecueMode() : bool
+    public static function isRescueMode() : bool
     {
         return self::$rescueMode;
     }

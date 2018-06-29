@@ -292,13 +292,14 @@ class repo_market {
                 } else {
                     shell_exec('cd /tmp/;sudo wget http://repo.zabbix.com/zabbix/3.4/debian/pool/main/z/zabbix-release/zabbix-release_3.4-1+jessie_all.deb  >> ' . $logfile . ' 2>&1;sudo dpkg -i zabbix-release_3.4-1+jessie_all.deb  >> ' . $logfile . ' 2>&1;sudo rm zabbix-release_3.4-1+jessie_all.deb  >> ' . $logfile . ' 2>&1');
                 }
-                shell_exec('sudo apt-get update  >> ' . $logfile . ' 2>&1');
             }
         }
+        shell_exec('sudo apt-get update  >> ' . $logfile . ' 2>&1');
         shell_exec('sudo apt-get -y install zabbix-agent  >> ' . $logfile . ' 2>&1');
     }
 
     public static function monitoring_start() {
+        preg_match_all('/(\d\.\d\.\d)/m', shell_exec('sudo zabbix_agentd -V'), $matches);
         self::monitoring_install();
         $cmd = "sudo chmod -R 777 /etc/zabbix;";
         $cmd .= "sudo sed -i '/ServerActive=/d' /etc/zabbix/zabbix_agentd.conf;";
@@ -309,11 +310,17 @@ class repo_market {
         $cmd .= "sudo sed -i '/TLSPSKFile=/d' /etc/zabbix/zabbix_agentd.conf;";
         $cmd .= 'sudo echo "ServerActive=' . config::byKey('market::monitoringServer') . '" >> /etc/zabbix/zabbix_agentd.conf;';
         $cmd .= 'sudo echo "Hostname=' . config::byKey('market::monitoringName') . '" >> /etc/zabbix/zabbix_agentd.conf;';
-        $cmd .= 'sudo echo "TLSConnect=psk" >> /etc/zabbix/zabbix_agentd.conf;';
-        $cmd .= 'sudo echo "TLSAccept=psk" >> /etc/zabbix/zabbix_agentd.conf;';
-        $cmd .= 'sudo echo "TLSPSKIdentity=' . config::byKey('market::monitoringPskIdentity') . '" >> /etc/zabbix/zabbix_agentd.conf;';
-        $cmd .= 'sudo echo "TLSPSKFile=/etc/zabbix/zabbix_psk" >> /etc/zabbix/zabbix_agentd.conf;';
-        $cmd .= 'sudo echo "' . config::byKey('market::monitoringPsk') . '" > /etc/zabbix/zabbix_psk;';
+        if (!isset($matches[0]) || !isset($matches[0][0]) || version_compare($matches[0][0], '3.0.0') >= 0) {
+            $cmd .= 'sudo echo "TLSConnect=psk" >> /etc/zabbix/zabbix_agentd.conf;';
+            $cmd .= 'sudo echo "TLSAccept=psk" >> /etc/zabbix/zabbix_agentd.conf;';
+            $cmd .= 'sudo echo "TLSPSKIdentity=' . config::byKey('market::monitoringPskIdentity') . '" >> /etc/zabbix/zabbix_agentd.conf;';
+            $cmd .= 'sudo echo "TLSPSKFile=/etc/zabbix/zabbix_psk" >> /etc/zabbix/zabbix_agentd.conf;';
+            $cmd .= 'sudo echo "' . config::byKey('market::monitoringPsk') . '" > /etc/zabbix/zabbix_psk;';
+        }
+        if (!file_exists('/var/log/zabbix')) {
+            $cmd .= 'sudo mkdir /var/log/zabbix;';
+            $cmd .= 'sudo chmod 777 -R /var/log/zabbix;';
+        }
         $cmd .= 'sudo systemctl restart zabbix-agent;';
         $cmd .= 'sudo systemctl enable zabbix-agent;';
         shell_exec($cmd);
@@ -591,21 +598,19 @@ class repo_market {
                 'password_type' => 'sha1',
                 'nextdomversion' => nextdom::version(),
                 'hwkey' => nextdom::getHardwareKey(),
-                'addrComplement' => config::byKey('externalComplement'),
                 'information' => array(
                     'nbMessage' => message::nbMessage(),
                     'nbUpdate' => update::nbNeedUpdate(),
                     'hardware' => (method_exists('nextdom', 'getHardwareName')) ? nextdom::getHardwareName() : '',
                     'uname' => $uname,
                 ),
+                'market_api_key' => nextdom::getApiKey('apimarket'),
                 'localIp' => $internalIp,
                 'nextdom_name' => config::byKey('name'),
                 'plugin_install_list' => plugin::listPlugin(true, false, false, true),
             );
-            if (config::byKey('market::allowDNS') != 1) {
-                $params['addr'] = config::byKey('externalAddr');
-                $params['addrProtocol'] = config::byKey('externalProtocol');
-                $params['addrPort'] = config::byKey('externalPort');
+            if (config::byKey('market::allowDNS') != 1 || config::byKey('network::disableMangement') == 1) {
+                $params['url'] = network::getNetworkAccess('external');
             }
             $jsonrpc = new jsonrpcClient(config::byKey('market::address') . '/core/api/api.php', '', $params);
         } else {

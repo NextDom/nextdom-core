@@ -23,6 +23,9 @@ use NextDom\Helpers\Status;
 use NextDom\Helpers\Client;
 use NextDom\Helpers\Router;
 use NextDom\Helpers\Utils;
+//use Symfony\Component\Debug\Debug;
+
+//Debug::enable();
 
 try {
     // Test si l'installation doit être lancée

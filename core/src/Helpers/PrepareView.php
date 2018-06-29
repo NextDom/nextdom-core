@@ -18,6 +18,7 @@
 namespace NextDom\Helpers;
 
 use NextDom\Helpers\Status;
+use NextDom\Managers\PluginManager;
 
 /**
  * Classe de support à l'affichage des contenus HTML
@@ -47,7 +48,7 @@ class PrepareView
      */
     public static function showMenu()
     {
-        if (Status::isRecueMode()) {
+        if (Status::isRescueMode()) {
             require_once(NEXTDOM_ROOT . '/desktop/template/menuRescue.php');
         } else {
             require_once(NEXTDOM_ROOT . '/desktop/template/menu.php');
@@ -67,7 +68,7 @@ class PrepareView
         global $eventjs_plugin;
         $plugin = null;
 
-        $pluginsList = \plugin::listPlugin(true, true);
+        $pluginsList = PluginManager::listPlugin(true, true);
         if (count($pluginsList) > 0) {
             foreach ($pluginsList as $category_name => $category) {
                 $icon = '';

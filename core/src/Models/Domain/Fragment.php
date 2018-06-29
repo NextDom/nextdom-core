@@ -15,55 +15,55 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\src\Models\Domaine;
+namespace NextDom\Models\Domain;
 
 
-class Update
+class Fragment
 {
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $type;
+    protected $type = 'plugin';
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $logicalId;
+    protected $logicalId;
 
     /**
      * @var string
      */
-    private $localVersion;
+    protected $localVersion;
 
     /**
      * @var string
      */
-    private $remoteVersion;
+    protected $remoteVersion;
 
     /**
      * @var string
      */
-    private $source = 'market';
+    protected $source = 'market';
 
     /**
      * @var string
      */
-    private $status;
+    protected $status;
 
     /**
      * @var string
      */
-    private $configuration;
+    protected $configuration;
 
     /**
      * @return int
@@ -75,9 +75,9 @@ class Update
 
     /**
      * @param int $id
-     * @return Update
+     * @return Fragment
      */
-    public function setId(int $id): Update
+    public function setId(int $id): Fragment
     {
         $this->id = $id;
         return $this;
@@ -93,9 +93,9 @@ class Update
 
     /**
      * @param string $type
-     * @return Update
+     * @return Fragment
      */
-    public function setType($type): Update
+    public function setType($type): Fragment
     {
         $this->type = $type;
         return $this;
@@ -111,9 +111,9 @@ class Update
 
     /**
      * @param string $name
-     * @return Update
+     * @return Fragment
      */
-    public function setName($name): Update
+    public function setName($name): Fragment
     {
         $this->name = $name;
         return $this;
@@ -129,9 +129,9 @@ class Update
 
     /**
      * @param string $logicalId
-     * @return Update
+     * @return Fragment
      */
-    public function setLogicalId($logicalId): Update
+    public function setLogicalId($logicalId): Fragment
     {
         $this->logicalId = $logicalId;
         return $this;
@@ -147,9 +147,9 @@ class Update
 
     /**
      * @param string $localVersion
-     * @return Update
+     * @return Fragment
      */
-    public function setLocalVersion($localVersion): Update
+    public function setLocalVersion($localVersion): Fragment
     {
         $this->localVersion = $localVersion;
         return $this;
@@ -165,9 +165,9 @@ class Update
 
     /**
      * @param string $remoteVersion
-     * @return Update
+     * @return Fragment
      */
-    public function setRemoteVersion($remoteVersion): Update
+    public function setRemoteVersion($remoteVersion): Fragment
     {
         $this->remoteVersion = $remoteVersion;
         return $this;
@@ -183,9 +183,9 @@ class Update
 
     /**
      * @param string $source
-     * @return Update
+     * @return Fragment
      */
-    public function setSource($source): Update
+    public function setSource($source): Fragment
     {
         $this->source = $source;
         return $this;
@@ -201,9 +201,9 @@ class Update
 
     /**
      * @param string $status
-     * @return Update
+     * @return Fragment
      */
-    public function setStatus($status): Update
+    public function setStatus($status): Fragment
     {
         $this->status = $status;
         return $this;
@@ -219,9 +219,9 @@ class Update
 
     /**
      * @param string $configuration
-     * @return Update
+     * @return Fragment
      */
-    public function setConfiguration($configuration): Update
+    public function setConfiguration($configuration): Fragment
     {
         $this->configuration = $configuration;
         return $this;
