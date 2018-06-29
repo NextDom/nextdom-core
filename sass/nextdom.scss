@@ -1,4 +1,4 @@
-@import "_colors.scss";
+
 /* This file is part of NextDom.
  *
  * NextDom is free software: you can redistribute it and/or modify
@@ -15,45 +15,20 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#nextdom-header {
-    margin-bottom: 0px !important;
-    .navbar-brand {
-        position: relative;
-        top: -5px;
-    }
-}
-
-#dashboard-submenu {
-    height: auto;
-    max-height: 600px;
-    overflow-x: hidden;
-}
-
-.plugin-item {
-    padding-right: 10px;
-    .img-responsive {
-        width: 20px;
-        display: inline-block;
-    }
-}
-
-#bt_messageModal > span {
-    background-color: #ec971f;
-}
-
-#span_nbUpdate {
-    background-color: #c9302c;
-}
-
-.default-cursor {
-    cursor: default;
-}
-
-#div_alert {
-    display: none;
-    width: 100%;
-}
-
-#md_pageHelp {
-    display: none;
-}
+@import "_colors.scss";
+@import "_core.scss";
+@import "_charts.scss";
+@import "desktop/_commun.scss";
+@import "Market/_market.scss";
+@import "Market/_AlternativeMarketForJeedomConfig.scss";
+@import "../3rdparty/jquery.toastr/jquery.toastr.scss";
+@import "../3rdparty/jquery.ui/jquery-ui.scss";
+@import "../3rdparty/jquery.utils/jquery.utils.scss";
+@import "../3rdparty/font-noto/font-noto.scss";
+@import "../3rdparty/jquery.tree/themes/default/style.scss";
+@import "../3rdparty/datetimepicker/jquery.datetimepicker.scss";
+@import "../3rdparty/jquery.cron/jquery.cron.scss";
+@import "../3rdparty/jquery.contextMenu/jquery.contextMenu.scss";
+@import "../3rdparty/codemirror/lib/codemirror.scss";
+@import "../3rdparty/jquery.sew/jquery.sew.scss";
+@import "../3rdparty/jquery.tablesorter/theme.bootstrap.scss";
