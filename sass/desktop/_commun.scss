@@ -10,7 +10,7 @@ body {
   height: 100%;
 }
 
-.btn:hover { 
+.btn:hover {
  opacity: 0.7;
 }
 
@@ -24,28 +24,28 @@ body {
 
 /* Themes for different contexts */
 .alert {
-  border-left: 5px solid #F3E5A7;
+  border-left: 5px solid $lightyellow;
 }
 
 .alert-danger {
-  border-left: 5px solid #DFAAA9;
+  border-left: 5px solid $lightred;
 }
 
 .alert-info {
-  border-left: 5px solid #B3D7EF;
+  border-left: 5px solid $lightblue;
 }
 .alert-success {
-  border-left: 5px solid #94C680;
+  border-left: 5px solid $lightgreen;
 }
 
 .btn-black {
-  color:white;
+  color:$white;
   background-color:#373737;
   border-color:#1f1f1f;
 }
 
 .btn-black:hover {
-  color:white;
+  color:$white;
   background-color:#303030;
   border-color:#1f1f1f;
 }
@@ -65,16 +65,16 @@ body {
 }
 
 .eqLogic-widget{
-  background-color: #19bc9c;
+  background-color: $nextdom_blue;
   display: inline-block;
   vertical-align: top;
-  color : white;
+  color : $white;
   border-radius: 4px;
 }
 
 .eqLogic-widget .btn:not(.btn-circle){
   border : none !important;
-  color : white !important;
+  color : $white !important;
   font-weight: bold;
 }
 
@@ -90,15 +90,15 @@ body {
 }
 
 .scenario-widget{
-  background-color: #7f8c8d;
+  background-color: $grey;
   display: inline-block;
   position : relative;
   vertical-align: top;
-  color : white;
+  color : $white;
 }
 
 .scenario-widget a{
-  color : white;
+  color : $white;
 }
 
 .cmd-widget{
@@ -108,7 +108,7 @@ body {
 }
 
 .cmd-widget .statistiques{
-  position : absolute; 
+  position : absolute;
   bottom: 0;
   font-size: 0.80em;
   left : 0;
@@ -159,8 +159,8 @@ body {
 }
 
 ::-webkit-scrollbar-thumb{
-  background:#ddd
-} 
+  background:$lightgrey
+}
 
 /* Docs sidebar
 -------------------------------------------------- */
@@ -184,16 +184,16 @@ body {
 .bs-sidebar .nav > li > a:hover,
 .bs-sidebar .nav > li > a:focus {
   text-decoration: none;
-  background-color: #e5e3e9;
-  border-right: 1px solid #dbd8e0;
+  background-color: $lightgrey;
+  border-right: 1px solid $lightgrey;
 }
 .bs-sidebar .nav > .active > a,
 .bs-sidebar .nav > .active:hover > a,
 .bs-sidebar .nav > .active:focus > a {
   font-weight: bold;
-  color: #563d7c;
+  color: $purple;
   background-color: transparent;
-  border-right: 1px solid #563d7c;
+  border-right: 1px solid $purple;
 }
 .bs-sidebar .nav .nav > li > a {
   padding-top:    3px;
@@ -232,7 +232,7 @@ body {
   font-size: 12px !important;
   line-height: 1.428571429 !important;
   border-radius: 15px !important;
-  color : white !important;
+  color : $white !important;
   background-color: transparent !important;
 }
 .btn-circle.btn-lg {
@@ -267,7 +267,7 @@ body {
   filter: alpha(opacity=0);
   opacity: 0;
   outline: none;
-  background: white;
+  background: $white;
   cursor: inherit;
   display: block;
 }
@@ -338,7 +338,7 @@ input[type=checkbox] {
 
 .highcharts-data-table th{
   border-bottom-width: 2px;
-  border: 1px solid #ddd;
+  border: 1px solid $lightgrey;
   padding: 5px;
   vertical-align: bottom;
   line-height: 1.42857143;
@@ -354,7 +354,7 @@ input[type=checkbox] {
 
 
 .highcharts-data-table td{
-  border: 1px solid #ddd;
+  border: 1px solid $lightgrey;
   padding: 5px;
   line-height: 1.42857143;
   vertical-align: top;

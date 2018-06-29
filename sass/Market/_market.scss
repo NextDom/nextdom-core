@@ -29,7 +29,7 @@
     height: 200px;
     transition: all 0.2s ease;
     overflow: hidden;
-    border: 1px solid #CCC;
+    border: 1px solid $lightgrey;
     background-color: rgba(220, 220, 220, 0.2);
     margin: 0;
     border-radius: 5px;
@@ -171,14 +171,14 @@
 }
 
 #plugin-modal .btn-success {
-    background-color: #5cb85c !important;
-    border: #5cb85c !important;
+    background-color: $lightgreen !important;
+    border: $lightgreen !important;
     background-image: none !important;
 }
 
 #plugin-modal .btn-warning {
-    background-color: #f0ad4e !important;
-    border: #f0ad4e !important;
+    background-color: $orange !important;
+    border: $orange !important;
     background-image: none !important;
 }
 
@@ -215,7 +215,7 @@
 }
 
 #plugin-modal-header {
-    background-color: #FFFFFF;
+    background-color: $white;
 }
 
 #plugin-modal-header .left-pane img {
@@ -240,7 +240,7 @@
 }
 
 #plugin-modal-body {
-    background-color: #EAEAEA;
+    background-color: $white;
 }
 
 #plugin-modal-body,
@@ -249,7 +249,7 @@
 }
 
 #plugin-modal .right-pane .help-block {
-    color: #c0c0c0;
+    color: $lightgrey;
 }
 
 #gitid-list li .btn {

@@ -78,7 +78,7 @@
 }
 
 .red {
-    background-color: #cc0000;
+    background-color: #c9302c;
 }
 
 .grey {
@@ -90,7 +90,7 @@
 }
 
 .orange {
-    background-color: #FF8000;
+    background-color: #ec971f;
 }
 
 .yellow {
@@ -98,7 +98,7 @@
 }
 
 .white {
-    background-color: white;
+    background-color: #FFF;
 }
 
 .highcharts-data-table th {
@@ -221,17 +221,17 @@ body {
 }
 
 .alert-success {
-    border-left: 5px solid #94C680;
+    border-left: 5px solid #5cb85c;
 }
 
 .btn-black {
-    color: white;
+    color: #FFF;
     background-color: #373737;
     border-color: #1f1f1f;
 }
 
 .btn-black:hover {
-    color: white;
+    color: #FFF;
     background-color: #303030;
     border-color: #1f1f1f;
 }
@@ -251,16 +251,16 @@ body {
 }
 
 .eqLogic-widget {
-    background-color: #19bc9c;
+    background-color: #33b8cc;
     display: inline-block;
     vertical-align: top;
-    color: white;
+    color: #FFF;
     border-radius: 4px;
 }
 
 .eqLogic-widget .btn:not(.btn-circle) {
     border: none !important;
-    color: white !important;
+    color: #FFF !important;
     font-weight: bold;
 }
 
@@ -276,15 +276,15 @@ body {
 }
 
 .scenario-widget {
-    background-color: #7f8c8d;
+    background-color: #666666;
     display: inline-block;
     position: relative;
     vertical-align: top;
-    color: white;
+    color: #FFF;
 }
 
 .scenario-widget a {
-    color: white;
+    color: #FFF;
 }
 
 .cmd-widget {
@@ -376,8 +376,8 @@ body {
 .bs-sidebar .nav > li > a:hover,
 .bs-sidebar .nav > li > a:focus {
     text-decoration: none;
-    background-color: #e5e3e9;
-    border-right: 1px solid #dbd8e0;
+    background-color: #ddd;
+    border-right: 1px solid #ddd;
 }
 
 .bs-sidebar .nav > .active > a,
@@ -465,7 +465,7 @@ body {
     font-size: 12px !important;
     line-height: 1.428571429 !important;
     border-radius: 15px !important;
-    color: white !important;
+    color: #FFF !important;
     background-color: transparent !important;
 }
 
@@ -503,7 +503,7 @@ body {
     filter: alpha(opacity=0);
     opacity: 0;
     outline: none;
-    background: white;
+    background: #FFF;
     cursor: inherit;
     display: block;
 }
@@ -631,7 +631,7 @@ input[type=checkbox] {
     height: 200px;
     transition: all 0.2s ease;
     overflow: hidden;
-    border: 1px solid #CCC;
+    border: 1px solid #ddd;
     background-color: rgba(220, 220, 220, 0.2);
     margin: 0;
     border-radius: 5px;
@@ -650,7 +650,7 @@ input[type=checkbox] {
     left: 0;
     width: 0;
     height: 0;
-    border-top: 3em solid #33B8CC;
+    border-top: 3em solid #33b8cc;
     border-right: 3em solid transparent;
 }
 
@@ -667,7 +667,7 @@ input[type=checkbox] {
     right: 0;
     width: 0;
     height: 0;
-    border-top: 3em solid #33B8CC;
+    border-top: 3em solid #33b8cc;
     border-left: 3em solid transparent;
 }
 
@@ -718,7 +718,7 @@ input[type=checkbox] {
     bottom: 0;
     right: 0;
     z-index: 1;
-    background-image: linear-gradient(to right, #40535e, #40535e 50%, #33B8CC 50%, #33B8CC);
+    background-image: linear-gradient(to right, #40535e, #40535e 50%, #33b8cc 50%, #33b8cc);
     background-size: 202% 100%;
     background-position: 0 0;
     -webkit-transition: all 0.2s ease;
@@ -739,7 +739,7 @@ input[type=checkbox] {
 #market-div .gitid {
     position: absolute;
     bottom: 0;
-    background-color: #33B8CC;
+    background-color: #33b8cc;
     line-height: 2em;
     padding-left: 1em;
     padding-right: 1em;
@@ -759,8 +759,8 @@ input[type=checkbox] {
 
 .market-filters .btn-primary,
 #plugin-modal .btn-primary {
-    background-color: #33B8CC !important;
-    border-color: #33B8CC !important;
+    background-color: #33b8cc !important;
+    border-color: #33b8cc !important;
     background-image: none;
 }
 
@@ -775,8 +775,8 @@ input[type=checkbox] {
 }
 
 #plugin-modal .btn-warning {
-    background-color: #f0ad4e !important;
-    border: #f0ad4e !important;
+    background-color: #ec971f !important;
+    border: #ec971f !important;
     background-image: none !important;
 }
 
@@ -813,7 +813,7 @@ input[type=checkbox] {
 }
 
 #plugin-modal-header {
-    background-color: #FFFFFF;
+    background-color: #FFF;
 }
 
 #plugin-modal-header .left-pane img {
@@ -838,7 +838,7 @@ input[type=checkbox] {
 }
 
 #plugin-modal-body {
-    background-color: #EAEAEA;
+    background-color: #FFF;
 }
 
 #plugin-modal-body,
@@ -847,7 +847,7 @@ input[type=checkbox] {
 }
 
 #plugin-modal .right-pane .help-block {
-    color: #c0c0c0;
+    color: #ddd;
 }
 
 #gitid-list li .btn {
@@ -906,7 +906,7 @@ input[type=checkbox] {
     top: -3px;
     width: 65px;
     height: 30px;
-    background: #DDDDDD;
+    background: #ddd;
     border-radius: 15px;
     -webkit-transition: background-color .2s;
     -moz-transition: background-color .2s;
@@ -935,7 +935,7 @@ input[type=checkbox] {
     -ms-transition: all .2s;
     transition: all .2s;
     border-radius: 50%;
-    background: #d9534f;
+    background: #c9302c;
     top: 2px;
     left: 5px;
 }
@@ -948,17 +948,17 @@ input[type=checkbox] {
     -ms-transition: all .2s;
     transition: all .2s;
     border-radius: 50%;
-    background: #d9534f;
+    background: #c9302c;
     top: 2px;
     left: 5px;
 }
 
 .config-form [type="checkbox"]:checked + label:before {
-    background: #DDD;
+    background: #ddd;
 }
 
 .config-form [type="checkbox"]:checked + label:after {
-    background: #62c462;
+    background: #5cb85c;
     top: 2px;
     left: 40px;
 }
@@ -998,11 +998,11 @@ input[type=checkbox] {
 
 .config-form [type="checkbox"]:checked + label .ui:after {
     content: "yes";
-    color: #62c462;
+    color: #5cb85c;
 }
 
 .config-form [type="checkbox"]:focus + label:before {
-    border: 1px dashed #777;
+    border: 1px dashed #666666;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
@@ -1017,7 +1017,7 @@ input[type=checkbox] {
 /* on checked */
 #amfj-config .control-label sup {
     font-size: 1em;
-    color: grey;
+    color: #666666;
 }
 
 #config-modal h3 {
@@ -1029,7 +1029,7 @@ input[type=checkbox] {
 }
 
 #config-modal .btn-config-market {
-    background-color: #33B8CC;
+    background-color: #33b8cc;
     min-width: 100px;
     min-height: 100px;
     margin-right: 10px;
@@ -1041,7 +1041,7 @@ input[type=checkbox] {
 }
 
 #config-modal .btn-config-market span {
-    color: white;
+    color: #FFF;
 }
 
 #github-list-container {
@@ -1064,9 +1064,9 @@ input[type=checkbox] {
 }
 
 .btn-nextdom {
-    color: #fff;
-    background-color: #33B8CC !important;
-    border-color: #33B8CC !important;
+    color: #FFF;
+    background-color: #33b8cc !important;
+    border-color: #33b8cc !important;
 }
 
 #disclaimer-modal .alert .col-md-2 {

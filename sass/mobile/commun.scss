@@ -13,7 +13,7 @@ body{
 .eqLogic-widget{
     display: inline-block;
     background-color: #19bc9c;
-    color : white;
+    color : $white;
     vertical-align: top;
     text-shadow: initial !important;
     padding-bottom: 10px;
@@ -28,7 +28,7 @@ body{
 .scenario-widget{
     display: inline-block;
     background-color: #7f8c8d;
-    color : white;
+    color : $white;
     vertical-align: top;
     text-shadow: initial;
 }
@@ -51,7 +51,7 @@ body{
 legend{
     color: #3eb249;
     background-color: transparent;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $lightgrey;
     font-size: 1.2em;
     padding-bottom: .2em;
     margin: 0 0 .7375em;

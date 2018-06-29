@@ -16,7 +16,7 @@
     top: -3px;
     width: 65px;
     height: 30px;
-    background: #DDDDDD;
+    background: $lightgrey;
     border-radius: 15px;
     -webkit-transition: background-color .2s;
     -moz-transition: background-color .2s;
@@ -48,7 +48,7 @@
       -ms-transition: all .2s;
       transition: all .2s;
       border-radius: 50%;
-      background: #d9534f;
+      background: $red;
       top: 2px;
       left: 5px;
     }
@@ -61,15 +61,15 @@
         -ms-transition: all .2s;
         transition: all .2s;
         border-radius: 50%;
-        background: #d9534f;
+        background: $red;
         top: 2px;
         left: 5px;
       }
       &:before {
-        background: #DDD;
+        background: $lightgrey;
       }
       &:after {
-        background: #62c462;
+        background: $lightgreen;
         top: 2px;
         left: 40px;
       }
@@ -106,10 +106,10 @@
     }
     &:checked + label .ui:after {
       content: "yes";
-      color: #62c462;
+      color: $lightgreen;
     }
     &:focus + label:before {
-      border: 1px dashed #777;
+      border: 1px dashed $grey;
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       -ms-box-sizing: border-box;
@@ -126,7 +126,7 @@
 
 #amfj-config .control-label sup {
   font-size: 1em;
-  color: grey;
+  color: $grey;
 }
 
 #config-modal h3 {
@@ -138,7 +138,7 @@
 }
 
 #config-modal .btn-config-market {
-  background-color: #33B8CC;
+  background-color: $nextdom_blue;
   min-width: 100px;
   min-height: 100px;
   margin-right: 10px;
@@ -147,7 +147,7 @@
     height: 50px;
   }
   span {
-    color: white;
+    color: $white;
   }
 }
 
@@ -170,9 +170,9 @@
 }
 
 .btn-nextdom {
-  color: #fff;
-  background-color: #33B8CC !important;
-  border-color: #33B8CC !important;
+  color: $white;
+  background-color: $nextdom_blue !important;
+  border-color: $nextdom_blue !important;
 }
 
 #disclaimer-modal .alert {

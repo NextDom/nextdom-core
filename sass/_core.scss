@@ -21,11 +21,11 @@
 }
 
 #bt_messageModal > span {
-    background-color: #ec971f;
+    background-color: $orange;
 }
 
 #span_nbUpdate {
-    background-color: #c9302c;
+    background-color: $red;
 }
 
 .default-cursor {
@@ -56,29 +56,29 @@ display: inline-block;
 }
 
 .green{
-background-color: #00cc00;
+background-color: $green;
 }
 
 .red{
-background-color: #cc0000;
+background-color: $red;
 }
 
 .grey{
-background-color: #666666;
+background-color: $grey;
 }
 
 .blue{
-background-color: #0174DF;
+background-color: $blue;
 }
 
 .orange{
-background-color: #FF8000;
+background-color: $orange;
 }
 
 .yellow{
-background-color: #BFFF00;
+background-color: $yellow;
 }
 
 .white{
-background-color: white;
+background-color: $white;
 }
