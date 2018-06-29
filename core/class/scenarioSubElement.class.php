@@ -19,6 +19,8 @@
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
 
+use NextDom\Managers\ScenarioSubElementManager;
+
 class scenarioSubElement {
     /*     * *************************Attributs****************************** */
 
@@ -31,33 +33,12 @@ class scenarioSubElement {
     private $order;
     private $_expression;
 
-    /*     * ***********************Methode static*************************** */
-
     public static function byId($_id) {
-        $values = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-                FROM ' . __CLASS__ . '
-                WHERE id=:id';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+        return ScenarioSubElementManager::byId($_id);
     }
 
     public static function byScenarioElementId($_scenarioElementId, $_type = '') {
-        $values = array(
-            'scenarioElement_id' => $_scenarioElementId,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-                FROM ' . __CLASS__ . '
-                WHERE scenarioElement_id=:scenarioElement_id ';
-        if ($_type != '') {
-            $values['type'] = $_type;
-            $sql .= ' AND type=:type ';
-            return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
-        }
-        $sql .= ' ORDER BY `order`';
-
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
+        return ScenarioSubElementManager::byScenarioElementId($_scenarioElementId, $_type);
     }
 
     /*     * *********************Methode d'instance************************* */

@@ -5,7 +5,7 @@ pip install jsmin
 
 mkdir -p css
 mkdir -p js
-
+<< --DOESNT-WORK--
 cat 3rdparty/roboto/roboto.css \
     desktop/css/commun.css \
     core/css/core.css \
@@ -16,8 +16,16 @@ sed -i 's/url[(]"images/url^("\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/image
 
 cat css/jquery-ui.css \
     3rdparty/jquery.utils/jquery.utils.css \
-    3rdparty/font-noto/font-noto.css \
-    3rdparty/jquery.tree/themes/default/style.min.css \
+    3rdparty/font-noto/font-noto.css >> css/temp.css
+
+sed -i 's/gritter\.png/\/3rdparty\/jquery\.utils\/gritter\.png/g' css/temp.css
+
+cp 3rdparty/jquery.tree/themes/default/style.min.css css/style.min.css
+sed -i 's/throbber\.gif/\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' css/style.min.css
+sed -i 's/32px\.gif/\/3rdparty\/jquery\.tree\/themes\/default\/32px\.gif/g' css/style.min.css
+sed -i 's/40px\.gif/\/3rdparty\/jquery\.tree\/themes\/default\/40px\.gif/g' css/style.min.css
+
+cat css/style.min.css \
     3rdparty/datetimepicker/jquery.datetimepicker.css \
     3rdparty/jquery.cron/jquery.cron.css \
     3rdparty/jquery.contextMenu/jquery.contextMenu.min.css \
@@ -29,7 +37,9 @@ sed -i 's/NotoSans-Regular\.ttf/\/3rdparty\/font-noto\/NotoSans-Regular\.ttf/g' 
 sed -i 's/NotoSans-Italic\.ttf/\/3rdparty\/font-noto\/NotoSans-Italic\.ttf/g' css/temp.css
 sed -i 's/NotoSans-Bold\.ttf/\/3rdparty\/font-noto\/NotoSans-Bold\.ttf/g' css/temp.css
 rm css/jquery-ui.css
+rm css/style.min.css
 python -m csscompressor css/temp.css -o css/base.css
+--DOESNT-WORK--
 
 cat 3rdparty/jquery.utils/jquery.utils.js \
     core/js/core.js \

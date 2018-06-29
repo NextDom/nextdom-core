@@ -54,8 +54,8 @@ class ScenarioManager
     public static function byId(int $id)
     {
         $values = array('id' => $id);
-        $sql = 'SELECT ' . \DB::buildField(ScenarioManager::CLASS_NAME) . ' FROM ' . ScenarioManager::DB_CLASS_NAME . ' WHERE id = :id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, ScenarioManager::CLASS_NAME);
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE id = :id';
+        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -90,7 +90,7 @@ class ScenarioManager
         $result1 = null;
         $result2 = null;
 
-        $baseSql = 'SELECT ' . \DB::buildField(ScenarioManager::CLASS_NAME, 's') . 'FROM ' . ScenarioManager::DB_CLASS_NAME . ' s ';
+        $baseSql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 's') . 'FROM ' . self::DB_CLASS_NAME . ' s ';
         $sqlWhereTypeFilter = ' ';
         $sqlAndTypeFilter = ' ';
         if ($type !== null) {
@@ -112,8 +112,8 @@ class ScenarioManager
             $sql1 .= 'WHERE `group` = :group ' . $sqlAndTypeFilter . 'ORDER BY ob.name, s.group, s.name';
             $sql2 = $baseSql . 'WHERE `group` = :group AND s.object_id IS NULL' . $sqlAndTypeFilter . 'ORDER BY s.group, s.name';
         }
-        $result1 = \DB::Prepare($sql1, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, ScenarioManager::CLASS_NAME);
-        $result2 = \DB::Prepare($sql2, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, ScenarioManager::CLASS_NAME);
+        $result1 = \DB::Prepare($sql1, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        $result2 = \DB::Prepare($sql2, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
         if (!is_array($result1)) {
             $result1 = array();
         }
@@ -130,11 +130,11 @@ class ScenarioManager
      */
     public static function schedule()
     {
-        $sql = 'SELECT ' . \DB::buildField(ScenarioManager::CLASS_NAME) . '
-                FROM ' . ScenarioManager::DB_CLASS_NAME . '
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE `mode` != "provoke"
                 AND isActive = 1';
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, ScenarioManager::CLASS_NAME);
+        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -148,7 +148,7 @@ class ScenarioManager
     {
         $values = array();
         $sql = 'SELECT DISTINCT(`group`)
-        FROM ' . ScenarioManager::DB_CLASS_NAME;
+        FROM ' . self::DB_CLASS_NAME;
         if ($groupPattern !== null) {
             $values['group'] = '%' . $groupPattern . '%';
             $sql .= ' WHERE `group` LIKE :group';
@@ -168,13 +168,13 @@ class ScenarioManager
     public static function byTrigger(string $cmdId, $onlyEnabled = true)
     {
         $values = array('cmd_id' => '%#' . $cmdId . '#%');
-        $sql = 'SELECT ' . \DB::buildField(ScenarioManager::DB_CLASS_NAME) . '
-        FROM ' . ScenarioManager::DB_CLASS_NAME . '
+        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
+        FROM ' . self::DB_CLASS_NAME . '
         WHERE mode != "schedule" AND `trigger` LIKE :cmd_id';
         if ($onlyEnabled) {
             $sql .= ' AND isActive = 1';
         }
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, ScenarioManager::CLASS_NAME);
+        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -189,10 +189,10 @@ class ScenarioManager
         $values = array(
             'element_id' => '%"' . $elementId . '"%',
         );
-        $sql = 'SELECT ' . \DB::buildField(ScenarioManager::DB_CLASS_NAME) . '
-        FROM ' . ScenarioManager::DB_CLASS_NAME . '
+        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
+        FROM ' . self::DB_CLASS_NAME . '
         WHERE `scenarioElement` LIKE :element_id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, ScenarioManager::CLASS_NAME);
+        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -209,8 +209,8 @@ class ScenarioManager
     public static function byObjectId($objectId, $onlyEnabled = true, $onlyVisible = false)
     {
         $values = array();
-        $sql = 'SELECT ' . \DB::buildField(ScenarioManager::CLASS_NAME) . '
-        FROM ' . ScenarioManager::DB_CLASS_NAME;
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        FROM ' . self::DB_CLASS_NAME;
         if ($objectId === null) {
             $sql .= ' WHERE object_id IS NULL';
         } else {
@@ -223,7 +223,7 @@ class ScenarioManager
         if ($onlyVisible) {
             $sql .= ' AND isVisible = 1';
         }
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, ScenarioManager::CLASS_NAME);
+        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -319,7 +319,7 @@ class ScenarioManager
                 $scenario->setLog(__('Scénario désactivé non lancement de la sous tâche'));
                 $scenario->persistLog();
             } else {
-                $scenarioElement = scenarioElement::byId($options['scenarioElement_id']);
+                $scenarioElement = ScenarioElementManager::byId($options['scenarioElement_id']);
                 $scenario->setLog(__('************Lancement sous tâche**************'));
                 if (isset($options['tags']) && is_array($options['tags']) && count($options['tags']) > 0) {
                     $scenario->setTags($options['tags']);
@@ -439,8 +439,8 @@ class ScenarioManager
             'scenario_name' => html_entity_decode($scenarioName),
         );
 
-        $sql = 'SELECT ' . \DB::buildField(ScenarioManager::CLASS_NAME, 's') . '
-                FROM ' . ScenarioManager::DB_CLASS_NAME . ' s ';
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 's') . '
+                FROM ' . self::DB_CLASS_NAME . ' s ';
 
         if ($objectName == __('Aucun')) {
             $sql .= 'WHERE s.name=:scenario_name ';
@@ -464,7 +464,7 @@ class ScenarioManager
                 $sql .= 'AND `group` = :group_name';
             }
         }
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, ScenarioManager::CLASS_NAME);
+        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -473,7 +473,7 @@ class ScenarioManager
      *
      * @param $input /TODO: Ca entre en effect
      *
-     * @return string TODO: Quelque chose de lisible à priori
+     * @return mixed TODO: Quelque chose de lisible à priori
      *
      * @throws \Exception
      */
@@ -483,7 +483,7 @@ class ScenarioManager
             $reflections = array();
             $uuid = spl_object_hash($input);
             if (!isset($reflections[$uuid])) {
-                $reflections[$uuid] = new ReflectionClass($input);
+                $reflections[$uuid] = new \ReflectionClass($input);
             }
             $reflection = $reflections[$uuid];
             $properties = $reflection->getProperties();
@@ -531,7 +531,7 @@ class ScenarioManager
             $reflections = array();
             $uuid = spl_object_hash($input);
             if (!isset($reflections[$uuid])) {
-                $reflections[$uuid] = new ReflectionClass($input);
+                $reflections[$uuid] = new \ReflectionClass($input);
             }
             $reflection = $reflections[$uuid];
             $properties = $reflection->getProperties();
@@ -589,7 +589,7 @@ class ScenarioManager
             if (!isset($search['option'])) {
                 $search['option'] = $search['action'];
             }
-            $expressions = array_merge($expressions, \scenarioExpression::searchExpression($search['action'], $search['option'], $search['and']));
+            $expressions = array_merge($expressions, ScenarioExpressionManager::searchExpression($search['action'], $search['option'], $search['and']));
         }
         if (is_array($expressions) && count($expressions) > 0) {
             foreach ($expressions as $expression) {
