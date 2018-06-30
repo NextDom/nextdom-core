@@ -148,6 +148,6 @@ class Router
             $filename = $_GET['p'];
             $plugin = isset($_GET['m']) ? $_GET['m'] : $plugin;
         }
-        include_file('mobile', $filename, $type, $plugin);
+        \include_file('mobile', $filename, $type, $plugin);
     }
 }

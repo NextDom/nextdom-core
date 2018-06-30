@@ -17,7 +17,7 @@ if [ $(id -u) != 0 ] ; then
     exit 1
 fi
 
-if [ -z "$3" ] ; then
+if [ -z "$1" ] ; then
     DEBUG="/tmp/output.txt"
 else
     DEBUG=""
@@ -38,7 +38,7 @@ apt_install() {
 mysql_sql() {
     echo "$@" | mysql -uroot -p${MYSQL_ROOT_PASSWD}
     if [ $? -ne 0 ]; then
-        printf "C${ROUGE}Ne peut exécuter $@ dans MySQL - Annulation${NORMAL}"
+        printf "${ROUGE}Ne peut exécuter $@ dans MySQL - Annulation${NORMAL}"
         exit 1
     fi
 }
@@ -109,8 +109,9 @@ step_5_php() {
 }
 
 step_6_nextdom_download() {
+    echo "                                                                                    "
     mkdir -p ${WEBSERVER_HOME} > ${DEBUG} 2>&1
-	find ${WEBSERVER_HOME} -name 'index.html' -type f -exec rm -rf {} + > ${DEBUG} 2>&1
+    find ${WEBSERVER_HOME} -name 'index.html' -type f -exec rm -rf {} + > ${DEBUG} 2>&1
     cd  ${WEBSERVER_HOME}
     if [ "$(ls -A  ${WEBSERVER_HOME})" ]; then
         git fetch --all > ${DEBUG} 2>&1
@@ -155,7 +156,7 @@ step_7_nextdom_customization() {
     for folder in php5 php7; do
         for subfolder in apache2 cli; do
             if [ -f /etc/${folder}/${subfolder}/php.ini ]; then
-                echo "Update php file /etc/${folder}/${subfolder}/php.ini" > ${DEBUG} 2>&1  2>&1
+                echo "Update php file /etc/${folder}/${subfolder}/php.ini" > ${DEBUG} 2>&1
                 sed -i 's/max_execution_time = 30/max_execution_time = 600/g' /etc/${folder}/${subfolder}/php.ini > /dev/null 2>&1
                 sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 1G/g' /etc/${folder}/${subfolder}/php.ini > /dev/null 2>&1
                 sed -i 's/post_max_size = 8M/post_max_size = 1G/g' /etc/${folder}/${subfolder}/php.ini > /dev/null 2>&1
@@ -252,19 +253,20 @@ step_9_nextdom_installation() {
 }
 
 step_10_nextdom_post() {
+    rm /etc/cron.d/nextd* > ${DEBUG} 2>&1
     if [ $(crontab -l | grep nextdom | wc -l) -ne 0 ];then
         (echo crontab -l | grep -v "nextdom") | crontab -  > ${DEBUG} 2>&1
         
     fi
     if [ ! -f /etc/cron.d/nextdom ]; then
-        echo "* * * * * www-data /usr/bin/php ${WEBSERVER_HOME}/core/php/jeeCron.php >> /dev/null" > /etc/cron.d/nextdom  > ${DEBUG} 2>&1
+        echo "* * * * * www-data /usr/bin/php ${WEBSERVER_HOME}/core/php/jeeCron.php >> /dev/null" > /etc/cron.d/nextdom
         if [ $? -ne 0 ]; then
             printf "${ROUGE}Ne peut installer le cron de nextdom - Annulation${NORMAL}"
             exit 1
         fi
     fi
     if [ ! -f /etc/cron.d/nextdom_watchdog ]; then
-        echo "*/5 * * * * root /usr/bin/php ${WEBSERVER_HOME}/core/php/watchdog.php >> /dev/null" > /etc/cron.d/nextdom_watchdog  > ${DEBUG} 2>&1
+        echo "*/5 * * * * root /usr/bin/php ${WEBSERVER_HOME}/core/php/watchdog.php >> /dev/null" > /etc/cron.d/nextdom_watchdog
         if [ $? -ne 0 ]; then
             printf "${ROUGE}Ne peut installer le cron de nextdom - Annulation${NORMAL}"
             exit 1
@@ -283,6 +285,8 @@ step_10_nextdom_post() {
             echo 'tmpfs        /tmp/nextdom            tmpfs  defaults,size=128M                                       0 0' >>  /etc/fstab
         fi
     fi
+    cd ${WEBSERVER_HOME} > ${DEBUG} 2>&1
+    ./gen_compress.sh > ${DEBUG} 2>&1
 }
 
 step_11_nextdom_check() {
@@ -309,7 +313,6 @@ distrib_1_spe(){
 }
 
 STEP=0
-VERSION=develop
 WEBSERVER_HOME=/var/www/html
 HTML_OUTPUT=0
 MYSQL_ROOT_PASSWD=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)
@@ -360,10 +363,48 @@ displaylogo()
     echo "██║ ╚████║███████╗██╔╝ ██╗   ██║   ██████╔╝╚██████╔╝██║ ╚═╝ ██║                     "
     echo "╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═════╝  ╚═════╝ ╚═╝     ╚═╝                     "
     echo "                                                                                    "
+    printf "${CYAN}Bienvenue dans l'installateur de NextDom${NORMAL}                        \n"
+    
+}
 
-printf "${CYAN}Bienvenue dans l'installateur de NextDom${NORMAL}                        \n"
-printf "${CYAN}Version d'installation de NextDom : ${VERSION}${NORMAL}                  \n"
-printf "${CYAN}Dossier principal du serveur web : ${WEBSERVER_HOME}${NORMAL}            \n"
+infos(){
+    printf "${CYAN}Version d'installation de NextDom : ${VERSION}${NORMAL}                  \n"
+    printf "${CYAN}Dossier principal du serveur web : ${WEBSERVER_HOME}${NORMAL}            \n"
+}
+
+selectoption(){
+    PS3='Selectionner la branche github a installer: '
+    options=("master" "develop" "feature/Sass" "Quit")
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            "master")
+            VERSION=master
+            clear
+            displaylogo
+            infos
+            break
+            ;;
+            "develop")
+            VERSION=develop
+            clear
+            displaylogo
+            infos
+            break
+            ;;
+            "feature/Sass")
+            VERSION=feature/Sass
+            clear
+            displaylogo
+            infos
+            break
+            ;;
+            "Quit")
+            break
+            ;;
+            *) echo "invalid option $REPLY";;
+        esac
+    done
 }
 
 progress()
@@ -383,7 +424,7 @@ progress()
     if [ $PARAM_PROGRESS = 45 ]; then echo -ne "[#########.................] (45%) $PARAM_PHASE \r"  ; delay; fi;
     if [ $PARAM_PROGRESS = 50 ]; then echo -ne "[##########................] (50%) $PARAM_PHASE \r"  ; step_6_nextdom_download; fi;
     if [ $PARAM_PROGRESS = 55 ]; then echo -ne "[###########...............] (55%) $PARAM_PHASE \r"  ; delay; fi;
-    if [ $PARAM_PROGRESS = 60 ]; then echo -ne "[############..............] (60%) $PARAM_PHASE \r"  ; step_7_nextdom_customization; fi;
+    if [ $PARAM_PROGRESS = 60 ]; then echo -ne "[############..............] (60%) $PARAM_PHASE \r \n"  ; step_7_nextdom_customization; fi;
     if [ $PARAM_PROGRESS = 65 ]; then echo -ne "[#############.............] (65%) $PARAM_PHASE \r"  ; delay; fi;
     if [ $PARAM_PROGRESS = 70 ]; then echo -ne "[###############...........] (70%) $PARAM_PHASE \r"  ; step_8_nextdom_configuration; fi;
     if [ $PARAM_PROGRESS = 75 ]; then echo -ne "[#################.........] (75%) $PARAM_PHASE \r"  ; delay; fi;
@@ -395,6 +436,7 @@ progress()
 }
 
 displaylogo
+selectoption
 printf "${CYAN}Avancement de l'installation${NORMAL}               \n"
 progress 0 "upgrade du system                                                 "
 progress 5  "upgrade du system                                                 "
