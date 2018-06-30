@@ -72,8 +72,8 @@ $themeDir = NEXTDOM_ROOT . 'core/themes/'
         }
     }
     include_file('core', 'icon.inc', 'php');
-    if (file_exists(NEXTDOM_ROOT.'/css/base.css')) {
-        include_file('', 'base', 'css');
+    if (file_exists(NEXTDOM_ROOT.'/css/nextdom.min.css')) {
+        include_file('', 'nextdom.min', 'css');
     }
     else {
         include_file('3rdparty', 'roboto/roboto', 'css');

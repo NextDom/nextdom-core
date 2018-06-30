@@ -5,41 +5,18 @@ pip install jsmin
 
 mkdir -p css
 mkdir -p js
-<< --DOESNT-WORK--
-cat 3rdparty/roboto/roboto.css \
-    desktop/css/commun.css \
-    core/css/core.css \
-    3rdparty/jquery.toastr/jquery.toastr.min.css > css/temp.css
 
-cp 3rdparty/jquery.ui/jquery-ui-bootstrap/jquery-ui.css css/jquery-ui.css
-sed -i 's/url[(]"images/url^("\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images/g' css/jquery-ui.css
+sed -i 's/url[(]"images/url("\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images/g' css/nextdom.css
+sed -i 's/url[(]"images/url("\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images/g' css/nextdom.min.css
 
-cat css/jquery-ui.css \
-    3rdparty/jquery.utils/jquery.utils.css \
-    3rdparty/font-noto/font-noto.css >> css/temp.css
+sed -i 's/url[(]"images/url("\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images/g' css/nextdom.min.css
 
-sed -i 's/gritter\.png/\/3rdparty\/jquery\.utils\/gritter\.png/g' css/temp.css
-
-cp 3rdparty/jquery.tree/themes/default/style.min.css css/style.min.css
-sed -i 's/throbber\.gif/\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' css/style.min.css
-sed -i 's/32px\.gif/\/3rdparty\/jquery\.tree\/themes\/default\/32px\.gif/g' css/style.min.css
-sed -i 's/40px\.gif/\/3rdparty\/jquery\.tree\/themes\/default\/40px\.gif/g' css/style.min.css
-
-cat css/style.min.css \
-    3rdparty/datetimepicker/jquery.datetimepicker.css \
-    3rdparty/jquery.cron/jquery.cron.css \
-    3rdparty/jquery.contextMenu/jquery.contextMenu.min.css \
-    3rdparty/codemirror/lib/codemirror.css \
-    3rdparty/jquery.sew/jquery.sew.css \
-    3rdparty/jquery.tablesorter/theme.bootstrap.css >> css/temp.css
-
-sed -i 's/NotoSans-Regular\.ttf/\/3rdparty\/font-noto\/NotoSans-Regular\.ttf/g' css/temp.css
-sed -i 's/NotoSans-Italic\.ttf/\/3rdparty\/font-noto\/NotoSans-Italic\.ttf/g' css/temp.css
-sed -i 's/NotoSans-Bold\.ttf/\/3rdparty\/font-noto\/NotoSans-Bold\.ttf/g' css/temp.css
-rm css/jquery-ui.css
-rm css/style.min.css
-python -m csscompressor css/temp.css -o css/base.css
---DOESNT-WORK--
+sed -i 's/NotoSans-Regular\.ttf/\/3rdparty\/font-noto\/NotoSans-Regular\.ttf/g' css/nextdom.css
+sed -i 's/NotoSans-Italic\.ttf/\/3rdparty\/font-noto\/NotoSans-Italic\.ttf/g' css/nextdom.css
+sed -i 's/NotoSans-Bold\.ttf/\/3rdparty\/font-noto\/NotoSans-Bold\.ttf/g' css/nextdom.css
+sed -i 's/NotoSans-Regular\.ttf/\/3rdparty\/font-noto\/NotoSans-Regular\.ttf/g' css/nextdom.min.css
+sed -i 's/NotoSans-Italic\.ttf/\/3rdparty\/font-noto\/NotoSans-Italic\.ttf/g' css/nextdom.min.css
+sed -i 's/NotoSans-Bold\.ttf/\/3rdparty\/font-noto\/NotoSans-Bold\.ttf/g' css/nextdom.min.css
 
 cat 3rdparty/jquery.utils/jquery.utils.js \
     core/js/core.js \
@@ -104,5 +81,4 @@ cat 3rdparty/jquery.utils/jquery.utils.js \
 
 python -m jsmin js/temp.js > js/base.js
 
-rm css/temp.css
 rm js/temp.js

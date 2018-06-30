@@ -1,0 +1,84 @@
+#nextdom-header {
+    margin-bottom: 0px !important;
+    .navbar-brand {
+        position: relative;
+        top: -5px;
+    }
+}
+
+#dashboard-submenu {
+    height: auto;
+    max-height: 600px;
+    overflow-x: hidden;
+}
+
+.plugin-item {
+    padding-right: 10px;
+    .img-responsive {
+        width: 20px;
+        display: inline-block;
+    }
+}
+
+#bt_messageModal > span {
+    background-color: #ec971f;
+}
+
+#span_nbUpdate {
+    background-color: #c9302c;
+}
+
+.default-cursor {
+    cursor: default;
+}
+
+#div_alert {
+    display: none;
+    width: 100%;
+}
+
+#md_pageHelp {
+    display: none;
+}
+
+.cursor{
+cursor : pointer;
+}
+
+.binary{
+margin-left: 5px;
+position: relative;
+top: 2px;
+width : 15px;
+height : 15px;
+border-radius: 5px 5px 5px 5px;
+display: inline-block;
+}
+
+.green{
+background-color: $green;
+}
+
+.red{
+background-color: $red;
+}
+
+.grey{
+background-color: $grey;
+}
+
+.blue{
+background-color: $blue;
+}
+
+.orange{
+background-color: $orange;
+}
+
+.yellow{
+background-color: $yellow;
+}
+
+.white{
+background-color: $white;
+}
