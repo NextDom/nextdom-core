@@ -155,7 +155,7 @@ step_7_nextdom_customization() {
     for folder in php5 php7; do
         for subfolder in apache2 cli; do
             if [ -f /etc/${folder}/${subfolder}/php.ini ]; then
-                echo "Update php file /etc/${folder}/${subfolder}/php.ini" > ${DEBUG} 2>&1  2>&1
+                echo "Update php file /etc/${folder}/${subfolder}/php.ini" > ${DEBUG} 2>&1
                 sed -i 's/max_execution_time = 30/max_execution_time = 600/g' /etc/${folder}/${subfolder}/php.ini > /dev/null 2>&1
                 sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 1G/g' /etc/${folder}/${subfolder}/php.ini > /dev/null 2>&1
                 sed -i 's/post_max_size = 8M/post_max_size = 1G/g' /etc/${folder}/${subfolder}/php.ini > /dev/null 2>&1
@@ -252,19 +252,20 @@ step_9_nextdom_installation() {
 }
 
 step_10_nextdom_post() {
+    rm /etc/cron.d/nextd* > ${DEBUG} 2>&1
     if [ $(crontab -l | grep nextdom | wc -l) -ne 0 ];then
         (echo crontab -l | grep -v "nextdom") | crontab -  > ${DEBUG} 2>&1
         
     fi
     if [ ! -f /etc/cron.d/nextdom ]; then
-        echo "* * * * * www-data /usr/bin/php ${WEBSERVER_HOME}/core/php/jeeCron.php >> /dev/null" > /etc/cron.d/nextdom  > ${DEBUG} 2>&1
+        echo "* * * * * www-data /usr/bin/php ${WEBSERVER_HOME}/core/php/jeeCron.php >> /dev/null" > /etc/cron.d/nextdom
         if [ $? -ne 0 ]; then
             printf "${ROUGE}Ne peut installer le cron de nextdom - Annulation${NORMAL}"
             exit 1
         fi
     fi
     if [ ! -f /etc/cron.d/nextdom_watchdog ]; then
-        echo "*/5 * * * * root /usr/bin/php ${WEBSERVER_HOME}/core/php/watchdog.php >> /dev/null" > /etc/cron.d/nextdom_watchdog  > ${DEBUG} 2>&1
+        echo "*/5 * * * * root /usr/bin/php ${WEBSERVER_HOME}/core/php/watchdog.php >> /dev/null" > /etc/cron.d/nextdom_watchdog
         if [ $? -ne 0 ]; then
             printf "${ROUGE}Ne peut installer le cron de nextdom - Annulation${NORMAL}"
             exit 1
