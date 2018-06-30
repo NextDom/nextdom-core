@@ -423,7 +423,7 @@ progress()
     if [ $PARAM_PROGRESS = 45 ]; then echo -ne "[#########.................] (45%) $PARAM_PHASE \r"  ; delay; fi;
     if [ $PARAM_PROGRESS = 50 ]; then echo -ne "[##########................] (50%) $PARAM_PHASE \r"  ; step_6_nextdom_download; fi;
     if [ $PARAM_PROGRESS = 55 ]; then echo -ne "[###########...............] (55%) $PARAM_PHASE \r"  ; delay; fi;
-    if [ $PARAM_PROGRESS = 60 ]; then echo -ne "[############..............] (60%) $PARAM_PHASE \r \n"  ; step_7_nextdom_customization; fi;
+    if [ $PARAM_PROGRESS = 60 ]; then echo -ne "[############..............] (60%) $PARAM_PHASE \r"  ; step_7_nextdom_customization; fi;
     if [ $PARAM_PROGRESS = 65 ]; then echo -ne "[#############.............] (65%) $PARAM_PHASE \r"  ; delay; fi;
     if [ $PARAM_PROGRESS = 70 ]; then echo -ne "[###############...........] (70%) $PARAM_PHASE \r"  ; step_8_nextdom_configuration; fi;
     if [ $PARAM_PROGRESS = 75 ]; then echo -ne "[#################.........] (75%) $PARAM_PHASE \r"  ; delay; fi;
