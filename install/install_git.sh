@@ -17,7 +17,7 @@ if [ $(id -u) != 0 ] ; then
     exit 1
 fi
 
-if [ -z "$3" ] ; then
+if [ -z "$1" ] ; then
     DEBUG="/tmp/output.txt"
 else
     DEBUG=""
@@ -38,7 +38,7 @@ apt_install() {
 mysql_sql() {
     echo "$@" | mysql -uroot -p${MYSQL_ROOT_PASSWD}
     if [ $? -ne 0 ]; then
-        printf "C${ROUGE}Ne peut exécuter $@ dans MySQL - Annulation${NORMAL}"
+        printf "${ROUGE}Ne peut exécuter $@ dans MySQL - Annulation${NORMAL}"
         exit 1
     fi
 }
@@ -109,8 +109,9 @@ step_5_php() {
 }
 
 step_6_nextdom_download() {
+    echo "                                                                                    "
     mkdir -p ${WEBSERVER_HOME} > ${DEBUG} 2>&1
-	find ${WEBSERVER_HOME} -name 'index.html' -type f -exec rm -rf {} + > ${DEBUG} 2>&1
+    find ${WEBSERVER_HOME} -name 'index.html' -type f -exec rm -rf {} + > ${DEBUG} 2>&1
     cd  ${WEBSERVER_HOME}
     if [ "$(ls -A  ${WEBSERVER_HOME})" ]; then
         git fetch --all > ${DEBUG} 2>&1
@@ -312,7 +313,6 @@ distrib_1_spe(){
 }
 
 STEP=0
-VERSION=develop
 WEBSERVER_HOME=/var/www/html
 HTML_OUTPUT=0
 MYSQL_ROOT_PASSWD=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)
@@ -363,10 +363,48 @@ displaylogo()
     echo "██║ ╚████║███████╗██╔╝ ██╗   ██║   ██████╔╝╚██████╔╝██║ ╚═╝ ██║                     "
     echo "╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═════╝  ╚═════╝ ╚═╝     ╚═╝                     "
     echo "                                                                                    "
+    printf "${CYAN}Bienvenue dans l'installateur de NextDom${NORMAL}                        \n"
+    
+}
 
-printf "${CYAN}Bienvenue dans l'installateur de NextDom${NORMAL}                        \n"
-printf "${CYAN}Version d'installation de NextDom : ${VERSION}${NORMAL}                  \n"
-printf "${CYAN}Dossier principal du serveur web : ${WEBSERVER_HOME}${NORMAL}            \n"
+infos(){
+    printf "${CYAN}Version d'installation de NextDom : ${VERSION}${NORMAL}                  \n"
+    printf "${CYAN}Dossier principal du serveur web : ${WEBSERVER_HOME}${NORMAL}            \n"
+}
+
+selectoption(){
+    PS3='Selectionner la branche github a installer: '
+    options=("master" "develop" "feature/Sass" "Quit")
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            "master")
+            VERSION=master
+            clear
+            displaylogo
+            infos
+            break
+            ;;
+            "develop")
+            VERSION=develop
+            clear
+            displaylogo
+            infos
+            break
+            ;;
+            "feature/Sass")
+            VERSION=feature/Sass
+            clear
+            displaylogo
+            infos
+            break
+            ;;
+            "Quit")
+            break
+            ;;
+            *) echo "invalid option $REPLY";;
+        esac
+    done
 }
 
 progress()
@@ -386,7 +424,7 @@ progress()
     if [ $PARAM_PROGRESS = 45 ]; then echo -ne "[#########.................] (45%) $PARAM_PHASE \r"  ; delay; fi;
     if [ $PARAM_PROGRESS = 50 ]; then echo -ne "[##########................] (50%) $PARAM_PHASE \r"  ; step_6_nextdom_download; fi;
     if [ $PARAM_PROGRESS = 55 ]; then echo -ne "[###########...............] (55%) $PARAM_PHASE \r"  ; delay; fi;
-    if [ $PARAM_PROGRESS = 60 ]; then echo -ne "[############..............] (60%) $PARAM_PHASE \r"  ; step_7_nextdom_customization; fi;
+    if [ $PARAM_PROGRESS = 60 ]; then echo -ne "[############..............] (60%) $PARAM_PHASE \r \n"  ; step_7_nextdom_customization; fi;
     if [ $PARAM_PROGRESS = 65 ]; then echo -ne "[#############.............] (65%) $PARAM_PHASE \r"  ; delay; fi;
     if [ $PARAM_PROGRESS = 70 ]; then echo -ne "[###############...........] (70%) $PARAM_PHASE \r"  ; step_8_nextdom_configuration; fi;
     if [ $PARAM_PROGRESS = 75 ]; then echo -ne "[#################.........] (75%) $PARAM_PHASE \r"  ; delay; fi;
@@ -398,6 +436,7 @@ progress()
 }
 
 displaylogo
+selectoption
 printf "${CYAN}Avancement de l'installation${NORMAL}               \n"
 progress 0 "upgrade du system                                                 "
 progress 5  "upgrade du system                                                 "
