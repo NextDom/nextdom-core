@@ -159,7 +159,7 @@ class nextdom
 
         $state = self::isStarted();
         $systemHealth[] = array(
-            'name' => __('health.jeedom-started'),
+            'name' => __('health.NextDom-started'),
             'state' => $state,
             'result' => ($state) ? $okStr . ' ' . file_get_contents(self::getTmpFolder() . '/started') : $nokStr,
             'comment' => '',
@@ -192,7 +192,7 @@ class nextdom
         );
 
         $systemHealth[] = array(
-            'name' => __('health.jeedom-version'),
+            'name' => __('health.NextDom-version'),
             'state' => true,
             'result' => self::version(),
             'comment' => '',
@@ -223,7 +223,7 @@ class nextdom
             'name' => __('os-version'),
             'state' => $state,
             'result' => ($state) ? $uname . ' [' . $version . ']' : $uname,
-            'comment' => ($state) ? '' : __('Vous n\'êtes pas sur un OS officiellement supporté par l\'équipe Jeedom (toute demande de support pourra donc être refusée). Les OS officiellement supporté sont Debian Jessie et Debian Strech (voir <a href="https://jeedom.github.io/documentation/compatibility/fr_FR/index" target="_blank">ici</a>)'),
+            'comment' => ($state) ? '' : __('Vous n\'êtes pas sur un OS officiellement supporté par l\'équipe NextDom (toute demande de support pourra donc être refusée). Les OS officiellement supporté sont Debian Jessie et Debian Strech (voir <a href="https://jeedom.github.io/documentation/compatibility/fr_FR/index" target="_blank">ici</a>)'),
         );
 
         $version = \DB::Prepare('select version()', array(), \DB::FETCH_TYPE_ROW);
