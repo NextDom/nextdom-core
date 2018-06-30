@@ -123,4 +123,5 @@ Options -Indexes +FollowSymLinks
 RewriteEngine on
 RewriteBase /core/ajax
 RewriteCond %{REQUEST_FILENAME} ^(.*).ajax.php
+RewriteCond %{REQUEST_URI} ^/core/ajax/
 RewriteRule core/ajax/(.+)\.ajax\.php /core/ajax/ajax-router.php?ajax-action=$1 [L]
