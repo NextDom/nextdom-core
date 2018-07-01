@@ -50,19 +50,10 @@ step_1_upgrade() {
 }
 
 step_2_mainpackage() {
-    apt-get -q -y install ntp ca-certificates unzip curl sudo cron >> ${DEBUG} 2>&1
-    apt-get -q -y install locate tar telnet wget logrotate fail2ban dos2unix ntpdate htop iotop vim iftop smbclient >> ${DEBUG} 2>&1
-    apt-get -q -y install git python python-pip >> ${DEBUG} 2>&1
-    apt-get -q -y install software-properties-common >> ${DEBUG} 2>&1
-    apt-get -q -y install libexpat1 ssl-cert >> ${DEBUG} 2>&1
-    apt-get -q -y install apt-transport-https >> ${DEBUG} 2>&1
-    apt-get -q -y install xvfb cutycapt xauth >> ${DEBUG} 2>&1
+    apt-get -q -y install ntp ca-certificates unzip curl sudo cron locate tar telnet wget logrotate fail2ban dos2unix ntpdate htop iotop vim iftop smbclient git python python-pip software-properties-common libexpat1 ssl-cert apt-transport-https xvfb cutycapt xauth >> ${DEBUG} 2>&1
     add-apt-repository non-free >> ${DEBUG} 2>&1
     apt-get -q update >> ${DEBUG} 2>&1
-    apt-get -q -y install libav-tools >> ${DEBUG} 2>&1
-    apt-get -q -y install libsox-fmt-mp3 sox libttspico-utils >> ${DEBUG} 2>&1
-    apt-get -q -y install espeak >> ${DEBUG} 2>&1
-    apt-get -q -y install mbrola >> ${DEBUG} 2>&1
+    apt-get -q -y install libav-tools libsox-fmt-mp3 sox libttspico-utils espeak mbrola >> ${DEBUG} 2>&1
     apt-get -q -y remove brltty >> ${DEBUG} 2>&1
 }
 
@@ -70,8 +61,6 @@ step_3_database() {
     echo "mysql-server mysql-server/root_password password ${MYSQL_ROOT_PASSWD}" | debconf-set-selections
     echo "mysql-server mysql-server/root_password_again password ${MYSQL_ROOT_PASSWD}" | debconf-set-selections
     apt-get install -q -y mysql-client mysql-common mysql-server >> ${DEBUG} 2>&1
-
-    mysqladmin -u root password ${MYSQL_ROOT_PASSWD}
 
     systemctl status mysql > /dev/null 2>&1
     if [ $? -ne 0 ]; then
@@ -91,6 +80,7 @@ step_3_database() {
             exit 1
         fi
     fi
+    mysqladmin -u root password ${MYSQL_ROOT_PASSWD}
 }
 
 step_4_apache() {
@@ -110,8 +100,9 @@ step_5_php() {
 
 step_6_nextdom_download() {
     echo "                                                                                    "
+    rm -fr ${WEBSERVER_HOME}
     mkdir -p ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
-    find ${WEBSERVER_HOME} -name 'index.html' -type f -exec rm -rf {} + >> ${DEBUG} 2>&1
+    
     cd  ${WEBSERVER_HOME}
     if [ "$(ls -A  ${WEBSERVER_HOME})" ]; then
         git fetch --all >> ${DEBUG} 2>&1
@@ -123,16 +114,16 @@ step_6_nextdom_download() {
 }
 
 step_7_nextdom_customization() {
-    cp ${WEBSERVER_HOME}/install/apache_security /etc/apache2/conf-available/security.conf  >> ${DEBUG} 2>&1
-    rm /etc/apache2/conf-enabled/security.conf > /dev/null >> ${DEBUG} 2>&1
+    cp ${WEBSERVER_HOME}/install/apache_security /etc/apache2/conf-available/security.conf >> ${DEBUG} 2>&1
+    rm /etc/apache2/conf-enabled/security.conf > /dev/null
     ln -s /etc/apache2/conf-available/security.conf /etc/apache2/conf-enabled/ >> ${DEBUG} 2>&1
 
-    cp ${WEBSERVER_HOME}/install/apache_default /etc/apache2/sites-available/000-default.conf  >> ${DEBUG} 2>&1
-    rm /etc/apache2/sites-enabled/000-default.conf > /dev/null >> ${DEBUG} 2>&1
-    ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/  >> ${DEBUG} 2>&1
+    cp ${WEBSERVER_HOME}/install/apache_default /etc/apache2/sites-available/000-default.conf >> ${DEBUG} 2>&1
+    rm /etc/apache2/sites-enabled/000-default.conf > /dev/null
+    ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/ >> ${DEBUG} 2>&1
 
-    rm /etc/apache2/conf-available/other-vhosts-access-log.conf > /dev/null >> ${DEBUG} 2>&1
-    rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf > /dev/null >> ${DEBUG} 2>&1
+    rm /etc/apache2/conf-available/other-vhosts-access-log.conf > /dev/null
+    rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf > /dev/null
 
     mkdir /etc/systemd/system/apache2.service.d >${DEBUG} 2>&1
     echo "[Service]" > /etc/systemd/system/apache2.service.d/privatetmp.conf
@@ -218,11 +209,11 @@ step_7_nextdom_customization() {
 }
 
 step_8_nextdom_configuration() {
-    echo "DROP USER 'nextdom'@'localhost';" | mysql -uroot -p${MYSQL_ROOT_PASSWD} > /dev/null 2>&1
-    mysql_sql "CREATE USER 'nextdom'@'localhost' IDENTIFIED BY '${MYSQL_NEXTDOM_PASSWD}';"
-    mysql_sql "DROP DATABASE IF EXISTS nextdom;"
-    mysql_sql "CREATE DATABASE nextdom;"
-    mysql_sql "GRANT ALL PRIVILEGES ON nextdom.* TO 'nextdom'@'localhost';"
+    echo "DROP USER 'nextdom'@'localhost';" | mysql -u root -p${MYSQL_ROOT_PASSWD} > /dev/null 2>&1
+    mysql -u root -p${MYSQL_ROOT_PASSWD} -e "CREATE USER 'nextdom'@'localhost' IDENTIFIED BY '${MYSQL_NEXTDOM_PASSWD}';"
+    mysql -u root -p${MYSQL_ROOT_PASSWD} -e "DROP DATABASE IF EXISTS nextdom;"
+    mysql -u root -p${MYSQL_ROOT_PASSWD} -e "CREATE DATABASE nextdom;"
+    mysql -u root -p${MYSQL_ROOT_PASSWD} -e "GRANT ALL PRIVILEGES ON nextdom.* TO 'nextdom'@'localhost';"
     cp ${WEBSERVER_HOME}/core/config/common.config.sample.php ${WEBSERVER_HOME}/core/config/common.config.php
     sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${WEBSERVER_HOME}/core/config/common.config.php
     sed -i "s/#DBNAME#/nextdom/g" ${WEBSERVER_HOME}/core/config/common.config.php
