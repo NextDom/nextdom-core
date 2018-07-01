@@ -34,7 +34,7 @@ class repo_nextdom_market
         'sendPlugin' => false,
         'hasStore' => true,
         'hasScenarioStore' => false,
-        'test' => true,
+        'test' => false,
     );
 
     public static $_configuration = array(
