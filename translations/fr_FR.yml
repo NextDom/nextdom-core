@@ -18,14 +18,14 @@ health:
   cron-disabled: "Erreur cron : les crons sont désactivés. Allez dans Administration -> Moteur de tâches pour les réactiver"
   scenario-enabled: Scénario actif
   scenario-disabled: "Erreur scénario : tous les scénarios sont désactivés. Allez dans Outils -> Scénarios pour les réactiver"
-  jeedom-started: Démarré
+  NextDom-started: Démarré
   system-date: Date système (dernière heure enregistrée)
   system-date-error: Si la derniere heure enregistrée est fausse, il faut la remettre à zéro <a href="index.php?v=d&p=administration">ici</a>
   default-authentication: Authentification par défaut
   authentication-error: "Attention : vous avez toujours l'utilisateur admin/admin de configuré, cela représente une grave faille de sécurité, aller <a href=\"index.php?v=d&p=user\">ici</a> pour modifier le mot de passe de l'utilisateur admin"
   sudo-rights: Droits sudo
-  sudo-error: Appliquez les droits root à Jeedom
-  jeedom-version: Version Jeedom
+  sudo-error: Appliquez les droits root à NextDom
+  NextDom-version: Version NextDom
   php-version: Version PHP
   php-error: Si vous êtes en version 5.4.x on vous indiquera quand la version 5.5 sera obligatoire
   os-version: Version OS
@@ -43,7 +43,7 @@ health:
   cache-persistence: Persistance du cache
   cache-not-saved: Votre cache n'est pas sauvegardé. En cas de redémarrage, certaines informations peuvent être perdues. Essayez de lancer (à partir du moteur de tâches) la tâche cache::persist.
   apache-private-tmp: Apache private tmp
-  apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (Jeedom ne peut marcher avec). Voir <a href="https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29" target="_blank">ici</a>
+  apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (NextDom ne peut marcher avec). Voir <a href="https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29" target="_blank">ici</a>
 plugin:
   cant-report: Vous ne pouvez pas faire de rapport sur un plugin sans panneau
 # Ancien format

@@ -16,6 +16,30 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+Chemin d'un scénario
+scenario->launch(trigger, message, forceSyncMode);
+ - Test si le scénario est activé
+ - Si mode syncmode
+   - scenario->execute(trigger, message)
+   Sinon
+     - Fait un truc avec les tags
+     - lancement en mode asynchrone avec jeeScenario en ligne de commande scenarioId, trigger, message
+
+scenario->execute(trigger, message)
+ - Fait un truc avec les tags
+ - Test si le scenario est actif
+ - Vérifie la date !!!! Peut amener un délai de 3s
+ - Récupère la commande du trigger
+ - Fait des trucs et des bidules avec une histoire de timeline
+ - Fait des trucs encore plus bizarres
+ - Boucle sur les éléments
+   - Appel récursif à cette commande !!!! et recheck tout le merdier
+   - Break si $this->getDo() sur l'élément
+ - Fait encore un truc bizarre avec le PID
+ */
+
+
 use NextDom\Managers\ScenarioManager;
 
 /* * ***************************Includes********************************* */
@@ -220,8 +244,6 @@ class scenario
         return ScenarioManager::getTemplate($_template);
     }
 
-    /*     * *************************MARKET**************************************** */
-
     public static function shareOnMarket(&$market)
     {
         return ScenarioManager::shareOnMarket($market, __FILE);
@@ -254,6 +276,7 @@ class scenario
     }
 
     /*     * *********************Méthodes d'instance************************* */
+
     /**
      *
      * @param type $_event
@@ -273,28 +296,31 @@ class scenario
     }
 
     /**
+     * Lance un scénario
      *
-     * @param type $_trigger
-     * @param type $_message
-     * @param type $_forceSyncMode
+     * @param type $trigger
+     * @param type $message
+     * @param bool $forceSyncMode Force synchronous mode
      * @return boolean
      */
-    public function launch($_trigger = '', $_message = '', $_forceSyncMode = false)
+    public function launch($trigger = '', $message = '', bool $forceSyncMode = false)
     {
+        // Test if scenarios are enabled and if this scenario is activated
         if (config::byKey('enableScenario') != 1 || $this->getIsActive() != 1) {
             return false;
         }
-        if ($this->getConfiguration('syncmode') == 1 || $_forceSyncMode) {
-            $this->setLog(__('Lancement du scénario en mode synchrone', __FILE__));
-            return $this->execute($_trigger, $_message);
+        // Test execution mode
+        if ($this->getConfiguration('syncmode') == 1 || $forceSyncMode) {
+            $this->setLog(__('Lancement du scénario en mode synchrone'));
+            return $this->execute($trigger, $message);
         } else {
             if (count($this->getTags()) != '') {
                 $this->setCache('tags', $this->getTags());
             }
-            $cmd = dirname(__FILE__) . '/../../core/php/jeeScenario.php ';
+            $cmd = __DIR__ . '/../../core/php/jeeScenario.php ';
             $cmd .= ' scenario_id=' . $this->getId();
-            $cmd .= ' trigger=' . escapeshellarg($_trigger);
-            $cmd .= ' "message=' . escapeshellarg(sanitizeAccent($_message)) . '"';
+            $cmd .= ' trigger=' . escapeshellarg($trigger);
+            $cmd .= ' "message=' . escapeshellarg(sanitizeAccent($message)) . '"';
             $cmd .= ' >> ' . log::getPathToLog('scenario_execution') . ' 2>&1 &';
             system::php($cmd);
         }
@@ -302,19 +328,20 @@ class scenario
     }
 
     /**
+     * Execute the scenario
      *
-     * @param type $_trigger
-     * @param type $_message
+     * @param type $trigger
+     * @param type $message
      * @return type
      */
-    public function execute($_trigger = '', $_message = '')
+    public function execute($trigger = '', $message = '')
     {
         if ($this->getCache('tags') != '') {
             $this->setTags($this->getCache('tags'));
             $this->setCache('tags', '');
         }
         if ($this->getIsActive() != 1) {
-            $this->setLog(__('Impossible d\'exécuter le scénario : ', __FILE__) . $this->getHumanName() . __(' sur : ', __FILE__) . $_message . __(' car il est désactivé', __FILE__));
+            $this->setLog(__('Impossible d\'exécuter le scénario : ', __FILE__) . $this->getHumanName() . __(' sur : ', __FILE__) . $message . __(' car il est désactivé', __FILE__));
             $this->persistLog();
             return;
         }
@@ -324,27 +351,27 @@ class scenario
             return;
         }
 
-        $cmd = cmd::byId(str_replace('#', '', $_trigger));
+        $cmd = cmd::byId(str_replace('#', '', $trigger));
         if (is_object($cmd)) {
             log::add('event', 'info', __('Exécution du scénario ', __FILE__) . $this->getHumanName() . __(' déclenché par : ', __FILE__) . $cmd->getHumanName());
             if ($this->getConfiguration('timeline::enable')) {
                 nextdom::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'trigger' => $cmd->getHumanName(true)));
             }
         } else {
-            log::add('event', 'info', __('Exécution du scénario ', __FILE__) . $this->getHumanName() . __(' déclenché par : ', __FILE__) . $_trigger);
+            log::add('event', 'info', __('Exécution du scénario ', __FILE__) . $this->getHumanName() . __(' déclenché par : ', __FILE__) . $trigger);
             if ($this->getConfiguration('timeline::enable')) {
-                nextdom::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'trigger' => $_trigger == 'schedule' ? 'programmation' : $_trigger));
+                nextdom::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'trigger' => $trigger == 'schedule' ? 'programmation' : $trigger));
             }
         }
         if (count($this->getTags()) == 0) {
-            $this->setLog('Start : ' . trim($_message, "'") . '.');
+            $this->setLog('Start : ' . trim($message, "'") . '.');
         } else {
-            $this->setLog('Start : ' . trim($_message, "'") . '. Tags : ' . json_encode($this->getTags()));
+            $this->setLog('Start : ' . trim($message, "'") . '. Tags : ' . json_encode($this->getTags()));
         }
         $this->setLastLaunch(date('Y-m-d H:i:s'));
         $this->setState('in progress');
         $this->setPID(getmypid());
-        $this->setRealTrigger($_trigger);
+        $this->setRealTrigger($trigger);
         foreach ($this->getElement() as $element) {
             if (!$this->getDo()) {
                 break;
@@ -808,7 +835,7 @@ class scenario
         $elements = $this->getScenarioElement();
         if (is_array($elements)) {
             foreach ($this->getScenarioElement() as $element_id) {
-                $element = scenarioElement::byId($element_id);
+                $element = ScenarioElement::byId($element_id);
                 if (is_object($element)) {
                     $return[] = $element;
                 }
@@ -817,7 +844,7 @@ class scenario
             return $return;
         }
         if ($elements != '') {
-            $element = scenarioElement::byId($element_id);
+            $element = ScenarioElement::byId($element_id);
             if (is_object($element)) {
                 $return[] = $element;
                 $this->_elements = $return;

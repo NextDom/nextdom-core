@@ -17,7 +17,9 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
+
+use NextDom\Managers\ScenarioElementManager;
 
 class scenarioElement {
     /*     * *************************Attributs****************************** */
@@ -29,90 +31,13 @@ class scenarioElement {
     private $order = 0;
     private $_subelement;
 
-    /*     * ***********************Méthodes statiques*************************** */
-
     public static function byId($_id) {
-        $values = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-        FROM ' . __CLASS__ . '
-        WHERE id=:id';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+        return ScenarioElementManager::byId($_id);
     }
 
     public static function saveAjaxElement($element_ajax) {
-        if (isset($element_ajax['id']) && $element_ajax['id'] != '') {
-            $element_db = scenarioElement::byId($element_ajax['id']);
-        } else {
-            $element_db = new scenarioElement();
-        }
-        if (!isset($element_db) || !is_object($element_db)) {
-            throw new Exception(__('Elément inconnu. Vérifiez l\'ID : ', __FILE__) . $element_ajax['id']);
-        }
-        utils::a2o($element_db, $element_ajax);
-        $element_db->save();
-        $subElement_order = 0;
-        $subElement_list = $element_db->getSubElement();
-        $enable_subElement = array();
-        foreach ($element_ajax['subElements'] as $subElement_ajax) {
-            if (isset($subElement_ajax['id']) && $subElement_ajax['id'] != '') {
-                $subElement_db = scenarioSubElement::byId($subElement_ajax['id']);
-            } else {
-                $subElement_db = new scenarioSubElement();
-            }
-            if (!isset($subElement_db) || !is_object($subElement_db)) {
-                throw new Exception(__('Elément inconnu. Vérifiez l\'ID : ', __FILE__) . $subElement_ajax['id']);
-            }
-            utils::a2o($subElement_db, $subElement_ajax);
-            $subElement_db->setScenarioElement_id($element_db->getId());
-            $subElement_db->setOrder($subElement_order);
-            $subElement_db->save();
-            $subElement_order++;
-            $enable_subElement[$subElement_db->getId()] = true;
-
-            $expression_list = $subElement_db->getExpression();
-            $expression_order = 0;
-            $enable_expression = array();
-            foreach ($subElement_ajax['expressions'] as &$expression_ajax) {
-                if (isset($expression_ajax['scenarioSubElement_id']) && $expression_ajax['scenarioSubElement_id'] != $subElement_db->getId() && isset($expression_ajax['id']) && $expression_ajax['id'] != '') {
-                    $expression_ajax['id'] = '';
-                }
-                if (isset($expression_ajax['id']) && $expression_ajax['id'] != '') {
-                    $expression_db = scenarioExpression::byId($expression_ajax['id']);
-                } else {
-                    $expression_db = new scenarioExpression();
-                }
-                if (!isset($expression_db) || !is_object($expression_db)) {
-                    throw new Exception(__('Expression inconnue. Vérifiez l\'ID : ', __FILE__) . $expression_ajax['id']);
-                }
-                $expression_db->emptyOptions();
-                utils::a2o($expression_db, $expression_ajax);
-                $expression_db->setScenarioSubElement_id($subElement_db->getId());
-                if ($expression_db->getType() == 'element') {
-                    $expression_db->setExpression(self::saveAjaxElement($expression_ajax['element']));
-                }
-                $expression_db->setOrder($expression_order);
-                $expression_db->save();
-                $expression_order++;
-                $enable_expression[$expression_db->getId()] = true;
-            }
-            foreach ($expression_list as $expresssion) {
-                if (!isset($enable_expression[$expresssion->getId()])) {
-                    $expresssion->remove();
-                }
-            }
-        }
-        foreach ($subElement_list as $subElement) {
-            if (!isset($enable_subElement[$subElement->getId()])) {
-                $subElement->remove();
-            }
-        }
-
-        return $element_db->getId();
+        return ScenarioElementManager::saveAjaxElement($element_ajax);
     }
-
-    /*     * *********************Méthodes d'instance************************* */
 
     public function save() {
         DB::save($this);
