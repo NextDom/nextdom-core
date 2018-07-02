@@ -126,10 +126,9 @@ try {
         'desktop',
         'mobile',
         'script',
-        'install'
-        config::byKey('backup::path'),
+        'install',
+        config::byKey('backup::path')
     );
-    $exclude = '';
     foreach ($excludes as $folder) {
         $exclude .= ' --exclude="' . $folder . '"';
     }
