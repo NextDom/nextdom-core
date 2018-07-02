@@ -277,6 +277,7 @@ step_10_nextdom_post() {
     fi
     cd ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
     ./gen_compress.sh >> ${DEBUG} 2>&1
+    service cron start
 }
 
 step_11_nextdom_check() {
