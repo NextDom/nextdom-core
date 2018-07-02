@@ -127,6 +127,11 @@ try {
         'mobile',
         'script',
         'install',
+        'data',
+        'desktop',
+        'montheme',
+        'vendor',
+        '',
         config::byKey('backup::path')
     );
     foreach ($excludes as $folder) {
