@@ -67,7 +67,7 @@
     bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée}}', function (result) {
         if (result) {
             el.find('.fa-refresh').show();
-            nextdom.backup.restoreLocal({
+            nextdom.backup.migrate({
                 backup: $('#sel_restoreBackup').value(),
                 error: function (error) {
                     $('#div_alert').showAlert({message: error.message, level: 'danger'});
@@ -78,6 +78,24 @@
             });
         }
     });
+});
+
+$("#bt_migrateNextdom").on('click', function (event) {
+   var el = $(this);
+   bootbox.confirm('{{Etes-vous sûr de vouloir migrer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée}}', function (result) {
+       if (result) {
+           el.find('.fa-refresh').show();
+           nextdom.backup.restoreLocal({
+               backup: $('#sel_restoreBackup').value(),
+               error: function (error) {
+                   $('#div_alert').showAlert({message: error.message, level: 'danger'});
+               },
+               success: function () {
+                   getNextDomLog(1, 'migrate');
+               }
+           });
+       }
+   });
 });
 
  $("#bt_removeBackup").on('click', function (event) {
