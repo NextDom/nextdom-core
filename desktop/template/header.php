@@ -72,25 +72,7 @@ $themeDir = NEXTDOM_ROOT . 'core/themes/'
         }
     }
     include_file('core', 'icon.inc', 'php');
-    if (file_exists(NEXTDOM_ROOT.'/css/nextdom.min.css')) {
-        include_file('', 'nextdom.min', 'css');
-    }
-    else {
-        include_file('3rdparty', 'roboto/roboto', 'css');
-        include_file('desktop', 'commun', 'css');
-        include_file('core', 'core', 'css');
-        include_file('3rdparty', 'jquery.toastr/jquery.toastr.min', 'css');
-        include_file('3rdparty', 'jquery.ui/jquery-ui-bootstrap/jquery-ui', 'css');
-        include_file('3rdparty', 'jquery.utils/jquery.utils', 'css');
-        include_file('3rdparty', 'font-noto/font-noto', 'css');
-        include_file('3rdparty', 'jquery.tree/themes/default/style.min', 'css');
-        include_file('3rdparty', 'datetimepicker/jquery.datetimepicker', 'css');
-        include_file('3rdparty', 'jquery.cron/jquery.cron', 'css');
-        include_file('3rdparty', 'jquery.contextMenu/jquery.contextMenu.min', 'css');
-        include_file('3rdparty', 'jquery.tablesorter/theme.bootstrap', 'css');
-        include_file('3rdparty', 'jquery.sew/jquery.sew', 'css');
-        include_file('3rdparty', 'codemirror/lib/codemirror', 'css');
-    }
+    include_file('', 'nextdom.min', 'css');
 
     // Javascript
     include_file('3rdparty', 'jquery/jquery.min', 'js');
