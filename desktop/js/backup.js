@@ -80,7 +80,7 @@
     });
 });
 
-$("#bt_migrateNextdom").on('click', function (event) {
+$("#bt_migrateNextDom").on('click', function (event) {
    var el = $(this);
    bootbox.confirm('{{Etes-vous sûr de vouloir migrer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée}}', function (result) {
        if (result) {
@@ -91,7 +91,7 @@ $("#bt_migrateNextdom").on('click', function (event) {
                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
                },
                success: function () {
-                   getNextDomLog(1, 'mi');
+                   getNextDomLog(1, 'restore');
                }
            });
        }
