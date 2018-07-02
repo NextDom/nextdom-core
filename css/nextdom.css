@@ -7443,6 +7443,10 @@ input[type=checkbox] {
     display: inline-block;
 }
 
+.nav-tabs a {
+    padding: 10px 5px !important;
+}
+
 .green {
     background-color: #00cc00;
 }
