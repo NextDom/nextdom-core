@@ -595,11 +595,11 @@ class nextdom
     {
         if ($taskInBackground) {
             \log::clear('backup');
-            $cmd = NEXTDOM . '/install/backup.php';
+            $cmd = NEXTDOM_ROOT . '/install/backup.php';
             $cmd .= ' >> ' . \log::getPathToLog('backup') . ' 2>&1 &';
             \system::php($cmd, true);
         } else {
-            require_once NEXTDOM . '/install/backup.php';
+            require_once NEXTDOM_ROOT . '/install/backup.php';
         }
     }
 
@@ -611,7 +611,7 @@ class nextdom
     public static function listBackup(): array
     {
         if (substr(\config::byKey('backup::path'), 0, 1) != '/') {
-            $backup_dir = NEXTDOM . \config::byKey('backup::path');
+            $backup_dir = NEXTDOM_ROOT . \config::byKey('backup::path');
         } else {
             $backup_dir = \config::byKey('backup::path');
         }

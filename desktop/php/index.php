@@ -70,7 +70,7 @@ if (!Status::isConnect()) {
     include_file('desktop', 'connection', 'php');
 } else {
     // Affichage normal d'une page
-    include_file('desktop', 'nextdom', 'css');
+    include_file('', 'nextdom', 'css');
     Utils::sendVarsToJS(array(
         'userProfils' => $_SESSION['user']->getOptions(),
         'user_id' => $_SESSION['user']->getId(),
