@@ -5,30 +5,15 @@ if (!isConnect()) {
 ?>
 <div class="row">
   <div class="col-lg-2">
-    <h3>{{Auteur(s)}}</h3>
-    <lu>
-      <li><a class="cursor" href="http://nextdom.com/" style="color:blue;" target="_blank">Loïc</a></li>
-    </lu>
-  </div>
-  <div class="col-lg-2">
     <h3>{{Développeurs principaux}}</h3>
     <lu>
-      <li><a class="cursor" href="http://nextdom.com/" style="color:blue;" target="_blank">Loïc</a></li>
-      <li>Ludovic</li>
+      <li><a class="cursor" href="https://github.com/Sylvaner/nextdom-core/graphs/contributors" style="color:blue;" target="_blank">NextDom Team</a></li>
     </lu>
   </div>
   <div class="col-lg-2">
     <h3>{{Traducteur(s)}}</h3>
     <lu>
       <li>All amazing people who help us on <a class="cursor" href="https://www.transifex.com/nextdom/public/" style="color:blue;" target="_blank">Transifex</a></li>
-    </lu>
-  </div>
-  <div class="col-lg-2">
-    <h3>{{Designer}}</h3>
-    <lu>
-      <li><a class="cursor" href="http://nextdom.com/" style="color:blue;" target="_blank">Loïc</a></li>
-      <li>Marie</li>
-      <li><a class="cursor" href="http://ma-maison-domotique.blogspot.com/" style="color:blue;" target="_blank">Mathieu (alias Algeroth)</a></li>
     </lu>
   </div>
   <div class="col-lg-2">
@@ -43,6 +28,7 @@ if (!isConnect()) {
 <div class="row">
   <div class="col-lg-4">
     <lu>
+      <li><a class="cursor" href="http://jeedom.com/" style="color:blue;" target="_blank">Jeedom</a></li>
       <li><a class="cursor" href="http://bootboxjs.com/" style="color:blue;" target="_blank">bootbox</a></li>
       <li><a class="cursor" href="http://getbootstrap.com/" style="color:blue;" target="_blank">bootstrap</a></li>
       <li><a class="cursor" href="http://codemirror.net/" style="color:blue;" target="_blank">codemirror</a></li>

@@ -16,12 +16,7 @@
  */
 
 @import "_colors.scss";
-@import "_core.scss";
-@import "_charts.scss";
 @import "../3rdparty/roboto/roboto.scss";
-@import "desktop/_commun.scss";
-@import "Market/_market.scss";
-@import "Market/_AlternativeMarketForJeedomConfig.scss";
 @import "../3rdparty/jquery.toastr/jquery.toastr.scss";
 @import "../3rdparty/jquery.ui/jquery-ui-bootstrap/jquery-ui.scss";
 @import "../3rdparty/jquery.utils/jquery.utils.scss";
@@ -33,3 +28,8 @@
 @import "../3rdparty/jquery.tablesorter/theme.bootstrap.scss";
 @import "../3rdparty/jquery.sew/jquery.sew.scss";
 @import "../3rdparty/codemirror/lib/codemirror.scss";
+@import "desktop/_commun.scss";
+@import "Market/_market.scss";
+@import "Market/_AlternativeMarketForJeedomConfig.scss";
+@import "_charts.scss";
+@import "_core.scss";

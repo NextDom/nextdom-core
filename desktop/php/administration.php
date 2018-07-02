@@ -19,20 +19,20 @@ user::isBan();
     <a class="btn btn-success pull-right" id="bt_saveGeneraleConfig"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active"><a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-wrench"></i> {{Général}}</a></li>
-        <li role="presentation"><a href="#apitab" aria-controls="profile" role="tab" data-toggle="tab" style="padding:10px 5px !important"><i class="fa fa-key"></i> {{API}}</a></li>
-        <li role="presentation"><a href="#ostab" aria-controls="profile" role="tab" data-toggle="tab" style="padding:10px 5px !important"><i class="fa fa-terminal"></i> {{OS/DB}}</a></li>
-        <li role="presentation"><a href="#securitytab" aria-controls="profile" role="tab" data-toggle="tab" style="padding:10px 5px !important"><i class="fa fa-shield"></i> {{Securité}}</a></li>
-        <li role="presentation"><a href="#networktab" aria-controls="profile" role="tab" data-toggle="tab" style="padding:10px 5px !important"><i class="fa fa-rss"></i> {{Réseaux}}</a></li>
-        <li role="presentation"><a href="#colortab" aria-controls="profile" role="tab" data-toggle="tab" style="padding:10px 5px !important"><i class="fa fa-tint"></i> {{Couleurs}}</a></li>
-        <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab" style="padding:10px 5px !important"><i class="icon divers-table29"></i> {{Commandes}}</a></li>
-        <li role="presentation"><a href="#cachetab" aria-controls="profile" role="tab" data-toggle="tab" style="padding:10px 5px !important"><i class="fa fa-hdd-o"></i> {{Cache}}</a></li>
-        <li role="presentation"><a href="#interacttab" aria-controls="profile" role="tab" data-toggle="tab" style="padding:10px 5px !important"><i class="fa fa-microphone"></i> {{Interactions}}</a></li>
-        <li role="presentation"><a href="#repporttab" aria-controls="profile" role="tab" data-toggle="tab" style="padding:10px 5px !important"><i class="fa fa-newspaper-o"></i> {{Rapports}}</a></li>
-        <li role="presentation"><a href="#grephlinktab" aria-controls="profile" role="tab" data-toggle="tab" style="padding:10px 5px !important"><i class="fa fa-sitemap"></i> {{Liens}}</a></li>
-        <li role="presentation"><a href="#summarytab" aria-controls="profile" role="tab" data-toggle="tab" style="padding:10px 5px !important"><i class="fa fa-table"></i> {{Résumés}}</a></li>
-        <li role="presentation"><a href="#logtab" aria-controls="profile" role="tab" data-toggle="tab" style="padding:10px 5px !important"><i class="fa fa-pencil-square-o"></i> {{Logs}}</a></li>
-        <li role="presentation"><a href="#eqlogictab" aria-controls="profile" role="tab" data-toggle="tab" style="padding:10px 5px !important"><i class="icon divers-svg"></i> {{Equipements}}</a></li>
-        <li role="presentation"><a href="#updatetab" aria-controls="profile" role="tab" data-toggle="tab" style="padding:10px 5px !important"><i class="fa fa-credit-card"></i> {{Mises à jour}}</a></li>
+        <li role="presentation"><a href="#apitab" class"nav-tabs_administration" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-key"></i> {{API}}</a></li>
+        <li role="presentation"><a href="#ostab" class"nav-tabs_administration" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-terminal"></i> {{OS/DB}}</a></li>
+        <li role="presentation"><a href="#securitytab" class"nav-tabs_administration" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-shield"></i> {{Securité}}</a></li>
+        <li role="presentation"><a href="#networktab" class"nav-tabs_administration" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-rss"></i> {{Réseaux}}</a></li>
+        <li role="presentation"><a href="#colortab" class"nav-tabs_administration" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-tint"></i> {{Couleurs}}</a></li>
+        <li role="presentation"><a href="#commandtab" class"nav-tabs_administration" aria-controls="profile" role="tab" data-toggle="tab"><i class="icon divers-table29"></i> {{Commandes}}</a></li>
+        <li role="presentation"><a href="#cachetab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-hdd-o"></i> {{Cache}}</a></li>
+        <li role="presentation"><a href="#interacttab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-microphone"></i> {{Interactions}}</a></li>
+        <li role="presentation"><a href="#repporttab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-newspaper-o"></i> {{Rapports}}</a></li>
+        <li role="presentation"><a href="#grephlinktab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-sitemap"></i> {{Liens}}</a></li>
+        <li role="presentation"><a href="#summarytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-table"></i> {{Résumés}}</a></li>
+        <li role="presentation"><a href="#logtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-pencil-square-o"></i> {{Logs}}</a></li>
+        <li role="presentation"><a href="#eqlogictab" aria-controls="profile" role="tab" data-toggle="tab"><i class="icon divers-svg"></i> {{Equipements}}</a></li>
+        <li role="presentation"><a href="#updatetab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-credit-card"></i> {{Mises à jour}}</a></li>
     </ul>
     <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
         <div role="tabpanel" class="tab-pane active" id="generaltab">
