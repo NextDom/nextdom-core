@@ -90,6 +90,9 @@ $themeDir = NEXTDOM_ROOT . 'core/themes/'
     <?php
     if (file_exists(NEXTDOM_ROOT.'/js/base.js')) {
         include_file('', 'base', 'js');
+        // TODO: Bug compression table sorter
+        include_file('3rdparty', 'jquery.tablesorter/jquery.tablesorter.min', 'js');
+        include_file('3rdparty', 'jquery.tablesorter/jquery.tablesorter.widgets.min', 'js');
     }
     else {
         include_file('3rdparty', 'jquery.utils/jquery.utils', 'js');
@@ -122,8 +125,6 @@ $themeDir = NEXTDOM_ROOT . 'core/themes/'
         include_file('3rdparty', 'jquery.fileupload/jquery.ui.widget', 'js');
         include_file('3rdparty', 'jquery.fileupload/jquery.iframe-transport', 'js');
         include_file('3rdparty', 'jquery.fileupload/jquery.fileupload', 'js');
-        include_file('3rdparty', 'jquery.tablesorter/jquery.tablesorter.min', 'js');
-        include_file('3rdparty', 'jquery.tablesorter/jquery.tablesorter.widgets.min', 'js');
         include_file('3rdparty', 'datetimepicker/jquery.datetimepicker', 'js');
         include_file('3rdparty', 'jquery.cron/jquery.cron.min', 'js');
         include_file('3rdparty', 'jquery.contextMenu/jquery.contextMenu.min', 'js');
