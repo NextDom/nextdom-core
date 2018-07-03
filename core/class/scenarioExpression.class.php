@@ -20,6 +20,8 @@
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
 use NextDom\Managers\ScenarioExpressionManager;
+use NextDom\Managers\ScenarioElementManager;
+use NextDom\Managers\ScenarioSubElementManager;
 
 class scenarioExpression {
     /*     * *************************Attributs****************************** */
@@ -263,7 +265,7 @@ class scenarioExpression {
         $message = '';
         try {
             if ($this->getType() == 'element') {
-                $element = scenarioElement::byId($this->getExpression());
+                $element = ScenarioElementManager::byId($this->getExpression());
                 if (is_object($element)) {
                     $this->setLog($scenario, __('Exécution d\'un bloc élément : ', __FILE__) . $this->getExpression());
                     return $element->execute($scenario);
@@ -661,7 +663,7 @@ class scenarioExpression {
             'expression' => array(),
         );
         if ($this->getType() == 'element') {
-            $element = scenarioElement::byId($this->getExpression());
+            $element = ScenarioElementManager::byId($this->getExpression());
             if (is_object($element)) {
                 $result = $element->getAllId();
             }
@@ -678,7 +680,7 @@ class scenarioExpression {
         $expressionCopy->setScenarioSubElement_id($_scenarioSubElement_id);
         $expressionCopy->save();
         if ($expressionCopy->getType() == 'element') {
-            $element = scenarioElement::byId($expressionCopy->getExpression());
+            $element = ScenarioElementManager::byId($expressionCopy->getExpression());
             if (is_object($element)) {
                 $expressionCopy->setExpression($element->copy());
                 $expressionCopy->save();
@@ -694,7 +696,7 @@ class scenarioExpression {
     public function export() {
         $return = '';
         if ($this->getType() == 'element') {
-            $element = scenarioElement::byId($this->getExpression());
+            $element = ScenarioElementManager::byId($this->getExpression());
             if (is_object($element)) {
                 $exports = explode("\n", $element->export());
                 foreach ($exports as $export) {
@@ -758,7 +760,7 @@ class scenarioExpression {
     }
 
     public function getSubElement() {
-        return scenarioSubElement::byId($this->getScenarioSubElement_id());
+        return ScenarioSubElementManager::byId($this->getScenarioSubElement_id());
     }
 
     public function setScenarioSubElement_id($scenarioSubElement_id) {

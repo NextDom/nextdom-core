@@ -21,6 +21,7 @@ require_once __DIR__ . '/../../core/php/core.inc.php';
 
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioSubElementManager;
+use NextDom\Managers\ScenarioExpressionManager;
 
 class scenarioElement {
     /*     * *************************Attributs****************************** */
@@ -369,7 +370,7 @@ class scenarioElement {
         if (is_object($scenario)) {
             return $scenario;
         }
-        $expression = scenarioExpression::byElement($this->getId());
+        $expression = ScenarioExpressionManager::byElement($this->getId());
         if (is_object($expression)) {
             return $expression->getSubElement()->getElement()->getScenario();
         }
