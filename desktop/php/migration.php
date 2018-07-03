@@ -38,7 +38,7 @@ if (!isConnect('admin')) {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 col-xs-6 control-label">{{Envoyer une sauvegarde}}</label>
+                        <label class="col-sm-4 col-xs-6 control-label">{{téléverser une sauvegarde}}</label>
                         <div class="col-sm-8 col-xs-6">
                             <span class="btn btn-default btn-file">
                                 <i class="fa fa-cloud-upload"></i> {{Envoyer}}<input id="bt_uploadBackup" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token=<?php echo ajax::getToken(); ?>">
