@@ -149,7 +149,7 @@ class NextDomMarket
      *
      * @return MarketItem[] Liste des éléments
      */
-    public function getItems()
+    public function getItems(): array
     {
         $result = array();
         if ($this->source['type'] == 'github') {
@@ -166,13 +166,15 @@ class NextDomMarket
      *
      * @return MarketItem[] Liste des éléments
      */
-    public function getItemsFromJson()
+    public function getItemsFromJson(): array
     {
         $result = array();
         $plugins = $this->dataStorage->getJsonData('repo_data_' . $this->source['name']);
         foreach ($plugins as $plugin) {
-            $marketItem = MarketItem::createFromCache($this->source['name'], $plugin['gitId'] . '/' . $plugin['repository']);
-            array_push($result, $marketItem);
+            if ($plugin['id'] !== 'AlternativeMarketForJeedom') {
+                $marketItem = MarketItem::createFromCache($this->source['name'], $plugin['gitId'] . '/' . $plugin['repository']);
+                array_push($result, $marketItem);
+            }
         }
         return $result;
     }
@@ -180,10 +182,11 @@ class NextDomMarket
     /**
      * Supprime les informations d'une source
      */
-    public function remove() {
-        $this->dataStorage->remove('repo_ignore_'.$this->source['name']);
-        $this->dataStorage->remove('repo_last_change_'.$this->source['name'].'%');
-        $this->dataStorage->remove('repo_data_'.$this->source['name'].'%');
-        $this->dataStorage->remove('repo_last_update_'.$this->source['name'].'%');
+    public function remove()
+    {
+        $this->dataStorage->remove('repo_ignore_' . $this->source['name']);
+        $this->dataStorage->remove('repo_last_change_' . $this->source['name'] . '%');
+        $this->dataStorage->remove('repo_data_' . $this->source['name'] . '%');
+        $this->dataStorage->remove('repo_last_update_' . $this->source['name'] . '%');
     }
 }

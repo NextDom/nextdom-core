@@ -660,6 +660,20 @@ class nextdom
         }
     }
 
+    public static function migrate(string $backupFilePath = '', bool $taskInBackground = false)
+    {
+        if ($taskInBackground) {
+            \log::clear('restore');
+            $cmd = NEXTDOM_ROOT . '/install/migrate_jeedom_to_nextdom.php "backup=' . $backupFilePath . '"';
+            $cmd .= ' >> ' . \log::getPathToLog('restore') . ' 2>&1 &';
+            \system::php($cmd, true);
+        } else {
+            global $BACKUP_FILE;
+            $BACKUP_FILE = $backupFilePath;
+            require_once NEXTDOM_ROOT . '/install/migrate_jeedom_to_nextdom.php';
+        }
+    }
+
     /**
      * Lance une mise à jour
      *

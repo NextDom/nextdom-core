@@ -45,7 +45,7 @@ if (isset($_GET['message'])) {
 }
 
 \include_file('desktop', 'Market/market', 'js');
-\include_file('desktop', 'Market/market', 'css');
+//\include_file('desktop', 'Market/market', 'css');
 
 ?>
 <div class="row">

@@ -57,6 +57,25 @@ nextdom.backup.restoreLocal = function(_params) {
     $.ajax(paramsAJAX);
 };
 
+nextdom.backup.migrate = function(_params) {
+    var paramsRequired = [];
+    var paramsSpecifics = {};
+    try {
+        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
+    } catch (e) {
+        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
+        return;
+    }
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
+    var paramsAJAX = nextdom.private.getParamsAJAX(params);
+    paramsAJAX.url = 'core/ajax/nextdom.ajax.php';
+    paramsAJAX.data = {
+        action: 'migrate',
+        backup : _params.backup
+    };
+    $.ajax(paramsAJAX);
+};
+
 nextdom.backup.remove = function(_params) {
     var paramsRequired = ['backup'];
     var paramsSpecifics = {};

@@ -178,9 +178,9 @@ class DataStorage
      *
      * @param string $code Code des données
      *
-     * @return array Tableau de données.
+     * @return array|null Tableau de données.
      */
-    public function getJsonData(string $code) : array
+    public function getJsonData(string $code)
     {
         return \json_decode($this->getRawData($code), true);
     }
