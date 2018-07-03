@@ -41,6 +41,7 @@ scenario->execute(trigger, message)
 
 
 use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\ScenarioElementManager;
 
 /* * ***************************Includes********************************* */
 require_once __DIR__ . '/../../core/php/core.inc.php';
@@ -835,7 +836,7 @@ class scenario
         $elements = $this->getScenarioElement();
         if (is_array($elements)) {
             foreach ($this->getScenarioElement() as $element_id) {
-                $element = ScenarioElement::byId($element_id);
+                $element = ScenarioElementManager::byId($element_id);
                 if (is_object($element)) {
                     $return[] = $element;
                 }
@@ -844,7 +845,7 @@ class scenario
             return $return;
         }
         if ($elements != '') {
-            $element = ScenarioElement::byId($element_id);
+            $element = ScenarioElementManager::byId($element_id);
             if (is_object($element)) {
                 $return[] = $element;
                 $this->_elements = $return;

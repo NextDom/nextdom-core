@@ -20,6 +20,7 @@
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
 use NextDom\Managers\ScenarioElementManager;
+use NextDom\Managers\ScenarioSubElementManager;
 
 class scenarioElement {
     /*     * *************************Attributs****************************** */
@@ -199,13 +200,13 @@ class scenarioElement {
             if (isset($this->_subelement[$_type]) && is_object($this->_subelement[$_type])) {
                 return $this->_subelement[$_type];
             }
-            $this->_subelement[$_type] = scenarioSubElement::byScenarioElementId($this->getId(), $_type);
+            $this->_subelement[$_type] = ScenarioSubElementManager::byScenarioElementId($this->getId(), $_type);
             return $this->_subelement[$_type];
         } else {
             if (isset($this->_subelement[-1]) && is_array($this->_subelement[-1]) && count($this->_subelement[-1]) > 0) {
                 return $this->_subelement[-1];
             }
-            $this->_subelement[-1] = scenarioSubElement::byScenarioElementId($this->getId(), $_type);
+            $this->_subelement[-1] = ScenarioSubElementManager::byScenarioElementId($this->getId(), $_type);
             return $this->_subelement[-1];
         }
     }
