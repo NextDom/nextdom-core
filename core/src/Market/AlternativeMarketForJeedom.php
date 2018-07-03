@@ -22,6 +22,7 @@ require_once('DownloadManager.php');
 
 /**
  * Classe des objets de Jeedom
+ * // TODO: Virer eqLogic
  */
 class AlternativeMarketForJeedom extends eqLogic
 {
