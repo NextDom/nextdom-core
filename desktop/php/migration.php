@@ -4,11 +4,21 @@ if (!isConnect('admin')) {
 }
 ?>
 <div id="backup">
-    <div class="row row-overflow">
-        <div class="col-sm-6">
+  <div class="row row-overflow">
+	<h3 class="col-sm-12  control-label text-center">{{Bienvenue sur la page de migration de NextDom}}</h3><br>
+  <p class="col-sm-6  control-label  alert-info">{{La fonction migration permet d'utiliser une sauvegarde jeedom pour migrer vers nextdom}}<br>
+  il vous suffit simplement de rentrer le chemin d'acces vers les sauvegardes (si les sauvegardes sont deportées sur un NAS.ou vous pouvez également les uploader sur nextdom.</p>
+     <div class="col-sm-12">
+          <div class="col-sm-6">
             <legend><i class="fa fa-folder-open"></i>  {{Sauvegardes locales}}</legend>
             <form class="form-horizontal">
                 <fieldset>
+                                                                               <div class="form-group">
+                        <label class="col-sm-4 col-xs-6 control-label">{{Emplacement des sauvegardes}}</label>
+                        <div class="col-sm-4 col-xs-6">
+                            <input type="text" class="configKey form-control" data-l1key="backup::path" />
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="col-sm-4 col-xs-6 control-label">{{Sauvegardes disponibles}}</label>
                         <div class="col-sm-6 col-xs-6">
@@ -45,6 +55,7 @@ if (!isConnect('admin')) {
             <legend><i class="fa fa-info-circle"></i>  {{Informations}}</legend>
             <pre id="pre_backupInfo" style="overflow: scroll;"></pre>
         </div>
+      </div>
     </div>
 </div>
 

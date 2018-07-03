@@ -19,6 +19,30 @@
     $("#bt_saveBackup").click();
 });
 
+$("#bt_saveBackup").on('click', function (event) {
+   $.hideAlert();
+   nextdom.config.save({
+       configuration: $('#backup').getValues('.configKey')[0],
+       error: function (error) {
+           $('#div_alert').showAlert({message: error.message, level: 'danger'});
+       },
+       success: function () {
+           nextdom.config.load({
+               configuration: $('#backup').getValues('.configKey')[0],
+               plugin: 'core',
+               error: function (error) {
+                   $('#div_alert').showAlert({message: error.message, level: 'danger'});
+               },
+               success: function (data) {
+                   $('#backup').setValues(data, '.configKey');
+                   modifyWithoutSave = false;
+                   $('#div_alert').showAlert({message: '{{Sauvegarde réussie}}', level: 'success'});
+               }
+           });
+       }
+   });
+});
+
  $('#pre_backupInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
 
 $("#bt_migrateNextDom").on('click', function (event) {

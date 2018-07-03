@@ -24,7 +24,7 @@ if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SE
     echo "La page que vous demandez ne peut être trouvée.";
     exit();
 }
-echo "[START RESTORE]\n";
+echo "[START MIGRATION]\n";
 $starttime = strtotime('now');
 if (isset($argv)) {
     foreach ($argv as $arg) {
@@ -40,7 +40,7 @@ try {
     echo "***************Début de la migration de jeedom vers nextdom " . date('Y-m-d H:i:s') . "***************\n";
 
     try {
-        echo "Envoie l'événement de début de restauration...";
+        echo "Envoie l'événement de début de la migration...";
         nextdom::event('begin_restore', true);
         echo "OK\n";
     } catch (Exception $e) {
@@ -204,13 +204,13 @@ try {
     } catch (Exception $e) {
         echo '***ERREUR*** ' . $e->getMessage();
     }
-    echo "Temps de la restauration : " . (strtotime('now') - $starttime) . "s\n";
+    echo "Temps de la migration : " . (strtotime('now') - $starttime) . "s\n";
     echo "***************Fin de la restauration de NextDom***************\n";
-    echo "[END RESTORE SUCCESS]\n";
+    echo "[END MIGRATION SUCCESS]\n";
 } catch (Exception $e) {
-    echo 'Erreur durant la restauration : ' . $e->getMessage();
+    echo 'Erreur durant la migration : ' . $e->getMessage();
     echo 'Détails : ' . print_r($e->getTrace(), true);
-    echo "[END RESTORE ERROR]\n";
+    echo "[END MIGRATION ERROR]\n";
     nextdom::start();
     throw $e;
 }
