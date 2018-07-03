@@ -5,10 +5,24 @@ if (!isConnect()) {
 ?>
 <legend>
     Mes premiers pas dans NextDom
-    <a class='btn btn-default btn-xs pull-right' id='bt_doNotDisplayFirstUse'><i class="fa fa-eye-slash"></i> Ne plus afficher</a>
+    <a class='btn btn-default btn-xs pull-right' id='bt_doNotDisplay'><i class="fa fa-eye-slash"></i> Ne plus afficher</a>
 </legend>
-<div id="div_alertFirstUse text-center"></div>
-    {{Bienvenue dans}} <?php echo config::byKey('product_name'); ?> {{, et merci d'avoir choisi cet outil pour votre habitat connecté. Voici 3 guides pour bien débuter avec}} <?php echo config::byKey('product_name'); ?> :
+<div id="div_alertFirstUse"></div>
+   <p class="alert-success"> {{  Bienvenue dans}} <?php echo config::byKey('product_name'); ?> {{, et merci d'avoir choisi cet outil pour votre habitat connecté. Une nouvelle fonctionnalité fait son apparition, vous pouvez désormait migrer votre installation jeedom sur nextdom.:}}<br>
+    {{  Rien de plus simple il suffit de cliquer sur le bouton ci-dessous}} </p>
+<br/><br/>
+  <div class="row text-center">
+    <div class="col-xs-12">
+        <a href="index.php?v=d&p=migration" target="_blank">
+            <i class="fa fa-upload" style="font-size:12em;"></i><br/>
+            {{Migration de jeedom vers NextDom}}
+        </a>
+    </div>
+</div>
+<br><br>
+  </legend>
+<div id="div_alertFirstUse"></div>
+    <p class="alert-info">{{Voici 3 guides pour bien débuter avec}} <?php echo config::byKey('product_name'); ?> :</p>
 <br/><br/>
 
 <div class="row">
