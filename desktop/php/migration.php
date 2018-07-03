@@ -5,7 +5,7 @@ if (!isConnect('admin')) {
 ?>
 <div id="backup">
   <div class="row row-overflow">
-	<h3 class="col-sm-12  control-label text-center">{{Bienvenue sur la page de migration de NextDom}}</h3><br>
+	<h3 class="col-sm-12  control-label text-center">{{Bienvenue sur la page de migration de NextDom}}</h3><br><br><br>
   <p class="col-sm-6  control-label  alert-info">{{La fonction migration permet d'utiliser une sauvegarde jeedom pour migrer vers nextdom}}<br>
   il vous suffit simplement de rentrer le chemin d'acces vers les sauvegardes (si les sauvegardes sont deportées sur un NAS.ou vous pouvez également les uploader sur nextdom.</p>
      <div class="col-sm-12">
