@@ -51,12 +51,6 @@ if (!isConnect('admin')) {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 col-xs-6 control-label">{{Migrer la sauvegarde}}</label>
-                        <div class="col-sm-4 col-xs-6">
-                            <a class="btn btn-warning" id="bt_migrateNextDom"><i class="fa fa-refresh fa-spin" style="display : none;"></i> <i class="fa fa-file"></i> {{Migrer}}</a>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="col-sm-4 col-xs-6 control-label">{{Supprimer la sauvegarde}}</label>
                         <div class="col-sm-4 col-xs-6">
                             <a class="btn btn-danger" id="bt_removeBackup"><i class="fa fa-trash-o"></i> {{Supprimer}}</a>

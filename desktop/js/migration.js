@@ -21,63 +21,22 @@
 
  $('#pre_backupInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
 
- $("#bt_saveBackup").on('click', function (event) {
-    $.hideAlert();
-    nextdom.config.save({
-        configuration: $('#backup').getValues('.configKey')[0],
-        error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
-        },
-        success: function () {
-            nextdom.config.load({
-                configuration: $('#backup').getValues('.configKey')[0],
-                plugin: 'core',
-                error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
-                },
-                success: function (data) {
-                    $('#backup').setValues(data, '.configKey');
-                    modifyWithoutSave = false;
-                    $('#div_alert').showAlert({message: '{{Sauvegarde réussie}}', level: 'success'});
-                }
-            });
-        }
-    });
-});
-
- $(".bt_backupNextDom").on('click', function (event) {
-    var el = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir faire une sauvegarde de}} '+NEXTDOM_PRODUCT_NAME+' {{? Une fois lancée cette opération ne peut être annulée}}', function (result) {
-        if (result) {
-            el.find('.fa-refresh').show();
-            nextdom.backup.backup({
-                error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
-                },
-                success: function () {
-                    getNextDomLog(1, 'backup');
-                }
-            });
-        }
-    });
-});
-
- $("#bt_restoreNextDom").on('click', function (event) {
-    var el = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée}}', function (result) {
-        if (result) {
-            el.find('.fa-refresh').show();
-            nextdom.backup.restoreLocal({
-                backup: $('#sel_restoreBackup').value(),
-                error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
-                },
-                success: function () {
-                    getNextDomLog(1, 'restore');
-                }
-            });
-        }
-    });
+$("#bt_migrateNextDom").on('click', function (event) {
+   var el = $(this);
+   bootbox.confirm('{{Etes-vous sûr de vouloir migrer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée}}', function (result) {
+       if (result) {
+           el.find('.fa-refresh').show();
+           nextdom.backup.migrate({
+               backup: $('#sel_restoreBackup').value(),
+               error: function (error) {
+                   $('#div_alert').showAlert({message: error.message, level: 'danger'});
+               },
+               success: function () {
+                   getNextDomLog(1, 'restore');
+               }
+           });
+       }
+   });
 });
 
  $("#bt_removeBackup").on('click', function (event) {
@@ -116,42 +75,6 @@
     }
 });
 
- $(".bt_uploadCloudBackup").on('click', function (event) {
-    var el = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir envoyer une sauvegarde de}} '+NEXTDOM_PRODUCT_NAME+' {{sur le cloud ? Une fois lancée cette opération ne peut être annulée}}', function (result) {
-        if (result) {
-            el.find('.fa-refresh').show();
-            nextdom.backup.uploadCloud({
-                backup: $('#sel_restoreBackup').value(),
-                error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
-                },
-                success: function () {
-                    getNextDomLog(1, 'backupCloud');
-                }
-            });
-        }
-    });
-});
-
- $(".bt_restoreRepoBackup").on('click', function (event) {
-    var el = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec la sauvegarde Cloud}} <b>' + $('#sel_restoreCloudBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée}}', function (result) {
-        if (result) {
-            el.find('.fa-refresh').show();
-            nextdom.backup.restoreCloud({
-                backup: el.closest('.repo').find('.sel_restoreCloudBackup').value(),
-                repo: el.attr('data-repo'),
-                error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
-                },
-                success: function () {
-                    getNextDomLog(1, 'restore');
-                }
-            });
-        }
-    });
-});
 
  $.showLoading();
  nextdom.config.load({
