@@ -183,8 +183,8 @@ $panelMenu = PrepareView::getPanelMenu();
                         <ul class="dropdown-menu">
                             <li><a href="index.php?v=d&p=administration" tabindex="0"><i
                                         class="fa fa-wrench"></i> {{Configuration}}</a></li>
-                            <li><a href="index.php?v=d&p=backup"><i class="fa fa-floppy-o"></i> {{Sauvegardes}}</a>
-                            </li>
+                            <li><a href="index.php?v=d&p=backup"><i class="fa fa-floppy-o"></i> {{Sauvegardes}}</a></li>
+                            <li><a href="index.php?v=d&p=migration"><i class="fa fa-floppy-o"></i> {{Migration}}</a></li>
                             <li><a href="index.php?v=d&p=update"><i class="fa fa-refresh"></i> {{Centre de mise
                                     à jour}}</a></li>
                             <li><a href="index.php?v=d&p=cron"><i class="fa fa-tasks"></i> {{Moteur de tâches}}</a>
