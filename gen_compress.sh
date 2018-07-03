@@ -72,12 +72,14 @@ cat 3rdparty/jquery.utils/jquery.utils.js \
     3rdparty/jquery.fileupload/jquery.ui.widget.js \
     3rdparty/jquery.fileupload/jquery.iframe-transport.js \
     3rdparty/jquery.fileupload/jquery.fileupload.js \
-    3rdparty/jquery.tablesorter/jquery.tablesorter.min.js \
-    3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min.js \
     3rdparty/datetimepicker/jquery.datetimepicker.js \
     3rdparty/jquery.cron/jquery.cron.min.js \
     3rdparty/jquery.contextMenu/jquery.contextMenu.min.js \
     3rdparty/autosize/autosize.min.js > js/temp.js
+
+# Bug compression de tablesorter
+#    3rdparty/jquery.tablesorter/jquery.tablesorter.min.js \
+#    3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min.js \
 
 python -m jsmin js/temp.js > js/base.js
 
