@@ -159,6 +159,11 @@ try {
         ajax::success();
     }
 
+    if (init('action') == 'migrate') {
+        nextdom::migrate(init('backup'), true);
+        ajax::success();
+    }
+
     if (init('action') == 'removeBackup') {
         nextdom::removeBackup(init('backup'));
         ajax::success();
