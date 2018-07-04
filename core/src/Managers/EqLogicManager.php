@@ -1,0 +1,609 @@
+<?php
+/* This file is part of Jeedom.
+ *
+ * Jeedom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jeedom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* This file is part of NextDom.
+ *
+ * NextDom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * NextDom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+namespace NextDom\Managers;
+
+class EqLogicManager
+{
+    const CLASS_NAME = 'eqLogic';
+    const DB_CLASS_NAME = '`eqLogic`';
+    
+    /**
+     * Get eqLogic object with his id.
+     *
+     * @param $id EqLogic object id
+     *
+     * @return array|mixed|void
+     */
+    public static function byId($id) {
+        if ($id == '') {
+            return;
+        }
+        $values = array(
+            'id' => $id,
+        );
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+                FROM '.self::DB_CLASS_NAME.' 
+                WHERE id = :id';
+        return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+    }
+
+    /**
+     * TODO: ???
+     * Repasse en private
+     * @param $inputs
+     *
+     * @return array|mixed
+     */
+    public static function cast($inputs) {
+        if (is_object($inputs) && class_exists($inputs->getEqType_name())) {
+            return cast($inputs, $inputs->getEqType_name());
+        }
+        if (is_array($inputs)) {
+            $return = array();
+            foreach ($inputs as $input) {
+                $return[] = self::cast($input);
+            }
+            return $return;
+        }
+        return $inputs;
+    }
+
+    /**
+     * Get all eqLogics
+     *
+     * @param bool $onlyEnable Filter only enabled eqLogics
+     *
+     * @return array|mixed
+     */
+    public static function all($onlyEnable = false) {
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 'el') . '
+                FROM '.self::DB_CLASS_NAME.' el
+                LEFT JOIN object ob ON el.object_id = ob.id ';
+        if ($onlyEnable) {
+            $sql .= 'AND isEnable = 1 ';
+        }
+        $sql .= 'ORDER BY ob.name, el.name';
+        return self::cast(\DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+    }
+
+    /**
+     * TODO: ???
+     *
+     * @param $eqRealId
+     * 
+     * @return array|mixed
+     */
+    public static function byEqRealId($eqRealId) {
+        $values = array(
+            'eqReal_id' => $eqRealId,
+        );
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+                FROM '.self::DB_CLASS_NAME.' 
+                WHERE eqReal_id = :eqReal_id';
+        return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+    }
+
+    /**
+     * Get all eqLogics linked to object
+     *
+     * @param $objectId Object id
+     * @param bool $onlyEnable Filter only enabled
+     * @param bool $onlyVisible Filter only visible
+     * @param null $eqTypeName
+     * @param null $logicalId
+     * @param bool $orderByName
+     * @return array|mixed
+     * @throws \Exception
+     */
+    public static function byObjectId($objectId, $onlyEnable = true, $onlyVisible = false, $eqTypeName = null, $logicalId = null, $orderByName = false) {
+        $values = array();
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+                FROM '.self::DB_CLASS_NAME.' ';
+        if ($objectId === null) {
+            $sql .= 'WHERE object_id IS NULL ';
+        } else {
+            $values['object_id'] = $objectId;
+            $sql .= 'WHERE object_id = :object_id ';
+        }
+        if ($onlyEnable) {
+            $sql .= 'AND isEnable = 1 ';
+        }
+        if ($onlyVisible) {
+            $sql .= 'AND isVisible = 1 ';
+        }
+        if ($eqTypeName !== null) {
+            $values['eqType_name'] = $eqTypeName;
+            $sql .= 'AND eqType_name = :eqType_name ';
+        }
+        if ($logicalId !== null) {
+            $values['logicalId'] = $logicalId;
+            $sql .= 'AND logicalId = :logicalId ';
+        }
+        if ($orderByName) {
+            $sql .= 'ORDER BY `name`';
+        } else {
+            $sql .= 'ORDER BY `order`, category';
+        }
+        return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+    }
+
+    /**
+     * TODO: ???
+     *
+     * @param $logicalId
+     * @param $eqTypeName
+     * @param bool $multiple
+     * @return array|mixed
+     * @throws \Exception
+     */
+    public static function byLogicalId($logicalId, $eqTypeName, $multiple = false) {
+        $values = array(
+            'logicalId' => $logicalId,
+            'eqType_name' => $eqTypeName,
+        );
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+                FROM '.self::DB_CLASS_NAME.' 
+                WHERE logicalId = :logicalId
+                AND eqType_name = :eqType_name';
+        if ($multiple) {
+            return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        }
+        else {
+            return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        }
+    }
+
+    /**
+     * TODO: ???
+     *
+     * @param $eqTypeName
+     * @param bool $onlyEnable
+     * @return array|mixed
+     * @throws \Exception
+     */
+    public static function byType($eqTypeName, $onlyEnable = false) {
+        $values = array(
+            'eqType_name' => $eqTypeName,
+        );
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 'el') . '
+                FROM '.self::DB_CLASS_NAME.'  el
+                LEFT JOIN object ob ON el.object_id = ob.id
+                WHERE eqType_name = :eqType_name ';
+        if ($onlyEnable) {
+            $sql .= 'AND isEnable=1 ';
+        }
+        $sql .= 'ORDER BY ob.name,el.name';
+        return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+    }
+
+    /**
+     * Get eqLogics objets by category
+     *
+     * @param $category
+     * @return array|mixed
+     * @throws \Exception
+     */
+    public static function byCategory($category) {
+        $values = array(
+            'category' => '%"' . $category . '":1%',
+            'category2' => '%"' . $category . '":"1"%',
+        );
+
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+                FROM '.self::DB_CLASS_NAME.' 
+                WHERE category LIKE :category
+                OR category LIKE :category2
+                ORDER BY name';
+        return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+    }
+
+    /**
+     * TODO: ???
+     *
+     * @param $eqTypeName
+     * @param $configuration
+     * @return array|mixed
+     * @throws \Exception
+     */
+    public static function byTypeAndSearhConfiguration($eqTypeName, $configuration) {
+        $values = array(
+            'eqType_name' => $eqTypeName,
+            'configuration' => '%' . $configuration . '%',
+        );
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+                FROM '.self::DB_CLASS_NAME.' 
+                WHERE eqType_name = :eqType_name
+                AND configuration LIKE :configuration
+                ORDER BY name';
+        return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+    }
+
+    /**
+     * TODO: ???
+     *
+     * @param $configuration
+     * @param null $type
+     * @return array|mixed
+     * @throws \Exception
+     */
+    public static function searchConfiguration($configuration, $type = null) {
+        $values = array(
+            'configuration' => '%' . $configuration . '%',
+        );
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        FROM '.self::DB_CLASS_NAME.' 
+        WHERE configuration LIKE :configuration';
+        if ($type !== null) {
+            $values['eqType_name'] = $type;
+            $sql .= ' AND eqType_name=:eqType_name ';
+        }
+        $sql .= ' ORDER BY name';
+        return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+    }
+
+    /**
+     * TODO: ??
+     *
+     * @param $eqTypeName
+     * @param $typeCmd
+     * @param string $subTypeCmd
+     * @return array|mixed|null
+     * @throws \Exception
+     */
+    public static function listByTypeAndCmdType($eqTypeName, $typeCmd, $subTypeCmd = '') {
+        if ($subTypeCmd == '') {
+            $values = array(
+                'eqType_name' => $eqTypeName,
+                'typeCmd' => $typeCmd,
+            );
+            $sql = 'SELECT DISTINCT(el.id),el.name
+                    FROM '.self::DB_CLASS_NAME.'  el
+                    INNER JOIN cmd c ON c.eqLogic_id = el.id
+                    WHERE eqType_name = :eqType_name
+                    AND c.type = :typeCmd
+                    ORDER BY name';
+            return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL);
+        } else {
+            $values = array(
+                'eqType_name' => $eqTypeName,
+                'typeCmd' => $typeCmd,
+                'subTypeCmd' => $subTypeCmd,
+            );
+            $sql = 'SELECT DISTINCT(el.id),el.name
+                    FROM '.self::DB_CLASS_NAME.'  el
+                    INNER JOIN cmd c ON c.eqLogic_id = el.id
+                    WHERE eqType_name = :eqType_name
+                    AND c.type = :typeCmd
+                    AND c.subType = :subTypeCmd
+                    ORDER BY name';
+            return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL);
+        }
+    }
+
+    /**
+     * TODO: ???
+     *
+     * @param $objectId
+     * @param $typeCmd
+     * @param string $subTypeCmd
+     * @return array|mixed|null
+     * @throws \Exception
+     */
+    public static function listByObjectAndCmdType($objectId, $typeCmd, $subTypeCmd = '') {
+        $values = array();
+        $sql = 'SELECT DISTINCT(el.id), el.name
+                FROM '.self::DB_CLASS_NAME.'  el
+                INNER JOIN cmd c ON c.eqLogic_id=el.id
+                WHERE ';
+        if ($objectId === null) {
+            $sql .= 'object_id IS NULL ';
+        } elseif ($objectId != '') {
+            $values['object_id'] = $objectId;
+            $sql .= 'object_id = :object_id ';
+        }
+        if ($subTypeCmd != '') {
+            $values['subTypeCmd'] = $subTypeCmd;
+            $sql .= 'AND c.subType = :subTypeCmd ';
+        }
+        if ($typeCmd != '' && $typeCmd != 'all') {
+            $values['type'] = $typeCmd;
+            $sql .= 'AND c.type = :type ';
+        }
+        $sql .= 'ORDER BY name';
+        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL);
+    }
+
+    /**
+     * TODO: ???
+     *
+     * @return array|mixed|null
+     * @throws \Exception
+     */
+    public static function allType() {
+        $sql = 'SELECT distinct(eqType_name) as type
+                FROM '.self::DB_CLASS_NAME.' ';
+        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL);
+    }
+
+    /**
+     * Vérifier si un objet est actif
+     */
+    public static function checkAlive() {
+        foreach (self::byTimeout(1, true) as $eqLogic) {
+            $sendReport = false;
+            $cmds = $eqLogic->getCmd();
+            foreach ($cmds as $cmd) {
+                $sendReport = true;
+            }
+            $logicalId = 'noMessage' . $eqLogic->getId();
+            if ($sendReport) {
+                $noReponseTimeLimit = $eqLogic->getTimeout();
+                if (count(\message::byPluginLogicalId('core', $logicalId)) == 0) {
+                    if ($eqLogic->getStatus('lastCommunication', date('Y-m-d H:i:s')) < date('Y-m-d H:i:s', strtotime('-' . $noReponseTimeLimit . ' minutes' . date('Y-m-d H:i:s')))) {
+                        $message = __('Attention', __FILE__) . ' ' . $eqLogic->getHumanName();
+                        $message .= __(' n\'a pas envoyé de message depuis plus de ', __FILE__) . $noReponseTimeLimit . __(' min (vérifiez les piles)', __FILE__);
+                        $eqLogic->setStatus('timeout', 1);
+                        if (\config::ByKey('alert::addMessageOnTimeout') == 1) {
+                            \message::add('core', $message, '', $logicalId);
+                        }
+                        $cmds = explode(('&&'), \config::byKey('alert::timeoutCmd'));
+                        if (count($cmds) > 0 && trim(\config::byKey('alert::timeoutCmd')) != '') {
+                            foreach ($cmds as $id) {
+                                $cmd = \cmd::byId(str_replace('#', '', $id));
+                                if (is_object($cmd)) {
+                                    $cmd->execCmd(array(
+                                        'title' => __('[' . \config::byKey('name', 'core', 'NEXTDOM') . '] ', __FILE__) . $message,
+                                        'message' => \config::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
+                                    ));
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if ($eqLogic->getStatus('lastCommunication', date('Y-m-d H:i:s')) > date('Y-m-d H:i:s', strtotime('-' . $noReponseTimeLimit . ' minutes' . date('Y-m-d H:i:s')))) {
+                        foreach (\message::byPluginLogicalId('core', $logicalId) as $message) {
+                            $message->remove();
+                        }
+                        $eqLogic->setStatus('timeout', 0);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * TODO: ???
+     *
+     * @param int $timeout
+     * @param bool $onlyEnable
+     * @return array|mixed
+     * @throws \Exception
+     */
+    public static function byTimeout($timeout = 0, $onlyEnable = false) {
+        $values = array(
+            'timeout' => $timeout,
+        );
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+                FROM '.self::DB_CLASS_NAME.' 
+                WHERE timeout >= :timeout';
+        if ($onlyEnable) {
+            $sql .= ' AND isEnable = 1';
+        }
+        return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+    }
+
+    /**
+     * TODO: ???
+     *
+     * @param $objectName
+     * @param $eqLogicName
+     * @return array|mixed
+     * @throws \Exception
+     */
+    public static function byObjectNameEqLogicName($objectName, $eqLogicName) {
+        if ($objectName == __('Aucun', __FILE__)) {
+            $values = array(
+                'eqLogic_name' => $eqLogicName,
+            );
+            $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+                    FROM '.self::DB_CLASS_NAME.' 
+                    WHERE name=:eqLogic_name
+                    AND object_id IS NULL';
+        } else {
+            $values = array(
+                'eqLogic_name' => $eqLogicName,
+                'object_name' => $objectName,
+            );
+            $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 'el') . '
+                    FROM '.self::DB_CLASS_NAME.'  el
+                    INNER JOIN object ob ON el.object_id=ob.id
+                    WHERE el.name=:eqLogic_name
+                    AND ob.name=:object_name';
+        }
+        return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+    }
+
+    /**
+     * TODO: ???
+     *
+     * @param $input
+     * @return array|mixed
+     */
+    public static function toHumanReadable($input) {
+        if (is_object($input)) {
+            $reflections = array();
+            $uuid = spl_object_hash($input);
+            if (!isset($reflections[$uuid])) {
+                $reflections[$uuid] = new \ReflectionClass($input);
+            }
+            $reflection = $reflections[$uuid];
+            $properties = $reflection->getProperties();
+            foreach ($properties as $property) {
+                $property->setAccessible(true);
+                $value = $property->getValue($input);
+                $property->setValue($input, self::toHumanReadable($value));
+                $property->setAccessible(false);
+            }
+            return $input;
+        }
+        if (is_array($input)) {
+            foreach ($input as $key => $value) {
+                $input[$key] = self::toHumanReadable($value);
+            }
+            return $input;
+        }
+        $text = $input;
+        preg_match_all("/#eqLogic([0-9]*)#/", $text, $matches);
+        foreach ($matches[1] as $eqLogic_id) {
+            if (is_numeric($eqLogic_id)) {
+                $eqLogic = self::byId($eqLogic_id);
+                if (is_object($eqLogic)) {
+                    $text = str_replace('#eqLogic' . $eqLogic_id . '#', '#' . $eqLogic->getHumanName() . '#', $text);
+                }
+            }
+        }
+        return $text;
+    }
+
+    /**
+     * TODO: ???
+     *
+     * @param $input
+     * @return array|mixed
+     * @throws \Exception
+     */
+    public static function fromHumanReadable($input) {
+        $isJson = false;
+        if (is_json($input)) {
+            $isJson = true;
+            $input = json_decode($input, true);
+        }
+        if (is_object($input)) {
+            $reflections = array();
+            $uuid = spl_object_hash($input);
+            if (!isset($reflections[$uuid])) {
+                $reflections[$uuid] = new \ReflectionClass($input);
+            }
+            $reflection = $reflections[$uuid];
+            $properties = $reflection->getProperties();
+            foreach ($properties as $property) {
+                $property->setAccessible(true);
+                $value = $property->getValue($input);
+                $property->setValue($input, self::fromHumanReadable($value));
+                $property->setAccessible(false);
+            }
+            return $input;
+        }
+        if (is_array($input)) {
+            foreach ($input as $key => $value) {
+                $input[$key] = self::fromHumanReadable($value);
+            }
+            if ($isJson) {
+                return json_encode($input, JSON_UNESCAPED_UNICODE);
+            }
+            return $input;
+        }
+        $text = $input;
+        preg_match_all("/#\[(.*?)\]\[(.*?)\]#/", $text, $matches);
+        if (count($matches) == 3) {
+            $countMatches = count($matches[0]);
+            for ($i = 0; $i < $countMatches; $i++) {
+                if (isset($matches[1][$i]) && isset($matches[2][$i])) {
+                    $eqLogic = self::byObjectNameEqLogicName($matches[1][$i], $matches[2][$i]);
+                    if (isset($eqLogic[0]) && is_object($eqLogic[0])) {
+                        $text = str_replace($matches[0][$i], '#eqLogic' . $eqLogic[0]->getId() . '#', $text);
+                    }
+                }
+            }
+        }
+        return $text;
+    }
+
+    /**
+     * TODO: ???
+     */
+    public static function clearCacheWidget() {
+        foreach (self::all() as $eqLogic) {
+            $eqLogic->emptyCacheWidget();
+        }
+    }
+
+    /**
+     * TODO: ???
+     *
+     * @param $nbLine
+     * @param $nbColumn
+     * @param array $options
+     * @return array
+     */
+    public static function generateHtmlTable($nbLine, $nbColumn, $options = array()) {
+        $return = array('html' => '', 'replace' => array());
+        if (!isset($options['styletd'])) {
+            $options['styletd'] = '';
+        }
+        if (!isset($options['center'])) {
+            $options['center'] = 0;
+        }
+        if (!isset($options['styletable'])) {
+            $options['styletable'] = '';
+        }
+        $return['html'] .= '<table style="' . $options['styletable'] . '" class="tableCmd" data-line="' . $nbLine . '" data-column="' . $nbColumn . '">';
+        $return['html'] .= '<tbody>';
+        for ($i = 1; $i <= $nbLine; $i++) {
+            $return['html'] .= '<tr>';
+            for ($j = 1; $j <= $nbColumn; $j++) {
+                $styletd = (isset($options['style::td::' . $i . '::' . $j]) && $options['style::td::' . $i . '::' . $j] != '') ? $options['style::td::' . $i . '::' . $j] : $options['styletd'];
+                $return['html'] .= '<td style="min-width:30px;height:30px;' . $styletd . '" data-line="' . $i . '" data-column="' . $j . '">';
+                if ($options['center'] == 1) {
+                    $return['html'] .= '<center>';
+                }
+                if (isset($options['text::td::' . $i . '::' . $j])) {
+                    $return['html'] .= $options['text::td::' . $i . '::' . $j];
+                }
+                $return['html'] .= '#cmd::' . $i . '::' . $j . '#';
+                if ($options['center'] == 1) {
+                    $return['html'] .= '</center>';
+                }
+                $return['html'] .= '</td>';
+                $return['tag']['#cmd::' . $i . '::' . $j . '#'] = '';
+            }
+            $return['html'] .= '</tr>';
+        }
+        $return['html'] .= '</tbody>';
+        $return['html'] .= '</table>';
+
+        return $return;
+    }
+
+}
