@@ -42,6 +42,7 @@ scenario->execute(trigger, message)
 
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ScenarioElementManager;
+use NextDom\Managers\EqLogicManager;
 
 /* * ***************************Includes********************************* */
 require_once __DIR__ . '/../../core/php/core.inc.php';
@@ -1146,10 +1147,8 @@ class scenario
     {
         $return = array('cmd' => array(), 'eqLogic' => array(), 'scenario' => array(), 'plan' => array(), 'view' => array());
         $return['cmd'] = cmd::searchConfiguration('#scenario' . $this->getId() . '#');
-        $return['eqLogic'] = eqLogic::searchConfiguration('#scenario' . $this->getId() . '#');
-        $return['eqLogic'] = array_merge($return['eqLogic'], eqLogic::searchConfiguration('"scenario_id":"' . $this->getId()));
-        $return['interactDef'] = interactDef::searchByUse('#scenario' . $this->getId() . '#');
-        $return['interactDef'] = array_merge($return['interactDef'], interactDef::searchByUse('"scenario_id":"' . $this->getId()));
+        $return['eqLogic'] = EqLogicManager::searchConfiguration(array('#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()));
+        $return['interactDef'] = interactDef::searchByUse(array('#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()));
         $return['scenario'] = scenario::searchByUse(array(
             array('action' => 'scenario', 'option' => $this->getId(), 'and' => true),
             array('action' => '#scenario' . $this->getId() . '#'),

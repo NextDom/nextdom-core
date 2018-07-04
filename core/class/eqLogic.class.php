@@ -1031,10 +1031,8 @@ class eqLogic {
     public function getUsedBy($_array = false) {
         $return = array('cmd' => array(), 'eqLogic' => array(), 'scenario' => array(), 'plan' => array(), 'view' => array());
         $return['cmd'] = cmd::searchConfiguration('#eqLogic' . $this->getId() . '#');
-        $return['eqLogic'] = EqLogicManager::searchConfiguration('#eqLogic' . $this->getId() . '#');
-        $return['eqLogic'] = array_merge($return['eqLogic'], EqLogicManager::searchConfiguration('"eqLogic":"' . $this->getId()));
-        $return['interactDef'] = interactDef::searchByUse('#eqLogic' . $this->getId() . '#');
-        $return['interactDef'] = array_merge($return['interactDef'], interactDef::searchByUse('"eqLogic":"' . $this->getId()));
+        $return['eqLogic'] = EqLogicManager::searchConfiguration(array('#eqLogic' . $this->getId() . '#', '"eqLogic":"' . $this->getId()));
+        $return['interactDef'] = interactDef::searchByUse(array('#eqLogic' . $this->getId() . '#', '"eqLogic":"' . $this->getId()));
         $return['scenario'] = scenario::searchByUse(array(
             array('action' => 'equipment', 'option' => $this->getId(), 'and' => true),
             array('action' => '#eqLogic' . $this->getId() . '#'),
