@@ -59,6 +59,9 @@ display: inline-block;
 padding:10px 5px !important;
 }
 
+#jqueryLoadingDiv .overlay {
+background-image: url(/3rdparty/jquery.utils/gritter.png);
+}
 .green{
 background-color: $green;
 }
