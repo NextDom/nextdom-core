@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -67,7 +66,7 @@
     bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée}}', function (result) {
         if (result) {
             el.find('.fa-refresh').show();
-            nextdom.backup.restoreLocal({
+              nextdom.backup.restoreLocal({
                 backup: $('#sel_restoreBackup').value(),
                 error: function (error) {
                     $('#div_alert').showAlert({message: error.message, level: 'danger'});
@@ -215,6 +214,17 @@
                 }
             }
             $('#pre_backupInfo').text(log);
+          if(log.includes("BACKUP")){
+          div2 = document.getElementById('progressbar_reboot').style.width;
+          div3 =  parseFloat(div2.slice(0, -1)) + 12,5;
+            $('#progressbar_reboot').width(div3+'%');
+		  console.log("Width of div2 with style = " + div3+'%');
+          }else if (log.includes("RESTORE")){
+            $('#progressbar_reboot').width('50%');
+          }else if (log.includes("Fin")){
+            $('#progressbar_reboot').width('100%');
+          }
+
             if (init(_autoUpdate, 0) == 1) {
                 setTimeout(function () {
                     getNextDomLog(_autoUpdate, _log)

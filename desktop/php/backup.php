@@ -137,11 +137,21 @@ foreach (update::listRepo() as $rkey => $value) {
         </div>
     </div>
     <div class="col-sm-6">
-        <legend><i class="fa fa-info-circle"></i>  {{Informations}}</legend>
-        <pre id="pre_backupInfo" style="overflow: scroll;"></pre>
+  <div id="contenu">
+    <h2 class="text-center" style="opacity:0.8;"><span class="glyphicon glyphicon-refresh"></span> Avancement:</h2>
+    <div class="progress">
+        <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" id="progressbar_reboot" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+    <div id="div_reboot_nextdom_texte"><h6>Merci de patienter...</h6></div>
+      <br>
+</div>
+        <legend><i class="fa fa-info-circle" id="demo"></i>  {{Informations}} <button type="button" class="btn btn-info pull-right" data-toggle="collapse" data-target="#pre_backupInfo">afficher</button></legend>
+
+        <pre id="pre_backupInfo" class="collapse" style="overflow: scroll;"></pre>
     </div>
 </div>
 </div>
-
 
 <?php include_file("desktop", "backup", "js");?>
