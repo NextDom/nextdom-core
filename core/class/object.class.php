@@ -17,7 +17,9 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
+
+use NextDom\Managers\ObjectManager;
 
 class object {
     /*     * *************************Attributs****************************** */
@@ -33,386 +35,51 @@ class object {
     /*     * ***********************Méthodes statiques*************************** */
 
     public static function byId($_id) {
-        if ($_id == '') {
-            return;
-        }
-        $values = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-                FROM object
-                WHERE id=:id';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+        return ObjectManager::byId($_id);
     }
 
     public static function byName($_name) {
-        $values = array(
-            'name' => $_name,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-                FROM object
-                WHERE name=:name';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+        return ObjectManager::byName($_name);
     }
 
     public static function all($_onlyVisible = false) {
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-                FROM object ';
-        if ($_onlyVisible) {
-            $sql .= ' WhERE isVisible = 1';
-        }
-        $sql .= ' ORDER BY position,name,father_id';
-        return DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
+        return ObjectManager::all($_onlyVisible);
     }
 
     public static function rootObject($_all = false, $_onlyVisible = false) {
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-                FROM object
-                WHERE father_id IS NULL';
-        if ($_onlyVisible) {
-            $sql .= ' AND isVisible = 1';
-        }
-        $sql .= ' ORDER BY position';
-        if ($_all === false) {
-            $sql .= ' LIMIT 1';
-            return DB::Prepare($sql, array(), DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
-        }
-        return DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
+        return ObjectManager::rootObject($_all, $_onlyVisible);
     }
 
     public static function buildTree($_object = null, $_visible = true) {
-        $return = array();
-        if (!is_object($_object)) {
-            $object_list = self::rootObject(true, $_visible);
-        } else {
-            $object_list = $_object->getChild($_visible);
-        }
-        if (is_array($object_list) && count($object_list) > 0) {
-            foreach ($object_list as $object) {
-                $return[] = $object;
-                $return = array_merge($return, self::buildTree($object, $_visible));
-            }
-        }
-        return $return;
+        return ObjectManager::buildTree($_object, $_visible);
     }
 
     public static function fullData($_restrict = array()) {
-        $return = array();
-        foreach (object::all(true) as $object) {
-            if (!isset($_restrict['object']) || !is_array($_restrict['object']) || isset($_restrict['object'][$object->getId()])) {
-                $object_return = utils::o2a($object);
-                $object_return['eqLogics'] = array();
-                foreach ($object->getEqLogic(true, true) as $eqLogic) {
-                    if (!isset($_restrict['eqLogic']) || !is_array($_restrict['eqLogic']) || isset($_restrict['eqLogic'][$eqLogic->getId()])) {
-                        $eqLogic_return = utils::o2a($eqLogic);
-                        $eqLogic_return['cmds'] = array();
-                        foreach ($eqLogic->getCmd() as $cmd) {
-                            if (!isset($_restrict['cmd']) || !is_array($_restrict['cmd']) || isset($_restrict['cmd'][$cmd->getId()])) {
-                                $cmd_return = utils::o2a($cmd);
-                                if ($cmd->getType() == 'info') {
-                                    $cmd_return['state'] = $cmd->execCmd();
-                                }
-                                $eqLogic_return['cmds'][] = $cmd_return;
-                            }
-                        }
-                        $object_return['eqLogics'][] = $eqLogic_return;
-                    }
-                }
-                $return[] = $object_return;
-            }
-        }
-        return $return;
+        return ObjectManager::fullData($_restrict);
     }
 
     public static function searchConfiguration($_search) {
-        $values = array(
-            'configuration' => '%' . $_search . '%',
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-        FROM object
-        WHERE `configuration` LIKE :configuration';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
+        return ObjectManager::searchConfiguration($_search);
     }
 
     public static function deadCmd() {
-        $return = array();
-        foreach (object::all() as $object) {
-            foreach ($object->getConfiguration('summary', '') as $key => $summary) {
-                foreach ($summary as $cmdInfo) {
-                    if (!cmd::byId(str_replace('#', '', $cmdInfo['cmd']))) {
-                        $return[] = array('detail' => 'Résumé ' . $object->getName(), 'help' => config::byKey('object:summary')[$key]['name'], 'who' => $cmdInfo['cmd']);
-                    }
-                }
-            }
-        }
-        return $return;
+        return ObjectManager::deadCmd();
     }
 
     public static function checkSummaryUpdate($_cmd_id) {
-        $objects = self::searchConfiguration('#' . $_cmd_id . '#');
-        if (count($objects) == 0) {
-            return;
-        }
-        $toRefreshCmd = array();
-        $global = array();
-        foreach ($objects as $object) {
-            $summaries = $object->getConfiguration('summary');
-            if (!is_array($summaries)) {
-                continue;
-            }
-            $event = array('object_id' => $object->getId(), 'keys' => array());
-            foreach ($summaries as $key => $summary) {
-                foreach ($summary as $cmd_info) {
-                    preg_match_all("/#([0-9]*)#/", $cmd_info['cmd'], $matches);
-                    foreach ($matches[1] as $cmd_id) {
-                        if ($cmd_id == $_cmd_id) {
-                            $value = $object->getSummary($key);
-                            $event['keys'][$key] = array('value' => $value);
-                            $toRefreshCmd[] = array('key' => $key, 'object' => $object, 'value' => $value);
-                            if ($object->getConfiguration('summary::global::' . $key, 0) == 1) {
-                                $global[$key] = 1;
-                            }
-                        }
-                    }
-                }
-            }
-            $events[] = $event;
-        }
-        if (count($toRefreshCmd) > 0) {
-            foreach ($toRefreshCmd as $value) {
-                try {
-                    if ($object->getConfiguration('summary_virtual_id') == '') {
-                        continue;
-                    }
-                    $virtual = eqLogic::byId($value['object']->getConfiguration('summary_virtual_id'));
-                    if (!is_object($virtual)) {
-                        $object->getConfiguration('summary_virtual_id', '');
-                        $object->save();
-                        continue;
-                    }
-                    $cmd = $virtual->getCmd('info', $value['key']);
-                    if (!is_object($cmd)) {
-                        continue;
-                    }
-                    $cmd->event($value['value']);
-                } catch (Exception $e) {
-
-                }
-            }
-        }
-        if (count($global) > 0) {
-            $event = array('object_id' => 'global', 'keys' => array());
-            foreach ($global as $key => $value) {
-                try {
-                    $result = object::getGlobalSummary($key);
-                    if ($result === null) {
-                        continue;
-                    }
-                    $event['keys'][$key] = array('value' => $result);
-                    $virtual = eqLogic::byLogicalId('summaryglobal', 'virtual');
-                    if (!is_object($virtual)) {
-                        continue;
-                    }
-                    $cmd = $virtual->getCmd('info', $key);
-                    if (!is_object($cmd)) {
-                        continue;
-                    }
-                    $cmd->event($result);
-                } catch (Exception $e) {
-
-                }
-            }
-            $events[] = $event;
-        }
-        if (count($events) > 0) {
-            event::adds('object::summary::update', $events);
-        }
+        return ObjectManager::checkSummaryUpdate($_cmd_id);
     }
 
     public static function getGlobalSummary($_key) {
-        if ($_key == '') {
-            return null;
-        }
-        $def = config::byKey('object:summary');
-        $objects = self::all();
-        $value = array();
-        foreach ($objects as $object) {
-            if ($object->getConfiguration('summary::global::' . $_key, 0) == 0) {
-                continue;
-            }
-            $result = $object->getSummary($_key, true);
-            if ($result === null || !is_array($result)) {
-                continue;
-            }
-            $value = array_merge($value, $result);
-        }
-        if (count($value) == 0) {
-            return null;
-        }
-        if ($def[$_key]['calcul'] == 'text') {
-            return trim(implode(',', $value), ',');
-        }
-        return round(nextdom::calculStat($def[$_key]['calcul'], $value), 1);
+        return ObjectManager::getGlobalSummary($_key);
     }
 
-    public static function getGlobalHtmlSummary($_version = 'desktop') {
-        $objects = self::all();
-        $def = config::byKey('object:summary');
-        $values = array();
-        $return = '<span class="objectSummaryglobal" data-version="' . $_version . '">';
-        foreach ($def as $key => $value) {
-            foreach ($objects as $object) {
-                if ($object->getConfiguration('summary::global::' . $key, 0) == 0) {
-                    continue;
-                }
-                if (!isset($values[$key])) {
-                    $values[$key] = array();
-                }
-                $result = $object->getSummary($key, true);
-                if ($result === null || !is_array($result)) {
-                    continue;
-                }
-                $values[$key] = array_merge($values[$key], $result);
-            }
-        }
-        $margin = ($_version == 'desktop') ? 4 : 2;
-
-        foreach ($values as $key => $value) {
-            if (count($value) == 0) {
-                continue;
-            }
-            $style = '';
-            $allowDisplayZero = $def[$key]['allowDisplayZero'];
-            if ($def[$key]['calcul'] == 'text') {
-                $result = trim(implode(',', $value), ',');
-                $allowDisplayZero = 1;
-            } else {
-                $result = round(nextdom::calculStat($def[$key]['calcul'], $value), 1);
-
-            }
-            if ($allowDisplayZero == 0 && $result == 0) {
-                $style = 'display:none;';
-            }
-            $return .= '<span class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="" style="margin-right:' . $margin . 'px;' . $style . '" data-displayZeroValue="' . $allowDisplayZero . '">';
-            $return .= $def[$key]['icon'] . ' <sup><span class="objectSummary' . $key . '">' . $result . '</span> ' . $def[$key]['unit'] . '</sup>';
-            $return .= '</span>';
-        }
-        return trim($return) . '</span>';
+    public static function getGlobalHtmlSummary($_key) {
+        return ObjectManager::getGlobalHtmlSummary($_key);
     }
 
     public static function createSummaryToVirtual($_key = '') {
-        if ($_key == '') {
-            return;
-        }
-        $def = config::byKey('object:summary');
-        if (!isset($def[$_key])) {
-            return;
-        }
-        try {
-            $plugin = plugin::byId('virtual');
-            if (!is_object($plugin)) {
-                $update = update::byLogicalId('virtual');
-                if (!is_object($update)) {
-                    $update = new update();
-                }
-                $update->setLogicalId('virtual');
-                $update->setSource('market');
-                $update->setConfiguration('version', 'stable');
-                $update->save();
-                $update->doUpdate();
-                sleep(2);
-                $plugin = plugin::byId('virtual');
-            }
-        } catch (Exception $e) {
-            $update = update::byLogicalId('virtual');
-            if (!is_object($update)) {
-                $update = new update();
-            }
-            $update->setLogicalId('virtual');
-            $update->setSource('market');
-            $update->setConfiguration('version', 'stable');
-            $update->save();
-            $update->doUpdate();
-            sleep(2);
-            $plugin = plugin::byId('virtual');
-        }
-        if (!$plugin->isActive()) {
-            $plugin->setIsEnable(1);
-        }
-        if (!is_object($plugin)) {
-            throw new Exception(__('Le plugin virtuel doit être installé', __FILE__));
-        }
-        if (!$plugin->isActive()) {
-            throw new Exception(__('Le plugin virtuel doit être actif', __FILE__));
-        }
-
-        $virtual = eqLogic::byLogicalId('summaryglobal', 'virtual');
-        if (!is_object($virtual)) {
-            $virtual = new virtual();
-            $virtual->setName(__('Résumé Global', __FILE__));
-            $virtual->setIsVisible(0);
-            $virtual->setIsEnable(1);
-        }
-        $virtual->setIsEnable(1);
-        $virtual->setLogicalId('summaryglobal');
-        $virtual->setEqType_name('virtual');
-        $virtual->save();
-        $cmd = $virtual->getCmd('info', $_key);
-        if (!is_object($cmd)) {
-            $cmd = new virtualCmd();
-            $cmd->setName($def[$_key]['name']);
-            $cmd->setIsHistorized(1);
-        }
-        $cmd->setEqLogic_id($virtual->getId());
-        $cmd->setLogicalId($_key);
-        $cmd->setType('info');
-        if ($def[$_key]['calcul'] == 'text') {
-            $cmd->setSubtype('string');
-        } else {
-            $cmd->setSubtype('numeric');
-        }
-        $cmd->setUnite($def[$_key]['unit']);
-        $cmd->save();
-
-        foreach (object::all() as $object) {
-            $summaries = $object->getConfiguration('summary');
-            if (!is_array($summaries)) {
-                continue;
-            }
-            if (!isset($summaries[$_key]) || !is_array($summaries[$_key]) || count($summaries[$_key]) == 0) {
-                continue;
-            }
-            $virtual = eqLogic::byLogicalId('summary' . $object->getId(), 'virtual');
-            if (!is_object($virtual)) {
-                $virtual = new virtual();
-                $virtual->setName(__('Résumé', __FILE__));
-                $virtual->setIsVisible(0);
-                $virtual->setIsEnable(1);
-            }
-            $virtual->setIsEnable(1);
-            $virtual->setLogicalId('summary' . $object->getId());
-            $virtual->setEqType_name('virtual');
-            $virtual->setObject_id($object->getId());
-            $virtual->save();
-            $object->setConfiguration('summary_virtual_id', $virtual->getId());
-            $object->save();
-            $cmd = $virtual->getCmd('info', $_key);
-            if (!is_object($cmd)) {
-                $cmd = new virtualCmd();
-                $cmd->setName($def[$_key]['name']);
-                $cmd->setIsHistorized(1);
-            }
-            $cmd->setEqLogic_id($virtual->getId());
-            $cmd->setLogicalId($_key);
-            $cmd->setType('info');
-            if ($def[$_key]['calcul'] == 'text') {
-                $cmd->setSubtype('string');
-            } else {
-                $cmd->setSubtype('numeric');
-            }
-            $cmd->setUnite($def[$_key]['unit']);
-            $cmd->save();
-        }
+        return ObjectManager::createSummaryToVirtual($_key);
     }
 
     /*     * *********************Méthodes d'instance************************* */
