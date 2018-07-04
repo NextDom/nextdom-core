@@ -11,12 +11,12 @@ sed -i 's/url[(]"images/url("\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images
 
 sed -i 's/url[(]"images/url("\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images/g' css/nextdom.min.css
 
-sed -i 's/NotoSans-Regular\.ttf/\/3rdparty\/font-noto\/NotoSans-Regular\.ttf/g' css/nextdom.css
-sed -i 's/NotoSans-Italic\.ttf/\/3rdparty\/font-noto\/NotoSans-Italic\.ttf/g' css/nextdom.css
-sed -i 's/NotoSans-Bold\.ttf/\/3rdparty\/font-noto\/NotoSans-Bold\.ttf/g' css/nextdom.css
-sed -i 's/NotoSans-Regular\.ttf/\/3rdparty\/font-noto\/NotoSans-Regular\.ttf/g' css/nextdom.min.css
-sed -i 's/NotoSans-Italic\.ttf/\/3rdparty\/font-noto\/NotoSans-Italic\.ttf/g' css/nextdom.min.css
-sed -i 's/NotoSans-Bold\.ttf/\/3rdparty\/font-noto\/NotoSans-Bold\.ttf/g' css/nextdom.min.css
+sed -i 's/"NotoSans-Regular\.ttf/"\/3rdparty\/font-noto\/NotoSans-Regular\.ttf/g' css/nextdom.css
+sed -i 's/"NotoSans-Italic\.ttf/"\/3rdparty\/font-noto\/NotoSans-Italic\.ttf/g' css/nextdom.css
+sed -i 's/"NotoSans-Bold\.ttf/"\/3rdparty\/font-noto\/NotoSans-Bold\.ttf/g' css/nextdom.css
+sed -i 's/"NotoSans-Regular\.ttf/"\/3rdparty\/font-noto\/NotoSans-Regular\.ttf/g' css/nextdom.min.css
+sed -i 's/"NotoSans-Italic\.ttf/"\/3rdparty\/font-noto\/NotoSans-Italic\.ttf/g' css/nextdom.min.css
+sed -i 's/"NotoSans-Bold\.ttf/"\/3rdparty\/font-noto\/NotoSans-Bold\.ttf/g' css/nextdom.min.css
 
 cat 3rdparty/jquery.utils/jquery.utils.js \
     core/js/core.js \
@@ -48,6 +48,7 @@ cat 3rdparty/jquery.utils/jquery.utils.js \
     core/js/dataStore.class.js \
     core/js/cache.class.js \
     core/js/report.class.js \
+    core/js/jeedom.class.js \
     3rdparty/bootbox/bootbox.min.js \
     3rdparty/highstock/highstock.js \
     3rdparty/highstock/highcharts-more.js \
