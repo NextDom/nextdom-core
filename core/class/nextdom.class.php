@@ -611,7 +611,7 @@ class nextdom
     public static function listBackup(): array
     {
         if (substr(\config::byKey('backup::path'), 0, 1) != '/') {
-            $backup_dir = NEXTDOM_ROOT . \config::byKey('backup::path');
+            $backup_dir = NEXTDOM_ROOT .'/'. \config::byKey('backup::path');
         } else {
             $backup_dir = \config::byKey('backup::path');
         }
