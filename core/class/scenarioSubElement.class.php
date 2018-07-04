@@ -19,7 +19,9 @@
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
 
+use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioSubElementManager;
+use NextDom\Managers\ScenarioExpressionManager;
 
 class scenarioSubElement {
     private $id;
@@ -74,7 +76,7 @@ class scenarioSubElement {
         if (is_array($this->_expression) && count($this->_expression) > 0) {
             return $this->_expression;
         }
-        $this->_expression = scenarioExpression::byscenarioSubElementId($this->getId());
+        $this->_expression = ScenarioExpressionManager::byscenarioSubElementId($this->getId());
         return $this->_expression;
     }
 
@@ -138,7 +140,7 @@ class scenarioSubElement {
     }
 
     public function getElement() {
-        return scenarioElement::byId($this->getScenarioElement_id());
+        return ScenarioElementManager::byId($this->getScenarioElement_id());
     }
 
     public function setScenarioElement_id($scenarioElement_id) {
