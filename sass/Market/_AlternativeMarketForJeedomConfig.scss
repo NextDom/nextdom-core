@@ -78,8 +78,10 @@
         left: 6px;
         width: 65px;
         border-radius: 15px;
-        font-size: 14px;
-        font-weight: bold;
+        font:{
+          size: 14px;
+          weight: bold;
+        }
         line-height: 22px;
         -webkit-transition: all .2s;
         -moz-transition: all .2s;
@@ -92,8 +94,10 @@
       left: 6px;
       width: 65px;
       border-radius: 15px;
-      font-size: 14px;
-      font-weight: bold;
+      font:{
+          size: 14px;
+          weight: bold;
+      }
       line-height: 22px;
       -webkit-transition: all .2s;
       -moz-transition: all .2s;
