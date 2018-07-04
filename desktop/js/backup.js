@@ -214,15 +214,15 @@
                 }
             }
             $('#pre_backupInfo').text(log);
-          if(log.includes("BACKUP")){
           div2 = document.getElementById('progressbar_reboot').style.width;
-          div3 =  parseFloat(div2.slice(0, -1)) + 12,5;
-            $('#progressbar_reboot').width(div3+'%');
-		  console.log("Width of div2 with style = " + div3+'%');
-          }else if (log.includes("RESTORE")){
-            $('#progressbar_reboot').width('50%');
-          }else if (log.includes("Fin")){
+          if (log.includes("Fin")){
             $('#progressbar_reboot').width('100%');
+          }else if(log.includes("BACKUP")){
+          		div3 =  parseFloat(div2.slice(0, -1)) + 12,86;
+            	$('#progressbar_reboot').width(div3+'%');
+          }else if (log.includes("RESTORE")){
+            div3 =  parseFloat(div2.slice(0, -1)) + 18;
+            	$('#progressbar_reboot').width(div3+'%');
           }
 
             if (init(_autoUpdate, 0) == 1) {

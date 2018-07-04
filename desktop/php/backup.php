@@ -144,7 +144,6 @@ foreach (update::listRepo() as $rkey => $value) {
             <span class="sr-only"></span>
         </div>
     </div>
-    <div id="div_reboot_nextdom_texte"><h6>Merci de patienter...</h6></div>
       <br>
 </div>
         <legend><i class="fa fa-info-circle" id="demo"></i>  {{Informations}} <button type="button" class="btn btn-info pull-right" data-toggle="collapse" data-target="#pre_backupInfo">afficher</button></legend>
