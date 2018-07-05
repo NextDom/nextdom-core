@@ -21,3 +21,5 @@ cache.tar.gz
 
 vendor
 composer.*
+market_cache/*
+backup/*

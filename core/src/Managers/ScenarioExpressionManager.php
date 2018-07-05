@@ -33,6 +33,9 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Managers\CmdManager;
+use NextDom\Managers\EqLogicManager;
+
 class ScenarioExpressionManager
 {
     const DB_CLASS_NAME = 'scenarioExpression';
@@ -153,7 +156,7 @@ class ScenarioExpressionManager
             '#uid#' => 'exp' . mt_rand(),
         );
         $return = array('html' => '');
-        $cmd = \cmd::byId(str_replace('#', '', \cmd::humanReadableToCmd($expression)));
+        $cmd = CmdManager::byId(str_replace('#', '', CmdManager::humanReadableToCmd($expression)));
         if (is_object($cmd)) {
             $return['html'] = trim($cmd->toHtml('scenario', $options));
             return $return;
@@ -170,7 +173,7 @@ class ScenarioExpressionManager
         if (!isset($replace['#id#'])) {
             $replace['#id#'] = rand();
         }
-        $return['html'] = template_replace(\cmd::cmdToHumanReadable($replace), $return['template']);
+        $return['html'] = template_replace(CmdManager::cmdToHumanReadable($replace), $return['template']);
         preg_match_all("/#[a-zA-Z_]*#/", $return['template'], $matches);
         foreach ($matches[0] as $value) {
             if (!isset($replace[$value])) {
@@ -201,13 +204,13 @@ class ScenarioExpressionManager
                 $name = $scenario->getName();
             }
             $action = $baseAction['options']['action'];
-            $result .= __('Scénario : ', __FILE__) . $name . ' <i class="fa fa-arrow-right"></i> ' . $action;
+            $result .= \__('Scénario : ', __FILE__) . $name . ' <i class="fa fa-arrow-right"></i> ' . $action;
         } elseif ($baseAction['cmd'] == 'variable') {
             $name = $baseAction['options']['name'];
             $value = $baseAction['options']['value'];
-            $result .= __('Variable : ', __FILE__) . $name . ' <i class="fa fa-arrow-right"></i> ' . $value;
-        } elseif (is_object(\cmd::byId(str_replace('#', '', $baseAction['cmd'])))) {
-            $cmd = \cmd::byId(str_replace('#', '', $baseAction['cmd']));
+            $result .= \__('Variable : ', __FILE__) . $name . ' <i class="fa fa-arrow-right"></i> ' . $value;
+        } elseif (is_object(CmdManager::byId(str_replace('#', '', $baseAction['cmd'])))) {
+            $cmd = CmdManager::byId(str_replace('#', '', $baseAction['cmd']));
             $eqLogic = $cmd->getEqLogic();
             $result .= $eqLogic->getHumanName(true) . ' ' . $cmd->getName();
         }
@@ -292,7 +295,7 @@ class ScenarioExpressionManager
     public static function eqEnable($eqLogicId)
     {
         $id = str_replace(array('eqLogic', '#'), '', trim($eqLogicId));
-        $eqLogic = \eqLogic::byId($id);
+        $eqLogic = \EqLogicManager::byId($id);
         if (!is_object($eqLogic)) {
             return -2;
         }
@@ -317,7 +320,7 @@ class ScenarioExpressionManager
                 if (is_numeric($arg)) {
                     $values[] = $arg;
                 } else {
-                    $value = \cmd::cmdToValue($arg);
+                    $value = CmdManager::cmdToValue($arg);
                     if (is_numeric($value)) {
                         $values[] = $value;
                     } else {
@@ -333,7 +336,7 @@ class ScenarioExpressionManager
             }
             return array_sum($values) / count($values);
         } else {
-            $cmd = \cmd::byId(trim(str_replace('#', '', $cmdId)));
+            $cmd = CmdManager::byId(trim(str_replace('#', '', $cmdId)));
             if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
                 return '';
             }
@@ -364,7 +367,7 @@ class ScenarioExpressionManager
      */
     public static function averageBetween($cmdId, $startDate, $endDate)
     {
-        $cmd = \cmd::byId(trim(str_replace('#', '', $cmdId)));
+        $cmd = CmdManager::byId(trim(str_replace('#', '', $cmdId)));
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
         }
@@ -393,7 +396,7 @@ class ScenarioExpressionManager
                 if (is_numeric($arg)) {
                     $values[] = $arg;
                 } else {
-                    $value = \cmd::cmdToValue($arg);
+                    $value = CmdManager::cmdToValue($arg);
                     if (is_numeric($value)) {
                         $values[] = $value;
                     } else {
@@ -409,7 +412,7 @@ class ScenarioExpressionManager
             }
             return max($values);
         } else {
-            $cmd = \cmd::byId(trim(str_replace('#', '', $cmdId)));
+            $cmd = CmdManager::byId(trim(str_replace('#', '', $cmdId)));
             if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
                 return '';
             }
@@ -439,7 +442,7 @@ class ScenarioExpressionManager
      */
     public static function maxBetween($cmdId, $startDate, $endDate)
     {
-        $cmd = \cmd::byId(trim(str_replace('#', '', $cmdId)));
+        $cmd = CmdManager::byId(trim(str_replace('#', '', $cmdId)));
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
         }
@@ -496,7 +499,7 @@ class ScenarioExpressionManager
                 if (is_numeric($arg)) {
                     $values[] = $arg;
                 } else {
-                    $value = \cmd::cmdToValue($arg);
+                    $value = CmdManager::cmdToValue($arg);
                     if (is_numeric($value)) {
                         $values[] = $value;
                     } else {
@@ -512,7 +515,7 @@ class ScenarioExpressionManager
             }
             return min($values);
         } else {
-            $cmd = \cmd::byId(trim(str_replace('#', '', $cmdId)));
+            $cmd = CmdManager::byId(trim(str_replace('#', '', $cmdId)));
             if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
                 return '';
             }
@@ -542,7 +545,7 @@ class ScenarioExpressionManager
      */
     public static function minBetween($cmdId, $startDate, $endDate)
     {
-        $cmd = \cmd::byId(trim(str_replace('#', '', $cmdId)));
+        $cmd = CmdManager::byId(trim(str_replace('#', '', $cmdId)));
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
         }
@@ -568,7 +571,7 @@ class ScenarioExpressionManager
             if (is_numeric($arg)) {
                 $values[] = $arg;
             } else {
-                $value = \cmd::cmdToValue($arg);
+                $value = CmdManager::cmdToValue($arg);
                 if (is_numeric($value)) {
                     $values[] = $value;
                 } else {
@@ -602,7 +605,7 @@ class ScenarioExpressionManager
      */
     public static function tendance($cmdId, $period = '1 hour', $threshold = '')
     {
-        $cmd = \cmd::byId(trim(str_replace('#', '', $cmdId)));
+        $cmd = CmdManager::byId(trim(str_replace('#', '', $cmdId)));
         if (!is_object($cmd)) {
             return '';
         }
@@ -660,9 +663,9 @@ class ScenarioExpressionManager
     public static function stateChanges($cmdId, $value = null, $period = '1 hour')
     {
         if (!is_numeric(str_replace('#', '', $cmdId))) {
-            $cmd = \cmd::byId(str_replace('#', '', \cmd::humanReadableToCmd($cmdId)));
+            $cmd = CmdManager::byId(str_replace('#', '', CmdManager::humanReadableToCmd($cmdId)));
         } else {
-            $cmd = \cmd::byId(str_replace('#', '', $cmdId));
+            $cmd = CmdManager::byId(str_replace('#', '', $cmdId));
         }
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
@@ -694,9 +697,9 @@ class ScenarioExpressionManager
     public static function stateChangesBetween($cmdId, $value, $startDate, $_endDate = null)
     {
         if (!is_numeric(str_replace('#', '', $cmdId))) {
-            $cmd = \cmd::byId(str_replace('#', '', \cmd::humanReadableToCmd($cmdId)));
+            $cmd = CmdManager::byId(str_replace('#', '', CmdManager::humanReadableToCmd($cmdId)));
         } else {
-            $cmd = \cmd::byId(str_replace('#', '', $cmdId));
+            $cmd = CmdManager::byId(str_replace('#', '', $cmdId));
         }
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
@@ -727,9 +730,9 @@ class ScenarioExpressionManager
     {
         $cmd_id = str_replace('#', '', $cmdId);
         if (!is_numeric($cmd_id)) {
-            $cmd_id = \cmd::byId(str_replace('#', '', \cmd::humanReadableToCmd($cmdId)));
+            $cmd_id = CmdManager::byId(str_replace('#', '', CmdManager::humanReadableToCmd($cmdId)));
         }
-        $cmd = \cmd::byId($cmd_id);
+        $cmd = CmdManager::byId($cmd_id);
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
         }
@@ -792,9 +795,9 @@ class ScenarioExpressionManager
     public static function durationBetween($cmdId, $value, $startDate, $endDate)
     {
         if (!is_numeric(str_replace('#', '', $cmdId))) {
-            $cmd = \cmd::byId(str_replace('#', '', \cmd::humanReadableToCmd($cmdId)));
+            $cmd = CmdManager::byId(str_replace('#', '', CmdManager::humanReadableToCmd($cmdId)));
         } else {
-            $cmd = \cmd::byId(str_replace('#', '', $cmdId));
+            $cmd = CmdManager::byId(str_replace('#', '', $cmdId));
         }
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
@@ -845,7 +848,7 @@ class ScenarioExpressionManager
      */
     public static function lastBetween($cmdId, $startDate, $endDate)
     {
-        $cmd = \cmd::byId(trim(str_replace('#', '', $cmdId)));
+        $cmd = CmdManager::byId(trim(str_replace('#', '', $cmdId)));
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
         }
@@ -866,7 +869,7 @@ class ScenarioExpressionManager
     public static function statistics($cmdId, $calc, $period = '1 hour')
     {
 
-        $cmd = \cmd::byId(trim(str_replace('#', '', $cmdId)));
+        $cmd = CmdManager::byId(trim(str_replace('#', '', $cmdId)));
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
         }
@@ -897,7 +900,7 @@ class ScenarioExpressionManager
      */
     public static function statisticsBetween($cmdId, $calc, $startDate, $endDate)
     {
-        $cmd = \cmd::byId(trim(str_replace('#', '', $cmdId)));
+        $cmd = CmdManager::byId(trim(str_replace('#', '', $cmdId)));
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
         }
@@ -997,7 +1000,7 @@ class ScenarioExpressionManager
      */
     public static function collectDate($cmd, $format = 'Y-m-d H:i:s')
     {
-        $cmdObj = \cmd::byId(trim(str_replace('#', '', $cmd)));
+        $cmdObj = CmdManager::byId(trim(str_replace('#', '', $cmd)));
         if (!is_object($cmdObj)) {
             return -1;
         }
@@ -1017,7 +1020,7 @@ class ScenarioExpressionManager
      */
     public static function valueDate($cmdId, $format = 'Y-m-d H:i:s')
     {
-        $cmd = \cmd::byId(trim(str_replace('#', '', $cmdId)));
+        $cmd = CmdManager::byId(trim(str_replace('#', '', $cmdId)));
         if (!is_object($cmd)) {
             return '';
         }
@@ -1088,7 +1091,7 @@ class ScenarioExpressionManager
     public static function triggerValue(&$scenario = null)
     {
         if ($scenario !== null) {
-            $cmd = \cmd::byId(str_replace('#', '', $scenario->getRealTrigger()));
+            $cmd = CmdManager::byId(str_replace('#', '', $scenario->getRealTrigger()));
             if (is_object($cmd)) {
                 return $cmd->execCmd();
             }
@@ -1268,12 +1271,12 @@ class ScenarioExpressionManager
      */
     public static function name($type, $cmdId)
     {
-        $cmd = \cmd::byId(str_replace('#', '', $cmdId));
+        $cmd = CmdManager::byId(str_replace('#', '', $cmdId));
         if (!is_object($cmd)) {
-            $cmd = \cmd::byId(trim(str_replace('#', '', \cmd::humanReadableToCmd('#' . str_replace('#', '', $cmdId) . '#'))));
+            $cmd = CmdManager::byId(trim(str_replace('#', '', CmdManager::humanReadableToCmd('#' . str_replace('#', '', $cmdId) . '#'))));
         }
         if (!is_object($cmd)) {
-            return __('Commande non trouvée', __FILE__);
+            return \__('Commande non trouvée', __FILE__);
         }
         switch ($type) {
             case 'cmd':
@@ -1283,11 +1286,11 @@ class ScenarioExpressionManager
             case 'object':
                 $object = $cmd->getEqLogic()->getObject();
                 if (!is_object($object)) {
-                    return __('Aucun', __FILE__);
+                    return \__('Aucun', __FILE__);
                 }
                 return $object->getName();
         }
-        return __('Type inconnu', __FILE__);
+        return \__('Type inconnu', __FILE__);
     }
 
     /**
@@ -1411,7 +1414,7 @@ class ScenarioExpressionManager
         }
 
         if (is_object($scenario)) {
-            $cmd = \cmd::byId(str_replace('#', '', $scenario->getRealTrigger()));
+            $cmd = CmdManager::byId(str_replace('#', '', $scenario->getRealTrigger()));
             if (is_object($cmd)) {
                 $replace1['#trigger#'] = $cmd->getHumanName();
                 $replace1['#trigger_value#'] = $cmd->execCmd();
@@ -1450,7 +1453,7 @@ class ScenarioExpressionManager
                         $result .= ')';
                     }
                     $result = self::setTags($result, $scenario, $quote, $nbCall++);
-                    return \cmd::cmdToValue(str_replace(array_keys($replace1), array_values($replace1), $result), $quote);
+                    return CmdManager::cmdToValue(str_replace(array_keys($replace1), array_values($replace1), $result), $quote);
                 } else {
                     $arguments = explode(',', $match[2]);
                 }
@@ -1488,7 +1491,7 @@ class ScenarioExpressionManager
                 }
             }
         }
-        $return = \cmd::cmdToValue(str_replace(array_keys($replace1), array_values($replace1), str_replace(array_keys($replace2), array_values($replace2), $expression)), $quote);
+        $return = CmdManager::cmdToValue(str_replace(array_keys($replace1), array_values($replace1), str_replace(array_keys($replace2), array_values($replace2), $expression)), $quote);
         return $return;
     }
 
