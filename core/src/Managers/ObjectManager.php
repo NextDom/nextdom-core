@@ -459,16 +459,16 @@ class ObjectManager
             $plugin->setIsEnable(1);
         }
         if (!is_object($plugin)) {
-            throw new \Exception(__('Le plugin virtuel doit être installé', __FILE____));
+            throw new \Exception(__('Le plugin virtuel doit être installé', __FILE__));
         }
         if (!$plugin->isActive()) {
-            throw new \Exception(__('Le plugin virtuel doit être actif', __FILE____));
+            throw new \Exception(__('Le plugin virtuel doit être actif', __FILE__));
         }
 
         $virtual = \EqLogicManager::byLogicalId('summaryglobal', 'virtual');
         if (!is_object($virtual)) {
             $virtual = new \virtual();
-            $virtual->setName(__('Résumé Global', __FILE____));
+            $virtual->setName(__('Résumé Global', __FILE__));
             $virtual->setIsVisible(0);
             $virtual->setIsEnable(1);
         }
@@ -504,7 +504,7 @@ class ObjectManager
             $virtual = \EqLogicManager::byLogicalId('summary' . $object->getId(), 'virtual');
             if (!is_object($virtual)) {
                 $virtual = new \virtual();
-                $virtual->setName(__('Résumé', __FILE____));
+                $virtual->setName(__('Résumé', __FILE__));
                 $virtual->setIsVisible(0);
                 $virtual->setIsEnable(1);
             }

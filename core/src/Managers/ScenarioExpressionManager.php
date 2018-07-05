@@ -204,11 +204,11 @@ class ScenarioExpressionManager
                 $name = $scenario->getName();
             }
             $action = $baseAction['options']['action'];
-            $result .= \__('Scénario : ', __FILE____) . $name . ' <i class="fa fa-arrow-right"></i> ' . $action;
+            $result .= \__('Scénario : ', __FILE__) . $name . ' <i class="fa fa-arrow-right"></i> ' . $action;
         } elseif ($baseAction['cmd'] == 'variable') {
             $name = $baseAction['options']['name'];
             $value = $baseAction['options']['value'];
-            $result .= \__('Variable : ', __FILE____) . $name . ' <i class="fa fa-arrow-right"></i> ' . $value;
+            $result .= \__('Variable : ', __FILE__) . $name . ' <i class="fa fa-arrow-right"></i> ' . $value;
         } elseif (is_object(CmdManager::byId(str_replace('#', '', $baseAction['cmd'])))) {
             $cmd = CmdManager::byId(str_replace('#', '', $baseAction['cmd']));
             $eqLogic = $cmd->getEqLogic();
@@ -1276,7 +1276,7 @@ class ScenarioExpressionManager
             $cmd = CmdManager::byId(trim(str_replace('#', '', CmdManager::humanReadableToCmd('#' . str_replace('#', '', $cmdId) . '#'))));
         }
         if (!is_object($cmd)) {
-            return \__('Commande non trouvée', __FILE____);
+            return \__('Commande non trouvée', __FILE__);
         }
         switch ($type) {
             case 'cmd':
@@ -1286,11 +1286,11 @@ class ScenarioExpressionManager
             case 'object':
                 $object = $cmd->getEqLogic()->getObject();
                 if (!is_object($object)) {
-                    return \__('Aucun', __FILE____);
+                    return \__('Aucun', __FILE__);
                 }
                 return $object->getName();
         }
-        return \__('Type inconnu', __FILE____);
+        return \__('Type inconnu', __FILE__);
     }
 
     /**
