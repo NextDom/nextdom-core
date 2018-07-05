@@ -49,7 +49,7 @@ class ScenarioManager
      *
      * @param int $id Identifiant du scénario
      *
-     * @return scenario Objet demandé
+     * @return \scenario Objet demandé
      *
      * @throws \Exception
      */
@@ -65,7 +65,7 @@ class ScenarioManager
      *
      * @param string $scenarioName Chaine identifiant le scénario
      *
-     * @return scenario Objet demandé
+     * @return \scenario Objet demandé
      *
      * @throws \Exception
      */
@@ -232,7 +232,7 @@ class ScenarioManager
      * Vérifier un scénario
      * TODO: Virer les strings
      *
-     * @param event $event Evènement déclencheur
+     * @param \event $event Evènement déclencheur
      * @param bool $forceSyncMode Forcer le mode synchrone
      *
      * @return bool Renvoie toujours true //TODO: A voir
@@ -622,7 +622,7 @@ class ScenarioManager
      *
      * @param string $template
      *
-     * @return type
+     * @return mixed
      */
     public static function getTemplate($template = '')
     {
@@ -664,7 +664,7 @@ class ScenarioManager
      * TODO:
      * @param type $market
      * @param type $path
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getFromMarket(&$market, $path)
     {

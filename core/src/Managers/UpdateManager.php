@@ -167,10 +167,10 @@ class UpdateManager
                         try {
                             $update->doUpdate();
                         } catch (\Exception $e) {
-                            log::add('update', 'update', $e->getMessage());
+                            \log::add('update', 'update', $e->getMessage());
                             $error = true;
-                        } catch (Error $e) {
-                            log::add('update', 'update', $e->getMessage());
+                        } catch (\Error $e) {
+                            \log::add('update', 'update', $e->getMessage());
                             $error = true;
                         }
                     }

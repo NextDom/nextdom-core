@@ -43,7 +43,7 @@ class EqLogicManager
     /**
      * Get eqLogic object with his id.
      *
-     * @param $id EqLogic object id
+     * @param mixed $id EqLogic object id
      *
      * @return array|mixed|void
      */
