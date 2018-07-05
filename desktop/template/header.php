@@ -26,7 +26,7 @@ $bootstrapTheme = '';
 if (isset($_SESSION['user'])) {
     $bootstrapTheme = $_SESSION['user']->getOptions('bootstrap_theme');
 }
-$themeDir = NEXTDOM_ROOT . 'core/themes/'
+$themeDir = NEXTDOM_ROOT . 'core/themes/';
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -72,7 +72,7 @@ $themeDir = NEXTDOM_ROOT . 'core/themes/'
         }
     }
     include_file('core', 'icon.inc', 'php');
-    include_file('', 'nextdom.min', 'css');
+    include_file('', 'nextdom', 'css');
 
     // Javascript
     include_file('3rdparty', 'jquery/jquery.min', 'js');
