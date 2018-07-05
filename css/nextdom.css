@@ -7457,6 +7457,10 @@ input[type=checkbox] {
     margin-left: 10px;
 }
 
+.bs-sidebar .bs-sidenav {
+    background-color: rgba(255, 255, 255, 0);
+}
+
 #jqueryLoadingDiv .overlay {
     background-image: url(/3rdparty/jquery.utils/gritter.png);
 }
