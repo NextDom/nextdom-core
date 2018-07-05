@@ -33,6 +33,8 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Managers\CmdManager;
+
 //require_once __DIR__.'/../DB.class.php';
 
 // TODO: \DB::buildField(ScenarioEntity::className) à factoriser
@@ -243,11 +245,11 @@ class ScenarioManager
             if (is_object($event)) {
                 $eventScenarios = self::byTrigger($event->getId());
                 $trigger = '#' . $event->getId() . '#';
-                $message = __('Scénario exécuté automatiquement sur événement venant de : ') . $event->getHumanName();
+                $message = \__('Scénario exécuté automatiquement sur événement venant de : ') . $event->getHumanName();
             } else {
                 $eventScenarios = self::byTrigger($event);
                 $trigger = $event;
-                $message = __('Scénario exécuté sur événement : #') . $event . '#';
+                $message = \__('Scénario exécuté sur événement : #') . $event . '#';
             }
             if (is_array($eventScenarios) && count($eventScenarios) > 0) {
                 foreach ($eventScenarios as $scenario) {
@@ -257,7 +259,7 @@ class ScenarioManager
                 }
             }
         } else {
-            $message = __('Scénario exécuté automatiquement sur programmation');
+            $message = \__('Scénario exécuté automatiquement sur programmation');
             $scenarios = self::schedule();
             $trigger = 'schedule';
             if (\nextdom::isDateOk()) {
@@ -391,7 +393,7 @@ class ScenarioManager
             if ($scenario->getMode() == 'provoke' || $scenario->getMode() == 'all') {
                 $trigger_list = '';
                 foreach ($scenario->getTrigger() as $trigger) {
-                    $trigger_list .= \cmd::cmdToHumanReadable($trigger) . '_';
+                    $trigger_list .= CmdManager::cmdToHumanReadable($trigger) . '_';
                 }
                 preg_match_all("/#([0-9]*)#/", $trigger_list, $matches);
                 foreach ($matches[1] as $cmd_id) {
@@ -399,14 +401,14 @@ class ScenarioManager
                         if ($needsReturn) {
                             $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Déclencheur du scénario', 'who' => '#' . $cmd_id . '#');
                         } else {
-                            \log::add('scenario', 'error', __('Un déclencheur du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
+                            \log::add('scenario', 'error', \__('Un déclencheur du scénario : ') . $scenario->getHumanName() . \__(' est introuvable'));
                         }
                     }
                 }
             }
             $expression_list = '';
             foreach ($scenario->getElement() as $element) {
-                $expression_list .= \cmd::cmdToHumanReadable(json_encode($element->getAjaxElement()));
+                $expression_list .= CmdManager::cmdToHumanReadable(json_encode($element->getAjaxElement()));
             }
             preg_match_all("/#([0-9]*)#/", $expression_list, $matches);
             foreach ($matches[1] as $cmd_id) {
@@ -414,7 +416,7 @@ class ScenarioManager
                     if ($needsReturn) {
                         $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Utilisé dans le scénario', 'who' => '#' . $cmd_id . '#');
                     } else {
-                        \log::add('scenario', 'error', __('Une commande du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
+                        \log::add('scenario', 'error', \__('Une commande du scénario : ') . $scenario->getHumanName() . \__(' est introuvable'));
                     }
                 }
             }
@@ -442,9 +444,9 @@ class ScenarioManager
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 's') . '
                 FROM ' . self::DB_CLASS_NAME . ' s ';
 
-        if ($objectName == __('Aucun')) {
+        if ($objectName == \__('Aucun')) {
             $sql .= 'WHERE s.name=:scenario_name ';
-            if ($groupName == __('Aucun')) {
+            if ($groupName == \__('Aucun')) {
                 $sql .= 'AND (`group` IS NULL OR `group` = ""  OR `group` = "Aucun" OR `group` = "None")
                          AND s.object_id IS NULL';
             } else {
@@ -457,7 +459,7 @@ class ScenarioManager
             $sql .= 'INNER JOIN object ob ON s.object_id=ob.id
                      WHERE s.name = :scenario_name
                      AND ob.name = :object_name ';
-            if ($groupName == __('Aucun')) {
+            if ($groupName == \__('Aucun')) {
                 $sql .= 'AND (`group` IS NULL OR `group` = ""  OR `group` = "Aucun" OR `group` = "None")';
             } else {
                 $values['group_name'] = $groupName;
@@ -649,11 +651,11 @@ class ScenarioManager
         $tmp = \nextdom::getTmpFolder('market') . '/' . $market->getLogicalId() . '.zip';
         if (file_exists($tmp)) {
             if (!unlink($tmp)) {
-                throw new \Exception(__('Impossible de supprimer : ') . $tmp . __('. Vérifiez les droits'));
+                throw new \Exception(__('Impossible de supprimer : ') . $tmp . \__('. Vérifiez les droits'));
             }
         }
         if (!\create_zip($moduleFile, $tmp)) {
-            throw new \Exception(__('Echec de création du zip. Répertoire source : ') . $moduleFile . __(' / Répertoire cible : ') . $tmp);
+            throw new \Exception(__('Echec de création du zip. Répertoire source : ') . $moduleFile . \__(' / Répertoire cible : ') . $tmp);
         }
         return $tmp;
     }

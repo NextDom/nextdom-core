@@ -143,7 +143,7 @@ class PluginManager
                 foreach ($listPlugin as $plugin) {
                     $category = $plugin->getCategory();
                     if ($category == '') {
-                        $category = __('Autre', __FILE__);
+                        $category = \__('Autre', __FILE____);
                     }
                     if (!isset($returnValue[$category])) {
                         $returnValue[$category] = array();
@@ -248,7 +248,7 @@ class PluginManager
     {
         $cache = \cache::byKey('plugin::' . $cronType . '::inprogress');
         if ($cache->getValue(0) > 3) {
-            \message::add('core', __('La tache plugin::' . $cronType . ' n\'arrive pas à finir à cause du plugin : ') . \cache::byKey('plugin::'.$cronType.'::last')->getValue() . __(' nous vous conseillons de désactiver le plugin et de contacter l\'auteur'));
+            \message::add('core', \__('La tache plugin::' . $cronType . ' n\'arrive pas à finir à cause du plugin : ') . \cache::byKey('plugin::'.$cronType.'::last')->getValue() . \__(' nous vous conseillons de désactiver le plugin et de contacter l\'auteur'));
         }
         \cache::set('plugin::'.$cronType.'::inprogress', $cache->getValue(0) + 1);
         foreach (self::listPlugin(true) as $plugin) {
@@ -259,9 +259,9 @@ class PluginManager
                     try {
                         $pluginId::$cronType();
                     } catch (\Exception $e) {
-                        \log::add($pluginId, 'error', __('Erreur sur la fonction cron du plugin : ', __FILE__) . $e->getMessage());
+                        \log::add($pluginId, 'error', \__('Erreur sur la fonction cron du plugin : ', __FILE____) . $e->getMessage());
                     } catch (\Error $e) {
-                        \log::add($pluginId, 'error', __('Erreur sur la fonction cron du plugin : ', __FILE__) . $e->getMessage());
+                        \log::add($pluginId, 'error', \__('Erreur sur la fonction cron du plugin : ', __FILE____) . $e->getMessage());
                     }
                 }
             }
@@ -283,9 +283,9 @@ class PluginManager
                 try {
                     $pluginId::start();
                 } catch (\Exception $e) {
-                    \log::add($pluginId, 'error', __('Erreur sur la fonction start du plugin : ', __FILE__) . $e->getMessage());
+                    \log::add($pluginId, 'error', \__('Erreur sur la fonction start du plugin : ', __FILE____) . $e->getMessage());
                 } catch (\Error $e) {
-                    \log::add($pluginId, 'error', __('Erreur sur la fonction start du plugin : ', __FILE__) . $e->getMessage());
+                    \log::add($pluginId, 'error', \__('Erreur sur la fonction start du plugin : ', __FILE____) . $e->getMessage());
                 }
             }
         }
@@ -305,9 +305,9 @@ class PluginManager
                 try {
                     $pluginId::stop();
                 } catch (\Exception $e) {
-                    \log::add($pluginId, 'error', __('Erreur sur la fonction stop du plugin : ', __FILE__) . $e->getMessage());
+                    \log::add($pluginId, 'error', \__('Erreur sur la fonction stop du plugin : ', __FILE____) . $e->getMessage());
                 } catch (\Error $e) {
-                    \log::add($pluginId, 'error', __('Erreur sur la fonction stop du plugin : ', __FILE__) . $e->getMessage());
+                    \log::add($pluginId, 'error', \__('Erreur sur la fonction stop du plugin : ', __FILE____) . $e->getMessage());
                 }
             }
         }
@@ -336,7 +336,7 @@ class PluginManager
                     shell_exec('rm ' . $dependancy_info['progress_file']);
                 }
                 \config::save('deamonAutoMode', 0, $plugin->getId());
-                \log::add($plugin->getId(), 'error', __('Attention : l\'installation des dépendances a dépassé le temps maximum autorisé : ', __FILE__) . $plugin->getMaxDependancyInstallTime() . 'min');
+                \log::add($plugin->getId(), 'error', \__('Attention : l\'installation des dépendances a dépassé le temps maximum autorisé : ', __FILE____) . $plugin->getMaxDependancyInstallTime() . 'min');
             }
             try {
                 $plugin->deamon_start(false, true);

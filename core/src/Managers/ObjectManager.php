@@ -33,8 +33,8 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Managers\PluginManager;
-use NextDom\Managers\UpdateManager;
+use NextDom\Managers\CmdManager;
+use NextDom\Managers\EqLogicManager;
 
 class ObjectManager
 {
@@ -226,7 +226,7 @@ class ObjectManager
         foreach (self::all() as $object) {
             foreach ($object->getConfiguration('summary', '') as $key => $summary) {
                 foreach ($summary as $cmdInfo) {
-                    if (!\cmd::byId(str_replace('#', '', $cmdInfo['cmd']))) {
+                    if (!CmdManager::byId(str_replace('#', '', $cmdInfo['cmd']))) {
                         $result[] = array('detail' => 'Résumé ' . $object->getName(), 'help' => \config::byKey('object:summary')[$key]['name'], 'who' => $cmdInfo['cmd']);
                     }
                 }
@@ -278,7 +278,7 @@ class ObjectManager
                     if ($object->getConfiguration('summary_virtual_id') == '') {
                         continue;
                     }
-                    $virtual = \eqLogic::byId($value['object']->getConfiguration('summary_virtual_id'));
+                    $virtual = \EqLogicManager::byId($value['object']->getConfiguration('summary_virtual_id'));
                     if (!is_object($virtual)) {
                         $object->getConfiguration('summary_virtual_id', '');
                         $object->save();
@@ -303,7 +303,7 @@ class ObjectManager
                         continue;
                     }
                     $event['keys'][$key] = array('value' => $result);
-                    $virtual = \eqLogic::byLogicalId('summaryglobal', 'virtual');
+                    $virtual = \EqLogicManager::byLogicalId('summaryglobal', 'virtual');
                     if (!is_object($virtual)) {
                         continue;
                     }
@@ -459,16 +459,16 @@ class ObjectManager
             $plugin->setIsEnable(1);
         }
         if (!is_object($plugin)) {
-            throw new \Exception(__('Le plugin virtuel doit être installé', __FILE__));
+            throw new \Exception(__('Le plugin virtuel doit être installé', __FILE____));
         }
         if (!$plugin->isActive()) {
-            throw new \Exception(__('Le plugin virtuel doit être actif', __FILE__));
+            throw new \Exception(__('Le plugin virtuel doit être actif', __FILE____));
         }
 
-        $virtual = \eqLogic::byLogicalId('summaryglobal', 'virtual');
+        $virtual = \EqLogicManager::byLogicalId('summaryglobal', 'virtual');
         if (!is_object($virtual)) {
             $virtual = new \virtual();
-            $virtual->setName(__('Résumé Global', __FILE__));
+            $virtual->setName(__('Résumé Global', __FILE____));
             $virtual->setIsVisible(0);
             $virtual->setIsEnable(1);
         }
@@ -501,10 +501,10 @@ class ObjectManager
             if (!isset($summaries[$key]) || !is_array($summaries[$key]) || count($summaries[$key]) == 0) {
                 continue;
             }
-            $virtual = \eqLogic::byLogicalId('summary' . $object->getId(), 'virtual');
+            $virtual = \EqLogicManager::byLogicalId('summary' . $object->getId(), 'virtual');
             if (!is_object($virtual)) {
                 $virtual = new \virtual();
-                $virtual->setName(__('Résumé', __FILE__));
+                $virtual->setName(__('Résumé', __FILE____));
                 $virtual->setIsVisible(0);
                 $virtual->setIsEnable(1);
             }

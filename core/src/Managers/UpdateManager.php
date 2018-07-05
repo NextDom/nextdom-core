@@ -166,7 +166,7 @@ class UpdateManager
                     if ($update->getStatus() != 'hold' && $update->getStatus() == 'update' && $update->getType() != 'core') {
                         try {
                             $update->doUpdate();
-                        } catch (Exception $e) {
+                        } catch (\Exception $e) {
                             log::add('update', 'update', $e->getMessage());
                             $error = true;
                         } catch (Error $e) {
