@@ -50,7 +50,7 @@ class CmdManager
             if ($eqLogic !== null) {
                 $inputs->_eqLogic = $eqLogic;
             }
-            return cast($inputs, $inputs->getEqType() . 'Cmd');
+            return \cast($inputs, $inputs->getEqType() . 'Cmd');
         }
         if (is_array($inputs)) {
             $return = array();

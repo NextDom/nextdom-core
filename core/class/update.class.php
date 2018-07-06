@@ -152,7 +152,7 @@ class update {
                         }
                         $zip->close();
                         unlink($tmp);
-                        JeedomToNextDom::convertPlugin($cibDir);
+//                        JeedomToNextDom::convertPlugin($cibDir);
                         try {
                             if (file_exists(NEXTDOM_ROOT.'/plugins/' . $this->getLogicalId() . '/doc')) {
                                 shell_exec('sudo rm -rf ' . NEXTDOM_ROOT.'/plugins/' . $this->getLogicalId() . '/doc');
