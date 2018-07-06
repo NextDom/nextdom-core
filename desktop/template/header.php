@@ -26,7 +26,7 @@ $bootstrapTheme = '';
 if (isset($_SESSION['user'])) {
     $bootstrapTheme = $_SESSION['user']->getOptions('bootstrap_theme');
 }
-$themeDir = NEXTDOM_ROOT . 'core/themes/';
+$themeDir = NEXTDOM_ROOT . '/css/themes/';
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
