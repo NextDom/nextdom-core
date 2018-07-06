@@ -7461,6 +7461,14 @@ input[type=checkbox] {
     background-color: rgba(255, 255, 255, 0);
 }
 
+.icon_font_size {
+    font-size: 6em;
+}
+
+.pluginListContainer {
+    margin-top: 20px;
+}
+
 #jqueryLoadingDiv .overlay {
     background-image: url(/3rdparty/jquery.utils/gritter.png);
 }
@@ -7478,7 +7486,19 @@ input[type=checkbox] {
 }
 
 .blue {
-    background-color: #0174DF;
+    background-color: #337ab7;
+}
+
+.icon_blue {
+    color: #337ab7;
+}
+
+.icon_nextdom_blue {
+    color: #33b8cc;
+}
+
+.nextdom_blue {
+    color: #33b8cc;
 }
 
 .orange {

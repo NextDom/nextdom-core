@@ -67,7 +67,7 @@ foreach (update::listRepo() as $key => $value) {
 foreach (plugin::listPlugin() as $plugin) {
     $opacity = ($plugin->isActive()) ? '' : nextdom::getConfiguration('eqLogic:style:noactive');
     echo '<div class="pluginDisplayCard iconlist text-center" data-pluginPath="' . $plugin->getFilepath() . '" data-plugin_id="' . $plugin->getId() . '" style="' . $opacity . '" >';
-    echo '<img class="img-responsive" style="width : 120px;" src="' . $plugin->getPathImgIcon() . '" />';
+    echo '<img class="img-responsive" style="width : 100px;" src="' . $plugin->getPathImgIcon() . '" />';
     echo '<span style="display:none;" class="name">' . $plugin->getName() . '</span>';
     echo '</div>';
 }
