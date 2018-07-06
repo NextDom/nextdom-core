@@ -31,7 +31,7 @@ class GitManager
      */
     private $gitId;
     /**
-     * @var AmfjDataStorage Gestionnaire de base de données
+     * @var DataStorage Gestionnaire de base de données
      */
     private $dataStorage;
 
@@ -52,7 +52,7 @@ class GitManager
      *
      * @return bool True si l'opération a réussie
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function updateRepositoriesList()
     {
@@ -84,7 +84,7 @@ class GitManager
      * Télécharge la liste des dépôts au format JSON
      *
      * @return string|bool Données au format JSON ou False en cas d'échec
-     * @throws Exception
+     * @throws \Exception
      */
     protected function downloadRepositoriesList()
     {

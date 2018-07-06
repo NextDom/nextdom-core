@@ -50,7 +50,7 @@ class CmdManager
             if ($eqLogic !== null) {
                 $inputs->_eqLogic = $eqLogic;
             }
-            return cast($inputs, $inputs->getEqType() . 'Cmd');
+            return \cast($inputs, $inputs->getEqType() . 'Cmd');
         }
         if (is_array($inputs)) {
             $return = array();
@@ -68,7 +68,7 @@ class CmdManager
     /**
      * Get command by his id
      * 
-     * @param $id Command id
+     * @param mixed $id Command id
      * @return array|mixed|void
      */
     public static function byId($id) {
@@ -605,7 +605,7 @@ class CmdManager
             $reflections = array();
             $uuid = spl_object_hash($input);
             if (!isset($reflections[$uuid])) {
-                $reflections[$uuid] = new ReflectionClass($input);
+                $reflections[$uuid] = new \ReflectionClass($input);
             }
             $reflection = $reflections[$uuid];
             $properties = $reflection->getProperties();

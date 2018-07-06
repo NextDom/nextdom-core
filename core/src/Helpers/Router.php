@@ -101,7 +101,7 @@ class Router
     /**
      * Affichage de la page de configuration d'un plugin
      *
-     * @throws \ExceptionAffichage
+     * @throws \Exception Affichage
      */
     private function showConfiguration() {
         \include_file('core', 'authentification', 'php');

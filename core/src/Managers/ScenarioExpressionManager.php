@@ -295,7 +295,7 @@ class ScenarioExpressionManager
     public static function eqEnable($eqLogicId)
     {
         $id = str_replace(array('eqLogic', '#'), '', trim($eqLogicId));
-        $eqLogic = \EqLogicManager::byId($id);
+        $eqLogic = EqLogicManager::byId($id);
         if (!is_object($eqLogic)) {
             return -2;
         }
@@ -1039,7 +1039,7 @@ class ScenarioExpressionManager
     {
         $value = rand($rangeLower, $rangeHighter);
         $color_range = 85;
-        $color = new stdClass();
+        $color = new \stdClass();
         $color->red = $rangeLower;
         $color->green = $rangeLower;
         $color->blue = $rangeLower;
@@ -1188,7 +1188,7 @@ class ScenarioExpressionManager
     /**
      * Obtenir l'interval entre deux dates
      *
-     * @param strin $date1Str Première date au format texte
+     * @param string $date1Str Première date au format texte
      * @param string $date2Str Seconde date au format texte
      * @param string $intervalFormat Format de l'interval (s : secondes, m : minutes, h : heures, d : jours)
      *

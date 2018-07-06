@@ -26,12 +26,12 @@ use NextDom\Managers\PluginManager;
 class PrepareView
 {
     /**
-     * @var Données HTML du menu
+     * @var string Données HTML du menu
      */
     private static $pluginMenu;
 
     /**
-     * @var Données HTML de TODO: ????
+     * @var string Données HTML de TODO: ????
      */
     private static $panelMenu;
 

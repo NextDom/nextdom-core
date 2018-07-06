@@ -278,7 +278,7 @@ class ObjectManager
                     if ($object->getConfiguration('summary_virtual_id') == '') {
                         continue;
                     }
-                    $virtual = \EqLogicManager::byId($value['object']->getConfiguration('summary_virtual_id'));
+                    $virtual = EqLogicManager::byId($value['object']->getConfiguration('summary_virtual_id'));
                     if (!is_object($virtual)) {
                         $object->getConfiguration('summary_virtual_id', '');
                         $object->save();
@@ -303,7 +303,7 @@ class ObjectManager
                         continue;
                     }
                     $event['keys'][$key] = array('value' => $result);
-                    $virtual = \EqLogicManager::byLogicalId('summaryglobal', 'virtual');
+                    $virtual = EqLogicManager::byLogicalId('summaryglobal', 'virtual');
                     if (!is_object($virtual)) {
                         continue;
                     }
@@ -399,7 +399,7 @@ class ObjectManager
                 $result = trim(implode(',', $value), ',');
                 $allowDisplayZero = 1;
             } else {
-                $result = round(nextdom::calculStat($def[$key]['calcul'], $value), 1);
+                $result = round(\nextdom::calculStat($def[$key]['calcul'], $value), 1);
 
             }
             if ($allowDisplayZero == 0 && $result == 0) {
@@ -423,7 +423,7 @@ class ObjectManager
         if ($key == '') {
             return;
         }
-        $def = config::byKey('object:summary');
+        $def = \config::byKey('object:summary');
         if (!isset($def[$key])) {
             return;
         }
@@ -465,7 +465,7 @@ class ObjectManager
             throw new \Exception(__('Le plugin virtuel doit être actif', __FILE__));
         }
 
-        $virtual = \EqLogicManager::byLogicalId('summaryglobal', 'virtual');
+        $virtual = EqLogicManager::byLogicalId('summaryglobal', 'virtual');
         if (!is_object($virtual)) {
             $virtual = new \virtual();
             $virtual->setName(__('Résumé Global', __FILE__));
@@ -501,7 +501,7 @@ class ObjectManager
             if (!isset($summaries[$key]) || !is_array($summaries[$key]) || count($summaries[$key]) == 0) {
                 continue;
             }
-            $virtual = \EqLogicManager::byLogicalId('summary' . $object->getId(), 'virtual');
+            $virtual = EqLogicManager::byLogicalId('summary' . $object->getId(), 'virtual');
             if (!is_object($virtual)) {
                 $virtual = new \virtual();
                 $virtual->setName(__('Résumé', __FILE__));
