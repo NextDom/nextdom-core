@@ -118,14 +118,14 @@ try {
         $exclude .= ' --exclude="' . $folder . '"';
     }
     $rc = 0;
-    system('cd /tmp; tar xfz "' . $backup . '" ' . $exclude);
-  	system('cp -r /tmp/plugins/* ' . $nextdom_dir . '/plugins' );
+  	system('mkdir /tmp/nextdombackup');
+    system('cd /tmp/nextdombackup; tar xfz "' . $backup . '" ' . $exclude);
 
     echo "OK\n";
-    if (!file_exists("/tmp/DB_backup.sql")) {
+    if (!file_exists("/tmp/nextdombackup/DB_backup.sql")) {
         throw new Exception('Impossible de trouver le fichier de la base de données de la sauvegarde : DB_backup.sql');
     }else{
-        shell_exec("sed -i -e s/jeedom/nextdom/g /tmp/DB_backup.sql");
+        shell_exec("sed -i -e s/jeedom/nextdom/g /tmp/nextdombackup/DB_backup.sql");
     }
     echo "Supprimer la table de la sauvegarde";
     $tables = DB::Prepare("SHOW TABLES", array(), DB::FETCH_TYPE_ALL);
@@ -141,7 +141,7 @@ try {
     }
 
     echo "Restauration de la base de données...";
-    shell_exec("mysql --host=" . $CONFIG['db']['host'] . " --port=" . $CONFIG['db']['port'] . " --user=" . $CONFIG['db']['username'] . " --password=" . $CONFIG['db']['password'] . " " . $CONFIG['db']['dbname'] . "  </tmp/DB_backup.sql");
+    shell_exec("mysql --host=" . $CONFIG['db']['host'] . " --port=" . $CONFIG['db']['port'] . " --user=" . $CONFIG['db']['username'] . " --password=" . $CONFIG['db']['password'] . " " . $CONFIG['db']['dbname'] . "  </tmp/nextdombackup/DB_backup.sql");
     echo "OK\n";
 
     echo "Active les contraintes...";
@@ -152,17 +152,17 @@ try {
     }
     echo "OK\n";
 
-   	if (copy(dirname(__FILE__) . '/../core/config/common.config.php', '/tmp/common.config.php')) {
+   	if (copy(dirname(__FILE__) . '/../core/config/jeedom.config.php', '/tmp/nextdom.config.php')) {
         echo 'Can not copy ' . dirname(__FILE__) . "/../core/config/common.config.php\n";
     }
-    if (!file_exists(dirname(__FILE__) . '/../core/config/common.config.php')) {
+    if (!file_exists(dirname(__FILE__) . '/../core/config/nextdom.config.php')) {
         echo "Restauration du fichier de configuration de la base de données...";
-        copy('/tmp/common.config.php', dirname(__FILE__) . '/../core/config/common.config.php');
+        copy('/tmp/nextdombackup/nextdom.config.php', dirname(__FILE__) . '/../core/config/common.config.php');
         echo "OK\n";
     }
 
   	echo "Restauration du cache...";
-  	copy('/tmp/cache*', dirname(__FILE__) . '/../');
+  	copy('/tmp/nextdombackup/cache*', dirname(__FILE__) . '/../');
 	try {
 		cache::restore();
 	} catch (Exception $e) {
@@ -171,7 +171,7 @@ try {
 	echo "OK\n";
 
 	echo "Restauration des plugins...";
-  	copy('/tmp/plugins/*', dirname(__FILE__) . '/../plugins/');
+  	system('cp -r /tmp/nextdombackup/plugins/* ' . $nextdom_dir . '/plugins' );
     foreach (plugin::listPlugin(true) as $plugin) {
         $plugin_id = $plugin->getId();
         $dependancy_info = $plugin->dependancy_info(true);
