@@ -69,6 +69,7 @@ $NEXTDOM_INTERNAL_CONFIG = array(
             'nature' => array('name' => 'Nature', 'icon' => 'icon nature-leaf32'),
             'automatisation' => array('name' => 'Automatisme', 'icon' => 'fa fa-magic'),
             'energy' => array('name' => 'Energie', 'icon' => 'fa fa-bolt'),
+            'travel' => array('name' => 'Voyage', 'icon' => 'fa fa-plane'),
             'other' => array('name' => 'Autre', 'icon' => 'fa-bars'),
         ),
     ),
