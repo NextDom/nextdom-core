@@ -42,50 +42,84 @@
 }
 
 .cursor{
-cursor : pointer;
+    cursor : pointer;
 }
 
 .binary{
-margin-left: 5px;
-position: relative;
-top: 2px;
-width : 15px;
-height : 15px;
-border-radius: 5px 5px 5px 5px;
-display: inline-block;
+    margin-left: 5px;
+    position: relative;
+    top: 2px;
+    width : 15px;
+    height : 15px;
+    border-radius: 5px 5px 5px 5px;
+    display: inline-block;
 }
 
 .nav-tabs a{
-padding:10px 5px !important;
+    padding:10px 5px !important;
+}
+
+#div_pageContainer .iconlist{
+    background-color : rgba(255,255,255,0);
+    height : 130px;
+    margin-bottom : 10px;
+    padding : 5px;
+    border-radius: 2px;
+    width : 170px;
+    margin-left : 10px;
+}
+
+.bs-sidebar .bs-sidenav{
+    background-color: rgba(255,255,255,0);
+}
+
+.icon_font_size{
+    font-size : 6em;
+}
+
+.pluginListContainer{
+    margin-top:20px;
 }
 
 #jqueryLoadingDiv .overlay {
-background-image: url(/3rdparty/jquery.utils/gritter.png);
+    background-image: url(/3rdparty/jquery.utils/gritter.png);
 }
+
+
 .green{
-background-color: $green;
+    background-color: $green;
 }
 
 .red{
-background-color: $red;
+    background-color: $red;
 }
 
 .grey{
-background-color: $grey;
+    background-color: $grey;
 }
 
 .blue{
-background-color: $blue;
+    background-color: $blue;
+}
+.icon_blue{
+    color: $blue;
 }
 
+.icon_nextdom_blue{
+    color: $nextdom_blue;
+}
+
+.nextdom_blue{
+    color: $nextdom_blue;
+}
 .orange{
-background-color: $orange;
+    background-color: $orange;
 }
 
 .yellow{
-background-color: $yellow;
+    background-color: $yellow;
 }
 
 .white{
-background-color: $white;
+    background-color: $white;
 }

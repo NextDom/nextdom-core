@@ -6525,7 +6525,7 @@ body {
 }
 
 .scenario-widget {
-    background-color: #666666;
+    background-color: #666;
     display: inline-block;
     position: relative;
     vertical-align: top;
@@ -7251,7 +7251,7 @@ input[type=checkbox] {
 }
 
 .config-form [type="checkbox"]:focus + label:before {
-    border: 1px dashed #666666;
+    border: 1px dashed #666;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
@@ -7266,7 +7266,7 @@ input[type=checkbox] {
 /* on checked */
 #amfj-config .control-label sup {
     font-size: 1em;
-    color: #666666;
+    color: #666;
 }
 
 #config-modal h3 {
@@ -7447,6 +7447,28 @@ input[type=checkbox] {
     padding: 10px 5px !important;
 }
 
+#div_pageContainer .iconlist {
+    background-color: rgba(255, 255, 255, 0);
+    height: 130px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 2px;
+    width: 170px;
+    margin-left: 10px;
+}
+
+.bs-sidebar .bs-sidenav {
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.icon_font_size {
+    font-size: 6em;
+}
+
+.pluginListContainer {
+    margin-top: 20px;
+}
+
 #jqueryLoadingDiv .overlay {
     background-image: url(/3rdparty/jquery.utils/gritter.png);
 }
@@ -7460,11 +7482,23 @@ input[type=checkbox] {
 }
 
 .grey {
-    background-color: #666666;
+    background-color: #666;
 }
 
 .blue {
-    background-color: #0174DF;
+    background-color: #337ab7;
+}
+
+.icon_blue {
+    color: #337ab7;
+}
+
+.icon_nextdom_blue {
+    color: #33b8cc;
+}
+
+.nextdom_blue {
+    color: #33b8cc;
 }
 
 .orange {

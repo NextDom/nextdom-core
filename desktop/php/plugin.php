@@ -27,7 +27,7 @@ foreach ($plugins_list as $category_name => $category) {
     echo '<li><i class="fa ' . $icon . '"></i> ' . $name . '</li>';
     foreach ($category as $plugin) {
         $opacity = ($plugin->isActive()) ? '' : nextdom::getConfiguration('eqLogic:style:noactive');
-        echo '<li class="cursor li_plugin" data-pluginPath="' . $plugin->getFilepath() . '" data-plugin_id="' . $plugin->getId() . '" style="' . $opacity . '"><a>';
+        echo '<li class="iconlist li_plugin" data-pluginPath="' . $plugin->getFilepath() . '" data-plugin_id="' . $plugin->getId() . '" style="' . $opacity . '"><a>';
         echo '<img class="img-responsive" style="width : 20px;display:inline-block;" src="' . $plugin->getPathImgIcon() . '" /> ';
         echo $plugin->getName();
         echo '</a></li>';
@@ -41,10 +41,8 @@ foreach ($plugins_list as $category_name => $category) {
 <div class="col-md-9 col-sm-8" id="div_resumePluginList" style="border-left: solid 1px #EEE; padding-left: 25px;">
  <legend><i class="fa fa-cog"></i> {{Gestion}}</legend>
  <div class="pluginListContainer">
-  <div class="cursor" id="bt_addPluginFromOtherSource" style="background-color : #ffffff; height : 130px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
-    <center>
+  <div class="iconlist text-center" id="bt_addPluginFromOtherSource">
       <i class="fa fa-plus" style="font-size : 6em;color:#33B8CC;"></i>
-    </center>
     <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#33B8CC"><center>{{Sources}}</center></span>
   </div>
    <?php
@@ -55,10 +53,8 @@ foreach (update::listRepo() as $key => $value) {
     if (!isset($value['scope']['hasStore']) || !$value['scope']['hasStore']) {
         continue;
     }
-    echo '<div class="cursor displayStore" data-repo="' . $key . '" style="background-color : #ffffff; height : 130px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
-    <center>
+    echo '<div class="iconlist displayStore text-center" data-repo="' . $key . '">
       <i class="fa fa-shopping-cart" style="font-size : 6em;color:#33B8CC;"></i>
-    </center>
     <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#33B8CC"><center>' . $value['name'] . '</center></span>
   </div>';
 }
@@ -70,10 +66,8 @@ foreach (update::listRepo() as $key => $value) {
 <?php
 foreach (plugin::listPlugin() as $plugin) {
     $opacity = ($plugin->isActive()) ? '' : nextdom::getConfiguration('eqLogic:style:noactive');
-    echo '<div class="pluginDisplayCard cursor" data-pluginPath="' . $plugin->getFilepath() . '" data-plugin_id="' . $plugin->getId() . '" style="background-color : #ffffff; height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
-    echo '<center>';
-    echo '<img class="img-responsive" style="width : 120px;" src="' . $plugin->getPathImgIcon() . '" />';
-    echo '</center>';
+    echo '<div class="pluginDisplayCard iconlist text-center" data-pluginPath="' . $plugin->getFilepath() . '" data-plugin_id="' . $plugin->getId() . '" style="' . $opacity . '" >';
+    echo '<img class="img-responsive" style="width : 100px;" src="' . $plugin->getPathImgIcon() . '" />';
     echo '<span style="display:none;" class="name">' . $plugin->getName() . '</span>';
     echo '</div>';
 }
