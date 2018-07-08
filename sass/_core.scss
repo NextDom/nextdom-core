@@ -123,3 +123,64 @@
 .white{
     background-color: $white;
 }
+
+
+.eqLogic-battery {
+    min-width:100px;
+    min-height:150px;
+    text-align: center;
+}
+
+.eqLogic-battery.good {
+    background-color: $good;
+}
+
+.eqLogic-battery.warning {
+    background-color: $warn;
+}
+
+.eqLogic-battery.critical {
+    background-color: $critical;
+}
+
+.eqLogic-name {
+    font-size: 1em;
+    display: block;
+}
+
+.eqLogic-place {
+    font-size: 0.95em;
+    position:relative;
+    top:-5px;
+    cursor:default;
+}
+
+.eqLogic-battery-icon {
+    font-size:2.2em;
+    margin-top:-25px;
+    margin-bottom:-25px;
+}
+
+.eqLogic-battery-icon i {
+    font-size: 2.5em;
+}
+
+.eqLogic-percent {
+    font-size:1.2em;
+    font-weight: bold;
+    cursor:default;
+}
+
+.eqLogic-battery .informations {
+    font-size : 0.8em;
+    margin-bottom: 3px;
+    margin-right: 5px;
+    cursor:default;
+}
+
+.eqLogic-battery .manual-threshold {
+    position:absolute;
+    bottom: 3px;
+    right: 3px;
+    cursor:default;
+}

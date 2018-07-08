@@ -17,9 +17,12 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
 
-class eqLogic {
+use NextDom\Managers\EqLogicManager;
+
+class eqLogic
+{
     /*     * *************************Attributs****************************** */
     const UIDDELIMITER = '__';
     protected $id;
@@ -47,443 +50,116 @@ class eqLogic {
 
     /*     * ***********************Méthodes statiques*************************** */
 
-    public static function byId($_id) {
-        if ($_id == '') {
-            return;
-        }
-        $values = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-        FROM eqLogic
-        WHERE id=:id';
-        return self::cast(DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__));
+    public static function byId($_id)
+    {
+        return EqLogicManager::byId($_id);
     }
 
-    private static function cast($_inputs) {
-        if (is_object($_inputs) && class_exists($_inputs->getEqType_name())) {
-            return cast($_inputs, $_inputs->getEqType_name());
-        }
-        if (is_array($_inputs)) {
-            $return = array();
-            foreach ($_inputs as $input) {
-                $return[] = self::cast($input);
-            }
-            return $return;
-        }
-        return $_inputs;
+    private static function cast($_inputs)
+    {
+        return EqLogicManager::cast($_inputs);
     }
 
-    public static function all($_onlyEnable = false) {
-        $sql = 'SELECT ' . DB::buildField(__CLASS__, 'el') . '
-        FROM eqLogic el
-        LEFT JOIN object ob ON el.object_id=ob.id';
-        if ($_onlyEnable) {
-            $sql .= ' AND isEnable=1';
-        }
-        $sql .= ' ORDER BY ob.name,el.name';
-        return self::cast(DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__));
+    public static function all($_onlyEnable = false)
+    {
+        return EqLogicManager::all($_onlyEnable);
     }
 
-    public static function byEqRealId($_eqReal_id) {
-        $values = array(
-            'eqReal_id' => $_eqReal_id,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-        FROM eqLogic
-        WHERE eqReal_id=:eqReal_id';
-        return self::cast(DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__));
+    public static function byEqRealId($_eqReal_id)
+    {
+        return EqLogicManager::byEqRealId($_eqReal_id);
     }
 
-    public static function byObjectId($_object_id, $_onlyEnable = true, $_onlyVisible = false, $_eqType_name = null, $_logicalId = null, $_orderByName = false) {
-        $values = array();
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-        FROM eqLogic';
-        if ($_object_id === null) {
-            $sql .= ' WHERE object_id IS NULL';
-        } else {
-            $values['object_id'] = $_object_id;
-            $sql .= ' WHERE object_id=:object_id';
-        }
-        if ($_onlyEnable) {
-            $sql .= ' AND isEnable = 1';
-        }
-        if ($_onlyVisible) {
-            $sql .= ' AND isVisible = 1';
-        }
-        if ($_eqType_name !== null) {
-            $values['eqType_name'] = $_eqType_name;
-            $sql .= ' AND eqType_name=:eqType_name';
-        }
-        if ($_logicalId !== null) {
-            $values['logicalId'] = $_logicalId;
-            $sql .= ' AND logicalId=:logicalId';
-        }
-        if ($_orderByName) {
-            $sql .= ' ORDER BY `name`';
-        } else {
-            $sql .= ' ORDER BY `order`,category';
-        }
-        return self::cast(DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__));
+    public static function byObjectId($_object_id, $_onlyEnable = true, $_onlyVisible = false, $_eqType_name = null, $_logicalId = null, $_orderByName = false)
+    {
+        return EqLogicManager::byObjectId($_object_id, $_onlyEnable, $_onlyVisible, $_eqType_name, $_logicalId, $_orderByName);
     }
 
-    public static function byLogicalId($_logicalId, $_eqType_name, $_multiple = false) {
-        $values = array(
-            'logicalId' => $_logicalId,
-            'eqType_name' => $_eqType_name,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-        FROM eqLogic
-        WHERE logicalId=:logicalId
-        AND eqType_name=:eqType_name';
-        if ($_multiple) {
-            return self::cast(DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__));
-        }
-        return self::cast(DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__));
+    public static function byLogicalId($_logicalId, $_eqType_name, $_multiple = false)
+    {
+        return EqLogicManager::byLogicalId($_logicalId, $_eqType_name, $_multiple);
     }
 
-    public static function byType($_eqType_name, $_onlyEnable = false) {
-        $values = array(
-            'eqType_name' => $_eqType_name,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__, 'el') . '
-        FROM eqLogic el
-        LEFT JOIN object ob ON el.object_id=ob.id
-        WHERE eqType_name=:eqType_name ';
-        if ($_onlyEnable) {
-            $sql .= ' AND isEnable=1';
-        }
-        $sql .= ' ORDER BY ob.name,el.name';
-        return self::cast(DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__));
+    public static function byType($_eqType_name, $_onlyEnable = false)
+    {
+        return EqLogicManager::byType($_eqType_name, $_onlyEnable);
     }
 
-    public static function byCategorie($_category) {
-        $values = array(
-            'category' => '%"' . $_category . '":1%',
-            'category2' => '%"' . $_category . '":"1"%',
-        );
-
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-        FROM eqLogic
-        WHERE category LIKE :category
-        OR category LIKE :category2
-        ORDER BY name';
-        return self::cast(DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__));
+    public static function byCategorie($_category)
+    {
+        return EqLogicManager::byCategory($_category);
     }
 
-    public static function byTypeAndSearhConfiguration($_eqType_name, $_configuration) {
-        $values = array(
-            'eqType_name' => $_eqType_name,
-            'configuration' => '%' . $_configuration . '%',
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-        FROM eqLogic
-        WHERE eqType_name=:eqType_name
-        AND configuration LIKE :configuration
-        ORDER BY name';
-        return self::cast(DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__));
+    public static function byTypeAndSearhConfiguration($_eqType_name, $_configuration)
+    {
+        return self::byTypeAndSearhConfiguration($_eqType_name, $_configuration);
     }
 
-    public static function searchConfiguration($_configuration, $_type = null) {
-        if (!is_array($_configuration)) {
-            $values = array(
-                'configuration' => '%' . $_configuration . '%',
-            );
-            $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-			        FROM eqLogic
-			        WHERE configuration LIKE :configuration';
-        } else {
-            $values = array(
-                'configuration' => '%' . $_configuration[0] . '%',
-            );
-            $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-			        FROM eqLogic
-			        WHERE configuration LIKE :configuration';
-            for ($i = 1; $i < count($_configuration); $i++) {
-                $values['configuration' . $i] = '%' . $_configuration[$i] . '%';
-                $sql .= ' OR configuration LIKE :configuration' . $i;
-            }
-        }
-        if ($_type !== null) {
-            $values['eqType_name'] = $_type;
-            $sql .= ' AND eqType_name=:eqType_name ';
-        }
-        $sql .= ' ORDER BY name';
-        return self::cast(DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__));
+    public static function searchConfiguration($_configuration, $_type = null)
+    {
+        return EqLogicManager::searchConfiguration($_configuration, $_type);
     }
 
-    public static function listByTypeAndCmdType($_eqType_name, $_typeCmd, $subTypeCmd = '') {
-        if ($subTypeCmd == '') {
-            $values = array(
-                'eqType_name' => $_eqType_name,
-                'typeCmd' => $_typeCmd,
-            );
-            $sql = 'SELECT DISTINCT(el.id),el.name
-            FROM eqLogic el
-            INNER JOIN cmd c ON c.eqLogic_id=el.id
-            WHERE eqType_name=:eqType_name
-            AND c.type=:typeCmd
-            ORDER BY name';
-            return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL);
-        } else {
-            $values = array(
-                'eqType_name' => $_eqType_name,
-                'typeCmd' => $_typeCmd,
-                'subTypeCmd' => $subTypeCmd,
-            );
-            $sql = 'SELECT DISTINCT(el.id),el.name
-            FROM eqLogic el
-            INNER JOIN cmd c ON c.eqLogic_id=el.id
-            WHERE eqType_name=:eqType_name
-            AND c.type=:typeCmd
-            AND c.subType=:subTypeCmd
-            ORDER BY name';
-            return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL);
-        }
+    public static function listByTypeAndCmdType($_eqType_name, $_typeCmd, $subTypeCmd = '')
+    {
+        return EqLogicManager::listByTypeAndCmdType($_eqType_name, $_typeCmd, $subTypeCmd);
     }
 
-    public static function listByObjectAndCmdType($_object_id, $_typeCmd, $subTypeCmd = '') {
-        $values = array();
-        $sql = 'SELECT DISTINCT(el.id),el.name
-        FROM eqLogic el
-        INNER JOIN cmd c ON c.eqLogic_id=el.id
-        WHERE ';
-        if ($_object_id === null) {
-            $sql .= ' object_id IS NULL ';
-        } elseif ($_object_id != '') {
-            $values['object_id'] = $_object_id;
-            $sql .= ' object_id=:object_id ';
-        }
-        if ($subTypeCmd != '') {
-            $values['subTypeCmd'] = $subTypeCmd;
-            $sql .= ' AND c.subType=:subTypeCmd ';
-        }
-        if ($_typeCmd != '' && $_typeCmd != 'all') {
-            $values['type'] = $_typeCmd;
-            $sql .= ' AND c.type=:type ';
-        }
-        $sql .= ' ORDER BY name ';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL);
+    public static function listByObjectAndCmdType($_object_id, $_typeCmd, $subTypeCmd = '')
+    {
+        return EqLogicManager::listByObjectAndCmdType($_object_id, $_typeCmd, $subTypeCmd);
     }
 
-    public static function allType() {
-        $sql = 'SELECT distinct(eqType_name) as type
-        FROM eqLogic';
-        return DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL);
+    public static function allType()
+    {
+        return EqLogicManager::allType();
     }
 
-    public static function checkAlive() {
-        foreach (eqLogic::byTimeout(1, true) as $eqLogic) {
-            $sendReport = false;
-            $cmds = $eqLogic->getCmd();
-            foreach ($cmds as $cmd) {
-                $sendReport = true;
-            }
-            $logicalId = 'noMessage' . $eqLogic->getId();
-            if ($sendReport) {
-                $noReponseTimeLimit = $eqLogic->getTimeout();
-                if (count(message::byPluginLogicalId('core', $logicalId)) == 0) {
-                    if ($eqLogic->getStatus('lastCommunication', date('Y-m-d H:i:s')) < date('Y-m-d H:i:s', strtotime('-' . $noReponseTimeLimit . ' minutes' . date('Y-m-d H:i:s')))) {
-                        $message = __('Attention', __FILE__) . ' ' . $eqLogic->getHumanName();
-                        $message .= __(' n\'a pas envoyé de message depuis plus de ', __FILE__) . $noReponseTimeLimit . __(' min (vérifiez les piles)', __FILE__);
-                        $eqLogic->setStatus('timeout', 1);
-                        if (config::ByKey('alert::addMessageOnTimeout') == 1) {
-                            message::add('core', $message, '', $logicalId);
-                        }
-                        $cmds = explode(('&&'), config::byKey('alert::timeoutCmd'));
-                        if (count($cmds) > 0 && trim(config::byKey('alert::timeoutCmd')) != '') {
-                            foreach ($cmds as $id) {
-                                $cmd = cmd::byId(str_replace('#', '', $id));
-                                if (is_object($cmd)) {
-                                    $cmd->execCmd(array(
-                                        'title' => __('[' . config::byKey('name', 'core', 'JEEDOM') . '] ', __FILE__) . $message,
-                                        'message' => config::byKey('name', 'core', 'JEEDOM') . ' : ' . $message,
-                                    ));
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    if ($eqLogic->getStatus('lastCommunication', date('Y-m-d H:i:s')) > date('Y-m-d H:i:s', strtotime('-' . $noReponseTimeLimit . ' minutes' . date('Y-m-d H:i:s')))) {
-                        foreach (message::byPluginLogicalId('core', $logicalId) as $message) {
-                            $message->remove();
-                        }
-                        $eqLogic->setStatus('timeout', 0);
-                    }
-                }
-            }
-        }
+    public static function checkAlive()
+    {
+        return EqLogicManager::checkAlive();
     }
 
-    public static function byTimeout($_timeout = 0, $_onlyEnable = false) {
-        $values = array(
-            'timeout' => $_timeout,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-        FROM eqLogic
-        WHERE timeout>=:timeout';
-        if ($_onlyEnable) {
-            $sql .= ' AND isEnable=1';
-        }
-        return self::cast(DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__));
+    public static function byTimeout($_timeout = 0, $_onlyEnable = false)
+    {
+        return EqLogicManager::byTimeout($_timeout, $_onlyEnable);
     }
 
-    public static function byObjectNameEqLogicName($_object_name, $_eqLogic_name) {
-        if ($_object_name == __('Aucun', __FILE__)) {
-            $values = array(
-                'eqLogic_name' => $_eqLogic_name,
-            );
-            $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-            FROM eqLogic
-            WHERE name=:eqLogic_name
-            AND object_id IS NULL';
-        } else {
-            $values = array(
-                'eqLogic_name' => $_eqLogic_name,
-                'object_name' => $_object_name,
-            );
-            $sql = 'SELECT ' . DB::buildField(__CLASS__, 'el') . '
-            FROM eqLogic el
-            INNER JOIN object ob ON el.object_id=ob.id
-            WHERE el.name=:eqLogic_name
-            AND ob.name=:object_name';
-        }
-        return self::cast(DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__));
+    public static function byObjectNameEqLogicName($_object_name, $_eqLogic_name)
+    {
+        return EqLogicManager::byObjectNameEqLogicName($_object_name, $_eqLogic_name);
     }
 
-    public static function toHumanReadable($_input) {
-        if (is_object($_input)) {
-            $reflections = array();
-            $uuid = spl_object_hash($_input);
-            if (!isset($reflections[$uuid])) {
-                $reflections[$uuid] = new ReflectionClass($_input);
-            }
-            $reflection = $reflections[$uuid];
-            $properties = $reflection->getProperties();
-            foreach ($properties as $property) {
-                $property->setAccessible(true);
-                $value = $property->getValue($_input);
-                $property->setValue($_input, self::toHumanReadable($value));
-                $property->setAccessible(false);
-            }
-            return $_input;
-        }
-        if (is_array($_input)) {
-            foreach ($_input as $key => $value) {
-                $_input[$key] = self::toHumanReadable($value);
-            }
-            return $_input;
-        }
-        $text = $_input;
-        preg_match_all("/#eqLogic([0-9]*)#/", $text, $matches);
-        foreach ($matches[1] as $eqLogic_id) {
-            if (is_numeric($eqLogic_id)) {
-                $eqLogic = self::byId($eqLogic_id);
-                if (is_object($eqLogic)) {
-                    $text = str_replace('#eqLogic' . $eqLogic_id . '#', '#' . $eqLogic->getHumanName() . '#', $text);
-                }
-            }
-        }
-        return $text;
+    public static function toHumanReadable($_input)
+    {
+        return EqLogicManager::toHumanReadable($_input);
     }
 
-    public static function fromHumanReadable($_input) {
-        $isJson = false;
-        if (is_json($_input)) {
-            $isJson = true;
-            $_input = json_decode($_input, true);
-        }
-        if (is_object($_input)) {
-            $reflections = array();
-            $uuid = spl_object_hash($_input);
-            if (!isset($reflections[$uuid])) {
-                $reflections[$uuid] = new ReflectionClass($_input);
-            }
-            $reflection = $reflections[$uuid];
-            $properties = $reflection->getProperties();
-            foreach ($properties as $property) {
-                $property->setAccessible(true);
-                $value = $property->getValue($_input);
-                $property->setValue($_input, self::fromHumanReadable($value));
-                $property->setAccessible(false);
-            }
-            return $_input;
-        }
-        if (is_array($_input)) {
-            foreach ($_input as $key => $value) {
-                $_input[$key] = self::fromHumanReadable($value);
-            }
-            if ($isJson) {
-                return json_encode($_input, JSON_UNESCAPED_UNICODE);
-            }
-            return $_input;
-        }
-        $text = $_input;
-        preg_match_all("/#\[(.*?)\]\[(.*?)\]#/", $text, $matches);
-        if (count($matches) == 3) {
-            $countMatches = count($matches[0]);
-            for ($i = 0; $i < $countMatches; $i++) {
-                if (isset($matches[1][$i]) && isset($matches[2][$i])) {
-                    $eqLogic = self::byObjectNameEqLogicName($matches[1][$i], $matches[2][$i]);
-                    if (isset($eqLogic[0]) && is_object($eqLogic[0])) {
-                        $text = str_replace($matches[0][$i], '#eqLogic' . $eqLogic[0]->getId() . '#', $text);
-                    }
-                }
-            }
-        }
-        return $text;
+    public static function fromHumanReadable($_input)
+    {
+        return EqLogicManager::fromHumanReadable($_input);
     }
 
-    public static function clearCacheWidget() {
-        foreach (self::all() as $eqLogic) {
-            $eqLogic->emptyCacheWidget();
-        }
+    public static function clearCacheWidget()
+    {
+        return EqLogicManager::clearCacheWidget();
     }
 
-    public static function generateHtmlTable($_nbLine, $_nbColumn, $_options = array()) {
-        $return = array('html' => '', 'replace' => array());
-        if (!isset($_options['styletd'])) {
-            $_options['styletd'] = '';
-        }
-        if (!isset($_options['center'])) {
-            $_options['center'] = 0;
-        }
-        if (!isset($_options['styletable'])) {
-            $_options['styletable'] = '';
-        }
-        $return['html'] .= '<table style="' . $_options['styletable'] . '" class="tableCmd" data-line="' . $_nbLine . '" data-column="' . $_nbColumn . '">';
-        $return['html'] .= '<tbody>';
-        for ($i = 1; $i <= $_nbLine; $i++) {
-            $return['html'] .= '<tr>';
-            for ($j = 1; $j <= $_nbColumn; $j++) {
-                $styletd = (isset($_options['style::td::' . $i . '::' . $j]) && $_options['style::td::' . $i . '::' . $j] != '') ? $_options['style::td::' . $i . '::' . $j] : $_options['styletd'];
-                $return['html'] .= '<td style="min-width:30px;height:30px;' . $styletd . '" data-line="' . $i . '" data-column="' . $j . '">';
-                if ($_options['center'] == 1) {
-                    $return['html'] .= '<center>';
-                }
-                if (isset($_options['text::td::' . $i . '::' . $j])) {
-                    $return['html'] .= $_options['text::td::' . $i . '::' . $j];
-                }
-                $return['html'] .= '#cmd::' . $i . '::' . $j . '#';
-                if ($_options['center'] == 1) {
-                    $return['html'] .= '</center>';
-                }
-                $return['html'] .= '</td>';
-                $return['tag']['#cmd::' . $i . '::' . $j . '#'] = '';
-            }
-            $return['html'] .= '</tr>';
-        }
-        $return['html'] .= '</tbody>';
-        $return['html'] .= '</table>';
-
-        return $return;
+    public static function generateHtmlTable($_nbLine, $_nbColumn, $_options = array())
+    {
+        return EqLogicManager::generateHtmlTable($_nbLine, $_nbColumn, $_options);
     }
 
-    /*     * *********************Méthodes d'instance************************* */
-
-    public function batteryWidget($_version = 'dashboard') {
+    /**
+     * Get HTML code for battery widget
+     *
+     * @param string $display Display type (dashboard or mobile)
+     *
+     * @return string HTML code
+     */
+    public function batteryWidget(string $display = 'dashboard'): string
+    {
         $html = '';
-        $color = '#2ecc71';
         $level = 'good';
         $niveau = '3';
         $battery = $this->getConfiguration('battery_type', 'none');
@@ -496,11 +172,9 @@ class eqLogic {
             $object_name = $this->getObject()->getName();
         }
         if ($this->getStatus('battery') <= $this->getConfiguration('battery_danger_threshold', config::byKey('battery::danger'))) {
-            $color = '#e74c3c';
             $level = 'critical';
             $niveau = '0';
         } else if ($this->getStatus('battery') <= $this->getConfiguration('battery_warning_threshold', config::byKey('battery::warning'))) {
-            $color = '#f1c40f';
             $level = 'warning';
             $niveau = '1';
         } else if ($this->getStatus('battery') <= 75) {
@@ -508,27 +182,29 @@ class eqLogic {
         }
         $classAttr = $level . ' ' . $battery . ' ' . $plugins . ' ' . $object_name;
         $idAttr = $level . '__' . $battery . '__' . $plugins . '__' . $object_name;
-        $html .= '<div class="eqLogic eqLogic-widget ' . $classAttr . '" style="min-width:100px;min-height:150px;background-color:' . $color . '" id="' . $idAttr . '">';
-        if ($_version == 'mobile') {
-            $html .= '<div class="widget-name" style="text-align : center;"><span style="font-size : 1em;">' . $this->getName() . '</span><br/><span style="font-size: 0.95em;position:relative;top:-5px;cursor:default;">' . $object_name . '</span></div>';
+        $html .= '<div id="' . $idAttr . '" class="eqLogic eqLogic-widget eqLogic-battery ' . $classAttr . '">';
+        if ($display == 'mobile') {
+            $html .= '<span class="eqLogic-name">' . $this->getName() . '</span>';
         } else {
-            $html .= '<div class="widget-name" style="text-align : center;"><a href="' . $this->getLinkToConfiguration() . '" style="font-size : 1em;">' . $this->getName() . '</a><br/><span style="font-size: 0.95em;position:relative;top:-5px;cursor:default;">' . $object_name . '</span></div>';
+            $html .= '<a class="eqLogic-name" href="' . $this->getLinkToConfiguration() . '">' . $this->getName() . '</a>';
         }
-        $html .= '<div style="text-align : center;font-size:2.2em;font-weight: bold;margin-top:-25px;margin-bottom:-25px"><i class="icon jeedom-batterie' . $niveau . ' tooltips" title="' . $this->getStatus('battery', -2) . '%" style="font-size :2.5em;"></i></div>';
-        $html .= '<div style="text-align : center;"><span style="font-size:1.2em;font-weight: bold;cursor:default;">' . $this->getStatus('battery', -2) . '</span><span>%</span></div>';
-        $html .= '<div style="text-align : center; cursor:default;">' . __('Le', __FILE__) . ' ' . date("d/m/y G:H:s", strtotime($this->getStatus('batteryDatetime', __('inconnue', __FILE__)))) . '</div>';
+        $html .= '<span class="eqLogic-place">' . $object_name . '</span>';
+        $html .= '<div class="eqLogic-battery-icon"><i class="icon nextdom-batterie' . $niveau . ' tooltips" title="' . $this->getStatus('battery', -2) . '%"></i></div>';
+        $html .= '<div class="eqLogic-percent">' . $this->getStatus('battery', -2) . '%</div>';
+        $html .= '<div>' . __('Le') . ' ' . date("d/m/y G:H:s", strtotime($this->getStatus('batteryDatetime', __('inconnue', __FILE__)))) . '</div>';
         if ($this->getConfiguration('battery_type', '') != '') {
-            $html .= '<span class="pull-right" style="font-size : 0.8em;margin-bottom: 3px;margin-right: 5px;cursor:default;" title="Piles">' . $this->getConfiguration('battery_type', '') . '</span>';
+            $html .= '<span class="informations pull-right" title="Piles">' . $this->getConfiguration('battery_type', '') . '</span>';
         }
-        $html .= '<span class="pull-left" style="font-size : 0.8em;margin-bottom: 3px;margin-left: 5px;cursor:default;" title="Plugin">' . ucfirst($this->getEqType_name()) . '</span>';
+        $html .= '<span class="informations pull-left" title="Plugin">' . ucfirst($this->getEqType_name()) . '</span>';
         if ($this->getConfiguration('battery_danger_threshold') != '' || $this->getConfiguration('battery_warning_threshold') != '') {
-            $html .= '<i class="icon techno-fingerprint41 pull-right" style="position:absolute;bottom: 3px;right: 3px;cursor:default;" title="Seuil manuel défini"></i>';
+            $html .= '<i class="manual-threshold icon techno-fingerprint41 pull-right" title="Seuil manuel défini"></i>';
         }
         $html .= '</div>';
         return $html;
     }
 
-    public function checkAndUpdateCmd($_logicalId, $_value, $_updateTime = null) {
+    public function checkAndUpdateCmd($_logicalId, $_value, $_updateTime = null)
+    {
         if ($this->getIsEnable() == 0) {
             return false;
         }
@@ -558,7 +234,8 @@ class eqLogic {
         return false;
     }
 
-    public function copy($_name) {
+    public function copy($_name)
+    {
         $eqLogicCopy = clone $this;
         $eqLogicCopy->setName($_name);
         $eqLogicCopy->setId('');
@@ -586,15 +263,18 @@ class eqLogic {
         return $eqLogicCopy;
     }
 
-    public function getTableName() {
+    public function getTableName()
+    {
         return 'eqLogic';
     }
 
-    public function hasOnlyEventOnlyCmd() {
+    public function hasOnlyEventOnlyCmd()
+    {
         return true;
     }
 
-    public function preToHtml($_version = 'dashboard', $_default = array(), $_noCache = false) {
+    public function preToHtml($_version = 'dashboard', $_default = array(), $_noCache = false)
+    {
         if ($_version == '') {
             throw new Exception(__('La version demandée ne peut pas être vide (mobile, dashboard ou scénario)', __FILE__));
         }
@@ -749,7 +429,8 @@ class eqLogic {
         return $replace;
     }
 
-    public function toHtml($_version = 'dashboard') {
+    public function toHtml($_version = 'dashboard')
+    {
         $replace = $this->preToHtml($_version);
         if (!is_array($replace)) {
             return $replace;
@@ -805,7 +486,8 @@ class eqLogic {
         return $this->postToHtml($_version, template_replace($replace, self::$_templateArray[$version]));
     }
 
-    public function postToHtml($_version, $_html) {
+    public function postToHtml($_version, $_html)
+    {
         $user_id = '';
         if (isset($_SESSION) && isset($_SESSION['user']) && is_object($_SESSION['user'])) {
             $user_id = $_SESSION['user']->getId();
@@ -814,7 +496,8 @@ class eqLogic {
         return $_html;
     }
 
-    public function emptyCacheWidget() {
+    public function emptyCacheWidget()
+    {
         $users = user::all();
         foreach (array('dashboard', 'mobile', 'mview', 'dview', 'dplan', 'view', 'plan') as $version) {
             $mc = cache::byKey('widgetHtml' . $this->getId() . $version);
@@ -826,41 +509,45 @@ class eqLogic {
         }
     }
 
-    public function getAlert() {
-        global $JEEDOM_INTERNAL_CONFIG;
+    public function getAlert()
+    {
+        global $NEXTDOM_INTERNAL_CONFIG;
         $hasAlert = '';
         $maxLevel = 0;
-        foreach ($JEEDOM_INTERNAL_CONFIG['alerts'] as $key => $data) {
-            if ($this->getStatus($key, 0) != 0 && $JEEDOM_INTERNAL_CONFIG['alerts'][$key]['level'] > $maxLevel) {
+        foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $key => $data) {
+            if ($this->getStatus($key, 0) != 0 && $NEXTDOM_INTERNAL_CONFIG['alerts'][$key]['level'] > $maxLevel) {
                 $hasAlert = $data;
-                $maxLevel = $JEEDOM_INTERNAL_CONFIG['alerts'][$key]['level'];
+                $maxLevel = $NEXTDOM_INTERNAL_CONFIG['alerts'][$key]['level'];
             }
         }
         return $hasAlert;
     }
 
-    public function getMaxCmdAlert() {
+    public function getMaxCmdAlert()
+    {
         $return = 'none';
         $max = 0;
-        global $JEEDOM_INTERNAL_CONFIG;
+        global $NEXTDOM_INTERNAL_CONFIG;
         foreach ($this->getCmd('info') as $cmd) {
             $cmdLevel = $cmd->getCache('alertLevel');
-            if (!isset($JEEDOM_INTERNAL_CONFIG['alerts'][$cmdLevel])) {
+            if (!isset($NEXTDOM_INTERNAL_CONFIG['alerts'][$cmdLevel])) {
                 continue;
             }
-            if ($JEEDOM_INTERNAL_CONFIG['alerts'][$cmdLevel]['level'] > $max) {
+            if ($NEXTDOM_INTERNAL_CONFIG['alerts'][$cmdLevel]['level'] > $max) {
                 $return = $cmdLevel;
-                $max = $JEEDOM_INTERNAL_CONFIG['alerts'][$cmdLevel]['level'];
+                $max = $NEXTDOM_INTERNAL_CONFIG['alerts'][$cmdLevel]['level'];
             }
         }
         return $return;
     }
 
-    public function getShowOnChild() {
+    public function getShowOnChild()
+    {
         return false;
     }
 
-    public function remove() {
+    public function remove()
+    {
         foreach ($this->getCmd() as $cmd) {
             $cmd->remove();
         }
@@ -872,7 +559,8 @@ class eqLogic {
         return DB::remove($this);
     }
 
-    public function save($_direct = false) {
+    public function save($_direct = false)
+    {
         if ($this->getName() == '') {
             throw new Exception(__('Le nom de l\'équipement ne peut pas être vide : ', __FILE__) . print_r($this, true));
         }
@@ -950,15 +638,18 @@ class eqLogic {
         }
     }
 
-    public function refresh() {
+    public function refresh()
+    {
         DB::refresh($this);
     }
 
-    public function getLinkToConfiguration() {
+    public function getLinkToConfiguration()
+    {
         return 'index.php?v=d&p=' . $this->getEqType_name() . '&m=' . $this->getEqType_name() . '&id=' . $this->getId();
     }
 
-    public function getHumanName($_tag = false, $_prettify = false) {
+    public function getHumanName($_tag = false, $_prettify = false)
+    {
         $name = '';
         $object = $this->getObject();
         if (is_object($object)) {
@@ -992,7 +683,8 @@ class eqLogic {
         return $name;
     }
 
-    public function getBackgroundColor($_version = 'dashboard') {
+    public function getBackgroundColor($_version = 'dashboard')
+    {
         $vcolor = ($_version == 'mobile') ? 'mcolor' : 'color';
         $category = $this->getPrimaryCategory();
         if ($category != '') {
@@ -1001,7 +693,8 @@ class eqLogic {
         return nextdom::getConfiguration('eqLogic:category:default:' . $vcolor);
     }
 
-    public function getPrimaryCategory() {
+    public function getPrimaryCategory()
+    {
         if ($this->getCategory('security', 0) == 1) {
             return 'security';
         }
@@ -1023,13 +716,15 @@ class eqLogic {
         return '';
     }
 
-    public function displayDebug($_message) {
+    public function displayDebug($_message)
+    {
         if ($this->getDebug()) {
             echo $_message . "\n";
         }
     }
 
-    public function batteryStatus($_pourcent = '', $_datetime = '') {
+    public function batteryStatus($_pourcent = '', $_datetime = '')
+    {
         if ($this->getConfiguration('noBatterieCheck', 0) == 1) {
             return;
         }
@@ -1063,8 +758,8 @@ class eqLogic {
                         $cmd = cmd::byId(str_replace('#', '', $id));
                         if (is_object($cmd)) {
                             $cmd->execCmd(array(
-                                'title' => __('[' . config::byKey('name', 'core', 'JEEDOM') . '] ', __FILE__) . $message,
-                                'message' => config::byKey('name', 'core', 'JEEDOM') . ' : ' . $message,
+                                'title' => __('[' . config::byKey('name', 'core', 'NEXTDOM') . '] ', __FILE__) . $message,
+                                'message' => config::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
                             ));
                         }
                     }
@@ -1089,8 +784,8 @@ class eqLogic {
                         $cmd = cmd::byId(str_replace('#', '', $id));
                         if (is_object($cmd)) {
                             $cmd->execCmd(array(
-                                'title' => __('[' . config::byKey('name', 'core', 'JEEDOM') . '] ', __FILE__) . $message,
-                                'message' => config::byKey('name', 'core', 'JEEDOM') . ' : ' . $message,
+                                'title' => __('[' . config::byKey('name', 'core', 'NEXTDOM') . '] ', __FILE__) . $message,
+                                'message' => config::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
                             ));
                         }
                     }
@@ -1110,12 +805,14 @@ class eqLogic {
         $this->setStatus(array('battery' => $_pourcent, 'batteryDatetime' => ($_datetime != '') ? $_datetime : date('Y-m-d H:i:s')));
     }
 
-    public function refreshWidget() {
+    public function refreshWidget()
+    {
         $this->emptyCacheWidget();
-        event::add('eqLogic::update', array('eqLogic_id' => $this->getId()));
+        event::add('EqLogicManager::update', array('eqLogic_id' => $this->getId()));
     }
 
-    public function hasRight($_right, $_user = null) {
+    public function hasRight($_right, $_user = null)
+    {
         if ($_user != null) {
             if ($_user->getProfils() == 'admin' || $_user->getProfils() == 'user') {
                 return true;
@@ -1137,7 +834,8 @@ class eqLogic {
         return false;
     }
 
-    public function import($_configuration) {
+    public function import($_configuration)
+    {
         $cmdClass = $this->getEqType_name() . 'Cmd';
         if (isset($_configuration['configuration'])) {
             foreach ($_configuration['configuration'] as $key => $value) {
@@ -1237,7 +935,8 @@ class eqLogic {
         $this->save();
     }
 
-    public function export($_withCmd = true) {
+    public function export($_withCmd = true)
+    {
         $eqLogic = clone $this;
         $eqLogic->setId('');
         $eqLogic->setLogicalId('');
@@ -1277,7 +976,8 @@ class eqLogic {
         return $return;
     }
 
-    public function widgetPossibility($_key = '', $_default = true) {
+    public function widgetPossibility($_key = '', $_default = true)
+    {
         $class = new ReflectionClass($this->getEqType_name());
         $method_toHtml = $class->getMethod('toHtml');
         $return = array();
@@ -1319,20 +1019,23 @@ class eqLogic {
         return $return;
     }
 
-    public function toArray() {
+    public function toArray()
+    {
         $return = utils::o2a($this, true);
         $return['status'] = $this->getStatus();
         return $return;
     }
 
-    public function getImage() {
+    public function getImage()
+    {
         $plugin = plugin::byId($this->getEqType_name());
         return $plugin->getPathImgIcon();
     }
 
-    public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = null) {
+    public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = null)
+    {
         if ($_drill === null) {
-            $_drill = config::byKey('graphlink::eqLogic::drill');
+            $_drill = config::byKey('graphlink::EqLogicManager::drill');
         }
         if (isset($_data['node']['eqLogic' . $this->getId()])) {
             return;
@@ -1373,15 +1076,17 @@ class eqLogic {
         return $_data;
     }
 
-    public function getUse() {
+    public function getUse()
+    {
         $json = nextdom::fromHumanReadable(json_encode(utils::o2a($this)));
         return nextdom::getTypeUse($json);
     }
 
-    public function getUsedBy($_array = false) {
+    public function getUsedBy($_array = false)
+    {
         $return = array('cmd' => array(), 'eqLogic' => array(), 'scenario' => array(), 'plan' => array(), 'view' => array());
         $return['cmd'] = cmd::searchConfiguration('#eqLogic' . $this->getId() . '#');
-        $return['eqLogic'] = eqLogic::searchConfiguration(array('#eqLogic' . $this->getId() . '#', '"eqLogic":"' . $this->getId()));
+        $return['eqLogic'] = EqLogicManager::searchConfiguration(array('#eqLogic' . $this->getId() . '#', '"eqLogic":"' . $this->getId()));
         $return['interactDef'] = interactDef::searchByUse(array('#eqLogic' . $this->getId() . '#', '"eqLogic":"' . $this->getId()));
         $return['scenario'] = scenario::searchByUse(array(
             array('action' => 'equipment', 'option' => $this->getId(), 'and' => true),
@@ -1399,53 +1104,63 @@ class eqLogic {
 
     /*     * **********************Getteur Setteur*************************** */
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function getLogicalId() {
+    public function getLogicalId()
+    {
         return $this->logicalId;
     }
 
-    public function getObject_id() {
+    public function getObject_id()
+    {
         return $this->object_id;
     }
 
-    public function getObject() {
+    public function getObject()
+    {
         if ($this->_object === null) {
             $this->setObject(object::byId($this->object_id));
         }
         return $this->_object;
     }
 
-    public function setObject($_object) {
+    public function setObject($_object)
+    {
         $this->_object = $_object;
         return $this;
     }
 
-    public function getEqType_name() {
+    public function getEqType_name()
+    {
         return $this->eqType_name;
     }
 
-    public function getIsVisible($_default = 0) {
+    public function getIsVisible($_default = 0)
+    {
         if ($this->isVisible == '' || !is_numeric($this->isVisible)) {
             return $_default;
         }
         return $this->isVisible;
     }
 
-    public function getIsEnable($_default = 0) {
+    public function getIsEnable($_default = 0)
+    {
         if ($this->isEnable == '' || !is_numeric($this->isEnable)) {
             return $_default;
         }
         return $this->isEnable;
     }
 
-    public function getCmd($_type = null, $_logicalId = null, $_visible = null, $_multiple = false) {
+    public function getCmd($_type = null, $_logicalId = null, $_visible = null, $_multiple = false)
+    {
         if ($_logicalId !== null) {
             if (isset($this->_cmds[$_logicalId . '.' . $_multiple . '.' . $_type])) {
                 return $this->_cmds[$_logicalId . '.' . $_multiple . '.' . $_type];
@@ -1467,7 +1182,8 @@ class eqLogic {
         return $cmds;
     }
 
-    public function getCmdByGenericType($_type = null, $_generic_type = null, $_visible = null, $_multiple = false) {
+    public function getCmdByGenericType($_type = null, $_generic_type = null, $_visible = null, $_multiple = false)
+    {
         if ($_generic_type !== null) {
             if (isset($this->_cmds[$_generic_type . '.' . $_multiple . '.' . $_type])) {
                 return $this->_cmds[$_generic_type . '.' . $_multiple . '.' . $_type];
@@ -1489,67 +1205,80 @@ class eqLogic {
         return $cmds;
     }
 
-    public function searchCmdByConfiguration($_configuration, $_type = null) {
+    public function searchCmdByConfiguration($_configuration, $_type = null)
+    {
         return cmd::searchConfigurationEqLogic($this->id, $_configuration, $_type);
     }
 
-    public function getEqReal_id($_default = null) {
+    public function getEqReal_id($_default = null)
+    {
         if ($this->eqReal_id == '' || !is_numeric($this->eqReal_id)) {
             return $_default;
         }
         return $this->eqReal_id;
     }
 
-    public function getEqReal() {
+    public function getEqReal()
+    {
         return eqReal::byId($this->eqReal_id);
     }
 
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
         return $this;
     }
 
-    public function setName($name) {
+    public function setName($name)
+    {
         $name = str_replace(array('&', '#', ']', '[', '%', "'", "\\", "/"), '', $name);
         $this->name = $name;
         return $this;
     }
 
-    public function setLogicalId($logicalId) {
+    public function setLogicalId($logicalId)
+    {
         $this->logicalId = $logicalId;
         return $this;
     }
 
-    public function setObject_id($object_id = null) {
+    public function setObject_id($object_id = null)
+    {
         $this->object_id = (!is_numeric($object_id)) ? null : $object_id;
         return $this;
     }
 
-    public function setEqType_name($eqType_name) {
+    public function setEqType_name($eqType_name)
+    {
         $this->eqType_name = $eqType_name;
         return $this;
     }
 
-    public function setEqReal_id($eqReal_id) {
+    public function setEqReal_id($eqReal_id)
+    {
         $this->eqReal_id = $eqReal_id;
         return $this;
     }
 
-    public function setIsVisible($_isVisible) {
+    public function setIsVisible($_isVisible)
+    {
         $this->isVisible = $_isVisible;
         return $this;
     }
 
-    public function setIsEnable($_isEnable) {
+    public function setIsEnable($_isEnable)
+    {
         $this->isEnable = $_isEnable;
         return $this;
     }
 
-    public function getConfiguration($_key = '', $_default = '') {
+    public function getConfiguration($_key = '', $_default = '')
+    {
         return utils::getJsonAttr($this->configuration, $_key, $_default);
     }
 
-    public function setConfiguration($_key, $_value) {
+    public function setConfiguration($_key, $_value)
+    {
         if (in_array($_key, array('battery_warning_threshold', 'battery_danger_threshold'))) {
             if ($this->getConfiguration($_key, '') != $_value) {
                 $this->_batteryUpdated = True;
@@ -1559,23 +1288,27 @@ class eqLogic {
         return $this;
     }
 
-    public function getDisplay($_key = '', $_default = '') {
+    public function getDisplay($_key = '', $_default = '')
+    {
         return utils::getJsonAttr($this->display, $_key, $_default);
     }
 
-    public function setDisplay($_key, $_value) {
+    public function setDisplay($_key, $_value)
+    {
         $this->display = utils::setJsonAttr($this->display, $_key, $_value);
         $this->_needRefreshWidget = true;
     }
 
-    public function getTimeout($_default = null) {
+    public function getTimeout($_default = null)
+    {
         if ($this->timeout == '' || !is_numeric($this->timeout)) {
             return $_default;
         }
         return $this->timeout;
     }
 
-    public function setTimeout($_timeout) {
+    public function setTimeout($_timeout)
+    {
         if ($_timeout == '' || is_nan(intval($_timeout)) || $_timeout < 1) {
             $_timeout = null;
         }
@@ -1586,73 +1319,86 @@ class eqLogic {
         return $this;
     }
 
-    public function getCategory($_key = '', $_default = '') {
+    public function getCategory($_key = '', $_default = '')
+    {
         if ($_key == 'other' && strpos($this->category, "1") === false) {
             return 1;
         }
         return utils::getJsonAttr($this->category, $_key, $_default);
     }
 
-    public function setCategory($_key, $_value) {
+    public function setCategory($_key, $_value)
+    {
         $this->category = utils::setJsonAttr($this->category, $_key, $_value);
         return $this;
     }
 
-    public function getGenericType() {
+    public function getGenericType()
+    {
         return $this->generic_type;
     }
 
-    public function setGenericType($_generic_type) {
+    public function setGenericType($_generic_type)
+    {
         $this->generic_type = $_generic_type;
         return $this;
     }
 
-    public function getComment() {
+    public function getComment()
+    {
         return $this->comment;
     }
 
-    public function setComment($_comment) {
+    public function setComment($_comment)
+    {
         $this->comment = $_comment;
         return $this;
     }
 
-    public function getDebug() {
+    public function getDebug()
+    {
         return $this->_debug;
     }
 
-    public function setDebug($_debug) {
+    public function setDebug($_debug)
+    {
         if ($_debug) {
             echo "Mode debug activé\n";
         }
         $this->_debug = $_debug;
     }
 
-    public function getOrder() {
+    public function getOrder()
+    {
         if ($this->order == '' || !is_numeric($this->order)) {
             return 0;
         }
         return $this->order;
     }
 
-    public function setOrder($order) {
+    public function setOrder($order)
+    {
         $this->order = $order;
         return $this;
     }
 
-    public function getCache($_key = '', $_default = '') {
+    public function getCache($_key = '', $_default = '')
+    {
         return utils::getJsonAttr(cache::byKey('eqLogicCacheAttr' . $this->getId())->getValue(), $_key, $_default);
     }
 
-    public function setCache($_key, $_value = null) {
+    public function setCache($_key, $_value = null)
+    {
         cache::set('eqLogicCacheAttr' . $this->getId(), utils::setJsonAttr(cache::byKey('eqLogicCacheAttr' . $this->getId())->getValue(), $_key, $_value));
     }
 
-    public function getStatus($_key = '', $_default = '') {
+    public function getStatus($_key = '', $_default = '')
+    {
         return utils::getJsonAttr(cache::byKey('eqLogicStatusAttr' . $this->getId())->getValue(), $_key, $_default);
     }
 
-    public function setStatus($_key, $_value = null) {
+    public function setStatus($_key, $_value = null)
+    {
         cache::set('eqLogicStatusAttr' . $this->getId(), utils::setJsonAttr(cache::byKey('eqLogicStatusAttr' . $this->getId())->getValue(), $_key, $_value));
     }
-
 }
