@@ -189,7 +189,7 @@ class eqLogic
             $html .= '<a class="eqLogic-name" href="' . $this->getLinkToConfiguration() . '">' . $this->getName() . '</a>';
         }
         $html .= '<span class="eqLogic-place">' . $object_name . '</span>';
-        $html .= '<div class="eqLogic-battery-icon"><i class="icon nextdom-batterie' . $niveau . ' tooltips" title="' . $this->getStatus('battery', -2) . '%"></i></div>';
+        $html .= '<div class="eqLogic-battery-icon"><i class="icon nextdom-battery' . $niveau . ' tooltips" title="' . $this->getStatus('battery', -2) . '%"></i></div>';
         $html .= '<div class="eqLogic-percent">' . $this->getStatus('battery', -2) . '%</div>';
         $html .= '<div>' . __('Le') . ' ' . date("d/m/y G:H:s", strtotime($this->getStatus('batteryDatetime', __('inconnue', __FILE__)))) . '</div>';
         if ($this->getConfiguration('battery_type', '') != '') {
@@ -203,6 +203,14 @@ class eqLogic
         return $html;
     }
 
+    /**
+     * TODO: ???
+     *
+     * @param $_logicalId
+     * @param $_value
+     * @param null $_updateTime
+     * @return bool
+     */
     public function checkAndUpdateCmd($_logicalId, $_value, $_updateTime = null)
     {
         if ($this->getIsEnable() == 0) {
@@ -234,6 +242,11 @@ class eqLogic
         return false;
     }
 
+    /**
+     * @param $_name
+     * @return eqLogic
+     * @throws Exception
+     */
     public function copy($_name)
     {
         $eqLogicCopy = clone $this;
@@ -263,6 +276,11 @@ class eqLogic
         return $eqLogicCopy;
     }
 
+    /**
+     * Get the name of the SQL table where data is stored.
+     *
+     * @return string
+     */
     public function getTableName()
     {
         return 'eqLogic';

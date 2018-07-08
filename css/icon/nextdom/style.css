@@ -62,16 +62,16 @@
 .nextdom-alerte2:before {
 	content: "\e601";
 }
-.nextdom-batterie0:before {
+.nextdom-battery0:before {
 	content: "\e602";
 }
-.nextdom-batterie1:before {
+.nextdom-battery1:before {
 	content: "\e603";
 }
-.nextdom-batterie2:before {
+.nextdom-battery2:before {
 	content: "\e604";
 }
-.nextdom-batterie3:before {
+.nextdom-battery3:before {
 	content: "\e605";
 }
 .nextdom-bell:before {
