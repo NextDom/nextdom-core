@@ -150,7 +150,7 @@ if (count($totalScenario) == 0) {
         echo '<div class="scenarioListContainer">';
         foreach ($scenarios[$group['group']] as $scenario) {
             $opacity = ($scenario->getIsActive()) ? '' : nextdom::getConfiguration('eqLogic:style:noactive');
-            echo '<div class="scenarioDisplayCard iconlist" data-scenario_id="' . $scenario->getId() . '" style="text-align: center; background-color : #ffffff; min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
+            echo '<div class="scenarioDisplayCard iconlist" data-scenario_id="' . $scenario->getId() . '" style="' . $opacity . '" >';
             echo '<img src="core/img/scenario.png" height="90" width="85" />';
             echo "<br>";
             echo '<span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">' . $scenario->getHumanName(true, true, true, true) . '</span>';
