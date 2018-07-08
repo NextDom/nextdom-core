@@ -41,7 +41,7 @@ sendVarToJS('select_id', init('id', '-1'));
             <div class="iconlist text-center bt_showObjectSummary">
                 <i class="fa fa-list icon_blue icon_font_size"></i>
                 <br>
-                <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#33B8CC">{{Ajouter}}</span>
+                <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#337ab7">{{Vue d'ensemble}}</span>
             </div>
 
 

@@ -48,7 +48,7 @@ $themeDir = NEXTDOM_ROOT . '/css/themes/';
     // CSS
     if (!Status::isConnect()) {
         if (!Status::initRescueModeState() && file_exists($themeDir . config::byKey('default_bootstrap_theme') . '/desktop/' . config::byKey('default_bootstrap_theme') . '.css')) {
-            include_file('core', config::byKey('default_bootstrap_theme') . '/desktop/' . config::byKey('default_bootstrap_theme'), 'themes.css');
+            include_file('css', config::byKey('default_bootstrap_theme') . '/desktop/' . config::byKey('default_bootstrap_theme'), 'themes.css');
         } else {
             include_file('3rdparty', 'bootstrap/css/bootstrap.min', 'css');
         }
@@ -57,12 +57,12 @@ $themeDir = NEXTDOM_ROOT . '/css/themes/';
         if (!Status::isRescueMode()) {
             $defaultBootstrapTheme = config::byKey('default_bootstrap_theme');
             if (file_exists($themeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.css')) {
-                include_file('core', $bootstrapTheme . '/desktop/' . $bootstrapTheme, 'themes.css');
+                include_file('css', $bootstrapTheme . '/desktop/' . $bootstrapTheme, 'themes.css');
                 $cssBootstrapToAdd = false;
             } else {
                 $defaultBootstrapTheme = config::byKey('default_bootstrap_theme');
                 if (file_exists($themeDir . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css')) {
-                    include_file('core', $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme, 'themes.css');
+                    include_file('css', $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme, 'themes.css');
                     $cssBootstrapToAdd = false;
                 }
             }

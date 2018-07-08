@@ -260,7 +260,7 @@
                                     $('#div_loadingSpinner').show()
                                 } else {
                                     if ($('#jqueryLoadingDiv').length == 0) {
-                                        $('body').append('<div id="jqueryLoadingDiv"><div class="overlay"></div><i class="fa fa-cog fa-spin loadingImg"></i></div>');
+                                        $('body').append('<div id="jqueryLoadingDiv"><div class="overlay"></div><i class="fa fa-spinner fa-spin loadingImg icon_nextdom_blue"></i></div>');
                                     }
                                     $('#jqueryLoadingDiv').show();
                                 }
@@ -282,7 +282,7 @@
                                 options.show = init(options.show, true);
                                 if ($.mobile) {
                                    new $.nd2Toast({
-                                    message :  options.message, 
+                                    message :  options.message,
                                     ttl : 3000
                                 });
                                } else {
@@ -638,5 +638,3 @@ String.prototype.stripAccents = function () {
     });
 };
 })(jQuery);
-
-
