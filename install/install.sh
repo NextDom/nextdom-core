@@ -106,6 +106,7 @@ step_6_nextdom_download() {
     cd  ${WEBSERVER_HOME}
     if [ "$(ls -A  ${WEBSERVER_HOME})" ]; then
         git fetch --all >> ${DEBUG} 2>&1
+        git reset --hard origin/${VERSION}
         git pull origin ${VERSION}
     else
         git clone --quiet https://github.com/sylvaner/nextdom-core .
