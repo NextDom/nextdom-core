@@ -13,7 +13,7 @@ if (!isConnect()) {
 <br/><br/>
   <div class="row text-center">
     <div class="col-xs-12">
-        <a href="index.php?v=d&p=migration" target="_blank">
+        <a href="index.php?v=d&p=migration">
             <i class="fa fa-upload" style="font-size:12em;"></i><br/>
             {{Migration de jeedom vers NextDom}}
         </a>
