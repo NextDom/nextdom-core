@@ -28,56 +28,46 @@ delay(){
 }
 
 apt_install() {
-    if [ $? -ne 0 ]; then@"
+    apt-get -y install "$@"
+    if [ $? -ne 0 ]; then
         printf "${ROUGE}Ne peut installer $@ - Annulation${NORMAL}"
         exit 1
     fi
 }
 
-
 mysql_sql() {
     echo "$@" | mysql -uroot -p${MYSQL_ROOT_PASSWD}
     if [ $? -ne 0 ]; then
-        exit 1 "${ROUGE}Ne peut exécuter $@ dans MySQL - Annulation${NORMAL}"
+        printf "${ROUGE}Ne peut exécuter $@ dans MySQL - Annulation${NORMAL}"
+        exit 1
     fi
 }
 
 step_1_upgrade() {
-
-    apt-get -q update  >${DEBUG} 2>&1
-    apt-get -q -f install  > ${DEBUG} 2>&1
-    apt-get -q -y dist-upgrade > ${DEBUG} 2>&1
+    apt-get -q update  > ${DEBUG} 2>&1
+    apt-get -q -f install  >> ${DEBUG} 2>&1
+    apt-get -q -y dist-upgrade >> ${DEBUG} 2>&1
 }
+
 step_2_mainpackage() {
-    apt-get -q -y install ntp ca-certificates unzip curl sudo cron > ${DEBUG} 2>&1
-    apt-get -q -y install locate tar telnet wget logrotate fail2ban dos2unix ntpdate htop iotop vim iftop smbclient > ${DEBUG} 2>&1
-    apt-get -q -y install git python python-pip > ${DEBUG} 2>&1
-    apt-get -q -y install software-properties-common > ${DEBUG} 2>&1
-    apt-get -q -y install libexpat1 ssl-cert > ${DEBUG} 2>&1
-
-    apt-get -q -y install apt-transport-https > ${DEBUG} 2>&1
-    apt-get -q -y install xvfb cutycapt xauth > ${DEBUG} 2>&1
-    add-apt-repository non-free > ${DEBUG} 2>&1
-    apt-get -q -y install libav-tools > ${DEBUG} 2>&1
-    apt-get -q -y install libsox-fmt-mp3 sox libttspico-utils > ${DEBUG} 2>&1
-    apt-get -q -y install espeak > ${DEBUG} 2>&1
-    apt-get -q -y install mbrola > ${DEBUG} 2>&1
-    apt-get -q -y remove brltty > ${DEBUG} 2>&1
+    apt-get -q -y install ntp ca-certificates unzip curl sudo cron locate tar telnet wget logrotate fail2ban dos2unix ntpdate htop iotop vim iftop smbclient git python python-pip software-properties-common libexpat1 ssl-cert apt-transport-https xvfb cutycapt xauth >> ${DEBUG} 2>&1
+    add-apt-repository non-free >> ${DEBUG} 2>&1
+    apt-get -q update >> ${DEBUG} 2>&1
+    apt-get -q -y install libav-tools libsox-fmt-mp3 sox libttspico-utils espeak mbrola >> ${DEBUG} 2>&1
+    apt-get -q -y remove brltty >> ${DEBUG} 2>&1
 }
-
 
 step_3_database() {
     echo "mysql-server mysql-server/root_password password ${MYSQL_ROOT_PASSWD}" | debconf-set-selections
-    apt-get install -q -y mysql-client mysql-common mysql-server > ${DEBUG} 2>&1SSWD}" | debconf-set-selections
-
-    mysqladmin -u root password ${MYSQL_ROOT_PASSWD}
+    echo "mysql-server mysql-server/root_password_again password ${MYSQL_ROOT_PASSWD}" | debconf-set-selections
+    apt-get install -q -y mysql-client mysql-common mysql-server >> ${DEBUG} 2>&1
 
     systemctl status mysql > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         service mysql status  2>&1
-
         if [ $? -ne 0 ]; then
             systemctl start mysql > /dev/null 2>&1
+            if [ $? -ne 0 ]; then
                 service mysql start > /dev/null 2>&1
             fi
         fi
@@ -86,64 +76,63 @@ step_3_database() {
     if [ $? -ne 0 ]; then
         service mysql status 2>&1
         if [ $? -ne 0 ]; then
-
             echo "${ROUGE}Ne peut lancer mysql - Annulation${NORMAL}"
-        fi  exit 1
+            exit 1
+        fi
     fi
+    mysqladmin -u root password ${MYSQL_ROOT_PASSWD}
 }
 
 step_4_apache() {
-    apt_install apache2 apache2-utils libexpat1 ssl-cert > ${DEBUG} 2>&1
-    a2enmod rewrite > ${DEBUG} 2>&1
+    apt_install apache2 apache2-utils libexpat1 ssl-cert >> ${DEBUG} 2>&1
+    a2enmod rewrite >> ${DEBUG} 2>&1
 }
 
-
-    apt-get -y install php7.0 php7.0-curl php7.0-gd php7.0-imap php7.0-json php7.0-mcrypt php7.0-mysql php7.0-xml php7.0-opcache php7.0-soap php7.0-xmlrpc libapache2-
-mod-php7.0 php7.0-common php7.0-dev php7.0-zip php7.0-ssh2 php7.0-mbstring composer > ${DEBUG} 2>&1
+step_5_php() {
+    apt-get -y install php7.0 php7.0-curl php7.0-gd php7.0-imap php7.0-json php7.0-mcrypt php7.0-mysql php7.0-xml php7.0-opcache php7.0-soap php7.0-xmlrpc libapache2-mod-php7.0 php7.0-common php7.0-dev php7.0-zip php7.0-ssh2 php7.0-mbstring composer >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
-        apt_install libapache2-mod-php5 php5 php5-common php5-curl php5-dev php5-gd php5-json php5-memcached php5-mysqlnd php5-cli php5-ssh2 php5-redis php5-mbstring
-composer > ${DEBUG} 2>&1
-        apt_install php5-ldap > ${DEBUG} 2>&1
+        apt_install libapache2-mod-php5 php5 php5-common php5-curl php5-dev php5-gd php5-json php5-memcached php5-mysqlnd php5-cli php5-ssh2 php5-redis php5-mbstring composer >> ${DEBUG} 2>&1
+        apt_install php5-ldap >> ${DEBUG} 2>&1
     else
-        apt-get -y install php7.0-ldap > ${DEBUG} 2>&1
+        apt-get -y install php7.0-ldap >> ${DEBUG} 2>&1
     fi
-
 }
+
 step_6_nextdom_download() {
     echo "                                                                                    "
-    mkdir -p ${WEBSERVER_HOME} > ${DEBUG} 2>&1
-    find ${WEBSERVER_HOME} -name 'index.html' -type f -exec rm -rf {} + > ${DEBUG} 2>&1
+    rm -fr ${WEBSERVER_HOME}
+    mkdir -p ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
+
     cd  ${WEBSERVER_HOME}
     if [ "$(ls -A  ${WEBSERVER_HOME})" ]; then
-        git fetch --all
-        git reset --hard origin/${VERSION}
+        git fetch --all >> ${DEBUG} 2>&1
         git pull origin ${VERSION}
     else
-        git clone --quiet https://github.com/sylvaner/nextdom-core . > ${DEBUG} 2>&1
+        git clone --quiet https://github.com/sylvaner/nextdom-core .
 
     fi
 }
 
 step_7_nextdom_customization() {
-    cp ${WEBSERVER_HOME}/install/apache_security /etc/apache2/conf-available/security.conf  > ${DEBUG} 2>&1
-    rm /etc/apache2/conf-enabled/security.conf > /dev/null > ${DEBUG} 2>&1
-    ln -s /etc/apache2/conf-available/security.conf /etc/apache2/conf-enabled/ > ${DEBUG} 2>&1
+    cp ${WEBSERVER_HOME}/install/apache_security /etc/apache2/conf-available/security.conf >> ${DEBUG} 2>&1
+    rm /etc/apache2/conf-enabled/security.conf > /dev/null
+    ln -s /etc/apache2/conf-available/security.conf /etc/apache2/conf-enabled/ >> ${DEBUG} 2>&1
 
-    cp ${WEBSERVER_HOME}/install/apache_default /etc/apache2/sites-available/000-default.conf  > ${DEBUG} 2>&1
-    rm /etc/apache2/sites-enabled/000-default.conf > /dev/null > ${DEBUG} 2>&1
-    ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/  > ${DEBUG} 2>&1
+    cp ${WEBSERVER_HOME}/install/apache_default /etc/apache2/sites-available/000-default.conf >> ${DEBUG} 2>&1
+    rm /etc/apache2/sites-enabled/000-default.conf > /dev/null
+    ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/ >> ${DEBUG} 2>&1
 
-    rm /etc/apache2/conf-available/other-vhosts-access-log.conf > /dev/null > ${DEBUG} 2>&1
-    rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf > /dev/null > ${DEBUG} 2>&1
+    rm /etc/apache2/conf-available/other-vhosts-access-log.conf > /dev/null
+    rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf > /dev/null
 
     mkdir /etc/systemd/system/apache2.service.d >${DEBUG} 2>&1
     echo "[Service]" > /etc/systemd/system/apache2.service.d/privatetmp.conf
     echo "PrivateTmp=no" >> /etc/systemd/system/apache2.service.d/privatetmp.conf
 
-    systemctl daemon-reload > ${DEBUG} 2>&1
+    systemctl daemon-reload >> ${DEBUG} 2>&1
 
     for file in $(find / -iname php.ini -type f); do
-        echo "Update php file ${file}" > ${DEBUG} 2>&1
+        echo "Update php file ${file}" >> ${DEBUG} 2>&1
         sed -i 's/max_execution_time = 30/max_execution_time = 600/g' ${file} > /dev/null 2>&1
         sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 1G/g' ${file} > /dev/null 2>&1
         sed -i 's/post_max_size = 8M/post_max_size = 1G/g' ${file} > /dev/null 2>&1
@@ -157,7 +146,7 @@ step_7_nextdom_customization() {
     for folder in php5 php7; do
         for subfolder in apache2 cli; do
             if [ -f /etc/${folder}/${subfolder}/php.ini ]; then
-                echo "Update php file /etc/${folder}/${subfolder}/php.ini" > ${DEBUG} 2>&1
+                echo "Update php file /etc/${folder}/${subfolder}/php.ini" >> ${DEBUG} 2>&1
                 sed -i 's/max_execution_time = 30/max_execution_time = 600/g' /etc/${folder}/${subfolder}/php.ini > /dev/null 2>&1
                 sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 1G/g' /etc/${folder}/${subfolder}/php.ini > /dev/null 2>&1
                 sed -i 's/post_max_size = 8M/post_max_size = 1G/g' /etc/${folder}/${subfolder}/php.ini > /dev/null 2>&1
@@ -170,19 +159,19 @@ step_7_nextdom_customization() {
         done
     done
 
-    a2dismod status > ${DEBUG} 2>&1
+    a2dismod status >> ${DEBUG} 2>&1
     systemctl restart apache2 > /dev/null 2>&1
     if [ $? -ne 0 ]; then
-        service apache2 restart > ${DEBUG} 2>&1
+        service apache2 restart >> ${DEBUG} 2>&1
         if [ $? -ne 0 ]; then
             printf "${ROUGE}Ne peut redémarrer apache - Annulation${NORMAL}"
             exit 1
         fi
     fi
 
-    systemctl stop mysql > ${DEBUG} 2>&1
+    systemctl stop mysql >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
-        service mysql stop > ${DEBUG} 2>&1
+        service mysql stop >> ${DEBUG} 2>&1
         if [ $? -ne 0 ]; then
             printf "${ROUGE}Ne peut arrêter mysql - Annulation${NORMAL}"
             exit 1
@@ -208,9 +197,9 @@ step_7_nextdom_customization() {
         echo "innodb_log_file_size = 32M" >> /etc/mysql/conf.d/nextdom_my.cnf
     fi
 
-    systemctl start mysql > ${DEBUG} 2>&1
+    systemctl start mysql >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
-        service mysql start > ${DEBUG} 2>&1
+        service mysql start >> ${DEBUG} 2>&1
         if [ $? -ne 0 ]; then
             printf "${ROUGE}Ne peut lancer mysql - Annulation${NORMAL}"
             exit 1
@@ -220,11 +209,11 @@ step_7_nextdom_customization() {
 }
 
 step_8_nextdom_configuration() {
-    echo "DROP USER 'nextdom'@'localhost';" | mysql -uroot -p${MYSQL_ROOT_PASSWD} > /dev/null 2>&1
-    mysql_sql "CREATE USER 'nextdom'@'localhost' IDENTIFIED BY '${MYSQL_NEXTDOM_PASSWD}';"
-    mysql_sql "DROP DATABASE IF EXISTS nextdom;"
-    mysql_sql "CREATE DATABASE nextdom;"
-    mysql_sql "GRANT ALL PRIVILEGES ON nextdom.* TO 'nextdom'@'localhost';"
+    echo "DROP USER 'nextdom'@'localhost';" | mysql -u root -p${MYSQL_ROOT_PASSWD} > /dev/null 2>&1
+    mysql -u root -p${MYSQL_ROOT_PASSWD} -e "CREATE USER 'nextdom'@'localhost' IDENTIFIED BY '${MYSQL_NEXTDOM_PASSWD}';"
+    mysql -u root -p${MYSQL_ROOT_PASSWD} -e "DROP DATABASE IF EXISTS nextdom;"
+    mysql -u root -p${MYSQL_ROOT_PASSWD} -e "CREATE DATABASE nextdom;"
+    mysql -u root -p${MYSQL_ROOT_PASSWD} -e "GRANT ALL PRIVILEGES ON nextdom.* TO 'nextdom'@'localhost';"
     cp ${WEBSERVER_HOME}/core/config/common.config.sample.php ${WEBSERVER_HOME}/core/config/common.config.php
     sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${WEBSERVER_HOME}/core/config/common.config.php
     sed -i "s/#DBNAME#/nextdom/g" ${WEBSERVER_HOME}/core/config/common.config.php
@@ -236,18 +225,17 @@ step_8_nextdom_configuration() {
 }
 
 step_9_nextdom_installation() {
-    mkdir -p /tmp/nextdom > ${DEBUG} 2>&1
-    chmod 777 -R /tmp/nextdom > ${DEBUG} 2>&1
-    chown www-data:www-data -R /tmp/nextdom > ${DEBUG} 2>&1
+    mkdir -p /tmp/nextdom >> ${DEBUG} 2>&1
+    chmod 777 -R /tmp/nextdom >> ${DEBUG} 2>&1
+    chown www-data:www-data -R /tmp/nextdom >> ${DEBUG} 2>&1
     cd ${WEBSERVER_HOME}
-    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" > ${DEBUG} 2>&1
-    php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { ec
-ho 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" > ${DEBUG} 2>&1
-    php composer-setup.php > ${DEBUG} 2>&1
-    php -r "unlink('composer-setup.php');" > ${DEBUG} 2>&1
-    php composer.phar require symfony/translation > ${DEBUG} 2>&1
-    composer -q install > ${DEBUG} 2>&1
-    php ${WEBSERVER_HOME}/install/install.php mode=force > ${DEBUG} 2>&1
+    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" >> ${DEBUG} 2>&1
+    php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" >> ${DEBUG} 2>&1
+    php composer-setup.php >> ${DEBUG} 2>&1
+    php -r "unlink('composer-setup.php');" >> ${DEBUG} 2>&1
+    php composer.phar require symfony/translation >> ${DEBUG} 2>&1
+    composer -q install >> ${DEBUG} 2>&1
+    php ${WEBSERVER_HOME}/install/install.php mode=force >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
         echo "${ROUGE}Ne peut installer nextdom - Annulation${NORMAL}"
         exit 1
@@ -255,9 +243,9 @@ ho 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-set
 }
 
 step_10_nextdom_post() {
-    rm /etc/cron.d/nextd* > ${DEBUG} 2>&1
+    rm /etc/cron.d/nextd* >> ${DEBUG} 2>&1
     if [ $(crontab -l | grep nextdom | wc -l) -ne 0 ];then
-        (echo crontab -l | grep -v "nextdom") | crontab -  > ${DEBUG} 2>&1
+        (echo crontab -l | grep -v "nextdom") | crontab -  >> ${DEBUG} 2>&1
 
     fi
     if [ ! -f /etc/cron.d/nextdom ]; then
@@ -287,30 +275,31 @@ step_10_nextdom_post() {
             echo 'tmpfs        /tmp/nextdom            tmpfs  defaults,size=128M                                       0 0' >>  /etc/fstab
         fi
     fi
-    cd ${WEBSERVER_HOME} > ${DEBUG} 2>&1
-    ./gen_compress.sh > ${DEBUG} 2>&1
+    cd ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
+    ./gen_compress.sh >> ${DEBUG} 2>&1
+    service cron start
 }
 
 step_11_nextdom_check() {
-    php ${WEBSERVER_HOME}/sick.php > ${DEBUG} 2>&1
-    chmod 777 -R /tmp/nextdom > ${DEBUG} 2>&1
-    chown www-data:www-data -R /tmp/nextdom > ${DEBUG} 2>&1
+    php ${WEBSERVER_HOME}/sick.php >> ${DEBUG} 2>&1
+    chmod 777 -R /tmp/nextdom >> ${DEBUG} 2>&1
+    chown www-data:www-data -R /tmp/nextdom >> ${DEBUG} 2>&1
 }
 
 distrib_1_spe(){
     if [ -f post-install.sh ]; then
-        rm post-install.sh > ${DEBUG} 2>&1
+        rm post-install.sh >> ${DEBUG} 2>&1
     fi
     if [ -f /etc/armbian.txt ]; then
-        cp ${WEBSERVER_HOME}/install/OS_specific/armbian/post-install.sh post-install.sh > ${DEBUG} 2>&1
+        cp ${WEBSERVER_HOME}/install/OS_specific/armbian/post-install.sh post-install.sh >> ${DEBUG} 2>&1
     fi
     if [ -f /usr/bin/raspi-config ]; then
-        cp ${WEBSERVER_HOME}/install/OS_specific/rpi/post-install.sh post-install.sh > ${DEBUG} 2>&1
+        cp ${WEBSERVER_HOME}/install/OS_specific/rpi/post-install.sh post-install.sh >> ${DEBUG} 2>&1
     fi
     if [ -f post-install.sh ]; then
-        chmod +x post-install.sh > ${DEBUG} 2>&1
-        ./post-install.sh > ${DEBUG} 2>&1
-        rm post-install.sh > ${DEBUG} 2>&1
+        chmod +x post-install.sh >> ${DEBUG} 2>&1
+        ./post-install.sh >> ${DEBUG} 2>&1
+        rm post-install.sh >> ${DEBUG} 2>&1
     fi
 }
 
@@ -376,7 +365,7 @@ infos(){
 
 selectoption(){
     PS3='Selectionner la branche github a installer: '
-    options=("master" "develop" "feature/Sass" "feature/Migration" "Quit")
+    options=("master" "develop" "feature/Sass" "Quit")
     select opt in "${options[@]}"
     do
         case $opt in
@@ -396,13 +385,6 @@ selectoption(){
             ;;
             "feature/Sass")
             VERSION=feature/Sass
-            clear
-            displaylogo
-            infos
-            break
-            ;;
-              "feature/Migration")
-            VERSION=feature/Migration
             clear
             displaylogo
             infos
