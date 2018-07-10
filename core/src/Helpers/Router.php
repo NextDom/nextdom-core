@@ -32,11 +32,11 @@ class Router
     /**
      * Constructeur initialisant le type de vue
      *
-     * @param $_viewType string Type de vue
+     * @param $viewType string Type de vue
      */
-    public function __construct($_viewType)
+    public function __construct(string $viewType)
     {
-        $this->viewType = $_viewType;
+        $this->viewType = $viewType;
     }
 
     /**
@@ -63,7 +63,7 @@ class Router
      *
      * @throws \Exception
      */
-    function desktopView()
+    public function desktopView()
     {
         if (isset($_GET['modal'])) {
             $this->showModal();
