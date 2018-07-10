@@ -1,4 +1,5 @@
 <?php
+
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -26,15 +27,17 @@ use NextDom\Market\MarketItem;
  */
 class GitManager
 {
+
     /**
      * @var string Utilisateur du dépot
      */
     private $gitId;
+
     /**
      * @var DataStorage Gestionnaire de base de données
      */
     private $dataStorage;
-    
+
     /**
      *
      * @var string
@@ -49,7 +52,7 @@ class GitManager
     public function __construct($gitId)
     {
         DownloadManager::init();
-        $this->gitId = $gitId;
+        $this->gitId       = $gitId;
         $this->dataStorage = new DataStorage('nextdom_market');
     }
 
@@ -62,18 +65,18 @@ class GitManager
      */
     public function updateRepositoriesList()
     {
-        $result = false;
+        $result   = false;
         $jsonList = $this->downloadRepositoriesList();
         if ($jsonList !== false) {
-            $jsonAnswer = \json_decode($jsonList, true);
+            $jsonAnswer  = \json_decode($jsonList, true);
             $dataToStore = array();
             foreach ($jsonAnswer as $repository) {
-                $data = array();
-                $data['name'] = $repository['name'];
-                $data['full_name'] = $repository['full_name'];
-                $data['description'] = $repository['description'];
-                $data['html_url'] = $repository['html_url'];
-                $data['git_id'] = $this->gitId;
+                $data                   = array();
+                $data['name']           = $repository['name'];
+                $data['full_name']      = $repository['full_name'];
+                $data['description']    = $repository['description'];
+                $data['html_url']       = $repository['html_url'];
+                $data['git_id']         = $this->gitId;
                 $data['default_branch'] = $repository['default_branch'];
                 \array_push($dataToStore, $data);
             }
@@ -94,13 +97,13 @@ class GitManager
      */
     protected function downloadRepositoriesList()
     {
-        $result = false;
+        $result  = false;
         $content = DownloadManager::downloadContent($this->githubApiDomain . '/orgs/' . $this->gitId . '/repos?per_page=100');
         // Limite de l'API GitHub atteinte
         if (\strstr($content, 'API rate limit exceeded')) {
-            $content = DownloadManager::downloadContent($this->githubApiDomain . '/rate_limit');
+            $content         = DownloadManager::downloadContent($this->githubApiDomain . '/rate_limit');
             $gitHubLimitData = json_decode($content, true);
-            $refreshDate = date('H:i', $gitHubLimitData['resources']['core']['reset']);
+            $refreshDate     = date('H:i', $gitHubLimitData['resources']['core']['reset']);
             throw new \Exception('Limite de l\'API GitHub atteinte. Le rafraichissement sera accessible à ' . $refreshDate);
         } elseif (\strstr($content, 'Bad credentials')) {
             // Le token GitHub n'est pas bon
@@ -135,7 +138,7 @@ class GitManager
         $ignoreList = $this->getIgnoreList();
         foreach ($repositoriesList as $repository) {
             $repositoryName = $repository['name'];
-            $marketItem = MarketItem::createFromGit($sourceName, $repository);
+            $marketItem     = MarketItem::createFromGit($sourceName, $repository);
             if (($force || $marketItem->isNeedUpdate($repository)) && !\in_array($repositoryName, $ignoreList)) {
                 if (!$marketItem->refresh()) {
                     \array_push($ignoreList, $repositoryName);
@@ -152,7 +155,7 @@ class GitManager
      */
     protected function getIgnoreList()
     {
-        $result = array();
+        $result   = array();
         $jsonList = $this->dataStorage->getJsonData('repo_ignore_' . $this->gitId);
         if ($jsonList !== null) {
             $result = $jsonList;
@@ -177,7 +180,7 @@ class GitManager
      */
     public function getRepositoriesList()
     {
-        $result = false;
+        $result      = false;
         $jsonStrList = $this->dataStorage->getJsonData('repo_data_' . $this->gitId);
         if ($jsonStrList !== null) {
             $result = $jsonStrList;
@@ -194,9 +197,9 @@ class GitManager
      */
     public function getItems($sourceName)
     {
-        $result = array();
+        $result       = array();
         $repositories = $this->getRepositoriesList();
-        $ignoreList = $this->getIgnoreList();
+        $ignoreList   = $this->getIgnoreList();
         foreach ($repositories as $repository) {
             if (!\in_array($repository['name'], $ignoreList)) {
                 $marketItem = MarketItem::createFromCache($sourceName, $repository['full_name']);
@@ -205,4 +208,5 @@ class GitManager
         }
         return $result;
     }
+
 }
