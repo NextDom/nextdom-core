@@ -6860,14 +6860,14 @@ input[type=checkbox] {
     margin-top: 2rem;
 }
 
+#admin-buttons {
+    float: right;
+}
+
 #market-div {
     margin-top: 2rem;
     margin-left: 5%;
     margin-right: 5%;
-}
-
-#admin-buttons {
-    float: right;
 }
 
 #market-div .media-container {
@@ -7422,7 +7422,8 @@ input[type=checkbox] {
 
 #div_alert {
     display: none;
-    width: 100%;
+    margin: 10px auto;
+    width: 80%;
 }
 
 #md_pageHelp {
