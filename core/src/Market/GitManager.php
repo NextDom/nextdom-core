@@ -34,6 +34,12 @@ class GitManager
      * @var DataStorage Gestionnaire de base de données
      */
     private $dataStorage;
+    
+    /**
+     *
+     * @var string
+     */
+    private $githubApiDomain = 'https://api.github.com';
 
     /**
      * Constructeur du gestionnaire Git
@@ -89,10 +95,10 @@ class GitManager
     protected function downloadRepositoriesList()
     {
         $result = false;
-        $content = DownloadManager::downloadContent('https://api.github.com/orgs/' . $this->gitId . '/repos?per_page=100');
+        $content = DownloadManager::downloadContent($this->githubApiDomain . '/orgs/' . $this->gitId . '/repos?per_page=100');
         // Limite de l'API GitHub atteinte
         if (\strstr($content, 'API rate limit exceeded')) {
-            $content = DownloadManager::downloadContent('https://api.github.com/rate_limit');
+            $content = DownloadManager::downloadContent($this->githubApiDomain . '/rate_limit');
             $gitHubLimitData = json_decode($content, true);
             $refreshDate = date('H:i', $gitHubLimitData['resources']['core']['reset']);
             throw new \Exception('Limite de l\'API GitHub atteinte. Le rafraichissement sera accessible à ' . $refreshDate);
@@ -103,7 +109,7 @@ class GitManager
             // Test si c'est un dépôt d'organisation
             if (\strstr($content, '"message":"Not Found"')) {
                 // Test d'un téléchargement pour un utilisateur
-                $content = DownloadManager::downloadContent('https://api.github.com/users/' . $this->gitId . '/repos?per_page=100');
+                $content = DownloadManager::downloadContent($this->githubApiDomain . '/users/' . $this->gitId . '/repos?per_page=100');
                 // Test si c'est un dépot d'utilisateur
                 if (\strstr($content, '"message":"Not Found"') || strlen($content) < 10) {
                     throw new \Exception('Le dépôt ' . $this->gitId . ' n\'existe pas.');
