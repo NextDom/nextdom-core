@@ -135,7 +135,7 @@ if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
         echo '<script>getObjectHtml(' . $child->getId() . ')</script>';
         echo '</div>';
         echo '</div>';
-        echo '</div>';
+        echo '</div>';  
     }
 
     ?>
