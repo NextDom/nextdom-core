@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -14,6 +13,21 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
+document.getElementById("div_displayObject").onscroll = function() {scrollFunction()};
+function scrollFunction() {
+    if (document.getElementById("div_displayObject").scrollTop < 20 ) {
+        document.getElementById("bt_displayObject").style.display = "block";
+        document.getElementById("bt_displayScenario").style.display = "block";
+    } else {
+        document.getElementById("bt_displayObject").style.display = "none";
+        document.getElementById("bt_displayScenario").style.display = "none";
+      setTimeout('scrollshow()', 3000); // after 5 secs
+    }
+}
+function scrollshow() {
+          document.getElementById("bt_displayObject").style.display = "block";
+          document.getElementById("bt_displayScenario").style.display = "block";
+}
 
  var category_dashabord = getUrlVars('category');
  if(category_dashabord == false){
@@ -30,52 +44,23 @@ $('#div_pageContainer').on( 'click','.eqLogic-widget .history', function () {
     $("#md_modal2").load('index.php?v=d&modal=cmd.history&id=' + $(this).data('cmd_id')).dialog('open');
 });
 
+$('#bt_closeScenario').on('click', function () {
+  console.log("toto");
+$('#div_displayScenario').animate({right: "-250px"});
+});
+
 $('#bt_displayScenario').on('click', function () {
-    if ($(this).attr('data-display') == 1) {
-        $('#div_displayScenario').hide();
-        if ($('#bt_displayObject').attr('data-display') == 1) {
-            $('#div_displayObject').removeClass('col-lg-8 col-lg-10 col-lg-12 col-md-8 col-md-10 col-md-12 col-sm-8 col-sm-10 col-sm-12').addClass('col-lg-10 col-md-9 col-sm-8');
-        } else {
-            $('#div_displayObject').removeClass('col-lg-8 col-lg-10 col-lg-12 col-lg-8 col-lg-10 col-lg-12 col-md-8 col-md-10 col-md-12 col-sm-8 col-sm-10 col-sm-12').addClass('col-lg-12 col-md-12 col-sm-12');
-        }
-        $('.div_displayEquipement').each(function () {
-            $(this).packery();
-        });
-        $(this).attr('data-display', 0);
-    } else {
-        $('#div_displayScenario').show();
-        if ($('#bt_displayObject').attr('data-display') == 1) {
-            $('#div_displayObject').removeClass('col-lg-8 col-lg-10 col-lg-12 col-lg-8 col-lg-10 col-lg-12 col-md-8 col-md-10 col-md-12 col-sm-8 col-sm-10 col-sm-12').addClass('col-lg-8 col-md-7 col-sm-5');
-        } else {
-            $('#div_displayObject').removeClass('col-lg-8 col-lg-10 col-lg-12 col-lg-8 col-lg-10 col-lg-12 col-md-8 col-md-10 col-md-12 col-sm-8 col-sm-10 col-sm-12').addClass('col-lg-10 col-md-9 col-sm-7');
-        }
+        $('#div_displayScenario').animate({right: "0px"});
         $('.div_displayEquipement').packery();
-        $(this).attr('data-display', 1);
-    }
+});
+
+$('#bt_closeObject').on('click', function () {
+$('#div_displayObjectList').animate({left: "-250px"});
 });
 
 $('#bt_displayObject').on('click', function () {
-    if ($(this).attr('data-display') == 1) {
-        $('#div_displayObjectList').hide();
-        if ($('#bt_displayScenario').attr('data-display') == 1) {
-            $('#div_displayObject').removeClass('col-lg-8 col-lg-10 col-lg-12 col-lg-8 col-lg-10 col-lg-12 col-md-8 col-md-10 col-md-12 col-sm-8 col-sm-10 col-sm-12').addClass('col-lg-10 col-md-9 col-sm-7');
-        } else {
-            $('#div_displayObject').removeClass('col-lg-8 col-lg-10 col-lg-12 col-lg-8 col-lg-10 col-lg-12 col-md-8 col-md-10 col-md-12 col-sm-8 col-sm-10 col-sm-12').addClass('col-lg-12 col-md-12 col-sm-12');
-        }
-        $('.div_displayEquipement').each(function () {
-            $(this).packery();
-        });
-        $(this).attr('data-display', 0);
-    } else {
-        $('#div_displayObjectList').show();
-        if ($('#bt_displayScenario').attr('data-display') == 1) {
-            $('#div_displayObject').removeClass('col-lg-8 col-lg-10 col-lg-12 col-lg-8 col-lg-10 col-lg-12 col-md-8 col-md-10 col-md-12 col-sm-8 col-sm-10 col-sm-12').addClass('col-lg-8 col-md-7 col-sm-5');
-        } else {
-            $('#div_displayObject').removeClass('col-lg-8 col-lg-10 col-lg-12 col-lg-8 col-lg-10 col-lg-12 col-md-8 col-md-10 col-md-12 col-sm-8 col-sm-10 col-sm-12').addClass('col-lg-10 col-md-9 col-sm-8');
-        }
+        $('#div_displayObjectList').animate({left: "0px"});
         $('.div_displayEquipement').packery();
-        $(this).attr('data-display', 1);
-    }
 });
 
 function editWidgetMode(_mode,_save){
