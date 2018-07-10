@@ -70,10 +70,10 @@ $loadExtensions = get_loaded_extensions();
     </center>
     <?php
 $error = false;
-if (version_compare(PHP_VERSION, '5.6.0', '<')) {
+if (version_compare(PHP_VERSION, '7.0.0', '<')) {
     $error = true;
     echo '<div class="alert alert-danger" style="margin:15px;">';
-    echo '<center style="font-size:1.2em;">NextDom nécessite PHP 5.6 ou plus (actuellement : ' . PHP_VERSION . ')</center>';
+    echo '<center style="font-size:1.2em;">NextDom nécessite PHP 7.0 ou plus (actuellement : ' . PHP_VERSION . ')</center>';
     echo '</div>';
 }
 if (!file_exists('/etc/cron.d/nextdom')) {
@@ -109,7 +109,7 @@ foreach ($needphpextensions as $needphpextension) {
     echo '<center style="font-size:1.2em;">NextDom nécessite l\'extension PHP ' . $needphpextension . ' . Veuillez faire, en SSH : </center>';
     echo '<pre>';
     echo "sudo su -\n";
-    echo system::get('cmd_install') . ' php5-' . $needphpextension . "\n";
+    echo system::get('cmd_install') . ' php7-' . $needphpextension . "\n";
     echo 'systemctl reload php5-fpm <strong>or</strong> systemctl reload apache2';
     echo '</pre>';
     echo '</div>';
