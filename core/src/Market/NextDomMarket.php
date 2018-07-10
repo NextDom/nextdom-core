@@ -25,7 +25,7 @@ class NextDomMarket
     /**
      * @var int Temps de rafraichissement de la liste des plugins
      */
-    private $REFRESH_TIME_LIMIT = 86400;
+    const REFRESH_TIME_LIMIT = 86400;
 
     /**
      * @var string Utilisateur Git des depôts
@@ -67,7 +67,7 @@ class NextDomMarket
                 $result = $this->refreshJson($force);
             }
         } else {
-            throw new \Exception('Pas de connection internet');
+            throw new \Exception('Pas de connection internet', 500);
         }
         return $result;
     }
@@ -79,7 +79,7 @@ class NextDomMarket
      * @return bool True si un rafraichissement a eu lieu
      * @throws \Exception
      */
-    public function refreshGitHub($force)
+    public function refreshGitHub(bool $force): bool
     {
         $result = false;
         $gitManager = new GitManager($this->source['data']);
@@ -101,7 +101,7 @@ class NextDomMarket
      *
      * @return bool True si un rafraichissement a eu lieu
      */
-    public function refreshJson($force)
+    public function refreshJson($force): bool
     {
         $result = false;
         $content = null;
@@ -132,12 +132,12 @@ class NextDomMarket
      *
      * @return bool True si une mise à jour est nécessaire
      */
-    public function isUpdateNeeded($id)
+    public function isUpdateNeeded($id): bool
     {
         $result = true;
         $lastUpdate = $this->dataStorage->getRawData('repo_last_update_' . $id);
         if ($lastUpdate !== null) {
-            if (\time() - $lastUpdate < $this->REFRESH_TIME_LIMIT) {
+            if (\time() - $lastUpdate < self::REFRESH_TIME_LIMIT) {
                 return false;
             }
         }
