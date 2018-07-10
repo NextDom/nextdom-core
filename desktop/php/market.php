@@ -5,9 +5,14 @@ namespace NextDom;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\DataStorage;
 use NextDom\Helpers\Utils;
+use NextDom\Exceptions\CoreException;
 
 Status::initConnectState();
-Status::isConnectedAdminOrFail();
+try {
+    Status::isConnectedAdminOrFail();
+} catch (CoreException $exc) {
+   \displayException($exc);
+}
 
 global $NEXTDOM_INTERNAL_CONFIG;
 $sourcesList = array();

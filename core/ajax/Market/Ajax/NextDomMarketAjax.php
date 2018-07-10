@@ -21,6 +21,7 @@ namespace NextDom\Market\Ajax;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Market\Ajax\MarketAjaxParser;
+use NextDom\Exceptions\CoreException;
 
 header('Content-Type: application/json');
 
@@ -48,5 +49,8 @@ try {
     throw new \Exception(__('Aucune méthode correspondante à : ', __FILE__) . $action);
 } catch (\Exception $e) {
     \ajax::error(displayException($e), $e->getCode());
+ 
+} catch (CoreException $exc) {
+    \ajax::error(displayException($exc), $exc->getCode());
 }
 

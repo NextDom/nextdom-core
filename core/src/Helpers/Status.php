@@ -18,11 +18,14 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Exceptions\CoreException;
+
 /**
  * Classe temporaire pour stocker différents états.
  */
 class Status
 {
+
     /**
      * @var bool Statut de la connexion de l'utilisateur
      */
@@ -53,7 +56,7 @@ class Status
      */
     public static function initConnectState()
     {
-        self::$connectState = \isConnect();
+        self::$connectState      = \isConnect();
         self::$connectAdminState = \isConnect('admin');
     }
 
@@ -61,33 +64,33 @@ class Status
      * Obtenir le statut de la connexion de l'utilisateur
      * @return bool Statut de la connexion de l'utilisateur
      */
-    public static function isConnect() : bool
+    public static function isConnect(): bool
     {
         return self::$connectState;
     }
 
     /**
      * Test si l'utilisateur est connecté et lève une exception si ce n'est pas le cas.
-     *
-     * @throws \Exception
+     * @return bool 
+     * @throws CoreException
      */
-    public static function isConnectedOrFail() : bool
+    public static function isConnectedOrFail()
     {
         if (!self::$connectState) {
-            throw new \Exception(__('core.error-401'));
+            throw new CoreException(__('core.error-401'), 401);
         }
         return self::isConnect();
     }
 
     /**
-     * Test si l'utilisateur est connecté avec les droits admin et lève une exception si ce n'est pas le cas.
-     *
-     * @throws \Exception
+     * @abstract Test if user is connected with admins right or throw CoreException if not.
+     * @return bool 
+     * @throws CoreException
      */
-    public static function isConnectedAdminOrFail() : bool
+    public static function isConnectedAdminOrFail()
     {
         if (!self::$connectAdminState) {
-            throw new \Exception(__('core.error-401'));
+            throw new CoreException(__('core.error-401'), 401);
         }
         return self::isConnectAdmin();
     }
@@ -96,7 +99,7 @@ class Status
      * Obtenir le statut de la connexion de l'utilisateur en administrateur
      * @return bool Statut de la connexion de l'utilisateur en administrateur
      */
-    public static function isConnectAdmin() : bool
+    public static function isConnectAdmin(): bool
     {
         return self::$connectAdminState;
     }
@@ -105,8 +108,9 @@ class Status
      * Obtenir le statut du mode récupération
      * @return bool Statut du mode récupération
      */
-    public static function isRescueMode() : bool
+    public static function isRescueMode(): bool
     {
         return self::$rescueMode;
     }
+
 }
