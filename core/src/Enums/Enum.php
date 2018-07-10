@@ -1,4 +1,5 @@
 <?php
+
 /* This file is part of NextDom.
  *
  * NextDom is free software: you can redistribute it and/or modify
@@ -19,9 +20,11 @@ namespace NextDom\Enums;
 
 abstract class Enum
 {
+
     public static function getConstants(): array
     {
         $reflectionClass = new \ReflectionClass(get_called_class());
         return $reflectionClass->getConstants();
     }
+
 }

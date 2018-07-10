@@ -1,4 +1,5 @@
 <?php
+
 /* This file is part of NextDom.
  *
  * NextDom is free software: you can redistribute it and/or modify
@@ -19,10 +20,12 @@ namespace NextDom\Enums;
 
 class PluginManagerCronEnum extends Enum
 {
-    const CRON = 'cron';
-    const CRON_5 = 'cron5';
-    const CRON_15 = 'cron15';
-    const CRON_30 = 'cron30';
-    const CRON_DAILY = 'cronDaily';
+
+    const CRON        = 'cron';
+    const CRON_5      = 'cron5';
+    const CRON_15     = 'cron15';
+    const CRON_30     = 'cron30';
+    const CRON_DAILY  = 'cronDaily';
     const CRON_HOURLY = 'cronHourly';
+
 }
