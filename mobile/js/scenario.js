@@ -3,7 +3,7 @@ function initScenario() {
         id: 'all',
         version: 'mobile',
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (htmls) {
             $('#div_displayScenario').empty().html(htmls).trigger('create');

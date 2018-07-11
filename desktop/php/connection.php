@@ -25,7 +25,7 @@
         nextdom.user.useTwoFactorAuthentification({
             login: $('#in_login_username').value(),
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             },
             success: function (data) {
                 if(data == 1){
@@ -44,7 +44,7 @@
             twoFactorCode: $('#in_twoFactorCode').val(),
             storeConnection: $('#cb_storeConnection').value(),
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             },
             success: function (data) {
                 window.location.href = 'index.php?v=d';

@@ -33,7 +33,7 @@
              type : 'folders',
              path : path,
              error: function (error) {
-                 $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                 notify("Erreur", error.message, 'error');
              },
              success : function(data){
                  for(var i in data){
@@ -59,7 +59,7 @@
          type : 'files',
          path : _path,
          error: function (error) {
-             $('#div_alert').showAlert({message: error.message, level: 'danger'});
+             notify("Erreur", error.message, 'error');
          },
          success : function(data){
              $('#div_fileList').empty();
@@ -95,7 +95,7 @@
      nextdom.getFileContent({
          path : _path,
          error: function (error) {
-             $('#div_alert').showAlert({message: error.message, level: 'danger'});
+             notify("Erreur", error.message, 'error');
          },
          success : function(data){
              if (fileEditor != null) {
@@ -125,7 +125,7 @@
          path : $(this).attr('data-path'),
          content :fileEditor.getValue(),
          error: function (error) {
-             $('#div_alert').showAlert({message: error.message, level: 'danger'});
+             notify("Erreur", error.message, 'error');
          },
          success : function(data){
              $('#div_alert').showAlert({message: '{{Fichier enregistré avec succès}}', level: 'success'});
@@ -140,7 +140,7 @@
              nextdom.deleteFile({
                  path : path,
                  error: function (error) {
-                     $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                     notify("Erreur", error.message, 'error');
                  },
                  success : function(data){
                      $('#div_alert').showAlert({message: '{{Fichier enregistré avec succès}}', level: 'success'});
@@ -175,7 +175,7 @@
                  path : CURRENT_FOLDER,
                  name :result,
                  error: function (error) {
-                     $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                     notify("Erreur", error.message, 'error');
                  },
                  success : function(data){
                      $('#div_alert').showAlert({message: '{{Fichier enregistré avec succès}}', level: 'success'});

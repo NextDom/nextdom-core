@@ -56,7 +56,7 @@
  autoCompleteAction = ['report','sleep', 'variable', 'scenario', 'stop', 'wait','gotodesign','log','message','equipement','ask','nextdom_poweroff','scenario_return','alert','popup','icon','event','remove_inat'];
 
  if (getUrlVars('saveSuccessFull') == 1) {
-  $('#div_alert').showAlert({message: '{{Sauvegarde effectuée avec succès}}', level: 'success'});
+  notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
 }
 
 if((!isset(userProfils.doNotAutoHideMenu) || userProfils.doNotAutoHideMenu != 1) && !jQuery.support.touch){
@@ -171,7 +171,7 @@ $('.scenarioAttr[data-l1key=group]').autocomplete({
       },
       success: function (data) {
         if (data.state != 'ok') {
-          $('#div_alert').showAlert({message: data.result, level: 'danger'});
+          notify("Erreur", data.result, 'error');
           return;
         }
         response(data.result);
@@ -186,7 +186,7 @@ $("#bt_changeAllScenarioState,#bt_changeAllScenarioState2").off('click').on('cli
   nextdom.config.save({
     configuration: {enableScenario: el.attr('data-state')},
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'});
+      notify("Erreur", error.message, 'error');
     },
     success: function () {
      loadPage('index.php?v=d&p=scenario');
@@ -220,7 +220,7 @@ $("#bt_addScenario,#bt_addScenario2").off('click').on('click', function (event) 
           nextdom.scenario.save({
             scenario: {name: $('#in_scenarioAddName').val(), type: $("input[name=cbScenarioType]:checked").val()},
             error: function (error) {
-              $('#div_alert').showAlert({message: error.message, level: 'danger'});
+              notify("Erreur", error.message, 'error');
             },
             success: function (data) {
               var vars = getUrlVars();
@@ -257,7 +257,7 @@ $("#bt_delScenario,#bt_delScenario2").off('click').on('click', function (event) 
       nextdom.scenario.remove({
         id: $('.scenarioAttr[data-l1key=id]').value(),
         error: function (error) {
-          $('#div_alert').showAlert({message: error.message, level: 'danger'});
+          notify("Erreur", error.message, 'error');
         },
         success: function () {
           modifyWithoutSave = false;
@@ -274,7 +274,7 @@ $("#bt_testScenario,#bt_testScenario2").off('click').on('click', function () {
     id: $('.scenarioAttr[data-l1key=id]').value(),
     state: 'start',
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'});
+      notify("Erreur", error.message, 'error');
     },
     success: function () {
       $('#div_alert').showAlert({message: '{{Lancement du scénario réussi}}', level: 'success'});
@@ -289,7 +289,7 @@ $("#bt_copyScenario").off('click').on('click', function () {
         id: $('.scenarioAttr[data-l1key=id]').value(),
         name: result,
         error: function (error) {
-          $('#div_alert').showAlert({message: error.message, level: 'danger'});
+          notify("Erreur", error.message, 'error');
         },
         success: function (data) {
           loadPage('index.php?v=d&p=scenario&id=' + data.id);
@@ -304,7 +304,7 @@ $("#bt_stopScenario").off('click').on('click', function () {
     id: $('.scenarioAttr[data-l1key=id]').value(),
     state: 'stop',
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'});
+      notify("Erreur", error.message, 'error');
     },
     success: function () {
       $('#div_alert').showAlert({message: '{{Arrêt du scénario réussi}}', level: 'success'});
@@ -842,7 +842,7 @@ function printScenario(_id) {
  nextdom.scenario.get({
   id: _id,
   error: function (error) {
-    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+    notify("Erreur", error.message, 'error');
   },
   success: function (data) {
     pColor = 0;
@@ -904,7 +904,7 @@ function printScenario(_id) {
       params : actionOptions,
       async : false,
       error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
       },
       success : function(data){
        $.showLoading();
@@ -941,7 +941,7 @@ function saveScenario() {
   nextdom.scenario.save({
     scenario: scenario,
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'});
+      notify("Erreur", error.message, 'error');
     },
     success: function (data) {
       modifyWithoutSave = false;

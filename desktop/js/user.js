@@ -29,7 +29,7 @@
     nextdom.user.save({
         users: user,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             printUsers();
@@ -49,7 +49,7 @@
     nextdom.user.save({
         users: $('#table_user tbody tr').getValues('.userAttr'),
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             printUsers();
@@ -67,7 +67,7 @@
             nextdom.user.remove({
                 id: user.id,
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function () {
                     printUsers();
@@ -87,7 +87,7 @@
             nextdom.user.save({
                 users: [user],
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function () {
                     printUsers();
@@ -108,7 +108,7 @@
             nextdom.user.save({
                 users: [user],
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function () {
                     printUsers();
@@ -132,7 +132,7 @@
     nextdom.user.supportAccess({
         enable : $(this).attr('data-enable'),
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             modifyWithoutSave = false;
@@ -145,7 +145,7 @@
     $.showLoading();
     nextdom.user.all({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             $('#table_user tbody').empty();
@@ -215,7 +215,7 @@ $('.bt_deleteSession').on('click',function(){
    nextdom.user.deleteSession({
     id : id,
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function (data) {
         window.location.reload();
@@ -231,7 +231,7 @@ $('.bt_removeRegisterDevice').on('click',function(){
         key : key,
         user_id : user_id,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             modifyWithoutSave = false;
@@ -243,7 +243,7 @@ $('.bt_removeRegisterDevice').on('click',function(){
 $('#bt_removeAllRegisterDevice').on('click',function(){
     nextdom.user.removeRegisterDevice({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             modifyWithoutSave = false;

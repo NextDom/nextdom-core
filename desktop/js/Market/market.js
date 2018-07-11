@@ -404,7 +404,7 @@ function ajaxQuery(url, data, callbackFunc) {
         success: function (data, status) {
             // Test si l'appel a échoué
             if (data.state !== 'ok' || status !== 'success') {
-                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                notify("Erreur", data.result, 'error');
             }
             else {
                 if (typeof callbackFunc !== "undefined") {

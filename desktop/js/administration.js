@@ -18,7 +18,7 @@
  var url = document.location.toString();
  if (url.match('#')) {
     $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-} 
+}
 $('.nav-tabs a').on('shown.bs.tab', function (e) {
     window.location.hash = e.target.hash;
 })
@@ -70,7 +70,7 @@ $(".bt_regenerate_api").on('click', function (event) {
     bootbox.confirm('{{Etes-vous sûr de vouloir réinitialiser la clef API de }}'+el.attr('data-plugin')+' ?', function (result) {
         if (result) {
          $.ajax({
-            type: "POST", 
+            type: "POST",
             url: "core/ajax/config.ajax.php",
             data: {
                 action: "genApiKey",
@@ -82,7 +82,7 @@ $(".bt_regenerate_api").on('click', function (event) {
             },
             success: function (data) {
                 if (data.state != 'ok') {
-                    $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                    notify("Erreur", data.result, 'error');
                     return;
                 }
                 el.closest('.input-group').find('.span_apikey').value(data.result);
@@ -96,7 +96,7 @@ $('#bt_forceSyncHour').on('click', function () {
     $.hideAlert();
     nextdom.forceSyncHour({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             $('#div_alert').showAlert({message: '{{Commande réalisée avec succès}}', level: 'success'});
@@ -109,12 +109,12 @@ $('#bt_restartDns').on('click', function () {
  nextdom.config.save({
     configuration: $('#config').getValues('.configKey')[0],
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function () {
      nextdom.network.restartDns({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
            modifyWithoutSave = false;
@@ -122,7 +122,7 @@ $('#bt_restartDns').on('click', function () {
        }
    });
  }
-}); 
+});
 });
 
 
@@ -131,12 +131,12 @@ $('#bt_haltDns').on('click', function () {
  nextdom.config.save({
     configuration: $('#config').getValues('.configKey')[0],
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function () {
      nextdom.network.stopDns({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
            modifyWithoutSave = false;
@@ -144,7 +144,7 @@ $('#bt_haltDns').on('click', function () {
        }
    });
  }
-}); 
+});
 });
 
 $("#bt_cleanCache").on('click', function (event) {
@@ -176,19 +176,19 @@ $("#bt_saveGeneraleConfig").on('click', function (event) {
     nextdom.config.save({
         configuration: config,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             nextdom.config.load({
                 configuration: $('#config').getValues('.configKey:not(.noSet)')[0],
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
                     $('#config').setValues(data, '.configKey');
                     loadAactionOnMessage();
                     modifyWithoutSave = false;
-                    $('#div_alert').showAlert({message: '{{Sauvegarde réussie}}', level: 'success'});
+                    notify("Info", '{{Sauvegarde réussie}}', 'success');
                 }
             });
         }
@@ -210,7 +210,7 @@ $("#bt_testLdapConnection").on('click', function (event) {
     nextdom.config.save({
         configuration: $('#config').getValues('.configKey')[0],
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             modifyWithoutSave = false;
@@ -252,7 +252,7 @@ function loadAactionOnMessage(){
     nextdom.config.load({
         configuration: 'actionOnMessage',
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             if(data == ''){
@@ -266,7 +266,7 @@ function loadAactionOnMessage(){
                 params : actionOptions,
                 async : false,
                 error: function (error) {
-                  $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                  notify("Erreur", error.message, 'error');
               },
               success : function(data){
                 for(var i in data){
@@ -376,7 +376,7 @@ $.showLoading();
 nextdom.config.load({
     configuration: $('#config').getValues('.configKey:not(.noSet)')[0],
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function (data) {
         $('#config').setValues(data, '.configKey');
@@ -394,8 +394,8 @@ $('#div_pageContainer').delegate('.configKey', 'change', function () {
 
 $('#bt_resetHour').on('click',function(){
    $.ajax({
-    type: "POST", 
-    url: "core/ajax/nextdom.ajax.php", 
+    type: "POST",
+    url: "core/ajax/nextdom.ajax.php",
     data: {
         action: "resetHour"
     },
@@ -403,9 +403,9 @@ $('#bt_resetHour').on('click',function(){
     error: function (request, status, error) {
         handleAjaxError(request, status, error);
     },
-    success: function (data) { 
+    success: function (data) {
         if (data.state != 'ok') {
-            $('#div_alert').showAlert({message: data.result, level: 'danger'});
+            notify("Erreur", data.result, 'error');
             return;
         }
         loadPage('index.php?v=d&p=administration');
@@ -415,8 +415,8 @@ $('#bt_resetHour').on('click',function(){
 
 $('#bt_resetHwKey').on('click',function(){
    $.ajax({
-    type: "POST", 
-    url: "core/ajax/nextdom.ajax.php", 
+    type: "POST",
+    url: "core/ajax/nextdom.ajax.php",
     data: {
         action: "resetHwKey"
     },
@@ -424,9 +424,9 @@ $('#bt_resetHwKey').on('click',function(){
     error: function (request, status, error) {
         handleAjaxError(request, status, error);
     },
-    success: function (data) { 
+    success: function (data) {
         if (data.state != 'ok') {
-            $('#div_alert').showAlert({message: data.result, level: 'danger'});
+            notify("Erreur", data.result, 'error');
             return;
         }
         loadPage('index.php?v=d&p=administration');
@@ -438,7 +438,7 @@ $('#bt_resetHardwareType').on('click',function(){
     nextdom.config.save({
         configuration: {hardware_name : ''},
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             loadPage('index.php?v=d&p=administration');
@@ -449,7 +449,7 @@ $('#bt_resetHardwareType').on('click',function(){
 $('#bt_removeTimelineEvent').on('click',function(){
     nextdom.removeTimelineEvents({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             $('#div_alert').showAlert({message: '{{Evènement de la timeline supprimé avec succès}}', level: 'success'});
@@ -460,7 +460,7 @@ $('#bt_removeTimelineEvent').on('click',function(){
 $('#bt_removeBanIp').on('click',function(){
     nextdom.user.removeBanIp({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             window.location.reload();
@@ -470,8 +470,8 @@ $('#bt_removeBanIp').on('click',function(){
 
 function clearNextDomDate() {
     $.ajax({
-        type: "POST", 
-        url: "core/ajax/nextdom.ajax.php", 
+        type: "POST",
+        url: "core/ajax/nextdom.ajax.php",
         data: {
             action: "clearDate"
         },
@@ -479,9 +479,9 @@ function clearNextDomDate() {
         error: function (request, status, error) {
             handleAjaxError(request, status, error);
         },
-        success: function (data) { 
+        success: function (data) {
             if (data.state != 'ok') {
-                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                notify("Erreur", data.result, 'error');
                 return;
             }
             $('#in_nextdomLastDate').value('');
@@ -493,7 +493,7 @@ function clearNextDomDate() {
 function flushCache() {
   nextdom.cache.flush({
     error: function (error) {
-     $('#div_alert').showAlert({message: data.result, level: 'danger'});
+     notify("Erreur", data.result, 'error');
  },
  success: function (data) {
     updateCacheStats();
@@ -505,7 +505,7 @@ function flushCache() {
 function cleanCache() {
     nextdom.cache.clean({
         error: function (error) {
-         $('#div_alert').showAlert({message: data.result, level: 'danger'});
+         notify("Erreur", data.result, 'error');
      },
      success: function (data) {
         updateCacheStats();
@@ -517,7 +517,7 @@ function cleanCache() {
 function updateCacheStats(){
  nextdom.cache.stats({
     error: function (error) {
-     $('#div_alert').showAlert({message: data.result, level: 'danger'});
+     notify("Erreur", data.result, 'error');
  },
  success: function (data) {
     $('#span_cacheObject').html(data.count);
@@ -529,8 +529,8 @@ function updateCacheStats(){
 /********************Convertion************************/
 function printConvertColor() {
     $.ajax({
-        type: "POST", 
-        url: "core/ajax/config.ajax.php", 
+        type: "POST",
+        url: "core/ajax/config.ajax.php",
         data: {
             action: "getKey",
             key: 'convertColor'
@@ -539,9 +539,9 @@ function printConvertColor() {
         error: function (request, status, error) {
             handleAjaxError(request, status, error);
         },
-        success: function (data) { 
+        success: function (data) {
             if (data.state != 'ok') {
-                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                notify("Erreur", data.result, 'error');
                 return;
             }
 
@@ -575,8 +575,8 @@ function saveConvertColor() {
     });
     value.convertColor = colors;
     $.ajax({
-        type: "POST", 
-        url: "core/ajax/config.ajax.php", 
+        type: "POST",
+        url: "core/ajax/config.ajax.php",
         data: {
             action: 'addKey',
             value: json_encode(value)
@@ -585,9 +585,9 @@ function saveConvertColor() {
         error: function (request, status, error) {
             handleAjaxError(request, status, error);
         },
-        success: function (data) { 
+        success: function (data) {
             if (data.state != 'ok') {
-                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                notify("Erreur", data.result, 'error');
                 return;
             }
             modifyWithoutSave = false;
@@ -603,7 +603,7 @@ $('.bt_resetColor').on('click', function () {
         key: $(this).attr('data-l1key'),
         default: 1,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             $('.configKey[data-l1key="' + el.attr('data-l1key') + '"]').value(data);
@@ -616,13 +616,13 @@ $('.testRepoConnection').on('click',function(){
     nextdom.config.save({
         configuration: $('#config').getValues('.configKey')[0],
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             nextdom.config.load({
                 configuration: $('#config').getValues('.configKey:not(.noSet)')[0],
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
                     $('#config').setValues(data, '.configKey');
@@ -630,7 +630,7 @@ $('.testRepoConnection').on('click',function(){
                     nextdom.repo.test({
                         repo: repo,
                         error: function (error) {
-                            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                            notify("Erreur", error.message, 'error');
                         },
                         success: function (data) {
                             $('#div_alert').showAlert({message: '{{Test réussi}}', level: 'success'});
@@ -674,8 +674,8 @@ $('#div_pageContainer').undelegate('.objectSummary .objectSummaryAction[data-l1k
 $('#div_pageContainer').undelegate('.objectSummary .objectSummaryAction[data-l1key=createVirtual]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=createVirtual]', 'click', function () {
     var objectSummary = $(this).closest('.objectSummary');
     $.ajax({
-        type: "POST", 
-        url: "core/ajax/object.ajax.php", 
+        type: "POST",
+        url: "core/ajax/object.ajax.php",
         data: {
             action: "createSummaryVirtual",
             key: objectSummary.find('.objectSummaryAttr[data-l1key=key]').value()
@@ -686,7 +686,7 @@ $('#div_pageContainer').undelegate('.objectSummary .objectSummaryAction[data-l1k
         },
         success: function (data) {
             if (data.state != 'ok') {
-                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                notify("Erreur", data.result, 'error');
                 return;
             }
             $('#div_alert').showAlert({message: '{{Création des commandes virtuel réussies}}', level: 'success'});
@@ -701,8 +701,8 @@ printObjectSummary();
 
 function printObjectSummary() {
     $.ajax({
-        type: "POST", 
-        url: "core/ajax/config.ajax.php", 
+        type: "POST",
+        url: "core/ajax/config.ajax.php",
         data: {
             action: "getKey",
             key: 'object:summary'
@@ -711,9 +711,9 @@ function printObjectSummary() {
         error: function (request, status, error) {
             handleAjaxError(request, status, error);
         },
-        success: function (data) { 
+        success: function (data) {
             if (data.state != 'ok') {
-                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                notify("Erreur", data.result, 'error');
                 return;
             }
             $('#table_objectSummary tbody').empty();
@@ -796,8 +796,8 @@ function saveObjectSummary() {
     }
     value = {'object:summary' : summary};
     $.ajax({
-        type: "POST", 
-        url: "core/ajax/config.ajax.php", 
+        type: "POST",
+        url: "core/ajax/config.ajax.php",
         data: {
             action: 'addKey',
             value: json_encode(value)
@@ -806,9 +806,9 @@ function saveObjectSummary() {
         error: function (request, status, error) {
             handleAjaxError(request, status, error);
         },
-        success: function (data) { 
+        success: function (data) {
             if (data.state != 'ok') {
-                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                notify("Erreur", data.result, 'error');
                 return;
             }
             printObjectSummary();

@@ -31,7 +31,7 @@
     nextdom.eqLogic.setOrder({
         eqLogics: eqLogics,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
             $( ".eqLogicSortable" ).sortable( "cancel" );
         }
     });
@@ -54,7 +54,7 @@
     nextdom.cmd.setOrder({
         cmds: cmds,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         }
     });
 }
@@ -170,7 +170,7 @@
             nextdom.eqLogic.removes({
                 eqLogics: eqLogics,
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success : function(){
                     loadPage('index.php?v=d&p=display');
@@ -191,7 +191,7 @@
         eqLogics: eqLogics,
         isVisible : $(this).attr('data-value'),
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success : function(){
            loadPage('index.php?v=d&p=display');
@@ -210,7 +210,7 @@
         eqLogics: eqLogics,
         isEnable : $(this).attr('data-value'),
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success : function(){
             loadPage('index.php?v=d&p=display');

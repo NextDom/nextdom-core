@@ -118,7 +118,7 @@ function getObjectHtml(_object_id){
     category : category_dashabord,
     summary : summary_dashabord,
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function (html) {
         if($.trim(html) == ''){

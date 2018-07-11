@@ -65,7 +65,7 @@ foreach (object::all() as $object) {
             id: _select.value(),
             orderByName : true,
             error: function(error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             },
             success: function(eqLogics) {
                 _select.closest('tr').find('.mod_insertEqLogicValue_eqLogic').empty();

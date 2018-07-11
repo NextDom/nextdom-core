@@ -173,7 +173,7 @@ $('body').on('click', '.li_eqLogic', function(event) {
         id: $(this).attr('data-eqLogic_id'),
         status: 1,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             $('body .eqLogicAttr').value('');
@@ -224,7 +224,7 @@ $('.eqLogicAction[data-action=copy]').on('click', function () {
                     id: $('.li_eqLogic.active').attr('data-eqLogic_id'),
                     name: result,
                     error: function (error) {
-                        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                        notify("Erreur", error.message, 'error');
                     },
                     success: function (data) {
                         modifyWithoutSave = false;
@@ -303,7 +303,7 @@ $('.eqLogicAction[data-action=save]').on('click', function () {
         id: $(this).attr('data-eqLogic_id'),
         eqLogics: eqLogics,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             console.log(data)
@@ -312,7 +312,7 @@ $('.eqLogicAction[data-action=save]').on('click', function () {
                 updateDisplayPlugin(function () {
                     $('body .li_eqLogic[data-eqLogic_id="' + data.id + '"]').click();
                 });
-            $('#div_alert').showAlert({message: '{{Sauvegarde effectuée avec succès}}', level: 'success'});
+            notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
         }
     });
     return false;
@@ -326,7 +326,7 @@ $('.eqLogicAction[data-action=remove]').on('click', function () {
                     type: isset($(this).attr('data-eqLogic_type')) ? $(this).attr('data-eqLogic_type') : eqType,
                     id: $('.li_eqLogic.active').attr('data-eqLogic_id'),
                     error: function (error) {
-                        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                        notify("Erreur", error.message, 'error');
                     },
                     success: function () {
                         var vars = getMyUrlVars();
@@ -347,7 +347,7 @@ $('.eqLogicAction[data-action=remove]').on('click', function () {
                                 $('.eqLogicThumbnailContainer').packery();
                             });
                         window.history.replaceState('', '', url);
-                        $('#div_alert').showAlert({message: '{{Suppression effectuée avec succès}}', level: 'success'});
+                        notify("Info", '{{Suppression effectuée avec succès}}', 'success');
                         modifyWithoutSave = false;
                     }
                 });
@@ -365,7 +365,7 @@ $('body').on('click', '.eqLogicAction[data-action=add]', function () {
                 type: eqType,
                 eqLogics: [{name: result}],
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (_data) {
                     var vars = getMyUrlVars();
