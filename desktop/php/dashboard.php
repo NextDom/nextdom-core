@@ -28,6 +28,11 @@ $child_object = object::buildTree($object);
     <a style="position: fixed; top:42px;left:0px;padding-left:-5px;" class='btn-floating btn-lg' id='bt_displayObject' title="{{Afficher/Masquer les objets}}"><i class='fa fa-chevron-circle-right fa-2x icon_nextdom_blue'></i></a>
     <a style="position: fixed; top:42px;right:-5px;" class='btn-floating btn-lg' id='bt_displayScenario' title="{{Afficher/Masquer les objets}}"><i class='fa fa-chevron-circle-left fa-2x icon_nextdom_blue'></i></a>
 
+    <?php if (init('category', 'all') == 'all') {?>
+        <i class="fa fa-pencil pull-right cursor" id="bt_editDashboardWidgetOrder" data-mode="0" style="bottom:5px; right:5px;position:fixed"></i>
+    <?php }
+    ?>
+
     <div class="bs-sidebar">
         <ul id="ul_object" class="nav nav-list bs-sidenav">
             <li id="bt_closeObject" style="text-align:right;"><i class="fa fa-times fa-2x icon_white"></i></li>
@@ -57,7 +62,7 @@ if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
 }
 ?>
 <a id="bt_closeScenario" style="text-align:left; display:inline;"><i class="fa fa-times fa-2x icon_white"></i></a>
-<a style="display:inline;text-align:center" ><i class="fa fa-history"></i> {{Scénarios}} </a>
+<a class="text-center" style="display:inline;text-align:center;color:white;margin-left:50px;font-size:2rem" ><i class="fa fa-history"></i> {{Scénarios}}</a>
 
 
 
@@ -89,10 +94,7 @@ if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
 ?>
 <div class="fixed-action-btn">
 </div>
-<?php if (init('category', 'all') == 'all') {?>
-    <i class="fa fa-pencil pull-right cursor" id="bt_editDashboardWidgetOrder" data-mode="0" style="margin-right : 10px;"></i>
-<?php }
-?>
+
 <div style="text-align : center;">
     <?php
     if (init('category', 'all') == 'all') {
