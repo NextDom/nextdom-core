@@ -104,7 +104,7 @@ nextdom.history.drawChart = function (_params) {
                 } else {
                     message += (init(data.result.dateEnd) != '') ? ' {{jusqu\'au}} ' + data.result.dateEnd:'';
                 }
-                $('#div_alert').showAlert({message: message, level: 'danger'});
+                notify("Erreur", message, 'error');
                 return;
             }
             if (isset(nextdom.history.chart[_params.el]) && isset(nextdom.history.chart[_params.el].cmd[_params.cmd_id])) {
@@ -485,10 +485,10 @@ nextdom.history.changePoint = function (_params) {
     var paramsRequired = ['cmd_id'];
     var paramsSpecifics = {
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify("{{Historique}}", error.message, 'error');
         },
         success: function (result) {
-            $('#div_alert').showAlert({message: '{{La valeur a été éditée avec succès}}', level: 'success'});
+            notify("{{Historique}}", '{{La valeur a été éditée avec succès}}', 'success');
             var serie = null;
             for (var i in nextdom.history.chart) {
                 serie = nextdom.history.chart[i].chart.get(_params.cmd_id);

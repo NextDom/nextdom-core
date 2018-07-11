@@ -124,10 +124,10 @@ $('#bt_cmdConfigureCmdHistoryApply').on('click',function(){
   nextdom.cmd.multiSave({
     cmds : cmds,
     error: function (error) {
-      $('#md_cmdConfigureHistory').showAlert({message: error.message, level: 'danger'});
+        notify("{{historique}}", error.message, 'error');
     },
     success: function (data) {
-     $('#md_cmdConfigureHistory').showAlert({message: '{{Modifications sauvegardées avec succès}}', level: 'success'});
+        notify("{{historique}}", '{{Modifications sauvegardées avec succès}}', 'success');
    }
  });
 });

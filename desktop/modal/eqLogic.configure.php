@@ -649,7 +649,7 @@ for ($i = 1; $i <= $getDisplayDasboardNbLine; $i++) {
                                                 eqLogics: [eqLogic],
                                                 type: eqLogic.eqType_name,
                                                 error: function (error) {
-                                                    $('#md_displayEqLogicConfigure').showAlert({message: error.message, level: 'danger'});
+                                                    notify("EqLogic", error.message, 'error');
                                                 },
                                                 success: function () {
                                                     cmds = [];
@@ -667,10 +667,10 @@ for ($i = 1; $i <= $getDisplayDasboardNbLine; $i++) {
                                                         version : 'dashboard',
                                                         cmds: cmds,
                                                         error: function (error) {
-                                                            $('#md_displayEqLogicConfigure').showAlert({message: error.message, level: 'danger'});
+                                                            notify("EqLogic", error.message, 'error');
                                                         },
                                                         success : function(){
-                                                            $('#md_displayEqLogicConfigure').showAlert({message: '{{Enregistrement réussi}}', level: 'success'});
+                                                            notify("EqLogic", '{{Enregistrement réussi}}', 'success');
                                                         }
                                                     });
                                                 }
@@ -685,10 +685,10 @@ for ($i = 1; $i <= $getDisplayDasboardNbLine; $i++) {
                                                         id : eqLogic.id,
                                                         type : eqLogic.eqType_name,
                                                         error: function (error) {
-                                                            $('#md_displayEqLogicConfigure').showAlert({message: error.message, level: 'danger'});
+                                                            notify("EqLogic", error.message, 'error');
                                                         },
                                                         success: function (data) {
-                                                            $('#md_displayEqLogicConfigure').showAlert({message: '{{Suppression réalisée avec succès}}', level: 'success'});
+                                                            notify("EqLogic", '{{Suppression réalisée avec succès}}', 'success');
                                                         }
                                                     });
                                                 }

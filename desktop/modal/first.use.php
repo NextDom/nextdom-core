@@ -51,10 +51,10 @@ if (!isConnect()) {
         nextdom.config.save({
             configuration: {'nextdom::firstUse': 0},
             error: function (error) {
-                $('#div_alertFirstUse').showAlert({message: error.message, level: 'danger'});
+                notify("Core", error.message, 'error');
             },
             success: function () {
-                $('#div_alertFirstUse').showAlert({message: '{{Sauvegarde réussie}}', level: 'success'});
+                notify("Core", '{{Sauvegarde réussie}}', 'success');
             }
         });
 });

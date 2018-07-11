@@ -36,7 +36,7 @@ sendVarToJS('renderGraph', config::byKey('graphlink::render', 'core', 3000));
         filter_type : '<?php echo init('filter_type', '') ?>',
         filter_id : '<?php echo init('filter_id', '') ?>',
         error: function(error) {
-            $('#div_alertGraphLink').showAlert({message: error.message, level: 'danger'});
+            notify("Core", error.message, 'error');
         },
         success : function(data){
             for(var i in data.node){

@@ -37,10 +37,10 @@ sendVarToJS('dataStore_link_id', init('link_id', -1));
                     nextdom.dataStore.remove({
                        id: tr.attr('data-dataStore_id'),
                        error: function (error) {
-                        $('#div_dataStoreManagementAlert').showAlert({message: error.message, level: 'danger'});
+                        notify("Core", error.message, 'error');
                     },
                     success: function (data) {
-                        $('#div_dataStoreManagementAlert').showAlert({message: '{{Dépôt de données supprimé}}', level: 'success'});
+                        notify("Info", '{{Dépôt de données supprimé}}', 'success');
                         refreshDataStoreMangementTable();
                     }
                 });
@@ -57,10 +57,10 @@ sendVarToJS('dataStore_link_id', init('link_id', -1));
               key: tr.find('.key').value(),
               link_id: dataStore_link_id,
               error: function (error) {
-                $('#div_dataStoreManagementAlert').showAlert({message: error.message, level: 'danger'});
+                notify("Core", error.message, 'error');
             },
             success: function (data) {
-                $('#div_dataStoreManagementAlert').showAlert({message: '{{Dépôt de données sauvegardé}}', level: 'success'});
+                notify("Info", '{{Dépôt de données sauvegardé}}', 'success');
                 refreshDataStoreMangementTable();
             }
         });
@@ -97,7 +97,7 @@ sendVarToJS('dataStore_link_id', init('link_id', -1));
              type: dataStore_type,
              usedBy : 1,
              error: function (error) {
-                $('#div_dataStoreManagementAlert').showAlert({message: error.message, level: 'danger'});
+                notify("Core", error.message, 'error');
             },
             success: function (data) {
              $('#table_dataStore tbody').empty();

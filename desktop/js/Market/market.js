@@ -18,7 +18,7 @@ $(document).ready(function () {
  */
 function initEvents() {
     if (github != '1') {
-        $('#div_alert').showAlert({message: 'Erreur', level: 'danger'});
+        notify("Erreur", 'Erreur', 'error');
     }
     $('#market-filter-src button').click(function () {
         var source = $(this).data('source');

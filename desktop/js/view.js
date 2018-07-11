@@ -25,7 +25,7 @@
     version: 'dview',
     useCache: true,
     error: function (error) {
-      notify("Erreur", error.message, 'error');
+      notify("{{Vue}}", error.message, 'error');
     },
     success: function (html) {
      try {
@@ -77,7 +77,7 @@
           editWidgetMode(0);
           $(this).css('color','black');
         }else{
-            notify("Info", "{{Vous êtes en mode édition vous pouvez déplacer les widgets, les redimensionner et changer l'ordre des commandes dans les widgets}}", 'info');
+            notify("{{Vue}}", "{{Vous êtes en mode édition vous pouvez déplacer les widgets, les redimensionner et changer l'ordre des commandes dans les widgets}}", 'info');
          $(this).attr('data-mode',1);
          editWidgetMode(1);
          $(this).css('color','rgb(46, 176, 75)');

@@ -51,8 +51,8 @@
   bootbox.confirm("{{Etes-vous sûr de vouloir supprimer tous les logs ?}}", function(result) {
    if (result) {
     $.ajax({
-      type: "POST", 
-      url: "core/ajax/log.ajax.php", 
+      type: "POST",
+      url: "core/ajax/log.ajax.php",
       data: {
        action: "removeAll",
      },
@@ -62,7 +62,7 @@
      },
      success: function(data) {
       if (data.state != 'ok') {
-       $('#div_alertError').showAlert({message: data.result, level: 'danger'});
+          notify("{{Log}}", data.result, 'error');
        return;
      }
      loadPage('index.php?v=d&p=log');

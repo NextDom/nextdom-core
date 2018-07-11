@@ -37,7 +37,7 @@ if (!isConnect('admin')) {
             $('#in_testExpression').atCaret('insert', result.human);
         });
     });
-    
+
     $('#bt_searchScenario').on('click', function() {
         var el = $(this);
         nextdom.scenario.getSelectModal({}, function(result) {
@@ -54,13 +54,13 @@ if (!isConnect('admin')) {
 
     $('#bt_executeExpressionOk').on('click',function(){
         if($('#in_testExpression').value() == ''){
-            $('#div_alertExpressionTest').showAlert({message: '{{L\'expression de test ne peut être vide}}', level: 'danger'});
+            notify("{{Expression}}", '{{L\'expression de test ne peut être vide}}', 'error');
             return;
         }
         nextdom.scenario.testExpression({
             expression: $('#in_testExpression').value(),
             error: function (error) {
-                $('#div_alertExpressionTest').showAlert({message: error.message, level: 'danger'});
+                notify("{{Expression}}", error.message, 'error');
             },
             success: function (data) {
                 $('#div_expressionTestResult').empty();

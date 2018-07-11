@@ -28,13 +28,13 @@ if (!isConnect('admin')) {
 
     $('#bt_executeInteractOk').on('click',function(){
         if($('#in_testInteractQuery').value() == ''){
-            $('#div_alertInteractTest').showAlert({message: '{{La demande ne peut être vide}}', level: 'danger'});
+            notify("{{Interaction}}", '{{La demande ne peut être vide}}', 'error');
             return;
         }
         nextdom.interact.execute({
             query: $('#in_testInteractQuery').value(),
             error: function (error) {
-                $('#div_alertInteractTest').showAlert({message: error.message, level: 'danger'});
+                notify("{{Interaction}}", error.message, 'error');
             },
             success: function (data) {
                 $('#div_interactTestResult').empty();
