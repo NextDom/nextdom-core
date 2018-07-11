@@ -29,10 +29,10 @@ sendVarToJs('scenarioLog_scenario_id', init('scenario_id'));
      nextdom.scenario.emptyLog({
         id: <?php echo init('scenario_id') ?>,
         error: function (error) {
-            $('#div_alertScenarioLog').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
-            $('#div_alertScenarioLog').showAlert({message: '{{Log vidé avec succès}}', level: 'success'});
+            notify("Info", '{{Log vidé avec succès}}', 'success');
             $('#pre_logScenarioDisplay').empty();
         }
     });

@@ -93,7 +93,7 @@ sendVarToJS('planHeader', utils::o2a($planHeader));
         dataType: 'json',
         done: function (e, data) {
             if (data.result.state != 'ok') {
-                $('#div_alertPlanHeaderConfigure').showAlert({message: data.result.result, level: 'danger'});
+                notify("{{Plan}}", data.result.result, 'error');
                 return;
             }
             loadPage('index.php?v=d&p=plan&plan_id='+planHeader_id);
@@ -104,10 +104,10 @@ sendVarToJS('planHeader', utils::o2a($planHeader));
       nextdom.plan.removeImageHeader({
         planHeader_id: planHeader_id,
         error: function (error) {
-            $('#div_alertPlanHeaderConfigure').showAlert({message: error.message, level: 'danger'});
+            notify("{{Plan}}", error.message, 'error');
         },
         success: function () {
-            $('#div_alertPlanHeaderConfigure').showAlert({message: '{{Image supprimée}}', level: 'success'});
+            notify("{{Plan}}", '{{Image supprimée}}', 'success');
         },
     });
   });
@@ -116,10 +116,10 @@ sendVarToJS('planHeader', utils::o2a($planHeader));
       nextdom.plan.saveHeader({
         planHeader: $('#div_planHeaderConfigure').getValues('.planHeaderAttr')[0],
         error: function (error) {
-            $('#div_alertPlanHeaderConfigure').showAlert({message: error.message, level: 'danger'});
+            notify("{{Plan}}", error.message, 'error');
         },
         success: function () {
-            $('#div_alertPlanHeaderConfigure').showAlert({message: '{{Design sauvegardé}}', level: 'success'});
+            notify("{{Plan}}", '{{Design sauvegardé}}', 'success');
             loadPage('index.php?v=d&p=plan&plan_id='+planHeader_id);
         },
     });

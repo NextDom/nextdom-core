@@ -104,7 +104,7 @@ foreach ($repos as $key => $value) {
          replaceFileInput: false,
          done: function (e, data) {
              if (data.result.state != 'ok') {
-                 $('#div_repoAddAlert').showAlert({message: data.result.result, level: 'danger'});
+                 notify("Update", data.result.result, 'error');
                  return;
              }
              $('.updateAttr[data-l1key=configuration][data-l2key='+$('#bt_uploadPlugin').attr('data-key')+']').value(data.result.result);
@@ -119,10 +119,10 @@ foreach ($repos as $key => $value) {
          nextdom.update.save({
              update : update,
              error: function (error) {
-                 $('#div_repoAddAlert').showAlert({message: error.message, level: 'danger'});
+                 notify("{{Scénario}}", error.message, 'error');
              },
              success: function () {
-                 $('#div_repoAddAlert').showAlert({message: '{{Enregistrement réussi}}', level: 'success'});
+                 notify("{{Scénario}}", '{{Enregistrement réussi}}', 'success');
              }
          });
      });

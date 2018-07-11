@@ -79,7 +79,7 @@ foreach (update::listRepo() as $key => $value) {
     function refreshScenarioTemplateList() {
         nextdom.scenario.getTemplate({
             error: function (error) {
-                $('#md_scenarioTemplate').showAlert({message: error.message, level: 'danger'});
+                notify("{{Scénario}}", error.message, 'error');
             },
             success: function (data) {
                 $('#ul_scenarioTemplateList').empty();
@@ -105,7 +105,7 @@ foreach (update::listRepo() as $key => $value) {
 
    $('.bt_scenarioTemplateShare').on('click', function () {
     if($('#ul_scenarioTemplateList li.active').attr('data-template') == undefined){
-        $('#md_scenarioTemplate').showAlert({message: 'Vous devez d\'abord selectionner un template', level: 'danger'});
+notify("{{Scénario}}", '{Vous devez d\'abord selectionner un template}}', 'error');
         return;
     }
     var logicalId = $('#ul_scenarioTemplateList li.active').attr('data-template').replace(".json", "");
@@ -118,28 +118,28 @@ foreach (update::listRepo() as $key => $value) {
         id: scenario_template_id,
         template: $('#in_newTemplateName').value()+'.json',
         error: function (error) {
-            $('#md_scenarioTemplate').showAlert({message: error.message, level: 'danger'});
+            notify("{{Scénario}}", error.message, 'error');
         },
         success: function (data) {
             refreshScenarioTemplateList();
-            $('#md_scenarioTemplate').showAlert({message: 'Création du template réussie', level: 'success'});
+            notify("Info", '{{Création du template réussie}}', 'success');
         }
     });
   });
 
    $('#bt_scenarioTemplateRemove').on('click', function () {
     if($('#ul_scenarioTemplateList li.active').attr('data-template') == undefined){
-        $('#md_scenarioTemplate').showAlert({message: 'Vous devez d\'abord sélectionner un template', level: 'danger'});
+        notify("Info", Vous devez d\'abord sélectionner un template', 'error');
         return;
     }
     nextdom.scenario.removeTemplate({
         template: $('#ul_scenarioTemplateList li.active').attr('data-template'),
         error: function (error) {
-            $('#md_scenarioTemplate').showAlert({message: error.message, level: 'danger'});
+            notify("{{Scénario}}", error.message, 'error');
         },
         success: function (data) {
             refreshScenarioTemplateList();
-            $('#md_scenarioTemplate').showAlert({message: 'Suppression du template réussie', level: 'success'});
+            notify("Info", '{{Suppression du template réussie}}', 'success');
         }
     });
 });
@@ -153,10 +153,10 @@ foreach (update::listRepo() as $key => $value) {
                 id: scenario_template_id,
                 convert: json_encode(convert),
                 error: function (error) {
-                    $('#md_scenarioTemplate').showAlert({message: error.message, level: 'danger'});
+                    notify("{{Scénario}}", error.message, 'error');
                 },
                 success: function (data) {
-                    $('#md_scenarioTemplate').showAlert({message: 'Template appliqué avec succès', level: 'success'});
+                    notify("Info", '{{Template appliqué avec succès}}', 'success');
                     $('.li_scenario[data-scenario_id='+scenario_template_id+']').click();
                 }
             });
@@ -173,7 +173,7 @@ foreach (update::listRepo() as $key => $value) {
         template: $(this).attr('data-template'),
         id: scenario_template_id,
         error: function (error) {
-            $('#md_scenarioTemplate').showAlert({message: error.message, level: 'danger'});
+            notify("{{Scénario}}", error.message, 'error');
         },
         success: function (data) {
             var html = '';
@@ -198,7 +198,7 @@ foreach (update::listRepo() as $key => $value) {
 
    $('#bt_scenarioTemplateDownload').on('click',function(){
     if($('#ul_scenarioTemplateList li.active').attr('data-template') == undefined){
-        $('#md_scenarioTemplate').showAlert({message: 'Vous devez d\'abord sélectionner un template', level: 'danger'});
+        notify("{{Scénario}}", 'Vous devez d\'abord sélectionner un template', 'error');
         return;
     }
     window.open('core/php/downloadFile.php?pathfile=core/config/scenario/' + $('#ul_scenarioTemplateList li.active').attr('data-template'), "_blank", null);
@@ -217,10 +217,10 @@ foreach (update::listRepo() as $key => $value) {
     replaceFileInput: false,
     done: function (e, data) {
         if (data.result.state != 'ok') {
-            $('#md_scenarioTemplate').showAlert({message: data.result.result, level: 'danger'});
+            notify("{{Scénario}}", data.result.result, 'error');
             return;
         }
-        $('#md_scenarioTemplate').showAlert({message: '{{Template ajouté avec succès}}', level: 'success'});
+        notify("{{Scénario}}", '{{Template ajouté avec succès}}', 'success');
         refreshScenarioTemplateList();
     }
 });
