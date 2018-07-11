@@ -1,4 +1,5 @@
 <?php
+
 /* This file is part of NextDom.
  *
  * NextDom is free software: you can redistribute it and/or modify
@@ -23,26 +24,31 @@ use Symfony\Component\Translation\Loader\YamlFileLoader;
 
 class Translate
 {
+
     /**
-     * @var array Données de traduction
+     * @var array Data of translation
      */
     protected static $translation;
+
     /**
      * @var bool Etat du chargement des traductions
      */
     protected static $translationLoaded = false;
+
     /**
      * @var string Langage par défaut
      */
-    protected static $language = null;
+    protected static $language          = null;
+
     /**
      * @var Translator Outil de traduction
      */
-    protected static $translator = null;
+    protected static $translator        = null;
+
     /**
      * @var array Informations de la configuration
      */
-    protected static $config = null;
+    protected static $config            = null;
 
     /**
      * Obtenir une des informations de la configuration liée à la traduction
@@ -51,7 +57,7 @@ class Translate
      * @param string $defaultValue
      * @return mixed|string
      */
-    public static function getConfig(string $informationKey, string $defaultValue = '') : string
+    public static function getConfig(string $informationKey, string $defaultValue = ''): string
     {
         $result = $defaultValue;
         // Lecture et mise en cache de la configuration
@@ -71,7 +77,7 @@ class Translate
      *
      * @return string Langue
      */
-    public static function getLanguage() : string
+    public static function getLanguage(): string
     {
         if (self::$language === null) {
             self::$language = self::getConfig('language', 'fr_FR');
@@ -84,9 +90,9 @@ class Translate
      * TODO: Même celles de tous les plugins. Les plugins sont chargés à l'ancienne
      * @return array Données chargées
      */
-    public static function loadTranslation() : array
+    public static function loadTranslation(): array
     {
-        $result = array();
+        $result   = array();
         $language = self::getLanguage();
         $filename = self::getPathTranslationFile($language);
         if (file_exists($filename)) {
@@ -105,11 +111,11 @@ class Translate
      *
      * @return mixed
      */
-    public static function getTranslation() : array
+    public static function getTranslation(): array
     {
         // Test si les traductions ont été mises en cache
         if (!self::$translationLoaded) {
-            self::$translation = array(
+            self::$translation       = array(
                 self::getLanguage() => self::loadTranslation(),
             );
             self::$translationLoaded = true;
@@ -125,22 +131,22 @@ class Translate
      * @param bool $_backslash TODO: Comprendre à quoi ça sert
      * @return string Texte traduit
      */
-    public static function exec(string $content, string $filename = '', bool $_backslash = false) : string
+    public static function exec(string $content, string $filename = '', bool $_backslash = false): string
     {
         if ($content == '') {// || $filename == '') {
             return '';
         }
-        $language = self::getLanguage();
+        $language           = self::getLanguage();
         $oldTranslationMode = false;
 
         $translate = self::getTranslation();
         // Ancienne version pour les plugins
         if (strpos($filename, '/plugins') === 0) {
-            $filename = substr($filename, strpos($filename, 'plugins'));
+            $filename           = substr($filename, strpos($filename, 'plugins'));
             $oldTranslationMode = true;
         }
 
-        $modify = false;
+        $modify  = false;
         $replace = array();
         preg_match_all("/{{(.*?)}}/s", $content, $matches);
         if ($oldTranslationMode) {
@@ -172,16 +178,16 @@ class Translate
             }
         } else {
             foreach ($matches[1] as $text) {
-                $replace['{{'.$text.'}}'] = self::$translator->trans($text);
+                $replace['{{' . $text . '}}'] = self::$translator->trans($text);
             }
         }
         // TODO: Refaire la génération de fichiers de traduction
         /*
-        if ($language == 'fr_FR' && $modify) {
-            static::$translation[self::getLanguage()] = $translate;
-            self::saveTranslation($language);
-        }
-        */
+          if ($language == 'fr_FR' && $modify) {
+          static::$translation[self::getLanguage()] = $translate;
+          self::saveTranslation($language);
+          }
+         */
         return str_replace(array_keys($replace), $replace, $content);
     }
 
@@ -194,7 +200,7 @@ class Translate
      *
      * @return string Phrase traduite
      */
-    public static function sentence(string $sentenceToTranslate, string $filename, bool $backslash = false) : string
+    public static function sentence(string $sentenceToTranslate, string $filename, bool $backslash = false): string
     {
         $result = '';
         // Ancienne méthode
@@ -217,7 +223,7 @@ class Translate
      *
      * @return string Chemin vers le fichier
      */
-    public static function getPathTranslationFile(string $language) : string
+    public static function getPathTranslationFile(string $language): string
     {
         //return __DIR__ . '/../i18n/' . $language . '.json';
         return NEXTDOM_ROOT . '/translations/' . $language . '.yml';
@@ -228,7 +234,7 @@ class Translate
      */
     public static function saveTranslation()
     {
-        $core = array();
+        $core    = array();
         $plugins = array();
         foreach (self::getTranslation(self::getLanguage()) as $page => $translation) {
             if (strpos($page, 'plugins/') === false) {
@@ -248,9 +254,9 @@ class Translate
                 $plugin = PluginManager::byId($plugin_name);
                 $plugin->saveTranslation(self::getLanguage(), $translation);
             } catch (\Exception $e) {
-
+                
             } catch (\Error $e) {
-
+                
             }
         }
     }
@@ -264,4 +270,5 @@ class Translate
     {
         self::$language = $language;
     }
+
 }
