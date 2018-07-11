@@ -262,7 +262,7 @@ $('.eqLogicAction[data-action=remove]').on('click', function () {
             }
         });
     } else {
-        $('#div_alert').showAlert({message: '{{Veuillez d\'abord sélectionner un}} ' + eqType, level: 'danger'});
+        notify("Erreur", '{{Veuillez d\'abord sélectionner un}} ' + eqType, 'error');
     }
 });
 
@@ -356,7 +356,7 @@ $('#div_pageContainer').on( 'click','.cmd .cmdAction[data-action=test]',function
         var id = $(this).closest('.cmd').attr('data-cmd_id');
         nextdom.cmd.test({id: id});
     } else {
-        $('#div_alert').showAlert({message: '{{Veuillez activer l\'équipement avant de tester une de ses commandes}}', level: 'warning'});
+        notify("Info", '{{Veuillez activer l\'équipement avant de tester une de ses commandes}}', 'warning');
     }
 
 });

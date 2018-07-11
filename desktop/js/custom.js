@@ -100,10 +100,9 @@
                 notify("Erreur", error.message, 'error');
             },
             success: function (data) {
-                $('#div_alert').showAlert({message: 'Sauvegarde réussie', level: 'success'});
+                notify("Info", 'Sauvegarde réussie', 'success');
             }
         });
       }
   });
 });
-

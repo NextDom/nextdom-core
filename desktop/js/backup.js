@@ -91,7 +91,7 @@
                 },
                 success: function () {
                     updateListBackup();
-                    $('#div_alert').showAlert({message: '{{Sauvegarde supprimée avec succès}}', level: 'success'});
+                    notify("Info", '{{Sauvegarde supprimée avec succès}}', 'success');
                 }
             });
         }
@@ -107,11 +107,11 @@
     replaceFileInput: false,
     done: function (e, data) {
         if (data.result.state != 'ok') {
-            $('#div_alert').showAlert({message: data.result.result, level: 'danger'});
+            notify("Erreur", data.result.result, 'error');
             return;
         }
         updateListBackup();
-        $('#div_alert').showAlert({message: '{{Fichier(s) ajouté(s) avec succès}}', level: 'success'});
+        notify("Info", '{{Fichier(s) ajouté(s) avec succès}}', 'success');
     }
 });
 

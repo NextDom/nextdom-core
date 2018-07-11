@@ -33,7 +33,7 @@
         },
         success: function () {
             printUsers();
-            $('#div_alert').showAlert({message: '{{Sauvegarde effectuée}}', level: 'success'});
+            notify("Info", '{{Sauvegarde effectuée}}', 'success');
             modifyWithoutSave = false;
             $('#md_newUser').modal('hide');
         }
@@ -53,7 +53,7 @@
         },
         success: function () {
             printUsers();
-            $('#div_alert').showAlert({message: '{{Sauvegarde effectuée}}', level: 'success'});
+            notify("Info", '{{Sauvegarde effectuée}}', 'success');
             modifyWithoutSave = false;
         }
     });
@@ -71,7 +71,7 @@
                 },
                 success: function () {
                     printUsers();
-                    $('#div_alert').showAlert({message: '{{L\'utilisateur a bien été supprimé}}', level: 'success'});
+                    notify("Info", '{{L\'utilisateur a bien été supprimé}}', 'success');
                 }
             });
         }
@@ -91,7 +91,7 @@
                 },
                 success: function () {
                     printUsers();
-                    $('#div_alert').showAlert({message: '{{Sauvegarde effectuée}}', level: 'success'});
+                    notify("Info", '{{Sauvegarde effectuée}}', 'success');
                     modifyWithoutSave = false;
                 }
             });
@@ -112,7 +112,7 @@
                 },
                 success: function () {
                     printUsers();
-                    $('#div_alert').showAlert({message: '{{Modification effectuée}}', level: 'success'});
+                    notify("Info", '{{Modification effectuée}}', 'success');
                     modifyWithoutSave = false;
                 }
             });
@@ -211,7 +211,7 @@ $('#table_user').delegate('.bt_manage_restrict_rights', 'click', function () {
 });
 
 $('.bt_deleteSession').on('click',function(){
-   var id = $(this).closest('tr').attr('data-id'); 
+   var id = $(this).closest('tr').attr('data-id');
    nextdom.user.deleteSession({
     id : id,
     error: function (error) {

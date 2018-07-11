@@ -18,7 +18,6 @@ $(document).ready(function () {
  */
 function initEvents() {
     if (github != '1') {
-        console.log('coucou');
         $('#div_alert').showAlert({message: 'Erreur', level: 'danger'});
     }
     $('#market-filter-src button').click(function () {
@@ -274,7 +273,7 @@ function iconDownload() {
             success: function (iconData, status) {
                 // Test si l'appel a échoué
                 if (iconData.state !== 'ok' || status !== 'success') {
-                    $('#div_alert').showAlert({message: iconData.result, level: 'danger'});
+                    notify("Erreur", iconData.result, 'error');
                 }
                 else {
                     var img = new Image();

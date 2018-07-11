@@ -128,8 +128,8 @@
              notify("Erreur", error.message, 'error');
          },
          success : function(data){
-             $('#div_alert').showAlert({message: '{{Fichier enregistré avec succès}}', level: 'success'});
-         }
+             notify("Info", '{{Fichier enregistré avec succès}}', 'success');
+        }
      });
  })
 
@@ -143,7 +143,7 @@
                      notify("Erreur", error.message, 'error');
                  },
                  success : function(data){
-                     $('#div_alert').showAlert({message: '{{Fichier enregistré avec succès}}', level: 'success'});
+                     notify("Info", '{{Fichier enregistré avec succès}}', 'success');
                      if (fileEditor != null) {
                          fileEditor.getDoc().setValue('');
                          setTimeout(function () {
@@ -178,7 +178,7 @@
                      notify("Erreur", error.message, 'error');
                  },
                  success : function(data){
-                     $('#div_alert').showAlert({message: '{{Fichier enregistré avec succès}}', level: 'success'});
+                     notify("Info", '{{Fichier enregistré avec succès}}', 'success');
                      printFileFolder(CURRENT_FOLDER);
                      displayFile(CURRENT_FOLDER+'/'+result);
                  }

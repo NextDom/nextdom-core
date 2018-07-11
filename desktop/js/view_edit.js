@@ -162,7 +162,7 @@
         notify("Erreur", error.message, 'error');
     },
     success: function() {
-        $('#div_alert').showAlert({message: '{{Modification enregistrée}}', level: 'success'});
+        notify("Info", '{{Modification enregistrée}}', 'success');
         modifyWithoutSave = false;
         if(isset(_viewResult) && _viewResult){
            window.location.href = 'index.php?v=d&p=view&view_id=' + $(".li_view.active").attr('data-view_id');

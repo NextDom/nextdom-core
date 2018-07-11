@@ -170,7 +170,7 @@ $('#bt_editDashboardWidgetOrder').on('click',function(){
         editWidgetMode(0);
         $(this).css('color','black');
     }else{
-       $('#div_alert').showAlert({message: "{{Vous êtes en mode édition vous pouvez déplacer les widgets, les redimensionner et changer l'ordre des commandes dans les widgets. N'oubliez pas de quitter le mode édition pour sauvegarder}}", level: 'info'});
+        notify("Info", "{{Vous êtes en mode édition vous pouvez déplacer les widgets, les redimensionner et changer l'ordre des commandes dans les widgets. N'oubliez pas de quitter le mode édition pour sauvegarder}}", 'info');
        $(this).attr('data-mode',1);
        editWidgetMode(1);
        $(this).css('color','rgb(46, 176, 75)');

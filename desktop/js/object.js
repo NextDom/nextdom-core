@@ -176,7 +176,7 @@ $("#bt_saveObject").on('click', function (event) {
             }
         });
     } else {
-        $('#div_alert').showAlert({message: '{{Veuillez d\'abord sélectionner un objet}}', level: 'danger'});
+        notify("Attention", '{{Veuillez d\'abord sélectionner un objet}}', 'warning');
     }
     return false;
 });
@@ -199,7 +199,7 @@ $("#bt_removeObject").on('click', function (event) {
             }
         });
     } else {
-        $('#div_alert').showAlert({message: '{{Veuillez d\'abord sélectionner un objet}}', level: 'danger'});
+        notify("Attention", '{{Veuillez d\'abord sélectionner un objet}}', 'warning');
     }
     return false;
 });
@@ -240,7 +240,7 @@ if (is_numeric(getUrlVars('id'))) {
     } else {
         $('#ul_object .li_object:first').click();
     }
-} 
+}
 
 $('#div_pageContainer').delegate('.objectAttr', 'change', function () {
     modifyWithoutSave = true;

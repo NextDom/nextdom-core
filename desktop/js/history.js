@@ -30,7 +30,7 @@
 });
 
  $('#bt_displayCalculHistory').on('click',function(){
-    addChart($('#in_calculHistory').value(), 1) 
+    addChart($('#in_calculHistory').value(), 1)
 });
 
  $('#bt_configureCalculHistory').on('click',function(){
@@ -117,7 +117,7 @@
                 notify("Erreur", data.result, 'error');
                 return;
             }
-            $('#div_alert').showAlert({message: '{{Historique supprimé avec succès}}', level: 'success'});
+            notify("Info", '{{Historique supprimé avec succès}}', 'success');
             li = $('li[data-cmd_id=' + _cmd_id + ']');
             if (li.hasClass('active')) {
                 li.find('.history').click();

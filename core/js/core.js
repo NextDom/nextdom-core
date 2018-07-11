@@ -28,13 +28,13 @@
     }
     var template = '';
     $.ajax({
-        type: "POST", 
+        type: "POST",
         url: path,
         async: false,
         error: function (request, status, error) {
             handleAjaxError(request, status, error);
         },
-        success: function (data) { 
+        success: function (data) {
             if (isset(_replace) && _replace != null) {
                 for (i in _replace) {
                     var reg = new RegExp(i, "g");
@@ -49,12 +49,11 @@
 
 function handleAjaxError(_request, _status, _error, _div_alert) {
     $.hideLoading();
-    var div_alert = init(_div_alert, $('#div_alert'));
     if (_request.status != '0') {
         if (init(_request.responseText, '') != '') {
-            div_alert.showAlert({message: _request.responseText, level: 'danger'});
+            notify("Erreur", _request.responseText, 'error');
         } else {
-            div_alert.showAlert({message: _request.status + ' : ' + _error, level: 'danger'});
+            notify("Erreur", _request.status + ' : ' + _error, 'error');
         }
     }
 }
@@ -130,5 +129,3 @@ function getDeviceType() {
     }
     return result;
 }
-
-

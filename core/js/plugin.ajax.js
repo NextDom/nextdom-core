@@ -354,7 +354,7 @@ $('.eqLogicAction[data-action=remove]').on('click', function () {
             }
         });
     } else {
-        $('#div_alert').showAlert({message: '{{Veuillez d\'abord sélectionner un}} ' + eqType, level: 'danger'});
+        notify("Erreur", '{{Veuillez d\'abord sélectionner un}} ' + eqType, 'error');
     }
 });
 
@@ -383,7 +383,7 @@ $('body').on('click', '.eqLogicAction[data-action=add]', function () {
                             $('body .li_eqLogic[data-eqLogic_id="' + _data.id + '"]').click();
                         });
                     url += '&id=' + _data.id;
-                    $('#div_alert').showAlert({message: '{{Création effectuée avec succès}}', level: 'success'});
+                    notify("Info", '{{Création effectuée avec succès}}', 'success');
                     window.history.replaceState('', '', url);
                     modifyWithoutSave = false;
                 }
@@ -430,7 +430,7 @@ $('body').on('.cmd .cmdAction[data-action=test]', 'click', function (event) {
         var id = $(this).closest('.cmd').attr('data-cmd_id');
         nextdom.cmd.test({id: id});
     } else {
-        $('#div_alert').showAlert({message: '{{Veuillez activer l\'équipement avant de tester une de ses commandes}}', level: 'warning'});
+        notify("Attention", '{{Veuillez activer l\'équipement avant de tester une de ses commandes}}', 'warning');
     }
 
 });

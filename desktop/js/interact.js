@@ -184,7 +184,7 @@ $("#bt_saveInteract").on('click', function () {
     },
     success: function (data) {
      $('.li_interact[data-interact_id=' + data.id + ']').click();
-     $('#div_alert').showAlert({message: '{{Sauvegarde réussie avec succès}}', level: 'success'});
+     notify("Info", '{{Sauvegarde réussie avec succès}}', 'success');
    }
  });
 });
@@ -199,7 +199,7 @@ $("#bt_regenerateInteract,#bt_regenerateInteract2").on('click', function () {
         notify("Erreur", error.message, 'error');
       },
       success: function (data) {
-       $('#div_alert').showAlert({message: '{{Toutes les interations ont été regénérées}}', level: 'success'});
+          notify("Info", '{{Toutes les interations ont été regénérées}}', 'success');
      }
    });
   }
@@ -239,7 +239,7 @@ $("#bt_removeInteract").on('click', function () {
       }
     });
   } else {
-    $('#div_alert').showAlert({message: '{{Veuillez d\'abord sélectionner un objet}}', level: 'danger'});
+      notify("Erreur", '{{Veuillez d\'abord sélectionner un objet}}', 'error');
   }
 });
 
@@ -402,4 +402,3 @@ function addAction(_action, _type, _name) {
     id : actionOption_id
   });
 }
-

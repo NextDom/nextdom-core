@@ -99,7 +99,7 @@ $('#bt_forceSyncHour').on('click', function () {
             notify("Erreur", error.message, 'error');
         },
         success: function (data) {
-            $('#div_alert').showAlert({message: '{{Commande réalisée avec succès}}', level: 'success'});
+            notify("Info", '{{Commande réalisée avec succès}}', 'success');
         }
     });
 });
@@ -226,10 +226,10 @@ $("#bt_testLdapConnection").on('click', function (event) {
                 },
                 success: function (data) {
                     if (data.state != 'ok') {
-                        $('#div_alert').showAlert({message: '{{Connexion échouée :}} ' + data.result, level: 'danger'});
+                        notify("Erreur", '{{Connexion échouée :}} ' + data.result, 'error');
                         return;
                     }
-                    $('#div_alert').showAlert({message: '{{Connexion réussie}}', level: 'success'});
+                    notify("Info", '{{Connexion réussie}}', 'success');
                 }
             });
         }
@@ -452,7 +452,7 @@ $('#bt_removeTimelineEvent').on('click',function(){
             notify("Erreur", error.message, 'error');
         },
         success: function (data) {
-            $('#div_alert').showAlert({message: '{{Evènement de la timeline supprimé avec succès}}', level: 'success'});
+            notify("Info", '{{Evènement de la timeline supprimé avec succès}}', 'success');
         }
     });
 });
@@ -497,8 +497,8 @@ function flushCache() {
  },
  success: function (data) {
     updateCacheStats();
-    $('#div_alert').showAlert({message: '{{Cache vidé}}', level: 'success'});
-}
+    notify("Info", '{{Cache vidé}}', 'success');
+    }
 });
 }
 
@@ -509,7 +509,7 @@ function cleanCache() {
      },
      success: function (data) {
         updateCacheStats();
-        $('#div_alert').showAlert({message: '{{Cache nettoyé}}', level: 'success'});
+        notify("Info", '{{Cache nettoyé}}', 'success');
     }
 });
 }
@@ -633,7 +633,7 @@ $('.testRepoConnection').on('click',function(){
                             notify("Erreur", error.message, 'error');
                         },
                         success: function (data) {
-                            $('#div_alert').showAlert({message: '{{Test réussi}}', level: 'success'});
+                            notify("Info", '{{Test réussi}}', 'success');
                         }
                     });
                 }
@@ -689,7 +689,7 @@ $('#div_pageContainer').undelegate('.objectSummary .objectSummaryAction[data-l1k
                 notify("Erreur", data.result, 'error');
                 return;
             }
-            $('#div_alert').showAlert({message: '{{Création des commandes virtuel réussies}}', level: 'success'});
+            notify("Info", '{{Création des commandes virtuel réussies}}', 'success');
         }
     });
 });
