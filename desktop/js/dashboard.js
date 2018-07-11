@@ -14,6 +14,8 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 document.getElementById("div_displayObject").onscroll = function() {scrollFunction()};
+
+
 function scrollFunction() {
     if (document.getElementById("div_displayObject").scrollTop < 20 ) {
         document.getElementById("bt_displayObject").style.display = "block";
@@ -44,24 +46,33 @@ $('#div_pageContainer').on( 'click','.eqLogic-widget .history', function () {
     $("#md_modal2").load('index.php?v=d&modal=cmd.history&id=' + $(this).data('cmd_id')).dialog('open');
 });
 
-$('#bt_closeScenario').on('click', function () {
-  console.log("toto");
-$('#div_displayScenario').animate({right: "-250px"});
-});
 
-$('#bt_displayScenario').on('click', function () {
+document.getElementById('bt_displayScenario').onclick =  function() {animateScenario()} ;
+
+function animateScenario(){
         $('#div_displayScenario').animate({right: "0px"});
         $('.div_displayEquipement').packery();
-});
+}
 
-$('#bt_closeObject').on('click', function () {
-$('#div_displayObjectList').animate({left: "-250px"});
-});
+document.getElementById('bt_closeScenario').onclick = function () {closeScenario()};
 
-$('#bt_displayObject').on('click', function () {
+function closeScenario(){
+$('#div_displayScenario').animate({right: "-250px"});
+}
+
+document.getElementById('bt_displayObject').onclick = function () {animateObject()};
+
+function animateObject(){
         $('#div_displayObjectList').animate({left: "0px"});
         $('.div_displayEquipement').packery();
-});
+}
+
+document.getElementById('bt_closeObject').onclick = function () {closeObject()};
+
+function closeObject(){
+$('#div_displayObjectList').animate({left: "-250px"});
+}
+
 
 function editWidgetMode(_mode,_save){
     if(!isset(_mode)){

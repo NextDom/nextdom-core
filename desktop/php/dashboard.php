@@ -20,13 +20,13 @@ $child_object = object::buildTree($object);
 <div class="row row-overflow">
     <?php
     if ($_SESSION['user']->getOptions('displayObjetByDefault') == 1) {
-        echo '<div class="sidenav-overlay" id="div_displayObjectList" style="display:block">';
+        echo '<div class="sidenav-overlay" id="div_displayObjectList" style="display:block;left:0">';
     } else {
         echo '<div class="sidenav-overlay" id="div_displayObjectList">';
     }
     ?>
-    <a style="position: fixed; top:40px;left:10px;" class='btn-floating btn-lg' id='bt_displayObject' title="{{Afficher/Masquer les objets}}"><i class='fa fa-chevron-circle-right fa-2x icon_nextdom_blue'></i></a>
-    <a style="position: fixed; top:40px;right:10px;" class='btn-floating btn-lg' id='bt_displayScenario' title="{{Afficher/Masquer les objets}}"><i class='fa fa-chevron-circle-left fa-2x icon_nextdom_blue'></i></a>
+    <a style="position: fixed; top:42px;left:0px;padding-left:-5px;" class='btn-floating btn-lg' id='bt_displayObject' title="{{Afficher/Masquer les objets}}"><i class='fa fa-chevron-circle-right fa-2x icon_nextdom_blue'></i></a>
+    <a style="position: fixed; top:42px;right:-5px;" class='btn-floating btn-lg' id='bt_displayScenario' title="{{Afficher/Masquer les objets}}"><i class='fa fa-chevron-circle-left fa-2x icon_nextdom_blue'></i></a>
 
     <div class="bs-sidebar">
         <ul id="ul_object" class="nav nav-list bs-sidenav">
@@ -49,7 +49,7 @@ $child_object = object::buildTree($object);
 
 <?php
 if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
-    echo '<div class="displayScenario-overlay " id="div_displayScenario" style="display:block">';
+    echo '<div class="displayScenario-overlay " id="div_displayScenario" style="display:block;right:0">';
 
 } else {
     echo '<div class="displayScenario-overlay" id="div_displayScenario">';
@@ -75,13 +75,13 @@ foreach (scenario::all() as $scenario) {
 <?php
 if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
     if ($_SESSION['user']->getOptions('displayObjetByDefault') == 1) {
-        echo '<div class="col-lg-8 col-md-7 col-sm-5" id="div_displayObject">';
+        echo '<div class="col-lg-8 col-lg-offset-2 col-md-7-offset-2 col-sm-5-offset-2" id="div_displayObject">';
     } else {
         echo '<div class="col-lg-10 col-md-9 col-sm-7" id="div_displayObject">';
     }
 } else {
     if ($_SESSION['user']->getOptions('displayObjetByDefault') == 1) {
-        echo '<div class="col-lg-10 col-md-9 col-sm-8" id="div_displayObject">';
+        echo '<div class="col-lg-10 col-lg-offset-2 col-md-9 col-sm-8" id="div_displayObject">';
     } else {
         echo '<div class="col-lg-12 col-md-12 col-sm-12" id="div_displayObject">';
     }
@@ -135,7 +135,7 @@ if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
         echo '<script>getObjectHtml(' . $child->getId() . ')</script>';
         echo '</div>';
         echo '</div>';
-        echo '</div>';  
+        echo '</div>';
     }
 
     ?>
