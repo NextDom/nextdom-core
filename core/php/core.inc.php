@@ -22,6 +22,15 @@ require_once NEXTDOM_ROOT.'/core/config/common.config.php';
 require_once NEXTDOM_ROOT.'/vendor/autoload.php';
 require_once NEXTDOM_ROOT.'/core/class/DB.class.php';
 require_once NEXTDOM_ROOT.'/core/class/config.class.php';
+////////////////////////////////////
+/////    developper mode   /////////
+////////////////////////////////////
+// Register global error and exception handlers
+if ((config::getDefaultConfiguration()['core']['developer::mode'] == '1') && (config::getDefaultConfiguration()['core']['developer::errorhandler'] == '1') && (config::getDefaultConfiguration()['core']['developer::exceptionhandler'] == '1')) {
+    Symfony\Component\Debug\ErrorHandler::register();
+    Symfony\Component\Debug\ExceptionHandler::register();
+}
+
 require_once NEXTDOM_ROOT.'/core/src/app/app.php';
 require_once NEXTDOM_ROOT.'/core/class/nextdom.class.php';
 require_once NEXTDOM_ROOT.'/core/class/jeedom.class.php';
@@ -76,6 +85,8 @@ function nextdomPluginAutoload($_classname)
     } catch (Error $e) {
     }
 }
+
+new toto();
 
 function nextdomOtherAutoload($classname)
 {
