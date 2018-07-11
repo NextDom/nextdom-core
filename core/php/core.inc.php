@@ -86,8 +86,6 @@ function nextdomPluginAutoload($_classname)
     }
 }
 
-new toto();
-
 function nextdomOtherAutoload($classname)
 {
     try {
