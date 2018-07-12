@@ -141,7 +141,7 @@ $panelMenu = PrepareView::getPanelMenu();
                                         <i class="fa fa-bars" style="margin-top:35px" data-toggle="collapse" data-target="#collapse_categorie"></i>
                                     </ul>
                                 </div>
-                                <div class="collapse navbar-collapse navbar-right col-lg-4 col-md-4">
+                                <div class="collapse navbar-collapse navbar-right col-lg-4 col-md-4" style="margin-right:25px">
                                     <ul class="nav navbar-nav navbar-right">
                                         <li>
                                             <a href="#" class="default-cursor">

@@ -25,8 +25,8 @@ $child_object = object::buildTree($object);
         echo '<div class="sidenav-overlay" id="div_displayObjectList">';
     }
     ?>
-    <a style="position: fixed; top:20px;left:0px;padding-left:-5px !important;"  class='btn-floating btn-lg'  title="{{Afficher/Masquer les objets}}"><i id='bt_displayObject' data-status="close" class='fa fa-angle-double-right fa-2x icon_nextdom_blue'></i></a>
-    <a style="position: fixed; top:20px;right:0px;padding-right:-5px !important;" class='btn-floating btn-lg'  title="{{Afficher/Masquer les objets}}"><i id='bt_displayScenario' data-status="close" class='fa fa-angle-double-left fa-2x icon_nextdom_blue'></i></a>
+    <a  class='btn-floating btn-lg'  title="{{Afficher/Masquer les objets}}"><i id='bt_displayObject' data-status="close" class='fa fa-angle-double-right fa-2x icon_nextdom_blue'></i></a>
+    <a  class='btn-floating btn-lg'  title="{{Afficher/Masquer les objets}}"><i id='bt_displayScenario' data-status="close" class='fa fa-angle-double-left fa-2x icon_nextdom_blue'></i></a>
 
     <?php if (init('category', 'all') == 'all') {?>
         <i class="fa fa-pencil pull-right cursor" id="bt_editDashboardWidgetOrder" data-mode="0" style="bottom:5px; right:5px;position:fixed"></i>
