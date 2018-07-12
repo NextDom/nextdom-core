@@ -7543,7 +7543,7 @@ input[type=checkbox] {
     position: fixed;
     top: 20px;
     left: 0px;
-    margin-left: -10px;
+    margin-left: 10px;
 }
 
 #bt_displayScenario {

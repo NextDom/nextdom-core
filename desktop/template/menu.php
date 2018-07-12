@@ -205,12 +205,6 @@ $panelMenu = PrepareView::getPanelMenu();
                                             </li>
                                         <?php }
                                         ?>
-
-                                        <li>
-                                            <a href="#" class="default-cursor">
-                                                <span id="horloge"><?php echo date('H:i:s'); ?></span>
-                                            </a>
-                                        </li>
                                     </ul>
                                 </div>
                             </nav>
