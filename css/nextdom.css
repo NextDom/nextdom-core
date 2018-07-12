@@ -7479,7 +7479,7 @@ input[type=checkbox] {
     position: absolute;
     z-index: 9999;
     left: -250px;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.7);
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
@@ -7533,6 +7533,28 @@ input[type=checkbox] {
     -moz-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
     -ms-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
     animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
+}
+
+#div_mainContainer {
+    margin-top: 50px;
+}
+
+#bt_displayObject {
+    position: fixed;
+    top: 20px;
+    left: 0px;
+    margin-left: -10px;
+}
+
+#bt_displayScenario {
+    position: fixed;
+    top: 20px;
+    right: 0px;
+    margin-right: -10px;
+}
+
+.rotated-image {
+    transform: rotate(180deg);
 }
 
 .green {

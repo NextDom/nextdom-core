@@ -25,8 +25,8 @@ $child_object = object::buildTree($object);
         echo '<div class="sidenav-overlay" id="div_displayObjectList">';
     }
     ?>
-    <a style="position: fixed; top:42px;left:0px;padding-left:-5px;" class='btn-floating btn-lg' id='bt_displayObject' title="{{Afficher/Masquer les objets}}"><i class='fa fa-chevron-circle-right fa-2x icon_nextdom_blue'></i></a>
-    <a style="position: fixed; top:42px;right:-5px;" class='btn-floating btn-lg' id='bt_displayScenario' title="{{Afficher/Masquer les objets}}"><i class='fa fa-chevron-circle-left fa-2x icon_nextdom_blue'></i></a>
+    <a style="position: fixed; top:20px;left:0px;padding-left:-5px !important;"  class='btn-floating btn-lg'  title="{{Afficher/Masquer les objets}}"><i id='bt_displayObject' data-status="close" class='fa fa-angle-double-right fa-2x icon_nextdom_blue'></i></a>
+    <a style="position: fixed; top:20px;right:0px;padding-right:-5px !important;" class='btn-floating btn-lg'  title="{{Afficher/Masquer les objets}}"><i id='bt_displayScenario' data-status="close" class='fa fa-angle-double-left fa-2x icon_nextdom_blue'></i></a>
 
     <?php if (init('category', 'all') == 'all') {?>
         <i class="fa fa-pencil pull-right cursor" id="bt_editDashboardWidgetOrder" data-mode="0" style="bottom:5px; right:5px;position:fixed"></i>
@@ -35,7 +35,6 @@ $child_object = object::buildTree($object);
 
     <div class="bs-sidebar">
         <ul id="ul_object" class="nav nav-list bs-sidenav">
-            <li id="bt_closeObject" style="text-align:right;"><i class="fa fa-times fa-2x icon_white"></i></li>
             <li class="filter" style="margin-bottom: 5px;"><input class="filter form-control input-sm" placeholder="{{Rechercher}}" style="width: 100%"/></li>
             <?php
             $allObject = object::buildTree(null, true);
@@ -61,7 +60,6 @@ if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
 
 }
 ?>
-<a id="bt_closeScenario" style="text-align:left; display:inline;"><i class="fa fa-times fa-2x icon_white"></i></a>
 <a class="text-center" style="display:inline;text-align:center;color:white;margin-left:50px;font-size:2rem" ><i class="fa fa-history"></i> {{Scénarios}}</a>
 
 
@@ -95,7 +93,7 @@ if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
 <div class="fixed-action-btn">
 </div>
 
-<div style="text-align : center;">
+<div id="collapse_categorie" style="text-align : center;" class="collapse">
     <?php
     if (init('category', 'all') == 'all') {
         echo '<a href="index.php?v=d&p=dashboard&object_id=' . init('object_id') . '&category=all&summary=' . init('summary') . '" class="btn btn-primary btn-sm categoryAction" style="margin-bottom: 5px;margin-right: 3px;"><i class="fa fa-asterisk"></i> {{Tous}}</a>';

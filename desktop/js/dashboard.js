@@ -13,23 +13,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
-document.getElementById("div_displayObject").onscroll = function() {scrollFunction()};
-
-
-function scrollFunction() {
-    if (document.getElementById("div_displayObject").scrollTop < 20 ) {
-        document.getElementById("bt_displayObject").style.display = "block";
-        document.getElementById("bt_displayScenario").style.display = "block";
-    } else {
-        document.getElementById("bt_displayObject").style.display = "none";
-        document.getElementById("bt_displayScenario").style.display = "none";
-      setTimeout('scrollshow()', 3000); // after 5 secs
-    }
-}
-function scrollshow() {
-          document.getElementById("bt_displayObject").style.display = "block";
-          document.getElementById("bt_displayScenario").style.display = "block";
-}
 
  var category_dashabord = getUrlVars('category');
  if(category_dashabord == false){
@@ -47,31 +30,36 @@ $('#div_pageContainer').on( 'click','.eqLogic-widget .history', function () {
 });
 
 
-document.getElementById('bt_displayScenario').onclick =  function() {animateScenario()} ;
-
-function animateScenario(){
+$('#bt_displayScenario').click(function(){
+  var msglist = document.getElementById('bt_displayScenario');
+  	if (msglist.getAttribute('data-status') == "close"){
+  		msglist.setAttribute('data-status', "open");
         $('#div_displayScenario').animate({right: "0px"});
         $('.div_displayEquipement').packery();
-}
+ 		msglist.setAttribute("class", "rotated-image fa fa-angle-double-left fa-2x icon_nextdom_blue");
+    } else {
+       	msglist.setAttribute('data-status', "close");
+        $('#div_displayScenario').animate({right: "-250px"});
+        $('.div_displayEquipement').packery();
+ 		msglist.setAttribute("class", "fa fa-angle-double-left fa-2x icon_nextdom_blue");
+    }
+});
 
-document.getElementById('bt_closeScenario').onclick = function () {closeScenario()};
 
-function closeScenario(){
-$('#div_displayScenario').animate({right: "-250px"});
-}
-
-document.getElementById('bt_displayObject').onclick = function () {animateObject()};
-
-function animateObject(){
+$('#bt_displayObject').click(function(){
+  var object = document.getElementById('bt_displayObject');
+  	if (object.getAttribute('data-status') == "close"){
+  		object.setAttribute('data-status', "open");
         $('#div_displayObjectList').animate({left: "0px"});
         $('.div_displayEquipement').packery();
-}
-
-document.getElementById('bt_closeObject').onclick = function () {closeObject()};
-
-function closeObject(){
-$('#div_displayObjectList').animate({left: "-250px"});
-}
+ 		object.setAttribute("class", "rotated-image fa fa-angle-double-right fa-2x icon_nextdom_blue");
+    } else {
+       	object.setAttribute('data-status', "close");
+        $('#div_displayObjectList').animate({left: "-250px"});
+        $('.div_displayEquipement').packery();
+ 		object.setAttribute("class", "fa fa-angle-double-right fa-2x icon_nextdom_blue");
+    }
+});
 
 
 function editWidgetMode(_mode,_save){
