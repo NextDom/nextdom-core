@@ -1,9 +1,7 @@
 #!/bin/sh
 
-pip install csscompressor
 pip install jsmin
 
-mkdir -p css
 mkdir -p js
 
 sed -i 's/url[(]"images/url("\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images/g' css/nextdom.css
