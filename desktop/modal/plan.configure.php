@@ -426,11 +426,11 @@ foreach (planHeader::all() as $plan) {
   });
   $('#bt_uploadImagePlan').fileupload({
     replaceFileInput: false,
-    url: 'core/ajax/plan.ajax.php?action=uploadImagePlan&id=' + id+'&nextdom_token='+NEXTDOM_AJAX_TOKEN,
+    url: 'Plan/ajax/plan.ajax.php?action=uploadImagePlan&id=' + id+'&nextdom_token='+NEXTDOM_AJAX_TOKEN,
     dataType: 'json',
     done: function (e, data) {
       if (data.result.state != 'ok') {
-        $('#div_alertPlanConfigure').showAlert({message: data.result.result, level: 'danger'});
+          notify("{{Plan}}", data.result.result, 'error');
         return;
       }
     }
@@ -470,7 +470,7 @@ foreach (planHeader::all() as $plan) {
   if (isset(id) && id != '') {
    $.ajax({
     type: "POST",
-    url: "core/ajax/plan.ajax.php",
+    url: "Plan/ajax/plan.ajax.php",
     data: {
       action: "get",
       id: id
@@ -481,7 +481,7 @@ foreach (planHeader::all() as $plan) {
     },
     success: function (data) {
       if (data.state != 'ok') {
-        $('#div_alertPlanConfigure').showAlert({message: data.result, level: 'danger'});
+          notify("{{Plan}}", data.result, 'error');
         return;
       }
       $('.link_type:not(.link_'+data.result.link_type+')').remove()
@@ -536,10 +536,10 @@ foreach (planHeader::all() as $plan) {
   nextdom.plan.save({
     plans: plans,
     error: function (error) {
-      $('#div_alertPlanConfigure').showAlert({message: error.message, level: 'danger'});
+        notify("{{Plan}}", error.message, 'error');
     },
     success: function () {
-      $('#div_alertPlanConfigure').showAlert({message: 'Design sauvegardé', level: 'success'});
+        notify("{{Plan}}", 'Design sauvegardé', 'success');
       displayPlan();
       $('#fd_planConfigure').closest("div.ui-dialog-content").dialog("close");
     },

@@ -87,7 +87,7 @@ if (init('step', 0) == 1) {
                     nextdom.cmd.save({
                         cmd: {id: <?php echo init('id'); ?>, display: {graphType: $(this).value()}},
                         error: function (error) {
-                            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                            notify("Erreur", error.message, 'error');
                         },
                         success: function () {
                             var modal = false;
@@ -107,7 +107,7 @@ if (init('step', 0) == 1) {
                     nextdom.cmd.save({
                         cmd: {id: <?php echo init('id'); ?>, display: {groupingType: $(this).value()}},
                         error: function (error) {
-                            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                            notify("Erreur", error.message, 'error');
                         },
                         success: function () {
                          var modal = false;
@@ -127,7 +127,7 @@ if (init('step', 0) == 1) {
                     nextdom.cmd.save({
                         cmd: {id: <?php echo init('id'); ?>, display: {graphDerive: $(this).value()}},
                         error: function (error) {
-                            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                            notify("Erreur", error.message, 'error');
                         },
                         success: function () {
                             var modal = false;
@@ -147,7 +147,7 @@ if (init('step', 0) == 1) {
                     nextdom.cmd.save({
                         cmd: {id: <?php echo init('id'); ?>, display: {graphStep: $(this).value()}},
                         error: function (error) {
-                            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                            notify("Erreur", error.message, 'error');
                         },
                         success: function () {
                             var modal = false;

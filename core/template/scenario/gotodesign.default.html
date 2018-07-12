@@ -5,7 +5,7 @@
 <script>
     nextdom.plan.allHeader({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (plans) {
             var options = '';

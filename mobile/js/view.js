@@ -1,7 +1,7 @@
 function initView(_view_id) {
     nextdom.view.all({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (views) {
             var li = ' <ul data-role="listview">';
@@ -23,7 +23,7 @@ function initView(_view_id) {
             id: _view_id,
             version: 'mview',
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             },
             success: function (html) {
                 displayView(html);

@@ -118,7 +118,7 @@ function initApplication(_reinit) {
                     page('connection', 'Connexion');
                     return;
                 } else {
-                    $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                    notify("Erreur", data.result, 'error');
                 }
                 return;
             }

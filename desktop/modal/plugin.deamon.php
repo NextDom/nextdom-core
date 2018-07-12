@@ -176,7 +176,7 @@ sendVarToJs('refresh_deamon_info', $refresh);
                             id : plugin_id,
                             forceRestart: 1,
                             error: function (error) {
-                                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                                notify("Erreur", error.message, 'error');
                                 refreshDeamonInfo();
                                 timeout_refreshDeamonInfo = setTimeout(refreshDeamonInfo, 5000);
                             },
@@ -194,7 +194,7 @@ sendVarToJs('refresh_deamon_info', $refresh);
                 nextdom.plugin.deamonStop({
                     id : plugin_id,
                     error: function (error) {
-                        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                        notify("Erreur", error.message, 'error');
                         refreshDeamonInfo();
                         timeout_refreshDeamonInfo = setTimeout(refreshDeamonInfo, 5000);
                     },
@@ -212,7 +212,7 @@ sendVarToJs('refresh_deamon_info', $refresh);
                     id : plugin_id,
                     mode : mode,
                     error: function (error) {
-                        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                        notify("Erreur", error.message, 'error');
                         refreshDeamonInfo();
                         timeout_refreshDeamonInfo = setTimeout(refreshDeamonInfo, 5000);
                     },

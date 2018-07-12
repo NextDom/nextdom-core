@@ -16,11 +16,11 @@
  */
 
  if (getUrlVars('saveSuccessFull') == 1) {
-    $('#div_alert').showAlert({message: '{{Sauvegarde effectuée avec succès}}', level: 'success'});
+    notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
 }
 
 if (getUrlVars('removeSuccessFull') == 1) {
-    $('#div_alert').showAlert({message: '{{Suppression effectuée avec succès}}', level: 'success'});
+    notify("Info", '{{Suppression effectuée avec succès}}', 'success');
 }
 
 if((!isset(userProfils.doNotAutoHideMenu) || userProfils.doNotAutoHideMenu != 1) && !jQuery.support.touch){
@@ -86,7 +86,7 @@ function loadObjectConfiguration(_id){
         id: _id,
         cache: false,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             $('.objectAttr').value('');
@@ -125,12 +125,12 @@ $("#bt_addObject,#bt_addObject2").on('click', function (event) {
             nextdom.object.save({
                 object: {name: result, isVisible: 1},
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
                     modifyWithoutSave = false;
                     loadPage('index.php?v=d&p=object&id=' + data.id + '&saveSuccessFull=1');
-                    $('#div_alert').showAlert({message: '{{Sauvegarde effectuée avec succès}}', level: 'success'});
+                    notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
                 }
             });
         }
@@ -167,16 +167,16 @@ $("#bt_saveObject").on('click', function (event) {
         nextdom.object.save({
             object: object,
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             },
             success: function (data) {
                 modifyWithoutSave = false;
                 loadObjectConfiguration(data.id);
-                $('#div_alert').showAlert({message: '{{Sauvegarde effectuée avec succès}}', level: 'success'});
+                notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
             }
         });
     } else {
-        $('#div_alert').showAlert({message: '{{Veuillez d\'abord sélectionner un objet}}', level: 'danger'});
+        notify("Attention", '{{Veuillez d\'abord sélectionner un objet}}', 'warning');
     }
     return false;
 });
@@ -189,7 +189,7 @@ $("#bt_removeObject").on('click', function (event) {
                 nextdom.object.remove({
                     id: $('.li_object.active').attr('data-object_id'),
                     error: function (error) {
-                        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                        notify("Erreur", error.message, 'error');
                     },
                     success: function () {
                         modifyWithoutSave = false;
@@ -199,7 +199,7 @@ $("#bt_removeObject").on('click', function (event) {
             }
         });
     } else {
-        $('#div_alert').showAlert({message: '{{Veuillez d\'abord sélectionner un objet}}', level: 'danger'});
+        notify("Attention", '{{Veuillez d\'abord sélectionner un objet}}', 'warning');
     }
     return false;
 });
@@ -220,7 +220,7 @@ $("#ul_object").sortable({
         nextdom.object.setOrder({
             objects: objects,
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             }
         });
     }
@@ -240,7 +240,7 @@ if (is_numeric(getUrlVars('id'))) {
     } else {
         $('#ul_object .li_object:first').click();
     }
-} 
+}
 
 $('#div_pageContainer').delegate('.objectAttr', 'change', function () {
     modifyWithoutSave = true;

@@ -9,7 +9,7 @@ function initHome() {
 
     nextdom.object.all({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (objects) {
             var li = '';
@@ -32,7 +32,7 @@ function initHome() {
 
     nextdom.view.all({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (views) {
             var li = '';
@@ -49,7 +49,7 @@ function initHome() {
 
     nextdom.plan.allHeader({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (planHeader) {
             var li = '';
@@ -97,7 +97,7 @@ $('#bt_logout').off().on('click', function () {
         },
         success: function (data) { 
             if (data.state != 'ok') {
-                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                notify("Erreur", data.result, 'error');
                 return;
             }
             initApplication();

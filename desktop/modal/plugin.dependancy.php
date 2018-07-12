@@ -103,7 +103,7 @@ switch ($dependancy_info['state']) {
         nextdom.plugin.dependancyInstall({
             id : plugin_id,
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             },
             success: function (data) {
                 $("#div_plugin_dependancy").load('index.php?v=d&modal=plugin.dependancy&plugin_id='+plugin_id);

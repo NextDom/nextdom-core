@@ -18,7 +18,7 @@
  var url = document.location.toString();
  if (url.match('#')) {
     $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-} 
+}
 $('.nav-tabs a').on('shown.bs.tab', function (e) {
     window.location.hash = e.target.hash;
 })
@@ -38,19 +38,19 @@ $("#bt_saveProfils").on('click', function (event) {
     $.hideAlert();
     var profil = $('#div_pageContainer').getValues('.userAttr')[0];
     if (profil.password != $('#in_passwordCheck').value()) {
-        $('#div_alert').showAlert({message: "{{Les deux mots de passe ne sont pas identiques}}", level: 'danger'});
+        notify("Erreur", "{{Les deux mots de passe ne sont pas identiques}}", 'error');
         return;
     }
     nextdom.user.saveProfils({
         profils: profil,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
-            $('#div_alert').showAlert({message: "{{Sauvegarde effectuée}}", level: 'success'});
+            notify("Info", "{{Sauvegarde effectuée}}", 'success');
             nextdom.user.get({
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
                     $('#div_pageContainer').setValues(data, '.userAttr');
@@ -68,13 +68,13 @@ $('#bt_genUserKeyAPI').on('click',function(){
     nextdom.user.saveProfils({
         profils: profil,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
-            $('#div_alert').showAlert({message: "{{Opération effectuée}}", level: 'success'});
+            notify("Info", "{{Opération effectuée}}", 'success');
             nextdom.user.get({
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
                     $('#div_pageContainer').setValues(data, '.userAttr');
@@ -91,12 +91,12 @@ $('.userAttr[data-l1key=options][data-l2key=bootstrap_theme]').on('change', func
     }else{
         $('#div_imgThemeDesktop').html('<img src="core/themes/' + $(this).value() + '/desktop/preview.png" height="300" class="img-thumbnail" />');
     }
-    
+
 });
 
 nextdom.user.get({
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function (data) {
         $('#div_pageContainer').setValues(data, '.userAttr');
@@ -120,7 +120,7 @@ $('.bt_removeRegisterDevice').on('click',function(){
     nextdom.user.removeRegisterDevice({
         key : key,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             modifyWithoutSave = false;
@@ -133,7 +133,7 @@ $('#bt_removeAllRegisterDevice').on('click',function(){
     nextdom.user.removeRegisterDevice({
         key : '',
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             modifyWithoutSave = false;
@@ -144,11 +144,11 @@ $('#bt_removeAllRegisterDevice').on('click',function(){
 
 
 $('.bt_deleteSession').on('click',function(){
-   var id = $(this).closest('tr').attr('data-id'); 
+   var id = $(this).closest('tr').attr('data-id');
    nextdom.user.deleteSession({
     id : id,
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function (data) {
         window.location.reload();

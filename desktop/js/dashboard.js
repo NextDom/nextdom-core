@@ -118,7 +118,7 @@ function getObjectHtml(_object_id){
     category : category_dashabord,
     summary : summary_dashabord,
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function (html) {
         if($.trim(html) == ''){
@@ -170,7 +170,7 @@ $('#bt_editDashboardWidgetOrder').on('click',function(){
         editWidgetMode(0);
         $(this).css('color','black');
     }else{
-       $('#div_alert').showAlert({message: "{{Vous êtes en mode édition vous pouvez déplacer les widgets, les redimensionner et changer l'ordre des commandes dans les widgets. N'oubliez pas de quitter le mode édition pour sauvegarder}}", level: 'info'});
+        notify("Info", "{{Vous êtes en mode édition vous pouvez déplacer les widgets, les redimensionner et changer l'ordre des commandes dans les widgets. N'oubliez pas de quitter le mode édition pour sauvegarder}}", 'info');
        $(this).attr('data-mode',1);
        editWidgetMode(1);
        $(this).css('color','rgb(46, 176, 75)');

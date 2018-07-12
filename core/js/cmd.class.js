@@ -47,10 +47,7 @@ nextdom.cmd.execute = function(_params) {
                      }else{
                         nextdom.cmd.refreshValue({id:_params.id});
                         if ('function' != typeof(_params.error)) {
-                            $('#div_alert').showAlert({
-                                message: data.result,
-                                level: 'danger'
-                            });
+                            notify("Erreur", data.result, 'error');
                         }
                         if (notify) {
                             eqLogic.find('.statusCmd').empty().append('<i class="fa fa-times"></i>');
@@ -68,10 +65,7 @@ nextdom.cmd.execute = function(_params) {
                  }else{
                     nextdom.cmd.refreshValue({id:_params.id});
                     if ('function' != typeof(_params.error)) {
-                        $('#div_alert').showAlert({
-                            message: data.result,
-                            level: 'danger'
-                        });
+                        notify("Erreur", data.result, 'error');
                     }
                     if (notify) {
                         eqLogic.find('.statusCmd').empty().append('<i class="fa fa-times"></i>');
@@ -93,10 +87,7 @@ nextdom.cmd.execute = function(_params) {
                 }else{
                     nextdom.cmd.refreshValue({id:_params.id});
                     if ('function' != typeof(_params.error)) {
-                        $('#div_alert').showAlert({
-                            message: data.result,
-                            level: 'danger'
-                        });
+                        notify("Erreur", data.result, 'error');
                     }
                     if (notify) {
                         eqLogic.find('.statusCmd').empty().append('<i class="fa fa-times"></i>');
@@ -114,10 +105,7 @@ nextdom.cmd.execute = function(_params) {
                  }else{
                     nextdom.cmd.refreshValue({id:_params.id});
                     if ('function' != typeof(_params.error)) {
-                        $('#div_alert').showAlert({
-                            message: data.result,
-                            level: 'danger'
-                        });
+                        notify("Erreur", data.result, 'error');
                     }
                     if (notify) {
                         eqLogic.find('.statusCmd').empty().append('<i class="fa fa-times"></i>');
@@ -132,10 +120,7 @@ nextdom.cmd.execute = function(_params) {
             }
         }else{
             if ('function' != typeof(_params.error)) {
-                $('#div_alert').showAlert({
-                    message: data.result,
-                    level: 'danger'
-                });
+                notify("Erreur", data.result, 'error');
             }
             if (notify) {
                 eqLogic.find('.statusCmd').empty().append('<i class="fa fa-times"></i>');
@@ -205,16 +190,10 @@ nextdom.cmd.test = function(_params) {
                         id: _params.id,
                         cache: 0,
                         error: function(error) {
-                            $('#div_alert').showAlert({
-                                message: error.message,
-                                level: 'danger'
-                            });
+                            notify("Erreur", data.result, 'error');
                         },
                         success: function() {
-                            $('#div_alert').showAlert({
-                                message: '{{Action exécutée avec succès}}',
-                                level: 'success'
-                            });
+                            notify("Info", '{{Action exécutée avec succès}}', 'success');
                         }
                     });
                     break;
@@ -230,16 +209,10 @@ nextdom.cmd.test = function(_params) {
                         },
                         cache: 0,
                         error: function(error) {
-                            $('#div_alert').showAlert({
-                                message: error.message,
-                                level: 'danger'
-                            });
+                            notify("Erreur", data.result, 'error');
                         },
                         success: function() {
-                            $('#div_alert').showAlert({
-                                message: '{{Action exécutée avec succès}}',
-                                level: 'success'
-                            });
+                            notify("Info", '{{Action exécutée avec succès}}', 'success');
                         }
                     });
                     break;
@@ -251,16 +224,10 @@ nextdom.cmd.test = function(_params) {
                         },
                         cache: 0,
                         error: function(error) {
-                            $('#div_alert').showAlert({
-                                message: error.message,
-                                level: 'danger'
-                            });
+                            notify("Erreur", data.result, 'error');
                         },
                         success: function() {
-                            $('#div_alert').showAlert({
-                                message: '{{Action exécutée avec succès}}',
-                                level: 'success'
-                            });
+                            notify("Info", '{{Action exécutée avec succès}}', 'success');
                         }
                     });
                     break;
@@ -273,16 +240,10 @@ nextdom.cmd.test = function(_params) {
                         },
                         cache: 0,
                         error: function(error) {
-                            $('#div_alert').showAlert({
-                                message: error.message,
-                                level: 'danger'
-                            });
+                            notify("Erreur", data.result, 'error');
                         },
                         success: function() {
-                            $('#div_alert').showAlert({
-                                message: '{{Action exécutée avec succès}}',
-                                level: 'success'
-                            });
+                            notify("Info", '{{Action exécutée avec succès}}', 'success');
                         }
                     });
                     break;
@@ -765,10 +726,7 @@ nextdom.cmd.displayActionOption = function(_expression, _options, _callback) {
         },
         success: function(data) {
             if (data.state != 'ok') {
-                $('#div_alert').showAlert({
-                    message: data.result,
-                    level: 'danger'
-                });
+                notify("Erreur", data.result, 'error');
                 return;
             }
             if (data.result.html != '') {
@@ -879,7 +837,7 @@ nextdom.cmd.displayDuration = function(_date,_el){
      var h = Math.floor(d % 86400 / 3600);
      var m = Math.floor(d % 3600 / 60);
      _el.empty().append(((j > 0 ? j + " j " : "") + (h > 0 ? h + " h " : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + " min" : "0 min")));
-     var myinterval = setInterval(function(){ 
+     var myinterval = setInterval(function(){
         var d = ((Date.now() + clientServerDiffDatetime) - _el.attr('data-time')) / 1000;
         var j = Math.floor(d / 86400);
         var h = Math.floor(d % 86400 / 3600);

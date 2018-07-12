@@ -56,7 +56,7 @@
  autoCompleteAction = ['report','sleep', 'variable', 'scenario', 'stop', 'wait','gotodesign','log','message','equipement','ask','nextdom_poweroff','scenario_return','alert','popup','icon','event','remove_inat'];
 
  if (getUrlVars('saveSuccessFull') == 1) {
-  $('#div_alert').showAlert({message: '{{Sauvegarde effectuée avec succès}}', level: 'success'});
+  notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
 }
 
 if((!isset(userProfils.doNotAutoHideMenu) || userProfils.doNotAutoHideMenu != 1) && !jQuery.support.touch){
@@ -171,7 +171,7 @@ $('.scenarioAttr[data-l1key=group]').autocomplete({
       },
       success: function (data) {
         if (data.state != 'ok') {
-          $('#div_alert').showAlert({message: data.result, level: 'danger'});
+          notify("Erreur", data.result, 'error');
           return;
         }
         response(data.result);
@@ -186,7 +186,7 @@ $("#bt_changeAllScenarioState,#bt_changeAllScenarioState2").off('click').on('cli
   nextdom.config.save({
     configuration: {enableScenario: el.attr('data-state')},
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'});
+      notify("Erreur", error.message, 'error');
     },
     success: function () {
      loadPage('index.php?v=d&p=scenario');
@@ -220,7 +220,7 @@ $("#bt_addScenario,#bt_addScenario2").off('click').on('click', function (event) 
           nextdom.scenario.save({
             scenario: {name: $('#in_scenarioAddName').val(), type: $("input[name=cbScenarioType]:checked").val()},
             error: function (error) {
-              $('#div_alert').showAlert({message: error.message, level: 'danger'});
+              notify("Erreur", error.message, 'error');
             },
             success: function (data) {
               var vars = getUrlVars();
@@ -257,7 +257,7 @@ $("#bt_delScenario,#bt_delScenario2").off('click').on('click', function (event) 
       nextdom.scenario.remove({
         id: $('.scenarioAttr[data-l1key=id]').value(),
         error: function (error) {
-          $('#div_alert').showAlert({message: error.message, level: 'danger'});
+          notify("Erreur", error.message, 'error');
         },
         success: function () {
           modifyWithoutSave = false;
@@ -274,10 +274,10 @@ $("#bt_testScenario,#bt_testScenario2").off('click').on('click', function () {
     id: $('.scenarioAttr[data-l1key=id]').value(),
     state: 'start',
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'});
+      notify("Erreur", error.message, 'error');
     },
     success: function () {
-      $('#div_alert').showAlert({message: '{{Lancement du scénario réussi}}', level: 'success'});
+        notify("Info", '{{Lancement du scénario réussi}}', 'success');
     }
   });
 });
@@ -289,7 +289,7 @@ $("#bt_copyScenario").off('click').on('click', function () {
         id: $('.scenarioAttr[data-l1key=id]').value(),
         name: result,
         error: function (error) {
-          $('#div_alert').showAlert({message: error.message, level: 'danger'});
+          notify("Erreur", error.message, 'error');
         },
         success: function (data) {
           loadPage('index.php?v=d&p=scenario&id=' + data.id);
@@ -304,10 +304,10 @@ $("#bt_stopScenario").off('click').on('click', function () {
     id: $('.scenarioAttr[data-l1key=id]').value(),
     state: 'stop',
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'});
+      notify("Erreur", error.message, 'error');
     },
     success: function () {
-      $('#div_alert').showAlert({message: '{{Arrêt du scénario réussi}}', level: 'success'});
+        notify("Info", '{{Arrêt du scénario réussi}}', 'success');
     }
   });
 });
@@ -334,8 +334,8 @@ $('#in_addElementType').off('change').on('change',function(){
 
 $('#bt_scenarioTab').on('click',function(){
 
-  setTimeout(function(){ 
-    setEditor(); 
+  setTimeout(function(){
+    setEditor();
     taAutosize();
   }, 50);
 });
@@ -397,7 +397,7 @@ $('#div_pageContainer').off('click','.bt_addSinon').on( 'click','.bt_addSinon', 
      alert("{{Le bloc Sinon ne peut être supprimé s'il contient des éléments}}");
    }
    else
-   {  
+   {
      $(this).children("i").removeClass('fa-chevron-down').addClass('fa-chevron-right');
      $(this).closest('.subElement').next().css('display','none');
    }
@@ -417,7 +417,7 @@ $('#div_pageContainer').off('click','.bt_addSinon').on( 'click','.bt_addSinon', 
      alert("{{Le bloc Sinon ne peut être supprimé s'il contient des éléments}}");
    }
    else
-   {  
+   {
      $(this).children("i").removeClass('fa-chevron-down').addClass('fa-chevron-right');
      $(this).closest('.subElement').next().css('display','none');
    }
@@ -789,7 +789,7 @@ function setEditor() {
         });
       }, 1);
     }
-    
+
   });
 }
 
@@ -842,7 +842,7 @@ function printScenario(_id) {
  nextdom.scenario.get({
   id: _id,
   error: function (error) {
-    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+    notify("Erreur", error.message, 'error');
   },
   success: function (data) {
     pColor = 0;
@@ -904,7 +904,7 @@ function printScenario(_id) {
       params : actionOptions,
       async : false,
       error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
       },
       success : function(data){
        $.showLoading();
@@ -941,11 +941,11 @@ function saveScenario() {
   nextdom.scenario.save({
     scenario: scenario,
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'});
+      notify("Erreur", error.message, 'error');
     },
     success: function (data) {
       modifyWithoutSave = false;
-      $('#div_alert').showAlert({message: '{{Sauvegarde du scénario réussi}}', level: 'success'});
+      notify("Info", '{{Sauvegarde du scénario réussi}}', 'success');
       printScenario(scenario.id);
     }
   });
@@ -1133,7 +1133,7 @@ function addSubElement(_subElement, _pColor) {
     case 'then' :
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="action"/>';
     retour += '  <div style="display:table-cell; width: 125px;vertical-align: top; padding-left: 15px;">';
-    retour += '     <legend style="margin-bottom: 0px; color : white;border : none;">{{ALORS}}</legend>'; 
+    retour += '     <legend style="margin-bottom: 0px; color : white;border : none;">{{ALORS}}</legend>';
     retour += '       <button class="btn btn-xs btn-default bt_addSinon" type="button" id="addSinon" data-toggle="dropdown" title="{{Afficher/masquer le bloc Sinon}}" aria-haspopup="true" aria-expanded="true">';
     retour += '         <i class="fa fa-chevron-right"></i>';
     retour += '       </button>';
@@ -1162,7 +1162,7 @@ function addSubElement(_subElement, _pColor) {
     case 'else' :
     retour += '<input class="subElementAttr subElementElse" data-l1key="subtype" style="display : none;" value="action"/>';
     retour += '  <div style="display:table-cell; width: 125px; vertical-align: top; padding-left: 15px;">';
-    retour += '     <legend style="margin-bottom: 0px; color : white;border : none;">{{SINON}}</legend>'; 
+    retour += '     <legend style="margin-bottom: 0px; color : white;border : none;">{{SINON}}</legend>';
     retour += '     <div class="dropdown">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
     retour += '         <i class="fa fa-plus-circle"></i> Ajouter';
@@ -1255,7 +1255,7 @@ function addSubElement(_subElement, _pColor) {
     case 'do' :
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="action"/>';
     retour += '  <div style="display:table-cell; width: 100px; vertical-align: top; padding-left: 15px;">';
-    retour += '     <legend style="margin-bottom: 0px; color : white;border : none;">{{FAIRE}}</legend>'; 
+    retour += '     <legend style="margin-bottom: 0px; color : white;border : none;">{{FAIRE}}</legend>';
     retour += '     <div class="dropdown">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
     retour += '         <i class="fa fa-plus-circle"></i> Ajouter';
@@ -1289,7 +1289,7 @@ function addSubElement(_subElement, _pColor) {
     }
     retour += '  </div>';
     retour += '  <div style="display:table-cell; width: 85px;vertical-align: top;">';
-    retour += '     <legend style="margin-bottom: 0px; color : white;border : none;">{{CODE}}</legend>'; 
+    retour += '     <legend style="margin-bottom: 0px; color : white;border : none;">{{CODE}}</legend>';
     retour += '  </div>';
     retour += '  <div class="expressions" style="display:table-cell; padding-bottom: 10px; background-color: ' + listColor[_pColor] + ';">';
     retour += '     <div class="sortable empty" style="height : 30px;"></div>';

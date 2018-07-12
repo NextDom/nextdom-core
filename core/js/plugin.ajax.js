@@ -173,7 +173,7 @@ $('body').on('click', '.li_eqLogic', function(event) {
         id: $(this).attr('data-eqLogic_id'),
         status: 1,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             $('body .eqLogicAttr').value('');
@@ -224,7 +224,7 @@ $('.eqLogicAction[data-action=copy]').on('click', function () {
                     id: $('.li_eqLogic.active').attr('data-eqLogic_id'),
                     name: result,
                     error: function (error) {
-                        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                        notify("Erreur", error.message, 'error');
                     },
                     success: function (data) {
                         modifyWithoutSave = false;
@@ -303,7 +303,7 @@ $('.eqLogicAction[data-action=save]').on('click', function () {
         id: $(this).attr('data-eqLogic_id'),
         eqLogics: eqLogics,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             console.log(data)
@@ -312,7 +312,7 @@ $('.eqLogicAction[data-action=save]').on('click', function () {
                 updateDisplayPlugin(function () {
                     $('body .li_eqLogic[data-eqLogic_id="' + data.id + '"]').click();
                 });
-            $('#div_alert').showAlert({message: '{{Sauvegarde effectuée avec succès}}', level: 'success'});
+            notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
         }
     });
     return false;
@@ -326,7 +326,7 @@ $('.eqLogicAction[data-action=remove]').on('click', function () {
                     type: isset($(this).attr('data-eqLogic_type')) ? $(this).attr('data-eqLogic_type') : eqType,
                     id: $('.li_eqLogic.active').attr('data-eqLogic_id'),
                     error: function (error) {
-                        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                        notify("Erreur", error.message, 'error');
                     },
                     success: function () {
                         var vars = getMyUrlVars();
@@ -347,14 +347,14 @@ $('.eqLogicAction[data-action=remove]').on('click', function () {
                                 $('.eqLogicThumbnailContainer').packery();
                             });
                         window.history.replaceState('', '', url);
-                        $('#div_alert').showAlert({message: '{{Suppression effectuée avec succès}}', level: 'success'});
+                        notify("Info", '{{Suppression effectuée avec succès}}', 'success');
                         modifyWithoutSave = false;
                     }
                 });
             }
         });
     } else {
-        $('#div_alert').showAlert({message: '{{Veuillez d\'abord sélectionner un}} ' + eqType, level: 'danger'});
+        notify("Erreur", '{{Veuillez d\'abord sélectionner un}} ' + eqType, 'error');
     }
 });
 
@@ -365,7 +365,7 @@ $('body').on('click', '.eqLogicAction[data-action=add]', function () {
                 type: eqType,
                 eqLogics: [{name: result}],
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (_data) {
                     var vars = getMyUrlVars();
@@ -383,7 +383,7 @@ $('body').on('click', '.eqLogicAction[data-action=add]', function () {
                             $('body .li_eqLogic[data-eqLogic_id="' + _data.id + '"]').click();
                         });
                     url += '&id=' + _data.id;
-                    $('#div_alert').showAlert({message: '{{Création effectuée avec succès}}', level: 'success'});
+                    notify("Info", '{{Création effectuée avec succès}}', 'success');
                     window.history.replaceState('', '', url);
                     modifyWithoutSave = false;
                 }
@@ -430,7 +430,7 @@ $('body').on('.cmd .cmdAction[data-action=test]', 'click', function (event) {
         var id = $(this).closest('.cmd').attr('data-cmd_id');
         nextdom.cmd.test({id: id});
     } else {
-        $('#div_alert').showAlert({message: '{{Veuillez activer l\'équipement avant de tester une de ses commandes}}', level: 'warning'});
+        notify("Attention", '{{Veuillez activer l\'équipement avant de tester une de ses commandes}}', 'warning');
     }
 
 });

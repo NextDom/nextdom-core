@@ -44,14 +44,14 @@ if(deviceInfo.type == 'desktop'  && user_isAdmin == 1){
         events: {
             show: function(opt) {
                 $.contextMenu.setInputValues(opt, this.data());
-            }, 
+            },
             hide: function(opt) {
                 $.contextMenu.getInputValues(opt, this.data());
             }
         },
         items: {
             fold1: {
-                name: "{{Designs}}", 
+                name: "{{Designs}}",
                 icon : 'fa-picture-o',
                 items: planHeaderContextMenu
             },
@@ -79,8 +79,8 @@ if(deviceInfo.type == 'desktop'  && user_isAdmin == 1){
             addGraph: {
                 name: "{{Ajouter Graphique}}",
                 icon : 'fa-line-chart',
-                disabled:function(key, opt) { 
-                    return !this.data('editOption.state'); 
+                disabled:function(key, opt) {
+                    return !this.data('editOption.state');
                 },
                 callback: function(key, opt){
                     addObject({link_type : 'graph',link_id:Math.round(Math.random() * 99999999) + 9999});
@@ -89,8 +89,8 @@ if(deviceInfo.type == 'desktop'  && user_isAdmin == 1){
             addText: {
                 name: "{{Ajouter texte/html}}",
                 icon : 'fa-align-center',
-                disabled:function(key, opt) { 
-                    return !this.data('editOption.state'); 
+                disabled:function(key, opt) {
+                    return !this.data('editOption.state');
                 },
                 callback: function(key, opt){
                  addObject({link_type : 'text',link_id:Math.round(Math.random() * 99999999) + 9999,display: {text: 'Texte à insérer ici'}});
@@ -99,8 +99,8 @@ if(deviceInfo.type == 'desktop'  && user_isAdmin == 1){
          addScenario: {
             name: "{{Ajouter scénario}}",
             icon : 'fa-plus-circle',
-            disabled:function(key, opt) { 
-                return !this.data('editOption.state'); 
+            disabled:function(key, opt) {
+                return !this.data('editOption.state');
             },
             callback: function(key, opt){
              nextdom.scenario.getSelectModal({}, function (data) {
@@ -109,17 +109,17 @@ if(deviceInfo.type == 'desktop'  && user_isAdmin == 1){
          }
      },
      fold4: {
-        name: "{{Ajouter un lien}}", 
+        name: "{{Ajouter un lien}}",
         icon : 'fa-link',
-        disabled:function(key, opt) { 
-            return !this.data('editOption.state'); 
+        disabled:function(key, opt) {
+            return !this.data('editOption.state');
         },
         items: {
          addViewLink: {
             name: "{{Vers une vue}}",
             icon : 'fa-link',
-            disabled:function(key, opt) { 
-                return !this.data('editOption.state'); 
+            disabled:function(key, opt) {
+                return !this.data('editOption.state');
             },
             callback: function(key, opt){
                 addObject({link_type :'view',link_id : -(Math.round(Math.random() * 99999999) + 9999),display : {name : 'A configurer'}});
@@ -128,8 +128,8 @@ if(deviceInfo.type == 'desktop'  && user_isAdmin == 1){
         addPlanLink: {
             name: "{{Vers un design}}",
             icon : 'fa-link',
-            disabled:function(key, opt) { 
-                return !this.data('editOption.state'); 
+            disabled:function(key, opt) {
+                return !this.data('editOption.state');
             },
             callback: function(key, opt){
                 addObject({link_type :'plan',link_id : -(Math.round(Math.random() * 99999999) + 9999),display : {name : 'A configurer'}});
@@ -140,8 +140,8 @@ if(deviceInfo.type == 'desktop'  && user_isAdmin == 1){
 addEqLogic: {
     name: "{{Ajouter équipement}}",
     icon : 'fa-plus-circle',
-    disabled:function(key, opt) { 
-        return !this.data('editOption.state'); 
+    disabled:function(key, opt) {
+        return !this.data('editOption.state');
     },
     callback: function(key, opt){
       nextdom.eqLogic.getSelectModal({}, function (data) {
@@ -152,8 +152,8 @@ addEqLogic: {
 addCommand: {
     name: "{{Ajouter commande}}",
     icon : 'fa-plus-circle',
-    disabled:function(key, opt) { 
-        return !this.data('editOption.state'); 
+    disabled:function(key, opt) {
+        return !this.data('editOption.state');
     },
     callback: function(key, opt){
       nextdom.cmd.getSelectModal({}, function (data) {
@@ -164,8 +164,8 @@ addCommand: {
 addImage: {
     name: "{{Ajouter une image/caméra}}",
     icon : 'fa-plus-circle',
-    disabled:function(key, opt) { 
-        return !this.data('editOption.state'); 
+    disabled:function(key, opt) {
+        return !this.data('editOption.state');
     },
     callback: function(key, opt){
         addObject({link_type : 'image',link_id : Math.round(Math.random() * 99999999) + 9999});
@@ -174,8 +174,8 @@ addImage: {
 addZone: {
     name: "{{Ajouter une zone}}",
     icon : 'fa-plus-circle',
-    disabled:function(key, opt) { 
-        return !this.data('editOption.state'); 
+    disabled:function(key, opt) {
+        return !this.data('editOption.state');
     },
     callback: function(key, opt){
         addObject({link_type : 'zone',link_id : Math.round(Math.random() * 99999999) + 9999});
@@ -184,8 +184,8 @@ addZone: {
 addSummary: {
     name: "{{Ajouter un résumé}}",
     icon : 'fa-plus-circle',
-    disabled:function(key, opt) { 
-        return !this.data('editOption.state'); 
+    disabled:function(key, opt) {
+        return !this.data('editOption.state');
     },
     callback: function(key, opt){
         addObject({link_type : 'summary',link_id : -1});
@@ -193,16 +193,16 @@ addSummary: {
 },
 sep2 : "---------",
 fold2: {
-    name: "{{Affichage}}", 
+    name: "{{Affichage}}",
     icon : 'fa-th',
-    disabled:function(key, opt) { 
-        return !this.data('editOption.state'); 
+    disabled:function(key, opt) {
+        return !this.data('editOption.state');
     },
     items: {
         grid_none: {
-            name: "Aucune", 
-            type: 'radio', 
-            radio: 'radio', 
+            name: "Aucune",
+            type: 'radio',
+            radio: 'radio',
             value: '0',
             selected: true,
             events: {
@@ -213,10 +213,10 @@ fold2: {
             }
         },
         grid_10x10: {
-            name: "10x10", 
-            type: 'radio', 
-            radio: 'radio', 
-            value: '10', 
+            name: "10x10",
+            type: 'radio',
+            radio: 'radio',
+            value: '10',
             events: {
                 click : function(e) {
                     editOption.gridSize = [10,10];
@@ -225,9 +225,9 @@ fold2: {
             }
         },
         grid_15x15: {
-            name: "15x15", 
-            type: 'radio', 
-            radio: 'radio', 
+            name: "15x15",
+            type: 'radio',
+            radio: 'radio',
             value: '15',
             events: {
                 click : function(e) {
@@ -237,9 +237,9 @@ fold2: {
             }
         },
         grid_20x20: {
-            name: "20x20", 
-            type: 'radio', 
-            radio: 'radio', 
+            name: "20x20",
+            type: 'radio',
+            radio: 'radio',
             value: '20',
             events: {
                 click : function(e) {
@@ -250,9 +250,9 @@ fold2: {
         },
         sep4 : "---------",
         snap: {
-            name: "{{Aimanter les élements}}", 
-            type: 'checkbox', 
-            radio: 'radio', 
+            name: "{{Aimanter les élements}}",
+            type: 'checkbox',
+            radio: 'radio',
             selected:  editOption.snap,
             events: {
                 click : function(e) {
@@ -262,8 +262,8 @@ fold2: {
          }
      },
      snapGrid: {
-        name: "{{Aimanter à la grille}}", 
-        type: 'checkbox', 
+        name: "{{Aimanter à la grille}}",
+        type: 'checkbox',
         radio: 'radio',
         selected:  editOption.grid,
         events: {
@@ -274,8 +274,8 @@ fold2: {
         }
     },
     highlightWidget: {
-        name: "{{Masquer surbrillance des éléments}}", 
-        type: 'checkbox', 
+        name: "{{Masquer surbrillance des éléments}}",
+        type: 'checkbox',
         radio: 'radio',
         selected:  editOption.highlight,
         events: {
@@ -291,8 +291,8 @@ fold2: {
 removePlan: {
     name: "{{Supprimer le design}}",
     icon : 'fa-trash',
-    disabled:function(key, opt) { 
-        return !this.data('editOption.state'); 
+    disabled:function(key, opt) {
+        return !this.data('editOption.state');
     },
     callback: function(key, opt){
       bootbox.confirm('{{Etes-vous sûr de vouloir supprimer ce design ?}}', function (result) {
@@ -300,10 +300,10 @@ removePlan: {
             nextdom.plan.removeHeader({
                 id:planHeader_id,
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function () {
-                 $('#div_alert').showAlert({message: 'Design supprimé', level: 'success'});
+                notify("Info", 'Design supprimé', 'success');
                  loadPage('index.php?v=d&p=plan');
              },
          });
@@ -314,8 +314,8 @@ removePlan: {
 addPlan: {
     name: "{{Creer un design}}",
     icon : 'fa-plus-circle',
-    disabled:function(key, opt) { 
-        return !this.data('editOption.state'); 
+    disabled:function(key, opt) {
+        return !this.data('editOption.state');
     },
     callback: function(key, opt){
         createNewDesign();
@@ -324,8 +324,8 @@ addPlan: {
 duplicatePlan: {
     name: "{{Dupliquer le design}}",
     icon : 'fa-files-o',
-    disabled:function(key, opt) { 
-        return !this.data('editOption.state'); 
+    disabled:function(key, opt) {
+        return !this.data('editOption.state');
     },
     callback: function(key, opt){
        bootbox.prompt("{{Nom la copie du design ?}}", function (result) {
@@ -335,7 +335,7 @@ duplicatePlan: {
                 name: result,
                 id: planHeader_id,
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
                  loadPage('index.php?v=d&p=plan&plan_id=' + data.id);
@@ -348,8 +348,8 @@ duplicatePlan: {
 configurePlan: {
     name: "{{Configurer le design}}",
     icon : 'fa-cogs',
-    disabled:function(key, opt) { 
-        return !this.data('editOption.state'); 
+    disabled:function(key, opt) {
+        return !this.data('editOption.state');
     },
     callback: function(key, opt){
         savePlan(false,false);
@@ -398,8 +398,8 @@ items: {
     configuration: {
         name: '{{Configuration avancée}}',
         icon:'fa-cog',
-        disabled: function(key, opt){ 
-            var info = getObjectInfo($(this));    
+        disabled: function(key, opt){
+            var info = getObjectInfo($(this));
             return !(info.type == 'eqLogic' || info.type == 'cmd' || info.type == 'graph');
         },
         callback: function(key, opt){
@@ -439,7 +439,7 @@ items: {
                     $('#md_modal').dialog('open');
                 });
             }else{
-             $('#md_modal').load('index.php?v=d&modal='+info.type+'.configure&'+info.type+'_id=' + info.id).dialog('open'); 
+             $('#md_modal').load('index.php?v=d&modal='+info.type+'.configure&'+info.type+'_id=' + info.id).dialog('open');
          }
      }
  },
@@ -451,7 +451,7 @@ items: {
         nextdom.plan.remove({
            id:  $(this).attr('data-plan_id'),
            error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             displayPlan();
@@ -462,8 +462,8 @@ items: {
 duplicate: {
     name: '{{Dupliquer}}',
     icon:'fa-files-o',
-    disabled: function(key, opt){ 
-        var info = getObjectInfo($(this));    
+    disabled: function(key, opt){
+        var info = getObjectInfo($(this));
         return !(info.type == 'text' || info.type == 'graph' || info.type == 'zone');
     },
     callback: function(key, opt){
@@ -472,7 +472,7 @@ duplicate: {
             id: $(this).attr('data-plan_id'),
             version: 'dplan',
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             },
             success: function (data) {
                 displayObject(data.plan,data.html);
@@ -482,8 +482,8 @@ duplicate: {
     }
 },
 lock: {
-    name: "{{Verrouiller}}", 
-    type: 'checkbox', 
+    name: "{{Verrouiller}}",
+    type: 'checkbox',
     events: {
         click : function(opt) {
             console.log(opt);
@@ -520,7 +520,7 @@ $('#div_pageContainer').on( 'click','.zone-widget:not(.zoneEqLogic)', function (
         nextdom.plan.execute({
             id: el.attr('data-plan_id'),
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
                 el.empty().append('<center class="loading"><i class="fa fa-times fa-4x"></i></center>');
                 setTimeout(function() {
                    el.empty();
@@ -630,7 +630,7 @@ function createNewDesign(){
             nextdom.plan.saveHeader({
                 planHeader: {name: result},
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
                     loadPage('index.php?v=d&p=plan&plan_id=' + data.id);
@@ -673,7 +673,7 @@ function initEditOption(_state) {
         cancel : '.locked',
         stop: function( event, ui ) {
             savePlan(false,false);
-        }   
+        }
     });
       if(editOption.highlight){
         $('.plan-link-widget,.view-link-widget,.graph-widget,.div_displayObject >.eqLogic-widget,.div_displayObject > .cmd-widget,.scenario-widget,.text-widget,.image-widget,.zone-widget,.summary-widget').addClass('widget-shadow-edit');
@@ -728,7 +728,7 @@ function addObject(_plan){
         plan: _plan,
         version: 'dplan',
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             displayObject(data.plan,data.html);
@@ -753,12 +753,12 @@ function displayPlan(_code) {
             if(error.code == -32005){
                 var result = prompt("{{Veuillez indiquer le code ?}}", "")
                 if(result == null){
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                     return;
                 }
                 displayPlan(result);
             }else{
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             }
         },
         success: function (data) {
@@ -798,7 +798,7 @@ function displayPlan(_code) {
             nextdom.plan.byPlanHeader({
                 id: planHeader_id,
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (plans) {
                     var objects = [];
@@ -882,7 +882,7 @@ function savePlan(_refreshDisplay,_async) {
         async : _async || true,
         global : false,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             if (init(_refreshDisplay, false)) {
@@ -938,8 +938,8 @@ function displayObject(_plan,_html, _noRender) {
             if (key == 'background-color' && (!isset(_plan.display) || !isset(_plan.display['background-defaut']) || _plan.display['background-defaut'] != 1)) {
              if (isset(_plan.display) && isset(_plan.display['background-transparent']) && _plan.display['background-transparent'] == 1) {
                  html.css('background-color', 'transparent');
-                 html.css('border-radius', '0px'); 
-                 html.css('box-shadow', 'none'); 
+                 html.css('border-radius', '0px');
+                 html.css('box-shadow', 'none');
              }else{
               html.css(key, _plan.css[key]);
           }

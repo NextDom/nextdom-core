@@ -43,7 +43,7 @@ if (!isConnect()) {
         configuration: 'calculHistory',
         convertToHumanReadable : true,
         error: function (error) {
-            $('#div_alertHistoryCalcul').showAlert({message: error.message, level: 'danger'});
+            notify("{{Historique}}", error.message, 'error');
         },
         success: function (data) {
             for(var i in data){
@@ -59,10 +59,10 @@ if (!isConnect()) {
         nextdom.config.save({
             configuration: {'calculHistory' : calculHistory},
             error: function (error) {
-                $('#div_alertHistoryCalcul').showAlert({message: error.message, level: 'danger'});
+                notify("{{Historique}}", error.message, 'error');
             },
             success: function () {
-                $('#div_alertHistoryCalcul').showAlert({message: '{{Sauvegarde effectuée}}', level: 'success'});
+                notify("{{Historique}}", '{{Sauvegarde effectuée}}', 'success');
             }
         });
     });

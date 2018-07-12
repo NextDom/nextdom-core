@@ -24,19 +24,19 @@ $("#bt_saveBackup").on('click', function (event) {
    nextdom.config.save({
        configuration: $('#backup').getValues('.configKey')[0],
        error: function (error) {
-           $('#div_alert').showAlert({message: error.message, level: 'danger'});
+           notify("Erreur", error.message, 'error');
        },
        success: function () {
            nextdom.config.load({
                configuration: $('#backup').getValues('.configKey')[0],
                plugin: 'core',
                error: function (error) {
-                   $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                   notify("Erreur", error.message, 'error');
                },
                success: function (data) {
                    $('#backup').setValues(data, '.configKey');
                    modifyWithoutSave = false;
-                   $('#div_alert').showAlert({message: '{{Sauvegarde réussie}}', level: 'success'});
+                   notify("Info", '{{Sauvegarde réussie}}', 'success');
                }
            });
        }
@@ -53,7 +53,7 @@ $("#bt_migrateNextDom").on('click', function (event) {
            nextdom.backup.migrate({
                backup: $('#sel_restoreBackup').value(),
                error: function (error) {
-                   $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                   notify("Erreur", error.message, 'error');
                },
                success: function () {
                    getNextDomLog(1, 'restore');
@@ -71,11 +71,11 @@ $("#bt_migrateNextDom").on('click', function (event) {
             nextdom.backup.remove({
                 backup: $('#sel_restoreBackup').value(),
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function () {
                     updateListBackup();
-                    $('#div_alert').showAlert({message: '{{Sauvegarde supprimée avec succès}}', level: 'success'});
+                    notify("Info", '{{Sauvegarde supprimée avec succès}}', 'success');
                 }
             });
         }
@@ -91,11 +91,11 @@ $("#bt_migrateNextDom").on('click', function (event) {
     replaceFileInput: false,
     done: function (e, data) {
         if (data.result.state != 'ok') {
-            $('#div_alert').showAlert({message: data.result.result, level: 'danger'});
+            notify("Erreur", data.result.result, 'error');
             return;
         }
         updateListBackup();
-        $('#div_alert').showAlert({message: '{{Fichier(s) ajouté(s) avec succès}}', level: 'success'});
+        notify("Info", '{{Fichier(s) ajouté(s) avec succès}}', 'success');
     }
 });
 
@@ -104,7 +104,7 @@ $("#bt_migrateNextDom").on('click', function (event) {
  nextdom.config.load({
     configuration: $('#backup').getValues('.configKey')[0],
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function (data) {
         $('#backup').setValues(data, '.configKey');
@@ -146,14 +146,14 @@ $("#bt_migrateNextDom").on('click', function (event) {
                 for (var i in data.result.reverse()) {
                     log += data.result[i]+"\n";
                     if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' SUCCESS]') != -1){
-                        $('#div_alert').showAlert({message: '{{L\'opération est réussie}}', level: 'success'});
+                        notify("Info", '{{L\'opération est réussie}}', 'success');
                         if(_log == 'restore'){
                             nextdom.user.refresh();
                         }
                         _autoUpdate = 0;
                     }
                     if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' ERROR]') != -1){
-                        $('#div_alert').showAlert({message: '{{L\'opération a échoué}}', level: 'danger'});
+                        notify("Erreur", '{{L\'opération a échoué}}', 'error');
                         if(_log == 'restore'){
                             nextdom.user.refresh();
                         }
@@ -178,7 +178,7 @@ $("#bt_migrateNextDom").on('click', function (event) {
 function updateListBackup() {
     nextdom.backup.list({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             var options = '';

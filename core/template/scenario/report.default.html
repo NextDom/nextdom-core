@@ -44,7 +44,7 @@
 
     nextdom.view.all({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (views) {
             var options = '';
@@ -60,7 +60,7 @@
     });
     nextdom.plan.allHeader({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (plans) {
             var options = '';
@@ -77,7 +77,7 @@
 
       nextdom.plugin.all({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (plugins) {
             var options = '';

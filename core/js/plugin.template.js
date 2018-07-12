@@ -55,7 +55,7 @@
 var url = document.location.toString();
 if (url.match('#')) {
     $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-} 
+}
 $('.nav-tabs a').on('shown.bs.tab', function (e) {
     window.location.hash = e.target.hash;
 })
@@ -103,7 +103,7 @@ $(".li_eqLogic").on('click', function () {
         status : 1,
         error: function (error) {
             $.hideLoading();
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             $('body .eqLogicAttr').value('');
@@ -136,11 +136,11 @@ $(".li_eqLogic").on('click', function () {
 });
 
 if (getUrlVars('saveSuccessFull') == 1) {
-    $('#div_alert').showAlert({message: '{{Sauvegarde effectuée avec succès}}', level: 'success'});
+    notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
 }
 
 if (getUrlVars('removeSuccessFull') == 1) {
-    $('#div_alert').showAlert({message: '{{Suppression effectuée avec succès}}', level: 'success'});
+    notify("Info", '{{Suppression effectuée avec succès}}', 'success');
 }
 
 /**************************EqLogic*********************************************/
@@ -152,7 +152,7 @@ $('.eqLogicAction[data-action=copy]').on('click', function () {
                     id: $('.li_eqLogic.active').attr('data-eqLogic_id'),
                     name: result,
                     error: function (error) {
-                        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                        notify("Erreur", error.message, 'error');
                     },
                     success: function (data) {
                         modifyWithoutSave = false;
@@ -205,13 +205,13 @@ $('.eqLogicAction[data-action=save]').on('click', function () {
         id: $(this).attr('data-eqLogic_id'),
         eqLogics: eqLogics,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             modifyWithoutSave = false;
             if ($('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + data.id + ']').length != 0 && !changeLeftMenuObjectOrEqLogicName) {
                 $('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + data.id + ']').click();
-                $('#div_alert').showAlert({message: '{{Sauvegarde effectuée avec succès}}', level: 'success'});
+                notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
             } else {
                 var vars = getUrlVars();
                 var url = 'index.php?';
@@ -244,7 +244,7 @@ $('.eqLogicAction[data-action=remove]').on('click', function () {
                     type: isset($(this).attr('data-eqLogic_type')) ? $(this).attr('data-eqLogic_type') : eqType,
                     id: $('.li_eqLogic.active').attr('data-eqLogic_id'),
                     error: function (error) {
-                        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                        notify("Erreur", error.message, 'error');
                     },
                     success: function () {
                         var vars = getUrlVars();
@@ -262,7 +262,7 @@ $('.eqLogicAction[data-action=remove]').on('click', function () {
             }
         });
     } else {
-        $('#div_alert').showAlert({message: '{{Veuillez d\'abord sélectionner un}} ' + eqType, level: 'danger'});
+        notify("Erreur", '{{Veuillez d\'abord sélectionner un}} ' + eqType, 'error');
     }
 });
 
@@ -273,7 +273,7 @@ $('.eqLogicAction[data-action=add]').on('click', function () {
                 type: eqType,
                 eqLogics: [{name: result}],
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (_data) {
                     var vars = getUrlVars();
@@ -356,7 +356,7 @@ $('#div_pageContainer').on( 'click','.cmd .cmdAction[data-action=test]',function
         var id = $(this).closest('.cmd').attr('data-cmd_id');
         nextdom.cmd.test({id: id});
     } else {
-        $('#div_alert').showAlert({message: '{{Veuillez activer l\'équipement avant de tester une de ses commandes}}', level: 'warning'});
+        notify("Info", '{{Veuillez activer l\'équipement avant de tester une de ses commandes}}', 'warning');
     }
 
 });

@@ -67,13 +67,13 @@ $google2fa_url = $google2fa->getQRCodeGoogleUrl(
                 code: $('#in_testCode').value(),
                 enableTwoFactorAuthentification : 1,
                 error: function (error) {
-                    $('#div_alertTwoFactorAuthentification').showAlert({message: error.message, level: 'danger'});
+                    notify("authentification", error.message, 'error');
                 },
                 success: function (data) {
                     if(data){
-                        $('#div_alertTwoFactorAuthentification').showAlert({message: '{{Configuration réussie}}', level: 'success'});
+                        notify("authentification", '{{Configuration réussie}}', 'success');
                     }else{
-                        $('#div_alertTwoFactorAuthentification').showAlert({message: '{{Code invalide}}', level: 'danger'});
+                            notify("authentification", '{{Code invalide}}', 'error');
                     }
                 }
             });

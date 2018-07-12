@@ -29,11 +29,11 @@
     nextdom.user.save({
         users: user,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             printUsers();
-            $('#div_alert').showAlert({message: '{{Sauvegarde effectuée}}', level: 'success'});
+            notify("Info", '{{Sauvegarde effectuée}}', 'success');
             modifyWithoutSave = false;
             $('#md_newUser').modal('hide');
         }
@@ -49,11 +49,11 @@
     nextdom.user.save({
         users: $('#table_user tbody tr').getValues('.userAttr'),
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             printUsers();
-            $('#div_alert').showAlert({message: '{{Sauvegarde effectuée}}', level: 'success'});
+            notify("Info", '{{Sauvegarde effectuée}}', 'success');
             modifyWithoutSave = false;
         }
     });
@@ -67,11 +67,11 @@
             nextdom.user.remove({
                 id: user.id,
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function () {
                     printUsers();
-                    $('#div_alert').showAlert({message: '{{L\'utilisateur a bien été supprimé}}', level: 'success'});
+                    notify("Info", '{{L\'utilisateur a bien été supprimé}}', 'success');
                 }
             });
         }
@@ -87,11 +87,11 @@
             nextdom.user.save({
                 users: [user],
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function () {
                     printUsers();
-                    $('#div_alert').showAlert({message: '{{Sauvegarde effectuée}}', level: 'success'});
+                    notify("Info", '{{Sauvegarde effectuée}}', 'success');
                     modifyWithoutSave = false;
                 }
             });
@@ -108,11 +108,11 @@
             nextdom.user.save({
                 users: [user],
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function () {
                     printUsers();
-                    $('#div_alert').showAlert({message: '{{Modification effectuée}}', level: 'success'});
+                    notify("Info", '{{Modification effectuée}}', 'success');
                     modifyWithoutSave = false;
                 }
             });
@@ -132,7 +132,7 @@
     nextdom.user.supportAccess({
         enable : $(this).attr('data-enable'),
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             modifyWithoutSave = false;
@@ -145,7 +145,7 @@
     $.showLoading();
     nextdom.user.all({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             $('#table_user tbody').empty();
@@ -211,11 +211,11 @@ $('#table_user').delegate('.bt_manage_restrict_rights', 'click', function () {
 });
 
 $('.bt_deleteSession').on('click',function(){
-   var id = $(this).closest('tr').attr('data-id'); 
+   var id = $(this).closest('tr').attr('data-id');
    nextdom.user.deleteSession({
     id : id,
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function (data) {
         window.location.reload();
@@ -231,7 +231,7 @@ $('.bt_removeRegisterDevice').on('click',function(){
         key : key,
         user_id : user_id,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             modifyWithoutSave = false;
@@ -243,7 +243,7 @@ $('.bt_removeRegisterDevice').on('click',function(){
 $('#bt_removeAllRegisterDevice').on('click',function(){
     nextdom.user.removeRegisterDevice({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             modifyWithoutSave = false;

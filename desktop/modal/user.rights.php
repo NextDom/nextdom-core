@@ -83,10 +83,10 @@ foreach (scenario::all() as $scenario) {
         nextdom.user.save({
             users: $('#div_tasbUserRights').getValues('.userAttr'),
             error: function (error) {
-                $('#div_userRightAlert').showAlert({message: error.message, level: 'danger'});
+                notify("Core", error.message, 'error');
             },
             success: function () {
-                $('#div_userRightAlert').showAlert({message: '{{Sauvegarde effectuée}}', level: 'success'});
+                notify("Info", '{{Sauvegarde effectuée}}', 'success');
                 modifyWithoutSave = false;
             }
         });

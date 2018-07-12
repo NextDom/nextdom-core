@@ -122,15 +122,15 @@ foreach (plugin::listPlugin(true) as $plugin) {
             },
             success: function (data) {
                 if (data.state != 'ok') {
-                    $('#div_alertReportBug').showAlert({message: data.result, level: 'danger'});
+                    notify("{{Report bug}}", data.result, 'error');
                     return;
                 }
                 $('#form_reportBug').hide();
                 $('#bt_sendBugReport').hide();
                 if(data.result != '' && data.result != null){
-                     $('#div_alertReportBug').showAlert({message: '{{Vous venez de déclarer un bug qui sera publié sur notre Bug Tracker public.<br/>Vous pouvez le suivre}} <a target="_blank" href="'+data.result+'">ici</a><br/><br/><strong>ATTENTION</strong> votre message sera public, il pourra être supprimé s\'il ne s\'agit pas d\'un bug, vous ne recevrez pas d\'assistance technique suite à cette déclaration)', level: 'success'});
+                    notify("{{Report bug}}", '{{Vous venez de déclarer un bug qui sera publié sur notre Bug Tracker public.<br/>Vous pouvez le suivre}} <a target="_blank" href="'+data.result+'">ici</a><br/><br/><strong>ATTENTION</strong> votre message sera public, il pourra être supprimé s\'il ne s\'agit pas d\'un bug, vous ne recevrez pas d\'assistance technique suite à cette déclaration)', 'success');
                 }else{
-                    $('#div_alertReportBug').showAlert({message: '{{Votre ticket a bien été ouvert. Un mail va vous être envoyé}}', level: 'success'});
+                    notify("{{Report bug}}", '{{Votre ticket a bien été ouvert. Un mail va vous être envoyé}}', 'success');
                 }
             }
         });

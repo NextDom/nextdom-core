@@ -1,7 +1,7 @@
 function initEquipment(_object_id) {
   nextdom.object.all({
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'});
+      notify("Erreur", error.message, 'error');
     },
     success: function (objects) {
       var summaries = [];
@@ -34,13 +34,13 @@ function initEquipment(_object_id) {
       version: 'mobile',
       summary :summary,
       error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
       },
       success: function (html) {
         if(_object_id == 'all' || _object_id == ''){
          nextdom.object.all({
           error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
           },
           success: function (objects) {
            var div = '';

@@ -36,7 +36,7 @@
     nextdom.cron.save({
         crons: $('#table_cron tbody tr').getValues('.cronAttr'),
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: printCron
     });
@@ -47,7 +47,7 @@
     nextdom.config.save({
         configuration: {enableCron: el.attr('data-state')},
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             if (el.attr('data-state') == 1) {
@@ -70,7 +70,7 @@
         state: 'stop',
         id: $(this).closest('tr').attr('id'),
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: printCron
     });
@@ -81,7 +81,7 @@
         state: 'start',
         id: $(this).closest('tr').attr('id'),
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: printCron
     });

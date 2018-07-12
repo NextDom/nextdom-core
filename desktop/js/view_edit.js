@@ -31,7 +31,7 @@
         nextdom.view.setOrder({
             views: views,
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             }
         });
     }
@@ -56,7 +56,7 @@
     nextdom.view.get({
         id: $(this).attr('data-view_id'),
         error: function(error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function(data) {
             $('#div_viewZones').empty();
@@ -92,7 +92,7 @@
             id: '',
             view: {name:result},
             error: function(error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             },
             success: function(data) {
                loadPage('index.php?v=d&p=view_edit&view_id=' + data.id);
@@ -109,7 +109,7 @@
             id: $('.li_view.active').attr('data-view_id'),
             view: {name:result},
             error: function(error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             },
             success: function(data) {
                 $('.li_view.active a').text(result);
@@ -159,10 +159,10 @@
     id: $(".li_view.active").attr('data-view_id'),
     view: view,
     error: function(error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function() {
-        $('#div_alert').showAlert({message: '{{Modification enregistrée}}', level: 'success'});
+        notify("Info", '{{Modification enregistrée}}', 'success');
         modifyWithoutSave = false;
         if(isset(_viewResult) && _viewResult){
            window.location.href = 'index.php?v=d&p=view&view_id=' + $(".li_view.active").attr('data-view_id');
@@ -178,7 +178,7 @@ $("#bt_removeView").on('click', function(event) {
             nextdom.view.remove({
                 id: $(".li_view.active").attr('data-view_id'),
                 error: function(error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function() {
                     modifyWithoutSave = false;

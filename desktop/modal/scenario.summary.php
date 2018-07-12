@@ -40,7 +40,7 @@ if (!isConnect()) {
         nextdom.scenario.all({
             nocache : true,
             error: function (error) {
-                $('#div_alertScenarioSummary').showAlert({message: error.message, level: 'danger'});
+                notify("{{Scénario}}", error.message, 'error');
             },
             success : function(data){
                 $('#table_scenarioSummary tbody').empty();
@@ -56,7 +56,7 @@ if (!isConnect()) {
                     tr += '<td>';
                     switch (data[i].state) {
                         case 'error' :
-                        tr += '<span class="label label-warning" style="font-size : 1em;">{{Erreur}}</span>';
+                        tr += '<span class="label label-warning" style="font-size : 1em;">{{Erreur}</span>';
                         break;
                         case 'on' :
                         tr += '<span class="label label-info" style="font-size : 1em;">{{Actif}}</span>';
@@ -122,7 +122,7 @@ if (!isConnect()) {
                         id: tr.attr('data-id'),
                         state: 'stop',
                         error: function (error) {
-                            $('#div_alertScenarioSummary').showAlert({message: error.message, level: 'danger'});
+                            notify("{{Scénario}}", error.message, 'error');
                         },
                         success:function(){
                             refreshScenarioSummary();
@@ -136,7 +136,7 @@ if (!isConnect()) {
                         id: tr.attr('data-id'),
                         state: 'start',
                         error: function (error) {
-                            $('#div_alertScenarioSummary').showAlert({message: error.message, level: 'danger'});
+                            notify("{{Scénario}}", error.message, 'error');
                         },
                         success:function(){
                             refreshScenarioSummary();
@@ -158,7 +158,7 @@ $('#bt_saveSummaryScenario').off().on('click',function(){
     nextdom.scenario.saveAll({
         scenarios : scenarios,
         error: function (error) {
-            $('#div_alertScenarioSummary').showAlert({message: error.message, level: 'danger'});
+            notify("{{Scénario}}", error.message, 'error');
         },
         success : function(data){
             refreshScenarioSummary();
