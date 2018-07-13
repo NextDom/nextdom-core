@@ -29,7 +29,6 @@ delay(){
 
 apt_install() {
     apt-get -y install "$@"
-    if [ $? -ne 0 ]; then
         printf "${ROUGE}Ne peut installer $@ - Annulation${NORMAL}"
         exit 1
     fi
@@ -39,57 +38,57 @@ apt_install() {
 mysql_sql() {
     echo "$@" | mysql -uroot -p${MYSQL_ROOT_PASSWD}
     if [ $? -ne 0 ]; then
-        exit 1 "${ROUGE}Ne peut excuter $@ dans MySQL - Annulation${NORMAL}"
-    fi
+        printf "${ROUGE}Ne peut exécuter $@ dans MySQL - Annulation${NORMAL}"
+    fi  exit 1
 }
 
 step_1_upgrade() {
-
     apt-get -q update  > ${DEBUG} 2>&1
+
     apt-get -q -f install  >> ${DEBUG} 2>&1
     apt-get -q -y dist-upgrade >> ${DEBUG} 2>&1
 }
-step_2_mainpackage() {
+
     apt-get -q -y install ntp ca-certificates unzip curl sudo cron locate tar telnet wget logrotate fail2ban dos2unix ntpdate htop iotop vim iftop smbclient git pytho
 n python-pip software-properties-common libexpat1 ssl-cert apt-transport-https xvfb cutycapt xauth >> ${DEBUG} 2>&1
     add-apt-repository non-free >> ${DEBUG} 2>&1
     apt-get -q update >> ${DEBUG} 2>&1
     apt-get -q -y install libav-tools libsox-fmt-mp3 sox libttspico-utils espeak mbrola >> ${DEBUG} 2>&1
-
     apt-get -q -y remove brltty >> ${DEBUG} 2>&1
+
 }
 
-    echo "mysql-server mysql-server/root_password password ${MYSQL_ROOT_PASSWD}" | debconf-set-selections
+step_3_database() {
     echo "mysql-server mysql-server/root_password_again password ${MYSQL_ROOT_PASSWD}" | debconf-set-selections
     apt-get install -q -y mysql-client mysql-common mysql-server >> ${DEBUG} 2>&1
 
     systemctl status mysql > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         service mysql status  2>&1
-
         if [ $? -ne 0 ]; then
+
             systemctl start mysql > /dev/null 2>&1
-                service mysql start > /dev/null 2>&1
-            fi
+            if [ $? -ne 0 ]; then
+            fi  service mysql start > /dev/null 2>&1
         fi
     fi
     systemctl status mysql > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         service mysql status 2>&1
-
         if [ $? -ne 0 ]; then
+
             echo "${ROUGE}Ne peut lancer mysql - Annulation${NORMAL}"
-        fi  exit 1
-    fi
+            exit 1
+    fi  fi
     mysqladmin -u root password ${MYSQL_ROOT_PASSWD}
 }
 
 step_4_apache() {
     apt_install apache2 apache2-utils libexpat1 ssl-cert >> ${DEBUG} 2>&1
     a2enmod rewrite >> ${DEBUG} 2>&1
-
 }
-step_5_php() {
+
+
     apt-get -y install php7.0 php7.0-curl php7.0-gd php7.0-imap php7.0-json php7.0-mcrypt php7.0-mysql php7.0-xml php7.0-opcache php7.0-soap php7.0-xmlrpc libapache2-
 mod-php7.0 php7.0-common php7.0-dev php7.0-zip php7.0-ssh2 php7.0-mbstring composer >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
@@ -98,11 +97,12 @@ composer >> ${DEBUG} 2>&1
         apt_install php5-ldap >> ${DEBUG} 2>&1
     else
         apt-get -y install php7.0-ldap >> ${DEBUG} 2>&1
+    fi
 
-}   fi
-
+}
 step_6_nextdom_download() {
     echo "                                                                                    "
+    rm -fr ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
     mkdir -p ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
 
     cd  ${WEBSERVER_HOME}
@@ -122,7 +122,7 @@ step_7_nextdom_customization() {
     ln -s /etc/apache2/conf-available/security.conf /etc/apache2/conf-enabled/ >> ${DEBUG} 2>&1
 
     cp ${WEBSERVER_HOME}/install/apache_default /etc/apache2/sites-available/000-default.conf >> ${DEBUG} 2>&1
-    rm /etc/apache2/sites-enabled/000-default.conf >> ${DEBUG} 2>&1
+    rm /etc/apache2/sites-enabled/000-default.conf > /dev/null
     ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/ >> ${DEBUG} 2>&1
 
     rm /etc/apache2/conf-available/other-vhosts-access-log.conf >> ${DEBUG} 2>&1
@@ -163,7 +163,7 @@ step_7_nextdom_customization() {
     done
 
     a2dismod status >> ${DEBUG} 2>&1
-    systemctl restart apache2 > /dev/null >> ${DEBUG} 2>&1
+    systemctl restart apache2 > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         service apache2 restart >> ${DEBUG} 2>&1
         if [ $? -ne 0 ]; then
@@ -176,7 +176,7 @@ step_7_nextdom_customization() {
     if [ $? -ne 0 ]; then
         service mysql stop >> ${DEBUG} 2>&1
         if [ $? -ne 0 ]; then
-            printf "${ROUGE}Ne peut arrter mysql - Annulation${NORMAL}"
+            printf "${ROUGE}Ne peut arrêter mysql - Annulation${NORMAL}"
             exit 1
         fi
     fi
@@ -223,8 +223,8 @@ step_8_nextdom_configuration() {
     sed -i "s/#USERNAME#/nextdom/g" ${WEBSERVER_HOME}/core/config/common.config.php
     sed -i "s/#PORT#/3306/g" ${WEBSERVER_HOME}/core/config/common.config.php
     sed -i "s/#HOST#/localhost/g" ${WEBSERVER_HOME}/core/config/common.config.php
-    chmod 775 -R ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
-    chown -R www-data:www-data ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
+    chmod 775 -R ${WEBSERVER_HOME}
+    chown -R www-data:www-data ${WEBSERVER_HOME}
 }
 
 step_9_nextdom_installation() {
@@ -270,7 +270,7 @@ step_10_nextdom_post() {
     if [ $(grep "www-data ALL=(ALL) NOPASSWD: ALL" /etc/sudoers | wc -l) -eq 0 ];then
         echo "www-data ALL=(ALL) NOPASSWD: ALL" | (EDITOR="tee -a" visudo)
         if [ $? -ne 0 ]; then
-            printf "${ROUGE}Ne peut permettre à  nextdom d'utiliser sudo - Annulation${NORMAL}"
+            printf "${ROUGE}Ne peut permettre à nextdom d'utiliser sudo - Annulation${NORMAL}"
             exit 1
         fi
     fi
@@ -281,7 +281,7 @@ step_10_nextdom_post() {
     fi
     cd ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
     ./gen_compress.sh >> ${DEBUG} 2>&1
-    service cron start
+    service cron start >> ${DEBUG} 2>&1
 }
 
 step_11_nextdom_check() {
@@ -350,15 +350,15 @@ fi
 
 displaylogo()
 {
-echo ""
-echo "███╗   ██╗███████╗██╗  ██╗████████╗██████╗  ██████╗ ███╗   ███╗"
-echo "████╗  ██║██╔════╝╚██╗██╔╝╚══██╔══╝██╔══██╗██╔═══██╗████╗ ████║"
-echo "██╔██╗ ██║█████╗   ╚███╔╝    ██║   ██║  ██║██║   ██║██╔████╔██║"
-echo "██║╚██╗██║██╔══╝   ██╔██╗    ██║   ██║  ██║██║   ██║██║╚██╔╝██║"
-echo "██║ ╚████║███████╗██╔╝ ██╗   ██║   ██████╔╝╚██████╔╝██║ ╚═╝ ██║                     "
-echo "╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═════╝  ╚═════╝ ╚═╝     ╚═╝                     "
-echo "                                                                                    "
-printf "${CYAN}Bienvenue dans l'installateur de NextDom${NORMAL}                        \n"
+    echo ""
+    echo "███╗   ██╗███████╗██╗  ██╗████████╗██████╗  ██████╗ ███╗   ███╗"
+    echo "████╗  ██║██╔════╝╚██╗██╔╝╚══██╔══╝██╔══██╗██╔═══██╗████╗ ████║"
+    echo "██╔██╗ ██║█████╗   ╚███╔╝    ██║   ██║  ██║██║   ██║██╔████╔██║"
+    echo "██║╚██╗██║██╔══╝   ██╔██╗    ██║   ██║  ██║██║   ██║██║╚██╔╝██║"
+    echo "██║ ╚████║███████╗██╔╝ ██╗   ██║   ██████╔╝╚██████╔╝██║ ╚═╝ ██║                     "
+    echo "╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═════╝  ╚═════╝ ╚═╝     ╚═╝                     "
+    echo "                                                                                    "
+    printf "${CYAN}Bienvenue dans l'installateur de NextDom${NORMAL}                        \n"
 
 }
 
@@ -369,7 +369,7 @@ infos(){
 
 selectoption(){
     PS3='Selectionner la branche github a installer: '
-    options=("master" "develop" "notification" "Quit")
+    options=("master" "develop" "feature/Sass" "Quit")
     select opt in "${options[@]}"
     do
         case $opt in
@@ -387,8 +387,8 @@ selectoption(){
             infos
             break
             ;;
-            "notification")
-            VERSION=notification
+            "feature/Sass")
+            VERSION=feature/Sass
             clear
             displaylogo
             infos
@@ -432,13 +432,13 @@ progress()
 
 displaylogo
 selectoption
-printf "${CYAN}Avancement de l'installation${NORMAL}                        \n"
+printf "${CYAN}Avancement de l'installation${NORMAL}               \n"
 progress 0 "upgrade du system                                                 "
 progress 5  "upgrade du system                                                 "
 progress 10 "installation des packages de base                                "
 progress 15 "installation des packages de base                                "
-progress 20 "installation de la base de donne                                "
-progress 25 "installation de la base de donne                                "
+progress 20 "installation de la base de donnée                                "
+progress 25 "installation de la base de donnée                                "
 progress 30 "installation apache                                              "
 progress 35 "installation apache                                              "
 progress 40 "installation php                                                 "
@@ -459,8 +459,8 @@ clear
 displaylogo
 printf "${VERT}installation terminée avec succes   ${NORMAL}                \n"
 printf "Le mot de passe root MySQL est ${CYAN}${MYSQL_ROOT_PASSWD}${NORMAL} \n"
-printf "Un redémarrage devrait tre effectuée                                 \n"
+printf "Un redémarrage devrait être effectué             \n"
 
-rm -rf ${WEBSERVER_HOME}/index.html > /dev/null 2>&1
+rm -rf ${WEBSERVER_HOME}/index.html >> ${DEBUG} 2>&1
 
 exit 0
