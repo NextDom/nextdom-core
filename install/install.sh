@@ -49,8 +49,7 @@ step_1_upgrade() {
     apt-get -q -y dist-upgrade >> ${DEBUG} 2>&1
 }
 
-    apt-get -q -y install ntp ca-certificates unzip curl sudo cron locate tar telnet wget logrotate fail2ban dos2unix ntpdate htop iotop vim iftop smbclient git pytho
-n python-pip software-properties-common libexpat1 ssl-cert apt-transport-https xvfb cutycapt xauth >> ${DEBUG} 2>&1
+    apt-get -q -y install ntp ca-certificates unzip curl sudo cron locate tar telnet wget logrotate fail2ban dos2unix ntpdate htop iotop vim iftop smbclient git python python-pip software-properties-common libexpat1 ssl-cert apt-transport-https xvfb cutycapt xauth >> ${DEBUG} 2>&1
     add-apt-repository non-free >> ${DEBUG} 2>&1
     apt-get -q update >> ${DEBUG} 2>&1
     apt-get -q -y install libav-tools libsox-fmt-mp3 sox libttspico-utils espeak mbrola >> ${DEBUG} 2>&1
@@ -89,11 +88,9 @@ step_4_apache() {
 }
 
 
-    apt-get -y install php7.0 php7.0-curl php7.0-gd php7.0-imap php7.0-json php7.0-mcrypt php7.0-mysql php7.0-xml php7.0-opcache php7.0-soap php7.0-xmlrpc libapache2-
-mod-php7.0 php7.0-common php7.0-dev php7.0-zip php7.0-ssh2 php7.0-mbstring composer >> ${DEBUG} 2>&1
+    apt-get -y install php7.0 php7.0-curl php7.0-gd php7.0-imap php7.0-json php7.0-mcrypt php7.0-mysql php7.0-xml php7.0-opcache php7.0-soap php7.0-xmlrpc libapache2-mod-php7.0 php7.0-common php7.0-dev php7.0-zip php7.0-ssh2 php7.0-mbstring composer >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
-        apt_install libapache2-mod-php5 php5 php5-common php5-curl php5-dev php5-gd php5-json php5-memcached php5-mysqlnd php5-cli php5-ssh2 php5-redis php5-mbstring
-composer >> ${DEBUG} 2>&1
+        apt_install libapache2-mod-php5 php5 php5-common php5-curl php5-dev php5-gd php5-json php5-memcached php5-mysqlnd php5-cli php5-ssh2 php5-redis php5-mbstring composer >> ${DEBUG} 2>&1
         apt_install php5-ldap >> ${DEBUG} 2>&1
     else
         apt-get -y install php7.0-ldap >> ${DEBUG} 2>&1
@@ -102,7 +99,6 @@ composer >> ${DEBUG} 2>&1
 }
 step_6_nextdom_download() {
     echo "                                                                                    "
-    rm -fr ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
     mkdir -p ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
 
     cd  ${WEBSERVER_HOME}
@@ -122,7 +118,7 @@ step_7_nextdom_customization() {
     ln -s /etc/apache2/conf-available/security.conf /etc/apache2/conf-enabled/ >> ${DEBUG} 2>&1
 
     cp ${WEBSERVER_HOME}/install/apache_default /etc/apache2/sites-available/000-default.conf >> ${DEBUG} 2>&1
-    rm /etc/apache2/sites-enabled/000-default.conf > /dev/null
+    rm /etc/apache2/sites-enabled/000-default.conf >> ${DEBUG} 2>&1
     ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/ >> ${DEBUG} 2>&1
 
     rm /etc/apache2/conf-available/other-vhosts-access-log.conf >> ${DEBUG} 2>&1
@@ -233,8 +229,7 @@ step_9_nextdom_installation() {
     chown www-data:www-data -R /tmp/nextdom >> ${DEBUG} 2>&1
     cd ${WEBSERVER_HOME}
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" >> ${DEBUG} 2>&1
-    php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { ec
-ho 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" >> ${DEBUG} 2>&1
+    php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" >> ${DEBUG} 2>&1
     php composer-setup.php >> ${DEBUG} 2>&1
     php -r "unlink('composer-setup.php');" >> ${DEBUG} 2>&1
     php composer.phar require symfony/translation >> ${DEBUG} 2>&1
