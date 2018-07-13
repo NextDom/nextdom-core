@@ -36,7 +36,7 @@ $('#bt_displayScenario').click(function(){
   		msglist.setAttribute('data-status', "open");
         $('#div_displayScenario').animate({right: "0px"});
         $('.div_displayEquipement').packery();
- 		msglist.setAttribute("class", "rotated-image fa fa-angle-double-left fa-2x icon_nextdom_blue");
+ 		msglist.setAttribute("class", "fa-flip-horizontal fa fa-angle-double-left fa-2x icon_nextdom_blue");
     } else {
        	msglist.setAttribute('data-status', "close");
         $('#div_displayScenario').animate({right: "-250px"});
@@ -52,7 +52,7 @@ $('#bt_displayObject').click(function(){
   		object.setAttribute('data-status', "open");
         $('#div_displayObjectList').animate({left: "0px"});
         $('.div_displayEquipement').packery();
- 		object.setAttribute("class", "rotated-image fa fa-angle-double-right fa-2x icon_nextdom_blue");
+ 		object.setAttribute("class", "fa-flip-horizontal fa fa-angle-double-right fa-2x icon_nextdom_blue");
     } else {
        	object.setAttribute('data-status', "close");
         $('#div_displayObjectList').animate({left: "-250px"});

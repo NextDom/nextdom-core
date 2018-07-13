@@ -3440,8 +3440,8 @@ div.wijmo-wijmenu .wijmo-wijmenu-child .wijmo-wijmenu-text {
   filter: alpha(opacity=200);
   position: absolute;
   font-size: 15em;
-  top: 48%;
-  left: 48%;
+  top: 41%;
+  left: 41%;
   z-index: 99999;
   border: none;
   outline-style: none;
@@ -6459,8 +6459,7 @@ body {
   border-radius: 4px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
-
-.eqLogic-widget :after {
+.eqLogic-widget:after {
   content: none;
 }
 
@@ -6471,8 +6470,7 @@ body {
   vertical-align: top;
   text-shadow: initial;
 }
-
-.scenario-widget :after {
+.scenario-widget:after {
   content: none;
 }
 
@@ -6630,7 +6628,8 @@ legend {
 
 #div_alert {
   display: none;
-  width: 100%;
+  margin: 10px auto;
+  width: 80%;
 }
 
 #md_pageHelp {
@@ -6681,6 +6680,81 @@ legend {
   background-image: url(/3rdparty/jquery.utils/gritter.png);
 }
 
+.sidenav-overlay {
+  height: 100%;
+  position: absolute;
+  z-index: 9999;
+  left: -250px;
+  background-color: rgba(0, 0, 0, 0.7);
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  width: 250px;
+  float: left;
+}
+
+.sidenav-overlay a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav-overlay .closebtn {
+  position: absolute;
+  top: 0;
+  right: 250px;
+  font-size: 36px;
+}
+
+.displayScenario-overlay {
+  height: 100%;
+  position: absolute;
+  z-index: 9999;
+  right: -250px;
+  background-color: rgba(0, 0, 0, 0.7);
+  overflow-x: hidden;
+  padding-top: 60px;
+  width: 250px;
+  float: left;
+}
+
+.displayScenario-overlay a:hover {
+  color: #f1f1f1;
+}
+
+.displayScenario-overlay .closebtn {
+  position: absolute;
+  top: 0;
+  left: 250px;
+  font-size: 36px;
+}
+
+.alert {
+  width: 80%;
+  margin: 10px auto;
+}
+
+.alert-danger {
+  border-left: 5px solid #DFAAA9;
+  box-shadow: 0 0 0 0 rgba(235, 204, 209, 0.7) !important;
+  -webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
+  -moz-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
+  -ms-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
+  animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
+}
+
+#bt_displayObject {
+  position: fixed;
+  top: 30px;
+  left: 0px;
+  margin-left: 10px;
+}
+
+#bt_displayScenario {
+  position: fixed;
+  top: 30px;
+  right: 0px;
+  margin-right: 10px;
+}
+
 .green {
   background-color: #00cc00;
 }
@@ -6719,6 +6793,10 @@ legend {
 
 .white {
   background-color: #FFF;
+}
+
+.icon_white {
+  color: #FFF;
 }
 
 .eqLogic-battery {
@@ -6779,6 +6857,39 @@ legend {
   bottom: 3px;
   right: 3px;
   cursor: default;
+}
+
+/**
+ * Page d'administration
+ */
+#config .global-tab-content {
+  height: calc(100% - 50px);
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+#networktab .label-success,
+#cachetab .label-primary,
+#generaltab .label-info {
+  font-size: 1em;
+}
+
+#generaltab .link-dns-success {
+  color: white;
+  text-decoration: underline;
+}
+
+#colortab-list {
+  margin-left: 10px;
+}
+
+#interacttab #bt_addColorConvert,
+#summarytab #bt_addObjectSummary {
+  font-size: 1.8em;
+}
+
+#eqlogictab .form-group label {
+  font-size: 1.4em;
 }
 
 /*# sourceMappingURL=nextdom.mob.css.map */
