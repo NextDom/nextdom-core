@@ -267,3 +267,36 @@ margin-right:10px;
     right: 3px;
     cursor:default;
 }
+
+/**
+ * Page d'administration
+ */
+#config .global-tab-content {
+    height:calc(100% - 50px);
+    overflow:auto;
+    overflow-x: hidden;
+}
+
+#networktab .label-success,
+#cachetab .label-primary,
+#generaltab .label-info {
+    font-size : 1em;
+}
+
+#generaltab .link-dns-success {
+    color:white;
+    text-decoration: underline;
+}
+
+#colortab-list {
+    margin-left: 10px;
+}
+
+#interacttab #bt_addColorConvert,
+#summarytab #bt_addObjectSummary {
+    font-size: 1.8em;
+}
+
+#eqlogictab .form-group label {
+    font-size : 1.4em
+}
