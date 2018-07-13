@@ -117,28 +117,47 @@ if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
     } else {
         echo '<div class="col-md-' . $object->getDisplay('dashboard::size', 12) . '">';
     }
-    echo '<div data-object_id="' . $object->getId() . '" class="div_object">';
-    echo '<legend style="margin-bottom : 0px;"><a class="div_object" style="text-decoration:none" href="index.php?v=d&p=object&id=' . $object->getId() . '">' . $object->getDisplay('icon') . ' ' . $object->getName() . '</a><span style="font-size : 0.6em;margin-left:10px;">' . $object->getHtmlSummary() . '</span></legend>';
-    echo '<div class="div_displayEquipement" id="div_ob' . $object->getId() . '" style="width: 100%;padding-top:3px;margin-bottom : 3px;">';
-    echo '<script>getObjectHtml(' . $object->getId() . ')</script>';
-    echo '</div>';
-    echo '</div>';
-    echo '</div>';
+
+	echo '<div class="panel panel-default">';
+  		echo '<div class="panel-heading">';
+    		echo '<h3 class="panel-title">';
+    		echo '<a data-parent="" data-toggle="collapse" href="#config" style="text-decoration:none;">'.$object->getDisplay('icon') .' ' . $object->getName();
+    		echo '</h3>';
+    	echo '</div>';
+      	echo '<div id="config" class="accordion in">';
+        	echo '<div class="panel-body">';
+  				echo '<div class="div_displayEquipement" id="div_ob' . $object->getId() . '" style="width: 100%;padding-top:3px;margin-bottom : 3px;">';
+    				echo '<script>getObjectHtml(' . $object->getId() . ')</script>';
+    			echo '</div>';
+         	echo '</div>';
+        echo '</div>';
+	echo '</div>';
+
+
     foreach ($child_object as $child) {
         if ($child->getConfiguration('hideOnDashboard', 0) == 1) {
             continue;
         }
-        echo '<div class="col-md-' . $child->getDisplay('dashboard::size', 12) . '">';
-        echo '<div data-object_id="' . $child->getId() . '" style="margin-bottom : 3px;" class="div_object">';
-        echo '<legend style="margin-bottom : 0px;"><a style="text-decoration:none" href="index.php?v=d&p=object&id=' . $child->getId() . '">' . $child->getDisplay('icon') . ' ' . $child->getName() . '</a><span style="font-size : 0.6em;margin-left:10px;">' . $child->getHtmlSummary() . '</span></legend>';
-        echo '<div class="div_displayEquipement" id="div_ob' . $child->getId() . '" style="width: 100%;padding-top:3px;margin-bottom : 3px;">';
-        echo '<script>getObjectHtml(' . $child->getId() . ')</script>';
-        echo '</div>';
-        echo '</div>';
-        echo '</div>';
+  echo '<div class="panel panel-default">';
+      echo '<div class="panel-heading">';
+          echo '<h3 class="panel-title">';
+          echo '<a data-parent="" data-toggle="collapse" href="#config_' . $child->getId() . '" style="text-decoration:none;">'.$child->getDisplay('icon') .' ' . $child->getName();
+          echo '</h3>';
+      echo '</div>';
+      echo '<div id="config_' . $child->getId() . '" class="accordion in">';
+          echo '<div class="panel-body">';
+              echo '<div class="div_displayEquipement" id="div_ob' . $child->getId() . '" style="width: 100%;padding-top:3px;margin-bottom : 3px;">';
+                  echo '<script>getObjectHtml(' . $child->getId() . ')</script>';
+              echo '</div>';
+          echo '</div>';
+      echo '</div>';
+  echo '</div>';
+
     }
 
     ?>
+
+
 </div>
 </div>
 </div>

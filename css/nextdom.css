@@ -6440,7 +6440,7 @@ html {
 body {
     font-family: 'noto', sans-serif !important;
     font-size: 1.42em;
-    padding-top: 50px;
+    padding-top: 70px;
     height: 100%;
 }
 
@@ -7533,10 +7533,6 @@ input[type=checkbox] {
     -moz-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
     -ms-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
     animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
-}
-
-#div_mainContainer {
-    margin-top: 50px;
 }
 
 #bt_displayObject {
