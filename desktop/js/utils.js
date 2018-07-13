@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -162,17 +161,27 @@ $(function () {
 }
 /*********************Gestion de l'heure********************************/
 setInterval(function () {
-    var date = new Date();
-    date.setTime(date.getTime() + clientServerDiffDatetime);
-    var hour = date.getHours();
-    var minute = date.getMinutes();
-    var seconde = date.getSeconds();
-    var horloge = (hour < 10) ? '0' + hour : hour;
-    horloge += ':';
-    horloge += (minute < 10) ? '0' + minute : minute;
-    horloge += ':';
-    horloge += (seconde < 10) ? '0' + seconde : seconde;
-    $('#horloge').text(horloge);
+       // les noms de jours / mois
+     var jours = new Array("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi");
+     var mois = new Array("janvier", "fevrier", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "decembre");
+     // on recupere la date
+     var date = new Date();
+     var minutes = date.getMinutes();
+  	var secondes = date.getSeconds();
+     if(minutes < 10){
+          minutes = "0" + minutes;
+     }
+  if(secondes < 10){
+          secondes = "0" + secondes;
+     }
+     // on construit le message
+     var horloge= jours[date.getDay()] + " ";   // nom du jour
+     horloge += date.getDate() + " ";   // numero du jour
+     horloge += mois[date.getMonth()] + " ";   // mois
+     horloge += date.getFullYear();
+  	 horloge += ' -';
+  	 horloge += date.getHours() + ":" + minutes + ":" +secondes;
+        $('#horloge').text(horloge);
 }, 1000);
 
 
@@ -403,7 +412,7 @@ function initReportMode() {
        $('#wrap').css('margin-bottom', '0px');
        $('.reportModeVisible').show();
        $('.reportModeHidden').hide();
-   } 
+   }
 }
 
 function initTableSorter() {
@@ -754,7 +763,7 @@ function editWidgetCmdMode(_mode){
     events: {
         show: function(opt) {
             $.contextMenu.setInputValues(opt, this.data());
-        }, 
+        },
         hide: function(opt) {
             $.contextMenu.getInputValues(opt, this.data());
         }
@@ -773,8 +782,8 @@ function editWidgetCmdMode(_mode){
     layoutDefaut: {
         name: "{{Defaut}}",
         icon : 'fa-square-o',
-        disabled:function(key, opt) { 
-            return !$(this).hasClass('allowLayout') || !$(this).hasClass('eqLogic_layout_table'); 
+        disabled:function(key, opt) {
+            return !$(this).hasClass('allowLayout') || !$(this).hasClass('eqLogic_layout_table');
         },
         callback: function(key, opt){
            saveWidgetDisplay()
@@ -792,11 +801,11 @@ function editWidgetCmdMode(_mode){
    layoutTable: {
     name: "{{Table}}",
     icon : 'fa-table',
-    disabled:function(key, opt) { 
-        return !$(this).hasClass('allowLayout') || $(this).hasClass('eqLogic_layout_table'); 
+    disabled:function(key, opt) {
+        return !$(this).hasClass('allowLayout') || $(this).hasClass('eqLogic_layout_table');
     },
     callback: function(key, opt){
-       saveWidgetDisplay()   
+       saveWidgetDisplay()
        nextdom.eqLogic.simpleSave({
         eqLogic : {
             id : $(this).attr('data-eqLogic_id'),
@@ -812,8 +821,8 @@ sep2 : "---------",
 addTableColumn: {
     name: "{{Ajouter colonne}}",
     icon : 'fa-plus',
-    disabled:function(key, opt) { 
-        return !$(this).hasClass('eqLogic_layout_table'); 
+    disabled:function(key, opt) {
+        return !$(this).hasClass('eqLogic_layout_table');
     },
     callback: function(key, opt){
         saveWidgetDisplay()
@@ -831,8 +840,8 @@ addTableColumn: {
 addTableLine: {
     name: "{{Ajouter ligne}}",
     icon : 'fa-plus',
-    disabled:function(key, opt) { 
-        return !$(this).hasClass('eqLogic_layout_table'); 
+    disabled:function(key, opt) {
+        return !$(this).hasClass('eqLogic_layout_table');
     },
     callback: function(key, opt){
         saveWidgetDisplay()
@@ -850,8 +859,8 @@ addTableLine: {
 removeTableColumn: {
     name: "{{Supprimer colonne}}",
     icon : 'fa-minus',
-    disabled:function(key, opt) { 
-        return !$(this).hasClass('eqLogic_layout_table'); 
+    disabled:function(key, opt) {
+        return !$(this).hasClass('eqLogic_layout_table');
     },
     callback: function(key, opt){
         saveWidgetDisplay()
@@ -869,8 +878,8 @@ removeTableColumn: {
 removeTableLine: {
     name: "{{Supprimer ligne}}",
     icon : 'fa-minus',
-    disabled:function(key, opt) { 
-        return !$(this).hasClass('eqLogic_layout_table'); 
+    disabled:function(key, opt) {
+        return !$(this).hasClass('eqLogic_layout_table');
     },
     callback: function(key, opt){
         saveWidgetDisplay()

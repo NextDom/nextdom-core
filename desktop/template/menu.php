@@ -105,9 +105,7 @@ $panelMenu = PrepareView::getPanelMenu();
                         if (Status::isConnectAdmin()) {
                             ?>
                             <li class="dropdown cursor">
-                                <a data-toggle="dropdown"><i class="fa fa-wrench fa-3x"></i> <br><span
-                                    class="hidden-xs hidden-sm hidden-md">{{Outils}}</span> <b
-                                    class="caret"></b></a>
+                                <a data-toggle="dropdown"><i class="fa fa-wrench fa-3x"></i> <br><span class="hidden-xs hidden-sm hidden-md">{{Outils}}</span> <b class="caret"></b></a>
                                     <ul class="dropdown-menu" role="menu">
                                         <li><a href="index.php?v=d&p=object"><i class="fa fa-picture-o"></i> {{Objets}}</a></li>
                                         <li><a href="index.php?v=d&p=interact"><i class="fa fa-comments-o"></i> {{Interactions}}</a></li>
@@ -127,45 +125,8 @@ $panelMenu = PrepareView::getPanelMenu();
                                                 ?>
                                             </ul>
                                         </li>
-                                        <?php
-                                    }
-                                    ?>
-                                </ul>
-
-                            </div>
-                            <div class="collapse navbar-collapse col-lg-4 col-md-4 col-lg-offset-2 text-center">
-                                <ul class="nav navbar-nav">
-                                    <a class="navbar-brand" style="margin-top:-5px" href="<?php echo $homeLink; ?>">
-                                        <img src="<?php echo config::byKey('product_image') ?>" height="70"/></a><br>
-                                        <i class="fa fa-bars" style="margin-top:35px" data-toggle="collapse" data-target="#collapse_categorie"></i>
-                                    </ul>
-                                </div>
-                                <div class="collapse navbar-collapse navbar-right col-lg-4 col-md-4" style="margin-right:25px">
-                                    <ul class="nav navbar-nav navbar-right">
-                                        <li>
-                                            <a href="#" class="default-cursor">
-                                                <?php
-                                                echo object::getGlobalHtmlSummary();
-                                                ?>
-                                            </a>
-                                        </li>
-                                        <li>
-                                        <?php
-                                        $nbMessage = message::nbMessage();
-                                        $displayMessage = ($nbMessage > 0) ? '' : 'display : none;'; ?>
-                                        <li>
-                                            <a href="#" id="bt_messageModal"><span class="badge" id="span_nbMessage" title="{{Nombre de messages}}" style="<?php echo $displayMessage; ?>"><?php echo $nbMessage; ?></span></a>
-
-                                        <?php $nbUpdate = update::nbNeedUpdate();
-                                        $displayUpdate = ($nbUpdate > 0) ? '' : 'display : none;'; ?>
-
-                                            <a href="index.php?v=d&p=update"><span class="badge"  style="padding-top:5px" id="span_nbUpdate" title="{{Nombre de mises à jour}}" style="<?php echo $displayUpdate; ?>"><?php echo $nbUpdate; ?></span></a>
-                                        </li>
-                                        </li>
-                                        <?php if (Status::isConnectAdmin()) {
-                                            ?>
-                                            <li class="dropdown">
-                                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-cogs fa-3x"></i><span class="caret"></span></a>
+                                                  <li class="dropdown">
+                                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-cogs fa-3x"><span class="hidden-xs hidden-sm hidden-md"></i><br>{{Réglages}}</span> <b class="caret"></b></a>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="index.php?v=d&p=administration" tabindex="0"><i class="fa fa-wrench"></i> {{Configuration}}</a></li>
                                                     <li><a href="index.php?v=d&p=backup"><i class="fa fa-floppy-o"></i> {{Sauvegardes}}</a></li>
@@ -200,8 +161,46 @@ $panelMenu = PrepareView::getPanelMenu();
                                                     ?>
                                                 </ul>
                                             </li>
+                                        <?php
+                                    }
+                                    ?>
+                                </ul>
+
+                            </div>
+                            <div class="collapse navbar-collapse col-lg-4 col-md-4 col-lg-offset-1 text-center">
+                                <ul class="nav navbar-nav">
+                                    <a class="navbar-brand" style="margin-top:-5px" href="<?php echo $homeLink; ?>">
+                                        <img src="<?php echo config::byKey('product_image') ?>" height="70"/></a><br>
+                                        <i class="fa fa-bars" style="margin-top:35px" data-toggle="collapse" data-target="#collapse_categorie"></i>
+                                    </ul>
+                                </div>
+                                <div class="collapse navbar-collapse navbar-right col-lg-4 col-md-4" style="margin-right:25px">
+                                    <ul class="nav navbar-nav navbar-right">
+                                      <li>
+                                      	<a href="#" class="default-cursor">
+                        				<span id="horloge"><?php setlocale(LC_TIME, 'fra_fra'); echo strftime('%A %d %B %Y, %H:%M:%S'); ?></span>
+                    					</a>
+
+                                            <a href="#" class="default-cursor">
+                                                <?php echo object::getGlobalHtmlSummary(); ?>
+                                            </a>
+
+                                      </li>
+
+                                        <li>
+                                        	<?php $nbMessage = message::nbMessage(); $displayMessage = ($nbMessage > 0) ? '' : 'display : none;'; ?>
+                                        <li>
+                                            <a href="#" id="bt_messageModal"><span class="badge" id="span_nbMessage" title="{{Nombre de messages}}" style="<?php echo $displayMessage; ?>"><?php echo $nbMessage; ?></span></a>
+											<?php $nbUpdate = update::nbNeedUpdate(); $displayUpdate = ($nbUpdate > 0) ? '' : 'display : none;'; ?>
+											<a href="index.php?v=d&p=update"><span class="badge"  style="padding-top:5px" id="span_nbUpdate" title="{{Nombre de mises à jour}}" style="<?php echo $displayUpdate; ?>"><?php echo $nbUpdate; ?></span></a>
+                                        </li>
+                                        </li>
+                                        <?php if (Status::isConnectAdmin()) {
+                                            ?>
+
                                         <?php }
                                         ?>
+
                                     </ul>
                                 </div>
                             </nav>
