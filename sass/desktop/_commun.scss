@@ -363,3 +363,40 @@ input[type=checkbox] {
 .highcharts-table-caption{
   display: none;
 }
+
+
+nav .navbar-left {
+  margin-left: 25px;
+}
+
+nav .navbar-right {
+  margin-right: 25px;
+}
+
+nav .navbar-brand {
+  margin-top: -5px;
+}
+
+nav .navbar-brand img {
+  height: 70px;
+}
+
+nav .burger {
+  margin-top: 35px;
+}
+
+nav #span_nbUpdate {
+  padding-top:5px;
+}
+
+nav li .caret {
+  transition: all 0.3s ease;
+}
+
+nav li.open .caret {
+  transform: rotate(180deg);
+}
+
+nav i.fa-3x {
+  display: block;
+}
