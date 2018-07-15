@@ -7463,6 +7463,11 @@ nav i.fa-3x {
   padding: 10px 5px !important;
 }
 
+#div_pageContainer {
+  position: relative;
+  overflow: hidden;
+}
+
 #div_pageContainer .iconlist {
   background-color: rgba(255, 255, 255, 0);
   height: 130px;
