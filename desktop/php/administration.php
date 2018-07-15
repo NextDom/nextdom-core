@@ -1,7 +1,9 @@
 <?php
+
 use NextDom\Managers\UpdateManager;
 use NextDom\Helpers\Status;
 
+Status::initConnectState();
 Status::isConnectedAdminOrFail();
 
 $repos = UpdateManager::listRepo();
@@ -41,28 +43,22 @@ user::isBan();
             <form class="form-horizontal">
                 <fieldset>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help"
-                               data-help="{{Nom de votre  <?php echo config::byKey('product_name'); ?> (utilisé notamment par le market)}}">{{Nom
-                            de votre}} <?php echo config::byKey('product_name'); ?></label>
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{Nom de votre  <?php echo config::byKey('product_name'); ?> (utilisé notamment par le market)}}">{{Nom de votre}} <?php echo config::byKey('product_name'); ?></label>
                         <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                             <input type="text" class="configKey form-control" data-l1key="name"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help"
-                               data-help="{{Indique votre type de matériel}}">{{Système}}</label>
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{Indique votre type de matériel}}">{{Système}}</label>
                         <div class="col-lg-5 col-md-5 col-sm-6 col-xs-6">
                             <span class="label label-info"><?php echo nextdom::getHardwareName() ?></span>
                         </div>
                         <div class="col-lg-2 col-md-3 col-sm-3">
-                            <a class="btn btn-default form-control" id="bt_resetHardwareType"><i
-                                        class="fa fa-refresh"></i> {{Rafraîchir}}</a>
+                            <a class="btn btn-default form-control" id="bt_resetHardwareType"><i class="fa fa-refresh"></i> {{Rafraîchir}}</a>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help"
-                               data-help="{{Clef d'installation qui permet d'identifier votre}} <?php echo config::byKey('product_name'); ?> {{quand il communique avec le market}}">{{Clef
-                            d'installation}}</label>
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{Clef d'installation qui permet d'identifier votre}} <?php echo config::byKey('product_name'); ?> {{quand il communique avec le market}}">{{Clef d'installation}}</label>
                         <div class="col-lg-5 col-md-5 col-sm-6 col-xs-6">
                             <span class="label label-info"><?php echo nextdom::getHardwareKey() ?></span>
                         </div>
@@ -72,8 +68,7 @@ user::isBan();
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help"
-                               data-help="{{Langue de votre}} <?php echo config::byKey('product_name'); ?>">{{Langue}}</label>
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{Langue de votre}} <?php echo config::byKey('product_name'); ?>">{{Langue}}</label>
                         <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                             <select class="configKey form-control" data-l1key="language">
                                 <option value="fr_FR">French</option>
@@ -89,25 +84,20 @@ user::isBan();
                             </select>
                         </div>
                         <div>
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{Générer les
-                                traductions}}</label>
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{Générer les traductions}}</label>
                             <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                                <input type="checkbox" class="configKey" data-l1key="generateTranslation"
-                                       title="{{Option pour les développeurs permettant à}} <?php echo config::byKey('product_name'); ?> {{de générer les phrases à traduire}}"/>
+                                <input type="checkbox" class="configKey" data-l1key="generateTranslation" title="{{Option pour les développeurs permettant à}} <?php echo config::byKey('product_name'); ?> {{de générer les phrases à traduire}}"/>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help"
-                               data-help="{{Durée de vie de votre connexion à}} <?php echo config::byKey('product_name'); ?> {{si vous n'avez pas coché la case enregistrer cet ordinateur}}">{{Durée
-                            de vie des sessions (heure)}}</label>
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{Durée de vie de votre connexion à}} <?php echo config::byKey('product_name'); ?> {{si vous n'avez pas coché la case enregistrer cet ordinateur}}">{{Durée de vie des sessions (heure)}}</label>
                         <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                             <input type="text" class="configKey form-control" data-l1key="session_lifetime"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help">{{Dernière date
-                            connue}}</label>
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help">{{Dernière date connue}}</label>
                         <div class="col-lg-5 col-md-5 col-sm-6 col-xs-6">
                             <?php
 
@@ -117,14 +107,13 @@ user::isBan();
                             <span class="label label-info"><?php echo $lastKnowDate ?></span>
                         </div>
                         <div class="col-lg-2 col-md-3 col-sm-3">
-                            <a class="btn btn-default form-control" id="bt_resetHour"><i class="fa fa-refresh"></i>
-                                {{Remise à zéro}}</a>
+                            <a class="btn btn-default form-control" id="bt_resetHour">
+                                <i class="fa fa-refresh"></i> {{Remise à zéro}}
+                            </a>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help"
-                               data-help="{{Fuseau horaire de votre}} <?php echo config::byKey('product_name'); ?>">{{Date
-                            et heure}}</label>
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{Fuseau horaire de votre}} <?php echo config::byKey('product_name'); ?>">{{Date et heure}}</label>
                         <div class="col-lg-5 col-md-5 col-sm-6 col-xs-6">
                             <select class="configKey form-control" data-l1key="timezone">
                                 <option value="Pacific/Midway">(GMT-11:00) Midway Island, Samoa</option>
@@ -202,8 +191,7 @@ user::isBan();
                                 <option value="Asia/Rangoon">(GMT+06:30) Yangon (Rangoon)</option>
                                 <option value="Asia/Bangkok">(GMT+07:00) Bangkok, Hanoi, Jakarta</option>
                                 <option value="Asia/Krasnoyarsk">(GMT+07:00) Krasnoyarsk</option>
-                                <option value="Asia/Hong_Kong">(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi
-                                </option>
+                                <option value="Asia/Hong_Kong">(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi</option>
                                 <option value="Asia/Irkutsk">(GMT+08:00) Irkutsk, Ulaan Bataar</option>
                                 <option value="Australia/Perth">(GMT+08:00) Perth</option>
                                 <option value="Australia/Eucla">(GMT+08:45) Eucla</option>
@@ -228,22 +216,18 @@ user::isBan();
                             </select>
                         </div>
                         <div class="col-lg-4 col-md-5 col-sm-6 col-xs-6">
-                            <a class="btn btn-primary" id="bt_forceSyncHour"><i class="fa fa-clock-o"></i> {{Forcer la
-                                synchronisation de l'heure}}</a>
+                            <a class="btn btn-primary" id="bt_forceSyncHour"><i class="fa fa-clock-o"></i> {{Forcer la synchronisation de l'heure}}</a>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help"
-                               data-help="{{Permet d'ajouter un serveur de temps à}} <?php echo config::byKey('product_name'); ?> {{utilisé lorsque}} <?php echo config::byKey('product_name'); ?> {{force la synchronisation de l'heure}}">{{Serveur
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{Permet d'ajouter un serveur de temps à}} <?php echo config::byKey('product_name'); ?> {{utilisé lorsque}} <?php echo config::byKey('product_name'); ?> {{force la synchronisation de l'heure}}">{{Serveur
                             de temps optionnel}}</label>
                         <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                             <input type="text" class="configKey form-control" data-l1key="ntp::optionalServer"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help"
-                               data-help="{{Indique à}} <?php echo config::byKey('product_name'); ?> {{de ne pas prendre en compte l'heure du système}}">{{Ignorer
-                            la vérification de l'heure}}</label>
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{Indique à}} <?php echo config::byKey('product_name'); ?> {{de ne pas prendre en compte l'heure du système}}">{{Ignorer la vérification de l'heure}}</label>
                         <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                             <input type="checkbox" class="configKey" data-l1key="ignoreHourCheck"/>
                         </div>
@@ -288,9 +272,7 @@ user::isBan();
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help"
-                               data-help="{{Clef API globale de}} <?php echo config::byKey('product_name'); ?>">{{Clef
-                            API}}</label>
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{Clef API globale de}} <?php echo config::byKey('product_name'); ?>">{{Clef API}}</label>
                         <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
                             <div class="input-group">
                                 <span class="span_apikey"><?php echo $configs['api']; ?></span>
@@ -303,15 +285,12 @@ user::isBan();
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help"
-                               data-help="{{Clef API Pro de}} <?php echo config::byKey('product_name'); ?>">{{Clef API
-                            Pro}}</label>
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{Clef API Pro de}} <?php echo config::byKey('product_name'); ?>">{{Clef API Pro}}</label>
                         <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
                             <div class="input-group">
                                 <span class="span_apikey"><?php echo $configs['apipro']; ?></span>
                                 <span class="input-group-btn">
-                                    <a class="btn btn-default form-control bt_regenerate_api" data-plugin="pro"><i
-                                                class="fa fa-refresh"></i></a>
+                                    <a class="btn btn-default form-control bt_regenerate_api" data-plugin="pro"><i class="fa fa-refresh"></i></a>
                                 </span>
                             </div>
                         </div>
@@ -324,9 +303,7 @@ user::isBan();
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help"
-                               data-help="{{Clef Market de}} <?php echo config::byKey('product_name'); ?>">{{Clef
-                            Market}}</label>
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{Clef Market de}} <?php echo config::byKey('product_name'); ?>">{{Clef Market}}</label>
                         <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
                             <div class="input-group">
                                 <span class="span_apikey"><?php echo $configs['apimarket']; ?></span>
@@ -360,9 +337,8 @@ user::isBan();
                                     <div class="input-group">
                                         <span class="span_apikey"><?php echo config::byKey('api', $plugin->getId()); ?></span>
                                         <span class="input-group-btn">
-        <a class="btn btn-default form-control bt_regenerate_api" data-plugin="' . $plugin->getId() . '"><i
-                    class="fa fa-refresh"></i></a>
-        </span>
+                                            <a class="btn btn-default form-control bt_regenerate_api" data-plugin="' . $plugin->getId() . '"><i class="fa fa-refresh"></i></a>
+                                        </span>
                                     </div>
                                 </div>
                                 <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{Accès API}}</label>
@@ -388,10 +364,8 @@ user::isBan();
             <br/>
             <form class="form-horizontal">
                 <fieldset>
-                    <div class="alert alert-danger">{{ATTENTION : ces opérations sont risquées, vous pouvez perdre
-                        l'accès à votre système et à}} <?php echo config::byKey('product_name'); ?>{{.
-                        L'équipe}} <?php echo config::byKey('product_name'); ?> {{se réserve le droit de refuser toute
-                        demande de support en cas de mauvaise manipulation.}}
+                    <div class="alert alert-danger">
+                        {{ATTENTION : ces opérations sont risquées, vous pouvez perdre l'accès à votre système et à}} <?php echo config::byKey('product_name'); ?>{{. L'équipe}} <?php echo config::byKey('product_name'); ?> {{se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.}}
                     </div>
                     <legend><i class="fa fa-terminal"></i> {{Système}}</legend>
                     <div class="form-group">
