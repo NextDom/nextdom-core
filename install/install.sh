@@ -29,35 +29,36 @@ delay(){
 
 apt_install() {
     apt-get -y install "$@"
+    if [ $? -ne 0 ]; then
         printf "${ROUGE}Ne peut installer $@ - Annulation${NORMAL}"
         exit 1
     fi
 }
 
-
 mysql_sql() {
     echo "$@" | mysql -uroot -p${MYSQL_ROOT_PASSWD}
     if [ $? -ne 0 ]; then
         printf "${ROUGE}Ne peut exécuter $@ dans MySQL - Annulation${NORMAL}"
-    fi  exit 1
+        exit 1
+    fi
 }
 
 step_1_upgrade() {
     apt-get -q update  > ${DEBUG} 2>&1
-
     apt-get -q -f install  >> ${DEBUG} 2>&1
     apt-get -q -y dist-upgrade >> ${DEBUG} 2>&1
 }
 
+step_2_mainpackage() {
     apt-get -q -y install ntp ca-certificates unzip curl sudo cron locate tar telnet wget logrotate fail2ban dos2unix ntpdate htop iotop vim iftop smbclient git python python-pip software-properties-common libexpat1 ssl-cert apt-transport-https xvfb cutycapt xauth >> ${DEBUG} 2>&1
     add-apt-repository non-free >> ${DEBUG} 2>&1
     apt-get -q update >> ${DEBUG} 2>&1
     apt-get -q -y install libav-tools libsox-fmt-mp3 sox libttspico-utils espeak mbrola >> ${DEBUG} 2>&1
     apt-get -q -y remove brltty >> ${DEBUG} 2>&1
-
 }
 
 step_3_database() {
+    echo "mysql-server mysql-server/root_password password ${MYSQL_ROOT_PASSWD}" | debconf-set-selections
     echo "mysql-server mysql-server/root_password_again password ${MYSQL_ROOT_PASSWD}" | debconf-set-selections
     apt-get install -q -y mysql-client mysql-common mysql-server >> ${DEBUG} 2>&1
 
@@ -65,20 +66,20 @@ step_3_database() {
     if [ $? -ne 0 ]; then
         service mysql status  2>&1
         if [ $? -ne 0 ]; then
-
             systemctl start mysql > /dev/null 2>&1
             if [ $? -ne 0 ]; then
-            fi  service mysql start > /dev/null 2>&1
+                service mysql start > /dev/null 2>&1
+            fi
         fi
     fi
     systemctl status mysql > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         service mysql status 2>&1
         if [ $? -ne 0 ]; then
-
             echo "${ROUGE}Ne peut lancer mysql - Annulation${NORMAL}"
             exit 1
-    fi  fi
+        fi
+    fi
     mysqladmin -u root password ${MYSQL_ROOT_PASSWD}
 }
 
@@ -87,7 +88,7 @@ step_4_apache() {
     a2enmod rewrite >> ${DEBUG} 2>&1
 }
 
-
+step_5_php() {
     apt-get -y install php7.0 php7.0-curl php7.0-gd php7.0-imap php7.0-json php7.0-mcrypt php7.0-mysql php7.0-xml php7.0-opcache php7.0-soap php7.0-xmlrpc libapache2-mod-php7.0 php7.0-common php7.0-dev php7.0-zip php7.0-ssh2 php7.0-mbstring composer >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
         apt_install libapache2-mod-php5 php5 php5-common php5-curl php5-dev php5-gd php5-json php5-memcached php5-mysqlnd php5-cli php5-ssh2 php5-redis php5-mbstring composer >> ${DEBUG} 2>&1
@@ -95,17 +96,17 @@ step_4_apache() {
     else
         apt-get -y install php7.0-ldap >> ${DEBUG} 2>&1
     fi
-
 }
+
 step_6_nextdom_download() {
     echo "                                                                                    "
+    rm -fr ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
     mkdir -p ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
 
     cd  ${WEBSERVER_HOME}
     if [ "$(ls -A  ${WEBSERVER_HOME})" ]; then
         git fetch --all >> ${DEBUG} 2>&1
-
-        git pull origin ${VERSION}VERSION}
+        git pull origin ${VERSION}
     else
         git clone --quiet https://github.com/sylvaner/nextdom-core .
 
@@ -124,7 +125,7 @@ step_7_nextdom_customization() {
     rm /etc/apache2/conf-available/other-vhosts-access-log.conf >> ${DEBUG} 2>&1
     rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf >> ${DEBUG} 2>&1
 
-    mkdir /etc/systemd/system/apache2.service.d >> ${DEBUG} 2>&1
+    mkdir /etc/systemd/system/apache2.service.d >${DEBUG} 2>&1
     echo "[Service]" > /etc/systemd/system/apache2.service.d/privatetmp.conf
     echo "PrivateTmp=no" >> /etc/systemd/system/apache2.service.d/privatetmp.conf
 
@@ -159,7 +160,7 @@ step_7_nextdom_customization() {
     done
 
     a2dismod status >> ${DEBUG} 2>&1
-    systemctl restart apache2 > /dev/null 2>&1
+    systemctl restart apache2 >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
         service apache2 restart >> ${DEBUG} 2>&1
         if [ $? -ne 0 ]; then
@@ -177,7 +178,7 @@ step_7_nextdom_customization() {
         fi
     fi
 
-    rm /var/lib/mysql/ib_logfile* >> ${DEBUG} 2>&1
+    rm /var/lib/mysql/ib_logfile*
 
     if [ -d /etc/mysql/conf.d ]; then
         touch /etc/mysql/conf.d/nextdom_my.cnf
@@ -276,7 +277,7 @@ step_10_nextdom_post() {
     fi
     cd ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
     ./gen_compress.sh >> ${DEBUG} 2>&1
-    service cron start >> ${DEBUG} 2>&1
+    service cron start
 }
 
 step_11_nextdom_check() {
@@ -456,6 +457,6 @@ printf "${VERT}installation terminée avec succes   ${NORMAL}                \n"
 printf "Le mot de passe root MySQL est ${CYAN}${MYSQL_ROOT_PASSWD}${NORMAL} \n"
 printf "Un redémarrage devrait être effectué             \n"
 
-rm -rf ${WEBSERVER_HOME}/index.html >> ${DEBUG} 2>&1
+rm -rf ${WEBSERVER_HOME}/index.html > /dev/null 2>&1
 
 exit 0
