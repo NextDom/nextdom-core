@@ -162,10 +162,7 @@ try {
     }
 
   	echo "Restauration du cache...";
-  	copy('/tmp/nextdombackup/cache*', dirname(__FILE__) . '/../');
-	try {
-		cache::restore();
-	} catch (Exception $e) {
+  	system('cd /tmp/nextdom/cache; tar xfz "/tmp/nextdombackup/cache.tar.gz"');
 
 	}
 	echo "OK\n";
