@@ -119,7 +119,7 @@ try {
     }
     $rc = 0;
   	system('mkdir /tmp/nextdombackup');
-    system('cd /tmp/nextdombackup; tar xfz "' . $backup . '" ' . $exclude);
+    system('cd /tmp/nextdombackup; rm * -rf; tar xfz "' . $backup . '" ' . $exclude);
 
     echo "OK\n";
     if (!file_exists("/tmp/nextdombackup/DB_backup.sql")) {
@@ -188,6 +188,10 @@ try {
     } catch (Exception $ex) {
         echo "***ERREUR*** " . $ex->getMessage() . "\n";
     }
+
+    echo "Restauration des droits...";
+    system('chmod 777 /tmp -R');
+    echo "OK\n";
 
     try {
         nextdom::start();
