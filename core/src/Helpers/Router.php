@@ -105,7 +105,7 @@ class Router
      */
     private function showConfiguration() {
         \include_file('core', 'authentification', 'php');
-        \include_file('plugin_info', 'configuration', 'configuration', init('plugin'));
+        \include_file('plugin_info', 'configuration', 'configuration', init('plugin'), true);
     }
 
     /**
