@@ -24,7 +24,7 @@ class Utils
      * Ajouter une variable Javascript au code HTML
      *
      * @param string $varName Nom de la variable dans le code HTML
-     * @param mixed $value Valeur de la variable
+     * @param mixed $varValue Valeur de la variable
      */
     public static function sendVarToJs(string $varName, $varValue)
     {
@@ -69,7 +69,7 @@ class Utils
     /**
      * Rediriger vers un autre url
      *
-     * @param $url URL cible
+     * @param string $url URL cible
      * @param null $forceType Forcage si 'JS' TODO: ???
      */
     public static function redirect(string $url, $forceType = null)

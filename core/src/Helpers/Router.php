@@ -17,6 +17,8 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Helpers\Utils;
+
 /**
  * Aiguillage de l'affichage
  *
@@ -84,16 +86,16 @@ class Router
     private function showModal() {
         try {
             \include_file('core', 'authentification', 'php');
-            \include_file('desktop', init('modal'), 'modal', \init('plugin'), true);
+            \include_file('desktop', Utils::init('modal'), 'modal', Utils::init('plugin'), true);
         } catch (\Exception $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
-            echo \translate::exec(\displayException($e), 'desktop/' . \init('p') . '.php');
+            echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
             echo '</div>';
         } catch (\Error $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
-            echo \translate::exec(\displayException($e), 'desktop/' . \init('p') . '.php');
+            echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
             echo '</div>';
         }
     }
@@ -105,7 +107,7 @@ class Router
      */
     private function showConfiguration() {
         \include_file('core', 'authentification', 'php');
-        \include_file('plugin_info', 'configuration', 'configuration', init('plugin'), true);
+        \include_file('plugin_info', 'configuration', 'configuration', Utils::init('plugin'), true);
     }
 
     /**
@@ -116,16 +118,16 @@ class Router
     private function ajaxGetContent() {
         try {
             \include_file('core', 'authentification', 'php');
-            \include_file('desktop', init('p'), 'php', init('m'), true);
+            \include_file('desktop', Utils::init('p'), 'php', Utils::init('m'), true);
         } catch (\Exception $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
-            echo \translate::exec(displayException($e), 'desktop/' . init('p') . '.php');
+            echo \translate::exec(displayException($e), 'desktop/' . Utils::init('p') . '.php');
             echo '</div>';
         } catch (\Error $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
-            echo \translate::exec(displayException($e), 'desktop/' . init('p') . '.php');
+            echo \translate::exec(displayException($e), 'desktop/' . Utils::init('p') . '.php');
             echo '</div>';
         }
     }
@@ -139,11 +141,11 @@ class Router
         $filename = 'index';
         $type = 'html';
         $plugin = '';
-        $modal = \init('modal', false);
+        $modal = Utils::init('modal', false);
         if ($modal !== false) {
             $filename = $modal;
             $type = 'modalhtml';
-            $plugin = \init('plugin');
+            $plugin = Utils::init('plugin');
         } elseif (isset($_GET['p']) && isset($_GET['ajax'])) {
             $filename = $_GET['p'];
             $plugin = isset($_GET['m']) ? $_GET['m'] : $plugin;
