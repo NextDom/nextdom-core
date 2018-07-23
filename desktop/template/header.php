@@ -32,6 +32,8 @@ $themeDir = NEXTDOM_ROOT . '/css/themes/';
 <head>
     <meta charset="utf-8">
     <title><?php echo $title; ?></title>
+    <link rel="apple-touch-icon" href="/core/img/logo-nextdom-petit-nom-couleur-128x128" />
+    <link rel="apple-touch-icon-precomposed" href="/core/img/logo-nextdom-petit-nom-couleur-128x128" />
     <link rel="shortcut icon" href="<?php echo config::byKey('product_icon') ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
