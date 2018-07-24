@@ -133,7 +133,7 @@ $('#bt_duplicate').on('click', function () {
       nextdom.interact.save({
         interact: interact,
         error: function (error) {
-          $('#div_alert').showAlert({message: error.message, level: 'danger'});
+          notify("Erreur", error.message, 'error');
         },
         success: function (data) {
           modifyWithoutSave = false;
@@ -151,11 +151,11 @@ if (is_numeric(getUrlVars('id'))) {
 }
 
 if (getUrlVars('saveSuccessFull') == 1) {
-  $('#div_alert').showAlert({message: '{{Sauvegarde effectuée avec succès}}', level: 'success'});
+  notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
 }
 
 if (getUrlVars('removeSuccessFull') == 1) {
-  $('#div_alert').showAlert({message: '{{Suppression effectuée avec succès}}', level: 'success'});
+  notify("Info", '{{Suppression effectuée avec succès}}', 'success');
 }
 
 $('#bt_testInteract,#bt_testInteract2').on('click', function () {
@@ -181,11 +181,11 @@ $("#bt_saveInteract").on('click', function () {
   nextdom.interact.save({
     interact: interact,
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'});
+      notify("Erreur", error.message, 'error');
     },
     success: function (data) {
      $('.li_interact[data-interact_id=' + data.id + ']').click();
-     $('#div_alert').showAlert({message: '{{Sauvegarde réussie avec succès}}', level: 'success'});
+     notify("Info", '{{Sauvegarde réussie avec succès}}', 'success');
    }
  });
 });
@@ -197,10 +197,10 @@ $("#bt_regenerateInteract,#bt_regenerateInteract2").on('click', function () {
     nextdom.interact.regenerateInteract({
       interact: {query: result},
       error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
       },
       success: function (data) {
-       $('#div_alert').showAlert({message: '{{Toutes les interations ont été regénérées}}', level: 'success'});
+       notify("Info", '{{Toutes les interations ont été regénérées}}', 'success');
      }
    });
   }
@@ -213,7 +213,7 @@ $("#bt_addInteract,#bt_addInteract2").on('click', function () {
       nextdom.interact.save({
         interact: {query: result},
         error: function (error) {
-          $('#div_alert').showAlert({message: error.message, level: 'danger'});
+          notify("Erreur", error.message, 'error');
         },
         success: function (data) {
          loadPage('index.php?v=d&p=interact&id=' + data.id + '&saveSuccessFull=1');
@@ -231,7 +231,7 @@ $("#bt_removeInteract").on('click', function () {
         nextdom.interact.remove({
           id: $('.li_interact.active').attr('data-interact_id'),
           error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
           },
           success: function () {
            loadPage('index.php?v=d&p=interact&removeSuccessFull=1');
@@ -240,7 +240,7 @@ $("#bt_removeInteract").on('click', function () {
       }
     });
   } else {
-    $('#div_alert').showAlert({message: '{{Veuillez d\'abord sélectionner un objet}}', level: 'danger'});
+    notify("Erreur", '{{Veuillez d\'abord sélectionner un objet}}', 'error');
   }
 });
 
@@ -357,7 +357,7 @@ nextdom.cmd.displayActionsOption({
   params : actionOptions,
   async : false,
   error: function (error) {
-    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+    notify("Erreur", error.message, 'error');
   },
   success : function(data){
     for(var i in data){

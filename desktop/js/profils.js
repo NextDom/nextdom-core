@@ -38,19 +38,19 @@ $("#bt_saveProfils").on('click', function (event) {
     $.hideAlert();
     var profil = $('#div_pageContainer').getValues('.userAttr')[0];
     if (profil.password != $('#in_passwordCheck').value()) {
-        $('#div_alert').showAlert({message: "{{Les deux mots de passe ne sont pas identiques}}", level: 'danger'});
+        notify("Erreur", "{{Les deux mots de passe ne sont pas identiques}}", 'error');
         return;
     }
     nextdom.user.saveProfils({
         profils: profil,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
-            $('#div_alert').showAlert({message: "{{Sauvegarde effectuée}}", level: 'success'});
+            notify("Info", "{{Sauvegarde effectuée}}", 'success');
             nextdom.user.get({
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
                     $('#div_pageContainer').setValues(data, '.userAttr');
@@ -68,13 +68,13 @@ $('#bt_genUserKeyAPI').on('click',function(){
     nextdom.user.saveProfils({
         profils: profil,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
-            $('#div_alert').showAlert({message: "{{Opération effectuée}}", level: 'success'});
+            notify("Info", "{{Opération effectuée}}", 'success');
             nextdom.user.get({
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
                     $('#div_pageContainer').setValues(data, '.userAttr');
@@ -96,7 +96,7 @@ $('.userAttr[data-l1key=options][data-l2key=bootstrap_theme]').on('change', func
 
 nextdom.user.get({
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function (data) {
         $('#div_pageContainer').setValues(data, '.userAttr');
@@ -120,7 +120,7 @@ $('.bt_removeRegisterDevice').on('click',function(){
     nextdom.user.removeRegisterDevice({
         key : key,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             modifyWithoutSave = false;
@@ -133,7 +133,7 @@ $('#bt_removeAllRegisterDevice').on('click',function(){
     nextdom.user.removeRegisterDevice({
         key : '',
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             modifyWithoutSave = false;
@@ -148,7 +148,7 @@ $('.bt_deleteSession').on('click',function(){
    nextdom.user.deleteSession({
     id : id,
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function (data) {
         window.location.reload();

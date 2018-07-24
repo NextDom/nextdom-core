@@ -23,7 +23,7 @@
  nextdom.config.load({
     configuration: $('#div_spanAlertMessage').getValues('.configKey:not(.noSet)')[0],
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function (data) {
         $('#div_spanAlertMessage').setValues(data, '.configKey');
@@ -89,7 +89,7 @@
     nextdom.config.save({
         configuration: $('#div_spanAlertMessage').getValues('.configKey')[0],
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
           nextdom.saveCustum({
@@ -97,10 +97,10 @@
             type: type,
             content: content,
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             },
             success: function (data) {
-                $('#div_alert').showAlert({message: 'Sauvegarde réussie', level: 'success'});
+                notify("Info", 'Sauvegarde réussie', 'success');
             }
         });
       }

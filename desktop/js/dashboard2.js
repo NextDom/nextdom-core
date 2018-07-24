@@ -137,7 +137,7 @@ function getObjectHtml(_object_id){
     summary : SEL_SUMMARY,
     tag : SEL_TAG,
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function (html) {
         if($.trim(html) == ''){

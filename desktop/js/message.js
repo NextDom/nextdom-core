@@ -24,7 +24,7 @@
     nextdom.message.clear({
         plugin: $('#sel_plugin').value(),
         error: function(error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function() {
             $("#table_message tbody").remove();
@@ -43,7 +43,7 @@
     nextdom.message.remove({
         id: tr.attr('data-message_id'),
         error: function(error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function() {
             tr.remove();

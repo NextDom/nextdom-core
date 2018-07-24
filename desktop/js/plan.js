@@ -300,10 +300,10 @@ removePlan: {
             nextdom.plan.removeHeader({
                 id:planHeader_id,
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function () {
-                 $('#div_alert').showAlert({message: 'Design supprimé', level: 'success'});
+                 notify("Info", 'Design supprimé', 'success');
                  loadPage('index.php?v=d&p=plan');
              },
          });
@@ -335,7 +335,7 @@ duplicatePlan: {
                 name: result,
                 id: planHeader_id,
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
                  loadPage('index.php?v=d&p=plan&plan_id=' + data.id);
@@ -451,7 +451,7 @@ items: {
         nextdom.plan.remove({
            id:  $(this).attr('data-plan_id'),
            error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             displayPlan();
@@ -472,7 +472,7 @@ duplicate: {
             id: $(this).attr('data-plan_id'),
             version: 'dplan',
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             },
             success: function (data) {
                 displayObject(data.plan,data.html);
@@ -520,7 +520,7 @@ $('#div_pageContainer').on( 'click','.zone-widget:not(.zoneEqLogic)', function (
         nextdom.plan.execute({
             id: el.attr('data-plan_id'),
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
                 el.empty().append('<center class="loading"><i class="fas fa-times fa-4x"></i></center>');
                 setTimeout(function() {
                    el.empty();
@@ -630,7 +630,7 @@ function createNewDesign(){
             nextdom.plan.saveHeader({
                 planHeader: {name: result},
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
                     window.location = 'index.php?v=d&p=plan&plan_id=' + data.id;
@@ -728,7 +728,7 @@ function addObject(_plan){
         plan: _plan,
         version: 'dplan',
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             displayObject(data.plan,data.html);
@@ -753,12 +753,12 @@ function displayPlan(_code) {
             if(error.code == -32005){
                 var result = prompt("{{Veuillez indiquer le code ?}}", "")
                 if(result == null){
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                     return;
                 }
                 displayPlan(result);
             }else{
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             }
         },
         success: function (data) {
@@ -798,7 +798,7 @@ function displayPlan(_code) {
             nextdom.plan.byPlanHeader({
                 id: planHeader_id,
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (plans) {
                     var objects = [];
@@ -882,7 +882,7 @@ function savePlan(_refreshDisplay,_async) {
         async : _async || true,
         global : false,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             if (init(_refreshDisplay, false)) {

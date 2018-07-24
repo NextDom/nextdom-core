@@ -51,7 +51,7 @@
      nextdom.plan3d.byplan3dHeader({
          plan3dHeader_id : plan3dHeader_id,
          error : function(error){
-             $('#div_alert').showAlert({message: error.message, level: 'danger'});
+             notify("Erreur", error.message, 'error');
          },
          success : function(data){
              for(var i in data){
@@ -75,7 +75,7 @@
              nextdom.plan3d.saveHeader({
                  plan3dHeader: {name: result},
                  error: function (error) {
-                     $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                     notify("Erreur", error.message, 'error');
                  },
                  success: function (data) {
                      window.location = 'index.php?v=d&p=plan3d&plan3d_id=' + data.id;
@@ -151,7 +151,7 @@
              name: intersects[0].object.name,
              plan3dHeader_id: plan3dHeader_id,
              error: function (request, status, error) {
-                 $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                 notify("Erreur", error.message, 'error');
              },
              success: function (data) {
                  if(data.html){
@@ -170,7 +170,7 @@
      nextdom.plan3d.getHeader({
          id : _id,
          error : function(error){
-             $('#div_alert').showAlert({message: error.message, level: 'danger'});
+             notify("Erreur", error.message, 'error');
          },
          success : function(data){
              if(!data.configuration || !data.configuration.path || !data.configuration.objfile){
@@ -279,7 +279,7 @@
      nextdom.plan3d.byplan3dHeader({
          plan3dHeader_id : _id,
          error : function(error){
-             $('#div_alert').showAlert({message: error.message, level: 'danger'});
+             notify("Erreur", error.message, 'error');
          },
          success : function(data){
              for(var i in data){
