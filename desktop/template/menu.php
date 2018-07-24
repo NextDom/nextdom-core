@@ -182,7 +182,7 @@ if ($nbUpdate == 0) {
                 </ul>
 
             </div>
-            <div class="collapse navbar-collapse col-lg-4 col-md-4 col-lg-offset-1 text-center">
+            <div class="collapse navbar-collapse col-lg-4 col-md-4 col-lg-offset-2 col-md-offset-2 text-center">
                 <ul class="nav navbar-nav">
                     <a class="navbar-brand" href="<?php echo $homeLink; ?>">
                         <img src="<?php echo config::byKey('product_image') ?>" /></a><br/>
