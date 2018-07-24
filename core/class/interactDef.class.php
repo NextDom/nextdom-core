@@ -17,7 +17,7 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
 
 class interactDef {
     /*     * *************************Attributs****************************** */
@@ -446,7 +446,7 @@ class interactDef {
             preg_match_all("/#(.*?)#/", $input, $matches);
             $matches = $matches[1];
             if (in_array('commande', $matches) || (in_array('objet', $matches) || in_array('equipement', $matches))) {
-                foreach (object::all() as $object) {
+                foreach (jeeObject::all() as $object) {
                     if (isset($object_filter[$object->getId()]) && $object_filter[$object->getId()] == 0) {
                         continue;
                     }
@@ -548,7 +548,7 @@ class interactDef {
                 if (count($values) != 2) {
                     continue;
                 }
-                $synonymes[strtolower($values[0])] = explode(',', $values[1]);
+                $synonymes[self::sanitizeQuery($values[0])] = explode(',', self::sanitizeQuery($values[1]));
             }
             $result = array();
             foreach ($return as $query) {
@@ -577,7 +577,7 @@ class interactDef {
         $_deep++;
         foreach ($_synonymes as $replace => $values) {
             foreach ($values as $value) {
-                $result = @preg_replace('/\b' . self::sanitizeQuery($replace) . '\b/iu', self::sanitizeQuery($value), $_text);
+                $result = @preg_replace('/\b' . $replace . '\b/iu', $value, $_text);
                 if ($result != $_text) {
                     $synonymes = $_synonymes;
                     unset($synonymes[$replace]);

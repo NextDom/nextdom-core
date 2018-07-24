@@ -122,7 +122,7 @@ l’équipement ainsi que ses commandes :
 
 -   **ID** : Identifiant unique dans la base de données de NextDom.
 
--   **Name** : Gerätename
+-   **Nom** : Nom de l’équipement.
 
 -   **ID logique** : Identifiant logique de l’équipement (peut
     être vide).
@@ -246,7 +246,7 @@ Cet onglet permet d’avoir les informations sur la batterie de
 l’équipement et de définir des alertes par rapport à celle-ci. Voici les
 types d’informations que l’on peut trouver :
 
--   **Batterietyp**,
+-   **Type de pile**,
 
 -   **Dernière remontée de l’information**,
 
@@ -314,7 +314,7 @@ commande :
 -   **ID logique** : Identifiant logique de la commande (peut
     être vide).
 
--   **Name** : Name des Befehls.
+-   **Nom** : Nom de la commande.
 
 -   **Type** : Type de la commande (action ou info).
 

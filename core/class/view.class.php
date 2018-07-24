@@ -17,7 +17,7 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
 
 class view {
     /*     * *************************Attributs****************************** */
@@ -82,6 +82,7 @@ class view {
     }
 
     public function remove() {
+        nextdom::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'view'));
         return DB::remove($this);
     }
 

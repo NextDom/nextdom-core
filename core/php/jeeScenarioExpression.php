@@ -24,7 +24,7 @@ if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SE
     echo "La page que vous demandez ne peut être trouvée.";
     exit();
 }
-require_once dirname(__FILE__) . "/core.inc.php";
+require_once __DIR__ . "/core.inc.php";
 if (isset($argv)) {
     foreach ($argv as $arg) {
         $argList = explode('=', $arg);
@@ -46,12 +46,12 @@ if (!isset($cache['scenario'])) {
     $cache['scenario'] = null;
 }
 cache::byKey(init('key'))->remove();
-if ($cache['scenario'] !== null) {
+if ($cache['scenario'] != null) {
     $cache['scenario']->clearLog();
     $cache['scenario']->setLog(__('Lancement en arrière-plan de : ', __FILE__) . init('key'));
 }
 $cache['scenarioExpression']->setOptions('background', 0);
 $cache['scenarioExpression']->execute($cache['scenario']);
-if ($cache['scenario'] !== null) {
+if ($cache['scenario'] != null) {
     $cache['scenario']->persistLog();
 }

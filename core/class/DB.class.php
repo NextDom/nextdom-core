@@ -49,7 +49,8 @@ class DB {
             self::$sharedInstance = new self();
         } else if (self::$sharedInstance->lastConnection + 120 < strtotime('now')) {
             try {
-                if (!self::$sharedInstance->connection->query('select 1;')) {
+                $result = @self::$sharedInstance->connection->query('select 1;');
+                if (!$result) {
                     self::$sharedInstance = new self();
                 }
             } catch (Exception $e) {
@@ -80,11 +81,11 @@ class DB {
         $stmt = self::getConnection()->prepare($_query);
         $res = NULL;
 
-        if ($stmt !== false && $stmt->execute($_params) !== false) {
+        if ($stmt != false && $stmt->execute($_params) != false) {
             if ($_fetchType == self::FETCH_TYPE_ROW) {
                 if ($_fetch_opt === null) {
                     $res = $stmt->fetch($_fetch_param);
-                } elseif ($_fetch_param == PDO::FETCH_CLASS) {
+                } else if ($_fetch_param == PDO::FETCH_CLASS) {
                     $res = $stmt->fetchObject($_fetch_opt);
                 }
             } else {
@@ -98,7 +99,7 @@ class DB {
 
         $errorInfo = $stmt->errorInfo();
         if ($errorInfo[0] != 0000) {
-            throw new Exception('[MySQL] Error code : ' . $errorInfo[0] . ' (' . $errorInfo[1] . '). ' . $errorInfo[2]);
+            throw new Exception('[MySQL] Error code : ' . $errorInfo[0] . ' (' . $errorInfo[1] . '). ' . $errorInfo[2] . '  : ' . $_query);
         }
         return $res;
     }

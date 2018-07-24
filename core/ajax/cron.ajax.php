@@ -17,7 +17,7 @@
  */
 
 try {
-    require_once dirname(__FILE__) . '/../php/core.inc.php';
+    require_once __DIR__ . '/../php/core.inc.php';
     include_file('core', 'authentification', 'php');
 
     if (!isConnect('admin')) {
@@ -27,11 +27,13 @@ try {
     ajax::init();
 
     if (init('action') == 'save') {
+        unautorizedInDemo();
         utils::processJsonObject('cron', init('crons'));
         ajax::success();
     }
 
     if (init('action') == 'remove') {
+        unautorizedInDemo();
         $cron = cron::byId(init('id'));
         if (!is_object($cron)) {
             throw new Exception(__('Cron id inconnu', __FILE__));

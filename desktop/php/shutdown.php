@@ -37,7 +37,7 @@ if (!isConnect('admin')) {
     nextdom.haltSystem();
 
     function reboot_nextdom(rebooti){
-        $('#div_reboot_nextdom_texte').empty().html('<h6>Votre box}} '+NEXTDOM_PRODUCT_NAME+' {{est éteinte.<br /> Pour la redémarrer, débranchez-la et rebranchez-la.</h6>');
+        $('#div_reboot_nextdom_texte').empty().html('<h6>{{Votre box}} '+NEXTDOM_PRODUCT_NAME+' {{est éteinte.<br /> Pour la redémarrer, débranchez-la et rebranchez-la.}}</h6>');
         $('#progressbar_reboot').width('100%');
         $('#progressbar_reboot').addClass('progress-bar-danger').removeClass('progress-bar-success').removeClass('active');
     }

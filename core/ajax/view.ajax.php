@@ -17,7 +17,7 @@
  */
 
 try {
-    require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+    require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
 
     if (!isConnect()) {
@@ -27,6 +27,10 @@ try {
     ajax::init();
 
     if (init('action') == 'remove') {
+        if (!isConnect('admin')) {
+            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+        }
+        unautorizedInDemo();
         $view = view::byId(init('id'));
         if (!is_object($view)) {
             throw new Exception(__('Vue non trouvée. Vérifiez l\'iD', __FILE__));
@@ -65,6 +69,10 @@ try {
     }
 
     if (init('action') == 'save') {
+        if (!isConnect('admin')) {
+            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+        }
+        unautorizedInDemo();
         $view = view::byId(init('view_id'));
         if (!is_object($view)) {
             $view = new view();
@@ -111,6 +119,10 @@ try {
     }
 
     if (init('action') == 'setEqLogicOrder') {
+        if (!isConnect('admin')) {
+            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+        }
+        unautorizedInDemo();
         $eqLogics = json_decode(init('eqLogics'), true);
         $sql = '';
         foreach ($eqLogics as $eqLogic_json) {
@@ -135,6 +147,7 @@ try {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
         }
+        unautorizedInDemo();
         $order = 1;
         foreach (json_decode(init('views'), true) as $id) {
             $view = view::byId($id);
@@ -152,4 +165,4 @@ try {
 } catch (Exception $e) {
     ajax::error(displayException($e), $e->getCode());
 }
-
+?>

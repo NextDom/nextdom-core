@@ -122,14 +122,14 @@ LDAP
 -    **Filter (optional)** : Filter auf dem AD (zum Beispiel für 
     Gruppenmanagement)
 
--   **REMOTE_USER zulassen** : REMOTE_USER aktivieren (zum Beispiel 
+-   **Autoriser REMOTE\_USER** : Active le REMOTE\_USER (utilisé en SSO
     verwendet in SSO)
 
 Verbindung 
 ---------
 
--   **Anzahl der tolerierten Fehler** : Legt die Anzahl der aufeinander 
-    folgenden Versuche fest, bevor die IP verboten wird.
+-   **Anzahl der tolerierten Fehler** : Legt die Anzahl der aufeinander folgenden Versuche fest, bevor die IP verboten wird.
+    successives autorisées avant de bannir l’IP
 
 -   **Maximale Zeit zwischen Fehlern (in Sekunden)** : maximale Zeit für 2 
     Versuche, die als aufeinanderfolgend betrachtet werden
@@ -178,26 +178,26 @@ Netzwerk, insbesondere vom Internet).
     -   **URL oder IP Adresse** : Die NextDom IP-Adresse eintragen.
 
     -   **Port** : Der Port des Webinterface von NextDom, allgemein 80.
-        Achtung, den Port hier zu ändern, ändert tatsächlich nicht den 
-        NextDom Port, er wird derselbe bleiben.
+        Attention changer le port ici ne change pas le port réel de
+        NextDom qui restera le même
 
-    -   **Ergänzung** : das komplementäre URL-Fragment (Beispiel
-        /nextdom) um auf NextDom zuzugreifen.
+    -   **Complément** : le fragment d’URL complémentaire (exemple
+        : /nextdom) pour accéder à NextDom.
 
--   **Externer Zugriff** : Angaben, um von außerhalb des lokalen Netzwerks 
-    auf NextDom zuzugreifen. Füllen Sie dies nur aus, wenn Sie die
-    NextDom DNS nicht verwenden.
+-   **Accès externe** : informations pour joindre NextDom de l’extérieur
+    du réseau local. À ne remplir que si vous n’utilisez pas le DNS
+    NextDom
 
-    -   **OK/NOK** : Zeigt an, ob die externe Netzwerkkonfiguration
-        korrekt ist.
+    -   **OK/NOK** : indique si la configuration réseau externe est
+        correcte
 
     -   **Protokolle** : verwendetes Protokoll für den Zugriff von außen 
 
-    -   **URL oder IP Adresse** : Externe IP-Adresse, wenn es behoben wird.
-        Andernfalls geben Sie die URL für die externe IP-Adresse Ihres Netzwerks.
+    -   **Adresse URL ou IP** : IP externe, si elle est fixe. Sinon,
+        donnez l’URL pointant sur l’adresse IP externe de votre réseau.
 
-    -   **Ergänzung** : das komplementäre URL-Fragment (Beispiel
-        /nextdom) um auf NextDom zuzugreifen.
+    -   **Complément** : le fragment d’URL complémentaire (exemple
+        : /nextdom) pour accéder à NextDom.
 
 > **Tip**
 >
@@ -217,7 +217,7 @@ Netzwerk, insbesondere vom Internet).
     la liste de vos interfaces réseaux. Vous pourrez indiquer à NextDom
     de ne pas monitorer le réseau en cliquant sur **désactiver la
     gestion du réseau par NextDom** (à cocher si NextDom n’est connecté à
-    keine Netwerke)
+    aucun réseau)
 
 -   **Proxy market** : permet un accès distant à votre NextDom sans avoir
     besoin d’un DNS, d’une IP fixe ou d’ouvrir les ports de votre box
@@ -236,10 +236,12 @@ Netzwerk, insbesondere vom Internet).
 > configuration du pare-feu et du filtre parental de votre box Internet
 > (sur livebox il faut par exemple le pare-feu en moyen).
 
-Farben
-======
+Couleurs 
+========
 
-Die farbliche Kennzeichnung der Widgets erfolgt entsprechend der Kategorie des Widgets. Unter die Kategorien umfassen Heizung, Licht, Automation etc.... 
+La colorisation des widgets est effectuée en fonction de la catégorie à
+laquelle appartient l’équipement. Parmi les catégories on retrouve le
+chauffage, Sécurité, Energie, lumière, Automatisme, Multimedia, Autre…​
 
 Pour chaque catégorie, on pourra différencier les couleurs de la version
 desktop et de la version mobile. On peut alors changer :
@@ -321,7 +323,7 @@ Historique
 > [ici](https://fr.wikipedia.org/wiki/M%C3%A9thode_des_moindres_carr%C3%A9s)
 > pour le détail).
 
-Push
+Push 
 ----
 
 **URL de push globale** : permet de rajouter une URL à appeler en cas de
@@ -342,7 +344,7 @@ Permet de surveiller et d’agir sur le cache de NextDom :
     plus utiles. NextDom le fait automatiquement toutes les nuits.
 
 -   **Vider toutes les données en cache** : Vide complètement le cache.
-    Achtung, Daten könnten verschwinden 
+    Attention cela peut faire perdre des données !
 
 -   **Temps de pause pour le long polling** : Fréquence à laquelle
     NextDom vérifie si il y a des événements en attente pour les clients
@@ -350,8 +352,8 @@ Permet de surveiller et d’agir sur le cache de NextDom :
     l’interface se mettra à jour rapidement, en contre partie cela
     utilise plus de ressources et peut donc ralentir NextDom.
 
-Interaktion
-==========
+Interactions 
+============
 
 Cet onglet permet de fixer des paramètres globaux concernant les
 interactions que vous trouverez dans Outils→Interactions.
@@ -374,10 +376,10 @@ Vous avez ici trois paramètres :
         un seul mot
 
     -   2 mots : le niveau de correspondance pour les interactions à
-        zwei Wörter
+        deux mots
 
     -   3 mots : le niveau de correspondance pour les interactions à
-        drei Wörter
+        trois mots
 
     -   + de 3 mots : le niveau de correspondance pour les interactions
         à plus de trois mots
@@ -386,14 +388,14 @@ Vous avez ici trois paramètres :
     NextDom répond "je n’ai pas compris" si aucune interaction
     ne correspond. Il est possible de désactiver ce fonctionnement pour
     que NextDom ne réponde rien. Cochez la case pour désactiver
-    Die Antwort.
+    la réponse.
 
 -   **Regex général d’exclusion pour les interactions** : permet de
     définir une regexp qui, si elle correspond à une interaction,
     supprimera automatiquement cette phrase de la génération (réservé
     aux experts). Pour plus d’informations voir les explications dans le
     chapitre **Regexp d’exclusion** de la documentation sur
-    Interaktion.
+    les interactions.
 
 Interaction automatique, contextuelle & avertissement 
 -----------------------------------------------------
@@ -410,7 +412,7 @@ Interaction automatique, contextuelle & avertissement
 
         -   *Vous* : Combien fait-il dans la chambre ?
 
-        -   *NextDom* : Temperatur 25.2 °C 
+        -   *NextDom* : Température 25.2 °C
 
         -   *Vous* : et dans le salon ?
 
@@ -546,7 +548,7 @@ objets :
 
 -   **Clef** : Clé du résumé, à ne surtout pas toucher.
 
--   **Name** : Der Name der Zusammenfassung.
+-   **Nom** : Nom du résumé.
 
 -   **Calcul** : Méthode de calcul, peut être de type :
 
@@ -718,7 +720,7 @@ refusée si vous utilisez un autre dépôt que celui-ci.
 
 -   **Adresse** : Adresse du Market.
 
--   **Benutzername** : Ihr Benutzername auf dem Markt.
+-   **Nom d’utilisateur** : Votre nom d’utilisateur sur le Market.
 
 -   **Mot de passe** : Votre mot de passe du Market.
 

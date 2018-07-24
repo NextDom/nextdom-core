@@ -22,8 +22,10 @@ require_once __DIR__ . '/../../core/php/core.inc.php';
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioSubElementManager;
+use NextDom\Managers\ScenarioManager;
 
-class scenarioExpression {
+class scenarioExpression
+{
     /*     * *************************Attributs****************************** */
 
     private $id;
@@ -36,203 +38,253 @@ class scenarioExpression {
 
     /*     * ***********************Méthodes statiques*************************** */
 
-    public static function byId($_id) {
+    public static function byId($_id)
+    {
         return ScenarioExpressionManager::byId($_id);
     }
 
-    public static function all() {
+    public static function all()
+    {
         return ScenarioExpressionManager::all();
     }
 
-    public static function byscenarioSubElementId($_scenarioSubElementId) {
+    public static function byscenarioSubElementId($_scenarioSubElementId)
+    {
         return ScenarioExpressionManager::byScenarioSubElementId($_scenarioSubElementId);
     }
 
-    public static function searchExpression($_expression, $_options = null, $_and = true) {
+    public static function searchExpression($_expression, $_options = null, $_and = true)
+    {
         return ScenarioExpressionManager::searchExpression($_expression, $_options, $_and);
     }
 
-    public static function byElement($_element_id) {
+    public static function byElement($_element_id)
+    {
         return ScenarioExpressionManager::byElement($_element_id);
     }
 
-    public static function getExpressionOptions($_expression, $_options) {
+    public static function getExpressionOptions($_expression, $_options)
+    {
         return ScenarioExpressionManager::getExpressionOptions($_expression, $_options);
     }
 
-    public static function humanAction($_action) {
+    public static function humanAction($_action)
+    {
         return ScenarioExpressionManager::humanAction($_action);
     }
 
-    public static function rand($_min, $_max) {
+    public static function rand($_min, $_max)
+    {
         return ScenarioExpressionManager::rand($_min, $_max);
     }
 
-    public static function randText($_sValue) {
+    public static function randText($_sValue)
+    {
         return ScenarioExpressionManager::randText($_sValue);
     }
 
-    public static function scenario($_scenario) {
+    public static function scenario($_scenario)
+    {
         return ScenarioExpressionManager::scenario($_scenario);
     }
 
-    public static function eqEnable($_eqLogic_id) {
+    public static function eqEnable($_eqLogic_id)
+    {
         return ScenarioExpressionManager::eqEnable($_eqLogic_id);
     }
 
-    public static function average($_cmd_id, $_period = '1 hour') {
+    public static function average($_cmd_id, $_period = '1 hour')
+    {
         return ScenarioExpressionManager::average($_cmd_id, $_period);
     }
 
-    public static function averageBetween($_cmd_id, $_startDate, $_endDate) {
+    public static function averageBetween($_cmd_id, $_startDate, $_endDate)
+    {
         return ScenarioExpressionManager::averageBetween($_cmd_id, $_startDate, $_endDate);
     }
 
-    public static function max($_cmd_id, $_period = '1 hour') {
+    public static function max($_cmd_id, $_period = '1 hour')
+    {
         return ScenarioExpressionManager::max($_cmd_id, $_period);
     }
 
-    public static function maxBetween($_cmd_id, $_startDate, $_endDate) {
+    public static function maxBetween($_cmd_id, $_startDate, $_endDate)
+    {
         return ScenarioExpressionManager::maxBetween($_cmd_id, $_startDate, $_endDate);
     }
 
-    public static function wait($_condition, $_timeout = 7200) {
+    public static function wait($_condition, $_timeout = 7200)
+    {
         return ScenarioExpressionManager::wait($_condition, $_timeout);
     }
 
-    public static function min($_cmd_id, $_period = '1 hour') {
+    public static function min($_cmd_id, $_period = '1 hour')
+    {
         return ScenarioExpressionManager::min($_cmd_id, $_period);
     }
 
-    public static function minBetween($_cmd_id, $_startDate, $_endDate) {
+    public static function minBetween($_cmd_id, $_startDate, $_endDate)
+    {
         return ScenarioExpressionManager::minBetween($_cmd_id, $_startDate, $_endDate);
     }
 
-    public static function median() {
+    public static function median()
+    {
         return ScenarioExpressionManager::median();
     }
 
-    public static function tendance($_cmd_id, $_period = '1 hour', $_threshold = '') {
+    public static function tendance($_cmd_id, $_period = '1 hour', $_threshold = '')
+    {
         return ScenarioExpressionManager::tendance($_cmd_id, $_period, $_threshold);
     }
 
-    public static function lastStateDuration($_cmd_id, $_value = null) {
+    public static function lastStateDuration($_cmd_id, $_value = null)
+    {
         return ScenarioExpressionManager::lastStateDuration($_cmd_id, $_value);
     }
 
-    public static function stateChanges($_cmd_id, $_value = null, $_period = '1 hour') {
+    public static function stateChanges($_cmd_id, $_value = null, $_period = '1 hour')
+    {
         return ScenarioExpressionManager::stateChanges($_cmd_id, $_value, $_period);
     }
 
-    public static function stateChangesBetween($_cmd_id, $_value, $_startDate, $_endDate = null) {
+    public static function stateChangesBetween($_cmd_id, $_value, $_startDate, $_endDate = null)
+    {
         return ScenarioExpressionManager::stateChangesBetween($_cmd_id, $_value, $_startDate, $_endDate);
     }
 
-    public static function duration($_cmd_id, $_value, $_period = '1 hour') {
+    public static function duration($_cmd_id, $_value, $_period = '1 hour')
+    {
         return ScenarioExpressionManager::duration($_cmd_id, $_value, $_period);
     }
 
-    public static function durationBetween($_cmd_id, $_value, $_startDate, $_endDate) {
+    public static function durationBetween($_cmd_id, $_value, $_startDate, $_endDate)
+    {
         return ScenarioExpressionManager::durationBetween($_cmd_id, $_value, $_startDate, $_endDate);
     }
 
-    public static function lastBetween($_cmd_id, $_startDate, $_endDate) {
+    public static function lastBetween($_cmd_id, $_startDate, $_endDate)
+    {
         return ScenarioExpressionManager::lastBetween($_cmd_id, $_startDate, $_endDate);
     }
 
-    public static function statistics($_cmd_id, $_calc, $_period = '1 hour') {
+    public static function statistics($_cmd_id, $_calc, $_period = '1 hour')
+    {
         return ScenarioExpressionManager::statistics($_cmd_id, $_calc, $_period);
     }
 
-    public static function statisticsBetween($_cmd_id, $_calc, $_startDate, $_endDate) {
+    public static function statisticsBetween($_cmd_id, $_calc, $_startDate, $_endDate)
+    {
         return ScenarioExpressionManager::statisticsBetween($_cmd_id, $_calc, $_startDate, $_endDate);
     }
 
-    public static function variable($_name, $_default = '') {
+    public static function variable($_name, $_default = '')
+    {
         return ScenarioExpressionManager::variable($_name, $_default);
     }
 
-    public static function stateDuration($_cmd_id, $_value = null) {
+    public static function stateDuration($_cmd_id, $_value = null)
+    {
         return ScenarioExpressionManager::stateDuration($_cmd_id, $_value);
     }
 
-    public static function lastChangeStateDuration($_cmd_id, $_value) {
+    public static function lastChangeStateDuration($_cmd_id, $_value)
+    {
         return ScenarioExpressionManager::lastChangeStateDuration($_cmd_id, $_value);
     }
 
-    public static function odd($_value) {
+    public static function odd($_value)
+    {
         return ScenarioExpressionManager::odd($_value);
     }
 
-    public static function lastScenarioExecution($_scenario_id) {
+    public static function lastScenarioExecution($_scenario_id)
+    {
         return ScenarioExpressionManager::lastScenarioExecution($_scenario_id);
     }
 
-    public static function collectDate($_cmd, $_format = 'Y-m-d H:i:s') {
+    public static function collectDate($_cmd, $_format = 'Y-m-d H:i:s')
+    {
         return ScenarioExpressionManager::collectDate($_cmd, $_format);
     }
 
-    public static function valueDate($_cmd_id, $_format = 'Y-m-d H:i:s') {
+    public static function valueDate($_cmd_id, $_format = 'Y-m-d H:i:s')
+    {
         return ScenarioExpressionManager::valueDate($_cmd_id, $_format);
     }
 
-    public static function randomColor($_rangeLower, $_rangeHighter) {
+    public static function randomColor($_rangeLower, $_rangeHighter)
+    {
         return ScenarioExpressionManager::randomColor($_rangeLower, $_rangeHighter);
     }
 
-    public static function trigger($_name = '', &$_scenario = null) {
+    public static function trigger($_name = '', &$_scenario = null)
+    {
         return ScenarioExpressionManager::trigger($_name, $_scenario);
     }
 
-    public static function triggerValue(&$_scenario = null) {
+    public static function triggerValue(&$_scenario = null)
+    {
         return ScenarioExpressionManager::triggerValue($_scenario);
     }
 
-    public static function round($_value, $_decimal = 0) {
+    public static function round($_value, $_decimal = 0)
+    {
         return ScenarioExpressionManager::round($_value, $_decimal);
     }
 
-    public static function time_op($_time, $_value) {
+    public static function time_op($_time, $_value)
+    {
         return ScenarioExpressionManager::time_op($_time, $_value);
     }
 
-    public static function time_between($_time, $_start, $_end) {
+    public static function time_between($_time, $_start, $_end)
+    {
         return ScenarioExpressionManager::time_between($_time, $_start, $_end);
     }
 
-    public static function time_diff($_date1, $_date2, $_format = 'd') {
+    public static function time_diff($_date1, $_date2, $_format = 'd')
+    {
         return ScenarioExpressionManager::time_diff($_date1, $_date2, $_format);
     }
 
-    public static function time($_value) {
+    public static function time($_value)
+    {
         return ScenarioExpressionManager::time($_value);
     }
 
-    public static function formatTime($_time) {
+    public static function formatTime($_time)
+    {
         return ScenarioExpressionManager::formatTime($_time);
     }
 
-    public static function name($_type, $_cmd_id) {
+    public static function name($_type, $_cmd_id)
+    {
         return ScenarioExpressionManager::name($_type, $_cmd_id);
     }
 
-    public static function getRequestTags($_expression) {
+    public static function getRequestTags($_expression)
+    {
         return ScenarioExpressionManager::getRequestTags($_expression);
     }
 
-    public static function tag(&$_scenario = null, $_name, $_default = '') {
+    public static function tag(&$_scenario = null, $_name, $_default = '')
+    {
         return ScenarioExpressionManager::tag($_scenario, $_name, $_default);
     }
 
-    public static function setTags($_expression, &$_scenario = null, $_quote = false, $_nbCall = 0) {
+    public static function setTags($_expression, &$_scenario = null, $_quote = false, $_nbCall = 0)
+    {
         return ScenarioExpressionManager::setTags($_expression, $_scenario, $_quote, $_nbCall);
     }
 
-    public static function createAndExec($_type, $_cmd, $_options = null) {
+    public static function createAndExec($_type, $_cmd, $_options = null)
+    {
         return ScenarioExpressionManager::createAndExec($_type, $_cmd, $_options);
     }
 
-    public function checkBackground() {
+    public function checkBackground()
+    {
         if ($this->getOptions('background', 0) == 0) {
             return;
         }
@@ -242,7 +294,8 @@ class scenarioExpression {
         return;
     }
 
-    public function execute(&$scenario = null) {
+    public function execute(&$scenario = null)
+    {
         if ($scenario !== null && !$scenario->getDo()) {
             return null;
         }
@@ -485,6 +538,10 @@ class scenarioExpression {
                     $dataStore->setLink_id(-1);
                     $dataStore->save();
                     return;
+                } elseif ($this->getExpression() == 'delete_variable') {
+                    ScenarioManager::removeData($options['name']);
+                    $this->setLog($scenario, __('Suppression de la variable ', __FILE__) . $this->getOptions('name'));
+                    return;
                 } elseif ($this->getExpression() == 'ask') {
                     $dataStore = new dataStore();
                     $dataStore->setType('scenario');
@@ -642,16 +699,19 @@ class scenarioExpression {
         }
     }
 
-    public function save() {
+    public function save()
+    {
         $this->checkBackground();
         DB::save($this);
     }
 
-    public function remove() {
+    public function remove()
+    {
         DB::remove($this);
     }
 
-    public function getAllId() {
+    public function getAllId()
+    {
         $return = array(
             'element' => array(),
             'subelement' => array(),
@@ -674,7 +734,8 @@ class scenarioExpression {
         return $return;
     }
 
-    public function copy($_scenarioSubElement_id) {
+    public function copy($_scenarioSubElement_id)
+    {
         $expressionCopy = clone $this;
         $expressionCopy->setId('');
         $expressionCopy->setScenarioSubElement_id($_scenarioSubElement_id);
@@ -689,11 +750,13 @@ class scenarioExpression {
         return $expressionCopy->getId();
     }
 
-    public function emptyOptions() {
+    public function emptyOptions()
+    {
         $this->options = '';
     }
 
-    public function export() {
+    public function export()
+    {
         $return = '';
         if ($this->getType() == 'element') {
             $element = ScenarioElementManager::byId($this->getExpression());
@@ -735,76 +798,92 @@ class scenarioExpression {
         }
     }
 
-/*     * **********************Getteur Setteur*************************** */
+    /*     * **********************Getteur Setteur*************************** */
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
         return $this;
     }
 
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
 
-    public function setType($type) {
+    public function setType($type)
+    {
         $this->type = $type;
         return $this;
     }
 
-    public function getScenarioSubElement_id() {
+    public function getScenarioSubElement_id()
+    {
         return $this->scenarioSubElement_id;
     }
 
-    public function getSubElement() {
+    public function getSubElement()
+    {
         return ScenarioSubElementManager::byId($this->getScenarioSubElement_id());
     }
 
-    public function setScenarioSubElement_id($scenarioSubElement_id) {
+    public function setScenarioSubElement_id($scenarioSubElement_id)
+    {
         $this->scenarioSubElement_id = $scenarioSubElement_id;
         return $this;
     }
 
-    public function getSubtype() {
+    public function getSubtype()
+    {
         return $this->subtype;
     }
 
-    public function setSubtype($subtype) {
+    public function setSubtype($subtype)
+    {
         $this->subtype = $subtype;
         return $this;
     }
 
-    public function getExpression() {
+    public function getExpression()
+    {
         return $this->expression;
     }
 
-    public function setExpression($expression) {
+    public function setExpression($expression)
+    {
         $this->expression = nextdom::fromHumanReadable($expression);
         return $this;
     }
 
-    public function getOptions($_key = '', $_default = '') {
+    public function getOptions($_key = '', $_default = '')
+    {
         return utils::getJsonAttr($this->options, $_key, $_default);
     }
 
-    public function setOptions($_key, $_value) {
+    public function setOptions($_key, $_value)
+    {
         $this->options = utils::setJsonAttr($this->options, $_key, nextdom::fromHumanReadable($_value));
         return $this;
     }
 
-    public function getOrder() {
+    public function getOrder()
+    {
         return $this->order;
     }
 
-    public function setOrder($order) {
+    public function setOrder($order)
+    {
         $this->order = $order;
         return $this;
     }
 
-    public function setLog(&$_scenario, $log) {
+    public function setLog(&$_scenario, $log)
+    {
         if ($_scenario !== null && is_object($_scenario)) {
             $_scenario->setLog($log);
         }

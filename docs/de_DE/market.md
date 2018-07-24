@@ -1,170 +1,174 @@
-Die Dokumentation ist etwas Besonderes, weil sie sich nur mit Ihrer
-Profilseiteauf dem Markt befassen wird.
+Doc un peu particulière car elle va traiter uniquement de votre page
+profil du market.
 
-Verfügbar, indem Sie zu Ihrem Benutzernamen dann Profil vom Markt gehen (ein bisschen wie NextDom).
+Disponible en allant sur votre nom d’utilisateur puis profil à partir du
+market (un peu comme sur NextDom).
 
 Er besteht aus mehreren Teilen :
 
 Mein Profil 
 ==========
 
-Hier können sie verschiedene Einstellungen Ihres Profiles anpassen :
+C’est ici que vous allez pouvoir régler différents paramètres de votre
+profil :
 
 -   **Profil**
 
-    -   **Login** : Ihre Anmeldung auf dem Markt, es kann nicht geändert werden.
+    -   **Login** : Votre login sur le market, il ne peut être changé
 
-    -   **Name** : Ihr Name (Diese Information ist sinnvoll, um freundliche 
-        E-Mails zubekommen)
+    -   **Nom** : Votre nom (cette information n’est utile que pour
+        rendre les mails plus sympa)
 
-    -   **Vorname** : Ihren Vorname (Diese Information ist sinnvoll,
-        um freundliche E-Mails zubekommen)
+    -   **Prénom** : Votre prénom (cette information n’est utile que
+        pour rendre les mails plus sympa)
 
-    -   **Benutzername im Forum** : Ihr Nickname im Forum
+    -   **Nom d’utilisateur sur le forum** : Votre pseudo sur le forum
 
     -   **Email** : Ihre E-Mail
 
-    -   **Sprache** : Ihre Sprache
+    -   **Langue** : Votre langue
 
-    -   **Passwort && Passwort bestätigen** : Um ihr
-        Passwort zu ändern.
+    -   **Mot de passe && Confirmer le mot de passe** : permet de
+        changer votre mot passe
 
-Für die Entwickler :
+Pour les développeurs :
 
--   **Benutzername im Forum** : Ihr Nickname im Forum
+-   **Nom d’utilisateur sur le forum** : Votre pseudo sur le forum
 
--   ** öffentlich E-Mail** : Ihre E-Mail, um Mitteilungen von 
-    uns zu erhalten
+-   **Email public** : Votre mail pour recevoir des éventuelles
+    communications de notre part
 
--   **Paypal Konto** : Ihre E-Mail vom Paypal Konto (wird nur verwendet,
-    um die Entwickler zu bezahlen)
+-   **Compte paypal** : Votre mail de compte Paypal (uniquement utilisé
+    pour payer les developpeurs)
 
-Für die Profis :
+Pour les pros :
 
--   **E-Mail-Installer-Konto** : Ihre E-Mail-Kontakt-Adresse
+-   **Compte mail installateur** : Votre mail de contact pro
 
--   **Empfänger von Supportanfragen** : Wer erhält Support-E-Mails
-    (Endkunde, Installateur oder beides)
+-   **Destinataire des demandes de support** : savoir qui recevra les
+    mails de support (client final, installateur ou les deux)
 
-    -   **CGU** AGB allgemeine Geschäftsbedingungen
+    -   **CGU**
 
--   **Benutzer** : Allgemeine Geschäftsbedingungen (Achtung, vor 
-    Benutzung gut durchlesen)
+-   **Utilisateur** : conditions générales d’utilisation (attention à
+    bien les lire car elles vous engage)
 
--   **Entwickler** : Allgemeine Geschäftsbedingungen für 
-    Entwickler
+-   **Developpeur** : conditions générales d’utilisation pour les
+    développeurs
 
-    -   **Gutscheine**
+    -   **Tickets**
 
--   **Gutschein Anzahl** : Anzahl der Gutscheine für den laufenden Monat, 
-    sowie Ihr Limit
+-   **Nombre de tickets** : Nombre de tickets pour le mois en cours
+    ainsi que votre limite
 
--   **Support** : Schaltfläche, um eine Support-Anfrage zu senden (auch
-    zugänglich durch das Ausrufezeichen am rechten oberen Rand auf dem 
-    Markt oder auf ihrem NextDom). 
+-   **Support** : bouton pour envoyer une demande de support (accessible
+    aussi par le point d’exclamation en haut à droite sur le market ou
+    sur votre NextDom)
 
-    -   **Zugriff auf Betas**
+    -   **Accés aux betas**
 
--   **Zugriff auf die Beta-Plugins aktivieren** : Ermöglicht es, den Zugang zu den 
-    Beta Plugins zu aktivieren (Achtung, dadurch wird Ihnen den Zugriff auf den Support verboten)
+-   **Activer l’accès aux plugins beta** : permet d’activer l’accès aux
+    plugins betas (attention cela vous interdira tout accès au support)
 
-    -   **Zusammenfassung** : Hier finden Sie eine Zusammenfassung Ihrer
-        verschiedenen Rechte und Dienstleistungen
-
-> **Tipp**
->
-> Vergessen Sie nicht, zu speichern !
-
-Meine NextDoms
-===========
-
--   **Ebene**
-
-    -   **NextDom** : Ihre Service Pack Ebene
-
-    -   **Geben Sie eine Service-Pack-Nummer ein** : Ermöglicht es ihnen eine
-        Service-Pack-Nummer einzugeben (Sie ist in der E-Mail von NextDom,
-        die bei der Bestellung versendet wurde)
-
--   **Installationsschlüssel**
-
-    -   **Anzahl der Installationsschlüssel** : Zeigt die Anzahl
-        der NextDom-Installationen, die derzeit mit Ihrem Konto verknüpft sind,
-        und die zulässige Anzahl an.
+    -   **Résumé** Ici vous retrouverez un résumé de vos différents
+        droits et services
 
 > **Tip**
 >
-> Es ist möglich, dass Sie der Markt mal bittet, den Installationsschlüssel
-> wieder auf null zu stellen, das ist normal, folgen Sie einfach den
-> Anweisungen.
+> N’oubliez pas de sauvegarder
 
--   **Mein NextDom** : Hier sind alle Ihre NextDoms aufgelistet
+Mes NextDoms 
+===========
 
-    -   **Name** : Der Name, den Sie Ihrem NextDom geben möchten (wird
-        im Namen des Backups verwendet, wenn Sie das Cloud-Backup-
-        Abonnement haben)
+-   **Niveau**
 
-    -   **Zustand** : ermöglicht es Ihnen, den Status der NextDoms abzufragen
+    -   **NextDom** : votre niveau de service pack
 
-    -   **Lokale/Remote IP** : IP oder Adresse von den NextDoms,
-        ist in NextDom konfiguriert, wenn Sie nichts festlegen, wird das die
-        letzte bekannt IP sein
+    -   **Entrer un numéro de service pack** : permet d’entrer votre
+        numéro de service pack (il se trouve dans le mail envoyé par
+        NextDom lors de votre commande)
 
-    -   **DNS** : ermöglicht es, den Namen Ihrer DNS anzupassen
+-   **Clef d’installation**
 
-    -   **URL** : listet die verschiedenen Zugangs-URLs zu NextDom auf.
+    -   **Nombre de clefs d’installation** : affiche le nombre
+        d’installations NextDom actuellement liées à votre compte ainsi
+        que la limite autorisée
 
-    -   **DNS Server** : zeigt Ihnen den DNS-Server an, wenn Sie mit im
-        verbunden sind
+> **Tip**
+>
+> Il est possible que le market vous demande parfois de remettre à zéro
+> vos clefs d’installation, c’est normal, il suffit de suivre ce qu’il
+> vous demande
 
-    -   **DNS-Status** : Zeigt den Status des DNS an
+-   **Mes NextDoms** : c’est ici que sont listés tous vos NextDom
 
-    -   **Erstellungsdatum** : Datum der Erstellung des NextDoms auf Ihrem
-        Marktkonto (zur Erinnerung, dies geschieht automatisch, wenn Sie es mit
-        dem Markt verbinden)
+    -   **Nom** : le nom que vous voulez donner à votre NextDom (se
+        retrouve dans le nom du backup si vous avez l’abonnement de
+        sauvegarde cloud)
 
-    -   **Zuletzt aktualisiert** : die letzte Kommunikation von NextDom mit 
-        dem Markt
+    -   **Etat** : permet de voir l’état du NextDom en question
+
+    -   **IP locale / distante** : IP ou addresse de ce NextDom, se
+        configure dans NextDom, si vous ne mettez rien ça sera la
+        dernière IP connue
+
+    -   **DNS** : permet de personnaliser le nom de votre DNS
+
+    -   **URL** : liste les différentes URL d’accès au NextDom.
+
+    -   **Serveur DNS** : vous indique si le serveur DNS auquel vous
+        êtes rattachés
+
+    -   **Statut du DNS** : permet de voir le statut du DNS
+
+    -   **Date de création** : date de création de ce NextDom sur votre
+        compte market (pour rappel cela se fait automatiquement lorsque
+        vous le liez au market)
+
+    -   **Dernière mise à jour** : dernière communication du NextDom avec
+        le market
 
     -   **Hardware** : Name der NextDom Hardware
 
-    -   **Version** : installierte NextDom Version
+    -   **Version** : la version de NextDom installée
 
-> **Tipp**
+> **Tip**
 >
-> Vergessen Sie nicht, zu speichern !
+> N’oubliez pas de sauvegarder
 
-Meine Sicherungen
+Mes backups 
 ===========
 
-Auf dieser Registerkarte können sie die vorhandenen Sicherungen auf dem
-Markt ansehen und herunterladen. Im folgenden haben sie Zugriff auf die
-Links, zum kauf von einem 1,3,6 oder 12-Monats-Abonnement für die Backup Cloud.
+Sur cette onglet vous pouvez consulter les backups présents sur le
+market et en télécharger un. En dessous vous avez accès au lien pour
+acheter 1,3,6 ou 12 mois d’abonnement à la sauvegarde cloud
 
-Meine SMS/Anrufe
+Mes SMS/Appels 
 ==============
 
-Auf dieser Registerkarte können Sie Ihr SMS/Anruf Guthaben (mit dem Plugin Telefon Markt) abrufen. Im Folgenden haben Sie die verschiedenen Möglichkeiten, zusätzliches Guthaben zu kaufen.
+Sur cette onglet vous pouvez consulter votre solde SMS/Appels
+(utilisable avec le plugin Phone market). En dessous vous avez les
+différentes options permettant d’acheter du solde supplémentaire.
 
-Meine Einkäufe/Gutscheine/Spenden
+Mes achats/promos/dons 
 ======================
 
-Hier finden sie all ihre Einkäufe und Sie können die Überweisung der E-Mail
-Rechnung oder Quittung anfordern.
+Ici vous retrouvez tous vos achats et vous pouvez demander le renvoi du
+mail de facture ou de reçu
 
 > **Important**
 >
-> Wenn sie ein offizielles Plugin kaufen, erhalten sie eine Rechnung, im
-> Gegensatz zu einem Plugin von dritten, ist das eine Quittung, für die
-> Rechnung muss man den Entwickler fragen.
+> Si vous achetez un plugin officiel vous recevez une facture. En
+> revanche pour un plugin tiers c’est un reçu, pour la facture il faut
+> la demander au développeur
 
-Sie können auch darin einen Gutscheincode eingeben (zum Beispiel ein
-Code für ein Plugin, dass der Entwickler an sie weitergegeben hat) und eine
-Spende machen.  
+Vous pouvez aussi à partir de cet onglet entrer un code promo (un code
+pour un plugin par exemple que le développeur a pu vous transmettre) et
+faire un don.
 
-Meine Entwicklungen
+Mes développments 
 =================
 
-Wenn sie Entwickler sind finden sie hier eine Liste aller Verkäufe über einen
-Zeitraum, die Liste der Zahlungen und eine Übersicht über die Anzahl der
-Downloads, die Zahl der Verkäufe ...
+Si vous êtes développeur vous retrouvez ici la liste de toutes vos
+ventes sur une période, la liste de vos versements ainsi qu’un résumé du
+nombre de téléchargements, du nombre de ventes…​

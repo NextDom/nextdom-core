@@ -18,7 +18,7 @@
 
 /* * ***************************Includes********************************* */
 
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
 
 class repo_market {
     /*     * *************************Attributs****************************** */
@@ -50,10 +50,24 @@ class repo_market {
                 'name' => 'Mot de passe',
                 'type' => 'password',
             ),
+
+            'cloud::backup::name' => array(
+                'name' => '[Backup cloud] Nom',
+                'type' => 'input',
+            ),
+            'cloud::backup::password' => array(
+                'name' => '[Backup cloud] Mot de passe',
+                'type' => 'password',
+            ),
+            'cloud::backup::fullfrequency' => array(
+                'name' => '[Backup cloud] Fréquence backup full',
+                'type' => 'select',
+                'values' => array('1D' => 'Toutes les jours', '1W' => 'Toutes les semaines', '1M' => 'Toutes les mois'),
+            ),
         ),
         'parameters_for_add' => array(
             'version' => array(
-                'name' => 'Version : beta, release, stable',
+                'name' => 'Version : beta, stable',
                 'type' => 'input',
             ),
         ),
@@ -182,101 +196,187 @@ class repo_market {
 
     /*     * ***********************BACKUP*************************** */
 
-    public static function sendBackup($_path) {
-        $market = self::getJsonRpc();
-        $file = array(
-            'file' => '@' . realpath($_path),
-        );
-        if (!$market->sendRequest('backup::upload', array(), 7200, $file)) {
-            throw new Exception($market->getError());
-        }
-    }
-
-    public static function uploadChunk($path, $chunkStart, $chunkEnd, $id, $fileSize) {
-        $market = self::getJsonRpc();
-        $file = fopen($path, "r");
-        fseek($file, $chunkStart - $fileSize, SEEK_END);
-        $chunkSize = (($diff = $chunkEnd - $chunkStart) < 10240) ? 10240 : $diff;
-        $chunk = fread($file, $chunkSize);
-        $tmp = tmpfile();
-        $path = stream_get_meta_data($tmp);
-        fwrite($tmp, $chunk);
-        $rangeHeader = array('chunkStart' => $chunkStart, 'chunkEnd' => $chunkEnd, 'chunkSize' => $chunkSize, 'fileSize' => $fileSize);
-        if (!$market->sendRequest('backup::put', array('id' => $id, 'rangeHeader' => $rangeHeader), 7300, array('file' => '@' . $path['uri']))) {
-            fclose($tmp);
-            throw new Exception($market->getError());
-        }
-        $status = $market->getResult();
-        fclose($tmp);
-        return $status;
-    }
-
-    public static function sendBackupCloud($_path, $_chunksize = 4096000) {
-        $market = self::getJsonRpc();
-        if (!$market->sendRequest('backup::create', array('filename' => pathinfo($_path, PATHINFO_BASENAME), 'filesize' => filesize($_path), 'chunksize' => $_chunksize, 'checksum' => md5_file($_path)))) {
-            throw new Exception($market->getError());
-        }
-        $backup = $market->getResult();
-        if (isset($backup["completed_at"]) && $backup["completed_at"]) {
-            log::add('backupCloud', 'info', 'la sauvegarde est déjà sur le cloud');
-            return false;
-        }
-        if (isset($backup["retry"]) && $backup["retry"] > 5) {
-            log::add('backupCloud', 'info', 'Téléversement impossible, nombre d\'essais : 5');
-            return false;
-        }
-        $fileSize = filesize($_path);
-        while (!$backup["completed_at"]) {
-            try {
-                $backup = repo_market::uploadChunk($_path, $backup["chunk_start"], $backup["chunk_end"], $backup["id"], $fileSize);
-            } catch (Exception $e) {
-                echo $e->getMessage() . "\n";
-                repo_market::sendBackupCloud($_path);
-                break;
+    public static function backup_createFolderIsNotExist() {
+        $client = new Sabre\DAV\Client(array(
+            'baseUri' => 'https://' . config::byKey('market::backupServer'),
+            'userName' => config::byKey('market::username'),
+            'password' => config::byKey('market::backupPassword'),
+        ));
+        $adapter = new League\Flysystem\WebDAV\WebDAVAdapter($client);
+        $filesystem = new League\Flysystem\Filesystem($adapter);
+        $folders = $filesystem->listContents('/remote.php/webdav/');
+        $found = false;
+        if (count($folders) > 0) {
+            foreach ($folders as $folder) {
+                if ($folder['basename'] == config::byKey('market::cloud::backup::name')) {
+                    $found = true;
+                    break;
+                }
             }
-
         }
-        if ($backup["completed_at"] != "") {
-            log::add('backupCloud', 'info', 'la sauvegarde a fini le téléversement');
-            return true;
+        if (!$found) {
+            $filesystem->createDir('/remote.php/webdav/' . config::byKey('market::cloud::backup::name'));
         }
     }
 
-    public static function listeBackup() {
-        $market = self::getJsonRpc();
-        if (!$market->sendRequest('backup::liste', array())) {
-            throw new Exception($market->getError());
+    public static function backup_send($_path) {
+        if (config::byKey('market::backupServer') == '' || config::byKey('market::backupPassword') == '') {
+            throw new Exception(__('Aucun serveur de backup defini. Avez vous bien un abonnement au backup cloud ?', __FILE__));
         }
-        return $market->getResult();
-    }
-
-    public static function retoreBackup($_backup) {
-        $url = config::byKey('market::address') . "/core/php/downloadBackup.php?backup=" . $_backup . '&hwkey=' . nextdom::getHardwareKey() . '&username=' . urlencode(config::byKey('market::username')) . '&password=' . self::getPassword() . '&password_type=sha1';
-        $tmp_dir = nextdom::getTmpFolder('market');
-        $tmp = $tmp_dir . '/' . $_backup;
-        $opts = array(
-            "ssl" => array(
-                "verify_peer" => false,
-                "verify_peer_name" => false,
-            ),
+        if (config::byKey('market::cloud::backup::password') == '') {
+            throw new Exception(__('Vous devez obligatoirement avoir un mot de passe pour le backup cloud', __FILE__));
+        }
+        shell_exec(system::getCmdSudo() . ' rm -rf /tmp/duplicity-*-tempdir');
+        self::backup_createFolderIsNotExist();
+        $base_dir = realpath(__DIR__ . '/../../');
+        $excludes = array(
+            $base_dir . '/tmp',
+            $base_dir . '/log',
+            $base_dir . '/backup',
+            $base_dir . '/doc',
+            $base_dir . '/docs',
+            $base_dir . '/plugins/*/doc',
+            $base_dir . '/plugins/*/docs',
+            $base_dir . '/tests',
+            $base_dir . '/.git',
+            $base_dir . '/.log',
+            $base_dir . '/core/config/common.config.php',
+            $base_dir . '/' . config::byKey('backup::path'),
         );
-        file_put_contents($tmp, fopen($url, 'r', false, stream_context_create($opts)));
-        if (!file_exists($tmp)) {
-            throw new Exception(__('Impossible de télécharger la sauvegarde : ', __FILE__) . $url . '.');
+        if (config::byKey('recordDir', 'camera') != '') {
+            $excludes[] = $base_dir . '/' . config::byKey('recordDir', 'camera');
         }
-        if (!file_exists(dirname(__FILE__) . '/../../backup/')) {
-            mkdir(dirname(__FILE__) . '/../../backup/');
+        $cmd = system::getCmdSudo() . ' PASSPHRASE="' . config::byKey('market::cloud::backup::password') . '"';
+        $cmd .= ' duplicity incremental --full-if-older-than ' . config::byKey('market::cloud::backup::fullfrequency', 'core', '1M');
+        foreach ($excludes as $exclude) {
+            $cmd .= ' --exclude "' . $exclude . '"';
         }
-        $backup_path = dirname(__FILE__) . '/../../backup/' . $_backup;
-        if (!copy($tmp, $backup_path)) {
-            throw new Exception(__('Impossible de copier le fichier de  : ', __FILE__) . $tmp . '.');
+        $cmd .= ' --num-retries 1';
+        $cmd .= ' --ssl-no-check-certificate';
+        $cmd .= ' ' . $base_dir . '  webdavs://' . config::byKey('market::username') . ':' . config::byKey('market::backupPassword');
+        $cmd .= '@' . config::byKey('market::backupServer') . '/remote.php/webdav/' . config::byKey('market::cloud::backup::name');
+        try {
+            com_shell::execute($cmd);
+        } catch (Exception $e) {
+            if (self::backup_errorAnalyzed($e->getMessage()) != null) {
+                throw new Exception('[backup cloud] ' . self::backup_errorAnalyzed($e->getMessage()));
+            }
+            if (strpos($e->getMessage(), 'Insufficient Storage') !== false) {
+                self::backup_clean();
+            }
+            system::kill('duplicity');
+            shell_exec(system::getCmdSudo() . ' rm -rf /tmp/duplicity-*-tempdir');
+            shell_exec(system::getCmdSudo() . ' rm -rf ~/.cache/duplicity/*');
+            com_shell::execute($cmd);
         }
-        if (!file_exists($backup_path)) {
-            throw new Exception(__('Impossible de trouver le fichier : ', __FILE__) . $backup_path . '.');
-        }
-        nextdom::restore('backup/' . $_backup, true);
+        shell_exec(system::getCmdSudo() . ' rm -rf /tmp/duplicity-*-tempdir');
     }
-    
+
+    public static function backup_errorAnalyzed($_error) {
+        if (strpos($_error, 'decryption failed: Bad session key') !== false) {
+            return __('Clef de chiffrement invalide. Si vous oubliez votre mot de passe aucune récupération n\'est possible. Veuillez supprimer le backup à partir de votre page profil sur le market', __FILE__);
+        }
+        return null;
+    }
+
+    public static function backup_clean($_nb = null) {
+        if (config::byKey('market::backupServer') == '' || config::byKey('market::backupPassword') == '') {
+            return;
+        }
+        if (config::byKey('market::cloud::backup::password') == '') {
+            return;
+        }
+        if ($_nb == null) {
+            $_nb = 0;
+            $lists = self::backup_list();
+            foreach ($lists as $name) {
+                if (strpos($name, 'Full') !== false) {
+                    $_nb++;
+                }
+            }
+            $_nb = ($_nb - 2 < 1) ? 1 : $_nb - 2;
+        }
+        $cmd = system::getCmdSudo();
+        $cmd .= ' duplicity remove-all-but-n-full ' . $_nb . ' --force ';
+        $cmd .= ' --ssl-no-check-certificate';
+        $cmd .= ' --num-retries 1';
+        $cmd .= ' webdavs://' . config::byKey('market::username') . ':' . config::byKey('market::backupPassword');
+        $cmd .= '@' . config::byKey('market::backupServer') . '/remote.php/webdav/' . config::byKey('market::cloud::backup::name');
+        try {
+            com_shell::execute($cmd);
+        } catch (Exception $e) {
+            if (self::backup_errorAnalyzed($e->getMessage()) != null) {
+                throw new Exception('[restore cloud] ' . self::backup_errorAnalyzed($e->getMessage()));
+            }
+            throw new Exception('[restore cloud] ' . $e->getMessage());
+        }
+    }
+
+    public static function backup_list() {
+        if (config::byKey('market::backupServer') == '' || config::byKey('market::backupPassword') == '') {
+            return array();
+        }
+        if (config::byKey('market::cloud::backup::password') == '') {
+            return array();
+        }
+        self::backup_createFolderIsNotExist();
+        $return = array();
+        $cmd = system::getCmdSudo();
+        $cmd .= ' duplicity collection-status';
+        $cmd .= ' --ssl-no-check-certificate';
+        $cmd .= ' --num-retries 1';
+        $cmd .= ' --timeout 60';
+        $cmd .= ' webdavs://' . config::byKey('market::username') . ':' . config::byKey('market::backupPassword');
+        $cmd .= '@' . config::byKey('market::backupServer') . '/remote.php/webdav/' . config::byKey('market::cloud::backup::name');
+        shell_exec(system::getCmdSudo() . ' rm -rf ~/.cache/duplicity/*');
+        $results = explode("\n", com_shell::execute($cmd));
+        foreach ($results as $line) {
+            if (strpos($line, 'Full') === false && strpos($line, 'Incremental') === false) {
+                continue;
+            }
+            $return[] = trim(substr($line, 0, -1));
+        }
+        return array_reverse($return);
+    }
+
+    public static function backup_restore($_backup) {
+        $backup_dir = calculPath(config::byKey('backup::path'));
+        if (!file_exists($backup_dir)) {
+            mkdir($backup_dir, 0770, true);
+        }
+        if (!is_writable($backup_dir)) {
+            throw new Exception('Impossible d\'accéder au dossier de sauvegarde. Veuillez vérifier les droits : ' . $backup_dir);
+        }
+        $restore_dir = '/tmp/nextdom_cloud_restore';
+        if (file_exists($restore_dir)) {
+            com_shell::execute(system::getCmdSudo() . ' rm -rf ' . $restore_dir);
+        }
+        mkdir($restore_dir);
+        $timestamp = strtotime(trim(str_replace(array('Full', 'Incremental'), '', $_backup)));
+        $backup_name = str_replace(' ', '_', 'backup-cloud-' . config::byKey('market::cloud::backup::name') . '-' . date("Y-m-d-H\hi", $timestamp) . '.tar.gz');
+        $cmd = system::getCmdSudo() . ' PASSPHRASE="' . config::byKey('market::cloud::backup::password') . '"';
+        $cmd .= ' duplicity --file-to-restore /';
+        $cmd .= ' --time ' . $timestamp;
+        $cmd .= ' --num-retries 1';
+        $cmd .= ' webdavs://' . config::byKey('market::username') . ':' . config::byKey('market::backupPassword');
+        $cmd .= '@' . config::byKey('market::backupServer') . '/remote.php/webdav/' . config::byKey('market::cloud::backup::name');
+        $cmd .= ' ' . $restore_dir;
+        try {
+            com_shell::execute($cmd);
+        } catch (Exception $e) {
+            if (self::backup_errorAnalyzed($e->getMessage()) != null) {
+                throw new Exception('[restore cloud] ' . self::backup_errorAnalyzed($e->getMessage()));
+            }
+            throw new Exception('[restore cloud] ' . $e->getMessage());
+        }
+        return;
+        system('cd ' . $restore_dir . ';tar cfz "' . $backup_dir . '/' . $backup_name . '" . > /dev/null');
+        if (file_exists($restore_dir)) {
+            com_shell::execute(system::getCmdSudo() . ' rm -rf ' . $restore_dir);
+        }
+        nextdom::restore($backup_dir . '/' . $backup_name, true);
+    }
+
     /******************************MONITORING********************************/
 
     public static function monitoring_install() {
@@ -365,7 +465,7 @@ class repo_market {
 
         }
     }
-    
+
     public static function cron5() {
         try {
             $monitoring_state = self::monitoring_status();
@@ -379,7 +479,7 @@ class repo_market {
 
         }
     }
-    
+
     /*******************************health********************************/
 
     public static function health() {
@@ -523,7 +623,7 @@ class repo_market {
             $_ticket['user_plugin'] .= $plugin->getId();
             $update = $plugin->getUpdate();
             if (is_object($update)) {
-                $_ticket['user_plugin'] .= '[' . $update->getConfiguration('version', 'stable'). ',' . $update->getSource() . ',' . $update->getLocalVersion() . ']';
+                $_ticket['user_plugin'] .= '[' . $update->getConfiguration('version', 'stable') . ',' . $update->getSource() . ',' . $update->getLocalVersion() . ']';
             }
             $_ticket['user_plugin'] .= ',';
         }
@@ -653,9 +753,11 @@ class repo_market {
             }
             if (isset($_result['user::backupServer']) && config::byKey('market::backupServer') != $_result['user::backupServer']) {
                 config::save('market::backupServer', $_result['user::backupServer']);
+                $restart_monitoring = true;
             }
             if (isset($_result['user::backupPassword']) && config::byKey('market::backupPassword') != $_result['user::backupPassword']) {
                 config::save('market::backupPassword', $_result['user::backupPassword']);
+                $restart_monitoring = true;
             }
             if (isset($_result['user::monitoringServer']) && config::byKey('market::monitoringServer') != $_result['user::monitoringServer']) {
                 config::save('market::monitoringServer', $_result['user::monitoringServer']);
@@ -679,16 +781,8 @@ class repo_market {
             if ($restart_dns && config::byKey('market::allowDNS') == 1) {
                 network::dns_start();
             }
-            if (config::byKey('market::allowDNS') == 1) {
-                if (isset($_result['nextdom::url']) && config::byKey('nextdom::url') != $_result['nextdom::url']) {
-                    config::save('nextdom::url', $_result['nextdom::url']);
-                }
-            }
-            if (isset($_result['market::allowBeta']) && config::byKey('market::allowBeta') != $_result['market::allowBeta']) {
-                config::save('market::allowBeta', $_result['market::allowBeta']);
-            }
-            if (isset($_result['market::allowAllRepo']) && config::byKey('market::allowAllRepo') != $_result['market::allowAllRepo']) {
-                config::save('market::allowAllRepo', $_result['market::allowAllRepo']);
+            if (config::byKey('market::allowDNS') == 1 && isset($_result['nextdom::url']) && config::byKey('nextdom::url') != $_result['nextdom::url']) {
+                config::save('nextdom::url', $_result['nextdom::url']);
             }
             if (isset($_result['register::hwkey_nok']) && $_result['register::hwkey_nok'] == 1) {
                 config::save('nextdom::installKey', '');
@@ -916,14 +1010,7 @@ class repo_market {
 
         $url = config::byKey('market::address') . "/core/php/downloadFile.php?id=" . $this->getId() . '&version=' . $_version . '&nextdomversion=' . nextdom::version() . '&hwkey=' . nextdom::getHardwareKey() . '&username=' . urlencode(config::byKey('market::username')) . '&password=' . self::getPassword() . '&password_type=sha1';
         log::add('update', 'alert', __('Téléchargement de ', __FILE__) . $this->getLogicalId() . '...');
-        $opts = array(
-            "ssl" => array(
-                "verify_peer" => false,
-                "verify_peer_name" => false,
-            ),
-        );
-        file_put_contents($tmp, fopen($url, 'r', false, stream_context_create($opts)));
-
+        exec('wget --no-check-certificate "' . $url . '" -O ' . $tmp . ' 2>&1 >> ' . log::getPathToLog('update'));
         switch ($this->getType()) {
             case 'plugin':
                 return $tmp;
@@ -976,16 +1063,12 @@ class repo_market {
                     rrmdir($cibDir);
                 }
                 mkdir($cibDir);
-                $exclude = array(
-                    'tmp',
-                    '.git',
-                    '.DStore',
-                );
+                $exclude = array('tmp', '.git', '.DStore');
                 if (property_exists($plugin_id, '_excludeOnSendPlugin')) {
                     $exclude = array_merge($plugin_id::$_excludeOnSendPlugin);
                 }
-                exec('find ' . realpath(dirname(__FILE__) . '/../../plugins/' . $plugin_id) . ' -name "*.sh" -type f -exec dos2unix {} \;');
-                rcopy(realpath(dirname(__FILE__) . '/../../plugins/' . $plugin_id), $cibDir, true, $exclude, true);
+                exec('find ' . realpath(__DIR__ . '/../../plugins/' . $plugin_id) . ' -name "*.sh" -type f -exec dos2unix {} \;');
+                rcopy(realpath(__DIR__ . '/../../plugins/' . $plugin_id), $cibDir, true, $exclude, true);
                 if (file_exists($cibDir . '/data')) {
                     rrmdir($cibDir . '/data');
                 }
@@ -1164,6 +1247,15 @@ class repo_market {
         return $this;
     }
 
+    public function getNbInstall() {
+        return $this->nbInstall;
+    }
+
+    public function setNbInstall($nbInstall) {
+        $this->nbInstall = $nbInstall;
+        return $this;
+    }
+
     public function getLogicalId() {
         return $this->logicalId;
     }
@@ -1287,15 +1379,6 @@ class repo_market {
 
     public function setParameters($_key, $_value) {
         $this->parameters = utils::setJsonAttr($this->parameters, $_key, $_value);
-        return $this;
-    }
-    
-    public function getNbInstall() {
-        return $this->nbInstall;
-    }
-
-    public function setNbInstall($nbInstall) {
-        $this->nbInstall = $nbInstall;
         return $this;
     }
 

@@ -17,7 +17,7 @@
  */
 
 try {
-    require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+    require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
 
     if (!isConnect()) {
@@ -27,10 +27,11 @@ try {
     ajax::init();
 
     if (init('action') == 'remove') {
+        unautorizedInDemo();
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
         }
-        $object = object::byId(init('id'));
+        $object = jeeObject::byId(init('id'));
         if (!is_object($object)) {
             throw new Exception(__('Objet inconnu. Vérifiez l\'ID', __FILE__));
         }
@@ -39,7 +40,7 @@ try {
     }
 
     if (init('action') == 'byId') {
-        $object = object::byId(init('id'));
+        $object = jeeObject::byId(init('id'));
         if (!is_object($object)) {
             throw new Exception(__('Objet inconnu. Vérifiez l\'ID ', __FILE__) . init('id'));
         }
@@ -47,7 +48,7 @@ try {
     }
 
     if (init('action') == 'createSummaryVirtual') {
-        object::createSummaryToVirtual(init('key'));
+        jeeObject::createSummaryToVirtual(init('key'));
         ajax::success();
     }
 
@@ -67,15 +68,16 @@ try {
     }
 
     if (init('action') == 'save') {
+        unautorizedInDemo();
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
         }
         $object_json = json_decode(init('object'), true);
         if (isset($object_json['id'])) {
-            $object = object::byId($object_json['id']);
+            $object = jeeObject::byId($object_json['id']);
         }
         if (!isset($object) || !is_object($object)) {
-            $object = new object();
+            $object = new jeeObject();
         }
         utils::a2o($object, nextdom::fromHumanReadable($object_json));
         $object->save();
@@ -83,7 +85,8 @@ try {
     }
 
     if (init('action') == 'uploadImage') {
-        $object = object::byId(init('id'));
+        unautorizedInDemo();
+        $object = jeeObject::byId(init('id'));
         if (!is_object($object)) {
             throw new Exception(__('Objet inconnu. Vérifiez l\'ID', __FILE__));
         }
@@ -105,7 +108,7 @@ try {
     }
 
     if (init('action') == 'getChild') {
-        $object = object::byId(init('id'));
+        $object = jeeObject::byId(init('id'));
         if (!is_object($object)) {
             throw new Exception(__('Objet inconnu. Vérifiez l\'ID', __FILE__));
         }
@@ -119,7 +122,7 @@ try {
                 $objects = json_decode(init('id'), true);
             } else {
                 $objects = array();
-                foreach (object::all() as $object) {
+                foreach (jeeObject::all() as $object) {
                     if ($object->getConfiguration('hideOnDashboard', 0) == 1) {
                         continue;
                     }
@@ -133,13 +136,17 @@ try {
                 if (init('summary') == '') {
                     $eqLogics = eqLogic::byObjectId($id, true, true);
                 } else {
-                    $object = object::byId($id);
+                    $object = jeeObject::byId($id);
                     $eqLogics = $object->getEqLogicBySummary(init('summary'), true, false);
                 }
                 foreach ($eqLogics as $eqLogic) {
-                    if (init('category', 'all') == 'all' || $eqLogic->getCategory(init('category')) == 1) {
-                        $html .= $eqLogic->toHtml(init('version'));
+                    if (init('category', 'all') != 'all' && $eqLogic->getCategory(init('category')) != 1) {
+                        continue;
                     }
+                    if (init('tag', 'all') != 'all' && strpos($eqLogic->getTags(), init('tag')) === false) {
+                        continue;
+                    }
+                    $html .= $eqLogic->toHtml(init('version'));
                 }
                 $return[$i . '::' . $id] = $html;
                 $i++;
@@ -150,13 +157,17 @@ try {
             if (init('summary') == '') {
                 $eqLogics = eqLogic::byObjectId(init('id'), true, true);
             } else {
-                $object = object::byId(init('id'));
+                $object = jeeObject::byId(init('id'));
                 $eqLogics = $object->getEqLogicBySummary(init('summary'), true, false);
             }
             foreach ($eqLogics as $eqLogic) {
-                if (init('category', 'all') == 'all' || $eqLogic->getCategory(init('category')) == 1) {
-                    $html .= $eqLogic->toHtml(init('version'));
+                if (init('category', 'all') != 'all' && $eqLogic->getCategory(init('category')) != 1) {
+                    continue;
                 }
+                if (init('tag', 'all') != 'all' && strpos($eqLogic->getTags(), init('tag')) === false) {
+                    continue;
+                }
+                $html .= $eqLogic->toHtml(init('version'));
             }
             ajax::success($html);
         }
@@ -168,7 +179,7 @@ try {
         }
         $position = 1;
         foreach (json_decode(init('objects'), true) as $id) {
-            $object = object::byId($id);
+            $object = jeeObject::byId($id);
             if (is_object($object)) {
                 $object->setPosition($position);
                 $object->save();
@@ -184,12 +195,12 @@ try {
             foreach (json_decode(init('ids'), true) as $id => $value) {
                 if ($id == 'global') {
                     $return['global'] = array(
-                        'html' => object::getGlobalHtmlSummary($value['version']),
+                        'html' => jeeObject::getGlobalHtmlSummary($value['version']),
                         'id' => 'global',
                     );
                     continue;
                 }
-                $object = object::byId($id);
+                $object = jeeObject::byId($id);
                 if (!is_object($object)) {
                     continue;
                 }
@@ -201,7 +212,7 @@ try {
 
             ajax::success($return);
         } else {
-            $object = object::byId(init('id'));
+            $object = jeeObject::byId(init('id'));
             if (!is_object($object)) {
                 throw new Exception(__('Objet inconnu. Vérifiez l\'ID', __FILE__));
             }

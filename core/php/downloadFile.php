@@ -16,11 +16,12 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 try {
-    require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+    require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
     if (!isConnect() && !nextdom::apiAccess(init('apikey'))) {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
+    unautorizedInDemo();
     $pathfile = realpath(calculPath(urldecode(init('pathfile'))));
     if ($pathfile === false) {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
@@ -28,7 +29,7 @@ try {
     if (strpos($pathfile, '.php') !== false) {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
-    $rootPath = realpath(dirname(__FILE__) . '/../../');
+    $rootPath = realpath(__DIR__ . '/../../');
     if (strpos($pathfile, $rootPath) === false) {
         if (config::byKey('recordDir', 'camera') != '' && substr(config::byKey('recordDir', 'camera'), 0, 1) == '/') {
             $cameraPath = realpath(config::byKey('recordDir', 'camera'));
@@ -76,4 +77,3 @@ try {
 } catch (Exception $e) {
     echo $e->getMessage();
 }
-

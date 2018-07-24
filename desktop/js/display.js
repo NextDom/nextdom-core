@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
+
  $( ".eqLogicSortable" ).sortable({
   connectWith: ".eqLogicSortable",
   stop: function (event, ui) {
@@ -31,7 +32,7 @@
     nextdom.eqLogic.setOrder({
         eqLogics: eqLogics,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
             $( ".eqLogicSortable" ).sortable( "cancel" );
         }
     });
@@ -54,7 +55,7 @@
     nextdom.cmd.setOrder({
         cmds: cmds,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         }
     });
 }
@@ -67,14 +68,14 @@
 });
 
  $('.configureEqLogic').on('click',function(){
-     $('#md_modal').dialog({title: "{{Configuration de l'équipement}}"});
-     $('#md_modal').load('index.php?v=d&modal=eqLogic.configure&eqLogic_id=' + $(this).closest('.eqLogic').attr('data-id')).dialog('open');
- });
+   $('#md_modal').dialog({title: "{{Configuration de l'équipement}}"});
+   $('#md_modal').load('index.php?v=d&modal=eqLogic.configure&eqLogic_id=' + $(this).closest('.eqLogic').attr('data-id')).dialog('open');
+});
 
  $('.configureObject').on('click',function(){
-     $('#md_modal').dialog({title: "{{Configuration de l'objet}}"});
-     $('#md_modal').load('index.php?v=d&modal=object.configure&object_id=' + $(this).closest('.object').attr('data-id')).dialog('open');
- });
+   $('#md_modal').dialog({title: "{{Configuration de l'objet}}"});
+   $('#md_modal').load('index.php?v=d&modal=object.configure&object_id=' + $(this).closest('.object').attr('data-id')).dialog('open');
+});
 
  $('.showCmd').on('click',function(){
     if($(this).hasClass('fa-chevron-right')){
@@ -105,14 +106,14 @@
 });
 
  $( ".cmd" ).on('dblclick',function(){
-   $('#md_modal').dialog({title: "{{Configuration de la commande}}"});
-   $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
-});
+     $('#md_modal').dialog({title: "{{Configuration de la commande}}"});
+     $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
+ });
 
  $('.configureCmd').on('click',function(){
-     $('#md_modal').dialog({title: "{{Configuration de la commande}}"});
-     $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-id')).dialog('open');
- });
+   $('#md_modal').dialog({title: "{{Configuration de la commande}}"});
+   $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-id')).dialog('open');
+});
 
  $('#in_search').on('keyup',function(){
     var search = $(this).value().toLowerCase();
@@ -170,7 +171,7 @@
             nextdom.eqLogic.removes({
                 eqLogics: eqLogics,
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
                 },
                 success : function(){
                     loadPage('index.php?v=d&p=display');
@@ -191,12 +192,12 @@
         eqLogics: eqLogics,
         isVisible : $(this).attr('data-value'),
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success : function(){
-           loadPage('index.php?v=d&p=display');
-        }
-    });
+         loadPage('index.php?v=d&p=display');
+     }
+ });
 });
 
  $('.bt_setIsEnable').on('click',function(){
@@ -210,10 +211,15 @@
         eqLogics: eqLogics,
         isEnable : $(this).attr('data-value'),
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success : function(){
             loadPage('index.php?v=d&p=display');
         }
     });
 });
+
+ $('#bt_removeHistory').on('click',function(){
+    $('#md_modal').dialog({title: "{{Historique des supression}}"});
+    $('#md_modal').load('index.php?v=d&modal=remove.history').dialog('open');
+});     

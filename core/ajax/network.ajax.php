@@ -17,7 +17,7 @@
  */
 
 try {
-    require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+    require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
 
     if (!isConnect('admin')) {
@@ -27,12 +27,14 @@ try {
     ajax::init();
 
     if (init('action') == 'restartDns') {
+        unautorizedInDemo();
         config::save('market::allowDNS', 1);
         network::dns_start();
         ajax::success();
     }
 
     if (init('action') == 'stopDns') {
+        unautorizedInDemo();
         config::save('market::allowDNS', 0);
         network::dns_stop();
         ajax::success();

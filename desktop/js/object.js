@@ -16,11 +16,11 @@
  */
 
  if (getUrlVars('saveSuccessFull') == 1) {
-    notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
+    $('#div_alert').showAlert({message: '{{Sauvegarde effectuée avec succès}}', level: 'success'});
 }
 
 if (getUrlVars('removeSuccessFull') == 1) {
-    notify("Info", '{{Suppression effectuée avec succès}}', 'success');
+    $('#div_alert').showAlert({message: '{{Suppression effectuée avec succès}}', level: 'success'});
 }
 
 if((!isset(userProfils.doNotAutoHideMenu) || userProfils.doNotAutoHideMenu != 1) && !jQuery.support.touch){
@@ -86,7 +86,7 @@ function loadObjectConfiguration(_id){
         id: _id,
         cache: false,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function (data) {
             $('.objectAttr').value('');
@@ -125,12 +125,12 @@ $("#bt_addObject,#bt_addObject2").on('click', function (event) {
             nextdom.object.save({
                 object: {name: result, isVisible: 1},
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
                 },
                 success: function (data) {
                     modifyWithoutSave = false;
                     loadPage('index.php?v=d&p=object&id=' + data.id + '&saveSuccessFull=1');
-                    notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
+                    $('#div_alert').showAlert({message: '{{Sauvegarde effectuée avec succès}}', level: 'success'});
                 }
             });
         }
@@ -167,16 +167,15 @@ $("#bt_saveObject").on('click', function (event) {
         nextdom.object.save({
             object: object,
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                $('#div_alert').showAlert({message: error.message, level: 'danger'});
             },
             success: function (data) {
                 modifyWithoutSave = false;
-                loadObjectConfiguration(data.id);
-                notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
+                window.location = 'index.php?v=d&p=object&id=' + data.id + '&saveSuccessFull=1';
             }
         });
     } else {
-        notify("Attention", '{{Veuillez d\'abord sélectionner un objet}}', 'warning');
+        $('#div_alert').showAlert({message: '{{Veuillez d\'abord sélectionner un objet}}', level: 'danger'});
     }
     return false;
 });
@@ -189,7 +188,7 @@ $("#bt_removeObject").on('click', function (event) {
                 nextdom.object.remove({
                     id: $('.li_object.active').attr('data-object_id'),
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        $('#div_alert').showAlert({message: error.message, level: 'danger'});
                     },
                     success: function () {
                         modifyWithoutSave = false;
@@ -199,7 +198,7 @@ $("#bt_removeObject").on('click', function (event) {
             }
         });
     } else {
-        notify("Attention", '{{Veuillez d\'abord sélectionner un objet}}', 'warning');
+        $('#div_alert').showAlert({message: '{{Veuillez d\'abord sélectionner un objet}}', level: 'danger'});
     }
     return false;
 });
@@ -220,7 +219,7 @@ $("#ul_object").sortable({
         nextdom.object.setOrder({
             objects: objects,
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                $('#div_alert').showAlert({message: error.message, level: 'danger'});
             }
         });
     }
@@ -240,7 +239,7 @@ if (is_numeric(getUrlVars('id'))) {
     } else {
         $('#ul_object .li_object:first').click();
     }
-}
+} 
 
 $('#div_pageContainer').delegate('.objectAttr', 'change', function () {
     modifyWithoutSave = true;
@@ -275,11 +274,11 @@ function addSummaryInfo(_el, _summary) {
     div += '<div class="input-group">';
     div += '<span class="input-group-btn">';
     div += '<input type="checkbox" class="summaryAttr checkbox-inline" data-l1key="enable" checked title="{{Activer}}" />';
-    div += '<a class="btn btn-default bt_removeSummary btn-sm"><i class="fa fa-minus-circle"></i></a>';
+    div += '<a class="btn btn-default bt_removeSummary btn-sm"><i class="fas fa-minus-circle"></i></a>';
     div += '</span>';
     div += '<input class="summaryAttr form-control input-sm" data-l1key="cmd" />';
     div += '<span class="input-group-btn">';
-    div += '<a class="btn btn-sm listCmdInfo btn-success"><i class="fa fa-list-alt"></i></a>';
+    div += '<a class="btn btn-sm listCmdInfo btn-success"><i class="fas fa-list-alt"></i></a>';
     div += '</span>';
     div += '</div>';
     div += '</div>';
@@ -292,6 +291,6 @@ function addSummaryInfo(_el, _summary) {
 }
 
 $('.bt_showObjectSummary').off('click').on('click', function () {
-  $('#md_modal').dialog({title: "{{Résumé objet}}"});
+  $('#md_modal').dialog({title: "{{Résumé Objets}}"});
   $("#md_modal").load('index.php?v=d&modal=object.summary').dialog('open');
 });

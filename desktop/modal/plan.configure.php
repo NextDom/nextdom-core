@@ -14,7 +14,7 @@ sendVarToJS('id', $plan->getId());
 <form class="form-horizontal">
   <fieldset id="fd_planConfigure">
     <legend>{{Général}}
-      <a class='btn btn-success btn-xs pull-right cursor' style="color: white;" id='bt_saveConfigurePlan'><i class="fa fa-check"></i> {{Sauvegarder}}</a>
+      <a class='btn btn-success btn-xs pull-right cursor' style="color: white;" id='bt_saveConfigurePlan'><i class="fas fa-check"></i> {{Sauvegarder}}</a>
     </legend>
     <input type="text"  class="planAttr form-control" data-l1key="id" style="display: none;"/>
     <input type="text"  class="planAttr form-control" data-l1key="link_type" style="display: none;"/>
@@ -69,7 +69,7 @@ sendVarToJS('id', $plan->getId());
     <label class="col-lg-4 control-label">{{Image}}</label>
     <div class="col-lg-8">
       <span class="btn btn-default btn-file">
-        <i class="fa fa-cloud-upload"></i> {{Envoyer}}<input  id="bt_uploadImagePlan" type="file" name="file" style="display: inline-block;">
+        <i class="fas fa-cloud-upload-alt"></i> {{Envoyer}}<input  id="bt_uploadImagePlan" type="file" name="file" style="display: inline-block;">
       </span>
     </div>
   </div>
@@ -79,7 +79,7 @@ sendVarToJS('id', $plan->getId());
       <div class="input-group">
         <input type="text" class="planAttr form-control" data-l1key="configuration" data-l2key="camera"/>
         <span class="input-group-btn">
-         <a class="btn btn-default" id="bt_planConfigureSelectCamera"><i class="fa fa-list-alt"></i></a>
+         <a class="btn btn-default" id="bt_planConfigureSelectCamera"><i class="fas fa-list-alt"></i></a>
        </span>
      </div>
    </div>
@@ -141,7 +141,7 @@ sendVarToJS('id', $plan->getId());
       <option value="-1">{{Aucun}}</option>
       <option value="0">{{Général}}</option>
       <?php
-foreach (object::all() as $object) {
+foreach (jeeObject::all() as $object) {
     echo '<option value="' . $object->getId() . '">' . $object->getName() . '</option>';
 }
 ?>
@@ -178,7 +178,7 @@ foreach (planHeader::all() as $plan) {
     <div class="planAttr" data-l1key="display" data-l2key="icon" ></div>
   </div>
   <div class="col-lg-2">
-    <a class="btn btn-default btn-sm" id="bt_chooseIcon"><i class="fa fa-flag"></i> {{Choisir une icône}}</a>
+    <a class="btn btn-default btn-sm" id="bt_chooseIcon"><i class="fas fa-flag"></i> {{Choisir une icône}}</a>
   </div>
 </div>
 <div class="form-group link_type link_plan link_view link_text link_summary">
@@ -263,7 +263,7 @@ foreach (planHeader::all() as $plan) {
 
 
   <div class="zone_mode zone_simple">
-    <legend>{{Action}}<a class="btn btn-success pull-right btn-xs bt_planConfigurationAction" data-type="other"><i class="fa fa-plus"></i></a></legend>
+    <legend>{{Action}}<a class="btn btn-success pull-right btn-xs bt_planConfigurationAction" data-type="other"><i class="fas fa-plus"></i></a></legend>
     <div id="div_planConfigureActionother"></div>
   </div>
 
@@ -274,7 +274,7 @@ foreach (planHeader::all() as $plan) {
        <div class="input-group">
          <input type="text" class="planAttr form-control" data-l1key="configuration" data-l2key="eqLogic"/>
          <span class="input-group-btn">
-           <a class="btn btn-default" id="bt_planConfigureAddEqLogic"><i class="fa fa-list-alt"></i></a>
+           <a class="btn btn-default" id="bt_planConfigureAddEqLogic"><i class="fas fa-list-alt"></i></a>
          </div>
        </div>
      </div>
@@ -309,13 +309,13 @@ foreach (planHeader::all() as $plan) {
        <input type="text" class="planAttr form-control" data-l1key="configuration" data-l2key="binary_info"/>
      </div>
      <div class="col-lg-3">
-       <a class="btn btn-default" id="bt_planConfigureSelectBinary"><i class="fa fa-list-alt"></i></a>
+       <a class="btn btn-default" id="bt_planConfigureSelectBinary"><i class="fas fa-list-alt"></i></a>
      </div>
    </div>
-   <legend>{{Action on}}<a class="btn btn-success pull-right btn-xs bt_planConfigurationAction" data-type="on"><i class="fa fa-plus"></i></a></legend>
+   <legend>{{Action on}}<a class="btn btn-success pull-right btn-xs bt_planConfigurationAction" data-type="on"><i class="fas fa-plus"></i></a></legend>
    <div id="div_planConfigureActionon"></div>
 
-   <legend>{{Action off}}<a class="btn btn-success pull-right btn-xs bt_planConfigurationAction" data-type="off"><i class="fa fa-plus"></i></a></legend>
+   <legend>{{Action off}}<a class="btn btn-success pull-right btn-xs bt_planConfigurationAction" data-type="off"><i class="fas fa-plus"></i></a></legend>
    <div id="div_planConfigureActionoff"></div>
  </div>
 </div>
@@ -385,12 +385,12 @@ foreach (planHeader::all() as $plan) {
     div += '<div class="col-sm-4">';
     div += '<div class="input-group">';
     div += '<span class="input-group-btn">';
-    div += '<a class="btn btn-default bt_removeAction btn-sm" data-type="' + _type + '"><i class="fa fa-minus-circle"></i></a>';
+    div += '<a class="btn btn-default bt_removeAction btn-sm" data-type="' + _type + '"><i class="fas fa-minus-circle"></i></a>';
     div += '</span>';
     div += '<input class="expressionAttr form-control input-sm cmdAction" data-l1key="cmd" data-type="' + _type + '" />';
     div += '<span class="input-group-btn">';
-    div += '<a class="btn btn-default btn-sm bt_selectOtherActionExpression" data-type="' + _type + '" title="{{Sélectionner un mot-clé}}"><i class="fa fa-tasks"></i></a>';
-    div += '<a class="btn btn-default btn-sm listCmdAction" data-type="' + _type + '"><i class="fa fa-list-alt"></i></a>';
+    div += '<a class="btn btn-default btn-sm bt_selectOtherActionExpression" data-type="' + _type + '" title="{{Sélectionner un mot-clé}}"><i class="fas fa-tasks"></i></a>';
+    div += '<a class="btn btn-default btn-sm listCmdAction" data-type="' + _type + '"><i class="fas fa-list-alt"></i></a>';
     div += '</span>';
     div += '</div>';
     div += '</div>';
@@ -426,11 +426,11 @@ foreach (planHeader::all() as $plan) {
   });
   $('#bt_uploadImagePlan').fileupload({
     replaceFileInput: false,
-    url: 'Plan/ajax/plan.ajax.php?action=uploadImagePlan&id=' + id+'&nextdom_token='+NEXTDOM_AJAX_TOKEN,
+    url: 'core/ajax/plan.ajax.php?action=uploadImagePlan&id=' + id+'&nextdom_token='+NEXTDOM_AJAX_TOKEN,
     dataType: 'json',
     done: function (e, data) {
       if (data.result.state != 'ok') {
-          notify("{{Plan}}", data.result.result, 'error');
+        $('#div_alertPlanConfigure').showAlert({message: data.result.result, level: 'danger'});
         return;
       }
     }
@@ -470,7 +470,7 @@ foreach (planHeader::all() as $plan) {
   if (isset(id) && id != '') {
    $.ajax({
     type: "POST",
-    url: "Plan/ajax/plan.ajax.php",
+    url: "core/ajax/plan.ajax.php",
     data: {
       action: "get",
       id: id
@@ -481,7 +481,7 @@ foreach (planHeader::all() as $plan) {
     },
     success: function (data) {
       if (data.state != 'ok') {
-          notify("{{Plan}}", data.result, 'error');
+        $('#div_alertPlanConfigure').showAlert({message: data.result, level: 'danger'});
         return;
       }
       $('.link_type:not(.link_'+data.result.link_type+')').remove()
@@ -536,10 +536,10 @@ foreach (planHeader::all() as $plan) {
   nextdom.plan.save({
     plans: plans,
     error: function (error) {
-        notify("{{Plan}}", error.message, 'error');
+      $('#div_alertPlanConfigure').showAlert({message: error.message, level: 'danger'});
     },
     success: function () {
-        notify("{{Plan}}", 'Design sauvegardé', 'success');
+      $('#div_alertPlanConfigure').showAlert({message: 'Design sauvegardé', level: 'success'});
       displayPlan();
       $('#fd_planConfigure').closest("div.ui-dialog-content").dialog("close");
     },

@@ -17,7 +17,7 @@
  */
 
 try {
-    require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+    require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
 
     if (!isConnect()) {
@@ -95,14 +95,22 @@ try {
         if (!is_object($cmd)) {
             throw new Exception(__('Commande inconnue : ', __FILE__) . init('id'), 9999);
         }
-        ajax::success(utils::o2a($cmd));
+        ajax::success(nextdom::toHumanReadable(utils::o2a($cmd)));
     }
 
     if (init('action') == 'copyHistoryToCmd') {
+        if (!isConnect('admin')) {
+            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+        }
+        unautorizedInDemo();
         ajax::success(history::copyHistoryToCmd(init('source_id'), init('target_id')));
     }
 
     if (init('action') == 'replaceCmd') {
+        if (!isConnect('admin')) {
+            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+        }
+        unautorizedInDemo();
         ajax::success(nextdom::replaceTag(array('#' . str_replace('#', '', init('source_id')) . '#' => '#' . str_replace('#', '', init('target_id')) . '#')));
     }
 
@@ -116,6 +124,9 @@ try {
     }
 
     if (init('action') == 'usedBy') {
+        if (!isConnect('admin')) {
+            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+        }
         $cmd = cmd::byId(init('id'));
         if (!is_object($cmd)) {
             throw new Exception(__('Commande inconnue : ', __FILE__) . init('id'), 9999);
@@ -170,6 +181,7 @@ try {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
         }
+        unautorizedInDemo();
         $cmd_ajax = nextdom::fromHumanReadable(json_decode(init('cmd'), true));
         $cmd = cmd::byId($cmd_ajax['id']);
         if (!is_object($cmd)) {
@@ -177,13 +189,14 @@ try {
         }
         utils::a2o($cmd, $cmd_ajax);
         $cmd->save();
-        ajax::success();
+        ajax::success(utils::o2a($cmd));
     }
 
     if (init('action') == 'multiSave') {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
         }
+        unautorizedInDemo();
         $cmds = json_decode(init('cmd'), true);
         foreach ($cmds as $cmd_ajax) {
             $cmd = cmd::byId($cmd_ajax['id']);
@@ -200,6 +213,7 @@ try {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
         }
+        unautorizedInDemo();
         $history = history::byCmdIdDatetime(init('cmd_id'), init('datetime'));
         if (!is_object($history)) {
             throw new Exception(__('Aucun point ne correspond pour l\'historique : ', __FILE__) . init('cmd_id') . ' - ' . init('datetime'));
@@ -334,6 +348,7 @@ try {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
         }
+        unautorizedInDemo();
         $cmd = cmd::byId(init('id'));
         if (!is_object($cmd)) {
             throw new Exception(__('Commande ID inconnu : ', __FILE__) . init('id'));
@@ -343,6 +358,7 @@ try {
     }
 
     if (init('action') == 'setOrder') {
+        unautorizedInDemo();
         $cmds = json_decode(init('cmds'), true);
         foreach ($cmds as $cmd_json) {
             if (!isset($cmd_json['id']) || trim($cmd_json['id']) == '') {

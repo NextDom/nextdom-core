@@ -1,83 +1,84 @@
-Das ist die Hauptseite von NextDom, es zeigt eine Übersicht über die ganze
-Heimautomation. Dieser Bericht (im Gegensatz zu den Ansichten und
-Design) wird von NextDom selbst erzeugt.
+Une des pages principales de NextDom affiche un compte-rendu de toute
+votre domotique. Ce compte-rendu (contrairement aux vues et design) est
+auto-généré par NextDom.
 
-Es kann zugegriffen werden, indem Sie auf **Mein Haus → Armaturenbrett** klicken.
+Il est accessible en cliquant sur **Accueil → Dashboard**
 
 > **Tip**
 >
-> Es ist möglich, direkt zu einem Objekt Ihrer Hausautomation zu gehen.
-> Dadurch können Sie nur das Gerät wählen, das Sie interessiert, und die
-> Seite wird daher schneller geladen.
+> Il est possible d’aller directement sur un objet de votre domotique.
+> Cela permet de n’avoir que les équipements qui vous intéressent et
+> donc de charger la page plus rapidement
 
--   Oben links haben Sie ein kleines Symbol, um den Objektbaum
-    ein-/auszublenden (dieser zeigt auch die Informationen
-    der Objektzusammenfassungen an)
+-   Vous avez en haut à gauche une petite icône pour faire
+    afficher/masquer l’arbre des objets (celui-ci affiche aussi les
+    informations des résumés d’objet)
 
--   In der Mitte sind Schaltflächen, mit denen mann verschiedene Gerätetypen 
-    Filtern kann
+-   Au milieu vous pouvez choisir de ne filtrer que sur certains types
+    d’équipements
 
--   Auf der rechten Seite ist eine Schaltfläche, um in den Bearbeitungsmodus
-    zu wechseln z. B. ändern der Reihenfolge der Widgets (mit einem 
-    Klick auf das Widget), Sie können auch in diesem Bearbeitungsmodus
-    die Größe einiger Widgets ändern und die Reihenfolge der darin enthaltenen 
-    Befehle neu anordnen
+-   A droite un premier bouton pour passer en mode édition, pour par
+    exemple modifier l’ordre des widgets (à l’aide d’un cliqué déposé
+    sur le widget), vous pouvez aussi dans ce mode édition
+    redimensionner certains widgets et réorganiser l’ordre des commandes
+    à l’intérieur de celui-ci
 
--   Eine zweite Schaltfläche zum Ein-/Ausblenden der Szenarien
+-   Un deuxième bouton pour afficher/masquer les scénarios
 
 -   En cliquant sur un résumé d’objet, vous filtrez pour n’afficher que
     les équipements ayant pour parent cet objet et qui concernent ce
     résumé d’objet.
 
--   Ein Klick auf einen Informationsbefehl zeigt den Verlauf des 
-    Befehls an (falls er archiviert ist)
+-   Un clic sur une commande de type information permet d’afficher
+    l’historique de la commande (si elle est historisée)
 
 > **Tip**
 >
-> In Ihrem Profil ist es möglich, NextDom so zu konfigurieren, dass die
-> Baumstruktur der Objekte und/oder der Szenarien standardmäßig
-> angezeigt werden, wenn Sie auf dem Armaturenbrett sind.
+> Il est possible, à partir de votre profil, de configurer NextDom pour
+> que l’arbre des objets et/ou les scénarios soient visibles par défaut
+> lorsque vous arrivez sur le Dashboard
 
 > **Tip**
 >
-> Auf Mobilgeräten wird durch langes Drücken eines Info Befehlstyps ein
-> Menü angezeigt, in dem Sie den Verlauf der Befehle anzeigen oder einen
-> Alarm auslösen können, damit NextDom Sie (einmalig) warnen kann dass
-> der Wert eine bestimmte Schwelle überschreitet.
+> En mobile un appui long sur une commande de type info permet
+> d’afficher un menu vous proposant soit d’afficher l’historique de la
+> commande, ou de mettre une alerte sur celle-ci pour que nextdom vous
+> previenne (une seule fois) dès que la valeur passe un certain seuil
 
-Bearbeitungsmodus
+Mode édition 
 ============
 
-Im Bearbeitungsmodus können Sie die Größe der Widgets und deren Layout
-im Armaturenbrett ändern.
+En mode édition vous pouvez changer la taille des widgets et leur
+disposition sur le dashboard.
 
-Sie können auch das interne Layout der Widget Befehle bearbeiten :
+Vous pouvez aussi éditer la disposition interne des commandes du widget
+:
 
--   Sie können sie entweder durch Ziehen/Ablegen neu anordnen
+-   soit les réorganiser par glisser/déposer
 
--   Klicken Sie entweder mit der rechten Maustaste auf das Widget. Dann haben Sie zugriff auf :
+-   soit en faisant un clic droit sur le widget. Vous accédez alors à :
 
-    -   **Erweiterte Konfiguration** : Ermöglicht den Zugriff auf die erweiterte 
-        Konfiguration des Befehls
+    -   **Configuration avancée** : permet d’accéder à la configuration
+        avancée de la commande
 
-    -   **Standard** : Standard-Layout, alles ist automatisch, nur mit der Möglichkeit, 
-        die Reihenfolge der Befehle neu zu ordnen
+    -   **Standard** : disposition par défaut, tout est en automatique
+        avec juste la possibilité de réorganiser l’ordre des commandes
 
-    -   **Tabelle** : ermöglicht die Befehle in eine Tabelle anzuordnen,
-        Spalten und Zeilen werden hinzugefügt und gelöscht durch Rechtsklick,
-        dann können Sie einfach die Befehle in der Kachel verschieben.
-        Sie können mehrere Befehle pro Kachel einsetzen.
+    -   **Tableau** : permet de mettre les commandes dans un tableau,
+        les colonnes et les lignes s’ajoutent et se suppriment par clic
+        droit, ensuite il suffit de déplacer les commandes dans les
+        cases voulues. Vous pouvez mettre plusieurs commandes par case
 
-    -   **Spalte hinzufügen** : Fügt eine Spalte in die Tabelle ein (nur zugänglich, 
-        wenn Sie sich im Tabellenlayout befinden)
+    -   **Ajouter colonne** : ajoute une colonne au tableau (accessible
+        uniquement si vous êtes en disposition tableau)
 
-    -   **Zeile hinzufügen** : Fügt eine Zeile in die Tabelle ein (nur zugänglich,
-        wenn Sie sich im Tabellenlayout befinden)
+    -   **Ajouter ligne** : ajoute une ligne au tableau (accessible
+        uniquement si vous êtes en disposition tableau)
 
-    -   **Spalte löschen** : Löscht eine Spalte in der Tabelle
-        (nur zugänglich, wenn Sie sich im Tabellenlayout befinden)
+    -   **Supprimer colonne** : supprime une colonne au tableau
+        (accessible uniquement si vous êtes en disposition tableau)
 
-    -   **Zeile löschen** : Löscht eine Zeile in der Tabelle (nur zugänglich,
-        wenn Sie sich im Tabellenlayout befinden)
+    -   **Supprimer ligne** : supprime une ligne au tableau (accessible
+        uniquement si vous êtes en disposition tableau)
 
 

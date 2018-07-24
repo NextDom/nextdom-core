@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
-require_once dirname(__FILE__) . '/../php/utils.inc.php';
+require_once __DIR__ . '/../php/utils.inc.php';
 include_file('core', 'nextdom', 'class.js');
 include_file('core', 'private', 'class.js');
 include_file('core', 'eqLogic', 'class.js');
@@ -35,11 +35,12 @@ include_file('core', 'backup', 'class.js');
 include_file('core', 'interact', 'class.js');
 include_file('core', 'update', 'class.js');
 include_file('core', 'plan', 'class.js');
+include_file('core', 'plan3d', 'class.js');
 include_file('core', 'log', 'class.js');
 include_file('core', 'repo', 'class.js');
 include_file('core', 'network', 'class.js');
 include_file('core', 'dataStore', 'class.js');
 include_file('core', 'cache', 'class.js');
 include_file('core', 'report', 'class.js');
+include_file('core', 'note', 'class.js');
 include_file('core', 'jeedom', 'class.js');
-

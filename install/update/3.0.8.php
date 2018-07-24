@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
 echo 'Move cache and tmp nextdom to new folder (/tmp/nextdom). It can take some times....';
 nextdom::stop();
 shell_exec('sudo mkdir -p /tmp/nextdom');

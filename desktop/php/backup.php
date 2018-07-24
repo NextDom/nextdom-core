@@ -2,17 +2,20 @@
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
+echo '<script>';
+echo 'REPO_LIST = []';
+echo '</script>';
 ?>
 <div id="backup">
     <div class="row row-overflow">
         <div class="col-sm-6">
-            <legend><i class="fa fa-floppy-o"></i>  {{Sauvegardes}}</legend>
+            <legend><i class="fas fa-floppy-o"></i>  {{Sauvegardes}}</legend>
             <form class="form-horizontal">
                 <fieldset>
                     <div class="form-group">
                         <label class="col-sm-4 col-xs-6 control-label">{{Sauvegardes}}</label>
                         <div class="col-sm-8 col-xs-6">
-                            <a class="btn btn-success bt_backupNextDom"><i class="fa fa-refresh fa-spin" style="display : none;"></i> <i class="fa fa-floppy-o"></i> {{Lancer}}</a>
+                            <a class="btn btn-success bt_backupNextDom"><i class="fas fa-refresh fa-spin" style="display : none;"></i> <i class="fas fa-floppy-o"></i> {{Lancer}}</a>
                         </div>
                     </div>
                     <div class="form-group">
@@ -35,7 +38,7 @@ if (!isConnect('admin')) {
                     </div>
                 </fieldset>
             </form>
-            <legend><i class="fa fa-folder-open"></i>  {{Sauvegardes locales}}</legend>
+            <legend><i class="fas fa-folder-open"></i>  {{Sauvegardes locales}}</legend>
             <form class="form-horizontal">
                 <fieldset>
                     <div class="form-group">
@@ -47,27 +50,27 @@ if (!isConnect('admin')) {
                     <div class="form-group">
                         <label class="col-sm-4 col-xs-6 control-label">{{Restaurer la sauvegarde}}</label>
                         <div class="col-sm-4 col-xs-6">
-                            <a class="btn btn-warning" id="bt_restoreNextDom"><i class="fa fa-refresh fa-spin" style="display : none;"></i> <i class="fa fa-file"></i> {{Restaurer}}</a>
+                            <a class="btn btn-warning" id="bt_restoreNextDom"><i class="fas fa-refresh fa-spin" style="display : none;"></i> <i class="far fa-file"></i> {{Restaurer}}</a>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 col-xs-6 control-label">{{Supprimer la sauvegarde}}</label>
                         <div class="col-sm-4 col-xs-6">
-                            <a class="btn btn-danger" id="bt_removeBackup"><i class="fa fa-trash-o"></i> {{Supprimer}}</a>
+                            <a class="btn btn-danger" id="bt_removeBackup"><i class="far fa-trash-alt"></i> {{Supprimer}}</a>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 col-xs-6 control-label">{{Envoyer une sauvegarde}}</label>
                         <div class="col-sm-8 col-xs-6">
                             <span class="btn btn-default btn-file">
-                                <i class="fa fa-cloud-upload"></i> {{Envoyer}}<input id="bt_uploadBackup" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token=<?php echo ajax::getToken(); ?>">
+                                <i class="fas fa-cloud-upload-alt"></i> {{Envoyer}}<input id="bt_uploadBackup" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token=<?php echo ajax::getToken(); ?>">
                             </span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 col-xs-6 control-label">{{Télécharger la sauvegarde}}</label>
                         <div class="col-sm-4 col-xs-6">
-                            <a class="btn btn-success" id="bt_downloadBackup"><i class="fa fa-cloud-download"></i> {{Télécharger}}</a>
+                            <a class="btn btn-success" id="bt_downloadBackup"><i class="fas fa-cloud-download-alt"></i> {{Télécharger}}</a>
                         </div>
                     </div>
                 </fieldset>
@@ -75,14 +78,14 @@ if (!isConnect('admin')) {
             <?php
 
 foreach (update::listRepo() as $rkey => $value) {
-    if ($value['scope']['backup'] === false) {
+    if ($value['scope']['backup'] == false) {
         continue;
     }
     if ($value['enable'] == 0) {
         continue;
     }
     $class = 'repo_' . $rkey;
-    echo '<legend><i class="fa fa-cloud"></i> {{Sauvegardes}} ' . $value['name'] . '</legend>';
+    echo '<legend><i class="fas fa-cloud"></i> {{Sauvegardes}} ' . $value['name'] . '</legend>';
     echo '<form class="form-horizontal repo">';
     echo '<fieldset>';
     echo '<div class="form-group">';
@@ -91,40 +94,21 @@ foreach (update::listRepo() as $rkey => $value) {
     echo '<input type="checkbox" class="configKey" data-l1key="' . $rkey . '::cloudUpload" />';
     echo '</div>';
     echo '</div>';
-    if ($class == 'repo_market') {
-        echo '<div class="form-group">';
-        echo '<label class="col-sm-4 col-xs-6 control-label">{{Envoyer la sauvegarde locale sélectionnée}}</label>';
-        echo '<div class="col-sm-4 col-xs-6">';
-        echo '<a class="btn btn-success bt_uploadCloudBackup" data-repo="' . $rkey . '"> <i class="fa fa-file"></i> {{Envoyer}}</a>';
-        echo '</div>';
-        echo '</div>';
-    }
-    try {
-        $listeCloudBackup = $class::listeBackup();
-    } catch (Exception $e) {
-        $listeCloudBackup = array();
-        echo '<div class="alert alert-danger">' . $e->getMessage() . '</div>';
-    }
     echo '<div class="form-group">';
     echo '<label class="col-sm-4 col-xs-6 control-label">{{Sauvegardes disponibles}}</label>';
     echo '<div class="col-sm-6 col-xs-6">';
-    echo '<select class="form-control sel_restoreCloudBackup">';
-    try {
-        foreach ($listeCloudBackup as $key => $backup) {
-            if (is_numeric($key)) {
-                echo '<option>' . $backup . '</option>';
-            }
-        }
-    } catch (Exception $e) {
-
-    }
+    echo '<select class="form-control sel_restoreCloudBackup" data-repo="' . $rkey . '">';
+    echo '<option>{{Chargement...}}</option>';
     echo '</select>';
+    echo '<script>';
+    echo 'REPO_LIST.push("' . $rkey . '");';
+    echo '</script>';
     echo '</div>';
     echo '</div>';
     echo '<div class="form-group">';
     echo '<label class="col-sm-4 col-xs-6 control-label">{{Restaurer la sauvegarde}}</label>';
     echo '<div class="col-sm-4 col-xs-6">';
-    echo '<a class="btn btn-warning bt_restoreRepoBackup" data-repo="' . $rkey . '"><i class="fa fa-refresh fa-spin" style="display : none;"></i> <i class="fa fa-file"></i> {{Restaurer}}</a>';
+    echo '<a class="btn btn-warning bt_restoreRepoBackup" data-repo="' . $rkey . '"><i class="fas fa-refresh fa-spin" style="display : none;"></i> <i class="far fa-file"></i> {{Restaurer}}</a>';
     echo '</div>';
     echo '</div>';
     echo '</fieldset>';
@@ -133,24 +117,15 @@ foreach (update::listRepo() as $rkey => $value) {
 ?>
 
         <div class="form-actions" style="height: 20px;">
-            <a class="btn btn-success" id="bt_saveBackup"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>
+            <a class="btn btn-success" id="bt_saveBackup"><i class="far fa-check-circle"></i> {{Sauvegarder}}</a>
         </div>
     </div>
     <div class="col-sm-6">
-  <div id="contenu">
-    <h2 class="text-center" style="opacity:0.8;"><span class="glyphicon glyphicon-refresh"></span> Avancement:</h2>
-    <div class="progress">
-        <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" id="progressbar_reboot" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-            <span class="sr-only"></span>
-        </div>
+        <legend><i class="fas fa-info-circle"></i>  {{Informations}}</legend>
+        <pre id="pre_backupInfo" style="overflow: scroll;"></pre>
     </div>
-      <br>
 </div>
-        <legend><i class="fa fa-info-circle" id="demo"></i>  {{Informations}} <button type="button" class="btn btn-info pull-right" data-toggle="collapse" data-target="#pre_backupInfo">afficher</button></legend>
+</div>
 
-        <pre id="pre_backupInfo" class="collapse" style="overflow: scroll;"></pre>
-    </div>
-</div>
-</div>
 
 <?php include_file("desktop", "backup", "js");?>

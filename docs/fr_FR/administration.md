@@ -331,7 +331,7 @@ mise à jour d’une commande. Vous pouvez utiliser les tags suivants :
 **\#value\#** pour la valeur de la commande, **\#cmd\_name\#** pour le
 nom de la commande, **\#cmd\_id\#** pour l’identifiant unique de la
 commande, **\#humanname\#** pour le nom complet de la commande (ex :
-\#\[Salle de bain\]\[Hydrometrie\]\[Humidité\]\#)
+\#\[Salle de bain\]\[Hydrometrie\]\[Humidité\]\#), `#eq_name#` pour le nom de l'équipement
 
 Cache 
 =====
@@ -722,6 +722,12 @@ refusée si vous utilisez un autre dépôt que celui-ci.
 -   **Nom d’utilisateur** : Votre nom d’utilisateur sur le Market.
 
 -   **Mot de passe** : Votre mot de passe du Market.
+
+-   **[Backup cloud] Nom** : Nom de votre backup cloud (attention doit etre unique pour chaque NextDom sous risque qu'il s'écrase entre eux)
+
+-   **[Backup cloud] Mot de passe** : Mot de passe du backup cloud. IMPORTANT vous ne devez surtout pas le perdre, il n'y a aucun moyen de le recuperer. Sans celui-ci vous ne pourrez restorer votre NextDom
+
+-   **[Backup cloud] Fréquence backup full** : Fréquence du backup cloud full. Un backup full est plus long qu'un incrémentale (qui n'envoi que les difference). Il est recommandé d'en faire 1 par mois
 
 ### Samba 
 

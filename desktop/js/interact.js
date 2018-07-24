@@ -133,12 +133,13 @@ $('#bt_duplicate').on('click', function () {
       nextdom.interact.save({
         interact: interact,
         error: function (error) {
-          notify("{{interaction}}", error.message, 'error');
+          $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function (data) {
-         loadPage('index.php?v=d&p=interact&id=' + data.id + '&saveSuccessFull=1');
-       }
-     });
+          modifyWithoutSave = false;
+          loadPage('index.php?v=d&p=interact&id=' + data.id + '&saveSuccessFull=1');
+        }
+      });
     }
   });
 });
@@ -150,11 +151,11 @@ if (is_numeric(getUrlVars('id'))) {
 }
 
 if (getUrlVars('saveSuccessFull') == 1) {
-  notify("{{interaction}}", '{{Sauvegarde effectuée avec succès}}', 'success');
+  $('#div_alert').showAlert({message: '{{Sauvegarde effectuée avec succès}}', level: 'success'});
 }
 
 if (getUrlVars('removeSuccessFull') == 1) {
-  notify("{{interaction}}", '{{Suppression effectuée avec succès}}', 'success');
+  $('#div_alert').showAlert({message: '{{Suppression effectuée avec succès}}', level: 'success'});
 }
 
 $('#bt_testInteract,#bt_testInteract2').on('click', function () {
@@ -180,11 +181,11 @@ $("#bt_saveInteract").on('click', function () {
   nextdom.interact.save({
     interact: interact,
     error: function (error) {
-      notify("{{interaction}}", error.message, 'error');
+      $('#div_alert').showAlert({message: error.message, level: 'danger'});
     },
     success: function (data) {
      $('.li_interact[data-interact_id=' + data.id + ']').click();
-     notify("{{interaction}}", '{{Sauvegarde réussie avec succès}}', 'success');
+     $('#div_alert').showAlert({message: '{{Sauvegarde réussie avec succès}}', level: 'success'});
    }
  });
 });
@@ -196,10 +197,10 @@ $("#bt_regenerateInteract,#bt_regenerateInteract2").on('click', function () {
     nextdom.interact.regenerateInteract({
       interact: {query: result},
       error: function (error) {
-        notify("{{interaction}}", error.message, 'error');
+        $('#div_alert').showAlert({message: error.message, level: 'danger'});
       },
       success: function (data) {
-          notify("{{interaction}}", '{{Toutes les interations ont été regénérées}}', 'info');
+       $('#div_alert').showAlert({message: '{{Toutes les interations ont été regénérées}}', level: 'success'});
      }
    });
   }
@@ -212,7 +213,7 @@ $("#bt_addInteract,#bt_addInteract2").on('click', function () {
       nextdom.interact.save({
         interact: {query: result},
         error: function (error) {
-          notify("{{interaction}}", error.message, 'error');
+          $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function (data) {
          loadPage('index.php?v=d&p=interact&id=' + data.id + '&saveSuccessFull=1');
@@ -230,7 +231,7 @@ $("#bt_removeInteract").on('click', function () {
         nextdom.interact.remove({
           id: $('.li_interact.active').attr('data-interact_id'),
           error: function (error) {
-            notify("{{interaction}}", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
           },
           success: function () {
            loadPage('index.php?v=d&p=interact&removeSuccessFull=1');
@@ -239,7 +240,7 @@ $("#bt_removeInteract").on('click', function () {
       }
     });
   } else {
-      notify("{{interaction}}", '{{Veuillez d\'abord sélectionner un objet}}', 'error');
+    $('#div_alert').showAlert({message: '{{Veuillez d\'abord sélectionner un objet}}', level: 'danger'});
   }
 });
 
@@ -283,14 +284,14 @@ $("body").undelegate(".listAction", 'click').delegate(".listAction", 'click', fu
 
 $("body").undelegate(".listCmdAction", 'click').delegate(".listCmdAction", 'click', function () {
  var type = $(this).attr('data-type');
-  var el = $(this).closest('.' + type).find('.expressionAttr[data-l1key=cmd]');
-  nextdom.cmd.getSelectModal({cmd:{type:'action'}}, function (result) {
-    el.value(result.human);
-    nextdom.cmd.displayActionOption(el.value(), '', function (html) {
-      el.closest('.' + type).find('.actionOptions').html(html);
-      taAutosize();
-    });
+ var el = $(this).closest('.' + type).find('.expressionAttr[data-l1key=cmd]');
+ nextdom.cmd.getSelectModal({cmd:{type:'action'}}, function (result) {
+  el.value(result.human);
+  nextdom.cmd.displayActionOption(el.value(), '', function (html) {
+    el.closest('.' + type).find('.actionOptions').html(html);
+    taAutosize();
   });
+});
 });
 
 $("body").undelegate('.bt_removeAction', 'click').delegate('.bt_removeAction', 'click', function () {
@@ -356,7 +357,7 @@ nextdom.cmd.displayActionsOption({
   params : actionOptions,
   async : false,
   error: function (error) {
-    notify("{{interaction}}", error.message, 'error');
+    $('#div_alert').showAlert({message: error.message, level: 'danger'});
   },
   success : function(data){
     for(var i in data){
@@ -383,12 +384,12 @@ function addAction(_action, _type, _name) {
   div += '<div class="col-sm-5">';
   div += '<div class="input-group input-group-sm">';
   div += '<span class="input-group-btn">';
-  div += '<a class="btn btn-default btn-sm bt_removeAction" data-type="' + _type + '"><i class="fa fa-minus-circle"></i></a>';
+  div += '<a class="btn btn-default btn-sm bt_removeAction" data-type="' + _type + '"><i class="fas fa-minus-circle"></i></a>';
   div += '</span>';
   div += '<input class="expressionAttr form-control cmdAction" data-l1key="cmd" data-type="' + _type + '" />';
   div += '<span class="input-group-btn">';
-  div += '<a class="btn btn-default btn-sm listAction"" data-type="' + _type + '" title="{{Sélectionner un mot-clé}}"><i class="fa fa-tasks"></i></a>';
-  div += '<a class="btn btn-default btn-sm listCmdAction" data-type="' + _type + '"><i class="fa fa-list-alt"></i></a>';
+  div += '<a class="btn btn-default btn-sm listAction"" data-type="' + _type + '" title="{{Sélectionner un mot-clé}}"><i class="fas fa-tasks"></i></a>';
+  div += '<a class="btn btn-default btn-sm listCmdAction" data-type="' + _type + '"><i class="fas fa-list-alt"></i></a>';
   div += '</span>';
   div += '</div>';
   div += '</div>';
@@ -402,3 +403,4 @@ function addAction(_action, _type, _name) {
     id : actionOption_id
   });
 }
+

@@ -17,7 +17,7 @@
  */
 
 try {
-    require_once dirname(__FILE__) . '/../php/core.inc.php';
+    require_once __DIR__ . '/../php/core.inc.php';
     include_file('core', 'authentification', 'php');
 
     if (!isConnect('admin')) {
@@ -27,22 +27,26 @@ try {
     ajax::init();
 
     if (init('action') == 'uploadCloud') {
-        repo_market::sendBackupCloud(init('backup'));
+        unautorizedInDemo();
+        repo_market::backup_send(init('backup'));
         ajax::success();
     }
 
     if (init('action') == 'restoreCloud') {
+        unautorizedInDemo();
         $class = 'repo_' . init('repo');
-        $class::retoreBackup(init('backup'));
+        $class::backup_restore(init('backup'));
         ajax::success();
     }
 
     if (init('action') == 'sendReportBug') {
+        unautorizedInDemo();
         $class = 'repo_' . init('repo');
         ajax::success($class::saveTicket(json_decode(init('ticket'), true)));
     }
 
     if (init('action') == 'install') {
+        unautorizedInDemo();
         $class = 'repo_' . init('repo');
         $repo = $class::byId(init('id'));
         if (!is_object($repo)) {
@@ -69,21 +73,29 @@ try {
     }
 
     if (init('action') == 'remove') {
+        unautorizedInDemo();
         $class = 'repo_' . init('repo');
         $repo = $class::byId(init('id'));
         if (!is_object($market)) {
             throw new Exception(__('Impossible de trouver l\'objet associé : ', __FILE__) . init('id'));
         }
         $update = update::byTypeAndLogicalId($repo->getType(), $repo->getLogicalId());
-        if (is_object($update)) {
-            $update->remove();
-        } else {
-            $market->remove();
+        try {
+            if (is_object($update)) {
+                $update->remove();
+            } else {
+                $market->remove();
+            }
+        } catch (Exception $e) {
+            if (is_object($update)) {
+                $update->deleteObjet();
+            }
         }
         ajax::success();
     }
 
     if (init('action') == 'save') {
+        unautorizedInDemo();
         $class = 'repo_' . init('repo');
         $repo_ajax = json_decode(init('market'), true);
         try {
@@ -115,6 +127,7 @@ try {
     }
 
     if (init('action') == 'setRating') {
+        unautorizedInDemo();
         $class = 'repo_' . init('repo');
         $repo = $class::byId(init('id'));
         if (!is_object($repo)) {
@@ -122,6 +135,11 @@ try {
         }
         $repo->setRating(init('rating'));
         ajax::success();
+    }
+
+    if (init('action') == 'backupList') {
+        $class = 'repo_' . init('repo');
+        ajax::success($class::backup_list());
     }
 
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));

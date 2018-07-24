@@ -17,25 +17,17 @@
  */
 
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use NextDom\Helpers\Utils;
 
-/**
- * Inclut un fichier à partir de son type et son nom.
- *
- * @param string $_folder Répertoire du fichier
- * @param string $_filename Nom du fichier
- * @param string $_type Type de fichier
- * @param string $_plugin Nom du plugin ou vide pour le core
- * @throws Exception
- */
-function include_file($_folder, $_filename, $_type, $_plugin = '', $translate = false)
-{
-    // Aucune particularité pour les 3rdparty
+function include_file($_folder, $_fn, $_type, $_plugin = '') {
+    $_rescue = false;
+    if (isset($_GET['rescue']) && $_GET['rescue'] == 1) {
+        $_rescue = true;
+    }
     if ($_folder == '3rdparty') {
-        $_filename .= '.' . $_type;
+        $_fn .= '.' . $_type;
+        $path = __DIR__ . '/../../' . $_folder . '/' . $_fn;
         $type = $_type;
     } else {
-        // Tableau de mappage des fichiers
         $config = array(
             'class' => array('/class', '.class.php', 'php'),
             'com' => array('/com', '.com.php', 'php'),
@@ -56,65 +48,75 @@ function include_file($_folder, $_filename, $_type, $_plugin = '', $translate = 
             'configuration' => array('', '.php', 'php'),
         );
         $_folder .= $config[$_type][0];
-        $_filename .= $config[$_type][1];
+        $_fn .= $config[$_type][1];
         $type = $config[$_type][2];
     }
     if ($_plugin != '') {
         $_folder = 'plugins/' . $_plugin . '/' . $_folder;
     }
-    $path = __DIR__ . '/../../' . $_folder . '/' . $_filename;
+    $path = __DIR__ . '/../../' . $_folder . '/' . $_fn;
     if (!file_exists($path)) {
         throw new Exception('Fichier introuvable : ' . $path, 35486);
     }
     if ($type == 'php') {
-        // Les fichiers php sont traduits
         if ($_type != 'class') {
             ob_start();
             require_once $path;
-            // TODO: Remplacer par le helper
-            if (init('rescue', 0) == 1) {
+            if ($_rescue) {
                 echo str_replace(array('{{', '}}'), '', ob_get_clean());
             } else {
-                if ($translate) {
-                    echo translate::exec(ob_get_clean(), $_folder . '/' . $_filename);
-                } else {
-                    echo ob_get_clean();
-                }
+                echo translate::exec(ob_get_clean(), $_folder . '/' . $_fn);
             }
-        } else {
-            require_once $path;
+            return;
         }
-    } elseif ($type == 'css') {
-        // TODO : MD5
-        echo '<link href="' . $_folder . '/' . $_filename . '?md5=' . md5_file($path) . '" rel="stylesheet" />';
-    } elseif ($type == 'js') {
-        // TODO : MD5
-        echo '<script type="text/javascript" src="core/php/getResource.php?file=' . $_folder . '/' . $_filename . '&md5=' . md5_file($path) . '&lang=' . translate::getLanguage() . '"></script>';
+        require_once $path;
+        return;
+    }
+    if ($type == 'css') {
+        echo '<link href="' . $_folder . '/' . $_fn . '?md5=' . md5_file($path) . '" rel="stylesheet" />';
+        return;
+    }
+    if ($type == 'js') {
+        echo '<script type="text/javascript" src="core/php/getResource.php?file=' . $_folder . '/' . $_fn . '&md5=' . md5_file($path) . '&lang=' . translate::getLanguage() . '"></script>';
+        return;
     }
 }
 
-function getTemplate($_folder, $_version, $_filename, $_plugin = '')
-{
-    return Utils::getTemplateFilecontent($_folder, $_version, $_filename, $_plugin);
+function getTemplate($_folder, $_version, $_filename, $_plugin = '') {
+    $path = ($_plugin == '')
+    ? __DIR__ . '/../../' . $_folder . '/template/' . $_version . '/' . $_filename . '.html'
+    : __DIR__ . '/../../plugins/' . $_plugin . '/core/template/' . $_version . '/' . $_filename . '.html';
+    return (file_exists($path)) ? file_get_contents($path) : '';
 }
 
-function template_replace($_array, $_subject)
-{
+function template_replace($_array, $_subject) {
     return str_replace(array_keys($_array), array_values($_array), $_subject);
 }
 
-function init($_name, $_default = '')
-{
-    return Utils::init($_name, $_default);
+function init($_name, $_default = '') {
+    if (isset($_GET[$_name])) {
+        return $_GET[$_name];
+    }
+    if (isset($_POST[$_name])) {
+        return $_POST[$_name];
+    }
+    if (isset($_REQUEST[$_name])) {
+        return $_REQUEST[$_name];
+    }
+    return $_default;
 }
 
-function sendVarToJS($_varName, $_value)
-{
-    Utils::sendVarToJs($_varName, $_value);
+function sendVarToJS($_varName, $_value) {
+    $_value = (is_array($_value))
+    ? 'jQuery.parseJSON("' . addslashes(json_encode($_value, JSON_UNESCAPED_UNICODE)) . '")'
+    : '"' . $_value . '"'
+    ;
+    echo '<script>'
+        . 'var ' . $_varName . ' = ' . $_value . ';'
+        . '</script>';
 }
 
-function resizeImage($contents, $width, $height)
-{
+function resizeImage($contents, $width, $height) {
 // Cacul des nouvelles dimensions
     $width_orig = imagesx($contents);
     $height_orig = imagesy($contents);
@@ -143,19 +145,23 @@ function resizeImage($contents, $width, $height)
     return $contents;
 }
 
-function getmicrotime()
-{
+function getmicrotime() {
     list($usec, $sec) = explode(" ", microtime());
-    return ((float)$usec + (float)$sec);
+    return ((float) $usec + (float) $sec);
 }
 
-function redirect($_url, $_forceType = null)
-{
-    Utils::redirect($_url, $_forceType);
+function redirect($_url, $_forceType = null) {
+    if ($_forceType == 'JS' || headers_sent() || isset($_GET['ajax'])) {
+        echo '<script type="text/javascript">';
+        echo "window.location.href='$_url';";
+        echo '</script>';
+    } else {
+        exit(header("Location: $_url"));
+    }
+    return;
 }
 
-function convertDuration($time)
-{
+function convertDuration($time) {
     $result = '';
     $unities = array('j' => 86400, 'h' => 3600, 'min' => 60);
     foreach ($unities as $unity => $value) {
@@ -169,13 +175,7 @@ function convertDuration($time)
     return $result;
 }
 
-/**
- * Obtenir l'adresse IP du client
- *
- * @return string
- */
-function getClientIp()
-{
+function getClientIp() {
     $sources = array(
         'HTTP_X_REAL_IP',
         'HTTP_X_FORWARDED_FOR',
@@ -190,21 +190,17 @@ function getClientIp()
     return '';
 }
 
-function mySqlIsHere()
-{
-    require_once NEXTDOM_ROOT . '/core/class/DB.class.php';
+function mySqlIsHere() {
+    require_once __DIR__ . '/../class/DB.class.php';
     return is_object(DB::getConnection());
 }
 
-function displayExeption($e)
-{
+function displayExeption($e) {
     trigger_error('La fonction displayExeption devient displayException', E_USER_DEPRECATED);
-
     return displayException($e);
 }
 
-function displayException($e)
-{
+function displayException($e) {
     $message = '<span id="span_errorMessage">' . $e->getMessage() . '</span>';
     if (DEBUG) {
         $message .= '<a class="pull-right bt_errorShowTrace cursor">Show traces</a>';
@@ -213,29 +209,25 @@ function displayException($e)
     return $message;
 }
 
-function is_json($_string)
-{
+function is_json($_string) {
     return ((is_string($_string) && is_array(json_decode($_string, true, 512, JSON_BIGINT_AS_STRING)))) ? true : false;
 }
 
-function is_sha1($_string = '')
-{
+function is_sha1($_string = '') {
     if ($_string == '') {
         return false;
     }
     return preg_match('/^[0-9a-f]{40}$/i', $_string);
 }
 
-function is_sha512($_string = '')
-{
+function is_sha512($_string = '') {
     if ($_string == '') {
         return false;
     }
     return preg_match('/^[0-9a-f]{128}$/i', $_string);
 }
 
-function cleanPath($path)
-{
+function cleanPath($path) {
     $out = array();
     foreach (explode('/', $path) as $i => $fold) {
         if ($fold == '' || $fold == '.') {
@@ -252,13 +244,11 @@ function cleanPath($path)
     return ($path{0} == '/' ? '/' : '') . join('/', $out);
 }
 
-function getRootPath()
-{
-    return NEXTDOM_ROOT;
+function getRootPath() {
+    return cleanPath(__DIR__ . '/../../');
 }
 
-function hadFileRight($_allowPath, $_path)
-{
+function hadFileRight($_allowPath, $_path) {
     $path = cleanPath($_path);
     foreach ($_allowPath as $right) {
         if (strpos($right, '/') !== false || strpos($right, '\\') !== false) {
@@ -277,22 +267,12 @@ function hadFileRight($_allowPath, $_path)
     return false;
 }
 
-/**
- * Obtenir la version de NextDom installée
- *
- * TODO: Supprimer l'argument ?
- *
- * @param string $_name Nom de ?
- * @return string Version de NextDom
- */
-function getVersion($_name)
-{
+function getVersion($_name) {
     return nextdom::version();
 }
 
 // got from https://github.com/zendframework/zend-stdlib/issues/58
-function polyfill_glob_brace($pattern, $flags)
-{
+function polyfill_glob_brace($pattern, $flags) {
     static $next_brace_sub;
     if (!$next_brace_sub) {
         // Find the end of the sub-pattern in a brace expression.
@@ -350,8 +330,8 @@ function polyfill_glob_brace($pattern, $flags)
     // For each comma-separated subpattern.
     do {
         $subpattern = substr($pattern, 0, $begin)
-            . substr($pattern, $p, $next - $p)
-            . substr($pattern, $rest + 1);
+        . substr($pattern, $p, $next - $p)
+        . substr($pattern, $rest + 1);
 
         if (($result = polyfill_glob_brace($subpattern, $flags))) {
             $paths = array_merge($paths, $result);
@@ -368,8 +348,7 @@ function polyfill_glob_brace($pattern, $flags)
     return array_values(array_unique($paths));
 }
 
-function glob_brace($pattern, $flags = 0)
-{
+function glob_brace($pattern, $flags = 0) {
     if (defined("GLOB_BRACE")) {
         return glob($pattern, $flags + GLOB_BRACE);
     } else {
@@ -377,8 +356,7 @@ function glob_brace($pattern, $flags = 0)
     }
 }
 
-function ls($folder = "", $pattern = "*", $recursivly = false, $options = array('files', 'folders'))
-{
+function ls($folder = "", $pattern = "*", $recursivly = false, $options = array('files', 'folders')) {
     if ($folder) {
         $current_folder = realpath('.');
         if (in_array('quiet', $options)) {
@@ -465,13 +443,11 @@ function ls($folder = "", $pattern = "*", $recursivly = false, $options = array(
     return $all;
 }
 
-function removeCR($_string)
-{
+function removeCR($_string) {
     return trim(str_replace(array("\n", "\r\n", "\r", "\n\r"), '', $_string));
 }
 
-function rcopy($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = false, $_params = array())
-{
+function rcopy($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = false, $_params = array()) {
     if (!file_exists($src)) {
         return true;
     }
@@ -524,8 +500,7 @@ function rcopy($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = 
     return true;
 }
 
-function rmove($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = false, $_params = array())
-{
+function rmove($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = false, $_params = array()) {
     if (!file_exists($src)) {
         return true;
     }
@@ -579,8 +554,7 @@ function rmove($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = 
 }
 
 // removes files and non-empty directories
-function rrmdir($dir)
-{
+function rrmdir($dir) {
     if (is_dir($dir)) {
         $files = scandir($dir);
         foreach ($files as $file) {
@@ -589,16 +563,27 @@ function rrmdir($dir)
             }
         }
         if (!rmdir($dir)) {
-            return false;
+            $output = array();
+            $retval = 0;
+            exec('sudo rm -rf ' . $dir, $output, $retval);
+            if ($retval != 0) {
+                return false;
+            }
         }
     } else if (file_exists($dir)) {
-        return unlink($dir);
+        if (!unlink($dir)) {
+            $output = array();
+            $retval = 0;
+            exec('sudo rm -rf ' . $dir, $output, $retval);
+            if ($retval != 0) {
+                return false;
+            }
+        }
     }
     return true;
 }
 
-function date_fr($date_en)
-{
+function date_fr($date_en) {
     if (config::byKey('language', 'core', 'fr_FR') == 'en_US') {
         return $date_en;
     }
@@ -652,17 +637,15 @@ function date_fr($date_en)
     return str_replace($texte_short_en, $texte_short, str_replace($texte_long_en, $texte_long, $date_en));
 }
 
-function convertDayEnToFr($_day)
-{
+function convertDayEnToFr($_day) {
     trigger_error('La fonction convertDayEnToFr devient convertDayFromEn', E_USER_DEPRECATED);
     return convertDayFromEn($_day);
 }
 
-function convertDayFromEn($_day)
-{
+function convertDayFromEn($_day) {
     $result = $_day;
-    $daysMapping = [
-        'fr_FR' => [
+    $daysMapping = array(
+        'fr_FR' => array(
             'Monday' => 'Lundi', 'Mon' => 'Lundi',
             'monday' => 'lundi', 'mon' => 'lundi',
             'Tuesday' => 'Mardi', 'Tue' => 'Mardi',
@@ -676,9 +659,9 @@ function convertDayFromEn($_day)
             'Saturday' => 'Samedi', 'Sat' => 'Samedi',
             'saturday' => 'samedi', 'sat' => 'samedi',
             'Sunday' => 'Dimanche', 'Sun' => 'Dimanche',
-            'sunday' => 'dimanche', 'sun' => 'dimanche'
-        ],
-        'de_DE' => [
+            'sunday' => 'dimanche', 'sun' => 'dimanche',
+        ),
+        'de_DE' => array(
             'Monday' => 'Montag', 'Mon' => 'Montag',
             'monday' => 'montag', 'mon' => 'montag',
             'Tuesday' => 'Dienstag', 'Tue' => 'Dienstag',
@@ -692,9 +675,9 @@ function convertDayFromEn($_day)
             'Saturday' => 'Samstag', 'Sat' => 'Samstag',
             'saturday' => 'samstag', 'sat' => 'samstag',
             'Sunday' => 'Sonntag', 'Sun' => 'Sonntag',
-            'sunday' => 'sonntag', 'sun' => 'sonntag'
-        ]
-    ];
+            'sunday' => 'sonntag', 'sun' => 'sonntag',
+        ),
+    );
     $language = config::byKey('language', 'core', 'fr_FR');
     if (array_key_exists($language, $daysMapping)) {
         $daysArray = $daysMapping[$language];
@@ -702,12 +685,10 @@ function convertDayFromEn($_day)
             $result = $daysArray[$_day];
         }
     }
-
     return $result;
 }
 
-function create_zip($source_arr, $destination, $_excludes = array())
-{
+function create_zip($source_arr, $destination, $_excludes = array()) {
     if (is_string($source_arr)) {
         $source_arr = array($source_arr);
     }
@@ -751,21 +732,18 @@ function create_zip($source_arr, $destination, $_excludes = array())
     return $zip->close();
 }
 
-function br2nl($string)
-{
+function br2nl($string) {
     return preg_replace('/\<br(\s*)?\/?\>/i', "\n", $string);
 }
 
-function calculPath($_path)
-{
+function calculPath($_path) {
     if (strpos($_path, '/') !== 0) {
-        return dirname(__FILE__) . '/../../' . $_path;
+        return __DIR__ . '/../../' . $_path;
     }
     return $_path;
 }
 
-function getDirectorySize($path)
-{
+function getDirectorySize($path) {
     $totalsize = 0;
     if ($handle = opendir($path)) {
         while (false !== ($file = readdir($handle))) {
@@ -783,8 +761,7 @@ function getDirectorySize($path)
     return $totalsize;
 }
 
-function sizeFormat($size)
-{
+function sizeFormat($size) {
     $mod = 1024;
     $units = explode(' ', 'B KB MB GB TB PB');
     for ($i = 0; $size > $mod; $i++) {
@@ -794,13 +771,12 @@ function sizeFormat($size)
 }
 
 /**
+ *
  * @param string $network
  * @param string $ip
- *
- * @return bool
+ * @return boolean
  */
-function netMatch($network, $ip)
-{
+function netMatch($network, $ip) {
 
     $ip = trim($ip);
     if ($ip == trim($network)) {
@@ -856,8 +832,7 @@ function netMatch($network, $ip)
     return false;
 }
 
-function getNtpTime()
-{
+function getNtpTime() {
     $time_servers = array(
         'ntp2.emn.fr',
         'time-a.timefreq.bldrdoc.gov',
@@ -885,8 +860,7 @@ function getNtpTime()
     return false;
 }
 
-function cast($sourceObject, $destination)
-{
+function cast($sourceObject, $destination) {
     if (is_string($destination)) {
         $destination = new $destination();
     }
@@ -908,8 +882,7 @@ function cast($sourceObject, $destination)
     return $destination;
 }
 
-function getIpFromString($_string)
-{
+function getIpFromString($_string) {
     $result = parse_url($_string);
     if (isset($result['host'])) {
         $_string = $result['host'];
@@ -928,19 +901,59 @@ function getIpFromString($_string)
     return $_string;
 }
 
-/**
- * TODO: Stocker la version évaluée
- *
- * @param $_string
- * @return string
- */
-function evaluate($_string)
-{
+function evaluate($_string) {
     if (!isset($GLOBALS['ExpressionLanguage'])) {
         $GLOBALS['ExpressionLanguage'] = new ExpressionLanguage();
     }
-    $expr = Utils::transformExpressionForEvaluation($_string);
+    if (strpos($_string, '"') !== false || strpos($_string, '\'') !== false) {
+        $regex = "/(?:(?:\"(?:\\\\\"|[^\"])+\")|(?:'(?:\\\'|[^'])+'))/is";
+        $r = preg_match_all($regex, $_string, $matches);
+        $c = count($matches[0]);
+        for ($i = 0; $i < $c; $i++) {
+            $_string = str_replace($matches[0][$i], '--preparsed' . $i . '--', $_string);
+        }
+    } else {
+        $c = 0;
+    }
+    $expr = str_ireplace(array(' et ', ' and ', ' ou ', ' or '), array(' && ', ' && ', ' || ', ' || '), $_string);
+    $expr = str_replace('==', '=', $expr);
+    $expr = str_replace('=', '==', $expr);
+    $expr = str_replace('<==', '<=', $expr);
+    $expr = str_replace('>==', '>=', $expr);
+    $expr = str_replace('!==', '!=', $expr);
+    $expr = str_replace('!===', '!==', $expr);
+    $expr = str_replace('====', '===', $expr);
+    if ($c > 0) {
+        for ($i = 0; $i < $c; $i++) {
+            $expr = str_replace('--preparsed' . $i . '--', $matches[0][$i], $expr);
+        }
+    }
+    try {
+        return $GLOBALS['ExpressionLanguage']->evaluate($expr);
+    } catch (Exception $e) {
+        //log::add('expression', 'debug', '[Parser 1] Expression : ' . $_string . ' tranformé en ' . $expr . ' => ' . $e->getMessage());
+    }
+    try {
+        $expr = str_replace('""', '"', $expr);
+        return $GLOBALS['ExpressionLanguage']->evaluate($expr);
+    } catch (Exception $e) {
+        //log::add('expression', 'debug', '[Parser 2] Expression : ' . $_string . ' tranformé en ' . $expr . ' => ' . $e->getMessage());
+    }
+    return $_string;
+}
 
+function evaluate_old($_string) {
+    if (!isset($GLOBALS['ExpressionLanguage'])) {
+        $GLOBALS['ExpressionLanguage'] = new ExpressionLanguage();
+    }
+    $expr = str_replace(array(' et ', ' ET ', ' AND ', ' and ', ' ou ', ' OR ', ' or ', ' OU '), array(' && ', ' && ', ' && ', ' && ', ' || ', ' || ', ' || ', ' || '), $_string);
+    $expr = str_replace('==', '=', $expr);
+    $expr = str_replace('=', '==', $expr);
+    $expr = str_replace('<==', '<=', $expr);
+    $expr = str_replace('>==', '>=', $expr);
+    $expr = str_replace('!==', '!=', $expr);
+    $expr = str_replace('!===', '!==', $expr);
+    $expr = str_replace('====', '===', $expr);
     try {
         return $GLOBALS['ExpressionLanguage']->evaluate($expr);
     } catch (Exception $e) {
@@ -956,17 +969,18 @@ function evaluate($_string)
 }
 
 /**
- * @param string $_string
  *
+ * @param string $_string
  * @return string
  */
-function secureXSS($_string)
-{
+function secureXSS($_string) {
+    if ($_string === null) {
+        return null;
+    }
     return str_replace('&amp;', '&', htmlspecialchars(strip_tags($_string), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
 }
 
-function minify($_buffer)
-{
+function minify($_buffer) {
     $search = array(
         '/\>[^\S ]+/s', // strip whitespaces after tags, except space
         '/[^\S ]+\</s', // strip whitespaces before tags, except space
@@ -980,8 +994,7 @@ function minify($_buffer)
     return preg_replace($search, $replace, $_buffer);
 }
 
-function sanitizeAccent($_message)
-{
+function sanitizeAccent($_message) {
     $caracteres = array(
         'À' => 'a', 'Á' => 'a', 'Â' => 'a', 'Ä' => 'a', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ä' => 'a', '@' => 'a',
         'È' => 'e', 'É' => 'e', 'Ê' => 'e', 'Ë' => 'e', 'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', '€' => 'e',
@@ -993,13 +1006,24 @@ function sanitizeAccent($_message)
     return preg_replace('#[^A-Za-z0-9 \n\.\'=\*:]+\#\)\(#', '', strtr($_message, $caracteres));
 }
 
-function isConnect($_right = '')
-{
-    return Utils::isConnect($_right);
+function isConnect($_right = '') {
+    if (isset($_SESSION['user']) && isset($GLOBALS['isConnect::' . $_right]) && $GLOBALS['isConnect::' . $_right]) {
+        return $GLOBALS['isConnect::' . $_right];
+    }
+    $GLOBALS['isConnect::' . $_right] = false;
+    if (session_status() == PHP_SESSION_DISABLED || !isset($_SESSION) || !isset($_SESSION['user'])) {
+        $GLOBALS['isConnect::' . $_right] = false;
+    } else if (isset($_SESSION['user']) && is_object($_SESSION['user']) && $_SESSION['user']->is_Connected()) {
+        if ($_right != '') {
+            $GLOBALS['isConnect::' . $_right] = ($_SESSION['user']->getProfils() == $_right);
+        } else {
+            $GLOBALS['isConnect::' . $_right] = true;
+        }
+    }
+    return $GLOBALS['isConnect::' . $_right];
 }
 
-function ZipErrorMessage($code)
-{
+function ZipErrorMessage($code) {
     switch ($code) {
         case 0:
             return 'No error';
@@ -1078,8 +1102,7 @@ function ZipErrorMessage($code)
     }
 }
 
-function arg2array($_string)
-{
+function arg2array($_string) {
     $return = array();
     $re = '/[\/-]?(([a-zA-Z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ_#]+)(?:[=:]("[^"]+"|[^\s"]+))?)(?:\s+|$)/';
     preg_match_all($re, $_string, $matches, PREG_SET_ORDER, 0);
@@ -1092,8 +1115,7 @@ function arg2array($_string)
     return $return;
 }
 
-function strToHex($string)
-{
+function strToHex($string) {
     $hex = '';
     $calculateStrLen = strlen($string);
     for ($i = 0; $i < $calculateStrLen; $i++) {
@@ -1104,8 +1126,7 @@ function strToHex($string)
     return strToUpper($hex);
 }
 
-function hex2rgb($hex)
-{
+function hex2rgb($hex) {
     $hex = str_replace("#", "", $hex);
     if (strlen($hex) == 3) {
         $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));
@@ -1119,8 +1140,7 @@ function hex2rgb($hex)
     return array($r, $g, $b);
 }
 
-function getDominantColor($_pathimg)
-{
+function getDominantColor($_pathimg) {
     $rTotal = 0;
     $gTotal = 0;
     $bTotal = 0;
@@ -1143,25 +1163,23 @@ function getDominantColor($_pathimg)
     return '#' . sprintf('%02x', round($rTotal / $total)) . sprintf('%02x', round($gTotal / $total)) . sprintf('%02x', round($bTotal / $total));
 }
 
-function sha512($_string)
-{
+function sha512($_string) {
     return hash('sha512', $_string);
 }
 
-function findCodeIcon($_icon)
-{
+function findCodeIcon($_icon) {
     $icon = trim(str_replace(array('fa ', 'icon ', '></i>', '<i', 'class="', '"'), '', trim($_icon)));
     $re = '/.' . $icon . ':.*\n.*content:.*"(.*?)";/m';
 
-    $css = file_get_contents(dirname(__FILE__) . '/../../3rdparty/font-awesome/css/font-awesome.min.css');
+    $css = file_get_contents(__DIR__ . '/../../3rdparty/font-awesome/css/font-awesome.css');
     preg_match($re, $css, $matches);
     if (isset($matches[1])) {
         return array('icon' => trim($matches[1], '\\'), 'fontfamily' => 'FontAwesome');
     }
 
-    foreach (ls(dirname(__FILE__) . '/../css/icon', '*') as $dir) {
-        if (is_dir(dirname(__FILE__) . '/../css/icon/' . $dir) && file_exists(dirname(__FILE__) . '/../css/icon/' . $dir . '/style.css')) {
-            $css = file_get_contents(dirname(__FILE__) . '/../css/icon/' . $dir . '/style.css');
+    foreach (ls(__DIR__ . '/../css/icon', '*') as $dir) {
+        if (is_dir(__DIR__ . '/../css/icon/' . $dir) && file_exists(__DIR__ . '/../css/icon/' . $dir . '/style.css')) {
+            $css = file_get_contents(__DIR__ . '/../css/icon/' . $dir . '/style.css');
             preg_match($re, $css, $matches);
             if (isset($matches[1])) {
                 return array('icon' => trim($matches[1], '\\'), 'fontfamily' => trim($dir, '/'));
@@ -1171,8 +1189,7 @@ function findCodeIcon($_icon)
     return array('icon' => '', 'fontfamily' => '');
 }
 
-function addGraphLink($_from, $_from_type, $_to, $_to_type, &$_data, $_level, $_drill, $_display = array('dashvalue' => '5,3', 'lengthfactor' => 0.6))
-{
+function addGraphLink($_from, $_from_type, $_to, $_to_type, &$_data, $_level, $_drill, $_display = array('dashvalue' => '5,3', 'lengthfactor' => 0.6)) {
     if (is_array($_to) && count($_to) == 0) {
         return;
     }
@@ -1199,8 +1216,7 @@ function addGraphLink($_from, $_from_type, $_to, $_to_type, &$_data, $_level, $_
     return $_data;
 }
 
-function getSystemMemInfo()
-{
+function getSystemMemInfo() {
     $data = explode("\n", file_get_contents("/proc/meminfo"));
     $meminfo = array();
     foreach ($data as $line) {
@@ -1214,8 +1230,7 @@ function getSystemMemInfo()
     return $meminfo;
 }
 
-function strContain($_string, $_words)
-{
+function strContain($_string, $_words) {
     foreach ($_words as $word) {
         if (strpos($_string, $word) !== false) {
             return true;
@@ -1224,9 +1239,8 @@ function strContain($_string, $_words)
     return false;
 }
 
-function makeZipSupport()
-{
-    $nextdom_folder = dirname(__FILE__) . '/../..';
+function makeZipSupport() {
+    $nextdom_folder = __DIR__ . '/../..';
     $folder = '/tmp/nextdom_support';
     $outputfile = $nextdom_folder . '/support/nextdom_support_' . date('Y-m-d_His') . '.tar.gz';
     if (file_exists($folder)) {
@@ -1242,31 +1256,51 @@ function makeZipSupport()
     return realpath($outputfile);
 }
 
-function cleanSession()
-{
-    $saveSession = $_SESSION;
-    $cSsid = session_id();
-    $cache = cache::byKey('current_sessions');
-    $sessions = $cache->getValue(array());
-    foreach ($cache->getValue(array()) as $id => $session) {
-        session_id($id);
-        @session_start();
-        if (!isset($_SESSION['user'])) {
-            @session_write_close();
-            unset($sessions[$id]);
-            continue;
+function decodeSessionData($_data) {
+    $return_data = array();
+    $offset = 0;
+    while ($offset < strlen($_data)) {
+        if (!strstr(substr($_data, $offset), "|")) {
+            throw new Exception("invalid data, remaining: " . substr($_data, $offset));
         }
-        @session_write_close();
+        $pos = strpos($_data, "|", $offset);
+        $num = $pos - $offset;
+        $varname = substr($_data, $offset, $num);
+        $offset += $num + 1;
+        $data = unserialize(substr($_data, $offset));
+        $return_data[$varname] = $data;
+        $offset += strlen(serialize($data));
     }
-    session_id($cSsid);
-    @session_start();
-    $_SESSION = $saveSession;
-    @session_write_close();
-    cache::set('current_sessions', $sessions);
+    return $return_data;
 }
 
-function deleteSession($_id)
-{
+function listSession() {
+    $return = array();
+    try {
+        $sessions = explode("\n", com_shell::execute(system::getCmdSudo() . ' ls ' . session_save_path()));
+        foreach ($sessions as $session) {
+            $data = com_shell::execute(system::getCmdSudo() . ' cat ' . session_save_path() . '/' . $session);
+            if ($data == '') {
+                continue;
+            }
+            $data_session = decodeSessionData($data);
+            $session_id = str_replace('sess_', '', $session);
+            $return[$session_id] = array(
+                'datetime' => date('Y-m-d H:i:s', com_shell::execute(system::getCmdSudo() . ' stat -c "%Y" ' . session_save_path() . '/' . $session)),
+            );
+            if (isset($data_session['user'])) {
+                $return[$session_id]['login'] = $data_session['user']->getLogin();
+                $return[$session_id]['user_id'] = $data_session['user']->getId();
+            }
+            $return[$session_id]['ip'] = (isset($data_session['ip'])) ? $data_session['ip'] : '';
+        }
+    } catch (Exception $e) {
+
+    }
+    return $return;
+}
+
+function deleteSession($_id) {
     $cSsid = session_id();
     @session_start();
     session_id($_id);
@@ -1276,8 +1310,7 @@ function deleteSession($_id)
     @session_write_close();
 }
 
-function unautorizedInDemo()
-{
+function unautorizedInDemo() {
     if ($_SESSION['user']->getLogin() == 'demo') {
         throw new Exception(__('Cette action n\'est pas autorisée en mode démo', __FILE__));
     }

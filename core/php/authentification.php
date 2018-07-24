@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
-require_once dirname(__FILE__) . '/core.inc.php';
+require_once __DIR__ . '/core.inc.php';
 
 $configs = config::byKeys(array('session_lifetime', 'sso:allowRemoteUser'));
 
@@ -26,25 +26,14 @@ if (!is_numeric($session_lifetime)) {
 ini_set('session.gc_maxlifetime', $session_lifetime * 3600);
 ini_set('session.use_cookies', 1);
 ini_set('session.cookie_httponly', 1);
-$old_sess_id = session_id();
 
 if (isset($_COOKIE['sess_id'])) {
     session_id($_COOKIE['sess_id']);
 }
 @session_start();
+$_SESSION['ip'] = getClientIp();
 if (!headers_sent()) {
-    if (!isset($_SESSION['alreadyRegister'])) {
-        $cache = cache::byKey('current_sessions');
-        $sessions = $cache->getValue(array());
-        if (!isset($sessions[session_id()]) || !is_array($sessions[session_id()])) {
-            $sessions[session_id()] = array();
-        }
-        $sessions[session_id()]['datetime'] = date('Y-m-d H:i:s');
-        $sessions[session_id()]['ip'] = getClientIp();
-        cache::set('current_sessions', $sessions);
-        setcookie('sess_id', session_id(), time() + 24 * 3600, "/", '', false, true);
-        $_SESSION['alreadyRegister'] = 1;
-    }
+    setcookie('sess_id', session_id(), time() + 24 * 3600, "/", '', false, true);
 }
 @session_write_close();
 if (user::isBan()) {
@@ -113,14 +102,6 @@ function login($_login, $_password, $_twoFactor = null) {
             return false;
         }
     }
-    $cache = cache::byKey('current_sessions');
-    $sessions = $cache->getValue(array());
-    if (!isset($sessions[session_id()])) {
-        $sessions[session_id()] = array();
-    }
-    $sessions[session_id()]['login'] = $user->getLogin();
-    $sessions[session_id()]['user_id'] = $user->getId();
-    cache::set('current_sessions', $sessions);
     @session_start();
     $_SESSION['user'] = $user;
     @session_write_close();
@@ -152,14 +133,6 @@ function loginByHash($_key) {
         sleep(5);
         return false;
     }
-    $cache = cache::byKey('current_sessions');
-    $sessions = $cache->getValue(array());
-    if (!isset($sessions[session_id()])) {
-        $sessions[session_id()] = array();
-    }
-    $sessions[session_id()]['login'] = $user->getLogin();
-    $sessions[session_id()]['user_id'] = $user->getId();
-    cache::set('current_sessions', $sessions);
     @session_start();
     $_SESSION['user'] = $user;
     @session_write_close();

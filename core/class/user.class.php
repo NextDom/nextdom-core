@@ -17,7 +17,7 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
 use PragmaRX\Google2FA\Google2FA;
 
 class user {
@@ -394,17 +394,10 @@ class user {
         if (count(user::byProfils('admin', true)) == 1 && $this->getProfils() == 'admin') {
             throw new Exception(__('Vous ne pouvez supprimer le dernier administrateur', __FILE__));
         }
-        cleanSession();
-        $cache = cache::byKey('current_sessions');
-        $sessions = $cache->getValue(array());
-        foreach ($sessions as $id => $session) {
-            if ($session['login'] == $this->getLogin()) {
-                deleteSession($id);
-            }
-        }
     }
 
     public function remove() {
+        nextdom::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getLogin(), 'date' => date('Y-m-d H:i:s'), 'type' => 'user'));
         return DB::remove($this);
     }
 

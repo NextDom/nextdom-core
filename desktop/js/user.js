@@ -29,11 +29,11 @@
     nextdom.user.save({
         users: user,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function () {
             printUsers();
-            notify("Info", '{{Sauvegarde effectuée}}', 'success');
+            $('#div_alert').showAlert({message: '{{Sauvegarde effectuée}}', level: 'success'});
             modifyWithoutSave = false;
             $('#md_newUser').modal('hide');
         }
@@ -49,17 +49,17 @@
     nextdom.user.save({
         users: $('#table_user tbody tr').getValues('.userAttr'),
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function () {
             printUsers();
-            notify("Info", '{{Sauvegarde effectuée}}', 'success');
+            $('#div_alert').showAlert({message: '{{Sauvegarde effectuée}}', level: 'success'});
             modifyWithoutSave = false;
         }
     });
 });
 
- $("#table_user").delegate(".bt_del_user", 'click', function (event) {
+ $("#table_user").on('click',".bt_del_user",  function (event) {
     $.hideAlert();
     var user = {id: $(this).closest('tr').find('.userAttr[data-l1key=id]').value()};
     bootbox.confirm('{{Etes-vous sûr de vouloir supprimer cet utilisateur ?}}', function (result) {
@@ -67,18 +67,18 @@
             nextdom.user.remove({
                 id: user.id,
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
                 },
                 success: function () {
                     printUsers();
-                    notify("Info", '{{L\'utilisateur a bien été supprimé}}', 'success');
+                    $('#div_alert').showAlert({message: '{{L\'utilisateur a bien été supprimé}}', level: 'success'});
                 }
             });
         }
     });
 });
 
- $("#table_user").delegate(".bt_change_mdp_user", 'click', function (event) {
+ $("#table_user").on( 'click',".bt_change_mdp_user", function (event) {
     $.hideAlert();
     var user = {id: $(this).closest('tr').find('.userAttr[data-l1key=id]').value(), login: $(this).closest('tr').find('.userAttr[data-l1key=login]').value()};
     bootbox.prompt("{{Quel est le nouveau mot de passe ?}}", function (result) {
@@ -87,11 +87,11 @@
             nextdom.user.save({
                 users: [user],
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
                 },
                 success: function () {
                     printUsers();
-                    notify("Info", '{{Sauvegarde effectuée}}', 'success');
+                    $('#div_alert').showAlert({message: '{{Sauvegarde effectuée}}', level: 'success'});
                     modifyWithoutSave = false;
                 }
             });
@@ -99,7 +99,7 @@
     });
 });
 
- $("#table_user").on('click',".bt_changeHash",  function (event) {
+ $("#table_user").on( 'click',".bt_changeHash", function (event) {
     $.hideAlert();
     var user = {id: $(this).closest('tr').find('.userAttr[data-l1key=id]').value()};
     bootbox.confirm("{{Etes-vous sûr de vouloir changer la clef API de l\'utilisateur ?}}", function (result) {
@@ -108,11 +108,11 @@
             nextdom.user.save({
                 users: [user],
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
                 },
                 success: function () {
                     printUsers();
-                    notify("Info", '{{Modification effectuée}}', 'success');
+                    $('#div_alert').showAlert({message: '{{Modification effectuée}}', level: 'success'});
                     modifyWithoutSave = false;
                 }
             });
@@ -120,11 +120,11 @@
     });
 });
 
- $('#div_pageContainer').delegate('.userAttr', 'change', function () {
+ $('#div_pageContainer').on('change','.userAttr',  function () {
     modifyWithoutSave = true;
 });
 
- $('#div_pageContainer').delegate('.configKey', 'change', function () {
+ $('#div_pageContainer').on('change','.configKey',  function () {
     modifyWithoutSave = true;
 });
 
@@ -132,7 +132,7 @@
     nextdom.user.supportAccess({
         enable : $(this).attr('data-enable'),
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function (data) {
             modifyWithoutSave = false;
@@ -145,7 +145,7 @@
     $.showLoading();
     nextdom.user.all({
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function (data) {
             $('#table_user tbody').empty();
@@ -176,21 +176,22 @@
                 ligne += '<td>';
                 if(isset(data[i].options) && isset(data[i].options.twoFactorAuthentification) && data[i].options.twoFactorAuthentification == 1 && isset(data[i].options.twoFactorAuthentificationSecret) && data[i].options.twoFactorAuthentificationSecret != ''){
                     ligne += '<span class="label label-success" style="font-size:1em;">{{OK}}</span>';
+                    ligne += ' <a class="btn btn-danger btn-sm bt_disableTwoFactorAuthentification"><i class="fas fa-times"></i> {{Désactiver}}</span>';
                 }else{
-                 ligne += '<span class="label label-danger" style="font-size:1em;">{{NOK}}</span>';
-             }
-             ligne += '</td>';
-             ligne += '<td>';
-             ligne += '<span class="userAttr" data-l1key="options" data-l2key="lastConnection"></span>';
-             ligne += '</td>';
-             ligne += '<td>';
-             if(disable == ''){
-                 ligne += '<a class="cursor bt_changeHash btn btn-warning btn-xs pull-right" title="{{Renouveler la clef API}}"><i class="fa fa-refresh"></i> {{Régénérer API}}</a>';
-                 if (ldapEnable != '1') {
-                    ligne += '<a class="btn btn-xs btn-danger pull-right bt_del_user" style="margin-bottom : 5px;"><i class="fa fa-trash-o"></i> {{Supprimer}}</a>';
-                    ligne += '<a class="btn btn-xs btn-warning pull-right bt_change_mdp_user" style="margin-bottom : 5px;"><i class="fa fa-pencil"></i> {{Mot de passe}}</a>';
+                   ligne += '<span class="label label-danger" style="font-size:1em;">{{NOK}}</span>';
+               }
+               ligne += '</td>';
+               ligne += '<td>';
+               ligne += '<span class="userAttr" data-l1key="options" data-l2key="lastConnection"></span>';
+               ligne += '</td>';
+               ligne += '<td>';
+               if(disable == ''){
+                   ligne += '<a class="cursor bt_changeHash btn btn-warning btn-xs pull-right" title="{{Renouveler la clef API}}"><i class="fas fa-refresh"></i> {{Régénérer API}}</a>';
+                   if (ldapEnable != '1') {
+                    ligne += '<a class="btn btn-xs btn-danger pull-right bt_del_user" style="margin-bottom : 5px;"><i class="far fa-trash-alt"></i> {{Supprimer}}</a>';
+                    ligne += '<a class="btn btn-xs btn-warning pull-right bt_change_mdp_user" style="margin-bottom : 5px;"><i class="fas fa-pencil-alt"></i> {{Mot de passe}}</a>';
                 }
-                ligne += '<a class="btn btn-xs btn-warning pull-right bt_manage_restrict_rights" style="margin-bottom : 5px;"><i class="fa fa-align-right"></i> {{Droits}}</a>';
+                ligne += '<a class="btn btn-xs btn-warning pull-right bt_manage_restrict_rights" style="margin-bottom : 5px;"><i class="fas fa-align-right"></i> {{Droits}}</a>';
             }
             ligne += '</td>';
             ligne += '</tr>';
@@ -205,17 +206,31 @@
 });
 }
 
-$('#table_user').delegate('.bt_manage_restrict_rights', 'click', function () {
+$('#table_user').on( 'click','.bt_manage_restrict_rights', function () {
     $('#md_modal').dialog({title: "Gestion des droits"});
     $("#md_modal").load('index.php?v=d&modal=user.rights&id=' + $(this).closest('tr').find('.userAttr[data-l1key=id]').value()).dialog('open');
 });
 
+
+$('#table_user').on( 'click', '.bt_disableTwoFactorAuthentification',function () {
+    nextdom.user.removeTwoFactorCode({
+        id :  $(this).closest('tr').find('.userAttr[data-l1key=id]').value(),
+        error: function (error) {
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        },
+        success: function (data) {
+            printUsers();
+        }
+    }); 
+
+});
+
 $('.bt_deleteSession').on('click',function(){
-   var id = $(this).closest('tr').attr('data-id');
-   nextdom.user.deleteSession({
+ var id = $(this).closest('tr').attr('data-id'); 
+ nextdom.user.deleteSession({
     id : id,
     error: function (error) {
-        notify("Erreur", error.message, 'error');
+        $('#div_alert').showAlert({message: error.message, level: 'danger'});
     },
     success: function (data) {
         window.location.reload();
@@ -231,7 +246,7 @@ $('.bt_removeRegisterDevice').on('click',function(){
         key : key,
         user_id : user_id,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function (data) {
             modifyWithoutSave = false;
@@ -243,7 +258,7 @@ $('.bt_removeRegisterDevice').on('click',function(){
 $('#bt_removeAllRegisterDevice').on('click',function(){
     nextdom.user.removeRegisterDevice({
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function (data) {
             modifyWithoutSave = false;

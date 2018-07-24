@@ -114,8 +114,8 @@ nextdom.history.drawChart = function (_params) {
             _params.option.graphStep = (_params.option.graphStep == "1") ? true : false;
             if(isset(data.result.cmd)){
                 if (init(_params.option.graphStep) == '') {
-                 _params.option.graphStep = (data.result.cmd.subType == 'binary') ? true : false;
-                 if (isset(data.result.cmd.display) && init(data.result.cmd.display.graphStep) != '') {
+                   _params.option.graphStep = (data.result.cmd.subType == 'binary') ? true : false;
+                   if (isset(data.result.cmd.display) && init(data.result.cmd.display.graphStep) != '') {
                     _params.option.graphStep = (data.result.cmd.display.graphStep == "0") ? false : true;
                 }
             }
@@ -134,7 +134,7 @@ nextdom.history.drawChart = function (_params) {
         _params.showTimeSelector = (init(_params.showTimeSelector, true) && init(_params.showTimeSelector, true) != "0") ? true : false;
         _params.showScrollbar = (init(_params.showScrollbar, true) && init(_params.showScrollbar, true) != "0") ? true : false;
         _params.showNavigator = (init(_params.showNavigator, true) && init(_params.showNavigator, true) != "0") ? true : false;
-
+        
         var legend = {borderColor: 'black',borderWidth: 2,shadow: true};
         legend.enabled = init(_params.showLegend, true);
         if(isset(_params.newGraph) && _params.newGraph == true){
@@ -184,8 +184,8 @@ nextdom.history.drawChart = function (_params) {
                     text: '',
                     href: '',
                 },
-                exporting: {
-                    enabled: _params.enableExport || ($.mobile) ? false : true
+                exporting: { 
+                    enabled: _params.enableExport || ($.mobile) ? false : true 
                 },
                 tooltip: {
                     pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>',
@@ -270,7 +270,7 @@ nextdom.history.drawChart = function (_params) {
             for(var i in data.result.data){
                 series.data.push({
                     x : data.result.data[i][0],
-                    title : data.result.data[i][1]
+                    title : data.result.data[i][1] 
                 });
             }
 
@@ -341,7 +341,7 @@ nextdom.history.drawChart = function (_params) {
             }else  if(_params.dateRange == 'all'){
                 var dateRange = 6
             }else{
-                var dateRange = 3;
+                var dateRange = 3;  
             }
 
             nextdom.history.chart[_params.el].type = _params.option.graphType;
@@ -353,12 +353,12 @@ nextdom.history.drawChart = function (_params) {
                 },
                 navigator: {
                     enabled:  _params.showNavigator,
-                    series: {
-                        includeInCSVExport: false
+                    series: { 
+                        includeInCSVExport: false 
                     }
                 },
-                exporting: {
-                    enabled: _params.enableExport || ($.mobile) ? false : true
+                exporting: { 
+                    enabled: _params.enableExport || ($.mobile) ? false : true 
                 },
                 rangeSelector: {
                     buttons: [{
@@ -451,11 +451,11 @@ nextdom.history.drawChart = function (_params) {
     var extremes = nextdom.history.chart[_params.el].chart.xAxis[0].getExtremes();
     var plotband = nextdom.history.generatePlotBand(extremes.min,extremes.max);
     for(var i in plotband){
-     nextdom.history.chart[_params.el].chart.xAxis[0].addPlotBand(plotband[i]);
- }
+       nextdom.history.chart[_params.el].chart.xAxis[0].addPlotBand(plotband[i]);   
+   }
 
- $.hideLoading();
- if (typeof (init(_params.success)) == 'function') {
+   $.hideLoading();
+   if (typeof (init(_params.success)) == 'function') {
     _params.success(data.result);
 }
 }

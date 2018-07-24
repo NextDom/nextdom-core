@@ -17,13 +17,16 @@
  */
 
 try {
-    require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+    require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
     ajax::init(false);
 
     if (init('action') == 'useTwoFactorAuthentification') {
         $user = user::byLogin(init('login'));
         if (!is_object($user)) {
+            ajax::success(0);
+        }
+        if (network::getUserLocation() == 'internal') {
             ajax::success(0);
         }
         ajax::success($user->getOptions('twoFactorAuthentification', 0));
@@ -81,6 +84,7 @@ try {
     ajax::init();
 
     if (init('action') == 'validateTwoFactorCode') {
+        unautorizedInDemo();
         @session_start();
         $_SESSION['user']->refresh();
         $result = $_SESSION['user']->validateTwoFactorCode(init('code'));
@@ -89,6 +93,20 @@ try {
             $_SESSION['user']->save();
         }
         @session_write_close();
+        ajax::success($result);
+    }
+
+    if (init('action') == 'removeTwoFactorCode') {
+        if (!isConnect('admin')) {
+            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+        }
+        unautorizedInDemo();
+        $user = user::byId(init('id'));
+        if (!is_object($user)) {
+            throw new Exception('User ID inconnu');
+        }
+        $user->setOptions('twoFactorAuthentification', 0);
+        $user->save();
         ajax::success($result);
     }
 
@@ -112,6 +130,7 @@ try {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
         }
+        unautorizedInDemo();
         $users = array();
         foreach (user::all() as $user) {
             $user_info = utils::o2a($user);
@@ -124,6 +143,7 @@ try {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
         }
+        unautorizedInDemo();
         $users = json_decode(init('users'), true);
         $user = null;
         foreach ($users as &$user_json) {
@@ -149,6 +169,7 @@ try {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
         }
+        unautorizedInDemo();
         if (config::byKey('ldap::enable') == '1') {
             throw new Exception(__('Vous devez désactiver l\'authentification LDAP pour pouvoir supprimer un utilisateur', __FILE__));
         }
@@ -164,6 +185,7 @@ try {
     }
 
     if (init('action') == 'saveProfils') {
+        unautorizedInDemo();
         $user_json = nextdom::fromHumanReadable(json_decode(init('profils'), true));
         if (isset($user_json['id']) && $user_json['id'] != $_SESSION['user']->getId()) {
             throw new Exception('401 - Accès non autorisé');
@@ -188,6 +210,7 @@ try {
     }
 
     if (init('action') == 'removeRegisterDevice') {
+        unautorizedInDemo();
         if (init('key') == '' && init('user_id') == '') {
             if (!isConnect('admin')) {
                 throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
@@ -234,9 +257,8 @@ try {
     }
 
     if (init('action') == 'deleteSession') {
-        deleteSession(init('id'));
-        $cache = cache::byKey('current_sessions');
-        $sessions = $cache->getValue(array());
+        unautorizedInDemo();
+        $sessions = listSession();
         if (isset($sessions[init('id')])) {
             $user = user::byId($sessions[init('id')]['user_id']);
             if (is_object($user)) {
@@ -250,6 +272,7 @@ try {
                 $user->save();
             }
         }
+        deleteSession(init('id'));
         ajax::success();
     }
 
@@ -261,6 +284,7 @@ try {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
         }
+        unautorizedInDemo();
         $connection = user::connectToLDAP();
         if ($connection === false) {
             throw new Exception();
@@ -269,10 +293,12 @@ try {
     }
 
     if (init('action') == 'removeBanIp') {
+        unautorizedInDemo();
         ajax::success(user::removeBanIp());
     }
 
     if (init('action') == 'supportAccess') {
+        unautorizedInDemo();
         ajax::success(user::supportAccess(init('enable')));
     }
 

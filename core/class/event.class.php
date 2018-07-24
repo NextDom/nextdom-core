@@ -17,7 +17,7 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
 
 class event {
     /*     * *************************Attributs****************************** */
@@ -90,7 +90,7 @@ class event {
     }
 
     private static function filterEvent($_data = array(), $_filter = null) {
-        if ($_filter === null) {
+        if ($_filter == null) {
             return $_data;
         }
         $filters = cache::byKey($_filter . '::event')->getValue(array());

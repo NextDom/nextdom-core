@@ -17,7 +17,7 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
 
 class config {
     /*     * *************************Attributs****************************** */
@@ -30,12 +30,12 @@ class config {
     public static function getDefaultConfiguration($_plugin = 'core') {
         if (!isset(self::$defaultConfiguration[$_plugin])) {
             if ($_plugin == 'core') {
-                self::$defaultConfiguration[$_plugin] = parse_ini_file(dirname(__FILE__) . '/../../core/config/default.config.ini', true);
+                self::$defaultConfiguration[$_plugin] = parse_ini_file(__DIR__ . '/../../core/config/default.config.ini', true);
                 if (file_exists(__DIR__ . '/../../data/custom/custom.config.ini')) {
                     self::$defaultConfiguration[$_plugin] = array_merge(self::$defaultConfiguration[$_plugin], parse_ini_file(__DIR__ . '/../../data/custom/custom.config.ini', true));
                 }
             } else {
-                $filename = dirname(__FILE__) . '/../../plugins/' . $_plugin . '/core/config/' . $_plugin . '.config.ini';
+                $filename = __DIR__ . '/../../plugins/' . $_plugin . '/core/config/' . $_plugin . '.config.ini';
                 if (file_exists($filename)) {
                     self::$defaultConfiguration[$_plugin] = parse_ini_file($filename, true);
                 }
@@ -46,13 +46,13 @@ class config {
         }
         return self::$defaultConfiguration[$_plugin];
     }
-        /**
+    /**
      * Ajoute une clef à la config
-         * @param string $_key
-         * @param string | object | array $_value
-         * @param string $_plugin
-         * @return boolean
-         */
+     * @param string $_key
+     * @param string | object | array $_value
+     * @param string $_plugin
+     * @return boolean
+     */
     public static function save($_key, $_value, $_plugin = 'core') {
         if (is_object($_value) || is_array($_value)) {
             $_value = json_encode($_value, JSON_UNESCAPED_UNICODE);
@@ -143,12 +143,13 @@ class config {
                     AND plugin=:plugin';
         $value = DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW);
         if ($value['value'] === '' || $value['value'] === null) {
-            $defaultConfiguration = self::getDefaultConfiguration($_plugin);
-            if (isset($defaultConfiguration[$_plugin][$_key])) {
-                self::$cache[$_plugin . '::' . $_key] = $defaultConfiguration[$_plugin][$_key];
-            }
             if ($_default !== '') {
                 self::$cache[$_plugin . '::' . $_key] = $_default;
+            } else {
+                $defaultConfiguration = self::getDefaultConfiguration($_plugin);
+                if (isset($defaultConfiguration[$_plugin][$_key])) {
+                    self::$cache[$_plugin . '::' . $_key] = $defaultConfiguration[$_plugin][$_key];
+                }
             }
         } else {
             if (is_json($value['value'])) {
@@ -273,9 +274,14 @@ class config {
         }
     }
 
+    public static function preConfig_market_password($_value) {
+        if (!is_sha1($_value)) {
+            return sha1($_value);
+        }
+        return $_value;
+    }
+
     /*     * *********************Methode d'instance************************* */
 
     /*     * **********************Getteur Setteur*************************** */
 }
-
-

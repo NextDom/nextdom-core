@@ -30,13 +30,13 @@
 });
 
  $('#bt_displayCalculHistory').on('click',function(){
-    addChart($('#in_calculHistory').value(), 1)
+    addChart($('#in_calculHistory').value(), 1) 
 });
 
  $('#bt_configureCalculHistory').on('click',function(){
-   $('#md_modal').dialog({title: "{{Configuration des formules de calcul}}"});
-   $("#md_modal").load('index.php?v=d&modal=history.calcul').dialog('open');
-});
+     $('#md_modal').dialog({title: "{{Configuration des formules de calcul}}"});
+     $("#md_modal").load('index.php?v=d&modal=history.calcul').dialog('open');
+ });
 
  $('#bt_clearGraph').on('click',function(){
     while(nextdom.history.chart['div_graph'].chart.series.length > 0){
@@ -100,9 +100,9 @@
 });
 
  function emptyHistory(_cmd_id,_date) {
-    $.ajax({// fonction permettant de faire de l'ajax
-        type: "POST", // methode de transmission des données au fichier php
-        url: "core/ajax/cmd.ajax.php", // url du fichier php
+    $.ajax({
+        type: "POST", 
+        url: "core/ajax/cmd.ajax.php", 
         data: {
             action: "emptyHistory",
             id: _cmd_id,
@@ -114,10 +114,10 @@
         },
         success: function (data) {
             if (data.state != 'ok') {
-                notify("Erreur", data.result, 'error');
+                $('#div_alert').showAlert({message: data.result, level: 'danger'});
                 return;
             }
-            notify("Info", '{{Historique supprimé avec succès}}', 'success');
+            $('#div_alert').showAlert({message: '{{Historique supprimé avec succès}}', level: 'success'});
             li = $('li[data-cmd_id=' + _cmd_id + ']');
             if (li.hasClass('active')) {
                 li.find('.history').click();
@@ -141,7 +141,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: lastId, display: {graphType: $(this).value()}},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                $('#div_alert').showAlert({message: error.message, level: 'danger'});
             },
             success: function () {
                 $('.li_history[data-cmd_id=' + lastId + '] .history').click();
@@ -149,7 +149,7 @@ function initHistoryTrigger() {
         });
     });
     $('#sel_groupingType').off('change').on('change', function () {
-     if(lastId == null){
+       if(lastId == null){
         return;
     }
     if(lastId.indexOf('#') != -1){
@@ -162,7 +162,7 @@ function initHistoryTrigger() {
     nextdom.cmd.save({
         cmd: {id: lastId, display: {groupingType: $(this).value()}},
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function () {
             $('.li_history[data-cmd_id=' + lastId + '] .history').click();
@@ -170,7 +170,7 @@ function initHistoryTrigger() {
     });
 });
     $('#cb_derive').off('change').on('change', function () {
-     if(lastId == null){
+       if(lastId == null){
         return;
     }
     if(lastId.indexOf('#') != -1){
@@ -183,7 +183,7 @@ function initHistoryTrigger() {
     nextdom.cmd.save({
         cmd: {id: lastId, display: {graphDerive: $(this).value()}},
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function () {
             $('.li_history[data-cmd_id=' + lastId + '] .history').click();
@@ -191,7 +191,7 @@ function initHistoryTrigger() {
     });
 });
     $('#cb_step').off('change').on('change', function () {
-     if(lastId == null){
+       if(lastId == null){
         return;
     }
     if(lastId.indexOf('#') != -1){
@@ -204,7 +204,7 @@ function initHistoryTrigger() {
     nextdom.cmd.save({
         cmd: {id: lastId, display: {graphStep: $(this).value()}},
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function () {
             $('.li_history[data-cmd_id=' + lastId + '] .history').click();
@@ -215,7 +215,7 @@ function initHistoryTrigger() {
 
 $('#bt_validChangeDate').on('click',function(){
     $(nextdom.history.chart['div_graph'].chart.series).each(function(i, serie){
-       if(!isNaN(serie.options.id)){
+     if(!isNaN(serie.options.id)){
         var cmd_id = serie.options.id;
         addChart(cmd_id, 0);
         addChart(cmd_id, 1);
@@ -225,46 +225,53 @@ $('#bt_validChangeDate').on('click',function(){
 
 function addChart(_cmd_id, _action,_options) {
     if (_action == 0) {
-        if (isset(nextdom.history.chart['div_graph']) && nextdom.history.chart['div_graph'].chart.get(_cmd_id) !== undefined) {
-            nextdom.history.chart['div_graph'].chart.get(_cmd_id).remove();
-        }
-    } else {
-        lastId = _cmd_id
-        if(init(_options) == ''){
-            _options = {};
-            if(_cmd_id.indexOf('#') != 1){
-                _options.graphType = $('#sel_chartType').value()
-                _options.groupingType = $('#sel_groupingType').value()
-                _options.graphStep =  ($('#cb_step').value() == 0) ? false : true;
-            }
-        }
-        nextdom.history.drawChart({
-            cmd_id: _cmd_id,
-            el: 'div_graph',
-            dateRange : 'all',
-            dateStart : $('#in_startDate').value(),
-            dateEnd :  $('#in_endDate').value(),
-            height : $('#div_graph').height(),
-            option : _options,
-            success: function (data) {
-                if(isset(data.cmd) && isset(data.cmd.display)){
-                    if (init(data.cmd.display.graphStep) != '') {
-                        $('#cb_step').off().value(init(data.cmd.display.graphStep));
-                    }
-                    if (init(data.cmd.display.graphType) != '') {
-                        $('#sel_chartType').off().value(init(data.cmd.display.graphType));
-                    }
-                    if (init(data.cmd.display.groupingType) != '') {
-                        $('#sel_groupingType').off().value(init(data.cmd.display.groupingType));
-                    }
-                    if (init(data.cmd.display.graphDerive) != '') {
-                        $('#cb_derive').off().value(init(data.cmd.display.graphDerive));
-                    }
+        if (isset(nextdom.history.chart['div_graph']) && isset(nextdom.history.chart['div_graph'].chart) && isset(nextdom.history.chart['div_graph'].chart.series)) {
+         $(nextdom.history.chart['div_graph'].chart.series).each(function(i, serie){
+             try {
+                if(serie.options.id == _cmd_id){
+                    serie.remove();
                 }
-                initHistoryTrigger();
+            }catch(error) {
             }
         });
+     }
+ } else {
+    lastId = _cmd_id
+    if(init(_options) == ''){
+        _options = {};
+        if(_cmd_id.indexOf('#') != 1){
+            _options.graphType = $('#sel_chartType').value()
+            _options.groupingType = $('#sel_groupingType').value()
+            _options.graphStep =  ($('#cb_step').value() == 0) ? false : true;
+        }
     }
+    nextdom.history.drawChart({
+        cmd_id: _cmd_id,
+        el: 'div_graph',
+        dateRange : 'all',
+        dateStart : $('#in_startDate').value(),
+        dateEnd :  $('#in_endDate').value(),
+        height : $('#div_graph').height(),
+        option : _options,
+        success: function (data) {
+            if(isset(data.cmd) && isset(data.cmd.display)){
+                if (init(data.cmd.display.graphStep) != '') {
+                    $('#cb_step').off().value(init(data.cmd.display.graphStep));
+                }
+                if (init(data.cmd.display.graphType) != '') {
+                    $('#sel_chartType').off().value(init(data.cmd.display.graphType));
+                }
+                if (init(data.cmd.display.groupingType) != '') {
+                    $('#sel_groupingType').off().value(init(data.cmd.display.groupingType));
+                }
+                if (init(data.cmd.display.graphDerive) != '') {
+                    $('#cb_derive').off().value(init(data.cmd.display.graphDerive));
+                }
+            }
+            initHistoryTrigger();
+        }
+    });
+}
 }
 
 /**************TIMELINE********************/
@@ -330,22 +337,22 @@ $('.bt_timelineZoom').on('click',function(){
         end.setTime(start.getTime() + 390 * 24 *3600 *1000);
     }else if (zoom == 'm'){
         if(end.getMonth() == 1){
-         start.setFullYear(end.getFullYear() - 1);
-         start.setMonth(12);
-         end.setTime(start.getTime() + 35 * 24 *3600 *1000);
-     }else{
-         start.setMonth(end.getMonth() - 1);
-         end.setTime(start.getTime() + 33 * 24 *3600 *1000);
-     }
- }else if (zoom == 'w'){
+           start.setFullYear(end.getFullYear() - 1);
+           start.setMonth(12);
+           end.setTime(start.getTime() + 35 * 24 *3600 *1000);
+       }else{
+           start.setMonth(end.getMonth() - 1);
+           end.setTime(start.getTime() + 33 * 24 *3600 *1000);
+       }
+   }else if (zoom == 'w'){
     start.setTime(end.getTime() - 7 * 24 *3600 * 1000);
     end.setTime(start.getTime() + 7.5 * 24 *3600 *1000);
 }else if (zoom == 'd'){
-   start.setTime(end.getTime() - 1 * 24 *3600 * 1000);
-   end.setTime(start.getTime() + 1.1 * 24 *3600 *1000);
+ start.setTime(end.getTime() - 1 * 24 *3600 * 1000);
+ end.setTime(start.getTime() + 1.1 * 24 *3600 *1000);
 }else if (zoom == 'h'){
-   start.setTime(end.getTime() -  3600 * 1000);
-   end.setTime(start.getTime() + 3700 *1000);
+ start.setTime(end.getTime() -  3600 * 1000);
+ end.setTime(start.getTime() + 3700 *1000);
 }
 timeline.setWindow(start,end);
 });
@@ -363,7 +370,7 @@ function displayTimeline(){
     end.setTime(start.getTime() + 3700 *1000);
     nextdom.getTimelineEvents({
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function (data) {
             if(timeline != null){
@@ -376,39 +383,39 @@ function displayTimeline(){
             id = 0;
             for(var i in data){
                 if (typefilter != 'all' && data[i].type != typefilter) {
-                   continue;
+                 continue;
+             }
+             if (pluginfilter != 'all' && data[i].plugins != pluginfilter && typefilter != 'scenario') {
+                 continue;
+             }
+             if (objectfilter != 'all' && data[i].object != objectfilter) {
+                 continue;
+             }
+             if (categoryfilter != 'all' && typefilter != 'scenario'){
+                 var hascat =0;
+                 for (var category in data[i].category){
+                  if (category == categoryfilter && data[i].category[category] == 1) {
+                   hascat += 1;
                }
-               if (pluginfilter != 'all' && data[i].plugins != pluginfilter && typefilter != 'scenario') {
-                   continue;
-               }
-               if (objectfilter != 'all' && data[i].object != objectfilter) {
-                   continue;
-               }
-               if (categoryfilter != 'all' && typefilter != 'scenario'){
-                   var hascat =0;
-                   for (var category in data[i].category){
-                      if (category == categoryfilter && data[i].category[category] == 1) {
-                         hascat += 1;
-                     }
-                 }
-                 if (hascat==0){
-                  continue;
-              }
+           }
+           if (hascat==0){
+              continue;
           }
-          item = {id : id,start : data[i].date,content : data[i].html,group : data[i].group,title:data[i].date};
-          id++;
-          data_item.push(item);
       }
-      var items = new vis.DataSet(data_item);
-      var options = {
-        groupOrder:'content',
-        verticalScroll: true,
-        zoomKey: 'ctrlKey',
-        orientation : 'top',
-        maxHeight: $('body').height() - $('header').height() - 75
-    };
-    timeline = new vis.Timeline(document.getElementById('div_visualization'),items,options);
-    timeline.setWindow(start,end);
+      item = {id : id,start : data[i].date,content : data[i].html,group : data[i].group,title:data[i].date};
+      id++;
+      data_item.push(item);
+  }
+  var items = new vis.DataSet(data_item);
+  var options = {
+    groupOrder:'content',
+    verticalScroll: true,
+    zoomKey: 'ctrlKey',
+    orientation : 'top',
+    maxHeight: $('body').height() - $('header').height() - 75
+};
+timeline = new vis.Timeline(document.getElementById('div_visualization'),items,options);
+timeline.setWindow(start,end);
 }
 });
 }

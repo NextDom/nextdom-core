@@ -17,7 +17,7 @@
  */
 
 try {
-    require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+    require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
 
     if (!isConnect('admin')) {
@@ -27,16 +27,19 @@ try {
     ajax::init();
 
     if (init('action') == 'clear') {
+        unautorizedInDemo();
         log::clear(init('log'));
         ajax::success();
     }
 
     if (init('action') == 'remove') {
+        unautorizedInDemo();
         log::remove(init('log'));
         ajax::success();
     }
 
     if (init('action') == 'removeAll') {
+        unautorizedInDemo();
         log::removeAll();
         ajax::success();
     }

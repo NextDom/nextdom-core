@@ -17,7 +17,7 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
 
 class dataStore {
     /*     * *************************Attributs****************************** */
@@ -121,7 +121,7 @@ class dataStore {
     }
 
     public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = null) {
-        if ($_drill === null) {
+        if ($_drill == null) {
             $_drill = config::byKey('graphlink::dataStore::drill');
         }
         if (isset($_data['node']['dataStore' . $this->getId()])) {
@@ -147,6 +147,7 @@ class dataStore {
         addGraphLink($this, 'dataStore', $usedBy['scenario'], 'scenario', $_data, $_level, $_drill);
         addGraphLink($this, 'dataStore', $usedBy['cmd'], 'cmd', $_data, $_level, $_drill);
         addGraphLink($this, 'dataStore', $usedBy['eqLogic'], 'eqLogic', $_data, $_level, $_drill);
+        addGraphLink($this, 'dataStore', $usedBy['interactDef'], 'interactDef', $_data, $_level, $_drill);
         return $_data;
     }
 

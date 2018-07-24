@@ -291,14 +291,14 @@ if (is_object($market)) {
         },
         success: function (data) {
           if (data.state != 'ok') {
-              notify("Market", data.result, 'error');
+            $('#div_alertMarketSend').showAlert({message: data.result, level: 'danger'});
             return;
           }
           if (market.id == undefined || market.id == '') {
             $.showLoading();
             window.location.reload();
           } else {
-              notify("Market", '{{Votre objet a été envoyé avec succès sur le market}}', 'success');
+           $('#div_alertMarketSend').showAlert({message: '{{Votre objet a été envoyé avec succès sur le market}}', level: 'success'});
          }
 
        }
@@ -318,14 +318,14 @@ if (is_object($market)) {
         },
         success: function (data) {
           if (data.state != 'ok') {
-            notify("Market", data.result, 'error');
+            $('#div_alertMarketSend').showAlert({message: data.result, level: 'danger'});
             return;
           }
           if (market.id == undefined || market.id == '') {
             $.showLoading();
             window.location.reload();
           } else {
-              notify("Market", '{{Votre objet a été envoyé avec succès sur le market}}', 'success');
+            $('#div_alertMarketSend').showAlert({message: '{{Votre objet a été envoyé avec succès sur le market}}', level: 'success'});
           }
 
         }

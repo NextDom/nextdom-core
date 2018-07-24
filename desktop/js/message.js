@@ -16,15 +16,15 @@
  */
 
 
-$("#sel_plugin").on('change', function() {
+ $("#sel_plugin").on('change', function() {
     loadPage('index.php?v=d&p=message&plugin=' + $('#sel_plugin').value());
 });
 
-$("#bt_clearMessage").on('click', function(event) {
+ $("#bt_clearMessage").on('click', function(event) {
     nextdom.message.clear({
         plugin: $('#sel_plugin').value(),
         error: function(error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function() {
             $("#table_message tbody").remove();
@@ -33,12 +33,17 @@ $("#bt_clearMessage").on('click', function(event) {
     });
 });
 
-$("#table_message").delegate(".removeMessage", 'click', function(event) {
+ $('#bt_refreshMessage').on('click', function(event) {
+    $('#md_modal').dialog({title: "{{Message NextDom}}"});
+    $('#md_modal').load('index.php?v=d&p=message&ajax=1').dialog('open');
+});
+
+ $("#table_message").delegate(".removeMessage", 'click', function(event) {
     var tr = $(this).closest('tr');
     nextdom.message.remove({
         id: tr.attr('data-message_id'),
         error: function(error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function() {
             tr.remove();

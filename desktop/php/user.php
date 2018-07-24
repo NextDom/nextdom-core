@@ -11,17 +11,17 @@ sendVarToJS('ldapEnable', config::byKey('ldap::enable'));
   <div class="tab-pane" id="user">
     <br/>
     <legend><i class="icon personne-toilet1"></i>  {{Liste des utilisateurs}}
-      <a class="btn btn-success btn-xs pull-right" id="bt_saveUser"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>
+      <a class="btn btn-success btn-xs pull-right" id="bt_saveUser"><i class="far fa-check-circle"></i> {{Sauvegarder}}</a>
       <?php if (config::byKey('ldap::enable') != '1') {
     $user = user::byLogin('nextdom_support');
     if (!is_object($user)) {
-        echo ' <a class="btn btn-success btn-xs pull-right" id="bt_supportAccess" data-enable="1"><i class="fa fa-user"></i> {{Activer accès support}}</a>';
+        echo ' <a class="btn btn-success btn-xs pull-right" id="bt_supportAccess" data-enable="1"><i class="fas fa-user"></i> {{Activer accès support}}</a>';
     } else {
-        echo ' <a class="btn btn-danger btn-xs pull-right" id="bt_supportAccess" data-enable="0"><i class="fa fa-user"></i> {{Désactiver accès support}}</a>';
+        echo ' <a class="btn btn-danger btn-xs pull-right" id="bt_supportAccess" data-enable="0"><i class="fas fa-user"></i> {{Désactiver accès support}}</a>';
     }
     ?>
 
-       <a class="btn btn-warning btn-xs  pull-right" id="bt_addUser"><i class="fa fa-plus-circle"></i> {{Ajouter un utilisateur}}</a>
+       <a class="btn btn-warning btn-xs  pull-right" id="bt_addUser"><i class="fas fa-plus-circle"></i> {{Ajouter un utilisateur}}</a>
        <?php }
 ?>
      </legend>
@@ -51,11 +51,15 @@ sendVarToJS('ldapEnable', config::byKey('ldap::enable'));
       </thead>
       <tbody>
         <?php
-cleanSession();
-$cache = cache::byKey('current_sessions');
-$sessions = $cache->getValue(array());
-if(is_array($sessions) && count($sessions) > 0){
+$sessions = listSession();
+if (is_array($sessions) && count($sessions) > 0) {
     foreach ($sessions as $id => $session) {
+        if (!isset($session['ip'])) {
+            $session['ip'] = '';
+        }
+        if (!isset($session['datetime'])) {
+            $session['datetime'] = '';
+        }
         echo '<tr data-id="' . $id . '">';
         echo '<td>' . $id . '</td>';
         echo '<td>' . $session['login'] . '</td>';
@@ -72,7 +76,7 @@ if(is_array($sessions) && count($sessions) > 0){
 </form>
 <form class="form-horizontal">
   <fieldset>
-    <legend>{{Périphériques enregistrés}} <a class="btn btn-xs btn-warning pull-right" id="bt_removeAllRegisterDevice"><i class="fa fa-trash"></i> {{Supprimer tout}}</a></legend>
+    <legend>{{Périphériques enregistrés}} <a class="btn btn-xs btn-warning pull-right" id="bt_removeAllRegisterDevice"><i class="fas fa-trash"></i> {{Supprimer tout}}</a></legend>
     <table class="table table-bordered table-condensed">
       <thead>
         <tr>
@@ -104,7 +108,7 @@ foreach (user::all() as $user) {
         echo $value['datetime'];
         echo '</td>';
         echo '<td>';
-        echo '<a class="btn btn-warning btn-xs bt_removeRegisterDevice"><i class="fa fa-trash"></i> {{Supprimer}}</a>';
+        echo '<a class="btn btn-warning btn-xs bt_removeRegisterDevice"><i class="fas fa-trash"></i> {{Supprimer}}</a>';
         echo '</td>';
         echo '</tr>';
     }
@@ -131,7 +135,7 @@ foreach (user::all() as $user) {
       </div>
       <div class="modal-footer">
         <a class="btn btn-default" data-dismiss="modal">{{Annuler}}</a>
-        <a class="btn btn-primary" id="bt_newUserSave"><i class="fa fa-check-circle"></i> {{Enregistrer}}</a>
+        <a class="btn btn-primary" id="bt_newUserSave"><i class="far fa-check-circle"></i> {{Enregistrer}}</a>
       </div>
     </div>
   </div>

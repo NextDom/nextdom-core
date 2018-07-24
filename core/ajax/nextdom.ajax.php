@@ -17,7 +17,7 @@
  */
 
 try {
-    require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+    require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
 
     if (!isConnect()) {
@@ -33,6 +33,9 @@ try {
         $return = array();
         $return['nextdom_token'] = ajax::getToken();
         $return['user_id'] = $_SESSION['user']->getId();
+        $return['product_name'] = config::byKey('product_name');
+        $return['product_icon'] = config::byKey('product_icon');
+        $return['product_image'] = config::byKey('product_image');
         $return['serverDatetime'] = getmicrotime();
         $return['userProfils'] = $_SESSION['user']->getOptions();
         $return['userProfils']['defaultMobileViewName'] = __('Vue', __FILE__);
@@ -44,7 +47,7 @@ try {
         }
         $return['userProfils']['defaultMobileObjectName'] = __('Objet', __FILE__);
         if ($_SESSION['user']->getOptions('defaultDashboardObject') != '') {
-            $object = object::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
+            $object = jeeObject::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
             if (is_object($object)) {
                 $return['userProfils']['defaultMobileObjectName'] = $object->getName();
             }
@@ -60,8 +63,8 @@ try {
         }
         $return['custom'] = array('js' => false, 'css' => false);
         if (config::byKey('enableCustomCss', 'core', 1) == 1) {
-            $return['custom']['js'] = file_exists(dirname(__FILE__) . '/../../mobile/custom/custom.js');
-            $return['custom']['css'] = file_exists(dirname(__FILE__) . '/../../mobile/custom/custom.css');
+            $return['custom']['js'] = file_exists(__DIR__ . '/../../mobile/custom/custom.js');
+            $return['custom']['css'] = file_exists(__DIR__ . '/../../mobile/custom/custom.css');
         }
         ajax::success($return);
     }
@@ -121,6 +124,7 @@ try {
     }
 
     if (init('action') == 'ssh') {
+        unautorizedInDemo();
         $command = init('command');
         if (strpos($command, '2>&1') === false && strpos($command, '>') === false) {
             $command .= ' 2>&1';
@@ -131,6 +135,7 @@ try {
     }
 
     if (init('action') == 'db') {
+        unautorizedInDemo();
         ajax::success(DB::prepare(init('command'), array(), DB::FETCH_TYPE_ALL));
     }
 
@@ -139,6 +144,7 @@ try {
     }
 
     if (init('action') == 'update') {
+        unautorizedInDemo();
         nextdom::update();
         ajax::success();
     }
@@ -150,21 +156,19 @@ try {
     }
 
     if (init('action') == 'backup') {
+        unautorizedInDemo();
         nextdom::backup(true);
         ajax::success();
     }
 
     if (init('action') == 'restore') {
+        unautorizedInDemo();
         nextdom::restore(init('backup'), true);
         ajax::success();
     }
 
-    if (init('action') == 'migrate') {
-        nextdom::migrate(init('backup'), true);
-        ajax::success();
-    }
-
     if (init('action') == 'removeBackup') {
+        unautorizedInDemo();
         nextdom::removeBackup(init('backup'));
         ajax::success();
     }
@@ -178,6 +182,7 @@ try {
     }
 
     if (init('action') == 'resetHwKey') {
+        unautorizedInDemo();
         config::save('nextdom::installKey', '');
         ajax::success();
     }
@@ -188,7 +193,8 @@ try {
     }
 
     if (init('action') == 'backupupload') {
-        $uploaddir = dirname(__FILE__) . '/../../backup';
+        unautorizedInDemo();
+        $uploaddir = __DIR__ . '/../../backup';
         if (!file_exists($uploaddir)) {
             mkdir($uploaddir);
         }
@@ -215,19 +221,23 @@ try {
     }
 
     if (init('action') == 'haltSystem') {
+        unautorizedInDemo();
         ajax::success(nextdom::haltSystem());
     }
 
     if (init('action') == 'rebootSystem') {
+        unautorizedInDemo();
         ajax::success(nextdom::rebootSystem());
     }
 
     if (init('action') == 'forceSyncHour') {
+        unautorizedInDemo();
         ajax::success(nextdom::forceSyncHour());
     }
 
     if (init('action') == 'saveCustom') {
-        $path = dirname(__FILE__) . '/../../';
+        unautorizedInDemo();
+        $path = __DIR__ . '/../../';
         if (init('version') != 'desktop' && init('version') != 'mobile') {
             throw new Exception(__('La version ne peut être que desktop ou mobile', __FILE__));
         }
@@ -270,7 +280,7 @@ try {
                     $info = scenario::timelineDisplay($event);
                     break;
             }
-            if ($info !== null) {
+            if ($info != null) {
                 $return[] = $info;
             }
         }
@@ -278,14 +288,17 @@ try {
     }
 
     if (init('action') == 'removeTimelineEvents') {
+        unautorizedInDemo();
         ajax::success(nextdom::removeTimelineEvent());
     }
 
     if (init('action') == 'getFileFolder') {
+        unautorizedInDemo();
         ajax::success(ls(init('path'), '*', false, array(init('type'))));
     }
 
     if (init('action') == 'getFileContent') {
+        unautorizedInDemo();
         $pathinfo = pathinfo(init('path'));
         if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql'))) {
             throw new Exception(__('Vous ne pouvez éditer ce type d\'extension : ' . $pathinfo['extension'], __FILE__));
@@ -294,6 +307,7 @@ try {
     }
 
     if (init('action') == 'setFileContent') {
+        unautorizedInDemo();
         $pathinfo = pathinfo(init('path'));
         if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql'))) {
             throw new Exception(__('Vous ne pouvez éditer ce type d\'extension : ' . $pathinfo['extension'], __FILE__));
@@ -302,6 +316,7 @@ try {
     }
 
     if (init('action') == 'deleteFile') {
+        unautorizedInDemo();
         $pathinfo = pathinfo(init('path'));
         if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql'))) {
             throw new Exception(__('Vous ne pouvez éditer ce type d\'extension : ' . $pathinfo['extension'], __FILE__));
@@ -310,6 +325,7 @@ try {
     }
 
     if (init('action') == 'createFile') {
+        unautorizedInDemo();
         $pathinfo = pathinfo(init('name'));
         if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql'))) {
             throw new Exception(__('Vous ne pouvez éditer ce type d\'extension : ' . $pathinfo['extension'], __FILE__));
@@ -318,6 +334,12 @@ try {
         if (!file_exists(init('path') . init('name'))) {
             throw new Exception(__('Impossible de créer le fichier, vérifiez les droits', __FILE__));
         }
+        ajax::success();
+    }
+
+    if (init('action') == 'emptyRemoveHistory') {
+        unautorizedInDemo();
+        unlink(__DIR__ . '/../../data/remove_history.json');
         ajax::success();
     }
 

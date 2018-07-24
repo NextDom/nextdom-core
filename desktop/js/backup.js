@@ -1,3 +1,4 @@
+
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -25,19 +26,19 @@
     nextdom.config.save({
         configuration: $('#backup').getValues('.configKey')[0],
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function () {
             nextdom.config.load({
                 configuration: $('#backup').getValues('.configKey')[0],
                 plugin: 'core',
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
                 },
                 success: function (data) {
                     $('#backup').setValues(data, '.configKey');
                     modifyWithoutSave = false;
-                    notify("Info", '{{Sauvegarde réussie}}', 'success');
+                    $('#div_alert').showAlert({message: '{{Sauvegarde réussie}}', level: 'success'});
                 }
             });
         }
@@ -48,10 +49,11 @@
     var el = $(this);
     bootbox.confirm('{{Etes-vous sûr de vouloir faire une sauvegarde de}} '+NEXTDOM_PRODUCT_NAME+' {{? Une fois lancée cette opération ne peut être annulée}}', function (result) {
         if (result) {
+            $.hideAlert();
             el.find('.fa-refresh').show();
             nextdom.backup.backup({
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
                 },
                 success: function () {
                     getNextDomLog(1, 'backup');
@@ -63,13 +65,14 @@
 
  $("#bt_restoreNextDom").on('click', function (event) {
     var el = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée}}', function (result) {
+    bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec la sauvegarde}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée.}}<span style="color:red;font-weight: bold;">IMPORTANT la restauration d\'un backup est une opération risquée et n\'est à utiliser qu\'en dernier recours.</span>', function (result) {
         if (result) {
+            $.hideAlert();
             el.find('.fa-refresh').show();
-              nextdom.backup.restoreLocal({
+            nextdom.backup.restoreLocal({
                 backup: $('#sel_restoreBackup').value(),
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
                 },
                 success: function () {
                     getNextDomLog(1, 'restore');
@@ -87,11 +90,11 @@
             nextdom.backup.remove({
                 backup: $('#sel_restoreBackup').value(),
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
                 },
                 success: function () {
                     updateListBackup();
-                    notify("Info", '{{Sauvegarde supprimée avec succès}}', 'success');
+                    $('#div_alert').showAlert({message: '{{Sauvegarde supprimée avec succès}}', level: 'success'});
                 }
             });
         }
@@ -107,11 +110,11 @@
     replaceFileInput: false,
     done: function (e, data) {
         if (data.result.state != 'ok') {
-            notify("Erreur", data.result.result, 'error');
+            $('#div_alert').showAlert({message: data.result.result, level: 'danger'});
             return;
         }
         updateListBackup();
-        notify("Info", '{{Fichier(s) ajouté(s) avec succès}}', 'success');
+        $('#div_alert').showAlert({message: '{{Fichier(s) ajouté(s) avec succès}}', level: 'success'});
     }
 });
 
@@ -123,7 +126,7 @@
             nextdom.backup.uploadCloud({
                 backup: $('#sel_restoreBackup').value(),
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
                 },
                 success: function () {
                     getNextDomLog(1, 'backupCloud');
@@ -142,7 +145,7 @@
                 backup: el.closest('.repo').find('.sel_restoreCloudBackup').value(),
                 repo: el.attr('data-repo'),
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
                 },
                 success: function () {
                     getNextDomLog(1, 'restore');
@@ -156,7 +159,7 @@
  nextdom.config.load({
     configuration: $('#backup').getValues('.configKey')[0],
     error: function (error) {
-        notify("Erreur", error.message, 'error');
+        $('#div_alert').showAlert({message: error.message, level: 'danger'});
     },
     success: function (data) {
         $('#backup').setValues(data, '.configKey');
@@ -198,14 +201,14 @@
                 for (var i in data.result.reverse()) {
                     log += data.result[i]+"\n";
                     if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' SUCCESS]') != -1){
-                        notify("Info", '{{L\'opération est réussie}}', 'success');
+                        $('#div_alert').showAlert({message: '{{L\'opération est réussie}}', level: 'success'});
                         if(_log == 'restore'){
                             nextdom.user.refresh();
                         }
                         _autoUpdate = 0;
                     }
                     if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' ERROR]') != -1){
-                        notify("Erreur", '{{L\'opération a échoué}}', 'error');
+                        $('#div_alert').showAlert({message: '{{L\'opération a échoué}}', level: 'danger'});
                         if(_log == 'restore'){
                             nextdom.user.refresh();
                         }
@@ -214,17 +217,6 @@
                 }
             }
             $('#pre_backupInfo').text(log);
-          div2 = document.getElementById('progressbar_reboot').style.width;
-          if (log.includes("Fin")){
-            $('#progressbar_reboot').width('100%');
-          }else if(log.includes("BACKUP")){
-          		div3 =  parseFloat(div2.slice(0, -1)) + 12,86;
-            	$('#progressbar_reboot').width(div3+'%');
-          }else if (log.includes("RESTORE")){
-            div3 =  parseFloat(div2.slice(0, -1)) + 18;
-            	$('#progressbar_reboot').width(div3+'%');
-          }
-
             if (init(_autoUpdate, 0) == 1) {
                 setTimeout(function () {
                     getNextDomLog(_autoUpdate, _log)
@@ -233,6 +225,9 @@
                 $('#bt_' + _log + 'NextDom .fa-refresh').hide();
                 $('.bt_' + _log + 'NextDom .fa-refresh').hide();
                 updateListBackup();
+                for(var i in REPO_LIST){
+                    updateRepoListBackup(REPO_LIST[i]);
+                }
             }
         }
     });
@@ -241,7 +236,7 @@
 function updateListBackup() {
     nextdom.backup.list({
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function (data) {
             var options = '';
@@ -249,6 +244,27 @@ function updateListBackup() {
                 options += '<option value="' + i + '">' + data[i] + '</option>';
             }
             $('#sel_restoreBackup').html(options);
+        }
+    });
+}
+
+for(var i in REPO_LIST){
+    updateRepoListBackup(REPO_LIST[i]);
+}
+
+function updateRepoListBackup(_repo) {
+    nextdom.repo.backupList({
+        repo : _repo,
+        global : false,
+        error: function (error) {
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        },
+        success: function (data) {
+            var options = '';
+            for (var i in data) {
+                options += '<option value="' + data[i] + '">' + data[i] + '</option>';
+            }
+            $('.sel_restoreCloudBackup[data-repo='+_repo+']').empty().html(options);
         }
     });
 }

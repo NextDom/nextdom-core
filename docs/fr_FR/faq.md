@@ -211,7 +211,7 @@ courants sont :
 
 -   Problème de corruption de fichier(s), ce qui arrive souvent suite à
     un arrêt non propre de NextDom (coupure de courant)
-    
+
 -     Soucis mémoire, le systeme manque de mémoire et tue le process le plus consommateur (souvent la base de données). Cela peut se voir dans l'administration de l'OS puis dmesg, vous devez voir un kill par "oom". Si c'est le cas il faut réduire la consommation de nextdom en désactivant des plugins.
 
 Malheureusement, il n’y a pas beaucoup de solution si c’est le deuxième

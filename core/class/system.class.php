@@ -32,8 +32,8 @@ class system {
     /*     * ***********************Methode static*************************** */
 
     public static function loadCommand() {
-        if (file_exists(dirname(__FILE__) . '/../../config/system_cmd.json')) {
-            $content = file_get_contents(dirname(__FILE__) . '/../../config/system_cmd.json');
+        if (file_exists(__DIR__ . '/../../config/system_cmd.json')) {
+            $content = file_get_contents(__DIR__ . '/../../config/system_cmd.json');
             if (is_json($content)) {
                 self::$_command['custom'] = json_decode($content, true);
             }
@@ -87,7 +87,7 @@ class system {
     public static function ps($_find, $_without = null) {
         $return = array();
         $cmd = '(ps ax || ps w) | grep -ie "' . $_find . '" | grep -v "grep"';
-        if ($_without !== null) {
+        if ($_without != null) {
             if (!is_array($_without)) {
                 $_without = array($_without);
             }

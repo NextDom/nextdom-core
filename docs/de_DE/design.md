@@ -1,20 +1,21 @@
-Auf dieser Seite können sie die Anzeige der gesamten Haustechnik ganz
-genau konfigurieren. Dies braucht Zeit, aber die einzige Grenze ist Ihre
-Vorstellungskraft.
+Cette page permet de configurer l’affichage de toute votre domotique de
+manière très fine. Celle-ci demande du temps mais sa seule limite est
+votre imagination.
 
-Elle est accessible par Acceuil → Design
+Elle est accessible par Acceuil → Dashboard
 
-> **Tipp**
+> **Tip**
 >
-> Über das Untermenü kann direkt zu einem Design gesprungen werden.
+> Il est possible d’aller directement sur un design grâce au sous-menu.
 
-> **Wichtig**
+> **Important**
 >
-> Alle Aktionen werden ausgeführt, indem Sie mit der rechten Maustaste auf
-> diese Seite klicken, achten Sie darauf, dass Sie es richtig im Design machen.
-> Beim Erstellen müssen Sie es in der Mitte der Seite tun (um sicher zu sein, dass es auf dem Design ist).
+> Toutes les actions se font par un clic droit sur cette page, attention
+> à bien le faire dans le design. Lors de la création, il faut donc le
+> faire au milieu de la page (pour être sûr d’être sur le design).
 
-Im Menü (rechts klicken), sind folgende Aktionen verfügbar :
+Dans le menu nous retrouvons (clic droit donc) nous retrouvons les
+actions suivantes :
 
 -   **Designs** : Affiche la liste de vos designs et d’y accéder
 
@@ -94,7 +95,7 @@ On retrouve ici :
 
 -   **Général**
 
-    -   **Name** : Der Name Ihres Designs
+    -   **Nom** : Le nom de votre design
 
     -   **Fond transparent** : rend le fond transparent. Attention si la
         case est coché la couleur de fond n’est pas utilisée
@@ -371,13 +372,4 @@ Résumé
 
 -   **Gras** : met le texte en gras
 
-FAQ 
-======
 
->**Je n'arrive plus à éditer mon design**
->
->Si vous avais mis un widget ou une image qui prend quasiment la totalité du design il faut bien cliquer en dehors du widget ou de l'image pour avoir accès au menu par clic droit.
-
->**Supprimer un design qui ne marche plus**
->
->Dans la partie administration puis OS/DB faire "select * from planHeader" recuperer l'id du design en question et faire un "delete from planHeader where id=#TODO#" et "delete from plan where planHeader_id=#todo#" en replacant bien #TODO# par l'id du design trouvé précedement.

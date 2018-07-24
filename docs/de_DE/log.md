@@ -25,7 +25,7 @@ Schaltflächen :
 
 -   **Alle Protokolle löschen** : Löscht alle vorhandene Protokolle.
 
-> **Tipp**
+> **Tip**
 >
 > Man beachte, daß das Protokoll http.error nicht gelöscht werden kann. Es
 > ist unbedingt erforderlich! Wenn sie es entfernen (zum Beispiel in der

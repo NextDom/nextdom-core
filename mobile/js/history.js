@@ -5,8 +5,15 @@
 
  function addChart(_cmd_id, _action) {
      if (_action == 0) {
-         if (isset(nextdom.history.chart['div_graph']) && nextdom.history.chart['div_graph'].chart.get(parseInt(_cmd_id)) !== null) {
-             nextdom.history.chart['div_graph'].chart.get(parseInt(_cmd_id)).remove();
+         if (isset(nextdom.history.chart['div_graph']) && isset(nextdom.history.chart['div_graph'].chart) && isset(nextdom.history.chart['div_graph'].chart.series)) {
+             $(nextdom.history.chart['div_graph'].chart.series).each(function(i, serie){
+                 try {
+                     if(serie.options.id == _cmd_id){
+                         serie.remove();
+                     }
+                 }catch(error) {
+                 }
+             });
          }
      } else {
          lastId = _cmd_id

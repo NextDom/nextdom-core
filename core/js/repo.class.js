@@ -107,3 +107,25 @@
      };
      $.ajax(paramsAJAX);
  }
+
+
+ nextdom.repo.backupList = function (_params) {
+     var paramsRequired = ['repo'];
+     var paramsSpecifics = {
+         global: _params.global || true,
+     };
+     try {
+         nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
+     } catch (e) {
+         (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
+         return;
+     }
+     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
+     var paramsAJAX = nextdom.private.getParamsAJAX(params);
+     paramsAJAX.url = 'core/ajax/repo.ajax.php';
+     paramsAJAX.data = {
+         action: 'backupList',
+         repo: _params.repo,
+     };
+     $.ajax(paramsAJAX);
+ }

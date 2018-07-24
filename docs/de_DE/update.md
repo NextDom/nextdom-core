@@ -1,129 +1,135 @@
 Beschreibung 
 ===========
 
-Das **Update Center** ermöglicht es Ihnen, alle Funktionen von NextDom zu
-aktualisieren, einschließlich Kernsoftware, Plugins, Widgets usw.. Weitere
-Funktionen zur Verwaltung von Erweiterungen sind verfügbar (Löschen,
-Neuinstallieren, Prüfen usw.).
+Le **centre de mise à jour** permet de mettre à jour toutes les
+fonctionnalités de NextDom, incluant le logiciel de base (core), les
+plugins, les widgets, etc. D’autres fonctions de gestion des extensions
+sont diponibles (supprimer, réinstaller, vérifier, etc)
 
-Die Update Center Seite
+La page du Centre de mise à jour 
 ================================
 
-Sie ist über das Menü **Administration → Update Center**
-erreichbar.
+Elle est accessible par le menu **Administration → Centre de mise à
+jour**.
 
-Sie finden auf der linken Seite alle Funktionen von NextDom und auf der rechten Seite den **Informations**-Teil, in dem angezeigt wird, was passiert wenn ein ein Update gestartet wird.
+Vous y trouverez, sur la gauche, l’ensemble des fonctionnalités de
+NextDom et sur la droite une partie **Informations** qui décrit ce qu’il
+s’est passé, quand vous avez lancé une mise à jour.
 
-Die Funktionen oben auf der Seite.
+Les fonctions du haut de la page. 
 ---------------------------------
 
-In oberem Teil der Tabelle befinden sich die Schaltflächen. NextDom
-verbindet sich regelmäßig mit dem Markt um zu sehen, ob Updates
-verfügbar sind (das Datum der letzten Prüfung wird am oberen Rand auf der
-linken Seite der Tabelle angezeigt). Wenn Sie eine manuelle Überprüfung
-durchführen möchten, klicken Sie die Schaltfläche "Nach Updates suchen" an.
+En haut du tableau, se trouvent les boutons de commande. NextDom se
+connecte périodiquement avec le Market pour voir si des mises à jour
+sont disponibles (la date de dernière vérification est indiquée en haut
+à gauche du tableau). Si vous voulez réaliser une vérification manuelle,
+vous pouvez appuyer sur le bouton "Vérifier les mises à jour".
 
-Die Schaltfläche **Updaten** wird verwendet, um das NextDom Paket zu aktualisieren. Sobald Sie darauf klicken, erhalten Sie diese verschiedenen Optionen :
+Le bouton **Mettre à jour** permet de mettre à jour l’ensemble de
+NextDom. Une fois que vous avez cliqué dessus, on obtient ces différentes
+options :
 
--   **Vorher speichern** : Führt vor dem Update eine NextDom-Sicherung 
-    durch.
+-   **Sauvegarder avant** : Effectue une sauvegarde de NextDom avant
+    d’effectuer la mise à jour.
 
--   **Plugins aktualisieren** : Ermöglicht Plugins im Update zu
-    integrieren.
+-   **Mettre à jour les plugins** : Permet d’inclure les plugins dans la
+    mise à jour.
 
--   **Kern aktualisieren** : Ermöglicht Ihnen, den NextDom-Kernel in das
-    Update aufzunehmen.
+-   **Mettre à jour le core** : Permet d’inclure le noyau de NextDom dans
+    la mise à jour.
 
--   **Zwangsbetrieb** : Führt das Update im erzwungenen Modus durch, das
-    heißt, selbst wenn ein Fehler auftritt, fährt NextDom fort und wird das Backup
-    nicht wiederherstellen.
+-   **Mode forcé** : Effectue la mise à jour en mode forcé, c’est-à-dire
+    que, même s’il y a une erreur, NextDom continue et ne restaurera pas
+    la sauvegarde.
 
--   **Update wieder anwenden** : Ermöglicht es Ihnen, ein Update erneut zu
-    installieren. (Hinweis : Nicht alle Updates können erneut angewendet werden.)
+-   **Mise à jour à réappliquer** : Permet de réappliquer une mise
+    à jour. (NB : Toutes les mises à jour ne peuvent être réappliquées.)
 
-> **Wichtig**
+> **Important**
 >
->Vor der Aktualisierung wird NextDom standardmäßig eine Sicherungskopie
-> erstellen. Bei Problemen beim Anwenden eines Updates wird NextDom
-> automatisch die zuvor erstellte Sicherung wiederherstellen. Dieses Prinzip
-> gilt natürlich nur für NextDom Updates, nicht für Plugins.
+> Avant une mise à jour, par défaut, NextDom va faire une sauvegarde. En
+> cas de souci lors de l’application d’une mise à jour, NextDom va
+> automatiquement restaurer la sauvegarde faite juste avant. Ce principe
+> n’est valable que pour les mises à jour de NextDom et non des plugins.
 
-> **Tipp**
+> **Tip**
 >
-> Sie können ein Update von NextDom erzwingen, auch wenn es Ihnen nicht
-> angeboten wird.
+> Vous pouvez forcer une mise à jour de NextDom, même si celui-ci ne vous
+> en propose pas.
 
-Die Tabelle der Aktualisierungen
+Le tableau des mises à jour 
 ---------------------------
 
-Der Tabelle besteht aus zwei Registerkarten :
+Le tableau se compose de deux onglets :
 
--   **Kern und Plugins** : Enthält die Basissoftware von NextDom und 
-    die Liste der installierten Plugins.
+-   **Core et Plugins** : Contient le logiciel de base de NextDom et la
+    liste des plugins installés.
 
--   **Andere** : Enthält Widgets, Skripte usw.
+-   **Autre** : Contient les widgets, les scripts, etc.
 
-Hier finden Sie folgende Informationen: * **Status** : OK oder NOK. Zeigt den
-aktuellen Status des Plugins an. * **Name** : Sie sehen die Quelle des
-Elements, den Typ des Elements und seinen Namen. * **Version** : Gibt die
-genaue Version des Elements an. * **Optionen** : Aktivieren Sie dieses
-Kontrollkästchen, wenn das Element während des allgemeinen Updates
-nicht aktualisiert werden soll (Schaltfläche **Updaten**).
+Vous y trouverez les informations suivants : \* **Statut** : OK ou NOK.
+Permet de connaître l’état actuel du plugin. \* **Nom** : Vous y
+trouverez la provenance de l’élément, le type d’élément et son nom. \*
+**Version**: Indique la version précise de l’élément. \***Options** :
+Cochez cette case si vous ne souhaitez pas que cet élément soit mis à
+jour lors de la mise à jour générale (Bouton **Mettre à jour**).
 
-> **Tipp**
+> **Tip**
 >
-> Für jede Tabelle können Sie in der ersten Zeile nach dem Status, den
-> Namen oder der Version des vorhandenen Elemente filtern.
+> Pour chaque tableau, la première ligne permet de filter suivant
+> l’état, le nom ou la version des éléments présents.
 
-In jeder Zeile können Sie  für jedes Element die folgenden Aktionen vdurchführen :
+Sur chaque ligne, vous pouvez utiliser les fonctions suivants pour
+chaque élément :
 
--   **Neu installieren** : Erzwingt eine Neuinstallation.
+-   **Réinstaller** : Force la réinstallation.
 
--   **Löschen** : Ermöglicht das Elemente zu löschen.
+-   **Supprimer** : Permet de le désinstaller.
 
--   **Prüfen** : Überprüft die Update-Quelle, um herauszufinden, 
-    ob ein neues Update verfügbar ist.
+-   **Vérifier** : Interroge la source des mises à jour pour savoir si
+    une nouvelle mise à jour est disponible.
 
--   **Update** : Ermöglicht das Element zu aktualisieren (wenn ein 
-    Update verfügbar ist).
+-   **Mettre à jour** : Permet de mettre à jour l’élément (si celui-ci a
+    une mise à jour).
 
--   **Änderungsprotokoll** : Bietet Zugriff auf die Liste der Änderungen der 
-    Updates.
+-   **Changelog** : Permet d’accéder à la liste des changements de la
+    mise à jour.
 
-> **Wichtig**
+> **Important**
 >
-> Wenn das Änderungsprotokoll leer ist, aber Sie noch ein Update haben,
-> bedeutet dies, dass die Dokumentation aktualisiert wurde. Es ist daher
-> nicht notwendig, vom Entwickler die Veränderungen zu verlangen, da es
-> nicht unbedingt notwendig ist. (Dies ist oft ein Update der Dokumentations > Übersetzung.)
+> Si le changelog est vide mais que vous avez tout de même une mise à
+> jour, cela signifie que c’est la documentation qui a été mise à jour.
+> Il n’est donc pas nécessaire de demander au développeur les
+> changements, vu qu’il n’y en a pas forcément. (c’est souvent une mise
+> à jour de la traduction de la documentation)
 
-> **Tipp**
+> **Tip**
 >
-> Beachten Sie, dass "core : nextdom" "Aktualisierung der NextDom
-> Kernsoftware" bedeutet.
+> A noter que "core : nextdom" signifie "la mise à jour du logiciel de
+> base NextDom".
 
-Update in der Kommandozeile
+Mise à jour en ligne de commande 
 ================================
 
-Es ist möglich, NextDom direkt in SSH zu aktualisieren. Sobald die Verbindung
-hergestellt ist, folgt der folgende Befehl :
+Il est possible de faire une mise à jour de NextDom directement en SSH.
+Une fois connecté, voilà la commande à effectuer :
 
     sudo php /var/www/html/install/update.php
 
-Die möglichen Parameter sind :
+Les paramètres possibles sont :
 
--   **`mode`** : `force`, um ein Update im erzwungenen Modus zu starten (be
-    rücksichtigt keine Fehler).
+-   **`mode`** : `force`, pour lancer une mise à jour en mode forcé (ne
+    tient pas compte des erreurs).
 
--   **`version`** : gefolgt von der Versionsnummer, um Änderungen von 
-    dieser Version erneut anzuwenden.
+-   **`version`** : suivi du numéro de version, pour réappliquer les
+    changements depuis cette version.
 
-Im Folgenden finden Sie eine Beispielsyntax für eine erzwungene
-Aktualisierung durch erneutes Anwenden des Updates von Version 1.188.0 :
+Voici un exemple de syntaxe pour faire une mise à jour forcée en
+réappliquant les changements depuis la 1.188.0 :
 
     sudo php  /var/www/html/install/update.php mode=force version=1.188.0
 
-Achtung nach einem Update in der Komandozeile müssen Sie die Rechte an
-den NextDom Ordner erneut anwenden :
+Attention, après une mise à jour en ligne de commande, il faut
+réappliquer les droits sur le dossier NextDom :
 
     chown -R www-data:www-data /var/www/html

@@ -126,9 +126,9 @@ NextDom, ainsi que leur configuration :
 
 -   **ID** : ID de l’objet.
 
--   **Objekt** : Der Name des Objekts.
+-   **Objet** : Nom de l’objet.
 
--   **Vater** : Name des übergeordneten Objekts.
+-   **Père** : Nom de l’objet parent.
 
 -   **Visible** : Visibilité de l’objet.
 

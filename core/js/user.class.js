@@ -168,6 +168,25 @@ nextdom.user.validateTwoFactorCode = function(_params) {
     $.ajax(paramsAJAX);
 };
 
+nextdom.user.removeTwoFactorCode = function(_params) {
+    var paramsRequired = ['id'];
+    var paramsSpecifics = {};
+    try {
+        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
+    } catch (e) {
+        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
+        return;
+    }
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
+    var paramsAJAX = nextdom.private.getParamsAJAX(params);
+    paramsAJAX.url = 'core/ajax/user.ajax.php';
+    paramsAJAX.data = {
+        action: 'removeTwoFactorCode',
+        id: _params.id,
+    };
+    $.ajax(paramsAJAX);
+};
+
 nextdom.user.useTwoFactorAuthentification = function(_params) {
     var paramsRequired = ['login'];
     var paramsSpecifics = {

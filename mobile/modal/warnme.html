@@ -43,8 +43,8 @@
 			test: test,
 			cmd_id: $('#in_mdwarnme_cmd_id').value(),
 			error: function (error) {
-				notify("Erreur", error.message, 'error');
-			},
+                notify("Erreur", error.message, 'error');
+            },
 			success: function (messages) {
 				$('#popupDialog').popup('close'); 
 			}

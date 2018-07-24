@@ -7,6 +7,7 @@ if (!isConnect()) {
     <select id="mod_actionValue_sel" class="form-control">
         <option value="sleep">{{Pause}}</option>
         <option value="variable">{{Variable}}</option>
+    <option value="delete_variable">{{Supprimer une variable}}</option>
         <option value="scenario">{{Scénario}}</option>
         <option value="stop" class="scenarioOnly">{{Stop}}</option>
         <option value="wait">{{Attendre}}</option>
@@ -16,6 +17,7 @@ if (!isConnect()) {
         <option value="equipement">{{Activer/Désactiver Masquer/Afficher un équipement}}</option>
         <option value="ask">{{Faire une demande}}</option>
         <option value="nextdom_poweroff">{{Arrêter}} <?php echo config::byKey('product_name'); ?></option>
+        <option value="nextdom_reboot">{{Reémarrer}} <?php echo config::byKey('product_name'); ?></option>
         <option value="scenario_return" class="scenarioOnly">{{Retourner un texte/une donnée}}</option>
         <option value="icon" class="scenarioOnly">{{Icône}}</option>
         <option value="alert">{{Alerte}}</option>
@@ -37,6 +39,10 @@ if (!isConnect()) {
     {{Création/modification d’une variable ou de la valeur d’une variable}}
 </div>
 
+<div class="alert alert-info mod_actionValue_selDescription delete_variable" style="display:none;">
+    {{Suppression d’une variable}}
+</div>
+
 <div class="alert alert-info mod_actionValue_selDescription scenario" style="display:none;">
     {{Permet le contrôle des scénarios}}
 </div>
@@ -46,7 +52,7 @@ if (!isConnect()) {
 </div>
 
 <div class="alert alert-info mod_actionValue_selDescription say" style="display:none;">
-    {{Permet de faire dire un texte à NextDom (ne marche que si un onglet}} <?php echo config::byKey('product_name'); ?> {{est ouvert dans le navigateur)}}
+    {{Permet de faire dire un texte à}} <?php echo config::byKey('product_name'); ?> {{(ne marche que si un onglet NextDom est ouvert dans le navigateur)}}
 </div>
 
 <div class="alert alert-info mod_actionValue_selDescription gotodesign" style="display:none;">

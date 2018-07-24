@@ -16,7 +16,7 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once dirname(__FILE__) . "/../php/core.inc.php";
+require_once __DIR__ . "/../php/core.inc.php";
 
 if (isset($argv)) {
     foreach ($argv as $arg) {
@@ -206,7 +206,7 @@ try {
                 if (config::byKey('cache::engine') != 'FilesystemCache' && config::byKey('cache::engine') != 'PhpFileCache') {
                     $result = 'OK';
                 } else {
-                    $filename = dirname(__FILE__) . '/../../cache.tar.gz';
+                    $filename = __DIR__ . '/../../cache.tar.gz';
                     $result = 'OK (' . date('Y-m-d H:i:s', filemtime($filename)) . ')';
                 }
             } else {
@@ -318,24 +318,24 @@ try {
         }
 
         /*             * ************************Object*************************** */
-        if ($jsonrpc->getMethod() == 'object::all') {
-            $jsonrpc->makeSuccess(utils::o2a(object::all()));
+        if ($jsonrpc->getMethod() == 'jeeObject::all') {
+            $jsonrpc->makeSuccess(utils::o2a(jeeObject::all()));
         }
 
-        if ($jsonrpc->getMethod() == 'object::byId') {
-            $object = object::byId($params['id']);
+        if ($jsonrpc->getMethod() == 'jeeObject::byId') {
+            $object = jeeObject::byId($params['id']);
             if (!is_object($object)) {
                 throw new Exception('Objet introuvable : ' . secureXSS($params['id']), -32601);
             }
             $jsonrpc->makeSuccess(utils::o2a($object));
         }
 
-        if ($jsonrpc->getMethod() == 'object::full') {
-            $jsonrpc->makeSuccess(object::fullData());
+        if ($jsonrpc->getMethod() == 'jeeObject::full') {
+            $jsonrpc->makeSuccess(jeeObject::fullData());
         }
 
-        if ($jsonrpc->getMethod() == 'object::fullById') {
-            $object = object::byId($params['id']);
+        if ($jsonrpc->getMethod() == 'jeeObject::fullById') {
+            $object = jeeObject::byId($params['id']);
             if (!is_object($object)) {
                 throw new Exception('Objet introuvable : ' . secureXSS($params['id']), -32601);
             }
@@ -672,7 +672,7 @@ try {
                 throw new Exception(__('Aucun esclave correspondant à l\'ID : ', __FILE__) . secureXSS($params['slave_id']));
             }
             if (substr(config::byKey('backup::path'), 0, 1) != '/') {
-                $backup_dir = dirname(__FILE__) . '/../../' . config::byKey('backup::path');
+                $backup_dir = __DIR__ . '/../../' . config::byKey('backup::path');
             } else {
                 $backup_dir = config::byKey('backup::path');
             }
@@ -704,7 +704,7 @@ try {
                 throw new Exception(__('Seul un esclave peut restaurer une sauvegarde', __FILE__));
             }
             if (substr(config::byKey('backup::path'), 0, 1) != '/') {
-                $uploaddir = dirname(__FILE__) . '/../../' . config::byKey('backup::path');
+                $uploaddir = __DIR__ . '/../../' . config::byKey('backup::path');
             } else {
                 $uploaddir = config::byKey('backup::path');
             }
@@ -758,11 +758,11 @@ try {
         }
 
         if ($jsonrpc->getMethod() == 'backup::listMarket') {
-            $jsonrpc->makeSuccess(repo_market::listeBackup());
+            $jsonrpc->makeSuccess(repo_market::backup_list());
         }
 
         if ($jsonrpc->getMethod() == 'backup::restoreMarket') {
-            repo_market::retoreBackup($params['backup'], true);
+            repo_market::backup_restore($params['backup'], true);
             $jsonrpc->makeSuccess();
         }
 

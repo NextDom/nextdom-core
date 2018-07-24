@@ -1,11 +1,13 @@
 function initHome() {
     refreshMessageNumber();
     $('#bottompanel_otherActionList').empty();
-    $('#bottompanel_otherActionList').append('<a class="ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" href="index.php?v=d"><i class="fa fa-desktop"></i> {{Version desktop}}</a>');
-    $('#bottompanel_otherActionList').append('<a class="link ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" data-page="deamon" data-title="{{Démons}}"><i class="fa fa-bug" ></i> {{Démons}}</a>');
-    $('#bottompanel_otherActionList').append('<a class="link ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" data-page="cron" data-title="{{Crons}}"><i class="fa fa-cogs" ></i> {{Crons}}</a>');
+    $('#bottompanel_otherActionList').append('<a class="ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" href="index.php?v=d"><i class="fas fa-desktop"></i> {{Version desktop}}</a>');
+    $('#bottompanel_otherActionList').append('<a class="link ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" data-page="deamon" data-title="{{Démons}}"><i class="fas fa-bug" ></i> {{Démons}}</a>');
+    $('#bottompanel_otherActionList').append('<a class="link ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" data-page="cron" data-title="{{Crons}}"><i class="fas fa-cogs" ></i> {{Crons}}</a>');
     $('#bottompanel_otherActionList').append('<a class="link ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" data-page="health" data-title="{{Santé}}"><i class="icon divers-caduceus3" ></i> {{Santé}}</a>');
-    $('#bottompanel_otherActionList').append('<a class="link ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" data-page="eqAnalyse" data-title="{{Analyse équipement}}"><i class="fa fa-battery-full" ></i> {{Analyse équipement}}</a>');
+    $('#bottompanel_otherActionList').append('<a class="link ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" data-page="eqAnalyse" data-title="{{Analyse équipement}}"><i class="fas fa-battery-full" ></i> {{Analyse équipement}}</a>');
+    $('#bottompanel_otherActionList').append('<a class="link ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" data-page="scenario" data-title="{{Scénarios}}"><i class="fas fa-cogs"></i> {{Scénario}}</a>');
+
 
     nextdom.object.all({
         error: function (error) {
@@ -54,11 +56,32 @@ function initHome() {
         success: function (planHeader) {
             var li = '';
             for (var i in planHeader) {
-                li += '<a class="ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" href="index.php?v=d&p=plan&plan_id=' + planHeader[i].id + '" data-ajax="false">' +init(planHeader[i].configuration['icon'])+' '+ planHeader[i].name + '</a>'
+                var icon = '';
+                if (isset(planHeader[i].configuration) && isset(planHeader[i].configuration.icon)) {
+                    icon = planHeader[i].configuration.icon;
+                }
+                li += '<a class="ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" href="index.php?v=d&p=plan&plan_id=' + planHeader[i].id + '" data-ajax="false">' +icon+' '+ planHeader[i].name + '</a>'
             }
             $('#bottompanel_planList').empty().append(li);
         }
     });
+
+    nextdom.plan3d.allHeader({
+        error: function (error) {
+            notify("Erreur", error.message, 'error');
+        },
+        success: function (plan3dHeader) {
+            var li = '';
+            for (var i in plan3dHeader) {
+                var icon = '';
+                 if (isset(plan3dHeader[i].configuration) && isset(plan3dHeader[i].configuration.icon)) {
+                    icon = plan3dHeader[i].configuration.icon;
+                }
+                li += '<a class="ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" href="index.php?v=d&p=plan3d&plan3d_id=' + plan3dHeader[i].id + '" data-ajax="false">' +icon+' '+ plan3dHeader[i].name + '</a>'
+            }
+        $('#bottompanel_plan3dList').empty().append(li);
+    }
+});
 
 
     if (plugins.length > 0) {
@@ -78,9 +101,9 @@ function initHome() {
         if(li != ''){
             $('#bottompanel_pluginList').empty().append(li);
         }else{
-           $('#bt_listPlugin').hide();   
-       }
-   } else {
+         $('#bt_listPlugin').hide();   
+     }
+ } else {
     $('#bt_listPlugin').hide();
 }
 

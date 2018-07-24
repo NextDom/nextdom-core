@@ -15,7 +15,7 @@
             <div class="checkbox">
                 <label><input type="checkbox" id="cb_storeConnection">{{Enregistrer cet ordinateur}}</label>
             </div>
-            <button class="btn-lg btn-primary btn-block" id="bt_login_validate"><i class="fa fa-sign-in"></i> {{Connexion}}</button>
+            <button class="btn-lg btn-primary btn-block" id="bt_login_validate"><i class="fas fa-sign-in-alt"></i> {{Connexion}}</button>
             <a href="https://nextdom.github.io/documentation/howto/fr_FR/reset.password" target="_blank">{{J'ai perdu mon mot de passe}}</a>
         </div>
     </div>
@@ -25,7 +25,7 @@
         nextdom.user.useTwoFactorAuthentification({
             login: $('#in_login_username').value(),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                $('#div_alert').showAlert({message: error.message, level: 'danger'});
             },
             success: function (data) {
                 if(data == 1){
@@ -44,7 +44,7 @@
             twoFactorCode: $('#in_twoFactorCode').val(),
             storeConnection: $('#cb_storeConnection').value(),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                $('#div_alert').showAlert({message: error.message, level: 'danger'});
             },
             success: function (data) {
                 window.location.href = 'index.php?v=d';

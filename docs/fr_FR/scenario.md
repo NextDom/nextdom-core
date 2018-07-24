@@ -523,6 +523,8 @@ Plusieurs fonctions sont disponibles pour les équipements :
     l’équipement est introuvable, 1 si l’équipement est actif et 0 s’il
     est inactif
 
+-   value(cmd) : Renvoie la valeur d'une commande si elle n'est pas donnée automatiquement par nextdom (cas lors du stockage du nom de la commande dans une variable)    
+
 -   tag(montag,[defaut]) : Permet de récuperer la valeur d’un tag ou
     la valeur par défaut si il n’existe pas :
 
@@ -656,6 +658,8 @@ En plus des commandes domotiques vous avez accès aux actions suivantes :
 
 -   **variable** (variable) : Création/modification d’une variable ou de la valeur
     d’une variable.
+
+-   **Supprimer variable** (delete_variable) : Permet de supprimer une variable
 
 -   **Scénario** (scenario) : Permet de contrôler des scénarios. La partie tags
     permet d’envoyer des tags au scénario, ex : montag=2 (attention il

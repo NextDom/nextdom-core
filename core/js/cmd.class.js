@@ -231,6 +231,21 @@ nextdom.cmd.test = function(_params) {
                         }
                     });
                     break;
+                      case 'select':
+                    nextdom.cmd.execute({
+                        id: _params.id,
+                        value: {
+                            select: result.configuration.listValue.split(';')[0].split('|')[0]
+                        },
+                        cache: 0,
+                        error: function(error) {
+                            notify("Erreur", data.result, 'error');
+                        },
+                        success: function() {
+                            notify("Info", '{{Action exécutée avec succès}}', 'success');
+                        }
+                    });
+                    break;
                     case 'message':
                     nextdom.cmd.execute({
                         id: _params.id,
@@ -269,88 +284,16 @@ nextdom.cmd.test = function(_params) {
 };
 
 nextdom.cmd.refreshValue = function(_params) {
-    var paramsRequired = [];
-    var cmds = {};
-    var sends = {};
     for(var i in _params){
         var cmd = $('.cmd[data-cmd_id=' + _params[i].cmd_id + ']');
         if (cmd.html() == undefined || cmd.hasClass('noRefresh')) {
             continue;
         }
-        if (!isset(_params[i].global) || !_params[i].global) {
-            if (isset(nextdom.cmd.update) && isset(nextdom.cmd.update[_params[i].cmd_id])) {
-                nextdom.cmd.update[_params[i].cmd_id](_params[i]);
-                continue;
-            }
-        }
-        version = null;
-        if (cmd.closest('.eqLogic').attr('data-version') != undefined) {
-            version = cmd.closest('.eqLogic').attr('data-version');
-        }
-         if (cmd.attr('data-version') != undefined) {
-            version =cmd.attr('data-version');
-        }
-        if(version == null){
+        if (!isset(nextdom.cmd.update) || !isset(nextdom.cmd.update[_params[i].cmd_id])) {
             continue;
         }
-        cmds[_params[i].cmd_id] = {cmd : cmd, version : version};
-        sends[_params[i].cmd_id] = {version : version};
+        nextdom.cmd.update[_params[i].cmd_id](_params[i]);
     }
-    if (Object.keys(cmds).length == 0){
-        return;
-    }
-    var paramsSpecifics = {
-        global: false,
-        success: function(result) {
-           for(var i in result){
-            var cmd = cmds[i].cmd;
-            var html = $(result[i].html);
-            if(html.attr('data-cmd_uid') != 'undefined'){
-                cmd.attr('data-cmd_uid',html.attr('data-cmd_uid'));
-            }
-            cmd.empty().html(html.children());
-            cmd.attr("class", html.attr("class"));
-            var top =  cmd.css('top');
-            var left =  cmd.css('left');
-            var width =  cmd.css('width');
-            var height =  cmd.css('height');
-            var margin =  cmd.css('margin');
-            var padding =  cmd.css('padding');
-            var position =  cmd.css('position');
-            var transform_origin =  cmd.css('transform-origin');
-            var transform =  cmd.css('transform');
-            var zindex =  cmd.css('z-index');
-            cmd.attr("style", html.attr("style"));
-            cmd.css('top',top);
-            cmd.css('left',left);
-            cmd.css('width',width);
-            cmd.css('height',height);
-            cmd.css('margin',margin);
-            cmd.css('padding',padding);
-            cmd.css('position',position);
-            cmd.css('transform-origin',transform_origin);
-            cmd.css('transform',transform);
-            cmd.css('z-index',zindex);
-            if ($.mobile) {
-                $('.cmd[data-cmd_id=' + i + ']').trigger("create");
-            }
-        }
-    }
-};
-try {
-    nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-} catch (e) {
-    (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-    return;
-}
-var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-var paramsAJAX = nextdom.private.getParamsAJAX(params);
-paramsAJAX.url = 'core/ajax/cmd.ajax.php';
-paramsAJAX.data = {
-    action: 'toHtml',
-    ids: json_encode(sends),
-};
-$.ajax(paramsAJAX);
 };
 
 nextdom.cmd.toHtml = function (_params) {
@@ -837,7 +780,7 @@ nextdom.cmd.displayDuration = function(_date,_el){
      var h = Math.floor(d % 86400 / 3600);
      var m = Math.floor(d % 3600 / 60);
      _el.empty().append(((j > 0 ? j + " j " : "") + (h > 0 ? h + " h " : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + " min" : "0 min")));
-     var myinterval = setInterval(function(){
+     var myinterval = setInterval(function(){ 
         var d = ((Date.now() + clientServerDiffDatetime) - _el.attr('data-time')) / 1000;
         var j = Math.floor(d / 86400);
         var h = Math.floor(d % 86400 / 3600);

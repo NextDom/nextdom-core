@@ -17,7 +17,7 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
 
 class network {
 
@@ -56,9 +56,15 @@ class network {
         return '';
     }
 
-    public static function getNetworkAccess($_mode = 'auto', $_protocole = '', $_default = '', $_test = true) {
+    public static function getNetworkAccess($_mode = 'auto', $_protocol = '', $_default = '', $_test = false) {
         if ($_mode == 'auto') {
             $_mode = self::getUserLocation();
+        }
+        if ($_mode == 'internal' && config::byKey('internalAddr', 'core', '') == '') {
+            self::checkConf($_mode);
+        }
+        if ($_mode == 'external' && config::byKey('market::allowDNS') != 1 && config::byKey('externalAddr', 'core', '') == '') {
+            self::checkConf($_mode);
         }
         if ($_test && !self::test($_mode)) {
             self::checkConf($_mode);
@@ -67,22 +73,22 @@ class network {
             if (strpos(config::byKey('internalAddr', 'core', $_default), 'http://') !== false || strpos(config::byKey('internalAddr', 'core', $_default), 'https://') !== false) {
                 config::save('internalAddr', str_replace(array('http://', 'https://'), '', config::byKey('internalAddr', 'core', $_default)));
             }
-            if ($_protocole == 'ip' || $_protocole == 'dns') {
+            if ($_protocol == 'ip' || $_protocol == 'dns') {
                 return config::byKey('internalAddr', 'core', $_default);
             }
-            if ($_protocole == 'ip:port' || $_protocole == 'dns:port') {
+            if ($_protocol == 'ip:port' || $_protocol == 'dns:port') {
                 return config::byKey('internalAddr') . ':' . config::byKey('internalPort', 'core', 80);
             }
-            if ($_protocole == 'proto:ip' || $_protocole == 'proto:dns') {
+            if ($_protocol == 'proto:ip' || $_protocol == 'proto:dns') {
                 return config::byKey('internalProtocol') . config::byKey('internalAddr');
             }
-            if ($_protocole == 'proto:ip:port' || $_protocole == 'proto:dns:port') {
+            if ($_protocol == 'proto:ip:port' || $_protocol == 'proto:dns:port') {
                 return config::byKey('internalProtocol') . config::byKey('internalAddr') . ':' . config::byKey('internalPort', 'core', 80);
             }
-            if ($_protocole == 'proto:127.0.0.1:port:comp') {
+            if ($_protocol == 'proto:127.0.0.1:port:comp') {
                 return trim(config::byKey('internalProtocol') . '127.0.0.1:' . config::byKey('internalPort', 'core', 80) . '/' . trim(config::byKey('internalComplement'), '/'), '/');
             }
-            if ($_protocole == 'http:127.0.0.1:port:comp') {
+            if ($_protocol == 'http:127.0.0.1:port:comp') {
                 return trim('http://127.0.0.1:' . config::byKey('internalPort', 'core', 80) . '/' . trim(config::byKey('internalComplement'), '/'), '/');
             }
             return trim(config::byKey('internalProtocol') . config::byKey('internalAddr') . ':' . config::byKey('internalPort', 'core', 80) . '/' . trim(config::byKey('internalComplement'), '/'), '/');
@@ -92,14 +98,14 @@ class network {
             return config::byKey('nextdom::url');
         }
         if ($_mode == 'external') {
-            if ($_protocole == 'ip') {
-                if (config::byKey('market::allowDNS') == 1 && config::byKey('nextdom::url') != '') {
+            if ($_protocol == 'ip') {
+                if (config::byKey('market::allowDNS') == 1 && config::byKey('nextdom::url') != '' && config::byKey('network::disableMangement') == 0) {
                     return getIpFromString(config::byKey('nextdom::url'));
                 }
                 return getIpFromString(config::byKey('externalAddr'));
             }
-            if ($_protocole == 'ip:port') {
-                if (config::byKey('market::allowDNS') == 1 && config::byKey('nextdom::url') != '') {
+            if ($_protocol == 'ip:port') {
+                if (config::byKey('market::allowDNS') == 1 && config::byKey('nextdom::url') != '' && config::byKey('network::disableMangement') == 0) {
                     $url = parse_url(config::byKey('nextdom::url'));
                     if (isset($url['host'])) {
                         if (isset($url['port'])) {
@@ -111,8 +117,8 @@ class network {
                 }
                 return config::byKey('externalAddr') . ':' . config::byKey('externalPort', 'core', 80);
             }
-            if ($_protocole == 'proto:dns:port' || $_protocole == 'proto:ip:port') {
-                if (config::byKey('market::allowDNS') == 1 && config::byKey('nextdom::url') != '') {
+            if ($_protocol == 'proto:dns:port' || $_protocol == 'proto:ip:port') {
+                if (config::byKey('market::allowDNS') == 1 && config::byKey('nextdom::url') != '' && config::byKey('network::disableMangement') == 0) {
                     $url = parse_url(config::byKey('nextdom::url'));
                     $return = '';
                     if (isset($url['scheme'])) {
@@ -128,8 +134,8 @@ class network {
                 }
                 return config::byKey('externalProtocol') . config::byKey('externalAddr') . ':' . config::byKey('externalPort', 'core', 80);
             }
-            if ($_protocole == 'proto:dns' || $_protocole == 'proto:ip') {
-                if (config::byKey('market::allowDNS') == 1 && config::byKey('nextdom::url') != '') {
+            if ($_protocol == 'proto:dns' || $_protocol == 'proto:ip') {
+                if (config::byKey('market::allowDNS') == 1 && config::byKey('nextdom::url') != '' && config::byKey('network::disableMangement') == 0) {
                     $url = parse_url(config::byKey('nextdom::url'));
                     $return = '';
                     if (isset($url['scheme'])) {
@@ -145,8 +151,8 @@ class network {
                 }
                 return config::byKey('externalProtocol') . config::byKey('externalAddr');
             }
-            if ($_protocole == 'dns:port') {
-                if (config::byKey('market::allowDNS') == 1 && config::byKey('nextdom::url') != '') {
+            if ($_protocol == 'dns:port') {
+                if (config::byKey('market::allowDNS') == 1 && config::byKey('nextdom::url') != '' && config::byKey('network::disableMangement') == 0) {
                     $url = parse_url(config::byKey('nextdom::url'));
                     if (isset($url['host'])) {
                         if (isset($url['port'])) {
@@ -158,8 +164,8 @@ class network {
                 }
                 return config::byKey('externalAddr') . ':' . config::byKey('externalPort', 'core', 80);
             }
-            if ($_protocole == 'proto') {
-                if (config::byKey('market::allowDNS') == 1 && config::byKey('nextdom::url') != '') {
+            if ($_protocol == 'proto') {
+                if (config::byKey('market::allowDNS') == 1 && config::byKey('nextdom::url') != '' && config::byKey('network::disableMangement') == 0) {
                     $url = parse_url(config::byKey('nextdom::url'));
                     if (isset($url['scheme'])) {
                         return $url['scheme'] . '://';
@@ -167,7 +173,7 @@ class network {
                 }
                 return config::byKey('externalProtocol');
             }
-            if (config::byKey('dns::token') != '' && config::byKey('market::allowDNS') == 1 && config::byKey('nextdom::url') != '') {
+            if (config::byKey('dns::token') != '' && config::byKey('market::allowDNS') == 1 && config::byKey('nextdom::url') != '' && config::byKey('network::disableMangement') == 0) {
                 return trim(config::byKey('nextdom::url') . '/' . trim(config::byKey('externalComplement', 'core', ''), '/'), '/');
             }
             return trim(config::byKey('externalProtocol') . config::byKey('externalAddr') . ':' . config::byKey('externalPort', 'core', 80) . '/' . trim(config::byKey('externalComplement'), '/'), '/');
@@ -204,7 +210,7 @@ class network {
         }
     }
 
-    public static function test($_mode = 'external', $_timeout = 10) {
+    public static function test($_mode = 'external', $_timeout = 5) {
         if (config::byKey('network::disableMangement') == 1) {
             return true;
         }
@@ -295,14 +301,14 @@ class network {
         $openvpn->setConfiguration('remote_port', config::byKey('vpn::port', 'core', 1194));
         $openvpn->setConfiguration('auth_mode', 'password');
         $openvpn->save();
-        if (!file_exists(dirname(__FILE__) . '/../../plugins/openvpn/data')) {
-            shell_exec('mkdir -p ' . dirname(__FILE__) . '/../../plugins/openvpn/data');
+        if (!file_exists(__DIR__ . '/../../plugins/openvpn/data')) {
+            shell_exec('mkdir -p ' . __DIR__ . '/../../plugins/openvpn/data');
         }
-        $path_ca = dirname(__FILE__) . '/../../plugins/openvpn/data/ca_' . $openvpn->getConfiguration('key') . '.crt';
+        $path_ca = __DIR__ . '/../../plugins/openvpn/data/ca_' . $openvpn->getConfiguration('key') . '.crt';
         if (file_exists($path_ca)) {
             unlink($path_ca);
         }
-        copy(dirname(__FILE__) . '/../../script/ca_dns.crt', $path_ca);
+        copy(__DIR__ . '/../../script/ca_dns.crt', $path_ca);
         if (!file_exists($path_ca)) {
             throw new Exception(__('Impossible de créer le fichier  : ', __FILE__) . $path_ca);
         }

@@ -16,7 +16,7 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 header('Access-Control-Allow-Origin: *');
-require_once dirname(__FILE__) . "/../php/core.inc.php";
+require_once __DIR__ . "/../php/core.inc.php";
 if (user::isBan()) {
     header("Status: 404 Not Found");
     header('HTTP/1.0 404 Not Found');
@@ -36,7 +36,6 @@ if (isset($argv)) {
 GLOBAL $_USER_GLOBAL;
 $_USER_GLOBAL = null;
 if (init('type') != '') {
-
     try {
         $type = init('type');
         if ((!nextdom::apiAccess(init('apikey', init('api')), init('plugin', 'core')) &&
@@ -74,7 +73,7 @@ if (init('type') != '') {
                     if (init('plugin', 'core') != 'core' && init('plugin', 'core') != $cmd->getEqType()) {
                         throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 2, IP : ', __FILE__) . getClientIp());
                     }
-                    if ($_USER_GLOBAL !== null && !$cmd->hasRight($_USER_GLOBAL)) {
+                    if ($_USER_GLOBAL != null && !$cmd->hasRight($_USER_GLOBAL)) {
                         continue;
                     }
                     $result[$id] = $cmd->execCmd($_REQUEST);
@@ -89,7 +88,7 @@ if (init('type') != '') {
                 if (init('plugin', 'core') != 'core' && init('plugin', 'core') != $cmd->getEqType()) {
                     throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 3, IP : ', __FILE__) . getClientIp());
                 }
-                if ($_USER_GLOBAL !== null && !$cmd->hasRight($_USER_GLOBAL)) {
+                if ($_USER_GLOBAL != null && !$cmd->hasRight($_USER_GLOBAL)) {
                     throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 4, IP : ', __FILE__) . getClientIp());
                 }
                 log::add('api', 'debug', __('Exécution de : ', __FILE__) . $cmd->getHumanName());
@@ -98,7 +97,7 @@ if (init('type') != '') {
             }
         }
         if ($type != init('plugin', 'core') && init('plugin', 'core') != 'core') {
-            throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 4, IP : ', __FILE__). getClientIp());
+            throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 4, IP : ', __FILE__) . getClientIp());
         }
         if (class_exists($type) && method_exists($type, 'event')) {
             log::add('api', 'info', __('Appels de ', __FILE__) . secureXSS($type) . '::event()');
@@ -134,7 +133,7 @@ if (init('type') != '') {
             if (!is_object($scenario)) {
                 throw new Exception(__('Aucun scénario correspondant à l\'ID : ', __FILE__) . secureXSS(init('id')));
             }
-            if ($_USER_GLOBAL !== null && !$scenario->hasRight('w', $_USER_GLOBAL)) {
+            if ($_USER_GLOBAL != null && !$scenario->hasRight('w', $_USER_GLOBAL)) {
                 throw new Exception(__('Vous n\'avez pas le droit de faire une action sur ce scénario', __FILE__));
             }
             switch (init('action')) {
@@ -184,25 +183,25 @@ if (init('type') != '') {
         if ($type == 'object') {
             log::add('api', 'debug', __('Demande API pour les objets', __FILE__));
             header('Content-Type: application/json');
-            echo json_encode(utils::o2a(object::all()), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE,1024);
+            echo json_encode(utils::o2a(jeeObject::all()), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE, 1024);
             die();
         }
         if ($type == 'eqLogic') {
             log::add('api', 'debug', __('Demande API pour les équipements', __FILE__));
             header('Content-Type: application/json');
-            echo json_encode(utils::o2a(eqLogic::byObjectId(init('object_id'))), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE,1024);
+            echo json_encode(utils::o2a(eqLogic::byObjectId(init('object_id'))), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE, 1024);
             die();
         }
         if ($type == 'command') {
             log::add('api', 'debug', __('Demande API pour les commandes', __FILE__));
             header('Content-Type: application/json');
-            echo json_encode(utils::o2a(cmd::byEqLogicId(init('eqLogic_id'))), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE,1024);
+            echo json_encode(utils::o2a(cmd::byEqLogicId(init('eqLogic_id'))), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE, 1024);
             die();
         }
         if ($type == 'fullData') {
             log::add('api', 'debug', __('Demande API pour les commandes', __FILE__));
             header('Content-Type: application/json');
-            echo json_encode(object::fullData(), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE,1024);
+            echo json_encode(jeeObject::fullData(), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE, 1024);
             die();
         }
         if ($type == 'variable') {
@@ -293,18 +292,7 @@ try {
             session_id($params['sess_id']);
         }
         @session_start();
-        $cache = cache::byKey('current_sessions');
-        $sessions = $cache->getValue(array());
-        if (!isset($sessions[session_id()])) {
-            $sessions[session_id()] = array();
-        }
-        $sessions[session_id()]['datetime'] = date('Y-m-d H:i:s');
-        $sessions[session_id()]['ip'] = getClientIp();
-        if (isset($_SESSION['user']) && is_object($_SESSION['user'])) {
-            $sessions[session_id()]['login'] = $_SESSION['user']->getLogin();
-            $sessions[session_id()]['user_id'] = $_SESSION['user']->getId();
-        }
-        cache::set('current_sessions', $sessions);
+        $_SESSION['ip'] = getClientIp();
         @session_write_close();
         $jsonrpc->setAdditionnalParams('sess_id', session_id());
         if (isset($_SESSION['user']) && is_object($_SESSION['user'])) {
@@ -416,24 +404,24 @@ try {
         }
 
         /*             * ************************Object*************************** */
-        if ($jsonrpc->getMethod() == 'object::all') {
-            $jsonrpc->makeSuccess(utils::o2a(object::all()));
+        if ($jsonrpc->getMethod() == 'jeeObject::all') {
+            $jsonrpc->makeSuccess(utils::o2a(jeeObject::all()));
         }
 
-        if ($jsonrpc->getMethod() == 'object::byId') {
-            $object = object::byId($params['id']);
+        if ($jsonrpc->getMethod() == 'jeeObject::byId') {
+            $object = jeeObject::byId($params['id']);
             if (!is_object($object)) {
                 throw new Exception(__('Objet introuvable : ', __FILE__) . secureXSS($params['id']), -32601);
             }
             $jsonrpc->makeSuccess(utils::o2a($object));
         }
 
-        if ($jsonrpc->getMethod() == 'object::full') {
-            $jsonrpc->makeSuccess(object::fullData());
+        if ($jsonrpc->getMethod() == 'jeeObject::full') {
+            $jsonrpc->makeSuccess(jeeObject::fullData());
         }
 
-        if ($jsonrpc->getMethod() == 'object::fullById') {
-            $object = object::byId($params['id']);
+        if ($jsonrpc->getMethod() == 'jeeObject::fullById') {
+            $object = jeeObject::byId($params['id']);
             if (!is_object($object)) {
                 throw new Exception(__('Objet introuvable : ', __FILE__) . secureXSS($params['id']), -32601);
             }
@@ -450,12 +438,12 @@ try {
             $jsonrpc->makeSuccess($return);
         }
 
-        if ($jsonrpc->getMethod() == 'object::save') {
+        if ($jsonrpc->getMethod() == 'jeeObject::save') {
             if (isset($params['id'])) {
-                $object = object::byId($params['id']);
+                $object = jeeObject::byId($params['id']);
             }
             if (!is_object($object)) {
-                $object = new object();
+                $object = new jeeObject();
             }
             utils::a2o($object, nextdom::fromHumanReadable($params));
             $object->save();
@@ -466,18 +454,18 @@ try {
 
         if ($jsonrpc->getMethod() == 'summary::global') {
             if (isset($params['key'])) {
-                $jsonrpc->makeSuccess(object::getGlobalSummary($params['key']));
+                $jsonrpc->makeSuccess(jeeObject::getGlobalSummary($params['key']));
             }
             $return = array();
             $def = config::byKey('object:summary');
             foreach ($def as $key => $value) {
-                $return[$key] = object::getGlobalSummary($key);
+                $return[$key] = jeeObject::getGlobalSummary($key);
             }
             $jsonrpc->makeSuccess($return);
         }
 
         if ($jsonrpc->getMethod() == 'summary::byId') {
-            $object = object::byId($params['id']);
+            $object = jeeObject::byId($params['id']);
             if (!is_object($object)) {
                 throw new Exception(__('Objet introuvable : ', __FILE__) . secureXSS($params['id']), -32601);
             }
@@ -640,8 +628,8 @@ try {
         }
 
         if ($jsonrpc->getMethod() == 'cmd::execCmd') {
+            $return = array();
             if (is_array($params['id'])) {
-                $return = array();
                 foreach ($params['id'] as $id) {
                     $cmd = cmd::byId($id);
                     if (!is_object($cmd)) {
@@ -660,7 +648,11 @@ try {
                     if ($cmd->getType() == 'action' && $cmd->getConfiguration('actionConfirm') == 1 && $params['confirmAction'] != 1) {
                         throw new Exception(__('Cette action nécessite une confirmation', __FILE__), -32006);
                     }
-                    $return[$id] = array('value' => $cmd->execCmd($params['options']), 'collectDate' => $cmd->getCollectDate());
+                    if ($cmd->getType() == 'info') {
+                        $return[$id] = array('value' => $cmd->execCmd($params['options']), 'collectDate' => $cmd->getCollectDate());
+                    } else {
+                        $cmd->execCmd($params['options']);
+                    }
                 }
             } else {
                 $cmd = cmd::byId($params['id']);
@@ -679,7 +671,11 @@ try {
                 if ($cmd->getType() == 'action' && $cmd->getConfiguration('actionConfirm') == 1 && $params['confirmAction'] != 1) {
                     throw new Exception(__('Cette action nécessite une confirmation', __FILE__), -32006);
                 }
-                $return = array('value' => $cmd->execCmd($params['options']), 'collectDate' => $cmd->getCollectDate());
+                if ($cmd->getType() == 'info') {
+                    $return = array('value' => $cmd->execCmd($params['options']), 'collectDate' => $cmd->getCollectDate());
+                } else {
+                    $cmd->execCmd($params['options']);
+                }
             }
             $jsonrpc->makeSuccess($return);
         }
@@ -753,7 +749,7 @@ try {
                 $jsonrpc->makeSuccess($scenario->stop());
             }
             if ($params['state'] == 'run') {
-                $jsonrpc->makeSuccess($scenario->launch(__('Scénario exécuté sur appel API', __FILE__)));
+                $jsonrpc->makeSuccess($scenario->launch('api', __('Scénario exécuté sur appel API', __FILE__)));
             }
             if ($params['state'] == 'enable') {
                 $scenario->setIsActive(1);

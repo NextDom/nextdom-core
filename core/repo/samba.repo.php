@@ -18,7 +18,7 @@
 
 /* * ***************************Includes********************************* */
 
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
 
 class repo_samba {
     /*     * *************************Attributs****************************** */
@@ -169,7 +169,7 @@ class repo_samba {
         }
     }
 
-    public static function sendBackup($_path) {
+    public static function backup_send($_path) {
         $pathinfo = pathinfo($_path);
         $cmd = 'cd ' . $pathinfo['dirname'] . ';';
         $cmd .= self::makeSambaCommand('cd ' . config::byKey('samba::backup::folder') . ';put ' . $pathinfo['basename']);
@@ -177,15 +177,18 @@ class repo_samba {
         self::cleanBackupFolder();
     }
 
-    public static function listeBackup() {
+    public static function backup_list() {
         $return = array();
         foreach (self::ls(config::byKey('samba::backup::folder')) as $file) {
+            if ($file['filename'] == '.' || $file['filename'] == '..') {
+                continue;
+            }
             $return[] = $file['filename'];
         }
         return $return;
     }
 
-    public static function retoreBackup($_backup) {
+    public static function backup_restore($_backup) {
         $backup_dir = calculPath(config::byKey('backup::path'));
         $cmd = 'cd ' . $backup_dir . ';';
         $cmd .= self::makeSambaCommand('cd ' . config::byKey('samba::backup::folder') . ';get ' . $_backup);

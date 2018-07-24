@@ -1,3 +1,4 @@
+
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -14,66 +15,82 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
- var category_dashabord = getUrlVars('category');
- if(category_dashabord == false){
-    category_dashabord = 'all';
-}
 
-var summary_dashabord = getUrlVars('summary');
-if(summary_dashabord == false){
-    summary_dashabord = '';
-}
+$('#sel_eqLogicCategory').on('change',function(){
+    SEL_CATEGORY = $(this).value();
+    gotoFilterDashboardPage();
+});
 
-$(document).on('click', '.panel-heading span.clickable', function(e){
-    var $this = $(this);
-	if(!$this.hasClass('panel-collapsed')) {
-		$this.parents('.panel').find('.panel-body').slideUp();
-		$this.addClass('panel-collapsed');
-		$this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
-	} else {
-		$this.parents('.panel').find('.panel-body').slideDown();
-		$this.removeClass('panel-collapsed');
-		$this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
-	}
-})
+$('#sel_eqLogicTags').on('change',function(){
+    SEL_TAG = $(this).value();
+    gotoFilterDashboardPage();
+});
+
+function gotoFilterDashboardPage(){
+    var url = 'index.php?v=d&p=dashboard';
+    url += '&category='+SEL_CATEGORY;
+    url += '&tag='+SEL_TAG;
+    if(SEL_OBJECT_ID != ''){
+        url += '&object_id='+SEL_OBJECT_ID;
+    }
+     if(SEL_SUMMARY != ''){
+        url += '&summary='+SEL_SUMMARY;
+    }
+    loadPage(url);
+}
 
 $('#div_pageContainer').on( 'click','.eqLogic-widget .history', function () {
     $('#md_modal2').dialog({title: "Historique"});
     $("#md_modal2").load('index.php?v=d&modal=cmd.history&id=' + $(this).data('cmd_id')).dialog('open');
 });
 
-
-$('#bt_displayScenario').click(function(){
-  var msglist = document.getElementById('bt_displayScenario');
-  	if (msglist.getAttribute('data-status') == "close"){
-  		msglist.setAttribute('data-status', "open");
-        $('#div_displayScenario').animate({right: "0px"});
-        $('.div_displayEquipement').packery();
- 		msglist.setAttribute("class", "fa-flip-horizontal fa fa-angle-double-left fa-2x icon_nextdom_blue");
+$('#bt_displayScenario').on('click', function () {
+    if ($(this).attr('data-display') == 1) {
+        $('#div_displayScenario').hide();
+        if ($('#bt_displayObject').attr('data-display') == 1) {
+            $('#div_displayObject').removeClass('col-lg-8 col-lg-10 col-lg-12 col-md-8 col-md-10 col-md-12 col-sm-8 col-sm-10 col-sm-12').addClass('col-lg-10 col-md-9 col-sm-8');
+        } else {
+            $('#div_displayObject').removeClass('col-lg-8 col-lg-10 col-lg-12 col-lg-8 col-lg-10 col-lg-12 col-md-8 col-md-10 col-md-12 col-sm-8 col-sm-10 col-sm-12').addClass('col-lg-12 col-md-12 col-sm-12');
+        }
+        $('.div_displayEquipement').each(function () {
+            $(this).packery();
+        });
+        $(this).attr('data-display', 0);
     } else {
-       	msglist.setAttribute('data-status', "close");
-        $('#div_displayScenario').animate({right: "-250px"});
+        $('#div_displayScenario').show();
+        if ($('#bt_displayObject').attr('data-display') == 1) {
+            $('#div_displayObject').removeClass('col-lg-8 col-lg-10 col-lg-12 col-lg-8 col-lg-10 col-lg-12 col-md-8 col-md-10 col-md-12 col-sm-8 col-sm-10 col-sm-12').addClass('col-lg-8 col-md-7 col-sm-5');
+        } else {
+            $('#div_displayObject').removeClass('col-lg-8 col-lg-10 col-lg-12 col-lg-8 col-lg-10 col-lg-12 col-md-8 col-md-10 col-md-12 col-sm-8 col-sm-10 col-sm-12').addClass('col-lg-10 col-md-9 col-sm-7');
+        }
         $('.div_displayEquipement').packery();
- 		msglist.setAttribute("class", "fa fa-angle-double-left fa-2x icon_nextdom_blue");
+        $(this).attr('data-display', 1);
     }
 });
 
-
-$('#bt_displayObject').click(function(){
-  var object = document.getElementById('bt_displayObject');
-  	if (object.getAttribute('data-status') == "close"){
-  		object.setAttribute('data-status', "open");
-        $('#div_displayObjectList').animate({left: "0px"});
-        $('.div_displayEquipement').packery();
- 		object.setAttribute("class", "fa-flip-horizontal fa fa-angle-double-right fa-2x icon_nextdom_blue");
+$('#bt_displayObject').on('click', function () {
+    if ($(this).attr('data-display') == 1) {
+        $('#div_displayObjectList').hide();
+        if ($('#bt_displayScenario').attr('data-display') == 1) {
+            $('#div_displayObject').removeClass('col-lg-8 col-lg-10 col-lg-12 col-lg-8 col-lg-10 col-lg-12 col-md-8 col-md-10 col-md-12 col-sm-8 col-sm-10 col-sm-12').addClass('col-lg-10 col-md-9 col-sm-7');
+        } else {
+            $('#div_displayObject').removeClass('col-lg-8 col-lg-10 col-lg-12 col-lg-8 col-lg-10 col-lg-12 col-md-8 col-md-10 col-md-12 col-sm-8 col-sm-10 col-sm-12').addClass('col-lg-12 col-md-12 col-sm-12');
+        }
+        $('.div_displayEquipement').each(function () {
+            $(this).packery();
+        });
+        $(this).attr('data-display', 0);
     } else {
-       	object.setAttribute('data-status', "close");
-        $('#div_displayObjectList').animate({left: "-250px"});
+        $('#div_displayObjectList').show();
+        if ($('#bt_displayScenario').attr('data-display') == 1) {
+            $('#div_displayObject').removeClass('col-lg-8 col-lg-10 col-lg-12 col-lg-8 col-lg-10 col-lg-12 col-md-8 col-md-10 col-md-12 col-sm-8 col-sm-10 col-sm-12').addClass('col-lg-8 col-md-7 col-sm-5');
+        } else {
+            $('#div_displayObject').removeClass('col-lg-8 col-lg-10 col-lg-12 col-lg-8 col-lg-10 col-lg-12 col-md-8 col-md-10 col-md-12 col-sm-8 col-sm-10 col-sm-12').addClass('col-lg-10 col-md-9 col-sm-8');
+        }
         $('.div_displayEquipement').packery();
- 		object.setAttribute("class", "fa fa-angle-double-right fa-2x icon_nextdom_blue");
+        $(this).attr('data-display', 1);
     }
 });
-
 
 function editWidgetMode(_mode,_save){
     if(!isset(_mode)){
@@ -116,10 +133,11 @@ function getObjectHtml(_object_id){
   nextdom.object.toHtml({
     id: _object_id,
     version: 'dashboard',
-    category : category_dashabord,
-    summary : summary_dashabord,
+    category : SEL_CATEGORY,
+    summary : SEL_SUMMARY,
+    tag : SEL_TAG,
     error: function (error) {
-        notify("Erreur", error.message, 'error');
+        $('#div_alert').showAlert({message: error.message, level: 'danger'});
     },
     success: function (html) {
         if($.trim(html) == ''){
@@ -171,7 +189,7 @@ $('#bt_editDashboardWidgetOrder').on('click',function(){
         editWidgetMode(0);
         $(this).css('color','black');
     }else{
-        notify("Info", "{{Vous êtes en mode édition vous pouvez déplacer les widgets, les redimensionner et changer l'ordre des commandes dans les widgets. N'oubliez pas de quitter le mode édition pour sauvegarder}}", 'info');
+       $('#div_alert').showAlert({message: "{{Vous êtes en mode édition vous pouvez déplacer les widgets, les redimensionner et changer l'ordre des commandes dans les widgets. N'oubliez pas de quitter le mode édition pour sauvegarder}}", level: 'info'});
        $(this).attr('data-mode',1);
        editWidgetMode(1);
        $(this).css('color','rgb(46, 176, 75)');

@@ -46,7 +46,7 @@ nextdom.changes = function(){
             eqLogic_update.push(data.result[i].option);
             continue;
         }
-        if(data.result[i].name == 'object::summary::update'){
+        if(data.result[i].name == 'jeeObject::summary::update'){
             object_summary_update.push(data.result[i].option);
             continue;
         }
@@ -63,7 +63,7 @@ if(eqLogic_update.length > 0){
    $('body').trigger('eqLogic::update',[eqLogic_update]);
 }
 if(object_summary_update.length > 0){
-    $('body').trigger('object::summary::update',[object_summary_update]);
+    $('body').trigger('jeeObject::summary::update',[object_summary_update]);
 }
 setTimeout(nextdom.changes, 1);
 },
@@ -117,7 +117,7 @@ nextdom.init = function () {
     $('body').on('eqLogic::update', function (_event,_options) {
         nextdom.eqLogic.refreshValue(_options);
     });
-    $('body').on('object::summary::update', function (_event,_options) {
+    $('body').on('jeeObject::summary::update', function (_event,_options) {
         nextdom.object.summaryUpdate(_options);
     });
 
@@ -176,7 +176,7 @@ nextdom.init = function () {
     $('body').on('message::refreshMessageNumber', function (_event,_options) {
         refreshMessageNumber();
     });
-      $('body').on('update::refreshUpdateNumber', function (_event,_options) {
+    $('body').on('update::refreshUpdateNumber', function (_event,_options) {
         refreshUpdateNumber();
     });
     $('body').on('notify', function (_event,_options) {
@@ -531,118 +531,137 @@ nextdom.getTimelineEvents = function(_params) {
 
 nextdom.removeTimelineEvents = function(_params) {
  var paramsRequired = [];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/nextdom.ajax.php';
-    paramsAJAX.data = {
-        action: 'removeTimelineEvents'
-    };
-    $.ajax(paramsAJAX);
+ var paramsSpecifics = {};
+ try {
+    nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
+} catch (e) {
+    (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
+    return;
+}
+var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
+var paramsAJAX = nextdom.private.getParamsAJAX(params);
+paramsAJAX.url = 'core/ajax/nextdom.ajax.php';
+paramsAJAX.data = {
+    action: 'removeTimelineEvents'
+};
+$.ajax(paramsAJAX);
 };
 
 
 nextdom.getFileFolder = function(_params) {
  var paramsRequired = ['type','path'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/nextdom.ajax.php';
-    paramsAJAX.data = {
-        action: 'getFileFolder',
-        type : _params.type,
-        path : _params.path,
-    };
-    $.ajax(paramsAJAX);
+ var paramsSpecifics = {};
+ try {
+    nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
+} catch (e) {
+    (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
+    return;
+}
+var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
+var paramsAJAX = nextdom.private.getParamsAJAX(params);
+paramsAJAX.url = 'core/ajax/nextdom.ajax.php';
+paramsAJAX.data = {
+    action: 'getFileFolder',
+    type : _params.type,
+    path : _params.path,
+};
+$.ajax(paramsAJAX);
 };
 
 nextdom.getFileContent = function(_params) {
  var paramsRequired = ['path'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/nextdom.ajax.php';
-    paramsAJAX.data = {
-        action: 'getFileContent',
-        path : _params.path,
-    };
-    $.ajax(paramsAJAX);
+ var paramsSpecifics = {};
+ try {
+    nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
+} catch (e) {
+    (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
+    return;
+}
+var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
+var paramsAJAX = nextdom.private.getParamsAJAX(params);
+paramsAJAX.url = 'core/ajax/nextdom.ajax.php';
+paramsAJAX.data = {
+    action: 'getFileContent',
+    path : _params.path,
+};
+$.ajax(paramsAJAX);
 };
 
 nextdom.setFileContent = function(_params) {
  var paramsRequired = ['path','content'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/nextdom.ajax.php';
-    paramsAJAX.data = {
-        action: 'setFileContent',
-        path : _params.path,
-        content : _params.content,
-    };
-    $.ajax(paramsAJAX);
+ var paramsSpecifics = {};
+ try {
+    nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
+} catch (e) {
+    (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
+    return;
+}
+var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
+var paramsAJAX = nextdom.private.getParamsAJAX(params);
+paramsAJAX.url = 'core/ajax/nextdom.ajax.php';
+paramsAJAX.data = {
+    action: 'setFileContent',
+    path : _params.path,
+    content : _params.content,
+};
+$.ajax(paramsAJAX);
 };
 
 
 nextdom.deleteFile = function(_params) {
  var paramsRequired = ['path'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/nextdom.ajax.php';
-    paramsAJAX.data = {
-        action: 'deleteFile',
-        path : _params.path,
-    };
-    $.ajax(paramsAJAX);
+ var paramsSpecifics = {};
+ try {
+    nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
+} catch (e) {
+    (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
+    return;
+}
+var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
+var paramsAJAX = nextdom.private.getParamsAJAX(params);
+paramsAJAX.url = 'core/ajax/nextdom.ajax.php';
+paramsAJAX.data = {
+    action: 'deleteFile',
+    path : _params.path,
+};
+$.ajax(paramsAJAX);
 };
 
 nextdom.createFile = function(_params) {
  var paramsRequired = ['path','name'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/nextdom.ajax.php';
-    paramsAJAX.data = {
-        action: 'createFile',
-        path : _params.path,
-        name : _params.name,
-    };
-    $.ajax(paramsAJAX);
+ var paramsSpecifics = {};
+ try {
+    nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
+} catch (e) {
+    (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
+    return;
+}
+var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
+var paramsAJAX = nextdom.private.getParamsAJAX(params);
+paramsAJAX.url = 'core/ajax/nextdom.ajax.php';
+paramsAJAX.data = {
+    action: 'createFile',
+    path : _params.path,
+    name : _params.name,
+};
+$.ajax(paramsAJAX);
+};
+
+
+nextdom.emptyRemoveHistory = function(_params) {
+ var paramsRequired = [];
+ var paramsSpecifics = {};
+ try {
+    nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
+} catch (e) {
+   (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
+   return;
+}
+var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
+var paramsAJAX = nextdom.private.getParamsAJAX(params);
+paramsAJAX.url = 'core/ajax/nextdom.ajax.php';
+paramsAJAX.data = {
+    action: 'emptyRemoveHistory',
+};
+$.ajax(paramsAJAX);
 };

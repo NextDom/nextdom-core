@@ -17,7 +17,7 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
 
 class interactQuery {
     /*     * *************************Attributs****************************** */
@@ -227,7 +227,7 @@ class interactQuery {
         $return[$_type] = null;
         $synonyms = self::getQuerySynonym($return['query'], $_type);
         if ($_type == 'object') {
-            $objects = object::all();
+            $objects = jeeObject::all();
         } elseif ($_type == 'eqLogic') {
             if ($_data !== null && is_object($_data['object'])) {
                 $objects = $_data['object']->getEqLogic();
@@ -339,7 +339,7 @@ class interactQuery {
                 $value = $data['object']->getSummary($data['summary']['key']);
             }
             if (trim($value) === '') {
-                $value = object::getGlobalSummary($data['summary']['key']);
+                $value = jeeObject::getGlobalSummary($data['summary']['key']);
             }
             if (trim($value) === '') {
                 return '';

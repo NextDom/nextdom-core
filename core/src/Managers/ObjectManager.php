@@ -95,7 +95,7 @@ class ObjectManager
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . ' ';
         if ($onlyVisible) {
-            $sql .= ' WhERE isVisible = 1';
+            $sql .= ' WHERE isVisible = 1';
         }
         $sql .= ' ORDER BY position,name,father_id';
         return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
