@@ -39,7 +39,7 @@ use NextDom\Managers\EqLogicManager;
 class ObjectManager
 {
     const DB_CLASS_NAME = '`object`';
-    const CLASS_NAME = 'object';
+    const CLASS_NAME = 'jeeObject';
 
     /**
      * Get an object by with his id.
