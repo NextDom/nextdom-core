@@ -123,7 +123,7 @@ class EqLogicManager
     /**
      * Get all eqLogics linked to object
      *
-     * @param $objectId Object id
+     * @param mixed $objectId Object id
      * @param bool $onlyEnable Filter only enabled
      * @param bool $onlyVisible Filter only visible
      * @param null $eqTypeName

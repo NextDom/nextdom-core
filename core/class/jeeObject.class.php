@@ -16,9 +16,12 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use NextDom\Managers\CmdManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\EqLogicManager;
+use NextDom\Managers\ScenarioManager;
 
-require_once __DIR__ . '/../../core/php/core.inc.php';
+require_once NEXTDOM_ROOT.'/core/php/core.inc.php';
 
 class jeeObject {
     private $id;
@@ -77,31 +80,47 @@ class jeeObject {
         return JeeObjectManager::createSummaryToVirtual($_key);
     }
 
-
-    /*     * *********************Méthodes d'instance************************* */
-
+    /**
+     * Get table name for stored object in database
+     * TODO: A supprimer
+     * @return string
+     */
     public function getTableName() {
         return 'object';
     }
 
-    public function checkTreeConsistency($_fathers = array()) {
+    /**
+     * Check that the object tree does not have a loop.
+     *
+     * @param array $ancestors List of all objects ancestors
+     *
+     * @throws Exception
+     */
+    public function checkTreeConsistency($ancestors = array()) {
         $father = $this->getFather();
-        if (!is_object($father)) {
-            return;
-        }
-        if (in_array($this->getFather_id(), $_fathers)) {
-            throw new Exception(__('Problème dans l\'arbre des objets', __FILE__));
-        }
-        $_fathers[] = $this->getId();
+        // If object as a father
+        if (is_object($father)) {
+            // Check if the object is in ancestors (loop)
+            if (in_array($this->getFather_id(), $ancestors)) {
+                throw new \Exception(__('Problème dans l\'arbre des objets', __FILE__));
+            }
+            $ancestors[] = $this->getId();
 
-        $father->checkTreeConsistency($_fathers);
+            $father->checkTreeConsistency($ancestors);
+        }
     }
 
+    /**
+     * Method called before save. Check error and set default values
+     *
+     * @throws Exception
+     */
     public function preSave() {
-        if (is_numeric($this->getFather_id()) && $this->getFather_id() == $this->getId()) {
+        if (is_numeric($this->getFather_id()) && $this->getFather_id() === $this->getId()) {
             throw new Exception(__('L\'objet ne peut pas être son propre père', __FILE__));
         }
         $this->checkTreeConsistency();
+
         $this->setConfiguration('parentNumber', $this->parentNumber());
         if ($this->getConfiguration('tagColor') == '') {
             $this->setConfiguration('tagColor', '#000000');
@@ -117,64 +136,86 @@ class jeeObject {
         }
     }
 
+    /**
+     * Save object in database
+     *
+     * @return bool True if save works
+     */
     public function save() {
         return DB::save($this);
     }
 
-    public function getChild($_visible = true) {
+    /**
+     * Get direct chidren
+     *
+     * @param bool $visible Filter only visible
+     *
+     * @return array|mixed|null
+     *
+     * @throws Exception
+     */
+    public function getChild($visible = true) {
         $values = array(
             'id' => $this->id,
         );
         $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
                 FROM object
                 WHERE father_id=:id';
-        if ($_visible) {
+        if ($visible) {
             $sql .= ' AND isVisible=1 ';
         }
         $sql .= ' ORDER BY position';
         return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
     }
 
+    /**
+     * Get tree under this object
+     *
+     * @return array
+     *
+     * @throws Exception
+     */
     public function getChilds() {
-        $return = array();
+        $tree = array();
         foreach ($this->getChild() as $child) {
-            $return[] = $child;
-            $return = array_merge($return, $child->getChilds());
+            $tree[] = $child;
+            $tree = array_merge($tree, $child->getChilds());
         }
-        return $return;
+        return $tree;
     }
 
-    public function getEqLogic($_onlyEnable = true, $_onlyVisible = false, $_eqType_name = null, $_logicalId = null, $_searchOnchild = false) {
-        $eqLogics = eqLogic::byObjectId($this->getId(), $_onlyEnable, $_onlyVisible, $_eqType_name, $_logicalId);
+
+    public function getEqLogic($onlyEnable = true, $onlyVisible = false, $eqTypeName = null, $logicalId = null, $searchOnchild = false) {
+        $eqLogics = EqLogicManager::byObjectId($this->getId(), $onlyEnable, $onlyVisible, $eqTypeName, $logicalId);
         if (is_array($eqLogics)) {
             foreach ($eqLogics as &$eqLogic) {
                 $eqLogic->setObject($this);
             }
         }
-        if ($_searchOnchild) {
-            $child_object = jeeObject::buildTree($this);
+        if ($searchOnchild) {
+            $child_object = JeeObjectManager::buildTree($this);
             if (count($child_object) > 0) {
                 foreach ($child_object as $object) {
-                    $eqLogics = array_merge($eqLogics, $object->getEqLogic($_onlyEnable, $_onlyVisible, $_eqType_name, $_logicalId));
+                    $eqLogics = array_merge($eqLogics, $object->getEqLogic($onlyEnable, $onlyVisible, $eqTypeName, $logicalId));
                 }
             }
         }
         return $eqLogics;
     }
 
-    public function getEqLogicBySummary($_summary = '', $_onlyEnable = true, $_onlyVisible = false, $_eqType_name = null, $_logicalId = null) {
+    public function getEqLogicBySummary($summary = '', $onlyEnable = true, $onlyVisible = false, $eqTypeName = null, $logicalId = null) {
         $def = config::byKey('object:summary');
-        if ($_summary == '' || !isset($def[$_summary])) {
+        if ($summary == '' || !isset($def[$summary])) {
             return null;
         }
         $summaries = $this->getConfiguration('summary');
-        if (!isset($summaries[$_summary])) {
+        if (!isset($summaries[$summary])) {
             return array();
         }
-        $eqLogics = eqLogic::byObjectId($this->getId(), $_onlyEnable, $_onlyVisible, $_eqType_name, $_logicalId);
+        $eqLogics = EqLogicManager::byObjectId($this->getId(), $onlyEnable, $onlyVisible, $eqTypeName, $logicalId);
         $eqLogics_id = array();
-        foreach ($summaries[$_summary] as $infos) {
-            $cmd = cmd::byId(str_replace('#', '', $infos['cmd']));
+        foreach ($summaries[$summary] as $infos) {
+            $cmd = CmdManager::byId(str_replace('#', '', $infos['cmd']));
             if (is_object($cmd)) {
                 $eqLogics_id[$cmd->getEqLogic_id()] = $cmd->getEqLogic_id();
             }
@@ -191,8 +232,8 @@ class jeeObject {
         return $return;
     }
 
-    public function getScenario($_onlyEnable = true, $_onlyVisible = false) {
-        return scenario::byObjectId($this->getId(), $_onlyEnable, $_onlyVisible);
+    public function getScenario($onlyEnable = true, $onlyVisible = false) {
+        return ScenarioManager::byObjectId($this->getId(), $onlyEnable, $onlyVisible);
     }
 
     public function preRemove() {
@@ -205,7 +246,7 @@ class jeeObject {
     }
 
     public function getFather() {
-        return self::byId($this->getFather_id());
+        return JeeObjectManager::byId($this->getFather_id());
     }
 
     public function parentNumber() {
@@ -224,9 +265,9 @@ class jeeObject {
         return 0;
     }
 
-    public function getHumanName($_tag = false, $_prettify = false) {
-        if ($_tag) {
-            if ($_prettify) {
+    public function getHumanName($tag = false, $prettify = false) {
+        if ($tag) {
+            if ($prettify) {
                 if ($this->getDisplay('tagColor') != '') {
                     return '<span class="label" style="text-shadow : none;background-color:' . $this->getDisplay('tagColor') . ' !important;color:' . $this->getDisplay('tagTextColor', 'white') . ' !important">' . $this->getDisplay('icon') . ' ' . $this->getName() . '</span>';
                 } else {
@@ -240,17 +281,17 @@ class jeeObject {
         }
     }
 
-    public function getSummary($_key = '', $_raw = false) {
+    public function getSummary($key = '', $raw = false) {
         $def = config::byKey('object:summary');
-        if ($_key == '' || !isset($def[$_key])) {
+        if ($key == '' || !isset($def[$key])) {
             return null;
         }
         $summaries = $this->getConfiguration('summary');
-        if (!isset($summaries[$_key])) {
+        if (!isset($summaries[$key])) {
             return null;
         }
         $values = array();
-        foreach ($summaries[$_key] as $infos) {
+        foreach ($summaries[$key] as $infos) {
             if (isset($infos['enable']) && $infos['enable'] == 0) {
                 continue;
             }
@@ -258,7 +299,7 @@ class jeeObject {
             if (isset($infos['invert']) && $infos['invert'] == 1) {
                 $value = !$value;
             }
-            if (isset($def[$_key]['count']) && $def[$_key]['count'] == 'binary' && $value > 1) {
+            if (isset($def[$key]['count']) && $def[$key]['count'] == 'binary' && $value > 1) {
                 $value = 1;
             }
             $values[] = $value;
@@ -266,26 +307,26 @@ class jeeObject {
         if (count($values) == 0) {
             return null;
         }
-        if ($_raw) {
+        if ($raw) {
             return $values;
         }
-        if ($def[$_key]['calcul'] == 'text') {
+        if ($def[$key]['calcul'] == 'text') {
             return trim(implode(',', $values), ',');
         }
-        return round(nextdom::calculStat($def[$_key]['calcul'], $values), 1);
+        return round(nextdom::calculStat($def[$key]['calcul'], $values), 1);
     }
 
-    public function getHtmlSummary($_version = 'desktop') {
-        $return = '<span class="objectSummary' . $this->getId() . '" data-version="' . $_version . '">';
+    public function getHtmlSummary($version = 'desktop') {
+        $return = '<span class="objectSummary' . $this->getId() . '" data-version="' . $version . '">';
         foreach (config::byKey('object:summary') as $key => $value) {
-            if ($this->getConfiguration('summary::hide::' . $_version . '::' . $key, 0) == 1) {
+            if ($this->getConfiguration('summary::hide::' . $version . '::' . $key, 0) == 1) {
                 continue;
             }
             $result = $this->getSummary($key);
             if ($result !== null) {
                 $style = '';
-                if ($_version == 'desktop') {
-                    $style = 'color:' . $this->getDisplay($_version . '::summaryTextColor', '#000000') . ';';
+                if ($version == 'desktop') {
+                    $style = 'color:' . $this->getDisplay($version . '::summaryTextColor', '#000000') . ';';
                 }
                 $allowDisplayZero = $value['allowDisplayZero'];
                 if ($value['calcul'] == 'text') {
@@ -300,24 +341,24 @@ class jeeObject {
         return trim($return) . '</span>';
     }
 
-    public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = null) {
-        if ($_drill === null) {
-            $_drill = config::byKey('graphlink::jeeObject::drill');
+    public function getLinkData(&$data = array('node' => array(), 'link' => array()), $level = 0, $drill = null) {
+        if ($drill === null) {
+            $drill = config::byKey('graphlink::jeeObject::drill');
         }
-        if (isset($_data['node']['object' . $this->getId()])) {
+        if (isset($data['node']['object' . $this->getId()])) {
             return;
         }
-        $_level++;
-        if ($_level > $_drill) {
-            return $_data;
+        $level++;
+        if ($level > $drill) {
+            return $data;
         }
         $icon = findCodeIcon($this->getDisplay('icon'));
-        $_data['node']['object' . $this->getId()] = array(
+        $data['node']['object' . $this->getId()] = array(
             'id' => 'object' . $this->getId(),
             'name' => $this->getName(),
             'icon' => $icon['icon'],
             'fontfamily' => $icon['fontfamily'],
-            'fontweight' => ($_level == 1) ? 'bold' : 'normal',
+            'fontweight' => ($level == 1) ? 'bold' : 'normal',
             'fontsize' => '4em',
             'texty' => -35,
             'textx' => 0,
@@ -325,14 +366,14 @@ class jeeObject {
             'url' => 'index.php?v=d&p=object&id=' . $this->getId(),
         );
         $use = $this->getUse();
-        addGraphLink($this, 'object', $this->getEqLogic(), 'eqLogic', $_data, $_level, $_drill, array('dashvalue' => '1,0', 'lengthfactor' => 0.6));
-        addGraphLink($this, 'object', $use['cmd'], 'cmd', $_data, $_level, $_drill);
-        addGraphLink($this, 'object', $use['scenario'], 'scenario', $_data, $_level, $_drill);
-        addGraphLink($this, 'object', $use['eqLogic'], 'eqLogic', $_data, $_level, $_drill);
-        addGraphLink($this, 'object', $use['dataStore'], 'dataStore', $_data, $_level, $_drill);
-        addGraphLink($this, 'object', $this->getChild(), 'object', $_data, $_level, $_drill, array('dashvalue' => '1,0', 'lengthfactor' => 0.6));
-        addGraphLink($this, 'object', $this->getScenario(), 'scenario', $_data, $_level, $_drill, array('dashvalue' => '1,0', 'lengthfactor' => 0.6));
-        return $_data;
+        addGraphLink($this, 'object', $this->getEqLogic(), 'eqLogic', $data, $level, $drill, array('dashvalue' => '1,0', 'lengthfactor' => 0.6));
+        addGraphLink($this, 'object', $use['cmd'], 'cmd', $data, $level, $drill);
+        addGraphLink($this, 'object', $use['scenario'], 'scenario', $data, $level, $drill);
+        addGraphLink($this, 'object', $use['eqLogic'], 'eqLogic', $data, $level, $drill);
+        addGraphLink($this, 'object', $use['dataStore'], 'dataStore', $data, $level, $drill);
+        addGraphLink($this, 'object', $this->getChild(), 'object', $data, $level, $drill, array('dashvalue' => '1,0', 'lengthfactor' => 0.6));
+        addGraphLink($this, 'object', $this->getScenario(), 'scenario', $data, $level, $drill, array('dashvalue' => '1,0', 'lengthfactor' => 0.6));
+        return $data;
     }
 
     public function getUse() {
@@ -340,87 +381,209 @@ class jeeObject {
         return nextdom::getTypeUse($json);
     }
 
-    /*     * **********************Getteur Setteur*************************** */
-
+    /**
+     * Get object id
+     *
+     * @return int|null Object id
+     */
     public function getId() {
         return $this->id;
     }
 
-    public function getName() {
+    /**
+     * Get object name
+     *
+     * @return string Object name
+     */
+    public function getName(): string {
         return $this->name;
     }
 
-    public function getFather_id($_default = null) {
+    /**
+     * Get father object id
+     *
+     * @param int|null $default Default value if object as no father
+     *
+     * @return int|null Father object id
+     */
+    public function getFather_id($default = null) {
         if ($this->father_id == '' || !is_numeric($this->father_id)) {
-            return $_default;
+            return $default;
         }
         return $this->father_id;
     }
 
-    public function getIsVisible($_default = null) {
+    /**
+     * Get visibility value
+     *
+     * @param null $default Default value if state is not set
+     *
+     * @return int|null
+     */
+    public function getIsVisible($default = null) {
         if ($this->isVisible == '' || !is_numeric($this->isVisible)) {
-            return $_default;
+            return $default;
         }
         return $this->isVisible;
     }
 
+    /**
+     * Get visibility state
+     *
+     * @return bool True if the object is visible
+     */
+    public function isVisible(): bool {
+        if ($this->getIsVisible() === 1)
+            return true;
+        return false;
+    }
+
+    /**
+     * Set object id
+     *
+     * @param int|null $id Object Id
+     *
+     * @return $this
+     */
     public function setId($id) {
         $this->id = $id;
         return $this;
     }
 
-    public function setName($name) {
+    /**
+     * Set object name
+     *
+     * @param string $name Object name
+     *
+     * @return $this
+     */
+    public function setName(string $name) {
         $name = str_replace(array('&', '#', ']', '[', '%'), '', $name);
         $this->name = $name;
         return $this;
     }
 
+    /**
+     * Set father object
+     *
+     * @param int|null $father_id Set father object id or null for root object
+     *
+     * @return $this
+     */
     public function setFather_id($father_id = null) {
         $this->father_id = ($father_id == '') ? null : $father_id;
         return $this;
     }
 
+    /**
+     * Set visibility value
+     *
+     * @param int $isVisible 1 if visible, 0 for not visible
+     *
+     * @return $this
+     */
     public function setIsVisible($isVisible) {
         $this->isVisible = $isVisible;
         return $this;
     }
 
-    public function getPosition($_default = null) {
+    /**
+     * Get object position
+     *
+     * @param int|null $default Default value if position is not set
+     *
+     * @return int|null Object position
+     */
+    public function getPosition($default = null) {
         if ($this->position == '' || !is_numeric($this->position)) {
-            return $_default;
+            return $default;
         }
         return $this->position;
     }
 
+    /**
+     * Set position
+     * TODO: Position dans ?
+     *
+     * @param int $position Object position
+     *
+     * @return $this
+     */
     public function setPosition($position) {
         $this->position = $position;
         return $this;
     }
 
-    public function getConfiguration($_key = '', $_default = '') {
-        return utils::getJsonAttr($this->configuration, $_key, $_default);
+    /**
+     * Get configuration information by key
+     * TODO: Position dans ?
+     * @param string $key Name of the information
+     * @param mixed $default Default value
+     *
+     * @return mixed Value of the asked information or $default.
+     */
+    public function getConfiguration(string $key = '', $default = '') {
+        return utils::getJsonAttr($this->configuration, $key, $default);
     }
 
-    public function setConfiguration($_key, $_value) {
-        $this->configuration = utils::setJsonAttr($this->configuration, $_key, $_value);
+    /**
+     * Set configuration information by key
+     *
+     * @param string $key Name of the information
+     * @param mixed $value Value of this information
+     *
+     * @return $this
+     */
+    public function setConfiguration(string $key, $value) {
+        $this->configuration = utils::setJsonAttr($this->configuration, $key, $value);
         return $this;
     }
 
-    public function getDisplay($_key = '', $_default = '') {
-        return utils::getJsonAttr($this->display, $_key, $_default);
+    /**
+     * Get display information by key
+     *
+     * @param string $key Name of the information
+     * @param mixed $default Value of this information
+     *
+     * @return mixed Value of the asked information or $default
+     */
+    public function getDisplay(string $key = '', $default = '') {
+        return utils::getJsonAttr($this->display, $key, $default);
     }
 
-    public function setDisplay($_key, $_value) {
-        $this->display = utils::setJsonAttr($this->display, $_key, $_value);
+    /**
+     * Set display information by key
+     *
+     * @param string $key Name of the information
+     * @param mixed $value value of this information
+     *
+     * @return $this
+     */
+    public function setDisplay(string $key, $value) {
+        $this->display = utils::setJsonAttr($this->display, $key, $value);
         return $this;
     }
 
-    public function getCache($_key = '', $_default = '') {
-        return utils::getJsonAttr(cache::byKey('objectCacheAttr' . $this->getId())->getValue(), $_key, $_default);
+    /**
+     * Get cache information of this object
+     *
+     * @param string $key Name of the information
+     * @param mixed $default Default value
+     *
+     * @return mixed Value of the asked information or $default
+     */
+    public function getCache(string $key = '', $default = '') {
+        return utils::getJsonAttr(cache::byKey('objectCacheAttr' . $this->getId())->getValue(), $key, $default);
     }
 
-    public function setCache($_key, $_value = null) {
-        cache::set('objectCacheAttr' . $this->getId(), utils::setJsonAttr(cache::byKey('objectCacheAttr' . $this->getId())->getValue(), $_key, $_value));
+    /**
+     * Store information of this object in cache
+     *
+     * @param string $key Name of the information to store
+     * @param mixed $value Default value
+     */
+    public function setCache(string $key, $value = null) {
+        cache::set('objectCacheAttr' . $this->getId(), utils::setJsonAttr(cache::byKey('objectCacheAttr' . $this->getId())->getValue(), $key, $value));
     }
 
 }
