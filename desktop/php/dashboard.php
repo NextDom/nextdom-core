@@ -2,24 +2,24 @@
 
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\ScenarioManager;
 
 Status::initConnectState();
 Status::isConnectedAdminOrFail();
 
 if (Utils::init('object_id') == '') {
-    $object = ObjectManager::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
+    $object = JeeObjectManager::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
 } else {
-    $object = ObjectManager::byId(Utils::init('object_id'));
+    $object = JeeObjectManager::byId(Utils::init('object_id'));
 }
 if (!is_object($object)) {
-    $object = ObjectManager::rootObject();
+    $object = JeeObjectManager::rootObject();
 }
 if (!is_object($object)) {
     throw new \Exception('{{Aucun objet racine trouvé. Pour en créer un, allez dans Outils -> Objets.<br/> Si vous ne savez pas quoi faire ou que c\'est la première fois que vous utilisez NextDom, n\'hésitez pas à consulter cette <a href="https://nextdom.github.io/documentation/premiers-pas/fr_FR/index" target="_blank">page</a> et celle-là si vous avez un pack : <a href="https://nextdom.com/start" target="_blank">page</a>}}');
 }
-$childrenObjets = ObjectManager::buildTree($object);
+$childrenObjets = JeeObjectManager::buildTree($object);
 $displayScenarioByDefault = false;
 if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
     $displayScenarioByDefault = true;
@@ -100,7 +100,7 @@ if ($_SESSION['user']->getOptions('displayObjetByDefault') == 1) {
                 <input class="filter form-control input-sm" placeholder="{{Rechercher}}"/>
             </li>
             <?php
-            $allObject = ObjectManager::buildTree(null, true);
+            $allObject = JeeObjectManager::buildTree(null, true);
             foreach ($allObject as $childObject) {
                 $margin = 5 * $childObject->getConfiguration('parentNumber');
                 if ($childObject->getId() == $object->getId()) {

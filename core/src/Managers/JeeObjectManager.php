@@ -36,7 +36,7 @@ namespace NextDom\Managers;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
 
-class ObjectManager
+class JeeObjectManager
 {
     const DB_CLASS_NAME = '`object`';
     const CLASS_NAME = 'jeeObject';

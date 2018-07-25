@@ -16,13 +16,11 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use NextDom\Managers\ObjectManager;
-/* * ***************************Includes********************************* */
+use NextDom\Managers\JeeObjectManager;
+
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
 class jeeObject {
-    /*     * *************************Attributs****************************** */
-
     private $id;
     private $name;
     private $father_id = null;
@@ -31,53 +29,52 @@ class jeeObject {
     private $configuration;
     private $display;
 
-    /*     * ***********************Méthodes statiques*************************** */
     public static function byId($_id) {
-        return ObjectManager::byId($_id);
+        return JeeObjectManager::byId($_id);
     }
 
     public static function byName($_name) {
-        return ObjectManager::byName($_name);
+        return JeeObjectManager::byName($_name);
     }
 
     public static function all($_onlyVisible = false) {
-        return ObjectManager::all($_onlyVisible);
+        return JeeObjectManager::all($_onlyVisible);
     }
 
     public static function rootObject($_all = false, $_onlyVisible = false) {
-        return ObjectManager::rootObject($_all, $_onlyVisible);
+        return JeeObjectManager::rootObject($_all, $_onlyVisible);
     }
 
     public static function buildTree($_object = null, $_visible = true) {
-        return ObjectManager::buildTree($_object, $_visible);
+        return JeeObjectManager::buildTree($_object, $_visible);
     }
 
     public static function fullData($_restrict = array()) {
-        return ObjectManager::fullData($_restrict);
+        return JeeObjectManager::fullData($_restrict);
     }
 
     public static function searchConfiguration($_search) {
-        return ObjectManager::searchConfiguration($_search);
+        return JeeObjectManager::searchConfiguration($_search);
     }
 
     public static function deadCmd() {
-        return ObjectManager::deadCmd();
+        return JeeObjectManager::deadCmd();
     }
 
     public static function checkSummaryUpdate($_cmd_id) {
-        return ObjectManager::checkSummaryUpdate($_cmd_id);
+        return JeeObjectManager::checkSummaryUpdate($_cmd_id);
     }
 
     public static function getGlobalSummary($_key) {
-        return ObjectManager::getGlobalSummary($_key);
+        return JeeObjectManager::getGlobalSummary($_key);
     }
 
     public static function getGlobalHtmlSummary($_key) {
-        return ObjectManager::getGlobalHtmlSummary($_key);
+        return JeeObjectManager::getGlobalHtmlSummary($_key);
     }
 
     public static function createSummaryToVirtual($_key = '') {
-        return ObjectManager::createSummaryToVirtual($_key);
+        return JeeObjectManager::createSummaryToVirtual($_key);
     }
 
 

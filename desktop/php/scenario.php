@@ -4,7 +4,7 @@
 
 use NextDom\Helpers\Status;
 use NextDom\Managers\ScenarioManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 
 /**
  * Show HTML button for scenario
@@ -367,7 +367,7 @@ if (is_array($scenarioListGroup)) {
                                     <select class="scenarioAttr form-control" data-l1key="object_id">
                                         <option value="">{{Aucun}}</option>
                                         <?php
-                                        foreach (ObjectManager::all() as $object) {
+                                        foreach (JeeObjectManager::all() as $object) {
                                             echo '<option value="<?php echo $object->getId(); ?>"><?php echo $object->getName(); ?></option>';
                                         }
                                         ?>

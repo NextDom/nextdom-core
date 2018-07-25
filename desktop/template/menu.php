@@ -18,7 +18,7 @@
 
 use NextDom\Helpers\PrepareView;
 use NextDom\Helpers\Status;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\UpdateManager;
 
 global $homeLink;
@@ -59,7 +59,7 @@ if ($nbUpdate == 0) {
                                 <a data-toggle="dropdown" id="bt_gotoDashboard" href="index.php?v=d&p=dashboard"><i class="fa fa-dashboard"></i> {{Dashboard}}</a>
                                 <ul id="dashboard-submenu" class="dropdown-menu scrollable-menu" role="menu">
                                     <?php
-                                    foreach (ObjectManager::buildTree(null, false) as $objectLi) {
+                                    foreach (JeeObjectManager::buildTree(null, false) as $objectLi) {
                                         echo '<li><a href="index.php?v=d&p=dashboard&object_id=' . $objectLi->getId() . '">' . $objectLi->getHumanName(true) . '</a></li>';
                                     }
                                     ?>
@@ -198,7 +198,7 @@ if ($nbUpdate == 0) {
                         </a>
 
                         <a href="#" class="default-cursor">
-                            <?php echo ObjectManager::getGlobalHtmlSummary(); ?>
+                            <?php echo JeeObjectManager::getGlobalHtmlSummary(); ?>
                         </a>
 
                     </li>
