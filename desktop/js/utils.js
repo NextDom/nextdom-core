@@ -295,7 +295,7 @@ if (isset(nextdom_langage)) {
         plugin: $(this).attr('data-plugin'),
         page: $(this).attr('data-page'),
         error: function(error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function(url) {
            window.open(url,'_blank');
@@ -503,7 +503,7 @@ function showHelpModal(_name, _plugin) {
 function refreshMessageNumber() {
     nextdom.message.number({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success : function (_number) {
             MESSAGE_NUMBER = _number;
@@ -520,7 +520,7 @@ function refreshMessageNumber() {
 function refreshUpdateNumber() {
     nextdom.update.number({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success : function (_number) {
             UPDATE_NUMBER = _number;
@@ -715,7 +715,7 @@ function saveWidgetDisplay(_params){
      nextdom.eqLogic.setOrder({
         eqLogics: eqLogics,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         }
     });
  }
@@ -736,14 +736,14 @@ function saveWidgetDisplay(_params){
    nextdom.view.setEqLogicOrder({
     eqLogics: eqLogics,
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     }
 });
 }
 nextdom.cmd.setOrder({
     cmds: cmds,
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     }
 });
 }
@@ -825,7 +825,7 @@ if( $('.eqLogic-widget.ui-draggable').length > 0){
                 display : {'layout::dashboard' : 'default'},
             },
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             }
         });
      }
@@ -844,7 +844,7 @@ if( $('.eqLogic-widget.ui-draggable').length > 0){
             display : {'layout::dashboard' : 'table'},
         },
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         }
     });
  }
@@ -864,7 +864,7 @@ addTableColumn: {
                 display : {'layout::dashboard::table::nbColumn' : parseInt($(this).find('table.tableCmd').attr('data-column')) + 1},
             },
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             }
         });
     }
@@ -883,7 +883,7 @@ addTableLine: {
                 display : {'layout::dashboard::table::nbLine' : parseInt($(this).find('table.tableCmd').attr('data-line')) + 1},
             },
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             }
         });
     }
@@ -902,7 +902,7 @@ removeTableColumn: {
                 display : {'layout::dashboard::table::nbColumn' : parseInt($(this).find('table.tableCmd').attr('data-column')) - 1},
             },
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             }
         });
     }
@@ -921,7 +921,7 @@ removeTableLine: {
                 display : {'layout::dashboard::table::nbLine' : parseInt($(this).find('table.tableCmd').attr('data-line')) - 1},
             },
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             }
         });
     }

@@ -82,7 +82,7 @@ $(".bt_regenerate_api").on('click', function (event) {
             },
             success: function (data) {
                 if (data.state != 'ok') {
-                    $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                    notify("Erreur", data.result, 'error');
                     return;
                 }
                 el.closest('.input-group').find('.span_apikey').value(data.result);
@@ -96,10 +96,10 @@ $('#bt_forceSyncHour').on('click', function () {
     $.hideAlert();
     nextdom.forceSyncHour({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
-            $('#div_alert').showAlert({message: '{{Commande réalisée avec succès}}', level: 'success'});
+            notify("Info", '{{Commande réalisée avec succès}}', 'success');
         }
     });
 });
@@ -109,12 +109,12 @@ $('#bt_restartDns').on('click', function () {
    nextdom.config.save({
     configuration: $('#config').getValues('.configKey')[0],
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function () {
        nextdom.network.restartDns({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
          modifyWithoutSave = false;
@@ -131,12 +131,12 @@ $('#bt_haltDns').on('click', function () {
    nextdom.config.save({
     configuration: $('#config').getValues('.configKey')[0],
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function () {
        nextdom.network.stopDns({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
          modifyWithoutSave = false;
@@ -176,19 +176,19 @@ $("#bt_saveGeneraleConfig").on('click', function (event) {
     nextdom.config.save({
         configuration: config,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             nextdom.config.load({
                 configuration: $('#config').getValues('.configKey:not(.noSet)')[0],
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
                     $('#config').setValues(data, '.configKey');
                     loadAactionOnMessage();
                     modifyWithoutSave = false;
-                    $('#div_alert').showAlert({message: '{{Sauvegarde réussie}}', level: 'success'});
+                    notify("Info", '{{Sauvegarde réussie}}', 'success');
                 }
             });
         }
@@ -210,7 +210,7 @@ $("#bt_testLdapConnection").on('click', function (event) {
     nextdom.config.save({
         configuration: $('#config').getValues('.configKey')[0],
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             modifyWithoutSave = false;
@@ -226,10 +226,10 @@ $("#bt_testLdapConnection").on('click', function (event) {
                 },
                 success: function (data) {
                     if (data.state != 'ok') {
-                        $('#div_alert').showAlert({message: '{{Connexion échouée :}} ' + data.result, level: 'danger'});
+                        notify("Erreur", '{{Connexion échouée :}} ' + data.result, 'error');
                         return;
                     }
-                    $('#div_alert').showAlert({message: '{{Connexion réussie}}', level: 'success'});
+                    notify("Info", '{{Connexion réussie}}', 'success');
                 }
             });
         }
@@ -252,7 +252,7 @@ function loadAactionOnMessage(){
     nextdom.config.load({
         configuration: 'actionOnMessage',
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             if(data == ''){
@@ -266,7 +266,7 @@ function loadAactionOnMessage(){
                 params : actionOptions,
                 async : false,
                 error: function (error) {
-                  $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                  notify("Erreur", error.message, 'error');
               },
               success : function(data){
                 for(var i in data){
@@ -376,7 +376,7 @@ $.showLoading();
 nextdom.config.load({
     configuration: $('#config').getValues('.configKey:not(.noSet)')[0],
     error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        notify("Erreur", error.message, 'error');
     },
     success: function (data) {
         $('#config').setValues(data, '.configKey');
@@ -405,7 +405,7 @@ $('#bt_resetHour').on('click',function(){
     },
     success: function (data) { 
         if (data.state != 'ok') {
-            $('#div_alert').showAlert({message: data.result, level: 'danger'});
+            notify("Erreur", data.result, 'error');
             return;
         }
         loadPage('index.php?v=d&p=administration');
@@ -426,7 +426,7 @@ $('#bt_resetHwKey').on('click',function(){
     },
     success: function (data) { 
         if (data.state != 'ok') {
-            $('#div_alert').showAlert({message: data.result, level: 'danger'});
+            notify("Erreur", data.result, 'error');
             return;
         }
         loadPage('index.php?v=d&p=administration');
@@ -438,7 +438,7 @@ $('#bt_resetHardwareType').on('click',function(){
     nextdom.config.save({
         configuration: {hardware_name : ''},
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             loadPage('index.php?v=d&p=administration');
@@ -449,10 +449,10 @@ $('#bt_resetHardwareType').on('click',function(){
 $('#bt_removeTimelineEvent').on('click',function(){
     nextdom.removeTimelineEvents({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
-            $('#div_alert').showAlert({message: '{{Evènement de la timeline supprimé avec succès}}', level: 'success'});
+            notify("Info", '{{Evènement de la timeline supprimé avec succès}}', 'success');
         }
     });
 });
@@ -460,7 +460,7 @@ $('#bt_removeTimelineEvent').on('click',function(){
 $('#bt_removeBanIp').on('click',function(){
     nextdom.user.removeBanIp({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             window.location.reload();
@@ -481,7 +481,7 @@ function clearNextDomDate() {
         },
         success: function (data) { 
             if (data.state != 'ok') {
-                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                notify("Erreur", data.result, 'error');
                 return;
             }
             $('#in_nextdomLastDate').value('');
@@ -493,11 +493,11 @@ function clearNextDomDate() {
 function flushCache() {
   nextdom.cache.flush({
     error: function (error) {
-       $('#div_alert').showAlert({message: data.result, level: 'danger'});
+       notify("Erreur", data.result, 'error');
    },
    success: function (data) {
     updateCacheStats();
-    $('#div_alert').showAlert({message: '{{Cache vidé}}', level: 'success'});
+    notify("Info", '{{Cache vidé}}', 'success');
 }
 });
 }
@@ -505,11 +505,11 @@ function flushCache() {
 function cleanCache() {
     nextdom.cache.clean({
         error: function (error) {
-           $('#div_alert').showAlert({message: data.result, level: 'danger'});
+           notify("Erreur", data.result, 'error');
        },
        success: function (data) {
         updateCacheStats();
-        $('#div_alert').showAlert({message: '{{Cache nettoyé}}', level: 'success'});
+        notify("Info", '{{Cache nettoyé}}', 'success');
     }
 });
 }
@@ -517,7 +517,7 @@ function cleanCache() {
 function updateCacheStats(){
    nextdom.cache.stats({
     error: function (error) {
-       $('#div_alert').showAlert({message: data.result, level: 'danger'});
+       notify("Erreur", data.result, 'error');
    },
    success: function (data) {
     $('#span_cacheObject').html(data.count);
@@ -541,7 +541,7 @@ function printConvertColor() {
         },
         success: function (data) { 
             if (data.state != 'ok') {
-                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                notify("Erreur", data.result, 'error');
                 return;
             }
 
@@ -587,7 +587,7 @@ function saveConvertColor() {
         },
         success: function (data) { 
             if (data.state != 'ok') {
-                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                notify("Erreur", data.result, 'error');
                 return;
             }
             modifyWithoutSave = false;
@@ -603,7 +603,7 @@ $('.bt_resetColor').on('click', function () {
         key: $(this).attr('data-l1key'),
         default: 1,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             $('.configKey[data-l1key="' + el.attr('data-l1key') + '"]').value(data);
@@ -616,13 +616,13 @@ $('.testRepoConnection').on('click',function(){
     nextdom.config.save({
         configuration: $('#config').getValues('.configKey')[0],
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             nextdom.config.load({
                 configuration: $('#config').getValues('.configKey:not(.noSet)')[0],
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
                     $('#config').setValues(data, '.configKey');
@@ -630,10 +630,10 @@ $('.testRepoConnection').on('click',function(){
                     nextdom.repo.test({
                         repo: repo,
                         error: function (error) {
-                            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                            notify("Erreur", error.message, 'error');
                         },
                         success: function (data) {
-                            $('#div_alert').showAlert({message: '{{Test réussi}}', level: 'success'});
+                            notify("Info", '{{Test réussi}}', 'success');
                         }
                     });
                 }
@@ -686,10 +686,10 @@ $('#div_pageContainer').undelegate('.objectSummary .objectSummaryAction[data-l1k
         },
         success: function (data) {
             if (data.state != 'ok') {
-                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                notify("Erreur", data.result, 'error');
                 return;
             }
-            $('#div_alert').showAlert({message: '{{Création des commandes virtuel réussies}}', level: 'success'});
+            notify("Info", '{{Création des commandes virtuel réussies}}', 'success');
         }
     });
 });
@@ -713,7 +713,7 @@ function printObjectSummary() {
         },
         success: function (data) { 
             if (data.state != 'ok') {
-                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                notify("Erreur", data.result, 'error');
                 return;
             }
             $('#table_objectSummary tbody').empty();
@@ -808,7 +808,7 @@ function saveObjectSummary() {
         },
         success: function (data) { 
             if (data.state != 'ok') {
-                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                notify("Erreur", data.result, 'error');
                 return;
             }
             printObjectSummary();

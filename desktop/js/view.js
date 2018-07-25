@@ -25,7 +25,7 @@
     version: 'dview',
     useCache: true,
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'});
+      notify("Erreur", error.message, 'error');
     },
     success: function (html) {
      try {

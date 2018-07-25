@@ -47,7 +47,7 @@ $('.bt_dbCommand').off('click').on('click',function(){
   nextdom.db({
     command : command,
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'});
+      notify("Erreur", error.message, 'error');
     },
     success : function(log){
      $('#h3_executeCommand').empty().append('{{Commande : }}'+command);
@@ -62,7 +62,7 @@ $('#ul_listSqlHistory').off('click','.bt_dbCommand').on('click','.bt_dbCommand',
   nextdom.db({
     command : command,
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'});
+      notify("Erreur", error.message, 'error');
     },
     success : function(log){
      $('#h3_executeCommand').empty().append('{{Commande : }}'+command);
@@ -78,7 +78,7 @@ $('#bt_validateSpecifiCommand').off('click').on('click',function(){
   nextdom.db({
     command : command,
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'});
+      notify("Erreur", error.message, 'error');
     },
     success : function(log){
       $('#h3_executeCommand').empty().append('{{Commande : }}'+command);
@@ -99,7 +99,7 @@ $('#in_specificCommand').keypress(function(e) {
    nextdom.db({
     command : command,
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'});
+      notify("Erreur", error.message, 'error');
     },
     success : function(log){
       $('#h3_executeCommand').empty().append('{{Commande : }}'+command);

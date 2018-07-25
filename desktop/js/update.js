@@ -55,7 +55,7 @@
     nextdom.update.doAll({
         options: options,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             getNextDomLog(1, 'update');
@@ -67,7 +67,7 @@
     $.hideAlert();
     nextdom.update.checkAll({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             printUpdate();
@@ -84,7 +84,7 @@
             nextdom.update.do({
                 id: id,
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function () {
                     getNextDomLog(1, 'update');
@@ -102,7 +102,7 @@
             nextdom.update.remove({
                 id: id,
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function () {
                     printUpdate();
@@ -118,7 +118,7 @@
     nextdom.update.check({
         id: id,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             printUpdate();
@@ -155,12 +155,12 @@
                     log += data.result[i]+"\n";
                     if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' SUCCESS]') != -1){
                         printUpdate();
-                        $('#div_alert').showAlert({message: '{{L\'opération est réussie. Merci de faire F5 pour avoir les dernières nouveautés}}', level: 'success'});
+                        notify("Info", '{{L\'opération est réussie. Merci de faire F5 pour avoir les dernières nouveautés}}', 'success');
                         _autoUpdate = 0;
                     }
                     if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' ERROR]') != -1){
                         printUpdate();
-                        $('#div_alert').showAlert({message: '{{L\'opération a échoué}}', level: 'danger'});
+                        notify("Erreur", '{{L\'opération a échoué}}', 'error');
                         _autoUpdate = 0;
                     }
                 }
@@ -182,7 +182,7 @@
 function printUpdate() {
     nextdom.update.get({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             $('#table_update tbody').empty();
@@ -198,7 +198,7 @@ function printUpdate() {
     nextdom.config.load({
         configuration: {"update::lastCheck":0,"update::lastDateCore": 0},
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             $('#span_lastUpdateCheck').value(data['update::lastCheck']);
@@ -264,10 +264,10 @@ $('#bt_saveUpdate').on('click',function(){
     nextdom.update.saves({
         updates : $('#table_update tbody tr').getValues('.updateAttr'),
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
-           $('#div_alert').showAlert({message: '{{Sauvegarde effectuée}}', level: 'success'});
+           notify("Info", '{{Sauvegarde effectuée}}', 'success');
            printUpdate();
        }
    });

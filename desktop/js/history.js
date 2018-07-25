@@ -114,10 +114,10 @@
         },
         success: function (data) {
             if (data.state != 'ok') {
-                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                notify("Erreur", data.result, 'error');
                 return;
             }
-            $('#div_alert').showAlert({message: '{{Historique supprimé avec succès}}', level: 'success'});
+            notify("Info", '{{Historique supprimé avec succès}}', 'success');
             li = $('li[data-cmd_id=' + _cmd_id + ']');
             if (li.hasClass('active')) {
                 li.find('.history').click();
@@ -141,7 +141,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: lastId, display: {graphType: $(this).value()}},
             error: function (error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             },
             success: function () {
                 $('.li_history[data-cmd_id=' + lastId + '] .history').click();
@@ -162,7 +162,7 @@ function initHistoryTrigger() {
     nextdom.cmd.save({
         cmd: {id: lastId, display: {groupingType: $(this).value()}},
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             $('.li_history[data-cmd_id=' + lastId + '] .history').click();
@@ -183,7 +183,7 @@ function initHistoryTrigger() {
     nextdom.cmd.save({
         cmd: {id: lastId, display: {graphDerive: $(this).value()}},
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             $('.li_history[data-cmd_id=' + lastId + '] .history').click();
@@ -204,7 +204,7 @@ function initHistoryTrigger() {
     nextdom.cmd.save({
         cmd: {id: lastId, display: {graphStep: $(this).value()}},
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function () {
             $('.li_history[data-cmd_id=' + lastId + '] .history').click();
@@ -370,7 +370,7 @@ function displayTimeline(){
     end.setTime(start.getTime() + 3700 *1000);
     nextdom.getTimelineEvents({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             if(timeline != null){
