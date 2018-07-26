@@ -21,5 +21,6 @@ cache.tar.gz
 
 /vendor
 composer.lock
+composer.phar
 market_cache/*
 backup/*

@@ -192,7 +192,7 @@ class Utils
             '>' => '>',
             '' => ''
         ];
-        preg_match_all('/(\w+|[0-9]|\.[0-9]*|".*?"|\'.*?\'|\#.*?\#|\(|\))[ ]*([!>=<]+|and|or|ou|et)*[ ]*/i', $expression, $preg_output);
+        preg_match_all('/(\w+|\d+|\.\d+|".*?"|\'.*?\'|\#.*?\#|\(|\))[ ]*([!>=<]+|and|or|ou|et)*[ ]*/i', $expression, $preg_output);
         if (count($preg_output) > 2) {
             $result = '';
             $exprIndex = 0;
