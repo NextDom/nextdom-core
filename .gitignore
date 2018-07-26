@@ -19,8 +19,7 @@ Thumbs.db
 /.buildpath
 cache.tar.gz
 
-vendor
-composer.*
+/vendor
+composer.lock
 market_cache/*
 backup/*
-!/composer.lock
