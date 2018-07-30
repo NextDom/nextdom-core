@@ -120,10 +120,10 @@ if ($nbUpdate == 0) {
     <ul class="sidebar-menu" data-widget="tree">
       <li class="header">MENU PRINCIPAL</li>
       <li class="active treeview menu-open">
-          <a href="#"><i class="fa fa-dashboard"></i> <span>Acceuil</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+          <a href="#"><i class="fa fa-home"></i> <span>Acceuil</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
               <ul class="treeview-menu">
                   <li class="treeview">
-                      <a href="#"><i class="fa fa-circle-o"></i> Dashboard <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                      <a href="#"><i class="fa fa-dashboard"></i> Dashboard <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                       <ul class="treeview-menu">
 
                               <li class="treeview-menu">
@@ -139,7 +139,7 @@ if ($nbUpdate == 0) {
 
 
                   <li class="treeview">
-                      <a href="#"><i class="fa fa-circle-o"></i> Vue <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                      <a href="#"><i class="fa fa-picture-o"></i> Vue <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                       <ul class="treeview-menu">
 
                               <li class="treeview-menu">
@@ -155,7 +155,7 @@ if ($nbUpdate == 0) {
 
 
                   <li class="treeview">
-                      <a href="#"><i class="fa fa-circle-o"></i> Design <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                      <a href="#"><i class="fa fa-paint-brush"></i> Design <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                       <ul class="treeview-menu">
 
                               <li class="treeview-menu">
@@ -173,19 +173,19 @@ if ($nbUpdate == 0) {
        </li>
           <li class="treeview">
           <a href="#">
-            <i class="fa fa-laptop"></i>
+            <i class="fa fa-stethoscope"></i>
             <span>Analyse</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="index.php?v=d&p=history"><i class="fa fa-circle-o"></i> {{Historique}}</a></li>
-            <li><a href="index.php?v=d&p=report"><i class="fa fa-circle-o"></i> {{Rapport}}</a></li>
-            <li><a href="#" id="bt_showEventInRealTime"><i class="fa fa-circle-o"></i> {{Temps réel}}</a></li>
-            <li><a href="index.php?v=d&p=log"><i class="fa fa-circle-o"></i> {{Logs}}</a></li>
-            <li><a href="index.php?v=d&p=eqAnalyse"><i class="fa fa-circle-o"></i> {{Equipements}}</a></li>
-            <li><a href="index.php?v=d&p=health"><i class="fa fa-circle-o"></i> {{Santé}}</a></li>
+            <li><a href="index.php?v=d&p=history"><i class="fa fa-bar-chart-o"></i> {{Historique}}</a></li>
+            <li><a href="index.php?v=d&p=report"><i class="fa fa-newspaper-o"></i> {{Rapport}}</a></li>
+            <li><a href="#" id="bt_showEventInRealTime"><i class="fa fa-tachometer"></i> {{Temps réel}}</a></li>
+            <li><a href="index.php?v=d&p=log"><i class="fa fa-file-o"></i> {{Logs}}</a></li>
+            <li><a href="index.php?v=d&p=eqAnalyse"><i class="fa fa-battery-full"></i> {{Equipements}}</a></li>
+            <li><a href="index.php?v=d&p=health"><i class="fa fa-medkit"></i> {{Santé}}</a></li>
           </ul>
         </li>
            <li class="treeview">
@@ -197,10 +197,10 @@ if ($nbUpdate == 0) {
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="index.php?v=d&p=object"><i class="fa fa-circle-o"></i> {{Objets}}</a></li>
-            <li><a href="index.php?v=d&p=interact"><i class="fa fa-circle-o"></i> {{Interactions}}</a></li>
-            <li><a href="index.php?v=d&p=display" id="bt_showEventInRealTime"><i class="fa fa-circle-o"></i> {{Résumé domotique}}</a></li>
-            <li><a href="index.php?v=d&p=scenario"><i class="fa fa-circle-o"></i> {{Scénarios}}</a></li>
+            <li><a href="index.php?v=d&p=object"><i class="fa fa-picture-o"></i> {{Objets}}</a></li>
+            <li><a href="index.php?v=d&p=interact"><i class="fa fa-comments-o"></i> {{Interactions}}</a></li>
+            <li><a href="index.php?v=d&p=display"><i class="fa fa-th"></i> {{Résumé domotique}}</a></li>
+            <li><a href="index.php?v=d&p=scenario"><i class="fa fa-cogs"></i> {{Scénarios}}</a></li>
           </ul>
         </li>
         <li class="treeview">
@@ -211,7 +211,7 @@ if ($nbUpdate == 0) {
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o"></i> Gestion des plugins</a></li>
+            <li><a href="index.php?v=d&p=plugin"><i class="fa fa-tags"></i> {{Gestion des plugins}}</a></li>
                 <li class="treeview-menu">
                    <?php echo $pluginMenu; ?>
                </li>
@@ -228,18 +228,17 @@ if ($nbUpdate == 0) {
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="index.php?v=d&p=administration"><i class="fa fa-circle-o"></i> {{Configuration}}</a></li>
-            <li><a href="index.php?v=d&p=backup"><i class="fa fa-circle-o"></i> {{Sauvegardes}}</a></li>
-            <li><a href="index.php?v=d&p=migration"><i class="fa fa-circle-o"></i> {{Migration depuis jeedom}}</a></li>
-            <li><a href="index.php?v=d&p=update"><i class="fa fa-circle-o"></i> {{Centre de mise à jour}}</a></li>
-            <li><a href="index.php?v=d&p=cron"><i class="fa fa-circle-o"></i> {{Moteur de tâches}}</a></li>
-            <li><a href="index.php?v=d&p=health"><i class="fa fa-circle-o"></i> {{Personnalisation avancée}}</a></li>
-            <li><a href="index.php?v=d&p=history"><i class="fa fa-circle-o"></i> {{Utilisateurs}}</a></li>
-            <li><a href="index.php?v=d&p=report"><i class="fa fa-circle-o"></i> {{Profil}}</a></li>
-            <li><a href="#" id="bt_showEventInRealTime"><i class="fa fa-circle-o"></i> {{Version mobile}}</a></li>
-            <li><a href="index.php?v=d&p=log"><i class="fa fa-circle-o"></i> {{Version}}</a></li>
-            <li><a href="index.php?v=d&p=eqAnalyse"><i class="fa fa-circle-o"></i> {{Se déconnecter}}</a></li>
-            <li><a href="index.php?v=d&p=health"><i class="fa fa-circle-o"></i> {{Aide}}</a></li>
+            <li><a href="index.php?v=d&p=administration"><i class="fa fa-wrench"></i> {{Configuration}}</a></li>
+            <li><a href="index.php?v=d&p=backup"><i class="fa fa-floppy-o"></i> {{Sauvegardes}}</a></li>
+            <li><a href="index.php?v=d&p=migration"><i class="fa fa-upload"></i> {{Migration depuis jeedom}}</a></li>
+            <li><a href="index.php?v=d&p=update"><i class="fa fa-refresh"></i> {{Centre de mise à jour}}</a></li>
+            <li><a href="index.php?v=d&p=cron"><i class="fa fa-tasks"></i> {{Moteur de tâches}}</a></li>
+            <li><a href="index.php?v=d&p=custom"><i class="fa fa-pencil-square-o"></i> {{Personnalisation avancée}}</a></li>
+            <li><a href="index.php?v=d&p=user"><i class="fa fa-users"></i> {{Utilisateurs}}</a></li>
+            <li><a href="index.php?v=d&p=profils"><i class="fa fa-briefcase"></i> {{Profil}}</a></li>
+            <li><a href="index.php?v=m"><i class="fa fa-mobile"></i> {{Version mobile}}</a></li>
+            <li><a href="index.php?v=d&p=log"><i class="fa fa-info-circle"></i> {{Version}}<?php echo nextdom::version(); ?></a></li>
+            <li><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fa fa-circle-o"></i> {{Se déconnecter}}</a></li>
 			<?php
                      if (nextdom::isCapable('sudo')) {
                        echo '<li class="divider"></li>';
