@@ -24,3 +24,4 @@ composer.lock
 composer.phar
 market_cache/*
 backup/*
+var/*
