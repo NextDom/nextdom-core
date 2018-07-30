@@ -19,7 +19,6 @@
 /* * ***************************Includes********************************* */
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
-use NextDom\Helpers\Utils;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioSubElementManager;
@@ -36,7 +35,6 @@ class scenarioExpression
     private $expression;
     private $options;
     private $order;
-    private $transformedExpression;
 
     /*     * ***********************Méthodes statiques*************************** */
 
@@ -683,7 +681,7 @@ class scenarioExpression
             } elseif ($this->getType() == 'condition') {
                 $expression = self::setTags($this->getExpression(), $scenario, true);
                 $message = __('Evaluation de la condition : [', __FILE__) . $expression . '] = ';
-                $result = evaluate($this->transformedExpression, true);
+                $result = evaluate($expression);
                 if (is_bool($result)) {
                     if ($result) {
                         $message .= __('Vrai', __FILE__);
@@ -709,7 +707,6 @@ class scenarioExpression
     public function save()
     {
         $this->checkBackground();
-        $this->transformedExpression = Utils::transformExpressionForEvaluation($this->expression);
         DB::save($this);
     }
 
@@ -880,12 +877,12 @@ class scenarioExpression
 
     public function getOptions($_key = '', $_default = '')
     {
-        return \utils::getJsonAttr($this->options, $_key, $_default);
+        return utils::getJsonAttr($this->options, $_key, $_default);
     }
 
     public function setOptions($_key, $_value)
     {
-        $this->options = \utils::setJsonAttr($this->options, $_key, nextdom::fromHumanReadable($_value));
+        $this->options = utils::setJsonAttr($this->options, $_key, nextdom::fromHumanReadable($_value));
         return $this;
     }
 
@@ -906,5 +903,4 @@ class scenarioExpression
             $_scenario->setLog($log);
         }
     }
-
 }
