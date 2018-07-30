@@ -1,19 +1,19 @@
 <?php
 /* This file is part of NextDom.
- *
- * NextDom is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * NextDom is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
- */
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 namespace NextDom\Helpers;
 
@@ -21,47 +21,55 @@ use NextDom\Helpers\Status;
 use NextDom\Managers\PluginManager;
 
 /**
- * Classe de support à l'affichage des contenus HTML
- */
+* Classe de support à l'affichage des contenus HTML
+*/
 class PrepareView
 {
     /**
-     * @var string Données HTML du menu
-     */
+    * @var string Données HTML du menu
+    */
     private static $pluginMenu;
 
     /**
-     * @var string Données HTML de TODO: ????
-     */
+    * @var string Données HTML de TODO: ????
+    */
     private static $panelMenu;
 
     /**
-     * Affiche le contenu de l'en-tête
-     */
+    * Affiche le contenu de l'en-tête
+    */
     public static function showHeader()
     {
         require_once(NEXTDOM_ROOT . '/desktop/template/header.php');
     }
 
     /**
-     * Affiche le menu en fonction du mode
-     */
+    * Affiche le menu en fonction du mode
+    */
     public static function showMenu()
     {
         if (Status::isRescueMode()) {
             require_once(NEXTDOM_ROOT . '/desktop/template/menuRescue.php');
         } else {
-            require_once(NEXTDOM_ROOT . '/desktop/template/menu.php');
+            if (isset($_SESSION['user'])) {
+                $designTheme = $_SESSION['user']->getOptions('design_nextdom');
+                if (file_exists(NEXTDOM_ROOT . '/desktop/template/menu_'.$designTheme.'.php')) {
+                    require_once(NEXTDOM_ROOT . '/desktop/template/menu_'.$designTheme.'.php');
+                }else{
+                    require_once(NEXTDOM_ROOT . '/desktop/template/menu.php');
+                }} else{
+                    require_once(NEXTDOM_ROOT . '/desktop/template/menu.php');
+                }
+            }
         }
-    }
 
     /**
-     * Initialise les informations nécessaires au menu
-     *
-     * @param array $internalConfig Configuration interne de NextDom
-     *
-     * @return object Plugin courant
-     */
+    * Initialise les informations nécessaires au menu
+    *
+    * @param array $internalConfig Configuration interne de NextDom
+    *
+    * @return object Plugin courant
+    */
     public static function initMenus(array $internalConfig)
     {
         global $title;
@@ -104,31 +112,31 @@ class PrepareView
     }
 
     /**
-     * Afficher un message d'erreur
-     *
-     * @param string $msg Message de l'erreur
-     *
-     * @return string Code HTML du message d'erreur
-     */
+    * Afficher un message d'erreur
+    *
+    * @param string $msg Message de l'erreur
+    *
+    * @return string Code HTML du message d'erreur
+    */
     public static function showAlertMessage(string $msg) {
         echo '<div class="alert alert-danger">'.$msg.'</div>';
     }
 
     /**
-     * Obtenir le code HTML du menu des plugins
-     *
-     * @return string Code HTML du menu des plugins
-     */
+    * Obtenir le code HTML du menu des plugins
+    *
+    * @return string Code HTML du menu des plugins
+    */
     public static function getPluginMenu()
     {
         return self::$pluginMenu;
     }
 
     /**
-     * Obtenir le code HTML du panneau TODO ?????
-     *
-     * @return string Code HTML du panneau
-     */
+    * Obtenir le code HTML du panneau TODO ?????
+    *
+    * @return string Code HTML du panneau
+    */
     public static function getPanelMenu()
     {
         return self::$panelMenu;
