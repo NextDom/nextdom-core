@@ -318,4 +318,9 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $result = Utils::transformExpressionForEvaluation('1.23 == 12.3');
         $this->assertEquals('1.23==12.3', $result);
     }
+
+    public function testEvaluateOperator() {
+        $result = Utils::transformExpressionForEvaluation('1*2 + 3-#Test# == 12/3');
+        $this->assertEquals('1*2+3-#Test#==12/3', $result);
+    }
 }
