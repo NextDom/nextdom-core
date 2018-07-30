@@ -112,7 +112,7 @@ if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
     </div>
 </div>
 <?php include_file('desktop', 'dashboard', 'js');?>
-                  <?php include_file('desktop', 'dashboard-v2', 'js'); ?>
+<?php include_file('desktop', 'dashboard-v2', 'js'); ?>
 <?php include_file('3rdparty', 'jquery.isotope/isotope.pkgd.min', 'js');?>
 <?php include_file('desktop', 'dashboard', 'css');?>
 <?php include_file('3rdparty', 'jquery.multi-column-select/multi-column-select', 'js');?>
@@ -124,30 +124,30 @@ if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
         echo '<div class="col-md-' . $object->getDisplay('dashboard::size', 12) . '">';
     }
 
-echo '<div class="panel" style="border-color:' . $object->getDisplay("tagColor") . ';" data-father_id="' . $object->getFather_id() .'">';
-echo '<div class="panel-heading" style="background-color:' . $object->getDisplay("tagColor") . '; color:'.$object->getDisplay("tagTextColor").'">';
-echo '<h3 class="panel-title">' . $object->getDisplay("icon" ).' '. $object->getName().'</h3>';
-echo '</div>';
-echo '<div id="config">';
-echo '<div class="panel-body">';
-echo '<div class="div_displayEquipement" id="div_ob' . $object->getId() . '" style="width: 100%;padding-top:3px;margin-bottom : 3px;">';
+    echo '<div class="panel" style="border-color:' . $object->getDisplay("tagColor") . ';" data-father_id="' . $object->getFather_id() .'">';
+    echo '<div class="panel-heading" style="background-color:' . $object->getDisplay("tagColor") . '; color:'.$object->getDisplay("tagTextColor").'">';
+    echo '<h3 class="panel-title">' . $object->getDisplay("icon" ).' '. $object->getName().'</h3>';
+    echo '</div>';
+    echo '<div id="config">';
+    echo '<div class="panel-body">';
+    echo '<div class="div_displayEquipement" id="div_ob' . $object->getId() . '" style="width: 100%;padding-top:3px;margin-bottom : 3px;">';
     echo '<script>getObjectHtml(' . $object->getId() . ')</script>';
     echo '</div>';
     echo '</div>';
     echo '</div>';
-echo '</div>';
+    echo '</div>';
     foreach ($child_object as $child) {
         if ($child->getConfiguration('hideOnDashboard', 0) == 1) {
             continue;
         }
-      echo '<div class="panel div_object" style="border-color:' . $child->getDisplay("tagColor") . ';" data-father_id="' . $child->getFather_id() .'">';
-echo '<div class="panel-heading" style="background-color:' . $child->getDisplay("tagColor") . ';color:'.$child->getDisplay("tagTextColor").'">';
-echo '<h3 class="panel-title">' . $child->getDisplay("icon" ).' '. $child->getName().'</h3>';
-echo '      <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>';
-echo '</div>';
-echo '<div id="config">';
-echo '<div class="panel-body">';
-echo '<div class="div_displayEquipement" id="div_ob' . $child->getId() . '" style="width: 100%;padding-top:3px;margin-bottom : 3px;">';
+        echo '<div class="panel div_object" style="border-color:' . $child->getDisplay("tagColor") . ';" data-father_id="' . $child->getFather_id() .'">';
+        echo '<div class="panel-heading" style="background-color:' . $child->getDisplay("tagColor") . ';color:'.$child->getDisplay("tagTextColor").'">';
+        echo '<h3 class="panel-title">' . $child->getDisplay("icon" ).' '. $child->getName().'</h3>';
+        echo '      <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>';
+        echo '</div>';
+        echo '<div id="config">';
+        echo '<div class="panel-body">';
+        echo '<div class="div_displayEquipement" id="div_ob' . $child->getId() . '" style="width: 100%;padding-top:3px;margin-bottom : 3px;">';
         echo '<script>getObjectHtml(' . $child->getId() . ')</script>';
         echo '</div>';
         echo '</div>';
@@ -374,3 +374,4 @@ immediately after the control sidebar -->
 </div>
 <!-- ./wrapper -->
 </html>
+<?php include_file('desktop', 'dashboard-v2', 'js'); ?>
