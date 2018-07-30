@@ -20,7 +20,8 @@ foreach (plugin::listPlugin() as $pluginList) {
   <a class="btn btn-success pull-right" id="bt_saveProfils"><i class="far fa-check-circle"></i> {{Sauvegarder}}</a>
   <ul class="nav nav-tabs" role="tablist">
    <li role="presentation" class="active"><a href="#themetab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint"></i> {{Thèmes}}</a></li>
-   <li role="presentation"><a href="#interfacetab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-laptop"></i> {{Interface}}</a></li>
+     <li role="presentation"><a href="#designtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-laptop"></i> {{Design}}</a></li>
+  <li role="presentation"><a href="#interfacetab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-laptop"></i> {{Interface}}</a></li>
    <li role="presentation"><a href="#securitytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="icon securite-key1"></i> {{Sécurité}}</a></li>
    <li role="presentation"><a href="#notificationtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="icon securite-key1"></i> {{Notifications}}</a></li>
  </ul>
@@ -51,7 +52,7 @@ foreach (ls(__DIR__ . '/../../css/themes') as $dir) {
           <div class="col-sm-3">
             <select class="userAttr form-control" data-l1key="options" data-l2key="mobile_theme_color">
               <?php
-foreach (ls(__DIR__ . '/../../css/themes') as $dir) {
+foreach (ls(__DIR__ . '/../../cs/themes') as $dir) {
     if (is_dir(__DIR__ . '/../../css/themes/' . $dir . '/mobile')) {
         echo '<option value="' . trim($dir, '/') . '">' . ucfirst(str_replace('_', ' ', trim($dir, '/'))) . '</option>';
     }
@@ -107,6 +108,29 @@ foreach (nextdom::getConfiguration('eqLogic:displayType') as $key => $value) {
 </div>
 <div class="col-sm-6">
   <div class="img-responsive" id="div_imgThemeDesktop" style="height: 450px;"></div>
+</div>
+</div>
+
+  <div role="tabpanel" class="tab-pane active" id="designtab">
+  <br/>
+  <div class="col-sm-6">
+    <form class="form-horizontal">
+      <fieldset>
+
+    <div class="form-group">
+      <label class="col-sm-4 control-label">{{Design Dashboard}}</label>
+      <div class="col-sm-4">
+        <select class="userAttr form-control" data-l1key="options" data-l2key="design_nextdom">
+          <option value="dashboard">Dashboard</option>
+  		  <option value="dashboard-v2">Dashboard-v2</option>
+        </select>
+      </div>
+    </div>
+ </fieldset>
+</form>
+</div>
+<div class="col-sm-6">
+<div class="img-responsive" id="div_imgThemeDesktop" style="height: 450px;"></div>
 </div>
 </div>
 
