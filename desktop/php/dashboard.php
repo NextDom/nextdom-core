@@ -1,210 +1,166 @@
 <?php
-
-use NextDom\Helpers\Status;
-use NextDom\Helpers\Utils;
-use NextDom\Managers\JeeObjectManager;
-use NextDom\Managers\ScenarioManager;
-
-Status::initConnectState();
-Status::isConnectedAdminOrFail();
-
-if (Utils::init('object_id') == '') {
-    $object = JeeObjectManager::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
+if (!isConnect()) {
+    throw new Exception('{{401 - Accès non autorisé}}');
+}
+sendVarToJs('SEL_OBJECT_ID', init('object_id'));
+sendVarToJs('SEL_CATEGORY', init('category', 'all'));
+sendVarToJs('SEL_TAG', init('tag', 'all'));
+sendVarToJs('SEL_SUMMARY', init('summary'));
+if (init('object_id') == '') {
+    $object = jeeObject::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
 } else {
-    $object = JeeObjectManager::byId(Utils::init('object_id'));
+    $object = jeeObject::byId(init('object_id'));
 }
 if (!is_object($object)) {
-    $object = JeeObjectManager::rootObject();
+    $object = jeeObject::rootObject();
 }
 if (!is_object($object)) {
-    throw new \Exception('{{Aucun objet racine trouvé. Pour en créer un, allez dans Outils -> Objets.<br/> Si vous ne savez pas quoi faire ou que c\'est la première fois que vous utilisez NextDom, n\'hésitez pas à consulter cette <a href="https://nextdom.github.io/documentation/premiers-pas/fr_FR/index" target="_blank">page</a> et celle-là si vous avez un pack : <a href="https://nextdom.com/start" target="_blank">page</a>}}');
+    throw new Exception('{{Aucun objet racine trouvé. Pour en créer un, allez dans Outils -> Objets.<br/> Si vous ne savez pas quoi faire ou que c\'est la première fois que vous utilisez Jeedom, n\'hésitez pas à consulter cette <a href="https://jeedom.github.io/documentation/premiers-pas/fr_FR/index" target="_blank">page</a> et celle-là si vous avez un pack : <a href="https://jeedom.com/start" target="_blank">page</a>}}');
 }
-$childrenObjets = JeeObjectManager::buildTree($object);
-$displayScenarioByDefault = false;
-if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
-    $displayScenarioByDefault = true;
-}
-$displayObjetByDefault = false;
-if ($_SESSION['user']->getOptions('displayObjetByDefault') == 1) {
-    $displayObjetByDefault = true;
-}
+$child_object = jeeObject::buildTree($object);
+sendVarToJs('rootObjectId', $object->getId());
 ?>
-<style>
-.scenario-widget {
-    margin-top: 2px !important;
-}
 
-#div_displayObjectList.show-sidenav {
-    display: block;
-    left: 0;
-}
-
-#div_displayScenario.show-sidenav {
-    display: block;
-    right: 0;
-}
-
-#bt_editDashboardWidgetOrder {
-    bottom: 5px;
-    right: 5px;
-    position: fixed;
-}
-
-#ul_object li.filter {
-    margin-bottom: 5px;
-}
-
-#ul_object li.filter {
-    width: 100%;
-}
-
-#scenario-title {
-    display: inline;
-    color: white;
-    margin-left: 50px;
-    font-size: 2rem;
-}
-
-#ul_object .li_object {
-    padding: 2px 0px;
-}
-
-#config .div_displayEquipement {
-    width: 100%;
-    padding-top: 3px;
-    margin-bottom: 3px;
-}
-
-#collapse_categorie a {
-    margin-bottom: 5px;margin-right: 3px
-}
-</style>
 <div class="row row-overflow">
-    <div id="div_displayObjectList" class="sidenav-overlay
     <?php
-    if ($displayObjetByDefault) {
-        echo ' show-sidenav';
+    if ($_SESSION['user']->getOptions('displayObjetByDefault') == 1) {
+        echo '<div class="col-lg-2 col-md-3 col-sm-4" id="div_displayObjectList">';
+    } else {
+        echo '<div class="col-lg-2 col-md-3 col-sm-4" style="display:none;" id="div_displayObjectList">';
     }
-    ?>">
-    <a class='btn-floating btn-lg' title="{{Afficher/Masquer les objets}}"><i id='bt_displayObject' data-status="close" class='fa fa-angle-double-right fa-2x icon_nextdom_blue'></i></a>
-    <a class='btn-floating btn-lg' title="{{Afficher/Masquer les objets}}"><i id='bt_displayScenario' data-status="close" class='fa fa-angle-double-left fa-2x icon_nextdom_blue'></i></a>
-
-    <?php if (Utils::init('category', 'all') == 'all') { ?>
-        <i class="fa fa-pencil pull-right cursor" id="bt_editDashboardWidgetOrder" data-mode="0"></i>
-    <?php }
     ?>
-
     <div class="bs-sidebar">
         <ul id="ul_object" class="nav nav-list bs-sidenav">
-            <li class="filter">
-                <input class="filter form-control input-sm" placeholder="{{Rechercher}}"/>
-            </li>
+            <li class="filter" style="margin-bottom: 5px;"><input class="filter form-control input-sm" placeholder="{{Rechercher}}" style="width: 100%"/></li>
             <?php
-            $allObject = JeeObjectManager::buildTree(null, true);
-            foreach ($allObject as $childObject) {
-                $margin = 5 * $childObject->getConfiguration('parentNumber');
-                if ($childObject->getId() == $object->getId()) {
-                    echo '<li class="cursor li_object active" ><a data-object_id="' . $childObject->getId() . '" data-href="index.php?v=d&p=dashboard&object_id=' . $childObject->getId() . '&category=' . Utils::init('category', 'all') . '"><span style="position:relative;left:' . $margin . 'px;font-size:0.85em;">' . $childObject->getHumanName(true, true) . '</span><span style="font-size : 0.65em;float:right;position:relative;top:7px;">' . $childObject->getHtmlSummary() . '</span></a></li>';
+            $allObject = jeeObject::buildTree(null, true);
+            foreach ($allObject as $object_li) {
+                $margin = 5 * $object_li->getConfiguration('parentNumber');
+                if ($object_li->getId() == $object->getId()) {
+                    echo '<li class="cursor li_object active" ><a data-object_id="' . $object_li->getId() . '" data-href="index.php?v=d&p=dashboard&object_id=' . $object_li->getId() . '&category=' . init('category', 'all') . '" style="padding: 2px 0px;"><span style="position:relative;left:' . $margin . 'px;font-size:0.85em;">' . $object_li->getHumanName(true, true) . '</span><span style="font-size : 0.65em;float:right;position:relative;top:7px;">' . $object_li->getHtmlSummary() . '</span></a></li>';
                 } else {
-                    echo '<li class="cursor li_object" ><a data-object_id="' . $childObject->getId() . '" data-href="index.php?v=d&p=dashboard&object_id=' . $childObject->getId() . '&category=' . Utils::init('category', 'all') . '"><span style="position:relative;left:' . $margin . 'px;font-size:0.85em;">' . $childObject->getHumanName(true, true) . '</span><span style="font-size : 0.65em;float:right;position:relative;top:7px;">' . $childObject->getHtmlSummary() . '</span></a></li>';
+                    echo '<li class="cursor li_object" ><a data-object_id="' . $object_li->getId() . '" data-href="index.php?v=d&p=dashboard&object_id=' . $object_li->getId() . '&category=' . init('category', 'all') . '" style="padding: 2px 0px;"><span style="position:relative;left:' . $margin . 'px;font-size:0.85em;">' . $object_li->getHumanName(true, true) . '</span><span style="font-size : 0.65em;float:right;position:relative;top:7px;">' . $object_li->getHtmlSummary() . '</span></a></li>';
                 }
             }
             ?>
         </ul>
     </div>
 </div>
-
-<div id="div_displayScenario" class="displayScenario-overlay<?php
-if ($displayScenarioByDefault) {
-    echo ' show-sidenav';
-} ?>">
-<a id="scenario-title" class="text-center"><i class="fa fa-history"></i> {{Scénarios}}</a>
 <?php
-foreach (ScenarioManager::all() as $scenario) {
-    if ($scenario->getIsVisible() != 0) {
-        echo $scenario->toHtml('dashboard');
+if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
+    if ($_SESSION['user']->getOptions('displayObjetByDefault') == 1) {
+        echo '<div class="col-lg-8 col-md-7 col-sm-5" id="div_displayObject">';
+    } else {
+        echo '<div class="col-lg-10 col-md-9 col-sm-7" id="div_displayObject">';
+    }
+} else {
+    if ($_SESSION['user']->getOptions('displayObjetByDefault') == 1) {
+        echo '<div class="col-lg-10 col-md-9 col-sm-8" id="div_displayObject">';
+    } else {
+        echo '<div class="col-lg-12 col-md-12 col-sm-12" id="div_displayObject">';
     }
 }
 ?>
-</div>
-
-<div id="div_displayObject" class="
-<?php
-if ($displayScenarioByDefault) {
-    if ($displayObjetByDefault) {
-        echo 'col-lg-8 col-lg-offset-2 col-md-7-offset-2 col-sm-5-offset-2';
-    } else {
-        echo 'col-lg-10 col-md-9 col-sm-7';
-    }
-} else {
-    if ($displayObjetByDefault) {
-        echo 'col-lg-10 col-lg-offset-2 col-md-9 col-sm-8';
-    } else {
-        echo 'col-lg-12 col-md-12 col-sm-12';
-    }
-}
-?>">
-<div class="fixed-action-btn">
-</div>
-
-<div id="collapse_categorie" class="collapse text-center">
-    <?php
-    if (Utils::init('category', 'all') == 'all') {
-        echo '<a href="index.php?v=d&p=dashboard&object_id=' . Utils::init('object_id') . '&category=all&summary=' . Utils::init('summary') . '" class="btn btn-primary btn-sm categoryAction"><i class="fa fa-asterisk"></i> {{Tous}}</a>';
-    } else {
-        echo '<a href="index.php?v=d&p=dashboard&object_id=' . Utils::init('object_id') . '&category=all&summary=' . Utils::init('summary') . '" class="btn btn-default btn-sm categoryAction"><i class="fa fa-asterisk"></i> {{Tous}}</a>';
-    }
-    foreach (nextdom::getConfiguration('eqLogic:category', true) as $key => $value) {
-        if (Utils::init('category', 'all') == $key) {
-            echo '<a href="index.php?v=d&p=dashboard&object_id=' . Utils::init('object_id') . '&category=' . $key . '&summary=' . Utils::init('summary') . '" class="btn btn-primary btn-sm categoryAction" data-l1key="' . $key . '"><i class="' . $value['icon'] . '"></i> {{' . $value['name'] . '}}</a>';
-        } else {
-            echo '<a href="index.php?v=d&p=dashboard&object_id=' . Utils::init('object_id') . '&category=' . $key . '&summary=' . Utils::init('summary') . '" class="btn btn-default btn-sm categoryAction" data-l1key="' . $key . '"><i class="' . $value['icon'] . '"></i> {{' . $value['name'] . '}}</a>';
-        }
-    }
-    ?>
-</div>
-<?php include_file('desktop', 'dashboard', 'js'); ?>
-<div class="row">
-    <div class="
-    <?php
-    if (Utils::init('object_id') != '') {
-        echo 'col-md-12';
-    } else {
-        echo 'col-md-' . $object->getDisplay('dashboard::size', 12);
-    }
-    ?>">
-    <div class="panel" style="border-color:<?php echo $object->getDisplay('tagColor') ?>;">
-        <div class="panel-heading" style="background-color:<?php echo $object->getDisplay('tagColor') ?>;color:<?php echo $object->getDisplay('tagTextColor') ?>">
-            <h3 class="panel-title"><?php echo $object->getDisplay('icon') . ' ' . $object->getName(); ?></h3>
-        </div>
-        <div id="config">
-            <div class="panel-body">
-                <div class="div_displayEquipement" id="div_ob<?php echo $object->getId(); ?>">
-                    <script>getObjectHtml(<?php echo $object->getId(); ?>)</script>
-                </div>
-            </div>
+<i class='fa fa-picture-o cursor pull-left' id='bt_displayObject' data-display='<?php echo $_SESSION['user']->getOptions('displayObjetByDefault') ?>' title="{{Afficher/Masquer les objets}}"></i>
+<i class='fa fa-sort-amount-desc pull-left cursor' id='bt_categorieHidden' title="{{Trier vos équipements}}"></i>
+<i class='fa fa-cogs pull-right cursor' id='bt_displayScenario' data-display='<?php echo $_SESSION['user']->getOptions('displayScenarioByDefault') ?>' title="{{Afficher/Masquer les scénarios}}"></i>
+<?php if (init('category', 'all') == 'all') {?>
+    <i class="fas fa-pencil-alt pull-right cursor" id="bt_editDashboardWidgetOrder" data-mode="0" style="margin-right : 10px;"></i>
+<?php }
+?>
+<div style="witdh:100%; display: none;" class="categorieHidden">
+    <div style="witdh:45%; float:left;">
+        <div class="demo">
+            <select id="sel_eqLogicCategory">
+                <?php
+                if (init('category', 'all') == 'all') {
+                    echo '<option value="all" selected> {{Toute}}</option>';
+                } else {
+                    echo '<option value="all"> {{Toute}}</option>';
+                }
+                foreach (jeedom::getConfiguration('eqLogic:category', true) as $key => $value) {
+                    if (init('category', 'all') == $key) {
+                        echo '<option value="' . $key . '" selected> {{' . $value['name'] . '}}</option>';
+                    } else {
+                        echo '<option value="' . $key . '"> {{' . $value['name'] . '}}</option>';
+                    }
+                }
+                ?>
+            </select>
         </div>
     </div>
+    <div style="witdh:45%; float:left;">
+        <div class="demo2">
+            <select id="sel_eqLogicTags">
+                <?php
+                if (init('tag', 'all') == 'all') {
+                    echo '<option value="all" selected> {{Tous}}</option>';
+                } else {
+                    echo '<option value="all"> {{Tous}}</option>';
+                }
+                $knowTags = eqLogic::getAllTags();
+                foreach ($knowTags as $tag) {
+                    if (init('tag', 'all') == $tag) {
+                        echo '<option value="' . $tag . '" selected> ' . $tag . '</option>';
+                    } else {
+                        echo '<option value="' . $tag . '"> ' . $tag . '</option>';
+                    }
+                }
+                ?>
+            </select>
+        </div>
+    </div>
+</div>
+<?php include_file('desktop', 'dashboard', 'js');?>
+<?php include_file('3rdparty', 'jquery.isotope/isotope.pkgd.min', 'js');?>
+<?php include_file('desktop', 'dashboard', 'css');?>
+<?php include_file('3rdparty', 'jquery.multi-column-select/multi-column-select', 'js');?>
+<div class="row" >
     <?php
-
-    foreach ($childrenObjets as $child) {
-        if ($child->getConfiguration('hideOnDashboard', 0) != 1) {
-            ?>
-            <div class="panel" style="border-color:<?php echo $child->getDisplay('tagColor') ?>;">
-                <div class="panel-heading" style="background-color:<?php echo $child->getDisplay('tagColor') ?>;color:<?php echo $child->getDisplay('tagTextColor') ?>">
-                    <h3 class="panel-title"><?php echo $child->getDisplay('icon') . ' ' . $child->getName(); ?></h3>
-                    <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
-                </div>
-                <div class="panel-body">
-                    <div class="div_displayEquipement" id="div_ob<?php echo $child->getId(); ?>" style="width: 100%;padding-top:3px;margin-bottom : 3px;">
-                        <script>getObjectHtml(<?php echo $child->getId(); ?>)</script>
-                    </div>
-                </div>
-            </div>
-            <?php
-        }
+    if (init('object_id') != '') {
+        echo '<div class="col-md-12">';
+    } else {
+        echo '<div class="col-md-' . $object->getDisplay('dashboard::size', 12) . '">';
     }
+    echo '<div data-object_id="' . $object->getId() . '" data-father_id="' . $object->getFather_id() . '" class="div_object">';
+    echo '<legend style="margin-bottom : 0px;"><a class="div_object" style="text-decoration:none" href="index.php?v=d&p=object&id=' . $object->getId() . '">' . $object->getDisplay('icon') . ' ' . $object->getName() . '</a><span style="font-size : 0.6em;margin-left:10px;">' . $object->getHtmlSummary() . '</span> <i class="fas fa-compress pull-right cursor bt_editDashboardWidgetAutoResize" id="edit_object_' . $object->getId() . '" data-mode="0" style="margin-right : 10px; display: none;"></i> </legend>';
+    echo '<div class="div_displayEquipement" id="div_ob' . $object->getId() . '" style="width: 100%;padding-top:3px;margin-bottom : 3px;">';
+    echo '<script>getObjectHtml(' . $object->getId() . ')</script>';
+    echo '</div>';
+    echo '</div>';
+    echo '</div>';
+    foreach ($child_object as $child) {
+        if ($child->getConfiguration('hideOnDashboard', 0) == 1) {
+            continue;
+        }
+        echo '<div class="col-md-' . $child->getDisplay('dashboard::size', 12) . '">';
+        echo '<div data-object_id="' . $child->getId() . '" data-father_id="' . $child->getFather_id() . '" style="margin-bottom : 3px;" class="div_object">';
+        echo '<legend style="margin-bottom : 0px;"><a style="text-decoration:none" href="index.php?v=d&p=object&id=' . $child->getId() . '">' . $child->getDisplay('icon') . ' ' . $child->getName() . '</a><span style="font-size : 0.6em;margin-left:10px;">' . $child->getHtmlSummary() . '</span> <i class="fas fa-compress pull-right cursor bt_editDashboardWidgetAutoResize" id="edit_object_' . $child->getId() . '" data-mode="0" style="margin-right : 10px; display: none;"></i></legend>';
+        echo '<div class="div_displayEquipement" id="div_ob' . $child->getId() . '" style="width: 100%;padding-top:3px;margin-bottom : 3px;">';
+        echo '<script>getObjectHtml(' . $child->getId() . ')</script>';
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+    }
+
     ?>
 </div>
+</div>
+<?php
+if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
+    echo '<div class="col-lg-2 col-md-2 col-sm-3" id="div_displayScenario">';
+} else {
+    echo '<div class="col-lg-2 col-md-2 col-sm-3" id="div_displayScenario" style="display:none;">';
+}
+?>
+<legend><i class="fas fa-history"></i> {{Scénarios}}</legend>
+<?php
+foreach (scenario::all() as $scenario) {
+    if ($scenario->getIsVisible() == 0) {
+        continue;
+    }
+    echo $scenario->toHtml('dashboard');
+}
+?>
 </div>
 </div>
