@@ -13,7 +13,8 @@
         "symfony/expression-language": "2.8.*",
         "touki/ftp": "1.2.*",
         "symfony/translation": "^3.4",
-        "symfony/debug": "^3.4"
+        "symfony/debug": "^3.4",
+        "symfony/config": "^3.4"
     },
     "license": "GPL",
     "config": {
