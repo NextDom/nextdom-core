@@ -96,7 +96,7 @@ class Translate
         $language = self::getLanguage();
         $filename = self::getPathTranslationFile($language);
         if (file_exists($filename)) {
-            self::$translator = new Translator($language);
+            self::$translator = new Translator($language,null,'var/i10n');
             self::$translator->addLoader('yaml', new YamlFileLoader());
             self::$translator->addResource('yaml', $filename, $language);
             foreach (PluginManager::listPlugin(false, false, false) as $plugin) {
