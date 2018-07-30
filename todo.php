@@ -11,4 +11,5 @@ shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password']
 shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password'].' '.$CONFIG['db']['dbname'].' < install/update/3.3.1.sql');
 shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password'].' '.$CONFIG['db']['dbname'].' < install/update/3.3.2.sql');
 shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password'].' '.$CONFIG['db']['dbname'].' < install/update/3.3.3.sql');
+shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password'].' '.$CONFIG['db']['dbname'].' < install/update/nextdom.sql');
 

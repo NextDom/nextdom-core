@@ -236,6 +236,7 @@ step_9_nextdom_installation() {
     php composer.phar require symfony/translation >> ${DEBUG} 2>&1
     composer -q install >> ${DEBUG} 2>&1
     composer dump-autoload -o >> ${DEBUG} 2>&1
+    php todo.php
     php ${WEBSERVER_HOME}/install/install.php mode=force >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
         echo "${ROUGE}Ne peut installer nextdom - Annulation${NORMAL}"

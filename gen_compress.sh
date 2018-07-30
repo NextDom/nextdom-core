@@ -72,6 +72,7 @@ cat 3rdparty/jquery.utils/jquery.utils.js \
     3rdparty/jquery.fileupload/jquery.iframe-transport.js \
     3rdparty/jquery.fileupload/jquery.fileupload.js \
     3rdparty/jquery.multi-column-select/multi-column-select.js \
+    3rdparty/jquery.sew/jquery.sew.min.js \
     3rdparty/datetimepicker/jquery.datetimepicker.js \
     3rdparty/jquery.cron/jquery.cron.min.js \
     3rdparty/jquery.contextMenu/jquery.contextMenu.min.js \

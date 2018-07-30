@@ -965,12 +965,15 @@ function getIpFromString($_string)
  * @param $_string
  * @return string
  */
-function evaluate($_string)
+function evaluate($_string, $alreadyTransformed = false)
 {
     if (!isset($GLOBALS['ExpressionLanguage'])) {
         $GLOBALS['ExpressionLanguage'] = new ExpressionLanguage();
     }
-    $expr = Utils::transformExpressionForEvaluation($_string);
+    $expr = $_string;
+    if (!$alreadyTransformed) {
+        $expr = Utils::transformExpressionForEvaluation($_string);
+    }
 
     try {
         return $GLOBALS['ExpressionLanguage']->evaluate($expr);
