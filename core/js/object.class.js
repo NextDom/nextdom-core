@@ -292,3 +292,40 @@ nextdom.object.summaryUpdate = function(_params) {
     };
     $.ajax(paramsAJAX);
 };
+
+nextdom.object.getImgPath = function(_params){
+    nextdom.object.byId({
+        id : _params.id,
+        global: false,
+        async : false,
+        error : function(data){
+            return;
+        },
+        success : function(data){
+            if(!isset(data.img)){
+                return '';
+            }
+           _params.success(data.img);
+        }
+    });
+}
+
+
+nextdom.object.removeImage = function (_params) {
+    var paramsRequired = ['id'];
+    var paramsSpecifics = {};
+    try {
+        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
+    } catch (e) {
+        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
+        return;
+    }
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
+    var paramsAJAX = nextdom.private.getParamsAJAX(params);
+    paramsAJAX.url = 'core/ajax/object.ajax.php';
+    paramsAJAX.data = {
+        action: 'removeImage',
+        id: _params.id
+    };
+    $.ajax(paramsAJAX);
+};

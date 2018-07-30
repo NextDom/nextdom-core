@@ -26,18 +26,18 @@
 }
 
 nextdom.changes = function(){
- var paramsRequired = [];
- var paramsSpecifics = {
+   var paramsRequired = [];
+   var paramsSpecifics = {
     global: false,
     success: function(data) {
         if(nextdom.connect > 0){
-         nextdom.connect = 0;
-     }
-     nextdom.datetime = data.datetime;
-     var cmd_update = [];
-     var eqLogic_update = [];
-     var object_summary_update = [];
-     for(var i in data.result){
+           nextdom.connect = 0;
+       }
+       nextdom.datetime = data.datetime;
+       var cmd_update = [];
+       var eqLogic_update = [];
+       var object_summary_update = [];
+       for(var i in data.result){
         if(data.result[i].name == 'cmd::update'){
             cmd_update.push(data.result[i].option);
             continue;
@@ -51,20 +51,21 @@ nextdom.changes = function(){
             continue;
         }
         if(isset(data.result[i].option)){
-           $('body').trigger(data.result[i].name,data.result[i].option);
-       }else{
+         $('body').trigger(data.result[i].name,data.result[i].option);
+     }else{
         $('body').trigger(data.result[i].name);
     }
 }
 if(cmd_update.length > 0){
-   $('body').trigger('cmd::update',[cmd_update]);
+ $('body').trigger('cmd::update',[cmd_update]);
 }
 if(eqLogic_update.length > 0){
-   $('body').trigger('eqLogic::update',[eqLogic_update]);
+ $('body').trigger('eqLogic::update',[eqLogic_update]);
 }
 if(object_summary_update.length > 0){
     $('body').trigger('jeeObject::summary::update',[object_summary_update]);
 }
+
 setTimeout(nextdom.changes, 1);
 },
 error: function(_error){
@@ -123,7 +124,7 @@ nextdom.init = function () {
 
     $('body').on('ui::update', function (_event,_options) {
         if(isset(_options.page) && _options.page != ''){
-           if(!$.mobile && getUrlVars('p') != _options.page){
+         if(!$.mobile && getUrlVars('p') != _options.page){
             return;
         }
         if($.mobile && isset(CURRENT_PAGE) && CURRENT_PAGE != _options.page){
@@ -143,7 +144,7 @@ nextdom.init = function () {
     });
     $('body').on('nextdom::gotoplan', function (_event,_plan_id) {
         if(getUrlVars('p') == 'plan' && 'function' == typeof (displayPlan)){
-           if (_plan_id != $('#sel_planHeader').attr('data-link_id')) {
+         if (_plan_id != $('#sel_planHeader').attr('data-link_id')) {
             planHeader_id = _plan_id;
             displayPlan();
         }
@@ -152,7 +153,7 @@ nextdom.init = function () {
 
     $('body').on('nextdom::alert', function (_event,_options) {
         if (!isset(_options.message) || $.trim(_options.message) == '') {
-           if(isset(_options.page) && _options.page != ''){
+         if(isset(_options.page) && _options.page != ''){
             if(getUrlVars('p') == _options.page || ($.mobile && isset(CURRENT_PAGE) && CURRENT_PAGE == _options.page)){
                 $.hideAlert();
             }
@@ -182,8 +183,9 @@ nextdom.init = function () {
     $('body').on('notify', function (_event,_options) {
         notify(_options.title, _options.message, _options.theme);
     });
-
-    nextdom.changes();
+    if (typeof user_id !== 'undefined') {
+        nextdom.changes();
+    }
 }
 
 nextdom.getConfiguration = function (_params) {
@@ -410,7 +412,7 @@ nextdom.getCronSelectModal = function(_options,_callback) {
 };
 
 nextdom.getSelectActionModal = function(_options, _callback){
- if (!isset(_options)) {
+   if (!isset(_options)) {
     _options = {};
 }
 if ($("#mod_insertActionValue").length == 0) {
@@ -530,9 +532,9 @@ nextdom.getTimelineEvents = function(_params) {
 };
 
 nextdom.removeTimelineEvents = function(_params) {
- var paramsRequired = [];
- var paramsSpecifics = {};
- try {
+   var paramsRequired = [];
+   var paramsSpecifics = {};
+   try {
     nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
 } catch (e) {
     (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
@@ -549,9 +551,9 @@ $.ajax(paramsAJAX);
 
 
 nextdom.getFileFolder = function(_params) {
- var paramsRequired = ['type','path'];
- var paramsSpecifics = {};
- try {
+   var paramsRequired = ['type','path'];
+   var paramsSpecifics = {};
+   try {
     nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
 } catch (e) {
     (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
@@ -569,9 +571,9 @@ $.ajax(paramsAJAX);
 };
 
 nextdom.getFileContent = function(_params) {
- var paramsRequired = ['path'];
- var paramsSpecifics = {};
- try {
+   var paramsRequired = ['path'];
+   var paramsSpecifics = {};
+   try {
     nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
 } catch (e) {
     (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
@@ -588,9 +590,9 @@ $.ajax(paramsAJAX);
 };
 
 nextdom.setFileContent = function(_params) {
- var paramsRequired = ['path','content'];
- var paramsSpecifics = {};
- try {
+   var paramsRequired = ['path','content'];
+   var paramsSpecifics = {};
+   try {
     nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
 } catch (e) {
     (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
@@ -609,9 +611,9 @@ $.ajax(paramsAJAX);
 
 
 nextdom.deleteFile = function(_params) {
- var paramsRequired = ['path'];
- var paramsSpecifics = {};
- try {
+   var paramsRequired = ['path'];
+   var paramsSpecifics = {};
+   try {
     nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
 } catch (e) {
     (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
@@ -628,9 +630,9 @@ $.ajax(paramsAJAX);
 };
 
 nextdom.createFile = function(_params) {
- var paramsRequired = ['path','name'];
- var paramsSpecifics = {};
- try {
+   var paramsRequired = ['path','name'];
+   var paramsSpecifics = {};
+   try {
     nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
 } catch (e) {
     (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
@@ -649,13 +651,13 @@ $.ajax(paramsAJAX);
 
 
 nextdom.emptyRemoveHistory = function(_params) {
- var paramsRequired = [];
- var paramsSpecifics = {};
- try {
+   var paramsRequired = [];
+   var paramsSpecifics = {};
+   try {
     nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
 } catch (e) {
-   (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-   return;
+ (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
+ return;
 }
 var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
 var paramsAJAX = nextdom.private.getParamsAJAX(params);

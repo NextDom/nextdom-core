@@ -216,3 +216,23 @@ nextdom.view.setOrder = function(_params) {
     };
     $.ajax(paramsAJAX);
 };
+
+
+nextdom.view.removeImage = function (_params) {
+    var paramsRequired = ['id'];
+    var paramsSpecifics = {};
+    try {
+        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
+    } catch (e) {
+        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
+        return;
+    }
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
+    var paramsAJAX = nextdom.private.getParamsAJAX(params);
+    paramsAJAX.url = 'core/ajax/view.ajax.php';
+    paramsAJAX.data = {
+        action: 'removeImage',
+        id: _params.id
+    };
+    $.ajax(paramsAJAX);
+};

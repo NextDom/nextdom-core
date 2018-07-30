@@ -31,6 +31,7 @@ class jeeObject {
     private $position;
     private $configuration;
     private $display;
+    private $image;
 
     public static function byId($_id) {
         return JeeObjectManager::byId($_id);

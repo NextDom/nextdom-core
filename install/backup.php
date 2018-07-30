@@ -36,7 +36,7 @@ if (isset($argv)) {
 }
 
 try {
-    require_once dirname(__FILE__) . '/../core/php/core.inc.php';
+    require_once __DIR__ . '/../core/php/core.inc.php';
     echo "***************Start of NextDom backup at " . date('Y-m-d H:i:s') . "***************\n";
 
     try {
@@ -46,7 +46,7 @@ try {
     } catch (Exception $e) {
         echo '***ERREUR*** ' . $e->getMessage();
     }
-    
+
     try {
         echo 'Vérifiez les droits sur les fichiers...';
         nextdom::cleanFileSytemRight();
@@ -56,7 +56,7 @@ try {
     }
 
     global $CONFIG;
-    $nextdom_dir = realpath(dirname(__FILE__) . '/..');
+    $nextdom_dir = realpath(__DIR__ . '/..');
     $backup_dir = calculPath(config::byKey('backup::path'));
     if (!file_exists($backup_dir)) {
         mkdir($backup_dir, 0770, true);
@@ -217,11 +217,7 @@ try {
             $class = 'repo_' . $key;
             echo 'Send backup ' . $value['name'] . '...';
             try {
-                if ($class == 'repo_market') {
-                    repo_market::sendBackupCloud($backup_dir . '/' . $backup_name);
-                } else {
-                    $class::sendBackup($backup_dir . '/' . $backup_name);
-                }
+                $class::backup_send($backup_dir . '/' . $backup_name);
             } catch (Exception $e) {
                 log::add('backup', 'error', $e->getMessage());
                 echo '/!\ ' . br2nl($e->getMessage()) . ' /!\\';
@@ -230,7 +226,7 @@ try {
         }
     }
     echo "Nom de la sauvegarde : " . $backup_dir . '/' . $backup_name . "\n";
-    
+
     try {
         echo 'Vérifiez les droits sur les fichiers...';
         nextdom::cleanFileSytemRight();

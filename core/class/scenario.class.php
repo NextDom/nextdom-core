@@ -1168,6 +1168,12 @@ class scenario
         $this->_log = '';
     }
 
+    public function resetRepeatIfStatus() {
+        foreach ($this->getElement() as $element) {
+            $element->resetRepeatIfStatus();
+        }
+    }
+
     /*     * **********************Getteur Setteur*************************** */
     /**
      *

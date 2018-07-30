@@ -49,7 +49,9 @@ try {
         date_default_timezone_set($configs['timezone']);
     }
 } catch (Exception $e) {
+
 } catch (Error $e) {
+
 }
 
 try {
@@ -57,20 +59,22 @@ try {
         log::define_error_reporting($configs['log::level']);
     }
 } catch (Exception $e) {
+
 } catch (Error $e) {
+
 }
 
-function nextdomCoreAutoload($classname)
-{
+function nextdomCoreAutoload($classname) {
     try {
         include_file('core', $classname, 'class');
     } catch (Exception $e) {
+
     } catch (Error $e) {
+
     }
 }
 
-function nextdomPluginAutoload($_classname)
-{
+function nextdomPluginAutoload($_classname) {
     $classname = str_replace(array('Real', 'Cmd'), '', $_classname);
     $plugin_active = config::byKey('active', $classname, null);
     if ($plugin_active === null || $plugin_active == '') {
@@ -82,25 +86,28 @@ function nextdomPluginAutoload($_classname)
             include_file('core', $classname, 'class', $classname);
         }
     } catch (Exception $e) {
+
     } catch (Error $e) {
+
     }
 }
 
-function nextdomOtherAutoload($classname)
-{
+function nextdomOtherAutoload($classname) {
     try {
         include_file('core', substr($classname, 4), 'com');
-
         return;
     } catch (Exception $e) {
+
     } catch (Error $e) {
+
     }
     try {
         include_file('core', substr($classname, 5), 'repo');
-
         return;
     } catch (Exception $e) {
+
     } catch (Error $e) {
+
     }
 }
 spl_autoload_register('nextdomOtherAutoload', true, true);
