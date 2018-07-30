@@ -640,4 +640,25 @@ class EqLogicManager
         return $return;
     }
 
+    /**
+     * Obtenir l'ensemble des tags liés aux objets
+     *
+     * @return array
+     */
+    public static function getAllTags() {
+        $values = array();
+        $sql = 'SELECT tags
+                FROM '.self::DB_CLASS_NAME.'
+                WHERE tags IS NOT NULL
+        	    AND tags!=""';
+        $results = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL);
+        $return = array();
+        foreach ($results as $result) {
+            $tags = explode(',', $result['tags']);
+            foreach ($tags as $tag) {
+                $return[$tag] = $tag;
+            }
+        }
+        return $return;
+    }
 }

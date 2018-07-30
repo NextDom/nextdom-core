@@ -150,6 +150,9 @@ class eqLogic
         return EqLogicManager::generateHtmlTable($_nbLine, $_nbColumn, $_options);
     }
 
+    public static function getAllTags() {
+        return EqLogicManager::getAllTags();
+    }
     /**
      * Get HTML code for battery widget
      *
