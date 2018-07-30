@@ -1,260 +1,376 @@
 <?php
-
-/* This file is part of NextDom.
-*
-* NextDom is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* NextDom is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-use NextDom\Helpers\PrepareView;
-use NextDom\Helpers\Status;
-use NextDom\Managers\JeeObjectManager;
-use NextDom\Managers\UpdateManager;
-
-global $homeLink;
-
-$pluginMenu = PrepareView::getPluginMenu();
-$panelMenu = PrepareView::getPanelMenu();
-$nbMessage = message::nbMessage();
-$displayMessage = '';
-if ($nbMessage == 0) {
-  $displayMessage = 'display : none;';
+if (!isConnect()) {
+    throw new Exception('{{401 - Accès non autorisé}}');
 }
-$nbUpdate = UpdateManager::nbNeedUpdate();
-$displayUpdate = '';
-if ($nbUpdate == 0) {
-  $displayUpdate = 'display : none;';
+sendVarToJs('SEL_OBJECT_ID', init('object_id'));
+sendVarToJs('SEL_CATEGORY', init('category', 'all'));
+sendVarToJs('SEL_TAG', init('tag', 'all'));
+sendVarToJs('SEL_SUMMARY', init('summary'));
+if (init('object_id') == '') {
+    $object = jeeObject::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
+} else {
+    $object = jeeObject::byId(init('object_id'));
 }
-
+if (!is_object($object)) {
+    $object = jeeObject::rootObject();
+}
+if (!is_object($object)) {
+    throw new Exception('{{Aucun objet racine trouvé. Pour en créer un, allez dans Outils -> Objets.<br/> Si vous ne savez pas quoi faire ou que c\'est la première fois que vous utilisez Jeedom, n\'hésitez pas à consulter cette <a href="https://jeedom.github.io/documentation/premiers-pas/fr_FR/index" target="_blank">page</a> et celle-là si vous avez un pack : <a href="https://jeedom.com/start" target="_blank">page</a>}}');
+}
+$child_object = jeeObject::buildTree($object);
+sendVarToJs('rootObjectId', $object->getId());
 ?>
-<body class="hold-transition skin-blue sidebar-mini">
-<header class="main-header">
 
-  <!-- Logo -->
-  <a href="<?php echo $homeLink; ?>" class="logo">
-    <!-- mini logo for sidebar mini 50x50 pixels -->
-    <span class="logo-mini"><b>Nx</b>D</span>
-    <!-- logo for regular state and mobile devices -->
-    <span class="logo-lg"><b>NextDom</b></span>
-  </a>
-
-  <!-- Header Navbar: style can be found in header.less -->
-  <nav class="navbar navbar-static-top">
-    <!-- Sidebar toggle button-->
-    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-      <span class="sr-only">Toggle navigation</span>
-    </a>
-    <!-- Navbar Right Menu -->
-    <div class="navbar-custom-menu">
-      <ul class="nav navbar-nav">
-                  <!-- Notifications: style can be found in dropdown.less -->
-        <li class="dropdown notifications-menu">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-bell-o"></i>
-            <span class="label label-warning"><?php echo $nbMessage; ?></span>
-          </a>
-          <ul class="dropdown-menu">
-            <li class="header">You have <?php echo $nbMessage; ?>  notifications</li>
-
-            </li>
-            <li class="footer"><a href="index.php?v=d&p=update">View all</a></li>
-          </ul>
-        </li>
-        <!-- Tasks: style can be found in dropdown.less -->
-        <li class="dropdown tasks-menu">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-flag-o"></i>
-            <span class="label label-danger"><?php echo $nbUpdate; ?></span>
-          </a>
-          <ul class="dropdown-menu">
-            <li class="header">You have <?php echo $nbUpdate; ?> tasks</li>
-            <li>
-              <!-- inner menu: contains the actual data -->
-
-                <!-- end task item -->
-
-            </li>
-            <li class="footer">
-              <a href="index.php?v=d&p=update">View all tasks</a>
-            </li>
-          </ul>
-        </li>
-
-        <!-- Control Sidebar Toggle Button -->
-        <li>
-          <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-        </li>
-      </ul>
+<div class="row row-overflow">
+    <?php
+    if ($_SESSION['user']->getOptions('displayObjetByDefault') == 1) {
+        echo '<div class="col-lg-2 col-md-3 col-sm-4" id="div_displayObjectList">';
+    } else {
+        echo '<div class="col-lg-2 col-md-3 col-sm-4" style="display:none;" id="div_displayObjectList">';
+    }
+    ?>
+    <div class="bs-sidebar">
+        <ul id="ul_object" class="nav nav-list bs-sidenav">
+            <li class="filter" style="margin-bottom: 5px;"><input class="filter form-control input-sm" placeholder="{{Rechercher}}" style="width: 100%"/></li>
+            <?php
+            $allObject = jeeObject::buildTree(null, true);
+            foreach ($allObject as $object_li) {
+                $margin = 5 * $object_li->getConfiguration('parentNumber');
+                if ($object_li->getId() == $object->getId()) {
+                    echo '<li class="cursor li_object active" ><a data-object_id="' . $object_li->getId() . '" data-href="index.php?v=d&p=dashboard&object_id=' . $object_li->getId() . '&category=' . init('category', 'all') . '" style="padding: 2px 0px;"><span style="position:relative;left:' . $margin . 'px;font-size:0.85em;">' . $object_li->getHumanName(true, true) . '</span><span style="font-size : 0.65em;float:right;position:relative;top:7px;">' . $object_li->getHtmlSummary() . '</span></a></li>';
+                } else {
+                    echo '<li class="cursor li_object" ><a data-object_id="' . $object_li->getId() . '" data-href="index.php?v=d&p=dashboard&object_id=' . $object_li->getId() . '&category=' . init('category', 'all') . '" style="padding: 2px 0px;"><span style="position:relative;left:' . $margin . 'px;font-size:0.85em;">' . $object_li->getHumanName(true, true) . '</span><span style="font-size : 0.65em;float:right;position:relative;top:7px;">' . $object_li->getHtmlSummary() . '</span></a></li>';
+                }
+            }
+            ?>
+        </ul>
     </div>
+</div>
+<?php
+if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
+    if ($_SESSION['user']->getOptions('displayObjetByDefault') == 1) {
+        echo '<div class="col-lg-8 col-md-7 col-sm-5" id="div_displayObject">';
+    } else {
+        echo '<div class="col-lg-10 col-md-9 col-sm-7" id="div_displayObject">';
+    }
+} else {
+    if ($_SESSION['user']->getOptions('displayObjetByDefault') == 1) {
+        echo '<div class="col-lg-10 col-md-9 col-sm-8" id="div_displayObject">';
+    } else {
+        echo '<div class="col-lg-12 col-md-12 col-sm-12" id="div_displayObject">';
+    }
+}
+?>
+<i class='fa fa-picture-o cursor pull-left' id='bt_displayObject' data-display='<?php echo $_SESSION['user']->getOptions('displayObjetByDefault') ?>' title="{{Afficher/Masquer les objets}}"></i>
+<i class='fa fa-sort-amount-desc pull-left cursor' id='bt_categorieHidden' title="{{Trier vos équipements}}"></i>
+<i class='fa fa-cogs pull-right cursor' id='bt_displayScenario' data-display='<?php echo $_SESSION['user']->getOptions('displayScenarioByDefault') ?>' title="{{Afficher/Masquer les scénarios}}"></i>
+<?php if (init('category', 'all') == 'all') {?>
+    <i class="fas fa-pencil-alt pull-right cursor" id="bt_editDashboardWidgetOrder" data-mode="0" style="margin-right : 10px;"></i>
+<?php }
+?>
+<div style="witdh:100%; display: none;" class="categorieHidden">
+    <div style="witdh:45%; float:left;">
+        <div class="demo">
+            <select id="sel_eqLogicCategory">
+                <?php
+                if (init('category', 'all') == 'all') {
+                    echo '<option value="all" selected> {{Toute}}</option>';
+                } else {
+                    echo '<option value="all"> {{Toute}}</option>';
+                }
+                foreach (jeedom::getConfiguration('eqLogic:category', true) as $key => $value) {
+                    if (init('category', 'all') == $key) {
+                        echo '<option value="' . $key . '" selected> {{' . $value['name'] . '}}</option>';
+                    } else {
+                        echo '<option value="' . $key . '"> {{' . $value['name'] . '}}</option>';
+                    }
+                }
+                ?>
+            </select>
+        </div>
+    </div>
+    <div style="witdh:45%; float:left;">
+        <div class="demo2">
+            <select id="sel_eqLogicTags">
+                <?php
+                if (init('tag', 'all') == 'all') {
+                    echo '<option value="all" selected> {{Tous}}</option>';
+                } else {
+                    echo '<option value="all"> {{Tous}}</option>';
+                }
+                $knowTags = eqLogic::getAllTags();
+                foreach ($knowTags as $tag) {
+                    if (init('tag', 'all') == $tag) {
+                        echo '<option value="' . $tag . '" selected> ' . $tag . '</option>';
+                    } else {
+                        echo '<option value="' . $tag . '"> ' . $tag . '</option>';
+                    }
+                }
+                ?>
+            </select>
+        </div>
+    </div>
+</div>
+<?php include_file('desktop', 'dashboard', 'js');?>
+                  <?php include_file('desktop', 'dashboard-v2', 'js'); ?>
+<?php include_file('3rdparty', 'jquery.isotope/isotope.pkgd.min', 'js');?>
+<?php include_file('desktop', 'dashboard', 'css');?>
+<?php include_file('3rdparty', 'jquery.multi-column-select/multi-column-select', 'js');?>
+<div class="row" >
+    <?php
+    if (init('object_id') != '') {
+        echo '<div class="col-md-12">';
+    } else {
+        echo '<div class="col-md-' . $object->getDisplay('dashboard::size', 12) . '">';
+    }
 
-  </nav>
-</header>
-<!-- Left side column. contains the logo and sidebar -->
-<aside class="main-sidebar">
-  <!-- sidebar: style can be found in sidebar.less -->
-  <section class="sidebar">
+echo '<div class="panel" style="border-color:' . $object->getDisplay("tagColor") . ';" data-father_id="' . $object->getFather_id() .'">';
+echo '<div class="panel-heading" style="background-color:' . $object->getDisplay("tagColor") . '; color:'.$object->getDisplay("tagTextColor").'">';
+echo '<h3 class="panel-title">' . $object->getDisplay("icon" ).' '. $object->getName().'</h3>';
+echo '</div>';
+echo '<div id="config">';
+echo '<div class="panel-body">';
+echo '<div class="div_displayEquipement" id="div_ob' . $object->getId() . '" style="width: 100%;padding-top:3px;margin-bottom : 3px;">';
+    echo '<script>getObjectHtml(' . $object->getId() . ')</script>';
+    echo '</div>';
+    echo '</div>';
+    echo '</div>';
+echo '</div>';
+    foreach ($child_object as $child) {
+        if ($child->getConfiguration('hideOnDashboard', 0) == 1) {
+            continue;
+        }
+      echo '<div class="panel div_object" style="border-color:' . $child->getDisplay("tagColor") . ';" data-father_id="' . $child->getFather_id() .'">';
+echo '<div class="panel-heading" style="background-color:' . $child->getDisplay("tagColor") . ';color:'.$child->getDisplay("tagTextColor").'">';
+echo '<h3 class="panel-title">' . $child->getDisplay("icon" ).' '. $child->getName().'</h3>';
+echo '      <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>';
+echo '</div>';
+echo '<div id="config">';
+echo '<div class="panel-body">';
+echo '<div class="div_displayEquipement" id="div_ob' . $child->getId() . '" style="width: 100%;padding-top:3px;margin-bottom : 3px;">';
+        echo '<script>getObjectHtml(' . $child->getId() . ')</script>';
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+    }
 
-    <!-- search form -->
-    <form action="#" method="get" class="sidebar-form">
-      <div class="input-group">
-        <input type="text" name="q" class="form-control" placeholder="Search...">
-        <span class="input-group-btn">
-              <button type="submit" name="search" id="search-btn" class="btn btn-flat">
-                <i class="fa fa-search"></i>
-              </button>
-            </span>
-      </div>
-    </form>
-    <!-- /.search form -->
-    <!-- sidebar menu: : style can be found in sidebar.less -->
-    <ul class="sidebar-menu" data-widget="tree">
-      <li class="header">MENU PRINCIPAL</li>
-      <li class="active treeview menu-open">
-          <a href="#"><i class="fa fa-dashboard"></i> <span>Acceuil</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-              <ul class="treeview-menu">
-                  <li class="treeview">
-                      <a href="#"><i class="fa fa-circle-o"></i> Dashboard <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                      <ul class="treeview-menu">
+    ?>
+</div>
+</div>
+<?php
+if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
+    echo '<div class="col-lg-2 col-md-2 col-sm-3" id="div_displayScenario">';
+} else {
+    echo '<div class="col-lg-2 col-md-2 col-sm-3" id="div_displayScenario" style="display:none;">';
+}
+?>
+<legend><i class="fas fa-history"></i> {{Scénarios}}</legend>
+<?php
+foreach (scenario::all() as $scenario) {
+    if ($scenario->getIsVisible() == 0) {
+        continue;
+    }
+    echo $scenario->toHtml('dashboard');
+}
+?>
 
-                              <li class="treeview-menu">
-                                  <?php
-                                  foreach (JeeObjectManager::buildTree(null, false) as $objectLi) {
-                                      echo '<li><a href="index.php?v=d&p=dashboard&object_id=' . $objectLi->getId() . '">' . $objectLi->getHumanName(true) . '</a></li>';
-                                  }
-                                  ?>
-                              </li>
+</div>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
 
-                      </ul>
-                  </li>
-
-
-                  <li class="treeview">
-                      <a href="#"><i class="fa fa-circle-o"></i> Vue <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                      <ul class="treeview-menu">
-
-                              <li class="treeview-menu">
-                                  <?php
-                                  foreach (view::all() as $viewMenu) {
-                                      echo '<li><a href="index.php?v=d&p=view&view_id=' . $viewMenu->getId() . '">' . trim($viewMenu->getDisplay('icon')) . ' ' . $viewMenu->getName() . '</a></li>';
-                                  }
-                                  ?>
-                              </li>
-
-                      </ul>
-                  </li>
-
-
-                  <li class="treeview">
-                      <a href="#"><i class="fa fa-circle-o"></i> Design <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                      <ul class="treeview-menu">
-
-                              <li class="treeview-menu">
-                 <?php
-                                  foreach (planHeader::all() as $planMenu) {
-                                      echo '<li><a href="index.php?v=d&p=plan&plan_id=' . $planMenu->getId() . '">' . trim($planMenu->getConfiguration('icon') . ' ' . $planMenu->getName()) . '</a></li>';
-                                  }
-                                  ?>
-                              </li>
-
-                      </ul>
-                  </li>
-              </ul>
-
-       </li>
-          <li class="treeview">
-          <a href="#">
-            <i class="fa fa-laptop"></i>
-            <span>Analyse</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="index.php?v=d&p=history"><i class="fa fa-circle-o"></i> {{Historique}}</a></li>
-            <li><a href="index.php?v=d&p=report"><i class="fa fa-circle-o"></i> {{Rapport}}</a></li>
-            <li><a href="#" id="bt_showEventInRealTime"><i class="fa fa-circle-o"></i> {{Temps réel}}</a></li>
-            <li><a href="index.php?v=d&p=log"><i class="fa fa-circle-o"></i> {{Logs}}</a></li>
-            <li><a href="index.php?v=d&p=eqAnalyse"><i class="fa fa-circle-o"></i> {{Equipements}}</a></li>
-            <li><a href="index.php?v=d&p=health"><i class="fa fa-circle-o"></i> {{Santé}}</a></li>
-          </ul>
-        </li>
-           <li class="treeview">
-          <a href="#">
-            <i class="fa fa-laptop"></i>
-            <span>Outils</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="index.php?v=d&p=object"><i class="fa fa-circle-o"></i> {{Objets}}</a></li>
-            <li><a href="index.php?v=d&p=interact"><i class="fa fa-circle-o"></i> {{Interactions}}</a></li>
-            <li><a href="index.php?v=d&p=display" id="bt_showEventInRealTime"><i class="fa fa-circle-o"></i> {{Résumé domotique}}</a></li>
-            <li><a href="index.php?v=d&p=scenario"><i class="fa fa-circle-o"></i> {{Scénarios}}</a></li>
-          </ul>
-        </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-share"></i> <span>Plugins</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o"></i> Gestion des plugins</a></li>
-                <li class="treeview-menu">
-                   <?php echo $pluginMenu; ?>
-               </li>
-        </li>
-
-
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+    <!-- Create the tabs -->
+    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+        <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+        <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
     </ul>
-                     <li class="treeview">
-          <a href="#">
-            <i class="fa fa-laptop"></i>
-            <span>{{Réglages}}</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="index.php?v=d&p=administration"><i class="fa fa-circle-o"></i> {{Configuration}}</a></li>
-            <li><a href="index.php?v=d&p=backup"><i class="fa fa-circle-o"></i> {{Sauvegardes}}</a></li>
-            <li><a href="index.php?v=d&p=migration"><i class="fa fa-circle-o"></i> {{Migration depuis jeedom}}</a></li>
-            <li><a href="index.php?v=d&p=update"><i class="fa fa-circle-o"></i> {{Centre de mise à jour}}</a></li>
-            <li><a href="index.php?v=d&p=cron"><i class="fa fa-circle-o"></i> {{Moteur de tâches}}</a></li>
-            <li><a href="index.php?v=d&p=health"><i class="fa fa-circle-o"></i> {{Personnalisation avancée}}</a></li>
-            <li><a href="index.php?v=d&p=history"><i class="fa fa-circle-o"></i> {{Utilisateurs}}</a></li>
-            <li><a href="index.php?v=d&p=report"><i class="fa fa-circle-o"></i> {{Profil}}</a></li>
-            <li><a href="#" id="bt_showEventInRealTime"><i class="fa fa-circle-o"></i> {{Version mobile}}</a></li>
-            <li><a href="index.php?v=d&p=log"><i class="fa fa-circle-o"></i> {{Version}}</a></li>
-            <li><a href="index.php?v=d&p=eqAnalyse"><i class="fa fa-circle-o"></i> {{Se déconnecter}}</a></li>
-            <li><a href="index.php?v=d&p=health"><i class="fa fa-circle-o"></i> {{Aide}}</a></li>
-			<?php
-                     if (nextdom::isCapable('sudo')) {
-                       echo '<li class="divider"></li>';
-                       echo '<li><a id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i> {{Redémarrer}}</a></li>';
-                       echo '<li><a id="bt_haltSystem" state="0"><i class="fa fa-power-off"></i> {{Eteindre}}</a></li>';
-                     }
-			?>
-          </ul>
-        </li>
-</ul>
-  </section>
-  <!-- /.sidebar -->
-</aside>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <!-- Home tab content -->
+        <div class="tab-pane" id="control-sidebar-home-tab">
+            <h3 class="control-sidebar-heading">Recent Activity</h3>
+            <ul class="control-sidebar-menu">
+                <li>
+                    <a href="javascript:void(0)">
+                        <i class="menu-icon fa fa-birthday-cake bg-red"></i>
 
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-  <!-- Content Header (Page header) -->
-</body>
+                        <div class="menu-info">
+                            <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
+
+                            <p>Will be 23 on April 24th</p>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">
+                        <i class="menu-icon fa fa-user bg-yellow"></i>
+
+                        <div class="menu-info">
+                            <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
+
+                            <p>New phone +1(800)555-1234</p>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">
+                        <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
+
+                        <div class="menu-info">
+                            <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
+
+                            <p>nora@example.com</p>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">
+                        <i class="menu-icon fa fa-file-code-o bg-green"></i>
+
+                        <div class="menu-info">
+                            <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
+
+                            <p>Execution time 5 seconds</p>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <!-- /.control-sidebar-menu -->
+
+            <h3 class="control-sidebar-heading">Tasks Progress</h3>
+            <ul class="control-sidebar-menu">
+                <li>
+                    <a href="javascript:void(0)">
+                        <h4 class="control-sidebar-subheading">
+                            Custom Template Design
+                            <span class="label label-danger pull-right">70%</span>
+                        </h4>
+
+                        <div class="progress progress-xxs">
+                            <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">
+                        <h4 class="control-sidebar-subheading">
+                            Update Resume
+                            <span class="label label-success pull-right">95%</span>
+                        </h4>
+
+                        <div class="progress progress-xxs">
+                            <div class="progress-bar progress-bar-success" style="width: 95%"></div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">
+                        <h4 class="control-sidebar-subheading">
+                            Laravel Integration
+                            <span class="label label-warning pull-right">50%</span>
+                        </h4>
+
+                        <div class="progress progress-xxs">
+                            <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">
+                        <h4 class="control-sidebar-subheading">
+                            Back End Framework
+                            <span class="label label-primary pull-right">68%</span>
+                        </h4>
+
+                        <div class="progress progress-xxs">
+                            <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <!-- /.control-sidebar-menu -->
+
+        </div>
+        <!-- /.tab-pane -->
+
+        <!-- Settings tab content -->
+        <div class="tab-pane" id="control-sidebar-settings-tab">
+            <form method="post">
+                <h3 class="control-sidebar-heading">General Settings</h3>
+
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">
+                        Report panel usage
+                        <input type="checkbox" class="pull-right" checked>
+                    </label>
+
+                    <p>
+                        Some information about this general settings option
+                    </p>
+                </div>
+                <!-- /.form-group -->
+
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">
+                        Allow mail redirect
+                        <input type="checkbox" class="pull-right" checked>
+                    </label>
+
+                    <p>
+                        Other sets of options are available
+                    </p>
+                </div>
+                <!-- /.form-group -->
+
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">
+                        Expose author name in posts
+                        <input type="checkbox" class="pull-right" checked>
+                    </label>
+
+                    <p>
+                        Allow the user to show his name in blog posts
+                    </p>
+                </div>
+                <!-- /.form-group -->
+
+                <h3 class="control-sidebar-heading">Chat Settings</h3>
+
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">
+                        Show me as online
+                        <input type="checkbox" class="pull-right" checked>
+                    </label>
+                </div>
+                <!-- /.form-group -->
+
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">
+                        Turn off notifications
+                        <input type="checkbox" class="pull-right">
+                    </label>
+                </div>
+                <!-- /.form-group -->
+
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">
+                        Delete chat history
+                        <a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
+                    </label>
+                </div>
+                <!-- /.form-group -->
+            </form>
+        </div>
+        <!-- /.tab-pane -->
+    </div>
+</aside>
+<!-- /.control-sidebar -->
+<!-- Add the sidebar's background. This div must be placed
+immediately after the control sidebar -->
+<div class="control-sidebar-bg"></div>
+
+</div>
+<!-- ./wrapper -->
+</html>
