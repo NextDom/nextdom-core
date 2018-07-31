@@ -78,10 +78,11 @@ $themeDir = NEXTDOM_ROOT . '/css/themes/';
 
 if (isset($_SESSION['user'])) {
     $designTheme = $_SESSION['user']->getOptions('design_nextdom');
-    if (file_exists(NEXTDOM_ROOT .'/css/'. $designTheme .'.css')) {
-		include_file('', $designTheme, 'css');
-    }else{
+    if (file_exists(NEXTDOM_ROOT . '/css/' . $designTheme . '.css')) {
+        include_file('', $designTheme, 'css');
+    } else {
         include_file('', 'dashboard', 'css');
+    }
 }
     // Javascript
     include_file('3rdparty', 'jquery/jquery.min', 'js');
