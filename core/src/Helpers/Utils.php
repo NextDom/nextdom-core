@@ -36,15 +36,27 @@ class Utils
     /**
      * Ajouter une liste de variables Javascript au HTML
      *
+     * TODO: Merger les 2 avecs un test
      * @param array $listOfVarsWithValues Liste des variables 'nom' => 'valeur'
      */
     public static function sendVarsToJS(array $listOfVarsWithValues)
     {
-        echo "<script>\n";
+        echo self::getVarsToJS($listOfVarsWithValues);
+    }
+
+    /**
+     * Get HTML code of list a javascript variables.
+     *
+     * @param array $listOfVarsWithValues
+     * @return string
+     */
+    public static function getVarsToJS(array $listOfVarsWithValues) {
+        $result = "<script>\n";
         foreach ($listOfVarsWithValues as $varName => $value) {
-            echo self::getVarInJs($varName, $value) . "\n";
+            $result .= self::getVarInJs($varName, $value) . "\n";
         }
-        echo "</script>\n";
+        $result .= "</script>\n";
+        return $result;
     }
 
     /**

@@ -141,4 +141,142 @@ class PrepareView
     {
         return self::$panelMenu;
     }
+
+    public static function showRescueMode()
+    {
+    }
+
+    public static function showContent()
+    {
+        global $NEXTDOM_INTERNAL_CONFIG;
+        global $homeLink;
+        global $title;
+        global $language;
+        global $eventjs_plugin;
+        global $configs;
+
+        if (Status::isRescueMode() && !in_array(Utils::init('p'), array('custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system'))) {
+            $_GET['p'] = 'system';
+        }
+        require_once(NEXTDOM_ROOT . '/core/php/authentification.php');
+        Status::initConnectState();
+        $configs = \config::byKeys(array('enableCustomCss', 'language', 'nextdom::firstUse'));
+
+        // Détermine la page courante
+        if (Status::isConnect()) {
+            $homePage = explode('::', $_SESSION['user']->getOptions('homePage', 'core::dashboard'));
+            if (count($homePage) == 2) {
+                if ($homePage[0] == 'core') {
+                    $homeLink = 'index.php?v=d&p=' . $homePage[1];
+                } else {
+                    $homeLink = 'index.php?v=d&m=' . $homePage[0] . '&p=' . $homePage[1];
+                }
+                if ($homePage[1] == 'plan' && $_SESSION['user']->getOptions('defaultPlanFullScreen') == 1) {
+                    $homeLink .= '&fullscreen=1';
+                }
+            } else {
+                $homeLink = 'index.php?v=d&p=dashboard';
+            }
+        }
+        if (Status::isRescueMode()) {
+            $homeLink = 'index.php?v=d&p=system&rescue=1';
+        }
+
+        // Informations générales
+        $eventjs_plugin = [];
+        $title = 'NextDom';
+        //TODO: Tests à revoir
+        if (init('p') == '' && Status::isConnect()) {
+            redirect($homeLink);
+        }
+        $page = '';
+        if (Status::isConnect() && init('p') != '') {
+            $page = init('p');
+            $title = ucfirst($page) . ' - ' . $title;
+        }
+        $language = $configs['language'];
+
+        // Initialisation des plugins
+        $plugin = null;
+        if (!Status::isRescueMode()) {
+            $plugin = PrepareView::initMenus($NEXTDOM_INTERNAL_CONFIG);
+        }
+        $globalData = [];
+        // TODO: Remplacer par un include dans twig
+        $render = Render::getInstance();
+        ob_start();
+        require_once(NEXTDOM_ROOT . '/desktop/template/header.php');
+        $globalData['HEADER'] = ob_get_clean();
+
+        if (!Status::isConnect()) {
+            $logo = \config::byKey('product_connection_image');
+            $css = $render->getCssHtmlTag('/desktop/css/connection.css');
+            $js = $render->getJsHtmlTag('/desktop/js/connection.js');
+            $js .= $render->getJsHtmlTag('/3rdparty/animate/animate.js');
+            $globalData['CONTENT'] = $render->get('desktop/connection.html.twig', array('logo' => $logo, 'CSS' => $css, 'JS' => $js));
+        } else {
+            $pageData = [];
+
+            $pageData['CSS'] = $render->getCssHtmlTag('/css/nextdom.css');
+            $pageData['varToJs'] = Utils::getVarsToJS(array(
+                'userProfils' => $_SESSION['user']->getOptions(),
+                'user_id' => $_SESSION['user']->getId(),
+                'user_isAdmin' => Status::isConnectAdmin(),
+                'user_login' => $_SESSION['user']->getLogin(),
+                'nextdom_firstUse' => $configs['nextdom::firstUse']
+            ));
+            $pageData['JS'] = '';
+
+            if (count($eventjs_plugin) > 0) {
+                foreach ($eventjs_plugin as $value) {
+                    try {
+                        $pageData['JS'] .= $render->getJsHtmlTag('/plugins/' . $value . '/desktop/js/event.js');
+                    } catch (\Exception $e) {
+                        \log::add($value, 'error', 'Event JS file not found');
+                    }
+                }
+            }
+            ob_start();
+            PrepareView::showMenu();
+            $globalData['MENU'] = ob_get_clean();
+
+            try {
+                if (!\nextdom::isStarted()) {
+                    $pageData['alertMsg'] = 'NextDom est en cours de démarrage, veuillez patienter . La page se rechargera automatiquement une fois le démarrage terminé.';
+                }
+                ob_start();
+                if ($plugin !== null && is_object($plugin)) {
+                    \include_file('desktop', $page, 'php', $plugin->getId());
+                } else {
+                    \include_file('desktop', $page, 'php');
+                }
+                $pageData['content'] = ob_get_clean();
+            } catch (\Exception $e) {
+                ob_end_clean();
+                $pageData['alertMsg'] = displayException($e);
+            }
+
+            $globalData['CONTENT'] = $render->get('desktop/index.html.twig', $pageData);
+        }
+
+        $render = Render::getInstance();
+        $render->show('desktop/base.html.twig', $globalData);
+
+    }
+
+    private static function getMenu()
+    {
+        $pluginMenu = PrepareView::getPluginMenu();
+        $panelMenu = PrepareView::getPanelMenu();
+        $nbMessage = message::nbMessage();
+        $displayMessage = '';
+        if ($nbMessage == 0) {
+            $displayMessage = 'display : none;';
+        }
+        $nbUpdate = UpdateManager::nbNeedUpdate();
+        $displayUpdate = '';
+        if ($nbUpdate == 0) {
+            $displayUpdate = 'display : none;';
+        }
+    }
 }

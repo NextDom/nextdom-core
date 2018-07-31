@@ -14,7 +14,10 @@
         "touki/ftp": "1.2.*",
         "symfony/translation": "^3.4",
         "symfony/debug": "^3.4",
-        "symfony/config": "^3.4"
+        "symfony/config": "^3.4",
+        "twig/twig": "^2.5",
+        "twig/extensions": "^1.5",
+        "symfony/twig-bridge": "^3.4"
     },
     "license": "GPL",
     "config": {
