@@ -43,9 +43,9 @@ if ($nbUpdate == 0) {
     <!-- Logo -->
     <a href="<?php echo $homeLink; ?>" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>Nx</b>D</span>
+        <span class="logo-mini"><img src="/core/img/NextDom_Square_AlphaBlackBlue.png" style="height:40px;width:auto"></img></span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>NextDom</b></span>
+        <span class="logo-lg"><img src="/core/img/NextDom_Wide_AlphaBlueBlack.png" style="height:40px;width:auto"></img></span>
     </a>
 
     <!-- Header Navbar: style can be found in header.less -->

@@ -85,7 +85,7 @@ sendVarToJs('rootObjectId', $object->getId());
         echo '<div class="col-md-' . $object->getDisplay('dashboard::size', 12) . '">';
     }
 
-echo '<div class="panel" style="border-color:' . $object->getDisplay("tagColor") . ';" data-father_id="' . $object->getFather_id() .'">';
+echo '<div class="panel" style="background-color:#ecf0f5;border-color:' . $object->getDisplay("tagColor") . ';" data-father_id="' . $object->getFather_id() .'">';
 echo '<div class="panel-heading" style="background-color:' . $object->getDisplay("tagColor") . '; color:'.$object->getDisplay("tagTextColor").'">';
 echo '<h3 class="panel-title">' . $object->getDisplay("icon" ).' '. $object->getName().'</h3>';
 echo '</div>';
@@ -101,7 +101,7 @@ echo '</div>';
         if ($child->getConfiguration('hideOnDashboard', 0) == 1) {
             continue;
         }
-      echo '<div class="panel div_object" style="border-color:' . $child->getDisplay("tagColor") . ';" data-father_id="' . $child->getFather_id() .'">';
+      echo '<div class="panel div_object" style="background-color:#ecf0f5; border-color:' . $child->getDisplay("tagColor") . ';" data-father_id="' . $child->getFather_id() .'">';
 echo '<div class="panel-heading" style="background-color:' . $child->getDisplay("tagColor") . ';color:'.$child->getDisplay("tagTextColor").'">';
 echo '<h3 class="panel-title">' . $child->getDisplay("icon" ).' '. $child->getName().'</h3>';
 echo '      <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>';
@@ -335,4 +335,4 @@ immediately after the control sidebar -->
 </div>
 <!-- ./wrapper -->
 </html>
-                  <?php include_file('desktop', 'dashboard-v2', 'js'); ?>
+<?php include_file('desktop', 'dashboard-v2', 'js'); ?>
