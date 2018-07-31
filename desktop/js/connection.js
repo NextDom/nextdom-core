@@ -33,6 +33,8 @@ $('#in_login_username').on('focusout change keypress',function(){
                     $(".veen .login-btn button").removeClass('active');
                     $(this).addClass('active');
                 }else{
+                    // TODO: Problème de l'animation
+                    window.location.href = 'index.php?v=d';
                     $('.veen').animateCss('bounceOut', function(){
                         $('.veen').hide();
                         window.location.href = 'index.php?v=d';
@@ -57,6 +59,8 @@ $('#in_login_username').on('focusout change keypress',function(){
                             $('.veen').animateCss('shake');
                         },
                         success : function (){
+                            window.location.href = 'index.php?v=d';
+                            // TODO: Problème de l'animation
                             $('.veen').animateCss('bounceOut', function(){
                             $('.veen').hide();
                             window.location.href = 'index.php?v=d';

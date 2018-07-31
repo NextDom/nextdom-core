@@ -74,11 +74,18 @@ class Router
         } elseif (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
             $this->ajaxGetContent();
         } else {
-            if (Status::isRescueMode()) {
-                PrepareView::showRescueMode();
+            require_once(NEXTDOM_ROOT . '/core/php/authentification.php');
+            Status::initConnectState();
+            if (!Status::isConnect()) {
+                PrepareView::showConnectionPage();
             }
             else {
-                PrepareView::showContent();
+                if (Status::isRescueMode()) {
+                    PrepareView::showRescueMode();
+                }
+                else {
+                    PrepareView::showContent();
+                }
             }
         }
     }
@@ -94,11 +101,6 @@ class Router
             \include_file('core', 'authentification', 'php');
             \include_file('desktop', Utils::init('modal'), 'modal', Utils::init('plugin'), true);
         } catch (\Exception $e) {
-            ob_end_clean();
-            echo '<div class="alert alert-danger div_alert">';
-            echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
-            echo '</div>';
-        } catch (\Error $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
             echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
@@ -128,11 +130,6 @@ class Router
             \include_file('core', 'authentification', 'php');
             \include_file('desktop', Utils::init('p'), 'php', Utils::init('m'), true);
         } catch (\Exception $e) {
-            ob_end_clean();
-            echo '<div class="alert alert-danger div_alert">';
-            echo \translate::exec(displayException($e), 'desktop/' . Utils::init('p') . '.php');
-            echo '</div>';
-        } catch (\Error $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
             echo \translate::exec(displayException($e), 'desktop/' . Utils::init('p') . '.php');
