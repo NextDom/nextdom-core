@@ -186,7 +186,6 @@ if ($nbUpdate == 0) {
                 <ul class="nav navbar-nav">
                     <a class="navbar-brand" href="<?php echo $homeLink; ?>">
                         <img src="<?php echo config::byKey('product_image') ?>" /></a><br/>
-                    <i class="fa fa-bars burger" data-toggle="collapse" data-target="#collapse_categorie"></i>
                 </ul>
             </div>
             <div class="collapse navbar-collapse navbar-right col-lg-4 col-md-4">

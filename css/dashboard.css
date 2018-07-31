@@ -16,8 +16,13 @@
 body {
     font-family: 'noto', sans-serif !important;
     font-size: 1.42em;
-    padding-top: 105px;
+    padding-top: 90px;
     height: 100%;
+}
+
+.navbar-nav > li > a {
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 /*# sourceMappingURL=dashboard.css.map */
