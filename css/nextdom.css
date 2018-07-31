@@ -5760,11 +5760,6 @@ nav li.open .caret {
 nav i.fa-3x {
   display: block; }
 
-.content-wrapper {
-  min-height: 100%;
-  background-color: #ecf0f5;
-  z-index: 800; }
-
 #logo-nextdom img {
   width: 100%;
   margin-top: 2rem;

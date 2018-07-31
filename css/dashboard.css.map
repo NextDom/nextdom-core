@@ -1,10 +1,7 @@
 {
-	"version": 3,
-	"file": "dashboard.css",
-	"sources": [
-		"../sass/dashboard.scss",
-		"../sass/desktop/_dashboard-v1.scss"
-	],
-	"names": [],
-	"mappings": "AACA;;;;;;;;;;;;;;GAcG;ACfH,AAAA,IAAI,CAAC;IACH,WAAW,EAAE,6BAA6B;IAC1C,SAAS,EAAE,MAAM;IACjB,WAAW,EAAE,IAAI;IACjB,MAAM,EAAE,IAAI;CACb;;AAED,AAAA,WAAW,GAAC,EAAE,GAAC,CAAC,CAAA;IACZ,WAAW,EAAC,GAAG;IACf,cAAc,EAAC,GAAG;CACrB"
+"version": 3,
+"mappings": "AACA;;;;;;;;;;;;;;GAcG;ACfH,IAAK;EACH,WAAW,EAAE,6BAA6B;EAC1C,SAAS,EAAE,MAAM;EACjB,WAAW,EAAE,IAAI;EACjB,MAAM,EAAE,IAAI;;AAGd,oBAAgB;EACZ,WAAW,EAAC,GAAG;EACf,cAAc,EAAC,GAAG;;AAGtB,gBAAiB;EACf,UAAU,EAAE,IAAI;EAChB,gBAAgB,EAAE,OAAO;EACzB,OAAO,EAAE,GAAG",
+"sources": ["../sass/dashboard.scss","../sass/desktop/_dashboard-v1.scss"],
+"names": [],
+"file": "dashboard.css"
 }
