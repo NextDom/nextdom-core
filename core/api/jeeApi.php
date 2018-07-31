@@ -315,9 +315,13 @@ try {
         if (!isset($params['apikey']) && !isset($params['api'])) {
             throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action', __FILE__), -32001);
         }
-
-        if ((isset($params['apikey']) && !nextdom::apiAccess($params['apikey'])) || (isset($params['api']) && !nextdom::apiAccess($params['api']))) {
-            throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action', __FILE__), -32001);
+        $apikey = isset($params['apikey']) ? $params['apikey'] : $params['api'];
+        if (isset($params['plugin']) && $params['plugin'] != '' && $params['plugin'] != 'core') {
+            if (!nextdom::apiAccess($apikey, $params['plugin'])) {
+                throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 1', __FILE__), -32001);
+            }
+        } else if (!nextdom::apiAccess($apikey)) {
+            throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 2', __FILE__), -32001);
         }
         if (is_object($_USER_GLOBAL) && isset($params['session']) && $params['session']) {
             @session_start();
@@ -359,7 +363,7 @@ try {
 
         if ($jsonrpc->getMethod() == 'nextdom::halt') {
             if (is_object($_USER_GLOBAL) && $_USER_GLOBAL->getProfils() != 'admin') {
-                throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action', __FILE__), -32001);
+                throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
             }
             nextdom::haltSystem();
             $jsonrpc->makeSuccess('ok');
@@ -367,7 +371,7 @@ try {
 
         if ($jsonrpc->getMethod() == 'nextdom::reboot') {
             if (is_object($_USER_GLOBAL) && $_USER_GLOBAL->getProfils() != 'admin') {
-                throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action', __FILE__), -32001);
+                throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
             }
             nextdom::rebootSystem();
             $jsonrpc->makeSuccess('ok');
@@ -375,7 +379,7 @@ try {
 
         if ($jsonrpc->getMethod() == 'nextdom::update') {
             if (is_object($_USER_GLOBAL) && $_USER_GLOBAL->getProfils() != 'admin') {
-                throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action', __FILE__), -32001);
+                throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
             }
             nextdom::update('', 0);
             $jsonrpc->makeSuccess('ok');
@@ -383,7 +387,7 @@ try {
 
         if ($jsonrpc->getMethod() == 'nextdom::backup') {
             if (is_object($_USER_GLOBAL) && $_USER_GLOBAL->getProfils() != 'admin') {
-                throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action', __FILE__), -32001);
+                throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
             }
             nextdom::backup(true);
             $jsonrpc->makeSuccess('ok');
@@ -554,7 +558,7 @@ try {
                 $eqLogic->setEqType_name($params['eqType_name']);
             }
             if (is_object($_USER_GLOBAL) && $_USER_GLOBAL->getProfils() != 'admin') {
-                throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action', __FILE__), -32001);
+                throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
             }
             utils::a2o($eqLogic, nextdom::fromHumanReadable($params));
             $eqLogic->save();

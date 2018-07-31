@@ -17,7 +17,7 @@ if (Status::isRescueMode() && !in_array(init('p'), array('custom', 'backup', 'cr
 include_file('core', 'authentification', 'php');
 Status::initConnectState();
 
-$configs = config::byKeys(array('enableCustomCss', 'language', 'nextdom::firstUse'));
+$configs = config::byKeys(array('enableCustomCss', 'language', 'nextdom::firstUse', 'widget::step::width', 'widget::step::height', 'widget::margin'));
 
 // Détermine la page courante
 if (Status::isConnect()) {
@@ -76,7 +76,10 @@ if (!Status::isConnect()) {
         'user_id' => $_SESSION['user']->getId(),
         'user_isAdmin' => Status::isConnectAdmin(),
         'user_login' => $_SESSION['user']->getLogin(),
-        'nextdom_firstUse' => $configs['nextdom::firstUse']
+        'nextdom_firstUse' => $configs['nextdom::firstUse'],
+        'widget_width_step' => $configs['widget::step::width'],
+    	'widget_height_step' => $configs['widget::step::height'],
+	    'widget_margin' => $configs['widget::margin']
     ));
 
     if (count($eventjs_plugin) > 0) {
