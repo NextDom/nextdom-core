@@ -28,7 +28,12 @@ class Utils
      */
     public static function sendVarToJs(string $varName, $varValue)
     {
-        echo "<script>" .
+        echo self::getVarToJs($varName, $varValue);
+    }
+
+    public static function getVarToJs(string $varName, $varValue)
+    {
+        return "<script>" .
             self::getVarInJs($varName, $varValue) .
             "</script>\n";
     }
@@ -50,7 +55,8 @@ class Utils
      * @param array $listOfVarsWithValues
      * @return string
      */
-    public static function getVarsToJS(array $listOfVarsWithValues) {
+    public static function getVarsToJS(array $listOfVarsWithValues)
+    {
         $result = "<script>\n";
         foreach ($listOfVarsWithValues as $varName => $value) {
             $result .= self::getVarInJs($varName, $value) . "\n";
@@ -177,7 +183,8 @@ class Utils
      *
      * @return string Expression transformée
      */
-    public static function transformExpressionForEvaluation(string $expression):string {
+    public static function transformExpressionForEvaluation(string $expression): string
+    {
 
         $result = $expression;
         $replaceMap = [
@@ -213,7 +220,7 @@ class Utils
             $result = '';
             $exprIndex = 0;
             foreach ($preg_output[1] as $expr) {
-                $result .= $expr.$replaceMap[$preg_output[2][$exprIndex++]];
+                $result .= $expr . $replaceMap[$preg_output[2][$exprIndex++]];
             }
         }
         return $result;

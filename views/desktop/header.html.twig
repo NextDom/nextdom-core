@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+    <link rel="apple-touch-icon" href="/core/img/logo-nextdom-petit-nom-couleur-128x128" />
+    <link rel="apple-touch-icon-precomposed" href="/core/img/logo-nextdom-petit-nom-couleur-128x128" />
+    <link rel="shortcut icon" href="{{ productIcon }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <script>
+        var clientDatetime = new Date();
+        var clientServerDiffDatetime = ({{ date().timestamp }} * 1000) - clientDatetime.getTime();
+        var serverDatetime = {{ date().timestamp }};
+        var io = null;
+    </script>
+    {% if cssPool is defined %}
+        {% for cssFile in cssPool %}
+            <link href="{{ cssFile }}" rel="stylesheet" />
+        {% endfor %}
+    {% endif %}
+    {% if custonCss is defined %}
+        {{ customCss }}
+    {% endif %}
+    <script src="/3rdparty/jquery/jquery.min.js"></script>
+    <script>
+        NEXTDOM_PRODUCT_NAME='{{ productName }}';
+        NEXTDOM_AJAX_TOKEN = '{{ ajaxToken }}';
+        $.ajaxSetup({
+            type: "POST",
+            data: {
+                nextdom_token: '{{ ajaxToken }}'
+            }
+        })
+    </script>
+    {% if jsPool is defined %}
+        {% for jsFile in jsPool %}
+            <script src="{{ jsFile }}"></script>
+        {% endfor %}
+    {% endif %}
+    {{ language|raw }}
+    <!-- Inclusion à l'arrache ??? -->
+    <script src="3rdparty/snap.svg/snap.svg-min.js"></script>
+</head>
