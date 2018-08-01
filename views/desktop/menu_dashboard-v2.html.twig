@@ -1,7 +1,7 @@
 <header class="main-header">
 
   <!-- Logo -->
-  <a href="<?php echo $homeLink; ?>" class="logo">
+  <a href="{{ homeLink }}" class="logo">
     <!-- mini logo for sidebar mini 50x50 pixels -->
     <span class="logo-mini"><b>Nx</b>D</span>
     <!-- logo for regular state and mobile devices -->
@@ -101,11 +101,9 @@
                       <ul class="treeview-menu">
 
                               <li class="treeview-menu">
-                                  <?php
-                                  foreach (view::all() as $viewMenu) {
-                                      echo '<li><a href="index.php?v=d&p=view&view_id=' . $viewMenu->getId() . '">' . trim($viewMenu->getDisplay('icon')) . ' ' . $viewMenu->getName() . '</a></li>';
-                                  }
-                                  ?>
+                                  {% for view in viewsList %}
+                                      <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">{{ view.getDisplay('icon')|trim }} {{ viewMenu.getName() }}</a></li>
+                                  {% endfor %}
                               </li>
 
                       </ul>
@@ -117,12 +115,21 @@
                       <ul class="treeview-menu">
 
                               <li class="treeview-menu">
-                 <?php
-                                  foreach (planHeader::all() as $planMenu) {
-                                      echo '<li><a href="index.php?v=d&p=plan&plan_id=' . $planMenu->getId() . '">' . trim($planMenu->getConfiguration('icon') . ' ' . $planMenu->getName()) . '</a></li>';
-                                  }
-                                  ?>
+                                  {% for plan in plansList %}
+                                      <li><a href="index.php?v=d&p=plan&plan_id={{ plan.getId() }}">{{ plan.getConfiguration('icon')|trim }} {{ plan.getName() }}</a></li>
+                                  {% endfor %}
                               </li>
+
+                      </ul>
+                  </li>
+                  <li class="treeview">
+                      <a href="#"><i class="fa fa-paint-brush"></i> Design 3D <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                      <ul class="treeview-menu">
+                          <li class="treeview-menu">
+                              {% for plan3d in plans3dList %}
+                                  <li><a href="index.php?v=d&p=plan3d&plan3d_id={{ plan3d.getId() }}">{{ plan3d.getConfiguration('icon')|trim }} {{ plan3d.getName() }}</a></li>
+                              {% endfor %}
+                          </li>
 
                       </ul>
                   </li>
@@ -171,7 +178,7 @@
           <ul class="treeview-menu">
             <li><a href="index.php?v=d&p=plugin"><i class="fa fa-tags"></i> {{ 'Gestion des plugins' }}</a></li>
                 <li class="treeview-menu">
-                   <?php echo $pluginMenu; ?>
+                   {{ pluginMenu }}
                </li>
         </li>
 
@@ -195,15 +202,13 @@
             <li><a href="index.php?v=d&p=user"><i class="fa fa-users"></i> {{ 'Utilisateurs' }}</a></li>
             <li><a href="index.php?v=d&p=profils"><i class="fa fa-briefcase"></i> {{ 'Profil' }}</a></li>
             <li><a href="index.php?v=m"><i class="fa fa-mobile"></i> {{ 'Version mobile' }}</a></li>
-            <li><a href="index.php?v=d&p=log"><i class="fa fa-info-circle"></i> {{ 'Version' }}<?php echo nextdom::version(); ?></a></li>
+            <li><a href="index.php?v=d&p=log"><i class="fa fa-info-circle"></i> {{ 'Version' }}{{ nextdomVersion }}</a></li>
             <li><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fa fa-circle-o"></i> {{ 'Se déconnecter' }}</a></li>
-			<?php
-                     if (nextdom::isCapable('sudo')) {
-                       echo '<li class="divider"></li>';
-                       echo '<li><a id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i> {{ 'Redémarrer' }}</a></li>';
-                       echo '<li><a id="bt_haltSystem" state="0"><i class="fa fa-power-off"></i> {{ 'Eteindre' }}</a></li>';
-                     }
-			?>
+              {% if isAdmin and canSudo %}
+                  <li class="divider"></li>
+                  <li><a id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i> {{ 'Redémarrer' }}</a></li>
+                  <li><a id="bt_haltSystem" state="0"><i class="fa fa-power-off"></i> {{ 'Eteindre' }}</a></li>
+              {% endif %}
           </ul>
         </li>
 </ul>
