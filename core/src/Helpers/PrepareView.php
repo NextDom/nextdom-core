@@ -66,9 +66,10 @@ class PrepareView
                 $designTheme = $_SESSION['user']->getOptions('design_nextdom');
                 if ($designTheme == "dashboard") {
                     require_once(NEXTDOM_ROOT . '/desktop/template/menu.php');
-                }else{
+                } else {
                     require_once(NEXTDOM_ROOT . '/desktop/template/menu_dashboard-v2.php');
-                }} else{
+                }
+            } else {
                 require_once(NEXTDOM_ROOT . '/desktop/template/menu_dashboard-v2.php');
             }
         }
@@ -77,11 +78,9 @@ class PrepareView
     /**
      * Initialise les informations nécessaires au menu
      *
-     * @param array $internalConfig Configuration interne de NextDom
-     *
      * @return object Plugin courant
      */
-    public static function initMenus(array $internalConfig)
+    public static function initMenus()
     {
         global $NEXTDOM_INTERNAL_CONFIG;
 
@@ -129,8 +128,9 @@ class PrepareView
      *
      * @return string Code HTML du message d'erreur
      */
-    public static function showAlertMessage(string $msg) {
-        echo '<div class="alert alert-danger">'.$msg.'</div>';
+    public static function showAlertMessage(string $msg)
+    {
+        echo '<div class="alert alert-danger">' . $msg . '</div>';
     }
 
     public static function showConnectionPage($configs)
@@ -312,6 +312,10 @@ class PrepareView
 
     }
 
+    /**
+     * TODO: Gros bordel à refaire
+     * @return string
+     */
     private static function getHomeLink()
     {
         // Détermine la page courante
@@ -320,7 +324,11 @@ class PrepareView
             if ($homePage[0] == 'core') {
                 if ($homePage[1] == "dashboard") {
                     $designTheme = $_SESSION['user']->getOptions('design_nextdom');
+                }
+                if ($designTheme <> "") {
                     $homeLink = 'index.php?v=d&p=' . $designTheme;
+                } else {
+                    $homeLink = 'index.php?v=d&p=' . $homePage[1];
                 }
             } else {
                 $homeLink = 'index.php?v=d&m=' . $homePage[0] . '&p=' . $homePage[1];
@@ -334,8 +342,7 @@ class PrepareView
         return $homeLink;
     }
 
-    private
-    static function getPluginJsEvents(Render $render)
+    private static function getPluginJsEvents(Render $render)
     {
         $result = '';
         if (count(self::$eventJsPlugin) > 0) {
@@ -350,8 +357,7 @@ class PrepareView
         return $result;
     }
 
-    private
-    static function getMenu(Render $render, $menuView, $currentPlugin, $homeLink)
+    private static function getMenu(Render $render, $menuView, $currentPlugin, $homeLink)
     {
         $menuData = [];
         $menuData['pluginMenu'] = self::$pluginMenu;
@@ -377,8 +383,7 @@ class PrepareView
         return $render->get($menuView, $menuData);
     }
 
-    private
-    static function getHeader(Render $render, $title, $configs)
+    private static function getHeader(Render $render, $title, $configs)
     {
         $headerData = [];
         // TODO: Remplacer par un include dans twig
@@ -465,12 +470,14 @@ class PrepareView
             $designTheme = $_SESSION['user']->getOptions('design_nextdom');
             if (file_exists(NEXTDOM_ROOT . '/css/' . $designTheme . '.css')) {
                 $headerData['cssPool'][] = '/css/' . $designTheme . '.css';
-            }
-            else {
+            } else {
                 $headerData['cssPool'][] = '/css/dashboard-v2.css';
             }
             if (file_exists(NEXTDOM_ROOT . '/desktop/js/' . $designTheme . '.js')) {
                 $headerData['jsPool'][] = '/desktop/js/' . $designTheme . '.js';
+            }
+            else {
+                $headerData['jsPool'][] = '/desktop/js/dashboard-v2.js';
             }
         }
         if (!Status::isRescueMode() && $configs['enableCustomCss'] == 1) {
