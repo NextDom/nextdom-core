@@ -6492,29 +6492,6 @@ html {
     margin-top: 5px;
 }
 
-.eqLogic-widget {
-    display: inline-block;
-    vertical-align: top;
-    color: #FFF;
-    border-radius: 4px;
-}
-
-.eqLogic-widget .btn:not(.btn-circle) {
-    border: none !important;
-    font-weight: bold;
-}
-
-.view-link-widget, .plan-link-widget {
-    padding: 3px;
-    margin: 3px;
-    display: inline-block;
-    vertical-align: top;
-}
-
-.eqLogic-widget a {
-    color: inherit;
-}
-
 .scenario-widget {
     background-color: #666;
     display: inline-block;

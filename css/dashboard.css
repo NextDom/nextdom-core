@@ -14,21 +14,18 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 body {
-    font-family: 'noto', sans-serif !important;
-    font-size: 1.42em;
-    padding-top: 90px;
-    height: 100%;
-}
+  font-family: 'noto', sans-serif !important;
+  font-size: 1.42em;
+  padding-top: 90px;
+  height: 100%; }
 
 .navbar-nav > li > a {
-    padding-top: 0px;
-    padding-bottom: 0px;
-}
+  padding-top: 0px;
+  padding-bottom: 0px; }
 
 .content-wrapper {
-    min-height: 100%;
-    background-color: #ecf0f5;
-    z-index: 800;
-}
+  min-height: 100%;
+  background-color: #eef5f9;
+  z-index: 800; }
 
 /*# sourceMappingURL=dashboard.css.map */

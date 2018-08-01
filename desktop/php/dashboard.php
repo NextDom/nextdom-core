@@ -141,6 +141,7 @@ if ($_SESSION['user']->getOptions('displayScenarioByDefault') == 1) {
         echo '</div>';
         echo '</div>';
         echo '</div>';
+        echo '</div>';
     }
 
     ?>

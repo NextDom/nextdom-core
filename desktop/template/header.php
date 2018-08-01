@@ -144,6 +144,8 @@ if (isset($_SESSION['user'])) {
     $designTheme = $_SESSION['user']->getOptions('design_nextdom');
     if (file_exists(NEXTDOM_ROOT .'/desktop/js/'. $designTheme .'.js')) {
         include_file('desktop', $designTheme, 'js');
+    }else {
+        include_file('desktop', 'dashboard-v2', 'js');
     }
 }
 

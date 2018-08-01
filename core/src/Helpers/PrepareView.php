@@ -21,31 +21,31 @@ use NextDom\Helpers\Status;
 use NextDom\Managers\PluginManager;
 
 /**
-* Classe de support à l'affichage des contenus HTML
-*/
+ * Classe de support à l'affichage des contenus HTML
+ */
 class PrepareView
 {
     /**
-    * @var string Données HTML du menu
-    */
+     * @var string Données HTML du menu
+     */
     private static $pluginMenu;
 
     /**
-    * @var string Données HTML de TODO: ????
-    */
+     * @var string Données HTML de TODO: ????
+     */
     private static $panelMenu;
 
     /**
-    * Affiche le contenu de l'en-tête
-    */
+     * Affiche le contenu de l'en-tête
+     */
     public static function showHeader()
     {
         require_once(NEXTDOM_ROOT . '/desktop/template/header.php');
     }
 
     /**
-    * Affiche le menu en fonction du mode
-    */
+     * Affiche le menu en fonction du mode
+     */
     public static function showMenu()
     {
         if (Status::isRescueMode()) {
@@ -53,23 +53,23 @@ class PrepareView
         } else {
             if (isset($_SESSION['user'])) {
                 $designTheme = $_SESSION['user']->getOptions('design_nextdom');
-                if (file_exists(NEXTDOM_ROOT . '/desktop/template/menu_'.$designTheme.'.php')) {
-                    require_once(NEXTDOM_ROOT . '/desktop/template/menu_'.$designTheme.'.php');
+                if ($designTheme == "dashboard") {
+                    require_once(NEXTDOM_ROOT . '/desktop/template/menu.php');
                 }else{
                     require_once(NEXTDOM_ROOT . '/desktop/template/menu_dashboard-v2.php');
                 }} else{
-                    require_once(NEXTDOM_ROOT . '/desktop/template/menu_dashboard-v2.php');
-                }
+                require_once(NEXTDOM_ROOT . '/desktop/template/menu_dashboard-v2.php');
             }
         }
+    }
 
     /**
-    * Initialise les informations nécessaires au menu
-    *
-    * @param array $internalConfig Configuration interne de NextDom
-    *
-    * @return object Plugin courant
-    */
+     * Initialise les informations nécessaires au menu
+     *
+     * @param array $internalConfig Configuration interne de NextDom
+     *
+     * @return object Plugin courant
+     */
     public static function initMenus(array $internalConfig)
     {
         global $title;
@@ -112,31 +112,31 @@ class PrepareView
     }
 
     /**
-    * Afficher un message d'erreur
-    *
-    * @param string $msg Message de l'erreur
-    *
-    * @return string Code HTML du message d'erreur
-    */
+     * Afficher un message d'erreur
+     *
+     * @param string $msg Message de l'erreur
+     *
+     * @return string Code HTML du message d'erreur
+     */
     public static function showAlertMessage(string $msg) {
         echo '<div class="alert alert-danger">'.$msg.'</div>';
     }
 
     /**
-    * Obtenir le code HTML du menu des plugins
-    *
-    * @return string Code HTML du menu des plugins
-    */
+     * Obtenir le code HTML du menu des plugins
+     *
+     * @return string Code HTML du menu des plugins
+     */
     public static function getPluginMenu()
     {
         return self::$pluginMenu;
     }
 
     /**
-    * Obtenir le code HTML du panneau TODO ?????
-    *
-    * @return string Code HTML du panneau
-    */
+     * Obtenir le code HTML du panneau TODO ?????
+     *
+     * @return string Code HTML du panneau
+     */
     public static function getPanelMenu()
     {
         return self::$panelMenu;
