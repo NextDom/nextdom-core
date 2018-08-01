@@ -124,22 +124,22 @@
                                 <li><a href="index.php?v=d&p=custom"><i class="fa fa-pencil-square-o"></i> {{ 'Personnalisation avancée' }}</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="index.php?v=d&p=user"><i class="fa fa-users"></i> {{ 'Utilisateurs' }}</a></li>
-                                <li><a href="index.php?v=d&p=profils"><i class="fa fa-briefcase"></i> {{ 'Profil' }} <?php echo $_SESSION['user']->getLogin(); ?></a></li>
+                                <li><a href="index.php?v=d&p=profils"><i class="fa fa-briefcase"></i> {{ 'Profil' }} {{ userLogin }}</a></li>
                                 <li><a href="index.php?v=m" class="noOnePageLoad"><i class="fa fa-mobile"></i> {{ 'Version mobile' }}</a></li>
-                                <li><a href="#" id="bt_nextdomAbout"><i class="fa fa-info-circle"></i> {{ 'Version' }}<?php echo nextdom::version(); ?></a></li>
+                                <li><a href="#" id="bt_nextdomAbout"><i class="fa fa-info-circle"></i> {{ 'Version' }} {{ nextdomVersion }}</a></li>
                                 <li><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fa fa-sign-out"></i> {{ 'Se déconnecter' }}</a></li>
-                                <li><a id="bt_getHelpPage" class="cursor" data-plugin="<?php echo init('m'); ?>" data-page="<?php echo init('p'); ?>" title="{{ 'Aide sur la page en cours' }}"><i class="fa fa-question-circle"></i> {{ 'Aide' }}</a></li>
+                                <li><a id="bt_getHelpPage" class="cursor" data-plugin="{{ mParam }}" data-page="{{ pParam }}" title="{{ 'Aide sur la page en cours' }}"><i class="fa fa-question-circle"></i> {{ 'Aide' }}</a></li>
                                 <li>
-                                    {% if currentPlugin is defined and currentPlugin.getIssue() != '' %}
-                                        <a target="_blank" href="<?php echo $plugin->getIssue() ?>" title="{{ 'Envoyer un rapport de bug' }}"><i class="fa fa-exclamation-circle"></i> {{ 'Rapport de bug' }}</a>
+                                    {% if currentPluginIssue %}
+                                        <a target="_blank" href="{{ currentPluginIssue }}" title="{{ 'Envoyer un rapport de bug' }}"><i class="fa fa-exclamation-circle"></i> {{ 'Rapport de bug' }}</a>
                                     {% else %}
                                         <a class="bt_reportBug cursor" title="{{ 'Envoyer un rapport de bug' }}"><i class="fa fa-exclamation-circle"></i> {{ 'Rapport de bug' }}</a>
                                     {% endif %}
                                 </li>
                                 {% if canSudo %}
-                                    echo '<li class="divider"></li>';
-                                    echo '<li class="cursor"><a id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i> {{ 'Redémarrer' }}</a></li>';
-                                    echo '<li class="cursor"><a id="bt_haltSystem" state="0"><i class="fa fa-power-off"></i> {{ 'Eteindre' }}</a></li>';
+                                    <li class="divider"></li>
+                                    <li class="cursor"><a id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i> {{ 'Redémarrer' }}</a></li>
+                                    <li class="cursor"><a id="bt_haltSystem" state="0"><i class="fa fa-power-off"></i> {{ 'Eteindre' }}</a></li>
                                 {% endif %}
                             </ul>
                         </li>
@@ -149,8 +149,8 @@
             </div>
             <div class="collapse navbar-collapse col-lg-4 col-md-4 col-lg-offset-2 col-md-offset-2 text-center">
                 <ul class="nav navbar-nav">
-                    <a class="navbar-brand" href="<?php echo $homeLink; ?>">
-                        <img src="<?php echo config::byKey('product_image') ?>" /></a><br/>
+                    <a class="navbar-brand" href="{{ homeLink }}">
+                        <img src="{{ logo }}" /></a><br/>
                     <i class="fa fa-bars burger" data-toggle="collapse" data-target="#collapse_categorie"></i>
                 </ul>
             </div>
@@ -158,18 +158,17 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <a href="#" class="default-cursor">
-                            <span id="horloge"><?php setlocale(LC_TIME, 'fra_fra');
-                                echo strftime('%A %d %B %Y, %H:%M:%S'); ?></span>
+                            <span id="horloge"></span>
                         </a>
 
                         <a href="#" class="default-cursor">
-                            <?php echo JeeObjectManager::getGlobalHtmlSummary(); ?>
+                            {{ htmlGlobalSummary|raw }}
                         </a>
 
                     </li>
                     <li>
-                        <a href="#" id="bt_messageModal"><span class="badge" id="span_nbMessage" title="{{ 'Nombre de messages' }}" style="<?php echo $displayMessage; ?>"><?php echo $nbMessage; ?></span></a>
-                        <a href="index.php?v=d&p=update"><span class="badge" id="span_nbUpdate" title="{{ 'Nombre de mises à jour' }}" style="<?php echo $displayUpdate; ?>"><?php echo $nbUpdate; ?></span></a>
+                        <a href="#" id="bt_messageModal"><span class="badge" id="span_nbMessage" title="{{ 'Nombre de messages' }}" {% if nbMessage == 0 %}style="display: none"{% endif %}>{{ nbMessage }}</span></a>
+                        <a href="index.php?v=d&p=update"><span class="badge" id="span_nbUpdate" title="{{ 'Nombre de mises à jour' }}" {% if nbUpdate == 0 %}style="display: none"{% endif %}>{{ nbUpdate }}</span></a>
                     </li>
                 </ul>
             </div>

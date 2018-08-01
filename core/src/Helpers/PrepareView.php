@@ -311,7 +311,7 @@ class PrepareView
         PrepareView::showMenu();
         $globalData['MENU'] = ob_get_clean();
         */
-        $globalData['MENU'] = self::getMenu($render, $currentPlugin);
+        $globalData['MENU'] = self::getMenu($render, $currentPlugin, $homeLink);
 
         try {
             if (!\nextdom::isStarted()) {
@@ -336,7 +336,7 @@ class PrepareView
 
     }
 
-    private static function getMenu(Render $render, $currentPlugin)
+    private static function getMenu(Render $render, $currentPlugin, $homeLink)
     {
         $menuView = '/desktop/menu.html.twig';
         if (isset($_SESSION['user'])) {
@@ -350,16 +350,23 @@ class PrepareView
         $menuData['pluginMenu'] = self::$pluginMenu;
         $menuData['panelMenu'] = self::$panelMenu;
         $menuData['nbMessage'] = \message::nbMessage();
+        $menuData['nbUpdate'] = UpdateManager::nbNeedUpdate();
         $menuData['jeeObjectsTree'] = JeeObjectManager::buildTree(null, false);
         $menuData['viewsList'] = \view::all();
         $menuData['plansList'] = \planHeader::all();
         $menuData['plans3dList'] = \plan3dHeader::all();
-        if (is_object($currentPlugin)) {
-            $menuData['currentPlugin'] = $currentPlugin;
+        if (is_object($currentPlugin) && $currentPlugin->getIssue()) {
+            $menuData['currentPluginIssue'] = $currentPlugin->getIssue();
         }
         $menuData['canSudo'] = \nextdom::isCapable('sudo');
         $menuData['isAdmin'] = Status::isConnectAdmin();
-
+        $menuData['htmlGlobalSummary'] = JeeObjectManager::getGlobalHtmlSummary();
+        $menuData['homeLink'] = $homeLink;
+        $menuData['logo'] = \config::byKey('product_image');
+        $menuData['userLogin'] = $_SESSION['user']->getLogin();
+        $menuData['nextdomVersion'] = \nextdom::version();
+        $menuData['mParam'] = Utils::init('m');
+        $menuData['pParam'] = Utils::init('p');
         return $render->get($menuView, $menuData);
     }
 }
