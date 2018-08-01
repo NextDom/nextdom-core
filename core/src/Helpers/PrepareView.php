@@ -69,12 +69,12 @@ class PrepareView
     /**
      * Initialise les informations nécessaires au menu
      *
-     * @param array $internalConfig Configuration interne de NextDom
-     *
      * @return object Plugin courant
      */
-    public static function initMenus(array $internalConfig)
+    public static function initMenus()
     {
+        global $NEXTDOM_INTERNAL_CONFIG;
+
         $currentPlugin = null;
 
         $pluginsList = PluginManager::listPlugin(true, true);
@@ -83,8 +83,8 @@ class PrepareView
                 $icon = '';
                 $name = $category_name;
                 try {
-                    $icon = $internalConfig['plugin']['category'][$category_name]['icon'];
-                    $name = $internalConfig['plugin']['category'][$category_name]['name'];
+                    $icon = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]['icon'];
+                    $name = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]['name'];
                 } catch (\Exception $e) {
                     $icon = '';
                     $name = $category_name;
@@ -147,6 +147,7 @@ class PrepareView
 
     /**
      * Obtenir le code HTML du menu des plugins
+     *TODO: A supprimer
      *
      * @return string Code HTML du menu des plugins
      */
@@ -157,7 +158,7 @@ class PrepareView
 
     /**
      * Obtenir le code HTML du panneau TODO ?????
-     *
+     * TODO: A supprimer
      * @return string Code HTML du panneau
      */
     public static function getPanelMenu()
@@ -168,6 +169,8 @@ class PrepareView
     public static function showRescueMode()
     {
         global $homeLink;
+        global $language;
+        global $configs;
 
         $configs = \config::byKeys(array('enableCustomCss', 'language', 'nextdom::firstUse'));
         if (!in_array(Utils::init('p'), array('custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system'))) {
@@ -236,57 +239,36 @@ class PrepareView
 
     public static function showContent()
     {
-        global $NEXTDOM_INTERNAL_CONFIG;
         global $homeLink;
-        global $title;
         global $language;
         global $configs;
 
-        $configs = \config::byKeys(array('enableCustomCss', 'language', 'nextdom::firstUse'));
-
-        // Détermine la page courante
-        $homePage = explode('::', $_SESSION['user']->getOptions('homePage', 'core::dashboard'));
-        if (count($homePage) == 2) {
-            if ($homePage[0] == 'core') {
-                $homeLink = 'index.php?v=d&p=' . $homePage[1];
-            } else {
-                $homeLink = 'index.php?v=d&m=' . $homePage[0] . '&p=' . $homePage[1];
-            }
-            if ($homePage[1] == 'plan' && $_SESSION['user']->getOptions('defaultPlanFullScreen') == 1) {
-                $homeLink .= '&fullscreen=1';
-            }
-        } else {
-            $homeLink = 'index.php?v=d&p=dashboard';
-        }
-
-        // Informations générales
         self::$eventJsPlugin = [];
         self::$title = 'NextDom';
+        $globalData = [];
         $page = '';
+        $baseView = '/desktop/base.html.twig';
+        $configs = \config::byKeys(array('enableCustomCss', 'language', 'nextdom::firstUse'));
+        $language = $configs['language'];
+        $homeLink = self::getHomeLink();
+
         //TODO: Tests à revoir
-        if (init('p') == '') {
+        if (Utils::init('p') == '') {
             redirect($homeLink);
         } else {
-            $page = init('p');
-            self::$title = ucfirst($page) . ' - ' . $title;
+            $page = Utils::init('p');
+            self::$title = ucfirst($page) . ' - ' . self::$title;
         }
-        $language = $configs['language'];
 
-        // Initialisation des plugins
-        // Doit être fait avant pour avoir le nom du plugin en titre
-        $currentPlugin = PrepareView::initMenus($NEXTDOM_INTERNAL_CONFIG);
-
-        $globalData = [];
-        // TODO: Remplacer par un include dans twig
-        $title = self::$title;
+        $currentPlugin = PrepareView::initMenus();
         $render = Render::getInstance();
 
+        // TODO: Remplacer par un include dans twig
         ob_start();
         require_once(NEXTDOM_ROOT . '/desktop/template/header.php');
         $globalData['HEADER'] = ob_get_clean();
 
         $pageData = [];
-
         $pageData['CSS'] = $render->getCssHtmlTag('/css/nextdom.css');
         $pageData['varToJs'] = Utils::getVarsToJS(array(
             'userProfils' => $_SESSION['user']->getOptions(),
@@ -295,23 +277,19 @@ class PrepareView
             'user_login' => $_SESSION['user']->getLogin(),
             'nextdom_firstUse' => $configs['nextdom::firstUse']
         ));
-        $pageData['JS'] = '';
+        $pageData['JS'] = self::getPluginJsEvents($render);
 
-        if (count(self::$eventJsPlugin) > 0) {
-            foreach (self::$eventJsPlugin as $value) {
-                try {
-                    $pageData['JS'] .= $render->getJsHtmlTag('/plugins/' . $value . '/desktop/js/event.js');
-                } catch (\Exception $e) {
-                    \log::add($value, 'error', 'Event JS file not found');
-                }
+        $menuView = '/desktop/menu.html.twig';
+        if (isset($_SESSION['user'])) {
+            $designTheme = $_SESSION['user']->getOptions('design_nextdom');
+            if (file_exists(NEXTDOM_ROOT . '/views/desktop/menu_' . $designTheme . '.html.twig')) {
+                $menuView = '/desktop/menu_' . $designTheme . '.html.twig';
             }
         }
-        /*
-        ob_start();
-        PrepareView::showMenu();
-        $globalData['MENU'] = ob_get_clean();
-        */
-        $globalData['MENU'] = self::getMenu($render, $currentPlugin, $homeLink);
+        $globalData['MENU'] = self::getMenu($render, $menuView, $currentPlugin, $homeLink);
+        if (strstr($menuView, 'v2')) {
+            $baseView = '/desktop/base-v2.html.twig';
+        }
 
         try {
             if (!\nextdom::isStarted()) {
@@ -332,20 +310,44 @@ class PrepareView
         $globalData['CONTENT'] = $render->get('desktop/index.html.twig', $pageData);
 
         $render = Render::getInstance();
-        $render->show('desktop/base.html.twig', $globalData);
+        $render->show($baseView, $globalData);
 
     }
 
-    private static function getMenu(Render $render, $currentPlugin, $homeLink)
-    {
-        $menuView = '/desktop/menu.html.twig';
-        if (isset($_SESSION['user'])) {
-            $designTheme = $_SESSION['user']->getOptions('design_nextdom');
-            if (file_exists(NEXTDOM_ROOT . '/desktop/menu_' . $designTheme . '.php')) {
-                $menuView = '/desktop/menu_' . $designTheme . '.php';
+    private static function getHomeLink() {
+        // Détermine la page courante
+        $homePage = explode('::', $_SESSION['user']->getOptions('homePage', 'core::dashboard'));
+        if (count($homePage) == 2) {
+            if ($homePage[0] == 'core') {
+                $homeLink = 'index.php?v=d&p=' . $homePage[1];
+            } else {
+                $homeLink = 'index.php?v=d&m=' . $homePage[0] . '&p=' . $homePage[1];
+            }
+            if ($homePage[1] == 'plan' && $_SESSION['user']->getOptions('defaultPlanFullScreen') == 1) {
+                $homeLink .= '&fullscreen=1';
+            }
+        } else {
+            $homeLink = 'index.php?v=d&p=dashboard';
+        }
+        return $homeLink;
+    }
+
+    private static function getPluginJsEvents(Render $render) {
+        $result = '';
+        if (count(self::$eventJsPlugin) > 0) {
+            foreach (self::$eventJsPlugin as $value) {
+                try {
+                    $result .= $render->getJsHtmlTag('/plugins/' . $value . '/desktop/js/event.js');
+                } catch (\Exception $e) {
+                    \log::add($value, 'error', 'Event JS file not found');
+                }
             }
         }
+        return $result;
+    }
 
+    private static function getMenu(Render $render, $menuView, $currentPlugin, $homeLink)
+    {
         $menuData = [];
         $menuData['pluginMenu'] = self::$pluginMenu;
         $menuData['panelMenu'] = self::$panelMenu;
