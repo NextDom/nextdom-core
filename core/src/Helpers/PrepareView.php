@@ -304,12 +304,16 @@ class PrepareView
 
     }
 
-    private static function getHomeLink() {
+    private static function getHomeLink()
+    {
         // Détermine la page courante
         $homePage = explode('::', $_SESSION['user']->getOptions('homePage', 'core::dashboard'));
         if (count($homePage) == 2) {
             if ($homePage[0] == 'core') {
-                $homeLink = 'index.php?v=d&p=' . $homePage[1];
+                if ($homePage[1] == "dashboard") {
+                    $designTheme = $_SESSION['user']->getOptions('design_nextdom');
+                    $homeLink = 'index.php?v=d&p=' . $designTheme;
+                }
             } else {
                 $homeLink = 'index.php?v=d&m=' . $homePage[0] . '&p=' . $homePage[1];
             }
@@ -322,7 +326,9 @@ class PrepareView
         return $homeLink;
     }
 
-    private static function getPluginJsEvents(Render $render) {
+    private
+    static function getPluginJsEvents(Render $render)
+    {
         $result = '';
         if (count(self::$eventJsPlugin) > 0) {
             foreach (self::$eventJsPlugin as $value) {
@@ -336,7 +342,8 @@ class PrepareView
         return $result;
     }
 
-    private static function getMenu(Render $render, $menuView, $currentPlugin, $homeLink)
+    private
+    static function getMenu(Render $render, $menuView, $currentPlugin, $homeLink)
     {
         $menuData = [];
         $menuData['pluginMenu'] = self::$pluginMenu;
@@ -362,18 +369,11 @@ class PrepareView
         return $render->get($menuView, $menuData);
     }
 
-    private static function getHeader(Render $render, $title, $configs) {
+    private
+    static function getHeader(Render $render, $title, $configs)
+    {
         $headerData = [];
         // TODO: Remplacer par un include dans twig
-        /**
-        if (isset($_SESSION['user'])) {
-        $designTheme = $_SESSION['user']->getOptions('design_nextdom');
-        if (file_exists(NEXTDOM_ROOT .'/css/'. $designTheme .'.css')) {
-        include_file('', $designTheme, 'css');
-        }
-        }
-
-         */
         $themeDir = NEXTDOM_ROOT . '/css/themes/';
         $bootstrapTheme = '';
         $defaultBootstrapTheme = \config::byKey('default_bootstrap_theme');
@@ -391,7 +391,7 @@ class PrepareView
             $cssBootstrapToAdd = true;
             if (!Status::isRescueMode()) {
                 if (file_exists($themeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.css')) {
-                    $headerData['cssPool'][] = $bootstrapTheme.'/desktop/'.$bootstrapTheme.'.css';
+                    $headerData['cssPool'][] = $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.css';
                     $cssBootstrapToAdd = false;
                 } else {
                     if (file_exists($themeDir . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css')) {
@@ -410,12 +410,11 @@ class PrepareView
         \include_file('', 'nextdom', 'css');
         $headerData['customCss'] = ob_get_clean();
 
-        if (file_exists(NEXTDOM_ROOT.'/js/base.js')) {
+        if (file_exists(NEXTDOM_ROOT . '/js/base.js')) {
             $headerData['jsPool'][] = '/js/base.js';
             $headerData['jsPool'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.min.js';
             $headerData['jsPool'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min.js';
-        }
-        else {
+        } else {
             $headerData['jsPool'][] = '3rdparty/jquery.utils/jquery.utils.js';
             $headerData['jsPool'][] = 'core/core.js';
             $headerData['jsPool'][] = '3rdparty/bootstrap/bootstrap.min.js';
@@ -456,18 +455,21 @@ class PrepareView
         if (isset($_SESSION['user'])) {
             $bootstrapTheme = $_SESSION['user']->getOptions('bootstrap_theme');
             $designTheme = $_SESSION['user']->getOptions('design_nextdom');
-            if (file_exists(NEXTDOM_ROOT .'/css/'. $designTheme .'.css')) {
+            if (file_exists(NEXTDOM_ROOT . '/css/' . $designTheme . '.css')) {
                 $headerData['cssPool'][] = '/css/' . $designTheme . '.css';
             }
-            if (file_exists(NEXTDOM_ROOT .'/desktop/js/'. $designTheme .'.js')) {
-                $headerData['jsPool'][] = '/desktop/js/'. $designTheme .'.js';
+            else {
+                $headerData['cssPool'][] = '/css/dashboard-v2.css';
+            }
+            if (file_exists(NEXTDOM_ROOT . '/desktop/js/' . $designTheme . '.js')) {
+                $headerData['jsPool'][] = '/desktop/js/' . $designTheme . '.js';
             }
         }
         if (!Status::isRescueMode() && $configs['enableCustomCss'] == 1) {
-            if (file_exists(NEXTDOM_ROOT.'/desktop/custom/custom.css')) {
+            if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.css')) {
                 $headerData['cssPool'][] = '/desktop/custom/custom.css';
             }
-            if (file_exists(NEXTDOM_ROOT.'/desktop/custom/custom.js')) {
+            if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.js')) {
                 $headerData['jsPool'][] = '/desktop/custom/custom.js';
             }
         }
@@ -492,7 +494,7 @@ class PrepareView
                     }
                     if (!Status::isRescueMode() && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
                         try {
-                            $headerData['jsPool'][] = '/3rdparty/highstock/themes/'.$_SESSION['user']->getOptions('desktop_highcharts_theme').'.js';
+                            $headerData['jsPool'][] = '/3rdparty/highstock/themes/' . $_SESSION['user']->getOptions('desktop_highcharts_theme') . '.js';
                         } catch (Exception $e) {
 
                         }

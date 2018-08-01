@@ -20,8 +20,8 @@
             <link href="{{ cssFile }}" rel="stylesheet" />
         {% endfor %}
     {% endif %}
-    {% if custonCss is defined %}
-        {{ customCss }}
+    {% if customCss is defined %}
+        {{ customCss|raw }}
     {% endif %}
     <script src="/3rdparty/jquery/jquery.min.js"></script>
     <script>
