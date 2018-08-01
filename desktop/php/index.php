@@ -24,7 +24,10 @@ if (Status::isConnect()) {
     $homePage = explode('::', $_SESSION['user']->getOptions('homePage', 'core::dashboard'));
     if (count($homePage) == 2) {
         if ($homePage[0] == 'core') {
-            $homeLink = 'index.php?v=d&p=' . $homePage[1];
+            if($homePage[1] == "dashboard"){
+            $designTheme = $_SESSION['user']->getOptions('design_nextdom');
+            $homeLink = 'index.php?v=d&p=' . $designTheme;
+        }
         } else {
             $homeLink = 'index.php?v=d&m=' . $homePage[0] . '&p=' . $homePage[1];
         }

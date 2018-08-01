@@ -81,7 +81,7 @@ if (isset($_SESSION['user'])) {
     if (file_exists(NEXTDOM_ROOT . '/css/' . $designTheme . '.css')) {
         include_file('', $designTheme, 'css');
     } else {
-        include_file('', 'dashboard', 'css');
+        include_file('', 'dashboard-v2', 'css');
     }
 }
     // Javascript

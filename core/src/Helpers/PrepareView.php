@@ -56,9 +56,9 @@ class PrepareView
                 if (file_exists(NEXTDOM_ROOT . '/desktop/template/menu_'.$designTheme.'.php')) {
                     require_once(NEXTDOM_ROOT . '/desktop/template/menu_'.$designTheme.'.php');
                 }else{
-                    require_once(NEXTDOM_ROOT . '/desktop/template/menu.php');
+                    require_once(NEXTDOM_ROOT . '/desktop/template/menu_dashboard-v2.php');
                 }} else{
-                    require_once(NEXTDOM_ROOT . '/desktop/template/menu.php');
+                    require_once(NEXTDOM_ROOT . '/desktop/template/menu_dashboard-v2.php');
                 }
             }
         }

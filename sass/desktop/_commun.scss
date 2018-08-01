@@ -58,7 +58,6 @@ html {
 }
 
 .eqLogic-widget{
-  background-color: $nextdom_blue;
   display: inline-block;
   vertical-align: top;
   color : $white;
@@ -67,7 +66,6 @@ html {
 
 .eqLogic-widget .btn:not(.btn-circle){
   border : none !important;
-  color : $white !important;
   font-weight: bold;
 }
 
@@ -318,45 +316,6 @@ input[type=checkbox] {
   vertical-align: middle;
   border-color: inherit;
 }
-
-.highcharts-data-table tr{
-  display: table-row;
-  vertical-align: inherit;
-  border-color: inherit;
-}
-
-.highcharts-data-table>caption+thead>tr:first-child>td, .table>caption+thead>tr:first-child>th, .table>colgroup+thead>tr:first-child>td, .table>colgroup+thead>tr:first-child>th, .table>thead:first-child>tr:first-child>td, .table>thead:first-child>tr:first-child>th {
-  border-top: 0;
-}
-
-.highcharts-data-table th{
-  border-bottom-width: 2px;
-  border: 1px solid $lightgrey;
-  padding: 5px;
-  vertical-align: bottom;
-  line-height: 1.42857143;
-  text-align: left;
-  font-weight: bold;
-}
-
-.highcharts-data-table tbody{
-  display: table-row-group;
-  vertical-align: middle;
-  border-color: inherit;
-}
-
-
-.highcharts-data-table td{
-  border: 1px solid $lightgrey;
-  padding: 5px;
-  line-height: 1.42857143;
-  vertical-align: top;
-}
-
-.highcharts-table-caption{
-  display: none;
-}
-
 
 nav .navbar-left {
   margin-left: 25px;

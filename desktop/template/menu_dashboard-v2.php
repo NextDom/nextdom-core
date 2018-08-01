@@ -37,7 +37,7 @@ if ($nbUpdate == 0) {
 }
 
 ?>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini fixed sidebar-collapse">
 <header class="main-header">
 
     <!-- Logo -->
@@ -103,18 +103,6 @@ if ($nbUpdate == 0) {
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-        <!-- search form -->
-        <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Search...">
-                <span class="input-group-btn">
-              <button type="submit" name="search" id="search-btn" class="btn btn-flat">
-                <i class="fa fa-search"></i>
-              </button>
-            </span>
-            </div>
-        </form>
-        <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MENU PRINCIPAL</li>
@@ -160,19 +148,17 @@ if ($nbUpdate == 0) {
                                 }
                                 ?>
                             </li>
-
                         </ul>
                     </li>
                 </ul>
-
             </li>
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-stethoscope"></i>
                     <span>Analyse</span>
                     <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="index.php?v=d&p=history"><i class="fa fa-bar-chart-o"></i> {{Historique}}</a></li>
@@ -188,8 +174,8 @@ if ($nbUpdate == 0) {
                     <i class="fa fa-laptop"></i>
                     <span>Outils</span>
                     <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="index.php?v=d&p=object"><i class="fa fa-picture-o"></i> {{Objets}}</a></li>
@@ -202,8 +188,8 @@ if ($nbUpdate == 0) {
                 <a href="#">
                     <i class="fa fa-share"></i> <span>Plugins</span>
                     <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="index.php?v=d&p=plugin"><i class="fa fa-tags"></i> {{Gestion des plugins}}</a></li>
@@ -224,13 +210,11 @@ if ($nbUpdate == 0) {
     <!-- Create the tabs -->
     <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
         <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+        <li><a href="#control-sidebar-tools-tab" data-toggle="tab"><i class="fa fa-wrench"></i></a></li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
-
-        <!-- Settings tab content -->
         <div class="tab-pane active" id="control-sidebar-settings-tab">
-
             <div><a class="control-sidebar-heading" href="index.php?v=d&p=administration"><i class="fa fa-wrench"></i> {{Configuration}}</a></div>
             <div><a class="control-sidebar-heading" href="index.php?v=d&p=backup"><i class="fa fa-floppy-o"></i> {{Sauvegardes}}</a></div>
             <div><a class="control-sidebar-heading" href="index.php?v=d&p=migration"><i class="fa fa-upload"></i> {{Migration depuis jeedom}}</a></div>
@@ -249,15 +233,209 @@ if ($nbUpdate == 0) {
             }
             ?>
         </div>
-        <!-- /.tab-pane -->
+        <div class="tab-pane" id="control-sidebar-tools-tab">
+            <h4 class="control-sidebar-heading">Layout Options</h4>
+            <div class="form-group">
+                <label class="control-sidebar-subheading"><input type="checkbox"data-layout="sidebar-collapse"class="pull-right"/>Toggle Sidebar</label>
+                <p>Toggle the left sidebar\'s state (open or collapse)</p>
+            </div>
+        <div class="form-group">
+            <label class="control-sidebar-subheading"><input type="checkbox"data-enable="expandOnHover"class="pull-right"/>Sidebar Expand on Hover</label>
+            <p>Let the sidebar mini expand on hover</p>
+        </div>
+        <div class="form-group">
+            <label class="control-sidebar-subheading"><input type="checkbox"data-controlsidebar="control-sidebar-open"class="pull-right"/>Toggle Right Sidebar Slide</label>
+            <p>Toggle between slide over content and push content effects</p>'
+        </div>
+        <div class="form-group"><label class="control-sidebar-subheading"><input type="checkbox"data-sidebarskin="toggle"class="pull-right"/>Toggle Right Sidebar Skin</label>
+            <p>Toggle between dark and light skins for the right sidebar</p>
+        </div>
+        <ul class="list-unstyled clearfix">
+            <li style="float:left; width: 33.33333%; padding: 5px;">
+                <a href="javascript:void(0)" data-skin="skin-nextdom" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
+                        <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                    </div>
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                        <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                    </div>
+                </a>
+                <p class="text-center no-margin">skin-nextdom</p>
+            </li>
+            <li style="float:left; width: 33.33333%; padding: 5px;">
+                <a href="javascript:void(0)" data-skin="skin-nextdom" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
+                        <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                    </div>
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                        <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                    </div>
+                </a>
+                <p class="text-center no-margin">skin-nextdom-light</p>
+            </li>
+            <li style="float:left; width: 33.33333%; padding: 5px;">
+                <a href="javascript:void(0)" data-skin="skin-nextdom-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
+                        <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                    </div>
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                        <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                    </div>
+                </a>
+                <p class="text-center no-margin">Blue</p>
+            </li>
+            <li style="float:left; width: 33.33333%; padding: 5px;">
+                <a href="javascript:void(0)" data-skin="skin-black" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                    <div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix">
+                        <span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe"></span>
+                        <span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe"></span>
+                    </div>
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 20px; background: #222"></span>
+                        <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                    </div>
+                </a>
+                <p class="text-center no-margin">Black</p>
+            </li>
+            <li style="float:left; width: 33.33333%; padding: 5px;">
+                <a href="javascript:void(0)" data-skin="skin-purple" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span>
+                        <span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                    </div>
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                        <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                    </div>
+                </a>
+                <p class="text-center no-margin">Purple</p>
+            </li>
+            <li style="float:left; width: 33.33333%; padding: 5px;">
+                <a href="javascript:void(0)" data-skin="skin-green" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span>
+                        <span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                    </div>
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                        <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                    </div>
+                </a>
+                <p class="text-center no-margin">Green</p>
+            </li>
+            <li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0)" data-skin="skin-red" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span>
+                        <span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                    </div>
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                        <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                    </div>
+                </a>
+                <p class="text-center no-margin">Red</p>
+            </li>
+            <li style="float:left; width: 33.33333%; padding: 5px;">
+                <a href="javascript:void(0)" data-skin="skin-yellow" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span>
+                        <span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                    </div>
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                        <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                    </div>
+                </a>
+                <p class="text-center no-margin">Yellow</p>
+            </li>
+            <li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0)" data-skin="skin-blue-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
+                        <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                    </div>
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                        <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                    </div>
+                </a>
+                <p class="text-center no-margin" style="font-size: 12px">Blue Light</p>
+            </li>
+            <li style="float:left; width: 33.33333%; padding: 5px;">
+                <a href="javascript:void(0)" data-skin="skin-black-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                    <div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix">
+                        <span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe"></span>
+                        <span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe"></span>
+                    </div>
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                        <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                    </div>
+                </a>
+                <p class="text-center no-margin" style="font-size: 12px">Black Light</p>
+            </li>
+            <li style="float:left; width: 33.33333%; padding: 5px;">
+                <a href="javascript:void(0)" data-skin="skin-purple-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span>
+                        <span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                    </div>
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                        <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                    </div>
+                </a>
+                <p class="text-center no-margin" style="font-size: 12px">Purple Light</p>
+            </li>
+            <li style="float:left; width: 33.33333%; padding: 5px;">
+                <a href="javascript:void(0)" data-skin="skin-green-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span>
+                        <span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                    </div>
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                        <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                    </div>
+                </a>
+                <p class="text-center no-margin" style="font-size: 12px">Green Light</p>
+            </li>
+            <li style="float:left; width: 33.33333%; padding: 5px;">
+                <a href="javascript:void(0)" data-skin="skin-red-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span>
+                        <span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                    </div>
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                        <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                    </div>
+                </a>
+                <p class="text-center no-margin" style="font-size: 12px">Red Light</p>
+            </li>
+            <li style="float:left; width: 33.33333%; padding: 5px;">
+                <a href="javascript:void(0)" data-skin="skin-yellow-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span>
+                        <span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                    </div>
+                    <div>
+                        <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                        <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                    </div>
+                </a>
+                <p class="text-center no-margin" style="font-size: 12px">Yellow Light</p>
+            </li>
+        </ul>
     </div>
 </aside>
 <!-- /.control-sidebar -->
-<!-- Add the sidebar's background. This div must be placed
-immediately after the control sidebar -->
-<div class="control-sidebar-bg"></div>
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-</body>
