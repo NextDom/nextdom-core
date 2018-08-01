@@ -76,14 +76,12 @@ $themeDir = NEXTDOM_ROOT . '/css/themes/';
     include_file('core', 'icon.inc', 'php');
     include_file('', 'nextdom', 'css');
 
-if (isset($_SESSION['user'])) {
-    $designTheme = $_SESSION['user']->getOptions('design_nextdom');
-    if (file_exists(NEXTDOM_ROOT . '/css/' . $designTheme . '.css')) {
-        include_file('', $designTheme, 'css');
-    } else {
-        include_file('', 'dashboard-v2', 'css');
+    if (isset($_SESSION['user'])) {
+        $designTheme = $_SESSION['user']->getOptions('design_nextdom');
+        if (file_exists(NEXTDOM_ROOT .'/css/'. $designTheme .'.css')) {
+            include_file('', $designTheme, 'css');
+        }
     }
-}
     // Javascript
     include_file('3rdparty', 'jquery/jquery.min', 'js');
     ?>
@@ -140,14 +138,12 @@ if (isset($_SESSION['user'])) {
         include_file('3rdparty', 'jquery.contextMenu/jquery.contextMenu.min', 'js');
         include_file('3rdparty', 'autosize/autosize.min', 'js');    }
 
-if (isset($_SESSION['user'])) {
-    $designTheme = $_SESSION['user']->getOptions('design_nextdom');
-    if (file_exists(NEXTDOM_ROOT .'/desktop/js/'. $designTheme .'.js')) {
-        include_file('desktop', $designTheme, 'js');
-    }else {
-        include_file('desktop', 'dashboard-v2', 'js');
+    if (isset($_SESSION['user'])) {
+        $designTheme = $_SESSION['user']->getOptions('design_nextdom');
+        if (file_exists(NEXTDOM_ROOT .'/desktop/js/'. $designTheme .'.js')) {
+            include_file('desktop', $designTheme, 'js');
+        }
     }
-}
 
     if (!Status::isRescueMode() && $configs['enableCustomCss'] == 1) {
         if (file_exists(NEXTDOM_ROOT.'/desktop/custom/custom.css')) {

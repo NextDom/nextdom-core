@@ -1,0 +1,12 @@
+{{ HEADER|raw }}
+<body>
+{% autoescape false %}
+    {%  if MENU is defined %}
+        {{ MENU }}
+    {%  endif %}
+{%  endautoescape %}
+{% autoescape false %}
+    {{ CONTENT }}
+{% endautoescape %}
+</body>
+</html>

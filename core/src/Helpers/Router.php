@@ -17,6 +17,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 
 /**
@@ -52,8 +53,7 @@ class Router
         if ($this->viewType == 'd') {
             $this->desktopView();
             $result = true;
-        }
-        elseif ($this->viewType == 'm') {
+        } elseif ($this->viewType == 'm') {
             $this->mobileView();
             $result = true;
         }
@@ -74,7 +74,20 @@ class Router
         } elseif (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
             $this->ajaxGetContent();
         } else {
-            \include_file('desktop', 'index', 'php', '', true);
+            require_once(NEXTDOM_ROOT . '/core/php/authentification.php');
+            Status::initConnectState();
+            $configs = \config::byKeys(array('enableCustomCss', 'language', 'nextdom::firstUse'));
+            if (!Status::isConnect()) {
+                PrepareView::showConnectionPage($configs);
+            }
+            else {
+                if (Status::isRescueMode()) {
+                    PrepareView::showRescueMode($configs);
+                }
+                else {
+                    PrepareView::showContent($configs);
+                }
+            }
         }
     }
 
@@ -83,16 +96,12 @@ class Router
      *
      * @throws \Exception
      */
-    private function showModal() {
+    private function showModal()
+    {
         try {
             \include_file('core', 'authentification', 'php');
             \include_file('desktop', Utils::init('modal'), 'modal', Utils::init('plugin'), true);
         } catch (\Exception $e) {
-            ob_end_clean();
-            echo '<div class="alert alert-danger div_alert">';
-            echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
-            echo '</div>';
-        } catch (\Error $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
             echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
@@ -105,7 +114,8 @@ class Router
      *
      * @throws \Exception Affichage
      */
-    private function showConfiguration() {
+    private function showConfiguration()
+    {
         \include_file('core', 'authentification', 'php');
         \include_file('plugin_info', 'configuration', 'configuration', Utils::init('plugin'), true);
     }
@@ -115,16 +125,12 @@ class Router
      *
      * @throws \Exception
      */
-    private function ajaxGetContent() {
+    private function ajaxGetContent()
+    {
         try {
             \include_file('core', 'authentification', 'php');
             \include_file('desktop', Utils::init('p'), 'php', Utils::init('m'), true);
         } catch (\Exception $e) {
-            ob_end_clean();
-            echo '<div class="alert alert-danger div_alert">';
-            echo \translate::exec(displayException($e), 'desktop/' . Utils::init('p') . '.php');
-            echo '</div>';
-        } catch (\Error $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
             echo \translate::exec(displayException($e), 'desktop/' . Utils::init('p') . '.php');
@@ -137,7 +143,8 @@ class Router
      *
      * @throws \Exception
      */
-    private function mobileView() {
+    private function mobileView()
+    {
         $filename = 'index';
         $type = 'html';
         $plugin = '';
