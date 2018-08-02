@@ -409,7 +409,8 @@ a:focus {
   -webkit-transition: -webkit-transform 0.3s ease-in-out, width 0.3s ease-in-out;
   -moz-transition: -moz-transform 0.3s ease-in-out, width 0.3s ease-in-out;
   -o-transition: -o-transform 0.3s ease-in-out, width 0.3s ease-in-out;
-  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out; }
+  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+  box-shadow: 4px 6px 12px 0 rgba(0, 0, 0, 0.2); }
 
 @media (max-width: 767px) {
   .main-sidebar {
