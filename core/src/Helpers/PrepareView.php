@@ -479,7 +479,7 @@ class PrepareView
                         self::$jsPool[] = '/css/themes/' . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.js';
                     }
                 }
-                if ($_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
+                if (isset($_SESSION['user']) && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
                     $highstockThemeFile = '/3rdparty/highstock/themes/' . $_SESSION['user']->getOptions('desktop_highcharts_theme') . '.js';
                     if (file_exists($highstockThemeFile)) {
                         self::$jsPool[] = $highstockThemeFile;
