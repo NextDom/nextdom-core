@@ -160,4 +160,12 @@ class system {
         }
         return exec('php ' . $arguments);
     }
+
+    public static function getWWWUid() {
+        $distrib = self::getDistrib();
+        if ($distrib == 'debian') {
+            return 'www-data';
+        }
+        return 'apache';
+    }
 }

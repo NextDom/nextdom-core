@@ -393,7 +393,10 @@ class PrepareView
         $headerData = [];
         // TODO: Remplacer par un include dans twig
         $headerData['productName'] = $configs['product_name'];
+        $headerData['productIcon'] = $configs['product_icon'];
         $headerData['ajaxToken'] = \ajax::getToken();
+        $headerData['language'] = $configs['language'];
+        $headerData['title'] = $title;
         self::initJsPool();
         self::initCssPool($configs);
         // TODO: A virer
@@ -401,9 +404,6 @@ class PrepareView
         \include_file('core', 'icon.inc', 'php');
         $headerData['customCss'] = ob_get_clean();
 
-        $headerData['language'] = $configs['language'];
-        $headerData['productIcon'] = $configs['product_icon'];
-        $headerData['title'] = $title;
         $headerData['jsPool'] = self::$jsPool;
         $headerData['cssPool'] = self::$cssPool;
         return $render->get('/desktop/header.html.twig', $headerData);
