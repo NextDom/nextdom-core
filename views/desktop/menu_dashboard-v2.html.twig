@@ -3,9 +3,9 @@
     <!-- Logo -->
     <a href="/" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><img src="/core/img/NextDom_Square_AlphaBlackBlue.png" style="height:40px;width:auto"/></span>
+        <span class="logo-mini"><img class="logo-mini-img" src="/core/img/NextDom_Square_AlphaBlackBlue.png" style="height:40px;width:auto"/></span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><img src="/core/img/NextDom_Wide_AlphaBlueBlack.png" style="height:40px;width:auto"/></span>
+        <span class="logo-lg"><img class="logo-lg-img" src="/core/img/NextDom_Wide_AlphaBlueBlack.png" style="height:40px;width:auto"/></span>
     </a>
 
     <!-- Header Navbar: style can be found in header.less -->
@@ -70,7 +70,7 @@
                                 {% for jeeObject in jeeObjectsTree %}
                             <li><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
                             {% endfor %}
-                            
+
                         </ul>
                     </li>
                     <li class="treeview">
@@ -79,7 +79,7 @@
                             <li class="treeview-menu">
                                 {% for view in viewsList %}
                             <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">{{ view.getDisplay('icon')|trim }} {{ viewMenu.getName() }}</a></li>
-                            {% endfor %}                      
+                            {% endfor %}
                         </ul>
                     </li>
                     <li class="treeview">
@@ -90,7 +90,7 @@
                                 {% for plan in plansList %}
                             <li><a href="index.php?v=d&p=plan&plan_id={{ plan.getId() }}">{{ plan.getConfiguration('icon')|trim }} {{ plan.getName() }}</a></li>
                             {% endfor %}
-                        
+
                         </ul>
                     </li>
                     <li class="treeview">
@@ -148,7 +148,7 @@
                     <li class="treeview-menu">
                         {{ pluginMenu | raw }}
                     </li>
-              
+
                 </ul>
 
         </ul>
@@ -165,32 +165,23 @@
     <!-- Tab panes -->
     <div class="tab-content">
         <div class="tab-pane active" id="control-sidebar-settings-tab">
-            <div><a href="index.php?v=d&p=administration"><i class="fa fa-wrench"></i> {{ 'Configuration' }}</a></div>
-            <div><a href="index.php?v=d&p=backup"><i class="fa fa-floppy-o"></i> {{ 'Sauvegardes' }}</a></div>
-            <div><a href="index.php?v=d&p=migration"><i class="fa fa-upload"></i> {{ 'Migration depuis jeedom' }}</a></div>
-            <div><a href="index.php?v=d&p=update"><i class="fa fa-refresh"></i> {{ 'Centre de mise à jour' }}</a></div>
-            <div><a href="index.php?v=d&p=cron"><i class="fa fa-tasks"></i> {{ 'Moteur de tâches' }}</a></div>
-            <div><a href="index.php?v=d&p=custom"><i class="fa fa-pencil-square-o"></i> {{ 'Personnalisation avancée' }}</a></div>
-            <div><a href="index.php?v=d&p=user"><i class="fa fa-users"></i> {{ 'Utilisateurs' }}</a></div>
-            <div><a href="index.php?v=d&p=profils"><i class="fa fa-briefcase"></i> {{ 'Profil' }}</a></div>
-            <div><a href="index.php?v=m"><i class="fa fa-mobile"></i> {{ 'Version mobile' }}</a></div>
-            <div><a href="index.php?v=d&p=log"><i class="fa fa-info-circle"></i> {{ 'Version' }}{{ nextdomVersion }}</a></div>
-            <div><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fa fa-circle-o"></i> {{ 'Se déconnecter' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=administration"><i class="fa fa-wrench"></i> {{ 'Configuration' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=backup"><i class="fa fa-floppy-o"></i> {{ 'Sauvegardes' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=migration"><i class="fa fa-upload"></i> {{ 'Migration depuis jeedom' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=update"><i class="fa fa-refresh"></i> {{ 'Centre de mise à jour' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=cron"><i class="fa fa-tasks"></i> {{ 'Moteur de tâches' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=custom"><i class="fa fa-pencil-square-o"></i> {{ 'Personnalisation avancée' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=user"><i class="fa fa-users"></i> {{ 'Utilisateurs' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=profils"><i class="fa fa-briefcase"></i> {{ 'Profil' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=m"><i class="fa fa-mobile"></i> {{ 'Version mobile' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=log"><i class="fa fa-info-circle"></i> {{ 'Version' }}{{ nextdomVersion }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fa fa-circle-o"></i> {{ 'Se déconnecter' }}</a></div>
             {% if isAdmin and canSudo %}
-                <div><a id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i> {{ 'Redémarrer' }}</a></div>
-                <div><a id="bt_haltSystem" state="0"><i class="fa fa-power-off"></i> {{ 'Eteindre' }}</a></div>
+                <div><a class="control-sidebar-subheading" id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i> {{ 'Redémarrer' }}</a></div>
+                <div><a class="control-sidebar-subheading" id="bt_haltSystem" state="0"><i class="fa fa-power-off"></i> {{ 'Eteindre' }}</a></div>
             {% endif %}
         </div>
         <div class="tab-pane" id="control-sidebar-tools-tab">
-            <h4 class="control-sidebar-heading">Layout Options</h4>
-            <div class="form-group">
-                <label class="control-sidebar-subheading"><input type="checkbox"data-layout="sidebar-collapse"class="pull-right"/>Toggle Sidebar</label>
-                <p>Toggle the left sidebar\'s state (open or collapse)</p>
-            </div>
-            <div class="form-group">
-                <label class="control-sidebar-subheading"><input type="checkbox"data-enable="expandOnHover"class="pull-right"/>Sidebar Expand on Hover</label>
-                <p>Let the sidebar mini expand on hover</p>
-            </div>
             <div class="form-group">
                 <label class="control-sidebar-subheading"><input type="checkbox"data-controlsidebar="control-sidebar-open"class="pull-right"/>Toggle Right Sidebar Slide</label>
                 <p>Toggle between slide over content and push content effects</p>'

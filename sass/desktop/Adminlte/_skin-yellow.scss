@@ -2,6 +2,14 @@
  * Skin: Yellow
  * ------------
  */
+
+.skin-yellow .logo-mini-img{
+  content:url("/core/img/NextDom_Square_AlphaBlackWhite.png");
+}
+.skin-yellow .logo-lg-img{
+  content:url("/core/img/NextDom_Wide_AlphaWhiteBlack.png");
+}
+
 .skin-yellow .main-header .navbar {
   background-color: #f39c12;
 }

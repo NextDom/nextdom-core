@@ -2,6 +2,14 @@
  * Skin: NextDom
  * ----------
  */
+.skin-nextdom .logo-mini-img{
+  content:url("/core/img/NextDom_Square_AlphaBlackWhite.png");
+}
+
+.skin-nextdom .logo-lg-img{
+  content:url("/core/img/NextDom_Wide_AlphaWhiteBlack.png");
+}
+
 .skin-nextdom .main-header .navbar {
   background-color: #33B8CC;
 }
