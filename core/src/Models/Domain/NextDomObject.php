@@ -55,6 +55,10 @@ class NextDomObject
     private $display;
 
     /**
+     * @var string
+     */
+    private $image;
+    /**
      * @return int
      */
     public function getId(): int
@@ -180,5 +184,22 @@ class NextDomObject
         return $this;
     }
 
-
+     /**
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image:
+    }
+    
+    /**
+     * @param string $image
+     * @return NextDomObject
+     */
+    public function setImage($image): NextDomObject
+    {
+        $this->image = $image;
+        return $this;
+    }
+    
 }
