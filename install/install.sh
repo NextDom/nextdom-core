@@ -125,7 +125,7 @@ step_7_nextdom_customization() {
     rm /etc/apache2/conf-available/other-vhosts-access-log.conf >> ${DEBUG} 2>&1
     rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf >> ${DEBUG} 2>&1
 
-    mkdir /etc/systemd/system/apache2.service.d >${DEBUG} 2>&1
+    mkdir /etc/systemd/system/apache2.service.d >> ${DEBUG} 2>&1
     echo "[Service]" > /etc/systemd/system/apache2.service.d/privatetmp.conf
     echo "PrivateTmp=no" >> /etc/systemd/system/apache2.service.d/privatetmp.conf
 
