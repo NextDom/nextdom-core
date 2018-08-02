@@ -25,8 +25,8 @@ $('#in_login_username').on('focusout change keypress',function(){
             },
             success: function (data) {
                 if($('#in_login_username').val() == $('#in_login_password').val()){
-                    $('#phrase_login_btn').html('{{Votre mot de passe doit être changé.<br/>Pour plus de sécurité.}}');
-                    $('#titre_login_btn').html('{{Information importante :}}');
+                    $('#phrase_login_btn').html('Votre mot de passe doit être changé.<br/>Pour plus de sécurité.');
+                    $('#titre_login_btn').html('Information importante :');
                     $('.veen .wrapper').addClass('move');
                     $('.body').css('background','linear-gradient(360deg, rgba(147,204,1,0.6), rgba(147,204,1,1))');
                     $('.login-btn').css('color','#000000');
