@@ -1,14 +1,10 @@
 {{ HEADER|raw }}
 <body class="hold-transition skin-blue sidebar-mini fixed sidebar-collapse">
-{% autoescape false %}
-    {%  if MENU is defined %}
-        {{ MENU }}
-    {%  endif %}
-{%  endautoescape %}
+{%  if MENU is defined %}
+    {{ MENU|raw }}
+{%  endif %}
 <div class="content-wrapper">
-    {% autoescape false %}
-        {{ CONTENT }}
-    {% endautoescape %}
+    {{ CONTENT|raw }}
 </div>
 </body>
 </html>

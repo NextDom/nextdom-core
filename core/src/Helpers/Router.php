@@ -76,7 +76,16 @@ class Router
         } else {
             require_once(NEXTDOM_ROOT . '/core/php/authentification.php');
             Status::initConnectState();
-            $configs = \config::byKeys(array('enableCustomCss', 'language', 'nextdom::firstUse'));
+            $configs = \config::byKeys(array(
+                'enableCustomCss',
+                'language',
+                'nextdom::firstUse',
+                'widget::step::width',
+                'widget::step::height',
+                'widget::margin',
+                'product_name',
+                'product_icon',
+                'default_bootstrap_theme'));
             if (!Status::isConnect()) {
                 PrepareView::showConnectionPage($configs);
             }

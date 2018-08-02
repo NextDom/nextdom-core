@@ -41,6 +41,9 @@ class PrepareView
 
     private static $title;
 
+    private static $jsPool;
+    private static $cssPool;
+
     /**
      * Affiche le contenu de l'en-tête
      */
@@ -263,7 +266,6 @@ class PrepareView
         $currentPlugin = PrepareView::initMenus();
         $render = Render::getInstance();
 
-
         $globalData['HEADER'] = self::getHeader($render, self::$title, $configs);
 
         $pageData = [];
@@ -273,7 +275,10 @@ class PrepareView
             'user_id' => $_SESSION['user']->getId(),
             'user_isAdmin' => Status::isConnectAdmin(),
             'user_login' => $_SESSION['user']->getLogin(),
-            'nextdom_firstUse' => $configs['nextdom::firstUse']
+            'nextdom_firstUse' => $configs['nextdom::firstUse'],
+            'widget_width_step' => $configs['widget::step::width'],
+            'widget_height_step' => $configs['widget::step::height'],
+            'widget_margin' => $configs['widget::margin']
         ));
         $pageData['JS'] = self::getPluginJsEvents($render);
 
@@ -387,141 +392,134 @@ class PrepareView
     {
         $headerData = [];
         // TODO: Remplacer par un include dans twig
-        $themeDir = NEXTDOM_ROOT . '/css/themes/';
-        $bootstrapTheme = '';
-        $defaultBootstrapTheme = \config::byKey('default_bootstrap_theme');
-        $headerData['productName'] = \config::byKey('product_name');
+        $headerData['productName'] = $configs['product_name'];
         $headerData['ajaxToken'] = \ajax::getToken();
-        $headerData['cssPool'] = [];
-        $headerData['jsPool'] = [];
-        if (!Status::isConnect()) {
-            if (!Status::isRescueMode() && file_exists($themeDir . \config::byKey('default_bootstrap_theme') . '/desktop/' . \config::byKey('default_bootstrap_theme') . '.css')) {
-                $headerData['cssPool'][] = $themeDir . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css';
-            } else {
-                $headerData['cssPool'][] = '/3rdparty/bootstrap/css/bootstrap.min.css';
-            }
-        } else {
-            $cssBootstrapToAdd = true;
-            if (!Status::isRescueMode()) {
-                if (file_exists($themeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.css')) {
-                    $headerData['cssPool'][] = $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.css';
-                    $cssBootstrapToAdd = false;
-                } else {
-                    if (file_exists($themeDir . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css')) {
-                        $headerData['cssPool'][] = $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css';
-                        $cssBootstrapToAdd = false;
-                    }
-                }
-            }
-            if ($cssBootstrapToAdd) {
-                $headerData['cssPool'][] = '/3rdparty/bootstrap/css/bootstrap.min.css';
-            }
-        }
+        self::initJsPool();
+        self::initCssPool($configs);
         // TODO: A virer
         ob_start();
         \include_file('core', 'icon.inc', 'php');
-        \include_file('', 'nextdom', 'css');
         $headerData['customCss'] = ob_get_clean();
 
-        if (file_exists(NEXTDOM_ROOT . '/js/base.js')) {
-            $headerData['jsPool'][] = '/js/base.js';
-            $headerData['jsPool'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.min.js';
-            $headerData['jsPool'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min.js';
-        } else {
-            $headerData['jsPool'][] = '3rdparty/jquery.utils/jquery.utils.js';
-            $headerData['jsPool'][] = 'core/core.js';
-            $headerData['jsPool'][] = '3rdparty/bootstrap/bootstrap.min.js';
-            $headerData['jsPool'][] = '3rdparty/jquery.ui/jquery-ui.min.js';
-            $headerData['jsPool'][] = '3rdparty/jquery.ui/jquery.ui.datepicker.fr.js';
-            $headerData['jsPool'][] = 'core/js.inc.js';
-            $headerData['jsPool'][] = '3rdparty/bootbox/bootbox.min.js';
-            $headerData['jsPool'][] = '3rdparty/highstock/highstock.js';
-            $headerData['jsPool'][] = '3rdparty/highstock/highcharts-more.js';
-            $headerData['jsPool'][] = '3rdparty/highstock/modules/solid-gauge.js';
-            $headerData['jsPool'][] = '3rdparty/highstock/modules/exporting.js';
-            $headerData['jsPool'][] = '3rdparty/highstock/modules/export-data.js';
-            $headerData['jsPool'][] = 'desktop/utils.js';
-            $headerData['jsPool'][] = '3rdparty/jquery.toastr/jquery.toastr.min.js';
-            $headerData['jsPool'][] = '3rdparty/jquery.at.caret/jquery.at.caret.min.js';
-            $headerData['jsPool'][] = '3rdparty/jwerty/jwerty.js';
-            $headerData['jsPool'][] = '3rdparty/jquery.packery/jquery.packery.js';
-            $headerData['jsPool'][] = '3rdparty/jquery.lazyload/jquery.lazyload.js';
-            $headerData['jsPool'][] = '3rdparty/codemirror/lib/codemirror.js';
-            $headerData['jsPool'][] = '3rdparty/codemirror/addon/edit/matchbrackets.js';
-            $headerData['jsPool'][] = '3rdparty/codemirror/mode/htmlmixed/htmlmixed.js';
-            $headerData['jsPool'][] = '3rdparty/codemirror/mode/clike/clike.js';
-            $headerData['jsPool'][] = '3rdparty/codemirror/mode/php/php.js';
-            $headerData['jsPool'][] = '3rdparty/codemirror/mode/xml/xml.js';
-            $headerData['jsPool'][] = '3rdparty/codemirror/mode/javascript/javascript.js';
-            $headerData['jsPool'][] = '3rdparty/codemirror/mode/css/css.js';
-            $headerData['jsPool'][] = '3rdparty/jquery.tree/jstree.min.js';
-            $headerData['jsPool'][] = '3rdparty/jquery.fileupload/jquery.ui.widget.js';
-            $headerData['jsPool'][] = '3rdparty/jquery.fileupload/jquery.iframe-transport.js';
-            $headerData['jsPool'][] = '3rdparty/jquery.fileupload/jquery.fileupload.js';
-            $headerData['jsPool'][] = '3rdparty/datetimepicker/jquery.datetimepicker.js';
-            $headerData['jsPool'][] = '3rdparty/jquery.cron/jquery.cron.min.js';
-            $headerData['jsPool'][] = '3rdparty/jquery.contextMenu/jquery.contextMenu.min.js';
-            $headerData['jsPool'][] = '3rdparty/autosize/autosize.min.js';
-        }
+        $headerData['language'] = $configs['language'];
+        $headerData['productIcon'] = $configs['product_icon'];
+        $headerData['title'] = $title;
+        $headerData['jsPool'] = self::$jsPool;
+        $headerData['cssPool'] = self::$cssPool;
+        return $render->get('/desktop/header.html.twig', $headerData);
+    }
 
-        // TODO: A remonter
+    private static function initJsPool()
+    {
+        self::$jsPool = [];
+        if (file_exists(NEXTDOM_ROOT . '/js/base.js')) {
+            self::$jsPool[] = '/js/base.js';
+            self::$jsPool[] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.min.js';
+            self::$jsPool[] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min.js';
+        } else {
+            self::$jsPool[] = '3rdparty/jquery.utils/jquery.utils.js';
+            self::$jsPool[] = 'core/core.js';
+            self::$jsPool[] = '3rdparty/bootstrap/bootstrap.min.js';
+            self::$jsPool[] = '3rdparty/jquery.ui/jquery-ui.min.js';
+            self::$jsPool[] = '3rdparty/jquery.ui/jquery.ui.datepicker.fr.js';
+            self::$jsPool[] = 'core/js.inc.js';
+            self::$jsPool[] = '3rdparty/bootbox/bootbox.min.js';
+            self::$jsPool[] = '3rdparty/highstock/highstock.js';
+            self::$jsPool[] = '3rdparty/highstock/highcharts-more.js';
+            self::$jsPool[] = '3rdparty/highstock/modules/solid-gauge.js';
+            self::$jsPool[] = '3rdparty/highstock/modules/exporting.js';
+            self::$jsPool[] = '3rdparty/highstock/modules/export-data.js';
+            self::$jsPool[] = 'desktop/utils.js';
+            self::$jsPool[] = '3rdparty/jquery.toastr/jquery.toastr.min.js';
+            self::$jsPool[] = '3rdparty/jquery.at.caret/jquery.at.caret.min.js';
+            self::$jsPool[] = '3rdparty/jwerty/jwerty.js';
+            self::$jsPool[] = '3rdparty/jquery.packery/jquery.packery.js';
+            self::$jsPool[] = '3rdparty/jquery.lazyload/jquery.lazyload.js';
+            self::$jsPool[] = '3rdparty/codemirror/lib/codemirror.js';
+            self::$jsPool[] = '3rdparty/codemirror/addon/edit/matchbrackets.js';
+            self::$jsPool[] = '3rdparty/codemirror/mode/htmlmixed/htmlmixed.js';
+            self::$jsPool[] = '3rdparty/codemirror/mode/clike/clike.js';
+            self::$jsPool[] = '3rdparty/codemirror/mode/php/php.js';
+            self::$jsPool[] = '3rdparty/codemirror/mode/xml/xml.js';
+            self::$jsPool[] = '3rdparty/codemirror/mode/javascript/javascript.js';
+            self::$jsPool[] = '3rdparty/codemirror/mode/css/css.js';
+            self::$jsPool[] = '3rdparty/jquery.tree/jstree.min.js';
+            self::$jsPool[] = '3rdparty/jquery.fileupload/jquery.ui.widget.js';
+            self::$jsPool[] = '3rdparty/jquery.fileupload/jquery.iframe-transport.js';
+            self::$jsPool[] = '3rdparty/jquery.fileupload/jquery.fileupload.js';
+            self::$jsPool[] = '3rdparty/datetimepicker/jquery.datetimepicker.js';
+            self::$jsPool[] = '3rdparty/jquery.cron/jquery.cron.min.js';
+            self::$jsPool[] = '3rdparty/jquery.contextMenu/jquery.contextMenu.min.js';
+            self::$jsPool[] = '3rdparty/autosize/autosize.min.js';
+        }
+    }
+
+    private static function initCssPool($configs) {
+        $nextdomThemeDir = NEXTDOM_ROOT . '/css/themes/';
+        $bootstrapTheme = '';
+        $defaultBootstrapTheme = $configs['default_bootstrap_theme'];
         if (isset($_SESSION['user'])) {
             $bootstrapTheme = $_SESSION['user']->getOptions('bootstrap_theme');
             $designTheme = $_SESSION['user']->getOptions('design_nextdom');
-            if (file_exists(NEXTDOM_ROOT . '/css/' . $designTheme . '.css')) {
-                $headerData['cssPool'][] = '/css/' . $designTheme . '.css';
+        }
+
+        self::$cssPool = [];
+        self::$cssPool[] = '/css/nextdom.css';
+        // TODO: AU SECOURS
+        $addBootstrapThemeFile = true;
+        if (!Status::isRescueMode()) {
+            if (!Status::isConnect()) {
+                if (file_exists($nextdomThemeDir . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css')) {
+                    self::$cssPool[] = '/css/themes/' . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css';
+                } else {
+                    self::$cssPool[] = '/3rdparty/bootstrap/css/bootstrap.min.css';
+                }
+                if (is_dir($nextdomThemeDir . $bootstrapTheme . '/desktop')) {
+                    if (file_exists($nextdomThemeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.js')) {
+                        self::$jsPool[] = '/css/themes/' . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.js';
+                    }
+                }
+                if ($_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
+                    $highstockThemeFile = '/3rdparty/highstock/themes/' . $_SESSION['user']->getOptions('desktop_highcharts_theme') . '.js';
+                    if (file_exists($highstockThemeFile)) {
+                        self::$jsPool[] = $highstockThemeFile;
+                    }
+                }
             } else {
-                $headerData['cssPool'][] = '/css/dashboard-v2.css';
+                if (file_exists($nextdomThemeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.css')) {
+                    self::$cssPool[] = '/css/themes/' . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.css';
+                    $addBootstrapThemeFile = false;
+                } else {
+                    if (file_exists($nextdomThemeDir . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css')) {
+                        self::$cssPool[] = '/css/themes/' . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css';
+                        $addBootstrapThemeFile = false;
+                    }
+                }
+            }
+        }
+        if ($addBootstrapThemeFile) {
+            self::$cssPool[] = '/3rdparty/bootstrap/css/bootstrap.min.css';
+        }
+        // TODO: Simplifiable ?
+        if (isset($_SESSION['user'])) {
+            if (file_exists(NEXTDOM_ROOT . '/css/' . $designTheme . '.css')) {
+                self::$cssPool[] = '/css/' . $designTheme . '.css';
+            } else {
+                self::$cssPool[] = '/css/dashboard-v2.css';
             }
             if (file_exists(NEXTDOM_ROOT . '/desktop/js/' . $designTheme . '.js')) {
-                $headerData['jsPool'][] = '/desktop/js/' . $designTheme . '.js';
-            }
-            else {
-                $headerData['jsPool'][] = '/desktop/js/dashboard-v2.js';
+                self::$jsPool[] = '/desktop/js/' . $designTheme . '.js';
+            } else {
+                self::$jsPool[] = '/desktop/js/dashboard-v2.js';
             }
         }
         if (!Status::isRescueMode() && $configs['enableCustomCss'] == 1) {
             if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.css')) {
-                $headerData['cssPool'][] = '/desktop/custom/custom.css';
+                self::$cssPool[] = '/desktop/custom/custom.css';
             }
             if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.js')) {
-                $headerData['jsPool'][] = '/desktop/custom/custom.js';
+                self::$jsPool[] = '/desktop/custom/custom.js';
             }
         }
-
-        // TODO: Horreur à remonter
-        try {
-            if (Status::isConnect()) {
-                if (!Status::isRescueMode() && is_dir($themeDir . $bootstrapTheme . '/desktop')) {
-                    if (file_exists($themeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.js')) {
-                        $headerData['jsPool'][] = $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.js';
-                    }
-                }
-                if (!Status::isRescueMode() && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
-                    try {
-                        if (is_dir($themeDir . $bootstrapTheme . '/desktop')) {
-                            if (file_exists($themeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.js')) {
-                                $headerData['jsPool'][] = $themeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.js';
-                            }
-                        }
-                    } catch (\Exception $e) {
-
-                    }
-                    if (!Status::isRescueMode() && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
-                        try {
-                            $headerData['jsPool'][] = '/3rdparty/highstock/themes/' . $_SESSION['user']->getOptions('desktop_highcharts_theme') . '.js';
-                        } catch (Exception $e) {
-
-                        }
-                    }
-                }
-            }
-        } catch (\Exception $e) {
-
-        }
-        $headerData['language'] = Utils::getVarToJS('nextdom_langage', $configs['language']);
-        $headerData['productIcon'] = \config::byKey('product_icon');
-        $headerData['title'] = $title;
-        return $render->get('/desktop/header.html.twig', $headerData);
     }
 }

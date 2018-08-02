@@ -9,12 +9,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <script>
-        var clientDatetime = new Date();
-        var clientServerDiffDatetime = ({{ date().timestamp }} * 1000) - clientDatetime.getTime();
-        var serverDatetime = {{ date().timestamp }};
-        var io = null;
-    </script>
     {% if cssPool is defined %}
         {% for cssFile in cssPool %}
             <link href="{{ cssFile }}" rel="stylesheet" />
@@ -25,6 +19,10 @@
     {% endif %}
     <script src="/3rdparty/jquery/jquery.min.js"></script>
     <script>
+        var clientDatetime = new Date();
+        var clientServerDiffDatetime = ({{ date().timestamp }} * 1000) - clientDatetime.getTime();
+        var serverDatetime = {{ date().timestamp }};
+        var io = null;
         NEXTDOM_PRODUCT_NAME='{{ productName }}';
         NEXTDOM_AJAX_TOKEN = '{{ ajaxToken }}';
         $.ajaxSetup({
@@ -32,8 +30,10 @@
             data: {
                 nextdom_token: '{{ ajaxToken }}'
             }
-        })
+        });
+        var nextdom_langage = '{{ language }}';
     </script>
+
     {% if jsPool is defined %}
         {% for jsFile in jsPool %}
             <script src="{{ jsFile }}"></script>
