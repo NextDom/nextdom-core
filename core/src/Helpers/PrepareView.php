@@ -142,6 +142,7 @@ class PrepareView
     {
         self::$pageData = [];
         self::$pageData['JS_POOL'] = [];
+        self::$pageData['JS_END_POOL'] = [];
         self::$pageData['CSS_POOL'] = [];
         self::$pageData['TITLE'] = 'Connexion';
         $render = Render::getInstance();
@@ -149,8 +150,8 @@ class PrepareView
 
         $logo = \config::byKey('product_connection_image');
         self::$pageData['CSS_POOL'][] = '/desktop/css/connection.css';
-        self::$pageData['JS_POOL'][] = '/desktop/js/connection.js';
-        self::$pageData['JS_POOL'][] = '/3rdparty/animate/animate.js';
+        self::$pageData['JS_END_POOL'][] = '/desktop/js/connection.js';
+        self::$pageData['JS_END_POOL'][] = '/3rdparty/animate/animate.js';
 
         $render->show('desktop/connection.html.twig', self::$pageData);
     }
