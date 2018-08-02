@@ -67,6 +67,13 @@ class Render
         return self::$instance;
     }
 
+    public function getTranslation(string $sentence): string {
+        if (!is_null(self::$instance)) {
+            return $this->translator->trans($sentence);
+        }
+        return $sentence;
+    }
+
     public function get($view, $data = array()) {
         return $this->twig->render($view, $data);
     }

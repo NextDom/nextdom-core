@@ -83,7 +83,7 @@ class PrepareView
      *
      * @return object Plugin courant
      */
-    public static function initMenus()
+    public static function initMenus(Render $render)
     {
         global $NEXTDOM_INTERNAL_CONFIG;
 
@@ -102,7 +102,7 @@ class PrepareView
                     $name = $category_name;
                 }
 
-                self::$pluginMenu .= '<li class="dropdown-submenu"><a data-toggle="dropdown"><i class="fa ' . $icon . '"></i> {{' . $name . '}}</a>';
+                self::$pluginMenu .= '<li class="dropdown-submenu"><a data-toggle="dropdown"><i class="fa ' . $icon . '"></i> '.$render->getTranslation($name).'</a>';
                 self::$pluginMenu .= '<ul class="dropdown-menu">';
                 foreach ($category as $pluginItem) {
                     if ($pluginItem->getId() == init('m')) {
@@ -263,8 +263,8 @@ class PrepareView
             self::$title = ucfirst($page) . ' - ' . self::$title;
         }
 
-        $currentPlugin = PrepareView::initMenus();
         $render = Render::getInstance();
+        $currentPlugin = PrepareView::initMenus($render);
 
         $globalData['HEADER'] = self::getHeader($render, self::$title, $configs);
 
