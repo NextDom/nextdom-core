@@ -9,7 +9,7 @@ Website (French):  [https://nextdom.com/site/](https://nextdom.com/site/)
 ## Pre-requis
 - MySQL installé (en local ou sur une machine distance)
 - un serveur web installé (apache ou nginx)
-- php (5.6 minimum) installé avec les extensions : curl, json, gd et mysql
+- php (7.0 minimum) installé avec les extensions : curl, json, gd et mysql
 - ntp et crontab installés
 - curl, unzip et sudo installés
 
