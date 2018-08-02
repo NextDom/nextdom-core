@@ -1525,12 +1525,12 @@ a:focus {
   position: relative;
   border-radius: 4px;
   background: #ffffff;
-  border-left: 1px solid #d7dfe3;
-  border-right: 1px solid #d7dfe3;
-  border-bottom: 1px solid #d7dfe3;
+  border-left: 1px solid rgba(0,0,0,0.2);
+  border-right: 1px solid rgba(0,0,0,0.2);
+  border-bottom: 1px solid rgba(0,0,0,0.2);
   margin-bottom: 20px;
   width: 100%;
-  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08);
 }
 .box.box-primary {
   border-top-color: #3c8dbc;
@@ -4004,5 +4004,8 @@ table.text-center th {
   color: #ffffff;
   border-radius: 3px;
   margin-top: -20px;
-  padding: 15px;
+}
+
+.panel{
+  margin-bottom: 40px;
 }
