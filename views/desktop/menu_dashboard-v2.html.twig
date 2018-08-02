@@ -3,9 +3,9 @@
     <!-- Logo -->
     <a href="/" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><img src="/core/img/NextDom_Square_AlphaBlackBlue.png" style="height:40px;width:auto"></img></span>
+        <span class="logo-mini"><img src="/core/img/NextDom_Square_AlphaBlackBlue.png" style="height:40px;width:auto"/></span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><img src="/core/img/NextDom_Wide_AlphaBlueBlack.png" style="height:40px;width:auto"></img></span>
+        <span class="logo-lg"><img src="/core/img/NextDom_Wide_AlphaBlueBlack.png" style="height:40px;width:auto"/></span>
     </a>
 
     <!-- Header Navbar: style can be found in header.less -->
@@ -25,8 +25,6 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li class="header">You have {{ nbMessage }} notifications</li>
-
-                        </li>
                         <li class="footer"><a href="index.php?v=d&p=update">View all</a></li>
                     </ul>
                 </li>
@@ -72,7 +70,7 @@
                                 {% for jeeObject in jeeObjectsTree %}
                             <li><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
                             {% endfor %}
-                            </li>
+                            
                         </ul>
                     </li>
                     <li class="treeview">
@@ -81,9 +79,7 @@
                             <li class="treeview-menu">
                                 {% for view in viewsList %}
                             <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">{{ view.getDisplay('icon')|trim }} {{ viewMenu.getName() }}</a></li>
-                            {% endfor %}
-                            </li>
-
+                            {% endfor %}                      
                         </ul>
                     </li>
                     <li class="treeview">
@@ -94,7 +90,7 @@
                                 {% for plan in plansList %}
                             <li><a href="index.php?v=d&p=plan&plan_id={{ plan.getId() }}">{{ plan.getConfiguration('icon')|trim }} {{ plan.getName() }}</a></li>
                             {% endfor %}
-                            </li>
+                        
                         </ul>
                     </li>
                     <li class="treeview">
@@ -104,7 +100,6 @@
                                 {% for plan3d in plans3dList %}
                             <li><a href="index.php?v=d&p=plan3d&plan3d_id={{ plan3d.getId() }}">{{ plan3d.getConfiguration('icon')|trim }} {{ plan3d.getName() }}</a></li>
                             {% endfor %}
-                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -153,7 +148,7 @@
                     <li class="treeview-menu">
                         {{ pluginMenu | raw }}
                     </li>
-                    </li>
+              
                 </ul>
 
         </ul>
