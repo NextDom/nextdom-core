@@ -15,10 +15,11 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 namespace NextDom\Enums;
+
 class LogRotateEnum extends Enum
 {
-    const ROTATE_NONE        = 'cron';
-    const ROTATE_DAY      = 'cron5';
-    const ROTATE_MONTH     = 'cron30';
+    const ROTATE_NONE  = 'cron';
+    const ROTATE_DAY   = 'cron5';
+    const ROTATE_MONTH = 'cron30';
     const ROTATE_YEAR  = 'cronDaily';
 }
