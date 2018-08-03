@@ -1,8 +1,6 @@
-{{ HEADER|raw }}
-<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
-{%  if MENU is defined %}
-    {{ MENU|raw }}
-{%  endif %}
+{% include '/desktop/header.html.twig' %}
+<body class="hold-transition skin-blue sidebar-mini fixed sidebar-collapse">
+{% include '/desktop/menu_dashboard-v2.html.twig' %}
 <div class="content-wrapper">
     {{ CONTENT|raw }}
 </div>
