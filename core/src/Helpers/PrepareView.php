@@ -27,153 +27,22 @@ use NextDom\Managers\JeeObjectManager;
  */
 class PrepareView
 {
-    /**
-     * @var string Données HTML du menu
-     */
-    private static $pluginMenu;
-
-    /**
-     * @var string Données HTML de TODO: ????
-     */
-    private static $panelMenu;
-
-    private static $eventJsPlugin;
-
-    private static $title;
-
-    private static $pageData = [];
-
-    /**
-     * Affiche le contenu de l'en-tête
-     */
-    public static function showHeader()
-    {
-        require_once(NEXTDOM_ROOT . '/desktop/template/header.php');
-    }
-
-    /**
-     * Affiche le menu en fonction du mode
-     */
-    public static function showMenu()
-    {
-        if (isset($_SESSION['user'])) {
-            $designTheme = $_SESSION['user']->getOptions('design_nextdom');
-            if (file_exists(NEXTDOM_ROOT . '/desktop/template/menu_' . $designTheme . '.php')) {
-                require_once(NEXTDOM_ROOT . '/desktop/template/menu_' . $designTheme . '.php');
-            } else {
-                require_once(NEXTDOM_ROOT . '/desktop/template/menu.php');
-            }
-        } else {
-            if (isset($_SESSION['user'])) {
-                $designTheme = $_SESSION['user']->getOptions('design_nextdom');
-                if ($designTheme == "dashboard") {
-                    require_once(NEXTDOM_ROOT . '/desktop/template/menu.php');
-                } else {
-                    require_once(NEXTDOM_ROOT . '/desktop/template/menu_dashboard-v2.php');
-                }
-            } else {
-                require_once(NEXTDOM_ROOT . '/desktop/template/menu_dashboard-v2.php');
-            }
-        }
-    }
-
-    /**
-     * Initialise les informations nécessaires au menu
-     *
-     * @return object Plugin courant
-     */
-    public static function initPluginsData(Render $render)
-    {
-        global $NEXTDOM_INTERNAL_CONFIG;
-
-        $currentPlugin = null;
-        $categories = PluginManager::getPluginsByCategory(true);
-
-        if (count($categories) > 0) {
-            self::$pageData['PANEL_MENU'] = [];
-            self::$pageData['MENU_PLUGIN'] = [];
-            self::$pageData['MENU_PLUGIN_CATEGORY'] = [];
-
-            foreach ($categories as $categoryCode => $pluginsList) {
-                self::$pageData['MENU_PLUGIN'][$categoryCode] = [];
-                self::$pageData['MENU_PLUGIN_CATEGORY'][$categoryCode] = [];
-
-                $icon = '';
-                $name = $categoryCode;
-                if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode])) {
-                    $icon = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode]['icon'];
-                    $name = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode]['name'];
-                }
-
-                self::$pageData['MENU_PLUGIN_CATEGORY'][$categoryCode]['name'] = $render->getTranslation($name);
-                self::$pageData['MENU_PLUGIN_CATEGORY'][$categoryCode]['icon'] = $icon;
-
-                foreach ($pluginsList as $plugin) {
-                    self::$pageData['MENU_PLUGIN'][$categoryCode][] = $plugin;
-                    if ($plugin->getId() == Utils::init('m')) {
-                        $currentPlugin = $plugin;
-                        self::$title = ucfirst($currentPlugin->getName()) . ' - NextDom';
-                    }
-                    // TODO: C'est quoi ?
-                    if ($plugin->getDisplay() != '' && \config::bykey('displayDesktopPanel', $plugin->getId(), 0) != 0) {
-                        //self::$panelMenu .= '<li class="plugin-item"><a href="index.php?v=d&m=' . $plugin->getId() . '&p=' . $plugin->getDisplay() . '"><img class="img-responsive" src="' . $plugin->getPathImgIcon() . '" /> ' . $plugin->getName() . '</a></li>';
-                        self::$pageData['PANEL_MENU'][] = $plugin;
-                    }
-                    if ($plugin->getEventjs() == 1) {
-                        self::$eventJsPlugin[] = $plugin->getId();
-                    }
-                }
-            }
-        }
-        return $currentPlugin;
-    }
-
-    /**
-     * Afficher un message d'erreur
-     *
-     * @param string $msg Message de l'erreur
-     */
-    public static function showAlertMessage(string $msg)
-    {
-        echo '<div class="alert alert-danger">' . $msg . '</div>';
-    }
-
     public static function showConnectionPage($configs)
     {
-        self::$pageData = [];
-        self::$pageData['JS_POOL'] = [];
-        self::$pageData['JS_END_POOL'] = [];
-        self::$pageData['CSS_POOL'] = [];
-        self::$pageData['TITLE'] = 'Connexion';
+        $pageData = [];
+        $pageData['JS_POOL'] = [];
+        $pageData['JS_END_POOL'] = [];
+        $pageData['CSS_POOL'] = [];
+        $pageData['TITLE'] = 'Connexion';
         $render = Render::getInstance();
-        self::initHeaderData($render, SELF::$title, $configs);
-
+        self::initHeaderData($pageData, $configs);
+        //TODO: Vérifier ça
         $logo = \config::byKey('product_connection_image');
-        self::$pageData['CSS_POOL'][] = '/desktop/css/connection.css';
-        self::$pageData['JS_END_POOL'][] = '/desktop/js/connection.js';
-        self::$pageData['JS_END_POOL'][] = '/3rdparty/animate/animate.js';
+        $pageData['CSS_POOL'][] = '/desktop/css/connection.css';
+        $pageData['JS_END_POOL'][] = '/desktop/js/connection.js';
+        $pageData['JS_END_POOL'][] = '/3rdparty/animate/animate.js';
 
-        $render->show('desktop/connection.html.twig', self::$pageData);
-    }
-
-    /**
-     * Obtenir le code HTML du menu des plugins
-     *
-     * @return string Code HTML du menu des plugins
-     */
-    public static function getPluginMenu()
-    {
-        return self::$pluginMenu;
-    }
-
-    /**
-     * Obtenir le code HTML du panneau TODO ?????
-     *
-     * @return string Code HTML du panneau
-     */
-    public static function getPanelMenu()
-    {
-        return self::$panelMenu;
+        $render->show('desktop/connection.html.twig', $pageData);
     }
 
     /**
@@ -189,90 +58,76 @@ class PrepareView
             $_GET['p'] = 'system';
         }
         $homeLink = 'index.php?v=d&p=dashboard';
-        $eventjs_plugin = [];
-        $title = 'NextDom';
         $page = '';
         //TODO: Tests à revoir
-        if (init('p') == '') {
+        if (Utils::init('p') == '') {
             redirect($homeLink);
         } else {
             $page = init('p');
-            self::$title = ucfirst($page) . ' - ' . $title;
+            $pageData['TITLE'] = ucfirst($page) . ' - ' . $configs['product_name'];
         }
         $language = $configs['language'];
 
         // TODO: Remplacer par un include dans twig
         $render = Render::getInstance();
-        self::initHeaderData($render, self::$title, $configs);
+        self::initHeaderData($pageData, $configs);
 
-        self::$pageData['CSS'] = $render->getCssHtmlTag('/css/nextdom.css');
-        self::$pageData['varToJs'] = Utils::getVarsToJS(array(
+        $pageData['CSS'] = $render->getCssHtmlTag('/css/nextdom.css');
+        $pageData['varToJs'] = Utils::getVarsToJS(array(
             'userProfils' => $_SESSION['user']->getOptions(),
             'user_id' => $_SESSION['user']->getId(),
             'user_isAdmin' => Status::isConnectAdmin(),
             'user_login' => $_SESSION['user']->getLogin(),
             'nextdom_firstUse' => $configs['nextdom::firstUse']
         ));
-        self::$pageData['JS'] = '';
+        $pageData['JS'] = '';
 
-        if (count($eventjs_plugin) > 0) {
-            foreach ($eventjs_plugin as $value) {
-                try {
-                    self::$pageData['JS'] .= $render->getJsHtmlTag('/plugins/' . $value . '/desktop/js/event.js');
-                } catch (\Exception $e) {
-                    \log::add($value, 'error', 'Event JS file not found');
-                }
-            }
-        }
-        self::$pageData['MENU'] = $render->get('desktop/menu_rescue.html.twig');
+        $pageData['MENU'] = $render->get('desktop/menu_rescue.html.twig');
 
         try {
             if (!\nextdom::isStarted()) {
-                self::$pageData['alertMsg'] = 'NextDom est en cours de démarrage, veuillez patienter . La page se rechargera automatiquement une fois le démarrage terminé.';
+                $pageData['alertMsg'] = 'NextDom est en cours de démarrage, veuillez patienter . La page se rechargera automatiquement une fois le démarrage terminé.';
             }
             ob_start();
             \include_file('desktop', $page, 'php');
-            self::$pageData['content'] = ob_get_clean();
+            $pageData['content'] = ob_get_clean();
         } catch (\Exception $e) {
             ob_end_clean();
-            self::$pageData['alertMsg'] = displayException($e);
+            $pageData['alertMsg'] = displayException($e);
         }
 
-        self::$pageData['CONTENT'] = $render->get('desktop/index.html.twig', self::$pageData);
+        $pageData['CONTENT'] = $render->get('desktop/index.html.twig', $pageData);
 
         $render = Render::getInstance();
-        $render->show('desktop/base.html.twig', self::$pageData);
+        $render->show('desktop/base.html.twig', $pageData);
     }
 
     public static function showContent($configs)
     {
-        global $homeLink;
         global $language;
         global $configs;
-        self::$pageData = [];
-        self::$pageData['JS_POOL'] = [];
-        self::$pageData['CSS_POOL'] = [];
-        self::$eventJsPlugin = [];
-        self::$title = 'NextDom';
+        $pageData = [];
+        $pageData['JS_POOL'] = [];
+        $pageData['CSS_POOL'] = [];
         $page = '';
         $language = $configs['language'];
-        $homeLink = self::getHomeLink();
 
+        $pageData['HOMELINK'] = self::getHomeLink();
         //TODO: Tests à revoir
         if (Utils::init('p') == '') {
-            redirect($homeLink);
+            redirect($pageData['homeLink']);
         } else {
             $page = Utils::init('p');
-            self::$title = ucfirst($page) . ' - ' . self::$title;
+            $pageData['TITLE'] = ucfirst($page) . ' - ' . $configs['product_name'];
         }
 
         $render = Render::getInstance();
-        $currentPlugin = PrepareView::initPluginsData($render);
-        self::initPluginsEvents($render);
-        self::initHeaderData($render, self::$title, $configs);
+        $currentPlugin = PrepareView::initPluginsData($render, $pageData, $eventsJsPlugin, $configs);
+        self::initPluginsEvents($eventsJsPlugin, $pageData);
+        self::initHeaderData($pageData, $configs);
 
-        self::$pageData['CSS_POOL'][] = '/css/nextdom.css';
-        self::$pageData['JS_VARS'] = array(
+        $pageData['CSS_POOL'][] = '/css/nextdom.css';
+        $pageData['JS_VARS'] = array(
             'user_id' => $_SESSION['user']->getId(),
             'user_isAdmin' => Status::isConnectAdmin(),
             'user_login' => $_SESSION['user']->getLogin(),
@@ -281,22 +136,22 @@ class PrepareView
             'widget_height_step' => $configs['widget::step::height'],
             'widget_margin' => $configs['widget::margin']
         );
-        self::$pageData['JS_VARS_RAW'] = array(
+        $pageData['JS_VARS_RAW'] = array(
             'userProfils' => Utils::getArrayToJQueryJson($_SESSION['user']->getOptions()),
         );
 
 
-        self::$pageData['MENU_VIEW'] = '/desktop/menu.html.twig';
+        $pageData['MENU_VIEW'] = '/desktop/menu.html.twig';
         if (isset($_SESSION['user'])) {
             $designTheme = $_SESSION['user']->getOptions('design_nextdom');
             if (file_exists(NEXTDOM_ROOT . '/views/desktop/menu_' . $designTheme . '.html.twig')) {
-                self::$pageData['MENU_VIEW'] = '/desktop/menu_' . $designTheme . '.html.twig';
+                $pageData['MENU_VIEW'] = '/desktop/menu_' . $designTheme . '.html.twig';
             }
         }
 
         $baseView = '/desktop/base.html.twig';
-        self::initMenu($render, $currentPlugin, $homeLink);
-        if (strstr(self::$pageData['MENU_VIEW'], 'v2')) {
+        self::initMenu($pageData, $currentPlugin);
+        if (strstr($pageData['MENU_VIEW'], 'v2')) {
             $baseView = '/desktop/base-v2.html.twig';
         }
 
@@ -316,10 +171,10 @@ class PrepareView
             $pageData['alertMsg'] = displayException($e);
         }
 
-        self::$pageData['CONTENT'] = $render->get('desktop/index.html.twig', $pageData);
+        $pageData['CONTENT'] = $render->get('desktop/index.html.twig', $pageData);
 
         $render = Render::getInstance();
-        $render->show($baseView, self::$pageData);
+        $render->show($baseView, $pageData);
 
     }
 
@@ -353,105 +208,156 @@ class PrepareView
         return $homeLink;
     }
 
-    private static function initPluginsEvents(Render $render)
+    /**
+     * Initialize plugins informations necessary for the menu
+     *
+     * @param Render $render Render engine
+     *
+     * @return mixed Current loaded plugin
+     */
+    public static function initPluginsData(Render $render, &$pageData, &$eventsJsPlugin, $configs)
     {
-        $result = '';
-        if (count(self::$eventJsPlugin) > 0) {
-            foreach (self::$eventJsPlugin as $value) {
+        global $NEXTDOM_INTERNAL_CONFIG;
+
+        $currentPlugin = null;
+        $eventsJsPlugin = [];
+        $categories = PluginManager::getPluginsByCategory(true);
+
+        if (count($categories) > 0) {
+            $pageData['PANEL_MENU'] = [];
+            $pageData['MENU_PLUGIN'] = [];
+            $pageData['MENU_PLUGIN_CATEGORY'] = [];
+
+            foreach ($categories as $categoryCode => $pluginsList) {
+                $pageData['MENU_PLUGIN'][$categoryCode] = [];
+                $pageData['MENU_PLUGIN_CATEGORY'][$categoryCode] = [];
+
+                $icon = '';
+                $name = $categoryCode;
+                if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode])) {
+                    $icon = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode]['icon'];
+                    $name = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode]['name'];
+                }
+
+                $pageData['MENU_PLUGIN_CATEGORY'][$categoryCode]['name'] = $render->getTranslation($name);
+                $pageData['MENU_PLUGIN_CATEGORY'][$categoryCode]['icon'] = $icon;
+
+                foreach ($pluginsList as $plugin) {
+                    $pageData['MENU_PLUGIN'][$categoryCode][] = $plugin;
+                    if ($plugin->getId() == Utils::init('m')) {
+                        $currentPlugin = $plugin;
+                        $pageData['title'] = ucfirst($currentPlugin->getName()) . ' - ' . $configs['product_name'];
+                    }
+                    // TODO: C'est quoi ?
+                    if ($plugin->getDisplay() != '' && \config::bykey('displayDesktopPanel', $plugin->getId(), 0) != 0) {
+                        $pageData['PANEL_MENU'][] = $plugin;
+                    }
+                    if ($plugin->getEventjs() == 1) {
+                        $eventJsPlugin[] = $plugin->getId();
+                    }
+                }
+            }
+        }
+        return $currentPlugin;
+    }
+
+    /**
+     * Add list of plugins events javascripts files
+     */
+    private static function initPluginsEvents($eventsJsPlugin, &$pageData)
+    {
+        if (count($eventsJsPlugin) > 0) {
+            foreach ($eventsJsPlugin as $value) {
                 try {
-                    self::$pageData['JS_POOL'][] = '/plugins/'.$value.'/desktop/js/events.js';
+                    $pageData['JS_POOL'][] = '/plugins/'.$value.'/desktop/js/events.js';
                 } catch (\Exception $e) {
                     \log::add($value, 'error', 'Event JS file not found');
                 }
             }
         }
-        return $result;
     }
 
-    private static function initMenu($menuView, $currentPlugin, $homeLink)
+    private static function initMenu($pageData, $currentPlugin)
     {
-        self::$pageData['nbMessage'] = \message::nbMessage();
-        self::$pageData['nbUpdate'] = UpdateManager::nbNeedUpdate();
-        self::$pageData['jeeObjectsTree'] = JeeObjectManager::buildTree(null, false);
-        self::$pageData['viewsList'] = \view::all();
-        self::$pageData['plansList'] = \planHeader::all();
-        self::$pageData['plans3dList'] = \plan3dHeader::all();
+        $pageData['MENU_NB_MESSAGES'] = \message::nbMessage();
+        $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
+        $pageData['MENU_JEEOBJECT_TREE'] = JeeObjectManager::buildTree(null, false);
+        $pageData['MENU_VIEWS_LIST'] = \view::all();
+        $pageData['MENU_PLANS_LIST'] = \planHeader::all();
+        $pageData['MENU_PLANS3D_LIST'] = \plan3dHeader::all();
         if (is_object($currentPlugin) && $currentPlugin->getIssue()) {
-            self::$pageData['currentPluginIssue'] = $currentPlugin->getIssue();
+            $pageData['MENU_CURRENT_PLUGIN_ISSUE'] = $currentPlugin->getIssue();
         }
-        self::$pageData['canSudo'] = \nextdom::isCapable('sudo');
-        self::$pageData['isAdmin'] = Status::isConnectAdmin();
-        self::$pageData['htmlGlobalSummary'] = JeeObjectManager::getGlobalHtmlSummary();
-        self::$pageData['homeLink'] = $homeLink;
-        self::$pageData['logo'] = \config::byKey('product_image');
-        self::$pageData['userLogin'] = $_SESSION['user']->getLogin();
-        self::$pageData['nextdomVersion'] = \nextdom::version();
-        self::$pageData['mParam'] = Utils::init('m');
-        self::$pageData['pParam'] = Utils::init('p');
+        $pageData['MENU_HTML_GLOBAL_SUMMARY'] = JeeObjectManager::getGlobalHtmlSummary();
+        $pageData['PRODUCT_IMAGE'] = \config::byKey('product_image');
+        $pageData['USER_LOGIN'] = $_SESSION['user']->getLogin();
+        $pageData['IS_ADMIN'] = Status::isConnectAdmin();
+        $pageData['CAN_SUDO'] = \nextdom::isCapable('sudo');
+        $pageData['NEXTDOM_VERSION'] = \nextdom::version();
+        $pageData['MENU_PLUGIN_HELP'] = Utils::init('m');
+        $pageData['MENU_PLUGIN_PAGE'] = Utils::init('p');
     }
 
-    private static function initHeaderData(Render $render, $title, $configs)
+    private static function initHeaderData(&$pageData, $configs)
     {
-//        $headerData = [];
         // TODO: Remplacer par un include dans twig
-        self::$pageData['PRODUCT_NAME'] = $configs['product_name'];
-        self::$pageData['PRODUCT_ICON'] = $configs['product_icon'];
-        self::$pageData['AJAX_TOKEN'] = \ajax::getToken();
-        self::$pageData['LANGUAGE'] = $configs['language'];
-        self::$pageData['TITLE'] = $title;
-        self::initJsPool();
-        self::initCssPool($configs);
+        $pageData['PRODUCT_NAME'] = $configs['product_name'];
+        $pageData['PRODUCT_ICON'] = $configs['product_icon'];
+        $pageData['AJAX_TOKEN'] = \ajax::getToken();
+        $pageData['LANGUAGE'] = $configs['language'];
+        self::initJsPool($pageData);
+        self::initCssPool($pageData, $configs);
         // TODO: A virer
         ob_start();
         \include_file('core', 'icon.inc', 'php');
-        self::$pageData['CUSTOM_CSS'] = ob_get_clean();
+        $pageData['CUSTOM_CSS'] = ob_get_clean();
     }
 
-    private static function initJsPool()
+    private static function initJsPool(&$pageData)
     {
         if (file_exists(NEXTDOM_ROOT . '/js/base.js')) {
-            self::$pageData['JS_POOL'][] = '/js/base.js';
-            self::$pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.min.js';
-            self::$pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min.js';
+            $pageData['JS_POOL'][] = '/js/base.js';
+            $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.min.js';
+            $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min.js';
         } else {
-            self::$pageData['JS_POOL'][] = '3rdparty/jquery.utils/jquery.utils.js';
-            self::$pageData['JS_POOL'][] = 'core/core.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/bootstrap/bootstrap.min.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/jquery.ui/jquery-ui.min.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/jquery.ui/jquery.ui.datepicker.fr.js';
-            self::$pageData['JS_POOL'][] = 'core/js.inc.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/bootbox/bootbox.min.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/highstock/highstock.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/highstock/highcharts-more.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/highstock/modules/solid-gauge.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/highstock/modules/exporting.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/highstock/modules/export-data.js';
-            self::$pageData['JS_POOL'][] = 'desktop/utils.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/jquery.toastr/jquery.toastr.min.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/jquery.at.caret/jquery.at.caret.min.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/jwerty/jwerty.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/jquery.packery/jquery.packery.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/jquery.lazyload/jquery.lazyload.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/codemirror/lib/codemirror.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/codemirror/addon/edit/matchbrackets.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/codemirror/mode/htmlmixed/htmlmixed.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/codemirror/mode/clike/clike.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/codemirror/mode/php/php.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/codemirror/mode/xml/xml.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/codemirror/mode/javascript/javascript.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/codemirror/mode/css/css.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/jquery.tree/jstree.min.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/jquery.fileupload/jquery.ui.widget.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/jquery.fileupload/jquery.iframe-transport.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/jquery.fileupload/jquery.fileupload.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/datetimepicker/jquery.datetimepicker.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/jquery.cron/jquery.cron.min.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/jquery.contextMenu/jquery.contextMenu.min.js';
-            self::$pageData['JS_POOL'][] = '3rdparty/autosize/autosize.min.js';
+            $pageData['JS_POOL'][] = '3rdparty/jquery.utils/jquery.utils.js';
+            $pageData['JS_POOL'][] = 'core/core.js';
+            $pageData['JS_POOL'][] = '3rdparty/bootstrap/bootstrap.min.js';
+            $pageData['JS_POOL'][] = '3rdparty/jquery.ui/jquery-ui.min.js';
+            $pageData['JS_POOL'][] = '3rdparty/jquery.ui/jquery.ui.datepicker.fr.js';
+            $pageData['JS_POOL'][] = 'core/js.inc.js';
+            $pageData['JS_POOL'][] = '3rdparty/bootbox/bootbox.min.js';
+            $pageData['JS_POOL'][] = '3rdparty/highstock/highstock.js';
+            $pageData['JS_POOL'][] = '3rdparty/highstock/highcharts-more.js';
+            $pageData['JS_POOL'][] = '3rdparty/highstock/modules/solid-gauge.js';
+            $pageData['JS_POOL'][] = '3rdparty/highstock/modules/exporting.js';
+            $pageData['JS_POOL'][] = '3rdparty/highstock/modules/export-data.js';
+            $pageData['JS_POOL'][] = 'desktop/utils.js';
+            $pageData['JS_POOL'][] = '3rdparty/jquery.toastr/jquery.toastr.min.js';
+            $pageData['JS_POOL'][] = '3rdparty/jquery.at.caret/jquery.at.caret.min.js';
+            $pageData['JS_POOL'][] = '3rdparty/jwerty/jwerty.js';
+            $pageData['JS_POOL'][] = '3rdparty/jquery.packery/jquery.packery.js';
+            $pageData['JS_POOL'][] = '3rdparty/jquery.lazyload/jquery.lazyload.js';
+            $pageData['JS_POOL'][] = '3rdparty/codemirror/lib/codemirror.js';
+            $pageData['JS_POOL'][] = '3rdparty/codemirror/addon/edit/matchbrackets.js';
+            $pageData['JS_POOL'][] = '3rdparty/codemirror/mode/htmlmixed/htmlmixed.js';
+            $pageData['JS_POOL'][] = '3rdparty/codemirror/mode/clike/clike.js';
+            $pageData['JS_POOL'][] = '3rdparty/codemirror/mode/php/php.js';
+            $pageData['JS_POOL'][] = '3rdparty/codemirror/mode/xml/xml.js';
+            $pageData['JS_POOL'][] = '3rdparty/codemirror/mode/javascript/javascript.js';
+            $pageData['JS_POOL'][] = '3rdparty/codemirror/mode/css/css.js';
+            $pageData['JS_POOL'][] = '3rdparty/jquery.tree/jstree.min.js';
+            $pageData['JS_POOL'][] = '3rdparty/jquery.fileupload/jquery.ui.widget.js';
+            $pageData['JS_POOL'][] = '3rdparty/jquery.fileupload/jquery.iframe-transport.js';
+            $pageData['JS_POOL'][] = '3rdparty/jquery.fileupload/jquery.fileupload.js';
+            $pageData['JS_POOL'][] = '3rdparty/datetimepicker/jquery.datetimepicker.js';
+            $pageData['JS_POOL'][] = '3rdparty/jquery.cron/jquery.cron.min.js';
+            $pageData['JS_POOL'][] = '3rdparty/jquery.contextMenu/jquery.contextMenu.min.js';
+            $pageData['JS_POOL'][] = '3rdparty/autosize/autosize.min.js';
         }
     }
 
-    private static function initCssPool($configs)
+    private static function initCssPool(&$pageData, $configs)
     {
         $nextdomThemeDir = NEXTDOM_ROOT . '/css/themes/';
         $bootstrapTheme = '';
@@ -461,61 +367,61 @@ class PrepareView
             $designTheme = $_SESSION['user']->getOptions('design_nextdom');
         }
 
-        self::$pageData['CSS_POOL'][] = '/css/nextdom.css';
+        $pageData['CSS_POOL'][] = '/css/nextdom.css';
         // TODO: AU SECOURS
         $addBootstrapThemeFile = true;
         if (!Status::isRescueMode()) {
             if (!Status::isConnect()) {
                 if (file_exists($nextdomThemeDir . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css')) {
-                    self::$pageData['CSS_POOL'][] = '/css/themes/' . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css';
+                    $pageData['CSS_POOL'][] = '/css/themes/' . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css';
                 } else {
-                    self::$pageData['CSS_POOL'][] = '/3rdparty/bootstrap/css/bootstrap.min.css';
+                    $pageData['CSS_POOL'][] = '/3rdparty/bootstrap/css/bootstrap.min.css';
                 }
                 if (is_dir($nextdomThemeDir . $bootstrapTheme . '/desktop')) {
                     if (file_exists($nextdomThemeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.js')) {
-                        self::$pageData['JS_POOL'][] = '/css/themes/' . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.js';
+                        $pageData['JS_POOL'][] = '/css/themes/' . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.js';
                     }
                 }
                 if (isset($_SESSION['user']) && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
                     $highstockThemeFile = '/3rdparty/highstock/themes/' . $_SESSION['user']->getOptions('desktop_highcharts_theme') . '.js';
                     if (file_exists($highstockThemeFile)) {
-                        self::$pageData['JS_POOL'][] = $highstockThemeFile;
+                        $pageData['JS_POOL'][] = $highstockThemeFile;
                     }
                 }
             } else {
                 if (file_exists($nextdomThemeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.css')) {
-                    self::$pageData['CSS_POOL'][] = '/css/themes/' . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.css';
+                    $pageData['CSS_POOL'][] = '/css/themes/' . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.css';
                     $addBootstrapThemeFile = false;
                 } else {
                     if (file_exists($nextdomThemeDir . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css')) {
-                        self::$pageData['CSS_POOL'][] = '/css/themes/' . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css';
+                        $pageData['CSS_POOL'][] = '/css/themes/' . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css';
                         $addBootstrapThemeFile = false;
                     }
                 }
             }
         }
         if ($addBootstrapThemeFile) {
-            self::$pageData['CSS_POOL'][] = '/3rdparty/bootstrap/css/bootstrap.min.css';
+            $pageData['CSS_POOL'][] = '/3rdparty/bootstrap/css/bootstrap.min.css';
         }
         // TODO: Simplifiable ?
         if (isset($_SESSION['user'])) {
             if (file_exists(NEXTDOM_ROOT . '/css/' . $designTheme . '.css')) {
-                self::$pageData['CSS_POOL'][] = '/css/' . $designTheme . '.css';
+                $pageData['CSS_POOL'][] = '/css/' . $designTheme . '.css';
             } else {
-                self::$pageData['CSS_POOL'][] = '/css/dashboard-v2.css';
+                $pageData['CSS_POOL'][] = '/css/dashboard-v2.css';
             }
             if (file_exists(NEXTDOM_ROOT . '/desktop/js/' . $designTheme . '.js')) {
-                self::$pageData['JS_POOL'][] = '/desktop/js/' . $designTheme . '.js';
+                $pageData['JS_POOL'][] = '/desktop/js/' . $designTheme . '.js';
             } else {
-                self::$pageData['JS_POOL'][] = '/desktop/js/dashboard-v2.js';
+                $pageData['JS_POOL'][] = '/desktop/js/dashboard-v2.js';
             }
         }
         if (!Status::isRescueMode() && $configs['enableCustomCss'] == 1) {
             if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.css')) {
-                self::$pageData['CSS_POOL'][] = '/desktop/custom/custom.css';
+                $pageData['CSS_POOL'][] = '/desktop/custom/custom.css';
             }
             if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.js')) {
-                self::$pageData['JS_POOL'][] = '/desktop/custom/custom.js';
+                $pageData['JS_POOL'][] = '/desktop/custom/custom.js';
             }
         }
     }
