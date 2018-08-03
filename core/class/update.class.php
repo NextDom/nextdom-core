@@ -103,7 +103,7 @@ class update {
     }
 
     /**
-     * Lancer la mise à jour
+     * Start update
      *
      * @throws Exception
      */
@@ -152,7 +152,6 @@ class update {
                         }
                         $zip->close();
                         unlink($tmp);
-//                        JeedomToNextDom::convertPlugin($cibDir);
                         try {
                             if (file_exists(NEXTDOM_ROOT.'/plugins/' . $this->getLogicalId() . '/doc')) {
                                 shell_exec('sudo rm -rf ' . NEXTDOM_ROOT.'/plugins/' . $this->getLogicalId() . '/doc');
@@ -344,7 +343,7 @@ class update {
                 return;
             }
             if (config::byKey('core::repo::provider') == 'default') {
-                $this->setRemoteVersion(self::getLastAvailableVersion(true));
+                $this->setRemoteVersion(self::getLastAvailableVersion());
             } else {
                 $class = 'repo_' . config::byKey('core::repo::provider');
                 if (!method_exists($class, 'versionCore') || config::byKey(config::byKey('core::repo::provider') . '::enable') != 1) {

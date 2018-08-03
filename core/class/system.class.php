@@ -168,4 +168,9 @@ class system {
         }
         return 'apache';
     }
+
+    public static function getWWWGid()
+    {
+        return self::getWWWUid();
+    }
 }
