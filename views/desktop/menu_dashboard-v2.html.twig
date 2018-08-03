@@ -1,7 +1,7 @@
 <header class="main-header">
 
     <!-- Logo -->
-    <a href="/" class="logo">
+    <a href="{{ homelink }}" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><img class="logo-mini-img" src="/core/img/NextDom_Square_AlphaBlackBlue.png" style="height:40px;width:auto"/></span>
         <!-- logo for regular state and mobile devices -->
@@ -146,7 +146,22 @@
                 <ul class="treeview-menu">
                     <li><a href="index.php?v=d&p=plugin"><i class="fa fa-tags"></i> {{ 'Gestion des plugins' }}</a></li>
                     <li class="treeview-menu">
-                        {{ pluginMenu | raw }}
+                            {# {{ pluginMenu | raw }}#}
+                        {% if MENU_PLUGIN_CATEGORY is defined %}
+                            {% for category, categoryData in MENU_PLUGIN_CATEGORY %}
+                                <li class="dropdown-submenu">
+                                    <a data-toggle="dropdown"><i class="fa {{ categoryData.icon }}"></i> {{ categoryData.name }}</a>
+                                    <ul class="dropdown-menu">
+                                        {% for plugin in MENU_PLUGIN[category] %}
+                                        <li class="plugin-item">
+                                            <a href="index.php?v=d&m={{ plugin.id }}&p={{ plugin.index }}"><img class="img-responsive" src="{{ plugin.pathImgIcon }}" /> {{ plugin.name }}</a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+
                     </li>
 
                 </ul>

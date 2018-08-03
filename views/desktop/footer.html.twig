@@ -1,0 +1,30 @@
+<script src="/3rdparty/jquery/jquery.min.js"></script>
+<script>
+    var clientDatetime = new Date();
+    var clientServerDiffDatetime = ({{ date().timestamp }} * 1000) - clientDatetime.getTime();
+    var serverDatetime = {{ date().timestamp }};
+    var io = null;
+    NEXTDOM_PRODUCT_NAME='{{ PRODUCT_NAME }}';
+    NEXTDOM_AJAX_TOKEN = '{{ AJAX_TOKEN }}';
+    $.ajaxSetup({
+        type: "POST",
+        data: {
+            nextdom_token: '{{ AJAX_TOKEN }}'
+        }
+    });
+    var nextdom_langage = '{{ LANGUAGE }}';
+    {% if JS_VARS is defined %}
+    {% for jsVarName, jsVarValue in JS_VARS  %}
+    var {{ jsVarName }} = "{{ jsVarValue }}";
+    {% endfor %}
+    {% endif %}
+    {% if JS_VARS_RAW is defined %}
+    {% for jsVarName, jsVarValue in JS_VARS_RAW  %}
+    var {{ jsVarName }} = {{ jsVarValue|raw }};
+    {% endfor %}
+    {% endif %}
+</script>{% if JS_POOL is defined %}
+    {% for jsFile in JS_POOL %}
+        <script src="{{ jsFile }}"></script>
+    {% endfor %}
+{% endif %}

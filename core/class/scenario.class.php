@@ -1668,7 +1668,7 @@ class scenario
 
     /**
      *
-     * @return type
+     * @return bool
      */
     public function getDo()
     {
@@ -1677,7 +1677,7 @@ class scenario
 
     /**
      *
-     * @param type $_do
+     * @param bool $_do
      * @return $this
      */
     public function setDo($_do)
@@ -1688,9 +1688,9 @@ class scenario
 
     /**
      *
-     * @param type $_key
-     * @param type $_default
-     * @return type
+     * @param string $_key
+     * @param mixed $_default
+     * @return mixed
      */
     public function getCache($_key = '', $_default = '')
     {
@@ -1699,8 +1699,8 @@ class scenario
 
     /**
      *
-     * @param type $_key
-     * @param type $_value
+     * @param string $_key
+     * @param mixed $_value
      */
     public function setCache($_key, $_value = null)
     {

@@ -83,6 +83,16 @@ class PluginManager
     }
 
     /**
+     * @param bool $activatedOnly
+     * @param bool $nameOnly
+     * @return array
+     * @throws \Exception
+     */
+    public static function getPluginsByCategory(bool $activatedOnly = false, bool $nameOnly = false): array {
+        return self::listPlugin($activatedOnly, true, $nameOnly);
+    }
+
+    /**
      * Obtenir la liste des plugins
      *
      * @param bool $activatedOnly Filtrer uniquement les plugins activés

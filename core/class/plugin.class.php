@@ -508,7 +508,7 @@ class plugin
     /**
      * Change l'état d'activation d'un plugin
      *
-     * @param $state Etat d'activation du plugin
+     * @param int $state Etat d'activation du plugin
      *
      * @return bool
      *
