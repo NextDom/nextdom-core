@@ -139,7 +139,6 @@ class PrepareView
             'userProfils' => Utils::getArrayToJQueryJson($_SESSION['user']->getOptions()),
         );
 
-
         $pageData['MENU_VIEW'] = '/desktop/menu.html.twig';
         if (isset($_SESSION['user'])) {
             $designTheme = $_SESSION['user']->getOptions('design_nextdom');
@@ -147,9 +146,9 @@ class PrepareView
                 $pageData['MENU_VIEW'] = '/desktop/menu_' . $designTheme . '.html.twig';
             }
         }
+        self::initMenu($pageData, $currentPlugin);
 
         $baseView = '/desktop/base.html.twig';
-        self::initMenu($pageData, $currentPlugin);
         if (strstr($pageData['MENU_VIEW'], 'v2')) {
             $baseView = '/desktop/base-v2.html.twig';
         }
@@ -276,7 +275,7 @@ class PrepareView
         }
     }
 
-    private static function initMenu($pageData, $currentPlugin)
+    private static function initMenu(&$pageData, $currentPlugin)
     {
         $pageData['MENU_NB_MESSAGES'] = \message::nbMessage();
         $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
