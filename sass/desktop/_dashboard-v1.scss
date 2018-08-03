@@ -6,6 +6,12 @@ body {
 }
 
 .navbar-nav>li>a{
-    padding-top:0px;
-    padding-bottom:0px;
+  padding-top:0px;
+  padding-bottom:0px;
+}
+
+.content-wrapper {
+  min-height: 100%;
+  background-color: #eef5f9;
+  z-index: 800;
 }

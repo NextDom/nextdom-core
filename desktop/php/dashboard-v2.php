@@ -84,15 +84,16 @@ sendVarToJs('rootObjectId', $object->getId());
         echo '<div class="col-md-' . $object->getDisplay('dashboard::size', 12) . '">';
     }
 
-    echo '<div class="panel" style="background-color:'. $object->getDisplay("tagColor") .'20;border-color:' . $object->getDisplay("tagColor") . ';" data-father_id="' . $object->getFather_id() .'">';
-    echo '<div class="panel-heading" style="box-shadow: 0 4px 20px 0 rgba(0,0,0,.14), 0 7px 10px -5px '. $object->getDisplay("tagColor") .'15;background-color:' . $object->getDisplay("tagColor") . '; color:'.$object->getDisplay("tagTextColor").'">';
-    echo '<h3 class="panel-title">' . $object->getDisplay("icon" ).' '. $object->getName().'</h3>';
+    echo '<div class="card" style="background-color:'. $object->getDisplay("tagColor") .'20;" data-father_id="' . $object->getFather_id() .'">';
+    echo '<div class="card-header card-header-icon">';
+    echo '<div class="card-icon" style="background:'. $object->getDisplay("tagColor") .'">';
+    echo $object->getDisplay("icon") .'</i>';
     echo '</div>';
-    echo '<div id="config">';
-    echo '<div class="panel-body">';
+    echo '<p class="card-category" style="color:'. $object->getDisplay("tagColor") .'"><b>'.$object->getName() .'</b></p>';
+    echo '</div>';
+    echo '<div class="card-body">';
     echo '<div class="div_displayEquipement" id="div_ob' . $object->getId() . '" style="width: 100%;padding-top:3px;margin-bottom : 3px;">';
     echo '<script>getObjectHtml(' . $object->getId() . ')</script>';
-    echo '</div>';
     echo '</div>';
     echo '</div>';
     echo '</div>';
@@ -100,13 +101,14 @@ sendVarToJs('rootObjectId', $object->getId());
         if ($child->getConfiguration('hideOnDashboard', 0) == 1) {
             continue;
         }
-        echo '<div class="panel div_object" style="background-color:'. $child->getDisplay("tagColor") .'15;border-color:' . $child->getDisplay("tagColor") . ';" data-father_id="' . $child->getFather_id() .'">';
-        echo '<div class="panel-heading" style="box-shadow: 0 4px 20px 0 rgba(0,0,0,.14), 0 7px 10px -5px '. $child->getDisplay("tagColor") .'15;background-color:' . $child->getDisplay("tagColor") . ';color:'.$child->getDisplay("tagTextColor").'">';
-        echo '<h3 class="panel-title">' . $child->getDisplay("icon" ).' '. $child->getName().'</h3>';
-        echo '      <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>';
-        echo '</div>';
-        echo '<div id="config">';
-        echo '<div class="panel-body">';
+        echo '<div class="card div_object" style="background-color:'. $child->getDisplay("tagColor") .'15;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08);" data-father_id="' . $child->getFather_id() .'">';
+        echo '<div class="card-header card-header-icon">';
+        echo '          <div class="card-icon" style="background:'. $child->getDisplay("tagColor") .'">';
+        echo '            '.$child->getDisplay("icon") .'</i>';
+        echo '          </div>';
+        echo '          <p class="card-category" style="color:'. $child->getDisplay("tagColor") .'"><b>'.$child->getName() .'</b></p>';
+        echo '        </div>';
+        echo '<div class="card-body">';
         echo '<div class="div_displayEquipement" id="div_ob' . $child->getId() . '" style="width: 100%;padding-top:3px;margin-bottom : 3px;">';
         echo '<script>getObjectHtml(' . $child->getId() . ')</script>';
         echo '</div>';
