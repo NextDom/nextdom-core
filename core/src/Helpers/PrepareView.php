@@ -87,37 +87,33 @@ class PrepareView
         global $NEXTDOM_INTERNAL_CONFIG;
 
         $currentPlugin = null;
+        $categories = PluginManager::getPluginsByCategory(true);
 
-        self::$pageData['PANEL_MENU'] = [];
-        $pluginsList = PluginManager::listPlugin(true, true);
-        if (count($pluginsList) > 0) {
+        if (count($categories) > 0) {
+            self::$pageData['PANEL_MENU'] = [];
             self::$pageData['MENU_PLUGIN'] = [];
             self::$pageData['MENU_PLUGIN_CATEGORY'] = [];
-            foreach ($pluginsList as $categoryName => $category) {
-                self::$pageData['MENU_PLUGIN'][$categoryName] = [];
-                self::$pageData['MENU_PLUGIN_CATEGORY'][$categoryName] = [];
+
+            foreach ($categories as $categoryCode => $pluginsList) {
+                self::$pageData['MENU_PLUGIN'][$categoryCode] = [];
+                self::$pageData['MENU_PLUGIN_CATEGORY'][$categoryCode] = [];
 
                 $icon = '';
-                $name = $categoryName;
-                try {
-                    $icon = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryName]['icon'];
-                    $name = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryName]['name'];
-                } catch (\Exception $e) {
-
+                $name = $categoryCode;
+                if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode])) {
+                    $icon = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode]['icon'];
+                    $name = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode]['name'];
                 }
 
-                self::$pageData['MENU_PLUGIN_CATEGORY'][$categoryName]['name'] = $render->getTranslation($name);
-                self::$pageData['MENU_PLUGIN_CATEGORY'][$categoryName]['icon'] = $icon;
+                self::$pageData['MENU_PLUGIN_CATEGORY'][$categoryCode]['name'] = $render->getTranslation($name);
+                self::$pageData['MENU_PLUGIN_CATEGORY'][$categoryCode]['icon'] = $icon;
 
-//                self::$pluginMenu .= '<li class="dropdown-submenu"><a data-toggle="dropdown"><i class="fa ' . $icon . '"></i> ' . $render->getTranslation($name) . '</a>';
-//                self::$pluginMenu .= '<ul class="dropdown-menu">';
-                foreach ($category as $plugin) {
-                    self::$pageData['MENU_PLUGIN'][$categoryName][] = $plugin;
+                foreach ($pluginsList as $plugin) {
+                    self::$pageData['MENU_PLUGIN'][$categoryCode][] = $plugin;
                     if ($plugin->getId() == Utils::init('m')) {
                         $currentPlugin = $plugin;
                         self::$title = ucfirst($currentPlugin->getName()) . ' - NextDom';
                     }
-//                    self::$pluginMenu .= '<li class="plugin-item"><a href="index.php?v=d&m=' . $plugin->getId() . '&p=' . $plugin->getIndex() . '"><img class="img-responsive" src="' . $plugin->getPathImgIcon() . '" /> ' . $plugin->getName() . '</a></li>';
                     // TODO: C'est quoi ?
                     if ($plugin->getDisplay() != '' && \config::bykey('displayDesktopPanel', $plugin->getId(), 0) != 0) {
                         //self::$panelMenu .= '<li class="plugin-item"><a href="index.php?v=d&m=' . $plugin->getId() . '&p=' . $plugin->getDisplay() . '"><img class="img-responsive" src="' . $plugin->getPathImgIcon() . '" /> ' . $plugin->getName() . '</a></li>';
@@ -127,7 +123,6 @@ class PrepareView
                         self::$eventJsPlugin[] = $plugin->getId();
                     }
                 }
-//                self::$pluginMenu .= '</ul></li>';
             }
         }
         return $currentPlugin;
