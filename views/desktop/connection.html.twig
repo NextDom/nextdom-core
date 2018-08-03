@@ -59,3 +59,8 @@
 </div>
 </body>
 </html>
+{% if JS_END_POOL is defined %}
+    {% for jsFile in JS_END_POOL %}
+        <script src="{{ jsFile }}"></script>
+    {% endfor %}
+{% endif %}
