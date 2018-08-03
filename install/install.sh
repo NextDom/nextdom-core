@@ -125,7 +125,7 @@ step_7_nextdom_customization() {
     rm /etc/apache2/conf-available/other-vhosts-access-log.conf >> ${DEBUG} 2>&1
     rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf >> ${DEBUG} 2>&1
 
-    mkdir /etc/systemd/system/apache2.service.d >${DEBUG} 2>&1
+    mkdir /etc/systemd/system/apache2.service.d >> ${DEBUG} 2>&1
     echo "[Service]" > /etc/systemd/system/apache2.service.d/privatetmp.conf
     echo "PrivateTmp=no" >> /etc/systemd/system/apache2.service.d/privatetmp.conf
 
@@ -236,12 +236,12 @@ step_9_nextdom_installation() {
     php composer.phar require symfony/translation >> ${DEBUG} 2>&1
     composer -q install >> ${DEBUG} 2>&1
     composer dump-autoload -o >> ${DEBUG} 2>&1
-    php todo.php
     php ${WEBSERVER_HOME}/install/install.php mode=force >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
         echo "${ROUGE}Ne peut installer nextdom - Annulation${NORMAL}"
         exit 1
     fi
+    php todo.php
 }
 
 step_10_nextdom_post() {
