@@ -1,8 +1,6 @@
-{{ HEADER|raw }}
+{% include '/desktop/header.html.twig' %}
 <body>
-{%  if MENU is defined %}
-    {{ MENU|raw }}
-{%  endif %}
+{% include '/desktop/menu.html.twig' %}
 {{ CONTENT|raw }}
 </body>
 </html>

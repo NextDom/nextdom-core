@@ -84,6 +84,9 @@ class Utils
         return "var $varName = $jsVarValue;";
     }
 
+    public static function getArrayToJQueryJson($varToTransform) {
+        return 'jQuery.parseJSON("' . addslashes(json_encode($varToTransform, JSON_UNESCAPED_UNICODE)) . '")';
+    }
     /**
      * Rediriger vers un autre url
      *

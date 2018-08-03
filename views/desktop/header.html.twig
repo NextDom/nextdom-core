@@ -2,44 +2,23 @@
 <html lang="fr">
 <head>
     <meta charset="utf-8">
-    <title>{{ title }}</title>
+    <title>{{ TITLE }}</title>
     <link rel="apple-touch-icon" href="/core/img/logo-nextdom-petit-nom-couleur-128x128" />
     <link rel="apple-touch-icon-precomposed" href="/core/img/logo-nextdom-petit-nom-couleur-128x128" />
-    <link rel="shortcut icon" href="{{ productIcon }}">
+    <link rel="shortcut icon" href="{{ PRODUCT_ICON }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    {% if cssPool is defined %}
-        {% for cssFile in cssPool %}
+    {% if CSS_POOL is defined %}
+        {% for cssFile in CSS_POOL %}
             <link href="{{ cssFile }}" rel="stylesheet" />
         {% endfor %}
     {% endif %}
-    {% if customCss is defined %}
-        {{ customCss|raw }}
+    {% if CUSTOM_CSS is defined %}
+        {{ CUSTOM_CSS|raw }}
     {% endif %}
-    <script src="/3rdparty/jquery/jquery.min.js"></script>
-    <script>
-        var clientDatetime = new Date();
-        var clientServerDiffDatetime = ({{ date().timestamp }} * 1000) - clientDatetime.getTime();
-        var serverDatetime = {{ date().timestamp }};
-        var io = null;
-        NEXTDOM_PRODUCT_NAME='{{ productName }}';
-        NEXTDOM_AJAX_TOKEN = '{{ ajaxToken }}';
-        $.ajaxSetup({
-            type: "POST",
-            data: {
-                nextdom_token: '{{ ajaxToken }}'
-            }
-        });
-        var nextdom_langage = '{{ language }}';
-    </script>
-
-    {% if jsPool is defined %}
-        {% for jsFile in jsPool %}
-            <script src="{{ jsFile }}"></script>
-        {% endfor %}
-    {% endif %}
-    {{ language|raw }}
+    {# Footer dans le futur #}
+    {% include '/desktop/footer.html.twig' %}
     <!-- Inclusion à l'arrache ??? -->
     <script src="3rdparty/snap.svg/snap.svg-min.js"></script>
 </head>
