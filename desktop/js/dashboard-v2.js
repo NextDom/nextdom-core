@@ -7,7 +7,7 @@
 * @Author  Almsaeed Studio
 * @Support <https://www.almsaeedstudio.com>
 * @Email   <abdullah@almsaeedstudio.com>
-* @version 2.4.8
+* @version 2.4.5
 * @repository git://github.com/almasaeed2010/AdminLTE.git
 * @license MIT <http://opensource.org/licenses/MIT>
 */
@@ -18,13 +18,13 @@ if (typeof jQuery === 'undefined') {
 }
 
 /* BoxRefresh()
-* =========
-* Adds AJAX content control to a box.
-*
-* @Usage: $('#my-box').boxRefresh(options)
-*         or add [data-widget="box-refresh"] to the box element
-*         Pass any option as data-option="value"
-*/
+ * =========
+ * Adds AJAX content control to a box.
+ *
+ * @Usage: $('#my-box').boxRefresh(options)
+ *         or add [data-widget="box-refresh"] to the box element
+ *         Pass any option as data-option="value"
+ */
 +function ($) {
     'use strict';
 
@@ -139,13 +139,13 @@ if (typeof jQuery === 'undefined') {
 
 
 /* BoxWidget()
-* ======
-* Adds box widget functions to boxes.
-*
-* @Usage: $('.my-box').boxWidget(options)
-*         This plugin auto activates on any element using the `.box` class
-*         Pass any option as data-option="value"
-*/
+ * ======
+ * Adds box widget functions to boxes.
+ *
+ * @Usage: $('.my-box').boxWidget(options)
+ *         This plugin auto activates on any element using the `.box` class
+ *         Pass any option as data-option="value"
+ */
 +function ($) {
     'use strict';
 
@@ -206,16 +206,16 @@ if (typeof jQuery === 'undefined') {
         $(this.element).removeClass(ClassName.collapsed);
 
         $(this.element)
-        .children(Selector.header + ', ' + Selector.body + ', ' + Selector.footer)
-        .children(Selector.tools)
-        .find('.' + expandIcon)
-        .removeClass(expandIcon)
-        .addClass(collapseIcon);
+            .children(Selector.header + ', ' + Selector.body + ', ' + Selector.footer)
+            .children(Selector.tools)
+            .find('.' + expandIcon)
+            .removeClass(expandIcon)
+            .addClass(collapseIcon);
 
         $(this.element).children(Selector.body + ', ' + Selector.footer)
-        .slideDown(this.options.animationSpeed, function () {
-            $(this.element).trigger(expandedEvent);
-        }.bind(this));
+            .slideDown(this.options.animationSpeed, function () {
+                $(this.element).trigger(expandedEvent);
+            }.bind(this));
     };
 
     BoxWidget.prototype.collapse = function () {
@@ -224,17 +224,17 @@ if (typeof jQuery === 'undefined') {
         var expandIcon     = this.options.expandIcon;
 
         $(this.element)
-        .children(Selector.header + ', ' + Selector.body + ', ' + Selector.footer)
-        .children(Selector.tools)
-        .find('.' + collapseIcon)
-        .removeClass(collapseIcon)
-        .addClass(expandIcon);
+            .children(Selector.header + ', ' + Selector.body + ', ' + Selector.footer)
+            .children(Selector.tools)
+            .find('.' + collapseIcon)
+            .removeClass(collapseIcon)
+            .addClass(expandIcon);
 
         $(this.element).children(Selector.body + ', ' + Selector.footer)
-        .slideUp(this.options.animationSpeed, function () {
-            $(this.element).addClass(ClassName.collapsed);
-            $(this.element).trigger(collapsedEvent);
-        }.bind(this));
+            .slideUp(this.options.animationSpeed, function () {
+                $(this.element).addClass(ClassName.collapsed);
+                $(this.element).trigger(collapsedEvent);
+            }.bind(this));
     };
 
     BoxWidget.prototype.remove = function () {
@@ -308,13 +308,13 @@ if (typeof jQuery === 'undefined') {
 
 
 /* ControlSidebar()
-* ===============
-* Toggles the state of the control sidebar
-*
-* @Usage: $('#control-sidebar-trigger').controlSidebar(options)
-*         or add [data-toggle="control-sidebar"] to the trigger
-*         Pass any option as data-option="value"
-*/
+ * ===============
+ * Toggles the state of the control sidebar
+ *
+ * @Usage: $('#control-sidebar-trigger').controlSidebar(options)
+ *         or add [data-toggle="control-sidebar"] to the trigger
+ *         Pass any option as data-option="value"
+ */
 +function ($) {
     'use strict';
 
@@ -448,12 +448,12 @@ if (typeof jQuery === 'undefined') {
 
 
 /* DirectChat()
-* ===============
-* Toggles the state of the control sidebar
-*
-* @Usage: $('#my-chat-box').directChat()
-*         or add [data-widget="direct-chat"] to the trigger
-*/
+ * ===============
+ * Toggles the state of the control sidebar
+ *
+ * @Usage: $('#my-chat-box').directChat()
+ *         or add [data-widget="direct-chat"] to the trigger
+ */
 +function ($) {
     'use strict';
 
@@ -516,14 +516,14 @@ if (typeof jQuery === 'undefined') {
 
 
 /* Layout()
-* ========
-* Implements AdminLTE layout.
-* Fixes the layout height in case min-height fails.
-*
-* @usage activated automatically upon window load.
-*        Configure any options by passing data-option="value"
-*        to the body tag.
-*/
+ * ========
+ * Implements AdminLTE layout.
+ * Fixes the layout height in case min-height fails.
+ *
+ * @usage activated automatically upon window load.
+ *        Configure any options by passing data-option="value"
+ *        to the body tag.
+ */
 +function ($) {
     'use strict';
 
@@ -626,7 +626,7 @@ if (typeof jQuery === 'undefined') {
             var $controlSidebar = $(Selector.controlSidebar);
             if (typeof $controlSidebar !== 'undefined') {
                 if ($controlSidebar.height() > postSetHeight)
-                $(Selector.contentWrapper).css('min-height', $controlSidebar.height());
+                    $(Selector.contentWrapper).css('min-height', $controlSidebar.height());
             }
         }
     };
@@ -696,13 +696,13 @@ if (typeof jQuery === 'undefined') {
 
 
 /* PushMenu()
-* ==========
-* Adds the push menu functionality to the sidebar.
-*
-* @usage: $('.btn').pushMenu(options)
-*          or add [data-toggle="push-menu"] to any button
-*          Pass any option as data-option="value"
-*/
+ * ==========
+ * Adds the push menu functionality to the sidebar.
+ *
+ * @usage: $('.btn').pushMenu(options)
+ *          or add [data-toggle="push-menu"] to any button
+ *          Pass any option as data-option="value"
+ */
 +function ($) {
     'use strict';
 
@@ -750,553 +750,381 @@ if (typeof jQuery === 'undefined') {
     PushMenu.prototype.init = function () {
         if (this.options.expandOnHover
             || ($('body').is(Selector.mini + Selector.layoutFixed))) {
-                this.expandOnHover();
-                $('body').addClass(ClassName.expandFeature);
-            }
+            this.expandOnHover();
+            $('body').addClass(ClassName.expandFeature);
+        }
 
-            $(Selector.contentWrapper).click(function () {
-                // Enable hide menu when clicking on the content-wrapper on small screens
-                if ($(window).width() <= this.options.collapseScreenSize && $('body').hasClass(ClassName.open)) {
-                    this.close();
-                }
-            }.bind(this));
-
-            // __Fix for android devices
-            $(Selector.searchInput).click(function (e) {
-                e.stopPropagation();
-            });
-        };
-
-        PushMenu.prototype.toggle = function () {
-            var windowWidth = $(window).width();
-            var isOpen      = !$('body').hasClass(ClassName.collapsed);
-
-            if (windowWidth <= this.options.collapseScreenSize) {
-                isOpen = $('body').hasClass(ClassName.open);
-            }
-
-            if (!isOpen) {
-                this.open();
-            } else {
+        $(Selector.contentWrapper).click(function () {
+            // Enable hide menu when clicking on the content-wrapper on small screens
+            if ($(window).width() <= this.options.collapseScreenSize && $('body').hasClass(ClassName.open)) {
                 this.close();
             }
-        };
+        }.bind(this));
 
-        PushMenu.prototype.open = function () {
-            var windowWidth = $(window).width();
+        // __Fix for android devices
+        $(Selector.searchInput).click(function (e) {
+            e.stopPropagation();
+        });
+    };
 
-            if (windowWidth > this.options.collapseScreenSize) {
-                $('body').removeClass(ClassName.collapsed)
+    PushMenu.prototype.toggle = function () {
+        var windowWidth = $(window).width();
+        var isOpen      = !$('body').hasClass(ClassName.collapsed);
+
+        if (windowWidth <= this.options.collapseScreenSize) {
+            isOpen = $('body').hasClass(ClassName.open);
+        }
+
+        if (!isOpen) {
+            this.open();
+        } else {
+            this.close();
+        }
+    };
+
+    PushMenu.prototype.open = function () {
+        var windowWidth = $(window).width();
+
+        if (windowWidth > this.options.collapseScreenSize) {
+            $('body').removeClass(ClassName.collapsed)
                 .trigger($.Event(Event.expanded));
-            }
-            else {
-                $('body').addClass(ClassName.open)
+        }
+        else {
+            $('body').addClass(ClassName.open)
                 .trigger($.Event(Event.expanded));
-            }
-        };
+        }
+    };
 
-        PushMenu.prototype.close = function () {
-            var windowWidth = $(window).width();
-            if (windowWidth > this.options.collapseScreenSize) {
-                $('body').addClass(ClassName.collapsed)
+    PushMenu.prototype.close = function () {
+        var windowWidth = $(window).width();
+        if (windowWidth > this.options.collapseScreenSize) {
+            $('body').addClass(ClassName.collapsed)
                 .trigger($.Event(Event.collapsed));
-            } else {
-                $('body').removeClass(ClassName.open + ' ' + ClassName.collapsed)
+        } else {
+            $('body').removeClass(ClassName.open + ' ' + ClassName.collapsed)
                 .trigger($.Event(Event.collapsed));
-            }
-        };
+        }
+    };
 
-        PushMenu.prototype.expandOnHover = function () {
-            $(Selector.mainSidebar).hover(function () {
-                if ($('body').is(Selector.mini + Selector.collapsed)
+    PushMenu.prototype.expandOnHover = function () {
+        $(Selector.mainSidebar).hover(function () {
+            if ($('body').is(Selector.mini + Selector.collapsed)
                 && $(window).width() > this.options.collapseScreenSize) {
-                    this.expand();
-                }
-            }.bind(this), function () {
-                if ($('body').is(Selector.expanded)) {
-                    this.collapse();
-                }
-            }.bind(this));
-        };
+                this.expand();
+            }
+        }.bind(this), function () {
+            if ($('body').is(Selector.expanded)) {
+                this.collapse();
+            }
+        }.bind(this));
+    };
 
-        PushMenu.prototype.expand = function () {
-            setTimeout(function () {
-                $('body').removeClass(ClassName.collapsed)
+    PushMenu.prototype.expand = function () {
+        setTimeout(function () {
+            $('body').removeClass(ClassName.collapsed)
                 .addClass(ClassName.expanded);
-            }, this.options.expandTransitionDelay);
-        };
+        }, this.options.expandTransitionDelay);
+    };
 
-        PushMenu.prototype.collapse = function () {
-            setTimeout(function () {
-                $('body').removeClass(ClassName.expanded)
+    PushMenu.prototype.collapse = function () {
+        setTimeout(function () {
+            $('body').removeClass(ClassName.expanded)
                 .addClass(ClassName.collapsed);
-            }, this.options.expandTransitionDelay);
-        };
+        }, this.options.expandTransitionDelay);
+    };
 
-        // PushMenu Plugin Definition
-        // ==========================
-        function Plugin(option) {
-            return this.each(function () {
-                var $this = $(this);
-                var data  = $this.data(DataKey);
+    // PushMenu Plugin Definition
+    // ==========================
+    function Plugin(option) {
+        return this.each(function () {
+            var $this = $(this);
+            var data  = $this.data(DataKey);
 
-                if (!data) {
-                    var options = $.extend({}, Default, $this.data(), typeof option == 'object' && option);
-                    $this.data(DataKey, (data = new PushMenu(options)));
-                }
+            if (!data) {
+                var options = $.extend({}, Default, $this.data(), typeof option == 'object' && option);
+                $this.data(DataKey, (data = new PushMenu(options)));
+            }
 
-                if (option === 'toggle') data.toggle();
-            });
-        }
-
-        var old = $.fn.pushMenu;
-
-        $.fn.pushMenu             = Plugin;
-        $.fn.pushMenu.Constructor = PushMenu;
-
-        // No Conflict Mode
-        // ================
-        $.fn.pushMenu.noConflict = function () {
-            $.fn.pushMenu = old;
-            return this;
-        };
-
-        // Data API
-        // ========
-        $(document).on('click', Selector.button, function (e) {
-            e.preventDefault();
-            Plugin.call($(this), 'toggle');
+            if (option === 'toggle') data.toggle();
         });
-        $(window).on('load', function () {
-            Plugin.call($(Selector.button));
+    }
+
+    var old = $.fn.pushMenu;
+
+    $.fn.pushMenu             = Plugin;
+    $.fn.pushMenu.Constructor = PushMenu;
+
+    // No Conflict Mode
+    // ================
+    $.fn.pushMenu.noConflict = function () {
+        $.fn.pushMenu = old;
+        return this;
+    };
+
+    // Data API
+    // ========
+    $(document).on('click', Selector.button, function (e) {
+        e.preventDefault();
+        Plugin.call($(this), 'toggle');
+    });
+    $(window).on('load', function () {
+        Plugin.call($(Selector.button));
+    });
+}(jQuery);
+
+
+/* TodoList()
+ * =========
+ * Converts a list into a todoList.
+ *
+ * @Usage: $('.my-list').todoList(options)
+ *         or add [data-widget="todo-list"] to the ul element
+ *         Pass any option as data-option="value"
+ */
++function ($) {
+    'use strict';
+
+    var DataKey = 'lte.todolist';
+
+    var Default = {
+        onCheck  : function (item) {
+            return item;
+        },
+        onUnCheck: function (item) {
+            return item;
+        }
+    };
+
+    var Selector = {
+        data: '[data-widget="todo-list"]'
+    };
+
+    var ClassName = {
+        done: 'done'
+    };
+
+    // TodoList Class Definition
+    // =========================
+    var TodoList = function (element, options) {
+        this.element = element;
+        this.options = options;
+
+        this._setUpListeners();
+    };
+
+    TodoList.prototype.toggle = function (item) {
+        item.parents(Selector.li).first().toggleClass(ClassName.done);
+        if (!item.prop('checked')) {
+            this.unCheck(item);
+            return;
+        }
+
+        this.check(item);
+    };
+
+    TodoList.prototype.check = function (item) {
+        this.options.onCheck.call(item);
+    };
+
+    TodoList.prototype.unCheck = function (item) {
+        this.options.onUnCheck.call(item);
+    };
+
+    // Private
+
+    TodoList.prototype._setUpListeners = function () {
+        var that = this;
+        $(this.element).on('change ifChanged', 'input:checkbox', function () {
+            that.toggle($(this));
         });
-    }(jQuery);
+    };
 
+    // Plugin Definition
+    // =================
+    function Plugin(option) {
+        return this.each(function () {
+            var $this = $(this);
+            var data  = $this.data(DataKey);
 
-    /* TodoList()
-    * =========
-    * Converts a list into a todoList.
-    *
-    * @Usage: $('.my-list').todoList(options)
-    *         or add [data-widget="todo-list"] to the ul element
-    *         Pass any option as data-option="value"
-    */
-    +function ($) {
-        'use strict';
-
-        var DataKey = 'lte.todolist';
-
-        var Default = {
-            onCheck  : function (item) {
-                return item;
-            },
-            onUnCheck: function (item) {
-                return item;
-            }
-        };
-
-        var Selector = {
-            data: '[data-widget="todo-list"]'
-        };
-
-        var ClassName = {
-            done: 'done'
-        };
-
-        // TodoList Class Definition
-        // =========================
-        var TodoList = function (element, options) {
-            this.element = element;
-            this.options = options;
-
-            this._setUpListeners();
-        };
-
-        TodoList.prototype.toggle = function (item) {
-            item.parents(Selector.li).first().toggleClass(ClassName.done);
-            if (!item.prop('checked')) {
-                this.unCheck(item);
-                return;
+            if (!data) {
+                var options = $.extend({}, Default, $this.data(), typeof option == 'object' && option);
+                $this.data(DataKey, (data = new TodoList($this, options)));
             }
 
-            this.check(item);
-        };
-
-        TodoList.prototype.check = function (item) {
-            this.options.onCheck.call(item);
-        };
-
-        TodoList.prototype.unCheck = function (item) {
-            this.options.onUnCheck.call(item);
-        };
-
-        // Private
-
-        TodoList.prototype._setUpListeners = function () {
-            var that = this;
-            $(this.element).on('change ifChanged', 'input:checkbox', function () {
-                that.toggle($(this));
-            });
-        };
-
-        // Plugin Definition
-        // =================
-        function Plugin(option) {
-            return this.each(function () {
-                var $this = $(this);
-                var data  = $this.data(DataKey);
-
-                if (!data) {
-                    var options = $.extend({}, Default, $this.data(), typeof option == 'object' && option);
-                    $this.data(DataKey, (data = new TodoList($this, options)));
+            if (typeof data == 'string') {
+                if (typeof data[option] == 'undefined') {
+                    throw new Error('No method named ' + option);
                 }
-
-                if (typeof data == 'string') {
-                    if (typeof data[option] == 'undefined') {
-                        throw new Error('No method named ' + option);
-                    }
-                    data[option]();
-                }
-            });
-        }
-
-        var old = $.fn.todoList;
-
-        $.fn.todoList             = Plugin;
-        $.fn.todoList.Constructor = TodoList;
-
-        // No Conflict Mode
-        // ================
-        $.fn.todoList.noConflict = function () {
-            $.fn.todoList = old;
-            return this;
-        };
-
-        // TodoList Data API
-        // =================
-        $(window).on('load', function () {
-            $(Selector.data).each(function () {
-                Plugin.call($(this));
-            });
+                data[option]();
+            }
         });
+    }
 
-    }(jQuery);
+    var old = $.fn.todoList;
 
+    $.fn.todoList             = Plugin;
+    $.fn.todoList.Constructor = TodoList;
 
-    /* Tree()
-    * ======
-    * Converts a nested list into a multilevel
-    * tree view menu.
-    *
-    * @Usage: $('.my-menu').tree(options)
-    *         or add [data-widget="tree"] to the ul element
-    *         Pass any option as data-option="value"
-    */
-    +function ($) {
-        'use strict';
+    // No Conflict Mode
+    // ================
+    $.fn.todoList.noConflict = function () {
+        $.fn.todoList = old;
+        return this;
+    };
 
-        var DataKey = 'lte.tree';
-
-        var Default = {
-            animationSpeed: 500,
-            accordion     : true,
-            followLink    : false,
-            trigger       : '.treeview a'
-        };
-
-        var Selector = {
-            tree        : '.tree',
-            treeview    : '.treeview',
-            treeviewMenu: '.treeview-menu',
-            open        : '.menu-open, .active',
-            li          : 'li',
-            data        : '[data-widget="tree"]',
-            active      : '.active'
-        };
-
-        var ClassName = {
-            open: 'menu-open',
-            tree: 'tree'
-        };
-
-        var Event = {
-            collapsed: 'collapsed.tree',
-            expanded : 'expanded.tree'
-        };
-
-        // Tree Class Definition
-        // =====================
-        var Tree = function (element, options) {
-            this.element = element;
-            this.options = options;
-
-            $(this.element).addClass(ClassName.tree);
-
-            $(Selector.treeview + Selector.active, this.element).addClass(ClassName.open);
-
-            this._setUpListeners();
-        };
-
-        Tree.prototype.toggle = function (link, event) {
-            var treeviewMenu = link.next(Selector.treeviewMenu);
-            var parentLi     = link.parent();
-            var isOpen       = parentLi.hasClass(ClassName.open);
-
-            if (!parentLi.is(Selector.treeview)) {
-                return;
-            }
-
-            if (!this.options.followLink || link.attr('href') === '#') {
-                event.preventDefault();
-            }
-
-            if (isOpen) {
-                this.collapse(treeviewMenu, parentLi);
-            } else {
-                this.expand(treeviewMenu, parentLi);
-            }
-        };
-
-        Tree.prototype.expand = function (tree, parent) {
-            var expandedEvent = $.Event(Event.expanded);
-
-            if (this.options.accordion) {
-                var openMenuLi = parent.siblings(Selector.open);
-                var openTree   = openMenuLi.children(Selector.treeviewMenu);
-                this.collapse(openTree, openMenuLi);
-            }
-
-            parent.addClass(ClassName.open);
-            tree.slideDown(this.options.animationSpeed, function () {
-                $(this.element).trigger(expandedEvent);
-            }.bind(this));
-        };
-
-        Tree.prototype.collapse = function (tree, parentLi) {
-            var collapsedEvent = $.Event(Event.collapsed);
-
-            //tree.find(Selector.open).removeClass(ClassName.open);
-            parentLi.removeClass(ClassName.open);
-            tree.slideUp(this.options.animationSpeed, function () {
-                //tree.find(Selector.open + ' > ' + Selector.treeview).slideUp();
-                $(this.element).trigger(collapsedEvent);
-            }.bind(this));
-        };
-
-        // Private
-
-        Tree.prototype._setUpListeners = function () {
-            var that = this;
-
-            $(this.element).on('click', this.options.trigger, function (event) {
-                that.toggle($(this), event);
-            });
-        };
-
-        // Plugin Definition
-        // =================
-        function Plugin(option) {
-            return this.each(function () {
-                var $this = $(this);
-                var data  = $this.data(DataKey);
-
-                if (!data) {
-                    var options = $.extend({}, Default, $this.data(), typeof option == 'object' && option);
-                    $this.data(DataKey, new Tree($this, options));
-                }
-            });
-        }
-
-        var old = $.fn.tree;
-
-        $.fn.tree             = Plugin;
-        $.fn.tree.Constructor = Tree;
-
-        // No Conflict Mode
-        // ================
-        $.fn.tree.noConflict = function () {
-            $.fn.tree = old;
-            return this;
-        };
-
-        // Tree Data API
-        // =============
-        $(window).on('load', function () {
-            $(Selector.data).each(function () {
-                Plugin.call($(this));
-            });
+    // TodoList Data API
+    // =================
+    $(window).on('load', function () {
+        $(Selector.data).each(function () {
+            Plugin.call($(this));
         });
+    });
 
-    }(jQuery);
+}(jQuery);
 
-    /**
-    * AdminLTE Demo Menu
-    * ------------------
-    * You should not use this file in production.
-    * This file is for demo purposes only.
-    */
-    $(function () {
-        'use strict'
 
-        /**
-        * Get access to plugins
-        */
+/* Tree()
+ * ======
+ * Converts a nested list into a multilevel
+ * tree view menu.
+ *
+ * @Usage: $('.my-menu').tree(options)
+ *         or add [data-widget="tree"] to the ul element
+ *         Pass any option as data-option="value"
+ */
++function ($) {
+    'use strict';
 
-        $('[data-toggle="control-sidebar"]').controlSidebar()
-        $('[data-toggle="push-menu"]').pushMenu()
-        var $pushMenu = $('[data-toggle="push-menu"]').data('lte.pushmenu')
-        var $controlSidebar = $('[data-toggle="control-sidebar"]').data('lte.controlsidebar')
-        var $layout = $('body').data('lte.layout')
-        $(window).on('load', function() {
-            // Reinitialize variables on load
-            $pushMenu = $('[data-toggle="push-menu"]').data('lte.pushmenu')
-            $controlSidebar = $('[data-toggle="control-sidebar"]').data('lte.controlsidebar')
-            $layout = $('body').data('lte.layout')
-        })
+    var DataKey = 'lte.tree';
 
-        /**
-        * List of all the available skins
-        *
-        * @type Array
-        */
-        var mySkins = [
-            'skin-blue',
-            'skin-black',
-            'skin-red',
-            'skin-yellow',
-            'skin-purple',
-            'skin-green',
-            'skin-blue-light',
-            'skin-black-light',
-            'skin-red-light',
-            'skin-yellow-light',
-            'skin-purple-light',
-            'skin-green-light'
-        ]
+    var Default = {
+        animationSpeed: 500,
+        accordion     : true,
+        followLink    : false,
+        trigger       : '.treeview a'
+    };
 
-        /**
-        * Get a prestored setting
-        *
-        * @param String name Name of of the setting
-        * @returns String The value of the setting | null
-        */
-        function get(name) {
-            if (typeof (Storage) !== 'undefined') {
-                return localStorage.getItem(name)
-            } else {
-                window.alert('Please use a modern browser to properly view this template!')
-            }
+    var Selector = {
+        tree        : '.tree',
+        treeview    : '.treeview',
+        treeviewMenu: '.treeview-menu',
+        open        : '.menu-open, .active',
+        li          : 'li',
+        data        : '[data-widget="tree"]',
+        active      : '.active'
+    };
+
+    var ClassName = {
+        open: 'menu-open',
+        tree: 'tree'
+    };
+
+    var Event = {
+        collapsed: 'collapsed.tree',
+        expanded : 'expanded.tree'
+    };
+
+    // Tree Class Definition
+    // =====================
+    var Tree = function (element, options) {
+        this.element = element;
+        this.options = options;
+
+        $(this.element).addClass(ClassName.tree);
+
+        $(Selector.treeview + Selector.active, this.element).addClass(ClassName.open);
+
+        this._setUpListeners();
+    };
+
+    Tree.prototype.toggle = function (link, event) {
+        var treeviewMenu = link.next(Selector.treeviewMenu);
+        var parentLi     = link.parent();
+        var isOpen       = parentLi.hasClass(ClassName.open);
+
+        if (!parentLi.is(Selector.treeview)) {
+            return;
         }
 
-        /**
-        * Store a new settings in the browser
-        *
-        * @param String name Name of the setting
-        * @param String val Value of the setting
-        * @returns void
-        */
-        function store(name, val) {
-            if (typeof (Storage) !== 'undefined') {
-                localStorage.setItem(name, val)
-            } else {
-                window.alert('Please use a modern browser to properly view this template!')
-            }
+        if (!this.options.followLink || link.attr('href') === '#') {
+            event.preventDefault();
         }
 
-        /**
-        * Toggles layout classes
-        *
-        * @param String cls the layout class to toggle
-        * @returns void
-        */
-        function changeLayout(cls) {
-            $('body').toggleClass(cls)
-            $layout.fixSidebar()
-            if ($('body').hasClass('fixed') && cls == 'fixed') {
-                $pushMenu.expandOnHover()
-                $layout.activate()
-            }
-            $controlSidebar.fix()
+        if (isOpen) {
+            this.collapse(treeviewMenu, parentLi);
+        } else {
+            this.expand(treeviewMenu, parentLi);
+        }
+    };
+
+    Tree.prototype.expand = function (tree, parent) {
+        var expandedEvent = $.Event(Event.expanded);
+
+        if (this.options.accordion) {
+            var openMenuLi = parent.siblings(Selector.open);
+            var openTree   = openMenuLi.children(Selector.treeviewMenu);
+            this.collapse(openTree, openMenuLi);
         }
 
-        /**
-        * Replaces the old skin with the new skin
-        * @param String cls the new skin class
-        * @returns Boolean false to prevent link's default action
-        */
-        function changeSkin(cls) {
-            $.each(mySkins, function (i) {
-                $('body').removeClass(mySkins[i])
-            })
+        parent.addClass(ClassName.open);
+        tree.slideDown(this.options.animationSpeed, function () {
+            $(this.element).trigger(expandedEvent);
+        }.bind(this));
+    };
 
-            $('body').addClass(cls)
-            store('skin', cls)
-            return false
-        }
+    Tree.prototype.collapse = function (tree, parentLi) {
+        var collapsedEvent = $.Event(Event.collapsed);
 
-        /**
-        * Retrieve default settings and apply them to the template
-        *
-        * @returns void
-        */
-        function setup() {
-            var tmp = get('skin')
-            if (tmp && $.inArray(tmp, mySkins))
-            changeSkin(tmp)
+        //tree.find(Selector.open).removeClass(ClassName.open);
+        parentLi.removeClass(ClassName.open);
+        tree.slideUp(this.options.animationSpeed, function () {
+            //tree.find(Selector.open + ' > ' + Selector.treeview).slideUp();
+            $(this.element).trigger(collapsedEvent);
+        }.bind(this));
+    };
 
-            // Add the change skin listener
-            $('[data-skin]').on('click', function (e) {
-                if ($(this).hasClass('knob'))
-                return
-                e.preventDefault()
-                changeSkin($(this).data('skin'))
-            })
+    // Private
 
-            // Add the layout manager
-            $('[data-layout]').on('click', function () {
-                changeLayout($(this).data('layout'))
-            })
+    Tree.prototype._setUpListeners = function () {
+        var that = this;
 
-            $('[data-controlsidebar]').on('click', function () {
-                changeLayout($(this).data('controlsidebar'))
-                var slide = !$controlSidebar.options.slide
+        $(this.element).on('click', this.options.trigger, function (event) {
+            that.toggle($(this), event);
+        });
+    };
 
-                $controlSidebar.options.slide = slide
-                if (!slide)
-                $('.control-sidebar').removeClass('control-sidebar-open')
-            })
+    // Plugin Definition
+    // =================
+    function Plugin(option) {
+        return this.each(function () {
+            var $this = $(this);
+            var data  = $this.data(DataKey);
 
-            $('[data-sidebarskin="toggle"]').on('click', function () {
-                var $sidebar = $('.control-sidebar')
-                if ($sidebar.hasClass('control-sidebar-dark')) {
-                    $sidebar.removeClass('control-sidebar-dark')
-                    $sidebar.addClass('control-sidebar-light')
-                } else {
-                    $sidebar.removeClass('control-sidebar-light')
-                    $sidebar.addClass('control-sidebar-dark')
-                }
-            })
-
-            $('[data-enable="expandOnHover"]').on('click', function () {
-                $(this).attr('disabled', true)
-                $pushMenu.expandOnHover()
-                if (!$('body').hasClass('sidebar-collapse'))
-                $('[data-layout="sidebar-collapse"]').click()
-            })
-
-            //  Reset options
-            if ($('body').hasClass('fixed')) {
-                $('[data-layout="fixed"]').attr('checked', 'checked')
+            if (!data) {
+                var options = $.extend({}, Default, $this.data(), typeof option == 'object' && option);
+                $this.data(DataKey, new Tree($this, options));
             }
-            if ($('body').hasClass('layout-boxed')) {
-                $('[data-layout="layout-boxed"]').attr('checked', 'checked')
-            }
-            if ($('body').hasClass('sidebar-collapse')) {
-                $('[data-layout="sidebar-collapse"]').attr('checked', 'checked')
-            }
+        });
+    }
 
-        }
-        setup()
+    var old = $.fn.tree;
 
-        $('[data-toggle="tooltip"]').tooltip()
-    })
+    $.fn.tree             = Plugin;
+    $.fn.tree.Constructor = Tree;
+
+    // No Conflict Mode
+    // ================
+    $.fn.tree.noConflict = function () {
+        $.fn.tree = old;
+        return this;
+    };
+
+    // Tree Data API
+    // =============
+    $(window).on('load', function () {
+        $(Selector.data).each(function () {
+            Plugin.call($(this));
+        });
+    });
+
+}(jQuery);
