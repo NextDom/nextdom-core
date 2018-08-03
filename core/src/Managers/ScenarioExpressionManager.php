@@ -998,9 +998,9 @@ class ScenarioExpressionManager
      * @param string $format
      * @return false|int|string
      */
-    public static function collectDate($cmd, $format = 'Y-m-d H:i:s')
+    public static function collectDate($cmd_id, $format = 'Y-m-d H:i:s')
     {
-        $cmdObj = CmdManager::byId(trim(str_replace('#', '', $cmd)));
+        $cmdObj = CmdManager::byId(trim(str_replace('#', '', $cmd_id)));
         if (!is_object($cmdObj)) {
             return -1;
         }

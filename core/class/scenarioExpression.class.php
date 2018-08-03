@@ -205,9 +205,9 @@ class scenarioExpression
         return ScenarioExpressionManager::lastScenarioExecution($_scenario_id);
     }
 
-    public static function collectDate($_cmd, $_format = 'Y-m-d H:i:s')
+    public static function collectDate($_cmd_id, $_format = 'Y-m-d H:i:s')
     {
-        return ScenarioExpressionManager::collectDate($_cmd, $_format);
+        return ScenarioExpressionManager::collectDate($_cmd_id, $_format);
     }
 
     public static function valueDate($_cmd_id, $_format = 'Y-m-d H:i:s')
