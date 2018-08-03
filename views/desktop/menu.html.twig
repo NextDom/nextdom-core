@@ -76,12 +76,12 @@
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="index.php?v=d&p=history"><i class="fa fa-bar-chart-o"></i> {{ 'Historique' }}</a></li>
-                            {% if isAdmin %}
+                            {% if IS_ADMIN %}
                                 <li><a href="index.php?v=d&p=report"><i class="fa fa-newspaper-o"></i> {{ 'Rapport' }}</a></li>
                             {% endif %}
                             <li class="divider"></li>
                             <li><a href="#" id="bt_showEventInRealTime"><i class="fa fa-tachometer"></i> {{ 'Temps réel' }}</a></li>
-                            {% if isAdmin %}
+                            {% if IS_ADMIN %}
                                 <li><a href="index.php?v=d&p=log"><i class="fa fa-file-o"></i> {{ 'Logs' }}</a></li>
                                 <li><a href="index.php?v=d&p=eqAnalyse"><i class="fa fa-battery-full"></i> {{ 'Equipements' }}</a></li>
                                 <li class="divider"></li>
@@ -89,7 +89,7 @@
                             {% endif %}
                         </ul>
                     </li>
-                    {% if isAdmin %}
+                    {% if IS_ADMIN %}
                         <li class="dropdown">
                             <a data-toggle="dropdown" href="#"><i class="fa fa-wrench fa-3x"></i>
                                 <span class="hidden-xs hidden-sm hidden-md">{{ 'Outils' }}&nbsp;</span><span class="caret"></span>
@@ -108,7 +108,20 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="index.php?v=d&p=plugin"><i class="fa fa-tags"></i> {{ 'Gestion des plugins' }}</a></li>
                                 <li role="separator" class="divider"></li>
-                                {{ pluginMenu }}
+                                {% if MENU_PLUGIN_CATEGORY is defined %}
+                                    {% for category, categoryData in MENU_PLUGIN_CATEGORY %}
+                                        <li class="dropdown-submenu">
+                                            <a data-toggle="dropdown"><i class="fa {{ categoryData.icon }}"></i> {{ categoryData.name }}</a>
+                                            <ul class="dropdown-menu">
+                                                {% for plugin in MENU_PLUGIN[category] %}
+                                                    <li class="plugin-item">
+                                                        <a href="index.php?v=d&m={{ plugin.id }}&p={{ plugin.index }}"><img class="img-responsive" src="{{ plugin.pathImgIcon }}" /> {{ plugin.name }}</a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                    {% endfor %}
+                                {% endif %}
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -136,7 +149,7 @@
                                         <a class="bt_reportBug cursor" title="{{ 'Envoyer un rapport de bug' }}"><i class="fa fa-exclamation-circle"></i> {{ 'Rapport de bug' }}</a>
                                     {% endif %}
                                 </li>
-                                {% if IS_ADMIN and CAN_SUDO %}
+                                {% if CAN_SUDO %}
                                     <li class="divider"></li>
                                     <li class="cursor"><a id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i> {{ 'Redémarrer' }}</a></li>
                                     <li class="cursor"><a id="bt_haltSystem" state="0"><i class="fa fa-power-off"></i> {{ 'Eteindre' }}</a></li>
