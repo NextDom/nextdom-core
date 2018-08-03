@@ -50,7 +50,6 @@ class PrepareView
      */
     public static function showRescueMode($configs)
     {
-        global $homeLink;
         global $language;
         global $configs;
 
@@ -115,7 +114,7 @@ class PrepareView
         $pageData['HOMELINK'] = self::getHomeLink();
         //TODO: Tests à revoir
         if (Utils::init('p') == '') {
-            redirect($pageData['homeLink']);
+            redirect($pageData['HOMELINK'] );
         } else {
             $page = Utils::init('p');
             $pageData['TITLE'] = ucfirst($page) . ' - ' . $configs['product_name'];
