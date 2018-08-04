@@ -294,6 +294,15 @@ class eqLogic
         return true;
     }
 
+    /**
+     * Prepare data for HTML view
+     *
+     * @param string $viewType Type of view
+     * @param array $_default
+     * @param bool $_noCache
+     * @return array
+     * @throws Exception
+     */
     public function preToHtml($viewType = EqLogicViewTypeEnum::DASHBOARD, $_default = array(), $_noCache = false)
     {
         // Check if view type is valid
@@ -310,7 +319,6 @@ class eqLogic
         if ($this->getDisplay('showOn' . $version, 1) == 0) {
             return '';
         }
-
         $user_id = '';
         if (isset($_SESSION) && isset($_SESSION['user']) && is_object($_SESSION['user'])) {
             $user_id = $_SESSION['user']->getId();
@@ -455,7 +463,9 @@ class eqLogic
      * Get HTML code depends of the view
      *
      * @param string $viewType Type of view : mobile, dashboard, scenario
+     * 
      * @return array|mixed
+     *
      * @throws Exception
      */
     public function toHtml($viewType = EqLogicViewTypeEnum::DASHBOARD)
@@ -515,14 +525,22 @@ class eqLogic
         return $this->postToHtml($viewType, template_replace($replace, self::$_templateArray[$version]));
     }
 
-    public function postToHtml($_version, $_html)
+    /**
+     * Store HTML view in cache
+     *
+     * @param string $viewType Define target view type
+     * @param string $htmlCode HTML code to store
+     *
+     * @return string $htmlCode
+     */
+    public function postToHtml(string $viewType, string $htmlCode)
     {
         $user_id = '';
         if (isset($_SESSION) && isset($_SESSION['user']) && is_object($_SESSION['user'])) {
             $user_id = $_SESSION['user']->getId();
         }
-        cache::set('widgetHtml' . $this->getId() . $_version . $user_id, $_html);
-        return $_html;
+        cache::set('widgetHtml' . $this->getId() . $viewType . $user_id, $htmlCode);
+        return $htmlCode;
     }
 
     public function emptyCacheWidget()
@@ -1188,6 +1206,15 @@ class eqLogic
         return $this->isEnable;
     }
 
+    /**
+     * Get all commands of the object
+     *
+     * @param null $_type
+     * @param null $_logicalId
+     * @param null $_visible
+     * @param bool $_multiple
+     * @return array|mixed
+     */
     public function getCmd($_type = null, $_logicalId = null, $_visible = null, $_multiple = false)
     {
         if ($_logicalId !== null) {
