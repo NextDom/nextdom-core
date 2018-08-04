@@ -198,7 +198,7 @@ class PrepareView
                 if ($designTheme <> "") {
                     $homeLink = 'index.php?v=d&p=' . $designTheme;
                 } else {
-                    $homeLink = 'index.php?v=d&p=' .\config::getDefaultConfiguration()['core']['dashboard'].;
+                    $homeLink = 'index.php?v=d&p=' .\config::getDefaultConfiguration()['core']['dashboard'];
                 }
             } else {
                 $homeLink = 'index.php?v=d&m=' . $homePage[0] . '&p=' . $homePage[1];
