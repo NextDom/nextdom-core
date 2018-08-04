@@ -110,6 +110,7 @@ class PrepareView
         $pageData['CSS_POOL'] = [];
         $page = '';
         $language = $configs['language'];
+      	$designTheme = $_SESSION['user']->getOptions('design_nextdom');
 
         $pageData['HOMELINK'] = self::getHomeLink();
         //TODO: Tests à revoir
@@ -141,16 +142,15 @@ class PrepareView
 
         $pageData['MENU_VIEW'] = '/desktop/menu.html.twig';
         if (isset($_SESSION['user'])) {
-            $designTheme = $_SESSION['user']->getOptions('design_nextdom');
             if (file_exists(NEXTDOM_ROOT . '/views/desktop/menu_' . $designTheme . '.html.twig')) {
                 $pageData['MENU_VIEW'] = '/desktop/menu_' . $designTheme . '.html.twig';
             }
         }
         self::initMenu($pageData, $currentPlugin);
 
-        $baseView = '/desktop/base.html.twig';
-        if (strstr($pageData['MENU_VIEW'], 'v2')) {
-            $baseView = '/desktop/base-v2.html.twig';
+        $baseView = '/desktop/base-v2.html.twig';
+        if ($designTheme == "dashboard") {
+            $baseView = '/desktop/base.html.twig';
         }
 
         try {
