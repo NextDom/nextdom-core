@@ -56,7 +56,7 @@ class PrepareView
         if (!in_array(Utils::init('p'), array('custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system'))) {
             $_GET['p'] = 'system';
         }
-        $homeLink = 'index.php?v=d&p='.$configs['nextdom::dashboard'];
+        $homeLink = 'index.php?v=d&p='.\config::getDefaultConfiguration()['core']['dashboard'];
         $page = '';
         //TODO: Tests à revoir
         if (Utils::init('p') == '') {
@@ -140,23 +140,22 @@ class PrepareView
             'userProfils' => Utils::getArrayToJQueryJson($_SESSION['user']->getOptions()),
         );
 
-        $pageData['MENU_VIEW'] = '/desktop/menu_' .$configs['nextdom::dashboard'].'.html.twig';
+        $pageData['MENU_VIEW'] = '/desktop/menu_' .\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
         if (isset($_SESSION['user'])) {
             if (file_exists(NEXTDOM_ROOT . '/views/desktop/menu_' . $designTheme . '.html.twig')) {
                 $pageData['MENU_VIEW'] = '/desktop/menu_' . $designTheme . '.html.twig';
             } else {
-                $pageData['MENU_VIEW'] = '/desktop/menu_'.$configs['nextdom::dashboard'].'.html.twig';
-
+                $pageData['MENU_VIEW'] = '/desktop/menu_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
             }
         }
         self::initMenu($pageData, $currentPlugin);
 
-        $baseView = '/desktop/base_'.$configs['nextdom::dasboard'].'.html.twig';
+        $baseView = '/desktop/base_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
         if (isset($_SESSION['user'])) {
-            if (file_exists(NEXTDOM_ROOT . '/desktop/base-' . $designTheme . '.html.twig')) {
+            if (file_exists(NEXTDOM_ROOT . '/desktop/base_' . $designTheme . '.html.twig')) {
                 $baseView = '/desktop/base_' . $designTheme . '.html.twig';
         } else {
-            $baseView = '/desktop/base_'.$configs['nextdom::dashboard'].'.html.twig';
+            $baseView = '/desktop/base_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
         }
     }
 
@@ -413,12 +412,12 @@ class PrepareView
             if (file_exists(NEXTDOM_ROOT . '/css/' . $designTheme . '.css')) {
                 $pageData['CSS_POOL'][] = '/css/' . $designTheme . '.css';
             } else {
-                $pageData['CSS_POOL'][] = '/css/'.$configs['nextdom::dashboard'].'.css';
+                $pageData['CSS_POOL'][] = '/css/'.\config::getDefaultConfiguration()['core']['dashboard'].'.css';
             }
             if (file_exists(NEXTDOM_ROOT . '/desktop/js/' . $designTheme . '.js')) {
                 $pageData['JS_POOL'][] = '/desktop/js/' . $designTheme . '.js';
             } else {
-                $pageData['JS_POOL'][] = '/desktop/js/'.$configs['nextdom::dasboard'].'.js';
+                $pageData['JS_POOL'][] = '/desktop/js/'.\config::getDefaultConfiguration()['core']['dashboard'].'.js';
             }
         }
         if (!Status::isRescueMode() && $configs['enableCustomCss'] == 1) {
