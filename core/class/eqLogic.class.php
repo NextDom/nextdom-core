@@ -20,6 +20,7 @@
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
 use NextDom\Managers\EqLogicManager;
+use NextDom\Enums\EqLogicViewTypeEnum;
 
 class eqLogic
 {
@@ -293,10 +294,11 @@ class eqLogic
         return true;
     }
 
-    public function preToHtml($_version = 'dashboard', $_default = array(), $_noCache = false)
+    public function preToHtml($viewType = EqLogicViewTypeEnum::DASHBOARD, $_default = array(), $_noCache = false)
     {
-        if ($_version == '') {
-            throw new Exception(__('La version demandée ne peut pas être vide (mobile, dashboard ou scénario)', __FILE__));
+        // Check if view type is valid
+        if (!in_array($viewType, EqLogicViewTypeEnum::getConstants())) {
+            throw new Exception(__('La version demandée ne peut pas être vide (mobile, dashboard ou scénario)'));
         }
         if (!$this->hasRight('r')) {
             return '';
@@ -304,7 +306,7 @@ class eqLogic
         if (!$this->getIsEnable()) {
             return '';
         }
-        $version = nextdom::versionAlias($_version, false);
+        $version = nextdom::versionAlias($viewType, false);
         if ($this->getDisplay('showOn' . $version, 1) == 0) {
             return '';
         }
@@ -314,7 +316,7 @@ class eqLogic
             $user_id = $_SESSION['user']->getId();
         }
         if (!$_noCache) {
-            $mc = cache::byKey('widgetHtml' . $this->getId() . $_version . $user_id);
+            $mc = cache::byKey('widgetHtml' . $this->getId() . $viewType . $user_id);
             if ($mc->getValue() != '') {
                 return preg_replace("/" . preg_quote(self::UIDDELIMITER) . "(.*?)" . preg_quote(self::UIDDELIMITER) . "/", self::UIDDELIMITER . mt_rand() . self::UIDDELIMITER, $mc->getValue());
             }
@@ -337,7 +339,7 @@ class eqLogic
             '#width#' => $this->getDisplay('width', 'auto'),
             '#uid#' => 'eqLogic' . $this->getId() . self::UIDDELIMITER . mt_rand() . self::UIDDELIMITER,
             '#refresh_id#' => '',
-            '#version#' => $_version,
+            '#version#' => $viewType,
             '#alert_name#' => '',
             '#alert_icon#' => '',
             '#custom_layout#' => ($this->widgetPossibility('custom::layout')) ? 'allowLayout' : '',
@@ -386,7 +388,7 @@ class eqLogic
             $replace['#hideEqLogicName#'] = 'display:none;';
         }
         $vcolor = 'cmdColor';
-        if ($version == 'mobile' || $_version == 'mview') {
+        if ($version == 'mobile' || $viewType == 'mview') {
             $vcolor = 'mcmdColor';
         }
         $parameters = $this->getDisplay('parameters');
@@ -449,13 +451,20 @@ class eqLogic
         return $replace;
     }
 
-    public function toHtml($_version = 'dashboard')
+    /**
+     * Get HTML code depends of the view
+     *
+     * @param string $viewType Type of view : mobile, dashboard, scenario
+     * @return array|mixed
+     * @throws Exception
+     */
+    public function toHtml($viewType = EqLogicViewTypeEnum::DASHBOARD)
     {
-        $replace = $this->preToHtml($_version);
+        $replace = $this->preToHtml($viewType);
         if (!is_array($replace)) {
             return $replace;
         }
-        $version = nextdom::versionAlias($_version);
+        $version = nextdom::versionAlias($viewType);
 
         switch ($this->getDisplay('layout::' . $version)) {
             case 'table':
@@ -470,7 +479,7 @@ class eqLogic
                     if ($br_before == 0 && $cmd->getDisplay('forceReturnLineBefore', 0) == 1) {
                         $table['tag'][$tag] .= '<br/>';
                     }
-                    $table['tag'][$tag] .= $cmd->toHtml($_version, '', $replace['#cmd-background-color#']);
+                    $table['tag'][$tag] .= $cmd->toHtml($viewType, '', $replace['#cmd-background-color#']);
                     $br_before = 0;
                     if ($cmd->getDisplay('forceReturnLineAfter', 0) == 1) {
                         $table['tag'][$tag] .= '<br/>';
@@ -490,7 +499,7 @@ class eqLogic
                     if ($br_before == 0 && $cmd->getDisplay('forceReturnLineBefore', 0) == 1) {
                         $cmd_html .= '<br/>';
                     }
-                    $cmd_html .= $cmd->toHtml($_version, '', $replace['#cmd-background-color#']);
+                    $cmd_html .= $cmd->toHtml($viewType, '', $replace['#cmd-background-color#']);
                     $br_before = 0;
                     if ($cmd->getDisplay('forceReturnLineAfter', 0) == 1) {
                         $cmd_html .= '<br/>';
@@ -503,7 +512,7 @@ class eqLogic
         if (!isset(self::$_templateArray[$version])) {
             self::$_templateArray[$version] = getTemplate('core', $version, 'eqLogic');
         }
-        return $this->postToHtml($_version, template_replace($replace, self::$_templateArray[$version]));
+        return $this->postToHtml($viewType, template_replace($replace, self::$_templateArray[$version]));
     }
 
     public function postToHtml($_version, $_html)
