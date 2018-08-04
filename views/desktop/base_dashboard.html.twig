@@ -3,7 +3,7 @@
     {% include '/desktop/menu_dashboard.html.twig' %}
     {{ CONTENT|raw }}
     {% if debugbar != false %}
-        {{ debugbar.render }}
+        {{ debugbar.render | raw }}
     {% endif %}
     </body>
 </html>

@@ -5,7 +5,7 @@
             {{ CONTENT|raw }}
         </div><!-- plif  -->
     {% if debugbar != false %}
-        {{ debugbar.render }}
+        {{ debugbar.render | raw }}
     {% endif %}
     </body>
 </html>
