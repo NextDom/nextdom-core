@@ -24,6 +24,9 @@ use Twig_Environment;
 use Twig_Extensions_Extension_I18n;
 use Twig_Loader_Filesystem;
 use DebugBar\StandardDebugBar;
+use DebugBar\DataCollector;
+use DebugBar\Bridge\Twig\TwigCollector;
+use DebugBar\Bridge\Twig\TraceableTwigEnvironment;
 
 
 class Render
@@ -33,6 +36,8 @@ class Render
     private $translator;
 
     private $twig;
+
+    private $twigLoader;
 
     private static $instance;
 
@@ -57,6 +62,7 @@ class Render
      */
     private function initRenderer() {
         $loader = new Twig_Loader_Filesystem(realpath('views'));
+        $this->twigLoader = $loader;
         $this->twig   = new Twig_Environment($loader, [
 //            'cache' => NEXTDOM_ROOT.'/var/cache/twig'
         ]);
@@ -103,7 +109,7 @@ class Render
      */
     public function show($view, $data = array())
     {
-        $data['debugbar'] = $this->showDebugBar();
+        $data['debugbar'] = $this->showDebugBar($this->twigLoader);
         echo $this->twig->render($view, $data);
     }
 
@@ -127,12 +133,17 @@ class Render
     /**
      * @return array
      */
-    private function showDebugBar()
+    private function showDebugBar(Twig_Loader_Filesystem $twigLoader)
     {
+        $config =  \config::getDefaultConfiguration()['core'];
 
         if (\config::getDefaultConfiguration()['core']['developer::mode'] == '1') {
-            $debugbar = new StandardDebugBar();
+            $debugbar         = new StandardDebugBar();
             $debugbarRenderer = $debugbar->getJavascriptRenderer();
+
+            $env = new TraceableTwigEnvironment(new Twig_Environment($twigLoader));
+            $debugbar->addCollector(new TwigCollector($env));
+            $debugbar->addCollector(new DataCollector\ConfigCollector($config));
             $pageData = $debugbarRenderer;
         } else {
             $pageData = false;
