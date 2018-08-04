@@ -175,14 +175,6 @@ class nextdom
             'comment' => ($state) ? '' : __('health.system-date-error'),
         );
 
-        $state = !user::hasDefaultIdentification();
-        $systemHealth[] = array(
-            'name' => __('health.default-authentication'),
-            'state' => $state,
-            'result' => ($state) ? $okStr : $nokStr,
-            'comment' => ($state) ? '' : __('health.authentication-error'),
-        );
-
         $state = self::isCapable('sudo', true);
         $systemHealth[] = array(
             'name' => __('health.sudo-rights'),
