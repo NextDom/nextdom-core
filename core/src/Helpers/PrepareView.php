@@ -198,7 +198,7 @@ class PrepareView
                 if ($designTheme <> "") {
                     $homeLink = 'index.php?v=d&p=' . $designTheme;
                 } else {
-                    $homeLink = 'index.php?v=d&p=' . $homePage[1];
+                    $homeLink = 'index.php?v=d&p=' .\config::getDefaultConfiguration()['core']['dashboard'].;
                 }
             } else {
                 $homeLink = 'index.php?v=d&m=' . $homePage[0] . '&p=' . $homePage[1];
@@ -207,7 +207,7 @@ class PrepareView
                 $homeLink .= '&fullscreen=1';
             }
         } else {
-            $homeLink = 'index.php?v=d&p=dashboard-v2';
+            $homeLink = 'index.php?v=d&p='.\config::getDefaultConfiguration()['core']['dashboard'];
         }
         return $homeLink;
     }
