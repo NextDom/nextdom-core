@@ -17,7 +17,6 @@
 
 namespace NextDom\Helpers;
 
-
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Symfony\Component\Translation\Translator;
@@ -131,7 +130,7 @@ class Render
     private function showDebugBar()
     {
 
-        if (config::getDefaultConfiguration()['core']['developer::mode'] == '1') {
+        if (\config::getDefaultConfiguration()['core']['developer::mode'] == '1') {
             $debugbar = new StandardDebugBar();
             $debugbarRenderer = $debugbar->getJavascriptRenderer();
             $pageData = $debugbarRenderer;
