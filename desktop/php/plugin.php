@@ -7,38 +7,8 @@ sendVarToJS('sel_plugin_id', init('id', '-1'));
 $plugins_list = plugin::listPlugin(false, true);
 ?>
 <div id='div_alertPluginConfiguration'></div>
-<div style="position : fixed;height:100%;width:15px;top:50px;left:0px;z-index:998;background-color:#f6f6f6;" class="div_smallSideBar" id="bt_displayPluginList"><i class="fa fa-arrow-circle-o-right" style="color : #b6b6b6;"></i></div>
-
 <div class="row row-overflow">
-    <div class="col-md-3 col-sm-4" id="sd_pluginList" style="z-index:999;display:none">
-        <div class="bs-sidebar">
-            <ul id="ul_plugin" class="nav nav-list bs-sidenav">
-                <li class="filter" style="margin-bottom: 5px;margin-top: 5px;"><input class="filter form-control input-sm" placeholder="{{Rechercher}}" style="width: 100%"/></li>
-                <?php
-                foreach ($plugins_list as $category_name => $category) {
-                    $icon = '';
-                    if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]) && isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]['icon'])) {
-                        $icon = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]['icon'];
-                    }
-                    $name = $category_name;
-                    if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]) && isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]['name'])) {
-                        $name = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$category_name]['name'];
-                    }
-                    echo '<li><i class="fa ' . $icon . '"></i> ' . $name . '</li>';
-                    foreach ($category as $plugin) {
-                        $opacity = ($plugin->isActive()) ? '' : nextdom::getConfiguration('eqLogic:style:noactive');
-                        echo '<li class="iconlist li_plugin" data-pluginPath="' . $plugin->getFilepath() . '" data-plugin_id="' . $plugin->getId() . '" style="' . $opacity . '"><a>';
-                        echo '<img class="img-responsive" style="width : 20px;display:inline-block;" src="' . $plugin->getPathImgIcon() . '" /> ';
-                        echo $plugin->getName();
-                        echo '</a></li>';
-                    }
-                }
-                ?>
-            </ul>
-        </div>
-    </div>
-
-    <div class="col-md-9 col-sm-8" id="div_resumePluginList" style="border-left: solid 1px #EEE; padding-left: 25px;">
+    <div class="col-md-12 col-sm-12" id="div_resumePluginList" style="border-left: solid 1px #EEE; padding-left: 25px;">
         <legend><i class="fa fa-cog"></i> {{Gestion}}</legend>
         <div class="pluginListContainer">
             <div class="iconlist text-center" id="bt_addPluginFromOtherSource">
