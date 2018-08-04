@@ -140,18 +140,25 @@ class PrepareView
             'userProfils' => Utils::getArrayToJQueryJson($_SESSION['user']->getOptions()),
         );
 
-        $pageData['MENU_VIEW'] = '/desktop/menu.html.twig';
+        $pageData['MENU_VIEW'] = '/desktop/menu_' .$configs['nextdom::dashboard'].'.html.twig';
         if (isset($_SESSION['user'])) {
             if (file_exists(NEXTDOM_ROOT . '/views/desktop/menu_' . $designTheme . '.html.twig')) {
                 $pageData['MENU_VIEW'] = '/desktop/menu_' . $designTheme . '.html.twig';
+            } else {
+                $pageData['MENU_VIEW'] = '/desktop/menu_dashboard-v2.html.twig';
+
             }
         }
         self::initMenu($pageData, $currentPlugin);
 
-        $baseView = '/desktop/base-v2.html.twig';
-        if ($designTheme == "dashboard") {
-            $baseView = '/desktop/base.html.twig';
+        $baseView = '/desktop/base_'.$configs['nextdom::dasboard'].'.html.twig';
+        if (isset($_SESSION['user'])) {
+            if (file_exists(NEXTDOM_ROOT . '/desktop/base-' . $designTheme . '.html.twig')) {
+                $baseView = '/desktop/base_' . $designTheme . '.html.twig';
+        } else {
+            $baseView = '/desktop/base_dashboard-v2.html.twig';
         }
+    }
 
         try {
             if (!\nextdom::isStarted()) {
@@ -201,7 +208,7 @@ class PrepareView
                 $homeLink .= '&fullscreen=1';
             }
         } else {
-            $homeLink = 'index.php?v=d&p=dashboard';
+            $homeLink = 'index.php?v=d&p=dashboard-v2';
         }
         return $homeLink;
     }
@@ -411,7 +418,7 @@ class PrepareView
             if (file_exists(NEXTDOM_ROOT . '/desktop/js/' . $designTheme . '.js')) {
                 $pageData['JS_POOL'][] = '/desktop/js/' . $designTheme . '.js';
             } else {
-                $pageData['JS_POOL'][] = '/desktop/js/dashboard-v2.js';
+                $pageData['JS_POOL'][] = '/desktop/js/'.'$configs['nextdom::dasboard'].'.js';
             }
         }
         if (!Status::isRescueMode() && $configs['enableCustomCss'] == 1) {
