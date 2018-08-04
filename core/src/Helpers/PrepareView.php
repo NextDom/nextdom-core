@@ -418,7 +418,7 @@ class PrepareView
             if (file_exists(NEXTDOM_ROOT . '/desktop/js/' . $designTheme . '.js')) {
                 $pageData['JS_POOL'][] = '/desktop/js/' . $designTheme . '.js';
             } else {
-                $pageData['JS_POOL'][] = '/desktop/js/'.'$configs['nextdom::dasboard'].'.js';
+                $pageData['JS_POOL'][] = '/desktop/js/'.$configs['nextdom::dasboard'].'.js';
             }
         }
         if (!Status::isRescueMode() && $configs['enableCustomCss'] == 1) {
