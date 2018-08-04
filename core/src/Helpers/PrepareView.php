@@ -56,7 +56,7 @@ class PrepareView
         if (!in_array(Utils::init('p'), array('custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system'))) {
             $_GET['p'] = 'system';
         }
-        $homeLink = 'index.php?v=d&p=dashboard';
+        $homeLink = 'index.php?v=d&p='.$configs['nextdom::dashboard'];
         $page = '';
         //TODO: Tests à revoir
         if (Utils::init('p') == '') {
@@ -145,7 +145,7 @@ class PrepareView
             if (file_exists(NEXTDOM_ROOT . '/views/desktop/menu_' . $designTheme . '.html.twig')) {
                 $pageData['MENU_VIEW'] = '/desktop/menu_' . $designTheme . '.html.twig';
             } else {
-                $pageData['MENU_VIEW'] = '/desktop/menu_dashboard-v2.html.twig';
+                $pageData['MENU_VIEW'] = '/desktop/menu_'.$configs['nextdom::dashboard'].'.html.twig';
 
             }
         }
@@ -156,7 +156,7 @@ class PrepareView
             if (file_exists(NEXTDOM_ROOT . '/desktop/base-' . $designTheme . '.html.twig')) {
                 $baseView = '/desktop/base_' . $designTheme . '.html.twig';
         } else {
-            $baseView = '/desktop/base_dashboard-v2.html.twig';
+            $baseView = '/desktop/base_'.$configs['nextdom::dashboard'].'.html.twig';
         }
     }
 
@@ -413,7 +413,7 @@ class PrepareView
             if (file_exists(NEXTDOM_ROOT . '/css/' . $designTheme . '.css')) {
                 $pageData['CSS_POOL'][] = '/css/' . $designTheme . '.css';
             } else {
-                $pageData['CSS_POOL'][] = '/css/dashboard-v2.css';
+                $pageData['CSS_POOL'][] = '/css/'.$configs['nextdom::dashboard'].'.css';
             }
             if (file_exists(NEXTDOM_ROOT . '/desktop/js/' . $designTheme . '.js')) {
                 $pageData['JS_POOL'][] = '/desktop/js/' . $designTheme . '.js';
