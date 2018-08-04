@@ -21,4 +21,7 @@
     {% include '/desktop/footer.html.twig' %}
     <!-- Inclusion à l'arrache ??? -->
     <script src="3rdparty/snap.svg/snap.svg-min.js"></script>
+    {% if debugbar != false %}
+       {{  debugbar.renderHead }}
+    {% endif %}
 </head>

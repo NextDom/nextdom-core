@@ -1,6 +1,9 @@
 {% include '/desktop/header.html.twig' %}
-<body>
-{% include '/desktop/menu_dashboard.html.twig' %}
-{{ CONTENT|raw }}
-</body>
+    <body>
+    {% include '/desktop/menu_dashboard.html.twig' %}
+    {{ CONTENT|raw }}
+    {% if debugbar != false %}
+        {{ debugbar.render }}
+    {% endif %}
+    </body>
 </html>

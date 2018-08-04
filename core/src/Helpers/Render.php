@@ -18,12 +18,14 @@
 namespace NextDom\Helpers;
 
 
+use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Symfony\Component\Translation\Translator;
 use Twig_Environment;
-use Twig_Loader_Filesystem;
 use Twig_Extensions_Extension_I18n;
-use Symfony\Bridge\Twig\Extension\TranslationExtension;
+use Twig_Loader_Filesystem;
+use DebugBar\StandardDebugBar;
+
 
 class Render
 {
@@ -51,6 +53,9 @@ class Render
         }
     }
 
+    /**
+     *
+     */
     private function initRenderer() {
         $loader = new Twig_Loader_Filesystem(realpath('views'));
         $this->twig   = new Twig_Environment($loader, [
@@ -60,34 +65,79 @@ class Render
         $this->twig->addExtension(new TranslationExtension($this->translator));
     }
 
-    public static function getInstance(): Render {
+    /**
+     * @return Render
+     */
+    public static function getInstance(): Render
+    {
         if (is_null(self::$instance)) {
             self::$instance = new Render();
         }
         return self::$instance;
     }
 
-    public function getTranslation(string $sentence): string {
+    /**
+     * @param string $sentence
+     * @return string
+     */
+    public function getTranslation(string $sentence): string
+    {
         if (!is_null(self::$instance)) {
             return $this->translator->trans($sentence);
         }
         return $sentence;
     }
 
-    public function get($view, $data = array()) {
+    /**
+     * @param $view
+     * @param array $data
+     * @return mixed
+     */
+    public function get($view, $data = array())
+    {
         return $this->twig->render($view, $data);
     }
 
+    /**
+     * @param $view
+     * @param array $data
+     */
     public function show($view, $data = array())
     {
+        $data['debugbar'] = $this->showDebugBar();
         echo $this->twig->render($view, $data);
     }
 
-    public function getCssHtmlTag($url) {
-        return '<link href="'.$url.'" rel="stylesheet"/>';
+    /**
+     * @param string $url
+     * @return string
+     */
+    public function getCssHtmlTag(string $url) {
+        return '<link href="' . $url  . '" rel="stylesheet"/>';
     }
 
-    public function getJsHtmlTag($url) {
-        return '<script src="'.$url.'"></script>';
+    /**
+     * @param string $url
+     * @return string
+     */
+    public function getJsHtmlTag(string $url)
+    {
+        return '<script src="' . $url . '"></script>';
+    }
+
+    /**
+     * @return array
+     */
+    private function showDebugBar()
+    {
+
+        if (config::getDefaultConfiguration()['core']['developer::mode'] == '1') {
+            $debugbar = new StandardDebugBar();
+            $debugbarRenderer = $debugbar->getJavascriptRenderer();
+            $pageData = $debugbarRenderer;
+        } else {
+            $pageData = false;
+        }
+        return $pageData;
     }
 }
