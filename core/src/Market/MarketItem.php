@@ -15,6 +15,23 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+ * This file is part of the NextDom software (https://github.com/NextDom or http://nextdom.github.io).
+ * Copyright (c) 2018 NextDom --
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 namespace NextDom\Market;
 
 use NextDom\Helpers\DataStorage;
@@ -23,24 +40,24 @@ use NextDom\Managers\UpdateManager;
 class MarketItem
 {
     /**
-     * @var int Temps de rafraichissement d'un dépôt
+     * @var int Refresh time of a deposit
      */
     private $REFRESH_TIME_LIMIT = 86400;
 
     /**
-     * @var string Identifiant du plugin
+     * @var string Plugin ID
      */
     private $id;
     /**
-     * @var string Nom du plugin sur GitHub
+     * @var string Plugin name on GitHub
      */
     private $gitName;
     /**
-     * @var string Utilisateur GitHub
+     * @var string User GitHub
      */
     private $gitId;
     /**
-     * @var string Nom complet de son dépôt
+     * @var string Full name of his deposit
      */
     private $fullName;
     /**
@@ -52,31 +69,31 @@ class MarketItem
      */
     private $url;
     /**
-     * @var string Nom du plug
+     * @var string Name of plugin
      */
     private $name;
     /**
-     * @var string Auteur du plugin
+     * @var string Plugin author
      */
     private $author;
     /**
-     * @var string Catégorie du plugin
+     * @var string Plugin category
      */
     private $category;
     /**
-     * @var DataStorage Gestionnaire de base de données
+     * @var DataStorage Database Manager
      */
     private $dataStorage;
     /**
-     * @var string Chemin de l'icône
+     * @var string Icon path
      */
     private $iconPath;
     /**
-     * @var string Branche par défaut
+     * @var string Default branch
      */
     private $defaultBranch;
     /**
-     * @var array Liste des branches
+     * @var array List of branches
      */
     private $branchesList;
     /**
@@ -84,30 +101,30 @@ class MarketItem
      */
     private $licence;
     /**
-     * @var string Lien vers la documentation
+     * @var string Link to the documentation
      */
     private $documentationLink;
     /**
-     * @var string Lien vers le changelog
+     * @var string Link to the changelog
      */
     private $changelogLink;
     /**
-     * @var string Nom de la source
+     * @var string Name of the source
      */
     private $sourceName;
     /**
-     * @var array Données de Jeedom sur le plugin
+     * @var array Jeedom data on the plugin
      */
     private $updateData;
     /**
-     * @var array Liste des captures
+     * @var array Captures list
      */
     private $screenshots;
 
     /**
-     * Constructeur initialisant les informations de base
+     * Builder initializing basic information
      *
-     * @param string $sourceName Nom de la source de l'élément
+     * @param string $sourceName Name of the source of the element
      */
     public function __construct($sourceName)
     {
@@ -122,47 +139,47 @@ class MarketItem
     }
 
     /**
-     * Créer un élément à partir des données d'un dépôt GitHub
+     * Create an element from the data of a GitHub repository
      *
-     * @param string $sourceName Nom de la source
-     * @param string[] $repositoryInformations Informations du dépôt
+     * @param string $sourceName Create an element from the data of a GitHub repository
+     * @param string[] $repositoryInformations Deposit Information
      *
-     * @return MarketItem Elément créé
+     * @return MarketItem Element created
      */
-    public static function createFromGit($sourceName, $repositoryInformations)
+    public static function createFromGit(string $sourceName, $repositoryInformations)
     {
-        $result = new MarketItem($sourceName);
+        $result = new self($sourceName);
         $result->initWithGlobalInformations($repositoryInformations);
         return $result;
     }
 
     /**
-     * Créer un élément depuis le cache
+     * Create an item from the cache
      *
-     * @param string $sourceName Nom de la source
-     * @param string $fullName Nom complet
+     * @param string $sourceName Name of the source
+     * @param string $fullName Full Name
      *
-     * @return MarketItem Elément créé
+     * @return MarketItem Element created
      */
-    public static function createFromCache($sourceName, $fullName)
+    public static function createFromCache(string $sourceName, string $fullName)
     {
-        $result = new MarketItem($sourceName);
-        $result->setFullName($fullName);
+        $result = (new self($sourceName)) 
+               ->setFullName($fullName);
         $result->readCache();
         return $result;
     }
 
     /**
-     * Créer un élément à partir des données d'un JSON
+     * Create an element from data in a JSON
      *
-     * @param string $sourceName Nom de la source
-     * @param string[] $jsonData Données de l'élément
+     * @param string $sourceName Name of the source
+     * @param string[] $jsonData Element data
      *
      * @return MarketItem Elément créé
      */
-    public static function createFromJson($sourceName, $jsonData)
+    public static function createFromJson(string $sourceName, $jsonData)
     {
-        $result = new MarketItem($sourceName);
+        $result = new self($sourceName);
         $result->initWithJsonInformations($jsonData);
         return $result;
     }
@@ -184,7 +201,7 @@ class MarketItem
     }
 
     /**
-     * Ajouter les informations contenu dans le fichier info.json du plugin
+     * Add the information contained in the plugin's info.json file
      *
      * @param string[] $pluginInfo Contenu du fichier info.json
      */
@@ -224,13 +241,13 @@ class MarketItem
     }
 
     /**
-     * Test si une mise à jour est nécessaire
+     * Test if an update is needed
      *
-     * @param array $repositoryInformations Informations de GitHub
+     * @param array $repositoryInformations Informations from GitHub
      *
-     * @return bool True si une mise à jour est nécessaire
+     * @return bool True if an update is needed
      */
-    public function isNeedUpdate($repositoryInformations)
+    public function isNeedUpdate(array $repositoryInformations): bool
     {
         $result = true;
         $lastUpdate = $this->dataStorage->getRawData('repo_last_update_' . \str_replace('/', '_', $repositoryInformations['full_name']));
@@ -243,9 +260,9 @@ class MarketItem
     }
 
     /**
-     * Obtenir l'ensemble des informations dans un tableau associatif
+     * Get all the information in an associative array
      *
-     * @return array Tableau des données
+     * @return array Data array
      */
     public function getDataInArray()
     {
@@ -278,7 +295,7 @@ class MarketItem
     }
 
     /**
-     * Ecrire le fichier de cache au format JSON
+     * Write the cache file in JSON format
      */
     public function writeCache()
     {
@@ -290,11 +307,11 @@ class MarketItem
     }
 
     /**
-     * Lire le fichier de cache
+     * Read the cache file
      *
-     * @return bool True si la lecture a réussi
+     * @return bool True if the reading was successful
      */
-    public function readCache()
+    public function readCache(): bool
     {
         $result = false;
         $jsonContent = $this->dataStorage->getJsonData('repo_data_' . str_replace('/', '_', $this->fullName));
@@ -321,11 +338,11 @@ class MarketItem
     }
 
     /**
-     * Met à jour les données de l'élement
+     * Updates the data of the element
      *
-     * @return bool True si la mise à jour a été effectuée.
+     * @return bool True if the update was done.
      */
-    public function refresh()
+    public function refresh(): bool
     {
         $result = false;
         $infoJsonUrl = 'https://raw.githubusercontent.com/' . $this->fullName . '/' . $this->defaultBranch . '/plugin_info/info.json';
@@ -344,7 +361,7 @@ class MarketItem
     }
 
     /**
-     * Télécharge l'icône du plugin
+     * Download the plugin icon
      */
     public function downloadIcon()
     {
@@ -362,11 +379,11 @@ class MarketItem
     }
 
     /**
-     * Met à jour les données des branches
+     * Update branch data
      *
-     * @return bool True si les données ont été trouvées
+     * @return bool True if the data was found
      */
-    public function downloadBranchesInformations()
+    public function downloadBranchesInformations(): bool
     {
         $result = false;
         $baseGitRepoUrl = 'https://api.github.com/repos/' . $this->fullName . '/branches';
@@ -388,7 +405,7 @@ class MarketItem
     }
 
     /**
-     * Initialise les données de Jeedom sur le plugin
+     * Initialize the Jeedom data on the plugin
      */
     private function initUpdateData()
     {
@@ -396,11 +413,11 @@ class MarketItem
     }
 
     /**
-     * Test si le plugin est installée
+     * Test if the plugin is installed
      *
-     * @return bool True si le plugin est installée
+     * @return bool True if the plugin is installed
      */
-    public function isInstalled()
+    public function isInstalled(): bool
     {
         $result = false;
         if ($this->updateData !== false) {
@@ -458,9 +475,9 @@ class MarketItem
     }
 
     /**
-     * Obtenir le nom du dépot.
+     * Get the name of the depot.
      *
-     * @return string Nom du dépot
+     * @return string name of the depot
      */
     public function getGitName()
     {
@@ -468,9 +485,9 @@ class MarketItem
     }
 
     /**
-     * Obtenir le nom complet
+     * Get the full name
      *
-     * @return string Nom complet
+     * @return string full name
      */
     public function getFullName()
     {
@@ -548,9 +565,9 @@ class MarketItem
     }
 
     /**
-     * Obtenir la liste des branches du plugin
+     * Get the list of branches of the plugin
      *
-     * @return array Liste des branches
+     * @return array List of branches
      */
     public function getBranchesList()
     {
@@ -558,13 +575,13 @@ class MarketItem
     }
 
     /**
-     * Définir le nom du complet du dépôt
+     * Define the name of the deposit full
      *
-     * @param string $fullName Nom complet
+     * @param string $fullName full name
      *
-     * @return MarketItem Instance de l'objet
+     * @return MarketItem Instance of the object
      */
-    public function setFullName($fullName)
+    public function setFullName($fullName): MarketItem
     {
         $this->fullName = $fullName;
         return $this;
