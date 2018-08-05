@@ -1256,7 +1256,7 @@ class scenario
 
     /**
      *
-     * @param type $isActive
+     * @param int $isActive
      * @return $this
      */
     public function setIsActive($isActive)
@@ -1451,7 +1451,7 @@ class scenario
 
     /**
      *
-     * @param type $log
+     * @param string $log
      */
     public function setLog($log)
     {
@@ -1628,7 +1628,7 @@ class scenario
 
     /**
      *
-     * @return type
+     * @return string
      */
     public function getReturn()
     {
@@ -1657,7 +1657,7 @@ class scenario
 
     /**
      *
-     * @param type $_tags
+     * @param array $_tags
      * @return $this
      */
     public function setTags($_tags)
