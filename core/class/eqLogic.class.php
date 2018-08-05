@@ -463,7 +463,7 @@ class eqLogic
      * Get HTML code depends of the view
      *
      * @param string $viewType Type of view : mobile, dashboard, scenario
-     * 
+     *
      * @return array|mixed
      *
      * @throws Exception

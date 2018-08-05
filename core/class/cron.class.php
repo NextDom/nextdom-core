@@ -88,8 +88,8 @@ class cron {
     }
     /**
      *
-     * @param type $_class
-     * @param type $_function
+     * @param string $_class
+     * @param string $_function
      * @param type $_option
      * @return type
      */

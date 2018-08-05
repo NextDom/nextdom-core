@@ -32,8 +32,8 @@ class message {
     /*     * ***********************Methode static*************************** */
     /**
      *
-     * @param type $_type
-     * @param type $_message
+     * @param string $_type
+     * @param string $_message
      * @param type $_action
      * @param type $_logicalId
      * @param type $_writeMessage

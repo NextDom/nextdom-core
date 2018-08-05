@@ -23,6 +23,7 @@ use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioSubElementManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\EqLogicManager;
 use NextDom\Enums\ScenarioExpressionTypeEnum;
 use NextDom\Enums\ScenarioExpressionEnum;
 
@@ -296,7 +297,14 @@ class scenarioExpression
         return;
     }
 
-    public function execute(&$scenario = null)
+    /**
+     * Execute a scenario
+     *
+     * @param scenario|null $scenario Scenario to execute
+     *
+     * @return mixed|null|string|void
+     */
+    public function execute(scenario &$scenario = null)
     {
         if ($scenario !== null && !$scenario->getDo()) {
             return null;
@@ -364,350 +372,454 @@ class scenarioExpression
             }
         } catch (Exception $e) {
             $this->setLog($scenario, $message . $e->getMessage());
-        } catch (Error $e) {
-            $this->setLog($scenario, $message . $e->getMessage());
         }
     }
 
-    private function executeAction(&$scenario, $options) {
-        if ($this->getExpression() == ScenarioExpressionEnum::ICON) {
-            if ($scenario !== null) {
-                $options = $this->getOptions();
-                $this->setLog($scenario, __('Changement de l\'icone du scénario : ', __FILE__) . $options['icon']);
-                $scenario->setDisplay('icon', $options['icon']);
-                $scenario->save();
-            }
-            return;
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::WAIT) {
-            if (!isset($options['condition'])) {
-                return;
-            }
-            $result = false;
-            $occurence = 0;
-            $limit = 7200;
-            if (isset($options['timeout'])) {
-                $timeout = nextdom::evaluateExpression($options['timeout']);
-                $limit = (is_numeric($timeout)) ? $timeout : 7200;
-            }
-            while (!$result) {
-                $expression = self::setTags($options['condition'], $scenario, true);
-                $result = evaluate($expression);
-                if ($occurence > $limit) {
-                    $this->setLog($scenario, __('[Wait] Condition valide par dépassement de temps : ', __FILE__) . $expression . ' => ' . $result);
-                    return;
-                }
-                $occurence++;
-                sleep(1);
-            }
-            $this->setLog($scenario, __('[Wait] Condition valide : ', __FILE__) . $expression . ' => ' . $result);
-            return;
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::SLEEP) {
-            if (isset($options['duration'])) {
-                try {
-                    $options['duration'] = floatval(evaluate($options['duration']));
-                } catch (Exception $e) {
+    private function executeAction(scenario &$scenario, $options)
+    {
+        switch ($this->getExpression()) {
+            case ScenarioExpressionEnum::ICON:
+                $this->executeActionIcon($scenario);
+                break;
+            case ScenarioExpressionEnum::WAIT:
+                $this->executeActionWait($scenario, $options);
+                break;
+            case ScenarioExpressionEnum::SLEEP:
+                $this->executeActionSleep($scenario, $options);
+                break;
+            case ScenarioExpressionEnum::STOP:
+                $this->executeActionStop($scenario);
+                break;
+            case ScenarioExpressionEnum::LOG:
+                $this->executeActionLog($scenario, $options);
+                break;
+            case ScenarioExpressionEnum::EVENT:
+                $this->executeActionEvent($options);
+                break;
+            case ScenarioExpressionEnum::MESSAGE:
+                $this->executeActionMessage($scenario, $options);
+                break;
+            case ScenarioExpressionEnum::ALERT:
+                $this->executeActionAlert($scenario, $options);
+                break;
+            case ScenarioExpressionEnum::POPUP:
+                $this->executeActionPopup($scenario, $options);
+                break;
+            case ScenarioExpressionEnum::EQUIPMENT:
+            case ScenarioExpressionEnum::EQUIPEMENT:
+                $this->executeActionEquipment($scenario);
+                break;
+            case ScenarioExpressionEnum::GOTODESIGN:
+                $this->executeActionGotoDesign($scenario, $options);
+                break;
+            case ScenarioExpressionEnum::SCENARIO:
+                $this->executeActionScenario($scenario);
+                break;
+            case ScenarioExpressionEnum::VARIABLE:
+                $this->executeActionVariable($scenario, $options);
+                break;
+            case ScenarioExpressionEnum::DELETE_VARIABLE:
+                $this->executeActionDeleteVariable($scenario, $options);
+                break;
+            case ScenarioExpressionEnum::ASK:
+                $this->executeActionAsk($scenario, $options);
+                break;
+            case ScenarioExpressionEnum::NEXTDOM_POWEROFF:
+                $this->executeActionNextDomPowerOff($scenario);
+                break;
+            case ScenarioExpressionEnum::SCENARIO_RETURN:
+                $this->executeActionScenarioReturn($scenario, $options);
+                break;
+            case ScenarioExpressionEnum::REMOVE_INAT:
+                $this->executeActionRemoveInat($scenario);
+                break;
+            case ScenarioExpressionEnum::REPORT:
+                $this->executeActionReport($scenario, $options);
+                break;
+            default:
+                $this->executeActionOthers($scenario, $options);
+                break;
+        }
+    }
 
-                } catch (Error $e) {
+    private function executeActionIcon(scenario &$scenario)
+    {
+        if ($scenario !== null) {
+            $options = $this->getOptions();
+            $this->setLog($scenario, __('Changement de l\'icone du scénario : ', __FILE__) . $options['icon']);
+            $scenario->setDisplay('icon', $options['icon']);
+            $scenario->save();
+        }
+    }
 
-                }
-                if (is_numeric($options['duration']) && $options['duration'] > 0) {
-                    $this->setLog($scenario, __('Pause de ', __FILE__) . $options['duration'] . __(' seconde(s)', __FILE__));
-                    if ($options['duration'] < 1) {
-                        return usleep($options['duration'] * 1000000);
-                    } else {
-                        return sleep($options['duration']);
-                    }
-                }
-            }
-            $this->setLog($scenario, __('Aucune durée trouvée pour l\'action sleep ou la durée n\'est pas valide : ', __FILE__) . $options['duration']);
-            return;
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::STOP) {
-            if ($scenario !== null) {
-                $this->setLog($scenario, __('Action stop', __FILE__));
-                $scenario->setDo(false);
-                return;
-            }
-            die();
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::LOG) {
-            if ($scenario !== null) {
-                $scenario->setLog('Log : ' . $options['message']);
-            }
-            return;
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::EVENT) {
-            $cmd = cmd::byId(trim(str_replace('#', '', $options['cmd'])));
-            if (!is_object($cmd)) {
-                throw new Exception(__('Commande introuvable : ', __FILE__) . $options['cmd']);
-            }
-            $cmd->event(nextdom::evaluateExpression($options['value']));
-            return;
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::MESSAGE) {
-            message::add('scenario', $options['message']);
-            $this->setLog($scenario, __('Ajout du message suivant dans le centre de message : ', __FILE__) . $options['message']);
-            return;
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::ALERT) {
-            event::add('nextdom::alert', $options);
-            $this->setLog($scenario, __('Ajout de l\'alerte : ', __FILE__) . $options['message']);
-            return;
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::POPUP) {
-            event::add('nextdom::alertPopup', $options['message']);
-            $this->setLog($scenario, __('Affichage du popup : ', __FILE__) . $options['message']);
-            return;
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::EQUIPMENT || $this->getExpression() == ScenarioExpressionEnum::EQUIPEMENT) {
-            $eqLogic = eqLogic::byId(str_replace(array('#eqLogic', '#'), '', $this->getOptions('eqLogic')));
-            if (!is_object($eqLogic)) {
-                throw new Exception(__('Action sur l\'équipement impossible. Equipement introuvable - Vérifiez l\'id : ', __FILE__) . $this->getOptions('eqLogic'));
-            }
-            switch ($this->getOptions('action')) {
-                case 'show':
-                    $this->setLog($scenario, __('Equipement visible : ', __FILE__) . $eqLogic->getHumanName());
-                    $eqLogic->setIsVisible(1);
-                    $eqLogic->save();
-                    break;
-                case 'hide':
-                    $this->setLog($scenario, __('Equipement masqué : ', __FILE__) . $eqLogic->getHumanName());
-                    $eqLogic->setIsVisible(0);
-                    $eqLogic->save();
-                    break;
-                case 'deactivate':
-                    $this->setLog($scenario, __('Equipement désactivé : ', __FILE__) . $eqLogic->getHumanName());
-                    $eqLogic->setIsEnable(0);
-                    $eqLogic->save();
-                    break;
-                case 'activate':
-                    $this->setLog($scenario, __('Equipement activé : ', __FILE__) . $eqLogic->getHumanName());
-                    $eqLogic->setIsEnable(1);
-                    $eqLogic->save();
-                    break;
-            }
-            return;
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::GOTODESIGN) {
-            $this->setLog($scenario, __('Changement design : ', __FILE__) . $options['plan_id']);
-            event::add('nextdom::gotoplan', $options['plan_id']);
-            return;
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::SCENARIO) {
-            if ($scenario !== null && $this->getOptions('scenario_id') == $scenario->getId()) {
-                $actionScenario = &$scenario;
-            } else {
-                $actionScenario = scenario::byId($this->getOptions('scenario_id'));
-            }
-            if (!is_object($actionScenario)) {
-                throw new Exception(__('Action sur scénario impossible. Scénario introuvable - Vérifiez l\'id : ', __FILE__) . $this->getOptions('scenario_id'));
-            }
-            switch ($this->getOptions('action')) {
-                case 'start':
-                    if ($this->getOptions('tags') != '' && !is_array($this->getOptions('tags'))) {
-                        $tags = array();
-                        $args = arg2array($this->getOptions('tags'));
-                        foreach ($args as $key => $value) {
-                            $tags['#' . trim(trim($key), '#') . '#'] = self::setTags(trim($value), $scenario);
-                        }
-                        $actionScenario->setTags($tags);
-                    }
-                    if (is_array($this->getOptions('tags'))) {
-                        $actionScenario->setTags($this->getOptions('tags'));
-                    }
-                    $this->setLog($scenario, __('Lancement du scénario : ', __FILE__) . $actionScenario->getName() . __(' options : ', __FILE__) . json_encode($actionScenario->getTags()));
-                    if ($scenario !== null) {
-                        return $actionScenario->launch('scenario', __('Lancement provoqué par le scénario  : ', __FILE__) . $scenario->getHumanName());
-                    } else {
-                        return $actionScenario->launch('other', __('Lancement provoqué', __FILE__));
-                    }
-                    break;
-                case 'startsync':
-                    if ($this->getOptions('tags') != '' && !is_array($this->getOptions('tags'))) {
-                        $tags = array();
-                        $args = arg2array($this->getOptions('tags'));
-                        foreach ($args as $key => $value) {
-                            $tags['#' . trim(trim($key), '#') . '#'] = self::setTags(trim($value), $scenario);
-                        }
-                        $actionScenario->setTags($tags);
-                    }
-                    if (is_array($this->getOptions('tags'))) {
-                        $actionScenario->setTags($this->getOptions('tags'));
-                    }
-                    $this->setLog($scenario, __('Lancement du scénario : ', __FILE__) . $actionScenario->getName() . __(' options : ', __FILE__) . json_encode($actionScenario->getTags()));
-                    if ($scenario !== null) {
-                        return $actionScenario->launch('scenario', __('Lancement provoqué par le scénario  : ', __FILE__) . $scenario->getHumanName(), true);
-                    } else {
-                        return $actionScenario->launch('other', __('Lancement provoqué', __FILE__), true);
-                    }
-                    break;
-                case 'stop':
-                    $this->setLog($scenario, __('Arrêt forcé du scénario : ', __FILE__) . $actionScenario->getName());
-                    $actionScenario->stop();
-                    break;
-                case 'deactivate':
-                    $this->setLog($scenario, __('Désactivation du scénario : ', __FILE__) . $actionScenario->getName());
-                    $actionScenario->setIsActive(0);
-                    $actionScenario->save();
-                    break;
-                case 'activate':
-                    $this->setLog($scenario, __('Activation du scénario : ', __FILE__) . $actionScenario->getName());
-                    $actionScenario->setIsActive(1);
-                    $actionScenario->save();
-                    break;
-                case 'resetRepeatIfStatus':
-                    $this->setLog($scenario, __('Remise à zero des status du status des SI du scénario : ', __FILE__) . $actionScenario->getName());
-                    $actionScenario->resetRepeatIfStatus();
-                    break;
-            }
-            return;
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::VARIABLE) {
-            $options['value'] = self::setTags($options['value'], $scenario);
-            try {
-                $result = evaluate($options['value']);
-                if (!is_numeric($result)) {
-                    $result = $options['value'];
-                }
-            } catch (Exception $ex) {
-                $result = $options['value'];
-            } catch (Error $ex) {
-                $result = $options['value'];
-            }
-            $this->setLog($scenario, __('Affectation de la variable ', __FILE__) . $this->getOptions('name') . __(' => ', __FILE__) . $options['value'] . ' = ' . $result);
-            $dataStore = new dataStore();
-            $dataStore->setKey($this->getOptions('name'));
-            $dataStore->setValue($result);
-            $dataStore->setType('scenario');
-            $dataStore->setLink_id(-1);
-            $dataStore->save();
-            return;
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::DELETE_VARIABLE) {
-            // TODO: Erreur, pas static
-            scenario::removeData($options['name']);
-            $this->setLog($scenario, __('Suppression de la variable ', __FILE__) . $this->getOptions('name'));
-            return;
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::ASK) {
-            $dataStore = new dataStore();
-            $dataStore->setType('scenario');
-            $dataStore->setKey($this->getOptions('variable'));
-            $dataStore->setValue('');
-            $dataStore->setLink_id(-1);
-            $dataStore->save();
-            $limit = (isset($options['timeout'])) ? $options['timeout'] : 300;
-            $options_cmd = array('title' => $options['question'], 'message' => $options['question'], 'answer' => explode(';', $options['answer']), 'timeout' => $limit, 'variable' => $this->getOptions('variable'));
-            $cmd = cmd::byId(str_replace('#', '', $this->getOptions('cmd')));
-            if (!is_object($cmd)) {
-                throw new Exception(__('Commande introuvable - Vérifiez l\'id : ', __FILE__) . $this->getOptions('cmd'));
-            }
-            $this->setLog($scenario, __('Demande ', __FILE__) . json_encode($options_cmd));
-            $cmd->setCache('ask::variable', $this->getOptions('variable'));
-            $cmd->setCache('ask::endtime', strtotime('now') + $limit);
-            $cmd->execCmd($options_cmd);
-            $occurence = 0;
-            $value = '';
-            while (true) {
-                $dataStore = dataStore::byTypeLinkIdKey('scenario', -1, $this->getOptions('variable'));
-                if (is_object($dataStore)) {
-                    $value = $dataStore->getValue();
-                }
-                if ($value != '') {
-                    break;
-                }
-                if ($occurence > $limit) {
-                    break;
-                }
-                $occurence++;
-                sleep(1);
-            }
-            if ($value == '') {
-                $value = __('Aucune réponse', __FILE__);
-                $cmd->setCache('ask::variable', 'none');
-                $dataStore = dataStore::byTypeLinkIdKey('scenario', -1, $this->getOptions('variable'));
-                $dataStore->setValue($value);
-                $dataStore->save();
-            }
-            $this->setLog($scenario, __('Réponse ', __FILE__) . $value);
-            return;
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::NEXTDOM_POWEROFF) {
-            $this->setLog($scenario, __('Lancement de l\'arret de nextdom', __FILE__));
-            $scenario->persistLog();
-            nextdom::haltSystem();
-            return;
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::SCENARIO_RETURN) {
-            $this->setLog($scenario, __('Demande de retour d\'information : ', __FILE__) . $options['message']);
-            if ($scenario->getReturn() === true) {
-                $scenario->setReturn($options['message']);
-            } else {
-                $scenario->setReturn($scenario->getReturn() . ' ' . $options['message']);
-            }
-            return;
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::REMOVE_INAT) {
-            if ($scenario === null) {
-                return;
-            }
-            $this->setLog($scenario, __('Suppression des blocs DANS et A programmés du scénario ', __FILE__));
-            $crons = cron::searchClassAndFunction('scenario', 'doIn', '"scenario_id":' . $scenario->getId() . ',');
-            if (is_array($crons)) {
-                foreach ($crons as $cron) {
-                    if ($cron->getState() != 'run') {
-                        $cron->remove();
-                    }
-                }
-            }
-            return;
-        } elseif ($this->getExpression() == ScenarioExpressionEnum::REPORT) {
-            $cmd_parameters = array('files' => null);
-            $this->setLog($scenario, __('Génération d\'un rapport de type ', __FILE__) . $options['type']);
-            switch ($options['type']) {
-                case 'view':
-                    $view = view::byId($options['view_id']);
-                    if (!is_object($view)) {
-                        throw new Exception(__('Vue introuvable - Vérifiez l\'id : ', __FILE__) . $options['view_id']);
-                    }
-                    $this->setLog($scenario, __('Génération du rapport ', __FILE__) . $view->getName());
-                    $cmd_parameters['files'] = array($view->report($options['export_type'], $options));
-                    $cmd_parameters['title'] = __('[' . config::byKey('name') . '] Rapport ', __FILE__) . $view->getName() . __(' du ', __FILE__) . date('Y-m-d H:i:s');
-                    $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ', __FILE__) . $view->getName() . __(' généré le ', __FILE__) . date('Y-m-d H:i:s');
-                    break;
-                case 'plan':
-                    $plan = planHeader::byId($options['plan_id']);
-                    if (!is_object($plan)) {
-                        throw new Exception(__('Design introuvable - Vérifiez l\'id : ', __FILE__) . $options['plan_id']);
-                    }
-                    $this->setLog($scenario, __('Génération du rapport ', __FILE__) . $plan->getName());
-                    $cmd_parameters['files'] = array($plan->report($options['export_type'], $options));
-                    $cmd_parameters['title'] = __('[' . config::byKey('name') . '] Rapport ', __FILE__) . $plan->getName() . __(' du ', __FILE__) . date('Y-m-d H:i:s');
-                    $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ', __FILE__) . $plan->getName() . __(' généré le ', __FILE__) . date('Y-m-d H:i:s');
-                    break;
-                case 'plugin':
-                    $plugin = plugin::byId($options['plugin_id']);
-                    if (!is_object($plugin)) {
-                        throw new Exception(__('Panel introuvable - Vérifiez l\'id : ', __FILE__) . $options['plugin_id']);
-                    }
-                    $this->setLog($scenario, __('Génération du rapport ', __FILE__) . $plugin->getName());
-                    $cmd_parameters['files'] = array($plugin->report($options['export_type'], $options));
-                    $cmd_parameters['title'] = __('[' . config::byKey('name') . '] Rapport ', __FILE__) . $plugin->getName() . __(' du ', __FILE__) . date('Y-m-d H:i:s');
-                    $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ', __FILE__) . $plugin->getName() . __(' généré le ', __FILE__) . date('Y-m-d H:i:s');
-                    break;
-            }
-            if ($cmd_parameters['files'] === null) {
-                throw new Exception(__('Erreur : Aucun rapport généré', __FILE__));
-            }
-            if ($this->getOptions('cmd') != '') {
-                $cmd = cmd::byId(str_replace('#', '', $this->getOptions('cmd')));
-                if (!is_object($cmd)) {
-                    throw new Exception(__('Commande introuvable veuillez vérifiez l\'id : ', __FILE__) . $this->getOptions('cmd'));
-                }
-                $this->setLog($scenario, __('Envoi du rapport généré sur ', __FILE__) . $cmd->getHumanName());
-                $cmd->execCmd($cmd_parameters);
-            }
-        } else {
-            $cmd = cmd::byId(str_replace('#', '', $this->getExpression()));
-            if (is_object($cmd)) {
-                if ($cmd->getSubtype() == 'slider' && isset($options['slider'])) {
-                    $options['slider'] = evaluate($options['slider']);
-                }
-                if (is_array($options) && (count($options) > 1 || (isset($options['background']) && $options['background'] == 1))) {
-                    $this->setLog($scenario, __('Exécution de la commande ', __FILE__) . $cmd->getHumanName() . __(" avec comme option(s) : ", __FILE__) . json_encode($options));
-                } else {
-                    $this->setLog($scenario, __('Exécution de la commande ', __FILE__) . $cmd->getHumanName());
-                }
-                return $cmd->execCmd($options);
-            }
-            $this->setLog($scenario, __('[Erreur] Aucune commande trouvée pour ', __FILE__) . $this->getExpression());
+    private function executeActionWait(&$scenario, $options)
+    {
+        if (!isset($options['condition'])) {
             return;
         }
+        $result = false;
+        $occurence = 0;
+        $limit = 7200;
+        if (isset($options['timeout'])) {
+            $timeout = nextdom::evaluateExpression($options['timeout']);
+            $limit = (is_numeric($timeout)) ? $timeout : 7200;
+        }
+        while (!$result) {
+            $expression = self::setTags($options['condition'], $scenario, true);
+            $result = evaluate($expression);
+            if ($occurence > $limit) {
+                $this->setLog($scenario, __('[Wait] Condition valide par dépassement de temps : ', __FILE__) . $expression . ' => ' . $result);
+                return;
+            }
+            $occurence++;
+            sleep(1);
+        }
+        $this->setLog($scenario, __('[Wait] Condition valide : ', __FILE__) . $expression . ' => ' . $result);
+    }
+
+    private function executeActionSleep(&$scenario, $options)
+    {
+        if (isset($options['duration'])) {
+            try {
+                $options['duration'] = floatval(evaluate($options['duration']));
+            } catch (Exception $e) {
+
+            }
+            if (is_numeric($options['duration']) && $options['duration'] > 0) {
+                $this->setLog($scenario, __('Pause de ', __FILE__) . $options['duration'] . __(' seconde(s)', __FILE__));
+                if ($options['duration'] < 1) {
+                    return usleep($options['duration'] * 1000000);
+                } else {
+                    return sleep($options['duration']);
+                }
+            }
+        }
+        $this->setLog($scenario, __('Aucune durée trouvée pour l\'action sleep ou la durée n\'est pas valide : ', __FILE__) . $options['duration']);
+        return;
+    }
+
+    private function executeActionStop(scenario &$scenario)
+    {
+        if ($scenario !== null) {
+            $this->setLog($scenario, __('Action stop', __FILE__));
+            $scenario->setDo(false);
+            return;
+        }
+        die();
+    }
+
+    private function executeActionLog(scenario &$scenario, $options)
+    {
+        if ($scenario !== null) {
+            $scenario->setLog('Log : ' . $options['message']);
+        }
+    }
+
+    private function executeActionEvent($options)
+    {
+        $cmd = cmd::byId(trim(str_replace('#', '', $options['cmd'])));
+        if (!is_object($cmd)) {
+            throw new Exception(__('Commande introuvable : ', __FILE__) . $options['cmd']);
+        }
+        $cmd->event(nextdom::evaluateExpression($options['value']));
+    }
+
+    private function executeActionMessage(scenario &$scenario, $options)
+    {
+        message::add('scenario', $options['message']);
+        $this->setLog($scenario, __('Ajout du message suivant dans le centre de message : ', __FILE__) . $options['message']);
+    }
+
+    private function executeActionAlert(scenario &$scenario, $options)
+    {
+        event::add('nextdom::alert', $options);
+        $this->setLog($scenario, __('Ajout de l\'alerte : ', __FILE__) . $options['message']);
+    }
+
+    private function executeActionPopup(scenario &$scenario, $options)
+    {
+        event::add('nextdom::alertPopup', $options['message']);
+        $this->setLog($scenario, __('Affichage du popup : ', __FILE__) . $options['message']);
+    }
+
+    private function executeActionEquipment(scenario &$scenario)
+    {
+        $eqLogic = EqLogicManager::byId(str_replace(array('#eqLogic', '#'), '', $this->getOptions('eqLogic')));
+        if (!is_object($eqLogic)) {
+            throw new Exception(__('Action sur l\'équipement impossible. Equipement introuvable - Vérifiez l\'id : ', __FILE__) . $this->getOptions('eqLogic'));
+        }
+        switch ($this->getOptions('action')) {
+            case 'show':
+                $this->setLog($scenario, __('Equipement visible : ', __FILE__) . $eqLogic->getHumanName());
+                $eqLogic->setIsVisible(1);
+                $eqLogic->save();
+                break;
+            case 'hide':
+                $this->setLog($scenario, __('Equipement masqué : ', __FILE__) . $eqLogic->getHumanName());
+                $eqLogic->setIsVisible(0);
+                $eqLogic->save();
+                break;
+            case 'deactivate':
+                $this->setLog($scenario, __('Equipement désactivé : ', __FILE__) . $eqLogic->getHumanName());
+                $eqLogic->setIsEnable(0);
+                $eqLogic->save();
+                break;
+            case 'activate':
+                $this->setLog($scenario, __('Equipement activé : ', __FILE__) . $eqLogic->getHumanName());
+                $eqLogic->setIsEnable(1);
+                $eqLogic->save();
+                break;
+        }
+    }
+
+    private function executeActionGotoDesign(scenario &$scenario, $options)
+    {
+        $this->setLog($scenario, __('Changement design : ', __FILE__) . $options['plan_id']);
+        event::add('nextdom::gotoplan', $options['plan_id']);
+    }
+
+    private function executeActionScenario(scenario &$scenario)
+    {
+        if ($scenario !== null && $this->getOptions('scenario_id') == $scenario->getId()) {
+            $actionScenario = &$scenario;
+        } else {
+            $actionScenario = scenario::byId($this->getOptions('scenario_id'));
+        }
+        if (!is_object($actionScenario)) {
+            throw new Exception(__('Action sur scénario impossible. Scénario introuvable - Vérifiez l\'id : ', __FILE__) . $this->getOptions('scenario_id'));
+        }
+        switch ($this->getOptions('action')) {
+            case 'start':
+                if ($this->getOptions('tags') != '' && !is_array($this->getOptions('tags'))) {
+                    $tags = array();
+                    $args = arg2array($this->getOptions('tags'));
+                    foreach ($args as $key => $value) {
+                        $tags['#' . trim(trim($key), '#') . '#'] = self::setTags(trim($value), $scenario);
+                    }
+                    $actionScenario->setTags($tags);
+                }
+                if (is_array($this->getOptions('tags'))) {
+                    $actionScenario->setTags($this->getOptions('tags'));
+                }
+                $this->setLog($scenario, __('Lancement du scénario : ', __FILE__) . $actionScenario->getName() . __(' options : ', __FILE__) . json_encode($actionScenario->getTags()));
+                if ($scenario !== null) {
+                    return $actionScenario->launch('scenario', __('Lancement provoqué par le scénario  : ', __FILE__) . $scenario->getHumanName());
+                } else {
+                    return $actionScenario->launch('other', __('Lancement provoqué', __FILE__));
+                }
+                break;
+            case 'startsync':
+                if ($this->getOptions('tags') != '' && !is_array($this->getOptions('tags'))) {
+                    $tags = array();
+                    $args = arg2array($this->getOptions('tags'));
+                    foreach ($args as $key => $value) {
+                        $tags['#' . trim(trim($key), '#') . '#'] = self::setTags(trim($value), $scenario);
+                    }
+                    $actionScenario->setTags($tags);
+                }
+                if (is_array($this->getOptions('tags'))) {
+                    $actionScenario->setTags($this->getOptions('tags'));
+                }
+                $this->setLog($scenario, __('Lancement du scénario : ', __FILE__) . $actionScenario->getName() . __(' options : ', __FILE__) . json_encode($actionScenario->getTags()));
+                if ($scenario !== null) {
+                    return $actionScenario->launch('scenario', __('Lancement provoqué par le scénario  : ', __FILE__) . $scenario->getHumanName(), true);
+                } else {
+                    return $actionScenario->launch('other', __('Lancement provoqué', __FILE__), true);
+                }
+                break;
+            case 'stop':
+                $this->setLog($scenario, __('Arrêt forcé du scénario : ', __FILE__) . $actionScenario->getName());
+                $actionScenario->stop();
+                break;
+            case 'deactivate':
+                $this->setLog($scenario, __('Désactivation du scénario : ', __FILE__) . $actionScenario->getName());
+                $actionScenario->setIsActive(0);
+                $actionScenario->save();
+                break;
+            case 'activate':
+                $this->setLog($scenario, __('Activation du scénario : ', __FILE__) . $actionScenario->getName());
+                $actionScenario->setIsActive(1);
+                $actionScenario->save();
+                break;
+            case 'resetRepeatIfStatus':
+                $this->setLog($scenario, __('Remise à zero des status du status des SI du scénario : ', __FILE__) . $actionScenario->getName());
+                $actionScenario->resetRepeatIfStatus();
+                break;
+        }
+    }
+
+    private function executeActionVariable(scenario &$scenario, $options)
+    {
+        $options['value'] = self::setTags($options['value'], $scenario);
+        try {
+            $result = evaluate($options['value']);
+            if (!is_numeric($result)) {
+                $result = $options['value'];
+            }
+        } catch (Exception $ex) {
+            $result = $options['value'];
+        } catch (Error $ex) {
+            $result = $options['value'];
+        }
+        $this->setLog($scenario, __('Affectation de la variable ', __FILE__) . $this->getOptions('name') . __(' => ', __FILE__) . $options['value'] . ' = ' . $result);
+        $dataStore = new dataStore();
+        $dataStore->setKey($this->getOptions('name'));
+        $dataStore->setValue($result);
+        $dataStore->setType('scenario');
+        $dataStore->setLink_id(-1);
+        $dataStore->save();
+
+    }
+
+    private function executeActionDeleteVariable(scenario &$scenario, $options)
+    {
+        // TODO: Erreur, pas static
+        scenario::removeData($options['name']);
+        $this->setLog($scenario, __('Suppression de la variable ', __FILE__) . $this->getOptions('name'));
+        return;
+    }
+
+    private function executeActionAsk(scenario &$scenario, $options)
+    {
+        $dataStore = new dataStore();
+        $dataStore->setType('scenario');
+        $dataStore->setKey($this->getOptions('variable'));
+        $dataStore->setValue('');
+        $dataStore->setLink_id(-1);
+        $dataStore->save();
+        $limit = (isset($options['timeout'])) ? $options['timeout'] : 300;
+        $options_cmd = array('title' => $options['question'], 'message' => $options['question'], 'answer' => explode(';', $options['answer']), 'timeout' => $limit, 'variable' => $this->getOptions('variable'));
+        $cmd = cmd::byId(str_replace('#', '', $this->getOptions('cmd')));
+        if (!is_object($cmd)) {
+            throw new Exception(__('Commande introuvable - Vérifiez l\'id : ', __FILE__) . $this->getOptions('cmd'));
+        }
+        $this->setLog($scenario, __('Demande ', __FILE__) . json_encode($options_cmd));
+        $cmd->setCache('ask::variable', $this->getOptions('variable'));
+        $cmd->setCache('ask::endtime', strtotime('now') + $limit);
+        $cmd->execCmd($options_cmd);
+        $occurence = 0;
+        $value = '';
+        while (true) {
+            $dataStore = dataStore::byTypeLinkIdKey('scenario', -1, $this->getOptions('variable'));
+            if (is_object($dataStore)) {
+                $value = $dataStore->getValue();
+            }
+            if ($value != '') {
+                break;
+            }
+            if ($occurence > $limit) {
+                break;
+            }
+            $occurence++;
+            sleep(1);
+        }
+        if ($value == '') {
+            $value = __('Aucune réponse', __FILE__);
+            $cmd->setCache('ask::variable', 'none');
+            $dataStore = dataStore::byTypeLinkIdKey('scenario', -1, $this->getOptions('variable'));
+            $dataStore->setValue($value);
+            $dataStore->save();
+        }
+        $this->setLog($scenario, __('Réponse ', __FILE__) . $value);
+    }
+
+    private function executeActionNextDomPowerOff(scenario &$scenario)
+    {
+        $this->setLog($scenario, __('Lancement de l\'arret de nextdom', __FILE__));
+        $scenario->persistLog();
+        nextdom::haltSystem();
+    }
+
+    private function executeActionScenarioReturn(scenario &$scenario, $options)
+    {
+        $this->setLog($scenario, __('Demande de retour d\'information : ', __FILE__) . $options['message']);
+        if ($scenario->getReturn() === true) {
+            $scenario->setReturn($options['message']);
+        } else {
+            $scenario->setReturn($scenario->getReturn() . ' ' . $options['message']);
+        }
+    }
+
+    private function executeActionRemoveInat(scenario &$scenario)
+    {
+        if ($scenario === null) {
+            return;
+        }
+        $this->setLog($scenario, __('Suppression des blocs DANS et A programmés du scénario ', __FILE__));
+        $crons = cron::searchClassAndFunction('scenario', 'doIn', '"scenario_id":' . $scenario->getId() . ',');
+        if (is_array($crons)) {
+            foreach ($crons as $cron) {
+                if ($cron->getState() != 'run') {
+                    $cron->remove();
+                }
+            }
+        }
+    }
+
+    private function executeActionReport(scenario &$scenario, $options)
+    {
+        $cmd_parameters = array('files' => null);
+        $this->setLog($scenario, __('Génération d\'un rapport de type ', __FILE__) . $options['type']);
+        switch ($options['type']) {
+            case 'view':
+                $view = view::byId($options['view_id']);
+                if (!is_object($view)) {
+                    throw new Exception(__('Vue introuvable - Vérifiez l\'id : ', __FILE__) . $options['view_id']);
+                }
+                $this->setLog($scenario, __('Génération du rapport ', __FILE__) . $view->getName());
+                $cmd_parameters['files'] = array($view->report($options['export_type'], $options));
+                $cmd_parameters['title'] = __('[' . config::byKey('name') . '] Rapport ', __FILE__) . $view->getName() . __(' du ', __FILE__) . date('Y-m-d H:i:s');
+                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ', __FILE__) . $view->getName() . __(' généré le ', __FILE__) . date('Y-m-d H:i:s');
+                break;
+            case 'plan':
+                $plan = planHeader::byId($options['plan_id']);
+                if (!is_object($plan)) {
+                    throw new Exception(__('Design introuvable - Vérifiez l\'id : ', __FILE__) . $options['plan_id']);
+                }
+                $this->setLog($scenario, __('Génération du rapport ', __FILE__) . $plan->getName());
+                $cmd_parameters['files'] = array($plan->report($options['export_type'], $options));
+                $cmd_parameters['title'] = __('[' . config::byKey('name') . '] Rapport ', __FILE__) . $plan->getName() . __(' du ', __FILE__) . date('Y-m-d H:i:s');
+                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ', __FILE__) . $plan->getName() . __(' généré le ', __FILE__) . date('Y-m-d H:i:s');
+                break;
+            case 'plugin':
+                $plugin = plugin::byId($options['plugin_id']);
+                if (!is_object($plugin)) {
+                    throw new Exception(__('Panel introuvable - Vérifiez l\'id : ', __FILE__) . $options['plugin_id']);
+                }
+                $this->setLog($scenario, __('Génération du rapport ', __FILE__) . $plugin->getName());
+                $cmd_parameters['files'] = array($plugin->report($options['export_type'], $options));
+                $cmd_parameters['title'] = __('[' . config::byKey('name') . '] Rapport ', __FILE__) . $plugin->getName() . __(' du ', __FILE__) . date('Y-m-d H:i:s');
+                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ', __FILE__) . $plugin->getName() . __(' généré le ', __FILE__) . date('Y-m-d H:i:s');
+                break;
+        }
+        if ($cmd_parameters['files'] === null) {
+            throw new Exception(__('Erreur : Aucun rapport généré', __FILE__));
+        }
+        if ($this->getOptions('cmd') != '') {
+            $cmd = cmd::byId(str_replace('#', '', $this->getOptions('cmd')));
+            if (!is_object($cmd)) {
+                throw new Exception(__('Commande introuvable veuillez vérifiez l\'id : ', __FILE__) . $this->getOptions('cmd'));
+            }
+            $this->setLog($scenario, __('Envoi du rapport généré sur ', __FILE__) . $cmd->getHumanName());
+            $cmd->execCmd($cmd_parameters);
+        }
+    }
+
+    private function executeActionOthers(scenario &$scenario, $options)
+    {
+        $cmd = cmd::byId(str_replace('#', '', $this->getExpression()));
+        if (is_object($cmd)) {
+            if ($cmd->getSubtype() == 'slider' && isset($options['slider'])) {
+                $options['slider'] = evaluate($options['slider']);
+            }
+            if (is_array($options) && (count($options) > 1 || (isset($options['background']) && $options['background'] == 1))) {
+                $this->setLog($scenario, __('Exécution de la commande ', __FILE__) . $cmd->getHumanName() . __(" avec comme option(s) : ", __FILE__) . json_encode($options));
+            } else {
+                $this->setLog($scenario, __('Exécution de la commande ', __FILE__) . $cmd->getHumanName());
+            }
+            return $cmd->execCmd($options);
+        }
+        $this->setLog($scenario, __('[Erreur] Aucune commande trouvée pour ', __FILE__) . $this->getExpression());
     }
 
     public function save()
