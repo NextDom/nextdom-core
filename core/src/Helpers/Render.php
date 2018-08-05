@@ -33,8 +33,14 @@ class Render
 {
     const DEFAULT_LANGUAGE = 'fr';
 
+    /**
+     * @var Translator
+     */
     private $translator;
 
+    /**
+     * @var Twig_Environment
+     */
     private $twig;
 
     private $twigLoader;
@@ -97,6 +103,9 @@ class Render
      * @param $view
      * @param array $data
      * @return mixed
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function get($view, $data = array())
     {
@@ -104,8 +113,13 @@ class Render
     }
 
     /**
-     * @param $view
+     * @param string $view
      * @param array $data
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     * @throws \DebugBar\DebugBarException
      */
     public function show($view, $data = array())
     {
@@ -131,9 +145,11 @@ class Render
     }
 
     /**
-     * @return array
+     * @param Twig_Loader_Filesystem $twigLoader
+     * @return bool|\DebugBar\JavascriptRenderer
+     * @throws \DebugBar\DebugBarException
      */
-    private function showDebugBar(Twig_Loader_Filesystem $twigLoader)
+    private function showDebugBar($twigLoader)
     {
         $config =  \config::getDefaultConfiguration()['core'];
 
