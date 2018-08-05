@@ -21,6 +21,7 @@ use NextDom\Helpers\Status;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Helpers\Controller;
 
 /**
  * Classe de support à l'affichage des contenus HTML
@@ -163,13 +164,7 @@ class PrepareView
             if (!\nextdom::isStarted()) {
                 $pageData['alertMsg'] = 'NextDom est en cours de démarrage, veuillez patienter . La page se rechargera automatiquement une fois le démarrage terminé.';
             }
-            ob_start();
-            if ($currentPlugin !== null && is_object($currentPlugin)) {
-                \include_file('desktop', $page, 'php', $currentPlugin->getId());
-            } else {
-                \include_file('desktop', $page, 'php', '', true);
-            }
-            $pageData['content'] = ob_get_clean();
+            $pageData['content'] = self::getContent($render, $pageData, $page, $currentPlugin);
         } catch (\Exception $e) {
             ob_end_clean();
             $pageData['alertMsg'] = displayException($e);
@@ -426,6 +421,24 @@ class PrepareView
             }
             if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.js')) {
                 $pageData['JS_POOL'][] = '/desktop/custom/custom.js';
+            }
+        }
+    }
+
+    private static function getContent(Render $render, array &$pageContent, string $page, $currentPlugin) {
+        if ($currentPlugin !== null && is_object($currentPlugin)) {
+            ob_start();
+            \include_file('desktop', $page, 'php', $currentPlugin->getId());
+            return ob_get_clean();
+        } else {
+            $controllerRoute = Controller::getRoute($page);
+            if ($controllerRoute == null) {
+                ob_start();
+                \include_file('desktop', $page, 'php', '', true);
+                return ob_get_clean();
+            }
+            else {
+                return \NextDom\Helpers\Controller::$controllerRoute($render, $pageContent);
             }
         }
     }
