@@ -39,7 +39,7 @@ foreach (plugin::listPlugin() as $pluginList) {
 
                             <input class="userAttr form-control" data-l1key="options" data-l2key="avatar" style="display:none" ></input>
 
-                            <div class="col-sm-4">
+                            <div>
                                 <input class="userAttr form-control" id="user_avatar" type="file" name="images" data-url="core/ajax/profils.ajax.php?action=imageUpload"/>
                             </div>
                         </div>
