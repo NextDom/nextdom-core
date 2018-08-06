@@ -57,6 +57,19 @@
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
+        <div class="user-panel">
+            <div class="pull-left image">
+                <a href="http://vfhome.fr:8800/index.php?v=d&p=profils#profil"><img src="{{ USER_AVATAR }}" class="img-circle" alt="User Image"></a>
+            </div>
+            <div class="pull-left info">
+                <p>{{ USER_LOGIN }}</p>
+                {% if USER_ISCONNECTED %}
+                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                {% else %}
+                    <a href="#"><i class="fa fa-circle text-danger"></i> Offline</a>
+                {% endif %}
+            </div>
+        </div>
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MENU PRINCIPAL</li>
@@ -146,21 +159,21 @@
                 <ul class="treeview-menu">
                     <li><a href="index.php?v=d&p=plugin"><i class="fa fa-tags"></i> {{ 'Gestion des plugins' }}</a></li>
                     <li class="treeview-menu">
-                            {# {{ pluginMenu | raw }}#}
+                        {# {{ pluginMenu | raw }}#}
                         {% if MENU_PLUGIN_CATEGORY is defined %}
-                            {% for category, categoryData in MENU_PLUGIN_CATEGORY %}
-                                <li class="dropdown-submenu">
-                                    <a data-toggle="dropdown"><i class="fa {{ categoryData.icon }}"></i> {{ categoryData.name }}</a>
-                                    <ul class="dropdown-menu">
-                                        {% for plugin in MENU_PLUGIN[category] %}
-                                        <li class="plugin-item">
-                                            <a href="index.php?v=d&m={{ plugin.id }}&p={{ plugin.index }}"><img class="img-responsive" src="{{ plugin.pathImgIcon }}" /> {{ plugin.name }}</a>
-                                        </li>
-                                        {% endfor %}
-                                    </ul>
+                        {% for category, categoryData in MENU_PLUGIN_CATEGORY %}
+                    <li class="dropdown-submenu">
+                        <a data-toggle="dropdown"><i class="fa {{ categoryData.icon }}"></i> {{ categoryData.name }}</a>
+                        <ul class="dropdown-menu">
+                            {% for plugin in MENU_PLUGIN[category] %}
+                                <li class="plugin-item">
+                                    <a href="index.php?v=d&m={{ plugin.id }}&p={{ plugin.index }}"><img class="img-responsive" src="{{ plugin.pathImgIcon }}" /> {{ plugin.name }}</a>
                                 </li>
                             {% endfor %}
-                        {% endif %}
+                        </ul>
+                    </li>
+                    {% endfor %}
+                    {% endif %}
 
                     </li>
 
