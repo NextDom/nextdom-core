@@ -153,10 +153,10 @@ class PrepareView
 
         $baseView = '/desktop/base_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
         if (isset($_SESSION['user'])) {
-            if (file_exists(NEXTDOM_ROOT . '/desktop/base_' . $designTheme . '.html.twig')) {
-                $baseView = '/desktop/base_' . $designTheme . '.html.twig';
+            if (file_exists(NEXTDOM_ROOT . '/layouts/base_' . $designTheme . '.html.twig')) {
+                $baseView = '/layouts/base_' . $designTheme . '.html.twig';
             } else {
-                $baseView = '/desktop/base_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
+                $baseView = '/layouts/base_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
             }
         }
 
@@ -170,7 +170,7 @@ class PrepareView
             $pageData['alertMsg'] = displayException($e);
         }
 
-        $pageData['CONTENT'] = $render->get('desktop/index.html.twig', $pageData);
+        $pageData['CONTENT'] = $render->get('/desktop/index.html.twig', $pageData);
 
         $render = Render::getInstance();
         $render->show($baseView, $pageData);
