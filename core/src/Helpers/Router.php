@@ -72,7 +72,7 @@ class Router
         } elseif (isset($_GET['configure'])) {
             $this->showConfiguration();
         } elseif (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
-            $this->ajaxGetContent();
+            $this->getContentByAjax();
         } else {
             require_once(NEXTDOM_ROOT . '/core/php/authentification.php');
             Status::initConnectState();
@@ -134,11 +134,24 @@ class Router
      *
      * @throws \Exception
      */
-    private function ajaxGetContent()
+    private function getContentByAjax()
     {
         try {
             \include_file('core', 'authentification', 'php');
-            \include_file('desktop', Utils::init('p'), 'php', Utils::init('m'), true);
+            $page = Utils::init('p');
+            $controllerRoute = Controller::getRoute($page);
+            if ($controllerRoute === null) {
+                \include_file('desktop', $page, 'php', Utils::init('m'), true);
+            }
+            else {
+                $render = Render::getInstance();
+                $pageContent = [];
+                $pageContent['JS_POOL'] = [];
+                $pageContent['JS_END_POOL'] = [];
+                $pageContent['CSS_POOL'] = [];
+                $pageContent['content'] = \NextDom\Helpers\Controller::$controllerRoute($render, $pageContent);
+                $render->show('/desktop/ajax_content.html.twig', $pageContent);
+            }
         } catch (\Exception $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
