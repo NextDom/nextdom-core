@@ -20,6 +20,7 @@ namespace NextDom\Helpers;
 
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
 
@@ -27,7 +28,8 @@ class Controller
 {
     const routesList = [
         'dashboard-v2' => 'dashboardV2Page',
-        'scenario' => 'scenarioPage'
+        'scenario' => 'scenarioPage',
+        'administration-move' => 'administrationPage'
     ];
 
     public static function getRoute(string $page) {
@@ -111,11 +113,67 @@ class Controller
     }
 
     public static function administrationPage(Render $render, array &$pageContent): string {
+        global $CONFIG;
+
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageContent['reposList'] = UpdateManager::listRepo();
+        $keys = array('api', 'apipro', 'dns::token', 'market::allowDNS', 'market::allowBeta', 'market::allowAllRepo', 'ldap::enable', 'apimarket', 'product_name', 'security::bantime');
+        foreach ($pageContent['reposList'] as $key => $value) {
+            $keys[] = $key . '::enable';
+        }
+        $pageContent['adminConfigs'] = \config::byKeys($keys);
+        $pageContent['JS_VARS']['ldapEnable'] = $pageContent['adminConfigs']['ldap::enable'];
+        $pageContent['adminIsBan'] = \user::isBan();
+        $pageContent['adminHardwareName'] = \nextdom::getHardwareName();
+        $pageContent['adminHardwareKey'] = \nextdom::getHardwareKey();
+        $pageContent['adminLastKnowDate'] = \cache::byKey('hour')->getValue();
+        $pageContent['adminIsRescueMode'] = Status::isRescueMode();
+        if (!$pageContent['adminIsRescueMode']) {
+            $pageContent['adminPluginsList'] = [];
+            $pluginsList = PluginManager::listPlugin(true);
+            foreach ($pluginsList as $plugin) {
+                $pluginApi = \config::byKey('api', $plugin->getId());
+                if ($pluginApi !== '') {
+                    $pluginData = [];
+                    $pluginData['api'] = $pluginApi;
+                    $pluginData['plugin'] = $plugin;
+                    $pageContent['adminPluginsList'][] = $pluginData;
+                }
+            }
+        }
+        $pageContent['adminDbConfig'] = $CONFIG['db'];
+        $pageContent['adminUseLdap'] = function_exists('ldap_connect');
 
-        return 'Coucou';
+        $pageContent['adminBannedIp'] = [];
+        $cache = \cache::byKey('security::banip');
+        $values = json_decode($cache->getValue('[]'), true);
+        if (is_array($values) && count($values) > 0) {
+            foreach ($values as $value) {
+                $bannedData = [];
+                $bannedData['ip'] = $value['ip'];
+                $bannedData['startDate'] = date('Y-m-d H:i:s', $value['datetime']);
+                if ($pageContent['adminConfigs']['security::bantime'] < 0) {
+                    $bannedData['endDate'] = __('Jamais');
+                }
+                else {
+                    $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageContent['adminConfigs']['security::bantime']);
+                }
+                $pageContent['adminBannedIp'][] = $bannedData;
+            }
+        }
+
+        $pageContent['adminNetworkInterfaces'] = [];
+        foreach (\network::getInterfaces() as $interface) {
+            $intData = [];
+            $intData['name'] = $interface;
+            $intData['mac'] = \network::getInterfaceMac($interface);
+            $intData['ip'] = \network::getInterfaceIp($interface);
+            $pageContent['adminNetworkInterfaces'][] = $intData;
+        }
+        $pageContent['adminReposList'] = UpdateManager::listRepo();
+        $pageContent['adminDnsRun'] = \network::dns_run();
+        $pageContent['adminNetworkExternalAccess'] = \network::getNetworkAccess('external');
+        return $render->get('/desktop/administration.html.twig', $pageContent);
     }
 }
