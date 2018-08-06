@@ -88,7 +88,7 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $scenarios = array();
+        $pageContent['scenarios'] = array();
         // TODO: A supprimé pour éviter la requête inutile
         $pageContent['scenarioCount'] = count(ScenarioManager::all());
         $pageContent['scenarios'][-1] = ScenarioManager::all(null);

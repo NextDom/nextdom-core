@@ -131,29 +131,22 @@ class Render
      * @param string $url
      * @return string
      */
-    public function getCssHtmlTag(string $url) {
+    public function getCssHtmlTag(string $url): string
+    {
         return '<link href="' . $url  . '" rel="stylesheet"/>';
     }
 
-    /**
-     * @param string $url
-     * @return string
-     */
-    public function getJsHtmlTag(string $url)
-    {
-        return '<script src="' . $url . '"></script>';
-    }
 
     /**
      * @param Twig_Loader_Filesystem $twigLoader
      * @return bool|\DebugBar\JavascriptRenderer
      * @throws \DebugBar\DebugBarException
      */
-    private function showDebugBar($twigLoader)
+    private function showDebugBar(Twig_Loader_Filesystem $twigLoader)
     {
         $config =  \config::getDefaultConfiguration()['core'];
 
-        if (\config::getDefaultConfiguration()['core']['developer::mode'] == '1') {
+        if (Status::isInDeveloperMode()) {
             $debugbar         = new StandardDebugBar();
             $debugbarRenderer = $debugbar->getJavascriptRenderer();
 
