@@ -70,7 +70,7 @@ class Render
      */
     private function initRenderer()
     {
-        $developerMode = Status::isInDeveloperMode()
+        $developerMode = Status::isInDeveloperMode();
         $loader = new Twig_Loader_Filesystem(realpath('views'));
         $this->twigLoader = $loader;
         $twigConfig =  [
