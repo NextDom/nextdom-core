@@ -24,10 +24,11 @@ use DebugBar\StandardDebugBar;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Symfony\Component\Translation\Translator;
+use Twig\Extensions\DateExtension;
+use Twig\Extensions\I18nExtension;
+use Twig\Extensions\TextExtension;
 use Twig_Environment;
-use Twig_Extensions_Extension_I18n;
 use Twig_Loader_Filesystem;
-
 
 class Render
 {
@@ -70,6 +71,7 @@ class Render
     private function initRenderer()
     {
         $developerMode = Status::isInDeveloperMode();
+        var_dump($this->translator);
         $loader = new Twig_Loader_Filesystem(realpath('views'));
         $this->twigLoader = $loader;
         $twigConfig =  [
@@ -77,10 +79,9 @@ class Render
             'debug' => $developerMode,
         ];
         $this->twig = new Twig_Environment($loader,  $twigConfig);
-        //if ($developerMode){
-        //    $this->twig->addExtension(new Twig_Extension_Debug());
-        // }
-        $this->twig->addExtension(new Twig_Extensions_Extension_I18n());
+        $this->twig->addExtension(new I18nExtension());
+        $this->twig->addExtension(new DateExtension($this->translator));
+        $this->twig->addExtension(new TextExtension());
         $this->twig->addExtension(new TranslationExtension($this->translator));
     }
 
@@ -152,7 +153,6 @@ class Render
      */
     private function showDebugBar(Twig_Loader_Filesystem $twigLoader)
     {
-        $config = \config::getDefaultConfiguration()['core'];
 
         if (Status::isInDeveloperMode()) {
             $debugbar = new StandardDebugBar();
@@ -160,7 +160,7 @@ class Render
 
             $env = new TraceableTwigEnvironment(new Twig_Environment($twigLoader));
             $debugbar->addCollector(new TwigCollector($env));
-            $debugbar->addCollector(new DataCollector\ConfigCollector($config));
+            $debugbar->addCollector(new DataCollector\ConfigCollector(\config::getDefaultConfiguration()['core']));
             $pageData = $debugbarRenderer;
         } else {
             $pageData = false;
