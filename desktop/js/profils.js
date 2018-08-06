@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -15,10 +14,10 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
- var url = document.location.toString();
- if (url.match('#')) {
+var url = document.location.toString();
+if (url.match('#')) {
     $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-} 
+}
 $('.nav-tabs a').on('shown.bs.tab', function (e) {
     window.location.hash = e.target.hash;
 })
@@ -29,9 +28,9 @@ jwerty.key('ctrl+s', function (e) {
 });
 
 $('#bt_configureTwoFactorAuthentification').on('click',function(){
-   var profil = $('#div_pageContainer').getValues('.userAttr')[0];
-   $('#md_modal').dialog({title: "{{Authentification 2 étapes}}"});
-   $("#md_modal").load('index.php?v=d&modal=twoFactor.authentification').dialog('open');
+    var profil = $('#div_pageContainer').getValues('.userAttr')[0];
+    $('#md_modal').dialog({title: "{{Authentification 2 étapes}}"});
+    $("#md_modal").load('index.php?v=d&modal=twoFactor.authentification').dialog('open');
 });
 
 $("#bt_saveProfils").on('click', function (event) {
@@ -91,7 +90,7 @@ $('.userAttr[data-l1key=options][data-l2key=bootstrap_theme]').on('change', func
     }else{
         $('#div_imgThemeDesktop').html('<img src="core/themes/' + $(this).value() + '/desktop/preview.png" height="300" class="img-thumbnail" />');
     }
-    
+
 });
 
 nextdom.user.get({
@@ -144,14 +143,34 @@ $('#bt_removeAllRegisterDevice').on('click',function(){
 
 
 $('.bt_deleteSession').on('click',function(){
-   var id = $(this).closest('tr').attr('data-id'); 
-   nextdom.user.deleteSession({
-    id : id,
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        window.location.reload();
-    }
+    var id = $(this).closest('tr').attr('data-id');
+    nextdom.user.deleteSession({
+        id : id,
+        error: function (error) {
+            notify("Erreur", error.message, 'error');
+        },
+        success: function (data) {
+            window.location.reload();
+        }
+    });
 });
+
+$('#user_avatar').fileupload({
+    dataType: 'json',
+    url: "core/ajax/profils.ajax.php?action=imageUpload",
+    dropZone: "#bsImagesPanel",
+    done: function (e, data) {
+        if (data.result.state !== 'ok') {
+            $('#div_alert').showAlert({message: data.result.result, level: 'danger'});
+            return;
+        }
+        if ($('.userAttr[data-l2key=avatar]') == '') {
+            $('.userAttr[data-l2key=avatar]').value('/core/img/profils/noPicture.jpg');
+        }else{
+            $('.userAttr[data-l2key=avatar]').value('/core/img/profils/' + data.files[0]['name']);
+            $('#monAvatar').attr('src','/core/img/profils/' + data.files[0]['name']);
+
+            notify("{{Ajout d'une Image}}", '{{Image ajoutée avec succès}}', 'success');
+        }
+    }
 });

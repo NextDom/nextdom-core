@@ -111,7 +111,7 @@ class PrepareView
         $pageData['CSS_POOL'] = [];
         $page = '';
         $language = $configs['language'];
-      	$designTheme = $_SESSION['user']->getOptions('design_nextdom');
+        $designTheme = $_SESSION['user']->getOptions('design_nextdom');
 
         $pageData['HOMELINK'] = self::getHomeLink();
         //TODO: Tests à revoir
@@ -155,10 +155,10 @@ class PrepareView
         if (isset($_SESSION['user'])) {
             if (file_exists(NEXTDOM_ROOT . '/desktop/base_' . $designTheme . '.html.twig')) {
                 $baseView = '/desktop/base_' . $designTheme . '.html.twig';
-        } else {
-            $baseView = '/desktop/base_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
+            } else {
+                $baseView = '/desktop/base_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
+            }
         }
-    }
 
         try {
             if (!\nextdom::isStarted()) {
@@ -290,6 +290,8 @@ class PrepareView
         $pageData['MENU_HTML_GLOBAL_SUMMARY'] = JeeObjectManager::getGlobalHtmlSummary();
         $pageData['PRODUCT_IMAGE'] = \config::byKey('product_image');
         $pageData['USER_LOGIN'] = $_SESSION['user']->getLogin();
+        $pageData['USER_ISCONNECTED'] = $_SESSION['user']->is_Connected();
+        $pageData['USER_AVATAR'] = $_SESSION['user']->getOptions('avatar');
         $pageData['IS_ADMIN'] = Status::isConnectAdmin();
         $pageData['CAN_SUDO'] = \nextdom::isCapable('sudo');
         $pageData['NEXTDOM_VERSION'] = \nextdom::version();
