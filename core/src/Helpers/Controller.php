@@ -21,6 +21,7 @@ namespace NextDom\Helpers;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\UpdateManager;
 
 class Controller
 {
@@ -107,5 +108,14 @@ class Controller
         $pageContent['JS_END_POOL'][] = '/3rdparty/jquery.sew/jquery.sew.min.js';
 
         return $render->get('/desktop/scenario.html.twig', $pageContent);
+    }
+
+    public static function administrationPage(Render $render, array &$pageContent): string {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['reposList'] = UpdateManager::listRepo();
+
+        return 'Coucou';
     }
 }
