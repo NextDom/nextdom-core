@@ -25,7 +25,8 @@ use NextDom\Managers\ScenarioManager;
 class Controller
 {
     const routesList = [
-        'dashboard-v2' => 'dashboardV2Page'
+        'dashboard-v2' => 'dashboardV2Page',
+        'scenario' => 'scenarioPage'
     ];
 
     public static function getRoute(string $page) {
@@ -37,11 +38,13 @@ class Controller
     }
 
     /**
-     * @param Render $
-     * @param array $pageContent
-     * @return string
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of Dashboard V2 page
      */
     public static function dashboardV2Page(Render $render, array &$pageContent): string {
+        Status::initConnectState();
         Status::isConnectedAdminOrFail();
         $pageContent['JS_VARS']['SEL_OBJECT_ID'] = Utils::init('object_id');
         $pageContent['JS_VARS']['SEL_CATEGORY'] = Utils::init('category', 'all');
@@ -73,11 +76,36 @@ class Controller
         if ($pageContent['dashboardDisplayScenarioByDefault'] == 1) {
             $pageContent['dashboardScenarios'] = ScenarioManager::all();
         }
-        $pageContent['JS_POOL'][] = '/desktop/js/dashboard.js';
-        $pageContent['JS_POOL'][] = '/desktop/js/dashboard-v2.js';
-        $pageContent['JS_POOL'][] = '/3rdparty/jquery.isotope/isotope.pkgd.min.js';
-        $pageContent['JS_POOL'][] = '/3rdparty/jquery.multi-column-select/multi-column-select.js';
+        $pageContent['JS_END_POOL'][] = '/desktop/js/dashboard.js';
+        $pageContent['JS_END_POOL'][] = '/desktop/js/dashboard-v2.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/jquery.isotope/isotope.pkgd.min.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/jquery.multi-column-select/multi-column-select.js';
 
         return $render->get('/desktop/dashboard-v2.html.twig', $pageContent);
+    }
+
+    public static function scenarioPage(Render $render, array &$pageContent): string {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $scenarios = array();
+        // TODO: A supprimé pour éviter la requête inutile
+        $pageContent['scenarioCount'] = count(ScenarioManager::all());
+        $pageContent['scenarios'][-1] = ScenarioManager::all(null);
+        $pageContent['scenarioListGroup'] = ScenarioManager::listGroup();
+        if (is_array($pageContent['scenarioListGroup'])) {
+            foreach ($pageContent['scenarioListGroup'] as $group) {
+                $pageContent['scenarios'][$group['group']] = ScenarioManager::all($group['group']);
+            }
+        }
+        $pageContent['scenarioInactiveStyle'] = \nextdom::getConfiguration('eqLogic:style:noactive');
+        $pageContent['scenarioEnabled'] = \config::byKey('enableScenario');
+        $pageContent['scenarioAllObjects'] = JeeObjectManager::all();
+
+        $pageContent['JS_END_POOL'][] = '/desktop/js/scenario.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/jquery.sew/jquery.caretposition.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/jquery.sew/jquery.sew.min.js';
+
+        return $render->get('/desktop/scenario.html.twig', $pageContent);
     }
 }

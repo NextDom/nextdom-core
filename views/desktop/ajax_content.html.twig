@@ -1,0 +1,16 @@
+{{ content|raw }}
+{% if CSS_POOL is defined %}
+    {% for cssFile in CSS_POOL %}
+        <link href="{{ cssFile }}" rel="stylesheet" />
+    {% endfor %}
+{% endif %}
+{% if JS_POOL is defined %}
+    {% for jsFile in JS_POOL %}
+        <script src="{{ jsFile }}"></script>
+    {% endfor %}
+{% endif %}
+{% if JS_END_POOL is defined %}
+    {% for jsFile in JS_END_POOL %}
+        <script src="{{ jsFile }}"></script>
+    {% endfor %}
+{% endif %}
