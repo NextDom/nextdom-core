@@ -149,6 +149,7 @@ class Router
                 $pageContent['JS_POOL'] = [];
                 $pageContent['JS_END_POOL'] = [];
                 $pageContent['CSS_POOL'] = [];
+                $pageContent['JS_VARS'] = [];
                 $pageContent['content'] = \NextDom\Helpers\Controller::$controllerRoute($render, $pageContent);
                 $render->show('/desktop/ajax_content.html.twig', $pageContent);
             }

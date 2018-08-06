@@ -4,6 +4,13 @@
         <link href="{{ cssFile }}" rel="stylesheet" />
     {% endfor %}
 {% endif %}
+{% if JS_VARS is defined and JS_VARS|length > 0 %}
+    <script>
+    {% for jsVarName, jsVarValue in JS_VARS  %}
+        var {{ jsVarName }} = "{{ jsVarValue }}";
+    {% endfor %}
+    </script>
+{% endif %}
 {% if JS_POOL is defined %}
     {% for jsFile in JS_POOL %}
         <script src="{{ jsFile }}"></script>
