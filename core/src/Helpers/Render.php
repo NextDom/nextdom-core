@@ -17,16 +17,16 @@
 
 namespace NextDom\Helpers;
 
+use DebugBar\Bridge\Twig\TraceableTwigEnvironment;
+use DebugBar\Bridge\Twig\TwigCollector;
+use DebugBar\DataCollector;
+use DebugBar\StandardDebugBar;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Symfony\Component\Translation\Translator;
 use Twig_Environment;
 use Twig_Extensions_Extension_I18n;
 use Twig_Loader_Filesystem;
-use DebugBar\StandardDebugBar;
-use DebugBar\DataCollector;
-use DebugBar\Bridge\Twig\TwigCollector;
-use DebugBar\Bridge\Twig\TraceableTwigEnvironment;
 
 
 class Render
@@ -54,10 +54,11 @@ class Render
         $this->initRenderer();
     }
 
-    private function initTranslation($language) {
-        $this->translator = new Translator($language,  null, NEXTDOM_ROOT.'/var/i10n');
+    private function initTranslation($language)
+    {
+        $this->translator = new Translator($language, null, NEXTDOM_ROOT . '/var/cache/i18n');
         $this->translator->addLoader('yaml', new YamlFileLoader());
-        $filename = NEXTDOM_ROOT.'/translations/'.$language.'.yml';
+        $filename = NEXTDOM_ROOT . '/translations/' . $language . '.yml';
         if (file_exists($filename)) {
             $this->translator->addResource('yaml', $filename, $language);
         }
@@ -66,12 +67,19 @@ class Render
     /**
      *
      */
-    private function initRenderer() {
+    private function initRenderer()
+    {
+        $developerMode = Status::isInDeveloperMode();
         $loader = new Twig_Loader_Filesystem(realpath('views'));
         $this->twigLoader = $loader;
-        $this->twig   = new Twig_Environment($loader, [
-//            'cache' => NEXTDOM_ROOT.'/var/cache/twig'
-        ]);
+        $twigConfig =  [
+            'cache' => NEXTDOM_ROOT . '/var/cache/twig',
+            'debug' => $developerMode,
+        ];
+        $this->twig = new Twig_Environment($loader,  $twigConfig);
+        //if ($developerMode){
+        //    $this->twig->addExtension(new Twig_Extension_Debug());
+        // }
         $this->twig->addExtension(new Twig_Extensions_Extension_I18n());
         $this->twig->addExtension(new TranslationExtension($this->translator));
     }
@@ -133,7 +141,7 @@ class Render
      */
     public function getCssHtmlTag(string $url): string
     {
-        return '<link href="' . $url  . '" rel="stylesheet"/>';
+        return '<link href="' . $url . '" rel="stylesheet"/>';
     }
 
 
@@ -144,10 +152,10 @@ class Render
      */
     private function showDebugBar(Twig_Loader_Filesystem $twigLoader)
     {
-        $config =  \config::getDefaultConfiguration()['core'];
+        $config = \config::getDefaultConfiguration()['core'];
 
         if (Status::isInDeveloperMode()) {
-            $debugbar         = new StandardDebugBar();
+            $debugbar = new StandardDebugBar();
             $debugbarRenderer = $debugbar->getJavascriptRenderer();
 
             $env = new TraceableTwigEnvironment(new Twig_Environment($twigLoader));
