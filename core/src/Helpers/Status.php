@@ -113,7 +113,11 @@ class Status
         return self::$rescueMode;
     }
 
-    public static function isInDeveloperMode(): bool {
+    /**
+     * @return bool
+     */
+    public static function isInDeveloperMode(): bool
+    {
         return \config::getDefaultConfiguration()['core']['developer::mode'] == '1';
     }
 }
