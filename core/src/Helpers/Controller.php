@@ -81,10 +81,10 @@ class Controller
         if ($pageContent['dashboardDisplayScenarioByDefault'] == 1) {
             $pageContent['dashboardScenarios'] = ScenarioManager::all();
         }
-        $pageContent['JS_END_POOL'][] = '/desktop/js/dashboard.js';
-        $pageContent['JS_END_POOL'][] = '/desktop/js/dashboard-v2.js';
-        $pageContent['JS_END_POOL'][] = '/3rdparty/jquery.isotope/isotope.pkgd.min.js';
-        $pageContent['JS_END_POOL'][] = '/3rdparty/jquery.multi-column-select/multi-column-select.js';
+        $pageContent['JS_POOL'][] = '/desktop/js/dashboard.js';
+        $pageContent['JS_POOL'][] = '/desktop/js/dashboard-v2.js';
+        $pageContent['JS_POOL'][] = '/3rdparty/jquery.isotope/isotope.pkgd.min.js';
+        $pageContent['JS_POOL'][] = '/3rdparty/jquery.multi-column-select/multi-column-select.js';
 
         return $render->get('/desktop/dashboard-v2.html.twig', $pageContent);
     }
