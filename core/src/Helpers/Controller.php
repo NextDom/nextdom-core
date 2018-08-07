@@ -29,10 +29,11 @@ class Controller
     const routesList = [
         'dashboard-v2' => 'dashboardV2Page',
         'scenario' => 'scenarioPage',
-        'administration-move' => 'administrationPage'
+        'administration' => 'administrationPage'
     ];
 
-    public static function getRoute(string $page) {
+    public static function getRoute(string $page)
+    {
         $route = null;
         if (array_key_exists($page, self::routesList)) {
             $route = self::routesList[$page];
@@ -46,7 +47,8 @@ class Controller
      *
      * @return string Content of Dashboard V2 page
      */
-    public static function dashboardV2Page(Render $render, array &$pageContent): string {
+    public static function dashboardV2Page(Render $render, array &$pageContent): string
+    {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
         $pageContent['JS_VARS']['SEL_OBJECT_ID'] = Utils::init('object_id');
@@ -87,7 +89,8 @@ class Controller
         return $render->get('/desktop/dashboard-v2.html.twig', $pageContent);
     }
 
-    public static function scenarioPage(Render $render, array &$pageContent): string {
+    public static function scenarioPage(Render $render, array &$pageContent): string
+    {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
@@ -112,14 +115,17 @@ class Controller
         return $render->get('/desktop/scenario.html.twig', $pageContent);
     }
 
-    public static function administrationPage(Render $render, array &$pageContent): string {
+    public static function administrationPage(Render $render, array &$pageContent): string
+    {
         global $CONFIG;
+        global $NEXTDOM_INTERNAL_CONFIG;
 
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
+        $pageContent['adminReposList'] = UpdateManager::listRepo();
         $keys = array('api', 'apipro', 'dns::token', 'market::allowDNS', 'market::allowBeta', 'market::allowAllRepo', 'ldap::enable', 'apimarket', 'product_name', 'security::bantime');
-        foreach ($pageContent['reposList'] as $key => $value) {
+        foreach ($pageContent['adminReposList'] as $key => $value) {
             $keys[] = $key . '::enable';
         }
         $pageContent['adminConfigs'] = \config::byKeys($keys);
@@ -155,8 +161,7 @@ class Controller
                 $bannedData['startDate'] = date('Y-m-d H:i:s', $value['datetime']);
                 if ($pageContent['adminConfigs']['security::bantime'] < 0) {
                     $bannedData['endDate'] = __('Jamais');
-                }
-                else {
+                } else {
                     $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageContent['adminConfigs']['security::bantime']);
                 }
                 $pageContent['adminBannedIp'][] = $bannedData;
@@ -171,9 +176,18 @@ class Controller
             $intData['ip'] = \network::getInterfaceIp($interface);
             $pageContent['adminNetworkInterfaces'][] = $intData;
         }
-        $pageContent['adminReposList'] = UpdateManager::listRepo();
         $pageContent['adminDnsRun'] = \network::dns_run();
         $pageContent['adminNetworkExternalAccess'] = \network::getNetworkAccess('external');
+        $pageContent['adminCategories'] = \nextdom::getConfiguration('eqLogic:category');
+        $pageContent['adminStats'] = \cache::stats();
+        $pageContent['adminCacheFolder'] = \cache::getFolder();
+        $pageContent['adminMemCachedExists'] = class_exists('memcached');
+        $pageContent['adminRedisExists'] = class_exists('redis');
+        $pageContent['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
+        $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
+
+        $pageContent['JS_END_POOL'][] = '/desktop/js/administration.js';
+
         return $render->get('/desktop/administration.html.twig', $pageContent);
     }
 }
