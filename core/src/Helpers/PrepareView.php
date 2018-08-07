@@ -151,12 +151,12 @@ class PrepareView
         }
         self::initMenu($pageData, $currentPlugin);
 
-        $baseView = '/desktop/base_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
+        $baseView = '/layouts/base_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
         if (isset($_SESSION['user'])) {
-            if (file_exists(NEXTDOM_ROOT . '/desktop/base_' . $designTheme . '.html.twig')) {
-                $baseView = '/desktop/base_' . $designTheme . '.html.twig';
+            if (file_exists(NEXTDOM_ROOT . '/layouts/base_' . $designTheme . '.html.twig')) {
+                $baseView = '/layouts/base_' . $designTheme . '.html.twig';
         } else {
-            $baseView = '/desktop/base_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
+            $baseView = '/layouts/base_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
         }
     }
 
