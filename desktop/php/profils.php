@@ -60,8 +60,8 @@ foreach (plugin::listPlugin() as $pluginList) {
                             <label class="col-sm-4 control-label">{{Design Dashboard}}</label>
                             <div class="col-sm-4">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="design_nextdom">
-                                    <option value="dashboard">Dashboard</option>
                                     <option value="dashboard-v2">Dashboard-v2</option>
+                                    <option value="dashboard">Dashboard</option>
                                 </select>
                             </div>
                         </div>
