@@ -139,8 +139,10 @@ $(function () {
 
     toastr.options = {
         "closeButton": true,
+        "progressBar": true,
         "debug": false,
-        "positionClass": "toast-top-right",
+        "newestOnTop": true,
+        "positionClass": "toast-top",
         "onclick": null,
         "showDuration": "300",
         "hideDuration": "1000",
