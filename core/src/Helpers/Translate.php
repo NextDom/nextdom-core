@@ -253,10 +253,8 @@ class Translate
             try {
                 $plugin = PluginManager::byId($plugin_name);
                 $plugin->saveTranslation(self::getLanguage(), $translation);
-            } catch (\Exception $e) {
-                
-            } catch (\Error $e) {
-                
+            } catch (\Throwable $e) {
+
             }
         }
     }
