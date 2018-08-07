@@ -92,8 +92,7 @@ class Router
             else {
                 if (Status::isRescueMode()) {
                     PrepareView::showRescueMode($configs);
-                }
-                else {
+                } else {
                     PrepareView::showContent($configs);
                 }
             }
@@ -142,8 +141,7 @@ class Router
             $controllerRoute = Controller::getRoute($page);
             if ($controllerRoute === null) {
                 \include_file('desktop', $page, 'php', Utils::init('m'), true);
-            }
-            else {
+            } else {
                 $render = Render::getInstance();
                 $pageContent = [];
                 $pageContent['JS_POOL'] = [];
