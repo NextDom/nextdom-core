@@ -314,6 +314,7 @@ class PrepareView
         // TODO: Remplacer par un include dans twig
         $pageData['PRODUCT_NAME'] = $configs['product_name'];
         $pageData['PRODUCT_ICON'] = $configs['product_icon'];
+        $pageData['PRODUCT_CONNECTION_ICON'] = $configs['product_connection_image'];
         $pageData['AJAX_TOKEN'] = \ajax::getToken();
         $pageData['LANGUAGE'] = $configs['language'];
         self::initJsPool($pageData);
