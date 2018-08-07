@@ -199,11 +199,11 @@ class JeeObjectManager
     /**
      * Search object configuration TODO: ??
      *
-     * @param $search
+     * @param string $search
      * @return array|mixed|null
      * @throws \Exception
      */
-    public static function searchConfiguration($search)
+    public static function searchConfiguration(string $search)
     {
         $values = array(
             'configuration' => '%' . $search . '%',
@@ -238,10 +238,10 @@ class JeeObjectManager
     /**
      * TODO ???
      *
-     * @param $cmdId
+     * @param string $cmdId
      * @throws \Exception
      */
-    public static function checkSummaryUpdate($cmdId)
+    public static function checkSummaryUpdate(string $cmdId)
     {
         $objects = self::searchConfiguration('#' . $cmdId . '#');
         if (count($objects) == 0) {
@@ -326,23 +326,23 @@ class JeeObjectManager
     /**
      * TODO: ???
      *
-     * @param $_key
+     * @param string $key
      * @return float|null|string
      * @throws \Exception
      */
-    public static function getGlobalSummary($_key)
+    public static function getGlobalSummary(string $key)
     {
-        if ($_key == '') {
+        if ($key == '') {
             return null;
         }
         $def = \config::byKey('object:summary');
         $objects = self::all();
         $value = array();
         foreach ($objects as $object) {
-            if ($object->getConfiguration('summary::global::' . $_key, 0) == 0) {
+            if ($object->getConfiguration('summary::global::' . $key, 0) == 0) {
                 continue;
             }
-            $result = $object->getSummary($_key, true);
+            $result = $object->getSummary($key, true);
             if ($result === null || !is_array($result)) {
                 continue;
             }
@@ -351,10 +351,10 @@ class JeeObjectManager
         if (count($value) == 0) {
             return null;
         }
-        if ($def[$_key]['calcul'] == 'text') {
+        if ($def[$key]['calcul'] == 'text') {
             return trim(implode(',', $value), ',');
         }
-        return round(\nextdom::calculStat($def[$_key]['calcul'], $value), 1);
+        return round(\nextdom::calculStat($def[$key]['calcul'], $value), 1);
     }
 
     /**
