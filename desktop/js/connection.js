@@ -10,7 +10,7 @@ $('#in_login_username').on('focusout change keypress',function(){
     nextdom.user.useTwoFactorAuthentification({
         login: $('#in_login_username').value(),
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+           notify('core',error.message, 'danger');
         },
         success: function (data) {
             if(data == 1){

@@ -1,11 +1,13 @@
 {% include '/commons/header.html.twig' %}
-<link rel="stylesheet" href="/css/dashboard-v2.css">
-<link rel="stylesheet" href="/3rdparty/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="/3rdparty/iCheck/all.css">
+{% if CSS_POOL is defined %}
+    {% for cssFile in CSS_POOL %}
+        <script src="{{ cssFile }}"></script>
+    {% endfor %}
+{% endif %}
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a href="../../index2.html"><b>Next</b>Dom</a>
+        <img src="core/img/NextDom/NextDom_Wide_BlueAlphaBlack.png" style="height:100px; border-radius: 10px">
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
@@ -26,7 +28,7 @@
             </div>
             <div class="row">
                 <div class="col-xs-8">
-                    <div class="checkbox icheck">
+                    <div class="checkbox icheck ">
                         <label>
                             <input type="checkbox" id="cb_storeConnection"> Enregister
                         </label>
@@ -45,11 +47,13 @@
     </div>
     <!-- /.login-box-body -->
 </div>
-</body>
 
-</html>
 {% if JS_END_POOL is defined %}
     {% for jsFile in JS_END_POOL %}
         <script src="{{ jsFile }}"></script>
     {% endfor %}
 {% endif %}
+
+</body>
+
+</html>
