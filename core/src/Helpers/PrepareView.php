@@ -111,7 +111,7 @@ class PrepareView
         $pageData['CSS_POOL'] = [];
         $page = '';
         $language = $configs['language'];
-        $designTheme = $_SESSION['user']->getOptions('design_nextdom');
+      	$designTheme = $_SESSION['user']->getOptions('design_nextdom');
 
         $pageData['HOMELINK'] = self::getHomeLink();
         //TODO: Tests à revoir
@@ -153,24 +153,24 @@ class PrepareView
 
         $baseView = '/desktop/base_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
         if (isset($_SESSION['user'])) {
-            if (file_exists(NEXTDOM_ROOT . '/layouts/base_' . $designTheme . '.html.twig')) {
-                $baseView = '/layouts/base_' . $designTheme . '.html.twig';
-            } else {
-                $baseView = '/layouts/base_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
-            }
+            if (file_exists(NEXTDOM_ROOT . '/desktop/base_' . $designTheme . '.html.twig')) {
+                $baseView = '/desktop/base_' . $designTheme . '.html.twig';
+        } else {
+            $baseView = '/desktop/base_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
         }
+    }
 
         try {
             if (!\nextdom::isStarted()) {
-                $pageData['alertMsg'] = 'NextDom est en cours de démarrage, veuillez patienter . La page se rechargera automatiquement une fois le démarrage terminé.';
+                $pageData['ALERT_MSG'] = 'NextDom est en cours de démarrage, veuillez patienter . La page se rechargera automatiquement une fois le démarrage terminé.';
             }
             $pageData['content'] = self::getContent($render, $pageData, $page, $currentPlugin);
         } catch (\Exception $e) {
             ob_end_clean();
-            $pageData['alertMsg'] = displayException($e);
+            $pageData['ALERT_MSG'] = displayException($e);
         }
 
-        $pageData['CONTENT'] = $render->get('/desktop/index.html.twig', $pageData);
+        $pageData['CONTENT'] = $render->get('desktop/index.html.twig', $pageData);
 
         $render = Render::getInstance();
         $render->show($baseView, $pageData);
@@ -276,33 +276,37 @@ class PrepareView
         }
     }
 
+    /**
+     * @param $pageData
+     * @param $currentPlugin
+     * @throws \Exception
+     */
     private static function initMenu(&$pageData, $currentPlugin)
     {
-        $pageData['MENU_NB_MESSAGES'] = \message::nbMessage();
-        $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
+        $pageData['MENU_NB_MESSAGES']    = \message::nbMessage();
+        $pageData['MENU_NB_UPDATES']     = UpdateManager::nbNeedUpdate();
         $pageData['MENU_JEEOBJECT_TREE'] = JeeObjectManager::buildTree(null, false);
-        $pageData['MENU_VIEWS_LIST'] = \view::all();
-        $pageData['MENU_PLANS_LIST'] = \planHeader::all();
-        $pageData['MENU_PLANS3D_LIST'] = \plan3dHeader::all();
+        $pageData['MENU_VIEWS_LIST']     = \view::all();
+        $pageData['MENU_PLANS_LIST']     = \planHeader::all();
+        $pageData['MENU_PLANS3D_LIST']   = \plan3dHeader::all();
         if (is_object($currentPlugin) && $currentPlugin->getIssue()) {
             $pageData['MENU_CURRENT_PLUGIN_ISSUE'] = $currentPlugin->getIssue();
         }
         $pageData['MENU_HTML_GLOBAL_SUMMARY'] = JeeObjectManager::getGlobalHtmlSummary();
-        $pageData['PRODUCT_IMAGE'] = \config::byKey('product_image');
-        $pageData['USER_LOGIN'] = $_SESSION['user']->getLogin();
-        $pageData['USER_ISCONNECTED'] = $_SESSION['user']->is_Connected();
-        $pageData['USER_AVATAR'] = $_SESSION['user']->getOptions('avatar');
-        $pageData['IS_ADMIN'] = Status::isConnectAdmin();
-        $pageData['CAN_SUDO'] = \nextdom::isCapable('sudo');
-        $pageData['NEXTDOM_VERSION'] = \nextdom::version();
-        $pageData['MENU_PLUGIN_HELP'] = Utils::init('m');
-        $pageData['MENU_PLUGIN_PAGE'] = Utils::init('p');
-        $pageData['messages'] = \message::all();
-
+        $pageData['PRODUCT_IMAGE']            = \config::byKey('product_image');
+        $pageData['USER_LOGIN']               = $_SESSION['user']->getLogin();
+        $pageData['IS_ADMIN']                 = Status::isConnectAdmin();
+        $pageData['CAN_SUDO']                 = \nextdom::isCapable('sudo');
+        $pageData['NEXTDOM_VERSION']          = \nextdom::version();
+        $pageData['MENU_PLUGIN_HELP']         = Utils::init('m');
+        $pageData['MENU_PLUGIN_PAGE']         = Utils::init('p');
     }
 
-
-
+    /**
+     * @param $pageData
+     * @param $configs
+     * @throws \Exception
+     */
     private static function initHeaderData(&$pageData, $configs)
     {
         // TODO: Remplacer par un include dans twig
@@ -318,6 +322,9 @@ class PrepareView
         $pageData['CUSTOM_CSS'] = ob_get_clean();
     }
 
+    /**
+     * @param $pageData
+     */
     private static function initJsPool(&$pageData)
     {
         if (file_exists(NEXTDOM_ROOT . '/js/base.js')) {
@@ -363,6 +370,10 @@ class PrepareView
         }
     }
 
+    /**.
+     * @param $pageData
+     * @param $configs
+     */
     private static function initCssPool(&$pageData, $configs)
     {
         $nextdomThemeDir = NEXTDOM_ROOT . '/css/themes/';
@@ -432,6 +443,14 @@ class PrepareView
         }
     }
 
+    /**
+     * @param Render $render
+     * @param array $pageContent
+     * @param string $page
+     * @param $currentPlugin
+     * @return string
+     * @throws \Exception
+     */
     private static function getContent(Render $render, array &$pageContent, string $page, $currentPlugin) {
         if ($currentPlugin !== null && is_object($currentPlugin)) {
             ob_start();
