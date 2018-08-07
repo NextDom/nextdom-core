@@ -294,6 +294,8 @@ class PrepareView
         }
         $pageData['MENU_HTML_GLOBAL_SUMMARY'] = JeeObjectManager::getGlobalHtmlSummary();
         $pageData['PRODUCT_IMAGE']            = \config::byKey('product_image');
+        $pageData['USER_ISCONNECTED']         = $_SESSION['user']->is_Connected();
+        $pageData['USER_AVATAR']              = $_SESSION['user']->getOptions('avatar');
         $pageData['USER_LOGIN']               = $_SESSION['user']->getLogin();
         $pageData['IS_ADMIN']                 = Status::isConnectAdmin();
         $pageData['CAN_SUDO']                 = \nextdom::isCapable('sudo');
