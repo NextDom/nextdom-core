@@ -24,24 +24,20 @@
                         <span class="label label-warning">{{ MENU_NB_MESSAGES }}</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">You have {{ MENU_NB_MESSAGES }} notifications</li>
-                        <li class="footer"><a href="index.php?v=d&p=update">View all</a></li>
+                        {% for message in messages |slice(0, 15) %}
+                            <li>
+                                <a class="removeMessage" href="#"><i class="fa fa-circle-o"> {{ message.getPlugin()}}: {{ message.getMessage | slice(0, 25) }} ... </i></a>
+                            </li>
+                        {% endfor %}
+                        <li class="footer" id="bt_messageModal"><a href="#">View all</a></li>
                     </ul>
                 </li>
                 <!-- Tasks: style can be found in dropdown.less -->
-                <li class="dropdown tasks-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <li class="tasks-menu">
+                    <a href="index.php?v=d&p=update">
                         <i class="fa fa-flag-o"></i>
                         <span class="label label-danger">{{ MENU_NB_UPDATES }}</span>
                     </a>
-                    <ul class="dropdown-menu">
-                        <li class="header">You have {{ MENU_NB_UPDATES }} update</li>
-                        <li>
-                        </li>
-                        <li class="footer">
-                            <a href="index.php?v=d&p=update">View all tasks</a>
-                        </li>
-                    </ul>
                 </li>
 
                 <!-- Control Sidebar Toggle Button -->
