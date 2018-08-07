@@ -4013,6 +4013,12 @@ table.text-center th {
  * Skin: Black
  * -----------
  */
+.skin-black .logo-mini-img {
+  content: url("/core/img/NextDom/NextDom_Square_AlphaWhite.png"); }
+
+.skin-black .logo-lg-img {
+  content: url("/core/img/NextDom/NextDom_Wide_AlphaWhiteBlack.png"); }
+
 /* skin-black navbar */
 .skin-black .main-header {
   -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
@@ -4173,10 +4179,10 @@ table.text-center th {
  * -----------
  */
 .skin-black-light .logo-mini-img {
-  content: url("/core/img/NextDom_Square_AlphaWhiteBlue.png"); }
+  content: url("/core/img/NextDom/NextDom/NextDom_Square_AlphaWhiteBlue.png"); }
 
 .skin-black-light .logo-lg-img {
-  content: url("/core/img/NextDom_Wide_AlphaWhiteBlue.png"); }
+  content: url("/core/img/NextDom/NextDom/NextDom_Wide_AlphaWhiteBlue.png"); }
 
 /* skin-black navbar */
 .skin-black-light .main-header {
@@ -4345,6 +4351,12 @@ table.text-center th {
  * Skin: Blue
  * ----------
  */
+.skin-blue .logo-mini-img {
+  content: url("/core/img/NextDom/NextDom_Square_AlphaWhite.png"); }
+
+.skin-blue .logo-lg-img {
+  content: url("/core/img/NextDom/NextDom_Wide_AlphaWhiteBlack.png"); }
+
 .skin-blue .main-header .navbar {
   background-color: #3c8dbc; }
 
@@ -4485,6 +4497,12 @@ table.text-center th {
  * Skin: Blue
  * ----------
  */
+.skin-green-light .logo-mini-img {
+  content: url("/core/img/NextDom/NextDom_Square_AlphaWhite.png"); }
+
+.skin-green-light .logo-lg-img {
+  content: url("/core/img/NextDom/NextDom_Wide_AlphaWhiteBlack.png"); }
+
 .skin-blue-light .main-header .navbar {
   background-color: #3c8dbc; }
 
@@ -4644,8 +4662,11 @@ table.text-center th {
  * Skin: Green
  * -----------
  */
-.skin-yellow-light .logo-mini-img {
-  content: url("/core/img/NextDom_Square_AlphaWhite.png"); }
+.skin-green .logo-mini-img {
+  content: url("/core/img/NextDom/NextDom_Square_AlphaWhite.png"); }
+
+.skin-green .logo-lg-img {
+  content: url("/core/img/NextDom/NextDom_Wide_AlphaWhiteBlack.png"); }
 
 .skin-green .main-header .navbar {
   background-color: #00a65a; }
@@ -4780,10 +4801,10 @@ table.text-center th {
  * -----------
  */
 .skin-green-light .logo-mini-img {
-  content: url("/core/img/NextDom_Square_AlphaWhite.png"); }
+  content: url("/core/img/NextDom/NextDom_Square_AlphaWhite.png"); }
 
 .skin-green-light .logo-lg-img {
-  content: url("/core/img/NextDom_Wide_AlphaWhiteBlack.png"); }
+  content: url("/core/img/NextDom/NextDom_Wide_AlphaWhiteBlack.png"); }
 
 .skin-green-light .main-header .navbar {
   background-color: #00a65a; }
@@ -4934,10 +4955,10 @@ table.text-center th {
  * ----------
  */
 .skin-nextdom .logo-mini-img {
-  content: url("/core/img/NextDom_Square_AlphaBlackWhite.png"); }
+  content: url("/core/img/NextDom/NextDom_Square_AlphaBlackWhite.png"); }
 
 .skin-nextdom .logo-lg-img {
-  content: url("/core/img/NextDom_Wide_AlphaWhiteBlack.png"); }
+  content: url("/core/img/NextDom/NextDom_Wide_AlphaWhiteBlack.png"); }
 
 .skin-nextdom .main-header .navbar {
   background-color: #33B8CC; }
@@ -5080,10 +5101,10 @@ table.text-center th {
  * ----------
  */
 .skin-nextdom-light .logo-mini-img {
-  content: url("/core/img/NextDom_Square_AlphaBlackWhite.png"); }
+  content: url("/core/img/NextDom/NextDom_Square_AlphaBlackWhite.png"); }
 
 .skin-nextdom-light .logo-lg-img {
-  content: url("/core/img/NextDom_Wide_AlphaWhiteBlack.png"); }
+  content: url("/core/img/NextDom/NextDom_Wide_AlphaWhiteBlack.png"); }
 
 .skin-nextdom-light .main-header .navbar {
   background-color: #33B8CC; }
@@ -5245,10 +5266,10 @@ table.text-center th {
  * ------------
  */
 .skin-purple .logo-mini-img {
-  content: url("/core/img/NextDom_Square_AlphaWhite.png"); }
+  content: url("/core/img/NextDom/NextDom_Square_AlphaWhite.png"); }
 
 .skin-purple .logo-lg-img {
-  content: url("/core/img/NextDom_Wide_AlphaBlueWhite.png"); }
+  content: url("/core/img/NextDom/NextDom_Wide_AlphaBlueWhite.png"); }
 
 .skin-purple .main-header .navbar {
   background-color: #605ca8; }
@@ -5383,10 +5404,10 @@ table.text-center th {
  * ---------
  */
 .skin-red .logo-mini-img {
-  content: url("/core/img/NextDom_Square_AlphaBlackWhite.png"); }
+  content: url("/core/img/NextDom/NextDom_Square_AlphaBlackWhite.png"); }
 
 .skin-red .logo-lg-img {
-  content: url("/core/img/NextDom_Wide_AlphaWhiteBlack.png"); }
+  content: url("/core/img/NextDom/NextDom_Wide_AlphaWhiteBlack.png"); }
 
 .skin-red .main-header .navbar {
   background-color: #dd4b39; }
@@ -5521,10 +5542,10 @@ table.text-center th {
  * ---------
  */
 .skin-red-light .logo-mini-img {
-  content: url("/core/img/NextDom_Square_AlphaBlackWhite.png"); }
+  content: url("/core/img/NextDom/NextDom_Square_AlphaBlackWhite.png"); }
 
 .skin-red-light .logo-lg-img {
-  content: url("/core/img/NextDom_Wide_AlphaWhiteBlack.png"); }
+  content: url("/core/img/NextDom/NextDom_Wide_AlphaWhiteBlack.png"); }
 
 .skin-red-light .main-header .navbar {
   background-color: #dd4b39; }
@@ -5675,10 +5696,10 @@ table.text-center th {
  * ------------
  */
 .skin-yellow .logo-mini-img {
-  content: url("/core/img/NextDom_Square_AlphaBlackWhite.png"); }
+  content: url("/core/img/NextDom/NextDom_Square_AlphaBlackWhite.png"); }
 
 .skin-yellow .logo-lg-img {
-  content: url("/core/img/NextDom_Wide_AlphaWhiteBlack.png"); }
+  content: url("/core/img/NextDom/NextDom_Wide_AlphaWhiteBlack.png"); }
 
 .skin-yellow .main-header .navbar {
   background-color: #f39c12; }
@@ -5813,10 +5834,10 @@ table.text-center th {
  * ------------
  */
 .skin-yellow-light .logo-mini-img {
-  content: url("/core/img/NextDom_Square_AlphaBlackWhite.png"); }
+  content: url("/core/img/NextDom/NextDom_Square_AlphaBlackWhite.png"); }
 
 .skin-yellow-light .logo-lg-img {
-  content: url("/core/img/NextDom_Wide_AlphaWhiteBlack.png"); }
+  content: url("/core/img/NextDom/NextDom_Wide_AlphaWhiteBlack.png"); }
 
 .skin-yellow-light .main-header .navbar {
   background-color: #f39c12; }
@@ -5967,10 +5988,10 @@ table.text-center th {
  * ------------
  */
 .skin-purple-light .logo-mini-img {
-  content: url("/core/img/NextDom_Square_AlphaWhite.png"); }
+  content: url("/core/img/NextDom/NextDom_Square_AlphaWhite.png"); }
 
 .skin-purple-light .logo-lg-img {
-  content: url("/core/img/NextDom_Wide_AlphaBlueWhite.png"); }
+  content: url("/core/img/NextDom/NextDom_Wide_AlphaBlueWhite.png"); }
 
 .skin-purple-light .main-header .navbar {
   background-color: #605ca8; }
