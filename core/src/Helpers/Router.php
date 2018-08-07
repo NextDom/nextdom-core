@@ -151,7 +151,7 @@ class Router
                 $pageContent['CSS_POOL'] = [];
                 $pageContent['JS_VARS'] = [];
                 $pageContent['content'] = \NextDom\Helpers\Controller::$controllerRoute($render, $pageContent);
-                $render->show('/desktop/ajax_content.html.twig', $pageContent);
+                $render->show('/layouts/ajax_content.html.twig', $pageContent);
             }
         } catch (\Exception $e) {
             ob_end_clean();
