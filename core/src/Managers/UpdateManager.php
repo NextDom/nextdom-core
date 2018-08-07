@@ -37,7 +37,7 @@ class UpdateManager
 {
     const DB_CLASS_NAME = 'update';
     const CLASS_NAME    = 'update';
-    
+
     /**
      * Check all updates
      * @param string $filter
