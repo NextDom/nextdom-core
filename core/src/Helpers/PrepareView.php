@@ -297,7 +297,11 @@ class PrepareView
         $pageData['NEXTDOM_VERSION'] = \nextdom::version();
         $pageData['MENU_PLUGIN_HELP'] = Utils::init('m');
         $pageData['MENU_PLUGIN_PAGE'] = Utils::init('p');
+        $pageData['messages'] = \message::all();
+
     }
+
+
 
     private static function initHeaderData(&$pageData, $configs)
     {
