@@ -1064,7 +1064,7 @@ class ScenarioExpressionManager
 
     /**
      * TODO ????
-     *
+     * @ il semble judicieu de rajouter l'interface SenarioInterface à $senario, elle est prete, faut se servir...
      * @param string $name
      * @param null $scenario
      * @return int
