@@ -1200,7 +1200,7 @@ class ScenarioExpressionManager
         $date2 = new \DateTime($date2Str);
         $interval = $date1->diff($date2);
         if ($intervalFormat == 's') {
-            return $interval->format('%s') + 60 * $interval->format('%m') + 3600 * $interval->format('%h') + 86400 * $interval->format('%a');
+            return $interval->format('%s') + 60 * $interval->format('%i') + 3600 * $interval->format('%h') + 86400 * $interval->format('%a');
         }
         if ($intervalFormat == 'm') {
             return $interval->format('%i') + 60 * $interval->format('%h') + 1440 * $interval->format('%a');
