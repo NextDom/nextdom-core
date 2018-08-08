@@ -1,7 +1,7 @@
 {% include '/commons/header.html.twig' %}
 {% if CSS_POOL is defined %}
     {% for cssFile in CSS_POOL %}
-        <script src="{{ cssFile }}"></script>
+        <link href="{{ cssFile }}" rel="stylesheet">
     {% endfor %}
 {% endif %}
 <body class="hold-transition login-page">
