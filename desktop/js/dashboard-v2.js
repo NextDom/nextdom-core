@@ -12,6 +12,14 @@
 * @license MIT <http://opensource.org/licenses/MIT>
 */
 
+$(function () {
+    $('input').iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        radioClass: 'iradio_square-blue',
+        increaseArea: '20%' /* optional */
+    });
+});
+
 // Make sure jQuery has been loaded
 if (typeof jQuery === 'undefined') {
     throw new Error('AdminLTE requires jQuery')
