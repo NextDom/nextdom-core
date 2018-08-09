@@ -74,8 +74,8 @@ class PluginManager
     /**
      * Get the path of the info.json file from the plugin ID
      *
-     * @param string $id Identifiant du plugin
-     * @return string Chemin vers le fichier info.json
+     * @param string $id Plugin ID
+     * @return string Path to the info.json file
      */
     public static function getPathById(string $id): string
     {
@@ -96,9 +96,8 @@ class PluginManager
      * Get the list of plugins
      *
      * @param bool $activatedOnly Filter only activated plugins
-     * @param bool $orderByCategory Filter only activated plugins
+     * @param bool $orderByCategory Sort by category
      * @param bool $nameOnly Get only plugin names
-     *
      * @return array List of plugins
      *
      * @throws \Exception
@@ -222,7 +221,7 @@ class PluginManager
     }
 
     /**
-     * Tâche exécutée tous les jours
+     * Task performed every day
      *
      * @throws \Exception
      */
@@ -242,9 +241,9 @@ class PluginManager
     }
 
     /**
-     * Démarre un tâche cron
+     * Start a cron job
      *
-     * @param string $cronType Type de tâche cron, voir PluginManagerCronEnum
+     * @param string $cronType Cron job type, see PluginManagerCronEnum
      * // TODO Rajouter un test sur l'enum ???
      * @throws \Exception
      */
@@ -271,7 +270,7 @@ class PluginManager
     }
 
     /**
-     * Démarre les daemons des plugins
+     * Start plugin daemons
      *
      * @throws \Exception
      */
