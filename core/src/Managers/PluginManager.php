@@ -15,7 +15,7 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* This file is part of NextDom.
+/* This file is part of NextDom Software.
  *
  * NextDom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ class PluginManager
     private static $enabledPlugins = null;
 
     /**
-     * Obtenir un plugin à partir de son identifiant
+     * Get a plugin from his username
      *
      * @param string $id Identifiant du plugin
      *
@@ -72,10 +72,10 @@ class PluginManager
     }
 
     /**
-     * Obtenir le chemin du fichier info.json à partir de l'identifiant du plugin
+     * Get the path of the info.json file from the plugin ID
      *
-     * @param string $id Identifiant du plugin
-     * @return string Chemin vers le fichier info.json
+     * @param string $id Plugin ID
+     * @return string Path to the info.json file
      */
     public static function getPathById(string $id): string
     {
@@ -93,19 +93,16 @@ class PluginManager
     }
 
     /**
-     * Obtenir la liste des plugins
+     * Get the list of plugins
      *
-     * @param bool $activatedOnly Filtrer uniquement les plugins activés
-     * @param bool $orderByCategory Trier par catégorie
-     * @param bool $nameOnly Obtenir uniquement les noms des plugins
-     *
-     * @return array Liste des plugins
+     * @param bool $activatedOnly Filter only activated plugins
+     * @param bool $orderByCategory Sort by category
+     * @param bool $nameOnly Get only plugin names
+     * @return array List of plugins
      *
      * @throws \Exception
      */
-    public static function listPlugin(bool $activatedOnly = false,
-                                      bool $orderByCategory = false,
-                                      bool $nameOnly = false): array
+    public static function listPlugin(bool $activatedOnly = false, bool $orderByCategory = false, bool $nameOnly = false): array
     {
         $listPlugin = array();
         if ($activatedOnly) {
@@ -123,9 +120,7 @@ class PluginManager
                 foreach ($queryResults as $row) {
                     try {
                         $listPlugin[] = self::byId($row['plugin']);
-                    } catch (\Exception $e) {
-                        \log::add('plugin', 'error', $e->getMessage(), 'pluginNotFound::' . $row['plugin']);
-                    } catch (\Error $e) {
+                    } catch (\Throwable $e) {
                         \log::add('plugin', 'error', $e->getMessage(), 'pluginNotFound::' . $row['plugin']);
                     }
                 }
@@ -138,9 +133,7 @@ class PluginManager
                     if (file_exists($pathInfoPlugin)) {
                         try {
                             $listPlugin[] = self::byId($pathInfoPlugin);
-                        } catch (\Exception $e) {
-                            \log::add('plugin', 'error', $e->getMessage(), 'pluginNotFound::' . $pathInfoPlugin);
-                        } catch (\Error $e) {
+                          } catch (\Throwable $e) {
                             \log::add('plugin', 'error', $e->getMessage(), 'pluginNotFound::' . $pathInfoPlugin);
                         }
                     }
@@ -228,7 +221,7 @@ class PluginManager
     }
 
     /**
-     * Tâche exécutée tous les jours
+     * Task performed every day
      *
      * @throws \Exception
      */
@@ -248,9 +241,9 @@ class PluginManager
     }
 
     /**
-     * Démarre un tâche cron
+     * Start a cron job
      *
-     * @param string $cronType Type de tâche cron, voir PluginManagerCronEnum
+     * @param string $cronType Cron job type, see PluginManagerCronEnum
      * // TODO Rajouter un test sur l'enum ???
      * @throws \Exception
      */
@@ -268,11 +261,8 @@ class PluginManager
                     \cache::set('plugin::'.$cronType.'::last', $pluginId);
                     try {
                         $pluginId::$cronType();
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         \log::add($pluginId, 'error', \__('Erreur sur la fonction cron du plugin : ', __FILE__) . $e->getMessage());
-                    } catch (\Error $e) {
-                        \log::add($pluginId, 'error', \__('Erreur sur la fonction cron du plugin : ', __FILE__) . $e->getMessage());
-                    }
                 }
             }
         }
@@ -280,7 +270,7 @@ class PluginManager
     }
 
     /**
-     * Démarre les daemons des plugins
+     * Start plugin daemons
      *
      * @throws \Exception
      */
@@ -292,9 +282,7 @@ class PluginManager
                 $pluginId = $plugin->getId();
                 try {
                     $pluginId::start();
-                } catch (\Exception $e) {
-                    \log::add($pluginId, 'error', \__('Erreur sur la fonction start du plugin : ', __FILE__) . $e->getMessage());
-                } catch (\Error $e) {
+                } catch (\Throwable $e) {
                     \log::add($pluginId, 'error', \__('Erreur sur la fonction start du plugin : ', __FILE__) . $e->getMessage());
                 }
             }
@@ -314,9 +302,7 @@ class PluginManager
                 $pluginId = $plugin->getId();
                 try {
                     $pluginId::stop();
-                } catch (\Exception $e) {
-                    \log::add($pluginId, 'error', \__('Erreur sur la fonction stop du plugin : ', __FILE__) . $e->getMessage());
-                } catch (\Error $e) {
+                } catch (\Throwable $e) {
                     \log::add($pluginId, 'error', \__('Erreur sur la fonction stop du plugin : ', __FILE__) . $e->getMessage());
                 }
             }
@@ -341,7 +327,7 @@ class PluginManager
                 } catch (\Exception $e) {
 
                 }
-            } else if ($dependancy_info['state'] == DaemonStateEnum::IN_PROGRESS && $dependancy_info['duration'] > $plugin->getMaxDependancyInstallTime()) {
+            } elseif ($dependancy_info['state'] == DaemonStateEnum::IN_PROGRESS && $dependancy_info['duration'] > $plugin->getMaxDependancyInstallTime()) {
                 if (isset($dependancy_info['progress_file']) && file_exists($dependancy_info['progress_file'])) {
                     shell_exec('rm ' . $dependancy_info['progress_file']);
                 }

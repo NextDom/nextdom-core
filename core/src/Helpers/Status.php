@@ -1,6 +1,6 @@
 <?php
 
-/* This file is part of NextDom.
+/* This file is part of NextDom Software.
  *
  * NextDom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,28 +21,28 @@ namespace NextDom\Helpers;
 use NextDom\Exceptions\CoreException;
 
 /**
- * Classe temporaire pour stocker différents états.
+ * Temporary class to store different states.
  */
 class Status
 {
 
     /**
-     * @var bool Statut de la connexion de l'utilisateur
+     * @var bool Status of the user connection
      */
     private static $connectState = false;
 
     /**
-     * @var bool Statut de la connexion de l'utilisateur en administrateur
+     * @var bool Status of the user login as administrator
      */
     private static $connectAdminState = false;
 
     /**
-     * @var bool Statut du mode récupération
+     * @var bool Recovery mode status
      */
     private static $rescueMode = false;
 
     /**
-     * Initialiser le statut du mode récupération
+     * Initialize the status of the recovery mode
      */
     public static function initRescueModeState()
     {
@@ -52,7 +52,7 @@ class Status
     }
 
     /**
-     * Initialiser le statut de la connexion de l'utilisateur
+     * Initialize the status of the user's connection
      */
     public static function initConnectState()
     {
@@ -61,8 +61,8 @@ class Status
     }
 
     /**
-     * Obtenir le statut de la connexion de l'utilisateur
-     * @return bool Statut de la connexion de l'utilisateur
+     * Get the status of the user login
+     * @return bool Status of the user connection
      */
     public static function isConnect(): bool
     {
@@ -70,7 +70,7 @@ class Status
     }
 
     /**
-     * Test si l'utilisateur est connecté et lève une exception si ce n'est pas le cas.
+     * Test if the user is logged in and throws an exception if this is not the case.
      * @return bool 
      * @throws CoreException
      */
@@ -96,8 +96,8 @@ class Status
     }
 
     /**
-     * Obtenir le statut de la connexion de l'utilisateur en administrateur
-     * @return bool Statut de la connexion de l'utilisateur en administrateur
+     * Get the login status of the user as an administrator
+     * @return bool Status of the user login as administrator
      */
     public static function isConnectAdmin(): bool
     {
@@ -105,8 +105,8 @@ class Status
     }
 
     /**
-     * Obtenir le statut du mode récupération
-     * @return bool Statut du mode récupération
+     * Get the status of the recovery mode
+     * @return bool Recovery mode status
      */
     public static function isRescueMode(): bool
     {
