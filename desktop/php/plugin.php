@@ -7,7 +7,6 @@ sendVarToJS('sel_plugin_id', init('id', '-1'));
 $plugins_list = plugin::listPlugin(false, true);
 ?>
 <section class="content">
-<div id='div_alertPluginConfiguration'></div>
 <div class="row row-overflow">
     <div class="col-md-12 col-sm-12" id="div_resumePluginList" style="border-left: solid 1px #EEE; padding-left: 25px;">
         <div class="box">
