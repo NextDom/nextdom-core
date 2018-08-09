@@ -15,7 +15,7 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* This file is part of NextDom.
+/* This file is part of NextDom Software.
  *
  * NextDom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,10 +36,10 @@ namespace NextDom\Managers;
 class ScenarioSubElementManager
 {
     const DB_CLASS_NAME = 'scenarioSubElement';
-    const CLASS_NAME = 'scenarioSubElement';
+    const CLASS_NAME    = 'scenarioSubElement';
 
     /**
-     * Obtenir un sous élément d'un scénario à partir de son identifiant
+     * Obtain a sub-element of a scenario from its identifier
      *
      * @param $id
      *
@@ -57,10 +57,10 @@ class ScenarioSubElementManager
     }
 
     /**
-     * Obtenir les sous-éléments d'un scénarios
+     * Get the sub-elements of a scenario
      *
-     * @param $scenarioElementId Identifiant de l'élément du scénario
-     * @param string $filterByType Filtrer un type de sous-éléments
+     * @param $scenarioElementId Identifier of the scenario element
+     * @param string $filterByType Filter a type of sub-elements
      *
      * @return array|mixed|null
      *
