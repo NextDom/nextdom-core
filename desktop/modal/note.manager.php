@@ -30,7 +30,7 @@ if (!isConnect('admin')) {
     function updateNoteList(){
         nextdom.note.all({
             error: function (error) {
-                $('#div_noteManagementAlert').showAlert({message: error.message, level: 'danger'});
+                notify('Core',error.message,'error');
             },
             success: function (notes) {
                 var note = $('#div_noteManagerDisplay').getValues('.noteAttr')[0];
@@ -52,10 +52,10 @@ if (!isConnect('admin')) {
             nextdom.note.save({
                 note : {name : name},
                 error: function (error) {
-                    $('#div_noteManagementAlert').showAlert({message: error.message, level: 'danger'});
+                    notify('Core',error.message,'error');
                 },
                 success: function (notes) {
-                    $('#div_noteManagementAlert').showAlert({message: '{{Note créée avec succès}}', level: 'success'});
+                    notify('Core','{{Note créée avec succès}}','success');
                     updateNoteList();
                 }
             });
@@ -68,7 +68,7 @@ if (!isConnect('admin')) {
         nextdom.note.byId({
             id : $(this).attr('data-id'),
             error: function (error) {
-                $('#div_noteManagementAlert').showAlert({message: error.message, level: 'danger'});
+                notify('Core',error.message,'error');
             },
             success: function (note) {
                 $('#div_noteManagerDisplay .noteAttr').value('');
@@ -84,10 +84,10 @@ if (!isConnect('admin')) {
         nextdom.note.save({
             note : note,
             error: function (error) {
-                $('#div_noteManagementAlert').showAlert({message: error.message, level: 'danger'});
+                notify('Core',error.message,'error');
             },
             success: function (notes) {
-                $('#div_noteManagementAlert').showAlert({message: '{{Note sauvegardée avec succès}}', level: 'success'});
+                notify('Core','{{Note sauvegardée avec succès}}','success');
                 updateNoteList();
             }
         });
@@ -100,10 +100,10 @@ if (!isConnect('admin')) {
             nextdom.note.remove({
                 id : note.id,
                 error: function (error) {
-                    $('#div_noteManagementAlert').showAlert({message: error.message, level: 'danger'});
+                    notify('Core',error.message,'error');
                 },
                 success: function (notes) {
-                    $('#div_noteManagementAlert').showAlert({message: '{{Note supprimée avec succès}}', level: 'success'});
+                    notify('Core','{{Note supprimée avec succès}}','success');
                     $('#div_noteManagerDisplay .noteAttr').value('');
                     updateNoteList();
                 }

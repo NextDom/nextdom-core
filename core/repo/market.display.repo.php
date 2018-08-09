@@ -312,7 +312,7 @@ if ($market->getLanguage('it_IT') == 1) {
       repo : 'market',
       version: $(this).attr('data-version'),
       error: function (error) {
-        $('#div_alertMarketDisplay').showAlert({message: error.message, level: 'danger'});
+        notify('Core',error.message,'error');
       },
       success: function (data) {
        if(market_display_info.type == 'plugin'){
@@ -337,7 +337,7 @@ if ($market->getLanguage('it_IT') == 1) {
       id: id,
       repo : 'market',
       error: function (error) {
-        $('#div_alertMarketDisplay').showAlert({message: error.message, level: 'danger'});
+        notify('Core',error.message,'error');
       },
       success: function (data) {
        $.showLoading();
@@ -353,7 +353,7 @@ if ($market->getLanguage('it_IT') == 1) {
      repo : 'market',
      rating: $(this).val(),
      error: function (error) {
-      $('#div_alertMarketDisplay').showAlert({message: error.message, level: 'danger'});
+      notify('Core',error.message,'error');
     }
   });
   });

@@ -94,7 +94,7 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
   nextdom.plugin.get({
     id: $(this).attr('data-plugin_id'),
     error: function (error) {
-      alert_div_plugin_configuration.showAlert({message: error.message, level: 'danger'});
+      notify('Core',error.message,'error');
     },
     success: function (data) {
       $('#span_plugin_id').html(data.id);
@@ -288,7 +288,7 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
       configuration: $('#div_plugin_configuration').getValues('.configKey')[0],
       plugin: $('.li_plugin.active').attr('data-plugin_id'),
       error: function (error) {
-        alert_div_plugin_configuration.showAlert({message: error.message, level: 'danger'});
+        notify('Core',error.message,'error');
       },
       success: function (data) {
         $('#div_plugin_configuration').setValues(data, '.configKey');
@@ -304,7 +304,7 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
     configuration: $('#div_plugin_panel').getValues('.configKey')[0],
     plugin: $('.li_plugin.active').attr('data-plugin_id'),
     error: function (error) {
-      alert_div_plugin_configuration.showAlert({message: error.message, level: 'danger'});
+      notify('Core',error.message,'error');
     },
     success: function (data) {
       $('#div_plugin_panel').setValues(data, '.configKey');
@@ -315,7 +315,7 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
     configuration: $('#div_plugin_functionality').getValues('.configKey')[0],
     plugin: $('.li_plugin.active').attr('data-plugin_id'),
     error: function (error) {
-      alert_div_plugin_configuration.showAlert({message: error.message, level: 'danger'});
+      notify('Core',error.message,'error');
     },
     success: function (data) {
       $('#div_plugin_functionality').setValues(data, '.configKey');
@@ -325,7 +325,7 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
   nextdom.config.load({
     configuration: $('#div_plugin_log').getValues('.configKey')[0],
     error: function (error) {
-      alert_div_plugin_configuration.showAlert({message: error.message, level: 'danger'});
+      notify('Core',error.message,'error');
     },
     success: function (data) {
       $('#div_plugin_log').setValues(data, '.configKey');
@@ -350,7 +350,7 @@ $('#span_plugin_delete').delegate('.removePlugin','click',function(){
       nextdom.update.remove({
         id: _el.attr('data-market_logicalId'),
         error: function (error) {
-          alert_div_plugin_configuration.showAlert({message: error.message, level: 'danger'});
+          notify('Core',error.message,'error');
         },
         success: function () {
          loadPage('index.php?v=d&p=plugin');
@@ -366,7 +366,7 @@ $("#div_plugin_toggleState").delegate(".togglePlugin", 'click', function () {
     id: _el.attr('data-plugin_id'),
     state: _el.attr('data-state'),
     error: function (error) {
-      alert_div_plugin_configuration.showAlert({message: error.message, level: 'danger'});
+      notify('Core',error.message,'error');
     },
     success: function () {
       if($('#md_modal').is(':visible')){
@@ -427,7 +427,7 @@ $('#bt_savePluginPanelConfig').off('click').on('click',function(){
   configuration: $('#div_plugin_panel').getValues('.configKey')[0],
   plugin: $('.li_plugin.active').attr('data-plugin_id'),
   error: function (error) {
-    alert_div_plugin_configuration.showAlert({message: error.message, level: 'danger'});
+    notify('Core',error.message,'error');
   },
   success: function () {
     alert_div_plugin_configuration.showAlert({message: '{{Sauvegarde de la configuration des panneaux effectuée}}', level: 'success'});
@@ -441,7 +441,7 @@ $('#bt_savePluginFunctionalityConfig').off('click').on('click',function(){
   configuration: $('#div_plugin_functionality').getValues('.configKey')[0],
   plugin: $('.li_plugin.active').attr('data-plugin_id'),
   error: function (error) {
-    alert_div_plugin_configuration.showAlert({message: error.message, level: 'danger'});
+    notify('Core',error.message,'error');
   },
   success: function () {
     alert_div_plugin_configuration.showAlert({message: '{{Sauvegarde des fonctionalités effectuée}}', level: 'success'});
@@ -454,7 +454,7 @@ $('#bt_savePluginLogConfig').off('click').on('click',function(){
  nextdom.config.save({
   configuration: $('#div_plugin_log').getValues('.configKey')[0],
   error: function (error) {
-    alert_div_plugin_configuration.showAlert({message: error.message, level: 'danger'});
+    notify('Core',error.message,'error');
   },
   success: function () {
     alert_div_plugin_configuration.showAlert({message: '{{Sauvegarde de la configuration des logs effectuée}}', level: 'success'});
@@ -478,7 +478,7 @@ function savePluginConfig(_param) {
     configuration: $('#div_plugin_configuration').getValues('.configKey')[0],
     plugin: $('.li_plugin.active').attr('data-plugin_id'),
     error: function (error) {
-      alert_div_plugin_configuration.showAlert({message: error.message, level: 'danger'});
+      notify('Core',error.message,'error');
     },
     success: function () {
       alert_div_plugin_configuration.showAlert({message: '{{Sauvegarde effectuée}}', level: 'success'});
@@ -496,7 +496,7 @@ function savePluginConfig(_param) {
           slave_id: 0,
           forceRestart: 1,
           error: function (error) {
-            alert_div_plugin_configuration.showAlert({message: error.message, level: 'danger'});
+            notify('Core',error.message,'error');
           },
           success: function (data) {
             $("#div_plugin_deamon").load('index.php?v=d&modal=plugin.deamon&plugin_id='+$('.li_plugin.active').attr('data-plugin_id'));

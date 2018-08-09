@@ -430,7 +430,7 @@ foreach (planHeader::all() as $plan) {
     dataType: 'json',
     done: function (e, data) {
       if (data.result.state != 'ok') {
-        $('#div_alertPlanConfigure').showAlert({message: data.result.result, level: 'danger'});
+          notify('Core',data.result.result,'error');
         return;
       }
     }
@@ -481,7 +481,7 @@ foreach (planHeader::all() as $plan) {
     },
     success: function (data) {
       if (data.state != 'ok') {
-        $('#div_alertPlanConfigure').showAlert({message: data.result, level: 'danger'});
+          notify('Core',data.result,'error');
         return;
       }
       $('.link_type:not(.link_'+data.result.link_type+')').remove()
@@ -536,10 +536,10 @@ foreach (planHeader::all() as $plan) {
   nextdom.plan.save({
     plans: plans,
     error: function (error) {
-      $('#div_alertPlanConfigure').showAlert({message: error.message, level: 'danger'});
+      notify('Core',error.message,'error');
     },
     success: function () {
-      $('#div_alertPlanConfigure').showAlert({message: 'Design sauvegardé', level: 'success'});
+        notify('Core','Design sauvegardé','success');
       displayPlan();
       $('#fd_planConfigure').closest("div.ui-dialog-content").dialog("close");
     },
