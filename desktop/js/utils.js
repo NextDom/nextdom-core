@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -14,17 +13,17 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
- uniqId_count = 0;
- modifyWithoutSave = false;
- nbActiveAjaxRequest = 0;
- nextdomBackgroundImg = null;
- utid = Date.now();
+uniqId_count = 0;
+modifyWithoutSave = false;
+nbActiveAjaxRequest = 0;
+nextdomBackgroundImg = null;
+utid = Date.now();
 
- $(document).ajaxStart(function () {
+$(document).ajaxStart(function () {
     nbActiveAjaxRequest++;
     $.showLoading();
 });
- $(document).ajaxStop(function () {
+$(document).ajaxStop(function () {
     nbActiveAjaxRequest--;
     if (nbActiveAjaxRequest <= 0) {
         nbActiveAjaxRequest = 0;
@@ -32,66 +31,66 @@
     }
 });
 
- function loadPage(_url,_noPushHistory){
-  if (modifyWithoutSave) {
-    if (!confirm('{{Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?}}')) {
-        return;
+function loadPage(_url,_noPushHistory){
+    if (modifyWithoutSave) {
+        if (!confirm('{{Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?}}')) {
+            return;
+        }
+        modifyWithoutSave = false;
     }
-    modifyWithoutSave = false;
-}
-if (typeof unload_page !== "undefined") {
-    unload_page();
-}
-$("#md_modal").dialog('close');
-$("#md_modal2").dialog('close');
-if ($("#mod_insertCmdValue").length != 0) {
-    $("#mod_insertCmdValue").dialog('close');
-}
-if ($("#mod_insertDataStoreValue").length != 0) {
-    $("#mod_insertDataStoreValue").dialog('close');
-}
-if ($("#mod_insertEqLogicValue").length != 0) {
-    $("#mod_insertEqLogicValue").dialog('close');
-}
-if ($("#mod_insertCronValue").length != 0) {
-    $("#mod_insertCronValue").dialog('close');
-}
-if ($("#mod_insertActionValue").length != 0) {
-    $("#mod_insertActionValue").dialog('close');
-}
-if ($("#mod_insertScenarioValue").length != 0) {
-    $("#mod_insertScenarioValue").dialog('close');
-}
-if(!isset(_noPushHistory) || _noPushHistory == false){
-    window.history.pushState('','', _url);
-}
-if(isset(bootbox)){
-    bootbox.hideAll();
-}
-nextdom.cmd.update = Array();
-nextdom.scenario.update = Array();
-$('main').css('padding-right','').css('padding-left','').css('margin-right','').css('margin-left','');
-$('#div_pageContainer').add("#div_pageContainer *").off();
-$.hideAlert();
-$('.bt_pluginTemplateShowSidebar').remove();
-removeContextualFunction();
-if(_url.indexOf('#') == -1){
-    var url = _url+'&ajax=1';
-}else{
-    var n=_url.lastIndexOf("#");
-    var url = _url.substring(0,n)+"&ajax=1"+_url.substring(n)
-}
-nextdomBackgroundImg = null;
-$('#div_pageContainer').empty().load(url,function(){
-    $('#bt_getHelpPage').attr('data-page',getUrlVars('p')).attr('data-plugin',getUrlVars('m'));
-    var title = getUrlVars('p');
-    if(title !== false){
-     document.title = title[0].toUpperCase() + title.slice(1) +' - NextDom';
- }
- initPage();
- $('body').trigger('nextdom_page_load');
-});
-return;
+    if (typeof unload_page !== "undefined") {
+        unload_page();
+    }
+    $("#md_modal").dialog('close');
+    $("#md_modal2").dialog('close');
+    if ($("#mod_insertCmdValue").length != 0) {
+        $("#mod_insertCmdValue").dialog('close');
+    }
+    if ($("#mod_insertDataStoreValue").length != 0) {
+        $("#mod_insertDataStoreValue").dialog('close');
+    }
+    if ($("#mod_insertEqLogicValue").length != 0) {
+        $("#mod_insertEqLogicValue").dialog('close');
+    }
+    if ($("#mod_insertCronValue").length != 0) {
+        $("#mod_insertCronValue").dialog('close');
+    }
+    if ($("#mod_insertActionValue").length != 0) {
+        $("#mod_insertActionValue").dialog('close');
+    }
+    if ($("#mod_insertScenarioValue").length != 0) {
+        $("#mod_insertScenarioValue").dialog('close');
+    }
+    if(!isset(_noPushHistory) || _noPushHistory == false){
+        window.history.pushState('','', _url);
+    }
+    if(isset(bootbox)){
+        bootbox.hideAll();
+    }
+    nextdom.cmd.update = Array();
+    nextdom.scenario.update = Array();
+    $('main').css('padding-right','').css('padding-left','').css('margin-right','').css('margin-left','');
+    $('#div_pageContainer').add("#div_pageContainer *").off();
+    $.hideAlert();
+    $('.bt_pluginTemplateShowSidebar').remove();
+    removeContextualFunction();
+    if(_url.indexOf('#') == -1){
+        var url = _url+'&ajax=1';
+    }else{
+        var n=_url.lastIndexOf("#");
+        var url = _url.substring(0,n)+"&ajax=1"+_url.substring(n)
+    }
+    nextdomBackgroundImg = null;
+    $('#div_pageContainer').empty().load(url,function(){
+        $('#bt_getHelpPage').attr('data-page',getUrlVars('p')).attr('data-plugin',getUrlVars('m'));
+        var title = getUrlVars('p');
+        if(title !== false){
+            document.title = title[0].toUpperCase() + title.slice(1) +' - NextDom';
+        }
+        initPage();
+        $('body').trigger('nextdom_page_load');
+    });
+    return;
 }
 
 function removeContextualFunction(){
@@ -137,25 +136,6 @@ $(function () {
     });
 
 
-    toastr.options = {
-        "closeButton": true,
-        "debug": false,
-        "newestOnTop": false,
-        "progressBar": false,
-        "positionClass": "toast-top-center",
-        "preventDuplicates": false,
-        "onclick": null,
-        "showDuration": "300",
-        "hideDuration": "1000",
-        "timeOut": "5000",
-        "extendedTimeOut": "1000",
-        "showEasing": "swing",
-        "hideEasing": "linear",
-        "showMethod": "fadeIn",
-        "hideMethod": "fadeOut"
-    }
-
-
     $('ul.dropdown-menu [data-toggle=dropdown]').on('click', function (event) {
         event.preventDefault();
         event.stopPropagation();
@@ -169,56 +149,56 @@ $(function () {
         && !navigator.userAgent.match(/iPod/i)
         && !navigator.userAgent.match(/BlackBerry/i)
         & !navigator.userAgent.match(/Windows Phone/i)
-        ) {
+    ) {
         $('ul.dropdown-menu [data-toggle=dropdown]').on('mouseenter', function (event) {
             event.preventDefault();
             event.stopPropagation();
             $(this).parent().siblings().removeClass('open');
             $(this).parent().toggleClass('open');
         });
-}
-/*********************Gestion de l'heure********************************/
-setInterval(function () {
-    // les noms de jours / mois
-    var jours = new Array("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi");
-    var mois = new Array("janvier", "fevrier", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "decembre");
-    // on recupere la date
-    var date = new Date();
-    var minutes = date.getMinutes();
-    var secondes = date.getSeconds();
-    if(minutes < 10){
-        minutes = "0" + minutes;
     }
-    if(secondes < 10){
-        secondes = "0" + secondes;
-    }
-    // on construit le message
-    var horloge= jours[date.getDay()] + " ";   // nom du jour
-    horloge += date.getDate() + " ";   // numero du jour
-    horloge += mois[date.getMonth()] + " ";   // mois
-    horloge += date.getFullYear();
-    horloge += ' -';
-    horloge += date.getHours() + ":" + minutes + ":" +secondes;
-    $('#horloge').text(horloge);
-}, 1000);
+    /*********************Gestion de l'heure********************************/
+    setInterval(function () {
+        // les noms de jours / mois
+        var jours = new Array("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi");
+        var mois = new Array("janvier", "fevrier", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "decembre");
+        // on recupere la date
+        var date = new Date();
+        var minutes = date.getMinutes();
+        var secondes = date.getSeconds();
+        if(minutes < 10){
+            minutes = "0" + minutes;
+        }
+        if(secondes < 10){
+            secondes = "0" + secondes;
+        }
+        // on construit le message
+        var horloge= jours[date.getDay()] + " ";   // nom du jour
+        horloge += date.getDate() + " ";   // numero du jour
+        horloge += mois[date.getMonth()] + " ";   // mois
+        horloge += date.getFullYear();
+        horloge += ' -';
+        horloge += date.getHours() + ":" + minutes + ":" +secondes;
+        $('#horloge').text(horloge);
+    }, 1000);
 
 
 
-$.fn.modal.Constructor.prototype.enforceFocus = function () {
-};
+    $.fn.modal.Constructor.prototype.enforceFocus = function () {
+    };
 
-$('body').on( "show", ".modal",function () {
-    document.activeElement.blur();
-    $(this).find(".modal-body :input:visible:first").focus();
-});
-
-/************************Help*************************/
-
-if (isset(nextdom_langage)) {
-    bootbox.setDefaults({
-        locale: nextdom_langage.substr(0, 2),
+    $('body').on( "show", ".modal",function () {
+        document.activeElement.blur();
+        $(this).find(".modal-body :input:visible:first").focus();
     });
-}
+
+    /************************Help*************************/
+
+    if (isset(nextdom_langage)) {
+        bootbox.setDefaults({
+            locale: nextdom_langage.substr(0, 2),
+        });
+    }
 
     //Display report bug
     $("#md_reportBug").dialog({
@@ -296,17 +276,17 @@ if (isset(nextdom_langage)) {
     });
 
     $('#bt_getHelpPage').on('click',function(){
-     nextdom.getDocumentationUrl({
-        plugin: $(this).attr('data-plugin'),
-        page: $(this).attr('data-page'),
-        error: function(error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function(url) {
-         window.open(url,'_blank');
-     }
- });
- });
+        nextdom.getDocumentationUrl({
+            plugin: $(this).attr('data-plugin'),
+            page: $(this).attr('data-page'),
+            error: function(error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function(url) {
+                window.open(url,'_blank');
+            }
+        });
+    });
 
     $('body').on( 'click','.bt_pageHelp', function () {
         showHelpModal($(this).attr('data-name'), $(this).attr('data-plugin'));
@@ -352,14 +332,14 @@ if (isset(nextdom_langage)) {
     });
 
     $('#bt_showEventInRealTime').on('click',function(){
-     $('#md_modal').dialog({title: "{{Evénement en temps réel}}"});
-     $("#md_modal").load('index.php?v=d&modal=log.display&log=event').dialog('open');
- });
+        $('#md_modal').dialog({title: "{{Evénement en temps réel}}"});
+        $("#md_modal").load('index.php?v=d&modal=log.display&log=event').dialog('open');
+    });
 
     $('#bt_showNoteManager').on('click',function(){
-     $('#md_modal').dialog({title: "{{Note}}"});
-     $("#md_modal").load('index.php?v=d&modal=note.manager').dialog('open');
- });
+        $('#md_modal').dialog({title: "{{Note}}"});
+        $("#md_modal").load('index.php?v=d&modal=note.manager').dialog('open');
+    });
 
     $('#bt_gotoDashboard').on('click',function(){
         $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
@@ -387,8 +367,8 @@ if (isset(nextdom_langage)) {
     });
 
     $('body').on('click','.objectSummaryParent',function(){
-     loadPage('index.php?v=d&p=dashboard&summary='+$(this).data('summary')+'&object_id='+$(this).data('object_id'));
- });
+        loadPage('index.php?v=d&p=dashboard&summary='+$(this).data('summary')+'&object_id='+$(this).data('object_id'));
+    });
     initPage();
     setTimeout(function(){
         $('body').trigger('nextdom_page_load');
@@ -438,20 +418,20 @@ function initRowOverflow() {
         hWindow -= 10;
     }
     if($('.row-overflow').attr('data-offset') != undefined){
-     hWindow -= $('.row-overflow').attr('data-offset');
- }
- $('.row-overflow > div').height(hWindow).css('overflow-y', 'auto').css('overflow-x', 'hidden').css('padding-top','5px');
+        hWindow -= $('.row-overflow').attr('data-offset');
+    }
+    $('.row-overflow > div').height(hWindow).css('overflow-y', 'auto').css('overflow-x', 'hidden').css('padding-top','5px');
 }
 
 function initReportMode() {
     if (getUrlVars('report') == 1) {
-       $('header').hide();
-       $('footer').hide();
-       $('#div_mainContainer').css('margin-top', '-50px');
-       $('#wrap').css('margin-bottom', '0px');
-       $('.reportModeVisible').show();
-       $('.reportModeHidden').hide();
-   }
+        $('header').hide();
+        $('footer').hide();
+        $('#div_mainContainer').css('margin-top', '-50px');
+        $('#wrap').css('margin-bottom', '0px');
+        $('.reportModeVisible').show();
+        $('.reportModeHidden').hide();
+    }
 }
 
 function initTableSorter() {
@@ -542,14 +522,18 @@ function refreshUpdateNumber() {
 }
 
 function notify(_title, _text, _class_name) {
-    if (_title == '' && _text == '') {
-        return true;
-    }
-    if (isset(_class_name) != '' && isset(toastr[_class_name])) {
-        toastr[_class_name](_text, _title);
-    } else {
-        toastr.info(_text, _title);
-    }
+    Lobibox.notify(
+        _class_name,
+        {
+            msg:  _text,
+            closable: true,
+            rounded: true,
+            delayIndicator: false,
+            size: 'mini',
+            position: 'center top'
+
+        }
+    );
 }
 
 jQuery.fn.findAtDepth = function (selector, maxDepth) {
@@ -566,12 +550,12 @@ jQuery.fn.findAtDepth = function (selector, maxDepth) {
 };
 
 function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
-      break;
-  }
-}
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+            break;
+        }
+    }
 }
 
 
@@ -628,31 +612,31 @@ function positionEqLogic(_id,_preResize) {
             $(this).height('auto');
         }
         if(init(_preResize,true)){
-           eqLogic.width(Math.floor(eqLogic.width() / widget_width_step) * widget_width_step - (2 * widget_margin));
-           eqLogic.height(Math.floor(eqLogic.height() / widget_height_step) * widget_height_step - (2 * widget_margin));
-       }
-       eqLogic.width(Math.ceil(eqLogic.width() / widget_width_step) * widget_width_step - (2 * widget_margin));
-       eqLogic.height(Math.ceil(eqLogic.height() / widget_height_step) * widget_height_step - (2 * widget_margin));
-       eqLogic.trigger('resize');
-       eqLogic.addClass(eqLogic.attr('data-category'));
-       eqLogic.css('margin',widget_margin+'px');
-   }else{
-    $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('margin','0px').css('padding','0px');
-    $('.eqLogic-widget:not(.nextdomAlreadyPosition)').each(function () {
-        if($(this).width() == 0){
-            $(this).width('auto');
+            eqLogic.width(Math.floor(eqLogic.width() / widget_width_step) * widget_width_step - (2 * widget_margin));
+            eqLogic.height(Math.floor(eqLogic.height() / widget_height_step) * widget_height_step - (2 * widget_margin));
         }
-        if($(this).height() == 0){
-            $(this).height('auto');
-        }
-        $(this).width(Math.ceil($(this).width() / widget_width_step) * widget_width_step - (2 * widget_margin));
-        $(this).height(Math.ceil($(this).height() / widget_height_step) * widget_height_step - (2 * widget_margin));
-        $(this).trigger('resize');
-        $(this).addClass($(this).attr('data-category'));
-    });
-    $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('margin',widget_margin+'px');
-    $('.eqLogic-widget').addClass('nextdomAlreadyPosition');
-}
+        eqLogic.width(Math.ceil(eqLogic.width() / widget_width_step) * widget_width_step - (2 * widget_margin));
+        eqLogic.height(Math.ceil(eqLogic.height() / widget_height_step) * widget_height_step - (2 * widget_margin));
+        eqLogic.trigger('resize');
+        eqLogic.addClass(eqLogic.attr('data-category'));
+        eqLogic.css('margin',widget_margin+'px');
+    }else{
+        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('margin','0px').css('padding','0px');
+        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').each(function () {
+            if($(this).width() == 0){
+                $(this).width('auto');
+            }
+            if($(this).height() == 0){
+                $(this).height('auto');
+            }
+            $(this).width(Math.ceil($(this).width() / widget_width_step) * widget_width_step - (2 * widget_margin));
+            $(this).height(Math.ceil($(this).height() / widget_height_step) * widget_height_step - (2 * widget_margin));
+            $(this).trigger('resize');
+            $(this).addClass($(this).attr('data-category'));
+        });
+        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('margin',widget_margin+'px');
+        $('.eqLogic-widget').addClass('nextdomAlreadyPosition');
+    }
 }
 
 
@@ -681,80 +665,80 @@ function saveWidgetDisplay(_params){
     var cmds = [];
     var eqLogics = [];
     $('.eqLogic-widget:not(.eqLogic_layout_table)').each(function(){
-     var eqLogic = $(this);
-     order = 1;
-     eqLogic.find('.cmd').each(function(){
-        cmd = {};
-        cmd.id = $(this).attr('data-cmd_id');
-        cmd.order = order;
-        cmds.push(cmd);
-        order++;
+        var eqLogic = $(this);
+        order = 1;
+        eqLogic.find('.cmd').each(function(){
+            cmd = {};
+            cmd.id = $(this).attr('data-cmd_id');
+            cmd.order = order;
+            cmds.push(cmd);
+            order++;
+        });
     });
- });
     $('.eqLogic-widget.eqLogic_layout_table').each(function(){
-     var eqLogic = $(this);
-     order = 1;
-     eqLogic.find('.cmd').each(function(){
-        cmd = {};
-        cmd.id = $(this).attr('data-cmd_id');
-        cmd.line = $(this).closest('td').attr('data-line');
-        cmd.column = $(this).closest('td').attr('data-column');
-        cmd.order = order;
-        cmds.push(cmd);
-        order++;
+        var eqLogic = $(this);
+        order = 1;
+        eqLogic.find('.cmd').each(function(){
+            cmd = {};
+            cmd.id = $(this).attr('data-cmd_id');
+            cmd.line = $(this).closest('td').attr('data-line');
+            cmd.column = $(this).closest('td').attr('data-column');
+            cmd.order = order;
+            cmds.push(cmd);
+            order++;
+        });
     });
- });
     if(init(_params['dashboard']) == 1){
-       $('.div_displayEquipement').each(function(){
-        order = 1;
-        $(this).find('.eqLogic-widget').each(function(){
-         var eqLogic = {id :$(this).attr('data-eqlogic_id')}
-         eqLogic.display = {};
-         eqLogic.display.width =  Math.floor($(this).width() / 2) * 2 + 'px';
-         eqLogic.display.height = Math.floor($(this).height() / 2) * 2+ 'px';
-         if($(this).attr('data-order') != undefined){
-            eqLogic.order = $(this).attr('data-order');
-        }else{
-            eqLogic.order = order;
-        }
-        eqLogics.push(eqLogic);
-        order++;
-    });
-    });
-       nextdom.eqLogic.setOrder({
-        eqLogics: eqLogics,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        }
-    });
-   }
-   if(init(_params['view']) == 1){
-     $('.eqLogicZone').each(function(){
-        order = 1;
-        $(this).find('.eqLogic-widget').each(function(){
-         var eqLogic = {id :$(this).attr('data-eqlogic_id')}
-         eqLogic.display = {};
-         eqLogic.display.width =  Math.floor($(this).width() / 2) * 2 + 'px';
-         eqLogic.display.height = Math.floor($(this).height() / 2) * 2+ 'px';
-         eqLogic.viewZone_id = $(this).closest('.eqLogicZone').attr('data-viewZone-id');
-         eqLogic.order = order;
-         eqLogics.push(eqLogic);
-         order++;
-     });
-    });
-     nextdom.view.setEqLogicOrder({
-        eqLogics: eqLogics,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        }
-    });
- }
- nextdom.cmd.setOrder({
-    cmds: cmds,
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
+        $('.div_displayEquipement').each(function(){
+            order = 1;
+            $(this).find('.eqLogic-widget').each(function(){
+                var eqLogic = {id :$(this).attr('data-eqlogic_id')}
+                eqLogic.display = {};
+                eqLogic.display.width =  Math.floor($(this).width() / 2) * 2 + 'px';
+                eqLogic.display.height = Math.floor($(this).height() / 2) * 2+ 'px';
+                if($(this).attr('data-order') != undefined){
+                    eqLogic.order = $(this).attr('data-order');
+                }else{
+                    eqLogic.order = order;
+                }
+                eqLogics.push(eqLogic);
+                order++;
+            });
+        });
+        nextdom.eqLogic.setOrder({
+            eqLogics: eqLogics,
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            }
+        });
     }
-});
+    if(init(_params['view']) == 1){
+        $('.eqLogicZone').each(function(){
+            order = 1;
+            $(this).find('.eqLogic-widget').each(function(){
+                var eqLogic = {id :$(this).attr('data-eqlogic_id')}
+                eqLogic.display = {};
+                eqLogic.display.width =  Math.floor($(this).width() / 2) * 2 + 'px';
+                eqLogic.display.height = Math.floor($(this).height() / 2) * 2+ 'px';
+                eqLogic.viewZone_id = $(this).closest('.eqLogicZone').attr('data-viewZone-id');
+                eqLogic.order = order;
+                eqLogics.push(eqLogic);
+                order++;
+            });
+        });
+        nextdom.view.setEqLogicOrder({
+            eqLogics: eqLogics,
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            }
+        });
+    }
+    nextdom.cmd.setOrder({
+        cmds: cmds,
+        error: function (error) {
+            notify("Erreur", error.message, 'error');
+        }
+    });
 }
 
 
@@ -767,177 +751,177 @@ function editWidgetCmdMode(_mode){
         return;
     }
     if(_mode == 0){
-       $( ".eqLogic-widget.eqLogic_layout_table table.tableCmd").removeClass('table-bordered');
-       $.contextMenu('destroy');
-       if( $('.eqLogic-widget.allowReorderCmd.eqLogic_layout_table table.tableCmd.ui-sortable').length > 0){
-        try{
-          $('.eqLogic-widget.allowReorderCmd.eqLogic_layout_table table.tableCmd').sortable('destroy');
-      }catch(e){
+        $( ".eqLogic-widget.eqLogic_layout_table table.tableCmd").removeClass('table-bordered');
+        $.contextMenu('destroy');
+        if( $('.eqLogic-widget.allowReorderCmd.eqLogic_layout_table table.tableCmd.ui-sortable').length > 0){
+            try{
+                $('.eqLogic-widget.allowReorderCmd.eqLogic_layout_table table.tableCmd').sortable('destroy');
+            }catch(e){
 
-      }
-  }
-  if( $('.eqLogic-widget.allowReorderCmd.eqLogic_layout_default.ui-sortable').length > 0){
-      try{
-         $('.eqLogic-widget.allowReorderCmd.eqLogic_layout_default').sortable('destroy');
-     }catch(e){
+            }
+        }
+        if( $('.eqLogic-widget.allowReorderCmd.eqLogic_layout_default.ui-sortable').length > 0){
+            try{
+                $('.eqLogic-widget.allowReorderCmd.eqLogic_layout_default').sortable('destroy');
+            }catch(e){
 
-     }
- }
- if( $('.eqLogic-widget.ui-draggable').length > 0){
-    $('.eqLogic-widget.allowReorderCmd').off('mouseover','.cmd');
-    $('.eqLogic-widget.allowReorderCmd').off('mouseleave','.cmd');
-}
-}else{
-   $( ".eqLogic-widget.allowReorderCmd.eqLogic_layout_default").sortable({items: ".cmd"});
-   $(".eqLogic-widget.eqLogic_layout_table table.tableCmd").addClass('table-bordered');
-   $('.eqLogic-widget.eqLogic_layout_table table.tableCmd td').sortable({
-    connectWith: '.eqLogic-widget.eqLogic_layout_table table.tableCmd td',items: ".cmd"});
-   $('.eqLogic-widget.allowReorderCmd').on('mouseover','.cmd',function(){
-    $('.eqLogic-widget').draggable('disable');
-});
-   $('.eqLogic-widget.allowReorderCmd').on('mouseleave','.cmd',function(){
-    $('.eqLogic-widget').draggable('enable');
-});
-   $.contextMenu({
-    selector: '.eqLogic-widget',
-    zIndex: 9999,
-    events: {
-        show: function(opt) {
-            $.contextMenu.setInputValues(opt, this.data());
-        },
-        hide: function(opt) {
-            $.contextMenu.getInputValues(opt, this.data());
+            }
         }
-    },
-    items: {
-       configuration: {
-        name: "{{Configuration avancée}}",
-        icon : 'fa-cog',
-        callback: function(key, opt){
-            saveWidgetDisplay()
-            $('#md_modal').dialog({title: "{{Configuration du widget}}"});
-            $('#md_modal').load('index.php?v=d&modal=eqLogic.configure&eqLogic_id='+$(this).attr('data-eqLogic_id')).dialog('open');
+        if( $('.eqLogic-widget.ui-draggable').length > 0){
+            $('.eqLogic-widget.allowReorderCmd').off('mouseover','.cmd');
+            $('.eqLogic-widget.allowReorderCmd').off('mouseleave','.cmd');
         }
-    },
-    sep1 : "---------",
-    layoutDefaut: {
-        name: "{{Defaut}}",
-        icon : 'fa-square-o',
-        disabled:function(key, opt) {
-            return !$(this).hasClass('allowLayout') || !$(this).hasClass('eqLogic_layout_table');
-        },
-        callback: function(key, opt){
-           saveWidgetDisplay()
-           nextdom.eqLogic.simpleSave({
-            eqLogic : {
-                id : $(this).attr('data-eqLogic_id'),
-                display : {'layout::dashboard' : 'default'},
-            },
-            error: function (error) {
-                notify("Erreur", error.message, 'error');
-            }
+    }else{
+        $( ".eqLogic-widget.allowReorderCmd.eqLogic_layout_default").sortable({items: ".cmd"});
+        $(".eqLogic-widget.eqLogic_layout_table table.tableCmd").addClass('table-bordered');
+        $('.eqLogic-widget.eqLogic_layout_table table.tableCmd td').sortable({
+            connectWith: '.eqLogic-widget.eqLogic_layout_table table.tableCmd td',items: ".cmd"});
+        $('.eqLogic-widget.allowReorderCmd').on('mouseover','.cmd',function(){
+            $('.eqLogic-widget').draggable('disable');
         });
-       }
-   },
-   layoutTable: {
-    name: "{{Table}}",
-    icon : 'fa-table',
-    disabled:function(key, opt) {
-        return !$(this).hasClass('allowLayout') || $(this).hasClass('eqLogic_layout_table');
-    },
-    callback: function(key, opt){
-       saveWidgetDisplay()
-       nextdom.eqLogic.simpleSave({
-        eqLogic : {
-            id : $(this).attr('data-eqLogic_id'),
-            display : {'layout::dashboard' : 'table'},
-        },
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        }
-    });
-   }
-},
-sep2 : "---------",
-addTableColumn: {
-    name: "{{Ajouter colonne}}",
-    icon : 'fa-plus',
-    disabled:function(key, opt) {
-        return !$(this).hasClass('eqLogic_layout_table');
-    },
-    callback: function(key, opt){
-        saveWidgetDisplay()
-        nextdom.eqLogic.simpleSave({
-            eqLogic : {
-                id : $(this).attr('data-eqLogic_id'),
-                display : {'layout::dashboard::table::nbColumn' : parseInt($(this).find('table.tableCmd').attr('data-column')) + 1},
+        $('.eqLogic-widget.allowReorderCmd').on('mouseleave','.cmd',function(){
+            $('.eqLogic-widget').draggable('enable');
+        });
+        $.contextMenu({
+            selector: '.eqLogic-widget',
+            zIndex: 9999,
+            events: {
+                show: function(opt) {
+                    $.contextMenu.setInputValues(opt, this.data());
+                },
+                hide: function(opt) {
+                    $.contextMenu.getInputValues(opt, this.data());
+                }
             },
-            error: function (error) {
-                notify("Erreur", error.message, 'error');
+            items: {
+                configuration: {
+                    name: "{{Configuration avancée}}",
+                    icon : 'fa-cog',
+                    callback: function(key, opt){
+                        saveWidgetDisplay()
+                        $('#md_modal').dialog({title: "{{Configuration du widget}}"});
+                        $('#md_modal').load('index.php?v=d&modal=eqLogic.configure&eqLogic_id='+$(this).attr('data-eqLogic_id')).dialog('open');
+                    }
+                },
+                sep1 : "---------",
+                layoutDefaut: {
+                    name: "{{Defaut}}",
+                    icon : 'fa-square-o',
+                    disabled:function(key, opt) {
+                        return !$(this).hasClass('allowLayout') || !$(this).hasClass('eqLogic_layout_table');
+                    },
+                    callback: function(key, opt){
+                        saveWidgetDisplay()
+                        nextdom.eqLogic.simpleSave({
+                            eqLogic : {
+                                id : $(this).attr('data-eqLogic_id'),
+                                display : {'layout::dashboard' : 'default'},
+                            },
+                            error: function (error) {
+                                notify("Erreur", error.message, 'error');
+                            }
+                        });
+                    }
+                },
+                layoutTable: {
+                    name: "{{Table}}",
+                    icon : 'fa-table',
+                    disabled:function(key, opt) {
+                        return !$(this).hasClass('allowLayout') || $(this).hasClass('eqLogic_layout_table');
+                    },
+                    callback: function(key, opt){
+                        saveWidgetDisplay()
+                        nextdom.eqLogic.simpleSave({
+                            eqLogic : {
+                                id : $(this).attr('data-eqLogic_id'),
+                                display : {'layout::dashboard' : 'table'},
+                            },
+                            error: function (error) {
+                                notify("Erreur", error.message, 'error');
+                            }
+                        });
+                    }
+                },
+                sep2 : "---------",
+                addTableColumn: {
+                    name: "{{Ajouter colonne}}",
+                    icon : 'fa-plus',
+                    disabled:function(key, opt) {
+                        return !$(this).hasClass('eqLogic_layout_table');
+                    },
+                    callback: function(key, opt){
+                        saveWidgetDisplay()
+                        nextdom.eqLogic.simpleSave({
+                            eqLogic : {
+                                id : $(this).attr('data-eqLogic_id'),
+                                display : {'layout::dashboard::table::nbColumn' : parseInt($(this).find('table.tableCmd').attr('data-column')) + 1},
+                            },
+                            error: function (error) {
+                                notify("Erreur", error.message, 'error');
+                            }
+                        });
+                    }
+                },
+                addTableLine: {
+                    name: "{{Ajouter ligne}}",
+                    icon : 'fa-plus',
+                    disabled:function(key, opt) {
+                        return !$(this).hasClass('eqLogic_layout_table');
+                    },
+                    callback: function(key, opt){
+                        saveWidgetDisplay()
+                        nextdom.eqLogic.simpleSave({
+                            eqLogic : {
+                                id : $(this).attr('data-eqLogic_id'),
+                                display : {'layout::dashboard::table::nbLine' : parseInt($(this).find('table.tableCmd').attr('data-line')) + 1},
+                            },
+                            error: function (error) {
+                                notify("Erreur", error.message, 'error');
+                            }
+                        });
+                    }
+                },
+                removeTableColumn: {
+                    name: "{{Supprimer colonne}}",
+                    icon : 'fa-minus',
+                    disabled:function(key, opt) {
+                        return !$(this).hasClass('eqLogic_layout_table');
+                    },
+                    callback: function(key, opt){
+                        saveWidgetDisplay()
+                        nextdom.eqLogic.simpleSave({
+                            eqLogic : {
+                                id : $(this).attr('data-eqLogic_id'),
+                                display : {'layout::dashboard::table::nbColumn' : parseInt($(this).find('table.tableCmd').attr('data-column')) - 1},
+                            },
+                            error: function (error) {
+                                notify("Erreur", error.message, 'error');
+                            }
+                        });
+                    }
+                },
+                removeTableLine: {
+                    name: "{{Supprimer ligne}}",
+                    icon : 'fa-minus',
+                    disabled:function(key, opt) {
+                        return !$(this).hasClass('eqLogic_layout_table');
+                    },
+                    callback: function(key, opt){
+                        saveWidgetDisplay()
+                        nextdom.eqLogic.simpleSave({
+                            eqLogic : {
+                                id : $(this).attr('data-eqLogic_id'),
+                                display : {'layout::dashboard::table::nbLine' : parseInt($(this).find('table.tableCmd').attr('data-line')) - 1},
+                            },
+                            error: function (error) {
+                                notify("Erreur", error.message, 'error');
+                            }
+                        });
+                    }
+                },
             }
         });
     }
-},
-addTableLine: {
-    name: "{{Ajouter ligne}}",
-    icon : 'fa-plus',
-    disabled:function(key, opt) {
-        return !$(this).hasClass('eqLogic_layout_table');
-    },
-    callback: function(key, opt){
-        saveWidgetDisplay()
-        nextdom.eqLogic.simpleSave({
-            eqLogic : {
-                id : $(this).attr('data-eqLogic_id'),
-                display : {'layout::dashboard::table::nbLine' : parseInt($(this).find('table.tableCmd').attr('data-line')) + 1},
-            },
-            error: function (error) {
-                notify("Erreur", error.message, 'error');
-            }
-        });
-    }
-},
-removeTableColumn: {
-    name: "{{Supprimer colonne}}",
-    icon : 'fa-minus',
-    disabled:function(key, opt) {
-        return !$(this).hasClass('eqLogic_layout_table');
-    },
-    callback: function(key, opt){
-        saveWidgetDisplay()
-        nextdom.eqLogic.simpleSave({
-            eqLogic : {
-                id : $(this).attr('data-eqLogic_id'),
-                display : {'layout::dashboard::table::nbColumn' : parseInt($(this).find('table.tableCmd').attr('data-column')) - 1},
-            },
-            error: function (error) {
-                notify("Erreur", error.message, 'error');
-            }
-        });
-    }
-},
-removeTableLine: {
-    name: "{{Supprimer ligne}}",
-    icon : 'fa-minus',
-    disabled:function(key, opt) {
-        return !$(this).hasClass('eqLogic_layout_table');
-    },
-    callback: function(key, opt){
-        saveWidgetDisplay()
-        nextdom.eqLogic.simpleSave({
-            eqLogic : {
-                id : $(this).attr('data-eqLogic_id'),
-                display : {'layout::dashboard::table::nbLine' : parseInt($(this).find('table.tableCmd').attr('data-line')) - 1},
-            },
-            error: function (error) {
-                notify("Erreur", error.message, 'error');
-            }
-        });
-    }
-},
-}
-});
-}
 }
 
 function hexToRgb(hex) {

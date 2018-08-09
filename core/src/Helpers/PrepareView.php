@@ -396,6 +396,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '3rdparty/jquery.contextMenu/jquery.contextMenu.min.js';
             $pageData['JS_POOL'][] = '3rdparty/autosize/autosize.min.js';
             $pageData['JS_POOL'][] = '3rdparty/iCheck/icheck.min.js';
+            $pageData['JS_POOL'][] = '3rdparty/lolibox/js/notifications.js';
         }
     }
 
@@ -445,6 +446,7 @@ class PrepareView
                     }
                 }
             }
+            $pageData['CSS_POOL'][] = '3rdparty/lolibox/css/lobibox.min.css';
         }
         if ($addBootstrapThemeFile) {
             $pageData['CSS_POOL'][] = '/3rdparty/bootstrap/css/bootstrap.min.css';
