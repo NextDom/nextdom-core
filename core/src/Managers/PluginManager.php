@@ -262,7 +262,8 @@ class PluginManager
                     try {
                         $pluginId::$cronType();
                     } catch (\Throwable $e) {
-                        \log::add($pluginId, 'error', \__('Erreur sur la fonction cron du plugin : ', __FILE__) . $e->getMessage());
+                        \log::add($pluginId, 'error', \__('Erreur sur la fonction cron du plugin : ', __FILE__) . $e->getMessage());           
+                    }
                 }
             }
         }
