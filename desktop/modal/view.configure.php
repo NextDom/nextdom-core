@@ -62,7 +62,7 @@ sendVarToJS('view', utils::o2a($view));
         dataType: 'json',
         done: function (e, data) {
             if (data.result.state != 'ok') {
-                $('#div_alertViewConfigure').showAlert({message: data.result.result, level: 'danger'});
+                notify('Core',data.result.result,'error');
                 return;
             }
             $('#div_alertViewConfigure').showAlert({message: '{{Image ajoutée}}', level: 'success'});
@@ -73,7 +73,7 @@ sendVarToJS('view', utils::o2a($view));
       nextdom.view.removeImage({
         view: view.id,
         error: function (error) {
-            $('#div_alertViewConfigure').showAlert({message: error.message, level: 'danger'});
+            notify('Core',error.message,'error');
         },
         success: function () {
             $('#div_alertViewConfigure').showAlert({message: '{{Image supprimée}}', level: 'success'});
@@ -87,7 +87,7 @@ sendVarToJS('view', utils::o2a($view));
             id : view.id,
             view: view,
             error: function (error) {
-                $('#div_alertViewConfigure').showAlert({message: error.message, level: 'danger'});
+                notify('Core',error.message,'error');
             },
             success: function () {
                 $('#div_alertViewConfigure').showAlert({message: '{{Vue sauvegardé}}', level: 'success'});

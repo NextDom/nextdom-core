@@ -380,7 +380,7 @@ sendVarToJS('id', $plan3d->getId());
         nextdom.plan3d.save({
             plan3ds: plan3ds,
             error: function (error) {
-                $('#div_alertPlan3dConfigure').showAlert({message: error.message, level: 'danger'});
+                notify('Core',error.message,'error');
             },
             success: function () {
                 $('#fd_plan3dConfigure').closest("div.ui-dialog-content").dialog("close");
@@ -399,7 +399,7 @@ sendVarToJS('id', $plan3d->getId());
         nextdom.plan3d.remove({
             id: plan3ds[0].id,
             error: function (error) {
-                $('#div_alertPlan3dConfigure').showAlert({message: error.message, level: 'danger'});
+                notify('Core',error.message,'error');
             },
             success: function () {
                 $('#fd_plan3dConfigure').closest("div.ui-dialog-content").dialog("close");

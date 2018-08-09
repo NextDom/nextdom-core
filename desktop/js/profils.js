@@ -161,7 +161,7 @@ $('#user_avatar').fileupload({
     dropZone: "#bsImagesPanel",
     done: function (e, data) {
         if (data.result.state !== 'ok') {
-            $('#div_alert').showAlert({message: data.result.result, level: 'danger'});
+            notify('Core',data.result.result,'error');
             return;
         }
         if ($('.userAttr[data-l2key=avatar]') == '') {

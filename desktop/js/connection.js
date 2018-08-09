@@ -29,7 +29,7 @@ $('#bt_login_validate').on('click', function() {
         twoFactorCode: $('#in_twoFactorCode').val(),
         storeConnection: $('#cb_storeConnection').value(),
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify('Core',error.message,'error');
         },
         success: function (data) {
             window.location.href = 'index.php?v=d';

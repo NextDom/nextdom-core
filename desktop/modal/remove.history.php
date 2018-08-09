@@ -49,7 +49,7 @@ if (count($remove_history) > 0) {
     $('#bt_emptyRemoveHistory').on('click',function(){
         nextdom.emptyRemoveHistory({
             error: function (error) {
-                $('#div_alertRemoveHistory').showAlert({message: error.message, level: 'danger'});
+                notify('Core',error.message,'error');
             },
             success: function (data) {
                 $('#div_alertRemoveHistory').showAlert({message: '{{Historique vidée avec succès}}', level: 'success'});

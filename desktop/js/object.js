@@ -71,7 +71,7 @@ $('#bt_removeBackgroundImage').off('click').on('click', function () {
     nextdom.object.removeImage({
         view: $('.objectAttr[data-l1key=id]').value(),
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify('Core',error.message,'error');
         },
         success: function () {
             $('#div_alert').showAlert({message: '{{Image supprimée}}', level: 'success'});
@@ -92,7 +92,7 @@ function loadObjectConfiguration(_id){
         dataType: 'json',
         done: function (e, data) {
             if (data.result.state != 'ok') {
-                $('#div_alert').showAlert({message: data.result.result, level: 'danger'});
+                notify('Core',data.result.result,'error');
                 return;
             }
             $('#div_alert').showAlert({message: '{{Image ajoutée}}', level: 'success'});
@@ -107,7 +107,7 @@ function loadObjectConfiguration(_id){
         id: _id,
         cache: false,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify('Core',error.message,'error');
         },
         success: function (data) {
             $('.objectAttr').value('');
@@ -146,7 +146,7 @@ $("#bt_addObject,#bt_addObject2").on('click', function (event) {
             nextdom.object.save({
                 object: {name: result, isVisible: 1},
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify('Core',error.message,'error');
                 },
                 success: function (data) {
                     modifyWithoutSave = false;
@@ -187,7 +187,7 @@ $("#bt_saveObject").on('click', function (event) {
     nextdom.object.save({
         object: object,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify('Core',error.message,'error');
         },
         success: function (data) {
             modifyWithoutSave = false;
@@ -204,7 +204,7 @@ $("#bt_removeObject").on('click', function (event) {
             nextdom.object.remove({
                 id: $('.objectDisplayCard.active').attr('data-object_id'),
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                    notify('Core',error.message,'error');
                 },
                 success: function () {
                     modifyWithoutSave = false;

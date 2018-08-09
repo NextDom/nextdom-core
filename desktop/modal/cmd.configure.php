@@ -861,10 +861,10 @@ if ($cmd->getDisplay('parameters') != '') {
             source_id : cmdInfo.id,
             target_id : target_id,
             error: function (error) {
-             $('#md_displayCmdConfigure').showAlert({message: error.message, level: 'danger'});
+             notify('Core',error.message,'error');
            },
            success: function (data) {
-             $('#md_displayCmdConfigure').showAlert({message: '{{Historique copié avec succès}}', level: 'success'});
+             notify('Core','{{Historique copié avec succès}}','success');
            }
          });
         }
@@ -882,10 +882,10 @@ if ($cmd->getDisplay('parameters') != '') {
             source_id : cmdInfo.id,
             target_id : target_id,
             error: function (error) {
-             $('#md_displayCmdConfigure').showAlert({message: error.message, level: 'danger'});
+             notify('Core',error.message,'error');
            },
            success: function (data) {
-             $('#md_displayCmdConfigure').showAlert({message: '{{Historique copié avec succès}}', level: 'success'});
+             notify('Core','{{Historique copié avec succès}}','success');
            }
          });
         }
@@ -904,10 +904,10 @@ if ($cmd->getDisplay('parameters') != '') {
             source_id : cmdInfo.id,
             target_id : target_id,
             error: function (error) {
-             $('#md_displayCmdConfigure').showAlert({message: error.message, level: 'danger'});
+             notify('Core',error.message,'error');
            },
            success: function (data) {
-             $('#md_displayCmdConfigure').showAlert({message: '{{Remplacement réalisé avec succès}}', level: 'success'});
+             notify('Core','{{Remplacement réalisé avec succès}}','success');
            }
          });
         }
@@ -925,10 +925,10 @@ if ($cmd->getDisplay('parameters') != '') {
             source_id : target_id,
             target_id : cmdInfo.id,
             error: function (error) {
-             $('#md_displayCmdConfigure').showAlert({message: error.message, level: 'danger'});
+             notify('Core',error.message,'error');
            },
            success: function (data) {
-             $('#md_displayCmdConfigure').showAlert({message: '{{Remplacement réalisé avec succès}}', level: 'success'});
+             notify('Core','{{Remplacement réalisé avec succès}}','success');
            }
          });
         }
@@ -948,10 +948,10 @@ if ($cmd->getDisplay('parameters') != '') {
           source_id : target_id,
           target_id : cmdInfo.id,
           error: function (error) {
-           $('#md_displayCmdConfigure').showAlert({message: error.message, level: 'danger'});
+           notify('Core',error.message,'error');
          },
          success: function (data) {
-           $('#md_displayCmdConfigure').showAlert({message: '{{Remplacement réalisé avec succès}}', level: 'success'});
+           notify('Core','{{Remplacement réalisé avec succès}}','success');
          }
        });
       }
@@ -1059,7 +1059,7 @@ if ($cmd->getDisplay('parameters') != '') {
   if(editorCodeMview != null){
    editorCodeMview.setValue('');
  }
- $('#md_displayCmdConfigure').showAlert({message: '{{Opération effectuée avec succès, n\'oubliez pas de sauvegarder}}', level: 'success'});
+ notify('Core','{{Opération effectuée avec succès, n\'oubliez pas de sauvegarder}}','success');
 });
 
 
@@ -1103,10 +1103,10 @@ if ($cmd->getDisplay('parameters') != '') {
     nextdom.cmd.save({
       cmd: cmd,
       error: function (error) {
-        $('#md_displayCmdConfigure').showAlert({message: error.message, level: 'danger'});
+        notify('Core',error.message,'error');
       },
       success: function () {
-        $('#md_displayCmdConfigure').showAlert({message: '{{Enregistrement réussi}}', level: 'success'});
+        notify('Core','{{Enregistrement réussi}}','success');
       }
     });
   });
@@ -1220,7 +1220,7 @@ if ($cmd->getDisplay('parameters') != '') {
             nextdom.cmd.save({
               cmd: cmd,
               error: function (error) {
-                $('#md_cmdConfigureSelectMultipleAlert').showAlert({message: error.message, level: 'danger'});
+                notify('Core',error.message,'error');
               },
               success: function () {
 

@@ -66,10 +66,10 @@ sendVarToJS('plan3dHeader', utils::o2a($plan3dHeader));
         dataType: 'json',
         done: function (e, data) {
             if (data.result.state != 'ok') {
-                $('#div_alertplan3dHeaderConfigure').showAlert({message: data.result.result, level: 'danger'});
+                notify('Core',data.result.result,'error');
                 return;
             }
-             $('#div_alertplan3dHeaderConfigure').showAlert({message: '{{Chargement réussi merci de recharger la page pour voir le résultat}}', level: 'success'});
+            notify('Core','{{Chargement réussi merci de recharger la page pour voir le résultat}}','success');
         }
     });
 
@@ -83,7 +83,7 @@ sendVarToJS('plan3dHeader', utils::o2a($plan3dHeader));
       nextdom.plan3d.saveHeader({
         plan3dHeader: $('#div_plan3dHeaderConfigure').getValues('.plan3dHeaderAttr')[0],
         error: function (error) {
-            $('#div_alertplan3dHeaderConfigure').showAlert({message: error.message, level: 'danger'});
+            notify('Core',error.message,'error');
         },
         success: function () {
             window.location.reload();
@@ -95,7 +95,7 @@ sendVarToJS('plan3dHeader', utils::o2a($plan3dHeader));
       nextdom.plan3d.removeHeader({
         id: $('#div_plan3dHeaderConfigure').getValues('.plan3dHeaderAttr')[0].id,
         error: function (error) {
-            $('#div_alertplan3dHeaderConfigure').showAlert({message: error.message, level: 'danger'});
+            notify('Core',error.message,'error');
         },
         success: function () {
             window.location.reload();
