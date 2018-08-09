@@ -15,7 +15,7 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* This file is part of NextDom.
+/* This file is part of NextDom Software.
  *
  * NextDom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,8 +39,8 @@ use NextDom\Managers\EqLogicManager;
 class ScenarioExpressionManager
 {
     const DB_CLASS_NAME = 'scenarioExpression';
-    const CLASS_NAME = 'scenarioExpression';
-    const WAIT_LIMIT = 7200;
+    const CLASS_NAME    = 'scenarioExpression';
+    const WAIT_LIMIT    = 7200;
 
     /**
      * Obtenir une expression de scénario à partir de son identifiant
@@ -76,19 +76,19 @@ class ScenarioExpressionManager
 
 
     /**
-     * Obtenir le sous élément d'un scénario à partir de son identifiant
+     * Get the sub-element of a scenario from its identifier
      *
      * TODO: Remplacable par ScenarioSubElementManager:byId si j'ai bien compris
      *
-     * @param $_scenarioSubElementId
+     * @param $scenarioSubElementId
      *
      * @return array|mixed|null
      *
      * @throws \Exception
      */
-    public static function byScenarioSubElementId($_scenarioSubElementId)
+    public static function byScenarioSubElementId($scenarioSubElementId)
     {
-        $values = array('scenarioSubElement_id' => $_scenarioSubElementId);
+        $values = array('scenarioSubElement_id' => $scenarioSubElementId);
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE scenarioSubElement_id = :scenarioSubElement_id
@@ -97,11 +97,11 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Rechercher une expression d'après son nom et/ou avec une option
+     * Search an expression by name and/or option
      *
-     * @param string $expression Expression recherchée
-     * @param string $options Option recherchée
-     * @param bool $and True si l'expression et l'option sont un critère, sinon l'expression ou l'option
+     * @param string $expression Expression searched
+     * @param string $options Option searched
+     * @param bool $and True if the expression and the option are a criterion, if not the expression or the option
      *
      * @return array|mixed|null
      *
@@ -125,7 +125,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Recherche une expression de type "element" ou l'expression est égale à l'identifiant de l'élément TODO ????
+     * Searches for an expression of type "element" where the expression is equal to the identifier of the element TODO ????
      *
      * @param $elementId
      * @return array|mixed|null
@@ -218,16 +218,16 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Obtenir un nombre aléatoire
+     * Get a random number
      *
      * @param $minValue
      * @param $maxValue
      *
      * @return int
      */
-    public static function rand($minValue, $maxValue): int
+    public static function rand(int $minValue, int $maxValue): int
     {
-        return rand($minValue, $maxValue);
+        return mt_rand($minValue, $maxValue);
     }
 
     /**
@@ -258,14 +258,14 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Obtenir un scénario à partir de son expression
+     * Get a scenario from its expression
      * TODO: Format ???
      *
      * @param $scenarioExpression
      * @return int TODO -1, -2, -3 ????
      * @throws \Exception
      */
-    public static function scenario($scenarioExpression)
+    public static function scenario(string $scenarioExpression)
     {
         $id = str_replace(array('scenario', '#'), '', trim($scenarioExpression));
         $scenario = ScenarioManager::byId($id);
@@ -286,11 +286,11 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Active un objet eqLogic
+     * Enables an eqLogic object
      * TODO: -2 en -1 ?
      * @param mixed $eqLogicId Identifiant du l'objet
      *
-     * @return int 0 Si l'objet n'est pas activé, 1 si l'objet est activé, -2 si l'objet n'existe pas
+     * @return int 0 If the object is not activated, 1 if the object is activated, -2 if the object does not exist
      */
     public static function eqEnable($eqLogicId)
     {
@@ -326,9 +326,7 @@ class ScenarioExpressionManager
                     } else {
                         try {
                             $values[] = evaluate($value);
-                        } catch (\Exception $ex) {
-
-                        } catch (\Error $ex) {
+                        } catch (\Throwable $ex) {
 
                         }
                     }
@@ -402,9 +400,7 @@ class ScenarioExpressionManager
                     } else {
                         try {
                             $values[] = evaluate($value);
-                        } catch (\Exception $ex) {
-
-                        } catch (\Error $ex) {
+                        } catch (\Throwable $ex) {
 
                         }
                     }
@@ -447,7 +443,7 @@ class ScenarioExpressionManager
             return '';
         }
         $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
-        $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
+        $endDate   = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
         // TODO ligne à virer, voir si ça lance quelque chose avant
         $historyStatistique = $cmd->getStatistique($startDate, $endDate);
         $historyStatistique = $cmd->getStatistique(self::setTags($startDate), self::setTags($endDate));
@@ -505,10 +501,8 @@ class ScenarioExpressionManager
                     } else {
                         try {
                             $values[] = evaluate($value);
-                        } catch (\Exception $ex) {
-
-                        } catch (\Error $ex) {
-
+                        } catch (\Throwable $ex) {
+                            
                         }
                     }
                 }
@@ -577,9 +571,7 @@ class ScenarioExpressionManager
                 } else {
                     try {
                         $values[] = evaluate($value);
-                    } catch (\Exception $ex) {
-
-                    } catch (\Error $ex) {
+                    } catch (\Throwable $ex) {
 
                     }
                 }
@@ -694,7 +686,7 @@ class ScenarioExpressionManager
      * @return array|string
      * @throws \Exception
      */
-    public static function stateChangesBetween($cmdId, $value, $startDate, $_endDate = null)
+    public static function stateChangesBetween($cmdId, $value, $startDate, $endDate = null)
     {
         if (!is_numeric(str_replace('#', '', $cmdId))) {
             $cmd = CmdManager::byId(str_replace('#', '', CmdManager::humanReadableToCmd($cmdId)));
@@ -706,16 +698,15 @@ class ScenarioExpressionManager
         }
         $cmd_id = $cmd->getId();
 
-        $args = func_num_args();
-        if ($args == 3) {
-            $_endDate = func_get_arg(2);
+        if (func_num_args() == 3) {
+            $endDate = func_get_arg(2);
             $startDate = func_get_arg(1);
             $value = null;
         }
         $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
-        $_endDate = date('Y-m-d H:i:s', strtotime(self::setTags($_endDate)));
+        $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
 
-        return \history::stateChanges($cmd_id, $value, $startDate, $_endDate);
+        return \history::stateChanges($cmd_id, $value, $startDate, $endDate);
     }
 
     /**
@@ -906,7 +897,7 @@ class ScenarioExpressionManager
         }
         $calc = str_replace(' ', '', $calc);
         $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
-        $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
+        $endDate   = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
         $historyStatistique = $cmd->getStatistique(self::setTags($startDate), self::setTags($endDate));
         return $historyStatistique[$calc];
     }
@@ -964,7 +955,7 @@ class ScenarioExpressionManager
      *
      * @return int 1 si $value est pair, sinon 0
      */
-    public static function odd($value)
+    public static function odd($value): int
     {
         $value = intval(evaluate(self::setTags($value)));
         if ($value % 2) {
@@ -1037,12 +1028,12 @@ class ScenarioExpressionManager
      */
     public static function randomColor($rangeLower, $rangeHighter)
     {
-        $value = rand($rangeLower, $rangeHighter);
+        $value = mt_rand($rangeLower, $rangeHighter);
         $color_range = 85;
         $color = new \stdClass();
-        $color->red = $rangeLower;
+        $color->red   = $rangeLower;
         $color->green = $rangeLower;
-        $color->blue = $rangeLower;
+        $color->blue  = $rangeLower;
         if ($value < $color_range * 1) {
             $color->red += $color_range - $value;
             $color->green += $value;
@@ -1053,12 +1044,12 @@ class ScenarioExpressionManager
             $color->blue += $color_range - $value;
             $color->red += $value;
         }
-        $color->red = ($color->red < 0) ? dechex(0) : dechex(round($color->red));
-        $color->blue = ($color->blue < 0) ? dechex(0) : dechex(round($color->blue));
+        $color->red   = ($color->red < 0) ? dechex(0) : dechex(round($color->red));
+        $color->blue  = ($color->blue < 0) ? dechex(0) : dechex(round($color->blue));
         $color->green = ($color->green < 0) ? dechex(0) : dechex(round($color->green));
-        $color->red = (strlen($color->red) == 1) ? '0' . $color->red : $color->red;
+        $color->red   = (strlen($color->red) == 1) ? '0' . $color->red : $color->red;
         $color->green = (strlen($color->green) == 1) ? '0' . $color->green : $color->green;
-        $color->blue = (strlen($color->blue) == 1) ? '0' . $color->blue : $color->blue;
+        $color->blue  = (strlen($color->blue) == 1) ? '0' . $color->blue : $color->blue;
         return '#' . $color->red . $color->green . $color->blue;
     }
 
@@ -1476,7 +1467,7 @@ class ScenarioExpressionManager
                     } else {
                         $replace2[$replace_string] = call_user_func_array(__CLASS__ . "::" . $function, $arguments);
                     }
-                } else if (class_exists('userFunction') && method_exists('userFunction', $function)) {
+                } elseif (class_exists('userFunction') && method_exists('userFunction', $function)) {
                     $replace2[$replace_string] = call_user_func_array('userFunction' . "::" . $function, $arguments);
                 } else {
                     if (function_exists($function)) {
