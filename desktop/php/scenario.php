@@ -127,7 +127,7 @@ if (is_array($scenarioListGroup)) {
                             echo '</div>';
                         }
                         ?>
-
+                    </div>
                     </div>
 
                     <div id="div_editScenario" class="col-xs-12" style="display: none;" >
@@ -359,7 +359,7 @@ if (is_array($scenarioListGroup)) {
                     </div>
                 </div>
             </div>
-        </div>
+
     </section>
 <?php
 include_file('desktop', 'scenario', 'js');
