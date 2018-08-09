@@ -19,6 +19,6 @@ namespace NextDom\Enums;
 class EqLogicViewTypeEnum extends Enum
 {
     const SCENARIO  = 'scenario';
-    const MOBILE   = 'mobile';
+    const MOBILE    = 'mobile';
     const DASHBOARD = 'dashboard';
 }
