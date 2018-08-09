@@ -171,7 +171,7 @@ class ScenarioExpressionManager
             }
         }
         if (!isset($replace['#id#'])) {
-            $replace['#id#'] = rand();
+            $replace['#id#'] = mt_rand();
         }
         $return['html'] = template_replace(CmdManager::cmdToHumanReadable($replace), $return['template']);
         preg_match_all("/#[a-zA-Z_]*#/", $return['template'], $matches);
