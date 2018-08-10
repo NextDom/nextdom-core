@@ -35,12 +35,11 @@ html {
   color:$white;
   background-color:#373737;
   border-color:#1f1f1f;
-}
-
-.btn-black:hover {
-  color:$white;
-  background-color:#303030;
-  border-color:#1f1f1f;
+    &:hover {
+    color:$white;
+    background-color:#303030;
+    border-color:#1f1f1f;
+  }
 }
 
 .pull-right{
@@ -262,7 +261,6 @@ html {
   display: block;
 }
 
-
 .row-full-height {
   height: 100%;
 }
@@ -280,7 +278,6 @@ html {
   display: table-cell;
   float: none !important;
 }
-
 
 input[type=checkbox] {
   position: relative;
