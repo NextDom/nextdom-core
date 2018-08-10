@@ -462,7 +462,7 @@ class repo_market {
         if (strtotime(config::byKey('market::lastCommunication', 'core', 0)) > (strtotime('now') - (24 * 3600))) {
             return;
         }
-        sleep(rand(0, 1800));
+        sleep(mt_rand(0, 1800));
         try {
             self::test();
         } catch (Exception $e) {
