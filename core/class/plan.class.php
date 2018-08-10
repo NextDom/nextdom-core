@@ -136,7 +136,7 @@ class plan {
             $this->setCss('zoom', 1);
         }
         if ($this->getLink_id() == '') {
-            $this->setLink_id(rand(0, 99999999) + 9999);
+            $this->setLink_id(mt_rand(0, 99999999) + 9999);
         }
     }
 
@@ -162,13 +162,13 @@ class plan {
         if ($this->getLink_type() == 'eqLogic') {
             $eqLogic = eqLogic::byId($this->getLink_id());
             return $eqLogic;
-        } else if ($this->getLink_type() == 'scenario') {
+        } elseif ($this->getLink_type() == 'scenario') {
             $scenario = scenario::byId($this->getLink_id());
             return $scenario;
-        } else if ($this->getLink_type() == 'cmd') {
+        } elseif ($this->getLink_type() == 'cmd') {
             $cmd = cmd::byId($this->getLink_id());
             return $cmd;
-        } else if ($this->getLink_type() == 'summary') {
+        } elseif ($this->getLink_type() == 'summary') {
             $object = jeeObject::byId($this->getLink_id());
             return $object;
         }
@@ -181,7 +181,7 @@ class plan {
         }
         if ($this->getConfiguration('zone_mode', 'simple') == 'simple') {
             $this->doAction('other');
-        } else if ($this->getConfiguration('zone_mode', 'simple') == 'binary') {
+        } elseif ($this->getConfiguration('zone_mode', 'simple') == 'binary') {
             $result = nextdom::evaluateExpression($this->getConfiguration('binary_info', 0));
             if ($result) {
                 $this->doAction('off');
@@ -219,7 +219,7 @@ class plan {
                 'plan' => utils::o2a($this),
                 'html' => $link->toHtml($_version),
             );
-        } else if ($this->getLink_type() == 'plan') {
+        } elseif ($this->getLink_type() == 'plan') {
             $html = '<span class="cursor plan-link-widget" data-link_id="' . $this->getLink_id() . '" data-offsetX="' . $this->getDisplay('offsetX') . '" data-offsetY="' . $this->getDisplay('offsetY') . '">';
             $html .= '<a style="color:' . $this->getCss('color', 'black') . ';text-decoration:none;font-size : 1.5em;">';
             $html .= $this->getDisplay('icon') . ' ' . $this->getDisplay('name');
@@ -229,7 +229,7 @@ class plan {
                 'plan' => utils::o2a($this),
                 'html' => $html,
             );
-        } else if ($this->getLink_type() == 'view') {
+        } elseif ($this->getLink_type() == 'view') {
             $link = 'index.php?p=view&view_id=' . $this->getLink_id();
             $html = '<span href="' . $link . '" class="cursor view-link-widget" data-link_id="' . $this->getLink_id() . '" >';
             $html .= '<a href="' . $link . '" class="noOnePageLoad" style="color:' . $this->getCss('color', 'black') . ';text-decoration:none;font-size : 1.5em;">';
@@ -240,7 +240,7 @@ class plan {
                 'plan' => utils::o2a($this),
                 'html' => $html,
             );
-        } else if ($this->getLink_type() == 'graph') {
+        } elseif ($this->getLink_type() == 'graph') {
             $background_color = 'background-color : white;';
             if ($this->getDisplay('transparentBackground', false)) {
                 $background_color = '';
@@ -253,7 +253,7 @@ class plan {
                 'plan' => utils::o2a($this),
                 'html' => $html,
             );
-        } else if ($this->getLink_type() == 'text') {
+        } elseif ($this->getLink_type() == 'text') {
             $html = '<div class="text-widget" data-text_id="' . $this->getLink_id() . '" style="color:' . $this->getCss('color', 'black') . ';">';
             if ($this->getDisplay('name') != '' || $this->getDisplay('icon') != '') {
                 $html .= $this->getDisplay('icon') . ' ' . $this->getDisplay('text');
@@ -265,7 +265,7 @@ class plan {
                 'plan' => utils::o2a($this),
                 'html' => $html,
             );
-        } else if ($this->getLink_type() == 'image') {
+        } elseif ($this->getLink_type() == 'image') {
             $html = '<div class="image-widget" data-image_id="' . $this->getLink_id() . '" style="min-width:10px;min-height:10px;">';
             if ($this->getConfiguration('display_mode', 'image') == 'image') {
                 $html .= '<img style="width:100%;height:100%" src="' . $this->getDisplay('path', 'core/img/no_image.gif') . '"/>';
@@ -280,7 +280,7 @@ class plan {
                 'plan' => utils::o2a($this),
                 'html' => $html,
             );
-        } else if ($this->getLink_type() == 'zone') {
+        } elseif ($this->getLink_type() == 'zone') {
             if ($this->getConfiguration('zone_mode', 'simple') == 'widget') {
                 $class = '';
                 if ($this->getConfiguration('showOnFly') == 1) {
@@ -297,7 +297,7 @@ class plan {
                 'plan' => utils::o2a($this),
                 'html' => $html,
             );
-        } else if ($this->getLink_type() == 'summary') {
+        } elseif ($this->getLink_type() == 'summary') {
             $background_color = 'background-color : ' . $this->getCss('background-color', 'black') . ';';
             if ($this->getDisplay('background-defaut', false)) {
                 $background_color = 'background-color : black;';
