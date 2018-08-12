@@ -1,9 +1,4 @@
 {% include '/commons/header.html.twig' %}
-{% if CSS_POOL is defined %}
-    {% for cssFile in CSS_POOL %}
-        <link href="{{ cssFile }}" rel="stylesheet">
-    {% endfor %}
-{% endif %}
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
@@ -11,7 +6,7 @@
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
-        <p class="login-box-msg">{{ 'connectez vous pour commencer votre session'}}</p>
+        <p class="login-box-msg">{{ 'Connectez vous pour accéder à votre session'}}</p>
 
         <form >
             <div class="form-group has-feedback">
@@ -30,13 +25,13 @@
                 <div class="col-xs-8">
                     <div class="checkbox icheck ">
                         <label>
-                            <input type="checkbox" id="cb_storeConnection"> Enregister
+                            <input type="checkbox" id="cb_storeConnection"> {{ 'Enregistrer' }}
                         </label>
                     </div>
                 </div>
                 <!-- /.col -->
                 <div class="col-xs-4">
-                    <button class="btn btn-primary btn-block btn-flat" id="bt_login_validate">Connection</button>
+                    <button class="btn btn-primary btn-block btn-flat" id="bt_login_validate"> {{ 'Connexion' }}</button>
                 </div>
                 <!-- /.col -->
             </div>
