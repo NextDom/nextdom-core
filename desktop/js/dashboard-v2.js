@@ -12,6 +12,12 @@
 * @license MIT <http://opensource.org/licenses/MIT>
 */
 
+/**
+ *
+ */
+
+
+
 $(function () {
     $('input').iCheck({
         checkboxClass: 'icheckbox_square-blue',

@@ -265,7 +265,7 @@ $('#bt_editDashboardWidgetOrder').on('click',function(){
     $('.counterReorderNextDom').remove();
     $('.div_displayEquipement').packery();
   }else{
-      notify('Core','{{Vous êtes en mode édition vous pouvez déplacer les widgets, les redimensionner et changer l'ordre des commandes dans les widgets. N'oubliez pas de quitter le mode édition pour sauvegarder}}','success');   $(this).attr('data-mode',1);
+      notify('Core','{{Vous êtes en mode édition vous pouvez déplacer les widgets, les redimensionner et changer l\'ordre des commandes dans les widgets. N\'oubliez pas de quitter le mode édition pour sauvegarder}}','success');   $(this).attr('data-mode',1);
    $('.bt_editDashboardWidgetAutoResize').show();
    $('.bt_editDashboardWidgetAutoResize').off('click').on('click', function(){
      var id_object = $(this).attr('id');
