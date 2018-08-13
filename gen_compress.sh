@@ -11,6 +11,8 @@ sed -i 's/"NotoSans-Italic\.ttf/"\/3rdparty\/font-noto\/NotoSans-Italic\.ttf/g' 
 sed -i 's/"NotoSans-Bold\.ttf/"\/3rdparty\/font-noto\/NotoSans-Bold\.ttf/g' css/nextdom.css
 
 cat 3rdparty/jquery.utils/jquery.utils.js \
+    3rdparty/lobibox/js/notifications.js \
+    desktop/js/utils.js \
     core/js/core.js \
     3rdparty/bootstrap/bootstrap.min.js \
     3rdparty/jquery.ui/jquery-ui.min.js \
@@ -47,7 +49,6 @@ cat 3rdparty/jquery.utils/jquery.utils.js \
     3rdparty/highstock/modules/solid-gauge.js \
     3rdparty/highstock/modules/exporting.js \
     3rdparty/highstock/modules/export-data.js \
-    desktop/js/utils.js \
     3rdparty/jquery.at.caret/jquery.at.caret.min.js \
     3rdparty/jwerty/jwerty.js \
     3rdparty/jquery.packery/jquery.packery.js \
@@ -70,8 +71,7 @@ cat 3rdparty/jquery.utils/jquery.utils.js \
     3rdparty/jquery.cron/jquery.cron.min.js \
     3rdparty/jquery.contextMenu/jquery.contextMenu.min.js \
     3rdparty/autosize/autosize.min.js \
-    3rdparty/iCheck/icheck.js \
-    3rdparty/lobibox/js/notifications.js > js/temp.js
+    3rdparty/iCheck/icheck.js > js/temp.js
 
 # Bug compression de tablesorter
 #    3rdparty/jquery.tablesorter/jquery.tablesorter.min.js \
