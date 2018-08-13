@@ -167,7 +167,7 @@ function showHelpModal(_name,_plugin){if(init(_plugin)!=''&&_plugin!=undefined){
 $('#md_pageHelp').dialog('open');}
 function refreshMessageNumber(){nextdom.message.number({error:function(error){notify("Erreur",error.message,'error');},success:function(_number){MESSAGE_NUMBER=_number;if(_number==0||_number=='0'){$('#span_nbMessage').hide();}else{$('#span_nbMessage').html(_number);$('#span_nbMessage').show();}}});}
 function refreshUpdateNumber(){nextdom.update.number({error:function(error){notify("Erreur",error.message,'error');},success:function(_number){UPDATE_NUMBER=_number;if(_number==0||_number=='0'){$('#span_nbUpdate').hide();}else{$('#span_nbUpdate span').html(_number);$('#span_nbUpdate').show();}}});}
-function notify(_title,_text,_class_name){Lobibox.notify(_class_name,{msg:_text,closable:true,rounded:true,delayIndicator:false,size:'mini',position:'center top'});}
+function notify(_title,_text,_class_name){console.log(_title);console.log(_text);Lobibox.notify(_class_name,{msg:_text,closable:true,rounded:true,delayIndicator:false,size:'mini',position:'center top'});}
 jQuery.fn.findAtDepth=function(selector,maxDepth){var depths=[],i;if(maxDepth>0){for(i=1;i<=maxDepth;i++){depths.push('> '+new Array(i).join('* > ')+selector);}
 selector=depths.join(', ');}
 return this.find(selector);};function sleep(milliseconds){var start=new Date().getTime();for(var i=0;i<1e7;i++){if((new Date().getTime()-start)>milliseconds){break;}}}
