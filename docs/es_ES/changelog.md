@@ -21,6 +21,7 @@ cambios
 -   Possibilité d'ajouter des images en fond sur les vues
 -   Possibilité d'ajouter des images en fond sur les objets
 -   Ajout d'un theme NextDom
+-   L'information de mise à jour disponible est maintenant masquée aux utilisateurs non admin
 
 
 3.2.11

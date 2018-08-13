@@ -2,7 +2,7 @@ Esta página le permite configurar la visualización de todo su sistema domótic
 manera más personal. Esto lleva tiempo pero su único límite es
 su imaginación.
 
-Elle est accessible par Acceuil → Design
+Es accesible a través de Inicio → Diseño
 
 > **Consejo**
 >
@@ -218,12 +218,12 @@ Texto / html
 
 -   **Texto**: Texto en código HTML que estará en el elemento
 
-> **Important**
+> **Importante**
 >
-> Si vous mettez du code HTML (en particulier du Javascript), attention
-> à bien le vérifier avant car vous pouvez si il y a une erreur dedans
-> ou si il écrase un composant NextDom planter completement le design et
-> il ne restera plus qu’a le supprimer directement base de données
+> Si pones código HTML (especialmente Javascript), ten cuidado
+> Compruébelo de antemano porque puede haber errores en él.l
+> o si se sobrescribe un componente de NextDom bloqueará completamente el diseño y
+> sólo podrá borrarla directamente de la base de datos
 
 Escenario
 ========
@@ -231,155 +231,155 @@ Escenario
 Configuración de pantalla
 ---------------------
 
-Aucun paramètre spécifique d’affichage
+No hay parámetros de visualización específicos
 
-Lien 
+Link 
 ====
 
-Paramètre d’affichage 
+Parámetro de visualización 
 ---------------------
 
--   **Nom** : Nom du lien (texte affiché)
+-   **Nombre** : Nombre del enlace (texto mostrado)
 
--   **Lien** : Lien vers le design ou la vue en question
+-   **Link** :  Enlace al diseño o a la vista en cuestión
 
--   **Couleur de fond** : permet de changer la couleur de fond ou de le
-    mettre transparent, ne pas oublier de passer "Défaut" sur NON
+-   **Color de fondo** : Permite cambiar el color de fondo o el color de fondo de la imagen.
+    no se olvide de cambiar "Predeterminado" a NO
 
--   **Couleur du texte** : permet de changer la couleur des icônes et
-    des textes (attention à bien passer Défaut sur Non)
+-   **Color del texto** : permite cambiar el color de los iconos y
+    textos (tenga cuidado de pasar Default a No)
 
--   **Arrondir les angles (ne pas oublier de mettre %, ex 50%)** :
-    permet d’arrondir les angles, ne pas oublier de mettre le %
+-   **Redondear las esquinas (no olvides poner %, ej 50%)** :
+    para redondear las esquinas, no olvides poner el %
 
--   **Bordure (attention syntaxe CSS, ex : solid 1px black)** : permet
-    d’ajouter une bordure, attention la syntaxe est HTML
+-   **Borde (atención a la sintaxis CSS, ej : sólido 1px negro)** : permite
+    para agregar un borde, tenga cuidado de que la sintaxis sea HTML
 
--   **Taille de la police (ex 50%, il faut bien mettre le signe %)** :
-    permet de modifier la taille de la police
+-   **Tamaño de la fuente (ej 50%, es necesario poner el signo %)** :
+    permite cambiar el tamaño de la fuente
 
--   **Alignement du texte** : permet de choisir l’alignement du
-    texte (gauche/droit/centré)
+-   **Alineación del texto** : Le permite elegir la alineación del texto.
+    texto (izquierda/derecha/centro)
 
--   **Gras** : met le texte en gras
+-   **Negrita** : pone el texto en negrita
 
-Equipement 
+Dispositivo 
 ==========
 
-Paramètre d’affichage 
+Parámetro de visualización 
 ---------------------
 
-Aucun paramètre spécifique d’affichage
+No hay parámetros de visualización específicos
 
-Configuration avancée 
+Configuración avanzada
 ---------------------
 
-Affiche la fenetre de configuration avancé de l’équipement (voir
-documentation Résumé domotique ("display"))
+Muestra la ventana de configuración avanzada del equipo (véase
+documentación Resumen domótico ("display")
 
-Commande 
+Commando 
 ========
 
-Paramètre d’affichage 
+Parámetro de visualización 
 ---------------------
 
-Aucun paramètre spécifique d’affichage
+No hay parámetros de visualización específicos
 
-Configuration avancée 
+Configuración avanzada
 ---------------------
 
-Affiche la fenetre de configuration avancé de la commande (voir
-documentation Résumé domotique ("display"))
+Muestra la ventana de configuración avanzada del comando (véase
+documentación Resumen domótico ("display")
 
-Image/Caméra 
+Imagen/Cámara 
 ============
 
-Paramètre d’affichage 
+Parámetro de visualización 
 ---------------------
 
--   **Afficher** : défini ceux que vous voulez afficher, image fixe ou
-    flux d’une caméra
+-   **Visualización** : define lo que desea visualizar, imagen fija o
+    Flujo de una cámara
 
--   **Image** : permet d’envoyer l’image en question (si vous avez
-    choisi une image)
+-   **Imagen** : permite enviar la imagen en cuestión (si tiene
+    seleccionada una imagen)
 
--   **Caméra** : caméra à afficher (si vous avez choisi caméra)
+-   **Cámara** : cámara a mostrar (si ha elegido una cámara)
 
-Zone 
+Zona 
 ====
 
-Paramètre d’affichage 
+Parámetro de visualización 
 ---------------------
 
--   **Type de zone** : C’est ici que vous choissez le type de la zone :
-    Macro simple, Macro Binaire ou Widget au survol
+-   **Tipo de zona** : Aquí es donde usted elige el tipo de zona :
+    Macro individual, macro Binario o widget flotante
 
-### Macro simple 
+### Macro Individual
 
-Dans ce mode la un clic sur la zone execute une ou plusieurs action.
+En este modo, un clic en el área realiza una o más acciones.
 
-Il vous suffit ici d’indiquer la liste des actions à faire lors du clic
-sur la zone
+Aquí sólo tienes que indicar la lista de acciones a realizar al hacer clic en
+la zona
 
-### Macro binaire 
+### Macro binario
 
-Dans ce mode NextDom va executer la ou les action(s) On ou Off en
-fonction de l’état de la commande que vous donnez. Ex si la commande
-vaut 0 alors NextDom executera la ou les action(s) On sinon il executera
-la ou les action(s) off
+En este modo NextDom ejecutará la o las acción(es) ON u Off en
+función del estado del comando que haya elegido. Ej si el comando
+es 0 entonces NextDom ejecutará la o las acción(es)  On, Si no ejecutará
+la o las acción(es) off
 
--   **Information binaire** : Commande donnant l’état à verifier pour
-    decider de l’action à faire (on ou off)
+-   **Información binaria** : Comando que da el estado para comprobar
+    decidir qué acción tomar (on u off)
 
-Il vous suffit en dessous de mettre les actions à faire pour le on et
-pour le off
+Sólo tienes que poner las acciones a realizar a continuación para el on y
+para el off
 
-### Widget au survol 
+### Widget flotante
 
-Dans ce mode lors du survole ou du clic dans la zone nextdom vous
-affichera le widget en question
+En este modo, cuando se desplaza el cursor o hace clic en el área de nextdom, usted
+verá el widget en cuestión
 
--   **Equipement** : widget à afficher lors du survole ou du clic
+-   **Dispositivo** : widget para mostrar cuando se desplaza o hace clic
 
--   **Afficher au survol** : si coché affiche le widget au survol
+-   **Mostrar flotante** : si esta opción está seleccionada, se muestra
 
--   **Afficher sur un clic** : si coché alors le widget est affiché au
+-   **Mostrar con un clic** : si esta opción está seleccionada, el widget se mostrará con un
     clic
 
--   **Position** : permet de choisir l’emplacement d’apparition du
-    widget (par defaut bas droite)
+-   **Posición** : le permite elegir la ubicación en la que se muestra el
+    widget (por defecto abajo a la derecha)
 
-Résumé 
+Resumén 
 ======
 
--   **Lien** : Permet d’indiqué le résumé à afficher (Général pour le
-    globale sinon indiquer l’objet)
+-   **Enlace** : Se usa para indicar el resumen a mostrar (General para los
+    globales si no indica el objeto)
 
--   **Couleur de fond** : permet de changer la couleur de fond ou de le
-    mettre transparent, ne pas oublier de passer "Défaut" sur NON
+-   **Color de fondo** : Permite cambiar el color de fondo o el color de la
+    o transparencia, no olvide de cambiar "Predeterminado" a NO
 
--   **Couleur du texte** : permet de changer la couleur des icônes et
-    des textes (attention à bien passer Défaut sur Non)
+-   **Color del texto** : permite cambiar el color de los iconos y
+    textos (recuerda cambiar Predeterminado on No)
 
--   **Arrondir les angles (ne pas oublier de mettre %, ex 50%)** :
-    permet d’arrondir les angles, ne pas oublier de mettre le %
+-   **Redondear las esquinas (no olvides poner %, ej 50%)** :
+    para redondear las esquinas, no olvides poner el %
 
--   **Bordure (attention syntaxe CSS, ex : solid 1px black)** : permet
-    d’ajouter une bordure, attention la syntaxe est HTML
+-   **Borde (atención a la sintaxis CSS, ej : sólido 1px negro)** : permite
+    para agregar un borde, tenga cuidado de que la sintaxis sea HTML
 
--   **Taille de la police (ex 50%, il faut bien mettre le signe %)** :
-    permet de modifier la taille de la police
+-   **Tamaño de la fuente (ex 50%, es necesario poner el signo %)** :
+    permite cambiar el tamaño de la fuente
 
--   **Gras** : met le texte en gras
+-   **Negrita**: Pone el texto en negrita
 
 
 FAQ 
 ======
 
->**Je n'arrive plus à éditer mon design**
+>**Ya no puedo editar mi diseño**
 >
->Si vous avais mis un widget ou une image qui prend quasiment la totalité du design il faut bien cliquer en dehors du widget ou de l'image pour avoir accès au menu par clic droit.
+>Si has puesto un widget o una imagen que ocupe casi la totalidad del diseño debes pulsar bien fuera del widget o de la imagen para acceder al menú con el botón derecho del ratón.
 
->**Supprimer un design qui ne marche plus**
+>**Borrar un Diseño que ya no funciona**
 >
->Dans la partie administration puis OS/DB faire "select * from planHeader" recuperer l'id du design en question et faire un "delete from planHeader where id=#TODO#" et "delete from plan where planHeader_id=#todo#" en replacant bien #TODO# par l'id du design trouvé précedement.
+>En la parte de administración en de OS/DB hacer "select * from planHeader" obtener el id del diseño en cuestión y hacer un "delete from planHeader where id=#TODO#" y "delete from plan where planHeader_id=#todo#" reemplazando correctamente #TODO# por el id del diseño encontrado previamente.
