@@ -522,6 +522,8 @@ function refreshUpdateNumber() {
 }
 
 function notify(_title, _text, _class_name) {
+    console.log(_title);
+    console.log(_text);
     Lobibox.notify(
         _class_name,
         {

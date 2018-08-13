@@ -29,7 +29,8 @@ class Controller
     const routesList = [
         'dashboard-v2' => 'dashboardV2Page',
         'scenario' => 'scenarioPage',
-        'administration' => 'administrationPage'
+        'administration' => 'administrationPage',
+        'backup' => 'backupPage'
     ];
 
     public static function getRoute(string $page)
@@ -190,5 +191,18 @@ class Controller
         $pageContent['JS_END_POOL'][] = '/desktop/js/administration.js';
 
         return $render->get('/desktop/administration.html.twig', $pageContent);
+    }
+
+    public static function backupPage(Render $render, array &$pageContent): string {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['JS_VARS_RAW']['REPO_LIST'] = '[]';
+
+        $pageContent['backupAjaxToken'] = \ajax::getToken();
+        $pageContent['backupReposList'] = UpdateManager::listRepo();
+        $pageContent['JS_END_POOL'][] = '/desktop/js/backup.js';
+
+        return $render->get('/desktop/backup.html.twig', $pageContent);
     }
 }
