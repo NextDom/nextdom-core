@@ -190,7 +190,7 @@
                                             <option value="Pacific/Kiritimati">(GMT+14:00) Kiritimati</option>
                                         </select>
                                     </div>
-                                    <div class="col-lg-4 col-md-5 col-sm-6 col-xs-6">
+                                    <div class="col-lg-5 col-md-5 col-md-offset-3 col-sm-6 col-sm-offset-4 col-xs-6">
                                         <a class="btn btn-primary" id="bt_forceSyncHour"><i class="fa fa-clock-o"></i> {{ 'Forcer la synchronisation de l\'heure' }}</a>
                                     </div>
                                 </div>
@@ -1178,7 +1178,7 @@
                                     <form class="form-horizontal">
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label">{{ otherLog|capitalize }}</label>
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-10">
                                                 <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="1000"/> {{ 'Aucun' }}</label>
                                                 <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="default"/> {{ 'Défaut' }}</label>
                                                 <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="100"/> {{ 'Debug' }}</label>
@@ -1194,7 +1194,7 @@
                                         <form class="form-horizontal">
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">{{ pluginData['plugin'].getName() }}</label>
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-10">
                                                     <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="1000"/> {{ 'Aucun' }}</label>
                                                     <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="default"/> {{ 'Défaut' }}</label>
                                                     <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="100"/> {{ 'Debug' }}</label>
