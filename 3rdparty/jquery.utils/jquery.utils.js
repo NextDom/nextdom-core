@@ -260,7 +260,7 @@
                                     $('#div_loadingSpinner').show()
                                 } else {
                                     if ($('#jqueryLoadingDiv').length == 0) {
-                                        $('body').append('<div id="jqueryLoadingDiv"><div class="overlay"></div><i class="fa fa-refresh fa-spin loadingImg icon_nextdom_blue"></i></div>');
+                                        $('body').append('<div id="jqueryLoadingDiv"><div class="overlay"></div><i class="fa fa-cog fa-spin loadingImg"></i></div>');
                                     }
                                     $('#jqueryLoadingDiv').show();
                                 }
@@ -281,11 +281,11 @@
                                 options.emptyBefore = init(options.emptyBefore, true);
                                 options.show = init(options.show, true);
                                 if ($.mobile) {
-                                   new $.nd2Toast({
-                                    message :  options.message,
+                                 new $.nd2Toast({
+                                    message :  options.message, 
                                     ttl : 3000
                                 });
-                               } else {
+                             } else {
                                 if (options.emptyBefore == false) {
                                     var html = $(this).find('.displayError').html();
                                     if (isset(html)) {
@@ -389,8 +389,8 @@
                             $(this).prop('checked', (init(_value) == 1) ? true : false);
                         }
                     } else  if ($(this).attr('type') == 'radio') {
-                       $(this).prop('checked', (init(_value) == 1) ? true : false);
-                   } else {
+                     $(this).prop('checked', (init(_value) == 1) ? true : false);
+                 } else {
                     $(this).val(init(_value));
                 }
             }
@@ -425,10 +425,7 @@
             }
         }
         if ($(this).is('div') || $(this).is('span') || $(this).is('p')) {
-            value = $(this).text();
-            if (value == '') {
-                value = $(this).html();
-            }
+            value = $(this).html();
         }
         if ($(this).is('a') && $(this).attr('value') != undefined) {
             value = $(this).attr('value');
@@ -638,3 +635,5 @@ String.prototype.stripAccents = function () {
     });
 };
 })(jQuery);
+
+

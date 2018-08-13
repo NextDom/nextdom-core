@@ -22,10 +22,10 @@ require_once __DIR__ . '/../../core/php/core.inc.php';
 class history {
     /*     * *************************Attributs****************************** */
 
-    private $cmd_id;
-    private $value;
-    private $datetime;
-    private $_tableName = 'history';
+    protected $cmd_id;
+    protected $value;
+    protected $datetime;
+    protected $_tableName = 'history';
 
     /*     * ***********************Methode static*************************** */
 
@@ -254,30 +254,30 @@ class history {
         }
 
         $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-        FROM (
-            SELECT ' . DB::buildField(__CLASS__) . '
             FROM history
             WHERE cmd_id=:cmd_id ';
-
         if ($_startTime !== null) {
             $sql .= ' AND datetime>=:startTime';
         }
         if ($_endTime !== null) {
             $sql .= ' AND datetime<=:endTime';
         }
-        $sql .= ' UNION ALL
-            SELECT ' . DB::buildField(__CLASS__) . '
+        $sql .= ' ORDER BY `datetime` ASC';
+        $result1 = DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
+
+        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
             FROM historyArch
-            WHERE cmd_id=:cmd_id';
+            WHERE cmd_id=:cmd_id ';
         if ($_startTime !== null) {
             $sql .= ' AND `datetime`>=:startTime';
         }
         if ($_endTime !== null) {
             $sql .= ' AND `datetime`<=:endTime';
         }
-        $sql .= ' ) as dt
-                ORDER BY `datetime` ASC';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
+        $sql .= ' ORDER BY `datetime` ASC';
+        $result2 = DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, 'historyArch');
+
+        return array_merge($result2, $result1);
     }
 
     public static function getPlurality($_cmd_id, $_startTime = null, $_endTime = null, $_period = 'day', $_offset = 0) {
@@ -474,6 +474,7 @@ class history {
         }
         return -1;
     }
+
     public static function lastStateDuration($_cmd_id, $_value = null) {
         $cmd = cmd::byId($_cmd_id);
         if (!is_object($cmd)) {
@@ -483,6 +484,7 @@ class history {
             return -2;
         }
         $_value = str_replace(',', '.', $_value);
+        $_value = trim($_value);
         $_decimal = strlen(substr(strrchr($_value, '.'), 1));
         $histories = array_reverse(history::all($_cmd_id));
         $c = count($histories);
@@ -490,17 +492,22 @@ class history {
             return -1;
         }
         $currentValue = $histories[0]->getValue();
+        if (is_numeric($_value)) {
+            $currentValue = round($currentValue, $_decimal);
+        }
         $duration = 0;
         $dateTo = date('Y-m-d H:i:s');
         if ($_value === null || $_value == $currentValue) {
-            $_value = $histories[0]->getValue();
+            $_value = $currentValue;
             $duration = strtotime($dateTo) - strtotime($histories[0]->getDatetime());
         }
         $started = 0;
         for ($i = 0; $i < $c; $i++) {
             $history = $histories[$i];
             $value = $history->getValue();
-            $value = round($value, $_decimal);
+            if (is_numeric($_value)) {
+                $value = round($value, $_decimal);
+            }
             $date = $history->getDatetime();
             //same state as current:
             if ($_value == $currentValue && $_value != $value) {
@@ -508,7 +515,10 @@ class history {
             }
             //different state as current:
             if ($_value != $currentValue && $i > 0) {
-                $prevValue = round($histories[$i - 1]->getValue(), $_decimal);
+                $prevValue = $histories[$i - 1]->getValue();
+                if (is_numeric($_value)) {
+                    $prevValue = round($prevValue, $_decimal);
+                }
                 if ($_value == $value && $_value != $prevValue) {
                     $started = 1;
                     $duration = 0;
@@ -536,6 +546,7 @@ class history {
             return -2;
         }
         $_value = str_replace(',', '.', $_value);
+        $_value = trim($_value);
         $_decimal = strlen(substr(strrchr($_value, '.'), 1));
         $histories = array_reverse(history::all($_cmd_id));
         $c = count($histories);
@@ -543,27 +554,40 @@ class history {
             return -1;
         }
         $currentValue = $histories[0]->getValue();
+        if (is_numeric($_value)) {
+            $currentValue = round($currentValue, $_decimal);
+        }
         $dateTo = date('Y-m-d H:i:s');
         $duration = strtotime($dateTo) - strtotime($histories[0]->getDatetime());
-        if ($_value === null || $_value == $currentValue) {
-            $_value = $histories[0]->getValue();
+        if ($_value === null) {
+            $_value = $currentValue;
         }
         for ($i = 0; $i < $c - 1; $i++) {
             $history = $histories[$i];
             $value = $history->getValue();
-            $value = round($value, $_decimal);
+            if (is_numeric($_value)) {
+                $value = round($value, $_decimal);
+            }
             $date = $history->getDatetime();
             //same state as current:
             if ($_value == $currentValue) {
-                $nextValue = round($histories[$i + 1]->getValue(), $_decimal);
+                $nextValue = $histories[$i + 1]->getValue();
+                if (is_numeric($_value)) {
+                    $nextValue = round($nextValue, $_decimal);
+                }
                 if ($_value != $nextValue) {
+                    $duration += strtotime($histories[$i - 1]->getDatetime()) - strtotime($date);
                     return $duration;
                 }
             }
             //different state as current:
             if ($_value != $currentValue && $i > 0) {
-                $prevValue = round($histories[$i - 1]->getValue(), $_decimal);
-                $nextValue = round($histories[$i + 1]->getValue(), $_decimal);
+                $prevValue = $histories[$i - 1]->getValue();
+                $nextValue = $histories[$i + 1]->getValue();
+                if (is_numeric($_value)) {
+                    $prevValue = round($prevValue, $_decimal);
+                    $nextValue = round($nextValue, $_decimal);
+                }
                 if ($_value == $value && $_value != $nextValue) {
                     $duration += strtotime($histories[$i - 1]->getDatetime()) - strtotime($date);
                     return $duration;
@@ -654,8 +678,6 @@ class history {
 
     public static function getHistoryFromCalcul($_strcalcul, $_dateStart = null, $_dateEnd = null, $_noCalcul = false) {
         $now = strtotime('now');
-        $archiveTime = (config::byKey('historyArchiveTime') + 1) * 3600 + 86400;
-        $packetTime = (config::byKey('historyArchivePackage')) * 3600;
         $value = array();
         $cmd_histories = array();
         preg_match_all("/#([0-9]*)#/", $_strcalcul, $matches);
@@ -696,7 +718,7 @@ class history {
                 if (count($matches[1]) != count($cmd_history)) {
                     continue;
                 }
-                $datetime = floatval(strtotime($datetime . " UTC"));
+                $datetime = floatval(strtotime($datetime));
                 $calcul = template_replace($cmd_history, $_strcalcul);
                 if ($_noCalcul) {
                     $value[$datetime] = $calcul;
