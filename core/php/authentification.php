@@ -17,6 +17,8 @@
  */
 require_once __DIR__ . '/core.inc.php';
 
+use NextDom\Helpers\Utils;
+
 $configs = config::byKeys(array('session_lifetime', 'sso:allowRemoteUser'));
 
 $session_lifetime = $configs['session_lifetime'];
@@ -74,6 +76,8 @@ if (!isConnect() && init('auth') != '') {
 
 if (init('logout') == 1) {
     logout();
+    Utils::redirect('index.php');
+    die();
 }
 
 /* * **************************Definition des function************************** */
