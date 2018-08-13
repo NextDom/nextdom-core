@@ -336,6 +336,8 @@ class PrepareView
             $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min.js';
         } else {
+            $pageData['JS_POOL'][] = '3rdparty/lobibox/js/notifications.js';
+            $pageData['JS_POOL'][] = 'desktop/js/utils.js';
             $pageData['JS_POOL'][] = '3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = 'core/js/core.js';
             $pageData['JS_POOL'][] = '3rdparty/bootstrap/bootstrap.min.js';
@@ -373,8 +375,6 @@ class PrepareView
             $pageData['JS_POOL'][] = '3rdparty/highstock/modules/solid-gauge.js';
             $pageData['JS_POOL'][] = '3rdparty/highstock/modules/exporting.js';
             $pageData['JS_POOL'][] = '3rdparty/highstock/modules/export-data.js';
-            $pageData['JS_POOL'][] = 'desktop/js/utils.js';
-            $pageData['JS_POOL'][] = '3rdparty/jquery.toastr/jquery.toastr.min.js';
             $pageData['JS_POOL'][] = '3rdparty/jquery.at.caret/jquery.at.caret.min.js';
             $pageData['JS_POOL'][] = '3rdparty/jwerty/jwerty.js';
             $pageData['JS_POOL'][] = '3rdparty/jquery.packery/jquery.packery.js';
@@ -396,7 +396,6 @@ class PrepareView
             $pageData['JS_POOL'][] = '3rdparty/jquery.contextMenu/jquery.contextMenu.min.js';
             $pageData['JS_POOL'][] = '3rdparty/autosize/autosize.min.js';
             $pageData['JS_POOL'][] = '3rdparty/iCheck/icheck.min.js';
-            $pageData['JS_POOL'][] = '3rdparty/lobibox/js/notifications.js';
         }
     }
 

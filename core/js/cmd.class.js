@@ -25,8 +25,8 @@ if (!isset(nextdom.cmd.update)) {
     nextdom.cmd.update = Array();
 }
 nextdom.cmd.execute = function(_params) {
-    var notify = _params.notify || true;
-    if (notify) {
+    var needNotify = _params.notify || true;
+    if (needNotify) {
         var eqLogic = $('.cmd[data-cmd_id=' + _params.id + ']').closest('.eqLogic');
         eqLogic.find('.statusCmd').empty().append('<i class="fa fa-spinner fa-spin"></i>');
     }
@@ -49,7 +49,7 @@ nextdom.cmd.execute = function(_params) {
                         if ('function' != typeof(_params.error)) {
                             notify("Erreur", data.result, 'error');
                         }
-                        if (notify) {
+                        if (needNotify) {
                             eqLogic.find('.statusCmd').empty().append('<i class="fa fa-times"></i>');
                             setTimeout(function() {
                                 eqLogic.find('.statusCmd').empty();
@@ -67,7 +67,7 @@ nextdom.cmd.execute = function(_params) {
                     if ('function' != typeof(_params.error)) {
                         notify("Erreur", data.result, 'error');
                     }
-                    if (notify) {
+                    if (needNotify) {
                         eqLogic.find('.statusCmd').empty().append('<i class="fa fa-times"></i>');
                         setTimeout(function() {
                             eqLogic.find('.statusCmd').empty();
@@ -89,7 +89,7 @@ nextdom.cmd.execute = function(_params) {
                     if ('function' != typeof(_params.error)) {
                         notify("Erreur", data.result, 'error');
                     }
-                    if (notify) {
+                    if (needNotify) {
                         eqLogic.find('.statusCmd').empty().append('<i class="fa fa-times"></i>');
                         setTimeout(function() {
                             eqLogic.find('.statusCmd').empty();
@@ -107,7 +107,7 @@ nextdom.cmd.execute = function(_params) {
                     if ('function' != typeof(_params.error)) {
                         notify("Erreur", data.result, 'error');
                     }
-                    if (notify) {
+                    if (needNotify) {
                         eqLogic.find('.statusCmd').empty().append('<i class="fa fa-times"></i>');
                         setTimeout(function() {
                             eqLogic.find('.statusCmd').empty();
@@ -122,7 +122,7 @@ nextdom.cmd.execute = function(_params) {
             if ('function' != typeof(_params.error)) {
                 notify("Erreur", data.result, 'error');
             }
-            if (notify) {
+            if (needNotify) {
                 eqLogic.find('.statusCmd').empty().append('<i class="fa fa-times"></i>');
                 setTimeout(function() {
                     eqLogic.find('.statusCmd').empty();
@@ -131,7 +131,7 @@ nextdom.cmd.execute = function(_params) {
             return data;
         }
     }
-    if (notify) {
+    if (needNotify) {
         eqLogic.find('.statusCmd').empty().append('<i class="fa fa-rss"></i>');
         setTimeout(function() {
             eqLogic.find('.statusCmd').empty();
