@@ -768,7 +768,7 @@ class cmd {
         if (count($events) > 0) {
             event::adds('cmd::update', $events);
         }
-        listener::check($this->getId(), $value);
+        listener::check($this->getId(), $value, $this->getCollectDate());
         if (!$repeat) {
             object::checkSummaryUpdate($this->getId());
         }

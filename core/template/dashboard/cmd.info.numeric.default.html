@@ -8,7 +8,7 @@
        nextdom.cmd.update['#id#'] = function(_options){
            $('.cmd[data-cmd_uid=#uid#] .gauge').highcharts().series[0].points[0].update(_options.display_value);
        }
-
+       
        if (is_numeric('#state#')) {
         // The speed gauge
         $('.cmd[data-cmd_uid=#uid#] .gauge').empty().highcharts({
@@ -66,7 +66,7 @@
                     min: #minValue#,
                     max: #maxValue#,
                     title: {
-                        text: '<span style="font-weight: bold;font-family : Helvetica Neue,Helvetica,Arial,sans-serif;#hideCmdName#">#name_display#</span>',
+                        text: '<span style="color: white;font-weight: bold;font-family : Helvetica Neue,Helvetica,Arial,sans-serif;#hideCmdName#">#name_display#</span>',
                         y: - 35
                     }
                 },
@@ -90,7 +90,7 @@
                     name: '',
                     data: [Math.round(parseFloat('#state#') * 10) / 10],
                     dataLabels: {
-                        format: '<span>{y}</span> <span style="font-size:10px;color:white">#unite#</span>'
+                        format: '<span style="color : white;">{y}</span> <span style="font-size:10px;color:white">#unite#</span>'
                     },
                 }]
             });

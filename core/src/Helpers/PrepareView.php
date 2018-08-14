@@ -284,8 +284,12 @@ class PrepareView
      */
     private static function initMenu(&$pageData, $currentPlugin)
     {
+        $pageData['IS_ADMIN']                 = Status::isConnectAdmin();
+        $pageData['CAN_SUDO']                 = \nextdom::isCapable('sudo');
         $pageData['MENU_NB_MESSAGES']    = \message::nbMessage();
-        $pageData['MENU_NB_UPDATES']     = UpdateManager::nbNeedUpdate();
+        if ($pageData['IS_ADMIN']) {
+            $pageData['MENU_NB_UPDATES']     = UpdateManager::nbNeedUpdate();
+        }
         $pageData['MENU_JEEOBJECT_TREE'] = JeeObjectManager::buildTree(null, false);
         $pageData['MENU_VIEWS_LIST']     = \view::all();
         $pageData['MENU_PLANS_LIST']     = \planHeader::all();
@@ -298,8 +302,6 @@ class PrepareView
         $pageData['USER_ISCONNECTED']         = $_SESSION['user']->is_Connected();
         $pageData['USER_AVATAR']              = $_SESSION['user']->getOptions('avatar');
         $pageData['USER_LOGIN']               = $_SESSION['user']->getLogin();
-        $pageData['IS_ADMIN']                 = Status::isConnectAdmin();
-        $pageData['CAN_SUDO']                 = \nextdom::isCapable('sudo');
         $pageData['NEXTDOM_VERSION']          = \nextdom::version();
         $pageData['MENU_PLUGIN_HELP']         = Utils::init('m');
         $pageData['MENU_PLUGIN_PAGE']         = Utils::init('p');
