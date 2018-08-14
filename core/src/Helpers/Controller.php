@@ -188,6 +188,7 @@ class Controller
         $pageContent['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
         $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
 
+        $pageContent['CSS_POOL'][] = '/desktop/css/administration.css';
         $pageContent['JS_END_POOL'][] = '/desktop/js/administration.js';
 
         return $render->get('/desktop/administration.html.twig', $pageContent);

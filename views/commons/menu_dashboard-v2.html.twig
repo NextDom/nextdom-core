@@ -33,13 +33,14 @@
                     </ul>
                 </li>
                 <!-- Tasks: style can be found in dropdown.less -->
+                {% if IS_ADMIN %}
                 <li class="tasks-menu">
                     <a href="index.php?v=d&p=update">
                         <i class="fa fa-flag-o"></i>
                         <span class="label label-danger">{{ MENU_NB_UPDATES }}</span>
                     </a>
                 </li>
-
+                {% endif %}
                 <!-- Control Sidebar Toggle Button -->
                 <li>
                     <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>

@@ -1,5 +1,5 @@
 
-/* This file is part of nextdom.
+/* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,24 +12,24 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with nextdom. If not, see <http://www.gnu.org/licenses/>.
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-if (getUrlVars('saveSuccessFull') == 1) {
-    $('#div_alert').showAlert({message: '{{Sauvegarde effectuée avec succès}}', level: 'success'});
+ if (getUrlVars('saveSuccessFull') == 1) {
+    notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
 }
 
 if (getUrlVars('removeSuccessFull') == 1) {
-    $('#div_alert').showAlert({message: '{{Suppression effectuée avec succès}}', level: 'success'});
+    notify("Info", '{{Suppression effectuée avec succès}}', 'success');
 }
 
 $('#bt_graphObject').on('click', function () {
-    $('#md_modal').dialog({title: "{{Graphique des liens}}"});
-    $("#md_modal").load('index.php?v=d&modal=graph.link&filter_type=object&filter_id='+$('.objectAttr[data-l1key=id]').value()).dialog('open');
+  $('#md_modal').dialog({title: "{{Graphique des liens}}"});
+  $("#md_modal").load('index.php?v=d&modal=graph.link&filter_type=object&filter_id='+$('.objectAttr[data-l1key=id]').value()).dialog('open');
 });
 
 setTimeout(function(){
-    $('.objectListContainer').packery();
+  $('.objectListContainer').packery();
 },100);
 
 $('#bt_returnToThumbnailDisplay').on('click',function(){
@@ -48,35 +48,35 @@ $(".objectDisplayCard").on('click', function (event) {
 });
 
 $('#in_searchObject').keyup(function () {
-    var search = $(this).value();
-    if(search == ''){
-        $('.objectDisplayCard').show();
-        $('.objectListContainer').packery();
-        return;
-    }
-    $('.objectDisplayCard').hide();
-    $('.objectDisplayCard .name').each(function(){
-        var text = $(this).text().toLowerCase();
-        if(text.indexOf(search.toLowerCase()) >= 0){
-            $(this)
-            $(this).closest('.objectDisplayCard').show();
-        }
-    });
+   var search = $(this).value();
+   if(search == ''){
+    $('.objectDisplayCard').show();
     $('.objectListContainer').packery();
+    return;
+}
+$('.objectDisplayCard').hide();
+$('.objectDisplayCard .name').each(function(){
+    var text = $(this).text().toLowerCase();
+    if(text.indexOf(search.toLowerCase()) >= 0){
+      $(this)
+      $(this).closest('.objectDisplayCard').show();
+  }
+});
+$('.objectListContainer').packery();
 });
 
 
 
 $('#bt_removeBackgroundImage').off('click').on('click', function () {
-    nextdom.object.removeImage({
-        view: $('.objectAttr[data-l1key=id]').value(),
-        error: function (error) {
-            notify('Core',error.message,'error');
-        },
-        success: function () {
-            $('#div_alert').showAlert({message: '{{Image supprimée}}', level: 'success'});
-        },
-    });
+  nextdom.object.removeImage({
+    view: $('.objectAttr[data-l1key=id]').value(),
+    error: function (error) {
+        notify("Erreur", error.message, 'error');
+    },
+    success: function () {
+        notify("Info", '{{Image supprimée}}', 'success');
+    },
+});
 });
 
 function loadObjectConfiguration(_id){
@@ -92,10 +92,10 @@ function loadObjectConfiguration(_id){
         dataType: 'json',
         done: function (e, data) {
             if (data.result.state != 'ok') {
-                notify('Core',data.result.result,'error');
+                notify("Erreur", data.result.result, 'error');
                 return;
             }
-            $('#div_alert').showAlert({message: '{{Image ajoutée}}', level: 'success'});
+            notify("Info", '{{Image ajoutée}}', 'success');
         }
     });
     $(".objectDisplayCard").removeClass('active');
@@ -107,7 +107,7 @@ function loadObjectConfiguration(_id){
         id: _id,
         cache: false,
         error: function (error) {
-            notify('Core',error.message,'error');
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             $('.objectAttr').value('');
@@ -146,12 +146,12 @@ $("#bt_addObject,#bt_addObject2").on('click', function (event) {
             nextdom.object.save({
                 object: {name: result, isVisible: 1},
                 error: function (error) {
-                    notify('Core',error.message,'error');
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
                     modifyWithoutSave = false;
                     loadPage('index.php?v=d&p=object&id=' + data.id + '&saveSuccessFull=1');
-                    $('#div_alert').showAlert({message: '{{Sauvegarde effectuée avec succès}}', level: 'success'});
+                    notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
                 }
             });
         }
@@ -187,7 +187,7 @@ $("#bt_saveObject").on('click', function (event) {
     nextdom.object.save({
         object: object,
         error: function (error) {
-            notify('Core',error.message,'error');
+            notify("Erreur", error.message, 'error');
         },
         success: function (data) {
             modifyWithoutSave = false;
@@ -204,7 +204,7 @@ $("#bt_removeObject").on('click', function (event) {
             nextdom.object.remove({
                 id: $('.objectDisplayCard.active').attr('data-object_id'),
                 error: function (error) {
-                    notify('Core',error.message,'error');
+                    notify("Erreur", error.message, 'error');
                 },
                 success: function () {
                     modifyWithoutSave = false;
@@ -229,7 +229,7 @@ if (is_numeric(getUrlVars('id'))) {
     } else {
         $('.objectDisplayCard:first').click();
     }
-}
+} 
 
 $('#div_pageContainer').delegate('.objectAttr', 'change', function () {
     modifyWithoutSave = true;
@@ -281,6 +281,6 @@ function addSummaryInfo(_el, _summary) {
 }
 
 $('.bt_showObjectSummary').off('click').on('click', function () {
-    $('#md_modal').dialog({title: "{{Résumé Objets}}"});
-    $("#md_modal").load('index.php?v=d&modal=object.summary').dialog('open');
+  $('#md_modal').dialog({title: "{{Résumé Objets}}"});
+  $("#md_modal").load('index.php?v=d&modal=object.summary').dialog('open');
 });
