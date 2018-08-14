@@ -32,7 +32,8 @@ class Controller
         'administration' => 'administrationPage',
         'backup' => 'backupPage',
         'object' => 'objectPage',
-        'message' => 'messagePage'
+        'message' => 'messagePage',
+        'cron' => 'cronPage'
     ];
 
     public static function getRoute(string $page)
@@ -237,5 +238,14 @@ class Controller
         }
         $pageContent['messagePluginsList'] = \message::listPlugin();
         return $render->get('/desktop/message.html.twig', $pageContent);
+    }
+
+    public static function cronPage(Render $render, array &$pageContent): string {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $pageContent['cronEnabled'] = \config::byKey('enableCron');
+        $pageContent['JS_END_POOL'][] = '/desktop/js/cron.js';
+        return $render->get('/desktop/cron.html.twig', $pageContent);
     }
 }
