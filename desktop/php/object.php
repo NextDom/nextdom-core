@@ -64,7 +64,7 @@ $allObject = jeeObject::buildTree(null, false);
             </div>
 
             <div class="col-xs-12">
-                <div class="nav-tabs-custom" style="display: none;" id="div_conf">
+                <div class="nav-tabs-custom object" style="display: none;" id="div_conf">
                     <a class="btn btn-success pull-right" id="bt_saveObject"><i class="far fa-check-circle"></i> {{Sauvegarder}}</a>
                     <a class="btn btn-danger pull-right" id="bt_removeObject"><i class="fas fa-minus-circle"></i> {{Supprimer}}</a>
                     <a class="btn btn-default pull-right" id="bt_graphObject"><i class="fas fa-object-group"></i> {{Liens}}</a>
