@@ -30,7 +30,9 @@ class Controller
         'dashboard-v2' => 'dashboardV2Page',
         'scenario' => 'scenarioPage',
         'administration' => 'administrationPage',
-        'backup' => 'backupPage'
+        'backup' => 'backupPage',
+        'object' => 'objectPage',
+        'message' => 'messagePage'
     ];
 
     public static function getRoute(string $page)
@@ -205,5 +207,35 @@ class Controller
         $pageContent['JS_END_POOL'][] = '/desktop/js/backup.js';
 
         return $render->get('/desktop/backup.html.twig', $pageContent);
+    }
+
+    public static function objectPage(Render $render, array &$pageContent): string {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['JS_VARS']['select_id'] = Utils::init('id', '-1');
+        $pageContent['JS_END_POOL'][] = '/desktop/js/object.js';
+
+        $pageContent['objectList'] = JeeObjectManager::buildTree(null, false);
+        $pageContent['objectSummary'] = \config::byKey('object:summary');
+
+        return $render->get('/desktop/object.html.twig', $pageContent);
+    }
+
+    public static function messagePage(Render $render, array &$pageContent): string {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $pageContent['JS_END_POOL'][] = '/desktop/js/message.js';
+
+        $pageContent['messageSelectedPlugin'] = Utils::init('plugin');
+        if ($pageContent['messageSelectedPlugin'] != '') {
+            $pageContent['messagesList'] = \message::byPlugin($pageContent['messageSelectedPlugin']);
+        }
+        else {
+            $pageContent['messagesList'] = \message::all();
+        }
+        $pageContent['messagePluginsList'] = \message::listPlugin();
+        return $render->get('/desktop/message.html.twig', $pageContent);
     }
 }
