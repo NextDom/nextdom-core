@@ -36,7 +36,9 @@ class Controller
         'cron' => 'cronPage',
         'user' => 'userPage',
         'update' => 'updatePage',
-        'system' => 'systemPage'
+        'system' => 'systemPage',
+        'database' => 'databasePage',
+        'display' => 'displayPage'
     ];
 
     public static function getRoute(string $page)
@@ -294,5 +296,49 @@ class Controller
         $pageContent['JS_END_POOL'][] = '/desktop/js/system.js';
 
         return $render->get('/desktop/system.html.twig', $pageContent);
+    }
+
+    public static function databasePage(Render $render, array &$pageContent): string {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['JS_END_POOL'][] = '/desktop/js/database.js';
+
+        return $render->get('/desktop/database.html.twig', $pageContent);
+    }
+
+    public static function displayPage(Render $render, array &$pageContent): string {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['JS_END_POOL'][] = '/desktop/js/display.js';
+
+        $nbEqlogics = 0;
+        $nbCmds = 0;
+        $objects = JeeObjectManager::all();
+        $eqLogics = array();
+        $cmds = array();
+        $eqLogics[-1] = EqLogicManager::byObjectId(null, false);
+        foreach ($eqLogics[-1] as $eqLogic) {
+            $cmds[$eqLogic->getId()] = $eqLogic->getCmd();
+            $nbCmds += count($cmds[$eqLogic->getId()]);
+        }
+        $nbEqlogics += count($eqLogics[-1]);
+        foreach ($objects as $object) {
+            $eqLogics[$object->getId()] = $object->getEqLogic(false, false);
+            foreach ($eqLogics[$object->getId()] as $eqLogic) {
+                $cmds[$eqLogic->getId()] = $eqLogic->getCmd();
+                $nbCmds += count($cmds[$eqLogic->getId()]);
+            }
+            $nbEqlogics += count($eqLogics[$object->getId()]);
+        }
+
+        $pageContent['displayObjects'] = $objects;
+        $pageContent['displayNbEqLogics'] = $nbEqlogics;
+        $pageContent['displayNbCmds'] = $nbCmds;
+        $pageContent['displayEqLogics'] = $eqLogics;
+        $pageContent['displayCmds'] = $cmds;
+
+        return $render->get('/desktop/display.html.twig', $pageContent);
     }
 }
