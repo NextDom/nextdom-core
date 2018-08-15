@@ -88,6 +88,24 @@ class nextdom
     }
 
     /**
+     * TODO ???
+     * @param $data
+     */
+    public static function addRemoveHistory($data)
+    {
+        try {
+            $remove_history = array();
+            if (file_exists(NEXTDOM_ROOT . '/data/remove_history.json')) {
+                $remove_history = json_decode(file_get_contents(NEXTDOM_ROOT . '/data/remove_history.json'), true);
+            }
+            $remove_history[] = $data;
+            $remove_history = array_slice($remove_history, -200, 200);
+            file_put_contents(NEXTDOM_ROOT . '/data/remove_history.json', json_encode($remove_history));
+        } catch (Exception $e) {
+        }
+    }
+
+    /**
      * TODO: ???
      * @return array
      */
@@ -355,6 +373,12 @@ class nextdom
             }
             return \config::byKey('apipro');
         }
+        if ($plugin == 'apimarket') {
+            if (config::byKey('apimarket') == '') {
+                config::save('apimarket', config::genKey());
+            }
+            return config::byKey('apimarket');
+        }
         if (\config::byKey('api', $plugin) == '') {
             \config::save('api', \config::genKey(), $plugin);
         }
@@ -603,7 +627,7 @@ class nextdom
     public static function listBackup(): array
     {
         if (substr(\config::byKey('backup::path'), 0, 1) != '/') {
-            $backup_dir = NEXTDOM_ROOT .'/'. \config::byKey('backup::path');
+            $backup_dir = NEXTDOM_ROOT . '/' . \config::byKey('backup::path');
         } else {
             $backup_dir = \config::byKey('backup::path');
         }
