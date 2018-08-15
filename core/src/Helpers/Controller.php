@@ -33,7 +33,8 @@ class Controller
         'backup' => 'backupPage',
         'object' => 'objectPage',
         'message' => 'messagePage',
-        'cron' => 'cronPage'
+        'cron' => 'cronPage',
+        'user' => 'userPage'
     ];
 
     public static function getRoute(string $page)
@@ -242,10 +243,27 @@ class Controller
 
     public static function cronPage(Render $render, array &$pageContent): string {
         Status::initConnectState();
-        Status::isConnectedOrFail();
+        Status::isConnectedAdminOrFail();
 
         $pageContent['cronEnabled'] = \config::byKey('enableCron');
         $pageContent['JS_END_POOL'][] = '/desktop/js/cron.js';
         return $render->get('/desktop/cron.html.twig', $pageContent);
+    }
+
+    public static function userPage(Render $render, array &$pageContent): string {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['userLdapEnabled'] = \config::byKey('ldap::enable');
+        if ($pageContent['userLdapEnabled'] != '1') {
+            $user = \user::byLogin('nextdom_support');
+            $pageContent['userSupportExists'] = is_object($user);
+        }
+        $pageContent['userSessionsList'] = \listSession();
+        $pageContent['usersList'] = \user::all();
+        $pageContent['JS_VARS']['ldapEnable'] = $pageContent['userLdapEnabled'];
+        $pageContent['JS_END_POOL'][] = '/desktop/js/user.js';
+
+        return $render->get('/desktop/user.html.twig', $pageContent);
     }
 }
