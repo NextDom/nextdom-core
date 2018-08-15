@@ -34,7 +34,9 @@ class Controller
         'object' => 'objectPage',
         'message' => 'messagePage',
         'cron' => 'cronPage',
-        'user' => 'userPage'
+        'user' => 'userPage',
+        'update' => 'updatePage',
+        'system' => 'systemPage'
     ];
 
     public static function getRoute(string $page)
@@ -218,6 +220,7 @@ class Controller
         $pageContent['JS_VARS']['select_id'] = Utils::init('id', '-1');
         $pageContent['JS_END_POOL'][] = '/desktop/js/object.js';
 
+        $pageContent['objectProductName'] = \config::byKey('product_name');
         $pageContent['objectList'] = JeeObjectManager::buildTree(null, false);
         $pageContent['objectSummary'] = \config::byKey('object:summary');
 
@@ -265,5 +268,31 @@ class Controller
         $pageContent['JS_END_POOL'][] = '/desktop/js/user.js';
 
         return $render->get('/desktop/user.html.twig', $pageContent);
+    }
+
+    public static function updatePage(Render $render, array &$pageContent): string {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $updates = array();
+        foreach (UpdateManager::listCoreUpdate() as $udpate) {
+            $updates[str_replace(array('.php', '.sql'), '', $udpate)] = str_replace(array('.php', '.sql'), '', $udpate);
+        }
+        usort($updates, 'version_compare');
+        $pageContent['updatesList'] = array_reverse($updates);
+
+        $pageContent['JS_END_POOL'][] = '/desktop/js/update.js';
+
+        return $render->get('/desktop/update.html.twig', $pageContent);
+    }
+
+    public static function systemPage(Render $render, array &$pageContent): string {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageData['systemCanSudo'] = \nextdom::isCapable('sudo');
+        $pageContent['JS_END_POOL'][] = '/desktop/js/system.js';
+
+        return $render->get('/desktop/system.html.twig', $pageContent);
     }
 }
