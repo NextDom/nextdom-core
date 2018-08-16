@@ -103,7 +103,7 @@ step_6_nextdom_download() {
     mkdir -p ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
     find ${WEBSERVER_HOME} -name 'index.html' -type f -exec rm -rf {} + >> ${DEBUG} 2>&1
     cd  ${WEBSERVER_HOME}
-    if [ "$(ls -A  ${WEBSERVER_HOME})" ]; then
+    if [ -d ${WEBSERVER_HOME}/.git ]; then
         git fetch --all >> ${DEBUG} 2>&1
         git reset --hard origin/${VERSION} >> ${DEBUG} 2>&1
         git pull origin ${VERSION} >> ${DEBUG} 2>&1
