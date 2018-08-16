@@ -100,6 +100,7 @@ step_5_php() {
 
 step_6_nextdom_download() {
     echo "                                                                                    "
+    rm -fr /var/www/html
     mkdir -p ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
 
     cd  ${WEBSERVER_HOME}
