@@ -62,19 +62,19 @@ step_3_database() {
     echo "mysql-server mysql-server/root_password_again password ${MYSQL_ROOT_PASSWD}" | debconf-set-selections
     apt-get install -q -y mysql-client mysql-common mysql-server >> ${DEBUG} 2>&1
 
-    systemctl status mysql > /dev/null 2>&1
+    systemctl status mysql >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
-        service mysql status  2>&1
+        service mysql status  >> ${DEBUG} 2>&1
         if [ $? -ne 0 ]; then
-            systemctl start mysql > /dev/null 2>&1
+            systemctl start mysql >> ${DEBUG} 2>&1
             if [ $? -ne 0 ]; then
-                service mysql start > /dev/null 2>&1
+                service mysql start >> ${DEBUG} 2>&1
             fi
         fi
     fi
-    systemctl status mysql > /dev/null 2>&1
+    systemctl status mysql >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
-        service mysql status 2>&1
+        service mysql status >> ${DEBUG} 2>&1
         if [ $? -ne 0 ]; then
             echo "${ROUGE}Ne peut lancer mysql - Annulation${NORMAL}"
             exit 1
@@ -100,16 +100,15 @@ step_5_php() {
 
 step_6_nextdom_download() {
     echo "                                                                                    "
-    rm -fr /var/www/html
     mkdir -p ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
-
+    find ${WEBSERVER_HOME} -name 'index.html' -type f -exec rm -rf {} + >> ${DEBUG} 2>&1
     cd  ${WEBSERVER_HOME}
     if [ "$(ls -A  ${WEBSERVER_HOME})" ]; then
         git fetch --all >> ${DEBUG} 2>&1
-        git pull origin ${VERSION}
+        git reset --hard origin/${VERSION} >> ${DEBUG} 2>&1
+        git pull origin ${VERSION} >> ${DEBUG} 2>&1
     else
-        git clone --quiet https://github.com/sylvaner/nextdom-core .
-
+        git clone --quiet https://github.com/sylvaner/nextdom-core . >> ${DEBUG} 2>&1
     fi
 }
 
