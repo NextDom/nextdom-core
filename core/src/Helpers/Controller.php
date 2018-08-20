@@ -38,7 +38,10 @@ class Controller
         'update' => 'updatePage',
         'system' => 'systemPage',
         'database' => 'databasePage',
-        'display' => 'displayPage'
+        'display' => 'displayPage',
+        'log' => 'logPage',
+        'report' => 'reportPage',
+        'plugin' => 'pluginPage'
     ];
 
     public static function getRoute(string $page)
@@ -348,5 +351,102 @@ class Controller
         $pageContent['displayCmds'] = $cmds;
 
         return $render->get('/desktop/display.html.twig', $pageContent);
+    }
+
+    public static function logPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['JS_END_POOL'][] = '/desktop/js/log.js';
+        $currentLogfile = Utils::init('logfile');
+        $logFilesList = array();
+        $dir = opendir(NEXTDOM_ROOT . '/log/');
+        while ($file = readdir($dir)) {
+            if ($file != '.' && $file != '..' && $file != '.htaccess' && !is_dir(NEXTDOM_ROOT . '/log/' . $file)) {
+                $logFilesList[] = $file;
+            }
+        }
+        natcasesort($logFilesList);
+        $pageContent['logFilesList'] = [];
+        foreach ($logFilesList as $logFile) {
+            $logFileData = [];
+            $logFileData['name'] = $logFile;
+            $logFileData['icon'] = 'check';
+            $logFileData['color'] = 'green';
+            if (shell_exec('grep ERROR ' . NEXTDOM_ROOT . '/log/' . $logFile . ' | wc -l ') != 0) {
+                $logFileData['icon'] = 'exclamation-triangle';
+                $logFileData['color'] = 'red';
+            } elseif (shell_exec('grep WARNING ' . NEXTDOM_ROOT . '/log/' . $logFile . ' | wc -l ') != 0) {
+                $logFileData['icon'] = 'exclamation-circle';
+                $logFileData['color'] = 'orange';
+            }
+            if ($currentLogfile == $logFile) {
+                $logFileData['active'] = true;
+            } else {
+                $logFileData['active'] = false;
+            }
+            $logFileData['size'] = round(filesize(NEXTDOM_ROOT . '/log/' . $logFile) / 1024);
+            $pageContent['logFilesList'][] = $logFileData;
+
+        }
+        return $render->get('/desktop/log.html.twig', $pageContent);
+    }
+
+    public static function reportPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['JS_END_POOL'][] = '/desktop/js/report.js';
+
+        $report_path = NEXTDOM_ROOT . '/data/report/';
+        $pageContent['reportViews'] = [];
+        foreach (\view::all() as $view) {
+            $viewData = [];
+            $viewData['id'] = $view->getId();
+            $viewData['name'] = $view->getName();
+            $viewData['number'] = count(ls($report_path . '/view/' . $view->getId(), '*'));
+            $pageContent['reportViews'][] = $viewData;
+        }
+        $pageContent['reportPlans'] = [];
+        foreach (\planHeader::all() as $plan) {
+            $planData = [];
+            $planData['id'] = $plan->getId();
+            $planData['name'] = $plan->getName();
+            $planData['number'] = count(ls($report_path . '/plan/' . $plan->getId(), '*'));
+            $pageContent['reportPlans'][] = $planData;
+        }
+        $pageContent['reportPlugins'] = [];
+        foreach (PluginManager::listPlugin(true) as $plugin) {
+            if ($plugin->getDisplay() != '') {
+                $pluginData = [];
+                $pluginData['id'] = $plugin->getId();
+                $pluginData['name'] = $plugin->getName();
+                $pluginData['number'] = count(ls($report_path . '/plugin/' . $plugin->getId(), '*'));
+                $pageContent['reportPlugins'][] = $pluginData;
+            }
+        }
+        return $render->get('/desktop/report.html.twig', $pageContent);
+    }
+
+    public static function pluginPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        global $NEXTDOM_INTERNAL_CONFIG;
+
+        $pageContent['JS_END_POOL'][] = '/desktop/js/plugin.js';
+        $pageContent['JS_VARS']['sel_plugin_id'] = Utils::init('id', '-1');
+        $pageContent['pluginsList'] = PluginManager::listPlugin();
+        $pageContent['pluginReposList'] = [];
+        foreach (UpdateManager::listRepo() as $repoCode => $repoData) {
+            if ($repoData['enable'] && isset($repoData['scope']['hasStore']) && $repoData['scope']['hasStore']) {
+                $pageContent['pluginReposList'][$repoCode] = $repoData;
+            }
+        }
+        $pageContent['pluginInactiveOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
+        return $render->get('/desktop/plugin.html.twig', $pageContent);
     }
 }
