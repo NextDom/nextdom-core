@@ -18,6 +18,7 @@
 namespace NextDom\Helpers;
 
 
+use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
@@ -41,7 +42,11 @@ class Controller
         'display' => 'displayPage',
         'log' => 'logPage',
         'report' => 'reportPage',
-        'plugin' => 'pluginPage'
+        'plugin' => 'pluginPage',
+        'custom' => 'customPage',
+        'editor' => 'editorPage',
+        'migration' => 'migrationPage',
+        'history' => 'historyPage'
     ];
 
     public static function getRoute(string $page)
@@ -435,8 +440,6 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        global $NEXTDOM_INTERNAL_CONFIG;
-
         $pageContent['JS_END_POOL'][] = '/desktop/js/plugin.js';
         $pageContent['JS_VARS']['sel_plugin_id'] = Utils::init('id', '-1');
         $pageContent['pluginsList'] = PluginManager::listPlugin();
@@ -448,5 +451,84 @@ class Controller
         }
         $pageContent['pluginInactiveOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
         return $render->get('/desktop/plugin.html.twig', $pageContent);
+    }
+
+    public static function customPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['customProductName'] = \config::byKey('product_name');
+        $pageContent['customJS'] = '';
+        if (file_exists(NEXTDOM_ROOT . '/custom/custom.js')) {
+            $pageContent['customJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/custom/custom.js'));
+        }
+        $pageContent['customCSS'] = '';
+        if (file_exists(NEXTDOM_ROOT . '/custom/custom.css')) {
+            $pageContent['customCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/custom/custom.css'));
+        }
+        $pageContent['customMobileJS'] = '';
+        if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.js')) {
+            $pageContent['customMobileJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.js'));
+        }
+        $pageContent['customMobileCSS'] = '';
+        if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.css')) {
+            $pageContent['customMobileCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.css'));
+        }
+
+        $pageContent['JS_END_POOL'][] = '/desktop/js/custom.js';
+
+        return $render->get('/desktop/custom.html.twig', $pageContent);
+    }
+
+    public static function editorPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['JS_VARS']['rootPath'] = NEXTDOM_ROOT;
+
+        $pageContent['editorFolders'] = [];
+        $pageContent['editorRootPath'] = NEXTDOM_ROOT;
+
+        foreach (\ls(NEXTDOM_ROOT, '*', false, array('folders')) as $folder) {
+            $pageContent['editorFolders'][] = $folder;
+        }
+        $pageContent['JS_END_POOL'][] = '/desktop/js/editor.js';
+
+        return $render->get('/desktop/editor.html.twig', $pageContent);
+    }
+
+    public static function migrationPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['migrationAjaxToken'] = \ajax::getToken();
+        $pageContent['JS_END_POOL'][] = '/desktop/js/migration.js';
+
+        return $render->get('/desktop/migration.html.twig', $pageContent);
+    }
+
+    public static function historyPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['historyDate'] = array(
+            'start' => date('Y-m-d', strtotime(\config::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
+            'end' => date('Y-m-d'),
+        );
+
+        $pageContent['historyCmdsList'] = CmdManager::allHistoryCmd();
+        $pageContent['historyPluginsList'] = PluginManager::listPlugin();
+        $pageContent['historyEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
+        $pageContent['historyObjectsList'] = JeeObjectManager::all();
+
+        $pageContent['JS_POOL'][] = '/3rdparty/visjs/vis.min.js';
+        $pageContent['CSS_POOL'][] = '/3rdparty/visjs/vis.min.css';
+        $pageContent['JS_END_POOL'][] = '/desktop/js/history.js';
+
+        return $render->get('/desktop/history.html.twig', $pageContent);
     }
 }
