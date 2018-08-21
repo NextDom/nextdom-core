@@ -41,7 +41,7 @@
         "psr-4": {
             "NextDom\\": [
                 "core/class",
-                "core/src",
+                "src",
                 "core/ajax"
             ]
         }
