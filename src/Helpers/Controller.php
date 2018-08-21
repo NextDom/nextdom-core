@@ -46,7 +46,8 @@ class Controller
         'custom' => 'customPage',
         'editor' => 'editorPage',
         'migration' => 'migrationPage',
-        'history' => 'historyPage'
+        'history' => 'historyPage',
+        'shutdown' => 'shutdownPage'
     ];
 
     public static function getRoute(string $page)
@@ -530,5 +531,12 @@ class Controller
         $pageContent['JS_END_POOL'][] = '/desktop/js/history.js';
 
         return $render->get('/desktop/history.html.twig', $pageContent);
+    }
+
+    public static function shutdownPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+        return $render->get('/desktop/shutdown.html.twig', $pageContent);
     }
 }
