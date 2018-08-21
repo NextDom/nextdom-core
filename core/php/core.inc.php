@@ -31,7 +31,7 @@ if ((config::getDefaultConfiguration()['core']['developer::mode'] == '1') && (co
     Symfony\Component\Debug\ExceptionHandler::register();
 }
 
-require_once NEXTDOM_ROOT.'/core/src/app/app.php';
+//require_once NEXTDOM_ROOT.'/core/src/app/app.php';
 require_once NEXTDOM_ROOT.'/core/class/nextdom.class.php';
 require_once NEXTDOM_ROOT.'/core/class/jeedom.class.php';
 require_once NEXTDOM_ROOT.'/core/class/plugin.class.php';
