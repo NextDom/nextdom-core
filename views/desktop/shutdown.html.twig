@@ -1,5 +1,5 @@
 <style>
-    #div_reboot_nextdom_texte{
+    #div_reboot_nextdom_text{
         width: 400px;
         margin: auto;
         text-align: center;
@@ -16,7 +16,7 @@
             <span class="sr-only"></span>
         </div>
     </div>
-    <div id="div_reboot_nextdom_texte"><h6>{{ 'Merci de patienter...' }}</h6></div>
+    <div id="div_reboot_nextdom_text"><h6>{{ 'Merci de patienter...' }}</h6></div>
 </div>
 <iframe src="" id="iframe_reboot" style="display:none"></iframe>
 <div id="div_reboot_nextdom" style="display:none;">
@@ -28,7 +28,7 @@
     nextdom.haltSystem();
 
     function reboot_nextdom(rebooti){
-        $('#div_reboot_nextdom_texte').empty().html('<h6>{{ 'Votre box' }} '+NEXTDOM_PRODUCT_NAME+' {{ 'est éteinte.<br /> Pour la redémarrer, débranchez-la et rebranchez-la.' }}</h6>');
+        $('#div_reboot_nextdom_text').empty().html('<h6>{{ 'Votre box' }} '+NEXTDOM_PRODUCT_NAME+' {{ 'est éteinte.<br /> Pour la redémarrer, débranchez-la et rebranchez-la.' }}</h6>');
         $('#progressbar_reboot').width('100%');
         $('#progressbar_reboot').addClass('progress-bar-danger').removeClass('progress-bar-success').removeClass('active');
     }

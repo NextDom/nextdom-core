@@ -98,7 +98,7 @@ class PluginManager
      * @param bool $activatedOnly Filter only activated plugins
      * @param bool $orderByCategory Sort by category
      * @param bool $nameOnly Get only plugin names
-     * @return array List of plugins
+     * @return \plugin[] List of plugins
      *
      * @throws \Exception
      */
@@ -107,7 +107,7 @@ class PluginManager
         $listPlugin = array();
         if ($activatedOnly) {
             $sql = "SELECT plugin
-                    FROM config
+                    FROM `config`
                     WHERE `key` = 'active'
                     AND `value` = '1'";
             $queryResults = \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL);
