@@ -47,7 +47,8 @@ class Controller
         'editor' => 'editorPage',
         'migration' => 'migrationPage',
         'history' => 'historyPage',
-        'shutdown' => 'shutdownPage'
+        'shutdown' => 'shutdownPage',
+        'health' => 'healthPage'
     ];
 
     public static function getRoute(string $page)
@@ -538,5 +539,101 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
         return $render->get('/desktop/shutdown.html.twig', $pageContent);
+    }
+
+    public static function healthPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['healthInformations'] = \nextdom::health();
+        $pageContent['healthPluginsInformations'] = [];
+        $pageContent['healthPluginDataToShow'] = false;
+        $pageContent['healthTotalNOk'] = 0;
+        $pageContent['healthTotalPending'] = 0;
+        foreach (PluginManager::listPlugin(true) as $plugin) {
+            $pluginData = [];
+            if (file_exists(dirname(PluginManager::getPathById($plugin->getId())) . '/../desktop/modal/health.php')) {
+                $pluginData['hasSpecificHealth'] = true;
+            }
+            if ($plugin->getHasDependency() == 1 || $plugin->getHasOwnDeamon() == 1 || method_exists($plugin->getId(), 'health') || $pluginData['hasSpecificHealth']) {
+                $pageContent['healthPluginDataToShow'] = true;
+                $pluginData['plugin'] = $plugin;
+                $pluginData['port'] = false;
+                $pluginData['nOk'] = 0;
+                $pluginData['pending'] = 0;
+                $pluginData['hasDependency'] = false;
+                $pluginData['hasOwnDaemon'] = false;
+                $pluginData['showOnlyTable'] = false;
+
+                $port = \config::byKey('port', $plugin->getId());
+                if ($port != '') {
+                    $pluginData['port'] = $port;
+                }
+                if ($plugin->getHasDependency() == 1 || $plugin->getHasOwnDeamon() == 1 || method_exists($plugin->getId(), 'health')) {
+                    $pluginData['showOnlyTable'] = true;
+                }
+                if ($plugin->getHasDependency() == 1) {
+                    $pluginData['hasDependency'] = true;
+                    $dependencyInfo = $plugin->dependancy_info();
+                    if (isset($dependencyInfo['state'])) {
+                        $pluginData['dependencyState'] = $dependencyInfo['state'];
+                        if ($pluginData['dependencyState'] == 'nok') {
+                            $pluginData['nOk']++;
+                        }
+                        elseif ($pluginData['dependencyState'] == 'in_progress') {
+                            $pluginData['pending']++;
+                        }
+                        elseif ($pluginData['dependencyState'] != 'ok') {
+                            $pluginData['nOk']++;
+                        }
+                    }
+                }
+                if ($plugin->getHasOwnDeamon() == 1) {
+                    $pluginData['hasOwnDaemon'] = true;
+                    $daemonInfo = $plugin->deamon_info();
+                    $pluginData['daemonAuto'] = $daemonInfo['auto'];
+                    if (isset($daemonInfo['launchable'])) {
+                        $pluginData['daemonLaunchable'] = $daemonInfo['launchable'];
+                        if ($pluginData['daemonLaunchable'] == 'nok' && $pluginData['daemonAuto'] == 1) {
+                            $pluginData['nOk']++;
+                        }
+                    }
+                    $pluginData['daemonLaunchableMessage'] = $daemonInfo['launchable_message'];
+                    $pluginData['daemonState'] = $daemonInfo['state'];
+                    if ($pluginData['daemonState'] == 'nok' && $pluginData['daemonAuto'] == 1) {
+                        $pluginData['nOk']++;
+                    }
+                }
+
+                if (method_exists($plugin->getId(), 'health')) {
+                    $pluginData['health'] = [];
+                    // Je vois pas quand ça peut être appelé
+                    foreach ($plugin->getId()::health() as $result) {
+                        $pluginData['health'][] = [
+                            'test' => $result['test'],
+                            'state' => $result['state'],
+                            'advice' => $result['advice']
+                        ];
+                        if ($result['state'] == 'nok') {
+                            $pluginData['nOk'] = true;
+                        }
+                    }
+                }
+
+                if ($pluginData['nOk'] > 0) {
+                    $pageContent['healthTotalNOk']++;
+                }
+                if ($pluginData['pending'] > 0) {
+                    $pageContent['healthTotalPending']++;
+                }
+                $pageContent['healthPluginsInformations'][] = $pluginData;
+            }
+        }
+
+
+        $pageContent['JS_END_POOL'][] = '/desktop/js/health.js';
+
+        return $render->get('/desktop/health.html.twig', $pageContent);
     }
 }
