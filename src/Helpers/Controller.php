@@ -49,7 +49,8 @@ class Controller
         'history' => 'historyPage',
         'shutdown' => 'shutdownPage',
         'health' => 'healthPage',
-        'profils' => 'profilsPage'
+        'profils' => 'profilsPage',
+        'view_edit' => 'viewEditPage'
     ];
 
     /**
@@ -964,5 +965,30 @@ class Controller
         $pageContent['JS_END_POOL'][] = '/desktop/js/profils.js';
 
         return $render->get('/desktop/profils.html.twig', $pageContent);
+    }
+
+    /**
+     * Render view edit page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of view edit page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function viewEditPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['viewEditViewsList'] = \view::all();
+
+        $pageContent['JS_END_POOL'][] = '/desktop/js/view_edit.js';
+
+        return $render->get('/desktop/view_edit.html.twig', $pageContent);
     }
 }
