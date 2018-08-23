@@ -49,7 +49,7 @@ class Controller
         'history' => 'historyPage',
         'shutdown' => 'shutdownPage',
         'health' => 'healthPage',
-        'aprofils' => 'profilsPage'
+        'profils' => 'profilsPage'
     ];
 
     /**
