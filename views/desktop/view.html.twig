@@ -1,0 +1,33 @@
+<div class="row row-overflow">
+    <div class="col-lg-2 col-md-3 col-sm-4 div_displayViewList"{% if viewHideList %} style="display:none;"{% endif %}>
+        <div class="bs-sidebar">
+            <ul id="ul_viewSummary" class="nav nav-list bs-sidenav" style="font-size:0.9em;"></ul>
+        </div>
+        <div class="bs-sidebar">
+            <ul id="ul_view" class="nav nav-list bs-sidenav">
+                {% if viewIsAdmin %}
+                    <a class="btn btn-default" style="width : 100%;margin-top : 5px;margin-bottom: 5px;" href="index.php?v=d&p=view_edit"><i class="fas fa-plus-circle"></i> {{ 'Ajouter une vue' }}</a>
+                {% endif %}
+                <li class="filter"><input class="filter form-control input-sm" placeholder="{{ 'Rechercher' }}" style="width: 100%"/></li>
+                {% for view in viewsList %}
+                    <li class="cursor li_view{% if view.getId() == viewCurrent %} active{% endif %}">
+                        <a href="index.php?v=d&p=view&view_id={{ view.getId() }}">{{ view.getDisplay('icon')|trim }} {{ view.getName() }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="div_displayViewContainer {% if viewHideList %}col-lg-12 col-md-12 col-sm-12{% else %}col-lg-10 col-md-9 col-sm-8{% endif %}">
+        <i class='fa fa-picture-o cursor pull-left bt_displayView reportModeHidden' data-display="{{ viewDefault }}" title="{{ 'Afficher/Masquer les vues' }}"></i>
+        <legend style="height: 35px;color : #563d7c;">{{ 'Vue' }} {{ viewCurrent.getName() }}
+            {% if viewNoControl == '' %}
+                {% if viewIsAdmin %}
+                    <a href="index.php?v=d&p=view_edit&view_id={{ viewCurrent.getId() }}" class="btn btn-warning btn-xs pull-right reportModeHidden"><i class="fas fa-pencil-alt"></i> {{ 'Edition complète' }}</a>
+                {% endif %}
+                <i class="fas fa-pencil-alt pull-right cursor reportModeHidden" id="bt_editViewWidgetOrder" data-mode="0"></i>
+            {% endif %}
+        </legend>
+        <div class="row div_displayView"></div>
+    </div>
+</div>
+

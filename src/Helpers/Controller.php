@@ -50,6 +50,7 @@ class Controller
         'shutdown' => 'shutdownPage',
         'health' => 'healthPage',
         'profils' => 'profilsPage',
+        'view' => 'viewPage',
         'view_edit' => 'viewEditPage'
     ];
 
@@ -968,6 +969,59 @@ class Controller
     }
 
     /**
+     * Render view page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of view page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function viewPage(Render $render, array &$pageContent): string
+    {
+
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $pageContent['viewsList'] = \view::all();
+        $pageContent['viewHideList'] = true;
+        $pageContent['viewIsAdmin'] = Status::isConnectAdmin();
+        $pageContent['viewDefault'] = $_SESSION['user']->getOptions('displayViewByDefault');
+        $pageContent['viewNoControl'] = Utils::init('noControl');
+
+        $currentView = null;
+        if (Utils::init('view_id') == '') {
+            if ($_SESSION['user']->getOptions('defaultDesktopView') != '') {
+                $currentView = \view::byId($_SESSION['user']->getOptions('defaultDesktopView'));
+            }
+            if (!is_object($currentView)) {
+                $currentView = $pageContent['viewsList'][0];
+            }
+        } else {
+            $currentView = \view::byId(init('view_id'));
+            if (!is_object($currentView)) {
+                throw new \Exception('{{Vue inconnue. Vérifier l\'ID.}}');
+            }
+        }
+        if (!is_object($currentView)) {
+            throw new \Exception(__('Aucune vue n\'existe, cliquez <a href="index.php?v=d&p=view_edit">ici</a> pour en créer une.'));
+        }
+        $pageContent['viewCurrent'] = $currentView;
+        if ($_SESSION['user']->getOptions('displayViewByDefault') == 1 && Utils::init('report') != 1) {
+            $pageContent['viewHideList'] = false;
+        }
+        $pageContent['JS_VARS']['view_id'] = $currentView->getId();
+
+        $pageContent['JS_END_POOL'][] = '/desktop/js/view.js';
+
+        return $render->get('/desktop/view.html.twig', $pageContent);
+    }
+
+    /**
      * Render view edit page
      *
      * @param Render $render Render engine
@@ -983,7 +1037,7 @@ class Controller
     public static function viewEditPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
-        Status::isConnectedAdminOrFail();
+        Status::isConnectedOrFail();
 
         $pageContent['viewEditViewsList'] = \view::all();
 
