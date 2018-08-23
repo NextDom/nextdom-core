@@ -306,8 +306,8 @@ class eqLogic
     public function preToHtml($viewType = EqLogicViewTypeEnum::DASHBOARD, $_default = array(), $_noCache = false)
     {
         // Check if view type is valid
-        if (!in_array($viewType, EqLogicViewTypeEnum::getConstants())) {
-            throw new Exception(__('La version demandée ne peut pas être vide (mobile, dashboard ou scénario)'));
+        if (!EqLogicViewTypeEnum::exists($viewType)) {
+            throw new Exception(__('La version demandée ne peut pas être vide (mobile, dashboard, dview ou scénario)'));
         }
         if (!$this->hasRight('r')) {
             return '';

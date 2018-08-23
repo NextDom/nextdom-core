@@ -20,11 +20,20 @@ namespace NextDom\Enums;
 
 abstract class Enum
 {
-
+    /**
+     * Get list of all constants
+     *
+     * @return array List of all constants
+     *
+     * @throws \ReflectionException
+     */
     public static function getConstants(): array
     {
         $reflectionClass = new \ReflectionClass(get_called_class());
         return $reflectionClass->getConstants();
     }
 
+    public static function exists($needle): bool {
+        return in_array($needle, array_values(self::getConstants()));
+    }
 }
