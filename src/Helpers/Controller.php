@@ -48,9 +48,17 @@ class Controller
         'migration' => 'migrationPage',
         'history' => 'historyPage',
         'shutdown' => 'shutdownPage',
-        'health' => 'healthPage'
+        'health' => 'healthPage',
+        'aprofils' => 'profilsPage'
     ];
 
+    /**
+     * Get static method of page by his code
+     *
+     * @param string $page Page code
+     *
+     * @return mixed|null Static method or null
+     */
     public static function getRoute(string $page)
     {
         $route = null;
@@ -61,10 +69,17 @@ class Controller
     }
 
     /**
+     * Render dashboard
+     *
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
      * @return string Content of Dashboard V2 page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public static function dashboardV2Page(Render $render, array &$pageContent): string
     {
@@ -109,6 +124,19 @@ class Controller
         return $render->get('/desktop/dashboard-v2.html.twig', $pageContent);
     }
 
+    /**
+     * Render scenario page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of scenario page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function scenarioPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -135,6 +163,19 @@ class Controller
         return $render->get('/desktop/scenario.html.twig', $pageContent);
     }
 
+    /**
+     * Render administration page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of administration page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function administrationPage(Render $render, array &$pageContent): string
     {
         global $CONFIG;
@@ -212,6 +253,19 @@ class Controller
         return $render->get('/desktop/administration.html.twig', $pageContent);
     }
 
+    /**
+     * Render backup page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of backup page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function backupPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -226,6 +280,19 @@ class Controller
         return $render->get('/desktop/backup.html.twig', $pageContent);
     }
 
+    /**
+     * Render objects page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of objects page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function objectPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -241,6 +308,19 @@ class Controller
         return $render->get('/desktop/object.html.twig', $pageContent);
     }
 
+    /**
+     * Render message page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of render page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function messagePage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -258,6 +338,19 @@ class Controller
         return $render->get('/desktop/message.html.twig', $pageContent);
     }
 
+    /**
+     * Render cron page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of cron page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function cronPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -268,6 +361,19 @@ class Controller
         return $render->get('/desktop/cron.html.twig', $pageContent);
     }
 
+    /**
+     * Render user page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of user page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function userPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -286,6 +392,19 @@ class Controller
         return $render->get('/desktop/user.html.twig', $pageContent);
     }
 
+    /**
+     * Render update page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of update page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function updatePage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -303,6 +422,19 @@ class Controller
         return $render->get('/desktop/update.html.twig', $pageContent);
     }
 
+    /**
+     * Render system page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of system page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function systemPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -314,6 +446,19 @@ class Controller
         return $render->get('/desktop/system.html.twig', $pageContent);
     }
 
+    /**
+     * Render database page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of database page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function databasePage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -324,6 +469,19 @@ class Controller
         return $render->get('/desktop/database.html.twig', $pageContent);
     }
 
+    /**
+     * Render display page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of display page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function displayPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -360,6 +518,19 @@ class Controller
         return $render->get('/desktop/display.html.twig', $pageContent);
     }
 
+    /**
+     * Render log page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of log page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function logPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -400,6 +571,19 @@ class Controller
         return $render->get('/desktop/log.html.twig', $pageContent);
     }
 
+    /**
+     * Render report page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of report page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function reportPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -437,6 +621,19 @@ class Controller
         return $render->get('/desktop/report.html.twig', $pageContent);
     }
 
+    /**
+     * Render plugin page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of plugin page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function pluginPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -455,6 +652,19 @@ class Controller
         return $render->get('/desktop/plugin.html.twig', $pageContent);
     }
 
+    /**
+     * Render custom page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of custom page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function customPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -483,6 +693,19 @@ class Controller
         return $render->get('/desktop/custom.html.twig', $pageContent);
     }
 
+    /**
+     * Render editor page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of editor page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function editorPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -501,6 +724,19 @@ class Controller
         return $render->get('/desktop/editor.html.twig', $pageContent);
     }
 
+    /**
+     * Render migration page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of migration page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function migrationPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -512,6 +748,19 @@ class Controller
         return $render->get('/desktop/migration.html.twig', $pageContent);
     }
 
+    /**
+     * Render history page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of history page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function historyPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -534,6 +783,19 @@ class Controller
         return $render->get('/desktop/history.html.twig', $pageContent);
     }
 
+    /**
+     * Render shutdown page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of shutdown page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function shutdownPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -541,6 +803,19 @@ class Controller
         return $render->get('/desktop/shutdown.html.twig', $pageContent);
     }
 
+    /**
+     * Render health page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of health page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function healthPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
@@ -580,11 +855,9 @@ class Controller
                         $pluginData['dependencyState'] = $dependencyInfo['state'];
                         if ($pluginData['dependencyState'] == 'nok') {
                             $pluginData['nOk']++;
-                        }
-                        elseif ($pluginData['dependencyState'] == 'in_progress') {
+                        } elseif ($pluginData['dependencyState'] == 'in_progress') {
                             $pluginData['pending']++;
-                        }
-                        elseif ($pluginData['dependencyState'] != 'ok') {
+                        } elseif ($pluginData['dependencyState'] != 'ok') {
                             $pluginData['nOk']++;
                         }
                     }
@@ -635,5 +908,61 @@ class Controller
         $pageContent['JS_END_POOL'][] = '/desktop/js/health.js';
 
         return $render->get('/desktop/health.html.twig', $pageContent);
+    }
+
+    /**
+     * Render profils page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of profils page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function profilsPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        @session_start();
+        $_SESSION['user']->refresh();
+        @session_write_close();
+        $pageContent['profilsHomePage'] = array(
+            'core::dashboard' => __('Dashboard'),
+            'core::view' => __('Vue'),
+            'core::plan' => __('Design'),
+        );
+        foreach (PluginManager::listPlugin() as $pluginList) {
+            if ($pluginList->isActive() == 1 && $pluginList->getDisplay() != '') {
+                $pageContent['profilsHomePage'][$pluginList->getId() . '::' . $pluginList->getDisplay()] = $pluginList->getName();
+            }
+        }
+        $pageContent['profilsUser'] = $_SESSION['user'];
+        $pageContent['profilsSessionsList'] = listSession();
+        $pageContent['profilsDesktopThemes'] = [];
+        foreach (ls(NEXTDOM_ROOT . '/css/themes') as $dir) {
+            if (is_dir(NEXTDOM_ROOT . '/css/themes/' . $dir . '/desktop')) {
+                $pageContent['profilsDesktopThemes'][] = trim($dir, '/');
+            }
+        }
+        $pageContent['profilsMobileThemes'] = [];
+        foreach (ls(NEXTDOM_ROOT . '/css/themes') as $dir) {
+            if (is_dir(NEXTDOM_ROOT . '/css/themes' . $dir . '/mobile')) {
+                $pageContent['profilsDesktopThemes'][] = trim($dir, '/');
+            }
+        }
+        $pageContent['profilsDisplayTypes'] = \nextdom::getConfiguration('eqLogic:displayType');
+        $pageContent['profilsJeeObjects'] = JeeObjectManager::all();
+        $pageContent['profilsViews'] = \view::all();
+        $pageContent['profilsPlans'] = \planHeader::all();
+        $pageContent['profilsAllowRemoteUsers'] = \config::byKey('sso:allowRemoteUser');
+
+        $pageContent['JS_END_POOL'][] = '/desktop/js/profils.js';
+
+        return $render->get('/desktop/profils.html.twig', $pageContent);
     }
 }

@@ -129,7 +129,9 @@ class EqLogicManager
      * @param null $eqTypeName
      * @param null $logicalId
      * @param bool $orderByName
-     * @return array|mixed
+     *
+     * @return \eqLogic[] All linked eqLogic
+     *
      * @throws \Exception
      */
     public static function byObjectId($objectId, $onlyEnable = true, $onlyVisible = false, $eqTypeName = null, $logicalId = null, $orderByName = false)
