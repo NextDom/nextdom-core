@@ -56,7 +56,10 @@ class Controller
         'eqAnalyze' => 'eqAnalyzePage',
         'eqAnalyse' => 'eqAnalyzePage',
         'plan' => 'planPage',
-        'plan3d' => 'plan3dPage'
+        'plan3d' => 'plan3dPage',
+        'interact' => 'interactPage',
+        'market' => 'marketPage',
+        'reboot' => 'rebootPage'
     ];
 
     /**
@@ -1303,4 +1306,128 @@ class Controller
 
         return $render->get('/desktop/plan3d.html.twig', $pageContent);
     }
+
+    /**
+     * Render interact page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of interact page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function interactPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $interacts = array();
+        $pageContent['interactTotal'] = \interactDef::all();
+        $interacts[-1] = \interactDef::all(null);
+        $interactListGroup = \interactDef::listGroup();
+        if (is_array($interactListGroup)) {
+            foreach ($interactListGroup as $group) {
+                $interacts[$group['group']] = \interactDef::all($group['group']);
+            }
+        }
+        $pageContent['JS_END_POOL'][] = '/desktop/js/interact.js';
+        $pageContent['interactsList'] = $interacts;
+        $pageContent['interactsListGroup'] = $interactListGroup;
+        $pageContent['interactDisabledOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
+        $pageContent['interactCmdType'] = \nextdom::getConfiguration('cmd:type');
+        $pageContent['interactAllUnite'] = CmdManager::allUnite();
+        $pageContent['interactJeeObjects'] = JeeObjectManager::all();
+        $pageContent['interactEqLogicTypes'] = EqLogicManager::allType();
+        $pageContent['interactEqLogics'] = EqLogicManager::all();
+        $pageContent['interactEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
+
+        return $render->get('/desktop/interact.html.twig', $pageContent);
+    }
+
+    /**
+     * Render market page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of market page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function marketPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        global $NEXTDOM_INTERNAL_CONFIG;
+
+        $sourcesList = array();
+
+        foreach ($NEXTDOM_INTERNAL_CONFIG['nextdom_market']['sources'] as $source) {
+            // TODO: Limiter les requêtes
+            if (\config::byKey('nextdom_market::' . $source['code']) == 1) {
+                $sourcesList[] = $source;
+            }
+        }
+
+        $pageContent['JS_VARS']['github'] = \config::byKey('github::enable');
+        $pageContent['JS_VARS_RAW']['sourcesList'] = Utils::getArrayToJQueryJson($sourcesList);
+        $pageContent['JS_VARS']['moreInformationsStr'] = __("Plus d'informations");
+        $pageContent['JS_VARS']['updateStr'] = __("Mettre à jour");
+        $pageContent['JS_VARS']['updateAllStr'] = __("Voulez-vous mettre à jour tous les plugins ?");
+        $pageContent['JS_VARS']['updateThisStr'] = __("Voulez-vous mettre à jour ce plugin ?");
+        $pageContent['JS_VARS']['installedPluginStr'] = __("Plugin installé");
+        $pageContent['JS_VARS']['updateAvailableStr'] = __("Mise à jour disponible");
+        $pageContent['marketSourcesList'] = $sourcesList;
+        $pageContent['marketSourcesFilter'] = \config::byKey('nextdom_market::show_sources_filters');
+
+        // Affichage d'un message à un utilisateur
+        if (isset($_GET['message'])) {
+            $messages = [
+                __('La mise à jour du plugin a été effecutée.'),
+                __('Le plugin a été supprimé')
+            ];
+
+            $messageIndex = intval($_GET['message']);
+            if ($messageIndex < count($messages)) {
+                \message::add('core', $messages[$messageIndex]);
+            }
+        }
+
+        $pageContent['JS_END_POOL'][] = '/desktop/js/Market/market.js';
+
+        return $render->get('/desktop/market.html.twig', $pageContent);
+    }
+
+    /**
+     * Render reboot page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of reboot page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function rebootPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['JS_END_POOL'][] = '/desktop/js/reboot.js';
+
+        return $render->get('/desktop/reboot.html.twig', $pageContent);
+    }
+
+
 }
