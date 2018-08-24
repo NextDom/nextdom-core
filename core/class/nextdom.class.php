@@ -683,6 +683,7 @@ class nextdom
             $cmd = NEXTDOM_ROOT . '/install/migrate_jeedom_to_nextdom.php "backup=' . $backupFilePath . '"';
             $cmd .= ' >> ' . \log::getPathToLog('restore') . ' 2>&1 &';
             \system::php($cmd, true);
+            \system::php(NEXTDOM_ROOT.'/todo.php');
         } else {
             global $BACKUP_FILE;
             $BACKUP_FILE = $backupFilePath;
