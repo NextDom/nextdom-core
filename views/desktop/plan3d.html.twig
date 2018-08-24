@@ -1,0 +1,29 @@
+<div class="row{% if not plan3dFullScreen %} row-overflow{% endif %}">
+    <div class="col-lg-10" style="height: 100%" id="div_colPlan3d">
+        <div class="div_background3d" style="height: 100%">
+            <div class="container-fluid" id="div_display3d" style="position: relative;padding:0;user-select: none;-khtml-user-select: none;-o-user-select: none;-moz-user-select: -moz-none;-webkit-user-select: none;height: 100%">
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2 bs-sidebar" id="div_colMenu">
+        <div id="div_btEdit" style="display: none;">
+            <a class="btn btn-default btn-xs" id="bt_plan3dHeaderConfigure"><i class="fas fa-cogs"></i></a>
+            <a class="btn btn-default btn-xs" id="bt_plan3dHeaderAdd"><i class="fas fa-plus"></i></a>
+            <a class="btn btn-default btn-xs" id="bt_showAllObject"><i class="fas fa-eye"></i></a>
+        </div>
+        <legend>{{ 'Informations' }}
+            <a class="btn btn-default btn-xs pull-right" id="bt_editMode"><i class="fas fa-pencil-alt"></i></a>
+            <a class="btn btn-default btn-xs pull-right" id="bt_plan3dHeaderFullScreen"><i class="fas fa-desktop"></i></a>
+        </legend>
+        <ul id="ul_plan3d" class="nav nav-list bs-sidenav">
+            {% for plan3d in plan3dHeader %}
+                {% if plan3dCurrentHeaderId is defined and plan3d.getId() == plan3dCurrentHeaderId %}
+                    <li class="cursor active"><a data-3d_id="{{ plan3d.getId() }}" href="index.php?v=d&p=plan3d&plan3d_id={{ plan3d.getId() }}" style="padding: 2px 0px;">{{ plan3d.getName() }}</a></li>
+                {% else %}
+                    <li class="cursor"><a data-3d_id="{{ plan3d.getId() }}" href="index.php?v=d&p=plan3d&plan3d_id={{ plan3d.getId() }}" style="padding: 2px 0px;">{{ plan3d.getName() }}</a></li>
+                    {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<div id="md_plan3dWidget" style="position : fixed;top:60px;left:20px"></div>
