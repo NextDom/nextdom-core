@@ -55,8 +55,8 @@ class Controller
         'view_edit' => 'viewEditPage',
         'eqAnalyze' => 'eqAnalyzePage',
         'eqAnalyse' => 'eqAnalyzePage',
-        'aplan' => 'planPage',
-        'aplan3d' => 'plan3dPage'
+        'plan' => 'planPage',
+        'plan3d' => 'plan3dPage'
     ];
 
     /**
