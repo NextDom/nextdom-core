@@ -22,6 +22,7 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
 
@@ -51,7 +52,9 @@ class Controller
         'health' => 'healthPage',
         'profils' => 'profilsPage',
         'view' => 'viewPage',
-        'view_edit' => 'viewEditPage'
+        'view_edit' => 'viewEditPage',
+        'eqAnalyze' => 'eqAnalyzePage',
+        'eqAnalyse' => 'eqAnalyzePage'
     ];
 
     /**
@@ -1044,5 +1047,146 @@ class Controller
         $pageContent['JS_END_POOL'][] = '/desktop/js/view_edit.js';
 
         return $render->get('/desktop/view_edit.html.twig', $pageContent);
+    }
+
+    /**
+     * Render eqLogic analyze page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of eqLogic analyze page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function eqAnalyzePage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+        global $NEXTDOM_INTERNAL_CONFIG;
+        $pageContent['eqAnalyzeEqLogicList'] = [];
+        foreach (EqLogicManager::all() as $eqLogic) {
+            $battery_type = str_replace(array('(', ')'), array('', ''), $eqLogic->getConfiguration('battery_type', ''));
+            if ($eqLogic->getStatus('battery', -2) != -2) {
+                $pageContent['eqAnalyzeEqLogicList'][] = $eqLogic;
+            }
+        }
+        usort($pageContent['eqAnalyzeEqLogicList'], function ($a, $b) {
+            $result = 0;
+            if ($a->getStatus('battery') < $b->getStatus('battery')) {
+                $result = -1;
+            } elseif ($a->getStatus('battery') > $b->getStatus('battery')) {
+                $result = 1;
+            }
+            return $result;
+        });
+
+
+        $cmdDataArray = [];
+        foreach (EqLogicManager::all() as $eqLogic) {
+            $cmdData = [];
+            $cmdData['eqLogic'] = $eqLogic;
+            $cmdData['infoCmds'] = [];
+            $cmdData['actionCmds'] = [];
+
+            foreach ($eqLogic->getCmd('info') as $cmd) {
+                if (count($cmd->getConfiguration('actionCheckCmd', array())) > 0) {
+                    $data = [];
+                    $data['cmd'] = $cmd;
+                    $data['actions'] = [];
+                    foreach ($cmd->getConfiguration('actionCheckCmd') as $actionCmd) {
+                        $data['actions'][] = ScenarioExpressionManager::humanAction($actionCmd);
+                    }
+                    $cmdData['infoCmds'][] = $data;
+                }
+            }
+            foreach ($eqLogic->getCmd('action') as $cmd) {
+                $actionCmdData = [];
+                $actionCmdData['cmd'] = $cmd;
+
+                if (count($cmd->getConfiguration('nextdomPreExecCmd', array())) > 0) {
+                    $actionCmdData['preExecCmds'] = [];
+                    foreach ($cmd->getConfiguration('nextdomPreExecCmd') as $actionCmd) {
+                        $actionCmdData['preExecCmds'][] = ScenarioExpressionManager::humanAction($actionCmd);
+                    }
+                }
+                if (count($cmd->getConfiguration('nextdomPostExecCmd', array())) > 0) {
+                    $actionCmdData['postExecCmds'] = [];
+                    foreach ($cmd->getConfiguration('nextdomPostExecCmd') as $actionCmd) {
+                        $actionCmdData['postExecCmds'][] = ScenarioExpressionManager::humanAction($actionCmd);
+                    }
+                }
+                $cmdData['actionCmds'][] = $actionCmdData;
+            }
+            $cmdDataArray[] = $cmdData;
+        }
+        $pageContent['eqAnalyzeCmdData'] = $cmdDataArray;
+//TODO: Imbriquer les boucles quand le fonctionnement sera sûr
+        $pageContent['eqAnalyzeAlerts'] = [];
+        foreach (EqLogicManager::all() as $eqLogic) {
+            $hasSomeAlerts = 0;
+            $listCmds = array();
+            foreach ($eqLogic->getCmd('info') as $cmd) {
+                foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
+                    if ($value['check']) {
+                        if ($cmd->getAlert($level . 'if', '') != '') {
+                            $hasSomeAlerts += 1;
+                            if (!in_array($cmd, $listCmds)) {
+                                $listCmds[] = $cmd;
+                            }
+                        }
+                    }
+                }
+            }
+            if ($eqLogic->getConfiguration('battery_warning_threshold', '') != '') {
+                $hasSomeAlerts += 1;
+            }
+            if ($eqLogic->getConfiguration('battery_danger_threshold', '') != '') {
+                $hasSomeAlerts += 1;
+            }
+            if ($eqLogic->getTimeout('')) {
+                $hasSomeAlerts += 1;
+            }
+            if ($hasSomeAlerts != 0) {
+                $alertData = [];
+                $alertData['eqLogic'] = $eqLogic;
+                foreach ($listCmds as $cmdalert) {
+                    foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
+                        if ($value['check']) {
+                            if ($cmdalert->getAlert($level . 'if', '') != '') {
+                                $during = '';
+                                if ($cmdalert->getAlert($level . 'during', '') == '') {
+                                    $during = ' effet immédiat';
+                                }
+                                else {
+                                    $during = ' pendant plus de ' . $cmdalert->getAlert($level . 'during', '') . ' minute(s)';
+                                }
+                                $alertData['msg'] = ucfirst($level) . ' si ' . \nextdom::toHumanReadable(str_replace('#value#', '<b>' . $cmdalert->getName() . '</b>', $cmdalert->getAlert($level . 'if', ''))) . $during . '</br>';
+                            }
+                        }
+                    }
+                }
+                $pageContent['eqAnalyzeAlerts'][] = $alertData;
+            }
+        }
+
+        $pageContent['eqAnalyzeNextDomDeadCmd'] = \nextdom::deadCmd();
+        $pageContent['eqAnalyzeCmdDeadCmd'] = CmdManager::deadCmd();
+        $pageContent['eqAnalyzeJeeObjectDeadCmd'] = JeeObjectManager::deadCmd();
+        $pageContent['eqAnalyzeScenarioDeadCmd'] = ScenarioManager::consystencyCheck(true);
+        $pageContent['eqAnalyzeInteractDefDeadCmd'] = \interactDef::deadCmd();
+        $pageContent['eqAnalyzePluginDeadCmd'] = [];
+        foreach(PluginManager::listPlugin(true) as $plugin) {
+            $pluginId = $plugin->getId();
+            if (method_exists($pluginId, 'deadCmd')) {
+                $pageContent['eqAnalyzePluginDeadCmd'][] = $pluginId::deadCmd();
+            }
+        }
+        $pageContent['JS_END_POOL'][] = '/desktop/js/eqAnalyse.js';
+
+        return $render->get('/desktop/eqAnalyze.html.twig', $pageContent);
     }
 }
