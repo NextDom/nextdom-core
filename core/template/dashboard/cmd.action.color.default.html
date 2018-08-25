@@ -6,17 +6,19 @@
     </span>
   </div>
   <script>
-    nextdom.cmd.update['#id#'] = function(_options){
-     $('.cmd[data-cmd_uid=#uid#]:last .action_colorpicker_change').off('change')
-     $('.cmd[data-cmd_uid=#uid#] .action_colorpicker_change').value((_options.display_value != '') ? _options.display_value.substr(0,7) : _options.display_value);
-     $('.cmd[data-cmd_uid=#uid#]:last .action_colorpicker_change').on('change', function() {
-      nextdom.cmd.execute({id: '#id#', value: {color: $(this).value()}});
-    });
-   }
-   $('.cmd[data-cmd_uid=#uid#] .action_colorpicker_off').on('click', function() {
-    nextdom.cmd.execute({id: '#id#', value: {color: '#000000'}});
-  });
-   nextdom.cmd.update['#id#']({display_value:'#state#'});
-
- </script>
+      nextdom.cmd.update['#id#'] = function (_options) {
+          var cmdColorPicker = $('.cmd[data-cmd_uid=#uid#]:last .action_colorpicker_change');
+          cmdColorPicker.off('change');
+          if (_options.display_value !== '') {
+              $('.cmd[data-cmd_uid=#uid#] .action_colorpicker_change').value(_options.display_value.substr(0, 7));
+          }
+          cmdColorPicker.on('change', function () {
+              nextdom.cmd.execute({id: '#id#', value: {color: $(this).value()}});
+          });
+      };
+      $('.cmd[data-cmd_uid=#uid#] .action_colorpicker_off').on('click', function () {
+          nextdom.cmd.execute({id: '#id#', value: {color: '#000000'}});
+      });
+      nextdom.cmd.update['#id#']({display_value: '#state#'});
+  </script>
 </div>
