@@ -33,7 +33,8 @@ abstract class Enum
         return $reflectionClass->getConstants();
     }
 
-    public static function exists($needle): bool {
+    public static function exists($needle): bool 
+    {
         return in_array($needle, array_values(self::getConstants()));
     }
 }
