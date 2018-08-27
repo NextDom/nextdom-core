@@ -29,37 +29,37 @@ use NextDom\Managers\UpdateManager;
 class Controller
 {
     const routesList = [
-        'dashboard-v2' => 'dashboardV2Page',
-        'scenario' => 'scenarioPage',
+        'dashboard-v2'   => 'dashboardV2Page',
+        'scenario'       => 'scenarioPage',
         'administration' => 'administrationPage',
-        'backup' => 'backupPage',
-        'object' => 'objectPage',
-        'message' => 'messagePage',
-        'cron' => 'cronPage',
-        'user' => 'userPage',
-        'update' => 'updatePage',
-        'system' => 'systemPage',
-        'database' => 'databasePage',
-        'display' => 'displayPage',
-        'log' => 'logPage',
-        'report' => 'reportPage',
-        'plugin' => 'pluginPage',
-        'custom' => 'customPage',
-        'editor' => 'editorPage',
-        'migration' => 'migrationPage',
-        'history' => 'historyPage',
-        'shutdown' => 'shutdownPage',
-        'health' => 'healthPage',
-        'profils' => 'profilsPage',
-        'view' => 'viewPage',
-        'view_edit' => 'viewEditPage',
-        'eqAnalyze' => 'eqAnalyzePage',
-        'eqAnalyse' => 'eqAnalyzePage',
-        'plan' => 'planPage',
-        'plan3d' => 'plan3dPage',
-        'interact' => 'interactPage',
-        'market' => 'marketPage',
-        'reboot' => 'rebootPage'
+        'backup'         => 'backupPage',
+        'object'         => 'objectPage',
+        'message'        => 'messagePage',
+        'cron'           => 'cronPage',
+        'user'           => 'userPage',
+        'update'         => 'updatePage',
+        'system'         => 'systemPage',
+        'database'       => 'databasePage',
+        'display'        => 'displayPage',
+        'log'            => 'logPage',
+        'report'         => 'reportPage',
+        'plugin'         => 'pluginPage',
+        'custom'         => 'customPage',
+        'editor'         => 'editorPage',
+        'migration'      => 'migrationPage',
+        'history'        => 'historyPage',
+        'shutdown'       => 'shutdownPage',
+        'health'         => 'healthPage',
+        'profils'        => 'profilsPage',
+        'view'           => 'viewPage',
+        'view_edit'      => 'viewEditPage',
+        'eqAnalyze'      => 'eqAnalyzePage',
+        'eqAnalyse'      => 'eqAnalyzePage',
+        'plan'           => 'planPage',
+        'plan3d'         => 'plan3dPage',
+        'interact'       => 'interactPage',
+        'market'         => 'marketPage',
+        'reboot'         => 'rebootPage'
     ];
 
     /**
@@ -105,23 +105,26 @@ class Controller
         } else {
             $object = JeeObjectManager::byId(Utils::init('object_id'));
         }
+        
         if (!is_object($object)) {
             $object = JeeObjectManager::rootObject();
         }
+        
         if (!is_object($object)) {
             throw new \Exception(__('Aucun objet racine trouvé. Pour en créer un, allez dans Outils -> Objets.<br/> Si vous ne savez pas quoi faire ou que c\'est la première fois que vous utilisez Jeedom, n\'hésitez pas à consulter cette <a href="https://jeedom.github.io/documentation/premiers-pas/fr_FR/index" target="_blank">page</a> et celle-là si vous avez un pack : <a href="https://jeedom.com/start" target="_blank">page</a>'));
         }
         $pageContent['JS_VARS']['rootObjectId'] = $object->getId();
 
-        $pageContent['dashboardDisplayObjectByDefault'] = $_SESSION['user']->getOptions('displayObjetByDefault');
+        $pageContent['dashboardDisplayObjectByDefault']   = $_SESSION['user']->getOptions('displayObjetByDefault');
         $pageContent['dashboardDisplayScenarioByDefault'] = $_SESSION['user']->getOptions('displayScenarioByDefault');
-        $pageContent['dashboardCategory'] = $pageContent['JS_VARS']['SEL_CATEGORY'];
-        $pageContent['dashboardTag'] = $pageContent['JS_VARS']['SEL_TAG'];
-        $pageContent['dashboardCategories'] = \nextdom::getConfiguration('eqLogic:category', true);
-        $pageContent['dashboardTags'] = EqLogicManager::getAllTags();
-        $pageContent['dashboardObjectId'] = $pageContent['JS_VARS']['SEL_OBJECT_ID'];
-        $pageContent['dashboardObject'] = $object;
-        $pageContent['dashboardChildrenObjects'] = JeeObjectManager::buildTree($object);
+        $pageContent['dashboardCategory']                 = $pageContent['JS_VARS']['SEL_CATEGORY'];
+        $pageContent['dashboardTag']                      = $pageContent['JS_VARS']['SEL_TAG'];
+        $pageContent['dashboardCategories']               = \nextdom::getConfiguration('eqLogic:category', true);
+        $pageContent['dashboardTags']                     = EqLogicManager::getAllTags();
+        $pageContent['dashboardObjectId']                 = $pageContent['JS_VARS']['SEL_OBJECT_ID'];
+        $pageContent['dashboardObject']                   = $object;
+        $pageContent['dashboardChildrenObjects']          = JeeObjectManager::buildTree($object);
+        
         if ($pageContent['dashboardDisplayScenarioByDefault'] == 1) {
             $pageContent['dashboardScenarios'] = ScenarioManager::all();
         }
@@ -154,17 +157,18 @@ class Controller
 
         $pageContent['scenarios'] = array();
         // TODO: A supprimé pour éviter la requête inutile
-        $pageContent['scenarioCount'] = count(ScenarioManager::all());
-        $pageContent['scenarios'][-1] = ScenarioManager::all(null);
+        $pageContent['scenarioCount']     = count(ScenarioManager::all());
+        $pageContent['scenarios'][-1]     = ScenarioManager::all(null);
         $pageContent['scenarioListGroup'] = ScenarioManager::listGroup();
+        
         if (is_array($pageContent['scenarioListGroup'])) {
             foreach ($pageContent['scenarioListGroup'] as $group) {
                 $pageContent['scenarios'][$group['group']] = ScenarioManager::all($group['group']);
             }
         }
         $pageContent['scenarioInactiveStyle'] = \nextdom::getConfiguration('eqLogic:style:noactive');
-        $pageContent['scenarioEnabled'] = \config::byKey('enableScenario');
-        $pageContent['scenarioAllObjects'] = JeeObjectManager::all();
+        $pageContent['scenarioEnabled']       = \config::byKey('enableScenario');
+        $pageContent['scenarioAllObjects']    = JeeObjectManager::all();
 
         $pageContent['JS_END_POOL'][] = '/desktop/js/scenario.js';
         $pageContent['JS_END_POOL'][] = '/3rdparty/jquery.sew/jquery.caretposition.js';
@@ -199,18 +203,20 @@ class Controller
         foreach ($pageContent['adminReposList'] as $key => $value) {
             $keys[] = $key . '::enable';
         }
-        $pageContent['adminConfigs'] = \config::byKeys($keys);
+        $pageContent['adminConfigs']          = \config::byKeys($keys);
         $pageContent['JS_VARS']['ldapEnable'] = $pageContent['adminConfigs']['ldap::enable'];
-        $pageContent['adminIsBan'] = \user::isBan();
-        $pageContent['adminHardwareName'] = \nextdom::getHardwareName();
-        $pageContent['adminHardwareKey'] = \nextdom::getHardwareKey();
-        $pageContent['adminLastKnowDate'] = \cache::byKey('hour')->getValue();
-        $pageContent['adminIsRescueMode'] = Status::isRescueMode();
+        $pageContent['adminIsBan']            = \user::isBan();
+        $pageContent['adminHardwareName']     = \nextdom::getHardwareName();
+        $pageContent['adminHardwareKey']      = \nextdom::getHardwareKey();
+        $pageContent['adminLastKnowDate']     = \cache::byKey('hour')->getValue();
+        $pageContent['adminIsRescueMode']     = Status::isRescueMode();
+        
         if (!$pageContent['adminIsRescueMode']) {
             $pageContent['adminPluginsList'] = [];
             $pluginsList = PluginManager::listPlugin(true);
             foreach ($pluginsList as $plugin) {
                 $pluginApi = \config::byKey('api', $plugin->getId());
+                
                 if ($pluginApi !== '') {
                     $pluginData = [];
                     $pluginData['api'] = $pluginApi;
@@ -225,6 +231,7 @@ class Controller
         $pageContent['adminBannedIp'] = [];
         $cache = \cache::byKey('security::banip');
         $values = json_decode($cache->getValue('[]'), true);
+        
         if (is_array($values) && count($values) > 0) {
             foreach ($values as $value) {
                 $bannedData = [];
@@ -240,6 +247,7 @@ class Controller
         }
 
         $pageContent['adminNetworkInterfaces'] = [];
+        
         foreach (\network::getInterfaces() as $interface) {
             $intData = [];
             $intData['name'] = $interface;
@@ -285,7 +293,7 @@ class Controller
 
         $pageContent['backupAjaxToken'] = \ajax::getToken();
         $pageContent['backupReposList'] = UpdateManager::listRepo();
-        $pageContent['JS_END_POOL'][] = '/desktop/js/backup.js';
+        $pageContent['JS_END_POOL'][]   = '/desktop/js/backup.js';
 
         return $render->get('/desktop/backup.html.twig', $pageContent);
     }
@@ -309,11 +317,11 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageContent['JS_VARS']['select_id'] = Utils::init('id', '-1');
-        $pageContent['JS_END_POOL'][] = '/desktop/js/object.js';
+        $pageContent['JS_END_POOL'][]        = '/desktop/js/object.js';
 
         $pageContent['objectProductName'] = \config::byKey('product_name');
-        $pageContent['objectList'] = JeeObjectManager::buildTree(null, false);
-        $pageContent['objectSummary'] = \config::byKey('object:summary');
+        $pageContent['objectList']        = JeeObjectManager::buildTree(null, false);
+        $pageContent['objectSummary']     = \config::byKey('object:summary');
 
         return $render->get('/desktop/object.html.twig', $pageContent);
     }
@@ -366,8 +374,9 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageContent['cronEnabled'] = \config::byKey('enableCron');
+        $pageContent['cronEnabled']   = \config::byKey('enableCron');
         $pageContent['JS_END_POOL'][] = '/desktop/js/cron.js';
+        
         return $render->get('/desktop/cron.html.twig', $pageContent);
     }
 
@@ -390,6 +399,7 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageContent['userLdapEnabled'] = \config::byKey('ldap::enable');
+        
         if ($pageContent['userLdapEnabled'] != '1') {
             $user = \user::byLogin('nextdom_support');
             $pageContent['userSupportExists'] = is_object($user);
@@ -425,8 +435,7 @@ class Controller
             $updates[str_replace(array('.php', '.sql'), '', $udpate)] = str_replace(array('.php', '.sql'), '', $udpate);
         }
         usort($updates, 'version_compare');
-        $pageContent['updatesList'] = array_reverse($updates);
-
+        $pageContent['updatesList']   = array_reverse($updates);
         $pageContent['JS_END_POOL'][] = '/desktop/js/update.js';
 
         return $render->get('/desktop/update.html.twig', $pageContent);
@@ -450,7 +459,7 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageData['systemCanSudo'] = \nextdom::isCapable('sudo');
+        $pageData['systemCanSudo']    = \nextdom::isCapable('sudo');
         $pageContent['JS_END_POOL'][] = '/desktop/js/system.js';
 
         return $render->get('/desktop/system.html.twig', $pageContent);
@@ -499,17 +508,19 @@ class Controller
 
         $pageContent['JS_END_POOL'][] = '/desktop/js/display.js';
 
-        $nbEqlogics = 0;
-        $nbCmds = 0;
-        $objects = JeeObjectManager::all();
-        $eqLogics = array();
-        $cmds = array();
+        $nbEqlogics   = 0;
+        $nbCmds       = 0;
+        $objects      = JeeObjectManager::all();
+        $eqLogics     = [];
+        $cmds         = [];
         $eqLogics[-1] = EqLogicManager::byObjectId(null, false);
+        
         foreach ($eqLogics[-1] as $eqLogic) {
             $cmds[$eqLogic->getId()] = $eqLogic->getCmd();
             $nbCmds += count($cmds[$eqLogic->getId()]);
         }
         $nbEqlogics += count($eqLogics[-1]);
+        
         foreach ($objects as $object) {
             $eqLogics[$object->getId()] = $object->getEqLogic(false, false);
             foreach ($eqLogics[$object->getId()] as $eqLogic) {
@@ -519,11 +530,11 @@ class Controller
             $nbEqlogics += count($eqLogics[$object->getId()]);
         }
 
-        $pageContent['displayObjects'] = $objects;
+        $pageContent['displayObjects']    = $objects;
         $pageContent['displayNbEqLogics'] = $nbEqlogics;
-        $pageContent['displayNbCmds'] = $nbCmds;
-        $pageContent['displayEqLogics'] = $eqLogics;
-        $pageContent['displayCmds'] = $cmds;
+        $pageContent['displayNbCmds']     = $nbCmds;
+        $pageContent['displayEqLogics']   = $eqLogics;
+        $pageContent['displayCmds']       = $cmds;
 
         return $render->get('/desktop/display.html.twig', $pageContent);
     }
@@ -548,8 +559,9 @@ class Controller
 
         $pageContent['JS_END_POOL'][] = '/desktop/js/log.js';
         $currentLogfile = Utils::init('logfile');
-        $logFilesList = array();
+        $logFilesList   = [];
         $dir = opendir(NEXTDOM_ROOT . '/log/');
+        
         while ($file = readdir($dir)) {
             if ($file != '.' && $file != '..' && $file != '.htaccess' && !is_dir(NEXTDOM_ROOT . '/log/' . $file)) {
                 $logFilesList[] = $file;
@@ -559,9 +571,10 @@ class Controller
         $pageContent['logFilesList'] = [];
         foreach ($logFilesList as $logFile) {
             $logFileData = [];
-            $logFileData['name'] = $logFile;
-            $logFileData['icon'] = 'check';
+            $logFileData['name']  = $logFile;
+            $logFileData['icon']  = 'check';
             $logFileData['color'] = 'green';
+            
             if (shell_exec('grep ERROR ' . NEXTDOM_ROOT . '/log/' . $logFile . ' | wc -l ') != 0) {
                 $logFileData['icon'] = 'exclamation-triangle';
                 $logFileData['color'] = 'red';
@@ -604,17 +617,17 @@ class Controller
         $report_path = NEXTDOM_ROOT . '/data/report/';
         $pageContent['reportViews'] = [];
         foreach (\view::all() as $view) {
-            $viewData = [];
-            $viewData['id'] = $view->getId();
-            $viewData['name'] = $view->getName();
+            $viewData           = [];
+            $viewData['id']     = $view->getId();
+            $viewData['name']   = $view->getName();
             $viewData['number'] = count(ls($report_path . '/view/' . $view->getId(), '*'));
             $pageContent['reportViews'][] = $viewData;
         }
         $pageContent['reportPlans'] = [];
         foreach (\planHeader::all() as $plan) {
-            $planData = [];
-            $planData['id'] = $plan->getId();
-            $planData['name'] = $plan->getName();
+            $planData           = [];
+            $planData['id']     = $plan->getId();
+            $planData['name']   = $plan->getName();
             $planData['number'] = count(ls($report_path . '/plan/' . $plan->getId(), '*'));
             $pageContent['reportPlans'][] = $planData;
         }
@@ -622,8 +635,8 @@ class Controller
         foreach (PluginManager::listPlugin(true) as $plugin) {
             if ($plugin->getDisplay() != '') {
                 $pluginData = [];
-                $pluginData['id'] = $plugin->getId();
-                $pluginData['name'] = $plugin->getName();
+                $pluginData['id']     = $plugin->getId();
+                $pluginData['name']   = $plugin->getName();
                 $pluginData['number'] = count(ls($report_path . '/plugin/' . $plugin->getId(), '*'));
                 $pageContent['reportPlugins'][] = $pluginData;
             }
@@ -723,7 +736,7 @@ class Controller
 
         $pageContent['JS_VARS']['rootPath'] = NEXTDOM_ROOT;
 
-        $pageContent['editorFolders'] = [];
+        $pageContent['editorFolders']  = [];
         $pageContent['editorRootPath'] = NEXTDOM_ROOT;
 
         foreach (\ls(NEXTDOM_ROOT, '*', false, array('folders')) as $folder) {
@@ -753,7 +766,7 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageContent['migrationAjaxToken'] = \ajax::getToken();
-        $pageContent['JS_END_POOL'][] = '/desktop/js/migration.js';
+        $pageContent['JS_END_POOL'][]      = '/desktop/js/migration.js';
 
         return $render->get('/desktop/migration.html.twig', $pageContent);
     }
@@ -781,13 +794,13 @@ class Controller
             'end' => date('Y-m-d'),
         );
 
-        $pageContent['historyCmdsList'] = CmdManager::allHistoryCmd();
-        $pageContent['historyPluginsList'] = PluginManager::listPlugin();
+        $pageContent['historyCmdsList']          = CmdManager::allHistoryCmd();
+        $pageContent['historyPluginsList']       = PluginManager::listPlugin();
         $pageContent['historyEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
-        $pageContent['historyObjectsList'] = JeeObjectManager::all();
+        $pageContent['historyObjectsList']       = JeeObjectManager::all();
 
-        $pageContent['JS_POOL'][] = '/3rdparty/visjs/vis.min.js';
-        $pageContent['CSS_POOL'][] = '/3rdparty/visjs/vis.min.css';
+        $pageContent['JS_POOL'][]     = '/3rdparty/visjs/vis.min.js';
+        $pageContent['CSS_POOL'][]    = '/3rdparty/visjs/vis.min.css';
         $pageContent['JS_END_POOL'][] = '/desktop/js/history.js';
 
         return $render->get('/desktop/history.html.twig', $pageContent);
@@ -810,6 +823,7 @@ class Controller
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
+        
         return $render->get('/desktop/shutdown.html.twig', $pageContent);
     }
 
@@ -831,24 +845,26 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageContent['healthInformations'] = \nextdom::health();
+        $pageContent['healthInformations']        = \nextdom::health();
         $pageContent['healthPluginsInformations'] = [];
-        $pageContent['healthPluginDataToShow'] = false;
-        $pageContent['healthTotalNOk'] = 0;
-        $pageContent['healthTotalPending'] = 0;
+        $pageContent['healthPluginDataToShow']    = false;
+        $pageContent['healthTotalNOk']            = 0;
+        $pageContent['healthTotalPending']        = 0;
+        
         foreach (PluginManager::listPlugin(true) as $plugin) {
             $pluginData = [];
+            
             if (file_exists(dirname(PluginManager::getPathById($plugin->getId())) . '/../desktop/modal/health.php')) {
                 $pluginData['hasSpecificHealth'] = true;
             }
             if ($plugin->getHasDependency() == 1 || $plugin->getHasOwnDeamon() == 1 || method_exists($plugin->getId(), 'health') || $pluginData['hasSpecificHealth']) {
                 $pageContent['healthPluginDataToShow'] = true;
-                $pluginData['plugin'] = $plugin;
-                $pluginData['port'] = false;
-                $pluginData['nOk'] = 0;
+                $pluginData['plugin']  = $plugin;
+                $pluginData['port']    = false;
+                $pluginData['nOk']     = 0;
                 $pluginData['pending'] = 0;
                 $pluginData['hasDependency'] = false;
-                $pluginData['hasOwnDaemon'] = false;
+                $pluginData['hasOwnDaemon']  = false;
                 $pluginData['showOnlyTable'] = false;
 
                 $port = \config::byKey('port', $plugin->getId());
@@ -861,8 +877,10 @@ class Controller
                 if ($plugin->getHasDependency() == 1) {
                     $pluginData['hasDependency'] = true;
                     $dependencyInfo = $plugin->dependancy_info();
+                    
                     if (isset($dependencyInfo['state'])) {
                         $pluginData['dependencyState'] = $dependencyInfo['state'];
+                        
                         if ($pluginData['dependencyState'] == 'nok') {
                             $pluginData['nOk']++;
                         } elseif ($pluginData['dependencyState'] == 'in_progress') {
@@ -872,10 +890,12 @@ class Controller
                         }
                     }
                 }
+                
                 if ($plugin->getHasOwnDeamon() == 1) {
                     $pluginData['hasOwnDaemon'] = true;
                     $daemonInfo = $plugin->deamon_info();
                     $pluginData['daemonAuto'] = $daemonInfo['auto'];
+                    
                     if (isset($daemonInfo['launchable'])) {
                         $pluginData['daemonLaunchable'] = $daemonInfo['launchable'];
                         if ($pluginData['daemonLaunchable'] == 'nok' && $pluginData['daemonAuto'] == 1) {
@@ -884,6 +904,7 @@ class Controller
                     }
                     $pluginData['daemonLaunchableMessage'] = $daemonInfo['launchable_message'];
                     $pluginData['daemonState'] = $daemonInfo['state'];
+                    
                     if ($pluginData['daemonState'] == 'nok' && $pluginData['daemonAuto'] == 1) {
                         $pluginData['nOk']++;
                     }
@@ -965,10 +986,10 @@ class Controller
                 $pageContent['profilsDesktopThemes'][] = trim($dir, '/');
             }
         }
-        $pageContent['profilsDisplayTypes'] = \nextdom::getConfiguration('eqLogic:displayType');
-        $pageContent['profilsJeeObjects'] = JeeObjectManager::all();
-        $pageContent['profilsViews'] = \view::all();
-        $pageContent['profilsPlans'] = \planHeader::all();
+        $pageContent['profilsDisplayTypes']     = \nextdom::getConfiguration('eqLogic:displayType');
+        $pageContent['profilsJeeObjects']       = JeeObjectManager::all();
+        $pageContent['profilsViews']            = \view::all();
+        $pageContent['profilsPlans']            = \planHeader::all();
         $pageContent['profilsAllowRemoteUsers'] = \config::byKey('sso:allowRemoteUser');
 
         $pageContent['JS_END_POOL'][] = '/desktop/js/profils.js';
@@ -995,36 +1016,40 @@ class Controller
         Status::initConnectState();
         Status::isConnectedOrFail();
 
-        $pageContent['viewsList'] = \view::all();
-        $pageContent['viewHideList'] = true;
-        $pageContent['viewIsAdmin'] = Status::isConnectAdmin();
-        $pageContent['viewDefault'] = $_SESSION['user']->getOptions('displayViewByDefault');
+        $pageContent['viewsList']     = \view::all();
+        $pageContent['viewHideList']  = true;
+        $pageContent['viewIsAdmin']   = Status::isConnectAdmin();
+        $pageContent['viewDefault']   = $_SESSION['user']->getOptions('displayViewByDefault');
         $pageContent['viewNoControl'] = Utils::init('noControl');
 
         $currentView = null;
         if (Utils::init('view_id') == '') {
+            
             if ($_SESSION['user']->getOptions('defaultDesktopView') != '') {
                 $currentView = \view::byId($_SESSION['user']->getOptions('defaultDesktopView'));
             }
+            
             if (!is_object($currentView)) {
                 $currentView = $pageContent['viewsList'][0];
             }
         } else {
             $currentView = \view::byId(init('view_id'));
+            
             if (!is_object($currentView)) {
                 throw new \Exception('{{Vue inconnue. Vérifier l\'ID.}}');
             }
         }
+        
         if (!is_object($currentView)) {
             throw new \Exception(__('Aucune vue n\'existe, cliquez <a href="index.php?v=d&p=view_edit">ici</a> pour en créer une.'));
         }
         $pageContent['viewCurrent'] = $currentView;
+        
         if ($_SESSION['user']->getOptions('displayViewByDefault') == 1 && Utils::init('report') != 1) {
             $pageContent['viewHideList'] = false;
         }
         $pageContent['JS_VARS']['view_id'] = $currentView->getId();
-
-        $pageContent['JS_END_POOL'][] = '/desktop/js/view.js';
+        $pageContent['JS_END_POOL'][]      = '/desktop/js/view.js';
 
         return $render->get('/desktop/view.html.twig', $pageContent);
     }
@@ -1048,8 +1073,7 @@ class Controller
         Status::isConnectedOrFail();
 
         $pageContent['viewEditViewsList'] = \view::all();
-
-        $pageContent['JS_END_POOL'][] = '/desktop/js/view_edit.js';
+        $pageContent['JS_END_POOL'][]     = '/desktop/js/view_edit.js';
 
         return $render->get('/desktop/view_edit.html.twig', $pageContent);
     }
@@ -1071,10 +1095,13 @@ class Controller
     {
         Status::initConnectState();
         Status::isConnectedOrFail();
+        
         global $NEXTDOM_INTERNAL_CONFIG;
+        
         $pageContent['eqAnalyzeEqLogicList'] = [];
+        
         foreach (EqLogicManager::all() as $eqLogic) {
-            $battery_type = str_replace(array('(', ')'), array('', ''), $eqLogic->getConfiguration('battery_type', ''));
+            $battery_type = str_replace(array('(', ')'), ['', ''], $eqLogic->getConfiguration('battery_type', ''));
             if ($eqLogic->getStatus('battery', -2) != -2) {
                 $pageContent['eqAnalyzeEqLogicList'][] = $eqLogic;
             }
@@ -1093,8 +1120,8 @@ class Controller
         $cmdDataArray = [];
         foreach (EqLogicManager::all() as $eqLogic) {
             $cmdData = [];
-            $cmdData['eqLogic'] = $eqLogic;
-            $cmdData['infoCmds'] = [];
+            $cmdData['eqLogic']    = $eqLogic;
+            $cmdData['infoCmds']   = [];
             $cmdData['actionCmds'] = [];
 
             foreach ($eqLogic->getCmd('info') as $cmd) {
@@ -1133,9 +1160,10 @@ class Controller
         $pageContent['eqAnalyzeAlerts'] = [];
         foreach (EqLogicManager::all() as $eqLogic) {
             $hasSomeAlerts = 0;
-            $listCmds = array();
+            $listCmds = [];
             foreach ($eqLogic->getCmd('info') as $cmd) {
                 foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
+                    
                     if ($value['check']) {
                         if ($cmd->getAlert($level . 'if', '') != '') {
                             $hasSomeAlerts += 1;
@@ -1146,18 +1174,23 @@ class Controller
                     }
                 }
             }
+            
             if ($eqLogic->getConfiguration('battery_warning_threshold', '') != '') {
                 $hasSomeAlerts += 1;
             }
+            
             if ($eqLogic->getConfiguration('battery_danger_threshold', '') != '') {
                 $hasSomeAlerts += 1;
             }
+            
             if ($eqLogic->getTimeout('')) {
                 $hasSomeAlerts += 1;
             }
+            
             if ($hasSomeAlerts != 0) {
                 $alertData = [];
                 $alertData['eqLogic'] = $eqLogic;
+                
                 foreach ($listCmds as $cmdalert) {
                     foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
                         if ($value['check']) {
@@ -1178,12 +1211,12 @@ class Controller
             }
         }
 
-        $pageContent['eqAnalyzeNextDomDeadCmd'] = \nextdom::deadCmd();
-        $pageContent['eqAnalyzeCmdDeadCmd'] = CmdManager::deadCmd();
-        $pageContent['eqAnalyzeJeeObjectDeadCmd'] = JeeObjectManager::deadCmd();
-        $pageContent['eqAnalyzeScenarioDeadCmd'] = ScenarioManager::consystencyCheck(true);
+        $pageContent['eqAnalyzeNextDomDeadCmd']     = \nextdom::deadCmd();
+        $pageContent['eqAnalyzeCmdDeadCmd']         = CmdManager::deadCmd();
+        $pageContent['eqAnalyzeJeeObjectDeadCmd']   = JeeObjectManager::deadCmd();
+        $pageContent['eqAnalyzeScenarioDeadCmd']    = ScenarioManager::consystencyCheck(true);
         $pageContent['eqAnalyzeInteractDefDeadCmd'] = \interactDef::deadCmd();
-        $pageContent['eqAnalyzePluginDeadCmd'] = [];
+        $pageContent['eqAnalyzePluginDeadCmd']      = [];
         foreach(PluginManager::listPlugin(true) as $plugin) {
             $pluginId = $plugin->getId();
             if (method_exists($pluginId, 'deadCmd')) {
@@ -1291,7 +1324,7 @@ class Controller
         } else {
             $pageContent['JS_VARS']['plan3dHeader_id'] = -1;
         }
-        $pageContent['plan3dHeader'] = \plan3dHeader::all();
+        $pageContent['plan3dHeader']     = \plan3dHeader::all();
         $pageContent['plan3dFullScreen'] = Utils::init('fullscreen') == 1;
 
         $pageContent['JS_END_POOL'][] = '/3rdparty/three.js/three.min.js';
@@ -1334,15 +1367,15 @@ class Controller
                 $interacts[$group['group']] = \interactDef::all($group['group']);
             }
         }
-        $pageContent['JS_END_POOL'][] = '/desktop/js/interact.js';
-        $pageContent['interactsList'] = $interacts;
-        $pageContent['interactsListGroup'] = $interactListGroup;
+        $pageContent['JS_END_POOL'][]           = '/desktop/js/interact.js';
+        $pageContent['interactsList']           = $interacts;
+        $pageContent['interactsListGroup']      = $interactListGroup;
         $pageContent['interactDisabledOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
-        $pageContent['interactCmdType'] = \nextdom::getConfiguration('cmd:type');
-        $pageContent['interactAllUnite'] = CmdManager::allUnite();
-        $pageContent['interactJeeObjects'] = JeeObjectManager::all();
+        $pageContent['interactCmdType']      = \nextdom::getConfiguration('cmd:type');
+        $pageContent['interactAllUnite']     = CmdManager::allUnite();
+        $pageContent['interactJeeObjects']   = JeeObjectManager::all();
         $pageContent['interactEqLogicTypes'] = EqLogicManager::allType();
-        $pageContent['interactEqLogics'] = EqLogicManager::all();
+        $pageContent['interactEqLogics']     = EqLogicManager::all();
         $pageContent['interactEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
 
         return $render->get('/desktop/interact.html.twig', $pageContent);
@@ -1377,16 +1410,16 @@ class Controller
             }
         }
 
-        $pageContent['JS_VARS']['github'] = \config::byKey('github::enable');
-        $pageContent['JS_VARS_RAW']['sourcesList'] = Utils::getArrayToJQueryJson($sourcesList);
+        $pageContent['JS_VARS']['github']              = \config::byKey('github::enable');
+        $pageContent['JS_VARS_RAW']['sourcesList']     = Utils::getArrayToJQueryJson($sourcesList);
         $pageContent['JS_VARS']['moreInformationsStr'] = __("Plus d'informations");
-        $pageContent['JS_VARS']['updateStr'] = __("Mettre à jour");
-        $pageContent['JS_VARS']['updateAllStr'] = __("Voulez-vous mettre à jour tous les plugins ?");
-        $pageContent['JS_VARS']['updateThisStr'] = __("Voulez-vous mettre à jour ce plugin ?");
-        $pageContent['JS_VARS']['installedPluginStr'] = __("Plugin installé");
-        $pageContent['JS_VARS']['updateAvailableStr'] = __("Mise à jour disponible");
-        $pageContent['marketSourcesList'] = $sourcesList;
-        $pageContent['marketSourcesFilter'] = \config::byKey('nextdom_market::show_sources_filters');
+        $pageContent['JS_VARS']['updateStr']           = __("Mettre à jour");
+        $pageContent['JS_VARS']['updateAllStr']        = __("Voulez-vous mettre à jour tous les plugins ?");
+        $pageContent['JS_VARS']['updateThisStr']       = __("Voulez-vous mettre à jour ce plugin ?");
+        $pageContent['JS_VARS']['installedPluginStr']  = __("Plugin installé");
+        $pageContent['JS_VARS']['updateAvailableStr']  = __("Mise à jour disponible");
+        $pageContent['marketSourcesList']              = $sourcesList;
+        $pageContent['marketSourcesFilter']            = \config::byKey('nextdom_market::show_sources_filters');
 
         // Affichage d'un message à un utilisateur
         if (isset($_GET['message'])) {
@@ -1428,6 +1461,5 @@ class Controller
 
         return $render->get('/desktop/reboot.html.twig', $pageContent);
     }
-
 
 }
