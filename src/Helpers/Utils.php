@@ -1,6 +1,6 @@
 <?php
 
-/* This file is part of NextDom.
+/* This file is part of NextDom Software.
  *
  * NextDom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -111,16 +111,18 @@ class Utils
      */
     public static function isConnect(string $rights = ''): bool
     {
-        $rightsKey = 'isConnect::' . $rights;
+        $rightsKey        = 'isConnect::' . $rights;
         $isSetSessionUser = isset($_SESSION['user']);
-        $result = false;
+        $result           = false;
 
         if ($isSetSessionUser && isset($GLOBALS[$rightsKey]) && $GLOBALS[$rightsKey]) {
             $result = $GLOBALS[$rightsKey];
         } else {
+            
             if (session_status() == PHP_SESSION_DISABLED || !$isSetSessionUser) {
                 $result = false;
             } elseif ($isSetSessionUser && is_object($_SESSION['user']) && $_SESSION['user']->is_Connected()) {
+                
                 if ($rights !== '') {
                     if ($_SESSION['user']->getProfils() == $rights) {
                         $result = true;
@@ -191,32 +193,32 @@ class Utils
 
         $result = $expression;
         $replaceMap = [
-            '==' => '==',
-            '=' => '==',
-            '>=' => '>=',
-            '<=' => '<=',
+            '=='  => '==',
+            '='   => '==',
+            '>='  => '>=',
+            '<='  => '<=',
             '<==' => '<=',
             '>==' => '>=',
             '===' => '==',
             '!==' => '!=',
-            '!=' => '!=',
-            'OR' => '||',
-            'OU' => '||',
-            'or' => '||',
-            'ou' => '||',
-            '||' => '||',
+            '!='  => '!=',
+            'OR'  => '||',
+            'OU'  => '||',
+            'or'  => '||',
+            'ou'  => '||',
+            '||'  => '||',
             'AND' => '&&',
-            'ET' => '&&',
+            'ET'  => '&&',
             'and' => '&&',
-            'et' => '&&',
-            '&&' => '&&',
-            '<' => '<',
-            '>' => '>',
-            '/' => '/',
-            '*' => '*',
-            '+' => '+',
-            '-' => '-',
-            '' => ''
+            'et'  => '&&',
+            '&&'  => '&&',
+            '<'   => '<',
+            '>'   => '>',
+            '/'   => '/',
+            '*'   => '*',
+            '+'   => '+',
+            '-'   => '-',
+            ''    => ''
         ];
         preg_match_all('/(\w+|\d+|\.\d+|".*?"|\'.*?\'|\#.*?\#|\(|\))[ ]*([!*+\\-\\/>=<]+|and|or|ou|et)*[ ]*/i', $expression, $preg_output);
         if (count($preg_output) > 2) {
@@ -228,6 +230,5 @@ class Utils
         }
         return $result;
     }
-
 
 }
