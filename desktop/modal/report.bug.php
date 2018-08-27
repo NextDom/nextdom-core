@@ -127,7 +127,7 @@ foreach (plugin::listPlugin(true) as $plugin) {
                 }
                 $('#form_reportBug').hide();
                 $('#bt_sendBugReport').hide();
-                if(data.result != '' && data.result != null){
+                if(data.result != '' && data.result != null && data.result != 'ok'){
                     notify("{{Report bug}}", '{{Vous venez de déclarer un bug qui sera publié sur notre Bug Tracker public.<br/>Vous pouvez le suivre}} <a target="_blank" href="'+data.result+'">ici</a><br/><br/><strong>ATTENTION</strong> votre message sera public, il pourra être supprimé s\'il ne s\'agit pas d\'un bug, vous ne recevrez pas d\'assistance technique suite à cette déclaration)', 'success');
                 }else{
                     notify("{{Report bug}}", '{{Votre ticket a bien été ouvert. Un mail va vous être envoyé}}', 'success');
