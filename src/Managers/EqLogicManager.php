@@ -178,19 +178,21 @@ class EqLogicManager
      */
     public static function byLogicalId($logicalId, $eqTypeName, $multiple = false)
     {
-        $values = array(
-            'logicalId' => $logicalId,
+ 
+        $values = [
+            'logicalId'   => $logicalId,
             'eqType_name' => $eqTypeName,
-        );
+        ];
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . ' 
                 WHERE logicalId = :logicalId
                 AND eqType_name = :eqType_name';
         if ($multiple) {
-            return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+            $data = self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
         } else {
-            return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+            $data = self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
         }
+        return $data;
     }
 
     /**
