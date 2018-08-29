@@ -120,7 +120,7 @@ class CmdManager
                 INNER JOIN object ob ON el.object_id=ob.id
                 WHERE isHistorized=1
                 AND type=\'info\'';
-        $sql .= ' ORDER BY ob.name, el.name, c.name';
+        $sql .= ' ORDER BY ob.position, ob.name, el.name, c.name';
         $result1 = self::cast(\DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 'c') . '
                 FROM ' . self::DB_CLASS_NAME . ' c
