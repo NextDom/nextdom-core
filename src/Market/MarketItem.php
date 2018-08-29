@@ -266,24 +266,24 @@ class MarketItem
      */
     public function getDataInArray()
     {
-        $dataArray = array();
-        $dataArray['name'] = $this->name;
-        $dataArray['gitName'] = $this->gitName;
-        $dataArray['gitId'] = $this->gitId;
-        $dataArray['fullName'] = $this->fullName;
-        $dataArray['description'] = $this->description;
-        $dataArray['url'] = $this->url;
-        $dataArray['id'] = $this->id;
-        $dataArray['author'] = $this->author;
-        $dataArray['category'] = $this->category;
-        $dataArray['iconPath'] = $this->iconPath;
-        $dataArray['defaultBranch'] = $this->defaultBranch;
-        $dataArray['branchesList'] = $this->branchesList;
-        $dataArray['licence'] = $this->licence;
-        $dataArray['sourceName'] = $this->sourceName;
-        $dataArray['changelogLink'] = $this->changelogLink;
+        $dataArray = [];
+        $dataArray['name']              = $this->name;
+        $dataArray['gitName']           = $this->gitName;
+        $dataArray['gitId']             = $this->gitId;
+        $dataArray['fullName']          = $this->fullName;
+        $dataArray['description']       = $this->description;
+        $dataArray['url']               = $this->url;
+        $dataArray['id']                = $this->id;
+        $dataArray['author']            = $this->author;
+        $dataArray['category']          = $this->category;
+        $dataArray['iconPath']          = $this->iconPath;
+        $dataArray['defaultBranch']     = $this->defaultBranch;
+        $dataArray['branchesList']      = $this->branchesList;
+        $dataArray['licence']           = $this->licence;
+        $dataArray['sourceName']        = $this->sourceName;
+        $dataArray['changelogLink']     = $this->changelogLink;
         $dataArray['documentationLink'] = $this->documentationLink;
-        $dataArray['screenshots'] = $this->screenshots;
+        $dataArray['screenshots']       = $this->screenshots;
 
         $this->initUpdateData();
         $dataArray['installed'] = $this->isInstalled();
@@ -466,7 +466,7 @@ class MarketItem
             }
         }
         if ($added === false) {
-            $branch = array();
+            $branch = [];
             $branch['name'] = $installedBranch['branch'];
             $branch['hash'] = $installedBranch['hash'];
             array_push($this->branchesList, $branch);
