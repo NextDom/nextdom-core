@@ -260,7 +260,7 @@ nextdom.history.drawChart = function (_params) {
                             var value = this.y;
                             bootbox.prompt("{{Edition de la série :}} <b>" + this.series.name + "</b> {{et du point de}} <b>" + datetime + "</b> ({{valeur :}} <b>" + value + "</b>) ? {{Ne rien mettre pour supprimer la valeur}}", function (result) {
                                 if (result !== null) {
-                                    nextdom.history.changePoint({cmd_id: id, datetime: datetime, value: result});
+                                    nextdom.history.changePoint({cmd_id: id, datetime: datetime,oldValue:value, value: result});
                                 }
                             });
                         }
@@ -307,7 +307,7 @@ nextdom.history.drawChart = function (_params) {
                             var value = this.y;
                             bootbox.prompt("{{Edition de la série :}} <b>" + this.series.name + "</b> {{et du point de}} <b>" + datetime + "</b> ({{valeur :}} <b>" + value + "</b>) ? {{Ne rien mettre pour supprimer la valeur}}", function (result) {
                                 if (result !== null) {
-                                    nextdom.history.changePoint({cmd_id: id, datetime: datetime, value: result});
+                                    nextdom.history.changePoint({cmd_id: id, datetime: datetime,oldValue:value, value: result});
                                 }
                             });
                         }
@@ -481,7 +481,7 @@ nextdom.history.generatePlotBand = function (_startTime, _endTime) {
 }
 
 nextdom.history.changePoint = function (_params) {
-    var paramsRequired = ['cmd_id'];
+    var paramsRequired = ['cmd_id','datetime','value','oldValue'];
     var paramsSpecifics = {
         error: function (error) {
             notify("{{Historique}}", error.message, 'error');
@@ -517,7 +517,8 @@ nextdom.history.changePoint = function (_params) {
         action: 'changeHistoryPoint',
         cmd_id: _params.cmd_id,
         datetime: _params.datetime,
-        value: _params.value
+        value: _params.value,
+        oldValue : _params.oldValue
     };
     $.ajax(paramsAJAX);
 }

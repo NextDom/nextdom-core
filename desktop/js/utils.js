@@ -80,6 +80,7 @@ function loadPage(_url,_noPushHistory){
         var n=_url.lastIndexOf("#");
         var url = _url.substring(0,n)+"&ajax=1"+_url.substring(n)
     }
+    $('.backgroundforJeedom').css('background-image','');
     nextdomBackgroundImg = null;
     $('#div_pageContainer').empty().load(url,function(){
         $('#bt_getHelpPage').attr('data-page',getUrlVars('p')).attr('data-plugin',getUrlVars('m'));
@@ -413,14 +414,14 @@ function linkify(inputText) {
 }
 
 function initRowOverflow() {
-    var hWindow = $(window).outerHeight() - $('header').outerHeight() - $('#div_alert').outerHeight()-4;
+    var hWindow = $(window).outerHeight() - $('header').outerHeight() - $('#div_alert').outerHeight()-5;
     if($('#div_alert').outerHeight() > 0){
         hWindow -= 10;
     }
     if($('.row-overflow').attr('data-offset') != undefined){
         hWindow -= $('.row-overflow').attr('data-offset');
     }
-    $('.row-overflow > div').height(hWindow).css('overflow-y', 'auto').css('overflow-x', 'hidden').css('padding-top','5px');
+    $('.row-overflow > div').css('padding-top','0px').height(hWindow).css('overflow-y', 'auto').css('overflow-x', 'hidden').css('padding-top','5px');
 }
 
 function initReportMode() {
