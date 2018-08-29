@@ -13,8 +13,23 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */.
+     
+/* This file is part of Nextdom Software.
+ *
+ * Nextdom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Nextdom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Nextdom. If not, see <http://www.gnu.org/licenses/>.
  */
-
 namespace NextDom\Market;
 
 use NextDom\Helpers\DataStorage;
@@ -103,7 +118,7 @@ class NextDomMarket
      */
     public function refreshJson($force): bool
     {
-        $result = false;
+        $result  = false;
         $content = null;
         if ($force || $this->isUpdateNeeded($this->source['name'])) {
             $content = DownloadManager::downloadContent($this->source['data']);
@@ -134,11 +149,11 @@ class NextDomMarket
      */
     public function isUpdateNeeded($id): bool
     {
-        $result = true;
+        $result     = true;
         $lastUpdate = $this->dataStorage->getRawData('repo_last_update_' . $id);
         if ($lastUpdate !== null) {
             if (\time() - $lastUpdate < self::REFRESH_TIME_LIMIT) {
-                return false;
+                $result = false;
             }
         }
         return $result;
@@ -151,11 +166,11 @@ class NextDomMarket
      */
     public function getItems(): array
     {
-        $result = array();
+        $result = [];
         if ($this->source['type'] == 'github') {
             $gitManager = new GitManager($this->source['data']);
             $result = $gitManager->getItems($this->source['name']);
-        } else if ($this->source['type'] == 'json') {
+        } elseif ($this->source['type'] == 'json') {
             $result = $this->getItemsFromJson();
         }
         return $result;
