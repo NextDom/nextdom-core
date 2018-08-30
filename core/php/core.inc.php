@@ -48,9 +48,7 @@ try {
     if (isset($configs['timezone'])) {
         date_default_timezone_set($configs['timezone']);
     }
-} catch (Exception $e) {
-
-} catch (Error $e) {
+} catch (\Throwable $e ) {
 
 }
 
@@ -58,18 +56,14 @@ try {
     if (isset($configs['log::level'])) {
         log::define_error_reporting($configs['log::level']);
     }
-} catch (Exception $e) {
-
-} catch (Error $e) {
+} catch (\Throwable $e ) {
 
 }
 
 function nextdomCoreAutoload($classname) {
     try {
         include_file('core', $classname, 'class');
-    } catch (Exception $e) {
-
-    } catch (Error $e) {
+    } catch (\Throwable $e ) {
 
     }
 }
@@ -85,9 +79,7 @@ function nextdomPluginAutoload($_classname) {
         if ($plugin_active == 1) {
             include_file('core', $classname, 'class', $classname);
         }
-    } catch (Exception $e) {
-
-    } catch (Error $e) {
+    } catch (\Throwable $e ) {
 
     }
 }
@@ -96,17 +88,13 @@ function nextdomOtherAutoload($classname) {
     try {
         include_file('core', substr($classname, 4), 'com');
         return;
-    } catch (Exception $e) {
-
-    } catch (Error $e) {
+    } catch (\Throwable $e ) {
 
     }
     try {
         include_file('core', substr($classname, 5), 'repo');
         return;
-    } catch (Exception $e) {
-
-    } catch (Error $e) {
+    } catch (\Throwable $e ) {
 
     }
 }
