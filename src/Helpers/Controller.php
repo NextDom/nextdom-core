@@ -29,7 +29,7 @@ use NextDom\Managers\UpdateManager;
 class Controller
 {
     const routesList = [
-        'dashboard-v2'   => 'dashboardV2Page',
+        'dashboard'   => 'dashboardPage',
         'scenario'       => 'scenarioPage',
         'administration' => 'administrationPage',
         'backup'         => 'backupPage',
@@ -91,7 +91,7 @@ class Controller
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function dashboardV2Page(Render $render, array &$pageContent): string
+    public static function dashboardPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();

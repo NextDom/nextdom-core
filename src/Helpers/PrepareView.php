@@ -188,14 +188,7 @@ class PrepareView
         $homePage = explode('::', $_SESSION['user']->getOptions('homePage', 'core::dashboard'));
         if (count($homePage) == 2) {
             if ($homePage[0] == 'core') {
-                if ($homePage[1] == "dashboard") {
-                    $designTheme = $_SESSION['user']->getOptions('design_nextdom');
-                }
-                if ($designTheme <> "") {
-                    $homeLink = 'index.php?v=d&p=' . $designTheme;
-                } else {
-                    $homeLink = 'index.php?v=d&p=' .\config::getDefaultConfiguration()['core']['dashboard'];
-                }
+                $homeLink = 'index.php?v=d&p=' . $homePage[1];
             } else {
                 $homeLink = 'index.php?v=d&m=' . $homePage[0] . '&p=' . $homePage[1];
             }
