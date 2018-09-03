@@ -157,7 +157,7 @@ h6,
 }
 /* General Links */
 a {
-  color: #3c8dbc;
+  color: #32B8CC;
 }
 a:hover,
 a:active,
@@ -1234,6 +1234,7 @@ a:focus {
   border-radius: 0;
   box-shadow: none;
   border-color: #d2d6de;
+  padding-left: 10px !important;
 }
 .form-control:focus {
   border-color: #3c8dbc;
@@ -1296,6 +1297,8 @@ a:focus {
 }
 .icheck > label {
   padding-left: 0;
+  margin-top: 6px;
+  margin-bottom: 15px;
 }
 /* support Font Awesome icons in form-control */
 .form-control-feedback.fa {
@@ -2187,7 +2190,7 @@ a:focus {
   text-transform: uppercase;
 }
 .btn.btn-flat {
-  border-radius: 0;
+  border-radius: 4px;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
@@ -2231,17 +2234,17 @@ a:focus {
   background-color: #e7e7e7;
 }
 .btn-primary {
-  background-color: #3c8dbc;
-  border-color: #367fa9;
+  background-color: #33B8CC;
+  border-color: #33B8CC;
 }
 .btn-primary:hover,
 .btn-primary:active,
 .btn-primary.hover {
-  background-color: #367fa9;
+  background-color: #33B888;
 }
 .btn-success {
-  background-color: #00a65a;
-  border-color: #008d4c;
+  background-color: #67DB84;
+  border-color: #67DB84;
 }
 .btn-success:hover,
 .btn-success:active,
@@ -3238,8 +3241,11 @@ table.text-center th {
 .register-logo {
   font-size: 35px;
   text-align: center;
-  margin-bottom: 25px;
+  padding-bottom: 15px;
+  padding-top: 25px;
   font-weight: 300;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  border-radius: 3px;
 }
 .login-logo a,
 .register-logo a {
@@ -3247,11 +3253,11 @@ table.text-center th {
 }
 .login-page,
 .register-page {
-  background: #d2d6de;
+  background-image: linear-gradient(#33B8CCAA, #22B8CC);
 }
 .login-box,
 .register-box {
-  width: 390px;
+  width: 450px;
   margin: 7% auto;
 }
 @media (max-width: 768px) {
@@ -3267,6 +3273,8 @@ table.text-center th {
   padding: 20px;
   border-top: 0;
   color: #666;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  border-radius: 3px;
 }
 .login-box-body .form-control-feedback,
 .register-box-body .form-control-feedback {
