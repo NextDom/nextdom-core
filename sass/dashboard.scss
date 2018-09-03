@@ -15,4 +15,19 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "desktop/_dashboard-v1.scss";
+@import "desktop/Adminlte/_AdminLTE-without-plugins";
+@import "desktop/Adminlte/_skin-black.scss";
+@import "desktop/Adminlte/_skin-black-light.scss";
+@import "desktop/Adminlte/_skin-blue.scss";
+@import "desktop/Adminlte/_skin-blue-light.scss";
+@import "desktop/Adminlte/_skin-green.scss";
+@import "desktop/Adminlte/_skin-green-light.scss";
+@import "desktop/Adminlte/_skin-nextdom.scss";
+@import "desktop/Adminlte/_skin-nextdom-light.scss";
+@import "desktop/Adminlte/_skin-purple.scss";
+@import "desktop/Adminlte/_skin-red.scss";
+@import "desktop/Adminlte/_skin-red-light.scss";
+@import "desktop/Adminlte/_skin-yellow.scss";
+@import "desktop/Adminlte/_skin-yellow-light.scss";
+@import "desktop/Adminlte/_skin-purple-light.scss";
+@import url("/3rdparty/iCheck/all.css");
