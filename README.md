@@ -1,8 +1,8 @@
-# NextDom by Loïc #
+# NextDom by NextDom Team #
 
-Website (English): [https://nextdom.com/site/en/](https://nextdom.com/site/en/)
+Website (English): [https://www.nextdom.com/site/en/](https://www.nextdom.com/site/en/)
 
-Website (French):  [https://nextdom.com/site/](https://nextdom.com/site/)
+Website (French):  [https://www.nextdom.com/site/](https://www.nextdom.com/site/)
 
 # Installation #
 
