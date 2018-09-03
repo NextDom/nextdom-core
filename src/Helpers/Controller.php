@@ -129,12 +129,12 @@ class Controller
             $pageContent['dashboardScenarios'] = ScenarioManager::all();
         }
         $pageContent['JS_POOL'][] = '/desktop/js/dashboard.js';
-        // A remettre une fois mise sous forme de thème
-//        $pageContent['JS_POOL'][] = '/desktop/js/dashboard-v2.js';
+        // A remettre une fois mise sous forme de thème//
+        $pageContent['JS_POOL'][] = '/3rdparty/AdminLTE/js/dashboard-v2.js';
         $pageContent['JS_POOL'][] = '/3rdparty/jquery.isotope/isotope.pkgd.min.js';
         $pageContent['JS_POOL'][] = '/3rdparty/jquery.multi-column-select/multi-column-select.js';
 
-        return $render->get('/desktop/dashboard-v2.html.twig', $pageContent);
+        return $render->get('/desktop/dashboard.html.twig', $pageContent);
     }
 
     /**
