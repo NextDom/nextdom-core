@@ -142,24 +142,10 @@ class PrepareView
             'userProfils' => Utils::getArrayToJQueryJson($_SESSION['user']->getOptions()),
         );
 
-        $pageData['MENU_VIEW'] = '/desktop/menu_' .\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
-        if (isset($_SESSION['user'])) {
-            if (file_exists(NEXTDOM_ROOT . '/views/desktop/menu_' . $designTheme . '.html.twig')) {
-                $pageData['MENU_VIEW'] = '/desktop/menu_' . $designTheme . '.html.twig';
-            } else {
-                $pageData['MENU_VIEW'] = '/desktop/menu_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
-            }
-        }
+        $pageData['MENU_VIEW'] = '/desktop/menu_dashboard.html.twig';
         self::initMenu($pageData, $currentPlugin);
 
-        $baseView = '/layouts/base_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
-        if (isset($_SESSION['user'])) {
-            if (file_exists(NEXTDOM_ROOT . '/layouts/base_' . $designTheme . '.html.twig')) {
-                $baseView = '/layouts/base_' . $designTheme . '.html.twig';
-        } else {
-            $baseView = '/layouts/base_'.\config::getDefaultConfiguration()['core']['dashboard'].'.html.twig';
-        }
-    }
+        $baseView = '/layouts/base_dashboard.html.twig';
 
         try {
             if (!\nextdom::isStarted()) {
