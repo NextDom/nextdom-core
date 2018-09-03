@@ -144,6 +144,16 @@ try {
     shell_exec("mysql --host=" . $CONFIG['db']['host'] . " --port=" . $CONFIG['db']['port'] . " --user=" . $CONFIG['db']['username'] . " --password=" . $CONFIG['db']['password'] . " " . $CONFIG['db']['dbname'] . "  </tmp/nextdombackup/DB_backup.sql");
     echo "OK\n";
 
+    echo "Mise a jour SQL";
+    shell_exec('php ' . dirname(__FILE__) . '/../install/update/3.2.4.php');
+    shell_exec('php ' . dirname(__FILE__) . '/../install/update/3.2.5.php');
+    shell_exec('php ' . dirname(__FILE__) . '/../install/update/3.2.6.php');
+    shell_exec('php ' . dirname(__FILE__) . '/../install/update/3.3.0.php');
+    shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password'].' '.$CONFIG['db']['dbname'].' <  ' . dirname(__FILE__) . '/../install/update/3.3.0.sql');
+    shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password'].' '.$CONFIG['db']['dbname'].' <  ' . dirname(__FILE__) . '/../install/update/3.3.1.sql');
+    shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password'].' '.$CONFIG['db']['dbname'].' <  ' . dirname(__FILE__) . '/../install/update/3.3.2.sql');
+    shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password'].' '.$CONFIG['db']['dbname'].' <  ' . dirname(__FILE__) . '/../install/update/3.3.3.sql');
+    echo "OK\n";
     echo "Active les contraintes...";
     try {
         DB::Prepare("SET foreign_key_checks = 1", array(), DB::FETCH_TYPE_ROW);
