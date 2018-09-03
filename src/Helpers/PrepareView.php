@@ -58,7 +58,7 @@ class PrepareView
         if (!in_array(Utils::init('p'), array('custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system'))) {
             $_GET['p'] = 'system';
         }
-        $homeLink = 'index.php?v=d&p='.\config::getDefaultConfiguration()['core']['dashboard'];
+        $homeLink = 'index.php?v=d&p=dashboard';
         $page = '';
         //TODO: Tests à revoir
         if (Utils::init('p') == '') {
@@ -182,7 +182,7 @@ class PrepareView
                 $homeLink .= '&fullscreen=1';
             }
         } else {
-            $homeLink = 'index.php?v=d&p='.\config::getDefaultConfiguration()['core']['dashboard'];
+            $homeLink = 'index.php?v=d&p=dashboard';
         }
         return $homeLink;
     }
@@ -437,12 +437,13 @@ class PrepareView
             if (file_exists(NEXTDOM_ROOT . '/css/' . $designTheme . '.css')) {
                 $pageData['CSS_POOL'][] = '/css/' . $designTheme . '.css';
             } else {
-                $pageData['CSS_POOL'][] = '/css/'.\config::getDefaultConfiguration()['core']['dashboard'].'.css';
+                $pageData['CSS_POOL'][] = '/css/dashboard.css';
             }
             if (file_exists(NEXTDOM_ROOT . '/desktop/js/' . $designTheme . '.js')) {
                 $pageData['JS_POOL'][] = '/desktop/js/' . $designTheme . '.js';
             } else {
-                $pageData['JS_POOL'][] = '/desktop/js/'.\config::getDefaultConfiguration()['core']['dashboard'].'.js';
+                $pageData['JS_POOL'][] = '/desktop/js/dashboard.js';
+                $pageData['JS_POOL'][] = '/3rdparty/AdminLTE/js/dashboard-v2.js';
             }
         }
         if (!Status::isRescueMode() && $configs['enableCustomCss'] == 1) {
