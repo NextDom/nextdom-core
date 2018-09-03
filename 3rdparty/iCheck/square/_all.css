@@ -193,6 +193,8 @@
     vertical-align: middle;
     margin: 0;
     padding: 0;
+    margin-right: 10px;
+    margin-top: -3px;
     width: 22px;
     height: 22px;
     background: url(blue.png) no-repeat;
