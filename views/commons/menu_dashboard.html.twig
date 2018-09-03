@@ -17,173 +17,405 @@
 */
 
 #}
-<header id="nextdom-header" class="navbar navbar-fixed-top navbar-default reportModeHidden">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">{{ 'Toggle navigation' }}</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+<header class="main-header">
+
+    <!-- Logo -->
+    <a href="{{ HOMELINK }}" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><img class="logo-mini-img" src="/core/img/NextDom/NextDom_Square_AlphaBlackBlue.png" style="height:40px;width:auto"/></span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><img class="logo-lg-img" src="/core/img/NextDom/NextDom_Wide_AlphaBlueBlack.png" style="height:40px;width:auto"/></span>
+    </a>
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+            <span class="sr-only">Toggle navigation</span>
+        </a>
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <!-- Notifications: style can be found in dropdown.less -->
+                <li class="dropdown notifications-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-bell-o"></i>
+                        <span class="label label-warning">{{ MENU_NB_MESSAGES }}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for message in messages |slice(0, 15) %}
+                            <li>
+                                <a class="removeMessage" href="#"><i class="fa fa-circle-o"> {{ message.getPlugin()}}: {{ message.getMessage | slice(0, 25) }} ... </i></a>
+                            </li>
+                        {% endfor %}
+                        <li class="footer" id="bt_messageModal"><a href="#">View all</a></li>
+                    </ul>
+                </li>
+                <!-- Tasks: style can be found in dropdown.less -->
+                {% if IS_ADMIN %}
+                    <li class="tasks-menu">
+                        <a href="index.php?v=d&p=update">
+                            <i class="fa fa-flag-o"></i>
+                            <span class="label label-danger">{{ MENU_NB_UPDATES }}</span>
+                        </a>
+                    </li>
+                {% endif %}
+                <!-- Control Sidebar Toggle Button -->
+                <li>
+                    <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                </li>
+            </ul>
         </div>
-        <nav class="navbar-collapse collapse text-center">
-            <div class="collapse navbar-collapse navbar-left col-lg-4 col-md-4">
-                <ul class="nav navbar-nav">
-                    <li class="dropdown">
-                        <a data-toggle="dropdown" href="#"><i class="fa fa-home fa-3x"></i>
-                            <span class="hidden-xs hidden-sm hidden-md">{{ 'Accueil' }}&nbsp;</span><span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="dropdown-submenu">
-                                <a data-toggle="dropdown" id="bt_gotoDashboard" href="index.php?v=d&p=dashboard"><i class="fa fa-dashboard"></i> {{ 'Dashboard' }}</a>
-                                <ul id="dashboard-submenu" class="dropdown-menu scrollable-menu" role="menu">
-                                    {% for jeeObject in MENU_JEEOBJECT_TREE %}
-                                        <li><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                            <li class="dropdown-submenu">
-                                <a data-toggle="dropdown" id="bt_gotoView"><i class="fa fa-picture-o"></i> {{ 'Vue' }}</a>
-                                <ul class="dropdown-menu">
-                                    {% for view in MENU_VIEWS_LIST %}
-                                        <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">{{ view.getDisplay('icon')|trim }} {{ viewMenu.getName() }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                            <li class="dropdown-submenu">
-                                <a data-toggle="dropdown" id="bt_gotoPlan"><i class="fa fa-paint-brush"></i> {{ 'Design' }}</a>
-                                <ul class="dropdown-menu">
-                                    {% for plan in MENU_PLANS_LIST %}
-                                        <li><a href="index.php?v=d&p=plan&plan_id={{ plan.getId() }}">{{ plan.getConfiguration('icon')|trim }} {{ plan.getName() }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                            <li class="dropdown-submenu">
-                                <a data-toggle="dropdown" id="bt_gotoPlan3d"><i class="fa fa-paint-brush"></i> {{ 'Design 3D' }}</a>
-                                <ul class="dropdown-menu">
-                                    {% for plan3d in MENU_PLANS3D_LIST %}
-                                        <li><a href="index.php?v=d&p=plan3d&plan3d_id={{ plan3d.getId() }}">{{ plan3d.getConfiguration('icon')|trim }} {{ plan3d.getName() }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                            {{ panelMenu }}
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a data-toggle="dropdown" href="#"><i class="fa fa-stethoscope fa-3x"></i>
-                            <span class="hidden-xs hidden-sm hidden-md">{{ 'Analyse' }}&nbsp;</span><span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="index.php?v=d&p=history"><i class="fa fa-bar-chart-o"></i> {{ 'Historique' }}</a></li>
-                            {% if IS_ADMIN %}
-                                <li><a href="index.php?v=d&p=report"><i class="fa fa-newspaper-o"></i> {{ 'Rapport' }}</a></li>
-                            {% endif %}
-                            <li class="divider"></li>
-                            <li><a href="#" id="bt_showEventInRealTime"><i class="fa fa-tachometer"></i> {{ 'Temps réel' }}</a></li>
-                            {% if IS_ADMIN %}
-                                <li><a href="index.php?v=d&p=log"><i class="fa fa-file-o"></i> {{ 'Logs' }}</a></li>
-                                <li><a href="index.php?v=d&p=eqAnalyse"><i class="fa fa-battery-full"></i> {{ 'Equipements' }}</a></li>
-                                <li class="divider"></li>
-                                <li><a href="index.php?v=d&p=health"><i class="fa fa-medkit"></i> {{ 'Santé' }}</a></li>
-                            {% endif %}
-                        </ul>
-                    </li>
-                    {% if IS_ADMIN %}
-                        <li class="dropdown">
-                            <a data-toggle="dropdown" href="#"><i class="fa fa-wrench fa-3x"></i>
-                                <span class="hidden-xs hidden-sm hidden-md">{{ 'Outils' }}&nbsp;</span><span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="index.php?v=d&p=object"><i class="fa fa-picture-o"></i> {{ 'Objets' }}</a></li>
-                                <li><a href="index.php?v=d&p=interact"><i class="fa fa-comments-o"></i> {{ 'Interactions' }}</a></li>
-                                <li><a href="index.php?v=d&p=display"><i class="fa fa-th"></i> {{ 'Résumé domotique' }}</a></li>
-                                <li><a href="index.php?v=d&p=scenario"><i class="fa fa-cogs"></i> {{ 'Scénarios' }}</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a data-toggle="dropdown" href="#"><i class="fa fa-puzzle-piece fa-3x"></i>
-                                <span class="hidden-xs hidden-sm hidden-md">{{ 'Plugins' }}&nbsp;</span><span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="index.php?v=d&p=plugin"><i class="fa fa-tags"></i> {{ 'Gestion des plugins' }}</a></li>
-                                <li role="separator" class="divider"></li>
-                                {% if MENU_PLUGIN_CATEGORY is defined %}
-                                    {% for category, categoryData in MENU_PLUGIN_CATEGORY %}
-                                        <li class="dropdown-submenu">
-                                            <a data-toggle="dropdown"><i class="fa {{ categoryData.icon }}"></i> {{ categoryData.name }}</a>
-                                            <ul class="dropdown-menu">
-                                                {% for plugin in MENU_PLUGIN[category] %}
-                                                    <li class="plugin-item">
-                                                        <a href="index.php?v=d&m={{ plugin.id }}&p={{ plugin.index }}"><img class="img-responsive" src="{{ plugin.pathImgIcon }}" /> {{ plugin.name }}</a>
-                                                    </li>
-                                                {% endfor %}
-                                            </ul>
-                                        </li>
-                                    {% endfor %}
-                                {% endif %}
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a data-toggle="dropdown" href="#"><i class="fa fa-cogs fa-3x"></i>
-                                <span class="hidden-xs hidden-sm hidden-md">{{ 'Réglages' }}&nbsp;</span><span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="index.php?v=d&p=administration" tabindex="0"><i class="fa fa-wrench"></i> {{ 'Configuration' }}</a></li>
-                                <li><a href="index.php?v=d&p=backup"><i class="fa fa-floppy-o"></i> {{ 'Sauvegardes' }}</a></li>
-                                <li><a href="index.php?v=d&p=migration"><i class="fa fa-floppy-o"></i> {{ 'Migration depuis jeedom' }}</a></li>
-                                <li><a href="index.php?v=d&p=update"><i class="fa fa-refresh"></i> {{ 'Centre de mise à jour' }}</a></li>
-                                <li><a href="index.php?v=d&p=cron"><i class="fa fa-tasks"></i> {{ 'Moteur de tâches' }}</a></li>
-                                <li><a href="index.php?v=d&p=custom"><i class="fa fa-pencil-square-o"></i> {{ 'Personnalisation avancée' }}</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="index.php?v=d&p=user"><i class="fa fa-users"></i> {{ 'Utilisateurs' }}</a></li>
-                                <li><a href="index.php?v=d&p=profils"><i class="fa fa-briefcase"></i> {{ 'Profil' }} {{ USER_LOGIN }}</a></li>
-                                <li><a href="index.php?v=m" class="noOnePageLoad"><i class="fa fa-mobile"></i> {{ 'Version mobile' }}</a></li>
-                                <li><a href="#" id="bt_nextdomAbout"><i class="fa fa-info-circle"></i> {{ 'Version' }} {{ NEXTDOM_VERSION }}</a></li>
-                                <li><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fa fa-sign-out"></i> {{ 'Se déconnecter' }}</a></li>
-                                <li><a id="bt_getHelpPage" class="cursor" data-plugin="{{ MENU_PLUGIN_HELP }}" data-page="{{ MENU_PLUGIN_PAGE }}" title="{{ 'Aide sur la page en cours' }}"><i class="fa fa-question-circle"></i> {{ 'Aide' }}</a></li>
-                                <li>
-                                    {% if MENU_CURRENT_PLUGIN_ISSUE %}
-                                        <a target="_blank" href="{{ MENU_CURRENT_PLUGIN_ISSUE }}" title="{{ 'Envoyer un rapport de bug' }}"><i class="fa fa-exclamation-circle"></i> {{ 'Rapport de bug' }}</a>
-                                    {% else %}
-                                        <a class="bt_reportBug cursor" title="{{ 'Envoyer un rapport de bug' }}"><i class="fa fa-exclamation-circle"></i> {{ 'Rapport de bug' }}</a>
-                                    {% endif %}
-                                </li>
-                                {% if CAN_SUDO %}
-                                    <li class="divider"></li>
-                                    <li class="cursor"><a id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i> {{ 'Redémarrer' }}</a></li>
-                                    <li class="cursor"><a id="bt_haltSystem" state="0"><i class="fa fa-power-off"></i> {{ 'Eteindre' }}</a></li>
-                                {% endif %}
-                            </ul>
-                        </li>
-                    {% endif %}
-                </ul>
 
-            </div>
-            <div class="collapse navbar-collapse col-lg-4 col-md-4 col-lg-offset-2 col-md-offset-2 text-center">
-                <ul class="nav navbar-nav">
-                    <a class="navbar-brand" href="{{ homeLink }}">
-                        <img src="{{ PRODUCT_IMAGE }}" /></a><br/>
-                </ul>
-            </div>
-            <div class="collapse navbar-collapse navbar-right col-lg-4 col-md-4">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="#" class="default-cursor">
-                            <span id="horloge"></span>
-                        </a>
-
-                        <a href="#" class="default-cursor">
-                            {{ MENU_HTML_GLOBAL_SUMMARY|raw }}
-                        </a>
-
-                    </li>
-                    <li>
-                        <a href="#" id="bt_messageModal"><span class="badge" id="span_nbMessage" title="{{ 'Nombre de messages' }}" {% if MENU_NB_MESSAGES == 0 %}style="display: none"{% endif %}>{{ MENU_NB_MESSAGES }}</span></a>
-                        <a href="index.php?v=d&p=update"><span class="badge" id="span_nbUpdate" title="{{ 'Nombre de mises à jour' }}" {% if MENU_NB_UPDATES == 0 %}style="display: none"{% endif %}>{{ MENU_NB_UPDATES }}</span></a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
+    </nav>
 </header>
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <div class="user-panel">
+            <div class="pull-left image">
+                {% if USER_AVATAR == "" %}
+                    <a href="http://vfhome.fr:8800/index.php?v=d&p=profils#profil"><img src="/core/img/profils/noPicture.gif" class="img-circle" alt="User Image"></a>
+                {% else %}
+                    <a href="http://vfhome.fr:8800/index.php?v=d&p=profils#profil"><img src="{{ USER_AVATAR }}" class="img-circle" alt="User Image"></a>
+                {% endif %}            </div>
+            <div class="pull-left info">
+                <p>{{ USER_LOGIN }}</p>
+                {% if USER_ISCONNECTED %}
+                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                {% else %}
+                    <a href="#"><i class="fa fa-circle text-danger"></i> Offline</a>
+                {% endif %}
+            </div>
+        </div>
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">MENU PRINCIPAL</li>
+            <li class="active treeview menu-open">
+                <a href="#"><i class="fa fa-home"></i> <span> Accueil </span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-dashboard"></i> Dashboard <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                        <ul class="treeview-menu">
+                            <li class="treeview-menu">
+                                {% for jeeObject in MENU_JEEOBJECT_TREE %}
+                            <li><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
+                            {% endfor %}
+
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-picture-o"></i> Vue <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                        <ul class="treeview-menu">
+                            <li class="treeview-menu">
+                                {% for view in MENU_VIEWS_LIST %}
+                            <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">{{ view.getDisplay('icon')|trim }} {{ viewMenu.getName() }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-paint-brush"></i> Design <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                        <ul class="treeview-menu">
+
+                            <li class="treeview-menu">
+                                {% for plan in MENU_PLANS_LIST %}
+                            <li><a href="index.php?v=d&p=plan&plan_id={{ plan.getId() }}">{{ plan.getConfiguration('icon')|trim }} {{ plan.getName() }}</a></li>
+                            {% endfor %}
+
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-paint-brush"></i> Design 3D <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                        <ul class="treeview-menu">
+                            <li class="treeview-menu">
+                                {% for plan3d in MENU_PLANS3D_LIST %}
+                            <li><a href="index.php?v=d&p=plan3d&plan3d_id={{ plan3d.getId() }}">{{ plan3d.getConfiguration('icon')|trim }} {{ plan3d.getName() }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-stethoscope"></i>
+                    <span>Analyse</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="index.php?v=d&p=history"><i class="fa fa-bar-chart-o"></i> {{ 'Historique' }}</a></li>
+                    <li><a href="index.php?v=d&p=report"><i class="fa fa-newspaper-o"></i> {{ 'Rapport' }}</a></li>
+                    <li><a href="#" id="bt_showEventInRealTime"><i class="fa fa-tachometer"></i> {{ 'Temps réel' }}</a></li>
+                    <li><a href="index.php?v=d&p=log"><i class="fa fa-file-o"></i> {{ 'Logs' }}</a></li>
+                    <li><a href="index.php?v=d&p=eqAnalyse"><i class="fa fa-battery-full"></i> {{ 'Equipements' }}</a></li>
+                    <li><a href="index.php?v=d&p=health"><i class="fa fa-medkit"></i> {{ 'Santé' }}</a></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-wrench"></i>
+                    <span>Outils</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="index.php?v=d&p=object"><i class="fa fa-picture-o"></i> {{ 'Objets' }}</a></li>
+                    <li><a href="index.php?v=d&p=interact"><i class="fa fa-comments-o"></i> {{ 'Interactions' }}</a></li>
+                    <li><a href="index.php?v=d&p=display"><i class="fa fa-th"></i> {{ 'Résum    é domotique' }}</a></li>
+                    <li><a href="index.php?v=d&p=scenario"><i class="fa fa-cogs"></i> {{ 'Scénarios' }}</a></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-puzzle-piece"></i> <span>Plugins</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="index.php?v=d&p=plugin"><i class="fa fa-tags"></i> {{ 'Gestion des plugins' }}</a></li>
+                    <li class="treeview-menu">
+                        {# {{ pluginMenu | raw }}#}
+                        {% if MENU_PLUGIN_CATEGORY is defined %}
+                        {% for category, categoryData in MENU_PLUGIN_CATEGORY %}
+                    <li class="dropdown-submenu">
+                        <a data-toggle="dropdown"><i class="fa {{ categoryData.icon }}"></i> {{ categoryData.name }}</a>
+                        <ul class="dropdown-menu">
+                            {% for plugin in MENU_PLUGIN[category] %}
+                                <li class="plugin-item">
+                                    <a href="index.php?v=d&m={{ plugin.id }}&p={{ plugin.index }}"><img class="img-responsive" src="{{ plugin.pathImgIcon }}" /> {{ plugin.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    {% endfor %}
+                    {% endif %}
+
+                    </li>
+
+                </ul>
+
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+    <!-- Create the tabs -->
+    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+        <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+        <li><a href="#control-sidebar-tools-tab" data-toggle="tab"><i class="fa fa-wrench"></i></a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane active" id="control-sidebar-settings-tab">
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=administration"><i class="fa fa-wrench"></i> {{ 'Configuration' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=backup"><i class="fa fa-floppy-o"></i> {{ 'Sauvegardes' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=migration"><i class="fa fa-upload"></i> {{ 'Migration depuis jeedom' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=update"><i class="fa fa-refresh"></i> {{ 'Centre de mise à jour' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=cron"><i class="fa fa-tasks"></i> {{ 'Moteur de tâches' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=custom"><i class="fa fa-pencil-square-o"></i> {{ 'Personnalisation avancée' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=user"><i class="fa fa-users"></i> {{ 'Utilisateurs' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=profils"><i class="fa fa-briefcase"></i> {{ 'Profil' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=m"><i class="fa fa-mobile"></i> {{ 'Version mobile' }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&p=log"><i class="fa fa-info-circle"></i> {{ 'Version' }} {{ NEXTDOM_VERSION }}</a></div>
+            <div><a class="control-sidebar-subheading" href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fa fa-circle-o"></i> {{ 'Se déconnecter' }}</a></div>
+            {% if IS_ADMIN and CAN_SUDO %}
+                <div><a class="control-sidebar-subheading" id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i> {{ 'Redémarrer' }}</a></div>
+                <div><a class="control-sidebar-subheading" id="bt_haltSystem" state="0"><i class="fa fa-power-off"></i> {{ 'Eteindre' }}</a></div>
+            {% endif %}
+        </div>
+        <div class="tab-pane" id="control-sidebar-tools-tab">
+            <div class="form-group">
+                <label class="control-sidebar-subheading"><input type="checkbox"data-controlsidebar="control-sidebar-open"class="pull-right"/>Toggle Right Sidebar Slide</label>
+                <p>Toggle between slide over content and push content effects</p>'
+            </div>
+            <div class="form-group"><label class="control-sidebar-subheading"><input type="checkbox"data-sidebarskin="toggle"class="pull-right"/>Toggle Right Sidebar Skin</label>
+                <p>Toggle between dark and light skins for the right sidebar</p>
+            </div>
+            <ul class="list-unstyled clearfix">
+                <li style="float:left; width: 33.33333%; padding: 5px;">
+                    <a href="javascript:void(0)" data-skin="skin-nextdom" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
+                            <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                        </div>
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin">skin-nextdom</p>
+                </li>
+                <li style="float:left; width: 33.33333%; padding: 5px;">
+                    <a href="javascript:void(0)" data-skin="skin-blue" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
+                            <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                        </div>
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin">Blue</p>
+                </li>
+                <li style="float:left; width: 33.33333%; padding: 5px;">
+                    <a href="javascript:void(0)" data-skin="skin-black" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                        <div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix">
+                            <span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe"></span>
+                            <span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe"></span>
+                        </div>
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 20px; background: #222"></span>
+                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin">Black</p>
+                </li>
+                <li style="float:left; width: 33.33333%; padding: 5px;">
+                    <a href="javascript:void(0)" data-skin="skin-purple" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span>
+                            <span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                        </div>
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin">Purple</p>
+                </li>
+                <li style="float:left; width: 33.33333%; padding: 5px;">
+                    <a href="javascript:void(0)" data-skin="skin-green" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span>
+                            <span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                        </div>
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin">Green</p>
+                </li>
+                <li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0)" data-skin="skin-red" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span>
+                            <span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                        </div>
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin">Red</p>
+                </li>
+                <li style="float:left; width: 33.33333%; padding: 5px;">
+                    <a href="javascript:void(0)" data-skin="skin-yellow" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span>
+                            <span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                        </div>
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin">Yellow</p>
+                </li>
+                <li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0)" data-skin="skin-nextdom-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
+                            <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                        </div>
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin" style="font-size: 12px">Nextdom Light</p>
+                </li>
+                <li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0)" data-skin="skin-blue-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
+                            <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                        </div>
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin" style="font-size: 12px">Blue Light</p>
+                </li>
+                <li style="float:left; width: 33.33333%; padding: 5px;">
+                    <a href="javascript:void(0)" data-skin="skin-black-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                        <div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix">
+                            <span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe"></span>
+                            <span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe"></span>
+                        </div>
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin" style="font-size: 12px">Black Light</p>
+                </li>
+                <li style="float:left; width: 33.33333%; padding: 5px;">
+                    <a href="javascript:void(0)" data-skin="skin-purple-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span>
+                            <span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                        </div>
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin" style="font-size: 12px">Purple Light</p>
+                </li>
+                <li style="float:left; width: 33.33333%; padding: 5px;">
+                    <a href="javascript:void(0)" data-skin="skin-green-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span>
+                            <span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                        </div>
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin" style="font-size: 12px">Green Light</p>
+                </li>
+                <li style="float:left; width: 33.33333%; padding: 5px;">
+                    <a href="javascript:void(0)" data-skin="skin-red-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span>
+                            <span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                        </div>
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin" style="font-size: 12px">Red Light</p>
+                </li>
+                <li style="float:left; width: 33.33333%; padding: 5px;">
+                    <a href="javascript:void(0)" data-skin="skin-yellow-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span>
+                            <span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                        </div>
+                        <div>
+                            <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin" style="font-size: 12px">Yellow Light</p>
+                </li>
+            </ul>
+        </div>
+</aside>
