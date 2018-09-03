@@ -762,11 +762,6 @@ if (typeof jQuery === 'undefined') {
     };
 
     PushMenu.prototype.init = function () {
-        if (this.options.expandOnHover
-            || ($('body').is(Selector.mini + Selector.layoutFixed))) {
-                this.expandOnHover();
-                $('body').addClass(ClassName.expandFeature);
-            }
 
             $(Selector.contentWrapper).click(function () {
                 // Enable hide menu when clicking on the content-wrapper on small screens
