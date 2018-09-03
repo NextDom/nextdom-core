@@ -377,6 +377,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '3rdparty/jquery.contextMenu/jquery.contextMenu.min.js';
             $pageData['JS_POOL'][] = '3rdparty/autosize/autosize.min.js';
             $pageData['JS_POOL'][] = '3rdparty/iCheck/icheck.min.js';
+            $pageData['JS_POOL'][] = '3rdparty/AdminLTE/js/dashboard-v2.js';
         }
     }
 

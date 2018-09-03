@@ -71,6 +71,7 @@ cat 3rdparty/jquery.utils/jquery.utils.js \
     3rdparty/jquery.cron/jquery.cron.min.js \
     3rdparty/jquery.contextMenu/jquery.contextMenu.min.js \
     3rdparty/autosize/autosize.min.js \
+    3rdparty/AdminLTE/js/dashboard-v2.js \
     3rdparty/iCheck/icheck.js > js/temp.js
 
 # Bug compression de tablesorter
