@@ -40,7 +40,7 @@ class PrepareView
         //TODO: Vérifier ça
         $logo = \config::byKey('product_connection_image');
         $pageData['CSS_POOL'][] = '/3rdparty/bootstrap/css/bootstrap.min.css';
-        $pageData['CSS_POOL'][] = '/css/dashboard-v2.css';
+        $pageData['CSS_POOL'][] = '/css/dashboard.css';
         $pageData['CSS_POOL'][] = '/3rdparty/iCheck/all.css';
         $pageData['JS_END_POOL'][] = '/desktop/js/connection.js';
 
