@@ -461,8 +461,8 @@ a:focus {
   height: auto; }
 
 .user-panel > .info {
-  padding: 5px 5px 5px 15px;
-  line-height: 1;
+  padding: 5px 5px 5px 0px;
+  line-height: 0.5;
   position: absolute;
   left: 55px; }
 
@@ -3032,7 +3032,8 @@ table.text-center th {
   padding-left: 20px; }
 
 .treeview-menu > li {
-  margin: 0; }
+  margin-top: 5px;
+  margin-bottom: 5px; }
 
 .treeview-menu > li > a {
   padding: 5px 5px 5px 15px;
@@ -3196,8 +3197,7 @@ table.text-center th {
   padding-bottom: 15px;
   padding-top: 25px;
   font-weight: 300;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-  border-radius: 3px; }
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23); }
 
 .login-logo a,
 .register-logo a {
@@ -3225,7 +3225,9 @@ table.text-center th {
   border-top: 0;
   color: #666;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-  border-radius: 3px; }
+  border-radius: 7px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px; }
 
 .login-box-body .form-control-feedback,
 .register-box-body .form-control-feedback {
@@ -3239,6 +3241,9 @@ table.text-center th {
 
 .social-auth-links {
   margin: 10px 0; }
+
+.login-page .icheck {
+  margin-top: 0px; }
 
 /*
  * Page: 400 and 500 error pages
