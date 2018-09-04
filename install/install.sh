@@ -1,5 +1,4 @@
 #!/bin/bash
-DEBUG=$1
 VERT="\\033[1;32m"
 NORMAL="\\033[0;39m"
 ROUGE="\\033[1;31m"
@@ -20,7 +19,7 @@ fi
 if [ -z "$1" ] ; then
     DEBUG="/tmp/output.txt"
 else
-    DEBUG=""
+    DEBUG="/dev/null"
 fi
 
 delay(){
@@ -50,7 +49,7 @@ step_1_upgrade() {
 }
 
 step_2_mainpackage() {
-    apt-get -q -y install ntp ca-certificates unzip curl sudo cron locate tar telnet wget logrotate fail2ban dos2unix ntpdate htop iotop vim iftop smbclient git python python-pip software-properties-common libexpat1 ssl-cert apt-transport-https xvfb cutycapt xauth >> ${DEBUG} 2>&1
+    apt-get -q -y install ntp ca-certificates unzip curl sudo cron locate tar wget logrotate fail2ban dos2unix ntpdate htop iotop iftop smbclient git python python-pip software-properties-common libexpat1 ssl-cert apt-transport-https cutycapt mysql-client mysql-common >> ${DEBUG} 2>&1
     add-apt-repository non-free >> ${DEBUG} 2>&1
     apt-get -q update >> ${DEBUG} 2>&1
     apt-get -q -y install libav-tools libsox-fmt-mp3 sox libttspico-utils espeak mbrola >> ${DEBUG} 2>&1
@@ -58,9 +57,11 @@ step_2_mainpackage() {
 }
 
 step_3_database() {
+    # Si run de la creation de l'image, on n'installe pas la BDD en local
+    [[ ${MYSQL_HOST} != "localhost" || ${VERSION} == "docker" ]] && return
     echo "mysql-server mysql-server/root_password password ${MYSQL_ROOT_PASSWD}" | debconf-set-selections
     echo "mysql-server mysql-server/root_password_again password ${MYSQL_ROOT_PASSWD}" | debconf-set-selections
-    apt-get install -q -y mysql-client mysql-common mysql-server >> ${DEBUG} 2>&1
+    apt-get install -q -y mysql-server >> ${DEBUG} 2>&1
 
     systemctl status mysql >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
@@ -89,16 +90,19 @@ step_4_apache() {
 }
 
 step_5_php() {
-    apt-get -y install php7.0 php7.0-curl php7.0-gd php7.0-imap php7.0-json php7.0-mcrypt php7.0-mysql php7.0-xml php7.0-opcache php7.0-soap php7.0-xmlrpc libapache2-mod-php7.0 php7.0-common php7.0-dev php7.0-zip php7.0-ssh2 php7.0-mbstring composer >> ${DEBUG} 2>&1
+    numPhp=$( apt-cache search "php7.*-curl" | cut -d'-' -f1 )
+    apt-get -y install ${numPhp} ${numPhp}-curl ${numPhp}-gd ${numPhp}-imap ${numPhp}-json ${numPhp}-mcrypt ${numPhp}-mysql ${numPhp}-xml ${numPhp}-opcache ${numPhp}-soap ${numPhp}-xmlrpc libapache2-mod-${numPhp} ${numPhp}-common ${numPhp}-dev ${numPhp}-zip ${numPhp}-ssh2 ${numPhp}-mbstring composer >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
         apt_install libapache2-mod-php5 php5 php5-common php5-curl php5-dev php5-gd php5-json php5-memcached php5-mysqlnd php5-cli php5-ssh2 php5-redis php5-mbstring composer >> ${DEBUG} 2>&1
         apt_install php5-ldap >> ${DEBUG} 2>&1
     else
-        apt-get -y install php7.0-ldap >> ${DEBUG} 2>&1
+        apt-get -y install ${numPhp}-ldap >> ${DEBUG} 2>&1
     fi
 }
 
 step_6_nextdom_download() {
+    # Si run de la creation de l'image, on s'arrete la
+    [[ ${VERSION} == "docker" ]] && echo "Fin de l'install de l'image Docker" && exit 0
     echo "                                                                                    "
     mkdir -p ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
     find ${WEBSERVER_HOME} -name 'index.html' -type f -exec rm -rf {} + >> ${DEBUG} 2>&1
@@ -168,57 +172,59 @@ step_7_nextdom_customization() {
         fi
     fi
 
-    systemctl stop mysql >> ${DEBUG} 2>&1
-    if [ $? -ne 0 ]; then
-        service mysql stop >> ${DEBUG} 2>&1
+    if [ ${MYSQL_HOST} == "localhost" ]; then
+        systemctl stop mysql >> ${DEBUG} 2>&1
         if [ $? -ne 0 ]; then
-            printf "${ROUGE}Ne peut arrêter mysql - Annulation${NORMAL}"
-            exit 1
+            service mysql stop >> ${DEBUG} 2>&1
+            if [ $? -ne 0 ]; then
+                printf "${ROUGE}Ne peut arrêter mysql - Annulation${NORMAL}"
+                exit 1
+            fi
         fi
-    fi
 
-    rm /var/lib/mysql/ib_logfile*
+        rm /var/lib/mysql/ib_logfile*
 
-    if [ -d /etc/mysql/conf.d ]; then
-        touch /etc/mysql/conf.d/nextdom_my.cnf
-        echo "[mysqld]" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "skip-name-resolve" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "key_buffer_size = 16M" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "thread_cache_size = 16" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "tmp_table_size = 48M" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "max_heap_table_size = 48M" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "query_cache_type =1" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "query_cache_size = 32M" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "query_cache_limit = 2M" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "query_cache_min_res_unit=3K" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "innodb_flush_method = O_DIRECT" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "innodb_flush_log_at_trx_commit = 2" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "innodb_log_file_size = 32M" >> /etc/mysql/conf.d/nextdom_my.cnf
-    fi
+        if [ -d /etc/mysql/conf.d ]; then
+            touch /etc/mysql/conf.d/nextdom_my.cnf
+            echo "[mysqld]" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "skip-name-resolve" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "key_buffer_size = 16M" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "thread_cache_size = 16" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "tmp_table_size = 48M" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "max_heap_table_size = 48M" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "query_cache_type =1" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "query_cache_size = 32M" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "query_cache_limit = 2M" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "query_cache_min_res_unit=3K" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "innodb_flush_method = O_DIRECT" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "innodb_flush_log_at_trx_commit = 2" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "innodb_log_file_size = 32M" >> /etc/mysql/conf.d/nextdom_my.cnf
+        fi
 
-    systemctl start mysql >> ${DEBUG} 2>&1
-    if [ $? -ne 0 ]; then
-        service mysql start >> ${DEBUG} 2>&1
+        systemctl start mysql >> ${DEBUG} 2>&1
         if [ $? -ne 0 ]; then
-            printf "${ROUGE}Ne peut lancer mysql - Annulation${NORMAL}"
-            exit 1
+            service mysql start >> ${DEBUG} 2>&1
+            if [ $? -ne 0 ]; then
+                printf "${ROUGE}Ne peut lancer mysql - Annulation${NORMAL}"
+                exit 1
+            fi
         fi
     fi
 
 }
 
 step_8_nextdom_configuration() {
-    echo "DROP USER 'nextdom'@'localhost';" | mysql -u root -p${MYSQL_ROOT_PASSWD} > /dev/null 2>&1
-    mysql -u root -p${MYSQL_ROOT_PASSWD} -e "CREATE USER 'nextdom'@'localhost' IDENTIFIED BY '${MYSQL_NEXTDOM_PASSWD}';"
-    mysql -u root -p${MYSQL_ROOT_PASSWD} -e "DROP DATABASE IF EXISTS nextdom;"
-    mysql -u root -p${MYSQL_ROOT_PASSWD} -e "CREATE DATABASE nextdom;"
-    mysql -u root -p${MYSQL_ROOT_PASSWD} -e "GRANT ALL PRIVILEGES ON nextdom.* TO 'nextdom'@'localhost';"
+    echo "DROP USER 'nextdom'@'localhost';" | mysql -u root -p${MYSQL_ROOT_PASSWD} -h ${MYSQL_HOST} > /dev/null 2>&1
+    mysql -u root -p${MYSQL_ROOT_PASSWD} -h ${MYSQL_HOST} -e "CREATE USER 'nextdom'@'localhost' IDENTIFIED BY '${MYSQL_NEXTDOM_PASSWD}';"
+    mysql -u root -p${MYSQL_ROOT_PASSWD} -h ${MYSQL_HOST} -e "DROP DATABASE IF EXISTS nextdom;"
+    mysql -u root -p${MYSQL_ROOT_PASSWD} -h ${MYSQL_HOST} -e "CREATE DATABASE nextdom;"
+    mysql -u root -p${MYSQL_ROOT_PASSWD} -h ${MYSQL_HOST} -e "GRANT ALL PRIVILEGES ON nextdom.* TO 'nextdom'@'"${MYSQL_HOST}"';"
     cp ${WEBSERVER_HOME}/core/config/common.config.sample.php ${WEBSERVER_HOME}/core/config/common.config.php
     sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${WEBSERVER_HOME}/core/config/common.config.php
     sed -i "s/#DBNAME#/nextdom/g" ${WEBSERVER_HOME}/core/config/common.config.php
     sed -i "s/#USERNAME#/nextdom/g" ${WEBSERVER_HOME}/core/config/common.config.php
     sed -i "s/#PORT#/3306/g" ${WEBSERVER_HOME}/core/config/common.config.php
-    sed -i "s/#HOST#/localhost/g" ${WEBSERVER_HOME}/core/config/common.config.php
+    sed -i "s/#HOST#/${MYSQL_HOST}/g" ${WEBSERVER_HOME}/core/config/common.config.php
     chmod 775 -R ${WEBSERVER_HOME}
     chown -R www-data:www-data ${WEBSERVER_HOME}
 }
@@ -279,6 +285,7 @@ step_10_nextdom_post() {
     cd ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
     ./gen_compress.sh >> ${DEBUG} 2>&1
     service cron start
+    echo "_nextdom_is_installed" > /var/www/html/
 }
 
 step_11_nextdom_check() {
@@ -304,47 +311,6 @@ distrib_1_spe(){
     fi
 }
 
-STEP=0
-WEBSERVER_HOME=/var/www/html
-HTML_OUTPUT=0
-MYSQL_ROOT_PASSWD=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)
-MYSQL_NEXTDOM_PASSWD=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)
-
-while getopts ":s:v:w:h:m:" opt; do
-    case $opt in
-        s) STEP="$OPTARG"
-        ;;
-        v) VERSION="$OPTARG"
-        ;;
-        w) WEBSERVER_HOME="$OPTARG"
-        ;;
-        h) HTML_OUTPUT=1
-        ;;
-        m) MYSQL_ROOT_PASSWD="$OPTARG"
-        ;;
-        \?) echo "${ROUGE}Invalid option -$OPTARG${NORMAL}" >&2
-        ;;
-    esac
-done
-
-if [ ${HTML_OUTPUT} -eq 1 ]; then
-    VERT="</pre><span style='color:green;font-weight: bold;'>"
-    NORMAL="</span><pre>"
-    ROUGE="<span style='color:red;font-weight: bold;'>"
-    ROSE="<span style='color:pink;font-weight: bold;'>"
-    BLEU="<span style='color:blue;font-weight: bold;'>"
-    BLANC="<span style='color:white;font-weight: bold;'>"
-    BLANCLAIR="<span style='color:blue;font-weight: bold;'>"
-    JAUNE="<span style='color:#FFBF00;font-weight: bold;'>"
-    CYAN="<span style='color:blue;font-weight: bold;'>"
-    echo "<script>"
-    echo "setTimeout(function(){ window.scrollTo(0,document.body.scrollHeight); }, 100);"
-    echo "setTimeout(function(){ window.scrollTo(0,document.body.scrollHeight); }, 300);"
-    echo "setTimeout(function(){ location.reload(); }, 1000);"
-    echo "</script>"
-    echo "<pre>"
-fi
-
 displaylogo()
 {
     echo ""
@@ -365,6 +331,7 @@ infos(){
 }
 
 selectoption(){
+    VERSION=""
     PS3='Selectionner la branche github a installer: '
     options=("master" "develop" "feature/Sass" "Quit")
     select opt in "${options[@]}"
@@ -427,30 +394,93 @@ progress()
     if [ $PARAM_PROGRESS = 100 ]; then echo -ne "[##########################] (100%) $PARAM_PHASE \r \n" ; distrib_1_spe; fi;
 }
 
+#MAIN
+
+while getopts ":d:hm:n:os:v:w:" opt; do
+    case $opt in
+        d) MYSQL_HOST=${OPTARG}
+        ;;
+        h) HTML_OUTPUT=1
+        ;;
+        m) MYSQL_ROOT_PASSWD="$OPTARG"
+        ;;
+        n) MYSQL_NEXTDOM_PASSWD="$OPTARG"
+        ;;
+        o) DEBUG="/tmp/output"
+        echo DEBUG: ${DEBUG}
+        ;;
+        s) STEP="$OPTARG"
+            echo step: ${STEP}
+        ;;
+        v) VERSION="$OPTARG"
+            echo version: ${VERSION}
+        ;;
+        w) WEBSERVER_HOME="$OPTARG"
+            echo WEBSERVER_HOME: ${WEBSERVER_HOME}
+        ;;
+        \?) echo "${ROUGE}Invalid option -$OPTARG${NORMAL}" >&2
+        ;;
+    esac
+done
+
+# verification des nuls et not set des parametres définis par OPTIONS
+
+STEP=${STEP:-1}
+VERSION=${VERSION:-master}
+DISTINCT=${DISTINCT:-N}
+WEBSERVER_HOME=${WEBSERVER_HOME:-/var/www/html}
+HTML_OUTPUT=${HTML_OUTPUT:-0}
+DEBUG=${DEBUG:-/dev/null}
+MYSQL_ROOT_PASSWD=${MYSQL_ROOT_PASSWD:-$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)}
+MYSQL_NEXTDOM_PASSWD=${MYSQL_NEXTDOM_PASSWD:-$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)}
+MYSQL_HOST=${MYSQL_HOST:-localhost}
+
+echo -e "Installing version ${VERSION} of Nextdom from STEP ${STEP} to ${WEBSERVER_HOME},\nusing mysql server named ${MYSQL_HOST} \
+\nwith password root ${MYSQL_ROOT_PASSWD}, nextdom password ${MYSQL_NEXTDOM_PASSWD}, output is HTML(${HTML_OUTPUT}), log is written to ${DEBUG}"
+
+if [ ${HTML_OUTPUT} -eq 1 ]; then
+    VERT="</pre><span style='color:green;font-weight: bold;'>"
+    NORMAL="</span><pre>"
+    ROUGE="<span style='color:red;font-weight: bold;'>"
+    ROSE="<span style='color:pink;font-weight: bold;'>"
+    BLEU="<span style='color:blue;font-weight: bold;'>"
+    BLANC="<span style='color:white;font-weight: bold;'>"
+    BLANCLAIR="<span style='color:blue;font-weight: bold;'>"
+    JAUNE="<span style='color:#FFBF00;font-weight: bold;'>"
+    CYAN="<span style='color:blue;font-weight: bold;'>"
+    echo "<script>"
+    echo "setTimeout(function(){ window.scrollTo(0,document.body.scrollHeight); }, 100);"
+    echo "setTimeout(function(){ window.scrollTo(0,document.body.scrollHeight); }, 300);"
+    echo "setTimeout(function(){ location.reload(); }, 1000);"
+    echo "</script>"
+    echo "<pre>"
+fi
+
 displaylogo
-selectoption
+[[ -z ${VERSION} ]] && selectoption
+infos
 printf "${CYAN}Avancement de l'installation${NORMAL}               \n"
-progress 0 "upgrade du system                                                 "
-progress 5  "upgrade du system                                                 "
-progress 10 "installation des packages de base                                "
-progress 15 "installation des packages de base                                "
-progress 20 "installation de la base de donnée                                "
-progress 25 "installation de la base de donnée                                "
-progress 30 "installation apache                                              "
-progress 35 "installation apache                                              "
-progress 40 "installation php                                                 "
-progress 45 "installation php                                                 "
-progress 50 "telechargement de nextdom                                        "
-progress 55 "telechargement de nextdom                                        "
-progress 60 "customisation de nextdom                                         "
-progress 65 "customisation de nextdom                                         "
-progress 70 "configuration de nextdom                                         "
-progress 75 "configuration de nextdom                                         "
-progress 80 "installation de nextdom                                          "
-progress 85 "installation de nextdom                                          "
-progress 90 "opérations post installation                                     "
-progress 95 "verification de l'installation                                   "
-progress 100 "suppression des fichiers inutiles                               "
+[[ ${STEP} -eq 1 ]] && ((STEP++)) && progress 0 "upgrade du system                                                 "
+[[ ${STEP} -eq 2 ]] && ((STEP++)) &&progress 5  "upgrade du system                                                 "
+[[ ${STEP} -eq 3 ]] && ((STEP++)) &&progress 10 "installation des packages de base                                "
+[[ ${STEP} -eq 4 ]] && ((STEP++)) &&progress 15 "installation des packages de base                                "
+[[ ${STEP} -eq 5 ]] && ((STEP++)) &&progress 20 "installation de la base de donnée                                "
+[[ ${STEP} -eq 6 ]] && ((STEP++)) &&progress 25 "installation de la base de donnée                                "
+[[ ${STEP} -eq 7 ]] && ((STEP++)) &&progress 30 "installation apache                                              "
+[[ ${STEP} -eq 8 ]] && ((STEP++)) &&progress 35 "installation apache                                              "
+[[ ${STEP} -eq 9 ]] && ((STEP++)) &&progress 40 "installation php                                                 "
+[[ ${STEP} -eq 10 ]] && ((STEP++)) &&progress 45 "installation php                                                 "
+[[ ${STEP} -eq 11 ]] && ((STEP++)) &&progress 50 "telechargement de nextdom                                        "
+[[ ${STEP} -eq 12 ]] && ((STEP++)) &&progress 55 "telechargement de nextdom                                        "
+[[ ${STEP} -eq 13 ]] && ((STEP++)) &&progress 60 "customisation de nextdom                                         "
+[[ ${STEP} -eq 14 ]] && ((STEP++)) &&progress 65 "customisation de nextdom                                         "
+[[ ${STEP} -eq 15 ]] && ((STEP++)) &&progress 70 "configuration de nextdom                                         "
+[[ ${STEP} -eq 16 ]] && ((STEP++)) &&progress 75 "configuration de nextdom                                         "
+[[ ${STEP} -eq 17 ]] && ((STEP++)) &&progress 80 "installation de nextdom                                          "
+[[ ${STEP} -eq 18 ]] && ((STEP++)) &&progress 85 "installation de nextdom                                          "
+[[ ${STEP} -eq 19 ]] && ((STEP++)) &&progress 90 "opérations post installation                                     "
+[[ ${STEP} -eq 20 ]] && ((STEP++)) &&progress 95 "verification de l'installation                                   "
+[[ ${STEP} -eq 21 ]] && ((STEP++)) &&progress 100 "suppression des fichiers inutiles                               "
 clear
 
 displaylogo

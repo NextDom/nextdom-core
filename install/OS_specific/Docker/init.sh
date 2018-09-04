@@ -23,12 +23,10 @@ else
 fi	
 
 if [ ! -z ${SSH_PORT} ]; then
-	echo 'Change SSH listen port to : '${APACHE_PORT}
-	sed '/Port /d' /etc/ssh/sshd_config
+	echo 'Change SSH listen port to : '${SSH_PORT}
 	echo "Port ${SSH_PORT}" >> /etc/ssh/sshd_config
 else
-	sed '/Port /d' /etc/ssh/sshd_config
-	echo "Port 22" >> /etc/ssh/sshd_config
+	sed '/Port /d' /etc/ssh/sshd_config | echo "Port 22" >> /etc/ssh/sshd_config
 fi
 
 if [ ! -z ${MODE_HOST} ] && [ ${MODE_HOST} -eq 1 ]; then
@@ -36,14 +34,17 @@ if [ ! -z ${MODE_HOST} ] && [ ${MODE_HOST} -eq 1 ]; then
 	echo "127.0.0.1 localhost nextdom" > /etc/hosts
 fi
 
-if [ -f /var/www/html/core/config/common.config.php ]; then
+if [ -f "/var/www/html/_nextdom_is_installed" ]; then
 	echo 'NextDom is already install'
 else
 	echo 'Start nextdom installation'
-	rm -rf /root/install.sh
-	wget https://raw.githubusercontent.com/nextdom/core/stable/install/install.sh -O /root/install.sh
-	chmod +x /root/install.sh
-	/root/install.sh -s 6
+	#TODO tant que ce n'est pas dans le master commenter les 4 lines suivantes
+	#rm -rf /root/install.sh
+	#wget https://raw.githubusercontent.com/nextdom/core/stable/install/install.sh -O /root/install.sh
+	#cp /var/www/html/core/install/install.sh /root/install.sh
+	#chmod +x /root/install.sh
+	#on reprend l'install la ou l'image s'est arrétée
+	/root/install_docker.sh -s 14 -v ${VERSION} -m ${SHELL_ROOT_PASSWORD} -n ${SHELL_ROOT_PASSWORD} -d ${MYSQL_HOST} -o
 fi
 
 echo 'All init complete'
