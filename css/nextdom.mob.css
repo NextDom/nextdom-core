@@ -1675,7 +1675,7 @@ button.ui-button::-moz-focus-inner {
 * Bug inline with IE sub menu
 */
 /* IE9, IE10 */
-@media screen and (min-width: 0\0) {
+@media screen and (min-width: 0\0 ) {
   .ui-menu li {
     list-style-type: none;
     display: inline;
