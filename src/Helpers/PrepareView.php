@@ -387,50 +387,18 @@ class PrepareView
      */
     private static function initCssPool(&$pageData, $configs)
     {
-        $nextdomThemeDir = NEXTDOM_ROOT . '/css/themes/';
-        $bootstrapTheme = '';
-        $defaultBootstrapTheme = $configs['default_bootstrap_theme'];
-        if (isset($_SESSION['user'])) {
-            $bootstrapTheme = $_SESSION['user']->getOptions('bootstrap_theme');
-            $designTheme = $_SESSION['user']->getOptions('design_nextdom');
-        }
-
         $pageData['CSS_POOL'][] = '/css/nextdom.css';
         // TODO: AU SECOURS
-        $addBootstrapThemeFile = true;
         if (!Status::isRescueMode()) {
             if (!Status::isConnect()) {
-                if (file_exists($nextdomThemeDir . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css')) {
-                    $pageData['CSS_POOL'][] = '/css/themes/' . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css';
-                } else {
-                    $pageData['CSS_POOL'][] = '/3rdparty/bootstrap/css/bootstrap.min.css';
-                }
-                if (is_dir($nextdomThemeDir . $bootstrapTheme . '/desktop')) {
-                    if (file_exists($nextdomThemeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.js')) {
-                        $pageData['JS_POOL'][] = '/css/themes/' . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.js';
-                    }
-                }
                 if (isset($_SESSION['user']) && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
                     $highstockThemeFile = '/3rdparty/highstock/themes/' . $_SESSION['user']->getOptions('desktop_highcharts_theme') . '.js';
                     if (file_exists($highstockThemeFile)) {
                         $pageData['JS_POOL'][] = $highstockThemeFile;
                     }
                 }
-            } else {
-                if (file_exists($nextdomThemeDir . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.css')) {
-                    $pageData['CSS_POOL'][] = '/css/themes/' . $bootstrapTheme . '/desktop/' . $bootstrapTheme . '.css';
-                    $addBootstrapThemeFile = false;
-                } else {
-                    if (file_exists($nextdomThemeDir . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css')) {
-                        $pageData['CSS_POOL'][] = '/css/themes/' . $defaultBootstrapTheme . '/desktop/' . $defaultBootstrapTheme . '.css';
-                        $addBootstrapThemeFile = false;
-                    }
-                }
             }
             $pageData['CSS_POOL'][] = '3rdparty/lobibox/css/lobibox.min.css';
-        }
-        if ($addBootstrapThemeFile) {
-            $pageData['CSS_POOL'][] = '/3rdparty/bootstrap/css/bootstrap.min.css';
         }
         // TODO: Simplifiable ?
         if (isset($_SESSION['user'])) {
