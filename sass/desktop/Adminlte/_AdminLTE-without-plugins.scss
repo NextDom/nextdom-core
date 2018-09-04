@@ -269,12 +269,17 @@ a:focus {
 }
 .main-header .navbar .nav > li > a > .label {
   position: absolute;
-  top: 9px;
-  right: 7px;
+  top: 0px;
+  right: 0px;
   text-align: center;
-  font-size: 9px;
-  padding: 2px 3px;
+  font-size: 14px;
+  padding: 3px 3px;
   line-height: .9;
+  z-index: -1;
+}
+.tasks-menu, .notifications-menu {
+    top: 8px;
+    left:-8px;
 }
 .main-header .logo {
   -webkit-transition: width 0.3s ease-in-out;
