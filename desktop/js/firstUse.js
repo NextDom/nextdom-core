@@ -116,17 +116,15 @@ $("#toStep4").click(function(){
                 configuration: {'market::password': password},
                 error: function (error) {
                     notify("Erreur",data.message,"error");
-                    $('.veen').animateCss('shake');
                 },
                 success: function (data) {
                     jeedom.repo.test({
                         repo: 'market',
                         error: function (error) {
                             notify("Erreur",data.message,"error");
-                            $('.veen').animateCss('shake');
                         },
                         success: function (data) {
-                            
+
                         }
                     });
                 }
