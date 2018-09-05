@@ -388,7 +388,8 @@ class PrepareView
     private static function initCssPool(&$pageData, $configs)
     {
         $pageData['CSS_POOL'][] = '/css/nextdom.css';
-        // TODO: AU SECOURS
+        $pageData['CSS_POOL'][] = '3rdparty/lobibox/css/lobibox.min.css';
+
         if (!Status::isRescueMode()) {
             if (!Status::isConnect()) {
                 if (isset($_SESSION['user']) && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
@@ -398,22 +399,8 @@ class PrepareView
                     }
                 }
             }
-            $pageData['CSS_POOL'][] = '3rdparty/lobibox/css/lobibox.min.css';
         }
-        // TODO: Simplifiable ?
-        if (isset($_SESSION['user'])) {
-            if (file_exists(NEXTDOM_ROOT . '/css/' . $designTheme . '.css')) {
-                $pageData['CSS_POOL'][] = '/css/' . $designTheme . '.css';
-            } else {
-                $pageData['CSS_POOL'][] = '/css/dashboard.css';
-            }
-            if (file_exists(NEXTDOM_ROOT . '/desktop/js/' . $designTheme . '.js')) {
-                $pageData['JS_POOL'][] = '/desktop/js/' . $designTheme . '.js';
-            } else {
-                $pageData['JS_POOL'][] = '/desktop/js/dashboard.js';
-                $pageData['JS_POOL'][] = '/3rdparty/AdminLTE/js/dashboard-v2.js';
-            }
-        }
+
         if (!Status::isRescueMode() && $configs['enableCustomCss'] == 1) {
             if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.css')) {
                 $pageData['CSS_POOL'][] = '/desktop/custom/custom.css';
