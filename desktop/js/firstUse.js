@@ -126,7 +126,7 @@ $("#toStep4").click(function(){
                             $('.veen').animateCss('shake');
                         },
                         success: function (data) {
-                            goToIndex();
+                            
                         }
                     });
                 }
