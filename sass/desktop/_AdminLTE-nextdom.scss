@@ -4,7 +4,11 @@ body {
 }
 
 a {
-  color: #33B8CC !important;
+  color: #33B8CC;
+}
+
+.Link-Blue {
+  color: #33B8CC;
 }
 
 .main-header {
@@ -263,7 +267,7 @@ a {
 
 .login-page,
 .register-page {
-  background: linear-gradient(#33B8CC, #33B8EE);
+  background: linear-gradient(#33B8CC, #33B8FF);
   overflow: hidden;
 }
 .login-box,
@@ -278,7 +282,7 @@ a {
   padding: 20px;
   border-top: 0;
   color: #666;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 20px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   border-radius: 7px;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
