@@ -41,6 +41,7 @@ class eqLogic
     protected $display;
     protected $order;
     protected $comment;
+    protected $tags;
     protected $_debug = false;
     protected $_object = null;
     private static $_templateArray = array();
@@ -50,6 +51,10 @@ class eqLogic
     protected $_cmds = array();
 
     /*     * ***********************Méthodes statiques*************************** */
+
+    public static function getAllTags() {
+        return EqLogicManager::getAllTags();
+    }
 
     public static function byId($_id)
     {
