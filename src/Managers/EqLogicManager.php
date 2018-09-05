@@ -56,7 +56,7 @@ class EqLogicManager
             'id' => $id,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . ' 
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
         return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
     }
@@ -115,7 +115,7 @@ class EqLogicManager
             'eqReal_id' => $eqRealId,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . ' 
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE eqReal_id = :eqReal_id';
         return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
     }
@@ -178,13 +178,13 @@ class EqLogicManager
      */
     public static function byLogicalId($logicalId, $eqTypeName, $multiple = false)
     {
- 
+
         $values = [
             'logicalId'   => $logicalId,
             'eqType_name' => $eqTypeName,
         ];
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . ' 
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE logicalId = :logicalId
                 AND eqType_name = :eqType_name';
         if ($multiple) {
@@ -234,7 +234,7 @@ class EqLogicManager
         );
 
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . ' 
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE category LIKE :category
                 OR category LIKE :category2
                 ORDER BY name';
@@ -256,7 +256,7 @@ class EqLogicManager
             'configuration' => '%' . $configuration . '%',
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . ' 
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE eqType_name = :eqType_name
                 AND configuration LIKE :configuration
                 ORDER BY name';
@@ -448,7 +448,7 @@ class EqLogicManager
             'timeout' => $timeout,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . ' 
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE timeout >= :timeout';
         if ($onlyEnable) {
             $sql .= ' AND isEnable = 1';
@@ -471,7 +471,7 @@ class EqLogicManager
                 'eqLogic_name' => $eqLogicName,
             );
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . ' 
+                    FROM ' . self::DB_CLASS_NAME . '
                     WHERE name=:eqLogic_name
                     AND object_id IS NULL';
         } else {
