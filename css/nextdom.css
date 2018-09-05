@@ -20365,6 +20365,10 @@ a {
   z-index: -1;
 }
 
+.navbar-custom-menu > .navbar-nav > li {
+  position: unset;
+}
+
 .tasks-menu, .notifications-menu {
   top: 8px;
   left: -8px;
