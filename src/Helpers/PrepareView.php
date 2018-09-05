@@ -28,6 +28,23 @@ use NextDom\Helpers\Controller;
  */
 class PrepareView
 {
+    public static function showFirstUsePage($configs)
+    {
+        $pageData = [];
+        $pageData['JS_POOL'] = [];
+        $pageData['JS_END_POOL'] = [];
+        $pageData['CSS_POOL'] = [];
+        $pageData['TITLE'] = '1ere connexion';
+        $render = Render::getInstance();
+        self::initHeaderData($pageData, $configs);
+        //TODO: Vérifier ça
+        $logo = \config::byKey('product_connection_image');
+        $pageData['CSS_POOL'][] = '/css/firstUse.css';
+        $pageData['JS_END_POOL'][] = '/desktop/js/firstUse.js';
+
+        $render->show('desktop/firstUse.html.twig', $pageData);
+    }
+
     public static function showConnectionPage($configs)
     {
         $pageData                = [];

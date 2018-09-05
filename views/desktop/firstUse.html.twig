@@ -1,0 +1,113 @@
+{% include '/commons/header.html.twig' %}
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <center><img src="core/img/NextDom/NextDom_Wide_AlphaWhiteBlack.png" style="height:100px; border-radius: 10px"></center>
+    </div>
+</div>
+<div class="row">
+    <div class="stepwizard col-md-offset-3">
+        <div class="stepwizard-row setup-panel">
+            <div class="stepwizard-step">
+                <a href="#step-1" type="button" class="btn btn-primary stepwizard-btn-circle">1</a>
+                <p>{{'Étape 1'}}</p>
+            </div>
+            <div class="stepwizard-step">
+                <a href="#step-2" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled">2</a>
+                <p>{{'Étape 2'}}</p>
+            </div>
+            <div class="stepwizard-step">
+                <a href="#step-3" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled">3</a>
+                <p>{{'Étape 3'}}</p>
+            </div>
+            <div class="stepwizard-step">
+                <a href="#step-4" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled">4</a>
+                <p>{{'Étape 4'}}</p>
+            </div>
+            <div class="stepwizard-step">
+                <a href="#step-5" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled">5</a>
+                <p>{{'Étape 5'}}</p>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <form role="form" action="" method="post">
+        <div class="row setup-content" id="step-1">
+            <div class="stepwizard col-md-offset-3">
+                <h1><p class="login-box-msg">{{ 'Bienvenue sur NextDom'}}</p></h1><br/>
+                <p class="login-box-msg">{{ 'Cette page va vous guider dans le processus de configuration de Nextdom'}}</p>
+                <button id="toStep2" class="btn btn-primary nextBtn btn-lg pull-right" type="button" ><i class="fa fa-fast-forward"></i> {{Suivant}}</button>
+            </div>
+        </div>
+        <div class="row setup-content" id="step-2">
+            <div class="stepwizard col-md-offset-3">
+                <center><h3>{{'Définir le mot de passe administrateur'}}</h3></center></br>
+                <div class="form-group">
+                    <div id="register" tabindex="500" class="form-group col-md-offset-3">
+                        <div class="passwd">
+                            <input type="password" id="in_change_password">
+                            <label>Mot de passe</label>
+                        </div>
+                        <div class="passwd">
+                            <input type="password" id="in_change_passwordToo">
+                            <label>Répeter le mot de passe</label>
+                        </div>
+                    </div>
+                    <button id="toStep3" class="btn btn-primary nextBtn btn-lg pull-right" type="button" ><i class="fa fa-fast-forward"></i> {{'Suivant'}}</button>
+                </div>
+            </div>
+        </div>
+        <div class="row setup-content" id="step-3">
+            <div class="stepwizard col-md-offset-3">
+                <center><h3>{{'Compte Market'}}</h3></center><br/>
+                <div class="form-group">
+                    <div id="market" class="form-group col-md-offset-3">
+                        <h3>Je nai pas de compte Market</h3>
+                        <button class="dark btn-lg" id="bt_compte_market"><i class="fa fa-sign-in" ></i> {{'En créer un'}}</button>
+                        <hr align=center size=2 width="70%">
+                        <h3>Jai un compte market</h3>
+                        <div class="mail">
+                            <input type="text" id="in_login_username_market">
+                            <label>{{'Nom dutilisateur'}}</label>
+                        </div>
+                        <div class="passwd">
+                            <input type="password" id="in_login_password_market">
+                            <label>{{'Mot de passe'}}</label>
+                        </div>
+                    </div>
+                </div>
+                <button id="toStep4" class="btn btn-primary nextBtn btn-lg pull-right" type="button" ><i class="fa fa-fast-forward"></i> {{'Suivant'}}</button>
+            </div>
+        </div>
+        <div class="row setup-content" id="step-4">
+            <div class="stepwizard col-md-offset-3">
+                <center><h3>{{'Installation de plugins'}}</h3></center></br>
+                <div class="form-group">
+                    <center><label class="control-label">{{'Liste des plugins les plus utilisé'}}</label></center>
+                </div>
+                <button id="toStep5" class="btn btn-primary nextBtn btn-lg pull-right" type="button" ><i class="fa fa-fast-forward"></i> {{'Suivant'}}</button>
+            </div>
+        </div>
+        <div class="row setup-content" id="step-5">
+            <div class="stepwizard col-md-offset-3">
+                <center><h3>{{'Finalisation'}}</h3></center></br>
+                <div class="form-group">
+                    <center><label class="control-label">{{'Cliquer sur le bouton terminer pour profiter de NextDom'}}</label></center>
+                </div>
+                <button id="finishConf" class="btn btn-primary btn-lg pull-right ui-icon-closethick" type="button" >{{'Terminer'}}</button>
+            </div>
+        </div>
+    </form>
+
+
+
+    {% if JS_END_POOL is defined %}
+        {% for jsFile in JS_END_POOL %}
+            <script src="{{ jsFile }}"></script>
+        {% endfor %}
+    {% endif %}
+</div>
