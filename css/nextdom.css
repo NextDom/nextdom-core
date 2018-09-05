@@ -16008,7 +16008,7 @@ table.text-center th {
 .login-logo a,
 .register-logo a {
   color: #444; }
-.register-page
+
 .login-page,
 .register-page {
   background: #d2d6de; }
@@ -16753,6 +16753,9 @@ table.text-center th {
   .table-responsive > .table tr th,
   .table-responsive > .table tr td {
     white-space: normal !important; } }
+body {
+  font-family: 'Roboto','Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+
 a {
   color: #32B8CC; }
 
