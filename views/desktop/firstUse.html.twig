@@ -63,9 +63,22 @@
         </div>
         <div class="row setup-content" id="step-3">
             <div class="stepwizard col-md-offset-3">
-                <center><h3>{{'Compte Market'}}</h3></center></br>
+                <center><h3>{{'Compte Market'}}</h3></center><br/>
                 <div class="form-group">
-                    <center><label class="control-label">{{'Aller'}}</label></center>
+                    <div id="market" class="form-group col-md-offset-3">
+                        <h3>Je nai pas de compte Market</h3>
+                        <button class="dark btn-lg" id="bt_compte_market"><i class="fa fa-sign-in" ></i> {{'En créer un'}}</button>
+                        <hr align=center size=2 width="70%">
+                        <h3>Jai un compte market</h3>
+                        <div class="mail">
+                            <input type="text" id="in_login_username_market">
+                            <label>{{'Nom dutilisateur'}}</label>
+                        </div>
+                        <div class="passwd">
+                            <input type="password" id="in_login_password_market">
+                            <label>{{'Mot de passe'}}</label>
+                        </div>
+                    </div>
                 </div>
                 <button id="toStep4" class="btn btn-primary nextBtn btn-lg pull-right" type="button" ><i class="fa fa-fast-forward"></i> {{'Suivant'}}</button>
             </div>
@@ -92,9 +105,9 @@
 
 
 
-{% if JS_END_POOL is defined %}
-{% for jsFile in JS_END_POOL %}
-<script src="{{ jsFile }}"></script>
-{% endfor %}
-{% endif %}
+    {% if JS_END_POOL is defined %}
+        {% for jsFile in JS_END_POOL %}
+            <script src="{{ jsFile }}"></script>
+        {% endfor %}
+    {% endif %}
 </div>
