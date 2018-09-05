@@ -86,7 +86,9 @@ class Router
                 'product_name',
                 'product_icon',
                 'default_bootstrap_theme'));
-            if (!Status::isConnect()) {
+            if ($configs['nextdom::firstUse'] == 1) {
+                PrepareView::showFirstUsePage($configs);
+            } else if (!Status::isConnect()) {
                 PrepareView::showConnectionPage($configs);
             }
             else {
