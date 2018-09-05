@@ -24,6 +24,7 @@ body {
     width: 100%;
     height: 1px;
     background-color: #ccc;
+    opacity: 0.4;
     z-order: 0;
 }
 .stepwizard-step {
@@ -36,12 +37,25 @@ body {
     height: 30px;
     text-align: center;
     padding: 6px 0;
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: bold;
     line-height: 1.428571429;
     border-radius: 15px;
+    color: white;
 }
+
 .stepwizard-input {
     margin-left:25%;
     margin-bottom: 20px;
     width:50%;
+}
+
+.stepwizard-passwd > input {
+    width: 250px;
+    height: 30px;
+    text-align: center;
+}
+
+.stepwizard-btn-circle.disabled, .stepwizard-btn-circle[disabled] {
+  color: Black;
 }
