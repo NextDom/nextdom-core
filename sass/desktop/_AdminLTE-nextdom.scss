@@ -35,17 +35,19 @@ a {
   z-index: -1;
 }
 .tasks-menu, .notifications-menu {
-    top: 8px;
-    left:-8px;
+  top: 8px;
+  left:-8px;
 }
 
 .notifbadge {
   position: inherit;
   top: 7px;
+  left:-7px;
 }
 
 .notifcounter {
-    margin-top: 7px;
+  margin-top: 7px;
+  margin-right: 7px;
 }
 
 .content-header > .breadcrumb > li > a > .fa,
