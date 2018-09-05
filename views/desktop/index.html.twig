@@ -2,7 +2,7 @@
     <div id="div_alert"></div>
     <div id="div_pageContainer">
         {% if ALERT_MSG is defined %}
-            <div class="alert alert-danger">{{ ALERT_MSG|raw }}</div>
+            <div class="text-center alert alert-danger">{{ ALERT_MSG|raw }}</div>
         {%  endif %}
         {{ content|raw }}
     </div>
