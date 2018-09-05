@@ -63,7 +63,7 @@ a {
   height: auto;
 }
 .user-panel > .info {
-  padding: 5px 5px 5px 0px;
+  padding: 5px 5px 5px 10px;
   line-height: 0.5;
   position: absolute;
   left: 55px;
@@ -83,14 +83,14 @@ a {
   width: 20px;
 }
 
-  .sidebar-mini.sidebar-collapse .main-sidebar {
-    -webkit-transform: translate(0, 0);
-    -ms-transform: translate(0, 0);
-    -o-transform: translate(0, 0);
-    transform: translate(0, 0);
-    width: 50px !important;
-    z-index: 2001;
-  }
+.sidebar-mini.sidebar-collapse .main-sidebar {
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+  width: 50px !important;
+  z-index: 2001;
+}
 
 .sidebar-mini:not(.sidebar-mini-expand-feature).sidebar-collapse .sidebar-menu > li:hover > a > span:not(.pull-right),
 .sidebar-mini:not(.sidebar-mini-expand-feature).sidebar-collapse .sidebar-menu > li:hover > .treeview-menu {
@@ -122,6 +122,11 @@ a {
 .dropdown-menu > li > a > .fas,
 .dropdown-menu > li > a > .ion {
   margin-right: 10px;
+}
+
+.treeview-menu > li {
+    padding-top: 1px;
+    padding-bottom: 1px;
 }
 
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .glyphicon,
