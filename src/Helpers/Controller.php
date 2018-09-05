@@ -105,11 +105,11 @@ class Controller
         } else {
             $object = JeeObjectManager::byId(Utils::init('object_id'));
         }
-        
+
         if (!is_object($object)) {
             $object = JeeObjectManager::rootObject();
         }
-        
+
         if (!is_object($object)) {
             throw new \Exception(__('Aucun objet racine trouvé. Pour en créer un, allez dans Outils -> <a href="/index.php?v=d&p=object" target="_blank">Objets</a>'));
         }
@@ -124,7 +124,7 @@ class Controller
         $pageContent['dashboardObjectId']                 = $pageContent['JS_VARS']['SEL_OBJECT_ID'];
         $pageContent['dashboardObject']                   = $object;
         $pageContent['dashboardChildrenObjects']          = JeeObjectManager::buildTree($object);
-        
+
         if ($pageContent['dashboardDisplayScenarioByDefault'] == 1) {
             $pageContent['dashboardScenarios'] = ScenarioManager::all();
         }
@@ -160,7 +160,7 @@ class Controller
         $pageContent['scenarioCount']     = count(ScenarioManager::all());
         $pageContent['scenarios'][-1]     = ScenarioManager::all(null);
         $pageContent['scenarioListGroup'] = ScenarioManager::listGroup();
-        
+
         if (is_array($pageContent['scenarioListGroup'])) {
             foreach ($pageContent['scenarioListGroup'] as $group) {
                 $pageContent['scenarios'][$group['group']] = ScenarioManager::all($group['group']);
@@ -210,13 +210,13 @@ class Controller
         $pageContent['adminHardwareKey']      = \nextdom::getHardwareKey();
         $pageContent['adminLastKnowDate']     = \cache::byKey('hour')->getValue();
         $pageContent['adminIsRescueMode']     = Status::isRescueMode();
-        
+
         if (!$pageContent['adminIsRescueMode']) {
             $pageContent['adminPluginsList'] = [];
             $pluginsList = PluginManager::listPlugin(true);
             foreach ($pluginsList as $plugin) {
                 $pluginApi = \config::byKey('api', $plugin->getId());
-                
+
                 if ($pluginApi !== '') {
                     $pluginData = [];
                     $pluginData['api'] = $pluginApi;
@@ -231,7 +231,7 @@ class Controller
         $pageContent['adminBannedIp'] = [];
         $cache = \cache::byKey('security::banip');
         $values = json_decode($cache->getValue('[]'), true);
-        
+
         if (is_array($values) && count($values) > 0) {
             foreach ($values as $value) {
                 $bannedData = [];
@@ -247,7 +247,7 @@ class Controller
         }
 
         $pageContent['adminNetworkInterfaces'] = [];
-        
+
         foreach (\network::getInterfaces() as $interface) {
             $intData = [];
             $intData['name'] = $interface;
@@ -376,7 +376,7 @@ class Controller
 
         $pageContent['cronEnabled']   = \config::byKey('enableCron');
         $pageContent['JS_END_POOL'][] = '/desktop/js/cron.js';
-        
+
         return $render->get('/desktop/cron.html.twig', $pageContent);
     }
 
@@ -399,7 +399,7 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageContent['userLdapEnabled'] = \config::byKey('ldap::enable');
-        
+
         if ($pageContent['userLdapEnabled'] != '1') {
             $user = \user::byLogin('nextdom_support');
             $pageContent['userSupportExists'] = is_object($user);
@@ -514,13 +514,13 @@ class Controller
         $eqLogics     = [];
         $cmds         = [];
         $eqLogics[-1] = EqLogicManager::byObjectId(null, false);
-        
+
         foreach ($eqLogics[-1] as $eqLogic) {
             $cmds[$eqLogic->getId()] = $eqLogic->getCmd();
             $nbCmds += count($cmds[$eqLogic->getId()]);
         }
         $nbEqlogics += count($eqLogics[-1]);
-        
+
         foreach ($objects as $object) {
             $eqLogics[$object->getId()] = $object->getEqLogic(false, false);
             foreach ($eqLogics[$object->getId()] as $eqLogic) {
@@ -561,7 +561,7 @@ class Controller
         $currentLogfile = Utils::init('logfile');
         $logFilesList   = [];
         $dir = opendir(NEXTDOM_ROOT . '/log/');
-        
+
         while ($file = readdir($dir)) {
             if ($file != '.' && $file != '..' && $file != '.htaccess' && !is_dir(NEXTDOM_ROOT . '/log/' . $file)) {
                 $logFilesList[] = $file;
@@ -570,15 +570,16 @@ class Controller
         natcasesort($logFilesList);
         $pageContent['logFilesList'] = [];
         foreach ($logFilesList as $logFile) {
+            $hasError = 0;
             $logFileData = [];
             $logFileData['name']  = $logFile;
             $logFileData['icon']  = 'check';
             $logFileData['color'] = 'green';
-            
-            if (shell_exec('grep ERROR ' . NEXTDOM_ROOT . '/log/' . $logFile . ' | wc -l ') != 0) {
+
+            if (shell_exec('grep -c -E "\[ERROR\]|\[error\]" ' . NEXTDOM_ROOT . '/log/' . $logFile) != 0) {
                 $logFileData['icon'] = 'exclamation-triangle';
                 $logFileData['color'] = 'red';
-            } elseif (shell_exec('grep WARNING ' . NEXTDOM_ROOT . '/log/' . $logFile . ' | wc -l ') != 0) {
+            } elseif (shell_exec('grep -c -E "\[WARNING\]" ' . NEXTDOM_ROOT . '/log/' . $logFile) != 0) {
                 $logFileData['icon'] = 'exclamation-circle';
                 $logFileData['color'] = 'orange';
             }
@@ -823,7 +824,7 @@ class Controller
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
-        
+
         return $render->get('/desktop/shutdown.html.twig', $pageContent);
     }
 
@@ -850,10 +851,10 @@ class Controller
         $pageContent['healthPluginDataToShow']    = false;
         $pageContent['healthTotalNOk']            = 0;
         $pageContent['healthTotalPending']        = 0;
-        
+
         foreach (PluginManager::listPlugin(true) as $plugin) {
             $pluginData = [];
-            
+
             if (file_exists(dirname(PluginManager::getPathById($plugin->getId())) . '/../desktop/modal/health.php')) {
                 $pluginData['hasSpecificHealth'] = true;
             }
@@ -877,10 +878,10 @@ class Controller
                 if ($plugin->getHasDependency() == 1) {
                     $pluginData['hasDependency'] = true;
                     $dependencyInfo = $plugin->dependancy_info();
-                    
+
                     if (isset($dependencyInfo['state'])) {
                         $pluginData['dependencyState'] = $dependencyInfo['state'];
-                        
+
                         if ($pluginData['dependencyState'] == 'nok') {
                             $pluginData['nOk']++;
                         } elseif ($pluginData['dependencyState'] == 'in_progress') {
@@ -890,12 +891,12 @@ class Controller
                         }
                     }
                 }
-                
+
                 if ($plugin->getHasOwnDeamon() == 1) {
                     $pluginData['hasOwnDaemon'] = true;
                     $daemonInfo = $plugin->deamon_info();
                     $pluginData['daemonAuto'] = $daemonInfo['auto'];
-                    
+
                     if (isset($daemonInfo['launchable'])) {
                         $pluginData['daemonLaunchable'] = $daemonInfo['launchable'];
                         if ($pluginData['daemonLaunchable'] == 'nok' && $pluginData['daemonAuto'] == 1) {
@@ -904,7 +905,7 @@ class Controller
                     }
                     $pluginData['daemonLaunchableMessage'] = $daemonInfo['launchable_message'];
                     $pluginData['daemonState'] = $daemonInfo['state'];
-                    
+
                     if ($pluginData['daemonState'] == 'nok' && $pluginData['daemonAuto'] == 1) {
                         $pluginData['nOk']++;
                     }
@@ -1024,27 +1025,27 @@ class Controller
 
         $currentView = null;
         if (Utils::init('view_id') == '') {
-            
+
             if ($_SESSION['user']->getOptions('defaultDesktopView') != '') {
                 $currentView = \view::byId($_SESSION['user']->getOptions('defaultDesktopView'));
             }
-            
+
             if (!is_object($currentView)) {
                 $currentView = $pageContent['viewsList'][0];
             }
         } else {
             $currentView = \view::byId(init('view_id'));
-            
+
             if (!is_object($currentView)) {
                 throw new \Exception('{{Vue inconnue. Vérifier l\'ID.}}');
             }
         }
-        
+
         if (!is_object($currentView)) {
             throw new \Exception(__('Aucune vue n\'existe, cliquez <a href="index.php?v=d&p=view_edit">ici</a> pour en créer une.'));
         }
         $pageContent['viewCurrent'] = $currentView;
-        
+
         if ($_SESSION['user']->getOptions('displayViewByDefault') == 1 && Utils::init('report') != 1) {
             $pageContent['viewHideList'] = false;
         }
@@ -1095,11 +1096,11 @@ class Controller
     {
         Status::initConnectState();
         Status::isConnectedOrFail();
-        
+
         global $NEXTDOM_INTERNAL_CONFIG;
-        
+
         $pageContent['eqAnalyzeEqLogicList'] = [];
-        
+
         foreach (EqLogicManager::all() as $eqLogic) {
             $battery_type = str_replace(array('(', ')'), ['', ''], $eqLogic->getConfiguration('battery_type', ''));
             if ($eqLogic->getStatus('battery', -2) != -2) {
@@ -1163,7 +1164,7 @@ class Controller
             $listCmds = [];
             foreach ($eqLogic->getCmd('info') as $cmd) {
                 foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
-                    
+
                     if ($value['check']) {
                         if ($cmd->getAlert($level . 'if', '') != '') {
                             $hasSomeAlerts += 1;
@@ -1174,23 +1175,23 @@ class Controller
                     }
                 }
             }
-            
+
             if ($eqLogic->getConfiguration('battery_warning_threshold', '') != '') {
                 $hasSomeAlerts += 1;
             }
-            
+
             if ($eqLogic->getConfiguration('battery_danger_threshold', '') != '') {
                 $hasSomeAlerts += 1;
             }
-            
+
             if ($eqLogic->getTimeout('')) {
                 $hasSomeAlerts += 1;
             }
-            
+
             if ($hasSomeAlerts != 0) {
                 $alertData = [];
                 $alertData['eqLogic'] = $eqLogic;
-                
+
                 foreach ($listCmds as $cmdalert) {
                     foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
                         if ($value['check']) {
