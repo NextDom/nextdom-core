@@ -133,6 +133,13 @@ a {
     padding-bottom: 1px;
 }
 
+.treeview-menu > li > a > .fa,
+.treeview-menu > li > a > .fas,
+.treeview-menu > li > a > .glyphicon,
+.treeview-menu > li > a > .ion {
+  width: 20px;
+}
+
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .glyphicon,
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .fa,
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .fas,
