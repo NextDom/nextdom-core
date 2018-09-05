@@ -14068,7 +14068,7 @@ a:focus {
   border-radius: 0; }
 
 .icheck > label {
-  padding-left: 0; }
+  padding-left: 0px; }
 
 /* support Font Awesome icons in form-control */
 .form-control-feedback.fa {
@@ -16754,10 +16754,11 @@ table.text-center th {
   .table-responsive > .table tr td {
     white-space: normal !important; } }
 body {
-  font-family: 'Roboto','Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+  font-family: 'Roboto','Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+  font-size: 15px !important; }
 
 a {
-  color: #32B8CC; }
+  color: #33B8CC !important; }
 
 .main-header {
   z-index: 3030; }
@@ -16811,7 +16812,7 @@ a {
   height: auto; }
 
 .user-panel > .info {
-  padding: 5px 5px 5px 0px;
+  padding: 5px 5px 5px 10px;
   line-height: 0.5;
   position: absolute;
   left: 55px; }
@@ -16864,6 +16865,10 @@ a {
 .dropdown-menu > li > a > .ion {
   margin-right: 10px; }
 
+.treeview-menu > li {
+  padding-top: 1px;
+  padding-bottom: 1px; }
+
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .glyphicon,
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .fa,
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .fas,
@@ -16877,8 +16882,8 @@ a {
   padding-left: 10px !important; }
 
 .icheck > label {
-  padding-left: 0;
-  margin-top: 6px;
+  padding-left: 0px !important;
+  margin-top: 7px;
   margin-bottom: 15px; }
 
 .box {
@@ -16937,7 +16942,8 @@ a {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
-  border-width: 1px; }
+  border-width: 1px;
+  font-size: 15px; }
 
 .btn-primary {
   background-color: #33B8CC;
@@ -16977,13 +16983,14 @@ a {
   text-align: center;
   padding-bottom: 15px;
   padding-top: 25px;
+  margin-bottom: 0px;
   font-weight: 300;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   margin-bottom: 0px; }
 
 .login-page,
 .register-page {
-  background: linear-gradient(#33B8CC, #22B8CC);
+  background: linear-gradient(#33B8CC, #33B8EE);
   overflow: hidden; }
 
 .login-box,
