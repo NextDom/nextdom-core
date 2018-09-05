@@ -6875,7 +6875,12 @@ button.close {
 .ui-widget-content {
   border: 1px solid #aaaaaa;
   background: #ffffff url("images/ui-bg_glass_75_ffffff_1x400.png") 50% 50% repeat-x;
+<<<<<<< HEAD
   color: #404040; }
+=======
+  color: #404040;
+}
+>>>>>>> RightMenuToLeft
 
 .ui-widget-header {
   font-weight: bold;
@@ -7004,6 +7009,7 @@ button.close {
 .ui-icon {
   width: 16px;
   height: 16px;
+<<<<<<< HEAD
   background-image: url("images/ui-icons_222222_256x240.png"); }
 
 .ui-widget-content .ui-icon {
@@ -7028,6 +7034,40 @@ button.close {
 .ui-state-error .ui-icon,
 .ui-state-error-text .ui-icon {
   background-image: url("images/ui-icons_f6cf3b_256x240.png"); }
+=======
+  background-image: url("images/ui-icons_222222_256x240.png");
+}
+
+.ui-widget-content .ui-icon {
+  background-image: url("images/ui-icons_222222_256x240.png");
+}
+
+.ui-widget-header .ui-icon {
+  background-image: url("images/ui-icons_222222_256x240.png");
+}
+
+.ui-state-default .ui-icon {
+  background-image: url("images/ui-icons_888888_256x240.png");
+}
+
+.ui-state-hover .ui-icon,
+.ui-state-focus .ui-icon {
+  background-image: url("images/ui-icons_454545_256x240.png");
+}
+
+.ui-state-active .ui-icon {
+  background-image: url("images/ui-icons_454545_256x240.png");
+}
+
+.ui-state-highlight .ui-icon {
+  background-image: url("images/ui-icons_2e83ff_256x240.png");
+}
+
+.ui-state-error .ui-icon,
+.ui-state-error-text .ui-icon {
+  background-image: url("images/ui-icons_f6cf3b_256x240.png");
+}
+>>>>>>> RightMenuToLeft
 
 /* positioning */
 .ui-icon-carat-1-n {
@@ -7601,14 +7641,24 @@ button.close {
 /* Overlays */
 .ui-widget-overlay {
   background: #aaaaaa url("images/ui-bg_flat_0_aaaaaa_40x100.png") 50% 50% repeat-x;
+<<<<<<< HEAD
   opacity: .30;
   filter: Alpha(Opacity=30); }
+=======
+  opacity: 0.3;
+  filter: Alpha(Opacity=30);
+}
+>>>>>>> RightMenuToLeft
 
 .ui-widget-shadow {
   margin: -8px 0 0 -8px;
   padding: 8px;
   background: #aaaaaa url("images/ui-bg_flat_0_aaaaaa_40x100.png") 50% 50% repeat-x;
+<<<<<<< HEAD
   opacity: .30;
+=======
+  opacity: 0.3;
+>>>>>>> RightMenuToLeft
   filter: Alpha(Opacity=30);
   -webkit-border-radius: 8px;
   /* Safari 4 */
@@ -7978,7 +8028,7 @@ button.ui-button::-moz-focus-inner {
 * Bug inline with IE sub menu
 */
 /* IE9, IE10 */
-@media screen and (min-width: 0\0) {
+@media screen and (min-width: 0\0 ) {
   .ui-menu li {
     list-style-type: none;
     display: inline;
@@ -9337,6 +9387,7 @@ div.wijmo-wijmenu .wijmo-wijmenu-child .wijmo-wijmenu-text {
   outline-style: none; }
 
 @font-face {
+<<<<<<< HEAD
   font-family: 'noto';
   src: url("NotoSans-Regular.ttf"); }
 @font-face {
@@ -9347,6 +9398,21 @@ div.wijmo-wijmenu .wijmo-wijmenu-child .wijmo-wijmenu-text {
   font-family: 'noto';
   src: url("NotoSans-Bold.ttf");
   font-weight: bold; }
+=======
+  font-family: "noto";
+  src: url("NotoSans-Regular.ttf");
+}
+@font-face {
+  font-family: "noto";
+  src: url("NotoSans-Italic.ttf");
+  font-style: italic;
+}
+@font-face {
+  font-family: "noto";
+  src: url("NotoSans-Bold.ttf");
+  font-weight: bold;
+}
+>>>>>>> RightMenuToLeft
 /* jsTree default theme */
 .jstree-node,
 .jstree-children,
