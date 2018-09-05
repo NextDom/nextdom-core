@@ -140,6 +140,10 @@ a {
   width: 20px;
 }
 
+.treeview-menu > li > a {
+    padding: 5px 15px 5px 15px;
+}
+
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .glyphicon,
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .fa,
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .fas,
