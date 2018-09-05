@@ -14664,7 +14664,7 @@ input[type=checkbox] {
   margin: 0 1rem 0 0;
   cursor: pointer;
   display: inline-block;
-  top: 5px;
+  top: 2px;
   min-height: 0px !important;
 }
 
@@ -20632,8 +20632,8 @@ a {
 }
 
 .nav-tabs-custom > .nav-tabs {
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: 1px;
+  padding-right: 1px;
 }
 
 .login-logo,
@@ -22039,7 +22039,6 @@ a {
 }
 
 .skin-nextdom .sidebar-menu > li:hover > a,
-.skin-nextdom .sidebar-menu > li.active > a,
 .skin-nextdom .sidebar-menu > li.menu-open > a {
   color: #ffffff;
   background: #1e282c;
