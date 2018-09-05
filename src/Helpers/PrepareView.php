@@ -30,18 +30,18 @@ class PrepareView
 {
     public static function showConnectionPage($configs)
     {
-        $pageData = [];
-        $pageData['JS_POOL'] = [];
+        $pageData                = [];
+        $pageData['JS_POOL']     = [];
         $pageData['JS_END_POOL'] = [];
-        $pageData['CSS_POOL'] = [];
-        $pageData['TITLE'] = 'Connexion';
-        $render = Render::getInstance();
+        $pageData['CSS_POOL']    = [];
+        $pageData['TITLE']       = 'Connexion';
+        $render                  = Render::getInstance();
         self::initHeaderData($pageData, $configs);
         //TODO: Vérifier ça
         $logo = \config::byKey('product_connection_image');
-        $pageData['CSS_POOL'][] = '/3rdparty/bootstrap/css/bootstrap.min.css';
-        $pageData['CSS_POOL'][] = '/css/dashboard.css';
-        $pageData['CSS_POOL'][] = '/3rdparty/iCheck/all.css';
+        $pageData['CSS_POOL'][]    = '/3rdparty/bootstrap/css/bootstrap.min.css';
+        $pageData['CSS_POOL'][]    = '/css/dashboard.css';
+        $pageData['CSS_POOL'][]    = '/3rdparty/iCheck/all.css';
         $pageData['JS_END_POOL'][] = '/desktop/js/connection.js';
 
         $render->show('desktop/connection.html.twig', $pageData);
@@ -107,8 +107,9 @@ class PrepareView
     {
         global $language;
         global $configs;
-        $pageData = [];
-        $pageData['JS_POOL'] = [];
+        
+        $pageData             = [];
+        $pageData['JS_POOL']  = [];
         $pageData['CSS_POOL'] = [];
         $page = '';
         $language = $configs['language'];
@@ -129,18 +130,18 @@ class PrepareView
         self::initHeaderData($pageData, $configs);
 
         $pageData['CSS_POOL'][] = '/css/nextdom.css';
-        $pageData['JS_VARS'] = array(
-            'user_id' => $_SESSION['user']->getId(),
-            'user_isAdmin' => Status::isConnectAdmin(),
-            'user_login' => $_SESSION['user']->getLogin(),
-            'nextdom_firstUse' => $configs['nextdom::firstUse'],
-            'widget_width_step' => $configs['widget::step::width'],
+        $pageData['JS_VARS'] = [
+            'user_id'            => $_SESSION['user']->getId(),
+            'user_isAdmin'       => Status::isConnectAdmin(),
+            'user_login'         => $_SESSION['user']->getLogin(),
+            'nextdom_firstUse'   => $configs['nextdom::firstUse'],
+            'widget_width_step'  => $configs['widget::step::width'],
             'widget_height_step' => $configs['widget::step::height'],
-            'widget_margin' => $configs['widget::margin']
-        );
-        $pageData['JS_VARS_RAW'] = array(
+            'widget_margin'      => $configs['widget::margin']
+        ];
+        $pageData['JS_VARS_RAW'] = [
             'userProfils' => Utils::getArrayToJQueryJson($_SESSION['user']->getOptions()),
-        );
+        ];
 
         $pageData['MENU_VIEW'] = '/desktop/menu_dashboard.html.twig';
         self::initMenu($pageData, $currentPlugin);
@@ -203,16 +204,17 @@ class PrepareView
         $categories = PluginManager::getPluginsByCategory(true);
 
         if (count($categories) > 0) {
-            $pageData['PANEL_MENU'] = [];
-            $pageData['MENU_PLUGIN'] = [];
+            $pageData['PANEL_MENU']           = [];
+            $pageData['MENU_PLUGIN']          = [];
             $pageData['MENU_PLUGIN_CATEGORY'] = [];
 
             foreach ($categories as $categoryCode => $pluginsList) {
-                $pageData['MENU_PLUGIN'][$categoryCode] = [];
+                $pageData['MENU_PLUGIN'][$categoryCode]          = [];
                 $pageData['MENU_PLUGIN_CATEGORY'][$categoryCode] = [];
 
                 $icon = '';
                 $name = $categoryCode;
+                
                 if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode])) {
                     $icon = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode]['icon'];
                     $name = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode]['name'];
@@ -265,9 +267,9 @@ class PrepareView
     {
         $pageData['IS_ADMIN']                 = Status::isConnectAdmin();
         $pageData['CAN_SUDO']                 = \nextdom::isCapable('sudo');
-        $pageData['MENU_NB_MESSAGES']    = \message::nbMessage();
+        $pageData['MENU_NB_MESSAGES']         = \message::nbMessage();
         if ($pageData['IS_ADMIN']) {
-            $pageData['MENU_NB_UPDATES']     = UpdateManager::nbNeedUpdate();
+            $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
         }
         $pageData['MENU_JEEOBJECT_TREE'] = JeeObjectManager::buildTree(null, false);
         $pageData['MENU_VIEWS_LIST']     = \view::all();
@@ -430,10 +432,10 @@ class PrepareView
                 ob_start();
                 \include_file('desktop', $page, 'php', '', true);
                 return ob_get_clean();
-            }
-            else {
+            } else {
                 return \NextDom\Helpers\Controller::$controllerRoute($render, $pageContent);
             }
         }
     }
+    
 }
