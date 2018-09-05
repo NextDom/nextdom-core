@@ -17,6 +17,7 @@ cat 3rdparty/jquery.utils/jquery.utils.js \
     3rdparty/bootstrap/bootstrap.min.js \
     3rdparty/jquery.ui/jquery-ui.min.js \
     3rdparty/jquery.ui/jquery.ui.datepicker.fr.js \
+    3rdparty/iCheck/icheck.js \
     core/js/nextdom.class.js \
     core/js/private.class.js \
     core/js/eqLogic.class.js \
@@ -71,8 +72,7 @@ cat 3rdparty/jquery.utils/jquery.utils.js \
     3rdparty/jquery.cron/jquery.cron.min.js \
     3rdparty/jquery.contextMenu/jquery.contextMenu.min.js \
     3rdparty/autosize/autosize.min.js \
-    3rdparty/AdminLTE/js/dashboard-v2.js \
-    3rdparty/iCheck/icheck.js > js/temp.js
+    3rdparty/AdminLTE/js/dashboard-v2.js > js/temp.js
 
 # Bug compression de tablesorter
 #    3rdparty/jquery.tablesorter/jquery.tablesorter.min.js \
