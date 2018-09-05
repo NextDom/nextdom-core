@@ -53,7 +53,10 @@ class scenarioElement {
     }
 
     public function execute(&$_scenario = null) {
-        if ($_scenario !== null && !$_scenario->getDo()) {
+        if ($_scenario != null && !$_scenario->getDo()) {
+            return;
+        }
+        if (!is_object($this->getSubElement($this->getType()))) {
             return;
         }
         if ($this->getType() == 'if') {
