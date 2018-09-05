@@ -48,7 +48,7 @@
     {% else %}
     <div class="col-md-{{ dashboardObject.getDisplay('dashboard::size', 12) }}">
     {% endif %}
-        <div class="card" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}25;" data-father_id="{{ dashboardObject.getFather_id() }}">
+        <div class="card" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}25;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ dashboardObject.getDisplay("tagColor") }}50;" data-father_id="{{ dashboardObject.getFather_id() }}">
             <div class="card-header card-header-icon">
                 <div class="card-icon" style="background:{{ dashboardObject.getDisplay("tagColor") }}">
                     {{ dashboardObject.getDisplay("icon")|raw }}</i>
@@ -63,7 +63,7 @@
         </div>
         {% for child in dashboardChildrenObjects %}
             {% if child.getConfiguration('hideOnDashboard, 0') != 1 %}
-            <div class="card div_object" style="background-color:{{ child.getDisplay("tagColor") }}25;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08);" data-father_id="{{ child.getFather_id() }}">
+            <div class="card div_object" style="background-color:{{ child.getDisplay("tagColor") }}25;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ dashboardObject.getDisplay("tagColor") }}50"; data-father_id="{{ child.getFather_id() }}">
                 <div class="card-header card-header-icon">
                     <div class="card-icon" style="background:{{ child.getDisplay("tagColor") }}">
                         {{ child.getDisplay("icon")|raw }}</i>
