@@ -111,7 +111,7 @@ class Controller
         }
         
         if (!is_object($object)) {
-            throw new \Exception(__('Aucun objet racine trouvé. Pour en créer un, allez dans Outils -> Objets.<br/> Si vous ne savez pas quoi faire ou que c\'est la première fois que vous utilisez Jeedom, n\'hésitez pas à consulter cette <a href="https://jeedom.github.io/documentation/premiers-pas/fr_FR/index" target="_blank">page</a> et celle-là si vous avez un pack : <a href="https://jeedom.com/start" target="_blank">page</a>'));
+            throw new \Exception(__('Aucun objet racine trouvé. Pour en créer un, allez dans Outils -> <a href="/index.php?v=d&p=object" target="_blank">Objets</a>'));
         }
         $pageContent['JS_VARS']['rootObjectId'] = $object->getId();
 
