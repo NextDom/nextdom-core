@@ -57,22 +57,22 @@ $(document).ready(function () {
     $('div.setup-panel div a.btn-primary').trigger('click');
 });
 $("#toStep2").click(function(){
-jeedom.user.login({
-    username: "admin",
-    password: "admin",
-    error: function (error) {
-        $('#div_alert').showAlert({message: error.message, level: 'danger'});
-        $('.veen').animateCss('shake');
-    },
-    success: function (data) {
-    }
-});
+    jeedom.user.login({
+        username: "admin",
+        password: "admin",
+        error: function (error) {
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            $('.veen').animateCss('shake');
+        },
+        success: function (data) {
+        }
+    });
 });
 $("#toStep3").click(function(){
     if($('#in_change_password').val() == $('#in_change_passwordToo').val()){
         jeedom.user.get({
             error: function (data) {
-                notify("Erreur",data.message,"error")
+                notify("Erreur",data.message,"error");
             },
             success: function (data){
                 var user = data;
@@ -80,14 +80,14 @@ $("#toStep3").click(function(){
                 jeedom.user.saveProfils({
                     profils: user,
                     error: function (error) {
-                        notify("Erreur",error.message,"error")
+                        notify("Erreur",error.message,"error");
                         $('.veen').animateCss('shake');
                     },
                     success : function (){
                         jeedom.config.load({
                             configuration: 'market::username',
                             error: function (error) {
-                                notify("Erreur",error.message,"error")
+                                notify("Erreur",error.message,"error");
 
                             },
                             success: function (data) {
@@ -102,18 +102,52 @@ $("#toStep3").click(function(){
     }
 });
 
-$("#toStep5").click(function(){
-
-});
-
-$("#finishConf").click(function(){
-    nextdom.config.save({
-        configuration: {'nextdom::firstUse': 0},
+$("#toStep4").click(function(){
+    var username = $('#in_login_username_market').val();
+    var password = $('#in_login_password_market').val();
+    var adress = 'https://jeedom.com/market';
+    jeedom.config.save({
+        configuration: {'market::username': username},
         error: function (error) {
-            notify("Core", error.message, 'error');
+            notify("Erreur",data.message,"error");
         },
-        success: function () {
-            notify("Core", '{{Sauvegarde réussie}}', 'success');
+        success: function (data) {
+            jeedom.config.save({
+                configuration: {'market::password': password},
+                error: function (error) {
+                    notify("Erreur",data.message,"error");
+                    $('.veen').animateCss('shake');
+                },
+                success: function (data) {
+                    jeedom.repo.test({
+                        repo: 'market',
+                        error: function (error) {
+                            notify("Erreur",data.message,"error");
+                            $('.veen').animateCss('shake');
+                        },
+                        success: function (data) {
+                            goToIndex();
+                        }
+                    });
+                }
+            });
         }
     });
 });
+
+    $("#toStep5").click(function(){
+
+    });
+
+    $("#finishConf").click(function(){
+        nextdom.config.save({
+            configuration: {'nextdom::firstUse': 0},
+            error: function (error) {
+                notify("Core", error.message, 'error');
+            },
+            success: function () {
+                notify("Core", '{{Sauvegarde réussie}}', 'success');
+                location.reload();
+            }
+        });
+    });
