@@ -20572,7 +20572,7 @@ a {
 }
 
 .btn {
-  line-height: 1.8;
+  line-height: 2;
 }
 
 .btn.btn-flat {
@@ -20631,9 +20631,12 @@ a {
   background: #fafafa;
 }
 
-.nav-tabs-custom > .nav-tabs {
-  padding-left: 1px;
-  padding-right: 1px;
+.nav-tabs a {
+  padding: 10px 10px !important;
+}
+
+.nav-tabs i.fa, .nav-tabs i.fas {
+  padding-right: 5px;
 }
 
 .login-logo,
