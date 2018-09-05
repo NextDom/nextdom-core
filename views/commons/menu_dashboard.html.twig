@@ -39,8 +39,8 @@
                     <!-- Notifications: style can be found in dropdown.less -->
                     <li class="dropdown notifications-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-bell-o"></i>
-                            <span class="label label-warning">{{ MENU_NB_MESSAGES }}</span>
+                            <i class="fa fa-bell-o notifbadge"></i>
+                            <span class="label label-warning notifcounter">{{ MENU_NB_MESSAGES }}</span>
                         </a>
                         <ul class="dropdown-menu">
                             {% for message in messages |slice(0, 15) %}
@@ -55,8 +55,8 @@
                     {% if IS_ADMIN %}
                         <li class="tasks-menu">
                             <a href="index.php?v=d&p=update">
-                                <i class="fa fa-flag-o"></i>
-                                <span class="label label-danger">{{ MENU_NB_UPDATES }}</span>
+                                <i class="fa fa-flag-o notifbadge"></i>
+                                <span class="label label-danger notifcounter">{{ MENU_NB_UPDATES }}</span>
                             </a>
                         </li>
                     {% endif %}
@@ -185,34 +185,6 @@
                         <li><a href="index.php?v=d&p=interact"><i class="fa fa-comments-o"></i> {{ 'Interactions' }}</a></li>
                         <li><a href="index.php?v=d&p=display"><i class="fa fa-th"></i> {{ 'Résumé domotique' }}</a></li>
                         <li><a href="index.php?v=d&p=scenario"><i class="fa fa-cogs"></i> {{ 'Scénarios' }}</a></li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-cog"></i>
-                        <span>Expert</span>
-                        <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="index.php?v=d&p=administration"><i class="fa fa-wrench"></i> {{ 'Configuration' }}</a></li>
-                        <li><a href="index.php?v=d&p=backup"><i class="fa fa-floppy-o"></i> {{ 'Sauvegardes' }}</a></li>
-                        <li><a href="index.php?v=d&p=migration"><i class="fas fa-fighter-jet"></i> {{ 'Migration' }}</a></li>
-                        <li><a href="index.php?v=d&p=update"><i class="fa fa-refresh"></i> {{ 'Mises à jour' }}</a></li>
-                        <li><a href="index.php?v=d&p=cron"><i class="fa fa-tasks"></i> {{ 'Tâches' }}</a></li>
-                        <li><a href="index.php?v=d&p=custom"><i class="fa fa-pencil-square-o"></i> {{ 'Personnalisation' }}</a></li>
-                        <li><a href="index.php?v=d&p=user"><i class="fa fa-users"></i> {{ 'Utilisateurs' }}</a></li>
-                        <li><a href="index.php?v=d&p=profils"><i class="fa fa-briefcase"></i> {{ 'Profils' }}</a></li>
-                        <li><a class="fa fa-ellipsis-h"></a></li>
-                        <li><a href="index.php?v=m"><i class="fas fa-mobile-alt"></i> {{ 'Version mobile' }}</a></li>
-                        <li><a><i class="fa fa-info-circle"></i> {{ 'Version' }} {{ NEXTDOM_VERSION }}</a></li>
-                        <li><a class="fa fa-ellipsis-h"></a></li>
-                        <li><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock"></i> {{ 'Se déconnecter' }}</a></li>
-                        {% if IS_ADMIN and CAN_SUDO %}
-                            <li><a id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i> {{ 'Redémarrer' }}</a></li>
-                            <li><a id="bt_haltSystem" state="0"><i class="fa fa-power-off"></i> {{ 'Eteindre' }}</a></li>
-                        {% endif %}
                     </ul>
                 </li>
                 <li class="treeview">
@@ -405,7 +377,34 @@
                         </li>
                     </ul>
                 </li>
-
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-cog"></i>
+                        <span>Expert</span>
+                        <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="index.php?v=d&p=administration"><i class="fa fa-wrench"></i> {{ 'Configuration' }}</a></li>
+                        <li><a href="index.php?v=d&p=backup"><i class="fa fa-floppy-o"></i> {{ 'Sauvegardes' }}</a></li>
+                        <li><a href="index.php?v=d&p=migration"><i class="fas fa-fighter-jet"></i> {{ 'Migration' }}</a></li>
+                        <li><a href="index.php?v=d&p=update"><i class="fa fa-refresh"></i> {{ 'Mises à jour' }}</a></li>
+                        <li><a href="index.php?v=d&p=cron"><i class="fa fa-tasks"></i> {{ 'Tâches' }}</a></li>
+                        <li><a href="index.php?v=d&p=custom"><i class="fa fa-pencil-square-o"></i> {{ 'Personnalisation' }}</a></li>
+                        <li><a href="index.php?v=d&p=user"><i class="fa fa-users"></i> {{ 'Utilisateurs' }}</a></li>
+                        <li><a href="index.php?v=d&p=profils"><i class="fa fa-briefcase"></i> {{ 'Profils' }}</a></li>
+                        <li><a class="fa fa-ellipsis-h"></a></li>
+                        <li><a href="index.php?v=m"><i class="fas fa-mobile-alt"></i> {{ 'Version mobile' }}</a></li>
+                        <li><a><i class="fa fa-info-circle"></i> {{ 'Version' }} {{ NEXTDOM_VERSION }}</a></li>
+                        <li><a class="fa fa-ellipsis-h"></a></li>
+                        <li><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock"></i> {{ 'Se déconnecter' }}</a></li>
+                        {% if IS_ADMIN and CAN_SUDO %}
+                            <li><a id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i> {{ 'Redémarrer' }}</a></li>
+                            <li><a id="bt_haltSystem" state="0"><i class="fa fa-power-off"></i> {{ 'Eteindre' }}</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
 
             </ul>
         </section>
