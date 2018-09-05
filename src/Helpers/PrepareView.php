@@ -39,7 +39,7 @@ class PrepareView
         self::initHeaderData($pageData, $configs);
         //TODO: Vérifier ça
         $logo = \config::byKey('product_connection_image');
-        $pageData['CSS_POOL'][] = '/css/firstUse.css';
+        $pageData['CSS_POOL'][] = '/public/css/firstUse.css';
         $pageData['JS_END_POOL'][] = '/desktop/js/firstUse.js';
 
         $render->show('desktop/firstUse.html.twig', $pageData);
@@ -89,7 +89,7 @@ class PrepareView
         $render = Render::getInstance();
         self::initHeaderData($pageData, $configs);
 
-        $pageData['CSS'] = $render->getCssHtmlTag('/css/nextdom.css');
+        $pageData['CSS'] = $render->getCssHtmlTag('/public/css/nextdom.css');
         $pageData['varToJs'] = Utils::getVarsToJS(array(
             'userProfils' => $_SESSION['user']->getOptions(),
             'user_id' => $_SESSION['user']->getId(),
@@ -145,7 +145,6 @@ class PrepareView
         self::initPluginsEvents($eventsJsPlugin, $pageData);
         self::initHeaderData($pageData, $configs);
 
-        $pageData['CSS_POOL'][] = '/css/nextdom.css';
         $pageData['JS_VARS'] = [
             'user_id'            => $_SESSION['user']->getId(),
             'user_isAdmin'       => Status::isConnectAdmin(),
@@ -331,7 +330,7 @@ class PrepareView
     private static function initJsPool(&$pageData)
     {
         if (file_exists(NEXTDOM_ROOT . '/js/base.js')) {
-            $pageData['JS_POOL'][] = '/js/base.js';
+            $pageData['JS_POOL'][] = 'public/js/base.js';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min.js';
         } else {
@@ -405,7 +404,7 @@ class PrepareView
      */
     private static function initCssPool(&$pageData, $configs)
     {
-        $pageData['CSS_POOL'][] = '/css/nextdom.css';
+        $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
         $pageData['CSS_POOL'][] = '3rdparty/lobibox/css/lobibox.min.css';
 
         if (!Status::isRescueMode()) {
