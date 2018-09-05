@@ -56,6 +56,18 @@ $(document).ready(function () {
     });
     $('div.setup-panel div a.btn-primary').trigger('click');
 });
+$("#toStep2").click(function(){
+jeedom.user.login({
+    username: "admin",
+    password: "admin",
+    error: function (error) {
+        $('#div_alert').showAlert({message: error.message, level: 'danger'});
+        $('.veen').animateCss('shake');
+    },
+    success: function (data) {
+    }
+});
+});
 $("#toStep3").click(function(){
     if($('#in_change_password').val() == $('#in_change_passwordToo').val()){
         jeedom.user.get({
