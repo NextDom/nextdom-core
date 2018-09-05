@@ -1,9 +1,10 @@
 body {
-  font-family: 'Roboto','Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Roboto','Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+  font-size: 15px !important;
 }
 
 a {
-  color: #32B8CC;
+  color: #33B8CC !important;
 }
 
 .main-header {
@@ -138,8 +139,8 @@ a {
 }
 
 .icheck > label {
-  padding-left: 0;
-  margin-top: 6px;
+  padding-left: 0px !important;
+  margin-top: 7px;
   margin-bottom: 15px;
 }
 
@@ -204,6 +205,7 @@ a {
   -moz-box-shadow: none;
   box-shadow: none;
   border-width: 1px;
+  font-size: 15px;
 }
 
 .btn-primary {
@@ -248,6 +250,7 @@ a {
   text-align: center;
   padding-bottom: 15px;
   padding-top: 25px;
+  margin-bottom: 0px;
   font-weight: 300;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
