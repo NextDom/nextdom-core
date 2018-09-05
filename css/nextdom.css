@@ -16978,7 +16978,8 @@ a {
   padding-bottom: 15px;
   padding-top: 25px;
   font-weight: 300;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23); }
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  margin-bottom: 0px; }
 
 .login-page,
 .register-page {
