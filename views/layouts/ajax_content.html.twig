@@ -12,9 +12,11 @@
     </script>
 {% endif %}
 {% if JS_VARS_RAW is defined %}
+    <script>
     {% for jsVarName, jsVarValue in JS_VARS_RAW  %}
         var {{ jsVarName }} = {{ jsVarValue|raw }};
     {% endfor %}
+    </script>
 {% endif %}
 {% if JS_POOL is defined %}
     {% for jsFile in JS_POOL %}
