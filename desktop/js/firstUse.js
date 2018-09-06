@@ -124,7 +124,7 @@ $("#toStep4").click(function(){
                             notify("Erreur",data.message,"error");
                         },
                         success: function (data) {
-
+                            notify("Core", '{{Sauvegarde réussie}}', 'success');
                         }
                     });
                 }

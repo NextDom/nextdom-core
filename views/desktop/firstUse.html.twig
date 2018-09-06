@@ -1,11 +1,12 @@
 {% include '/commons/header.html.twig' %}
 
 <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-md-12">
         <center><img src="core/img/NextDom/NextDom_Wide_AlphaWhiteBlack.png" style="height:100px; border-radius: 10px"></center>
     </div>
 </div>
 <div class="row">
+    <div class="col-md-12">
     <div class="stepwizard col-md-offset-3">
         <div class="stepwizard-row setup-panel">
             <div class="stepwizard-step">
@@ -30,12 +31,15 @@
             </div>
         </div>
     </div>
+    </div>
+</div>
 
 
 
-
-    <div class="login-box">
-        <div class="login-box-body">
+<div class="row">
+    <div class="col-md-12">
+    <div class="box">
+        <div class="box-body">
     <form role="form" action="" method="post">
         <div class="row setup-content" id="step-1">
             <div class="stepwizard col-md-offset-3">
@@ -105,7 +109,8 @@
     </form>
     </div>
     </div>
-
+    </div>
+</div>
 
     {% if JS_END_POOL is defined %}
         {% for jsFile in JS_END_POOL %}
