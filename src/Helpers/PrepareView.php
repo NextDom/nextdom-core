@@ -331,7 +331,7 @@ class PrepareView
      */
     private static function initJsPool(&$pageData)
     {
-        if (file_exists(NEXTDOM_ROOT . '/js/base.js')) {
+        if (file_exists(NEXTDOM_ROOT . '/public/js/base.js')) {
             $pageData['JS_POOL'][] = 'public/js/base.js';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min.js';
