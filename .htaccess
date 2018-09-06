@@ -1,7 +1,7 @@
 ServerSignature Off
 Options -Indexes +FollowSymLinks
 
-ErrorDocument 404 /404.html
+ErrorDocument 404 /public/404.html
 
 <ifModule mod_gzip.c>
 	mod_gzip_on Yes
@@ -122,6 +122,8 @@ ErrorDocument 404 /404.html
 	satisfy all
 </Files>
 
+RewriteEngine On
+RewriteRule ^/?core/img/(.*)$ /public/img/$1 [R,L]
 
 #RewriteEngine on
 #RewriteBase /core/ajax

@@ -86,9 +86,9 @@ $('#bt_genUserKeyAPI').on('click',function(){
 
 $('.userAttr[data-l1key=options][data-l2key=bootstrap_theme]').on('change', function () {
     if($(this).value() == ''){
-        $('#div_imgThemeDesktop').html('<img src="core/img/theme_default.png" height="300" class="img-thumbnail" />');
+        $('#div_imgThemeDesktop').html('<img src="public/img/theme_default.png" height="300" class="img-thumbnail" />');
     }else{
-        $('#div_imgThemeDesktop').html('<img src="core/themes/' + $(this).value() + '/desktop/preview.png" height="300" class="img-thumbnail" />');
+        $('#div_imgThemeDesktop').html('<img src="public/themes/' + $(this).value() + '/desktop/preview.png" height="300" class="img-thumbnail" />');
     }
 
 });
@@ -165,10 +165,10 @@ $('#user_avatar').fileupload({
             return;
         }
         if ($('.userAttr[data-l2key=avatar]') == '') {
-            $('.userAttr[data-l2key=avatar]').value('/core/img/profils/noPicture.jpg');
+            $('.userAttr[data-l2key=avatar]').value('/public/img/profils/noPicture.jpg');
         }else{
-            $('.userAttr[data-l2key=avatar]').value('/core/img/profils/' + data.files[0]['name']);
-            $('#monAvatar').attr('src','/core/img/profils/' + data.files[0]['name']);
+            $('.userAttr[data-l2key=avatar]').value('/public/img/profils/' + data.files[0]['name']);
+            $('#monAvatar').attr('src','/public/img/profils/' + data.files[0]['name']);
 
             notify("{{Ajout d'une Image}}", '{{Image ajoutée avec succès}}', 'success');
         }

@@ -97,7 +97,7 @@ function gen_js {
 }
 
 function init_dependencies {
-	sass --version 2&>1 /dev/null
+	sass --version 2>&1 /dev/null
 	if [ $? -ne 0 ]; then
 		echo " >>> Installation de node et npm"
 		curl -sL https://deb.nodesource.com/setup_10.x | bash -
@@ -105,7 +105,7 @@ function init_dependencies {
 		echo " >>> Installation de sass"
 		npm install -g sass
 	fi
-	python -c "import jsmin" 2&>1 /dev/null
+	python -c "import jsmin" 2>&1 /dev/null
 	if [ $? -ne 0 ]; then
 	    . /etc/os-release
 	    if [[ "$NAME" == *Debian* ]]; then
@@ -121,6 +121,8 @@ function copy_assets {
 	cp -fr assets/icon public/
 	echo " >>> Copie des themes"
 	cp -fr assets/themes public/
+	echo " >>> Copie des images"
+	cp -fr assets/img public/
 	gen_css
 	gen_js
 }
