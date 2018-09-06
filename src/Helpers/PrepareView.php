@@ -39,9 +39,9 @@ class PrepareView
         self::initHeaderData($pageData, $configs);
         //TODO: Vérifier ça
         $logo = \config::byKey('product_connection_image');
-        $pageData['CSS_POOL'][]    = '/css/nextdom.css';
+        $pageData['CSS_POOL'][]    = '/public/css/nextdom.css';
         $pageData['CSS_POOL'][]    = '/3rdparty/iCheck/all.css';
-        $pageData['CSS_POOL'][] = '/css/firstUse.css';
+        $pageData['CSS_POOL'][] = '/public/css/firstUse.css';
         $pageData['JS_END_POOL'][] = '/desktop/js/firstUse.js';
 
         $render->show('desktop/firstUse.html.twig', $pageData);
