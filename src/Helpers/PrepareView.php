@@ -336,7 +336,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min.js';
         } else {
-            $pageData['JS_POOL'][] = '3rdparty/lobibox/js/notifications.js';
+            $pageData['JS_POOL'][] = '3rdparty/iziToast/js/iziToast.js';
             $pageData['JS_POOL'][] = 'desktop/js/utils.js';
             $pageData['JS_POOL'][] = '3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = 'core/js/core.js';
@@ -407,7 +407,7 @@ class PrepareView
     private static function initCssPool(&$pageData, $configs)
     {
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
-        $pageData['CSS_POOL'][] = '3rdparty/lobibox/css/lobibox.min.css';
+        $pageData['CSS_POOL'][] = '3rdparty/iziToast/css/iziToast.css';
 
         if (!Status::isRescueMode()) {
             if (!Status::isConnect()) {
