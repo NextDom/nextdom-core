@@ -407,7 +407,16 @@ class PrepareView
     private static function initCssPool(&$pageData, $configs)
     {
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
-        $pageData['CSS_POOL'][] = '3rdparty/iziToast/css/iziToast.css';
+        $pageData['CSS_POOL'][] = '/3rdparty/iziToast/css/iziToast.css';
+        // Icônes
+        $pageData['CSS_POOL'][] = '/3rdparty/font-awesome/css/font-awesome.min.css';
+        $pageData['CSS_POOL'][] = '/3rdparty/font-awesome5/css/fontawesome-all.css';
+        $rootDir = NEXTDOM_ROOT . '/public/icon/';
+        foreach (ls($rootDir, '*') as $dir) {
+            if (is_dir($rootDir . $dir) && file_exists($rootDir . $dir . '/style.css')) {
+                $pageData['CSS_POOL'][] = '/public/icon/' . $dir . 'style.css';
+            }
+        }
 
         if (!Status::isRescueMode()) {
             if (!Status::isConnect()) {
