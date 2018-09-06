@@ -2,9 +2,9 @@
 
 function gen_css {
 	echo " >>> Generation du CSS"
-	sass assets/css/nextdom.scss public/css/nextdom.css
-	sass assets/css/nextdom.mob.scss public/css/nextdom.mob.css
-	sass assets/css/firstUse.scss public/css/firstUse.css
+	sass assets/css/nextdom.scss public/css/nextdom.css --style compressed
+	sass assets/css/nextdom.mob.scss public/css/nextdom.mob.css --style compressed
+	sass assets/css/firstUse.scss public/css/firstUse.css --style compressed
 	# Remplacement des chemins
 	# TODO: A optimiser
 	sed -i 's/[\"]Roboto-Light\.ttf/"\/3rdparty\/roboto\/Roboto-Light\.ttf/g' public/css/nextdom.css
