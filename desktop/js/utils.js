@@ -523,20 +523,71 @@ function refreshUpdateNumber() {
 }
 
 function notify(_title, _text, _class_name) {
-    console.log(_title);
-    console.log(_text);
-    Lobibox.notify(
-        _class_name,
-        {
-            msg:  _text,
-            closable: true,
-            rounded: true,
-            delayIndicator: false,
-            size: 'mini',
-            position: 'center top'
-
-        }
-    );
+    var _backgroundColor ="";
+    var _icon ="";
+    if(_class_name ="success"){
+        _backgroundColor= '#00a65a';
+        _icon= 'far fa-check-circle fa-3x';
+    }else if (_class_name ="warning"){
+        _backgroundColor= '#f39c12';
+        _icon= 'fas fa-exclamation-triangle fa-3x';
+    }else if (_class_name ="danger"){
+        _backgroundColor= '#dd4b39';
+        _icon= 'fas fa-times fa-3x';
+    }
+    iziToast.show({
+        id: null,
+        class: '',
+        title: _title,
+        titleColor: 'white',
+        titleSize: '1.5em',
+        titleLineHeight: '30px',
+        message: _text,
+        messageColor: 'white',
+        messageSize: '',
+        messageLineHeight: '',
+        theme: 'dark', // dark
+        iconText: '',
+        backgroundColor: _backgroundColor,
+        icon: _icon,
+        iconColor: 'white',
+        iconUrl: null,
+        image: '',
+        imageWidth: 50,
+        maxWidth: null,
+        zindex: null,
+        layout: 2,
+        balloon: false,
+        close: true,
+        closeOnEscape: false,
+        closeOnClick: false,
+        displayMode: 0, // once, replace
+        position: 'topCenter', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
+        target: '',
+        targetFirst: true,
+        timeout: 5000,
+        rtl: false,
+        animateInside: true,
+        drag: true,
+        pauseOnHover: true,
+        resetOnHover: false,
+        progressBar: true,
+        progressBarColor: '',
+        progressBarEasing: 'linear',
+        overlay: false,
+        overlayClose: false,
+        overlayColor: 'rgba(0, 0, 0, 0.6)',
+        transitionIn: 'fadeInUp',
+        transitionOut: 'fadeOut',
+        transitionInMobile: 'fadeInUp',
+        transitionOutMobile: 'fadeOutDown',
+        buttons: {},
+        inputs: {},
+        onOpening: function () {},
+        onOpened: function () {},
+        onClosing: function () {},
+        onClosed: function () {}
+    });
 }
 
 jQuery.fn.findAtDepth = function (selector, maxDepth) {
