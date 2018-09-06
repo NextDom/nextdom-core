@@ -100,7 +100,8 @@ function init_dependencies {
 	sass --version 2>&1 /dev/null
 	if [ $? -ne 0 ]; then
 		echo " >>> Installation de node et npm"
-		curl -sL https://deb.nodesource.com/setup_10.x | bash -
+		wget https://deb.nodesource.com/setup_10.x -O install_npm.sh
+		bash install_npm.sh
 		apt install -y nodejs
 		echo " >>> Installation de sass"
 		npm install -g sass
