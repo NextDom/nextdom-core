@@ -7,6 +7,7 @@ function gen_css {
 	sass assets/css/firstUse.scss public/css/firstUse.css --style compressed
 	# Remplacement des chemins
 	# TODO: A optimiser
+	# sed ne prend pas en charge le non-greey
 	sed -i 's/[\"]Roboto-Light\.ttf/"\/3rdparty\/roboto\/Roboto-Light\.ttf/g' public/css/nextdom.css
 	sed -i 's/[\"]Roboto-LightItalic\.ttf/"\/3rdparty\/roboto\/Roboto-LightItalic\.ttf/g' public/css/nextdom.css
 	sed -i 's/[\"]Roboto-Regular\.ttf/"\/3rdparty\/roboto\/Roboto-Regular\.ttf/g' public/css/nextdom.css
@@ -94,10 +95,11 @@ function gen_js {
     python -m jsmin /tmp/temp.js > public/js/base.js
 
     rm /tmp/temp.js
+    php script/translate.php public/js/base.js
 }
 
 function init_dependencies {
-	sass --version 2>&1 /dev/null
+	sass --version > /dev/null 2>&1
 	if [ $? -ne 0 ]; then
 		echo " >>> Installation de node et npm"
 		wget https://deb.nodesource.com/setup_10.x -O install_npm.sh
@@ -144,8 +146,8 @@ function start {
 
 init_dependencies
 if [ "$1" == "--init" ]; then
-    mkdir -p public/css
-    mkdir -p public/js
+	mkdir -p public/css
+	mkdir -p public/js
 	copy_assets;
 else
 	start;
