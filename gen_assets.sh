@@ -14,6 +14,7 @@ function gen_css {
 	sed -i 's/[\"]Roboto-Italic\.ttf/"\/3rdparty\/roboto\/Roboto-Italic\.ttf/g' public/css/nextdom.css
 	sed -i 's/[\"]Roboto-Bold\.ttf/"\/3rdparty\/roboto\/Roboto-Bold\.ttf/g' public/css/nextdom.css
 	sed -i 's/[\"]Roboto-BoldItalic\.ttf/"\/3rdparty\/roboto\/Roboto-BoldItalic\.ttf/g' public/css/nextdom.css
+	sed -i 's/\.\.\/fonts\/glyphicons-halflings/\/3rdparty\/bootstrap\/fonts\/glyphicons-halflings/g' public/css/nextdom.css
 	sed -i 's/images\/ui-bg_glass_75_ffffff_1x400\.png/\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images\/ui-bg_glass_75_ffffff_1x400.png/g' public/css/nextdom.css
 	sed -i 's/images\/ui-icons_222222_256x240\.png/\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images\/ui-icons_222222_256x240.png/g' public/css/nextdom.css
 	sed -i 's/[\"]Roboto-Light\.ttf/"\/3rdparty\/roboto\/Roboto-Light\.ttf/g' public/css/nextdom.mob.css
@@ -29,7 +30,7 @@ function gen_css {
 function gen_js {
 	echo " >>> Generation du JS"
     cat 3rdparty/jquery.utils/jquery.utils.js \
-        3rdparty/lobibox/js/notifications.js \
+        3rdparty/iziToast/js/iziToast.min.js \
         desktop/js/utils.js \
         core/js/core.js \
         3rdparty/bootstrap/bootstrap.min.js \
