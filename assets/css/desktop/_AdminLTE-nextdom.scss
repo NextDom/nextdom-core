@@ -1,6 +1,5 @@
 body {
   font-family: 'Roboto','Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
-  font-size: 15px !important ;
 }
 
 a {
@@ -256,15 +255,6 @@ a {
   background-color: #33B8CC;
   border-color: #33B8CC;
 }
-.btn-primary:hover,
-.btn-primary:active,
-.btn-primary.hover {
-  background-color: #33B888;
-}
-.btn-success {
-  background-color: #67DB84;
-  border-color: #67DB84;
-}
 
 .btn-app > .fa,
 .btn-app > .fas,
@@ -415,6 +405,8 @@ a {
   min-height: 100%;
   background-color: #ecf0f5;
   z-index: 800;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .container-fluid{
