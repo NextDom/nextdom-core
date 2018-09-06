@@ -320,7 +320,7 @@ function getItemHtml(item) {
 
     var iconPath = item['iconPath'];
     if (item['iconPath'] === false) {
-        iconPath = 'core/img/wait_icon.png';
+        iconPath = 'public/img/wait_icon.png';
     }
     // Préparation du code
     var result = '' +

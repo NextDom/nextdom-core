@@ -367,13 +367,13 @@ class MarketItem
     {
         $iconFilename = \str_replace('/', '_', $this->fullName) . '.png';
         $iconUrl = 'https://raw.githubusercontent.com/' . $this->fullName . '/' . $this->defaultBranch . '/plugin_info/' . $this->id . '_icon.png';
-        $targetPath = NEXTDOM_ROOT.'/market_cache/' . $iconFilename;
+        $targetPath = NEXTDOM_ROOT.'/var/market_cache/' . $iconFilename;
         DownloadManager::downloadBinary($iconUrl, $targetPath);
         if (\filesize($targetPath) < 100) {
             \unlink($targetPath);
-            $this->iconPath = '/core/img/unknown_icon.png';
+            $this->iconPath = '/public/img/unknown_icon.png';
         } else {
-            $this->iconPath = '/market_cache/' . $iconFilename;
+            $this->iconPath = '/var/market_cache/' . $iconFilename;
         }
         $this->writeCache();
     }
