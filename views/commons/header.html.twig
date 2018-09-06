@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>{{ TITLE }}</title>
-    <link rel="apple-touch-icon" href="/core/img/logo-nextdom-petit-nom-couleur-128x128" />
-    <link rel="apple-touch-icon-precomposed" href="/core/img/logo-nextdom-petit-nom-couleur-128x128" />
+    <link rel="apple-touch-icon" href="/public/img/logo-nextdom-petit-nom-couleur-128x128" />
+    <link rel="apple-touch-icon-precomposed" href="/public/img/logo-nextdom-petit-nom-couleur-128x128" />
     <link rel="shortcut icon" href="{{ PRODUCT_ICON }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
     {# Footer dans le futur #}
     {% include '/commons/footer.html.twig' %}
     <!-- Inclusion à l'arrache ??? -->
-    <script src="3rdparty/snap.svg/snap.svg-min.js"></script>
+    <script src="/3rdparty/snap.svg/snap.svg-min.js"></script>
     {% if debugbar != false %}
        {{  debugbar.renderHead | raw}}
     {% endif %}
