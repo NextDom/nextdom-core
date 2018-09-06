@@ -23,6 +23,6 @@ $root_dir = NEXTDOM_ROOT . '/css/icon/';
 
 foreach (ls($root_dir, '*') as $dir) {
     if (is_dir($root_dir . $dir) && file_exists($root_dir . $dir . '/style.css')) {
-        echo '<link rel="stylesheet" href="css/icon/' . $dir . 'style.css?md5=' . md5($root_dir . $dir . '/style.css') . '">' . "\n";
+        echo '<link rel="stylesheet" href="public/css/icon/' . $dir . 'style.css?md5=' . md5($root_dir . $dir . '/style.css') . '">' . "\n";
     }
 }
