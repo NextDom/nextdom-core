@@ -122,8 +122,11 @@ ErrorDocument 404 /public/404.html
 	satisfy all
 </Files>
 
-RewriteEngine On
-RewriteRule ^/?core/img/(.*)$ /public/img/$1 [R,L]
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} ^/?core/img/.*$
+    RewriteRule ^/?core/img/(.*)$ /public/img/$1 [L,QSA]
+</IfModule>
 
 #RewriteEngine on
 #RewriteBase /core/ajax
