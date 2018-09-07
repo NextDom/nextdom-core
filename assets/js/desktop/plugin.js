@@ -91,6 +91,7 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
   $('.li_plugin').removeClass('active');
   $('.li_plugin[data-plugin_id='+$(this).attr('data-plugin_id')+']').addClass('active');
   $.showLoading();
+  sel_plugin_id = $(this).attr('data-plugin_id');
   nextdom.plugin.get({
     id: $(this).attr('data-plugin_id'),
     error: function (error) {
@@ -286,7 +287,7 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
      }
      nextdom.config.load({
       configuration: $('#div_plugin_configuration').getValues('.configKey')[0],
-      plugin: $('.li_plugin.active').attr('data-plugin_id'),
+      plugin: sel_plugin_id,
       error: function (error) {
         notify('Core',error.message,'error');
       },
@@ -302,7 +303,7 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
   }
   nextdom.config.load({
     configuration: $('#div_plugin_panel').getValues('.configKey')[0],
-    plugin: $('.li_plugin.active').attr('data-plugin_id'),
+    plugin: sel_plugin_id,
     error: function (error) {
       notify('Core',error.message,'error');
     },
@@ -313,7 +314,7 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
   });
   nextdom.config.load({
     configuration: $('#div_plugin_functionality').getValues('.configKey')[0],
-    plugin: $('.li_plugin.active').attr('data-plugin_id'),
+    plugin: sel_plugin_id,
     error: function (error) {
       notify('Core',error.message,'error');
     },
@@ -379,11 +380,14 @@ $("#div_plugin_toggleState").delegate(".togglePlugin", 'click', function () {
 });
 
 if (sel_plugin_id != -1) {
+    /*
   if ($('#ul_plugin .li_plugin[data-plugin_id=' + sel_plugin_id + ']').length != 0) {
     $('#ul_plugin .li_plugin[data-plugin_id=' + sel_plugin_id + ']').click();
   } else {
     $('#ul_plugin .li_plugin:first').click();
   }
+  */
+    $('.pluginDisplayCard[data-plugin_id="'+sel_plugin_id+'"]').click();
 }
 
 $('#bt_returnToThumbnailDisplay').on('click',function(){
@@ -425,12 +429,12 @@ $('#div_pageContainer').delegate('.configKey', 'change', function () {
 $('#bt_savePluginPanelConfig').off('click').on('click',function(){
  nextdom.config.save({
   configuration: $('#div_plugin_panel').getValues('.configKey')[0],
-  plugin: $('.li_plugin.active').attr('data-plugin_id'),
+  plugin: sel_plugin_id,
   error: function (error) {
     notify('Core',error.message,'error');
   },
   success: function () {
-    alert_div_plugin_configuration.showAlert({message: '{{Sauvegarde de la configuration des panneaux effectuée}}', level: 'success'});
+      notify("Core",'{{Sauvegarde de la configuration des panneaux effectuée}}',"success");
     modifyWithoutSave = false;
   }
 });
@@ -439,12 +443,12 @@ $('#bt_savePluginPanelConfig').off('click').on('click',function(){
 $('#bt_savePluginFunctionalityConfig').off('click').on('click',function(){
  nextdom.config.save({
   configuration: $('#div_plugin_functionality').getValues('.configKey')[0],
-  plugin: $('.li_plugin.active').attr('data-plugin_id'),
+  plugin: sel_plugin_id,
   error: function (error) {
     notify('Core',error.message,'error');
   },
   success: function () {
-    alert_div_plugin_configuration.showAlert({message: '{{Sauvegarde des fonctionalités effectuée}}', level: 'success'});
+      notify("Core",'{{Sauvegarde des fonctionalités effectuée}}',"success");
     modifyWithoutSave = false;
   }
 });
@@ -457,7 +461,7 @@ $('#bt_savePluginLogConfig').off('click').on('click',function(){
     notify('Core',error.message,'error');
   },
   success: function () {
-    alert_div_plugin_configuration.showAlert({message: '{{Sauvegarde de la configuration des logs effectuée}}', level: 'success'});
+      notify("Core",'{{Sauvegarde de la configuration des logs effectuée}}',"success");
     modifyWithoutSave = false;
   }
 });
@@ -474,16 +478,19 @@ $('#div_plugin_log').on('click','.bt_plugin_conf_view_log',function(){
 });
 
 function savePluginConfig(_param) {
+    console.log('coucou');
+    console.log($('#div_plugin_configuration').getValues('.configKey')[0]);
+    console.log($('.li_plugin.active').attr('data-plugin_id'));
   nextdom.config.save({
     configuration: $('#div_plugin_configuration').getValues('.configKey')[0],
-    plugin: $('.li_plugin.active').attr('data-plugin_id'),
+    plugin: sel_plugin_id,
     error: function (error) {
       notify('Core',error.message,'error');
     },
     success: function () {
-      alert_div_plugin_configuration.showAlert({message: '{{Sauvegarde effectuée}}', level: 'success'});
+        notify("Core",'{{Sauvegarde effectuée}}',"success");
       modifyWithoutSave = false;
-      var postSave = $('.li_plugin.active').attr('data-plugin_id')+'_postSaveConfiguration';
+      var postSave = sel_plugin_id+'_postSaveConfiguration';
       if (typeof window[postSave] == 'function'){
         window[postSave]();
       }
@@ -491,15 +498,18 @@ function savePluginConfig(_param) {
         _param.success(0);
       }
       if(!isset(_param) || !isset(_param.relaunchDeamon) || _param.relaunchDeamon){
+          console.log(sel_plugin_id);
         nextdom.plugin.deamonStart({
-          id : $('.li_plugin.active').attr('data-plugin_id'),
+            // TODO: Suite à la suppression du menu
+//            id : $('.li_plugin.active').attr('data-plugin_id'),
+            id : sel_plugin_id,
           slave_id: 0,
           forceRestart: 1,
           error: function (error) {
             notify('Core',error.message,'error');
           },
           success: function (data) {
-            $("#div_plugin_deamon").load('index.php?v=d&modal=plugin.deamon&plugin_id='+$('.li_plugin.active').attr('data-plugin_id'));
+            $("#div_plugin_deamon").load('index.php?v=d&modal=plugin.deamon&plugin_id='+sel_plugin_id);
           }
         });
       }

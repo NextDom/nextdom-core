@@ -31,7 +31,7 @@ function gen_js {
 	echo " >>> Generation du JS"
     cat 3rdparty/jquery.utils/jquery.utils.js \
         3rdparty/iziToast/js/iziToast.min.js \
-        desktop/js/utils.js \
+        assets/js/desktop/utils.js \
         core/js/core.js \
         3rdparty/bootstrap/bootstrap.min.js \
         3rdparty/jquery.ui/jquery-ui.min.js \
@@ -92,11 +92,22 @@ function gen_js {
         3rdparty/jquery.contextMenu/jquery.contextMenu.min.js \
         3rdparty/autosize/autosize.min.js \
         3rdparty/AdminLTE/js/dashboard-v2.js > /tmp/temp.js
-
     python -m jsmin /tmp/temp.js > public/js/base.js
-
     rm /tmp/temp.js
     php script/translate.php public/js/base.js
+
+    mkdir -p public/js/desktop/Market
+
+    for jsFile in assets/js/desktop/*.js
+    do
+        python -m jsmin $jsFile > public/js/desktop/${jsFile##*/}
+        php script/translate.php public/js/desktop/${jsFile##*/}
+    done
+    for jsFile in assets/js/desktop/Market/*.js
+    do
+        python -m jsmin $jsFile > public/js/desktop/Market/${jsFile##*/}
+        php script/translate.php public/js/desktop/Market/${jsFile##*/}
+    done
 }
 
 function init_dependencies {
@@ -132,16 +143,24 @@ function copy_assets {
 }
 
 function start {
+    echo "Recommpression à la volée. Ajoutez le paramètre --init pour tout réinitialiser"
 	while true; do
 		FIND_CSS_RES=$(find assets/css -mmin -0.1)
 		if [ -n "$FIND_CSS_RES" ]; then
 			gen_css
+			echo " >>> OK"
 		fi
 		FIND_JS_RES=$(find core/js -mmin -0.1)
 		if [ -n "$FIND_JS_RES" ]; then
 			gen_js
+			echo " >>> OK"
 		fi
-		sleep 5
+		FIND_JS_RES=$(find assets/js -mmin -0.1)
+		if [ -n "$FIND_JS_RES" ]; then
+			gen_js
+			echo " >>> OK"
+		fi
+		sleep 1
 	done
 }
 

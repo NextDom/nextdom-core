@@ -325,7 +325,7 @@ if ($market->getLanguage('it_IT') == 1) {
        if ( typeof refreshListAfterMarketObjectInstall == 'function'){
         refreshListAfterMarketObjectInstall()
       }
-      $('#div_alertMarketDisplay').showAlert({message: '{{Objet installé avec succès}}', level: 'success'})
+          notify("Core",'{{Objet installé avec succès}}',"success");
     }
   });
 

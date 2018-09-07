@@ -103,7 +103,7 @@ $(".li_eqLogic,.eqLogicDisplayCard").on('click', function () {
         status : 1,
         error: function (error) {
             $.hideLoading();
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify("Core",error.message,"error");
         },
         success: function (data) {
             $('body .eqLogicAttr').value('');
