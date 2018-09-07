@@ -532,7 +532,6 @@ function notify(_title, _text, _class_name) {
     if(_text == "") {
         _text = "Erreur inconnue";
     }
-    }
     if(_class_name =="success"){
         _backgroundColor = '#00a65a';
         _icon = 'far fa-check-circle fa-3x';
