@@ -64,7 +64,7 @@
                             <div class="scenarioListContainer">
                                 {% for scenario in scenarios[-1] %}
                                     <div class="scenarioDisplayCard cursor" data-scenario_id="{{ scenario.getId() }}" style="text-align: center; min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
-                                        <img src="var/market_cache/scenario.png" height="90" width="85"/>
+                                        <img src="/public/img/scenario.png" height="90" width="85"/>
                                         <br>
                                         <span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">{{ scenario.getHumanName(true, true, true, true)|raw }}</span>
                                     </div>
@@ -90,7 +90,7 @@
                                 <div class="scenarioListContainer">
                                     {% for scenario in scenarios[scenarioGroup.group] %}
                                         <div class="scenarioDisplayCard cursor" data-scenario_id="{{ scenario.getId() }}" style="text-align: center; min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
-                                            <img src="var/market_cache/scenario.png" height="90" width="85"/>
+                                            <img src="/public/img/scenario.png" height="90" width="85"/>
                                             <br>
                                             <span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">{{ scenario.getHumanName(true, true, true, true)|raw }}</span>
                                         </div>
