@@ -43,14 +43,15 @@
                 <form role="form" action="" method="post"  style="padding-top:10px">
                     <div class="row setup-content" id="step-1">
                         <div class="stepwizard">
-                            <h1>{{ 'Bienvenue sur NextDom'}}</h1><br/>
-                            <h4 class="stepwizard-h4">{{ 'Cette page va vous guider dans le processus de configuration de Nextdom ...'}}</h4>
-                            <button id="toStep2" class="btn btn-primary nextBtn btn-lg pull-right" type="button" style="margin-top:20px;margin-bottom:20px">{{'Suivant'}}<i class="fas fa-chevron-circle-Right" style="padding-left:10px"></i></button>
+                            <h2>{{ 'Bienvenue sur NextDom'}}</h2><br/>
+                            <p class="stepwizard-h4">{{ 'Bravo ! vous venez d'installer votre solution domotique, l'assistant de première utilisation est activé !'}}</p>
+                            <p class="stepwizard-h4">{{ 'Celui-ci va vous guider dans le processus de configuration de Nextdom ...'}}</p>
+                            <button id="toStep2" class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:20px;margin-bottom:20px">{{'Suivant'}}<i class="fa fa-caret-right" style="padding-left:10px"></i></button>
                         </div>
                     </div>
                     <div class="row setup-content" id="step-2">
                         <div class="stepwizard">
-                            <center><h4 class="stepwizard-h4">{{'Pour commencer, merci de définir un nouveau mot de passe administrateur pour améliorer la sécurité ...'}}</h4></center></br>
+                            <center><p class="stepwizard-h4">{{'Pour commencer, merci de définir un nouveau mot de passe administrateur pour améliorer la sécurité ...'}}</p></center></br>
                             <div class="form-group">
                                 <div id="register" tabindex="500" class="form-group">
                                     <div class="passwd stepwizard-passwd">
@@ -60,20 +61,20 @@
                                         <input type="password" id="in_change_passwordToo" class="stepwizard-input" placeholder="Confirmer le mot de passe ...">
                                     </div>
                                 </div>
-                                <button id="toStep3" class="btn btn-primary nextBtn btn-lg pull-right" type="button" style="margin-top:20px;margin-bottom:20px">{{'Suivant'}}<i class="fas fa-chevron-circle-Right" style="padding-left:10px"></i></button>
-                                <button id="toStep1" class="btn btn-primary returnBtn btn-lg pull-left" type="button" style="margin-top:20px;margin-bottom:20px"><i class="fas fa-chevron-circle-Left" style="padding-left:10px"></i>{{'Précédent'}}</button>
+                                <button id="toStep3" class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:20px;margin-bottom:20px">{{'Suivant'}}<i class="fa fa-caret-right" style="padding-left:10px"></i></button>
+                                <button id="toStep1" class="btn btn-primary returnBtn pull-left" type="button" style="margin-top:20px;margin-bottom:20px"><i class="fa fa-caret-Left" style="padding-left:10px"></i>{{'Précédent'}}</button>
                             </div>
                         </div>
                     </div>
                     <div class="row setup-content" id="step-3">
                         <div class="stepwizard">
-                            <center><h4 class="stepwizard-h4">{{'Ajout du Compte Market pour l\'installation de plugins ...'}}</h4></center></br>
+                            <center><p class="stepwizard-h4">{{'Ajout du Compte Market pour l\'installation de plugins ...'}}</p></center></br>
                             <div class="form-group">
                                 <div id="market" class="form-group">
-                                    <h4>Je nai pas de compte Market</h4>
-                                    <button class="dark btn-lg" id="bt_compte_market"><i class="fa fa-sign-in" ></i> {{'En créer un'}}</button>
+                                    <p>Je nai pas de compte Market</p>
+                                    <button class="dark btn" id="bt_compte_market"><i class="fa fa-sign-in" ></i> {{'En créer un'}}</button>
                                     <hr align=center size=2 width="70%">
-                                    <h4>Jai un compte market</h4>
+                                    <p>Jai un compte market</p>
                                     <div class="mail">
                                         <input type="text" id="in_login_username_market" class="stepwizard-input" placeholder="Nom d'utilisateur">
                                     </div>
@@ -82,27 +83,27 @@
                                     </div>
                                 </div>
                             </div>
-                            <button id="toStep4" class="btn btn-primary nextBtn btn-lg pull-right" type="button" style="margin-top:20px;margin-bottom:20px">{{'Suivant'}}<i class="fas fa-chevron-circle-Right" style="padding-left:10px"></i></button>
-                            <button id="toStep2" class="btn btn-primary returnBtn btn-lg pull-left" type="button" style="margin-top:20px;margin-bottom:20px"><i class="fas fa-chevron-circle-Left" style="padding-left:10px"></i>{{'Précédent'}}</button>
+                            <button id="toStep4" class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:20px;margin-bottom:20px">{{'Suivant'}}<i class="fa fa-caret-right" style="padding-left:10px"></i></button>
+                            <button id="toStep2" class="btn btn-primary returnBtn pull-left" type="button" style="margin-top:20px;margin-bottom:20px"><i class="fa fa-caret-Left" style="padding-left:10px"></i>{{'Précédent'}}</button>
                         </div>
                     </div>
                     <div class="row setup-content" id="step-4">
                         <div class="stepwizard">
-                            <center><h4 class="stepwizard-h4">{{'Installation de plugins ...'}}</h4></center></br>
+                            <center><p class="stepwizard-h4">{{'Installation de plugins ...'}}</p></center></br>
                             <div class="form-group">
                                 <center><label class="control-label">{{'Liste des plugins les plus utilisé'}}</label></center>
                             </div>
-                            <button id="toStep5" class="btn btn-primary nextBtn btn-lg pull-right" type="button" style="margin-top:20px;margin-bottom:20px">{{'Suivant'}}<i class="fas fa-chevron-circle-Right" style="padding-left:10px"></i></button>
-                            <button id="toStep3" class="btn btn-primary returnBtn btn-lg pull-left" type="button" style="margin-top:20px;margin-bottom:20px"><i class="fas fa-chevron-circle-Left" style="padding-left:10px"></i>{{'Précédent'}}</button>
+                            <button id="toStep5" class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:20px;margin-bottom:20px">{{'Suivant'}}<i class="fa fa-caret-right" style="padding-left:10px"></i></button>
+                            <button id="toStep3" class="btn btn-primary returnBtn pull-left" type="button" style="margin-top:20px;margin-bottom:20px"><i class="fa fa-caret-Left" style="padding-left:10px"></i>{{'Précédent'}}</button>
                         </div>
                     </div>
                     <div class="row setup-content" id="step-5">
                         <div class="stepwizard">
-                            <center><h4 class="stepwizard-h4">{{'Finalisation ...'}}</h4></center></br>
+                            <center><p class="stepwizard-h4">{{'Finalisation ...'}}</p></center></br>
                             <div class="form-group">
                                 <center><label class="control-label">{{'Cliquer sur le bouton terminer pour profiter de NextDom ...'}}</label></center>
                             </div>
-                            <button id="finishConf" class="btn btn-primary btn-lg pull-right ui-icon-closethick" type="button" >{{'Terminer'}}<i class="fas fa-check-circle" style="padding-left:10px"></i></button>
+                            <button id="finishConf" class="btn btn-primary pull-right ui-icon-closethick" type="button" >{{'Terminer'}}<i class="fas fa-check-circle" style="padding-left:10px"></i></button>
                         </div>
                     </div>
                 </form>
