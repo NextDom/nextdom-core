@@ -79,8 +79,12 @@ class Translate
      */
     public static function getLanguage(): string
     {
-        if (self::$language === null) {
+        if (self::$language === null || self::$language === '') {
             self::$language = self::getConfig('language', 'fr_FR');
+        }
+        // TODO: Pourquoi pas défault getConfig renvoie vide
+        if (self::$language === '') {
+            self::$language = 'fr_FR';
         }
         return self::$language;
     }
@@ -96,7 +100,7 @@ class Translate
         $language = self::getLanguage();
         $filename = self::getPathTranslationFile($language);
         if (file_exists($filename)) {
-            self::$translator = new Translator($language,null,NEXTDOM_ROOT.'/var/i10n');
+            self::$translator = new Translator($language,null,NEXTDOM_ROOT.'/var/cache/i18n');
             self::$translator->addLoader('yaml', new YamlFileLoader());
             self::$translator->addResource('yaml', $filename, $language);
             foreach (PluginManager::listPlugin(false, false, false) as $plugin) {
