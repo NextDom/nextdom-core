@@ -62,7 +62,7 @@
      },
      success: function(data) {
       if (data.state != 'ok') {
-       $('#div_alertError').showAlert({message: data.result, level: 'danger'});
+       notify("Core",data.result,"error");
        return;
      }
      loadPage('index.php?v=d&p=log');

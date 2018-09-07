@@ -11,7 +11,7 @@ a {
 }
 
 .main-header {
-  z-index: 3030;
+  z-index: 1030;
 }
 .main-header .navbar {
   box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.5);
@@ -112,7 +112,7 @@ a {
   -o-transform: translate(0, 0);
   transform: translate(0, 0);
   width: 50px !important;
-  z-index: 2001;
+  z-index: 1020;
 }
 
 .sidebar-mini:not(.sidebar-mini-expand-feature).sidebar-collapse .sidebar-menu > li:hover > a > span:not(.pull-right),

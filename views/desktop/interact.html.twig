@@ -51,7 +51,7 @@
                                         <div class="interactListContainer">
                                             {% for interact in interactsList[-1] %}
                                                 <div class="interactDisplayCard cursor" data-interact_id="{{ interact.getId() }}" style="text-align: center;  min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;{% if not interact.getEnable() %}{{ interactDisabledOpacity }}{% endif %}">
-                                                    <img src="var/market_cache/interaction.png" height="90" width="85"/>
+                                                    <img src="/public/img/interaction.png" height="90" width="85"/>
                                                     <br>
                                                     <span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">{{ interact.getHumanName(true, true, true, true) }}</span>
                                                 </div>
@@ -75,7 +75,7 @@
                                             <div class="interactListContainer">
                                                 {% for interact in interactsList[group['group']] %}
                                                     <div class="interactDisplayCard cursor" data-interact_id="{{ interact.getId() }}" style="text-align: center;  min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;{% if not interact.getEnable() %}{{ interactDisabledOpacity }}{% endif %}">
-                                                        <img src="var/market_cache/interaction.png" height="90" width="85"/>
+                                                        <img src="/public/img/interaction.png" height="90" width="85"/>
                                                         <br>
                                                         <span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">{{ interact.getHumanName(true, true, true, true) }}</span>
                                                     </div>

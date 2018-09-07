@@ -424,7 +424,7 @@ sendVarToJS('id', $plan3d->getId());
             },
             success: function (data) {
                 if (data.state != 'ok') {
-                    $('#div_alertPlan3dConfigure').showAlert({message: data.result, level: 'danger'});
+                    notify("Core",data.result,"error");
                     return;
                 }
                 $('#fd_plan3dConfigure').setValues(data.result, '.plan3dAttr');

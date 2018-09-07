@@ -42,7 +42,7 @@ class PrepareView
         $pageData['CSS_POOL'][]    = '/public/css/nextdom.css';
         $pageData['CSS_POOL'][]    = '/3rdparty/iCheck/all.css';
         $pageData['CSS_POOL'][] = '/public/css/firstUse.css';
-        $pageData['JS_END_POOL'][] = '/desktop/js/firstUse.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/firstUse.js';
 
         $render->show('desktop/firstUse.html.twig', $pageData);
     }
@@ -60,7 +60,7 @@ class PrepareView
         $logo = \config::byKey('product_connection_image');
         $pageData['CSS_POOL'][]    = '/public/css/nextdom.css';
         $pageData['CSS_POOL'][]    = '/3rdparty/iCheck/all.css';
-        $pageData['JS_END_POOL'][] = '/desktop/js/connection.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/connection.js';
 
         $render->show('desktop/connection.html.twig', $pageData);
     }
@@ -267,7 +267,7 @@ class PrepareView
         if (count($eventsJsPlugin) > 0) {
             foreach ($eventsJsPlugin as $value) {
                 try {
-                    $pageData['JS_POOL'][] = '/plugins/'.$value.'/desktop/js/events.js';
+                    $pageData['JS_POOL'][] = '/plugins/'.$value.'/public/js/desktop/events.js';
                 } catch (\Exception $e) {
                     \log::add($value, 'error', 'Event JS file not found');
                 }
@@ -337,7 +337,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min.js';
         } else {
             $pageData['JS_POOL'][] = '3rdparty/iziToast/js/iziToast.js';
-            $pageData['JS_POOL'][] = 'desktop/js/utils.js';
+            $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
             $pageData['JS_POOL'][] = '3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = 'core/js/core.js';
             $pageData['JS_POOL'][] = '3rdparty/bootstrap/bootstrap.min.js';

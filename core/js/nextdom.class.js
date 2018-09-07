@@ -163,10 +163,10 @@ nextdom.init = function () {
     } else {
         if(isset(_options.page) && _options.page != ''){
             if(getUrlVars('p') == _options.page || ($.mobile && isset(CURRENT_PAGE) && CURRENT_PAGE == _options.page)){
-                $('#div_alert').showAlert({message: _options.message, level: _options.level});
+                notify("Core",_options.message,_options.level);
             }
         }else{
-            $('#div_alert').showAlert({message: _options.message, level: _options.level});
+            notify("Core",_options.message,_options.level);
         }
     }
 

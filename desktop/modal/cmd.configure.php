@@ -1228,7 +1228,7 @@ if ($cmd->getDisplay('parameters') != '') {
             });
           }
         });
-        $('#md_cmdConfigureSelectMultipleAlert').showAlert({message: "{{Modification(s) appliquée(s) avec succès}}", level: 'success'});
+          notify("Core","{{Modification(s) appliquée(s) avec succès}}","success");
       });
     }).dialog('open');
   });
