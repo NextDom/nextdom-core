@@ -14,17 +14,6 @@ ErrorDocument 404 /public/404.html
 	mod_gzip_item_exclude rspheader ^Content-Encoding:.*gzip.*
 </ifModule>
 
-<IfModule mod_php5.c>
-	php_value post_max_size 1G
-	php_value upload_max_filesize 1G
-	php_value max_execution_time 600
-	php_flag display_startup_errors on
-	php_flag display_errors off
-	php_flag html_errors on
-	php_flag log_errors on
-	php_value error_log  log/http.error
-</IfModule>
-
 <IfModule mod_php7.c>
 	php_value post_max_size 1G
 	php_value upload_max_filesize 1G
