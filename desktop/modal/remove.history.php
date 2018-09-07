@@ -52,7 +52,7 @@ if (count($remove_history) > 0) {
                 notify('Core',error.message,'error');
             },
             success: function (data) {
-                $('#div_alertRemoveHistory').showAlert({message: '{{Historique vidée avec succès}}', level: 'success'});
+                notify("Core",'{{Historique vidée avec succès}}',"success");
             }
         });
     });

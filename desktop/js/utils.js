@@ -534,6 +534,9 @@ function notify(_title, _text, _class_name) {
     }else if (_class_name =="error"){
         _backgroundColor= '#dd4b39';
         _icon= 'fas fa-times fa-3x';
+    }else if (_class_name =="info"){
+        _backgroundColor= '#33B8CC';
+        _icon= 'fas fa-times fa-3x';
     }
     console.log(_backgroundColor);
 

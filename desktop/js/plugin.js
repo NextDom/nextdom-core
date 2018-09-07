@@ -430,7 +430,7 @@ $('#bt_savePluginPanelConfig').off('click').on('click',function(){
     notify('Core',error.message,'error');
   },
   success: function () {
-    alert_div_plugin_configuration.showAlert({message: '{{Sauvegarde de la configuration des panneaux effectuée}}', level: 'success'});
+      notify("Core",'{{Sauvegarde de la configuration des panneaux effectuée}}',"success");
     modifyWithoutSave = false;
   }
 });
@@ -444,7 +444,7 @@ $('#bt_savePluginFunctionalityConfig').off('click').on('click',function(){
     notify('Core',error.message,'error');
   },
   success: function () {
-    alert_div_plugin_configuration.showAlert({message: '{{Sauvegarde des fonctionalités effectuée}}', level: 'success'});
+      notify("Core",'{{Sauvegarde des fonctionalités effectuée}}',"success");
     modifyWithoutSave = false;
   }
 });
@@ -457,7 +457,7 @@ $('#bt_savePluginLogConfig').off('click').on('click',function(){
     notify('Core',error.message,'error');
   },
   success: function () {
-    alert_div_plugin_configuration.showAlert({message: '{{Sauvegarde de la configuration des logs effectuée}}', level: 'success'});
+      notify("Core",'{{Sauvegarde de la configuration des logs effectuée}}',"success");
     modifyWithoutSave = false;
   }
 });
@@ -481,7 +481,7 @@ function savePluginConfig(_param) {
       notify('Core',error.message,'error');
     },
     success: function () {
-      alert_div_plugin_configuration.showAlert({message: '{{Sauvegarde effectuée}}', level: 'success'});
+        notify("Core",'{{Sauvegarde effectuée}}',"success");
       modifyWithoutSave = false;
       var postSave = $('.li_plugin.active').attr('data-plugin_id')+'_postSaveConfiguration';
       if (typeof window[postSave] == 'function'){

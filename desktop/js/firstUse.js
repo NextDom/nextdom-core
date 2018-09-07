@@ -61,8 +61,7 @@ $("#toStep2").click(function(){
         username: "admin",
         password: "admin",
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
-            $('.veen').animateCss('shake');
+            notify("Core",error.message,"error");
         },
         success: function (data) {
         }
@@ -81,7 +80,6 @@ $("#toStep3").click(function(){
                     profils: user,
                     error: function (error) {
                         notify("Erreur",error.message,"error");
-                        $('.veen').animateCss('shake');
                     },
                     success : function (){
                         jeedom.config.load({
