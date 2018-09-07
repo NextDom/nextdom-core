@@ -111,7 +111,6 @@ try {
 
     echo "Décompression de la sauvegarde...";
     	$excludes = array(
-		'plugins/musiccast',
 	);
 	$exclude = '';
     foreach ($excludes as $folder) {
