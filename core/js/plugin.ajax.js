@@ -306,7 +306,6 @@ $('.eqLogicAction[data-action=save]').on('click', function () {
             notify("Erreur", error.message, 'error');
         },
         success: function (data) {
-            console.log(data)
             modifyWithoutSave = false;
             if (updateDisplayPlugin !== undefined)
                 updateDisplayPlugin(function () {
