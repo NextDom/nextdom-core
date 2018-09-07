@@ -22,4 +22,5 @@ class EqLogicViewTypeEnum extends Enum
     const MOBILE    = 'mobile';
     const DASHBOARD = 'dashboard';
     const DVIEW     = 'dview';
+    const DPLAN     = 'dplan';
 }
