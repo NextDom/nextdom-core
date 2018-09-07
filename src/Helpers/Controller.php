@@ -128,7 +128,7 @@ class Controller
         if ($pageContent['dashboardDisplayScenarioByDefault'] == 1) {
             $pageContent['dashboardScenarios'] = ScenarioManager::all();
         }
-        $pageContent['JS_POOL'][] = '/desktop/js/dashboard.js';
+        $pageContent['JS_POOL'][] = '/public/js/desktop/dashboard.js';
         // A remettre une fois mise sous forme de thème//
         $pageContent['JS_POOL'][] = '/3rdparty/AdminLTE/js/dashboard-v2.js';
         $pageContent['JS_POOL'][] = '/3rdparty/jquery.isotope/isotope.pkgd.min.js';
@@ -170,7 +170,7 @@ class Controller
         $pageContent['scenarioEnabled']       = \config::byKey('enableScenario');
         $pageContent['scenarioAllObjects']    = JeeObjectManager::all();
 
-        $pageContent['JS_END_POOL'][] = '/desktop/js/scenario.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/scenario.js';
         $pageContent['JS_END_POOL'][] = '/3rdparty/jquery.sew/jquery.caretposition.js';
         $pageContent['JS_END_POOL'][] = '/3rdparty/jquery.sew/jquery.sew.min.js';
 
@@ -266,7 +266,7 @@ class Controller
         $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
 
         $pageContent['CSS_POOL'][] = '/desktop/css/administration.css';
-        $pageContent['JS_END_POOL'][] = '/desktop/js/administration.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/administration.js';
 
         return $render->get('/desktop/administration.html.twig', $pageContent);
     }
@@ -293,7 +293,7 @@ class Controller
 
         $pageContent['backupAjaxToken'] = \ajax::getToken();
         $pageContent['backupReposList'] = UpdateManager::listRepo();
-        $pageContent['JS_END_POOL'][]   = '/desktop/js/backup.js';
+        $pageContent['JS_END_POOL'][]   = '/public/js/desktop/backup.js';
 
         return $render->get('/desktop/backup.html.twig', $pageContent);
     }
@@ -317,7 +317,7 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageContent['JS_VARS']['select_id'] = Utils::init('id', '-1');
-        $pageContent['JS_END_POOL'][]        = '/desktop/js/object.js';
+        $pageContent['JS_END_POOL'][]        = '/public/js/desktop/object.js';
 
         $pageContent['objectProductName'] = \config::byKey('product_name');
         $pageContent['objectList']        = JeeObjectManager::buildTree(null, false);
@@ -344,7 +344,7 @@ class Controller
         Status::initConnectState();
         Status::isConnectedOrFail();
 
-        $pageContent['JS_END_POOL'][] = '/desktop/js/message.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/message.js';
 
         $pageContent['messageSelectedPlugin'] = Utils::init('plugin');
         if ($pageContent['messageSelectedPlugin'] != '') {
@@ -375,7 +375,7 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageContent['cronEnabled']   = \config::byKey('enableCron');
-        $pageContent['JS_END_POOL'][] = '/desktop/js/cron.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/cron.js';
 
         return $render->get('/desktop/cron.html.twig', $pageContent);
     }
@@ -407,7 +407,7 @@ class Controller
         $pageContent['userSessionsList'] = \listSession();
         $pageContent['usersList'] = \user::all();
         $pageContent['JS_VARS']['ldapEnable'] = $pageContent['userLdapEnabled'];
-        $pageContent['JS_END_POOL'][] = '/desktop/js/user.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/user.js';
 
         return $render->get('/desktop/user.html.twig', $pageContent);
     }
@@ -436,7 +436,7 @@ class Controller
         }
         usort($updates, 'version_compare');
         $pageContent['updatesList']   = array_reverse($updates);
-        $pageContent['JS_END_POOL'][] = '/desktop/js/update.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/update.js';
 
         return $render->get('/desktop/update.html.twig', $pageContent);
     }
@@ -460,7 +460,7 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageData['systemCanSudo']    = \nextdom::isCapable('sudo');
-        $pageContent['JS_END_POOL'][] = '/desktop/js/system.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/system.js';
 
         return $render->get('/desktop/system.html.twig', $pageContent);
     }
@@ -483,7 +483,7 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageContent['JS_END_POOL'][] = '/desktop/js/database.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/database.js';
 
         return $render->get('/desktop/database.html.twig', $pageContent);
     }
@@ -506,7 +506,7 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageContent['JS_END_POOL'][] = '/desktop/js/display.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/display.js';
 
         $nbEqlogics   = 0;
         $nbCmds       = 0;
@@ -557,7 +557,7 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageContent['JS_END_POOL'][] = '/desktop/js/log.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/log.js';
         $currentLogfile = Utils::init('logfile');
         $logFilesList   = [];
         $dir = opendir(NEXTDOM_ROOT . '/log/');
@@ -613,7 +613,7 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageContent['JS_END_POOL'][] = '/desktop/js/report.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/report.js';
 
         $report_path = NEXTDOM_ROOT . '/data/report/';
         $pageContent['reportViews'] = [];
@@ -663,7 +663,7 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageContent['JS_END_POOL'][] = '/desktop/js/plugin.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/plugin.js';
         $pageContent['JS_VARS']['sel_plugin_id'] = Utils::init('id', '-1');
         $pageContent['pluginsList'] = PluginManager::listPlugin();
         $pageContent['pluginReposList'] = [];
@@ -712,7 +712,7 @@ class Controller
             $pageContent['customMobileCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.css'));
         }
 
-        $pageContent['JS_END_POOL'][] = '/desktop/js/custom.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/custom.js';
 
         return $render->get('/desktop/custom.html.twig', $pageContent);
     }
@@ -743,7 +743,7 @@ class Controller
         foreach (\ls(NEXTDOM_ROOT, '*', false, array('folders')) as $folder) {
             $pageContent['editorFolders'][] = $folder;
         }
-        $pageContent['JS_END_POOL'][] = '/desktop/js/editor.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/editor.js';
 
         return $render->get('/desktop/editor.html.twig', $pageContent);
     }
@@ -767,7 +767,7 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageContent['migrationAjaxToken'] = \ajax::getToken();
-        $pageContent['JS_END_POOL'][]      = '/desktop/js/migration.js';
+        $pageContent['JS_END_POOL'][]      = '/public/js/desktop/migration.js';
 
         return $render->get('/desktop/migration.html.twig', $pageContent);
     }
@@ -802,7 +802,7 @@ class Controller
 
         $pageContent['JS_POOL'][]     = '/3rdparty/visjs/vis.min.js';
         $pageContent['CSS_POOL'][]    = '/3rdparty/visjs/vis.min.css';
-        $pageContent['JS_END_POOL'][] = '/desktop/js/history.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/history.js';
 
         return $render->get('/desktop/history.html.twig', $pageContent);
     }
@@ -937,7 +937,7 @@ class Controller
         }
 
 
-        $pageContent['JS_END_POOL'][] = '/desktop/js/health.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/health.js';
 
         return $render->get('/desktop/health.html.twig', $pageContent);
     }
@@ -993,7 +993,7 @@ class Controller
         $pageContent['profilsPlans']            = \planHeader::all();
         $pageContent['profilsAllowRemoteUsers'] = \config::byKey('sso:allowRemoteUser');
 
-        $pageContent['JS_END_POOL'][] = '/desktop/js/profils.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/profils.js';
 
         return $render->get('/desktop/profils.html.twig', $pageContent);
     }
@@ -1050,7 +1050,7 @@ class Controller
             $pageContent['viewHideList'] = false;
         }
         $pageContent['JS_VARS']['view_id'] = $currentView->getId();
-        $pageContent['JS_END_POOL'][]      = '/desktop/js/view.js';
+        $pageContent['JS_END_POOL'][]      = '/public/js/desktop/view.js';
 
         return $render->get('/desktop/view.html.twig', $pageContent);
     }
@@ -1074,7 +1074,7 @@ class Controller
         Status::isConnectedOrFail();
 
         $pageContent['viewEditViewsList'] = \view::all();
-        $pageContent['JS_END_POOL'][]     = '/desktop/js/view_edit.js';
+        $pageContent['JS_END_POOL'][]     = '/public/js/desktop/view_edit.js';
 
         return $render->get('/desktop/view_edit.html.twig', $pageContent);
     }
@@ -1224,7 +1224,7 @@ class Controller
                 $pageContent['eqAnalyzePluginDeadCmd'][] = $pluginId::deadCmd();
             }
         }
-        $pageContent['JS_END_POOL'][] = '/desktop/js/eqAnalyse.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/eqAnalyse.js';
 
         return $render->get('/desktop/eqAnalyze.html.twig', $pageContent);
     }
@@ -1281,7 +1281,7 @@ class Controller
             $pageContent['JS_VARS']['planHeader_id'] = $planHeader->getId();
         }
 
-        $pageContent['JS_END_POOL'][] = '/desktop/js/plan.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/plan.js';
 
         return $render->get('/desktop/plan.html.twig', $pageContent);
     }
@@ -1336,7 +1336,7 @@ class Controller
         $pageContent['JS_END_POOL'][] = '/3rdparty/three.js/controls/OrbitControls.js';
         $pageContent['JS_END_POOL'][] = '/3rdparty/three.js/renderers/Projector.js';
         $pageContent['JS_END_POOL'][] = '/3rdparty/three.js/objects/Sky.js';
-        $pageContent['JS_END_POOL'][] = '/desktop/js/plan3d.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/plan3d.js';
 
         return $render->get('/desktop/plan3d.html.twig', $pageContent);
     }
@@ -1368,7 +1368,7 @@ class Controller
                 $interacts[$group['group']] = \interactDef::all($group['group']);
             }
         }
-        $pageContent['JS_END_POOL'][]           = '/desktop/js/interact.js';
+        $pageContent['JS_END_POOL'][]           = '/public/js/desktop/interact.js';
         $pageContent['interactsList']           = $interacts;
         $pageContent['interactsListGroup']      = $interactListGroup;
         $pageContent['interactDisabledOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
@@ -1435,7 +1435,7 @@ class Controller
             }
         }
 
-        $pageContent['JS_END_POOL'][] = '/desktop/js/Market/market.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/Market/market.js';
 
         return $render->get('/desktop/market.html.twig', $pageContent);
     }
@@ -1458,7 +1458,7 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageContent['JS_END_POOL'][] = '/desktop/js/reboot.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/reboot.js';
 
         return $render->get('/desktop/reboot.html.twig', $pageContent);
     }
