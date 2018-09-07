@@ -525,16 +525,18 @@ function refreshUpdateNumber() {
 function notify(_title, _text, _class_name) {
     var _backgroundColor ="";
     var _icon ="";
-    if(_class_name ="success"){
-        _backgroundColor= '#00a65a';
-        _icon= 'far fa-check-circle fa-3x';
-    }else if (_class_name ="warning"){
-        _backgroundColor= '#f39c12';
-        _icon= 'fas fa-exclamation-triangle fa-3x';
-    }else if (_class_name ="danger"){
+    if(_class_name =="success"){
+        _backgroundColor = '#00a65a';
+        _icon = 'far fa-check-circle fa-3x';
+    }else if (_class_name =="warning"){
+        _backgroundColor = '#f39c12';
+        _icon = 'fas fa-exclamation-triangle fa-3x';
+    }else if (_class_name =="error"){
         _backgroundColor= '#dd4b39';
         _icon= 'fas fa-times fa-3x';
     }
+    console.log(_backgroundColor);
+
     iziToast.show({
         id: null,
         class: '',
