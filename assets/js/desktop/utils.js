@@ -545,7 +545,6 @@ function notify(_title, _text, _class_name) {
         _backgroundColor= '#33B8CC';
         _icon= 'fas fa-times fa-3x';
     }
-    console.log(_backgroundColor);
 
     iziToast.show({
         id: null,

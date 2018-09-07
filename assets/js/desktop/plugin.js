@@ -478,9 +478,6 @@ $('#div_plugin_log').on('click','.bt_plugin_conf_view_log',function(){
 });
 
 function savePluginConfig(_param) {
-    console.log('coucou');
-    console.log($('#div_plugin_configuration').getValues('.configKey')[0]);
-    console.log($('.li_plugin.active').attr('data-plugin_id'));
   nextdom.config.save({
     configuration: $('#div_plugin_configuration').getValues('.configKey')[0],
     plugin: sel_plugin_id,
@@ -498,11 +495,8 @@ function savePluginConfig(_param) {
         _param.success(0);
       }
       if(!isset(_param) || !isset(_param.relaunchDeamon) || _param.relaunchDeamon){
-          console.log(sel_plugin_id);
         nextdom.plugin.deamonStart({
-            // TODO: Suite à la suppression du menu
-//            id : $('.li_plugin.active').attr('data-plugin_id'),
-            id : sel_plugin_id,
+          id : sel_plugin_id,
           slave_id: 0,
           forceRestart: 1,
           error: function (error) {

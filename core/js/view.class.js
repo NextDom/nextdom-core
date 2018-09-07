@@ -150,13 +150,11 @@ nextdom.view.save = function (_params) {
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
     var paramsAJAX = nextdom.private.getParamsAJAX(params);
     paramsAJAX.url = 'core/ajax/view.ajax.php';
-    console.log(_params);
     paramsAJAX.data = {
         action: 'save',
         view_id: _params.id,
         view: json_encode(_params.view),
     };
-    console.log(paramsAJAX);
     $.ajax(paramsAJAX);
 }
 

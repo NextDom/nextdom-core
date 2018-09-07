@@ -280,7 +280,6 @@ fold2: {
         selected:  editOption.highlight,
         events: {
             click : function(e) {
-                console.log($(this).value())
                 editOption.highlight = ($(this).value() == 1) ? false : true;
                 initEditOption(1);
             }
@@ -486,7 +485,6 @@ lock: {
     type: 'checkbox', 
     events: {
         click : function(opt) {
-            console.log(opt);
             if($(this).value() == 1){
                 opt.handleObj.data.$trigger.addClass('locked');
             }else{

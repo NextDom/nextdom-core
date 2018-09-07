@@ -10,7 +10,7 @@ require (__DIR__.'/../vendor/autoload.php');
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 
-$translator = new Translator('fr_FR', null, '../var/i10n');
+$translator = new Translator('fr_FR', null, __DIR__.'/../var/i10n');
 $translator->addLoader('yaml', new YamlFileLoader());
 $translator->addResource('yaml', '../translations/fr_FR.yml', 'fr_FR');
 
