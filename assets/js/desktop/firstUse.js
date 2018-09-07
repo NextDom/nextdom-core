@@ -113,16 +113,15 @@ $("#toStep4").click(function(){
             jeedom.config.save({
                 configuration: {'market::password': password},
                 error: function (error) {
-                    notify("Erreur",data.message,"error");
+                    notify("Erreur",error.message,"error");
                 },
                 success: function (data) {
                     jeedom.repo.test({
                         repo: 'market',
                         error: function (error) {
-                            notify("Erreur",data.message,"error");
+                            notify("Erreur",error.message,"error");
                         },
                         success: function (data) {
-                            notify("Core", '{{Sauvegarde réussie}}', 'success');
                         }
                     });
                 }
