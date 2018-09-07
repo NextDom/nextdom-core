@@ -65,7 +65,7 @@ sendVarToJS('view', utils::o2a($view));
                 notify('Core',data.result.result,'error');
                 return;
             }
-            $('#div_alertViewConfigure').showAlert({message: '{{Image ajoutée}}', level: 'success'});
+            notify("Core","{{Image ajoutée}}","success");
         }
     });
 
@@ -76,7 +76,7 @@ sendVarToJS('view', utils::o2a($view));
             notify('Core',error.message,'error');
         },
         success: function () {
-            $('#div_alertViewConfigure').showAlert({message: '{{Image supprimée}}', level: 'success'});
+            notify("Core","{{Image supprimée}}","success");
         },
     });
   });
@@ -90,7 +90,7 @@ sendVarToJS('view', utils::o2a($view));
                 notify('Core',error.message,'error');
             },
             success: function () {
-                $('#div_alertViewConfigure').showAlert({message: '{{Vue sauvegardé}}', level: 'success'});
+                notify("Core","{{Vue sauvegardé}}","success");
             },
         });
     });

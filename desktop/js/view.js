@@ -84,7 +84,7 @@
             editWidgetMode(0);
             $(this).css('color','black');
           }else{
-           $('#div_alert').showAlert({message: "{{Vous êtes en mode édition vous pouvez déplacer les widgets, les redimensionner et changer l'ordre des commandes dans les widgets}}", level: 'info'});
+              notify("Core","{{Vous êtes en mode édition vous pouvez déplacer les widgets, les redimensionner et changer l'ordre des commandes dans les widgets}}","info");
            $(this).attr('data-mode',1);
            editWidgetMode(1);
            $(this).css('color','rgb(46, 176, 75)');
