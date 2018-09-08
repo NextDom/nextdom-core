@@ -18,7 +18,10 @@ services:
     - "3326:3306"
  nextdom-dev:
   container_name: ${CNAME}
-  image: ${IMAGE}
+  #image: ${IMAGE}
+  build:
+    dockerfile: Dockerfile.develop
+    context: .
   restart: ${RESTART}
   healthcheck:
     test: ["CMD","curl","-f","http://localhost/here.html"]
