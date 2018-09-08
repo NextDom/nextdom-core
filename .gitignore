@@ -4,6 +4,7 @@ core/config/common.config.php
 /plugins
 /data
 sftp-config.json
+*.iml
 
 .idea
 .project
