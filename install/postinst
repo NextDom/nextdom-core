@@ -41,7 +41,7 @@ step_7_nextdom_customization() {
     echo "[Service]" > /etc/systemd/system/apache2.service.d/privatetmp.conf
     echo "PrivateTmp=no" >> /etc/systemd/system/apache2.service.d/privatetmp.conf
 
-    systemctl daemon-reload >> ${DEBUG} 2>&1
+    #systemctl daemon-reload >> ${DEBUG} 2>&1
 
     for file in $(find /etc/ -iname php.ini -type f); do
         echo "Update php file ${file}" >> ${DEBUG} 2>&1
@@ -56,7 +56,8 @@ step_7_nextdom_customization() {
     done
 
     a2dismod status >> ${DEBUG} 2>&1
-    systemctl restart apache2 >> ${DEBUG} 2>&1
+    a2enmod rewrite >> ${DEBUG} 2>&1
+    service apache2 restart >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
         service apache2 restart >> ${DEBUG} 2>&1
         if [ $? -ne 0 ]; then
@@ -64,8 +65,7 @@ step_7_nextdom_customization() {
             exit 1
         fi
     fi
-
-    systemctl stop mysql >> ${DEBUG} 2>&1
+    service mysql stop >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
         service mysql stop >> ${DEBUG} 2>&1
         if [ $? -ne 0 ]; then
@@ -93,7 +93,7 @@ step_7_nextdom_customization() {
         echo "innodb_log_file_size = 32M" >> /etc/mysql/conf.d/nextdom_my.cnf
     fi
 
-    systemctl start mysql >> ${DEBUG} 2>&1
+    service mysql start >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
         service mysql start >> ${DEBUG} 2>&1
         if [ $? -ne 0 ]; then
@@ -128,15 +128,6 @@ step_9_nextdom_installation() {
     mkdir -p /tmp/nextdom >> ${DEBUG} 2>&1
     chmod 777 -R /tmp/nextdom >> ${DEBUG} 2>&1
     chown www-data:www-data -R /tmp/nextdom >> ${DEBUG} 2>&1
-    cd ${WEBSERVER_HOME}
-    #php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" >> ${DEBUG} 2>&1
-    #php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" >> ${DEBUG} 2>&1
-    #php composer-setup.php >> ${DEBUG} 2>&1
-    #php -r "unlink('composer-setup.php');" >> ${DEBUG} 2>&1
-    #php composer.phar require symfony/translation >> ${DEBUG} 2>&1
-    #composer -q install >> ${DEBUG} 2>&1
-    #composer dump-autoload -o >> ${DEBUG} 2>&1
-
     cd ${WEBSERVER_HOME}
     php ${WEBSERVER_HOME}/install/install.php mode=force >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
@@ -184,7 +175,7 @@ step_10_nextdom_post() {
 }
 
 step_11_nextdom_check() {
-    #php ${WEBSERVER_HOME}/sick.php >> ${DEBUG} 2>&1
+    php ${WEBSERVER_HOME}/sick.php >> ${DEBUG} 2>&1
     chmod 777 -R /tmp/nextdom >> ${DEBUG} 2>&1
     chown www-data:www-data -R /tmp/nextdom >> ${DEBUG} 2>&1
 }
@@ -259,7 +250,7 @@ set_root() {
     root=`dirname $bin`
 }
 set_root $0
-echo $root
+#echo $root
 
 # Detect if there is a .git directory (development version) 
 if [ -d ${root}/.git ] ; then
@@ -269,7 +260,7 @@ if [ -d ${root}/.git ] ; then
     MYSQL_NEXTDOM_USER="nextdomdev"
     WEBSERVER_HOME=${root}
 else
-    echo "Debian package configuration..."
+    #echo "Debian package configuration..."
     isdev=0
     MYSQL_NEXTDOM_DB="nextdom"
     MYSQL_NEXTDOM_USER="nextdom"
@@ -278,12 +269,18 @@ fi
 #exit 0
 
 # Keep compatibility (old plugins)
-check_var_www_html
-ln -s ${WEBSERVER_HOME} /var/www/html
+if [ -t 0 ] ; then    # launch only when interactive (this is already done by preinst Debian script)
+    if [ ! "${WEBSERVER_HOME}" = "/var/www/html" ] ; then
+        check_var_www_html
+    fi
+fi
+if [ ! "${WEBSERVER_HOME}" = "/var/www/html" ] ; then
+    ln -s ${WEBSERVER_HOME} /var/www/html
+fi
 
 if [ "${isdev}" = "1" ] ; then
     # A faire dans une version developpeur (apres git clone)
-    cd ${WEBSERVER_HOME}                        
+    cd ${WEBSERVER_HOME}
     composer -q install
     ./gen_assets.sh --init
 fi
