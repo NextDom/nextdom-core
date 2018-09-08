@@ -62,6 +62,12 @@ function include_file($_folder, $_filename, $_type, $_plugin = '', $translate = 
     if ($_plugin != '') {
         $_folder = 'plugins/' . $_plugin . '/' . $_folder;
     }
+    /**
+     * Modification pour la gestion du dossier public
+     */
+    if ($_folder === 'desktop/js') {
+        $_folder = 'public/js/desktop';
+    }
     $path = __DIR__ . '/../../' . $_folder . '/' . $_filename;
     if (!file_exists($path)) {
         throw new Exception('Fichier introuvable : ' . $path, 35486);
@@ -71,8 +77,7 @@ function include_file($_folder, $_filename, $_type, $_plugin = '', $translate = 
         if ($_type != 'class') {
             ob_start();
             require_once $path;
-            // TODO: Remplacer par le helper
-            if (init('rescue', 0) == 1) {
+            if (Utils::init('rescue', 0) == 1) {
                 echo str_replace(array('{{', '}}'), '', ob_get_clean());
             } else {
                 if ($translate) {
