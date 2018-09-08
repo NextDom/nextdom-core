@@ -51,16 +51,11 @@ YML=docker-compose-nextdom.yml
 docker build -f ${DKRFILE} . --tag ${TAG}
 docker-compose -f ${YML} up -d
 source .env
-echo working on ${CNAME}
-#Tant que ce n'est pas commité on copie nextdom manuellement
-docker cp . ${CNAME}:/var/www/html/
-docker restart ${CNAME}
-alias logmy='docker logs -f nextdom-mysql'
-alias logdev='docker logs -f nextdom-dev'
-alias gomy='docker exec -it nextdom-mysql bash'
-alias godev='docker exec -it nextdom-dev bash'
+docker attach ${}
+
 ```
 
+/!\ particularité du au dépot privé, il faut lancer le init.sh dans le conteneur nextdom-dev pour avoir les invites (login/pwd) git du projet. 
 
 ### Parametres du install.sh
 

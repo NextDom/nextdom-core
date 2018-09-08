@@ -112,7 +112,10 @@ step_6_nextdom_download() {
         git reset --hard origin/${VERSION} >> ${DEBUG} 2>&1
         git pull origin ${VERSION} >> ${DEBUG} 2>&1
     else
-        git clone --quiet https://github.com/sylvaner/nextdom-core . >> ${DEBUG} 2>&1
+        rm -Rf *
+        #git clone --quiet https://github.com/sylvaner/nextdom-core . >> ${DEBUG} 2>&1
+        git clone --quiet https://github.com/sylvaner/nextdom-core .
+        git checkout ${version}
     fi
 }
 
@@ -285,7 +288,6 @@ step_10_nextdom_post() {
     cd ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
     ./gen_compress.sh >> ${DEBUG} 2>&1
     service cron start
-    echo "_nextdom_is_installed" > /var/www/html/
 }
 
 step_11_nextdom_check() {

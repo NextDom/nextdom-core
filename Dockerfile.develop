@@ -10,7 +10,7 @@ ENV VERSION docker
 ENV MYSQL_HOST localhost
 
 
-RUN apt-get update && apt-get install -y wget openssh-server supervisor mysql-client
+RUN apt-get update && apt-get install -y wget openssh-server supervisor mysql-client vim
 
 RUN echo root:$SHELL_ROOT_PASSWORD | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
@@ -23,12 +23,13 @@ RUN rm /root/.bashrc
 ADD install/bashrc /root/.bashrc
 ADD install/OS_specific/Docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-ADD install/install.sh /root/install_docker.sh
-RUN chmod +x /root/install_docker.sh
-RUN /root/install_docker.sh -s 1 -v ${VERSION} -m ${SHELL_ROOT_PASSWORD} -n ${SHELL_ROOT_PASSWORD} -d ${MYSQL_HOST} -o;exit 0
+ADD install/install.sh /root/install.sh
+RUN chmod +x /root/install.sh
+RUN /root/install.sh -s 1 -v ${VERSION} -m ${SHELL_ROOT_PASSWORD} -n ${SHELL_ROOT_PASSWORD} -d ${MYSQL_HOST} -o;exit 0
 RUN rm /var/www/html/index.html
 RUN systemctl disable apache2;exit 0
 RUN systemctl disable sshd;exit 0
 ADD install/OS_specific/Docker/init.sh /root/init.sh
 RUN chmod +x /root/init.sh
-CMD ["/root/init.sh"]
+#CMD ["/root/init.sh"]
+CMD ["/bin/bash"]

@@ -821,7 +821,7 @@ class CmdManager
      */
     public static function availableWidget($version)
     {
-        $path = dirname(__FILE__) . '/../template/' . $version;
+        $path = dirname(__FILE__) . '/../../core/template/' . $version;
         $files = ls($path, 'cmd.*', false, array('files', 'quiet'));
         $return = array();
         foreach ($files as $file) {
