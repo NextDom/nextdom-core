@@ -1,61 +1,101 @@
 body {
-    margin-top:40px;
+  margin-top: 40px;
 }
+
 .stepwizard-step p {
-    margin-top: 10px;
+  margin-top: 10px;
 }
+
 .stepwizard-row {
-    display: table-row;
+  display: table-row;
 }
+
 .stepwizard {
-    display: table;
-    width: 55%;
-    position: relative;
+  display: table;
+  width: 55%;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
 }
+
 .stepwizard-step button[disabled] {
-    opacity: 1 !important;
-    filter: alpha(opacity=100) !important;
+  opacity: 1 !important;
+  filter: alpha(opacity=100) !important;
 }
+
 .stepwizard-row:before {
-    top: 14px;
-    bottom: 0;
-    position: absolute;
-    content: " ";
-    width: 100%;
-    height: 1px;
-    background-color: #ccc;
-    opacity: 0.4;
-    z-order: 0;
+  top: 14px;
+  bottom: 0;
+  position: absolute;
+  content: " ";
+  width: 100%;
+  height: 1px;
+  background-color: #ccc;
+  opacity: 0.4;
+  z-order: 0;
 }
+
 .stepwizard-step {
-    display: table-cell;
-    text-align: center;
-    position: relative;
+  display: table-cell;
+  text-align: center;
+  position: relative;
 }
+
 .stepwizard-btn-circle {
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    padding: 6px 0;
-    font-size: 13px;
-    font-weight: bold;
-    line-height: 1.428571429;
-    border-radius: 15px;
-    color: white;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 1.428571429;
+  border-radius: 15px;
+  color: white;
 }
 
 .stepwizard-input {
-    margin-left:25%;
-    margin-bottom: 20px;
-    width:50%;
+  margin-left: 25%;
+  margin-bottom: 20px;
+  width: 50%;
 }
 
 .stepwizard-passwd > input {
-    width: 250px;
-    height: 30px;
-    text-align: center;
+  width: 250px;
+  height: 30px;
+  text-align: center;
 }
 
 .stepwizard-btn-circle.disabled, .stepwizard-btn-circle[disabled] {
   color: Black;
+}
+
+#logo img {
+  height: 100px;
+  border-radius: 10px;
+}
+
+.centered {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.stepwizard h1,
+.stepwizard h3,
+.stepwizard h4 {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+@media (max-width: 991px) {
+  #market {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 2rem;
+  }
+}
+
+@media (min-width: 992px) {
+  #market {
+    border-right: 1px solid #CCC;
+  }
 }
