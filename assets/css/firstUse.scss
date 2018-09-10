@@ -53,12 +53,6 @@ body {
     color: white;
 }
 
-.stepwizard-input {
-    margin-left: 25%;
-    margin-bottom: 20px;
-    width:50%;
-}
-
 .stepwizard-passwd > input {
   width: 250px;
   height: 30px;
@@ -92,4 +86,27 @@ body {
   #market {
     border-right: 1px solid #CCC;
   }
+}
+
+.nextBtn{
+  padding-right: 10px;
+  margin-right: 20px;
+  margin-top:20px;
+  margin-bottom:20px;
+}
+
+.returnBtn{
+  padding-left: 10px;
+  margin-left: 20px;
+  margin-top:20px;
+  margin-bottom:20px;
+}
+
+.nextBtn i{
+  padding-right: 10px;
+}
+
+.returnBtn i{
+  padding-left: 10px;
+
 }
