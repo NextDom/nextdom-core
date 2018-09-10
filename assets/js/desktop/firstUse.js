@@ -107,7 +107,7 @@
     $("#toStep5").click(function () {
         NextStep("#toStep5");
     });
-    
+
     $("#finishConf").click(function () {
         location.reload();
     });

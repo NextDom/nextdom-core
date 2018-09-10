@@ -3,7 +3,14 @@
         <div class="col-sm-6">
             <div class="box">
                 <div class="box-header">
-                    <legend><i class="fas fa-floppy-o"></i> {{ 'Sauvegardes' }}</legend>
+                    <legend><i class="fas fa-floppy-o"></i> {{ 'Sauvegardes' }}
+                        <a class="btn btn-success btn-xs" id="bt_saveBackup"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </legend>
                 </div>
                 <div class="box-body">
                     <form class="form-horizontal">
@@ -106,9 +113,6 @@
                         </form>
                     {% endif %}
                 {% endfor %}
-                <div class="form-actions" style="height: 20px;">
-                    <a class="btn btn-success" id="bt_saveBackup"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-                </div>
             </div>
         </div>
 
@@ -116,6 +120,11 @@
             <div class="box">
                 <div class="box-header">
                     <legend><i class="fas fa-info-circle"></i> {{ 'Informations' }}</legend>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
                 </div>
                 <div class="box-body">
                     <pre id="pre_backupInfo" style="overflow: scroll;"></pre>
