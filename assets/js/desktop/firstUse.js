@@ -104,6 +104,9 @@
         NextStep("#toStep4");
     });
 
+    $("#toStep5").click(function () {
+        NextStep("#toStep5");
+    }
     $("#finishConf").click(function () {
         Location.reload();
     });
