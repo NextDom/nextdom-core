@@ -30,12 +30,13 @@
             <div class="box">
                 <div class="box-header">
                     <legend><i class="fas fa-picture-o"></i> {{ 'Mes objets' }}</legend>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
                 </div>
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                </div>
+
                 <input class="form-control" placeholder="{{ 'Rechercher' }}" style="margin-bottom:4px;" id="in_searchObject"/>
                 <div class="box-body objectListContainer">
                     {% for object in objectList %}
