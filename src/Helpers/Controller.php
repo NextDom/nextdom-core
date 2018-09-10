@@ -257,7 +257,6 @@ class Controller
         }
         $pageContent['adminDnsRun'] = \network::dns_run();
         $pageContent['adminNetworkExternalAccess'] = \network::getNetworkAccess('external');
-        $pageContent['adminCategories'] = \nextdom::getConfiguration('eqLogic:category');
         $pageContent['adminStats'] = \cache::stats();
         $pageContent['adminCacheFolder'] = \cache::getFolder();
         $pageContent['adminMemCachedExists'] = class_exists('memcached');
@@ -693,7 +692,7 @@ class Controller
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
-
+        $pageContent['adminCategories'] = \nextdom::getConfiguration('eqLogic:category');
         $pageContent['customProductName'] = \config::byKey('product_name');
         $pageContent['customJS'] = '';
         if (file_exists(NEXTDOM_ROOT . '/custom/custom.js')) {
