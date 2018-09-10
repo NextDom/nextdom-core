@@ -41,8 +41,8 @@
                     <div class="stepwizard col-md-offset-3">
                         <h1 class="login-box-msg">{{ 'Bienvenue sur NextDom' }}</h1>
                         <p class="login-box-msg">{{ 'Cette page va vous guider dans le processus de configuration de Nextdom' }}</p>
-                        <button id="toStep2" class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:20px;margin-bottom:20px">{{ 'Suivant' }}<i class="fa fa-caret-right"></i></button>
                     </div>
+                    <button id="toStep2" class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:20px;margin-bottom:20px">{{ 'Suivant' }}<i class="fa fa-caret-right"></i></button>
                 </div>
                 <div class="row setup-content" id="step-2">
                     <div class="stepwizard col-md-offset-3">
@@ -56,12 +56,11 @@
                                     <input type="password" id="in_change_passwordToo" placeholder="Confirmer le mot de passe ...">
                                 </div>
                             </div>
-                            <button id="toStep3" class="btn btn-primary nextBtn pull-right" type="button">{{ 'Suivant' }}<i class="fa fa-caret-right"></i></button>
-                            <button id="toStep1" class="btn btn-primary returnBtn pull-left" type="button"><i class="fa fa-caret-left"></i>{{ 'Précédent' }}</button>
                         </div>
                     </div>
+                    <button id="toStep3" class="btn btn-primary nextBtn pull-right" type="button">{{ 'Suivant' }}<i class="fa fa-caret-right"></i></button>
+                    <button id="toStep1" class="btn btn-primary returnBtn pull-left" type="button"><i class="fa fa-caret-left"></i>{{ 'Précédent' }}</button>
                 </div>
-
                 <div class="row setup-content" id="step-3">
                     <div class="stepwizard col-md-offset-3">
                         <div class="row">
@@ -97,31 +96,31 @@
                     <button id="toStep4" class="btn btn-primary nextBtn pull-right" type="button">{{ 'Suivant' }}<i class="fa fa-caret-right"></i></button>
                     <button id="toStep2" class="btn btn-primary returnBtn pull-left" type="button"><i class="fa fa-caret-left"></i>{{ 'Précédent' }}<i class="fas fa-caret-left"></i></button>
                 </div>
-            </div>
-            <div class="row setup-content" id="step-4">
-                <div class="stepwizard col-md-offset-3">
-                    <h4 class="stepwizard-h4">{{ 'Installation de plugins ...' }}</h4>
-                    <div class="form-group">
-                        <center><label class="control-label">{{ 'Liste des plugins les plus utilisés :' }}</label></center>
+                <div class="row setup-content" id="step-4">
+                    <div class="stepwizard col-md-offset-3">
+                        <h4 class="stepwizard-h4">{{ 'Installation de plugins ...' }}</h4>
+                        <div class="form-group">
+                            <center><label class="control-label">{{ 'Liste des plugins les plus utilisés :' }}</label></center>
+                        </div>
+                        <button id="toStep5" class="btn btn-primary nextBtn pull-right" type="button">{{ 'Suivant' }}<i class="fa fa-caret-right"></i></button>
+                        <button id="toStep3" class="btn btn-primary returnBtn pull-left" type="button"><i class="fa fa-caret-left"></i>{{ 'Précédent' }}</button>
                     </div>
-                    <button id="toStep5" class="btn btn-primary nextBtn pull-right" type="button">{{ 'Suivant' }}<i class="fa fa-caret-right"></i></button>
-                    <button id="toStep3" class="btn btn-primary returnBtn pull-left" type="button"><i class="fa fa-caret-left"></i>{{ 'Précédent' }}</button>
                 </div>
-            </div>
-            <div class="row setup-content" id="step-5">
-                <div class="stepwizard col-md-offset-3">
-                    <h4 class="stepwizard-h4">{{ 'Bravo ! La configuration de votre NextDom est terminée !' }}</h4>
-                    <div class="form-group">
-                        <center><label class="control-label">{{ 'Cliquer sur le bouton Terminer pour profiter de NextDom ...' }}</label></center>
+                <div class="row setup-content" id="step-5">
+                    <div class="stepwizard col-md-offset-3">
+                        <h4 class="stepwizard-h4">{{ 'Bravo ! La configuration de votre NextDom est terminée !' }}</h4>
+                        <div class="form-group">
+                            <center><label class="control-label">{{ 'Cliquer sur le bouton Terminer pour profiter de NextDom ...' }}</label></center>
+                        </div>
                     </div>
-                    <button id="finishConf" class="btn btn-primary btn-lg pull-right ui-icon-closethick" type="button">{{ 'Terminer' }}</button>
+                    <button id="finishConf" class="btn btn-primary pull-right ui-icon-closethick" type="button">{{ 'Terminer' }}</button>
                 </div>
             </div>
         </div>
     </div>
-{% if JS_END_POOL is defined %}
-    {% for jsFile in JS_END_POOL %}
-        <script src="{{ jsFile }}"></script>
-    {% endfor %}
-{% endif %}
+    {% if JS_END_POOL is defined %}
+        {% for jsFile in JS_END_POOL %}
+            <script src="{{ jsFile }}"></script>
+        {% endfor %}
+    {% endif %}
 </div>
