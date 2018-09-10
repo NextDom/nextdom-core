@@ -294,5 +294,10 @@ step_11_nextdom_check
 distrib_1_spe
 
 if [ "${isdev}" = "1" ] ; then
+    echo " "
+    echo "Installation dir  : ${WEBSERVER_HOME}"
+    echo "Database          : ${MYSQL_NEXTDOM_DB}"        
+    echo "Database user     : ${MYSQL_NEXTDOM_USER}"
+    echo "Database password : ${MYSQL_NEXTDOM_PASSWD}" 
     echo " >>>>> COMPLETED <<<<< "
 fi
