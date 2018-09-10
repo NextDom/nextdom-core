@@ -291,7 +291,7 @@ a {
 }
 
 .nav-tabs a {
-    padding: 10px 10px !important; 
+    padding: 10px 10px !important;
 }
 
 .nav-tabs i.fa, .nav-tabs i.fas {
@@ -315,10 +315,15 @@ a {
   background: linear-gradient(#33B8CC, #33B8FF);
   overflow: hidden;
 }
+
 .login-box,
 .register-box {
   width: 450px;
   margin: 7% auto;
+}
+
+.login-box-msg, .register-box-msg {
+    padding: 0 20px 7px 20px;
 }
 
 .login-box-body,
