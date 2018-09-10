@@ -37,36 +37,40 @@
         });
     });
     $("#toStep3").click(function () {
-        if ($('#in_change_password').val() == $('#in_change_passwordToo').val()) {
-            jeedom.user.get({
-                error: function (data) {
-                    notify("Core", data.message, "error");
-                },
-                success: function (data) {
-                    var user = data;
-                    user.password = $('#in_change_password').val();
-                    jeedom.user.saveProfils({
-                        profils: user,
-                        error: function (error) {
-                            notify("Core", error.message, "error");
-                        },
-                        success: function () {
-                        }
-                    });
-                }
-            });
-            nextdom.config.save({
-                configuration: {'nextdom::firstUse': 0},
-                error: function (error) {
-                    notify("Core", error.message, 'error');
-                },
-                success: function () {
-                    notify("Core", '{{Mot de passe changé avec success}}', 'success');
-                    NextStep("#toStep3");
-                }
-            });
+        if ($('#in_change_password').val() !="") {
+            if ($('#in_change_password').val() == $('#in_change_passwordToo').val()) {
+                jeedom.user.get({
+                    error: function (data) {
+                        notify("Core", data.message, "error");
+                    },
+                    success: function (data) {
+                        var user = data;
+                        user.password = $('#in_change_password').val();
+                        jeedom.user.saveProfils({
+                            profils: user,
+                            error: function (error) {
+                                notify("Core", error.message, "error");
+                            },
+                            success: function () {
+                            }
+                        });
+                    }
+                });
+                nextdom.config.save({
+                    configuration: {'nextdom::firstUse': 0},
+                    error: function (error) {
+                        notify("Core", error.message, 'error');
+                    },
+                    success: function () {
+                        notify("Core", '{{Mot de passe changé avec success}}', 'success');
+                        NextStep("#toStep3");
+                    }
+                });
+            } else {
+                notify("Erreur", "Les deux mots de passe ne sont pas identiques", "error")
+            }
         } else {
-            notify("Erreur", "Les deux mots de passe ne sont pas identiques", "error")
+            notify("Erreur", "Veuillez saisir un mot de passe", "error")
         }
     });
 
