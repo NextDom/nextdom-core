@@ -10,12 +10,19 @@ body {
   display: table-row;
 }
 
+.stepwizard-box {
+  border-bottom: 2px solid rgba(0,0,0,0.2);
+  border-top: 1px solid #d2d6de;
+}
+
 .stepwizard {
   display: table;
   width: 55%;
   position: relative;
   margin-left: auto;
   margin-right: auto;
+  padding-top:20px;
+  padding-bottom: 20px;
 }
 
 .stepwizard-step button[disabled] {
@@ -24,7 +31,7 @@ body {
 }
 
 .stepwizard-row:before {
-  top: 14px;
+  top: 35px;
   bottom: 0;
   position: absolute;
   content: " ";
@@ -66,6 +73,7 @@ body {
 #logo img {
   height: 100px;
   border-radius: 10px;
+  margin-bottom: 10px;
 }
 
 .stepwizard h1,
@@ -92,14 +100,14 @@ body {
   padding-right: 10px;
   margin-right: 20px;
   margin-top:20px;
-  margin-bottom:20px;
+  margin-bottom:7px;
 }
 
 .returnBtn{
   padding-left: 10px;
   margin-left: 20px;
   margin-top:20px;
-  margin-bottom:20px;
+  margin-bottom:7px;
 }
 
 .nextBtn i{
