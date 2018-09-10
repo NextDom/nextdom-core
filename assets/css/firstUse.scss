@@ -54,6 +54,7 @@ body {
 }
 
 .stepwizard-input {
+    margin-left: 25%;
     margin-bottom: 20px;
     width:50%;
 }
@@ -68,6 +69,27 @@ body {
   color: Black;
 }
 
-.stepwizard-h4 {
-    line-height:2;
+#logo img {
+  height: 100px;
+  border-radius: 10px;
+}
+
+.stepwizard h1,
+.stepwizard h3,
+.stepwizard h4 {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+@media (max-width: 991px) {
+  #market {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 2rem;
+  }
+}
+
+@media (min-width: 992px) {
+  #market {
+    border-right: 1px solid #CCC;
+  }
 }
