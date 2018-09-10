@@ -1,17 +1,23 @@
 <div class="box">
     <div class="box-header">
-        <legend><i class="fas fa-floppy-o"></i> {{ 'Taches' }}</legend>
+        <legend><i class="fas fa-floppy-o"></i> {{ 'Taches' }}
+            <a class="btn btn-success btn-xs pull-right" id="bt_save" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Enregistrer' }}</a>
+            <a class="btn btn-default btn-xs pull-right" id="bt_addCron" style="margin-top: 5px;"><i class="fas fa-plus-circle"></i> {{ 'Ajouter' }}</a>
+            <a class="btn btn-default btn-xs pull-right" id="bt_refreshCron" style="margin-top: 5px;"><i class="fas fa-refresh"></i> {{ 'Rafraîchir' }}</a>
+            {% if cronEnabled == 0 %}
+                <a class="btn btn-success pull-right" id="bt_changeCronState" data-state="1" style="margin-top: 5px;"><i class="fas fa-check"></i> {{ 'Activer le système cron' }}</a>
+            {% else %}
+                <a class="btn btn-danger pull-right" id="bt_changeCronState" data-state="0" style="margin-top: 5px;"><i class="fas fa-times"></i> {{ 'Désactiver le système cron' }}</a>
+            {% endif %}
+        </legend>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+        </div>
     </div>
     <div class="box-body">
-        <a class="btn btn-success pull-right" id="bt_save" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Enregistrer' }}</a>
-        <a class="btn btn-default pull-right" id="bt_addCron" style="margin-top: 5px;"><i class="fas fa-plus-circle"></i> {{ 'Ajouter' }}</a>
-        <a class="btn btn-default pull-right" id="bt_refreshCron" style="margin-top: 5px;"><i class="fas fa-refresh"></i> {{ 'Rafraîchir' }}</a>
-        {% if cronEnabled == 0 %}
-            <a class="btn btn-success pull-right" id="bt_changeCronState" data-state="1" style="margin-top: 5px;"><i class="fas fa-check"></i> {{ 'Activer le système cron' }}</a>
-        {% else %}
-            <a class="btn btn-danger pull-right" id="bt_changeCronState" data-state="0" style="margin-top: 5px;"><i class="fas fa-times"></i> {{ 'Désactiver le système cron' }}</a>
-        {% endif %}
-        <br/><br/>
+
         <table id="table_cron" class="table table-bordered table-condensed">
             <thead>
             <tr>
