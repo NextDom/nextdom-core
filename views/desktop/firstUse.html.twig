@@ -10,23 +10,23 @@
         <div class="stepwizard">
             <div class="stepwizard-row setup-panel">
                 <div class="stepwizard-step">
-                    <a href="#step-1" type="button" class="btn btn-primary stepwizard-btn-circle">1</a>
+                    <a href="#step-1" type="button" class="btn btn-primary stepwizard-btn-circle"></a>
                     <p>{{ 'Étape 1' }}</p>
                 </div>
                 <div class="stepwizard-step">
-                    <a href="#step-2" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled">2</a>
+                    <a href="#step-2" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled"></a>
                     <p>{{ 'Étape 2' }}</p>
                 </div>
                 <div class="stepwizard-step">
-                    <a href="#step-3" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled">3</a>
+                    <a href="#step-3" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled"></a>
                     <p>{{ 'Étape 3' }}</p>
                 </div>
                 <div class="stepwizard-step">
-                    <a href="#step-4" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled">4</a>
+                    <a href="#step-4" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled"></a>
                     <p>{{ 'Étape 4' }}</p>
                 </div>
                 <div class="stepwizard-step">
-                    <a href="#step-5" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled">5</a>
+                    <a href="#step-5" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled"></a>
                     <p>{{ 'Étape 5' }}</p>
                 </div>
             </div>
@@ -35,12 +35,13 @@
 </div>
 <div class="row">
     <div class="col-md-10 col-md-offset-1">
-        <div class="box">
+        <div class="box stepwizard-box">
             <div class="box-body">
                 <div class="row setup-content" id="step-1">
                     <div class="stepwizard col-md-offset-3">
                         <h1 class="login-box-msg">{{ 'Bienvenue sur NextDom' }}</h1>
-                        <p class="login-box-msg">{{ 'Cette page va vous guider dans le processus de configuration de Nextdom' }}</p>
+                        <p class="stepwizard-h4">{{ 'Bravo ! Vous venez d'installer votre solution domotique, l\'assistant de première utilisation est activé !' }}</p>
+                        <p class="stepwizard-h4">{{ 'Celui-ci va vous guider dans le processus de configuration de Nextdom ...' }}</p>
                     </div>
                     <button id="toStep2" class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:20px;margin-bottom:20px">{{ 'Suivant' }}<i class="fa fa-caret-right"></i></button>
                 </div>
