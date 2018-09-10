@@ -1,12 +1,12 @@
 {% include '/commons/header.html.twig' %}
 
 <div class="row text-center">
-    <div id="logo" class="col-sm-12">
+    <div id="logo" class="col-md-12 col-sm-12 col-xs-12">
         <img src="public/img/NextDom/NextDom_Wide_AlphaBlackBlue.png">
     </div>
 </div>
-<div class="row">
-    <div class="col-md-12">
+<div class="row text-center">
+    <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="stepwizard">
             <div class="stepwizard-row setup-panel">
                 <div class="stepwizard-step">
@@ -33,20 +33,21 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-8 col-md-offset-2">
+<div class="row text-center">
+    <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
         <div class="box stepwizard-box">
             <div class="box-body">
                 <div class="row setup-content" id="step-1">
-                    <div class="stepwizard col-md-offset-3">
+                    <div class="stepwizard">
                         <h2 class="login-box-msg">{{ 'Bienvenue sur NextDom !' }}</h2>
                         <h5>{{ 'Bravo ! Vous venez d\'installer votre solution domotique, l\'assistant de première utilisation est activé !' }}</h5>
-                        <h5>{{ 'Celui-ci va vous guider dans le processus de configuration de Nextdom ...' }}</h5>
+                        <h5>{{ 'Celui-ci va vous guider dans le processus de configuration de votre solution domotique ...' }}</h5>
                     </div>
                     <button id="toStep2" class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:20px;">{{ 'Suivant' }}<i class="fa fa-caret-right"></i></button>
                 </div>
                 <div class="row setup-content" id="step-2">
-                    <div class="stepwizard col-md-offset-3">
+                    <div class="stepwizard">
+                        <h2 class="login-box-msg">{{ 'Sécurisez votre NextDom !' }}</h2>
                         <h5>{{ 'Pour commencer, merci de définir un nouveau mot de passe administrateur pour améliorer la sécurité ...' }}</h5>
                         <div id="register" tabindex="500">
                             <div class="passwd stepwizard-passwd">
@@ -61,33 +62,21 @@
                     <button id="toStep1" class="btn btn-primary returnBtn pull-left" type="button" style="margin-top:20px;"><i class="fa fa-caret-left"></i>{{ 'Précédent' }}</button>
                 </div>
                 <div class="row setup-content" id="step-3">
-                    <div class="stepwizard col-md-offset-3">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <h3>{{ 'Compte Market' }}</h3>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <h5>{{ 'Ajout du Compte Market pour l\'installation de plugins ...' }}</h5>
-                            </div>
-                        </div>
+                    <div class="stepwizard">
+                        <h2 class="login-box-msg">{{ 'Connectez votre NextDom !' }}</h2>
+                        <h5>{{ 'En ajoutant ou connectant un Compte Market pour l\'installation de plugins ...' }}</h5>
                         <div class="row">
                             <div id="market" class="col-sm-12 col-md-6">
-                                <h3>{{ 'Je n\'ai pas de compte Market' }}</h3>
-                                <button class="dark btn-lg" id="bt_compte_market"><i class="fa fa-sign-in"></i> {{ 'Je veux en créer un' }}</button>
+                                <h5>{{ 'Je n\'ai pas de compte Market' }}</h5>
+                                <button class="dark btn" id="bt_compte_market"><i class="fa fa-sign-in"></i> {{ 'Je veux en créer un' }}</button>
                             </div>
                             <div class="col-sm-12 col-md-6">
-                                <div class="form-group">
-                                    <h3>{{ 'J\'ai un compte market' }}</h3>
-                                    <div class="mail">
-                                        <label>{{ 'Nom dutilisateur' }}</label>
-                                        <input type="text" id="in_login_username_market" class="stepwizard-input" placeholder="{{ 'Nom dutilisateur ...' }}">
-                                    </div>
-                                    <div class="passwd">
-                                        <label>{{ 'Mot de passe' }}</label>
-                                        <input type="password" id="in_login_password_market" class="stepwizard-input" placeholder="{{ 'Mot de passe ...' }}">
-                                    </div>
+                                <h5>{{ 'J\'ai un compte market' }}</h5>
+                                <div class="mail stepwizard-passwd">
+                                    <input type="text" id="in_login_username_market" class="stepwizard-input" placeholder="{{ 'Nom dutilisateur ...' }}">
+                                </div>
+                                <div class="passwd stepwizard-passwd">
+                                    <input type="password" id="in_login_password_market" class="stepwizard-input" placeholder="{{ 'Mot de passe ...' }}">
                                 </div>
                             </div>
                         </div>
@@ -97,15 +86,15 @@
                     <button id="toStep2" class="btn btn-primary returnBtn pull-left" type="button" style="margin-top:20px;"><i class="fa fa-caret-left"></i>{{ 'Précédent' }}<i class="fas fa-caret-left"></i></button>
                 </div>
                 <div class="row setup-content" id="step-4">
-                    <div class="stepwizard col-md-offset-3">
-                        <h5>{{ 'Installation de plugins ...' }}</h5>
-                        <h5>{{ 'Liste des plugins les plus utilisés :' }}</h5>
+                    <div class="stepwizard">
+                        <h2 class="login-box-msg">{{ 'Agrémentez votre NextDom !' }}</h2>
+                        <h5>{{ 'Par l\'installation de plugins dont voici les plus utilisés :' }}</h5>
                      </div>
                     <button id="toStep5" class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:20px;">{{ 'Suivant' }}<i class="fa fa-caret-right"></i></button>
                     <button id="toStep3" class="btn btn-primary returnBtn pull-left" type="button" style="margin-top:20px;"><i class="fa fa-caret-left"></i>{{ 'Précédent' }}</button>
                 </div>
                 <div class="row setup-content" id="step-5">
-                    <div class="stepwizard col-md-offset-3">
+                    <div class="stepwizard">
                         <h2 class="login-box-msg">{{ 'Bravo ! La configuration de votre NextDom est terminée !' }}</h2>
                         <h5>{{ 'Cliquer sur le bouton Terminer pour profiter de votre solution Domotique ...' }}</h5>
                     </div>
