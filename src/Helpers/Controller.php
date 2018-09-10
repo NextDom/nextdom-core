@@ -616,7 +616,9 @@ class Controller
 
         $report_path = NEXTDOM_ROOT . '/data/report/';
         $pageContent['reportViews'] = [];
-        foreach (\view::all() as $view) {
+        
+        $allViews = \view::all();
+        foreach ($allViews as $view) {
             $viewData           = [];
             $viewData['id']     = $view->getId();
             $viewData['name']   = $view->getName();
@@ -624,7 +626,9 @@ class Controller
             $pageContent['reportViews'][] = $viewData;
         }
         $pageContent['reportPlans'] = [];
-        foreach (\planHeader::all() as $plan) {
+        
+        $allPlanHeader = \planHeader::all();
+        foreach ($allPlanHeader as $plan) {
             $planData           = [];
             $planData['id']     = $plan->getId();
             $planData['name']   = $plan->getName();
@@ -632,7 +636,9 @@ class Controller
             $pageContent['reportPlans'][] = $planData;
         }
         $pageContent['reportPlugins'] = [];
-        foreach (PluginManager::listPlugin(true) as $plugin) {
+        
+        $pluginManagerList = PluginManager::listPlugin(true);
+        foreach ($pluginManagerList as $plugin) {
             if ($plugin->getDisplay() != '') {
                 $pluginData = [];
                 $pluginData['id']     = $plugin->getId();
@@ -666,7 +672,9 @@ class Controller
         $pageContent['JS_VARS']['sel_plugin_id'] = Utils::init('id', '-1');
         $pageContent['pluginsList'] = PluginManager::listPlugin();
         $pageContent['pluginReposList'] = [];
-        foreach (UpdateManager::listRepo() as $repoCode => $repoData) {
+        
+        $updateManagerListRepo = UpdateManager::listRepo();
+        foreach ($updateManagerListRepo as $repoCode => $repoData) {
             if ($repoData['enable'] && isset($repoData['scope']['hasStore']) && $repoData['scope']['hasStore']) {
                 $pageContent['pluginReposList'][$repoCode] = $repoData;
             }
@@ -739,7 +747,8 @@ class Controller
         $pageContent['editorFolders']  = [];
         $pageContent['editorRootPath'] = NEXTDOM_ROOT;
 
-        foreach (\ls(NEXTDOM_ROOT, '*', false, array('folders')) as $folder) {
+        $lsNextDomRoot = \ls(NEXTDOM_ROOT, '*', false, array('folders'));
+        foreach ($lsNextDomRoot as $folder) {
             $pageContent['editorFolders'][] = $folder;
         }
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/editor.js';
@@ -967,7 +976,9 @@ class Controller
             'core::view' => __('Vue'),
             'core::plan' => __('Design'),
         );
-        foreach (PluginManager::listPlugin() as $pluginList) {
+        
+        $pluginMangerList = PluginManager::listPlugin();
+        foreach ($pluginMangerList as $pluginList) {
             if ($pluginList->isActive() == 1 && $pluginList->getDisplay() != '') {
                 $pageContent['profilsHomePage'][$pluginList->getId() . '::' . $pluginList->getDisplay()] = $pluginList->getName();
             }
@@ -975,13 +986,15 @@ class Controller
         $pageContent['profilsUser'] = $_SESSION['user'];
         $pageContent['profilsSessionsList'] = listSession();
         $pageContent['profilsDesktopThemes'] = [];
-        foreach (ls(NEXTDOM_ROOT . '/css/themes') as $dir) {
+        
+        $lsCssThemes = ls(NEXTDOM_ROOT . '/css/themes');
+        foreach ($lsCssThemes as $dir) {
             if (is_dir(NEXTDOM_ROOT . '/css/themes/' . $dir . '/desktop')) {
                 $pageContent['profilsDesktopThemes'][] = trim($dir, '/');
             }
         }
         $pageContent['profilsMobileThemes'] = [];
-        foreach (ls(NEXTDOM_ROOT . '/css/themes') as $dir) {
+        foreach ($lsCssThemes as $dir) {
             if (is_dir(NEXTDOM_ROOT . '/css/themes' . $dir . '/mobile')) {
                 $pageContent['profilsDesktopThemes'][] = trim($dir, '/');
             }
@@ -1100,7 +1113,8 @@ class Controller
 
         $pageContent['eqAnalyzeEqLogicList'] = [];
 
-        foreach (EqLogicManager::all() as $eqLogic) {
+        $eqLogicMangerAll = EqLogicManager::all();
+        foreach ($eqLogicMangerAll as $eqLogic) {
             $battery_type = str_replace(array('(', ')'), ['', ''], $eqLogic->getConfiguration('battery_type', ''));
             if ($eqLogic->getStatus('battery', -2) != -2) {
                 $pageContent['eqAnalyzeEqLogicList'][] = $eqLogic;
@@ -1118,13 +1132,14 @@ class Controller
 
 
         $cmdDataArray = [];
-        foreach (EqLogicManager::all() as $eqLogic) {
+        foreach ($eqLogicMangerAll as $eqLogic) {
             $cmdData = [];
             $cmdData['eqLogic']    = $eqLogic;
             $cmdData['infoCmds']   = [];
             $cmdData['actionCmds'] = [];
 
-            foreach ($eqLogic->getCmd('info') as $cmd) {
+            $eqlogicGetCmdInfo = $eqLogic->getCmd('info');
+            foreach ($eqlogicGetCmdInfo as $cmd) {
                 if (count($cmd->getConfiguration('actionCheckCmd', array())) > 0) {
                     $data = [];
                     $data['cmd'] = $cmd;
@@ -1135,19 +1150,23 @@ class Controller
                     $cmdData['infoCmds'][] = $data;
                 }
             }
-            foreach ($eqLogic->getCmd('action') as $cmd) {
+            
+            $eqLogicGetCmdAction = $eqLogic->getCmd('action');
+            foreach ($eqLogicGetCmdAction as $cmd) {
                 $actionCmdData = [];
                 $actionCmdData['cmd'] = $cmd;
 
-                if (count($cmd->getConfiguration('nextdomPreExecCmd', array())) > 0) {
+                if (count($cmd->getConfiguration('nextdomPreExecCmd', [])) > 0) {
                     $actionCmdData['preExecCmds'] = [];
-                    foreach ($cmd->getConfiguration('nextdomPreExecCmd') as $actionCmd) {
+                    
+                    $cmdGetConfigurationNextdomPreExecCmd = $cmd->getConfiguration('nextdomPreExecCmd');
+                    foreach ($cmdGetConfigurationNextdomPreExecCmd as $actionCmd) {
                         $actionCmdData['preExecCmds'][] = ScenarioExpressionManager::humanAction($actionCmd);
                     }
                 }
-                if (count($cmd->getConfiguration('nextdomPostExecCmd', array())) > 0) {
+                if (count($cmd->getConfiguration('nextdomPostExecCmd', [])) > 0) {
                     $actionCmdData['postExecCmds'] = [];
-                    foreach ($cmd->getConfiguration('nextdomPostExecCmd') as $actionCmd) {
+                    foreach ($cmdGetConfigurationNextdomPreExecCmd  as $actionCmd) {
                         $actionCmdData['postExecCmds'][] = ScenarioExpressionManager::humanAction($actionCmd);
                     }
                 }
@@ -1158,10 +1177,14 @@ class Controller
         $pageContent['eqAnalyzeCmdData'] = $cmdDataArray;
 //TODO: Imbriquer les boucles quand le fonctionnement sera sûr
         $pageContent['eqAnalyzeAlerts'] = [];
-        foreach (EqLogicManager::all() as $eqLogic) {
+        
+        $eqLogicManagerAll = EqLogicManager::all();
+        foreach ($eqLogicManagerAll as $eqLogic) {
             $hasSomeAlerts = 0;
+            
             $listCmds = [];
-            foreach ($eqLogic->getCmd('info') as $cmd) {
+            $eqLogicGetCmdInfo = $eqLogic->getCmd('info');
+            foreach ($eqLogicGetCmdInfo as $cmd) {
                 foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
 
                     if ($value['check']) {
@@ -1198,8 +1221,7 @@ class Controller
                                 $during = '';
                                 if ($cmdalert->getAlert($level . 'during', '') == '') {
                                     $during = ' effet immédiat';
-                                }
-                                else {
+                                } else {
                                     $during = ' pendant plus de ' . $cmdalert->getAlert($level . 'during', '') . ' minute(s)';
                                 }
                                 $alertData['msg'] = ucfirst($level) . ' si ' . \nextdom::toHumanReadable(str_replace('#value#', '<b>' . $cmdalert->getName() . '</b>', $cmdalert->getAlert($level . 'if', ''))) . $during . '</br>';
@@ -1217,7 +1239,9 @@ class Controller
         $pageContent['eqAnalyzeScenarioDeadCmd']    = ScenarioManager::consystencyCheck(true);
         $pageContent['eqAnalyzeInteractDefDeadCmd'] = \interactDef::deadCmd();
         $pageContent['eqAnalyzePluginDeadCmd']      = [];
-        foreach(PluginManager::listPlugin(true) as $plugin) {
+        
+        $pluginManagerListPluginTrue = PluginManager::listPlugin(true);
+        foreach($pluginManagerListPluginTrue as $plugin) {
             $pluginId = $plugin->getId();
             if (method_exists($pluginId, 'deadCmd')) {
                 $pageContent['eqAnalyzePluginDeadCmd'][] = $pluginId::deadCmd();
@@ -1401,7 +1425,7 @@ class Controller
 
         global $NEXTDOM_INTERNAL_CONFIG;
 
-        $sourcesList = array();
+        $sourcesList = [];
 
         foreach ($NEXTDOM_INTERNAL_CONFIG['nextdom_market']['sources'] as $source) {
             // TODO: Limiter les requêtes
