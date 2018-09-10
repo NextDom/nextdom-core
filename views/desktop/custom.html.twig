@@ -1,44 +1,112 @@
-<div class="alert alert-warning" id="div_spanAlertMessage">
-    {{ 'Attention : tout ce que vous écrivez ici est global et inclus sur toutes les pages. La moindre erreur peut rendre votre' }} {{ customProductName }} {{ 'non fonctionel.' }}
-    <span class="pull-right">
-    {{ 'Activer' }} : <input type="checkbox" class="configKey" data-l1key="enableCustomCss" checked/>
-   </span>
-</div>
-<div role="tabpanel">
-    <ul class="nav nav-tabs" role="tablist">
-        <li class="active"><a href="#desktop" aria-controls="home" role="tab" data-toggle="tab">{{ 'Desktop' }}</a></li>
-        <li><a href="#mobile" aria-controls="profile" role="tab" data-toggle="tab">{{ 'Mobile' }}</a></li>
-    </ul>
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="desktop">
-            <div class="row">
-                <div class="col-xs-6">
-                    <legend>{{ 'Javascript' }}
-                        <a class="btn btn-success pull-right btn-xs saveCustom" data-version="desktop" data-type="js" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-                    </legend>
-                    <textarea id="ta_jsDesktopContent">{{ customJS }}</textarea>
+<div>
+    <div class="box-header">
+        <legend><i class="fa fa-cog"></i> {{ 'Personalisaton de Nextdom' }}</legend>
+        <a class="btn btn-success pull-right" id="bt_saveGeneraleConfig"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+    </div>
+    <div box-body>
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-wrench"></i> {{ 'Général' }}</a></li>
+                <li role="presentation"><a href="#colortab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-key"></i> {{ 'couleur' }}</a></li>
+                <li role="presentation"><a href="#advanced" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-terminal"></i> {{ 'avancée' }}</a></li>
+            </ul>
+            <div class="global-tab-content tab-content">
+                <div role="tabpanel" class="tab-pane" id="generaltab">
                 </div>
-                <div class="col-xs-6">
-                    <legend>{{ 'CSS' }}
-                        <a class="btn btn-success pull-right btn-xs saveCustom" data-version="desktop" data-type="css" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-                    </legend>
-                    <textarea id="ta_cssDesktopContent" style="height:auto;">{{ customCSS }}</textarea>
+                <div role="tabpanel" class="tab-pane" id="colortab">
+                    <br/>
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Opacité par défaut des widgets' }}</label>
+                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                    <input type="numeric" class="configKey form-control" data-l1key="widget::background-opacity"/>
+                                </div>
+                            </div>
+                            <div id="colortab-list">
+                                {% for category, categoryData in adminCategories %}
+
+                                    <legend>'{{ categoryData['name'] }}</legend>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{ 'Dashboard couleur de fond' }}</label>
+                                        <div class="col-sm-2">
+                                            <input type="color" class="configKey form-control cursor noSet input-sm" data-l1key="eqLogic:category:{{ category }}:color" value="{{ categoryData['color'] }}"/>
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <a class="btn btn-default btn-sm bt_resetColor" data-l1key="eqLogic:category:{{ category }}:color" title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                                        </div>
+                                        <label class="col-sm-3 control-label">{{ 'Dashboard couleur commande' }}</label>
+                                        <div class="col-sm-2">
+                                            <input type="color" class="configKey form-control cursor noSet input-sm" data-l1key="eqLogic:category:{{ category }}:cmdColor" value="{{ categoryData['cmdColor'] }}"/>
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <a class="btn btn-default btn-sm bt_resetColor" data-l1key="eqLogic:category:{{ category }}:cmdColor" title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{ 'Mobile couleur de fond' }}</label>
+                                        <div class="col-sm-2">
+                                            <input type="color" class="configKey form-control cursor noSet input-sm" data-l1key="eqLogic:category:{{ category }}:mcolor" value="{{ categoryData['mcolor'] }}"/>
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <a class="btn btn-default btn-sm bt_resetColor" data-l1key="eqLogic:category:{{ category }}:mcolor" title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                                        </div>
+                                        <label class="col-sm-3 control-label">{{ 'Mobile couleur commande' }}</label>
+                                        <div class="col-sm-2">
+                                            <input type="color" class="configKey form-control cursor noSet input-sm" data-l1key="eqLogic:category:{{ category }}:mcmdColor" value="{{ categoryData['mcmdColor'] }}"/>
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <a class="btn btn-default btn-sm bt_resetColor" data-l1key="eqLogic:category:{{ category }}:mcmdColor" title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </fieldset>
+                    </form>
                 </div>
-            </div>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="mobile">
-            <div class="row">
-                <div class="col-xs-6">
-                    <legend>{{ 'Javascript' }}
-                        <a class="btn btn-success pull-right btn-xs saveCustom" data-version="mobile" data-type="js" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-                    </legend>
-                    <textarea id="ta_jsMobileContent" style="height:auto;">{{ customMobileJS }}</textarea>
-                </div>
-                <div class="col-xs-6">
-                    <legend>{{ 'CSS' }}
-                        <a class="btn btn-success pull-right btn-xs saveCustom" data-version="mobile" data-type="css" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-                    </legend>
-                    <textarea id="ta_cssMobileContent" style="height:auto;">{{ customMobileCSS }}</textarea>
+                <div role="tabpanel" class="tab-pane" id="advanced">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="active"><a href="#desktop" aria-controls="home" role="tab" data-toggle="tab">{{ 'Desktop' }}</a></li>
+                        <li><a href="#mobile" aria-controls="profile" role="tab" data-toggle="tab">{{ 'Mobile' }}</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="alert alert-warning" id="div_spanAlertMessage">
+                            {{ 'Attention : tout ce que vous écrivez ici est global et inclus sur toutes les pages. La moindre erreur peut rendre votre' }} {{ customProductName }} {{ 'non fonctionel.' }}
+                            <span class="pull-right"> {{ 'Activer' }} : <input type="checkbox" class="configKey" data-l1key="enableCustomCss" checked/> </span>
+                        </div>
+                        <div role="tabpanel" class="tab-pane active" id="desktop">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <legend>{{ 'Javascript' }}
+                                        <a class="btn btn-success pull-right btn-xs saveCustom" data-version="desktop" data-type="js" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+                                    </legend>
+                                    <textarea id="ta_jsDesktopContent">{{ customJS }}</textarea>
+                                </div>
+                                <div class="col-xs-6">
+                                    <legend>{{ 'CSS' }}
+                                        <a class="btn btn-success pull-right btn-xs saveCustom" data-version="desktop" data-type="css" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+                                    </legend>
+                                    <textarea id="ta_cssDesktopContent" style="height:auto;">{{ customCSS }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="mobile">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <legend>{{ 'Javascript' }}
+                                        <a class="btn btn-success pull-right btn-xs saveCustom" data-version="mobile" data-type="js" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+                                    </legend>
+                                    <textarea id="ta_jsMobileContent" style="height:auto;">{{ customMobileJS }}</textarea>
+                                </div>
+                                <div class="col-xs-6">
+                                    <legend>{{ 'CSS' }}
+                                        <a class="btn btn-success pull-right btn-xs saveCustom" data-version="mobile" data-type="css" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+                                    </legend>
+                                    <textarea id="ta_cssMobileContent" style="height:auto;">{{ customMobileCSS }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
