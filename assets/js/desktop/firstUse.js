@@ -102,7 +102,7 @@
     });
     $("#skipStep4").click(function () {
         NextStep("#toStep4");
-    }
+    });
 
     $("#finishConf").click(function () {
         Location.reload();
