@@ -86,6 +86,34 @@
         content = editor.getValue();
     }
 
+     $("#bt_saveGeneraleConfig").on('click', function (event) {
+         $.hideAlert();
+         saveConvertColor();
+         saveObjectSummary();
+         var config = $('#config').getValues('.configKey')[0];
+         config.actionOnMessage = json_encode($('#div_actionOnMessage .actionOnMessage').getValues('.expressionAttr'));
+         nextdom.config.save({
+             configuration: config,
+             error: function (error) {
+                 notify("Erreur", error.message, 'error');
+             },
+             success: function () {
+                 nextdom.config.load({
+                     configuration: $('#config').getValues('.configKey:not(.noSet)')[0],
+                     error: function (error) {
+                         notify("Erreur", error.message, 'error');
+                     },
+                     success: function (data) {
+                         $('#config').setValues(data, '.configKey');
+                         loadAactionOnMessage();
+                         modifyWithoutSave = false;
+                         notify("Info", '{{Sauvegarde réussie}}', 'success');
+                     }
+                 });
+             }
+         });
+     });
+
     nextdom.config.save({
         configuration: $('#div_spanAlertMessage').getValues('.configKey')[0],
         error: function (error) {
