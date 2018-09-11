@@ -1,418 +1,418 @@
-    {#
+{#
 
-    /* This file is part of NextDom.
-    *
-    * NextDom is free software: you can redistribute it and/or modify
-    * it under the terms of the GNU General Public License as published by
-    * the Free Software Foundation, either version 3 of the License, or
-    * (at your option) any later version.
-    *
-    * NextDom is distributed in the hope that it will be useful,
-    * but WITHOUT ANY WARRANTY; without even the implied warranty of
-    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-    * GNU General Public License for more details.
-    *
-    * You should have received a copy of the GNU General Public License
-    * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
-    */
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
 
-    #}
-    <header class="main-header">
+#}
+<header class="main-header">
 
-        <!-- Logo -->
-        <a href="{{ HOMELINK }}" class="logo">
-            <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><img class="logo-mini-img" src="/public/img/NextDom/NextDom_Square_AlphaBlackBlue.png" style="height:40px;width:auto"/></span>
-            <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><img class="logo-lg-img" src="/public/img/NextDom/NextDom_Wide_AlphaBlueBlack.png" style="height:40px;width:auto"/></span>
+    <!-- Logo -->
+    <a href="{{ HOMELINK }}" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><img class="logo-mini-img" src="/public/img/NextDom/NextDom_Square_AlphaBlackBlue.png" style="height:40px;width:auto"/></span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><img class="logo-lg-img" src="/public/img/NextDom/NextDom_Wide_AlphaBlueBlack.png" style="height:40px;width:auto"/></span>
+    </a>
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+            <span class="sr-only">Toggle navigation</span>
         </a>
-
-        <!-- Header Navbar: style can be found in header.less -->
-        <nav class="navbar navbar-static-top">
-            <!-- Sidebar toggle button-->
-            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-                <span class="sr-only">Toggle navigation</span>
-            </a>
-            <!-- Navbar Right Menu -->
-            <div class="navbar-custom-menu">
-                <ul class="nav navbar-nav">
-                    <!-- Notifications: style can be found in dropdown.less -->
-                    <li>
-  											<a href="#" style="cursor:default;">
-  												  <span id="horloge_short">14:11:46</span>
-  											</a>
-										</li>
-                    <li class="dropdown notifications-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fas fa-bell notifbadge"></i>
-                            <span class="label label-warning notifcounter">{{ MENU_NB_MESSAGES }}</span>
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <!-- Notifications: style can be found in dropdown.less -->
+                <li>
+                    <a href="#" style="cursor:default;">
+                        <span id="horloge_short">14:11:46</span>
+                    </a>
+                </li>
+                <li class="dropdown notifications-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fas fa-bell notifbadge"></i>
+                        <span class="label label-warning notifcounter">{{ MENU_NB_MESSAGES }}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for message in messages |slice(0, 15) %}
+                            <li>
+                                <a class="removeMessage" href="#"><i class="fa fa-circle-o"> {{ message.getPlugin() }}: {{ message.getMessage | slice(0, 25) }} ... </i></a>
+                            </li>
+                        {% endfor %}
+                        <li class="footer" id="bt_messageModal"><a href="#">View all</a></li>
+                    </ul>
+                </li>
+                <!-- Tasks: style can be found in dropdown.less -->
+                {% if IS_ADMIN %}
+                    <li class="tasks-menu">
+                        <a href="index.php?v=d&p=update">
+                            <i class="fas fa-flag notifbadge"></i>
+                            <span class="label label-danger notifcounter">{{ MENU_NB_UPDATES }}</span>
                         </a>
-                        <ul class="dropdown-menu">
-                            {% for message in messages |slice(0, 15) %}
-                                <li>
-                                    <a class="removeMessage" href="#"><i class="fa fa-circle-o"> {{ message.getPlugin()}}: {{ message.getMessage | slice(0, 25) }} ... </i></a>
-                                </li>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+
+    </nav>
+</header>
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <div class="user-panel">
+            <div class="pull-left image">
+                {% if USER_AVATAR == "" %}
+                    <a href="/index.php?v=d&p=profils#profil"><img src="/public/img/profils/noPicture.gif" class="img-circle" alt="User Image"></a>
+                {% else %}
+                    <a href="/index.php?v=d&p=profils#profil"><img src="{{ USER_AVATAR }}" class="img-circle" alt="User Image"></a>
+                {% endif %}            </div>
+            <div class="pull-left info">
+                <p>{{ USER_LOGIN }}</p>
+                {% if USER_ISCONNECTED %}
+                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                {% else %}
+                    <a href="#"><i class="fa fa-circle text-danger"></i> Offline</a>
+                {% endif %}
+            </div>
+        </div>
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">MENU PRINCIPAL</li>
+            <li class="active treeview menu-open">
+                <a href="#"><i class="fa fa-home"></i> <span> Accueil </span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-dashboard"></i> Dashboard <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                        <ul class="treeview-menu">
+                            <li class="treeview-menu">
+                            <li><a href="index.php?v=d&p=dashboard">Afficher tout</a></li>
+                            {% for jeeObject in MENU_JEEOBJECT_TREE %}
+                                <li><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
                             {% endfor %}
-                            <li class="footer" id="bt_messageModal"><a href="#">View all</a></li>
+
                         </ul>
                     </li>
-                    <!-- Tasks: style can be found in dropdown.less -->
-                    {% if IS_ADMIN %}
-                        <li class="tasks-menu">
-                            <a href="index.php?v=d&p=update">
-                                <i class="fas fa-flag notifbadge"></i>
-                                <span class="label label-danger notifcounter">{{ MENU_NB_UPDATES }}</span>
-                            </a>
-                        </li>
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-picture-o"></i> Vue(s) <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                        <ul class="treeview-menu">
+                            <li class="treeview-menu">
+                            <li><a href="index.php?v=d&p=view">Afficher tout</a></li>
+                            {% for view in MENU_VIEWS_LIST %}
+                                <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">{{ view.getDisplay('icon')|trim }} {{ viewMenu.getName() }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#"><i class="fas fa-object-group"></i> Design(s) <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                        <ul class="treeview-menu">
+                            <li class="treeview-menu">
+                            <li><a href="index.php?v=d&p=plan">Afficher tout</a></li>
+                            {% for plan in MENU_PLANS_LIST %}
+                                <li><a href="index.php?v=d&p=plan&plan_id={{ plan.getId() }}">{{ plan.getConfiguration('icon')|trim }} {{ plan.getName() }}</a></li>
+                            {% endfor %}
+
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#"><i class="fas fa-building"></i> Plan(s) 3D <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                        <ul class="treeview-menu">
+                            <li class="treeview-menu">
+                            <li><a href="index.php?v=d&p=plan3d">Afficher tout</a></li>
+                            {% for plan3d in MENU_PLANS3D_LIST %}
+                                <li><a href="index.php?v=d&p=plan3d&plan3d_id={{ plan3d.getId() }}">{{ plan3d.getConfiguration('icon')|trim }} {{ plan3d.getName() }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-puzzle-piece"></i> <span>Plugins</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    <li class="treeview"><a href="index.php?v=d&p=plugin"><i class="fa fa-tags"></i> {{ 'Gestion' }}</a></li>
+                    {# {{ pluginMenu | raw }}#}
+                    {% if MENU_PLUGIN_CATEGORY is defined %}
+                        {% for category, categoryData in MENU_PLUGIN_CATEGORY %}
+                            <li class="treeview">
+                                <a data-toggle="dropdown"><i class="fa {{ categoryData.icon }}"></i> {{ categoryData.name }}</a>
+                                <ul class="treeview-menu">
+                                    {% for plugin in MENU_PLUGIN[category] %}
+                                        <li class="plugin-item"><a href="index.php?v=d&m={{ plugin.id }}&p={{ plugin.index }}"><img class="img-responsive" src="{{ plugin.pathImgIcon }}"/> {{ plugin.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            </li>
+                        {% endfor %}
                     {% endif %}
                 </ul>
-            </div>
-
-        </nav>
-    </header>
-    <!-- Left side column. contains the logo and sidebar -->
-    <aside class="main-sidebar">
-        <!-- sidebar: style can be found in sidebar.less -->
-        <section class="sidebar">
-            <div class="user-panel">
-                <div class="pull-left image">
-                    {% if USER_AVATAR == "" %}
-                        <a href="/index.php?v=d&p=profils#profil"><img src="/public/img/profils/noPicture.gif" class="img-circle" alt="User Image"></a>
-                    {% else %}
-                        <a href="/index.php?v=d&p=profils#profil"><img src="{{ USER_AVATAR }}" class="img-circle" alt="User Image"></a>
-                    {% endif %}            </div>
-                <div class="pull-left info">
-                    <p>{{ USER_LOGIN }}</p>
-                    {% if USER_ISCONNECTED %}
-                        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-                    {% else %}
-                        <a href="#"><i class="fa fa-circle text-danger"></i> Offline</a>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-th-list"></i>
+                    <span>Outils</span>
+                    <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="index.php?v=d&p=object"><i class="fa fa-picture-o"></i> {{ 'Objets' }}</a></li>
+                    <li><a href="index.php?v=d&p=interact"><i class="fa fa-comments-o"></i> {{ 'Interactions' }}</a></li>
+                    <li><a href="index.php?v=d&p=display"><i class="fa fa-th"></i> {{ 'Résumé domotique' }}</a></li>
+                    <li><a href="index.php?v=d&p=scenario"><i class="fas fa-film"></i> {{ 'Scénarios' }}</a></li>
+                </ul>
+            </li>
+            <li class="header">MENU REGLAGES</li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-stethoscope"></i>
+                    <span>Analyse</span>
+                    <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="index.php?v=d&p=history"><i class="fa fa-bar-chart-o"></i> {{ 'Historique' }}</a></li>
+                    <li><a href="index.php?v=d&p=report"><i class="fa fa-newspaper-o"></i> {{ 'Rapports' }}</a></li>
+                    <li><a href="#" id="bt_showEventInRealTime"><i class="fa fa-tachometer"></i> {{ 'Temps réel' }}</a></li>
+                    <li><a href="index.php?v=d&p=log"><i class="fa fa-file-o"></i> {{ 'Logs' }}</a></li>
+                    <li><a href="index.php?v=d&p=eqAnalyse"><i class="fa fa-battery-full"></i> {{ 'Equipements' }}</a></li>
+                    <li><a href="index.php?v=d&p=health"><i class="fa fa-medkit"></i> {{ 'Santé' }}</a></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-paint-brush"></i>
+                    <span>Thème</span>
+                    <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                </a>
+                <ul class="treeview-menu list-unstyled clearfix">
+                    <li style="float:left; width: 50%;">
+                        <a href="javascript:void(0)" data-skin="skin-nextdom" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
+                                <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                            </div>
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                                <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                            </div>
+                        </a>
+                        <a class="text-center no-margin">Nextdom</a>
+                    </li>
+                    <li style="float:left; width: 50%;"><a href="javascript:void(0)" data-skin="skin-nextdom-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
+                                <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                            </div>
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                            </div>
+                        </a>
+                        <a class="text-center no-margin">Light</a>
+                    </li>
+                    <li style="float:left; width: 50%;">
+                        <a href="javascript:void(0)" data-skin="skin-blue" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
+                                <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                            </div>
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                                <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                            </div>
+                        </a>
+                        <a class="text-center no-margin">Blue</a>
+                    </li>
+                    <li style="float:left; width: 50%;"><a href="javascript:void(0)" data-skin="skin-blue-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
+                                <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                            </div>
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                            </div>
+                        </a>
+                        <a class="text-center no-margin">Light</a>
+                    </li>
+                    <li style="float:left; width: 50%;">
+                        <a href="javascript:void(0)" data-skin="skin-black" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                            <div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix">
+                                <span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe"></span>
+                                <span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe"></span>
+                            </div>
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 20px; background: #222"></span>
+                                <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                            </div>
+                        </a>
+                        <a class="text-center no-margin">Black</a>
+                    </li>
+                    <li style="float:left; width: 50%;">
+                        <a href="javascript:void(0)" data-skin="skin-black-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                            <div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix">
+                                <span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe"></span>
+                                <span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe"></span>
+                            </div>
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                            </div>
+                        </a>
+                        <a class="text-center no-margin">Light</a>
+                    </li>
+                    <li style="float:left; width: 50%;">
+                        <a href="javascript:void(0)" data-skin="skin-purple" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span>
+                                <span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                            </div>
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                                <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                            </div>
+                        </a>
+                        <a class="text-center no-margin">Purple</a>
+                    </li>
+                    <li style="float:left; width: 50%;">
+                        <a href="javascript:void(0)" data-skin="skin-purple-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span>
+                                <span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                            </div>
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                            </div>
+                        </a>
+                        <a class="text-center no-margin">Light</a>
+                    </li>
+                    <li style="float:left; width: 50%;">
+                        <a href="javascript:void(0)" data-skin="skin-green" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span>
+                                <span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                            </div>
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                                <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                            </div>
+                        </a>
+                        <a class="text-center no-margin">Green</a>
+                    </li>
+                    <li style="float:left; width: 50%;">
+                        <a href="javascript:void(0)" data-skin="skin-green-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span>
+                                <span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                            </div>
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                            </div>
+                        </a>
+                        <a class="text-center no-margin">Light</a>
+                    </li>
+                    <li style="float:left; width: 50%;"><a href="javascript:void(0)" data-skin="skin-red" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span>
+                                <span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                            </div>
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                                <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                            </div>
+                        </a>
+                        <a class="text-center no-margin">Red</a>
+                    </li>
+                    <li style="float:left; width: 50%;">
+                        <a href="javascript:void(0)" data-skin="skin-red-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span>
+                                <span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                            </div>
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                            </div>
+                        </a>
+                        <a class="text-center no-margin">Light</a>
+                    </li>
+                    <li style="float:left; width: 50%;">
+                        <a href="javascript:void(0)" data-skin="skin-yellow" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span>
+                                <span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                            </div>
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                                <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                            </div>
+                        </a>
+                        <a class="text-center no-margin">Yellow</a>
+                    </li>
+                    <li style="float:left; width: 50%;">
+                        <a href="javascript:void(0)" data-skin="skin-yellow-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span>
+                                <span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                            </div>
+                            <div>
+                                <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                            </div>
+                        </a>
+                        <a class="text-center no-margin">Light</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-cog"></i>
+                    <span>Expert</span>
+                    <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="index.php?v=d&p=administration"><i class="fa fa-wrench"></i> {{ 'Configuration' }}</a></li>
+                    <li><a href="index.php?v=d&p=backup"><i class="fas fa-save"></i> {{ 'Sauvegardes' }}</a></li>
+                    <li><a href="index.php?v=d&p=migration"><i class="fas fa-fighter-jet"></i> {{ 'Migration' }}</a></li>
+                    <li><a href="index.php?v=d&p=update"><i class="fa fa-refresh"></i> {{ 'Mises à jour' }}</a></li>
+                    <li><a href="index.php?v=d&p=cron"><i class="fa fa-tasks"></i> {{ 'Tâches' }}</a></li>
+                    <li><a href="index.php?v=d&p=custom"><i class="fas fa-pencil-square"></i> {{ 'Personnalisation' }}</a></li>
+                    <li><a href="index.php?v=d&p=user"><i class="fas fa-users"></i> {{ 'Utilisateurs' }}</a></li>
+                    <li><a href="index.php?v=d&p=profils"><i class="fa fa-briefcase"></i> {{ 'Profils' }}</a></li>
+                    <li><a class="fa fa-ellipsis-h"></a></li>
+                    <li><a href="index.php?v=m"><i class="fas fa-mobile-alt"></i> {{ 'Version mobile' }}</a></li>
+                    <li><a><i class="fa fa-info-circle"></i> {{ 'Version' }} {{ NEXTDOM_VERSION }}</a></li>
+                    <li><a class="fa fa-ellipsis-h"></a></li>
+                    <li><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock"></i> {{ 'Se déconnecter' }}</a></li>
+                    {% if IS_ADMIN and CAN_SUDO %}
+                        <li><a id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i> {{ 'Redémarrer' }}</a></li>
+                        <li><a id="bt_haltSystem" state="0"><i class="fa fa-power-off"></i> {{ 'Eteindre' }}</a></li>
                     {% endif %}
-                </div>
-            </div>
-            <!-- sidebar menu: : style can be found in sidebar.less -->
-            <ul class="sidebar-menu" data-widget="tree">
-                <li class="header">MENU PRINCIPAL</li>
-                <li class="active treeview menu-open">
-                    <a href="#"><i class="fa fa-home"></i> <span> Accueil </span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                    <ul class="treeview-menu">
-                        <li class="treeview">
-                            <a href="#"><i class="fa fa-dashboard"></i> Dashboard <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                            <ul class="treeview-menu">
-                                <li class="treeview-menu">
-                                <li><a href="index.php?v=d&p=dashboard">Afficher tout</a></li>
-                                    {% for jeeObject in MENU_JEEOBJECT_TREE %}
-                                <li><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
-                                {% endfor %}
+                </ul>
+            </li>
 
-                            </ul>
-                        </li>
-                        <li class="treeview">
-                            <a href="#"><i class="fa fa-picture-o"></i> Vue(s) <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                            <ul class="treeview-menu">
-                                <li class="treeview-menu">
-                                <li><a href="index.php?v=d&p=view">Afficher tout</a></li>
-                                    {% for view in MENU_VIEWS_LIST %}
-                                <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">{{ view.getDisplay('icon')|trim }} {{ viewMenu.getName() }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                        <li class="treeview">
-                            <a href="#"><i class="fas fa-object-group"></i> Design(s) <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                            <ul class="treeview-menu">
-                                <li class="treeview-menu">
-                                <li><a href="index.php?v=d&p=plan">Afficher tout</a></li>
-                                    {% for plan in MENU_PLANS_LIST %}
-                                <li><a href="index.php?v=d&p=plan&plan_id={{ plan.getId() }}">{{ plan.getConfiguration('icon')|trim }} {{ plan.getName() }}</a></li>
-                                {% endfor %}
-
-                            </ul>
-                        </li>
-                        <li class="treeview">
-                            <a href="#"><i class="fas fa-building"></i> Plan(s) 3D <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                            <ul class="treeview-menu">
-                                <li class="treeview-menu">
-                                <li><a href="index.php?v=d&p=plan3d">Afficher tout</a></li>
-                                    {% for plan3d in MENU_PLANS3D_LIST %}
-                                <li><a href="index.php?v=d&p=plan3d&plan3d_id={{ plan3d.getId() }}">{{ plan3d.getConfiguration('icon')|trim }} {{ plan3d.getName() }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#"><i class="fa fa-puzzle-piece"></i> <span>Plugins</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                    <ul class="treeview-menu">
-                        <li class="treeview"><a href="index.php?v=d&p=plugin"><i class="fa fa-tags"></i> {{ 'Gestion' }}</a></li>
-                        {# {{ pluginMenu | raw }}#}
-                        {% if MENU_PLUGIN_CATEGORY is defined %}
-                            {% for category, categoryData in MENU_PLUGIN_CATEGORY %}
-                                <li class="treeview">
-                                    <a data-toggle="dropdown"><i class="fa {{ categoryData.icon }}"></i> {{ categoryData.name }}</a>
-                                    <ul class="treeview-menu">
-                                        {% for plugin in MENU_PLUGIN[category] %}
-                                            <li class="plugin-item"><a href="index.php?v=d&m={{ plugin.id }}&p={{ plugin.index }}"><img class="img-responsive" src="{{ plugin.pathImgIcon }}" /> {{ plugin.name }}</a></li>
-                                        {% endfor %}
-                                    </ul>
-                                </li>
-                                </li>
-                            {% endfor %}
-                        {% endif %}
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-th-list"></i>
-                        <span>Outils</span>
-                        <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="index.php?v=d&p=object"><i class="fa fa-picture-o"></i> {{ 'Objets' }}</a></li>
-                        <li><a href="index.php?v=d&p=interact"><i class="fa fa-comments-o"></i> {{ 'Interactions' }}</a></li>
-                        <li><a href="index.php?v=d&p=display"><i class="fa fa-th"></i> {{ 'Résumé domotique' }}</a></li>
-                        <li><a href="index.php?v=d&p=scenario"><i class="fas fa-film"></i> {{ 'Scénarios' }}</a></li>
-                    </ul>
-                </li>
-                <li class="header">MENU REGLAGES</li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-stethoscope"></i>
-                        <span>Analyse</span>
-                        <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="index.php?v=d&p=history"><i class="fa fa-bar-chart-o"></i> {{ 'Historique' }}</a></li>
-                        <li><a href="index.php?v=d&p=report"><i class="fa fa-newspaper-o"></i> {{ 'Rapports' }}</a></li>
-                        <li><a href="#" id="bt_showEventInRealTime"><i class="fa fa-tachometer"></i> {{ 'Temps réel' }}</a></li>
-                        <li><a href="index.php?v=d&p=log"><i class="fa fa-file-o"></i> {{ 'Logs' }}</a></li>
-                        <li><a href="index.php?v=d&p=eqAnalyse"><i class="fa fa-battery-full"></i> {{ 'Equipements' }}</a></li>
-                        <li><a href="index.php?v=d&p=health"><i class="fa fa-medkit"></i> {{ 'Santé' }}</a></li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-paint-brush"></i>
-                        <span>Thème</span>
-                        <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                    </a>
-                    <ul class="treeview-menu list-unstyled clearfix">
-                        <li style="float:left; width: 50%;">
-                            <a href="javascript:void(0)" data-skin="skin-nextdom" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
-                                    <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                </div>
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                </div>
-                            </a>
-                            <a class="text-center no-margin">Nextdom</a>
-                        </li>
-                        <li style="float:left; width: 50%;"><a href="javascript:void(0)" data-skin="skin-nextdom-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
-                                    <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                </div>
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                </div>
-                            </a>
-                            <a class="text-center no-margin">Light</a>
-                        </li>
-                        <li style="float:left; width: 50%;">
-                            <a href="javascript:void(0)" data-skin="skin-blue" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
-                                    <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                </div>
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                </div>
-                            </a>
-                            <a class="text-center no-margin">Blue</a>
-                        </li>
-                        <li style="float:left; width: 50%;"><a href="javascript:void(0)" data-skin="skin-blue-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
-                                    <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                </div>
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                </div>
-                            </a>
-                            <a class="text-center no-margin">Light</a>
-                        </li>
-                        <li style="float:left; width: 50%;">
-                            <a href="javascript:void(0)" data-skin="skin-black" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                <div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix">
-                                    <span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe"></span>
-                                </div>
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #222"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                </div>
-                            </a>
-                            <a class="text-center no-margin">Black</a>
-                        </li>
-                        <li style="float:left; width: 50%;">
-                            <a href="javascript:void(0)" data-skin="skin-black-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                <div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix">
-                                    <span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe"></span>
-                                </div>
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                </div>
-                            </a>
-                            <a class="text-center no-margin">Light</a>
-                        </li>
-                        <li style="float:left; width: 50%;">
-                            <a href="javascript:void(0)" data-skin="skin-purple" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span>
-                                    <span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                </div>
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                </div>
-                            </a>
-                            <a class="text-center no-margin">Purple</a>
-                        </li>
-                        <li style="float:left; width: 50%;">
-                            <a href="javascript:void(0)" data-skin="skin-purple-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span>
-                                    <span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                </div>
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                </div>
-                            </a>
-                            <a class="text-center no-margin">Light</a>
-                        </li>
-                        <li style="float:left; width: 50%;">
-                            <a href="javascript:void(0)" data-skin="skin-green" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span>
-                                    <span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                </div>
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                </div>
-                            </a>
-                            <a class="text-center no-margin">Green</a>
-                        </li>
-                        <li style="float:left; width: 50%;">
-                            <a href="javascript:void(0)" data-skin="skin-green-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span>
-                                    <span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                </div>
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                </div>
-                            </a>
-                            <a class="text-center no-margin">Light</a>
-                        </li>
-                        <li style="float:left; width: 50%;"><a href="javascript:void(0)" data-skin="skin-red" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span>
-                                    <span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                </div>
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                </div>
-                            </a>
-                            <a class="text-center no-margin">Red</a>
-                        </li>
-                        <li style="float:left; width: 50%;">
-                            <a href="javascript:void(0)" data-skin="skin-red-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span>
-                                    <span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                </div>
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                </div>
-                            </a>
-                            <a class="text-center no-margin">Light</a>
-                        </li>
-                        <li style="float:left; width: 50%;">
-                            <a href="javascript:void(0)" data-skin="skin-yellow" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span>
-                                    <span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                </div>
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                </div>
-                            </a>
-                            <a class="text-center no-margin">Yellow</a>
-                        </li>
-                        <li style="float:left; width: 50%;">
-                            <a href="javascript:void(0)" data-skin="skin-yellow-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span>
-                                    <span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                </div>
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                </div>
-                            </a>
-                            <a class="text-center no-margin">Light</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-cog"></i>
-                        <span>Expert</span>
-                        <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="index.php?v=d&p=administration"><i class="fa fa-wrench"></i> {{ 'Configuration' }}</a></li>
-                        <li><a href="index.php?v=d&p=backup"><i class="fas fa-save"></i> {{ 'Sauvegardes' }}</a></li>
-                        <li><a href="index.php?v=d&p=migration"><i class="fas fa-fighter-jet"></i> {{ 'Migration' }}</a></li>
-                        <li><a href="index.php?v=d&p=update"><i class="fa fa-refresh"></i> {{ 'Mises à jour' }}</a></li>
-                        <li><a href="index.php?v=d&p=cron"><i class="fa fa-tasks"></i> {{ 'Tâches' }}</a></li>
-                        <li><a href="index.php?v=d&p=custom"><i class="fas fa-pencil-square"></i> {{ 'Personnalisation' }}</a></li>
-                        <li><a href="index.php?v=d&p=user"><i class="fas fa-users"></i> {{ 'Utilisateurs' }}</a></li>
-                        <li><a href="index.php?v=d&p=profils"><i class="fa fa-briefcase"></i> {{ 'Profils' }}</a></li>
-                        <li><a class="fa fa-ellipsis-h"></a></li>
-                        <li><a href="index.php?v=m"><i class="fas fa-mobile-alt"></i> {{ 'Version mobile' }}</a></li>
-                        <li><a><i class="fa fa-info-circle"></i> {{ 'Version' }} {{ NEXTDOM_VERSION }}</a></li>
-                        <li><a class="fa fa-ellipsis-h"></a></li>
-                        <li><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock"></i> {{ 'Se déconnecter' }}</a></li>
-                        {% if IS_ADMIN and CAN_SUDO %}
-                            <li><a id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i> {{ 'Redémarrer' }}</a></li>
-                            <li><a id="bt_haltSystem" state="0"><i class="fa fa-power-off"></i> {{ 'Eteindre' }}</a></li>
-                        {% endif %}
-                    </ul>
-                </li>
-
-            </ul>
-        </section>
-        <!-- /.sidebar -->
-    </aside>
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>
