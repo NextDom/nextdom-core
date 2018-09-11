@@ -147,6 +147,10 @@ a {
   margin-right: 10px;
 }
 
+.treeview-menu {
+  padding: 5px 5px;
+}
+
 .treeview-menu > li {
     padding-top: 1px;
     padding-bottom: 1px;
@@ -425,4 +429,15 @@ legend{
 
 #div_pageContainer{
   top: 10px;
+}
+
+legend {
+font-size: 16px;
+border: 1px solid #e5e5e5;
+padding: 5px 10px;
+margin-bottom: 15px;
+}
+
+.btn-tab {
+    line-height: 2;
 }
