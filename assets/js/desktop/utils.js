@@ -178,9 +178,11 @@ $(function () {
         horloge += date.getDate() + " ";   // numero du jour
         horloge += mois[date.getMonth()] + " ";   // mois
         horloge += date.getFullYear();
-        horloge += ' -';
+        horloge += ' - ';
         horloge += date.getHours() + ":" + minutes + ":" +secondes;
         $('#horloge').text(horloge);
+        var horloge_short= date.getHours() + ":" + minutes + ":" +secondes;
+        $('#horloge_short').text(horloge_short);
     }, 1000);
 
 
