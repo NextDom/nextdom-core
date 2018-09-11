@@ -53,23 +53,23 @@
     </tbody>
 </table>
 {% if healthPluginDataToShow %}
-    <div class="panel-group" id="accordionHealth">
+    <div class="box-group" id="accordionHealth">
         {% for pluginData in healthPluginsInformations %}
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
+            <div class="panel box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">
                         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionHealth" href="#config_{{ pluginData['plugin'].getId() }}" style="text-decoration:none;">
                             <img class="img-responsive" style="width : 20px;display:inline-block;" src="{{ pluginData['plugin'].getPathImgIcon() }}"/>
                             {{ 'Santé' }} {{ pluginData['plugin'].getName() }}
                         </a>
                         {% if pluginData['nOk'] > 0 %}
-                            <span class="label label-danger pull-right" style="position:relative;top:-3px;">{{ pluginData['nOk'] }} {{ 'erreurs' }} </span>
+                            <span class="label label-danger pull-right" style="position:relative;">{{ pluginData['nOk'] }} {{ 'erreurs' }} </span>
                         {% endif %}
                         {% if pluginData['pending'] > 0 %}
-                            <span class="label label-warning pull-right" style="position:relative;top:-3px;">{{ pluginData['pending'] }} {{ 'en cours' }} </span>
+                            <span class="label label-warning pull-right" style="position:relative;">{{ pluginData['pending'] }} {{ 'en cours' }} </span>
                         {% endif %}
                         {% if pluginData['nOk'] == 0 and pluginData['pending'] == 0 %}
-                            <span class="label label-success pull-right" style="position:relative;top:-3px;">{{ 'OK' }}</span>
+                            <span class="label label-success pull-right" style="position:relative;">{{ 'OK' }}</span>
                         {% endif %}
                         <i class="fas fa-cogs bt_configurationPlugin cursor pull-right" style="color:grey;font-size:0.8em" data-pluginid="{{ pluginData['plugin'].getId() }}"></i>
                         {% if pluginData['hasSpecificHealth'] %}
@@ -89,7 +89,7 @@
                     </h3>
                 </div>
                 <div id="config_{{ pluginData['plugin'].getId() }}" class="panel-collapse collapse">
-                    <div class="panel-body">
+                    <div class="box-body">
                         {% if pluginData['showOnlyTable'] %}
                             <table class="table table-condensed table-bordered">
                                 <thead>

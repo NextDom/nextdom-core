@@ -68,17 +68,17 @@
         </center>
         {% else %}
         <input class="form-control" placeholder="{{ 'Rechercher' }}" style="margin-bottom:4px" id="in_searchScenario"/>
-        <div class="panel-group" id="accordionScenar">
+        <div class="box-group" id="accordionScenar">
             {% if scenarios[-1]|length > 0 %}
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">
+                <div class="panel box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none"
                                style="text-decoration:none;">Aucun - {{ scenarios[-1]|length }} scénario(s)</a>
                         </h3>
                     </div>
                     <div id="config_none" class="panel-collapse collapse">
-                        <div class="panel-body">
+                        <div class="box-body">
                             <div class="scenarioListContainer">
                                 {% for scenario in scenarios[-1] %}
                                     <div class="scenarioDisplayCard cursor" data-scenario_id="{{ scenario.getId() }}" style="text-align: center; min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
@@ -97,14 +97,14 @@
 
             {% for scenarioGroup in scenarioListGroup %}
                 {% if scenarioGroup.group != '' %}
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
+                    <div class="panel box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">
                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}" style="text-decoration:none;">{{ scenarioGroup.group }} - {{ scenarios[scenarioGroup.group]|length }} scénario(s)</a>
                             </h3>
                         </div>
                         <div id="config_{{ index }}" class="panel-collapse collapse">
-                            <div class="panel-body">
+                            <div class="box-body">
                                 <div class="scenarioListContainer">
                                     {% for scenario in scenarios[scenarioGroup.group] %}
                                         <div class="scenarioDisplayCard cursor" data-scenario_id="{{ scenario.getId() }}" style="text-align: center; min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
