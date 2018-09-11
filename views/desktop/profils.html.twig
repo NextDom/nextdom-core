@@ -1,14 +1,15 @@
 <section class="content">
     <div class="col-xs-12">
         <div class="nav-tabs-custom config">
-            <div style="margin-top: 5px;">
-                <a title="{{ 'Sauvegarder' }}" class="btn btn-success pull-right" id="bt_saveProfils"><i class="far fa-check-circle"></i> </a>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+            <a title="{{ 'Sauvegarder' }}" class="btn btn-success pull-right" id="bt_saveProfils"><i class="far fa-check-circle"></i> </a>
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#profil" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-user"></i> {{ 'Profil' }}</a></li>
                     <li role="presentation"><a href="#themetab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint"></i> {{ 'Thèmes' }}</a></li>
                     <li role="presentation"><a href="#interfacetab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-laptop"></i> {{ 'Interface' }}</a></li>
                     <li role="presentation"><a href="#securitytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="icon securite-key1"></i> {{ 'Sécurité' }}</a></li>
                     <li role="presentation"><a href="#notificationtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="icon securite-key1"></i> {{ 'Notifications' }}</a></li>
+                    <li class="pull-left header"><i class="fa fa-inbox"></i> {{ 'Profil utilisateur' }}</li>
                 </ul>
                 <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
                     <div role="tabpanel" class="tab-pane active" id="profil">
