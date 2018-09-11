@@ -26,22 +26,35 @@ if [ $(id -u) != 0 ] ; then
 fi
 
 step_7_nextdom_customization() {
-    cp ${WEBSERVER_HOME}/install/apache_security /etc/apache2/conf-available/security.conf >> ${DEBUG} 2>&1
-    rm -f /etc/apache2/conf-enabled/security.conf >> ${DEBUG} 2>&1
-    ln -s /etc/apache2/conf-available/security.conf /etc/apache2/conf-enabled/ >> ${DEBUG} 2>&1
+    #cp ${WEBSERVER_HOME}/install/apache_security /etc/apache2/conf-available/security.conf >> ${DEBUG} 2>&1
+    #rm -f /etc/apache2/conf-enabled/security.conf >> ${DEBUG} 2>&1
+    #ln -s /etc/apache2/conf-available/security.conf /etc/apache2/conf-enabled/ >> ${DEBUG} 2>&1
 
-    cp ${WEBSERVER_HOME}/install/apache_default /etc/apache2/sites-available/000-default.conf >> ${DEBUG} 2>&1
-    rm -f /etc/apache2/sites-enabled/000-default.conf >> ${DEBUG} 2>&1
-    ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/ >> ${DEBUG} 2>&1
+    #cp ${WEBSERVER_HOME}/install/apache_default /etc/apache2/sites-available/000-default.conf >> ${DEBUG} 2>&1
+    #rm -f /etc/apache2/sites-enabled/000-default.conf >> ${DEBUG} 2>&1
+    #ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/ >> ${DEBUG} 2>&1
 
-    rm -f /etc/apache2/conf-available/other-vhosts-access-log.conf >> ${DEBUG} 2>&1
-    rm -f /etc/apache2/conf-enabled/other-vhosts-access-log.conf >> ${DEBUG} 2>&1
+    #rm -f /etc/apache2/conf-available/other-vhosts-access-log.conf >> ${DEBUG} 2>&1
+    #rm -f /etc/apache2/conf-enabled/other-vhosts-access-log.conf >> ${DEBUG} 2>&1
 
-    mkdir -p /etc/systemd/system/apache2.service.d >> ${DEBUG} 2>&1
-    echo "[Service]" > /etc/systemd/system/apache2.service.d/privatetmp.conf
-    echo "PrivateTmp=no" >> /etc/systemd/system/apache2.service.d/privatetmp.conf
+    #mkdir -p /etc/systemd/system/apache2.service.d >> ${DEBUG} 2>&1
+    #echo "[Service]" > /etc/systemd/system/apache2.service.d/privatetmp.conf
+    #echo "PrivateTmp=no" >> /etc/systemd/system/apache2.service.d/privatetmp.conf
 
     #systemctl daemon-reload >> ${DEBUG} 2>&1
+
+    # Certificat auto signe
+    cd /etc/nextdom/ssl/ >> ${DEBUG} 2>&1
+    openssl genrsa -out nextdom.key 2048 >> ${DEBUG} 2>&1
+    #openssl req -new -key nextdom.key -out nextdom.csr
+    openssl req -new -key nextdom.key -out nextdom.csr -subj "/C=FR/ST=Paris/L=Paris/O=Global Security/OU=IT Department/CN=example.com" >> ${DEBUG} 2>&1
+    openssl x509 -req -days 3650 -in nextdom.csr -signkey nextdom.key -out nextdom.crt >> ${DEBUG} 2>&1
+
+    a2enmod ssl >> ${DEBUG} 2>&1
+    a2ensite nextdom-ssl >> ${DEBUG} 2>&1
+    a2ensite nextdom >> ${DEBUG} 2>&1
+
+    a2enconf nextdom-security >> ${DEBUG} 2>&1
 
     for file in $(find /etc/ -iname php.ini -type f); do
         echo "Update php file ${file}" >> ${DEBUG} 2>&1
@@ -296,8 +309,12 @@ distrib_1_spe
 if [ "${isdev}" = "1" ] ; then
     echo " "
     echo "Installation dir  : ${WEBSERVER_HOME}"
-    echo "Database          : ${MYSQL_NEXTDOM_DB}"        
+    echo "Database          : ${MYSQL_NEXTDOM_DB}"
     echo "Database user     : ${MYSQL_NEXTDOM_USER}"
-    echo "Database password : ${MYSQL_NEXTDOM_PASSWD}" 
+    echo "Database password : ${MYSQL_NEXTDOM_PASSWD}"
+    echo " "
+    echo "> A self-signed SSL Certificate created in /etc/nextdom/ssl/"
+    echo "> Please feel free to use another Certificate"
+    echo " "
     echo " >>>>> COMPLETED <<<<< "
 fi
