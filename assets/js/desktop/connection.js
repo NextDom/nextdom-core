@@ -23,6 +23,22 @@ $('#in_login_username').on('focusout change keypress',function(){
 });
 
 $('#bt_login_validate').on('click', function() {
+    tryLogin();
+});
+
+$('#in_login_password').keypress(function(e) {
+    if(e.which == 13) {
+        tryLogin();
+    }
+});
+
+$('#in_twoFactorCode').keypress(function(e) {
+    if(e.which == 13) {
+        tryLogin();
+    }
+});
+
+function tryLogin() {
     nextdom.user.login({
         username: $('#in_login_username').val(),
         password: $('#in_login_password').val(),
@@ -35,16 +51,4 @@ $('#bt_login_validate').on('click', function() {
             window.location.href = 'index.php?v=d';
         }
     });
-});
-
-$('#in_login_password').keypress(function(e) {
-    if(e.which == 13) {
-        $('#bt_login_validate').trigger('click');
-    }
-});
-
-$('#in_twoFactorCode').keypress(function(e) {
-    if(e.which == 13) {
-        $('#bt_login_validate').trigger('click');
-    }
-});
+}
