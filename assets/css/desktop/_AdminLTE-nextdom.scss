@@ -462,8 +462,15 @@ legend{
 .label-config {
     padding: 9px 10px 10px;
     font-size: 100%;
+    background-color: #33B8CC !important;
 }
 
-.btn > .fa {
+.legend-title-1> .fa,
+.legend-title-1> .fas {
+    padding-right: 5px;
+}
+
+.btn > .fa,
+.btn > .fas {
     padding-right: 5px;
 }
