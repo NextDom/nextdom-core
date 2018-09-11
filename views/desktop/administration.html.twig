@@ -23,27 +23,28 @@
                 <div class="global-tab-content tab-content">
                     <div role="tabpanel" class="tab-pane active" id="generaltab">
                         <form class="form-horizontal">
-                            <legend class="legend-title-1"><i class="fa fa-wrench"></i>{{ ' Général' }}</legend>
+                            <legend class="legend-title-1"><i class="fa fa-wrench"></i>{{ 'Général' }}</legend>
                             <fieldset>
                                 <legend class="legend-title-2">{{ 'NextDom' }}</legend>
                                 <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Nom de votre NextDom (utilisé notamment par le market)">Nom de votre NextDom</label>
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{'Nom de votre NextDom (utilisé notamment par le market)'}}">{{'Nom de votre NextDom'}}</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                                         <input type="text" class="configKey form-control" data-l1key="name">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Indique votre type de matériel">Système / Hardware</label>
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Indique votre type de matériel">{{'Système / Hardware'}}</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                                        <a class="btn btn-warning" id="bt_resetHardwareType"><i class="fa fa-refresh"></i> Rafraîchir</a>
-                                    </div><div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
+                                        <a class="btn btn-warning" id="bt_resetHardwareType"><i class="fa fa-refresh"></i>{{'Rafraîchir'}}</a>
+                                    </div>
+                                    <div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
                                         <span class="label label-info label-config">diy</span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Clef d'installation qui permet d'identifier votre NextDom quand il communique avec le market">Clef d'installation</label>
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{'Clef d\'installation qui permet d'identifier votre NextDom quand il communique avec le market'}}">{{'Clef d\'installation'}}</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                                        <a class="btn btn-warning" id="bt_resetHwKey"><i class="fa fa-bomb"></i> Remise à zéro</a>
+                                        <a class="btn btn-warning" id="bt_resetHwKey"><i class="fa fa-bomb"></i>{{'Remise à zéro'}}</a>
                                     </div>
                                     <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                         <span class="label label-info label-config">e56cb61e66d1dd9daedf9431b155030859f3f9902d39354368c715422d6968e</span>
@@ -51,7 +52,7 @@
                                 </div>
                                 <legend class="legend-title-2">{{ 'Langage' }}</legend>
                                 <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Langue de votre NextDom">Langue</label>
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{'Langue de votre NextDom'}}">{{'Langue'}}</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                                         <select class="configKey form-control" data-l1key="language">
                                             <option value="fr_FR" selected="selected">French</option>
@@ -68,34 +69,32 @@
                                     </div>
                                     <div>
                                         <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
-                                            <input type="checkbox" class="configKey" data-l1key="generateTranslation" title="Option pour les développeurs permettant à NextDom de générer les phrases à traduire"><label class="control-label">Générer les traductions</label>
+                                            <input type="checkbox" class="configKey" data-l1key="generateTranslation" title="{{'Option pour les développeurs permettant à NextDom de générer les phrases à traduire'}}"><label class="control-label">{{'Générer les traductions'}}</label>
                                         </div>
                                     </div>
                                 </div>
                                 <legend class="legend-title-2">{{ 'Horodatage' }}</legend>
                                 <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Durée de vie de votre connexion à NextDom si vous n'avez pas coché la case enregistrer cet ordinateur">Durée de vie des sessions (en H)</label>
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{'Durée de vie de votre connexion à NextDom si vous n'avez pas coché la case enregistrer cet ordinateur'}}">{{'Durée de vie des sessions (en H)'}}'</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                                         <input type="text" class="configKey form-control" data-l1key="session_lifetime">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help">Dernière date connue</label>
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help">{{'Dernière date connue'}}</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                                        <a class="btn btn-warning" id="bt_resetHour">
-                                            <i class="fa fa-bomb"></i> Remise à zéro
-                                        </a>
+                                        <a class="btn btn-warning" id="bt_resetHour"><i class="fa fa-bomb"></i>{{'Remise à zéro'}}</a>
                                     </div>
                                     <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
-                                        <span class="label label-info label-config">2018-09-05 17:05:02</span>
+                                        <span class="label label-info label-config">{{'2018-09-05 17:05:02'}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Fuseau horaire de votre NextDom">Date et heure</label>
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Fuseau horaire de votre NextDom">{{'Date et heure'}}</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                                        <a class="btn btn-primary" id="bt_forceSyncHour"><i class="fa fa-clock-o"></i> Synchronisation</a>
+                                        <a class="btn btn-primary" id="bt_forceSyncHour"><i class="fa fa-clock-o"></i>{{'Synchronisation'}}</a>
                                     </div>
-                                    <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                                    <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4">
                                         <select class="configKey form-control" data-l1key="timezone">
                                             <option value="Pacific/Midway">(GMT-11:00) Midway Island, Samoa</option>
                                             <option value="Pacific/Tahiti">(GMT-10:00) Pacific/Tahiti</option>
@@ -194,13 +193,13 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="ntp-optional-server" class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Permet d'ajouter un serveur de temps à NextDom utilisé lorsque NextDom force la synchronisation de l'heure">Serveur de temps optionnel</label>
+                                    <label for="ntp-optional-server" class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{'Permet d\'ajouter un serveur de temps à NextDom utilisé lorsque NextDom force la synchronisation de l\'heure'}}">{{'Serveur de temps optionnel'}}</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                                         <input type="text" id="ntp-optional-server" class="configKey form-control" data-l1key="ntp::optionalServer">
                                     </div>
                                     <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                         <input type="checkbox" id="ignore-hour-check" class="configKey" data-l1key="ignoreHourCheck">
-                                        <label for="ignore-hour-check" class="control-label" data-help="Indique à NextDom de ne pas prendre en compte l'heure du système">Ignorer la vérification de l'heure</label>
+                                        <label for="ignore-hour-check" class="control-label" data-help="{{'Indique à NextDom de ne pas prendre en compte l\'heure du système'}}">{{'Ignorer la vérification de l\'heure'}}</label>
                                     </div>
                                 </div>
                             </fieldset>
@@ -208,8 +207,9 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="apitab">
                         <form class="form-horizontal">
-                            <legend class="legend-title-1"><i class="fa fa-key"></i>{{ ' API' }}</legend>
+                            <legend class="legend-title-1"><i class="fa fa-key"></i>{{ 'API' }}</legend>
                             <fieldset>
+                                <legend class="legend-title-2">{{ 'Accès API' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Accès API HTTP' }}</label>
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
@@ -220,6 +220,8 @@
                                             <option value="disable">{{ 'Désactivé' }}</option>
                                         </select>
                                     </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="col-lg-2 col-md-2 col-sm-3 col-xs-6 control-label">{{ 'Accès API JSONRPC' }}</label>
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
                                         <select class="form-control configKey" data-l1key="api::core::jsonrpc::mode">
@@ -229,6 +231,8 @@
                                             <option value="disable">{{ 'Désactivé' }}</option>
                                         </select>
                                     </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="col-lg-2 col-md-2 col-sm-3 col-xs-6 control-label">{{ 'Accès API TTS' }}</label>
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
                                         <select class="form-control configKey" data-l1key="api::core::tts::mode">
@@ -240,27 +244,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{ 'Clef API globale de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API' }}</label>
-                                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
-                                        <div class="input-group">
-                                            <span class="span_apikey">{{ adminConfigs['api'] }}</span>
-                                            <span class="input-group-btn">
-                                                <a class="btn btn-default form-control bt_regenerate_api" data-plugin="core"><i class="fa fa-refresh"></i></a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{ 'Clef API Pro de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API Pro' }}</label>
-                                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
-                                        <div class="input-group">
-                                            <span class="span_apikey">{{ adminConfigs['apipro'] }}</span>
-                                            <span class="input-group-btn">
-                                                <a class="btn btn-default form-control bt_regenerate_api" data-plugin="pro"><i class="fa fa-refresh"></i></a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Accès API' }}</label>
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Accès API Pro' }}</label>
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
                                         <select class="form-control configKey" data-l1key="api::core::pro::mode">
                                             <option value="enable">{{ 'Activé' }}</option>
@@ -269,16 +253,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{ 'Clef Market de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef Market' }}</label>
-                                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
-                                        <div class="input-group">
-                                            <span class="span_apikey">{{ adminConfigs['apimarket'] }}</span>
-                                            <span class="input-group-btn">
-                                                <a class="btn btn-default form-control bt_regenerate_api" data-plugin="apimarket"><i class="fas fa-refresh"></i></a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Accès API' }}</label>
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Accès API Market' }}</label>
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
                                         <select class="form-control configKey" data-l1key="api::core::market::mode">
                                             <option value="enable">{{ 'Activé' }}</option>
@@ -286,12 +261,44 @@
                                         </select>
                                     </div>
                                 </div>
+                                <legend class="legend-title-2">{{ 'Clefs API' }}</legend>
+                                <div class="form-group">
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{ 'Clef API globale de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API' }}</label>
+                                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                                        <a class="btn btn-warning" id="bt_regenerate_api"><i class="fa fa-refresh"></i>{{'Rafraîchir'}}</a>
+                                    </div>
+                                    <div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
+                                        <span class="span_apikey label label-info label-config">{{ adminConfigs['api'] }}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{ 'Clef API Pro de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API Pro' }}</label>
+                                    <div class="col-lg-5 col-md-6 col-sm-6 col-xs-6">
+                                        <div class="input-group">
+                                            <span class="span_apikey">{{ adminConfigs['apipro'] }}</span>
+                                            <span class="input-group-btn">
+                                                <a class="btn btn-default form-control bt_regenerate_api" data-plugin="pro"><i class="fa fa-refresh"></i></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{ 'Clef Market de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef Market' }}</label>
+                                    <div class="col-lg-5 col-md-6 col-sm-6 col-xs-6">
+                                        <div class="input-group">
+                                            <span class="span_apikey">{{ adminConfigs['apimarket'] }}</span>
+                                            <span class="input-group-btn">
+                                                <a class="btn btn-default form-control bt_regenerate_api" data-plugin="apimarket"><i class="fas fa-refresh"></i></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                                 <hr/>
                                 {% if not adminIsRescueMode and adminPluginsList|length > 0 %}
                                     {% for pluginData in adminPluginsList %}
                                         <div class="form-group">
                                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{ 'Clef API pour le plugin' }} {{ pluginData.plugin.getName() }}">{{ 'Clef API' }} {{ pluginData.plugin.getName() }}</label>
-                                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
+                                            <div class="col-lg-5 col-md-6 col-sm-6 col-xs-6">
                                                 <div class="input-group">
                                                     <span class="span_apikey">{{ pluginData.api }}</span>
                                                     <span class="input-group-btn">
@@ -300,7 +307,7 @@
                                                 </div>
                                             </div>
                                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Accès API' }}</label>
-                                            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
+                                            <div class="col-lg-5 col-md-6 col-sm-6 col-xs-6">
                                                 <select class="form-control configKey" data-l1key="api::{{ pluginData.plugin.getId() }}::mode">
                                                     <option value="enable">{{ 'Activé' }}</option>
                                                     <option value="whiteip">{{ 'IP blanche' }}</option>
@@ -316,11 +323,11 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="ostab">
                         <form class="form-horizontal">
-                            <legend class="legend-title-1"><i class="fa fa-terminal"></i>{{ ' OS/DB' }}</legend>
+                            <legend class="legend-title-1"><i class="fa fa-terminal"></i>{{ 'OS/DB' }}</legend>
+                            <div class="alert alert-danger alert-config">
+                                {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à' }} {{ adminConfigs['product_name'] }}{{ '. L\'équipe' }} {{ adminConfigs['product_name'] }} {{ 'se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.' }}
+                            </div>
                             <fieldset>
-                                <div class="alert alert-danger alert-config">
-                                    {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à' }} {{ adminConfigs['product_name'] }}{{ '. L\'équipe' }} {{ adminConfigs['product_name'] }} {{ 'se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.' }}
-                                </div>
                                 <legend class="legend-title-2">{{ 'Système' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
@@ -359,7 +366,7 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="securitytab">
                         <form class="form-horizontal">
-                            <legend class="legend-title-1"><i class="fa fa-shield"></i>{{ ' Sécurité' }}</legend>
+                            <legend class="legend-title-1"><i class="fa fa-shield"></i>{{ 'Sécurité' }}</legend>
                             <fieldset>
                                 <legend class="legend-title-2">{{ 'LDAP' }}</legend>
                                 {% if adminUseLdap %}
@@ -487,7 +494,7 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="networktab">
-                        <legend class="legend-title-1"><i class="fa fa-rss"></i>{{ 'Réseaux' }}</legend>
+                        <legend class="legend-title-1"><i class="fa fa-rss"></i>{{ ' Réseaux' }}</legend>
                         <div class="alert alert-warning alert-config">{{ 'Attention : cette configuration n\'est là que pour informer' }} {{ adminConfigs['product_name'] }} {{ 'de sa configuration réseau et n\'a aucun impact sur les ports ou l\'IP réellement utilisés pour joindre' }} {{ adminConfigs['product_name'] }}</div>
                         <form class="form-horizontal">
                             <legend class="legend-title-2">{{ 'Accès interne' }}</legend>
