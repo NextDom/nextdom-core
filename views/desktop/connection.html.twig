@@ -6,35 +6,33 @@
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
-        <p class="login-box-msg">{{ 'Connectez-vous pour accéder à votre session ...'}}</p>
+        <p class="login-box-msg">{{ 'Connectez-vous pour accéder à votre session' }}</p>
         <br/>
-        <form >
-            <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="{{ 'Identifiant / Login' }}" id="in_login_username">
-                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-            </div>
-            <div class="form-group has-feedback">
-                <input type="password" class="form-control" placeholder="{{ 'Mot de Passe' }}" id="in_login_password">
-                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-            </div>
-            <div class="passwd form-group has-feedback" id="div_twoFactorCode" style="display:none;">
-                <input type="text" id="in_twoFactorCode" placeholder="{{ 'Code à 2 facteur' }}" class="form-control">
-            </div>
-            <div class="row" style="padding-bottom:20px;">
-                <div class="col-xs-8">
-                    <div class="checkbox icheck ">
-                        <label>
-                            <input type="checkbox" id="cb_storeConnection"> {{ 'Se souvenir de moi ?' }}
-                        </label>
-                    </div>
+        <div class="form-group has-feedback">
+            <input type="text" class="form-control" placeholder="{{ 'Identifiant' }}" id="in_login_username">
+            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+            <input type="password" class="form-control" placeholder="{{ 'Mot de Passe' }}" id="in_login_password">
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+        <div class="passwd form-group has-feedback" id="div_twoFactorCode" style="display:none;">
+            <input type="text" id="in_twoFactorCode" placeholder="{{ 'Code à 2 facteur' }}" class="form-control">
+        </div>
+        <div class="row" style="padding-bottom:20px;">
+            <div class="col-xs-8">
+                <div class="checkbox icheck ">
+                    <label>
+                        <input type="checkbox" id="cb_storeConnection"> {{ 'Se souvenir de moi ?' }}
+                    </label>
                 </div>
-                <!-- /.col -->
-                <div class="col-xs-4">
-                    <button class="btn btn-primary btn-block btn-flat" id="bt_login_validate"> {{ 'Connexion' }}</button>
-                </div>
-                <!-- /.col -->
             </div>
-        </form>
+            <!-- /.col -->
+            <div class="col-xs-4">
+                <button class="btn btn-primary btn-block btn-flat" id="bt_login_validate">{{ 'Connexion' }}</button>
+            </div>
+            <!-- /.col -->
+        </div>
         <a class="Link-Blue" href="https://jeedom.github.io/documentation/howto/fr_FR/reset.password">{{ 'Oups, J\'ai oublié mon mot de passe !' }}</a><br>
     </div>
     <!-- /.login-box-body -->
