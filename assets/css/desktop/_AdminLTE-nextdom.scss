@@ -196,7 +196,7 @@ a {
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08);
 }
 .box-header{
-  line-height:3em;
+  padding-top: 5px;
 }
 
 .box-header > .fa,
@@ -239,10 +239,6 @@ a {
   text-align: center;
   left: 18px;
   top: 0;
-}
-
-.btn {
-  line-height: 2;
 }
 
 .btn.btn-flat {
@@ -292,10 +288,6 @@ a {
 
 .nav-tabs a {
     padding: 10px 10px !important;
-}
-
-.nav-tabs i.fa, .nav-tabs i.fas {
-    padding-right: 5px;
 }
 
 .login-logo,
