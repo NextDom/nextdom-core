@@ -75,7 +75,7 @@
                                 </div>
                                 <legend class="legend-title-2">{{ 'Horodatage' }}</legend>
                                 <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{'Durée de vie de votre connexion à NextDom si vous n\'avez pas coché la case enregistrer cet ordinateur'}}">{{'Durée de vie des sessions (en H)'}}'</label>
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{'Durée de vie de votre connexion à NextDom si vous n\'avez pas coché la case enregistrer cet ordinateur'}}">{{'Durée de vie des sessions (en H)'}}</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                                         <input type="text" class="configKey form-control" data-l1key="session_lifetime">
                                     </div>
@@ -265,7 +265,7 @@
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{ 'Clef API globale de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API' }}</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                                        <a class="btn btn-warning" id="bt_regenerate_api"><i class="fa fa-refresh"></i>{{'Rafraîchir'}}</a>
+                                        <a class="btn btn-warning" id="bt_regenerate_api" data-plugin="core"><i class="fa fa-refresh"></i>{{'Rafraîchir'}}</a>
                                     </div>
                                     <div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
                                         <span class="span_apikey label label-info label-config">{{ adminConfigs['api'] }}</span>
@@ -273,24 +273,20 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{ 'Clef API Pro de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API Pro' }}</label>
-                                    <div class="col-lg-5 col-md-6 col-sm-6 col-xs-6">
-                                        <div class="input-group">
-                                            <span class="span_apikey">{{ adminConfigs['apipro'] }}</span>
-                                            <span class="input-group-btn">
-                                                <a class="btn btn-default form-control bt_regenerate_api" data-plugin="pro"><i class="fa fa-refresh"></i></a>
-                                            </span>
-                                        </div>
+                                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                                        <a class="btn btn-warning" id="bt_regenerate_api" data-plugin="pro"><i class="fa fa-refresh"></i>{{'Rafraîchir'}}</a>
+                                    </div>
+                                    <div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
+                                        <span class="span_apikey label label-info label-config">{{ adminConfigs['apipro'] }}</span>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{ 'Clef Market de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef Market' }}</label>
-                                    <div class="col-lg-5 col-md-6 col-sm-6 col-xs-6">
-                                        <div class="input-group">
-                                            <span class="span_apikey">{{ adminConfigs['apimarket'] }}</span>
-                                            <span class="input-group-btn">
-                                                <a class="btn btn-default form-control bt_regenerate_api" data-plugin="apimarket"><i class="fas fa-refresh"></i></a>
-                                            </span>
-                                        </div>
+                                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                                        <a class="btn btn-warning" id="bt_regenerate_api" data-plugin="apimarket"><i class="fa fa-refresh"></i>{{'Rafraîchir'}}</a>
+                                    </div>
+                                    <div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
+                                        <span class="span_apikey label label-info label-config">{{ adminConfigs['apimarket'] }}</span>
                                     </div>
                                 </div>
                                 <hr/>
@@ -328,7 +324,7 @@
                                 {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à' }} {{ adminConfigs['product_name'] }}{{ '. L\'équipe' }} {{ adminConfigs['product_name'] }} {{ 'se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.' }}
                             </div>
                             <fieldset>
-                                <legend class="legend-title-2">{{ 'Système' }}</legend>
+                                <legend class="legend-title-2">{{ 'Console Système' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
                                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
@@ -470,7 +466,7 @@
                             </fieldset>
                         </form>
                         <form class="form-horizontal">
-                            <legend class="legend-title-2">{{ 'IPs bannies' }} <a class="btn btn-warning btn-xs pull-right" id="bt_removeBanIp"><i class="fa fa-trash"></i> {{ 'Supprimer' }}</a></legend>
+                            <legend class="legend-title-2">{{ 'IPs bannies' }} <a class="btn btn-warning btn-legend pull-right" id="bt_removeBanIp"><i class="fa fa-trash"></i> {{ 'Supprimer' }}</a></legend>
                             <fieldset>
                                 <table class="table table-condensed table-bordered">
                                     <thead>
@@ -494,7 +490,7 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="networktab">
-                        <legend class="legend-title-1"><i class="fa fa-rss"></i>{{ ' Réseaux' }}</legend>
+                        <legend class="legend-title-1"><i class="fa fa-rss"></i>{{ 'Réseaux' }}</legend>
                         <div class="alert alert-warning alert-config">{{ 'Attention : cette configuration n\'est là que pour informer' }} {{ adminConfigs['product_name'] }} {{ 'de sa configuration réseau et n\'a aucun impact sur les ports ou l\'IP réellement utilisés pour joindre' }} {{ adminConfigs['product_name'] }}</div>
                         <form class="form-horizontal">
                             <legend class="legend-title-2">{{ 'Accès interne' }}</legend>
@@ -541,26 +537,26 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-12">
                                         <legend class="legend-title-2">{{ 'Gestion avancée' }}</legend>
                                         <table class="table table-condensed table-bordered">
                                             <thead>
-                                            <tr>
-                                                <th>{{ 'Interface' }}</th>
-                                                <th>{{ 'IP' }}</th>
-                                                <th>{{ 'Mac' }}</th>
-                                            </tr>
+                                                <tr>
+                                                    <th>{{ 'Interface' }}</th>
+                                                    <th>{{ 'IP' }}</th>
+                                                    <th>{{ 'Mac' }}</th>
+                                                </tr>
                                             </thead>
                                             <tbody>
-                                            {% for interface in adminNetworkInterfaces %}
-                                            <tr>
-                                                <td>{{ interface['name'] }}</td>
-                                                <td>{{ interface['ip'] }}</td>
-                                                <td>{{ interface['mac'] }}</td>
-                                            </tr>
+                                                {% for interface in adminNetworkInterfaces %}
+                                                <tr>
+                                                    <td>{{ interface['name'] }}</td>
+                                                    <td>{{ interface['ip'] }}</td>
+                                                    <td>{{ interface['mac'] }}</td>
+                                                </tr>
+                                                {% endfor %}
                                             </tbody>
                                         </table>
-                                        {% endfor %}
                                         <div class="form-group has-error">
                                             <label class="col-xs-6 control-label">{{ 'Désactiver la gestion du réseau par' }} {{ adminConfigs['product_name'] }}</label>
                                             <div class="col-xs-4">
@@ -574,12 +570,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-12">
                                         {% for repo, data in adminReposList %}
                                             {% if data['scope']['proxy'] is defined and data['scope']['proxy'] == true and adminConfigs[repo ~ '::enable'] != 0 %}
                                                 <legend class="legend-title-2">{{ 'DNS (proxy)' }} {{ data['name'] }}</legend>
                                                 {% if adminConfigs['dns::token'] == '' %}
-                                                    <div class="alert alert-warning">{{ 'Attention : cette fonctionnalité n\'est pas disponible dans le service pack community (voir votre service pack sur votre page profil sur le market)' }}</div>
+                                                    <div class="alert alert-warning alert-config">{{ 'Attention : cette fonctionnalité n\'est pas disponible dans le service pack community (voir votre service pack sur votre page profil sur le market)' }}</div>
                                                 {% else %}
                                                     <div class="form-group">
                                                         <label class="col-xs-4 control-label">{{ 'Utiliser les DNS' }} {{ adminConfigs['product_name'] }}</label>
