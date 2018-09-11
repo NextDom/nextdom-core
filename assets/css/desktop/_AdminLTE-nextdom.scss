@@ -399,13 +399,13 @@ legend{
 }
 
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text {
-  border-radius: 3px;
+  border-radius: 5px;
   background-color: #999;
-  padding-right: 6px;
-  padding-left: 6px;
   margin-top: -10px;
   margin-right: 15px;
   float: left;
+  height: 45px;
+  width: 50px;
 }
 
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text > i {
