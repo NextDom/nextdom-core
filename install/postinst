@@ -51,6 +51,8 @@ step_7_nextdom_customization() {
     openssl x509 -req -days 3650 -in nextdom.csr -signkey nextdom.key -out nextdom.crt >> ${DEBUG} 2>&1
 
     a2enmod ssl >> ${DEBUG} 2>&1
+    a2dissite 000-default >> ${DEBUG} 2>&1
+    a2dissite default-ssl >> ${DEBUG} 2>&1
     a2ensite nextdom-ssl >> ${DEBUG} 2>&1
     a2ensite nextdom >> ${DEBUG} 2>&1
 
