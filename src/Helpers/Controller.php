@@ -263,8 +263,6 @@ class Controller
         $pageContent['adminRedisExists'] = class_exists('redis');
         $pageContent['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
         $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
-
-        $pageContent['CSS_POOL'][] = '/desktop/css/administration.css';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/administration.js';
 
         return $render->get('/desktop/administration.html.twig', $pageContent);
@@ -616,7 +614,7 @@ class Controller
 
         $report_path = NEXTDOM_ROOT . '/data/report/';
         $pageContent['reportViews'] = [];
-        
+
         $allViews = \view::all();
         foreach ($allViews as $view) {
             $viewData           = [];
@@ -626,7 +624,7 @@ class Controller
             $pageContent['reportViews'][] = $viewData;
         }
         $pageContent['reportPlans'] = [];
-        
+
         $allPlanHeader = \planHeader::all();
         foreach ($allPlanHeader as $plan) {
             $planData           = [];
@@ -636,7 +634,7 @@ class Controller
             $pageContent['reportPlans'][] = $planData;
         }
         $pageContent['reportPlugins'] = [];
-        
+
         $pluginManagerList = PluginManager::listPlugin(true);
         foreach ($pluginManagerList as $plugin) {
             if ($plugin->getDisplay() != '') {
@@ -672,7 +670,7 @@ class Controller
         $pageContent['JS_VARS']['sel_plugin_id'] = Utils::init('id', '-1');
         $pageContent['pluginsList'] = PluginManager::listPlugin();
         $pageContent['pluginReposList'] = [];
-        
+
         $updateManagerListRepo = UpdateManager::listRepo();
         foreach ($updateManagerListRepo as $repoCode => $repoData) {
             if ($repoData['enable'] && isset($repoData['scope']['hasStore']) && $repoData['scope']['hasStore']) {
@@ -976,7 +974,7 @@ class Controller
             'core::view' => __('Vue'),
             'core::plan' => __('Design'),
         );
-        
+
         $pluginMangerList = PluginManager::listPlugin();
         foreach ($pluginMangerList as $pluginList) {
             if ($pluginList->isActive() == 1 && $pluginList->getDisplay() != '') {
@@ -986,7 +984,7 @@ class Controller
         $pageContent['profilsUser'] = $_SESSION['user'];
         $pageContent['profilsSessionsList'] = listSession();
         $pageContent['profilsDesktopThemes'] = [];
-        
+
         $lsCssThemes = ls(NEXTDOM_ROOT . '/css/themes');
         foreach ($lsCssThemes as $dir) {
             if (is_dir(NEXTDOM_ROOT . '/css/themes/' . $dir . '/desktop')) {
@@ -1150,7 +1148,7 @@ class Controller
                     $cmdData['infoCmds'][] = $data;
                 }
             }
-            
+
             $eqLogicGetCmdAction = $eqLogic->getCmd('action');
             foreach ($eqLogicGetCmdAction as $cmd) {
                 $actionCmdData = [];
@@ -1158,7 +1156,7 @@ class Controller
 
                 if (count($cmd->getConfiguration('nextdomPreExecCmd', [])) > 0) {
                     $actionCmdData['preExecCmds'] = [];
-                    
+
                     $cmdGetConfigurationNextdomPreExecCmd = $cmd->getConfiguration('nextdomPreExecCmd');
                     foreach ($cmdGetConfigurationNextdomPreExecCmd as $actionCmd) {
                         $actionCmdData['preExecCmds'][] = ScenarioExpressionManager::humanAction($actionCmd);
@@ -1177,11 +1175,11 @@ class Controller
         $pageContent['eqAnalyzeCmdData'] = $cmdDataArray;
 //TODO: Imbriquer les boucles quand le fonctionnement sera sûr
         $pageContent['eqAnalyzeAlerts'] = [];
-        
+
         $eqLogicManagerAll = EqLogicManager::all();
         foreach ($eqLogicManagerAll as $eqLogic) {
             $hasSomeAlerts = 0;
-            
+
             $listCmds = [];
             $eqLogicGetCmdInfo = $eqLogic->getCmd('info');
             foreach ($eqLogicGetCmdInfo as $cmd) {
@@ -1239,7 +1237,7 @@ class Controller
         $pageContent['eqAnalyzeScenarioDeadCmd']    = ScenarioManager::consystencyCheck(true);
         $pageContent['eqAnalyzeInteractDefDeadCmd'] = \interactDef::deadCmd();
         $pageContent['eqAnalyzePluginDeadCmd']      = [];
-        
+
         $pluginManagerListPluginTrue = PluginManager::listPlugin(true);
         foreach($pluginManagerListPluginTrue as $plugin) {
             $pluginId = $plugin->getId();
