@@ -22,7 +22,6 @@
                 </ul>
                 <div class="global-tab-content tab-content">
                     <div role="tabpanel" class="tab-pane active" id="generaltab">
-                        <br/>
                         <form class="form-horizontal">
                             <legend><i class="fa fa-wrench"></i>{{ ' Général' }}</legend>
                             <fieldset>
@@ -38,7 +37,7 @@
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                                         <a class="btn btn-warning" id="bt_resetHardwareType"><i class="fa fa-refresh"></i> Rafraîchir</a>
                                     </div><div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
-                                        <span class="label label-info">diy</span>
+                                        <span class="label label-info label-config">diy</span>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -47,7 +46,7 @@
                                         <a class="btn btn-warning" id="bt_resetHwKey"><i class="fa fa-bomb"></i> Remise à zéro</a>
                                     </div>
                                     <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
-                                        <span class="label label-info">e56cb61e66d1dd9daedf9431b155030859f3f9902d39354368c715422d6968e</span>
+                                        <span class="label label-info label-config">e56cb61e66d1dd9daedf9431b155030859f3f9902d39354368c715422d6968e</span>
                                     </div>
                                 </div>
                                 <legend>{{ 'Langage' }}</legend>
@@ -86,15 +85,17 @@
                                         <a class="btn btn-warning" id="bt_resetHour">
                                             <i class="fa fa-bomb"></i> Remise à zéro
                                         </a>
-                                    </div><div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
-                                        <span class="label label-info">2018-09-05 17:05:02</span>
+                                    </div>
+                                    <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                                        <span class="label label-info label-config">2018-09-05 17:05:02</span>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Fuseau horaire de votre NextDom">Date et heure</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                                         <a class="btn btn-primary" id="bt_forceSyncHour"><i class="fa fa-clock-o"></i> Synchronisation</a>
-                                    </div><div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                                    </div>
+                                    <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                         <select class="configKey form-control" data-l1key="timezone">
                                             <option value="Pacific/Midway">(GMT-11:00) Midway Island, Samoa</option>
                                             <option value="Pacific/Tahiti">(GMT-10:00) Pacific/Tahiti</option>
@@ -206,7 +207,6 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="apitab">
-                        <br/>
                         <form class="form-horizontal">
                             <legend><i class="fa fa-key"></i>{{ ' API' }}</legend>
                             <fieldset>
@@ -317,8 +317,8 @@
                     <div role="tabpanel" class="tab-pane" id="ostab">
                         <form class="form-horizontal">
                             <fieldset>
-                                <legend><legend><i class="fa fa-terminal"></i>{{ ' OS/DB' }}</legend>
-                                <div class="alert alert-danger">
+                                <legend><i class="fa fa-terminal"></i>{{ ' OS/DB' }}</legend>
+                                <div class="alert alert-danger alert-config">
                                     {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à' }} {{ adminConfigs['product_name'] }}{{ '. L\'équipe' }} {{ adminConfigs['product_name'] }} {{ 'se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.' }}
                                 </div>
                                 <legend>{{ 'Système' }}</legend>
@@ -345,13 +345,13 @@
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Utilisateur' }}</label>
                                     <div class="col-sm-1">
-                                        {{ adminDbConfig['username'] }}
+                                        <span class="label label-info label-config">{{ adminDbConfig['username'] }}</span>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Mot de passe' }}</label>
                                     <div class="col-sm-1">
-                                        {{ adminDbConfig['password'] }}
+                                        <span class="label label-info label-config">{{ adminDbConfig['password'] }}</span>
                                     </div>
                                 </div>
                             </fieldset>
@@ -488,7 +488,7 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="networktab">
-                        <div class="alert alert-warning">{{ 'Attention : cette configuration n\'est là que pour informer' }} {{ adminConfigs['product_name'] }} {{ 'de sa configuration réseau et n\'a aucun impact sur les ports ou l\'IP réellement utilisés pour joindre' }} {{ adminConfigs['product_name'] }}</div>
+                        <div class="alert alert-warning alert-config">{{ 'Attention : cette configuration n\'est là que pour informer' }} {{ adminConfigs['product_name'] }} {{ 'de sa configuration réseau et n\'a aucun impact sur les ports ou l\'IP réellement utilisés pour joindre' }} {{ adminConfigs['product_name'] }}</div>
                         <form class="form-horizontal">
                             <fieldset>
                                 <legend>{{ 'Accès interne' }}</legend>

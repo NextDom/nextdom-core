@@ -278,6 +278,11 @@ legend{
   margin-right: 5px;
 }
 
+.nav-tabs-custom > .nav-tabs > li.header {
+  padding: 2px 15px;
+  font-size: 17px;
+}
+
 .nav-tabs-custom > .nav-tabs > li.header > .fa,
 .nav-tabs-custom > .nav-tabs > li.header > .fas,
 .nav-tabs-custom > .nav-tabs > li.header > .glyphicon,
@@ -440,4 +445,12 @@ margin-bottom: 15px;
 
 .btn-tab {
     line-height: 2;
+}
+
+.alert-config {
+    width: 100%;
+}
+
+.label-config {
+    padding: 9px 10px 10px;
 }
