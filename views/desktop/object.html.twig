@@ -58,13 +58,14 @@
         </div>
         <div class="col-xs-12">
             <div class="nav-tabs-custom object" style="display: none;" id="div_conf">
-                <a class="btn btn-success pull-right" id="bt_saveObject"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-                <a class="btn btn-danger pull-right" id="bt_removeObject"><i class="fas fa-minus-circle"></i> {{ 'Supprimer' }}</a>
-                <a class="btn btn-default pull-right" id="bt_graphObject"><i class="fas fa-object-group"></i> {{ 'Liens' }}</a>
-                <ul class="nav nav-tabs" role="tablist">
+                <a class="btn btn-success btn-xs pull-right" id="bt_saveObject"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+                <a class="btn btn-danger btn-xs pull-right" id="bt_removeObject"><i class="fas fa-minus-circle"></i> {{ 'Supprimer' }}</a>
+                <a class="btn btn-default btn-xs pull-right" id="bt_graphObject"><i class="fas fa-object-group"></i> {{ 'Liens' }}</a>
+                <ul class="nav nav-tabs pull-right" role="tablist">
                     <li role="presentation"><a class="cursor" aria-controls="home" role="tab" id="bt_returnToThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a></li>
                     <li role="presentation" class="active"><a href="#objecttab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i> {{ 'Objet' }}</a></li>
                     <li role="presentation"><a href="#summarytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-list-alt"></i> {{ 'Résumé' }}</a></li>
+                    <li class="pull-left header"><i class="fa fa-inbox"></i> {{ 'Configuration de l\'objet' }}</li>
                 </ul>
                 <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
                     <div role="tabpanel" class="tab-pane active" id="objecttab">
