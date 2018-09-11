@@ -512,73 +512,73 @@ foreach ($groups as $group) {
       </div>
     </div>
     <br/>
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-      <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="headingOne">
-          <h4 class="panel-title">
+    <div class="box-group" id="accordion" role="tablist" aria-multiselectable="true">
+      <div class="panel box box-primary">
+        <div class="box-header with-border" role="tab" id="headingOne">
+          <h4 class="box-title">
             <a role="button" id="bt_codeDashboard" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
              {{Dashboard}}
            </a>
          </h4>
        </div>
        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-        <div class="panel-body">
+        <div class="box-body">
           <textarea class="cmdAttr" id="ta_codeDashboard" data-l1key="html" data-l2key="dashboard" style="width: 100%;height: 350px"></textarea>
         </div>
       </div>
     </div>
-    <div class="panel panel-default">
-      <div class="panel-heading" role="tab" id="headingFour">
-        <h4 class="panel-title">
+    <div class="panel box box-primary">
+      <div class="box-header with-border" role="tab" id="headingFour">
+        <h4 class="box-title">
           <a class="collapsed" id="bt_codeDview" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
            {{Vue dashboard}}
          </a>
        </h4>
      </div>
      <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-      <div class="panel-body">
+      <div class="box-body">
         <textarea class="cmdAttr" id="ta_codeDview" data-l1key="html" data-l2key="dview" style="width: 100%;height: 350px"></textarea>
       </div>
     </div>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingThree">
-      <h4 class="panel-title">
+  <div class="panel box box-primary">
+    <div class="box-header with-border" role="tab" id="headingThree">
+      <h4 class="box-title">
         <a class="collapsed" id="bt_codeDplan" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
          {{Design}}
        </a>
      </h4>
    </div>
    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-    <div class="panel-body">
+    <div class="box-body">
       <textarea class="cmdAttr" id="ta_codeDplan" data-l1key="html" data-l2key="dplan" style="width: 100%;height: 350px"></textarea>
     </div>
   </div>
 </div>
-<div class="panel panel-default">
-  <div class="panel-heading" role="tab" id="headingTwo">
-    <h4 class="panel-title">
+<div class="panel box box-primary">
+  <div class="box-header with-border" role="tab" id="headingTwo">
+    <h4 class="box-title">
       <a class="collapsed" id="bt_codeMobile" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
         {{Mobile}}
       </a>
     </h4>
   </div>
   <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-    <div class="panel-body">
+    <div class="box-body">
       <textarea class="cmdAttr" id="ta_codeMobile" data-l1key="html" data-l2key="mobile" style="width: 100%;height: 350px"></textarea>
     </div>
   </div>
 </div>
-<div class="panel panel-default">
-  <div class="panel-heading" role="tab" id="headingFive">
-    <h4 class="panel-title">
+<div class="panel box box-primary">
+  <div class="box-header with-border" role="tab" id="headingFive">
+    <h4 class="box-title">
       <a class="collapsed" id="bt_codeMview" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
        {{Vue mobile}}
      </a>
    </h4>
  </div>
  <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-  <div class="panel-body">
+  <div class="box-body">
     <textarea class="cmdAttr" id="ta_codeMview" data-l1key="html" data-l2key="mview" style="width: 100%;height: 350px"></textarea>
   </div>
 </div>

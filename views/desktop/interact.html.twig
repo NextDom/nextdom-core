@@ -48,16 +48,16 @@
                     </div>
                 </div>
                 {% if interactTotal|length > 0 %}
-                    <div class="panel-group" id="accordionInteract" style="margin:10px">
+                    <div class="box-group" id="accordionInteract" style="margin:10px">
                         {% if interactsList[-1]|length > 0 %}
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">
+                            <div class="panel box box-primary">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">
                                         <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_aucun" style="text-decoration:none;">{{ 'Aucun - ' }} {{ interactsList[-1]|length }} {{ 'interaction(s)' }}</a>
                                     </h3>
                                 </div>
                                 <div id="config_aucun" class="panel-collapse collapse">
-                                    <div class="panel-body">
+                                    <div class="box-body">
                                         <div class="interactListContainer">
                                             {% for interact in interactsList[-1] %}
                                                 <div class="interactDisplayCard cursor" data-interact_id="{{ interact.getId() }}" style="text-align: center;  min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;{% if not interact.getEnable() %}{{ interactDisabledOpacity }}{% endif %}">
@@ -74,14 +74,14 @@
                         {% set index = 0 %}
                         {% for group in interactsListGroup %}
                             {% if group['group'] != '' %}
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">
+                                <div class="panel box box-primary">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">
                                             <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}" style="text-decoration:none;">{{ group['group'] }} - {{ interactsList[group['group']]|length }} {{ 'interaction(s)' }}</a>
                                         </h3>
                                     </div>
                                     <div id="config_{{ index }}" class="panel-collapse collapse">
-                                        <div class="panel-body">
+                                        <div class="box-body">
                                             <div class="interactListContainer">
                                                 {% for interact in interactsList[group['group']] %}
                                                     <div class="interactDisplayCard cursor" data-interact_id="{{ interact.getId() }}" style="text-align: center;  min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;{% if not interact.getEnable() %}{{ interactDisabledOpacity }}{% endif %}">
