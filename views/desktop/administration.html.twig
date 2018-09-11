@@ -2,7 +2,7 @@
     <div class="col-xs-12">
         <div id="config">
             <div class="nav-tabs-custom config">
-                <a class="btn btn-success pull-right" id="bt_saveGeneraleConfig"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+                <a class="btn btn-success pull-right btn-tab" id="bt_saveGeneraleConfig"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
                 <ul class="nav nav-tabs pull-right" role="tablist">
                     <li role="presentation" class="active"><a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab" title="Général"><i class="fa fa-wrench"></i></a></li>
                     <li role="presentation"><a href="#apitab" aria-controls="profile" role="tab" data-toggle="tab" title="{{ 'API' }}"><i class="fa fa-key"></i> </a></li>
@@ -18,15 +18,17 @@
                     <li role="presentation"><a href="#logtab" aria-controls="profile" role="tab" data-toggle="tab" title="{{ 'Logs' }}"><i class="fa fa-pencil-square-o"></i> </a></li>
                     <li role="presentation"><a href="#eqlogictab" aria-controls="profile" role="tab" data-toggle="tab" title="{{ 'Equipements' }}"><i class="icon divers-svg"></i> </a></li>
                     <li role="presentation"><a href="#updatetab" aria-controls="profile" role="tab" data-toggle="tab" title="{{ 'Mises à jour' }}"><i class="fa fa-credit-card"></i> </a></li>
-                    <li class="pull-left header"><i class="fa fa-inbox"></i> {{ 'Administration' }}</li>
+                    <li class="pull-left header"><i class="fa fa-cog"></i> {{ 'Configuration' }}</li>
                 </ul>
                 <div class="global-tab-content tab-content">
                     <div role="tabpanel" class="tab-pane active" id="generaltab">
                         <br/>
                         <form class="form-horizontal">
+                            <legend><i class="fa fa-wrench"></i>{{ ' Général' }}</legend>
                             <fieldset>
+                                <legend>{{ 'NextDom' }}</legend>
                                 <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Nom de votre  NextDom (utilisé notamment par le market)">Nom de votre NextDom</label>
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Nom de votre NextDom (utilisé notamment par le market)">Nom de votre NextDom</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                                         <input type="text" class="configKey form-control" data-l1key="name">
                                     </div>
@@ -38,18 +40,17 @@
                                     </div><div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
                                         <span class="label label-info">diy</span>
                                     </div>
-
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Clef d'installation qui permet d'identifier votre NextDom quand il communique avec le market">Clef d'installation</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                                        <a class="btn btn-warning" id="bt_resetHwKey"><i class="fa fa-refresh"></i>
-                                            Remise à zéro</a>
-                                    </div><div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                                        <a class="btn btn-warning" id="bt_resetHwKey"><i class="fa fa-bomb"></i> Remise à zéro</a>
+                                    </div>
+                                    <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                         <span class="label label-info">e56cb61e66d1dd9daedf9431b155030859f3f9902d39354368c715422d6968e</span>
                                     </div>
-
                                 </div>
+                                <legend>{{ 'Langage' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Langue de votre NextDom">Langue</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
@@ -67,12 +68,12 @@
                                         </select>
                                     </div>
                                     <div>
-
                                         <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                             <input type="checkbox" class="configKey" data-l1key="generateTranslation" title="Option pour les développeurs permettant à NextDom de générer les phrases à traduire"><label class="control-label">Générer les traductions</label>
                                         </div>
                                     </div>
                                 </div>
+                                <legend>{{ 'Horodatage' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Durée de vie de votre connexion à NextDom si vous n'avez pas coché la case enregistrer cet ordinateur">Durée de vie des sessions (en H)</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
@@ -83,12 +84,11 @@
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help">Dernière date connue</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                                         <a class="btn btn-warning" id="bt_resetHour">
-                                            <i class="fa fa-refresh"></i> Remise à zéro
+                                            <i class="fa fa-bomb"></i> Remise à zéro
                                         </a>
                                     </div><div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                         <span class="label label-info">2018-09-05 17:05:02</span>
                                     </div>
-
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Fuseau horaire de votre NextDom">Date et heure</label>
@@ -191,15 +191,16 @@
                                             <option value="Pacific/Kiritimati">(GMT+14:00) Kiritimati</option>
                                         </select>
                                     </div>
-
                                 </div>
                                 <div class="form-group">
                                     <label for="ntp-optional-server" class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Permet d'ajouter un serveur de temps à NextDom utilisé lorsque NextDom force la synchronisation de l'heure">Serveur de temps optionnel <sup><i class="fas fa-question-circle tooltips" title="Permet d'ajouter un serveur de temps à NextDom utilisé lorsque NextDom force la synchronisation de l'heure" style="font-size : 1em;color:grey;"></i></sup></label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                                         <input type="text" id="ntp-optional-server" class="configKey form-control" data-l1key="ntp::optionalServer">
-                                    </div><div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                                    </div>
+                                    <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                         <input type="checkbox" id="ignore-hour-check" class="configKey" data-l1key="ignoreHourCheck">
-                                        <label for="ignore-hour-check" class="control-label" data-help="Indique à NextDom de ne pas prendre en compte l'heure du système">Ignorer la vérification de l'heure <sup><i class="fas fa-question-circle tooltips" title="Indique à NextDom de ne pas prendre en compte l'heure du système" style="font-size : 1em;color:grey;"></i></sup></label></div>
+                                        <label for="ignore-hour-check" class="control-label" data-help="Indique à NextDom de ne pas prendre en compte l'heure du système">Ignorer la vérification de l'heure <sup><i class="fas fa-question-circle tooltips" title="Indique à NextDom de ne pas prendre en compte l'heure du système" style="font-size : 1em;color:grey;"></i></sup></label>
+                                    </div>
                                 </div>
                             </fieldset>
                         </form>
@@ -207,6 +208,7 @@
                     <div role="tabpanel" class="tab-pane" id="apitab">
                         <br/>
                         <form class="form-horizontal">
+                            <legend><i class="fa fa-key"></i>{{ ' API' }}</legend>
                             <fieldset>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Accès API HTTP' }}</label>
@@ -237,15 +239,14 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{ 'Clef API globale de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API' }}</label>
                                     <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
                                         <div class="input-group">
                                             <span class="span_apikey">{{ adminConfigs['api'] }}</span>
                                             <span class="input-group-btn">
-                                                        <a class="btn btn-default form-control bt_regenerate_api" data-plugin="core"><i class="fa fa-refresh"></i></a>
-                                                    </span>
+                                                <a class="btn btn-default form-control bt_regenerate_api" data-plugin="core"><i class="fa fa-refresh"></i></a>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -255,11 +256,10 @@
                                         <div class="input-group">
                                             <span class="span_apikey">{{ adminConfigs['apipro'] }}</span>
                                             <span class="input-group-btn">
-                                                        <a class="btn btn-default form-control bt_regenerate_api" data-plugin="pro"><i class="fa fa-refresh"></i></a>
-                                                    </span>
+                                                <a class="btn btn-default form-control bt_regenerate_api" data-plugin="pro"><i class="fa fa-refresh"></i></a>
+                                            </span>
                                         </div>
                                     </div>
-
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Accès API' }}</label>
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
                                         <select class="form-control configKey" data-l1key="api::core::pro::mode">
@@ -274,8 +274,8 @@
                                         <div class="input-group">
                                             <span class="span_apikey">{{ adminConfigs['apimarket'] }}</span>
                                             <span class="input-group-btn">
-                                                        <a class="btn btn-default form-control bt_regenerate_api" data-plugin="apimarket"><i class="fas fa-refresh"></i></a>
-                                                    </span>
+                                                <a class="btn btn-default form-control bt_regenerate_api" data-plugin="apimarket"><i class="fas fa-refresh"></i></a>
+                                            </span>
                                         </div>
                                     </div>
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Accès API' }}</label>
@@ -315,33 +315,27 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="ostab">
-                        <br/>
                         <form class="form-horizontal">
                             <fieldset>
+                                <legend><legend><i class="fa fa-terminal"></i>{{ ' OS/DB' }}</legend>
                                 <div class="alert alert-danger">
                                     {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à' }} {{ adminConfigs['product_name'] }}{{ '. L\'équipe' }} {{ adminConfigs['product_name'] }} {{ 'se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.' }}
                                 </div>
-                                <legend><i class="fa fa-terminal"></i> {{ 'Système' }}</legend>
+                                <legend>{{ 'Système' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
                                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                                         <a class="btn btn-danger" href="index.php?v=d&p=system"><i class="fa fa-exclamation-triangle"></i> {{ 'Lancer' }}</a>
                                     </div>
                                 </div>
-                                <legend><i class="fa fa-indent"></i> {{ 'Editeur de fichiers' }}</legend>
-                                <div class="alert alert-danger">
-                                    {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à NextDom. L\'équipe NextDom se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.' }}
-                                </div>
+                                <legend>{{ 'Editeur de fichiers' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Editeur' }}</label>
                                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                                         <a class="btn btn-danger" href="index.php?v=d&p=editor"><i class="fa fa-exclamation-triangle"></i> {{ 'Lancer' }}</a>
                                     </div>
                                 </div>
-                                <legend><i class="fa fa-database"></i> {{ 'Base de données' }}</legend>
-                                <div class="alert alert-danger">
-                                    {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à NextDom. L\'équipe NextDom se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.' }}
-                                </div>
+                                <legend>{{ 'Base de données' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
                                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
@@ -364,8 +358,8 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="securitytab">
-                        <br/>
                         <form class="form-horizontal">
+                            <legend><i class="fa fa-shield"></i>{{ ' Sécurité' }}</legend>
                             <fieldset>
                                 <legend>{{ 'LDAP' }}</legend>
                                 {% if adminUseLdap %}
@@ -494,7 +488,6 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="networktab">
-                        <br/>
                         <div class="alert alert-warning">{{ 'Attention : cette configuration n\'est là que pour informer' }} {{ adminConfigs['product_name'] }} {{ 'de sa configuration réseau et n\'a aucun impact sur les ports ou l\'IP réellement utilisés pour joindre' }} {{ adminConfigs['product_name'] }}</div>
                         <form class="form-horizontal">
                             <fieldset>
@@ -613,7 +606,6 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="commandtab">
-                        <br/>
                         <legend>{{ 'Historique' }}</legend>
                         <form class="form-horizontal">
                             <fieldset>
@@ -686,7 +678,6 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="cachetab">
-                        <br/>
                         <form class="form-horizontal">
                             <fieldset>
                                 <div class="alert alert-info">
@@ -763,7 +754,6 @@
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="interacttab">
-                        <br/>
                         <form class="form-horizontal">
                             <fieldset>
                                 <legend>{{ 'Général' }}</legend>
@@ -918,7 +908,6 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="repporttab">
-                        <br/>
                         <form class="form-horizontal">
                             <fieldset>
                                 <div class="form-group">
@@ -938,7 +927,6 @@
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="grephlinktab">
-                        <br/>
                         <form class="form-horizontal">
                             <fieldset>
                                 <div class="form-group">
@@ -988,7 +976,6 @@
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="summarytab">
-                        <br/>
                         <form class="form-horizontal">
                             <fieldset>
                                 <i class="fa fa-plus-circle pull-right cursor" id="bt_addObjectSummary"></i>
@@ -1012,7 +999,6 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="logtab">
-                        <br/>
                         <form class="form-horizontal">
                             <fieldset>
                                 <legend>{{ 'Timeline' }}</legend>
@@ -1154,7 +1140,6 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="eqlogictab">
-                        <br/>
                         <form class="form-horizontal">
                             <fieldset>
                                 <div class="form-group">
@@ -1179,7 +1164,6 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="updatetab">
-                        <br/>
                         <div class="row">
                             <div class="col-sm-6">
                                 <form class="form-horizontal">
