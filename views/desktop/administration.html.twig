@@ -9,7 +9,7 @@
                     <li role="presentation"><a href="#ostab" aria-controls="profile" role="tab" data-toggle="tab" title="{{ 'OS/DB' }}"><i class="fa fa-terminal"></i> </a></li>
                     <li role="presentation"><a href="#securitytab" aria-controls="profile" role="tab" data-toggle="tab" title="{{ 'Securité' }}"><i class="fa fa-shield"></i> </a></li>
                     <li role="presentation"><a href="#networktab" aria-controls="profile" role="tab" data-toggle="tab" title="{{ 'Réseaux' }}"><i class="fa fa-rss"></i> </a></li>
-                    <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab" title="{{ 'Commandes' }}"><i class="icon divers-table29"></i> </a></li>
+                    <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab" title="{{ 'Commandes' }}"><i class="fa fa-hand-o-right"></i> </a></li>
                     <li role="presentation"><a href="#cachetab" aria-controls="profile" role="tab" data-toggle="tab" title="{{ 'Cache' }}"><i class="fa fa-hdd-o"></i> </a></li>
                     <li role="presentation"><a href="#interacttab" aria-controls="profile" role="tab" data-toggle="tab" title="{{ 'Interactions' }}"><i class="fa fa-microphone"></i> </a></li>
                     <li role="presentation"><a href="#repporttab" aria-controls="profile" role="tab" data-toggle="tab" title="{{ 'Rapports' }}"><i class="fa fa-newspaper-o"></i> </a></li>
@@ -23,9 +23,9 @@
                 <div class="global-tab-content tab-content">
                     <div role="tabpanel" class="tab-pane active" id="generaltab">
                         <form class="form-horizontal">
-                            <legend><i class="fa fa-wrench"></i>{{ ' Général' }}</legend>
+                            <legend class="legend-title-1"><i class="fa fa-wrench"></i>{{ ' Général' }}</legend>
                             <fieldset>
-                                <legend>{{ 'NextDom' }}</legend>
+                                <legend class="legend-title-2">{{ 'NextDom' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Nom de votre NextDom (utilisé notamment par le market)">Nom de votre NextDom</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
@@ -49,7 +49,7 @@
                                         <span class="label label-info label-config">e56cb61e66d1dd9daedf9431b155030859f3f9902d39354368c715422d6968e</span>
                                     </div>
                                 </div>
-                                <legend>{{ 'Langage' }}</legend>
+                                <legend class="legend-title-2">{{ 'Langage' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Langue de votre NextDom">Langue</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
@@ -72,7 +72,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <legend>{{ 'Horodatage' }}</legend>
+                                <legend class="legend-title-2">{{ 'Horodatage' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Durée de vie de votre connexion à NextDom si vous n'avez pas coché la case enregistrer cet ordinateur">Durée de vie des sessions (en H)</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
@@ -194,13 +194,13 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="ntp-optional-server" class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Permet d'ajouter un serveur de temps à NextDom utilisé lorsque NextDom force la synchronisation de l'heure">Serveur de temps optionnel <sup><i class="fas fa-question-circle tooltips" title="Permet d'ajouter un serveur de temps à NextDom utilisé lorsque NextDom force la synchronisation de l'heure" style="font-size : 1em;color:grey;"></i></sup></label>
+                                    <label for="ntp-optional-server" class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Permet d'ajouter un serveur de temps à NextDom utilisé lorsque NextDom force la synchronisation de l'heure">Serveur de temps optionnel</label>
                                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                                         <input type="text" id="ntp-optional-server" class="configKey form-control" data-l1key="ntp::optionalServer">
                                     </div>
                                     <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                         <input type="checkbox" id="ignore-hour-check" class="configKey" data-l1key="ignoreHourCheck">
-                                        <label for="ignore-hour-check" class="control-label" data-help="Indique à NextDom de ne pas prendre en compte l'heure du système">Ignorer la vérification de l'heure <sup><i class="fas fa-question-circle tooltips" title="Indique à NextDom de ne pas prendre en compte l'heure du système" style="font-size : 1em;color:grey;"></i></sup></label>
+                                        <label for="ignore-hour-check" class="control-label" data-help="Indique à NextDom de ne pas prendre en compte l'heure du système">Ignorer la vérification de l'heure</label>
                                     </div>
                                 </div>
                             </fieldset>
@@ -208,7 +208,7 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="apitab">
                         <form class="form-horizontal">
-                            <legend><i class="fa fa-key"></i>{{ ' API' }}</legend>
+                            <legend class="legend-title-1"><i class="fa fa-key"></i>{{ ' API' }}</legend>
                             <fieldset>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Accès API HTTP' }}</label>
@@ -316,26 +316,26 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="ostab">
                         <form class="form-horizontal">
+                            <legend class="legend-title-1"><i class="fa fa-terminal"></i>{{ ' OS/DB' }}</legend>
                             <fieldset>
-                                <legend><i class="fa fa-terminal"></i>{{ ' OS/DB' }}</legend>
                                 <div class="alert alert-danger alert-config">
                                     {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à' }} {{ adminConfigs['product_name'] }}{{ '. L\'équipe' }} {{ adminConfigs['product_name'] }} {{ 'se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.' }}
                                 </div>
-                                <legend>{{ 'Système' }}</legend>
+                                <legend class="legend-title-2">{{ 'Système' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
                                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                                         <a class="btn btn-danger" href="index.php?v=d&p=system"><i class="fa fa-exclamation-triangle"></i> {{ 'Lancer' }}</a>
                                     </div>
                                 </div>
-                                <legend>{{ 'Editeur de fichiers' }}</legend>
+                                <legend class="legend-title-2">{{ 'Editeur de fichiers' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Editeur' }}</label>
                                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                                         <a class="btn btn-danger" href="index.php?v=d&p=editor"><i class="fa fa-exclamation-triangle"></i> {{ 'Lancer' }}</a>
                                     </div>
                                 </div>
-                                <legend>{{ 'Base de données' }}</legend>
+                                <legend class="legend-title-2">{{ 'Base de données' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
                                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
@@ -359,9 +359,9 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="securitytab">
                         <form class="form-horizontal">
-                            <legend><i class="fa fa-shield"></i>{{ ' Sécurité' }}</legend>
+                            <legend class="legend-title-1"><i class="fa fa-shield"></i>{{ ' Sécurité' }}</legend>
                             <fieldset>
-                                <legend>{{ 'LDAP' }}</legend>
+                                <legend class="legend-title-2">{{ 'LDAP' }}</legend>
                                 {% if adminUseLdap %}
                                     <div class="form-group">
                                         <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Activer l\'authentification LDAP' }}</label>
@@ -435,7 +435,7 @@
                                 {% else %}
                                     <div class="alert alert-info">{{ 'Librairie LDAP non trouvée. Merci de l\'installer avant de pouvoir utiliser la connexion LDAP' }}</div>
                                 {% endif %}
-                                <legend>{{ 'Connexion' }}</legend>
+                                <legend class="legend-title-2">{{ 'Connexion' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nombre d\'échecs tolérés' }}</label>
                                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
@@ -460,12 +460,11 @@
                                         <input type="text" class="configKey form-control" data-l1key="security::whiteips"/>
                                     </div>
                                 </div>
-
                             </fieldset>
                         </form>
                         <form class="form-horizontal">
+                            <legend class="legend-title-2">{{ 'IPs bannies' }} <a class="btn btn-warning btn-xs pull-right" id="bt_removeBanIp"><i class="fa fa-trash"></i> {{ 'Supprimer' }}</a></legend>
                             <fieldset>
-                                <legend>{{ 'IPs bannies' }} <a class="btn btn-warning btn-xs pull-right" id="bt_removeBanIp"><i class="fa fa-trash"></i> {{ 'Supprimer' }}</a></legend>
                                 <table class="table table-condensed table-bordered">
                                     <thead>
                                     <tr>
@@ -488,10 +487,11 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="networktab">
+                        <legend class="legend-title-1"><i class="fa fa-rss"></i>{{ 'Réseaux' }}</legend>
                         <div class="alert alert-warning alert-config">{{ 'Attention : cette configuration n\'est là que pour informer' }} {{ adminConfigs['product_name'] }} {{ 'de sa configuration réseau et n\'a aucun impact sur les ports ou l\'IP réellement utilisés pour joindre' }} {{ adminConfigs['product_name'] }}</div>
                         <form class="form-horizontal">
+                            <legend class="legend-title-2">{{ 'Accès interne' }}</legend>
                             <fieldset>
-                                <legend>{{ 'Accès interne' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Protocole' }}</label>
                                     <div class="col-lg-8 col-md-9 col-sm-8 col-xs-6">
@@ -514,7 +514,7 @@
                         </form>
                         <form class="form-horizontal">
                             <fieldset>
-                                <legend>{{ 'Accès externe' }}</legend>
+                                <legend class="legend-title-2">{{ 'Accès externe' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Protocole' }}</label>
                                     <div class="col-lg-8 col-md-9 col-sm-8 col-xs-6">
@@ -535,7 +535,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <legend>{{ 'Gestion avancée' }}</legend>
+                                        <legend class="legend-title-2">{{ 'Gestion avancée' }}</legend>
                                         <table class="table table-condensed table-bordered">
                                             <thead>
                                             <tr>
@@ -570,7 +570,7 @@
                                     <div class="col-sm-6">
                                         {% for repo, data in adminReposList %}
                                             {% if data['scope']['proxy'] is defined and data['scope']['proxy'] == true and adminConfigs[repo ~ '::enable'] != 0 %}
-                                                <legend>{{ 'DNS (proxy)' }} {{ data['name'] }}</legend>
+                                                <legend class="legend-title-2">{{ 'DNS (proxy)' }} {{ data['name'] }}</legend>
                                                 {% if adminConfigs['dns::token'] == '' %}
                                                     <div class="alert alert-warning">{{ 'Attention : cette fonctionnalité n\'est pas disponible dans le service pack community (voir votre service pack sur votre page profil sur le market)' }}</div>
                                                 {% else %}
@@ -606,9 +606,10 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="commandtab">
-                        <legend>{{ 'Historique' }}</legend>
+                        <legend class="legend-title-1"><i class="fa fa-hand-o-right"></i>{{ 'Commandes' }}</legend>
                         <form class="form-horizontal">
                             <fieldset>
+                                <legend class="legend-title-2">{{ 'Historique' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Afficher les statistiques sur les widgets' }}</label>
                                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
@@ -665,9 +666,9 @@
                                 </div>
                             </fieldset>
                         </form>
-                        <legend>{{ 'Push' }}</legend>
                         <form class="form-horizontal">
                             <fieldset>
+                                <legend class="legend-title-2">{{ 'Push' }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'URL de push globale' }}</label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
