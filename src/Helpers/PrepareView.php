@@ -101,7 +101,7 @@ class PrepareView
         ));
         $pageData['JS'] = '';
 
-        $pageData['MENU'] = $render->get('desktop/menu_rescue.html.twig');
+        $pageData['MENU'] = $render->get('commons/menu_rescue.html.twig');
 
         try {
             if (!\nextdom::isStarted()) {
@@ -118,7 +118,7 @@ class PrepareView
         $pageData['CONTENT'] = $render->get('desktop/index.html.twig', $pageData);
 
         $render = Render::getInstance();
-        $render->show('desktop/base.html.twig', $pageData);
+        $render->show('layouts/base_rescue.html.twig', $pageData);
     }
 
     public static function showContent($configs)

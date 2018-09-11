@@ -1,0 +1,13 @@
+{% include '/commons/header.html.twig' %}
+    <body class="hold-transition skin-nextdom sidebar-mini fixed sidebar-collapse">
+    {% include '/commons/menu_rescue.html.twig' %}
+        <div class="content-wrapper">
+            {{ CONTENT | raw }}
+        </div><!-- plif  -->
+    {% if JS_END_POOL is defined %}
+        {% for jsFile in JS_END_POOL %}
+            <script src="{{ jsFile }}"></script>
+        {% endfor %}
+    {% endif %}
+    </body>
+</html>
