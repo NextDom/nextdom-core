@@ -436,11 +436,19 @@ legend{
   top: 10px;
 }
 
-legend {
-font-size: 16px;
-border: 1px solid #e5e5e5;
-padding: 5px 10px;
-margin-bottom: 15px;
+.legend-title-1 {
+    font-size: 16px;
+    border: 1px solid #e5e5e5;
+    padding: 5px 10px;
+    margin-bottom: 15px;
+    background-color: lightgrey;
+}
+
+.legend-title-2 {
+    font-size: 16px;
+    border: 1px solid #e5e5e5;
+    padding: 5px 10px;
+    margin-bottom: 15px;
 }
 
 .btn-tab {
