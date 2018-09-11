@@ -111,7 +111,7 @@ class Controller
         }
 
         if (!is_object($object)) {
-            throw new \Exception(__('Aucun objet racine trouvé. Pour en créer un, allez dans Outils -> <a href="/index.php?v=d&p=object" target="_blank">Objets</a>'));
+            throw new \Exception(__('Aucun objet racine trouvé. Pour en créer un, allez dans Outils -> <a href="/index.php?v=d&p=object">Objets</a>'));
         }
         $pageContent['JS_VARS']['rootObjectId'] = $object->getId();
 
