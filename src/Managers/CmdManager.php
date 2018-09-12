@@ -33,6 +33,8 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Managers\CacheManager;
+
 class CmdManager
 {
     const CLASS_NAME = 'cmd';
@@ -719,7 +721,7 @@ class CmdManager
             if (isset($replace['#' . $cmd_id . '#'])) {
                 continue;
             }
-            $mc = \cache::byKey('cmdCacheAttr' . $cmd_id);
+            $mc = CacheManager::byKey('cmdCacheAttr' . $cmd_id);
             if (\utils::getJsonAttr($mc->getValue(), 'value', null) !== null) {
                 $collectDate = \utils::getJsonAttr($mc->getValue(), 'collectDate', date('Y-m-d H:i:s'));
                 $valueDate = \utils::getJsonAttr($mc->getValue(), 'valueDate', date('Y-m-d H:i:s'));

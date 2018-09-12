@@ -25,6 +25,7 @@ use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Managers\CacheManager;
 
 class Controller
 {
@@ -208,7 +209,7 @@ class Controller
         $pageContent['adminIsBan']            = \user::isBan();
         $pageContent['adminHardwareName']     = \nextdom::getHardwareName();
         $pageContent['adminHardwareKey']      = \nextdom::getHardwareKey();
-        $pageContent['adminLastKnowDate']     = \cache::byKey('hour')->getValue();
+        $pageContent['adminLastKnowDate']     = CacheManager::byKey('hour')->getValue();
         $pageContent['adminIsRescueMode']     = Status::isRescueMode();
 
         if (!$pageContent['adminIsRescueMode']) {
@@ -229,7 +230,7 @@ class Controller
         $pageContent['adminUseLdap'] = function_exists('ldap_connect');
 
         $pageContent['adminBannedIp'] = [];
-        $cache = \cache::byKey('security::banip');
+        $cache = CacheManager::byKey('security::banip');
         $values = json_decode($cache->getValue('[]'), true);
 
         if (is_array($values) && count($values) > 0) {
@@ -257,8 +258,8 @@ class Controller
         }
         $pageContent['adminDnsRun'] = \network::dns_run();
         $pageContent['adminNetworkExternalAccess'] = \network::getNetworkAccess('external');
-        $pageContent['adminStats'] = \cache::stats();
-        $pageContent['adminCacheFolder'] = \cache::getFolder();
+        $pageContent['adminStats'] = CacheManager::stats();
+        $pageContent['adminCacheFolder'] = CacheManager::getFolder();
         $pageContent['adminMemCachedExists'] = class_exists('memcached');
         $pageContent['adminRedisExists'] = class_exists('redis');
         $pageContent['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
