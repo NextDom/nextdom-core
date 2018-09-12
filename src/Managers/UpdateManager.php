@@ -314,7 +314,8 @@ class UpdateManager
             }
             $find = array();
             if (method_exists($pluginId, 'listMarketObject')) {
-                foreach ($pluginId::listMarketObject() as $logical_id) {
+                $pluginIdListMarketObject = $pluginId::listMarketObject();
+                foreach ($pluginIdListMarketObject as $logical_id) {
                     $find[$logical_id] = true;
                     $update = self::byTypeAndLogicalId($pluginId, $logical_id);
                     if (!is_object($update)) {
@@ -325,7 +326,8 @@ class UpdateManager
                         $update->save();
                     }
                 }
-                foreach (self::byType($pluginId) as $update) {
+                $byTypePluginId = self::byType($pluginId);
+                foreach ($byTypePluginId as $update) {
                     if (!isset($find[$update->getLogicalId()])) {
                         $update->remove();
                     }
