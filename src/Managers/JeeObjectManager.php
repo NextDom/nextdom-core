@@ -174,11 +174,13 @@ class JeeObjectManager
             if (!isset($restrict['object']) || !is_array($restrict['object']) || isset($restrict['object'][$object->getId()])) {
                 $object_return = \utils::o2a($object);
                 $object_return['eqLogics'] = array();
-                foreach ($object->getEqLogic(true, true) as $eqLogic) {
+                $objectGetEqLogic = $object->getEqLogic(true, true);
+                foreach ($objectGetEqLogic as $eqLogic) {
                     if (!isset($restrict['eqLogic']) || !is_array($restrict['eqLogic']) || isset($restrict['eqLogic'][$eqLogic->getId()])) {
                         $eqLogic_return = \utils::o2a($eqLogic);
-                        $eqLogic_return['cmds'] = array();
-                        foreach ($eqLogic->getCmd() as $cmd) {
+                        $eqLogic_return['cmds'] = [];
+                        $eqLogicGetCmd = $eqLogic->getCmd();
+                        foreach ($eqLogicGetCmd as $cmd) {
                             if (!isset($restrict['cmd']) || !is_array($restrict['cmd']) || isset($restrict['cmd'][$cmd->getId()])) {
                                 $cmd_return = \utils::o2a($cmd);
                                 if ($cmd->getType() == 'info') {
