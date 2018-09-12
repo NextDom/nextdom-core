@@ -35,6 +35,7 @@ namespace NextDom\Managers;
 
 use NextDom\Enums\DaemonStateEnum;
 use NextDom\Enums\PluginManagerCronEnum;
+use NextDom\Managers\CacheManager;
 
 class PluginManager
 {
@@ -249,16 +250,16 @@ class PluginManager
      */
     private static function startCronTask(string $cronType = '')
     {
-        $cache = \cache::byKey('plugin::' . $cronType . '::inprogress');
+        $cache = CacheManager::byKey('plugin::' . $cronType . '::inprogress');
         if ($cache->getValue(0) > 3) {
-            \message::add('core', \__('La tache plugin::' . $cronType . ' n\'arrive pas à finir à cause du plugin : ') . \cache::byKey('plugin::'.$cronType.'::last')->getValue() . \__(' nous vous conseillons de désactiver le plugin et de contacter l\'auteur'));
+            \message::add('core', \__('La tache plugin::' . $cronType . ' n\'arrive pas à finir à cause du plugin : ') . CacheManager::byKey('plugin::'.$cronType.'::last')->getValue() . \__(' nous vous conseillons de désactiver le plugin et de contacter l\'auteur'));
         }
-        \cache::set('plugin::'.$cronType.'::inprogress', $cache->getValue(0) + 1);
+        CacheManager::set('plugin::'.$cronType.'::inprogress', $cache->getValue(0) + 1);
         foreach (self::listPlugin(true) as $plugin) {
             if (method_exists($plugin->getId(), $cronType)) {
                 if (\config::byKey('functionality::cron::enable', $plugin->getId(), 1) == 1) {
                     $pluginId = $plugin->getId();
-                    \cache::set('plugin::'.$cronType.'::last', $pluginId);
+                    CacheManager::set('plugin::'.$cronType.'::last', $pluginId);
                     try {
                         $pluginId::$cronType();
                     } catch (\Throwable $e) {
@@ -267,7 +268,7 @@ class PluginManager
                 }
             }
         }
-        \cache::set('plugin::'.$cronType.'::inprogress', 0);
+        CacheManager::set('plugin::'.$cronType.'::inprogress', 0);
     }
 
     /**
