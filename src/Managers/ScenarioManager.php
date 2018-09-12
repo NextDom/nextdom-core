@@ -626,11 +626,11 @@ class ScenarioManager
      */
     public static function getTemplate($template = '')
     {
-        $path = dirname(__FILE__) . '/../../config/scenario';
+        $path = __DIR__ . '/../../config/scenario';
         if (isset($template) && $template != '') {
             // TODO Magic trixxxxxx
         }
-        return ls($path, '*.json', false, array('files', 'quiet'));
+        return ls($path, '*.json', false, ['files', 'quiet']);
     }
 
     /**
@@ -644,7 +644,7 @@ class ScenarioManager
      */
     public static function shareOnMarket(&$market)
     {
-        $moduleFile = dirname(__FILE__) . '/../../config/scenario/' . $market->getLogicalId() . '.json';
+        $moduleFile = __DIR__ . '/../../config/scenario/' . $market->getLogicalId() . '.json';
         if (!file_exists($moduleFile)) {
             throw new \Exception('Impossible de trouver le fichier de configuration ' . $moduleFile);
         }
@@ -697,7 +697,7 @@ class ScenarioManager
      */
     public static function timelineDisplay(array $event)
     {
-        $return = array();
+        $return = [];
         $return['date'] = $event['datetime'];
         $return['group'] = 'scenario';
         $return['type'] = $event['type'];
