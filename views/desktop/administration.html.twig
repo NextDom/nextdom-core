@@ -60,7 +60,7 @@
     <div class="col-md-8 col-md-offset-2">
         <div class="box" style="display: none;" id="div_General">
             <div class="box-header">
-                <legend class="legend-title-1"><i class="fa fa-wrench"></i>{{ 'Général' }}</legend>
+                <legend><i class="fa fa-wrench"></i>{{ 'Général' }}</legend>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -70,7 +70,7 @@
             <div class="box-body">
                 <form class="form-horizontal">
                     <fieldset>
-                        <legend class="legend-title-2">{{ 'NextDom' }}</legend>
+                        <legend >{{ 'NextDom' }}</legend>
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{'Nom de votre NextDom (utilisé notamment par le market)'}}">{{'Nom de votre NextDom'}}</label>
                             <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
@@ -95,7 +95,7 @@
                                 <span class="label label-info label-config">e56cb61e66d1dd9daedf9431b155030859f3f9902d39354368c715422d6968e</span>
                             </div>
                         </div>
-                        <legend class="legend-title-2">{{ 'Langage' }}</legend>
+                        <legend >{{ 'Langage' }}</legend>
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{'Langue de votre NextDom'}}">{{'Langue'}}</label>
                             <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
@@ -118,7 +118,7 @@
                                 </div>
                             </div>
                         </div>
-                        <legend class="legend-title-2">{{ 'Horodatage' }}</legend>
+                        <legend >{{ 'Horodatage' }}</legend>
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{'Durée de vie de votre connexion à NextDom si vous n\'avez pas coché la case enregistrer cet ordinateur'}}">{{'Durée de vie des sessions (en H)'}}</label>
                             <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
@@ -253,7 +253,7 @@
         </div>
         <div class="box" style="display: none;" id="div_API">
             <div class="box-header">
-                <legend class="legend-title-1"><i class="fa fa-wrench"></i>{{ 'API' }}</legend>
+                <legend ><i class="fa fa-wrench"></i>{{ 'API' }}</legend>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -262,9 +262,9 @@
             </div>
             <div class="box-body">
                 <form class="form-horizontal">
-                    <legend class="legend-title-1"><i class="fa fa-key"></i>{{ 'API' }}</legend>
+                    <legend ><i class="fa fa-key"></i>{{ 'API' }}</legend>
                     <fieldset>
-                        <legend class="legend-title-2">{{ 'Accès API' }}</legend>
+                        <legend >{{ 'Accès API' }}</legend>
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Accès API HTTP' }}</label>
                             <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
@@ -316,7 +316,7 @@
                                 </select>
                             </div>
                         </div>
-                        <legend class="legend-title-2">{{ 'Clefs API' }}</legend>
+                        <legend >{{ 'Clefs API' }}</legend>
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{ 'Clef API globale de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API' }}</label>
                             <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
@@ -375,7 +375,7 @@
         </div>
         <div class="box" style="display: none;" id="div_OSDB">
             <div class="box-header">
-                <legend class="legend-title-1"><i class="fa fa-terminal"></i>{{ 'OS/DB' }}</legend>
+                <legend ><i class="fa fa-terminal"></i>{{ 'OS/DB' }}</legend>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -388,21 +388,21 @@
                         {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à' }} {{ adminConfigs['product_name'] }}{{ '. L\'équipe' }} {{ adminConfigs['product_name'] }} {{ 'se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.' }}
                     </div>
                     <fieldset>
-                        <legend class="legend-title-2">{{ 'Console Système' }}</legend>
+                        <legend >{{ 'Console Système' }}</legend>
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
                             <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                                 <a class="btn btn-danger" href="index.php?v=d&p=system"><i class="fa fa-exclamation-triangle"></i> {{ 'Lancer' }}</a>
                             </div>
                         </div>
-                        <legend class="legend-title-2">{{ 'Editeur de fichiers' }}</legend>
+                        <legend >{{ 'Editeur de fichiers' }}</legend>
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Editeur' }}</label>
                             <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                                 <a class="btn btn-danger" href="index.php?v=d&p=editor"><i class="fa fa-exclamation-triangle"></i> {{ 'Lancer' }}</a>
                             </div>
                         </div>
-                        <legend class="legend-title-2">{{ 'Base de données' }}</legend>
+                        <legend >{{ 'Base de données' }}</legend>
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
                             <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
@@ -427,7 +427,7 @@
         </div>
         <div class="box" style="display: none;" id="div_Securite">
             <div class="box-header">
-                <legend class="legend-title-1"><i class="fa fa-shield"></i>{{ 'Sécurité' }}</legend>
+                <legend ><i class="fa fa-shield"></i>{{ 'Sécurité' }}</legend>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -437,7 +437,7 @@
             <div class="box-body">
                 <form class="form-horizontal">
                     <fieldset>
-                        <legend class="legend-title-2">{{ 'LDAP' }}</legend>
+                        <legend >{{ 'LDAP' }}</legend>
                         {% if adminUseLdap %}
                             <div class="form-group">
                                 <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Activer l\'authentification LDAP' }}</label>
@@ -511,7 +511,7 @@
                         {% else %}
                             <div class="alert alert-info">{{ 'Librairie LDAP non trouvée. Merci de l\'installer avant de pouvoir utiliser la connexion LDAP' }}</div>
                         {% endif %}
-                        <legend class="legend-title-2">{{ 'Connexion' }}</legend>
+                        <legend >{{ 'Connexion' }}</legend>
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nombre d\'échecs tolérés' }}</label>
                             <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
@@ -539,7 +539,7 @@
                     </fieldset>
                 </form>
                 <form class="form-horizontal">
-                    <legend class="legend-title-2">{{ 'IPs bannies' }} <a class="btn btn-warning btn-legend pull-right" id="bt_removeBanIp"><i class="fa fa-trash"></i> {{ 'Supprimer' }}</a></legend>
+                    <legend >{{ 'IPs bannies' }} <a class="btn btn-warning btn-legend pull-right" id="bt_removeBanIp"><i class="fa fa-trash"></i> {{ 'Supprimer' }}</a></legend>
                     <fieldset>
                         <table class="table table-condensed table-bordered">
                             <thead>
@@ -565,7 +565,7 @@
         </div>
         <div class="box" style="display: none;" id="div_Réseaux">
             <div class="box-header">
-                <legend class="legend-title-1"><i class="fa fa-rss"></i>{{ 'Réseaux' }}</legend>
+                <legend ><i class="fa fa-rss"></i>{{ 'Réseaux' }}</legend>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -575,7 +575,7 @@
             <div class="box-body">
                 <div class="alert alert-warning alert-config">{{ 'Attention : cette configuration n\'est là que pour informer' }} {{ adminConfigs['product_name'] }} {{ 'de sa configuration réseau et n\'a aucun impact sur les ports ou l\'IP réellement utilisés pour joindre' }} {{ adminConfigs['product_name'] }}</div>
                 <form class="form-horizontal">
-                    <legend class="legend-title-2">{{ 'Accès interne' }}</legend>
+                    <legend >{{ 'Accès interne' }}</legend>
                     <fieldset>
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Protocole' }}</label>
@@ -599,7 +599,7 @@
                 </form>
                 <form class="form-horizontal">
                     <fieldset>
-                        <legend class="legend-title-2">{{ 'Accès externe' }}</legend>
+                        <legend >{{ 'Accès externe' }}</legend>
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Protocole' }}</label>
                             <div class="col-lg-8 col-md-9 col-sm-8 col-xs-6">
@@ -620,7 +620,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <legend class="legend-title-2">{{ 'Gestion avancée' }}</legend>
+                                <legend >{{ 'Gestion avancée' }}</legend>
                                 <table class="table table-condensed table-bordered">
                                     <thead>
                                     <tr>
@@ -655,7 +655,7 @@
                             <div class="col-sm-12">
                                 {% for repo, data in adminReposList %}
                                     {% if data['scope']['proxy'] is defined and data['scope']['proxy'] == true and adminConfigs[repo ~ '::enable'] != 0 %}
-                                        <legend class="legend-title-2">{{ 'DNS (proxy)' }} {{ data['name'] }}</legend>
+                                        <legend >{{ 'DNS (proxy)' }} {{ data['name'] }}</legend>
                                         {% if adminConfigs['dns::token'] == '' %}
                                             <div class="alert alert-warning alert-config">{{ 'Attention : cette fonctionnalité n\'est pas disponible dans le service pack community (voir votre service pack sur votre page profil sur le market)' }}</div>
                                         {% else %}
@@ -693,7 +693,7 @@
         </div>
         <div class="box" style="display: none;" id="div_Commandes">
             <div class="box-header">
-                <legend class="legend-title-1"><i class="fa fa-hand-o-right"></i>{{ 'Commandes' }}</legend>
+                <legend ><i class="fa fa-hand-o-right"></i>{{ 'Commandes' }}</legend>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -761,7 +761,7 @@
                 </form>
                 <form class="form-horizontal">
                     <fieldset>
-                        <legend class="legend-title-2">{{ 'Push' }}</legend>
+                        <legend >{{ 'Push' }}</legend>
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'URL de push globale' }}</label>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -774,7 +774,7 @@
         </div>
         <div class="box" style="display: none;" id="div_Cache">
             <div class="box-header">
-                <legend class="legend-title-1"><i class="fa fa-hand-o-right"></i>{{ 'Cache' }}</legend>
+                <legend ><i class="fa fa-hand-o-right"></i>{{ 'Cache' }}</legend>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -859,7 +859,7 @@
         </div>
         <div class="box" style="display: none;" id="div_Interactions">
             <div class="box-header">
-                <legend class="legend-title-1"><i class="fa fa-hand-o-right"></i>{{ 'Interact' }}</legend>
+                <legend ><i class="fa fa-hand-o-right"></i>{{ 'Interact' }}</legend>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -1023,7 +1023,7 @@
         </div>
         <div class="box" style="display: none;" id="div_Rapports">
             <div class="box-header">
-                <legend class="legend-title-1"><i class="fa fa-hand-o-right"></i>{{ 'Rapport' }}</legend>
+                <legend ><i class="fa fa-hand-o-right"></i>{{ 'Rapport' }}</legend>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -1051,7 +1051,7 @@
         </div>
         <div class="box" style="display: none;" id="div_Liens">
             <div class="box-header">
-                <legend class="legend-title-1"><i class="fa fa-hand-o-right"></i>{{ 'Liens' }}</legend>
+                <legend ><i class="fa fa-hand-o-right"></i>{{ 'Liens' }}</legend>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -1109,7 +1109,7 @@
         </div>
         <div class="box" style="display: none;" id="div_Resumes">
             <div class="box-header">
-                <legend class="legend-title-1"><i class="fa fa-hand-o-right"></i>{{ 'Résumés' }}</legend>
+                <legend ><i class="fa fa-hand-o-right"></i>{{ 'Résumés' }}</legend>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -1142,7 +1142,7 @@
         </div>
         <div class="box" style="display: none;" id="div_Logs">
             <div class="box-header">
-                <legend class="legend-title-1"><i class="fa fa-hand-o-right"></i>{{ 'Logs' }}</legend>
+                <legend ><i class="fa fa-hand-o-right"></i>{{ 'Logs' }}</legend>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -1293,7 +1293,7 @@
         </div>
         <div class="box" style="display: none;" id="div_Eqlogic">
             <div class="box-header">
-                <legend class="legend-title-1"><i class="fa fa-hand-o-right"></i>{{ 'Equipements' }}</legend>
+                <legend ><i class="fa fa-hand-o-right"></i>{{ 'Equipements' }}</legend>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -1327,7 +1327,7 @@
         </div>
         <div class="box" style="display: none;" id="div_Update">
             <div class="box-header">
-                <legend class="legend-title-1"><i class="fa fa-hand-o-right"></i>{{ 'Mise a jour' }}</legend>
+                <legend ><i class="fa fa-hand-o-right"></i>{{ 'Mise a jour' }}</legend>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
