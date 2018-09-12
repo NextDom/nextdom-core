@@ -15,20 +15,20 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* This file is part of NextDom.
+/* This file is part of NextDom Software.
  *
- * NextDom is free software: you can redistribute it and/or modify
+ * NextDom Software is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * NextDom is distributed in the hope that it will be useful,
+ * NextDom Software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+ * along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
  */
 
 namespace NextDom\Managers;
@@ -392,7 +392,8 @@ class EqLogicManager
      */
     public static function checkAlive()
     {
-        foreach (self::byTimeout(1, true) as $eqLogic) {
+        $selfByTimeout = self::byTimeout(1, true);
+        foreach ($selfByTimeout as $eqLogic) {
             $sendReport = false;
             $cmds = $eqLogic->getCmd();
             foreach ($cmds as $cmd) {
@@ -467,9 +468,9 @@ class EqLogicManager
     public static function byObjectNameEqLogicName($objectName, $eqLogicName)
     {
         if ($objectName == \__('Aucun', __FILE__)) {
-            $values = array(
+            $values = [
                 'eqLogic_name' => $eqLogicName,
-            );
+            ];
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE name=:eqLogic_name
@@ -497,7 +498,7 @@ class EqLogicManager
     public static function toHumanReadable($input)
     {
         if (is_object($input)) {
-            $reflections = array();
+            $reflections = [];
             $uuid = spl_object_hash($input);
             if (!isset($reflections[$uuid])) {
                 $reflections[$uuid] = new \ReflectionClass($input);
@@ -546,7 +547,7 @@ class EqLogicManager
             $input = json_decode($input, true);
         }
         if (is_object($input)) {
-            $reflections = array();
+            $reflections = [];
             $uuid = spl_object_hash($input);
             if (!isset($reflections[$uuid])) {
                 $reflections[$uuid] = new \ReflectionClass($input);
