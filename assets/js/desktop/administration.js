@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -18,7 +17,7 @@
  var url = document.location.toString();
  if (url.match('#')) {
     $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-} 
+}
 $('.nav-tabs a').on('shown.bs.tab', function (e) {
     window.location.hash = e.target.hash;
 })
@@ -70,7 +69,7 @@ $(".bt_regenerate_api").on('click', function (event) {
     bootbox.confirm('{{Etes-vous sûr de vouloir réinitialiser la clef API de }}'+el.attr('data-plugin')+' ?', function (result) {
         if (result) {
            $.ajax({
-            type: "POST", 
+            type: "POST",
             url: "core/ajax/config.ajax.php",
             data: {
                 action: "genApiKey",
@@ -122,7 +121,7 @@ $('#bt_restartDns').on('click', function () {
      }
  });
    }
-}); 
+});
 });
 
 
@@ -144,7 +143,7 @@ $('#bt_haltDns').on('click', function () {
      }
  });
    }
-}); 
+});
 });
 
 $("#bt_cleanCache").on('click', function (event) {
@@ -394,8 +393,8 @@ $('#div_pageContainer').delegate('.configKey', 'change', function () {
 
 $('#bt_resetHour').on('click',function(){
  $.ajax({
-    type: "POST", 
-    url: "core/ajax/nextdom.ajax.php", 
+    type: "POST",
+    url: "core/ajax/nextdom.ajax.php",
     data: {
         action: "resetHour"
     },
@@ -403,7 +402,7 @@ $('#bt_resetHour').on('click',function(){
     error: function (request, status, error) {
         handleAjaxError(request, status, error);
     },
-    success: function (data) { 
+    success: function (data) {
         if (data.state != 'ok') {
             notify("Erreur", data.result, 'error');
             return;
@@ -415,8 +414,8 @@ $('#bt_resetHour').on('click',function(){
 
 $('#bt_resetHwKey').on('click',function(){
  $.ajax({
-    type: "POST", 
-    url: "core/ajax/nextdom.ajax.php", 
+    type: "POST",
+    url: "core/ajax/nextdom.ajax.php",
     data: {
         action: "resetHwKey"
     },
@@ -424,7 +423,7 @@ $('#bt_resetHwKey').on('click',function(){
     error: function (request, status, error) {
         handleAjaxError(request, status, error);
     },
-    success: function (data) { 
+    success: function (data) {
         if (data.state != 'ok') {
             notify("Erreur", data.result, 'error');
             return;
@@ -470,8 +469,8 @@ $('#bt_removeBanIp').on('click',function(){
 
 function clearNextDomDate() {
     $.ajax({
-        type: "POST", 
-        url: "core/ajax/nextdom.ajax.php", 
+        type: "POST",
+        url: "core/ajax/nextdom.ajax.php",
         data: {
             action: "clearDate"
         },
@@ -479,7 +478,7 @@ function clearNextDomDate() {
         error: function (request, status, error) {
             handleAjaxError(request, status, error);
         },
-        success: function (data) { 
+        success: function (data) {
             if (data.state != 'ok') {
                 notify("Erreur", data.result, 'error');
                 return;
@@ -529,8 +528,8 @@ function updateCacheStats(){
 /********************Convertion************************/
 function printConvertColor() {
     $.ajax({
-        type: "POST", 
-        url: "core/ajax/config.ajax.php", 
+        type: "POST",
+        url: "core/ajax/config.ajax.php",
         data: {
             action: "getKey",
             key: 'convertColor'
@@ -539,7 +538,7 @@ function printConvertColor() {
         error: function (request, status, error) {
             handleAjaxError(request, status, error);
         },
-        success: function (data) { 
+        success: function (data) {
             if (data.state != 'ok') {
                 notify("Erreur", data.result, 'error');
                 return;
@@ -575,8 +574,8 @@ function saveConvertColor() {
     });
     value.convertColor = colors;
     $.ajax({
-        type: "POST", 
-        url: "core/ajax/config.ajax.php", 
+        type: "POST",
+        url: "core/ajax/config.ajax.php",
         data: {
             action: 'addKey',
             value: json_encode(value)
@@ -585,7 +584,7 @@ function saveConvertColor() {
         error: function (request, status, error) {
             handleAjaxError(request, status, error);
         },
-        success: function (data) { 
+        success: function (data) {
             if (data.state != 'ok') {
                 notify("Erreur", data.result, 'error');
                 return;
@@ -674,8 +673,8 @@ $('#div_pageContainer').undelegate('.objectSummary .objectSummaryAction[data-l1k
 $('#div_pageContainer').undelegate('.objectSummary .objectSummaryAction[data-l1key=createVirtual]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=createVirtual]', 'click', function () {
     var objectSummary = $(this).closest('.objectSummary');
     $.ajax({
-        type: "POST", 
-        url: "core/ajax/object.ajax.php", 
+        type: "POST",
+        url: "core/ajax/object.ajax.php",
         data: {
             action: "createSummaryVirtual",
             key: objectSummary.find('.objectSummaryAttr[data-l1key=key]').value()
@@ -701,8 +700,8 @@ printObjectSummary();
 
 function printObjectSummary() {
     $.ajax({
-        type: "POST", 
-        url: "core/ajax/config.ajax.php", 
+        type: "POST",
+        url: "core/ajax/config.ajax.php",
         data: {
             action: "getKey",
             key: 'object:summary'
@@ -711,7 +710,7 @@ function printObjectSummary() {
         error: function (request, status, error) {
             handleAjaxError(request, status, error);
         },
-        success: function (data) { 
+        success: function (data) {
             if (data.state != 'ok') {
                 notify("Erreur", data.result, 'error');
                 return;
@@ -796,8 +795,8 @@ function saveObjectSummary() {
     }
     value = {'object:summary' : summary};
     $.ajax({
-        type: "POST", 
-        url: "core/ajax/config.ajax.php", 
+        type: "POST",
+        url: "core/ajax/config.ajax.php",
         data: {
             action: 'addKey',
             value: json_encode(value)
@@ -806,7 +805,7 @@ function saveObjectSummary() {
         error: function (request, status, error) {
             handleAjaxError(request, status, error);
         },
-        success: function (data) { 
+        success: function (data) {
             if (data.state != 'ok') {
                 notify("Erreur", data.result, 'error');
                 return;
@@ -816,3 +815,12 @@ function saveObjectSummary() {
         }
     });
 }
+
+$(".btn-app").on('click', function (event) {
+    $('#'+$(this).attr('data-id')).show();
+    $('#div_MenuList').hide();
+});
+$(".btn-close").on('click', function (event) {
+    $('#'+$(this).parent().parent().parent().attr('id')).hide();
+    $('#div_MenuList').show();
+});
