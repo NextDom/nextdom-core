@@ -19,7 +19,7 @@
 use PHPUnit\Framework\TestCase;
 use NextDom\Helpers\DataStorage;
 
-require_once(__DIR__ . '/../core/class/DB.class.php');
+require_once(__DIR__ . '/../../core/class/DB.class.php');
 
 class DataStorageTest extends TestCase
 {

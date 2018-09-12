@@ -21,7 +21,7 @@ class nextdomTest extends PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        require_once(__DIR__ . '/../core/class/nextdom.class.php');
+        require_once(__DIR__ . '/../../core/class/nextdom.class.php');
         DB::Prepare("CREATE TABLE `config` (
                       `plugin` varchar(127) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'core',
                       `key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -32,9 +32,9 @@ class nextdomTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        require_once(__DIR__ . '/../core/class/nextdom.class.php');
+        require_once(__DIR__ . '/../../core/class/nextdom.class.php');
 
-        $this->timelineFile = __DIR__ . '/../data/timeline.json';
+        $this->timelineFile = __DIR__ . '/../../data/timeline.json';
         if (file_exists($this->timelineFile)) {
             unlink($this->timelineFile);
         }
@@ -48,7 +48,7 @@ class nextdomTest extends PHPUnit_Framework_TestCase
     }
 
     public static function tearDownAfterClass() {
-        require_once(__DIR__ . '/../core/class/nextdom.class.php');
+        require_once(__DIR__ . '/../../core/class/nextdom.class.php');
         DB::Prepare("DROP TABLE `config`", array());
     }
 
