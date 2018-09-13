@@ -75,6 +75,8 @@ class Controller
         $route = null;
         if (array_key_exists($page, self::routesList)) {
             $route = self::routesList[$page];
+        } else {
+            Router::showError404AndDie();
         }
         return $route;
     }
