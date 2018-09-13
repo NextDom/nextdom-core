@@ -182,4 +182,10 @@ class Router
         }
         \include_file('mobile', $filename, $type, $plugin, true);
     }
+
+    public static function showError404AndDie() {
+        header("HTTP/1.0 404 Not Found");
+        require(NEXTDOM_ROOT . '/public/404.html');
+        exit();
+    }
 }
