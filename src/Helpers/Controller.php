@@ -77,7 +77,8 @@ class Controller
             $route = self::routesList[$page];
         } else {
             header("HTTP/1.0 404 Not Found");
-            header("Location: /404.html");
+            require(NEXTDOM_ROOT . '/public/404.html');
+            exit();
         }
         return $route;
     }
