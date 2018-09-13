@@ -1,8 +1,82 @@
-<div class="col-md-12">
-  <div class="col-md-1 pull-right">
-  <a class="btn btn-success pull-right btn-tab" id="bt_saveGeneraleConfig"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-  </div>
-    <div class="col-md-8 col-md-offset-2" id="div_MenuList">
+<!-- Wigets performance -->
+<div class="row">
+    <div class="col-md-2 col-md-offset-1">
+        <div class="box box-solid ">
+            <div class="box-header with-border">
+                <h3 class="box-title">CPU</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="progress progress-sm active">
+                    <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+                        <span class="sr-only">20% Complete</span>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+</div>
+<div class="col-md-2">
+    <div class="box box-solid">
+        <div class="box-header with-border">
+            <h3 class="box-title">RAM</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="progress progress-sm active">
+                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+                    <span class="sr-only">20% Complete</span>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.box-body -->
+    </div>
+</div>
+    <div class="col-md-2">
+        <div class="box box-solid ">
+            <div class="box-header with-border">
+                <h3 class="box-title">DISK</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="progress progress-sm active">
+                    <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+                        <span class="sr-only">20% Complete</span>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title">SWAP</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="progress progress-sm active">
+                    <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+                        <span class="sr-only">20% Complete</span>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+
+    <div class="col-md-2 pull-right">
+        <a class="btn btn-success pull-right btn-tab" id="bt_saveGeneraleConfig"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+    </div>
+</div>
+<!-- End Wigets performance -->
+<!-- Menus -->
+<div class="row">
+    <div class="col-md-10 col-md-offset-1" id="div_MenuList">
         <div class="box box-danger">
             <div class="box-header">
                 <h3 class="box-title">{{ 'Administration' }}</h3>
@@ -30,7 +104,8 @@
                     <i class="fa fa-hdd-o"></i> {{ 'Cache' }}
                 </a>
                 <a class="btn btn-app" data-id="div_Interactions">
-                    <i class="fa fa-microphone"></i> {{ 'Interactions' }}
+                    <i class="fa fa-hdd-o"></i> {{ 'Interactions' }}
+
                 </a>
                 <a class="btn btn-app" data-id="div_Rapports">
                     <i class="fa fa-newspaper-o"></i> {{ 'Rapports' }}
@@ -50,14 +125,50 @@
                 <a class="btn btn-app" data-id="div_Update">
                     <i class="fa fa-credit-card"></i> {{ 'Mises à jour' }}
                 </a>
+                <a class="btn btn-app" data-id="div_Utilisateurs">
+                    <i class="fa fa-users"></i> {{ 'Utilisateurs' }}
+                </a>
+                <a class="btn btn-app" data-id="div_Sauvegardes">
+                    <i class="fa fa-users"></i> {{ 'Sauvegardes' }}
+                </a>
+                <a class="btn btn-app" data-id="div_Migration">
+                    <i class="fa fa-users"></i> {{ 'Migration' }}
+                </a>
             </div>
             <!-- /.box-body -->
         </div>
     </div>
+</div>
 
+<div class="row">
+    <div class="col-md-10 col-md-offset-1" id="div_MenuList_2">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">{{ 'Configuration' }}</h3>
+            </div>
+            <div class="box-body">
+                <a class="btn btn-app" data-id="div_Taches">
+                    <i class="fa fa-tasks"></i> {{ 'Taches' }}
+                </a>
+                <a class="btn btn-app" data-id="div_Personnalisation">
+                    <i class="fas fa-pencil-square"></i> {{ 'Personnalisation' }}
+                </a>
+                <a class="btn btn-app" data-id="div_Themes">
+                    <i class="fas fa-pencil-square"></i> {{ 'Themes' }}
+                </a>
+                <a class="btn btn-app" data-id="div_Profil">
+                    <i class="fa fa-briefcase"></i> {{ 'Profil' }}
+                </a>
 
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+</div>
+<!-- End Menus -->
+<!-- Pages -->
 <div id="config">
-    <div class="col-md-8 col-md-offset-2">
+    <div class="col-md-10 col-md-offset-1">
         <div class="box" style="display: none;" id="div_General">
             <div class="box-header">
                 <legend><i class="fa fa-wrench"></i>{{ 'Général' }}</legend>
@@ -1437,6 +1548,397 @@
                 </div>
             </div>
         </div>
+
+        <div class="box" style="display: none;" id="div_Migration">
+            <div class="box-header">
+                <legend ><i class="fa fa-hand-o-right"></i>{{ 'Migration' }}</legend>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool btn-close" ><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <div class="box-body">
+                <h3 class="col-sm-12  control-label text-center">{{ 'Bienvenue sur la page de migration de NextDom' }}</h3><br><br><br>
+                <p class="col-sm-6  control-label  alert-info">{{ 'La fonction migration permet d\'utiliser une sauvegarde jeedom pour migrer vers nextdom' }}<br>
+                    {{ 'il vous suffit simplement de rentrer le chemin d\'accès vers les sauvegardes (si les sauvegardes sont deportées sur un NAS.ou vous pouvez également les uploader sur nextdom.' }}</p>
+                <div class="col-sm-12">
+                    <div class="col-sm-6">
+                        <div class="box">
+                            <div class="box-header">
+                                <legend><i class="fa fa-folder-open"></i> {{ 'Sauvegardes locales' }}
+                                </legend>
+                                <div class="box-tools pull-right">
+                                    <a class="btn btn-success btn-xs" id="bt_saveBackup"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <form class="form-horizontal">
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 col-xs-6 control-label">{{ 'Emplacement des sauvegardes' }}</label>
+                                            <div class="col-sm-4 col-xs-6">
+                                                <input type="text" class="configKey form-control" data-l1key="backup::path"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 col-xs-6 control-label">{{ 'Sauvegardes disponibles' }}</label>
+                                            <div class="col-sm-6 col-xs-6">
+                                                <select class="form-control" id="sel_restoreBackup"> </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 col-xs-6 control-label">{{ 'Migrer la sauvegarde' }}</label>
+                                            <div class="col-sm-4 col-xs-6">
+                                                <a class="btn btn-warning" id="bt_migrateNextDom"><i class="fa fa-refresh fa-spin" style="display : none;"></i> <i class="fa fa-file"></i> {{ 'Migrer' }}</a>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 col-xs-6 control-label">{{ 'Supprimer la sauvegarde' }}</label>
+                                            <div class="col-sm-4 col-xs-6">
+                                                <a class="btn btn-danger" id="bt_removeBackup"><i class="fa fa-trash-o"></i> {{ 'Supprimer' }}</a>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 col-xs-6 control-label">{{ 'téléverser une sauvegarde' }}</label>
+                                            <div class="col-sm-8 col-xs-6">
+                            <span class="btn btn-default btn-file">
+                                <i class="fa fa-cloud-upload"></i> {{ 'Envoyer' }}<input id="bt_uploadBackup" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token={{ migrationAjaxToken }}">
+                            </span>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="box">
+                            <div class="box-header">
+                                <legend><i class="fa fa-info-circle"></i> {{ 'Informations' }}</legend>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <pre id="pre_backupInfo" style="overflow: scroll;"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box" style="display: none;" id="div_Sauvegardes">
+            <div class="box-header">
+                <legend ><i class="fa fa-hand-o-right"></i>{{ 'Sauvegardes / Restaurations' }}</legend>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool btn-close" ><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="col-sm-6">
+                    <div class="box">
+                        <div class="box-header">
+                            <legend><i class="fas fa-floppy-o"></i> {{ 'Sauvegardes' }}
+                                <div class="box-tools pull-right">
+                                    <a class="btn btn-success btn-xs" id="bt_saveBackup"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                </div>
+                            </legend>
+                        </div>
+                        <div class="box-body">
+                            <form class="form-horizontal">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 col-xs-6 control-label">{{ 'Sauvegardes' }}</label>
+                                        <div class="col-sm-8 col-xs-6">
+                                            <a class="btn btn-success bt_backupNextDom"><i class="fas fa-refresh fa-spin" style="display : none;"></i> <i class="fas fa-floppy-o"></i> {{ 'Lancer' }}</a>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 col-xs-6 control-label">{{ 'Emplacement des sauvegardes' }}</label>
+                                        <div class="col-sm-4 col-xs-6">
+                                            <input type="text" class="configKey form-control" data-l1key="backup::path"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 col-xs-6 control-label">{{ 'Nombre de jours de mémorisation des sauvegardes' }}</label>
+                                        <div class="col-sm-4 col-xs-6">
+                                            <input type="text" class="configKey form-control" data-l1key="backup::keepDays"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 col-xs-6 control-label">{{ 'Taille totale maximale des sauvegardes (Mo)' }}</label>
+                                        <div class="col-sm-4 col-xs-6">
+                                            <input type="text" class="configKey form-control" data-l1key="backup::maxSize"/>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <legend><i class="fas fa-folder-open"></i> {{ 'Sauvegardes locales' }}</legend>
+                        <form class="form-horizontal">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-4 col-xs-6 control-label">{{ 'Sauvegardes disponibles' }}</label>
+                                    <div class="col-sm-6 col-xs-6">
+                                        <select class="form-control" id="sel_restoreBackup"> </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 col-xs-6 control-label">{{ 'Restaurer la sauvegarde' }}</label>
+                                    <div class="col-sm-4 col-xs-6">
+                                        <a class="btn btn-warning" id="bt_restoreNextDom"><i class="fas fa-refresh fa-spin" style="display : none;"></i> <i class="far fa-file"></i> {{ 'Restaurer' }}</a>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 col-xs-6 control-label">{{ 'Supprimer la sauvegarde' }}</label>
+                                    <div class="col-sm-4 col-xs-6">
+                                        <a class="btn btn-danger" id="bt_removeBackup"><i class="far fa-trash-alt"></i> {{ 'Supprimer' }}</a>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 col-xs-6 control-label">{{ 'Envoyer une sauvegarde' }}</label>
+                                    <div class="col-sm-8 col-xs-6">
+                            <span class="btn btn-default btn-file">
+                                <i class="fas fa-cloud-upload-alt"></i> {{ 'Envoyer' }}<input id="bt_uploadBackup" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token={{ backupAjaxToken }}">
+                            </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 col-xs-6 control-label">{{ 'Télécharger la sauvegarde' }}</label>
+                                    <div class="col-sm-4 col-xs-6">
+                                        <a class="btn btn-success" id="bt_downloadBackup"><i class="fas fa-cloud-download-alt"></i> {{ 'Télécharger' }}</a>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                        {% for repo, repoData in backupReposList %}
+                            {% if repoData['scope']['backup'] != false and repoData['enable'] != 0 %}
+                                {% set cssClass = 'repo_' ~ repo %}
+                                <legend><i class="fas fa-cloud"></i> {{ 'Sauvegardes' }} {{ repoData['name'] }}</legend>
+                                <form class="form-horizontal repo">
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 col-xs-6 control-label">{{ 'Envoi des sauvegardes' }}</label>
+                                            <div class="col-sm-4 col-xs-6">
+                                                <input type="checkbox" class="configKey" data-l1key="{{ repo }}::cloudUpload"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 col-xs-6 control-label">{{ 'Sauvegardes disponibles' }}</label>
+
+                                            <div class="col-sm-6 col-xs-6">
+                                                <select class="form-control sel_restoreCloudBackup" data-repo="{{ repo }}">
+                                                    <option>{{ 'Chargement...' }}</option>
+                                                </select>
+                                                <script>
+                                                    REPO_LIST.push('{{ repo }}');
+                                                </script>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 col-xs-6 control-label">{{ 'Restaurer la sauvegarde' }}</label>
+                                            <div class="col-sm-4 col-xs-6">
+                                                <a class="btn btn-warning bt_restoreRepoBackup" data-repo="{{ repo }}"><i class="fas fa-refresh fa-spin" style="display: none;"></i> <i class="far fa-file"></i> {{ 'Restaurer' }}</a>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="box">
+                        <div class="box-header">
+                            <legend><i class="fas fa-info-circle"></i> {{ 'Informations' }}</legend>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <pre id="pre_backupInfo" style="overflow: scroll;"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box" style="display: none;" id="div_Utilisateurs">
+            <div class="box-header">
+                <legend ><i class="fa fa-hand-o-right"></i>{{ 'Gestion des utilisateurs' }}</legend>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool btn-close" ><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="box" id="div_administration">
+                    <div class="box-header">
+                        <legend><i class="icon personne-toilet1"></i> {{ 'Liste des utilisateurs' }}
+                            <div class="box-tools pull-right">
+                                <a class="btn btn-success btn-xs" id="bt_saveUser"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+                                {% if userLdapEnabled != '1' %}
+                                    {% if userSupportExists %}
+                                        <a class="btn btn-danger btn-xs" id="bt_supportAccess" data-enable="0"><i class="fas fa-user"></i> {{ 'Désactiver accès support' }}</a>
+                                    {% else %}
+                                        <a class="btn btn-success btn-xs" id="bt_supportAccess" data-enable="1"><i class="fas fa-user"></i> {{ 'Activer accès support' }}</a>
+                                    {% endif %}
+                                    <a class="btn btn-warning btn-xs" id="bt_addUser"><i class="fas fa-plus-circle"></i> {{ 'Ajouter un utilisateur' }}</a>
+                                {% endif %}
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </legend>
+                    </div>
+                    <div class="box-body">
+                        <div class="tab-pane" id="user">
+
+                            <table class="table table-condensed table-bordered" id="table_user">
+                                <thead>
+                                <th>{{ 'Utilisateur' }}</th>
+                                <th style="width: 100px;">{{ 'Actif' }}</th>
+                                <th>{{ 'Profil' }}</th>
+                                <th>{{ 'Clef API' }}</th>
+                                <th>{{ 'Double authentification' }}</th>
+                                <th>{{ 'Dernière connexion' }}</th>
+                                <th>{{ 'Actions' }}</th>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <div class="box-header">
+                        <legend>{{ 'Sessions actives' }}</legend>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <form class="form-horizontal">
+                            <fieldset>
+                                <table class="table table-condensed table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 250px;">{{ 'ID' }}</th>
+                                        <th style="width: 250px;">{{ 'Utilisateur' }}</th>
+                                        <th style="width: 250px;">{{ 'IP' }}</th>
+                                        <th style="width: 250px;">{{ 'Date' }}</th>
+                                        <th>{{ 'Actions' }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% if userSessionsList|length > 0 %}
+                                        {% for sessionId, sessionData in userSessionsList %}
+                                            {% if sessionData['ip'] is not defined %}
+                                                {% set sessionData = sessionData|merge({'ip': ''}) %}
+                                            {% endif %}
+                                            {% if sessionData['datetime'] is not defined %}
+                                                {% set sessionData = sessionData|merge({'datetime': ''}) %}
+                                            {% endif %}
+                                            <tr data-id="{{ sessionId }}">
+                                                <td>{{ sessionData['login'] }}</td>
+                                                <td>{{ sessionData['ip'] }}</td>
+                                                <td>{{ sessionData['datetime'] }}</td>
+                                                <td><a class="btn btn-xs btn-warning bt_deleteSession"><i class="fa fa-sign-out"></i> {{ 'Déconnecter' }}</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endif %}
+                                    </tbody>
+                                </table>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="box-header">
+                        <legend>{{ 'Périphériques enregistrés' }}
+                            <div class="box-tools pull-right">
+                                <a class="btn btn-xs btn-warning" id="bt_removeAllRegisterDevice"><i class="fas fa-trash"></i> {{ 'Supprimer tout' }}</a>
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </legend>
+                    </div>
+                    <div class="box-body">
+                        <form class="form-horizontal">
+                            <fieldset>
+                                <table class="table table-bordered table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 250px;">{{ 'ID' }}</th>
+                                        <th style="width: 250px;">{{ 'Utilisateur' }}</th>
+                                        <th style="width: 250px;">{{ 'IP' }}</th>
+                                        <th style="width: 250px;">{{ 'Date' }}</th>
+                                        <th>{{ 'Action' }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for user in usersList %}
+                                        {% if user.getOptions('registerDevice') is iterable and user.getOptions('registerDevice')|length > 0 %}
+                                            {% for deviceId, deviceData in user.getOptions('registerDevice') %}
+                                                <tr data-key="{{ deviceId }}" data-user_id="{{ user.getId() }}">
+                                                    <td>{{ deviceId|slice(0, 10) }}</td>
+                                                    <td>{{ user.getLogin() }}</td>
+                                                    <td>{{ deviceData['ip'] }}</td>
+                                                    <td>{{ deviceData['datetime'] }}</td>
+                                                    <td><a class="btn btn-warning btn-xs bt_removeRegisterDevice"><i class="fas fa-trash"></i> {{ 'Supprimer' }}</a></td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal fade" id="md_newUser">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button class="close" data-dismiss="modal">×</button>
+                                <h3>{{ 'Ajouter un utilisateur' }}</h3>
+                            </div>
+                            <div class="modal-body">
+                                <div style="display: none;" id="div_newUserAlert"></div>
+                                <center>
+                                    <input class="form-control" type="text" id="in_newUserLogin" placeholder="{{ 'Identifiant' }}"/><br/><br/>
+                                    <input class="form-control" type="password" id="in_newUserMdp" placeholder="{{ 'Mot de passe' }}"/>
+                                </center>
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-default" data-dismiss="modal">{{ 'Annuler' }}</a>
+                                <a class="btn btn-primary" id="bt_newUserSave"><i class="far fa-check-circle"></i> {{ 'Enregistrer' }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
     </div>
-</div>
 </div>
