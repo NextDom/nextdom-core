@@ -70,6 +70,7 @@
     padding : 10px;
     border-radius: 2px;
     margin : 10px;
+    cursor: pointer;
 }
 
 .bs-sidebar .bs-sidenav{
@@ -86,34 +87,34 @@
 
 
 .sidenav-overlay {
-height: 100%;
-position: absolute;
-z-index: 9999;
-left: -250px;
-background-color: rgba(0,0,0,0.7);
-overflow-x: hidden;
-transition: 0.5s;
-padding-top: 60px;
-width: 250px;
-float: left;
+    height: 100%;
+    position: absolute;
+    z-index: 9999;
+    left: -250px;
+    background-color: rgba(0,0,0,0.7);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    width: 250px;
+    float: left;
 }
 
 .sidenav-overlay a:hover {
-color: #f1f1f1;
+    color: #f1f1f1;
 }
 
 .sidenav-overlay .closebtn {
-position: absolute;
-top: 0;
-right: 250px;
-font-size: 36px;
+    position: absolute;
+    top: 0;
+    right: 250px;
+    font-size: 36px;
 }
 
 .displayScenario-overlay {
     height: 100%;
     position: absolute;
     z-index: 9999;
-	right: -250px;
+    right: -250px;
     background-color: rgba(0,0,0,0.7);
     overflow-x: hidden;
     padding-top: 60px;
