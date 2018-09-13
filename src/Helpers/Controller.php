@@ -75,6 +75,9 @@ class Controller
         $route = null;
         if (array_key_exists($page, self::routesList)) {
             $route = self::routesList[$page];
+        } else {
+            header("HTTP/1.0 404 Not Found");
+            header("Location: /404.html");
         }
         return $route;
     }
