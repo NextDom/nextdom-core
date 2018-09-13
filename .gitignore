@@ -21,7 +21,6 @@ Thumbs.db
 cache.tar.gz
 
 /vendor
-composer.lock
 composer.phar
 var/market_cache/*
 backup/*
