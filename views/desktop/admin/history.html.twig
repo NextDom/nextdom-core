@@ -1,27 +1,12 @@
-<style>
-    div.vis-item, div.vis-item-content {
-        background-color: white;
-        border-color: #D7D7D7;
-        padding: 0px !important;
-        margin: 0px !important;
-    }
-</style>
-<div class="box" style="display: none;" id="div_History">
-    <div class="box-header">
-        <h3 class="box-title"><i class="icon divers-caduceus3"></i> {{ 'Santé de NextDom' }}</h3>
-        <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-too" ><i class="fas fa-tachometer-alt pull-right cursor" id="bt_benchmarkNextDom"></i></button>
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-            <button type="button" class="btn btn-box-tool btn-close" ><i class="fa fa-times"></i></button>
-        </div>
-    </div>
-    <div class="box-body">
+<div  style="display: none;" id="div_History">
 <section class="content">
     <div class="col-xs-12">
         <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs" role="tablist">
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li class="header"><button type="button" class="btn btn-box-tool btn-close" ><i class="fa fa-times"></i></button></li>
                 <li role="presentation" class="active"><a href="#historytab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-bar-chart-o"></i> {{ 'Historique' }}</a></li>
                 <li role="presentation"><a id="bt_tabTimeline" href="#timelinetab" aria-controls="profile" role="tab" data-toggle="tab" style="padding:10px 5px !important"><i class="fas fa-clock-o"></i> {{ 'Timeline' }}</a></li>
+                <li class="pull-left header"><i class="fas fa-pencil-square"></i> {{ 'Historique'}}</li>
             </ul>
             <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
                 <div role="tabpanel" class="tab-pane active" id="historytab">
@@ -168,4 +153,4 @@
     </div>
 </section>
     </div>
-</div>
+

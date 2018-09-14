@@ -592,7 +592,7 @@ class Controller
             $pageContent['logFilesList'][] = $logFileData;
 
         }
-        return $render->get('/desktop/log-view.html.twig', $pageContent);
+        return $render->get('/desktop/logs-view.html.twig', $pageContent);
     }
 
     /**
