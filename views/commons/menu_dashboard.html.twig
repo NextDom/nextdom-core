@@ -173,6 +173,7 @@
                     <li><a href="index.php?v=d&p=interact"><i class="fa fa-comments-o"></i> {{ 'Interactions' }}</a></li>
                     <li><a href="index.php?v=d&p=display"><i class="fa fa-th"></i> {{ 'Résumé domotique' }}</a></li>
                     <li><a href="index.php?v=d&p=scenario"><i class="fas fa-film"></i> {{ 'Scénarios' }}</a></li>
+                    <li><a href="index.php?v=d&p=eqAnalyse"><i class="fa fa-battery-full"></i> {{ 'Equipements' }}</a></li>
                 </ul>
             </li>
             <li class="header">MENU REGLAGES</li>
@@ -186,9 +187,10 @@
                             </span>
                 </a>
                 <ul class="treeview-menu">
+                    <li><a href="index.php?v=d&p=administration"><i class="fa fa-wrench"></i> {{ 'Administration' }}</a></li>
                     <li><a href="index.php?v=m"><i class="fas fa-mobile-alt"></i> {{ 'Version mobile' }}</a></li>
                     <li><a><i class="fa fa-info-circle"></i> {{ 'Version' }} {{ NEXTDOM_VERSION }}</a></li>
-                    <li class="fa fa-info-circle"> id="bt_messageModal"><a href="#">{{ 'About' }}</a></li>
+                    <li><a><i class="fa fa-info-circle"> id="bt_messageModal"><a href="#">{{ 'About' }}</a></li>
                     <li><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock"></i> {{ 'Se déconnecter' }}</a></li>
                     {% if IS_ADMIN and CAN_SUDO %}
                         <li><a id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i> {{ 'Redémarrer' }}</a></li>
