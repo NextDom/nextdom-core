@@ -18,7 +18,7 @@
                         <legend><i class="fa fa-folder-open"></i> {{ 'Sauvegardes locales' }}
                         </legend>
                         <div class="box-tools pull-right">
-                            <a class="btn btn-success btn-xs" id="bt_saveBackup"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+                            <a class="btn btn-success btn-xs" id="bt_saveBackupforMigration"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                             </button>
                             <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -36,7 +36,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-4 col-xs-6 control-label">{{ 'Sauvegardes disponibles' }}</label>
                                     <div class="col-sm-6 col-xs-6">
-                                        <select class="form-control" id="sel_restoreBackup"> </select>
+                                        <select class="form-control" id="sel_restoreBackupforMigration"> </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -46,16 +46,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-4 col-xs-6 control-label">{{ 'Supprimer la sauvegarde' }}</label>
-                                    <div class="col-sm-4 col-xs-6">
-                                        <a class="btn btn-danger" id="bt_removeBackup"><i class="fa fa-trash-o"></i> {{ 'Supprimer' }}</a>
-                                    </div>
-                                </div>
-                                <div class="form-group">
                                     <label class="col-sm-4 col-xs-6 control-label">{{ 'téléverser une sauvegarde' }}</label>
                                     <div class="col-sm-8 col-xs-6">
                             <span class="btn btn-default btn-file">
-                                <i class="fa fa-cloud-upload"></i> {{ 'Envoyer' }}<input id="bt_uploadBackup" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token={{ migrationAjaxToken }}">
+                                <i class="fa fa-cloud-upload"></i> {{ 'Envoyer' }}<input id="bt_uploadBackupforMigration" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token={{ migrationAjaxToken }}">
                             </span>
                                     </div>
                                 </div>
@@ -76,7 +70,7 @@
                         </div>
                     </div>
                     <div class="box-body">
-                        <pre id="pre_backupInfo" style="overflow: scroll;"></pre>
+                        <pre id="pre_migrationInfo" style="overflow: scroll;"></pre>
                     </div>
                 </div>
             </div>
