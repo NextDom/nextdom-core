@@ -269,6 +269,53 @@ class Controller
         $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/administration.js';
 
+        /**
+         * Render custom page
+         */
+        $pageContent['adminCategories'] = \nextdom::getConfiguration('eqLogic:category');
+        $pageContent['customProductName'] = \config::byKey('product_name');
+        $pageContent['customJS'] = '';
+        if (file_exists(NEXTDOM_ROOT . '/custom/custom.js')) {
+            $pageContent['customJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/custom/custom.js'));
+        }
+        $pageContent['customCSS'] = '';
+        if (file_exists(NEXTDOM_ROOT . '/custom/custom.css')) {
+            $pageContent['customCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/custom/custom.css'));
+        }
+        $pageContent['customMobileJS'] = '';
+        if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.js')) {
+            $pageContent['customMobileJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.js'));
+        }
+        $pageContent['customMobileCSS'] = '';
+        if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.css')) {
+            $pageContent['customMobileCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.css'));
+        }
+
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/custom.js';
+
+        /**
+         * Render interact page
+         */
+        $interacts = array();
+        $pageContent['interactTotal'] = \interactDef::all();
+        $interacts[-1] = \interactDef::all(null);
+        $interactListGroup = \interactDef::listGroup();
+        if (is_array($interactListGroup)) {
+            foreach ($interactListGroup as $group) {
+                $interacts[$group['group']] = \interactDef::all($group['group']);
+            }
+        }
+        $pageContent['JS_END_POOL'][]           = '/public/js/desktop/interact.js';
+        $pageContent['interactsList']           = $interacts;
+        $pageContent['interactsListGroup']      = $interactListGroup;
+        $pageContent['interactDisabledOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
+        $pageContent['interactCmdType']      = \nextdom::getConfiguration('cmd:type');
+        $pageContent['interactAllUnite']     = CmdManager::allUnite();
+        $pageContent['interactJeeObjects']   = JeeObjectManager::all();
+        $pageContent['interactEqLogicTypes'] = EqLogicManager::allType();
+        $pageContent['interactEqLogics']     = EqLogicManager::all();
+        $pageContent['interactEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
+
         return $render->get('/desktop/administration.html.twig', $pageContent);
     }
 
@@ -382,6 +429,9 @@ class Controller
         }
         $pageContent['reportPlugins'] = [];
 
+        /**
+         * Render health page
+         */
         $pluginManagerList = PluginManager::listPlugin(true);
         foreach ($pluginManagerList as $plugin) {
             if ($plugin->getDisplay() != '') {
@@ -393,9 +443,127 @@ class Controller
             }
         }
 
+        $pageContent['healthInformations']        = \nextdom::health();
+        $pageContent['healthPluginsInformations'] = [];
+        $pageContent['healthPluginDataToShow']    = false;
+        $pageContent['healthTotalNOk']            = 0;
+        $pageContent['healthTotalPending']        = 0;
+
+        foreach (PluginManager::listPlugin(true) as $plugin) {
+            $pluginData = [];
+
+            if (file_exists(dirname(PluginManager::getPathById($plugin->getId())) . '/../desktop/modal/health.php')) {
+                $pluginData['hasSpecificHealth'] = true;
+            }
+            if ($plugin->getHasDependency() == 1 || $plugin->getHasOwnDeamon() == 1 || method_exists($plugin->getId(), 'health') || $pluginData['hasSpecificHealth']) {
+                $pageContent['healthPluginDataToShow'] = true;
+                $pluginData['plugin']  = $plugin;
+                $pluginData['port']    = false;
+                $pluginData['nOk']     = 0;
+                $pluginData['pending'] = 0;
+                $pluginData['hasDependency'] = false;
+                $pluginData['hasOwnDaemon']  = false;
+                $pluginData['showOnlyTable'] = false;
+
+                $port = \config::byKey('port', $plugin->getId());
+                if ($port != '') {
+                    $pluginData['port'] = $port;
+                }
+                if ($plugin->getHasDependency() == 1 || $plugin->getHasOwnDeamon() == 1 || method_exists($plugin->getId(), 'health')) {
+                    $pluginData['showOnlyTable'] = true;
+                }
+                if ($plugin->getHasDependency() == 1) {
+                    $pluginData['hasDependency'] = true;
+                    $dependencyInfo = $plugin->dependancy_info();
+
+                    if (isset($dependencyInfo['state'])) {
+                        $pluginData['dependencyState'] = $dependencyInfo['state'];
+
+                        if ($pluginData['dependencyState'] == 'nok') {
+                            $pluginData['nOk']++;
+                        } elseif ($pluginData['dependencyState'] == 'in_progress') {
+                            $pluginData['pending']++;
+                        } elseif ($pluginData['dependencyState'] != 'ok') {
+                            $pluginData['nOk']++;
+                        }
+                    }
+                }
+
+                if ($plugin->getHasOwnDeamon() == 1) {
+                    $pluginData['hasOwnDaemon'] = true;
+                    $daemonInfo = $plugin->deamon_info();
+                    $pluginData['daemonAuto'] = $daemonInfo['auto'];
+
+                    if (isset($daemonInfo['launchable'])) {
+                        $pluginData['daemonLaunchable'] = $daemonInfo['launchable'];
+                        if ($pluginData['daemonLaunchable'] == 'nok' && $pluginData['daemonAuto'] == 1) {
+                            $pluginData['nOk']++;
+                        }
+                    }
+                    $pluginData['daemonLaunchableMessage'] = $daemonInfo['launchable_message'];
+                    $pluginData['daemonState'] = $daemonInfo['state'];
+
+                    if ($pluginData['daemonState'] == 'nok' && $pluginData['daemonAuto'] == 1) {
+                        $pluginData['nOk']++;
+                    }
+                }
+
+                if (method_exists($plugin->getId(), 'health')) {
+                    $pluginData['health'] = [];
+                    // Je vois pas quand ça peut être appelé
+                    foreach ($plugin->getId()::health() as $result) {
+                        $pluginData['health'][] = [
+                            'test' => $result['test'],
+                            'state' => $result['state'],
+                            'advice' => $result['advice']
+                        ];
+                        if ($result['state'] == 'nok') {
+                            $pluginData['nOk'] = true;
+                        }
+                    }
+                }
+
+                if ($pluginData['nOk'] > 0) {
+                    $pageContent['healthTotalNOk']++;
+                }
+                if ($pluginData['pending'] > 0) {
+                    $pageContent['healthTotalPending']++;
+                }
+                $pageContent['healthPluginsInformations'][] = $pluginData;
+            }
+        }
 
 
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/health.js';
+
+        /**
+         * Render health page
+         */
+        $pageContent['historyDate'] = array(
+            'start' => date('Y-m-d', strtotime(\config::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
+            'end' => date('Y-m-d'),
+        );
+
+        $pageContent['historyCmdsList']          = CmdManager::allHistoryCmd();
+        $pageContent['historyPluginsList']       = PluginManager::listPlugin();
+        $pageContent['historyEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
+        $pageContent['historyObjectsList']       = JeeObjectManager::all();
+
+        $pageContent['JS_POOL'][]     = '/3rdparty/visjs/vis.min.js';
+        $pageContent['CSS_POOL'][]    = '/3rdparty/visjs/vis.min.css';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/history.js';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools.js';
+
+        /**
+         * Render update page
+         */
+        $updates = array();
+        foreach (UpdateManager::listCoreUpdate() as $udpate) {
+            $updates[str_replace(array('.php', '.sql'), '', $udpate)] = str_replace(array('.php', '.sql'), '', $udpate);
+        }
+        usort($updates, 'version_compare');
+        $pageContent['updatesList']   = array_reverse($updates);
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/update.js';
 
         return $render->get('/desktop/tools.html.twig', $pageContent);
     }
@@ -459,36 +627,7 @@ class Controller
     }
 
 
-    /**
-     * Render update page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of update page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function updatePage(Render $render, array &$pageContent): string
-    {
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-
-        $updates = array();
-        foreach (UpdateManager::listCoreUpdate() as $udpate) {
-            $updates[str_replace(array('.php', '.sql'), '', $udpate)] = str_replace(array('.php', '.sql'), '', $udpate);
-        }
-        usort($updates, 'version_compare');
-        $pageContent['updatesList']   = array_reverse($updates);
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/update.js';
-
-        return $render->get('/desktop/update-view.html.twig', $pageContent);
-    }
-
-    /**
+      /**
      * Render system page
      *
      * @param Render $render Render engine
@@ -620,46 +759,6 @@ class Controller
         return $render->get('/desktop/plugin.html.twig', $pageContent);
     }
 
-    /**
-     * Render custom page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of custom page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function customPage(Render $render, array &$pageContent): string
-    {
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-        $pageContent['adminCategories'] = \nextdom::getConfiguration('eqLogic:category');
-        $pageContent['customProductName'] = \config::byKey('product_name');
-        $pageContent['customJS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/custom/custom.js')) {
-            $pageContent['customJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/custom/custom.js'));
-        }
-        $pageContent['customCSS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/custom/custom.css')) {
-            $pageContent['customCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/custom/custom.css'));
-        }
-        $pageContent['customMobileJS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.js')) {
-            $pageContent['customMobileJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.js'));
-        }
-        $pageContent['customMobileCSS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.css')) {
-            $pageContent['customMobileCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.css'));
-        }
-
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/custom.js';
-
-        return $render->get('/desktop/custom.html.twig', $pageContent);
-    }
 
     /**
      * Render editor page
@@ -718,41 +817,6 @@ class Controller
     }
 
     /**
-     * Render history page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of history page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function historyPage(Render $render, array &$pageContent): string
-    {
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-
-        $pageContent['historyDate'] = array(
-            'start' => date('Y-m-d', strtotime(\config::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
-            'end' => date('Y-m-d'),
-        );
-
-        $pageContent['historyCmdsList']          = CmdManager::allHistoryCmd();
-        $pageContent['historyPluginsList']       = PluginManager::listPlugin();
-        $pageContent['historyEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
-        $pageContent['historyObjectsList']       = JeeObjectManager::all();
-
-        $pageContent['JS_POOL'][]     = '/3rdparty/visjs/vis.min.js';
-        $pageContent['CSS_POOL'][]    = '/3rdparty/visjs/vis.min.css';
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/history.js';
-
-        return $render->get('/desktop/history.html.twig', $pageContent);
-    }
-
-    /**
      * Render shutdown page
      *
      * @param Render $render Render engine
@@ -773,119 +837,6 @@ class Controller
         return $render->get('/desktop/shutdown.html.twig', $pageContent);
     }
 
-    /**
-     * Render health page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of health page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function healthPage(Render $render, array &$pageContent): string
-    {
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-
-        $pageContent['healthInformations']        = \nextdom::health();
-        $pageContent['healthPluginsInformations'] = [];
-        $pageContent['healthPluginDataToShow']    = false;
-        $pageContent['healthTotalNOk']            = 0;
-        $pageContent['healthTotalPending']        = 0;
-
-        foreach (PluginManager::listPlugin(true) as $plugin) {
-            $pluginData = [];
-
-            if (file_exists(dirname(PluginManager::getPathById($plugin->getId())) . '/../desktop/modal/health.php')) {
-                $pluginData['hasSpecificHealth'] = true;
-            }
-            if ($plugin->getHasDependency() == 1 || $plugin->getHasOwnDeamon() == 1 || method_exists($plugin->getId(), 'health') || $pluginData['hasSpecificHealth']) {
-                $pageContent['healthPluginDataToShow'] = true;
-                $pluginData['plugin']  = $plugin;
-                $pluginData['port']    = false;
-                $pluginData['nOk']     = 0;
-                $pluginData['pending'] = 0;
-                $pluginData['hasDependency'] = false;
-                $pluginData['hasOwnDaemon']  = false;
-                $pluginData['showOnlyTable'] = false;
-
-                $port = \config::byKey('port', $plugin->getId());
-                if ($port != '') {
-                    $pluginData['port'] = $port;
-                }
-                if ($plugin->getHasDependency() == 1 || $plugin->getHasOwnDeamon() == 1 || method_exists($plugin->getId(), 'health')) {
-                    $pluginData['showOnlyTable'] = true;
-                }
-                if ($plugin->getHasDependency() == 1) {
-                    $pluginData['hasDependency'] = true;
-                    $dependencyInfo = $plugin->dependancy_info();
-
-                    if (isset($dependencyInfo['state'])) {
-                        $pluginData['dependencyState'] = $dependencyInfo['state'];
-
-                        if ($pluginData['dependencyState'] == 'nok') {
-                            $pluginData['nOk']++;
-                        } elseif ($pluginData['dependencyState'] == 'in_progress') {
-                            $pluginData['pending']++;
-                        } elseif ($pluginData['dependencyState'] != 'ok') {
-                            $pluginData['nOk']++;
-                        }
-                    }
-                }
-
-                if ($plugin->getHasOwnDeamon() == 1) {
-                    $pluginData['hasOwnDaemon'] = true;
-                    $daemonInfo = $plugin->deamon_info();
-                    $pluginData['daemonAuto'] = $daemonInfo['auto'];
-
-                    if (isset($daemonInfo['launchable'])) {
-                        $pluginData['daemonLaunchable'] = $daemonInfo['launchable'];
-                        if ($pluginData['daemonLaunchable'] == 'nok' && $pluginData['daemonAuto'] == 1) {
-                            $pluginData['nOk']++;
-                        }
-                    }
-                    $pluginData['daemonLaunchableMessage'] = $daemonInfo['launchable_message'];
-                    $pluginData['daemonState'] = $daemonInfo['state'];
-
-                    if ($pluginData['daemonState'] == 'nok' && $pluginData['daemonAuto'] == 1) {
-                        $pluginData['nOk']++;
-                    }
-                }
-
-                if (method_exists($plugin->getId(), 'health')) {
-                    $pluginData['health'] = [];
-                    // Je vois pas quand ça peut être appelé
-                    foreach ($plugin->getId()::health() as $result) {
-                        $pluginData['health'][] = [
-                            'test' => $result['test'],
-                            'state' => $result['state'],
-                            'advice' => $result['advice']
-                        ];
-                        if ($result['state'] == 'nok') {
-                            $pluginData['nOk'] = true;
-                        }
-                    }
-                }
-
-                if ($pluginData['nOk'] > 0) {
-                    $pageContent['healthTotalNOk']++;
-                }
-                if ($pluginData['pending'] > 0) {
-                    $pageContent['healthTotalPending']++;
-                }
-                $pageContent['healthPluginsInformations'][] = $pluginData;
-            }
-        }
-
-
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/health.js';
-
-        return $render->get('/desktop/health.html.twig', $pageContent);
-    }
 
     /**
      * Render profils page
@@ -1301,46 +1252,6 @@ class Controller
         return $render->get('/desktop/plan3d.html.twig', $pageContent);
     }
 
-    /**
-     * Render interact page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of interact page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function interactPage(Render $render, array &$pageContent): string
-    {
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-
-        $interacts = array();
-        $pageContent['interactTotal'] = \interactDef::all();
-        $interacts[-1] = \interactDef::all(null);
-        $interactListGroup = \interactDef::listGroup();
-        if (is_array($interactListGroup)) {
-            foreach ($interactListGroup as $group) {
-                $interacts[$group['group']] = \interactDef::all($group['group']);
-            }
-        }
-        $pageContent['JS_END_POOL'][]           = '/public/js/desktop/interact.js';
-        $pageContent['interactsList']           = $interacts;
-        $pageContent['interactsListGroup']      = $interactListGroup;
-        $pageContent['interactDisabledOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
-        $pageContent['interactCmdType']      = \nextdom::getConfiguration('cmd:type');
-        $pageContent['interactAllUnite']     = CmdManager::allUnite();
-        $pageContent['interactJeeObjects']   = JeeObjectManager::all();
-        $pageContent['interactEqLogicTypes'] = EqLogicManager::allType();
-        $pageContent['interactEqLogics']     = EqLogicManager::all();
-        $pageContent['interactEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
-
-        return $render->get('/desktop/interact.html.twig', $pageContent);
-    }
 
     /**
      * Render market page
