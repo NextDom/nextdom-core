@@ -1,0 +1,81 @@
+<div class="box" style="display: none;" id="div_Commandes">
+    <div class="box-header">
+        <legend ><i class="fa fa-hand-o-right"></i>{{ 'Commandes' }}</legend>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool btn-close" ><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
+        <form class="form-horizontal">
+            <fieldset>
+                <div class="form-group">
+                    <label class="col-lg-3 col-md-3 col-sm-5 col-xs-6 control-label">{{ 'Statistiques sur les widgets' }}</label>
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                        <input type="checkbox" class="configKey" data-l1key="displayStatsWidget"/><label class="control-label">{{'Afficher'}}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 col-md-3 col-sm-5 col-xs-6 control-label">{{ 'Période de calcul pour min, max, moyenne (en heures)' }}</label>
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                        <input type="text" class="configKey form-control" data-l1key="historyCalculPeriod"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 col-md-3 col-sm-5 col-xs-6 control-label">{{ 'Période de calcul pour la tendance (en heures)' }}</label>
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                        <input type="text" class="configKey form-control" data-l1key="historyCalculTendance"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 col-md-3 col-sm-5 col-xs-6 control-label">{{ 'Délai avant archivage (en heures)' }}</label>
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                        <input type="text" class="configKey form-control" data-l1key="historyArchiveTime"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 col-md-3 col-sm-5 col-xs-6 control-label">{{ 'Archiver par paquet de (en heures)' }}</label>
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                        <input type="text" class="configKey form-control" data-l1key="historyArchivePackage"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 col-md-3 col-sm-5 col-xs-6 control-label">{{ 'Seuil de calcul de tendance bas' }}</label>
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                        <input type="text" class="configKey form-control" data-l1key="historyCalculTendanceThresholddMin"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 col-md-3 col-sm-5 col-xs-6 control-label">{{ 'Seuil de calcul de tendance haut' }}</label>
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                        <input type="text" class="configKey form-control" data-l1key="historyCalculTendanceThresholddMax"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 col-md-3 col-sm-5 col-xs-6 control-label">{{ 'Période d\'affichage des graphiques par défaut' }}</label>
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                        <select class="configKey form-control" data-l1key="history::defautShowPeriod">
+                            <option value="-6 month">{{ '6 mois' }}</option>
+                            <option value="-3 month">{{ '3 mois' }}</option>
+                            <option value="-1 month">{{ '1 mois' }}</option>
+                            <option value="-1 week">{{ '1 semaine' }}</option>
+                            <option value="-1 day">{{ '1 jour' }}</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <form class="form-horizontal">
+            <fieldset>
+                <legend >{{ 'Push' }}</legend>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'URL de push globale' }}</label>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <input type="text" class="configKey form-control" data-l1key="cmdPushUrl" title="{{ 'Mettez ici l\'URL à appeler lors d\'une mise à jour de la valeur des commandes. Vous pouvez utiliser les tags suivants : #value# (valeur de la commande), #cmd_id# (id de la commande) et #cmd_name# (nom de la commande)' }}"/>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

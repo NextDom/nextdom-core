@@ -1,0 +1,52 @@
+<div class="box" style="display: none;" id="div_OSDB">
+    <div class="box-header">
+        <legend ><i class="fa fa-terminal"></i>{{ 'OS/DB' }}</legend>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool btn-close" ><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
+        <form class="form-horizontal">
+            <div class="alert alert-danger alert-config">
+                {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à' }} {{ adminConfigs['product_name'] }}{{ '. L\'équipe' }} {{ adminConfigs['product_name'] }} {{ 'se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.' }}
+            </div>
+            <fieldset>
+                <legend >{{ 'Console Système' }}</legend>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <a class="btn btn-danger" href="index.php?v=d&p=system"><i class="fa fa-exclamation-triangle"></i> {{ 'Lancer' }}</a>
+                    </div>
+                </div>
+                <legend >{{ 'Editeur de fichiers' }}</legend>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Editeur' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <a class="btn btn-danger" href="index.php?v=d&p=editor"><i class="fa fa-exclamation-triangle"></i> {{ 'Lancer' }}</a>
+                    </div>
+                </div>
+                <legend >{{ 'Base de données' }}</legend>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <a class="btn btn-danger" href="index.php?v=d&p=database"><i class="fa fa-exclamation-triangle"></i> {{ 'Lancer' }}</a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Utilisateur' }}</label>
+                    <div class="col-sm-1">
+                        <span class="label label-info label-config">{{ adminDbConfig['username'] }}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Mot de passe' }}</label>
+                    <div class="col-sm-1">
+                        <span class="label label-info label-config">{{ adminDbConfig['password'] }}</span>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

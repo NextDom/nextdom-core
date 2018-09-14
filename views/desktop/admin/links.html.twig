@@ -1,0 +1,58 @@
+<div class="box" style="display: none;" id="div_Liens">
+    <div class="box-header">
+        <legend ><i class="fa fa-hand-o-right"></i>{{ 'Liens' }}</legend>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool btn-close" ><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
+        <form class="form-horizontal">
+            <fieldset>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Profondeur pour les scénarios' }}</label>
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
+                        <input class="configKey form-control" data-l1key="graphlink::scenario::drill"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Profondeur pour les objets' }}</label>
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
+                        <input class="configKey form-control" data-l1key="graphlink::object::drill"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Profondeur pour les équipements' }}</label>
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
+                        <input class="configKey form-control" data-l1key="graphlink::eqLogic::drill"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Profondeur pour les commandes' }}</label>
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
+                        <input class="configKey form-control" data-l1key="graphlink::cmd::drill"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Profondeur pour les variables' }}</label>
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
+                        <input class="configKey form-control" data-l1key="graphlink::dataStore::drill"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Paramètre de prerender' }}</label>
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
+                        <input class="configKey form-control" data-l1key="graphlink::prerender"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Paramètre de render' }}</label>
+                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
+                        <input class="configKey form-control" data-l1key="graphlink::render"/>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

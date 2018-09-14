@@ -1,0 +1,85 @@
+<div class="box" style="display: none;" id="div_Cache">
+    <div class="box-header">
+        <legend ><i class="fa fa-hand-o-right"></i>{{ 'Cache' }}</legend>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool btn-close" ><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
+        <form class="form-horizontal">
+            <fieldset>
+                <div class="alert alert-info">
+                    {{ 'Attention : toute modification du moteur de cache nécessite un redémarrage de' }} {{ adminConfigs['product_name'] }}
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Statistiques' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <span class="label label-primary"><span id="span_cacheObject">{{ adminStats['count'] }}</span> {{ 'objets' }}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Moteur de cache' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <select type="text" class="configKey form-control" data-l1key="cache::engine">
+                            <option value="FilesystemCache">{{ 'Système de fichiers' }} ({{ adminCacheFolder }})</option>
+                            {% if adminMemCachedExists %}
+                                <option value="MemcachedCache">{{ 'Memcached' }}</option>
+                            {% endif %}
+                            {% if adminRedisExists %}
+                                <option value="RedisCache">{{ 'Redis' }}</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="cacheEngine MemcachedCache">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Adresse Memcache' }}</label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                            <input type="text" class="configKey form-control" data-l1key="cache::memcacheaddr"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Port Memcache' }}</label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                            <input type="text" class="configKey form-control" data-l1key="cache::memcacheport"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="cacheEngine RedisCache">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Adresse Redis' }}</label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                            <input type="text" class="configKey form-control" data-l1key="cache::redisaddr"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Port redis' }}</label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                            <input type="text" class="configKey form-control" data-l1key="cache::redisport"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nettoyer le cache' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <a class="btn btn-warning" id="bt_cleanCache"><i class="fa fa-magic"></i> {{ 'Nettoyer' }}</a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Vider toutes les données en cache' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <a class="btn btn-danger" id="bt_flushCache"><i class="fa fa-trash"></i> {{ 'Vider' }}</a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Temps de pause pour le long polling' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <input class="configKey form-control" data-l1key="event::waitPollingTime"/>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

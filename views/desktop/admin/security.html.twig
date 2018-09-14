@@ -1,0 +1,138 @@
+<div class="box" style="display: none;" id="div_Securite">
+    <div class="box-header">
+        <legend ><i class="fa fa-shield"></i>{{ 'Sécurité' }}</legend>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool btn-close" ><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
+        <form class="form-horizontal">
+            <fieldset>
+                <legend >{{ 'LDAP' }}</legend>
+                {% if adminUseLdap %}
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Activer l\'authentification LDAP' }}</label>
+                        <div class="col-sm-1">
+                            <input type="checkbox" class="configKey" data-l1key="ldap:enable"/>
+                        </div>
+                    </div>
+                    <div id="div_config_ldap">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Hôte' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                <input type="text" class="configKey form-control" data-l1key="ldap:host"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Port' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                <input type="text" class="configKey form-control" data-l1key="ldap:port"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Domaine' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                <input type="text" class="configKey form-control" data-l1key="ldap:domain"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Base DN' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                <input type="text" class="configKey form-control" data-l1key="ldap:basedn"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nom d\'utilisateur' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                <input type="text" class="configKey form-control" data-l1key="ldap:username"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Mot de passe' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                <input type="password" class="configKey form-control" data-l1key="ldap:password"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Champs recherche utilisateur' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                <input type="text" class="configKey form-control" data-l1key="ldap::usersearch"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Filtre (optionnel)' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                <input type="text" class="configKey form-control" data-l1key="ldap:filter"/>
+                            </div>
+                        </div>
+                        <div class="form-group has-error">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Autoriser REMOTE_USER' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                <input type="checkbox" class="configKey" data-l1key="sso:allowRemoteUser"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6"></div>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                <a class="btn btn-default" id="bt_testLdapConnection"><i class="fa fa-cube"></i>
+                                    {{ 'Tester' }}</a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">{{ 'Librairie LDAP non trouvée. Merci de l\'installer avant de pouvoir utiliser la connexion LDAP' }}</div>
+                {% endif %}
+                <legend >{{ 'Connexion' }}</legend>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nombre d\'échecs tolérés' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <input type="text" class="configKey form-control" data-l1key="security::maxFailedLogin"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Temps maximum entre les échecs (s)' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <input type="text" class="configKey form-control" data-l1key="security::timeLoginFailed"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Durée du bannissement (s), -1 pour infini' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <input type="text" class="configKey form-control" data-l1key="security::bantime"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'IP "blanche"' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <input type="text" class="configKey form-control" data-l1key="security::whiteips"/>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <form class="form-horizontal">
+            <legend >{{ 'IPs bannies' }} <a class="btn btn-warning btn-legend pull-right" id="bt_removeBanIp"><i class="fa fa-trash"></i> {{ 'Supprimer' }}</a></legend>
+            <fieldset>
+                <table class="table table-condensed table-bordered">
+                    <thead>
+                    <tr>
+                        <th>{{ 'IP' }}</th>
+                        <th>{{ 'Date' }}</th>
+                        <th>{{ 'Date de fin' }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for bannedIp in adminBannedIp %}
+                        <tr>
+                            <td>{{ bannedIp.ip }}</td>
+                            <td>{{ bannedIp.startDate }}</td>
+                            <td>{{ bannedIp.endDate }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </fieldset>
+        </form>
+    </div>
+</div>
