@@ -291,15 +291,6 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         /**
-         * Render backup page
-         */
-
-        $pageContent['JS_VARS_RAW']['REPO_LIST'] = '[]';
-        $pageContent['backupAjaxToken'] = \ajax::getToken();
-        $pageContent['backupReposList'] = UpdateManager::listRepo();
-        $pageContent['JS_END_POOL'][]   = '/public/js/desktop/backup.js';
-
-        /**
          * Render cron Page
          */
 
