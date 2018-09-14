@@ -1,304 +1,292 @@
-<div class="box" style="display: none;" id="div_Personnalisation">
-    <div class="box-header">
-        <h3 class="box-title"><i class="fas fa-pencil-square"></i>{{ 'Personnalisation de NextDom' }}</h3>
-        <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-            </button>
-            <button type="button" class="btn btn-box-tool btn-close" ><i class="fa fa-times"></i></button>
-        </div>
-    </div>
-    <div class="box-body">
-        <div class="nav-tabs-custom">
-            <a class="btn btn-success btn-xs pull-right" id="bt_saveGeneraleConfig"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-            <ul class="nav nav-tabs pull-right" role="tablist">
-                <li role="presentation"><a href="#advanced" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-terminal"></i> {{ 'avancée' }}</a></li>
-                <li role="presentation" class="active"><a href="#themestab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-wrench"></i> {{ 'Themes' }}</a></li>
-                <li role="presentation"><a href="#colortab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-key"></i> {{ 'Widgets' }}</a></li>
-                <li class="pull-left header"><i class="fa fa-inbox"></i> {{ 'Personnalisation'}}</li>
-            </ul>
-            <div class="global-tab-content tab-content">
-                <div role="tabpanel" class="tab-pane" id="themestab">
-                    <form class="form-horizontal">
-                        <fieldset>
-                            <div class="form-group">
+<div class="nav-tabs-custom" id="div_Custom">
+    <a class="btn btn-success btn-xs pull-right" id="bt_saveGeneraleConfig"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+    <ul class="nav nav-tabs pull-right" role="tablist">
+        <li role="presentation"><a href="#advanced" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-terminal"></i> {{ 'avancée' }}</a></li>
+        <li role="presentation" class="active"><a href="#themestab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-wrench"></i> {{ 'Themes' }}</a></li>
+        <li role="presentation"><a href="#colortab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-key"></i> {{ 'Widgets' }}</a></li>
+        <li class="pull-left header"><i class="fas fa-pencil-square"></i> {{ 'Personnalisation'}}</li>
+    </ul>
+    <div class="global-tab-content tab-content">
+        <div role="tabpanel" class="tab-pane" id="themestab">
+            <form class="form-horizontal">
+                <fieldset>
+                    <div class="form-group">
                                         <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
-                                </a>
-                                <li style="float:left; width: 50%;">
-                                    <a href="javascript:void(0)" data-skin="skin-nextdom" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
-                                            <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                        </div>
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                        </div>
-                                    </a>
-                                    <a class="text-center no-margin">Nextdom</a>
-                                </li>
-                                <li style="float:left; width: 50%;"><a href="javascript:void(0)" data-skin="skin-nextdom-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
-                                            <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                        </div>
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                        </div>
-                                    </a>
-                                    <a class="text-center no-margin">Light</a>
-                                </li>
-                                <li style="float:left; width: 50%;">
-                                    <a href="javascript:void(0)" data-skin="skin-blue" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 15px; background: #367fa9"></span>
-                                            <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                        </div>
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                        </div>
-                                    </a>
-                                    <a class="text-center no-margin">Blue</a>
-                                </li>
-                                <li style="float:left; width: 50%;"><a href="javascript:void(0)" data-skin="skin-blue-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
-                                            <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                        </div>
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                        </div>
-                                    </a>
-                                    <a class="text-center no-margin">Light</a>
-                                </li>
-                                <li style="float:left; width: 50%;">
-                                    <a href="javascript:void(0)" data-skin="skin-black" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                        <div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix">
-                                            <span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe"></span>
-                                        </div>
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 20px; background: #222"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                        </div>
-                                    </a>
-                                    <a class="text-center no-margin">Black</a>
-                                </li>
-                                <li style="float:left; width: 50%;">
-                                    <a href="javascript:void(0)" data-skin="skin-black-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                        <div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix">
-                                            <span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe"></span>
-                                        </div>
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                        </div>
-                                    </a>
-                                    <a class="text-center no-margin">Light</a>
-                                </li>
-                                <li style="float:left; width: 50%;">
-                                    <a href="javascript:void(0)" data-skin="skin-purple" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span>
-                                            <span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                        </div>
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                        </div>
-                                    </a>
-                                    <a class="text-center no-margin">Purple</a>
-                                </li>
-                                <li style="float:left; width: 50%;">
-                                    <a href="javascript:void(0)" data-skin="skin-purple-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span>
-                                            <span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                        </div>
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                        </div>
-                                    </a>
-                                    <a class="text-center no-margin">Light</a>
-                                </li>
-                                <li style="float:left; width: 50%;">
-                                    <a href="javascript:void(0)" data-skin="skin-green" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span>
-                                            <span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                        </div>
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                        </div>
-                                    </a>
-                                    <a class="text-center no-margin">Green</a>
-                                </li>
-                                <li style="float:left; width: 50%;">
-                                    <a href="javascript:void(0)" data-skin="skin-green-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span>
-                                            <span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                        </div>
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                        </div>
-                                    </a>
-                                    <a class="text-center no-margin">Light</a>
-                                </li>
-                                <li style="float:left; width: 50%;"><a href="javascript:void(0)" data-skin="skin-red" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span>
-                                            <span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                        </div>
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                        </div>
-                                    </a>
-                                    <a class="text-center no-margin">Red</a>
-                                </li>
-                                <li style="float:left; width: 50%;">
-                                    <a href="javascript:void(0)" data-skin="skin-red-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span>
-                                            <span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                        </div>
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                        </div>
-                                    </a>
-                                    <a class="text-center no-margin">Light</a>
-                                </li>
-                                <li style="float:left; width: 50%;">
-                                    <a href="javascript:void(0)" data-skin="skin-yellow" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span>
-                                            <span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                        </div>
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                        </div>
-                                    </a>
-                                    <a class="text-center no-margin">Yellow</a>
-                                </li>
-                                <li style="float:left; width: 50%;">
-                                    <a href="javascript:void(0)" data-skin="skin-yellow-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span>
-                                            <span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span>
-                                        </div>
-                                        <div>
-                                            <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                                        </div>
-                                    </a>
-                                    <a class="text-center no-margin">Light</a>
-                                </li>
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
-                <div role="tabpanel" class="tab-pane" id="colortab">
-                    <form class="form-horizontal">
-                        <fieldset>
-                            <div class="form-group">
-                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Opacité par défaut des widgets' }}</label>
-                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                                    <input type="numeric" class="configKey form-control" data-l1key="widget::background-opacity"/>
+                        </a>
+                        <li style="float:left; width: 50%;">
+                            <a href="javascript:void(0)" data-skin="skin-nextdom" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
+                                    <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
                                 </div>
-                            </div>
-                            <div id="colortab-list">
-                                {% for category, categoryData in adminCategories %}
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <a class="text-center no-margin">Nextdom</a>
+                        </li>
+                        <li style="float:left; width: 50%;"><a href="javascript:void(0)" data-skin="skin-nextdom-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
+                                    <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <a class="text-center no-margin">Light</a>
+                        </li>
+                        <li style="float:left; width: 50%;">
+                            <a href="javascript:void(0)" data-skin="skin-blue" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 15px; background: #367fa9"></span>
+                                    <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <a class="text-center no-margin">Blue</a>
+                        </li>
+                        <li style="float:left; width: 50%;"><a href="javascript:void(0)" data-skin="skin-blue-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
+                                    <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <a class="text-center no-margin">Light</a>
+                        </li>
+                        <li style="float:left; width: 50%;">
+                            <a href="javascript:void(0)" data-skin="skin-black" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                                <div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix">
+                                    <span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe"></span>
+                                </div>
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #222"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <a class="text-center no-margin">Black</a>
+                        </li>
+                        <li style="float:left; width: 50%;">
+                            <a href="javascript:void(0)" data-skin="skin-black-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                                <div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix">
+                                    <span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe"></span>
+                                </div>
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <a class="text-center no-margin">Light</a>
+                        </li>
+                        <li style="float:left; width: 50%;">
+                            <a href="javascript:void(0)" data-skin="skin-purple" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span>
+                                    <span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <a class="text-center no-margin">Purple</a>
+                        </li>
+                        <li style="float:left; width: 50%;">
+                            <a href="javascript:void(0)" data-skin="skin-purple-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-purple-active"></span>
+                                    <span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <a class="text-center no-margin">Light</a>
+                        </li>
+                        <li style="float:left; width: 50%;">
+                            <a href="javascript:void(0)" data-skin="skin-green" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span>
+                                    <span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <a class="text-center no-margin">Green</a>
+                        </li>
+                        <li style="float:left; width: 50%;">
+                            <a href="javascript:void(0)" data-skin="skin-green-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-green-active"></span>
+                                    <span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <a class="text-center no-margin">Light</a>
+                        </li>
+                        <li style="float:left; width: 50%;"><a href="javascript:void(0)" data-skin="skin-red" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span>
+                                    <span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <a class="text-center no-margin">Red</a>
+                        </li>
+                        <li style="float:left; width: 50%;">
+                            <a href="javascript:void(0)" data-skin="skin-red-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-red-active"></span>
+                                    <span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <a class="text-center no-margin">Light</a>
+                        </li>
+                        <li style="float:left; width: 50%;">
+                            <a href="javascript:void(0)" data-skin="skin-yellow" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span>
+                                    <span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <a class="text-center no-margin">Yellow</a>
+                        </li>
+                        <li style="float:left; width: 50%;">
+                            <a href="javascript:void(0)" data-skin="skin-yellow-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="clearfix full-opacity-hover">
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active"></span>
+                                    <span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;"></span>
+                                </div>
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
+                                </div>
+                            </a>
+                            <a class="text-center no-margin">Light</a>
+                        </li>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="colortab">
+            <form class="form-horizontal">
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Opacité par défaut des widgets' }}</label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                            <input type="numeric" class="configKey form-control" data-l1key="widget::background-opacity"/>
+                        </div>
+                    </div>
+                    <div id="colortab-list">
+                        {% for category, categoryData in adminCategories %}
 
-                                    <legend>'{{ categoryData['name'] }}</legend>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">{{ 'Dashboard couleur de fond' }}</label>
-                                        <div class="col-sm-2">
-                                            <input type="color" class="configKey form-control cursor noSet input-sm" data-l1key="eqLogic:category:{{ category }}:color" value="{{ categoryData['color'] }}"/>
-                                        </div>
-                                        <div class="col-sm-1">
-                                            <a class="btn btn-default btn-sm bt_resetColor" data-l1key="eqLogic:category:{{ category }}:color" title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
-                                        </div>
-                                        <label class="col-sm-3 control-label">{{ 'Dashboard couleur commande' }}</label>
-                                        <div class="col-sm-2">
-                                            <input type="color" class="configKey form-control cursor noSet input-sm" data-l1key="eqLogic:category:{{ category }}:cmdColor" value="{{ categoryData['cmdColor'] }}"/>
-                                        </div>
-                                        <div class="col-sm-1">
-                                            <a class="btn btn-default btn-sm bt_resetColor" data-l1key="eqLogic:category:{{ category }}:cmdColor" title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">{{ 'Mobile couleur de fond' }}</label>
-                                        <div class="col-sm-2">
-                                            <input type="color" class="configKey form-control cursor noSet input-sm" data-l1key="eqLogic:category:{{ category }}:mcolor" value="{{ categoryData['mcolor'] }}"/>
-                                        </div>
-                                        <div class="col-sm-1">
-                                            <a class="btn btn-default btn-sm bt_resetColor" data-l1key="eqLogic:category:{{ category }}:mcolor" title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
-                                        </div>
-                                        <label class="col-sm-3 control-label">{{ 'Mobile couleur commande' }}</label>
-                                        <div class="col-sm-2">
-                                            <input type="color" class="configKey form-control cursor noSet input-sm" data-l1key="eqLogic:category:{{ category }}:mcmdColor" value="{{ categoryData['mcmdColor'] }}"/>
-                                        </div>
-                                        <div class="col-sm-1">
-                                            <a class="btn btn-default btn-sm bt_resetColor" data-l1key="eqLogic:category:{{ category }}:mcmdColor" title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
-                                        </div>
-                                    </div>
-                                {% endfor %}
+                            <legend>'{{ categoryData['name'] }}</legend>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">{{ 'Dashboard couleur de fond' }}</label>
+                                <div class="col-sm-2">
+                                    <input type="color" class="configKey form-control cursor noSet input-sm" data-l1key="eqLogic:category:{{ category }}:color" value="{{ categoryData['color'] }}"/>
+                                </div>
+                                <div class="col-sm-1">
+                                    <a class="btn btn-default btn-sm bt_resetColor" data-l1key="eqLogic:category:{{ category }}:color" title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                                </div>
+                                <label class="col-sm-3 control-label">{{ 'Dashboard couleur commande' }}</label>
+                                <div class="col-sm-2">
+                                    <input type="color" class="configKey form-control cursor noSet input-sm" data-l1key="eqLogic:category:{{ category }}:cmdColor" value="{{ categoryData['cmdColor'] }}"/>
+                                </div>
+                                <div class="col-sm-1">
+                                    <a class="btn btn-default btn-sm bt_resetColor" data-l1key="eqLogic:category:{{ category }}:cmdColor" title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                                </div>
                             </div>
-                        </fieldset>
-                    </form>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">{{ 'Mobile couleur de fond' }}</label>
+                                <div class="col-sm-2">
+                                    <input type="color" class="configKey form-control cursor noSet input-sm" data-l1key="eqLogic:category:{{ category }}:mcolor" value="{{ categoryData['mcolor'] }}"/>
+                                </div>
+                                <div class="col-sm-1">
+                                    <a class="btn btn-default btn-sm bt_resetColor" data-l1key="eqLogic:category:{{ category }}:mcolor" title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                                </div>
+                                <label class="col-sm-3 control-label">{{ 'Mobile couleur commande' }}</label>
+                                <div class="col-sm-2">
+                                    <input type="color" class="configKey form-control cursor noSet input-sm" data-l1key="eqLogic:category:{{ category }}:mcmdColor" value="{{ categoryData['mcmdColor'] }}"/>
+                                </div>
+                                <div class="col-sm-1">
+                                    <a class="btn btn-default btn-sm bt_resetColor" data-l1key="eqLogic:category:{{ category }}:mcmdColor" title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="advanced">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#desktop" aria-controls="home" role="tab" data-toggle="tab">{{ 'Desktop' }}</a></li>
+                <li><a href="#mobile" aria-controls="profile" role="tab" data-toggle="tab">{{ 'Mobile' }}</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="alert alert-warning" id="div_spanAlertMessage">
+                    {{ 'Attention : tout ce que vous écrivez ici est global et inclus sur toutes les pages. La moindre erreur peut rendre votre' }} {{ customProductName }} {{ 'non fonctionel.' }}
+                    <span class="pull-right"> {{ 'Activer' }} : <input type="checkbox" class="configKey" data-l1key="enableCustomCss" checked/> </span>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="advanced">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="active"><a href="#desktop" aria-controls="home" role="tab" data-toggle="tab">{{ 'Desktop' }}</a></li>
-                        <li><a href="#mobile" aria-controls="profile" role="tab" data-toggle="tab">{{ 'Mobile' }}</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="alert alert-warning" id="div_spanAlertMessage">
-                            {{ 'Attention : tout ce que vous écrivez ici est global et inclus sur toutes les pages. La moindre erreur peut rendre votre' }} {{ customProductName }} {{ 'non fonctionel.' }}
-                            <span class="pull-right"> {{ 'Activer' }} : <input type="checkbox" class="configKey" data-l1key="enableCustomCss" checked/> </span>
+                <div role="tabpanel" class="tab-pane active" id="desktop">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <legend>{{ 'Javascript' }}
+                                <a class="btn btn-success pull-right btn-xs saveCustom" data-version="desktop" data-type="js" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+                            </legend>
+                            <textarea id="ta_jsDesktopContent">{{ customJS }}</textarea>
                         </div>
-                        <div role="tabpanel" class="tab-pane active" id="desktop">
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <legend>{{ 'Javascript' }}
-                                        <a class="btn btn-success pull-right btn-xs saveCustom" data-version="desktop" data-type="js" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-                                    </legend>
-                                    <textarea id="ta_jsDesktopContent">{{ customJS }}</textarea>
-                                </div>
-                                <div class="col-xs-6">
-                                    <legend>{{ 'CSS' }}
-                                        <a class="btn btn-success pull-right btn-xs saveCustom" data-version="desktop" data-type="css" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-                                    </legend>
-                                    <textarea id="ta_cssDesktopContent" style="height:auto;">{{ customCSS }}</textarea>
-                                </div>
-                            </div>
+                        <div class="col-xs-6">
+                            <legend>{{ 'CSS' }}
+                                <a class="btn btn-success pull-right btn-xs saveCustom" data-version="desktop" data-type="css" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+                            </legend>
+                            <textarea id="ta_cssDesktopContent" style="height:auto;">{{ customCSS }}</textarea>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="mobile">
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <legend>{{ 'Javascript' }}
-                                        <a class="btn btn-success pull-right btn-xs saveCustom" data-version="mobile" data-type="js" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-                                    </legend>
-                                    <textarea id="ta_jsMobileContent" style="height:auto;">{{ customMobileJS }}</textarea>
-                                </div>
-                                <div class="col-xs-6">
-                                    <legend>{{ 'CSS' }}
-                                        <a class="btn btn-success pull-right btn-xs saveCustom" data-version="mobile" data-type="css" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-                                    </legend>
-                                    <textarea id="ta_cssMobileContent" style="height:auto;">{{ customMobileCSS }}</textarea>
-                                </div>
-                            </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="mobile">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <legend>{{ 'Javascript' }}
+                                <a class="btn btn-success pull-right btn-xs saveCustom" data-version="mobile" data-type="js" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+                            </legend>
+                            <textarea id="ta_jsMobileContent" style="height:auto;">{{ customMobileJS }}</textarea>
+                        </div>
+                        <div class="col-xs-6">
+                            <legend>{{ 'CSS' }}
+                                <a class="btn btn-success pull-right btn-xs saveCustom" data-version="mobile" data-type="css" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+                            </legend>
+                            <textarea id="ta_cssMobileContent" style="height:auto;">{{ customMobileCSS }}</textarea>
                         </div>
                     </div>
                 </div>

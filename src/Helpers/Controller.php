@@ -438,7 +438,7 @@ class Controller
         $pageContent['updatesList']   = array_reverse($updates);
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/update.js';
 
-        return $render->get('/desktop/update.html.twig', $pageContent);
+        return $render->get('/desktop/update-view.html.twig', $pageContent);
     }
 
     /**
@@ -592,7 +592,7 @@ class Controller
             $pageContent['logFilesList'][] = $logFileData;
 
         }
-        return $render->get('/desktop/log.html.twig', $pageContent);
+        return $render->get('/desktop/log-view.html.twig', $pageContent);
     }
 
     /**
@@ -648,7 +648,7 @@ class Controller
                 $pageContent['reportPlugins'][] = $pluginData;
             }
         }
-        return $render->get('/desktop/report.html.twig', $pageContent);
+        return $render->get('/desktop/reports-view.html.twig', $pageContent);
     }
 
     /**
