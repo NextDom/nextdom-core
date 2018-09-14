@@ -395,6 +395,7 @@ class Controller
 
 
 
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools.js';
 
         return $render->get('/desktop/tools.html.twig', $pageContent);
     }
