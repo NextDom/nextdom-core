@@ -819,6 +819,10 @@ function saveObjectSummary() {
 $(".btn-app").on('click', function (event) {
     $('#'+$(this).attr('data-id')).show();
     $('#div_MenuList').hide();
+    $('#div_MenuList-2').hide();
+    $('#div-menu-perf').hide();
+    menu-perf
+
 });
 $(".btn-close").on('click', function (event) {
     $('#'+$(this).parent().parent().parent().attr('id')).hide();
