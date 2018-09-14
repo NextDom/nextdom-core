@@ -1,0 +1,34 @@
+<div class="box" style="display: none;" id="div_Eqlogic">
+    <div class="box-header">
+        <legend ><i class="fa fa-hand-o-right"></i>{{ 'Equipements' }}</legend>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool btn-close" ><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
+        <form class="form-horizontal">
+            <fieldset>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nombre d\'échecs avant désactivation de l\'équipement' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <input type="text" class="configKey form-control" data-l1key="numberOfTryBeforeEqLogicDisable"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Seuil des piles' }}</label>
+                    <label class="col-lg-1 col-md-1 col-sm-1 col-xs-1 eqLogicAttr label label-danger">{{ 'Danger' }}</label>
+                    <div class="col-xs-1">
+                        <input class="configKey form-control" data-l1key="battery::danger"/>
+                    </div>
+                    <label class="col-xs-1 label label-warning">{{ 'Warning' }}</label>
+                    <div class="col-xs-1">
+                        <input class="configKey form-control" data-l1key="battery::warning"/>
+                    </div>
+                    <label class="col-xs-1 label label-success">{{ 'Ok' }}</label>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
