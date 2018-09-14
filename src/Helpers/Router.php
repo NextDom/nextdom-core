@@ -1,18 +1,18 @@
 <?php
-/* This file is part of NextDom.
+/* This file is part of NextDom software.
  *
  * NextDom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * NextDom is distributed in the hope that it will be useful,
+ * NextDom software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+ * along with NextDom software. If not, see <http://www.gnu.org/licenses/>.
  */
 
 namespace NextDom\Helpers;
@@ -21,21 +21,21 @@ use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 
 /**
- * Aiguillage de l'affichage
+ * Turnout of the display
  *
  * @package NextDom\Helper
  */
 class Router
 {
     /**
-     * @var string Type de vue
+     * @var string Type of view
      */
     private $viewType;
 
     /**
-     * Constructeur initialisant le type de vue
+     * Builder initializing the type of view
      *
-     * @param $viewType string Type de vue
+     * @param $viewType string Type of view
      */
     public function __construct(string $viewType)
     {
@@ -43,11 +43,11 @@ class Router
     }
 
     /**
-     * Affichage du contenu demandé
+     * Viewing the requested content
      *
-     * @return bool True si une réponse a été fournie.
+     * @return bool True if an answer has been provided.
      */
-    public function show()
+    public function show(): bool
     {
         $result = false;
         if ($this->viewType == 'd') {
@@ -61,7 +61,7 @@ class Router
     }
 
     /**
-     * Affichage pour un ordinateur
+     * Display for a computer
      *
      * @throws \Exception
      */
@@ -88,10 +88,9 @@ class Router
                 'default_bootstrap_theme'));
             if ($configs['nextdom::firstUse'] == 1) {
                 PrepareView::showFirstUsePage($configs);
-            } else if (!Status::isConnect()) {
+            } elseif (!Status::isConnect()) {
                 PrepareView::showConnectionPage($configs);
-            }
-            else {
+            } else {
                 if (Status::isRescueMode()) {
                     PrepareView::showRescueMode($configs);
                 } else {
@@ -102,7 +101,7 @@ class Router
     }
 
     /**
-     * Affichage d'un modal sur ordinateur
+     * Viewing a modal on a computer
      *
      * @throws \Exception
      */
@@ -120,7 +119,7 @@ class Router
     }
 
     /**
-     * Affichage de la page de configuration d'un plugin
+     * Displaying the configuration page of a plugin
      *
      * @throws \Exception Affichage
      */
@@ -131,7 +130,7 @@ class Router
     }
 
     /**
-     * Réponse à une requête Ajax
+     * Response to an Ajax request
      *
      * @throws \Exception
      */
@@ -162,7 +161,7 @@ class Router
     }
 
     /**
-     * Affichage de la vue mobile
+     * Display mobile view
      *
      * @throws \Exception
      */
@@ -183,7 +182,12 @@ class Router
         \include_file('mobile', $filename, $type, $plugin, true);
     }
 
-    public static function showError404AndDie() {
+    /**
+    *
+    * Generate 404 page
+    */
+    public static function showError404AndDie() 
+    {
         header("HTTP/1.0 404 Not Found");
         require(NEXTDOM_ROOT . '/public/404.html');
         exit();

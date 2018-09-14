@@ -297,7 +297,7 @@ if [ "${isdev}" = "1" ] ; then
     # A faire dans une version developpeur (apres git clone)
     cd ${WEBSERVER_HOME}
     composer -q install
-    ./gen_assets.sh --init
+    ./gen_assets.sh
 fi
 
 # Configure !

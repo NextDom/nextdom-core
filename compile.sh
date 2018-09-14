@@ -1,5 +1,5 @@
 #!/bin/bash
-${PWD}/gen_assets.sh --init
+${PWD}/gen_assets.sh
 if [ ! -d "${PWD}/vendor" ]; then
 	composer install && echo " >>> composer installed";
 else

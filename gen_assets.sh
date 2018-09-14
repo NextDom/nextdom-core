@@ -143,7 +143,6 @@ function copy_assets {
 }
 
 function start {
-    echo "Recommpression à la volée. Ajoutez le paramètre --init pour tout réinitialiser"
 	while true; do
 		FIND_CSS_RES=$(find assets/css -mmin -0.1)
 		if [ -n "$FIND_CSS_RES" ]; then
@@ -165,10 +164,11 @@ function start {
 }
 
 init_dependencies
-if [ "$1" == "--init" ]; then
+if [ "$#" == 0 ]; then
+    echo "Pour lancer la génération automatique, ajouter l'option --watch"
 	mkdir -p public/css
 	mkdir -p public/js
 	copy_assets;
-else
+elif [ "$1" == "--watch" ]; then
 	start;
 fi
