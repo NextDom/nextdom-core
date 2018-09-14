@@ -821,8 +821,6 @@ $(".btn-app").on('click', function (event) {
     $('#div_MenuList').hide();
     $('#div_MenuList2').hide();
     $('#div-menuPerf').hide();
-    menu-perf
-
 });
 $(".btn-close").on('click', function (event) {
     $('#'+$(this).parent().parent().parent().attr('id')).hide();
