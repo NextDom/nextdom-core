@@ -819,12 +819,14 @@ function saveObjectSummary() {
 $(".btn-app").on('click', function (event) {
     $('#'+$(this).attr('data-id')).show();
     $('#div_MenuList').hide();
-    $('#div_MenuList-2').hide();
-    $('#div-menu-perf').hide();
+    $('#div_MenuList2').hide();
+    $('#div-menuPerf').hide();
     menu-perf
 
 });
 $(".btn-close").on('click', function (event) {
     $('#'+$(this).parent().parent().parent().attr('id')).hide();
     $('#div_MenuList').show();
+    $('#div_MenuList2').hide();
+    $('#div-menuPerf').hide();
 });
