@@ -83,6 +83,7 @@
             </div>
             <div class="box-body">
                 <a class="btn btn-app" data-id="div_General"><i class="fa fa-wrench"></i> {{ 'Général' }} </a>
+                <a class="btn btn-app" data-id="div_Custom"><i class="fas fa-pencil-square"></i> {{ 'Personnalisation' }}</a>
                 <a class="btn btn-app" data-id="div_API"> <i class="fa fa-key"></i> {{ 'API' }}</a>
                 <a class="btn btn-app" data-id="div_OSDB"><i class="fa fa-terminal"></i> {{ 'OS/DB' }}</a>
                 <a class="btn btn-app" data-id="div_Security"><i class="fa fa-shield"></i> {{ 'Securité' }}</a>
@@ -97,61 +98,30 @@
                 <a class="btn btn-app" data-id="div_Eqlogic"><i class="fas fa-tablet-alt"></i> {{ 'Equipements' }}</a>
                 <a class="btn btn-app" data-id="div_Update-conf"><i class="fa fa-credit-card"></i> {{ 'Mises à jour' }}</a>
                 <a class="btn btn-app" data-id="div_Users"><i class="fa fa-users"></i> {{ 'Utilisateurs' }}</a>
-                <a class="btn btn-app" data-id="div_Backup"><i class="fa fa-users"></i> {{ 'Sauvegardes' }}</a>
-                <a class="btn btn-app" data-id="div_Migration"><i class="fa fa-users"></i> {{ 'Migration' }}</a>
+
             </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-10 col-md-offset-1" id="div_MenuList2">
-        <div class="box box-primary">
-            <div class="box-header with-border">
-                <h3 class="box-title">{{ 'Outils' }}</h3>
-            </div>
-            <div class="box-body">
-                <a class="btn btn-app" data-id="div_Cron"><i class="fa fa-tasks"></i> {{ 'Taches' }}</a>
-                <a class="btn btn-app" data-id="div_Update-view"><span class="badge bg-red">{{ MENU_NB_UPDATES }}</span><i class="fa fa-tasks"></i> {{ 'Mise a jour' }}</a>
-                <a class="btn btn-app" data-id="div_Custom"><i class="fas fa-pencil-square"></i> {{ 'Personnalisation' }}</a>
-                <a class="btn btn-app" data-id="div_Profils"><i class="fa fa-briefcase"></i> {{ 'Profil' }}</a>
-                <a class="btn btn-app" data-id="div_History"><i class="fa fa-bar-chart-o"></i> {{ 'Historique' }}</a>
-                <a class="btn btn-app" data-id="div_Reports-view"><i class="fa fa-newspaper-o"></i> {{ 'Rapports' }}</a>
-                <a class="btn btn-app" data-id="div_TempsReel"><i class="fa fa-tachometer"></i> {{ 'Temps réel' }}</a>
-                <a class="btn btn-app" data-id="div_Logs-view"><i class="fa fa-file-o"></i> {{ 'Logs' }}</a>
-                <a class="btn btn-app" data-id="div_Health"><i class="fa fa-medkit"></i> {{ 'Santé' }}</a>
-            </div>
-            <!-- /.box-body -->
         </div>
     </div>
 </div>
 
 
-<div id="config">
+<div id="adminContent">
     <div class="col-md-12">
         {% include '/desktop/admin/api.html.twig' %}
-        {% include '/desktop/admin/backup.html.twig' %}
         {% include '/desktop/admin/cache.html.twig' %}
         {% include '/desktop/admin/commandes.html.twig' %}
-        {% include '/desktop/admin/cron.html.twig' %}
         {% include '/desktop/admin/custom.html.twig' %}
         {% include '/desktop/admin/eqlogic.html.twig' %}
         {% include '/desktop/admin/general.html.twig' %}
-        {% include '/desktop/admin/health.html.twig' %}
-        {% include '/desktop/admin/history.html.twig' %}
         {% include '/desktop/admin/interactions.html.twig' %}
         {% include '/desktop/admin/links.html.twig' %}
         {% include '/desktop/admin/logs.html.twig' %}
-        {% include '/desktop/admin/logs-view.html.twig' %}
-        {% include '/desktop/admin/migration.html.twig' %}
         {% include '/desktop/admin/network.html.twig' %}
         {% include '/desktop/admin/osdb.html.twig' %}
         {% include '/desktop/admin/profils.html.twig' %}
-        {% include '/desktop/admin/reports.html.twig' %}
-        {% include '/desktop/admin/reports-view.html.twig' %}
         {% include '/desktop/admin/security.html.twig' %}
         {% include '/desktop/admin/summary.html.twig' %}
         {% include '/desktop/admin/update-conf.html.twig' %}
-        {% include '/desktop/admin/update-view.html.twig' %}
         {% include '/desktop/admin/users.html.twig' %}
     </div>
 </div>

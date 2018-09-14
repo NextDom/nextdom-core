@@ -1,0 +1,36 @@
+<div class="row">
+    <div class="col-md-10 col-md-offset-1" id="div_MenuList2">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">{{ 'Outils' }}</h3>
+            </div>
+            <div class="box-body">
+                <a class="btn btn-app" data-id="div_Backup"><i class="fa fa-users"></i> {{ 'Sauvegardes' }}</a>
+                <a class="btn btn-app" data-id="div_Migration"><i class="fa fa-users"></i> {{ 'Migration' }}</a>
+                <a class="btn btn-app" data-id="div_Cron"><i class="fa fa-tasks"></i> {{ 'Taches' }}</a>
+                <a class="btn btn-app" data-id="div_Update-view"><span class="badge bg-red">{{ MENU_NB_UPDATES }}</span><i class="fa fa-tasks"></i> {{ 'Mise a jour' }}</a>
+                <a class="btn btn-app" data-id="div_Profils"><i class="fa fa-briefcase"></i> {{ 'Profil' }}</a>
+                <a class="btn btn-app" data-id="div_History"><i class="fa fa-bar-chart-o"></i> {{ 'Historique' }}</a>
+                <a class="btn btn-app" data-id="div_Reports-view"><i class="fa fa-newspaper-o"></i> {{ 'Rapports' }}</a>
+                <a class="btn btn-app" data-id="div_TempsReel"><i class="fa fa-tachometer"></i> {{ 'Temps réel' }}</a>
+                <a class="btn btn-app" data-id="div_Logs-view"><i class="fa fa-file-o"></i> {{ 'Logs' }}</a>
+                <a class="btn btn-app" data-id="div_Health"><i class="fa fa-medkit"></i> {{ 'Santé' }}</a>
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+</div>
+
+<div id="toolsContent">
+<div class="col-md-12">
+    {% include '/desktop/admin/health.html.twig' %}
+    {% include '/desktop/admin/backup.html.twig' %}
+    {% include '/desktop/admin/logs-view.html.twig' %}
+    {% include '/desktop/admin/migration.html.twig' %}
+    {% include '/desktop/admin/reports-view.html.twig' %}
+    {% include '/desktop/admin/update-view.html.twig' %}
+    {% include '/desktop/admin/cron.html.twig' %}
+    {% include '/desktop/admin/history.html.twig' %}
+    {% include '/desktop/admin/reports.html.twig' %}
+</div>
+</div>
