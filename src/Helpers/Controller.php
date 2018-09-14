@@ -60,7 +60,8 @@ class Controller
         'plan3d'         => 'plan3dPage',
         'interact'       => 'interactPage',
         'market'         => 'marketPage',
-        'reboot'         => 'rebootPage'
+        'reboot'         => 'rebootPage',
+        'tools'         => 'toolsPage'
     ];
 
     /**
@@ -284,18 +285,127 @@ class Controller
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function backupPage(Render $render, array &$pageContent): string
+    public static function toolsPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageContent['JS_VARS_RAW']['REPO_LIST'] = '[]';
+        /**
+         * Render backup page
+         */
 
+        $pageContent['JS_VARS_RAW']['REPO_LIST'] = '[]';
         $pageContent['backupAjaxToken'] = \ajax::getToken();
         $pageContent['backupReposList'] = UpdateManager::listRepo();
         $pageContent['JS_END_POOL'][]   = '/public/js/desktop/backup.js';
 
-        return $render->get('/desktop/backup.html.twig', $pageContent);
+        /**
+         * Render cron Page
+         */
+
+        $pageContent['cronEnabled']   = \config::byKey('enableCron');
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/cron.js';
+
+        /**
+         * Render log page
+         */
+
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/log.js';
+        $currentLogfile = Utils::init('logfile');
+        $logFilesList   = [];
+        $dir = opendir(NEXTDOM_ROOT . '/log/');
+
+        while ($file = readdir($dir)) {
+            if ($file != '.' && $file != '..' && $file != '.htaccess' && !is_dir(NEXTDOM_ROOT . '/log/' . $file)) {
+                $logFilesList[] = $file;
+            }
+        }
+        natcasesort($logFilesList);
+        $pageContent['logFilesList'] = [];
+        foreach ($logFilesList as $logFile) {
+            $hasError = 0;
+            $logFileData = [];
+            $logFileData['name']  = $logFile;
+            $logFileData['icon']  = 'check';
+            $logFileData['color'] = 'green';
+
+            if (shell_exec('grep -c -E "\[ERROR\]|\[error\]" ' . NEXTDOM_ROOT . '/log/' . $logFile) != 0) {
+                $logFileData['icon'] = 'exclamation-triangle';
+                $logFileData['color'] = 'red';
+            } elseif (shell_exec('grep -c -E "\[WARNING\]" ' . NEXTDOM_ROOT . '/log/' . $logFile) != 0) {
+                $logFileData['icon'] = 'exclamation-circle';
+                $logFileData['color'] = 'orange';
+            }
+            if ($currentLogfile == $logFile) {
+                $logFileData['active'] = true;
+            } else {
+                $logFileData['active'] = false;
+            }
+            $logFileData['size'] = round(filesize(NEXTDOM_ROOT . '/log/' . $logFile) / 1024);
+            $pageContent['logFilesList'][] = $logFileData;
+
+        }
+
+        /**
+         * Render user page
+         */
+
+        $pageContent['userLdapEnabled'] = \config::byKey('ldap::enable');
+
+        if ($pageContent['userLdapEnabled'] != '1') {
+            $user = \user::byLogin('nextdom_support');
+            $pageContent['userSupportExists'] = is_object($user);
+        }
+        $pageContent['userSessionsList'] = \listSession();
+        $pageContent['usersList'] = \user::all();
+        $pageContent['JS_VARS']['ldapEnable'] = $pageContent['userLdapEnabled'];
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/user.js';
+
+
+        /**
+         * Render user page
+         */
+
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/report.js';
+
+        $report_path = NEXTDOM_ROOT . '/data/report/';
+        $pageContent['reportViews'] = [];
+
+        $allViews = \view::all();
+        foreach ($allViews as $view) {
+            $viewData           = [];
+            $viewData['id']     = $view->getId();
+            $viewData['name']   = $view->getName();
+            $viewData['number'] = count(ls($report_path . '/view/' . $view->getId(), '*'));
+            $pageContent['reportViews'][] = $viewData;
+        }
+        $pageContent['reportPlans'] = [];
+
+        $allPlanHeader = \planHeader::all();
+        foreach ($allPlanHeader as $plan) {
+            $planData           = [];
+            $planData['id']     = $plan->getId();
+            $planData['name']   = $plan->getName();
+            $planData['number'] = count(ls($report_path . '/plan/' . $plan->getId(), '*'));
+            $pageContent['reportPlans'][] = $planData;
+        }
+        $pageContent['reportPlugins'] = [];
+
+        $pluginManagerList = PluginManager::listPlugin(true);
+        foreach ($pluginManagerList as $plugin) {
+            if ($plugin->getDisplay() != '') {
+                $pluginData = [];
+                $pluginData['id']     = $plugin->getId();
+                $pluginData['name']   = $plugin->getName();
+                $pluginData['number'] = count(ls($report_path . '/plugin/' . $plugin->getId(), '*'));
+                $pageContent['reportPlugins'][] = $pluginData;
+            }
+        }
+
+
+
+
+        return $render->get('/desktop/tools.html.twig', $pageContent);
     }
 
     /**
@@ -356,61 +466,6 @@ class Controller
         return $render->get('/desktop/message.html.twig', $pageContent);
     }
 
-    /**
-     * Render cron page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of cron page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function cronPage(Render $render, array &$pageContent): string
-    {
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-
-        $pageContent['cronEnabled']   = \config::byKey('enableCron');
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/cron.js';
-
-        return $render->get('/desktop/cron.html.twig', $pageContent);
-    }
-
-    /**
-     * Render user page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of user page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function userPage(Render $render, array &$pageContent): string
-    {
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-
-        $pageContent['userLdapEnabled'] = \config::byKey('ldap::enable');
-
-        if ($pageContent['userLdapEnabled'] != '1') {
-            $user = \user::byLogin('nextdom_support');
-            $pageContent['userSupportExists'] = is_object($user);
-        }
-        $pageContent['userSessionsList'] = \listSession();
-        $pageContent['usersList'] = \user::all();
-        $pageContent['JS_VARS']['ldapEnable'] = $pageContent['userLdapEnabled'];
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/user.js';
-
-        return $render->get('/desktop/user.html.twig', $pageContent);
-    }
 
     /**
      * Render update page
@@ -539,117 +594,6 @@ class Controller
         return $render->get('/desktop/display.html.twig', $pageContent);
     }
 
-    /**
-     * Render log page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of log page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function logPage(Render $render, array &$pageContent): string
-    {
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/log.js';
-        $currentLogfile = Utils::init('logfile');
-        $logFilesList   = [];
-        $dir = opendir(NEXTDOM_ROOT . '/log/');
-
-        while ($file = readdir($dir)) {
-            if ($file != '.' && $file != '..' && $file != '.htaccess' && !is_dir(NEXTDOM_ROOT . '/log/' . $file)) {
-                $logFilesList[] = $file;
-            }
-        }
-        natcasesort($logFilesList);
-        $pageContent['logFilesList'] = [];
-        foreach ($logFilesList as $logFile) {
-            $hasError = 0;
-            $logFileData = [];
-            $logFileData['name']  = $logFile;
-            $logFileData['icon']  = 'check';
-            $logFileData['color'] = 'green';
-
-            if (shell_exec('grep -c -E "\[ERROR\]|\[error\]" ' . NEXTDOM_ROOT . '/log/' . $logFile) != 0) {
-                $logFileData['icon'] = 'exclamation-triangle';
-                $logFileData['color'] = 'red';
-            } elseif (shell_exec('grep -c -E "\[WARNING\]" ' . NEXTDOM_ROOT . '/log/' . $logFile) != 0) {
-                $logFileData['icon'] = 'exclamation-circle';
-                $logFileData['color'] = 'orange';
-            }
-            if ($currentLogfile == $logFile) {
-                $logFileData['active'] = true;
-            } else {
-                $logFileData['active'] = false;
-            }
-            $logFileData['size'] = round(filesize(NEXTDOM_ROOT . '/log/' . $logFile) / 1024);
-            $pageContent['logFilesList'][] = $logFileData;
-
-        }
-        return $render->get('/desktop/logs-view.html.twig', $pageContent);
-    }
-
-    /**
-     * Render report page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of report page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function reportPage(Render $render, array &$pageContent): string
-    {
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/report.js';
-
-        $report_path = NEXTDOM_ROOT . '/data/report/';
-        $pageContent['reportViews'] = [];
-
-        $allViews = \view::all();
-        foreach ($allViews as $view) {
-            $viewData           = [];
-            $viewData['id']     = $view->getId();
-            $viewData['name']   = $view->getName();
-            $viewData['number'] = count(ls($report_path . '/view/' . $view->getId(), '*'));
-            $pageContent['reportViews'][] = $viewData;
-        }
-        $pageContent['reportPlans'] = [];
-
-        $allPlanHeader = \planHeader::all();
-        foreach ($allPlanHeader as $plan) {
-            $planData           = [];
-            $planData['id']     = $plan->getId();
-            $planData['name']   = $plan->getName();
-            $planData['number'] = count(ls($report_path . '/plan/' . $plan->getId(), '*'));
-            $pageContent['reportPlans'][] = $planData;
-        }
-        $pageContent['reportPlugins'] = [];
-
-        $pluginManagerList = PluginManager::listPlugin(true);
-        foreach ($pluginManagerList as $plugin) {
-            if ($plugin->getDisplay() != '') {
-                $pluginData = [];
-                $pluginData['id']     = $plugin->getId();
-                $pluginData['name']   = $plugin->getName();
-                $pluginData['number'] = count(ls($report_path . '/plugin/' . $plugin->getId(), '*'));
-                $pageContent['reportPlugins'][] = $pluginData;
-            }
-        }
-        return $render->get('/desktop/reports-view.html.twig', $pageContent);
-    }
 
     /**
      * Render plugin page
