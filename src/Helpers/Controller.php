@@ -33,7 +33,6 @@ class Controller
         'dashboard'   => 'dashboardPage',
         'scenario'       => 'scenarioPage',
         'administration' => 'administrationPage',
-        'backup'         => 'backupPage',
         'object'         => 'objectPage',
         'message'        => 'messagePage',
         'system'         => 'systemPage',
@@ -41,17 +40,12 @@ class Controller
         'display'        => 'displayPage',
         'plugin'         => 'pluginPage',
         'editor'         => 'editorPage',
-        'migration'      => 'migrationPage',
         'shutdown'       => 'shutdownPage',
-        'health'         => 'healthPage',
-        'profils'        => 'profilsPage',
         'view'           => 'viewPage',
         'view_edit'      => 'viewEditPage',
         'eqAnalyze'      => 'eqAnalyzePage',
-        'eqAnalyse'      => 'eqAnalyzePage',
         'plan'           => 'planPage',
         'plan3d'         => 'plan3dPage',
-        'interact'       => 'interactPage',
         'market'         => 'marketPage',
         'reboot'         => 'rebootPage',
         'tools'         => 'toolsPage'
@@ -530,7 +524,7 @@ class Controller
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/health.js';
 
         /**
-         * Render health page
+         * Render history page
          */
         $pageContent['historyDate'] = array(
             'start' => date('Y-m-d', strtotime(\config::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
@@ -557,6 +551,12 @@ class Controller
         usort($updates, 'version_compare');
         $pageContent['updatesList']   = array_reverse($updates);
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/update.js';
+
+        /**
+         * Render migration page
+         */
+        $pageContent['migrationAjaxToken'] = \ajax::getToken();
+        $pageContent['JS_END_POOL'][]      = '/public/js/desktop/migration.js';
 
         return $render->get('/desktop/tools.html.twig', $pageContent);
     }
@@ -783,30 +783,6 @@ class Controller
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/editor.js';
 
         return $render->get('/desktop/editor.html.twig', $pageContent);
-    }
-
-    /**
-     * Render migration page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of migration page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function migrationPage(Render $render, array &$pageContent): string
-    {
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-
-        $pageContent['migrationAjaxToken'] = \ajax::getToken();
-        $pageContent['JS_END_POOL'][]      = '/public/js/desktop/migration.js';
-
-        return $render->get('/desktop/migration.html.twig', $pageContent);
     }
 
     /**

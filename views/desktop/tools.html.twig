@@ -5,7 +5,7 @@
                 <h3 class="box-title">{{ 'Outils' }}</h3>
             </div>
             <div class="box-body">
-                <a class="btn btn-app" data-id="div_Backup"><i class="fa fa-users"></i> {{ 'Sauvegardes' }}</a>
+                <a class="btn btn-app" data-id="Backup"><i class="fa fa-users"></i> {{ 'Sauvegardes' }}</a>
                 <a class="btn btn-app" data-id="div_Migration"><i class="fa fa-users"></i> {{ 'Migration' }}</a>
                 <a class="btn btn-app" data-id="div_Cron"><i class="fa fa-tasks"></i> {{ 'Taches' }}</a>
                 <a class="btn btn-app" data-id="div_Update-view"><span class="badge bg-red">{{ MENU_NB_UPDATES }}</span><i class="fa fa-tasks"></i> {{ 'Mise a jour' }}</a>
@@ -24,7 +24,7 @@
 <div id="toolsContent">
 <div class="col-md-12">
     {% include '/desktop/tools/health.html.twig' %}
-    {% include '/desktop/tools/users.html.twig' %}
+    {% include '/desktop/tools/user.html.twig' %}
     {% include '/desktop/tools/backup.html.twig' %}
     {% include '/desktop/tools/logs-view.html.twig' %}
     {% include '/desktop/tools/migration.html.twig' %}
