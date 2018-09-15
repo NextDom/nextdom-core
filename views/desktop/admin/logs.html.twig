@@ -1,0 +1,151 @@
+<div class="box" style="display: none;" id="div_Logs">
+    <div class="box-header">
+        <h3 class="box-title"><i class="fa fa-hand-o-right"></i>{{ 'Logs' }}</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool btn-close" ><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
+        <form class="form-horizontal">
+            <fieldset>
+                <legend>{{ 'Timeline' }}</legend>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nombre maximum d\'évènements' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <input type="text" class="configKey form-control" data-l1key="timeline::maxevent"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Supprimer tous les évènements' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <a type="text" class="btn btn-danger" id="bt_removeTimelineEvent"><i class="fa fa-trash"></i> {{ 'Supprimer' }}</a>
+                    </div>
+                </div>
+                <legend>{{ 'Messages' }}</legend>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Ajouter un message à chaque erreur dans les logs' }}</label>
+                    <div class="col-sm-1">
+                        <input type="checkbox" class="configKey" data-l1key="addMessageForErrorLog" checked/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Action sur message' }}</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <a class="btn btn-success" id="bt_addActionOnMessage"><i class="fa fa-plus-circle"></i>{{ 'Ajouter' }}</a>
+                    </div>
+                </div>
+                <div id="div_actionOnMessage"></div>
+            </fieldset>
+        </form>
+        <form class="form-horizontal">
+            <fieldset>
+                <legend>{{ 'Alertes' }}</legend>
+                {% for level, value in adminAlerts %}
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Ajouter un message à chaque' }} {{ value['name'] }}</label>
+                        <div class="col-sm-1">
+                            <input type="checkbox" class="configKey" data-l1key="alert::addMessageOn{{ level|capitalize }}"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Commande sur' }} {{ value['name'] }}</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="input-group">
+                                <input type="text" class="configKey form-control" data-l1key="alert::{{ level }}Cmd"/>
+                                <span class="input-group-btn">
+                                                <a class="btn btn-default cursor bt_selectAlertCmd" title="Rechercher une commande" data-type="{{ level }}"><i class="fa fa-list-alt"></i></a>
+                                            </span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </fieldset>
+        </form>
+        <form class="form-horizontal">
+            <fieldset>
+                <legend>{{ 'Log' }}</legend>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Moteur de log' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <select class="configKey form-control" data-l1key="log::engine">
+                            <option value="StreamHandler">{{ 'Defaut' }}</option>
+                            <option value="SyslogHandler">{{ 'Syslog' }}</option>
+                            <option value="SyslogUdp">{{ 'SyslogUdp' }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="logEngine SyslogUdp">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Adresse syslog UDP' }}</label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                            <input type="text" class="configKey form-control" data-l1key="log::syslogudphost"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Port syslog UDP' }}</label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                            <input type="text" class="configKey form-control" data-l1key="log::syslogudpport"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Format des logs' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <input type="text" class="configKey form-control" data-l1key="log::formatter"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nombre de lignes maximum dans un fichier de log' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <input type="text" class="configKey form-control" data-l1key="maxLineLog"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Niveau de log par défaut' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <select class="configKey form-control" data-l1key="log::level">
+                            <option value="100">{{ 'Debug' }}</option>
+                            <option value="200">{{ 'Info' }}</option>
+                            <option value="300">{{ 'Warning' }}</option>
+                            <option value="400">{{ 'Erreur' }}</option>
+                        </select>
+                    </div>
+                </div>
+                {% for otherLog in adminOthersLogs %}
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ otherLog|capitalize }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="1000"/> {{ 'Aucun' }}</label>
+                                <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="default"/> {{ 'Défaut' }}</label>
+                                <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="100"/> {{ 'Debug' }}</label>
+                                <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="200"/> {{ 'Info' }}</label>
+                                <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="300"/> {{ 'Warning' }}</label>
+                                <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="400"/> {{ 'Erreur' }}</label>
+                            </div>
+                        </div>
+                    </form>
+                {% endfor %}
+                {% if not adminIsRescueMode %}
+                    {% for pluginData in adminPluginsList %}
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">{{ pluginData['plugin'].getName() }}</label>
+                                <div class="col-sm-10">
+                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="1000"/> {{ 'Aucun' }}</label>
+                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="default"/> {{ 'Défaut' }}</label>
+                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="100"/> {{ 'Debug' }}</label>
+                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="200"/> {{ 'Info' }}</label>
+                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="300"/> {{ 'Warning' }}</label>
+                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="400"/> {{ 'Erreur' }}</label>
+                                </div>
+                            </div>
+                        </form>
+                    {% endfor %}
+                {% endif %}
+            </fieldset>
+        </form>
+    </div>
+</div>

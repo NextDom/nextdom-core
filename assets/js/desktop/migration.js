@@ -16,7 +16,7 @@
  */
  jwerty.key('ctrl+s', function (e) {
     e.preventDefault();
-    $("#bt_saveBackup").click();
+    $("#bt_saveBackupforMigration").click();
 });
 
 $("#bt_saveBackup").on('click', function (event) {
@@ -47,11 +47,11 @@ $("#bt_saveBackup").on('click', function (event) {
 
 $("#bt_migrateNextDom").on('click', function (event) {
    var el = $(this);
-   bootbox.confirm('{{Etes-vous sûr de vouloir migrer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée}}', function (result) {
+   bootbox.confirm('{{Etes-vous sûr de vouloir migrer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackupforMigration option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée}}', function (result) {
        if (result) {
            el.find('.fa-refresh').show();
            nextdom.backup.migrate({
-               backup: $('#sel_restoreBackup').value(),
+               backup: $('#sel_restoreBackupforMigration').value(),
                error: function (error) {
                    notify("Erreur", error.message, 'error');
                },
@@ -63,30 +63,11 @@ $("#bt_migrateNextDom").on('click', function (event) {
    });
 });
 
- $("#bt_removeBackup").on('click', function (event) {
-    var el = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir supprimer la sauvegarde}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ?', function (result) {
-        if (result) {
-            el.find('.fa-refresh').show();
-            nextdom.backup.remove({
-                backup: $('#sel_restoreBackup').value(),
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function () {
-                    updateListBackup();
-                    notify("Info", '{{Sauvegarde supprimée avec succès}}', 'success');
-                }
-            });
-        }
-    });
+ $('#bt_downloadBackupforMigration').on('click', function () {
+    window.open('core/php/downloadFile.php?pathfile=backup/' + $('#sel_restoreBackupforMigration option:selected').text(), "_blank", null);
 });
 
- $('#bt_downloadBackup').on('click', function () {
-    window.open('core/php/downloadFile.php?pathfile=backup/' + $('#sel_restoreBackup option:selected').text(), "_blank", null);
-});
-
- $('#bt_uploadBackup').fileupload({
+ $('#bt_uploadBackupforMigration').fileupload({
     dataType: 'json',
     replaceFileInput: false,
     done: function (e, data) {
@@ -161,7 +142,7 @@ $("#bt_migrateNextDom").on('click', function (event) {
                     }
                 }
             }
-            $('#pre_backupInfo').text(log);
+            $('#pre_migrationInfo').text(log);
             if (init(_autoUpdate, 0) == 1) {
                 setTimeout(function () {
                     getNextDomLog(_autoUpdate, _log)
@@ -185,7 +166,7 @@ function updateListBackup() {
             for (var i in data) {
                 options += '<option value="' + i + '">' + data[i] + '</option>';
             }
-            $('#sel_restoreBackup').html(options);
+            $('#sel_restoreBackupforMigration').html(options);
         }
     });
 }

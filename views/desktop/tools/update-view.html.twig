@@ -1,19 +1,18 @@
-<div class="row row-overflow">
+<div class="box" style="display: none;" id="div_Update-view">
+    <div class="box-header">
+        <h3 class="box-title"><i class="fa fa-hand-o-right"></i>{{ 'Mise a jour' }}</h3>
+        <div class="box-tools pull-right">
+            <a class="btn btn-success btn-xs " id="bt_saveUpdate" style="margin-top:5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+            <a class="btn btn-info btn-xs" id="bt_checkAllUpdate" style="margin-top:5px;"><i class="fas fa-refresh"></i> {{ 'Vérifier les mises à jour' }}</a>
+            <a href="#" class="btn btn-xs btn-default" id="bt_updateNextDom" style="margin-top:5px;"><i class="fas fa-check"></i> {{ 'Mettre à jour' }}</a>
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            <button type="button" class="btn btn-box-tool btn-close"><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="row row-overflow">
     <div class="col-sm-8">
-        <div class="box">
-            <div class="box-header">
-                <legend><i class="fa fa-cog"></i> {{ 'Mise a jour' }}
-                    <div class="box-tools pull-right">
-                        <a class="btn btn-success btn-xs " id="bt_saveUpdate" style="margin-top:5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-                        <a class="btn btn-info btn-xs" id="bt_checkAllUpdate" style="margin-top:5px;"><i class="fas fa-refresh"></i> {{ 'Vérifier les mises à jour' }}</a>
-                        <a href="#" class="btn btn-xs btn-default" id="bt_updateNextDom" style="margin-top:5px;"><i class="fas fa-check"></i> {{ 'Mettre à jour' }}</a>
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                    </div>
-                </legend>
-            </div>
-            <div class="box-body">
+
                 <i class="fas fa-clock-o" style="cursor:default;"></i> <span style="cursor:default;">{{ 'Dernière vérification : ' }}</span><span class="label label-info" id="span_lastUpdateCheck" style="margin-bottom: 5px;font-size:1em;cursor:default;"></span>
                 <br/><br/>
                 <ul class="nav nav-tabs" role="tablist">
@@ -53,20 +52,11 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
     <div class="col-sm-4">
-        <div class="box">
-            <div class="box-header">
-                <legend style="cursor:default;"><i class="fas fa-info-circle"></i> {{ 'Informations :' }}</legend>
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                </div>
-            </div>
-            <div class="box-body">
+        <legend style="cursor:default;"><i class="fas fa-info-circle"></i> {{ 'Informations :' }}</legend>
+
+
                 <pre id="pre_updateInfo"></pre>
             </div>
         </div>
@@ -75,7 +65,7 @@
     <div id="md_specifyUpdate">
         <form class="form-horizontal">
             <fieldset>
-                <div class="alert alert-danger">{{ 'Avant toute mise à jour, merci de consulter la note de version du core de NextDom' }} <a target="_blank" href="/releasenote/0.0.1.md">{{ 'ici' }}</a></div>
+                <div class="alert alert-danger">{{ 'Avant toute mise à jour, merci de consulter la note de version du core de NextDom' }} <a target="_blank" href="https://nextdom.github.io/core/fr_FR/noteVersion">{{ 'ici' }}</a></div>
                 <div class="form-group">
                     <div class="form-group">
                         <label class="col-xs-6 control-label">{{ 'Pré-update (mettre à jour le script d\'update avant)' }}</label>
@@ -124,5 +114,4 @@
         </form>
         <a class="btn btn-success pull-right" style="color:white;" id="bt_doUpdate"><i class="fas fa-check"></i> {{ 'Mettre à jour' }}</a>
     </div>
-</div>
 </div>

@@ -1,15 +1,22 @@
-<div id="backup">
-    <div class="row row-overflow">
+<div class="box" style="display: none;" id="backup">
+    <div class="box-header">
+        <h3 class="box-title"><i class="fa fa-hand-o-right"></i>{{ 'Sauvegardes / Restaurations' }}</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool btn-close" ><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
         <div class="col-sm-6">
             <div class="box">
                 <div class="box-header">
-                    <legend><i class="fas fa-floppy-o"></i> {{ 'Sauvegardes' }}
-                        <div class="box-tools pull-right">
-                            <a class="btn btn-success btn-xs" id="bt_saveBackup"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                        </div>
+                    <div class="box-tools pull-right">
+                        <a class="btn btn-success btn-xs" id="bt_saveBackup"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
                     </legend>
                 </div>
                 <div class="box-body">
