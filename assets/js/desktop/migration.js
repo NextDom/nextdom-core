@@ -16,7 +16,7 @@
  */
  jwerty.key('ctrl+s', function (e) {
     e.preventDefault();
-    $("#bt_saveBackup").click();
+    $("#bt_saveBackupforMigration").click();
 });
 
 $("#bt_saveBackup").on('click', function (event) {
