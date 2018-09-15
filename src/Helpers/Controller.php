@@ -307,12 +307,12 @@ class Controller
     }
 
     /**
-     * Render backup page
+     * Render tools page
      *
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of backup page
+     * @return string Content of tools page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -539,7 +539,6 @@ class Controller
         $pageContent['JS_POOL'][]     = '/3rdparty/visjs/vis.min.js';
         $pageContent['CSS_POOL'][]    = '/3rdparty/visjs/vis.min.css';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/history.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools.js';
 
         /**
          * Render update page
@@ -557,6 +556,16 @@ class Controller
          */
         $pageContent['migrationAjaxToken'] = \ajax::getToken();
         $pageContent['JS_END_POOL'][]      = '/public/js/desktop/migration.js';
+
+        /**
+         * Render backup page
+         */
+        $pageContent['JS_VARS_RAW']['REPO_LIST'] = '[]';
+        $pageContent['backupAjaxToken'] = \ajax::getToken();
+        $pageContent['backupReposList'] = UpdateManager::listRepo();
+        $pageContent['JS_END_POOL'][]   = '/public/js/desktop/backup.js';
+
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools.js';
 
         return $render->get('/desktop/tools.html.twig', $pageContent);
     }
