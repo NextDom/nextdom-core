@@ -1,8 +1,3 @@
-ServerSignature Off
-Options -Indexes +FollowSymLinks
-
-ErrorDocument 404 /public/404.html
-
 <ifModule mod_gzip.c>
 	mod_gzip_on Yes
 	mod_gzip_dechunk Yes
@@ -111,11 +106,11 @@ ErrorDocument 404 /public/404.html
 	satisfy all
 </Files>
 
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteCond %{REQUEST_URI} ^/?core/img/.*$
-    RewriteRule ^/?core/img/(.*)$ /public/img/$1 [L,QSA]
-</IfModule>
+#<IfModule mod_rewrite.c>
+   # RewriteEngine On
+   # RewriteCond %{REQUEST_URI} ^/?core/img/.*$
+   # RewriteRule ^/?core/img/(.*)$ /public/img/$1 [L,QSA]
+#</IfModule>
 
 #RewriteEngine on
 #RewriteBase /core/ajax
