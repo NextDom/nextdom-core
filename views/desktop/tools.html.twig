@@ -9,7 +9,7 @@
                 <a class="btn btn-app" data-id="div_Migration"><i class="fa fa-users"></i> {{ 'Migration' }}</a>
                 <a class="btn btn-app" data-id="div_Cron"><i class="fa fa-tasks"></i> {{ 'Taches' }}</a>
                 <a class="btn btn-app" data-id="div_Update-view"><span class="badge bg-red">{{ MENU_NB_UPDATES }}</span><i class="fa fa-tasks"></i> {{ 'Mise a jour' }}</a>
-                <a class="btn btn-app" data-id="div_Profils"><i class="fa fa-briefcase"></i> {{ 'Profil' }}</a>
+                <a class="btn btn-app" data-id="div_Users"><i class="fa fa-briefcase"></i> {{ 'Profil' }}</a>
                 <a class="btn btn-app" data-id="div_History"><i class="fa fa-bar-chart-o"></i> {{ 'Historique' }}</a>
                 <a class="btn btn-app" data-id="div_Reports-view"><i class="fa fa-newspaper-o"></i> {{ 'Rapports' }}</a>
                 <a class="btn btn-app" data-id="div_TempsReel"><i class="fa fa-tachometer"></i> {{ 'Temps réel' }}</a>
@@ -24,6 +24,7 @@
 <div id="toolsContent">
 <div class="col-md-12">
     {% include '/desktop/tools/health.html.twig' %}
+    {% include '/desktop/tools/users.html.twig' %}
     {% include '/desktop/tools/backup.html.twig' %}
     {% include '/desktop/tools/logs-view.html.twig' %}
     {% include '/desktop/tools/migration.html.twig' %}
