@@ -102,7 +102,7 @@ step_5_php() {
 
 step_6_nextdom_download() {
     # Si run de la creation de l'image, on s'arrete la
-    [[ ${VERSION} == "docker" ]] && echo "Fin de l'install de l'image Docker" && exit 0
+    [[ ${VERSION} == "docker" ]] && echo "Fin de l'install de l'image Docker avant le " && exit 0
     echo "                                                                                    "
     mkdir -p ${WEBSERVER_HOME} >> ${DEBUG} 2>&1
     find ${WEBSERVER_HOME} -name 'index.html' -type f -exec rm -rf {} + >> ${DEBUG} 2>&1
@@ -112,10 +112,11 @@ step_6_nextdom_download() {
         git reset --hard origin/${VERSION} >> ${DEBUG} 2>&1
         git pull origin ${VERSION} >> ${DEBUG} 2>&1
     else
-        rm -Rf *
         #git clone --quiet https://github.com/sylvaner/nextdom-core . >> ${DEBUG} 2>&1
-        git clone --quiet https://github.com/sylvaner/nextdom-core .
-        git checkout ${version}
+        git init
+        git remote add origin https://github.com/sylvaner/nextdom-core
+        git fetch --all
+        git reset --hard origin/${VERSION}
     fi
 }
 

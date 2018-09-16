@@ -15,7 +15,7 @@ services:
   expose:
     - "3306"
   ports:
-    - "3326:3306"
+    - "${MYSQLMAP}"
  nextdom-dev:
   container_name: ${CNAME}
   #image: ${IMAGE}
@@ -32,9 +32,9 @@ services:
     - "80"
     - "443"
   ports:
+    - "${SSHMAP}"
     - "${HTTPMAP}"
     - "${HTTPSMAP}"
-    - "${SSHMAP}"
   environment:
     - MYSQL_ROOT_PASSWORD=${MYSQLROOT}
     - ROOT_PASSWORD=${ROOT_PASSWORD}
