@@ -144,14 +144,7 @@ try {
     echo "OK\n";
 
     echo "Mise a jour SQL";
-    shell_exec('php ' . dirname(__FILE__) . '/../install/update/3.2.4.php');
-    shell_exec('php ' . dirname(__FILE__) . '/../install/update/3.2.5.php');
-    shell_exec('php ' . dirname(__FILE__) . '/../install/update/3.2.6.php');
-    shell_exec('php ' . dirname(__FILE__) . '/../install/update/3.3.0.php');
-    shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password'].' '.$CONFIG['db']['dbname'].' <  ' . dirname(__FILE__) . '/../install/update/3.3.0.sql');
-    shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password'].' '.$CONFIG['db']['dbname'].' <  ' . dirname(__FILE__) . '/../install/update/3.3.1.sql');
-    shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password'].' '.$CONFIG['db']['dbname'].' <  ' . dirname(__FILE__) . '/../install/update/3.3.2.sql');
-    shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password'].' '.$CONFIG['db']['dbname'].' <  ' . dirname(__FILE__) . '/../install/update/3.3.3.sql');
+    shell_exec('php ' . dirname(__FILE__) . '/../install/migrate/migrate.php');
     echo "OK\n";
     echo "Active les contraintes...";
     try {
