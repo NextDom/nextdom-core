@@ -450,7 +450,7 @@ class PrepareView
     private static function getContent(Render $render, array &$pageContent, string $page, $currentPlugin) {
         if ($currentPlugin !== null && is_object($currentPlugin)) {
             ob_start();
-            \include_file('desktop', $page, 'php', $currentPlugin->getId());
+            \include_file('desktop', $page, 'php', $currentPlugin->getId(), true);
             return ob_get_clean();
         } else {
             $controllerRoute = Controller::getRoute($page);
