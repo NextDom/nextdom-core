@@ -59,7 +59,7 @@ try {
             $backup_dir = config::byKey('backup::path');
         }
         if (!file_exists($backup_dir)) {
-            mkdir($backup_dir, 0770, true);
+            mkdir($backup_dir);
         }
         $backup = null;
         $mtime = null;
@@ -144,14 +144,7 @@ try {
     echo "OK\n";
 
     echo "Mise a jour SQL";
-    shell_exec('php ' . dirname(__FILE__) . '/../install/update/3.2.4.php');
-    shell_exec('php ' . dirname(__FILE__) . '/../install/update/3.2.5.php');
-    shell_exec('php ' . dirname(__FILE__) . '/../install/update/3.2.6.php');
-    shell_exec('php ' . dirname(__FILE__) . '/../install/update/3.3.0.php');
-    shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password'].' '.$CONFIG['db']['dbname'].' <  ' . dirname(__FILE__) . '/../install/update/3.3.0.sql');
-    shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password'].' '.$CONFIG['db']['dbname'].' <  ' . dirname(__FILE__) . '/../install/update/3.3.1.sql');
-    shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password'].' '.$CONFIG['db']['dbname'].' <  ' . dirname(__FILE__) . '/../install/update/3.3.2.sql');
-    shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password'].' '.$CONFIG['db']['dbname'].' <  ' . dirname(__FILE__) . '/../install/update/3.3.3.sql');
+    shell_exec('php ' . dirname(__FILE__) . '/../install/migrate/migrate.php');
     echo "OK\n";
     echo "Active les contraintes...";
     try {
@@ -170,6 +163,10 @@ try {
         echo "OK\n";
     }
 
+    echo "Restauration des droits...";
+    system('chmod 1777 /tmp -R');
+    echo "OK\n";
+    
   	echo "Restauration du cache...";
   	system('cd /tmp/nextdom/cache; tar xfz "/tmp/nextdombackup/cache.tar.gz"');
 	echo "OK\n";
@@ -198,9 +195,7 @@ try {
         echo "***ERREUR*** " . $ex->getMessage() . "\n";
     }
 
-    echo "Restauration des droits...";
-    system('chmod 777 /tmp -R');
-    echo "OK\n";
+
 
     try {
         nextdom::start();

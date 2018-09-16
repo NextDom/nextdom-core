@@ -221,7 +221,7 @@ try {
         }
 
         if (init('update::reapply') != '') {
-            $updateSql = __DIR__ . '/update/' . init('update::reapply') . '.sql';
+            $updateSql = __DIR__ . '/migrate/' . init('update::reapply') . '.sql';
             if (file_exists($updateSql)) {
                 try {
                     echo "Disable constraint...";
@@ -264,7 +264,7 @@ try {
                     }
                 }
             }
-            $updateScript = __DIR__ . '/update/' . init('update::reapply') . '.php';
+            $updateScript = __DIR__ . '/migrate/' . init('update::reapply') . '.php';
             if (file_exists($updateScript)) {
                 try {
                     echo "Update system into : " . init('update::reapply') . "\n";
@@ -282,7 +282,7 @@ try {
         } else {
             while (version_compare(nextdom::version(), $curentVersion, '>')) {
                 $nextVersion = incrementVersion($curentVersion);
-                $updateSql = __DIR__ . '/update/' . $nextVersion . '.sql';
+                $updateSql = __DIR__ . '/migrate/' . $nextVersion . '.sql';
                 if (file_exists($updateSql)) {
                     try {
                         echo "Disable constraint...";
@@ -325,7 +325,7 @@ try {
                         }
                     }
                 }
-                $updateScript = __DIR__ . '/update/' . $nextVersion . '.php';
+                $updateScript = __DIR__ . '/migrate/' . $nextVersion . '.php';
                 if (file_exists($updateScript)) {
                     try {
                         echo "Update system into : " . $nextVersion . "...";
