@@ -59,7 +59,7 @@ try {
             $backup_dir = config::byKey('backup::path');
         }
         if (!file_exists($backup_dir)) {
-            mkdir($backup_dir, 0770, true);
+            mkdir($backup_dir);
         }
         $backup = null;
         $mtime = null;
@@ -163,6 +163,10 @@ try {
         echo "OK\n";
     }
 
+    echo "Restauration des droits...";
+    system('chmod 1777 /tmp -R');
+    echo "OK\n";
+    
   	echo "Restauration du cache...";
   	system('cd /tmp/nextdom/cache; tar xfz "/tmp/nextdombackup/cache.tar.gz"');
 	echo "OK\n";
@@ -191,9 +195,7 @@ try {
         echo "***ERREUR*** " . $ex->getMessage() . "\n";
     }
 
-    echo "Restauration des droits...";
-    system('chmod 777 /tmp -R');
-    echo "OK\n";
+
 
     try {
         nextdom::start();
