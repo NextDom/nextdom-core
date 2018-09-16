@@ -141,7 +141,7 @@ class Router
             $page = Utils::init('p');
             $controllerRoute = Controller::getRoute($page);
             if ($controllerRoute === null) {
-                \include_file('desktop', $page, 'php', Utils::init('m'), true);
+                $this->showError404AndDie();
             } else {
                 $render = Render::getInstance();
                 $pageContent = [];
@@ -186,7 +186,7 @@ class Router
     *
     * Generate 404 page
     */
-    public static function showError404AndDie() 
+    private function showError404AndDie()
     {
         header("HTTP/1.0 404 Not Found");
         require(NEXTDOM_ROOT . '/public/404.html');
