@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `object` (
   `position` INT NULL,
   `configuration` TEXT NULL,
   `display` TEXT NULL,
+  `image` MEDIUMTEXT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC),
   INDEX `fk_object_object1_idx1` (`father_id` ASC),
@@ -75,6 +76,7 @@ CREATE TABLE IF NOT EXISTS `eqLogic` (
   `display` TEXT NULL,
   `order` INT NULL DEFAULT '1',
   `comment` TEXT NULL,
+  `tags` VARCHAR(255) NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `unique` (`name` ASC, `object_id` ASC),
   INDEX `eqTypeName` (`eqType_name` ASC),
@@ -85,6 +87,7 @@ CREATE TABLE IF NOT EXISTS `eqLogic` (
   INDEX `object_id` (`object_id` ASC),
   INDEX `timeout` (`timeout` ASC),
   INDEX `eqReal_id` (`eqReal_id` ASC),
+  INDEX `tags` (`tags` ASC),
   CONSTRAINT `fk_eqLogic_jeenode1`
     FOREIGN KEY (`eqReal_id`)
     REFERENCES `eqReal` (`id`)
@@ -527,6 +530,13 @@ CREATE TABLE IF NOT EXISTS `plan3d` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `note` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(127) NULL,
+  `text` TEXT NULL,
+  PRIMARY KEY (`id`))
+  ENGINE = InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
