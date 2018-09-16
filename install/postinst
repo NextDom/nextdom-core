@@ -150,7 +150,6 @@ step_9_nextdom_installation() {
         exit 1
     fi
     cd ${WEBSERVER_HOME}
-    php todo.php 2>/dev/null
 }
 
 step_10_nextdom_post() {
