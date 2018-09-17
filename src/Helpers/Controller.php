@@ -51,6 +51,7 @@ class Controller
         'market' => 'marketPage',
         'reboot' => 'rebootPage',
         'tools' => 'toolsPage',
+        'interact' => 'interactPage',
         'pluginRoute' => 'pluginRoute'
     ];
 
@@ -604,6 +605,32 @@ class Controller
         return $render->get('/desktop/object.html.twig', $pageContent);
     }
 
+    public static function interactPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+$interacts = array();
+$pageContent['interactTotal'] = \interactDef::all();
+$interacts[-1] = \interactDef::all(null);
+$interactListGroup = \interactDef::listGroup();
+if (is_array($interactListGroup)) {
+foreach ($interactListGroup as $group) {
+$interacts[$group['group']] = \interactDef::all($group['group']);
+}
+}
+$pageContent['JS_END_POOL'][] = '/public/js/desktop/interact.js';
+$pageContent['interactsList'] = $interacts;
+$pageContent['interactsListGroup'] = $interactListGroup;
+$pageContent['interactDisabledOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
+$pageContent['interactCmdType'] = \nextdom::getConfiguration('cmd:type');
+$pageContent['interactAllUnite'] = CmdManager::allUnite();
+$pageContent['interactJeeObjects'] = JeeObjectManager::all();
+$pageContent['interactEqLogicTypes'] = EqLogicManager::allType();
+$pageContent['interactEqLogics'] = EqLogicManager::all();
+$pageContent['interactEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
+return $render->get('/desktop/interact.html.twig', $pageContent);
+}
+
     /**
 * Render update page
 *
@@ -630,7 +657,7 @@ class Controller
         $pageContent['updatesList'] = array_reverse($updates);
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/update.js';
 
-        return $render->get('/desktop/update.html.twig', $pageContent);
+        return $render->get('/desktop/tools/update-view.html.twig', $pageContent);
     }
 
     /**
