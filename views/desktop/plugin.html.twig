@@ -1,31 +1,29 @@
 <section class="content">
     <div class="row row-overflow">
-        <div class="col-md-12 col-sm-12" id="div_resumePluginList" style="border-left: solid 1px #EEE; padding-left: 25px;">
+        <div class="col-md-12 col-sm-12" id="div_resumePluginList">
             <div class="box">
-                <div class="box-header">
-                    <legend><i class="fa fa-cog"></i> {{ 'Gestion' }}</legend>
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-cog"></i> {{ 'Gestion' }}</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                         </button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
-                <div class="pluginListContainer box-body">
-                    <div class="iconlist text-center" id="bt_addPluginFromOtherSource">
-                        <i class="fa fa-plus" style="font-size : 6em;color:#33B8CC;"></i>
-                        <span style="font-size : 1.1em;position:relative;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#33B8CC"><center>{{ 'Sources' }}</center></span>
+                <div class="pluginListContainer DisplayCard box-body">
+                    <div class="iconlist icon_gestion icon_theme_color cursor text-center" id="bt_addPluginFromOtherSource">
+                        <i class="fa fa-plus"></i><div class="text-center"><span>{{ 'Sources' }}</span></div>
                     </div>
                     {% for repoCode, repoData in pluginReposList %}
-                        <div class="iconlist displayStore text-center" data-repo="{{ repoCode }}">
-                            <i class="fa fa-shopping-cart" style="font-size : 6em;color:#33B8CC;"></i>
-                            <span style="font-size : 1.1em;position:relative;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#33B8CC"><center>{{ repoData['name'] }}</center></span>
+                        <div class="iconlist icon_gestion displayStore icon_theme_color cursor text-center" data-repo="{{ repoCode }}">
+                            <i class="fa fa-shopping-cart"></i><div class="text-center"><span>{{ repoData['name'] }}</span></div>
                         </div>
                     {% endfor %}
                 </div>
             </div>
             <div class="box">
                 <div class="box-header with-border">
-                    <legend><i class="fa fa-list-alt"></i> {{ 'Mes plugins' }}</legend>
+                    <h3 class="box-title"><i class="fa fa-list-alt"></i> {{ 'Mes plugins' }}</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                         </button>
@@ -36,7 +34,7 @@
                 <div class="pluginListContainer box-body">
                     {% for plugin in pluginsList %}
                         <div class="pluginDisplayCard iconlist text-center" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_id="{{ plugin.getId() }}" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
-                            <img class="img-responsive" style="width : 100px;" src="{{ plugin.getPathImgIcon() }}"/>
+                            <img class="img-responsive" style="width : 90px;" src="{{ plugin.getPathImgIcon() }}"/>
                             <span style="display:none;" class="name">{{ plugin.getName() }}</span>
                         </div>
                     {% endfor %}
