@@ -38,6 +38,7 @@ class Controller
         'system' => 'systemPage',
         'database' => 'databasePage',
         'display' => 'displayPage',
+        'update' => 'updatePage',
         'plugin' => 'pluginPage',
         'editor' => 'editorPage',
         'shutdown' => 'shutdownPage',
@@ -50,6 +51,7 @@ class Controller
         'market' => 'marketPage',
         'reboot' => 'rebootPage',
         'tools' => 'toolsPage',
+        'interact' => 'interactPage',
         'pluginRoute' => 'pluginRoute'
     ];
 
@@ -601,6 +603,61 @@ class Controller
         $pageContent['objectSummary'] = \config::byKey('object:summary');
 
         return $render->get('/desktop/object.html.twig', $pageContent);
+    }
+
+    public static function interactPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+$interacts = array();
+$pageContent['interactTotal'] = \interactDef::all();
+$interacts[-1] = \interactDef::all(null);
+$interactListGroup = \interactDef::listGroup();
+if (is_array($interactListGroup)) {
+foreach ($interactListGroup as $group) {
+$interacts[$group['group']] = \interactDef::all($group['group']);
+}
+}
+$pageContent['JS_END_POOL'][] = '/public/js/desktop/interact.js';
+$pageContent['interactsList'] = $interacts;
+$pageContent['interactsListGroup'] = $interactListGroup;
+$pageContent['interactDisabledOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
+$pageContent['interactCmdType'] = \nextdom::getConfiguration('cmd:type');
+$pageContent['interactAllUnite'] = CmdManager::allUnite();
+$pageContent['interactJeeObjects'] = JeeObjectManager::all();
+$pageContent['interactEqLogicTypes'] = EqLogicManager::allType();
+$pageContent['interactEqLogics'] = EqLogicManager::all();
+$pageContent['interactEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
+return $render->get('/desktop/interact.html.twig', $pageContent);
+}
+
+    /**
+* Render update page
+*
+* @param Render $render Render engine
+* @param array $pageContent Page data
+*
+* @return string Content of objects page
+*
+* @throws \NextDom\Exceptions\CoreException
+* @throws \Twig_Error_Loader
+* @throws \Twig_Error_Runtime
+* @throws \Twig_Error_Syntax
+*/
+    public static function updatePage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $updates = array();
+        foreach (UpdateManager::listCoreUpdate() as $udpate) {
+            $updates[str_replace(array('.php', '.sql'), '', $udpate)] = str_replace(array('.php', '.sql'), '', $udpate);
+        }
+        usort($updates, 'version_compare');
+        $pageContent['updatesList'] = array_reverse($updates);
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/update.js';
+
+        return $render->get('/desktop/tools/update-view.html.twig', $pageContent);
     }
 
     /**
