@@ -457,6 +457,7 @@ class eqLogic
         if ($replace['#background-color#'] != 'transparent' && $opacity != '' && $opacity < 1) {
             list($r, $g, $b) = sscanf($replace['#background-color#'], "#%02x%02x%02x");
             $replace['#background-color#'] = 'rgba(' . $r . ',' . $g . ',' . $b . ',' . $opacity . ')';
+            $replace['#opacity#'] = $opacity;
         }
         return $replace;
     }
