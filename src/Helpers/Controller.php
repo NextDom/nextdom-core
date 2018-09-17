@@ -38,6 +38,7 @@ class Controller
         'system' => 'systemPage',
         'database' => 'databasePage',
         'display' => 'displayPage',
+        'update' => 'updatePage',
         'plugin' => 'pluginPage',
         'editor' => 'editorPage',
         'shutdown' => 'shutdownPage',
@@ -601,6 +602,35 @@ class Controller
         $pageContent['objectSummary'] = \config::byKey('object:summary');
 
         return $render->get('/desktop/object.html.twig', $pageContent);
+    }
+
+    /**
+* Render update page
+*
+* @param Render $render Render engine
+* @param array $pageContent Page data
+*
+* @return string Content of objects page
+*
+* @throws \NextDom\Exceptions\CoreException
+* @throws \Twig_Error_Loader
+* @throws \Twig_Error_Runtime
+* @throws \Twig_Error_Syntax
+*/
+    public static function updatePage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $updates = array();
+        foreach (UpdateManager::listCoreUpdate() as $udpate) {
+            $updates[str_replace(array('.php', '.sql'), '', $udpate)] = str_replace(array('.php', '.sql'), '', $udpate);
+        }
+        usort($updates, 'version_compare');
+        $pageContent['updatesList'] = array_reverse($updates);
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/update.js';
+
+        return $render->get('/desktop/update.html.twig', $pageContent);
     }
 
     /**
