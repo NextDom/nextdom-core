@@ -303,3 +303,38 @@ margin-right:10px;
 .panel:hover{
     box-shadow: 0 6px 12px 0 rgba(0,0,0,0.15);
 }
+
+.objectDisplayCard {
+    height: 120px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 2px;
+    width: 140px;
+    margin-left: 10px;
+    position: absolute;
+    left: 140px;
+    top: 10px;
+}
+
+.icon_gestion {
+height : 120px;
+margin-bottom : 10px;
+padding : 5px;
+border-radius: 2px;
+width : 140px;
+margin-left : 10px;
+}
+
+.icon_gestion > i {
+font-size : 4em;
+margin-top:5px;
+}
+.icon_gestion > i > div >span{
+font-size : 1em;
+position:relative; 
+top : 15px;
+word-break: break-all;
+white-space: pre-wrap;
+word-wrap: break-word;
+}
+
