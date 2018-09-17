@@ -1,59 +1,48 @@
-<style>
-    .expressions .sortable-placeholder {
-        background-color: #33B8CC;
-    }
-</style>
 <div class="row row-overflow">
     <div id="scenarioThumbnailDisplay" class="col-xs-12">
         <div class="box">
-            <div class="box-header">
-                <legend><i class="fa fa-cog"></i> {{ 'Gestion' }}</legend>
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-cog"></i> {{ 'Gestion' }}</h3>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
                     <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                 </div>
             </div>
-            <div class="scenarioListContainer box-body">
-                <div class="cursor" id="bt_addScenario2" >
+            <div class="scenarioListContainer box-body text-center">
+                <div class="icon_gestion icon_theme_color cursor" id="bt_addScenario2" >
                     <i class="fas fa-plus-circle"></i>
-                    <br>
-                    <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#33B8CC">{{ 'Ajouter' }}</span>
+                    <div class="text-center"><span>{{ 'Ajouter' }}</span></div>
                 </div>
                 {% if scenarioEnabled == 0 %}
-                    <div class="cursor" id="bt_changeAllScenarioState2" data-state="1" style="text-align: center; height : 130px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 170px;margin-left : 10px;">
-                        <i class="fas fa-check" style="font-size : 6em;color:#5cb85c;"></i>
-                        <br>
-                        <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#5cb85c">{{ 'Activer scénarios' }}</span>
+                    <div class="icon_gestion icon-blue cursor" id="bt_changeAllScenarioState2" data-state="1">
+                        <i class="fas fa-check"></i>
+                        <div class="text-center"><span>{{ 'Activer scénarios' }}</span></div>
                     </div>
                 {% else %}
-                    <div class="cursor" id="bt_changeAllScenarioState2" data-state="0" style="text-align: center; height : 130px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 170px;margin-left : 10px;">
-                        <i class="fas fa-times" style="font-size : 6em;color:#d9534f;"></i>
-                        <br>
-                        <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#d9534f">{{ 'Désactiver scénarios' }}</span>
+                    <div class="icon_gestion icon-red cursor" id="bt_changeAllScenarioState2" data-state="0" style="text-align: center; height : 130px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 170px;margin-left : 10px;">
+                        <i class="fas fa-times"></i>
+                        <div class="text-center"><span>{{ 'Désactiver scénarios' }}</span></div>
                     </div>
                 {% endif %}
-                <div class="cursor" id="bt_displayScenarioVariable2" style="text-align: center; height : 130px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 170px;margin-left : 10px;">
-                    <i class="fas fa-eye" style="font-size : 6em;color:#337ab7;"></i>
-                    <br>
-                    <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#337ab7">{{ 'Voir variables' }}</span>
+                <div class="icon_gestion icon-blue cursor" id="bt_displayScenarioVariable2">
+                    <i class="fas fa-eye"></i>
+                    <div class="text-center"><span>{{ 'Voir variables' }}</span></div>
                 </div>
-                <div class="cursor bt_showScenarioSummary" style="text-align: center; height : 130px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 170px;margin-left : 10px;">
-                    <i class="fas fa-list" style="font-size : 6em;color:#337ab7;"></i>
-                    <br>
-                    <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#337ab7">{{ 'Vue d\'ensemble' }}</span>
+                <div class="icon_gestion icon-blue cursor bt_showScenarioSummary">
+                    <i class="fas fa-list"></i>
+                    <div class="text-center"><span>{{ 'Vue d\'ensemble' }}</span></div>
                 </div>
-                <div class="cursor bt_showExpressionTest" style="text-align: center; height : 130px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 170px;margin-left : 10px;">
-                    <i class="fas fa-check" style="font-size : 6em;color:#337ab7;"></i>
-                    <br>
-                    <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#337ab7">{{ 'Testeur d\'expression' }}</span>
+                <div class="icon_gestion icon-blue cursor bt_showExpressionTest">
+                    <i class="fas fa-check"></i>
+                    <div class="text-center"><span>{{ 'Testeur d\'expression' }}</span></div
                 </div>
             </div>
         </div>
 
         <div class="box">
-            <div class="box-header">
-                <legend><i class="icon nextdom-clap_cinema"></i> {{ 'Mes scénarios' }}</legend>
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="icon nextdom-clap_cinema"></i> {{ 'Mes scénarios' }}</h3>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -70,21 +59,20 @@
                 <input class="form-control" placeholder="{{ 'Rechercher' }}" style="margin-bottom:4px" id="in_searchScenario"/>
                 <div class="box-group" id="accordionScenar">
                     {% if scenarios[-1]|length > 0 %}
-                        <div class="panel box box-primary">
+                        <div class="panel box">
                             <div class="box-header with-border">
                                 <h3 class="box-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none"
-                                       style="text-decoration:none;">Aucun - {{ scenarios[-1]|length }} scénario(s)</a>
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none">Aucun - {{ scenarios[-1]|length }} scénario(s)</a>
                                 </h3>
                             </div>
                             <div id="config_none" class="panel-collapse collapse">
                                 <div class="box-body">
-                                    <div class="scenarioListContainer">
+                                    <div class="scenarioListContainer DisplayCard text-center">
                                         {% for scenario in scenarios[-1] %}
-                                            <div class="scenarioDisplayCard cursor" data-scenario_id="{{ scenario.getId() }}" style="text-align: center; min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
-                                                <img src="/public/img/scenario.png" height="90" width="85"/>
+                                            <div class="scenarioDisplayCard  cursor icon_gestion" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
+                                                <img src="/public/img/scenario.png" height="65" width="65"/>
                                                 <br>
-                                                <span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">{{ scenario.getHumanName(true, true, true, true)|raw }}</span>
+                                                <span class="name" >{{ scenario.getHumanName(true, true, true, true)|raw }}</span>
                                             </div>
                                         {% endfor %}
                                     </div>
@@ -97,20 +85,18 @@
 
                     {% for scenarioGroup in scenarioListGroup %}
                         {% if scenarioGroup.group != '' %}
-                            <div class="panel box box-primary">
+                            <div class="panel box">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">
-                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}" style="text-decoration:none;">{{ scenarioGroup.group }} - {{ scenarios[scenarioGroup.group]|length }} scénario(s)</a>
-                                    </h3>
+                                    <h3 class="box-title"><a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}">{{ scenarioGroup.group }} - {{ scenarios[scenarioGroup.group]|length }} scénario(s)</a></h3>
                                 </div>
                                 <div id="config_{{ index }}" class="panel-collapse collapse">
                                     <div class="box-body">
-                                        <div class="scenarioListContainer">
+                                        <div class="scenarioListContainer DisplayCard text-center">
                                             {% for scenario in scenarios[scenarioGroup.group] %}
-                                                <div class="scenarioDisplayCard cursor" data-scenario_id="{{ scenario.getId() }}" style="text-align: center; min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
-                                                    <img src="/public/img/scenario.png" height="90" width="85"/>
+                                                <div class="scenarioDisplayCard  icon_gestion cursor" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
+                                                    <img src="/public/img/scenario.png" height="65" width="65"/>
                                                     <br>
-                                                    <span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">{{ scenario.getHumanName(true, true, true, true)|raw }}</span>
+                                                    <span>{{ scenario.getHumanName(true, true, true, true)|raw }}</span>
                                                 </div>
                                             {% endfor %}
                                         </div>
