@@ -2,7 +2,7 @@
  * Skin: Green
  * -----------
  */
-.skin-green .logo-mini-img{
+ .skin-green .logo-mini-img{
   content:url("/public/img/NextDom/NextDom_Square_AlphaWhite.png");
 }
 .skin-green .logo-lg-img{
@@ -137,5 +137,13 @@
   border-top-left-radius: 0;
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
-  border-bottom-left-radius: 0;
+  border-bottom-left-radius: 0; 
+}
+
+.skin-green .icon_theme_color {
+  color: #00a65a ;
+}
+
+.skin-green .text_color {
+  color: #00a65a;
 }
