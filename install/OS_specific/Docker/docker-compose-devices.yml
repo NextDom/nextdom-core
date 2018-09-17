@@ -35,7 +35,6 @@ services:
     - "${HTTPMAP}"
     - "${HTTPSMAP}"
     - "${SSHMAP}"
-  env_file: ./devAbeille.env
   environment:
     - MYSQL_ROOT_PASSWORD=${MYSQLROOT}
     - ROOT_PASSWORD=${ROOT_PASSWORD}

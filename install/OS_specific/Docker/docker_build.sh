@@ -14,6 +14,18 @@ usage(){
     exit 0
 }
 
+copyNeededFilesForImage(){
+
+for fil in motd install.sh bashrc
+do
+    cp ../../${fil} ${fil}
+done
+
+}
+
+deleteCopiedFiles(){
+    rm motd install.sh bashrc
+}
 
 #getOptions
 while getopts ":hpu" opt; do
@@ -42,18 +54,16 @@ echo stopping $(docker stop ${MYSQLNAME})
 echo removing $(docker rm ${CNAME})
 echo removing $(docker rm ${MYSQLNAME})
 
+copyNeededFilesForImage
 docker build -f ${DKRFILE} . --tag ${TAG}
 docker-compose -f ${YML} up -d
+deleteCopiedFiles
 
 echo working on ${CNAME}
 echo -e "\nTant que le dépot est privé, il faut relancer l'init manuellement pour entrer les login/mdp github\n"
 echo -e "\tdocker attach ${CNAME}"
 echo -e "\t./root/init.sh"
-## pdt le dev de install, il faut ecraser celui du depot
-docker cp install/install.sh ${CNAME}:/root/
+## pdt le dev de install.sh, il faut ecraser celui du depot
+docker cp /install.sh ${CNAME}:/root/
 echo "/!\ now, entering in the docker container"
 docker attach ${CNAME}
-alias logmy='docker logs -f nextdom-mysql'
-alias logdev='docker logs -f nextdom-dev'
-alias gomy='docker exec -it nextdom-mysql bash'
-alias godev='docker exec -it nextdom-dev bash'
