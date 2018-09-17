@@ -184,7 +184,7 @@ try {
         $planHeader->setImage('data', '');
         $planHeader->setImage('sha1', '');
         $planHeader->save();
-        @rrmdir(__DIR__ . '/../../core/img/plan');
+        @rrmdir(__DIR__ . '/../../public/img/plan');
         ajax::success();
     }
 
@@ -215,7 +215,7 @@ try {
         $planHeader->setConfiguration('desktopSizeX', $img_size[0]);
         $planHeader->setConfiguration('desktopSizeY', $img_size[1]);
         $planHeader->save();
-        @rrmdir(__DIR__ . '/../../core/img/plan');
+        @rrmdir(__DIR__ . '/../../public/img/plan');
         ajax::success();
     }
 
@@ -250,7 +250,7 @@ try {
         }
         $plan->setDisplay('width', $img_size[0]);
         $plan->setDisplay('height', $img_size[1]);
-        $plan->setDisplay('path', 'core/img/plan_' . $plan->getId() . '/' . $name);
+        $plan->setDisplay('path', 'public/img/plan_' . $plan->getId() . '/' . $name);
         $plan->save();
         ajax::success();
     }
