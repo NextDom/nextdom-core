@@ -196,6 +196,7 @@ class Controller
         foreach ($pageContent['adminReposList'] as $key => $value) {
             $keys[] = $key . '::enable';
         }
+        $pageContent['networkkey'] = $key;
         $pageContent['adminConfigs'] = \config::byKeys($keys);
         $pageContent['JS_VARS']['ldapEnable'] = $pageContent['adminConfigs']['ldap::enable'];
         $pageContent['adminIsBan'] = \user::isBan();
@@ -203,6 +204,8 @@ class Controller
         $pageContent['adminHardwareKey'] = \nextdom::getHardwareKey();
         $pageContent['adminLastKnowDate'] = CacheManager::byKey('hour')->getValue();
         $pageContent['adminIsRescueMode'] = Status::isRescueMode();
+        $pageContent['key'] = Status::isRescueMode();
+
 
         if (!$pageContent['adminIsRescueMode']) {
             $pageContent['adminPluginsList'] = [];
