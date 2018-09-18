@@ -16,25 +16,25 @@
  */
  jwerty.key('ctrl+s', function (e) {
     e.preventDefault();
-    $("#bt_saveBackupforMigration").click();
+    $("#bt_saveMigration").click();
 });
 
-$("#bt_saveBackup").on('click', function (event) {
+$("#bt_saveMigration").on('click', function (event) {
    $.hideAlert();
    nextdom.config.save({
-       configuration: $('#backup').getValues('.configKey')[0],
+       configuration: $('#migration').getValues('.configKey')[0],
        error: function (error) {
            notify("Erreur", error.message, 'error');
        },
        success: function () {
            nextdom.config.load({
-               configuration: $('#backup').getValues('.configKey')[0],
+               configuration: $('#migration').getValues('.configKey')[0],
                plugin: 'core',
                error: function (error) {
                    notify("Erreur", error.message, 'error');
                },
                success: function (data) {
-                   $('#backup').setValues(data, '.configKey');
+                   $('#migration').setValues(data, '.configKey');
                    modifyWithoutSave = false;
                    notify("Info", '{{Sauvegarde réussie}}', 'success');
                }
@@ -43,7 +43,7 @@ $("#bt_saveBackup").on('click', function (event) {
    });
 });
 
- $('#pre_backupInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
+ $('#pre_migrationInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
 
 $("#bt_migrateNextDom").on('click', function (event) {
    var el = $(this);
@@ -83,12 +83,12 @@ $("#bt_migrateNextDom").on('click', function (event) {
 
  $.showLoading();
  nextdom.config.load({
-    configuration: $('#backup').getValues('.configKey')[0],
+    configuration: $('#migration').getValues('.configKey')[0],
     error: function (error) {
         notify("Erreur", error.message, 'error');
     },
     success: function (data) {
-        $('#backup').setValues(data, '.configKey');
+        $('#migration').setValues(data, '.configKey');
         modifyWithoutSave = false;
     }
 });
@@ -128,14 +128,14 @@ $("#bt_migrateNextDom").on('click', function (event) {
                     log += data.result[i]+"\n";
                     if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' SUCCESS]') != -1){
                         notify("Info", '{{L\'opération est réussie}}', 'success');
-                        if(_log == 'restore'){
+                        if(_log == 'migration'){
                             nextdom.user.refresh();
                         }
                         _autoUpdate = 0;
                     }
                     if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' ERROR]') != -1){
                         notify("Erreur", '{{L\'opération a échoué}}', 'error');
-                        if(_log == 'restore'){
+                        if(_log == 'migration'){
                             nextdom.user.refresh();
                         }
                         _autoUpdate = 0;
