@@ -1,8 +1,87 @@
 #!/bin/bash
 
-arg=$1
+usage() { echo "Usage: $0 [-h <help>] [-i <DB ip/hostname>] [-p <DB port>] [-d <DB name>] [-u <DB username>] [-z <DB user password>] " 1>&2; exit 1; }
+
+while getopts ":i:p:d:u:z:" option; do
+    case "${option}" in
+        h)
+            usage
+            ;;
+        i)
+            MYSQL_HOSTNAME=${OPTARG}
+            ;;
+        p)
+            MYSQL_PORT=${OPTARG}
+            ;;
+        d)
+            MYSQL_NEXTDOM_DB=${OPTARG}
+            ;;
+        u)
+            MYSQL_NEXTDOM_USER=${OPTARG}
+            ;;
+        z)
+            MYSQL_NEXTDOM_PASSWD=${OPTARG}
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+if [[ ! -z "${MYSQL_HOSTNAME}" ]] || [[ ! -z "${MYSQL_PORT}" ]] ; then
+    echo ">>>>> Custom database must be previously created <<<<<"
+  # todo : test la bdd distante
+  # some_db="somedb"
+  # isAnythingToProcess=$(mysql -uroot -proot -h REMOTE_IP -D$some_db -e "$checkSearch");
+fi
+
+if [[ -z "${MYSQL_HOSTNAME}" ]] ;       then MYSQL_HOSTNAME="localhost" ; fi
+if [[ -z "${MYSQL_PORT}" ]] ;           then MYSQL_PORT="3306" ; fi
+#if [[ -z "${MYSQL_NEXTDOM_DB}" ]] ;     then MYSQL_NEXTDOM_DB="nextdom" ; fi
+#if [[ -z "${MYSQL_NEXTDOM_USER}" ]] ;   then MYSQL_NEXTDOM_USER="nextdom" ; fi
+if [[ -z "${MYSQL_NEXTDOM_PASSWD}" ]] ; then MYSQL_NEXTDOM_PASSWD=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15) ; fi
+
+
+# Parameters
+STEP=0
+WEBSERVER_HOME=/usr/share/nextdom
+HTML_OUTPUT=0
+#MYSQL_NEXTDOM_PASSWD=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)
+
+# Get current directory
+set_root() {
+    local this=`readlink -n -f $1`
+    local bin=`dirname $this`
+    root=`dirname $bin`
+}
+set_root $0
+
+# Detect if there is a .git directory (development version)
+if [ -d ${root}/.git ] ; then
+    echo "Development version..."
+    isdev=1
+    if [[ -z "${MYSQL_NEXTDOM_DB}" ]] ; then MYSQL_NEXTDOM_DB="nextdomdev" ; fi
+    if [[ -z "${MYSQL_NEXTDOM_USER}" ]] ; then MYSQL_NEXTDOM_USER="nextdomdev" ; fi
+    WEBSERVER_HOME=${root}
+    echo " "
+    echo "Installation dir  : ${WEBSERVER_HOME}"
+    echo "Database host     : ${MYSQL_HOSTNAME}"
+    echo "Database port     : ${MYSQL_PORT}"
+    echo "Database name     : ${MYSQL_NEXTDOM_DB}"
+    echo "Database user     : ${MYSQL_NEXTDOM_USER}"
+    echo "Database password : ${MYSQL_NEXTDOM_PASSWD}"
+else
+    # Debian package configuration...
+    isdev=0
+    if [[ -z "${MYSQL_NEXTDOM_DB}" ]] ; then MYSQL_NEXTDOM_DB="nextdom" ; fi
+    if [[ -z "${MYSQL_NEXTDOM_USER}" ]] ; then MYSQL_NEXTDOM_USER="nextdom" ; fi
+fi
+
+#exit 0
 
 set -e
+
 
 DEBUG="/tmp/output.txt"
 VERT="\\033[1;32m"
@@ -26,36 +105,22 @@ if [ $(id -u) != 0 ] ; then
 fi
 
 step_7_nextdom_customization() {
-    #cp ${WEBSERVER_HOME}/install/apache_security /etc/apache2/conf-available/security.conf >> ${DEBUG} 2>&1
-    #rm -f /etc/apache2/conf-enabled/security.conf >> ${DEBUG} 2>&1
-    #ln -s /etc/apache2/conf-available/security.conf /etc/apache2/conf-enabled/ >> ${DEBUG} 2>&1
-
-    #cp ${WEBSERVER_HOME}/install/apache_default /etc/apache2/sites-available/000-default.conf >> ${DEBUG} 2>&1
-    #rm -f /etc/apache2/sites-enabled/000-default.conf >> ${DEBUG} 2>&1
-    #ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/ >> ${DEBUG} 2>&1
-
-    #rm -f /etc/apache2/conf-available/other-vhosts-access-log.conf >> ${DEBUG} 2>&1
-    #rm -f /etc/apache2/conf-enabled/other-vhosts-access-log.conf >> ${DEBUG} 2>&1
-
-    #mkdir -p /etc/systemd/system/apache2.service.d >> ${DEBUG} 2>&1
-    #echo "[Service]" > /etc/systemd/system/apache2.service.d/privatetmp.conf
-    #echo "PrivateTmp=no" >> /etc/systemd/system/apache2.service.d/privatetmp.conf
-
-    #systemctl daemon-reload >> ${DEBUG} 2>&1
 
     # Certificat auto signe
-    cd /etc/nextdom/ssl/ >> ${DEBUG} 2>&1
-    openssl genrsa -out nextdom.key 2048 >> ${DEBUG} 2>&1
-    #openssl req -new -key nextdom.key -out nextdom.csr
-    openssl req -new -key nextdom.key -out nextdom.csr -subj "/C=FR/ST=Paris/L=Paris/O=Global Security/OU=IT Department/CN=example.com" >> ${DEBUG} 2>&1
-    openssl x509 -req -days 3650 -in nextdom.csr -signkey nextdom.key -out nextdom.crt >> ${DEBUG} 2>&1
+    if [[ ! -f /etc/nextdom/ssl/nextdom.crt ]] || [[ ! -f /etc/nextdom/ssl/nextdom.csr ]] || [[ ! -f /etc/nextdom/ssl/nextdom.key ]] ; then
+        cd /etc/nextdom/ssl/ >> ${DEBUG} 2>&1
+        openssl genrsa -out nextdom.key 2048 >> ${DEBUG} 2>&1
+        #openssl req -new -key nextdom.key -out nextdom.csr
+        openssl req -new -key nextdom.key -out nextdom.csr -subj "/C=FR/ST=Paris/L=Paris/O=Global Security/OU=IT Department/CN=example.com" >> ${DEBUG} 2>&1
+        openssl x509 -req -days 3650 -in nextdom.csr -signkey nextdom.key -out nextdom.crt >> ${DEBUG} 2>&1
+    fi
 
+    # Apache2
     a2enmod ssl >> ${DEBUG} 2>&1
     a2dissite 000-default >> ${DEBUG} 2>&1
     a2dissite default-ssl >> ${DEBUG} 2>&1
     a2ensite nextdom-ssl >> ${DEBUG} 2>&1
     a2ensite nextdom >> ${DEBUG} 2>&1
-
     a2enconf nextdom-security >> ${DEBUG} 2>&1
 
     for file in $(find /etc/ -iname php.ini -type f); do
@@ -72,6 +137,7 @@ step_7_nextdom_customization() {
 
     a2dismod status >> ${DEBUG} 2>&1
     a2enmod rewrite >> ${DEBUG} 2>&1
+    systemctl daemon-reload >> ${DEBUG} 2>&1
     service apache2 restart >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
         service apache2 restart >> ${DEBUG} 2>&1
@@ -80,61 +146,80 @@ step_7_nextdom_customization() {
             exit 1
         fi
     fi
-    service mysql stop >> ${DEBUG} 2>&1
-    if [ $? -ne 0 ]; then
+
+    # MySQL
+    set +e
+    #isMySQL=$(ls /etc/init.d | grep mysql)
+    mysqladmin -u root status >/dev/null 2>/dev/null
+    isMySQL=$?
+    set -e
+    if [[ ${isMySQL} = "0" ]] ; then
         service mysql stop >> ${DEBUG} 2>&1
         if [ $? -ne 0 ]; then
-            printf "${ROUGE}Ne peut arrêter mysql - Annulation${NORMAL}"
-            exit 1
+            service mysql stop >> ${DEBUG} 2>&1
+            if [ $? -ne 0 ]; then
+                printf "${ROUGE}Ne peut arrêter mysql - Annulation${NORMAL}"
+                exit 1
+            fi
         fi
-    fi
 
-    rm -f /var/lib/mysql/ib_logfile*
+        rm -f /var/lib/mysql/ib_logfile*
 
-    if [ -d /etc/mysql/conf.d ]; then
-        touch /etc/mysql/conf.d/nextdom_my.cnf
-        echo "[mysqld]" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "skip-name-resolve" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "key_buffer_size = 16M" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "thread_cache_size = 16" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "tmp_table_size = 48M" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "max_heap_table_size = 48M" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "query_cache_type =1" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "query_cache_size = 32M" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "query_cache_limit = 2M" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "query_cache_min_res_unit=3K" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "innodb_flush_method = O_DIRECT" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "innodb_flush_log_at_trx_commit = 2" >> /etc/mysql/conf.d/nextdom_my.cnf
-        echo "innodb_log_file_size = 32M" >> /etc/mysql/conf.d/nextdom_my.cnf
-    fi
+        if [ -d /etc/mysql/conf.d ]; then
+            touch /etc/mysql/conf.d/nextdom_my.cnf
+            echo "[mysqld]" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "skip-name-resolve" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "key_buffer_size = 16M" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "thread_cache_size = 16" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "tmp_table_size = 48M" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "max_heap_table_size = 48M" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "query_cache_type =1" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "query_cache_size = 32M" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "query_cache_limit = 2M" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "query_cache_min_res_unit=3K" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "innodb_flush_method = O_DIRECT" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "innodb_flush_log_at_trx_commit = 2" >> /etc/mysql/conf.d/nextdom_my.cnf
+            echo "innodb_log_file_size = 32M" >> /etc/mysql/conf.d/nextdom_my.cnf
+        fi
 
-    service mysql start >> ${DEBUG} 2>&1
-    if [ $? -ne 0 ]; then
         service mysql start >> ${DEBUG} 2>&1
         if [ $? -ne 0 ]; then
-            printf "${ROUGE}Ne peut lancer mysql - Annulation${NORMAL}"
-            exit 1
+            service mysql start >> ${DEBUG} 2>&1
+            if [ $? -ne 0 ]; then
+                printf "${ROUGE}Ne peut lancer mysql - Annulation${NORMAL}"
+                exit 1
+            fi
         fi
-    fi
 
+    fi
 }
 
 step_8_nextdom_configuration() {
 
-    TEST_USER="$(mysql -u root -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '${MYSQL_NEXTDOM_USER}');")" >> ${DEBUG} 2>&1
-    if [ $TEST_USER = "1" ]; then
-        mysql -u root -e "DROP USER '${MYSQL_NEXTDOM_USER}'@'localhost';" 
-    fi
-    mysql -u root -e "CREATE USER '${MYSQL_NEXTDOM_USER}'@'localhost' IDENTIFIED BY '${MYSQL_NEXTDOM_PASSWD}';"
-    mysql -u root -e "DROP DATABASE IF EXISTS ${MYSQL_NEXTDOM_DB};"
-    mysql -u root -e "CREATE DATABASE ${MYSQL_NEXTDOM_DB};"
-    mysql -u root -e "GRANT ALL PRIVILEGES ON ${MYSQL_NEXTDOM_DB}.* TO '${MYSQL_NEXTDOM_USER}'@'localhost';"
     cp ${WEBSERVER_HOME}/core/config/common.config.sample.php ${WEBSERVER_HOME}/core/config/common.config.php
-    sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${WEBSERVER_HOME}/core/config/common.config.php
-    sed -i "s/#DBNAME#/${MYSQL_NEXTDOM_DB}/g" ${WEBSERVER_HOME}/core/config/common.config.php
-    sed -i "s/#USERNAME#/${MYSQL_NEXTDOM_USER}/g" ${WEBSERVER_HOME}/core/config/common.config.php
-    sed -i "s/#PORT#/3306/g" ${WEBSERVER_HOME}/core/config/common.config.php
-    sed -i "s/#HOST#/localhost/g" ${WEBSERVER_HOME}/core/config/common.config.php
+
+    if [[ ${isMySQL} = "0" ]] ; then
+        TEST_USER="$(mysql -u root -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '${MYSQL_NEXTDOM_USER}');")" >> ${DEBUG} 2>&1
+        if [ $TEST_USER = "1" ]; then
+            mysql -u root -e "DROP USER '${MYSQL_NEXTDOM_USER}'@'localhost';" 
+        fi
+        mysql -u root -e "CREATE USER '${MYSQL_NEXTDOM_USER}'@'localhost' IDENTIFIED BY '${MYSQL_NEXTDOM_PASSWD}';"
+        mysql -u root -e "DROP DATABASE IF EXISTS ${MYSQL_NEXTDOM_DB};"
+        mysql -u root -e "CREATE DATABASE ${MYSQL_NEXTDOM_DB};"
+        mysql -u root -e "GRANT ALL PRIVILEGES ON ${MYSQL_NEXTDOM_DB}.* TO '${MYSQL_NEXTDOM_USER}'@'localhost';"
+        sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${WEBSERVER_HOME}/core/config/common.config.php
+        sed -i "s/#DBNAME#/${MYSQL_NEXTDOM_DB}/g" ${WEBSERVER_HOME}/core/config/common.config.php
+        sed -i "s/#USERNAME#/${MYSQL_NEXTDOM_USER}/g" ${WEBSERVER_HOME}/core/config/common.config.php
+        sed -i "s/#PORT#/${MYSQL_PORT}/g" ${WEBSERVER_HOME}/core/config/common.config.php
+        sed -i "s/#HOST#/${MYSQL_HOSTNAME}/g" ${WEBSERVER_HOME}/core/config/common.config.php
+    else
+        echo " "
+        echo ">>>>> Database not present! Please set manually DB parameters : <<<<<"
+        echo ">>>>>         host, port, dbname, username and password         <<<<<"
+        echo " in file : ${WEBSERVER_HOME}/core/config/common.config.php"
+        echo " "
+    fi
+
     chmod 775 -R ${WEBSERVER_HOME}
     chown -R www-data:www-data ${WEBSERVER_HOME}
 }
@@ -249,39 +334,6 @@ check_var_www_html() {
 
 # ================================================================================
 
-# Parameters
-STEP=0
-WEBSERVER_HOME=/usr/share/nextdom
-HTML_OUTPUT=0
-MYSQL_ROOT_PASSWD=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)
-MYSQL_NEXTDOM_PASSWD=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)
-
-
-# Get current directory
-set_root() {
-    local this=`readlink -n -f $1`
-    local bin=`dirname $this`
-    root=`dirname $bin`
-}
-set_root $0
-#echo $root
-
-# Detect if there is a .git directory (development version) 
-if [ -d ${root}/.git ] ; then
-    echo "Development version..."
-    isdev=1
-    MYSQL_NEXTDOM_DB="nextdomdev"
-    MYSQL_NEXTDOM_USER="nextdomdev"
-    WEBSERVER_HOME=${root}
-else
-    #echo "Debian package configuration..."
-    isdev=0
-    MYSQL_NEXTDOM_DB="nextdom"
-    MYSQL_NEXTDOM_USER="nextdom"
-fi
-
-#exit 0
-
 # Keep compatibility (old plugins)
 if [ -t 0 ] ; then    # launch only when interactive (this is already done by preinst Debian script)
     if [ ! "${WEBSERVER_HOME}" = "/var/www/html" ] ; then
@@ -310,7 +362,9 @@ distrib_1_spe
 if [ "${isdev}" = "1" ] ; then
     echo " "
     echo "Installation dir  : ${WEBSERVER_HOME}"
-    echo "Database          : ${MYSQL_NEXTDOM_DB}"
+    echo "Database host     : ${MYSQL_HOSTNAME}"
+    echo "Database port     : ${MYSQL_PORT}"
+    echo "Database name     : ${MYSQL_NEXTDOM_DB}"
     echo "Database user     : ${MYSQL_NEXTDOM_USER}"
     echo "Database password : ${MYSQL_NEXTDOM_PASSWD}"
     echo " "
