@@ -88,6 +88,7 @@ class Controller
      *
      * @return mixed|null Static method or null
      */
+
     public static function getRoute(string $page)
     {
         $route = null;
@@ -317,7 +318,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of log_admin page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -341,7 +342,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of custom page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -383,7 +384,7 @@ class Controller
      * @param Render $API Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of API page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -422,7 +423,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of commandes page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -445,7 +446,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of osdb page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -471,7 +472,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of report_admin page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -506,7 +507,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of links page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -528,7 +529,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of security page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -573,7 +574,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of interact_admin page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -594,7 +595,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of summary page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -615,7 +616,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of update_admin page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -701,7 +702,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of users page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
