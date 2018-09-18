@@ -213,96 +213,11 @@ class Controller
      */
     public static function administrationPage(Render $render, array &$pageContent): string
     {
-        global $CONFIG;
-        global $NEXTDOM_INTERNAL_CONFIG;
-
+        
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageContent['adminReposList'] = UpdateManager::listRepo();
-        $keys = array('api', 'apipro', 'dns::token', 'market::allowDNS', 'market::allowBeta', 'market::allowAllRepo', 'ldap::enable', 'apimarket', 'product_name', 'security::bantime');
-        foreach ($pageContent['adminReposList'] as $key => $value) {
-            $keys[] = $key . '::enable';
-        }
-        $pageContent['networkkey'] = $key;
-        $pageContent['adminConfigs'] = \config::byKeys($keys);
-        $pageContent['JS_VARS']['ldapEnable'] = $pageContent['adminConfigs']['ldap::enable'];
-        $pageContent['adminIsBan'] = \user::isBan();
-        $pageContent['adminHardwareName'] = \nextdom::getHardwareName();
-        $pageContent['adminHardwareKey'] = \nextdom::getHardwareKey();
-        $pageContent['adminLastKnowDate'] = CacheManager::byKey('hour')->getValue();
-        $pageContent['adminIsRescueMode'] = Status::isRescueMode();
-        $pageContent['key'] = Status::isRescueMode();
-
-
-        if (!$pageContent['adminIsRescueMode']) {
-            $pageContent['adminPluginsList'] = [];
-            $pluginsList = PluginManager::listPlugin(true);
-            foreach ($pluginsList as $plugin) {
-                $pluginApi = \config::byKey('api', $plugin->getId());
-
-                if ($pluginApi !== '') {
-                    $pluginData = [];
-                    $pluginData['api'] = $pluginApi;
-                    $pluginData['plugin'] = $plugin;
-                    $pageContent['adminPluginsList'][] = $pluginData;
-                }
-            }
-        }
-        $pageContent['adminDbConfig'] = $CONFIG['db'];
-        $pageContent['adminUseLdap'] = function_exists('ldap_connect');
-
-        $pageContent['adminBannedIp'] = [];
-        $cache = CacheManager::byKey('security::banip');
-        $values = json_decode($cache->getValue('[]'), true);
-
-        if (is_array($values) && count($values) > 0) {
-            foreach ($values as $value) {
-                $bannedData = [];
-                $bannedData['ip'] = $value['ip'];
-                $bannedData['startDate'] = date('Y-m-d H:i:s', $value['datetime']);
-                if ($pageContent['adminConfigs']['security::bantime'] < 0) {
-                    $bannedData['endDate'] = __('Jamais');
-                } else {
-                    $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageContent['adminConfigs']['security::bantime']);
-                }
-                $pageContent['adminBannedIp'][] = $bannedData;
-            }
-        }
-
-
-        $pageContent['adminStats'] = CacheManager::stats();
-        $pageContent['adminCacheFolder'] = CacheManager::getFolder();
-        $pageContent['adminMemCachedExists'] = class_exists('memcached');
-        $pageContent['adminRedisExists'] = class_exists('redis');
-        $pageContent['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
-        $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/administration.js';
-
-
-        /**
-         * Render interact page
-         */
-        $interacts = array();
-        $pageContent['interactTotal'] = \interactDef::all();
-        $interacts[-1] = \interactDef::all(null);
-        $interactListGroup = \interactDef::listGroup();
-        if (is_array($interactListGroup)) {
-            foreach ($interactListGroup as $group) {
-                $interacts[$group['group']] = \interactDef::all($group['group']);
-            }
-        }
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/interact.js';
-        $pageContent['interactsList'] = $interacts;
-        $pageContent['interactsListGroup'] = $interactListGroup;
-        $pageContent['interactDisabledOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
-        $pageContent['interactCmdType'] = \nextdom::getConfiguration('cmd:type');
-        $pageContent['interactAllUnite'] = CmdManager::allUnite();
-        $pageContent['interactJeeObjects'] = JeeObjectManager::all();
-        $pageContent['interactEqLogicTypes'] = EqLogicManager::allType();
-        $pageContent['interactEqLogics'] = EqLogicManager::all();
-        $pageContent['interactEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
-
+        
         return $render->get('/desktop/administration.html.twig', $pageContent);
     }
 
