@@ -796,6 +796,7 @@ class Controller
         $pageContent['healthTotalPending']        = 0;
         foreach (PluginManager::listPlugin(true) as $plugin) {
             $pluginData = [];
+            $pluginData['hasSpecificHealth'] = false;
             if (file_exists(dirname(PluginManager::getPathById($plugin->getId())) . '/../desktop/modal/health.php')) {
                 $pluginData['hasSpecificHealth'] = true;
             }
