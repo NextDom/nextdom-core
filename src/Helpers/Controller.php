@@ -426,6 +426,7 @@ class Controller
         /**
          * Render health page
          */
+        // TODO: Double parcours de la liste des plugins
         $pluginManagerList = PluginManager::listPlugin(true);
         foreach ($pluginManagerList as $plugin) {
             if ($plugin->getDisplay() != '') {
@@ -443,9 +444,10 @@ class Controller
         $pageContent['healthTotalNOk'] = 0;
         $pageContent['healthTotalPending'] = 0;
 
+        // TODO: Double parcours de la liste des plugins
         foreach (PluginManager::listPlugin(true) as $plugin) {
             $pluginData = [];
-
+            $pluginData['hasSpecificHealth'] = false;
             if (file_exists(dirname(PluginManager::getPathById($plugin->getId())) . '/../desktop/modal/health.php')) {
                 $pluginData['hasSpecificHealth'] = true;
             }

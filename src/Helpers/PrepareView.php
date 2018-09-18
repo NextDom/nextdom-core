@@ -124,12 +124,12 @@ class PrepareView
     public static function showContent($configs)
     {
         global $language;
-        global $configs;
-        
+
         $pageData             = [];
         $pageData['JS_POOL']  = [];
         $pageData['CSS_POOL'] = [];
         $page = '';
+
         $language = $configs['language'];
       	$designTheme = $_SESSION['user']->getOptions('design_nextdom');
 

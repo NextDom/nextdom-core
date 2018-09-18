@@ -1,11 +1,11 @@
-<div  style="display: none;" id="div_History">
+<div style="display: none;" id="div_History">
     <div class="col-xs-12">
         <div class="nav-tabs-custom">
-            <button type="button" class="btn btn-box-tool btn-close pull-right" ><i class="fa fa-times"></i></button>
+            <button type="button" class="btn btn-box-tool btn-close pull-right"><i class="fa fa-times"></i></button>
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li role="presentation" class="active"><a href="#historytab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-bar-chart-o"></i> {{ 'Historique' }}</a></li>
                 <li role="presentation"><a id="bt_tabTimeline" href="#timelinetab" aria-controls="profile" role="tab" data-toggle="tab" style="padding:10px 5px !important"><i class="fas fa-clock-o"></i> {{ 'Timeline' }}</a></li>
-                <li class="pull-left header"><i class="fas fa-pencil-square"></i> {{ 'Historique'}}</li>
+                <li class="pull-left header"><i class="fas fa-pencil-square"></i> {{ 'Historique' }}</li>
             </ul>
             <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
                 <div role="tabpanel" class="tab-pane active" id="historytab">
@@ -39,7 +39,7 @@
                         {% endif %}
                         {% set object = eqLogic.getObject() %}
                         {# Pour remplacer is_object #}
-                        {% if object != null and object != 0 and object != -1 %}
+                        {% if object != null and object is not iterable %}
                             {% if object.getDisplay('tagColor') != '' %}
                                 <span class="label cursor displayObject" data-object_id="o{{ eqLogic.getObject_id() }}" style="text-shadow : none;background-color: {{ object.getDisplay('tagColor') }};color: {{ object.getDisplay('tagTextColor', 'white') }}">{{ object.getName() }} <i class="fas fa-arrow-circle-right"></i></span>
                             {% else %}
@@ -55,7 +55,7 @@
                                     {% if cmd.getSubType() == 'string' %}
                                         <i class="fas fa-share export"></i>
                                     {% endif %}
-                                    {{ cmd.getEqLogic().getName()  }} - {{ cmd.getName() }}</a></li>
+                                    {{ cmd.getEqLogic().getName() }} - {{ cmd.getName() }}</a></li>
                             {% set objectId = eqLogic.getObject_id() %}
                             {% endif %}
                             {% endfor %}
