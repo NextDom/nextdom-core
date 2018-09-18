@@ -30,29 +30,56 @@ use NextDom\Managers\CacheManager;
 class Controller
 {
     const routesList = [
-        'dashboard' => 'dashboardPage',
-        'scenario' => 'scenarioPage',
+        'dashboard'   => 'dashboardPage',
+        'scenario'       => 'scenarioPage',
         'administration' => 'administrationPage',
-        'object' => 'objectPage',
-        'message' => 'messagePage',
-        'system' => 'systemPage',
-        'database' => 'databasePage',
-        'display' => 'displayPage',
-        'update' => 'updatePage',
-        'plugin' => 'pluginPage',
-        'editor' => 'editorPage',
-        'shutdown' => 'shutdownPage',
-        'view' => 'viewPage',
-        'view_edit' => 'viewEditPage',
-        'eqAnalyze' => 'eqAnalyzePage',
-        'eqAnalyse' => 'eqAnalyzePage',
-        'plan' => 'planPage',
-        'plan3d' => 'plan3dPage',
-        'market' => 'marketPage',
-        'reboot' => 'rebootPage',
-        'tools' => 'toolsPage',
-        'interact' => 'interactPage',
-        'pluginRoute' => 'pluginRoute'
+        'backup'         => 'backupPage',
+        'object'         => 'objectPage',
+        'message'        => 'messagePage',
+        'cron'           => 'cronPage',
+        'user'           => 'userPage',
+        'update'         => 'updatePage',
+        'system'         => 'systemPage',
+        'database'       => 'databasePage',
+        'display'        => 'displayPage',
+        'log'            => 'logPage',
+        'report'         => 'reportPage',
+        'plugin'         => 'pluginPage',
+        'custom'         => 'customPage',
+        'editor'         => 'editorPage',
+        'migration'      => 'migrationPage',
+        'history'        => 'historyPage',
+        'shutdown'       => 'shutdownPage',
+        'health'         => 'healthPage',
+        'profils'        => 'profilsPage',
+        'view'           => 'viewPage',
+        'view_edit'      => 'viewEditPage',
+        'eqAnalyze'      => 'eqAnalyzePage',
+        'eqAnalyse'      => 'eqAnalyzePage',
+        'plan'           => 'planPage',
+        'plan3d'         => 'plan3dPage',
+        'interact'       => 'interactPage',
+        'market'         => 'marketPage',
+        'reboot'         => 'rebootPage',
+        'network'        => 'networkPage',
+      	'cache'          => 'cachePage',
+      	'general'        => 'generalPage',
+      	'log_admin'      => 'log_adminPage',
+        'custom'         => 'customPage',
+        'api'            => 'APIPage',
+        'commandes'      => 'commandesPage',
+        'osdb'           => 'osdbPage',
+        'reports_admin'  => 'reports_adminPage',
+        'eqlogic'        => 'eqlogicPage',
+        'interact'       => 'interactPage',
+        'interact_admin' => 'interact_adminPage',
+        'links'          => 'linksPage',
+        'security'       => 'securityPage',
+        'summary'        => 'summaryPage',
+        'update_admin'   => 'update_adminPage',
+        'users'          => 'usersPage',
+        'tools'          => 'toolsPage',
+        'pluginRoute'    => 'pluginRoute'
     ];
 
     /**
@@ -171,8 +198,7 @@ class Controller
 
         return $render->get('/desktop/scenario.html.twig', $pageContent);
     }
-
-    /**
+/**
      * Render administration page
      *
      * @param Render $render Render engine
@@ -187,7 +213,420 @@ class Controller
      */
     public static function administrationPage(Render $render, array &$pageContent): string
     {
-        global $CONFIG;
+        
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        
+        return $render->get('/desktop/administration.html.twig', $pageContent);
+    }
+
+
+     /**
+     * Render network page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of network page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function networkPage(Render $render, array &$pageContent): string
+    {
+      
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['adminNetworkInterfaces'] = [];
+
+        foreach (\network::getInterfaces() as $interface) {
+            $intData = [];
+            $intData['name'] = $interface;
+            $intData['mac'] = \network::getInterfaceMac($interface);
+            $intData['ip'] = \network::getInterfaceIp($interface);
+            $pageContent['adminNetworkInterfaces'][] = $intData;
+        }
+        $pageContent['adminDnsRun'] = \network::dns_run();
+        $pageContent['adminNetworkExternalAccess'] = \network::getNetworkAccess('external');
+
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/network.js';
+        return $render->get('/desktop/admin/network.html.twig', $pageContent);
+    }
+  
+  /**
+     * Render cache page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of cache page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function cachePage(Render $render, array &$pageContent): string
+    {
+            
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['customProductName'] = \config::byKey('product_name');
+        $pageContent['adminStats'] = CacheManager::stats();
+        $pageContent['adminCacheFolder'] = CacheManager::getFolder();
+        $pageContent['adminMemCachedExists'] = class_exists('memcached');
+        $pageContent['adminRedisExists'] = class_exists('redis');
+
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/cache.js';
+        return $render->get('/desktop/admin/cache.html.twig', $pageContent);
+    }
+  
+  /**
+     * Render general page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of general page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function generalPage(Render $render, array &$pageContent): string
+    {
+            
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+        $pageContent['adminHardwareName'] = \nextdom::getHardwareName();
+        $pageContent['adminHardwareKey'] = \nextdom::getHardwareKey();
+
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/general.js';
+        return $render->get('/desktop/admin/general.html.twig', $pageContent);
+    }
+  
+  /**
+     * Render log_admin page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of tools page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function log_adminPage(Render $render, array &$pageContent): string
+    {
+            
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/log_admin.js';
+        return $render->get('/desktop/admin/log_admin.html.twig', $pageContent);
+    }
+  
+  /**
+     * Render custom page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of tools page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function customPage(Render $render, array &$pageContent): string
+    {
+            
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+      $pageContent['adminCategories'] = \nextdom::getConfiguration('eqLogic:category');
+        $pageContent['customProductName'] = \config::byKey('product_name');
+        $pageContent['customJS'] = '';
+        if (file_exists(NEXTDOM_ROOT . '/custom/custom.js')) {
+            $pageContent['customJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/custom/custom.js'));
+        }
+        $pageContent['customCSS'] = '';
+        if (file_exists(NEXTDOM_ROOT . '/custom/custom.css')) {
+            $pageContent['customCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/custom/custom.css'));
+        }
+        $pageContent['customMobileJS'] = '';
+        if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.js')) {
+            $pageContent['customMobileJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.js'));
+        }
+        $pageContent['customMobileCSS'] = '';
+        if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.css')) {
+            $pageContent['customMobileCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.css'));
+        }
+
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/custom.js';
+        return $render->get('/desktop/admin/custom.html.twig', $pageContent);
+    }
+  
+    /**
+     * Render API page
+     *
+     * @param Render $API Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of tools page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function APIPage(Render $render, array &$pageContent): string
+    {
+            
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+      
+              $pageContent['adminIsRescueMode'] = Status::isRescueMode();
+        if (!$pageContent['adminIsRescueMode']) {
+            $pageContent['adminPluginsList'] = [];
+            $pluginsList = PluginManager::listPlugin(true);
+            foreach ($pluginsList as $plugin) {
+                $pluginApi = \config::byKey('api', $plugin->getId());
+
+                if ($pluginApi !== '') {
+                    $pluginData = [];
+                    $pluginData['api'] = $pluginApi;
+                    $pluginData['plugin'] = $plugin;
+                    $pageContent['adminPluginsList'][] = $pluginData;
+                }
+            }
+        }
+
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/api.js';
+        return $render->get('/desktop/admin/api.html.twig', $pageContent);
+    }
+
+    /**
+     * Render commandes page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of tools page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function commandesPage(Render $render, array &$pageContent): string
+    {
+            
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/commandes.js';
+        return $render->get('/desktop/admin/commandes.html.twig', $pageContent);
+    }
+    /**
+     * Render osdb page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of tools page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function osdbPage(Render $render, array &$pageContent): string
+    {
+             global $CONFIG;
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+              $pageContent['adminDbConfig'] = $CONFIG['db'];
+
+     
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/osdb.js';
+        return $render->get('/desktop/admin/osdb.html.twig', $pageContent);
+    }
+  
+      /**
+     * Render reports_admin page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of tools page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function reports_adminPage(Render $render, array &$pageContent): string
+    {
+             global $CONFIG;
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+              $pageContent['adminDbConfig'] = $CONFIG['db'];
+
+     
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/reports_admin.js';
+        return $render->get('/desktop/admin/reports_admin.html.twig', $pageContent);
+    }
+  
+      public static function eqlogicPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+     
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/eqlogic.js';
+        return $render->get('/desktop/admin/eqlogic.html.twig', $pageContent);
+    }
+  
+        /**
+     * Render links page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of tools page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function linksPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+     
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/links.js';
+        return $render->get('/desktop/admin/links.html.twig', $pageContent);
+    }  
+  
+         /**
+     * Render security page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of tools page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function securityPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+     
+      $pageContent['JS_VARS']['ldapEnable'] = $pageContent['adminConfigs']['ldap::enable'];
+        $cache = CacheManager::byKey('security::banip');
+             
+       $pageContent['adminUseLdap'] = function_exists('ldap_connect');
+
+        $pageContent['adminBannedIp'] = [];
+        $cache = CacheManager::byKey('security::banip');
+        $values = json_decode($cache->getValue('[]'), true);
+
+        if (is_array($values) && count($values) > 0) {
+            foreach ($values as $value) {
+                $bannedData = [];
+                $bannedData['ip'] = $value['ip'];
+                $bannedData['startDate'] = date('Y-m-d H:i:s', $value['datetime']);
+                if ($pageContent['adminConfigs']['security::bantime'] < 0) {
+                    $bannedData['endDate'] = __('Jamais');
+                } else {
+                    $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageContent['adminConfigs']['security::bantime']);
+                }
+                $pageContent['adminBannedIp'][] = $bannedData;
+            }
+        }
+      
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/security.js';
+        return $render->get('/desktop/admin/security.html.twig', $pageContent);
+    }  
+  
+     /**
+     * Render interact_admin page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of tools page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function interact_adminPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+      $pageContent['JS_END_POOL'][] = '/public/js/desktop/interact_admin.js';
+        return $render->get('/desktop/admin/interact_admin.html.twig', $pageContent);
+    }
+  
+     /** Render summary page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of tools page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function summaryPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+      $pageContent['JS_END_POOL'][] = '/public/js/desktop/summary.js';
+        return $render->get('/desktop/admin/summary.html.twig', $pageContent);
+    }
+  
+  /** Render update_admin page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of tools page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function update_adminPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+      
+	global $CONFIG;
         global $NEXTDOM_INTERNAL_CONFIG;
 
         Status::initConnectState();
@@ -244,77 +683,19 @@ class Controller
             }
         }
 
-        $pageContent['adminNetworkInterfaces'] = [];
 
-        foreach (\network::getInterfaces() as $interface) {
-            $intData = [];
-            $intData['name'] = $interface;
-            $intData['mac'] = \network::getInterfaceMac($interface);
-            $intData['ip'] = \network::getInterfaceIp($interface);
-            $pageContent['adminNetworkInterfaces'][] = $intData;
-        }
-        $pageContent['adminDnsRun'] = \network::dns_run();
-        $pageContent['adminNetworkExternalAccess'] = \network::getNetworkAccess('external');
         $pageContent['adminStats'] = CacheManager::stats();
         $pageContent['adminCacheFolder'] = CacheManager::getFolder();
         $pageContent['adminMemCachedExists'] = class_exists('memcached');
         $pageContent['adminRedisExists'] = class_exists('redis');
         $pageContent['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
         $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/administration.js';
-
-        /**
-         * Render custom page
-         */
-        $pageContent['adminCategories'] = \nextdom::getConfiguration('eqLogic:category');
-        $pageContent['customProductName'] = \config::byKey('product_name');
-        $pageContent['customJS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/custom/custom.js')) {
-            $pageContent['customJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/custom/custom.js'));
-        }
-        $pageContent['customCSS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/custom/custom.css')) {
-            $pageContent['customCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/custom/custom.css'));
-        }
-        $pageContent['customMobileJS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.js')) {
-            $pageContent['customMobileJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.js'));
-        }
-        $pageContent['customMobileCSS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.css')) {
-            $pageContent['customMobileCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.css'));
-        }
-
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/custom.js';
-
-        /**
-         * Render interact page
-         */
-        $interacts = array();
-        $pageContent['interactTotal'] = \interactDef::all();
-        $interacts[-1] = \interactDef::all(null);
-        $interactListGroup = \interactDef::listGroup();
-        if (is_array($interactListGroup)) {
-            foreach ($interactListGroup as $group) {
-                $interacts[$group['group']] = \interactDef::all($group['group']);
-            }
-        }
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/interact.js';
-        $pageContent['interactsList'] = $interacts;
-        $pageContent['interactsListGroup'] = $interactListGroup;
-        $pageContent['interactDisabledOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
-        $pageContent['interactCmdType'] = \nextdom::getConfiguration('cmd:type');
-        $pageContent['interactAllUnite'] = CmdManager::allUnite();
-        $pageContent['interactJeeObjects'] = JeeObjectManager::all();
-        $pageContent['interactEqLogicTypes'] = EqLogicManager::allType();
-        $pageContent['interactEqLogics'] = EqLogicManager::all();
-        $pageContent['interactEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
-
-        return $render->get('/desktop/administration.html.twig', $pageContent);
+      
+      $pageContent['JS_END_POOL'][] = '/public/js/desktop/update_admin.js';
+        return $render->get('/desktop/admin/update_admin.html.twig', $pageContent);
     }
-
-    /**
-     * Render tools page
+  
+     /** Render summary page
      *
      * @param Render $render Render engine
      * @param array $pageContent Page data
@@ -326,64 +707,12 @@ class Controller
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function toolsPage(Render $render, array &$pageContent): string
+    public static function usersPage(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        /**
-         * Render cron Page
-         */
-
-        $pageContent['cronEnabled'] = \config::byKey('enableCron');
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/cron.js';
-
-        /**
-         * Render log page
-         */
-
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/log.js';
-        $currentLogfile = Utils::init('logfile');
-        $logFilesList = [];
-        $dir = opendir(NEXTDOM_ROOT . '/log/');
-
-        while ($file = readdir($dir)) {
-            if ($file != '.' && $file != '..' && $file != '.htaccess' && !is_dir(NEXTDOM_ROOT . '/log/' . $file)) {
-                $logFilesList[] = $file;
-            }
-        }
-        natcasesort($logFilesList);
-        $pageContent['logFilesList'] = [];
-        foreach ($logFilesList as $logFile) {
-            $hasError = 0;
-            $logFileData = [];
-            $logFileData['name'] = $logFile;
-            $logFileData['icon'] = 'check';
-            $logFileData['color'] = 'green';
-
-            if (shell_exec('grep -c -E "\[ERROR\]|\[error\]" ' . NEXTDOM_ROOT . '/log/' . $logFile) != 0) {
-                $logFileData['icon'] = 'exclamation-triangle';
-                $logFileData['color'] = 'red';
-            } elseif (shell_exec('grep -c -E "\[WARNING\]" ' . NEXTDOM_ROOT . '/log/' . $logFile) != 0) {
-                $logFileData['icon'] = 'exclamation-circle';
-                $logFileData['color'] = 'orange';
-            }
-            if ($currentLogfile == $logFile) {
-                $logFileData['active'] = true;
-            } else {
-                $logFileData['active'] = false;
-            }
-            $logFileData['size'] = round(filesize(NEXTDOM_ROOT . '/log/' . $logFile) / 1024);
-            $pageContent['logFilesList'][] = $logFileData;
-
-        }
-
-        /**
-         * Render user page
-         */
-
-        $pageContent['userLdapEnabled'] = \config::byKey('ldap::enable');
-
+      $pageContent['userLdapEnabled'] = \config::byKey('ldap::enable');
         if ($pageContent['userLdapEnabled'] != '1') {
             $user = \user::byLogin('nextdom_support');
             $pageContent['userSupportExists'] = is_object($user);
@@ -392,73 +721,93 @@ class Controller
         $pageContent['usersList'] = \user::all();
         $pageContent['JS_VARS']['ldapEnable'] = $pageContent['userLdapEnabled'];
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/user.js';
+      
+      $pageContent['JS_END_POOL'][] = '/public/js/desktop/users.js';
+        return $render->get('/desktop/admin/users.html.twig', $pageContent);
+    }
+  
+     /**
+     * Render backup page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of backup page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function backupPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+        $pageContent['JS_VARS_RAW']['REPO_LIST'] = '[]';
+        $pageContent['backupAjaxToken'] = \ajax::getToken();
+        $pageContent['backupReposList'] = UpdateManager::listRepo();
+        $pageContent['JS_END_POOL'][]   = '/public/js/desktop/backup.js';
+        return $render->get('/desktop/tools/backup.html.twig', $pageContent);
+    }
 
+    /**
+     * Render cron page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of cron page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function cronPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+        $pageContent['cronEnabled']   = \config::byKey('enableCron');
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/cron.js';
+        return $render->get('/desktop/tools/cron.html.twig', $pageContent);
+    }
 
-        /**
-         * Render user page
-         */
-
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/report.js';
-
-        $report_path = NEXTDOM_ROOT . '/data/report/';
-        $pageContent['reportViews'] = [];
-
-        $allViews = \view::all();
-        foreach ($allViews as $view) {
-            $viewData = [];
-            $viewData['id'] = $view->getId();
-            $viewData['name'] = $view->getName();
-            $viewData['number'] = count(ls($report_path . '/view/' . $view->getId(), '*'));
-            $pageContent['reportViews'][] = $viewData;
-        }
-        $pageContent['reportPlans'] = [];
-
-        $allPlanHeader = \planHeader::all();
-        foreach ($allPlanHeader as $plan) {
-            $planData = [];
-            $planData['id'] = $plan->getId();
-            $planData['name'] = $plan->getName();
-            $planData['number'] = count(ls($report_path . '/plan/' . $plan->getId(), '*'));
-            $pageContent['reportPlans'][] = $planData;
-        }
-        $pageContent['reportPlugins'] = [];
-
-        /**
-         * Render health page
-         */
-        $pluginManagerList = PluginManager::listPlugin(true);
-        foreach ($pluginManagerList as $plugin) {
-            if ($plugin->getDisplay() != '') {
-                $pluginData = [];
-                $pluginData['id'] = $plugin->getId();
-                $pluginData['name'] = $plugin->getName();
-                $pluginData['number'] = count(ls($report_path . '/plugin/' . $plugin->getId(), '*'));
-                $pageContent['reportPlugins'][] = $pluginData;
-            }
-        }
-
-        $pageContent['healthInformations'] = \nextdom::health();
+    /**
+     * Render health page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of health page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function healthPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+        $pageContent['healthInformations']        = \nextdom::health();
         $pageContent['healthPluginsInformations'] = [];
-        $pageContent['healthPluginDataToShow'] = false;
-        $pageContent['healthTotalNOk'] = 0;
-        $pageContent['healthTotalPending'] = 0;
-
+        $pageContent['healthPluginDataToShow']    = false;
+        $pageContent['healthTotalNOk']            = 0;
+        $pageContent['healthTotalPending']        = 0;
         foreach (PluginManager::listPlugin(true) as $plugin) {
             $pluginData = [];
-
             if (file_exists(dirname(PluginManager::getPathById($plugin->getId())) . '/../desktop/modal/health.php')) {
                 $pluginData['hasSpecificHealth'] = true;
             }
             if ($plugin->getHasDependency() == 1 || $plugin->getHasOwnDeamon() == 1 || method_exists($plugin->getId(), 'health') || $pluginData['hasSpecificHealth']) {
                 $pageContent['healthPluginDataToShow'] = true;
-                $pluginData['plugin'] = $plugin;
-                $pluginData['port'] = false;
-                $pluginData['nOk'] = 0;
+                $pluginData['plugin']  = $plugin;
+                $pluginData['port']    = false;
+                $pluginData['nOk']     = 0;
                 $pluginData['pending'] = 0;
                 $pluginData['hasDependency'] = false;
-                $pluginData['hasOwnDaemon'] = false;
+                $pluginData['hasOwnDaemon']  = false;
                 $pluginData['showOnlyTable'] = false;
-
                 $port = \config::byKey('port', $plugin->getId());
                 if ($port != '') {
                     $pluginData['port'] = $port;
@@ -469,10 +818,8 @@ class Controller
                 if ($plugin->getHasDependency() == 1) {
                     $pluginData['hasDependency'] = true;
                     $dependencyInfo = $plugin->dependancy_info();
-
                     if (isset($dependencyInfo['state'])) {
                         $pluginData['dependencyState'] = $dependencyInfo['state'];
-
                         if ($pluginData['dependencyState'] == 'nok') {
                             $pluginData['nOk']++;
                         } elseif ($pluginData['dependencyState'] == 'in_progress') {
@@ -482,12 +829,10 @@ class Controller
                         }
                     }
                 }
-
                 if ($plugin->getHasOwnDeamon() == 1) {
                     $pluginData['hasOwnDaemon'] = true;
                     $daemonInfo = $plugin->deamon_info();
                     $pluginData['daemonAuto'] = $daemonInfo['auto'];
-
                     if (isset($daemonInfo['launchable'])) {
                         $pluginData['daemonLaunchable'] = $daemonInfo['launchable'];
                         if ($pluginData['daemonLaunchable'] == 'nok' && $pluginData['daemonAuto'] == 1) {
@@ -496,12 +841,10 @@ class Controller
                     }
                     $pluginData['daemonLaunchableMessage'] = $daemonInfo['launchable_message'];
                     $pluginData['daemonState'] = $daemonInfo['state'];
-
                     if ($pluginData['daemonState'] == 'nok' && $pluginData['daemonAuto'] == 1) {
                         $pluginData['nOk']++;
                     }
                 }
-
                 if (method_exists($plugin->getId(), 'health')) {
                     $pluginData['health'] = [];
                     // Je vois pas quand ça peut être appelé
@@ -516,7 +859,6 @@ class Controller
                         }
                     }
                 }
-
                 if ($pluginData['nOk'] > 0) {
                     $pageContent['healthTotalNOk']++;
                 }
@@ -526,57 +868,193 @@ class Controller
                 $pageContent['healthPluginsInformations'][] = $pluginData;
             }
         }
-
-
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/health.js';
+        return $render->get('/desktop/tools/health.html.twig', $pageContent);
+    }
 
-        /**
-         * Render history page
-         */
+    /**
+     * Render history page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of history page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function historyPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
         $pageContent['historyDate'] = array(
             'start' => date('Y-m-d', strtotime(\config::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
             'end' => date('Y-m-d'),
         );
-
-        $pageContent['historyCmdsList'] = CmdManager::allHistoryCmd();
-        $pageContent['historyPluginsList'] = PluginManager::listPlugin();
+        $pageContent['historyCmdsList']          = CmdManager::allHistoryCmd();
+        $pageContent['historyPluginsList']       = PluginManager::listPlugin();
         $pageContent['historyEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
-        $pageContent['historyObjectsList'] = JeeObjectManager::all();
-
-        $pageContent['JS_POOL'][] = '/3rdparty/visjs/vis.min.js';
-        $pageContent['CSS_POOL'][] = '/3rdparty/visjs/vis.min.css';
+        $pageContent['historyObjectsList']       = JeeObjectManager::all();
+        $pageContent['JS_POOL'][]     = '/3rdparty/visjs/vis.min.js';
+        $pageContent['CSS_POOL'][]    = '/3rdparty/visjs/vis.min.css';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/history.js';
+        return $render->get('/desktop/tools/history.html.twig', $pageContent);
+    }
 
-        /**
-         * Render update page
-         */
+    /**
+     * Render log page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of log page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function logPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/log.js';
+        $currentLogfile = Utils::init('logfile');
+        $logFilesList   = [];
+        $dir = opendir(NEXTDOM_ROOT . '/log/');
+        while ($file = readdir($dir)) {
+            if ($file != '.' && $file != '..' && $file != '.htaccess' && !is_dir(NEXTDOM_ROOT . '/log/' . $file)) {
+                $logFilesList[] = $file;
+            }
+        }
+        natcasesort($logFilesList);
+        $pageContent['logFilesList'] = [];
+        foreach ($logFilesList as $logFile) {
+            $hasError = 0;
+            $logFileData = [];
+            $logFileData['name']  = $logFile;
+            $logFileData['icon']  = 'check';
+            $logFileData['color'] = 'green';
+            if (shell_exec('grep -c -E "\[ERROR\]|\[error\]" ' . NEXTDOM_ROOT . '/log/' . $logFile) != 0) {
+                $logFileData['icon'] = 'exclamation-triangle';
+                $logFileData['color'] = 'red';
+            } elseif (shell_exec('grep -c -E "\[WARNING\]" ' . NEXTDOM_ROOT . '/log/' . $logFile) != 0) {
+                $logFileData['icon'] = 'exclamation-circle';
+                $logFileData['color'] = 'orange';
+            }
+            if ($currentLogfile == $logFile) {
+                $logFileData['active'] = true;
+            } else {
+                $logFileData['active'] = false;
+            }
+            $logFileData['size'] = round(filesize(NEXTDOM_ROOT . '/log/' . $logFile) / 1024);
+            $pageContent['logFilesList'][] = $logFileData;
+        }
+        return $render->get('/desktop/tools/logs-view.html.twig', $pageContent);
+    }
+
+    /**
+     * Render migration page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of migration page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function migrationPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+        $pageContent['migrationAjaxToken'] = \ajax::getToken();
+        $pageContent['JS_END_POOL'][]      = '/public/js/desktop/migration.js';
+        return $render->get('/desktop/tools/migration.html.twig', $pageContent);
+    }
+
+    /**
+     * Render report page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of report page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function reportPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/report.js';
+        $report_path = NEXTDOM_ROOT . '/data/report/';
+        $pageContent['reportViews'] = [];
+        $allViews = \view::all();
+        foreach ($allViews as $view) {
+            $viewData           = [];
+            $viewData['id']     = $view->getId();
+            $viewData['name']   = $view->getName();
+            $viewData['number'] = count(ls($report_path . '/view/' . $view->getId(), '*'));
+            $pageContent['reportViews'][] = $viewData;
+        }
+        $pageContent['reportPlans'] = [];
+        $allPlanHeader = \planHeader::all();
+        foreach ($allPlanHeader as $plan) {
+            $planData           = [];
+            $planData['id']     = $plan->getId();
+            $planData['name']   = $plan->getName();
+            $planData['number'] = count(ls($report_path . '/plan/' . $plan->getId(), '*'));
+            $pageContent['reportPlans'][] = $planData;
+        }
+        $pageContent['reportPlugins'] = [];
+        $pluginManagerList = PluginManager::listPlugin(true);
+        foreach ($pluginManagerList as $plugin) {
+            if ($plugin->getDisplay() != '') {
+                $pluginData = [];
+                $pluginData['id']     = $plugin->getId();
+                $pluginData['name']   = $plugin->getName();
+                $pluginData['number'] = count(ls($report_path . '/plugin/' . $plugin->getId(), '*'));
+                $pageContent['reportPlugins'][] = $pluginData;
+            }
+        }
+        return $render->get('/desktop/tools/reports-view.html.twig', $pageContent);
+    }
+
+    /**
+     * Render update page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of update page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function updatePage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
         $updates = array();
         foreach (UpdateManager::listCoreUpdate() as $udpate) {
             $updates[str_replace(array('.php', '.sql'), '', $udpate)] = str_replace(array('.php', '.sql'), '', $udpate);
         }
         usort($updates, 'version_compare');
-        $pageContent['updatesList'] = array_reverse($updates);
+        $pageContent['updatesList']   = array_reverse($updates);
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/update.js';
-
-        /**
-         * Render migration page
-         */
-        $pageContent['migrationAjaxToken'] = \ajax::getToken();
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/migration.js';
-
-        /**
-         * Render backup page
-         */
-        $pageContent['JS_VARS_RAW']['REPO_LIST'] = '[]';
-        $pageContent['backupAjaxToken'] = \ajax::getToken();
-        $pageContent['backupReposList'] = UpdateManager::listRepo();
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/backup.js';
-
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools.js';
-
-        return $render->get('/desktop/tools.html.twig', $pageContent);
+        return $render->get('/desktop/tools/update-view.html.twig', $pageContent);
     }
-
+    
     /**
      * Render objects page
      *
@@ -935,7 +1413,7 @@ return $render->get('/desktop/interact.html.twig', $pageContent);
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/profils.js';
 
-        return $render->get('/desktop/profils.html.twig', $pageContent);
+        return $render->get('/desktop/tools/profils.html.twig', $pageContent);
     }
 
     /**
@@ -1180,6 +1658,44 @@ return $render->get('/desktop/interact.html.twig', $pageContent);
         return $render->get('/desktop/eqAnalyze.html.twig', $pageContent);
     }
 
+   /**
+     * Render interact page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of interact page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function interactPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+        $interacts = array();
+        $pageContent['interactTotal'] = \interactDef::all();
+        $interacts[-1] = \interactDef::all(null);
+        $interactListGroup = \interactDef::listGroup();
+        if (is_array($interactListGroup)) {
+            foreach ($interactListGroup as $group) {
+                $interacts[$group['group']] = \interactDef::all($group['group']);
+            }
+        }
+        $pageContent['JS_END_POOL'][]           = '/public/js/desktop/interact.js';
+        $pageContent['interactsList']           = $interacts;
+        $pageContent['interactsListGroup']      = $interactListGroup;
+        $pageContent['interactDisabledOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
+        $pageContent['interactCmdType']      = \nextdom::getConfiguration('cmd:type');
+        $pageContent['interactAllUnite']     = CmdManager::allUnite();
+        $pageContent['interactJeeObjects']   = JeeObjectManager::all();
+        $pageContent['interactEqLogicTypes'] = EqLogicManager::allType();
+        $pageContent['interactEqLogics']     = EqLogicManager::all();
+        $pageContent['interactEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
+        return $render->get('/desktop/interact.html.twig', $pageContent);
+    }
     /**
      * Render plan page
      *
