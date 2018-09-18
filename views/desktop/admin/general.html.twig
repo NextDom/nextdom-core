@@ -1,9 +1,8 @@
 <div class="box"  id="general">
     <div class="box-header">
-        <h3 class="box-title"><i class="fa fa-wrench"></i>{{ 'Général' }}</h3>
+        <h3 class="box-title"><i class="fa fa-wrench"></i> {{ 'Général' }}</h3>
         <div class="box-tools pull-right">
-           <a class="btn btn-success btn-xs" id="bt_savegeneral"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>          
-  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
             </button>
             <a href="index.php?v=d&p=administration" <button type="button" class="btn btn-box-tool" ><i class="fa fa-times"></i></button></a>
         </div>
@@ -21,7 +20,7 @@
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Indique votre type de matériel">{{'Système / Hardware'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                        <a class="btn btn-warning" id="bt_resetHardwareType"><i class="fa fa-refresh"></i>{{'Rafraîchir'}}</a>
+                        <a class="btn btn-warning btn-sm" id="bt_resetHardwareType"><i class="fa fa-refresh"></i>{{'Rafraîchir'}}</a>
                     </div>
                     <div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
                         <span class="label label-info label-config">diy</span>
@@ -30,7 +29,7 @@
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{'Clef d\'installation qui permet d\'identifier votre NextDom quand il communique avec le market'}}">{{'Clef d\'installation'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                        <a class="btn btn-warning" id="bt_resetHwKey"><i class="fa fa-bomb"></i>{{'Remise à zéro'}}</a>
+                        <a class="btn btn-warning btn-sm" id="bt_resetHwKey"><i class="fa fa-bomb"></i>{{'Remise à zéro'}}</a>
                     </div>
                     <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
                         <span class="label label-info label-config">e56cb61e66d1dd9daedf9431b155030859f3f9902d39354368c715422d6968e</span>
@@ -69,7 +68,7 @@
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help">{{'Dernière date connue'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                        <a class="btn btn-warning" id="bt_resetHour"><i class="fa fa-bomb"></i>{{'Remise à zéro'}}</a>
+                        <a class="btn btn-warning btn-sm" id="bt_resetHour"><i class="fa fa-bomb"></i>{{'Remise à zéro'}}</a>
                     </div>
                     <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
                         <span class="label label-info label-config">{{'2018-09-05 17:05:02'}}</span>
@@ -78,7 +77,7 @@
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Fuseau horaire de votre NextDom">{{'Date et heure'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                        <a class="btn btn-primary" id="bt_forceSyncHour"><i class="fa fa-clock-o"></i>{{'Synchronisation'}}</a>
+                        <a class="btn btn-primary btn-sm" id="bt_forceSyncHour"><i class="fa fa-clock-o"></i>{{'Synchronisation'}}</a>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4">
                         <select class="configKey form-control" data-l1key="timezone">
@@ -190,5 +189,8 @@
                 </div>
             </fieldset>
         </form>
+    </div>
+    <div class="box-footer clearfix">
+        <a class="btn btn-success btn-sm pull-right" id="bt_savegeneral"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
     </div>
 </div>

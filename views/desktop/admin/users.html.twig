@@ -1,6 +1,6 @@
 <div class="box" id="users">
     <div class="box-header">
-        <legend ><i class="fa fa-hand-o-right"></i>{{ 'Gestion des utilisateurs' }}</legend>
+        <legend ><i class="fa fa-hand-o-right"></i> {{ 'Gestion des utilisateurs' }}</legend>
         <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
             </button>
@@ -12,7 +12,6 @@
             <div class="box-header">
                 <legend><i class="icon personne-toilet1"></i> {{ 'Liste des utilisateurs' }}
                     <div class="box-tools pull-right">
-                        <a class="btn btn-success btn-xs" id="bt_saveUser"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
                         {% if userLdapEnabled != '1' %}
                             {% if userSupportExists %}
                                 <a class="btn btn-danger btn-xs" id="bt_supportAccess" data-enable="0"><i class="fas fa-user"></i> {{ 'Désactiver accès support' }}</a>
@@ -156,5 +155,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="box-footer clearfix">
+        <a class="btn btn-success btn-sm pull-right" id="bt_saveUser"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
     </div>
 </div>
