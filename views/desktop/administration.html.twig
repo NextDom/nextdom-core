@@ -68,11 +68,6 @@
                 </div>
                 <!-- /.box-body -->
             </div>
-        </div>
-
-        <div class="col-md-2 pull-right">
-            <a class="btn btn-success pull-right btn-tab" id="bt_saveGeneraleConfig"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-        </div>
     </div>
 </div>
 <div class="row">
@@ -100,6 +95,28 @@
                 <a class="btn btn-app" href="index.php?v=d&p=users"><i class="fa fa-users"></i> {{ 'Utilisateurs' }}</a>
 
             </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-10 col-md-offset-1" id="div_MenuList2">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">{{ 'Outils' }}</h3>
+            </div>
+            <div class="box-body">
+                <a class="btn btn-app" href="index.php?v=d&p=backup" ><i class="fa fa-users"></i> {{ 'Sauvegardes' }}</a>
+                <a class="btn btn-app" href="index.php?v=d&p=migration" ><i class="fa fa-users"></i> {{ 'Migration' }}</a>
+                <a class="btn btn-app" href="index.php?v=d&p=cron"><i class="fa fa-tasks"></i> {{ 'Taches' }}</a>
+                <a class="btn btn-app" href="index.php?v=d&p=update"><span class="badge bg-red">{{ MENU_NB_UPDATES }}</span><i class="fa fa-tasks"></i> {{ 'Mise a jour' }}</a>
+                <a class="btn btn-app" href="index.php?v=d&p=profils"><i class="fa fa-briefcase"></i> {{ 'Profil' }}</a>
+                <a class="btn btn-app" href="index.php?v=d&p=history"><i class="fa fa-bar-chart-o"></i> {{ 'Historique' }}</a>
+                <a class="btn btn-app" href="index.php?v=d&p=report"><i class="fa fa-newspaper-o"></i> {{ 'Rapports' }}</a>
+                <a class="btn btn-app" href="index.php?v=d&p="><i class="fa fa-tachometer"></i> {{ 'Temps réel' }}</a>
+                <a class="btn btn-app" href="index.php?v=d&p=log"><i class="fa fa-file-o"></i> {{ 'Logs' }}</a>
+                <a class="btn btn-app" href="index.php?v=d&p=health"><i class="fa fa-medkit"></i> {{ 'Santé' }}</a>
+            </div>
+            <!-- /.box-body -->
         </div>
     </div>
 </div>
