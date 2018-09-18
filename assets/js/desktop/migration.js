@@ -37,6 +37,7 @@ $("#bt_saveMigration").on('click', function (event) {
                    $('#migration').setValues(data, '.configKey');
                    modifyWithoutSave = false;
                    notify("Info", '{{Sauvegarde réussie}}', 'success');
+                   window.location.reload();
                }
            });
        }
@@ -56,7 +57,7 @@ $("#bt_migrateNextDom").on('click', function (event) {
                    notify("Erreur", error.message, 'error');
                },
                success: function () {
-                   getNextDomLog(1, 'restore');
+                   getNextDomLog(1, 'migration');
                }
            });
        }

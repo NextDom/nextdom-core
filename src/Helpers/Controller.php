@@ -71,14 +71,12 @@ class Controller
         'osdb'           => 'osdbPage',
         'reports_admin'  => 'reports_adminPage',
         'eqlogic'        => 'eqlogicPage',
-        'interact'       => 'interactPage',
         'interact_admin' => 'interact_adminPage',
         'links'          => 'linksPage',
         'security'       => 'securityPage',
         'summary'        => 'summaryPage',
         'update_admin'   => 'update_adminPage',
         'users'          => 'usersPage',
-        'tools'          => 'toolsPage',
         'pluginRoute'    => 'pluginRoute'
     ];
 
@@ -89,6 +87,7 @@ class Controller
      *
      * @return mixed|null Static method or null
      */
+
     public static function getRoute(string $page)
     {
         $route = null;
@@ -317,7 +316,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of log_admin page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -341,7 +340,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of custom page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -383,7 +382,7 @@ class Controller
      * @param Render $API Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of API page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -422,7 +421,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of commandes page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -444,7 +443,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of osdb page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -470,7 +469,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of report_admin page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -505,7 +504,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of links page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -527,7 +526,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of security page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -572,7 +571,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of interact_admin page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -593,7 +592,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of summary page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -614,7 +613,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of update_admin page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -700,7 +699,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of users page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -1108,35 +1107,6 @@ $pageContent['interactEqLogics'] = EqLogicManager::all();
 $pageContent['interactEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
 return $render->get('/desktop/interact.html.twig', $pageContent);
 }
-
-    /**
-* Render update page
-*
-* @param Render $render Render engine
-* @param array $pageContent Page data
-*
-* @return string Content of objects page
-*
-* @throws \NextDom\Exceptions\CoreException
-* @throws \Twig_Error_Loader
-* @throws \Twig_Error_Runtime
-* @throws \Twig_Error_Syntax
-*/
-    public static function updatePage(Render $render, array &$pageContent): string
-    {
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-
-        $updates = array();
-        foreach (UpdateManager::listCoreUpdate() as $udpate) {
-            $updates[str_replace(array('.php', '.sql'), '', $udpate)] = str_replace(array('.php', '.sql'), '', $udpate);
-        }
-        usort($updates, 'version_compare');
-        $pageContent['updatesList'] = array_reverse($updates);
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/update.js';
-
-        return $render->get('/desktop/tools/update-view.html.twig', $pageContent);
-    }
 
     /**
      * Render message page
@@ -1658,44 +1628,6 @@ return $render->get('/desktop/interact.html.twig', $pageContent);
         return $render->get('/desktop/eqAnalyze.html.twig', $pageContent);
     }
 
-   /**
-     * Render interact page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of interact page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function interactPage(Render $render, array &$pageContent): string
-    {
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-        $interacts = array();
-        $pageContent['interactTotal'] = \interactDef::all();
-        $interacts[-1] = \interactDef::all(null);
-        $interactListGroup = \interactDef::listGroup();
-        if (is_array($interactListGroup)) {
-            foreach ($interactListGroup as $group) {
-                $interacts[$group['group']] = \interactDef::all($group['group']);
-            }
-        }
-        $pageContent['JS_END_POOL'][]           = '/public/js/desktop/interact.js';
-        $pageContent['interactsList']           = $interacts;
-        $pageContent['interactsListGroup']      = $interactListGroup;
-        $pageContent['interactDisabledOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
-        $pageContent['interactCmdType']      = \nextdom::getConfiguration('cmd:type');
-        $pageContent['interactAllUnite']     = CmdManager::allUnite();
-        $pageContent['interactJeeObjects']   = JeeObjectManager::all();
-        $pageContent['interactEqLogicTypes'] = EqLogicManager::allType();
-        $pageContent['interactEqLogics']     = EqLogicManager::all();
-        $pageContent['interactEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
-        return $render->get('/desktop/interact.html.twig', $pageContent);
-    }
     /**
      * Render plan page
      *
