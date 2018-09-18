@@ -228,7 +228,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of network page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -263,7 +263,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of cache page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -292,7 +292,7 @@ class Controller
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of tools page
+     * @return string Content of general page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -726,28 +726,7 @@ class Controller
         return $render->get('/desktop/admin/users.html.twig', $pageContent);
     }
   
-    /**
-     * Render tools page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of tools page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function toolsPage(Render $render, array &$pageContent): string
-    {
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-
-        return $render->get('/desktop/tools.html.twig', $pageContent);
-    }
-
-    /**
+     /**
      * Render backup page
      *
      * @param Render $render Render engine
