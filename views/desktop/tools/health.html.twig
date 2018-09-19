@@ -1,5 +1,5 @@
-<div class="box" id="div_Health">
-    <div class="box-header">
+<div class="box box-primary" id="div_Health">
+    <div class="box-header with-border">
         <h3 class="box-title"><i class="icon divers-caduceus3"></i> {{ 'Santé de NextDom' }}</h3>
         <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-too" ><i class="fas fa-tachometer-alt pull-right cursor" id="bt_benchmarkNextDom"></i></button>
@@ -58,6 +58,17 @@
             {% endif %}
             </tbody>
         </table>
+              </div>
+              </div>
+              <div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="icon divers-caduceus3"></i> {{ 'Santé des Plugins' }}</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            <a href="index.php?v=d&p=administration" <button type="button" class="btn btn-box-tool" ><i class="fa fa-times"></i></button></a>
+        </div>
+    </div>
+    <div class="box-body">
         {% if healthPluginDataToShow %}
             <div class="box-group" id="accordionHealth">
                 {% for pluginData in healthPluginsInformations %}
@@ -176,3 +187,4 @@
         {% endif %}
     </div>
 </div>
+      </div>
