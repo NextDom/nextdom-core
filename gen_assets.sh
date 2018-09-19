@@ -86,11 +86,10 @@ function gen_js {
         3rdparty/jquery.fileupload/jquery.fileupload.js \
         3rdparty/jquery.multi-column-select/multi-column-select.js \
         3rdparty/jquery.sew/jquery.sew.min.js \
-        3rdparty/datetimepicker/jquery.datetimepicker.js \
         3rdparty/jquery.cron/jquery.cron.min.js \
         3rdparty/jquery.contextMenu/jquery.contextMenu.min.js \
         3rdparty/autosize/autosize.min.js \
-        3rdparty/select2/select2.js \
+        3rdparty/select2/js/select2.js \
         3rdparty/inputmask/jquery.inputmask.bundle.js \
         3rdparty/bootstrap-colorpicker/js/bootstrap-colorpicker.js \
         3rdparty/bootstrap-datepicker/js/bootstrap-datepicker.js \
