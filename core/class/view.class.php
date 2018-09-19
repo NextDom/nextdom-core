@@ -100,7 +100,7 @@ class view {
         if ($this->getImage('data') == '') {
             return '';
         }
-        $dir = __DIR__ . '/../../core/img/view';
+        $dir = __DIR__ . '/../../public/img/view';
         if (!file_exists($dir)) {
             mkdir($dir);
         }
