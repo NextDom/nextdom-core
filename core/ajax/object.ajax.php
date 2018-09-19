@@ -212,7 +212,7 @@ try {
         $object->setImage('data', '');
         $object->setImage('sha1', '');
         $object->save();
-        @rrmdir(__DIR__ . '/../../core/img/object');
+        @rrmdir(__DIR__ . '/../../public/img/object');
         ajax::success();
     }
 
@@ -239,7 +239,7 @@ try {
         $object->setImage('data', base64_encode(file_get_contents($_FILES['file']['tmp_name'])));
         $object->setImage('sha512', sha512($object->getImage('data')));
         $object->save();
-        @rrmdir(__DIR__ . '/../../core/img/object');
+        @rrmdir(__DIR__ . '/../../public/img/object');
         ajax::success();
     }
 

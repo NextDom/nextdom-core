@@ -172,7 +172,7 @@ try {
         $view->setImage('data', '');
         $view->setImage('sha1', '');
         $view->save();
-        @rrmdir(__DIR__ . '/../../core/img/view');
+        @rrmdir(__DIR__ . '/../../public/img/view');
         ajax::success();
     }
 
@@ -199,7 +199,7 @@ try {
         $view->setImage('data', base64_encode(file_get_contents($_FILES['file']['tmp_name'])));
         $view->setImage('sha512', sha512($view->getImage('data')));
         $view->save();
-        @rrmdir(__DIR__ . '/../../core/img/view');
+        @rrmdir(__DIR__ . '/../../public/img/view');
         ajax::success();
     }
 
