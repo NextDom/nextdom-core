@@ -24,16 +24,19 @@ jwerty.key('ctrl+s', function (e) {
    $("#bt_savecustom").click();
 });
 
+printConvertColor();
+$.showLoading();
 nextdom.config.load({
-   configuration: $('#custom').getValues('.configKey:not(.noSet)')[0],
-   error: function (error) {
-       notify("Erreur", error.message, 'error');
-   },
-   success: function (data) {
-       $('#custom').setValues(data, '.configKey');
-       modifyWithoutSave = false;
-   }
+    configuration: $('#custom').getValues('.configKey:not(.noSet)')[0],
+    error: function (error) {
+        notify("Erreur", error.message, 'error');
+    },
+    success: function (data) {
+        $('#custom').setValues(data, '.configKey');
+        modifyWithoutSave = false;
+    }
 });
+
 
 setTimeout(function () {
    editorDesktopJS = CodeMirror.fromTextArea(document.getElementById("ta_jsDesktopContent"), {
@@ -116,30 +119,32 @@ $('.savecustom').on('click', function () {
 });
 
 $("#bt_savecustom").on('click', function (event) {
-   $.hideAlert();
-   nextdom.config.save({
-       configuration: $('#custom').getValues('.configKey')[0],
-       error: function (error) {
-           notify("Erreur", error.message, 'error');
-       },
-       success: function () {
-           nextdom.config.load({
-               configuration: $('#custom').getValues('.configKey')[0],
-               plugin: 'core',
-               error: function (error) {
-                   notify("Erreur", error.message, 'error');
-               },
-               success: function (data) {
-                   $('#custom').setValues(data, '.configKey');
-                   modifyWithoutSave = false;
-                   notify("Info", '{{Sauvegarde réussie}}', 'success');
-               }
-           });
-       }
-   });
+    $.hideAlert();
+    saveConvertColor();
+    var config = $('#custom').getValues('.configKey')[0];
+    nextdom.config.save({
+        configuration: config,
+        error: function (error) {
+            notify("Erreur", error.message, 'error');
+        },
+        success: function () {
+            nextdom.config.load({
+                configuration: $('#custom').getValues('.configKey:not(.noSet)')[0],
+                error: function (error) {
+                    notify("Erreur", error.message, 'error');
+                },
+                success: function (data) {
+                    $('#custom').setValues(data, '.configKey');
+
+                    modifyWithoutSave = false;
+                    notify("Info", '{{Sauvegarde réussie}}', 'success');
+                }
+            });
+        }
+    });
 });
 
-printConvertColor();
+
 /********************Convertion************************/
 function printConvertColor() {
    $.ajax({

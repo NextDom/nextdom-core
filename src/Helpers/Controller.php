@@ -1580,6 +1580,31 @@ class Controller
         return $render->get('/desktop/eqAnalyze.html.twig', $pageContent);
     }
 
+       /**
+     * Render objects page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of objects page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function objectPage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+        $pageContent['JS_VARS']['select_id'] = Utils::init('id', '-1');
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/object.js';
+        $pageContent['objectProductName'] = \config::byKey('product_name');
+        $pageContent['objectList'] = JeeObjectManager::buildTree(null, false);
+        $pageContent['objectSummary'] = \config::byKey('object:summary');
+        return $render->get('/desktop/object.html.twig', $pageContent);
+    }
+    
     /**
      * Render interact page
      *
