@@ -21,7 +21,6 @@
 @import "../../3rdparty/jquery.utils/_jquery.utils.scss";
 @import "../../3rdparty/font-noto/font-noto.scss";
 @import "../../3rdparty/jquery.tree/themes/default/style.scss";
-@import "../../3rdparty/datetimepicker/jquery.datetimepicker.scss";
 @import "../../3rdparty/jquery.cron/jquery.cron.scss";
 @import "../../3rdparty/jquery.contextMenu/jquery.contextMenu.scss";
 @import "../../3rdparty/jquery.tablesorter/theme.bootstrap.scss";
@@ -50,4 +49,9 @@
 @import "../../3rdparty/AdminLTE/css/_skin-yellow.scss";
 @import "../../3rdparty/AdminLTE/css/_skin-yellow-light.scss";
 @import "../../3rdparty/AdminLTE/css/_skin-purple-light.scss";
+@import "../../3rdparty/bootstrap-daterangepicker/_daterangepicker.scss";
+@import "../../3rdparty/bootstrap-datepicker/css/bootstrap-datepicker.css";
+
+@import url("/3rdparty/ion.rangeSlider/css/ion.rangeSlider.css");
+@import url("/3rdparty/bootstrap-colorpicker/css/bootstrap-colorpicker.css");
 @import url("/3rdparty/iCheck/all.css");
