@@ -386,7 +386,7 @@ class jeeObject {
         if ($this->getImage('data') == '') {
             return '';
         }
-        $dir = __DIR__ . '/../../core/img/object';
+        $dir = __DIR__ . '/../../public/img/object';
         if (!file_exists($dir)) {
             mkdir($dir);
         }
