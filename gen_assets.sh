@@ -33,9 +33,8 @@ function gen_js {
         3rdparty/iziToast/js/iziToast.min.js \
         assets/js/desktop/utils.js \
         core/js/core.js \
-        3rdparty/bootstrap/bootstrap.min.js \
+        3rdparty/bootstrap/js/bootstrap.js \
         3rdparty/jquery.ui/jquery-ui.min.js \
-        3rdparty/jquery.ui/jquery.ui.datepicker.fr.js \
         3rdparty/iCheck/icheck.js \
         core/js/nextdom.class.js \
         core/js/private.class.js \
@@ -87,10 +86,16 @@ function gen_js {
         3rdparty/jquery.fileupload/jquery.fileupload.js \
         3rdparty/jquery.multi-column-select/multi-column-select.js \
         3rdparty/jquery.sew/jquery.sew.min.js \
-        3rdparty/datetimepicker/jquery.datetimepicker.js \
         3rdparty/jquery.cron/jquery.cron.min.js \
         3rdparty/jquery.contextMenu/jquery.contextMenu.min.js \
         3rdparty/autosize/autosize.min.js \
+        3rdparty/select2/js/select2.js \
+        3rdparty/inputmask/jquery.inputmask.bundle.js \
+        3rdparty/bootstrap-colorpicker/js/bootstrap-colorpicker.js \
+        3rdparty/bootstrap-datepicker/js/bootstrap-datepicker.js \
+        3rdparty/bootstrap-timepicker/js/bootstrap-timepicker.js \
+        3rdparty/bootstrap-daterangepicker/daterangepicker.js \
+        3rdparty/ion.rangeSlider/js/ion.rangeSlider.js \
         3rdparty/AdminLTE/js/dashboard-v2.js > /tmp/temp.js
     python -m jsmin /tmp/temp.js > public/js/base.js
     rm /tmp/temp.js

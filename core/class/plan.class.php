@@ -268,7 +268,7 @@ class plan {
         } elseif ($this->getLink_type() == 'image') {
             $html = '<div class="image-widget" data-image_id="' . $this->getLink_id() . '" style="min-width:10px;min-height:10px;">';
             if ($this->getConfiguration('display_mode', 'image') == 'image') {
-                $html .= '<img style="width:100%;height:100%" src="' . $this->getDisplay('path', 'core/img/no_image.gif') . '"/>';
+                $html .= '<img style="width:100%;height:100%" src="' . $this->getDisplay('path', 'public/img/no_image.gif') . '"/>';
             } else {
                 $camera = eqLogic::byId(str_replace(array('#', 'eqLogic'), array('', ''), $this->getConfiguration('camera')));
                 if (is_object($camera)) {
