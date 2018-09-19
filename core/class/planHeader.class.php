@@ -115,7 +115,7 @@ class planHeader {
         if ($this->getImage('data') == '') {
             return '';
         }
-        $dir = __DIR__ . '/../../core/img/plan';
+        $dir = __DIR__ . '/../../public/img/plan';
         if (!file_exists($dir)) {
             mkdir($dir);
         }
@@ -129,7 +129,7 @@ class planHeader {
             file_put_contents($filepath, base64_decode($this->getImage('data')));
         }
         $size = $this->getImage('size');
-        return '<img style="z-index:997" src="core/img/plan/' . $filename . '" data-sixe_y="' . $size[1] . '" data-sixe_x="' . $size[0] . '">';
+        return '<img style="z-index:997" src="public/img/plan/' . $filename . '" data-sixe_y="' . $size[1] . '" data-sixe_x="' . $size[0] . '">';
     }
 
     public function getPlan() {
