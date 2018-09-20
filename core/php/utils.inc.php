@@ -964,12 +964,86 @@ function getIpFromString($_string)
     return $_string;
 }
 
+function evaluate($_string) {
+	if (!isset($GLOBALS['ExpressionLanguage'])) {
+		$GLOBALS['ExpressionLanguage'] = new ExpressionLanguage();
+	}
+	if (strpos($_string, '"') !== false || strpos($_string, '\'') !== false) {
+		$regex = "/(?:(?:\"(?:\\\\\"|[^\"])+\")|(?:'(?:\\\'|[^'])+'))/is";
+		$r = preg_match_all($regex, $_string, $matches);
+		$c = count($matches[0]);
+		for ($i = 0; $i < $c; $i++) {
+			$_string = str_replace($matches[0][$i], '--preparsed' . $i . '--', $_string);
+		}
+	} else {
+		$c = 0;
+	}
+	$expr = str_ireplace(array(' et ', ' and ', ' ou ', ' or '), array(' && ', ' && ', ' || ', ' || '), $_string);
+	$expr = str_replace('==', '=', $expr);
+	$expr = str_replace('=', '==', $expr);
+	$expr = str_replace('<==', '<=', $expr);
+	$expr = str_replace('>==', '>=', $expr);
+	$expr = str_replace('!==', '!=', $expr);
+	$expr = str_replace('!===', '!==', $expr);
+	$expr = str_replace('====', '===', $expr);
+	if ($c > 0) {
+		for ($i = 0; $i < $c; $i++) {
+			$expr = str_replace('--preparsed' . $i . '--', $matches[0][$i], $expr);
+		}
+	}
+	try {
+		return $GLOBALS['ExpressionLanguage']->evaluate($expr);
+	} catch (Exception $e) {
+		//log::add('expression', 'debug', '[Parser 1] Expression : ' . $_string . ' tranformé en ' . $expr . ' => ' . $e->getMessage());
+	}
+	try {
+		$expr = str_replace('""', '"', $expr);
+		return $GLOBALS['ExpressionLanguage']->evaluate($expr);
+	} catch (Exception $e) {
+		//log::add('expression', 'debug', '[Parser 2] Expression : ' . $_string . ' tranformé en ' . $expr . ' => ' . $e->getMessage());
+	}
+	if ($c > 0) {
+		for ($i = 0; $i < $c; $i++) {
+			$_string = str_replace('--preparsed' . $i . '--', $matches[0][$i], $_string);
+		}
+	}
+	return $_string;
+}
+
+function evaluate_old($_string) {
+	if (!isset($GLOBALS['ExpressionLanguage'])) {
+		$GLOBALS['ExpressionLanguage'] = new ExpressionLanguage();
+	}
+	$expr = str_replace(array(' et ', ' ET ', ' AND ', ' and ', ' ou ', ' OR ', ' or ', ' OU '), array(' && ', ' && ', ' && ', ' && ', ' || ', ' || ', ' || ', ' || '), $_string);
+	$expr = str_replace('==', '=', $expr);
+	$expr = str_replace('=', '==', $expr);
+	$expr = str_replace('<==', '<=', $expr);
+	$expr = str_replace('>==', '>=', $expr);
+	$expr = str_replace('!==', '!=', $expr);
+	$expr = str_replace('!===', '!==', $expr);
+	$expr = str_replace('====', '===', $expr);
+	try {
+		return $GLOBALS['ExpressionLanguage']->evaluate($expr);
+	} catch (Exception $e) {
+		//log::add('expression', 'debug', '[Parser 1] Expression : ' . $_string . ' tranformé en ' . $expr . ' => ' . $e->getMessage());
+	}
+	try {
+		$expr = str_replace('""', '"', $expr);
+		return $GLOBALS['ExpressionLanguage']->evaluate($expr);
+	} catch (Exception $e) {
+		//log::add('expression', 'debug', '[Parser 2] Expression : ' . $_string . ' tranformé en ' . $expr . ' => ' . $e->getMessage());
+	}
+	return $_string;
+}
+
 /**
  * TODO: Stocker la version évaluée
  *
  * @param $_string
  * @return string
  */
+/**
+ * TODO: Remettre cette version
 function evaluate($_string)
 {
     if (!isset($GLOBALS['ExpressionLanguage'])) {
@@ -991,6 +1065,7 @@ function evaluate($_string)
     }
     return $_string;
 }
+*/
 
 /**
  * @param string $_string

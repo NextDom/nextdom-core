@@ -394,7 +394,7 @@ class scenarioExpression
                 $this->executeActionLog($scenario, $options);
                 break;
             case ScenarioExpressionEnum::EVENT:
-                $this->executeActionEvent($options);
+                $this->executeActionEvent($scenario, $options);
                 break;
             case ScenarioExpressionEnum::MESSAGE:
                 $this->executeActionMessage($scenario, $options);
@@ -515,11 +515,12 @@ class scenarioExpression
         }
     }
 
-    private function executeActionEvent($options)
+    private function executeActionEvent(scenario &$scenario, $options)
     {
         $cmd = cmd::byId(trim(str_replace('#', '', $options['cmd'])));
         if (!is_object($cmd)) {
             throw new Exception(__('Commande introuvable : ', __FILE__) . $options['cmd']);
+            $this->setLog($scenario, __('Changement de ', __FILE__) . $cmd->getHumanName() . __(' à ', __FILE__) . $options['value']);
         }
         $cmd->event(nextdom::evaluateExpression($options['value']));
     }

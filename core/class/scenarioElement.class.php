@@ -17,7 +17,7 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once __DIR__ . '/../../core/php/core.inc.php';
+require_once NEXTDOM_ROOT . '/core/php/core.inc.php';
 
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioSubElementManager;

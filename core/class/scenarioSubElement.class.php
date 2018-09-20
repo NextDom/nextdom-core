@@ -17,13 +17,11 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
-
-use NextDom\Managers\ScenarioElementManager;
-use NextDom\Managers\ScenarioSubElementManager;
-use NextDom\Managers\ScenarioExpressionManager;
+require_once __DIR__ . '/../../core/php/core.inc.php';
 
 class scenarioSubElement {
+    /*     * *************************Attributs****************************** */
+
     private $id;
     private $name;
     private $scenarioElement_id;
@@ -33,16 +31,39 @@ class scenarioSubElement {
     private $order;
     private $_expression;
 
+    /*     * ***********************Methode static*************************** */
+
     public static function byId($_id) {
-        return ScenarioSubElementManager::byId($_id);
+        $values = array(
+            'id' => $_id,
+        );
+        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
+                FROM ' . __CLASS__ . '
+                WHERE id=:id';
+        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
     }
 
     public static function byScenarioElementId($_scenarioElementId, $_type = '') {
-        return ScenarioSubElementManager::byScenarioElementId($_scenarioElementId, $_type);
+        $values = array(
+            'scenarioElement_id' => $_scenarioElementId,
+        );
+        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
+                FROM ' . __CLASS__ . '
+                WHERE scenarioElement_id=:scenarioElement_id ';
+        if ($_type != '') {
+            $values['type'] = $_type;
+            $sql .= ' AND type=:type ';
+            return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+        }
+        $sql .= ' ORDER BY `order`';
+
+        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
     }
 
+    /*     * *********************Methode d'instance************************* */
+
     public function execute(&$_scenario = null) {
-        if ($_scenario !== null && !$_scenario->getDo()) {
+        if ($_scenario != null && !$_scenario->getDo()) {
             return;
         }
         if ($this->getSubtype() == 'action') {
@@ -76,7 +97,7 @@ class scenarioSubElement {
         if (is_array($this->_expression) && count($this->_expression) > 0) {
             return $this->_expression;
         }
-        $this->_expression = ScenarioExpressionManager::byscenarioSubElementId($this->getId());
+        $this->_expression = scenarioExpression::byscenarioSubElementId($this->getId());
         return $this->_expression;
     }
 
@@ -140,7 +161,7 @@ class scenarioSubElement {
     }
 
     public function getElement() {
-        return ScenarioElementManager::byId($this->getScenarioElement_id());
+        return scenarioElement::byId($this->getScenarioElement_id());
     }
 
     public function setScenarioElement_id($scenarioElement_id) {
