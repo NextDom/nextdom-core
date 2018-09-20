@@ -147,3 +147,7 @@
 .skin-green .text_color {
   color: #00a65a;
 }
+
+.skin-green::-webkit-scrollbar-thumb{
+  background:#00a65a;
+}

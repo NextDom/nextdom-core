@@ -229,3 +229,4 @@ $('.bt_resetColor').on('click', function () {
        }
    });
 });
+

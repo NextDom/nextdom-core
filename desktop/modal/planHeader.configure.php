@@ -32,7 +32,10 @@ sendVarToJS('planHeader', utils::o2a($planHeader));
              <div class="form-group">
                 <label class="col-lg-4 control-label">{{Couleur de fond}}</label>
                 <div class="col-lg-2">
-                    <input type="color" class="planHeaderAttr form-control" data-l1key="configuration" data-l2key="backgroundColor" />
+                     <div class=" colorpicker-component colorpick input-group">
+                    <input type="text" class="planHeaderAttr form-control" data-l1key="configuration" data-l2key="backgroundColor" />
+                    <span class="input-group-addon"><i></i></span>
+                     </div>
                 </div>
             </div>
             <div class="form-group">
