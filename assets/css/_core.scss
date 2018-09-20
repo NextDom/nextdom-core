@@ -1,33 +1,3 @@
-#nextdom-header {
-    margin-bottom: 0px !important;
-    .navbar-brand {
-        position: relative;
-        top: -5px;
-    }
-}
-
-#dashboard-submenu {
-    height: auto;
-    max-height: 600px;
-    overflow-x: hidden;
-}
-
-.plugin-item {
-    padding-right: 10px;
-    .img-responsive {
-        width: 20px;
-        display: inline-block;
-    }
-}
-
-#bt_messageModal > span {
-    background-color: #ec971f;
-}
-
-#span_nbUpdate {
-    background-color: #c9302c;
-}
-
 .default-cursor {
     cursor: default;
 }
@@ -56,10 +26,6 @@
     display: inline-block;
 }
 
-.nav-tabs a{
-    padding:10px 5px !important;
-}
-
 #div_pageContainer {
     position: relative;
     overflow: hidden;
@@ -73,41 +39,16 @@
     cursor: pointer;
 }
 
-.bs-sidebar .bs-sidenav{
-    background-color: rgba(255,255,255,0);
-}
-
-.icon_font_size{
-    font-size : 6em;
-}
-
 #jqueryLoadingDiv .overlay {
     background-image: url(/3rdparty/jquery.utils/gritter.png);
 }
 
-
-.sidenav-overlay {
-    height: 100%;
-    position: absolute;
-    z-index: 9999;
-    left: -250px;
-    background-color: rgba(0,0,0,0.7);
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 60px;
-    width: 250px;
-    float: left;
-}
-
-.sidenav-overlay a:hover {
-    color: #f1f1f1;
-}
-
-.sidenav-overlay .closebtn {
-    position: absolute;
-    top: 0;
-    right: 250px;
-    font-size: 36px;
+.plugin-item {
+  padding-right: 10px;
+  .img-responsive {
+    width: 20px;
+    display: inline-block;
+  }
 }
 
 .displayScenario-overlay {
@@ -147,19 +88,7 @@ box-shadow: 0 0 0 0 rgba(235, 204, 209, 0.7)  !important;
 animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
 }
 
-#bt_displayObject{
-position: fixed;
-top:30px;
-left:0px;
-margin-left:10px;
-}
 
-#bt_displayScenario{
-position: fixed;
-top:30px;
-right:0px;
-margin-right:10px;
-}
 
 .green{
     background-color: $green;
@@ -263,43 +192,6 @@ margin-right:10px;
     cursor:default;
 }
 
-/**
- * Page d'administration
- */
-#config .global-tab-content {
-    height:calc(100% - 50px);
-    overflow:auto;
-    overflow-x: hidden;
-}
-
-#networktab .label-success,
-#cachetab .label-primary,
-#generaltab .label-info {
-    font-size : 1em;
-}
-
-#generaltab .link-dns-success {
-    color:white;
-    text-decoration: underline;
-}
-
-#colortab-list {
-    margin-left: 10px;
-}
-
-#interacttab #bt_addColorConvert,
-#summarytab #bt_addObjectSummary {
-    font-size: 1.8em;
-}
-
-#eqlogictab .form-group label {
-    font-size : 1.4em
-}
-
-.clickable{
-    cursor: pointer;
-}
-
 .panel:hover{
     box-shadow: 0 6px 12px 0 rgba(0,0,0,0.15);
 }
@@ -343,3 +235,127 @@ word-wrap: break-word;
     font-size:0.9em;
 }
 
+.ui-dialog {
+    padding:0;
+    border-radius: 3px;
+    background-clip:0;
+    padding: 0px 0 0px 5px;
+    }
+
+    html {
+        height: 100%;
+        /* The html and body elements cannot have any padding or margin. */
+      }
+      
+      .btn:hover {
+       opacity: 0.7;
+      }
+      
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+      
+      .cursor{
+        cursor : pointer;
+      }
+      
+      /* Themes for different contexts */
+      .alert {
+        border-left: 5px solid $lightyellow;
+      }
+      
+      .alert-danger {
+        border-left: 5px solid $lightred;
+      }
+      
+      .alert-info {
+        border-left: 5px solid $lightblue;
+      }
+      .alert-success {
+        border-left: 5px solid $lightgreen;
+      }
+      
+      .btn-black {
+        color:$white;
+        background-color:#373737;
+        border-color:#1f1f1f;
+          &:hover {
+          color:$white;
+          background-color:#303030;
+          border-color:#1f1f1f;
+        }
+      }
+      
+      .pull-right{
+        float: right;
+        margin-left: 5px;
+      }
+      
+      .pull-left{
+        float: left;
+        margin-right: 5px;
+      }
+      
+      .form-actions{
+        margin-top: 5px;
+      }
+      
+      .eqLogic-widget{
+        display: inline-block;
+        vertical-align: top;
+        border-radius: 4px;
+      }
+      
+      .eqLogic-widget .btn:not(.btn-circle){
+        border : none !important;
+        font-weight: bold;
+      }
+      
+      .view-link-widget,.plan-link-widget{
+        padding: 3px;
+        margin: 3px;
+        display: inline-block;
+        vertical-align: top;
+      }
+      
+      .eqLogic-widget a{
+        color:inherit;
+      }
+      
+      .scenario-widget{
+        background-color: $grey;
+        display: inline-block;
+        position : relative;
+        vertical-align: top;
+        color : $white;
+      }
+      
+      .scenario-widget a{
+        color : $white;
+      }
+      
+      .cmd-widget{
+        display: inline-block;
+        position : relative;
+        vertical-align: top;
+      }
+      
+      .cmd-widget .statistiques{
+        position : absolute;
+        bottom: 0;
+        font-size: 0.80em;
+        left : 0;
+        margin : 0;
+        padding: 0;
+        line-height:0px;
+      }
+      
+      ::-webkit-scrollbar{
+        width:8px
+      }
+      
+      ::-webkit-scrollbar-track-piece{
+        background-color:transparent
+      }
+      
+      

@@ -177,3 +177,7 @@
 .skin-blue-light .text_color {
   color: #3c8dbc;
 }
+
+.skin-blue-light::-webkit-scrollbar-thumb{
+  background:#3c8dbc;
+}

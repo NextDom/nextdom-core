@@ -326,10 +326,10 @@ class cmd {
     }
 
     public function preExecCmd($_values = array()) {
-        if (!is_array($this->getConfiguration('jeedomPreExecCmd')) || count($this->getConfiguration('jeedomPreExecCmd')) == 0) {
+        if (!is_array($this->getConfiguration('nextdomPreExecCmd')) || count($this->getConfiguration('nextdomPreExecCmd')) == 0) {
             return;
         }
-        foreach ($this->getConfiguration('jeedomPreExecCmd') as $action) {
+        foreach ($this->getConfiguration('nextdomPreExecCmd') as $action) {
             try {
                 $options = array();
                 if (isset($action['options'])) {
@@ -352,10 +352,10 @@ class cmd {
     }
 
     public function postExecCmd($_values = array()) {
-        if (!is_array($this->getConfiguration('jeedomPostExecCmd'))) {
+        if (!is_array($this->getConfiguration('nextdomPostExecCmd'))) {
             return;
         }
-        foreach ($this->getConfiguration('jeedomPostExecCmd') as $action) {
+        foreach ($this->getConfiguration('nextdomPostExecCmd') as $action) {
             try {
                 $options = array();
                 if (isset($action['options'])) {
@@ -804,16 +804,16 @@ class cmd {
     }
 
     public function checkCmdAlert($_value) {
-        if ($this->getConfiguration('jeedomCheckCmdOperator') == '' || $this->getConfiguration('jeedomCheckCmdTest') == '' || is_nan($this->getConfiguration('jeedomCheckCmdTime', 0))) {
+        if ($this->getConfiguration('nextdomCheckCmdOperator') == '' || $this->getConfiguration('nextdomCheckCmdTest') == '' || is_nan($this->getConfiguration('nextdomCheckCmdTime', 0))) {
             return;
         }
-        $check = nextdom::evaluateExpression($_value . $this->getConfiguration('jeedomCheckCmdOperator') . $this->getConfiguration('jeedomCheckCmdTest'));
+        $check = nextdom::evaluateExpression($_value . $this->getConfiguration("nextdomCheckCmdOperator") . $this->getConfiguration('nextdomCheckCmdTest'));
         if ($check == 1 || $check || $check == '1') {
-            if ($this->getConfiguration('jeedomCheckCmdTime', 0) == 0) {
+            if ($this->getConfiguration('nextdomCheckCmdTime', 0) == 0) {
                 $this->executeAlertCmdAction();
                 return;
             }
-            $next = strtotime('+ ' . ($this->getConfiguration('jeedomCheckCmdTime') + 1) . ' minutes ' . date('Y-m-d H:i:s'));
+            $next = strtotime('+ ' . ($this->getConfiguration('nextdomCheckCmdTime') + 1) . ' minutes ' . date('Y-m-d H:i:s'));
             $cron = cron::byClassAndFunction('cmd', 'cmdAlert', array('cmd_id' => intval($this->getId())));
             if (!is_object($cron)) {
                 $cron = new cron();
@@ -859,10 +859,10 @@ class cmd {
         if ($this->getType() != 'info' || ($this->getAlert('warningif') == '' && $this->getAlert('dangerif') == '')) {
             return 'none';
         }
-        global $JEEDOM_INTERNAL_CONFIG;
+        global $NEXTDOM_INTERNAL_CONFIG;
 
         $currentLevel = 'none';
-        foreach ($JEEDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
+        foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
             if (!$value['check']) {
                 continue;
             }
@@ -925,7 +925,7 @@ class cmd {
         if ($this->getType() != 'info') {
             return;
         }
-        global $JEEDOM_INTERNAL_CONFIG;
+        global $NEXTDOM_INTERNAL_CONFIG;
         $this->setCache('alertLevel', $_level);
         $eqLogic = $this->getEqLogic();
         $maxAlert = $eqLogic->getMaxCmdAlert();
@@ -950,8 +950,8 @@ class cmd {
                     $cmd = cmd::byId(str_replace('#', '', $id));
                     if (is_object($cmd)) {
                         $cmd->execCmd(array(
-                            'title' => __('[' . config::byKey('name', 'core', 'JEEDOM') . '] ', __FILE__) . $message,
-                            'message' => config::byKey('name', 'core', 'JEEDOM') . ' : ' . $message,
+                            'title' => __('[' . config::byKey('name', 'core', 'NEXTDOM') . '] ', __FILE__) . $message,
+                            'message' => config::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
                         ));
                     }
                 }
@@ -963,7 +963,7 @@ class cmd {
                 'warning' => 0,
                 'danger' => 0,
             );
-            if ($maxAlert != 'none' && isset($JEEDOM_INTERNAL_CONFIG['alerts'][$maxAlert])) {
+            if ($maxAlert != 'none' && isset($NEXTDOM_INTERNAL_CONFIG['alerts'][$maxAlert])) {
                 $status[$maxAlert] = 1;
             }
             $eqLogic->setStatus($status);
@@ -972,7 +972,7 @@ class cmd {
     }
 
     public function pushUrl($_value) {
-        $url = $this->getConfiguration('jeedomPushUrl');
+        $url = $this->getConfiguration('nextdomPushUrl');
         if ($url == '') {
             $url = config::byKey('cmdPushUrl');
         }
