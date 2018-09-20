@@ -53,23 +53,77 @@ class PluginManager
      */
     public static function byId($id)
     {
-        if (is_string($id) && isset(self::$cache[$id])) {
-            return self::$cache[$id];
-        }
-        if (!file_exists($id) || strpos($id, '/') === false) {
-            $id = self::getPathById($id);
-        }
-        if (!file_exists($id)) {
-            throw new \Exception('Plugin introuvable : ' . $id);
-        }
-        $data = json_decode(file_get_contents($id), true);
-        if (!is_array($data)) {
-            throw new \Exception('Plugin introuvable (json invalide) : ' . $id . ' => ' . print_r($data, true));
-        }
-        $plugin = new \plugin();
-        $plugin->initPluginFromData($data);
-        self::$cache[$plugin->getId()] = $plugin;
-        return $plugin;
+        global $NEXTDOM_INTERNAL_CONFIG;
+		if (is_string($_id) && isset(self::$_cache[$_id])) {
+			return self::$_cache[$_id];
+		}
+		if (!file_exists($_id) || strpos($_id, '/') === false) {
+			$_id = self::getPathById($_id);
+		}
+		if (!file_exists($_id)) {
+			throw new Exception('Plugin introuvable : ' . $_id);
+		}
+		$data = json_decode(file_get_contents($_id), true);
+		if (!is_array($data)) {
+			throw new Exception('Plugin introuvable (json invalide) : ' . $_id . ' => ' . print_r($data, true));
+		}
+		$plugin = new plugin();
+		$plugin->id = $data['id'];
+		$plugin->name = $data['name'];
+		$plugin->description = (isset($data['description'])) ? $data['description'] : '';
+		$plugin->license = (isset($data['licence'])) ? $data['licence'] : '';
+		$plugin->license = (isset($data['license'])) ? $data['license'] : $plugin->license;
+		$plugin->author = (isset($data['author'])) ? $data['author'] : '';
+		$plugin->installation = (isset($data['installation'])) ? $data['installation'] : '';
+		$plugin->hasDependency = (isset($data['hasDependency'])) ? $data['hasDependency'] : 0;
+		$plugin->hasOwnDeamon = (isset($data['hasOwnDeamon'])) ? $data['hasOwnDeamon'] : 0;
+		$plugin->maxDependancyInstallTime = (isset($data['maxDependancyInstallTime'])) ? $data['maxDependancyInstallTime'] : 30;
+		$plugin->eventjs = (isset($data['eventjs'])) ? $data['eventjs'] : 0;
+		$plugin->require = (isset($data['require'])) ? $data['require'] : '';
+		$plugin->category = (isset($data['category'])) ? $data['category'] : '';
+		$plugin->filepath = $_id;
+		$plugin->index = (isset($data['index'])) ? $data['index'] : $data['id'];
+		$plugin->display = (isset($data['display'])) ? $data['display'] : '';
+		$plugin->issue = (isset($data['issue'])) ? $data['issue'] : '';
+		$plugin->changelog = (isset($data['changelog'])) ? str_replace('#language#', config::byKey('language', 'core', 'fr_FR'), $data['changelog']) : '';
+		$plugin->documentation = (isset($data['documentation'])) ? str_replace('#language#', config::byKey('language', 'core', 'fr_FR'), $data['documentation']) : '';
+		$plugin->mobile = '';
+		if (file_exists(__DIR__ . '/../../plugins/' . $data['id'] . '/mobile/html')) {
+			$plugin->mobile = (isset($data['mobile'])) ? $data['mobile'] : $data['id'];
+		}
+		if (isset($data['include'])) {
+			$plugin->include = array(
+				'file' => $data['include']['file'],
+				'type' => $data['include']['type'],
+			);
+		} else {
+			$plugin->include = array(
+				'file' => $data['id'],
+				'type' => 'class',
+			);
+		}
+		$plugin->functionality['interact'] = array('exists' => method_exists($plugin->getId(), 'interact'), 'controlable' => 1);
+		$plugin->functionality['cron'] = array('exists' => method_exists($plugin->getId(), 'cron'), 'controlable' => 1);
+		$plugin->functionality['cron5'] = array('exists' => method_exists($plugin->getId(), 'cron5'), 'controlable' => 1);
+		$plugin->functionality['cron15'] = array('exists' => method_exists($plugin->getId(), 'cron15'), 'controlable' => 1);
+		$plugin->functionality['cron30'] = array('exists' => method_exists($plugin->getId(), 'cron30'), 'controlable' => 1);
+		$plugin->functionality['cronHourly'] = array('exists' => method_exists($plugin->getId(), 'cronHourly'), 'controlable' => 1);
+		$plugin->functionality['cronDaily'] = array('exists' => method_exists($plugin->getId(), 'cronDaily'), 'controlable' => 1);
+		$plugin->functionality['deadcmd'] = array('exists' => method_exists($plugin->getId(), 'deadCmd'), 'controlable' => 0);
+		$plugin->functionality['health'] = array('exists' => method_exists($plugin->getId(), 'health'), 'controlable' => 0);
+		if (!isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$plugin->category])) {
+			foreach ($NEXTDOM_INTERNAL_CONFIG['plugin']['category'] as $key => $value) {
+				if (!isset($value['alias'])) {
+					continue;
+				}
+				if (in_array($plugin->category, $value['alias'])) {
+					$plugin->category = $key;
+					break;
+				}
+			}
+		}
+		self::$_cache[$plugin->id] = $plugin;
+		return $plugin;
     }
 
     /**

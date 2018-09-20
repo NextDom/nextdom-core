@@ -241,9 +241,10 @@ class eqLogic
                 return true;
             }
         } else if ($cmd->getConfiguration('repeatEventManagement', 'auto') == 'always') {
-            $cmd->event($_value);
+            $cmd->event($_value, $_updateTime);
             return true;
         }
+        $cmd->setCache('collectDate', date('Y-m-d H:i:s'));
         return false;
     }
 
@@ -331,6 +332,17 @@ class eqLogic
                 return preg_replace("/" . preg_quote(self::UIDDELIMITER) . "(.*?)" . preg_quote(self::UIDDELIMITER) . "/", self::UIDDELIMITER . mt_rand() . self::UIDDELIMITER, $mc->getValue());
             }
         }
+        $tagsValue = '';
+		if ($this->getTags() != null) {
+			$tagsArray = explode(',', $this->getTags());
+			foreach ($tagsArray as $tags) {
+				if ($tags == null) {
+					continue;
+				}
+				$tagsValue .= 'tag-' . $tags . ' ';
+			}
+		}
+		$tagsValue = trim($tagsValue);
         $replace = array(
             '#id#' => $this->getId(),
             '#name#' => $this->getName(),
@@ -340,7 +352,7 @@ class eqLogic
             '#category#' => $this->getPrimaryCategory(),
             '#color#' => '#ffffff',
             '#border#' => 'none',
-            '#border-radius#' => '4px',
+            '#border-radius#' => '0px',
             '#style#' => '',
             '#max_width#' => '650px',
             '#logicalId#' => $this->getLogicalId(),
@@ -353,6 +365,8 @@ class eqLogic
             '#alert_name#' => '',
             '#alert_icon#' => '',
             '#custom_layout#' => ($this->widgetPossibility('custom::layout')) ? 'allowLayout' : '',
+			'#tag#' => $tagsValue,
+            '#data-tags#' =>  $this->getTags(),
         );
 
         if ($this->getDisplay('background-color-default' . $version, 1) == 1) {
@@ -1177,7 +1191,7 @@ class eqLogic
     public function getObject()
     {
         if ($this->_object === null) {
-            $this->setObject(object::byId($this->object_id));
+            $this->setObject(jeeObject::byId($this->object_id));
         }
         return $this->_object;
     }
@@ -1347,27 +1361,23 @@ class eqLogic
         return $this;
     }
 
-    public function getDisplay($_key = '', $_default = '')
-    {
+    public function getDisplay($_key = '', $_default = '') {
         return utils::getJsonAttr($this->display, $_key, $_default);
     }
 
-    public function setDisplay($_key, $_value)
-    {
+    public function setDisplay($_key, $_value) {
         $this->display = utils::setJsonAttr($this->display, $_key, $_value);
         $this->_needRefreshWidget = true;
     }
 
-    public function getTimeout($_default = null)
-    {
+    public function getTimeout($_default = null) {
         if ($this->timeout == '' || !is_numeric($this->timeout)) {
             return $_default;
         }
         return $this->timeout;
     }
 
-    public function setTimeout($_timeout)
-    {
+    public function setTimeout($_timeout) {
         if ($_timeout == '' || is_nan(intval($_timeout)) || $_timeout < 1) {
             $_timeout = null;
         }
@@ -1378,86 +1388,82 @@ class eqLogic
         return $this;
     }
 
-    public function getCategory($_key = '', $_default = '')
-    {
+    public function getCategory($_key = '', $_default = '') {
         if ($_key == 'other' && strpos($this->category, "1") === false) {
             return 1;
         }
         return utils::getJsonAttr($this->category, $_key, $_default);
     }
 
-    public function setCategory($_key, $_value)
-    {
+    public function setCategory($_key, $_value) {
         $this->category = utils::setJsonAttr($this->category, $_key, $_value);
         return $this;
     }
 
-    public function getGenericType()
-    {
+    public function getGenericType() {
         return $this->generic_type;
     }
 
-    public function setGenericType($_generic_type)
-    {
+    public function setGenericType($_generic_type) {
         $this->generic_type = $_generic_type;
         return $this;
     }
 
-    public function getComment()
-    {
+    public function getComment() {
         return $this->comment;
     }
 
-    public function setComment($_comment)
-    {
+    public function setComment($_comment) {
         $this->comment = $_comment;
         return $this;
     }
 
-    public function getDebug()
-    {
+    public function getTags() {
+        return $this->tags;
+    }
+
+    public function setTags($_tags) {
+        $this->tags = str_replace(array("'", '<', '>'), "", $_tags);
+        return $this;
+    }
+
+    public function getDebug() {
         return $this->_debug;
     }
 
-    public function setDebug($_debug)
-    {
+    public function setDebug($_debug) {
         if ($_debug) {
             echo "Mode debug activé\n";
         }
         $this->_debug = $_debug;
     }
 
-    public function getOrder()
-    {
+    public function getOrder() {
         if ($this->order == '' || !is_numeric($this->order)) {
             return 0;
         }
         return $this->order;
     }
 
-    public function setOrder($order)
-    {
+    public function setOrder($order) {
         $this->order = $order;
         return $this;
     }
 
-    public function getCache($_key = '', $_default = '')
-    {
+    public function getCache($_key = '', $_default = '') {
         return utils::getJsonAttr(cache::byKey('eqLogicCacheAttr' . $this->getId())->getValue(), $_key, $_default);
     }
 
-    public function setCache($_key, $_value = null)
-    {
+    public function setCache($_key, $_value = null) {
         cache::set('eqLogicCacheAttr' . $this->getId(), utils::setJsonAttr(cache::byKey('eqLogicCacheAttr' . $this->getId())->getValue(), $_key, $_value));
     }
 
-    public function getStatus($_key = '', $_default = '')
-    {
+    public function getStatus($_key = '', $_default = '') {
         return utils::getJsonAttr(cache::byKey('eqLogicStatusAttr' . $this->getId())->getValue(), $_key, $_default);
     }
 
-    public function setStatus($_key, $_value = null)
-    {
+    public function setStatus($_key, $_value = null) {
         cache::set('eqLogicStatusAttr' . $this->getId(), utils::setJsonAttr(cache::byKey('eqLogicStatusAttr' . $this->getId())->getValue(), $_key, $_value));
     }
+
 }
