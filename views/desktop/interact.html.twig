@@ -2,42 +2,38 @@
     <div class="row row-overflow">
         <div id="interactThumbnailDisplay" class="col-xs-12">
             <div class="box">
-                <div class="box-header">
-                    <legend><i class="fas fa-cog"></i> {{ 'Gestion' }}</legend>
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-cog"></i> {{ 'Gestion' }}</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                         </button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
-                <div class="box-body interactListContainer">
-                    <div class="cursor" id="bt_addInteract2" style="height: 120px;margin-bottom: 10px;padding: 5px;border-radius: 2px;width : 140px;margin-left : 10px;">
-                        <center>
-                            <i class="fas fa-plus-circle" style="font-size : 6em;color:#94ca02;"></i>
-                        </center>
-                        <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#94ca02"><center>{{ 'Ajouter' }}</center></span>
+                <div class="box-body interactListContainer text-center">
+                    <div class="icon_gestion icon_theme_color cursor" id="bt_addInteract2" >
+                            <i class="fas fa-plus-circle"></i>
+                        <div class="text-center"><span >{{ 'Ajouter' }}</span></div>
                     </div>
-                    <div class="cursor" id="bt_regenerateInteract2" style=" height : 120px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 140px;margin-left : 10px;">
-                        <center>
-                            <i class="fas fa-refresh" style="font-size : 6em;color:#f0ad4e;"></i>
-                        </center>
-                        <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#f0ad4e"><center>{{ 'Regénérer' }}</center></span>
+                    <div class="icon_gestion icon-blue cursor" id="bt_regenerateInteract2">
+                            <i class="fas fa-refresh"></i>
+                        <div class="text-center"><span>{{ 'Regénérer' }}</span></div>
                     </div>
-                    <div class="cursor" id="bt_testInteract2" style=" height : 120px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 140px;margin-left : 10px;">
-                        <center>
-                            <i class="fas fa-comment" style="font-size : 6em;color:#337ab7;"></i>
-                        </center>
-                        <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#337ab7"><center>{{ 'Tester' }}</center></span>
+                    <div class="icon_gestion icon-blue cursor" id="bt_testInteract2">
+                            <i class="fas fa-comment"></i>
+                        <div class="text-center"> <span>{{ 'Tester' }}</span></div>
                     </div>
                 </div>
             </div>
 
             <div class="box">
                 <div class="box-header">
-                    <legend><i class="far fa-comments"></i> {{ 'Mes interactions' }}</legend>
+                    <h3 class="box-title"><i class="far fa-comments"></i> {{ 'Mes interactions' }}</h3>
                     {% if interactTotal|length == 0 %}
                         <br/><br/><br/>
-                        <center><span style='color:#767676;font-size:1.2em;font-weight: bold;'>{{ 'Vous n\'avez encore aucune interaction. Cliquez sur ajouter pour commencer.' }}</span></center>
+                        <div class="text-center">
+                        <span>{{ 'Vous n\'avez encore aucune interaction. Cliquez sur ajouter pour commencer.' }}</span>
+                        </div>
                     {% else %}
                         <input class="form-control" placeholder="{{ 'Rechercher' }}" style="margin-bottom:4px;" id="in_searchInteract"/>
                     {% endif %}
@@ -50,20 +46,20 @@
                 {% if interactTotal|length > 0 %}
                     <div class="box-group" id="accordionInteract" style="margin:10px">
                         {% if interactsList[-1]|length > 0 %}
-                            <div class="panel box box-primary">
+                            <div class="panel box">
                                 <div class="box-header with-border">
                                     <h3 class="box-title">
-                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_aucun" style="text-decoration:none;">{{ 'Aucun - ' }} {{ interactsList[-1]|length }} {{ 'interaction(s)' }}</a>
+                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_aucun">{{ 'Aucun - ' }} {{ interactsList[-1]|length }} {{ 'interaction(s)' }}</a>
                                     </h3>
                                 </div>
                                 <div id="config_aucun" class="panel-collapse collapse">
                                     <div class="box-body">
-                                        <div class="interactListContainer">
+                                        <div class="interactListContainer DisplayCard text-center">
                                             {% for interact in interactsList[-1] %}
-                                                <div class="interactDisplayCard cursor" data-interact_id="{{ interact.getId() }}" style="text-align: center;  min-height : 140px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;{% if not interact.getEnable() %}{{ interactDisabledOpacity }}{% endif %}">
-                                                    <img src="/public/img/interaction.png" height="90" width="85"/>
+                                                <div class="interactDisplayCard cursor icon_gestion" data-interact_id="{{ interact.getId() }}" style="{% if not interact.getEnable() %}{{ interactDisabledOpacity }}{% endif %}">
+                                                    <img src="/public/img/interaction.png" height="65" width="65"/>
                                                     <br>
-                                                    <span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">{{ interact.getHumanName(true, true, true, true) }}</span>
+                                                    <span>{{ interact.getHumanName(true, true, true, true) }}</span>
                                                 </div>
                                             {% endfor %}
                                         </div>
@@ -294,4 +290,4 @@
         </section>
     </div>
 </section>
-#}
+
