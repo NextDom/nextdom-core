@@ -1,6 +1,6 @@
 #!/bin/bash
 
-usage() { echo "Usage: $0 [-h <help>] [-i <DB ip/hostname>] [-p <DB port>] [-d <DB name>] [-u <DB username>] [-z <DB user password>] " 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-h <help>] [-i <DB ip/hostname>] [-z <DB port>] [-d <DB name>] [-u <DB username>] [-p <DB user password>] " 1>&2; exit 1; }
 
 while getopts ":i:p:d:u:z:" option; do
     case "${option}" in
@@ -10,7 +10,7 @@ while getopts ":i:p:d:u:z:" option; do
         i)
             MYSQL_HOSTNAME=${OPTARG}
             ;;
-        p)
+        z)
             MYSQL_PORT=${OPTARG}
             ;;
         d)
@@ -19,7 +19,7 @@ while getopts ":i:p:d:u:z:" option; do
         u)
             MYSQL_NEXTDOM_USER=${OPTARG}
             ;;
-        z)
+        p)
             MYSQL_NEXTDOM_PASSWD=${OPTARG}
             ;;
         *)
@@ -29,33 +29,30 @@ while getopts ":i:p:d:u:z:" option; do
 done
 shift $((OPTIND-1))
 
-if [[ ! -z "${MYSQL_HOSTNAME}" ]] || [[ ! -z "${MYSQL_PORT}" ]] ; then
-    echo ">>>>> Custom database must be previously created <<<<<"
-  # todo : test la bdd distante
-  # some_db="somedb"
-  # isAnythingToProcess=$(mysql -uroot -proot -h REMOTE_IP -D$some_db -e "$checkSearch");
-fi
-
-if [[ -z "${MYSQL_HOSTNAME}" ]] ;       then MYSQL_HOSTNAME="localhost" ; fi
 if [[ -z "${MYSQL_PORT}" ]] ;           then MYSQL_PORT="3306" ; fi
-#if [[ -z "${MYSQL_NEXTDOM_DB}" ]] ;     then MYSQL_NEXTDOM_DB="nextdom" ; fi
-#if [[ -z "${MYSQL_NEXTDOM_USER}" ]] ;   then MYSQL_NEXTDOM_USER="nextdom" ; fi
 if [[ -z "${MYSQL_NEXTDOM_PASSWD}" ]] ; then MYSQL_NEXTDOM_PASSWD=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15) ; fi
 
+if [[ ! -z "${MYSQL_HOSTNAME}" ]] ; then
+    echo ">>>>> Remote database used <<<<<"
+    mysql -u${MYSQL_NEXTDOM_USER} -p${MYSQL_NEXTDOM_PASSWD} -h${MYSQL_HOSTNAME} -D${MYSQL_NEXTDOM_DB} --port=${MYSQL_PORT} -e 'SHOW GRANTS;' >/dev/null 2>/dev/null
+    iret=$?    
+    #echo $iret
+    if [[ ! ${iret} = "0" ]] ; then
+        echo ">>>> Error : can't connect to remote database <<<<"
+        exit 1
+    fi
+fi
 
-# Parameters
-STEP=0
-WEBSERVER_HOME=/usr/share/nextdom
-HTML_OUTPUT=0
-#MYSQL_NEXTDOM_PASSWD=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)
+if [[ -z "${MYSQL_HOSTNAME}" ]] ; then MYSQL_HOSTNAME="localhost" ; fi
 
 # Get current directory
-set_root() {
+set_root() {      
     local this=`readlink -n -f $1`
     local bin=`dirname $this`
     root=`dirname $bin`
 }
 set_root $0
+
 
 # Detect if there is a .git directory (development version)
 if [ -d ${root}/.git ] ; then
@@ -74,6 +71,7 @@ if [ -d ${root}/.git ] ; then
 else
     # Debian package configuration...
     isdev=0
+    WEBSERVER_HOME=/usr/share/nextdom
     if [[ -z "${MYSQL_NEXTDOM_DB}" ]] ; then MYSQL_NEXTDOM_DB="nextdom" ; fi
     if [[ -z "${MYSQL_NEXTDOM_USER}" ]] ; then MYSQL_NEXTDOM_USER="nextdom" ; fi
 fi
@@ -83,6 +81,7 @@ fi
 set -e
 
 
+# Parameters
 DEBUG="/tmp/output.txt"
 VERT="\\033[1;32m"
 NORMAL="\\033[0;39m"
@@ -104,16 +103,59 @@ if [ $(id -u) != 0 ] ; then
     exit 1
 fi
 
-step_7_nextdom_customization() {
 
-    # Certificat auto signe
+step_nextdom_prerequisites_verification() {
+
+    # These prerequistes are instaled by nextdom-common or nextdom-minimal package, but this part is for other distribution compatibility
+
+    # Apache configuration files
+    if [[ ! -d "/etc/apache2/sites-available" ]] ; then
+        echo ">>>> Error : Apache2 isn't installed ! <<<<"
+        exit 1
+    fi
+    #
+    if [[ ! -f "/etc/apache2/sites-available/nextdom.conf" ]] ; then
+        cp {WEBSERVER_HOME}/install/apache/nextdom.conf /etc/apache2/sites-available/nextdom.conf >> ${DEBUG} 2>&1
+        echo "<I> Creating file : /etc/apache2/sites-available/nextdom.conf"
+    fi
+    #
+    if [[ ! -f "/etc/apache2/sites-available/nextdom-ssl.conf" ]] ; then
+        cp {WEBSERVER_HOME}/install/apache/nextdom-ssl.conf /etc/apache2/sites-available/nextdom-ssl.conf >> ${DEBUG} 2>&1
+        echo "<I> Creating file : /etc/apache2/sites-available/nextdom-ssl.conf"
+    fi
+    #
+    if [[ ! -f "/etc/apache2/conf-available/nextdom-security.conf" ]] ; then
+        cp {WEBSERVER_HOME}/install/apache/nextdom-security.conf /etc/apache2/conf-available/nextdom-security.conf >> ${DEBUG} 2>&1
+        echo "<I> Creating file : /etc/apache2/conf-available/nextdom-security.conf"
+    fi
+    #
+    if [[ ! -f "/etc/systemd/system/apache2.service.d/privatetmp.conf" ]] ; then
+        mkdir -p /etc/systemd/system/apache2.service.d      
+        cp {WEBSERVER_HOME}/install/apache/privatetmp.conf /etc/systemd/system/apache2.service.d/privatetmp.conf >> ${DEBUG} 2>&1
+        echo "<I> Creating file : /etc/systemd/system/apache2.service.d/privatetmp.conf"
+    fi
+    #
+    # PHP
+    ll=$(find /etc/ -iname php.ini -type f |wc -l) >> ${DEBUG} 2>&1
+    if [[ "$ll" = "0" ]] ; then
+        echo ">>>> Error : PHP not find ! <<<<"
+        exit 1
+    fi
+    #
+    # Certificat SSL auto signe
     if [[ ! -f /etc/nextdom/ssl/nextdom.crt ]] || [[ ! -f /etc/nextdom/ssl/nextdom.csr ]] || [[ ! -f /etc/nextdom/ssl/nextdom.key ]] ; then
+        echo "<I> Creating SSL self-signed certificat in /etc/nextdom/ssl/"
+        mkdir -p /etc/nextdom/ssl/ >> ${DEBUG} 2>&1
         cd /etc/nextdom/ssl/ >> ${DEBUG} 2>&1
         openssl genrsa -out nextdom.key 2048 >> ${DEBUG} 2>&1
-        #openssl req -new -key nextdom.key -out nextdom.csr
         openssl req -new -key nextdom.key -out nextdom.csr -subj "/C=FR/ST=Paris/L=Paris/O=Global Security/OU=IT Department/CN=example.com" >> ${DEBUG} 2>&1
         openssl x509 -req -days 3650 -in nextdom.csr -signkey nextdom.key -out nextdom.crt >> ${DEBUG} 2>&1
     fi
+
+}
+
+
+step_nextdom_apache_php() {
 
     # Apache2
     a2enmod ssl >> ${DEBUG} 2>&1
@@ -146,7 +188,45 @@ step_7_nextdom_customization() {
             exit 1
         fi
     fi
+}
 
+
+
+step_nextdom_configuration() {
+    cp ${WEBSERVER_HOME}/core/config/common.config.sample.php ${WEBSERVER_HOME}/core/config/common.config.php
+
+    sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${WEBSERVER_HOME}/core/config/common.config.php
+    sed -i "s/#DBNAME#/${MYSQL_NEXTDOM_DB}/g" ${WEBSERVER_HOME}/core/config/common.config.php
+    sed -i "s/#USERNAME#/${MYSQL_NEXTDOM_USER}/g" ${WEBSERVER_HOME}/core/config/common.config.php
+    sed -i "s/#PORT#/${MYSQL_PORT}/g" ${WEBSERVER_HOME}/core/config/common.config.php
+    sed -i "s/#HOST#/${MYSQL_HOSTNAME}/g" ${WEBSERVER_HOME}/core/config/common.config.php
+
+    chmod 775 -R ${WEBSERVER_HOME}
+    chown -R www-data:www-data ${WEBSERVER_HOME}
+    mkdir -p /tmp/nextdom >> ${DEBUG} 2>&1
+    chmod 777 -R /tmp/nextdom >> ${DEBUG} 2>&1    
+    chown www-data:www-data -R /tmp/nextdom >> ${DEBUG} 2>&1
+
+    usermod -a -G dialout,tty www-data
+
+    if [ $(cat /proc/meminfo | grep MemTotal | awk '{ print $2 }') -gt 600000 ]; then
+        if [ $(cat /etc/fstab | grep /tmp/nextdom | grep tmpfs | wc -l) -eq 0 ];then
+            echo 'tmpfs        /tmp/nextdom            tmpfs  defaults,size=128M                                       0 0' >>  /etc/fstab
+        fi
+    fi
+
+    if [ $(grep "www-data ALL=(ALL) NOPASSWD: ALL" /etc/sudoers | wc -l) -eq 0 ];then
+        echo "www-data ALL=(ALL) NOPASSWD: ALL" | (EDITOR="tee -a" visudo)
+        if [ $? -ne 0 ]; then
+            printf "${ROUGE}Ne peut permettre Ã  nextdom d'utiliser sudo - Annulation${NORMAL}"
+            exit 1
+        fi
+    fi
+}
+
+
+
+step_nextdom_mysql_configuration() {
     # MySQL
     set +e
     #isMySQL=$(ls /etc/init.d | grep mysql)
@@ -194,9 +274,8 @@ step_7_nextdom_customization() {
     fi
 }
 
-step_8_nextdom_configuration() {
 
-    cp ${WEBSERVER_HOME}/core/config/common.config.sample.php ${WEBSERVER_HOME}/core/config/common.config.php
+step_nextdom_mysql_populate() {
 
     if [[ ${isMySQL} = "0" ]] ; then
         TEST_USER="$(mysql -u root -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '${MYSQL_NEXTDOM_USER}');")" >> ${DEBUG} 2>&1
@@ -207,11 +286,14 @@ step_8_nextdom_configuration() {
         mysql -u root -e "DROP DATABASE IF EXISTS ${MYSQL_NEXTDOM_DB};"
         mysql -u root -e "CREATE DATABASE ${MYSQL_NEXTDOM_DB};"
         mysql -u root -e "GRANT ALL PRIVILEGES ON ${MYSQL_NEXTDOM_DB}.* TO '${MYSQL_NEXTDOM_USER}'@'localhost';"
-        sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${WEBSERVER_HOME}/core/config/common.config.php
-        sed -i "s/#DBNAME#/${MYSQL_NEXTDOM_DB}/g" ${WEBSERVER_HOME}/core/config/common.config.php
-        sed -i "s/#USERNAME#/${MYSQL_NEXTDOM_USER}/g" ${WEBSERVER_HOME}/core/config/common.config.php
-        sed -i "s/#PORT#/${MYSQL_PORT}/g" ${WEBSERVER_HOME}/core/config/common.config.php
-        sed -i "s/#HOST#/${MYSQL_HOSTNAME}/g" ${WEBSERVER_HOME}/core/config/common.config.php
+        mysql -u root -e "FLUSH PRIVILEGES;"
+        #
+        service mysql restart
+        php ${WEBSERVER_HOME}/install/install.php mode=force >> ${DEBUG} 2>&1
+        if [ $? -ne 0 ]; then
+            echo "${ROUGE}Ne peut installer nextdom - Annulation${NORMAL}"
+            exit 1
+        fi
     else
         echo " "
         echo ">>>>> Database not present! Please set manually DB parameters : <<<<<"
@@ -219,29 +301,12 @@ step_8_nextdom_configuration() {
         echo " in file : ${WEBSERVER_HOME}/core/config/common.config.php"
         echo " "
     fi
-
-    chmod 775 -R ${WEBSERVER_HOME}
-    chown -R www-data:www-data ${WEBSERVER_HOME}
 }
 
-step_9_nextdom_installation() {
-    mkdir -p /tmp/nextdom >> ${DEBUG} 2>&1
-    chmod 777 -R /tmp/nextdom >> ${DEBUG} 2>&1
-    chown www-data:www-data -R /tmp/nextdom >> ${DEBUG} 2>&1
-    cd ${WEBSERVER_HOME}
-    if [[ ${isMySQL} = "0" ]] ; then
-        service mysql restart
-    fi
-    php ${WEBSERVER_HOME}/install/install.php mode=force >> ${DEBUG} 2>&1
-    if [ $? -ne 0 ]; then
-        echo "${ROUGE}Ne peut installer nextdom - Annulation${NORMAL}"
-        exit 1
-    fi
-    cd ${WEBSERVER_HOME}
-}
 
-step_10_nextdom_post() {
-    rm -f /etc/cron.d/nextd* >> ${DEBUG} 2>&1
+
+step_nextdom_crontab() {
+    rm -f /etc/cron.d/nextdom /etc/cron.d/nextdom_watchdog >> ${DEBUG} 2>&1
     if [ $(crontab -l 2>/dev/null | grep nextdom | wc -l) -ne 0 ];then
         (echo crontab -l | grep -v "nextdom") | crontab -  >> ${DEBUG} 2>&1
     fi
@@ -259,28 +324,14 @@ step_10_nextdom_post() {
             exit 1
         fi
     fi
-    usermod -a -G dialout,tty www-data
-    #
-    if [ $(grep "www-data ALL=(ALL) NOPASSWD: ALL" /etc/sudoers | wc -l) -eq 0 ];then
-        echo "www-data ALL=(ALL) NOPASSWD: ALL" | (EDITOR="tee -a" visudo)
-        if [ $? -ne 0 ]; then
-            printf "${ROUGE}Ne peut permettre à nextdom d'utiliser sudo - Annulation${NORMAL}"
-            exit 1
-        fi
-    fi
-    if [ $(cat /proc/meminfo | grep MemTotal | awk '{ print $2 }') -gt 600000 ]; then
-        if [ $(cat /etc/fstab | grep /tmp/nextdom | grep tmpfs | wc -l) -eq 0 ];then
-            echo 'tmpfs        /tmp/nextdom            tmpfs  defaults,size=128M                                       0 0' >>  /etc/fstab
-        fi
-    fi
     service cron start
 }
 
-step_11_nextdom_check() {
+
+step_nextdom_check() {
     php ${WEBSERVER_HOME}/sick.php >> ${DEBUG} 2>&1
-    chmod 777 -R /tmp/nextdom >> ${DEBUG} 2>&1
-    chown www-data:www-data -R /tmp/nextdom >> ${DEBUG} 2>&1
 }
+
 
 distrib_1_spe(){
     cd /tmp
@@ -299,6 +350,7 @@ distrib_1_spe(){
         rm post-install.sh >> ${DEBUG} 2>&1
     fi
 }
+
 
 check_var_www_html() {
     dirn="/var/www/html"
@@ -335,31 +387,38 @@ check_var_www_html() {
 
 
 
-# ================================================================================
-
-# Keep compatibility (old plugins)
-if [ -t 0 ] ; then    # launch only when interactive (this is already done by preinst Debian script)
-    if [ ! "${WEBSERVER_HOME}" = "/var/www/html" ] ; then
-        check_var_www_html
+step_nextdom_var_www_html() {
+    # Keep compatibility (old plugins)
+    if [ -t 0 ] ; then    # launch only when interactive (this is already done by preinst Debian script)
+        if [ ! "${WEBSERVER_HOME}" = "/var/www/html" ] ; then
+            check_var_www_html
+        fi
     fi
-fi
-if [ ! "${WEBSERVER_HOME}" = "/var/www/html" ] ; then
-    ln -s ${WEBSERVER_HOME} /var/www/html
-fi
+    if [ ! "${WEBSERVER_HOME}" = "/var/www/html" ] ; then
+        ln -s ${WEBSERVER_HOME} /var/www/html
+    fi
 
-if [ "${isdev}" = "1" ] ; then
-    # A faire dans une version developpeur (apres git clone)
-    cd ${WEBSERVER_HOME}
-    composer -q install
-    ./gen_assets.sh
-fi
+    # Generate CSS files
+    if [ "${isdev}" = "1" ] ; then
+        # A faire dans une version developpeur (apres git clone)
+        cd ${WEBSERVER_HOME}
+        composer -q install
+        ./gen_assets.sh
+    fi
+}
 
+
+# ======================================================================
 # Configure !
-step_7_nextdom_customization
-step_8_nextdom_configuration
-step_9_nextdom_installation
-step_10_nextdom_post
-step_11_nextdom_check
+
+step_nextdom_prerequisites_verification
+step_nextdom_var_www_html
+step_nextdom_apache_php
+step_nextdom_configuration
+step_nextdom_mysql_configuration
+step_nextdom_mysql_populate
+step_nextdom_crontab
+step_nextdom_check
 distrib_1_spe
 
 if [ "${isdev}" = "1" ] ; then
