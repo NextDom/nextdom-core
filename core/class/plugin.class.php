@@ -23,28 +23,28 @@ use NextDom\Managers\PluginManager;
 
 class plugin
 {
-    private $id;
-    private $name = '';
-    private $description = '';
-    private $license = '';
-    private $installation = '';
-    private $author = '';
-    private $require = '';
-    private $category = '';
-    private $filepath;
-    private $index;
-    private $display = '';
-    private $mobile;
-    private $eventjs = 0;
-    private $hasDependency = 0;
-    private $maxDependancyInstallTime = 30;
-    private $hasOwnDeamon = 0;
-    private $issue = '';
-    private $changelog = '';
-    private $documentation = '';
-    private $info = array();
-    private $include = array();
-    private $functionality = array();
+    public $id;
+    public $name = '';
+    public $description = '';
+    public $license = '';
+    public $installation = '';
+    public $author = '';
+    public $require = '';
+    public $category = '';
+    public $filepath;
+    public $index;
+    public $display = '';
+    public $mobile;
+    public $eventjs = 0;
+    public $hasDependency = 0;
+    public $maxDependancyInstallTime = 30;
+    public $hasOwnDeamon = 0;
+    public $issue = '';
+    public $changelog = '';
+    public $documentation = '';
+    public $info = array();
+    public $include = array();
+    public $functionality = array();
 
     public static function byId($_id)
     {
