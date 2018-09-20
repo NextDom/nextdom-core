@@ -57,6 +57,8 @@ try {
     echo "Post installation...\n";
     config::save('api', config::genKey());
     require_once __DIR__ . '/consistency.php';
+
+    try {
     echo "Ajout de l'utilisateur (admin,admin)\n";
     $user = new user();
     $user->setLogin('admin');
@@ -65,6 +67,8 @@ try {
     $user->save();
     config::save('log::level', 400);
     echo "OK\n";
+    } catch (Exception $e) { echo "OK : Utilisateur deja present\n"; }
+
     config::save('version', nextdom::version());
 } catch (Exception $e) {
     echo 'Erreur durant l\'installation : ' . $e->getMessage();
