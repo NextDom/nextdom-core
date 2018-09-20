@@ -43,6 +43,14 @@
     background-image: url(/3rdparty/jquery.utils/gritter.png);
 }
 
+.plugin-item {
+  padding-right: 10px;
+  .img-responsive {
+    width: 20px;
+    display: inline-block;
+  }
+}
+
 .displayScenario-overlay {
     height: 100%;
     position: absolute;
