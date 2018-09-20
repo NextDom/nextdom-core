@@ -147,3 +147,7 @@
 .skin-red .text_color {
   color: #dd4b39;
 }
+
+.skin-red::-webkit-scrollbar-thumb{
+  background:#dd4b39;
+}

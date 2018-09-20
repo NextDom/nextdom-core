@@ -166,3 +166,7 @@
 .skin-yellow-light .text_color {
   color: #f39c12;
 }
+
+.skin-yellow-light::-webkit-scrollbar-thumb{
+  background:#f39c12;
+}
