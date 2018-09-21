@@ -96,7 +96,8 @@ function gen_js {
         3rdparty/bootstrap-timepicker/js/bootstrap-timepicker.js \
         3rdparty/bootstrap-daterangepicker/daterangepicker.js \
         3rdparty/ion.rangeSlider/js/ion.rangeSlider.js \
-        3rdparty/AdminLTE/js/dashboard-v2.js > /tmp/temp.js
+        3rdparty/AdminLTE/js/adminlte.js > /tmp/temp.js \
+        3rdparty/AdminLTE/js/adminlte_nextdom.js > /tmp/temp.js
     python -m jsmin /tmp/temp.js > public/js/base.js
     rm /tmp/temp.js
     php script/translate.php public/js/base.js
