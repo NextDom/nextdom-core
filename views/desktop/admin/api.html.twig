@@ -64,7 +64,7 @@
                 </div>
                 <legend >{{ 'Clefs API' }}</legend>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{ 'Clef API globale de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API' }}</label>
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API globale de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API' }}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                         <a class="btn btn-warning" id="bt_regenerate_api" data-plugin="core"><i class="fa fa-refresh"></i>{{'Rafraîchir'}}</a>
                     </div>
@@ -73,7 +73,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{ 'Clef API Pro de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API Pro' }}</label>
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API Pro de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API Pro' }}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                         <a class="btn btn-warning" id="bt_regenerate_api" data-plugin="pro"><i class="fa fa-refresh"></i>{{'Rafraîchir'}}</a>
                     </div>
@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{ 'Clef Market de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef Market' }}</label>
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef Market de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef Market' }}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                         <a class="btn btn-warning" id="bt_regenerate_api" data-plugin="apimarket"><i class="fa fa-refresh"></i>{{'Rafraîchir'}}</a>
                     </div>
@@ -94,7 +94,7 @@
                 {% if not adminIsRescueMode and adminPluginsList|length > 0 %}
                     {% for pluginData in adminPluginsList %}
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{ 'Clef API pour le plugin' }} {{ pluginData.plugin.getName() }}">{{ 'Clef API' }} {{ pluginData.plugin.getName() }}</label>
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API pour le plugin' }} {{ pluginData.plugin.getName() }}">{{ 'Clef API' }} {{ pluginData.plugin.getName() }}</label>
                             <div class="col-lg-5 col-md-6 col-sm-6 col-xs-6">
                                 <div class="input-group">
                                     <span class="span_apikey">{{ pluginData.api }}</span>

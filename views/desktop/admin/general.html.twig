@@ -2,7 +2,7 @@
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fa fa-wrench"></i> {{ 'Général' }}</h3>
         <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Collapse"><i class="fa fa-minus"></i>
             </button>
             <a href="index.php?v=d&p=administration" <button type="button" class="btn btn-box-tool" ><i class="fa fa-times"></i></button></a>
         </div>
@@ -12,13 +12,13 @@
             <fieldset>
                 <legend >{{ 'NextDom' }}</legend>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{'Nom de votre NextDom (utilisé notamment par le market)'}}">{{'Nom de votre NextDom'}}</label>
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Nom de votre NextDom (utilisé notamment par le market)'}}">{{'Nom de votre NextDom'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                         <input type="text" class="configKey form-control" data-l1key="name">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Indique votre type de matériel">{{'Système / Hardware'}}</label>
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="Indique votre type de matériel">{{'Système / Hardware'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                         <a class="btn btn-warning btn-sm" id="bt_resetHardwareType"><i class="fa fa-refresh"></i>{{'Rafraîchir'}}</a>
                     </div>
@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{'Clef d\'installation qui permet d\'identifier votre NextDom quand il communique avec le market'}}">{{'Clef d\'installation'}}</label>
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Clef d\'installation qui permet d\'identifier votre NextDom quand il communique avec le market'}}">{{'Clef d\'installation'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                         <a class="btn btn-warning btn-sm" id="bt_resetHwKey"><i class="fa fa-bomb"></i>{{'Remise à zéro'}}</a>
                     </div>
@@ -37,7 +37,7 @@
                 </div>
                 <legend >{{ 'Langage' }}</legend>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{'Langue de votre NextDom'}}">{{'Langue'}}</label>
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Langue de votre NextDom'}}">{{'Langue'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                         <select class="configKey form-control" data-l1key="language">
                             <option value="fr_FR" selected="selected">French</option>
@@ -54,19 +54,19 @@
                     </div>
                     <div>
                         <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
-                            <input type="checkbox" class="configKey" data-l1key="generateTranslation" title="{{'Option pour les développeurs permettant à NextDom de générer les phrases à traduire'}}"><label class="control-label">{{'Générer les traductions'}}</label>
+                            <input type="checkbox" class="configKey" data-l1key="generateTranslation" data-toggle="tooltip" title="" data-original-title="{{'Option pour les développeurs permettant à NextDom de générer les phrases à traduire'}}"><label class="control-label">{{'Générer les traductions'}}</label>
                         </div>
                     </div>
                 </div>
                 <legend >{{ 'Horodatage' }}</legend>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{'Durée de vie de votre connexion à NextDom si vous n\'avez pas coché la case enregistrer cet ordinateur'}}">{{'Durée de vie des sessions (en H)'}}</label>
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Durée de vie de votre connexion à NextDom si vous n\'avez pas coché la case enregistrer cet ordinateur'}}">{{'Durée de vie des sessions (en H)'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                         <input type="text" class="configKey form-control" data-l1key="session_lifetime">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help">{{'Dernière date connue'}}</label>
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{'Dernière date connue'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                         <a class="btn btn-warning btn-sm" id="bt_resetHour"><i class="fa fa-bomb"></i>{{'Remise à zéro'}}</a>
                     </div>
@@ -75,7 +75,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="Fuseau horaire de votre NextDom">{{'Date et heure'}}</label>
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-help="Fuseau horaire de votre NextDom">{{'Date et heure'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                         <a class="btn btn-primary btn-sm" id="bt_forceSyncHour"><i class="fa fa-clock-o"></i>{{'Synchronisation'}}</a>
                     </div>
@@ -178,13 +178,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="ntp-optional-server" class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label help" data-help="{{'Permet d\'ajouter un serveur de temps à NextDom utilisé lorsque NextDom force la synchronisation de l\'heure'}}">{{'Serveur de temps optionnel'}}</label>
+                    <label for="ntp-optional-server" class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Permet d\'ajouter un serveur de temps à NextDom utilisé lorsque NextDom force la synchronisation de l\'heure'}}">{{'Serveur de temps optionnel'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                         <input type="text" id="ntp-optional-server" class="configKey form-control" data-l1key="ntp::optionalServer">
                     </div>
                     <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
                         <input type="checkbox" id="ignore-hour-check" class="configKey" data-l1key="ignoreHourCheck">
-                        <label for="ignore-hour-check" class="control-label" data-help="{{'Indique à NextDom de ne pas prendre en compte l\'heure du système'}}">{{'Ignorer la vérification de l\'heure'}}</label>
+                        <label for="ignore-hour-check" class="control-label" data-toggle="tooltip" title="" data-original-title="{{'Indique à NextDom de ne pas prendre en compte l\'heure du système'}}">{{'Ignorer la vérification de l\'heure'}}</label>
                     </div>
                 </div>
             </fieldset>
