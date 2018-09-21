@@ -1,4 +1,4 @@
-<section class="content">
+<section>
     <div class="row row-overflow">
         <div class="col-xs-12" id="div_resumeObjectList">
             <div class="box">
@@ -44,9 +44,6 @@
         </div>
         <div class="col-xs-12">
             <div class="nav-tabs-custom object" style="display: none;" id="div_conf">
-                <a class="btn btn-success btn-xs pull-right" id="bt_saveObject"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-                <a class="btn btn-danger btn-xs pull-right" id="bt_removeObject"><i class="fas fa-minus-circle"></i> {{ 'Supprimer' }}</a>
-                <a class="btn btn-default btn-xs pull-right" id="bt_graphObject"><i class="fas fa-object-group"></i> {{ 'Liens' }}</a>
                 <ul class="nav nav-tabs pull-right" role="tablist">
                     <li role="presentation"><a class="cursor" aria-controls="home" role="tab" id="bt_returnToThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a></li>
                     <li role="presentation" class="active"><a href="#objecttab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i> {{ 'Objet' }}</a></li>
@@ -106,20 +103,29 @@
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du tag' }}</label>
                                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                                        <input type="color" class="objectAttr form-control" data-l1key="display" data-l2key="tagColor"/>
-                                    </div>
+                                    <div class=" colorpicker-component colorpick input-group">
+                                        <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="tagColor"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                            </div>
+                                            </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du texte du tag' }}</label>
                                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                                        <input type="color" class="objectAttr form-control" data-l1key="display" data-l2key="tagTextColor"/>
-                                    </div>
+                                    <div class=" colorpicker-component colorpick input-group">
+                                        <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="tagTextColor"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                            </div>
+                                            </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du texte du résumé' }}</label>
                                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                                        <input type="color" class="objectAttr form-control" data-l1key="display" data-l2key="desktop::summaryTextColor"/>
-                                    </div>
+                                    <div class=" colorpicker-component colorpick input-group">
+                                        <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="desktop::summaryTextColor"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                            </div>
+                                            </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Taille sur le dashboard (1 à 12)' }}</label>
@@ -216,7 +222,14 @@
                         {% endif %}
                     </div>
                 </div>
+                                              <div class="box-footer clearfix">
+       <a class="btn btn-success btn-sm pull-right" id="bt_saveObject"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+                <a class="btn btn-danger btn-sm pull-right" id="bt_removeObject"><i class="fas fa-minus-circle"></i> {{ 'Supprimer' }}</a>
+                <a class="btn btn-default btn-sm pull-right" id="bt_graphObject"><i class="fas fa-object-group"></i> {{ 'Liens' }}</a>
+    </div>
             </div>
+
         </div>
+
     </div>
 </section>
