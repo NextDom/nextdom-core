@@ -53,24 +53,35 @@ class PluginManager
      */
     public static function byId($id)
     {
-	    //TODO : Nouvelle version a mettre
-	            if (is_string($id) && isset(self::$cache[$id])) {
-			                return self::$cache[$id];
-					        }
-		            if (!file_exists($id) || strpos($id, '/') === false) {
-				                $id = self::getPathById($id);
-						        }
-		            if (!file_exists($id)) {
-				                throw new \Exception('Plugin introuvable : ' . $id);
-						        }
-		            $data = json_decode(file_get_contents($id), true);
-		            if (!is_array($data)) {
-				                throw new \Exception('Plugin introuvable (json invalide) : ' . $id . ' => ' . print_r($data, true));
-						        }
-			            $plugin = new \plugin();
-			            $plugin->initPluginFromData($data);
-				            self::$cache[$plugin->getId()] = $plugin;
-				            return $plugin;
+        global $NEXTDOM_INTERNAL_CONFIG;
+        if (is_string($id) && isset(self::$cache[$id])) {
+            return self::$cache[$id];
+        }
+        if (!file_exists($id) || strpos($id, '/') === false) {
+            $id = self::getPathById($id);
+        }
+        if (!file_exists($id)) {
+            throw new \Exception('Plugin introuvable : ' . $id);
+        }
+        $data = json_decode(file_get_contents($id), true);
+        if (!is_array($data)) {
+            throw new \Exception('Plugin introuvable (json invalide) : ' . $id . ' => ' . print_r($data, true));
+        }
+        $plugin = new \plugin();
+        $plugin->initPluginFromData($data);
+        self::$cache[$plugin->getId()] = $plugin;
+        if (!isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$plugin->category])) {
+            foreach ($NEXTDOM_INTERNAL_CONFIG['plugin']['category'] as $key => $value) {
+                if (!isset($value['alias'])) {
+                    continue;
+                }
+                if (in_array($plugin->category, $value['alias'])) {
+                    $plugin->category = $key;
+                    break;
+                }
+            }
+        }
+        return $plugin;
     }
 
     /**
