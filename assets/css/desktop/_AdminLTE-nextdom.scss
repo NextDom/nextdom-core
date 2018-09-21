@@ -61,20 +61,6 @@ body {
   margin-right: 5px;
 }
 
-.main-sidebar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding-top: 50px;
-  min-height: 100%;
-  width: 230px;
-  z-index: 810;
-  -webkit-transition: -webkit-transform 0.3s ease-in-out, width 0.3s ease-in-out;
-  -moz-transition: -moz-transform 0.3s ease-in-out, width 0.3s ease-in-out;
-  -o-transition: -o-transform 0.3s ease-in-out, width 0.3s ease-in-out;
-  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
-  box-shadow: 4px 6px 12px 0 rgba(0,0,0,0.2);
-}
 
 .user-panel > .image > a > img {
   width: 100%;
@@ -102,15 +88,6 @@ body {
   width: 20px;
 }
 
-.sidebar-mini.sidebar-collapse .main-sidebar {
-  -webkit-transform: translate(0, 0);
-  -ms-transform: translate(0, 0);
-  -o-transform: translate(0, 0);
-  transform: translate(0, 0);
-  width: 50px !important;
-  z-index: 1020;
-}
-
 .sidebar-mini:not(.sidebar-mini-expand-feature).sidebar-collapse .sidebar-menu > li:hover > a > span:not(.pull-right),
 .sidebar-mini:not(.sidebar-mini-expand-feature).sidebar-collapse .sidebar-menu > li:hover > .treeview-menu {
   display: block !important;
@@ -127,13 +104,6 @@ body {
   top: -22px !important;
   z-index: 900;
   opacity:0;
-}
-
-.control-sidebar {
-  position: absolute;
-  padding-top: 50px;
-  z-index: 1010;
-  height: 100%;
 }
 
 .dropdown-menu > li > a > .glyphicon,

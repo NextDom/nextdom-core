@@ -152,7 +152,6 @@ class Controller
         }
         $pageContent['JS_POOL'][] = '/public/js/desktop/dashboard.js';
         // A remettre une fois mise sous forme de thème//
-        $pageContent['JS_POOL'][] = '/3rdparty/AdminLTE/js/dashboard-v2.js';
         $pageContent['JS_POOL'][] = '/3rdparty/jquery.isotope/isotope.pkgd.min.js';
         $pageContent['JS_POOL'][] = '/3rdparty/jquery.multi-column-select/multi-column-select.js';
 

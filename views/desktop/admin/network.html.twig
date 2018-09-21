@@ -106,7 +106,7 @@
                                             {% if adminConfigs['market::allowDNS'] == 1 and adminDnsRun %}
                                                 <span class="label label-success">{{ 'Démarré : ' }} <a href="{{ adminNetworkExternalAccess }}" target="_blank" class="link-dns-success">{{ adminNetworkExternalAccess }}</a></span>
                                             {% else %}
-                                                <span class="label label-warning" title="{{ 'Normal si vous n\'avez pas coché la case : Utiliser les DNS' }} {{ adminConfigs['product_name'] }}">{{ 'Arrêté' }}</span>
+                                                <span class="label label-warning" data-toggle="tooltip" title="" data-original-title="{{ 'Normal si vous n\'avez pas coché la case : Utiliser les DNS' }} {{ adminConfigs['product_name'] }}">{{ 'Arrêté' }}</span>
                                             {% endif %}
                                         </div>
                                     </div>
