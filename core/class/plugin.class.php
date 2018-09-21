@@ -23,28 +23,28 @@ use NextDom\Managers\PluginManager;
 
 class plugin
 {
-    public $id;
-    public $name = '';
-    public $description = '';
-    public $license = '';
-    public $installation = '';
-    public $author = '';
-    public $require = '';
-    public $category = '';
-    public $filepath;
-    public $index;
-    public $display = '';
-    public $mobile;
-    public $eventjs = 0;
-    public $hasDependency = 0;
-    public $maxDependancyInstallTime = 30;
-    public $hasOwnDeamon = 0;
-    public $issue = '';
-    public $changelog = '';
-    public $documentation = '';
-    public $info = array();
-    public $include = array();
-    public $functionality = array();
+    protected $id;
+    protected $name = '';
+    protected $description = '';
+    protected $license = '';
+    protected $installation = '';
+    protected $author = '';
+    protected $require = '';
+    protected $category = '';
+    protected $filepath;
+    protected $index;
+    protected $display = '';
+    protected $mobile;
+    protected $eventjs = 0;
+    protected $hasDependency = 0;
+    protected $maxDependancyInstallTime = 30;
+    protected $hasOwnDeamon = 0;
+    protected $issue = '';
+    protected $changelog = '';
+    protected $documentation = '';
+    protected $info = array();
+    protected $include = array();
+    protected $functionality = array();
 
     public static function byId($_id)
     {
@@ -181,13 +181,15 @@ class plugin
                 'type' => 'class',
             );
         }
-        $this->functionality['interact'] = method_exists($this->getId(), 'interact');
-        $this->functionality['cron'] = method_exists($this->getId(), 'cron');
-        $this->functionality['cron5'] = method_exists($this->getId(), 'cron5');
-        $this->functionality['cron15'] = method_exists($this->getId(), 'cron15');
-        $this->functionality['cron30'] = method_exists($this->getId(), 'cron30');
-        $this->functionality['cronHourly'] = method_exists($this->getId(), 'cronHourly');
-        $this->functionality['cronDaily'] = method_exists($this->getId(), 'cronDaily');
+        $this->functionality['interact'] = array('exists' => method_exists($this->getId(), 'interact'), 'controlable' => 1);
+        $this->functionality['cron'] = array('exists' => method_exists($this->getId(), 'cron'), 'controlable' => 1);
+        $this->functionality['cron5'] = array('exists' => method_exists($this->getId(), 'cron5'), 'controlable' => 1);
+        $this->functionality['cron15'] = array('exists' => method_exists($this->getId(), 'cron15'), 'controlable' => 1);
+        $this->functionality['cron30'] = array('exists' => method_exists($this->getId(), 'cron30'), 'controlable' => 1);
+        $this->functionality['cronHourly'] = array('exists' => method_exists($this->getId(), 'cronHourly'), 'controlable' => 1);
+        $this->functionality['cronDaily'] = array('exists' => method_exists($this->getId(), 'cronDaily'), 'controlable' => 1);
+        $this->functionality['deadcmd'] = array('exists' => method_exists($this->getId(), 'deadCmd'), 'controlable' => 0);
+        $this->functionality['health'] = array('exists' => method_exists($this->getId(), 'health'), 'controlable' => 0);
     }
 
     /**
