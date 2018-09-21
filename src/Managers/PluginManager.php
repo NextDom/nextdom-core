@@ -70,12 +70,12 @@ class PluginManager
         $plugin = new \plugin();
         $plugin->initPluginFromData($data);
         self::$cache[$plugin->getId()] = $plugin;
-        if (!isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$plugin->category])) {
+        if (!isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$plugin->getCategory()])) {
             foreach ($NEXTDOM_INTERNAL_CONFIG['plugin']['category'] as $key => $value) {
                 if (!isset($value['alias'])) {
                     continue;
                 }
-                if (in_array($plugin->category, $value['alias'])) {
+                if (in_array($plugin->getCategory(), $value['alias'])) {
                     $plugin->category = $key;
                     break;
                 }
