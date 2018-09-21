@@ -1,6 +1,8 @@
 {% include '/commons/header.html.twig' %}
     <body class="hold-transition skin-nextdom sidebar-mini fixed sidebar-collapse">
-    {% include '/commons/menu_dashboard.html.twig' %}
+    <div class="wrapper">
+    {% include '/commons/AdminLTE_navbar.html.twig' %}
+    {% include '/commons/AdminLTE_sidebar.html.twig' %}
         <div class="content-wrapper">
             {{ CONTENT | raw }}
         </div><!-- plif  -->
@@ -12,5 +14,6 @@
             <script src="{{ jsFile }}"></script>
         {% endfor %}
     {% endif %}
+    </div>
     </body>
 </html>

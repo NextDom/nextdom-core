@@ -160,7 +160,6 @@ class PrepareView
             'userProfils' => Utils::getArrayToJQueryJson($_SESSION['user']->getOptions()),
         ];
 
-        $pageData['MENU_VIEW'] = '/desktop/menu_dashboard.html.twig';
         self::initMenu($pageData, $currentPlugin);
 
         $baseView = '/layouts/base_dashboard.html.twig';
@@ -340,8 +339,8 @@ class PrepareView
             $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
             $pageData['JS_POOL'][] = '3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = 'core/js/core.js';
-            $pageData['JS_POOL'][] = '3rdparty/bootstrap/bootstrap.min.js';
             $pageData['JS_POOL'][] = '3rdparty/jquery.ui/jquery-ui.min.js';
+            $pageData['JS_POOL'][] = '3rdparty/bootstrap/bootstrap.min.js';
             $pageData['JS_POOL'][] = '3rdparty/jquery.ui/jquery.ui.datepicker.fr.js';
             $pageData['JS_POOL'][] = 'core/js/nextdom.class.js';
             $pageData['JS_POOL'][] = 'core/js/private.class.js';
@@ -396,7 +395,8 @@ class PrepareView
             $pageData['JS_POOL'][] = '3rdparty/jquery.contextMenu/jquery.contextMenu.min.js';
             $pageData['JS_POOL'][] = '3rdparty/autosize/autosize.min.js';
             $pageData['JS_POOL'][] = '3rdparty/iCheck/icheck.min.js';
-            $pageData['JS_POOL'][] = '3rdparty/AdminLTE/js/dashboard-v2.js';
+            $pageData['JS_POOL'][] = '3rdparty/AdminLTE/js/adminlte.js';
+            $pageData['JS_POOL'][] = '3rdparty/AdminLTE/js/adminlte_nextdom.js';
         }
     }
 

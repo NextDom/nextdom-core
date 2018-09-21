@@ -1,0 +1,83 @@
+{#
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#}
+<header class="main-header">
+    <!-- Logo -->
+    <a href="{{ HOMELINK }}" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><img class="logo-mini-img" src="/public/img/NextDom/NextDom_Square_AlphaBlackBlue.png" style="height:40px;width:auto"/></span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><img class="logo-lg-img" src="/public/img/NextDom/NextDom_Wide_AlphaBlueBlack.png" style="height:40px;width:auto"/></span>
+    </a>
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+            <span class="sr-only">Toggle navigation</span>
+        </a>
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <!-- Notifications: style can be found in dropdown.less -->
+                <li>
+                    <a href="#" style="cursor:default;">
+                        <span id="horloge_short">14:11:46</span>
+                    </a>
+                </li>
+                <li class="dropdown notifications-menu" id="bt_messageModal">
+                    <a href="#"  >
+                        <i class="fas fa-bell notifbadge"></i>
+                        <span class="label label-warning notifcounter">{{ MENU_NB_MESSAGES }}</span>
+                    </a>
+                </li>
+                <!-- Tasks: style can be found in dropdown.less bt_messageModal-->
+                {% if IS_ADMIN %}
+                    <li class="tasks-menu">
+                        <a href="index.php?v=d&p=update">
+                            <i class="fas fa-download notifbadge"></i>
+                            <span class="label label-danger notifcounter">{{ MENU_NB_UPDATES }}</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+
+    </nav>
+</header>
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <div class="user-panel">
+            <div class="pull-left image">
+                {% if USER_AVATAR == "" %}
+                    <a href="/index.php?v=d&p=profils#profil"><img src="/public/img/profils/noPicture.gif" class="img-circle" alt="User Image"></a>
+                {% else %}
+                    <a href="/index.php?v=d&p=profils#profil"><img src="{{ USER_AVATAR }}" class="img-circle" alt="User Image"></a>
+                {% endif %}            </div>
+            <div class="pull-left info">
+                <p>{{ USER_LOGIN }}</p>
+                {% if USER_ISCONNECTED %}
+                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                {% else %}
+                    <a href="#"><i class="fa fa-circle text-danger"></i> Offline</a>
+                {% endif %}
+            </div>
+        </div>

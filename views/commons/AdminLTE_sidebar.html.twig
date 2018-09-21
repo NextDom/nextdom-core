@@ -17,71 +17,6 @@
 */
 
 #}
-<header class="main-header">
-
-    <!-- Logo -->
-    <a href="{{ HOMELINK }}" class="logo">
-        <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><img class="logo-mini-img" src="/public/img/NextDom/NextDom_Square_AlphaBlackBlue.png" style="height:40px;width:auto"/></span>
-        <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><img class="logo-lg-img" src="/public/img/NextDom/NextDom_Wide_AlphaBlueBlack.png" style="height:40px;width:auto"/></span>
-    </a>
-
-    <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top">
-        <!-- Sidebar toggle button-->
-        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-            <span class="sr-only">Toggle navigation</span>
-        </a>
-        <!-- Navbar Right Menu -->
-        <div class="navbar-custom-menu">
-            <ul class="nav navbar-nav">
-                <!-- Notifications: style can be found in dropdown.less -->
-                <li>
-                    <a href="#" style="cursor:default;">
-                        <span id="horloge_short">14:11:46</span>
-                    </a>
-                </li>
-                <li class="dropdown notifications-menu" id="bt_messageModal">
-                    <a href="#"  >
-                        <i class="fas fa-bell notifbadge"></i>
-                        <span class="label label-warning notifcounter">{{ MENU_NB_MESSAGES }}</span>
-                    </a>
-                </li>
-                <!-- Tasks: style can be found in dropdown.less bt_messageModal-->
-                {% if IS_ADMIN %}
-                    <li class="tasks-menu">
-                        <a href="index.php?v=d&p=update">
-                            <i class="fas fa-download notifbadge"></i>
-                            <span class="label label-danger notifcounter">{{ MENU_NB_UPDATES }}</span>
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
-
-    </nav>
-</header>
-<!-- Left side column. contains the logo and sidebar -->
-<aside class="main-sidebar">
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-        <div class="user-panel">
-            <div class="pull-left image">
-                {% if USER_AVATAR == "" %}
-                    <a href="/index.php?v=d&p=profils#profil"><img src="/public/img/profils/noPicture.gif" class="img-circle" alt="User Image"></a>
-                {% else %}
-                    <a href="/index.php?v=d&p=profils#profil"><img src="{{ USER_AVATAR }}" class="img-circle" alt="User Image"></a>
-                {% endif %}            </div>
-            <div class="pull-left info">
-                <p>{{ USER_LOGIN }}</p>
-                {% if USER_ISCONNECTED %}
-                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-                {% else %}
-                    <a href="#"><i class="fa fa-circle text-danger"></i> Offline</a>
-                {% endif %}
-            </div>
-        </div>
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MENU PRINCIPAL</li>
@@ -182,7 +117,7 @@
                     <li><a href="index.php?v=d&p=administration"><i class="fa fa-wrench"></i> {{ 'Administration' }}</a></li>
                     <li><a href="index.php?v=m"><i class="fas fa-mobile-alt"></i> {{ 'Version mobile' }}</a></li>
                     <li><a><i class="fa fa-info-circle"></i> {{ 'Version' }} {{ NEXTDOM_VERSION }}</a></li>
-                    <li><a href="#"><i class="fa fa-info-circle" id="bt_messageModal"></i>{{ 'About' }}</a></li>
+                    <li><a href="#"><i class="fa fa-info-circle"></i>{{ 'About' }}</a></li>
                     <li><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock"></i> {{ 'Se déconnecter' }}</a></li>
                     {% if IS_ADMIN and CAN_SUDO %}
                         <li><a id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i> {{ 'Redémarrer' }}</a></li>

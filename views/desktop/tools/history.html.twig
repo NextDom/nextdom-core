@@ -17,7 +17,7 @@
                                     <div class="input-group input-group-sm" style="width: 100%">
                                         <textarea class="form-control input-sm" id='in_calculHistory' placeholder="{{ 'Historique calculé' }}"></textarea>
                                         <span class="input-group-btn">
-                                    <a class="btn btn-default" id="bt_findCmdCalculHistory" title="{{ 'Sélectionner la commande' }}"><i class="fas fa-list-alt"></i></a>
+                                    <a class="btn btn-default" id="bt_findCmdCalculHistory" data-toggle="tooltip" title="" data-original-title="{{ 'Sélectionner la commande' }}"><i class="fas fa-list-alt"></i></a>
                                     <a class="btn btn-success" id="bt_displayCalculHistory"><i class="fas fa-check"></i></a>
                                     <a class="btn btn-default" id="bt_configureCalculHistory"><i class="fas fa-cogs"></i></a>
                                 </span>
@@ -65,7 +65,7 @@
                             <a class="btn btn-warning btn-sm" id='bt_clearGraph'><i class="far fa-trash-alt"></i> {{ 'Vider' }}</a>
                             <input id="in_startDate" class="form-control input-sm in_datepicker" style="display : inline-block; width: 150px;position:relative;top:1px;" value="{{ historyDate['start'] }}"/>
                             <input id="in_endDate" class="form-control input-sm in_datepicker" style="display : inline-block; width: 150px;position:relative;top:1px;" value="{{ historyDate['end'] }}"/>
-                            <a class="btn btn-success btn-sm" id='bt_validChangeDate' title="{{ 'Attention : une trop grande plage de dates peut mettre très longtemps à être calculée ou même ne pas s\'afficher.' }}"><i class="fas fa-check"></i> {{ 'Ok' }}</a>
+                            <a class="btn btn-success btn-sm" id='bt_validChangeDate' data-toggle="tooltip" title="" data-original-title="{{ 'Attention : une trop grande plage de dates peut mettre très longtemps à être calculée ou même ne pas s\'afficher.' }}"><i class="fas fa-check"></i> {{ 'Ok' }}</a>
                             <select class="form-control pull-right" id="sel_groupingType" style="width: 200px;">
                                 <option value="">{{ 'Aucun groupement' }}</option>
                                 <option value="sum::hour">{{ 'Somme par heure' }}</option>

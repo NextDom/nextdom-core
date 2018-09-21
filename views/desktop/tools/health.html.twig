@@ -91,18 +91,18 @@
                             {% endif %}
                             <i class="fas fa-cogs bt_configurationPlugin cursor pull-right icon-health" data-pluginid="{{ pluginData['plugin'].getId() }}"></i>
                             {% if pluginData['hasSpecificHealth'] %}
-                                <i data-pluginname="{{ pluginData['name'] }}" data-pluginid="{{ pluginData['id'] }}" class="fas fa-medkit bt_healthSpecific pull-right cursor icon-health" title="Santé spécifique"></i>
+                                <i data-pluginname="{{ pluginData['name'] }}" data-pluginid="{{ pluginData['id'] }}" class="fas fa-medkit bt_healthSpecific pull-right cursor icon-health" data-toggle="tooltip" title="" data-original-title="Santé spécifique"></i>
                             {% endif %}
                             {% if pluginData['hasOwnDaemon'] %}
                                 {% if pluginData['daemonAuto'] == 1 %}
-                                    <i class="fas fa-university pull-right icon-health" title="{{ 'Démon en mode automatique' }}"></i>
+                                    <i class="fas fa-university pull-right icon-health" data-toggle="tooltip" title="" data-original-title="{{ 'Démon en mode automatique' }}"></i>
                                 {% else %}
-                                    <i class="fas fa-university pull-right " style="color:#ff4c4c;font-size:0.9em" title="{{ 'Démon en mode manuel' }}"></i>
+                                    <i class="fas fa-university pull-right " style="color:#ff4c4c;font-size:0.9em" data-toggle="tooltip" title="" data-original-title="{{ 'Démon en mode manuel' }}"></i>
                                 {% endif %}
                             {% endif %}
                             {% if pluginData['port'] %}
-                                <i class="icon techno-fleches pull-right icon-health" title="{{ 'Port configuré' }}"></i>
-                                <span style="color:grey;font-size:0.8em" title="{{ 'Port configuré' }}" class="pull-right"> {{ pluginData['port']|capitalize }}</span>
+                                <i class="icon techno-fleches pull-right icon-health" data-toggle="tooltip" title="" data-original-title="{{ 'Port configuré' }}"></i>
+                                <span style="color:grey;font-size:0.8em" data-toggle="tooltip" title="" data-original-title="{{ 'Port configuré' }}" class="pull-right"> {{ pluginData['port']|capitalize }}</span>
                             {% endif %}
                         </div>
                         <div id="config_{{ pluginData['plugin'].getId() }}" class="panel-collapse collapse">
@@ -141,7 +141,7 @@
                                                     {% if pluginData['daemonAuto'] != 1 %}
                                                         <td class="alert alert-success">{{ 'Désactivé' }}</td>
                                                     {% else %}
-                                                        <td class="alert alert-danger" title="{{ pluginData['daemonLaunchableMessage'] }}">{{ 'NOK' }}</td>
+                                                        <td class="alert alert-danger" data-toggle="tooltip" title="" data-original-title"{{ pluginData['daemonLaunchableMessage'] }}">{{ 'NOK' }}</td>
                                                     {% endif %}
                                                 {% endif %}
                                                 <td>{{ pluginData['daemonLaunchableMessage'] }}</td>
