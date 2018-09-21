@@ -29,24 +29,14 @@ while getopts ":i:p:d:u:z:" option; do
 done
 shift $((OPTIND-1))
 
-if [[ -z "${MYSQL_PORT}" ]] ;           then MYSQL_PORT="3306" ; fi
-if [[ -z "${MYSQL_NEXTDOM_PASSWD}" ]] ; then MYSQL_NEXTDOM_PASSWD=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15) ; fi
+if [[ -z "${MYSQL_PORT}" ]] ;                then MYSQL_PORT="3306" ; fi
+if [[ -z "${MYSQL_NEXTDOM_PASSWD}" ]] ;      then MYSQL_NEXTDOM_PASSWD=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15) ; fi
+if [[ -z "${MYSQL_HOSTNAME}" ]] ;            then MYSQL_HOSTNAME="localhost" ; fi
+if [[ "${MYSQL_HOSTNAME}" = "localhost" ]] ; then isMySQLremote="0" ; fi
 
-if [[ ! -z "${MYSQL_HOSTNAME}" ]] ; then
-    echo ">>>>> Remote database used <<<<<"
-    mysql -u${MYSQL_NEXTDOM_USER} -p${MYSQL_NEXTDOM_PASSWD} -h${MYSQL_HOSTNAME} -D${MYSQL_NEXTDOM_DB} --port=${MYSQL_PORT} -e 'SHOW GRANTS;' >/dev/null 2>/dev/null
-    iret=$?    
-    #echo $iret
-    if [[ ! ${iret} = "0" ]] ; then
-        echo ">>>> Error : can't connect to remote database <<<<"
-        exit 1
-    fi
-fi
-
-if [[ -z "${MYSQL_HOSTNAME}" ]] ; then MYSQL_HOSTNAME="localhost" ; fi
 
 # Get current directory
-set_root() {      
+set_root() {
     local this=`readlink -n -f $1`
     local bin=`dirname $this`
     root=`dirname $bin`
@@ -108,6 +98,27 @@ step_nextdom_prerequisites_verification() {
 
     # These prerequistes are instaled by nextdom-common or nextdom-minimal package, but this part is for other distribution compatibility
 
+    # MySQL
+    if [[ ${isMySQLremote} = "0" ]] ; then
+        set +e
+        mysqladmin -u root status >/dev/null 2>/dev/null
+        notresponding=$?
+        set -e
+        if [[ ! ${notresponding} = "0" ]] ; then
+            echo ">>>> Error : MySQL not responding ! <<<<"
+        fi
+    else
+        echo ">>>>> Remote database used <<<<<"
+        set +e
+        mysql -u${MYSQL_NEXTDOM_USER} -p${MYSQL_NEXTDOM_PASSWD} -h${MYSQL_HOSTNAME} -D${MYSQL_NEXTDOM_DB} --port=${MYSQL_PORT} -e 'SHOW GRANTS;' >/dev/null 2>/dev/null
+        iret=$?
+        set -e
+        if [[ ! ${iret} = "0" ]] ; then
+            echo ">>>> Error : can't connect to remote database <<<<"
+            exit 1
+        fi
+    fi
+
     # Apache configuration files
     if [[ ! -d "/etc/apache2/sites-available" ]] ; then
         echo ">>>> Error : Apache2 isn't installed ! <<<<"
@@ -115,23 +126,23 @@ step_nextdom_prerequisites_verification() {
     fi
     #
     if [[ ! -f "/etc/apache2/sites-available/nextdom.conf" ]] ; then
-        cp {WEBSERVER_HOME}/install/apache/nextdom.conf /etc/apache2/sites-available/nextdom.conf >> ${DEBUG} 2>&1
+        cp ${WEBSERVER_HOME}/install/apache/nextdom.conf /etc/apache2/sites-available/nextdom.conf >> ${DEBUG} 2>&1
         echo "<I> Creating file : /etc/apache2/sites-available/nextdom.conf"
     fi
     #
     if [[ ! -f "/etc/apache2/sites-available/nextdom-ssl.conf" ]] ; then
-        cp {WEBSERVER_HOME}/install/apache/nextdom-ssl.conf /etc/apache2/sites-available/nextdom-ssl.conf >> ${DEBUG} 2>&1
+        cp ${WEBSERVER_HOME}/install/apache/nextdom-ssl.conf /etc/apache2/sites-available/nextdom-ssl.conf >> ${DEBUG} 2>&1
         echo "<I> Creating file : /etc/apache2/sites-available/nextdom-ssl.conf"
     fi
     #
     if [[ ! -f "/etc/apache2/conf-available/nextdom-security.conf" ]] ; then
-        cp {WEBSERVER_HOME}/install/apache/nextdom-security.conf /etc/apache2/conf-available/nextdom-security.conf >> ${DEBUG} 2>&1
+        cp ${WEBSERVER_HOME}/install/apache/nextdom-security.conf /etc/apache2/conf-available/nextdom-security.conf >> ${DEBUG} 2>&1
         echo "<I> Creating file : /etc/apache2/conf-available/nextdom-security.conf"
     fi
     #
     if [[ ! -f "/etc/systemd/system/apache2.service.d/privatetmp.conf" ]] ; then
-        mkdir -p /etc/systemd/system/apache2.service.d      
-        cp {WEBSERVER_HOME}/install/apache/privatetmp.conf /etc/systemd/system/apache2.service.d/privatetmp.conf >> ${DEBUG} 2>&1
+        mkdir -p /etc/systemd/system/apache2.service.d
+        cp ${WEBSERVER_HOME}/install/apache/privatetmp.conf /etc/systemd/system/apache2.service.d/privatetmp.conf >> ${DEBUG} 2>&1
         echo "<I> Creating file : /etc/systemd/system/apache2.service.d/privatetmp.conf"
     fi
     #
@@ -204,7 +215,7 @@ step_nextdom_configuration() {
     chmod 775 -R ${WEBSERVER_HOME}
     chown -R www-data:www-data ${WEBSERVER_HOME}
     mkdir -p /tmp/nextdom >> ${DEBUG} 2>&1
-    chmod 777 -R /tmp/nextdom >> ${DEBUG} 2>&1    
+    chmod 777 -R /tmp/nextdom >> ${DEBUG} 2>&1
     chown www-data:www-data -R /tmp/nextdom >> ${DEBUG} 2>&1
 
     usermod -a -G dialout,tty www-data
@@ -228,12 +239,11 @@ step_nextdom_configuration() {
 
 step_nextdom_mysql_configuration() {
     # MySQL
-    set +e
-    #isMySQL=$(ls /etc/init.d | grep mysql)
-    mysqladmin -u root status >/dev/null 2>/dev/null
-    isMySQL=$?
-    set -e
-    if [[ ${isMySQL} = "0" ]] ; then
+    #set +e
+    #mysqladmin -u root status >/dev/null 2>/dev/null
+    #isMySQLremote=$?
+    #set -e
+    if [[ ${isMySQLremote} = "0" ]] ; then
         service mysql stop >> ${DEBUG} 2>&1
         if [ $? -ne 0 ]; then
             service mysql stop >> ${DEBUG} 2>&1
@@ -277,11 +287,8 @@ step_nextdom_mysql_configuration() {
 
 step_nextdom_mysql_populate() {
 
-    if [[ ${isMySQL} = "0" ]] ; then
-        TEST_USER="$(mysql -u root -sse "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '${MYSQL_NEXTDOM_USER}');")" >> ${DEBUG} 2>&1
-        if [ $TEST_USER = "1" ]; then
-            mysql -u root -e "DROP USER '${MYSQL_NEXTDOM_USER}'@'localhost';" 
-        fi
+    if [[ ${isMySQLremote} = "0" ]] ; then
+        mysql -u root -e "DROP USER IF EXISTS '${MYSQL_NEXTDOM_USER}'@'localhost';"
         mysql -u root -e "CREATE USER '${MYSQL_NEXTDOM_USER}'@'localhost' IDENTIFIED BY '${MYSQL_NEXTDOM_PASSWD}';"
         mysql -u root -e "DROP DATABASE IF EXISTS ${MYSQL_NEXTDOM_DB};"
         mysql -u root -e "CREATE DATABASE ${MYSQL_NEXTDOM_DB};"
@@ -296,9 +303,8 @@ step_nextdom_mysql_populate() {
         fi
     else
         echo " "
-        echo ">>>>> Database not present! Please set manually DB parameters : <<<<<"
-        echo ">>>>>         host, port, dbname, username and password         <<<<<"
-        echo " in file : ${WEBSERVER_HOME}/core/config/common.config.php"
+        php ${WEBSERVER_HOME}/install/install.php mode=force >> ${DEBUG} 2>&1
+#        mysql -u${MYSQL_NEXTDOM_USER} -p${MYSQL_NEXTDOM_PASSWD} -h${MYSQL_HOSTNAME} -D${MYSQL_NEXTDOM_DB} --port=${MYSQL_PORT} -e 'SHOW GRANTS;' >/dev/null 2>/dev/null
         echo " "
     fi
 }
@@ -420,6 +426,8 @@ step_nextdom_mysql_populate
 step_nextdom_crontab
 step_nextdom_check
 distrib_1_spe
+chmod 777 -R /tmp/nextdom
+
 
 if [ "${isdev}" = "1" ] ; then
     echo " "
