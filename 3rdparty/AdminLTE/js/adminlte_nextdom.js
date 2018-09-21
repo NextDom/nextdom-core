@@ -13,3 +13,7 @@ $(function () {
         increaseArea: '20%' /* optional */
     });
 });
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+});
