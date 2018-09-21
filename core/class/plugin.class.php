@@ -181,15 +181,15 @@ class plugin
                 'type' => 'class',
             );
         }
-        $plugin->functionality['interact'] = array('exists' => method_exists($plugin->getId(), 'interact'), 'controlable' => 1);
-        $plugin->functionality['cron'] = array('exists' => method_exists($plugin->getId(), 'cron'), 'controlable' => 1);
-        $plugin->functionality['cron5'] = array('exists' => method_exists($plugin->getId(), 'cron5'), 'controlable' => 1);
-        $plugin->functionality['cron15'] = array('exists' => method_exists($plugin->getId(), 'cron15'), 'controlable' => 1);
-        $plugin->functionality['cron30'] = array('exists' => method_exists($plugin->getId(), 'cron30'), 'controlable' => 1);
-        $plugin->functionality['cronHourly'] = array('exists' => method_exists($plugin->getId(), 'cronHourly'), 'controlable' => 1);
-        $plugin->functionality['cronDaily'] = array('exists' => method_exists($plugin->getId(), 'cronDaily'), 'controlable' => 1);
-        $plugin->functionality['deadcmd'] = array('exists' => method_exists($plugin->getId(), 'deadCmd'), 'controlable' => 0);
-        $plugin->functionality['health'] = array('exists' => method_exists($plugin->getId(), 'health'), 'controlable' => 0);
+        $this->functionality['interact'] = array('exists' => method_exists($this->getId(), 'interact'), 'controlable' => 1);
+        $this->functionality['cron'] = array('exists' => method_exists($this->getId(), 'cron'), 'controlable' => 1);
+        $this->functionality['cron5'] = array('exists' => method_exists($this->getId(), 'cron5'), 'controlable' => 1);
+        $this->functionality['cron15'] = array('exists' => method_exists($this->getId(), 'cron15'), 'controlable' => 1);
+        $this->functionality['cron30'] = array('exists' => method_exists($this->getId(), 'cron30'), 'controlable' => 1);
+        $this->functionality['cronHourly'] = array('exists' => method_exists($this->getId(), 'cronHourly'), 'controlable' => 1);
+        $this->functionality['cronDaily'] = array('exists' => method_exists($this->getId(), 'cronDaily'), 'controlable' => 1);
+        $this->functionality['deadcmd'] = array('exists' => method_exists($this->getId(), 'deadCmd'), 'controlable' => 0);
+        $this->functionality['health'] = array('exists' => method_exists($this->getId(), 'health'), 'controlable' => 0);
     }
 
     /**
