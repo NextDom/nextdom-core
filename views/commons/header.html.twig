@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{ TITLE }}</title>
     <link rel="apple-touch-icon" href="/public/img/logo-nextdom-petit-nom-couleur-128x128" />
     <link rel="apple-touch-icon-precomposed" href="/public/img/logo-nextdom-petit-nom-couleur-128x128" />
@@ -18,6 +18,10 @@
     {% if CUSTOM_CSS is defined %}
         {{ CUSTOM_CSS|raw }}
     {% endif %}
+    {# Footer dans le futur #}
+    {% include '/commons/footer.html.twig' %}
+    <!-- Inclusion à l'arrache ??? -->
+    <script src="/3rdparty/snap.svg/snap.svg-min.js"></script>
     {% if debugbar != false %}
        {{  debugbar.renderHead | raw}}
     {% endif %}

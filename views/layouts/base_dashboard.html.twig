@@ -6,9 +6,6 @@
         <div class="content-wrapper">
             {{ CONTENT | raw }}
         </div><!-- plif  -->
-            {# Footer dans le futur #}
-    {% include '/commons/footer.html.twig' %}
-    <!-- Inclusion à l'arrache ??? -->
     {% if debugbar != false %}
         {{ debugbar.render | raw }}
     {% endif %}
@@ -17,7 +14,6 @@
             <script src="{{ jsFile }}"></script>
         {% endfor %}
     {% endif %}
-    <script src="/3rdparty/snap.svg/snap.svg-min.js"></script>
     </div>
     </body>
 </html>
