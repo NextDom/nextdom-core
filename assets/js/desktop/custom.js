@@ -230,3 +230,4 @@ $('.bt_resetColor').on('click', function () {
    });
 });
 
+$('.colorpick').colorpicker();
