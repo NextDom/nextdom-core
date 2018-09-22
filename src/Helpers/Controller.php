@@ -45,7 +45,6 @@ class Controller
         'log' => 'logPage',
         'report' => 'reportPage',
         'plugin' => 'pluginPage',
-        'custom' => 'customPage',
         'editor' => 'editorPage',
         'migration' => 'migrationPage',
         'history' => 'historyPage',
@@ -216,7 +215,6 @@ class Controller
 
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
-
 
         return $render->get('/desktop/administration.html.twig', $pageContent);
     }
