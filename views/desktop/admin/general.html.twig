@@ -22,7 +22,7 @@
                         <a class="btn btn-warning btn-sm" id="bt_resetHardwareType"><i class="fa fa-refresh"></i>{{'Rafraîchir'}}</a>
                     </div>
                     <div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
-                        <span class="label label-info label-config">diy</span>
+                        <span class="label label-info label-config">{{ adminHardwareName }}</span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -31,7 +31,7 @@
                         <a class="btn btn-warning btn-sm" id="bt_resetHwKey"><i class="fa fa-bomb"></i>{{'Remise à zéro'}}</a>
                     </div>
                     <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
-                        <span class="label label-info label-config">e56cb61e66d1dd9daedf9431b155030859f3f9902d39354368c715422d6968e</span>
+                        <span class="label label-info label-config">{{ adminHardwareKey }}</span>
                     </div>
                 </div>
                 <legend >{{ 'Langage' }}</legend>
@@ -70,7 +70,7 @@
                         <a class="btn btn-warning btn-sm" id="bt_resetHour"><i class="fa fa-bomb"></i>{{'Remise à zéro'}}</a>
                     </div>
                     <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
-                        <span class="label label-info label-config">{{'2018-09-05 17:05:02'}}</span>
+                        <span class="label label-info label-config">{{ adminLastKnowDate }}</span>
                     </div>
                 </div>
                 <div class="form-group">
