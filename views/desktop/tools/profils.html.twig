@@ -1,15 +1,20 @@
-<div id="div_Profils">
-    <div> <!-- div nécéssaire pour le js-->
+<div class="box" id="div_Profils">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fas fa-pencil-square"></i> {{ 'Profil utilisateur'}}</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
+            <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
+        </div>
+    </div>
+    <div class="box-body">
         <div class="nav-tabs-custom config">
-            <a href="index.php?v=d&p=administration" <button type="button" class="btn btn-box-tool" ><i class="fa fa-times"></i></button></a>
-            <a title="{{ 'Sauvegarder' }}" class="btn btn-success pull-right" id="bt_saveProfils"><i class="far fa-check-circle"></i> </a>
+            <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#profil" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-user"></i> {{ 'Profil' }}</a></li>
                 <li role="presentation"><a href="#themetab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint"></i> {{ 'Thèmes' }}</a></li>
                 <li role="presentation"><a href="#interfacetab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-laptop"></i> {{ 'Interface' }}</a></li>
                 <li role="presentation"><a href="#securitytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="icon securite-key1"></i> {{ 'Sécurité' }}</a></li>
                 <li role="presentation"><a href="#notificationtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="icon securite-key1"></i> {{ 'Notifications' }}</a></li>
-                <li class="pull-left header"><i class="fa fa-inbox"></i> {{ 'Profil utilisateur' }}</li>
             </ul>
             <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
                 <div role="tabpanel" class="tab-pane active" id="profil">
@@ -356,6 +361,9 @@
                     </form>
                 </div>
             </div>
+        </div>
     </div>
-</div>
+        <div class="box-footer clearfix">
+        <a class="btn btn-success btn-sm pull-right" id="bt_saveProfils"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+    </div>
 </div>

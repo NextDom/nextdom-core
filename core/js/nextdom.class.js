@@ -336,7 +336,7 @@ nextdom.health = function (_params) {
     $.ajax(paramsAJAX);
 };
 
-nextdom.saveCustum = function (_params) {
+nextdom.saveCustom = function (_params) {
     var paramsRequired = ['version', 'type', 'content'];
     var paramsSpecifics = {};
     try {
