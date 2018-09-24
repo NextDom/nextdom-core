@@ -1,20 +1,3 @@
-$(function() {
-    $('.colorpick').colorpicker();
-});
-
-$(function() {
-$(":input").inputmask();
-});
-
-$(function () {
-    $('input').iCheck({
-        checkboxClass: 'icheckbox_minimal-blue',
-        radioClass: 'iradio_square-blue',
-        increaseArea: '20%' /* optional */
-    });
-});
-
-
 $(function () {
     'use strict'
 
@@ -40,12 +23,14 @@ $(function () {
      * @type Array
      */
     var mySkins = [
+        'skin-nextdom',
         'skin-blue',
         'skin-black',
         'skin-red',
         'skin-yellow',
         'skin-purple',
         'skin-green',
+        'skin-nextdom-light',
         'skin-blue-light',
         'skin-black-light',
         'skin-red-light',

@@ -103,7 +103,7 @@ $('.savecustom').on('click', function () {
            notify("Erreur", error.message, 'error');
        },
        success: function () {
-         nextdom.saveCustum({
+         nextdom.saveCustom({
            version: version,
            type: type,
            content: content,
@@ -229,5 +229,3 @@ $('.bt_resetColor').on('click', function () {
        }
    });
 });
-
-$('.colorpick').colorpicker();
