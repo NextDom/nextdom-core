@@ -153,6 +153,7 @@ class Controller
         // A remettre une fois mise sous forme de thème//
         $pageContent['JS_POOL'][] = '/3rdparty/jquery.isotope/isotope.pkgd.min.js';
         $pageContent['JS_POOL'][] = '/3rdparty/jquery.multi-column-select/multi-column-select.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
 
         return $render->get('/desktop/dashboard.html.twig', $pageContent);
     }
@@ -193,6 +194,8 @@ class Controller
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/scenario.js';
         $pageContent['JS_END_POOL'][] = '/3rdparty/jquery.sew/jquery.caretposition.js';
         $pageContent['JS_END_POOL'][] = '/3rdparty/jquery.sew/jquery.sew.min.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
 
         return $render->get('/desktop/scenario.html.twig', $pageContent);
     }
@@ -252,6 +255,8 @@ class Controller
         $pageContent['adminNetworkExternalAccess'] = \network::getNetworkAccess('external');
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/network.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/admin/network.html.twig', $pageContent);
     }
 
@@ -281,6 +286,8 @@ class Controller
         $pageContent['adminRedisExists'] = class_exists('redis');
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/cache.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/admin/cache.html.twig', $pageContent);
     }
 
@@ -306,6 +313,8 @@ class Controller
         $pageContent['adminHardwareKey'] = \nextdom::getHardwareKey();
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/general.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/admin/general.html.twig', $pageContent);
     }
 
@@ -330,6 +339,8 @@ class Controller
 
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/log_admin.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/admin/log_admin.html.twig', $pageContent);
     }
 
@@ -355,23 +366,25 @@ class Controller
         $pageContent['adminCategories'] = \nextdom::getConfiguration('eqLogic:category');
         $pageContent['customProductName'] = \config::byKey('product_name');
         $pageContent['customJS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/custom/custom.js')) {
-            $pageContent['customJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/custom/custom.js'));
+        if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.js')) {
+            $pageContent['customJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/desktop/custom/custom.js'));
         }
         $pageContent['customCSS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/custom/custom.css')) {
-            $pageContent['customCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/custom/custom.css'));
+        if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.css')) {
+            $pageContent['customCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/desktop/custom/custom.css'));
         }
         $pageContent['customMobileJS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.js')) {
-            $pageContent['customMobileJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.js'));
+        if (file_exists(NEXTDOM_ROOT . '/desktop/mobile/custom/custom.js')) {
+            $pageContent['customMobileJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/desktop/mobile/custom/custom.js'));
         }
         $pageContent['customMobileCSS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.css')) {
-            $pageContent['customMobileCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.css'));
+        if (file_exists(NEXTDOM_ROOT . '/desktop/mobile/custom/custom.css')) {
+            $pageContent['customMobileCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/desktop/mobile/custom/custom.css'));
         }
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/custom.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/admin/custom.html.twig', $pageContent);
     }
 
@@ -411,6 +424,8 @@ class Controller
         }
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/api.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/admin/api.html.twig', $pageContent);
     }
 
@@ -434,6 +449,8 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/commandes.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/admin/commandes.html.twig', $pageContent);
     }
 
@@ -457,9 +474,9 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageContent['adminDbConfig'] = $CONFIG['db'];
-
-
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/osdb.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/admin/osdb.html.twig', $pageContent);
     }
 
@@ -486,6 +503,8 @@ class Controller
 
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/reports_admin.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/admin/reports_admin.html.twig', $pageContent);
     }
 
@@ -495,6 +514,8 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/eqlogic.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/admin/eqlogic.html.twig', $pageContent);
     }
 
@@ -517,6 +538,8 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/links.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/admin/links.html.twig', $pageContent);
     }
 
@@ -562,6 +585,8 @@ class Controller
         }
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/security.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/admin/security.html.twig', $pageContent);
     }
 
@@ -584,6 +609,8 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/interact_admin.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/admin/interact_admin.html.twig', $pageContent);
     }
 
@@ -605,6 +632,8 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/summary.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/admin/summary.html.twig', $pageContent);
     }
 
@@ -691,6 +720,8 @@ class Controller
         $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/update_admin.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/admin/update_admin.html.twig', $pageContent);
     }
 
@@ -720,8 +751,8 @@ class Controller
         $pageContent['usersList'] = \user::all();
         $pageContent['JS_VARS']['ldapEnable'] = $pageContent['userLdapEnabled'];
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/user.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/users.js';
         return $render->get('/desktop/admin/users.html.twig', $pageContent);
     }
 
@@ -746,6 +777,8 @@ class Controller
         $pageContent['backupAjaxToken'] = \ajax::getToken();
         $pageContent['backupReposList'] = UpdateManager::listRepo();
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/backup.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/tools/backup.html.twig', $pageContent);
     }
 
@@ -768,6 +801,8 @@ class Controller
         Status::isConnectedAdminOrFail();
         $pageContent['cronEnabled'] = \config::byKey('enableCron');
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/cron.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/tools/cron.html.twig', $pageContent);
     }
 
@@ -869,6 +904,8 @@ class Controller
             }
         }
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/health.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/tools/health.html.twig', $pageContent);
     }
 
@@ -900,6 +937,8 @@ class Controller
         $pageContent['JS_POOL'][] = '/3rdparty/visjs/vis.min.js';
         $pageContent['CSS_POOL'][] = '/3rdparty/visjs/vis.min.css';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/history.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/tools/history.html.twig', $pageContent);
     }
 
@@ -952,6 +991,8 @@ class Controller
             $logFileData['size'] = round(filesize(NEXTDOM_ROOT . '/log/' . $logFile) / 1024);
             $pageContent['logFilesList'][] = $logFileData;
         }
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/tools/logs-view.html.twig', $pageContent);
     }
 
@@ -1025,6 +1066,8 @@ class Controller
                 $pageContent['reportPlugins'][] = $pluginData;
             }
         }
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/tools/reports-view.html.twig', $pageContent);
     }
     
@@ -1053,6 +1096,7 @@ class Controller
         usort($updates, 'version_compare');
         $pageContent['updatesList'] = array_reverse($updates);
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/update.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
 
         return $render->get('/desktop/tools/update-view.html.twig', $pageContent);
     }
@@ -1084,6 +1128,8 @@ class Controller
             $pageContent['messagesList'] = \message::all();
         }
         $pageContent['messagePluginsList'] = \message::listPlugin();
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/message.html.twig', $pageContent);
     }
 
@@ -1108,6 +1154,7 @@ class Controller
 
         $pageData['systemCanSudo'] = \nextdom::isCapable('sudo');
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/system.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
 
         return $render->get('/desktop/system.html.twig', $pageContent);
     }
@@ -1131,6 +1178,7 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/database.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
 
         return $render->get('/desktop/database.html.twig', $pageContent);
     }
@@ -1217,6 +1265,8 @@ class Controller
             }
         }
         $pageContent['pluginInactiveOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/plugin.html.twig', $pageContent);
     }
 
@@ -1249,6 +1299,8 @@ class Controller
             $pageContent['editorFolders'][] = $folder;
         }
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/editor.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
 
         return $render->get('/desktop/editor.html.twig', $pageContent);
     }
@@ -1270,6 +1322,7 @@ class Controller
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
 
         return $render->get('/desktop/shutdown.html.twig', $pageContent);
     }
@@ -1312,15 +1365,15 @@ class Controller
         $pageContent['profilsSessionsList'] = listSession();
         $pageContent['profilsDesktopThemes'] = [];
 
-        $lsCssThemes = ls(NEXTDOM_ROOT . '/css/themes');
+        $lsCssThemes = ls(NEXTDOM_ROOT . '/public/themes/css/themes');
         foreach ($lsCssThemes as $dir) {
-            if (is_dir(NEXTDOM_ROOT . '/css/themes/' . $dir . '/desktop')) {
+            if (is_dir(NEXTDOM_ROOT . '/public/themes/' . $dir . '/desktop')) {
                 $pageContent['profilsDesktopThemes'][] = trim($dir, '/');
             }
         }
         $pageContent['profilsMobileThemes'] = [];
         foreach ($lsCssThemes as $dir) {
-            if (is_dir(NEXTDOM_ROOT . '/css/themes' . $dir . '/mobile')) {
+            if (is_dir(NEXTDOM_ROOT . '/public/themes/' . $dir . '/mobile')) {
                 $pageContent['profilsDesktopThemes'][] = trim($dir, '/');
             }
         }
@@ -1331,6 +1384,7 @@ class Controller
         $pageContent['profilsAllowRemoteUsers'] = \config::byKey('sso:allowRemoteUser');
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/profils.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
 
         return $render->get('/desktop/tools/profils.html.twig', $pageContent);
     }
@@ -1388,6 +1442,7 @@ class Controller
         }
         $pageContent['JS_VARS']['view_id'] = $currentView->getId();
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/view.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
 
         return $render->get('/desktop/view.html.twig', $pageContent);
     }
@@ -1412,6 +1467,7 @@ class Controller
 
         $pageContent['viewEditViewsList'] = \view::all();
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/view_edit.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
 
         return $render->get('/desktop/view_edit.html.twig', $pageContent);
     }
@@ -1573,6 +1629,7 @@ class Controller
             }
         }
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/eqAnalyse.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
 
         return $render->get('/desktop/eqAnalyze.html.twig', $pageContent);
     }
@@ -1599,6 +1656,8 @@ class Controller
         $pageContent['objectProductName'] = \config::byKey('product_name');
         $pageContent['objectList'] = JeeObjectManager::buildTree(null, false);
         $pageContent['objectSummary'] = \config::byKey('object:summary');
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/object.html.twig', $pageContent);
     }
     
@@ -1638,6 +1697,8 @@ class Controller
         $pageContent['interactEqLogicTypes'] = EqLogicManager::allType();
         $pageContent['interactEqLogics'] = EqLogicManager::all();
         $pageContent['interactEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
+
         return $render->get('/desktop/interact.html.twig', $pageContent);
     }
 
@@ -1694,6 +1755,7 @@ class Controller
         }
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/plan.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
 
         return $render->get('/desktop/plan.html.twig', $pageContent);
     }
@@ -1749,6 +1811,7 @@ class Controller
         $pageContent['JS_END_POOL'][] = '/3rdparty/three.js/renderers/Projector.js';
         $pageContent['JS_END_POOL'][] = '/3rdparty/three.js/objects/Sky.js';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/plan3d.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
 
         return $render->get('/desktop/plan3d.html.twig', $pageContent);
     }
@@ -1808,6 +1871,7 @@ class Controller
         }
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/Market/market.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
 
         return $render->get('/desktop/market.html.twig', $pageContent);
     }
@@ -1831,6 +1895,7 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/reboot.js';
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
 
         return $render->get('/desktop/reboot.html.twig', $pageContent);
     }

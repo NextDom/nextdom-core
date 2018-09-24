@@ -1,9 +1,9 @@
 <div class="box" id="custom">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-wrench"></i> {{ 'Général' }}</h3>
+        <h3 class="box-title"><i class="fas fa-pencil-square"></i> {{ 'Custom'}}</h3>
         <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
-            <a class="pull-right" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
+            <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
     <div class="box-body"> <!-- div nécéssaire pour le js-->
@@ -11,8 +11,8 @@
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li role="presentation"><a href="#advanced" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-terminal"></i> {{ 'avancée' }}</a></li>
                 <li role="presentation"><a href="#themestab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-wrench"></i> {{ 'Themes' }}</a></li>
-                <li role="presentation" class="active"><a href="#colortab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-key"></i> {{ 'Widgets' }}</a></li>
-                <li class="pull-left header"><i class="fas fa-pencil-square"></i> {{ 'Personnalisation'}}</li>
+                <li role="presentation"><a href="#colortab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-key"></i> {{ 'Widgets' }}</a></li>
+                <li role="presentation" class="active"><a href="#customSkin" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-key"></i> {{ 'Générale' }}</a></li>
             </ul>
             <div class="global-tab-content tab-content" style="min-height:500px;">
                 <div role="tabpanel" class="tab-pane" id="themestab">
@@ -203,7 +203,7 @@
 
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane active" id="colortab">
+                <div role="tabpanel" class="tab-pane" id="colortab">
                     <form class="form-horizontal">
                         <fieldset>
                             <div class="form-group">
@@ -237,7 +237,7 @@
                                         <label class="col-sm-3 control-label">{{ 'Dashboard couleur de fond' }}</label>
                                         <div class="col-sm-2">
                                             <div class=" colorpicker-component colorpick input-group">
-                                                <input type="text" class="configKey form-control noSet input-sm" data-l1key="eqLogic:category:{{ category }}:color" value="{{ categoryData['color'] }}"/>
+                                                <input type="text" class="configKey form-control noSet " data-l1key="eqLogic:category:{{ category }}:color" value="{{ categoryData['color'] }}"/>
                                                 <span class="input-group-addon"><i></i></span>
                                             </div>
                                         </div>
@@ -247,7 +247,7 @@
                                         <label class="col-sm-3 control-label">{{ 'Dashboard couleur commande' }}</label>
                                         <div class="col-sm-2 colorpick">
                                             <div class=" colorpicker-component input-group">
-                                                <input type="text" class="configKey form-control cursor noSet input-sm" data-l1key="eqLogic:category:{{ category }}:cmdColor" value="{{ categoryData['cmdColor'] }}"/>
+                                                <input type="text" class="configKey form-control cursor noSet " data-l1key="eqLogic:category:{{ category }}:cmdColor" value="{{ categoryData['cmdColor'] }}"/>
                                                 <span class="input-group-addon"><i></i></span>
                                             </div>
                                         </div>
@@ -259,7 +259,7 @@
                                         <label class="col-sm-3 control-label">{{ 'Mobile couleur de fond' }}</label>
                                         <div class="col-sm-2">
                                             <div class=" colorpicker-component colorpick input-group">
-                                                <input type="text" class="configKey form-control cursor noSet input-sm" data-l1key="eqLogic:category:{{ category }}:mcolor" value="{{ categoryData['mcolor'] }}"/>
+                                                <input type="text" class="configKey form-control cursor noSet " data-l1key="eqLogic:category:{{ category }}:mcolor" value="{{ categoryData['mcolor'] }}"/>
                                                 <span class="input-group-addon"><i></i></span>
                                             </div>
                                         </div>
@@ -269,7 +269,7 @@
                                         <label class="col-sm-3 control-label">{{ 'Mobile couleur commande' }}</label>
                                         <div class="col-sm-2">
                                             <div class=" colorpicker-component colorpick input-group">
-                                                <input type="text" class="configKey form-control cursor noSet input-sm" data-l1key="eqLogic:category:{{ category }}:mcmdColor" value="{{ categoryData['mcmdColor'] }}"/>
+                                                <input type="text" class="configKey form-control cursor noSet " data-l1key="eqLogic:category:{{ category }}:mcmdColor" value="{{ categoryData['mcmdColor'] }}"/>
                                                 <span class="input-group-addon"><i></i></span>
                                             </div>
                                         </div>
@@ -280,6 +280,94 @@
                                 {% endfor %}
                             </div>
                         </fieldset>
+                    </form>
+                </div>
+                <div role="tabpanel" class="tab-pane active" id="customSkin">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" data-toggle="tooltip" title="" data-original-title="{{'Nom de votre NextDom (utilisé notamment par le market)'}}">{{ 'Couleur du body' }} </label>
+                            <div class="col-sm-2">
+                                <div class=" colorpicker-component colorpick input-group">
+                                    <input type="text" class="userAttr form-control" data-l1key="options" data-l2key="customSkin_bodyBackgound"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <a class="btn btn-default btn-sm bt_resetColor" data-l1key="options" data-l2key="customSkin_bodyBackgound" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" data-toggle="tooltip" title="" data-original-title="{{'Nom de votre NextDom (utilisé notamment par le market)'}}">{{ 'Couleur du body' }} </label>
+                            <div class="col-sm-2">
+                                <div class=" colorpicker-component colorpick input-group">
+                                    <input type="text" class="userAttr form-control" data-l1key="options" data-l2key="customSkin_bodyBackgound"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <a class="btn btn-default btn-sm bt_resetColor" data-l1key="options" data-l2key="customSkin_bodyBackgound" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" data-toggle="tooltip" title="" data-original-title="{{'Nom de votre NextDom (utilisé notamment par le market)'}}">{{ 'Couleur du body' }} </label>
+                            <div class="col-sm-2">
+                                <div class=" colorpicker-component colorpick input-group">
+                                    <input type="text" class="userAttr form-control" data-l1key="options" data-l2key="customSkin_bodyBackgound"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <a class="btn btn-default btn-sm bt_resetColor" data-l1key="options" data-l2key="customSkin_bodyBackgound" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" data-toggle="tooltip" title="" data-original-title="{{'Nom de votre NextDom (utilisé notamment par le market)'}}">{{ 'Couleur du body' }} </label>
+                            <div class="col-sm-2">
+                                <div class=" colorpicker-component colorpick input-group">
+                                    <input type="text" class="userAttr form-control" data-l1key="options" data-l2key="customSkin_bodyBackgound"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <a class="btn btn-default btn-sm bt_resetColor" data-l1key="options" data-l2key="customSkin_bodyBackgound" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" data-toggle="tooltip" title="" data-original-title="{{'Nom de votre NextDom (utilisé notamment par le market)'}}">{{ 'Couleur du body' }} </label>
+                            <div class="col-sm-2">
+                                <div class=" colorpicker-component colorpick input-group">
+                                    <input type="text" class="userAttr form-control" data-l1key="options" data-l2key="customSkin_bodyBackgound"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <a class="btn btn-default btn-sm bt_resetColor" data-l1key="options" data-l2key="customSkin_bodyBackgound" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" data-toggle="tooltip" title="" data-original-title="{{'Nom de votre NextDom (utilisé notamment par le market)'}}">{{ 'Couleur du body' }} </label>
+                            <div class="col-sm-2">
+                                <div class=" colorpicker-component colorpick input-group">
+                                    <input type="text" class="userAttr form-control" data-l1key="options" data-l2key="customSkin_bodyBackgound"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <a class="btn btn-default btn-sm bt_resetColor" data-l1key="options" data-l2key="customSkin_bodyBackgound" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" data-toggle="tooltip" title="" data-original-title="{{'Nom de votre NextDom (utilisé notamment par le market)'}}">{{ 'Couleur du body' }} </label>
+                            <div class="col-sm-2">
+                                <div class=" colorpicker-component colorpick input-group">
+                                    <input type="text" class="userAttr form-control" data-l1key="options" data-l2key="customSkin_bodyBackgound"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <a class="btn btn-default btn-sm bt_resetColor" data-l1key="options" data-l2key="customSkin_bodyBackgound" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="advanced">
