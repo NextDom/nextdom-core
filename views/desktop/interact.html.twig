@@ -19,7 +19,7 @@
                         <div class="text-center"><span>{{ 'Regénérer' }}</span></div>
                     </div>
                     <div class="icon_gestion icon-blue cursor" id="bt_testInteract2">
-                            <i class="fas fa-comment"></i>
+                            <i class="fas fa-vial"></i>
                         <div class="text-center"> <span>{{ 'Tester' }}</span></div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                                         <div class="interactListContainer DisplayCard text-center">
                                             {% for interact in interactsList[-1] %}
                                                 <div class="interactDisplayCard cursor icon_gestion" data-interact_id="{{ interact.getId() }}" style="{% if not interact.getEnable() %}{{ interactDisabledOpacity }}{% endif %}">
-                                                    <img src="/public/img/interaction.png" height="65" width="65"/>
+                                                    <img class="backgroundColor" src="/public/img/interaction.png" height="65" width="65" style="border-raduis:15px"/>
                                                     <br>
                                                     <span>{{ interact.getHumanName(true, true, true, true) }}</span>
                                                 </div>
