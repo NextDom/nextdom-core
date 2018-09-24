@@ -116,12 +116,14 @@ class Controller
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
-        sendVarToJS('nextdom_welcome', $configs['nextdom::Welcome']);
+     
+      $pageContent['JS_VARS']['nextdom_Welcome'] = \config::byKey('nextdom::Welcome');
         $pageContent['JS_VARS']['SEL_OBJECT_ID'] = Utils::init('object_id');
         $pageContent['JS_VARS']['SEL_CATEGORY'] = Utils::init('category', 'all');
         $pageContent['JS_VARS']['SEL_TAG'] = Utils::init('tag', 'all');
         $pageContent['JS_VARS']['SEL_SUMMARY'] = Utils::init('summary');
 
+         sendVarToJS('nextdom_Welcome', $pageContent['JS_VARS']['welcome']);
         if ($pageContent['JS_VARS']['SEL_OBJECT_ID'] == '') {
             $object = JeeObjectManager::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
         } else {
