@@ -989,9 +989,9 @@ class ScenarioExpressionManager
      * @param string $format
      * @return false|int|string
      */
-    public static function collectDate($cmd_id, $format = 'Y-m-d H:i:s')
+    public static function collectDate($cmdId, $format = 'Y-m-d H:i:s')
     {
-        $cmdObj = CmdManager::byId(trim(str_replace('#', '', $cmd_id)));
+        $cmdObj = CmdManager::byId(trim(str_replace('#', '', $cmdId)));
         if (!is_object($cmdObj)) {
             return -1;
         }
@@ -1370,16 +1370,16 @@ class ScenarioExpressionManager
      * @param string $_default
      * @return string
      */
-    public static function tag(&$_scenario = null, $_name, $_default = '')
+    public static function tag(&$scenario = null, $name, $default = '')
     {
-        if ($_scenario === null) {
-            return '"' . $_default . '"';
+        if ($scenario === null) {
+            return '"' . $default . '"';
         }
         $tags = $_scenario->getTags();
-        if (isset($tags['#' . $_name . '#'])) {
-            return $tags['#' . $_name . '#'];
+        if (isset($tags['#' . $name . '#'])) {
+            return $tags['#' . $name . '#'];
         }
-        return '"' . $_default . '"';
+        return '"' . $default . '"';
     }
 
     /**
