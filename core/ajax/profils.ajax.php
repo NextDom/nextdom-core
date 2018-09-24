@@ -26,13 +26,13 @@ try {
 
 
     if (init('action') == 'removeImage') {
-        $uploaddir = dirname(__FILE__) . '/../img/profils/';
+        $uploaddir = dirname(__FILE__) . '/../../public/img/profils/';
         $name = init('image');
         ajax::success(unlink($uploaddir . $name));
     }
 
     if (init('action') == 'imageUpload') {
-        $uploaddir = dirname(__FILE__) . '/../img/profils/';
+        $uploaddir = dirname(__FILE__) . '/../../public/profils/';
         if (!file_exists($uploaddir)) {
             throw new Exception(__("{{Répertoire d'upload non trouvé}} : ", __FILE__) . $uploaddir);
         }
