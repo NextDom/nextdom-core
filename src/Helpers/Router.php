@@ -80,7 +80,7 @@ class Router
                 'enableCustomCss',
                 'language',
                 'nextdom::firstUse',
-                'nextdom::welcome',
+                'nextdom::Welcome',
                 'widget::step::width',
                 'widget::step::height',
                 'widget::margin',

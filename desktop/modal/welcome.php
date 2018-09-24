@@ -4,6 +4,7 @@ if (!isConnect()) {
 }
 ?>
 
+    <a class='btn btn-default btn-xs pull-right' id='bt_doNotDisplayWelcome'><i class="fas fa-eye-slash"></i> Ne plus afficher</a>
 
 </br>
 <div class="callout callout-success" style="margin-bottom: 0!important;">
