@@ -91,30 +91,35 @@
                     </div>
                 </div>
                 <hr/>
-                {% if not adminIsRescueMode and adminPluginsList|length > 0 %}
-                    {% for pluginData in adminPluginsList %}
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API pour le plugin' }} {{ pluginData.plugin.getName() }}">{{ 'Clef API' }} {{ pluginData.plugin.getName() }}</label>
-                            <div class="col-lg-5 col-md-6 col-sm-6 col-xs-6">
-                                <div class="input-group">
-                                    <span class="span_apikey">{{ pluginData.api }}</span>
-                                    <span class="input-group-btn">
-                                        <a class="btn btn-default form-control bt_regenerate_api" data-plugin="{{ pluginData.plugin.getId() }}"><i class="fa fa-refresh"></i></a>
-                                    </span>
+                <ul class="products-list product-list-in-box">
+                    {% if not adminIsRescueMode and adminPluginsList|length > 0 %}
+                        {% for pluginData in adminPluginsList %}
+                            <li class="item row">
+                                <div class="col-sm-8 col-xs-6">
+                                    <div class=product-info">
+                                        <a class="product-title" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API pour le plugin' }} {{ pluginData.plugin.getName() }}">{{ 'Clef API' }} {{ pluginData.plugin.getName() }}</a>
+                                        <span class="product-description span_apikey">{{ pluginData.api }}</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Accès API' }}</label>
-                            <div class="col-lg-5 col-md-6 col-sm-6 col-xs-6">
-                                <select class="form-control configKey" data-l1key="api::{{ pluginData.plugin.getId() }}::mode">
-                                    <option value="enable">{{ 'Activé' }}</option>
-                                    <option value="whiteip">{{ 'IP blanche' }}</option>
-                                    <option value="localhost">{{ 'Localhost' }}</option>
-                                    <option value="disable">{{ 'Désactivé' }}</option>
-                                </select>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
+
+                                <div class="col-sm-4 col-xs-6">
+                                    <a class="product-title">{{ 'Accès API' }}</a>
+                                    <div class="input-group">
+                          				<span class="input-group-btn">
+                                        <a class="btn btn-default form-control bt_regenerate_api" data-plugin="{{ pluginData.plugin.getId() }}"><i class="fa fa-refresh"></i></a>
+                           				</span>
+                                        <select class="form-control configKey" data-l1key="api::{{ pluginData.plugin.getId() }}::mode">
+                                            <option value="enable">{{ 'Activé' }}</option>
+                                            <option value="whiteip">{{ 'IP blanche' }}</option>
+                                            <option value="localhost">{{ 'Localhost' }}</option>
+                                            <option value="disable">{{ 'Désactivé' }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
             </fieldset>
         </form>
     </div>

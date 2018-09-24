@@ -312,6 +312,8 @@ class Controller
         Status::isConnectedAdminOrFail();
         $pageContent['adminHardwareName'] = \nextdom::getHardwareName();
         $pageContent['adminHardwareKey'] = \nextdom::getHardwareKey();
+        $cache = \cache::byKey('hour');
+        $pageContent['adminLastKnowDate'] = $cache->getValue();
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/general.js';
         $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';

@@ -56,7 +56,7 @@
                                         <div class="interactListContainer DisplayCard text-center">
                                             {% for interact in interactsList[-1] %}
                                                 <div class="interactDisplayCard cursor icon_gestion" data-interact_id="{{ interact.getId() }}" style="{% if not interact.getEnable() %}{{ interactDisabledOpacity }}{% endif %}">
-                                                    <img class="backgroundColor" src="/public/img/interaction.png" height="65" width="65" style="border-raduis:15px"/>
+                                                    <img class="backgroundColor" src="/public/img/interaction.png" height="65" width="65" style="border-radius:15px"/>
                                                     <br>
                                                     <span>{{ interact.getHumanName(true, true, true, true) }}</span>
                                                 </div>
