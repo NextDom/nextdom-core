@@ -679,9 +679,9 @@ class nextdom
     public static function migrate(string $backupFilePath = '', bool $taskInBackground = false)
     {
         if ($taskInBackground) {
-            \log::clear('migrate');
+            \log::clear('migration');
             $cmd = NEXTDOM_ROOT . '/install/migrate_jeedom_to_nextdom.php "backup=' . $backupFilePath . '"';
-            $cmd .= ' >> ' . \log::getPathToLog('migrate') . ' 2>&1 &';
+            $cmd .= ' >> ' . \log::getPathToLog('migration') . ' 2>&1 &';
             \system::php($cmd, true);
             \system::php(NEXTDOM_ROOT.'/todo.php');
         } else {

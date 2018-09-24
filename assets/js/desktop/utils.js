@@ -311,9 +311,9 @@ $(function () {
     });
 
 
-    if (typeof nextdom_firstUse != 'undefined' && isset(nextdom_firstUse) && nextdom_firstUse == 1 && getUrlVars('noFirstUse') != 1) {
+    if (typeof nextdom_Welcome != 'undefined' && isset(nextdom_Welcome) && nextdom_Welcome == 1 && getUrlVars('noWelcome') != 1) {
         $('#md_modal').dialog({title: "{{Bienvenue dans NextDom}}"});
-        $("#md_modal").load('index.php?v=d&modal=first.use').dialog('open');
+        $("#md_modal").load('index.php?v=d&modal=welcome').dialog('open');
     }
 
     $('#bt_haltSystem').on('click', function () {

@@ -4,7 +4,7 @@
         <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
             </button>
-            <a href="index.php?v=d&p=administration" <button type="button" class="btn btn-box-tool" ><i class="fa fa-times"></i></button></a>
+            <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
     <div class="box-body">
@@ -18,7 +18,6 @@
                         <legend><i class="fa fa-folder-open"></i> {{ 'Sauvegardes locales' }}
                         </legend>
                         <div class="box-tools pull-right">
-                            <a class="btn btn-success btn-sm" id="bt_saveMigration"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                             </button>
                             <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -75,5 +74,8 @@
                 </div>
             </div>
         </div>
+    </div>
+     <div class="box-footer clearfix">
+        <a class="btn btn-success btn-sm" id="bt_saveMigration"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
     </div>
 </div>
