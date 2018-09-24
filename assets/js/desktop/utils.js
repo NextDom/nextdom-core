@@ -309,11 +309,11 @@ $(function () {
     $(window).resize(function () {
         initRowOverflow();
     });
-    
+
 
     if (typeof nextdom_Welcome != 'undefined' && isset(nextdom_Welcome) && nextdom_Welcome == 1 && getUrlVars('noWelcome') != 1) {
         $('#md_modal').dialog({title: "{{Bienvenue dans NextDom}}"});
-        $("#md_modal").load('index.php?v=d&modal=first.use').dialog('open');
+        $("#md_modal").load('index.php?v=d&modal=welcome').dialog('open');
     }
 
     $('#bt_haltSystem').on('click', function () {

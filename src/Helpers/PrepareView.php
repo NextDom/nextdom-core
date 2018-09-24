@@ -151,7 +151,7 @@ class PrepareView
             'user_id'            => $_SESSION['user']->getId(),
             'user_isAdmin'       => Status::isConnectAdmin(),
             'user_login'         => $_SESSION['user']->getLogin(),
-            'nextdom_firstUse'   => $configs['nextdom::firstUse'],
+            'nextdom_welcome'   => $configs['nextdom::welcome'],
             'widget_width_step'  => $configs['widget::step::width'],
             'widget_height_step' => $configs['widget::step::height'],
             'widget_margin'      => $configs['widget::margin']
