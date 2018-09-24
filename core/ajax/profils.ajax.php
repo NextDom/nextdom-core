@@ -32,7 +32,7 @@ try {
     }
 
     if (init('action') == 'imageUpload') {
-        $uploaddir = dirname(__FILE__) . '/../../public/profils/';
+        $uploaddir = dirname(__FILE__) . '/../../public/img/profils/';
         if (!file_exists($uploaddir)) {
             throw new Exception(__("{{Répertoire d'upload non trouvé}} : ", __FILE__) . $uploaddir);
         }
