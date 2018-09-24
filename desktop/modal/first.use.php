@@ -5,9 +5,9 @@ if (!isConnect()) {
 ?>
 <legend>
     Mes premiers pas dans NextDom
-    <a class='btn btn-default btn-xs pull-right' id='bt_doNotDisplayFirstUse'><i class="fas fa-eye-slash"></i> Ne plus afficher</a>
+    <a class='btn btn-default btn-xs pull-right' id='bt_doNotDisplayWelcome'><i class="fas fa-eye-slash"></i> Ne plus afficher</a>
 </legend>
-<div id="div_alertFirstUse"></div>
+<div id="div_alertWelcome"></div>
    <p class="alert-success"> {{  Bienvenue dans}} <?php echo config::byKey('product_name'); ?> {{, et merci d'avoir choisi cet outil pour votre habitat connecté. Une nouvelle fonctionnalité fait son apparition, vous pouvez désormait migrer votre installation jeedom sur nextdom.:}}<br>
     {{  Rien de plus simple il suffit de cliquer sur le bouton ci-dessous}} </p>
 <br/><br/>
@@ -21,7 +21,7 @@ if (!isConnect()) {
 </div>
 <br><br>
   </legend>
-<div id="div_alertFirstUse"></div>
+<div id="div_alertWelcome"></div>
     <p class="alert-info">{{Voici 3 guides pour bien débuter avec}} <?php echo config::byKey('product_name'); ?> :</p>
 <br/><br/>
 
@@ -47,9 +47,9 @@ if (!isConnect()) {
 </div>
 
 <script>
-    $('#bt_doNotDisplayFirstUse').on('click', function () {
+    $('#bt_doNotDisplayWelcome').on('click', function () {
         nextdom.config.save({
-            configuration: {'nextdom::firstUse': 0},
+            configuration: {'nextdom::Welcome': 0},
             error: function (error) {
                 notify("Core", error.message, 'error');
             },
