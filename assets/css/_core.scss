@@ -1,46 +1,46 @@
 .default-cursor {
-    cursor: default;
+  cursor: default;
 }
 
 #div_alert {
-    display: none;
-    margin:10px auto;
-    width: 80%;
+  display: none;
+  margin:10px auto;
+  width: 80%;
 }
 
 #md_pageHelp {
-    display: none;
+  display: none;
 }
 
 .cursor{
-    cursor : pointer;
+  cursor : pointer;
 }
 
 .binary{
-    margin-left: 5px;
-    position: relative;
-    top: 2px;
-    width : 15px;
-    height : 15px;
-    border-radius: 5px 5px 5px 5px;
-    display: inline-block;
+  margin-left: 5px;
+  position: relative;
+  top: 2px;
+  width : 15px;
+  height : 15px;
+  border-radius: 5px 5px 5px 5px;
+  display: inline-block;
 }
 
 #div_pageContainer {
-    position: relative;
-    overflow: hidden;
+  position: relative;
+  overflow: hidden;
 }
 
 #div_pageContainer .iconlist{
-    background-color : rgba(255,255,255,0);
-    padding : 10px;
-    border-radius: 2px;
-    margin : 10px;
-    cursor: pointer;
+  background-color : rgba(255,255,255,0);
+  padding : 10px;
+  border-radius: 2px;
+  margin : 10px;
+  cursor: pointer;
 }
 
 #jqueryLoadingDiv .overlay {
-    background-image: url(/3rdparty/jquery.utils/gritter.png);
+  background-image: url(/3rdparty/jquery.utils/gritter.png);
 }
 
 .plugin-item {
@@ -52,310 +52,312 @@
 }
 
 .displayScenario-overlay {
-    height: 100%;
-    position: absolute;
-    z-index: 9999;
-    right: -250px;
-    background-color: rgba(0,0,0,0.7);
-    overflow-x: hidden;
-    padding-top: 60px;
-    width: 250px;
-    float: left;
+  height: 100%;
+  position: absolute;
+  z-index: 9999;
+  right: -250px;
+  background-color: rgba(0,0,0,0.7);
+  overflow-x: hidden;
+  padding-top: 60px;
+  width: 250px;
+  float: left;
 }
 
 .displayScenario-overlay a:hover {
-    color: #f1f1f1;
+  color: #f1f1f1;
 }
 
 .displayScenario-overlay .closebtn {
-    position: absolute;
-    top: 0;
-    left: 250px;
-    font-size: 36px;
+  position: absolute;
+  top: 0;
+  left: 250px;
+  font-size: 36px;
 }
 
 .alert{
-width: 80%;
-margin: 10px auto;
+  width: 80%;
+  margin: 10px auto;
 }
 
 .alert-danger {
-border-left: 5px solid #DFAAA9;
-box-shadow: 0 0 0 0 rgba(235, 204, 209, 0.7)  !important;
--webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
--moz-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
--ms-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
+  border-left: 5px solid #DFAAA9;
+  box-shadow: 0 0 0 0 rgba(235, 204, 209, 0.7)  !important;
+  -webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
+  -moz-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
+  -ms-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
+  animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
 }
 
 
 
 .green{
-    background-color: $green;
+  background-color: $green;
 }
 
 .red{
-    background-color: $red;
+  background-color: $red;
 }
 
 .grey{
-    background-color: $grey;
+  background-color: $grey;
 }
 
 .blue{
-    background-color: $blue;
+  background-color: $blue;
 }
 .icon_blue{
-    color: $blue;
+  color: $blue;
 }
 
 .icon_nextdom_blue{
-    color: $nextdom_blue;
+  color: $nextdom_blue;
 }
 
 .nextdom_blue{
-    color: $nextdom_blue;
+  color: $nextdom_blue;
 }
 .orange{
-    background-color: $orange;
+  background-color: $orange;
 }
 
 .yellow{
-    background-color: $yellow;
+  background-color: $yellow;
 }
 
 .white{
-    background-color: $white;
+  background-color: $white;
 }
 .icon_white{
-    color: $white;
+  color: $white;
 }
 
-
 .eqLogic-battery {
-    min-width:100px;
-    min-height:150px;
-    text-align: center;
+  min-width:100px;
+  min-height:150px;
+  text-align: center;
 }
 
 .eqLogic-battery.good {
-    background-color: $good;
+  background-color: $good;
 }
 
 .eqLogic-battery.warning {
-    background-color: $warn;
+  background-color: $warn;
 }
 
 .eqLogic-battery.critical {
-    background-color: $critical;
+  background-color: $critical;
 }
 
 .eqLogic-name {
-    font-size: 1em;
-    display: block;
+  font-size: 1em;
+  display: block;
 }
 
 .eqLogic-place {
-    font-size: 0.95em;
-    position:relative;
-    top:-5px;
-    cursor:default;
+  font-size: 0.95em;
+  position:relative;
+  top:-5px;
+  cursor:default;
 }
 
 .eqLogic-battery-icon {
-    font-size:2.2em;
-    margin-top:-25px;
-    margin-bottom:-25px;
+  font-size:2.2em;
+  margin-top:-25px;
+  margin-bottom:-25px;
 }
 
 .eqLogic-battery-icon i {
-    font-size: 2.5em;
+  font-size: 2.5em;
 }
 
 .eqLogic-percent {
-    font-size:1.2em;
-    font-weight: bold;
-    cursor:default;
+  font-size:1.2em;
+  font-weight: bold;
+  cursor:default;
 }
 
 .eqLogic-battery .informations {
-    font-size : 0.8em;
-    margin-bottom: 3px;
-    margin-right: 5px;
-    cursor:default;
+  font-size : 0.8em;
+  margin-bottom: 3px;
+  margin-right: 5px;
+  cursor:default;
 }
 
 .eqLogic-battery .manual-threshold {
-    position:absolute;
-    bottom: 3px;
-    right: 3px;
-    cursor:default;
+  position:absolute;
+  bottom: 3px;
+  right: 3px;
+  cursor:default;
 }
 
 .panel:hover{
-    box-shadow: 0 6px 12px 0 rgba(0,0,0,0.15);
+  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.15);
 }
 
 .objectDisplayCard {
-    height: 120px;
-    margin-bottom: 10px;
-    padding: 5px;
-    border-radius: 2px;
-    width: 140px;
-    margin-left: 10px;
-    position: absolute;
-    left: 140px;
-    top: 10px;
+  height: 120px;
+  margin-bottom: 10px;
+  padding: 5px;
+  border-radius: 2px;
+  width: 140px;
+  margin-left: 10px;
+  position: absolute;
+  left: 140px;
+  top: 10px;
 }
 
 .icon_gestion {
-height : 120px;
-margin-bottom : 10px;
-padding : 5px;
-border-radius: 2px;
-width : 140px;
-margin-left : 10px;
+  height : 120px;
+  margin-bottom : 10px;
+  padding : 5px;
+  border-radius: 2px;
+  width : 140px;
+  margin-left : 10px;
 }
 
 .icon_gestion > i {
-font-size : 4em;
-margin-top:5px;
+  font-size : 4em;
+  margin-top:5px;
 }
 .icon_gestion > i > div >span{
-font-size : 1em;
-position:relative; 
-top : 15px;
-word-break: break-all;
-white-space: pre-wrap;
-word-wrap: break-word;
+  font-size : 1em;
+  position:relative;
+  top : 15px;
+  word-break: break-all;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .icon-health {
-    color:grey;
-    font-size:0.9em;
+  color:grey;
+  font-size:0.9em;
 }
 
 .ui-dialog {
-    padding:0;
-    border-radius: 3px;
-    background-clip:0;
-    padding: 0px 0 0px 5px;
-    }
+  border-radius: 3px;
+  background-clip:0;
+  padding: 0px 0 0px 0px;
+}
 
-    html {
-        height: 100%;
-        /* The html and body elements cannot have any padding or margin. */
-      }
-      
-      .btn:hover {
-       opacity: 0.7;
-      }
-      
-      .sidebar-nav {
-        padding: 9px 0;
-      }
-      
-      .cursor{
-        cursor : pointer;
-      }
-      
-      /* Themes for different contexts */
-      .alert {
-        border-left: 5px solid $lightyellow;
-      }
-      
-      .alert-danger {
-        border-left: 5px solid $lightred;
-      }
-      
-      .alert-info {
-        border-left: 5px solid $lightblue;
-      }
-      .alert-success {
-        border-left: 5px solid $lightgreen;
-      }
-      
-      .btn-black {
-        color:$white;
-        background-color:#373737;
-        border-color:#1f1f1f;
-          &:hover {
-          color:$white;
-          background-color:#303030;
-          border-color:#1f1f1f;
-        }
-      }
-      
-      .pull-right{
-        float: right;
-        margin-left: 5px;
-      }
-      
-      .pull-left{
-        float: left;
-        margin-right: 5px;
-      }
-      
-      .form-actions{
-        margin-top: 5px;
-      }
-      
-      .eqLogic-widget{
-        display: inline-block;
-        vertical-align: top;
-        border-radius: 4px;
-      }
-      
-      .eqLogic-widget .btn:not(.btn-circle){
-        border : none !important;
-        font-weight: bold;
-      }
-      
-      .view-link-widget,.plan-link-widget{
-        padding: 3px;
-        margin: 3px;
-        display: inline-block;
-        vertical-align: top;
-      }
-      
-      .eqLogic-widget a{
-        color:inherit;
-      }
-      
-      .scenario-widget{
-        background-color: $grey;
-        display: inline-block;
-        position : relative;
-        vertical-align: top;
-        color : $white;
-      }
-      
-      .scenario-widget a{
-        color : $white;
-      }
-      
-      .cmd-widget{
-        display: inline-block;
-        position : relative;
-        vertical-align: top;
-      }
-      
-      .cmd-widget .statistiques{
-        position : absolute;
-        bottom: 0;
-        font-size: 0.80em;
-        left : 0;
-        margin : 0;
-        padding: 0;
-        line-height:0px;
-      }
-      
-      ::-webkit-scrollbar{
-        width:8px
-      }
-      
-      ::-webkit-scrollbar-track-piece{
-        background-color:transparent
-      }
+.callout {
+  border-radius: 3px;
+  margin: 0 0 20px 5px;
+}
+html {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+}
+
+.btn:hover {
+  opacity: 0.7;
+}
+
+.sidebar-nav {
+  padding: 9px 0;
+}
+
+.cursor{
+  cursor : pointer;
+}
+
+/* Themes for different contexts */
+.alert {
+  border-left: 5px solid $lightyellow;
+}
+
+.alert-danger {
+  border-left: 5px solid $lightred;
+}
+
+.alert-info {
+  border-left: 5px solid $lightblue;
+}
+.alert-success {
+  border-left: 5px solid $lightgreen;
+}
+
+.btn-black {
+  color:$white;
+  background-color:#373737;
+  border-color:#1f1f1f;
+  &:hover {
+    color:$white;
+    background-color:#303030;
+    border-color:#1f1f1f;
+  }
+}
+
+.pull-right{
+  float: right;
+  margin-left: 5px;
+}
+
+.pull-left{
+  float: left;
+  margin-right: 5px;
+}
+
+.form-actions{
+  margin-top: 5px;
+}
+
+.eqLogic-widget{
+  display: inline-block;
+  vertical-align: top;
+  border-radius: 4px;
+}
+
+.eqLogic-widget .btn:not(.btn-circle){
+  border : none !important;
+  font-weight: bold;
+}
+
+.view-link-widget,.plan-link-widget{
+  padding: 3px;
+  margin: 3px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.eqLogic-widget a{
+  color:inherit;
+}
+
+.scenario-widget{
+  background-color: $grey;
+  display: inline-block;
+  position : relative;
+  vertical-align: top;
+  color : $white;
+}
+
+.scenario-widget a{
+  color : $white;
+}
+
+.cmd-widget{
+  display: inline-block;
+  position : relative;
+  vertical-align: top;
+}
+
+.cmd-widget .statistiques{
+  position : absolute;
+  bottom: 0;
+  font-size: 0.80em;
+  left : 0;
+  margin : 0;
+  padding: 0;
+  line-height:0px;
+}
+
+::-webkit-scrollbar{
+  width:8px
+}
+
+::-webkit-scrollbar-track-piece{
+  background-color:transparent
+}
       
       
