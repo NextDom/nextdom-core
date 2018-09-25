@@ -40,7 +40,6 @@ class PrepareView
         //TODO: Vérifier ça
         $logo = \config::byKey('product_connection_image');
         $pageData['CSS_POOL'][]    = '/public/css/nextdom.css';
-        $pageData['CSS_POOL'][]    = '/3rdparty/iCheck/all.css';
         $pageData['CSS_POOL'][] = '/public/css/firstUse.css';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/firstUse.js';
 
@@ -59,7 +58,6 @@ class PrepareView
         //TODO: Vérifier ça
         $logo = \config::byKey('product_connection_image');
         $pageData['CSS_POOL'][]    = '/public/css/nextdom.css';
-        $pageData['CSS_POOL'][]    = '/3rdparty/iCheck/all.css';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/connection.js';
 
         $render->show('desktop/connection.html.twig', $pageData);
