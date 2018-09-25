@@ -35,7 +35,6 @@ function gen_js {
         core/js/core.js \
         3rdparty/jquery.ui/jquery-ui.min.js \
         3rdparty/bootstrap/js/bootstrap.js \
-        3rdparty/iCheck/icheck.js \
         core/js/nextdom.class.js \
         core/js/private.class.js \
         core/js/eqLogic.class.js \
@@ -92,9 +91,7 @@ function gen_js {
         3rdparty/select2/js/select2.js \
         3rdparty/inputmask/jquery.inputmask.bundle.js \
         3rdparty/bootstrap-colorpicker/js/bootstrap-colorpicker.js \
-        3rdparty/bootstrap-datepicker/js/bootstrap-datepicker.js \
-        3rdparty/bootstrap-timepicker/js/bootstrap-timepicker.js \
-        3rdparty/bootstrap-daterangepicker/daterangepicker.js \
+        3rdparty/datetimepicker/jquery.datetimepicker.js \
         3rdparty/ion.rangeSlider/js/ion.rangeSlider.js \
         3rdparty/AdminLTE/js/adminlte.js \
         3rdparty/AdminLTE/js/adminlte_nextdom.js > /tmp/temp.js
