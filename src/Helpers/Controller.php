@@ -54,7 +54,6 @@ class Controller
         'view' => 'viewPage',
         'view_edit' => 'viewEditPage',
         'eqAnalyze' => 'eqAnalyzePage',
-        'eqAnalyse' => 'eqAnalyzePage',
         'plan' => 'planPage',
         'plan3d' => 'plan3dPage',
         'market' => 'marketPage',
@@ -62,7 +61,8 @@ class Controller
         'network' => 'networkPage',
         'cache' => 'cachePage',
         'general' => 'generalPage',
-        'log_admin' => 'log_adminPage',
+        'log_admin' => 'logAdminPage',
+        'log_display' => 'logDisplayPage',
         'custom' => 'customPage',
         'api' => 'APIPage',
         'commandes' => 'commandesPage',
@@ -117,7 +117,7 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
      
-      $pageContent['JS_VARS']['nextdom_Welcome'] = \config::byKey('nextdom::Welcome');
+        $pageContent['JS_VARS']['nextdom_Welcome'] = \config::byKey('nextdom::Welcome');
         $pageContent['JS_VARS']['SEL_OBJECT_ID'] = Utils::init('object_id');
         $pageContent['JS_VARS']['SEL_CATEGORY'] = Utils::init('category', 'all');
         $pageContent['JS_VARS']['SEL_TAG'] = Utils::init('tag', 'all');
@@ -336,7 +336,7 @@ class Controller
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function log_adminPage(Render $render, array &$pageContent): string
+    public static function logAdminPage(Render $render, array &$pageContent): string
     {
 
         Status::initConnectState();
@@ -347,6 +347,32 @@ class Controller
         $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
 
         return $render->get('/desktop/admin/log_admin.html.twig', $pageContent);
+    }
+
+    /**
+     * Render log_admin page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of log_admin page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function logDisplayPage(Render $render, array &$pageContent): string
+    {
+
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+
+        $pageContent['JS_VARS']['log_display_name'] = Utils::init('log', 'event');
+        $pageContent['JS_VARS']['log_default_search'] = Utils::init('search', '');
+
+        return $render->get('/desktop/admin/log_display.html.twig', $pageContent);
     }
 
     /**
