@@ -12,7 +12,8 @@
             nextdom_token: '{{ AJAX_TOKEN }}'
         }
     });
-    var nextdom_langage = '{{ LANGUAGE }}';
+    var nextdom_langage = '{{ LANGUAGE }}';{# Corrigé la faute #}
+    var jeedom_langage = '{{ LANGUAGE }}';{# Pour la compatibilité #}
     {% if JS_VARS is defined %}
     {% for jsVarName, jsVarValue in JS_VARS  %}
     var {{ jsVarName }} = "{{ jsVarValue }}";
