@@ -91,10 +91,10 @@
                                     </div>
                                     <div id="config_{{ index }}" class="panel-collapse collapse">
                                         <div class="box-body">
-                                            <div class="scenarioListContainer DisplayCard text-center">
+                                            <div class="scenarioListContainer DisplayCard text-center ">
                                                 {% for scenario in scenarios[scenarioGroup.group] %}
                                                     <div class="scenarioDisplayCard  icon_gestion cursor" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
-                                                        <img src="/public/img/scenario.png" height="65" width="65"/>
+                                                        <img class="backgroundColor" src="/public/img/scenario.png" height="65" width="65"/>
                                                         <br>
                                                         <span>{{ scenario.getHumanName(true, true, true, true)|raw }}</span>
                                                     </div>

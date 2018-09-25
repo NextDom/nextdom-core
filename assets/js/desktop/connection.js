@@ -1,11 +1,3 @@
-$(function () {
-    $('input').iCheck({
-        checkboxClass: 'icheckbox_minimal-blue',
-        radioClass: 'iradio_square-blue',
-        increaseArea: '20%' /* optional */
-    });
-});
-
 $('#in_login_username').on('focusout change keypress',function(){
     nextdom.user.useTwoFactorAuthentification({
         login: $('#in_login_username').value(),
