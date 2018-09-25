@@ -25,10 +25,6 @@
                     <a href="#step-4" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled"></a>
                     <p>{{ 'Étape 4' }}</p>
                 </div>
-                <div class="stepwizard-step">
-                    <a href="#step-5" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled"></a>
-                    <p>{{ 'Étape 5' }}</p>
-                </div>
             </div>
         </div>
     </div>
@@ -84,28 +80,20 @@
                     <button id="skipStep4" class="btn btn-primary nextBtn" type="button">{{ 'Ignorer' }}</button>
                     <button id="toStep4" class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:20px;">{{ 'Suivant' }}<i class="fa fa-caret-right"></i></button>
                     <button id="toStep2" class="btn btn-primary returnBtn pull-left" type="button" style="margin-top:20px;"><i class="fa fa-caret-left"></i>{{ 'Précédent' }}<i class="fas fa-caret-left"></i></button>
-                </div>
-                <div class="row setup-content" id="step-4">
-                    <div class="stepwizard">
-                        <h2 class="login-box-msg">{{ 'Agrémentez votre NextDom !' }}</h2>
-                        <h5>{{ 'Par l\'installation de plugins dont voici les plus utilisés :' }}</h5>
-                     </div>
-                    <button id="toStep5" class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:20px;">{{ 'Suivant' }}<i class="fa fa-caret-right"></i></button>
-                    <button id="toStep3" class="btn btn-primary returnBtn pull-left" type="button" style="margin-top:20px;"><i class="fa fa-caret-left"></i>{{ 'Précédent' }}</button>
-                </div>
-                <div class="row setup-content" id="step-5">
-                    <div class="stepwizard">
-                        <h2 class="login-box-msg">{{ 'Bravo ! La configuration de votre NextDom est terminée !' }}</h2>
-                        <h5>{{ 'Cliquer sur le bouton Terminer pour profiter de votre solution Domotique ...' }}</h5>
+                    <div class="row setup-content" id="step-4">
+                        <div class="stepwizard">
+                            <h2 class="login-box-msg">{{ 'Bravo ! La configuration de votre NextDom est terminée !' }}</h2>
+                            <h5>{{ 'Cliquer sur le bouton Terminer pour profiter de votre solution Domotique ...' }}</h5>
+                        </div>
+                        <button id="finishConf" class="btn btn-primary nextBtn pull-right ui-icon-closethick" type="button" style="margin-top:20px;">{{ 'Terminer' }}<i class="fa fa-check-circle"></i></button>
                     </div>
-                    <button id="finishConf" class="btn btn-primary nextBtn pull-right ui-icon-closethick" type="button" style="margin-top:20px;">{{ 'Terminer' }}<i class="fa fa-check-circle"></i></button>
                 </div>
             </div>
         </div>
+        {% if JS_END_POOL is defined %}
+            {% for jsFile in JS_END_POOL %}
+                <script src="{{ jsFile }}"></script>
+            {% endfor %}
+        {% endif %}
     </div>
-    {% if JS_END_POOL is defined %}
-        {% for jsFile in JS_END_POOL %}
-            <script src="{{ jsFile }}"></script>
-        {% endfor %}
-    {% endif %}
 </div>
