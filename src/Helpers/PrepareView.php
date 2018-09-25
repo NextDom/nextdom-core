@@ -460,9 +460,16 @@ class PrepareView
         } else {
             $controllerRoute = Controller::getRoute($page);
             if ($controllerRoute == null) {
-                ob_start();
-                \include_file('desktop', $page, 'php', '', true);
-                return ob_get_clean();
+                // Vérifie que l'utilisateur n'essaie pas de sortir
+                $purgedPage = preg_replace('/[^a-z0-9_-]/i', '', $page);
+                if (file_exists(NEXTDOM_ROOT.'/desktop/'.$purgedPage)) {
+                    ob_start();
+                    \include_file('desktop', $page, 'php', '', true);
+                    return ob_get_clean();
+                }
+                else {
+                    Router::showError404AndDie();
+                }
             } else {
                 return \NextDom\Helpers\Controller::$controllerRoute($render, $pageContent);
             }
