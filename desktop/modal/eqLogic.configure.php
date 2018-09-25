@@ -415,16 +415,16 @@ if ($eqLogic->getDisplay('parameters') != '') {
                                                     <div class="row">
                                                         <div class="col-lg-12">
                                                             <div class="form-group">
-                                                                <label class="col-xs-2 eqLogicAttr label label-danger" style="font-size : 1.8em">{{Danger}}</label>
+                                                                <label class="col-xs-2 eqLogicAttr label label-danger">{{Danger}}</label>
                                                                 <div class="col-xs-2">
                                                                     <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery_danger_threshold" />
                                                                 </input>
                                                             </div>
-                                                            <label class="col-xs-2 label label-warning" style="font-size : 1.8em">{{Warning}}</label>
+                                                            <label class="col-xs-2 label label-warning">{{Warning}}</label>
                                                             <div class="col-xs-2">
                                                                 <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery_warning_threshold" />
                                                             </div>
-                                                            <label class="col-xs-2 label label-success" style="font-size : 1.8em">{{Ok}}</label>
+                                                            <label class="col-xs-2 label label-success">{{Ok}}</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -432,7 +432,7 @@ if ($eqLogic->getDisplay('parameters') != '') {
                                                 <div class="row">
                                                     <div class="col-lg-12">
                                                         <div class="form-group">
-                                                            <label class="col-xs-2 eqLogicAttr label label-danger" style="font-size : 1.8em">{{Danger}}</label>
+                                                            <label class="col-xs-2 eqLogicAttr label label-danger">{{Danger}}</label>
                                                             <div class="col-xs-2">
                                                                 <input class="eqLogicAttr form-control" data-l1key="timeout"/>
                                                             </input>{{(en minutes)}}
