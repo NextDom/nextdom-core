@@ -1,5 +1,14 @@
-<br/>
-<ul class="nav nav-tabs-custom" role="tablist" id="ul_tabBatteryAlert">
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fas fa-pencil-square"></i> {{ 'Analyse équipements'}}</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
+            <a class="pull-right btn-box-tool" href="index.php?v=d&p=dashboard"><i class="fa fa-times"></i></a>
+        </div>
+    </div>
+    <div class="box-body"> <!-- div nécéssaire pour le js-->
+    <div class="nav-tabs-custom">
+<ul class="nav nav-tabs pull-right" role="tablist" id="ul_tabBatteryAlert">
     <li role="presentation" class="active batteries"><a href="#battery" aria-controls="battery" role="tab" data-toggle="tab"><i class="fas fa-battery-full"></i> {{ 'Batteries' }}</a></li>
     <li role="presentation" class="alerts"><a href="#alertEqlogic" aria-controls="alertEqlogic" role="tab" data-toggle="tab"><i class="fas fa-exclamation-triangle"></i> {{ 'Modules en alerte' }}</a></li>
     <li role="presentation"><a href="#actionCmd" aria-controls="actionCmd" role="tab" data-toggle="tab"><i class="fas fa-gears"></i> {{ 'Actions définies' }}</a></li>
@@ -234,4 +243,7 @@
             </table>
         </div>
     </div>
+</div>
+</div>
+</div>
 </div>
