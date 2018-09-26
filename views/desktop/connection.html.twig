@@ -10,16 +10,16 @@
         <br/>
         <div class="form-group has-feedback">
             <input type="text" class="form-control" placeholder="{{ 'Identifiant' }}" id="in_login_username">
-            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+            <span class="form-control-feedback"><i class="fas fa-user-circle"></i></i></span>
         </div>
         <div class="form-group has-feedback">
             <input type="password" class="form-control" placeholder="{{ 'Mot de Passe' }}" id="in_login_password">
-            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            <span class="form-control-feedback"><i class="fas fa-key"></i></span>
         </div>
         <div class="passwd form-group has-feedback" id="div_twoFactorCode" style="display:none;">
             <input type="text" id="in_twoFactorCode" placeholder="{{ 'Code à 2 facteur' }}" class="form-control">
         </div>
-        <div class="row" style="padding-bottom:20px;">
+        <div class="row">
             <div class="col-xs-8">
                 <div class="checkbox icheck ">
                     <label>
@@ -29,10 +29,11 @@
             </div>
             <!-- /.col -->
             <div class="col-xs-4">
-                <button class="btn btn-primary btn-block btn-flat" id="bt_login_validate">{{ 'Connexion' }}</button>
+                <button class="btn btn-primary btn-block btn-flat" id="bt_login_validate"><i class="fas fa-unlock"></i>{{ 'Connexion' }}</button>
             </div>
             <!-- /.col -->
         </div>
+        <br/>
         <a class="Link-Blue" href="https://www.nextdom.org/knowledge-base/reinitialiser-sont-mot-de-passe/">{{ 'Oups, J\'ai oublié mon mot de passe !' }}</a><br>
     </div>
     <!-- /.login-box-body -->
