@@ -91,7 +91,7 @@
                             {% endif %}
                             <i class="fas fa-cogs bt_configurationPlugin cursor pull-right icon-health" data-pluginid="{{ pluginData['plugin'].getId() }}"></i>
                             {% if pluginData['hasSpecificHealth'] %}
-                                <i data-pluginname="{{ pluginData['name'] }}" data-pluginid="{{ pluginData['id'] }}" class="fas fa-medkit bt_healthSpecific pull-right cursor icon-health" data-toggle="tooltip" title="" data-original-title="Santé spécifique"></i>
+                                <i data-pluginname="{{ pluginData['plugin'].getName() }}" data-pluginid="{{ pluginData['plugin'].getId() }}" class="fas fa-medkit bt_healthSpecific pull-right cursor icon-health" data-toggle="tooltip" title="" data-original-title="Santé spécifique"></i>
                             {% endif %}
                             {% if pluginData['hasOwnDaemon'] %}
                                 {% if pluginData['daemonAuto'] == 1 %}
