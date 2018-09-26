@@ -438,6 +438,12 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
+        $pageContent['adminReposList'] = UpdateManager::listRepo();
+        $keys = array('api', 'apipro', 'apimarket');
+        foreach ($pageContent['adminReposList'] as $key => $value) {
+            $keys[] = $key . '::enable';
+        }
+        $pageContent['adminConfigs'] = \config::byKeys($keys);
         $pageContent['adminIsRescueMode'] = Status::isRescueMode();
         if (!$pageContent['adminIsRescueMode']) {
             $pageContent['adminPluginsList'] = [];
