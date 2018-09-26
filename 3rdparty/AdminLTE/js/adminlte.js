@@ -752,7 +752,7 @@ throw new Error('AdminLTE requires jQuery')
       || ($('body').is(Selector.mini + Selector.layoutFixed))) {
       this.expandOnHover();
       $('body').addClass(ClassName.expandFeature);
-      **/  }
+       }**/ 
 
     $(Selector.contentWrapper).click(function () {
       // Enable hide menu when clicking on the content-wrapper on small screens
