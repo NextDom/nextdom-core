@@ -32,7 +32,7 @@
                         {% for eqLogic in eqAnalyzeEqLogicList %}
                             {% if eqLogic.getAlert() != '' %}
                                 {% set hasAlert = true %}
-                                {{ eqLogic.toHtml('dashboard') }}
+                                {{ eqLogic.toHtml('dashboard')|raw }}
                             {% endif %}
                         {% endfor %}
                         {% if not hasAlert %}

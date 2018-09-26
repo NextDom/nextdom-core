@@ -88,7 +88,6 @@ class Controller
      *
      * @return mixed|null Static method or null
      */
-
     public static function getRoute(string $page)
     {
         $route = null;
@@ -1842,6 +1841,7 @@ class Controller
         $pageContent['JS_END_POOL'][] = '/3rdparty/three.js/controls/OrbitControls.js';
         $pageContent['JS_END_POOL'][] = '/3rdparty/three.js/renderers/Projector.js';
         $pageContent['JS_END_POOL'][] = '/3rdparty/three.js/objects/Sky.js';
+        $pageContent['JS_END_POOL'][] = '/core/js/plan3d.class.js';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/plan3d.js';
         $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
 
