@@ -712,6 +712,6 @@ for ($i = 1; $i <= $getDisplayDasboardNbLine; $i++) {
                                             $('#md_modal2').load('index.php?v=d&modal=log.display&log=event&search=' + eqLogicInfoSearchString).dialog('open');
                                         });
 
-
+                                    $(document).trigger('icheck'); // apply icheck to checkboxes
 
                                     </script>
