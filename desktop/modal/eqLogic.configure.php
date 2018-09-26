@@ -404,7 +404,7 @@ if ($eqLogic->getDisplay('parameters') != '') {
                                                                     <div class="form-group">
                                                                         <label class="col-sm-4 control-label">{{Type de batterie}}</label>
                                                                         <div class="col-sm-6">
-                                                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery_type"></input>
+                                                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery_type" />>
                                                                         </div>
                                                                     </div>
                                                                 </fieldset>
@@ -418,7 +418,6 @@ if ($eqLogic->getDisplay('parameters') != '') {
                                                                 <label class="col-xs-2 eqLogicAttr label label-danger">{{Danger}}</label>
                                                                 <div class="col-xs-2">
                                                                     <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery_danger_threshold" />
-                                                                </input>
                                                             </div>
                                                             <label class="col-xs-2 label label-warning">{{Warning}}</label>
                                                             <div class="col-xs-2">
@@ -435,7 +434,7 @@ if ($eqLogic->getDisplay('parameters') != '') {
                                                             <label class="col-xs-2 eqLogicAttr label label-danger">{{Danger}}</label>
                                                             <div class="col-xs-2">
                                                                 <input class="eqLogicAttr form-control" data-l1key="timeout"/>
-                                                            </input>{{(en minutes)}}
+                                                                {{(en minutes)}}
                                                         </div>
                                                     </div>
                                                 </div>
