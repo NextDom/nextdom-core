@@ -495,7 +495,7 @@ if [ $? -ne 0 ]; then
     service apache2 restart >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
         echo " "
-        echo  ' >>>>> Can\'t restart Apache! Please do : "service apache2 restart" <<<<< '
+        echo  ' >>>>> Could not restart Apache! Please do : "service apache2 restart" <<<<< '
         echo " "
         err="1"
     fi
