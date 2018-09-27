@@ -166,9 +166,9 @@
                                                         {{ health['test'] }}
                                                     </td>
                                                     {% if health['state'] %}
-                                                        <td class="alert alert-success"></td>
+                                                        <td class="alert alert-success">{{ health['result'] }}</td>
                                                     {% else %}
-                                                        <td class="alert alert-danger"></td>
+                                                        <td class="alert alert-danger">{{ health['result'] }}</td>
                                                     {% endif %}
                                                     <td>{{ health['advice'] }}</td>
                                                 </tr>
