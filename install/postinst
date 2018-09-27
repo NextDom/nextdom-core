@@ -105,7 +105,13 @@ step_nextdom_prerequisites_verification() {
         notresponding=$?
         set -e
         if [[ ! ${notresponding} = "0" ]] ; then
+            set +e
+            service mysql restart >> ${DEBUG} 2>&1
+            mysqladmin -u root status >/dev/null 2>/dev/null
+            notresponding=$?
+            set -e
             echo ">>>> Error : MySQL not responding ! <<<<"
+            exit ${notresponding}
         fi
     else
         echo ">>>>> Remote database used <<<<<"
@@ -115,7 +121,7 @@ step_nextdom_prerequisites_verification() {
         set -e
         if [[ ! ${iret} = "0" ]] ; then
             echo ">>>> Error : can't connect to remote database <<<<"
-            exit 1
+            exit ${iret}
         fi
     fi
 
@@ -145,7 +151,12 @@ step_nextdom_prerequisites_verification() {
         cp ${WEBSERVER_HOME}/install/apache/privatetmp.conf /etc/systemd/system/apache2.service.d/privatetmp.conf >> ${DEBUG} 2>&1
         echo "<I> Creating file : /etc/systemd/system/apache2.service.d/privatetmp.conf"
     fi
-    #
+
+    # Windows hack (bash for windows)
+    if [[ ! $(uname -r | grep -i microsoft) = "" ]] ; then
+        bash ${WEBSERVER_HOME}/install/OS_specific/windows/pre_inst.sh >> ${DEBUG} 2>&1
+    fi
+
     # PHP
     ll=$(find /etc/ -iname php.ini -type f |wc -l) >> ${DEBUG} 2>&1
     if [[ "$ll" = "0" ]] ; then
@@ -191,14 +202,12 @@ step_nextdom_apache_php() {
     a2dismod status >> ${DEBUG} 2>&1
     a2enmod rewrite >> ${DEBUG} 2>&1
     #systemctl daemon-reload >> ${DEBUG} 2>&1
+    set +e
     service apache2 restart >> ${DEBUG} 2>&1
     if [ $? -ne 0 ]; then
         service apache2 restart >> ${DEBUG} 2>&1
-        if [ $? -ne 0 ]; then
-            printf "${ROUGE}Ne peut redémarrer apache - Annulation${NORMAL}"
-            exit 1
-        fi
     fi
+    set -e
 }
 
 
@@ -296,16 +305,17 @@ step_nextdom_mysql_populate() {
         mysql -u root -e "FLUSH PRIVILEGES;"
         #
         service mysql restart
-        php ${WEBSERVER_HOME}/install/install.php mode=force >> ${DEBUG} 2>&1
-        if [ $? -ne 0 ]; then
-            echo "${ROUGE}Ne peut installer nextdom - Annulation${NORMAL}"
-            exit 1
-        fi
-    else
-        echo " "
-        php ${WEBSERVER_HOME}/install/install.php mode=force >> ${DEBUG} 2>&1
+   # else
+   #     echo " "
+   #     php ${WEBSERVER_HOME}/install/install.php mode=force >> ${DEBUG} 2>&1
 #        mysql -u${MYSQL_NEXTDOM_USER} -p${MYSQL_NEXTDOM_PASSWD} -h${MYSQL_HOSTNAME} -D${MYSQL_NEXTDOM_DB} --port=${MYSQL_PORT} -e 'SHOW GRANTS;' >/dev/null 2>/dev/null
-        echo " "
+   #     echo " "
+    fi
+
+    php ${WEBSERVER_HOME}/install/install.php mode=force >> ${DEBUG} 2>&1
+    if [ $? -ne 0 ]; then
+        echo "${ROUGE}Ne peut installer nextdom - Annulation${NORMAL}"
+        exit 1
     fi
 }
 
@@ -417,15 +427,47 @@ step_nextdom_var_www_html() {
 # ======================================================================
 # Configure !
 
-step_nextdom_prerequisites_verification
+if [ -f ${WEBSERVER_HOME}/log/postinst.ok ]; then \rm -f ${WEBSERVER_HOME}/log/postinst.ok ; fi
+if [ -f ${WEBSERVER_HOME}/log/postinst.warn ]; then \rm -f ${WEBSERVER_HOME}/log/postinst.warn ; fi
+if [ -f ${WEBSERVER_HOME}/log/postinst.log ]; then \rm -f ${WEBSERVER_HOME}/log/postinst.log ; fi
+
+printf "step_nextdom_var_www_html ... " >> ${WEBSERVER_HOME}/log/postinst.log
 step_nextdom_var_www_html
+echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+
+printf "step_nextdom_prerequisites_verification ... " >> ${WEBSERVER_HOME}/log/postinst.log
+step_nextdom_prerequisites_verification
+echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+
+
+printf "step_nextdom_apache_php ... " >> ${WEBSERVER_HOME}/log/postinst.log
 step_nextdom_apache_php
+echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+
+printf "step_nextdom_configuration ... " >> ${WEBSERVER_HOME}/log/postinst.log
 step_nextdom_configuration
+echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+
+printf "step_nextdom_mysql_configuration ... " >> ${WEBSERVER_HOME}/log/postinst.log
 step_nextdom_mysql_configuration
+echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+
+printf "step_nextdom_mysql_populate ... " >> ${WEBSERVER_HOME}/log/postinst.log
 step_nextdom_mysql_populate
+echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+
+printf "step_nextdom_crontab ... " >> ${WEBSERVER_HOME}/log/postinst.log
 step_nextdom_crontab
+echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+
+printf "step_nextdom_check ... " >> ${WEBSERVER_HOME}/log/postinst.log
 step_nextdom_check
+echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+
+printf "distrib_1_spe ... " >> ${WEBSERVER_HOME}/log/postinst.log
 distrib_1_spe
+echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+
 chmod 777 -R /tmp/nextdom
 
 
@@ -442,4 +484,26 @@ if [ "${isdev}" = "1" ] ; then
     echo "> Please feel free to use another Certificate"
     echo " "
     echo " >>>>> COMPLETED <<<<< "
+fi
+
+echo " >>>>> COMPLETED <<<<< " >> ${WEBSERVER_HOME}/log/postinst.log
+
+set +e
+err="0"
+service apache2 restart >> ${DEBUG} 2>&1
+if [ $? -ne 0 ]; then
+    service apache2 restart >> ${DEBUG} 2>&1
+    if [ $? -ne 0 ]; then
+        echo " "
+        echo  ' >>>>> Can\'t restart Apache! Please do : "service apache2 restart" <<<<< '
+        echo " "
+        err="1"
+    fi
+fi
+set -e
+
+if [[ ${err} = "0" ]] ; then
+    touch ${WEBSERVER_HOME}/log/installation.ok
+else
+    touch ${WEBSERVER_HOME}/log/installation.warn
 fi
