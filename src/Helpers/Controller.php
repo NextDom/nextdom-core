@@ -865,47 +865,76 @@ class Controller
         $pageContent['healthPluginDataToShow'] = false;
         $pageContent['healthTotalNOk'] = 0;
         $pageContent['healthTotalPending'] = 0;
+        // Santé pour chaque plugin
         foreach (PluginManager::listPlugin(true) as $plugin) {
             $pluginData = [];
             $pluginData['hasSpecificHealth'] = false;
+            // Test si le plugin offre une information spécifique pour sa santé
             if (file_exists(dirname(PluginManager::getPathById($plugin->getId())) . '/../desktop/modal/health.php')) {
                 $pluginData['hasSpecificHealth'] = true;
             }
+            /**
+             * Ajouter des informations sur la santé si le plugin
+             *  - A des dépendances
+             *  - A un daemon
+             *  - A une méthode health
+             *  - A une informations de santé spécifique
+             */
             if ($plugin->getHasDependency() == 1 || $plugin->getHasOwnDeamon() == 1 || method_exists($plugin->getId(), 'health') || $pluginData['hasSpecificHealth']) {
+                // Etat pour savoir si des données doivent être affichées
                 $pageContent['healthPluginDataToShow'] = true;
+                // Objet du plugin
                 $pluginData['plugin'] = $plugin;
+                // Port si nécessaire
                 $pluginData['port'] = false;
+                // Nombre d'erreur
                 $pluginData['nOk'] = 0;
+                // Nombre d'état en attente
                 $pluginData['pending'] = 0;
+                // Etat pour savoir si le plugin a des dépendances
                 $pluginData['hasDependency'] = false;
+                // Etat pour savoir si le plugin a un daemon
                 $pluginData['hasOwnDaemon'] = false;
+                // Etat pour savoir si le tableau doit être affiché
                 $pluginData['showOnlyTable'] = false;
+                // Le port du plugin est stocké dans la configuration
                 $port = \config::byKey('port', $plugin->getId());
+                // Si un port est configuré, stockage pour la vue
                 if ($port != '') {
                     $pluginData['port'] = $port;
                 }
+                // Si le plugin a des dépendances, un daemon, une méthode health ou des informations de santé
+                // Affiche le tableau
                 if ($plugin->getHasDependency() == 1 || $plugin->getHasOwnDeamon() == 1 || method_exists($plugin->getId(), 'health')) {
                     $pluginData['showOnlyTable'] = true;
                 }
+                // Si le plugin a des dépendances
                 if ($plugin->getHasDependency() == 1) {
                     $pluginData['hasDependency'] = true;
                     $dependencyInfo = $plugin->dependancy_info();
+                    // récupération des informations sur ses dépendances
                     if (isset($dependencyInfo['state'])) {
                         $pluginData['dependencyState'] = $dependencyInfo['state'];
+                        // Erreur
                         if ($pluginData['dependencyState'] == 'nok') {
                             $pluginData['nOk']++;
+                        // En cours
                         } elseif ($pluginData['dependencyState'] == 'in_progress') {
                             $pluginData['pending']++;
+                        // Autres
                         } elseif ($pluginData['dependencyState'] != 'ok') {
                             $pluginData['nOk']++;
                         }
                     }
                 }
+                // Si le plugin a un daemon
                 if ($plugin->getHasOwnDeamon() == 1) {
                     $pluginData['hasOwnDaemon'] = true;
                     $daemonInfo = $plugin->deamon_info();
+                    // Statut du lancement automatique
                     $pluginData['daemonAuto'] = $daemonInfo['auto'];
                     if (isset($daemonInfo['launchable'])) {
+                        // Erreur si le daemon doit est lançable et qu'il n'est pas lancé
                         $pluginData['daemonLaunchable'] = $daemonInfo['launchable'];
                         if ($pluginData['daemonLaunchable'] == 'nok' && $pluginData['daemonAuto'] == 1) {
                             $pluginData['nOk']++;
@@ -913,21 +942,24 @@ class Controller
                     }
                     $pluginData['daemonLaunchableMessage'] = $daemonInfo['launchable_message'];
                     $pluginData['daemonState'] = $daemonInfo['state'];
+                    // Erreur si le daemon doit se lancer en automatique et qu'il n'est pas lancé
                     if ($pluginData['daemonState'] == 'nok' && $pluginData['daemonAuto'] == 1) {
                         $pluginData['nOk']++;
                     }
                 }
+                // Données fournies par le plugin
                 if (method_exists($plugin->getId(), 'health')) {
                     $pluginData['health'] = [];
-                    // Je vois pas quand ça peut être appelé
-                    foreach ($plugin->getId()::health() as $result) {
+                    // Récupère l'ensemble des données et boucle
+                    foreach ($plugin->getId()::health() as $pluginHealthData) {
                         $pluginData['health'][] = [
-                            'test' => $result['test'],
-                            'state' => $result['state'],
-                            'advice' => $result['advice']
+                            'test' => $pluginHealthData['test'],
+                            'state' => $pluginHealthData['state'],
+                            'result' => $pluginHealthData['result'],
+                            'advice' => $pluginHealthData['advice']
                         ];
-                        if ($result['state'] == 'nok') {
-                            $pluginData['nOk'] = true;
+                        if ($pluginHealthData['state'] == 'nok') {
+                            $pluginData['nOk']++;
                         }
                     }
                 }
