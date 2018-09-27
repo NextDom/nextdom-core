@@ -1,10 +1,6 @@
 <div class="box"  id="general">
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fa fa-wrench"></i> {{ 'Général' }}</h3>
-        <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
-            <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
-        </div>
     </div>
     <div class="box-body">
         <form class="form-horizontal">
@@ -19,7 +15,7 @@
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="Indique votre type de matériel">{{'Système / Hardware'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                        <a class="btn btn-warning btn-sm" id="bt_resetHardwareType"><i class="fa fa-refresh"></i>{{'Rafraîchir'}}</a>
+                        <a class="btn btn-warning btn-sm" id="bt_resetHardwareType"><i class="fa fa-refresh">&nbsp;&nbsp;</i>{{'Rafraîchir'}}</a>
                     </div>
                     <div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
                         <span class="label label-info label-config">{{ adminHardwareName }}</span>
@@ -28,13 +24,13 @@
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Clef d\'installation qui permet d\'identifier votre NextDom quand il communique avec le market'}}">{{'Clef d\'installation'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                        <a class="btn btn-warning btn-sm" id="bt_resetHwKey"><i class="fa fa-bomb"></i>{{'Remise à zéro'}}</a>
+                        <a class="btn btn-warning btn-sm" id="bt_resetHwKey"><i class="fa fa-bomb">&nbsp;&nbsp;</i>{{'Remise à zéro'}}</a>
                     </div>
                     <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
                         <span class="label label-info label-config">{{ adminHardwareKey }}</span>
                     </div>
                 </div>
-                <legend >{{ 'Langage' }}</legend>
+                <legend class="legend-title-2">{{ 'Langage' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Langue de votre NextDom'}}">{{'Langue'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
@@ -57,7 +53,7 @@
                         </div>
                     </div>
                 </div>
-                <legend >{{ 'Horodatage' }}</legend>
+                <legend class="legend-title-2">{{ 'Horodatage' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Durée de vie de votre connexion à NextDom si vous n\'avez pas coché la case enregistrer cet ordinateur'}}">{{'Durée de vie des sessions (en H)'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
@@ -67,7 +63,7 @@
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{'Dernière date connue'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                        <a class="btn btn-warning btn-sm" id="bt_resetHour"><i class="fa fa-bomb"></i>{{'Remise à zéro'}}</a>
+                        <a class="btn btn-warning btn-sm" id="bt_resetHour"><i class="fa fa-bomb">&nbsp;&nbsp;</i>{{'Remise à zéro'}}</a>
                     </div>
                     <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
                         <span class="label label-info label-config">{{ adminLastKnowDate }}</span>
@@ -76,7 +72,7 @@
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-help="Fuseau horaire de votre NextDom">{{'Date et heure'}}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
-                        <a class="btn btn-primary btn-sm" id="bt_forceSyncHour"><i class="fa fa-clock-o"></i>{{'Synchronisation'}}</a>
+                        <a class="btn btn-primary btn-sm" id="bt_forceSyncHour"><i class="fa fa-clock-o">&nbsp;&nbsp;</i>{{'Synchronisation'}}</a>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4">
                         <select class="configKey form-control" data-l1key="timezone">
@@ -190,6 +186,7 @@
         </form>
     </div>
     <div class="box-footer clearfix">
-        <a class="btn btn-success btn-sm pull-right" id="bt_savegeneral"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+        <a class="btn btn-success pull-right" id="bt_savegeneral"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+        <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-backspace">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
     </div>
 </div>
