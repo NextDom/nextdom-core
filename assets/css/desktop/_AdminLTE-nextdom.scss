@@ -232,7 +232,13 @@ body {
 
 .btn-app {
   line-height: 2.5;
-  height: 80px;
+  height: 70px;
+}
+
+.btn-app>.badge {
+    top: 3px;
+    right: 3px;
+    font-size: 12px;
 }
 
 .nav-pills > li > a > .fa,
@@ -324,6 +330,7 @@ body {
   width: 100%;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
 }
+
 .card {
   position: relative;
   display: flex;
@@ -343,23 +350,26 @@ body {
 .card .card-header {
   z-index: 3!important;
 }
+
 .card[class*=bg-], .card[class*=bg-] .card-title, .card[class*=bg-] .card-title a, .card[class*=bg-] .icon i, .card [class*=card-header-], .card [class*=card-header-] .card-title, .card [class*=card-header-] .card-title a, .card [class*=card-header-] .icon i {
   color: #fff;
 }
+
 .card .card-header {
   border-bottom: none;
   background: transparent;
 }
+
 .card-header:first-child {
   border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
   margin-top: -25px;
 }
+
 .card-header {
   padding: .75rem 1.25rem;
   margin-bottom: 0;
   background-color: #fff;
   border-bottom: 1px solid #eee;
-
 }
 
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text {
@@ -392,8 +402,8 @@ body {
 }
 
 .container-fluid{
-     padding-right: 0;
- padding-left: 0;
+  padding-right: 0;
+  padding-left: 0;
 }
 
 #div_pageContainer{
