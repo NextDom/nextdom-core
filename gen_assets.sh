@@ -33,8 +33,8 @@ function gen_js {
         3rdparty/iziToast/js/iziToast.min.js \
         assets/js/desktop/utils.js \
         core/js/core.js \
-        3rdparty/jquery.ui/jquery-ui.min.js \
         3rdparty/bootstrap/js/bootstrap.js \
+        3rdparty/jquery.ui/jquery-ui.min.js \
         core/js/nextdom.class.js \
         core/js/private.class.js \
         core/js/eqLogic.class.js \
