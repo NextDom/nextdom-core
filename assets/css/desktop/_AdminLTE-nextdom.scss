@@ -9,6 +9,13 @@ body {
 .main-header {
   z-index: 1030;
 }
+
+@media (min-width: 768px) {
+  .sidebar-mini.sidebar-collapse .main-sidebar {
+    z-index: 1020;
+  }
+}
+
 .main-header .navbar {
   box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.5);
 }
@@ -204,7 +211,7 @@ body {
   background: #d2d6de;
   border-radius: 50%;
   text-align: center;
-  left: 18px;
+  left: 16px;
   top: 0;
 }
 
