@@ -44,7 +44,7 @@
                 <li class="dropdown notifications-menu" id="bt_messageModal">
                     <a href="#"  >
                         <i class="fas fa-bell notifbadge"></i>
-                        <span class="label label-warning notifcounter">{{ MENU_NB_MESSAGES }}</span>
+                        <span id="span_nbMessage" class="label label-warning notifcounter">{{ MENU_NB_MESSAGES }}</span>
                     </a>
                 </li>
                 <!-- Tasks: style can be found in dropdown.less bt_messageModal-->
@@ -52,7 +52,7 @@
                     <li class="tasks-menu">
                         <a href="index.php?v=d&p=update">
                             <i class="fas fa-download notifbadge"></i>
-                            <span class="label label-danger notifcounter">{{ MENU_NB_UPDATES }}</span>
+                            <span id="span_nbUpdate" class="label label-danger notifcounter">{{ MENU_NB_UPDATES }}</span>
                         </a>
                     </li>
                 {% endif %}
