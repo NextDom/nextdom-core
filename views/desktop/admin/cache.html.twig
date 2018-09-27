@@ -9,7 +9,7 @@
         <form class="form-horizontal">
             <fieldset>
                 <div class="alert alert-config alert-info">
-                    {{ 'Attention : toute modification du moteur de cache nécessite un redémarrage de' }} {{ adminConfigs['product_name'] }}
+                    {{ 'Attention : toute modification du moteur de cache nécessite un redémarrage de votre Nextdom :' }} {{ adminConfigs['product_name'] }}
                 </div>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Statistiques' }}</label>
@@ -61,10 +61,10 @@
                 </div>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Maintenance du cache' }}</label>
-                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
                         <a class="btn btn-warning" id="bt_cleanCache"><i class="fa fa-magic">&nbsp;&nbsp;</i>{{ 'Nettoyer' }}</a>
                     </div>
-                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
                         <a class="btn btn-danger" id="bt_flushCache"><i class="fa fa-trash">&nbsp;&nbsp;</i>{{ 'Vider' }}</a>
                     </div>
                 </div>
