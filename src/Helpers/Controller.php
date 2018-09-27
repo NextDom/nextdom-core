@@ -245,8 +245,13 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
+        $pageContent['adminReposList'] = UpdateManager::listRepo();
+        $keys = array('dns::token', 'market::allowDNS');
+        foreach ($pageContent['adminReposList'] as $key => $value) {
+            $keys[] = $key . '::enable';
+        }
+        $pageContent['adminConfigs'] = \config::byKeys($keys);
         $pageContent['adminNetworkInterfaces'] = [];
-
         foreach (\network::getInterfaces() as $interface) {
             $intData = [];
             $intData['name'] = $interface;
@@ -698,7 +703,7 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageContent['adminReposList'] = UpdateManager::listRepo();
-        $keys = array('api', 'apipro', 'dns::token', 'market::allowDNS', 'market::allowBeta', 'market::allowAllRepo', 'ldap::enable', 'apimarket', 'product_name', 'security::bantime');
+        $keys = array('market::allowDNS');
         foreach ($pageContent['adminReposList'] as $key => $value) {
             $keys[] = $key . '::enable';
         }
