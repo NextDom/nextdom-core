@@ -9,6 +9,11 @@ body {
 .main-header {
   z-index: 1030;
 }
+
+.main-sidebar {
+  z-index: 1020;
+}
+
 .main-header .navbar {
   box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.5);
 }
