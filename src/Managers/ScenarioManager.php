@@ -240,8 +240,8 @@ class ScenarioManager
     public static function check($event = null, $forceSyncMode = false)
     {
         $message = '';
+        $scenarios = [];
         if ($event !== null) {
-            $scenarios = [];
             if (is_object($event)) {
                 $eventScenarios = self::byTrigger($event->getId());
                 $trigger = '#' . $event->getId() . '#';
@@ -260,16 +260,14 @@ class ScenarioManager
             }
         } else {
             $message = \__('Scénario exécuté automatiquement sur programmation');
-            $scenarios = self::schedule();
+            $scheduledScenarios = self::schedule();
             $trigger = 'schedule';
             if (\nextdom::isDateOk()) {
-                foreach ($scenarios as $key => &$scenario) {
+                foreach ($scheduledScenarios as $key => $scenario) {
                     if ($scenario->getState() != 'in progress') {
-                        if (!$scenario->isDue()) {
-                            unset($scenarios[$key]);
+                        if ($scenario->isDue()) {
+                            $scenarios[] = $scenario;
                         }
-                    } else {
-                        unset($scenarios[$key]);
                     }
                 }
             }
