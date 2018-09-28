@@ -64,7 +64,7 @@
                         <div class="row">
                             <div id="market" class="col-sm-12 col-md-6">
                                 <h5>{{ 'Je n\'ai pas de compte Market' }}</h5>
-                                <button class="dark btn" id="bt_compte_market"><i class="fa fa-sign-in"></i> {{ 'Je veux en créer un' }}</button>
+                                <button class="dark btn" id="bt_compte_market"><i class="fa fa-sign-in"></i> {{ 'Je veux en créer un !' }}</button>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <h5>{{ 'J\'ai un compte market' }}</h5>
@@ -77,14 +77,15 @@
                             </div>
                         </div>
                     </div>
-                    <button id="skipStep4" class="btn btn-primary nextBtn" type="button">{{ 'Ignorer' }}</button>
+                    <button id="skipStep4" class="btn btn-primary nextBtn" type="button">{{ 'Ignorer' }}<i class="fa fa-ban"></i></button>
                     <button id="toStep4" class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:20px;">{{ 'Suivant' }}<i class="fa fa-caret-right"></i></button>
                     <button id="backStep2" class="btn btn-primary returnBtn pull-left" type="button" style="margin-top:20px;"><i class="fa fa-caret-left"></i>{{ 'Précédent' }}<i class="fas fa-caret-left"></i></button>
-                    </div>
-                    <div class="row setup-content" id="step-4">
-                        <div class="stepwizard">
-                            <h2 class="login-box-msg">{{ 'Bravo ! La configuration de votre NextDom est terminée !' }}</h2>
-                            <h5>{{ 'Cliquer sur le bouton Terminer pour profiter de votre solution Domotique ...' }}</h5>
+                </div>
+                <div class="row setup-content" id="step-4">
+                    <div class="stepwizard">
+                        <h2 class="login-box-msg">{{ 'Bravo ! La configuration de votre NextDom est terminée !' }}</h2>
+                        <h5>{{ 'Cliquer sur le bouton Terminer pour profiter de votre solution Domotique ...' }}</h5>
+
                         </div>
                         <button id="finishConf" class="btn btn-primary nextBtn pull-right ui-icon-closethick" type="button" style="margin-top:20px;">{{ 'Terminer' }}<i class="fa fa-check-circle"></i></button>
                         <button id="backStep3" class="btn btn-primary returnBtn pull-left" type="button" style="margin-top:20px;"><i class="fa fa-caret-left"></i>{{ 'Précédent' }}</button>

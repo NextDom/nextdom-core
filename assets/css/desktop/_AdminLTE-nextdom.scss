@@ -3,7 +3,7 @@ body {
 }
 
 .Link-Blue {
-  color: #33B8CC;
+  color: $nextdom_blue;
 }
 
 .main-header {
@@ -125,8 +125,8 @@ body {
 }
 
 .treeview-menu > li {
-    padding-top: 1px;
-    padding-bottom: 1px;
+  padding-top: 1px;
+  padding-bottom: 1px;
 }
 
 .treeview-menu > li > a > .fa,
@@ -137,7 +137,7 @@ body {
 }
 
 .treeview-menu > li > a {
-    padding: 5px 15px 5px 15px;
+  padding: 5px 15px 5px 15px;
 }
 
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .glyphicon,
@@ -150,7 +150,7 @@ body {
 .form-control {
   border-radius: 0;
   box-shadow: none;
-  border-color: #d2d6de;
+  border-color: $lightgrey;
   padding-left: 10px !important;
 }
 
@@ -163,11 +163,11 @@ body {
 .box {
   position: relative;
   border-radius: 4px;
-  background: #ffffff;
+  background: $white;
   border-left: 1px solid rgba(0,0,0,0.2);
   border-right: 1px solid rgba(0,0,0,0.2);
   border-bottom: 1px solid rgba(0,0,0,0.2);
-  border-top: 3px solid #d2d6de;
+  border-top: 3px solid $lightgrey;
   margin-bottom: 20px;
   width: 100%;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08);
@@ -207,8 +207,8 @@ body {
   font-size: 15px;
   line-height: 30px;
   position: absolute;
-  color: #666;
-  background: #d2d6de;
+  color: $grey;
+  background: $lightgrey;
   border-radius: 50%;
   text-align: center;
   left: 16px;
@@ -225,8 +225,8 @@ body {
 }
 
 .btn-primary {
-  background-color: #33B8CC;
-  border-color: #33B8CC;
+  background-color: $nextdom_blue;
+  border-color: $nextdom_blue;
 }
 
 .btn-app > .fa,
@@ -235,6 +235,17 @@ body {
 .btn-app > .ion {
   font-size: 20px;
   display: block;
+}
+
+.btn-app {
+  line-height: 2.5;
+  height: 70px;
+}
+
+.btn-app>.badge {
+    top: 3px;
+    right: 3px;
+    font-size: 12px;
 }
 
 .nav-pills > li > a > .fa,
@@ -262,7 +273,7 @@ body {
 }
 
 .nav-tabs-custom > .tab-content {
-  background: #fafafa;
+  background: $whitelightgray;
 }
 
 .nav-tabs a {
@@ -283,7 +294,7 @@ body {
 
 .login-page,
 .register-page {
-  background: #d2d6de;
+  background: whitesmoke;
   overflow: hidden;
 }
 
@@ -311,6 +322,7 @@ body {
 
 .login-page .icheck {
     margin-top: 0px;
+    line-height: 1.25;
 }
 .card {
   box-shadow: 0 1px 4px 0 rgba(0,0,0,.14);
@@ -326,15 +338,16 @@ body {
   width: 100%;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
 }
+
 .card {
   position: relative;
   display: flex;
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: #fff;
+  background-color: $white;
   background-clip: border-box;
-  border: 1px solid #eee;
+  border: 1px solid $whitegray;
   border-radius: .25rem;
 }
 
@@ -345,28 +358,31 @@ body {
 .card .card-header {
   z-index: 3!important;
 }
+
 .card[class*=bg-], .card[class*=bg-] .card-title, .card[class*=bg-] .card-title a, .card[class*=bg-] .icon i, .card [class*=card-header-], .card [class*=card-header-] .card-title, .card [class*=card-header-] .card-title a, .card [class*=card-header-] .icon i {
-  color: #fff;
+  color: $white;
 }
+
 .card .card-header {
   border-bottom: none;
   background: transparent;
 }
+
 .card-header:first-child {
   border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
   margin-top: -25px;
 }
+
 .card-header {
   padding: .75rem 1.25rem;
   margin-bottom: 0;
-  background-color: #fff;
-  border-bottom: 1px solid #eee;
-
+  background-color: $white;
+  border-bottom: 1px solid $whitegray;
 }
 
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text {
   border-radius: 5px;
-  background-color: #999;
+  background-color: $darkgray;
   margin-top: -10px;
   margin-right: 15px;
   float: left;
@@ -387,34 +403,27 @@ body {
 
 .content-wrapper {
   min-height: 100%;
-  background-color: #ecf0f5;
+  background-color: $nextdom_bg;
   z-index: 800;
   padding-left: 15px;
   padding-right: 15px;
 }
 
 .container-fluid{
-     padding-right: 0;
- padding-left: 0;
+  padding-right: 0;
+  padding-left: 0;
 }
 
 #div_pageContainer{
   top: 10px;
 }
 
-.legend-title-1 {
+.legend-title {
     font-size: 16px;
-    border: 1px solid #e5e5e5;
+    border: 1px solid $whitegray;
     padding: 5px 10px;
     margin-bottom: 15px;
-    background-color: lightgrey;
-}
-
-.legend-title-2 {
-    font-size: 16px;
-    border: 1px solid #e5e5e5;
-    padding: 5px 10px;
-    margin-bottom: 15px;
+    background-color: whitesmoke;
 }
 
 .btn-tab {
@@ -426,23 +435,23 @@ body {
     margin-right: -10px;
 }
 
-.alert-config {
+.alert-config,
+.alert {
     width: 100%;
 }
 
 .label-config {
     padding: 9px 10px 10px;
     font-size: 100%;
-    background-color: #33B8CC !important;
-}
-
-.legend-title-1> .fa,
-.legend-title-1> .fas {
-    padding-right: 5px;
+    background-color: $nextdom_blue !important;
 }
 
 .login-logo{
-  background-color: #33B8CC;
+  background-color: $nextdom_blue;
+}
+
+.progress {
+    margin-bottom: 10px;
 }
 
 .wrapper.fullscreen header,
@@ -458,4 +467,3 @@ body {
 .wrapper.fullscreen #div_mainContainer {
   margin-top: -50px;
 }
-
