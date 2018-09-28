@@ -201,6 +201,7 @@ $(function () {
         bootbox.setDefaults({
             locale: nextdom_langage.substr(0, 2),
         });
+            
     }
 
     //Display report bug
@@ -385,7 +386,7 @@ function initTextArea(){
 }
 
 function initCheckBox(){
-
+    $(document).trigger('icheck'); // apply icheck to checkboxes
 }
 
 function initPage(){

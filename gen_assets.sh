@@ -33,8 +33,8 @@ function gen_js {
         3rdparty/iziToast/js/iziToast.min.js \
         assets/js/desktop/utils.js \
         core/js/core.js \
-        3rdparty/jquery.ui/jquery-ui.min.js \
         3rdparty/bootstrap/js/bootstrap.js \
+        3rdparty/jquery.ui/jquery-ui.min.js \
         core/js/nextdom.class.js \
         core/js/private.class.js \
         core/js/eqLogic.class.js \
@@ -94,7 +94,8 @@ function gen_js {
         3rdparty/datetimepicker/jquery.datetimepicker.js \
         3rdparty/ion.rangeSlider/js/ion.rangeSlider.js \
         3rdparty/AdminLTE/js/adminlte.js \
-        3rdparty/AdminLTE/js/adminlte_nextdom.js > /tmp/temp.js
+        3rdparty/AdminLTE/js/adminlte_nextdom.js \
+        3rdparty/icheck/icheck.js > /tmp/temp.js
     python -m jsmin /tmp/temp.js > public/js/base.js
     rm /tmp/temp.js
     php script/translate.php public/js/base.js
