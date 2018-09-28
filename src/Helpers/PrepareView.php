@@ -339,7 +339,6 @@ class PrepareView
             $pageData['JS_POOL'][] = '/core/js/core.js ';
             $pageData['JS_POOL'][] = '/3rdparty/bootstrap/js/bootstrap.js ';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.ui/jquery-ui.min.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/iCheck/icheck.js ';
             $pageData['JS_POOL'][] = '/core/js/nextdom.class.js ';
             $pageData['JS_POOL'][] = '/core/js/private.class.js ';
             $pageData['JS_POOL'][] = '/core/js/eqLogic.class.js ';
@@ -402,7 +401,6 @@ class PrepareView
             $pageData['JS_POOL'][] = '/3rdparty/ion.rangeSlider/js/ion.rangeSlider.js ';
             $pageData['JS_POOL'][] = '/3rdparty/AdminLTE/js/adminlte.js ';
             $pageData['JS_POOL'][] = '/3rdparty/AdminLTE/js/adminlte_nextdom.js';
-            $pageData['JS_POOL'][] = '/3rdparty/icheck/icheck.js';
         }
     }
 
