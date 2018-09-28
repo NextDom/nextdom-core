@@ -871,6 +871,7 @@ class eqLogic
 
     public function refreshWidget()
     {
+        $this->_needRefreshWidget = false;
         $this->emptyCacheWidget();
         event::add('EqLogicManager::update', array('eqLogic_id' => $this->getId()));
     }
@@ -1335,12 +1336,18 @@ class eqLogic
 
     public function setIsVisible($_isVisible)
     {
+        if ($this->isVisible != $_isVisible) {
+            $this->_needRefreshWidget = true;
+        }
         $this->isVisible = $_isVisible;
         return $this;
     }
 
     public function setIsEnable($_isEnable)
     {
+        if ($this->isEnable != $_isEnable) {
+            $this->_needRefreshWidget = true;
+        }
         $this->isEnable = $_isEnable;
         return $this;
     }
@@ -1366,8 +1373,10 @@ class eqLogic
     }
 
     public function setDisplay($_key, $_value) {
+        if ($this->getDisplay($_key) != $_value) {
+            $this->_needRefreshWidget = true;
+        }
         $this->display = utils::setJsonAttr($this->display, $_key, $_value);
-        $this->_needRefreshWidget = true;
     }
 
     public function getTimeout($_default = null) {
@@ -1396,6 +1405,9 @@ class eqLogic
     }
 
     public function setCategory($_key, $_value) {
+        if ($this->getCategory($_key) != $_value) {
+            $this->_needRefreshWidget = true;
+        }
         $this->category = utils::setJsonAttr($this->category, $_key, $_value);
         return $this;
     }
