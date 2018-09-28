@@ -51,8 +51,8 @@
             <div class="card-header card-header-icon">
                 <div class="card-icon" style="background:{{ dashboardObject.getDisplay("tagColor") }}">
                     {{ dashboardObject.getDisplay("icon")|raw }}</i>
+                    <a class="card-category" style="color:white;vertical-align: -2px;"><b>{{ dashboardObject.getName() }}</b></a>
                 </div>
-                <a class="card-category" style="color:white;vertical-align: -2px;"><b>{{ dashboardObject.getName() }}</b></a>
             </div>
             <div class="card-body">
                 <div class="div_displayEquipement" id="div_ob{{ dashboardObject.getId() }}" style="width: 100%;padding-top:3px;margin-bottom : 3px;">

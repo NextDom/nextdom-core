@@ -29,7 +29,7 @@
                             <li class="treeview-menu">
                             <li><a href="index.php?v=d&p=dashboard">{{ 'Afficher tout' }}</a></li>
                             {% for jeeObject in MENU_JEEOBJECT_TREE %}
-                                <li><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>&nbsp;&nbsp;
+                                <li><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a>&nbsp;&nbsp;</li>
                             {% endfor %}
                         </ul>
                     </li>
