@@ -96,14 +96,14 @@
                                     <div class="form-group">
                                         <label class="col-xs-4 control-label">{{ 'Utiliser les DNS' }} {{ adminConfigs['product_name'] }}</label>
                                         <div class="col-xs-8">
-                                            <input type="checkbox" class="configKey" data-l1key="{{ $pageContent['networkkey'] }}::allowDNS"/>
+                                            <input type="checkbox" class="configKey" data-l1key="{{ pageContent['networkkey'] }}::allowDNS"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-xs-4 control-label">{{ 'Statut DNS' }}</label>
                                         <div class="col-xs-8">
                                             {% if adminConfigs['market::allowDNS'] == 1 and adminDnsRun %}
-                                                <span class="label label-success">{{ 'Démarré : ' }} <a href="{{ $pageContent['adminNetworkExternalAccess']  }}" target="_blank" class="link-dns-success">{{ adminNetworkExternalAccess }}</a></span>
+                                                <span class="label label-success">{{ 'Démarré : ' }} <a href="{{ pageContent['adminNetworkExternalAccess'] }}" target="_blank" class="link-dns-success">{{ adminNetworkExternalAccess }}</a></span>
                                             {% else %}
                                                 <span class="label label-warning" data-toggle="tooltip" title="" data-original-title="{{ 'Normal si vous n\'avez pas coché la case : Utiliser les DNS' }} {{ adminConfigs['product_name'] }}">{{ 'Arrêté' }}</span>
                                             {% endif %}
