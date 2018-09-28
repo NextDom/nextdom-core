@@ -25,8 +25,8 @@ if (!isset(nextdom.cmd.update)) {
     nextdom.cmd.update = Array();
 }
 nextdom.cmd.execute = function(_params) {
-    var needNotify = _params.notify || true;
-    if (needNotify) {
+    var notify = _params.notify || true;
+    if (notify) {
         var eqLogic = $('.cmd[data-cmd_id=' + _params.id + ']').closest('.eqLogic');
         eqLogic.find('.statusCmd').empty().append('<i class="fa fa-spinner fa-spin"></i>');
     }
@@ -40,16 +40,19 @@ nextdom.cmd.execute = function(_params) {
             if (data.state != 'ok') {
                 if(data.code == -32005){
                     if ($.mobile) {
-                     var result = prompt("{{Veuillez indiquer le code ?}}", "")
-                     if(result != null){
-                         _params.codeAccess = result;
-                         nextdom.cmd.execute(_params);
-                     }else{
+                       var result = prompt("{{Veuillez indiquer le code ?}}", "")
+                       if(result != null){
+                           _params.codeAccess = result;
+                           nextdom.cmd.execute(_params);
+                       }else{
                         nextdom.cmd.refreshValue({id:_params.id});
                         if ('function' != typeof(_params.error)) {
-                            notify("Erreur", data.result, 'error');
+                            $('#div_alert').showAlert({
+                                message: data.result,
+                                level: 'danger'
+                            });
                         }
-                        if (needNotify) {
+                        if (notify) {
                             eqLogic.find('.statusCmd').empty().append('<i class="fa fa-times"></i>');
                             setTimeout(function() {
                                 eqLogic.find('.statusCmd').empty();
@@ -58,16 +61,19 @@ nextdom.cmd.execute = function(_params) {
                         return data;
                     }
                 }else{
-                 bootbox.prompt("{{Veuillez indiquer le code ?}}", function (result) {
+                   bootbox.prompt("{{Veuillez indiquer le code ?}}", function (result) {
                     if(result != null){
-                     _params.codeAccess = result;
-                     nextdom.cmd.execute(_params);
-                 }else{
+                       _params.codeAccess = result;
+                       nextdom.cmd.execute(_params);
+                   }else{
                     nextdom.cmd.refreshValue({id:_params.id});
                     if ('function' != typeof(_params.error)) {
-                        notify("Erreur", data.result, 'error');
+                        $('#div_alert').showAlert({
+                            message: data.result,
+                            level: 'danger'
+                        });
                     }
-                    if (needNotify) {
+                    if (notify) {
                         eqLogic.find('.statusCmd').empty().append('<i class="fa fa-times"></i>');
                         setTimeout(function() {
                             eqLogic.find('.statusCmd').empty();
@@ -77,19 +83,22 @@ nextdom.cmd.execute = function(_params) {
                 }
 
             });
-             }
-         }else if(data.code == -32006){
-             if ($.mobile) {
-                 var result = confirm("{{Etes-vous sûr de vouloir faire cette action ?}}")
-                 if(result){
+               }
+           }else if(data.code == -32006){
+               if ($.mobile) {
+                   var result = confirm("{{Etes-vous sûr de vouloir faire cette action ?}}")
+                   if(result){
                     _params.confirmAction = 1;
                     nextdom.cmd.execute(_params);
                 }else{
                     nextdom.cmd.refreshValue({id:_params.id});
                     if ('function' != typeof(_params.error)) {
-                        notify("Erreur", data.result, 'error');
+                        $('#div_alert').showAlert({
+                            message: data.result,
+                            level: 'danger'
+                        });
                     }
-                    if (needNotify) {
+                    if (notify) {
                         eqLogic.find('.statusCmd').empty().append('<i class="fa fa-times"></i>');
                         setTimeout(function() {
                             eqLogic.find('.statusCmd').empty();
@@ -100,14 +109,17 @@ nextdom.cmd.execute = function(_params) {
             }else{
                 bootbox.confirm("{{Etes-vous sûr de vouloir faire cette action ?}}", function (result) {
                     if(result){
-                     _params.confirmAction = 1;
-                     nextdom.cmd.execute(_params);
-                 }else{
+                       _params.confirmAction = 1;
+                       nextdom.cmd.execute(_params);
+                   }else{
                     nextdom.cmd.refreshValue({id:_params.id});
                     if ('function' != typeof(_params.error)) {
-                        notify("Erreur", data.result, 'error');
+                        $('#div_alert').showAlert({
+                            message: data.result,
+                            level: 'danger'
+                        });
                     }
-                    if (needNotify) {
+                    if (notify) {
                         eqLogic.find('.statusCmd').empty().append('<i class="fa fa-times"></i>');
                         setTimeout(function() {
                             eqLogic.find('.statusCmd').empty();
@@ -120,9 +132,12 @@ nextdom.cmd.execute = function(_params) {
             }
         }else{
             if ('function' != typeof(_params.error)) {
-                notify("Erreur", data.result, 'error');
+                $('#div_alert').showAlert({
+                    message: data.result,
+                    level: 'danger'
+                });
             }
-            if (needNotify) {
+            if (notify) {
                 eqLogic.find('.statusCmd').empty().append('<i class="fa fa-times"></i>');
                 setTimeout(function() {
                     eqLogic.find('.statusCmd').empty();
@@ -131,7 +146,7 @@ nextdom.cmd.execute = function(_params) {
             return data;
         }
     }
-    if (needNotify) {
+    if (notify) {
         eqLogic.find('.statusCmd').empty().append('<i class="fa fa-rss"></i>');
         setTimeout(function() {
             eqLogic.find('.statusCmd').empty();
@@ -190,10 +205,16 @@ nextdom.cmd.test = function(_params) {
                         id: _params.id,
                         cache: 0,
                         error: function(error) {
-                            notify("Erreur", data.result, 'error');
+                            $('#div_alert').showAlert({
+                                message: error.message,
+                                level: 'danger'
+                            });
                         },
                         success: function() {
-                            notify("Info", '{{Action exécutée avec succès}}', 'success');
+                            $('#div_alert').showAlert({
+                                message: '{{Action exécutée avec succès}}',
+                                level: 'success'
+                            });
                         }
                     });
                     break;
@@ -209,10 +230,16 @@ nextdom.cmd.test = function(_params) {
                         },
                         cache: 0,
                         error: function(error) {
-                            notify("Erreur", data.result, 'error');
+                            $('#div_alert').showAlert({
+                                message: error.message,
+                                level: 'danger'
+                            });
                         },
                         success: function() {
-                            notify("Info", '{{Action exécutée avec succès}}', 'success');
+                            $('#div_alert').showAlert({
+                                message: '{{Action exécutée avec succès}}',
+                                level: 'success'
+                            });
                         }
                     });
                     break;
@@ -224,14 +251,20 @@ nextdom.cmd.test = function(_params) {
                         },
                         cache: 0,
                         error: function(error) {
-                            notify("Erreur", data.result, 'error');
+                            $('#div_alert').showAlert({
+                                message: error.message,
+                                level: 'danger'
+                            });
                         },
                         success: function() {
-                            notify("Info", '{{Action exécutée avec succès}}', 'success');
+                            $('#div_alert').showAlert({
+                                message: '{{Action exécutée avec succès}}',
+                                level: 'success'
+                            });
                         }
                     });
                     break;
-                      case 'select':
+                    case 'select':
                     nextdom.cmd.execute({
                         id: _params.id,
                         value: {
@@ -239,10 +272,16 @@ nextdom.cmd.test = function(_params) {
                         },
                         cache: 0,
                         error: function(error) {
-                            notify("Erreur", data.result, 'error');
+                            $('#div_alert').showAlert({
+                                message: error.message,
+                                level: 'danger'
+                            });
                         },
                         success: function() {
-                            notify("Info", '{{Action exécutée avec succès}}', 'success');
+                            $('#div_alert').showAlert({
+                                message: '{{Action exécutée avec succès}}',
+                                level: 'success'
+                            });
                         }
                     });
                     break;
@@ -255,10 +294,16 @@ nextdom.cmd.test = function(_params) {
                         },
                         cache: 0,
                         error: function(error) {
-                            notify("Erreur", data.result, 'error');
+                            $('#div_alert').showAlert({
+                                message: error.message,
+                                level: 'danger'
+                            });
                         },
                         success: function() {
-                            notify("Info", '{{Action exécutée avec succès}}', 'success');
+                            $('#div_alert').showAlert({
+                                message: '{{Action exécutée avec succès}}',
+                                level: 'success'
+                            });
                         }
                     });
                     break;
@@ -282,6 +327,25 @@ nextdom.cmd.test = function(_params) {
     };
     $.ajax(paramsAJAX);
 };
+
+nextdom.cmd.refreshByEqLogic = function(_params) {
+    var cmds = $('.cmd[data-eqLogic_id=' + _params.eqLogic_id + ']');
+    if(cmds.length > 0){
+        $(cmds).each(function(){
+            if($(this).closest('.eqLogic[data-eqLogic_id='+ _params.eqLogic_id+']').html() != undefined){
+             return true;
+         }
+         nextdom.cmd.toHtml({
+            global : false,
+            id : $(this).attr('data-cmd_id'),
+            version : $(this).attr('data-version'),
+            success : function(data){
+                $('.cmd[data-cmd_id=' + data.id + ']').replaceWith(data.html);
+            }
+        })
+     });
+    }
+}
 
 nextdom.cmd.refreshValue = function(_params) {
     for(var i in _params){
@@ -506,30 +570,71 @@ nextdom.cmd.changeSubType = function(_cmd) {
                         el = el.parent();
                     }
                     if (subtype[i].visible) {
-                     if(el.hasClass('bootstrapSwitch')){
-                         el.parent().parent().show();
-                         el.parent().parent().removeClass('hide');
+                       if(el.hasClass('bootstrapSwitch')){
+                           el.parent().parent().show();
+                           el.parent().parent().removeClass('hide');
+                       }
+                       if( el.attr('type') == 'checkbox'){
+                         el.parent().show();
+                         el.parent().removeClass('hide');
                      }
-                     if( el.attr('type') == 'checkbox'){
-                       el.parent().show();
-                       el.parent().removeClass('hide');
+                     el.show();
+                     el.removeClass('hide');
+                 } else {
+                    if(el.hasClass('bootstrapSwitch')){
+                     el.parent().parent().hide();
+                     el.parent().parent().addClass('hide');
+                 }
+                 if( el.attr('type') == 'checkbox'){
+                     el.parent().hide();
+                     el.parent().addClass('hide');
+                 }
+                 el.hide();
+                 el.addClass('hide');
+             }
+             if (isset(subtype[i].parentVisible)) {
+                if (subtype[i].parentVisible) {
+                    el.parent().show();
+                    el.parent().removeClass('hide');
+                } else {
+                    el.parent().hide();
+                    el.parent().addClass('hide');
+                }
+            }
+        } else {
+            for (var j in subtype[i]) {
+                var el = _cmd.find('.cmdAttr[data-l1key=' + i + '][data-l2key=' + j + ']');
+                if (el.attr('type') == 'checkbox' && el.parent().is('span')) {
+                    el = el.parent();
+                }
+
+                if (isset(subtype[i][j].visible)) {
+                    if (subtype[i][j].visible) {
+                        if(el.hasClass('bootstrapSwitch')){
+                          el.parent().parent().parent().show();
+                          el.parent().parent().parent().removeClass('hide');
+                      }
+                      if( el.attr('type') == 'checkbox'){
+                         el.parent().show();
+                         el.parent().removeClass('hide');
+                     }
+                     el.show();
+                     el.removeClass('hide');
+                 } else {
+                    if(el.hasClass('bootstrapSwitch')){
+                       el.parent().parent().parent().hide();
+                       el.parent().parent().parent().addClass('hide');
                    }
-                   el.show();
-                   el.removeClass('hide');
-               } else {
-                if(el.hasClass('bootstrapSwitch')){
-                   el.parent().parent().hide();
-                   el.parent().parent().addClass('hide');
-               }
-               if( el.attr('type') == 'checkbox'){
-                   el.parent().hide();
-                   el.parent().addClass('hide');
-               }
-               el.hide();
-               el.addClass('hide');
-           }
-           if (isset(subtype[i].parentVisible)) {
-            if (subtype[i].parentVisible) {
+                   if( el.attr('type') == 'checkbox'){
+                     el.parent().hide();
+                     el.parent().addClass('hide');
+                 }
+                 el.hide();
+                 el.addClass('hide');
+             }
+         }
+         if (isset(subtype[i][j].parentVisible)) {
+            if (subtype[i][j].parentVisible) {
                 el.parent().show();
                 el.parent().removeClass('hide');
             } else {
@@ -537,48 +642,7 @@ nextdom.cmd.changeSubType = function(_cmd) {
                 el.parent().addClass('hide');
             }
         }
-    } else {
-        for (var j in subtype[i]) {
-            var el = _cmd.find('.cmdAttr[data-l1key=' + i + '][data-l2key=' + j + ']');
-            if (el.attr('type') == 'checkbox' && el.parent().is('span')) {
-                el = el.parent();
-            }
-
-            if (isset(subtype[i][j].visible)) {
-                if (subtype[i][j].visible) {
-                    if(el.hasClass('bootstrapSwitch')){
-                      el.parent().parent().parent().show();
-                      el.parent().parent().parent().removeClass('hide');
-                  }
-                  if( el.attr('type') == 'checkbox'){
-                   el.parent().show();
-                   el.parent().removeClass('hide');
-               }
-               el.show();
-               el.removeClass('hide');
-           } else {
-            if(el.hasClass('bootstrapSwitch')){
-             el.parent().parent().parent().hide();
-             el.parent().parent().parent().addClass('hide');
-         }
-         if( el.attr('type') == 'checkbox'){
-           el.parent().hide();
-           el.parent().addClass('hide');
-       }
-       el.hide();
-       el.addClass('hide');
-   }
-}
-if (isset(subtype[i][j].parentVisible)) {
-    if (subtype[i][j].parentVisible) {
-        el.parent().show();
-        el.parent().removeClass('hide');
-    } else {
-        el.parent().hide();
-        el.parent().addClass('hide');
     }
-}
-}
 }
 }
 
@@ -589,11 +653,11 @@ if (_cmd.find('.cmdAttr[data-l1key=type]').value() == 'action') {
     _cmd.find('.cmdAttr[data-l1key=configuration][data-l2key=returnStateValue]').hide();
     _cmd.find('.cmdAttr[data-l1key=configuration][data-l2key=returnStateTime]').hide();
 }else{
- _cmd.find('.cmdAttr[data-l1key=configuration][data-l2key=returnStateValue]').show();
- _cmd.find('.cmdAttr[data-l1key=configuration][data-l2key=returnStateTime]').show();
- _cmd.find('.cmdAttr[data-l1key=value]').hide();
- _cmd.find('.cmdAttr[data-l1key=configuration][data-l2key=updateCmdId]').hide();
- _cmd.find('.cmdAttr[data-l1key=configuration][data-l2key=updateCmdToValue]').hide();
+   _cmd.find('.cmdAttr[data-l1key=configuration][data-l2key=returnStateValue]').show();
+   _cmd.find('.cmdAttr[data-l1key=configuration][data-l2key=returnStateTime]').show();
+   _cmd.find('.cmdAttr[data-l1key=value]').hide();
+   _cmd.find('.cmdAttr[data-l1key=configuration][data-l2key=updateCmdId]').hide();
+   _cmd.find('.cmdAttr[data-l1key=configuration][data-l2key=updateCmdToValue]').hide();
 }
 modifyWithoutSave = false;
 }
@@ -669,7 +733,10 @@ nextdom.cmd.displayActionOption = function(_expression, _options, _callback) {
         },
         success: function(data) {
             if (data.state != 'ok') {
-                notify("Erreur", data.result, 'error');
+                $('#div_alert').showAlert({
+                    message: data.result,
+                    level: 'danger'
+                });
                 return;
             }
             if (data.result.html != '') {
@@ -685,9 +752,9 @@ nextdom.cmd.displayActionOption = function(_expression, _options, _callback) {
 };
 
 nextdom.cmd.displayActionsOption = function(_params) {
-   var paramsRequired = ['params'];
-   var paramsSpecifics = {};
-   try {
+ var paramsRequired = ['params'];
+ var paramsSpecifics = {};
+ try {
     nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
 } catch (e) {
     (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
@@ -772,35 +839,35 @@ nextdom.cmd.displayDuration = function(_date,_el){
     var timeInMillis = new Date(arrDate[0], arrDate[1] -1, arrDate[2], arrDate[3], arrDate[4], arrDate[5]).getTime();
     _el.attr('data-time',timeInMillis);
     if(_el.attr('data-interval') != undefined){
-       clearInterval(_el.attr('data-interval'));
-   }
-   if(_el.attr('data-time') < (Date.now()+ clientServerDiffDatetime)){
-     var d = ((Date.now() + clientServerDiffDatetime) - _el.attr('data-time')) / 1000;
-     var j = Math.floor(d / 86400);
-     var h = Math.floor(d % 86400 / 3600);
-     var m = Math.floor(d % 3600 / 60);
-     _el.empty().append(((j > 0 ? j + " j " : "") + (h > 0 ? h + " h " : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + " min" : "0 min")));
-     var myinterval = setInterval(function(){ 
+     clearInterval(_el.attr('data-interval'));
+ }
+ if(_el.attr('data-time') < (Date.now()+ clientServerDiffDatetime)){
+   var d = ((Date.now() + clientServerDiffDatetime) - _el.attr('data-time')) / 1000;
+   var j = Math.floor(d / 86400);
+   var h = Math.floor(d % 86400 / 3600);
+   var m = Math.floor(d % 3600 / 60);
+   _el.empty().append(((j > 0 ? j + " j " : "") + (h > 0 ? h + " h " : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + " min" : "0 min")));
+   var myinterval = setInterval(function(){ 
+    var d = ((Date.now() + clientServerDiffDatetime) - _el.attr('data-time')) / 1000;
+    var j = Math.floor(d / 86400);
+    var h = Math.floor(d % 86400 / 3600);
+    var m = Math.floor(d % 3600 / 60);
+    _el.empty().append(((j > 0 ? j + " j " : "") + (h > 0 ? h + " h " : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + " min" : "0 min")));
+}, 60000);
+   _el.attr('data-interval',myinterval);
+}else{
+   _el.empty().append("0 min");
+   var myinterval = setInterval(function(){
+       if(_el.attr('data-time') < (Date.now()+ clientServerDiffDatetime)){
         var d = ((Date.now() + clientServerDiffDatetime) - _el.attr('data-time')) / 1000;
         var j = Math.floor(d / 86400);
         var h = Math.floor(d % 86400 / 3600);
         var m = Math.floor(d % 3600 / 60);
         _el.empty().append(((j > 0 ? j + " j " : "") + (h > 0 ? h + " h " : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + " min" : "0 min")));
-    }, 60000);
-     _el.attr('data-interval',myinterval);
- }else{
-     _el.empty().append("0 min");
-     var myinterval = setInterval(function(){
-         if(_el.attr('data-time') < (Date.now()+ clientServerDiffDatetime)){
-            var d = ((Date.now() + clientServerDiffDatetime) - _el.attr('data-time')) / 1000;
-            var j = Math.floor(d / 86400);
-            var h = Math.floor(d % 86400 / 3600);
-            var m = Math.floor(d % 3600 / 60);
-            _el.empty().append(((j > 0 ? j + " j " : "") + (h > 0 ? h + " h " : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + " min" : "0 min")));
-        }else{
-         _el.empty().append("0 min");
-     }
- }, 60000);
-     _el.attr('data-interval',myinterval);
- }
+    }else{
+       _el.empty().append("0 min");
+   }
+}, 60000);
+   _el.attr('data-interval',myinterval);
+}
 };
