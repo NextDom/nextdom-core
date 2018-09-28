@@ -648,15 +648,11 @@ $('.graphDataOption[data-l1key=configuration][data-l2key=graphColor]').off('chan
 
 function fullScreen(_mode) {
     if(_mode){
-        $('header').hide();
-        $('footer').hide();
-        $('#div_mainContainer').css('margin-top', '-50px');
+        $('.wrapper').addClass('fullscreen');
         $('#wrap').css('margin-bottom', '0px');
         $('.div_backgroundPlan').height($('html').height());
     }else{
-        $('header').show();
-        $('footer').show();
-        $('#div_mainContainer').css('margin-top', '0px');
+        $('.wrapper').removeClass('fullscreen');
         $('#wrap').css('margin-bottom', '15px');
         $('.div_backgroundPlan').height($('body').height());
     }
