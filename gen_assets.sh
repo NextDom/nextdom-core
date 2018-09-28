@@ -174,4 +174,8 @@ if [ "$#" == 0 ]; then
 	copy_assets;
 elif [ "$1" == "--watch" ]; then
 	start;
+elif [ "$1" == "--css" ]; then
+	gen_css
+elif [ "$1" == "--js" ]; then
+	gen_js
 fi

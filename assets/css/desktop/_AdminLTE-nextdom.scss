@@ -457,3 +457,43 @@ body {
 .wrapper.fullscreen #div_mainContainer {
   margin-top: -50px;
 }
+
+input[type="checkbox"] {
+  position: relative;
+  height: 1.6em;
+  width: 2em;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  border: 1px solid #CCCCCC;
+  border-radius: 0.8em;
+  background-color: #FEFEFE;
+  transition: all .2s;
+}
+
+input[type="checkbox"]:after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 1em;
+  height: 1.4em;
+  content: '';
+  display: block;
+  border: 1px solid #BBBBBB;
+  border-radius: 0.4em;
+  background-color: #999999;
+  transition: all 0.2s;
+}
+
+input[type="checkbox"]:checked {
+  border-color: #6872D7;
+  padding-left: 2em;
+  transition: all .2s;
+}
+
+input[type="checkbox"]:checked:after {
+  left: 1.2em;
+  right: 0;
+  transition: all .2s;
+  background-color: blue;
+}
