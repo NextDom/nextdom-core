@@ -19,7 +19,7 @@ if (!isConnect('admin')) {
         </span>
     </div>
 </form>
-</br>
+<br>
 <legend><i class="fas fa-sign-in-alt"></i>  {{Résultat}}</legend>
 <div id="div_expressionTestResult"></div>
 
