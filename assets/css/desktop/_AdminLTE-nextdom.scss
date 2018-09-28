@@ -3,7 +3,7 @@ body {
 }
 
 .Link-Blue {
-  color: #33B8CC;
+  color: $nextdom_blue;
 }
 
 .main-header {
@@ -125,8 +125,8 @@ body {
 }
 
 .treeview-menu > li {
-    padding-top: 1px;
-    padding-bottom: 1px;
+  padding-top: 1px;
+  padding-bottom: 1px;
 }
 
 .treeview-menu > li > a > .fa,
@@ -137,7 +137,7 @@ body {
 }
 
 .treeview-menu > li > a {
-    padding: 5px 15px 5px 15px;
+  padding: 5px 15px 5px 15px;
 }
 
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .glyphicon,
@@ -150,7 +150,7 @@ body {
 .form-control {
   border-radius: 0;
   box-shadow: none;
-  border-color: #d2d6de;
+  border-color: $lightgrey;
   padding-left: 10px !important;
 }
 
@@ -163,11 +163,11 @@ body {
 .box {
   position: relative;
   border-radius: 4px;
-  background: #ffffff;
+  background: $white;
   border-left: 1px solid rgba(0,0,0,0.2);
   border-right: 1px solid rgba(0,0,0,0.2);
   border-bottom: 1px solid rgba(0,0,0,0.2);
-  border-top: 3px solid #d2d6de;
+  border-top: 3px solid $lightgrey;
   margin-bottom: 20px;
   width: 100%;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08);
@@ -207,8 +207,8 @@ body {
   font-size: 15px;
   line-height: 30px;
   position: absolute;
-  color: #666;
-  background: #d2d6de;
+  color: $grey;
+  background: $lightgrey;
   border-radius: 50%;
   text-align: center;
   left: 16px;
@@ -225,8 +225,8 @@ body {
 }
 
 .btn-primary {
-  background-color: #33B8CC;
-  border-color: #33B8CC;
+  background-color: $nextdom_blue;
+  border-color: $nextdom_blue;
 }
 
 .btn-app > .fa,
@@ -273,7 +273,7 @@ body {
 }
 
 .nav-tabs-custom > .tab-content {
-  background: #fafafa;
+  background: $whitelightgray;
 }
 
 .nav-tabs a {
@@ -345,9 +345,9 @@ body {
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: #fff;
+  background-color: $white;
   background-clip: border-box;
-  border: 1px solid #eee;
+  border: 1px solid $whitegray;
   border-radius: .25rem;
 }
 
@@ -360,7 +360,7 @@ body {
 }
 
 .card[class*=bg-], .card[class*=bg-] .card-title, .card[class*=bg-] .card-title a, .card[class*=bg-] .icon i, .card [class*=card-header-], .card [class*=card-header-] .card-title, .card [class*=card-header-] .card-title a, .card [class*=card-header-] .icon i {
-  color: #fff;
+  color: $white;
 }
 
 .card .card-header {
@@ -376,13 +376,13 @@ body {
 .card-header {
   padding: .75rem 1.25rem;
   margin-bottom: 0;
-  background-color: #fff;
-  border-bottom: 1px solid #eee;
+  background-color: $white;
+  border-bottom: 1px solid $whitegray;
 }
 
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text {
   border-radius: 5px;
-  background-color: #999;
+  background-color: $darkgray;
   margin-top: -10px;
   margin-right: 15px;
   float: left;
@@ -403,7 +403,7 @@ body {
 
 .content-wrapper {
   min-height: 100%;
-  background-color: #ecf0f5;
+  background-color: $nextdom_bg;
   z-index: 800;
   padding-left: 15px;
   padding-right: 15px;
@@ -420,7 +420,7 @@ body {
 
 .legend-title {
     font-size: 16px;
-    border: 1px solid #e5e5e5;
+    border: 1px solid $whitegray;
     padding: 5px 10px;
     margin-bottom: 15px;
     background-color: whitesmoke;
@@ -443,11 +443,11 @@ body {
 .label-config {
     padding: 9px 10px 10px;
     font-size: 100%;
-    background-color: #33B8CC !important;
+    background-color: $nextdom_blue !important;
 }
 
 .login-logo{
-  background-color: #33B8CC;
+  background-color: $nextdom_blue;
 }
 
 .progress {
