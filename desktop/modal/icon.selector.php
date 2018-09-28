@@ -28,9 +28,9 @@ if (!isConnect()) {
 </style>
 <input class="form-control pull-right" placeholder="{{Rechercher}}" id="in_iconSelectorSearch" />
 <?php
-foreach (ls('css/icon', '*') as $dir) {
-    if (is_dir('css/icon/' . $dir) && file_exists('css/icon/' . $dir . '/style.css')) {
-        $css = file_get_contents('css/icon/' . $dir . '/style.css');
+foreach (ls('public/icon', '*') as $dir) {
+    if (is_dir('public/icon/' . $dir) && file_exists('public/icon/' . $dir . '/style.css')) {
+        $css = file_get_contents('public/icon/' . $dir . '/style.css');
         $research = strtolower(str_replace('/', '', $dir));
         preg_match_all("/\." . $research . "-(.*?):/", $css, $matches, PREG_SET_ORDER);
         $height = (ceil(count($matches) / 14) * 40) + 80;
@@ -40,7 +40,7 @@ foreach (ls('css/icon', '*') as $dir) {
         foreach ($matches as $match) {
             if (isset($match[0])) {
                 if ($number == 1) {
-                    echo '<div class="row">';
+                    echo '<div class="row text-center">';
                 }
                 echo '<div class="col-lg-1 divIconSel">';
                 $icon = str_replace(array(':', '.'), '', $match[0]);
