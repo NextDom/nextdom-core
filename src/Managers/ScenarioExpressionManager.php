@@ -1375,7 +1375,7 @@ class ScenarioExpressionManager
         if ($scenario === null) {
             return '"' . $default . '"';
         }
-        $tags = $_scenario->getTags();
+        $tags = $scenario->getTags();
         if (isset($tags['#' . $name . '#'])) {
             return $tags['#' . $name . '#'];
         }
@@ -1392,8 +1392,8 @@ class ScenarioExpressionManager
      * @return mixed
      */
     public static function setTags($_expression, &$_scenario = null, $_quote = false, $_nbCall = 0) {
-		if (file_exists(__DIR__ . '/../../data/php/user.function.class.php')) {
-			require_once __DIR__ . '/../../data/php/user.function.class.php';
+		if (file_exists(NEXTDOM_ROOT . '/data/php/user.function.class.php')) {
+			require_once NEXTDOM_ROOT . '/data/php/user.function.class.php';
 		}
 		if ($_nbCall > 10) {
 			return $_expression;
@@ -1497,7 +1497,7 @@ class ScenarioExpressionManager
      */
     public static function createAndExec($type, $cmd, $options = null)
     {
-        $scenarioExpression = new self();
+        $scenarioExpression = new \scenarioExpression();
         $scenarioExpression->setType($type);
         $scenarioExpression->setExpression($cmd);
         if (is_array($options)) {
