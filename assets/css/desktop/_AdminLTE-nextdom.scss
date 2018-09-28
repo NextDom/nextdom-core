@@ -444,3 +444,18 @@ body {
 .login-logo{
   background-color: #33B8CC;
 }
+
+.wrapper.fullscreen header,
+.wrapper.fullscreen footer,
+.wrapper.fullscreen aside {
+  display: none;
+}
+
+.wrapper.fullscreen .content-wrapper {
+  margin-left: 0px !important;
+}
+
+.wrapper.fullscreen #div_mainContainer {
+  margin-top: -50px;
+}
+
