@@ -1,9 +1,7 @@
 <div class="box" id="update_admin">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-hand-o-right"></i> {{ 'Mise a jour' }}</h3>
+        <h3 class="box-title"><i class="fa fa-credit-card">&nbsp;&nbsp;</i>{{ 'Mise a jour' }}</h3>
         <div class="box-tools pull-right">
-            <a class="btn btn-success btn-xs" id="bt_saveupdate_admin"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
@@ -12,7 +10,7 @@
             <div class="col-sm-6">
                 <form class="form-horizontal">
                     <fieldset>
-                        <legend>{{ 'Mise à jour de' }} {{ adminConfigs['product_name'] }}</legend>
+                        <legend class="legend-title">{{ 'Mise à jour de' }} {{ adminConfigs['product_name'] }}</legend>
                         <div class="form-group">
                             <label class="col-lg-4 col-md-6 col-sm-6 col-xs-6 control-label">{{ 'Source de mise à jour' }}</label>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -26,8 +24,6 @@
                                 </select>
                             </div>
                         </div>
-
-
                         <div class="form-group">
                             <label class="col-lg-4 col-md-6 col-sm-6 col-xs-6 control-label">{{ 'Version du core' }}</label>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -110,6 +106,7 @@
         </div>
     </div>
     <div class="box-footer clearfix">
-        <a class="btn btn-success btn-sm pull-right" id="bt_saveUser"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+        <a class="btn btn-success pull-right" id="bt_saveupdate_admin"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+        <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
     </div>
 </div>
