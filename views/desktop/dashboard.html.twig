@@ -49,10 +49,10 @@
     {% endif %}
         <div class="card" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}25;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ dashboardObject.getDisplay("tagColor") }}50;" data-father_id="{{ dashboardObject.getFather_id() }}">
             <div class="card-header card-header-icon">
-                <div class="card-icon text-center" style="background:{{ dashboardObject.getDisplay("tagColor") }}">
+                <div class="card-icon" style="background:{{ dashboardObject.getDisplay("tagColor") }}">
                     {{ dashboardObject.getDisplay("icon")|raw }}</i>
                 </div>
-                <p class="card-category" style="color:{{ dashboardObject.getDisplay("tagColor") }}"><b>{{ dashboardObject.getName() }}</b></p>
+                <a class="card-category" style="color:white;vertical-align: -2px;"><b>{{ dashboardObject.getName() }}</b></a>
             </div>
             <div class="card-body">
                 <div class="div_displayEquipement" id="div_ob{{ dashboardObject.getId() }}" style="width: 100%;padding-top:3px;margin-bottom : 3px;">

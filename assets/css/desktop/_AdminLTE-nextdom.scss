@@ -388,10 +388,11 @@ body {
   float: left;
   height: 45px;
   width: 50px;
+  padding: 3px 10px 7px;
 }
 
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text > i {
-  font-size: 2em;
+  font-size: 1.7em;
 }
 
 .card-body {
@@ -474,4 +475,8 @@ body {
 .iradio_minimal-blue {
 	  margin-right: 7px;
     margin-top: -2px;
+}
+
+[class^="fashion-"], [class*=" fashion-"] {
+    vertical-align: middle;
 }
