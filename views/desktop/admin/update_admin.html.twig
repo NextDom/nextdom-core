@@ -35,7 +35,7 @@
                         </div>
                         <div class="form-group">
                             <label class="col-lg-4 col-md-6 col-sm-6 col-xs-6 control-label">{{ 'Vérification des mises à jour' }}</label>
-                            <div class="col-sm-1">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <input type="checkbox" class="configKey" data-l1key="update::autocheck"/><label class="control-label">{{'Automatique'}}</label>
                             </div>
                         </div>
@@ -75,7 +75,7 @@
                                                             {% set defaultValue = '' %}
                                                         {% endif %}
                                                         {% if param['type'] == 'checkbox' %}
-                                                            <input type="checkbox" class="configKey" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/>
+                                                            <input type="checkbox" class="configKey" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/><label class="control-label">{{ 'Activer' }}</label>
                                                         {% elseif param['type'] == 'input' %}
                                                             <input class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/>
                                                         {% elseif param['type'] == 'number' %}
@@ -90,7 +90,7 @@
                                                 <div class="form-group">
                                                     <label class="col-lg-4 col-md-6 col-sm-6 col-xs-6 control-label">{{ 'Tester' }}</label>
                                                     <div class="col-sm-4">
-                                                        <a class="btn btn-default testRepoConnection" data-repo="{{ repo }}"><i class="fa fa-check"></i> {{ 'Tester' }}</a>
+                                                        <a class="btn btn-primary testRepoConnection" data-repo="{{ repo }}"><i class="fa fa-check">&nbsp;&nbsp;</i>{{ 'Tester' }}</a>
                                                     </div>
                                                 </div>
                                             {% endif %}
