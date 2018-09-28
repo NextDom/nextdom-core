@@ -1,15 +1,14 @@
 <div class="box" id="interact_admin">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-hand-o-right"></i> {{ 'Interact' }}</h3>
+        <h3 class="box-title"><i class="fas fa-american-sign-language-interpreting">&nbsp;&nbsp;</i>{{ 'Interact' }}</h3>
         <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
     <div class="box-body">
         <form class="form-horizontal">
             <fieldset>
-                <legend>{{ 'Général' }}</legend>
+                <legend class="legend-title">{{ 'Général' }}</legend>
                 <div class="alert alert-info">
                     {{ 'Plus la sensibilité est basse (proche de 1), plus la correspondance doit être exacte.' }}
                 </div>
@@ -55,7 +54,7 @@
                         <textarea type="text" class="configKey form-control" data-l1key="interact::regexpExcludGlobal"></textarea>
                     </div>
                 </div>
-                <legend>{{ 'Interaction automatique, contextuelle & avertissement' }}</legend>
+                <legend class="legend-title">{{ 'Interaction automatique, contextuelle & avertissement' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Activer les interactions automatiques' }}</label>
                     <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
@@ -92,19 +91,17 @@
                         <input class="configKey form-control" data-l1key="interact::warnme::start"/>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Commande de retour par défaut' }}</label>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <div class="input-group">
                             <input type="text" class="configKey form-control" data-l1key="interact::warnme::defaultreturncmd"/>
                             <span class="input-group-btn">
-                                            <a class="btn btn-default cursor bt_selectWarnMeCmd" data-toggle="tooltip" title="" data-original-title="Rechercher une commande"><i class="fa fa-list-alt"></i></a>
-                                        </span>
+                                <a class="btn btn-default cursor bt_selectWarnMeCmd" data-toggle="tooltip" title="" data-original-title="Rechercher une commande"><i class="fa fa-list-alt"></i></a>
+                            </span>
                         </div>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Synonymes pour les objets' }}</label>
                     <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
@@ -141,7 +138,7 @@
                         <input class="configKey form-control" data-l1key="interact::autoreply::cmd::slider::min"/>
                     </div>
                 </div>
-                <legend>{{ 'Couleurs' }}</legend>
+                <legend class="legend-title">{{ 'Couleurs' }}</legend>
                 <i class="fa fa-plus-circle pull-right cursor" id="bt_addColorConvert"></i>
                 <table class="table table-condensed table-bordered" id="table_convertColor">
                     <thead>
@@ -151,12 +148,11 @@
                     </tr>
                     <tr class="filter" style="display: none;">
                     <div class="col-lg-2">
-                     <div class=" colorpicker-component colorpick input-group">
-                        <td class="text"><input class="filter form-control" filterOn="color"/></td>
-
-                        <td class="codeHtml"><input class="filter form-control" filterOn="codeHtml"/></td>
-                                                <span class="input-group-addon"><i></i></span>
-                                        </div>
+                       <div class=" colorpicker-component colorpick input-group">
+                          <td class="text"><input class="filter form-control" filterOn="color"/></td>
+                          <td class="codeHtml"><input class="filter form-control" filterOn="codeHtml"/></td>
+                          <span class="input-group-addon"><i></i></span>
+                       </div>
                     </tr>
                     </thead>
                     <tbody>
@@ -166,6 +162,7 @@
         </form>
     </div>
     <div class="box-footer clearfix">
-        <a class="btn btn-success btn-sm pull-right" id="bt_saveinteract_admin"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+        <a class="btn btn-success pull-right" id="bt_saveinteract_admin"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+        <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
     </div>
 </div>

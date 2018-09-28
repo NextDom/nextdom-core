@@ -1,8 +1,7 @@
 <div class="box" id="custom">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fas fa-pencil-square"></i> {{ 'Custom'}}</h3>
+        <h3 class="box-title"><i class="fas fa-pencil-square">&nbsp;&nbsp;</i>{{ 'Custom'}}</h3>
         <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
@@ -232,7 +231,7 @@
                             </div>
                             <div id="colortab-list">
                                 {% for category, categoryData in adminCategories %}
-                                    <legend>{{ categoryData['name'] }}</legend>
+                                    <legend class="legend-title">{{ categoryData['name'] }}</legend>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">{{ 'Dashboard couleur de fond' }}</label>
                                         <div class="col-sm-2">
@@ -332,7 +331,7 @@
                                 <a class="btn btn-default btn-sm bt_resetColor" data-l1key="options" data-l2key="customSkin_iconsColors" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
                             </div>
                         </div>
-                        
+
                     </form>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="advanced">
@@ -348,13 +347,13 @@
                         <div role="tabpanel" class="tab-pane active" id="desktop">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <legend>{{ 'Javascript' }}
+                                    <legend class="legend-title">{{ 'Javascript' }}
                                         <a class="btn btn-success pull-right btn-xs saveCustom" data-version="desktop" data-type="js" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
                                     </legend>
                                     <textarea id="ta_jsDesktopContent">{{ customJS }}</textarea>
                                 </div>
                                 <div class="col-xs-6">
-                                    <legend>{{ 'CSS' }}
+                                    <legend class="legend-title">{{ 'CSS' }}
                                         <a class="btn btn-success pull-right btn-xs saveCustom" data-version="desktop" data-type="css" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
                                     </legend>
                                     <textarea id="ta_cssDesktopContent" style="height:auto;">{{ customCSS }}</textarea>
@@ -364,13 +363,13 @@
                         <div role="tabpanel" class="tab-pane" id="mobile">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <legend>{{ 'Javascript' }}
+                                    <legend class="legend-title">{{ 'Javascript' }}
                                         <a class="btn btn-success pull-right btn-xs saveCustom" data-version="mobile" data-type="js" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
                                     </legend>
                                     <textarea id="ta_jsMobileContent" style="height:auto;">{{ customMobileJS }}</textarea>
                                 </div>
                                 <div class="col-xs-6">
-                                    <legend>{{ 'CSS' }}
+                                    <legend class="legend-title">{{ 'CSS' }}
                                         <a class="btn btn-success pull-right btn-xs saveCustom" data-version="mobile" data-type="css" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
                                     </legend>
                                     <textarea id="ta_cssMobileContent" style="height:auto;">{{ customMobileCSS }}</textarea>
@@ -383,6 +382,7 @@
         </div>
     </div>
     <div class="box-footer clearfix">
-        <a class="btn btn-success btn-sm pull-right" id="bt_savecustom"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+        <a class="btn btn-success pull-right" id="bt_savecustom"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+        <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
     </div>
 </div>

@@ -1,8 +1,7 @@
 <div class="box" id="osdb">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-terminal"></i> {{ 'OS/DB' }}</h3>
+        <h3 class="box-title"><i class="fa fa-terminal">&nbsp;&nbsp;</i>{{ 'OS/DB' }}</h3>
         <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
@@ -12,21 +11,21 @@
                 {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à' }} {{ adminConfigs['product_name'] }}{{ '. L\'équipe' }} {{ adminConfigs['product_name'] }} {{ 'se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.' }}
             </div>
             <fieldset>
-                <legend >{{ 'Console Système' }}</legend>
+                <legend class="legend-title">{{ 'Console Système' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                         <a class="btn btn-danger" href="index.php?v=d&p=system"><i class="fa fa-exclamation-triangle"></i> {{ 'Lancer' }}</a>
                     </div>
                 </div>
-                <legend >{{ 'Editeur de fichiers' }}</legend>
+                <legend class="legend-title">{{ 'Editeur de fichiers' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Editeur' }}</label>
                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                         <a class="btn btn-danger" href="index.php?v=d&p=editor"><i class="fa fa-exclamation-triangle"></i> {{ 'Lancer' }}</a>
                     </div>
                 </div>
-                <legend >{{ 'Base de données' }}</legend>
+                <legend class="legend-title">{{ 'Base de données' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
@@ -47,5 +46,8 @@
                 </div>
             </fieldset>
         </form>
+    </div>
+    <div class="box-footer clearfix">
+        <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
     </div>
 </div>

@@ -1,15 +1,14 @@
 <div class="box" id="log_admin">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-hand-o-right"></i> {{ 'Logs' }}</h3>
+        <h3 class="box-title"><i class="fa fa-pencil-square-o">&nbsp;&nbsp;</i>{{ 'Logs' }}</h3>
         <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
     <div class="box-body">
         <form class="form-horizontal">
             <fieldset>
-                <legend>{{ 'Timeline' }}</legend>
+                <legend class="legend-title">{{ 'Timeline' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nombre maximum d\'évènements' }}</label>
                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
@@ -22,7 +21,7 @@
                         <a type="text" class="btn btn-danger" id="bt_removeTimelineEvent"><i class="fa fa-trash"></i> {{ 'Supprimer' }}</a>
                     </div>
                 </div>
-                <legend>{{ 'Messages' }}</legend>
+                <legend class="legend-title">{{ 'Messages' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Ajouter un message à chaque erreur dans les logs' }}</label>
                     <div class="col-sm-1">
@@ -40,7 +39,7 @@
         </form>
         <form class="form-horizontal">
             <fieldset>
-                <legend>{{ 'Alertes' }}</legend>
+                <legend class="legend-title">{{ 'Alertes' }}</legend>
                 {% for level, value in adminAlerts %}
                     <div class="form-group">
                         <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Ajouter un message à chaque' }} {{ value['name'] }}</label>
@@ -54,8 +53,8 @@
                             <div class="input-group">
                                 <input type="text" class="configKey form-control" data-l1key="alert::{{ level }}Cmd"/>
                                 <span class="input-group-btn">
-                                                <a class="btn btn-default cursor bt_selectAlertCmd" data-toggle="tooltip" title="" data-original-title="Rechercher une commande" data-type="{{ level }}"><i class="fa fa-list-alt"></i></a>
-                                            </span>
+                                    <a class="btn btn-default cursor bt_selectAlertCmd" data-toggle="tooltip" title="" data-original-title="Rechercher une commande" data-type="{{ level }}"><i class="fa fa-list-alt"></i></a>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -64,7 +63,7 @@
         </form>
         <form class="form-horizontal">
             <fieldset>
-                <legend>{{ 'Log' }}</legend>
+                <legend class="legend-title">{{ 'Log' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Moteur de log' }}</label>
                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
@@ -148,6 +147,7 @@
         </form>
     </div>
     <div class="box-footer clearfix">
-        <a class="btn btn-success btn-sm pull-right" id="bt_savelog_admin"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+        <a class="btn btn-success pull-right" id="bt_savelog_admin"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+        <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
     </div>
 </div>

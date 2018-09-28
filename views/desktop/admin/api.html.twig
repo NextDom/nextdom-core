@@ -1,6 +1,6 @@
 <div class="box" id="API">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-key"></i> {{ 'API' }}</h3>
+        <h3 class="box-title"><i class="fa fa-key">&nbsp;&nbsp;</i>{{ 'API' }}</h3>
         <div class="box-tools pull-right">
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Accès API JSONRPC' }}</label>
+                    <label class="col-lg-2 col-md-2 col-sm-3 col-xs-6 control-label">{{ 'Accès API JSONRPC' }}</label>
                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
                         <select class="form-control configKey" data-l1key="api::core::jsonrpc::mode">
                             <option value="enable">{{ 'Activé' }}</option>
@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Accès API TTS' }}</label>
+                    <label class="col-lg-2 col-md-2 col-sm-3 col-xs-6 control-label">{{ 'Accès API TTS' }}</label>
                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
                         <select class="form-control configKey" data-l1key="api::core::tts::mode">
                             <option value="enable">{{ 'Activé' }}</option>
@@ -62,8 +62,7 @@
                 </div>
                 <legend class="legend-title">{{ 'Clefs API' }}</legend>
                 <div class="form-group">
-
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API globale de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API Globale' }}</label>
+                    <label class="col-lg-2 col-md-2 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API globale de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API Globale' }}</label>
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
                         <a class="btn btn-warning bt_regenerate_api" data-plugin="core"><i class="fa fa-refresh">&nbsp;&nbsp;</i>{{'Rafraîchir'}}</a>
                     </div>
