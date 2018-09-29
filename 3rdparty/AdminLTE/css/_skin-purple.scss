@@ -157,3 +157,8 @@
 .skin-purple::-webkit-scrollbar-thumb{
   background:#605ca8;
 }
+
+.skin-purple [type="checkbox"]:not(:checked):after,
+.skin-purple [type="checkbox"]:checked:after {
+  color: #605ca8;
+}

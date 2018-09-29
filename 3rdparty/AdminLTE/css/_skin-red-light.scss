@@ -175,3 +175,8 @@
 .skin-red-light::-webkit-scrollbar-thumb{
   background:#dd4b39;
 }
+
+.skin-red-light [type="checkbox"]:not(:checked):after,
+.skin-red-light [type="checkbox"]:checked:after {
+  color: #dd4b39;
+}
