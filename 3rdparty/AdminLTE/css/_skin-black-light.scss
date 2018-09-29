@@ -193,3 +193,8 @@
 .skin-black-light::-webkit-scrollbar-thumb{
   background:#222;
 }
+
+.skin-black-light [type="checkbox"]:not(:checked):after,
+.skin-black-light [type="checkbox"]:checked:after {
+  color: #222;
+}
