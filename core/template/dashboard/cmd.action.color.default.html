@@ -1,4 +1,4 @@
-<div class="cmd cmd-widget" data-type="action" data-subtype="color" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" style="width: 146px;height: 34px;">
+<div class="cmd cmd-widget" data-type="action" data-subtype="color" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#" style="width: 146px;height: 34px;">
   <div class="input-group input-group-sm" style="width: 100%">
     <input class="action_colorpicker_change form-control cursor" type="color">
     <span class="input-group-btn">
@@ -6,19 +6,17 @@
     </span>
   </div>
   <script>
-      nextdom.cmd.update['#id#'] = function (_options) {
-          var cmdColorPicker = $('.cmd[data-cmd_uid=#uid#]:last .action_colorpicker_change');
-          cmdColorPicker.off('change');
-          if (_options.display_value !== '') {
-              $('.cmd[data-cmd_uid=#uid#] .action_colorpicker_change').value(_options.display_value.substr(0, 7));
-          }
-          cmdColorPicker.on('change', function () {
-              nextdom.cmd.execute({id: '#id#', value: {color: $(this).value()}});
-          });
-      };
-      $('.cmd[data-cmd_uid=#uid#] .action_colorpicker_off').on('click', function () {
-          nextdom.cmd.execute({id: '#id#', value: {color: '#000000'}});
-      });
-      nextdom.cmd.update['#id#']({display_value: '#state#'});
-  </script>
+    nextdom.cmd.update['#id#'] = function(_options){
+     $('.cmd[data-cmd_uid=#uid#]:last .action_colorpicker_change').off('change')
+     $('.cmd[data-cmd_uid=#uid#] .action_colorpicker_change').value((_options.display_value != '') ? _options.display_value.substr(0,7) : _options.display_value);
+     $('.cmd[data-cmd_uid=#uid#]:last .action_colorpicker_change').on('change', function() {
+      nextdom.cmd.execute({id: '#id#', value: {color: $(this).value()}});
+    });
+   }
+   $('.cmd[data-cmd_uid=#uid#] .action_colorpicker_off').on('click', function() {
+    nextdom.cmd.execute({id: '#id#', value: {color: '#000000'}});
+  });
+   nextdom.cmd.update['#id#']({display_value:'#state#'});
+
+ </script>
 </div>
