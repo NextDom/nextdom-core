@@ -154,12 +154,6 @@ body {
   padding-left: 10px !important;
 }
 
-.icheck > label {
-  padding-left: 0px !important;
-  margin-top: 7px;
-  margin-bottom: 15px;
-}
-
 .box {
   position: relative;
   border-radius: 4px;
@@ -243,9 +237,9 @@ body {
 }
 
 .btn-app>.badge {
-    top: 3px;
-    right: 3px;
-    font-size: 12px;
+  top: 3px;
+  right: 3px;
+  font-size: 12px;
 }
 
 .nav-pills > li > a > .fa,
@@ -277,7 +271,7 @@ body {
 }
 
 .nav-tabs a {
-    padding: 10px 10px !important;
+  padding: 10px 10px !important;
 }
 
 .login-logo,
@@ -305,7 +299,7 @@ body {
 }
 
 .login-box-msg, .register-box-msg {
-    padding: 0 20px 7px 20px;
+  padding: 0 20px 7px 20px;
 }
 
 .login-box-body,
@@ -320,10 +314,6 @@ body {
   border-top-right-radius: 0px;
 }
 
-.login-page .icheck {
-    margin-top: 0px;
-    line-height: 1.25;
-}
 .card {
   box-shadow: 0 1px 4px 0 rgba(0,0,0,.14);
 }
@@ -386,9 +376,8 @@ body {
   margin-top: -10px;
   margin-right: 15px;
   float: left;
-  height: 49px;
-  width: auto;
-  padding: 3px 12px 7px 11px;
+  height: 45px;
+  width: 50px;
 }
 
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text > i {
@@ -420,31 +409,31 @@ body {
 }
 
 .legend-title {
-    font-size: 16px;
-    border: 1px solid $whitegray;
-    padding: 5px 10px;
-    margin-bottom: 15px;
-    background-color: whitesmoke;
+  font-size: 16px;
+  border: 1px solid $whitegray;
+  padding: 5px 10px;
+  margin-bottom: 15px;
+  background-color: whitesmoke;
 }
 
 .btn-tab {
-    line-height: 2;
+  line-height: 2;
 }
 
 .btn-legend {
-    margin-top: -6px;
-    margin-right: -10px;
+  margin-top: -6px;
+  margin-right: -10px;
 }
 
 .alert-config,
 .alert {
-    width: 100%;
+  width: 100%;
 }
 
 .label-config {
-    padding: 9px 10px 10px;
-    font-size: 100%;
-    background-color: $nextdom_blue !important;
+  padding: 9px 10px 10px;
+  font-size: 100%;
+  background-color: $nextdom_blue !important;
 }
 
 .login-logo{
@@ -452,7 +441,7 @@ body {
 }
 
 .progress {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .wrapper.fullscreen header,
@@ -469,15 +458,46 @@ body {
   margin-top: -50px;
 }
 
-.icheckbox_flat-blue,
-.iradio_flat-blue,
-.icheckbox_minimal-blue,
-.iradio_minimal-blue {
-	  margin-right: 7px;
-    margin-top: -2px;
+input[type="checkbox"] {
+  position: relative;
+  height: 1.1em;
+  width: 2em;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
 }
 
-[class^="fashion-"], [class*=" fashion-"] {
-    vertical-align: middle;
-    padding-right: 5px;
+/* Aspect des checkboxes */
+/* :before sert à créer la case à cocher */
+[type="checkbox"]:not(:checked):before,
+[type="checkbox"]:checked:before {
+  content: '';
+  position: absolute;
+  left:0; top: 2px;
+  width: 17px; height: 17px; /* dim. de la case */
+  border: 1px solid #aaa;
+  background: #f8f8f8;
+  border-radius: 3px; /* angles arrondis */
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.3) /* légère ombre interne */
+}
+
+/* Aspect général de la coche */
+[type="checkbox"]:not(:checked):after,
+[type="checkbox"]:checked:after {
+  content: '✔';
+  position: absolute;
+  top: 0; left: 4px;
+  font-size: 14px;
+  color: #33B8CC;
+  transition: all .2s; /* on prévoit une animation */
+}
+/* Aspect si "pas cochée" */
+[type="checkbox"]:not(:checked):after {
+  opacity: 0; /* coche invisible */
+  transform: scale(0); /* mise à l'échelle à 0 */
+}
+/* Aspect si "cochée" */
+[type="checkbox"]:checked:after {
+  opacity: 1; /* coche opaque */
+  transform: scale(1); /* mise à l'échelle 1:1 */
 }

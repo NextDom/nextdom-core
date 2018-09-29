@@ -1,28 +1,5 @@
 $(function() {
     $('.colorpick').colorpicker();
-
-$(":input").inputmask();
-
-$('[data-toggle="tooltip"]').tooltip();
-
-$(document).ready(function(){
-    $('input').iCheck({
-      checkboxClass: 'icheckbox_flat-blue',
-      radioClass: 'iradio_flat-blue',
-      increaseArea: '20%' // optional
-    });
-  });
+    $(":input").inputmask();
+    $('[data-toggle="tooltip"]').tooltip();
 });
-
-if ($.fn.button.noConflict) {
-    var bootstrapButton = $.fn.button.noConflict();
-    $.fn.bootstrapBtn = bootstrapButton;
-}
-
-$(document).on('icheck', function(){
-    $('input[type=checkbox], input[type=radio]').iCheck({
-        checkboxClass: 'icheckbox_flat-blue',
-        radioClass: 'iradio_flat-blue',
-        increaseArea: '20%' // optional
-    });
-    }).trigger('icheck'); // trigger it for page load
