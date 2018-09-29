@@ -460,28 +460,29 @@ body {
 
 input[type="checkbox"] {
   position: relative;
-  height: 1.1em;
-  width: 2em;
+  top: 3px;
+  height: 1.4em;
+  width: 1.4em;
   appearance: none;
   -webkit-appearance: none;
   cursor: pointer;
 }
 
-/* Aspect des checkboxes */
-/* :before sert à créer la case à cocher */
+/* checkboxes aspect */
+/* :before for create box */
 [type="checkbox"]:not(:checked):before,
 [type="checkbox"]:checked:before {
   content: '';
   position: absolute;
   left:0; top: 2px;
-  width: 17px; height: 17px; /* dim. de la case */
+  width: 17px; height: 17px;
   border: 1px solid #aaa;
   background: #f8f8f8;
-  border-radius: 3px; /* angles arrondis */
-  box-shadow: inset 0 1px 3px rgba(0,0,0,.3) /* légère ombre interne */
+  border-radius: 3px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.3)
 }
 
-/* Aspect général de la coche */
+/* General aspect for cross */
 [type="checkbox"]:not(:checked):after,
 [type="checkbox"]:checked:after {
   content: '✔';
@@ -489,15 +490,15 @@ input[type="checkbox"] {
   top: 0; left: 4px;
   font-size: 14px;
   color: #33B8CC;
-  transition: all .2s; /* on prévoit une animation */
+  transition: all .2s;
 }
-/* Aspect si "pas cochée" */
+/* Aspect for uncheck */
 [type="checkbox"]:not(:checked):after {
-  opacity: 0; /* coche invisible */
-  transform: scale(0); /* mise à l'échelle à 0 */
+  opacity: 0;
+  transform: scale(0);
 }
-/* Aspect si "cochée" */
+/* Aspect if check*/
 [type="checkbox"]:checked:after {
-  opacity: 1; /* coche opaque */
-  transform: scale(1); /* mise à l'échelle 1:1 */
+  opacity: 1;
+  transform: scale(1);
 }
