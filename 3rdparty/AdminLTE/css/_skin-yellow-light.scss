@@ -175,3 +175,8 @@
 .skin-yellow-light::-webkit-scrollbar-thumb{
   background:#f39c12;
 }
+
+.skin-yellow-light [type="checkbox"]:not(:checked):after,
+.skin-yellow-light [type="checkbox"]:checked:after {
+  color: #f39c12;
+}
