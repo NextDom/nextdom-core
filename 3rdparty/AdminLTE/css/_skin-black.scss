@@ -176,3 +176,8 @@
 .skin-black::-webkit-scrollbar-thumb{
   background:#222;
 }
+
+.skin-black [type="checkbox"]:not(:checked):after,
+.skin-black [type="checkbox"]:checked:after {
+  color: #222;
+}

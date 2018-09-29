@@ -88,7 +88,7 @@ if (!isConnect()) {
                 <h3 class="box-title">Documentations</h3>
             </div>
             <!-- /.box-header -->
-            <p class="box-body">
+            <div class="box-body">
                 <p class="lead">Informez-vous pour mieux maitriser</p>
                 <p class="text-muted"> La lecture de la documentation est fastidieuse mais c'est une opération essentielle pour bien maitriser votre solutlion domotique<br/></p>
 

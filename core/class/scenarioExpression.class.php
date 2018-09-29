@@ -304,7 +304,7 @@ class scenarioExpression
      *
      * @return mixed|null|string|void
      */
-    public function execute(scenario &$scenario = null)
+    public function execute(&$scenario = null)
     {
         if ($scenario !== null && !$scenario->getDo()) {
             return null;
@@ -375,7 +375,7 @@ class scenarioExpression
         }
     }
 
-    private function executeAction(scenario &$scenario, $options)
+    private function executeAction(&$scenario, $options)
     {
         switch ($this->getExpression()) {
             case ScenarioExpressionEnum::ICON:
@@ -442,7 +442,7 @@ class scenarioExpression
         }
     }
 
-    private function executeActionIcon(scenario &$scenario)
+    private function executeActionIcon(&$scenario)
     {
         if ($scenario !== null) {
             $options = $this->getOptions();
@@ -498,7 +498,7 @@ class scenarioExpression
         return;
     }
 
-    private function executeActionStop(scenario &$scenario)
+    private function executeActionStop(&$scenario)
     {
         if ($scenario !== null) {
             $this->setLog($scenario, __('Action stop', __FILE__));
@@ -508,14 +508,14 @@ class scenarioExpression
         die();
     }
 
-    private function executeActionLog(scenario &$scenario, $options)
+    private function executeActionLog(&$scenario, $options)
     {
         if ($scenario !== null) {
             $scenario->setLog('Log : ' . $options['message']);
         }
     }
 
-    private function executeActionEvent(scenario &$scenario, $options)
+    private function executeActionEvent(&$scenario, $options)
     {
         $cmd = cmd::byId(trim(str_replace('#', '', $options['cmd'])));
         if (!is_object($cmd)) {
@@ -525,25 +525,25 @@ class scenarioExpression
         $cmd->event(nextdom::evaluateExpression($options['value']));
     }
 
-    private function executeActionMessage(scenario &$scenario, $options)
+    private function executeActionMessage(&$scenario, $options)
     {
         message::add('scenario', $options['message']);
         $this->setLog($scenario, __('Ajout du message suivant dans le centre de message : ', __FILE__) . $options['message']);
     }
 
-    private function executeActionAlert(scenario &$scenario, $options)
+    private function executeActionAlert(&$scenario, $options)
     {
         event::add('nextdom::alert', $options);
         $this->setLog($scenario, __('Ajout de l\'alerte : ', __FILE__) . $options['message']);
     }
 
-    private function executeActionPopup(scenario &$scenario, $options)
+    private function executeActionPopup(&$scenario, $options)
     {
         event::add('nextdom::alertPopup', $options['message']);
         $this->setLog($scenario, __('Affichage du popup : ', __FILE__) . $options['message']);
     }
 
-    private function executeActionEquipment(scenario &$scenario)
+    private function executeActionEquipment(&$scenario)
     {
         $eqLogic = EqLogicManager::byId(str_replace(array('#eqLogic', '#'), '', $this->getOptions('eqLogic')));
         if (!is_object($eqLogic)) {
@@ -573,13 +573,13 @@ class scenarioExpression
         }
     }
 
-    private function executeActionGotoDesign(scenario &$scenario, $options)
+    private function executeActionGotoDesign(&$scenario, $options)
     {
         $this->setLog($scenario, __('Changement design : ', __FILE__) . $options['plan_id']);
         event::add('nextdom::gotoplan', $options['plan_id']);
     }
 
-    private function executeActionScenario(scenario &$scenario)
+    private function executeActionScenario(&$scenario)
     {
         if ($scenario !== null && $this->getOptions('scenario_id') == $scenario->getId()) {
             $actionScenario = &$scenario;
@@ -649,7 +649,7 @@ class scenarioExpression
         }
     }
 
-    private function executeActionVariable(scenario &$scenario, $options)
+    private function executeActionVariable(&$scenario, $options)
     {
         $options['value'] = self::setTags($options['value'], $scenario);
         try {
@@ -672,7 +672,7 @@ class scenarioExpression
 
     }
 
-    private function executeActionDeleteVariable(scenario &$scenario, $options)
+    private function executeActionDeleteVariable(&$scenario, $options)
     {
         // TODO: Erreur, pas static
         scenario::removeData($options['name']);
@@ -680,7 +680,7 @@ class scenarioExpression
         return;
     }
 
-    private function executeActionAsk(scenario &$scenario, $options)
+    private function executeActionAsk(&$scenario, $options)
     {
         $dataStore = new dataStore();
         $dataStore->setType('scenario');
@@ -724,14 +724,14 @@ class scenarioExpression
         $this->setLog($scenario, __('Réponse ', __FILE__) . $value);
     }
 
-    private function executeActionNextDomPowerOff(scenario &$scenario)
+    private function executeActionNextDomPowerOff(&$scenario)
     {
         $this->setLog($scenario, __('Lancement de l\'arret de nextdom', __FILE__));
         $scenario->persistLog();
         nextdom::haltSystem();
     }
 
-    private function executeActionScenarioReturn(scenario &$scenario, $options)
+    private function executeActionScenarioReturn(&$scenario, $options)
     {
         $this->setLog($scenario, __('Demande de retour d\'information : ', __FILE__) . $options['message']);
         if ($scenario->getReturn() === true) {
@@ -741,7 +741,7 @@ class scenarioExpression
         }
     }
 
-    private function executeActionRemoveInat(scenario &$scenario)
+    private function executeActionRemoveInat(&$scenario)
     {
         if ($scenario === null) {
             return;
@@ -757,7 +757,7 @@ class scenarioExpression
         }
     }
 
-    private function executeActionReport(scenario &$scenario, $options)
+    private function executeActionReport(&$scenario, $options)
     {
         $cmd_parameters = array('files' => null);
         $this->setLog($scenario, __('Génération d\'un rapport de type ', __FILE__) . $options['type']);
@@ -806,7 +806,7 @@ class scenarioExpression
         }
     }
 
-    private function executeActionOthers(scenario &$scenario, $options)
+    private function executeActionOthers(&$scenario, $options)
     {
         $cmd = cmd::byId(str_replace('#', '', $this->getExpression()));
         if (is_object($cmd)) {

@@ -385,10 +385,6 @@ function initTextArea(){
     });
 }
 
-function initCheckBox(){
-    $(document).trigger('icheck'); // apply icheck to checkboxes
-}
-
 function initPage(){
     initTableSorter();
     initReportMode();

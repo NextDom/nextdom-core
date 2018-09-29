@@ -185,3 +185,8 @@
 .skin-blue-light::-webkit-scrollbar-thumb{
   background:#3c8dbc;
 }
+
+.skin-blue-light [type="checkbox"]:not(:checked):after,
+.skin-blue-light [type="checkbox"]:checked:after {
+  color: #3c8dbc;
+}

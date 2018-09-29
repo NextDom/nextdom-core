@@ -174,3 +174,8 @@
 .skin-nextdom::-webkit-scrollbar-thumb{
   background:#00a65a;
 }
+
+.skin-green-light [type="checkbox"]:not(:checked):after,
+.skin-green-light [type="checkbox"]:checked:after {
+  color: #00a65a;
+}
