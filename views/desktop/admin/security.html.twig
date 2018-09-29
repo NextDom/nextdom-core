@@ -1,20 +1,19 @@
 <div class="box" id="security">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-shield"></i> {{ 'Sécurité' }}</h3>
+        <h3 class="box-title"><i class="fa fa-shield">&nbsp;&nbsp;</i>{{ 'Sécurité' }}</h3>
         <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
     <div class="box-body">
         <form class="form-horizontal">
             <fieldset>
-                <legend >{{ 'LDAP' }}</legend>
+                <legend class="legend-title">{{ 'LDAP' }}</legend>
                 {% if adminUseLdap %}
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Activer l\'authentification LDAP' }}</label>
-                        <div class="col-sm-1">
-                            <input type="checkbox" class="configKey" data-l1key="ldap:enable"/>
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Authentification LDAP' }}</label>
+                        <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                            <input type="checkbox" class="configKey" data-l1key="ldap:enable"/><label class="control-label">{{'Activer'}}</label>
                         </div>
                     </div>
                     <div id="div_config_ldap">
@@ -67,23 +66,22 @@
                             </div>
                         </div>
                         <div class="form-group has-error">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Autoriser REMOTE_USER' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                                <input type="checkbox" class="configKey" data-l1key="sso:allowRemoteUser"/>
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'REMOTE_USER' }}</label>
+                            <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                                <input type="checkbox" class="configKey" data-l1key="sso:allowRemoteUser"/><label class="control-label">{{'Autoriser'}}</label>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6"></div>
                             <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                                <a class="btn btn-default" id="bt_testLdapConnection"><i class="fa fa-cube"></i>
-                                    {{ 'Tester' }}</a>
+                                <a class="btn btn-primary" id="bt_testLdapConnection"><i class="fa fa-cube">&nbsp;&nbsp;</i>{{ 'Tester' }}</a>
                             </div>
                         </div>
                     </div>
                 {% else %}
                     <div class="alert alert-info">{{ 'Librairie LDAP non trouvée. Merci de l\'installer avant de pouvoir utiliser la connexion LDAP' }}</div>
                 {% endif %}
-                <legend >{{ 'Connexion' }}</legend>
+                <legend class="legend-title">{{ 'Connexion' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nombre d\'échecs tolérés' }}</label>
                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
@@ -111,7 +109,7 @@
             </fieldset>
         </form>
         <form class="form-horizontal">
-            <legend >{{ 'IPs bannies' }} <a class="btn btn-warning btn-legend pull-right" id="bt_removeBanIp"><i class="fa fa-trash"></i> {{ 'Supprimer' }}</a></legend>
+            <legend class="legend-title">{{ 'IPs bannies' }} <a class="btn btn-warning btn-legend pull-right" id="bt_removeBanIp"><i class="fa fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a></legend>
             <fieldset>
                 <table class="table table-condensed table-bordered">
                     <thead>
@@ -135,6 +133,7 @@
         </form>
     </div>
     <div class="box-footer clearfix">
-        <a class="btn btn-success btn-sm pull-right" id="bt_savesecurity"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+        <a class="btn btn-success pull-right" id="bt_savesecurity"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+        <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
     </div>
 </div>

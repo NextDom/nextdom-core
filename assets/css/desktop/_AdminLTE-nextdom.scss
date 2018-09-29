@@ -237,9 +237,9 @@ body {
 }
 
 .btn-app>.badge {
-    top: 3px;
-    right: 3px;
-    font-size: 12px;
+  top: 3px;
+  right: 3px;
+  font-size: 12px;
 }
 
 .nav-pills > li > a > .fa,
@@ -271,7 +271,7 @@ body {
 }
 
 .nav-tabs a {
-    padding: 10px 10px !important;
+  padding: 10px 10px !important;
 }
 
 .login-logo,
@@ -299,7 +299,7 @@ body {
 }
 
 .login-box-msg, .register-box-msg {
-    padding: 0 20px 7px 20px;
+  padding: 0 20px 7px 20px;
 }
 
 .login-box-body,
@@ -409,31 +409,31 @@ body {
 }
 
 .legend-title {
-    font-size: 16px;
-    border: 1px solid $whitegray;
-    padding: 5px 10px;
-    margin-bottom: 15px;
-    background-color: whitesmoke;
+  font-size: 16px;
+  border: 1px solid $whitegray;
+  padding: 5px 10px;
+  margin-bottom: 15px;
+  background-color: whitesmoke;
 }
 
 .btn-tab {
-    line-height: 2;
+  line-height: 2;
 }
 
 .btn-legend {
-    margin-top: -6px;
-    margin-right: -10px;
+  margin-top: -6px;
+  margin-right: -10px;
 }
 
 .alert-config,
 .alert {
-    width: 100%;
+  width: 100%;
 }
 
 .label-config {
-    padding: 9px 10px 10px;
-    font-size: 100%;
-    background-color: $nextdom_blue !important;
+  padding: 9px 10px 10px;
+  font-size: 100%;
+  background-color: $nextdom_blue !important;
 }
 
 .login-logo{
@@ -441,7 +441,7 @@ body {
 }
 
 .progress {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .wrapper.fullscreen header,
@@ -460,29 +460,28 @@ body {
 
 input[type="checkbox"] {
   position: relative;
-  top: 3px;
-  height: 1.4em;
-  width: 1.4em;
+  height: 1.1em;
+  width: 2em;
   appearance: none;
   -webkit-appearance: none;
   cursor: pointer;
 }
 
-/* checkboxes aspect */
-/* :before for create box */
+/* Aspect des checkboxes */
+/* :before sert à créer la case à cocher */
 [type="checkbox"]:not(:checked):before,
 [type="checkbox"]:checked:before {
   content: '';
   position: absolute;
   left:0; top: 2px;
-  width: 17px; height: 17px;
+  width: 17px; height: 17px; /* dim. de la case */
   border: 1px solid #aaa;
   background: #f8f8f8;
-  border-radius: 3px;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,.3)
+  border-radius: 3px; /* angles arrondis */
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.3) /* légère ombre interne */
 }
 
-/* General aspect for cross */
+/* Aspect général de la coche */
 [type="checkbox"]:not(:checked):after,
 [type="checkbox"]:checked:after {
   content: '✔';
@@ -490,15 +489,15 @@ input[type="checkbox"] {
   top: 0; left: 4px;
   font-size: 14px;
   color: #33B8CC;
-  transition: all .2s;
+  transition: all .2s; /* on prévoit une animation */
 }
-/* Aspect for uncheck */
+/* Aspect si "pas cochée" */
 [type="checkbox"]:not(:checked):after {
-  opacity: 0;
-  transform: scale(0);
+  opacity: 0; /* coche invisible */
+  transform: scale(0); /* mise à l'échelle à 0 */
 }
-/* Aspect if check*/
+/* Aspect si "cochée" */
 [type="checkbox"]:checked:after {
-  opacity: 1;
-  transform: scale(1);
+  opacity: 1; /* coche opaque */
+  transform: scale(1); /* mise à l'échelle 1:1 */
 }

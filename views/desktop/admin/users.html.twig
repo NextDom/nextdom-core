@@ -1,23 +1,22 @@
 <div class="box" id="users">
     <div class="box-header with-border">
-        <legend ><i class="fa fa-hand-o-right"></i> {{ 'Gestion des utilisateurs' }}</legend>
+        <legend ><i class="fa fa-users">&nbsp;&nbsp;</i>{{ 'Gestion des utilisateurs' }}</legend>
         <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
     <div class="box-body">
         <div class="box" id="div_administration">
             <div class="box-header">
-                <legend><i class="icon personne-toilet1"></i> {{ 'Liste des utilisateurs' }}
+                <legend class="legend-title"><i class="icon personne-toilet1"></i> {{ 'Liste des utilisateurs' }}
                     <div class="box-tools pull-right">
                         {% if userLdapEnabled != '1' %}
                             {% if userSupportExists %}
-                                <a class="btn btn-danger btn-xs" id="bt_supportAccess" data-enable="0"><i class="fas fa-user"></i> {{ 'Désactiver accès support' }}</a>
+                                <a class="btn btn-danger" id="bt_supportAccess" data-enable="0"><i class="fas fa-user"></i> {{ 'Désactiver accès support' }}</a>
                             {% else %}
-                                <a class="btn btn-success btn-xs" id="bt_supportAccess" data-enable="1"><i class="fas fa-user"></i> {{ 'Activer accès support' }}</a>
+                                <a class="btn btn-success" id="bt_supportAccess" data-enable="1"><i class="fas fa-user"></i> {{ 'Activer accès support' }}</a>
                             {% endif %}
-                            <a class="btn btn-warning btn-xs" id="bt_addUser"><i class="fas fa-plus-circle"></i> {{ 'Ajouter un utilisateur' }}</a>
+                            <a class="btn btn-warning" id="bt_addUser"><i class="fas fa-plus-circle"></i> {{ 'Ajouter un utilisateur' }}</a>
                         {% endif %}
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                         </button>
@@ -46,7 +45,7 @@
 
         <div class="box">
             <div class="box-header">
-                <legend>{{ 'Sessions actives' }}</legend>
+                <legend class="legend-title">{{ 'Sessions actives' }}</legend>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -91,7 +90,7 @@
         </div>
         <div class="box">
             <div class="box-header">
-                <legend>{{ 'Périphériques enregistrés' }}
+                <legend class="legend-title">{{ 'Périphériques enregistrés' }}
                     <div class="box-tools pull-right">
                         <a class="btn btn-xs btn-warning" id="bt_removeAllRegisterDevice"><i class="fas fa-trash"></i> {{ 'Supprimer tout' }}</a>
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -156,6 +155,7 @@
         </div>
     </div>
     <div class="box-footer clearfix">
-        <a class="btn btn-success btn-sm pull-right" id="bt_saveUser"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+        <a class="btn btn-success pull-right" id="bt_saveUser"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+        <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
     </div>
 </div>

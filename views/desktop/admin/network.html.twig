@@ -1,15 +1,14 @@
 <div class="box" id="network">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-rss"></i> {{ 'Réseaux' }}</h3>
+        <h3 class="box-title"><i class="fa fa-rss">&nbsp;&nbsp;</i>{{ 'Réseaux' }}</h3>
         <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
     <div class="box-body">
         <div class="alert alert-warning alert-config">{{ 'Attention : cette configuration n\'est là que pour informer' }} {{ adminConfigs['product_name'] }} {{ 'de sa configuration réseau et n\'a aucun impact sur les ports ou l\'IP réellement utilisés pour joindre' }} {{ adminConfigs['product_name'] }}</div>
         <form class="form-horizontal">
-            <legend >{{ 'Accès interne' }}</legend>
+            <legend class="legend-title">{{ 'Accès interne' }}</legend>
             <fieldset>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Protocole' }}</label>
@@ -33,7 +32,7 @@
         </form>
         <form class="form-horizontal">
             <fieldset>
-                <legend >{{ 'Accès externe' }}</legend>
+                <legend class="legend-title">{{ 'Accès externe' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Protocole' }}</label>
                     <div class="col-lg-8 col-md-9 col-sm-8 col-xs-6">
@@ -54,7 +53,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <legend >{{ 'Gestion avancée' }}</legend>
+                        <legend class="legend-title">{{ 'Gestion avancée' }}</legend>
                         <table class="table table-condensed table-bordered">
                             <thead>
                             <tr>
@@ -74,9 +73,9 @@
                             </tbody>
                         </table>
                         <div class="form-group has-error">
-                            <label class="col-xs-6 control-label">{{ 'Désactiver la gestion du réseau par' }} {{ adminConfigs['product_name'] }}</label>
+                            <label class="col-xs-6 control-label">{{ 'Gestion du réseau par :' }} {{ adminConfigs['product_name'] }}</label>
                             <div class="col-xs-4">
-                                <input type="checkbox" class="configKey" data-l1key="network::disableMangement"/>
+                                <input type="checkbox" class="configKey" data-l1key="network::disableMangement"/><label class="control-label">{{'Désactiver'}}</label>
                             </div>
                         </div>
                         <div class="form-group">
@@ -103,7 +102,7 @@
                                         <label class="col-xs-4 control-label">{{ 'Statut DNS' }}</label>
                                         <div class="col-xs-8">
                                             {% if adminConfigs['market::allowDNS'] == 1 and adminDnsRun %}
-                                                <span class="label label-success">{{ 'Démarré : ' }} <a href="{{ pageContent['adminNetworkExternalAccess'] }}" target="_blank" class="link-dns-success">{{ adminNetworkExternalAccess }}</a></span>
+                                                <span class="label label-success">{{ 'Démarré : ' }} <a href="{{ pageContent['adminNetworkExternalAccess']  }}" target="_blank" class="link-dns-success">{{ adminNetworkExternalAccess }}</a></span>
                                             {% else %}
                                                 <span class="label label-warning" data-toggle="tooltip" title="" data-original-title="{{ 'Normal si vous n\'avez pas coché la case : Utiliser les DNS' }} {{ adminConfigs['product_name'] }}">{{ 'Arrêté' }}</span>
                                             {% endif %}
@@ -125,6 +124,7 @@
         </form>
     </div>
     <div class="box-footer clearfix">
-        <a class="btn btn-success btn-sm pull-right" id="bt_savenetwork"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+        <a class="btn btn-success pull-right" id="bt_savenetwork"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+        <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
     </div>
 </div>
