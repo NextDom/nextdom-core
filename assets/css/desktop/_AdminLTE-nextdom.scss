@@ -460,40 +460,44 @@ body {
 
 input[type="checkbox"] {
   position: relative;
-  height: 1.6em;
+  height: 1.1em;
   width: 2em;
   appearance: none;
   -webkit-appearance: none;
   cursor: pointer;
-  border: 1px solid #CCCCCC;
-  border-radius: 0.8em;
-  background-color: #FEFEFE;
-  transition: all .2s;
 }
 
-input[type="checkbox"]:after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 1em;
-  height: 1.4em;
+/* Aspect des checkboxes */
+/* :before sert à créer la case à cocher */
+[type="checkbox"]:not(:checked):before,
+[type="checkbox"]:checked:before {
   content: '';
-  display: block;
-  border: 1px solid #BBBBBB;
-  border-radius: 0.4em;
-  background-color: #999999;
-  transition: all 0.2s;
+  position: absolute;
+  left:0; top: 2px;
+  width: 17px; height: 17px; /* dim. de la case */
+  border: 1px solid #aaa;
+  background: #f8f8f8;
+  border-radius: 3px; /* angles arrondis */
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.3) /* légère ombre interne */
 }
 
-input[type="checkbox"]:checked {
-  border-color: #6872D7;
-  padding-left: 2em;
-  transition: all .2s;
+/* Aspect général de la coche */
+[type="checkbox"]:not(:checked):after,
+[type="checkbox"]:checked:after {
+  content: '✔';
+  position: absolute;
+  top: 0; left: 4px;
+  font-size: 14px;
+  color: #33B8CC;
+  transition: all .2s; /* on prévoit une animation */
 }
-
-input[type="checkbox"]:checked:after {
-  left: 1.2em;
-  right: 0;
-  transition: all .2s;
-  background-color: blue;
+/* Aspect si "pas cochée" */
+[type="checkbox"]:not(:checked):after {
+  opacity: 0; /* coche invisible */
+  transform: scale(0); /* mise à l'échelle à 0 */
+}
+/* Aspect si "cochée" */
+[type="checkbox"]:checked:after {
+  opacity: 1; /* coche opaque */
+  transform: scale(1); /* mise à l'échelle 1:1 */
 }
