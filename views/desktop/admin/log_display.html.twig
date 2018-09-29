@@ -1,8 +1,7 @@
 <div class="box" id="log_display">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-hand-o-right"></i> {{ 'Logs' }}</h3>
+        <h3 class="box-title"><i class="fa fa-hand-o-right">&nbsp;&nbsp;</i>{{ 'Logs' }}</h3>
         <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
@@ -38,6 +37,8 @@
                 window.open('core/php/downloadFile.php?pathfile=log/' + log_display_name, "_blank", null);
             });
         </script>
-
+    </div>
+    <div class="box-footer clearfix">
+        <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
     </div>
 </div>
