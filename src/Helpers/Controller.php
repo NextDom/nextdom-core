@@ -963,7 +963,7 @@ class Controller
                             'result' => $pluginHealthData['result'],
                             'advice' => $pluginHealthData['advice']
                         ];
-                        if ($pluginHealthData['state'] == 'nok') {
+                        if ($pluginHealthData['state'] === 'nok' || $pluginHealthData['state'] == false) {
                             $pluginData['nOk']++;
                         }
                     }
