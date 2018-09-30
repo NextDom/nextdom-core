@@ -1015,7 +1015,7 @@ class scenarioExpression
         return $this;
     }
 
-    public function setLog(scenario &$_scenario, $log)
+    public function setLog(&$_scenario, $log)
     {
         if ($_scenario !== null && is_object($_scenario)) {
             $_scenario->setLog($log);
