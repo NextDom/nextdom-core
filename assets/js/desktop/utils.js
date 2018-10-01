@@ -182,7 +182,7 @@ $(function () {
         horloge += date.getHours() + ":" + minutes + ":" +secondes;
         $('#horloge').text(horloge);
         var horloge_time= date.getHours() + ":" + minutes + ":" +secondes;
-        $('#horloge_time').text(horloge_short);
+        $('#horloge_time').text(horloge_time);
         var horloge_date= jours[date.getDay()] + " " + date.getDate() + " " + mois[date.getMonth()] + " " + date.getFullYear();
         $('#horloge_date').text(horloge_date);
     }, 1000);
