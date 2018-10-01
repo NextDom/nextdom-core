@@ -180,3 +180,12 @@
 .skin-yellow-light [type="checkbox"]:checked:after {
   color: #f39c12;
 }
+
+.skin-yellow-light .ui-dialog .ui-dialog-title{
+  color: #fff;
+}
+
+.skin-yellow-light .ui-dialog .ui-dialog-titlebar{
+  background-color:#f39c12;
+  padding: 0px 15px;
+}
