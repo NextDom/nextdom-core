@@ -521,7 +521,8 @@ input[type="checkbox"] {
     font-size: 18px;
 }
 
-@media (max-width: 767px)
-.form-horizontal .control-label {
-    padding-top: 7px;
+@media (max-width: 767px) {
+    .form-horizontal .control-label {
+        padding-top: 7px;
+    }
 }
