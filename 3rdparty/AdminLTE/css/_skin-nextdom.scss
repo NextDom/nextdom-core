@@ -46,8 +46,11 @@ $nextdom_table_title:$lightgolden;
 }
 
 /* Elements */
-.tooltip-inner, .tooltip-arrow {
+.tooltip-inner {
   background: $grey;
+}
+.tooltip-arrow {
+  border-top-color: $grey;
 }
 .skin-nextdom .main-header .navbar {
   background-color: $nextdom_accent;
