@@ -5,7 +5,7 @@ body {
 }
 
 .Link-Blue {
-  color: $nextdom_blue;
+  color: $nextdom_accent;
 }
 
 .main-header {
@@ -221,8 +221,8 @@ body {
 }
 
 .btn-primary {
-  background-color: $nextdom_blue;
-  border-color: $nextdom_blue;
+  background-color: $nextdom_primary;
+  border-color: $nextdom_primary;
 }
 
 .btn-app > .fa,
@@ -435,11 +435,18 @@ body {
 .label-config {
   padding: 9px 10px 10px;
   font-size: 100%;
-  background-color: $nextdom_blue !important;
+  background-color: $nextdom_accent !important;
+}
+
+.label-unity {
+    padding: 9px 0px 10px;
+    font-size: 100%;
+    background-color: $white !important;
+    color: $darkgray !important;
 }
 
 .login-logo{
-  background-color: $nextdom_blue;
+  background-color: $nextdom_accent;
 }
 
 .progress {
@@ -461,13 +468,14 @@ body {
 }
 
 input[type="checkbox"] {
-  position: relative;
-  top:3px;
-  height: 1.4em;
-  width: 1.4em;
+  position: relative !important;
+  top:6px;
+  height: 20px;
+  width: 24px;
   appearance: none;
   -webkit-appearance: none;
   cursor: pointer;
+  margin: 2px 0 0 0;
 }
 
 /* Aspect des checkboxes */
@@ -476,11 +484,11 @@ input[type="checkbox"] {
 [type="checkbox"]:checked:before {
   content: '';
   position: absolute;
-  left:0; top: 2px;
-  width: 17px; height: 17px; /* dim. de la case */
-  border: 1px solid #aaa;
-  background: #f8f8f8;
-  border-radius: 3px; /* angles arrondis */
+  left:0; top: 0px;
+  width: 18px; height: 18px; /* dim. de la case */
+  background: $white;
+  border: 1px solid #ccc;
+  border-radius: 2px; /* angles arrondis */
 }
 
 /* Aspect général de la coche */
@@ -488,10 +496,10 @@ input[type="checkbox"] {
 [type="checkbox"]:checked:after {
   content: '■';
   position: absolute;
-  top: -7px;
-  left: 2px;
-  font-size: 22px;
-  color: #33B8CC;
+  top: -0.52em;
+  left: -0.01em;
+  font-size: 2.2em;
+  color: $nextdom_accent;
   transition: all .2s;
 }
 /* Aspect si "pas cochée" */
@@ -501,6 +509,19 @@ input[type="checkbox"] {
 }
 /* Aspect si "cochée" */
 [type="checkbox"]:checked:after {
-  opacity: 1; /* coche opaque */
+  opacity: 0.9; /* coche opaque */
   transform: scale(1); /* mise à l'échelle 1:1 */
+}
+
+[type="checkbox"]:focus {
+    outline: none;
+}
+
+.clock {
+    font-size: 18px;
+}
+
+@media (max-width: 767px)
+.form-horizontal .control-label {
+    padding-top: 7px;
 }

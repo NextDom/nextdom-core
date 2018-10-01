@@ -8,35 +8,38 @@
     <div class="box-body">
         <form class="form-horizontal">
             <fieldset>
+                /* Section NextDom */
                 <legend class="legend-title">{{ 'NextDom' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Nom de votre NextDom (utilisé notamment par le market)'}}">{{'Nom de votre NextDom'}}</label>
-                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
                         <input type="text" class="configKey form-control" data-l1key="name">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="Indique votre type de matériel">{{'Système / Hardware'}}</label>
-                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="Indique votre type de matériel">{{'Système / Hardware'}}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
                         <a class="btn btn-warning" id="bt_resetHardwareType"><i class="fa fa-refresh">&nbsp;&nbsp;</i>{{'Rafraîchir'}}</a>
                     </div>
-                    <div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
+                    <div class="col-lg-7 col-md-5 col-sm-5 col-xs-12">
                         <span class="label label-info label-config">{{ adminHardwareName }}</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Clef d\'installation qui permet d\'identifier votre NextDom quand il communique avec le market'}}">{{'Clef d\'installation'}}</label>
-                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Clef d\'installation qui permet d\'identifier votre NextDom quand il communique avec le market'}}">{{'Clef d\'installation'}}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
                         <a class="btn btn-warning" id="bt_resetHwKey"><i class="fa fa-bomb">&nbsp;&nbsp;</i>{{'Remise à zéro'}}</a>
                     </div>
-                    <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                    <div class="col-lg-7 col-md-5 col-sm-5 col-xs-12">
                         <span class="label label-info label-config">{{ adminHardwareKey }}</span>
                     </div>
                 </div>
+
+                /* Section Langage */
                 <legend class="legend-title">{{ 'Langage' }}</legend>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Langue de votre NextDom'}}">{{'Langue'}}</label>
-                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Langue de votre NextDom'}}">{{'Langue'}}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
                         <select class="configKey form-control" data-l1key="language">
                             <option value="fr_FR" selected="selected">French</option>
                             <option value="en_US">English</option>
@@ -50,34 +53,38 @@
                             <option value="tr">Turkish</option>
                         </select>
                     </div>
-                    <div>
-                        <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
-                            <input type="checkbox" class="configKey" data-l1key="generateTranslation" data-toggle="tooltip" title="" data-original-title="{{'Option pour les développeurs permettant à NextDom de générer les phrases à traduire'}}"><label class="control-label">{{'Générer les traductions'}}</label>
-                        </div>
+                    <div class="col-lg-7 col-md-5 col-sm-5 col-xs-12">
+                        <input type="checkbox" class="configKey" data-l1key="generateTranslation">
+                        <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{'Option pour les développeurs permettant à NextDom de générer les phrases à traduire'}}">{{'Générer les traductions'}}</label>
                     </div>
                 </div>
+
+                /* Section horodatage */
                 <legend class="legend-title">{{ 'Horodatage' }}</legend>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Durée de vie de votre connexion à NextDom si vous n\'avez pas coché la case enregistrer cet ordinateur'}}">{{'Durée de vie des sessions (en H)'}}</label>
-                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Durée de vie de votre connexion à NextDom si vous n\'avez pas coché la case enregistrer cet ordinateur'}}">{{'Durée de vie des sessions'}}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
                         <input type="text" class="configKey form-control" data-l1key="session_lifetime">
+                    </div>
+                    <div class="col-lg-7 col-md-5 col-sm-5 col-xs-12">
+                        <span class="label label-info label-unity">Heures</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{'Dernière date connue'}}</label>
-                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label">{{'Dernière date connue'}}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
                         <a class="btn btn-warning" id="bt_resetHour"><i class="fa fa-bomb">&nbsp;&nbsp;</i>{{'Remise à zéro'}}</a>
                     </div>
-                    <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                    <div class="col-lg-7 col-md-5 col-sm-5 col-xs-12">
                         <span class="label label-info label-config">{{ adminLastKnowDate }}</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-help="Fuseau horaire de votre NextDom">{{'Date et heure'}}</label>
-                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-help="Fuseau horaire de votre NextDom">{{'Date et heure'}}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
                         <a class="btn btn-primary" id="bt_forceSyncHour"><i class="fa fa-clock-o">&nbsp;&nbsp;</i>{{'Synchronisation'}}</a>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4">
+                    <div class="col-lg-7 col-md-5 col-sm-5 col-xs-12">
                         <select class="configKey form-control" data-l1key="timezone">
                             <option value="Pacific/Midway">(GMT-11:00) Midway Island, Samoa</option>
                             <option value="Pacific/Tahiti">(GMT-10:00) Pacific/Tahiti</option>
@@ -176,11 +183,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="ntp-optional-server" class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Permet d\'ajouter un serveur de temps à NextDom utilisé lorsque NextDom force la synchronisation de l\'heure'}}">{{'Serveur de temps optionnel'}}</label>
-                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <label for="ntp-optional-server" class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Permet d\'ajouter un serveur de temps à NextDom utilisé lorsque NextDom force la synchronisation de l\'heure'}}">{{'Serveur de temps optionnel'}}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
                         <input type="text" id="ntp-optional-server" class="configKey form-control" data-l1key="ntp::optionalServer">
                     </div>
-                    <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                    <div class="col-lg-7 col-md-5 col-sm-5 col-xs-12">
                         <input type="checkbox" id="ignore-hour-check" class="configKey" data-l1key="ignoreHourCheck">
                         <label for="ignore-hour-check" class="control-label" data-toggle="tooltip" title="" data-original-title="{{'Indique à NextDom de ne pas prendre en compte l\'heure du système'}}">{{'Ignorer la vérification de l\'heure'}}</label>
                     </div>
