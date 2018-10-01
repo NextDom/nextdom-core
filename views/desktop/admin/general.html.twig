@@ -1,13 +1,17 @@
 <div class="box"  id="general">
+    <!-- Section header -->
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fa fa-wrench">&nbsp;&nbsp;</i>{{ 'Général' }}</h3>
         <div class="box-tools pull-right">
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
+
+    <!-- Section body -->
     <div class="box-body">
         <form class="form-horizontal">
             <fieldset>
+            
                 <-- Section NextDom -->
                 <legend class="legend-title">{{ 'NextDom' }}</legend>
                 <div class="form-group">
@@ -35,7 +39,7 @@
                     </div>
                 </div>
 
-                <-- Section Langage -->
+                <!-- Section Langage -->
                 <legend class="legend-title">{{ 'Langage' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Langue de votre NextDom'}}">{{'Langue'}}</label>
@@ -59,7 +63,7 @@
                     </div>
                 </div>
 
-                <-- Section horodatage -->
+                <!-- Section horodatage -->
                 <legend class="legend-title">{{ 'Horodatage' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Durée de vie de votre connexion à NextDom si vous n\'avez pas coché la case enregistrer cet ordinateur'}}">{{'Durée de vie des sessions'}}</label>
@@ -196,7 +200,7 @@
         </form>
     </div>
 
-    <-- Section bouton bottom -->
+    <!-- Section bouton bottom -->
     <div class="box-footer clearfix">
         <a class="btn btn-success pull-right" id="bt_savegeneral"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
         <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
