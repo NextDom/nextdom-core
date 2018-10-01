@@ -13,10 +13,16 @@ $nextdom_table_title:$lightgolden;
 .skin-nextdom .logo-lg-img{
   content:url("/public/img/NextDom/NextDom_Wide_AlphaWhiteBlack.png");
 }
+.login-logo{
+  background-color: $nextdom_accent;
+}
 
 /* Labels */
 .label-config {
   background-color: $nextdom_accent;
+}
+.Link-Blue {
+  color: $nextdom_accent;
 }
 
 /* Checkbox */
@@ -36,10 +42,13 @@ $nextdom_table_title:$lightgolden;
 }
 .btn-app {
   background-color: $whitegray;
-  border-color: $whitelightgray; 
+  border-color: $whitelightgray;
 }
 
 /* Elements */
+.tooltip-inner, .tooltip-arrow {
+  background: $grey;
+}
 .skin-nextdom .main-header .navbar {
   background-color: $nextdom_accent;
 }

@@ -4,10 +4,6 @@ body {
   font-family: 'Roboto','Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
 }
 
-.Link-Blue {
-  color: $nextdom_accent;
-}
-
 .main-header {
   z-index: 1030;
 }
@@ -63,7 +59,24 @@ body {
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .ion {
   width: 20px;
 }
+.box-header > .fa,
+.box-header > .fas,
+.box-header > .glyphicon,
+.box-header > .ion,
+.box-header .box-title {
+  display: inline-block;
+  font-size: 18px;
+  margin: 0;
+  line-height: 1;
+}
+.box-header > .fa,
+.box-header > .fas,
+.box-header > .glyphicon,
+.box-header > .ion {
+  margin-right: 5px;
+}
 
+/* Menus */
 .tasks-menu, .notifications-menu {
   top: 8px;
   left:-8px;
@@ -83,6 +96,10 @@ body {
   top: 3px;
   right: 3px;
   font-size: 12px;
+}
+.tooltip-inner {
+  padding: 8px 8px;
+  border-radius: 8px;
 }
 
 /* User panel */
@@ -152,22 +169,6 @@ body {
   margin-bottom: 20px;
   width: 100%;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08);
-}
-.box-header > .fa,
-.box-header > .fas,
-.box-header > .glyphicon,
-.box-header > .ion,
-.box-header .box-title {
-  display: inline-block;
-  font-size: 18px;
-  margin: 0;
-  line-height: 1;
-}
-.box-header > .fa,
-.box-header > .fas,
-.box-header > .glyphicon,
-.box-header > .ion {
-  margin-right: 5px;
 }
 
 /* Todo */
@@ -402,9 +403,6 @@ body {
 }
 
 /* Logos */
-.login-logo{
-  background-color: $nextdom_accent;
-}
 .login-logo,
 .register-logo {
   font-size: 35px;
