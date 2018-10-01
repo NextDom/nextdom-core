@@ -181,8 +181,10 @@ $(function () {
         horloge += ' - ';
         horloge += date.getHours() + ":" + minutes + ":" +secondes;
         $('#horloge').text(horloge);
-        var horloge_short= date.getHours() + ":" + minutes + ":" +secondes;
-        $('#horloge_short').text(horloge_short);
+        var horloge_time= date.getHours() + ":" + minutes + ":" +secondes;
+        $('#horloge_time').text(horloge_short);
+        var horloge_date= jours[date.getDay()] + " " + date.getDate() + " " + mois[date.getMonth()] + " " + date.getFullYear();
+        $('#horloge_date').text(horloge_date);
     }, 1000);
 
 
@@ -201,7 +203,7 @@ $(function () {
         bootbox.setDefaults({
             locale: nextdom_langage.substr(0, 2),
         });
-            
+
     }
 
     //Display report bug
