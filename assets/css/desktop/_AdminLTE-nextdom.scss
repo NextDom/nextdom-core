@@ -236,6 +236,8 @@ body {
 .btn-app {
   line-height: 2.5;
   height: 70px;
+  margin: 5px 5px 5px 5px;
+  min-width: 100px;
 }
 
 .btn-app>.badge {
@@ -478,13 +480,13 @@ body {
 
 input[type="checkbox"] {
   position: relative !important;
-  top:6px;
-  height: 20px;
-  width: 24px;
+  top:8px;
+  height: 22px;
+  width: 22px;
   appearance: none;
   -webkit-appearance: none;
   cursor: pointer;
-  margin: 2px 0 0 0;
+  margin: 0 0 0 0;
 }
 
 /* Aspect des checkboxes */
@@ -493,7 +495,7 @@ input[type="checkbox"] {
 [type="checkbox"]:checked:before {
   content: '';
   position: absolute;
-  left:0; top: 0px;
+  left:0px; top: 0px;
   width: 18px; height: 18px; /* dim. de la case */
   background: $white;
   border: 1px solid #ccc;
@@ -505,11 +507,11 @@ input[type="checkbox"] {
 [type="checkbox"]:checked:after {
   content: '■';
   position: absolute;
-  top: -0.52em;
-  left: -0.02em;
-  font-size: 2.2em;
+  top: -12px;
+  left:1px;
+  font-size: 26px;
   color: $nextdom_accent;
-  transition: all .2s;
+  transition: all .4s;
 }
 /* Aspect si "pas cochée" */
 [type="checkbox"]:not(:checked):after {
