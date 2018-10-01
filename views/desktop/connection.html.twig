@@ -1,42 +1,39 @@
 {% include '/commons/header.html.twig' %}
 <body class="hold-transition login-page">
 <div class="login-box">
+    <!-- Section logo -->
     <div class="login-logo">
         <img src="/public/img/NextDom/NextDom_Wide_AlphaBlackWhite.png" style="height:100px; border-radius: 10px">
     </div>
-    <!-- /.login-logo -->
+
+    <!-- Section connexion -->
     <div class="login-box-body">
-        <p class="login-box-msg">{{ 'Connectez-vous pour accéder à votre session' }}</p>
-        <br/>
+        <div class="form-group">
+            <p class="login-box-msg">{{ 'Connectez-vous pour accéder à votre session ...' }}</p>
+        </div>
         <div class="form-group has-feedback">
             <input type="text" class="form-control" placeholder="{{ 'Identifiant ... (admin par défaut)' }}" id="in_login_username">
-            <span class="form-control-feedback"><i class="fas fa-user-circle"></i></i></span>
+            <span class="label-badge"><i class="fas fa-user-circle"></i></span>
         </div>
         <div class="form-group has-feedback">
             <input type="password" class="form-control" placeholder="{{ 'Mot de Passe ...' }}" id="in_login_password">
-            <span class="form-control-feedback"><i class="fas fa-key"></i></span>
+            <span class="label-badge"><i class="fas fa-key"></i></span>
         </div>
         <div class="passwd form-group has-feedback" id="div_twoFactorCode" style="display:none;">
-            <input type="text" id="in_twoFactorCode" placeholder="{{ 'Code à 2 facteur' }}" class="form-control">
+            <input type="text" id="in_twoFactorCode" placeholder="{{ 'Code à 2 facteur ...' }}" class="form-control">
+            <span class="label-badge"><i class="fas fa-user-secret"></i></span>
         </div>
-        <div class="row">
+        <div class="row form-group">
             <div class="col-xs-8">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" id="cb_storeConnection"> {{ 'Se souvenir de moi ?' }}
-                    </label>
-                </div>
+                <input type="checkbox" id="cb_storeConnection">
+                <label for="cb_storeConnection" class="control-label" data-toggle="tooltip" title="" data-original-title="{{'En cochant cette case, vous n'aurez plus besoin de vous saisir vos identifiants.'}}">{{ 'Se souvenir de moi ?' }}</label>
             </div>
-            <!-- /.col -->
             <div class="col-xs-4">
                 <button class="btn btn-primary btn-block btn-flat" id="bt_login_validate"><i class="fas fa-unlock">&nbsp;&nbsp;</i>{{ 'Connexion' }}</button>
             </div>
-            <!-- /.col -->
         </div>
-        <br/>
         <a class="Link-Blue" href="https://www.nextdom.org/knowledge-base/reinitialiser-sont-mot-de-passe/">{{ 'Oups, J\'ai oublié mon mot de passe !' }}</a><br>
     </div>
-    <!-- /.login-box-body -->
 </div>
 
 {% if JS_END_POOL is defined %}
