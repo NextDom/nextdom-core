@@ -181,3 +181,12 @@
 .skin-purple-light [type="checkbox"]:checked:after {
   color: #605ca8;
 }
+
+.skin-purple-light .ui-dialog .ui-dialog-title{
+  color: #fff;
+}
+
+.skin-purple-light .ui-dialog .ui-dialog-titlebar{
+  background-color: #605ca8;
+  padding: 0px 15px;
+}

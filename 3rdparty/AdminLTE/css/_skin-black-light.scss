@@ -198,3 +198,12 @@
 .skin-black-light [type="checkbox"]:checked:after {
   color: #222;
 }
+
+.skin-black-light .ui-dialog .ui-dialog-title{
+  color: #fff;
+}
+
+.skin-black-light .ui-dialog .ui-dialog-titlebar{
+  background-color: #222;
+  padding: 0px 15px;
+}
