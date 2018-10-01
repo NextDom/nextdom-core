@@ -445,6 +445,15 @@ body {
     color: $darkgray !important;
 }
 
+.label-badge {
+    position: absolute;
+    top: 10px;
+    right: 0;
+    width: 34px;
+    height: 34px;
+    text-align: center;
+}
+
 .login-logo{
   background-color: $nextdom_accent;
 }
