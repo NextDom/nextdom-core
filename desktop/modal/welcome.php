@@ -99,7 +99,7 @@ if (!isConnect()) {
 					    La lecture de la documentation est fastidieuse mais c'est une opération essentielle pour bien maitriser votre solution domotique.
 					</p>
 			        <p>
-				        <a href="http://www.netxdom.org/docs" class="text-green">accéder a la documentation</a>
+				        <a href="http://www.nextdom.org/docs" class="text-green">accéder a la documentation</a>
                     </p>
 				</div>
 				<!-- /.box-body -->
@@ -123,7 +123,7 @@ if (!isConnect()) {
 						Si ce n'est pas le cas, posez vous question, la communautée y répondra au plus vite.
 					</p>
 					<p>
-						<a href="http://www.netxdom.org/forum" class="text-green">accéder au forum</a>
+						<a href="http://www.nextdom.org/forum" class="text-green">accéder au forum</a>
 					<p/>
 				</div>
 				<!-- /.box-body -->
@@ -144,7 +144,7 @@ if (!isConnect()) {
 						Retrouvez toute l'actualité de NextDom sur notre blog.
 					</p>
 					<p>
-					    <a href="http://www.netxdom.org/blog" class="text-green">accéder au blog</a>
+					    <a href="http://www.nextdom.org/blog" class="text-green">accéder au blog</a>
 					</p>
 				</div>
 				<!-- /.box-body -->
