@@ -1,3 +1,4 @@
+/* Colors variables */
 $white:#FFF;
 $black:#000;
 $orange: #ec971f;
@@ -20,11 +21,17 @@ $critical: #e74c3c;
 $whitegray: #f5f5f5;
 $whitelightgray: #fafafa;
 $darkgray: #999;
+$lightgolden:#fdfdf2;
+
+/* Accent colors by defaut, the real color is set in 3rdparty/adminLTE/skin-xxx */
+$nextdom_accent: $black;
+$nextdom_primary: $black;
+$nextdom_polar_accent: $white;
+$nextdom_table_title:$lightgrey;
 
 .text-white{
     color: $white ;
 }
-
 .text-black{
     color: $black;
 }
@@ -67,12 +74,9 @@ $darkgray: #999;
 .text-purple{
     color: $purple;
 }
-
-
 .icon-white{
     color: $white ;
 }
-
 .icon-black{
     color: $black;
 }
