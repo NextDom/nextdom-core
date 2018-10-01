@@ -382,6 +382,8 @@ body {
   float: left;
   height: 45px;
   width: 50px;
+  padding-top: 4px;
+  text-align: center;
 }
 
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text > i {
@@ -393,6 +395,12 @@ body {
   margin-left: 10px;
   margin-right: 10px;
   margin-bottom: 10px;
+}
+
+.card-category {
+    position: relative;
+    font-size: 18px;
+    top: -9px;
 }
 
 .content-wrapper {
@@ -511,7 +519,7 @@ input[type="checkbox"] {
   left:1px;
   font-size: 26px;
   color: $nextdom_accent;
-  transition: all .4s;
+  transition: all .2s;
 }
 /* Aspect si "pas cochée" */
 [type="checkbox"]:not(:checked):after {
