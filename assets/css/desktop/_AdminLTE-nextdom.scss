@@ -429,41 +429,33 @@ body {
   top: 10px;
 }
 
-.legend-title {
-  font-size: 16px;
-  border: 1px solid $whitegray;
-  padding: 5px 10px;
-  margin-bottom: 15px;
-  background-color: whitesmoke;
-}
-
+/* Buttons */
 .btn-tab {
   line-height: 2;
 }
-
 .btn-legend {
   margin-top: -6px;
   margin-right: -10px;
 }
 
+/* Alert popup */
 .alert-config,
 .alert {
   width: 100%;
 }
 
+/* Labels */
 .label-config {
   padding: 9px 10px 10px;
   font-size: 100%;
   background-color: $nextdom_accent !important;
 }
-
 .label-unity {
     padding: 9px 0px 10px;
     font-size: 100%;
     background-color: $white !important;
     color: $darkgray !important;
 }
-
 .label-badge {
     position: absolute;
     top: 10px;
@@ -472,29 +464,38 @@ body {
     height: 34px;
     text-align: center;
 }
+.legend-title {
+  font-size: 16px;
+  border: 1px solid $whitegray;
+  padding: 5px 10px;
+  margin-bottom: 15px;
+  background-color: whitesmoke;
+}
 
+/* Logos */
 .login-logo{
   background-color: $nextdom_accent;
 }
 
+/* Progress bars */
 .progress {
   margin-bottom: 10px;
 }
 
+/* Wrapper */
 .wrapper.fullscreen header,
 .wrapper.fullscreen footer,
 .wrapper.fullscreen aside {
   display: none;
 }
-
 .wrapper.fullscreen .content-wrapper {
   margin-left: 0px !important;
 }
-
 .wrapper.fullscreen #div_mainContainer {
   margin-top: -50px;
 }
 
+/* Checkboxes */
 input[type="checkbox"] {
   position: relative !important;
   top:8px;
@@ -505,21 +506,18 @@ input[type="checkbox"] {
   cursor: pointer;
   margin: 0 0 0 0;
 }
-
-/* Aspect des checkboxes */
-/* :before sert à créer la case à cocher */
+/* frame */
 [type="checkbox"]:not(:checked):before,
 [type="checkbox"]:checked:before {
   content: '';
   position: absolute;
   left:0px; top: 0px;
-  width: 18px; height: 18px; /* dim. de la case */
+  width: 18px; height: 18px;
   background: $white;
   border: 1px solid #ccc;
-  border-radius: 2px; /* angles arrondis */
+  border-radius: 2px;
 }
-
-/* Aspect général de la coche */
+/* content */
 [type="checkbox"]:not(:checked):after,
 [type="checkbox"]:checked:after {
   content: '■';
@@ -530,38 +528,41 @@ input[type="checkbox"] {
   color: $nextdom_accent;
   transition: all .2s;
 }
-/* Aspect si "pas cochée" */
+/* checked state */
 [type="checkbox"]:not(:checked):after {
   opacity: 0; /* coche invisible */
   transform: scale(0); /* mise à l'échelle à 0 */
 }
-/* Aspect si "cochée" */
+/* unchecked state */
 [type="checkbox"]:checked:after {
   opacity: 0.9; /* coche opaque */
   transform: scale(1); /* mise à l'échelle 1:1 */
 }
-
+/* focus frame */
 [type="checkbox"]:focus {
     outline: none !important;
 }
 
+/* Header clock */
 .clock {
     font-size: 18px;
 }
 
+/* Param label for small resolution */
 @media (max-width: 767px) {
     .form-horizontal .control-label {
         padding-top: 7px;
     }
 }
 
+/* Tables */
 .table-condensed>thead>tr>th, .table-condensed>tbody>tr>th, .table-condensed>tfoot>tr>th, .table-condensed>thead>tr>td, .table-condensed>tbody>tr>td, .table-condensed>tfoot>tr>td {
     padding: 7px;
     vertical-align: middle;
     font-size: 13px;
 }
-
 .table-condensed.thead {
     background-color: $nextdom_table_title;
     border-bottom: 1px solid lightgray;
     border-top: 1px solid lightgray;
+}
