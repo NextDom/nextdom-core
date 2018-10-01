@@ -8,7 +8,7 @@
     <div class="box-body">
         <form class="form-horizontal">
             <fieldset>
-                /* Section NextDom */
+                <-- Section NextDom -->
                 <legend class="legend-title">{{ 'NextDom' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Nom de votre NextDom (utilisé notamment par le market)'}}">{{'Nom de votre NextDom'}}</label>
@@ -35,7 +35,7 @@
                     </div>
                 </div>
 
-                /* Section Langage */
+                <-- Section Langage -->
                 <legend class="legend-title">{{ 'Langage' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Langue de votre NextDom'}}">{{'Langue'}}</label>
@@ -54,12 +54,12 @@
                         </select>
                     </div>
                     <div class="col-lg-7 col-md-5 col-sm-5 col-xs-12">
-                        <input type="checkbox" class="configKey" data-l1key="generateTranslation">
-                        <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{'Option pour les développeurs permettant à NextDom de générer les phrases à traduire'}}">{{'Générer les traductions'}}</label>
+                        <input type="checkbox" class="configKey" id="generateTranslation" data-l1key="generateTranslation">
+                        <label for="generateTranslation" class="control-label" data-toggle="tooltip" title="" data-original-title="{{'Option pour les développeurs permettant à NextDom de générer les phrases à traduire'}}">{{'Générer les traductions'}}</label>
                     </div>
                 </div>
 
-                /* Section horodatage */
+                <-- Section horodatage -->
                 <legend class="legend-title">{{ 'Horodatage' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{'Durée de vie de votre connexion à NextDom si vous n\'avez pas coché la case enregistrer cet ordinateur'}}">{{'Durée de vie des sessions'}}</label>
@@ -195,6 +195,8 @@
             </fieldset>
         </form>
     </div>
+
+    <-- Section bouton bottom -->
     <div class="box-footer clearfix">
         <a class="btn btn-success pull-right" id="bt_savegeneral"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
         <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
