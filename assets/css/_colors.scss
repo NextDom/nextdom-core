@@ -21,11 +21,13 @@ $critical: #e74c3c;
 $whitegray: #f5f5f5;
 $whitelightgray: #fafafa;
 $darkgray: #999;
+$lightgolden:#fdfdf2;
 
 /* Activation couleurs d'accentuation par défaut, sinon c'est dans 3rdparty/adminLTE/skin */
 $nextdom_accent: $nextdom_blue;
 $nextdom_primary: $nextdom_blue;
 $nextdom_polar_accent: $white;
+$nextdom_table_title:$lightgolden;
 
 .text-white{
     color: $white ;

@@ -295,6 +295,10 @@ body {
   margin-bottom: 0px;
 }
 
+.main-header .logo-mini, .main-header .logo-lg {
+    padding-top: 5px;
+}
+
 .login-page,
 .register-page {
   background: whitesmoke;
@@ -550,3 +554,14 @@ input[type="checkbox"] {
         padding-top: 7px;
     }
 }
+
+.table-condensed>thead>tr>th, .table-condensed>tbody>tr>th, .table-condensed>tfoot>tr>th, .table-condensed>thead>tr>td, .table-condensed>tbody>tr>td, .table-condensed>tfoot>tr>td {
+    padding: 7px;
+    vertical-align: middle;
+    font-size: 13px;
+}
+
+.table-condensed.thead {
+    background-color: $nextdom_table_title;
+    border-bottom: 1px solid lightgray;
+    border-top: 1px solid lightgray;
