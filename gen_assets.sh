@@ -60,6 +60,7 @@ function gen_js {
         core/js/dataStore.class.js \
         core/js/cache.class.js \
         core/js/report.class.js \
+        core/js/note.class.js \
         core/js/jeedom.class.js \
         3rdparty/bootbox/bootbox.min.js \
         3rdparty/highstock/highstock.js \
