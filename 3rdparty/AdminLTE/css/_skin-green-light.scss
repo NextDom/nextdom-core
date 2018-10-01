@@ -179,3 +179,12 @@
 .skin-green-light [type="checkbox"]:checked:after {
   color: #00a65a;
 }
+
+.skin-green-light .ui-dialog .ui-dialog-title{
+  color: #fff;
+}
+
+.skin-green-light .ui-dialog .ui-dialog-titlebar{
+  background-color: #00a65a;
+  padding: 0px 15px;
+}

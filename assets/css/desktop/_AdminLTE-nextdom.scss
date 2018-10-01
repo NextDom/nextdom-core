@@ -481,18 +481,18 @@ input[type="checkbox"] {
   border: 1px solid #aaa;
   background: #f8f8f8;
   border-radius: 3px; /* angles arrondis */
-  box-shadow: inset 0 1px 3px rgba(0,0,0,.3) /* légère ombre interne */
 }
 
 /* Aspect général de la coche */
 [type="checkbox"]:not(:checked):after,
 [type="checkbox"]:checked:after {
-  content: '✔';
+  content: '■';
   position: absolute;
-  top: 0; left: 4px;
-  font-size: 14px;
+  top: -7px;
+  left: 2px;
+  font-size: 22px;
   color: #33B8CC;
-  transition: all .2s; /* on prévoit une animation */
+  transition: all .2s;
 }
 /* Aspect si "pas cochée" */
 [type="checkbox"]:not(:checked):after {

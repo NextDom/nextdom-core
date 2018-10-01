@@ -160,3 +160,12 @@
 .skin-green [type="checkbox"]:checked:after {
   color: #00a65a;
 }
+
+.skin-green .ui-dialog .ui-dialog-title{
+  color: #fff;
+}
+
+.skin-green .ui-dialog .ui-dialog-titlebar{
+  background-color: #00a65a;
+  padding: 0px 15px;
+}
