@@ -497,7 +497,7 @@ input[type="checkbox"] {
   content: '■';
   position: absolute;
   top: -0.52em;
-  left: -0.01em;
+  left: -0.02em;
   font-size: 2.2em;
   color: $nextdom_accent;
   transition: all .2s;
@@ -514,7 +514,7 @@ input[type="checkbox"] {
 }
 
 [type="checkbox"]:focus {
-    outline: none;
+    outline: none !important;
 }
 
 .clock {
