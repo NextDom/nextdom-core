@@ -78,6 +78,7 @@ class Controller
         'update_admin' => 'update_adminPage',
         'users' => 'usersPage',
         'tools' => 'toolsPage',
+        'note' => 'notePage',
         'pluginRoute' => 'pluginRoute'
     ];
 
@@ -1090,6 +1091,28 @@ class Controller
         $pageContent['migrationAjaxToken'] = \ajax::getToken();
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/migration.js';
         return $render->get('/desktop/tools/migration.html.twig', $pageContent);
+    }
+
+    /**
+     * Render node page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of migration page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function notePage(Render $render, array &$pageContent): string
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+        
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/note.js';
+        return $render->get('/desktop/tools/note.html.twig', $pageContent);
     }
 
     /**
