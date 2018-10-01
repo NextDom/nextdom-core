@@ -35,6 +35,8 @@
                                 {{ eqLogic.toHtml('dashboard')|raw }}
                             {% endif %}
                         {% endfor %}
+                    </div>
+                    <div class="Container">
                         {% if not hasAlert %}
                             <br/>
                             <div class="alert alert-success">{{ 'Aucun module en Alerte pour le moment' }}</div>
