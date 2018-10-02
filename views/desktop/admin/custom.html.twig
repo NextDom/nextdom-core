@@ -15,8 +15,8 @@
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li role="presentation"><a href="#advanced" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-flask">&nbsp;&nbsp;</i>{{ 'Modifs Avancées' }}</a></li>
                 <li role="presentation"><a href="#colortab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-th-large">&nbsp;&nbsp;</i>{{ 'Options Tuiles' }}</a></li>
-                <li role="presentation" class="active"><a href="#customSkin" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-paint-brush">&nbsp;&nbsp;</i>{{ 'Options Thème' }}</a></li>
-                <li role="presentation"><a href="#themestab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint">&nbsp;&nbsp;</i>{{ 'Choix Thème' }}</a></li>
+                <li role="presentation"><a href="#customSkin" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-paint-brush">&nbsp;&nbsp;</i>{{ 'Options Thème' }}</a></li>
+                <li role="presentation" class="active"><a href="#themestab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint">&nbsp;&nbsp;</i>{{ 'Choix Thème' }}</a></li>
             </ul>
 
             <!-- Tabs content -->
@@ -41,7 +41,7 @@
                                         </div>
                                     </a>
                                 </li>
-                                <li class="container-fluid col-md-4">
+                                <li class="container col-md-4">
                                     <p class="text-center no-margin" style="font-size: 12px">Blue</p>
                                     <a href="" data-skin="skin-blue" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
                                         <div>
@@ -80,7 +80,7 @@
                                         </div>
                                     </a>
                                 </li>
-                                <li class="container-fluid col-md-4">
+                                <li class="container col-md-4">
                                     <p class="text-center no-margin" style="font-size: 12px">Green</p>
                                     <a href="" data-skin="skin-green" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
                                         <div>
@@ -119,7 +119,7 @@
                                         </div>
                                     </a>
                                 </li>
-                                <li class="container-fluid col-md-4">
+                                <li class="container col-md-4">
                                     <p class="text-center no-margin" style="font-size: 12px">Nextdom Light</p>
                                     <a href="" data-skin="skin-nextdom-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
                                         <div>
@@ -158,7 +158,7 @@
                                         </div>
                                     </a>
                                 </li>
-                                <li class="container-fluid col-md-4">
+                                <li class="container col-md-4">
                                     <p class="text-center no-margin" style="font-size: 12px">Purple Light</p>
                                     <a href="" data-skin="skin-purple-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
                                         <div>
@@ -197,7 +197,7 @@
                                         </div>
                                     </a>
                                 </li>
-                                <li class="container-fluid col-md-4">
+                                <li class="container col-md-4">
                                     <p class="text-center no-margin" style="font-size: 12px">Yellow Light</p>
                                     <a href="" data-skin="skin-yellow-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
                                         <div>
@@ -368,15 +368,11 @@
                         <div role="tabpanel" class="tab-pane active" id="desktop">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <legend class="legend-title">{{ 'Javascript' }}
-                                        <a class="btn btn-success pull-right btn-xs saveCustom" data-version="desktop" data-type="js" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-                                    </legend>
-                                    <textarea id="ta_jsDesktopContent">{{ customJS }}</textarea>
+                                    <legend class="legend-title">{{ 'Javascript' }}</legend>
+                                    <textarea id="ta_jsDesktopContent" style="height:auto;">{{ customJS }}</textarea>
                                 </div>
                                 <div class="col-xs-6">
-                                    <legend class="legend-title">{{ 'CSS' }}
-                                        <a class="btn btn-success pull-right btn-xs saveCustom" data-version="desktop" data-type="css" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-                                    </legend>
+                                    <legend class="legend-title">{{ 'CSS' }}</legend>
                                     <textarea id="ta_cssDesktopContent" style="height:auto;">{{ customCSS }}</textarea>
                                 </div>
                             </div>
@@ -384,15 +380,11 @@
                         <div role="tabpanel" class="tab-pane" id="mobile">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <legend class="legend-title">{{ 'Javascript' }}
-                                        <a class="btn btn-success pull-right btn-xs saveCustom" data-version="mobile" data-type="js" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-                                    </legend>
+                                    <legend class="legend-title">{{ 'Javascript' }}</legend>
                                     <textarea id="ta_jsMobileContent" style="height:auto;">{{ customMobileJS }}</textarea>
                                 </div>
                                 <div class="col-xs-6">
-                                    <legend class="legend-title">{{ 'CSS' }}
-                                        <a class="btn btn-success pull-right btn-xs saveCustom" data-version="mobile" data-type="css" style="margin-top: 5px;"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-                                    </legend>
+                                    <legend class="legend-title">{{ 'CSS' }}</legend>
                                     <textarea id="ta_cssMobileContent" style="height:auto;">{{ customMobileCSS }}</textarea>
                                 </div>
                             </div>
