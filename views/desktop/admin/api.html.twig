@@ -70,45 +70,45 @@
                 <legend class="legend-title">{{ 'Clefs API' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API globale de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API Globale' }}</label>
-                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
                         <a class="btn btn-warning bt_regenerate_api" data-plugin="core"><i class="fa fa-refresh">&nbsp;&nbsp;</i>{{'Rafraîchir'}}</a>
                     </div>
-                    <div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
+                    <div class="col-lg-8 col-md-7 col-sm-7 col-xs-12">
                         <span class="span_apikey label label-info label-config">{{ adminConfigs['api'] }}</span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API Pro de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API Pro' }}</label>
-                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
                         <a class="btn btn-warning bt_regenerate_api" data-plugin="pro"><i class="fa fa-refresh">&nbsp;&nbsp;</i>{{'Rafraîchir'}}</a>
                     </div>
-                    <div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
+                    <div class="col-lg-8 col-md-7 col-sm-7 col-xs-12">
                         <span class="span_apikey label label-info label-config">{{ adminConfigs['apipro'] }}</span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef Market de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef Market' }}</label>
-                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
                         <a class="btn btn-warning bt_regenerate_api" data-plugin="apimarket"><i class="fa fa-refresh">&nbsp;&nbsp;</i>{{'Rafraîchir'}}</a>
                     </div>
-                    <div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
+                    <div class="col-lg-8 col-md-7 col-sm-7 col-xs-12">
                         <span class="span_apikey label label-info label-config">{{ adminConfigs['apimarket'] }}</span>
                     </div>
                 </div>
 
                 <!-- Plugins Section -->
-                <legend class="legend-title">{{ 'Clefs API Plugins' }}</legend>
+                <legend class="legend-title">{{ 'API Plugins' }}</legend>
                 {% if not adminIsRescueMode and adminPluginsList|length > 0 %}
                     {% for pluginData in adminPluginsList %}
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-original-title="{{ 'API pour le plugin' }} {{ pluginData.plugin.getName() }}">{{ pluginData.plugin.getName() }}</label>
-                            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-6">
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
                                 <a class="btn btn-warning bt_regenerate_api" data-plugin="{{ pluginData.plugin.getId() }}"><i class="fa fa-refresh">&nbsp;&nbsp;</i>{{'Rafraîchir'}}</a>
                             </div>
-                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                            <div class="col-lg-6 col-md-5 col-sm-5 col-xs-6">
                                 <span class="span_apikey label label-info label-config">{{ pluginData.api }}</span>
                             </div>
-                            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-6">
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
                                 <select class="form-control configKey" data-l1key="api::{{ pluginData.plugin.getId() }}::mode">
                                     <option value="enable">{{ 'Activé' }}</option>
                                     <option value="whiteip">{{ 'IP blanche' }}</option>
