@@ -13,10 +13,10 @@
 
             <!-- Tabs title -->
             <ul class="nav nav-tabs pull-right" role="tablist">
-                <li role="presentation"><a href="#advanced" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-terminal"></i>{{ 'Modifs Avancées' }}</a></li>
-                <li role="presentation"><a href="#colortab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-key"></i>{{ 'Options Tuiles' }}</a></li>
-                <li role="presentation" class="active"><a href="#customSkin" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-key"></i>{{ 'Options Thème' }}</a></li>
-                <li role="presentation"><a href="#themestab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-wrench"></i>{{ 'Choix Thème' }}</a></li>
+                <li role="presentation"><a href="#advanced" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-flask">&nbsp;&nbsp;</i>{{ 'Modifs Avancées' }}</a></li>
+                <li role="presentation"><a href="#colortab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-th-large">&nbsp;&nbsp;</i>{{ 'Options Tuiles' }}</a></li>
+                <li role="presentation" class="active"><a href="#customSkin" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-paint-brush">&nbsp;&nbsp;</i>{{ 'Options Thème' }}</a></li>
+                <li role="presentation"><a href="#themestab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint">&nbsp;&nbsp;</i>{{ 'Choix Thème' }}</a></li>
             </ul>
 
             <!-- Tabs content -->
@@ -24,6 +24,7 @@
 
                 <!-- Theme tab -->
                 <div role="tabpanel" class="tab-pane" id="themestab">
+                    <div class="alert alert-info">{{ 'Choisissez une des bases ci-dessous comme thème.' }}</div>
                     <div class="row">
                         <div class="col-md-12">
                             <ul class="list-unstyled clearfix">
@@ -216,6 +217,7 @@
                 <div role="tabpanel" class="tab-pane" id="colortab">
                     <form class="form-horizontal">
                         <fieldset>
+                            <div class="alert alert-info">{{ 'Paramétrez l\'aspect des tuiles du dashboard en version desktop ou mobile.' }}</div>
                             <div class="form-group">
                                 <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Opacité par défaut des widgets' }}</label>
                                 <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
@@ -296,6 +298,7 @@
                 <!-- Theme option tab -->
                 <div role="tabpanel" class="tab-pane active" id="customSkin">
                     <form class="form-horizontal">
+                        <div class="alert alert-info">{{ 'Personnalisez ici les couleurs du thème choisit.' }}</div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label" data-toggle="tooltip" title="" data-original-title="{{'Couleur du fond de la page'}}">{{ 'Couleur du body' }} </label>
                             <div class="col-sm-2">
