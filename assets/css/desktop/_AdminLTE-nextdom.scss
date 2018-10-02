@@ -461,7 +461,7 @@ body {
 /* Checkboxes */
 input[type="checkbox"] {
   position: relative !important;
-  top:8px;
+  top:9px;
   height: 22px;
   width: 22px;
   appearance: none;
@@ -475,7 +475,7 @@ input[type="checkbox"] {
   content: '';
   position: absolute;
   left:0px; top: 0px;
-  width: 18px; height: 18px;
+  width: 18px; height: 17px;
   border: 1px solid #ccc;
   border-radius: 2px;
 }
@@ -484,9 +484,9 @@ input[type="checkbox"] {
 [type="checkbox"]:checked:after {
   content: '■';
   position: absolute;
-  top: -12px;
-  left:1px;
-  font-size: 26px;
+  top: -11px;
+  left:2px;
+  font-size: 24px;
   transition: all .2s;
 }
 /* checked state */
