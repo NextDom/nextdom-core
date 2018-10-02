@@ -49,7 +49,7 @@ $nextdom_table_title:$lightgolden;
 }
 
 /* Tables */
-.skin-nextdom .table-condensed.thead {
+.skin-nextdom .table-condensed>thead {
     background-color: $nextdom_table_title;
     border-bottom: 1px solid lightgray;
     border-top: 1px solid lightgray;
