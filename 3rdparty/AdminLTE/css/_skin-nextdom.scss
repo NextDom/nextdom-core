@@ -43,16 +43,19 @@ $nextdom_table_title:$lightgolden;
   background-color: $nextdom_primary;
   border-color: $nextdom_primary;
 }
-.skin-nextdom .btn-app {
+.btn-app {
   background-color: $whitegray;
   border-color: $whitelightgray;
 }
 
 /* Tables */
 .skin-nextdom .table-condensed>thead {
-    background-color: $nextdom_table_title;
-    border-bottom: 1px solid lightgray;
-    border-top: 1px solid lightgray;
+  background-color: $nextdom_table_title;
+  border-bottom: 1px solid $lightgrey;
+  border-top: 1px solid $lightgrey;
+}
+.skin-nextdom .table-condensed {
+  background-color: $whitelightgray;
 }
 
 /* Tooltip */
