@@ -7,4 +7,4 @@ else
 	echo " >>> composer updated"
 fi
 # Skipping binaries and hidden files
-find . -type f -not -path '*/\.*' -exec grep -Il '.' {} \; | xargs -d '\n' -L 1 dos2unix -k
+#find . -type f -not -path '*/\.*' -exec grep -Il '.' {} \; | xargs -d '\n' -L 1 dos2unix -k
