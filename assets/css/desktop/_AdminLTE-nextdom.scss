@@ -401,6 +401,11 @@ body {
   margin-bottom: 15px;
   background-color: whitesmoke;
 }
+@media (max-width: 767px) {
+    .legend-title {
+        text-align: center;
+    }
+}
 
 /* Logos */
 .login-logo,
