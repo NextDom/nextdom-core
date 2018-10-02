@@ -13,10 +13,12 @@
                     <div class="form-group">
                         <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Authentification LDAP' }}</label>
                         <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
-                            <input type="checkbox" class="configKey" data-l1key="ldap:enable"/><label class="control-label">{{'Activer'}}</label>
+                            <input type="checkbox" class="configKey" data-l1key="ldap:enable"/>
+                            <label class="control-label">{{ 'Activer' }}</label>
                         </div>
                     </div>
-                    <div id="div_config_ldap">
+
+                    <div id="div_config_ldap"{% if not adminLdapEnabled %} style="display: none"{% endif %}>
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Hôte' }}</label>
                             <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
@@ -68,13 +70,16 @@
                         <div class="form-group has-error">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'REMOTE_USER' }}</label>
                             <div class="col-lg-5 col-md-4 col-sm-4 col-xs-4">
-                                <input type="checkbox" class="configKey" data-l1key="sso:allowRemoteUser"/><label class="control-label">{{'Autoriser'}}</label>
+                                <input type="checkbox" class="configKey" data-l1key="sso:allowRemoteUser"/><label
+                                        class="control-label">{{ 'Autoriser' }}</label>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6"></div>
                             <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                                <a class="btn btn-primary" id="bt_testLdapConnection"><i class="fa fa-cube">&nbsp;&nbsp;</i>{{ 'Tester' }}</a>
+                                <a class="btn btn-primary" id="bt_testLdapConnection"><i
+                                            class="fa fa-cube">&nbsp;&nbsp;</i>{{ 'Tester' }}
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -109,7 +114,9 @@
             </fieldset>
         </form>
         <form class="form-horizontal">
-            <legend class="legend-title">{{ 'IPs bannies' }} <a class="btn btn-warning btn-legend pull-right" id="bt_removeBanIp"><i class="fa fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a></legend>
+            <legend class="legend-title">
+                {{ 'IPs bannies' }} <a class="btn btn-warning btn-legend pull-right" id="bt_removeBanIp"><i class="fa fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+            </legend>
             <fieldset>
                 <table class="table table-condensed table-bordered">
                     <thead>
@@ -133,7 +140,9 @@
         </form>
     </div>
     <div class="box-footer clearfix">
-        <a class="btn btn-success pull-right" id="bt_savesecurity"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
-        <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
+        <a class="btn btn-success pull-right" id="bt_savesecurity"><i
+                    class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+        <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}
+        </a>
     </div>
 </div>
