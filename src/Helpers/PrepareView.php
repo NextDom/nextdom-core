@@ -58,6 +58,7 @@ class PrepareView
         //TODO: Vérifier ça
         $logo = \config::byKey('product_connection_image');
         $pageData['CSS_POOL'][]    = '/public/css/nextdom.css';
+        $pageData['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/adminlte.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/connection.js';
 
         $render->show('desktop/connection.html.twig', $pageData);
