@@ -608,7 +608,9 @@ class Controller
         $cache = CacheManager::byKey('security::banip');
 
         $pageContent['adminUseLdap'] = function_exists('ldap_connect');
-
+        if ($pageContent['adminUseLdap']) {
+            $pageContent['adminLdapEnabled'] = \config::byKey('ldap:enable');
+        }
         $pageContent['adminBannedIp'] = [];
         $cache = CacheManager::byKey('security::banip');
         $values = json_decode($cache->getValue('[]'), true);
