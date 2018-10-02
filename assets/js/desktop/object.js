@@ -151,7 +151,6 @@ $("#bt_addObject,#bt_addObject2").on('click', function (event) {
                 success: function (data) {
                     modifyWithoutSave = false;
                     loadPage('index.php?v=d&p=object&id=' + data.id + '&saveSuccessFull=1');
-                    notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
                 }
             });
         }
