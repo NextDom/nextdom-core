@@ -54,18 +54,18 @@ done
 
 source ${DENV}
 
-#echo stopping $(docker stop ${CNAME})
-#echo stopping $(docker stop ${MYSQLNAME})
+echo stopping $(docker stop ${CNAME})
+echo stopping $(docker stop ${MYSQLNAME})
 
-#echo removing $(docker rm ${CNAME})
-#docker system prune -f --volumes
-#echo removing $(docker rm ${MYSQLNAME})
+echo removing $(docker rm ${CNAME})
+docker system prune -f --volumes
+echo removing $(docker rm ${MYSQLNAME})
 
 copyNeededFilesForImage
 docker-compose build --no-cache --build-arg numPhp=${numPhp} --build-arg GITHUB_TOKEN=${GITHUBTOKEN} --build-arg MYSQLROOT=${MYSQLROOT}
 docker-compose -f ${YML} up -d
 #Not commited yet...
-docker cp ../../postinst.sh  ${CNAME}:/var/www/html/install/postinst.sh
+docker cp ../../postinst  ${CNAME}:/var/www/html/install/postinst
 docker cp init.sh ${CNAME}:/root/
 deleteCopiedFiles
 
