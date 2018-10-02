@@ -1,8 +1,12 @@
-/*
- * Skin: Blue
- * ----------
- */
+/* Skin: NextDom */
 
+/* Accent colors */
+ $nextdom_accent: $nextdom_blue;
+ $nextdom_primary: $nextdom_blue;
+ $nextdom_polar_accent: $white;
+ $nextdom_table_title:$lightgolden;
+
+/* Logos */
 .skin-nextdom-light .logo-mini-img{
   content:url("/public/img/NextDom/NextDom_Square_AlphaBlackWhite.png");
 }
@@ -10,6 +14,7 @@
   content:url("/public/img/NextDom/NextDom_Wide_AlphaWhiteBlack.png");
 }
 
+/* Elements */
 .skin-nextdom-light .main-header .navbar {
   background-color: #33B8CC;
 }

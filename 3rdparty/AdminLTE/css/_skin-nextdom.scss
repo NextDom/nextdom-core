@@ -1,18 +1,57 @@
-/*
- * Skin: NextDom
- * ----------
- */
+/* Skin: NextDom */
+
+/* Accent colors */
 $nextdom_accent: $nextdom_blue;
 $nextdom_primary: $nextdom_blue;
+$nextdom_polar_accent: $white;
+$nextdom_table_title:$lightgolden;
 
+/* Logos */
 .skin-nextdom .logo-mini-img{
   content:url("/public/img/NextDom/NextDom_Square_AlphaBlackWhite.png");
 }
-
 .skin-nextdom .logo-lg-img{
   content:url("/public/img/NextDom/NextDom_Wide_AlphaWhiteBlack.png");
 }
+.login-logo{
+  background-color: $nextdom_accent;
+}
 
+/* Labels */
+.label-config {
+  background-color: $nextdom_accent;
+}
+.Link-Blue {
+  color: $nextdom_accent;
+}
+
+/* Checkbox */
+[type="checkbox"]:not(:checked):before,
+[type="checkbox"]:checked:before {
+  background: $nextdom_polar_accent;
+}
+[type="checkbox"]:not(:checked):after,
+[type="checkbox"]:checked:after {
+  color: $nextdom_accent;
+}
+
+/* buttons */
+.btn-primary {
+  background-color: $nextdom_primary;
+  border-color: $nextdom_primary;
+}
+.btn-app {
+  background-color: $whitegray;
+  border-color: $whitelightgray;
+}
+
+/* Elements */
+.tooltip-inner {
+  background: $grey;
+}
+.tooltip-arrow {
+  border-top-color: $grey;
+}
 .skin-nextdom .main-header .navbar {
   background-color: $nextdom_accent;
 }
