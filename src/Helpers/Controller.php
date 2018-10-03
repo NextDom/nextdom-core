@@ -223,6 +223,32 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
+        $pageContent['administrationMemLoad'] = 100;
+        $pageContent['administrationSwapLoad'] = 100;
+        $freeData = trim(shell_exec('free'));
+        $freeData = explode("\n", $freeData);
+        if (count($freeData) > 2) {
+            $memData = array_merge(
+                array_filter(
+                    explode(' ', $freeData[1]),
+                    function($value) {
+                        return $value !== '';
+                    }
+                )
+            );
+            $swapData = array_merge(
+                array_filter(
+                    explode(' ', $freeData[2]),
+                    function($value) {
+                        return $value !== '';
+                    }
+                )
+            );
+            $pageContent['administrationMemLoad'] = round(100 * $memData[2]/$memData[1], 2);
+            $pageContent['administrationSwapLoad'] = round(100 * $swapData[2]/$swapData[1], 2);
+        }
+        $pageContent['administrationCpuLoad'] = round(100 * sys_getloadavg()[0], 2);
+        $pageContent['administrationHddLoad'] = round(100 - 100 * disk_free_space(NEXTDOM_ROOT) / disk_total_space(NEXTDOM_ROOT), 2);
         return $render->get('/desktop/administration.html.twig', $pageContent);
     }
 
