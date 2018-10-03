@@ -284,8 +284,8 @@ class EqLogicManager
             $values = array(
                 'configuration' => '%' . $configuration[0] . '%',
             );
-            $sql = 'SELECT ' . \DB::buildField(__CLASS__) . '
-                    FROM eqLogic
+            $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+                    FROM ' . self::DB_CLASS_NAME . '
                     WHERE configuration LIKE :configuration';
             for ($i = 1; $i < count($configuration); $i++) {
                 $values['configuration' . $i] = '%' . $configuration[$i] . '%';
