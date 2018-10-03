@@ -21,8 +21,6 @@
                 <tr>
                     <td style="font-weight: bold;">
                         {{ informations['name'] }}
-                        {{ informations['state'] }}
-                        {{ informations['result'] }}
                     </td>
                     {% if informations['state'] == 1 or informations['state'] == true %}
                         <td class="alert alert-success">{{ informations['result'] }}</td>
@@ -65,7 +63,6 @@
         <h3 class="box-title"><i class="icon divers-caduceus3"></i> {{ 'Santé des Plugins' }}</h3>
         <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-            <a href="index.php?v=d&p=administration" <button type="button" class="btn btn-box-tool" ><i class="fa fa-times"></i></button></a>
         </div>
     </div>
     <div class="box-body">
