@@ -27,6 +27,11 @@ $nextdom_table_title:$lightgolden;
 .skin-nextdom .Link-Blue {
   color: $nextdom_accent;
 }
+.skin-nextdom .label-value {
+    background-color: $whitegray;
+    color: black !important;
+    border-color: $lightgrey
+}
 
 /* Checkbox */
 .skin-nextdom [type="checkbox"]:not(:checked):before,
@@ -43,9 +48,14 @@ $nextdom_table_title:$lightgolden;
   background-color: $nextdom_primary;
   border-color: $nextdom_primary;
 }
-.btn-app {
+.skin-nextdom .btn-app {
   background-color: $whitegray;
   border-color: $whitelightgray;
+}
+.skin-nextdom .btn-action {
+    background-color: $darkgray;
+    color: $white;
+    border-color: $grey;
 }
 
 /* Tables */
