@@ -5,6 +5,5 @@ nextdom.config.load({
     },
     success: function (data) {
         $('#osdb').setValues(data, '.configKey');
-        modifyWithoutSave = false;
     }
 });

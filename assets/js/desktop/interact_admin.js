@@ -34,12 +34,12 @@ nextdom.config.load({
     },
     success: function (data) {
         $('#interact_admin').setValues(data, '.configKey');
-  
+
         modifyWithoutSave = false;
     }
 });
 
-$('#div_pageContainer').delegate('.configKey', 'change', function () {
+$('#interact_admin').delegate('.configKey', 'change', function () {
     modifyWithoutSave = true;
 });
 

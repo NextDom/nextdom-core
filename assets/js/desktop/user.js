@@ -120,11 +120,11 @@
     });
 });
 
- $('#div_pageContainer').on('change','.userAttr',  function () {
+ $('#users').on('change','.userAttr',  function () {
     modifyWithoutSave = true;
 });
 
- $('#div_pageContainer').on('change','.configKey',  function () {
+ $('#users').on('change','.configKey',  function () {
     modifyWithoutSave = true;
 });
 
@@ -221,12 +221,12 @@ $('#table_user').on( 'click', '.bt_disableTwoFactorAuthentification',function ()
         success: function (data) {
             printUsers();
         }
-    }); 
+    });
 
 });
 
 $('.bt_deleteSession').on('click',function(){
- var id = $(this).closest('tr').attr('data-id'); 
+ var id = $(this).closest('tr').attr('data-id');
  nextdom.user.deleteSession({
     id : id,
     error: function (error) {

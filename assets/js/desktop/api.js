@@ -38,7 +38,7 @@ nextdom.config.load({
     }
 });
 
-$('#div_pageContainer').delegate('.configKey', 'change', function () {
+$('#API').delegate('.configKey', 'change', function () {
     modifyWithoutSave = true;
 });
 
@@ -69,4 +69,3 @@ $(".bt_regenerate_api").on('click', function (event) {
        }
    });
 });
-

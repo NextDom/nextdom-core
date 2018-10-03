@@ -95,7 +95,7 @@ $("#bt_migrateNextDom").on('click', function (event) {
 });
  updateListBackup();
 
- $('#div_pageContainer').delegate('.configKey', 'change', function () {
+ $('#migration').delegate('.configKey', 'change', function () {
     modifyWithoutSave = true;
 });
 

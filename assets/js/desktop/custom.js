@@ -53,7 +53,7 @@ setTimeout(function () {
    });
 }, 1);
 
-$('#div_pageContainer').delegate('.configKey', 'change', function () {
+$('#custom').delegate('.configKey', 'change', function () {
    modifyWithoutSave = true;
 });
 
