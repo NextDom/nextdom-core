@@ -49,8 +49,8 @@ $nextdom_table_title:$lightgolden;
   color: $nextdom_accent;
 }
 .skin-nextdom .has-error [type="checkbox"]:checked:after,
-.skin-nextdom [type="checkbox"]:checked:after {
-    color: $nextdom_accent;
+.skin-nextdom .has-error [type="checkbox"]:checked:after {
+    color: $red;
 }
 
 /* buttons */
