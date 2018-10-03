@@ -81,6 +81,35 @@ function setCronErrorOnException($cron, $e, $logChannel, $startTime) {
 }
 
 /**
+ * Call cron task method class
+ *
+ * @param string $classToCall Class to call
+ * @param string $methodToCall Method to call
+ * @param mixed $option Option for the method
+ */
+function callCronClassMethod($classToCall, $methodToCall, $option) {
+    if ($option !== null) {
+        $classToCall::$methodToCall($option);
+    } else {
+        $classToCall::$methodToCall();
+    }
+}
+
+/**
+ * Call cron function
+ *
+ * @param string $functionToCall Function to call
+ * @param mixed $option Option for the function
+ */
+function callCronFunction($functionToCall, $option) {
+    if ($option !== null) {
+        $functionToCall($option);
+    } else {
+        $functionToCall();
+    }
+}
+
+/**
  * Start cron where the target is a class method
  *
  * @param \cron $cron Cron object
@@ -95,20 +124,12 @@ function startCronTargetMethod($cron, $option, $startTime)
         $methodToCall = $cron->getFunction();
         if (class_exists($classToCall) && method_exists($classToCall, $methodToCall)) {
             if ($cron->getDeamon() == 0) {
-                if ($option !== null) {
-                    $classToCall::$methodToCall($option);
-                } else {
-                    $classToCall::$methodToCall();
-                }
+                callCronClassMethod($classToCall, $methodToCall, $option);
             } else {
                 $gc = 0;
                 while (true) {
                     $cycleStartTime = getmicrotime();
-                    if ($option !== null) {
-                        $classToCall::$methodToCall($option);
-                    } else {
-                        $classToCall::$methodToCall();
-                    }
+                    callCronClassMethod($classToCall, $methodToCall, $option);
                     $gc++;
                     if ($gc > GARBAGE_COLLECTOR_LIMIT) {
                         gc_collect_cycles();
@@ -146,20 +167,12 @@ function startCronTargetFunction($cron, $option, $startTime)
         $functionToCall = $cron->getFunction();
         if (function_exists($functionToCall)) {
             if ($cron->getDeamon() == 0) {
-                if ($option !== null) {
-                    $functionToCall($option);
-                } else {
-                    $functionToCall();
-                }
+                callCronFunction($functionToCall, $option);
             } else {
                 $gc = 0;
                 while (true) {
                     $cycleStartTime = getmicrotime();
-                    if ($option !== null) {
-                        $functionToCall($option);
-                    } else {
-                        $functionToCall();
-                    }
+                    callCronFunction($functionToCall, $option);
                     $gc++;
                     if ($gc > GARBAGE_COLLECTOR_LIMIT) {
                         gc_collect_cycles();
@@ -184,11 +197,11 @@ function startCronTargetFunction($cron, $option, $startTime)
 }
 
 /**
- * Start single cron job
+ * Start single cron job by his id
  *
  * @param int $cronId Id of the cron
  */
-function startSingleCron($cronId)
+function startSingleCronById($cronId)
 {
     if (nextdom::isStarted() && config::byKey('enableCron', 'core', 1, true) == 0) {
         die(__('Tous les crons sont actuellement désactivés'));
@@ -197,6 +210,15 @@ function startSingleCron($cronId)
     if (!is_object($cron)) {
         die();
     }
+}
+
+/**
+ * Start single cron job
+ *
+ * @param cron $cron Cron objet
+ */
+function startSingleCron($cron)
+{
     $datetime = date('Y-m-d H:i:s');
     $startTime = strtotime('now');
 
@@ -281,7 +303,7 @@ function startAllCrons()
  */
 $cronId = Utils::init('cron_id');
 if ($cronId != '') {
-    startSingleCron($cronId);
+    startSingleCronById($cronId);
 } else {
     startAllCrons();
 }
