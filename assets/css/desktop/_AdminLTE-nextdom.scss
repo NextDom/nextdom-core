@@ -394,13 +394,13 @@ body {
     border-radius: 2px;
     margin-left: -2px;
 }
-.label-unity {
-    padding: 9px 15px 10px;
+.label-unity, .label-unity-big {
+    padding: 9px 0px 10px;
     font-size: 100%;
     font-weight: 500;
 }
-@media (min-width: 768px) {
-    .label-unity {
+@media (max-width: 767px) {
+    .label-unity-big {
         margin-left: -15px;
     }
 }
