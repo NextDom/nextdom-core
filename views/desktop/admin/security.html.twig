@@ -16,8 +16,8 @@
                 <legend class="legend-title">{{ 'LDAP' }}</legend>
                 {% if adminUseLdap %}
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Authentification LDAP' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Authentification LDAP' }}</label>
+                        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                             <input type="checkbox" class="configKey" data-l1key="ldap:enable" id="ldap"/>
                             <label for="ldap" class="control-label">{{ 'Activer' }}</label>
                         </div>
@@ -25,66 +25,66 @@
 
                     <div id="div_config_ldap"{% if not adminLdapEnabled %} style="display: none"{% endif %}>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Hôte' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Hôte' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                 <input type="text" class="configKey form-control" data-l1key="ldap:host"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Port' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Port' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                 <input type="text" class="configKey form-control" data-l1key="ldap:port"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Domaine' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Domaine' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                 <input type="text" class="configKey form-control" data-l1key="ldap:domain"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Base DN' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Base DN' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                 <input type="text" class="configKey form-control" data-l1key="ldap:basedn"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nom d\'utilisateur' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Nom d\'utilisateur' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                 <input type="text" class="configKey form-control" data-l1key="ldap:username"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Mot de passe' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Mot de passe' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                 <input type="password" class="configKey form-control" data-l1key="ldap:password"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Champs recherche utilisateur' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Champs recherche utilisateur' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                 <input type="text" class="configKey form-control" data-l1key="ldap::usersearch"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label">{{ 'Filtre' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Filtre' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-10">
                                 <input type="text" class="configKey form-control" data-l1key="ldap:filter"/>
                             </div>
-                            <div class="col-lg-7 col-md-5 col-sm-5 col-xs-12">
+                            <div class="col-lg-7 col-md-5 col-sm-5 col-xs-2">
                                 <span class="label label-info label-unity">{{ '(Optionnel)' }}</span>
                             </div>
                         </div>
                         <div class="form-group has-error">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'REMOTE_USER' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'REMOTE_USER' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                 <input type="checkbox" class="configKey" data-l1key="sso:allowRemoteUser" id="allowRemoteUser"/>
                                 <label for="allowRemoteUser" class="control-label">{{ 'Autoriser' }}</label>
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6"></div>
-                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12"></div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                                 <a class="btn btn-primary" id="bt_testLdapConnection"><i class="fa fa-cube">&nbsp;&nbsp;</i>{{ 'Tester' }}</a>
                             </div>
                         </div>
@@ -96,32 +96,32 @@
                 <!-- Connexion section -->
                 <legend class="legend-title">{{ 'Connexion' }}</legend>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nombre d\'échecs tolérés' }}</label>
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Nombre d\'échecs tolérés' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                         <input type="text" class="configKey form-control" data-l1key="security::maxFailedLogin"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Temps maxi. entre les échecs' }}</label>
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Temps maxi. entre les échecs' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-8">
                         <input type="text" class="configKey form-control" data-l1key="security::timeLoginFailed"/>
                     </div>
-                    <div class="col-lg-7 col-md-5 col-sm-5 col-xs-12">
+                    <div class="col-lg-7 col-md-5 col-sm-5 col-xs-4">
                         <span class="label label-info label-unity">{{ 'secondes' }}</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Durée du bannissement' }}</label>
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Durée du bannissement' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-8">
                         <input type="text" class="configKey form-control" data-l1key="security::bantime"/>
                     </div>
-                    <div class="col-lg-7 col-md-5 col-sm-5 col-xs-12">
+                    <div class="col-lg-7 col-md-5 col-sm-5 col-xs-4">
                         <span class="label label-info label-unity">{{ 'secondes (-1 pour infini)' }}</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'IP "blanche"' }}</label>
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'IP "blanche"' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                         <input type="text" class="configKey form-control" data-l1key="security::whiteips"/>
                     </div>
                 </div>

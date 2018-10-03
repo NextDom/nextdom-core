@@ -1,56 +1,65 @@
 <div class="box" id="network">
+    <!-- Header bar -->
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fa fa-rss">&nbsp;&nbsp;</i>{{ 'Réseaux' }}</h3>
         <div class="box-tools pull-right">
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
+
+    <!-- Page content -->
     <div class="box-body">
+
+        <!-- Alert Section -->
         <div class="alert alert-warning alert-config">{{ 'Attention : cette configuration n\'est là que pour informer' }} {{ adminConfigs['product_name'] }} {{ 'de sa configuration réseau et n\'a aucun impact sur les ports ou l\'IP réellement utilisés pour joindre' }} {{ adminConfigs['product_name'] }}</div>
         <form class="form-horizontal">
+
+            <!-- Internal Access Section -->
             <legend class="legend-title">{{ 'Accès interne' }}</legend>
             <fieldset>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Protocole' }}</label>
-                    <div class="col-lg-8 col-md-9 col-sm-8 col-xs-6">
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Protocole' }}</label>
+                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                         <div class="input-group">
                             <select class="configKey form-control" data-l1key="internalProtocol">
                                 <option value="">{{ 'Aucun' }}</option>
                                 <option value="http://">HTTP</option>
                                 <option value="https://">HTTPS</option>
                             </select>
-                            <span class="input-group-addon">://</span>
+                            <span class="input-group-addon label-value">://</span>
                             <input type="text" class="configKey form-control" data-l1key="internalAddr"/>
-                            <span class="input-group-addon">:</span>
+                            <span class="input-group-addon label-value">:</span>
                             <input type="number" class="configKey form-control" data-l1key="internalPort"/>
-                            <span class="input-group-addon">/</span>
+                            <span class="input-group-addon label-value">/</span>
                             <input type="text" class="configKey form-control" data-l1key="internalComplement"/>
                         </div>
                     </div>
                 </div>
             </fieldset>
-        </form>
-        <form class="form-horizontal">
+
+            <!-- External Access Section -->
             <fieldset>
                 <legend class="legend-title">{{ 'Accès externe' }}</legend>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Protocole' }}</label>
-                    <div class="col-lg-8 col-md-9 col-sm-8 col-xs-6">
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Protocole' }}</label>
+                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                         <div class="input-group">
                             <select class="configKey form-control" data-l1key="externalProtocol">
                                 <option value="">{{ 'Aucun' }}</option>
                                 <option value="http://">HTTP</option>
                                 <option value="https://">HTTPS</option>
                             </select>
-                            <span class="input-group-addon">://</span>
+                            <span class="input-group-addon label-value">://</span>
                             <input type="text" class="configKey form-control" data-l1key="externalAddr"/>
-                            <span class="input-group-addon">:</span>
+                            <span class="input-group-addon label-value">:</span>
                             <input type="number" class="configKey form-control" data-l1key="externalPort"/>
-                            <span class="input-group-addon">/</span>
+                            <span class="input-group-addon label-value">/</span>
                             <input type="text" class="configKey form-control" data-l1key="externalComplement"/>
                         </div>
                     </div>
                 </div>
+
+                <!-- Advanced Section -->
                 <div class="row">
                     <div class="col-sm-12">
                         <legend class="legend-title">{{ 'Gestion avancée' }}</legend>
@@ -73,22 +82,26 @@
                             </tbody>
                         </table>
                         <div class="form-group has-error">
-                            <label class="col-xs-6 control-label">{{ 'Gestion du réseau par :' }} {{ adminConfigs['product_name'] }}</label>
-                            <div class="col-xs-4">
-                                <input type="checkbox" class="configKey" data-l1key="network::disableMangement"/><label class="control-label">{{'Désactiver'}}</label>
+                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Gestion autonome du réseau' }}</label>
+                            <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                                <input type="checkbox" class="configKey" data-l1key="network::disableMangement" id="networkmanagement"/>
+                                <label for="networkmanagement" class="control-label">{{'Désactiver'}}</label>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-xs-6 control-label">{{ 'Masque IP local (utile que pour les installations type docker, sous la forme 192.168.1.*)' }}</label>
-                            <div class="col-xs-6">
+                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Masque IP local' }}</label>
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
                                 <input type="text" class="configKey form-control" data-l1key="network::localip"/>
                             </div>
+                            <label class="col-lg-5 col-md-4 col-sm-4 col-xs-12 label-unity">{{ '(pour les installations docker-like, sous la forme 192.168.1.*)' }}</label>
                         </div>
                     </div>
+
+                    <!-- DNS Section -->
                     <div class="col-sm-12">
                         {% for repo, data in adminReposList %}
                             {% if data['scope']['proxy'] is defined and data['scope']['proxy'] == true and adminConfigs[repo ~ '::enable'] != 0 %}
-                                <legend >{{ 'DNS (proxy)' }} {{ data['name'] }}</legend>
+                                <legend class="legend-title">{{ 'DNS (proxy)' }} {{ data['name'] }}</legend>
                                 {% if adminConfigs['dns::token'] == '' %}
                                     <div class="alert alert-warning alert-config">{{ 'Attention : cette fonctionnalité n\'est pas disponible dans le service pack community (voir votre service pack sur votre page profil sur le market)' }}</div>
                                 {% else %}
