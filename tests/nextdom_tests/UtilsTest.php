@@ -314,6 +314,11 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('variable(PhraseQuestion)=="NON"||(#ObjetTest#!="Push"&&#[Organisation][Mode Notifications][Mode]#!="Tous")', $result);
     }
 
+    public function testEvaluateInParenthesis() {
+        $result = Utils::transformExpressionForEvaluation('variable(scenario(plouf + PhraseQuestion)) == "NON"');
+        $this->assertEquals('variable(scenario(plouf+PhraseQuestion))=="NON"', $result);
+    }
+
     public function testEvaluateDot() {
         $result = Utils::transformExpressionForEvaluation('1.23 == 12.3');
         $this->assertEquals('1.23==12.3', $result);
