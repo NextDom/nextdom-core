@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -39,48 +38,11 @@
 });
 
  $(document).ready(function(){
-  $('.demo').MultiColumnSelect({
-    multiple: false, 
-    useOptionText: true, 
-    hideselect: true, 
-    openmenuClass: 'mcs-open', 
-    openmenuText: 'Catégories', 
-    openclass: 'open', 
-    containerClass: 'mcs-container', 
-    itemClass: 'mcs-item', 
-    idprefix: 'categorie-', 
-    duration: 200, 
-    onOpen: null,
-    onClose: null,
-    onItemSelect: function(){
-     SEL_CATEGORY = $('#sel_eqLogicCategory').value();
-     SEL_TAG = $('#sel_eqLogicTags').value();
-     gotoFilterDashboardPage();
-   }
- });
-  $('.demo2').MultiColumnSelect({
-    multiple: false, 
-    useOptionText: true, 
-    hideselect: true, 
-    openmenuClass: 'mcs-open', 
-    openmenuText: 'Tags', 
-    openclass: 'open', 
-    containerClass: 'mcs-container', 
-    itemClass: 'mcs-item', 
-    idprefix: 'tags-', 
-    duration: 200, 
-    onOpen: null,
-    onClose: null,
-    onItemSelect: function(){
-     SEL_CATEGORY = $('#sel_eqLogicCategory').value();
-     SEL_TAG = $('#sel_eqLogicTags').value();
-     gotoFilterDashboardPage();
-   }
- });
-}); 
+});
 
- function gotoFilterDashboardPage(){
-   var category = SEL_CATEGORY;
+function selectCategory(_selectedCategory) {
+  console.log(_selectedCategory);
+   var category = _selectedCategory;
    var tag = SEL_TAG;
    var filterValue = '';
    if(category == 'all' && tag == 'all'){
@@ -177,7 +139,7 @@ function editWidgetMode(_mode,_save){
   if( $('.div_displayEquipement .eqLogic-widget.ui-draggable').length > 0){
    $('.div_displayEquipement .eqLogic-widget').draggable('disable');
  }
- $('.div_displayEquipement .eqLogic-widget').css('box-shadow',''); 
+ $('.div_displayEquipement .eqLogic-widget').css('box-shadow','');
 }else{
  $('.div_displayEquipement .eqLogic-widget').css('box-shadow','0 0 4px rgba(147,204,1,.14), 0 10px 16px rgba(147,204,1,.30)');
  $('.div_displayEquipement .eqLogic-widget').draggable('enable');
@@ -221,7 +183,7 @@ function getObjectHtml(_object_id){
         $("input").click(function() { $(this).focus(); });
         $("textarea").click(function() { $(this).focus(); });
         $("select").click(function() { $(this).focus(); });
-        
+
         $('#div_ob'+_object_id+'.div_displayEquipement').each(function(){
           var container = $(this).packery({
             itemSelector: ".eqLogic-widget",
@@ -232,7 +194,7 @@ function getObjectHtml(_object_id){
           container.packery('bindUIDraggableEvents',itemElems);
           function orderItems() {
             setTimeout(function(){
-             $('.div_displayEquipement').packery(); 
+             $('.div_displayEquipement').packery();
            },1);
             var itemElems = container.packery('getItemElements');
             $(itemElems).each( function( i, itemElem ) {
@@ -286,7 +248,7 @@ $('#bt_editDashboardWidgetOrder').on('click',function(){
       }
     }
     heightObjectex = heightObject;
-  }); 
+  });
    });
    editWidgetMode(1);
    $(this).css('color','rgb(46, 176, 75)');
