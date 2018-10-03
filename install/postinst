@@ -388,6 +388,8 @@ while getopts "i:p:d:r:u:v:w:z:" option; do
 done
 shift $((OPTIND-1))
 
+
+[[ -f /root/.mysqlroot ]] && MYSQL_ROOT_PASSWD=$(cat /root/.mysqlroot)
 VERSION=${VERSION:-master}
 WEBSERVER_HOME=${WEBSERVER_HOME:-/var/www/html}
 MYSQL_ROOT_PASSWD=${MYSQL_ROOT_PASSWD:-$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)}
@@ -416,14 +418,13 @@ set_root $0
 
 detect_dev_version
 
-printf "step_nextdom_var_www_html ... " >> ${WEBSERVER_HOME}/log/postinst.log
+printf "step_nextdom_var_www_html ... " > ${WEBSERVER_HOME}/log/postinst.log
 step_nextdom_var_www_html
 echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
 
 printf "step_nextdom_prerequisites_verification ... " >> ${WEBSERVER_HOME}/log/postinst.log
 step_nextdom_prerequisites_verification
 echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
-
 
 printf "step_nextdom_apache_php ... " >> ${WEBSERVER_HOME}/log/postinst.log
 step_nextdom_apache_php
@@ -442,6 +443,8 @@ step_nextdom_mysql_populate
 step_nextdom_crontab
 step_nextdom_check
 distrib_1_spe
+
+[[ -f /root/.mysqlroot ]] && rm -f /root/.mysqlroot
 
 if [ -f .git  ] ; then
     echo -e "\nInstallation dir  : ${WEBSERVER_HOME}"
