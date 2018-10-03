@@ -326,15 +326,18 @@ step_nextdom_var_www_html() {
 }
 
 step_nextdom_mysql_populate() {
-        QUERY="DROP USER IF EXISTS ${MYSQL_NEXTDOM_USER};"
+        CONSTRAINT="%";
+        if [ ${MYSQL_HOSTNAME} == "localhost" ];
+         then CONSTRAINT='localhost'; fi
+        QUERY="DROP USER IF EXISTS '${MYSQL_NEXTDOM_USER}'@'${CONSTRAINT}';"
         mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
-        QUERY="CREATE USER '${MYSQL_NEXTDOM_USER}'@'%' IDENTIFIED BY '${MYSQL_NEXTDOM_PASSWD}';"
+        QUERY="CREATE USER '${MYSQL_NEXTDOM_USER}'@'${CONSTRAINT}' IDENTIFIED BY '${MYSQL_NEXTDOM_PASSWD}';"
         mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
         QUERY="DROP DATABASE IF EXISTS ${MYSQL_NEXTDOM_DB};"
         mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
         QUERY="CREATE DATABASE ${MYSQL_NEXTDOM_DB};"
         mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
-        QUERY="GRANT ALL PRIVILEGES ON ${MYSQL_NEXTDOM_DB}.* TO '${MYSQL_NEXTDOM_USER}'@'%';"
+        QUERY="GRANT ALL PRIVILEGES ON ${MYSQL_NEXTDOM_DB}.* TO '${MYSQL_NEXTDOM_USER}'@'${CONSTRAINT}';"
         mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
         QUERY="FLUSH PRIVILEGES;"
         mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
@@ -354,7 +357,7 @@ if [ $(id -u) != 0 ] ; then
     exit 1
 fi
 
-while getopts "i:p:d:r:u:v:w:z:" option; do
+while getopts "i:p:d:r:u:z:" option; do
     case "${option}" in
         h)
             usage
@@ -376,10 +379,6 @@ while getopts "i:p:d:r:u:v:w:z:" option; do
             ;;
         r)  MYSQL_ROOT_PASSWD=${OPTARG}
             ;;
-        w)  WEBSERVER_HOME=${OPTARG}
-            ;;
-        v)  VERSION=${OPTARG}
-            ;;
         *)
             usage
             exit -1
@@ -390,8 +389,6 @@ shift $((OPTIND-1))
 
 
 [[ -f /root/.mysqlroot ]] && MYSQL_ROOT_PASSWD=$(cat /root/.mysqlroot)
-VERSION=${VERSION:-master}
-WEBSERVER_HOME=${WEBSERVER_HOME:-/var/www/html}
 MYSQL_ROOT_PASSWD=${MYSQL_ROOT_PASSWD:-$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)}
 MYSQL_NEXTDOM_PASSWD=${MYSQL_NEXTDOM_PASSWD:-$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)}
 MYSQL_HOSTNAME=${MYSQL_HOSTNAME:-localhost}
@@ -403,7 +400,7 @@ if [[ "${MYSQL_HOSTNAME}" != "localhost" ]] ; then
     HOSTPASS="-p${MYSQL_ROOT_PASSWD} -h${MYSQL_HOSTNAME}"
 fi
     echo ">>>>> checking database access <<<<<"
-    mysql -uroot ${HOSTPASS} --port=${MYSQL_PORT} -e "SHOW DATABASES;"
+    mysql -uroot ${HOSTPASS} --port=${MYSQL_PORT} -e "SHOW DATABASES;" >/dev/null 2>&1
     iret=$?
     if [[ ${iret} -ne 0 ]] ; then
         echo ">>>> Error : can\'t connect to remote database <<<<"

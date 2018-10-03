@@ -6,20 +6,6 @@ if ! [ -f /.dockerinit ]; then
 	chmod 755 /.dockerinit
 fi
 
-ROOT_PASSWORD=${ROOT_PASSWORD:--$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 20)}
-echo "Use generate password : ${ROOT_PASSWORD}"
-echo "root:${ROOT_PASSWORD}" | chpasswd
-
-APACHE_PORT=${APACHE_PORT:-80}
-echo 'apache listen port: '${APACHE_PORT}
-echo "Listen ${APACHE_PORT}" > /etc/apache2/ports.conf
-sed -i -E "s/\<VirtualHost \*:(.*)\>/VirtualHost \*:${APACHE_PORT}/" /etc/apache2/sites-enabled/000-default.conf
-
-SSH_PORT=${SSH_PORT:-22}
-echo 'Change SSH listen port to : '${SSH_PORT}
-sed '/Port /d' /etc/ssh/sshd_config | echo "Port ${SSH_PORT}" >> /etc/ssh/sshd_config
-#Pdt les devs
-echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 
 if [ ! -z ${MODE_HOST} ] && [ ${MODE_HOST} -eq 1 ]; then
 	echo 'Update /etc/hosts for host mode'
@@ -29,17 +15,12 @@ fi
 if [ -f "/var/www/html/_nextdom_is_installed" ]; then
 	echo 'NextDom is already install'
 else
-	echo 'Start nextdom installation'
-	#TODO tant que le dépot n'est pas publique commenter les 2 lines suivantes
-	#TODO il est déposé lors du build de l'image.
-	#rm -rf /root/install.sh
-	#wget https://raw.githubusercontent.com/nextdom/core/stable/install/install.sh -O /root/install.sh
-	[[ $(stat -c%s /root/install.sh) -lt 2 ]] && echo "Erreur, install.sh est incorrect" && exit -1
-	chmod +x /root/install.sh
-	#on reprend l'install la ou l'image s'est arrétée
-	/root/install.sh -s 10 -v ${VERSION} -m ${SHELL_ROOT_PASSWORD} -n ${SHELL_ROOT_PASSWORD} -d ${MYSQL_HOST} -o
-	[[ $? -ne 0 ]] && echo "Erreur, install.sh s'est terminé en erreur" && exit -1
+	echo 'Start nextdom customization'
+    [[ ( "${MYSQL_HOST}" != "localhost" ) && ( -f .mysqlroot ) ]] && MYSQL_ROOT_PASSWORD="-r $(cat .mysqlroot)"
+	bash -x /var/www/html/install/postinst ${MYSQL_ROOT_PASSWORD} -i ${MYSQL_HOST} -z ${MYSQL_PORT} -d ${MYSQL_DATABASE} -u ${MYSQL_USER} -p ${MYSQL_USER_PWD}
+	[[ $? -ne 0 ]] && echo "Erreur, postinst s'est terminé en erreur" && exit -1
 	touch /var/www/html/_nextdom_is_installed
+	rm /root/.mysqlroot
 fi
 
 echo 'All init complete'
