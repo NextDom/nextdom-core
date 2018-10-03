@@ -1,49 +1,9 @@
 <!-- Up-right buttons -->
 <i class="fa fa-picture-o cursor pull-right" id="bt_displayObject" data-display="{{ dashboardDisplayObjectByDefault }}" data-toggle="tooltip" title="" data-original-title="{{ 'Afficher/Masquer les objets' }}">&nbsp;</i>
-<i class="fa fa-sort-amount-desc pull-right cursor" id="bt_categorieHidden" data-toggle="tooltip" title="" data-original-title="{{ 'Trier vos équipements' }}">&nbsp;&nbsp;&nbsp;</i>
 {% if dashboardCategory == 'all' %}
     <i class="fas fa-pencil-alt pull-right cursor" id="bt_editDashboardWidgetOrder" data-mode="0">&nbsp;&nbsp;&nbsp;</i>
 {% endif %}
 
-<!-- Categories -->
-<div style="witdh:100%; display: none;" class="categorieHidden">
-    <div style="witdh:45%; float:left;">
-        <div class="demo">
-            <select id="sel_eqLogicCategory">
-                {% if dashboardCategory =='all' %}
-                    <option value="all" selected="selected"> {{ 'Toute' }}</option>
-                {% else %}
-                    <option value="all"> {{ 'Toute' }}</option>
-                {% endif %}
-                {% for categoryCode, category in dashboardCategories %}
-                    {% if dashboardCategory == categoryCode %}
-                        <option value="{{ categoryCode }}" selected="selected"> {{ category.name|trans }}</option>
-                    {% else %}
-                        <option value="{{ categoryCode }}"> {{ category.name|trans }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <div style="witdh:45%; float:left;">
-        <div class="demo2">
-            <select id="sel_eqLogicTags">
-                {% if dashboardTag == 'all' %}
-                    <option value="all" selected="selected"> {{ 'Tous' }}</option>
-                {% else %}
-                    <option value="all"> {{ 'Tous' }}</option>
-                {% endif %}
-                {% for tag in dashboardTags %}
-                    {% if dashboardTag == tag %}
-                        <option value="{{ tag }}" selected="selected"> {{ tag }}</option>
-                    {% else %}
-                        <option value="{{ tag }}"> {{ tag }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-</div>
 <div class="row">
     {% if dashboardObjectId != '' %}
     <div class="col-xs-12">
