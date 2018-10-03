@@ -39,7 +39,7 @@ nextdom.config.load({
     }
 });
 
-$('#div_pageContainer').delegate('.configKey', 'change', function () {
+$('#summary').delegate('.configKey', 'change', function () {
     modifyWithoutSave = true;
 });
 
@@ -49,18 +49,18 @@ $('#bt_addObjectSummary').on('click', function () {
     addObjectSummary();
 });
 
-$('#div_pageContainer').undelegate('.objectSummary .objectSummaryAction[data-l1key=chooseIcon]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=chooseIcon]', 'click', function () {
+$('#summary').undelegate('.objectSummary .objectSummaryAction[data-l1key=chooseIcon]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=chooseIcon]', 'click', function () {
     var objectSummary = $(this).closest('.objectSummary');
     chooseIcon(function (_icon) {
         objectSummary.find('.objectSummaryAttr[data-l1key=icon]').empty().append(_icon);
     });
 });
 
-$('#div_pageContainer').undelegate('.objectSummary .objectSummaryAction[data-l1key=remove]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=remove]', 'click', function () {
+$('#summary').undelegate('.objectSummary .objectSummaryAction[data-l1key=remove]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=remove]', 'click', function () {
     $(this).closest('.objectSummary').remove();
 });
 
-$('#div_pageContainer').undelegate('.objectSummary .objectSummaryAction[data-l1key=createVirtual]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=createVirtual]', 'click', function () {
+$('#summary').undelegate('.objectSummary .objectSummaryAction[data-l1key=createVirtual]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=createVirtual]', 'click', function () {
     var objectSummary = $(this).closest('.objectSummary');
     $.ajax({
         type: "POST",

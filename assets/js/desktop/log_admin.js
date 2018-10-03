@@ -45,11 +45,11 @@ nextdom.config.load({
 
 
 
-$('#div_pageContainer').delegate('.configKey', 'change', function () {
+$('#log_admin').delegate('.configKey', 'change', function () {
     modifyWithoutSave = true;
 });
 
-$('#div_pageContainer').delegate('.configKey[data-l1key="log::engine"]', 'change', function () {
+$('#log_admin').delegate('.configKey[data-l1key="log::engine"]', 'change', function () {
  $('.logEngine').hide();
  $('.logEngine.'+$(this).value()).show();
 });

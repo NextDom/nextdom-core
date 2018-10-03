@@ -100,7 +100,7 @@
     }
 });
 
- $('#div_pageContainer').delegate('.cronAttr', 'change', function () {
+ $('#div_Cron').delegate('.cronAttr', 'change', function () {
     modifyWithoutSave = true;
 });
 
