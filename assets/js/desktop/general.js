@@ -38,7 +38,7 @@ nextdom.config.load({
     }
 });
 
-$('#div_pageContainer').delegate('.configKey', 'change', function () {
+$('#general').delegate('.configKey', 'change', function () {
     modifyWithoutSave = true;
 });
 

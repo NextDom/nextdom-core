@@ -38,11 +38,11 @@ nextdom.config.load({
     }
 });
 
-$('#div_pageContainer').delegate('.configKey', 'change', function () {
+$('#cache').delegate('.configKey', 'change', function () {
     modifyWithoutSave = true;
 });
 
-$('#div_pageContainer').delegate('.configKey[data-l1key="cache::engine"]', 'change', function () {
+$('#cache').delegate('.configKey[data-l1key="cache::engine"]', 'change', function () {
  $('.cacheEngine').hide();
  $('.cacheEngine.'+$(this).value()).show();
 });

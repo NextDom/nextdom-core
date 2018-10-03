@@ -35,12 +35,12 @@ nextdom.config.load({
     },
     success: function (data) {
         $('#update_admin').setValues(data, '.configKey');
-        
+
         modifyWithoutSave = false;
     }
 });
 
-$('#div_pageContainer').delegate('.configKey', 'change', function () {
+$('#update_admin').delegate('.configKey', 'change', function () {
     modifyWithoutSave = true;
 });
 
@@ -75,7 +75,7 @@ $('.testRepoConnection').on('click',function(){
     });
 });
 
-$('#div_pageContainer').delegate('.enableRepository', 'change', function () {
+$('#update_admin').delegate('.enableRepository', 'change', function () {
     if($(this).value() == 1){
         $('.repositoryConfiguration'+$(this).attr('data-repo')).show();
     }else{
