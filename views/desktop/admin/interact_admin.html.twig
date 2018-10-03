@@ -1,43 +1,48 @@
 <div class="box" id="interact_admin">
+    <!-- Header bar -->
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fas fa-american-sign-language-interpreting">&nbsp;&nbsp;</i>{{ 'Interact' }}</h3>
         <div class="box-tools pull-right">
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
+
+    <!-- Page content -->
     <div class="box-body">
         <form class="form-horizontal">
             <fieldset>
+
+                <!-- General Section -->
                 <legend class="legend-title">{{ 'Général' }}</legend>
                 <div class="alert alert-info">
                     {{ 'Plus la sensibilité est basse (proche de 1), plus la correspondance doit être exacte.' }}
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Sensibilité' }}</label>
-                    <div class="col-lg-6 col-md-8 col-sm-8 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Sensibilité' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
                         <div class="input-group">
-                            <span class="input-group-addon">{{ '1 mot' }}</span>
+                            <span class="input-group-addon label-value">{{ '1 mot' }}</span>
                             <input type="text" class="configKey form-control" data-l1key="interact::confidence1"/>
-                            <span class="input-group-addon">{{ '2 mots' }}</span>
+                            <span class="input-group-addon label-value">{{ '2 mots' }}</span>
                             <input type="text" class="configKey form-control" data-l1key="interact::confidence2"/>
-                            <span class="input-group-addon">{{ '3 mots' }}</span>
+                            <span class="input-group-addon label-value">{{ '3 mots' }}</span>
                             <input type="text" class="configKey form-control" data-l1key="interact::confidence3"/>
-                            <span class="input-group-addon">> {{ '3 mots' }}</span>
+                            <span class="input-group-addon label-value">> {{ '3 mots' }}</span>
                             <input type="text" class="configKey form-control" data-l1key="interact::confidence"/>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Réduire le poids de' }}</label>
-                    <div class="col-lg-6 col-md-8 col-sm-8 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Réduire le poids de' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
                         <div class="input-group">
-                            <span class="input-group-addon">{{ '1 mot' }}</span>
+                            <span class="input-group-addon label-value">{{ '1 mot' }}</span>
                             <input type="text" class="configKey form-control" data-l1key="interact::weigh1"/>
-                            <span class="input-group-addon">{{ '2 mots' }}</span>
+                            <span class="input-group-addon label-value">{{ '2 mots' }}</span>
                             <input type="text" class="configKey form-control" data-l1key="interact::weigh2"/>
-                            <span class="input-group-addon">{{ '3 mots' }}</span>
+                            <span class="input-group-addon label-value">{{ '3 mots' }}</span>
                             <input type="text" class="configKey form-control" data-l1key="interact::weigh3"/>
-                            <span class="input-group-addon">{{ '4 mots' }}</span>
+                            <span class="input-group-addon label-value">{{ '4 mots' }}</span>
                             <input type="text" class="configKey form-control" data-l1key="interact::weigh4"/>
                         </div>
                     </div>
@@ -45,7 +50,8 @@
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Interaction non comprise' }}</label>
                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                        <input type="checkbox" class="configKey" data-l1key="interact::noResponseIfEmpty"/><label class="control-label">{{'Ne pas répondre'}}</label>
+                        <input type="checkbox" class="configKey" data-l1key="interact::noResponseIfEmpty" id="noResponseIfEmpty"/>
+                        <label for="noResponseIfEmpty" class="control-label">{{'Ne pas répondre'}}</label>
                     </div>
                 </div>
                 <div class="form-group">
@@ -54,46 +60,51 @@
                         <textarea type="text" class="configKey form-control" data-l1key="interact::regexpExcludGlobal"></textarea>
                     </div>
                 </div>
-                <legend class="legend-title">{{ 'Interaction automatique, contextuelle & avertissement' }}</legend>
+
+                <!-- Interacts section -->
+                <legend class="legend-title">{{ 'Intéractions automatique, contextuelles & avertissements' }}</legend>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Interactions automatiques' }}</label>
-                    <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
-                        <input type="checkbox" class="configKey" data-l1key="interact::autoreply::enable"/><label class="control-label">{{'Activer'}}</label>
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Interactions automatiques' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
+                        <input type="checkbox" class="configKey" data-l1key="interact::autoreply::enable" id="autoreply"/>
+                        <label for="autoreply" class="control-label">{{'Activer'}}</label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Réponses contextuelles' }}</label>
-                    <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
-                        <input type="checkbox" class="configKey" data-l1key="interact::contextual::enable"/><label class="control-label">{{'Activer'}}</label>
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Réponses contextuelles' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
+                        <input type="checkbox" class="configKey" data-l1key="interact::contextual::enable" id="contextual"/>
+                        <label for="contextual" class="control-label">{{'Activer'}}</label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Réponse contextuelle prioritaire si la phrase commence par' }}</label>
-                    <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Réponse contextuelle prioritaire si la phrase commence par' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
                         <input class="configKey form-control" data-l1key="interact::contextual::startpriority"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Découper une interaction en 2 si elle contient' }}</label>
-                    <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Découper une interaction en 2 si elle contient' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
                         <input class="configKey form-control" data-l1key="interact::contextual::splitword"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Interactions "préviens moi"' }}</label>
-                    <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
-                        <input type="checkbox" class="configKey" data-l1key="interact::warnme::enable"/><label class="control-label">{{'Activer'}}</label>
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Interactions "préviens moi"' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
+                        <input type="checkbox" class="configKey" data-l1key="interact::warnme::enable" id="warnme"/>
+                        <label for="warnme" class="control-label">{{'Activer'}}</label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Réponse de type "préviens moi" si la phrase commence par' }}</label>
-                    <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Réponse de type "préviens moi" si la phrase commence par' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
                         <input class="configKey form-control" data-l1key="interact::warnme::start"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Commande de retour par défaut' }}</label>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Commande de retour par défaut' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
                         <div class="input-group">
                             <input type="text" class="configKey form-control" data-l1key="interact::warnme::defaultreturncmd"/>
                             <span class="input-group-btn">
@@ -103,43 +114,46 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Synonymes pour les objets' }}</label>
-                    <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Synonymes pour les objets' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
                         <input class="configKey form-control" data-l1key="interact::autoreply::object::synonym"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Synonymes pour les équipements' }}</label>
-                    <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Synonymes pour les équipements' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
                         <input class="configKey form-control" data-l1key="interact::autoreply::eqLogic::synonym"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Synonymes pour les commandes' }}</label>
-                    <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Synonymes pour les commandes' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
                         <input class="configKey form-control" data-l1key="interact::autoreply::cmd::synonym"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Synonymes pour les résumés' }}</label>
-                    <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Synonymes pour les résumés' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
                         <input class="configKey form-control" data-l1key="interact::autoreply::summary::synonym"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Synonyme commande slider maximum' }}</label>
-                    <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Synonyme commande slider maximum' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
                         <input class="configKey form-control" data-l1key="interact::autoreply::cmd::slider::max"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Synonyme commande slider minimum' }}</label>
-                    <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Synonyme commande slider minimum' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
                         <input class="configKey form-control" data-l1key="interact::autoreply::cmd::slider::min"/>
                     </div>
                 </div>
-                <legend class="legend-title">{{ 'Couleurs' }}</legend>
-                <i class="fa fa-plus-circle pull-right cursor" id="bt_addColorConvert"></i>
+
+                <!-- Colors Section -->
+                <legend class="legend-title">
+                    {{ 'Couleurs' }}<a class="btn btn-acton btn-legend pull-right" id="bt_addColorConvert"><i class="fa fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                </legend>
                 <table class="table table-condensed table-bordered" id="table_convertColor">
                     <thead>
                     <tr>
@@ -161,6 +175,8 @@
             </fieldset>
         </form>
     </div>
+
+    <!-- Footer bar -->
     <div class="box-footer clearfix">
         <a class="btn btn-success pull-right" id="bt_saveinteract_admin"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
         <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
