@@ -19,7 +19,6 @@
 /* * ***************************Includes********************************* */
 require_once NEXTDOM_ROOT.'/core/php/core.inc.php';
 
-use NextDom\Helpers\JeedomToNextDom;
 use NextDom\Managers\UpdateManager;
 
 class update {

@@ -964,6 +964,10 @@ function getIpFromString($_string)
     return $_string;
 }
 
+/**
+ * Evaluate Jeedom
+ * @param $_string
+ * @return mixed
 function evaluate($_string) {
 	if (!isset($GLOBALS['ExpressionLanguage'])) {
 		$GLOBALS['ExpressionLanguage'] = new ExpressionLanguage();
@@ -1009,7 +1013,8 @@ function evaluate($_string) {
 	}
 	return $_string;
 }
-
+/**
+ * Evaluate Jeedom old
 function evaluate_old($_string) {
 	if (!isset($GLOBALS['ExpressionLanguage'])) {
 		$GLOBALS['ExpressionLanguage'] = new ExpressionLanguage();
@@ -1042,8 +1047,6 @@ function evaluate_old($_string) {
  * @param $_string
  * @return string
  */
-/**
- * TODO: Remettre cette version
 function evaluate($_string)
 {
     if (!isset($GLOBALS['ExpressionLanguage'])) {
@@ -1065,7 +1068,6 @@ function evaluate($_string)
     }
     return $_string;
 }
-*/
 
 /**
  * @param string $_string
