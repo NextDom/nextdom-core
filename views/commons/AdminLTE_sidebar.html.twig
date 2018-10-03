@@ -24,133 +24,132 @@
         <div class="user-panel">
             <div class="pull-left image">
                 {% if USER_AVATAR == "" %}
-                <a href="/index.php?v=d&p=profils#profil"><img src="/public/img/profils/noPicture.gif" class="img-circle" alt="User Image"></a>
+                    <a href="/index.php?v=d&p=profils#profil"><img src="/public/img/profils/noPicture.gif" class="img-circle" alt="User Image"></a>
                 {% else %}
-                <a href="/index.php?v=d&p=profils#profil"><img src="{{ USER_AVATAR }}" class="img-circle" alt="User Image"></a>
+                    <a href="/index.php?v=d&p=profils#profil"><img src="{{ USER_AVATAR }}" class="img-circle" alt="User Image"></a>
                 {% endif %}            </div>
-                <div class="pull-left info">
-                    <p>{{ USER_LOGIN }}</p>
-                    {% if USER_ISCONNECTED %}
+            <div class="pull-left info">
+                <p>{{ USER_LOGIN }}</p>
+                {% if USER_ISCONNECTED %}
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-                    {% else %}
+                {% else %}
                     <a href="#"><i class="fa fa-circle text-danger"></i> Offline</a>
-                    {% endif %}
-                </div>
+                {% endif %}
             </div>
-            <!-- sidebar menu: : style can be found in sidebar.less -->
-            <ul class="sidebar-menu" data-widget="tree">
-                <li class="header">{{ 'MENU PRINCIPAL' }}</li>
-                <li class="active treeview menu-open">
-                    <a href="#"><i class="fa fa-home"></i><span>&nbsp;&nbsp;{{ 'Accueil' }}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                    <ul class="treeview-menu">
-                        <li class="treeview">
-                            <a href="#"><i class="fa fa-dashboard"></i>&nbsp;&nbsp;{{ 'Dashboard' }}<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                            <ul class="treeview-menu">
-                                <li class="treeview-menu">
-                                    <li><a href="index.php?v=d&p=dashboard">{{ 'Afficher tout' }}</a></li>
-                                    {% for jeeObject in MENU_JEEOBJECT_TREE %}
-                                    <li><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                            <li class="treeview">
-                                <a href="#"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;{{ 'Vue(s)' }}<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                                <ul class="treeview-menu">
-                                    <li class="treeview-menu">
-                                        <li><a href="index.php?v=d&p=view">{{ 'Afficher tout' }}</a></li>
-                                        {% for view in MENU_VIEWS_LIST %}
-                                        <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">&nbsp;&nbsp;{{ view.getDisplay('icon')|trim }} {{ viewMenu.getName() }}</a></li>
-                                        {% endfor %}
-                                    </ul>
-                                </li>
-                                <li class="treeview">
-                                    <a href="#"><i class="fas fa-object-group"></i>&nbsp;&nbsp;{{ 'Design(s)' }}<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                                    <ul class="treeview-menu">
-                                        <li class="treeview-menu">
-                                            <li><a href="index.php?v=d&p=plan">{{ 'Afficher tout' }}</a></li>
-                                            {% for plan in MENU_PLANS_LIST %}
-                                            <li><a href="index.php?v=d&p=plan&plan_id={{ plan.getId() }}">&nbsp;&nbsp;{{ plan.getConfiguration('icon')|trim }} {{ plan.getName() }}</a></li>
-                                            {% endfor %}
-
-                                        </ul>
-                                    </li>
-                                    <li class="treeview">
-                                        <a href="#"><i class="fas fa-building"></i>&nbsp;&nbsp;{{ 'Plan(s) 3D' }}<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                                        <ul class="treeview-menu">
-                                            <li class="treeview-menu">
-                                                <li><a href="index.php?v=d&p=plan3d">{{ 'Afficher tout' }}</a></li>
-                                                {% for plan3d in MENU_PLANS3D_LIST %}
-                                                <li><a href="index.php?v=d&p=plan3d&plan3d_id={{ plan3d.getId() }}">&nbsp;&nbsp;{{ plan3d.getConfiguration('icon')|trim }} {{ plan3d.getName() }}</a></li>
-                                                {% endfor %}
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="treeview">
-                                    <a href="#"><i class="fa fa-puzzle-piece"></i><span>&nbsp;&nbsp;{{ 'Plugins' }}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                                    <ul class="treeview-menu">
-                                        <li class="treeview"><a href="index.php?v=d&p=plugin"><i class="fa fa-tags"></i>&nbsp;&nbsp;{{ 'Gestion' }}</a></li>
-                                        {# {{ pluginMenu | raw }}#}
-                                        {% if MENU_PLUGIN_CATEGORY is defined %}
-                                        {% for category, categoryData in MENU_PLUGIN_CATEGORY %}
-                                        <li class="treeview">
-                                            <a data-toggle="dropdown"><i class="fa {{ categoryData.icon }}"></i>&nbsp;&nbsp;{{ categoryData.name }}</a>
-                                            <ul class="treeview-menu">
-                                                {% for plugin in MENU_PLUGIN[category] %}
-                                                <li class="plugin-item"><a href="index.php?v=d&m={{ plugin.id }}&p={{ plugin.index }}"><img class="img-responsive" src="{{ plugin.pathImgIcon }}"/>&nbsp;&nbsp;{{ plugin.name }}</a></li>
-                                                {% endfor %}
-                                            </ul>
-                                        </li>
-                                    </li>
-                                    {% endfor %}
-                                    {% endif %}
-                                </ul>
-                            </li>
-                            <li class="treeview">
-                                <a href="#"><i class="fa fa-th-list"></i><span>&nbsp;&nbsp;{{ 'Outils' }}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                                <ul class="treeview-menu">
-                                    <li><a href="index.php?v=d&p=object"><i class="fas fa-clone"></i>&nbsp;&nbsp;{{ 'Objets' }}</a></li>
-                                    <li><a href="index.php?v=d&p=interact"><i class="fa fa-comments-o"></i>&nbsp;&nbsp;{{ 'Interactions' }}</a></li>
-                                    <li><a href="index.php?v=d&p=display"><i class="fa fa-th"></i>&nbsp;&nbsp;{{ 'Résumé domotique' }}</a></li>
-                                    <li><a href="index.php?v=d&p=scenario"><i class="fas fa-film"></i>&nbsp;&nbsp;{{ 'Scénarios' }}</a></li>
-                                    <li><a href="index.php?v=d&p=eqAnalyse"><i class="fa fa-plug"></i>&nbsp;&nbsp;{{ 'Equipements' }}</a></li>
-                                </ul>
-                            </li>
-                            <li class="header">{{ 'MENU REGLAGES' }}</li>
-                            <li class="treeview">
-                                <a href="index.php?v=d&p=administration"><i class="fa fa-wrench"></i><span>&nbsp;&nbsp;{{ 'Réglages & Utilitaires' }}</span></a>
-                            </li>
-                            <li class="treeview">
-                                <a href="#"><i class="fa fa-cog"></i><span>&nbsp;&nbsp;{{ 'Expert' }}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                                <ul class="treeview-menu">
-                                    <li><a href="javascript:window.location.href=window.location.protocol + '//' + window.location.hostname + ':' + window.location.port +'/index.php?v=m'"><i class="fas fa-mobile-alt"></i>&nbsp;&nbsp;{{ 'Version mobile' }}</a></li>
-                                    <li><a><i class="fas fa-code-branch"></i>&nbsp;&nbsp;{{ 'Version' }} {{ NEXTDOM_VERSION }}</a></li>
-                                    <li><a href="#" id="bt_nextdomAbout"><i class="fas fa-info-circle"></i>&nbsp;&nbsp;{{ 'About' }}</a></li>
-                                    <li><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock"></i>&nbsp;&nbsp;{{ 'Se déconnecter' }}</a></li>
-                                    {% if IS_ADMIN and CAN_SUDO %}
-                                    <li><a id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i>&nbsp;&nbsp;{{ 'Redémarrer' }}</a></li>
-                                    <li><a id="bt_haltSystem" state="0"><i class="fa fa-power-off"></i>&nbsp;&nbsp;{{ 'Eteindre' }}</a></li>
-                                    {% endif %}
-                                </ul>
-                            </li>
-                            <li class="treeview">
-                                <a href="#"><i class="fas fa-filter"></i><span>&nbsp;&nbsp;{{ 'Catégories' }}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                                <ul class="treeview-menu">
-                                    {% if dashboardCategory =='all' %}
-                                    <li class="selectCategoy"><a>Toutes</a></li>
-                                    {% else %}
-                                    <li class="selectCategoy"><a>Toutes</a></li>
-                                    {% endif %}
-                                    {% for categoryCode, category in dashboardCategories %}
-                                    {% if dashboardCategory == categoryCode %}
-                                    <li><a onclick='selectCategory("{{ categoryCode }}");'>{{ category.name|trans }}</a></li>
-                                    {% else %}
-                                    <li><a onclick='selectCategory("{{ categoryCode }}");'>{{ category.name|trans }}</a></li>
-                                    {% endif %}
-                                    {% endfor %}
-                                </ul>
-                            </li>
+        </div>
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">{{ 'MENU PRINCIPAL' }}</li>
+            <li class="active treeview menu-open">
+                <a href="#"><i class="fa fa-home"></i><span>&nbsp;&nbsp;{{ 'Accueil' }}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-dashboard"></i>&nbsp;&nbsp;{{ 'Dashboard' }}<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                        <ul class="treeview-menu">
+                            <li class="treeview-menu">
+                            <li><a href="index.php?v=d&p=dashboard">{{ 'Afficher tout' }}</a></li>
+                            {% for jeeObject in MENU_JEEOBJECT_TREE %}
+                                <li><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
+                            {% endfor %}
                         </ul>
-                    </section>
-                    <!-- /.sidebar -->
-                </aside>
+                    </li>
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;{{ 'Vue(s)' }}<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                        <ul class="treeview-menu">
+                            <li class="treeview-menu">
+                            <li><a href="index.php?v=d&p=view">{{ 'Afficher tout' }}</a></li>
+                            {% for view in MENU_VIEWS_LIST %}
+                                <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">&nbsp;&nbsp;{{ view.getDisplay('icon')|trim }} {{ viewMenu.getName() }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#"><i class="fas fa-object-group"></i>&nbsp;&nbsp;{{ 'Design(s)' }}<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                        <ul class="treeview-menu">
+                            <li class="treeview-menu">
+                            <li><a href="index.php?v=d&p=plan">{{ 'Afficher tout' }}</a></li>
+                            {% for plan in MENU_PLANS_LIST %}
+                                <li><a href="index.php?v=d&p=plan&plan_id={{ plan.getId() }}">&nbsp;&nbsp;{{ plan.getConfiguration('icon')|trim }} {{ plan.getName() }}</a></li>
+                            {% endfor %}
+
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#"><i class="fas fa-building"></i>&nbsp;&nbsp;{{ 'Plan(s) 3D' }}<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                        <ul class="treeview-menu">
+                            <li class="treeview-menu">
+                            <li><a href="index.php?v=d&p=plan3d">{{ 'Afficher tout' }}</a></li>
+                            {% for plan3d in MENU_PLANS3D_LIST %}
+                                <li><a href="index.php?v=d&p=plan3d&plan3d_id={{ plan3d.getId() }}">&nbsp;&nbsp;{{ plan3d.getConfiguration('icon')|trim }} {{ plan3d.getName() }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-puzzle-piece"></i><span>&nbsp;&nbsp;{{ 'Plugins' }}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    <li class="treeview"><a href="index.php?v=d&p=plugin"><i class="fa fa-tags"></i>&nbsp;&nbsp;{{ 'Gestion' }}</a></li>
+                    {# {{ pluginMenu | raw }}#}
+                    {% if MENU_PLUGIN_CATEGORY is defined %}
+                        {% for category, categoryData in MENU_PLUGIN_CATEGORY %}
+                            <li class="treeview">
+                                <a data-toggle="dropdown"><i class="fa {{ categoryData.icon }}"></i>&nbsp;&nbsp;{{ categoryData.name }}</a>
+                                <ul class="treeview-menu">
+                                    {% for plugin in MENU_PLUGIN[category] %}
+                                        <li class="plugin-item"><a href="index.php?v=d&m={{ plugin.id }}&p={{ plugin.index }}"><img class="img-responsive" src="{{ plugin.pathImgIcon }}"/>&nbsp;&nbsp;{{ plugin.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-th-list"></i><span>&nbsp;&nbsp;{{ 'Outils' }}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    <li><a href="index.php?v=d&p=object"><i class="fas fa-clone"></i>&nbsp;&nbsp;{{ 'Objets' }}</a></li>
+                    <li><a href="index.php?v=d&p=interact"><i class="fa fa-comments-o"></i>&nbsp;&nbsp;{{ 'Interactions' }}</a></li>
+                    <li><a href="index.php?v=d&p=display"><i class="fa fa-th"></i>&nbsp;&nbsp;{{ 'Résumé domotique' }}</a></li>
+                    <li><a href="index.php?v=d&p=scenario"><i class="fas fa-film"></i>&nbsp;&nbsp;{{ 'Scénarios' }}</a></li>
+                    <li><a href="index.php?v=d&p=eqAnalyse"><i class="fa fa-plug"></i>&nbsp;&nbsp;{{ 'Equipements' }}</a></li>
+                </ul>
+            </li>
+            <li class="header">{{ 'MENU REGLAGES' }}</li>
+
+            <li class="treeview">
+                <a href="#"><i class="fa fa-cog"></i><span>&nbsp;&nbsp;{{ 'Expert' }}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    <li><a href="index.php?v=d&p=administration"><i class="fa fa-wrench"></i>&nbsp;&nbsp;{{ 'Administration' }}</a></li>
+                    <li><a href="index.php?v=m"><i class="fas fa-mobile-alt"></i>&nbsp;&nbsp;{{ 'Version mobile' }}</a></li>
+                    <li><a><i class="fas fa-code-branch"></i>&nbsp;&nbsp;{{ 'Version' }} {{ NEXTDOM_VERSION }}</a></li>
+                    <li><a href="#" id="bt_nextdomAbout"><i class="fas fa-info-circle"></i>&nbsp;&nbsp;{{ 'About' }}</a></li>
+                    <li><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock"></i>&nbsp;&nbsp;{{ 'Se déconnecter' }}</a></li>
+                    {% if IS_ADMIN and CAN_SUDO %}
+                        <li><a id="bt_rebootSystem" state="0"><i class="fa fa-repeat"></i>&nbsp;&nbsp;{{ 'Redémarrer' }}</a></li>
+                        <li><a id="bt_haltSystem" state="0"><i class="fa fa-power-off"></i>&nbsp;&nbsp;{{ 'Eteindre' }}</a></li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#"><i class="fas fa-filter"></i><span>&nbsp;&nbsp;{{ 'Catégories' }}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    {% if dashboardCategory =='all' %}
+                        <li class="selectCategoy"><a>Toutes</a></li>
+                    {% else %}
+                        <li class="selectCategoy"><a>Toutes</a></li>
+                    {% endif %}
+                    {% for categoryCode, category in dashboardCategories %}
+                        {% if dashboardCategory == categoryCode %}
+                            <li><a onclick='selectCategory("{{ categoryCode }}");'>{{ category.name|trans }}</a></li>
+                        {% else %}
+                            <li><a onclick='selectCategory("{{ categoryCode }}");'>{{ category.name|trans }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </li>
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>
