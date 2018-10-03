@@ -24,7 +24,7 @@
 
                 <!-- Theme tab -->
                 <div role="tabpanel" class="tab-pane active" id="themestab">
-                    <legend class="legend-title">{{ 'Choix du thème comme base' }}</legend>
+                    <legend class="legend-title">{{ 'Choix du thème comme base, version normal' }}</legend>
                     <div class="row">
                         <div class="col-md-12">
                             <ul class="list-unstyled clearfix">
@@ -119,6 +119,13 @@
                                         </div>
                                     </a>
                                 </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <legend class="legend-title">{{ 'Versions Light' }}</legend>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="list-unstyled clearfix">
                                 <li class="container col-md-4">
                                     <p class="text-center no-margin" style="font-size: 12px">Nextdom Light</p>
                                     <a href="" data-skin="skin-nextdom-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
@@ -222,25 +229,25 @@
                         <fieldset>
                             <legend class="legend-title">{{ 'Paramétrage de l\'aspect des tuiles du dashboard en version desktop ou mobile.' }}</legend>
                             <div class="form-group">
-                                <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Opacité par défaut des widgets' }}</label>
+                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Opacité par défaut des widgets' }}</label>
                                 <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                     <input type="numeric" class="configKey form-control" data-l1key="widget::background-opacity"/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{'Pas horizontal'}}</label>
+                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{'Pas horizontal'}}</label>
                                 <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                     <input type="numeric" class="configKey form-control" data-l1key="widget::step::width" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{'Pas vertical'}}</label>
+                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{'Pas vertical'}}</label>
                                 <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                     <input type="numeric" class="configKey form-control" data-l1key="widget::step::height" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{'Marge'}}</label>
+                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{'Marge'}}</label>
                                 <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                     <input type="numeric" class="configKey form-control" data-l1key="widget::margin" />
                                 </div>
@@ -249,8 +256,8 @@
                                 {% for category, categoryData in adminCategories %}
                                     <legend class="legend-title">{{'Catégorie'}} {{ categoryData['name'] }}</legend>
                                     <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Dashboard couleur de fond' }}</label>
-                                        <div class="btn-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Dashboard couleur de fond' }}</label>
+                                        <div class="btn-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
                                             <a class="btn btn-action bt_resetColor" data-l1key="eqLogic:category:{{ category }}:color" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
                                             <div class=" colorpicker-component colorpick input-group">
                                                 <input type="text" class="configKey form-control noSet " data-l1key="eqLogic:category:{{ category }}:color" value="{{ categoryData['color'] }}"/>
@@ -259,8 +266,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Dashboard couleur commande' }}</label>
-                                        <div class="btn-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Dashboard couleur commande' }}</label>
+                                        <div class="btn-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
                                             <a class="btn btn-action bt_resetColor" data-l1key="eqLogic:category:{{ category }}:cmdColor" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
                                             <div class=" colorpicker-component colorpick input-group">
                                                 <input type="text" class="configKey form-control cursor noSet " data-l1key="eqLogic:category:{{ category }}:cmdColor" value="{{ categoryData['cmdColor'] }}"/>
@@ -269,8 +276,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Mobile couleur de fond' }}</label>
-                                        <div class="btn-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Mobile couleur de fond' }}</label>
+                                        <div class="btn-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
                                             <a class="btn btn-action bt_resetColor" data-l1key="eqLogic:category:{{ category }}:mcolor" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
                                             <div class=" colorpicker-component colorpick input-group">
                                                 <input type="text" class="configKey form-control cursor noSet " data-l1key="eqLogic:category:{{ category }}:mcolor" value="{{ categoryData['mcolor'] }}"/>
@@ -279,8 +286,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Mobile couleur commande' }}</label>
-                                        <div class="btn-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Mobile couleur commande' }}</label>
+                                        <div class="btn-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
                                             <a class="btn btn-action bt_resetColor" data-l1key="eqLogic:category:{{ category }}:mcmdColor" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
                                             <div class=" colorpicker-component colorpick input-group">
                                                 <input type="text" class="configKey form-control cursor noSet " data-l1key="eqLogic:category:{{ category }}:mcmdColor" value="{{ categoryData['mcmdColor'] }}"/>
@@ -299,8 +306,8 @@
                     <form class="form-horizontal">
                         <legend class="legend-title">{{ 'Personnalisation des couleurs spécifiques du thème.' }}</legend>
                         <div class="form-group">
-                            <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{'Couleur du fond de la page'}}">{{ 'Couleur du body' }} </label>
-                            <div class="btn-group btn-group col-lg-4 col-md-8 col-sm-8 col-xs-12">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{'Couleur du fond de la page'}}">{{ 'Couleur du body' }} </label>
+                            <div class="btn-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
                                 <a class="btn btn-action bt_resetColor" data-l1key="options" data-l2key="customSkin_bodyBackgound" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
                                 <div class=" colorpicker-component colorpick input-group">
                                     <input type="text" class="configKey form-control" data-l1key="options" data-l2key="customSkin_bodyBackgound"/>
@@ -309,9 +316,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{'Couleur du fond de la barre du haut (headerbar)'}}">{{ 'Couleur headerBar' }} </label>
-                            <div class="btn-group btn-group col-lg-4 col-md-8 col-sm-8 col-xs-12">
-                                <a class="btn btn-action btn-sm bt_resetColor" data-l1key="options" data-l2key="customSkin_navbarBackgound" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{'Couleur du fond de la barre du haut (headerbar)'}}">{{ 'Couleur headerBar' }} </label>
+                            <div class="btn-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
+                                <a class="btn btn-action bt_resetColor" data-l1key="options" data-l2key="customSkin_navbarBackgound" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
                                 <div class=" colorpicker-component colorpick input-group">
                                     <input type="text" class="configKey form-control" data-l1key="options" data-l2key="customSkin_navbarBackgound"/>
                                     <span class="input-group-addon"><i></i></span>
@@ -319,9 +326,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{'Couleur du fond de la barre du coté (sidebar)'}}">{{ 'Couleur sideBar' }} </label>
-                            <div class="btn-group btn-group col-lg-4 col-md-8 col-sm-8 col-xs-12">
-                                <a class="btn btn-action btn-sm bt_resetColor" data-l1key="options" data-l2key="customSkin_siderbarBackgound" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{'Couleur du fond de la barre du coté (sidebar)'}}">{{ 'Couleur sideBar' }} </label>
+                            <div class="btn-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
+                                <a class="btn btn-action bt_resetColor" data-l1key="options" data-l2key="customSkin_siderbarBackgound" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
                                 <div class=" colorpicker-component colorpick input-group">
                                     <input type="text" class="configKey form-control" data-l1key="options" data-l2key="customSkin_sidebaBackgound"/>
                                     <span class="input-group-addon"><i></i></span>
@@ -329,9 +336,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{'Couleur des icones'}}">{{ 'Couleur des icones' }} </label>
-                            <div class="btn-group btn-group col-lg-4 col-md-8 col-sm-8 col-xs-12">
-                                <a class="btn btn-action btn-sm bt_resetColor" data-l1key="options" data-l2key="customSkin_iconsColors" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{'Couleur des icones'}}">{{ 'Couleur des icones' }} </label>
+                            <div class="btn-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
+                                <a class="btn btn-action bt_resetColor" data-l1key="options" data-l2key="customSkin_iconsColors" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fa fa-times"></i></a>
                                 <div class=" colorpicker-component colorpick input-group">
                                     <input type="text" class="configKey form-control" data-l1key="options" data-l2key="customSkin_iconsColors"/>
                                     <span class="input-group-addon"><i></i></span>
@@ -342,23 +349,26 @@
                 </div>
 
                 <!-- Advanced tab -->
-                <div role="tabpanel" class="tab-pane" id="advanced">
+                <div role="tabpanel" class="tab-pane nav-tabs-custom" id="advanced">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="active"><a href="#desktop" aria-controls="home" role="tab" data-toggle="tab">{{ 'Desktop' }}</a></li>
                         <li><a href="#mobile" aria-controls="profile" role="tab" data-toggle="tab">{{ 'Mobile' }}</a></li>
                     </ul>
                     <div class="tab-content">
-                        <div class="alert alert-warning" id="div_spanAlertMessage">
+                        <div class="btn-group alert alert-warning" id="div_spanAlertMessage">
                             {{ 'Attention : tout ce que vous écrivez ici est global et inclus sur toutes les pages. La moindre erreur peut rendre votre' }} {{ customProductName }} {{ 'non fonctionel.' }}
-                            <span class="pull-right"> {{ 'Activer' }} : <input type="checkbox" class="configKey" data-l1key="enableCustomCss" checked/> </span>
+                            <div>
+                                <input type="checkbox" id="enableCustomCss" class="configKey" data-l1key="enableCustomCss">
+                                <label for="enableCustomCss" class="control-label" data-toggle="tooltip" title="" data-original-title="{{'Force la prise en compte de ces personnalisation CSS et JS en dernier lieu'}}">{{'Activer la personnalisation avancée'}}</label>
+                            </div>
                         </div>
                         <div role="tabpanel" class="tab-pane active" id="desktop">
                             <div class="row">
-                                <div class="col-xs-6">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                     <legend class="legend-title">{{ 'Javascript' }}</legend>
                                     <textarea id="ta_jsDesktopContent" style="height:auto;">{{ customJS }}</textarea>
                                 </div>
-                                <div class="col-xs-6">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                     <legend class="legend-title">{{ 'CSS' }}</legend>
                                     <textarea id="ta_cssDesktopContent" style="height:auto;">{{ customCSS }}</textarea>
                                 </div>
@@ -366,11 +376,11 @@
                         </div>
                         <div role="tabpanel" class="tab-pane" id="mobile">
                             <div class="row">
-                                <div class="col-xs-6">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                     <legend class="legend-title">{{ 'Javascript' }}</legend>
                                     <textarea id="ta_jsMobileContent" style="height:auto;">{{ customMobileJS }}</textarea>
                                 </div>
-                                <div class="col-xs-6">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                     <legend class="legend-title">{{ 'CSS' }}</legend>
                                     <textarea id="ta_cssMobileContent" style="height:auto;">{{ customMobileCSS }}</textarea>
                                 </div>
