@@ -38,6 +38,6 @@ nextdom.config.load({
     }
 });
 
-$('#div_pageContainer').delegate('.configKey', 'change', function () {
+$('#eqlogic').delegate('.configKey', 'change', function () {
     modifyWithoutSave = true;
 });

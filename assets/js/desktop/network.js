@@ -83,11 +83,11 @@ nextdom.config.load({
     }
 });
 
-$('#div_pageContainer').delegate('.configKey', 'change', function () {
+$('#network').delegate('.configKey', 'change', function () {
     modifyWithoutSave = true;
 });
 
-$('#div_pageContainer').delegate('.configKey[data-l1key="market::allowDNS"],.configKey[data-l1key="network::disableMangement"]', 'change', function () {
+$('#network').delegate('.configKey[data-l1key="market::allowDNS"],.configKey[data-l1key="network::disableMangement"]', 'change', function () {
     if($('.configKey[data-l1key="market::allowDNS"]').value() == 1 && $('.configKey[data-l1key="network::disableMangement"]').value() == 0){
        $('.configKey[data-l1key=externalProtocol]').attr('disabled',true);
        $('.configKey[data-l1key=externalAddr]').attr('disabled',true);
