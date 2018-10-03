@@ -220,6 +220,12 @@ body {
   margin-top: -6px;
   margin-right: -10px;
 }
+.btn-box-tool {
+  padding: 8px 5px;
+}
+.box-header>.box-tools {
+    top: 3px;
+}
 
 /* Navs */
 .navbar-custom-menu > .navbar-nav > li {
@@ -401,6 +407,11 @@ body {
   margin-bottom: 15px;
   background-color: whitesmoke;
 }
+@media (max-width: 767px) {
+    .legend-title {
+        text-align: center;
+    }
+}
 
 /* Logos */
 .login-logo,
@@ -456,7 +467,7 @@ body {
 /* Checkboxes */
 input[type="checkbox"] {
   position: relative !important;
-  top:8px;
+  top:9px;
   height: 22px;
   width: 22px;
   appearance: none;
@@ -470,7 +481,7 @@ input[type="checkbox"] {
   content: '';
   position: absolute;
   left:0px; top: 0px;
-  width: 18px; height: 18px;
+  width: 18px; height: 17px;
   border: 1px solid #ccc;
   border-radius: 2px;
 }
@@ -479,9 +490,9 @@ input[type="checkbox"] {
 [type="checkbox"]:checked:after {
   content: '■';
   position: absolute;
-  top: -12px;
-  left:1px;
-  font-size: 26px;
+  top: -11px;
+  left:2px;
+  font-size: 24px;
   transition: all .2s;
 }
 /* checked state */
@@ -534,9 +545,4 @@ input[type="checkbox"] {
     padding: 7px;
     vertical-align: middle;
     font-size: 13px;
-}
-.table-condensed.thead {
-    background-color: $nextdom_table_title;
-    border-bottom: 1px solid lightgray;
-    border-top: 1px solid lightgray;
 }

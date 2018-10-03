@@ -1,16 +1,21 @@
 <div class="box" id="API">
+    <!-- Header bar -->
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fa fa-key">&nbsp;&nbsp;</i>{{ 'API' }}</h3>
         <div class="box-tools pull-right">
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
+
+    <!-- Page content -->
     <div class="box-body">
         <form class="form-horizontal">
             <fieldset>
+
+                <!-- Access Section -->
                 <legend class="legend-title">{{ 'Accès API' }}</legend>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-2 col-sm-3 col-xs-6 control-label">{{ 'Accès API HTTP' }}</label>
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label">{{ 'Accès API HTTP' }}</label>
                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
                         <select class="form-control configKey" data-l1key="api::core::http::mode">
                             <option value="enable">{{ 'Activé' }}</option>
@@ -21,7 +26,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-2 col-sm-3 col-xs-6 control-label">{{ 'Accès API JSONRPC' }}</label>
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label">{{ 'Accès API JSONRPC' }}</label>
                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
                         <select class="form-control configKey" data-l1key="api::core::jsonrpc::mode">
                             <option value="enable">{{ 'Activé' }}</option>
@@ -32,7 +37,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-2 col-sm-3 col-xs-6 control-label">{{ 'Accès API TTS' }}</label>
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label">{{ 'Accès API TTS' }}</label>
                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
                         <select class="form-control configKey" data-l1key="api::core::tts::mode">
                             <option value="enable">{{ 'Activé' }}</option>
@@ -43,7 +48,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-2 col-sm-3 col-xs-6 control-label">{{ 'Accès API Pro' }}</label>
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label">{{ 'Accès API Pro' }}</label>
                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
                         <select class="form-control configKey" data-l1key="api::core::pro::mode">
                             <option value="enable">{{ 'Activé' }}</option>
@@ -52,7 +57,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-2 col-sm-3 col-xs-6 control-label">{{ 'Accès API Market' }}</label>
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label">{{ 'Accès API Market' }}</label>
                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
                         <select class="form-control configKey" data-l1key="api::core::market::mode">
                             <option value="enable">{{ 'Activé' }}</option>
@@ -60,66 +65,65 @@
                         </select>
                     </div>
                 </div>
+
+                <!-- Key Section -->
                 <legend class="legend-title">{{ 'Clefs API' }}</legend>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-2 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API globale de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API Globale' }}</label>
-                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API globale de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API Globale' }}</label>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
                         <a class="btn btn-warning bt_regenerate_api" data-plugin="core"><i class="fa fa-refresh">&nbsp;&nbsp;</i>{{'Rafraîchir'}}</a>
                     </div>
-                    <div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
+                    <div class="col-lg-8 col-md-7 col-sm-7 col-xs-12">
                         <span class="span_apikey label label-info label-config">{{ adminConfigs['api'] }}</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-2 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API Pro de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API Pro' }}</label>
-                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API Pro de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API Pro' }}</label>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
                         <a class="btn btn-warning bt_regenerate_api" data-plugin="pro"><i class="fa fa-refresh">&nbsp;&nbsp;</i>{{'Rafraîchir'}}</a>
                     </div>
-                    <div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
+                    <div class="col-lg-8 col-md-7 col-sm-7 col-xs-12">
                         <span class="span_apikey label label-info label-config">{{ adminConfigs['apipro'] }}</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-2 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef Market de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef Market' }}</label>
-                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef Market de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef Market' }}</label>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
                         <a class="btn btn-warning bt_regenerate_api" data-plugin="apimarket"><i class="fa fa-refresh">&nbsp;&nbsp;</i>{{'Rafraîchir'}}</a>
                     </div>
-                    <div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
+                    <div class="col-lg-8 col-md-7 col-sm-7 col-xs-12">
                         <span class="span_apikey label label-info label-config">{{ adminConfigs['apimarket'] }}</span>
                     </div>
                 </div>
-                <hr/>
-                <ul class="products-list product-list-in-box">
-                    {% if not adminIsRescueMode and adminPluginsList|length > 0 %}
-                        {% for pluginData in adminPluginsList %}
-                            <li class="item row">
-                                <div class="col-sm-8 col-xs-6">
-                                    <div class=product-info">
-                                        <a class="product-title" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API pour le plugin' }} {{ pluginData.plugin.getName() }}">{{ 'Clef API' }} {{ pluginData.plugin.getName() }}</a>
-                                        <span class="product-description span_apikey">{{ pluginData.api }}</span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 col-xs-6">
-                                    <a class="product-title">{{ 'Accès API' }}</a>
-                                    <div class="input-group">
-                          				      <span class="input-group-btn">
-                                            <a class="btn btn-default form-control bt_regenerate_api" data-plugin="{{ pluginData.plugin.getId() }}"><i class="fa fa-refresh">&nbsp;&nbsp;</i>{{'Rafraîchir'}}</a>
-                           				      </span>
-                                        <select class="form-control configKey" data-l1key="api::{{ pluginData.plugin.getId() }}::mode">
-                                            <option value="enable">{{ 'Activé' }}</option>
-                                            <option value="whiteip">{{ 'IP blanche' }}</option>
-                                            <option value="localhost">{{ 'Localhost' }}</option>
-                                            <option value="disable">{{ 'Désactivé' }}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    {% endif %}
-                </ul>
+
+                <!-- Plugins Section -->
+                <legend class="legend-title">{{ 'API Plugins' }}</legend>
+                {% if not adminIsRescueMode and adminPluginsList|length > 0 %}
+                    {% for pluginData in adminPluginsList %}
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-6 control-label" data-original-title="{{ 'API pour le plugin' }} {{ pluginData.plugin.getName() }}">{{ pluginData.plugin.getName() }}</label>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+                                <a class="btn btn-warning bt_regenerate_api" data-plugin="{{ pluginData.plugin.getId() }}"><i class="fa fa-refresh">&nbsp;&nbsp;</i>{{'Rafraîchir'}}</a>
+                            </div>
+                            <div class="col-lg-6 col-md-5 col-sm-5 col-xs-6">
+                                <span class="span_apikey label label-info label-config">{{ pluginData.api }}</span>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+                                <select class="form-control configKey" data-l1key="api::{{ pluginData.plugin.getId() }}::mode">
+                                    <option value="enable">{{ 'Activé' }}</option>
+                                    <option value="whiteip">{{ 'IP blanche' }}</option>
+                                    <option value="localhost">{{ 'Localhost' }}</option>
+                                    <option value="disable">{{ 'Désactivé' }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </fieldset>
         </form>
     </div>
+
+    <!-- Footer bar -->
     <div class="box-footer clearfix">
         <a class="btn btn-success pull-right" id="bt_saveapi"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
         <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
