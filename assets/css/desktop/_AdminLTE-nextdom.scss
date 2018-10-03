@@ -399,9 +399,10 @@ body {
     font-size: 100%;
     font-weight: 500;
 }
-@media (min-width: 768px)
-.label-unity {
-    margin-left: -15px;
+@media (min-width: 768px) {
+    .label-unity {
+        margin-left: -15px;
+    }
 }
 .label-badge {
     position: absolute;
