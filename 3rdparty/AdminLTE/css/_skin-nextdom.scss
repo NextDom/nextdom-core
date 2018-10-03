@@ -32,6 +32,12 @@ $nextdom_table_title:$lightgolden;
     color: black !important;
     border-color: $lightgrey
 }
+.skin-nextdom .label-unity {
+    color: $darkgray !important;
+}
+.skin-nextdom .legend-title {
+  border-color: : $whitegray;
+}
 
 /* Checkbox */
 .skin-nextdom [type="checkbox"]:not(:checked):before,
@@ -41,6 +47,10 @@ $nextdom_table_title:$lightgolden;
 .skin-nextdom [type="checkbox"]:not(:checked):after,
 .skin-nextdom [type="checkbox"]:checked:after {
   color: $nextdom_accent;
+}
+.skin-nextdom .has-error [type="checkbox"]:checked:after,
+.skin-nextdom [type="checkbox"]:checked:after {
+    color: $nextdom_accent;
 }
 
 /* buttons */

@@ -395,10 +395,13 @@ body {
     margin-left: -2px;
 }
 .label-unity {
-    padding: 9px 0px 10px;
+    padding: 9px 15px 10px;
     font-size: 100%;
-    background-color: $white !important;
-    color: $darkgray !important;
+    font-weight: 500;
+}
+@media (min-width: 768px)
+.label-unity {
+    margin-left: -15px;
 }
 .label-badge {
     position: absolute;
@@ -410,7 +413,7 @@ body {
 }
 .legend-title {
   font-size: 16px;
-  border: 1px solid $whitegray;
+  border: 1px solid;
   padding: 5px 10px;
   margin-bottom: 15px;
   background-color: whitesmoke;

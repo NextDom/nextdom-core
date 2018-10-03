@@ -21,17 +21,17 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="Indique votre type de matériel">{{'Système / Hardware'}}</label>
+                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{'Indique votre type de matériel'}}">{{'Système / Hardware'}}</label>
                     <div class="btn-group col-lg-10 col-md-9 col-sm-9 col-xs-12">
                         <a class="btn btn-default btn-action" id="bt_resetHardwareType"><i class="fa fa-refresh">&nbsp;&nbsp;</i>{{'Rafraîchir'}}</a>
-                        <span class="label label-info label-value">{{ adminHardwareName }}</span>
+                        <span class="label label-value">{{ adminHardwareName }}</span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{'Clef d\'installation qui permet d\'identifier votre NextDom quand il communique avec le market'}}">{{'Clef d\'installation'}}</label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                    <div class="btn-group col-lg-10 col-md-9 col-sm-9 col-xs-12">
                         <a class="btn btn-warning" id="bt_resetHwKey"><i class="fa fa-bomb">&nbsp;&nbsp;</i>{{'Remise à zéro'}}</a>
-                        <span class="label label-info label-value">{{ adminHardwareKey }}</span>
+                        <span class="label label-value">{{ adminHardwareKey }}</span>
                     </div>
                 </div>
 
@@ -63,10 +63,10 @@
                 <legend class="legend-title">{{ 'Horodatage' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{'Durée de vie de votre connexion à NextDom si vous n\'avez pas coché la case enregistrer cet ordinateur'}}">{{'Durée de vie des sessions'}}</label>
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-10">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-8">
                         <input type="text" class="configKey form-control" data-l1key="session_lifetime">
                     </div>
-                    <div class="col-lg-7 col-md-5 col-sm-5 col-xs-2">
+                    <div class="col-lg-7 col-md-5 col-sm-5 col-xs-4">
                         <span class="label label-info label-unity">Heures</span>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                     <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{'Dernière date connue'}}</label>
                     <div class="btn-group col-lg-10 col-md-9 col-sm-9 col-xs-12">
                         <a class="btn btn-warning" id="bt_resetHour"><i class="fa fa-bomb">&nbsp;&nbsp;</i>{{'Remise à zéro'}}</a>
-                        <span class="label label-info label-value">{{ adminLastKnowDate }}</span>
+                        <span class="label label-value">{{ adminLastKnowDate }}</span>
                     </div>
                 </div>
                 <div class="form-group">
