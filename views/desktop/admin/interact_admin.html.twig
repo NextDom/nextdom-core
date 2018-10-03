@@ -18,8 +18,8 @@
                     {{ 'Plus la sensibilité est basse (proche de 1), plus la correspondance doit être exacte.' }}
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Sensibilité' }}</label>
-                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
+                    <label class="col-lg-3 col-md-4 col-sm-12 col-xs-12 control-label">{{ 'Sensibilité' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12">
                         <div class="input-group">
                             <span class="input-group-addon label-value">{{ '1 mot' }}</span>
                             <input type="text" class="configKey form-control" data-l1key="interact::confidence1"/>
@@ -33,8 +33,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Réduire le poids de' }}</label>
-                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
+                    <label class="col-lg-3 col-md-4 col-sm-12 col-xs-12 control-label">{{ 'Réduire le poids de' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12">
                         <div class="input-group">
                             <span class="input-group-addon label-value">{{ '1 mot' }}</span>
                             <input type="text" class="configKey form-control" data-l1key="interact::weigh1"/>
@@ -48,15 +48,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Interaction non comprise' }}</label>
-                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Interaction non comprise' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
                         <input type="checkbox" class="configKey" data-l1key="interact::noResponseIfEmpty" id="noResponseIfEmpty"/>
                         <label for="noResponseIfEmpty" class="control-label">{{'Ne pas répondre'}}</label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Regex générale d\'exclusion pour les interactions' }}</label>
-                    <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Regex générale d\'exclusion pour les interactions' }}</label>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
                         <textarea type="text" class="configKey form-control" data-l1key="interact::regexpExcludGlobal"></textarea>
                     </div>
                 </div>
@@ -152,7 +152,7 @@
 
                 <!-- Colors Section -->
                 <legend class="legend-title">
-                    {{ 'Couleurs' }}<a class="btn btn-acton btn-legend pull-right" id="bt_addColorConvert"><i class="fa fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                    {{ 'Couleurs' }}<a class="btn btn-action btn-legend pull-right" id="bt_addColorConvert"><i class="fa fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
                 </legend>
                 <table class="table table-condensed table-bordered" id="table_convertColor">
                     <thead>
@@ -161,7 +161,6 @@
                         <th>{{ 'Code HTML' }}</th>
                     </tr>
                     <tr class="filter" style="display: none;">
-                    <div class="col-lg-2">
                        <div class=" colorpicker-component colorpick input-group">
                           <td class="text"><input class="filter form-control" filterOn="color"/></td>
                           <td class="codeHtml"><input class="filter form-control" filterOn="codeHtml"/></td>
