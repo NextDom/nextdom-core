@@ -1,52 +1,65 @@
 <div class="box" id="osdb">
+    <!-- Header bar -->
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fa fa-terminal">&nbsp;&nbsp;</i>{{ 'OS/DB' }}</h3>
         <div class="box-tools pull-right">
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
+
+    <!-- Page content -->
     <div class="box-body">
         <form class="form-horizontal">
+
+            <!-- Alert section -->
             <div class="alert alert-danger alert-config">
                 {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à' }} {{ adminConfigs['product_name'] }}{{ '. L\'équipe' }} {{ adminConfigs['product_name'] }} {{ 'se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.' }}
             </div>
             <fieldset>
+
+                <!-- Console Section -->
                 <legend class="legend-title">{{ 'Console Système' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                        <a class="btn btn-danger" href="index.php?v=d&p=system"><i class="fa fa-exclamation-triangle"></i> {{ 'Lancer' }}</a>
+                        <a class="btn btn-danger" href="index.php?v=d&p=system"><i class="fa fa-exclamation-triangle">&nbsp;&nbsp;</i>{{ 'Lancer' }}</a>
                     </div>
                 </div>
+
+                <!-- File editor Section -->
                 <legend class="legend-title">{{ 'Editeur de fichiers' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Editeur' }}</label>
                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                        <a class="btn btn-danger" href="index.php?v=d&p=editor"><i class="fa fa-exclamation-triangle"></i> {{ 'Lancer' }}</a>
+                        <a class="btn btn-danger" href="index.php?v=d&p=editor"><i class="fa fa-exclamation-triangle">&nbsp;&nbsp;</i>{{ 'Lancer' }}</a>
                     </div>
                 </div>
+
+                <!-- DB Section -->
                 <legend class="legend-title">{{ 'Base de données' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                        <a class="btn btn-danger" href="index.php?v=d&p=database"><i class="fa fa-exclamation-triangle"></i> {{ 'Lancer' }}</a>
+                        <a class="btn btn-danger" href="index.php?v=d&p=database"><i class="fa fa-exclamation-triangle">&nbsp;&nbsp;</i>{{ 'Lancer' }}</a>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Utilisateur' }}</label>
-                    <div class="col-sm-1">
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                         <span class="label label-info label-config">{{ adminDbConfig['username'] }}</span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Mot de passe' }}</label>
-                    <div class="col-sm-1">
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                         <span class="label label-info label-config">{{ adminDbConfig['password'] }}</span>
                     </div>
                 </div>
             </fieldset>
         </form>
     </div>
+
+    <!-- Footer bar -->
     <div class="box-footer clearfix">
         <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
     </div>

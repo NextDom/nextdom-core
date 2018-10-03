@@ -7,36 +7,39 @@ $nextdom_polar_accent: $white;
 $nextdom_table_title:$lightgolden;
 
 /* Logos */
-.skin-nextdom .logo-mini-img{
+.logo-mini-img{
   content:url("/public/img/NextDom/NextDom_Square_AlphaBlackWhite.png");
 }
-.skin-nextdom .logo-lg-img{
-  content:url("/public/img/NextDom/NextDom_Wide_AlphaWhiteBlack.png");
+.logo-lg-img{
+  content:url("/public/img/NextDom/NextDom_Wide_AlphaBlackWhite.png");
+}
+.login-logo-img{
+  content:url("/public/img/NextDom/NextDom_Wide_AlphaBlackWhite.png");
 }
 .login-logo{
   background-color: $nextdom_accent;
 }
 
 /* Labels */
-.label-config {
+.skin-nextdom .label-config {
   background-color: $nextdom_accent;
 }
-.Link-Blue {
+.skin-nextdom .Link-Blue {
   color: $nextdom_accent;
 }
 
 /* Checkbox */
-[type="checkbox"]:not(:checked):before,
-[type="checkbox"]:checked:before {
+.skin-nextdom [type="checkbox"]:not(:checked):before,
+.skin-nextdom [type="checkbox"]:checked:before {
   background: $nextdom_polar_accent;
 }
-[type="checkbox"]:not(:checked):after,
-[type="checkbox"]:checked:after {
+.skin-nextdom [type="checkbox"]:not(:checked):after,
+.skin-nextdom [type="checkbox"]:checked:after {
   color: $nextdom_accent;
 }
 
 /* buttons */
-.btn-primary {
+.skin-nextdom .btn-primary {
   background-color: $nextdom_primary;
   border-color: $nextdom_primary;
 }
@@ -45,13 +48,25 @@ $nextdom_table_title:$lightgolden;
   border-color: $whitelightgray;
 }
 
-/* Elements */
-.tooltip-inner {
+/* Tables */
+.skin-nextdom .table-condensed>thead {
+  background-color: $nextdom_table_title;
+  border-bottom: 1px solid $lightgrey;
+  border-top: 1px solid $lightgrey;
+}
+.skin-nextdom .table-condensed {
+  background-color: $whitelightgray;
+}
+
+/* Tooltip */
+.skin-nextdom .tooltip-inner {
   background: $grey;
 }
-.tooltip-arrow {
+.skin-nextdom .tooltip-arrow {
   border-top-color: $grey;
 }
+
+/* Navs */
 .skin-nextdom .main-header .navbar {
   background-color: $nextdom_accent;
 }
