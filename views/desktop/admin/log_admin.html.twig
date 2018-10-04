@@ -1,55 +1,64 @@
 <div class="box" id="log_admin">
+    <!-- Header bar -->
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fas fa-pencil-square-o">&nbsp;&nbsp;</i>{{ 'Logs' }}</h3>
         <div class="box-tools pull-right">
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
+
+    <!-- Page content -->
     <div class="box-body">
         <form class="form-horizontal">
             <fieldset>
+
+                <!-- Timeline Section -->
                 <legend class="legend-title">{{ 'Timeline' }}</legend>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nombre maximum d\'évènements' }}</label>
-                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Nombre maximum d\'évènements' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                         <input type="text" class="configKey form-control" data-l1key="timeline::maxevent"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Supprimer tous les évènements' }}</label>
-                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Supprimer tous les évènements' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                         <a type="text" class="btn btn-danger" id="bt_removeTimelineEvent"><i class="fa fa-trash"></i> {{ 'Supprimer' }}</a>
                     </div>
                 </div>
+
+                <!-- Messages Section -->
                 <legend class="legend-title">{{ 'Messages' }}</legend>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Si erreur dans les logs' }}</label>
-                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                        <input type="checkbox" class="configKey" data-l1key="addMessageForErrorLog" checked/><label class="control-label">{{'Ajouter un message'}}</label>
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Si erreur dans les logs' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                        <input type="checkbox" class="configKey" data-l1key="addMessageForErrorLog" id="addMessageForErrorLog" checked/>
+                        <label for="addMessageForErrorLog" class="control-label">{{'Ajouter un message'}}</label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Action sur message' }}</label>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Action sur message' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                         <a class="btn btn-success" id="bt_addActionOnMessage"><i class="fa fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
                     </div>
                 </div>
                 <div id="div_actionOnMessage"></div>
             </fieldset>
-        </form>
-        <form class="form-horizontal">
+
+            <!-- Alertes Section -->
             <fieldset>
                 <legend class="legend-title">{{ 'Alertes' }}</legend>
                 {% for level, value in adminAlerts %}
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Ajouter un message à chaque' }} {{ value['name'] }}</label>
-                        <div class="col-sm-1">
-                            <input type="checkbox" class="configKey" data-l1key="alert::addMessageOn{{ level|capitalize }}"/>
+                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'A chaque' }} {{ value['name'] }}</label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                            <input type="checkbox" class="configKey" data-l1key="alert::addMessageOn{{ level|capitalize }}" id="addMessageOn"/>
+                            <label for="addMessageOn" class="control-label">{{'Ajouter un message'}}</label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Commande sur' }} {{ value['name'] }}</label>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Commande sur' }} {{ value['name'] }}</label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                             <div class="input-group">
                                 <input type="text" class="configKey form-control" data-l1key="alert::{{ level }}Cmd"/>
                                 <span class="input-group-btn">
@@ -60,13 +69,13 @@
                     </div>
                 {% endfor %}
             </fieldset>
-        </form>
-        <form class="form-horizontal">
+
+            <!-- Log Section -->
             <fieldset>
                 <legend class="legend-title">{{ 'Log' }}</legend>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Moteur de log' }}</label>
-                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Moteur de log' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                         <select class="configKey form-control" data-l1key="log::engine">
                             <option value="StreamHandler">{{ 'Defaut' }}</option>
                             <option value="SyslogHandler">{{ 'Syslog' }}</option>
@@ -76,33 +85,33 @@
                 </div>
                 <div class="logEngine SyslogUdp">
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Adresse syslog UDP' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Adresse syslog UDP' }}</label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                             <input type="text" class="configKey form-control" data-l1key="log::syslogudphost"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Port syslog UDP' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Port syslog UDP' }}</label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                             <input type="text" class="configKey form-control" data-l1key="log::syslogudpport"/>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Format des logs' }}</label>
-                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Format des logs' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                         <input type="text" class="configKey form-control" data-l1key="log::formatter"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nombre de lignes maximum dans un fichier de log' }}</label>
-                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Nombre de lignes maximum dans un fichier de log' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                         <input type="text" class="configKey form-control" data-l1key="maxLineLog"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Niveau de log par défaut' }}</label>
-                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Niveau de log par défaut' }}</label>
+                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                         <select class="configKey form-control" data-l1key="log::level">
                             <option value="100">{{ 'Debug' }}</option>
                             <option value="200">{{ 'Info' }}</option>
@@ -146,6 +155,8 @@
             </fieldset>
         </form>
     </div>
+
+    <!-- Footer bar -->
     <div class="box-footer clearfix">
         <a class="btn btn-success pull-right" id="bt_savelog_admin"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
         <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
