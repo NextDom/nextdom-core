@@ -328,4 +328,14 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $result = Utils::transformExpressionForEvaluation('1*2 + 3-#Test# == 12/3');
         $this->assertEquals('1*2+3-#Test#==12/3', $result);
     }
+
+    public function testEvaluateAndSymbols() {
+        $result = Utils::transformExpressionForEvaluation('133.5 > 50 && 1 == 0');
+        $this->assertEquals('133.5>50&&1==0', $result);
+    }
+
+    public function testEvaluateOrSymbols() {
+        $result = Utils::transformExpressionForEvaluation('133.5 > 50 || 1 == 0');
+        $this->assertEquals('133.5>50||1==0', $result);
+    }
 }
