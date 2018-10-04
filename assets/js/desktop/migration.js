@@ -48,9 +48,10 @@ $("#bt_saveMigration").on('click', function (event) {
 
 $("#bt_migrateNextDom").on('click', function (event) {
    var el = $(this);
-   bootbox.confirm('{{Etes-vous sûr de vouloir migrer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackupforMigration option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée}}', function (result) {
+   bootbox.confirm('{{Etes-vous sûr de vouloir migrer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackupforMigration option:selected').text() + '</b> ? {{Une fois lancée, cette opération ne peut être annulée}}', function (result) {
        if (result) {
            el.find('.fa-refresh').show();
+           el.find('.fa-file').hide();
            nextdom.backup.migrate({
                backup: $('#sel_restoreBackupforMigration').value(),
                error: function (error) {
@@ -151,6 +152,8 @@ $("#bt_migrateNextDom").on('click', function (event) {
             } else {
                 $('#bt_' + _log + 'NextDom .fa-refresh').hide();
                 $('.bt_' + _log + 'NextDom .fa-refresh').hide();
+                $('#bt_' + _log + 'NextDom .fa-file').show();
+                $('.bt_' + _log + 'NextDom .fa-file').show();
                 updateListBackup();
             }
         }
