@@ -424,6 +424,12 @@ body {
         text-align: center;
     }
 }
+@media (max-width: 991px) {}
+    .form-horizontal .control-label-big {
+        margin-bottom: 5px;
+        text-align: left;
+  }
+}
 
 /* Logos */
 .login-logo,
