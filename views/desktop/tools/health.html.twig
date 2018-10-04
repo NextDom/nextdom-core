@@ -78,13 +78,13 @@
                                 </a>
                             </h3>
                             {% if pluginData['nOk'] > 0 %}
-                                <span class="label label-danger pull-right">{{ pluginData['nOk'] }} {{ 'erreurs' }} </span>
+                                <span class="label label-danger label-sticker pull-right">{{ pluginData['nOk'] }} {{ 'erreurs' }} </span>
                             {% endif %}
                             {% if pluginData['pending'] > 0 %}
-                                <span class="label label-warning pull-right">{{ pluginData['pending'] }} {{ 'en cours' }} </span>
+                                <span class="label label-warning label-sticker pull-right">{{ pluginData['pending'] }} {{ 'en cours' }} </span>
                             {% endif %}
                             {% if pluginData['nOk'] == 0 and pluginData['pending'] == 0 %}
-                                <span class="label label-success pull-right">{{ 'OK' }}</span>
+                                <span class="label label-success label-sticker pull-right">{{ 'OK' }}</span>
                             {% endif %}
                             <i class="fas fa-cogs bt_configurationPlugin cursor pull-right icon-health" data-pluginid="{{ pluginData['plugin'].getId() }}"></i>
                             {% if pluginData['hasSpecificHealth'] %}

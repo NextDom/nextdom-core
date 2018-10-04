@@ -85,7 +85,7 @@
                             <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Gestion autonome du réseau' }}</label>
                             <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                                 <input type="checkbox" class="configKey" data-l1key="network::disableMangement" id="networkmanagement"/>
-                                <label for="networkmanagement" class="control-label">{{'Désactiver'}}</label>
+                                <label for="networkmanagement" class="control-label label-check">{{'Désactiver'}}</label>
                             </div>
                         </div>
                         <div class="form-group">
@@ -106,14 +106,15 @@
                                     <div class="alert alert-warning alert-config">{{ 'Attention : cette fonctionnalité n\'est pas disponible dans le service pack community (voir votre service pack sur votre page profil sur le market)' }}</div>
                                 {% else %}
                                     <div class="form-group">
-                                        <label class="col-xs-4 control-label">{{ 'Utiliser les DNS' }} {{ adminConfigs['product_name'] }}</label>
-                                        <div class="col-xs-8">
+                                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Utiliser les DNS' }} {{ adminConfigs['product_name'] }}</label>
+                                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                                             <input type="checkbox" class="configKey" data-l1key="{{ pageContent['networkkey'] }}::allowDNS"/>
+                                            <label for="networkkey" class="control-label label-check">{{'Autoriser'}}</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-xs-4 control-label">{{ 'Statut DNS' }}</label>
-                                        <div class="col-xs-8">
+                                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12">{{ 'Statut DNS' }}</label>
+                                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                                             {% if adminConfigs['market::allowDNS'] == 1 and adminDnsRun %}
                                                 <span class="label label-success">{{ 'Démarré : ' }} <a href="{{ pageContent['adminNetworkExternalAccess']  }}" target="_blank" class="link-dns-success">{{ adminNetworkExternalAccess }}</a></span>
                                             {% else %}
@@ -124,8 +125,8 @@
                                     <div class="form-group">
                                         <label class="col-xs-4 control-label">{{ 'Gestion' }}</label>
                                         <div class="col-xs-8">
-                                            <a class="btn btn-success" id="bt_restartDns"><i class="fa fa-play"></i> {{ '(Re)démarrer' }}</a>
-                                            <a class="btn btn-danger" id="bt_haltDns"><i class="fa fa-stop"></i> {{ 'Arrêter' }}</a>
+                                            <a class="btn btn-success" id="bt_restartDns"><i class="fas fa-play">&nbsp;&nbsp;</i>{{ 'Redémarrer' }}</a>
+                                            <a class="btn btn-danger" id="bt_haltDns"><i class="fas fa-stop">&nbsp;&nbsp;</i>{{ 'Arrêter' }}</a>
                                         </div>
                                     </div>
                                 {% endif %}
