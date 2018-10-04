@@ -175,7 +175,7 @@
                 ligne += '</td>';
                 ligne += '<td>';
                 if(isset(data[i].options) && isset(data[i].options.twoFactorAuthentification) && data[i].options.twoFactorAuthentification == 1 && isset(data[i].options.twoFactorAuthentificationSecret) && data[i].options.twoFactorAuthentificationSecret != ''){
-                    ligne += '<span class="label label-success label-sticker-big"">{{OK}}</span>';
+                    ligne += '<span class="label label-success label-sticker-big">{{OK}}</span>';
                     ligne += ' <a class="btn btn-danger bt_disableTwoFactorAuthentification"><i class="fas fa-ban">&nbsp;&nbsp;</i>{{Désactiver}}</span>';
                 }else{
                    ligne += '<span class="label label-danger label-sticker-big>{{NOK}}</span>';
