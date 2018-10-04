@@ -430,6 +430,18 @@ body {
         text-align: left;
   }
 }
+.label-icon {
+    padding: 6px 10px 8px 9px;
+    font-size: 100%;
+    border: 1px solid;
+    border-radius: 2px;
+    margin-left: -2px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+.label-icon>i {
+    vertical-align: middle;
+}
 
 /* Logos */
 .login-logo,
