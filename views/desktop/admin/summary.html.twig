@@ -1,25 +1,32 @@
 <div class="box" id="summary">
+    <!-- Header bar -->
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fas fa-table">&nbsp;&nbsp;</i>{{ 'Résumés' }}</h3>
         <div class="box-tools pull-right">
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
+
+    <!-- Page content -->
     <div class="box-body">
         <form class="form-horizontal">
             <fieldset>
-                <i class="fa fa-plus-circle pull-right cursor" id="bt_addObjectSummary"></i>
+
+                <!-- Summary Section -->
+                <legend class="legend-title">
+                    {{ 'Résumés domotique' }}<a class="btn btn-action btn-legend pull-right" id="bt_addObjectSummary"><i class="fa fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
+                </legend>
                 <table class="table table-condensed table-bordered" id="table_objectSummary">
                     <thead>
                     <tr>
-                        <th>{{ 'Clef' }}</th>
+                        <th>{{ 'Clé' }}</th>
                         <th>{{ 'Nom' }}</th>
                         <th>{{ 'Calcul' }}</th>
-                        <th>{{ 'Icone' }}</th>
+                        <th>{{ 'Icône' }}</th>
                         <th>{{ 'Unité' }}</th>
                         <th>{{ 'Méthode de comptage' }}</th>
-                        <th>{{ 'Affiché si valeur égale 0' }}</th>
-                        <th>{{ 'Liée à un virtuel' }}</th>
+                        <th>{{ 'Affichage si valeur nulle' }}</th>
+                        <th>{{ 'Lien à un virtuel' }}</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -28,6 +35,8 @@
             </fieldset>
         </form>
     </div>
+
+    <!-- Footer bar -->
     <div class="box-footer clearfix">
         <a class="btn btn-success pull-right" id="bt_savesummary"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
         <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>

@@ -27,9 +27,9 @@ $nextdom_table_title:$lightgolden;
 .skin-nextdom .Link-Blue {
   color: $nextdom_accent;
 }
-.skin-nextdom .label-value {
+.skin-nextdom .label-value, .skin-nextdom .label-icon {
     background-color: $whitegray;
-    color: black !important;
+    color: $black !important;
     border-color: $lightgrey
 }
 .skin-nextdom .label-unity, .skin-nextdom .label-unity-big {
@@ -38,6 +38,7 @@ $nextdom_table_title:$lightgolden;
 .skin-nextdom .legend-title {
     border-color: $whitegray;
 }
+
 
 /* Checkbox */
 .skin-nextdom [type="checkbox"]:not(:checked):before,
