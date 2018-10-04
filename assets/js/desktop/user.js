@@ -178,7 +178,7 @@
                     ligne += '<span class="label label-success label-sticker-big">{{OK}}</span>';
                     ligne += ' <a class="btn btn-danger bt_disableTwoFactorAuthentification"><i class="fas fa-ban">&nbsp;&nbsp;</i>{{Désactiver}}</span>';
                 }else{
-                   ligne += '<span class="label label-danger label-sticker-big>{{NOK}}</span>';
+                   ligne += '<span class="label label-danger label-sticker-big">{{NOK}}</span>';
                }
                ligne += '</td>';
                ligne += '<td>';
