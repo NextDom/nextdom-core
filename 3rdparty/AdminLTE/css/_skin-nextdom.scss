@@ -27,6 +27,18 @@ $nextdom_table_title:$lightgolden;
 .skin-nextdom .Link-Blue {
   color: $nextdom_accent;
 }
+.skin-nextdom .label-value, .skin-nextdom .label-icon {
+    background-color: $whitegray;
+    color: $black !important;
+    border-color: $lightgrey
+}
+.skin-nextdom .label-unity, .skin-nextdom .label-unity-big {
+    color: $darkgray !important;
+}
+.skin-nextdom .legend-title {
+    border-color: $whitegray;
+}
+
 
 /* Checkbox */
 .skin-nextdom [type="checkbox"]:not(:checked):before,
@@ -37,15 +49,24 @@ $nextdom_table_title:$lightgolden;
 .skin-nextdom [type="checkbox"]:checked:after {
   color: $nextdom_accent;
 }
+.skin-nextdom .has-error [type="checkbox"]:checked:after,
+.skin-nextdom .has-error [type="checkbox"]:checked:after {
+    color: $red;
+}
 
 /* buttons */
 .skin-nextdom .btn-primary {
   background-color: $nextdom_primary;
   border-color: $nextdom_primary;
 }
-.btn-app {
+.skin-nextdom .btn-app {
   background-color: $whitegray;
   border-color: $whitelightgray;
+}
+.skin-nextdom .btn-action {
+    background-color: $darkgray;
+    color: $white;
+    border-color: $grey;
 }
 
 /* Tables */
@@ -232,4 +253,9 @@ $nextdom_table_title:$lightgolden;
 .skin-nextdom .ui-dialog .ui-dialog-titlebar{
   background-color: $nextdom_accent;
   padding: 0px 15px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar-thumb {
+    background-color: $nextdom_accent;
 }
