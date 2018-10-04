@@ -160,7 +160,7 @@
                 ligne += '<span class="userAttr" data-l1key="login" />';
                 ligne += '</td>';
                 ligne += '<td>';
-                ligne += '<label><input type="checkbox" class="userAttr" data-l1key="enable" '+disable+' />{{Actif}}</label><br/>';
+                ligne += '<label class="form-group"><input type="checkbox" class="userAttr" data-l1key="enable" '+disable+' />{{Actif}}</label>';
                 ligne += '<label><input type="checkbox" class="userAttr" data-l1key="options" data-l2key="localOnly" '+disable+' />{{Local}}</label>';
                 ligne += '</td>';
                 ligne += '<td style="width:175px;">';
@@ -175,10 +175,10 @@
                 ligne += '</td>';
                 ligne += '<td>';
                 if(isset(data[i].options) && isset(data[i].options.twoFactorAuthentification) && data[i].options.twoFactorAuthentification == 1 && isset(data[i].options.twoFactorAuthentificationSecret) && data[i].options.twoFactorAuthentificationSecret != ''){
-                    ligne += '<span class="label label-success" style="font-size:1em;">{{OK}}</span>';
-                    ligne += ' <a class="btn btn-danger btn-sm bt_disableTwoFactorAuthentification"><i class="fas fa-times"></i> {{Désactiver}}</span>';
+                    ligne += '<span class="label label-success label-sticker-big" style="font-size:1em;">{{OK}}</span>';
+                    ligne += ' <a class="btn btn-danger bt_disableTwoFactorAuthentification"><i class="fas fa-ban">&nbsp;&nbsp;</i>{{Désactiver}}</span>';
                 }else{
-                   ligne += '<span class="label label-danger" style="font-size:1em;">{{NOK}}</span>';
+                   ligne += '<span class="label label-danger label-sticker-big" style="font-size:1em;">{{NOK}}</span>';
                }
                ligne += '</td>';
                ligne += '<td>';
@@ -186,12 +186,12 @@
                ligne += '</td>';
                ligne += '<td>';
                if(disable == ''){
-                   ligne += '<a class="cursor bt_changeHash btn btn-warning btn-xs pull-right" title="{{Renouveler la clef API}}"><i class="fas fa-refresh"></i> {{Régénérer API}}</a>';
+                   ligne += '<a class="cursor bt_changeHash btn btn-xs btn-warning btn-xs pull-right" title="{{Renouveler la clef API}}"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{Regénération API}}</a>';
                    if (ldapEnable != '1') {
-                    ligne += '<a class="btn btn-xs btn-danger pull-right bt_del_user" style="margin-bottom : 5px;"><i class="far fa-trash-alt"></i> {{Supprimer}}</a>';
-                    ligne += '<a class="btn btn-xs btn-warning pull-right bt_change_mdp_user" style="margin-bottom : 5px;"><i class="fas fa-pencil-alt"></i> {{Mot de passe}}</a>';
+                    ligne += '<a class="btn btn-xs btn-danger pull-right bt_del_user" style="margin-bottom : 5px;"><i class="fas fa-trash-alt">&nbsp;&nbsp;</i>{{Supprimer}}</a>';
+                    ligne += '<a class="btn btn-xs btn-warning pull-right bt_change_mdp_user" style="margin-bottom : 5px;"><i class="fas fa-lock"></i>{{Mot de passe}}</a>';
                 }
-                ligne += '<a class="btn btn-xs btn-warning pull-right bt_manage_restrict_rights" style="margin-bottom : 5px;"><i class="fas fa-align-right"></i> {{Droits}}</a>';
+                ligne += '<a class="btn btn-xs btn-warning pull-right bt_manage_restrict_rights" style="margin-bottom : 5px;"><i class="fas fa-align-right">&nbsp;&nbsp;</i>{{Droits}}</a>';
             }
             ligne += '</td>';
             ligne += '</tr>';
