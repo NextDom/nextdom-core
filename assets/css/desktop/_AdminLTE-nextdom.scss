@@ -490,6 +490,11 @@ body {
 .fixed .content-wrapper, .fixed .right-side {
     padding-top: 58px;
 }
+@media (max-width: 767px) {
+    .fixed .content-wrapper, .fixed .right-side {
+        padding-top: 106px;
+    }
+}
 .container-fluid{
   padding-right: 0;
   padding-left: 0;
