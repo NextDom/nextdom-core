@@ -182,7 +182,7 @@
                }
                ligne += '</td>';
                ligne += '<td>';
-               ligne += '<span class="userAttr" data-l1key="options" data-l2key="lastConnection"></span>';
+               ligne += '<span class="userAttr label-value" data-l1key="options" data-l2key="lastConnection"></span>';
                ligne += '</td>';
                ligne += '<td>';
                if(disable == ''){
