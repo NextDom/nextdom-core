@@ -280,36 +280,39 @@ body {
 .register-box-body {
   background: #fff;
   padding: 20px;
-  border-top: 0;
+
   color: #666;
   box-shadow: 0 20px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-  border-radius: 7px;
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
+  border:{
+      top: 0;
+      radius: 7px;
+      top-left-radius: 0px;
+      top-right-radius: 0px;
+  }
 }
 
 /* Cards */
 .card {
   box-shadow: 0 1px 4px 0 rgba(0,0,0,.14);
-}
-.card {
   border: 0;
-  margin-bottom: 60px;
-  margin-top: 40px;
-  border-radius: 6px;
+  margin:{
+      bottom: 60px;
+      top: 40px;
+      radius: 6px;
+  }
   color: #333;
-  background: #fff;
   width: 100%;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
-}
-.card {
   position: relative;
   display: flex;
   flex-direction: column;
   min-width: 0;
+  background: $white;
   word-wrap: break-word;
-  background-color: $white;
-  background-clip: border-box;
+  background:{
+    color: $white;
+    clip: border-box;
+  }
   border: 1px solid $whitegray;
   border-radius: .25rem;
 }
@@ -326,16 +329,18 @@ body {
   border-bottom: none;
   background: transparent;
 }
-.card-header:first-child {
-  border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
-  margin-top: -25px;
-}
+ 
 .card-header {
   padding: .75rem 0.9rem;
   margin-bottom: 0;
   background-color: $white;
   border-bottom: 1px solid $whitegray;
+      &:first-child {
+      border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
+      margin-top: -25px;
+    }
 }
+
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text {
   border-radius: 5px;
   background-color: $darkgray;
