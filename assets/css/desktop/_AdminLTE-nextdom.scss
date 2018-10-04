@@ -344,8 +344,10 @@ body {
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text {
   border-radius: 5px;
   background-color: $darkgray;
-  margin-top: -10px;
-  margin-right: 10px;
+  margin:{
+    top: -10px;
+    right: 10px;
+  }
   float: left;
   height: 45px;
   width: 50px;
@@ -356,10 +358,7 @@ body {
   font-size: 2em;
 }
 .card-body {
-  margin-top: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-bottom: 10px;
+  margin-top: 10px, 10px, 10px, 10px;
 }
 .card-category {
     position: relative;
@@ -393,16 +392,20 @@ body {
 }
 .label-value {
     padding: 8px 10px 10px 12px;
-    font-size: 100%;
-    font-weight: 400;
+  font:{
+    size: 100%;
+    weight: 400;
+    }
     border: 1px solid;
     border-radius: 2px;
     margin-left: -2px;
 }
 .label-unity, .label-unity-big {
     padding: 9px 0px 10px;
-    font-size: 100%;
-    font-weight: 500;
+    font:{
+      size: 100%;
+      weight: 500;
+    }
 }
 @media (max-width: 767px) {
     .label-unity-big {
@@ -440,13 +443,16 @@ body {
     font-size: 100%;
     border: 1px solid;
     border-radius: 2px;
-    margin-left: -2px;
-    margin-top: 2px;
-    margin-bottom: 2px;
-}
-.label-icon>i {
+    margin:{
+      left: -2px;
+      top: 2px;
+      bottom: 2px;
+    }
+  &>i {
     vertical-align: middle;
+  }
 }
+ 
 .label-check {
     font-weight: 400;
 }
@@ -475,13 +481,14 @@ body {
 .login-logo,
 .register-logo {
   font-size: 35px;
-  text-align: center;
-  padding-bottom: 15px;
-  padding-top: 25px;
-  margin-bottom: 0px;
   font-weight: 300;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  text-align: center;
+  padding:{.
+    bottom: 15px;
+    top: 25px;
+  }
   margin-bottom: 0px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 .main-header .logo {
     height: 52px;
@@ -548,7 +555,8 @@ input[type="checkbox"] {
   content: '';
   position: absolute;
   left:0px; top: 0px;
-  width: 18px; height: 17px;
+  width: 18px; 
+  height: 17px;
   border: 1px solid #ccc;
   border-radius: 2px;
 }
