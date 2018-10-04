@@ -7,6 +7,13 @@ body {
 .main-header {
   z-index: 1030;
 }
+::-webkit-scrollbar-thumb {
+    width: 80px;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
 
 /* fas fa glyphicon ion*/
 .btn-app > .fa,
@@ -280,36 +287,39 @@ body {
 .register-box-body {
   background: #fff;
   padding: 20px;
-  border-top: 0;
+
   color: #666;
   box-shadow: 0 20px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-  border-radius: 7px;
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
+  border:{
+      top: 0;
+      radius: 7px;
+      top-left-radius: 0px;
+      top-right-radius: 0px;
+  }
 }
 
 /* Cards */
 .card {
   box-shadow: 0 1px 4px 0 rgba(0,0,0,.14);
-}
-.card {
   border: 0;
-  margin-bottom: 60px;
-  margin-top: 40px;
+  margin:{
+      bottom: 60px;
+      top: 40px;
+  }
   border-radius: 6px;
   color: #333;
-  background: #fff;
   width: 100%;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
-}
-.card {
   position: relative;
   display: flex;
   flex-direction: column;
   min-width: 0;
+  background: $white;
   word-wrap: break-word;
-  background-color: $white;
-  background-clip: border-box;
+  background:{
+    color: $white;
+    clip: border-box;
+  }
   border: 1px solid $whitegray;
   border-radius: .25rem;
 }
@@ -326,21 +336,25 @@ body {
   border-bottom: none;
   background: transparent;
 }
-.card-header:first-child {
-  border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
-  margin-top: -25px;
-}
+
 .card-header {
   padding: .75rem 0.9rem;
   margin-bottom: 0;
   background-color: $white;
   border-bottom: 1px solid $whitegray;
+      &:first-child {
+      border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
+      margin-top: -25px;
+    }
 }
+
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text {
   border-radius: 5px;
   background-color: $darkgray;
-  margin-top: -10px;
-  margin-right: 10px;
+  margin:{
+    top: -10px;
+    right: 10px;
+  }
   float: left;
   height: 45px;
   width: 50px;
@@ -351,10 +365,7 @@ body {
   font-size: 2em;
 }
 .card-body {
-  margin-top: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-bottom: 10px;
+  margin-top: 10px, 10px, 10px, 10px;
 }
 .card-category {
     position: relative;
@@ -386,11 +397,27 @@ body {
   padding: 9px 10px 10px;
   font-size: 100%;
 }
-.label-unity {
+.label-value {
+    padding: 8px 10px 10px 12px;
+  font:{
+    size: 100%;
+    weight: 400;
+    }
+    border: 1px solid;
+    border-radius: 2px;
+    margin-left: -2px;
+}
+.label-unity, .label-unity-big {
     padding: 9px 0px 10px;
-    font-size: 100%;
-    background-color: $white !important;
-    color: $darkgray !important;
+    font:{
+      size: 100%;
+      weight: 500;
+    }
+}
+@media (max-width: 767px) {
+    .label-unity-big {
+        margin-left: 15px;
+    }
 }
 .label-badge {
     position: absolute;
@@ -402,7 +429,7 @@ body {
 }
 .legend-title {
   font-size: 16px;
-  border: 1px solid $whitegray;
+  border: 1px solid;
   padding: 5px 10px;
   margin-bottom: 15px;
   background-color: whitesmoke;
@@ -412,18 +439,63 @@ body {
         text-align: center;
     }
 }
+@media (max-width: 991px) {
+    .form-horizontal .control-label-big {
+        margin-bottom: 5px;
+        text-align: left;
+  }
+}
+.label-icon {
+    padding: 6px 10px 8px 9px;
+    font-size: 100%;
+    border: 1px solid;
+    border-radius: 2px;
+    margin:{
+      left: -2px;
+      top: 2px;
+      bottom: 2px;
+    }
+  &>i {
+    vertical-align: middle;
+  }
+}
+
+.label-check {
+    font-weight: 400;
+}
+
+.label-sticker {
+    margin:{
+        left: 15px;
+        right: 15px;
+  }
+    font-size: 100%;
+}
+
+.label-sticker-big {
+    font-size: 100%;
+    padding:{
+      top: 10px;
+      bottom: 10px;
+    }
+    margin:{
+      left: 15px;
+      right: 15px;
+   }
+}
 
 /* Logos */
 .login-logo,
 .register-logo {
   font-size: 35px;
-  text-align: center;
-  padding-bottom: 15px;
-  padding-top: 25px;
-  margin-bottom: 0px;
   font-weight: 300;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  text-align: center;
+  padding:{.
+    bottom: 15px;
+    top: 25px;
+  }
   margin-bottom: 0px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 .main-header .logo {
     height: 52px;
@@ -445,6 +517,11 @@ body {
 .fixed .content-wrapper, .fixed .right-side {
     padding-top: 58px;
 }
+@media (max-width: 767px) {
+    .fixed .content-wrapper, .fixed .right-side {
+        padding-top: 106px;
+    }
+}
 .container-fluid{
   padding-right: 0;
   padding-left: 0;
@@ -462,6 +539,10 @@ body {
 }
 #div_pageContainer{
   top: 10px;
+}
+.container-split {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 /* Checkboxes */
@@ -481,7 +562,8 @@ input[type="checkbox"] {
   content: '';
   position: absolute;
   left:0px; top: 0px;
-  width: 18px; height: 17px;
+  width: 18px;
+  height: 17px;
   border: 1px solid #ccc;
   border-radius: 2px;
 }

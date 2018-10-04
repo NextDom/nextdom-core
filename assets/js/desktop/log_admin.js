@@ -100,10 +100,14 @@ function addActionOnMessage(_action) {
     }
     var div = '<div class="actionOnMessage">';
     div += '<div class="form-group ">';
-    div += '<label class="col-sm-1 control-label">Action</label>';
+    div += '<label class="col-sm-4 control-label">Action</label>';
     div += '<div class="col-sm-2">';
-    div += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour desactiver l\'action}}" />';
-    div += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="background" title="{{Cocher pour que la commande s\'éxecute en parrallele des autres actions}}" />';
+    div += '<input type="checkbox" class="expressionAttr" id="MessageActiv" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'action}}" />';
+    div += '<label for="MessageActiv" class="control-label label-check">{{Activer}}</label>';
+    div += '</div>';
+    div += '<div class="col-sm-2">';
+    div += '<input type="checkbox" class="expressionAttr" id="MessagePara" data-l1key="options" data-l2key="background" title="{{Cocher pour que la commande s\'éxecute en parrallele des autres actions}}" />';
+    div += '<label for="MessagePara" class="control-label label-check">{{En parallèle}}</label>';
     div += '</div>';
     div += '<div class="col-sm-4">';
     div += '<div class="input-group">';
