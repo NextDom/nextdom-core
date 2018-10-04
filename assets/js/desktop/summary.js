@@ -138,7 +138,7 @@ function addObjectSummary(_summary) {
     tr += '<option value="text">{{Texte}}</option>';
     tr += '</select>';
     tr += '</td>';
-    tr += '<td>';
+    tr += '<td class="col-xs-1">';
     tr += '<a class="objectSummaryAction btn btn-action btn-sm" data-l1key="chooseIcon"><i class="fas fa-plus"></i></a>';
     tr += '<span class="label label-icon objectSummaryAttr" data-l1key="icon"></span>';
     tr += '</td>';
