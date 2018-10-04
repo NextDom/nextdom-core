@@ -16,6 +16,12 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use NextDom\Helpers\Utils;
+
+const MAX_DURATION_TIME = 59;
+const GARBAGE_COLLECTOR_LIMIT = 30;
+
+// Check if the script as started from command line
 if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SERVER['argc'])) {
     header("Statut: 404 Page non trouvée");
     header('HTTP/1.0 404 Not Found');
@@ -25,6 +31,8 @@ if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SE
     exit();
 }
 
+// Command line args are stored in $_GET var
+// php jeeCron.php test=1 > $_GET['test'] = 1
 if (isset($argv)) {
     foreach ($argv as $arg) {
         $argList = explode('=', $arg);
@@ -36,161 +44,219 @@ if (isset($argv)) {
 
 require_once __DIR__ . "/core.inc.php";
 
-if (init('cron_id') != '') {
-    if (nextdom::isStarted() && config::byKey('enableCron', 'core', 1, true) == 0) {
-        die(__('Tous les crons sont actuellement désactivés', __FILE__));
+/**
+ * Set cron in error and stop the execution of the script
+ *
+ * @param \cron $cron Cron object
+ * @param string $msg Message to log
+ * @param int $startTime Start time of the cron
+ */
+function setCronErrorAndDie($cron, $msg, $startTime)
+{
+    $cron->setState('Not found');
+    $cron->setPID();
+    $cron->setCache('runtime', strtotime('now') - $startTime);
+    log::add('cron', 'error', __($msg) . $cron->getName());
+    die();
+}
+
+/**
+ * Set cron error on exception
+ *
+ * @param \cron $cron Cron object
+ * @param Exception $e Exception informations
+ * @param string $logChannel Target log channel
+ * @param int $startTime Start time of the cron
+ */
+function setCronErrorOnException($cron, $e, $logChannel, $startTime) {
+    $cron->setState('error');
+    $cron->setPID('');
+    $cron->setCache('runtime', strtotime('now') - $startTime);
+    $logicalId = config::genKey();
+    if ($e->getCode() != 0) {
+        $logicalId = $cron->getName() . '::' . $e->getCode();
     }
-    $datetime = date('Y-m-d H:i:s');
-    $datetimeStart = strtotime('now');
-    $cron = cron::byId(init('cron_id'));
+    echo '[Erreur] ' . $cron->getName() . ' : ' . log::exception($e);
+    log::add($logChannel, 'error', __('Erreur sur ') . $cron->getName() . ' : ' . log::exception($e), $logicalId);
+}
+
+/**
+ * Call cron task method class
+ *
+ * @param string $classToCall Class to call
+ * @param string $methodToCall Method to call
+ * @param mixed $option Option for the method
+ */
+function callCronClassMethod($classToCall, $methodToCall, $option) {
+    if ($option !== null) {
+        $classToCall::$methodToCall($option);
+    } else {
+        $classToCall::$methodToCall();
+    }
+}
+
+/**
+ * Call cron function
+ *
+ * @param string $functionToCall Function to call
+ * @param mixed $option Option for the function
+ */
+function callCronFunction($functionToCall, $option) {
+    if ($option !== null) {
+        $functionToCall($option);
+    } else {
+        $functionToCall();
+    }
+}
+
+/**
+ * Start cron where the target is a class method
+ *
+ * @param \cron $cron Cron object
+ * @param array $option Execution option
+ * @param int $startTime Start time.
+ */
+function startCronTargetMethod($cron, $option, $startTime)
+{
+    $classToCall = '';
+    try {
+        $classToCall = $cron->getClass();
+        $methodToCall = $cron->getFunction();
+        if (class_exists($classToCall) && method_exists($classToCall, $methodToCall)) {
+            if ($cron->getDeamon() == 0) {
+                callCronClassMethod($classToCall, $methodToCall, $option);
+            } else {
+                $gc = 0;
+                while (true) {
+                    $cycleStartTime = getmicrotime();
+                    callCronClassMethod($classToCall, $methodToCall, $option);
+                    $gc++;
+                    if ($gc > GARBAGE_COLLECTOR_LIMIT) {
+                        gc_collect_cycles();
+                        $gc = 0;
+                    }
+                    if ($cron->getDeamonSleepTime() > 1) {
+                        sleep($cron->getDeamonSleepTime());
+                    } else {
+                        $cycleDuration = getmicrotime() - $cycleStartTime;
+                        if ($cycleDuration < $cron->getDeamonSleepTime()) {
+                            usleep(round(($cron->getDeamonSleepTime() - $cycleDuration) * 1000000));
+                        }
+                    }
+                }
+            }
+        } else {
+            setCronErrorAndDie($cron, '[Erreur] Classe ou fonction non trouvée ', $startTime);
+        }
+    } catch (Exception $e) {
+        setCronErrorOnException($cron, $e, $classToCall, $startTime);
+    }
+}
+
+/**
+ * Start cron where the target is a global function
+ *
+ * @param \cron $cron Cron object
+ * @param array $option Execution option
+ * @param int $startTime Start time.
+ */
+function startCronTargetFunction($cron, $option, $startTime)
+{
+    $functionToCall = '';
+    try {
+        $functionToCall = $cron->getFunction();
+        if (function_exists($functionToCall)) {
+            if ($cron->getDeamon() == 0) {
+                callCronFunction($functionToCall, $option);
+            } else {
+                $gc = 0;
+                while (true) {
+                    $cycleStartTime = getmicrotime();
+                    callCronFunction($functionToCall, $option);
+                    $gc++;
+                    if ($gc > GARBAGE_COLLECTOR_LIMIT) {
+                        gc_collect_cycles();
+                        $gc = 0;
+                    }
+                    $cycleDuration = getmicrotime() - $cycleStartTime;
+                    if ($cron->getDeamonSleepTime() > 1) {
+                        sleep($cron->getDeamonSleepTime());
+                    } else {
+                        if ($cycleDuration < $cron->getDeamonSleepTime()) {
+                            usleep(round(($cron->getDeamonSleepTime() - $cycleDuration) * 1000000));
+                        }
+                    }
+                }
+            }
+        } else {
+            setCronErrorAndDie($cron, '[Erreur] Non trouvée ', $startTime);
+        }
+    } catch (Exception $e) {
+        setCronErrorOnException($cron, $e, $functionToCall, $startTime);
+    }
+}
+
+/**
+ * Start single cron job by his id
+ *
+ * @param int $cronId Id of the cron
+ */
+function startSingleCronById($cronId)
+{
+    if (nextdom::isStarted() && config::byKey('enableCron', 'core', 1, true) == 0) {
+        die(__('Tous les crons sont actuellement désactivés'));
+    }
+    $cron = cron::byId($cronId);
     if (!is_object($cron)) {
         die();
     }
+}
 
-    try {
-        $cron->setState('run');
-        $cron->setPID(getmypid());
-        $cron->setLastRun($datetime);
-        $option = $cron->getOption();
-        if ($cron->getClass() != '') {
-            $class = $cron->getClass();
-            $function = $cron->getFunction();
-            if (class_exists($class) && method_exists($class, $function)) {
-                if ($cron->getDeamon() == 0) {
-                    if ($option !== null) {
-                        $class::$function($option);
-                    } else {
-                        $class::$function();
-                    }
-                } else {
-                    $gc = 0;
-                    while (true) {
-                        $cycleStartTime = getmicrotime();
-                        if ($option !== null) {
-                            $class::$function($option);
-                        } else {
-                            $class::$function();
-                        }
-                        $gc++;
-                        if ($gc > 30) {
-                            gc_collect_cycles();
-                            $gc = 0;
-                        }
-                        if ($cron->getDeamonSleepTime() > 1) {
-                            sleep($cron->getDeamonSleepTime());
-                        } else {
-                            $cycleDuration = getmicrotime() - $cycleStartTime;
-                            if ($cycleDuration < $cron->getDeamonSleepTime()) {
-                                usleep(round(($cron->getDeamonSleepTime() - $cycleDuration) * 1000000));
-                            }
-                        }
-                    }
-                }
-            } else {
-                $cron->setState('Not found');
-                $cron->setPID();
-                $cron->setCache('runtime', strtotime('now') - $datetimeStart);
-                log::add('cron', 'error', __('[Erreur] Classe ou fonction non trouvée ', __FILE__) . $cron->getName());
-                die();
-            }
-        } else {
+/**
+ * Start single cron job
+ *
+ * @param cron $cron Cron objet
+ */
+function startSingleCron($cron)
+{
+    $datetime = date('Y-m-d H:i:s');
+    $startTime = strtotime('now');
 
-            $function = $cron->getFunction();
-            if (function_exists($function)) {
-                if ($cron->getDeamon() == 0) {
-                    if ($option !== null) {
-                        $function($option);
-                    } else {
-                        $function();
-                    }
-                } else {
-                    $gc = 0;
-                    while (true) {
-                        $cycleStartTime = getmicrotime();
-                        if ($option !== null) {
-                            $function($option);
-                        } else {
-                            $function();
-                        }
-                        $gc++;
-                        if ($gc > 30) {
-                            gc_collect_cycles();
-                            $gc = 0;
-                        }
-                        $cycleDuration = getmicrotime() - $cycleStartTime;
-                        if ($cron->getDeamonSleepTime() > 1) {
-                            sleep($cron->getDeamonSleepTime());
-                        } else {
-                            if ($cycleDuration < $cron->getDeamonSleepTime()) {
-                                usleep(round(($cron->getDeamonSleepTime() - $cycleDuration) * 1000000));
-                            }
-                        }
-                    }
-                }
-            } else {
-                $cron->setState('Not found');
-                $cron->setPID();
-                $cron->setCache('runtime', strtotime('now') - $datetimeStart);
-                log::add('cron', 'error', __('[Erreur] Non trouvée ', __FILE__) . $cron->getName());
-                die();
-            }
-        }
-        if ($cron->getOnce() == 1) {
-            $cron->remove(false);
-        } else {
-            if (!$cron->refresh()) {
-                die();
-            }
+    $cron->setState('run');
+    $cron->setPID(getmypid());
+    $cron->setLastRun($datetime);
+    $option = $cron->getOption();
+    if ($cron->getClass() != '') {
+        startCronTargetMethod($cron, $option, $startTime);
+    } else {
+        startCronTargetFunction($cron, $option, $startTime);
+    }
+    if ($cron->getOnce() == 1) {
+        $cron->remove(false);
+    } else {
+        if ($cron->refresh()) {
             $cron->setState('stop');
             $cron->setPID();
-            $cron->setCache('runtime', strtotime('now') - $datetimeStart);
-        }
-        die();
-    } catch (Exception $e) {
-        $cron->setState('error');
-        $cron->setPID('');
-        $cron->setCache('runtime', strtotime('now') - $datetimeStart);
-        $logicalId = config::genKey();
-        if ($e->getCode() != 0) {
-            $logicalId = $cron->getName() . '::' . $e->getCode();
-        }
-        echo '[Erreur] ' . $cron->getName() . ' : ' . log::exception($e);
-
-        if (isset($class) && $class != '') {
-            log::add($class, 'error', __('Erreur sur ', __FILE__) . $cron->getName() . ' : ' . log::exception($e), $logicalId);
-        } else if (isset($function) && $function != '') {
-            log::add($function, 'error', __('Erreur sur ', __FILE__) . $cron->getName() . ' : ' . log::exception($e), $logicalId);
-        } else {
-            log::add('cron', 'error', __('Erreur sur ', __FILE__) . $cron->getName() . ' : ' . log::exception($e), $logicalId);
-        }
-    } catch (Error $e) {
-        $cron->setState('error');
-        $cron->setPID('');
-        $cron->setCache('runtime', strtotime('now') - $datetimeStart);
-        $logicalId = config::genKey();
-        if ($e->getCode() != 0) {
-            $logicalId = $cron->getName() . '::' . $e->getCode();
-        }
-        echo '[Erreur] ' . $cron->getName() . ' : ' . log::exception($e);
-        if (isset($class) && $class != '') {
-            log::add($class, 'error', __('Erreur sur ', __FILE__) . $cron->getName() . ' : ' . log::exception($e), $logicalId);
-        } else if (isset($function) && $function != '') {
-            log::add($function, 'error', __('Erreur sur ', __FILE__) . $cron->getName() . ' : ' . log::exception($e), $logicalId);
-        } else {
-            log::add('cron', 'error', __('Erreur sur ', __FILE__) . $cron->getName() . ' : ' . log::exception($e), $logicalId);
+            $cron->setCache('runtime', strtotime('now') - $startTime);
         }
     }
-} else {
+}
+
+/**
+ * Start all crons jobs
+ */
+function startAllCrons()
+{
     if (cron::jeeCronRun()) {
         die();
     }
     $started = nextdom::isStarted();
 
-    set_time_limit(59);
+    set_time_limit(MAX_DURATION_TIME);
     cron::setPidFile();
 
     if ($started && config::byKey('enableCron', 'core', 1, true) == 0) {
-        die(__('Tous les crons sont actuellement désactivés', __FILE__));
+        die(__('Tous les crons sont actuellement désactivés'));
     }
     foreach (cron::all() as $cron) {
         try {
@@ -210,6 +276,7 @@ if (init('cron_id') != '') {
                     $cron->start();
                 }
             }
+            // Stop cron task if timeout is reached
             if ($cron->getState() == 'run' && ($duration / 60) >= $cron->getTimeout()) {
                 $cron->stop();
             }
@@ -225,16 +292,18 @@ if (init('cron_id') != '') {
             if ($cron->getOnce() != 1) {
                 $cron->setState('error');
                 $cron->setPID('');
-                echo __('[Erreur master] ', __FILE__) . $cron->getName() . ' : ' . log::exception($e);
-                log::add('cron', 'error', __('[Erreur master] ', __FILE__) . $cron->getName() . ' : ' . $e->getMessage());
-            }
-        } catch (Error $e) {
-            if ($cron->getOnce() != 1) {
-                $cron->setState('error');
-                $cron->setPID('');
-                echo __('[Erreur master] ', __FILE__) . $cron->getName() . ' : ' . log::exception($e);
                 log::add('cron', 'error', __('[Erreur master] ', __FILE__) . $cron->getName() . ' : ' . $e->getMessage());
             }
         }
     }
+}
+
+/**
+ * Entry point
+ */
+$cronId = Utils::init('cron_id');
+if ($cronId != '') {
+    startSingleCronById($cronId);
+} else {
+    startAllCrons();
 }
