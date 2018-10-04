@@ -1,137 +1,117 @@
 <div class="box" id="users">
+    <!-- Header bar -->
     <div class="box-header with-border">
         <legend ><i class="fas fa-users">&nbsp;&nbsp;</i>{{ 'Gestion des utilisateurs' }}</legend>
         <div class="box-tools pull-right">
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
+
+    <!-- Page content -->
     <div class="box-body">
-        <div class="box" id="div_administration">
-            <div class="box-header">
-                <legend class="legend-title"><i class="icon personne-toilet1"></i> {{ 'Liste des utilisateurs' }}
-                    <div class="box-tools pull-right">
-                        {% if userLdapEnabled != '1' %}
-                            {% if userSupportExists %}
-                                <a class="btn btn-danger" id="bt_supportAccess" data-enable="0"><i class="fas fa-user"></i> {{ 'Désactiver accès support' }}</a>
-                            {% else %}
-                                <a class="btn btn-success" id="bt_supportAccess" data-enable="1"><i class="fas fa-user"></i> {{ 'Activer accès support' }}</a>
-                            {% endif %}
-                            <a class="btn btn-warning" id="bt_addUser"><i class="fas fa-plus-circle"></i> {{ 'Ajouter un utilisateur' }}</a>
-                        {% endif %}
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                    </div>
-                </legend>
-            </div>
-            <div class="box-body">
-                <div class="tab-pane" id="user">
 
-                    <table class="table table-condensed table-bordered" id="table_user">
-                        <thead>
-                        <th>{{ 'Utilisateur' }}</th>
-                        <th style="width: 100px;">{{ 'Actif' }}</th>
-                        <th>{{ 'Profil' }}</th>
-                        <th>{{ 'Clef API' }}</th>
-                        <th>{{ 'Double authentification' }}</th>
-                        <th>{{ 'Dernière connexion' }}</th>
+        <!-- Users section -->
+        <legend class="legend-title">{{ 'Liste des utilisateurs' }}
+            <div class="box-tools pull-right">
+                {% if userLdapEnabled != '1' %}
+                    {% if userSupportExists %}
+                        <a class="btn btn-danger btn-legend" id="bt_supportAccess" data-enable="0"><i class="fas fa-user"></i> {{ 'Désactiver accès support' }}</a>
+                    {% else %}
+                        <a class="btn btn-success btn-legend" id="bt_supportAccess" data-enable="1"><i class="fas fa-user"></i> {{ 'Activer accès support' }}</a>
+                    {% endif %}
+                    <a class="btn btn-warning btn-legend" id="bt_addUser"><i class="fas fa-plus-circle"></i> {{ 'Ajouter un utilisateur' }}</a>
+                {% endif %}
+            </div>
+        </legend>
+        <div class="tab-pane" id="user">
+            <table class="table table-condensed table-bordered" id="table_user">
+                <thead>
+                <th>{{ 'Utilisateur' }}</th>
+                <th style="width: 100px;">{{ 'Actif' }}</th>
+                <th>{{ 'Profil' }}</th>
+                <th>{{ 'Clé API' }}</th>
+                <th>{{ 'Double authentification' }}</th>
+                <th>{{ 'Dernière connexion' }}</th>
+                <th>{{ 'Actions' }}</th>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- Sessions section -->
+        <legend class="legend-title">{{ 'Sessions actives' }}</legend>
+        <form class="form-horizontal">
+            <fieldset>
+                <table class="table table-condensed table-bordered">
+                    <thead>
+                    <tr>
+                        <th style="width: 250px;">{{ 'ID' }}</th>
+                        <th style="width: 250px;">{{ 'Utilisateur' }}</th>
+                        <th style="width: 250px;">{{ 'IP' }}</th>
+                        <th style="width: 250px;">{{ 'Date' }}</th>
                         <th>{{ 'Actions' }}</th>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="box">
-            <div class="box-header">
-                <legend class="legend-title">{{ 'Sessions actives' }}</legend>
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                </div>
-            </div>
-            <div class="box-body">
-                <form class="form-horizontal">
-                    <fieldset>
-                        <table class="table table-condensed table-bordered">
-                            <thead>
-                            <tr>
-                                <th style="width: 250px;">{{ 'ID' }}</th>
-                                <th style="width: 250px;">{{ 'Utilisateur' }}</th>
-                                <th style="width: 250px;">{{ 'IP' }}</th>
-                                <th style="width: 250px;">{{ 'Date' }}</th>
-                                <th>{{ 'Actions' }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% if userSessionsList|length > 0 %}
-                                {% for sessionId, sessionData in userSessionsList %}
-                                    {% if sessionData['ip'] is not defined %}
-                                        {% set sessionData = sessionData|merge({'ip': ''}) %}
-                                    {% endif %}
-                                    {% if sessionData['datetime'] is not defined %}
-                                        {% set sessionData = sessionData|merge({'datetime': ''}) %}
-                                    {% endif %}
-                                    <tr data-id="{{ sessionId }}">
-                                        <td>{{ sessionData['login'] }}</td>
-                                        <td>{{ sessionData['ip'] }}</td>
-                                        <td>{{ sessionData['datetime'] }}</td>
-                                        <td><a class="btn btn-xs btn-warning bt_deleteSession"><i class="fa fa-sign-out"></i> {{ 'Déconnecter' }}</a></td>
-                                    </tr>
-                                {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if userSessionsList|length > 0 %}
+                        {% for sessionId, sessionData in userSessionsList %}
+                            {% if sessionData['ip'] is not defined %}
+                                {% set sessionData = sessionData|merge({'ip': ''}) %}
                             {% endif %}
-                            </tbody>
-                        </table>
-                    </fieldset>
-                </form>
-            </div>
-        </div>
-        <div class="box">
-            <div class="box-header">
-                <legend class="legend-title">{{ 'Périphériques enregistrés' }}
-                    <div class="box-tools pull-right">
-                        <a class="btn btn-xs btn-warning" id="bt_removeAllRegisterDevice"><i class="fas fa-trash"></i> {{ 'Supprimer tout' }}</a>
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                    </div>
-                </legend>
-            </div>
-            <div class="box-body">
-                <form class="form-horizontal">
-                    <fieldset>
-                        <table class="table table-bordered table-condensed">
-                            <thead>
-                            <tr>
-                                <th style="width: 250px;">{{ 'ID' }}</th>
-                                <th style="width: 250px;">{{ 'Utilisateur' }}</th>
-                                <th style="width: 250px;">{{ 'IP' }}</th>
-                                <th style="width: 250px;">{{ 'Date' }}</th>
-                                <th>{{ 'Action' }}</th>
+                            {% if sessionData['datetime'] is not defined %}
+                                {% set sessionData = sessionData|merge({'datetime': ''}) %}
+                            {% endif %}
+                            <tr data-id="{{ sessionId }}">
+                                <td>{{ sessionData['login'] }}</td>
+                                <td>{{ sessionData['ip'] }}</td>
+                                <td>{{ sessionData['datetime'] }}</td>
+                                <td><a class="btn btn-warning bt_deleteSession"><i class="fas fa-sign-out">&nbsp;&nbsp;</i>{{ 'Déconnecter' }}</a></td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            {% for user in usersList %}
-                                {% if user.getOptions('registerDevice') is iterable and user.getOptions('registerDevice')|length > 0 %}
-                                    {% for deviceId, deviceData in user.getOptions('registerDevice') %}
-                                        <tr data-key="{{ deviceId }}" data-user_id="{{ user.getId() }}">
-                                            <td>{{ deviceId|slice(0, 10) }}</td>
-                                            <td>{{ user.getLogin() }}</td>
-                                            <td>{{ deviceData['ip'] }}</td>
-                                            <td>{{ deviceData['datetime'] }}</td>
-                                            <td><a class="btn btn-warning btn-xs bt_removeRegisterDevice"><i class="fas fa-trash"></i> {{ 'Supprimer' }}</a></td>
-                                        </tr>
-                                    {% endfor %}
-                                {% endif %}
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </fieldset>
-                </form>
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+                </table>
+            </fieldset>
+        </form>
+
+        <!-- Periphériques section -->
+        <legend class="legend-title">{{ 'Périphériques enregistrés' }}
+            <div class="box-tools pull-right">
+                <a class="btn btn-warning btn-legend" id="bt_removeAllRegisterDevice"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer tout' }}</a>
             </div>
-        </div>
+        </legend>
+        <form class="form-horizontal">
+            <fieldset>
+                <table class="table table-bordered table-condensed">
+                    <thead>
+                    <tr>
+                        <th style="width: 250px;">{{ 'ID' }}</th>
+                        <th style="width: 250px;">{{ 'Utilisateur' }}</th>
+                        <th style="width: 250px;">{{ 'IP' }}</th>
+                        <th style="width: 250px;">{{ 'Date' }}</th>
+                        <th>{{ 'Action' }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in usersList %}
+                        {% if user.getOptions('registerDevice') is iterable and user.getOptions('registerDevice')|length > 0 %}
+                            {% for deviceId, deviceData in user.getOptions('registerDevice') %}
+                                <tr data-key="{{ deviceId }}" data-user_id="{{ user.getId() }}">
+                                    <td>{{ deviceId|slice(0, 10) }}</td>
+                                    <td>{{ user.getLogin() }}</td>
+                                    <td>{{ deviceData['ip'] }}</td>
+                                    <td>{{ deviceData['datetime'] }}</td>
+                                    <td><a class="btn btn-warning bt_removeRegisterDevice"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a></td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </fieldset>
+        </form>
+
+        <!-- New user modal section -->
         <div class="modal fade" id="md_newUser">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -141,19 +121,19 @@
                     </div>
                     <div class="modal-body">
                         <div style="display: none;" id="div_newUserAlert"></div>
-                        <center>
-                            <input class="form-control" type="text" id="in_newUserLogin" placeholder="{{ 'Identifiant' }}"/><br/><br/>
-                            <input class="form-control" type="password" id="in_newUserMdp" placeholder="{{ 'Mot de passe' }}"/>
-                        </center>
+                        <input class="form-control form-group" type="text" id="in_newUserLogin" placeholder="{{ 'Identifiant ...' }}"/><br/><br/>
+                        <input class="form-control" type="password" id="in_newUserMdp" placeholder="{{ 'Mot de passe ...' }}"/>
                     </div>
                     <div class="modal-footer">
-                        <a class="btn btn-default" data-dismiss="modal">{{ 'Annuler' }}</a>
-                        <a class="btn btn-primary" id="bt_newUserSave"><i class="far fa-check-circle"></i> {{ 'Enregistrer' }}</a>
+                        <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-ban">&nbsp;&nbsp;</i>{{ 'Annuler' }}</a>
+                        <a class="btn btn-success" id="bt_newUserSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Valider' }}</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Footer bar -->
     <div class="box-footer clearfix">
         <a class="btn btn-success pull-right" id="bt_saveUser"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
         <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
