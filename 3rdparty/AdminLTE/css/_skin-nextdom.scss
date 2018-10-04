@@ -254,3 +254,8 @@ $nextdom_table_title:$lightgolden;
   background-color: $nextdom_accent;
   padding: 0px 15px;
 }
+
+/* Scrollbar */
+::-webkit-scrollbar-thumb {
+    background-color: $nextdom_accent;
+}
