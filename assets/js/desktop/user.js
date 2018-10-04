@@ -182,16 +182,16 @@
                }
                ligne += '</td>';
                ligne += '<td>';
-               ligne += '<span class="userAttr label-value" data-l1key="options" data-l2key="lastConnection"></span>';
+               ligne += '<span class="userAttr label label-value" data-l1key="options" data-l2key="lastConnection"></span>';
                ligne += '</td>';
                ligne += '<td>';
                if(disable == ''){
-                   ligne += '<a class="cursor bt_changeHash btn btn-xs btn-warning btn-xs pull-right" title="{{Renouveler la clef API}}"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{Regénération API}}</a>';
+                   ligne += '<a class="cursor bt_changeHash btn btn-sm btn-warning btn-xs pull-right" title="{{Renouveler la clef API}}"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{Regénération API}}</a>';
                    if (ldapEnable != '1') {
-                    ligne += '<a class="btn btn-xs btn-danger pull-right bt_del_user" style="margin-bottom : 5px;"><i class="fas fa-trash-alt">&nbsp;&nbsp;</i>{{Supprimer}}</a>';
-                    ligne += '<a class="btn btn-xs btn-warning pull-right bt_change_mdp_user" style="margin-bottom : 5px;"><i class="fas fa-lock"></i>{{Mot de passe}}</a>';
+                    ligne += '<a class="btn btn-sm btn-danger pull-right bt_del_user" style="margin-bottom : 5px;"><i class="fas fa-trash-alt">&nbsp;&nbsp;</i>{{Supprimer}}</a>';
+                    ligne += '<a class="btn btn-sm btn-warning pull-right bt_change_mdp_user"><i class="fas fa-lock">&nbsp;&nbsp;</i>{{Mot de passe}}</a>';
                 }
-                ligne += '<a class="btn btn-xs btn-warning pull-right bt_manage_restrict_rights" style="margin-bottom : 5px;"><i class="fas fa-align-right">&nbsp;&nbsp;</i>{{Droits}}</a>';
+                ligne += '<a class="btn btn-sm btn-warning pull-right bt_manage_restrict_rights"><i class="fas fa-align-right">&nbsp;&nbsp;</i>{{Droits}}</a>';
             }
             ligne += '</td>';
             ligne += '</tr>';
