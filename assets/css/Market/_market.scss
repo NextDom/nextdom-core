@@ -141,7 +141,7 @@
     bottom: 0;
     background-color: $nextdom_blue;
     line-height: 2em;
-    padding:{
+    padding: {
         left: 1em;
         right: 1em;
     }
@@ -190,10 +190,6 @@
 #div_pluginAlternativeMarketForJeedomAlert {
     /*    height: 100%;*/
     display: none;
-}
-
-#md_modal {
-    padding: 0;
 }
 
 #plugin-modal .row {
