@@ -1,4 +1,4 @@
-/* Skin: NextDom */
+/* Skin: Red */
 
 /* Accent colors */
 $nextdom_accent: $red;
@@ -8,10 +8,10 @@ $nextdom_table_title:$lightgolden;
 $nextdom_gray_title: $whitegray;
 
 /* Theme base */
-.skin-nextdom .icon_theme_color {
+.skin-red .icon_theme_color {
   color: $nextdom_accent;
 }
-.skin-nextdom .backgroundColor{
+.skin-red .backgroundColor{
   background-color: $nextdom_accent;
 }
 
@@ -28,226 +28,226 @@ $nextdom_gray_title: $whitegray;
 .login-logo{
   background-color: $nextdom_accent;
 }
-.skin-nextdom .main-header .logo {
+.skin-red .main-header .logo {
   background-color: $nextdom_accent;
   color: $nextdom_polar_accent;
   border-bottom: 0 solid transparent;
 }
-.skin-nextdom .main-header .logo:hover {
+.skin-red .main-header .logo:hover {
   background-color: $nextdom_accent;
 }
-.skin-nextdom .main-header li.user-header {
+.skin-red .main-header li.user-header {
   background-color: $nextdom_accent;
 }
-.skin-nextdom .content-header {
+.skin-red .content-header {
   background: transparent;
 }
 
 /* Labels & Texts */
-.skin-nextdom .text_color {
+.skin-red .text_color {
   color: $nextdom_accent;
 }
-.skin-nextdom .label-config {
+.skin-red .label-config {
   background-color: $nextdom_accent;
 }
-.skin-nextdom .Link-Blue {
+.skin-red .Link-Blue {
   color: $nextdom_accent;
 }
-.skin-nextdom .label-value, .skin-nextdom .label-icon {
+.skin-red .label-value, .skin-red .label-icon {
     background-color: $nextdom_gray_title;
     color: $black !important;
     border-color: $lightgrey
 }
-.skin-nextdom .label-unity, .skin-nextdom .label-unity-big {
+.skin-red .label-unity, .skin-red .label-unity-big {
     color: $darkgray !important;
 }
-.skin-nextdom .legend-title {
+.skin-red .legend-title {
     border-color: $nextdom_gray_title;
 }
 
 /* Checkbox */
-.skin-nextdom [type="checkbox"]:not(:checked):before,
-.skin-nextdom [type="checkbox"]:checked:before {
+.skin-red [type="checkbox"]:not(:checked):before,
+.skin-red [type="checkbox"]:checked:before {
   background: $nextdom_polar_accent;
 }
-.skin-nextdom [type="checkbox"]:not(:checked):after,
-.skin-nextdom [type="checkbox"]:checked:after {
+.skin-red [type="checkbox"]:not(:checked):after,
+.skin-red [type="checkbox"]:checked:after {
   color: $nextdom_accent;
 }
-.skin-nextdom .has-error [type="checkbox"]:checked:after,
-.skin-nextdom .has-error [type="checkbox"]:checked:after {
+.skin-red .has-error [type="checkbox"]:checked:after,
+.skin-red .has-error [type="checkbox"]:checked:after {
     color: $red;
 }
 
 /* buttons */
-.skin-nextdom .btn-primary {
+.skin-red .btn-primary {
   background-color: $nextdom_primary;
   border-color: $nextdom_primary;
 }
-.skin-nextdom .btn-app {
+.skin-red .btn-app {
   background-color: $whitegray;
   border-color: $whitelightgray;
 }
-.skin-nextdom .btn-action {
+.skin-red .btn-action {
     background-color: $darkgray;
     color: $nextdom_polar_accent;
     border-color: $grey;
 }
 
 /* Tables */
-.skin-nextdom .table-condensed>thead {
+.skin-red .table-condensed>thead {
   background-color: $nextdom_table_title;
   border-bottom: 1px solid $lightgrey;
   border-top: 1px solid $lightgrey;
 }
-.skin-nextdom .table-condensed {
+.skin-red .table-condensed {
   background-color: $whitelightgray;
 }
 
 /* Tooltip */
-.skin-nextdom .tooltip-inner {
+.skin-red .tooltip-inner {
   background: $grey;
 }
-.skin-nextdom .tooltip-arrow {
+.skin-red .tooltip-arrow {
   border-top-color: $grey;
 }
 
 /* Navs */
-.skin-nextdom .main-header .navbar {
+.skin-red .main-header .navbar {
   background-color: $nextdom_accent;
 }
-.skin-nextdom .main-header .navbar .nav > li > a {
+.skin-red .main-header .navbar .nav > li > a {
   color: $nextdom_polar_accent;
 }
-.skin-nextdom .main-header .navbar .nav > li > a:hover,
-.skin-nextdom .main-header .navbar .nav > li > a:active,
-.skin-nextdom .main-header .navbar .nav > li > a:focus,
-.skin-nextdom .main-header .navbar .nav .open > a,
-.skin-nextdom .main-header .navbar .nav .open > a:hover,
-.skin-nextdom .main-header .navbar .nav .open > a:focus,
-.skin-nextdom .main-header .navbar .nav > .active > a {
+.skin-red .main-header .navbar .nav > li > a:hover,
+.skin-red .main-header .navbar .nav > li > a:active,
+.skin-red .main-header .navbar .nav > li > a:focus,
+.skin-red .main-header .navbar .nav .open > a,
+.skin-red .main-header .navbar .nav .open > a:hover,
+.skin-red .main-header .navbar .nav .open > a:focus,
+.skin-red .main-header .navbar .nav > .active > a {
   background: rgba(0, 0, 0, 0.1);
   color: $nextdom_gray_title;
 }
-.skin-nextdom .main-header .navbar .sidebar-toggle {
+.skin-red .main-header .navbar .sidebar-toggle {
   color: $nextdom_polar_accent;
 }
-.skin-nextdom .main-header .navbar .sidebar-toggle:hover {
+.skin-red .main-header .navbar .sidebar-toggle:hover {
   color: $nextdom_gray_title;
   background: rgba(0, 0, 0, 0.1);
 }
-.skin-nextdom .main-header .navbar .sidebar-toggle {
+.skin-red .main-header .navbar .sidebar-toggle {
   color: $nextdom_polar_accent;
 }
-.skin-nextdom .main-header .navbar .sidebar-toggle:hover {
+.skin-red .main-header .navbar .sidebar-toggle:hover {
   background-color: $nextdom_accent;
 }
 @media (max-width: 767px) {
-  .skin-nextdom .main-header .navbar .dropdown-menu li.divider {
+  .skin-red .main-header .navbar .dropdown-menu li.divider {
     background-color: rgba(255, 255, 255, 0.1);
   }
-  .skin-nextdom .main-header .navbar .dropdown-menu li a {
+  .skin-red .main-header .navbar .dropdown-menu li a {
     color: $nextdom_polar_accent;
   }
-  .skin-nextdom .main-header .navbar .dropdown-menu li a:hover {
+  .skin-red .main-header .navbar .dropdown-menu li a:hover {
     background: $nextdom_accent;
   }
 }
 
 /* Sidebar */
-.skin-nextdom .wrapper,
-.skin-nextdom .main-sidebar,
-.skin-nextdom .left-side {
+.skin-red .wrapper,
+.skin-red .main-sidebar,
+.skin-red .left-side {
   background-color: #222d32;
 }
-.skin-nextdom .user-panel > .info,
-.skin-nextdom .user-panel > .info > a {
+.skin-red .user-panel > .info,
+.skin-red .user-panel > .info > a {
   color: $nextdom_polar_accent;
 }
-.skin-nextdom .sidebar-menu > li.header {
+.skin-red .sidebar-menu > li.header {
   color: $nextdom_accent;
   background: #1a2226;
 }
-.skin-nextdom .sidebar-menu > li > a {
+.skin-red .sidebar-menu > li > a {
   border-left: 3px solid transparent;
 }
-.skin-nextdom .sidebar-menu > li:hover > a,
-.skin-nextdom .sidebar-menu > li.menu-open > a {
+.skin-red .sidebar-menu > li:hover > a,
+.skin-red .sidebar-menu > li.menu-open > a {
   color: $nextdom_polar_accent;
   background: #1e282c;
   border-left-color: $nextdom_accent;
 }
-.skin-nextdom .sidebar-menu > li > .treeview-menu {
+.skin-red .sidebar-menu > li > .treeview-menu {
   margin: 0 1px;
   background: #2c3b41;
 }
-.skin-nextdom .sidebar a {
+.skin-red .sidebar a {
   color: #b8c7ce;
 }
-.skin-nextdom .sidebar a:hover {
+.skin-red .sidebar a:hover {
   text-decoration: none;
 }
-.skin-nextdom .sidebar-menu .treeview-menu > li > a {
+.skin-red .sidebar-menu .treeview-menu > li > a {
   color: #8aa4af;
 }
-.skin-nextdom .sidebar-menu .treeview-menu > li.active > a,
-.skin-nextdom .sidebar-menu .treeview-menu > li > a:hover {
+.skin-red .sidebar-menu .treeview-menu > li.active > a,
+.skin-red .sidebar-menu .treeview-menu > li > a:hover {
   color: $nextdom_polar_accent;
 }
-.skin-nextdom .sidebar-form {
+.skin-red .sidebar-form {
   border-radius: 3px;
   border: 1px solid #374850;
   margin: 10px 10px;
 }
-.skin-nextdom .sidebar-form input[type="text"],
-.skin-nextdom .sidebar-form .btn {
+.skin-red .sidebar-form input[type="text"],
+.skin-red .sidebar-form .btn {
   box-shadow: none;
   background-color: #374850;
   border: 1px solid transparent;
   height: 35px;
 }
-.skin-nextdom .sidebar-form input[type="text"] {
+.skin-red .sidebar-form input[type="text"] {
   color: $grey;
   border-top-left-radius: 2px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 2px;
 }
-.skin-nextdom .sidebar-form input[type="text"]:focus,
-.skin-nextdom .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
+.skin-red .sidebar-form input[type="text"]:focus,
+.skin-red .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   background-color: $nextdom_polar_accent;
   color: $grey;
 }
-.skin-nextdom .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
+.skin-red .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   border-left-color: $nextdom_polar_accent;
 }
-.skin-nextdom .sidebar-form .btn {
+.skin-red .sidebar-form .btn {
   color: $darkgray;
   border-top-left-radius: 0;
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
   border-bottom-left-radius: 0;
 }
-.skin-nextdom.layout-top-nav .main-header > .logo {
+.skin-red.layout-top-nav .main-header > .logo {
   background-color: $nextdom_accent;
   color: $nextdom_polar_accent;
   border-bottom: 0 solid transparent;
 }
-.skin-nextdom.layout-top-nav .main-header > .logo:hover {
+.skin-red.layout-top-nav .main-header > .logo:hover {
   background-color: $nextdom_accent;
 }
 
 /* Scrollbar */
-.skin-nextdom::-webkit-scrollbar-thumb{
+.skin-red::-webkit-scrollbar-thumb{
   background:$nextdom_accent;
   background-color: $nextdom_accent;
 }
 
 /* Title */
-.skin-nextdom .ui-dialog .ui-dialog-title{
+.skin-red .ui-dialog .ui-dialog-title{
   color: $nextdom_polar_accent;
 }
-.skin-nextdom .ui-dialog .ui-dialog-titlebar{
+.skin-red .ui-dialog .ui-dialog-titlebar{
   background-color: $nextdom_accent;
   padding: 0px 15px;
 }
@@ -259,7 +259,7 @@ $nextdom_gray_title: $whitegray;
 /*
  * Skin: Red
  * ---------
- 
+
 .skin-red .logo-mini-img{
   content:url("/public/img/NextDom/NextDom_Square_AlphaBlackWhite.png");
 }
