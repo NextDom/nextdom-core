@@ -106,9 +106,14 @@ body {
   right: 3px;
   font-size: 12px;
 }
+
+/* Tooltip */
 .tooltip-inner {
   padding: 8px 8px;
   border-radius: 8px;
+}
+.tooltip.in {
+  opacity: 0.95;
 }
 
 /* User panel */
@@ -646,18 +651,18 @@ input[type="checkbox"] {
 
 /* Info-box */
 .info-box {
-  min-height: 70px;
+  min-height: 65px;
   margin-bottom: 10px;
 }
 .info-box-icon {
-  height: 70px;
-  width: 70px;
+  height: 65px;
+  width: 65px;
   font-size: 38px;
-  line-height: 70px;
+  line-height: 65px;
 }
 .info-box-content {
-  padding: 14px 10px;
-  margin-left: 70px;
+  padding: 12px 10px;
+  margin-left: 65px;
 }
 .info-box-text-2 {
   text-transform:capitalize;
