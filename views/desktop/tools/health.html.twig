@@ -14,7 +14,7 @@
             <fieldset>
 
                 <!-- Nextdom health section -->
-                <legend class="legend-title">
+                <legend class="legend-title legend-first-btn">
                     {{ 'Détails de la santé de votre solution, survolez les icônes pour plus d\'informations.' }}<a class="btn btn-action btn-legend pull-right" id="bt_benchmarkNextDom"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Lancer un Benchmark' }}</a>
                 </legend>
                 {% for informations in healthInformations %}
@@ -64,7 +64,7 @@
             <fieldset>
 
                 <!-- Plugins health section -->
-                <legend class="legend-title" style="padding-bottom:0px">
+                <legend class="legend-title legend-first-btn">
                     {{ 'Détails de la santé de vos plugins, cliquez sur le titre pour avoir le détail puis survolez les icônes pour plus d\'informations.' }}
                 </legend>
                 {% if healthPluginDataToShow %}

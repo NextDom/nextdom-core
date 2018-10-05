@@ -7,7 +7,7 @@ function updateNoteList() {
             var note = $('#div_noteManagerDisplay').getValues('.noteAttr')[0];
             var ul = '';
             for (var i in notes) {
-                ul += '<li class="cursor li_noteDisplay" data-id="' + notes[i].id + '"><a class="legend-title">' + notes[i].name + '</a></li>';
+                ul += '<li class="cursor li_noteDisplay" data-id="' + notes[i].id + '"><a class="label-value">' + notes[i].name + '</a></li>';
             }
             $('#ul_noteList').empty().append(ul);
             if (note.id != '') {
