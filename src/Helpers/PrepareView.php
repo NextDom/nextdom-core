@@ -104,7 +104,7 @@ class PrepareView
 
         try {
             if (!\nextdom::isStarted()) {
-                $pageData['alertMsg'] = 'NextDom est en cours de démarrage, veuillez patienter . La page se rechargera automatiquement une fois le démarrage terminé.';
+                $pageData['alertMsg'] = 'NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.';
             }
             ob_start();
             \include_file('desktop', $page, 'php');
@@ -165,7 +165,7 @@ class PrepareView
 
         try {
             if (!\nextdom::isStarted()) {
-                $pageData['ALERT_MSG'] = 'NextDom est en cours de démarrage, veuillez patienter . La page se rechargera automatiquement une fois le démarrage terminé.';
+                $pageData['ALERT_MSG'] = 'NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.';
             }
             $pageData['content'] = self::getContent($render, $pageData, $page, $currentPlugin);
         } catch (\Exception $e) {
@@ -229,7 +229,7 @@ class PrepareView
 
                 $icon = '';
                 $name = $categoryCode;
-                
+
                 if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode])) {
                     $icon = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode]['icon'];
                     $name = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode]['name'];
@@ -476,5 +476,5 @@ class PrepareView
             }
         }
     }
-    
+
 }
