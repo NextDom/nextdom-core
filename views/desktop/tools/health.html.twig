@@ -2,44 +2,38 @@
     <div class="box-header with-border">
         <h3 class="box-title"><i class="icon divers-caduceus3"></i> {{ 'Santé de NextDom' }}</h3>
         <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-too">
-                <i class="fas fa-tachometer-alt pull-right cursor" id="bt_benchmarkNextDom"></i>
-            </button>
+
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
-    <div class="box-body">
-        <div class="row">
-            {% for informations in healthInformations %}
-
-                <div class="col-sm-6">
-                    {% set box_color = 'red' %}
-                    {% if informations['state'] == 1 or informations['state'] == true %}
-                        {% set box_color = 'green' %}
-                    {% elseif informations['state'] == 2 %}
-                        {% set box_color = 'yellow' %}
-                    {% endif %}
-                    <div class="info-box bg-{{ box_color }}">
-                        <span class="info-box-icon">
-                            {% if informations['icon'] is defined %}
-                                <i class="fas {{ informations['icon'] }}"></i>
-                            {% endif %}
+        <div class="box-body">
+        <legend class="legend-title">
+            {{ 'Détails de la santé de votre solution' }}<a class="btn btn-action btn-legend pull-right" id="bt_benchmarkNextDom"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Lancer un Benchmark' }}</a>
+        </legend>
+        {% for informations in healthInformations %}
+            <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                {% set box_color = 'red' %}
+                {% if informations['state'] == 1 or informations['state'] == true %}
+                    {% set box_color = 'green' %}
+                {% elseif informations['state'] == 2 %}
+                    {% set box_color = 'yellow' %}
+                {% endif %}
+                <div class="info-box bg-{{ box_color }}">
+                    <span class="info-box-icon" data-toggle="tooltip" title="" data-original-title="{{ informations['comment'] }}">
+                        {% if informations['icon'] is defined %}
+                            <i class="fas {{ informations['icon'] }}"></i>
+                        {% endif %}
+                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text"><b>{{ informations['name'] }}</b></span>
+                        <span class="info-box-text info-box-text-2">
+                            {{ informations['result'] }}
                         </span>
-                        <div class="info-box-content">
-                            <span class="info-box-text"><b>{{ informations['name'] }}</b></span>
-                            <span class="info-box-text">
-                                {{ informations['result'] }}
-                            </span>
-                            <span class="info-box-text">
-                                {{ informations['comment'] }}
-                            </span>
-                        </div>
                     </div>
                 </div>
-
-            {% endfor %}
-        </div>
+            </div>
+        {% endfor %}
     </div>
 </div>
 <div class="box">
@@ -77,8 +71,7 @@
                             {% if pluginData['hasSpecificHealth'] %}
                                 <i data-pluginname="{{ pluginData['plugin'].getName() }}"
                                    data-pluginid="{{ pluginData['plugin'].getId() }}"
-                                   class="fas fa-medkit bt_healthSpecific pull-right cursor icon-health"
-                                   data-toggle="tooltip" title="" data-original-title="Santé spécifique"></i>
+                                   class="fas fa-medkit bt_healthSpecific pull-right cursor icon-health" data-toggle="tooltip" title="" data-original-title="Santé spécifique"></i>
                             {% endif %}
                             {% if pluginData['hasOwnDaemon'] %}
                                 {% if pluginData['daemonAuto'] == 1 %}
@@ -102,7 +95,7 @@
                         <div id="config_{{ pluginData['plugin'].getId() }}" class="panel-collapse collapse">
                             <div class="box-body">
                                 {% if pluginData['showOnlyTable'] %}
-                                    <div class="col-sm-6">
+                                  <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
                                         {% if pluginData['hasDependency'] %}
                                             {% if pluginData['dependencyState'] == 'ok' %}
                                                 {% set box_color = 'green' %}
@@ -123,7 +116,7 @@
                                                   </span>
                                                 <div class="info-box-content">
                                                     <span class="info-box-text"><b>{{ 'Dépendance' }}</b></span>
-                                                    <span class="info-box-text">
+                                                    <span class="info-box-text info-box-text-2">
                                                  {{ text }}
                                                       </span>
                                                 </div>
@@ -131,7 +124,7 @@
                                         {% endif %}
                                     </div>
 
-                                    <div class="col-sm-6">
+                                    <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
                                     {% if pluginData['hasOwnDaemon'] %}
                                         {% if pluginData['daemonLaunchable'] == 'ok' %}
                                             {% set box_color = 'green' %}
@@ -151,16 +144,16 @@
                                                   </span>
                                             <div class="info-box-content">
                                                 <span class="info-box-text"><b>{{ 'Configuration démon' }}</b></span>
-                                                <span class="info-box-text">
+                                                <span class="info-box-text info-box-text-2">
                                                  {{ text }}
                                                 </span>
-                                                <span class="info-box-text">
+                                                <span class="info-box-text info-box-text-2">
                                                 {{ pluginData['daemonLaunchableMessage'] }}
                                                 </span>
                                             </div>
                                         </div>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
                                         {% if pluginData['daemonState'] == 'ok' %}
                                             {% set box_color = 'green' %}
                                             {% set text = 'OK' %}
@@ -179,10 +172,10 @@
                                                   </span>
                                             <div class="info-box-content">
                                                 <span class="info-box-text"><b>{{ 'Statut démon' }}</b></span>
-                                                <span class="info-box-text">
+                                                <span class="info-box-text info-box-text-2">
                                                  {{ text }}
                                                 </span>
-                                                <span class="info-box-text">
+                                                <span class="info-box-text info-box-text-2">
                                                 {{ pluginData['daemonLaunchableMessage'] }}
                                                 </span>
                                             </div>
@@ -192,7 +185,7 @@
 
                                     {% if pluginData['health'] is defined %}
                                         {% for health in pluginData['health'] %}
-                                            <div class="col-sm-6">
+                                            <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
                                                 {% if health['state'] %}
                                                     {% set box_color = 'green' %}
                                                     {% set text = 'OK' %}
@@ -201,16 +194,13 @@
                                                     {% set text = 'NOK' %}
                                                 {% endif %}
                                                 <div class="info-box bg-{{ box_color }}">
-                                                  <span class="info-box-icon">
+                                                  <span class="info-box-icon" data-toggle="tooltip" title="" data-original-title="{{ health['advice'] }}">
                                                    <i class="fas fa-puzzle-piece"></i>
                                                   </span>
                                                     <div class="info-box-content">
-                                                        <span class="info-box-text"><b> {{ health['test'] }}</b></span>
-                                                        <span class="info-box-text">
+                                                        <span class="info-box-text info-box-text-2"><b> {{ health['test'] }}</b></span>
+                                                        <span class="info-box-text info-box-text-2">
                                                 {{ health['result'] }}
-                                                </span>
-                                                        <span class="info-box-text">
-                                                {{ health['advice'] }}
                                                 </span>
                                                     </div>
                                                 </div>
