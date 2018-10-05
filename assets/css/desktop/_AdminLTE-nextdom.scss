@@ -177,6 +177,9 @@ body {
   width: 100%;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08);
 }
+.box.without-border {
+  border-bottom: 0px;
+}
 
 /* Todo */
 .todo-list > li .tools > .fa,
@@ -628,4 +631,23 @@ input[type="checkbox"] {
     padding: 7px;
     vertical-align: middle;
     font-size: 13px;
+}
+
+/* Info-box */
+.info-box {
+  min-height: 70px;
+  margin-bottom: 10px;
+}
+.info-box-icon {
+  height: 70px;
+  width: 70px;
+  font-size: 38px;
+  line-height: 70px;
+}
+.info-box-content {
+  padding: 14px 10px;
+  margin-left: 70px;
+}
+.info-box-text-2 {
+  text-transform:capitalize;
 }

@@ -1,18 +1,20 @@
 <div class="box box-primary" id="div_Health">
+    <!-- Header bar -->
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="icon divers-caduceus3"></i> {{ 'Santé de NextDom' }}</h3>
+        <h3 class="box-title"><i class="fas fa-medkit">&nbsp;&nbsp;</i>{{ 'Santé de NextDom' }}</h3>
         <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-too">
-                <i class="fas fa-tachometer-alt pull-right cursor" id="bt_benchmarkNextDom"></i>
-            </button>
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
+
+    <!-- Page content -->
     <div class="box-body">
+        <legend class="legend-title">
+            {{ 'Détails de la santé de votre solution' }}<a class="btn btn-action btn-legend pull-right" id="bt_benchmarkNextDom"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Lancer un Benchmark' }}</a>
+        </legend>
         {% for informations in healthInformations %}
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                     {% set box_color = 'red' %}
                     {% if informations['state'] == 1 or informations['state'] == true %}
                         {% set box_color = 'green' %}
@@ -27,10 +29,10 @@
                         </span>
                         <div class="info-box-content">
                             <span class="info-box-text">{{ informations['name'] }}</span>
-                            <span class="info-box-text">
+                            <span class="info-box-text info-box-text-2">
                                 {{ informations['result'] }}
                             </span>
-                            <span class="info-box-text">
+                            <span class="info-box-text info-box-text-2">
                                 {{ informations['comment'] }}
                             </span>
                         </div>
@@ -43,16 +45,15 @@
 <div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title"><i class="icon divers-caduceus3"></i> {{ 'Santé des Plugins' }}</h3>
-        <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-            </button>
-        </div>
     </div>
     <div class="box-body">
+        <legend class="legend-title">
+            {{ 'Détails de la santé de vos plugins' }}
+        </legend>
         {% if healthPluginDataToShow %}
             <div class="box-group" id="accordionHealth">
                 {% for pluginData in healthPluginsInformations %}
-                    <div class="panel box">
+                    <div class="panel box without-border">
                         <div class="box-header with-border">
                             <h3 class="box-title">
                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionHealth"
