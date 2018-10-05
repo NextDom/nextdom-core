@@ -106,10 +106,10 @@ $nextdom_gray_title: $whitegray;
 
 /* Tooltip */
 .skin-nextdom .tooltip-inner {
-  background: $grey;
+  background: $lightblack;
 }
 .skin-nextdom .tooltip-arrow {
-  border-top-color: $grey;
+  border-top-color: $lightblack !important;
 }
 
 /* Navs */
