@@ -13,10 +13,10 @@
         <!-- Alert Section -->
         <div class="alert alert-warning alert-config">{{ 'Attention : cette configuration n\'est là que pour informer' }} {{ adminConfigs['product_name'] }} {{ 'de sa configuration réseau et n\'a aucun impact sur les ports ou l\'IP réellement utilisés pour joindre' }} {{ adminConfigs['product_name'] }}</div>
         <form class="form-horizontal">
-
-            <!-- Internal Access Section -->
-            <legend class="legend-title">{{ 'Accès interne' }}</legend>
             <fieldset>
+
+                <!-- Internal Access Section -->
+                <legend class="legend-title">{{ 'Accès interne' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Protocole' }}</label>
                     <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -35,10 +35,8 @@
                         </div>
                     </div>
                 </div>
-            </fieldset>
 
-            <!-- External Access Section -->
-            <fieldset>
+                <!-- External Access Section -->
                 <legend class="legend-title">{{ 'Accès externe' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Protocole' }}</label>
