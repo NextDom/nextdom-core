@@ -2,42 +2,51 @@
     <!-- Header bar -->
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fas fa-tasks">&nbsp;&nbsp;</i>{{ 'Taches' }}</h3>
-            <div class="box-tools pull-right">
-                <a class="btn btn-default" id="bt_addCron"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
-                <a class="btn btn-primary" id="bt_refreshCron"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{ 'Rafraîchir' }}</a>
-                {% if cronEnabled == 0 %}
-                    <a class="btn btn-success" id="bt_changeCronState" data-state="1"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Activer le système cron' }}</a>
-                {% else %}
-                    <a class="btn btn-danger" id="bt_changeCronState" data-state="0"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Désactiver le système cron' }}</a>
-                {% endif %}
-                <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
-            </div>
+        <div class="box-tools pull-right">
+            <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
+        </div>
     </div>
 
     <!-- Page content -->
     <div class="box-body">
-        <table id="table_cron" class="table table-bordered table-condensed">
-            <thead>
-            <tr>
-                <th class="id" style="width: 40px;">#</th>
-                <th class="" style="width: 80px;" data-sorter="false" data-filter="false"></th>
-                <th class="enable" style="width: 80px;">{{ 'Actif' }}</th>
-                <th class="pid" style="width: 100px;">{{ 'PID' }}</th>
-                <th class="deamons" style="width: 120px;">{{ 'Démon' }}</th>
-                <th class="once" style="width: 80px;">{{ 'Unique' }}</th>
-                <th class="class" style="width: 120px;">{{ 'Classe' }}</th>
-                <th class="function" style="width: 120px;">{{ 'Fonction' }}</th>
-                <th class="schedule" style="width: 170px;">{{ 'Programmation' }}&nbsp;&nbsp;<i class="fas fa-question-circle cursor bt_pageHelp" data-name='cronSyntaxe' style="position: relative; width: 10px;"></i></th>
-                <th class="timeout" style="width: 150px;">{{ 'Timeout (min)' }}</th>
-                <th class="lastRun" style="width: 200px;">{{ 'Dernier lancement' }}</th>
-                <th class="runtime" style="width: 200px;">{{ 'Dernière durée' }}</th>
-                <th class="state" style="width: 80px;">{{ 'Statut' }}</th>
-                <th class="action" style="width: 50px;" data-sorter="false" data-filter="false"></th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+        <form class="form-horizontal">
+            <fieldset>
+                
+                <legend class="legend-title">{{ 'Liste des tâches cron' }}
+                    <div class="box-tools pull-right" style="padding-bottom:0px">
+                        <a class="btn btn-default" id="bt_addCron"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
+                        <a class="btn btn-primary" id="bt_refreshCron"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{ 'Rafraîchir' }}</a>
+                        {% if cronEnabled == 0 %}
+                            <a class="btn btn-success" id="bt_changeCronState" data-state="1"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Activer le système cron' }}</a>
+                        {% else %}
+                            <a class="btn btn-danger" id="bt_changeCronState" data-state="0"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Désactiver le système cron' }}</a>
+                        {% endif %}
+                    </div>
+                </legend>
+                <table id="table_cron" class="table table-bordered table-condensed">
+                    <thead>
+                    <tr>
+                        <th class="id" style="width: 40px;">#</th>
+                        <th class="" style="width: 80px;" data-sorter="false" data-filter="false"></th>
+                        <th class="enable" style="width: 80px;">{{ 'Actif' }}</th>
+                        <th class="pid" style="width: 100px;">{{ 'PID' }}</th>
+                        <th class="deamons" style="width: 120px;">{{ 'Démon' }}</th>
+                        <th class="once" style="width: 80px;">{{ 'Unique' }}</th>
+                        <th class="class" style="width: 120px;">{{ 'Classe' }}</th>
+                        <th class="function" style="width: 120px;">{{ 'Fonction' }}</th>
+                        <th class="schedule" style="width: 170px;">{{ 'Programmation' }}&nbsp;&nbsp;<i class="fas fa-question-circle cursor bt_pageHelp" data-name='cronSyntaxe' style="position: relative; width: 10px;"></i></th>
+                        <th class="timeout" style="width: 150px;">{{ 'Timeout (min)' }}</th>
+                        <th class="lastRun" style="width: 200px;">{{ 'Dernier lancement' }}</th>
+                        <th class="runtime" style="width: 200px;">{{ 'Dernière durée' }}</th>
+                        <th class="state" style="width: 80px;">{{ 'Statut' }}</th>
+                        <th class="action" style="width: 50px;" data-sorter="false" data-filter="false"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </fieldset>
+        </form>
     </div>
 
     <!-- Footer bar -->
