@@ -153,6 +153,7 @@ class nextdom
         $nbNeededUpdate = \update::nbNeedUpdate();
         $state = ($nbNeededUpdate == 0) ? true : false;
         $systemHealth[] = array(
+            'icon' => 'fa-heartbeat',
             'name' => __('health.update-to-date'),
             'state' => $state,
             'result' => ($state) ? $okStr : $nbNeededUpdate,
@@ -161,6 +162,7 @@ class nextdom
 
         $state = (\config::byKey('enableCron', 'core', 1, true) != 0) ? true : false;
         $systemHealth[] = array(
+            'icon' => 'fa-calendar-alt',
             'name' => __('health.cron-enabled'),
             'state' => $state,
             'result' => ($state) ? $okStr : $nokStr,
@@ -169,6 +171,7 @@ class nextdom
 
         $state = (\config::byKey('enableScenario') == 0 && count(ScenarioManager::all()) > 0) ? false : true;
         $systemHealth[] = array(
+            'icon' => 'fa-film',
             'name' => __('health.scenario-enabled'),
             'state' => $state,
             'result' => ($state) ? $okStr : $nokStr,
@@ -177,9 +180,10 @@ class nextdom
 
         $state = self::isStarted();
         $systemHealth[] = array(
+            'icon' => 'fa-play',
             'name' => __('health.NextDom-started'),
             'state' => $state,
-            'result' => ($state) ? $okStr . ' ' . file_get_contents(self::getTmpFolder() . '/started') : $nokStr,
+            'result' => ($state) ? $okStr . ' - ' . file_get_contents(self::getTmpFolder() . '/started') : $nokStr,
             'comment' => '',
         );
 
@@ -187,14 +191,16 @@ class nextdom
         $cache = \cache::byKey('hour');
         $lastKnowDate = $cache->getValue();
         $systemHealth[] = array(
+            'icon' => 'fa-clock',
             'name' => __('health.system-date'),
             'state' => $state,
-            'result' => ($state) ? $okStr . ' ' . date('Y-m-d H:i:s') . ' (' . $lastKnowDate . ')' : date('Y-m-d H:i:s'),
+            'result' => ($state) ? $okStr . ' - ' . date('Y-m-d H:i:s') . ' (' . $lastKnowDate . ')' : date('Y-m-d H:i:s'),
             'comment' => ($state) ? '' : __('health.system-date-error'),
         );
 
         $state = self::isCapable('sudo', true);
         $systemHealth[] = array(
+            'icon' => 'fa-user-secret',
             'name' => __('health.sudo-rights'),
             'state' => ($state) ? 1 : 2,
             'result' => ($state) ? $okStr : $nokStr,
@@ -202,14 +208,16 @@ class nextdom
         );
 
         $systemHealth[] = array(
+            'icon' => 'fa-code-branch',
             'name' => __('health.NextDom-version'),
             'state' => true,
             'result' => self::version(),
             'comment' => '',
         );
 
-        $state = version_compare(phpversion(), '5.5', '>=');
+        $state = version_compare(phpversion(), '7.0', '>=');
         $systemHealth[] = array(
+            'icon' => 'fa-code',
             'name' => __('health.php-version'),
             'state' => $state,
             'result' => phpversion(),
@@ -230,6 +238,7 @@ class nextdom
             }
         }
         $systemHealth[] = array(
+            'icon' => 'fa-cogs',
             'name' => __('os-version'),
             'state' => $state,
             'result' => ($state) ? $uname . ' [' . $version . ']' : $uname,
@@ -238,6 +247,7 @@ class nextdom
 
         $version = \DB::Prepare('select version()', array(), \DB::FETCH_TYPE_ROW);
         $systemHealth[] = array(
+            'icon' => 'fa-database',
             'name' => __('health.database-version'),
             'state' => true,
             'result' => $version['version()'],
@@ -246,6 +256,7 @@ class nextdom
 
         $value = self::checkSpaceLeft();
         $systemHealth[] = array(
+            'icon' => 'fa-hdd',
             'name' => __('health.harddisk-freespace'),
             'state' => ($value > 10),
             'result' => $value . ' %',
@@ -255,6 +266,7 @@ class nextdom
         $values = getSystemMemInfo();
         $value = round(($values['MemAvailable'] / $values['MemTotal']) * 100);
         $systemHealth[] = array(
+            'icon' => 'fa-th',
             'name' => __('Mémoire disponible'),
             'state' => ($value > 15),
             'result' => $value . ' %',
@@ -263,6 +275,7 @@ class nextdom
 
         $value = shell_exec('sudo dmesg | grep oom | wc -l');
         $systemHealth[] = array(
+            'icon' => 'fa-th-large',
             'name' => __('health.enough-memory'),
             'state' => ($value == 0),
             'result' => $value,
@@ -272,6 +285,7 @@ class nextdom
         if ($values['SwapTotal'] != 0 && $values['SwapTotal'] !== null) {
             $value = round(($values['SwapFree'] / $values['SwapTotal']) * 100);
             $systemHealth[] = array(
+                'icon' => 'fa-hdd',
                 'name' => __('health.available-swap'),
                 'state' => ($value > 15),
                 'result' => $value . ' %',
@@ -279,6 +293,7 @@ class nextdom
             );
         } else {
             $systemHealth[] = array(
+                'icon' => 'fa-hdd',
                 'name' => __('health.available-swap'),
                 'state' => 2,
                 'result' => __('health.unknow'),
@@ -288,6 +303,7 @@ class nextdom
 
         $values = sys_getloadavg();
         $systemHealth[] = array(
+            'icon' => 'fa-fire',
             'name' => __('health.load'),
             'state' => ($values[2] < 20),
             'result' => $values[0] . ' - ' . $values[1] . ' - ' . $values[2],
@@ -296,6 +312,7 @@ class nextdom
 
         $state = \network::test('internal');
         $systemHealth[] = array(
+            'icon' => 'fa-plug',
             'name' => __('health.internal-network-conf'),
             'state' => $state,
             'result' => ($state) ? $okStr : $nokStr,
@@ -304,13 +321,17 @@ class nextdom
 
         $state = \network::test('external');
         $systemHealth[] = array(
+            'icon' => 'fa-globe',
             'name' => __('health.external-network-conf'),
             'state' => $state,
             'result' => ($state) ? $okStr : $nokStr,
             'comment' => ($state) ? '' : __('health.network-config'),
         );
 
-        $cache_health = array('comment' => '', 'name' => __('health.cache-persistence'));
+        $cache_health = array(
+            'icon' => 'fa-inbox',
+            'comment' => '',
+            'name' => __('health.cache-persistence'));
         if (cache::isPersistOk()) {
             if (\config::byKey('cache::engine') != 'FilesystemCache' && \config::byKey('cache::engine') != 'PhpFileCache') {
                 $cache_health['state'] = true;
@@ -330,6 +351,7 @@ class nextdom
 
         $state = shell_exec('systemctl show apache2 | grep  PrivateTmp | grep yes | wc -l');
         $systemHealth[] = array(
+            'icon' => 'fa-folder',
             'name' => __('health.apache-private-tmp'),
             'state' => $state,
             'result' => ($state) ? $okStr : $nokStr,
