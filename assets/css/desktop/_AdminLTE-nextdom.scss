@@ -96,8 +96,10 @@ body {
   left:-7px;
 }
 .notifcounter {
-  margin-top: 7px;
-  margin-right: 7px;
+  margin:{
+    top: 7px;
+    right: 7px;
+  }
 }
 .btn-app>.badge {
   top: 3px;
@@ -143,11 +145,12 @@ body {
 /* Treeview */
 .treeview-menu {
   padding: 5px 5px;
+  &> li {
+      padding-top: 1px;
+      padding-bottom: 1px;
+  }
 }
-.treeview-menu > li {
-  padding-top: 1px;
-  padding-bottom: 1px;
-}
+
 .treeview-menu > li > a {
   padding: 5px 15px 5px 15px;
 }
@@ -176,6 +179,9 @@ body {
   margin-bottom: 20px;
   width: 100%;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08);
+}
+.box.without-border {
+  border-top: 0px;
 }
 
 /* Todo */
@@ -488,9 +494,11 @@ body {
 /* Logos */
 .login-logo,
 .register-logo {
-  font-size: 35px;
-  font-weight: 300;
-  text-align: center;
+  font:{
+      size: 35px;
+      weight: 300;
+      align: center;
+  }
   padding:{.
     bottom: 15px;
     top: 25px;
@@ -512,8 +520,10 @@ body {
   min-height: 100%;
   background-color: $nextdom_bg;
   z-index: 800;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding:{
+     left: 15px;
+     right: 15px;
+  }
 }
 .fixed .content-wrapper, .fixed .right-side {
     padding-top: 58px;
@@ -526,6 +536,10 @@ body {
 .container-fluid{
   padding-right: 0;
   padding-left: 0;
+}
+.container-light {
+  padding-right: 5px;
+  padding-left: 5px;
 }
 .wrapper.fullscreen header,
 .wrapper.fullscreen footer,
@@ -628,4 +642,23 @@ input[type="checkbox"] {
     padding: 7px;
     vertical-align: middle;
     font-size: 13px;
+}
+
+/* Info-box */
+.info-box {
+  min-height: 70px;
+  margin-bottom: 10px;
+}
+.info-box-icon {
+  height: 70px;
+  width: 70px;
+  font-size: 38px;
+  line-height: 70px;
+}
+.info-box-content {
+  padding: 14px 10px;
+  margin-left: 70px;
+}
+.info-box-text-2 {
+  text-transform:capitalize;
 }
