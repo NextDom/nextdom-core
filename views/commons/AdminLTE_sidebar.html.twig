@@ -27,7 +27,8 @@
                     <a href="/index.php?v=d&p=profils#profil"><img src="/public/img/profils/noPicture.gif" class="img-circle" alt="User Image"></a>
                 {% else %}
                     <a href="/index.php?v=d&p=profils#profil"><img src="{{ USER_AVATAR }}" class="img-circle" alt="User Image"></a>
-                {% endif %}            </div>
+                {% endif %}
+            </div>
             <div class="pull-left info">
                 <p>{{ USER_LOGIN }}</p>
                 {% if USER_ISCONNECTED %}
@@ -119,7 +120,7 @@
             <li class="treeview">
                 <a href="#"><i class="fa fa-cog"></i><span>&nbsp;&nbsp;{{ 'Expert' }}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li><a href="index.php?v=d&p=administration"><i class="fa fa-wrench"></i>&nbsp;&nbsp;{{ 'Administration' }}</a></li>
+                    <li><a href="index.php?v=d&p=administration"><i class="fa fa-wrench"></i>&nbsp;&nbsp;{{ 'Réglages & Outils' }}</a></li>
                     <li><a href="index.php?v=m"><i class="fas fa-mobile-alt"></i>&nbsp;&nbsp;{{ 'Version mobile' }}</a></li>
                     <li><a><i class="fas fa-code-branch"></i>&nbsp;&nbsp;{{ 'Version' }} {{ NEXTDOM_VERSION }}</a></li>
                     <li><a href="#" id="bt_nextdomAbout"><i class="fas fa-info-circle"></i>&nbsp;&nbsp;{{ 'About' }}</a></li>
@@ -140,9 +141,9 @@
                     {% endif %}
                     {% for categoryCode, category in dashboardCategories %}
                         {% if dashboardCategory == categoryCode %}
-                            <li><a onclick='selectCategory("{{ categoryCode }}");'>{{ category.name|trans }}</a></li>
+                            <li><a style="cursor: pointer;" onclick='selectCategory("{{ categoryCode }}");'><i class="fas fa-caret-right"></i>{{ category.name|trans }}</a></li>
                         {% else %}
-                            <li><a onclick='selectCategory("{{ categoryCode }}");'>{{ category.name|trans }}</a></li>
+                            <li><a style="cursor: pointer;" onclick='selectCategory("{{ categoryCode }}");'><i class="fas fa-caret-right"></i>{{ category.name|trans }}</a></li>
                         {% endif %}
                     {% endfor %}
                 </ul>
