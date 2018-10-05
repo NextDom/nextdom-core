@@ -160,7 +160,7 @@
                 ligne += '<span class="userAttr" data-l1key="login" />';
                 ligne += '</td>';
                 ligne += '<td>';
-                ligne += '<label class="form-group"><input type="checkbox" class="userAttr" data-l1key="enable" '+disable+' />{{Actif}}</label>';
+                ligne += '<label><input type="checkbox" class="userAttr" data-l1key="enable" '+disable+' />{{Actif}}</label>';
                 ligne += '<label><input type="checkbox" class="userAttr" data-l1key="options" data-l2key="localOnly" '+disable+' />{{Local}}</label>';
                 ligne += '</td>';
                 ligne += '<td style="width:175px;">';

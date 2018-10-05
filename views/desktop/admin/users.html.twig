@@ -13,8 +13,8 @@
             <fieldset>
 
                 <!-- Users section -->
-                <legend class="legend-title">{{ 'Liste des utilisateurs' }}
-                    <div class="box-tools pull-right" style="padding-bottom:0px">
+                <legend class="legend-title" style="padding-bottom:0px">{{ 'Liste des utilisateurs' }}
+                    <div class="box-tools pull-right">
                         {% if userLdapEnabled != '1' %}
                             {% if userSupportExists %}
                                 <a class="btn btn-danger btn-legend" id="bt_supportAccess" data-enable="0"><i class="fas fa-user">&nbsp;&nbsp;</i>{{ 'Désactiver accès support' }}</a>
