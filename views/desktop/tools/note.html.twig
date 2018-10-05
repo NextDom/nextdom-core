@@ -1,35 +1,34 @@
-<div class="box" id="migration">
+<div class="box" id="note">
+    <!-- Header bar -->
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-hand-o-right"></i>{{ 'Nodes' }}</h3>
+        <h3 class="box-title"><i class="fas fa-sticky-note">&nbsp;&nbsp;</i>{{ 'Notes' }}</h3>
         <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-            </button>
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
     </div>
+
+    <!-- Page content -->
     <div class="box-body">
         <div style="display: none;" id="div_noteManagementAlert"></div>
         <div class="row row-overflow">
             <div class="col-lg-2 col-md-3 col-sm-4" style="overflow-y:auto;overflow-x:hidden;">
+                <legend class="legend-title">{{ 'Liste des notes' }}</legend>
                 <div class="bs-sidebar">
                     <ul class="nav nav-list bs-sidenav list-group" id="ul_noteList">
 
                     </ul>
                 </div>
             </div>
-            <div class="col-lg-10 col-md-9 col-sm-8"
-                 style="border-left: solid 1px #EEE; padding-left: 25px;overflow-y:hidden;overflow-x:hidden;">
-                <a class="btn btn-danger btn-xs pull-right" id="bt_noteManagerRemove"><i
-                            class="fas fa-trash"></i> {{ 'Supprimer' }}</a>
-                <a class="btn btn-success btn-xs pull-right" id="bt_noteManagerSave"><i
-                            class="fas fa-save"></i> {{ 'Sauvegarder' }}</a>
-                <a class="btn btn-success btn-xs pull-right" id="bt_noteManagerAdd"><i
-                            class="fas fa-plus"></i> {{ 'Ajouter' }}</a>
-                <br/><br/>
+            <div class="col-lg-10 col-md-9 col-sm-8" style="border-left: solid 1px #EEE; padding-left: 25px;overflow-y:hidden;overflow-x:hidden;">
+                <legend class="legend-title">
+                    {{ 'Note' }}
+                    <a class="btn btn-danger btn-legend pull-right" id="bt_noteManagerRemove"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                    <a class="btn btn-success btn-legend pull-right" id="bt_noteManagerSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+                    <a class="btn btn-success btn-legend pull-right" id="bt_noteManagerAdd"><i class="fas fa-plus">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
+                </legend>
                 <div id="div_noteManagerDisplay">
                     <input class="noteAttr form-control" data-l1key="id" style="display:none;" disabled/>
-                    <input class="noteAttr form-control" data-l1key="name" disabled/>
-                    <br/>
+                    <input class="noteAttr form-control form-group" data-l1key="name" disabled/>
                     <textarea class="noteAttr form-control ta_autosize" data-l1key="text" disabled></textarea>
                 </div>
             </div>
