@@ -21,5 +21,11 @@ foreach (scenarioExpression::all() as $scenarioExpression) {
     }
 }
 
-shell_exec('mysql -u '.$CONFIG['db']['username'].' -p'.$CONFIG['db']['password'].' -f '.$CONFIG['db']['dbname'].' < '.__DIR__.'/migrate.sql');
+$HOST=' ';
 
+if ( 'localhost' != $CONFIG['db']['host'] ){
+    $HOST=' -h '.$CONFIG['db']['host'];
+}
+
+$CMD='mysql -u '.$CONFIG['db']['username'].$HOST.' -p'.$CONFIG['db']['password'].' -f '.$CONFIG['db']['dbname'].' < '.__DIR__.'/migrate.sql';
+shell_exec($CMD);
