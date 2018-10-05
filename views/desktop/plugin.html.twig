@@ -33,7 +33,7 @@
                 </div>
                 <div class="pluginListContainer box-body">
                     {% for plugin in pluginsList %}
-                        <div class="pluginDisplayCard iconlist text-center" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_id="{{ plugin.getId() }}" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
+                        <div class="pluginDisplayCard iconlist text-center cursor" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_id="{{ plugin.getId() }}" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
                             <img class="img-responsive" style="width : 90px;" src="{{ plugin.getPathImgIcon() }}"/>
                             <span style="display:none;" class="name">{{ plugin.getName() }}</span>
                         </div>
