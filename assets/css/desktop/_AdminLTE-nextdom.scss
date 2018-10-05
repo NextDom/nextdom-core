@@ -96,8 +96,10 @@ body {
   left:-7px;
 }
 .notifcounter {
-  margin-top: 7px;
-  margin-right: 7px;
+  margin:{
+    top: 7px;
+    right: 7px;
+  }
 }
 .btn-app>.badge {
   top: 3px;
@@ -143,11 +145,12 @@ body {
 /* Treeview */
 .treeview-menu {
   padding: 5px 5px;
+  &> li {
+      padding-top: 1px;
+      padding-bottom: 1px;
+  }
 }
-.treeview-menu > li {
-  padding-top: 1px;
-  padding-bottom: 1px;
-}
+
 .treeview-menu > li > a {
   padding: 5px 15px 5px 15px;
 }
@@ -491,9 +494,11 @@ body {
 /* Logos */
 .login-logo,
 .register-logo {
-  font-size: 35px;
-  font-weight: 300;
-  text-align: center;
+  font:{
+      size: 35px;
+      weight: 300;
+      align: center;
+  }
   padding:{.
     bottom: 15px;
     top: 25px;
@@ -515,8 +520,10 @@ body {
   min-height: 100%;
   background-color: $nextdom_bg;
   z-index: 800;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding:{
+     left: 15px;
+     right: 15px;
+  }
 }
 .fixed .content-wrapper, .fixed .right-side {
     padding-top: 58px;
