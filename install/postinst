@@ -171,8 +171,8 @@ step_nextdom_configuration() {
         fi
     fi
 
-    if [ $(grep "www-data ALL=(ALL) NOPASSWD: ALL" /etc/sudoers | wc -l) -eq 0 ];then
-        echo "www-data ALL=(ALL) NOPASSWD: ALL" | (EDITOR="tee -a" visudo)
+    if [ $(grep "www-data ALL=(ALL) NOPASSWD: ALL" /etc/sudoers | wc -l ) -eq 0 ];then
+        echo "www-data ALL=(ALL) NOPASSWD: ALL" | (EDITOR="tee -a" visudo) >/dev/null
         if [ $? -ne 0 ]; then
             printf "${ROUGE}Ne peut permettre a nextdom d\'utiliser sudo - Annulation${NORMAL}"
             exit 1
@@ -328,7 +328,8 @@ step_nextdom_var_www_html() {
 step_nextdom_mysql_populate() {
         CONSTRAINT="%";
         if [ ${MYSQL_HOSTNAME} == "localhost" ];
-         then CONSTRAINT='localhost'; fi
+            then CONSTRAINT='localhost';
+        fi
         QUERY="DROP USER IF EXISTS '${MYSQL_NEXTDOM_USER}'@'${CONSTRAINT}';"
         mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
         QUERY="CREATE USER '${MYSQL_NEXTDOM_USER}'@'${CONSTRAINT}' IDENTIFIED BY '${MYSQL_NEXTDOM_PASSWD}';"
@@ -399,7 +400,7 @@ HOSTPASS=""
 if [[ "${MYSQL_HOSTNAME}" != "localhost" ]] ; then
     HOSTPASS="-p${MYSQL_ROOT_PASSWD} -h${MYSQL_HOSTNAME}"
 fi
-    echo ">>>>> checking database access <<<<<"
+    #echo ">>>>> checking database access <<<<<"
     mysql -uroot ${HOSTPASS} --port=${MYSQL_PORT} -e "SHOW DATABASES;" >/dev/null 2>&1
     iret=$?
     if [[ ${iret} -ne 0 ]] ; then
@@ -437,9 +438,22 @@ echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
 
 printf "step_nextdom_mysql_populate ... " >> ${WEBSERVER_HOME}/log/postinst.log
 step_nextdom_mysql_populate
+echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+
+printf "step_nextdom_crontab ... " >> ${WEBSERVER_HOME}/log/postinst.log
 step_nextdom_crontab
+echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+
+printf "step_nextdom_check ... " >> ${WEBSERVER_HOME}/log/postinst.log
 step_nextdom_check
+echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+
+printf "distrib_1_spe ... " >> ${WEBSERVER_HOME}/log/postinst.log
 distrib_1_spe
+echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+
+chmod 777 -R /tmp/nextdom
+chown -R www-data:www-data /tmp/nextdom
 
 [[ -f /root/.mysqlroot ]] && rm -f /root/.mysqlroot
 
