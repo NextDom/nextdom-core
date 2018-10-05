@@ -14,9 +14,9 @@ core:
   incorrect-sys-date: "La date du système est incorrect (avant %s ou après %s) : "
 health:
   update-to-date: Système à jour
-  cron-enabled: Cron actif
+  cron-enabled: Service cron actif
   cron-disabled: "Erreur cron : les crons sont désactivés. Allez dans Administration -> Moteur de tâches pour les réactiver"
-  scenario-enabled: Scénario actif
+  scenario-enabled: Scénarios actifs
   scenario-disabled: "Erreur scénario : tous les scénarios sont désactivés. Allez dans Outils -> Scénarios pour les réactiver"
   NextDom-started: Démarré
   system-date: Date système (dernière heure enregistrée)
@@ -27,7 +27,7 @@ health:
   sudo-error: Appliquez les droits root à NextDom
   NextDom-version: Version NextDom
   php-version: Version PHP
-  php-error: Si vous êtes en version 5.4.x on vous indiquera quand la version 5.5 sera obligatoire
+  php-error: Une version de PHP supérieure ou égale à 7 est nécessaire.
   os-version: Version OS
   database-version: Version database
   harddisk-freespace: Espace disque libre
