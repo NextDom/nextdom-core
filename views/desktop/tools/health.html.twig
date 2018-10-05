@@ -12,7 +12,7 @@
     <!-- Nextdom health section -->
     <div class="box-body">
         <legend class="legend-title">
-            {{ 'Détails de la santé de votre solution' }}<a class="btn btn-action btn-legend pull-right" id="bt_benchmarkNextDom"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Lancer un Benchmark' }}</a>
+            {{ 'Détails de la santé de votre solution.' }}<a class="btn btn-action btn-legend pull-right" id="bt_benchmarkNextDom"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Lancer un Benchmark' }}</a>
         </legend>
         {% for informations in healthInformations %}
             <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
@@ -49,6 +49,9 @@
         </div>
     </div>
     <div class="box-body">
+        <legend class="legend-title">
+            {{ 'Détails de la santé de vos plugins, cliquez sur le titre pour avoir le détail.' }}
+        </legend>
         {% if healthPluginDataToShow %}
         <div class="box-group" id="accordionHealth">
             {% for pluginData in healthPluginsInformations %}
