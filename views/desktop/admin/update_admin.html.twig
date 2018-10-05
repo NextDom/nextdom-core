@@ -16,8 +16,8 @@
                     <fieldset>
                         <legend class="legend-title">{{ 'Paramètres de mises à jour' }}</legend>
                         <div class="form-group">
-                            <label class="col-lg-4 col-md-6 col-sm-6 col-xs-12 control-label">{{ 'Source de mise à jour' }}</label>
-                            <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
+                            <label class="col-lg-4 col-md-6 col-sm-5 col-xs-12 control-label">{{ 'Source de mise à jour' }}</label>
+                            <div class="col-lg-8 col-md-6 col-sm-7 col-xs-12">
                                 <select class="configKey form-control" data-l1key="core::repo::provider">
                                     <option value="default">{{ 'Défaut' }}</option>
                                     {% for repo, data in adminReposList %}
@@ -29,8 +29,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-4 col-md-6 col-sm-6 col-xs-12 control-label">{{ 'Version du core' }}</label>
-                            <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
+                            <label class="col-lg-4 col-md-6 col-sm-5 col-xs-12 control-label">{{ 'Version du core' }}</label>
+                            <div class="col-lg-8 col-md-6 col-sm-7 col-xs-12">
                                 <select class="configKey form-control" data-l1key="core::branch">
                                     <option value="beta">{{ 'Beta (Plus d\'accès au support)' }}</option>
                                     <option value="master">{{ 'Stable' }}</option>
@@ -38,8 +38,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-4 col-md-6 col-sm-6 col-xs-12 control-label">{{ 'Vérification automatique' }}</label>
-                            <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
+                            <label class="col-lg-4 col-md-6 col-sm-5 col-xs-12 control-label">{{ 'Vérification automatique' }}</label>
+                            <div class="col-lg-8 col-md-6 col-sm-7 col-xs-12">
                                 <input type="checkbox" class="configKey" data-l1key="update::autocheck" id="autocheck"/>
                                 <label for="autocheck" class="control-label label-check">{{'Activer'}}</label>
                             </div>
@@ -64,30 +64,29 @@
                             <div class="global-tab-content tab-content">
                                 {% for repo, data in adminReposList %}
                                     <div role="tabpanel" class="tab-pane {% if repo == 'market' %}active{% endif %}" id="tab{{ repo }}">
-                                        <br/>
                                         <div class="form-group">
-                                            <label class="col-lg-4 col-md-6 col-sm-6 col-xs-12 control-label">{{ 'Service' }} {{ data['name'] }}</label>
-                                            <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
-                                                <input type="checkbox" class="configKey enableRepository" data-repo="{{ repo }}" data-l1key="{{ repo }}::enable" id="enableRepo"/>
-                                                <label for="enableRepo" class="control-label label-check">{{ 'Activer' }}</label>
+                                            <label class="col-lg-4 col-md-6 col-sm-5 col-xs-12 control-label">{{ 'Service' }} {{ data['name'] }}</label>
+                                            <div class="col-lg-8 col-md-6 col-sm-7 col-xs-12">
+                                                <input type="checkbox" class="configKey enableRepository" data-repo="{{ repo }}" data-l1key="{{ repo }}::enable" id="enableRepo{{ repo }}"/>
+                                                <label for="enableRepo{{ repo }}" class="control-label label-check">{{ 'Activer' }}</label>
                                             </div>
                                         </div>
                                         {% if data['scope']['hasConfiguration'] %}
                                             <div class="repositoryConfiguration{{ repo }}" style="display:none;">
                                                 {% for config, param in data['configuration']['configuration'] %}
                                                     <div class="form-group">
-                                                        <label class="col-lg-4 col-md-6 col-sm-6 col-xs-6 control-label">
+                                                        <label class="col-lg-4 col-md-6 col-sm-5 col-xs-12 control-label">
                                                             {{ param['name'] }}
                                                         </label>
-                                                        <div class="col-sm-6">
+                                                        <div class="col-lg-8 col-md-6 col-sm-7 col-xs-12">
                                                             {% if param['default'] is defined %}
                                                                 {% set defaultValue = param['default'] %}
                                                             {% else %}
                                                                 {% set defaultValue = '' %}
                                                             {% endif %}
                                                             {% if param['type'] == 'checkbox' %}
-                                                                <input type="checkbox" class="configKey" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/>
-                                                                <label class="control-label label-check">{{ 'Activer' }}</label>
+                                                                <input type="checkbox" class="configKey" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}" id="{{ repo }}::{{ config }}"/>
+                                                                <label for="{{ repo }}::{{ config }}" class="control-label label-check">{{ 'Activer' }}</label>
                                                             {% elseif param['type'] == 'input' %}
                                                                 <input class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/>
                                                             {% elseif param['type'] == 'number' %}
@@ -100,9 +99,9 @@
                                                 {% endfor %}
                                                 {% if data['scope']['test'] is defined and data['scope']['test'] %}
                                                     <div class="form-group">
-                                                        <label class="col-lg-4 col-md-6 col-sm-6 col-xs-6 control-label">{{ 'Tester' }}</label>
+                                                        <label class="col-lg-4 col-md-6 col-sm-5 col-xs-12 control-label">{{ 'Tester' }}</label>
                                                         <div class="col-sm-4">
-                                                            <a class="btn btn-primary testRepoConnection" data-repo="{{ repo }}"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Tester' }}</a>
+                                                            <a class="btn btn-action testRepoConnection" data-repo="{{ repo }}"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Tester' }}</a>
                                                         </div>
                                                     </div>
                                                 {% endif %}
