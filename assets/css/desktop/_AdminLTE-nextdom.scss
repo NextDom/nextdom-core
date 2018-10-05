@@ -178,7 +178,7 @@ body {
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08);
 }
 .box.without-border {
-  border-bottom: 0px;
+  border-top: 0px;
 }
 
 /* Todo */
@@ -654,4 +654,5 @@ input[type="checkbox"] {
 }
 .info-box-text-2 {
   text-transform:capitalize;
+  white-space: normal;
 }
