@@ -1,7 +1,7 @@
 <div class="box" id="users">
     <!-- Header bar -->
     <div class="box-header with-border">
-        <legend ><i class="fas fa-users">&nbsp;&nbsp;</i>{{ 'Gestion des utilisateurs' }}</legend>
+        <h3 class="box-title"><i class="fas fa-users">&nbsp;&nbsp;</i>{{ 'Gestion des utilisateurs' }}</h3>
         <div class="box-tools pull-right">
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
         </div>
@@ -15,11 +15,11 @@
             <div class="box-tools pull-right">
                 {% if userLdapEnabled != '1' %}
                     {% if userSupportExists %}
-                        <a class="btn btn-danger btn-legend" id="bt_supportAccess" data-enable="0"><i class="fas fa-user"></i> {{ 'Désactiver accès support' }}</a>
+                        <a class="btn btn-danger btn-legend" id="bt_supportAccess" data-enable="0"><i class="fas fa-user">&nbsp;&nbsp;</i>{{ 'Désactiver accès support' }}</a>
                     {% else %}
-                        <a class="btn btn-success btn-legend" id="bt_supportAccess" data-enable="1"><i class="fas fa-user"></i> {{ 'Activer accès support' }}</a>
+                        <a class="btn btn-success btn-legend" id="bt_supportAccess" data-enable="1"><i class="fas fa-user">&nbsp;&nbsp;</i>{{ 'Activer accès support' }}</a>
                     {% endif %}
-                    <a class="btn btn-warning btn-legend" id="bt_addUser"><i class="fas fa-plus-circle"></i> {{ 'Ajouter un utilisateur' }}</a>
+                    <a class="btn btn-warning btn-legend" id="bt_addUser"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter un utilisateur' }}</a>
                 {% endif %}
             </div>
         </legend>
