@@ -9,39 +9,39 @@
 
     <!-- Page content -->
     <div class="box-body">
-
-        <!-- Users section -->
-        <legend class="legend-title">{{ 'Liste des utilisateurs' }}
-            <div class="box-tools pull-right">
-                {% if userLdapEnabled != '1' %}
-                    {% if userSupportExists %}
-                        <a class="btn btn-danger btn-legend" id="bt_supportAccess" data-enable="0"><i class="fas fa-user">&nbsp;&nbsp;</i>{{ 'Désactiver accès support' }}</a>
-                    {% else %}
-                        <a class="btn btn-success btn-legend" id="bt_supportAccess" data-enable="1"><i class="fas fa-user">&nbsp;&nbsp;</i>{{ 'Activer accès support' }}</a>
-                    {% endif %}
-                    <a class="btn btn-warning btn-legend" id="bt_addUser"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter un utilisateur' }}</a>
-                {% endif %}
-            </div>
-        </legend>
-        <div class="tab-pane" id="user">
-            <table class="table table-condensed table-bordered" id="table_user">
-                <thead>
-                <th>{{ 'Utilisateur' }}</th>
-                <th style="width: 100px;">{{ 'Actif' }}</th>
-                <th>{{ 'Profil' }}</th>
-                <th>{{ 'Clé API' }}</th>
-                <th>{{ 'Double authentification' }}</th>
-                <th>{{ 'Dernière connexion' }}</th>
-                <th>{{ 'Actions' }}</th>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-
-        <!-- Sessions section -->
-        <legend class="legend-title">{{ 'Sessions actives' }}</legend>
         <form class="form-horizontal">
             <fieldset>
+
+                <!-- Users section -->
+                <legend class="legend-title">{{ 'Liste des utilisateurs' }}
+                    <div class="box-tools pull-right" style="padding-bottom:0px">
+                        {% if userLdapEnabled != '1' %}
+                            {% if userSupportExists %}
+                                <a class="btn btn-danger btn-legend" id="bt_supportAccess" data-enable="0"><i class="fas fa-user">&nbsp;&nbsp;</i>{{ 'Désactiver accès support' }}</a>
+                            {% else %}
+                                <a class="btn btn-success btn-legend" id="bt_supportAccess" data-enable="1"><i class="fas fa-user">&nbsp;&nbsp;</i>{{ 'Activer accès support' }}</a>
+                            {% endif %}
+                            <a class="btn btn-warning btn-legend" id="bt_addUser"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter un utilisateur' }}</a>
+                        {% endif %}
+                    </div>
+                </legend>
+                <div class="tab-pane" id="user">
+                    <table class="table table-condensed table-bordered" id="table_user">
+                        <thead>
+                        <th>{{ 'Utilisateur' }}</th>
+                        <th style="width: 100px;">{{ 'Actif' }}</th>
+                        <th>{{ 'Profil' }}</th>
+                        <th>{{ 'Clé API' }}</th>
+                        <th>{{ 'Double authentification' }}</th>
+                        <th>{{ 'Dernière connexion' }}</th>
+                        <th>{{ 'Actions' }}</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <!-- Sessions section -->
+                <legend class="legend-title">{{ 'Sessions actives' }}</legend>
                 <table class="table table-condensed table-bordered">
                     <thead>
                     <tr>
@@ -62,6 +62,7 @@
                                 {% set sessionData = sessionData|merge({'datetime': ''}) %}
                             {% endif %}
                             <tr data-id="{{ sessionId }}">
+                                <td>{{ sessionId }}</td>
                                 <td>{{ sessionData['login'] }}</td>
                                 <td>{{ sessionData['ip'] }}</td>
                                 <td>{{ sessionData['datetime'] }}</td>
@@ -71,17 +72,13 @@
                     {% endif %}
                     </tbody>
                 </table>
-            </fieldset>
-        </form>
 
-        <!-- Periphériques section -->
-        <legend class="legend-title">{{ 'Périphériques enregistrés' }}
-            <div class="box-tools pull-right">
-                <a class="btn btn-warning btn-legend" id="bt_removeAllRegisterDevice"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer tout' }}</a>
-            </div>
-        </legend>
-        <form class="form-horizontal">
-            <fieldset>
+                <!-- Periphériques section -->
+                <legend class="legend-title">{{ 'Périphériques enregistrés' }}
+                    <div class="box-tools pull-right">
+                        <a class="btn btn-warning btn-legend" id="bt_removeAllRegisterDevice"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer tout' }}</a>
+                    </div>
+                </legend>
                 <table class="table table-bordered table-condensed">
                     <thead>
                     <tr>

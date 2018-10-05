@@ -10,13 +10,15 @@
 
         <!-- Page content -->
         <div class="box-body">
-            <p class="alert alert-info">{{ 'La fonction migration permet d\'utiliser une sauvegarde jeedom pour migrer vers nextdom' }}</p>
-            <p class="alert alert-info">{{ 'Il suffit de saisir le chemin d\'accès vers les sauvegardes (si les sauvegardes sont deportées sur un NAS) ou alors utiliser l\'outil d\'upload ci-dessous.' }}</p>
-
-            <!-- Sauvegardes Section -->
-            <legend class="legend-title">{{ 'Sauvegardes locales' }}</legend>
             <form class="form-horizontal">
                 <fieldset>
+                    <!-- Présentation Section -->
+                    <legend class="legend-title">{{ 'Présentation' }}</legend>
+                    <p class="alert alert-info">{{ 'La fonction migration permet d\'utiliser une sauvegarde jeedom pour migrer vers nextdom' }}</p>
+                    <p class="alert alert-info">{{ 'Il suffit de saisir le chemin d\'accès vers les sauvegardes (si les sauvegardes sont deportées sur un NAS) ou alors utiliser l\'outil d\'upload ci-dessous.' }}</p>
+
+                    <!-- Sauvegardes Section -->
+                    <legend class="legend-title">{{ 'Sauvegardes locales' }}</legend>
                     <div class="form-group">
                         <label class="col-sm-4 col-xs-6 control-label">{{ 'Emplacement des sauvegardes' }}</label>
                         <div class="col-sm-4 col-xs-6">
