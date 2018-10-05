@@ -13,29 +13,27 @@
             {{ 'Détails de la santé de votre solution' }}<a class="btn btn-action btn-legend pull-right" id="bt_benchmarkNextDom"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Lancer un Benchmark' }}</a>
         </legend>
         {% for informations in healthInformations %}
-            <div class="row">
-                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    {% set box_color = 'red' %}
-                    {% if informations['state'] == 1 or informations['state'] == true %}
-                        {% set box_color = 'green' %}
-                    {% elseif informations['state'] == 2 %}
-                        {% set box_color = 'yellow' %}
-                    {% endif %}
-                    <div class="info-box bg-{{ box_color }}">
-                        <span class="info-box-icon">
-                            {% if informations['icon'] is defined %}
-                                <i class="fas {{ informations['icon'] }}"></i>
-                            {% endif %}
+            <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                {% set box_color = 'red' %}
+                {% if informations['state'] == 1 or informations['state'] == true %}
+                    {% set box_color = 'green' %}
+                {% elseif informations['state'] == 2 %}
+                    {% set box_color = 'yellow' %}
+                {% endif %}
+                <div class="info-box bg-{{ box_color }}">
+                    <span class="info-box-icon">
+                        {% if informations['icon'] is defined %}
+                            <i class="fas {{ informations['icon'] }}"></i>
+                        {% endif %}
+                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">{{ informations['name'] }}</span>
+                        <span class="info-box-text info-box-text-2">
+                            {{ informations['result'] }}
                         </span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">{{ informations['name'] }}</span>
-                            <span class="info-box-text info-box-text-2">
-                                {{ informations['result'] }}
-                            </span>
-                            <span class="info-box-text info-box-text-2">
-                                {{ informations['comment'] }}
-                            </span>
-                        </div>
+                        <span class="info-box-text info-box-text-2">
+                            {{ informations['comment'] }}
+                        </span>
                     </div>
                 </div>
             </div>
