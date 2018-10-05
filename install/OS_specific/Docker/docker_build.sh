@@ -17,7 +17,7 @@ usage(){
 
 copyNeededFilesForImage(){
 
-for fil in motd bashrc postinst.sh
+for fil in motd bashrc
 do
     cp ../../${fil} ${fil}
 done
@@ -31,7 +31,7 @@ echo ${MYSQLROOT} > mysqlroot
 }
 
 deleteCopiedFiles(){
-    rm motd bashrc nextdom.conf nextdom-ssl.conf nextdom-security.conf privatetmp.conf postinst.sh mysqlroot
+    rm motd bashrc nextdom.conf nextdom-ssl.conf nextdom-security.conf privatetmp.conf mysqlroot
 }
 
 #getOptions
@@ -75,6 +75,3 @@ echo -e "\tdocker attach ${CNAME}"
 echo -e "\t./root/init.sh"
 echo "/!\ now, entering in the docker container"
 docker attach ${CNAME}
-
-#docker cp postinst.sh nextdom-dev:/var/www/html/install/postinst.sh
-#docker cp OS_specific/Docker/init.sh nextdom-dev:/root/
