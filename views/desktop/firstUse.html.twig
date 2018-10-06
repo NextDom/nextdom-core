@@ -1,46 +1,55 @@
 {% include '/commons/header.html.twig' %}
 
+<!-- Header -->
 <div class="row text-center">
     <div id="logo" class="col-md-12 col-sm-12 col-xs-12">
         <img src="public/img/NextDom/NextDom_Wide_AlphaBlackBlue.png">
     </div>
 </div>
+
+<!-- Header bar -->
 <div class="row text-center">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="stepwizard">
             <div class="stepwizard-row setup-panel">
                 <div class="stepwizard-step">
-                    <a href="#step-1" type="button" class="btn btn-primary stepwizard-btn-circle"></a>
+                    <a href="#step-1" type="button" class="btn btn-default primary-bg stepwizard-btn-circle"></a>
                     <p>{{ 'Étape 1' }}</p>
                 </div>
                 <div class="stepwizard-step">
-                    <a href="#step-2" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled"></a>
+                    <a href="#step-2" type="button" class="btn btn-default primary-bg stepwizard-btn-circle" disabled="disabled"></a>
                     <p>{{ 'Étape 2' }}</p>
                 </div>
                 <div class="stepwizard-step">
-                    <a href="#step-3" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled"></a>
+                    <a href="#step-3" type="button" class="btn btn-default primary-bg stepwizard-btn-circle" disabled="disabled"></a>
                     <p>{{ 'Étape 3' }}</p>
                 </div>
                 <div class="stepwizard-step">
-                    <a href="#step-4" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled"></a>
+                    <a href="#step-4" type="button" class="btn btn-default primary-bg stepwizard-btn-circle" disabled="disabled"></a>
                     <p>{{ 'Étape 4' }}</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Content -->
 <div class="row text-center">
     <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
         <div class="box stepwizard-box">
             <div class="box-body">
+
+                <!-- Step 1 section -->
                 <div class="row setup-content" id="step-1">
                     <div class="stepwizard">
                         <h2 class="login-box-msg">{{ 'Bienvenue sur NextDom !' }}</h2>
                         <h5>{{ 'Bravo ! Vous venez d\'installer votre solution domotique, l\'assistant de première utilisation est activé !' }}</h5>
                         <h5>{{ 'Celui-ci va vous guider dans le processus de configuration de votre solution domotique ...' }}</h5>
                     </div>
-                    <button id="toStep2" class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:20px;">{{ 'Suivant' }}<i class="fa fa-caret-right"></i></button>
+                    <button id="toStep2" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'Suivant' }}&nbsp;&nbsp;<i class="fa fa-caret-right"></i></button>
                 </div>
+
+                <!-- Step 2 section -->
                 <div class="row setup-content" id="step-2">
                     <div class="stepwizard">
                         <h2 class="login-box-msg">{{ 'Sécurisez votre NextDom !' }}</h2>
@@ -54,9 +63,11 @@
                             </div>
                         </div>
                     </div>
-                    <button id="toStep3" class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:20px;">{{ 'Suivant' }}<i class="fa fa-caret-right"></i></button>
-                    <button id="backStep1" class="btn btn-primary returnBtn pull-left" type="button" style="margin-top:20px;"><i class="fa fa-caret-left"></i>{{ 'Précédent' }}</button>
+                    <button id="toStep3" class="btn btn-primary nextBtn pull-right primary-bg" type="button">{{ 'Suivant' }}&nbsp;&nbsp;<i class="fa fa-caret-right"></i></button>
+                    <button id="backStep1" class="btn btn-primary returnBtn pull-left primary-bg" type="button"><i class="fa fa-caret-left">&nbsp;&nbsp;</i>{{ 'Précédent' }}</button>
                 </div>
+
+                <!-- Step 3 section -->
                 <div class="row setup-content" id="step-3">
                     <div class="stepwizard">
                         <h2 class="login-box-msg">{{ 'Connectez votre NextDom !' }}</h2>
@@ -77,22 +88,25 @@
                             </div>
                         </div>
                     </div>
-                    <button id="skipStep4" class="btn btn-primary nextBtn" type="button">{{ 'Ignorer' }}<i class="fa fa-ban"></i></button>
-                    <button id="toStep4" class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:20px;">{{ 'Suivant' }}<i class="fa fa-caret-right"></i></button>
-                    <button id="backStep2" class="btn btn-primary returnBtn pull-left" type="button" style="margin-top:20px;"><i class="fa fa-caret-left"></i>{{ 'Précédent' }}<i class="fas fa-caret-left"></i></button>
+                    <button id="skipStep4" class="btn btn-primary nextBtn primary-bg" type="button"><i class="fa fa-ban">&nbsp;&nbsp;</i>{{ 'Ignorer' }}</button>
+                    <button id="toStep4" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'Suivant' }}&nbsp;&nbsp;<i class="fa fa-caret-right"></i></button>
+                    <button id="backStep2" class="btn btn-primary returnBtn primary-bg pull-left" type="button"><i class="fa fa-caret-left">&nbsp;&nbsp;</i>{{ 'Précédent' }}</button>
                 </div>
+
+                <!-- Step 4 section -->
                 <div class="row setup-content" id="step-4">
                     <div class="stepwizard">
                         <h2 class="login-box-msg">{{ 'Bravo ! La configuration de votre NextDom est terminée !' }}</h2>
                         <h5>{{ 'Cliquer sur le bouton Terminer pour profiter de votre solution Domotique ...' }}</h5>
 
                         </div>
-                        <button id="finishConf" class="btn btn-primary nextBtn pull-right ui-icon-closethick" type="button" style="margin-top:20px;">{{ 'Terminer' }}<i class="fa fa-check-circle"></i></button>
-                        <button id="backStep3" class="btn btn-primary returnBtn pull-left" type="button" style="margin-top:20px;"><i class="fa fa-caret-left"></i>{{ 'Précédent' }}</button>
+                        <button id="finishConf" class="btn btn-primary nextBtn primary-bg pull-right ui-icon-closethick" type="button">{{ 'Terminer' }}&nbsp;&nbsp;<i class="fa fa-check-circle"></i></button>
+                        <button id="backStep3" class="btn btn-primary returnBtn primary-bg pull-left" type="button"><i class="fa fa-caret-left">&nbsp;&nbsp;</i>{{ 'Précédent' }}</button>
                     </div>
                 </div>
             </div>
         </div>
+
         {% if JS_END_POOL is defined %}
             {% for jsFile in JS_END_POOL %}
                 <script src="{{ jsFile }}"></script>
