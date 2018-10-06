@@ -148,6 +148,11 @@
                     {% endfor %}
                 </ul>
             </li>
+            {% if dashboardCategory == 'all' %}
+                <li class="treeview">
+                    <a href="#" id="bt_editDashboardWidgetOrder" data-mode="0"><i class="fas fa-pencil-alt"></i><span>&nbsp;&nbsp;{{ 'Réorganiser ...' }}</span></a>
+                </li>
+            {% endif %}
         </ul>
     </section>
     <!-- /.sidebar -->
