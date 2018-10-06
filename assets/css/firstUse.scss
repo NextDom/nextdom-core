@@ -1,20 +1,23 @@
+/* Colors */
+$Primary-Color:#33B8CC;
+.primary-bg {
+  background-color: $Primary-Color;
+}
+
+/* Sections */
 body {
   margin-top: 40px;
 }
-
 .stepwizard-step p {
   margin-top: 10px;
 }
-
 .stepwizard-row {
   display: table-row;
 }
-
 .stepwizard-box {
   border-bottom: 2px solid rgba(0,0,0,0.2);
   border-top: 1px solid #d2d6de;
 }
-
 .stepwizard {
   display: table;
   width: 65%;
@@ -24,12 +27,10 @@ body {
   padding-top:20px;
   padding-bottom: 20px;
 }
-
 .stepwizard-step button[disabled] {
   opacity: 1 !important;
   filter: alpha(opacity=100) !important;
 }
-
 .stepwizard-row:before {
   top: 35px;
   bottom: 0;
@@ -41,35 +42,17 @@ body {
   opacity: 0.4;
   z-order: 0;
 }
-
 .stepwizard-step {
   display: table-cell;
   text-align: center;
   position: relative;
 }
 
-.stepwizard-btn-circle {
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    padding: 4px 0;
-    font-size: 14px;
-    font-weight: bold;
-    line-height: 1.428571429;
-    border-radius: 15px;
-    color: white;
-}
-
-.stepwizard-passwd {
-    padding-left: 33%;
-    padding-right: 33%;
-}
-
+/* Inputs */
 .stepwizard-passwd {
     padding-left: 20%;
     padding-right: 20%;
 }
-
 .stepwizard-passwd > input {
   width: 65%;
   height: 30px;
@@ -77,17 +60,14 @@ body {
   margin-bottom: 15px;
 }
 
-.stepwizard-btn-circle.disabled, .stepwizard-btn-circle[disabled] {
-  color: Black;
-  opacity: 0.9;
-}
-
+/* Logo & images */
 #logo img {
   height: 100px;
   border-radius: 10px;
   margin-bottom: 10px;
 }
 
+/* Titles */
 .stepwizard h1,
 .stepwizard h2,
 .stepwizard h3,
@@ -98,6 +78,7 @@ body {
   line-height: 1.8;
 }
 
+/* Resizing */
 @media (max-width: 991px) {
   #market {
     border-bottom: 1px solid #ccc;
@@ -111,25 +92,29 @@ body {
   }
 }
 
+/* Buttons */
 .nextBtn{
-  padding-right: 10px;
   margin-right: 20px;
   margin-top:20px;
   margin-bottom:7px;
 }
-
 .returnBtn{
-  padding-left: 10px;
   margin-left: 20px;
   margin-top:20px;
   margin-bottom:7px;
 }
-
-.nextBtn i{
-  padding-left: 10px;
+.stepwizard-btn-circle {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 4px 0;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.428571429;
+    border-radius: 15px;
+    color: white;
 }
-
-.returnBtn i{
-  padding-right: 10px;
-
+.stepwizard-btn-circle.disabled, .stepwizard-btn-circle[disabled] {
+  color: Black;
+  opacity: 0.9;
 }
