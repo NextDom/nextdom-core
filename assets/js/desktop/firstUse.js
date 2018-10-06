@@ -12,15 +12,13 @@ $(document).ready(function () {
         var item = $(this);
 
         if (!item.hasClass('disabled')) {
-            navListItems.removeClass('btn-primary').addClass('btn-default');
-            item.addClass('btn-primary');
+            navListItems.removeClass('primary-bg').addClass('btn-default');
+            item.addClass('primary-bg');
             allWells.hide();
             target.show();
             target.find('input:eq(0)').focus();
         }
     });
-
-
     $('div.setup-panel div a.btn-primary').trigger('click');
 });
 
@@ -62,15 +60,15 @@ $("#toStep3").click(function () {
                     notify("Core", error.message, 'error');
                 },
                 success: function () {
-                    notify("Core", '{{Mot de passe changé avec success}}', 'success');
+                    notify("Core", '{{Mot de passe changé avec succès}}', 'success');
                     NextStep("#toStep3");
                 }
             });
         } else {
-            notify("Erreur", "Les deux mots de passe ne sont pas identiques", "error")
+            notify("Erreur", "Les deux mots de passe ne sont pas identiques !", "error")
         }
     } else {
-        notify("Erreur", "Veuillez saisir un mot de passe", "error")
+        notify("Erreur", "Veuillez saisir un mot de passe ...", "error")
     }
 });
 
