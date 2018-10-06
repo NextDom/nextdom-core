@@ -12,8 +12,10 @@ $(document).ready(function () {
         var item = $(this);
 
         if (!item.hasClass('disabled')) {
-            navListItems.removeClass('btn-primary').removeClass('primary-bg').addClass('btn-default');
-            item.addClass('btn-primary').addClass('primary-bg');
+            navListItems.removeClass('primary-bg');
+            navListItems.removeClass('btn-primary').addClass('btn-default');
+            item.addClass('btn-primary');
+            item.addClass('primary-bg');
             allWells.hide();
             target.show();
             target.find('input:eq(0)').focus();
