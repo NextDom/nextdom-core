@@ -111,9 +111,13 @@ body {
 .tooltip-inner {
   padding: 8px 8px;
   border-radius: 8px;
+  background: $lightblack;
 }
 .tooltip.in {
   opacity: 0.95;
+}
+.tooltip-arrow {
+  border-top-color: $lightblack !important;
 }
 
 /* User panel */
@@ -682,4 +686,10 @@ input[type="checkbox"] {
 
 .eqLogic-widget{
   max-width: 95%;
-  }
+}
+
+/* Modal */
+.ui-dialog .ui-dialog-titlebar-close {
+    right: 0.5em;
+    top: 70%;
+}
