@@ -160,7 +160,7 @@
                 ligne += '<span class="userAttr" data-l1key="login" />';
                 ligne += '</td>';
                 ligne += '<td>';
-                ligne += '<label class="form-group"><input type="checkbox" class="userAttr" data-l1key="enable" '+disable+' />{{Actif}}</label>';
+                ligne += '<label><input type="checkbox" class="userAttr" data-l1key="enable" '+disable+' />{{Actif}}</label>';
                 ligne += '<label><input type="checkbox" class="userAttr" data-l1key="options" data-l2key="localOnly" '+disable+' />{{Local}}</label>';
                 ligne += '</td>';
                 ligne += '<td style="width:175px;">';
@@ -186,7 +186,7 @@
                ligne += '</td>';
                ligne += '<td>';
                if(disable == ''){
-                   ligne += '<a class="cursor bt_changeHash btn btn-sm btn-warning btn-xs pull-right" title="{{Renouveler la clef API}}"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{Regénération API}}</a>';
+                   ligne += '<a class="cursor bt_changeHash btn btn-sm btn-warning pull-right" title="{{Renouveler la clef API}}"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{Regénération API}}</a>';
                    if (ldapEnable != '1') {
                     ligne += '<a class="btn btn-sm btn-danger pull-right bt_del_user" style="margin-bottom : 5px;"><i class="fas fa-trash-alt">&nbsp;&nbsp;</i>{{Supprimer}}</a>';
                     ligne += '<a class="btn btn-sm btn-warning pull-right bt_change_mdp_user"><i class="fas fa-lock">&nbsp;&nbsp;</i>{{Mot de passe}}</a>';

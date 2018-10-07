@@ -7,7 +7,7 @@ function updateNoteList() {
             var note = $('#div_noteManagerDisplay').getValues('.noteAttr')[0];
             var ul = '';
             for (var i in notes) {
-                ul += '<li class="cursor li_noteDisplay" data-id="' + notes[i].id + '"><a>' + notes[i].name + '</a></li>';
+                ul += '<li class="cursor li_noteDisplay" data-id="' + notes[i].id + '"><a class="label-list">' + notes[i].name + '</a></li>';
             }
             $('#ul_noteList').empty().append(ul);
             if (note.id != '') {
@@ -66,7 +66,7 @@ $('#bt_noteManagerSave').on('click', function () {
 
 $('#bt_noteManagerRemove').on('click', function () {
     var note = $('#div_noteManagerDisplay').getValues('.noteAttr')[0];
-    var r = confirm('{{Etês vous sur de vouloir supprimer la note : }}' + note.name + ' ?');
+    var r = confirm('{{Etês-vous sur de vouloir supprimer la note : }}' + note.name + ' ?');
     if (r == true) {
         nextdom.note.remove({
             id: note.id,

@@ -64,6 +64,11 @@ $nextdom_gray_title: $whitegray;
 .skin-nextdom .legend-title {
     border-color: $nextdom_gray_title;
 }
+.skin-nextdom .label-list {
+    background-color: $lightgolden;
+    color: $grey !important;
+    border-color: $lightgrey;
+}
 
 /* Checkbox */
 .skin-nextdom [type="checkbox"]:not(:checked):before,
@@ -106,10 +111,10 @@ $nextdom_gray_title: $whitegray;
 
 /* Tooltip */
 .skin-nextdom .tooltip-inner {
-  background: $grey;
+  background: $lightblack;
 }
 .skin-nextdom .tooltip-arrow {
-  border-top-color: $grey;
+  border-top-color: $lightblack !important;
 }
 
 /* Navs */

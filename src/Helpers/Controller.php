@@ -117,7 +117,7 @@ class Controller
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
-     
+
         $pageContent['JS_VARS']['nextdom_Welcome'] = \config::byKey('nextdom::Welcome');
         $pageContent['JS_VARS']['SEL_OBJECT_ID'] = Utils::init('object_id');
         $pageContent['JS_VARS']['SEL_CATEGORY'] = Utils::init('category', 'all');
@@ -404,7 +404,7 @@ class Controller
         $pageContent['JS_VARS']['log_display_name'] = Utils::init('log', 'event');
         $pageContent['JS_VARS']['log_default_search'] = Utils::init('search', '');
 
-        return $render->get('/desktop/admin/log_display.html.twig', $pageContent);
+        return $render->get('/desktop/tools/log_display.html.twig', $pageContent);
     }
 
     /**
@@ -1138,7 +1138,7 @@ class Controller
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
-        
+
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/note.js';
         return $render->get('/desktop/tools/note.html.twig', $pageContent);
     }
@@ -1195,7 +1195,7 @@ class Controller
 
         return $render->get('/desktop/tools/reports-view.html.twig', $pageContent);
     }
-    
+
     /**
      * Render update page
      *
@@ -1785,7 +1785,7 @@ class Controller
 
         return $render->get('/desktop/object.html.twig', $pageContent);
     }
-    
+
     /**
      * Render interact page
      *

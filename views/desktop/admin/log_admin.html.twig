@@ -1,9 +1,9 @@
 <div class="box" id="log_admin">
     <!-- Header bar -->
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fas fa-pencil-square-o">&nbsp;&nbsp;</i>{{ 'Logs' }}</h3>
+        <h3 class="box-title"><i class="fas fa-file-alt">&nbsp;&nbsp;</i>{{ 'Logs' }}</h3>
         <div class="box-tools pull-right">
-            <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
+            <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fas fa-times"></i></a>
         </div>
     </div>
 
@@ -43,10 +43,8 @@
                     </div>
                 </div>
                 <div id="div_actionOnMessage"></div>
-            </fieldset>
 
-            <!-- Alertes Section -->
-            <fieldset>
+                <!-- Alertes Section -->
                 <legend class="legend-title">{{ 'Alertes' }}</legend>
                 {% for level, value in adminAlerts %}
                     <div class="form-group">
@@ -68,10 +66,8 @@
                         </div>
                     </div>
                 {% endfor %}
-            </fieldset>
 
-            <!-- Log Section -->
-            <fieldset>
+                <!-- Log Section -->
                 <legend class="legend-title">{{ 'Log' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Moteur de log' }}</label>
@@ -99,7 +95,7 @@
                 </div>
                 <div class="form-group">
                     <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Format des logs' }}</label>
-                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
                         <input type="text" class="configKey form-control" data-l1key="log::formatter"/>
                     </div>
                 </div>

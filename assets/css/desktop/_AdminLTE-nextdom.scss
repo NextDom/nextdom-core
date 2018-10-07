@@ -106,9 +106,14 @@ body {
   right: 3px;
   font-size: 12px;
 }
+
+/* Tooltip */
 .tooltip-inner {
   padding: 8px 8px;
   border-radius: 8px;
+}
+.tooltip.in {
+  opacity: 0.95;
 }
 
 /* User panel */
@@ -224,7 +229,7 @@ body {
   line-height: 2.5;
   height: 70px;
   margin: 5px 5px 5px 5px;
-  min-width: 100px;
+  min-width: 115px;
 }
 .btn-tab {
   line-height: 2;
@@ -297,7 +302,7 @@ body {
 
   color: #666;
   box-shadow: 0 20px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-  border:{
+  border: {
       top: 0;
       radius: 7px;
       top-left-radius: 0px;
@@ -309,7 +314,7 @@ body {
 .card {
   box-shadow: 0 1px 4px 0 rgba(0,0,0,.14);
   border: 0;
-  margin:{
+  margin: {
       bottom: 60px;
       top: 40px;
   }
@@ -323,7 +328,7 @@ body {
   min-width: 0;
   background: $white;
   word-wrap: break-word;
-  background:{
+  background: {
     color: $white;
     clip: border-box;
   }
@@ -358,7 +363,7 @@ body {
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text {
   border-radius: 5px;
   background-color: $darkgray;
-  margin:{
+  margin: {
     top: -10px;
     right: 10px;
   }
@@ -406,7 +411,7 @@ body {
 }
 .label-value {
     padding: 8px 10px 10px 12px;
-  font:{
+  font: {
     size: 100%;
     weight: 400;
     }
@@ -416,7 +421,7 @@ body {
 }
 .label-unity, .label-unity-big {
     padding: 9px 0px 10px;
-    font:{
+    font: {
       size: 100%;
       weight: 500;
     }
@@ -439,7 +444,18 @@ body {
   border: 1px solid;
   padding: 5px 10px;
   margin-bottom: 15px;
+  margin-top: 40px;
   background-color: whitesmoke;
+}
+.label-list {
+    font-size: 95%;
+    border: 1px solid;
+    border-radius: 2px;
+    margin: 4px 0px;
+    padding: 19px;
+}
+.legend-first-btn {
+    padding-bottom: 0px;
 }
 @media (max-width: 767px) {
     .legend-title {
@@ -457,7 +473,7 @@ body {
     font-size: 100%;
     border: 1px solid;
     border-radius: 2px;
-    margin:{
+    margin: {
       left: -2px;
       top: 2px;
       bottom: 2px;
@@ -472,7 +488,7 @@ body {
 }
 
 .label-sticker {
-    margin:{
+    margin: {
         left: 15px;
         right: 15px;
   }
@@ -481,11 +497,11 @@ body {
 
 .label-sticker-big {
     font-size: 100%;
-    padding:{
+    padding: {
       top: 10px;
       bottom: 10px;
     }
-    margin:{
+    margin: {
       left: 15px;
       right: 15px;
    }
@@ -494,12 +510,13 @@ body {
 /* Logos */
 .login-logo,
 .register-logo {
-  font:{
+  font: {
       size: 35px;
       weight: 300;
       align: center;
   }
-  padding:{
+
+  padding: {
     bottom: 15px;
     top: 25px;
   }
@@ -520,7 +537,7 @@ body {
   min-height: 100%;
   background-color: $nextdom_bg;
   z-index: 800;
-  padding:{
+  padding: {
      left: 15px;
      right: 15px;
   }
@@ -646,19 +663,23 @@ input[type="checkbox"] {
 
 /* Info-box */
 .info-box {
-  min-height: 70px;
+  min-height: 65px;
   margin-bottom: 10px;
 }
 .info-box-icon {
-  height: 70px;
-  width: 70px;
+  height: 65px;
+  width: 65px;
   font-size: 38px;
-  line-height: 70px;
+  line-height: 65px;
 }
 .info-box-content {
-  padding: 14px 10px;
-  margin-left: 70px;
+  padding: 12px 10px;
+  margin-left: 65px;
 }
 .info-box-text-2 {
   text-transform:capitalize;
 }
+
+.eqLogic-widget{
+  max-width: 95%;
+  }
