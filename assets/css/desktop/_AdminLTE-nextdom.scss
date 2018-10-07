@@ -174,13 +174,15 @@ body {
 
 /* Boxs */
 .box {
+  border:{
+      radius: 4px;
+      left: 1px solid rgba(0,0,0,0.2);
+      right: 1px solid rgba(0,0,0,0.2);
+      bottom: 1px solid rgba(0,0,0,0.2);
+      top: 3px solid $lightgrey;
+  }
   position: relative;
-  border-radius: 4px;
   background: $white;
-  border-left: 1px solid rgba(0,0,0,0.2);
-  border-right: 1px solid rgba(0,0,0,0.2);
-  border-bottom: 1px solid rgba(0,0,0,0.2);
-  border-top: 3px solid $lightgrey;
   margin-bottom: 20px;
   width: 100%;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08);
@@ -299,7 +301,6 @@ body {
 .register-box-body {
   background: #fff;
   padding: 20px;
-
   color: #666;
   box-shadow: 0 20px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   border: {
@@ -373,12 +374,15 @@ body {
   padding-top: 5px;
   text-align: center;
 }
+
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text > i {
   font-size: 2em;
 }
+
 .card-body {
   margin-top: 10px, 10px, 10px, 10px;
 }
+
 .card-category {
     position: relative;
     font-size: 18px;
@@ -402,13 +406,16 @@ body {
   line-height: .9;
   z-index: -1;
 }
+
 .label {
   display: inline-block;
 }
+
 .label-config {
   padding: 9px 10px 10px;
   font-size: 100%;
 }
+
 .label-value {
     padding: 8px 10px 10px 12px;
   font: {
@@ -419,6 +426,7 @@ body {
     border-radius: 2px;
     margin-left: -2px;
 }
+
 .label-unity, .label-unity-big {
     padding: 9px 0px 10px;
     font: {
@@ -426,11 +434,13 @@ body {
       weight: 500;
     }
 }
+
 @media (max-width: 767px) {
     .label-unity-big {
         margin-left: 15px;
     }
 }
+
 .label-badge {
     position: absolute;
     top: 10px;
@@ -439,6 +449,7 @@ body {
     height: 34px;
     text-align: center;
 }
+
 .legend-title {
   font-size: 16px;
   border: 1px solid;
@@ -447,6 +458,7 @@ body {
   margin-top: 40px;
   background-color: whitesmoke;
 }
+
 .label-list {
     font-size: 95%;
     border: 1px solid;
@@ -454,20 +466,24 @@ body {
     margin: 4px 0px;
     padding: 19px;
 }
+
 .legend-first-btn {
     padding-bottom: 0px;
 }
+
 @media (max-width: 767px) {
     .legend-title {
         text-align: center;
     }
 }
+
 @media (max-width: 991px) {
     .form-horizontal .control-label-big {
         margin-bottom: 5px;
         text-align: left;
   }
 }
+
 .label-icon {
     padding: 6px 10px 8px 9px;
     font-size: 100%;
@@ -550,22 +566,27 @@ body {
         padding-top: 106px;
     }
 }
+
 .container-fluid{
   padding-right: 0;
   padding-left: 0;
 }
+
 .container-light {
   padding-right: 5px;
   padding-left: 5px;
 }
+
 .wrapper.fullscreen header,
 .wrapper.fullscreen footer,
 .wrapper.fullscreen aside {
   display: none;
 }
+
 .wrapper.fullscreen .content-wrapper {
   margin-left: 0px !important;
 }
+
 .wrapper.fullscreen #div_mainContainer {
   margin-top: -50px;
 }
@@ -588,6 +609,7 @@ input[type="checkbox"] {
   cursor: pointer;
   margin: 0 0 0 0;
 }
+
 /* frame */
 [type="checkbox"]:not(:checked):before,
 [type="checkbox"]:checked:before {
@@ -599,6 +621,7 @@ input[type="checkbox"] {
   border: 1px solid #ccc;
   border-radius: 2px;
 }
+
 /* content */
 [type="checkbox"]:not(:checked):after,
 [type="checkbox"]:checked:after {
@@ -609,16 +632,19 @@ input[type="checkbox"] {
   font-size: 24px;
   transition: all .2s;
 }
+
 /* checked state */
 [type="checkbox"]:not(:checked):after {
   opacity: 0; /* coche invisible */
   transform: scale(0); /* mise à l'échelle à 0 */
 }
+
 /* unchecked state */
 [type="checkbox"]:checked:after {
   opacity: 0.9; /* coche opaque */
   transform: scale(1); /* mise à l'échelle 1:1 */
 }
+
 /* focus frame */
 [type="checkbox"]:focus {
     outline: none !important;
@@ -628,9 +654,11 @@ input[type="checkbox"] {
 .clock>a:hover {
     background: transparent !important;
 }
+
 .clock {
     height: 50px;
 }
+
 .clocktime {
     font-size: 16px;
     text-align: right;
@@ -648,6 +676,7 @@ input[type="checkbox"] {
         padding-top: 7px;
     }
 }
+
 @media (min-width: 768px) {
   .sidebar-mini.sidebar-collapse .main-sidebar {
     z-index: 1020;
@@ -666,16 +695,19 @@ input[type="checkbox"] {
   min-height: 65px;
   margin-bottom: 10px;
 }
+
 .info-box-icon {
   height: 65px;
   width: 65px;
   font-size: 38px;
   line-height: 65px;
 }
+
 .info-box-content {
   padding: 12px 10px;
   margin-left: 65px;
 }
+
 .info-box-text-2 {
   text-transform:capitalize;
 }
