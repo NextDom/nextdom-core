@@ -4,7 +4,7 @@
 $nextdom_accent: $red;
 $nextdom_primary: $red;
 $nextdom_polar_accent: $white;
-$nextdom_table_title:$lightgolden;
+$nextdom_table_title:$lightgrey;
 $nextdom_gray_title: $whitegray;
 
 /* Theme base */
@@ -102,14 +102,6 @@ $nextdom_gray_title: $whitegray;
 }
 .skin-red .table-condensed {
   background-color: $whitelightgray;
-}
-
-/* Tooltip */
-.skin-nextdom .tooltip-inner {
-  background: $lightblack;
-}
-.skin-nextdom .tooltip-arrow {
-  border-top-color: $lightblack !important;
 }
 
 /* Navs */
