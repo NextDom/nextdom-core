@@ -127,11 +127,16 @@ $(function () {
         if ($(this).attr('href').match("^#")) {
             return;
         }
-        if($(this).attr('target') == '_blank'){
+        if($(this).attr('target') === '_blank'){
             return;
         }
         $('li.dropdown.open').click();
-        loadPage($(this).attr('href'));
+        if ($(this).data('reload') === 'yes') {
+            window.location.href= window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + $(this).attr('href');
+        }
+        else {
+            loadPage($(this).attr('href'));
+        }
         e.preventDefault();
         e.stopPropagation();
     });
