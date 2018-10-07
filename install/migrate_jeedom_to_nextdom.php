@@ -195,7 +195,12 @@ try {
         echo "***ERREUR*** " . $ex->getMessage() . "\n";
     }
 
-
+    echo "Restauration des droits...";
+    shell_exec('chmod 775 -R ' . dirname(__FILE__));
+    shell_exec('chown -R www-data:www-data ' . dirname(__FILE__));
+    shell_exec('chmod 777 -R /tmp/');
+    shell_exec('chown www-data:www-data -R /tmp/');
+    echo "OK\n";
 
     try {
         nextdom::start();
@@ -205,7 +210,7 @@ try {
 
     try {
         echo "Envoie l'événement de la fin de la sauvegarde...";
-        nextdom::event('end_restore');
+        nextdom::event('end_migration');
         echo "OK\n";
     } catch (Exception $e) {
         echo '***ERREUR*** ' . $e->getMessage();
