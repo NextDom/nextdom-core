@@ -5,7 +5,7 @@ if (!isConnect()) {
 ?>
 
 <div class="alert alert-success">
-    <h4><i class="fas fa-thumbs-up"></i>{{Félicitations}}</h4>
+    <h4><i class="fas fa-thumbs-up">&nbsp;&nbsp;</i>{{Félicitations}}</h4>
     {{Bienvenue dans}} <?= config::byKey('product_name'); ?> {{, merci d\'avoir choisit cet outil pour votre habitat connecté.'}}
     <span class='btn btn-legend btn-action btn-legend pull-right' id='bt_doNotDisplayWelcome'><i class="fas fa-eye-slash">&nbsp;&nbsp;</i>{{Ne plus afficher}}</span>
 </div>
@@ -63,6 +63,7 @@ if (!isConnect()) {
 		<div class="col-md-6">
 			<div class="box box-solid">
 				<div class="box-header with-border">
+          <i class="fas fa-rocket">&nbsp;&nbsp;</i>
 					<h3 class="box-title">{{Migration Jeedom}}&nbsp;&nbsp;</h3>
           <i class="fas fa-caret-right">&nbsp;</i>
           <h3 class="box-title">{{NextDom}}</h3>
@@ -71,7 +72,7 @@ if (!isConnect()) {
 				<div class="box-body">
 					<div class="row text-center">
 						<div class="form-group col-xs-12">
-							<a href="index.php?v=d&p=migration"><i class="fas fa-upload" style="font-size:14.3em;color:#33B8CC"></i></a>
+							<a href="index.php?v=d&p=migration"><i class="fas fa-rocket" style="font-size:14.3em;color:#33B8CC"></i></a>
 						</div>
 					</div>
 				</div>

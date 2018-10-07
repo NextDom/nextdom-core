@@ -6,23 +6,31 @@ if (!isConnect('admin')) {
 <div style="display: none;" id="div_noteManagementAlert"></div>
 <div class="row row-overflow">
     <div class="col-lg-2 col-md-3 col-sm-4" style="overflow-y:auto;overflow-x:hidden;">
-        <div class="bs-sidebar">
-            <ul class="nav nav-list bs-sidenav list-group" id="ul_noteList">
+        <fieldset>
+            <legend class="legend-title">{{Liste des notes}}</legend>
+                <div class="bs-sidebar">
+                    <ul class="nav nav-list bs-sidenav list-group" id="ul_noteList">
 
-            </ul>
-        </div>
+                    </ul>
+                </div>
+            </legend>
+        </fieldset>
     </div>
-    <div class="col-lg-10 col-md-9 col-sm-8" style="border-left: solid 1px #EEE; padding-left: 25px;overflow-y:hidden;overflow-x:hidden;">
-        <a class="btn btn-danger btn-xs pull-right" id="bt_noteManagerRemove"><i class="fas fa-trash"></i> {{Supprimer}}</a>
-        <a class="btn btn-success btn-xs pull-right" id="bt_noteManagerSave"><i class="fas fa-save"></i> {{Sauvegarder}}</a>
-        <a class="btn btn-success btn-xs pull-right" id="bt_noteManagerAdd"><i class="fas fa-plus"></i> {{Ajouter}}</a>
-        <br/><br/>
-        <div id="div_noteManagerDisplay">
-            <input class="noteAttr form-control" data-l1key="id" style="display:none;" disabled/>
-            <input class="noteAttr form-control" data-l1key="name" disabled/>
-            <br/>
-            <textarea class="noteAttr form-control ta_autosize" data-l1key="text" disabled></textarea>
-        </div>
+    <div class="col-lg-10 col-md-9 col-sm-8" style="border-left: solid 1px #EEE;overflow-y:hidden;overflow-x:hidden;">
+        <fieldset>
+            <legend class="legend-title legend-first-btn">{{Note selectionnée}}
+              <div class="box-tools pull-right">
+                  <a class="btn btn-action btn-legend" id="bt_noteManagerRemove"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{Supprimer}}</a>
+                  <a class="btn btn-success btn-legend" id="bt_noteManagerSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{Sauvegarder}}</a>
+                  <a class="btn btn-success btn-legend" id="bt_noteManagerAdd"><i class="fas fa-plus">&nbsp;&nbsp;</i>{{Ajouter}}</a>
+                </div>
+            </legend>
+            <div id="div_noteManagerDisplay">
+                <input class="noteAttr form-control" data-l1key="id" style="display:none;" disabled/>
+                <input class="noteAttr form-control" data-l1key="name" disabled/>
+                <textarea class="noteAttr form-control ta_autosize" data-l1key="text" disabled></textarea>
+            </div>
+        </fieldset>
     </div>
 </div>
 
