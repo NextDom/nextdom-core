@@ -25,22 +25,21 @@
 
                 <!-- Profil tab -->
                 <div role="tabpanel" class="tab-pane active" id="profil">
-                    <legend class="legend-title">{{ 'Choix de la photo de profil' }}</legend>
-                    <div class="col-sm-6">
-                        <form class="form-horizontal">
-                            <fieldset>
-                                <div class="form-group">
-                                    <input class="userAttr form-control" data-l1key="options" data-l2key="avatar" style="display:none"/>
-                                    <div>
-                                        <input class="userAttr form-control" id="user_avatar" type="file" name="images" data-url="core/ajax/profils.ajax.php?action=imageUpload"/>
-                                    </div>
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <legend class="legend-title">{{ 'Photo de profil' }}</legend>
+                            <div class="form-group col-sm-6">
+                                <img id="monAvatar" src="{{ profilsUser.getOptions('avatar') }}" style="width:auto; height:200px"></a>
+                                <input class="userAttr form-control" data-l1key="options" data-l2key="avatar"/>
+                            </div>
+                            <legend class="legend-title">{{ 'Choix de la photo de profil' }}</legend>
+                            <div class="form-group col-sm-6">
+                                <div>
+                                    <input class="userAttr form-control" id="user_avatar" type="file" name="images" data-url="core/ajax/profils.ajax.php?action=imageUpload"/>
                                 </div>
-                            </fieldset>
-                        </form>
-                    </div>
-                    <div class="col-sm-6">
-                        <img id="monAvatar" src="{{ profilsUser.getOptions('avatar') }}" style="width:auto; height:200px"></a>
-                    </div>
+                            </div>
+                        </fieldset>
+                    </form>
                 </div>
 
                 <!-- Themes tab -->
@@ -112,7 +111,6 @@
                     <legend class="legend-title">{{ 'Options d\'interfaces' }}</legend>
                     <form class="form-horizontal">
                         <fieldset>
-                            <legend><i class="fas fa-home"></i> {{ 'Général' }}</legend>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">{{ 'Afficher les menus' }}</label>
                                 <div class="col-sm-1">
