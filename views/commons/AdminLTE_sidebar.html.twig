@@ -48,7 +48,7 @@
                         <a href="#"><i class="fa fa-dashboard"></i>&nbsp;&nbsp;{{ 'Dashboard' }}<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                         <ul class="treeview-menu">
                             <li class="treeview-menu">
-                            <li><a href="index.php?v=d&p=dashboard">{{ 'Afficher tout' }}</a></li>
+                            <li><a href="{{ HOMELINK }}">{{ 'Afficher tout' }}</a></li>
                             {% for jeeObject in MENU_JEEOBJECT_TREE %}
                                 <li><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
                             {% endfor %}
