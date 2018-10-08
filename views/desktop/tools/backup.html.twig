@@ -2,7 +2,7 @@
     <div class="box" id="backup">
         <!-- Header bar -->
         <div class="box-header with-border ">
-            <h3 class="box-title"><i class="fa fa-hand-o-right"></i>{{ 'Sauvegardes / Restaurations' }}</h3>
+            <h3 class="box-title"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegardes / Restaurations' }}</h3>
             <div class="box-tools pull-right">
                 <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fas fa-times"></i></a>
             </div>
@@ -18,15 +18,15 @@
                     <p class="alert alert-info">{{ 'Seront sauvegardé les paramètres, dashboard, vues, designs, plugins, widgets etc...' }}</p>
 
                     <!-- Sauvegardes Section -->
-                    <legend class="legend-title">{{ 'Paramètres' }}</legend>
+                    <legend class="legend-title">{{ 'Paramètres des sauvegardes' }}</legend>
                     <div class="form-group">
-                        <label class="col-sm-4 col-xs-12 control-label">{{ 'Emplacement des sauvegardes' }}</label>
+                        <label class="col-sm-4 col-xs-12 control-label">{{ 'Emplacement' }}</label>
                         <div class="col-sm-4 col-xs-12">
                             <input type="text" class="configKey form-control" data-l1key="backup::path"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 col-xs-12 control-label">{{ 'Mémorisation des sauvegardes sur' }}</label>
+                        <label class="col-sm-4 col-xs-12 control-label">{{ 'Mémorisation sur' }}</label>
                         <div class="col-sm-4 col-xs-8">
                             <input type="text" class="configKey form-control" data-l1key="backup::keepDays"/>
                         </div>
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 col-xs-12 control-label">{{ 'Taille totale maximale des sauvegardes' }}</label>
+                        <label class="col-sm-4 col-xs-12 control-label">{{ 'Taille totale maximale' }}</label>
                         <div class="col-sm-4 col-xs-8">
                             <input type="text" class="configKey form-control" data-l1key="backup::maxSize"/>
                         </div>
@@ -59,29 +59,29 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 col-xs-6 control-label">{{ 'Restaurer la sauvegarde' }}</label>
+                        <label class="col-sm-4 col-xs-6 control-label">{{ 'Restauration' }}</label>
                         <div class="col-sm-4 col-xs-6">
-                            <a class="btn btn-warning" id="bt_restoreNextDom"><i class="fas fa-refresh fa-spin" style="display : none;">&nbsp;&nbsp;</i><i class="far fa-file">&nbsp;&nbsp;</i>{{ 'Restaurer' }}</a>
+                            <a class="btn btn-warning" id="bt_restoreNextDom"><i class="fas fa-refresh fa-spin" style="display : none;">&nbsp;&nbsp;</i><i class="far fa-file">&nbsp;&nbsp;</i>{{ 'Restaurer le selection' }}</a>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 col-xs-6 control-label">{{ 'Supprimer la sauvegarde' }}</label>
+                        <label class="col-sm-4 col-xs-6 control-label">{{ 'Suppression' }}</label>
                         <div class="col-sm-4 col-xs-6">
-                            <a class="btn btn-danger" id="bt_removeBackup"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                            <a class="btn btn-danger" id="bt_removeBackup"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer la selection' }}</a>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 col-xs-6 control-label">{{ 'Envoyer une sauvegarde' }}</label>
                         <div class="col-sm-8 col-xs-6">
                         <span class="btn btn-default btn-file">
-                            <i class="fas fa-cloud-upload-alt">&nbsp;&nbsp;</i>{{ 'Envoyer' }}<input id="bt_uploadBackup" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token={{ backupAjaxToken }}">
+                            <i class="fas fa-cloud-upload-alt">&nbsp;&nbsp;</i>{{ 'Selectionner' }}<input id="bt_uploadBackup" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token={{ backupAjaxToken }}">
                         </span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 col-xs-6 control-label">{{ 'Télécharger la sauvegarde' }}</label>
+                        <label class="col-sm-4 col-xs-6 control-label">{{ 'Téléchargement' }}</label>
                         <div class="col-sm-4 col-xs-6">
-                            <a class="btn btn-success" id="bt_downloadBackup"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{ 'Télécharger' }}</a>
+                            <a class="btn btn-success" id="bt_downloadBackup"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{ 'Télécharger la selection' }}</a>
                         </div>
                     </div>
 
@@ -91,9 +91,10 @@
                             {% set cssClass = 'repo_' ~ repo %}
                             <legend class="legend-title">{{ 'Sauvegardes' }} {{ repoData['name'] }}</legend>
                             <div class="form-group">
-                                <label class="col-sm-4 col-xs-6 control-label">{{ 'Envoi des sauvegardes' }}</label>
+                                <label class="col-sm-4 col-xs-6 control-label">{{ 'Envoi automatique' }}</label>
                                 <div class="col-sm-4 col-xs-6">
                                     <input type="checkbox" class="configKey" data-l1key="{{ repo }}::cloudUpload"/>
+                                    <label for="{{ repo }}::cloudUpload" class="control-label label-check">{{ 'Activer' }}</label>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -108,9 +109,9 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-4 col-xs-6 control-label">{{ 'Restaurer la sauvegarde' }}</label>
+                                <label class="col-sm-4 col-xs-6 control-label">{{ 'Restauration' }}</label>
                                 <div class="col-sm-4 col-xs-6">
-                                    <a class="btn btn-warning bt_restoreRepoBackup" data-repo="{{ repo }}"><i class="fas fa-refresh fa-spin" style="display: none;">&nbsp;&nbsp;</i><i class="fas fa-file">&nbsp;&nbsp;</i>{{ 'Restaurer' }}</a>
+                                    <a class="btn btn-warning bt_restoreRepoBackup" data-repo="{{ repo }}"><i class="fas fa-refresh fa-spin" style="display: none;">&nbsp;&nbsp;</i><i class="fas fa-file">&nbsp;&nbsp;</i>{{ 'Restaurer la selection' }}</a>
                                 </div>
                             </div>
                         {% endif %}
