@@ -172,7 +172,7 @@ body {
 .form-control {
   border-radius: 0;
   box-shadow: none;
-  border-color: $lightgrey;
+  border-color: $lightgray;
   padding-left: 10px !important;
 }
 
@@ -184,7 +184,7 @@ body {
   border-left: 1px solid rgba(0,0,0,0.2);
   border-right: 1px solid rgba(0,0,0,0.2);
   border-bottom: 1px solid rgba(0,0,0,0.2);
-  border-top: 3px solid $lightgrey;
+  border-top: 3px solid $lightgray;
   margin-bottom: 20px;
   width: 100%;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08);
@@ -212,8 +212,8 @@ body {
   font-size: 15px;
   line-height: 30px;
   position: absolute;
-  color: $grey;
-  background: $lightgrey;
+  color: $gray;
+  background: $lightgray;
   border-radius: 50%;
   text-align: center;
   left: 16px;

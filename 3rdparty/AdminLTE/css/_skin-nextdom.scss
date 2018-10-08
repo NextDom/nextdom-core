@@ -56,7 +56,7 @@ $nextdom_gray_title: $whitegray;
 .skin-nextdom .label-value, .skin-nextdom .label-icon {
     background-color: $nextdom_gray_title;
     color: $black !important;
-    border-color: $lightgrey
+    border-color: $lightgray
 }
 .skin-nextdom .label-unity, .skin-nextdom .label-unity-big {
     color: $darkgray !important;
@@ -66,13 +66,13 @@ $nextdom_gray_title: $whitegray;
 }
 .skin-nextdom .label-list {
     background-color: $lightgolden;
-    color: $grey !important;
-    border-color: $lightgrey;
+    color: $gray !important;
+    border-color: $lightgray;
 }
 .skin-nextdom .label-log {
     background-color: $lightgolden;
-    color: $grey !important;
-    border-color: $lightgrey;
+    color: $gray !important;
+    border-color: $lightgray;
 }
 
 /* Checkbox */
@@ -101,14 +101,14 @@ $nextdom_gray_title: $whitegray;
 .skin-nextdom .btn-action {
     background-color: $darkgray;
     color: $nextdom_polar_accent;
-    border-color: $grey;
+    border-color: $gray;
 }
 
 /* Tables */
 .skin-nextdom .table-condensed>thead {
   background-color: $nextdom_table_title;
-  border-bottom: 1px solid $lightgrey;
-  border-top: 1px solid $lightgrey;
+  border-bottom: 1px solid $lightgray;
+  border-top: 1px solid $lightgray;
 }
 .skin-nextdom .table-condensed {
   background-color: $whitelightgray;
@@ -209,7 +209,7 @@ $nextdom_gray_title: $whitegray;
   height: 35px;
 }
 .skin-nextdom .sidebar-form input[type="text"] {
-  color: $grey;
+  color: $gray;
   border-top-left-radius: 2px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
@@ -218,7 +218,7 @@ $nextdom_gray_title: $whitegray;
 .skin-nextdom .sidebar-form input[type="text"]:focus,
 .skin-nextdom .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   background-color: $nextdom_polar_accent;
-  color: $grey;
+  color: $gray;
 }
 .skin-nextdom .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   border-left-color: $nextdom_polar_accent;
