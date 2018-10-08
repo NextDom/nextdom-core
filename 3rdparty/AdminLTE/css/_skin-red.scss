@@ -4,7 +4,7 @@
 $nextdom_accent: $red;
 $nextdom_primary: $red;
 $nextdom_polar_accent: $white;
-$nextdom_table_title:$lightgolden;
+$nextdom_table_title:$whitegray;
 $nextdom_gray_title: $whitegray;
 
 /* Theme base */
@@ -56,13 +56,23 @@ $nextdom_gray_title: $whitegray;
 .skin-red .label-value, .skin-red .label-icon {
     background-color: $nextdom_gray_title;
     color: $black !important;
-    border-color: $lightgrey
+    border-color: $lightgray
 }
 .skin-red .label-unity, .skin-red .label-unity-big {
     color: $darkgray !important;
 }
 .skin-red .legend-title {
     border-color: $nextdom_gray_title;
+}
+.skin-red .label-list {
+    background-color: $lightgolden;
+    color: $gray !important;
+    border-color: $lightgray;
+}
+.skin-red .label-log {
+    background-color: $lightgolden;
+    color: $gray !important;
+    border-color: $lightgray;
 }
 
 /* Checkbox */
@@ -84,32 +94,21 @@ $nextdom_gray_title: $whitegray;
   background-color: $nextdom_primary;
   border-color: $nextdom_primary;
 }
-.skin-red .btn-app {
-  background-color: $whitegray;
-  border-color: $whitelightgray;
-}
+
 .skin-red .btn-action {
     background-color: $darkgray;
     color: $nextdom_polar_accent;
-    border-color: $grey;
+    border-color: $gray;
 }
 
 /* Tables */
 .skin-red .table-condensed>thead {
   background-color: $nextdom_table_title;
-  border-bottom: 1px solid $lightgrey;
-  border-top: 1px solid $lightgrey;
+  border-bottom: 1px solid $lightgray;
+  border-top: 1px solid $lightgray;
 }
 .skin-red .table-condensed {
   background-color: $whitelightgray;
-}
-
-/* Tooltip */
-.skin-nextdom .tooltip-inner {
-  background: $lightblack;
-}
-.skin-nextdom .tooltip-arrow {
-  border-top-color: $lightblack !important;
 }
 
 /* Navs */
@@ -207,7 +206,7 @@ $nextdom_gray_title: $whitegray;
   height: 35px;
 }
 .skin-red .sidebar-form input[type="text"] {
-  color: $grey;
+  color: $gray;
   border-top-left-radius: 2px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
@@ -216,7 +215,7 @@ $nextdom_gray_title: $whitegray;
 .skin-red .sidebar-form input[type="text"]:focus,
 .skin-red .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   background-color: $nextdom_polar_accent;
-  color: $grey;
+  color: $gray;
 }
 .skin-red .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   border-left-color: $nextdom_polar_accent;
@@ -237,12 +236,6 @@ $nextdom_gray_title: $whitegray;
   background-color: $nextdom_accent;
 }
 
-/* Scrollbar */
-.skin-red::-webkit-scrollbar-thumb{
-  background:$nextdom_accent;
-  background-color: $nextdom_accent;
-}
-
 /* Title */
 .skin-red .ui-dialog .ui-dialog-title{
   color: $nextdom_polar_accent;
@@ -250,4 +243,10 @@ $nextdom_gray_title: $whitegray;
 .skin-red .ui-dialog .ui-dialog-titlebar{
   background-color: $nextdom_accent;
   padding: 0px 15px;
+}
+
+/* Scrollbar */
+.skin-red ::-webkit-scrollbar-thumb {
+    background:$nextdom_accent;
+    background-color: $nextdom_accent;
 }
