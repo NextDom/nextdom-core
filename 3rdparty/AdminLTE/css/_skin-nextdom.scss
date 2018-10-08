@@ -247,3 +247,9 @@ $nextdom_gray_title: $whitegray;
   background-color: $nextdom_accent;
   padding: 0px 15px;
 }
+
+/* Scrollbar */
+.skin-nextdom ::-webkit-scrollbar-thumb {
+    background:$nextdom_accent;
+    background-color: $nextdom_accent;
+}
