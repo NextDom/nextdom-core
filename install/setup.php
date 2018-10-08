@@ -68,7 +68,7 @@ $loadExtensions = get_loaded_extensions();
 </head>
 <body>
     <center>
-        <img src="../public/img/logo-nextdom-grand-nom-couleur-460x320.png" class="img-responsive" />
+        <img src="../public/img/startup-image-320x460.png" class="img-responsive" />
     </center>
     <?php
 $error = false;
