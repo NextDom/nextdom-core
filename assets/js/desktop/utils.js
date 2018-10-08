@@ -90,6 +90,7 @@ function loadPage(_url,_noPushHistory){
         }
         initPage();
         $('body').trigger('nextdom_page_load');
+        window.scrollTo(0, 0);
     });
     return;
 }

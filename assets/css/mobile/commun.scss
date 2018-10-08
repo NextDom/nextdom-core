@@ -15,8 +15,10 @@ body {
   z-index: -1;
   opacity: 0.35;
   top: 65px;
-  background-size: cover;
-  background-position: center center;
+  background:{
+      size: cover;
+      position: center;
+  }
 }
 
 #pagecontainer {
@@ -47,10 +49,9 @@ body {
   color: white;
   vertical-align: top;
   text-shadow: initial;
-}
-
-.scenario-widget :after {
-  content: none;
+  &:after {
+      content: none;
+  }
 }
 
 .cursor {

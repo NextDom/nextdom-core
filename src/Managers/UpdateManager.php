@@ -80,6 +80,9 @@ class UpdateManager
                 ->setType('core')
                 ->setLogicalId('nextdom')
                 ->setSource(\config::byKey('core::repo::provider'))
+                ->setConfiguration('user', 'NextDom')
+                ->setConfiguration('repository', 'nextdom-core')
+                ->setConfiguration('version', 'master')
                 ->setLocalVersion(\nextdom::version());
             $update->save();
             $update->checkUpdate();
