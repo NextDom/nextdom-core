@@ -131,7 +131,7 @@
                     {% endif %}
                 </ul>
             </li>
-            <li class="treeview">
+            <li id="filter_category" class="treeview">
                 <a href="#"><i class="fas fa-filter"></i><span>&nbsp;&nbsp;{{ 'Catégories' }}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
                     {% if dashboardCategory =='all' %}
@@ -148,11 +148,6 @@
                     {% endfor %}
                 </ul>
             </li>
-            {% if dashboardCategory == 'all' %}
-                <li class="treeview">
-                    <a href="#" id="bt_editDashboardWidgetOrder" data-mode="0"><i class="fas fa-pencil-alt"></i><span>&nbsp;&nbsp;{{ 'Réorganiser ...' }}</span></a>
-                </li>
-            {% endif %}
         </ul>
     </section>
     <!-- /.sidebar -->
