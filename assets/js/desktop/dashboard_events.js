@@ -108,7 +108,7 @@ $('#bt_editDashboardWidgetOrder').on('click', function () {
             });
         });
         editWidgetMode(1);
-        $(this).css('color', 'rgb(46, 176, 75)');
+        $(this).css('color', 'black');
     }
 });
 
@@ -129,4 +129,3 @@ $('.li_object').on('click', function () {
         loadPage($(this).find('a').attr('data-href'));
     }
 });
-
