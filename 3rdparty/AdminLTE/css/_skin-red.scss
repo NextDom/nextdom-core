@@ -64,6 +64,16 @@ $nextdom_gray_title: $whitegray;
 .skin-red .legend-title {
     border-color: $nextdom_gray_title;
 }
+.skin-red .label-list {
+    background-color: $lightgolden;
+    color: $grey !important;
+    border-color: $lightgrey;
+}
+.skin-red .label-log {
+    background-color: $lightgolden;
+    color: $grey !important;
+    border-color: $lightgrey;
+}
 
 /* Checkbox */
 .skin-red [type="checkbox"]:not(:checked):before,
