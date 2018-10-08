@@ -124,7 +124,6 @@ class Controller
         $pageContent['JS_VARS']['SEL_TAG'] = Utils::init('tag', 'all');
         $pageContent['JS_VARS']['SEL_SUMMARY'] = Utils::init('summary');
 
-         sendVarToJS('nextdom_Welcome', $pageContent['JS_VARS']['welcome']);
         if ($pageContent['JS_VARS']['SEL_OBJECT_ID'] == '') {
             $object = JeeObjectManager::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
         } else {
