@@ -78,7 +78,8 @@ $('#bt_editDashboardWidgetOrder').on('click', function () {
         $.hideAlert();
         $(this).attr('data-mode', 0);
         editWidgetMode(0);
-        $(this).css('color', $('nextdom_polar_accent'));
+        $(this).removeClass('editionMode');
+        $(this).addClass('dashMode');
         $('.bt_editDashboardWidgetAutoResize').hide();
         $('.counterReorderNextDom').remove();
         $('.div_displayEquipement').packery();
@@ -108,7 +109,8 @@ $('#bt_editDashboardWidgetOrder').on('click', function () {
             });
         });
         editWidgetMode(1);
-        $(this).css('color', 'black');
+        $(this).removeClass('dashMode');
+        $(this).addClass('editionMode');
     }
 });
 

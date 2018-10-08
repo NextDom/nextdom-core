@@ -94,7 +94,6 @@ $nextdom_gray_title: $whitegray;
   background-color: $nextdom_primary;
   border-color: $nextdom_primary;
 }
-
 .skin-nextdom .btn-action {
     background-color: $darkgray;
     color: $nextdom_polar_accent;
@@ -151,6 +150,12 @@ $nextdom_gray_title: $whitegray;
   .skin-nextdom .main-header .navbar .dropdown-menu li a:hover {
     background: $nextdom_accent;
   }
+}
+.skin-nextdom .dashMode {
+  color: $nextdom_polar_accent;
+}
+.skin-nextdom .editionMode {
+  color: $black;
 }
 
 /* Sidebar */
