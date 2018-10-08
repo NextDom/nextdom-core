@@ -16,16 +16,16 @@ $nextdom_gray_title: $whitegray;
 }
 
 /* Logos & Header */
-.logo-mini-img{
+.skin-red .logo-mini-img{
   content:url("/public/img/NextDom/NextDom_Square_AlphaWhite.png");
 }
-.logo-lg-img{
+.skin-red .logo-lg-img{
   content:url("/public/img/NextDom/NextDom_Wide_AlphaWhite.png");
 }
-.login-logo-img{
+.skin-red .login-logo-img{
   content:url("/public/img/NextDom/NextDom_Wide_AlphaWhite.png");
 }
-.login-logo{
+.skin-red .login-logo{
   background-color: $nextdom_accent;
 }
 .skin-red .main-header .logo {

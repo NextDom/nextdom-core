@@ -157,7 +157,6 @@ class Controller
         // A remettre une fois mise sous forme de thème//
         $pageContent['JS_POOL'][] = '/3rdparty/jquery.isotope/isotope.pkgd.min.js';
         $pageContent['JS_POOL'][] = '/3rdparty/jquery.multi-column-select/multi-column-select.js';
-        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
 
         return $render->get('/desktop/dashboard.html.twig', $pageContent);
     }

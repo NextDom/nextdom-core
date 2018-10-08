@@ -166,3 +166,9 @@ $(function () {
     
     $('[data-toggle="tooltip"]').tooltip();
 });
+
+$( window ).resize(function() {
+    if ($(window).width() < 767  ){
+        $('body').removeClass("sidebar-collapse")
+      }
+      });
