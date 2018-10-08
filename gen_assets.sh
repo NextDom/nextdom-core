@@ -93,9 +93,7 @@ function gen_js {
         3rdparty/inputmask/jquery.inputmask.bundle.js \
         3rdparty/bootstrap-colorpicker/js/bootstrap-colorpicker.js \
         3rdparty/datetimepicker/jquery.datetimepicker.js \
-        3rdparty/ion.rangeSlider/js/ion.rangeSlider.js \
-        3rdparty/AdminLTE/js/adminlte.js \
-        3rdparty/AdminLTE/js/adminlte_nextdom.js > /tmp/temp.js
+        3rdparty/ion.rangeSlider/js/ion.rangeSlider.js > /tmp/temp.js
     python -m jsmin /tmp/temp.js > public/js/base.js
     rm /tmp/temp.js
     php script/translate.php public/js/base.js
