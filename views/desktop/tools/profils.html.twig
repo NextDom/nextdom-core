@@ -25,21 +25,20 @@
 
                 <!-- Profil tab -->
                 <div role="tabpanel" class="tab-pane active" id="profil">
-                    <form class="form-horizontal">
-                        <fieldset>
+                    <fieldset>
+                        <div class="row">
                             <legend class="legend-title">{{ 'Photo de profil' }}</legend>
-                            <div class="form-group col-sm-6">
+                            <div class="col-sm-12">
                                 <img id="monAvatar" src="{{ profilsUser.getOptions('avatar') }}" style="width:auto; height:200px"></a>
+                            </div>
+                            <div class="form-group col-sm-6">
                                 <input class="userAttr form-control" data-l1key="options" data-l2key="avatar"/>
                             </div>
-                            <legend class="legend-title">{{ 'Choix de la photo de profil' }}</legend>
-                            <div class="form-group col-sm-6">
-                                <div>
-                                    <input class="userAttr form-control" id="user_avatar" type="file" name="images" data-url="core/ajax/profils.ajax.php?action=imageUpload"/>
-                                </div>
+                            <div class="col-sm-6">
+                                <input class="userAttr form-control" id="user_avatar" type="file" name="images" data-url="core/ajax/profils.ajax.php?action=imageUpload"/>
                             </div>
-                        </fieldset>
-                    </form>
+                        </div>
+                    </fieldset>
                 </div>
 
                 <!-- Themes tab -->
