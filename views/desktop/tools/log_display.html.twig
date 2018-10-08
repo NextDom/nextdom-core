@@ -11,13 +11,15 @@
     <div class="box-body">
         <form class="form-horizontal">
             <fieldset>
-                <row class="form-group">
-                    <a class="btn btn-danger pull-right" id="bt_logdisplayremoveLog"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{'Supprimer'}}</a>
-                    <a class="btn btn-warning pull-right" id="bt_logdisplayclearLog"><i class="fas fa-times">&nbsp;&nbsp;</i>{{'Vider'}}</a>
-                    <a class="btn btn-success pull-right" id="bt_logdisplaydownloadLog"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{'Télécharger'}}</a>
-                    <a class="btn btn-warning pull-right" data-state="1" id="bt_eventLogStopStart"><i class="fas fa-pause">&nbsp;&nbsp;</i>{{'Pause'}}</a>
-                    <input class="form-control pull-right" id="in_eventLogSearch" style="width : 300px;" placeholder="{{'Rechercher ...'}}" />
-                </row>
+                <div class="row form-group">
+                    <div class="col-xs-12">
+                        <a class="btn btn-danger pull-right" id="bt_logdisplayremoveLog"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{'Supprimer'}}</a>
+                        <a class="btn btn-warning pull-right" id="bt_logdisplayclearLog"><i class="fas fa-times">&nbsp;&nbsp;</i>{{'Vider'}}</a>
+                        <a class="btn btn-success pull-right" id="bt_logdisplaydownloadLog"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{'Télécharger'}}</a>
+                        <a class="btn btn-warning pull-right" data-state="1" id="bt_eventLogStopStart"><i class="fas fa-pause">&nbsp;&nbsp;</i>{{'Pause'}}</a>
+                        <input class="form-control pull-right" id="in_eventLogSearch" style="width : 300px;" placeholder="{{'Rechercher ...'}}" />
+                    </div>
+                </div>
 
                 <pre id='pre_eventlog' style='overflow: scroll;'></pre>
                 <script>
