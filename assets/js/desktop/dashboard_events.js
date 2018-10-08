@@ -78,7 +78,7 @@ $('#bt_editDashboardWidgetOrder').on('click', function () {
         $.hideAlert();
         $(this).attr('data-mode', 0);
         editWidgetMode(0);
-        $(this).css('color', 'black');
+        $(this).css('color', $nextdom_polar_accent);
         $('.bt_editDashboardWidgetAutoResize').hide();
         $('.counterReorderNextDom').remove();
         $('.div_displayEquipement').packery();

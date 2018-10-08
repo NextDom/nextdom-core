@@ -28,10 +28,10 @@
 
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
-        <!-- Sidebar toggle button-->
-        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-            <span class="sr-only">Toggle navigation</span>
-        </a>
+        <!-- Navbar left menu-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button"></a>
+        <a href="#" id="bt_editDashboardWidgetOrder" style="float: left;padding: 15px;" data-mode="0" role="button"><i class="fas fa-pencil-alt"></i></a>
+
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
@@ -56,10 +56,7 @@
                     </li>
                 {% endif %}
                 <li>
-                    <a>
-                        <span id="togglefullscreen" class="fa fa-expand" onclick="toggleFullScreen();"></span>
-                    </a>
-
+                    <a><span id="togglefullscreen" class="fa fa-expand" onclick="toggleFullScreen();"></span></a>
                 </li>
             </ul>
         </div>
