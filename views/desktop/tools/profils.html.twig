@@ -26,11 +26,18 @@
                 <!-- Profil tab -->
                 <div role="tabpanel" class="tab-pane active" id="profil">
                     <fieldset>
+                        <legend class="legend-title">{{ 'Photo de profil' }}</legend>
                         <div class="row">
-                            <legend class="legend-title">{{ 'Photo de profil' }}</legend>
-                            <div class="col-sm-12">
+                            <div class="col-sm-6">
                                 <img id="monAvatar" src="{{ profilsUser.getOptions('avatar') }}" style="width:auto; height:200px"></a>
                             </div>
+                            <div class="col-sm-6">
+                                {% for i in 0..8 %}
+                                    <img id="monAvatar" src="/public/img/profils/avatar_0{{ i }}.jpg" style="width:auto; height:calc(200px/3)"></a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="form-group col-sm-6">
                                 <input class="userAttr form-control" data-l1key="options" data-l2key="avatar"/>
                             </div>
