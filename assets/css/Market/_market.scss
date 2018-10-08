@@ -29,7 +29,7 @@
     height: 200px;
     transition: all 0.2s ease;
     overflow: hidden;
-    border: 1px solid $lightgrey;
+    border: 1px solid $lightgray;
     background-color: rgba(220, 220, 220, 0.2);
     margin: 0;
     border-radius: 5px;
@@ -245,7 +245,7 @@
 }
 
 #plugin-modal .right-pane .help-block {
-    color: $lightgrey;
+    color: $lightgray;
 }
 
 #gitid-list li .btn {

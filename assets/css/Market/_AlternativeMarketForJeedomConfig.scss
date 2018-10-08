@@ -16,7 +16,7 @@
     top: -3px;
     width: 65px;
     height: 30px;
-    background: $lightgrey;
+    background: $lightgray;
     border-radius: 15px;
     -webkit-transition: background-color .2s;
     -moz-transition: background-color .2s;
@@ -66,7 +66,7 @@
         left: 5px;
       }
       &:before {
-        background: $lightgrey;
+        background: $lightgray;
       }
       &:after {
         background: $lightgreen;
@@ -113,7 +113,7 @@
       color: $lightgreen;
     }
     &:focus + label:before {
-      border: 1px dashed $grey;
+      border: 1px dashed $gray;
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       -ms-box-sizing: border-box;
@@ -130,7 +130,7 @@
 
 #amfj-config .control-label sup {
   font-size: 1em;
-  color: $grey;
+  color: $gray;
 }
 
 #config-modal h3 {
