@@ -1,24 +1,31 @@
 <div class="box" id="div_Profils">
+    <!-- Header bar -->
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fas fa-pencil-square"></i> {{ 'Profil utilisateur'}}</h3>
+        <h3 class="box-title"><i class="fas fa-pencil-square">&nbsp;&nbsp;</i>{{ 'Profil utilisateur'}}</h3>
         <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fas fa-times"></i></a>
         </div>
     </div>
+
+    <!-- Page content -->
     <div class="box-body">
         <div class="nav-tabs-custom config">
-            <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fas fa-times"></i></a>
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#profil" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-user"></i> {{ 'Profil' }}</a></li>
-                <li role="presentation"><a href="#themetab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint"></i> {{ 'Thèmes' }}</a></li>
-                <li role="presentation"><a href="#interfacetab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-laptop"></i> {{ 'Interface' }}</a></li>
-                <li role="presentation"><a href="#securitytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="icon securite-key1"></i> {{ 'Sécurité' }}</a></li>
-                <li role="presentation"><a href="#notificationtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="icon securite-key1"></i> {{ 'Notifications' }}</a></li>
+
+            <!-- Tabs title -->
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li role="presentation"><a href="#themetab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint">&nbsp;&nbsp;</i>{{ 'Thèmes' }}</a></li>
+                <li role="presentation"><a href="#interfacetab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-laptop">&nbsp;&nbsp;</i>{{ 'Interface' }}</a></li>
+                <li role="presentation"><a href="#notificationtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-comments">&nbsp;&nbsp;</i>{{ 'Notifications' }}</a></li>
+                <li role="presentation"><a href="#securitytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-user-secret">&nbsp;&nbsp;</i>{{ 'Sécurité' }}</a></li>
+                <li role="presentation" class="active"><a href="#profil" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-user">&nbsp;&nbsp;</i>{{ 'Profil' }}</a></li>
             </ul>
-            <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
+
+            <!-- Tabs content -->
+            <div class="global-tab-content tab-content">
+
+                <!-- Profil tab -->
                 <div role="tabpanel" class="tab-pane active" id="profil">
-                    <br/>
+                    <legend class="legend-title">{{ 'Choix de la photo de profil' }}</legend>
                     <div class="col-sm-6">
                         <form class="form-horizontal">
                             <fieldset>
@@ -36,14 +43,16 @@
                         <img id="monAvatar" src="{{ profilsUser.getOptions('avatar') }}" style="width:auto; height:200px"></a>
                     </div>
                 </div>
+
+                <!-- Themes tab -->
                 <div role="tabpanel" class="tab-pane" id="themetab">
-                    <br/>
-                    <div class="col-sm-6">
+                    <legend class="legend-title">{{ 'Personnalisation' }}</legend>
+                    <div class="col-sm-12">
                         <form class="form-horizontal">
                             <fieldset>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">{{ 'Couleur sur mobile' }}</label>
-                                    <div class="col-sm-3">
+                                    <label class="col-sm-6 control-label">{{ 'Couleur sur mobile' }}</label>
+                                    <div class="col-sm-6">
                                         <select class="userAttr form-control" data-l1key="options" data-l2key="mobile_theme_color">
                                             {% for theme in profilsMobileThemes %}
                                                 <option value="{{ theme }}">{{ theme|capitalize|replace({'_': ' '}) }}</option>
@@ -52,8 +61,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">{{ 'Graphique Desktop' }}</label>
-                                    <div class="col-sm-3">
+                                    <label class="col-sm-6 control-label">{{ 'Graphique Desktop' }}</label>
+                                    <div class="col-sm-6">
                                         <select class="userAttr form-control" data-l1key="options" data-l2key="desktop_highcharts_theme">
                                             <option value="">Défaut</option>
                                             <option value="dark-blue">Dark-blue</option>
@@ -68,8 +77,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">{{ 'Graphique mobile' }}</label>
-                                    <div class="col-sm-3">
+                                    <label class="col-sm-6 control-label">{{ 'Graphique mobile' }}</label>
+                                    <div class="col-sm-6">
                                         <select class="userAttr form-control" data-l1key="options" data-l2key="mobile_highcharts_theme">
                                             <option value="">Défaut</option>
                                             <option value="dark-blue">Dark-blue</option>
@@ -85,8 +94,8 @@
                                 </div>
                                 {% for displayTypeCode, displayTypeData in profilsDisplayTypes %}
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">{{ 'Opacité par des widgets' }} {{ displayTypeData['name'] }}</label>
-                                        <div class="col-sm-3">
+                                        <label class="col-sm-6 control-label">{{ 'Opacité par des widgets' }} {{ displayTypeData['name'] }}</label>
+                                        <div class="col-sm-6">
                                             <input type="number" min="0" max="1" class="userAttr form-control" data-l1key="options" data-l2key="widget::background-opacity::{{ displayTypeCode }}"/>
                                         </div>
                                     </div>
@@ -94,13 +103,14 @@
                             </fieldset>
                         </form>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                         <div class="img-responsive" id="div_imgThemeDesktop" style="height: 450px;"></div>
                     </div>
                 </div>
 
+                <!-- Interface tab -->
                 <div role="tabpanel" class="tab-pane" id="interfacetab">
-                    <br/>
+                    <legend class="legend-title">{{ 'Options d'interfaces' }}</legend>
                     <form class="form-horizontal">
                         <fieldset>
                             <legend><i class="fas fa-home"></i> {{ 'Général' }}</legend>
@@ -112,9 +122,10 @@
                             </div>
                         </fieldset>
                     </form>
+
                     <form class="form-horizontal">
                         <fieldset>
-                            <legend><i class="far fa-file"></i> {{ 'Page par défaut' }}</legend>
+                            <legend class="legend-title">{{ 'Page par défaut' }}</legend>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
                                 <div class="col-sm-2">
@@ -134,11 +145,8 @@
                                     </select>
                                 </div>
                             </div>
-                        </fieldset>
-                    </form>
-                    <form class="form-horizontal">
-                        <fieldset>
-                            <legend><i class="fas fa-columns"></i> {{ 'Objet par défaut sur le dashboard' }}</legend>
+
+                            <legend class="legend-title">{{ 'Objet par défaut sur le dashboard' }}</legend>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
                                 <div class="col-sm-2">
@@ -158,11 +166,8 @@
                                     </select>
                                 </div>
                             </div>
-                        </fieldset>
-                    </form>
-                    <form class="form-horizontal">
-                        <fieldset>
-                            <legend><i class="fas fa-eye"></i> {{ 'Vue par défaut' }}</legend>
+
+                            <legend class="legend-title">{{ 'Vue par défaut' }}</legend>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
                                 <div class="col-sm-2">
@@ -181,11 +186,8 @@
                                     </select>
                                 </div>
                             </div>
-                        </fieldset>
-                    </form>
-                    <form class="form-horizontal">
-                        <fieldset>
-                            <legend><i class="fas fa-paint-brush"></i> {{ 'Design par défaut' }}</legend>
+
+                            <legend class="legend-title">{{ 'Design par défaut' }}</legend>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
                                 <div class="col-sm-2">
@@ -210,11 +212,8 @@
                                     <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlanFullScreen"/>
                                 </div>
                             </div>
-                        </fieldset>
-                    </form>
-                    <form class="form-horizontal">
-                        <fieldset>
-                            <legend><i class="fas fa-tachometer-alt"></i> {{ 'Dashboard' }}</legend>
+
+                            <legend class="legend-title">{{ 'Dashboard' }}</legend>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">{{ 'Déplier le panneau des scénarios' }}</label>
                                 <div class="col-sm-1">
@@ -227,11 +226,8 @@
                                     <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="displayObjetByDefault"/>
                                 </div>
                             </div>
-                        </fieldset>
-                    </form>
-                    <form class="form-horizontal">
-                        <fieldset>
-                            <legend><i class="fas fa-picture-o"></i> {{ 'Vue' }}</legend>
+
+                            <legend class="legend-title">{{ 'Vue' }}</legend>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">{{ 'Déplier le panneau des vues' }}</label>
                                 <div class="col-sm-1">
@@ -242,8 +238,8 @@
                     </form>
                 </div>
 
+                <!-- Security tab -->
                 <div role="tabpanel" class="tab-pane" id="securitytab">
-                    <br/>
                     <form class="form-horizontal">
                         <fieldset>
                             {% if profilsAllowRemoteUsers != 1 %}
@@ -342,8 +338,8 @@
                     </form>
                 </div>
 
+                <!-- Notification tab -->
                 <div role="tabpanel" class="tab-pane" id="notificationtab">
-                    <br/>
                     <form class="form-horizontal">
                         <fieldset>
                             <div class="form-group">
@@ -363,7 +359,10 @@
             </div>
         </div>
     </div>
-        <div class="box-footer clearfix">
-        <a class="btn btn-success btn-sm pull-right" id="bt_saveProfils"><i class="fa fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+
+    <!-- Footer bar -->
+    <div class="box-footer clearfix">
+        <a class="btn btn-success pull-right" id="bt_saveProfils"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+        <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
     </div>
 </div>
