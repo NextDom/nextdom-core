@@ -124,7 +124,6 @@ class Controller
         $pageContent['JS_VARS']['SEL_TAG'] = Utils::init('tag', 'all');
         $pageContent['JS_VARS']['SEL_SUMMARY'] = Utils::init('summary');
 
-         sendVarToJS('nextdom_Welcome', $pageContent['JS_VARS']['welcome']);
         if ($pageContent['JS_VARS']['SEL_OBJECT_ID'] == '') {
             $object = JeeObjectManager::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
         } else {
@@ -154,6 +153,7 @@ class Controller
             $pageContent['dashboardScenarios'] = ScenarioManager::all();
         }
         $pageContent['JS_POOL'][] = '/public/js/desktop/dashboard.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/dashboard_events.js';
         // A remettre une fois mise sous forme de thème//
         $pageContent['JS_POOL'][] = '/3rdparty/jquery.isotope/isotope.pkgd.min.js';
         $pageContent['JS_POOL'][] = '/3rdparty/jquery.multi-column-select/multi-column-select.js';
