@@ -53,9 +53,7 @@ setTimeout(function () {
    });
 }, 1);
 
-$('#custom').delegate('.configKey', 'change', function () {
-   modifyWithoutSave = true;
-});
+
 
 $('a[data-toggle="tab"][href="#mobile"]').on('shown.bs.tab', function (e) {
    if (editorMobileCSS == null) {
@@ -183,7 +181,7 @@ function addConvertColor(_color, _html) {
    tr += '</td>';
    tr += '</tr>';
    $('#table_convertColor tbody').append(tr);
-   modifyWithoutSave = true;
+   modifyWithoutSave = false;
 }
 
 function saveConvertColor() {
