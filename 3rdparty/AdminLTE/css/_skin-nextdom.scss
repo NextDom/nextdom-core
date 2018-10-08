@@ -69,6 +69,11 @@ $nextdom_gray_title: $whitegray;
     color: $grey !important;
     border-color: $lightgrey;
 }
+.skin-nextdom .label-log {
+    background-color: $lightgolden;
+    color: $grey !important;
+    border-color: $lightgrey;
+}
 
 /* Checkbox */
 .skin-nextdom [type="checkbox"]:not(:checked):before,
