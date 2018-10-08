@@ -10,6 +10,8 @@ body {
 ::-webkit-scrollbar-thumb {
     width: 80px;
     border-radius: 3px;
+    background:$grey;
+    background-color: $grey;
 }
 ::-webkit-scrollbar-corner {
     background-color: transparent;

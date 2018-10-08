@@ -239,12 +239,6 @@ $nextdom_gray_title: $whitegray;
   background-color: $nextdom_accent;
 }
 
-/* Scrollbar */
-.skin-nextdom::-webkit-scrollbar-thumb{
-  background:$nextdom_accent;
-  background-color: $nextdom_accent;
-}
-
 /* Title */
 .skin-nextdom .ui-dialog .ui-dialog-title{
   color: $nextdom_polar_accent;
