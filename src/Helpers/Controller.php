@@ -157,7 +157,7 @@ class Controller
         // A remettre une fois mise sous forme de thème//
         $pageContent['JS_POOL'][] = '/3rdparty/jquery.isotope/isotope.pkgd.min.js';
         $pageContent['JS_POOL'][] = '/3rdparty/jquery.multi-column-select/multi-column-select.js';
-$pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/dashboard.html.twig', $pageContent);
     }
@@ -198,7 +198,7 @@ $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/scenario.js';
         $pageContent['JS_END_POOL'][] = '/3rdparty/jquery.sew/jquery.caretposition.js';
         $pageContent['JS_END_POOL'][] = '/3rdparty/jquery.sew/jquery.sew.min.js';
-$pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
 
         return $render->get('/desktop/scenario.html.twig', $pageContent);
@@ -249,6 +249,8 @@ $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
         }
         $pageContent['administrationCpuLoad'] = round(100 * sys_getloadavg()[0], 2);
         $pageContent['administrationHddLoad'] = round(100 - 100 * disk_free_space(NEXTDOM_ROOT) / disk_total_space(NEXTDOM_ROOT), 2);
+        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+
         return $render->get('/desktop/administration.html.twig', $pageContent);
     }
 
@@ -290,7 +292,7 @@ $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
         $pageContent['adminNetworkExternalAccess'] = \network::getNetworkAccess('external');
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/network.js';
-$pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/admin/network.html.twig', $pageContent);
     }
@@ -321,7 +323,7 @@ $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
         $pageContent['adminRedisExists'] = class_exists('redis');
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/cache.js';
-$pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/admin/cache.html.twig', $pageContent);
     }
@@ -350,7 +352,7 @@ $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
         $pageContent['adminLastKnowDate'] = $cache->getValue();
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/general.js';
-$pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/admin/general.html.twig', $pageContent);
     }
