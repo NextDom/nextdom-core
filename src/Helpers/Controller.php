@@ -1478,7 +1478,7 @@ class Controller
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/profils.js';
 
-        return $render->get('/desktop/tools/profils.html.twig', $pageContent);
+        return $render->get('/desktop/admin/profils.html.twig', $pageContent);
     }
 
     /**
