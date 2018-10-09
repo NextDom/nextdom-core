@@ -152,6 +152,7 @@ class Controller
         if ($pageContent['dashboardDisplayScenarioByDefault'] == 1) {
             $pageContent['dashboardScenarios'] = ScenarioManager::all();
         }
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
         $pageContent['JS_POOL'][] = '/public/js/desktop/dashboard.js';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/dashboard_events.js';
         // A remettre une fois mise sous forme de thème//
@@ -248,6 +249,7 @@ class Controller
         }
         $pageContent['administrationCpuLoad'] = round(100 * sys_getloadavg()[0], 2);
         $pageContent['administrationHddLoad'] = round(100 - 100 * disk_free_space(NEXTDOM_ROOT) / disk_total_space(NEXTDOM_ROOT), 2);
+        $pageContent['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
         return $render->get('/desktop/administration.html.twig', $pageContent);
     }
 
