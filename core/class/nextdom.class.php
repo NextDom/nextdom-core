@@ -150,6 +150,28 @@ class nextdom
         $nokStr = __('str.NOK');
 
         $systemHealth = array();
+
+        $state = true;
+        $version = '';
+        $uname = shell_exec('uname -a');
+        if (\system::getDistrib() != 'debian') {
+            $state = false;
+        } else {
+            $version = trim(strtolower(file_get_contents('/etc/debian_version')));
+            if (version_compare($version, '8', '<')) {
+                if (strpos($version, 'jessie') === false && strpos($version, 'stretch') === false) {
+                    $state = false;
+                }
+            }
+        }
+        $systemHealth[] = array(
+            'icon' => 'fa-cogs',
+            'name' => __('os-version'),
+            'state' => $state,
+            'result' => ($state) ? $uname . ' [' . $version . ']' : $uname,
+            'comment' => ($state) ? '' : __('Vous n\'êtes pas sur un OS officiellement supporté par l\'équipe NextDom (toute demande de support pourra donc être refusée). Les OS officiellement supporté sont Debian Jessie et Debian Strech (voir <a href="https://jeedom.github.io/documentation/compatibility/fr_FR/index" target="_blank">ici</a>)'),
+        );
+        
         $nbNeededUpdate = \update::nbNeedUpdate();
         $state = ($nbNeededUpdate == 0) ? true : false;
         $systemHealth[] = array(
@@ -222,27 +244,6 @@ class nextdom
             'state' => $state,
             'result' => phpversion(),
             'comment' => ($state) ? '' : __('health.php-error'),
-        );
-
-        $state = true;
-        $version = '';
-        $uname = shell_exec('uname -a');
-        if (\system::getDistrib() != 'debian') {
-            $state = false;
-        } else {
-            $version = trim(strtolower(file_get_contents('/etc/debian_version')));
-            if (version_compare($version, '8', '<')) {
-                if (strpos($version, 'jessie') === false && strpos($version, 'stretch') === false) {
-                    $state = false;
-                }
-            }
-        }
-        $systemHealth[] = array(
-            'icon' => 'fa-cogs',
-            'name' => __('os-version'),
-            'state' => $state,
-            'result' => ($state) ? $uname . ' [' . $version . ']' : $uname,
-            'comment' => ($state) ? '' : __('Vous n\'êtes pas sur un OS officiellement supporté par l\'équipe NextDom (toute demande de support pourra donc être refusée). Les OS officiellement supporté sont Debian Jessie et Debian Strech (voir <a href="https://jeedom.github.io/documentation/compatibility/fr_FR/index" target="_blank">ici</a>)'),
         );
 
         $version = \DB::Prepare('select version()', array(), \DB::FETCH_TYPE_ROW);
