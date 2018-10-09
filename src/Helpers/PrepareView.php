@@ -334,7 +334,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min.js';
             $pageData['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/adminlte.js ';
-            $pageData['JS_END_POOL'][] = '/assets/js/adminlte/adminlte_nextdom.js';
+            $pageData['JS_END_POOL'][] = '/public/js/adminlte/adminlte_nextdom.js';
         } else {
             $pageData['JS_POOL'][] = '/3rdparty/jquery.utils/jquery.utils.js ';
             $pageData['JS_POOL'][] = '/3rdparty/iziToast/js/iziToast.min.js ';
