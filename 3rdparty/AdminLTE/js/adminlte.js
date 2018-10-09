@@ -647,10 +647,15 @@ throw new Error('AdminLTE requires jQuery')
         // $(Selector.sidebar).slimScroll({ destroy: true }).height('auto')
 
         // Add slimscroll
+        if(!$('body').hasClass("sidebar-collapse")){
         $(Selector.sidebar).slimScroll({
           height: ($(window).height() - $(Selector.mainHeader).height()) + 'px'
         });
+      }else{
+        $(".slimScrollDiv").css("overflow","");
+        $(".sidebar").css("overflow","");
       }
+    }
     }
   };
 
@@ -748,6 +753,7 @@ throw new Error('AdminLTE requires jQuery')
   };
 
   PushMenu.prototype.init = function () {
+
  /*   if (this.options.expandOnHover
       || ($('body').is(Selector.mini + Selector.layoutFixed))) {
       this.expandOnHover();
@@ -777,8 +783,12 @@ throw new Error('AdminLTE requires jQuery')
 
     if (!isOpen) {
       this.open();
+      $(".slimScrollDiv").css("overflow","hidden");
+      $(".sidebar").css("overflow","hidden");
     } else {
       this.close();
+      $(".slimScrollDiv").css("overflow","");
+      $(".sidebar").css("overflow","");
     }
   };
 
@@ -810,11 +820,11 @@ throw new Error('AdminLTE requires jQuery')
     $(Selector.mainSidebar).hover(function () {
       if ($('body').is(Selector.mini + Selector.collapsed)
         && $(window).width() > this.options.collapseScreenSize) {
-        this.expand();
+        //this.expand();
       }
     }.bind(this), function () {
       if ($('body').is(Selector.expanded)) {
-        this.collapse();
+       // this.collapse();
       }
     }.bind(this));
   };

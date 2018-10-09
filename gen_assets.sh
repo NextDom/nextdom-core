@@ -97,13 +97,19 @@ function gen_js {
     rm /tmp/temp.js
     php script/translate.php public/js/base.js
 
-    mkdir -p public/js/desktop/Market
-
+    mkdir -p public/js/adminlte
+    for jsFile in assets/js/adminlte/*.js
+    do
+        python -m jsmin $jsFile > public/js/adminlte/${jsFile##*/}
+        php script/translate.php public/js/adminlte/${jsFile##*/}
+    done
     for jsFile in assets/js/desktop/*.js
     do
         python -m jsmin $jsFile > public/js/desktop/${jsFile##*/}
         php script/translate.php public/js/desktop/${jsFile##*/}
     done
+
+    mkdir -p public/js/desktop/Market
     for jsFile in assets/js/desktop/Market/*.js
     do
         python -m jsmin $jsFile > public/js/desktop/Market/${jsFile##*/}
