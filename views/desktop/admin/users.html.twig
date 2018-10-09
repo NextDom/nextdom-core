@@ -66,7 +66,7 @@
                                 <td>{{ sessionData['login'] }}</td>
                                 <td>{{ sessionData['ip'] }}</td>
                                 <td>{{ sessionData['datetime'] }}</td>
-                                <td><a class="btn btn-warning btn-sm bt_deleteSession"><i class="fa fa-sign-out">&nbsp;&nbsp;</i>{{ 'Déconnecter' }}</a></td>
+                                <td><a class="btn btn-warning btn-sm bt_deleteSession pull-right"><i class="fa fa-sign-out">&nbsp;&nbsp;</i>{{ 'Déconnecter' }}</a></td>
                             </tr>
                         {% endfor %}
                     {% endif %}
@@ -98,7 +98,7 @@
                                     <td>{{ user.getLogin() }}</td>
                                     <td>{{ deviceData['ip'] }}</td>
                                     <td>{{ deviceData['datetime'] }}</td>
-                                    <td><a class="btn btn-warning btn-sm bt_removeRegisterDevice"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a></td>
+                                    <td><a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a></td>
                                 </tr>
                             {% endfor %}
                         {% endif %}
