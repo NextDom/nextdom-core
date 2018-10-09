@@ -244,8 +244,8 @@
                 <!-- Security tab -->
                 <div role="tabpanel" class="tab-pane" id="securitytab">
                     <form class="form-horizontal">
-                        <legend class="legend-title">{{ 'Authentifications' }}</legend>
                         <fieldset>
+                            <legend class="legend-title">{{ 'Authentifications' }}</legend>
                             {% if profilsAllowRemoteUsers != 1 %}
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Authentification en 2 étapes' }}</label>
@@ -280,12 +280,8 @@
                                     <span class="userAttr label label-value" data-l1key="hash"></span>
                                 </div>
                             </div>
-                        </fieldset>
-                    </form>
 
-                    <form class="form-horizontal">
-                        <legend class="legend-title">{{ 'Sessions actives' }}</legend>
-                        <fieldset>
+                            <legend class="legend-title">{{ 'Sessions actives' }}</legend>
                             <table class="table table-condensed table-bordered">
                                 <thead>
                                 <tr>
@@ -302,17 +298,13 @@
                                             <td>{{ id }}</td>
                                             <td>{{ session['ip'] }}</td>
                                             <td>{{ session['datetime'] }}</td>
-                                            <td><a class="btn btn-sm btn-warning bt_deleteSession"><i class="fas fa-sign-out-alt">&nbsp;&nbsp;</i>{{ 'Déconnecter' }}</a></td>
+                                            <td><a class="btn btn-sm btn-warning bt_deleteSession pull-right"><i class="fas fa-sign-out-alt">&nbsp;&nbsp;</i>{{ 'Déconnecter' }}</a></td>
                                         </tr>
                                     {% endif %}
                                 {% endfor %}
                                 </tbody>
                             </table>
-                        </fieldset>
-                    </form>
 
-                    <form class="form-horizontal">
-                        <fieldset>
                             <legend class="legend-title">{{ 'Périphériques enregistrés' }}
                                 <div class="box-tools pull-right">
                                     <a class="btn btn-warning btn-legend" id="bt_removeAllRegisterDevice"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer tout' }}</a>
@@ -334,7 +326,7 @@
                                         <td>{{ sessionData['ip'] }}</td>
                                         <td>{{ sessionData['datetime'] }}</td>
                                         <td>
-                                            <a class="btn btn-warning btn-sm bt_removeRegisterDevice"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                                            <a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -347,8 +339,8 @@
                 <!-- Notification tab -->
                 <div role="tabpanel" class="tab-pane" id="notificationtab">
                     <form class="form-horizontal">
-                        <legend class="legend-title">{{ 'Gestion des notifications utilisateurs' }}</legend>
                         <fieldset>
+                            <legend class="legend-title">{{ 'Gestion des notifications utilisateurs' }}</legend>
                             <div class="form-group">
                                 <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Commande pour l\'envoi' }}</label>
                                 <div class="col-lg-4 col-md-5 col-sm-5 col-xs-12">
