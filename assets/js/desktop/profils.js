@@ -165,7 +165,7 @@ $('#user_avatar').fileupload({
             return;
         }
         if ($('.userAttr[data-l2key=avatar]') == '') {
-            $('.userAttr[data-l2key=avatar]').value('/public/img/profils/noPicture.jpg');
+            $('.userAttr[data-l2key=avatar]').value('/public/img/profils/avatar_00.jpg');
         }else{
             $('.userAttr[data-l2key=avatar]').value('/public/img/profils/' + data.files[0]['name']);
             $('#monAvatar').attr('src','/public/img/profils/' + data.files[0]['name']);

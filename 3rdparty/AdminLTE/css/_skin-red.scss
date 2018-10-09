@@ -152,6 +152,12 @@ $nextdom_gray_title: $whitegray;
     background: $nextdom_accent;
   }
 }
+.skin-red .dashMode {
+  color: $nextdom_polar_accent;
+}
+.skin-red .editionMode {
+  color: $black;
+}
 
 /* Sidebar */
 .skin-red .wrapper,
