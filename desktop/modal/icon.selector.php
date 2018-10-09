@@ -42,7 +42,7 @@ foreach (ls('public/icon', '*') as $dir) {
                 if ($number == 1) {
                     echo '<div class="row text-center">';
                 }
-                echo '<div class="col-lg-1 divIconSel">';
+                echo '<div class="col-xs-2 col-md-1 col-lg-1 divIconSel">';
                 $icon = str_replace(array(':', '.'), '', $match[0]);
                 echo '<span class="iconSel"><i class=\'icon ' . $icon . '\'></i></span><br/><span class="iconDesc">' . $icon . '</span></center>';
                 echo '</div>';
