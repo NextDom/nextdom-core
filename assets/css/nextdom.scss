@@ -32,9 +32,8 @@
 @import "_core.scss";
 @import "../../3rdparty/AdminLTE/css/_AdminLTE.scss";
 @import "../../3rdparty/AdminLTE/css/_AdminLTE-bootstrap-social.scss";
-@import "../../3rdparty/AdminLTE/css/_AdminLTE-select2.scss";
-@import "../../3rdparty/AdminLTE/css/_AdminLTE-nextdom.scss";
-@import "adminlte/css/_skin-black.scss";
+@import "adminlte/_AdminLTE-nextdom.scss";
+@import "adminlte/_skin-black.scss";
 @import "adminlte/_skin-black-light.scss";
 @import "adminlte/_skin-blue.scss";
 @import "adminlte/_skin-blue-light.scss";
@@ -50,5 +49,4 @@
 @import "adminlte/_skin-purple-light.scss";
 @import "../../3rdparty/datetimepicker/jquery.datetimepicker.css";
 
-@import url("/3rdparty/ion.rangeSlider/css/ion.rangeSlider.css");
 @import url("/3rdparty/bootstrap-colorpicker/css/bootstrap-colorpicker.css");
