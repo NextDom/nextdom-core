@@ -1513,7 +1513,7 @@ $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/profils.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/tools/profils.html.twig', $pageContent);
+        return $render->get('/desktop/admin/profils.html.twig', $pageContent);
     }
 
     /**
