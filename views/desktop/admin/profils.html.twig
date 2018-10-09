@@ -50,66 +50,59 @@
 
                 <!-- Themes tab -->
                 <div role="tabpanel" class="tab-pane" id="themetab">
-                    <legend class="legend-title">{{ 'Personnalisation' }}</legend>
-                    <div class="col-sm-12">
-                        <form class="form-horizontal">
-                            <fieldset>
-                                <div class="form-group">
-                                    <label class="col-sm-6 control-label">{{ 'Couleur sur mobile' }}</label>
-                                    <div class="col-sm-6">
-                                        <select class="userAttr form-control" data-l1key="options" data-l2key="mobile_theme_color">
-                                            {% for theme in profilsMobileThemes %}
-                                                <option value="{{ theme }}">{{ theme|capitalize|replace({'_': ' '}) }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
+                    <fieldset>
+                        <legend class="legend-title">{{ 'Personnalisation' }}</legend>
+                        <div class="form-group">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Couleur sur mobile' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                <select class="userAttr form-control" data-l1key="options" data-l2key="mobile_theme_color">
+                                    {% for theme in profilsMobileThemes %}
+                                        <option value="{{ theme }}">{{ theme|capitalize|replace({'_': ' '}) }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Graphique Desktop' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                <select class="userAttr form-control" data-l1key="options" data-l2key="desktop_highcharts_theme">
+                                    <option value="">Défaut</option>
+                                    <option value="dark-blue">Dark-blue</option>
+                                    <option value="dark-green">Dark-green</option>
+                                    <option value="dark-unica">Dark-unica</option>
+                                    <option value="gray">Gray</option>
+                                    <option value="grid-light">Grid-light</option>
+                                    <option value="grid">Grid</option>
+                                    <option value="sand-signika">Sand-signika</option>
+                                    <option value="skies">Skies</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Graphique mobile' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                <select class="userAttr form-control" data-l1key="options" data-l2key="mobile_highcharts_theme">
+                                    <option value="">Défaut</option>
+                                    <option value="dark-blue">Dark-blue</option>
+                                    <option value="dark-green">Dark-green</option>
+                                    <option value="dark-unica">Dark-unica</option>
+                                    <option value="gray">Gray</option>
+                                    <option value="grid-light">Grid-light</option>
+                                    <option value="grid">Grid</option>
+                                    <option value="sand-signika">Sand-signika</option>
+                                    <option value="skies">Skies</option>
+                                </select>
+                            </div>
+                        </div>
+                        {% for displayTypeCode, displayTypeData in profilsDisplayTypes %}
+                            <div class="form-group">
+                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Opacité par des widgets' }} {{ displayTypeData['name'] }}</label>
+                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                    <input type="number" min="0" max="1" class="userAttr form-control" data-l1key="options" data-l2key="widget::background-opacity::{{ displayTypeCode }}"/>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-6 control-label">{{ 'Graphique Desktop' }}</label>
-                                    <div class="col-sm-6">
-                                        <select class="userAttr form-control" data-l1key="options" data-l2key="desktop_highcharts_theme">
-                                            <option value="">Défaut</option>
-                                            <option value="dark-blue">Dark-blue</option>
-                                            <option value="dark-green">Dark-green</option>
-                                            <option value="dark-unica">Dark-unica</option>
-                                            <option value="gray">Gray</option>
-                                            <option value="grid-light">Grid-light</option>
-                                            <option value="grid">Grid</option>
-                                            <option value="sand-signika">Sand-signika</option>
-                                            <option value="skies">Skies</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-6 control-label">{{ 'Graphique mobile' }}</label>
-                                    <div class="col-sm-6">
-                                        <select class="userAttr form-control" data-l1key="options" data-l2key="mobile_highcharts_theme">
-                                            <option value="">Défaut</option>
-                                            <option value="dark-blue">Dark-blue</option>
-                                            <option value="dark-green">Dark-green</option>
-                                            <option value="dark-unica">Dark-unica</option>
-                                            <option value="gray">Gray</option>
-                                            <option value="grid-light">Grid-light</option>
-                                            <option value="grid">Grid</option>
-                                            <option value="sand-signika">Sand-signika</option>
-                                            <option value="skies">Skies</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                {% for displayTypeCode, displayTypeData in profilsDisplayTypes %}
-                                    <div class="form-group">
-                                        <label class="col-sm-6 control-label">{{ 'Opacité par des widgets' }} {{ displayTypeData['name'] }}</label>
-                                        <div class="col-sm-6">
-                                            <input type="number" min="0" max="1" class="userAttr form-control" data-l1key="options" data-l2key="widget::background-opacity::{{ displayTypeCode }}"/>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </fieldset>
-                        </form>
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="img-responsive" id="div_imgThemeDesktop" style="height: 450px;"></div>
-                    </div>
+                            </div>
+                        {% endfor %}
+                    </fieldset>
                 </div>
 
                 <!-- Interface tab -->
