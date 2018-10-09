@@ -107,9 +107,9 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
       }
       $('#span_plugin_license').html(data.license);
       if($.trim(data.installation) == '' || $.trim(data.installation) == 'Aucune'){
-        $('#span_plugin_installation').closest('.panel').hide();
+        $('#span_plugin_installation').closest('.box').hide();
       }else{
-        $('#span_plugin_installation').closest('.panel').show();
+        $('#span_plugin_installation').closest('.box').show();
         $('#span_plugin_installation').html(data.installation);
       }
 
@@ -119,22 +119,18 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
         $('#span_plugin_install_version').html('');
       }
 
-      $('#div_plugin_dependancy').closest('.panel').parent().addClass('col-md-6')
-      $('#div_plugin_deamon').closest('.panel').parent().addClass('col-md-6')
       if(data.hasDependency == 0 || data.activate != 1){
-        $('#div_plugin_dependancy').closest('.panel').hide();
-        $('#div_plugin_deamon').closest('.panel').parent().removeClass('col-md-6')
+        $('#div_plugin_dependancy').closest('.box').hide();
       }else{
-        $('#div_plugin_dependancy').closest('.panel').show();
+        $('#div_plugin_dependancy').closest('.box').show();
         $('#div_plugin_dependancy').closest('.panel')
         $("#div_plugin_dependancy").load('index.php?v=d&modal=plugin.dependancy&plugin_id='+data.id);
       }
 
       if(data.hasOwnDeamon == 0 || data.activate != 1){
-        $('#div_plugin_deamon').closest('.panel').hide();
-        $('#div_plugin_dependancy').closest('.panel').parent().removeClass('col-md-6')
+        $('#div_plugin_deamon').closest('.box').hide();
       }else{
-        $('#div_plugin_deamon').closest('.panel').show();
+        $('#div_plugin_deamon').closest('.box').show();
         $("#div_plugin_deamon").load('index.php?v=d&modal=plugin.deamon&plugin_id='+data.id);
       }
 
@@ -280,10 +276,10 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
     if (data.configurationPath != '' && data.activate == 1) {
      $('#div_plugin_configuration').load('index.php?v=d&plugin='+data.id+'&configure=1', function () {
       if($.trim($('#div_plugin_configuration').html()) == ''){
-        $('#div_plugin_configuration').closest('.panel').hide();
+        $('#div_plugin_configuration').closest('.box').hide();
         return;
       }else{
-       $('#div_plugin_configuration').closest('.panel').show();
+       $('#div_plugin_configuration').closest('.box').show();
      }
      nextdom.config.load({
       configuration: $('#div_plugin_configuration').getValues('.configKey')[0],
@@ -299,7 +295,7 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
     });
    });
    } else {
-    $('#div_plugin_configuration').closest('.panel').hide();
+    $('#div_plugin_configuration').closest('.box').hide();
   }
   nextdom.config.load({
     configuration: $('#div_plugin_panel').getValues('.configKey')[0],
