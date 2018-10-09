@@ -93,19 +93,24 @@ function gen_js {
         3rdparty/autosize/autosize.min.js \
         3rdparty/inputmask/jquery.inputmask.bundle.js \
         3rdparty/bootstrap-colorpicker/js/bootstrap-colorpicker.js \
-        3rdparty/jquery-slimscroll/jquery.slimscroll.js \
         3rdparty/datetimepicker/jquery.datetimepicker.js  > /tmp/temp.js
     python -m jsmin /tmp/temp.js > public/js/base.js
     rm /tmp/temp.js
     php script/translate.php public/js/base.js
 
-    mkdir -p public/js/desktop/Market
-
+    mkdir -p public/js/adminlte
+    for jsFile in assets/js/adminlte/*.js
+    do
+        python -m jsmin $jsFile > public/js/adminlte/${jsFile##*/}
+        php script/translate.php public/js/adminlte/${jsFile##*/}
+    done
     for jsFile in assets/js/desktop/*.js
     do
         python -m jsmin $jsFile > public/js/desktop/${jsFile##*/}
         php script/translate.php public/js/desktop/${jsFile##*/}
     done
+
+    mkdir -p public/js/desktop/Market
     for jsFile in assets/js/desktop/Market/*.js
     do
         python -m jsmin $jsFile > public/js/desktop/Market/${jsFile##*/}
