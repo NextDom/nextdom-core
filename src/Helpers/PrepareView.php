@@ -397,7 +397,6 @@ class PrepareView
             $pageData['JS_POOL'][] = '/3rdparty/jquery.cron/jquery.cron.min.js ';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.contextMenu/jquery.contextMenu.min.js ';
             $pageData['JS_POOL'][] = '/3rdparty/autosize/autosize.min.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/select2/js/select2.js ';
             $pageData['JS_POOL'][] = '/3rdparty/inputmask/jquery.inputmask.bundle.js ';
             $pageData['JS_POOL'][] = '/3rdparty/bootstrap-colorpicker/js/bootstrap-colorpicker.js ';
             $pageData['JS_POOL'][] = '/3rdparty/ion.rangeSlider/js/ion.rangeSlider.js ';
