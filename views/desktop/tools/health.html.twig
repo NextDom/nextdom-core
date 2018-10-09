@@ -17,7 +17,9 @@
                     {{ 'Détails de la santé de votre solution, survolez les icônes pour plus d\'informations.' }}<a class="btn btn-action btn-legend pull-right" id="bt_benchmarkNextDom"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Lancer un Benchmark' }}</a>
                 </legend>
                 {% for informations in healthInformations %}
-                    <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                 {% if informations['name'] == "os-version" %}
+
+                    <div class="container-light col-xs-12">
                         {% set box_color = 'red' %}
                         {% if informations['state'] == 1 or informations['state'] == true %}
                             {% set box_color = 'green' %}
@@ -38,6 +40,29 @@
                             </div>
                         </div>
                     </div>
+                 {% else %}
+                                     <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                        {% set box_color = 'red' %}
+                        {% if informations['state'] == 1 or informations['state'] == true %}
+                            {% set box_color = 'green' %}
+                        {% elseif informations['state'] == 2 %}
+                            {% set box_color = 'yellow' %}
+                        {% endif %}
+                        <div class="info-box bg-{{ box_color }}">
+                            <span class="info-box-icon" data-toggle="tooltip" title="" data-original-title="{{ informations['comment'] }}">
+                                {% if informations['icon'] is defined %}
+                                    <i class="fas {{ informations['icon'] }}"></i>
+                                {% endif %}
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text"><b>{{ informations['name'] }}</b></span>
+                                <span class="info-box-text info-box-text-2">
+                                    {{ informations['result'] }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                 {% endif %}
                 {% endfor %}
             </fieldset>
         </form>

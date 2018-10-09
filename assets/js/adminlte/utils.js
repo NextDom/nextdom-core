@@ -11,4 +11,6 @@ $(function() {
         document.getElementById("filter_category").style.display = "none";
         document.getElementById("bt_editDashboardWidgetOrder").style.display = "none";
     }
+    $(".slimScrollDiv").css("overflow","");
+    $(".sidebar").css("overflow","");
 });
