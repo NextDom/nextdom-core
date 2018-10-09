@@ -333,9 +333,9 @@ class PrepareView
             $pageData['JS_POOL'][] = '/public/js/base.js';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min.js';
-            $pageData['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
             $pageData['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/adminlte.js ';
-            $pageData['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/adminlte_nextdom.js';
+            $pageData['JS_END_POOL'][] = '/assets/js/adminlte/adminlte_nextdom.js';
+            $pageData['JS_END_POOL'][] = '/assets/js/adminlte/utils.js';
         } else {
             $pageData['JS_POOL'][] = '/3rdparty/jquery.utils/jquery.utils.js ';
             $pageData['JS_POOL'][] = '/3rdparty/iziToast/js/iziToast.min.js ';
@@ -401,9 +401,9 @@ class PrepareView
             $pageData['JS_POOL'][] = '/3rdparty/inputmask/jquery.inputmask.bundle.js ';
             $pageData['JS_POOL'][] = '/3rdparty/bootstrap-colorpicker/js/bootstrap-colorpicker.js ';
             $pageData['JS_POOL'][] = '/3rdparty/ion.rangeSlider/js/ion.rangeSlider.js ';
-            $pageData['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/utils.js';
             $pageData['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/adminlte.js ';
-            $pageData['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/adminlte_nextdom.js';
+            $pageData['JS_END_POOL'][] = '/assets/js/adminlte/adminlte_nextdom.js';
+            $pageData['JS_END_POOL'][] = '/assets/js/adminlte/utils.js';
         }
     }
 
