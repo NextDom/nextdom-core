@@ -1,13 +1,8 @@
 @import "_buttons.scss";
-  
+@import "_alerts.scss";  
+
 .default-cursor {
   cursor: default;
-}
-
-#div_alert {
-  display: none;
-  margin:10px auto;
-  width: 80%;
 }
 
 #md_pageHelp {
@@ -75,23 +70,6 @@
   left: 250px;
   font-size: 36px;
 }
-
-.alert{
-  width: 80%;
-  margin: 10px auto;
-}
-
-.alert-danger {
-  border-left: 5px solid #DFAAA9;
-  box-shadow: 0 0 0 0 rgba(235, 204, 209, 0.7)  !important;
-  -webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
-  -moz-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
-  -ms-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
-  animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
-}
-
-
-
 .green{
   background-color: $green;
 }
@@ -129,6 +107,7 @@
 .white{
   background-color: $white;
 }
+
 .icon_white{
   color: $white;
 }
@@ -250,6 +229,7 @@
   border-radius: 3px;
   margin: 0 0 20px 5px;
 }
+
 html {
   height: 100%;
   /* The html and body elements cannot have any padding or margin. */
@@ -261,22 +241,6 @@ html {
 
 .cursor{
   cursor : pointer;
-}
-
-/* Themes for different contexts */
-.alert {
-  border-left: 5px solid $lightyellow;
-}
-
-.alert-danger {
-  border-left: 5px solid $lightred;
-}
-
-.alert-info {
-  border-left: 5px solid $lightblue;
-}
-.alert-success {
-  border-left: 5px solid $lightgreen;
 }
 
 .pull-right{
