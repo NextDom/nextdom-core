@@ -91,6 +91,7 @@ function gen_js {
         3rdparty/autosize/autosize.min.js \
         3rdparty/inputmask/jquery.inputmask.bundle.js \
         3rdparty/bootstrap-colorpicker/js/bootstrap-colorpicker.js \
+        3rdparty/jquery-slimscroll/jquery.slimscroll.js \
         3rdparty/datetimepicker/jquery.datetimepicker.js  > /tmp/temp.js
     python -m jsmin /tmp/temp.js > public/js/base.js
     rm /tmp/temp.js

@@ -399,6 +399,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/3rdparty/autosize/autosize.min.js ';
             $pageData['JS_POOL'][] = '/3rdparty/inputmask/jquery.inputmask.bundle.js ';
             $pageData['JS_POOL'][] = '/3rdparty/bootstrap-colorpicker/js/bootstrap-colorpicker.js ';
+            $pageData['JS_POOL'][] = '/3rdparty/jquery-slimscroll/jquery.slimscroll.min.js ';
             $pageData['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/adminlte.js ';
             $pageData['JS_END_POOL'][] = '/assets/js/adminlte/adminlte_nextdom.js';
             $pageData['JS_END_POOL'][] = '/assets/js/adminlte/utils.js';
