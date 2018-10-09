@@ -8,7 +8,13 @@
   <script>
     nextdom.cmd.update['#id#'] = function(_options){
      $('.cmd[data-cmd_uid=#uid#]:last .action_colorpicker_change').off('change')
-     $('.cmd[data-cmd_uid=#uid#] .action_colorpicker_change').value((_options.display_value != '') ? _options.display_value.substr(0,7) : _options.display_value);
+     if (_options.display_value != '' && _options.display_value.length > 7) {
+       $('.cmd[data-cmd_uid=#uid#] .action_colorpicker_change').value(_options.display_value.substr(0,7));
+     }
+     else {
+       $('.cmd[data-cmd_uid=#uid#] .action_colorpicker_change').value('#000000');
+     }
+
      $('.cmd[data-cmd_uid=#uid#]:last .action_colorpicker_change').on('change', function() {
       nextdom.cmd.execute({id: '#id#', value: {color: $(this).value()}});
     });
