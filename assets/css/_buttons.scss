@@ -1,0 +1,14 @@
+.btn:hover {
+  opacity: 0.7;
+}
+
+.btn-black {
+  color:$white;
+  background-color:#373737;
+  border-color:#1f1f1f;
+  &:hover {
+    color:$white;
+    background-color:#303030;
+    border-color:#1f1f1f;
+  }
+}
