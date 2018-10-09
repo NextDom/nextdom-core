@@ -1448,8 +1448,8 @@ class Controller
             'core::plan' => __('Design'),
         );
 
-        $pluginMangerList = PluginManager::listPlugin();
-        foreach ($pluginMangerList as $pluginList) {
+        $pluginManagerList = PluginManager::listPlugin();
+        foreach ($pluginManagerList as $pluginList) {
             if ($pluginList->isActive() == 1 && $pluginList->getDisplay() != '') {
                 $pageContent['profilsHomePage'][$pluginList->getId() . '::' . $pluginList->getDisplay()] = $pluginList->getName();
             }
@@ -1468,6 +1468,13 @@ class Controller
         foreach ($lsCssThemes as $dir) {
             if (is_dir(NEXTDOM_ROOT . '/public/themes/' . $dir . '/mobile')) {
                 $pageContent['profilsDesktopThemes'][] = trim($dir, '/');
+            }
+        }
+        $pageContent['profilsAvatars'] = [];
+        $lsAvatars = ls(NEXTDOM_ROOT . '/public/img/profils/');
+        foreach ($lsAvatars as $avatarFile) {
+            if (is_file(NEXTDOM_ROOT . '/public/img/profils/'.$avatarFile)) {
+                $pageContent['profilsAvatars'][] = '/public/img/profils/'.$avatarFile;
             }
         }
         $pageContent['profilsDisplayTypes'] = \nextdom::getConfiguration('eqLogic:displayType');
