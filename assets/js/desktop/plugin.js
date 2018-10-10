@@ -123,7 +123,7 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
         $('#div_plugin_dependancy').closest('.box').hide();
       }else{
         $('#div_plugin_dependancy').closest('.box').show();
-        $('#div_plugin_dependancy').closest('.panel')
+        $('#div_plugin_dependancy').closest('.box')
         $("#div_plugin_dependancy").load('index.php?v=d&modal=plugin.dependancy&plugin_id='+data.id);
       }
 
@@ -161,61 +161,61 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
         $('#span_plugin_require').html('<span class="label label-danger">' + data.require + '</span>');
       }
 
-      $('#div_configPanel').hide();
-      $('#div_plugin_panel').empty();
+      $('#div_configbox').hide();
+      $('#div_plugin_box').empty();
       if(isset(data.display) && data.display != ''){
-        $('#div_configPanel').show();
-        var config_panel_html = '<div class="form-group">';
-        config_panel_html += '<label class="col-lg-4 col-md-4 col-sm-4 col-xs-6 control-label">{{Afficher le panneau desktop}}</label>';
-        config_panel_html += '<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">';
-        config_panel_html += '<input type="checkbox" class="configKey tooltips" data-l1key="displayDesktopPanel" />';
-        config_panel_html += '</div>';
-        config_panel_html += '</div>';
-        $('#div_plugin_panel').append(config_panel_html);
+        $('#div_configbox').show();
+        var config_box_html = '<div class="form-group">';
+        config_box_html += '<label class="col-lg-4 col-md-4 col-sm-4 col-xs-6 control-label">{{Afficher le panneau desktop}}</label>';
+        config_box_html += '<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">';
+        config_box_html += '<input type="checkbox" class="configKey tooltips" data-l1key="displayDesktopbox" />';
+        config_box_html += '</div>';
+        config_box_html += '</div>';
+        $('#div_plugin_box').append(config_box_html);
       }
 
       if(isset(data.mobile) && data.mobile != ''){
-        $('#div_configPanel').show();
-        var config_panel_html = '<div class="form-group">';
-        config_panel_html += '<label class="col-lg-4 col-md-4 col-sm-4 col-xs-6 control-label">{{Afficher le panneau mobile}}</label>';
-        config_panel_html += '<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">';
-        config_panel_html += '<input type="checkbox" class="configKey tooltips" data-l1key="displayMobilePanel" />';
-        config_panel_html += '</div>';
-        config_panel_html += '</div>';
-        $('#div_plugin_panel').append(config_panel_html);
+        $('#div_configbox').show();
+        var config_box_html = '<div class="form-group">';
+        config_box_html += '<label class="col-lg-4 col-md-4 col-sm-4 col-xs-6 control-label">{{Afficher le panneau mobile}}</label>';
+        config_box_html += '<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">';
+        config_box_html += '<input type="checkbox" class="configKey tooltips" data-l1key="displayMobilebox" />';
+        config_box_html += '</div>';
+        config_box_html += '</div>';
+        $('#div_plugin_box').append(config_box_html);
       }
 
       $('#div_plugin_functionality').empty();
       count = 0;
-      var config_panel_html = '<div class="row">';
-      config_panel_html += '<div class="col-sm-6">';
+      var config_box_html = '<div class="row">';
+      config_box_html += '<div class="col-sm-6">';
       for(var i in data.functionality){
-        config_panel_html += '<div class="form-group">';
-        config_panel_html += '<label class="col-lg-3 col-md-4 col-sm-4 col-xs-6 control-label">'+i+'</label>';
-        config_panel_html += '<div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">';
+        config_box_html += '<div class="form-group">';
+        config_box_html += '<label class="col-lg-3 col-md-4 col-sm-4 col-xs-6 control-label">'+i+'</label>';
+        config_box_html += '<div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">';
         if(data.functionality[i].exists){
-          config_panel_html += '<span class="label label-success">{{Oui}}</span>';
-          config_panel_html += '</div>';
+          config_box_html += '<span class="label label-success">{{Oui}}</span>';
+          config_box_html += '</div>';
           if(data.functionality[i].controlable){
-            config_panel_html += '<label class="col-lg-3 col-md-3 col-sm-3 col-xs-6 control-label">{{Activer}}</label>';
-            config_panel_html += '<div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">';
-            config_panel_html += '<input type="checkbox" class="configKey tooltips" data-l1key="functionality::'+i+'::enable" checked/>';
-            config_panel_html += '</div>';
+            config_box_html += '<label class="col-lg-3 col-md-3 col-sm-3 col-xs-6 control-label">{{Activer}}</label>';
+            config_box_html += '<div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">';
+            config_box_html += '<input type="checkbox" class="configKey tooltips" data-l1key="functionality::'+i+'::enable" checked/>';
+            config_box_html += '</div>';
           }
         }else{
-          config_panel_html += '<span class="label label-danger">{{Non}}</span>';
-          config_panel_html += '</div>';
+          config_box_html += '<span class="label label-danger">{{Non}}</span>';
+          config_box_html += '</div>';
         }
-        config_panel_html += '</div>';
+        config_box_html += '</div>';
         count++;
         if(count == 5){
-         config_panel_html += '</div>';
-         config_panel_html += '<div class="col-sm-6">';
+         config_box_html += '</div>';
+         config_box_html += '<div class="col-sm-6">';
        }
      }
-     config_panel_html += '</div>';
-     config_panel_html += '</div>';
-     $('#div_plugin_functionality').append(config_panel_html);
+     config_box_html += '</div>';
+     config_box_html += '</div>';
+     $('#div_plugin_functionality').append(config_box_html);
 
      $('#div_plugin_toggleState').empty();
      if (data.checkVersion != -1) {
@@ -224,10 +224,10 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
        html += '<label class="col-sm-2 control-label">{{Statut}}</label>';
        html += '<div class="col-sm-4">';
        if (data.activate == 1) {
-        $('#div_plugin_toggleState').closest('.panel').removeClass('panel-default panel-danger').addClass('panel-success');
+        $('#div_plugin_toggleState').closest('.box').removeClass('box-default box-danger').addClass('box-success');
         html += '<span class="label label-success" style="font-size:1em;position:relative;top:7px;">{{Actif}}</span>';
       }else{
-        $('#div_plugin_toggleState').closest('.panel').removeClass('panel-default panel-success').addClass('panel-danger');
+        $('#div_plugin_toggleState').closest('.box').removeClass('box-default box-success').addClass('box-danger');
         html += '<span class="label label-danger" style="font-size:1em;position:relative;top:7px;">{{Inactif}}</span>';
       }
       html += '</div>';
@@ -243,7 +243,7 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
      html += '</form>';
      $('#div_plugin_toggleState').html(html);
    }else{
-     $('#div_plugin_toggleState').closest('.panel').removeClass('panel-default panel-success').addClass('panel-danger');
+     $('#div_plugin_toggleState').closest('.box').removeClass('box-default box-success').addClass('box-danger');
      $('#div_plugin_toggleState').html('{{Votre version de}} '+NEXTDOM_PRODUCT_NAME+' {{ne permet pas d\'activer ce plugin}}');
    }
    var log_conf = '';
@@ -298,13 +298,13 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
     $('#div_plugin_configuration').closest('.box').hide();
   }
   nextdom.config.load({
-    configuration: $('#div_plugin_panel').getValues('.configKey')[0],
+    configuration: $('#div_plugin_box').getValues('.configKey')[0],
     plugin: sel_plugin_id,
     error: function (error) {
       notify('Core',error.message,'error');
     },
     success: function (data) {
-      $('#div_plugin_panel').setValues(data, '.configKey');
+      $('#div_plugin_box').setValues(data, '.configKey');
       modifyWithoutSave = false;
     }
   });
@@ -422,9 +422,9 @@ $('#div_pageContainer').delegate('.configKey', 'change', function () {
   modifyWithoutSave = true;
 });
 
-$('#bt_savePluginPanelConfig').off('click').on('click',function(){
+$('#bt_savePluginboxConfig').off('click').on('click',function(){
  nextdom.config.save({
-  configuration: $('#div_plugin_panel').getValues('.configKey')[0],
+  configuration: $('#div_plugin_box').getValues('.configKey')[0],
   plugin: sel_plugin_id,
   error: function (error) {
     notify('Core',error.message,'error');
