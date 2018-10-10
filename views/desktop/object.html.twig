@@ -1,47 +1,40 @@
 <section>
-    <div class="row row-overflow">
-        <div class="col-xs-12" id="div_resumeObjectList">
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-cog"></i> {{ 'Gestion' }}</h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fas fa-times"></i></button>
-                    </div>
-                </div>
-                <div class="box-body objectListContainer DisplayCard text-center">
-                    <div class="icon_gestion icon_theme_color cursor" id="bt_addObject2">
-                            <i class="fas fa-plus-circle"></i><div class="text-center"><span>{{ 'Ajouter' }}</span></div>
-                    </div>
-                    <div class="icon_gestion cursor icon_blue bt_showObjectSummary">
-                            <i class="fas fa-list"></i><div class="text-center"><span>{{ 'Vue d\'ensemble' }}</span></div>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <div class="box-header with-border">
-                    <class="box-title"><i class="fas fa-picture-o"></i> {{ 'Mes objets' }}</h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fas fa-times"></i></button>
-                    </div>
-                </div>
+    <!-- Objet list -->
+    <div class="box" id="div_resumeObjectList">
 
-                <input class="form-control" placeholder="{{ 'Rechercher' }}" style="margin-bottom:4px;" id="in_searchObject"/>
-                <div class="box-body objectListContainer text-center">
-                    {% for object in objectList %}
-                        <div class="objectDisplayCard DisplayCard cursor" data-object_id="{{ object.getId() }}" data-object_name="{{ object.getName() }}" data-object_icon='{{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|raw }}' >
-                                {{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|replace({'></i>': ' style="font-size : 4em;color:#767676;"></i>'})|raw }}
-                            <span><center class="name">{{ object.getName() }}</center></span><br/>
-                                {{ object.getHtmlSummary()|raw }}
-
-                        </div>
-                    {% endfor %}
-                </div>
+        <!-- Header bar -->
+        <div class="box-header with-border">
+            <class="box-title"><i class="fas fa-clone">&nbsp;&nbsp;</i>{{ 'Mes Objets' }}</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fas fa-times"></i></button>
             </div>
         </div>
+
+        <div class="box-body objectListContainer text-center">
+            <form class="form-horizontal">
+                <fieldset>
+                    <legend class="legend-title">{{ 'Liste des objets de votre ' }}
+                        <div class="box-tools pull-right">
+                            <a class="btn btn-warning btn-legend" id="bt_showObjectSummary"><i class="fas fa-list">&nbsp;&nbsp;</i>{{ 'Vue d\'ensemble' }}</a>
+                            <a class="btn btn-warning btn-legend" id="bt_addObject2"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
+                            <input class="form-control pull-right" id="in_searchObject" style="width : 300px;" placeholder="{{'Rechercher ...'}}" />
+                        </div>
+                    </legend>
+                    <div class="form-group">
+                        {% for object in objectList %}
+                            <div class="objectDisplayCard DisplayCard cursor icon-big" data-object_id="{{ object.getId() }}" data-object_name="{{ object.getName() }}" data-object_icon='{{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|raw }}' >
+                                    {{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|replace({'></i>': '></i>'})|raw }}
+                                <span class="name">{{ object.getName() }}</span>
+                                    {{ object.getHtmlSummary()|raw }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <div class="row row-overflow">      
         <div class="col-xs-12">
             <div class="nav-tabs-custom object" style="display: none;" id="div_conf">
                 <ul class="nav nav-tabs pull-right" role="tablist">
