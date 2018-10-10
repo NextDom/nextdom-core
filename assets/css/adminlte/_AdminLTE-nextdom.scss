@@ -722,7 +722,19 @@ input[type="checkbox"] {
   font-size : 4em;
   color:$gray;
 }
-.name {
+
+/* Objets */
+.object-name {
   font-size : 14px;
   color:$gray;
+}
+.object-summary {
+  /*background-color: $gray;*/
+  font-size: 12px;
+  margin: 5px;
+  padding-top: 5px;
+  border-radius: 3px;
+}
+.object-card {
+  height: 170px;
 }
