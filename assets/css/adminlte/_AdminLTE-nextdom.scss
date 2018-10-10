@@ -132,6 +132,17 @@ body {
   position: absolute;
   left: 55px;
 }
+.sidebar-collapse .user-panel {
+  text-align: center;
+}
+.sidebar-collapse .user-panel div.image {
+  width: 2.2rem;
+  height: 2.2rem;
+  margin-left: auto;
+  margin-right: auto;
+  float: none !important;
+  transition: all .2s;
+}
 
 /* Sidebar */
 .sidebar-mini:not(.sidebar-mini-expand-feature).sidebar-collapse .sidebar-menu > li:hover > a > span:not(.pull-right),
