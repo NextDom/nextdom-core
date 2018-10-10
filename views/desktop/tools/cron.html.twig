@@ -11,18 +11,20 @@
     <div class="box-body">
         <form class="form-horizontal">
             <fieldset>
-
-                <legend class="legend-title legend-first-btn">{{ 'Liste des tâches cron' }}
-                    <div class="box-tools pull-right">
-                        <a class="btn btn-action btn-legend" id="bt_addCron"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
-                        <a class="btn btn-primary btn-legend" id="bt_refreshCron"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{ 'Rafraîchir' }}</a>
+                <div class"col-md-6 col-xs-12 container-fluid">
+                    <legend class="legend-title legend-first-btn">{{ 'Liste des tâches cron' }}</legend>
+                </div>
+                <div class"col-md-6 col-xs-12 container-fluid">
+                    <div class="box-tools pull-right padding-bottom">
+                        <a class="btn btn-action" id="bt_addCron"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
+                        <a class="btn btn-primary" id="bt_refreshCron"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{ 'Rafraîchir' }}</a>
                         {% if cronEnabled == 0 %}
-                            <a class="btn btn-success btn-legend" id="bt_changeCronState" data-state="1"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Activer le système cron' }}</a>
+                            <a class="btn btn-success" id="bt_changeCronState" data-state="1"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Activer le système cron' }}</a>
                         {% else %}
-                            <a class="btn btn-danger btn-legend" id="bt_changeCronState" data-state="0"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Désactiver le système cron' }}</a>
+                            <a class="btn btn-danger" id="bt_changeCronState" data-state="0"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Désactiver le système cron' }}</a>
                         {% endif %}
                     </div>
-                </legend>
+                </div>
                 <table id="table_cron" class="table table-bordered table-condensed">
                     <thead>
                     <tr>
