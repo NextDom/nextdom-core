@@ -13,7 +13,7 @@
 
             <div style="display: none;" id="div_noteManagementAlert"></div>
             <div class="row">
-                <div class="col-lg-2 col-md-3 col-sm-4" style="overflow-y:auto;overflow-x:hidden;">
+                <div class="col-lg-2 col-md-3 col-sm-4 padding-bottom" style="overflow-y:auto;overflow-x:hidden;">
                     <fieldset>
                         <legend class="legend-title">{{ 'Liste des notes' }}</legend>
                         <div class="bs-sidebar">
@@ -26,13 +26,11 @@
 
                 <div class="col-lg-10 col-md-9 col-sm-8" style="border-left: solid 1px #EEE; overflow-y:hidden;overflow-x:hidden;">
                     <fieldset>
-                        <legend class="legend-title legend-first-btn">{{ 'Note selectionnée' }}
-                            <div class="box-tools pull-right">
-                                <a class="btn btn-action btn-legend" id="bt_noteManagerAdd"><i class="fas fa-plus">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
-                                <a class="btn btn-success btn-legend" id="bt_noteManagerSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
-                                <a class="btn btn-danger btn-legend" id="bt_noteManagerRemove"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
-                            </div>
-                        </legend>
+                        <div class="box-tools pull-right padding-bottom">
+                            <a class="btn btn-action btn-legend" id="bt_noteManagerAdd"><i class="fas fa-plus">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
+                            <a class="btn btn-success btn-legend" id="bt_noteManagerSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+                            <a class="btn btn-danger btn-legend" id="bt_noteManagerRemove"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                        </div>
                         <div id="div_noteManagerDisplay">
                             <input class="noteAttr form-control" data-l1key="id" style="display:none;" disabled/>
                             <input class="noteAttr form-control label-list" data-l1key="name" disabled/>
