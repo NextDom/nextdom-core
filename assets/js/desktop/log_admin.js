@@ -100,7 +100,7 @@ function addActionOnMessage(_action) {
     }
     var div = '<div class="actionOnMessage">';
     div += '<div class="form-group ">';
-    div += '<label class="col-sm-4 control-label">Action</label>';
+    div += '<label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">Action</label>';
     div += '<div class="col-sm-2">';
     div += '<input type="checkbox" class="expressionAttr" id="MessageActiv" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'action}}" />';
     div += '<label for="MessageActiv" class="control-label label-check">{{Activer}}</label>';
