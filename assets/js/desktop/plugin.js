@@ -224,10 +224,10 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
        html += '<label class="col-sm-2 control-label">{{Statut}}</label>';
        html += '<div class="col-sm-4">';
        if (data.activate == 1) {
-        $('#div_plugin_toggleState').closest('.panel').removeClass('panel-default panel-danger').addClass('panel-success');
+        $('#div_plugin_toggleState').closest('.box').removeClass('box-default box-danger').addClass('box-success');
         html += '<span class="label label-success" style="font-size:1em;position:relative;top:7px;">{{Actif}}</span>';
       }else{
-        $('#div_plugin_toggleState').closest('.panel').removeClass('panel-default panel-success').addClass('panel-danger');
+        $('#div_plugin_toggleState').closest('.box').removeClass('box-default box-success').addClass('box-danger');
         html += '<span class="label label-danger" style="font-size:1em;position:relative;top:7px;">{{Inactif}}</span>';
       }
       html += '</div>';
