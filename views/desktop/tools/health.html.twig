@@ -41,7 +41,7 @@
                         </div>
                     </div>
                  {% else %}
-                                     <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
                         {% set box_color = 'red' %}
                         {% if informations['state'] == 1 or informations['state'] == true %}
                             {% set box_color = 'green' %}
@@ -103,7 +103,7 @@
                             {% if pluginData['nOk'] == 0 and pluginData['pending'] == 0 %}
                             <div class="panel box box-success">
                                 {% endif %}
-                                <div class="box-header with-border">
+                                <div class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="#accordionHealth" href="#config_{{ pluginData['plugin'].getId() }}">
                                     <h3 class="box-title">
                                         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionHealth" href="#config_{{ pluginData['plugin'].getId() }}" style="text-decoration:none;">
                                             <img class="img-responsive" style="width : 20px;display:inline-block;" src="{{ pluginData['plugin'].getPathImgIcon() }}"/>
