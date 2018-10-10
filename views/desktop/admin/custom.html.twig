@@ -124,7 +124,7 @@
                             </div>
                         </div>
 
-                        <legend class="legend-title">{{ 'ou en versions Light' }}</legend>
+                        <legend class="legend-title legend-section">{{ 'ou en versions Light' }}</legend>
                         <div class="row">
                             <div class="col-md-12">
                                 <ul class="list-unstyled clearfix">
@@ -254,9 +254,10 @@
                                     <input type="numeric" class="configKey form-control" data-l1key="widget::margin" />
                                 </div>
                             </div>
+
                             <div id="colortab-list">
                                 {% for category, categoryData in adminCategories %}
-                                    <legend class="legend-title">{{'Catégorie'}} {{ categoryData['name'] }}</legend>
+                                    <legend class="legend-title legend-section">{{'Catégorie'}} {{ categoryData['name'] }}</legend>
                                     <div class="form-group">
                                         <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Dashboard couleur de fond' }}</label>
                                         <div class="btn-group col-lg-4 col-md-4 col-sm-5 col-xs-12">

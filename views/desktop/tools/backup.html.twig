@@ -13,12 +13,11 @@
             <form class="form-horizontal">
                 <fieldset>
                     <!-- Présentation Section -->
-                    <legend class="legend-title">{{ 'Présentation' }}</legend>
                     <p class="alert alert-info">{{ 'Cette fonction permet de compacter dans une archive tous les élements de votre Nextdom.' }}</br>
                     {{ 'Seront sauvegardé les paramètres, dashboard, vues, designs, plugins, widgets etc...' }}</p>
 
                     <!-- Sauvegardes Section -->
-                    <legend class="legend-title">{{ 'Paramètres des sauvegardes' }}</legend>
+                    <legend class="legend-title legend-section">{{ 'Paramètres des sauvegardes' }}</legend>
                     <div class="form-group">
                         <label class="col-sm-4 col-xs-12 control-label">{{ 'Emplacement' }}</label>
                         <div class="col-sm-4 col-xs-12">
@@ -51,7 +50,7 @@
                     </div>
 
                     <!-- Local Section -->
-                    <legend class="legend-title">{{ 'Sauvegardes locales' }}</legend>
+                    <legend class="legend-title legend-section">{{ 'Sauvegardes locales' }}</legend>
                     <div class="form-group">
                         <label class="col-sm-4 col-xs-6 control-label">{{ 'Sauvegardes disponibles' }}</label>
                         <div class="col-sm-6 col-xs-6">
@@ -89,7 +88,7 @@
                     {% for repo, repoData in backupReposList %}
                         {% if repoData['scope']['backup'] != false and repoData['enable'] != 0 %}
                             {% set cssClass = 'repo_' ~ repo %}
-                            <legend class="legend-title">{{ 'Sauvegardes' }} {{ repoData['name'] }}</legend>
+                            <legend class="legend-title legend-section">{{ 'Sauvegardes' }} {{ repoData['name'] }}</legend>
                             <div class="form-group">
                                 <label class="col-sm-4 col-xs-6 control-label">{{ 'Envoi automatique' }}</label>
                                 <div class="col-sm-4 col-xs-6">

@@ -13,19 +13,21 @@
             <fieldset>
 
                 <!-- Users section -->
-                <div class="col-md-6 col-xs-12 container-fluid">
-                    <legend class="legend-title legend-first">{{ 'Liste des utilisateurs' }}</legend>
-                </div>
-                <div class="col-md-6 col-xs-12 container-fluid">
-                    <div class="box-tools pull-right legend-btn">
-                        {% if userLdapEnabled != '1' %}
-                            {% if userSupportExists %}
-                                <a class="btn btn-danger" id="bt_supportAccess" data-enable="0"><i class="fas fa-user">&nbsp;&nbsp;</i>{{ 'Désactiver accès support' }}</a>
-                            {% else %}
-                                <a class="btn btn-success" id="bt_supportAccess" data-enable="1"><i class="fas fa-user">&nbsp;&nbsp;</i>{{ 'Activer accès support' }}</a>
+                <div class="legend-section">
+                    <div class="col-md-6 col-xs-12 container-fluid">
+                        <legend class="legend-title legend-first">{{ 'Liste des utilisateurs' }}</legend>
+                    </div>
+                    <div class="col-md-6 col-xs-12 container-fluid">
+                        <div class="box-tools pull-right padding-bottom">
+                            {% if userLdapEnabled != '1' %}
+                                {% if userSupportExists %}
+                                    <a class="btn btn-danger" id="bt_supportAccess" data-enable="0"><i class="fas fa-user">&nbsp;&nbsp;</i>{{ 'Désactiver accès support' }}</a>
+                                {% else %}
+                                    <a class="btn btn-success" id="bt_supportAccess" data-enable="1"><i class="fas fa-user">&nbsp;&nbsp;</i>{{ 'Activer accès support' }}</a>
+                                {% endif %}
+                                <a class="btn btn-warning" id="bt_addUser"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter un utilisateur' }}</a>
                             {% endif %}
-                            <a class="btn btn-warning" id="bt_addUser"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter un utilisateur' }}</a>
-                        {% endif %}
+                        </div>
                     </div>
                 </div>
                 <div class="tab-pane" id="user">
@@ -44,7 +46,7 @@
                 </div>
 
                 <!-- Sessions section -->
-                <legend class="legend-title">{{ 'Sessions actives' }}</legend>
+                <legend class="legend-title legend-section">{{ 'Sessions actives' }}</legend>
                 <table class="table table-condensed table-bordered">
                     <thead>
                     <tr>
@@ -77,12 +79,14 @@
                 </table>
 
                 <!-- Periphériques section -->
-                <div class="col-md-6 col-xs-12 container-fluid">
-                    <legend class="legend-title">{{ 'Périphériques enregistrés' }}</legend>
-                </div>
-                <div class="col-md-6 col-xs-12 container-fluid">
-                    <div class="box-tools pull-right legend-btn">
-                        <a class="btn btn-warning" id="bt_removeAllRegisterDevice"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer tout' }}</a>
+                <div class="legend-section">
+                    <div class="col-md-6 col-xs-12 container-fluid">
+                        <legend class="legend-title">{{ 'Périphériques enregistrés' }}</legend>
+                    </div>
+                    <div class="col-md-6 col-xs-12 container-fluid">
+                        <div class="box-tools pull-right padding-bottom">
+                            <a class="btn btn-warning" id="bt_removeAllRegisterDevice"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer tout' }}</a>
+                        </div>
                     </div>
                 </div>
                 <table class="table table-bordered table-condensed">
