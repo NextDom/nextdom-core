@@ -13,7 +13,7 @@
             <fieldset>
 
                 <!-- LDAP Section -->
-                <legend class="legend-title">{{ 'LDAP' }}</legend>
+                <legend class="legend-title legend-first">{{ 'LDAP' }}</legend>
                 {% if adminUseLdap %}
                     <div class="form-group">
                         <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Authentification LDAP' }}</label>
@@ -125,20 +125,16 @@
                         <input type="text" class="configKey form-control" data-l1key="security::whiteips"/>
                     </div>
                 </div>
-            </fieldset>
-        </form>
 
-        <!-- IP section -->
-        <form class="form-horizontal">
-            <div class="col-md-6 col-xs-12 container-fluid">
-                <legend class="legend-title">{{ 'IPs bannies' }}</legend>
-            </div>
-            <div class="col-md-6 col-xs-12 container-fluid">
-                <div class="box-tools pull-right padding-bottom">
-                    <a class="btn btn-warning" id="bt_removeBanIp"><i class="fa fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                <!-- IP section -->
+                <div class="col-md-6 col-xs-12 container-fluid">
+                    <legend class="legend-title">{{ 'IPs bannies' }}</legend>
                 </div>
-            </div>
-            <fieldset>
+                <div class="col-md-6 col-xs-12 container-fluid">
+                    <div class="box-tools pull-right legend-btn">
+                        <a class="btn btn-warning" id="bt_removeBanIp"><i class="fa fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                    </div>
+                </div>
                 <table class="table table-condensed table-bordered">
                     <thead>
                     <tr>

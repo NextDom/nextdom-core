@@ -26,7 +26,7 @@
                 <!-- Profil tab -->
                 <div role="tabpanel" class="tab-pane active" id="profil">
                     <fieldset>
-                        <legend class="legend-title">{{ 'Photo de profil' }}</legend>
+                        <legend class="legend-title legend-first">{{ 'Photo de profil' }}</legend>
                         <div class="row">
                             <div class="form-group col-sm-6">
                                 <img id="monAvatar" src="{{ profilsUser.getOptions('avatar') }}" style="width:auto; height:200px"></a>
@@ -52,7 +52,7 @@
                 <div role="tabpanel" class="tab-pane" id="themetab">
                     <form class="form-horizontal">
                         <fieldset>
-                            <legend class="legend-title">{{ 'Couleurs' }}</legend>
+                            <legend class="legend-title legend-first">{{ 'Couleurs' }}</legend>
                             <div class="form-group">
                                 <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Couleur sur mobile' }}</label>
                                 <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
@@ -111,7 +111,7 @@
 
                 <!-- Interface tab -->
                 <div role="tabpanel" class="tab-pane" id="interfacetab">
-                    <legend class="legend-title">{{ 'Options d\'interfaces' }}</legend>
+                    <legend class="legend-title legend-first">{{ 'Options d\'interfaces' }}</legend>
                     <form class="form-horizontal">
                         <fieldset>
                             <div class="form-group">
@@ -242,7 +242,7 @@
                 <div role="tabpanel" class="tab-pane" id="securitytab">
                     <form class="form-horizontal">
                         <fieldset>
-                            <legend class="legend-title">{{ 'Authentifications' }}</legend>
+                            <legend class="legend-title legend-first">{{ 'Authentifications' }}</legend>
                             {% if profilsAllowRemoteUsers != 1 %}
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Authentification en 2 étapes' }}</label>
