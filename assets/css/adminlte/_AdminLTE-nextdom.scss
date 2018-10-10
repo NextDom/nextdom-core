@@ -602,6 +602,9 @@ body {
   padding-left: 5px;
   padding-right: 5px;
 }
+.padding-bottom {
+  padding-bottom: 10px;
+}
 
 /* Checkboxes */
 input[type="checkbox"] {
@@ -706,6 +709,7 @@ input[type="checkbox"] {
   text-transform:capitalize;
 }
 
+/* Widget */
 .eqLogic-widget{
   max-width: 95%;
 }
