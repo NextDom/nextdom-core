@@ -68,12 +68,12 @@ switch ($dependancy_info['state']) {
                     break;
                     case 'nok':
                     nok = true;
-                    $("#div_plugin_dependancy").closest('.panel').removeClass('panel-success panel-info').addClass('panel-danger');
+                    $("#div_plugin_dependancy").closest('.box').removeClass('box-success box-info').addClass('box-danger');
                     $('.dependancyState').empty().append('<span class="label label-danger" style="font-size:1em;">{{NOK}}</span>');
                     break;
                     case 'in_progress':
                     nok = true;
-                    $("#div_plugin_dependancy").closest('.panel').removeClass('panel-success panel-danger').addClass('panel-info');
+                    $("#div_plugin_dependancy").closest('.box').removeClass('box-success box-danger').addClass('box-info');
                     var html = '<span class="label label-primary" style="font-size:1em;"><i class="fas fa-spinner fa-spin"></i> {{Installation en cours}}';
                     if(isset(data.progression) && data.progression !== ''){
                         html += ' - '+data.progression+' %';
@@ -89,7 +89,7 @@ switch ($dependancy_info['state']) {
                 }
                 $('.td_lastLaunchDependancy').empty().append(data.last_launch);
                 if(!nok){
-                    $("#div_plugin_dependancy").closest('.panel').removeClass('panel-danger panel-info').addClass('panel-success');
+                    $("#div_plugin_dependancy").closest('.box').removeClass('box-danger box-info').addClass('box-success');
                 }
                 if(nok){
                     setTimeout(refreshDependancyInfo, 5000);
