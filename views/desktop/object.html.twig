@@ -30,7 +30,7 @@
                         {% for object in objectList %}
                             <div class="objectDisplayCard DisplayCard cursor icon-big" data-object_id="{{ object.getId() }}" data-object_name="{{ object.getName() }}" data-object_icon='{{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|raw }}' >
                                     {{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|replace({'></i>': '></i>'})|raw }}
-                                <p class="name">{{ object.getName() }}</p><p>{{ object.getHtmlSummary()|raw }}</p>
+                                <p class="name">{{ object.getName() }}</p><p class="name">{{ object.getHtmlSummary()|raw }}</p>
                             </div>
                         {% endfor %}
                     </div>
