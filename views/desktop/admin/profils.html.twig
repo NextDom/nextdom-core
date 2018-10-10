@@ -26,23 +26,25 @@
                 <!-- Profil tab -->
                 <div role="tabpanel" class="tab-pane active" id="profil">
                     <fieldset>
-                        <legend class="legend-title">{{ 'Photo de profil' }}</legend>
-                        <div class="row">
-                            <div class="form-group col-sm-6">
-                                <img id="monAvatar" src="{{ profilsUser.getOptions('avatar') }}" style="width:auto; height:200px"></a>
+                        <div>
+                            <legend class="legend-title">{{ 'Photo de profil' }}</legend>
+                            <div class="row">
+                                <div class="form-group col-sm-6">
+                                    <img id="monAvatar" src="{{ profilsUser.getOptions('avatar') }}" style="width:auto; height:200px"></a>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    {% for i in 0..8 %}
+                                        <img id="monAvatar" src="/public/img/profils/avatar_0{{ i }}.jpg" style="width:auto; height:calc(200px/3)"></a>
+                                    {% endfor %}
+                                </div>
                             </div>
-                            <div class="form-group col-sm-6">
-                                {% for i in 0..8 %}
-                                    <img id="monAvatar" src="/public/img/profils/avatar_0{{ i }}.jpg" style="width:auto; height:calc(200px/3)"></a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-6">
-                                <input class="userAttr form-control" data-l1key="options" data-l2key="avatar" disabled/>
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <input class="userAttr form-control" id="user_avatar" type="file" name="images" data-url="core/ajax/profils.ajax.php?action=imageUpload"/>
+                            <div class="row">
+                                <div class="form-group col-sm-6">
+                                    <input class="userAttr form-control" data-l1key="options" data-l2key="avatar" disabled/>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <input class="userAttr form-control" id="user_avatar" type="file" name="images" data-url="core/ajax/profils.ajax.php?action=imageUpload"/>
+                                </div>
                             </div>
                         </div>
                     </fieldset>
@@ -52,59 +54,67 @@
                 <div role="tabpanel" class="tab-pane" id="themetab">
                     <form class="form-horizontal">
                         <fieldset>
-                            <legend class="legend-title">{{ 'Couleurs' }}</legend>
-                            <div class="form-group">
-                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Couleur sur mobile' }}</label>
-                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="mobile_theme_color">
-                                        {% for theme in profilsMobileThemes %}
-                                            <option value="{{ theme }}">{{ theme|capitalize|replace({'_': ' '}) }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                            <legend class="legend-title legend-section">{{ 'Graphiques' }}</legend>
-                            <div class="form-group">
-                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Graphique Desktop' }}</label>
-                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="desktop_highcharts_theme">
-                                        <option value="">Défaut</option>
-                                        <option value="dark-blue">Dark-blue</option>
-                                        <option value="dark-green">Dark-green</option>
-                                        <option value="dark-unica">Dark-unica</option>
-                                        <option value="gray">Gray</option>
-                                        <option value="grid-light">Grid-light</option>
-                                        <option value="grid">Grid</option>
-                                        <option value="sand-signika">Sand-signika</option>
-                                        <option value="skies">Skies</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Graphique mobile' }}</label>
-                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="mobile_highcharts_theme">
-                                        <option value="">Défaut</option>
-                                        <option value="dark-blue">Dark-blue</option>
-                                        <option value="dark-green">Dark-green</option>
-                                        <option value="dark-unica">Dark-unica</option>
-                                        <option value="gray">Gray</option>
-                                        <option value="grid-light">Grid-light</option>
-                                        <option value="grid">Grid</option>
-                                        <option value="sand-signika">Sand-signika</option>
-                                        <option value="skies">Skies</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <legend class="legend-title legend-section">{{ 'Opacités' }}</legend>
-                            {% for displayTypeCode, displayTypeData in profilsDisplayTypes %}
+                            <div>
+                                <legend class="legend-title">{{ 'Couleurs' }}</legend>
                                 <div class="form-group">
-                                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Widgets' }} {{ displayTypeData['name'] }}</label>
+                                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Couleur sur mobile' }}</label>
                                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                        <input type="number" min="0" max="1" class="userAttr form-control" data-l1key="options" data-l2key="widget::background-opacity::{{ displayTypeCode }}"/>
+                                        <select class="userAttr form-control" data-l1key="options" data-l2key="mobile_theme_color">
+                                            {% for theme in profilsMobileThemes %}
+                                                <option value="{{ theme }}">{{ theme|capitalize|replace({'_': ' '}) }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                 </div>
-                            {% endfor %}
+                            </div>
+
+                            <div class="legend-section">
+                                <legend class="legend-title">{{ 'Graphiques' }}</legend>
+                                <div class="form-group">
+                                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Graphique Desktop' }}</label>
+                                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                        <select class="userAttr form-control" data-l1key="options" data-l2key="desktop_highcharts_theme">
+                                            <option value="">Défaut</option>
+                                            <option value="dark-blue">Dark-blue</option>
+                                            <option value="dark-green">Dark-green</option>
+                                            <option value="dark-unica">Dark-unica</option>
+                                            <option value="gray">Gray</option>
+                                            <option value="grid-light">Grid-light</option>
+                                            <option value="grid">Grid</option>
+                                            <option value="sand-signika">Sand-signika</option>
+                                            <option value="skies">Skies</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Graphique mobile' }}</label>
+                                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                        <select class="userAttr form-control" data-l1key="options" data-l2key="mobile_highcharts_theme">
+                                            <option value="">Défaut</option>
+                                            <option value="dark-blue">Dark-blue</option>
+                                            <option value="dark-green">Dark-green</option>
+                                            <option value="dark-unica">Dark-unica</option>
+                                            <option value="gray">Gray</option>
+                                            <option value="grid-light">Grid-light</option>
+                                            <option value="grid">Grid</option>
+                                            <option value="sand-signika">Sand-signika</option>
+                                            <option value="skies">Skies</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="legend-section">
+                                <legend class="legend-title">{{ 'Opacités' }}</legend>
+                                {% for displayTypeCode, displayTypeData in profilsDisplayTypes %}
+                                    <div class="form-group">
+                                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Widgets' }} {{ displayTypeData['name'] }}</label>
+                                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                            <input type="number" min="0" max="1" class="userAttr form-control" data-l1key="options" data-l2key="widget::background-opacity::{{ displayTypeCode }}"/>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </fieldset>
                     </form>
                 </div>
@@ -113,123 +123,137 @@
                 <div role="tabpanel" class="tab-pane" id="interfacetab">
                     <form class="form-horizontal">
                         <fieldset>
-                            <legend class="legend-title">{{ 'Options d\'interfaces' }}</legend>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Afficher les menus' }}</label>
-                                <div class="col-sm-1">
-                                    <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="doNotAutoHideMenu"/>
+                            <div>
+                                <legend class="legend-title">{{ 'Options d\'interfaces' }}</legend>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{ 'Afficher les menus' }}</label>
+                                    <div class="col-sm-1">
+                                        <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="doNotAutoHideMenu"/>
+                                    </div>
                                 </div>
                             </div>
 
-                            <legend class="legend-title legend-section">{{ 'Page par défaut' }}</legend>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                                <div class="col-sm-2">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="homePage">
-                                        {% for homePageCode, homePageValue in profilsHomePage %}
-                                            <option value="{{ homePageCode }}">{{ homePageValue }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                                <div class="col-sm-2">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="homePageMobile">
-                                        <option value="home">{{ 'Accueil' }}</option>
-                                        {% for homePageCode, homePageValue in profilsHomePage %}
-                                            <option value="{{ homePageCode }}">{{ homePageValue }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <legend class="legend-title legend-section">{{ 'Objet par défaut sur le dashboard' }}</legend>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                                <div class="col-sm-2">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardObject">
-                                        {% for jeeObject in profilsJeeObjects %}
-                                            <option value="{{ jeeObject.getId() }}">{{ jeeObject.getName() }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                                <div class="col-sm-2">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobileObject">
-                                        <option value='all'>{{ 'Tout' }}</option>
-                                        {% for jeeObject in profilsJeeObjects %}
-                                            <option value="{{ jeeObject.getId() }}">{{ jeeObject.getName() }}</option>
-                                        {% endfor %}
-                                    </select>
+                            <div class="legend-section">
+                                <legend class="legend-title">{{ 'Page par défaut' }}</legend>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
+                                    <div class="col-sm-2">
+                                        <select class="userAttr form-control" data-l1key="options" data-l2key="homePage">
+                                            {% for homePageCode, homePageValue in profilsHomePage %}
+                                                <option value="{{ homePageCode }}">{{ homePageValue }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
+                                    <div class="col-sm-2">
+                                        <select class="userAttr form-control" data-l1key="options" data-l2key="homePageMobile">
+                                            <option value="home">{{ 'Accueil' }}</option>
+                                            {% for homePageCode, homePageValue in profilsHomePage %}
+                                                <option value="{{ homePageCode }}">{{ homePageValue }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
 
-                            <legend class="legend-title legend-section">{{ 'Vue par défaut' }}</legend>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                                <div class="col-sm-2">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDesktopView">
-                                        {% for view in profilsViews %}
-                                            <option value="{{ view.getId() }}">{{ view.getName() }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                                <div class="col-sm-2">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobileView">
-                                        {% for view in profilsViews %}
-                                            <option value="{{ view.getId() }}">{{ view.getName() }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <legend class="legend-title legend-section">{{ 'Design par défaut' }}</legend>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                                <div class="col-sm-2">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardPlan">
-                                        {% for plan in profilsPlans %}
-                                            <option value="{{ plan.getId() }}">{{ plan.getName() }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                                <div class="col-sm-2">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobilePlan">
-                                        {% for plan in profilsPlans %}
-                                            <option value="{{ plan.getId() }}">{{ plan.getName() }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Plein écran' }}</label>
-                                <div class="col-sm-1">
-                                    <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlanFullScreen"/>
+                            <div class="legend-section">
+                                <legend class="legend-title">{{ 'Objet par défaut sur le dashboard' }}</legend>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
+                                    <div class="col-sm-2">
+                                        <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardObject">
+                                            {% for jeeObject in profilsJeeObjects %}
+                                                <option value="{{ jeeObject.getId() }}">{{ jeeObject.getName() }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
+                                    <div class="col-sm-2">
+                                        <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobileObject">
+                                            <option value='all'>{{ 'Tout' }}</option>
+                                            {% for jeeObject in profilsJeeObjects %}
+                                                <option value="{{ jeeObject.getId() }}">{{ jeeObject.getName() }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
 
-                            <legend class="legend-title legend-section">{{ 'Dashboard' }}</legend>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Déplier le panneau des scénarios' }}</label>
-                                <div class="col-sm-1">
-                                    <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="displayScenarioByDefault"/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Déplier le panneau des objets' }}</label>
-                                <div class="col-sm-1">
-                                    <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="displayObjetByDefault"/>
+                            <div class="legend-section">
+                                <legend class="legend-title">{{ 'Vue par défaut' }}</legend>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
+                                    <div class="col-sm-2">
+                                        <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDesktopView">
+                                            {% for view in profilsViews %}
+                                                <option value="{{ view.getId() }}">{{ view.getName() }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
+                                    <div class="col-sm-2">
+                                        <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobileView">
+                                            {% for view in profilsViews %}
+                                                <option value="{{ view.getId() }}">{{ view.getName() }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
 
-                            <legend class="legend-title legend-section">{{ 'Vue' }}</legend>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Déplier le panneau des vues' }}</label>
-                                <div class="col-sm-1">
-                                    <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="displayViewByDefault"/>
+                            <div class="legend-section">
+                                <legend class="legend-title">{{ 'Design par défaut' }}</legend>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
+                                    <div class="col-sm-2">
+                                        <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardPlan">
+                                            {% for plan in profilsPlans %}
+                                                <option value="{{ plan.getId() }}">{{ plan.getName() }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
+                                    <div class="col-sm-2">
+                                        <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobilePlan">
+                                            {% for plan in profilsPlans %}
+                                                <option value="{{ plan.getId() }}">{{ plan.getName() }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{ 'Plein écran' }}</label>
+                                    <div class="col-sm-1">
+                                        <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlanFullScreen"/>
+                                    </div>
                                 </div>
                             </div>
+
+                            <div class="legend-section">
+                                <legend class="legend-title">{{ 'Dashboard' }}</legend>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{ 'Déplier le panneau des scénarios' }}</label>
+                                    <div class="col-sm-1">
+                                        <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="displayScenarioByDefault"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{ 'Déplier le panneau des objets' }}</label>
+                                    <div class="col-sm-1">
+                                        <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="displayObjetByDefault"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="legend-section">
+                                <legend class="legend-title">{{ 'Vue' }}</legend>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{ 'Déplier le panneau des vues' }}</label>
+                                    <div class="col-sm-1">
+                                        <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="displayViewByDefault"/>
+                                    </div>
+                                </div>
+                              </div>
                         </fieldset>
                     </form>
                 </div>
@@ -238,67 +262,71 @@
                 <div role="tabpanel" class="tab-pane" id="securitytab">
                     <form class="form-horizontal">
                         <fieldset>
-                            <legend class="legend-title">{{ 'Authentifications' }}</legend>
-                            {% if profilsAllowRemoteUsers != 1 %}
-                                <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Authentification en 2 étapes' }}</label>
-                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                                        <a class="btn btn-action" id="bt_configureTwoFactorAuthentification"><i class="fas fa-magic">&nbsp;&nbsp;</i>{{ 'Configurer' }}</a>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    {% if profilsUser.getOptions('twoFactorAuthentification', 0) == 1 %}
-                                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Activation' }}</label>
-                                        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
-                                            <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="twoFactorAuthentification"/>
-                                            <label class="control-label label-check">{{ 'Activation' }}</label>
+                            <div>
+                                <legend class="legend-title">{{ 'Authentifications' }}</legend>
+                                {% if profilsAllowRemoteUsers != 1 %}
+                                    <div class="form-group">
+                                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Authentification en 2 étapes' }}</label>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <a class="btn btn-action" id="bt_configureTwoFactorAuthentification"><i class="fas fa-magic">&nbsp;&nbsp;</i>{{ 'Configurer' }}</a>
                                         </div>
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Nouveau mot de passe' }}</label>
-                                    <div class="col-lg-3 col-md-5 col-sm-5 col-xs-12">
-                                        <input type="password" class="userAttr form-control" data-l1key="password"/>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Confirmation mot de passe' }}</label>
-                                    <div class="col-lg-3 col-md-5 col-sm-5 col-xs-12">
-                                        <input type="password" class="form-control" id="in_passwordCheck"/>
+                                    <div class="form-group">
+                                        {% if profilsUser.getOptions('twoFactorAuthentification', 0) == 1 %}
+                                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Activation' }}</label>
+                                            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                                                <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="twoFactorAuthentification"/>
+                                                <label class="control-label label-check">{{ 'Activation' }}</label>
+                                            </div>
+                                        {% endif %}
                                     </div>
-                                </div>
-                            {% endif %}
-                            <div class="form-group">
-                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Hash de l\'utilisateur' }}</label>
-                                <div class="btn-group col-lg-10 col-md-9 col-sm-8 col-xs-12">
-                                    <a class="btn btn-action" id="bt_genUserKeyAPI"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{ 'Regénérer' }}</a>
-                                    <span class="userAttr label label-value" data-l1key="hash"></span>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Nouveau mot de passe' }}</label>
+                                        <div class="col-lg-3 col-md-5 col-sm-5 col-xs-12">
+                                            <input type="password" class="userAttr form-control" data-l1key="password"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Confirmation mot de passe' }}</label>
+                                        <div class="col-lg-3 col-md-5 col-sm-5 col-xs-12">
+                                            <input type="password" class="form-control" id="in_passwordCheck"/>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div class="form-group">
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Hash de l\'utilisateur' }}</label>
+                                    <div class="btn-group col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                                        <a class="btn btn-action" id="bt_genUserKeyAPI"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{ 'Regénérer' }}</a>
+                                        <span class="userAttr label label-value" data-l1key="hash"></span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <legend class="legend-title legend-section">{{ 'Sessions actives' }}</legend>
-                            <table class="table table-condensed table-bordered">
-                                <thead>
-                                <tr>
-                                    <th>{{ 'ID' }}</th>
-                                    <th>{{ 'IP' }}</th>
-                                    <th>{{ 'Date' }}</th>
-                                    <th>{{ 'Actions' }}</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for id, session in profilsSessionsList %}
-                                    {% if session['user_id'] == profilsUser.getId() %}
-                                        <tr data-id="{{ id }}">
-                                            <td>{{ id }}</td>
-                                            <td>{{ session['ip'] }}</td>
-                                            <td>{{ session['datetime'] }}</td>
-                                            <td><a class="btn btn-sm btn-warning bt_deleteSession pull-right"><i class="fas fa-sign-out-alt">&nbsp;&nbsp;</i>{{ 'Déconnecter' }}</a></td>
-                                        </tr>
-                                    {% endif %}
-                                {% endfor %}
-                                </tbody>
-                            </table>
+                            <div class="legend-section">
+                                <legend class="legend-title">{{ 'Sessions actives' }}</legend>
+                                <table class="table table-condensed table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ 'ID' }}</th>
+                                        <th>{{ 'IP' }}</th>
+                                        <th>{{ 'Date' }}</th>
+                                        <th>{{ 'Actions' }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for id, session in profilsSessionsList %}
+                                        {% if session['user_id'] == profilsUser.getId() %}
+                                            <tr data-id="{{ id }}">
+                                                <td>{{ id }}</td>
+                                                <td>{{ session['ip'] }}</td>
+                                                <td>{{ session['datetime'] }}</td>
+                                                <td><a class="btn btn-sm btn-warning bt_deleteSession pull-right"><i class="fas fa-sign-out-alt">&nbsp;&nbsp;</i>{{ 'Déconnecter' }}</a></td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
 
                             <div class="legend-section">
                                 <div class="col-md-9 col-xs-12 container-fluid">
@@ -309,29 +337,29 @@
                                         <a class="btn btn-warning" id="bt_removeAllRegisterDevice"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer tout' }}</a>
                                     </div>
                                 </div>
-                            </div>
-                            <table class="table table-bordered table-condensed">
-                                <thead>
-                                <tr>
-                                    <th>{{ 'Identification' }}</th>
-                                    <th>{{ 'IP' }}</th>
-                                    <th>{{ 'Date dernière utilisation' }}</th>
-                                    <th>{{ 'Action' }}</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for sessionCode, sessionData in profilsUser.getOptions('registerDevice') %}
-                                    <tr data-key="{{ sessionCode }}">
-                                        <td>{{ sessionCode|slice(0, 10) }}</td>
-                                        <td>{{ sessionData['ip'] }}</td>
-                                        <td>{{ sessionData['datetime'] }}</td>
-                                        <td>
-                                            <a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
-                                        </td>
+                                <table class="table table-bordered table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ 'Identification' }}</th>
+                                        <th>{{ 'IP' }}</th>
+                                        <th>{{ 'Date dernière utilisation' }}</th>
+                                        <th>{{ 'Action' }}</th>
                                     </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    {% for sessionCode, sessionData in profilsUser.getOptions('registerDevice') %}
+                                        <tr data-key="{{ sessionCode }}">
+                                            <td>{{ sessionCode|slice(0, 10) }}</td>
+                                            <td>{{ sessionData['ip'] }}</td>
+                                            <td>{{ sessionData['datetime'] }}</td>
+                                            <td>
+                                                <a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </fieldset>
                     </form>
                 </div>
