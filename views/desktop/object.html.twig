@@ -4,20 +4,20 @@
 
         <!-- Header bar -->
         <div class="box-header with-border">
-            <class="box-title"><i class="fas fa-clone">&nbsp;&nbsp;</i>{{ 'Mes Objets' }}</h3>
+            <h3 class="box-title"><i class="fas fa-clone">&nbsp;&nbsp;</i>{{ 'Mes Objets' }}</h3>
             <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fas fa-times"></i></button>
             </div>
         </div>
 
-        <div class="box-body objectListContainer text-center">
+        <div class="box-body objectListContainer">
             <form class="form-horizontal">
                 <fieldset>
                     <legend class="legend-title">{{ 'Liste des objets de votre ' }}
                         <div class="box-tools pull-right">
                             <a class="btn btn-warning btn-legend" id="bt_showObjectSummary"><i class="fas fa-list">&nbsp;&nbsp;</i>{{ 'Vue d\'ensemble' }}</a>
                             <a class="btn btn-warning btn-legend" id="bt_addObject2"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
-                            <input class="form-control pull-right" id="in_searchObject" style="width : 300px;" placeholder="{{'Rechercher ...'}}" />
+                            <input class="form-control" id="in_searchObject" style="width : 300px;" placeholder="{{'Rechercher ...'}}" />
                         </div>
                     </legend>
                     <div class="form-group">
@@ -34,7 +34,7 @@
         </div>
     </div>
 
-    <div class="row row-overflow">      
+    <div class="row row-overflow">
         <div class="col-xs-12">
             <div class="nav-tabs-custom object" style="display: none;" id="div_conf">
                 <ul class="nav nav-tabs pull-right" role="tablist">
