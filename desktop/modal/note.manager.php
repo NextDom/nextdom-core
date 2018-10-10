@@ -18,16 +18,14 @@ if (!isConnect('admin')) {
     </div>
     <div class="col-lg-10 col-md-9 col-sm-8" style="border-left: solid 1px #EEE;overflow-y:hidden;overflow-x:hidden;">
         <fieldset>
-            <legend class="legend-title legend-first-btn">{{Note selectionnée}}
-              <div class="box-tools pull-right">
-                  <a class="btn btn-action btn-legend" id="bt_noteManagerRemove"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{Supprimer}}</a>
-                  <a class="btn btn-success btn-legend" id="bt_noteManagerSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{Sauvegarder}}</a>
-                  <a class="btn btn-success btn-legend" id="bt_noteManagerAdd"><i class="fas fa-plus">&nbsp;&nbsp;</i>{{Ajouter}}</a>
-                </div>
-            </legend>
+            <div class="box-tools pull-right padding-bottom">
+                <a class="btn btn-action" id="bt_noteManagerAdd"><i class="fas fa-plus">&nbsp;&nbsp;</i>{{Ajouter}}</a>
+                <a class="btn btn-success" id="bt_noteManagerSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{Sauvegarder}}</a>
+                <a class="btn btn-danger" id="bt_noteManagerRemove"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{Supprimer}}</a>
+            </div>
             <div id="div_noteManagerDisplay">
                 <input class="noteAttr form-control" data-l1key="id" style="display:none;" disabled/>
-                <input class="noteAttr form-control" data-l1key="name" disabled/>
+                <input class="noteAttr form-control label-list" data-l1key="name" disabled/>
                 <textarea class="noteAttr form-control ta_autosize" data-l1key="text" disabled></textarea>
             </div>
         </fieldset>
