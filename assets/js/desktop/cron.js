@@ -173,18 +173,18 @@ function addCron(_cron) {
     tr += init(_cron.runtime,'0')+'s';
     tr += '</td>';
     tr += '<td class="state">';
-    var label = 'label label-info label-sticker';
+    var label = 'label label-info label-sticker-big';
     if (init(_cron.state) == 'run') {
-        label = 'label label-success label-sticker';
+        label = 'label label-success label-sticker-big';
     }
     if (init(_cron.state) == 'stop') {
-        label = 'label label-danger label-sticker';
+        label = 'label label-danger label-sticker-big';
     }
     if (init(_cron.state) == 'starting') {
-        label = 'label label-warning label-sticker';
+        label = 'label label-warning label-sticker-big';
     }
     if (init(_cron.state) == 'stoping') {
-        label = 'label label-warning label-sticker';
+        label = 'label label-warning label-sticker-big';
     }
     tr += '<span class="' + label + '">' + init(_cron.state) + '</span>';
     tr += '</td>';
