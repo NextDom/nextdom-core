@@ -13,7 +13,7 @@
             <fieldset>
 
                 <!-- LDAP Section -->
-                <legend class="legend-title legend-first">{{ 'LDAP' }}</legend>
+                <legend class="legend-title">{{ 'LDAP' }}</legend>
                 {% if adminUseLdap %}
                     <div class="form-group">
                         <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Authentification LDAP' }}</label>
@@ -94,7 +94,7 @@
                 {% endif %}
 
                 <!-- Connexion section -->
-                <legend class="legend-title">{{ 'Connexion' }}</legend>
+                <legend class="legend-title legend-section">{{ 'Connexion' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Nombre d\'échecs tolérés' }}</label>
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -127,12 +127,14 @@
                 </div>
 
                 <!-- IP section -->
-                <div class="col-md-6 col-xs-12 container-fluid">
-                    <legend class="legend-title">{{ 'IPs bannies' }}</legend>
-                </div>
-                <div class="col-md-6 col-xs-12 container-fluid">
-                    <div class="box-tools pull-right legend-btn">
-                        <a class="btn btn-warning" id="bt_removeBanIp"><i class="fa fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                <div class="legend-section">
+                    <div class="col-md-10 col-xs-12 container-fluid">
+                        <legend class="legend-title">{{ 'IPs bannies' }}</legend>
+                    </div>
+                    <div class="col-md-2 col-xs-12 container-fluid">
+                        <div class="box-tools pull-right padding-bottom">
+                            <a class="btn btn-warning" id="bt_removeBanIp"><i class="fa fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                        </div>
                     </div>
                 </div>
                 <table class="table table-condensed table-bordered">

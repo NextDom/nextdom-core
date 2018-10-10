@@ -13,11 +13,13 @@
             <fieldset>
 
                 <!-- Nextdom health section -->
-                <div class="col-md-6 col-xs-12 container-fluid">
-                <legend class="legend-title legend-first-btn">{{ 'Détails de la santé de votre solution, survolez les icônes pour plus d\'informations.' }}</legend>
-                </div>
-                <div class="col-md-6 col-xs-12 container-fluid">
-                    <a class="btn btn-action" id="bt_benchmarkNextDom"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Lancer un Benchmark' }}</a>
+                <div class="legend-section">
+                    <div class="col-md-6 col-xs-12 container-fluid">
+                        <legend class="legend-title">{{ 'Détails de la santé de votre solution, survolez les icônes pour plus d\'informations.' }}</legend>
+                    </div>
+                    <div class="col-md-6 col-xs-12 container-fluid">
+                        <a class="btn btn-action padding-bottom" id="bt_benchmarkNextDom"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Lancer un Benchmark' }}</a>
+                    </div>
                 </div>
                 {% for informations in healthInformations %}
                     {% if informations['name'] == "os-version" %}
@@ -85,15 +87,12 @@
         </div>
     </div>
 
-
     <div class="box-body">
         <form class="form-horizontal">
             <fieldset>
 
                 <!-- Plugins health section -->
-                <legend class="legend-title legend-first-btn">
-                    {{ 'Détails de la santé de vos plugins, cliquez sur le titre pour avoir le détail puis survolez les icônes pour plus d\'informations.' }}
-                </legend>
+                <legend class="legend-title">{{ 'Détails de la santé de vos plugins, cliquez sur le titre pour avoir le détail puis survolez les icônes pour plus d\'informations.' }}</legend>
                 {% if healthPluginDataToShow %}
                 <div class="box-group" id="accordionHealth">
                     {% for pluginData in healthPluginsInformations %}

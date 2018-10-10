@@ -13,7 +13,7 @@
             <fieldset>
 
                 <!-- Statistiques Section -->
-                <legend class="legend-title legend-first">{{ 'Statistiques' }}</legend>
+                <legend class="legend-title">{{ 'Statistiques' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Statistiques' }}</label>
                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
@@ -22,7 +22,7 @@
                 </div>
 
                 <!-- Moteur Section -->
-                <legend class="legend-title">{{ 'Moteur' }}</legend>
+                <legend class="legend-title legend-section">{{ 'Moteur' }}</legend>
                 <div class="alert alert-config alert-info">
                     {{ 'Attention : toute modification du moteur de cache nécessite un redémarrage de votre Nextdom :' }} {{ adminConfigs['product_name'] }}
                 </div>
@@ -51,7 +51,7 @@
                 </div>
 
                 <!-- Parameters Section -->
-                <legend class="legend-title">{{ 'Paramètres' }}</legend>
+                <legend class="legend-title legend-section">{{ 'Paramètres' }}</legend>
                 <div class="cacheEngine MemcachedCache">
                     <div class="form-group">
                         <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Adresse Memcache' }}</label>

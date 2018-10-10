@@ -13,7 +13,7 @@
             <fieldset>
 
                 <!-- Access Section -->
-                <legend class="legend-title legend-first">{{ 'Accès API' }}</legend>
+                <legend class="legend-title">{{ 'Accès API' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Accès API HTTP' }}</label>
                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
@@ -67,7 +67,7 @@
                 </div>
 
                 <!-- Key Section -->
-                <legend class="legend-title">{{ 'Clefs API' }}</legend>
+                <legend class="legend-title legend-section">{{ 'Clefs API' }}</legend>
                 <div class="form-group">
                     <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API globale de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API Globale' }}</label>
                     <div class="btn-group col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -91,7 +91,7 @@
                 </div>
 
                 <!-- Plugins Section -->
-                <legend class="legend-title">{{ 'API Plugins' }}</legend>
+                <legend class="legend-title legend-section">{{ 'API Plugins' }}</legend>
                 {% if not adminIsRescueMode and adminPluginsList|length > 0 %}
                     {% for pluginData in adminPluginsList %}
                         <div class="form-group">
