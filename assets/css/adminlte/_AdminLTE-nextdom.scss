@@ -8,11 +8,11 @@ body {
   z-index: 1030;
 }
 ::-webkit-scrollbar-thumb {
-    width: 80px;
-    border-radius: 3px;
+  width: 80px;
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-corner {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 /* fas fa glyphicon ion*/
@@ -139,8 +139,8 @@ body {
   width: 2.2rem;
   height: 2.2rem;
   margin:{
-      left: auto;
-      right: auto;
+    left: auto;
+    right: auto;
   }
   float: none !important;
   transition: all .2s;
@@ -168,8 +168,8 @@ body {
 .treeview-menu {
   padding: 5px 5px;
   &> li {
-      padding-top: 1px;
-      padding-bottom: 1px;
+    padding-top: 1px;
+    padding-bottom: 1px;
   }
 }
 
@@ -194,11 +194,11 @@ body {
   position: relative;
   background: $white;
   border:{
-      radius: 4px;
-      left: 1px solid rgba(0,0,0,0.2);
-      right: 1px solid rgba(0,0,0,0.2);
-      bottom: 1px solid rgba(0,0,0,0.2);
-      top: 3px solid $lightgray;
+    radius: 4px;
+    left: 1px solid rgba(0,0,0,0.2);
+    right: 1px solid rgba(0,0,0,0.2);
+    bottom: 1px solid rgba(0,0,0,0.2);
+    top: 3px solid $lightgray;
   }
   margin-bottom: 20px;
   width: 100%;
@@ -253,11 +253,16 @@ body {
 .btn-tab {
   line-height: 2;
 }
+.btn-legend {
+  margin-top: -6px;
+  margin-right: -10px;
+  margin-left: 10px;
+}
 .btn-box-tool {
   padding: 8px 5px;
 }
 .box-header>.box-tools {
-    top: 3px;
+  top: 3px;
 }
 
 /* Navs */
@@ -317,10 +322,10 @@ body {
   color: #666;
   box-shadow: 0 20px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   border: {
-      top: 0;
-      radius: 7px;
-      top-left-radius: 0px;
-      top-right-radius: 0px;
+    top: 0;
+    radius: 7px;
+    top-left-radius: 0px;
+    top-right-radius: 0px;
   }
 }
 
@@ -329,8 +334,8 @@ body {
   box-shadow: 0 1px 4px 0 rgba(0,0,0,.14);
   border: 0;
   margin: {
-      bottom: 60px;
-      top: 40px;
+    bottom: 60px;
+    top: 40px;
   }
   border-radius: 6px;
   color: #333;
@@ -368,10 +373,10 @@ body {
   margin-bottom: 0;
   background-color: $white;
   border-bottom: 1px solid $whitegray;
-      &:first-child {
-      border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
-      margin-top: -25px;
-    }
+  &:first-child {
+    border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
+    margin-top: -25px;
+  }
 }
 
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text {
@@ -394,9 +399,9 @@ body {
   margin-top: 10px, 10px, 10px, 10px;
 }
 .card-category {
-    position: relative;
-    font-size: 16px;
-    top: -9px;
+  position: relative;
+  font-size: 16px;
+  top: -9px;
 }
 
 /* Alert popup */
@@ -424,116 +429,117 @@ body {
   font-size: 100%;
 }
 .label-value {
-    padding: 8px 10px 10px 12px;
+  padding: 8px 10px 10px 12px;
   font: {
     size: 100%;
     weight: 400;
-    }
-    border: 1px solid;
-    border-radius: 2px;
-    margin-left: -2px;
+  }
+  border: 1px solid;
+  border-radius: 2px;
+  margin-left: -2px;
 }
 .label-unity, .label-unity-big {
-    padding: 9px 0px 10px;
-    font: {
-      size: 100%;
-      weight: 500;
-    }
+  padding: 9px 0px 10px;
+  font: {
+    size: 100%;
+    weight: 500;
+  }
 }
 @media (max-width: 767px) {
-    .label-unity-big {
-        margin-left: 15px;
-    }
+  .label-unity-big {
+    margin-left: 15px;
+  }
 }
 .label-badge {
-    position: absolute;
-    top: 10px;
-    right: 0;
-    width: 34px;
-    height: 34px;
-    text-align: center;
+  position: absolute;
+  top: 10px;
+  right: 0;
+  width: 34px;
+  height: 34px;
+  text-align: center;
 }
 .legend-title {
   font-size: 15px;
   border: 1px solid;
   padding: 5px 8px;
   margin-bottom: 15px;
+  margin-top: 40px;
   background-color: whitesmoke;
 }
-.legend-section {
-    margin-top: 50px;
-}
 .label-list {
-    font-size: 95%;
-    border: 1px solid;
-    border-radius: 2px;
-    margin: 4px 0px;
-    padding: 19px;
+  font-size: 95%;
+  border: 1px solid;
+  border-radius: 2px;
+  margin: 4px 0px;
+  padding: 19px;
 }
 .label-log {
-    font-size: 95%;
-    border: 1px solid;
-    border-radius: 2px;
-    margin: 4px 0px;
-    padding: 0px 10px;
+  font-size: 95%;
+  border: 1px solid;
+  border-radius: 2px;
+  margin: 4px 0px;
+  padding: 0px 10px;
+}
+.legend-first-btn {
+  padding-bottom: 0px;
 }
 @media (max-width: 767px) {
-    .legend-title {
-        text-align: center;
-    }
+  .legend-title {
+    text-align: center;
+  }
 }
 @media (max-width: 991px) {
-    .form-horizontal .control-label-big {
-        margin-bottom: 5px;
-        text-align: left;
+  .form-horizontal .control-label-big {
+    margin-bottom: 5px;
+    text-align: left;
   }
 }
 .label-icon {
-    padding: 6px 10px 8px 9px;
-    font-size: 100%;
-    border: 1px solid;
-    border-radius: 2px;
-    margin: {
-      left: -2px;
-      top: 2px;
-      bottom: 2px;
-    }
+  padding: 6px 10px 8px 9px;
+  font-size: 100%;
+  border: 1px solid;
+  border-radius: 2px;
+  margin: {
+    left: -2px;
+    top: 2px;
+    bottom: 2px;
+  }
   &>i {
     vertical-align: middle;
   }
 }
 
 .label-check {
-    font-weight: 400;
+  font-weight: 400;
 }
 
 .label-sticker {
-    margin: {
-        left: 15px;
-        right: 15px;
+  margin: {
+    left: 15px;
+    right: 15px;
   }
-    font-size: 100%;
+  font-size: 100%;
 }
 
 .label-sticker-big {
-    font-size: 100%;
-    padding: {
-      top: 10px;
-      bottom: 10px;
-    }
-    margin: {
-      left: 15px;
-      right: 15px;
-   }
+  font-size: 100%;
+  padding: {
+    top: 10px;
+    bottom: 10px;
+  }
+  margin: {
+    left: 15px;
+    right: 15px;
+  }
 }
 
 /* Logos */
 .login-logo,
 .register-logo {
   font: {
-      size: 35px;
-      weight: 300;
-      align: center;
+    size: 35px;
+    weight: 300;
+    align: center;
   }
 
   padding: {
@@ -544,7 +550,7 @@ body {
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 .main-header .logo {
-    height: 52px;
+  height: 52px;
 }
 
 /* Progress bars */
@@ -558,17 +564,17 @@ body {
   background-color: $nextdom_bg;
   z-index: 800;
   padding: {
-     left: 15px;
-     right: 15px;
+    left: 15px;
+    right: 15px;
   }
 }
 .fixed .content-wrapper, .fixed .right-side {
-    padding-top: 58px;
+  padding-top: 58px;
 }
 @media (max-width: 767px) {
-    .fixed .content-wrapper, .fixed .right-side {
-        padding-top: 106px;
-    }
+  .fixed .content-wrapper, .fixed .right-side {
+    padding-top: 106px;
+  }
 }
 .container-fluid{
   padding-right: 0;
@@ -595,9 +601,6 @@ body {
 .container-split {
   padding-left: 5px;
   padding-right: 5px;
-}
-.padding-bottom {
-  padding-bottom: 10px;
 }
 
 /* Checkboxes */
@@ -644,32 +647,32 @@ input[type="checkbox"] {
 }
 /* focus frame */
 [type="checkbox"]:focus {
-    outline: none !important;
+  outline: none !important;
 }
 
 /* Header clock */
 .clock>a:hover {
-    background: transparent !important;
+  background: transparent !important;
 }
 .clock {
-    height: 50px;
+  height: 50px;
 }
 .clocktime {
-    font-size: 15px;
-    text-align: right;
-    top: -8px;
+  font-size: 15px;
+  text-align: right;
+  top: -8px;
 }
 .clockdate {
-    font-size: 11px;
-    text-align: right;
-    top: -40px;
+  font-size: 11px;
+  text-align: right;
+  top: -40px;
 }
 
 /* Param depends resolution */
 @media (max-width: 767px) {
-    .form-horizontal .control-label {
-        padding-top: 7px;
-    }
+  .form-horizontal .control-label {
+    padding-top: 7px;
+  }
 }
 @media (min-width: 768px) {
   .sidebar-mini.sidebar-collapse .main-sidebar {
@@ -679,9 +682,9 @@ input[type="checkbox"] {
 
 /* Tables */
 .table-condensed>thead>tr>th, .table-condensed>tbody>tr>th, .table-condensed>tfoot>tr>th, .table-condensed>thead>tr>td, .table-condensed>tbody>tr>td, .table-condensed>tfoot>tr>td {
-    padding: 6px;
-    vertical-align: middle;
-    font-size: 13px;
+  padding: 6px;
+  vertical-align: middle;
+  font-size: 13px;
 }
 
 /* Info-box */
@@ -703,44 +706,15 @@ input[type="checkbox"] {
   text-transform:capitalize;
 }
 
-/* Widget */
 .eqLogic-widget{
   max-width: 95%;
 }
 
 /* Modal */
 .ui-dialog .ui-dialog-titlebar-close {
-    right: 0.5em;
-    top: 70%;
+  right: 0.5em;
+  top: 70%;
 }
 .ui-dialog {
-    border-radius: 7px;
+  border-radius: 7px;
 }
-
-/* Icones */
-.icon-big {
-  font-size : 4em;
-  color:$gray;
-}
-
-/* Objets */
-.object-name {
-  font-size : 14px;
-  color:$gray;
-}
-.object-summary {
-  background-color: $gray;
-  font-size: 12px;
-  padding: 3px;
-  border-radius: 3px;
-}
-.object-card {
-  height: 170px;
-}
-
-/* Themes tabs */
-#themestab .list-unstyled {
-  margin-left: -15px;
-  margin-right: -15px;
-}
-
