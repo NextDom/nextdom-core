@@ -104,6 +104,7 @@ function gen_js {
         python -m jsmin $jsFile > public/js/adminlte/${jsFile##*/}
         php script/translate.php public/js/adminlte/${jsFile##*/}
     done
+    mkdir -p public/js/desktop
     for jsFile in assets/js/desktop/*.js
     do
         python -m jsmin $jsFile > public/js/desktop/${jsFile##*/}
