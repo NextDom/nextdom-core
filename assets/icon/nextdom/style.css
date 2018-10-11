@@ -9,7 +9,8 @@
 	font-style: normal;
 }
 
-[class^="nextdom-"], [class*=" nextdom-"] {
+[class^="nextdom-"], [class*=" nextdom-"],
+[class^="jeedom-"], [class*=" jeedom-"] {
 	font-family: 'nextdom';
 	speak: none;
 	font-style: normal;
@@ -23,156 +24,207 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.jeedom-alors:before,
 .nextdom-alors:before {
 	content: "\e628";
 }
+.jeedom-si:before,
 .nextdom-si:before {
 	content: "\e629";
 }
+.jeedom-cafetiere_off:before,
 .nextdom-cafetiere_off:before {
 	content: "\e62a";
 }
+.jeedom-cafetiere_on:before,
 .nextdom-cafetiere_on:before {
 	content: "\e62b";
 }
+.jeedom-clap_cinema:before,
 .nextdom-clap_cinema:before {
 	content: "\e62c";
 }
+.jeedom-portail_coulissant_demi_d:before,
 .nextdom-portail_coulissant_demi_d:before {
 	content: "\e62d";
 }
+.jeedom-portail_coulissant_demi_g:before,
 .nextdom-portail_coulissant_demi_g:before {
 	content: "\e62e";
 }
+.jeedom-portail_coulissant_ferme:before,
 .nextdom-portail_coulissant_ferme:before {
 	content: "\e62f";
 }
+.jeedom-portail_coulissant_ouvert_d:before,
 .nextdom-portail_coulissant_ouvert_d:before {
 	content: "\e630";
 }
+.jeedom-portail_coulissant_ouvert_g:before,
 .nextdom-portail_coulissant_ouvert_g:before {
 	content: "\e631";
 }
+.jeedom-ventilo:before,
 .nextdom-ventilo:before {
 	content: "\e632";
 }
+.jeedom-alerte:before,
 .nextdom-alerte:before {
 	content: "\e600";
 }
+.jeedom-alerte2:before,
 .nextdom-alerte2:before {
 	content: "\e601";
 }
+.jeedom-battery0:before,
 .nextdom-battery0:before {
 	content: "\e602";
 }
+.jeedom-battery1:before,
 .nextdom-battery1:before {
 	content: "\e603";
 }
+.jeedom-battery2:before,
 .nextdom-battery2:before {
 	content: "\e604";
 }
+.jeedom-battery3:before,
 .nextdom-battery3:before {
 	content: "\e605";
 }
+.jeedom-bell:before,
 .nextdom-bell:before {
 	content: "\e606";
 }
+.jeedom-choc:before,
 .nextdom-choc:before {
 	content: "\e607";
 }
+.jeedom-eau:before,
 .nextdom-eau:before {
 	content: "\e608";
 }
+.jeedom-fenetre-ferme:before,
 .nextdom-fenetre-ferme:before {
 	content: "\e609";
 }
+.jeedom-fenetre-ouverte:before,
 .nextdom-fenetre-ouverte:before {
 	content: "\e60a";
 }
+.jeedom-feu:before,
 .nextdom-feu:before {
 	content: "\e60b";
 }
+.jeedom-garage-ferme:before,
 .nextdom-garage-ferme:before {
 	content: "\e60c";
 }
+.jeedom-garage-ouvert:before,
 .nextdom-garage-ouvert:before {
 	content: "\e60d";
 }
+.jeedom-lock-ferme:before,
 .nextdom-lock-ferme:before {
 	content: "\e60e";
 }
+.jeedom-lock-ouvert:before,
 .nextdom-lock-ouvert:before {
 	content: "\e60f";
 }
+.jeedom-lumiere-off:before,
 .nextdom-lumiere-off:before {
 	content: "\e610";
 }
+.jeedom-lumiere-on:before,
 .nextdom-lumiere-on:before {
 	content: "\e611";
 }
+.jeedom-mouvement:before,
 .nextdom-mouvement:before {
 	content: "\e612";
 }
+.jeedom-no-bell:before,
 .nextdom-no-bell:before {
 	content: "\e613";
 }
+.jeedom-off:before,
 .nextdom-off:before {
 	content: "\e614";
 }
+.jeedom-on:before,
 .nextdom-on:before {
 	content: "\e615";
 }
+.jeedom-pilote-conf:before,
 .nextdom-pilote-conf:before {
 	content: "\e616";
 }
+.jeedom-pilote-eco:before,
 .nextdom-pilote-eco:before {
 	content: "\e617";
 }
+.jeedom-pilote-hg:before,
 .nextdom-pilote-hg:before {
 	content: "\e618";
 }
+.jeedom-pilote-off:before,
 .nextdom-pilote-off:before {
 	content: "\e619";
 }
+.jeedom-portail_ferme:before,
 .nextdom-portail_ferme:before {
 	content: "\e61a";
 }
+.jeedom-portail_ouvert:before,
 .nextdom-portail_ouvert:before {
 	content: "\e61b";
 }
+.jeedom-porte-ferme:before,
 .nextdom-porte-ferme:before {
 	content: "\e61c";
 }
+.jeedom-porte-ouverte:before,
 .nextdom-porte-ouverte:before {
 	content: "\e61d";
 }
+.jeedom-prise:before,
 .nextdom-prise:before {
 	content: "\e61e";
 }
+.jeedom-sirene:before,
 .nextdom-sirene:before {
 	content: "\e61f";
 }
+.jeedom-surveillance1:before,
 .nextdom-surveillance1:before {
 	content: "\e620";
 }
+.jeedom-thermo-chaud:before,
 .nextdom-thermo-chaud:before {
 	content: "\e621";
 }
+.jeedom-thermo-froid:before,
 .nextdom-thermo-froid:before {
 	content: "\e622";
 }
+.jeedom-thermo-moyen:before,
 .nextdom-thermo-moyen:before {
 	content: "\e623";
 }
+.jeedom-thermometre-celcius:before,
 .nextdom-thermometre-celcius:before {
 	content: "\e624";
 }
+.jeedom-thermometre:before,
 .nextdom-thermometre:before {
 	content: "\e625";
 }
+.jeedom-volet-ferme:before,
 .nextdom-volet-ferme:before {
 	content: "\e626";
 }
+.jeedom-volet-ouvert:before,
 .nextdom-volet-ouvert:before {
 	content: "\e627";
 }
