@@ -12,12 +12,12 @@
         <form class="form-horizontal">
 
             <div class="row">
-                <div class="col-md-3 col-sm-4" id="div_displayLogList">
+                <div class="col-md-3 col-sm-4 padding-bottom" id="div_displayLogList">
                     <fieldset>
                         <legend class="legend-title">{{ 'Liste des logs' }}</legend>
                         <div class="bs-sidebar">
                             <ul id="ul_object" class="nav nav-list bs-sidenav">
-                                <li class="filter"><input class="filter form-control input-sm" placeholder="{{ 'Rechercher un log ...' }}"/></li>
+                                <li class="filter"><input class="filter form-control" placeholder="{{ 'Rechercher un log ...' }}"/></li>
                                 {% for logFile in logFilesList %}
                                     <li class="cursor label-log li_log{% if logFile['active'] %} active{% endif %}" data-log="{{ logFile['name'] }}">
                                         <i class="fa fa-{{ logFile['icon'] }}" style="float:left;margin-top:13px;color:{{ logFile['color'] }};">&nbsp;&nbsp;</i>
@@ -30,21 +30,19 @@
                 </div>
 
                 <div class="col-md-9 col-sm-8" style="border-left: solid 1px #EEE;">
-                    <div class="row form-group">
-                        <div class="col-lg-12">
-                            <a class="btn btn-danger pull-right" id="bt_removeAllLog"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer tous' }}</a>
-                            <a class="btn btn-danger pull-right" id="bt_removeLog"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
-                            <a class="btn btn-warning pull-right" id="bt_clearLog"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Vider' }}</a>
-                            <a class="btn btn-success pull-right" id="bt_downloadLog" disabled="disabled"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{ 'Télécharger' }}</a>
-                            <a class="btn btn-action pull-right" data-state="1" id="bt_globalLogStopStart"><i class="fas fa-pause">&nbsp;&nbsp;</i>{{ 'Pause' }}</a>
+                    <fieldset>
+                        <div class="box-tools pull-right padding-bottom">
+                            <a class="btn btn-action" data-state="1" id="bt_globalLogStopStart"><i class="fas fa-pause">&nbsp;&nbsp;</i>{{ 'Pause' }}</a>
+                            <a class="btn btn-success" id="bt_downloadLog" disabled="disabled"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{ 'Télécharger' }}</a>
+                            <a class="btn btn-warning" id="bt_clearLog"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Vider' }}</a>
+                            <a class="btn btn-danger" id="bt_removeLog"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                            <a class="btn btn-danger" id="bt_removeAllLog"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer tous' }}</a>
                         </div>
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-lg-12">
+                        <div class="box-tools padding-bottom">
                             <input class="form-control text-right" id="in_globalLogSearch" placeholder="{{ 'Rechercher dans le log ...' }}"/>
                         </div>
-                    </div>
-                    <pre id='pre_globallog' style='overflow: scroll;'></pre>
+                        <pre id='pre_globallog' style='overflow: scroll;'></pre>
+                    </fieldset>
                 </div>
             </div>
         </form>
