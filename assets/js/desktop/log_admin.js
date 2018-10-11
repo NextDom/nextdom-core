@@ -100,7 +100,7 @@ function addActionOnMessage(_action) {
     }
     var div = '<div class="actionOnMessage">';
     div += '<div class="form-group ">';
-    div += '<label class="col-sm-4 control-label">Action</label>';
+    div += '<label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">Action</label>';
     div += '<div class="col-sm-2">';
     div += '<input type="checkbox" class="expressionAttr" id="MessageActiv" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'action}}" />';
     div += '<label for="MessageActiv" class="control-label label-check">{{Activer}}</label>';
@@ -109,7 +109,9 @@ function addActionOnMessage(_action) {
     div += '<input type="checkbox" class="expressionAttr" id="MessagePara" data-l1key="options" data-l2key="background" title="{{Cocher pour que la commande s\'éxecute en parrallele des autres actions}}" />';
     div += '<label for="MessagePara" class="control-label label-check">{{En parallèle}}</label>';
     div += '</div>';
-    div += '<div class="col-sm-4">';
+    div += '</div>';
+    div += '<div class="form-group ">';
+    div += '<div class="col-sm-6 col-xs-12">';
     div += '<div class="input-group">';
     div += '<span class="input-group-btn">';
     div += '<a class="btn btn-default bt_removeAction btn-sm"><i class="fas fa-minus-circle"></i></a>';
@@ -122,7 +124,7 @@ function addActionOnMessage(_action) {
     div += '</div>';
     div += '</div>';
     var actionOption_id = uniqId();
-    div += '<div class="col-sm-5 actionOptions" id="'+actionOption_id+'">';
+    div += '<div class="col-sm-6 col-xs-12 actionOptions" id="'+actionOption_id+'">';
     div += '</div>';
     div += '</div>';
     $('#div_actionOnMessage').append(div);
