@@ -154,9 +154,9 @@ sendVarToJs('refresh_deamon_info', $refresh);
                             $('.bt_changeAutoMode').html('<i class="fas fa-magic"></i> {{Activer}}');
                         }
                         if(!nok){
-                            $("#div_plugin_deamon").closest('.panel').removeClass('panel-danger').addClass('panel-success');
+                            $("#div_plugin_deamon").closest('.box').removeClass('box-danger').addClass('box-success');
                         }else{
-                            $("#div_plugin_deamon").closest('.panel').removeClass('panel-success').addClass('panel-danger');
+                            $("#div_plugin_deamon").closest('.box').removeClass('box-success').addClass('box-danger');
                         }
 
                         if($("#div_plugin_deamon").is(':visible')){
