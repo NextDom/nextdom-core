@@ -428,28 +428,14 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        // TODO: A mettre dans le Global COnfig
-        $pageContent['customDarkThemes'] = [
-            'NextDom' => ['#367fa9', '#3c8dbc', '#222d32', '#f4f5f7'],
-            'Blue'    => ['#367fa9', '#3c8dbc', '#222d32', '#f4f5f7'],
-            'Black'   => ['#fefefe', '#fefefe', '#222', '#f4f5f7'],
-            'Purple'   => ['#555299', '#605ca8', '#222d32', '#f4f5f7'],
-            'Green'   => ['#008d4c', '#00a65a', '#222d32', '#f4f5f7'],
-            'Red'   => ['#d33724', '#dd4b39', '#222d32', '#f4f5f7'],
-            'Yellow'   => ['#db8b0b', '#f39c12', '#222d32', '#f4f5f7'],
-        ];
-        $pageContent['customLightThemes'] = [
-            'NextDom-Light' => ['#367fa9', '#3c8dbc', '#f9fafc', '#f4f5f7'],
-            'Blue-Light'    => ['#367fa9', '#3c8dbc', '#f9fafc', '#f4f5f7'],
-            'Black-Light'   => ['#fefefe', '#fefefe', '#f9fafc', '#f4f5f7'],
-            'Purple-Light'   => ['#555299', '#605ca8', '#f9fafc', '#f4f5f7'],
-            'Green-Light'   => ['#008d4c', '#00a65a', '#f9fafc', '#f4f5f7'],
-            'Red-Light'   => ['#d33724', '#dd4b39', '#f9fafc', '#f4f5f7'],
-            'Yellow-Light'   => ['#db8b0b', '#f39c12', '#f9fafc', '#f4f5f7'],
-        ];
+        global $NEXTDOM_INTERNAL_CONFIG;
+        // TODO: Regrouper les config::byKey
+        $pageContent['customDarkThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-dark'];
+        $pageContent['customLightThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-light'];
         $pageContent['adminCategories'] = \nextdom::getConfiguration('eqLogic:category');
         $pageContent['customProductName'] = \config::byKey('product_name');
         $pageContent['customTheme'] = \config::byKey('theme');
+        $pageContent['customEnableCustomCss'] = \config::byKey('enableCustomCss');
         $pageContent['customJS'] = '';
         if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.js')) {
             $pageContent['customJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/desktop/custom/custom.js'));

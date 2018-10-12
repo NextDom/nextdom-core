@@ -323,6 +323,24 @@ $NEXTDOM_INTERNAL_CONFIG = array(
             ),
         ),
     ),
+    'themes-dark' => array(
+        'NextDom' => array('#367fa9', '#3c8dbc', '#222d32', '#f4f5f7'),
+        'Blue'    => array('#367fa9', '#3c8dbc', '#222d32', '#f4f5f7'),
+        'Black'   => array('#fefefe', '#fefefe', '#222', '#f4f5f7'),
+        'Purple'   => array('#555299', '#605ca8', '#222d32', '#f4f5f7'),
+        'Green'   => array('#008d4c', '#00a65a', '#222d32', '#f4f5f7'),
+        'Red'   => array('#d33724', '#dd4b39', '#222d32', '#f4f5f7'),
+        'Yellow'   => array('#db8b0b', '#f39c12', '#222d32', '#f4f5f7')
+    ),
+    'themes-light' => array(
+        'NextDom-Light' => array('#367fa9', '#3c8dbc', '#f9fafc', '#f4f5f7'),
+        'Blue-Light'    => array('#367fa9', '#3c8dbc', '#f9fafc', '#f4f5f7'),
+        'Black-Light'   => array('#fefefe', '#fefefe', '#f9fafc', '#f4f5f7'),
+        'Purple-Light'   => array('#555299', '#605ca8', '#f9fafc', '#f4f5f7'),
+        'Green-Light'   => array('#008d4c', '#00a65a', '#f9fafc', '#f4f5f7'),
+        'Red-Light'   => array('#d33724', '#dd4b39', '#f9fafc', '#f4f5f7'),
+        'Yellow-Light'   => array('#db8b0b', '#f39c12', '#f9fafc', '#f4f5f7')
+    )
 );
 global $JEEDOM_INTERNAL_CONFIG;
 $JEEDOM_INTERNAL_CONFIG = $NEXTDOM_INTERNAL_CONFIG;
