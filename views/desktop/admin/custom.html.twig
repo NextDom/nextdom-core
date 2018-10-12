@@ -29,7 +29,7 @@
                                 {% for themeName, themeData in customDarkThemes %}
                                     <div class="col-md-4 full-opacity-hover">
                                         <p class="legend-title text-center no-margin" style="font-size: 12px">
-                                            <input class="configKey" type="radio" name="theme" value="{{ themeName|lower }}" data-l1key="theme"{% if customTheme == themeName|lower %} checked="checked"{% endif %}/> {{ themeName }}
+                                            <input type="radio" name="theme" value="{{ themeName|lower }}" {% if customTheme == themeName|lower %} checked="checked"{% endif %}/> {{ themeName }}
                                         </p>
                                         <div style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)">
                                             <div>
@@ -51,7 +51,7 @@
                                 {% for themeName, themeData in customLightThemes %}
                                     <div class="col-md-4 full-opacity-hover">
                                         <p class="legend-title text-center no-margin" style="font-size: 12px">
-                                            <input class="configKey" type="radio" name="theme" value="{{ themeName|lower }}" data-l1key="theme"{% if customTheme == themeName|lower %} checked="checked"{% endif %}/> {{ themeName }}
+                                            <input type="radio" name="theme" value="{{ themeName|lower }}" {% if customTheme == themeName|lower %} checked="checked"{% endif %}/> {{ themeName }}
                                         </p>
                                         <div style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)">
                                             <div>
@@ -67,6 +67,7 @@
                                 {% endfor %}
                             </div>
                         </div>
+                        <input type="hidden" class="configKey" data-l1key="theme" id="theme-form-input" value="{{ customTheme }}" />
                     </fieldset>
                 </div>
 
@@ -315,6 +316,11 @@
             </a>
         </div>
     </div>
-
-
 </div>
+<script>
+    $(document).ready(function() {
+        $('#themestab input[type="radio"]').on('change', function() {
+            $('#theme-form-input').val($(this).val());
+        });
+    });
+</script>
