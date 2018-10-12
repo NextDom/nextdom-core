@@ -87,6 +87,7 @@ class Router
                 'product_name',
                 'product_icon',
                 'product_connection_image',
+                'theme',
                 'default_bootstrap_theme'));
             if ($configs['nextdom::firstUse'] == 1) {
                 PrepareView::showFirstUsePage($configs);
