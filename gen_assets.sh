@@ -2,9 +2,24 @@
 
 function gen_css {
 	echo " >>> Generation du CSS"
+	mkdir -p public/css/adminlte
 	sass assets/css/nextdom.scss public/css/nextdom.css --style compressed
 	sass assets/css/nextdom.mob.scss public/css/nextdom.mob.css --style compressed
 	sass assets/css/firstUse.scss public/css/firstUse.css --style compressed
+	sass assets/css/adminlte/skin-black.scss public/css/adminlte/skin-black.css --style compressed
+	sass assets/css/adminlte/skin-black-light.scss public/css/adminlte/skin-black-light.css --style compressed
+	sass assets/css/adminlte/skin-blue.scss public/css/adminlte/skin-blue-light.css --style compressed
+	sass assets/css/adminlte/skin-blue-light.scss public/css/adminlte/skin-blue-light.css --style compressed
+	sass assets/css/adminlte/skin-green.scss public/css/adminlte/skin-green.css --style compressed
+	sass assets/css/adminlte/skin-green-light.scss public/css/adminlte/skin-green.css --style compressed
+	sass assets/css/adminlte/skin-nextdom.scss public/css/adminlte/skin-nextdom.css --style compressed
+	sass assets/css/adminlte/skin-nextdom-light.scss public/css/adminlte/skin-nextdom-light.css --style compressed
+	sass assets/css/adminlte/skin-purple.scss public/css/adminlte/skin-purple.css --style compressed
+	sass assets/css/adminlte/skin-purple-light.scss public/css/adminlte/skin-purple-light.css --style compressed
+	sass assets/css/adminlte/skin-red.scss public/css/adminlte/skin-red.css --style compressed
+	sass assets/css/adminlte/skin-red-light.scss public/css/adminlte/skin-red-light.css --style compressed
+	sass assets/css/adminlte/skin-yellow.scss public/css/adminlte/skin-yellow.css --style compressed
+	sass assets/css/adminlte/skin-yellow-light.scss public/css/adminlte/skin-yellow-light.css --style compressed
 	# Remplacement des chemins
 	# TODO: A optimiser
 	# sed ne prend pas en charge le non-greey

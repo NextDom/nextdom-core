@@ -410,6 +410,7 @@ class PrepareView
     private static function initCssPool(&$pageData, $configs)
     {
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
+        $pageData['CSS_POOL'][] = '/public/css/adminlte/skin-'.$configs['theme'].'.css';
         $pageData['CSS_POOL'][] = '/3rdparty/iziToast/css/iziToast.css';
         // Icônes
         $pageData['CSS_POOL'][] = '/3rdparty/font-awesome/css/font-awesome.min.css';
