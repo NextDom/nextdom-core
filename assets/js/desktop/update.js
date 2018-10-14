@@ -235,7 +235,7 @@ function addUpdate(_update) {
         bgClass = 'bg-yellow';
     }
 
-    var tr = '<div class="col-md-4 col-sm-6 col-xs-12">';
+    var tr = '<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">';
     tr += '<div class="box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + '" data-type="' + init(_update.type) + '">';
     tr += '<div class="box-header">';
     tr += ' <h4 class="box-title"><img style="height:50px" src="' + init(_update.icon) + '"/> <b>' + init(_update.name)+'</b> -  ';
