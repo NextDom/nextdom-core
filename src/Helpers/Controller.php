@@ -428,8 +428,14 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
+        global $NEXTDOM_INTERNAL_CONFIG;
+        // TODO: Regrouper les config::byKey
+        $pageContent['customDarkThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-dark'];
+        $pageContent['customLightThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-light'];
         $pageContent['adminCategories'] = \nextdom::getConfiguration('eqLogic:category');
         $pageContent['customProductName'] = \config::byKey('product_name');
+        $pageContent['customTheme'] = \config::byKey('theme');
+        $pageContent['customEnableCustomCss'] = \config::byKey('enableCustomCss');
         $pageContent['customJS'] = '';
         if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.js')) {
             $pageContent['customJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/desktop/custom/custom.js'));
@@ -439,12 +445,12 @@ class Controller
             $pageContent['customCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/desktop/custom/custom.css'));
         }
         $pageContent['customMobileJS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/desktop/mobile/custom/custom.js')) {
-            $pageContent['customMobileJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/desktop/mobile/custom/custom.js'));
+        if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.js')) {
+            $pageContent['customMobileJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.js'));
         }
         $pageContent['customMobileCSS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/desktop/mobile/custom/custom.css')) {
-            $pageContent['customMobileCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/desktop/mobile/custom/custom.css'));
+        if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.css')) {
+            $pageContent['customMobileCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.css'));
         }
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/custom.js';
