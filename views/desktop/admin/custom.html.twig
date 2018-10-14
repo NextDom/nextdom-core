@@ -6,413 +6,323 @@
             <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
 
             <h4 class="box-title pull-left">&nbsp;&nbsp;<i class="fas fa-wrench">&nbsp;&nbsp;</i>{{ 'Général' }}</h4>
-            <li role="presentation"><a href="#advanced" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-flask">&nbsp;&nbsp;</i>{{ 'Modifs Avancées' }}</a></li>
-            <li role="presentation"><a href="#colortab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-th-large">&nbsp;&nbsp;</i>{{ 'Options Tuiles' }}</a></li>
-            <li role="presentation"><a href="#customSkin" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-paint-brush">&nbsp;&nbsp;</i>{{ 'Options Thème' }}</a></li>
-            <li role="presentation" class="active"><a href="#themestab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint">&nbsp;&nbsp;</i>{{ 'Choix Thème' }}</a></li>
+            <li role="presentation"><a href="#advanced" aria-controls="profile" role="tab" data-toggle="tab"><i
+                            class="fas fa-flask">&nbsp;&nbsp;</i>{{ 'Modifs Avancées' }}</a></li>
+            <li role="presentation"><a href="#colortab" aria-controls="profile" role="tab" data-toggle="tab"><i
+                            class="fas fa-th-large">&nbsp;&nbsp;</i>{{ 'Options Tuiles' }}</a></li>
+            <li role="presentation"><a href="#customSkin" aria-controls="profile" role="tab" data-toggle="tab"><i
+                            class="fa fa-paint-brush">&nbsp;&nbsp;</i>{{ 'Options Thème' }}</a></li>
+            <li role="presentation" class="active"><a href="#themestab" aria-controls="home" role="tab"
+                                                      data-toggle="tab"><i
+                            class="fas fa-tint">&nbsp;&nbsp;</i>{{ 'Choix Thème' }}</a></li>
         </ul>
+        <form>
+            <!-- Tabs content -->
+            <div class="global-tab-content tab-content">
 
-        <!-- Tabs content -->
-        <div class="global-tab-content tab-content">
-
-            <!-- Theme tab -->
-            <div role="tabpanel" class="tab-pane active" id="themestab">
-                <fieldset>
-                    <div>
+                <!-- Theme tab -->
+                <div role="tabpanel" class="tab-pane active" id="themestab">
+                    <div class="legend-section">
                         <legend class="legend-title">{{ 'Choix du thème comme base, en versions complètes' }}</legend>
                         <div class="row">
-                            <div class="col-md-12">
-                                <ul class="list-unstyled clearfix">
-                                    <li class="col-md-4">
-                                        <p class="legend-title text-center no-margin" style="font-size: 12px">Nextdom</p>
-                                        <a href="" data-skin="skin-nextdom" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 15px; background: #367fa9"></span>
-                                                <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 15px;"></span>
-                                            </div>
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 50px; background: #222d32"></span>
-                                                <span style="display:block; width: 80%; float: left; height: 50px; background: #f4f5f7"></span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="col-md-4">
-                                        <p class="legend-title text-center no-margin" style="font-size: 12px">Blue</p>
-                                        <a href="" data-skin="skin-blue" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 15px; background: #367fa9"></span>
-                                                <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 15px;"></span>
-                                            </div>
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 50px; background: #222d32"></span>
-                                                <span style="display:block; width: 80%; float: left; height: 50px; background: #f4f5f7"></span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="col-md-4">
-                                        <p class="legend-title text-center no-margin" style="font-size: 12px">Black</p>
-                                        <a href="" data-skin="skin-black" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
-                                            <div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix">
-                                                <span style="display:block; width: 20%; float: left; height: 15px; background: #fefefe"></span>
-                                                <span style="display:block; width: 80%; float: left; height: 15px; background: #fefefe"></span>
-                                            </div>
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 50px; background: #222"></span>
-                                                <span style="display:block; width: 80%; float: left; height: 50px; background: #f4f5f7"></span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="col-md-4">
-                                        <p class="legend-title text-center no-margin" style="font-size: 12px">Purple</p>
-                                        <a href="" data-skin="skin-purple" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 15px;" class="bg-purple-active"></span>
-                                                <span class="bg-purple" style="display:block; width: 80%; float: left; height: 15px;"></span>
-                                            </div>
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 50px; background: #222d32"></span>
-                                                <span style="display:block; width: 80%; float: left; height: 50px; background: #f4f5f7"></span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="col-md-4">
-                                        <p class="legend-title text-center no-margin" style="font-size: 12px">Green</p>
-                                        <a href="" data-skin="skin-green" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 15px;" class="bg-green-active"></span>
-                                                <span class="bg-green" style="display:block; width: 80%; float: left; height: 15px;"></span>
-                                            </div>
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 50px; background: #222d32"></span>
-                                                <span style="display:block; width: 80%; float: left; height: 50px; background: #f4f5f7"></span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="col-md-4">
-                                        <p class="legend-title text-center no-margin" style="font-size: 12px">Red</p>
-                                        <a href="" data-skin="skin-red" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 15px;" class="bg-red-active"></span>
-                                                <span class="bg-red" style="display:block; width: 80%; float: left; height: 15px;"></span>
-                                            </div>
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 50px; background: #222d32"></span>
-                                                <span style="display:block; width: 80%; float: left; height: 50px; background: #f4f5f7"></span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="col-md-4">
-                                        <p class="legend-title text-center no-margin" style="font-size: 12px">Yellow</p>
-                                        <a href="" data-skin="skin-yellow" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 15px;" class="bg-yellow-active"></span>
-                                                <span class="bg-yellow" style="display:block; width: 80%; float: left; height: 15px;"></span>
-                                            </div>
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 50px; background: #222d32"></span>
-                                                <span style="display:block; width: 80%; float: left; height: 50px; background: #f4f5f7"></span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+                            {% for themeName, themeData in customDarkThemes %}
+                                <div class="col-md-4 full-opacity-hover">
+                                    <p class="legend-title text-center no-margin" style="font-size: 12px">
+                                        <input type="radio" name="theme"
+                                               value="{{ themeName|lower }}" {% if customTheme == themeName|lower %} checked="checked"{% endif %}/> {{ themeName }}
+                                    </p>
+                                    <div style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)">
+                                        <div>
+                                            <span style="display:block; width: 20%; float: left; height: 15px; background: {{ themeData[0] }}"></span>
+                                            <span style="display:block; width: 80%; float: left; height: 15px; background: {{ themeData[1] }}"></span>
+                                        </div>
+                                        <div>
+                                            <span style="display:block; width: 20%; float: left; height: 50px; background: {{ themeData[2] }}"></span>
+                                            <span style="display:block; width: 80%; float: left; height: 50px; background: {{ themeData[3] }}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
-
                     <div class="legend-section">
                         <legend class="legend-title">{{ 'ou en versions Light' }}</legend>
                         <div class="row">
-                            <div class="col-md-12">
-                                <ul class="list-unstyled clearfix">
-                                    <li class="col-md-4">
-                                        <p class="legend-title text-center no-margin" style="font-size: 12px">Nextdom Light</p>
-                                        <a href="" data-skin="skin-nextdom-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 15px; background: #367fa9"></span>
-                                                <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 15px;"></span>
-                                            </div>
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 50px; background: #f9fafc"></span>
-                                                <span style="display:block; width: 80%; float: left; height: 50px; background: #f4f5f7"></span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="col-md-4">
-                                        <p class="legend-title text-center no-margin" style="font-size: 12px">Blue Light</p>
-                                        <a href="" data-skin="skin-blue-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 15px; background: #367fa9"></span>
-                                                <span class="bg-light-blue" style="display:block; width: 80%; float: left; height: 15px;"></span>
-                                            </div>
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 50px; background: #f9fafc"></span>
-                                                <span style="display:block; width: 80%; float: left; height: 50px; background: #f4f5f7"></span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="col-md-4">
-                                        <p class="legend-title text-center no-margin" style="font-size: 12px">Black Light</p>
-                                        <a href="" data-skin="skin-black-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
-                                            <div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix">
-                                                <span style="display:block; width: 20%; float: left; height: 15px; background: #fefefe"></span>
-                                                <span style="display:block; width: 80%; float: left; height: 15px; background: #fefefe"></span>
-                                            </div>
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 50px; background: #f9fafc"></span>
-                                                <span style="display:block; width: 80%; float: left; height: 50px; background: #f4f5f7"></span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="col-md-4">
-                                        <p class="legend-title text-center no-margin" style="font-size: 12px">Purple Light</p>
-                                        <a href="" data-skin="skin-purple-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 15px;" class="bg-purple-active"></span>
-                                                <span class="bg-purple" style="display:block; width: 80%; float: left; height: 15px;"></span>
-                                            </div>
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 50px; background: #f9fafc"></span>
-                                                <span style="display:block; width: 80%; float: left; height: 50px; background: #f4f5f7"></span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="col-md-4">
-                                        <p class="legend-title text-center no-margin" style="font-size: 12px">Green Light</p>
-                                        <a href="" data-skin="skin-green-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 15px;" class="bg-green-active"></span>
-                                                <span class="bg-green" style="display:block; width: 80%; float: left; height: 15px;"></span>
-                                            </div>
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 50px; background: #f9fafc"></span>
-                                                <span style="display:block; width: 80%; float: left; height: 50px; background: #f4f5f7"></span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="col-md-4">
-                                        <p class="legend-title text-center no-margin" style="font-size: 12px">Red Light</p>
-                                        <a href="" data-skin="skin-red-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 15px;" class="bg-red-active"></span>
-                                                <span class="bg-red" style="display:block; width: 80%; float: left; height: 15px;"></span>
-                                            </div>
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 50px; background: #f9fafc"></span>
-                                                <span style="display:block; width: 80%; float: left; height: 50px; background: #f4f5f7"></span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="col-md-4">
-                                        <p class="legend-title text-center no-margin" style="font-size: 12px">Yellow Light</p>
-                                        <a href="" data-skin="skin-yellow-light" style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)" class="form-group clearfix full-opacity-hover">
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 15px;" class="bg-yellow-active"></span>
-                                                <span class="bg-yellow" style="display:block; width: 80%; float: left; height: 15px;"></span>
-                                            </div>
-                                            <div>
-                                                <span style="display:block; width: 20%; float: left; height: 50px; background: #f9fafc"></span>
-                                                <span style="display:block; width: 80%; float: left; height: 50px; background: #f4f5f7"></span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
+                            {% for themeName, themeData in customLightThemes %}
+                                <div class="col-md-4 full-opacity-hover">
+                                    <p class="legend-title text-center no-margin" style="font-size: 12px">
+                                        <input type="radio" name="theme"
+                                               value="{{ themeName|lower }}" {% if customTheme == themeName|lower %} checked="checked"{% endif %}/> {{ themeName }}
+                                    </p>
+                                    <div style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)">
+                                        <div>
+                                            <span style="display:block; width: 20%; float: left; height: 15px; background: {{ themeData[0] }}"></span>
+                                            <span style="display:block; width: 80%; float: left; height: 15px; background: {{ themeData[1] }}"></span>
+                                        </div>
+                                        <div>
+                                            <span style="display:block; width: 20%; float: left; height: 50px; background: {{ themeData[2] }}"></span>
+                                            <span style="display:block; width: 80%; float: left; height: 50px; background: {{ themeData[3] }}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <input type="hidden" class="configKey" data-l1key="theme" id="theme-form-input"
+                           value="{{ customTheme }}"/>
+                </div>
+
+                <!-- Theme option tab -->
+                <div role="tabpanel" class="tab-pane" id="customSkin">
+
+
+                    <legend class="legend-title">{{ 'Personnalisation des couleurs spécifiques du thème.' }}</legend>
+                    <div class="row">
+                        <div class="form-group col-md-4 col-md-offset-1 col-xs-12">
+                            <label class="control-label" data-toggle="tooltip" title=""
+                                   data-original-title="{{ 'Couleur du fond de la page' }}">{{ 'Couleur du body' }} </label>
+                            <div class="btn-group">
+                                <a class="btn btn-action bt_resetColor" data-l1key="options"
+                                   data-l2key="customSkin_bodyBackgound" data-toggle="tooltip" title=""
+                                   data-original-title="{{ 'Remettre par défaut' }}"><i
+                                            class="fas fa-times"></i></a>
+                                <div class=" colorpicker-component colorpick input-group">
+                                    <input type="text" class="configKey form-control" data-l1key="options"
+                                           data-l2key="customSkin_bodyBackgound"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-md-offset-1 col-xs-12">
+                            <label class="control-label" data-toggle="tooltip" title=""
+                                   data-original-title="{{ 'Couleur du fond de la barre du haut (headerbar)' }}">{{ 'Couleur headerBar' }} </label>
+                            <div class="btn-group">
+                                <a class="btn btn-action bt_resetColor" data-l1key="options"
+                                   data-l2key="customSkin_navbarBackgound" data-toggle="tooltip" title=""
+                                   data-original-title="{{ 'Remettre par défaut' }}"><i
+                                            class="fas fa-times"></i></a>
+                                <div class=" colorpicker-component colorpick input-group">
+                                    <input type="text" class="configKey form-control" data-l1key="options"
+                                           data-l2key="customSkin_navbarBackgound"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-md-offset-1 col-xs-12">
+                            <label class="control-label" data-toggle="tooltip" title=""
+                                   data-original-title="{{ 'Couleur du fond de la barre du coté (sidebar)' }}">{{ 'Couleur sideBar' }} </label>
+                            <div class="btn-group">
+                                <a class="btn btn-action bt_resetColor" data-l1key="options"
+                                   data-l2key="customSkin_siderbarBackgound" data-toggle="tooltip" title=""
+                                   data-original-title="{{ 'Remettre par défaut' }}"><i
+                                            class="fas fa-times"></i></a>
+                                <div class=" colorpicker-component colorpick input-group">
+                                    <input type="text" class="configKey form-control" data-l1key="options"
+                                           data-l2key="customSkin_sidebaBackgound"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-md-offset-1 col-xs-12">
+                            <label class="control-label" data-toggle="tooltip" title=""
+                                   data-original-title="{{ 'Couleur des icones' }}">{{ 'Couleur des icones' }} </label>
+                            <div class="btn-group">
+                                <a class="btn btn-action bt_resetColor" data-l1key="options"
+                                   data-l2key="customSkin_iconsColors" data-toggle="tooltip" title=""
+                                   data-original-title="{{ 'Remettre par défaut' }}"><i
+                                            class="fas fa-times"></i></a>
+                                <div class=" colorpicker-component colorpick input-group">
+                                    <input type="text" class="configKey form-control" data-l1key="options"
+                                           data-l2key="customSkin_iconsColors"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </fieldset>
-            </div>
 
-            <!-- Tuiles tab -->
-            <div role="tabpanel" class="tab-pane" id="colortab">
-                <legend class="legend-title">{{ 'Paramétrage de l\'aspect des tuiles du dashboard en version desktop ou mobile.' }}</legend>
+                </div>
 
-                <div class="row">
+                <!-- Tuiles tab -->
+                <div role="tabpanel" class="tab-pane" id="colortab">
+                    <legend class="legend-title">{{ 'Paramétrage de l\'aspect des tuiles du dashboard en version desktop ou mobile.' }}</legend>
+                    <div class="row">
+                        <div class="form-group col-md-4 col-md-offset-1">
+                            <label class="control-label">{{ 'Opacité par défaut des widgets' }}</label>
+                            <input type="numeric" class="configKey form-control"
+                                   data-l1key="widget::background-opacity"/>
+                        </div>
 
-                    <div class="form-group col-md-4 col-md-offset-1">
-                        <label class="control-label">{{ 'Opacité par défaut des widgets' }}</label>
-                        <input type="numeric" class="configKey form-control" data-l1key="widget::background-opacity"/>
+                        <div class="form-group col-md-4 col-md-offset-2">
+                            <label class="control-label">{{ 'Pas horizontal' }}</label>
+                            <input type="numeric" class="configKey form-control" data-l1key="widget::step::width"/>
+                        </div>
+
+                        <div class="form-group col-md-4 col-md-offset-1">
+                            <label class="control-label">{{ 'Pas vertical' }}</label>
+                            <input type="numeric" class="configKey form-control" data-l1key="widget::step::height"/>
+                        </div>
+                        <div class="form-group col-md-4 col-md-offset-2">
+                            <label class="col-xs-12 control-label">{{ 'Marge' }}</label>
+                            <input type="numeric" class="configKey form-control" data-l1key="widget::margin"/>
+                        </div>
                     </div>
 
-                    <div class="form-group col-md-4 col-md-offset-2">
-                        <label class="control-label">{{'Pas horizontal'}}</label>
-                        <input type="numeric" class="configKey form-control" data-l1key="widget::step::width" />
-                    </div>
+                    <div id="colortab-list">
+                        {% for category, categoryData in adminCategories %}
+                            <legend class="legend-title">{{ 'Catégorie' }} {{ categoryData['name'] }}</legend>
+                            <div class="row">
+                                <div class="col-md-4 col-md-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label">{{ 'Dashboard couleur de fond' }}</label>
+                                        <div class="btn-group">
+                                            <a class="btn btn-action bt_resetColor"
+                                               data-l1key="eqLogic:category:{{ category }}:color"
+                                               data-toggle="tooltip"
+                                               title="" data-original-title="{{ 'Remettre par défaut' }}"><i
+                                                        class="fas fa-times"></i></a>
+                                            <div class=" colorpicker-component colorpick input-group">
+                                                <input type="text" class="configKey form-control noSet "
+                                                       data-l1key="eqLogic:category:{{ category }}:color"
+                                                       value="{{ categoryData['color'] }}"/>
+                                                <span class="input-group-addon"><i></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-md-offset-2">
+                                    <div class="form-group">
+                                        <label class="control-label">{{ 'Mobile couleur de fond' }}</label>
+                                        <div class="btn-group ">
+                                            <a class="btn btn-action bt_resetColor"
+                                               data-l1key="eqLogic:category:{{ category }}:mcolor"
+                                               data-toggle="tooltip"
+                                               title="" data-original-title="{{ 'Remettre par défaut' }}"><i
+                                                        class="fas fa-times"></i></a>
+                                            <div class=" colorpicker-component colorpick input-group">
+                                                <input type="text" class="configKey form-control cursor noSet "
+                                                       data-l1key="eqLogic:category:{{ category }}:mcolor"
+                                                       value="{{ categoryData['mcolor'] }}"/>
+                                                <span class="input-group-addon"><i></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-md-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label">{{ 'Dashboard couleur commande' }}</label>
+                                        <div class="btn-group">
+                                            <a class="btn btn-action bt_resetColor"
+                                               data-l1key="eqLogic:category:{{ category }}:cmdColor"
+                                               data-toggle="tooltip" title=""
+                                               data-original-title="{{ 'Remettre par défaut' }}"><i
+                                                        class="fas fa-times"></i></a>
+                                            <div class=" colorpicker-component colorpick input-group">
+                                                <input type="text" class="configKey form-control cursor noSet "
+                                                       data-l1key="eqLogic:category:{{ category }}:cmdColor"
+                                                       value="{{ categoryData['cmdColor'] }}"/>
+                                                <span class="input-group-addon"><i></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-md-offset-2">
+                                    <div class="form-group">
+                                        <label class="control-label">{{ 'Mobile couleur commande' }}</label>
+                                        <div class="btn-group">
+                                            <a class="btn btn-action bt_resetColor"
+                                               data-l1key="eqLogic:category:{{ category }}:mcmdColor"
+                                               data-toggle="tooltip" title=""
+                                               data-original-title="{{ 'Remettre par défaut' }}"><i
+                                                        class="fas fa-times"></i></a>
+                                            <div class=" colorpicker-component colorpick input-group">
+                                                <input type="text" class="configKey form-control cursor noSet "
+                                                       data-l1key="eqLogic:category:{{ category }}:mcmdColor"
+                                                       value="{{ categoryData['mcmdColor'] }}"/>
+                                                <span class="input-group-addon"><i></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                    <div class="form-group col-md-4 col-md-offset-1">
-                        <label class="control-label">{{'Pas vertical'}}</label>
-                        <input type="numeric" class="configKey form-control" data-l1key="widget::step::height" />
-                    </div>
-                    <div class="form-group col-md-4 col-md-offset-2">
-                        <label class="col-xs-12 control-label">{{'Marge'}}</label>
-                        <input type="numeric" class="configKey form-control" data-l1key="widget::margin" />
+                        {% endfor %}
                     </div>
                 </div>
 
-                <div id="colortab-list">
-                    {% for category, categoryData in adminCategories %}
+                <!-- Advanced tab -->
+                <div role="tabpanel" class="tab-pane nav-tabs-custom" id="advanced">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="active"><a href="#desktop" aria-controls="home" role="tab"
+                                              data-toggle="tab">{{ 'Desktop' }}</a></li>
+                        <li><a href="#mobile" aria-controls="profile" role="tab" data-toggle="tab">{{ 'Mobile' }}</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="btn-group alert alert-warning" id="div_spanAlertMessage">
+                            {{ 'Attention : tout ce que vous écrivez ici est global et inclus sur toutes les pages. La moindre erreur peut rendre votre' }} {{ customProductName }} {{ 'non fonctionel.' }}
+                            <div>
+                                <input type="checkbox" id="enableCustomCss" class="configKey"
+                                       data-l1key="enableCustomCss"{% if customEnableCustomCss %} checked="checked"{% endif %}>
+                                <label for="enableCustomCss" class="control-label label-check" data-toggle="tooltip"
+                                       title=""
+                                       data-original-title="{{ 'Force la prise en compte de ces personnalisation CSS et JS en dernier lieu' }}">{{ 'Activer la personnalisation avancée' }}</label>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane active" id="desktop">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 
-                        <legend class="legend-title">{{'Catégorie'}} {{ categoryData['name'] }}</legend>
-                        <div class="row">
-                            <div class="col-md-4 col-md-offset-1">
-                                <div class="form-group">
-                                    <label class="control-label">{{ 'Dashboard couleur de fond' }}</label>
-                                    <div class="btn-group">
-                                        <a class="btn btn-action bt_resetColor" data-l1key="eqLogic:category:{{ category }}:color" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
-                                        <div class=" colorpicker-component colorpick input-group">
-                                            <input type="text" class="configKey form-control noSet " data-l1key="eqLogic:category:{{ category }}:color" value="{{ categoryData['color'] }}"/>
-                                            <span class="input-group-addon"><i></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-md-offset-2">
-                                <div class="form-group">
-                                    <label class="control-label">{{ 'Mobile couleur de fond' }}</label>
-                                    <div class="btn-group ">
-                                        <a class="btn btn-action bt_resetColor" data-l1key="eqLogic:category:{{ category }}:mcolor" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
-                                        <div class=" colorpicker-component colorpick input-group">
-                                            <input type="text" class="configKey form-control cursor noSet " data-l1key="eqLogic:category:{{ category }}:mcolor" value="{{ categoryData['mcolor'] }}"/>
-                                            <span class="input-group-addon"><i></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4 col-md-offset-1">
-                                <div class="form-group">
-                                    <label class="control-label">{{ 'Dashboard couleur commande' }}</label>
-                                    <div class="btn-group">
-                                        <a class="btn btn-action bt_resetColor" data-l1key="eqLogic:category:{{ category }}:cmdColor" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
-                                        <div class=" colorpicker-component colorpick input-group">
-                                            <input type="text" class="configKey form-control cursor noSet " data-l1key="eqLogic:category:{{ category }}:cmdColor" value="{{ categoryData['cmdColor'] }}"/>
-                                            <span class="input-group-addon"><i></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-md-offset-2">
-                                <div class="form-group">
-                                    <label class="control-label">{{ 'Mobile couleur commande' }}</label>
-                                    <div class="btn-group">
-                                        <a class="btn btn-action bt_resetColor" data-l1key="eqLogic:category:{{ category }}:mcmdColor" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
-                                        <div class=" colorpicker-component colorpick input-group">
-                                            <input type="text" class="configKey form-control cursor noSet " data-l1key="eqLogic:category:{{ category }}:mcmdColor" value="{{ categoryData['mcmdColor'] }}"/>
-                                            <span class="input-group-addon"><i></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- Theme option tab -->
-            <div role="tabpanel" class="tab-pane" id="customSkin">
-                <form class="form-horizontal">
-                    <fieldset>
-                        <legend class="legend-title">{{ 'Personnalisation des couleurs spécifiques du thème.' }}</legend>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{'Couleur du fond de la page'}}">{{ 'Couleur du body' }} </label>
-                            <div class="btn-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
-                                <a class="btn btn-action bt_resetColor" data-l1key="options" data-l2key="customSkin_bodyBackgound" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
-                                <div class=" colorpicker-component colorpick input-group">
-                                    <input type="text" class="configKey form-control" data-l1key="options" data-l2key="customSkin_bodyBackgound"/>
-                                    <span class="input-group-addon"><i></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{'Couleur du fond de la barre du haut (headerbar)'}}">{{ 'Couleur headerBar' }} </label>
-                            <div class="btn-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
-                                <a class="btn btn-action bt_resetColor" data-l1key="options" data-l2key="customSkin_navbarBackgound" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
-                                <div class=" colorpicker-component colorpick input-group">
-                                    <input type="text" class="configKey form-control" data-l1key="options" data-l2key="customSkin_navbarBackgound"/>
-                                    <span class="input-group-addon"><i></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{'Couleur du fond de la barre du coté (sidebar)'}}">{{ 'Couleur sideBar' }} </label>
-                            <div class="btn-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
-                                <a class="btn btn-action bt_resetColor" data-l1key="options" data-l2key="customSkin_siderbarBackgound" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
-                                <div class=" colorpicker-component colorpick input-group">
-                                    <input type="text" class="configKey form-control" data-l1key="options" data-l2key="customSkin_sidebaBackgound"/>
-                                    <span class="input-group-addon"><i></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{'Couleur des icones'}}">{{ 'Couleur des icones' }} </label>
-                            <div class="btn-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
-                                <a class="btn btn-action bt_resetColor" data-l1key="options" data-l2key="customSkin_iconsColors" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
-                                <div class=" colorpicker-component colorpick input-group">
-                                    <input type="text" class="configKey form-control" data-l1key="options" data-l2key="customSkin_iconsColors"/>
-                                    <span class="input-group-addon"><i></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-
-            <!-- Advanced tab -->
-            <div role="tabpanel" class="tab-pane nav-tabs-custom" id="advanced">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li class="active"><a href="#desktop" aria-controls="home" role="tab" data-toggle="tab">{{ 'Desktop' }}</a></li>
-                    <li><a href="#mobile" aria-controls="profile" role="tab" data-toggle="tab">{{ 'Mobile' }}</a></li>
-                </ul>
-                <div class="tab-content">
-                    <div class="btn-group alert alert-warning" id="div_spanAlertMessage">
-                        {{ 'Attention : tout ce que vous écrivez ici est global et inclus sur toutes les pages. La moindre erreur peut rendre votre' }} {{ customProductName }} {{ 'non fonctionel.' }}
-                        <div>
-                            <input type="checkbox" id="enableCustomCss" class="configKey" data-l1key="enableCustomCss">
-                            <label for="enableCustomCss" class="control-label label-check" data-toggle="tooltip" title="" data-original-title="{{'Force la prise en compte de ces personnalisation CSS et JS en dernier lieu'}}">{{'Activer la personnalisation avancée'}}</label>
-                        </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="desktop">
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                <fieldset>
                                     <legend class="legend-title">{{ 'Javascript' }}</legend>
-                                    <textarea id="ta_jsDesktopContent" style="height:auto;">{{ customJS }}</textarea>
-                                </fieldset>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                <fieldset>
+                                    <textarea id="ta_jsDesktopContent"
+                                              style="height:auto;">{{ customJS }}</textarea>
+
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
                                     <legend class="legend-title">{{ 'CSS' }}</legend>
-                                    <textarea id="ta_cssDesktopContent" style="height:auto;">{{ customCSS }}</textarea>
-                                </fieldset>
+                                    <textarea id="ta_cssDesktopContent"
+                                              style="height:auto;">{{ customCSS }}</textarea>
+
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="mobile">
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                <fieldset>
+                        <div role="tabpanel" class="tab-pane" id="mobile">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
                                     <legend class="legend-title">{{ 'Javascript' }}</legend>
-                                    <textarea id="ta_jsMobileContent" style="height:auto;">{{ customMobileJS }}</textarea>
-                                </fieldset>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                <fieldset>
+                                    <textarea id="ta_jsMobileContent"
+                                              style="height:auto;">{{ customMobileJS }}</textarea>
+
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
                                     <legend class="legend-title">{{ 'CSS' }}</legend>
-                                    <textarea id="ta_cssMobileContent" style="height:auto;">{{ customMobileCSS }}</textarea>
-                                </fieldset>
+                                    <textarea id="ta_cssMobileContent"
+                                              style="height:auto;">{{ customMobileCSS }}</textarea>
+
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-        </div>
+            </div>
+        </form>
         <div class="box-footer">
-            <a class="btn btn-success pull-right" id="bt_savecustom"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
-            <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
+            <a class="btn btn-success pull-right" id="bt_savecustom"><i
+                        class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}
+            </a>
         </div>
     </div>
-
-
 </div>
+<script>
+    $(document).ready(function () {
+        $('#themestab input[type="radio"]').on('change', function () {
+            $('#theme-form-input').val($(this).val());
+        });
+    });
+</script>

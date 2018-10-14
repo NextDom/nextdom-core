@@ -38,7 +38,7 @@ nextdom.config.load({
 });
 
 
-setTimeout(function () {
+$('a[data-toggle="tab"][href="#advanced"]').on('shown.bs.tab', function () {
    editorDesktopJS = CodeMirror.fromTextArea(document.getElementById("ta_jsDesktopContent"), {
        lineNumbers: true,
        mode: "text/javascript",
@@ -51,7 +51,7 @@ setTimeout(function () {
        matchBrackets: true,
        viewportMargin: Infinity
    });
-}, 1);
+});
 
 
 
@@ -74,27 +74,14 @@ $('a[data-toggle="tab"][href="#mobile"]').on('shown.bs.tab', function (e) {
    }
 });
 
-$('.savecustom').on('click', function () {
-   var version = $(this).attr('data-version');
-   var type = $(this).attr('data-type');
-   var content = '';
-   var editor = null;
-   if (version == 'desktop' && type == 'js') {
-       editor = editorDesktopJS;
-   }
-   if (version == 'desktop' && type == 'css') {
-       editor = editorDesktopCSS;
-   }
-   if (version == 'mobile' && type == 'js') {
-       editor = editorMobileJS;
-   }
-   if (version == 'mobile' && type == 'css') {
-       editor = editorMobileCSS;
-   }
-   if (editor != null) {
-       content = editor.getValue();
-   }
+function saveCustom() {
+    sendCustomData('desktop', 'js', editorDesktopJS.getValue());
+    sendCustomData('desktop', 'css', editorDesktopCSS.getValue());
+    sendCustomData('mobile', 'js', editorMobileJS.getValue());
+    sendCustomData('mobile', 'css', editorMobileCSS.getValue());
+}
 
+function sendCustomData(version, type, content) {
    nextdom.config.save({
        configuration: $('#custom').getValues('.configKey')[0],
        error: function (error) {
@@ -109,12 +96,12 @@ $('.savecustom').on('click', function () {
                notify("Erreur", error.message, 'error');
            },
            success: function (data) {
-               notify("Info", 'Sauvegarde réussie', 'success');
+//               notify("Info", 'Sauvegarde réussie', 'success');
            }
        });
      }
  });
-});
+}
 
 $("#bt_savecustom").on('click', function (event) {
     $.hideAlert();
@@ -140,6 +127,7 @@ $("#bt_savecustom").on('click', function (event) {
             });
         }
     });
+    saveCustom();
 });
 
 
