@@ -264,10 +264,10 @@ function addUpdate(_update) {
     }
     if (_update.type != 'core') {
         if (isset(_update.plugin) && isset(_update.plugin.changelog) && _update.plugin.changelog != '') {
-            tr += '<a class="btn btn-default btn-xs cursor" target="_blank" href="'+_update.plugin.changelog+'" style="margin-bottom : 5px;"><i class="fas fa-book"></i> {{Changelog}}</a>';
+            tr += '<a class="btn btn-default btn-xs cursor" target="_blank" href="'+_update.plugin.changelog+'"><i class="fas fa-book"></i> {{Changelog}}</a>';
         }
     }else{
-        tr += '<a class="btn btn-default btn-xs" href="https://nextdom.github.io/core/fr_FR/changelog" target="_blank" style="margin-bottom : 5px;"><i class="fas fa-book"></i> {{Changelog}}</a>';
+        tr += '<a class="btn btn-default btn-xs" href="https://nextdom.github.io/core/fr_FR/changelog" target="_blank"><i class="fas fa-book"></i> {{Changelog}}</a>';
     }
     tr += '<a class="btn btn-info btn-xs checkUpdate" ><i class="fas fa-check"></i> {{Vérifier}}</a>';
     if (_update.type != 'core') {
