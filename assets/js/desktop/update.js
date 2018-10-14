@@ -14,7 +14,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 printUpdate();
 
 $("#md_specifyUpdate").dialog({
@@ -92,8 +91,8 @@ $('#bt_checkAllUpdate').off('click').on('click', function () {
 });
 
 
-$('#table_update,#table_updateOther').delegate('.update', 'click', function () {
-    var id = $(this).closest('tr').attr('data-id');
+$('#listPlugin,#listOther').delegate('.update', 'click', function () {
+    var id = $(this).closest('.box').attr('data-id');
     bootbox.confirm('{{Etes vous sur de vouloir mettre à jour cet objet ?}}', function (result) {
         if (result) {
             $.hideAlert();
@@ -110,8 +109,8 @@ $('#table_update,#table_updateOther').delegate('.update', 'click', function () {
     });
 });
 
-$('#table_update,#table_updateOther').delegate('.remove', 'click', function () {
-    var id = $(this).closest('tr').attr('data-id');
+$('#listPlugin,#listOther').delegate('.remove', 'click', function () {
+    var id = $(this).closest('.box').attr('data-id');
     bootbox.confirm('{{Etes vous sur de vouloir supprimer cet objet ?}}', function (result) {
         if (result) {
             $.hideAlert();
@@ -128,8 +127,8 @@ $('#table_update,#table_updateOther').delegate('.remove', 'click', function () {
     });
 });
 
-$('#table_update,#table_updateOther').delegate('.checkUpdate', 'click', function () {
-    var id = $(this).closest('tr').attr('data-id');
+$('#listPlugin,#listOther').delegate('.checkUpdate', 'click', function () {
+    var id = $(this).closest('.box').attr('data-id');
     $.hideAlert();
     nextdom.update.check({
         id: id,
@@ -196,18 +195,19 @@ function getNextDomLog(_autoUpdate, _log) {
 }
 
 function printUpdate() {
+
     nextdom.update.get({
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },
         success: function (data) {
-            $('#table_update tbody').empty();
-            $('#table_updateOther tbody').empty();
+            $('#listPlugin').empty();
+            $('#listOther').empty();
             for (var i in data) {
                 addUpdate(data[i]);
             }
-            $('#table_update').trigger('update');
-            $('#table_updateOther').trigger('update');
+            $('#listPlugin').trigger('update');
+            $('#listOther').trigger('update');
         }
     });
 
@@ -224,55 +224,67 @@ function printUpdate() {
 }
 
 function addUpdate(_update) {
-    var labelClass = 'label-success';
+    var boxClass = 'box-success';
+    var bgClass = 'bg-green';
+
     if(init(_update.status) == ''){
         _update.status = 'ok';
     }
     if (_update.status == 'update'){
-        labelClass = 'label-warning';
+        boxClass = 'box-warning';
+        bgClass = 'bg-yellow';
     }
-    var tr = '<tr data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + '" data-type="' + init(_update.type) + '">';
-    tr += '<td style="width:40px;cursor:default;"><span class="updateAttr label ' + labelClass +'" data-l1key="status" style="font-size:1em;text-transform: uppercase;"></span>';
-    tr += '</td>';
-    tr += '<td style="cursor:default;"><span class="updateAttr" data-l1key="id" style="display:none;"></span><span class="updateAttr" data-l1key="source"></span> / <span class="updateAttr" data-l1key="type"></span> : <span class="updateAttr label label-info" data-l1key="name" style="font-size:1em;"></span>';
+
+    var tr = '<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">';
+    tr += '<div class="box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + '" data-type="' + init(_update.type) + '">';
+    tr += '<div class="box-header">';
+    tr += ' <h4 class="box-title"><img style="height:50px" src="' + init(_update.icon) + '"/> <b>' + init(_update.name)+'</b> -  ';
     if(_update.configuration && _update.configuration.version){
-        tr += ' <span class="label label-warning" style="font-size:1em">'+_update.configuration.version+'</span>';
+        tr += _update.configuration.version ;
     }
-    tr += '</td>';
-    tr += '<td style="width:135px;"><span class="updateAttr label label-primary" data-l1key="localVersion" style="font-size:1em;cursor:default;" title="{{Dernière version : }}'+_update.remoteVersion+'"></span></td>';
-    tr += '<td style="width:180px;cursor:default;">';
+    tr +='</h4>';
+    tr += '<span data-toggle="tooltip" title="" class="updateAttr badge ' + bgClass +' pull-right" data-original-title="" data-l1key="status" style="text-transform: uppercase;"></span>';
+    tr += '</div>';
+    tr += '<div class="box-body">';
+    tr += '<span class="updateAttr" data-l1key="id" style="display:none;"></span><span class="updateAttr" data-l1key="source"></span> / <span class="updateAttr" data-l1key="type"></span> : <span class="updateAttr label label-info" data-l1key="name" style="font-size:1em;"></span>';
+    tr += '<p>'+_update.remoteVersion+'</p>';
     if (_update.type != 'core') {
-        tr += '<input type="checkbox" class="updateAttr" data-l1key="configuration" data-l2key="doNotUpdate"><span style="font-size:1em;">{{Ne pas mettre à jour}}</span>';
+        tr += '<input type="checkbox" class="updateAttr" data-l1key="configuration" data-l2key="doNotUpdate"><span style="font-size:1em;">{{Ne pas mettre à jour}}</span></br>';
     }
-    tr += '</td>';
-    tr += '<td>';
+    tr += '</div>';
+    tr += '<div class="box-footer clearfix text-center">';
+    tr += '  <div class="btn-group">';
+
     if (_update.type != 'core') {
         if (_update.status == 'update') {
-            tr += '<a class="btn btn-info btn-xs update" style="margin-bottom : 5px;" title="{{Mettre à jour}}"><i class="fas fa-refresh"></i> {{Mettre à jour}}</a> ';
+            tr += '<a class="btn btn-info btn-xs update" title="{{Mettre à jour}}"><i class="fas fa-refresh"></i> {{Mettre à jour}}</a> ';
         }else if (_update.type != 'core') {
-            tr += '<a class="btn btn-info btn-xs update" style="margin-bottom : 5px;" title="{{Re-installer}}"><i class="fas fa-refresh"></i> {{Reinstaller}}</a> ';
+            tr += '<a class="btn  btn-default btn-xs update" title="{{Re-installer}}"><i class="fas fa-refresh"></i> {{Reinstaller}}</a> ';
         }
     }
     if (_update.type != 'core') {
         if (isset(_update.plugin) && isset(_update.plugin.changelog) && _update.plugin.changelog != '') {
-            tr += '<a class="btn btn-default btn-xs cursor" target="_blank" href="'+_update.plugin.changelog+'" style="margin-bottom : 5px;"><i class="fas fa-book"></i> {{Changelog}}</a>';
+            tr += '<a class="btn btn-default btn-xs cursor" target="_blank" href="'+_update.plugin.changelog+'"><i class="fas fa-book"></i> {{Changelog}}</a>';
         }
     }else{
-        tr += '<a class="btn btn-default btn-xs" href="https://nextdom.github.io/core/fr_FR/changelog" target="_blank" style="margin-bottom : 5px;"><i class="fas fa-book"></i> {{Changelog}}</a>';
+        tr += '<a class="btn btn-default btn-xs" href="https://nextdom.github.io/core/fr_FR/changelog" target="_blank"><i class="fas fa-book"></i> {{Changelog}}</a>';
     }
-    tr += '<a class="btn btn-info btn-xs pull-right checkUpdate" style="margin-bottom : 5px;" ><i class="fas fa-check"></i> {{Vérifier}}</a>';
+    tr += '<a class="btn btn-info btn-xs checkUpdate" ><i class="fas fa-check"></i> {{Vérifier}}</a>';
     if (_update.type != 'core') {
-        tr += '<a class="btn btn-danger btn-xs pull-right remove" style="margin-bottom : 5px;" ><i class="far fa-trash-alt"></i> {{Supprimer}}</a>';
+        tr += '<a class="btn btn-danger btn-xs remove" ><i class="far fa-trash-alt"></i> {{Supprimer}}</a>';
     }
-    tr += '</td>';
-    tr += '</tr>';
+    tr += '</div>';
+    tr += '</div>';
+    tr += '</div>';
+
+
 
     if(_update.type == 'core' || _update.type == 'plugin'){
-        $('#table_update').append(tr);
-        $('#table_update tbody tr:last').setValues(_update, '.updateAttr');
+        $('#listPlugin').append(tr);
+        $('#listPlugin .box:last').setValues(_update, '.updateAttr');
     }else{
-        $('#table_updateOther').append(tr);
-        $('#table_updateOther tbody tr:last').setValues(_update, '.updateAttr');
+        $('#listOther').append(tr);
+        $('#listOther .box:last').setValues(_update, '.updateAttr');
     }
 }
 

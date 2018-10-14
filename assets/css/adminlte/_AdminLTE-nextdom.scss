@@ -747,10 +747,10 @@ input[type="checkbox"] {
   height: 170px;
 }
 
-/* Themes tabs */
-/*
-#themestab .list-unstyled {
-  margin-left: -15px;
-  margin-right: -15px;
+#div_Update-view .box .box-header {
+  min-height: 70px;
 }
-*/
+
+#div_Update-view .box .box-body {
+  min-height: 110px;
+}
