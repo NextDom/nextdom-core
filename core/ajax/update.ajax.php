@@ -43,6 +43,7 @@ try {
                     $plugin = plugin::byId($update->getLogicalId());
                     if (is_object($plugin)) {
                         $infos['plugin'] = array();
+                        $infos['icon'] = $plugin->getPathImgIcon();
                     }
                 } catch (Exception $e) {
 
