@@ -14,62 +14,78 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
- jwerty.key('ctrl+s', function (e) {
+jwerty.key('ctrl+s', function (e) {
     e.preventDefault();
     $("#bt_saveMigration").click();
 });
 
-$("#bt_saveMigration").on('click', function (event) {
-   $.hideAlert();
-   nextdom.config.save({
-       configuration: $('#migration').getValues('.configKey')[0],
-       error: function (error) {
-           notify("Erreur", error.message, 'error');
-       },
-       success: function () {
-           nextdom.config.load({
-               configuration: $('#migration').getValues('.configKey')[0],
-               plugin: 'core',
-               error: function (error) {
-                   notify("Erreur", error.message, 'error');
-               },
-               success: function (data) {
-                   $('#migration').setValues(data, '.configKey');
-                   modifyWithoutSave = false;
-                   notify("Info", '{{Sauvegarde réussie}}', 'success');
-                   window.location.reload();
-               }
-           });
-       }
-   });
+$("#md_migrationInfo").dialog({
+    closeText: '',
+    autoOpen: false,
+    modal: true,
+    height: 600,
+    width: 900,
+    open: function () {
+        $("body").css({overflow: 'hidden'});
+    },
+    beforeClose: function (event, ui) {
+        $("body").css({overflow: 'inherit'});
+    }
 });
 
- $('#pre_migrationInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
+$("#bt_saveMigration").on('click', function (event) {
+    $.hideAlert();
+    nextdom.config.save({
+        configuration: $('#migration').getValues('.configKey')[0],
+        error: function (error) {
+            notify("Erreur", error.message, 'error');
+        },
+        success: function () {
+            nextdom.config.load({
+                configuration: $('#migration').getValues('.configKey')[0],
+                plugin: 'core',
+                error: function (error) {
+                    notify("Erreur", error.message, 'error');
+                },
+                success: function (data) {
+                    $('#migration').setValues(data, '.configKey');
+                    modifyWithoutSave = false;
+                    notify("Info", '{{Sauvegarde réussie}}', 'success');
+                    window.location.reload();
+                }
+            });
+        }
+    });
+});
+
+$('#pre_migrationInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
 
 $("#bt_migrateNextDom").on('click', function (event) {
-   var el = $(this);
-   bootbox.confirm('{{Etes-vous sûr de vouloir migrer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackupforMigration option:selected').text() + '</b> ? {{Une fois lancée, cette opération ne peut être annulée}}', function (result) {
-       if (result) {
-           el.find('.fa-refresh').show();
-           el.find('.fa-file').hide();
-           nextdom.backup.migrate({
-               backup: $('#sel_restoreBackupforMigration').value(),
-               error: function (error) {
-                   notify("Erreur", error.message, 'error');
-               },
-               success: function () {
-                   getNextDomLog(1, 'migration');
-               }
-           });
-       }
-   });
+    $("#md_migrationInfo").dialog('open');
+    var el = $(this);
+    bootbox.confirm('{{Etes-vous sûr de vouloir migrer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackupforMigration option:selected').text() + '</b> ? {{Une fois lancée, cette opération ne peut être annulée}}', function (result) {
+        if (result) {
+            el.find('.fa-refresh').show();
+            el.find('.fa-file').hide();
+            nextdom.backup.migrate({
+                backup: $('#sel_restoreBackupforMigration').value(),
+                error: function (error) {
+                    notify("Erreur", error.message, 'error');
+                },
+                success: function () {
+
+                    getNextDomLog(1, 'migration');
+                }
+            });
+        }
+    });
 });
 
- $('#bt_downloadBackupforMigration').on('click', function () {
+$('#bt_downloadBackupforMigration').on('click', function () {
     window.open('core/php/downloadFile.php?pathfile=backup/' + $('#sel_restoreBackupforMigration option:selected').text(), "_blank", null);
 });
 
- $('#bt_uploadBackupforMigration').fileupload({
+$('#bt_uploadBackupforMigration').fileupload({
     dataType: 'json',
     replaceFileInput: false,
     done: function (e, data) {
@@ -83,8 +99,8 @@ $("#bt_migrateNextDom").on('click', function (event) {
 });
 
 
- $.showLoading();
- nextdom.config.load({
+$.showLoading();
+nextdom.config.load({
     configuration: $('#migration').getValues('.configKey')[0],
     error: function (error) {
         notify("Erreur", error.message, 'error');
@@ -94,15 +110,15 @@ $("#bt_migrateNextDom").on('click', function (event) {
         modifyWithoutSave = false;
     }
 });
- updateListBackup();
+updateListBackup();
 
- $('#migration').delegate('.configKey', 'change', function () {
+$('#migration').delegate('.configKey', 'change', function () {
     modifyWithoutSave = true;
 });
 
- /********************Log************************/
+/********************Log************************/
 
- function getNextDomLog(_autoUpdate, _log) {
+function getNextDomLog(_autoUpdate, _log) {
     $.ajax({
         type: 'POST',
         url: 'core/ajax/log.ajax.php',

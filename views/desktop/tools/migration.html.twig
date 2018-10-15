@@ -1,5 +1,6 @@
-<div class=" container-split col-lg-7 col-md-6 col-sm-12 col-xs-12">
-    <div class="box" id="migration">
+
+<div id="migration">
+    <div class="box">
         <!-- Header bar -->
         <div class="box-header with-border">
             <h3 class="box-title"><i class="fas fa-rocket">&nbsp;&nbsp;</i>{{ 'Bienvenue sur la page de migration de NextDom' }}</h3>
@@ -12,38 +13,36 @@
         <div class="box-body">
             <form class="form-horizontal">
                 <p class="alert alert-info">{{ 'La fonction migration permet d\'utiliser une sauvegarde Jeedom pour migrer vers Nextdom' }}</br>
-                {{ 'Il suffit de saisir le chemin d\'accès vers les sauvegardes (si les sauvegardes sont deportées sur un NAS) ou alors utiliser l\'outil d\'upload ci-dessous.' }}</p>
-                <fieldset>
-                    <!-- Sauvegardes Section -->
-                    <legend class="legend-title legend-section">{{ 'Sauvegardes locales' }}</legend>
-                    <div class="form-group">
-                        <label class="col-sm-4 col-xs-12 control-label">{{ 'Emplacement des sauvegardes' }}</label>
-                        <div class="col-sm-4 col-xs-12">
-                            <input type="text" class="configKey form-control" data-l1key="backup::path"/>
-                        </div>
+                    {{ 'Il suffit de saisir le chemin d\'accès vers les sauvegardes (si les sauvegardes sont deportées sur un NAS) ou alors utiliser l\'outil d\'upload ci-dessous.' }}</p>
+                <!-- Sauvegardes Section -->
+                <legend class="legend-title legend-section">{{ 'Sauvegardes locales' }}</legend>
+                <div class="form-group">
+                    <label class="col-sm-4 col-xs-12 control-label">{{ 'Emplacement des sauvegardes' }}</label>
+                    <div class="col-sm-4 col-xs-12">
+                        <input type="text" class="configKey form-control" data-l1key="backup::path"/>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 col-xs-12 control-label">{{ 'Sauvegardes disponibles' }}</label>
-                        <div class="col-sm-6 col-xs-12">
-                            <select class="form-control" id="sel_restoreBackupforMigration"> </select>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 col-xs-12 control-label">{{ 'Sauvegardes disponibles' }}</label>
+                    <div class="col-sm-6 col-xs-12">
+                        <select class="form-control" id="sel_restoreBackupforMigration"> </select>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 col-xs-12 control-label">{{ 'Migrer la sauvegarde' }}</label>
-                        <div class="col-sm-4 col-xs-12">
-                            <a class="btn btn-warning" id="bt_migrateNextDom"><i class="fas fa-refresh fa-spin" style="display : none;"></i><i class="fas fa-file"></i>&nbsp;&nbsp;{{ 'Lancer' }}</a>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 col-xs-12 control-label">{{ 'Migrer la sauvegarde' }}</label>
+                    <div class="col-sm-4 col-xs-12">
+                        <a class="btn btn-warning" id="bt_migrateNextDom"><i class="fas fa-refresh fa-spin" style="display : none;"></i><i class="fas fa-file"></i>&nbsp;&nbsp;{{ 'Lancer' }}</a>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 col-xs-12 control-label">{{ 'Envoyer une sauvegarde' }}</label>
-                        <div class="col-sm-8 col-xs-12">
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 col-xs-12 control-label">{{ 'Envoyer une sauvegarde' }}</label>
+                    <div class="col-sm-8 col-xs-12">
                         <span class="btn btn-default btn-file">
                             <i class="fa fa-cloud-upload">&nbsp;&nbsp;</i>{{ 'Selectionner' }}
                             <input id="bt_uploadBackupforMigration" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token={{ migrationAjaxToken }}">
                         </span>
-                        </div>
                     </div>
-                </fieldset>
+                </div>
             </form>
         </div>
 
@@ -53,26 +52,8 @@
             <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
         </div>
     </div>
-</div>
 
-<div class="container-split col-lg-5 col-md-6 col-sm-12 col-xs-12">
-    <div class="box" id="migration">
-        <!-- Header bar -->
-        <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-info-circle">&nbsp;&nbsp;</i>{{ 'Informations' }}</h3>
-            <div class="box-tools pull-right">
-                <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fas fa-times"></i></a>
-            </div>
-        </div>
-
-        <!-- Page content -->
-        <div class="box-body">
-            <pre id="pre_migrationInfo" style="overflow: scroll;"></pre>
-        </div>
-
-        <!-- Footer bar -->
-        <div class="box-footer clearfix">
-            <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
-        </div>
+    <div id="md_migrationInfo">
+        <pre id="pre_migrationInfo" style="overflow: scroll;"></pre>
     </div>
 </div>
