@@ -1,5 +1,5 @@
-<div class=" container-split col-lg-7 col-md-6 col-sm-12 col-xs-12">
-    <div class="box" id="backup">
+<div id="backup">
+    <div class="box" >
         <!-- Header bar -->
         <div class="box-header with-border ">
             <h3 class="box-title"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegardes / Restaurations' }}</h3>
@@ -12,7 +12,7 @@
         <div class="box-body">
             <form class="form-horizontal">
                 <p class="alert alert-info">{{ 'Cette fonction permet de compacter dans une archive tous les élements de votre Nextdom.' }}</br>
-                {{ 'Seront sauvegardé les paramètres, dashboard, vues, designs, plugins, widgets etc...' }}</p>
+                    {{ 'Seront sauvegardé les paramètres, dashboard, vues, designs, plugins, widgets etc...' }}</p>
                 <fieldset>
                     <!-- Sauvegardes Section -->
                     <div>
@@ -129,26 +129,9 @@
             <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
         </div>
     </div>
-</div>
 
-<div class="container-split col-lg-5 col-md-6 col-sm-12 col-xs-12">
-    <div class="box" id="backup">
-        <!-- Header bar -->
-        <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-info-circle">&nbsp;&nbsp;</i>{{ 'Informations' }}</h3>
-            <div class="box-tools pull-right">
-                <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fas fa-times"></i></a>
-            </div>
-        </div>
-
-        <!-- Page content -->
-        <div class="box-body">
-            <pre id="pre_backupInfo" style="overflow: scroll;"></pre>
-        </div>
-
-        <!-- Footer bar -->
-        <div class="box-footer clearfix">
-            <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
-        </div>
+    <div id="md_backupInfo">
+        <pre id="pre_backupInfo" style="overflow: scroll;"></pre>
     </div>
+
 </div>
