@@ -19,6 +19,20 @@
     $("#bt_saveBackup").click();
 });
 
+$("#md_backupInfo").dialog({
+    closeText: '',
+    autoOpen: false,
+    modal: true,
+    height: 600,
+    width: 900,
+    open: function () {
+        $("body").css({overflow: 'hidden'});
+    },
+    beforeClose: function (event, ui) {
+        $("body").css({overflow: 'inherit'});
+    }
+});
+
  $('#pre_backupInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
 
  $("#bt_saveBackup").on('click', function (event) {
@@ -51,6 +65,8 @@
         if (result) {
             $.hideAlert();
             el.find('.fa-refresh').show();
+            $('#md_backupInfo').dialog({title: "{{Avancement de la sauvegarde}}"});
+            $("#md_backupInfo").dialog('open');
             nextdom.backup.backup({
                 error: function (error) {
                     notify("Erreur", error.message, 'error');
@@ -141,6 +157,8 @@
     bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec la sauvegarde Cloud}} <b>' + $('#sel_restoreCloudBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée}}', function (result) {
         if (result) {
             el.find('.fa-refresh').show();
+            $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
+            $("#md_backupInfo").dialog('open');
             nextdom.backup.restoreCloud({
                 backup: el.closest('.repo').find('.sel_restoreCloudBackup').value(),
                 repo: el.attr('data-repo'),

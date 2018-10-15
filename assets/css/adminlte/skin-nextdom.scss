@@ -228,10 +228,12 @@ $nextdom_gray_title: $whitegray;
 }
 .sidebar-form .btn {
   color: $darkgray;
-  border-top-left-radius: 0;
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
-  border-bottom-left-radius: 0;
+  border:{
+  top-left-radius: 0;
+    top-right-radius: 2px;
+    bottom-right-radius: 2px;  
+    bottom-left-radius: 0;
+  }
 }
 .main-header > .logo {
   background-color: $nextdom_accent;
@@ -246,7 +248,7 @@ $nextdom_gray_title: $whitegray;
 .ui-dialog .ui-dialog-title{
   color: $nextdom_polar_accent;
 }
-.ui-dialog .ui-dialog-titlebar{
+.ui-dialog .ui-dialog-titlebamd_modalr{
   background-color: $nextdom_accent;
   padding: 0px 15px;
 }

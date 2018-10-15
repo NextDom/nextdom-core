@@ -1,3 +1,4 @@
+
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -13,24 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
-
-printUpdate();
-
-$("#md_specifyUpdate").dialog({
-    closeText: '',
-    autoOpen: false,
-    modal: true,
-    height: 600,
-    width: 600,
-    open: function () {
-        $("body").css({overflow: 'hidden'});
-    },
-    beforeClose: function (event, ui) {
-        $("body").css({overflow: 'inherit'});
-    }
+jwerty.key('ctrl+s', function (e) {
+    e.preventDefault();
+    $("#bt_saveMigration").click();
 });
 
-$("#md_updateInfo").dialog({
+$("#md_migrationInfo").dialog({
     closeText: '',
     autoOpen: false,
     modal: true,
@@ -44,103 +33,91 @@ $("#md_updateInfo").dialog({
     }
 });
 
-$('#bt_updateNextDom').off('click').on('click', function () {
-    $('#md_specifyUpdate').dialog({title: "{{Options}}"});
-    $("#md_specifyUpdate").dialog('open');
+$("#bt_saveMigration").on('click', function (event) {
+    $.hideAlert();
+    nextdom.config.save({
+        configuration: $('#migration').getValues('.configKey')[0],
+        error: function (error) {
+            notify("Erreur", error.message, 'error');
+        },
+        success: function () {
+            nextdom.config.load({
+                configuration: $('#migration').getValues('.configKey')[0],
+                plugin: 'core',
+                error: function (error) {
+                    notify("Erreur", error.message, 'error');
+                },
+                success: function (data) {
+                    $('#migration').setValues(data, '.configKey');
+                    modifyWithoutSave = false;
+                    notify("Info", '{{Sauvegarde réussie}}', 'success');
+                    window.location.reload();
+                }
+            });
+        }
+    });
 });
 
+$('#pre_migrationInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
 
-$('.updateOption[data-l1key=force]').off('click').on('click',function(){
-    if($(this).value() == 1){
-        $('.updateOption[data-l1key="backup::before"]').value(0);
-        $('.updateOption[data-l1key="backup::before"]').attr('disabled','disabled');
+$("#bt_migrateNextDom").on('click', function (event) {
+    var el = $(this);
+    bootbox.confirm('{{Etes-vous sûr de vouloir migrer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackupforMigration option:selected').text() + '</b> ? {{Une fois lancée, cette opération ne peut être annulée}}', function (result) {
+        if (result) {
+            el.find('.fa-refresh').show();
+            el.find('.fa-file').hide();
+            $('#md_migrationInfo').dialog({title: "{{Avancement de la migration}}"});
+            $("#md_migrationInfo").dialog('open');
+            nextdom.backup.migrate({
+                backup: $('#sel_restoreBackupforMigration').value(),
+                error: function (error) {
+                    notify("Erreur", error.message, 'error');
+                },
+                success: function () {
 
-    }else{
-        $('.updateOption[data-l1key="backup::before"]').attr('disabled',false);
+                    getNextDomLog(1, 'migration');
+                }
+            });
+        }
+    });
+});
+
+$('#bt_downloadBackupforMigration').on('click', function () {
+    window.open('core/php/downloadFile.php?pathfile=backup/' + $('#sel_restoreBackupforMigration option:selected').text(), "_blank", null);
+});
+
+$('#bt_uploadBackupforMigration').fileupload({
+    dataType: 'json',
+    replaceFileInput: false,
+    done: function (e, data) {
+        if (data.result.state != 'ok') {
+            notify("Erreur", data.result.result, 'error');
+            return;
+        }
+        updateListBackup();
+        notify("Info", '{{Fichier(s) ajouté(s) avec succès}}', 'success');
     }
 });
 
 
-$('#bt_doUpdate').off('click').on('click', function () {
-    $("#md_specifyUpdate").dialog('close');
-    $('#md_updateInfo').dialog({title: "{{Avancement des mises a jour}}"});
-    $("#md_updateInfo").dialog('open');
-    var options = $('#md_specifyUpdate').getValues('.updateOption')[0];
-    $.hideAlert();
-    nextdom.update.doAll({
-        options: options,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function () {
-            getNextDomLog(1, 'update');
-        }
-    });
+$.showLoading();
+nextdom.config.load({
+    configuration: $('#migration').getValues('.configKey')[0],
+    error: function (error) {
+        notify("Erreur", error.message, 'error');
+    },
+    success: function (data) {
+        $('#migration').setValues(data, '.configKey');
+        modifyWithoutSave = false;
+    }
+});
+updateListBackup();
+
+$('#migration').delegate('.configKey', 'change', function () {
+    modifyWithoutSave = true;
 });
 
-$('#bt_checkAllUpdate').off('click').on('click', function () {
-    $.hideAlert();
-    nextdom.update.checkAll({
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function () {
-            printUpdate();
-        }
-    });
-});
-
-
-$('#listPlugin,#listOther').delegate('.update', 'click', function () {
-    var id = $(this).closest('.box').attr('data-id');
-    bootbox.confirm('{{Etes vous sur de vouloir mettre à jour cet objet ?}}', function (result) {
-        if (result) {
-            $.hideAlert();
-            nextdom.update.do({
-                id: id,
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function () {
-                    getNextDomLog(1, 'update');
-                }
-            });
-        }
-    });
-});
-
-$('#listPlugin,#listOther').delegate('.remove', 'click', function () {
-    var id = $(this).closest('.box').attr('data-id');
-    bootbox.confirm('{{Etes vous sur de vouloir supprimer cet objet ?}}', function (result) {
-        if (result) {
-            $.hideAlert();
-            nextdom.update.remove({
-                id: id,
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function () {
-                    printUpdate();
-                }
-            });
-        }
-    });
-});
-
-$('#listPlugin,#listOther').delegate('.checkUpdate', 'click', function () {
-    var id = $(this).closest('.box').attr('data-id');
-    $.hideAlert();
-    nextdom.update.check({
-        id: id,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function () {
-            printUpdate();
-        }
-    });
-
-});
+/********************Log************************/
 
 function getNextDomLog(_autoUpdate, _log) {
     $.ajax({
@@ -169,19 +146,22 @@ function getNextDomLog(_autoUpdate, _log) {
                 for (var i in data.result.reverse()) {
                     log += data.result[i]+"\n";
                     if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' SUCCESS]') != -1){
-                        printUpdate();
-                        notify("Info", '{{L\'opération est réussie. Merci de faire F5 pour avoir les dernières nouveautés}}', 'success');
+                        notify("Info", '{{L\'opération est réussie}}', 'success');
+                        if(_log == 'migration'){
+                            nextdom.user.refresh();
+                        }
                         _autoUpdate = 0;
                     }
                     if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' ERROR]') != -1){
-                        printUpdate();
                         notify("Erreur", '{{L\'opération a échoué}}', 'error');
+                        if(_log == 'migration'){
+                            nextdom.user.refresh();
+                        }
                         _autoUpdate = 0;
                     }
                 }
             }
-            $('#pre_' + _log + 'Info').text(log);
-            $('#pre_updateInfo').parent().scrollTop($('#pre_updateInfo').parent().height() + 200000);
+            $('#pre_migrationInfo').text(log);
             if (init(_autoUpdate, 0) == 1) {
                 setTimeout(function () {
                     getNextDomLog(_autoUpdate, _log)
@@ -189,114 +169,25 @@ function getNextDomLog(_autoUpdate, _log) {
             } else {
                 $('#bt_' + _log + 'NextDom .fa-refresh').hide();
                 $('.bt_' + _log + 'NextDom .fa-refresh').hide();
+                $('#bt_' + _log + 'NextDom .fa-file').show();
+                $('.bt_' + _log + 'NextDom .fa-file').show();
+                updateListBackup();
             }
         }
     });
 }
 
-function printUpdate() {
-
-    nextdom.update.get({
+function updateListBackup() {
+    nextdom.backup.list({
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },
         success: function (data) {
-            $('#listPlugin').empty();
-            $('#listOther').empty();
+            var options = '';
             for (var i in data) {
-                addUpdate(data[i]);
+                options += '<option value="' + i + '">' + data[i] + '</option>';
             }
-            $('#listPlugin').trigger('update');
-            $('#listOther').trigger('update');
-        }
-    });
-
-    nextdom.config.load({
-        configuration: {"update::lastCheck":0,"update::lastDateCore": 0},
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (data) {
-            $('#span_lastUpdateCheck').value(data['update::lastCheck']);
-            $('#span_lastUpdateCheck').attr('title','{{Dernière mise à jour du core : }}'+data['update::lastDateCore']);
+            $('#sel_restoreBackupforMigration').html(options);
         }
     });
 }
-
-function addUpdate(_update) {
-    var boxClass = 'box-success';
-    var bgClass = 'bg-green';
-
-    if(init(_update.status) == ''){
-        _update.status = 'ok';
-    }
-    if (_update.status == 'update'){
-        boxClass = 'box-warning';
-        bgClass = 'bg-yellow';
-    }
-
-    var tr = '<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">';
-    tr += '<div class="box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + '" data-type="' + init(_update.type) + '">';
-    tr += '<div class="box-header">';
-    tr += ' <h4 class="box-title"><img style="height:50px" src="' + init(_update.icon) + '"/> <b>' + init(_update.name)+'</b> -  ';
-    if(_update.configuration && _update.configuration.version){
-        tr += _update.configuration.version ;
-    }
-    tr +='</h4>';
-    tr += '<span data-toggle="tooltip" title="" class="updateAttr badge ' + bgClass +' pull-right" data-original-title="" data-l1key="status" style="text-transform: uppercase;"></span>';
-    tr += '</div>';
-    tr += '<div class="box-body">';
-    tr += '<span class="updateAttr" data-l1key="id" style="display:none;"></span><span class="updateAttr" data-l1key="source"></span> / <span class="updateAttr" data-l1key="type"></span> : <span class="updateAttr label label-info" data-l1key="name" style="font-size:1em;"></span>';
-    tr += '<p>'+_update.remoteVersion+'</p>';
-    if (_update.type != 'core') {
-        tr += '<input type="checkbox" class="updateAttr" data-l1key="configuration" data-l2key="doNotUpdate"><span style="font-size:1em;">{{Ne pas mettre à jour}}</span></br>';
-    }
-    tr += '</div>';
-    tr += '<div class="box-footer clearfix text-center">';
-    tr += '  <div class="btn-group">';
-
-    if (_update.type != 'core') {
-        if (_update.status == 'update') {
-            tr += '<a class="btn btn-info btn-xs update" title="{{Mettre à jour}}"><i class="fas fa-refresh"></i> {{Mettre à jour}}</a> ';
-        }else if (_update.type != 'core') {
-            tr += '<a class="btn  btn-default btn-xs update" title="{{Re-installer}}"><i class="fas fa-refresh"></i> {{Reinstaller}}</a> ';
-        }
-    }
-    if (_update.type != 'core') {
-        if (isset(_update.plugin) && isset(_update.plugin.changelog) && _update.plugin.changelog != '') {
-            tr += '<a class="btn btn-default btn-xs cursor" target="_blank" href="'+_update.plugin.changelog+'"><i class="fas fa-book"></i> {{Changelog}}</a>';
-        }
-    }else{
-        tr += '<a class="btn btn-default btn-xs" href="https://nextdom.github.io/core/fr_FR/changelog" target="_blank"><i class="fas fa-book"></i> {{Changelog}}</a>';
-    }
-    tr += '<a class="btn btn-info btn-xs checkUpdate" ><i class="fas fa-check"></i> {{Vérifier}}</a>';
-    if (_update.type != 'core') {
-        tr += '<a class="btn btn-danger btn-xs remove" ><i class="far fa-trash-alt"></i> {{Supprimer}}</a>';
-    }
-    tr += '</div>';
-    tr += '</div>';
-    tr += '</div>';
-
-
-
-    if(_update.type == 'core' || _update.type == 'plugin'){
-        $('#listPlugin').append(tr);
-        $('#listPlugin .box:last').setValues(_update, '.updateAttr');
-    }else{
-        $('#listOther').append(tr);
-        $('#listOther .box:last').setValues(_update, '.updateAttr');
-    }
-}
-
-$('#bt_saveUpdate').on('click',function(){
-    nextdom.update.saves({
-        updates : $('#table_update tbody tr').getValues('.updateAttr'),
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (data) {
-            notify("Info", '{{Sauvegarde effectuée}}', 'success');
-            printUpdate();
-        }
-    });
-});
