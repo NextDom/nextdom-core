@@ -228,10 +228,12 @@ $nextdom_gray_title: $whitegray;
 }
 .sidebar-form .btn {
   color: $darkgray;
-  border-top-left-radius: 0;
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
-  border-bottom-left-radius: 0;
+  border:{
+  top-left-radius: 0;
+    top-right-radius: 2px;
+    bottom-right-radius: 2px;  
+    bottom-left-radius: 0;
+  }
 }
 .main-header > .logo {
   background-color: $nextdom_accent;
