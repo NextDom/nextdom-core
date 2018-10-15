@@ -24,6 +24,11 @@ jwerty.key('ctrl+s', function (e) {
    $("#bt_savecustom").click();
 });
 
+jwerty.key('esc', function (e) {
+    e.preventDefault();
+    $("#back").click();
+});
+
 printConvertColor();
 $.showLoading();
 nextdom.config.load({

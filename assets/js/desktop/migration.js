@@ -19,6 +19,11 @@
     $("#bt_saveMigration").click();
 });
 
+jwerty.key('esc', function (e) {
+    e.preventDefault();
+    $("#back").click();
+});
+
 $("#bt_saveMigration").on('click', function (event) {
    $.hideAlert();
    nextdom.config.save({

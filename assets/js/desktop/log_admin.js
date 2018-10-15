@@ -3,6 +3,11 @@ jwerty.key('ctrl+s', function (e) {
     $("#bt_savelog_admin").click();
 });
 
+jwerty.key('esc', function (e) {
+    e.preventDefault();
+    $("#back").click();
+});
+
  $("#bt_savelog_admin").on('click', function (event) {
     $.hideAlert();
     var config = $('#config').getValues('.configKey')[0];
