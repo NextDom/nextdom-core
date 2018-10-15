@@ -1,3 +1,8 @@
+jwerty.key('esc', function (e) {
+    e.preventDefault();
+    $("#back").click();
+});
+
 nextdom.config.load({
     configuration: $('#osdb').getValues('.configKey:not(.noSet)')[0],
     error: function (error) {

@@ -3,6 +3,11 @@ jwerty.key('ctrl+s', function (e) {
     $("#bt_savecache").click();
 });
 
+jwerty.key('esc', function (e) {
+    e.preventDefault();
+    $("#back").click();
+});
+
  $("#bt_savecache").on('click', function (event) {
     $.hideAlert();
     nextdom.config.save({

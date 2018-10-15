@@ -3,6 +3,11 @@ jwerty.key('ctrl+s', function (e) {
     $("#bt_savesummary").click();
 });
 
+jwerty.key('esc', function (e) {
+    e.preventDefault();
+    $("#back").click();
+});
+
  $("#bt_savesummary").on('click', function (event) {
     $.hideAlert();
    saveObjectSummary();

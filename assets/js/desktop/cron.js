@@ -15,6 +15,10 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+jwerty.key('esc', function (e) {
+    e.preventDefault();
+    $("#back").click();
+});
 
  printCron();
 

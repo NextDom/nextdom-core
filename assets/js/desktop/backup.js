@@ -19,6 +19,11 @@
     $("#bt_saveBackup").click();
 });
 
+jwerty.key('esc', function (e) {
+    e.preventDefault();
+    $("#back").click();
+});
+
  $('#pre_backupInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
 
  $("#bt_saveBackup").on('click', function (event) {

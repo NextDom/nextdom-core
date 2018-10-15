@@ -3,6 +3,11 @@ jwerty.key('ctrl+s', function (e) {
     $("#bt_saveinteract_admin").click();
 });
 
+jwerty.key('esc', function (e) {
+    e.preventDefault();
+    $("#back").click();
+});
+
  $("#bt_saveinteract_admin").on('click', function (event) {
     $.hideAlert();
     nextdom.config.save({

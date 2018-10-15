@@ -13,6 +13,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
+jwerty.key('esc', function (e) {
+    e.preventDefault();
+    $("#back").click();
+});
 
 var url = document.location.toString();
 if (url.match('#')) {
