@@ -13,6 +13,31 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
+setTimeout(function(){
+    $('.listPlugin').packery();
+    $('#listOther').packery();
+},100);
+
+
+$('#in_searchPlugin').off('keyup').keyup(function () {
+    var search = $(this).value();
+    if(search == ''){
+        $('.box').show();
+        $('#listPlugin').packery();
+        $('#listOther').packery();
+        return;
+    }
+    $('.box').hide();
+    $('.box .box-title').each(function(){
+        var text = $(this).text().toLowerCase();
+        if(text.indexOf(search.toLowerCase()) >= 0){
+            $(this)
+            $(this).closest('.box').show();
+        }
+    });
+    $('#listPlugin').packery();
+    $('#listOther').packery();
+});
 
 printUpdate();
 
@@ -235,8 +260,8 @@ function addUpdate(_update) {
         bgClass = 'bg-yellow';
     }
 
-    var tr = '<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">';
-    tr += '<div class="box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + '" data-type="' + init(_update.type) + '">';
+    var tr = '<div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">';
+    tr += '<div class="box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + ' col-lg-4 col-md-6 col-sm-6 col-xs-12" data-type="' + init(_update.type) + '">';
     tr += '<div class="box-header">';
     tr += ' <h4 class="box-title"><img style="height:50px" src="' + init(_update.icon) + '"/> <b>' + init(_update.name)+'</b> -  ';
     if(_update.configuration && _update.configuration.version){
