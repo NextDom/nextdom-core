@@ -33,6 +33,9 @@ function gen_css {
 	sed -i 's/images\/ui-bg_glass_75_ffffff_1x400\.png/\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images\/ui-bg_glass_75_ffffff_1x400.png/g' public/css/nextdom.css
 	sed -i 's/images\/ui-icons_222222_256x240\.png/\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images\/ui-icons_222222_256x240.png/g' public/css/nextdom.css
 	sed -i 's/images\/ui-bg_flat_0_aaaaaa_40x100\.png/\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images\/ui-bg_flat_0_aaaaaa_40x100.png/g' public/css/nextdom.css
+	sed -i 's/[\"]32px\.png/"\/3rdparty\/jquery\.tree\/themes\/default\/32px.png/g' public/css/nextdom.css
+	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.css
+
 	sed -i 's/[\"]Roboto-Light\.ttf/"\/3rdparty\/roboto\/Roboto-Light\.ttf/g' public/css/nextdom.mob.css
 	sed -i 's/[\"]Roboto-LightItalic\.ttf/"\/3rdparty\/roboto\/Roboto-LightItalic\.ttf/g' public/css/nextdom.mob.css
 	sed -i 's/[\"]Roboto-Regular\.ttf/"\/3rdparty\/roboto\/Roboto-Regular\.ttf/g' public/css/nextdom.mob.css
@@ -42,6 +45,8 @@ function gen_css {
 	sed -i 's/images\/ui-bg_glass_75_ffffff_1x400\.png/\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images\/ui-bg_glass_75_ffffff_1x400.png/g' public/css/nextdom.mob.css
 	sed -i 's/images\/ui-icons_222222_256x240\.png/\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images\/ui-icons_222222_256x240.png/g' public/css/nextdom.mob.css
 	sed -i 's/images\/ui-bg_flat_0_aaaaaa_40x100\.png/\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images\/ui-bg_flat_0_aaaaaa_40x100.png/g' public/css/nextdom.mob.css
+	sed -i 's/[\"]32px\.png/\/3rdparty\/jquery\.tree\/themes\/default\/32.png/g' public/css/nextdom.mob.css
+	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.css
 }
 
 function gen_js {
