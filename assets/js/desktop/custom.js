@@ -75,10 +75,14 @@ $('a[data-toggle="tab"][href="#mobile"]').on('shown.bs.tab', function (e) {
 });
 
 function saveCustom() {
-    sendCustomData('desktop', 'js', editorDesktopJS.getValue());
-    sendCustomData('desktop', 'css', editorDesktopCSS.getValue());
-    sendCustomData('mobile', 'js', editorMobileJS.getValue());
-    sendCustomData('mobile', 'css', editorMobileCSS.getValue());
+    if (editorDesktopJS !== null) {
+        sendCustomData('desktop', 'js', editorDesktopJS.getValue());
+        sendCustomData('desktop', 'css', editorDesktopCSS.getValue());
+        if (editorMobileCSS !== null) {
+            sendCustomData('mobile', 'js', editorMobileJS.getValue());
+            sendCustomData('mobile', 'css', editorMobileCSS.getValue());
+        }
+    }
 }
 
 function sendCustomData(version, type, content) {
