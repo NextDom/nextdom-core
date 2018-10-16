@@ -410,7 +410,6 @@ class PrepareView
     private static function initCssPool(&$pageData, $configs)
     {
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
-        $pageData['CSS_POOL'][] = '/public/css/adminlte/skin-'.$configs['theme'].'.css';
         $pageData['CSS_POOL'][] = '/3rdparty/iziToast/css/iziToast.css';
         // Icônes
         $pageData['CSS_POOL'][] = '/3rdparty/font-awesome/css/font-awesome.min.css';
@@ -423,6 +422,7 @@ class PrepareView
         }
 
         if (!Status::isRescueMode()) {
+            $pageData['CSS_POOL'][] = '/public/css/adminlte/skin-'.$configs['theme'].'.css';
             if (!Status::isConnect()) {
                 if (isset($_SESSION['user']) && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
                     $highstockThemeFile = '/3rdparty/highstock/themes/' . $_SESSION['user']->getOptions('desktop_highcharts_theme') . '.js';
@@ -431,15 +431,17 @@ class PrepareView
                     }
                 }
             }
+            if ($configs['enableCustomCss'] == 1) {
+                if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.css')) {
+                    $pageData['CSS_POOL'][] = '/desktop/custom/custom.css';
+                }
+                if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.js')) {
+                    $pageData['JS_POOL'][] = '/desktop/custom/custom.js';
+                }
+            }
         }
-
-        if (!Status::isRescueMode() && $configs['enableCustomCss'] == 1) {
-            if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.css')) {
-                $pageData['CSS_POOL'][] = '/desktop/custom/custom.css';
-            }
-            if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.js')) {
-                $pageData['JS_POOL'][] = '/desktop/custom/custom.js';
-            }
+        else {
+            $pageData['CSS_POOL'][] = '/public/css/rescue.css';
         }
     }
 
