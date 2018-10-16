@@ -23,30 +23,16 @@ function gen_css {
 	# Remplacement des chemins
 	# TODO: A optimiser
 	# sed ne prend pas en charge le non-greey
-	sed -i 's/[\"]Roboto-Light\.ttf/"\/3rdparty\/roboto\/Roboto-Light\.ttf/g' public/css/nextdom.css
-	sed -i 's/[\"]Roboto-LightItalic\.ttf/"\/3rdparty\/roboto\/Roboto-LightItalic\.ttf/g' public/css/nextdom.css
-	sed -i 's/[\"]Roboto-Regular\.ttf/"\/3rdparty\/roboto\/Roboto-Regular\.ttf/g' public/css/nextdom.css
-	sed -i 's/[\"]Roboto-Italic\.ttf/"\/3rdparty\/roboto\/Roboto-Italic\.ttf/g' public/css/nextdom.css
-	sed -i 's/[\"]Roboto-Bold\.ttf/"\/3rdparty\/roboto\/Roboto-Bold\.ttf/g' public/css/nextdom.css
-	sed -i 's/[\"]Roboto-BoldItalic\.ttf/"\/3rdparty\/roboto\/Roboto-BoldItalic\.ttf/g' public/css/nextdom.css
-	sed -i 's/\.\.\/fonts\/glyphicons-halflings/\/3rdparty\/bootstrap\/fonts\/glyphicons-halflings/g' public/css/nextdom.css
-	sed -i 's/images\/ui-bg_glass_75_ffffff_1x400\.png/\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images\/ui-bg_glass_75_ffffff_1x400.png/g' public/css/nextdom.css
-	sed -i 's/images\/ui-icons_222222_256x240\.png/\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images\/ui-icons_222222_256x240.png/g' public/css/nextdom.css
-	sed -i 's/images\/ui-bg_flat_0_aaaaaa_40x100\.png/\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images\/ui-bg_flat_0_aaaaaa_40x100.png/g' public/css/nextdom.css
+	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-#g public/css/nextdom.css
+	sed -i s#\.\./fonts/glyphicons-#/3rdparty/bootstrap/fonts/glyphicons-#g public/css/nextdom.css
+	sed -i s#\"images/ui-#\"/3rdparty/jquery.ui/images/ui-#g public/css/nextdom.css
 	sed -i 's/[\"]32px\.png/"\/3rdparty\/jquery\.tree\/themes\/default\/32px.png/g' public/css/nextdom.css
 	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.css
 
-	sed -i 's/[\"]Roboto-Light\.ttf/"\/3rdparty\/roboto\/Roboto-Light\.ttf/g' public/css/nextdom.mob.css
-	sed -i 's/[\"]Roboto-LightItalic\.ttf/"\/3rdparty\/roboto\/Roboto-LightItalic\.ttf/g' public/css/nextdom.mob.css
-	sed -i 's/[\"]Roboto-Regular\.ttf/"\/3rdparty\/roboto\/Roboto-Regular\.ttf/g' public/css/nextdom.mob.css
-	sed -i 's/[\"]Roboto-Italic\.ttf/"\/3rdparty\/roboto\/Roboto-Italic\.ttf/g' public/css/nextdom.mob.css
-	sed -i 's/[\"]Roboto-Bold\.ttf/"\/3rdparty\/roboto\/Roboto-Bold\.ttf/g' public/css/nextdom.mob.css
-	sed -i 's/[\"]Roboto-BoldItalic\.ttf/"\/3rdparty\/roboto\/Roboto-BoldItalic\.ttf/g' public/css/nextdom.mob.css
-	sed -i 's/images\/ui-bg_glass_75_ffffff_1x400\.png/\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images\/ui-bg_glass_75_ffffff_1x400.png/g' public/css/nextdom.mob.css
-	sed -i 's/images\/ui-icons_222222_256x240\.png/\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images\/ui-icons_222222_256x240.png/g' public/css/nextdom.mob.css
-	sed -i 's/images\/ui-bg_flat_0_aaaaaa_40x100\.png/\/3rdparty\/jquery\.ui\/jquery-ui-bootstrap\/images\/ui-bg_flat_0_aaaaaa_40x100.png/g' public/css/nextdom.mob.css
+	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-# public/css/nextdom.mob.css
+	sed -i s#\"images/ui-#\"/3rdparty/jquery.ui/images/ui-#g public/css/nextdom.mob.css
 	sed -i 's/[\"]32px\.png/\/3rdparty\/jquery\.tree\/themes\/default\/32.png/g' public/css/nextdom.mob.css
-	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.css
+	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.mob.css
 }
 
 function gen_js {
