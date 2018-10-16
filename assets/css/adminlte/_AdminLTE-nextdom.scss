@@ -448,7 +448,6 @@ body {
     size: 100%;
     weight: 500;
   }
-  line-height: 3.2rem;
 }
 @media (max-width: 767px) {
   .label-unity-big {
@@ -734,19 +733,7 @@ input[type="checkbox"] {
 }
 
 /* Objets */
-.object-name {
-  font-size : 14px;
-  color:$gray;
-}
-.object-summary {
-  background-color: $gray;
-  font-size: 12px;
-  padding: 3px;
-  border-radius: 3px;
-}
-.object-card {
-  height: 170px;
-}
+
 
 #div_Update-view .box .box-header {
   min-height: 70px;

@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -15,7 +14,7 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
- if (getUrlVars('saveSuccessFull') == 1) {
+if (getUrlVars('saveSuccessFull') == 1) {
     notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
 }
 
@@ -24,12 +23,12 @@ if (getUrlVars('removeSuccessFull') == 1) {
 }
 
 $('#bt_graphObject').on('click', function () {
-  $('#md_modal').dialog({title: "{{Graphique des liens}}"});
-  $("#md_modal").load('index.php?v=d&modal=graph.link&filter_type=object&filter_id='+$('.objectAttr[data-l1key=id]').value()).dialog('open');
+    $('#md_modal').dialog({title: "{{Graphique des liens}}"});
+    $("#md_modal").load('index.php?v=d&modal=graph.link&filter_type=object&filter_id='+$('.objectAttr[data-l1key=id]').value()).dialog('open');
 });
 
 setTimeout(function(){
-  $('.objectListContainer').packery();
+    $('.objectListContainer').packery();
 },100);
 
 $('#bt_returnToThumbnailDisplay').on('click',function(){
@@ -48,35 +47,35 @@ $(".objectDisplayCard").on('click', function (event) {
 });
 
 $('#in_searchObject').keyup(function () {
-   var search = $(this).value();
-   if(search == ''){
-    $('.objectDisplayCard').show();
+    var search = $(this).value();
+    if(search == ''){
+        $('.objectDisplayCard').show();
+        $('.objectListContainer').packery();
+        return;
+    }
+    $('.objectDisplayCard').hide();
+    $('.objectDisplayCard .name').each(function(){
+        var text = $(this).text().toLowerCase();
+        if(text.indexOf(search.toLowerCase()) >= 0){
+            $(this)
+            $(this).closest('.objectDisplayCard').show();
+        }
+    });
     $('.objectListContainer').packery();
-    return;
-}
-$('.objectDisplayCard').hide();
-$('.objectDisplayCard .name').each(function(){
-    var text = $(this).text().toLowerCase();
-    if(text.indexOf(search.toLowerCase()) >= 0){
-      $(this)
-      $(this).closest('.objectDisplayCard').show();
-  }
-});
-$('.objectListContainer').packery();
 });
 
 
 
 $('#bt_removeBackgroundImage').off('click').on('click', function () {
-  nextdom.object.removeImage({
-    view: $('.objectAttr[data-l1key=id]').value(),
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function () {
-        notify("Info", '{{Image supprimée}}', 'success');
-    },
-});
+    nextdom.object.removeImage({
+        view: $('.objectAttr[data-l1key=id]').value(),
+        error: function (error) {
+            notify("Erreur", error.message, 'error');
+        },
+        success: function () {
+            notify("Info", '{{Image supprimée}}', 'success');
+        },
+    });
 });
 
 function loadObjectConfiguration(_id){
@@ -135,7 +134,6 @@ function loadObjectConfiguration(_id){
 
                 }
             }
-            modifyWithoutSave = false;
         }
     });
 }
@@ -196,12 +194,13 @@ $("#bt_saveObject").on('click', function (event) {
     return false;
 });
 
-$("#bt_removeObject").on('click', function (event) {
+$(".bt_removeObject").on('click', function (event) {
     $.hideAlert();
-    bootbox.confirm('{{Etes-vous sûr de vouloir supprimer l\'objet}} <span style="font-weight: bold ;">' + $('.objectDisplayCard.active .name').text() + '</span> ?', function (result) {
+    var object = $(this);
+    bootbox.confirm('{{Etes-vous sûr de vouloir supprimer l\'objet}} <span style="font-weight: bold ;">' + object.closest(".objectDisplayCard").attr("data-object_name") + '</span> ?', function (result) {
         if (result) {
             nextdom.object.remove({
-                id: $('.objectDisplayCard.active').attr('data-object_id'),
+                id: object.closest(".objectDisplayCard").attr("data-object_id"),
                 error: function (error) {
                     notify("Erreur", error.message, 'error');
                 },
@@ -228,7 +227,7 @@ if (is_numeric(getUrlVars('id'))) {
     } else {
         $('.objectDisplayCard:first').click();
     }
-} 
+}
 
 $('#div_pageContainer').delegate('.objectAttr', 'change', function () {
     modifyWithoutSave = true;
@@ -279,7 +278,9 @@ function addSummaryInfo(_el, _summary) {
     _el.find('.summary:last').setValues(_summary, '.summaryAttr');
 }
 
-$('.bt_showObjectSummary').off('click').on('click', function () {
-  $('#md_modal').dialog({title: "{{Résumé Objets}}"});
-  $("#md_modal").load('index.php?v=d&modal=object.summary').dialog('open');
+$('#bt_showObjectSummary').off('click').on('click', function () {
+    $('#md_modal').dialog({title: "{{Résumé Objets}}"});
+    $("#md_modal").load('index.php?v=d&modal=object.summary').dialog('open');
 });
+
+
