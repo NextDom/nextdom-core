@@ -80,6 +80,8 @@ sendVarToJS('planHeader', utils::o2a($planHeader));
 </div>
 
 <script>
+    $('.colorpick').colorpicker();
+
     $('.planHeaderAttr[data-l1key=configuration][data-l2key=icon]').on('dblclick',function(){
         $('.planHeaderAttr[data-l1key=configuration][data-l2key=icon]').value('');
     });
