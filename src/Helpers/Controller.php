@@ -1496,18 +1496,12 @@ $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
         }
         $pageContent['profilsUser'] = $_SESSION['user'];
         $pageContent['profilsSessionsList'] = listSession();
-        $pageContent['profilsDesktopThemes'] = [];
 
-        $lsCssThemes = ls(NEXTDOM_ROOT . '/public/themes/css/themes');
-        foreach ($lsCssThemes as $dir) {
-            if (is_dir(NEXTDOM_ROOT . '/public/themes/' . $dir . '/desktop')) {
-                $pageContent['profilsDesktopThemes'][] = trim($dir, '/');
-            }
-        }
+        $lsCssThemes = ls(NEXTDOM_ROOT . '/public/themes/');
         $pageContent['profilsMobileThemes'] = [];
         foreach ($lsCssThemes as $dir) {
             if (is_dir(NEXTDOM_ROOT . '/public/themes/' . $dir . '/mobile')) {
-                $pageContent['profilsDesktopThemes'][] = trim($dir, '/');
+                $pageContent['profilsMobileThemes'][] = trim($dir, '/');
             }
         }
         $pageContent['profilsAvatars'] = [];
