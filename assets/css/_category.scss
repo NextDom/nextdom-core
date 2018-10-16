@@ -1,3 +1,4 @@
+@charset "utf-8";
 /* PARTIE Haute (catégorie et Tags */
 /*The container that holds the dropdown items*/
 .mcs-container{
@@ -15,8 +16,7 @@
 .mcs-open,
 .mcs-item{
   box-sizing: border-box;
-  background: rgba(147,204,1,1);
-  color:#000;
+  background: #222d32;
   text-decoration: none !important;
   width:25%;
   float:left;
@@ -27,14 +27,18 @@
 
 }
 
+.mcs-item {
+  color: #000000;
+}
+
 .mcs-open{
-  border: 0;
   text-align: left;
   padding: 0 10px 0 20px;
   width:100%;
   margin-top:20px;
   margin-left: 5px;
-  border:1px solid rgba(147,220,1,1);
+  border:1px solid #222d32;
+  color: #FFFFFF;
 }
 
 .mcs-open.open{
@@ -46,22 +50,31 @@
 }
 
 .mcs-item.active{
-  background:rgba(147,204,1,1);
-  color:#222;
+  background: #222d32;
+  color:#FFFFFF;
   border:1px solid #222;
 }
 
 .mcs-item:hover,
-.mcs-open:hover{
-  background:rgba(147,204,1,1);
+.mcs-open:hover {
+  background: #222d32;
   cursor:pointer;
+}
+
+.mcs-item:not(.active):hover {
+  color: #FFFFFF;
+}
+
+.mcs-item.active:hover {
+  color: #000000;
+  background-color: #FFFFFF;
 }
 
 /*Hide Select Form Control*/
 .hidden{
   visibility: hidden;
-  height: 0px;
-  width:0px;
+  height: 0;
+  width:0;
   position:absolute;
 }
 
@@ -100,11 +113,4 @@
   -o-transform: scale(1) rotate(-3deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
   -ms-transform: scale(1) rotate(-3deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
   transform: scale(1) rotate(-3deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-}
-.mcs-item.active{
-  text-shadow: 0 0 0 #FFF;
-}
-.mcs-item.active:hover{
-  background:#FFF;
-  text-shadow: 0 0 0 #FFF;
 }
