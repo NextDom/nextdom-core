@@ -1,5 +1,6 @@
 @import "_buttons.scss";
-@import "_alerts.scss";
+@import "_alerts.scss";  
+@import "_scenario.scss";
 
 .default-cursor {
   cursor: default;
@@ -26,15 +27,15 @@
 #div_pageContainer {
   position: relative;
   overflow: hidden;
+  & .iconlist{
+    background-color : rgba(255,255,255,0);
+    padding : 10px;
+    border-radius: 2px;
+    margin : 10px;
+    cursor: pointer;
+  }
 }
 
-#div_pageContainer .iconlist{
-  background-color : rgba(255,255,255,0);
-  padding : 10px;
-  border-radius: 2px;
-  margin : 10px;
-  cursor: pointer;
-}
 
 #jqueryLoadingDiv .overlay {
   background-image: url(/3rdparty/jquery.utils/gritter.png);
@@ -48,28 +49,6 @@
   }
 }
 
-.displayScenario-overlay {
-  height: 100%;
-  position: absolute;
-  z-index: 9999;
-  right: -250px;
-  background-color: rgba(0,0,0,0.7);
-  overflow-x: hidden;
-  padding-top: 60px;
-  width: 250px;
-  float: left;
-}
-
-.displayScenario-overlay a:hover {
-  color: #f1f1f1;
-}
-
-.displayScenario-overlay .closebtn {
-  position: absolute;
-  top: 0;
-  left: 250px;
-  font-size: 36px;
-}
 .green{
   background-color: $green;
 }
@@ -116,18 +95,29 @@
   min-width:100px;
   min-height:150px;
   text-align: center;
-}
-
-.eqLogic-battery.good {
-  background-color: $good;
-}
-
-.eqLogic-battery.warning {
-  background-color: $warn;
-}
-
-.eqLogic-battery.critical {
-  background-color: $critical;
+  &.good {
+    background-color: $good;
+  }
+  &.warning {
+    background-color: $warn;
+  }
+  &.critical {
+    background-color: $critical;
+  }
+  & .informations {
+    font-size : 0.8em;
+    margin: {
+      bottom: 3px;
+      right: 5px;
+    }
+    cursor:default;
+  }
+  & .manual-threshold {
+    position:absolute;
+    bottom: 3px;
+    right: 3px;
+    cursor:default;
+  }
 }
 
 .eqLogic-name {
@@ -144,31 +134,20 @@
 
 .eqLogic-battery-icon {
   font-size:2.2em;
-  margin-top:-25px;
-  margin-bottom:-25px;
-}
-
-.eqLogic-battery-icon i {
-  font-size: 2.5em;
+  margin:{
+    top:-25px;
+    bottom:-25px;
+  }
+  & i {
+    font-size: 2.5em;
+  }
 }
 
 .eqLogic-percent {
-  font-size:1.2em;
-  font-weight: bold;
-  cursor:default;
-}
-
-.eqLogic-battery .informations {
-  font-size : 0.8em;
-  margin-bottom: 3px;
-  margin-right: 5px;
-  cursor:default;
-}
-
-.eqLogic-battery .manual-threshold {
-  position:absolute;
-  bottom: 3px;
-  right: 3px;
+  font:{
+    size:1.2em;
+    weight: bold;
+  }
   cursor:default;
 }
 
@@ -176,14 +155,15 @@
   box-shadow: 0 6px 12px 0 rgba(0,0,0,0.15);
 }
 
-
 .icon_gestion {
   height : 120px;
-  margin-bottom : 10px;
+  margin:{
+    bottom : 10px;
+    left : 10px;
+  }
   padding : 5px;
   border-radius: 2px;
   width : 140px;
-  margin-left : 10px;
 }
 
 .icon_gestion > i {
@@ -250,11 +230,10 @@ html {
   display: inline-block;
   vertical-align: top;
   border-radius: 4px;
-}
-
-.eqLogic-widget .btn:not(.btn-circle){
-  border : none !important;
-  font-weight: bold;
+  & .btn:not(.btn-circle){
+    border : none !important;
+    font-weight: bold;
+  }
 }
 
 .view-link-widget,.plan-link-widget{
@@ -266,18 +245,6 @@ html {
 
 .eqLogic-widget a{
   color:inherit;
-}
-
-.scenario-widget{
-  background-color: $gray;
-  display: inline-block;
-  position : relative;
-  vertical-align: top;
-  color : $white;
-}
-
-.scenario-widget a{
-  color : $white;
 }
 
 .cmd-widget{

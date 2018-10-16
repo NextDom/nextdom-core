@@ -1,3 +1,30 @@
+<style>
+    .preview-selector label {
+        margin-left: 0.5rem;
+        cursor: pointer;
+    }
+    .preview {
+        display: block;
+        box-shadow: 0 0 3px rgba(0,0,0,0.4);
+        height: 7rem;
+    }
+    .preview .left-pane {
+        display: block;
+        width: 20%;
+        float: left;
+    }
+    .preview .right-pane {
+        display: block;
+        width: 80%;
+        float: left;
+    }
+    .preview .top {
+        height: 2rem;
+    }
+    .preview .bottom {
+        height: 5rem;
+    }
+</style>
 <div id="custom">
     <div class="nav-tabs-custom">
         <!-- Tabs title -->
@@ -26,19 +53,19 @@
                         <legend class="legend-title">{{ 'Choix du thème comme base, en versions complètes' }}</legend>
                         <div class="row">
                             {% for themeName, themeData in customDarkThemes %}
-                                <div class="col-md-4 full-opacity-hover">
-                                    <p class="legend-title text-center no-margin" style="font-size: 12px">
-                                        <input type="radio" name="theme"
-                                               value="{{ themeName|lower }}" {% if customTheme == themeName|lower %} checked="checked"{% endif %}/> {{ themeName }}
-                                    </p>
-                                    <div style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)">
+                                <div class="preview-selector col-md-4 full-opacity-hover">
+                                    <div class="legend-title text-center no-margin">
+                                        <input type="radio" id="theme-{{ themeName|lower }}" name="theme" value="{{ themeName|lower }}"{% if customTheme == themeName|lower %} checked="checked"{% endif %}/>
+                                        <label for="theme-{{ themeName|lower }}">{{ themeName }}</label>
+                                    </div>
+                                    <div id="preview">
                                         <div>
-                                            <span style="display:block; width: 20%; float: left; height: 15px; background: {{ themeData[0] }}"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 15px; background: {{ themeData[1] }}"></span>
+                                            <span class="left-pane top" style="background: {{ themeData[0] }}"></span>
+                                            <span class="right-pane top" style="background: {{ themeData[1] }}"></span>
                                         </div>
                                         <div>
-                                            <span style="display:block; width: 20%; float: left; height: 50px; background: {{ themeData[2] }}"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 50px; background: {{ themeData[3] }}"></span>
+                                            <span class="left-pane bottom" style="background: {{ themeData[2] }}"></span>
+                                            <span class="right-pane bottom" style="background: {{ themeData[3] }}"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -49,19 +76,19 @@
                         <legend class="legend-title">{{ 'ou en versions Light' }}</legend>
                         <div class="row">
                             {% for themeName, themeData in customLightThemes %}
-                                <div class="col-md-4 full-opacity-hover">
-                                    <p class="legend-title text-center no-margin" style="font-size: 12px">
-                                        <input type="radio" name="theme"
-                                               value="{{ themeName|lower }}" {% if customTheme == themeName|lower %} checked="checked"{% endif %}/> {{ themeName }}
-                                    </p>
-                                    <div style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)">
+                                <div class="preview-selector col-md-4 full-opacity-hover">
+                                    <div class="legend-title text-center no-margin">
+                                        <input type="radio" id="theme-{{ themeName|lower }}" name="theme" value="{{ themeName|lower }}"{% if customTheme == themeName|lower %} checked="checked"{% endif %}/>
+                                        <label for="theme-{{ themeName|lower }}">{{ themeName }}</label>
+                                    </div>
+                                    <div id="preview">
                                         <div>
-                                            <span style="display:block; width: 20%; float: left; height: 15px; background: {{ themeData[0] }}"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 15px; background: {{ themeData[1] }}"></span>
+                                            <span class="left-pane top" style="background: {{ themeData[0] }}"></span>
+                                            <span class="right-pane top" style="background: {{ themeData[1] }}"></span>
                                         </div>
                                         <div>
-                                            <span style="display:block; width: 20%; float: left; height: 50px; background: {{ themeData[2] }}"></span>
-                                            <span style="display:block; width: 80%; float: left; height: 50px; background: {{ themeData[3] }}"></span>
+                                            <span class="left-pane bottom" style="background: {{ themeData[2] }}"></span>
+                                            <span class="right-pane bottom" style="background: {{ themeData[3] }}"></span>
                                         </div>
                                     </div>
                                 </div>
