@@ -11,14 +11,15 @@
   & a:hover {
     color: #f1f1f1;
   }
-}
-
-.displayScenario-overlay .closebtn {
+  & .closebtn {
   position: absolute;
   top: 0;
   left: 250px;
   font-size: 36px;
+  }
 }
+
+ 
 
 .scenario-widget{
   background-color: $gray;
