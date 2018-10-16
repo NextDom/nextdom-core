@@ -159,10 +159,11 @@ function initApplication(_reinit) {
                 nextdom.init();
                 var include = ['core/js/core.js'];
 
+                console.log(userProfils);
                 if (isset(userProfils) && userProfils != null) {
                     if (isset(userProfils.mobile_theme_color) && userProfils.mobile_theme_color != '') {
-                        $('#jQMnDColor').attr('href', 'core/themes/'+userProfils.mobile_theme_color+'/mobile/' + userProfils.mobile_theme_color + '.css');
-                        include.push( 'core/themes/'+userProfils.mobile_theme_color+'/mobile/' + userProfils.mobile_theme_color + '.js');
+                        $('#jQMnDColor').attr('href', 'public/themes/'+userProfils.mobile_theme_color+'/mobile/' + userProfils.mobile_theme_color + '.css');
+                        include.push( 'public/themes/'+userProfils.mobile_theme_color+'/mobile/' + userProfils.mobile_theme_color + '.js');
                     }
                     if (isset(userProfils.mobile_highcharts_theme) && userProfils.mobile_highcharts_theme != '') {
                         include.push('3rdparty/highstock/themes/' + userProfils.mobile_highcharts_theme + '.js');
