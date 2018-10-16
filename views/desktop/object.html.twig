@@ -7,19 +7,22 @@
         <input class="form-control" id="in_searchObject" placeholder="{{'Rechercher ...'}}" />
     </div>
 
-    <div class="objectListContainer">
+    <div class="objectListContainer row">
         {% for object in objectList %}
-            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                 <div class="box objectDisplayCard" style='border-top:3px solid {{ object.getDisplay("tagColor") }}' data-object_id="{{ object.getId() }}" data-object_name="{{ object.getName() }}">
                     <div class="box-header with-border">
-                        <h4 class="box-title name object-name" style='color:{{ object.getDisplay("tagColor") }}'>{{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|replace({'></i>': '></i>'})|raw }} <b>{{ object.getName() }}</b></h4>
+                        <a class="btn bt_detailsObject">
+                            <h4 class="box-title name object-name" style='color:{{ object.getDisplay("tagColor") }}'>{{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|replace({'></i>': '></i>'})|raw }} <b>{{ object.getName() }}</b></h4>
+                        </a>
                     </div>
                     <div class="box-body">
-                        <p class="object-summary">{{ object.getHtmlSummary()|raw }}</p>
+                        <span class="object-summary">&nbsp;{{ object.getHtmlSummary()|raw }}</span>
                     </div>
                     <div class="box-footer clearfix text-center">
                         <div class="btn-group">
                             <a class="btn btn-danger btn-xs remove bt_removeObject"><i class="far fa-trash-alt"></i> {{ 'Supprimer' }}</a>
+                            <a class="btn btn-info btn-xs bt_detailsObject"><i class="far fa-edit"></i> {{ 'Modifier' }}</a>
                         </div>
                     </div>
                 </div>

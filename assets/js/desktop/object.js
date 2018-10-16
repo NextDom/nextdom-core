@@ -37,9 +37,10 @@ $('#bt_returnToThumbnailDisplay').on('click',function(){
     $('.objectListContainer').packery();
 });
 
-$(".objectDisplayCard").on('click', function (event) {
-    loadObjectConfiguration($(this).attr('data-object_id'));
-    $('.objectname_resume').empty().append($(this).attr('data-object_icon')+'  '+$(this).attr('data-object_name'));
+$(".bt_detailsObject").on('click', function (event) {
+    var object = $(this).closest(".objectDisplayCard");
+    loadObjectConfiguration(object.attr("data-object_id"));
+    $('.objectname_resume').empty().append(object.attr('data-object_icon')+'  '+object.attr('data-object_name'));
     if(document.location.toString().split('#')[1] == '' || document.location.toString().split('#')[1] == undefined){
         $('.nav-tabs a[href="#objecttab"]').click();
     }
