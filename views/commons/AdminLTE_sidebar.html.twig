@@ -131,23 +131,6 @@
                     {% endif %}
                 </ul>
             </li>
-            <li id="filter_category" class="treeview">
-                <a href="#"><i class="fas fa-filter"></i><span>&nbsp;&nbsp;{{ 'Catégories' }}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                <ul class="treeview-menu">
-                    {% if dashboardCategory =='all' %}
-                        <li class="selectCategoy"><a>Toutes</a></li>
-                    {% else %}
-                        <li class="selectCategoy"><a>Toutes</a></li>
-                    {% endif %}
-                    {% for categoryCode, category in dashboardCategories %}
-                        {% if dashboardCategory == categoryCode %}
-                            <li><a style="cursor: pointer;" onclick='selectCategory("{{ categoryCode }}");'><i class="fas fa-caret-right"></i>{{ category.name|trans }}</a></li>
-                        {% else %}
-                            <li><a style="cursor: pointer;" onclick='selectCategory("{{ categoryCode }}");'><i class="fas fa-caret-right"></i>{{ category.name|trans }}</a></li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </li>
         </ul>
     </section>
     <!-- /.sidebar -->
