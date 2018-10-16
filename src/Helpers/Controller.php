@@ -316,7 +316,8 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageContent['customProductName'] = \config::byKey('product_name');
+        $pageContent['adminProductName'] = \config::byKey('product_name');
+        $pageContent['adminCustomProductName'] = \config::byKey('name');
         $pageContent['adminStats'] = CacheManager::stats();
         $pageContent['adminCacheFolder'] = CacheManager::getFolder();
         $pageContent['adminMemCachedExists'] = class_exists('memcached');
@@ -1794,6 +1795,7 @@ $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
         $pageContent['JS_VARS']['select_id'] = Utils::init('id', '-1');
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/object.js';
         $pageContent['objectProductName'] = \config::byKey('product_name');
+        $pageContent['objectCustomProductName'] = \config::byKey('name');
         $pageContent['objectList'] = JeeObjectManager::buildTree(null, false);
         $pageContent['objectSummary'] = \config::byKey('object:summary');
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
