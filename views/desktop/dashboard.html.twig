@@ -1,39 +1,81 @@
-<!-- Up-right buttons -->
+<i class='fa fa-sort-amount-desc pull-left cursor' id='bt_categorieHidden' title="{{'Trier vos équipements'}}"></i>
+{% if dashboardCategory == 'all' %}
+    <i class="fas fa-pencil-alt pull-right cursor" id="bt_editDashboardWidgetOrder" data-mode="0" ></i>
+{% endif %}
+<div style="witdh:100%; display: none;" class="categorieHidden">
+    <div style="witdh:45%; float:left;">
+        <div class="demo">
+            <select id="sel_eqLogicCategory">
+                {% if dashboardCategory =='all' %}
+                    <option value="all" selected="selected"> {{ 'Toute' }}</option>
+                {% else %}
+                    <option value="all"> {{ 'Toute' }}</option>
+                {% endif %}
+                {% for categoryCode, category in dashboardCategories %}
+                    {% if dashboardCategory == categoryCode %}
+                        <option value="{{ categoryCode }}" selected="selected"> {{ category.name|trans }}</option>
+                    {% else %}
+                        <option value="{{ categoryCode }}"> {{ category.name|trans }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div style="witdh:45%; float:left;">
+        <div class="demo2">
+            <select id="sel_eqLogicTags">
+                {% if dashboardTag == 'all' %}
+                    <option value="all" selected="selected"> {{ 'Tous' }}</option>
+                {% else %}
+                    <option value="all"> {{ 'Tous' }}</option>
+                {% endif %}
+                {% for tag in dashboardTags %}
+                    {% if dashboardTag == tag %}
+                        <option value="{{ tag }}" selected="selected"> {{ tag }}</option>
+                    {% else %}
+                        <option value="{{ tag }}"> {{ tag }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</div>
 <div class="row">
     {% if dashboardObjectId != '' %}
     <div class="col-xs-12">
-    {% else %}
-    <div class="col-xs-{{ dashboardObject.getDisplay('dashboard::size', 12) }}">
-    {% endif %}
-        <div class="card" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}25;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ dashboardObject.getDisplay("tagColor") }}50;" data-father_id="{{ dashboardObject.getFather_id() }}">
-            <div class="card-header card-header-icon">
-                <div class="card-icon" style="background:{{ dashboardObject.getDisplay("tagColor") }}">
-                    {{ dashboardObject.getDisplay("icon")|raw }}</i>
-                </div>
-                <a class="card-category" style="color:{{ dashboardObject.getDisplay("tagColor") }}"><b>{{ dashboardObject.getName() }}</b></a>
-            </div>
-            <div class="card-body">
-                <div class="div_displayEquipement" id="div_ob{{ dashboardObject.getId() }}" style="width: 100%;padding-top:3px;margin-bottom : 3px;">
-                    <script>getObjectHtml({{ dashboardObject.getId()}})</script>
-                </div>
-            </div>
-        </div>
-        {% for child in dashboardChildrenObjects %}
-            {% if child.getConfiguration('hideOnDashboard, 0') != 1 %}
-            <div class="card div_object" style="background-color:{{ child.getDisplay("tagColor") }}25;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ child.getDisplay("tagColor") }}50"; data-father_id="{{ child.getFather_id() }}">
+        {% else %}
+        <div class="col-xs-{{ dashboardObject.getDisplay('dashboard::size', 12) }}">
+            {% endif %}
+            <div class="card" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}25;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ dashboardObject.getDisplay("tagColor") }}50;" data-father_id="{{ dashboardObject.getFather_id() }}">
                 <div class="card-header card-header-icon">
-                    <div class="card-icon text-center" style="background:{{ child.getDisplay("tagColor") }}">
-                        {{ child.getDisplay("icon")|raw }}</i>
+                    <div class="card-icon" style="background:{{ dashboardObject.getDisplay("tagColor") }}">
+                        {{ dashboardObject.getDisplay("icon")|raw }}</i>
                     </div>
-                    <p class="card-category" style="color:{{ child.getDisplay("tagColor") }}"><b>{{ child.getName() }}</b></p>
+                    <a class="card-category" style="color:{{ dashboardObject.getDisplay("tagColor") }}"><b>{{ dashboardObject.getName() }}</b></a>
                 </div>
                 <div class="card-body">
-                    <div class="div_displayEquipement" id="div_ob{{ child.getId() }}" style="width: 100%;padding-top:3px;margin-bottom : 3px;">
-                        <script>getObjectHtml({{ child.getId() }})</script>
+                    <div class="div_displayEquipement" id="div_ob{{ dashboardObject.getId() }}" style="width: 100%;padding-top:3px;margin-bottom : 3px;">
+                        <script>getObjectHtml({{ dashboardObject.getId()}})</script>
                     </div>
                 </div>
             </div>
-            {% endif %}
-        {% endfor %}
+            {% for child in dashboardChildrenObjects %}
+                {% if child.getConfiguration('hideOnDashboard, 0') != 1 %}
+                    <div class="card div_object" style="background-color:{{ child.getDisplay("tagColor") }}25;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ child.getDisplay("tagColor") }}50"; data-father_id="{{ child.getFather_id() }}">
+                        <div class="card-header card-header-icon">
+                            <div class="card-icon text-center" style="background:{{ child.getDisplay("tagColor") }}">
+                                {{ child.getDisplay("icon")|raw }}</i>
+                            </div>
+                            <p class="card-category" style="color:{{ child.getDisplay("tagColor") }}"><b>{{ child.getName() }}</b></p>
+                        </div>
+                        <div class="card-body">
+                            <div class="div_displayEquipement" id="div_ob{{ child.getId() }}" style="width: 100%;padding-top:3px;margin-bottom : 3px;">
+                                <script>getObjectHtml({{ child.getId() }})</script>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
 </div>
