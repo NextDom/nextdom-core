@@ -117,7 +117,7 @@ try {
         $exclude .= ' --exclude="' . $folder . '"';
     }
     $rc = 0;
-  	system('mkdir /tmp/nextdombackup');
+  	system('mkdir -p /tmp/nextdombackup');
     system('cd /tmp/nextdombackup; rm * -rf; tar xfz "' . $backup . '" ' . $exclude);
 
     echo "OK\n";
