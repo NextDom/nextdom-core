@@ -108,9 +108,9 @@ if (!isConnect()) {
 				<div class="box-body">
 					<p class="lead">{{Trouver de l'aide sur notre forum}}</p>
 					<p class="text-muted">
-					  {{Le forum NextDom est un moyen simple et efficace de trouver la solution a votre probleme.<br/>
-						Il y a surement une autre personne qui a déja rencontré le meme probleme que vous.<br/>
-						Si ce n'est pas le cas, posez vous question, la communautée y répondra au plus vite.}}</p>
+					  {{Le forum NextDom est un moyen simple et efficace de trouver la solution a votre problème.<br/>
+						Il y a sûrement une autre personne qui a déja rencontré le même problème que vous.<br/>
+						Si ce n'est pas le cas, posez votre question, la communauté y répondra au plus vite.}}</p>
 					<p><a href="http://www.nextdom.org/forum" class="text-blue">{{Accéder au forum}}</a><p/>
 				</div>
 				<!-- /.box-body -->

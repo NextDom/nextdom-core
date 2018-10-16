@@ -17,7 +17,7 @@
                         <legend class="legend-title">{{ 'Liste des logs' }}</legend>
                         <div class="bs-sidebar">
                             <ul id="ul_object" class="nav nav-list bs-sidenav">
-                                <li class="filter"><input class="filter form-control" placeholder="{{ 'Rechercher un log ...' }}"/></li>
+                                <li class="filter"><input class="filter form-control" placeholder="{{ 'Rechercher un log...' }}"/></li>
                                 {% for logFile in logFilesList %}
                                     <li class="cursor label-log li_log{% if logFile['active'] %} active{% endif %}" data-log="{{ logFile['name'] }}">
                                         <i class="fa fa-{{ logFile['icon'] }}" style="float:left;margin-top:13px;color:{{ logFile['color'] }};">&nbsp;&nbsp;</i>
@@ -39,7 +39,7 @@
                             <a class="btn btn-danger" id="bt_removeAllLog"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer tous' }}</a>
                         </div>
                         <div class="box-tools padding-bottom">
-                            <input class="form-control text-right" id="in_globalLogSearch" placeholder="{{ 'Rechercher dans le log ...' }}"/>
+                            <input class="form-control text-right" id="in_globalLogSearch" placeholder="{{ 'Rechercher dans le log...' }}"/>
                         </div>
                         <pre id='pre_globallog' style='overflow: scroll;'></pre>
                     </fieldset>
