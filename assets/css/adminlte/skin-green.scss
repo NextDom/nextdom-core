@@ -2,6 +2,7 @@
  * Skin: Green
  * -----------
  */
+@import "../_colors.scss";
  .logo-mini-img{
   content:url("/public/img/NextDom/NextDom_Square_AlphaWhite.png");
 }
@@ -13,7 +14,7 @@
   background-color: #00a65a;
 }
 .main-header .navbar .nav > li > a {
-  color: #ffffff;
+  color: $white;
 }
 .main-header .navbar .nav > li > a:hover,
 .main-header .navbar .nav > li > a:active,
@@ -26,14 +27,14 @@
   color: #f6f6f6;
 }
 .main-header .navbar .sidebar-toggle {
-  color: #ffffff;
+  color: $white;
 }
 .main-header .navbar .sidebar-toggle:hover {
   color: #f6f6f6;
   background: rgba(0, 0, 0, 0.1);
 }
 .main-header .navbar .sidebar-toggle {
-  color: #fff;
+  color: $white;
 }
 .main-header .navbar .sidebar-toggle:hover {
   background-color: #008d4c;
@@ -43,7 +44,7 @@
     background-color: rgba(255, 255, 255, 0.1);
   }
   .main-header .navbar .dropdown-menu li a {
-    color: #fff;
+    color: $white;
   }
   .main-header .navbar .dropdown-menu li a:hover {
     background: #008d4c;
@@ -51,7 +52,7 @@
 }
 .main-header .logo {
   background-color: #008d4c;
-  color: #ffffff;
+  color: $white;
   border-bottom: 0 solid transparent;
 }
 .main-header .logo:hover {
@@ -70,7 +71,7 @@
 }
 .user-panel > .info,
 .user-panel > .info > a {
-  color: #fff;
+  color: $white;
 }
 .sidebar-menu > li.header {
   color: #4b646f;
@@ -82,7 +83,7 @@
 .sidebar-menu > li:hover > a,
 .sidebar-menu > li.active > a,
 .sidebar-menu > li.menu-open > a {
-  color: #ffffff;
+  color: $white;
   background: #1e282c;
 }
 .sidebar-menu > li.active > a {
@@ -103,7 +104,7 @@
 }
 .sidebar-menu .treeview-menu > li.active > a,
 .sidebar-menu .treeview-menu > li > a:hover {
-  color: #ffffff;
+  color: $white;
 }
 .sidebar-form {
   border-radius: 3px;
@@ -162,10 +163,14 @@
 }
 
 .ui-dialog .ui-dialog-title{
-  color: #fff;
+  color: $white;
 }
 
 .ui-dialog .ui-dialog-titlebar{
   background-color: #00a65a;
   padding: 0px 15px;
+}
+
+.category-filter-fab {
+  background-color: #00a65a;
 }

@@ -15,17 +15,24 @@ body {
   display: table-row;
 }
 .stepwizard-box {
-  border-bottom: 2px solid rgba(0,0,0,0.2);
-  border-top: 1px solid #d2d6de;
+  border:{
+    bottom: 2px solid rgba(0,0,0,0.2);
+    top: 1px solid #d2d6de;
+  }
 }
+
 .stepwizard {
   display: table;
   width: 65%;
   position: relative;
-  margin-left: auto;
-  margin-right: auto;
-  padding-top:20px;
-  padding-bottom: 20px;
+  margin:{
+    left: auto;
+    right: auto;
+  }
+  padding:{
+    top:20px;
+    bottom: 20px;
+  }
 }
 .stepwizard-step button[disabled] {
   opacity: 1 !important;
@@ -97,23 +104,28 @@ body {
 }
 
 /* Buttons */
+.nextBtn, .returnBtn{
+    margin-top:20px;
+    margin-bottom:7px;
+}
+
 .nextBtn{
   margin-right: 20px;
-  margin-top:20px;
-  margin-bottom:7px;
 }
+
 .returnBtn{
   margin-left: 20px;
-  margin-top:20px;
-  margin-bottom:7px;
 }
+
 .stepwizard-btn-circle {
     width: 30px;
     height: 30px;
     text-align: center;
     padding: 4px 0;
-    font-size: 14px;
-    font-weight: bold;
+    font:{
+      size: 14px;
+      weight: bold;
+    }
     line-height: 1.428571429;
     border-radius: 15px;
     color: white;
