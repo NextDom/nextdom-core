@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -15,21 +14,21 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-function gotoFilterDashboardPage(){
-    var category = SEL_CATEGORY;
+function selectCategory(_selectedCategory) {
+    console.log(_selectedCategory);
+    var category = _selectedCategory;
     var tag = SEL_TAG;
     var filterValue = '';
-    if(category == 'all' && tag == 'all'){
+    if (category == 'all' && tag == 'all') {
         filterValue = '*';
-    }else{
-        if(category == 'all'){
-            filterValue = '.tag-'+tag;
-        }else{
-            if(tag == 'all'){
-                filterValue = '.'+category;
-            }else{
-                filterValue = '.'+category+'.tag-'+tag;
+    } else {
+        if (category == 'all') {
+            filterValue = '.tag-' + tag;
+        } else {
+            if (tag == 'all') {
+                filterValue = '.' + category;
+            } else {
+                filterValue = '.' + category + '.tag-' + tag;
             }
         }
     }
@@ -37,41 +36,41 @@ function gotoFilterDashboardPage(){
         itemSelector: '.eqLogic-widget',
         layoutMode: 'fitRows'
     });
-    $grid.isotope({ filter: filterValue });
-    setTimeout(function(){
+    $grid.isotope({filter: filterValue});
+    setTimeout(function () {
         $('.div_displayEquipement').packery();
-    },500);
+    }, 500);
 }
 
-function editWidgetMode(_mode,_save){
-    if(!isset(_mode)){
-        if($('#bt_editDashboardWidgetOrder').attr('data-mode') != undefined && $('#bt_editDashboardWidgetOrder').attr('data-mode') == 1){
-            editWidgetMode(0,false);
-            editWidgetMode(1,false);
+function editWidgetMode(_mode, _save) {
+    if (!isset(_mode)) {
+        if ($('#bt_editDashboardWidgetOrder').attr('data-mode') != undefined && $('#bt_editDashboardWidgetOrder').attr('data-mode') == 1) {
+            editWidgetMode(0, false);
+            editWidgetMode(1, false);
         }
         return;
     }
-    if(_mode == 0){
-        if(!isset(_save) || _save){
-            saveWidgetDisplay({dashboard : 1});
+    if (_mode == 0) {
+        if (!isset(_save) || _save) {
+            saveWidgetDisplay({dashboard: 1});
         }
-        if( $('.div_displayEquipement .eqLogic-widget.ui-resizable').length > 0){
+        if ($('.div_displayEquipement .eqLogic-widget.ui-resizable').length > 0) {
             $('.div_displayEquipement .eqLogic-widget.allowResize').resizable('destroy');
         }
-        if( $('.div_displayEquipement .eqLogic-widget.ui-draggable').length > 0){
+        if ($('.div_displayEquipement .eqLogic-widget.ui-draggable').length > 0) {
             $('.div_displayEquipement .eqLogic-widget').draggable('disable');
         }
-        $('.div_displayEquipement .eqLogic-widget').css('box-shadow','');
-    }else{
-        $('.div_displayEquipement .eqLogic-widget').css('box-shadow','0 0 4px rgba(147,204,1,.14), 0 10px 16px rgba(147,204,1,.30)');
+        $('.div_displayEquipement .eqLogic-widget').css('box-shadow', '');
+    } else {
+        $('.div_displayEquipement .eqLogic-widget').css('box-shadow', '0 0 4px rgba(147,204,1,.14), 0 10px 16px rgba(147,204,1,.30)');
         $('.div_displayEquipement .eqLogic-widget').draggable('enable');
-        $( ".div_displayEquipement .eqLogic-widget.allowResize").resizable({
-            resize: function( event, ui ) {
-                positionEqLogic(ui.element.attr('data-eqlogic_id'),false);
+        $(".div_displayEquipement .eqLogic-widget.allowResize").resizable({
+            resize: function (event, ui) {
+                positionEqLogic(ui.element.attr('data-eqlogic_id'), false);
                 ui.element.closest('.div_displayEquipement').packery();
             },
-            stop: function( event, ui ) {
-                positionEqLogic(ui.element.attr('data-eqlogic_id'),false);
+            stop: function (event, ui) {
+                positionEqLogic(ui.element.attr('data-eqlogic_id'), false);
                 ui.element.closest('.div_displayEquipement').packery();
             }
         });
@@ -79,73 +78,81 @@ function editWidgetMode(_mode,_save){
     editWidgetCmdMode(_mode);
 }
 
-function getObjectHtml(_object_id){
-    jeedom.object.toHtml({
+function getObjectHtml(_object_id) {
+    nextdom.object.toHtml({
         id: _object_id,
         version: 'dashboard',
-        category : SEL_CATEGORY,
-        summary : SEL_SUMMARY,
-        tag : SEL_TAG,
+        category: SEL_CATEGORY,
+        summary: SEL_SUMMARY,
+        tag: SEL_TAG,
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
+            notify('Core', error.message, 'error');
         },
         success: function (html) {
-            if($.trim(html) == ''){
-                $('#div_ob'+_object_id).parent().remove();
+            if ($.trim(html) == '') {
+                $('#div_ob' + _object_id).parent().remove();
                 return;
             }
             try {
-                $('#div_ob'+_object_id).empty().html(html).parent().show();
-            }catch(err) {
+                $('#div_ob' + _object_id).empty().html(html).parent().show();
+            } catch (err) {
                 console.log(err);
             }
-            setTimeout(function(){
+            setTimeout(function () {
                 positionEqLogic();
-                $('#div_ob'+_object_id+'.div_displayEquipement').disableSelection();
-                $("input").click(function() { $(this).focus(); });
-                $("textarea").click(function() { $(this).focus(); });
-                $("select").click(function() { $(this).focus(); });
+                $('#div_ob' + _object_id + '.div_displayEquipement').disableSelection();
+                $("input").click(function () {
+                    $(this).focus();
+                });
+                $("textarea").click(function () {
+                    $(this).focus();
+                });
+                $("select").click(function () {
+                    $(this).focus();
+                });
 
-                $('#div_ob'+_object_id+'.div_displayEquipement').each(function(){
+                $('#div_ob' + _object_id + '.div_displayEquipement').each(function () {
                     var container = $(this).packery({
                         itemSelector: ".eqLogic-widget",
-                        gutter : 0,
+                        gutter: 0,
                         columnWidth: parseInt(widget_width_step)
                     });
-                    var itemElems =  container.find('.eqLogic-widget').draggable();
-                    container.packery('bindUIDraggableEvents',itemElems);
+                    var itemElems = container.find('.eqLogic-widget').draggable();
+                    container.packery('bindUIDraggableEvents', itemElems);
+
                     function orderItems() {
-                        setTimeout(function(){
+                        setTimeout(function () {
                             $('.div_displayEquipement').packery();
-                        },1);
+                        }, 1);
                         var itemElems = container.packery('getItemElements');
-                        $(itemElems).each( function( i, itemElem ) {
-                            $(itemElem).attr('data-order', i + 1 );
+                        $(itemElems).each(function (i, itemElem) {
+                            $(itemElem).attr('data-order', i + 1);
                             value = i + 1;
-                            if($('#bt_editDashboardWidgetOrder').attr('data-mode') == 1){
-                                if ($(itemElem).find(".counterReorderJeedom").length) {
-                                    $(itemElem).find(".counterReorderJeedom").text(value);
+                            if ($('#bt_editDashboardWidgetOrder').attr('data-mode') == 1) {
+                                if ($(itemElem).find(".counterReorderNextDom").length) {
+                                    $(itemElem).find(".counterReorderNextDom").text(value);
                                 } else {
-                                    $(itemElem).prepend('<span class="counterReorderJeedom pull-left" style="margin-top: 3px;margin-left: 3px;">'+value+'</span>');
+                                    $(itemElem).prepend('<span class="counterReorderNextDom pull-left" style="margin-top: 3px;margin-left: 3px;">' + value + '</span>');
                                 }
                             }
                         });
                     }
-                    container.on('dragItemPositioned',orderItems);
+
+                    container.on('dragItemPositioned', orderItems);
                 });
-                $('#div_ob'+_object_id+'.div_displayEquipement .eqLogic-widget').draggable('disable');
-            },10);
+                $('#div_ob' + _object_id + '.div_displayEquipement .eqLogic-widget').draggable('disable');
+            }, 10);
         }
     });
 }
 
-function displayChildObject(_object_id,_recursion){
-    if(_recursion === false){
+function displayChildObject(_object_id, _recursion) {
+    if (_recursion === false) {
         $('.div_object').hide();
     }
-    $('.div_object[data-object_id='+_object_id+']').show({effect : 'drop',queue : false});
-    $('.div_object[data-father_id='+_object_id+']').each(function(){
-        $(this).show({effect : 'drop',queue : false});
-        displayChildObject($(this).attr('data-object_id'),true);
+    $('.div_object[data-object_id=' + _object_id + ']').show({effect: 'drop', queue: false});
+    $('.div_object[data-father_id=' + _object_id + ']').each(function () {
+        $(this).show({effect: 'drop', queue: false});
+        displayChildObject($(this).attr('data-object_id'), true);
     });
 }
