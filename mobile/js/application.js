@@ -159,7 +159,6 @@ function initApplication(_reinit) {
                 nextdom.init();
                 var include = ['core/js/core.js'];
 
-                console.log(userProfils);
                 if (isset(userProfils) && userProfils != null) {
                     if (isset(userProfils.mobile_theme_color) && userProfils.mobile_theme_color != '') {
                         $('#jQMnDColor').attr('href', 'public/themes/'+userProfils.mobile_theme_color+'/mobile/' + userProfils.mobile_theme_color + '.css');
