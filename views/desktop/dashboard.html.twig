@@ -40,7 +40,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row" id="dashPanel">
     {% if dashboardObjectId != '' %}
     <div class="col-xs-12">
         {% else %}
@@ -77,5 +77,23 @@
                 {% endif %}
             {% endfor %}
         </div>
+
     </div>
+</div>
+<div class="category-filter">
+    <a class="category-filter-fab category-filter-btn-large" id="category-filterBtn"><i class="fas fa-filter"></i></a>
+    <ul class="category-filter-menu sel_eqLogicCategory">
+        {% if dashboardCategory =='all' %}
+            <li><a class="category-filter-fab category-filter-btn-sm category-filter-btn-green scale-transition scale-out" data-toggle="tooltip" title="toutes" data-original-title= "" style="cursor: pointer;" onclick='selectCategory("all");'><i class="fa fa-user"></i></a></li>
+        {% else %}
+            <li><a class="category-filter-fab category-filter-btn-sm category-filter-btn-green scale-transition scale-out" data-toggle="tooltip" title="toutes" data-original-title= "" style="cursor: pointer;" onclick='selectCategory("all");'><i class="fa fa-user"></i></a></li>
+        {% endif %}
+        {% for categoryCode, category in dashboardCategories %}
+            {% if dashboardCategory == categoryCode %}
+                <li><a class="category-filter-fab category-filter-btn-sm  scale-transition scale-out" data-toggle="tooltip" title="{{ category.name|trans }}" data-original-title= "" style="cursor: pointer;background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}");'><i class="{{ category.icon }}"></i></a></li>
+            {% else %}
+                <li><a class="category-filter-fab category-filter-btn-sm  scale-transition scale-out" data-toggle="tooltip" title="{{ category.name|trans }}" style="cursor: pointer;background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}");'><i class="{{ category.icon }}"></i></a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
 </div>
