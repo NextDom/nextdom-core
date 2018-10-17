@@ -1,46 +1,7 @@
-<i class='fa fa-sort-amount-desc pull-left cursor' id='bt_categorieHidden' title="{{'Trier vos équipements'}}"></i>
 {% if dashboardCategory == 'all' %}
     <i class="fas fa-pencil-alt pull-right cursor" id="bt_editDashboardWidgetOrder" data-mode="0" ></i>
 {% endif %}
-<div style="witdh:100%; display: none;" class="categorieHidden">
-    <div style="witdh:45%; float:left;">
-        <div class="demo">
-            <select id="sel_eqLogicCategory">
-                {% if dashboardCategory =='all' %}
-                    <option value="all" selected="selected"> {{ 'Toute' }}</option>
-                {% else %}
-                    <option value="all"> {{ 'Toute' }}</option>
-                {% endif %}
-                {% for categoryCode, category in dashboardCategories %}
-                    {% if dashboardCategory == categoryCode %}
-                        <option value="{{ categoryCode }}" selected="selected"> {{ category.name|trans }}</option>
-                    {% else %}
-                        <option value="{{ categoryCode }}"> {{ category.name|trans }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <div style="witdh:45%; float:left;">
-        <div class="demo2">
-            <select id="sel_eqLogicTags">
-                {% if dashboardTag == 'all' %}
-                    <option value="all" selected="selected"> {{ 'Tous' }}</option>
-                {% else %}
-                    <option value="all"> {{ 'Tous' }}</option>
-                {% endif %}
-                {% for tag in dashboardTags %}
-                    {% if dashboardTag == tag %}
-                        <option value="{{ tag }}" selected="selected"> {{ tag }}</option>
-                    {% else %}
-                        <option value="{{ tag }}"> {{ tag }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-</div>
-<div class="row">
+<div class="row" id="dashPanel">
     {% if dashboardObjectId != '' %}
     <div class="col-xs-12">
         {% else %}
@@ -77,5 +38,22 @@
                 {% endif %}
             {% endfor %}
         </div>
+
     </div>
-</div>
+    <div class="category-filter">
+        <a class="category-filter-fab category-filter-btn-large" id="category-filterBtn"><i class="fas fa-filter"></i></a>
+        <ul class="category-filter-menu sel_eqLogicCategory">
+            {% if dashboardCategory =='all' %}
+                <li><a class="category-filter-fab category-filter-btn-sm category-filter-btn-green scale-transition scale-out" data-toggle="tooltip" title="toutes" data-original-title= "" style="cursor: pointer;" onclick='selectCategory("all");'><i class="fas fa-asterisk"></i></a></li>
+            {% else %}
+                <li><a class="category-filter-fab category-filter-btn-sm category-filter-btn-green scale-transition scale-out" data-toggle="tooltip" title="toutes" data-original-title= "" style="cursor: pointer;" onclick='selectCategory("all");'><i class="fas fa-asterisk"></i></a></li>
+            {% endif %}
+            {% for categoryCode, category in dashboardCategories %}
+                {% if dashboardCategory == categoryCode %}
+                    <li><a class="category-filter-fab category-filter-btn-sm  scale-transition scale-out" data-toggle="tooltip" title="{{ category.name|trans }}" data-original-title= "" style="cursor: pointer;background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}");'><i class="{{ category.icon }}"></i></a></li>
+                {% else %}
+                    <li><a class="category-filter-fab category-filter-btn-sm  scale-transition scale-out" data-toggle="tooltip" title="{{ category.name|trans }}" style="cursor: pointer;background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}");'><i class="{{ category.icon }}"></i></a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
