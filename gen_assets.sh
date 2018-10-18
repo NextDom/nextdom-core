@@ -22,16 +22,14 @@ function gen_css {
 	sass assets/css/adminlte/skin-yellow.scss public/css/adminlte/skin-yellow.css --style compressed
 	sass assets/css/adminlte/skin-yellow-light.scss public/css/adminlte/skin-yellow-light.css --style compressed
 	# Remplacement des chemins
-	# TODO: A optimiser
-	# sed ne prend pas en charge le non-greey
 	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-#g public/css/nextdom.css
 	sed -i s#\.\./fonts/glyphicons-#/3rdparty/bootstrap/fonts/glyphicons-#g public/css/nextdom.css
-	sed -i s#\"images/ui-#\"/3rdparty/jquery.ui/images/ui-#g public/css/nextdom.css
+	sed -i s#\"images/ui-#\"/3rdparty/jquery.ui/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
 	sed -i 's/[\"]32px\.png/"\/3rdparty\/jquery\.tree\/themes\/default\/32px.png/g' public/css/nextdom.css
 	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.css
 
 	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-# public/css/nextdom.mob.css
-	sed -i s#\"images/ui-#\"/3rdparty/jquery.ui/images/ui-#g public/css/nextdom.mob.css
+	sed -i s#\"images/ui-#\"/3rdparty/jquery.ui/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
 	sed -i 's/[\"]32px\.png/\/3rdparty\/jquery\.tree\/themes\/default\/32.png/g' public/css/nextdom.mob.css
 	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.mob.css
 }
