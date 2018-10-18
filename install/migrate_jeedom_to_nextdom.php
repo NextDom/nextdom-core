@@ -143,7 +143,7 @@ try {
     shell_exec("mysql --host=" . $CONFIG['db']['host'] . " --port=" . $CONFIG['db']['port'] . " --user=" . $CONFIG['db']['username'] . " --password=" . $CONFIG['db']['password'] . " " . $CONFIG['db']['dbname'] . "  </tmp/nextdombackup/DB_backup.sql");
     echo "OK\n";
 
-    echo "Mise a jour SQL";
+    echo "Mise à jour SQL";
     shell_exec('php ' . dirname(__FILE__) . '/../install/migrate/migrate.php');
     echo "OK\n";
     echo "Active les contraintes...";
@@ -183,6 +183,11 @@ try {
         }
     }
   	echo "OK\n";
+
+    echo "Mise à jour SQL post plugins";
+    shell_exec('php ' . dirname(__FILE__) . '/../install/migrate/migrate.php');
+    echo "OK\n";
+
     config::save('hardware_name', '');
     $cache = cache::byKey('nextdom::isCapable::sudo');
     $cache->remove();
