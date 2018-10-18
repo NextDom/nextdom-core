@@ -78,7 +78,11 @@ sendVarToJS('planHeader', utils::o2a($planHeader));
     </fieldset>
 </form>
 </div>
-
+<style>
+    .colorpicker {
+        z-index: 9999;
+    }
+</style>
 <script>
     $('.colorpick').colorpicker();
 
