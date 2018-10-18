@@ -46,19 +46,19 @@ class plugin
     protected $include = array();
     protected $functionality = array();
 
-    public static function byId($_id)
+    public static function byId($id)
     {
-        return PluginManager::byId($_id);
+        return PluginManager::byId($id);
     }
 
-    public static function getPathById($_id)
+    public static function getPathById($id)
     {
-        return PluginManager::getPathById($_id);
+        return PluginManager::getPathById($id);
     }
 
-    public static function listPlugin($_activateOnly = false, $_orderByCaterogy = false, $_translate = true, $_nameOnly = false)
+    public static function listPlugin($activateOnly = false, $orderByCaterogy = false, $translate = true, $nameOnly = false)
     {
-        return PluginManager::listPlugin($_activateOnly, $_orderByCaterogy, $_nameOnly);
+        return PluginManager::listPlugin($activateOnly, $orderByCaterogy, $nameOnly);
     }
 
     public static function orderPlugin($a, $b)
@@ -352,11 +352,11 @@ class plugin
         if ((strtotime('now') - 60) <= strtotime(config::byKey('lastDependancyInstallTime', $plugin_id))) {
             $cache = \cache::byKey('dependancy' . $this->getID());
             $cache->remove();
-            throw new Exception(__('Vous devez attendre au moins 60 secondes entre deux lancements d\'installation de dépendances', __FILE__));
+            throw new \Exception(__('Vous devez attendre au moins 60 secondes entre deux lancements d\'installation de dépendances', __FILE__));
         }
         $dependancy_info = $this->dependancy_info(true);
         if ($dependancy_info['state'] == 'in_progress') {
-            throw new Exception(__('Les dépendances sont déjà en cours d\'installation', __FILE__));
+            throw new \Exception(__('Les dépendances sont déjà en cours d\'installation', __FILE__));
         }
         foreach (self::listPlugin(true) as $plugin) {
             if ($plugin->getId() == $this->getId()) {
@@ -364,7 +364,7 @@ class plugin
             }
             $dependancy_info = $plugin->dependancy_info();
             if ($dependancy_info['state'] == 'in_progress') {
-                throw new Exception(__('Les dépendances d\'un autre plugin sont déjà en cours, veuillez attendre qu\'elles soient finies : ', __FILE__) . $plugin->getId());
+                throw new \Exception(__('Les dépendances d\'un autre plugin sont déjà en cours, veuillez attendre qu\'elles soient finies : ', __FILE__) . $plugin->getId());
             }
         }
         $cmd = $plugin_id::dependancy_install();
@@ -473,16 +473,14 @@ class plugin
                     $info = $inprogress->getValue(array('datetime' => strtotime('now') - 60));
                     $info['datetime'] = (isset($info['datetime'])) ? $info['datetime'] : strtotime('now') - 60;
                     if (abs(strtotime('now') - $info['datetime']) < 45) {
-                        throw new Exception(__('Vous devez attendre au moins 45 secondes entre deux lancements du démon. Dernier lancement : ' . date("Y-m-d H:i:s", $info['datetime']), __FILE__));
+                        throw new \Exception(__('Vous devez attendre au moins 45 secondes entre deux lancements du démon. Dernier lancement : ' . date("Y-m-d H:i:s", $info['datetime']), __FILE__));
                     }
                     \cache::set('deamonStart' . $this->getId() . 'inprogress', array('datetime' => strtotime('now')));
                     config::save('lastDeamonLaunchTime', date('Y-m-d H:i:s'), $pluginId);
                     $pluginId::deamon_start();
                 }
             }
-        } catch (Exception $e) {
-            \log::add($pluginId, 'error', __('Erreur sur la fonction deamon_start du plugin : ', __FILE__) . $e->getMessage());
-        } catch (Error $e) {
+        } catch (Throwable $e) {
             \log::add($pluginId, 'error', __('Erreur sur la fonction deamon_start du plugin : ', __FILE__) . $e->getMessage());
         }
     }
@@ -500,9 +498,7 @@ class plugin
                     $plugin_id::deamon_stop();
                 }
             }
-        } catch (Exception $e) {
-            \log::add($plugin_id, 'error', __('Erreur sur la fonction deamon_stop du plugin : ', __FILE__) . $e->getMessage());
-        } catch (Error $e) {
+        } catch (Throwable $e) {
             \log::add($plugin_id, 'error', __('Erreur sur la fonction deamon_stop du plugin : ', __FILE__) . $e->getMessage());
         }
     }
@@ -519,7 +515,7 @@ class plugin
     public function setIsEnable($state)
     {
         if (version_compare(nextdom::version(), $this->getRequire()) == -1 && $state == 1) {
-            throw new Exception(__('Votre version de NextDom n\'est pas assez récente pour activer ce plugin', __FILE__));
+            throw new \Exception(__('Votre version de NextDom n\'est pas assez récente pour activer ce plugin', __FILE__));
         }
         $alreadyActive = config::byKey('active', $this->getId(), 0);
         if ($state == 1) {
@@ -537,9 +533,7 @@ class plugin
                         $eqLogic->setIsEnable(0);
                         $eqLogic->setIsVisible(0);
                         $eqLogic->save();
-                    } catch (Exception $e) {
-
-                    } catch (Error $e) {
+                    } catch (\Throwable $e) {
 
                     }
                 }
@@ -556,9 +550,7 @@ class plugin
                     $eqLogic->setIsEnable($eqLogic->getConfiguration('previousIsEnable', 1));
                     $eqLogic->setIsVisible($eqLogic->getConfiguration('previousIsVisible', 1));
                     $eqLogic->save();
-                } catch (Exception $e) {
-
-                } catch (Error $e) {
+                } catch (\Throwable $e) {
 
                 }
             }
@@ -590,15 +582,12 @@ class plugin
             if (isset($out) && trim($out) != '') {
                 \log::add($this->getId(), 'info', "Installation/remove/update result : " . $out);
             }
-        } catch (Exception $e) {
-            config::save('active', $alreadyActive, $this->getId());
-            \log::add('plugin', 'error', $e->getMessage());
-            throw $e;
-        } catch (Error $e) {
+        } catch (\Throwable $e) {
             config::save('active', $alreadyActive, $this->getId());
             \log::add('plugin', 'error', $e->getMessage());
             throw $e;
         }
+        
         if ($state == 0) {
             config::save('active', $state, $this->getId());
         }
@@ -624,10 +613,10 @@ class plugin
     public function launch($functionToCall, $callInstallFunction = false)
     {
         if ($functionToCall == '') {
-            throw new Exception('La fonction à lancer ne peut être vide');
+            throw new \Exception('La fonction à lancer ne peut être vide');
         }
         if (!$callInstallFunction && (!class_exists($this->getId()) || !method_exists($this->getId(), $functionToCall))) {
-            throw new Exception('Il n\'existe aucune méthode : ' . $this->getId() . '::' . $functionToCall . '()');
+            throw new \Exception('Il n\'existe aucune méthode : ' . $this->getId() . '::' . $functionToCall . '()');
         }
         $cmd = NEXTDOM_ROOT . '/core/php/jeePlugin.php ';
         $cmd .= ' plugin_id=' . $this->getId();
@@ -650,7 +639,7 @@ class plugin
      *
      * @param string $language Langue demandée
      *
-     * @return array|mixed
+     * @return array
      */
     public function getTranslation(string $language): array
     {
@@ -659,7 +648,7 @@ class plugin
             @mkdir($dir, 0775, true);
         }
         if (!file_exists($dir)) {
-            return array();
+            return [];
         }
         if (file_exists($dir . '/' . $language . '.json')) {
             $result = file_get_contents($dir . '/' . $language . '.json');
@@ -668,7 +657,7 @@ class plugin
                 return json_decode($result, true);
             }
         }
-        return array();
+        return [];
     }
 
     /**
@@ -746,10 +735,9 @@ class plugin
      * @param $id Identifiant du plugin
      * @return $this
      */
-    public function setId($id)
+    public function setId($id): plugin
     {
         $this->id = $id;
-
         return $this;
     }
 
@@ -758,10 +746,9 @@ class plugin
      *
      * @param string $id Nom du plugin
      */
-    public function setName(string $name)
+    public function setName(string $name): plugin
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -901,7 +888,7 @@ class plugin
      * @param $display
      * @return $this
      */
-    public function setDisplay($display)
+    public function setDisplay($display): plugin
     {
         $this->display = $display;
         return $this;
@@ -922,7 +909,7 @@ class plugin
      * @param $mobile
      * @return $this
      */
-    public function setMobile($mobile)
+    public function setMobile($mobile): plugin
     {
         $this->mobile = $mobile;
         return $this;
@@ -942,7 +929,7 @@ class plugin
      * @param $eventjs
      * @return $this
      */
-    public function setEventjs($eventjs)
+    public function setEventjs($eventjs): plugin
     {
         $this->eventjs = $eventjs;
         return $this;
@@ -965,7 +952,7 @@ class plugin
      *
      * @return $this
      */
-    public function setHasDependency($hasDependency)
+    public function setHasDependency($hasDependency): plugin
     {
         $this->hasDependency = $hasDependency;
         return $this;
@@ -988,7 +975,7 @@ class plugin
      *
      * @return $this
      */
-    public function setHasOwnDeamony($hasOwnDeamon)
+    public function setHasOwnDeamony($hasOwnDeamon): plugin
     {
         $this->hasOwnDeamon = $hasOwnDeamon;
         return $this;
@@ -1011,7 +998,7 @@ class plugin
      *
      * @return $this
      */
-    public function setMaxDependancyInstallTime($maxDependancyInstallTime)
+    public function setMaxDependancyInstallTime($maxDependancyInstallTime): plugin
     {
         $this->maxDependancyInstallTime = $maxDependancyInstallTime;
         return $this;
@@ -1057,7 +1044,7 @@ class plugin
      *
      * @return $this
      */
-    public function setChangelog($changelog)
+    public function setChangelog($changelog): plugin 
     {
         $this->changelog = $changelog;
         return $this;
@@ -1083,7 +1070,7 @@ class plugin
      *
      * @return $this
      */
-    public function setDocumentation($documentation)
+    public function setDocumentation($documentation): plugin
     {
         $this->documentation = $documentation;
         return $this;
