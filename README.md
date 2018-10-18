@@ -38,7 +38,7 @@ Remplissez les informations, validez et attendez la fin de l'installation. Les i
 ### Construction de l'image et lancement des services 
 
 Aucune image docker existe pour le moment, il faut la construire (Dockerfile.develop)
-Le script ci dessous va construire l'image et les conteneurs et les lancer.
+Le script ci dessous va construire l'image, les conteneurs et les lancer.
 
 les alias permettent une accés rapide aux informations
 
@@ -62,7 +62,7 @@ docker attach ${}
 options du script:
 
 * -d NOMSERVEURSQL: par défaut localhost, permet de définir le serveur sql. 
-* -h : sorite au format html
+* -h : sortie au format html
 * -m mysql.root.password: mot de passe de root pour mysql
 * -n nextdom.mysql.user.password: mot de passe de l'utilisateur nextdom pour mysql
 * -o par defaut /dev/null: si utilisé, redirection dans /tmp/output
