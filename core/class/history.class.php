@@ -32,23 +32,23 @@ class history {
     public static function copyHistoryToCmd($_source_id, $_target_id) {
         $source_cmd = cmd::byId(str_replace('#', '', $_source_id));
         if (!is_object($source_cmd)) {
-            throw new Exception(__('La commande source n\'existe pas :', __FILE__) . ' ' . $_source_id);
+            throw new \Exception(__('La commande source n\'existe pas :', __FILE__) . ' ' . $_source_id);
         }
         if ($source_cmd->getIsHistorized() != 1) {
-            throw new Exception(__('La commande source n\'est pas historisée', __FILE__));
+            throw new \Exception(__('La commande source n\'est pas historisée', __FILE__));
         }
         if ($source_cmd->getType() != 'info') {
-            throw new Exception(__('La commande source n\'est pas de type info', __FILE__));
+            throw new \Exception(__('La commande source n\'est pas de type info', __FILE__));
         }
         $target_cmd = cmd::byId(str_replace('#', '', $_target_id));
         if (!is_object($target_cmd)) {
-            throw new Exception(__('La commande cible n\'existe pas :', __FILE__) . ' ' . $_target_id);
+            throw new \Exception(__('La commande cible n\'existe pas :', __FILE__) . ' ' . $_target_id);
         }
         if ($target_cmd->getType() != 'info') {
-            throw new Exception(__('La commande cible n\'est pas de type info', __FILE__));
+            throw new \Exception(__('La commande cible n\'est pas de type info', __FILE__));
         }
         if ($target_cmd->getSubType() != $source_cmd->getSubType()) {
-            throw new Exception(__('Le sous-type de la commande cible n\'est pas le même que celui de la commande source', __FILE__));
+            throw new \Exception(__('Le sous-type de la commande cible n\'est pas le même que celui de la commande source', __FILE__));
         }
         if ($target_cmd->getIsHistorized() != 1) {
             $target_cmd->setIsHistorized(1);
@@ -406,7 +406,7 @@ class history {
         $sql .= ' ) as dt ';
         $sql .= $groupBy;
         $sql .= ' ORDER BY `datetime` ASC ';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
+        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, __CLASS__);
     }
 
     public static function getStatistique($_cmd_id, $_startTime, $_endTime) {
@@ -777,11 +777,9 @@ class history {
                 try {
                     $result = floatval(nextdom::evaluateExpression($calcul));
                     $value[$datetime] = $result;
-                } catch (Exception $e) {
+                } catch (\Throwable $e) {
 
-                } catch (Error $e) {
-
-                }
+                } 
             }
         } else {
             $value = $_strcalcul;
@@ -877,8 +875,6 @@ class history {
         DB::remove($this);
     }
 
-    /*     * **********************Getteur Setteur*************************** */
-
     public function getCmd_id() {
         return $this->cmd_id;
     }
@@ -899,23 +895,27 @@ class history {
         return $this->_tableName;
     }
 
-    public function setTableName($_tableName) {
-        $this->_tableName = $_tableName;
+    public function setTableName($tableName): history 
+    {
+        $this->_tableName = $tableName;
         return $this;
     }
 
-    public function setCmd_id($cmd_id) {
-        $this->cmd_id = $cmd_id;
+    public function setCmd_id($cmdId): history 
+    {
+        $this->cmd_id = $cmdId;
         return $this;
     }
 
-    public function setValue($value) {
+    public function setValue($value): history 
+    {
         $this->value = $value;
         return $this;
     }
 
-    public function setDatetime($datetime) {
-        $this->datetime = $datetime;
+    public function setDatetime($dateTime): history  
+    {
+        $this->datetime = $dateTime;
         return $this;
     }
 
