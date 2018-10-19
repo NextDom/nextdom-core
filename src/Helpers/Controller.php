@@ -377,7 +377,21 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
+        if (!$pageContent['adminIsRescueMode']) {
+            $pageContent['adminPluginsList'] = [];
+            $pluginsList = PluginManager::listPlugin(true);
+            foreach ($pluginsList as $plugin) {
+                $pluginApi = \config::byKey('api', $plugin->getId());
 
+                if ($pluginApi !== '') {
+                    $pluginData = [];
+                    $pluginData['api'] = $pluginApi;
+                    $pluginData['plugin'] = $plugin;
+                    $pageContent['adminPluginsList'][] = $pluginData;
+                }
+            }
+        }
+        
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/log_admin.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
