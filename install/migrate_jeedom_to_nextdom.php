@@ -36,7 +36,7 @@ if (isset($argv)) {
 }
 
 try {
-    require_once dirname(__FILE__) . '/../core/php/core.inc.php';
+    require_once __DIR__ . '/../core/php/core.inc.php';
     echo "***************Début de la migration de jeedom vers nextdom " . date('Y-m-d H:i:s') . "***************\n";
 
     try {
@@ -80,7 +80,7 @@ try {
         $backup = $_GET['backup'];
     }
     if (substr($backup, 0, 1) != '/') {
-        $backup = dirname(__FILE__) . '/../' . $backup;
+        $backup = __DIR__ . '/../' . $backup;
     }
 
     if (!file_exists($backup)) {
@@ -95,7 +95,7 @@ try {
         echo '***ERREUR*** ' . $e->getMessage();
     }
 
-    $nextdom_dir = realpath(dirname(__FILE__) . '/../');
+    $nextdom_dir = realpath(__DIR__ . '/../');
 
     echo "Fichier utilisé pour la restauration : " . $backup . "\n";
 
@@ -123,7 +123,7 @@ try {
     echo "OK\n";
     if (!file_exists("/tmp/nextdombackup/DB_backup.sql")) {
         throw new Exception('Impossible de trouver le fichier de la base de données de la sauvegarde : DB_backup.sql');
-    }else{
+    } else {
         shell_exec("sed -i -e s/jeedom/nextdom/g /tmp/nextdombackup/DB_backup.sql");
     }
     echo "Supprimer la table de la sauvegarde";
@@ -143,8 +143,8 @@ try {
     shell_exec("mysql --host=" . $CONFIG['db']['host'] . " --port=" . $CONFIG['db']['port'] . " --user=" . $CONFIG['db']['username'] . " --password=" . $CONFIG['db']['password'] . " " . $CONFIG['db']['dbname'] . "  </tmp/nextdombackup/DB_backup.sql");
     echo "OK\n";
 
-    echo "Mise a jour SQL";
-    shell_exec('php ' . dirname(__FILE__) . '/../install/migrate/migrate.php');
+    echo "Mise à jour SQL";
+    shell_exec('php ' . __DIR__ . '/../install/migrate/migrate.php');
     echo "OK\n";
     echo "Active les contraintes...";
     try {
@@ -154,12 +154,12 @@ try {
     }
     echo "OK\n";
 
-   	if (copy(dirname(__FILE__) . '/../core/config/jeedom.config.php', '/tmp/nextdom.config.php')) {
-        echo 'Can not copy ' . dirname(__FILE__) . "/../core/config/common.config.php\n";
+   	if (copy(__DIR__ . '/../core/config/jeedom.config.php', '/tmp/nextdom.config.php')) {
+        echo 'Can not copy ' . __DIR__ . "/../core/config/common.config.php\n";
     }
-    if (!file_exists(dirname(__FILE__) . '/../core/config/nextdom.config.php')) {
+    if (!file_exists(__DIR__ . '/../core/config/nextdom.config.php')) {
         echo "Restauration du fichier de configuration de la base de données...";
-        copy('/tmp/nextdombackup/nextdom.config.php', dirname(__FILE__) . '/../core/config/common.config.php');
+        copy('/tmp/nextdombackup/nextdom.config.php', __DIR__ . '/../core/config/common.config.php');
         echo "OK\n";
     }
 
@@ -183,21 +183,26 @@ try {
         }
     }
   	echo "OK\n";
+
+    echo "Mise à jour SQL post plugins";
+    shell_exec('php ' . __DIR__ . '/../install/migrate/migrate.php');
+    echo "OK\n";
+
     config::save('hardware_name', '');
     $cache = cache::byKey('nextdom::isCapable::sudo');
     $cache->remove();
 
     try {
         echo "Check nextdom consistency...";
-        require_once dirname(__FILE__) . '/consistency.php';
+        require_once __DIR__ . '/consistency.php';
         echo "OK\n";
     } catch (Exception $ex) {
         echo "***ERREUR*** " . $ex->getMessage() . "\n";
     }
 
     echo "Restauration des droits...";
-    shell_exec('chmod 775 -R ' . dirname(__FILE__));
-    shell_exec('chown -R www-data:www-data ' . dirname(__FILE__));
+    shell_exec('chmod 775 -R ' . __DIR__ );
+    shell_exec('chown -R www-data:www-data ' . __DIR__ );
     shell_exec('chmod 777 -R /tmp/');
     shell_exec('chown www-data:www-data -R /tmp/');
     echo "OK\n";
