@@ -1,10 +1,5 @@
 <div id="div_Update-view">
     <a style="margin-right:30px">  <i class="fas fa-clock-o" style="cursor:default;"></i> <span style="cursor:default;">{{ 'Dernière vérification : ' }}</span><span class="label label-info" id="span_lastUpdateCheck" style="margin-bottom: 5px;font-size:1em;cursor:default;"></span></a>
-    <div class="btn-group pull-right">
-        <a class="btn btn-success btn-sm" id="bt_saveUpdate"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-        <a class="btn btn-info btn-sm" id="bt_checkAllUpdate"><i class="fas fa-refresh"></i> {{ 'Vérifier les mises à jour' }}</a>
-        <a href="#" class="btn btn-sm btn-default" id="bt_updateNextDom"><i class="fas fa-check"></i> {{ 'Mettre à jour' }}</a>
-    </div>
     <input class="form-control" placeholder="{{ 'Rechercher' }}" id="in_searchPlugin"/>
 
 
@@ -16,62 +11,64 @@
     <div class="row">
         <div id="listOther"></div>
     </div>
+    <div class="fab" style="z-index:999">
+        <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
+        <ul class="fab-buttons">
+            <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_checkAllUpdate" data-toggle="tooltip" title="" data-original-title="{{ 'Vérifier les mises à jour' }}"><i class="fas fa-refresh"></i></a></li>
+            <li class="fab-buttons__item"><a href="#" class="fab-buttons__link" id="bt_updateNextDom" data-toggle="tooltip" title="" data-original-title="{{ 'Mettre à jour' }}"><i class="fas fa-check"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_doUpdate" style="background-color:green"><i class="fas fa-save"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link" href="index.php?v=d&p=administration" style="background-color:#c9302c"><i class="fas fa-chevron-left"></i></a></li>
+        </ul>
+    </div>
 </div>
 
 <div id="md_updateInfo">
     <pre id="pre_updateInfo"></pre>
 </div>
 <div id="md_specifyUpdate">
-            <div class="alert alert-danger">{{ 'Avant toute mise à jour, merci de consulter la note de version du core de NextDom' }} <a target="_blank" href="https://nextdom.github.io/core/fr_FR/noteVersion">{{ 'ici' }}</a></div>
-            <div class="form-group">
-                <div class="form-group">
-                    <label class="col-xs-6 control-label label-sticker-big">{{ 'Pré-update (mettre à jour le script d\'update avant)' }}</label>
-                    <div class="col-xs-4">
-                        <input type="checkbox" class="updateOption" data-l1key="preUpdate"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-xs-6 control-label label-sticker-big">{{ 'Sauvegarder avant' }}</label>
-                    <div class="col-xs-4">
-                        <input type="checkbox" class="updateOption" data-l1key="backup::before" checked/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-xs-6 control-label label-sticker-big">{{ 'Mettre à jour les plugins' }}</label>
-                    <div class="col-xs-4">
-                        <input type="checkbox" class="updateOption" data-l1key="plugins" checked/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-xs-6 control-label label-sticker-big">{{ 'Mettre à jour le core' }}</label>
-                    <div class="col-xs-4">
-                        <input type="checkbox" class="updateOption" data-l1key="core" checked/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-xs-6 control-label ">{{ 'Mode forcé' }}</label>
-                    <div class="col-xs-4">
-                        <input type="checkbox" class="updateOption" data-l1key="force"/>
-                    </div>
-                </div>
-                <div class="alert alert-danger">{{ 'L\'option suivante n\'est à modifier que sur demande du support sinon il faut ABSOLUMENT qu\'elle soit sur "Aucune"' }}</div>
-                <div class="form-group has-error">
-                    <label class="col-xs-6 control-label ">{{ 'Mise à jour à réappliquer' }}</label>
-                    <div class="col-xs-5">
-                        <select id="sel_updateVersion" class="form-control updateOption" data-l1key="update::reapply">
-                            <option value="">{{ 'Aucune' }}</option>
-                            {% for update in updatesList %}
-                                <option value="{{ update }}">{{ update }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
+    <div class="alert alert-danger">{{ 'Avant toute mise à jour, merci de consulter la note de version du core de NextDom' }} <a target="_blank" href="https://nextdom.github.io/core/fr_FR/noteVersion">{{ 'ici' }}</a></div>
+    <div class="form-group">
+        <div class="form-group">
+            <label class="col-xs-6 control-label label-sticker-big">{{ 'Pré-update (mettre à jour le script d\'update avant)' }}</label>
+            <div class="col-xs-4">
+                <input type="checkbox" class="updateOption" data-l1key="preUpdate"/>
             </div>
-    <div class="fab" style="z-index:999">
-        <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
-        <ul class="fab-buttons">
-            <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_doUpdate" style="background-color:green"><i class="fas fa-save"></i></a></li>
-            <li class="fab-buttons__item"><a class="fab-buttons__link" href="index.php?v=d&p=administration" style="background-color:#c9302c"><i class="fas fa-chevron-left"></i></a></li>
-        </ul>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-6 control-label label-sticker-big">{{ 'Sauvegarder avant' }}</label>
+            <div class="col-xs-4">
+                <input type="checkbox" class="updateOption" data-l1key="backup::before" checked/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-6 control-label label-sticker-big">{{ 'Mettre à jour les plugins' }}</label>
+            <div class="col-xs-4">
+                <input type="checkbox" class="updateOption" data-l1key="plugins" checked/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-6 control-label label-sticker-big">{{ 'Mettre à jour le core' }}</label>
+            <div class="col-xs-4">
+                <input type="checkbox" class="updateOption" data-l1key="core" checked/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-6 control-label ">{{ 'Mode forcé' }}</label>
+            <div class="col-xs-4">
+                <input type="checkbox" class="updateOption" data-l1key="force"/>
+            </div>
+        </div>
+        <div class="alert alert-danger">{{ 'L\'option suivante n\'est à modifier que sur demande du support sinon il faut ABSOLUMENT qu\'elle soit sur "Aucune"' }}</div>
+        <div class="form-group has-error">
+            <label class="col-xs-6 control-label ">{{ 'Mise à jour à réappliquer' }}</label>
+            <div class="col-xs-5">
+                <select id="sel_updateVersion" class="form-control updateOption" data-l1key="update::reapply">
+                    <option value="">{{ 'Aucune' }}</option>
+                    {% for update in updatesList %}
+                        <option value="{{ update }}">{{ update }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
     </div>
 </div>
