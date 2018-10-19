@@ -1,22 +1,21 @@
 <?php
-/* This file is part of NextDom.
+/* This file is part of NextDom Software.
 *
 * NextDom is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
-* NextDom is distributed in the hope that it will be useful,
+* NextDom Software is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
-* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+* along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 */
 
 namespace NextDom\Helpers;
-
 
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
@@ -254,7 +253,6 @@ class Controller
         return $render->get('/desktop/administration.html.twig', $pageContent);
     }
 
-
     /**
      * Render network page
      *
@@ -270,7 +268,6 @@ class Controller
      */
     public static function networkPage(Render $render, array &$pageContent): string
     {
-
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
@@ -805,7 +802,6 @@ class Controller
             }
         }
 
-
         $pageContent['adminStats'] = CacheManager::stats();
         $pageContent['adminCacheFolder'] = CacheManager::getFolder();
         $pageContent['adminMemCachedExists'] = class_exists('memcached');
@@ -1281,7 +1277,6 @@ class Controller
         return $render->get('/desktop/message.html.twig', $pageContent);
     }
 
-
     /**
      * Render system page
      *
@@ -1382,7 +1377,6 @@ $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
         return $render->get('/desktop/display.html.twig', $pageContent);
     }
 
-
     /**
      * Render plugin page
      *
@@ -1417,7 +1411,6 @@ $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/plugin.html.twig', $pageContent);
     }
-
 
     /**
      * Render editor page
@@ -1474,7 +1467,6 @@ $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/shutdown.html.twig', $pageContent);
     }
-
 
     /**
      * Render profils page
@@ -1659,7 +1651,6 @@ $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
             }
             return $result;
         });
-
 
         $cmdDataArray = [];
         foreach ($eqLogicMangerAll as $eqLogic) {
@@ -1869,7 +1860,6 @@ $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
     {
         Status::initConnectState();
         Status::isConnectedOrFail();
-
 
         $planHeader = null;
         $planHeaders = \planHeader::all();
