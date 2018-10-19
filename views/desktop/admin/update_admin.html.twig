@@ -46,72 +46,76 @@
     </div>
     <!-- Services section -->
     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-        <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs pull-right" role="tablist">
-                <h4 class="box-title pull-left">&nbsp;&nbsp;<i class="fas fa-wrench">&nbsp;&nbsp;</i>{{ 'Services' }}</h4>
+        <form class="form-horizontal">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs pull-right" role="tablist">
+                    <h4 class="box-title pull-left">&nbsp;&nbsp;<i class="fas fa-wrench">&nbsp;&nbsp;</i>{{ 'Services' }}</h4>
 
-                {% for repo, data in adminReposList %}
-                    <li role="presentation" {% if repo == 'market' %}class="active"{% endif %}>
-                        <a href="#tab{{ repo }}" aria-controls="tab{{ repo }}" role="tab" data-toggle="tab">{{ data['name'] }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-            <div class="global-tab-content tab-content">
-                {% for repo, data in adminReposList %}
-                    <div role="tabpanel" class="tab-pane {% if repo == 'market' %}active{% endif %}" id="tab{{ repo }}">
-                        <div class="form-group">
-                            <label class="col-lg-4 col-md-6 col-sm-5 col-xs-12 control-label">{{ 'Service' }} {{ data['name'] }}</label>
-                            <div class="col-lg-8 col-md-6 col-sm-7 col-xs-12">
-                                <input type="checkbox" class="configKey enableRepository" data-repo="{{ repo }}" data-l1key="{{ repo }}::enable" id="enableRepo{{ repo }}"/>
-                                <label for="enableRepo{{ repo }}" class="control-label label-check">{{ 'Activer' }}</label>
-                            </div>
-                        </div>
-                        {% if data['scope']['hasConfiguration'] %}
-                            <div class="repositoryConfiguration{{ repo }}" style="display:none;">
-                                {% for config, param in data['configuration']['configuration'] %}
-                                    <div class="form-group">
-                                        <label class="col-lg-4 col-md-6 col-sm-5 col-xs-12 control-label">
-                                            {{ param['name'] }}
-                                        </label>
-                                        <div class="col-lg-8 col-md-6 col-sm-7 col-xs-12">
-                                            {% if param['default'] is defined %}
-                                                {% set defaultValue = param['default'] %}
-                                            {% else %}
-                                                {% set defaultValue = '' %}
-                                            {% endif %}
-                                            {% if param['type'] == 'checkbox' %}
-                                                <input type="checkbox" class="configKey" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}" id="{{ repo }}::{{ config }}"/>
-                                                <label for="{{ repo }}::{{ config }}" class="control-label label-check">{{ 'Activer' }}</label>
-                                            {% elseif param['type'] == 'input' %}
-                                                <input class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/>
-                                            {% elseif param['type'] == 'number' %}
-                                                <input type="number" class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/>
-                                            {% elseif param['type'] == 'password' %}
-                                                <input type="password" class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                                {% if data['scope']['test'] is defined and data['scope']['test'] %}
-                                    <div class="form-group">
-                                        <label class="col-lg-4 col-md-6 col-sm-5 col-xs-12 control-label">{{ 'Tester' }}</label>
-                                        <div class="col-sm-4">
-                                            <a class="btn btn-action testRepoConnection" data-repo="{{ repo }}"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Tester' }}</a>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-            </div>
-            <div class="fab" style="z-index:999">
-                <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
-                <ul class="fab-buttons">
-                    <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_saveupdate_admin" style="background-color:green"><i class="fas fa-save"></i></a></li>
-                    <li class="fab-buttons__item"><a class="fab-buttons__link" href="index.php?v=d&p=administration" style="background-color:#c9302c"><i class="fas fa-chevron-left"></i></a></li>
+                    {% for repo, data in adminReposList %}
+                        <li role="presentation" {% if repo == 'market' %}class="active"{% endif %}>
+                            <a href="#tab{{ repo }}" aria-controls="tab{{ repo }}" role="tab" data-toggle="tab">{{ data['name'] }}</a>
+                        </li>
+                    {% endfor %}
                 </ul>
+                <div class="global-tab-content tab-content">
+                    {% for repo, data in adminReposList %}
+                        <div role="tabpanel" class="tab-pane {% if repo == 'market' %}active{% endif %}" id="tab{{ repo }}">
+                            <div class="form-group">
+                                <label class="col-lg-4 col-md-6 col-sm-5 col-xs-12 control-label">{{ 'Service' }} {{ data['name'] }}</label>
+                                <div class="col-lg-8 col-md-6 col-sm-7 col-xs-12">
+                                    <input type="checkbox" class="configKey enableRepository" data-repo="{{ repo }}" data-l1key="{{ repo }}::enable" id="enableRepo{{ repo }}"/>
+                                    <label for="enableRepo{{ repo }}" class="control-label label-check">{{ 'Activer' }}</label>
+                                </div>
+                            </div>
+                            {% if data['scope']['hasConfiguration'] %}
+                                <div class="repositoryConfiguration{{ repo }}" style="display:none;">
+                                    {% for config, param in data['configuration']['configuration'] %}
+                                        <div class="form-group">
+                                            <label class="col-lg-4 col-md-6 col-sm-5 col-xs-12 control-label">
+                                                {{ param['name'] }}
+                                            </label>
+                                            <div class="col-lg-8 col-md-6 col-sm-7 col-xs-12">
+                                                {% if param['default'] is defined %}
+                                                    {% set defaultValue = param['default'] %}
+                                                {% else %}
+                                                    {% set defaultValue = '' %}
+                                                {% endif %}
+                                                {% if param['type'] == 'checkbox' %}
+                                                    <input type="checkbox" class="configKey" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}" id="{{ repo }}::{{ config }}"/>
+                                                    <label for="{{ repo }}::{{ config }}" class="control-label label-check">{{ 'Activer' }}</label>
+                                                {% elseif param['type'] == 'input' %}
+                                                    <input class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/>
+                                                {% elseif param['type'] == 'number' %}
+                                                    <input type="number" class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/>
+                                                {% elseif param['type'] == 'password' %}
+                                                    <input type="password" class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    {% if data['scope']['test'] is defined and data['scope']['test'] %}
+                                        <div class="form-group">
+                                            <label class="col-lg-4 col-md-6 col-sm-5 col-xs-12 control-label">{{ 'Tester' }}</label>
+                                            <div class="col-sm-4">
+                                                <a class="btn btn-action testRepoConnection" data-repo="{{ repo }}"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Tester' }}</a>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- Footer bar -->
+                <div class="fab" style="z-index:999">
+                    <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
+                    <ul class="fab-buttons">
+                        <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_saveupdate_admin" style="background-color:green"><i class="fas fa-save"></i></a></li>
+                        <li class="fab-buttons__item"><a class="fab-buttons__link" href="index.php?v=d&p=administration" style="background-color:#c9302c"><i class="fas fa-chevron-left"></i></a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
+
+        </form>
     </div>
 </div>
