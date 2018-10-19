@@ -1,4 +1,4 @@
-<div id="migration">
+<div id="migration" class="blurPanel">
     <div class="box blurPanel">
         <!-- Header bar -->
         <div class="box-header with-border">
@@ -25,12 +25,6 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-4 col-xs-12 control-label">{{ 'Migrer la sauvegarde' }}</label>
-                    <div class="col-sm-4 col-xs-12">
-                        <a class="btn btn-warning" id="bt_migrateNextDom"><i class="fas fa-refresh fa-spin" style="display : none;"></i><i class="fas fa-file"></i>&nbsp;&nbsp;{{ 'Lancer' }}</a>
-                    </div>
-                </div>
-                <div class="form-group">
                     <label class="col-sm-4 col-xs-12 control-label">{{ 'Envoyer une sauvegarde' }}</label>
                     <div class="col-sm-8 col-xs-12">
                         <span class="btn btn-default btn-file">
@@ -50,6 +44,7 @@
 <div class="fab" style="z-index:999">
     <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
     <ul class="fab-buttons">
+        <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_migrateNextDom" style="background-color:#00c0ef" data-toggle="tooltip" title="" data-original-title="{{ 'Lancer' }}"><i class="fas fa-play"></i></a></li>
         <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_saveuMigration" style="background-color:green"><i class="fas fa-save"></i></a></li>
         <li class="fab-buttons__item"><a class="fab-buttons__link" href="index.php?v=d&p=administration" style="background-color:#c9302c"><i class="fas fa-chevron-left"></i></a></li>
     </ul>
