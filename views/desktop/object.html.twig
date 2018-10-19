@@ -1,15 +1,5 @@
-<div id="div_resumeObjectList">
-    <div class="row padding-bottom">
-        <div class="col-md-8 col-xs-12">
-            <legend class="legend-title">{{ 'Liste des objets de votre ' }} {{ objectProductName }} - {{objectCustomProductName}}</legend>
-        </div>
-        <div class="col-md-4 col-xs-12">
-            <div class="pull-right">
-                <a class="btn btn-warning" id="bt_showObjectSummary"><i class="fas fa-list">&nbsp;&nbsp;</i>{{ 'Vue d\'ensemble' }}</a>
-                <a class="btn btn-warning" id="bt_addObject2"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
-            </div>
-        </div>
-    </div>
+<div id="div_resumeObjectList" class="blurPanel">
+    <legend class="legend-title">{{ 'Liste des objets de votre ' }} {{ objectProductName }} - {{objectCustomProductName}}</legend>
     <div class="row padding-bottom">
         <div class="col-xs-12">
             <input class="form-control padding-bottom" id="in_searchObject" placeholder="{{'Rechercher ...'}}" />
@@ -222,4 +212,13 @@
     <div class="box-footer clearfix">
         <a class="btn btn-success btn-sm pull-right" id="bt_saveObject"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
     </div>
+</div>
+<div class="fab" style="z-index:999">
+    <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
+    <ul class="fab-buttons">
+        <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_showObjectSummary" style="background-color:#33B8CC" data-toggle="tooltip" title="" data-original-title="{{ 'Vue d\'ensemble' }}"><i class="fas fa-list"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_addObject2" style="background-color:#33B8CC" data-toggle="tooltip" title="" data-original-title="{{ 'Ajouter' }}"><i class="fas fa-plus-circle"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_savegeneral" style="background-color:green"><i class="fas fa-save"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link" href="index.php?v=d&p=administration" style="background-color:#c9302c"><i class="fas fa-chevron-left"></i></a></li>
+    </ul>
 </div>
