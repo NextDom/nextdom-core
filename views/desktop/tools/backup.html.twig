@@ -7,113 +7,115 @@
 
         <!-- Page content -->
         <div class="box-body">
-            <p class="alert alert-info">{{ 'Cette fonction permet de compacter dans une archive tous les élements de votre Nextdom.' }}</br>
-                {{ 'Seront sauvegardé les paramètres, dashboard, vues, designs, plugins, widgets etc...' }}</p>
-            <!-- Sauvegardes Section -->
-            <div>
-                <legend class="legend-title">{{ 'Paramètres des sauvegardes' }}</legend>
-                <div class="form-group">
-                    <label class="col-sm-4 col-xs-12 control-label">{{ 'Emplacement' }}</label>
-                    <div class="col-sm-4 col-xs-12">
-                        <input type="text" class="configKey form-control" data-l1key="backup::path"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-4 col-xs-12 control-label">{{ 'Mémorisation sur' }}</label>
-                    <div class="col-sm-4 col-xs-8">
-                        <input type="text" class="configKey form-control" data-l1key="backup::keepDays"/>
-                    </div>
-                    <div class="col-sm- col-xs-4">
-                        <span class="label-unity">{{'jours'}}</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-4 col-xs-12 control-label">{{ 'Taille totale maximale' }}</label>
-                    <div class="col-sm-4 col-xs-8">
-                        <input type="text" class="configKey form-control" data-l1key="backup::maxSize"/>
-                    </div>
-                    <div class="col-sm-4 col-xs-4">
-                        <span class="label-unity">{{'Mo'}}</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-4 col-xs-12 control-label">{{ 'Sauvegarde manuelle' }}</label>
-                    <div class="col-sm-8 col-xs-12">
-                        <a class="btn btn-action bt_backupNextDom"><i class="fas fa-refresh fa-spin" style="display : none;"></i><i class="fas fa-floppy-o"></i>&nbsp;&nbsp;{{ 'Lancer' }}</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Local Section -->
-            <div class="legend-section">
-                <legend class="legend-title">{{ 'Sauvegardes locales' }}</legend>
-                <div class="form-group">
-                    <label class="col-sm-4 col-xs-6 control-label">{{ 'Sauvegardes disponibles' }}</label>
-                    <div class="col-sm-6 col-xs-6">
-                        <select class="form-control" id="sel_restoreBackup"> </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-4 col-xs-6 control-label">{{ 'Restauration' }}</label>
-                    <div class="col-sm-4 col-xs-6">
-                        <a class="btn btn-warning" id="bt_restoreNextDom"><i class="fas fa-refresh fa-spin" style="display : none;"></i><i class="far fa-file"></i>&nbsp;&nbsp;{{ 'Restaurer le selection' }}</a>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-4 col-xs-6 control-label">{{ 'Suppression' }}</label>
-                    <div class="col-sm-4 col-xs-6">
-                        <a class="btn btn-danger" id="bt_removeBackup"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer la selection' }}</a>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-4 col-xs-6 control-label">{{ 'Envoyer une sauvegarde' }}</label>
-                    <div class="col-sm-8 col-xs-6">
-                            <span class="btn btn-default btn-file">
-                                <i class="fas fa-cloud-upload-alt">&nbsp;&nbsp;</i>{{ 'Selectionner' }}<input id="bt_uploadBackup" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token={{ backupAjaxToken }}">
-                            </span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-4 col-xs-6 control-label">{{ 'Téléchargement' }}</label>
-                    <div class="col-sm-4 col-xs-6">
-                        <a class="btn btn-success" id="bt_downloadBackup"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{ 'Télécharger la selection' }}</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cloud Section -->
-            {% for repo, repoData in backupReposList %}
-                {% if repoData['scope']['backup'] != false and repoData['enable'] != 0 %}
-                    {% set cssClass = 'repo_' ~ repo %}
-                    <div class="legend-section">
-                        <legend class="legend-title">{{ 'Sauvegardes' }} {{ repoData['name'] }}</legend>
+            <form class="form-horizontal">
+                <p class="alert alert-info">{{ 'Cette fonction permet de compacter dans une archive tous les élements de votre Nextdom.' }}</br>
+                    {{ 'Seront sauvegardé les paramètres, dashboard, vues, designs, plugins, widgets etc...' }}</p>
+                    <!-- Sauvegardes Section -->
+                    <div>
+                        <legend class="legend-title">{{ 'Paramètres des sauvegardes' }}</legend>
                         <div class="form-group">
-                            <label class="col-sm-4 col-xs-6 control-label">{{ 'Envoi automatique' }}</label>
-                            <div class="col-sm-4 col-xs-6">
-                                <input type="checkbox" class="configKey" data-l1key="{{ repo }}::cloudUpload" id="{{ repo }}"/>
-                                <label for="{{ repo }}" class="control-label label-check">{{ 'Activer' }}</label>
+                            <label class="col-sm-4 col-xs-12 control-label">{{ 'Emplacement' }}</label>
+                            <div class="col-sm-4 col-xs-12">
+                                <input type="text" class="configKey form-control" data-l1key="backup::path"/>
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-4 col-xs-12 control-label">{{ 'Mémorisation sur' }}</label>
+                            <div class="col-sm-4 col-xs-8">
+                                <input type="text" class="configKey form-control" data-l1key="backup::keepDays"/>
+                            </div>
+                            <div class="col-sm- col-xs-4">
+                                <span class="label-unity">{{'jours'}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 col-xs-12 control-label">{{ 'Taille totale maximale' }}</label>
+                            <div class="col-sm-4 col-xs-8">
+                                <input type="text" class="configKey form-control" data-l1key="backup::maxSize"/>
+                            </div>
+                            <div class="col-sm-4 col-xs-4">
+                                <span class="label-unity">{{'Mo'}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 col-xs-12 control-label">{{ 'Sauvegarde manuelle' }}</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <a class="btn btn-action bt_backupNextDom"><i class="fas fa-refresh fa-spin" style="display : none;"></i><i class="fas fa-floppy-o"></i>&nbsp;&nbsp;{{ 'Lancer' }}</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Local Section -->
+                    <div class="legend-section">
+                        <legend class="legend-title">{{ 'Sauvegardes locales' }}</legend>
+                        <div class="form-group">
                             <label class="col-sm-4 col-xs-6 control-label">{{ 'Sauvegardes disponibles' }}</label>
                             <div class="col-sm-6 col-xs-6">
-                                <select class="form-control sel_restoreCloudBackup" data-repo="{{ repo }}">
-                                    <option>{{ 'Chargement...' }}</option>
-                                </select>
-                                <script>
-                                    REPO_LIST.push('{{ repo }}');
-                                </script>
+                                <select class="form-control" id="sel_restoreBackup"> </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 col-xs-6 control-label">{{ 'Restauration' }}</label>
                             <div class="col-sm-4 col-xs-6">
-                                <a class="btn btn-warning bt_restoreRepoBackup" data-repo="{{ repo }}"><i class="fas fa-refresh fa-spin" style="display: none;"></i><i class="fas fa-file"></i>&nbsp;&nbsp;{{ 'Restaurer la selection' }}</a>
+                                <a class="btn btn-warning" id="bt_restoreNextDom"><i class="fas fa-refresh fa-spin" style="display : none;"></i><i class="far fa-file"></i>&nbsp;&nbsp;{{ 'Restaurer le selection' }}</a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 col-xs-6 control-label">{{ 'Suppression' }}</label>
+                            <div class="col-sm-4 col-xs-6">
+                                <a class="btn btn-danger" id="bt_removeBackup"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer la selection' }}</a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 col-xs-6 control-label">{{ 'Envoyer une sauvegarde' }}</label>
+                            <div class="col-sm-8 col-xs-6">
+                            <span class="btn btn-default btn-file">
+                                <i class="fas fa-cloud-upload-alt">&nbsp;&nbsp;</i>{{ 'Selectionner' }}<input id="bt_uploadBackup" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token={{ backupAjaxToken }}">
+                            </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 col-xs-6 control-label">{{ 'Téléchargement' }}</label>
+                            <div class="col-sm-4 col-xs-6">
+                                <a class="btn btn-success" id="bt_downloadBackup"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{ 'Télécharger la selection' }}</a>
                             </div>
                         </div>
                     </div>
-                {% endif %}
-            {% endfor %}
+
+                    <!-- Cloud Section -->
+                    {% for repo, repoData in backupReposList %}
+                        {% if repoData['scope']['backup'] != false and repoData['enable'] != 0 %}
+                            {% set cssClass = 'repo_' ~ repo %}
+                            <div class="legend-section">
+                                <legend class="legend-title">{{ 'Sauvegardes' }} {{ repoData['name'] }}</legend>
+                                <div class="form-group">
+                                    <label class="col-sm-4 col-xs-6 control-label">{{ 'Envoi automatique' }}</label>
+                                    <div class="col-sm-4 col-xs-6">
+                                        <input type="checkbox" class="configKey" data-l1key="{{ repo }}::cloudUpload" id="{{ repo }}"/>
+                                        <label for="{{ repo }}" class="control-label label-check">{{ 'Activer' }}</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 col-xs-6 control-label">{{ 'Sauvegardes disponibles' }}</label>
+                                    <div class="col-sm-6 col-xs-6">
+                                        <select class="form-control sel_restoreCloudBackup" data-repo="{{ repo }}">
+                                            <option>{{ 'Chargement...' }}</option>
+                                        </select>
+                                        <script>
+                                            REPO_LIST.push('{{ repo }}');
+                                        </script>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 col-xs-6 control-label">{{ 'Restauration' }}</label>
+                                    <div class="col-sm-4 col-xs-6">
+                                        <a class="btn btn-warning bt_restoreRepoBackup" data-repo="{{ repo }}"><i class="fas fa-refresh fa-spin" style="display: none;"></i><i class="fas fa-file"></i>&nbsp;&nbsp;{{ 'Restaurer la selection' }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+            </form>
         </div>
         <div class="fab" style="z-index:999">
             <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
