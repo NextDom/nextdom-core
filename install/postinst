@@ -159,9 +159,36 @@ step_nextdom_configuration() {
 
     chmod 775 -R ${WEBSERVER_HOME}
     chown -R www-data:www-data ${WEBSERVER_HOME}
-    mkdir -p /tmp/nextdom >> ${DEBUG} 2>&1
+    if [[ -d "/tmp/jeedom" ]]
+    then
+        if [[ -L "/tmp/jeedom" ]]
+        then
+            rm -f /tmp/jeedom
+            ln -s /tmp/nextdom /tmp/jeedom
+            if [[ ! -d "/tmp/nextdom" ]]
+            then
+                mkdir -p /tmp/nextdom >> ${DEBUG} 2>&1
+            fi
+        else
+            if [[ -d "/tmp/nextdom" ]]
+            then
+                mv /tmp/jeedom/* /tmp/nextdom/
+            else
+                mv /tmp/jeedom /tmp/nextdom
+                ln -s /tmp/nextdom /tmp/jeedom
+            fi
+        fi
+    else
+        if [[ ! -d "/tmp/nextdom" ]]
+        then
+            mkdir -p /tmp/nextdom
+        fi
+        ln -s /tmp/nextdom /tmp/jeedom
+    fi
     chmod 777 -R /tmp/nextdom >> ${DEBUG} 2>&1
+    chmod 777 /tmp/jeedom >> ${DEBUG} 2>&1
     chown www-data:www-data -R /tmp/nextdom >> ${DEBUG} 2>&1
+    chown www-data:www-data /tmp/jeedom >> ${DEBUG} 2>&1
 
     usermod -a -G dialout,tty www-data
 
