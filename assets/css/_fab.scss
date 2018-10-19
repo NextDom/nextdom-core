@@ -5,12 +5,13 @@
   right: 10px;
   bottom: 10px;
   margin-left: -28px;
+  &:hover .fab-buttons {
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
-.fab:hover .fab-buttons {
-  opacity: 1;
-  visibility: visible;
-}
+ 
 
 .fab:hover .fab-buttons__link {
   transform: scaleY(1) scaleX(1) translateY(-16px) translateX(0px);
