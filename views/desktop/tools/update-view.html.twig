@@ -1,8 +1,7 @@
-<div id="div_Update-view">
+<div id="div_Update-view" class="blurPanel">
     <a style="margin-right:30px">  <i class="fas fa-clock-o" style="cursor:default;"></i> <span style="cursor:default;">{{ 'Dernière vérification : ' }}</span><span class="label label-info" id="span_lastUpdateCheck" style="margin-bottom: 5px;font-size:1em;cursor:default;"></span></a>
     <input class="form-control" placeholder="{{ 'Rechercher' }}" id="in_searchPlugin"/>
-
-
+    
     <h3>Plugins</h3>
     <div class="row">
         <div id="listPlugin"></div>
@@ -11,15 +10,16 @@
     <div class="row">
         <div id="listOther"></div>
     </div>
-    <div class="fab" style="z-index:999">
-        <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
-        <ul class="fab-buttons">
-            <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_checkAllUpdate" style="background-color:#00c0ef" data-toggle="tooltip" title="" data-original-title="{{ 'Vérifier les mises à jour' }}"><i class="fas fa-refresh"></i></a></li>
-            <li class="fab-buttons__item"><a href="#" class="fab-buttons__link" id="bt_updateNextDom" style="background-color:#00c0ef" data-toggle="tooltip" title="" data-original-title="{{ 'Mettre à jour' }}"><i class="fas fa-check"></i></a></li>
-            <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_doUpdate" style="background-color:green"><i class="fas fa-save"></i></a></li>
-            <li class="fab-buttons__item"><a class="fab-buttons__link" href="index.php?v=d&p=administration" style="background-color:#c9302c"><i class="fas fa-chevron-left"></i></a></li>
-        </ul>
-    </div>
+</div>
+
+<div class="fab" style="z-index:999">
+    <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
+    <ul class="fab-buttons">
+        <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_checkAllUpdate" style="background-color:#00c0ef" data-toggle="tooltip" title="" data-original-title="{{ 'Vérifier les mises à jour' }}"><i class="fas fa-refresh"></i></a></li>
+        <li class="fab-buttons__item"><a href="#" class="fab-buttons__link" id="bt_updateNextDom" style="background-color:#00c0ef" data-toggle="tooltip" title="" data-original-title="{{ 'Mettre à jour' }}"><i class="fas fa-check"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_doUpdate" style="background-color:green"><i class="fas fa-save"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link" href="index.php?v=d&p=administration" style="background-color:#c9302c"><i class="fas fa-chevron-left"></i></a></li>
+    </ul>
 </div>
 
 <div id="md_updateInfo">
