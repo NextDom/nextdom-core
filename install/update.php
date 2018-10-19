@@ -94,8 +94,6 @@ try {
         try {
             global $NO_PLUGIN_BACKUP;
             $NO_PLUGIN_BACKUP = true;
-            global $NO_CLOUD_BACKUP;
-            $NO_CLOUD_BACKUP = true;
             nextdom::backup();
         } catch (Exception $e) {
             if (init('force') != 1) {

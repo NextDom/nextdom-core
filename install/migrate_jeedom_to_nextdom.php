@@ -110,8 +110,7 @@ try {
     }
 
     echo "Décompression de la sauvegarde...";
-    	$excludes = array(
-	);
+    	$excludes = array();
 	$exclude = '';
     foreach ($excludes as $folder) {
         $exclude .= ' --exclude="' . $folder . '"';
@@ -134,17 +133,17 @@ try {
     foreach ($tables as $table) {
         $table = array_values($table);
         $table = $table[0];
-        echo "Supprimer la table : " . $table . ' ...';
+        echo "Supprimer la table : " . $table . '...';
         DB::Prepare('DROP TABLE IF EXISTS `' . $table . '`', array(), DB::FETCH_TYPE_ROW);
         echo "OK\n";
     }
 
     echo "Restauration de la base de données...";
-    shell_exec("mysql --host=" . $CONFIG['db']['host'] . " --port=" . $CONFIG['db']['port'] . " --user=" . $CONFIG['db']['username'] . " --password=" . $CONFIG['db']['password'] . " " . $CONFIG['db']['dbname'] . "  </tmp/nextdombackup/DB_backup.sql");
+    shell_exec("mysql --host=" . $CONFIG['db']['host'] . " --port=" . $CONFIG['db']['port'] . " --user=" . $CONFIG['db']['username'] . " --password=" . $CONFIG['db']['password'] . " " . $CONFIG['db']['dbname'] . " < /tmp/nextdombackup/DB_backup.sql");
     echo "OK\n";
 
-    echo "Mise à jour SQL";
-    shell_exec('php ' . __DIR__ . '/../install/migrate/migrate.php');
+    echo "Mise a jour SQL...";
+    echo shell_exec('php ' . __DIR__ . '/migrate/migrate.php');
     echo "OK\n";
     echo "Active les contraintes...";
     try {
@@ -172,7 +171,7 @@ try {
 	echo "OK\n";
 
 	echo "Restauration des plugins...";
-  	system('cp -r /tmp/nextdombackup/plugins/* ' . $nextdom_dir . '/plugins' );
+  	system('cp -fr /tmp/nextdombackup/plugins/* ' . $nextdom_dir . '/plugins' );
     foreach (plugin::listPlugin(true) as $plugin) {
         $plugin_id = $plugin->getId();
         $dependancy_info = $plugin->dependancy_info(true);
