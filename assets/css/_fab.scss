@@ -80,5 +80,8 @@
 
 .blur {
   filter:blur(2px) grayscale(1);
-}   
-          
+}
+
+*[class^="fab"]{
+  cursor : pointer;
+}
