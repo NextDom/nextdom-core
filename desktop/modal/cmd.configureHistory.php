@@ -137,7 +137,7 @@ $('#bt_cmdConfigureCmdHistoryApply').on('click',function(){
     },
     success: function (data) {
         $("#table_cmdConfigureHistory").trigger("update");
-        notify("Erreur", error.message, 'error');
+        notify("Info", "{{Opération effectuée}}", 'success');
     }
   });
 });
