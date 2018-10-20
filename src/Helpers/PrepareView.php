@@ -130,7 +130,6 @@ class PrepareView
         $page = '';
 
         $language = $configs['language'];
-      	$designTheme = $_SESSION['user']->getOptions('design_nextdom');
 
         $pageData['HOMELINK'] = self::getHomeLink();
         //TODO: Tests à revoir
