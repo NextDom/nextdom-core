@@ -136,43 +136,6 @@ $("#md_backupInfo").dialog({
     }
 });
 
- $(".bt_uploadCloudBackup").on('click', function (event) {
-    var el = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir envoyer une sauvegarde de}} '+NEXTDOM_PRODUCT_NAME+' {{sur le cloud ? Une fois lancée cette opération ne peut être annulée}}', function (result) {
-        if (result) {
-            el.find('.fa-refresh').show();
-            nextdom.backup.uploadCloud({
-                backup: $('#sel_restoreBackup').value(),
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function () {
-                    getNextDomLog(1, 'backupCloud');
-                }
-            });
-        }
-    });
-});
-
- $(".bt_restoreRepoBackup").on('click', function (event) {
-    var el = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec la sauvegarde Cloud}} <b>' + $('#sel_restoreCloudBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée}}', function (result) {
-        if (result) {
-            el.find('.fa-refresh').show();
-            nextdom.backup.restoreCloud({
-                backup: el.closest('.repo').find('.sel_restoreCloudBackup').value(),
-                repo: el.attr('data-repo'),
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function () {
-                    getNextDomLog(1, 'restore');
-                }
-            });
-        }
-    });
-});
-
  $.showLoading();
  nextdom.config.load({
     configuration: $('#backup').getValues('.configKey')[0],
@@ -266,23 +229,3 @@ function updateListBackup() {
     });
 }
 
-for(var i in REPO_LIST){
-    updateRepoListBackup(REPO_LIST[i]);
-}
-
-function updateRepoListBackup(_repo) {
-    nextdom.repo.backupList({
-        repo : _repo,
-        global : false,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (data) {
-            var options = '';
-            for (var i in data) {
-                options += '<option value="' + data[i] + '">' + data[i] + '</option>';
-            }
-            $('.sel_restoreCloudBackup[data-repo='+_repo+']').empty().html(options);
-        }
-    });
-}
