@@ -1,31 +1,6 @@
 <section>
       <div id="interactThumbnailDisplay" class="col-xs-12">
             <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-cog"></i> {{ 'Gestion' }}</h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fas fa-times"></i></button>
-                    </div>
-                </div>
-                <div class="box-body interactListContainer text-center">
-                    <div class="icon_gestion icon_theme_color cursor" id="bt_addInteract2" >
-                            <i class="fas fa-plus-circle"></i>
-                        <div class="text-center"><span >{{ 'Ajouter' }}</span></div>
-                    </div>
-                    <div class="icon_gestion icon-blue cursor" id="bt_regenerateInteract2">
-                            <i class="fas fa-refresh"></i>
-                        <div class="text-center"><span>{{ 'Regénérer' }}</span></div>
-                    </div>
-                    <div class="icon_gestion icon-blue cursor" id="bt_testInteract2">
-                            <i class="fas fa-vial"></i>
-                        <div class="text-center"> <span>{{ 'Tester' }}</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="box">
                 <div class="box-header">
                     <h3 class="box-title"><i class="far fa-comments"></i> {{ 'Mes interactions' }}</h3>
                     {% if interactTotal|length == 0 %}
@@ -308,5 +283,14 @@
                 </div>
             </div>
         </section>
+    </div>
+    <div class="fab" style="z-index:999">
+        <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
+        <ul class="fab-buttons">
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_addInteract2" data-tooltip="{{ 'Ajouter' }}"><i class="fas fa-plus-circle"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_regenerateInteract2" data-tooltip="{{ 'Regénerer' }}"><i class="fas fa-refresh"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_testInteract2" data-tooltip="{{ 'Tester' }}"><i class="fas fa-vial"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" href="{{ HOMELINK }}"><i class="fas fa-home"></i></a></li>
+        </ul>
     </div>
 </section>
