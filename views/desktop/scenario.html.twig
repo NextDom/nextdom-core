@@ -327,9 +327,9 @@
     <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
     <ul class="fab-buttons">
         {% if scenarioEnabled == 0 %}
-            <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_changeAllScenarioState2" data-state="1" style="background-color:#33B8CC" data-toggle="tooltip" title="" data-original-title="{{ 'Activer scénarios' }}"><i class="fas fa-check"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" id="bt_changeAllScenarioState2" data-state="1" data-tooltip="{{ 'Activer scénarios' }}"><i class="fas fa-check"></i></a></li>
         {% else %}
-            <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_changeAllScenarioState2" data-state="0" style="background-color:#33B8CC" data-toggle="tooltip" title="" data-original-title="{{ 'Désactiver scénarios' }}"> <i class="fas fa-times"></i></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_changeAllScenarioState2" data-state="0" data-tooltip="{{ 'Désactiver scénarios' }}"> <i class="fas fa-times"></i></i></a></li>
         {% endif %}
         <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_addScenario2" data-tooltip="{{ 'Ajouter' }}"><i class="fas fa-plus-circle"></i></a></li>
         <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_displayScenarioVariable2" data-tooltip="{{ 'Voir variables' }}"><i class="fas fa-eye"></i></a></li>
