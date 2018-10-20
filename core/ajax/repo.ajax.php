@@ -26,19 +26,6 @@ try {
 
     ajax::init();
 
-    if (init('action') == 'uploadCloud') {
-        unautorizedInDemo();
-        repo_market::backup_send(init('backup'));
-        ajax::success();
-    }
-
-    if (init('action') == 'restoreCloud') {
-        unautorizedInDemo();
-        $class = 'repo_' . init('repo');
-        $class::backup_restore(init('backup'));
-        ajax::success();
-    }
-
     if (init('action') == 'sendReportBug') {
         unautorizedInDemo();
         $class = 'repo_' . init('repo');

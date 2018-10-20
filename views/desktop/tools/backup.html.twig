@@ -85,40 +85,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Cloud Section -->
-                    {% for repo, repoData in backupReposList %}
-                        {% if repoData['scope']['backup'] != false and repoData['enable'] != 0 %}
-                            {% set cssClass = 'repo_' ~ repo %}
-                            <div class="legend-section">
-                                <legend class="legend-title">{{ 'Sauvegardes' }} {{ repoData['name'] }}</legend>
-                                <div class="form-group">
-                                    <label class="col-sm-4 col-xs-6 control-label">{{ 'Envoi automatique' }}</label>
-                                    <div class="col-sm-4 col-xs-6">
-                                        <input type="checkbox" class="configKey" data-l1key="{{ repo }}::cloudUpload" id="{{ repo }}"/>
-                                        <label for="{{ repo }}" class="control-label label-check">{{ 'Activer' }}</label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-4 col-xs-6 control-label">{{ 'Sauvegardes disponibles' }}</label>
-                                    <div class="col-sm-6 col-xs-6">
-                                        <select class="form-control sel_restoreCloudBackup" data-repo="{{ repo }}">
-                                            <option>{{ 'Chargement...' }}</option>
-                                        </select>
-                                        <script>
-                                            REPO_LIST.push('{{ repo }}');
-                                        </script>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-4 col-xs-6 control-label">{{ 'Restauration' }}</label>
-                                    <div class="col-sm-4 col-xs-6">
-                                        <a class="btn btn-warning bt_restoreRepoBackup" data-repo="{{ repo }}"><i class="fas fa-refresh fa-spin" style="display: none;"></i><i class="fas fa-file"></i>&nbsp;&nbsp;{{ 'Restaurer la selection' }}</a>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
                 </fieldset>
             </form>
         </div>
