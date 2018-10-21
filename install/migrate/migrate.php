@@ -9,7 +9,7 @@ if ( 'localhost' != $CONFIG['db']['host'] ){
     $HOST=' -h '.$CONFIG['db']['host'];
 }
 
-$CMD='mysql -u '.$CONFIG['db']['username'].$HOST.' -p'.$CONFIG['db']['password'].' -f '.$CONFIG['db']['dbname'].' < '.__DIR__.'/migrate.sql';
+$CMD='mysql -u '.$CONFIG['db']['username'].$HOST.' -p'.$CONFIG['db']['password'].' -f '.$CONFIG['db']['dbname'].' < '.__DIR__.'/migrate.sql > /dev/null 2>&1';
 shell_exec($CMD);
 
 require_once(__DIR__ . '/../../core/php/core.inc.php');
