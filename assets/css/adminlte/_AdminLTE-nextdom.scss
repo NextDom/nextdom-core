@@ -443,11 +443,11 @@ body {
   margin-left: -2px;
 }
 .label-unity, .label-unity-big {
-  padding: 9px 0px 10px;
   font: {
     size: 100%;
     weight: 500;
   }
+  line-height: 3rem;
 }
 @media (max-width: 767px) {
   .label-unity-big {
