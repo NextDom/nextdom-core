@@ -141,7 +141,13 @@ class repo_samba {
         $cmd = repo_samba::makeSambaCommand('cd ' . $_dir . ';ls', $_type);
         $result = explode("\n", com_shell::execute($cmd));
         $return = array();
-        for ($i = 2; $i < count($result) - 2; $i++) {
+        // Un warning fausse le résultat
+        // Sinon supprime les 2 premières lignes uniquement (cd + message du ls)
+        $startIndex = 2;
+        if (strpos(strtolower($result[0]), 'deprecated') !== false) {
+            ++$startIndex;
+        }
+        for ($i = $startIndex; $i < count($result) - 2; $i++) {
             $line = array();
             foreach (explode(" ", $result[$i]) as $value) {
                 if (trim($value) == '') {
@@ -180,7 +186,7 @@ class repo_samba {
     public static function backup_list() {
         $return = array();
         foreach (self::ls(config::byKey('samba::backup::folder')) as $file) {
-            if ($file['filename'] == '.' || $file['filename'] == '..') {
+            if ($file['filename'] == '.' || $file['filename'] == '..' || $file['filename'][0] == '.') {
                 continue;
             }
             $return[] = $file['filename'];
