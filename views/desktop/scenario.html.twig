@@ -1,286 +1,239 @@
-<div class="row row-overflow">
-    <div id="scenarioThumbnailDisplay" class="col-xs-12">
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title"><i class="fa fa-cog"></i> {{ 'Gestion' }}</h3>
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fas fa-times"></i></button>
-                </div>
-            </div>
-            <div class="scenarioListContainer box-body text-center">
-                <div class="icon_gestion icon_theme_color cursor" id="bt_addScenario2">
-                    <i class="fas fa-plus-circle"></i>
-                    <div class="text-center"><span>{{ 'Ajouter' }}</span></div>
-                </div>
-                {% if scenarioEnabled == 0 %}
-                    <div class="icon_gestion icon-blue cursor" id="bt_changeAllScenarioState2" data-state="1">
-                        <i class="fas fa-check"></i>
-                        <div class="text-center"><span>{{ 'Activer scénarios' }}</span></div>
-                    </div>
-                {% else %}
-                    <div class="icon_gestion icon-red cursor" id="bt_changeAllScenarioState2" data-state="0">
-                        <i class="fas fa-times"></i>
-                        <div class="text-center"><span>{{ 'Désactiver scénarios' }}</span></div>
-                    </div>
-                {% endif %}
-                <div class="icon_gestion icon-blue cursor" id="bt_displayScenarioVariable2">
-                    <i class="fas fa-eye"></i>
-                    <div class="text-center"><span>{{ 'Voir variables' }}</span></div>
-                </div>
-                <div class="icon_gestion icon-blue cursor bt_showScenarioSummary">
-                    <i class="fas fa-list"></i>
-                    <div class="text-center"><span>{{ 'Vue d\'ensemble' }}</span></div>
-                </div>
-                <div class="icon_gestion icon-blue cursor bt_showExpressionTest">
-                    <i class="fas fa-check"></i>
-                    <div class="text-center"><span>{{ 'Testeur d\'expression' }}</span></div>
-                </div>
-            </div>
+<div id="scenarioThumbnailDisplay" class="blurPanel">
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="icon nextdom-clap_cinema"></i> {{ 'Mes scénarios' }}</h3>
         </div>
+        <div class="box-body">
+            {% if scenarioCount == 0 %}
+                <br/><br/><br/>
+                <center>
+                    <span style="color:#767676;font-size:1.2em;font-weight: bold;">Vous n'avez encore aucun scénario. Cliquez sur ajouter pour commencer</span>
+                </center>
+            {% else %}
+                <input class="form-control" placeholder="{{ 'Rechercher' }}" style="margin-bottom:4px" id="in_searchScenario"/>
+                <div class="box-group" id="accordionScenar">
+                    {% if scenarios[-1]|length > 0 %}
+                        <div class="panel box">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none">Aucun - {{ scenarios[-1]|length }} scénario(s)</a>
+                                </h3>
+                            </div>
+                            <div id="config_none" class="panel-collapse collapse">
+                                <div class="box-body">
+                                    <div class="scenarioListContainer DisplayCard text-center">
+                                        {% for scenario in scenarios[-1] %}
+                                            <div class="scenarioDisplayCard cursor icon_gestion" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
+                                                <img class="backgroundColor" src="/public/img/scenario.png" height="65" width="65"  style="border-radius:15px"/>
+                                                <br>
+                                                <span class="name">{{ scenario.getHumanName(true, true, true, true)|raw }}</span>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
 
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title"><i class="icon nextdom-clap_cinema"></i> {{ 'Mes scénarios' }}</h3>
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fas fa-times"></i></button>
-                </div>
-            </div>
-            <div class="box-body">
-                {% if scenarioCount == 0 %}
-                    <br/><br/><br/>
-                    <center>
-                        <span style="color:#767676;font-size:1.2em;font-weight: bold;">Vous n'avez encore aucun scénario. Cliquez sur ajouter pour commencer</span>
-                    </center>
-                {% else %}
-                    <input class="form-control" placeholder="{{ 'Rechercher' }}" style="margin-bottom:4px" id="in_searchScenario"/>
-                    <div class="box-group" id="accordionScenar">
-                        {% if scenarios[-1]|length > 0 %}
+                    {% set index = 0 %}
+
+                    {% for scenarioGroup in scenarioListGroup %}
+                        {% if scenarioGroup.group != '' %}
                             <div class="panel box">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">
-                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none">Aucun - {{ scenarios[-1]|length }} scénario(s)</a>
-                                    </h3>
+                                    <h3 class="box-title"><a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}">{{ scenarioGroup.group }} - {{ scenarios[scenarioGroup.group]|length }} scénario(s)</a></h3>
                                 </div>
-                                <div id="config_none" class="panel-collapse collapse">
+                                <div id="config_{{ index }}" class="panel-collapse collapse">
                                     <div class="box-body">
-                                        <div class="scenarioListContainer DisplayCard text-center">
-                                            {% for scenario in scenarios[-1] %}
-                                                <div class="scenarioDisplayCard cursor icon_gestion" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
-                                                    <img class="backgroundColor" src="/public/img/scenario.png" height="65" width="65"  style="border-radius:15px"/>
+                                        <div class="scenarioListContainer DisplayCard text-center ">
+                                            {% for scenario in scenarios[scenarioGroup.group] %}
+                                                <div class="scenarioDisplayCard  icon_gestion cursor" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
+                                                    <img class="backgroundColor" src="/public/img/scenario.png" height="65" width="65"/>
                                                     <br>
-                                                    <span class="name">{{ scenario.getHumanName(true, true, true, true)|raw }}</span>
+                                                    <span>{{ scenario.getHumanName(true, true, true, true)|raw }}</span>
                                                 </div>
                                             {% endfor %}
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            {% set index = index + 1 %}
                         {% endif %}
-
-                        {% set index = 0 %}
-
-                        {% for scenarioGroup in scenarioListGroup %}
-                            {% if scenarioGroup.group != '' %}
-                                <div class="panel box">
-                                    <div class="box-header with-border">
-                                        <h3 class="box-title"><a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}">{{ scenarioGroup.group }} - {{ scenarios[scenarioGroup.group]|length }} scénario(s)</a></h3>
-                                    </div>
-                                    <div id="config_{{ index }}" class="panel-collapse collapse">
-                                        <div class="box-body">
-                                            <div class="scenarioListContainer DisplayCard text-center ">
-                                                {% for scenario in scenarios[scenarioGroup.group] %}
-                                                    <div class="scenarioDisplayCard  icon_gestion cursor" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
-                                                        <img class="backgroundColor" src="/public/img/scenario.png" height="65" width="65"/>
-                                                        <br>
-                                                        <span>{{ scenario.getHumanName(true, true, true, true)|raw }}</span>
-                                                    </div>
-                                                {% endfor %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% set index = index + 1 %}
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
     </div>
-    <div id="div_editScenario" class="col-xs-12" style="display: none;">
-        <a class="btn btn-default btn-sm pull-right" id="bt_graphScenario" title="{{ 'Liens' }}"><i class="fas fa-object-group"></i></a>
-        <a class="btn btn-default btn-sm pull-right" id="bt_copyScenario" title="{{ 'Dupliquer' }}"><i class="fas fa-copy"></i></a>
-        <a class="btn btn-default btn-sm pull-right" id="bt_logScenario" title="{{ 'Log' }}"><i class="far fa-file-alt"></i></a>
-        <a class="btn btn-default btn-sm pull-right" id="bt_exportScenario" title="{{ 'Exporter' }}"><i class="fas fa fa-share"></i></a>
-        <a class="btn btn-danger btn-sm pull-right" id="bt_stopScenario"><i class="fas fa-stop"></i> {{ 'Arrêter' }}</a>
-        <a class="btn btn-default btn-sm pull-right" id="bt_templateScenario" title="{{ 'Template' }}"><i class="fas fa-cubes"></i></a>
-        <a class="btn btn-success btn-sm pull-right" id="bt_saveScenario2"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-        <a class="btn btn-danger btn-sm pull-right" id="bt_delScenario2"><i class="fas fa-minus-circle"></i> {{ 'Supprimer' }}</a>
-        <a class="btn btn-warning btn-sm pull-right" id="bt_testScenario2" title='{{ 'Veuillez sauvegarder avant de tester. Ceci peut ne pas aboutir.' }}'><i class="fas fa-gamepad"></i> {{ 'Exécuter' }}</a>
-        <a class="btn btn-primary btn-sm pull-right bt_showExpressionTest"><i class="fas fa-check"></i> {{ 'Expression' }}</a>
-        <a class="btn btn-primary btn-sm pull-right" id="bt_displayScenarioVariable"><i class="fas fa-eye"></i> {{ 'Variables' }}</a>
-        <a class="btn btn-default btn-sm pull-right bt_addScenarioElement"><i class="fas fa-plus-circle"></i> {{ 'Ajouter bloc' }}</a>
-        <span id="span_ongoing" class="label pull-right" style="font-size : 1em;position:relative;top:5px;"></span>
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation">
-                <a class="cursor" aria-controls="home" role="tab" id="bt_scenarioThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a>
-            </li>
-            <li role="presentation" class="active">
-                <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i> {{ 'Général' }} (ID : <span class="scenarioAttr" data-l1key="id"></span>)</a>
-            </li>
-            <li role="presentation">
-                <a id="bt_scenarioTab" href="#scenariotab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-filter"></i> {{ 'Scénario' }}</a>
-            </li>
-        </ul>
-        <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
-            <div role="tabpanel" class="tab-pane active" id="generaltab">
-                <br/>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <form class="form-horizontal">
-                            <fieldset>
-                                <div class="form-group">
-                                    <label class="col-xs-5 control-label">{{ 'Nom du scénario' }}</label>
-                                    <div class="col-xs-6">
-                                        <input class="form-control scenarioAttr" data-l1key="name" type="text"
-                                               placeholder="{{ 'Nom du scénario' }}"/>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-xs-5 control-label">{{ 'Nom à afficher' }}</label>
-                                    <div class="col-xs-6">
-                                        <input class="form-control scenarioAttr"
-                                               title="{{ 'Ne rien mettre pour laisser le nom par défaut' }}"
-                                               data-l1key="display" data-l2key="name" type="text"
-                                               placeholder="{{ 'Nom à afficher' }}"/>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-xs-5 control-label">{{ 'Groupe' }}</label>
-                                    <div class="col-xs-6">
-                                        <input class="form-control scenarioAttr" data-l1key="group" type="text"
-                                               placeholder="{{ 'Groupe du scénario' }}"/>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-xs-5 control-label"></label>
-                                    <label>
-                                        {{ 'Actif' }} <input type="checkbox" class="scenarioAttr"
-                                                             data-l1key="isActive">
-                                    </label>
-                                    <label>
-                                        {{ 'Visible' }} <input type="checkbox" class="scenarioAttr"
-                                                               data-l1key="isVisible">
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-xs-5 control-label">{{ 'Objet parent' }}</label>
-                                    <div class="col-xs-6">
-                                        <select class="scenarioAttr form-control" data-l1key="object_id">
-                                            <option value="">{{ 'Aucun' }}</option>
-                                            {% for object in scenarioAllObjects %}
-                                                <option value="{{ object.getId() }}">{{ object.getName() }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-xs-5 control-label">{{ 'Timeout en secondes (0 = illimité)' }}</label>
-                                    <div class="col-xs-6">
-                                        <input class="form-control scenarioAttr" data-l1key="timeout">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-xs-5 control-label">{{ 'Multi lancement' }}</label>
-                                    <div class="col-xs-1">
-                                        <input type="checkbox" class="scenarioAttr" data-l1key="configuration"
-                                               data-l2key="allowMultiInstance"
-                                               title="{{ 'Le scénario pourra tourner plusieurs fois en même temps' }}">
-                                    </div>
-                                    <label class="col-xs-4 control-label">{{ 'Mode synchrone' }}</label>
-                                    <div class="col-xs-1">
-                                        <input type="checkbox" class="scenarioAttr" data-l1key="configuration"
-                                               data-l2key="syncmode"
-                                               title="{{ 'Le scénario est en mode synchrone. Attention, cela peut rendre le système instable' }}">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-xs-5 control-label">{{ 'Log' }}</label>
-                                    <div class="col-xs-6">
-                                        <select class="scenarioAttr form-control" data-l1key="configuration"
-                                                data-l2key="logmode">
-                                            <option value="default">{{ 'Défaut' }}</option>
-                                            <option value="none">{{ 'Aucun' }}</option>
-                                            <option value="realtime">{{ 'Temps réel' }}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-xs-5 control-label">{{ 'Suivre dans la timeline' }}</label>
-                                    <div class="col-xs-1">
-                                        <input type="checkbox" class="scenarioAttr" data-l1key="configuration"
-                                               data-l2key="timeline::enable"
-                                               title="{{ 'Les exécutions du scénario pourront être vues dans la timeline.' }}">
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </form>
-                    </div>
-                    <div class="col-sm-6">
-                        <form class="form-horizontal">
+</div>
+<div id="div_editScenario" class="col-xs-12" style="display: none;">
+    <a class="btn btn-default btn-sm pull-right" id="bt_graphScenario" title="{{ 'Liens' }}"><i class="fas fa-object-group"></i></a>
+    <a class="btn btn-default btn-sm pull-right" id="bt_copyScenario" title="{{ 'Dupliquer' }}"><i class="fas fa-copy"></i></a>
+    <a class="btn btn-default btn-sm pull-right" id="bt_logScenario" title="{{ 'Log' }}"><i class="far fa-file-alt"></i></a>
+    <a class="btn btn-default btn-sm pull-right" id="bt_exportScenario" title="{{ 'Exporter' }}"><i class="fas fa fa-share"></i></a>
+    <a class="btn btn-danger btn-sm pull-right" id="bt_stopScenario"><i class="fas fa-stop"></i> {{ 'Arrêter' }}</a>
+    <a class="btn btn-default btn-sm pull-right" id="bt_templateScenario" title="{{ 'Template' }}"><i class="fas fa-cubes"></i></a>
+    <a class="btn btn-success btn-sm pull-right" id="bt_saveScenario2"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+    <a class="btn btn-danger btn-sm pull-right" id="bt_delScenario2"><i class="fas fa-minus-circle"></i> {{ 'Supprimer' }}</a>
+    <a class="btn btn-warning btn-sm pull-right" id="bt_testScenario2" title='{{ 'Veuillez sauvegarder avant de tester. Ceci peut ne pas aboutir.' }}'><i class="fas fa-gamepad"></i> {{ 'Exécuter' }}</a>
+    <a class="btn btn-primary btn-sm pull-right bt_showExpressionTest"><i class="fas fa-check"></i> {{ 'Expression' }}</a>
+    <a class="btn btn-primary btn-sm pull-right" id="bt_displayScenarioVariable"><i class="fas fa-eye"></i> {{ 'Variables' }}</a>
+    <a class="btn btn-default btn-sm pull-right bt_addScenarioElement"><i class="fas fa-plus-circle"></i> {{ 'Ajouter bloc' }}</a>
+    <span id="span_ongoing" class="label pull-right" style="font-size : 1em;position:relative;top:5px;"></span>
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation">
+            <a class="cursor" aria-controls="home" role="tab" id="bt_scenarioThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a>
+        </li>
+        <li role="presentation" class="active">
+            <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i> {{ 'Général' }} (ID : <span class="scenarioAttr" data-l1key="id"></span>)</a>
+        </li>
+        <li role="presentation">
+            <a id="bt_scenarioTab" href="#scenariotab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-filter"></i> {{ 'Scénario' }}</a>
+        </li>
+    </ul>
+    <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
+        <div role="tabpanel" class="tab-pane active" id="generaltab">
+            <br/>
+            <div class="row">
+                <div class="col-sm-6">
+                    <form class="form-horizontal">
+                        <fieldset>
                             <div class="form-group">
-                                <div class="col-md-12">
-                                    <textarea class="form-control scenarioAttr ta_autosize"
-                                              data-l1key="description" placeholder="Description"></textarea>
+                                <label class="col-xs-5 control-label">{{ 'Nom du scénario' }}</label>
+                                <div class="col-xs-6">
+                                    <input class="form-control scenarioAttr" data-l1key="name" type="text"
+                                           placeholder="{{ 'Nom du scénario' }}"/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 col-xs-6 control-label">{{ 'Mode du scénario' }}</label>
-                                <div class="col-sm-9 col-xs-6">
-                                    <div class="input-group">
-                                        <select class="form-control scenarioAttr input-sm" data-l1key="mode">
-                                            <option value="provoke">{{ 'Provoqué' }}</option>
-                                            <option value="schedule">{{ 'Programmé' }}</option>
-                                            <option value="all">{{ 'Les deux' }}</option>
-                                        </select>
-                                        <span class="input-group-btn">
+                                <label class="col-xs-5 control-label">{{ 'Nom à afficher' }}</label>
+                                <div class="col-xs-6">
+                                    <input class="form-control scenarioAttr"
+                                           title="{{ 'Ne rien mettre pour laisser le nom par défaut' }}"
+                                           data-l1key="display" data-l2key="name" type="text"
+                                           placeholder="{{ 'Nom à afficher' }}"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-5 control-label">{{ 'Groupe' }}</label>
+                                <div class="col-xs-6">
+                                    <input class="form-control scenarioAttr" data-l1key="group" type="text"
+                                           placeholder="{{ 'Groupe du scénario' }}"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-5 control-label"></label>
+                                <label>
+                                    {{ 'Actif' }} <input type="checkbox" class="scenarioAttr"
+                                                         data-l1key="isActive">
+                                </label>
+                                <label>
+                                    {{ 'Visible' }} <input type="checkbox" class="scenarioAttr"
+                                                           data-l1key="isVisible">
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-5 control-label">{{ 'Objet parent' }}</label>
+                                <div class="col-xs-6">
+                                    <select class="scenarioAttr form-control" data-l1key="object_id">
+                                        <option value="">{{ 'Aucun' }}</option>
+                                        {% for object in scenarioAllObjects %}
+                                            <option value="{{ object.getId() }}">{{ object.getName() }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-5 control-label">{{ 'Timeout en secondes (0 = illimité)' }}</label>
+                                <div class="col-xs-6">
+                                    <input class="form-control scenarioAttr" data-l1key="timeout">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-5 control-label">{{ 'Multi lancement' }}</label>
+                                <div class="col-xs-1">
+                                    <input type="checkbox" class="scenarioAttr" data-l1key="configuration"
+                                           data-l2key="allowMultiInstance"
+                                           title="{{ 'Le scénario pourra tourner plusieurs fois en même temps' }}">
+                                </div>
+                                <label class="col-xs-4 control-label">{{ 'Mode synchrone' }}</label>
+                                <div class="col-xs-1">
+                                    <input type="checkbox" class="scenarioAttr" data-l1key="configuration"
+                                           data-l2key="syncmode"
+                                           title="{{ 'Le scénario est en mode synchrone. Attention, cela peut rendre le système instable' }}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-5 control-label">{{ 'Log' }}</label>
+                                <div class="col-xs-6">
+                                    <select class="scenarioAttr form-control" data-l1key="configuration"
+                                            data-l2key="logmode">
+                                        <option value="default">{{ 'Défaut' }}</option>
+                                        <option value="none">{{ 'Aucun' }}</option>
+                                        <option value="realtime">{{ 'Temps réel' }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-5 control-label">{{ 'Suivre dans la timeline' }}</label>
+                                <div class="col-xs-1">
+                                    <input type="checkbox" class="scenarioAttr" data-l1key="configuration"
+                                           data-l2key="timeline::enable"
+                                           title="{{ 'Les exécutions du scénario pourront être vues dans la timeline.' }}">
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="col-sm-6">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                    <textarea class="form-control scenarioAttr ta_autosize"
+                                              data-l1key="description" placeholder="Description"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 col-xs-6 control-label">{{ 'Mode du scénario' }}</label>
+                            <div class="col-sm-9 col-xs-6">
+                                <div class="input-group">
+                                    <select class="form-control scenarioAttr input-sm" data-l1key="mode">
+                                        <option value="provoke">{{ 'Provoqué' }}</option>
+                                        <option value="schedule">{{ 'Programmé' }}</option>
+                                        <option value="all">{{ 'Les deux' }}</option>
+                                    </select>
+                                    <span class="input-group-btn">
                                                 <a class="btn btn-default btn-sm" id="bt_addTrigger"><i class="fas fa-plus-square"></i> {{ 'Déclencheur' }}</a>
                                                 <a class="btn btn-default btn-sm" id="bt_addSchedule"><i class="fas fa-plus-square"></i> {{ 'Programmation' }}</a>
                                             </span>
-                                    </div>
                                 </div>
                             </div>
-                            <div class="scheduleDisplay" style="display: none;">
-                                <div class="form-group">
-                                    <label class="col-xs-3 control-label">{{ 'Précédent' }}</label>
-                                    <div class="col-xs-3"><span class="scenarioAttr label label-primary"
-                                                                data-l1key="forecast" data-l2key="prevDate"
-                                                                data-l3key="date"></span></div>
-                                    <label class="col-xs-3 control-label">{{ 'Prochain' }}</label>
-                                    <div class="col-xs-3"><span class="scenarioAttr label label-success"
-                                                                data-l1key="forecast" data-l2key="nextDate"
-                                                                data-l3key="date"></span></div>
-                                </div>
-                                <div class="scheduleMode"></div>
+                        </div>
+                        <div class="scheduleDisplay" style="display: none;">
+                            <div class="form-group">
+                                <label class="col-xs-3 control-label">{{ 'Précédent' }}</label>
+                                <div class="col-xs-3"><span class="scenarioAttr label label-primary"
+                                                            data-l1key="forecast" data-l2key="prevDate"
+                                                            data-l3key="date"></span></div>
+                                <label class="col-xs-3 control-label">{{ 'Prochain' }}</label>
+                                <div class="col-xs-3"><span class="scenarioAttr label label-success"
+                                                            data-l1key="forecast" data-l2key="nextDate"
+                                                            data-l3key="date"></span></div>
                             </div>
-                            <div class="provokeMode provokeDisplay" style="display: none;">
+                            <div class="scheduleMode"></div>
+                        </div>
+                        <div class="provokeMode provokeDisplay" style="display: none;">
 
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="scenariotab">
-                <br/>
-                <div id="div_scenarioElement" class="element" style="padding-bottom: 70px;"></div>
-            </div>
         </div>
-
+        <div role="tabpanel" class="tab-pane" id="scenariotab">
+            <br/>
+            <div id="div_scenarioElement" class="element" style="padding-bottom: 70px;"></div>
+        </div>
     </div>
+
 </div>
 <div class="modal fade" id="md_copyScenario">
     <div class="modal-dialog">
@@ -304,7 +257,7 @@
             </div>
         </div>
     </div>
-</div>
+
 </div>
 <div class="modal fade" id="md_addElement">
     <div class="modal-dialog">
@@ -368,4 +321,20 @@
             </div>
         </div>
     </div>
+</div>
+<div class="fab" style="z-index:999">
+    <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
+    <ul class="fab-buttons">
+        {% if scenarioEnabled == 0 %}
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_changeAllScenarioState2" data-state="1" data-tooltip="{{ 'Activer scénarios' }}"><i class="fas fa-check"></i></a></li>
+        {% else %}
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" id="bt_changeAllScenarioState2" data-state="0" data-tooltip="{{ 'Désactiver scénarios' }}"> <i class="fas fa-times"></i></i></a></li>
+        {% endif %}
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_addScenario2" data-tooltip="{{ 'Ajouter' }}"><i class="fas fa-plus-circle"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_displayScenarioVariable2" data-tooltip="{{ 'Voir variables' }}"><i class="fas fa-eye"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active bt_showScenarioSummary" data-tooltip="{{ 'Vue d\'ensemble' }}"><i class="fas fa-list"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active bt_showExpressionTest" data-tooltip="{{ 'Testeur d\'expression' }}"><i class="fas fa-check"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_savegeneral"><i class="fas fa-save"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" href="{{ HOMELINK }}"><i class="fas fa-home"></i></a></li>
+    </ul>
 </div>

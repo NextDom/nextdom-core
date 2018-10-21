@@ -1,8 +1,7 @@
-<div id="div_Profils">
+<div class="blurPanel" id="div_Profils">
     <div class="nav-tabs-custom config">
         <!-- Tabs title -->
         <ul class="nav nav-tabs pull-right" role="tablist">
-            <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fa fa-times"></i></a>
             <h4 class="box-title pull-left">&nbsp;&nbsp;<i class="fas fa-wrench">&nbsp;&nbsp;</i>{{ 'Profils' }}</h4>
             <li role="presentation"><a href="#themetab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint">&nbsp;&nbsp;</i>{{ 'Thèmes' }}</a></li>
             <li role="presentation"><a href="#interfacetab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-laptop">&nbsp;&nbsp;</i>{{ 'Interface' }}</a></li>
@@ -113,123 +112,121 @@
             <!-- Interface tab -->
             <div role="tabpanel" class="tab-pane" id="interfacetab">
                 <form class="form-horizontal">
-                    <fieldset>
-                        <div>
-                            <legend class="legend-title">{{ 'Options d\'interfaces' }}</legend>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Afficher les menus' }}</label>
-                                <div class="col-sm-1">
-                                    <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="doNotAutoHideMenu"/>
-                                </div>
+                    <div>
+                        <legend class="legend-title">{{ 'Options d\'interfaces' }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{{ 'Afficher les menus' }}</label>
+                            <div class="col-sm-1">
+                                <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="doNotAutoHideMenu"/>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="legend-section">
-                            <legend class="legend-title">{{ 'Page par défaut' }}</legend>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                                <div class="col-sm-2">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="homePage">
-                                        {% for homePageCode, homePageValue in profilsHomePage %}
-                                            <option value="{{ homePageCode }}">{{ homePageValue }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                                <div class="col-sm-2">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="homePageMobile">
-                                        <option value="home">{{ 'Accueil' }}</option>
-                                        {% for homePageCode, homePageValue in profilsHomePage %}
-                                            <option value="{{ homePageCode }}">{{ homePageValue }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
+                    <div class="legend-section">
+                        <legend class="legend-title">{{ 'Page par défaut' }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
+                            <div class="col-sm-2">
+                                <select class="userAttr form-control" data-l1key="options" data-l2key="homePage">
+                                    {% for homePageCode, homePageValue in profilsHomePage %}
+                                        <option value="{{ homePageCode }}">{{ homePageValue }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
+                            <div class="col-sm-2">
+                                <select class="userAttr form-control" data-l1key="options" data-l2key="homePageMobile">
+                                    <option value="home">{{ 'Accueil' }}</option>
+                                    {% for homePageCode, homePageValue in profilsHomePage %}
+                                        <option value="{{ homePageCode }}">{{ homePageValue }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="legend-section">
-                            <legend class="legend-title">{{ 'Objet par défaut sur le dashboard' }}</legend>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                                <div class="col-sm-2">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardObject">
-                                        {% for jeeObject in profilsJeeObjects %}
-                                            <option value="{{ jeeObject.getId() }}">{{ jeeObject.getName() }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                                <div class="col-sm-2">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobileObject">
-                                        <option value='all'>{{ 'Tout' }}</option>
-                                        {% for jeeObject in profilsJeeObjects %}
-                                            <option value="{{ jeeObject.getId() }}">{{ jeeObject.getName() }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
+                    <div class="legend-section">
+                        <legend class="legend-title">{{ 'Objet par défaut sur le dashboard' }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
+                            <div class="col-sm-2">
+                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardObject">
+                                    {% for jeeObject in profilsJeeObjects %}
+                                        <option value="{{ jeeObject.getId() }}">{{ jeeObject.getName() }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
+                            <div class="col-sm-2">
+                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobileObject">
+                                    <option value='all'>{{ 'Tout' }}</option>
+                                    {% for jeeObject in profilsJeeObjects %}
+                                        <option value="{{ jeeObject.getId() }}">{{ jeeObject.getName() }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="legend-section">
-                            <legend class="legend-title">{{ 'Vue par défaut' }}</legend>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                                <div class="col-sm-2">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDesktopView">
-                                        {% for view in profilsViews %}
-                                            <option value="{{ view.getId() }}">{{ view.getName() }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                                <div class="col-sm-2">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobileView">
-                                        {% for view in profilsViews %}
-                                            <option value="{{ view.getId() }}">{{ view.getName() }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
+                    <div class="legend-section">
+                        <legend class="legend-title">{{ 'Vue par défaut' }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
+                            <div class="col-sm-2">
+                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDesktopView">
+                                    {% for view in profilsViews %}
+                                        <option value="{{ view.getId() }}">{{ view.getName() }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
+                            <div class="col-sm-2">
+                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobileView">
+                                    {% for view in profilsViews %}
+                                        <option value="{{ view.getId() }}">{{ view.getName() }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="legend-section">
-                            <legend class="legend-title">{{ 'Design par défaut' }}</legend>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                                <div class="col-sm-2">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardPlan">
-                                        {% for plan in profilsPlans %}
-                                            <option value="{{ plan.getId() }}">{{ plan.getName() }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                                <div class="col-sm-2">
-                                    <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobilePlan">
-                                        {% for plan in profilsPlans %}
-                                            <option value="{{ plan.getId() }}">{{ plan.getName() }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
+                    <div class="legend-section">
+                        <legend class="legend-title">{{ 'Design par défaut' }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
+                            <div class="col-sm-2">
+                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardPlan">
+                                    {% for plan in profilsPlans %}
+                                        <option value="{{ plan.getId() }}">{{ plan.getName() }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Plein écran' }}</label>
-                                <div class="col-sm-1">
-                                    <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlanFullScreen"/>
-                                </div>
+                            <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
+                            <div class="col-sm-2">
+                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobilePlan">
+                                    {% for plan in profilsPlans %}
+                                        <option value="{{ plan.getId() }}">{{ plan.getName() }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{{ 'Plein écran' }}</label>
+                            <div class="col-sm-1">
+                                <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlanFullScreen"/>
+                            </div>
+                        </div>
+                    </div>
 
-                        <div class="legend-section">
-                            <legend class="legend-title">{{ 'Vue' }}</legend>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Déplier le panneau des vues' }}</label>
-                                <div class="col-sm-1">
-                                    <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="displayViewByDefault"/>
-                                </div>
+                    <div class="legend-section">
+                        <legend class="legend-title">{{ 'Vue' }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{{ 'Déplier le panneau des vues' }}</label>
+                            <div class="col-sm-1">
+                                <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="displayViewByDefault"/>
                             </div>
                         </div>
-                    </fieldset>
+                    </div>
                 </form>
             </div>
 
@@ -359,10 +356,12 @@
                 </form>
             </div>
         </div>
-        <div class="box-footer clearfix">
-            <a class="btn btn-success pull-right" id="bt_saveProfils"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
-            <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
-        </div>
     </div>
-
+</div>
+<div class="fab" style="z-index:999">
+    <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
+    <ul class="fab-buttons">
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_saveProfils"><i class="fas fa-save"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i></a></li>
+    </ul>
 </div>
