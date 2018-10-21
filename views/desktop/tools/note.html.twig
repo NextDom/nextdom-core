@@ -22,18 +22,11 @@
                 </div>
 
                 <div class="col-lg-10 col-md-9 col-sm-8" style="border-left: solid 1px #EEE; overflow-y:hidden;overflow-x:hidden;">
-                    <fieldset>
-                        <div class="box-tools pull-right padding-bottom legend-first">
-                            <a class="btn btn-action" id="bt_noteManagerAdd"><i class="fas fa-plus">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
-                            <a class="btn btn-success" id="bt_noteManagerSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
-                            <a class="btn btn-danger" id="bt_noteManagerRemove"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
-                        </div>
                         <div id="div_noteManagerDisplay">
                             <input class="noteAttr form-control" data-l1key="id" style="display:none;" disabled/>
                             <input class="noteAttr form-control label-list" data-l1key="name" disabled/>
                             <textarea class="noteAttr form-control ta_autosize" data-l1key="text" disabled></textarea>
                         </div>
-                    </fieldset>
                 </div>
             </div>
         </form>
@@ -42,6 +35,9 @@
 <div class="fab" style="z-index:999">
     <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
     <ul class="fab-buttons">
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_noteManagerAdd" data-tooltip="{{ 'Ajouter' }}"><i class="fas fa-plus"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_noteManagerSave" data-tooltip="{{ 'Sauvegarder' }}"><i class="fas fa-save"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" id="bt_noteManagerRemove" data-tooltip="{{ 'Supprimer' }}"><i class="fas fa-trash"></i></a></li>
         <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i></a></li>
     </ul>
 </div>
