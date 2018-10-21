@@ -6,9 +6,9 @@ $(function() {
     $(".sidebar").css("overflow","");
 });
 $('.fab').on('mouseleave',function() {
-    $('#dashPanel').removeClass('dashBlur');
+    $('.blurPanel').removeClass('blur');
 });
 
 $('.fab').on('mouseenter',function() {
-    $('#dashPanel').addClass('dashBlur');
+    $('.blurPanel').addClass('blur');
 });

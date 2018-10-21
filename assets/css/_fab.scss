@@ -1,16 +1,16 @@
-
 .fab {
   position: fixed;
-  width: 50px;
-  right: 20px;
-  bottom: 15px;
+  width: 40px;
+  right: 10px;
+  bottom: 10px;
   margin-left: -28px;
+  &:hover .fab-buttons {
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
-.fab:hover .fab-buttons {
-  opacity: 1;
-  visibility: visible;
-}
+
 
 .fab:hover .fab-buttons__link {
   transform: scaleY(1) scaleX(1) translateY(-16px) translateX(0px);
@@ -30,10 +30,10 @@
   display: inline-block;
   font-size: 1.5em;
   vertical-align: middle;
-  line-height: 50px;
+  line-height: 40px;
   color: $white;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   background-color: #29B6F6;
   border-radius: 50%;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
@@ -42,8 +42,8 @@
 .fab-buttons {
   position: absolute;
   left: 0;
-  right: 0;
-  bottom: 50px;
+  right: 12px;
+  bottom: 30px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -59,14 +59,14 @@
   margin: 12px 0;
   font-size: 1.3em;
   vertical-align: middle;
-  line-height: 40px;
+  line-height: 35px;
 }
 
 .fab-buttons__link {
   color: $white;
   display: inline-block;
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   text-decoration: none;
   border-radius: 50%;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
@@ -77,7 +77,39 @@
   transition: .3s;
 }
 
-.dashBlur {
+.blur {
   filter:blur(2px) grayscale(1);
-}   
-          
+}
+
+[data-tooltip]:before {
+  top: 50%;
+  margin-top: -15px;
+  font-weight: 600;
+  border-radius: 10px;
+  background: #585858;
+  color: #fff;
+  content: attr(data-tooltip);
+  font-size: 0.6em;
+  text-decoration: none;
+  visibility: hidden;
+  opacity: 0;
+  padding: 0px 5px;
+  margin-right: 12px;
+  position: absolute;
+  transform: scale(0);
+  right: 100%;
+  white-space: nowrap;
+  transform-origin: top right;
+  transition: all .3s cubic-bezier(.25, .8, .25, 1);
+}
+
+[data-tooltip]:hover:before {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+  transform-origin: right center 0;
+}
+
+*[class^="fab"]{
+  cursor : pointer;
+}

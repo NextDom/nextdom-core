@@ -1,7 +1,7 @@
 {% if dashboardCategory == 'all' %}
     <i class="fas fa-pencil-alt pull-right cursor" id="bt_editDashboardWidgetOrder" data-mode="0" ></i>
 {% endif %}
-<div class="row" id="dashPanel">
+<div class="row blurPanel">
     {% if dashboardObjectId != '' %}
     <div class="col-xs-12">
         {% else %}
@@ -46,15 +46,15 @@
     </span>
         <ul class="fab-buttons">
             {% if dashboardCategory =='all' %}
-                <li class="fab-buttons__item"><a class="fab-buttons__link" data-toggle="tooltip" title="toutes" data-original-title= "" style="cursor: pointer;background-color:green" onclick='selectCategory("all");'><i class="fas fa-asterisk"></i></a></li>
+                <li class="fab-buttons__item"><a class="fab-buttons__link" data-tooltip="toutes" style="cursor: pointer;background-color:green" onclick='selectCategory("all");'><i class="fas fa-asterisk"></i></a></li>
             {% else %}
-                <li class="fab-buttons__item"><a class="fab-buttons__link" data-toggle="tooltip" title="toutes" data-original-title= "" style="cursor: pointer;" onclick='selectCategory("all");'><i class="icon-material fas fa-asterisk"></i></a></li>
+                <li class="fab-buttons__item"><a class="fab-buttons__link" data-tooltip="toutes" style="cursor: pointer;" onclick='selectCategory("all");'><i class="icon-material fas fa-asterisk"></i></a></li>
             {% endif %}
             {% for categoryCode, category in dashboardCategories %}
                 {% if dashboardCategory == categoryCode %}
-                    <li class="fab-buttons__item"><a class="fab-buttons__link" data-toggle="tooltip" title="{{ category.name|trans }}" data-original-title= "" style="cursor: pointer;background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}");'><i class="{{ category.icon }}"></i></a></li>
+                    <li class="fab-buttons__item"><a class="fab-buttons__link" data-tooltip="{{ category.name|trans }}" style="cursor: pointer;background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}");'><i class="{{ category.icon }}"></i></a></li>
                 {% else %}
-                    <li class="fab-buttons__item"><a class="fab-buttons__link" data-toggle="tooltip" title="{{ category.name|trans }}" style="cursor: pointer;background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}");'><i class="{{ category.icon }}"></i></a></li>
+                    <li class="fab-buttons__item"><a class="fab-buttons__link" data-tooltip="{{ category.name|trans }}" style="cursor: pointer;background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}");'><i class="{{ category.icon }}"></i></a></li>
                 {% endif %}
             {% endfor %}
 

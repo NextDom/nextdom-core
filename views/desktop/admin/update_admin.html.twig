@@ -1,12 +1,9 @@
-<div id="update_admin">
+<div id="update_admin" class="blurPanel">
     <!-- Header bar -->
     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title"><i class="fas fa-credit-card">&nbsp;&nbsp;</i>{{ 'Mise à jour & Sauvegardes' }}</h3>
-                <div class="box-tools pull-right">
-                    <a class="pull-right btn-box-tool" href="index.php?v=d&p=administration"><i class="fas fa-times"></i></a>
-                </div>
             </div>
 
             <!-- Page content -->
@@ -109,15 +106,14 @@
                         </div>
                     {% endfor %}
                 </div>
-                <!-- Footer bar -->
-                <div class="box-footer clearfix">
-                    <a class="btn btn-success pull-right" id="bt_saveupdate_admin"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
-                    <a class="btn btn-danger pull-right" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
-                </div>
             </div>
-
         </form>
-
-
     </div>
+</div>
+<div class="fab" style="z-index:999">
+    <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
+    <ul class="fab-buttons">
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_saveupdate_admin"><i class="fas fa-save"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i></a></li>
+    </ul>
 </div>
