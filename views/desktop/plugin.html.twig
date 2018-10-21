@@ -4,8 +4,8 @@
         <div class="pluginListContainer">
             {% for plugin in pluginsList %}
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <div class="box pluginDisplayCard" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_id="{{ plugin.getId() }}" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
-                        <div class="box-header iconlist cursor with-border">
+                    <div class="box" data-plugin_id="{{ plugin.getId() }}" data-pluginPath="{{ plugin.getFilepath() }}" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
+                        <div class="box-header pluginDisplayCard iconlist cursor with-border">
                             <h4 class="box-title"><img style="height:50px" src="{{ plugin.getPathImgIcon() }}"> {{ plugin.getName() }}</h4>
                         </div>
                         <div class="box-body">
@@ -16,7 +16,7 @@
                         <div class="box-footer clearfix text-center">
                             <div class="btn-group">
                                 <a class="btn btn-info btn-xs update" title="{{'Mettre à jour'}}"><i class="fas fa-refresh"></i> {{'Mettre à jour'}}</a>
-                                <a class="btn btn-danger btn-xs remove" id="span_plugin_delete" title="{{'Supprimer'}}"><i class="far fa-trash-alt"></i> {{'Supprimer'}}</a>
+                                <a class="btn btn-danger btn-xs remove span_plugin_delete" title="{{'Supprimer'}}"><i class="far fa-trash-alt"></i> {{'Supprimer'}}</a>
                             </div>
                         </div>
                     </div>
