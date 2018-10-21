@@ -25,16 +25,16 @@ if($('#md_modal').is(':visible')){
 $('#in_searchPlugin').off('keyup').keyup(function () {
     var search = $(this).value();
     if(search == ''){
-        $('.pluginDisplayCard').show();
+        $('.box').show();
         $('.pluginListContainer').packery();
         return;
     }
-    $('.pluginDisplayCard').hide();
-    $('.pluginDisplayCard .name').each(function(){
+    $('.box').hide();
+    $('.box .box-title').each(function(){
         var text = $(this).text().toLowerCase();
         if(text.indexOf(search.toLowerCase()) >= 0){
             $(this)
-            $(this).closest('.pluginDisplayCard').show();
+            $(this).closest('.box').show();
         }
     });
     $('.pluginListContainer').packery();
