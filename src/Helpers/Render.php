@@ -157,8 +157,6 @@ class Render
             $debugbar = new StandardDebugBar();
             $debugbarRenderer = $debugbar->getJavascriptRenderer();
 
-            $env = new TraceableTwigEnvironment(new Twig_Environment($twigLoader));
-            $debugbar->addCollector(new TwigCollector($env));
             $debugbar->addCollector(new DataCollector\ConfigCollector(\config::getDefaultConfiguration()['core']));
             $pageData = $debugbarRenderer;
         } else {
