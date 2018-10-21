@@ -339,7 +339,7 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
 });
 
 $('.span_plugin_delete').on('click',function(){
-    var id = $(this).closest('.box').attr('data-plugin_id');
+    var id = $(this).closest('.box').children().attr('data-plugin_id');
     console.log(id);
     bootbox.confirm('{{Etes-vous sûr de vouloir supprimer ce plugin ?}}', function (result) {
         if (result) {

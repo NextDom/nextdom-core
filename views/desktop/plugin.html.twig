@@ -4,8 +4,8 @@
         <div class="pluginListContainer">
             {% for plugin in pluginsList %}
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <div class="box" data-plugin_id="{{ plugin.getId() }}" data-pluginPath="{{ plugin.getFilepath() }}" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
-                        <div class="box-header pluginDisplayCard iconlist cursor with-border">
+                    <div class="box" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
+                        <div class="box-header pluginDisplayCard iconlist cursor with-border" data-plugin_id="{{ plugin.getId() }}" data-pluginPath="{{ plugin.getFilepath() }}">
                             <h4 class="box-title"><img style="height:50px" src="{{ plugin.getPathImgIcon() }}"> {{ plugin.getName() }}</h4>
                         </div>
                         <div class="box-body">
