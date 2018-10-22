@@ -292,7 +292,7 @@ function addUpdate(_update) {
             tr += '<a class="btn btn-default btn-sm pull-left cursor" target="_blank" href="'+_update.plugin.changelog+'"><i class="fas fa-book">&nbsp;&nbsp;</i>{{Changelog}}</a>';
         }
     }else{
-        tr += '<a class="btn btn-default btn-sm" href="https://nextdom.github.io/core/fr_FR/changelog" target="_blank"><i class="fas fa-book">&nbsp;&nbsp;</i>{{Changelog}}</a>';
+        tr += '<a class="btn btn-default btn-sm pull-right" href="https://nextdom.github.io/core/fr_FR/changelog" target="_blank"><i class="fas fa-book">&nbsp;&nbsp;</i>{{Changelog}}</a>';
     }
     tr += '<a class="btn btn-info btn-sm pull-left checkUpdate" ><i class="fas fa-check">&nbsp;&nbsp;</i>{{Vérifier}}</a>';
     if (_update.type != 'core') {
