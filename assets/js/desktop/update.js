@@ -263,16 +263,17 @@ function addUpdate(_update) {
     var tr = '<div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">';
     tr += '<div class="box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + ' col-lg-4 col-md-6 col-sm-6 col-xs-12" data-type="' + init(_update.type) + '">';
     tr += '<div class="box-header">';
-    tr += ' <h4 class="box-title"><img style="height:50px;padding-right:5px;" src="' + init(_update.icon) + '"/> <b>' + init(_update.name)+'</b> -  ';
-    if(_update.configuration && _update.configuration.version){
-        tr += _update.configuration.version ;
-    }
-    tr +='</h4>';
+    tr += ' <h4 class="box-title"><img style="height:50px;padding-right:5px;" src="' + init(_update.icon) + '"/> <b>' + init(_update.name)+'</b></h4>';
     tr += '<span data-toggle="tooltip" title="" class="updateAttr badge ' + bgClass +' pull-right" data-original-title="" data-l1key="status" style="text-transform: uppercase;"></span>';
     tr += '</div>';
     tr += '<div class="box-body">';
     tr += '<span class="updateAttr" data-l1key="id" style="display:none;"></span><b>{{Source : }}</b><span class="updateAttr" data-l1key="source"></span>';
     tr += '<p><b>{{Type : }}</b><span class="updateAttr" data-l1key="type"></span></p>';
+    tr += '<p><i>{{Branche : }}</i>';
+    if(_update.configuration && _update.configuration.version){
+        tr += _update.configuration.version ;
+    }
+    tr += '</p>';
     tr += '<p><i>{{Version : }}</i>'+_update.remoteVersion+'</p>';
     if (_update.type != 'core') {
         tr += '<input type="checkbox" class="updateAttr" data-l1key="configuration" data-l2key="doNotUpdate"><span style="font-size:1em;">{{Ne pas mettre à jour}}</span></br>';

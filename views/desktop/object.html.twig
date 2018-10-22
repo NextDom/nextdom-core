@@ -2,16 +2,16 @@
     <legend class="legend-title">{{ 'Liste des objets de votre ' }} {{ objectProductName }} - {{objectCustomProductName}}</legend>
     <div class="row padding-bottom">
         <div class="col-xs-12">
-            <input class="form-control padding-bottom" id="in_searchObject" placeholder="{{'Rechercher ...'}}" />
+            <input class="form-control padding-bottom" id="in_searchObject" placeholder="{{'Rechercher...'}}" />
         </div>
     </div>
 
     <div class="objectListContainer row">
         {% for object in objectList %}
-            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                 <div class="box objectDisplayCard" style='border-top:3px solid {{ object.getDisplay("tagColor") }}' data-object_id="{{ object.getId() }}" data-object_name="{{ object.getName() }}">
                     <div class="box-header with-border">
-                        <a class="btn bt_detailsObject">
+                        <a class="bt_detailsObject cursor">
                             <h4 class="box-title name object-name" style='color:{{ object.getDisplay("tagColor") }}'>{{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|replace({'></i>': '></i>'})|raw }} <b>{{ object.getName() }}</b></h4>
                         </a>
                     </div>
@@ -19,10 +19,8 @@
                         <span class="object-summary">&nbsp;{{ object.getHtmlSummary()|raw }}</span>
                     </div>
                     <div class="box-footer clearfix text-center">
-                        <div class="btn-group">
-                            <a class="btn btn-danger btn-xs remove bt_removeObject"><i class="far fa-trash-alt"></i> {{ 'Supprimer' }}</a>
-                            <a class="btn btn-info btn-xs bt_detailsObject"><i class="far fa-edit"></i> {{ 'Modifier' }}</a>
-                        </div>
+                        <a class="btn btn-danger btn-sm pull-right remove bt_removeObject"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                        <a class="btn btn-info btn-sm pull-left bt_detailsObject"><i class="far fa-edit">&nbsp;&nbsp;</i>{{ 'Modifier' }}</a>
                     </div>
                 </div>
             </div>
@@ -32,7 +30,6 @@
 
 <div class="nav-tabs-custom object" style="display: none;" id="div_conf">
     <ul class="nav nav-tabs pull-right" role="tablist">
-        <li role="presentation"><a class="cursor" aria-controls="home" role="tab" id="bt_returnToThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a></li>
         <li role="presentation" class="active"><a href="#objecttab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i> {{ 'Objet' }}</a></li>
         <li role="presentation"><a href="#summarytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-list-alt"></i> {{ 'Résumé' }}</a></li>
         <li class="pull-left header"><i class="fa fa-inbox"></i> {{ 'Configuration de l\'objet' }}</li>
@@ -123,9 +120,9 @@
                     <div class="form-group">
                         <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Image' }}</label>
                         <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-        <span class="btn btn-default btn-file">
-          <i class="fas fa-cloud-upload-alt"></i> {{ 'Envoyer' }}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">
-        </span>
+                            <span class="btn btn-default btn-file">
+                              <i class="fas fa-cloud-upload-alt"></i> {{ 'Envoyer' }}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">
+                            </span>
                             <a class="btn btn-danger" id="bt_removeBackgroundImage"><i class="fas fa-trash"></i> {{ 'Supprimer l\'image' }}</a>
                         </div>
                     </div>
@@ -209,9 +206,6 @@
             {% endif %}
         </div>
     </div>
-    <div class="box-footer clearfix">
-        <a class="btn btn-success btn-sm pull-right" id="bt_saveObject"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-    </div>
 </div>
 <div class="fab" style="z-index:999">
     <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
@@ -219,6 +213,7 @@
         <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_showObjectSummary" style="background-color:#33B8CC" data-toggle="tooltip" title="" data-original-title="{{ 'Vue d\'ensemble' }}"><i class="fas fa-list"></i></a></li>
         <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_addObject2" style="background-color:#33B8CC" data-toggle="tooltip" title="" data-original-title="{{ 'Ajouter' }}"><i class="fas fa-plus-circle"></i></a></li>
         <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_savegeneral" style="background-color:green"><i class="fas fa-save"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" id="bt_returnToThumbnailDisplay"><i class="fas fa-chevron-left"></i></a></li>
         <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" href="{{ HOMELINK }}"><i class="fas fa-home"></i></a></li>
     </ul>
 </div>
