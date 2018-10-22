@@ -30,9 +30,9 @@
 
 <div class="nav-tabs-custom object" style="display: none;" id="div_conf">
     <ul class="nav nav-tabs pull-right" role="tablist">
-        <li role="presentation" class="active"><a href="#objecttab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i> {{ 'Objet' }}</a></li>
+        <li role="presentation" class="active"><a href="#objecttab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-clone"></i> {{ 'Objet' }}</a></li>
         <li role="presentation"><a href="#summarytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-list-alt"></i> {{ 'Résumé' }}</a></li>
-        <li class="pull-left header"><i class="fa fa-inbox"></i> {{ 'Configuration de l\'objet' }}</li>
+        <li class="pull-left header"><i class="fas fa-cogs"></i> {{ 'Configuration de l\'objet' }}</li>
     </ul>
     <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
         <div role="tabpanel" class="tab-pane active" id="objecttab">
@@ -143,7 +143,7 @@
             {% else %}
                 <form class="form-horizontal">
                     <fieldset>
-                        <table class="table">
+                        <table class="table table-bordered table-condensed">
                             <thead>
                             <tr>
                                 <th></th>
@@ -205,7 +205,7 @@
                                     {% for summaryKey, summaryValue in objectSummary %}
                                         <div role="tabpanel" class="tab-pane type{{ summaryKey }}{{ active }}" data-type="{{ summaryKey }}" id="summarytab{{ summaryKey }}">
                                             <div class="div_summary" data-type="{{ summaryKey }}"></div>
-                                            <div class="btn btn-sm btn-success pull-right addSummary" data-type="{{ summaryKey }}"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter une commande' }}</div>
+                                            <div class="btn btn-sm btn-success addSummary" data-type="{{ summaryKey }}"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter une commande' }}</div>
                                         </div>
                                         {% set active = '' %}
                                     {% endfor %}
