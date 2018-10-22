@@ -263,42 +263,42 @@ function addUpdate(_update) {
     var tr = '<div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">';
     tr += '<div class="box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + ' col-lg-4 col-md-6 col-sm-6 col-xs-12" data-type="' + init(_update.type) + '">';
     tr += '<div class="box-header">';
-    tr += ' <h4 class="box-title"><img style="height:50px" src="' + init(_update.icon) + '"/> <b>' + init(_update.name)+'</b> -  ';
-    if(_update.configuration && _update.configuration.version){
-        tr += _update.configuration.version ;
-    }
-    tr +='</h4>';
+    tr += ' <h4 class="box-title"><img style="height:50px;padding-right:5px;" src="' + init(_update.icon) + '"/> <b>' + init(_update.name)+'</b></h4>';
     tr += '<span data-toggle="tooltip" title="" class="updateAttr badge ' + bgClass +' pull-right" data-original-title="" data-l1key="status" style="text-transform: uppercase;"></span>';
     tr += '</div>';
     tr += '<div class="box-body">';
-    tr += '<span class="updateAttr" data-l1key="id" style="display:none;"></span><span class="updateAttr" data-l1key="source"></span> / <span class="updateAttr" data-l1key="type"></span> : <span class="updateAttr label label-info" data-l1key="name" style="font-size:1em;"></span>';
-    tr += '<p>'+_update.remoteVersion+'</p>';
+    tr += '<span class="updateAttr" data-l1key="id" style="display:none;"></span><b>{{Source : }}</b><span class="updateAttr" data-l1key="source"></span>';
+    tr += '<p><b>{{Type : }}</b><span class="updateAttr" data-l1key="type"></span></p>';
+    tr += '<p><i>{{Branche : }}</i>';
+    if(_update.configuration && _update.configuration.version){
+        tr += _update.configuration.version ;
+    }
+    tr += '</p>';
+    tr += '<p><i>{{Version : }}</i>'+_update.remoteVersion+'</p>';
     if (_update.type != 'core') {
         tr += '<input type="checkbox" class="updateAttr" data-l1key="configuration" data-l2key="doNotUpdate"><span style="font-size:1em;">{{Ne pas mettre à jour}}</span></br>';
     }
     tr += '</div>';
     tr += '<div class="box-footer clearfix text-center">';
-    tr += '  <div class="btn-group">';
 
     if (_update.type != 'core') {
         if (_update.status == 'update') {
-            tr += '<a class="btn btn-info btn-xs update" title="{{Mettre à jour}}"><i class="fas fa-refresh"></i> {{Mettre à jour}}</a> ';
+            tr += '<a class="btn btn-warning btn-sm update" title="{{Mettre à jour}}"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{Mettre à jour}}</a> ';
         }else if (_update.type != 'core') {
-            tr += '<a class="btn  btn-default btn-xs update" title="{{Re-installer}}"><i class="fas fa-refresh"></i> {{Reinstaller}}</a> ';
+            tr += '<a class="btn  btn-default btn-sm update" title="{{Re-installer}}"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{Reinstaller}}</a> ';
         }
     }
     if (_update.type != 'core') {
         if (isset(_update.plugin) && isset(_update.plugin.changelog) && _update.plugin.changelog != '') {
-            tr += '<a class="btn btn-default btn-xs cursor" target="_blank" href="'+_update.plugin.changelog+'"><i class="fas fa-book"></i> {{Changelog}}</a>';
+            tr += '<a class="btn btn-default btn-sm pull-left cursor" target="_blank" href="'+_update.plugin.changelog+'"><i class="fas fa-book">&nbsp;&nbsp;</i>{{Changelog}}</a>';
         }
     }else{
-        tr += '<a class="btn btn-default btn-xs" href="https://nextdom.github.io/core/fr_FR/changelog" target="_blank"><i class="fas fa-book"></i> {{Changelog}}</a>';
+        tr += '<a class="btn btn-default btn-sm pull-right" href="https://nextdom.github.io/core/fr_FR/changelog" target="_blank"><i class="fas fa-book">&nbsp;&nbsp;</i>{{Changelog}}</a>';
     }
-    tr += '<a class="btn btn-info btn-xs checkUpdate" ><i class="fas fa-check"></i> {{Vérifier}}</a>';
+    tr += '<a class="btn btn-info btn-sm pull-left checkUpdate" ><i class="fas fa-check">&nbsp;&nbsp;</i>{{Vérifier}}</a>';
     if (_update.type != 'core') {
-        tr += '<a class="btn btn-danger btn-xs remove" ><i class="far fa-trash-alt"></i> {{Supprimer}}</a>';
+        tr += '<a class="btn btn-danger btn-sm pull-right remove" ><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{Supprimer}}</a>';
     }
-    tr += '</div>';
     tr += '</div>';
     tr += '</div>';
 

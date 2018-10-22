@@ -1,12 +1,14 @@
 <div id="div_Update-view" class="blurPanel">
-    <a style="margin-right:30px">  <i class="fas fa-clock-o" style="cursor:default;"></i> <span style="cursor:default;">{{ 'Dernière vérification : ' }}</span><span class="label label-info" id="span_lastUpdateCheck" style="margin-bottom: 5px;font-size:1em;cursor:default;"></span></a>
-    <input class="form-control" placeholder="{{ 'Rechercher' }}" id="in_searchPlugin"/>
+    <legend class="legend-title">  <i class="fas fa-clock-o" style="cursor:default;">&nbsp;&nbsp;</i><span style="cursor:default;">{{ 'Dernière vérification : ' }}</span><span class="label label-info" id="span_lastUpdateCheck" style="margin-bottom: 10px;font-size:1em;cursor:default;"></span>
+        <input class="form-control" placeholder="{{ 'Rechercher...' }}" id="in_searchPlugin"/>
+    </legend>
 
-    <h3>Plugins</h3>
+    <legend class="legend-title"><i class="fas fa-puzzle-piece">&nbsp;&nbsp;</i>{{ 'Plugins' }}</legend>
     <div class="row">
         <div id="listPlugin"></div>
     </div>
-    <h3>Autres</h3>
+    
+    <legend class="legend-title"><i class="fas fa-cubes">&nbsp;&nbsp;</i>{{ 'Autres' }}</legend>
     <div class="row">
         <div id="listOther"></div>
     </div>

@@ -82,7 +82,7 @@ $('#bt_removeBackgroundImage').off('click').on('click', function () {
 function loadObjectConfiguration(_id){
     try {
         $('#bt_uploadImage').fileupload('destroy');
-        $('#bt_uploadImage').parent().html('<i class="fas fa-cloud-upload-alt"></i> {{Envoyer}}<input  id="bt_uploadImage" type="file" name="file" style="display: inline-block;">');
+        $('#bt_uploadImage').parent().html('<i class="fas fa-cloud-upload-alt">&nbsp;&nbsp;</i>{{Envoyer}}<input  id="bt_uploadImage" type="file" name="file" style="display: inline-block;">');
     }catch(error) {
 
     }
@@ -258,22 +258,26 @@ function addSummaryInfo(_el, _summary) {
     }
     var div = '<div class="summary">';
     div += '<div class="form-group">';
-    div += '<label class="col-sm-1 control-label">{{Commande}}</label>';
-    div += '<div class="col-sm-4 has-success">';
-    div += '<div class="input-group">';
-    div += '<span class="input-group-btn">';
-    div += '<input type="checkbox" class="summaryAttr checkbox-inline" data-l1key="enable" checked title="{{Activer}}" />';
-    div += '<a class="btn btn-default bt_removeSummary btn-sm"><i class="fas fa-minus-circle"></i></a>';
-    div += '</span>';
-    div += '<input class="summaryAttr form-control input-sm" data-l1key="cmd" />';
-    div += '<span class="input-group-btn">';
-    div += '<a class="btn btn-sm listCmdInfo btn-success"><i class="fas fa-list-alt"></i></a>';
-    div += '</span>';
-    div += '</div>';
-    div += '</div>';
-    div += '<div class="col-sm-2 has-success">';
-    div += '<label><input type="checkbox" class="summaryAttr checkbox-inline" data-l1key="invert" />{{Inverser}}</label>';
-    div += '</div>';
+    div += '  <label class="col-lg-2 col-md-2 col-sm-2 col-xs-6 control-label">{{Commande :}}</label>';
+    div += '  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">';
+    div += '    <input type="checkbox" class="summaryAttr" data-l1key="enable" checked title="{{Activer}}" />';
+    div += '    <label class="control-label label-check">{{Activer}}</label>';
+    div += '  </div>';
+    div += '  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 has-success">';
+    div += '    <div class="input-group">';
+    div += '      <span class="input-group-btn">';
+    div += '        <a class="btn btn-default bt_removeSummary btn-sm"><i class="fas fa-minus-circle"></i></a>';
+    div += '      </span>';
+    div += '      <input class="summaryAttr form-control input-sm" data-l1key="cmd" />';
+    div += '      <span class="input-group-btn">';
+    div += '        <a class="btn btn-sm listCmdInfo btn-success"><i class="fas fa-list-alt"></i></a>';
+    div += '      </span>';
+    div += '    </div>';
+    div += '  </div>';
+    div += '  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">';
+    div += '    <input type="checkbox" class="summaryAttr" data-l1key="invert" />';
+    div += '    <label class="control-label label-check">{{Inverser}}</label>';
+    div += '  </div>';
     div += '</div>';
     _el.find('.div_summary').append(div);
     _el.find('.summary:last').setValues(_summary, '.summaryAttr');
@@ -283,5 +287,3 @@ $('#bt_showObjectSummary').off('click').on('click', function () {
     $('#md_modal').dialog({title: "{{Résumé Objets}}"});
     $("#md_modal").load('index.php?v=d&modal=object.summary').dialog('open');
 });
-
-
