@@ -19,41 +19,46 @@
     margin-top: 2rem;
     margin-left: 5%;
     margin-right: 5%;
-    & .media-container {
-        margin: 0;
-        padding: 1rem;
-    }
-    & .media {
-        position: relative;
-        height: 200px;
-        transition: all 0.2s ease;
-        overflow: hidden;
-        border: 1px solid $lightgray;
-        background-color: rgba(220, 220, 220, 0.2);
-        margin: 0;
-        border-radius: 5px;
-        padding: 1.2em;
-        /** Fix pour darksobre **/
-        width: 100%;
-        & .installed-marker {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-top: 3em solid $nextdom_blue;
-            border-right: 3em solid transparent;
-            & i {
-                position: absolute;
-                top: -2.5em;
-                left: 0.5em;
-                color: $white;
-            }
-        }
-    }
-    & .media-left {
-        margin-right: 1em;
-    }
+}
+
+#market-div .media-container {
+    margin: 0;
+    padding: 1rem;
+}
+
+#market-div .media {
+    position: relative;
+    height: 200px;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    border: 1px solid $lightgray;
+    background-color: rgba(220, 220, 220, 0.2);
+    margin: 0;
+    border-radius: 5px;
+    padding: 1.2em;
+    /** Fix pour darksobre **/
+    width: 100%;
+}
+
+#market-div .media-left {
+    margin-right: 1em;
+}
+
+#market-div .media .installed-marker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-top: 3em solid $nextdom_blue;
+    border-right: 3em solid transparent;
+}
+
+#market-div .media .installed-marker i {
+    position: absolute;
+    top: -2.5em;
+    left: 0.5em;
+    color: $white;
 }
 
 #market-div .media .update-marker {
@@ -275,4 +280,8 @@
 #plugin-modal-footer {
     text-align: right;
     margin-right: 0.5em;
+}
+
+.modal-content button.close {
+    margin-top: -25px;
 }

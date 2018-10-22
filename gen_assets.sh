@@ -7,6 +7,7 @@ function gen_css {
 	sass assets/css/nextdom.mob.scss public/css/nextdom.mob.css --style compressed
 	sass assets/css/firstUse.scss public/css/firstUse.css --style compressed
 	sass assets/css/rescue.scss public/css/rescue.css --style compressed
+	sass assets/css/Market/market.scss public/css/market.css --style compressed
 	sass assets/css/adminlte/skin-black.scss public/css/adminlte/skin-black.css --style compressed
 	sass assets/css/adminlte/skin-black-light.scss public/css/adminlte/skin-black-light.css --style compressed
 	sass assets/css/adminlte/skin-blue.scss public/css/adminlte/skin-blue-light.css --style compressed
