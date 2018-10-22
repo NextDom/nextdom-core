@@ -5,7 +5,7 @@ if (!isConnect()) {
 ?>
 
 <div class="alert alert-success">
-    <h4 class="col-xs-10"><i class="fas fa-thumbs-up">&nbsp;&nbsp;</i>{{Félicitations}}</h4>
+    <h4 class="col-xs-10" style="padding-left:0px"><i class="fas fa-thumbs-up">&nbsp;&nbsp;</i>{{Félicitations}}</h4>
     <div class='btn btn-action pull-right' id='bt_doNotDisplayWelcome'><i class="fas fa-eye-slash">&nbsp;&nbsp;</i>{{Ne plus afficher}}</div>
     {{Bienvenue dans}} <?= config::byKey('product_name'); ?> {{, merci d'avoir choisi cet outil pour votre habitat connecté.}}
 </div>
