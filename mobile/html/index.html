@@ -14,12 +14,20 @@
     <link rel="shortcut icon" sizes="128x128" href="/public/img/icon-128x128.png">
     <link rel="apple-touch-icon" href="/public/img/icon-128x128.png" />
     <link rel="apple-touch-icon-precomposed" href="/public/img/icon-256x256.png">
-    <link href="/public/img/logo-460x222.png" media="(device-width: 320px)" rel="apple-touch-startup-image">
-    <link href="/public/img/logo-1000x483.png" media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
-    <link href="/public/img/logo-1000x483.png" media="(device-width: 768px) and (orientation: portrait)" rel="apple-touch-startup-image">
-    <link href="/public/img/logo-1024x494.png" media="(device-width: 768px) and (orientation: landscape)" rel="apple-touch-startup-image">
-    <link href="/public/img/logo-2000x965.png" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
-    <link href="/public/img/logo-2048x988.png" media="(device-width: 1536px)  and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+    <!-- iOS 6 & 7 iPad (retina, portrait) -->
+    <link href="/public/img/startup-image-1536x2008.png" media="(device-width: 768px) and (device-height: 1024px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+    <!-- iOS 6 & 7 iPad (retina, landscape) -->
+    <link href="/public/img/startup-image-1496x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+    <!-- iOS 6 iPad (portrait) -->
+    <link href="/public/img/startup-image-768x1004.png" media="(device-width: 768px) and (device-height: 1024px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">
+    <!-- iOS 6 iPad (landscape) -->
+    <link href="/public/img/startup-image-748x1024.png" media="(device-width: 768px) and (device-height: 1024px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">
+    <!-- iOS 6 & 7 iPhone 5 -->
+    <link href="/public/img/startup-image-640x1096.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+    <!-- iOS 6 & 7 iPhone (retina) -->
+    <link href="/public/img/startup-image-640x920.png" media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+    <!-- iOS 6 iPhone -->
+    <link href="/public/img/startup-image-320x460.png" media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">  
     <link rel="stylesheet" href="/3rdparty/font-noto/font-noto.css" />
     <link rel="stylesheet" href="/3rdparty/jquery.mobile/jquery.mobile.min.css" />
     <link rel="stylesheet" href="/3rdparty/waves/waves.min.css"/>
@@ -77,7 +85,7 @@
                 <div class="break dot3" style="position : relative;top : -6px;"></div>
             </div>
         </div>
-        
+
         <div role="main" class="ui-content" id="page" data-inset="false" style="padding : 2px;padding-top : 4px;"></div>
         <div data-role="popup" id="popupDialog" style="width : 100%">
          <div data-role="header">
