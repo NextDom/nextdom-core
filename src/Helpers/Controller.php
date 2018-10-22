@@ -2011,6 +2011,7 @@ $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
             }
         }
 
+        $pageContent['CSS_POOL'][] = '/public/css/market.css';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/Market/market.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
