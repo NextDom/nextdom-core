@@ -45,56 +45,65 @@
             <!-- Tabs content -->
             <div class="global-tab-content tab-content">
 
-                <!-- Theme tab -->
-                <div role="tabpanel" class="tab-pane active" id="themestab">
-                    <div class="legend-section">
-                        <legend class="legend-title">{{ 'Choix du thème comme base, en versions complètes' }}</legend>
+                    <!-- Theme tab -->
+                    <div role="tabpanel" class="tab-pane active" id="themestab">
                         <div class="row">
-                            {% for themeName, themeData in customDarkThemes %}
-                                <div class="preview-selector col-md-4 full-opacity-hover">
-                                    <div class="legend-title text-center no-margin">
-                                        <input type="radio" id="theme-{{ themeName|lower }}" name="theme" value="{{ themeName|lower }}"{% if customTheme == themeName|lower %} checked="checked"{% endif %}/>
-                                        <label for="theme-{{ themeName|lower }}">{{ themeName }}</label>
-                                    </div>
-                                    <div id="preview">
-                                        <div>
-                                            <span class="left-pane top" style="background: {{ themeData[0] }}"></span>
-                                            <span class="right-pane top" style="background: {{ themeData[1] }}"></span>
-                                        </div>
-                                        <div>
-                                            <span class="left-pane bottom" style="background: {{ themeData[2] }}"></span>
-                                            <span class="right-pane bottom" style="background: {{ themeData[3] }}"></span>
-                                        </div>
+
+                        <div class="col-md-4 col-md-offset-1">
+                            <div class="form-group">
+                                <label class="control-label">{{ 'Dashboard 1' }}</label>
+                                <div class="btn-group">
+                                    <a class="btn btn-action bt_resetColor"
+                                       data-l1key="theme_color_1"
+                                       data-toggle="tooltip"
+                                       title="" data-original-title="{{ 'Remettre par défaut' }}"><i
+                                                class="fas fa-times"></i></a>
+                                    <div class=" colorpicker-component colorpick input-group">
+                                        <input type="text" class="configKey form-control"
+                                               data-l1key="theme_color_1"
+                                               value="#eee"/>
+                                        <span class="input-group-addon"><i></i></span>
                                     </div>
                                 </div>
-                            {% endfor %}
+                            </div>
                         </div>
-                    </div>
-                    <div class="legend-section">
-                        <legend class="legend-title">{{ 'ou en versions Light' }}</legend>
-                        <div class="row">
-                            {% for themeName, themeData in customLightThemes %}
-                                <div class="preview-selector col-md-4 full-opacity-hover">
-                                    <div class="legend-title text-center no-margin">
-                                        <input type="radio" id="theme-{{ themeName|lower }}" name="theme" value="{{ themeName|lower }}"{% if customTheme == themeName|lower %} checked="checked"{% endif %}/>
-                                        <label for="theme-{{ themeName|lower }}">{{ themeName }}</label>
-                                    </div>
-                                    <div id="preview">
-                                        <div>
-                                            <span class="left-pane top" style="background: {{ themeData[0] }}"></span>
-                                            <span class="right-pane top" style="background: {{ themeData[1] }}"></span>
-                                        </div>
-                                        <div>
-                                            <span class="left-pane bottom" style="background: {{ themeData[2] }}"></span>
-                                            <span class="right-pane bottom" style="background: {{ themeData[3] }}"></span>
-                                        </div>
+                        <div class="col-md-4 col-md-offset-1">
+                            <div class="form-group">
+                                <label class="control-label">{{ 'Dashboard 2' }}</label>
+                                <div class="btn-group">
+                                    <a class="btn btn-action bt_resetColor"
+                                       data-l1key="theme_color_2"
+                                       data-toggle="tooltip"
+                                       title="" data-original-title="{{ 'Remettre par défaut' }}"><i
+                                                class="fas fa-times"></i></a>
+                                    <div class="colorpicker-component colorpick input-group">
+                                        <input type="text" class="configKey form-control"
+                                               data-l1key="theme_color_2"
+                                               value="#eee"/>
+                                        <span class="input-group-addon"><i></i></span>
                                     </div>
                                 </div>
-                            {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-md-offset-1">
+                            <div class="form-group">
+                                <label class="control-label">{{ 'Dashboard 3' }}</label>
+                                <div class="btn-group">
+                                    <a class="btn btn-action bt_resetColor"
+                                       data-l1key="theme_color_3"
+                                       data-toggle="tooltip"
+                                       title="" data-original-title="{{ 'Remettre par défaut' }}"><i
+                                                class="fas fa-times"></i></a>
+                                    <div class=" colorpicker-component colorpick input-group">
+                                        <input type="text" class="configKey form-control"
+                                               data-l1key="theme_color_3"
+                                               value="#eee"/>
+                                        <span class="input-group-addon"><i></i></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <input type="hidden" class="configKey" data-l1key="theme" id="theme-form-input"
-                           value="{{ customTheme }}"/>
                 </div>
 
                 <!-- Theme option tab -->
