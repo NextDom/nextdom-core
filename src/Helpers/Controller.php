@@ -2036,7 +2036,6 @@ $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-//        $pageContent['JS_END_POOL'][] = '/public/js/desktop/reboot.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/reboot.html.twig', $pageContent);
