@@ -1107,7 +1107,7 @@ class scenario
             'width' => 40,
             'height' => 40,
             'color' => 'green',
-            'image' => 'core/img/scenario.png',
+            'image' => '/public/img/NextDom_Scenario.png',
             'title' => $this->getHumanName(),
             'url' => 'index.php?v=d&p=scenario&id=' . $this->getId(),
         );

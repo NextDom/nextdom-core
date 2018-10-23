@@ -24,7 +24,7 @@
                                     <div class="scenarioListContainer DisplayCard text-center">
                                         {% for scenario in scenarios[-1] %}
                                             <div class="scenarioDisplayCard cursor icon_gestion" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
-                                                <img class="backgroundColor" src="/public/img/scenario.png" height="65" width="65"  style="border-radius:15px"/>
+                                                <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="65" width="65"  style="border-radius:15px"/>
                                                 <br>
                                                 <span class="name">{{ scenario.getHumanName(true, true, true, true)|raw }}</span>
                                             </div>
@@ -48,7 +48,7 @@
                                         <div class="scenarioListContainer DisplayCard text-center ">
                                             {% for scenario in scenarios[scenarioGroup.group] %}
                                                 <div class="scenarioDisplayCard  icon_gestion cursor" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
-                                                    <img class="backgroundColor" src="/public/img/scenario.png" height="65" width="65"/>
+                                                    <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="65" width="65"/>
                                                     <br>
                                                     <span>{{ scenario.getHumanName(true, true, true, true)|raw }}</span>
                                                 </div>
