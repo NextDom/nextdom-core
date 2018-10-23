@@ -1,19 +1,15 @@
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fas fa-pencil-square"></i> {{ 'Analyse équipements'}}</h3>
-        <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
-            <a class="pull-right btn-box-tool" href="index.php?v=d&p=dashboard"><i class="fa fa-times"></i></a>
-        </div>
+        <h3 class="box-title"><i class="fas fa-pencil-square">&nbsp;&nbsp;</i>{{ 'Analyse équipements'}}</h3>
     </div>
     <div class="box-body"> <!-- div nécéssaire pour le js-->
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right" role="tablist" id="ul_tabBatteryAlert">
-                <li role="presentation" class="active batteries"><a href="#battery" aria-controls="battery" role="tab" data-toggle="tab"><i class="fas fa-battery-full"></i> {{ 'Batteries' }}</a></li>
-                <li role="presentation" class="alerts"><a href="#alertEqlogic" aria-controls="alertEqlogic" role="tab" data-toggle="tab"><i class="fas fa-exclamation-triangle"></i> {{ 'Modules en alerte' }}</a></li>
-                <li role="presentation"><a href="#actionCmd" aria-controls="actionCmd" role="tab" data-toggle="tab"><i class="fas fa-gears"></i> {{ 'Actions définies' }}</a></li>
-                <li role="presentation"><a href="#alertCmd" aria-controls="actionCmd" role="tab" data-toggle="tab"><i class="fas fa-bell"></i> {{ 'Alertes définies' }}</a></li>
-                <li role="presentation"><a href="#deadCmd" aria-controls="actionCmd" role="tab" data-toggle="tab"><i class="fab fa-snapchat-ghost"></i> {{ 'Commandes orphelines' }}</a></li>
+                <li role="presentation" class="active batteries"><a href="#battery" aria-controls="battery" role="tab" data-toggle="tab"><i class="fas fa-battery-full">&nbsp;&nbsp;</i>{{ 'Batteries' }}</a></li>
+                <li role="presentation" class="alerts"><a href="#alertEqlogic" aria-controls="alertEqlogic" role="tab" data-toggle="tab"><i class="fas fa-exclamation-triangle">&nbsp;&nbsp;</i>{{ 'Modules en alerte' }}</a></li>
+                <li role="presentation"><a href="#actionCmd" aria-controls="actionCmd" role="tab" data-toggle="tab"><i class="fas fa-gears">&nbsp;&nbsp;</i>{{ 'Actions définies' }}</a></li>
+                <li role="presentation"><a href="#alertCmd" aria-controls="actionCmd" role="tab" data-toggle="tab"><i class="fas fa-bell">&nbsp;&nbsp;</i>{{ 'Alertes définies' }}</a></li>
+                <li role="presentation"><a href="#deadCmd" aria-controls="actionCmd" role="tab" data-toggle="tab"><i class="fas fa-h-square">&nbsp;&nbsp;</i>{{ 'Commandes orphelines' }}</a></li>
             </ul>
 
             <div class="tab-content">
@@ -248,4 +244,10 @@
             </div>
         </div>
     </div>
+</div>
+<div class="fab" style="z-index:999">
+    <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
+    <ul class="fab-buttons">
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" href="{{ HOMELINK }}"><i class="fas fa-home"></i></a></li>
+    </ul>
 </div>
