@@ -28,14 +28,14 @@
                     <label class="col-sm-4 col-xs-12 control-label">{{ 'Envoyer une sauvegarde' }}</label>
                     <div class="col-sm-8 col-xs-12">
                         <span class="btn btn-default btn-file">
-                            <i class="fas fa-cloud-upload">&nbsp;&nbsp;</i>{{ 'Selectionner' }}
+                            <i class="fas fa-cloud-upload-alt">&nbsp;&nbsp;</i>{{ 'Selectionner' }}
                             <input id="bt_uploadBackupforMigration" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token={{ migrationAjaxToken }}">
                         </span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-4 col-xs-12 control-label">{{ 'Migration' }}</label>
-                    <div class="col-lg-8 col-xs-12">
+                    <div class="col-sm-8 col-xs-12">
                         <a class="btn btn-success" id="bt_migrateNextDom"><i class="fas fa-play">&nbsp;&nbsp;</i>{{ 'Lancer' }}</a>
                     </div>
                 </div>
@@ -54,5 +54,5 @@
     </ul>
 </div>
 <div class="fab fab-bis" style="z-index:999">
-    <span class="fab-action-button bg-red"><i class="fab-action-button__icon fas fa-chevron-left" href="index.php?v=d&p=administration"></i></span>
+    <span class="fab-action-button bg-red"><a class="fab-action-button__icon fas fa-chevron-left" href="index.php?v=d&p=administration"></a></span>
 </div>
