@@ -32,7 +32,7 @@
 
     function refresh() {
         $.ajax({
-            url: "desktop/js/rebootjs.js?t=" + Date.now(),
+            url: "/public/js/desktop/rebootjs.js?t=" + Date.now(),
             success: function (retour) {
                 $('reboot_nextdom').html(retour);
             }
