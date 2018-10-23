@@ -1,4 +1,8 @@
 $(function() {
+    $('.colorpick_inline').colorpicker({
+        container: true,
+        inline: true
+    });
     $('.colorpick').colorpicker();
     $(":input").inputmask();
     $('[data-toggle="tooltip"]').tooltip();

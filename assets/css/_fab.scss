@@ -1,7 +1,7 @@
 .fab {
   position: fixed;
   width: 50px;
-  right: 25px;
+  right: 20px;
   bottom: 20px;
   margin-left: -28px;
 }
@@ -59,14 +59,14 @@
   margin: 12px 0;
   font-size: 1.3em;
   vertical-align: middle;
-  line-height: 40px;
+  line-height: 44px;
 }
 
 .fab-buttons__link {
   color: $white;
   display: inline-block;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   text-decoration: none;
   border-radius: 50%;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
@@ -83,24 +83,25 @@
 
 [data-tooltip]:before {
   top: 50%;
-  margin-top: -15px;
+  margin-top: -22px;
   font-weight: 600;
+  font-family: 'Roboto';
   border-radius: 10px;
   background: #585858;
   color: #fff;
   content: attr(data-tooltip);
-  font-size: 0.6em;
+  font-size: 0.7em;
   text-decoration: none;
   visibility: hidden;
   opacity: 0;
-  padding: 0px 5px;
+  padding: 0px 12px;
   margin-right: 12px;
   position: absolute;
   transform: scale(0);
   right: 100%;
   white-space: nowrap;
   transform-origin: top right;
-  transition: all .3s cubic-bezier(.25, .8, .25, 1);
+  transition: all .1s cubic-bezier(.25, .8, .25, 1);
 }
 
 [data-tooltip]:hover:before {
