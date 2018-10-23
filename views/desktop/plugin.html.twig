@@ -2,8 +2,7 @@
     <div class="row row-overflow">
         <div id="div_resumePluginList">
             <legend class="legend-title">&nbsp &nbsp{{ 'Plugins' }}</legend>
-
-            <div class="pluginListContainer">
+                <div class="pluginListContainer">
                 {% for plugin in pluginsList %}
                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                         <div class="box pluginDisplayCard" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_id="{{ plugin.getId() }}" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
@@ -11,9 +10,9 @@
                                 <h4 class="box-title"><img style="height:50px" src="{{ plugin.getPathImgIcon() }}"> {{ plugin.getName() }}</h4>
                             </div>
                             <div class="box-body">
-                                <p>{{ 'Catégorie:' }} {{ plugin.getCategory() }}</p>
-                                <p>{{ 'Autheur:' }} {{ plugin.getAuthor() }}</p>
-                                <p>{{ 'Licence:' }} {{ plugin.getLicense() }}</p>
+                                <p><b>{{ 'Catégorie :' }}</b> {{ plugin.getCategory() }}</p>
+                                <p><b>{{ 'Autheur :' }}</b> {{ plugin.getAuthor() }}</p>
+                                <p><i>{{ 'Licence :' }}</i> {{ plugin.getLicense() }}</p>
                             </div>
                             <div class="box-footer clearfix text-center">
                                 <div class="btn-group">
@@ -36,7 +35,7 @@
             <div class="row">
                 <div class="col-md-6 col-sm-12">
                     <div class="box">
-                        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-circle-o-notch"></i> {{ 'Etat' }}</h3></div>
+                        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-circle-o-notch">&nbsp;&nbsp;</i>{{ 'Etat' }}</h3></div>
                         <div class="box-body">
                             <div id="div_plugin_toggleState"></div>
                             <form class="form-horizontal">
@@ -68,8 +67,8 @@
                 </div>
                 <div class="col-md-6 col-sm-12">
                     <div class="box box-primary" id="div_configLog">
-                        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-file-o"></i> {{ 'Log' }}</h3>
-                            <a class="btn btn-success btn-xs pull-right" id="bt_savePluginLogConfig"><i class="fa fa-check-circle icon-white "></i> {{ 'Sauvegarder' }}</a>
+                        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-file-o">&nbsp;&nbsp;</i>{{ 'Log' }}</h3>
+                            <a class="btn btn-success btn-xs pull-right" id="bt_savePluginLogConfig"><i class="fa fa-check-circle icon-white ">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
                         </div>
                         <div class="box-body">
                             <form class="form-horizontal">
@@ -87,7 +86,7 @@
             <div class="row">
                 <div class="col-md-6 col-sm-12">
                     <div class="box box-success">
-                        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-certificate"></i> {{ 'Dépendances' }}</h3></div>
+                        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-certificate">&nbsp;&nbsp;</i>{{ 'Dépendances' }}</h3></div>
                         <div class="box-body">
                             <div id="div_plugin_dependancy"></div>
                         </div>
@@ -95,7 +94,7 @@
                 </div>
                 <div class="col-md-6 col-sm-12">
                     <div class="box box-success">
-                        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-university"></i> {{ 'Démon' }}</h3></div>
+                        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-university">&nbsp;&nbsp;</i>{{ 'Démon' }}</h3></div>
                         <div class="box-body">
                             <div id="div_plugin_deamon"></div>
                         </div>
@@ -103,7 +102,7 @@
                 </div>
             </div>
             <div class="box box-primary">
-                <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-map"></i> {{ 'Installation' }}</h3></div>
+                <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-map">&nbsp;&nbsp;</i>{{ 'Installation' }}</h3></div>
                 <div class="box-body">
                     <span id="span_plugin_installation"></span>
                 </div>
@@ -111,7 +110,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fa fa-cogs"></i> {{ 'Configuration' }}</h3>
-                    <a class="btn btn-success btn-xs pull-right" id="bt_savePluginConfig"><i class="fa fa-check-circle icon-white"></i> {{ 'Sauvegarder' }}</a>
+                    <a class="btn btn-success btn-xs pull-right" id="bt_savePluginConfig"><i class="fa fa-check-circle icon-white">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
                 </div>
                 <div class="box-body">
                     <div id="div_plugin_configuration"></div>
@@ -122,8 +121,8 @@
             <div class="row">
                 <div class="col-md-6 col-sm-12">
                     <div class="box box-primary" id="div_functionalityPanel">
-                        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-picture-o"></i> {{ 'Fonctionnalités' }}
-                                <a class="btn btn-success btn-xs pull-right" id="bt_savePluginFunctionalityConfig"><i class="fa fa-check-circle icon-white"></i> {{ 'Sauvegarder' }}</a>
+                        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-picture-o">&nbsp;&nbsp;</i>{{ 'Fonctionnalités' }}
+                                <a class="btn btn-success btn-xs pull-right" id="bt_savePluginFunctionalityConfig"><i class="fa fa-check-circle icon-white">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
                             </h3></div>
                         <div class="box-body">
                             <form class="form-horizontal">
@@ -137,8 +136,8 @@
                 <div class="col-md-6 col-sm-12">
                     <div class="box box-primary" id="div_configPanel">
                         <div class="box-header with-border">
-                            <h3 class="box-title"><i class="fa fa-picture-o"></i> {{ 'Panel' }}</h3>
-                            <a class="btn btn-success btn-xs pull-right" id="bt_savePluginPanelConfig"><i class="fa fa-check-circle icon-white"></i> {{ 'Sauvegarder' }}</a>
+                            <h3 class="box-title"><i class="fa fa-picture-o">&nbsp;&nbsp;</i>{{ 'Panel' }}</h3>
+                            <a class="btn btn-success btn-xs pull-right" id="bt_savePluginPanelConfig"><i class="fa fa-check-circle icon-white">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
                         </div>
                         <div class="box-body">
                             <form class="form-horizontal">
