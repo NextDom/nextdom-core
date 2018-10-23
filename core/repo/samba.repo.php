@@ -127,7 +127,8 @@ class repo_samba {
     }
 
     public static function makeSambaCommand($_cmd, $_type = 'backup') {
-        return system::getCmdSudo() . 'smbclient ' . config::byKey('samba::' . $_type . '::share') . ' -U "' . config::byKey('samba::' . $_type . '::username') . '%' . config::byKey('samba::' . $_type . '::password') . '" -I ' . config::byKey('samba::' . $_type . '::ip') . ' -c "' . $_cmd . '"';
+        error_log(system::getCmdSudo() . 'smbclient ' . config::byKey('samba::' . $_type . '::share') . ' -U "' . config::byKey('samba::' . $_type . '::username') . '%' . config::byKey('samba::' . $_type . '::password') . '" -I ' . config::byKey('samba::' . $_type . '::ip') . ' --debuglevel=0 -c "' . $_cmd . '"');
+        return system::getCmdSudo() . 'smbclient ' . config::byKey('samba::' . $_type . '::share') . ' -U "' . config::byKey('samba::' . $_type . '::username') . '%' . config::byKey('samba::' . $_type . '::password') . '" -I ' . config::byKey('samba::' . $_type . '::ip') . ' --debuglevel=0 -c "' . $_cmd . '"';
     }
 
     public static function sortByDatetime($a, $b) {
@@ -141,13 +142,7 @@ class repo_samba {
         $cmd = repo_samba::makeSambaCommand('cd ' . $_dir . ';ls', $_type);
         $result = explode("\n", com_shell::execute($cmd));
         $return = array();
-        // Un warning fausse le résultat
-        // Sinon supprime les 2 premières lignes uniquement (cd + message du ls)
-        $startIndex = 2;
-        if (strpos(strtolower($result[0]), 'deprecated') !== false) {
-            ++$startIndex;
-        }
-        for ($i = $startIndex; $i < count($result) - 2; $i++) {
+        for ($i = 2; $i < count($result) - 2; $i++) {
             $line = array();
             foreach (explode(" ", $result[$i]) as $value) {
                 if (trim($value) == '') {
