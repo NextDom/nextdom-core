@@ -76,6 +76,7 @@ class Render
         $twigConfig =  [
             'cache' => NEXTDOM_ROOT . '/var/cache/twig',
             'debug' => $developerMode,
+            'auto_reload' => true
         ];
         $this->twig = new Twig_Environment($loader,  $twigConfig);
         $this->twig->addExtension(new I18nExtension());
