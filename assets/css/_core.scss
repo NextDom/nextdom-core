@@ -1,5 +1,5 @@
 @import "_buttons.scss";
-@import "_alerts.scss";  
+@import "_alerts.scss";
 @import "_scenario.scss";
 
 .default-cursor {
@@ -157,12 +157,6 @@
 
 .icon_gestion {
   height : 120px;
-  margin:{
-    bottom : 10px;
-    left : 10px;
-  }
-  padding : 5px;
-  border-radius: 2px;
   width : 140px;
 }
 
@@ -180,7 +174,13 @@
 }
 
 .icon_gestion img{
-  border-radius: 15px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 4px;
+  margin-bottom: 5px;
+  border-bottom-right-radius: 10px;
+  padding: 4px;
+  box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 }
 
 .icon-health {
