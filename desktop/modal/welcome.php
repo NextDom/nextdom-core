@@ -5,17 +5,9 @@ if (!isConnect()) {
 ?>
 
 <div class="alert alert-success">
-    <div class="row">
-        <div class="col-xs-10">
-            <h4><i class="fas fa-thumbs-up">&nbsp;&nbsp;</i>{{Félicitations}}</h4>
-        </div>
-        <div class="col-xs-2">
-            <span class='btn btn-action' id='bt_doNotDisplayWelcome'><i class="fas fa-eye-slash">&nbsp;&nbsp;</i>{{Ne plus afficher}}</span>
-        </div>
-    </div>
-
-    <p>{{Bienvenue dans}} <?= config::byKey('product_name'); ?> {{, merci d'avoir choisi cet outil pour votre habitat connecté.}}
-
+    <h4 class="col-lg-5" style="padding-left:0px"><i class="fas fa-thumbs-up">&nbsp;&nbsp;</i>{{Félicitations}}</h4>
+    <div class='btn btn-action pull-right' id='bt_doNotDisplayWelcome'><i class="fas fa-eye-slash">&nbsp;&nbsp;</i>{{Ne plus afficher}}</div>
+    <br><br>{{Bienvenue dans}} <?= config::byKey('product_name'); ?> {{, merci d'avoir choisi cet outil pour votre habitat connecté.}}
 </div>
 
 <div class="container-fluid">

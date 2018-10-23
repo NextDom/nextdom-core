@@ -30,16 +30,16 @@ sendVarToJS('market_display_info', $market_array);
   <div class='col-sm-3'>
     <center>
       <?php
-$default_image = 'core/img/no_image.gif';
+$default_image = 'public/img/NextDom_NoPicture.png';
 switch ($market->getType()) {
     case 'widget':
-        $default_image = 'core/img/no-image-widget.png';
+        $default_image = '/public/img/NextDom_Widget.png';
         break;
     case 'plugin':
-        $default_image = 'core/img/no-image-plugin.png';
+        $default_image = '/public/img/NextDom_Plugin.png';
         break;
     case 'script':
-        $default_image = 'core/img/no-image-script.png';
+        $default_image = '/public/img/NextDom_Script.png';
         break;
 }
 $urlPath = config::byKey('market::address') . '/' . $market->getImg('icon');
