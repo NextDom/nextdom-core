@@ -52,6 +52,11 @@ $NEXTDOM_INTERNAL_CONFIG = array(
             array('name' => 'NextDom draft', 'type' => 'json', 'code' => 'nextdom_draft', 'data' => 'https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/nextdom-draft.json')
         )
     ),
+    'theme' => array(
+        'color1' => '#33b8cc',
+        'color2' => '#b8c7ce',
+        'color3' => '#ffffff'
+    ),
     'plugin' => array(
         'category' => array(
             'security' => array('name' => 'Sécurité', 'icon' => 'fa-lock'),

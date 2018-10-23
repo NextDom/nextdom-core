@@ -241,6 +241,7 @@ body {
     radius: 4px;
     width: 1px;
   }
+  
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
@@ -466,7 +467,6 @@ body {
 }
 .legend-title {
   font-size: 15px;
-  border: 1px solid;
   padding: 5px 8px;
   margin-bottom: 15px;
   background-color: whitesmoke;
@@ -733,7 +733,6 @@ input[type="checkbox"] {
 }
 
 /* Objets */
-
 
 #div_Update-view .box .box-header {
   min-height: 70px;

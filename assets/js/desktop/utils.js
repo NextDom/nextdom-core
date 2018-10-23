@@ -374,7 +374,7 @@ $(function () {
     });
 
     $('#bt_messageModal').on('click',function(){
-        $('#md_modal').dialog({title: "{{Message NextDom}}"});
+        $('#md_modal').dialog({title: "{{Messages NextDom}}"});
         $('#md_modal').load('index.php?v=d&p=message&ajax=1').dialog('open');
     });
 

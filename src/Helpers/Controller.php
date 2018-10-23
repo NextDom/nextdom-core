@@ -388,7 +388,7 @@ class Controller
                 }
             }
         }
-        
+
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/log_admin.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
@@ -445,6 +445,7 @@ class Controller
         $pageContent['customDarkThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-dark'];
         $pageContent['customLightThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-light'];
         $pageContent['adminCategories'] = \nextdom::getConfiguration('eqLogic:category');
+        $pageContent['Theme'] = \nextdom::getConfiguration('theme');
         $pageContent['customProductName'] = \config::byKey('product_name');
         $pageContent['customTheme'] = \config::byKey('theme');
         $pageContent['customEnableCustomCss'] = \config::byKey('enableCustomCss');
@@ -971,10 +972,10 @@ class Controller
                         // Erreur
                         if ($pluginData['dependencyState'] == 'nok') {
                             $pluginData['nOk']++;
-                        // En cours
+                            // En cours
                         } elseif ($pluginData['dependencyState'] == 'in_progress') {
                             $pluginData['pending']++;
-                        // Autres
+                            // Autres
                         } elseif ($pluginData['dependencyState'] != 'ok') {
                             $pluginData['nOk']++;
                         }
@@ -1297,7 +1298,7 @@ class Controller
 
         $pageData['systemCanSudo'] = \nextdom::isCapable('sudo');
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/system.js';
-$pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/system.html.twig', $pageContent);
     }
@@ -1321,7 +1322,7 @@ $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
         Status::isConnectedAdminOrFail();
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/database.js';
-$pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/database.html.twig', $pageContent);
     }
@@ -1774,7 +1775,7 @@ $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
         return $render->get('/desktop/eqAnalyze.html.twig', $pageContent);
     }
 
-       /**
+    /**
      * Render objects page
      *
      * @param Render $render Render engine

@@ -130,7 +130,6 @@ class PrepareView
         $page = '';
 
         $language = $configs['language'];
-
         $pageData['HOMELINK'] = self::getHomeLink();
         //TODO: Tests à revoir
         if (Utils::init('p') == '') {
@@ -315,6 +314,10 @@ class PrepareView
         $pageData['PRODUCT_CONNECTION_ICON'] = $configs['product_connection_image'];
         $pageData['AJAX_TOKEN'] = \ajax::getToken();
         $pageData['LANGUAGE'] = $configs['language'];
+        $pageData['COLOR1'] = \nextdom::getConfiguration('theme:color1');
+        $pageData['COLOR2'] = \nextdom::getConfiguration('theme:color2');
+        $pageData['COLOR3'] = \nextdom::getConfiguration('theme:color3');
+
         self::initJsPool($pageData);
         self::initCssPool($pageData, $configs);
         // TODO: A virer
@@ -421,7 +424,6 @@ class PrepareView
         }
 
         if (!Status::isRescueMode()) {
-            $pageData['CSS_POOL'][] = '/public/css/adminlte/skin-'.$configs['theme'].'.css';
             if (!Status::isConnect()) {
                 if (isset($_SESSION['user']) && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
                     $highstockThemeFile = '/3rdparty/highstock/themes/' . $_SESSION['user']->getOptions('desktop_highcharts_theme') . '.js';
