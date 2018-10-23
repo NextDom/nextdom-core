@@ -127,7 +127,8 @@ class repo_samba {
     }
 
     public static function makeSambaCommand($_cmd, $_type = 'backup') {
-        return system::getCmdSudo() . 'smbclient ' . config::byKey('samba::' . $_type . '::share') . ' -U "' . config::byKey('samba::' . $_type . '::username') . '%' . config::byKey('samba::' . $_type . '::password') . '" -I ' . config::byKey('samba::' . $_type . '::ip') . ' -c "' . $_cmd . '"';
+        error_log(system::getCmdSudo() . 'smbclient ' . config::byKey('samba::' . $_type . '::share') . ' -U "' . config::byKey('samba::' . $_type . '::username') . '%' . config::byKey('samba::' . $_type . '::password') . '" -I ' . config::byKey('samba::' . $_type . '::ip') . ' --debuglevel=0 -c "' . $_cmd . '"');
+        return system::getCmdSudo() . 'smbclient ' . config::byKey('samba::' . $_type . '::share') . ' -U "' . config::byKey('samba::' . $_type . '::username') . '%' . config::byKey('samba::' . $_type . '::password') . '" -I ' . config::byKey('samba::' . $_type . '::ip') . ' --debuglevel=0 -c "' . $_cmd . '"';
     }
 
     public static function sortByDatetime($a, $b) {
@@ -180,7 +181,7 @@ class repo_samba {
     public static function backup_list() {
         $return = array();
         foreach (self::ls(config::byKey('samba::backup::folder')) as $file) {
-            if ($file['filename'] == '.' || $file['filename'] == '..') {
+            if ($file['filename'] == '.' || $file['filename'] == '..' || $file['filename'][0] == '.') {
                 continue;
             }
             $return[] = $file['filename'];
