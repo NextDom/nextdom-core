@@ -8,20 +8,7 @@ function gen_css {
 	sass assets/css/firstUse.scss public/css/firstUse.css --style compressed
 	sass assets/css/rescue.scss public/css/rescue.css --style compressed
 	sass assets/css/Market/market.scss public/css/market.css --style compressed
-	sass assets/css/adminlte/skin-black.scss public/css/adminlte/skin-black.css --style compressed
-	sass assets/css/adminlte/skin-black-light.scss public/css/adminlte/skin-black-light.css --style compressed
-	sass assets/css/adminlte/skin-blue.scss public/css/adminlte/skin-blue-light.css --style compressed
-	sass assets/css/adminlte/skin-blue-light.scss public/css/adminlte/skin-blue-light.css --style compressed
-	sass assets/css/adminlte/skin-green.scss public/css/adminlte/skin-green.css --style compressed
-	sass assets/css/adminlte/skin-green-light.scss public/css/adminlte/skin-green.css --style compressed
-	sass assets/css/adminlte/skin-nextdom.scss public/css/adminlte/skin-nextdom.css --style compressed
-	sass assets/css/adminlte/skin-nextdom-light.scss public/css/adminlte/skin-nextdom-light.css --style compressed
-	sass assets/css/adminlte/skin-purple.scss public/css/adminlte/skin-purple.css --style compressed
-	sass assets/css/adminlte/skin-purple-light.scss public/css/adminlte/skin-purple-light.css --style compressed
-	sass assets/css/adminlte/skin-red.scss public/css/adminlte/skin-red.css --style compressed
-	sass assets/css/adminlte/skin-red-light.scss public/css/adminlte/skin-red-light.css --style compressed
-	sass assets/css/adminlte/skin-yellow.scss public/css/adminlte/skin-yellow.css --style compressed
-	sass assets/css/adminlte/skin-yellow-light.scss public/css/adminlte/skin-yellow-light.css --style compressed
+
 	# Remplacement des chemins
 	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-#g public/css/nextdom.css
 	sed -i s#\.\./fonts/glyphicons-#/3rdparty/bootstrap/fonts/glyphicons-#g public/css/nextdom.css
