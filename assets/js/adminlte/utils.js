@@ -5,10 +5,14 @@ $(function() {
     $(".slimScrollDiv").css("overflow","");
     $(".sidebar").css("overflow","");
 });
-$('.fab').on('mouseleave',function() {
-    $('.blurPanel').removeClass('blur');
-});
+if ($('[role="dialog"] .fab').length == 0) {
+    $('.fab').on('mouseleave',function() {
+        $('.blurPanel').removeClass('blur');
+    });
 
-$('.fab').on('mouseenter',function() {
-    $('.blurPanel').addClass('blur');
-});
+    $('.fab').on('mouseenter',function() {
+        $('.blurPanel').addClass('blur');
+    });
+} else {
+    $('.fab').css('display', 'none');
+}
