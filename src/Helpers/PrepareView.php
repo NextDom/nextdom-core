@@ -314,9 +314,9 @@ class PrepareView
         $pageData['PRODUCT_CONNECTION_ICON'] = $configs['product_connection_image'];
         $pageData['AJAX_TOKEN'] = \ajax::getToken();
         $pageData['LANGUAGE'] = $configs['language'];
-        $pageData['COLOR1'] = \config::byKey('theme:color1');
-        $pageData['COLOR2'] = \config::byKey('theme:color2');
-        $pageData['COLOR3'] = \config::byKey('theme:color3');
+        $pageData['COLOR1'] = \nextdom::getConfiguration('theme:color1');
+        $pageData['COLOR2'] = \nextdom::getConfiguration('theme:color2');
+        $pageData['COLOR3'] = \nextdom::getConfiguration('theme:color3');
 
         self::initJsPool($pageData);
         self::initCssPool($pageData, $configs);
