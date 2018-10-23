@@ -2,16 +2,16 @@
     <legend class="legend-title">{{ 'Liste des objets de votre ' }} {{ objectProductName }} - {{objectCustomProductName}}</legend>
     <div class="row padding-bottom">
         <div class="col-xs-12">
-            <input class="form-control padding-bottom" id="in_searchObject" placeholder="{{'Rechercher ...'}}" />
+            <input class="form-control padding-bottom" id="in_searchObject" placeholder="{{'Rechercher...'}}" />
         </div>
     </div>
 
     <div class="objectListContainer row">
         {% for object in objectList %}
-            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                 <div class="box objectDisplayCard" style='border-top:3px solid {{ object.getDisplay("tagColor") }}' data-object_id="{{ object.getId() }}" data-object_name="{{ object.getName() }}">
                     <div class="box-header with-border">
-                        <a class="btn bt_detailsObject">
+                        <a class="bt_detailsObject cursor">
                             <h4 class="box-title name object-name" style='color:{{ object.getDisplay("tagColor") }}'>{{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|replace({'></i>': '></i>'})|raw }} <b>{{ object.getName() }}</b></h4>
                         </a>
                     </div>
@@ -19,10 +19,8 @@
                         <span class="object-summary">&nbsp;{{ object.getHtmlSummary()|raw }}</span>
                     </div>
                     <div class="box-footer clearfix text-center">
-                        <div class="btn-group">
-                            <a class="btn btn-danger btn-xs remove bt_removeObject"><i class="far fa-trash-alt"></i> {{ 'Supprimer' }}</a>
-                            <a class="btn btn-info btn-xs bt_detailsObject"><i class="far fa-edit"></i> {{ 'Modifier' }}</a>
-                        </div>
+                        <a class="btn btn-danger btn-sm pull-right remove bt_removeObject"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                        <a class="btn btn-info btn-sm pull-left bt_detailsObject"><i class="far fa-edit">&nbsp;&nbsp;</i>{{ 'Modifier' }}</a>
                     </div>
                 </div>
             </div>
@@ -32,16 +30,15 @@
 
 <div class="nav-tabs-custom object" style="display: none;" id="div_conf">
     <ul class="nav nav-tabs pull-right" role="tablist">
-        <li role="presentation"><a class="cursor" aria-controls="home" role="tab" id="bt_returnToThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a></li>
-        <li role="presentation" class="active"><a href="#objecttab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i> {{ 'Objet' }}</a></li>
+        <li role="presentation" class="active"><a href="#objecttab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-clone"></i> {{ 'Objet' }}</a></li>
         <li role="presentation"><a href="#summarytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-list-alt"></i> {{ 'Résumé' }}</a></li>
-        <li class="pull-left header"><i class="fa fa-inbox"></i> {{ 'Configuration de l\'objet' }}</li>
+        <li class="pull-left header"><i class="fas fa-cogs"></i> {{ 'Configuration de l\'objet' }}</li>
     </ul>
     <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
         <div role="tabpanel" class="tab-pane active" id="objecttab">
-            <br/>
             <form class="form-horizontal">
                 <fieldset>
+                    <legend class="legend-title">{{ 'Identité' }}</legend>
                     <div class="form-group">
                         <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nom de l\'objet' }}</label>
                         <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
@@ -60,73 +57,81 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Position' }}</label>
-                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                            <input type="number" class="objectAttr form-control" data-l1key="position"/>
+
+                    <div class="legend-section">
+                        <legend class="legend-title">{{ 'Couleurs' }}</legend>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du tag' }}</label>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                <div class=" colorpicker-component colorpick input-group">
+                                    <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="tagColor"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Visible' }}</label>
-                        <div class="col-sm-1">
-                            <input class="objectAttr" type="checkbox" data-l1key="isVisible" checked/>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du texte du tag' }}</label>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                <div class=" colorpicker-component colorpick input-group">
+                                    <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="tagTextColor"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Masquer sur le dashboard' }}</label>
-                        <div class="col-sm-1">
-                            <input class="objectAttr" type="checkbox" data-l1key="configuration" data-l2key="hideOnDashboard"/>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du texte du résumé' }}</label>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                <div class=" colorpicker-component colorpick input-group">
+                                    <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="desktop::summaryTextColor"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Icône' }}</label>
-                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                            <div class="objectAttr" data-l1key="display" data-l2key="icon" style="font-size : 1.5em;"></div>
-                        </div>
-                        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4">
-                            <a class="btn btn-default btn-sm" id="bt_chooseIcon"><i class="fas fa-flag"></i> {{ 'Choisir' }}</a>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du tag' }}</label>
-                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                            <div class=" colorpicker-component colorpick input-group">
-                                <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="tagColor"/>
-                                <span class="input-group-addon"><i></i></span>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Taille sur le dashboard (1 à 12)' }}</label>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                <input type="number" class="objectAttr form-control" data-l1key="display" data-l2key="dashboard::size"/>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du texte du tag' }}</label>
-                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                            <div class=" colorpicker-component colorpick input-group">
-                                <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="tagTextColor"/>
-                                <span class="input-group-addon"><i></i></span>
+
+                    <div class="legend-section">
+                        <legend class="legend-title">{{ 'Design' }}</legend>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Position' }}</label>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                <input type="number" class="objectAttr form-control" data-l1key="position"/>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du texte du résumé' }}</label>
-                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                            <div class=" colorpicker-component colorpick input-group">
-                                <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="desktop::summaryTextColor"/>
-                                <span class="input-group-addon"><i></i></span>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Visible' }}</label>
+                            <div class="col-sm-1">
+                                <input class="objectAttr" type="checkbox" data-l1key="isVisible" checked/>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Taille sur le dashboard (1 à 12)' }}</label>
-                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                            <input type="number" class="objectAttr form-control" data-l1key="display" data-l2key="dashboard::size"/>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Masquer sur le dashboard' }}</label>
+                            <div class="col-sm-1">
+                                <input class="objectAttr" type="checkbox" data-l1key="configuration" data-l2key="hideOnDashboard"/>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Image' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-        <span class="btn btn-default btn-file">
-          <i class="fas fa-cloud-upload-alt"></i> {{ 'Envoyer' }}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">
-        </span>
-                            <a class="btn btn-danger" id="bt_removeBackgroundImage"><i class="fas fa-trash"></i> {{ 'Supprimer l\'image' }}</a>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Icône' }}</label>
+                            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                                <div class="objectAttr" data-l1key="display" data-l2key="icon" style="font-size : 1.5em;"></div>
+                            </div>
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4">
+                                <a class="btn btn-default btn-sm" id="bt_chooseIcon"><i class="fas fa-flag">&nbsp;&nbsp;</i>{{ 'Choisir' }}</a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Image' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                <span class="btn btn-default btn-file">
+                                    <i class="fas fa-cloud-upload-alt">&nbsp;&nbsp;</i>{{ 'Envoyer' }}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">
+                                </span>
+                                <a class="btn btn-danger" id="bt_removeBackgroundImage"><i class="fas fa-trash">&nbsp&nbsp;</i>{{ 'Supprimer' }}</a>
+                            </div>
                         </div>
                     </div>
                 </fieldset>
@@ -138,7 +143,7 @@
             {% else %}
                 <form class="form-horizontal">
                     <fieldset>
-                        <table class="table">
+                        <table class="table table-bordered table-condensed">
                             <thead>
                             <tr>
                                 <th></th>
@@ -185,32 +190,32 @@
                 </form>
                 <form class="form-horizontal">
                     <fieldset>
-                        <legend style="cursor:default;"><i class="fas fa-tachometer-alt"></i> {{ 'Commandes' }}</legend>
-                        <ul class="nav nav-tabs" role="tablist">
-                            {% set active = 'active' %}
-                            {% for summaryKey, summaryValue in objectSummary %}
-                                <li class="{{ active }}"><a href="#summarytab{{ summaryKey }}" role="tab" data-toggle="tab">{{ summaryValue['icon']|raw }} {{ summaryValue['name'] }}</i>  <span class="tabnumber summarytabnumber{{ summaryKey }}"></span></a></li>
-                                {% set active = '' %}
-                            {% endfor %}
-                        </ul>
-                        <div class="tab-content">
-                            {% set active = ' active' %}
-                            {% for summaryKey, summaryValue in objectSummary %}
-                                <div role="tabpanel" class="tab-pane type{{ summaryKey }}{{ active }}" data-type="{{ summaryKey }}" id="summarytab{{ summaryKey }}">
-                                    <a class="btn btn-sm btn-success pull-right addSummary" data-type="{{ summaryKey }}"><i class="fas fa-plus-circle"></i> {{ 'Ajouter une commande' }}</a>
-                                    <br/>
-                                    <div class="div_summary" data-type="{{ summaryKey }}"></div>
+                        <div class="legend-section">
+                            <legend class="legend-title"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Commandes' }}</legend>
+                            <div class="nav-tabs-custom">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    {% set active = 'active' %}
+                                    {% for summaryKey, summaryValue in objectSummary %}
+                                        <li class="{{ active }}"><a href="#summarytab{{ summaryKey }}" role="tab" data-toggle="tab">{{ summaryValue['icon']|raw }} {{ summaryValue['name'] }}</i>  <span class="tabnumber summarytabnumber{{ summaryKey }}"></span></a></li>
+                                        {% set active = '' %}
+                                    {% endfor %}
+                                </ul>
+                                <div class="tab-content">
+                                    {% set active = ' active' %}
+                                    {% for summaryKey, summaryValue in objectSummary %}
+                                        <div role="tabpanel" class="tab-pane type{{ summaryKey }}{{ active }}" data-type="{{ summaryKey }}" id="summarytab{{ summaryKey }}">
+                                            <div class="div_summary" data-type="{{ summaryKey }}"></div>
+                                            <div class="btn btn-sm btn-success addSummary" data-type="{{ summaryKey }}"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter une commande' }}</div>
+                                        </div>
+                                        {% set active = '' %}
+                                    {% endfor %}
                                 </div>
-                                {% set active = '' %}
-                            {% endfor %}
+                            </div>
                         </div>
                     </fieldset>
                 </form>
             {% endif %}
         </div>
-    </div>
-    <div class="box-footer clearfix">
-        <a class="btn btn-success btn-sm pull-right" id="bt_saveObject"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
     </div>
 </div>
 <div class="fab" style="z-index:999">
@@ -219,6 +224,7 @@
         <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_showObjectSummary" style="background-color:#33B8CC" data-toggle="tooltip" title="" data-original-title="{{ 'Vue d\'ensemble' }}"><i class="fas fa-list"></i></a></li>
         <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_addObject2" style="background-color:#33B8CC" data-toggle="tooltip" title="" data-original-title="{{ 'Ajouter' }}"><i class="fas fa-plus-circle"></i></a></li>
         <li class="fab-buttons__item"><a class="fab-buttons__link" id="bt_savegeneral" style="background-color:green"><i class="fas fa-save"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" id="bt_returnToThumbnailDisplay"><i class="fas fa-chevron-left"></i></a></li>
         <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" href="{{ HOMELINK }}"><i class="fas fa-home"></i></a></li>
     </ul>
 </div>

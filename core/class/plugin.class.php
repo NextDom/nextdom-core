@@ -587,7 +587,7 @@ class plugin
             \log::add('plugin', 'error', $e->getMessage());
             throw $e;
         }
-        
+
         if ($state == 0) {
             config::save('active', $state, $this->getId());
         }
@@ -699,7 +699,7 @@ class plugin
         if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/doc/images/' . strtolower($this->getId()) . '_icon.png')) {
             return 'plugins/' . $this->getId() . '/doc/images/' . strtolower($this->getId()) . '_icon.png';
         }
-        return 'core/img/no-image-plugin.png';
+        return '/public/img/NextDom_Plugin.png';
     }
 
     /**
@@ -1044,7 +1044,7 @@ class plugin
      *
      * @return $this
      */
-    public function setChangelog($changelog): plugin 
+    public function setChangelog($changelog): plugin
     {
         $this->changelog = $changelog;
         return $this;
