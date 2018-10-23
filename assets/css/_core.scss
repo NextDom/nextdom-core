@@ -1,5 +1,5 @@
 @import "_buttons.scss";
-@import "_alerts.scss";  
+@import "_alerts.scss";
 @import "_scenario.scss";
 
 .default-cursor {
@@ -92,8 +92,10 @@
 }
 
 .eqLogic-battery {
-  min-width:100px;
-  min-height:150px;
+  min:{
+      width:100px;
+      height:150px;
+  }
   text-align: center;
   &.good {
     background-color: $good;
@@ -157,12 +159,6 @@
 
 .icon_gestion {
   height : 120px;
-  margin:{
-    bottom : 10px;
-    left : 10px;
-  }
-  padding : 5px;
-  border-radius: 2px;
   width : 140px;
 }
 
@@ -180,7 +176,19 @@
 }
 
 .icon_gestion img{
-  border-radius: 15px;
+  border:{
+    top:{
+        left-radius: 10px;
+        right-radius: 4px;
+    }
+    bottom:{
+        left-radius: 4px;
+        right-radius: 10px;
+    }
+  }
+  margin-bottom: 5px;
+  padding: 4px;
+  box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 }
 
 .icon-health {
@@ -262,7 +270,6 @@ html {
   padding: 0;
   line-height:0px;
 }
-
 
 ::-webkit-scrollbar-track-piece{
   background-color:transparent
