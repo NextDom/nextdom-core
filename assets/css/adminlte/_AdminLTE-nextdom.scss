@@ -571,10 +571,8 @@ body {
   padding: {
     left: 15px;
     right: 15px;
+    bottom: 50px
   }
-}
-.fixed .content-wrapper, .fixed .right-side {
-  padding-top: 58px;
 }
 @media (max-width: 767px) {
   .fixed .content-wrapper, .fixed .right-side {
