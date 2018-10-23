@@ -35,17 +35,16 @@
                             class="fas fa-flask">&nbsp;&nbsp;</i>{{ 'Modifs Avancées' }}</a></li>
             <li role="presentation"><a href="#colortab" aria-controls="profile" role="tab" data-toggle="tab"><i
                             class="fas fa-th-large">&nbsp;&nbsp;</i>{{ 'Options Tuiles' }}</a></li>
-            <li role="presentation"><a href="#customSkin" aria-controls="profile" role="tab" data-toggle="tab"><i
-                            class="fa fa-paint-brush">&nbsp;&nbsp;</i>{{ 'Options Thème' }}</a></li>
             <li role="presentation" class="active"><a href="#themestab" aria-controls="home" role="tab"
                                                       data-toggle="tab"><i
-                            class="fas fa-tint">&nbsp;&nbsp;</i>{{ 'Choix Thème' }}</a></li>
+                            class="fas fa-tint">&nbsp;&nbsp;</i>{{ 'Personnalisation NExtDom' }}</a></li>
         </ul>
         <form>
             <!-- Tabs content -->
             <div class="global-tab-content tab-content">
                 <!-- Theme tab -->
                 <div role="tabpanel" class="tab-pane active" id="themestab">
+                    <legend class="legend-title">{{ 'Personnalisation du theme.' }}</legend>
                     <div class="row">
                         <div class="col-md-4 col-md-offset-1">
                             <div class="form-group">
@@ -56,10 +55,12 @@
                                        data-toggle="tooltip"
                                        title="" data-original-title="{{ 'Remettre par défaut' }}"><i
                                                 class="fas fa-times"></i></a>
-                                    <div class=" colorpicker-component colorpick_inline input-group">
+                                    <div class=" colorpicker-component colorpick input-group">
                                         <input type="text" class="configKey form-control noSet"
                                                data-l1key="theme:color1"
                                                value="{{ Theme['color1'] }}"/>
+                                        <span class="input-group-addon"><i></i></span>
+
                                     </div>
                                 </div>
                             </div>
@@ -73,10 +74,12 @@
                                        data-toggle="tooltip"
                                        title="" data-original-title="{{ 'Remettre par défaut' }}"><i
                                                 class="fas fa-times"></i></a>
-                                    <div class="colorpicker-component colorpick_inline input-group">
+                                    <div class="colorpicker-component colorpick input-group">
                                         <input type="text" class="configKey form-control noSet"
                                                data-l1key="theme:color2"
                                                value="{{ Theme['color2'] }}"/>
+                                        <span class="input-group-addon"><i></i></span>
+
                                     </div>
                                 </div>
                             </div>
@@ -90,21 +93,17 @@
                                        data-toggle="tooltip"
                                        title="" data-original-title="{{ 'Remettre par défaut' }}"><i
                                                 class="fas fa-times"></i></a>
-                                    <div class=" colorpicker-component colorpick_inline input-group">
+                                    <div class=" colorpicker-component colorpick input-group">
                                         <input type="text" class="configKey form-control noSet"
                                                data-l1key="theme:color3"
                                                value="{{ Theme['color3'] }}"/>
+                                        <span class="input-group-addon"><i></i></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Theme option tab -->
-                <div role="tabpanel" class="tab-pane" id="customSkin">
-
-                    <legend class="legend-title">{{ 'Personnalisation des couleurs spécifiques du thème.' }}</legend>
+                    <legend class="legend-title">{{ 'Personnalisation de NextDom.' }}</legend>
                     <div class="row">
                         <div class="form-group col-md-4 col-md-offset-1 col-xs-12">
                             <label class="control-label" data-toggle="tooltip" title=""
@@ -167,7 +166,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
 
                 <!-- Tuiles tab -->
