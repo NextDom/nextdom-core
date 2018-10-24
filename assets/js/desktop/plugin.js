@@ -157,7 +157,7 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
                 $('#span_plugin_doc').append('<a class="btn btn-primary btn-sm" target="_blank" href="'+data.changelog+'"><i class="fas fa-list-ul">&nbsp;&nbsp;</i>{{Changelog}}</a> ');
             }
             if(isset(data.info.display) && data.info.display != ''){
-                $('#span_plugin_doc').append('<a class="btn btn-default btn-sm" target="_blank" href="'+data.info.display+'"><i class="fa fa-certificate">&nbsp;&nbsp;</i>{{Détails}}</a> ');
+                $('#span_plugin_doc').append('<a class="btn btn-default btn-sm" target="_blank" href="'+data.info.display+'"><i class="fas fa-info-circle">&nbsp;&nbsp;</i>{{Détails}}</a> ');
             }
 
             if (data.checkVersion != -1) {
