@@ -76,7 +76,7 @@ class PluginManager
                     continue;
                 }
                 if (in_array($plugin->getCategory(), $value['alias'])) {
-                    $plugin->category = $key;
+                    $plugin->setCategory($key);
                     break;
                 }
             }
