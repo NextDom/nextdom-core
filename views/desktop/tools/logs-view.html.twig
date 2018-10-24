@@ -36,7 +36,10 @@
                             <a class="btn btn-danger" id="bt_removeAllLog"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer tous' }}</a>
                         </div>
                         <div class="box-tools padding-bottom">
-                            <input class="form-control text-right" id="in_globalLogSearch" placeholder="{{ 'Rechercher dans le log...' }}"/>
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                                <input class="form-control" id="in_globalLogSearch" placeholder="{{ 'Rechercher dans le log...' }}"/>
+                            </div>
                         </div>
                         <pre id='pre_globallog' style='overflow: scroll;'></pre>
                     </fieldset>

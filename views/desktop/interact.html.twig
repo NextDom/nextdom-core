@@ -9,7 +9,10 @@
                 <span>{{ 'Vous n\'avez encore aucune interaction. Cliquez sur ajouter pour commencer.' }}</span>
                 </div>
             {% else %}
-                <input class="form-control" placeholder="{{ 'Rechercher' }}" style="margin-bottom:4px;" id="in_searchInteract"/>
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fas fa-search"></i></div>
+                    <input class="form-control" placeholder="{{ 'Rechercher...' }}" style="margin-bottom:4px;" id="in_searchInteract"/>
+                </div>
             {% endif %}
         </div>
     </div>
