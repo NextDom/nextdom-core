@@ -273,7 +273,7 @@
                             <legend class="legend-title">{{ 'Authentifications' }}</legend>
                             {% if profilsAllowRemoteUsers != 1 %}
                                 <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Authentification en 2 étapes' }}</label>
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Double authentification' }}</label>
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                                         <a class="btn btn-action" id="bt_configureTwoFactorAuthentification"><i class="fas fa-magic">&nbsp;&nbsp;</i>{{ 'Configurer' }}</a>
                                     </div>
@@ -289,22 +289,24 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Nouveau mot de passe' }}</label>
-                                    <div class="col-lg-3 col-md-5 col-sm-5 col-xs-12">
+                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
                                         <input type="password" class="userAttr form-control" data-l1key="password"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Confirmation mot de passe' }}</label>
-                                    <div class="col-lg-3 col-md-5 col-sm-5 col-xs-12">
+                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
                                         <input type="password" class="form-control" id="in_passwordCheck"/>
                                     </div>
                                 </div>
                             {% endif %}
                             <div class="form-group">
                                 <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Hash de l\'utilisateur' }}</label>
-                                <div class="btn-group col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                                <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
                                     <a class="btn btn-action" id="bt_genUserKeyAPI"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{ 'Regénérer' }}</a>
-                                    <span class="userAttr label label-value" data-l1key="hash"></span>
+                                </div>
+                                <div class="col-lg-8 col-md-7 col-sm-5 col-xs-12">
+                                    <span class="userAttr label label-value label-hash" data-l1key="hash"></span>
                                 </div>
                             </div>
                         </div>
@@ -392,6 +394,9 @@
             </div>
         </div>
     </div>
+</div>
+<div class="fab fab-left">
+    <a class="fab-action-button cursor" id="bt_goOnTop"><i class="fab-action-button__icon fas fa-angle-double-up"></i></a>
 </div>
 <div class="fab">
     <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>

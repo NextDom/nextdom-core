@@ -544,6 +544,10 @@ body {
     right: 15px;
   }
 }
+.label-hash {
+  word-break: break-all;
+  white-space: normal;
+}
 
 /* Logos */
 .login-logo,
