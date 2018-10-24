@@ -76,8 +76,12 @@ class Render
         $twigConfig =  [
             'cache' => NEXTDOM_ROOT . '/var/cache/twig',
             'debug' => $developerMode,
-            'auto_reload' => true
         ];
+        
+        if ($developerMode) {
+           $twigConfig['auto_reload'] = true;
+        }
+
         $this->twig = new Twig_Environment($loader,  $twigConfig);
         $this->twig->addExtension(new I18nExtension());
         $this->twig->addExtension(new DateExtension($this->translator));
@@ -157,7 +161,6 @@ class Render
         if (Status::isInDeveloperMode()) {
             $debugbar = new StandardDebugBar();
             $debugbarRenderer = $debugbar->getJavascriptRenderer();
-
             $debugbar->addCollector(new DataCollector\ConfigCollector(\config::getDefaultConfiguration()['core']));
             $pageData = $debugbarRenderer;
         } else {
