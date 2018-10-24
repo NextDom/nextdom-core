@@ -708,6 +708,7 @@ function positionEqLogic(_id,_preResize) {
             $(this).addClass($(this).attr('data-category'));
         });
         $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('margin',widget_margin+'px');
+        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('padding',widget_padding+'px');
         $('.eqLogic-widget').addClass('nextdomAlreadyPosition');
     }
 }
