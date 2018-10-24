@@ -692,6 +692,7 @@ function positionEqLogic(_id,_preResize) {
         eqLogic.trigger('resize');
         eqLogic.addClass(eqLogic.attr('data-category'));
         eqLogic.css('margin',widget_margin+'px');
+        eqLogic.css('padding',widget_padding+'px');
     }else{
         $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('margin','0px').css('padding','0px');
         $('.eqLogic-widget:not(.nextdomAlreadyPosition)').each(function () {
