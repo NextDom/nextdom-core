@@ -55,7 +55,7 @@
     <div class="box-group" id="accordionScenar">
         {% if scenarios[-1]|length > 0 %}
             <div class="panel box">
-                <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none" aria-expanded="false">
+                <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none" aria-expanded="true">
                     <h3 class="box-title">
                         <span>Aucun - {{ scenarios[-1]|length }} scénario(s)</span>
                     </h3>
@@ -80,7 +80,7 @@
         {% for scenarioGroup in scenarioListGroup %}
             {% if scenarioGroup.group != '' %}
                 <div class="panel box">
-                    <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}" aria-expanded="false">
+                    <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}" aria-expanded="true">
                         <h3 class="box-title"><span>{{ scenarioGroup.group }} - {{ scenarios[scenarioGroup.group]|length }} scénario(s)</span></h3>
                     </a>
                     <div id="config_{{ index }}" class="panel-collapse">
