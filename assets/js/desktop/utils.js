@@ -693,6 +693,7 @@ function positionEqLogic(_id,_preResize) {
         eqLogic.addClass(eqLogic.attr('data-category'));
         eqLogic.css('margin',widget_margin+'px');
         eqLogic.css('padding',widget_padding+'px');
+        eqLogic.css('border-radius',widget_radius+'px');
     }else{
         $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('margin','0px').css('padding','0px');
         $('.eqLogic-widget:not(.nextdomAlreadyPosition)').each(function () {
@@ -709,6 +710,7 @@ function positionEqLogic(_id,_preResize) {
         });
         $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('margin',widget_margin+'px');
         $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('padding',widget_padding+'px');
+        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('border-radius',widget_radius+'px');
         $('.eqLogic-widget').addClass('nextdomAlreadyPosition');
     }
 }
