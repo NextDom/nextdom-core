@@ -85,6 +85,7 @@ class Router
                 'widget::step::height',
                 'widget::margin',
                 'widget::padding',
+                'widget::radius',
                 'product_name',
                 'product_icon',
                 'product_connection_image',
