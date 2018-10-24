@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="container-fluid">
     <div class="row row-overflow">
         <div id="div_resumePluginList">
@@ -24,145 +25,184 @@
                     </div>
                 {% endfor %}
             </div>
+=======
+<div id="div_resumePluginList">
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fa fa-list-alt"></i> {{ 'Mes plugins' }}</h3>
+>>>>>>> FixThemes
         </div>
-        <div class="col-md-9 col-sm-8" id="div_confPlugin" style="border-left: solid 1px #EEE; padding-left: 25px;display: none;">
-            <legend>
-                <i class="fa fa-arrow-circle-left cursor" id="bt_returnToThumbnailDisplay"></i>
-                <span id="span_plugin_name"></span> (<span id="span_plugin_id"></span>) - <span id="span_plugin_install_version"></span>
-                <span id="span_plugin_market" class="pull-right"></span>
-                <span id="span_plugin_doc" class="pull-right"></span>
-            </legend>
-            <div class="row">
-                <div class="col-md-6 col-sm-12">
-                    <div class="box">
-                        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-circle-o-notch">&nbsp;&nbsp;</i>{{ 'Etat' }}</h3></div>
-                        <div class="box-body">
-                            <div id="div_plugin_toggleState"></div>
-                            <form class="form-horizontal">
-                                <fieldset>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">{{ 'Version' }}</label>
-                                        <div class="col-sm-4">
-                                            <span id="span_plugin_install_date" style="position:relative;top:9px;"></span>
-                                        </div>
-                                        <label class="col-sm-2 control-label">{{ 'Version NextDom' }}</label>
-                                        <div class="col-sm-4">
-                                            <span id="span_plugin_require" style="position:relative;top:9px;"></span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">{{ 'Auteur' }}</label>
-                                        <div class="col-sm-4">
-                                            <span id="span_plugin_author" style="position:relative;top:9px;"></span>
-                                        </div>
-                                        <label class="col-sm-2 control-label">{{ 'License' }}</label>
-                                        <div class="col-sm-4">
-                                            <span id="span_plugin_license" style="position:relative;top:9px;"></span>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="box box-primary" id="div_configLog">
-                        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-file-o">&nbsp;&nbsp;</i>{{ 'Log' }}</h3>
-                            <a class="btn btn-success btn-xs pull-right" id="bt_savePluginLogConfig"><i class="fa fa-check-circle icon-white ">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
-                        </div>
-                        <div class="box-body">
-                            <form class="form-horizontal">
-                                <fieldset>
-                                    <div id="div_plugin_log"></div>
-                                </fieldset>
-                            </form>
-                            <div class="form-actions">
+        <div class="box-body">
+            <input class="form-control" placeholder="{{ 'Rechercher' }}" id="in_searchPlugin"/>
+        </div>
+    </div>
+    <div class="pluginListContainer">
+        <div class="row">
 
+            {% for plugin in pluginsList %}
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <div class="box pluginDisplayCard" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_id="{{ plugin.getId() }}" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
+                        <div class="box-header iconlist cursor with-border">
+                            <h4 class="box-title"><img style="height:50px" src="{{ plugin.getPathImgIcon() }}"> {{ plugin.getName() }}</h4>
+                        </div>
+                        <div class="box-body">
+                            <p><b>{{ 'Catégorie :' }}</b> {{ plugin.getCategory() }}</p>
+                            <p><b>{{ 'Autheur :' }}</b> {{ plugin.getAuthor() }}</p>
+                            <p><i>{{ 'Licence :' }}</i> {{ plugin.getLicense() }}</p>
+                        </div>
+                        <div class="box-footer clearfix text-center">
+                            <div class="btn-group">
+                                <a class="btn btn-info btn-xs update" title="{{'Mettre à jour'}}"><i class="fas fa-refresh"></i> {{'Mettre à jour'}}</a>
+                                <a class="btn btn-danger btn-xs remove" id="span_plugin_delete" title="{{'Supprimer'}}"><i class="far fa-trash-alt"></i> {{'Supprimer'}}</a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 col-sm-12">
-                    <div class="box box-success">
-                        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-certificate">&nbsp;&nbsp;</i>{{ 'Dépendances' }}</h3></div>
-                        <div class="box-body">
-                            <div id="div_plugin_dependancy"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="box box-success">
-                        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-university">&nbsp;&nbsp;</i>{{ 'Démon' }}</h3></div>
-                        <div class="box-body">
-                            <div id="div_plugin_deamon"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="box box-primary">
-                <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-map">&nbsp;&nbsp;</i>{{ 'Installation' }}</h3></div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+<div class="col-md-9 col-sm-8" id="div_confPlugin" style="border-left: solid 1px #EEE; padding-left: 25px;display: none;">
+    <legend>
+        <span id="span_plugin_name"></span> (<span id="span_plugin_id"></span>) - <span id="span_plugin_install_version"></span>
+        <span id="span_plugin_market" class="pull-right"></span>
+        <span id="span_plugin_doc" class="pull-right"></span>
+    </legend>
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="box">
+                <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-circle-o-notch">&nbsp;&nbsp;</i>{{ 'Etat' }}</h3></div>
                 <div class="box-body">
-                    <span id="span_plugin_installation"></span>
+                    <div id="div_plugin_toggleState"></div>
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">{{ 'Version' }}</label>
+                                <div class="col-sm-4">
+                                    <span id="span_plugin_install_date" style="position:relative;top:9px;"></span>
+                                </div>
+                                <label class="col-sm-2 control-label">{{ 'Version NextDom' }}</label>
+                                <div class="col-sm-4">
+                                    <span id="span_plugin_require" style="position:relative;top:9px;"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">{{ 'Auteur' }}</label>
+                                <div class="col-sm-4">
+                                    <span id="span_plugin_author" style="position:relative;top:9px;"></span>
+                                </div>
+                                <label class="col-sm-2 control-label">{{ 'License' }}</label>
+                                <div class="col-sm-4">
+                                    <span id="span_plugin_license" style="position:relative;top:9px;"></span>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
                 </div>
             </div>
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-cogs"></i> {{ 'Configuration' }}</h3>
-                    <a class="btn btn-success btn-xs pull-right" id="bt_savePluginConfig"><i class="fa fa-check-circle icon-white">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="box box-primary" id="div_configLog">
+                <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-file-o">&nbsp;&nbsp;</i>{{ 'Log' }}</h3>
+                    <a class="btn btn-success btn-xs pull-right" id="bt_savePluginLogConfig"><i class="fa fa-check-circle icon-white ">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
                 </div>
                 <div class="box-body">
-                    <div id="div_plugin_configuration"></div>
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <div id="div_plugin_log"></div>
+                        </fieldset>
+                    </form>
                     <div class="form-actions">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 col-sm-12">
-                    <div class="box box-primary" id="div_functionalityPanel">
-                        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-picture-o">&nbsp;&nbsp;</i>{{ 'Fonctionnalités' }}
-                                <a class="btn btn-success btn-xs pull-right" id="bt_savePluginFunctionalityConfig"><i class="fa fa-check-circle icon-white">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
-                            </h3></div>
-                        <div class="box-body">
-                            <form class="form-horizontal">
-                                <fieldset>
-                                    <div id="div_plugin_functionality"></div>
-                                </fieldset>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="box box-primary" id="div_configPanel">
-                        <div class="box-header with-border">
-                            <h3 class="box-title"><i class="fa fa-picture-o">&nbsp;&nbsp;</i>{{ 'Panel' }}</h3>
-                            <a class="btn btn-success btn-xs pull-right" id="bt_savePluginPanelConfig"><i class="fa fa-check-circle icon-white">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
-                        </div>
-                        <div class="box-body">
-                            <form class="form-horizontal">
-                                <fieldset>
-                                    <div id="div_plugin_panel"></div>
-                                </fieldset>
-                            </form>
-                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="fab" style="z-index:999">
-        <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
-        <ul class="fab-buttons">
-            {% for repoCode, repoData in pluginReposList %}
-                <li class="fab-buttons__item"><a class="fab-buttons__link displayStore bg-light-blue-active" data-repo="{{ repoCode }}" data-tooltip="{{ repoData['name'] }}"><i class="fa fa-shopping-cart"></i></a></li>
-            {% endfor %}
-            <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_addPluginFromOtherSource" data-tooltip="{{ 'Sources' }}"><i class="fa fa-plus"></i></a></li>
-        </ul>
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="box box-success">
+                <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-certificate">&nbsp;&nbsp;</i>{{ 'Dépendances' }}</h3></div>
+                <div class="box-body">
+                    <div id="div_plugin_dependancy"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="box box-success">
+                <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-university">&nbsp;&nbsp;</i>{{ 'Démon' }}</h3></div>
+                <div class="box-body">
+                    <div id="div_plugin_deamon"></div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="fab fab-bis" style="z-index:999">
-        <a class="fab-action-button bg-red-active" href="{{ HOMELINK }}"><i class="fab-action-button__icon fas fa-home"></i></a>
+    <div class="box box-primary">
+        <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-map">&nbsp;&nbsp;</i>{{ 'Installation' }}</h3></div>
+        <div class="box-body">
+            <span id="span_plugin_installation"></span>
+        </div>
     </div>
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fa fa-cogs"></i> {{ 'Configuration' }}</h3>
+            <a class="btn btn-success btn-xs pull-right" id="bt_savePluginConfig"><i class="fa fa-check-circle icon-white">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+        </div>
+        <div class="box-body">
+            <div id="div_plugin_configuration"></div>
+            <div class="form-actions">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="box box-primary" id="div_functionalityPanel">
+                <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-picture-o">&nbsp;&nbsp;</i>{{ 'Fonctionnalités' }}
+                        <a class="btn btn-success btn-xs pull-right" id="bt_savePluginFunctionalityConfig"><i class="fa fa-check-circle icon-white">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+                    </h3></div>
+                <div class="box-body">
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <div id="div_plugin_functionality"></div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="box box-primary" id="div_configPanel">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-picture-o">&nbsp;&nbsp;</i>{{ 'Panel' }}</h3>
+                    <a class="btn btn-success btn-xs pull-right" id="bt_savePluginPanelConfig"><i class="fa fa-check-circle icon-white">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+                </div>
+                <div class="box-body">
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <div id="div_plugin_panel"></div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="fab" style="z-index:999">
+    <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
+    <ul class="fab-buttons">
+        {% for repoCode, repoData in pluginReposList %}
+            {% if repoData['name'] == 'Market' %}
+                <li class="fab-buttons__item"><a class="fab-buttons__link displayStore" style="background-color:#96c927" data-repo="{{ repoCode }}" data-tooltip="{{ repoData['name'] }} Jeedom"><i class="fa fa-shopping-cart"></i></a></li>
+            {% else %}
+                <li class="fab-buttons__item"><a class="fab-buttons__link displayStore" style="background-color:#33b8cc" data-repo="{{ repoCode }}" data-tooltip="{{ repoData['name'] }}"><i class="fa fa-shopping-cart"></i></a></li>
+            {% endif %}
+        {% endfor %}
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_addPluginFromOtherSource" data-tooltip="{{ 'Sources' }}"><i class="fa fa-plus"></i></a></li>
+    </ul>
+</div>
+<div class="fab fab-bis" style="z-index:999">
+    <a class="fab-action-button bg-red-active" id="bt_returnToThumbnailDisplay"><i class="fab-action-button__icon fas fa-chevron-left"></i></a>
+    <a class="fab-action-button bg-red-active" id="home"><i class="fab-action-button__icon fas fa-home"></i></a>
 </div>
 <script>
     $('.pluginListContainer').packery();

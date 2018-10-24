@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -14,22 +13,29 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
-if($('#md_modal').is(':visible')){
-    $('#bt_returnToThumbnailDisplay').hide();
+if($('.pluginListContainer').is(':visible')){
     $('#div_confPlugin').addClass('col-lg-12').removeClass('col-md-9 col-sm-8');
     alert_div_plugin_configuration = $('#div_alertPluginConfiguration');
 }else{
     alert_div_plugin_configuration = $('#div_alert');
 }
 
+if($('#div_confPlugin').is(':visible')) {
+    $('#bt_returnToThumbnailDisplay').hide();
+    $('#home').show();
+}else{
+    $('#bt_returnToThumbnailDisplay').show();
+    $('#home').hide();
+}
+
 $('#in_searchPlugin').off('keyup').keyup(function () {
     var search = $(this).value();
     if(search == ''){
-        $('.box').show();
+        $('.pluginListContainer .box').show();
         $('.pluginListContainer').packery();
         return;
     }
-    $('.box').hide();
+    $('.pluginListContainer .box').hide();
     $('.box .box-title').each(function(){
         var text = $(this).text().toLowerCase();
         if(text.indexOf(search.toLowerCase()) >= 0){
