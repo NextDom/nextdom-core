@@ -152,7 +152,8 @@ class PrepareView
             'widget_width_step'  => $configs['widget::step::width'],
             'widget_height_step' => $configs['widget::step::height'],
             'widget_margin'      => $configs['widget::margin'],
-            'widget_padding'      => $configs['widget::padding']
+            'widget_padding'      => $configs['widget::padding'],
+            'widget_radius'      => $configs['widget::radius']
         ];
         $pageData['JS_VARS_RAW'] = [
             'userProfils' => Utils::getArrayToJQueryJson($_SESSION['user']->getOptions()),
