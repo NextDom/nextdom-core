@@ -6,64 +6,65 @@
         <div class="box-body">
             {% if scenarioCount == 0 %}
                 <div class="text-center">
-                    <span>{{ 'Vous n\'avez encore aucun scénario. Cliquez sur ajouter pour commencer' }}</span>
+                    <span>{{ 'Vous n\'avez encore aucun scénario ! Cliquez sur ajouter dans le menu pour commencer...' }}</span>
                 </div>
             {% else %}
                 <input class="form-control" placeholder="{{ 'Rechercher' }}" style="margin-bottom:4px" id="in_searchScenario"/>
-                <div class="box-group" id="accordionScenar">
-                    {% if scenarios[-1]|length > 0 %}
-                        <div class="panel box">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none">Aucun - {{ scenarios[-1]|length }} scénario(s)</a>
-                                </h3>
-                            </div>
-                            <div id="config_none" class="panel-collapse collapse">
-                                <div class="box-body">
-                                    <div class="scenarioListContainer DisplayCard text-center">
-                                        {% for scenario in scenarios[-1] %}
-                                            <div class="scenarioDisplayCard cursor icon_gestion" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
-                                                <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70" width="70"/>
-                                                <br>
-                                                <span class="name">{{ scenario.getHumanName(true, true, true, true)|raw }}</span>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-
-                    {% set index = 0 %}
-
-                    {% for scenarioGroup in scenarioListGroup %}
-                        {% if scenarioGroup.group != '' %}
-                            <div class="panel box">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title"><a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}">{{ scenarioGroup.group }} - {{ scenarios[scenarioGroup.group]|length }} scénario(s)</a></h3>
-                                </div>
-                                <div id="config_{{ index }}" class="panel-collapse collapse">
-                                    <div class="box-body">
-                                        <div class="scenarioListContainer DisplayCard text-center ">
-                                            {% for scenario in scenarios[scenarioGroup.group] %}
-                                                <div class="scenarioDisplayCard  icon_gestion cursor" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
-                                                    <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70" width="70"/>
-                                                    <br>
-                                                    <span>{{ scenario.getHumanName(true, true, true, true)|raw }}</span>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% set index = index + 1 %}
-                        {% endif %}
-                    {% endfor %}
-                </div>
             {% endif %}
         </div>
     </div>
+
+    <div class="box-group" id="accordionScenar">
+        {% if scenarios[-1]|length > 0 %}
+            <div class="panel box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none">Aucun - {{ scenarios[-1]|length }} scénario(s)</a>
+                    </h3>
+                </div>
+                <div id="config_none" class="panel-collapse collapse">
+                    <div class="box-body">
+                        <div class="scenarioListContainer DisplayCard text-center">
+                            {% for scenario in scenarios[-1] %}
+                                <div class="scenarioDisplayCard cursor icon_gestion" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
+                                    <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70"/>
+                                    <p class="name">{{ scenario.getHumanName(true, true, true, true)|raw }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% set index = 0 %}
+
+        {% for scenarioGroup in scenarioListGroup %}
+            {% if scenarioGroup.group != '' %}
+                <div class="panel box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}">{{ scenarioGroup.group }} - {{ scenarios[scenarioGroup.group]|length }} scénario(s)</a></h3>
+                    </div>
+                    <div id="config_{{ index }}" class="panel-collapse collapse">
+                        <div class="box-body">
+                            <div class="scenarioListContainer DisplayCard text-center ">
+                                {% for scenario in scenarios[scenarioGroup.group] %}
+                                    <div class="scenarioDisplayCard  icon_gestion cursor" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
+                                        <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70"/>
+                                        <p>{{ scenario.getHumanName(true, true, true, true)|raw }}</p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% set index = index + 1 %}
+            {% endif %}
+        {% endfor %}
+    </div>
 </div>
+
+
 <div id="div_editScenario" class="col-xs-12" style="display: none;">
     <a class="btn btn-default btn-sm pull-right" id="bt_graphScenario" title="{{ 'Liens' }}"><i class="fas fa-object-group"></i></a>
     <a class="btn btn-default btn-sm pull-right" id="bt_copyScenario" title="{{ 'Dupliquer' }}"><i class="fas fa-copy"></i></a>
