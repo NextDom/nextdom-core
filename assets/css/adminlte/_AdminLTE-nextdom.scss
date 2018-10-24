@@ -123,12 +123,12 @@ body {
 /* User panel */
 .user-panel > .image > a > img {
   width: 100%;
-  max-width: 45px;
+  max-width: 50px;
   height: auto;
 }
 .user-panel > .info {
-  padding: 5px 5px 5px 10px;
-  line-height: 0.8;
+  padding: 10px 5px 5px 15px;
+  line-height: 0.9;
   position: absolute;
   left: 55px;
 }
@@ -136,8 +136,8 @@ body {
   text-align: center;
 }
 .sidebar-collapse .user-panel div.image {
-  width: 2.2rem;
-  height: 2.2rem;
+  width: 3rem;
+  height: 3rem;
   margin:{
     left: auto;
     right: auto;
