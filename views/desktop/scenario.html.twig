@@ -5,7 +5,6 @@
         </div>
         <div class="box-body">
             {% if scenarioCount == 0 %}
-                <br/><br/><br/>
                 <div class="text-center">
                     <span>{{ 'Vous n\'avez encore aucun scénario. Cliquez sur ajouter pour commencer' }}</span>
                 </div>
@@ -24,7 +23,7 @@
                                     <div class="scenarioListContainer DisplayCard text-center">
                                         {% for scenario in scenarios[-1] %}
                                             <div class="scenarioDisplayCard cursor icon_gestion" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
-                                                <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="65" width="65"  style="border-radius:15px"/>
+                                                <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70" width="70"/>
                                                 <br>
                                                 <span class="name">{{ scenario.getHumanName(true, true, true, true)|raw }}</span>
                                             </div>
@@ -48,7 +47,7 @@
                                         <div class="scenarioListContainer DisplayCard text-center ">
                                             {% for scenario in scenarios[scenarioGroup.group] %}
                                                 <div class="scenarioDisplayCard  icon_gestion cursor" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
-                                                    <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="65" width="65"/>
+                                                    <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70" width="70"/>
                                                     <br>
                                                     <span>{{ scenario.getHumanName(true, true, true, true)|raw }}</span>
                                                 </div>
@@ -70,19 +69,16 @@
     <a class="btn btn-default btn-sm pull-right" id="bt_copyScenario" title="{{ 'Dupliquer' }}"><i class="fas fa-copy"></i></a>
     <a class="btn btn-default btn-sm pull-right" id="bt_logScenario" title="{{ 'Log' }}"><i class="far fa-file-alt"></i></a>
     <a class="btn btn-default btn-sm pull-right" id="bt_exportScenario" title="{{ 'Exporter' }}"><i class="fas fa fa-share"></i></a>
-    <a class="btn btn-danger btn-sm pull-right" id="bt_stopScenario"><i class="fas fa-stop"></i> {{ 'Arrêter' }}</a>
+    <a class="btn btn-danger btn-sm pull-right" id="bt_stopScenario"><i class="fas fa-stop">&nbsp;&nbsp;</i>{{ 'Arrêter' }}</a>
     <a class="btn btn-default btn-sm pull-right" id="bt_templateScenario" title="{{ 'Template' }}"><i class="fas fa-cubes"></i></a>
-    <a class="btn btn-success btn-sm pull-right" id="bt_saveScenario2"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-    <a class="btn btn-danger btn-sm pull-right" id="bt_delScenario2"><i class="fas fa-minus-circle"></i> {{ 'Supprimer' }}</a>
-    <a class="btn btn-warning btn-sm pull-right" id="bt_testScenario2" title='{{ 'Veuillez sauvegarder avant de tester. Ceci peut ne pas aboutir.' }}'><i class="fas fa-gamepad"></i> {{ 'Exécuter' }}</a>
-    <a class="btn btn-primary btn-sm pull-right bt_showExpressionTest"><i class="fas fa-check"></i> {{ 'Expression' }}</a>
-    <a class="btn btn-primary btn-sm pull-right" id="bt_displayScenarioVariable"><i class="fas fa-eye"></i> {{ 'Variables' }}</a>
-    <a class="btn btn-default btn-sm pull-right bt_addScenarioElement"><i class="fas fa-plus-circle"></i> {{ 'Ajouter bloc' }}</a>
+    <a class="btn btn-success btn-sm pull-right" id="bt_saveScenario2"><i class="far fa-check-circle">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+    <a class="btn btn-danger btn-sm pull-right" id="bt_delScenario2"><i class="fas fa-minus-circle">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+    <a class="btn btn-warning btn-sm pull-right" id="bt_testScenario2" title='{{ 'Veuillez sauvegarder avant de tester. Ceci peut ne pas aboutir.' }}'><i class="fas fa-gamepad">&nbsp;&nbsp;</i>{{ 'Exécuter' }}</a>
+    <a class="btn btn-primary btn-sm pull-right bt_showExpressionTest"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Expression' }}</a>
+    <a class="btn btn-primary btn-sm pull-right" id="bt_displayScenarioVariable"><i class="fas fa-eye">&nbsp;&nbsp;</i> {{ 'Variables' }}</a>
+    <a class="btn btn-default btn-sm pull-right bt_addScenarioElement"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter bloc' }}</a>
     <span id="span_ongoing" class="label pull-right" style="font-size : 1em;position:relative;top:5px;"></span>
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation">
-            <a class="cursor" aria-controls="home" role="tab" id="bt_scenarioThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a>
-        </li>
         <li role="presentation" class="active">
             <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i> {{ 'Général' }} (ID : <span class="scenarioAttr" data-l1key="id"></span>)</a>
         </li>
@@ -338,5 +334,8 @@
     </ul>
 </div>
 <div class="fab fab-bis" style="z-index:999">
+    <a class="fab-action-button bg-orange" id="bt_scenarioThumbnailDisplay"><i class="fab-action-button__icon fas fa-chevron-left"></i></a>
+</div>
+<div class="fab fab-ter" style="z-index:999">
     <a class="fab-action-button bg-red-active" href="{{ HOMELINK }}"><i class="fab-action-button__icon fas fa-home"></i></a>
 </div>
