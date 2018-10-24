@@ -94,7 +94,7 @@
                     {% if MENU_PLUGIN_CATEGORY is defined %}
                         {% for category, categoryData in MENU_PLUGIN_CATEGORY %}
                             <li class="treeview">
-                                <a href="#" data-toggle="dropdown"><i class="fa {{ categoryData.icon }}"></i>&nbsp;&nbsp;{{ categoryData.name }}<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                                <a href="#" data-toggle="dropdown"><i class="fas {{ categoryData.icon }}"></i>&nbsp;&nbsp;{{ categoryData.name }}<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                                 <ul class="treeview-menu">
                                     {% for plugin in MENU_PLUGIN[category] %}
                                         <li class="treeview plugin-item"><a href="index.php?v=d&m={{ plugin.id }}&p={{ plugin.index }}"><img class="img-responsive" src="{{ plugin.pathImgIcon }}"/>&nbsp;&nbsp;{{ plugin.name }}</a></li>
