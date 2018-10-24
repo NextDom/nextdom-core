@@ -4,7 +4,10 @@
             <h3 class="box-title"><i class="fa fa-list-alt"></i> {{ 'Mes plugins' }}</h3>
         </div>
         <div class="box-body">
-            <input class="form-control" placeholder="{{ 'Rechercher...' }}" id="in_searchPlugin"/>
+            <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                <input class="form-control" placeholder="{{ 'Rechercher...' }}" id="in_searchPlugin"/>
+            </div>
         </div>
     </div>
     <div class="pluginListContainer">
@@ -12,7 +15,7 @@
 
             {% for plugin in pluginsList %}
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <div class="box pluginDisplayCard" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_id="{{ plugin.getId() }}" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
+                    <div class="box pluginDisplayCard" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_icon="{{ plugin.getPathImgIcon() }}" data-plugin_id="{{ plugin.getId() }}" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
                         <div class="box-header cursor with-border">
                             <h4 class="box-title"><img style="height:50px;padding-right:5px" src="{{ plugin.getPathImgIcon() }}"> {{ plugin.getName() }}</h4>
                         </div>
@@ -35,7 +38,7 @@
 <div id="div_confPlugin" style="display: none;">
     <div class="box box-header">
         <div class="box-title">
-            <img style="height:50px;padding-right:5px" src="">
+            <img style="height:50px;padding-right:5px" src="" id="span_plugin_icon">
             <span id="span_plugin_name"></span> (<span id="span_plugin_id"></span>) - <span id="span_plugin_install_version"></span>
         </div>
         <span id="span_plugin_market" class="pull-right"></span>
