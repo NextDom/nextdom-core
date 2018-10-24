@@ -11,27 +11,26 @@
         </div>
     </div>
     <div class="pluginListContainer">
-        <div class="row">
 
-            {% for plugin in pluginsList %}
-                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <div class="box pluginDisplayCard" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_icon="{{ plugin.getPathImgIcon() }}" data-plugin_id="{{ plugin.getId() }}" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
-                        <div class="box-header cursor with-border">
-                            <h4 class="box-title"><img style="height:50px;padding-right:5px" src="{{ plugin.getPathImgIcon() }}"> {{ plugin.getName() }}</h4>
-                        </div>
-                        <div class="box-body">
-                            <p><b>{{ 'Catégorie :' }}</b> {{ plugin.getCategory() }}</p>
-                            <p><b>{{ 'Autheur :' }}</b> {{ plugin.getAuthor() }}</p>
-                            <p><i>{{ 'Licence :' }}</i> {{ plugin.getLicense() }}</p>
-                        </div>
-                        <div class="box-footer clearfix text-center">
-                            <a class="btn btn-info btn-sm updatep pull-left" title="{{'Mettre à jour'}}"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{'Mettre à jour'}}</a>
-                            <a class="btn btn-danger btn-sm remove pull-right" id="span_plugin_delete" title="{{'Supprimer'}}"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{'Supprimer'}}</a>
-                        </div>
+        {% for plugin in pluginsList %}
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                <div class="box pluginDisplayCard" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_icon="{{ plugin.getPathImgIcon() }}" data-plugin_id="{{ plugin.getId() }}" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
+                    <div class="box-header cursor with-border">
+                        <h4 class="box-title"><img style="height:50px;padding-right:5px" src="{{ plugin.getPathImgIcon() }}"> {{ plugin.getName() }}</h4>
+                    </div>
+                    <div class="box-body">
+                        <p><b>{{ 'Catégorie :' }}</b> {{ plugin.getCategory() }}</p>
+                        <p style="white-space: nowrap;white-space: pre-line;height: 75px;overflow: hidden;text-overflow: ellipsis;"><b>{{ 'Description :' }}</b> {{ plugin.getDescription() }}</p>
+                        <p><b>{{ 'Autheur :' }}</b> {{ plugin.getAuthor() }}</p>
+                        <p><i>{{ 'Licence :' }}</i> {{ plugin.getLicense() }}</p>
+                    </div>
+                    <div class="box-footer clearfix text-center">
+                        <a class="btn btn-info btn-sm updatep pull-left" title="{{'Mettre à jour'}}"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{'Mettre à jour'}}</a>
+                        <a class="btn btn-danger btn-sm remove pull-right" id="span_plugin_delete" title="{{'Supprimer'}}"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{'Supprimer'}}</a>
                     </div>
                 </div>
-            {% endfor %}
-        </div>
+            </div>
+        {% endfor %}
 
     </div>
 </div>
