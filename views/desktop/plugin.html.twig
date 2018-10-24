@@ -1,39 +1,10 @@
-<<<<<<< HEAD
-<div class="container-fluid">
-    <div class="row row-overflow">
-        <div id="div_resumePluginList">
-            <legend class="legend-title"><i class="fas fa-puzzle-piece">&nbsp;&nbsp;</i>{{ 'Liste des Plugins' }}</legend>
-                <div class="pluginListContainer">
-                {% for plugin in pluginsList %}
-                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                        <div class="box pluginDisplayCard" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_id="{{ plugin.getId() }}" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
-                            <div class="box-header iconlist cursor with-border">
-                                <h4 class="box-title"><img style="height:50px" src="{{ plugin.getPathImgIcon() }}"> {{ plugin.getName() }}</h4>
-                            </div>
-                            <div class="box-body">
-                                <p><b>{{ 'Catégorie :' }}</b> {{ plugin.getCategory() }}</p>
-                                <p><b>{{ 'Autheur :' }}</b> {{ plugin.getAuthor() }}</p>
-                                <p><i>{{ 'Licence :' }}</i> {{ plugin.getLicense() }}</p>
-                            </div>
-                            <div class="box-footer clearfix text-center">
-                                <div class="btn-group">
-                                    <a class="btn btn-info btn-xs update" title="{{'Mettre à jour'}}"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{'Mettre à jour'}}</a>
-                                    <a class="btn btn-danger btn-xs remove" id="span_plugin_delete" title="{{'Supprimer'}}"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{'Supprimer'}}</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-=======
 <div id="div_resumePluginList">
     <div class="box">
         <div class="box-header with-border">
             <h3 class="box-title"><i class="fa fa-list-alt"></i> {{ 'Mes plugins' }}</h3>
->>>>>>> FixThemes
         </div>
         <div class="box-body">
-            <input class="form-control" placeholder="{{ 'Rechercher' }}" id="in_searchPlugin"/>
+            <input class="form-control" placeholder="{{ 'Rechercher...' }}" id="in_searchPlugin"/>
         </div>
     </div>
     <div class="pluginListContainer">
@@ -52,8 +23,8 @@
                         </div>
                         <div class="box-footer clearfix text-center">
                             <div class="btn-group">
-                                <a class="btn btn-info btn-xs update" title="{{'Mettre à jour'}}"><i class="fas fa-refresh"></i> {{'Mettre à jour'}}</a>
-                                <a class="btn btn-danger btn-xs remove" id="span_plugin_delete" title="{{'Supprimer'}}"><i class="far fa-trash-alt"></i> {{'Supprimer'}}</a>
+                                <a class="btn btn-info btn-xs update" title="{{'Mettre à jour'}}"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{'Mettre à jour'}}</a>
+                                <a class="btn btn-danger btn-xs remove" id="span_plugin_delete" title="{{'Supprimer'}}"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{'Supprimer'}}</a>
                             </div>
                         </div>
                     </div>
