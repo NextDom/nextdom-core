@@ -105,7 +105,7 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
         success: function (data) {
             $('#span_plugin_id').html(data.id);
             $('#span_plugin_name').html(data.name);
-            $('#span_plugin_icon').src($(this).attr('data-plugin_icon'));
+            $('#span_plugin_icon').attr("src",$(this).attr('data-plugin_icon'));
             if(isset(data.update) && isset(data.update.localVersion)){
                 $('#span_plugin_install_date').html(data.update.localVersion);
             }else{
