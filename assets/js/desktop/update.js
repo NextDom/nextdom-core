@@ -59,8 +59,8 @@ $("#md_updateInfo").dialog({
     closeText: '',
     autoOpen: false,
     modal: true,
-    height: 600,
-    width: 900,
+    height: (jQuery(window).height() - 100),
+    width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
     open: function () {
         $("body").css({overflow: 'hidden'});
     },
@@ -121,6 +121,8 @@ $('#listPlugin,#listOther').delegate('.update', 'click', function () {
     bootbox.confirm('{{Etes vous sur de vouloir mettre à jour cet objet ?}}', function (result) {
         if (result) {
             $.hideAlert();
+            $('#md_updateInfo').dialog({title: "{{Avancement des mises a jour}}"});
+            $("#md_updateInfo").dialog('open');
             nextdom.update.do({
                 id: id,
                 error: function (error) {

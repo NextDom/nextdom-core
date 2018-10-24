@@ -23,8 +23,8 @@ $("#md_migrationInfo").dialog({
     closeText: '',
     autoOpen: false,
     modal: true,
-    height: 600,
-    width: 900,
+    height: (jQuery(window).height() - 100),
+    width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
     open: function () {
         $("body").css({overflow: 'hidden'});
     },
