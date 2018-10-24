@@ -151,7 +151,8 @@ class PrepareView
             'nextdom_Welcome'   => $configs['nextdom::Welcome'],
             'widget_width_step'  => $configs['widget::step::width'],
             'widget_height_step' => $configs['widget::step::height'],
-            'widget_margin'      => $configs['widget::margin']
+            'widget_margin'      => $configs['widget::margin'],
+            'widget_padding'      => $configs['widget::padding']
         ];
         $pageData['JS_VARS_RAW'] = [
             'userProfils' => Utils::getArrayToJQueryJson($_SESSION['user']->getOptions()),
