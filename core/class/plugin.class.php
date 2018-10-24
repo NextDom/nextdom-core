@@ -1075,4 +1075,10 @@ class plugin
         $this->documentation = $documentation;
         return $this;
     }
+
+    public function setCategory($key)
+    {
+        $this->category = $key;
+        return $this;
+    }
 }
