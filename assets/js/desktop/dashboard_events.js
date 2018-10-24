@@ -139,3 +139,17 @@ $('.category-filter-btn-sm').click(function() {
     $('.category-filter-btn-sm').toggleClass('scale-out');
     $('#dashPanel').toggleClass('dashBlur');
 });
+
+$('#bt_goOnTop').click(function() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+});
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        document.getElementById("bt_goOnTop").style.display = "block";
+    } else {
+        document.getElementById("bt_goOnTop").style.display = "none";
+    }
+}

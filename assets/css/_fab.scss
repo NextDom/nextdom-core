@@ -9,12 +9,15 @@
 
 .fab-bis {
   right: 80px;
-  z-index: 999;
 }
 
 .fab-ter {
   right: 140px;
-  z-index: 999;
+}
+
+.fab-left {
+  right: 0px;
+  left: 95px;
 }
 
 .fab:hover .fab-buttons {
