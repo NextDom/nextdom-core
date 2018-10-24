@@ -151,7 +151,8 @@ class PrepareView
             'nextdom_Welcome'   => $configs['nextdom::Welcome'],
             'widget_width_step'  => $configs['widget::step::width'],
             'widget_height_step' => $configs['widget::step::height'],
-            'widget_margin'      => $configs['widget::margin']
+            'widget_margin'      => $configs['widget::margin'],
+            'widget_padding'      => $configs['widget::padding']
         ];
         $pageData['JS_VARS_RAW'] = [
             'userProfils' => Utils::getArrayToJQueryJson($_SESSION['user']->getOptions()),
@@ -317,6 +318,12 @@ class PrepareView
         $pageData['COLOR1'] = \nextdom::getConfiguration('theme:color1');
         $pageData['COLOR2'] = \nextdom::getConfiguration('theme:color2');
         $pageData['COLOR3'] = \nextdom::getConfiguration('theme:color3');
+        $pageData['COLOR4'] = \nextdom::getConfiguration('theme:color4');
+        $pageData['COLOR5'] = \nextdom::getConfiguration('theme:color5');
+        $pageData['COLOR6'] = \nextdom::getConfiguration('theme:color6');
+        $pageData['COLOR7'] = \nextdom::getConfiguration('theme:color7');
+        $pageData['COLOR8'] = \nextdom::getConfiguration('theme:color8');
+        $pageData['COLOR9'] = \nextdom::getConfiguration('theme:color9');
 
         self::initJsPool($pageData);
         self::initCssPool($pageData, $configs);

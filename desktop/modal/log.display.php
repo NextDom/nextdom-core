@@ -21,11 +21,11 @@ if (!isConnect('admin')) {
 sendVarToJS('log_display_name', init('log', 'event'));
 sendVarToJS('log_default_search', init('search', ''));
 ?>
-<a class="btn btn-danger pull-right" id="bt_logdisplayremoveLog"><i class="far fa-trash-alt"></i> {{Supprimer}}</a>
-<a class="btn btn-warning pull-right" id="bt_logdisplayclearLog"><i class="fas fa-times"></i> {{Vider}}</a>
-<a class="btn btn-success pull-right" id="bt_logdisplaydownloadLog"><i class="fas fa-cloud-download-alt"></i> {{Télécharger}}</a>
-<a class="btn btn-warning pull-right" data-state="1" id="bt_eventLogStopStart"><i class="fas fa-pause"></i> {{Pause}}</a>
-<input class="form-control pull-right" id="in_eventLogSearch" style="width : 300px;" placeholder="{{Rechercher}}" />
+<a class="btn btn-danger pull-right" id="bt_logdisplayremoveLog"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{Supprimer}}</a>
+<a class="btn btn-warning pull-right" id="bt_logdisplayclearLog"><i class="fas fa-times">&nbsp;&nbsp;</i>{{Vider}}</a>
+<a class="btn btn-success pull-right" id="bt_logdisplaydownloadLog"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{Télécharger}}</a>
+<a class="btn btn-warning pull-right" data-state="1" id="bt_eventLogStopStart"><i class="fas fa-pause">&nbsp;&nbsp;</i>{{Pause}}</a>
+<input class="form-control" id="in_eventLogSearch" placeholder="{{'Rechercher...'}}" />
 <br/><br/><br/>
 <pre id='pre_eventlog' style='overflow: auto; height: calc(100% - 65px);with:90%;'></pre>
 <script>

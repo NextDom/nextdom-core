@@ -241,7 +241,7 @@ body {
     radius: 4px;
     width: 1px;
   }
-  
+
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
@@ -305,7 +305,9 @@ body {
 }
 .login-box,
 .register-box {
-  width: 450px;
+  width: 50%;
+  min-width: 350px;
+  max-width: 600px;
   margin: 7% auto;
 }
 .login-box-msg,
@@ -571,7 +573,7 @@ body {
   padding: {
     left: 15px;
     right: 15px;
-    bottom: 50px
+    bottom: 65px
   }
 }
 @media (max-width: 767px) {
@@ -733,11 +735,9 @@ input[type="checkbox"] {
 }
 
 /* Objets */
-
 #div_Update-view .box .box-header {
   min-height: 70px;
 }
-
 #div_Update-view .box .box-body {
   min-height: 110px;
 }

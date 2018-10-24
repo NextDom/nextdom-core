@@ -67,6 +67,7 @@ try {
         $return['update'] = utils::o2a($update);
         $return['logs'] = array();
         $return['logs'][-1] = array('id' => -1, 'name' => 'local', 'log' => $plugin->getLogList());
+        $return['icon'] = $plugin->getPathImgIcon();
         ajax::success($return);
     }
 

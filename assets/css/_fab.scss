@@ -4,13 +4,23 @@
   right: 20px;
   bottom: 20px;
   margin-left: -28px;
+  z-index: 999;
+}
+
+.fab-bis {
+  right: 80px;
+  z-index: 999;
+}
+
+.fab-ter {
+  right: 140px;
+  z-index: 999;
 }
 
 .fab:hover .fab-buttons {
   opacity: 1;
   visibility: visible;
 }
-
 
 .fab:hover .fab-buttons__link {
   transform: scaleY(1) scaleX(1) translateY(-16px) translateX(0px);
@@ -24,7 +34,6 @@
   transition-delay: 0.3s;
 }
 
-
 .fab-action-button {
   text-align: center;
   display: inline-block;
@@ -35,8 +44,13 @@
   width: 50px;
   height: 50px;
   background-color: #29B6F6;
+  opacity: 0.9;
   border-radius: 50%;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+}
+
+.fab-action-button > a {
+    color: $white;
 }
 
 .fab-buttons {

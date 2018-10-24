@@ -7,21 +7,23 @@
     <div class="row">
         <div id="listPlugin"></div>
     </div>
-    
+
     <legend class="legend-title"><i class="fas fa-cubes">&nbsp;&nbsp;</i>{{ 'Autres' }}</legend>
     <div class="row">
         <div id="listOther"></div>
     </div>
 </div>
 
-<div class="fab" style="z-index:999">
+<div class="fab">
     <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
     <ul class="fab-buttons">
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_checkAllUpdate" data-toggle="tooltip" title="" data-original-title="{{ 'Vérifier les mises à jour' }}"><i class="fas fa-refresh"></i></a></li>
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_updateNextDom" data-toggle="tooltip" title="" data-original-title="{{ 'Mettre à jour' }}"><i class="fas fa-check"></i></a></li>
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_doUpdate"><i class="fas fa-save"></i></a></li>
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_checkAllUpdate" title="" data-tooltip="{{ 'Vérifier les mises à jour' }}"><i class="fas fa-refresh"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_updateNextDom" title="" data-tooltip="{{ 'Mise à jour selective' }}"><i class="fas fa-check"></i></a></li>
+        <li class="fab-buttons__item"><a class="fab-buttons__link bg-orange" id="bt_doUpdate" title="" data-tooltip="{{ 'Tout mettre à jour' }}"><i class="fas fa-download"></i></a></li>
     </ul>
+</div>
+<div class="fab fab-bis" style="z-index:999">
+    <a class="fab-action-button bg-red-active" href="index.php?v=d&p=administration"><i class="fab-action-button__icon fas fa-chevron-left"></i></a>
 </div>
 
 <div id="md_updateInfo">
@@ -29,7 +31,8 @@
 </div>
 <div id="md_specifyUpdate">
     <div class="alert alert-danger">{{ 'Avant toute mise à jour, merci de consulter la note de version du core de NextDom' }} <a target="_blank" href="https://nextdom.github.io/core/fr_FR/noteVersion">{{ 'ici' }}</a></div>
-    <div class="form-group">
+    <fieldset>
+        <legend class="legend-title">{{ 'Options' }}</legend>
         <div class="form-group">
             <label class="col-xs-6 control-label label-sticker-big">{{ 'Pré-update (mettre à jour le script d\'update avant)' }}</label>
             <div class="col-xs-4">
@@ -42,6 +45,7 @@
                 <input type="checkbox" class="updateOption" data-l1key="backup::before" checked/>
             </div>
         </div>
+        <legend class="legend-title">{{ 'Selection des mises à jour' }}</legend>
         <div class="form-group">
             <label class="col-xs-6 control-label label-sticker-big">{{ 'Mettre à jour les plugins' }}</label>
             <div class="col-xs-4">
@@ -54,15 +58,19 @@
                 <input type="checkbox" class="updateOption" data-l1key="core" checked/>
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-xs-6 control-label ">{{ 'Mode forcé' }}</label>
+        <legend class="legend-title">{{ 'Expert' }}</legend>
+        <div class="form-group has-error">
+            <label class="col-xs-6 control-label label-sticker-big">{{ 'Mode forcé' }}</label>
             <div class="col-xs-4">
                 <input type="checkbox" class="updateOption" data-l1key="force"/>
             </div>
         </div>
+    </fieldset>
+    <fieldset>
         <div class="alert alert-danger">{{ 'L\'option suivante n\'est à modifier que sur demande du support sinon il faut ABSOLUMENT qu\'elle soit sur "Aucune"' }}</div>
-        <div class="form-group has-error">
-            <label class="col-xs-6 control-label ">{{ 'Mise à jour à réappliquer' }}</label>
+        <div class="form-group has-warning">
+            <legend class="legend-title">{{ 'Restauration' }}</legend>
+            <label class="col-xs-6 control-label label-sticker-big">{{ 'Mise à jour à réappliquer' }}</label>
             <div class="col-xs-5">
                 <select id="sel_updateVersion" class="form-control updateOption" data-l1key="update::reapply">
                     <option value="">{{ 'Aucune' }}</option>
@@ -72,5 +80,5 @@
                 </select>
             </div>
         </div>
-    </div>
+    </fieldset>
 </div>

@@ -136,7 +136,7 @@ $('.displayListContainer').packery();
             if(name.indexOf(search) >= 0){
                 eqLogic.show();
                 eqLogic.find('.cmdSortable').show();
-                cmd.removeClass('alert-warning').addClass('alert-success'); 
+                cmd.removeClass('alert-warning').addClass('alert-success');
             }
         });
     });
@@ -221,6 +221,6 @@ $('.displayListContainer').packery();
 });
 
  $('#bt_removeHistory').on('click',function(){
-    $('#md_modal').dialog({title: "{{Historique des supression}}"});
+    $('#md_modal').dialog({title: "{{Historique des suppressions}}"});
     $('#md_modal').load('index.php?v=d&modal=remove.history').dialog('open');
-});     
+});
