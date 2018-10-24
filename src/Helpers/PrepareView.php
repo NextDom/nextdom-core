@@ -322,6 +322,7 @@ class PrepareView
         $pageData['COLOR6'] = \nextdom::getConfiguration('theme:color6');
         $pageData['COLOR7'] = \nextdom::getConfiguration('theme:color7');
         $pageData['COLOR8'] = \nextdom::getConfiguration('theme:color8');
+        $pageData['COLOR9'] = \nextdom::getConfiguration('theme:color9');
 
         self::initJsPool($pageData);
         self::initCssPool($pageData, $configs);
