@@ -4,14 +4,17 @@
   right: 20px;
   bottom: 20px;
   margin-left: -28px;
+  z-index: 999;
 }
 
 .fab-bis {
   right: 80px;
+  z-index: 999;
 }
 
 .fab-ter {
   right: 140px;
+  z-index: 999;
 }
 
 .fab:hover .fab-buttons {
