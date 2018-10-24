@@ -10,13 +10,8 @@
 
             <!-- Nextdom health section -->
             <div>
-                <div class="col-md-9 col-xs-12 container-fluid">
+                <div class="col-xs-12 container-fluid">
                     <legend class="legend-title">{{ 'Détails de la santé de votre solution, survolez les icônes pour plus d\'informations.' }}</legend>
-                </div>
-                <div class="col-md-3 col-xs-12 container-fluid">
-                    <div class="box-tools pull-right padding-bottom">
-                        <a class="btn btn-action" id="bt_benchmarkNextDom"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Lancer un Benchmark' }}</a>
-                    </div>
                 </div>
             </div>
             {% for informations in healthInformations %}
@@ -223,5 +218,12 @@
     </div>
 </div>
 <div class="fab">
+    <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
+    <ul class="fab-buttons">
+    <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_benchmarkNextDom" title="" data-tooltip="{{ 'Lancer un Benchmark' }}"><i class="fas fa-tachometer-alt"></i></a></li>
+    </ul>
+</div>
+<div class="fab fab-bis">
     <a class="fab-action-button bg-red-active" href="index.php?v=d&p=administration"><i class="fab-action-button__icon fas fa-chevron-left"></i></a>
+
 </div>
