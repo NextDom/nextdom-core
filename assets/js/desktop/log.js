@@ -25,7 +25,7 @@
   $(".li_log").removeClass('active');
   $(this).addClass('active');
   $('#bt_globalLogStopStart').removeClass('btn-success').addClass('btn-warning');
-  $('#bt_globalLogStopStart').html('<i class="fas fa-pause"></i> {{Pause}}');
+  $('#bt_globalLogStopStart').html('<i class="fas fa-pause"></i>');
   $('#bt_globalLogStopStart').attr('data-state',1);
   nextdom.log.autoupdate({
     log : $(this).attr('data-log'),
@@ -55,8 +55,8 @@
   bootbox.confirm("{{Etes-vous sûr de vouloir supprimer tous les logs ?}}", function(result) {
    if (result) {
     $.ajax({
-      type: "POST", 
-      url: "core/ajax/log.ajax.php", 
+      type: "POST",
+      url: "core/ajax/log.ajax.php",
       data: {
        action: "removeAll",
      },
