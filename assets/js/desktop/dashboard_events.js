@@ -79,8 +79,6 @@ $('#bt_editDashboardWidgetOrder').on('click', function () {
         $(this).attr('data-mode', 0);
         editWidgetMode(0);
         $(this).html('<i class="fas fa-pencil-alt"></i>');
-        //$(this).removeClass('editionMode');
-        //$(this).addClass('dashMode');
         $('.bt_editDashboardWidgetAutoResize').hide();
         $('.counterReorderNextDom').remove();
         $('.div_displayEquipement').packery();
@@ -110,9 +108,7 @@ $('#bt_editDashboardWidgetOrder').on('click', function () {
             });
         });
         editWidgetMode(1);
-        $(this).html('<i class="fas fa-stop-circle"></i>');
-        //$(this).removeClass('dashMode');
-        //$(this).addClass('editionMode');
+        $(this).html('<i class="fas fa-stop"></i>');
     }
 });
 
