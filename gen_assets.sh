@@ -171,6 +171,8 @@ if [ "$#" == 0 ]; then
 	mkdir -p public/css
 	mkdir -p public/js
 	copy_assets;
+    echo  "cleaning twig cache"	
+	rm -fr var/cache/twig/*
 elif [ "$1" == "--watch" ]; then
 	start;
 elif [ "$1" == "--css" ]; then
