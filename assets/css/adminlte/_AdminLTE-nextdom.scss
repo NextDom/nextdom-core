@@ -396,10 +396,13 @@ body {
     right: 7px;
   }
   float: left;
-  height: 45px;
+  height: 50px;
   width: 50px;
   padding-top: 5px;
   text-align: center;
+}
+.card [class*=card-header-] .icon {
+  padding-top: 6px;
 }
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text > i {
   font-size: 2em;
