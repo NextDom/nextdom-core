@@ -23,7 +23,7 @@
                 <div class="box objectDisplayCard" style='border-top:3px solid {{ object.getDisplay("tagColor") }}' data-object_id="{{ object.getId() }}" data-object_name="{{ object.getName() }}">
                     <div class="box-header with-border">
                         <a class="bt_detailsObject cursor">
-                            <h4 class="box-title name object-name" style='color:{{ object.getDisplay("tagColor") }}'>{{ object.getDisplay('icon', '<i class="fas fa-lemon-o">&nbsp;&nbsp;</i>')|replace({'>&nbsp;&nbsp;</i>': '>&nbsp;&nbsp;</i>'})|raw }}<b>{{ object.getName() }}</b></h4>
+                            <h4 class="box-title name object-name" style='color:{{ object.getDisplay("tagColor") }}'>{{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|replace({'></i>': '></i>'})|raw }}&nbsp;&nbsp;<b>{{ object.getName() }}</b></h4>
                         </a>
                     </div>
                     <div class="box-body">
