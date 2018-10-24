@@ -14,7 +14,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 if($('.pluginListContainer').is(':visible')){
-    $('#div_confPlugin').addClass('col-lg-12').removeClass('col-md-9 col-sm-8');
     alert_div_plugin_configuration = $('#div_alertPluginConfiguration');
 }else{
     alert_div_plugin_configuration = $('#div_alert');
@@ -106,6 +105,7 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
         success: function (data) {
             $('#span_plugin_id').html(data.id);
             $('#span_plugin_name').html(data.name);
+            $('#span_plugin_icon').src(data.getPathImgIcon());
             if(isset(data.update) && isset(data.update.localVersion)){
                 $('#span_plugin_install_date').html(data.update.localVersion);
             }else{
