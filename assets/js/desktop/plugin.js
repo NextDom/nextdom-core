@@ -146,18 +146,18 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
                     if(data.status.owner[i] != 1){
                         continue;
                     }
-                    $('#span_plugin_market').append('<a class="btn btn-warning btn-xs sendPluginTo" data-repo="'+i+'" data-logicalId="' + data.id + '"><i class="fas fa-cloud-upload-alt"></i> {{Envoyer sur le}} '+i+'</a> ');
+                    $('#span_plugin_market').append('<a class="btn btn-warning btn-sm sendPluginTo" data-repo="'+i+'" data-logicalId="' + data.id + '"><i class="fas fa-cloud-upload-alt"></i> {{Envoyer sur le}} '+i+'</a> ');
                 }
             }
             $('#span_plugin_doc').empty();
             if(isset(data.documentation) && data.documentation != ''){
-                $('#span_plugin_doc').append('<a class="btn btn-primary btn-xs" target="_blank" href="'+data.documentation+'"><i class="fas fa-book"></i> {{Documentation}}</a> ');
+                $('#span_plugin_doc').append('<a class="btn btn-success btn-sm" target="_blank" href="'+data.documentation+'"><i class="fas fa-book">&nbsp;&nbsp;</i>{{Documentation}}</a> ');
             }
             if(isset(data.changelog) && data.changelog != ''){
-                $('#span_plugin_doc').append('<a class="btn btn-primary btn-xs" target="_blank" href="'+data.changelog+'"><i class="fas fa-book"></i> {{Changelog}}</a> ');
+                $('#span_plugin_doc').append('<a class="btn btn-primary btn-sm" target="_blank" href="'+data.changelog+'"><i class="fas fa-list-ul">&nbsp;&nbsp;</i>{{Changelog}}</a> ');
             }
             if(isset(data.info.display) && data.info.display != ''){
-                $('#span_plugin_doc').append('<a class="btn btn-primary btn-xs" target="_blank" href="'+data.info.display+'"><i class="fas fa-book"></i> {{Détails}}</a> ');
+                $('#span_plugin_doc').append('<a class="btn btn-default btn-sm" target="_blank" href="'+data.info.display+'"><i class="fa fa-certificate">&nbsp;&nbsp;</i>{{Détails}}</a> ');
             }
 
             if (data.checkVersion != -1) {
@@ -230,18 +230,18 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
                 html += '<div class="col-sm-4">';
                 if (data.activate == 1) {
                     $('#div_plugin_toggleState').closest('.box').removeClass('box-default box-danger').addClass('box-success');
-                    html += '<span class="label label-success" style="font-size:1em;position:relative;top:7px;">{{Actif}}</span>';
+                    html += '<span class="label label-success label-sticker-big">{{Actif}}</span>';
                 }else{
                     $('#div_plugin_toggleState').closest('.box').removeClass('box-default box-success').addClass('box-danger');
-                    html += '<span class="label label-danger" style="font-size:1em;position:relative;top:7px;">{{Inactif}}</span>';
+                    html += '<span class="label label-danger label-sticker-big">{{Inactif}}</span>';
                 }
                 html += '</div>';
                 html += '<label class="col-sm-2 control-label">{{Action}}</label>';
                 html += '<div class="col-sm-4">';
                 if (data.activate == 1) {
-                    html += '<a class="btn btn-danger btn-sm togglePlugin" data-state="0" data-plugin_id="' + data.id + '" style="position:relative;top:-2px;"><i class="fas fa-times"></i> {{Désactiver}}</a>';
+                    html += '<a class="btn btn-danger btn-sm togglePlugin" data-state="0" data-plugin_id="' + data.id + '" style="position:relative;top:-2px;"><i class="fas fa-times">&nbsp;&nbsp;</i>{{Désactiver}}</a>';
                 }else{
-                    html += '<a class="btn btn-success btn-sm togglePlugin" data-state="1" data-plugin_id="' + data.id + '" style="position:relative;top:-2px;"><i class="fas fa-check"></i> {{Activer}}</a>';
+                    html += '<a class="btn btn-success btn-sm togglePlugin" data-state="1" data-plugin_id="' + data.id + '" style="position:relative;top:-2px;"><i class="fas fa-check">&nbsp;&nbsp;</i>{{Activer}}</a>';
                 }
                 html += '</div>';
                 html += '</div>';
@@ -256,7 +256,7 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
                 log_conf = '<form class="form-horizontal">';
                 log_conf += '<div class="form-group">';
                 log_conf += '<label class="col-sm-2 control-label">{{Niveau de log local}}</label>';
-                log_conf += '<div class="col-sm-6">';
+                log_conf += '<div class="col-sm-10">';
                 log_conf += '<label class="radio-inline"><input type="radio" name="rd_logupdate' + data.id + '" class="configKey" data-l1key="log::level::' + data.id + '" data-l2key="1000" /> {{Aucun}}</label>';
                 log_conf += '<label class="radio-inline"><input type="radio" name="rd_logupdate' + data.id + '" class="configKey" data-l1key="log::level::' + data.id + '" data-l2key="default" /> {{Defaut}}</label>';
                 log_conf += '<label class="radio-inline"><input type="radio" name="rd_logupdate' + data.id + '" class="configKey" data-l1key="log::level::' + data.id + '" data-l2key="100" /> {{Debug}}</label>';
