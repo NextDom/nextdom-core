@@ -1267,7 +1267,7 @@ class nextdom
      *
      * @param $input
      *
-     * @return array|mixed
+     * @return array|mixed(
      */
     public static function fromHumanReadable($input)
     {
