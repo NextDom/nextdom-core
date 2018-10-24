@@ -25,7 +25,7 @@
                         <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none">Aucun - {{ scenarios[-1]|length }} scénario(s)</a>
                     </h3>
                 </div>
-                <div id="config_none" class="panel-collapse collapse">
+                <div id="config_none" class="panel-collapse">
                     <div class="box-body">
                         <div class="scenarioListContainer DisplayCard text-center">
                             {% for scenario in scenarios[-1] %}
@@ -48,7 +48,7 @@
                     <div class="box-header with-border">
                         <h3 class="box-title"><a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}">{{ scenarioGroup.group }} - {{ scenarios[scenarioGroup.group]|length }} scénario(s)</a></h3>
                     </div>
-                    <div id="config_{{ index }}" class="panel-collapse collapse">
+                    <div id="config_{{ index }}" class="panel-collapse">
                         <div class="box-body">
                             <div class="scenarioListContainer DisplayCard text-center ">
                                 {% for scenario in scenarios[scenarioGroup.group] %}
