@@ -1,6 +1,6 @@
 .fab {
   position: fixed;
-  width: 50px;
+  width: 49px;
   right: 15px;
   bottom: 15px;
   margin-left: -28px;
@@ -19,6 +19,13 @@
   right: 0px;
   left: 53px;
   z-index: 1050;
+}
+@media (max-width: 767px) {
+  .fab-left {
+    right: 0px;
+    left: 42px;
+    z-index: 1050;
+  }
 }
 
 .fab:hover .fab-buttons {
