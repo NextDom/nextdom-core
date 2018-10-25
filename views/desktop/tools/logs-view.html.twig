@@ -52,7 +52,7 @@
                                 <li class="filter"><input class="filter form-control" placeholder="{{ 'Rechercher un log...' }}"/></li>
                                 {% for logFile in logFilesList %}
                                     <li class="cursor label-log li_log{% if logFile['active'] %} active{% endif %}" data-log="{{ logFile['name'] }}">
-                                        <i class="fa fa-{{ logFile['icon'] }}" style="float:left;margin-top:13px;color:{{ logFile['color'] }};">&nbsp;&nbsp;</i>
+                                        <i class="fas fa-{{ logFile['icon'] }}" style="float:left;margin-top:13px;color:{{ logFile['color'] }};">&nbsp;&nbsp;</i>
                                         <a>{{ logFile['name'] }} ({{ logFile['size'] }} Ko)</a>
                                     </li>
                                 {% endfor %}
@@ -69,12 +69,15 @@
                                 <input class="form-control" id="in_globalLogSearch" placeholder="{{ 'Rechercher dans le log...' }}"/>
                             </div>
                         </div>
-                        <pre id='pre_globallog' style='overflow: scroll;'></pre>
+                        <pre id='pre_globallog' style='overflow: auto;min-height:215px;'></pre>
                     </fieldset>
                 </div>
             </div>
         </form>
     </div>
+</div>
+<div class="fab fab-left">
+    <a class="fab-action-button cursor" style="display: none;" id="bt_goOnTop"><i class="fab-action-button__icon fas fa-angle-double-up"></i></a>
 </div>
 <div class="fab">
     <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>

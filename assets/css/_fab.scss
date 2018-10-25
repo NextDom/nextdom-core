@@ -1,20 +1,47 @@
 .fab {
   position: fixed;
-  width: 50px;
-  right: 20px;
-  bottom: 20px;
+  width: 49px;
+  right: 15px;
+  bottom: 15px;
   margin-left: -28px;
   z-index: 999;
 }
+@media (max-width: 767px) {
+  .fab {
+    width: 40px;
+  }
+}
 
 .fab-bis {
-  right: 80px;
-  z-index: 999;
+  right: 75px;
+}
+@media (max-width: 767px) {
+  .fab-bis {
+    right: 65px;
+  }
 }
 
 .fab-ter {
-  right: 140px;
-  z-index: 999;
+  right: 135px;
+}
+@media (max-width: 767px) {
+  .fab-ter {
+    right: 115px;
+  }
+}
+
+.fab-left {
+  right: 0px;
+  left: 53px;
+  z-index: 1050;
+}
+
+@media (max-width: 767px) {
+  .fab-left {
+    right: 0px;
+    left: 42px;
+    z-index: 1050;
+  }
 }
 
 .fab:hover .fab-buttons {
@@ -37,16 +64,24 @@
 .fab-action-button {
   text-align: center;
   display: inline-block;
-  font-size: 1.5em;
+  font-size: 1.3em;
   vertical-align: middle;
-  line-height: 50px;
+  line-height: 48px;
   color: $white;
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   background-color: #29B6F6;
   opacity: 0.9;
   border-radius: 50%;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+}
+@media (max-width: 767px) {
+  .fab-action-button {
+    line-height: 44px;
+    font-size: 1.3em;
+    width: 44px;
+    height: 44px;
+  }
 }
 
 .fab-action-button > a {
@@ -97,19 +132,23 @@
 
 [data-tooltip]:before {
   top: 50%;
-  margin-top: -22px;
-  font-weight: 600;
-  font-family: 'Roboto';
+  margin:{
+    top: -22px;
+    right: 12px;
+  }
+  font:{
+    weight: 600;
+    family: 'Roboto';
+    size: 0.7em;
+  }
   border-radius: 10px;
   background: #585858;
-  color: #fff;
+  color: $white;
   content: attr(data-tooltip);
-  font-size: 0.7em;
   text-decoration: none;
   visibility: hidden;
   opacity: 0;
   padding: 0px 12px;
-  margin-right: 12px;
   position: absolute;
   transform: scale(0);
   right: 100%;

@@ -19,12 +19,12 @@ $cmd_widgetDashboard = cmd::availableWidget('dashboard');
 $cmd_widgetMobile = cmd::availableWidget('mobile');
 ?>
   <div style="display: none;" id="md_displayCmdConfigure"></div>
-  <a class="btn btn-success btn-sm pull-right" id="bt_cmdConfigureSave"><i class="far fa-check-circle"></i> {{Enregistrer}}</a>
-  <a class="btn btn-default pull-right btn-sm" id="bt_cmdConfigureSaveOn"><i class="fas fa-plus-circle"></i> {{Appliquer à}}</a>
-  <a class="btn btn-default pull-right btn-sm" id="bt_cmdConfigureRawObject"><i class="fas fa-info"></i> {{Informations}}</a>
-  <a class="btn btn-default pull-right btn-sm" id="bt_cmdConfigureLogRealTime"><i class="far fa-file"></i> {{Log}}</a>
-  <a class="btn btn-default pull-right btn-sm" id="bt_cmdConfigureGraph"><i class="fas fa-object-group"></i> {{Liens}}</a>
-  <a class="btn btn-default pull-right btn-sm" id="bt_cmdConfigureTest"><i class="fas fa-rss"></i> {{Tester}}</a>
+  <a class="btn btn-success btn-sm pull-right" id="bt_cmdConfigureSave"><i class="fas fa-check-circle">&nbsp;&nbsp;</i>{{Enregistrer}}</a>
+  <a class="btn btn-default pull-right btn-sm" id="bt_cmdConfigureSaveOn"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Appliquer à}}</a>
+  <a class="btn btn-default pull-right btn-sm" id="bt_cmdConfigureRawObject"><i class="fas fa-info">&nbsp;&nbsp;</i>{{Informations}}</a>
+  <a class="btn btn-default pull-right btn-sm" id="bt_cmdConfigureLogRealTime"><i class="fas fa-file-o">&nbsp;&nbsp;</i>{{Log}}</a>
+  <a class="btn btn-default pull-right btn-sm" id="bt_cmdConfigureGraph"><i class="fas fa-object-group">&nbsp;&nbsp;</i>{{Liens}}</a>
+  <a class="btn btn-default pull-right btn-sm" id="bt_cmdConfigureTest"><i class="fas fa-rss">&nbsp;&nbsp;</i>{{Tester}}</a>
   <div role="tabpanel">
     <ul class="nav nav-tabs" role="tablist">
       <li role="presentation" class="active"><a href="#cmd_information" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-info-circle"></i> {{Informations}}</a></li>

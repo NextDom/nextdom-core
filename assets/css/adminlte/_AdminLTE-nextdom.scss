@@ -123,12 +123,12 @@ body {
 /* User panel */
 .user-panel > .image > a > img {
   width: 100%;
-  max-width: 45px;
+  max-width: 50px;
   height: auto;
 }
 .user-panel > .info {
-  padding: 5px 5px 5px 10px;
-  line-height: 0.8;
+  padding: 10px 5px 5px 15px;
+  line-height: 0.9;
   position: absolute;
   left: 55px;
 }
@@ -136,14 +136,17 @@ body {
   text-align: center;
 }
 .sidebar-collapse .user-panel div.image {
-  width: 2.2rem;
-  height: 2.2rem;
+  width: 3rem;
+  height: 3rem;
   margin:{
     left: auto;
     right: auto;
   }
   float: none !important;
   transition: all .2s;
+}
+.user-panel {
+  padding-left: 7px;
 }
 
 /* Sidebar */
@@ -163,6 +166,12 @@ body {
   z-index: 900;
   opacity:0;
 }
+.sidebar-menu li>a>.pull-right-container {
+  right: 5px;
+}
+.sidebar-menu>li>a {
+  padding: 12px 5px 12px 14px;
+}
 
 /* Treeview */
 .treeview-menu {
@@ -172,13 +181,17 @@ body {
     padding-bottom: 1px;
   }
 }
-
 .treeview-menu > li > a {
-  padding: 5px 15px 5px 15px;
+  padding: 5px 10px 5px 10px;
+  word-break: break-all;
+  white-space: normal;
 }
 .treeview-menu>li>a>.icon {
   vertical-align: middle;
   padding-right: 5px;
+}
+.treeview-menu .treeview-menu {
+    padding-left: 5px;
 }
 
 /* Form */
@@ -544,6 +557,10 @@ body {
     right: 15px;
   }
 }
+.label-hash {
+  word-break: break-all;
+  white-space: normal;
+}
 
 /* Logos */
 .login-logo,
@@ -744,5 +761,5 @@ input[type="checkbox"] {
   min-height: 70px;
 }
 #listPlugin .box .box-body {
-  min-height: 110px;
+  min-height: 180px;
 }

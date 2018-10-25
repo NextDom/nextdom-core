@@ -20,3 +20,8 @@ if ($('[role="dialog"] .fab').length == 0) {
 } else {
     $('.fab').css('display', 'none');
 }
+
+$('#bt_goOnTop').click(function() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+});
