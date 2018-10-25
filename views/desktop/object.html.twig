@@ -56,11 +56,9 @@
         {% for object in objectList %}
             <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                 <div class="box objectDisplayCard" style='border-top:3px solid {{ object.getDisplay("tagColor") }}' data-object_id="{{ object.getId() }}" data-object_name="{{ object.getName() }}">
-                    <div class="box-header with-border">
-                        <a class="bt_detailsObject cursor">
-                            <h4 class="box-title name object-name" style='color:{{ object.getDisplay("tagColor") }}'>{{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|replace({'></i>': '></i>'})|raw }}&nbsp;&nbsp;<b>{{ object.getName() }}</b></h4>
-                        </a>
-                    </div>
+                    <a class="box-header with-border bt_detailsObject cursor">
+                        <h4 class="box-title name object-name" style='color:{{ object.getDisplay("tagColor") }}'>{{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|replace({'></i>': '></i>'})|raw }}&nbsp;&nbsp;<b>{{ object.getName() }}</b></h4>
+                    </a>
                     <div class="box-body">
                         <span class="object-summary">&nbsp;{{ object.getHtmlSummary()|raw }}</span>
                     </div>
@@ -264,6 +262,9 @@
             {% endif %}
         </div>
     </div>
+</div>
+<div class="fab fab-left">
+    <a class="fab-action-button cursor" style="display: none;" id="bt_goOnTop"><i class="fab-action-button__icon fas fa-angle-double-up"></i></a>
 </div>
 <div class="fab">
     <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>

@@ -55,12 +55,12 @@
     <div class="box-group" id="accordionScenar">
         {% if scenarios[-1]|length > 0 %}
             <div class="panel box">
-                <div class="box-header with-border">
+                <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none">
                     <h3 class="box-title">
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none">Aucun - {{ scenarios[-1]|length }} scénario(s)</a>
+                        <span>Aucun - {{ scenarios[-1]|length }} scénario(s)</span>
                     </h3>
-                </div>
-                <div id="config_none" class="panel-collapse">
+                </a>
+                <div id="config_none" class="panel-collapse collapse in">
                     <div class="box-body">
                         <div class="scenarioListContainer DisplayCard text-center">
                             {% for scenario in scenarios[-1] %}
@@ -80,10 +80,10 @@
         {% for scenarioGroup in scenarioListGroup %}
             {% if scenarioGroup.group != '' %}
                 <div class="panel box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}">{{ scenarioGroup.group }} - {{ scenarios[scenarioGroup.group]|length }} scénario(s)</a></h3>
-                    </div>
-                    <div id="config_{{ index }}" class="panel-collapse">
+                    <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}">
+                        <h3 class="box-title"><span>{{ scenarioGroup.group }} - {{ scenarios[scenarioGroup.group]|length }} scénario(s)</span></h3>
+                    </a>
+                    <div id="config_{{ index }}" class="panel-collapse collapse in">
                         <div class="box-body">
                             <div class="scenarioListContainer DisplayCard text-center ">
                                 {% for scenario in scenarios[scenarioGroup.group] %}
@@ -357,7 +357,10 @@
         </div>
     </div>
 </div>
-<div class="fab" style="z-index:999">
+<div class="fab fab-left">
+    <a class="fab-action-button cursor" style="display: none;" id="bt_goOnTop"><i class="fab-action-button__icon fas fa-angle-double-up"></i></a>
+</div>
+<div class="fab">
     <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
     <ul class="fab-buttons">
         {% if scenarioEnabled == 0 %}

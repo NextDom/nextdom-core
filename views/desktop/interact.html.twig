@@ -41,12 +41,12 @@
         <div class="box-body">
             {% if interactTotal|length == 0 %}
                 <div class="text-center">
-                <span>{{ 'Vous n\'avez encore aucune interaction. Cliquez sur ajouter pour commencer.' }}</span>
+                    <span>{{ 'Vous n\'avez encore aucune interaction. Cliquez sur ajouter pour commencer.' }}</span>
                 </div>
             {% else %}
                 <div class="input-group">
                     <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                    <input class="form-control" placeholder="{{ 'Rechercher...' }}" style="margin-bottom:4px;" id="in_searchInteract"/>
+                    <input class="form-control" placeholder="{{ 'Rechercher...' }}" id="in_searchInteract"/>
                 </div>
             {% endif %}
         </div>
@@ -54,19 +54,18 @@
         {% if interactTotal|length > 0 %}
                 {% if interactsList[-1]|length > 0 %}
                     <div class="panel box">
-                        <div class="box-header with-border">
+                        <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_aucun">
                             <h3 class="box-title">
-                                <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_aucun">{{ 'Aucun - ' }} {{ interactsList[-1]|length }} {{ 'interaction(s)' }}</a>
+                                <span>{{ 'Aucun - ' }} {{ interactsList[-1]|length }} {{ 'interaction(s)' }}</span>
                             </h3>
-                        </div>
-                        <div id="config_aucun" >
+                        </a>
+                        <div id="config_aucun" class="panel-collapse collapse in">
                             <div class="box-body">
                                 <div class="interactListContainer DisplayCard text-center">
                                     {% for interact in interactsList[-1] %}
                                         <div class="interactDisplayCard cursor icon_gestion" data-interact_id="{{ interact.getId() }}" style="{% if not interact.getEnable() %}{{ interactDisabledOpacity }}{% endif %}">
-                                            <img class="backgroundColor" src="/public/img/NextDom_Interaction.png" height="70" width="70"/>
-                                            <br>
-                                            <span>{{ interact.getHumanName(true, true, true, true) }}</span>
+                                            <img class="backgroundColor" src="/public/img/NextDom_Interaction.png" height="70"/>
+                                            <p>{{ interact.getHumanName(true, true, true, true) }}</p>
                                         </div>
                                     {% endfor %}
                                 </div>
@@ -78,19 +77,18 @@
                 {% for group in interactsListGroup %}
                     {% if group['group'] != '' %}
                         <div class="panel box box-primary">
-                            <div class="box-header with-border">
+                            <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}">
                                 <h3 class="box-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}" style="text-decoration:none;">{{ group['group'] }} - {{ interactsList[group['group']]|length }} {{ 'interaction(s)' }}</a>
+                                    <span style="text-decoration:none;">{{ group['group'] }} - {{ interactsList[group['group']]|length }} {{ 'interaction(s)' }}</span>
                                 </h3>
-                            </div>
-                            <div id="config_{{ index }}">
+                            </a>
+                            <div id="config_{{ index }}" class="panel-collapse collapse in">
                                 <div class="box-body">
                                     <div class="interactListContainer DisplayCard text-center">
                                         {% for interact in interactsList[group['group']] %}
                                             <div class="interactDisplayCard cursor icon_gestion" data-interact_id="{{ interact.getId() }}" style="{% if not interact.getEnable() %}{{ interactDisabledOpacity }}{% endif %}">
-                                                <img class="backgroundColor" src="/public/img/NextDom_Interaction.png" height="70" width="70"/>
-                                                <br>
-                                                <span>{{ interact.getHumanName(true, true, true, true) }}</span>
+                                                <img class="backgroundColor" src="/public/img/NextDom_Interaction.png" height="70"/>
+                                                <p>{{ interact.getHumanName(true, true, true, true) }}</p>
                                             </div>
                                         {% endfor %}
                                     </div>
@@ -313,6 +311,9 @@
             </div>
         </div>
     </section>
+</div>
+<div class="fab fab-left">
+    <a class="fab-action-button cursor" style="display: none;" id="bt_goOnTop"><i class="fab-action-button__icon fas fa-angle-double-up"></i></a>
 </div>
 <div class="fab">
     <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>

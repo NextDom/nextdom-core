@@ -71,7 +71,9 @@
                 {% endif %}
             {% endfor %}
         </div>
-
+    </div>
+    <div class="fab fab-left">
+        <a class="fab-action-button cursor" style="display: none;" id="bt_goOnTop"><i class="fab-action-button__icon fas fa-angle-double-up"></i></a>
     </div>
     <div class="fab">
         <span class="fab-action-button">
@@ -94,6 +96,6 @@
     </div>
     {% if dashboardCategory == 'all' %}
         <div class="fab fab-bis">
-            <a class="fab-action-button bg-gray-active cursor dashMode" id="bt_editDashboardWidgetOrder" data-mode="0" ><i class="fab-action-button__icon fas fa-pencil-alt"></i></a>
+            <a class="fab-action-button cursor dashMode" id="bt_editDashboardWidgetOrder" data-mode="0" ><i class="fab-action-button__icon fas fa-pencil-alt"></i></a>
         </div>
     {% endif %}

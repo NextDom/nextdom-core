@@ -476,33 +476,33 @@ class scenario
             if ($this->getIsActive() == 1) {
                 switch ($this->getState()) {
                     case 'in progress':
-                        return 'fa fa-spinner fa-spin';
+                        return 'fas fa-spinner fa-spin';
                     case 'error':
-                        return 'fa fa-exclamation-triangle';
+                        return 'fas fa-exclamation-triangle';
                     default:
                         if (strpos($this->getDisplay('icon'), '<i') === 0) {
                             return str_replace(array('<i', 'class=', '"', '/>'), '', $this->getDisplay('icon'));
                         }
-                        return 'fa fa-check';
+                        return 'fas fa-check';
                 }
             } else {
-                return 'fa fa-times';
+                return 'fas fa-times';
             }
         } else {
             if ($this->getIsActive() == 1) {
                 switch ($this->getState()) {
                     case 'in progress':
-                        return '<i class="fa fa-spinner fa-spin"></i>';
+                        return '<i class="fas fa-spinner fa-spin"></i>';
                     case 'error':
-                        return '<i class="fa fa-exclamation-triangle"></i>';
+                        return '<i class="fas fa-exclamation-triangle"></i>';
                     default:
                         if (strpos($this->getDisplay('icon'), '<i') === 0) {
                             return $this->getDisplay('icon');
                         }
-                        return '<i class="fa fa-check"></i>';
+                        return '<i class="fas fa-check"></i>';
                 }
             } else {
-                return '<i class="fa fa-times"></i>';
+                return '<i class="fas fa-times"></i>';
             }
         }
     }

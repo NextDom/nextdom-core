@@ -1029,7 +1029,14 @@ function toggleFullScreen() {
             document.webkitCancelFullScreen();
         }
         $('#togglefullscreen').removeClass('fa-compress').addClass('fa-expand');
-
     }
+}
 
+window.onscroll = function() {scrollFunction()};
+function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        document.getElementById("bt_goOnTop").style.display = "block";
+    } else {
+        document.getElementById("bt_goOnTop").style.display = "none";
+    }
 }

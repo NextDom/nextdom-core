@@ -59,9 +59,9 @@
     {% for message in messagesList %}
         <tr data-message_id="{{ message.getId() }}">
             <td>
-                <center><i class="far fa-trash-alt cursor removeMessage"></i></center>
+                <div class="btn btn-sm btn-danger text-center"><i class="far fa-trash-alt cursor removeMessage"></i></div>
             </td>
-            <td class="datetime">{{ message.getDate() }}</td>
+            <td class="datetime" style="width: 90px;">{{ message.getDate() }}</td>
             <td class="datetime">{{ message.getPlugin() }}</td>
             <td class="datetime">{{ message.getMessage()|raw }}</td>
             <td class="datetime">{{ message.getAction() }}</td>
