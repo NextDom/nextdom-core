@@ -189,7 +189,7 @@ class NextDomObject
      */
     public function getImage()
     {
-        return $this->image:
+        return $this->image;
     }
     
     /**
