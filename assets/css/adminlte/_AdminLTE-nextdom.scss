@@ -170,7 +170,7 @@ body {
   right: 5px;
 }
 .sidebar-menu>li>a {
-  padding: 12px 5px 12px 14px;
+  padding: 12px 5px 12px 13px;
 }
 
 /* Treeview */
@@ -182,7 +182,7 @@ body {
   }
 }
 .treeview-menu > li > a {
-  padding: 5px 10px 5px 10px;
+  padding: 5px 0px 5px 9px;
   word-break: break-all;
   white-space: normal;
 }
@@ -192,6 +192,9 @@ body {
 }
 .treeview-menu .treeview-menu {
     padding-left: 5px;
+}
+.plugin-item {
+  padding-right: 0px;
 }
 
 /* Form */
