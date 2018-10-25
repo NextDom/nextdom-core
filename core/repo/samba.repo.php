@@ -127,7 +127,6 @@ class repo_samba {
     }
 
     public static function makeSambaCommand($_cmd, $_type = 'backup') {
-        error_log(system::getCmdSudo() . 'smbclient ' . config::byKey('samba::' . $_type . '::share') . ' -U "' . config::byKey('samba::' . $_type . '::username') . '%' . config::byKey('samba::' . $_type . '::password') . '" -I ' . config::byKey('samba::' . $_type . '::ip') . ' --debuglevel=0 -c "' . $_cmd . '"');
         return system::getCmdSudo() . 'smbclient ' . config::byKey('samba::' . $_type . '::share') . ' -U "' . config::byKey('samba::' . $_type . '::username') . '%' . config::byKey('samba::' . $_type . '::password') . '" -I ' . config::byKey('samba::' . $_type . '::ip') . ' --debuglevel=0 -c "' . $_cmd . '"';
     }
 
