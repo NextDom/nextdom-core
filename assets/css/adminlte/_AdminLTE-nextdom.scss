@@ -145,6 +145,9 @@ body {
   float: none !important;
   transition: all .2s;
 }
+.user-panel {
+  padding-left: 7px;
+}
 
 /* Sidebar */
 .sidebar-mini:not(.sidebar-mini-expand-feature).sidebar-collapse .sidebar-menu > li:hover > a > span:not(.pull-right),
@@ -163,6 +166,12 @@ body {
   z-index: 900;
   opacity:0;
 }
+.sidebar-menu li>a>.pull-right-container {
+  right: 5px;
+}
+.sidebar-menu>li>a {
+  padding: 12px 5px 12px 14px;
+}
 
 /* Treeview */
 .treeview-menu {
@@ -172,9 +181,8 @@ body {
     padding-bottom: 1px;
   }
 }
-
 .treeview-menu > li > a {
-  padding: 5px 15px 5px 11px;
+  padding: 5px 10px 5px 10px;
   word-break: break-all;
   white-space: normal;
 }
@@ -184,9 +192,6 @@ body {
 }
 .treeview-menu .treeview-menu {
     padding-left: 5px;
-}
-.sidebar-menu li>a>.pull-right-container {
-    right: 5px;
 }
 
 /* Form */
