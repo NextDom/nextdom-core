@@ -264,7 +264,7 @@ function addUpdate(_update) {
 
     var tr = '<div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">';
     tr += '<div class="box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + ' col-lg-4 col-md-6 col-sm-6 col-xs-12" data-type="' + init(_update.type) + '">';
-    tr += '<div class="box-header">';
+    tr += '<div class="box-header with-border">';
     tr += ' <h4 class="box-title"><img style="height:50px;padding-right:5px;" src="' + init(_update.icon) + '"/> <b>' + init(_update.name)+'</b></h4>';
     tr += '<span data-toggle="tooltip" title="" class="updateAttr badge ' + bgClass +' pull-right" data-original-title="" data-l1key="status" style="text-transform: uppercase;"></span>';
     tr += '</div>';
