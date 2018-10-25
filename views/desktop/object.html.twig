@@ -56,11 +56,9 @@
         {% for object in objectList %}
             <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                 <div class="box objectDisplayCard" style='border-top:3px solid {{ object.getDisplay("tagColor") }}' data-object_id="{{ object.getId() }}" data-object_name="{{ object.getName() }}">
-                    <div class="box-header with-border">
-                        <a class="bt_detailsObject cursor">
-                            <h4 class="box-title name object-name" style='color:{{ object.getDisplay("tagColor") }}'>{{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|replace({'></i>': '></i>'})|raw }}&nbsp;&nbsp;<b>{{ object.getName() }}</b></h4>
-                        </a>
-                    </div>
+                    <a class="box-header with-border bt_detailsObject cursor">
+                        <h4 class="box-title name object-name" style='color:{{ object.getDisplay("tagColor") }}'>{{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|replace({'></i>': '></i>'})|raw }}&nbsp;&nbsp;<b>{{ object.getName() }}</b></h4>
+                    </a>
                     <div class="box-body">
                         <span class="object-summary">&nbsp;{{ object.getHtmlSummary()|raw }}</span>
                     </div>
@@ -273,7 +271,9 @@
     <ul class="fab-buttons">
         <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_showObjectSummary" title="" data-tooltip="{{ 'Vue d\'ensemble' }}"><i class="fas fa-list"></i></a></li>
         <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_addObject2" title="" data-tooltip="{{ 'Ajouter' }}"><i class="fas fa-plus-circle"></i></a></li>
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_savegeneral" title="" data-tooltip="{{ 'Sauvegarder' }}"><i class="fas fa-save"></i></a></li>
+        {% if div_conf.offsetHeight == 0 %}
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_savegeneral" title="" data-tooltip="{{ 'Sauvegarder' }}"><i class="fas fa-save"></i></a></li>
+        {% endif %}
     </ul>
 </div>
 <div class="fab fab-bis">
