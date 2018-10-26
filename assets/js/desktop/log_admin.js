@@ -41,7 +41,7 @@ jwerty.key('ctrl+s', function (e) {
 
  $("#bt_savelog_admin").on('click', function (event) {
     $.hideAlert();
-    var config = $('#config').getValues('.configKey')[0];
+    var config = $('#log_admin').getValues('.configKey')[0];
     config.actionOnMessage = json_encode($('#div_actionOnMessage .actionOnMessage').getValues('.expressionAttr'));
     nextdom.config.save({
         configuration: config,

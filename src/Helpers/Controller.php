@@ -390,6 +390,8 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
+        $pageContent['adminIsRescueMode'] = Status::isRescueMode();
+
         if (!$pageContent['adminIsRescueMode']) {
             $pageContent['adminPluginsList'] = [];
             $pluginsList = PluginManager::listPlugin(true);
@@ -404,7 +406,8 @@ class Controller
                 }
             }
         }
-
+        $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
+        
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/log_admin.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
