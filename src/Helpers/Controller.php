@@ -406,7 +406,8 @@ class Controller
                 }
             }
         }
-
+        $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
+        
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/log_admin.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
