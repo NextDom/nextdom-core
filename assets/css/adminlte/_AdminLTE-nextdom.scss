@@ -20,7 +20,7 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-body {
+body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: 'Roboto','Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
 }
 
@@ -314,7 +314,7 @@ body {
 }
 .nav-tabs-custom > .nav-tabs > li.header {
   padding: 2px 15px;
-  font-size: 17px;
+  font-size: 16px;
 }
 .nav-tabs-custom > .nav-tabs > li.header > .fa,
 .nav-tabs-custom > .nav-tabs > li.header > .fas,
