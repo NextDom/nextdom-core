@@ -407,7 +407,7 @@ class Controller
             }
         }
         $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
-        
+
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/log_admin.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
@@ -772,7 +772,7 @@ class Controller
         Status::isConnectedAdminOrFail();
 
         $pageContent['adminReposList'] = UpdateManager::listRepo();
-        $keys = array('market::allowDNS');
+        $keys = array('market::allowDNS', 'ldap::enable');
         foreach ($pageContent['adminReposList'] as $key => $value) {
             $keys[] = $key . '::enable';
         }
@@ -785,7 +785,6 @@ class Controller
         $pageContent['adminLastKnowDate'] = CacheManager::byKey('hour')->getValue();
         $pageContent['adminIsRescueMode'] = Status::isRescueMode();
         $pageContent['key'] = Status::isRescueMode();
-
 
         if (!$pageContent['adminIsRescueMode']) {
             $pageContent['adminPluginsList'] = [];
