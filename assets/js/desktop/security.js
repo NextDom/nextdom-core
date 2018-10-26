@@ -99,7 +99,7 @@ $('#bt_removeBanIp').on('click',function(){
 
 $("#bt_testLdapConnection").on('click', function (event) {
     nextdom.config.save({
-        configuration: $('#config').getValues('.configKey')[0],
+        configuration: $('#security').getValues('.configKey')[0],
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },
