@@ -66,7 +66,7 @@ jwerty.key('ctrl+s', function (e) {
 $('#bt_restartDns').on('click', function () {
     $.hideAlert();
     jeedom.config.save({
-        configuration: $('#config').getValues('.configKey')[0],
+        configuration: $('#network').getValues('.configKey')[0],
         error: function (error) {
             $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
@@ -88,7 +88,7 @@ $('#bt_restartDns').on('click', function () {
 $('#bt_haltDns').on('click', function () {
     $.hideAlert();
     jeedom.config.save({
-        configuration: $('#config').getValues('.configKey')[0],
+        configuration: $('#network').getValues('.configKey')[0],
         error: function (error) {
             $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
