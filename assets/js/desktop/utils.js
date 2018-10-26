@@ -1053,11 +1053,13 @@ function toggleFullScreen() {
     }
 }
 
-window.onscroll = function() {scrollFunction()};
-function scrollFunction() {
+window.onscroll = function scrollFunction() {
     if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        document.getElementById("bt_goOnTop").style.display = "block";
-    } else {
-        document.getElementById("bt_goOnTop").style.display = "none";
+        var goOnTopButton = document.getElementById("bt_goOnTop");
+        if (goOnTopButton !== undefined) {
+            goOnTopButton.style.display = "block";
+        } else {
+            goOnTopButton.style.display = "none";
+        }
     }
 }
