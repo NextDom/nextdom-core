@@ -127,162 +127,155 @@
 </div>
 
 <!-- Scenario Edition -->
-<div id="div_editScenario" class="col-xs-12" style="display: none;">
+<div id="div_editScenario" style="display: none;">
     <div class="blurPanel">
-        <!-- Header box -->
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title"><i class="fas fa-film">&nbsp;&nbsp;</i>{{ 'Scénarios' }} (ID : <span class="scenarioAttr" data-l1key="id"></span>)</h3>
-                <span id="span_ongoing" class="label pull-right label-sticker-big"></span>
-            </div>
-            <div class="box-body">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active">
-                        <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Paramètres' }}</a>
-                    </li>
-                    <li role="presentation">
-                        <a id="bt_scenarioTab" href="#scenariotab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-microchip">&nbsp;&nbsp;</i>{{ 'Programmation' }}</a>
-                    </li>
-                </ul>
-                <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
-                    <div role="tabpanel" class="tab-pane active" id="generaltab">
-                        <br/>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <form class="form-horizontal">
-                                    <fieldset>
-                                        <div class="form-group">
-                                            <label class="col-xs-5 control-label">{{ 'Nom du scénario' }}</label>
-                                            <div class="col-xs-6">
-                                                <input class="form-control scenarioAttr" data-l1key="name" type="text"
-                                                       placeholder="{{ 'Nom du scénario' }}"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-xs-5 control-label">{{ 'Nom à afficher' }}</label>
-                                            <div class="col-xs-6">
-                                                <input class="form-control scenarioAttr"
-                                                       title="{{ 'Ne rien mettre pour laisser le nom par défaut' }}"
-                                                       data-l1key="display" data-l2key="name" type="text"
-                                                       placeholder="{{ 'Nom à afficher' }}"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-xs-5 control-label">{{ 'Groupe' }}</label>
-                                            <div class="col-xs-6">
-                                                <input class="form-control scenarioAttr" data-l1key="group" type="text" placeholder="{{ 'Groupe du scénario' }}"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-xs-5 control-label"></label>
-                                            <label>
-                                                {{ 'Actif' }} <input type="checkbox" class="scenarioAttr" data-l1key="isActive">
-                                            </label>
-                                            <label>
-                                                {{ 'Visible' }} <input type="checkbox" class="scenarioAttr" data-l1key="isVisible">
-                                            </label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-xs-5 control-label">{{ 'Objet parent' }}</label>
-                                            <div class="col-xs-6">
-                                                <select class="scenarioAttr form-control" data-l1key="object_id">
-                                                    <option value="">{{ 'Aucun' }}</option>
-                                                    {% for object in scenarioAllObjects %}
-                                                        <option value="{{ object.getId() }}">{{ object.getName() }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-xs-5 control-label">{{ 'Timeout en secondes (0 = illimité)' }}</label>
-                                            <div class="col-xs-6">
-                                                <input class="form-control scenarioAttr" data-l1key="timeout">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-xs-5 control-label">{{ 'Multi lancement' }}</label>
-                                            <div class="col-xs-1">
-                                                <input type="checkbox" class="scenarioAttr" data-l1key="configuration"
-                                                       data-l2key="allowMultiInstance"
-                                                       title="{{ 'Le scénario pourra tourner plusieurs fois en même temps' }}">
-                                            </div>
-                                            <label class="col-xs-4 control-label">{{ 'Mode synchrone' }}</label>
-                                            <div class="col-xs-1">
-                                                <input type="checkbox" class="scenarioAttr" data-l1key="configuration"
-                                                       data-l2key="syncmode"
-                                                       title="{{ 'Le scénario est en mode synchrone. Attention, cela peut rendre le système instable' }}">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-xs-5 control-label">{{ 'Log' }}</label>
-                                            <div class="col-xs-6">
-                                                <select class="scenarioAttr form-control" data-l1key="configuration"
-                                                        data-l2key="logmode">
-                                                    <option value="default">{{ 'Défaut' }}</option>
-                                                    <option value="none">{{ 'Aucun' }}</option>
-                                                    <option value="realtime">{{ 'Temps réel' }}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-xs-5 control-label">{{ 'Suivre dans la timeline' }}</label>
-                                            <div class="col-xs-1">
-                                                <input type="checkbox" class="scenarioAttr" data-l1key="configuration"
-                                                       data-l2key="timeline::enable"
-                                                       title="{{ 'Les exécutions du scénario pourront être vues dans la timeline.' }}">
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                </form>
-                            </div>
-                            <div class="col-sm-6">
-                                <form class="form-horizontal">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <h4 id="span_ongoing" class="label pull-right label-sticker"></h4>
+                <h4 class="box-title pull-left">&nbsp;&nbsp;<i class="fas fa-film">&nbsp;&nbsp;</i>{{ 'Scénarios' }} (ID : <span class="scenarioAttr" data-l1key="id"></span>)</h4>
+                <li role="presentation">
+                    <a id="bt_scenarioTab" href="#scenariotab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-microchip">&nbsp;&nbsp;</i>{{ 'Programmation' }}</a>
+                </li>
+                <li role="presentation" class="active">
+                    <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Paramètres' }}</a>
+                </li>
+            </ul>
+            <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
+                <div role="tabpanel" class="tab-pane active" id="generaltab">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <form class="form-horizontal">
+                                <fieldset>
                                     <div class="form-group">
-                                        <div class="col-md-12">
-                                                <textarea class="form-control scenarioAttr ta_autosize"
-                                                          data-l1key="description" placeholder="Description"></textarea>
+                                        <label class="col-xs-5 control-label">{{ 'Nom du scénario' }}</label>
+                                        <div class="col-xs-6">
+                                            <input class="form-control scenarioAttr" data-l1key="name" type="text"
+                                                   placeholder="{{ 'Nom du scénario' }}"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-3 col-xs-6 control-label">{{ 'Mode du scénario' }}</label>
-                                        <div class="col-sm-9 col-xs-6">
-                                            <div class="input-group">
-                                                <select class="form-control scenarioAttr input-sm" data-l1key="mode">
-                                                    <option value="provoke">{{ 'Provoqué' }}</option>
-                                                    <option value="schedule">{{ 'Programmé' }}</option>
-                                                    <option value="all">{{ 'Les deux' }}</option>
-                                                </select>
-                                                <span class="input-group-btn">
-                                                            <a class="btn btn-default btn-sm" id="bt_addTrigger"><i class="fas fa-plus-square"></i> {{ 'Déclencheur' }}</a>
-                                                            <a class="btn btn-default btn-sm" id="bt_addSchedule"><i class="fas fa-plus-square"></i> {{ 'Programmation' }}</a>
-                                                        </span>
-                                            </div>
+                                        <label class="col-xs-5 control-label">{{ 'Nom à afficher' }}</label>
+                                        <div class="col-xs-6">
+                                            <input class="form-control scenarioAttr"
+                                                   title="{{ 'Ne rien mettre pour laisser le nom par défaut' }}"
+                                                   data-l1key="display" data-l2key="name" type="text"
+                                                   placeholder="{{ 'Nom à afficher' }}"/>
                                         </div>
                                     </div>
-                                    <div class="scheduleDisplay" style="display: none;">
-                                        <div class="form-group">
-                                            <label class="col-xs-3 control-label">{{ 'Précédent' }}</label>
-                                            <div class="col-xs-3"><span class="scenarioAttr label label-primary"
-                                                                        data-l1key="forecast" data-l2key="prevDate"
-                                                                        data-l3key="date"></span></div>
-                                            <label class="col-xs-3 control-label">{{ 'Prochain' }}</label>
-                                            <div class="col-xs-3"><span class="scenarioAttr label label-success"
-                                                                        data-l1key="forecast" data-l2key="nextDate"
-                                                                        data-l3key="date"></span></div>
+                                    <div class="form-group">
+                                        <label class="col-xs-5 control-label">{{ 'Groupe' }}</label>
+                                        <div class="col-xs-6">
+                                            <input class="form-control scenarioAttr" data-l1key="group" type="text" placeholder="{{ 'Groupe du scénario' }}"/>
                                         </div>
-                                        <div class="scheduleMode"></div>
                                     </div>
-                                    <div class="provokeMode provokeDisplay" style="display: none;">
+                                    <div class="form-group">
+                                        <label class="col-xs-5 control-label"></label>
+                                        <label>
+                                            {{ 'Actif' }} <input type="checkbox" class="scenarioAttr" data-l1key="isActive">
+                                        </label>
+                                        <label>
+                                            {{ 'Visible' }} <input type="checkbox" class="scenarioAttr" data-l1key="isVisible">
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-xs-5 control-label">{{ 'Objet parent' }}</label>
+                                        <div class="col-xs-6">
+                                            <select class="scenarioAttr form-control" data-l1key="object_id">
+                                                <option value="">{{ 'Aucun' }}</option>
+                                                {% for object in scenarioAllObjects %}
+                                                    <option value="{{ object.getId() }}">{{ object.getName() }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-xs-5 control-label">{{ 'Timeout en secondes (0 = illimité)' }}</label>
+                                        <div class="col-xs-6">
+                                            <input class="form-control scenarioAttr" data-l1key="timeout">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-xs-5 control-label">{{ 'Multi lancement' }}</label>
+                                        <div class="col-xs-1">
+                                            <input type="checkbox" class="scenarioAttr" data-l1key="configuration"
+                                                   data-l2key="allowMultiInstance"
+                                                   title="{{ 'Le scénario pourra tourner plusieurs fois en même temps' }}">
+                                        </div>
+                                        <label class="col-xs-4 control-label">{{ 'Mode synchrone' }}</label>
+                                        <div class="col-xs-1">
+                                            <input type="checkbox" class="scenarioAttr" data-l1key="configuration"
+                                                   data-l2key="syncmode"
+                                                   title="{{ 'Le scénario est en mode synchrone. Attention, cela peut rendre le système instable' }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-xs-5 control-label">{{ 'Log' }}</label>
+                                        <div class="col-xs-6">
+                                            <select class="scenarioAttr form-control" data-l1key="configuration"
+                                                    data-l2key="logmode">
+                                                <option value="default">{{ 'Défaut' }}</option>
+                                                <option value="none">{{ 'Aucun' }}</option>
+                                                <option value="realtime">{{ 'Temps réel' }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-xs-5 control-label">{{ 'Suivre dans la timeline' }}</label>
+                                        <div class="col-xs-1">
+                                            <input type="checkbox" class="scenarioAttr" data-l1key="configuration"
+                                                   data-l2key="timeline::enable"
+                                                   title="{{ 'Les exécutions du scénario pourront être vues dans la timeline.' }}">
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="col-sm-6">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                            <textarea class="form-control scenarioAttr ta_autosize"
+                                                      data-l1key="description" placeholder="Description"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 col-xs-6 control-label">{{ 'Mode du scénario' }}</label>
+                                    <div class="col-sm-9 col-xs-6">
+                                        <div class="input-group">
+                                            <select class="form-control scenarioAttr input-sm" data-l1key="mode">
+                                                <option value="provoke">{{ 'Provoqué' }}</option>
+                                                <option value="schedule">{{ 'Programmé' }}</option>
+                                                <option value="all">{{ 'Les deux' }}</option>
+                                            </select>
+                                            <span class="input-group-btn">
+                                                        <a class="btn btn-default btn-sm" id="bt_addTrigger"><i class="fas fa-plus-square"></i> {{ 'Déclencheur' }}</a>
+                                                        <a class="btn btn-default btn-sm" id="bt_addSchedule"><i class="fas fa-plus-square"></i> {{ 'Programmation' }}</a>
+                                                    </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="scheduleDisplay" style="display: none;">
+                                    <div class="form-group">
+                                        <label class="col-xs-3 control-label">{{ 'Précédent' }}</label>
+                                        <div class="col-xs-3"><span class="scenarioAttr label label-primary"
+                                                                    data-l1key="forecast" data-l2key="prevDate"
+                                                                    data-l3key="date"></span></div>
+                                        <label class="col-xs-3 control-label">{{ 'Prochain' }}</label>
+                                        <div class="col-xs-3"><span class="scenarioAttr label label-success"
+                                                                    data-l1key="forecast" data-l2key="nextDate"
+                                                                    data-l3key="date"></span></div>
+                                    </div>
+                                    <div class="scheduleMode"></div>
+                                </div>
+                                <div class="provokeMode provokeDisplay" style="display: none;">
 
-                                    </div>
-                                </form>
-                            </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="scenariotab">
-                        <br/>
-                        <div id="div_scenarioElement" class="element" style="padding-bottom: 70px;"></div>
-                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="scenariotab">
+                    <div id="div_scenarioElement" class="element"></div>
                 </div>
             </div>
         </div>
