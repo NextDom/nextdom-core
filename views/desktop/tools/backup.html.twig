@@ -121,7 +121,7 @@
                     {% for repo, repoData in backupReposList %}
                         {% if repoData['scope']['backup'] != false and repoData['enable'] != 0 %}
                             {% set cssClass = 'repo_' ~ repo %}
-                            <div class="legend-section">
+                            <div class="legend-section repo">
                                 <legend class="legend-title">{{ 'Sauvegardes' }} {{ repoData['name'] }}</legend>
                                 <div class="form-group">
                                     <label class="col-sm-4 col-xs-6 control-label">{{ 'Envoi automatique' }}</label>
