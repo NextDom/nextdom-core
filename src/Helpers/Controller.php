@@ -390,6 +390,8 @@ class Controller
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
+        $pageContent['adminIsRescueMode'] = Status::isRescueMode();
+
         if (!$pageContent['adminIsRescueMode']) {
             $pageContent['adminPluginsList'] = [];
             $pluginsList = PluginManager::listPlugin(true);
