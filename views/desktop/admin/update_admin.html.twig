@@ -79,18 +79,18 @@
             </div>
         </div>
     </div>
+
     <!-- Services section -->
     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
         <form class="form-horizontal">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs pull-right" role="tablist">
-                    <h4 class="box-title pull-left">&nbsp;&nbsp;<i class="fas fa-wrench">&nbsp;&nbsp;</i>{{ 'Services' }}</h4>
-
                     {% for repo, data in adminReposList %}
                         <li role="presentation" {% if repo == 'market' %}class="active"{% endif %}>
                             <a href="#tab{{ repo }}" aria-controls="tab{{ repo }}" role="tab" data-toggle="tab">{{ data['name'] }}</a>
                         </li>
                     {% endfor %}
+                    <li class="header pull-left">&nbsp;&nbsp;<i class="fas fa-wrench">&nbsp;&nbsp;</i>{{ 'Services' }}</li>
                 </ul>
                 <div class="global-tab-content tab-content">
                     {% for repo, data in adminReposList %}
