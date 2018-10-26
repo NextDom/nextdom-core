@@ -106,27 +106,27 @@
 
     <!-- Scenario list fab -->
     <div class="fab fab-bis">
-        <a class="fab-action-button bg-orange" id="bt_scenarioThumbnailDisplay"><i class="fab-action-button__icon fas fa-chevron-left"></i></a>
-    </div>
-    <div class="fab fab-ter">
         <a class="fab-action-button bg-red-active" href="{{ HOMELINK }}"><i class="fab-action-button__icon fas fa-home"></i></a>
+    </div>
+    <div class="fab">
+        <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
+        <ul class="fab-buttons">
+            {% if scenarioEnabled == 0 %}
+                <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_changeAllScenarioState2" data-state="1" data-tooltip="{{ 'Activer scénarios' }}"><i class="fas fa-check"></i></a></li>
+            {% else %}
+                <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" id="bt_changeAllScenarioState2" data-state="0" data-tooltip="{{ 'Désactiver scénarios' }}"> <i class="fas fa-times"></i></i></a></li>
+            {% endif %}
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_addScenario2" data-tooltip="{{ 'Ajouter' }}"><i class="fas fa-plus-circle"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_displayScenarioVariable2" data-tooltip="{{ 'Voir variables' }}"><i class="fas fa-eye"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active bt_showScenarioSummary" data-tooltip="{{ 'Vue d\'ensemble' }}"><i class="fas fa-list"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active bt_showExpressionTest" data-tooltip="{{ 'Testeur d\'expression' }}"><i class="fas fa-check"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_savegeneral" data-tooltip="{{ 'Sauvegarder tout' }}"><i class="fas fa-save"></i></a></li>
+        </ul>
     </div>
 </div>
 
 <!-- Scenario Edition -->
 <div id="div_editScenario" class="col-xs-12" style="display: none;">
-    <a class="btn btn-default btn-sm pull-right" id="bt_graphScenario" title="{{ 'Liens' }}"><i class="fas fa-object-group"></i></a>
-    <a class="btn btn-default btn-sm pull-right" id="bt_copyScenario" title="{{ 'Dupliquer' }}"><i class="fas fa-copy"></i></a>
-    <a class="btn btn-default btn-sm pull-right" id="bt_logScenario" title="{{ 'Log' }}"><i class="far fa-file-alt"></i></a>
-    <a class="btn btn-default btn-sm pull-right" id="bt_exportScenario" title="{{ 'Exporter' }}"><i class="fas fa fa-share"></i></a>
-    <a class="btn btn-danger btn-sm pull-right" id="bt_stopScenario"><i class="fas fa-stop">&nbsp;&nbsp;</i>{{ 'Arrêter' }}</a>
-    <a class="btn btn-default btn-sm pull-right" id="bt_templateScenario" title="{{ 'Template' }}"><i class="fas fa-cubes"></i></a>
-    <a class="btn btn-success btn-sm pull-right" id="bt_saveScenario2"><i class="far fa-check-circle">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
-    <a class="btn btn-danger btn-sm pull-right" id="bt_delScenario2"><i class="fas fa-minus-circle">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
-    <a class="btn btn-warning btn-sm pull-right" id="bt_testScenario2" title='{{ 'Veuillez sauvegarder avant de tester. Ceci peut ne pas aboutir.' }}'><i class="fas fa-gamepad">&nbsp;&nbsp;</i>{{ 'Exécuter' }}</a>
-    <a class="btn btn-primary btn-sm pull-right bt_showExpressionTest"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Expression' }}</a>
-    <a class="btn btn-primary btn-sm pull-right" id="bt_displayScenarioVariable"><i class="fas fa-eye">&nbsp;&nbsp;</i> {{ 'Variables' }}</a>
-    <a class="btn btn-default btn-sm pull-right bt_addScenarioElement"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter bloc' }}</a>
     <span id="span_ongoing" class="label pull-right" style="font-size : 1em;position:relative;top:5px;"></span>
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
@@ -279,6 +279,28 @@
             <div id="div_scenarioElement" class="element" style="padding-bottom: 70px;"></div>
         </div>
     </div>
+
+    <!-- Scenario edition fab -->
+    <div class="fab fab-bis">
+        <a class="fab-action-button bg-orange" id="bt_scenarioThumbnailDisplay"><i class="fab-action-button__icon fas fa-chevron-left"></i></a>
+    </div>
+    <div class="fab">
+        <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
+        <ul class="fab-buttons">
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_addScenarioElement" data-tooltip="{{ 'Ajouter bloc' }}"><i class="fas fa-plus-circle"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_displayScenarioVariable" data-tooltip="{{ 'Voir variables' }}"><i class="fas fa-eye"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active bt_showExpressionTest" data-tooltip="{{ 'Testeur d\'expression' }}"><i class="fas fa-check"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-gray-active bt_logScenario" data-tooltip="{{ 'Log' }}"><i class="fas fa-file-alt"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-gray-active bt_graphScenario" data-tooltip="{{ 'Liens' }}"><i class="fas fa-object-group"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active bt_copyScenario" data-tooltip="{{ 'Dupliquer' }}"><i class="fas fa-copy"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active bt_exportScenario" data-tooltip="{{ 'Exporter' }}"><i class="fas fa-share"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-orange-active" id="bt_testScenario2" data-tooltip="{{ 'Exécuter' }}"><i class="fas fa-gamepad"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active bt_stopScenario" data-tooltip="{{ 'Arrêter' }}"><i class="fas fa-stop"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_templateScenario" data-tooltip="{{ 'Template' }}"><i class="fas fa-cubes"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" id="bt_delScenario2" data-tooltip="{{ 'Supprimer scénario' }}"><i class="far fa-trash"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_saveScenario2" data-tooltip="{{ 'Sauvegarder scénario' }}"><i class="fas fa-save"></i></a></li>
+        </ul>
+    </div>
 </div>
 
 <!-- Modal Copy scenario -->
@@ -374,19 +396,4 @@
 <!-- Global Fab -->
 <div class="fab fab-left">
     <a class="fab-action-button cursor" style="display: none;" id="bt_goOnTop"><i class="fab-action-button__icon fas fa-angle-double-up"></i></a>
-</div>
-<div class="fab">
-    <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
-    <ul class="fab-buttons">
-        {% if scenarioEnabled == 0 %}
-            <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_changeAllScenarioState2" data-state="1" data-tooltip="{{ 'Activer scénarios' }}"><i class="fas fa-check"></i></a></li>
-        {% else %}
-            <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" id="bt_changeAllScenarioState2" data-state="0" data-tooltip="{{ 'Désactiver scénarios' }}"> <i class="fas fa-times"></i></i></a></li>
-        {% endif %}
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_addScenario2" data-tooltip="{{ 'Ajouter' }}"><i class="fas fa-plus-circle"></i></a></li>
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_displayScenarioVariable2" data-tooltip="{{ 'Voir variables' }}"><i class="fas fa-eye"></i></a></li>
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active bt_showScenarioSummary" data-tooltip="{{ 'Vue d\'ensemble' }}"><i class="fas fa-list"></i></a></li>
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active bt_showExpressionTest" data-tooltip="{{ 'Testeur d\'expression' }}"><i class="fas fa-check"></i></a></li>
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_savegeneral" data-tooltip="{{ 'Sauvegarder' }}"><i class="fas fa-save"></i></a></li>
-    </ul>
 </div>
