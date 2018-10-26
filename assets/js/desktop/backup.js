@@ -186,6 +186,8 @@ $("#md_backupInfo").dialog({
                     notify("Erreur", error.message, 'error');
                 },
                 success: function () {
+                    $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
+                    $("#md_backupInfo").dialog('open');
                     getNextDomLog(1, 'restore');
                 }
             });
