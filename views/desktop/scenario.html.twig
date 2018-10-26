@@ -33,7 +33,9 @@
 */
 
 #}
+<!-- Scenario list -->
 <div id="scenarioThumbnailDisplay" class="blurPanel">
+    <!-- Header box -->
     <div class="box">
         <div class="box-header with-border">
             <h3 class="box-title"><i class="fas fa-film">&nbsp;&nbsp;</i>{{ 'Mes scénarios' }}</h3>
@@ -52,6 +54,7 @@
         </div>
     </div>
 
+    <!-- Scenarios boxs -->
     <div class="box-group" id="accordionScenar">
         {% if scenarios[-1]|length > 0 %}
             <div class="panel box">
@@ -100,9 +103,17 @@
             {% endif %}
         {% endfor %}
     </div>
+
+    <!-- Scenario list fab -->
+    <div class="fab fab-bis">
+        <a class="fab-action-button bg-orange" id="bt_scenarioThumbnailDisplay"><i class="fab-action-button__icon fas fa-chevron-left"></i></a>
+    </div>
+    <div class="fab fab-ter">
+        <a class="fab-action-button bg-red-active" href="{{ HOMELINK }}"><i class="fab-action-button__icon fas fa-home"></i></a>
+    </div>
 </div>
 
-
+<!-- Scenario Edition -->
 <div id="div_editScenario" class="col-xs-12" style="display: none;">
     <a class="btn btn-default btn-sm pull-right" id="bt_graphScenario" title="{{ 'Liens' }}"><i class="fas fa-object-group"></i></a>
     <a class="btn btn-default btn-sm pull-right" id="bt_copyScenario" title="{{ 'Dupliquer' }}"><i class="fas fa-copy"></i></a>
@@ -268,8 +279,9 @@
             <div id="div_scenarioElement" class="element" style="padding-bottom: 70px;"></div>
         </div>
     </div>
-
 </div>
+
+<!-- Modal Copy scenario -->
 <div class="modal fade" id="md_copyScenario">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -292,8 +304,9 @@
             </div>
         </div>
     </div>
-
 </div>
+
+<!-- Modal Add scenario -->
 <div class="modal fade" id="md_addElement">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -357,6 +370,8 @@
         </div>
     </div>
 </div>
+
+<!-- Global Fab -->
 <div class="fab fab-left">
     <a class="fab-action-button cursor" style="display: none;" id="bt_goOnTop"><i class="fab-action-button__icon fas fa-angle-double-up"></i></a>
 </div>
@@ -374,10 +389,4 @@
         <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active bt_showExpressionTest" data-tooltip="{{ 'Testeur d\'expression' }}"><i class="fas fa-check"></i></a></li>
         <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_savegeneral" data-tooltip="{{ 'Sauvegarder' }}"><i class="fas fa-save"></i></a></li>
     </ul>
-</div>
-<div class="fab fab-bis">
-    <a class="fab-action-button bg-orange" id="bt_scenarioThumbnailDisplay"><i class="fab-action-button__icon fas fa-chevron-left"></i></a>
-</div>
-<div class="fab fab-ter">
-    <a class="fab-action-button bg-red-active" href="{{ HOMELINK }}"><i class="fab-action-button__icon fas fa-home"></i></a>
 </div>
