@@ -87,13 +87,15 @@
   max-width: 100%;
   margin-bottom: 20px;
   background-color: transparent;
-  border-spacing: 0;
-  border-collapse: collapse;
+	border:{
+	    spacing: 0;
+	    collapse: collapse;
+	}
   display: table;
+	& thead{
+          display: table-header-group;
+          vertical-align: middle;
+          border-color: inherit;
+    }
 }
-
-.highcharts-data-table thead{
-  display: table-header-group;
-  vertical-align: middle;
-  border-color: inherit;
-}
+ 
