@@ -41,10 +41,10 @@ function gen_js {
 	echo " >>> Generation du JS"
     cat 3rdparty/jquery.utils/jquery.utils.js \
         3rdparty/iziToast/js/iziToast.min.js \
-        assets/js/desktop/utils.js \
-        core/js/core.js \
         3rdparty/bootstrap/js/bootstrap.js \
         3rdparty/jquery.ui/jquery-ui.min.js \
+        public/js/desktop/utils.js \
+        core/js/core.js \
         core/js/nextdom.class.js \
         core/js/private.class.js \
         core/js/eqLogic.class.js \
