@@ -18,7 +18,8 @@
         "twig/twig": "^2.5",
         "twig/extensions": "^1.5",
         "symfony/twig-bridge": "^3.4",
-        "maximebf/debugbar": "^1.15"
+        "maximebf/debugbar": "^1.15",
+        "twitter/bootstrap": "3.3.7"
     },
     "license": "GPL",
     "config": {

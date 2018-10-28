@@ -26,7 +26,7 @@ function gen_css {
 
 	# Remplacement des chemins
 	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-#g public/css/nextdom.css
-	sed -i s#\.\./fonts/glyphicons-#/3rdparty/bootstrap/fonts/glyphicons-#g public/css/nextdom.css
+	sed -i s#\.\./fonts/glyphicons-#/vendor/twitter/bootstrap/fonts/glyphicons-#g public/css/nextdom.css
 	sed -i s#\"images/ui-#\"/3rdparty/jquery.ui/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
 	sed -i 's/[\"]32px\.png/"\/3rdparty\/jquery\.tree\/themes\/default\/32px.png/g' public/css/nextdom.css
 	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.css
@@ -41,7 +41,7 @@ function gen_js {
 	echo " >>> Generation du JS"
     cat 3rdparty/jquery.utils/jquery.utils.js \
         3rdparty/iziToast/js/iziToast.min.js \
-        3rdparty/bootstrap/js/bootstrap.js \
+        vendor/twitter/bootstrap/dist/js/bootstrap.js \
         3rdparty/jquery.ui/jquery-ui.min.js \
         public/js/desktop/utils.js \
         core/js/core.js \
