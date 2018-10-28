@@ -75,7 +75,7 @@ if (is_dir('3rdparty/font-awesome/css/') && file_exists('3rdparty/font-awesome/c
             if ($number == 1) {
                 echo '<div class="row text-center">';
             }
-            echo '<div class="col-lg-1 divIconSel">';
+            echo '<div class="col-xs-2 col-md-1 col-lg-1 divIconSel">';
             $icon = str_replace(array(':', '.'), '', $match[0]);
             echo '<div class="divIconSel"><center><span class="iconSel"><i class="fa '.$icon.'"></i></span><br/><span class="iconDesc">'.str_replace("fa-", "", $icon).'</span></div>';
             echo '</div>';
