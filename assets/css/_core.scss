@@ -34,20 +34,12 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-@import "_buttons.scss";
-@import "_alerts.scss";
-@import "_scenario.scss";
-
 .default-cursor {
   cursor: default;
 }
 
 #md_pageHelp {
   display: none;
-}
-
-.cursor{
-  cursor : pointer;
 }
 
 .binary{
@@ -60,71 +52,8 @@
   display: inline-block;
 }
 
-#div_pageContainer {
-  position: relative;
-  overflow: hidden;
-  & .iconlist{
-    background-color : rgba(255,255,255,0);
-    padding : 10px;
-    border-radius: 2px;
-    margin : 10px;
-    cursor: pointer;
-  }
-}
-
-
 #jqueryLoadingDiv .overlay {
   background-image: url(/3rdparty/jquery.utils/gritter.png);
-}
-
-.plugin-item {
-  padding-right: 10px;
-  .img-responsive {
-    width: 20px;
-    display: inline-block;
-  }
-}
-
-.green{
-  background-color: $green;
-}
-
-.red{
-  background-color: $red;
-}
-
-.grey{
-  background-color: $gray;
-}
-
-.blue{
-  background-color: $blue;
-}
-.icon_blue{
-  color: $blue;
-}
-
-.icon_nextdom_blue{
-  color: $nextdom_blue;
-}
-
-.nextdom_blue{
-  color: $nextdom_blue;
-}
-.orange{
-  background-color: $orange;
-}
-
-.yellow{
-  background-color: $yellow;
-}
-
-.white{
-  background-color: $white;
-}
-
-.icon_white{
-  color: $white;
 }
 
 .eqLogic-battery {
@@ -133,13 +62,13 @@
       height:150px;
   }
   text-align: center;
-  &.good {
+  & .good {
     background-color: $good;
   }
-  &.warning {
+  & .warning {
     background-color: $warn;
   }
-  &.critical {
+  & .critical {
     background-color: $critical;
   }
   & .informations {
@@ -181,6 +110,36 @@
   }
 }
 
+/* Widget */
+.eqLogic-widget{
+  display: inline-block;
+  vertical-align: top;
+  border-radius: 4px;
+  max-width: 95%;
+  & .btn:not(.btn-circle){
+    border : none !important;
+    font-weight: bold;
+  }
+  & a{
+    color:inherit;
+  }
+}
+
+.cmd-widget{
+  display: inline-block;
+  position : relative;
+  vertical-align: top;
+  & .statistiques{
+    position : absolute;
+    bottom: 0;
+    font-size: 0.80em;
+    left : 0;
+    margin : 0;
+    padding: 0;
+    line-height:0px;
+  }
+}
+
 .eqLogic-percent {
   font:{
     size:1.2em;
@@ -189,42 +148,41 @@
   cursor:default;
 }
 
-.panel:hover{
-  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.15);
+/* Icons */
+.icon-big {
+  font-size : 4em;
+  color:$gray;
 }
-
 .icon_gestion {
   height : 120px;
   width : 140px;
-}
-
-.icon_gestion > i {
-  font-size : 4em;
-  margin-top:5px;
-}
-.icon_gestion > i > div >span{
-  font-size : 1em;
-  position:relative;
-  top : 15px;
-  word-break: break-all;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
-.icon_gestion img{
-  border:{
-    top:{
+  & > i {
+    font-size : 4em;
+    margin-top:5px;
+  }
+  & > i > div >span{
+    font-size : 1em;
+    position:relative;
+    top : 15px;
+    word-break: break-all;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  & img{
+    border:{
+      top:{
         left-radius: 10px;
         right-radius: 4px;
-    }
-    bottom:{
+      }
+      bottom:{
         left-radius: 4px;
         right-radius: 10px;
+      }
     }
+    margin-bottom: 5px;
+    padding: 4px;
+    box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
   }
-  margin-bottom: 5px;
-  padding: 4px;
-  box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 }
 
 .icon-health {
@@ -232,24 +190,20 @@
   font-size:0.9em;
 }
 
+/* Modal */
 .ui-dialog {
-  border-radius: 3px;
-  background-clip:0;
+  border-radius: 7px;
+  background-clip: unset;
   padding: 0px 0 0px 0px;
+  & .ui-dialog-titlebar-close {
+    right: 0.5em;
+    top: 70%;
+  }
 }
 
 .callout {
   border-radius: 3px;
   margin: 0 0 20px 5px;
-}
-
-html {
-  height: 100%;
-  /* The html and body elements cannot have any padding or margin. */
-}
-
-.sidebar-nav {
-  padding: 9px 0;
 }
 
 .cursor{
@@ -270,16 +224,6 @@ html {
   margin-top: 5px;
 }
 
-.eqLogic-widget{
-  display: inline-block;
-  vertical-align: top;
-  border-radius: 4px;
-  & .btn:not(.btn-circle){
-    border : none !important;
-    font-weight: bold;
-  }
-}
-
 .view-link-widget,.plan-link-widget{
   padding: 3px;
   margin: 3px;
@@ -287,26 +231,11 @@ html {
   vertical-align: top;
 }
 
-.eqLogic-widget a{
-  color:inherit;
-}
-
-.cmd-widget{
-  display: inline-block;
-  position : relative;
-  vertical-align: top;
-}
-
-.cmd-widget .statistiques{
-  position : absolute;
-  bottom: 0;
-  font-size: 0.80em;
-  left : 0;
-  margin : 0;
-  padding: 0;
-  line-height:0px;
-}
-
-::-webkit-scrollbar-track-piece{
-  background-color:transparent
+.eqLogicThumbnailContainer> div {
+  background-color: rgba(0,0,0,0) !important;
+  margin: {
+    top:0;
+  }
+  box-shadow: none;
+  border: none;
 }
