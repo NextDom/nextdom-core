@@ -122,11 +122,12 @@
                             {% endif %}
                             <div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordionHealth" href="#config_{{ pluginData['plugin'].getId() }}">
                                 <h3 class="box-title">
-                                    <img style="height : 20px;padding-right:5px;" src="{{ pluginData['plugin'].getPathImgIcon() }}"/>{{ 'Santé' }} {{ pluginData['plugin'].getName() }}
+                                    <img style="height : 20px;padding-right:10px;" src="{{ pluginData['plugin'].getPathImgIcon() }}"/>{{ 'Santé' }} {{ pluginData['plugin'].getName() }}
                                 </h3>
                                 {% if pluginData['port'] %}
-                                    <i class="fas fa-sort pull-right" data-toggle="tooltip" title="" data-original-title="{{ 'Port configuré' }}">&nbsp;&nbsp;</i>
-                                    <span data-toggle="tooltip" title="" data-original-title="{{ 'Port configuré' }}" class="pull-right">{{ pluginData['port']|capitalize }}</span>
+                                    <div class="fas fa-sort pull-right" data-toggle="tooltip" title="" data-original-title="{{ 'Port configuré' }}"></i>
+                                        <a data-toggle="tooltip" title="" data-original-title="{{ 'Port configuré' }}" class="pull-right">{{ pluginData['port']|capitalize }}</a>
+                                    </div>
                                 {% endif %}
                                 <i class="fas fa-cogs bt_configurationPlugin cursor pull-right" data-pluginid="{{ pluginData['plugin'].getId() }}"></i>
                                 {% if pluginData['hasSpecificHealth'] %}
