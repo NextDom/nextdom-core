@@ -349,7 +349,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = '/3rdparty/iziToast/js/iziToast.min.js';
             $pageData['JS_POOL'][] = '/vendor/twitter/bootstrap/dist/js/bootstrap.js';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.ui/jquery-ui.min.js';
+            $pageData['JS_POOL'][] = '/vendor/components/jqueryui/jquery-ui.min.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
             $pageData['JS_POOL'][] = '/core/js/core.js';
             $pageData['JS_POOL'][] = '/core/js/nextdom.class.js';
