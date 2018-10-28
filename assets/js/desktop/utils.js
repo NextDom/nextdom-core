@@ -1053,13 +1053,3 @@ function toggleFullScreen() {
     }
 }
 
-window.onscroll = function scrollFunction() {
-    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        var goOnTopButton = document.getElementById("bt_goOnTop");
-        if (goOnTopButton !== undefined) {
-            goOnTopButton.style.display = "block";
-        } else {
-            goOnTopButton.style.display = "none";
-        }
-    }
-}

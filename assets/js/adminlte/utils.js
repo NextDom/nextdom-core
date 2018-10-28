@@ -41,6 +41,20 @@ if ($('[role="dialog"] .fab').length == 0) {
     $('.fab').css('display', 'none');
 }
 
+window.onscroll = function() {
+    var goOnTopButton = document.getElementById("bt_goOnTop");
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        if (goOnTopButton !== undefined) {
+            goOnTopButton.style.display = "block";
+        } else {
+            goOnTopButton.style.display = "none";
+        }
+    }
+    else {
+        goOnTopButton.style.display = "none";
+    }
+};
+
 $('#bt_goOnTop').click(function() {
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
