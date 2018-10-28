@@ -103,7 +103,7 @@
     <ul class="fab-buttons">
         {% for child in dashboardChildrenObjects %}
             {% if child.getConfiguration('hideOnDashboard') == 0 %}
-                <li class="fab-buttons__item"><a class="fab-buttons__link" data-tooltip="{{ child.getName() }}" style="cursor: pointer;background-color:{{ child.getDisplay("tagColor") }}" onclick='selectCategory("{{ categoryCode }}");'><i class="{{ child.getDisplay("icon")|raw }}"></i></a></li>
+                <li class="fab-buttons__item"><a class="fab-buttons__link" data-tooltip="{{ child.getName() }}" style="cursor: pointer;background-color:{{ child.getDisplay("tagColor") }}" onclick='selectCategory("{{ categoryCode }}");'>{{ child.getDisplay("icon")|raw }}</a></li>
             {% endif %}
         {% endfor %}
     </ul>
