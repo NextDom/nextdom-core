@@ -70,7 +70,6 @@ class PrepareView
     public static function showRescueMode($configs)
     {
         global $language;
-        global $configs;
 
         if (!in_array(Utils::init('p'), array('custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system'))) {
             $_GET['p'] = 'system';
