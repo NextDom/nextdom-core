@@ -90,7 +90,7 @@ function gen_js {
         3rdparty/codemirror/mode/xml/xml.js \
         3rdparty/codemirror/mode/javascript/javascript.js \
         3rdparty/codemirror/mode/css/css.js \
-        3rdparty/jquery.tree/jstree.min.js \
+        vendor/vakata/jstree/dist/jstree.min.js \
         3rdparty/jquery.fileupload/jquery.ui.widget.js \
         3rdparty/jquery.fileupload/jquery.iframe-transport.js \
         3rdparty/jquery.fileupload/jquery.fileupload.js \

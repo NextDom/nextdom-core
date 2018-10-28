@@ -397,7 +397,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/3rdparty/codemirror/mode/xml/xml.js';
             $pageData['JS_POOL'][] = '/3rdparty/codemirror/mode/javascript/javascript.js';
             $pageData['JS_POOL'][] = '/3rdparty/codemirror/mode/css/css.js';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.tree/jstree.min.js';
+            $pageData['JS_POOL'][] = '/vendor/vakata/jstree/dist/jstree.min.js';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.fileupload/jquery.ui.widget.js';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.fileupload/jquery.iframe-transport.js';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.fileupload/jquery.fileupload.js';
