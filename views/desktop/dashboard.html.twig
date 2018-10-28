@@ -40,7 +40,7 @@
         {% else %}
         <div class="col-xs-{{ dashboardObject.getDisplay('dashboard::size', 12) }}">
             {% endif %}
-            <div class="card card-dash" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}25;border-color:{}{ dashboardObject.getDisplay("tagColor") }}50;" data-father_id="{{ dashboardObject.getFather_id() }}">
+            <div class="card card-dash" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}25;border-color:{{ dashboardObject.getDisplay("tagColor") }}50;" data-father_id="{{ dashboardObject.getFather_id() }}">
                 <div class="card-header card-header-icon">
                     <div class="card-icon" style="background:{{ dashboardObject.getDisplay("tagColor") }}">
                         {{ dashboardObject.getDisplay("icon")|raw }}</i>
