@@ -59,35 +59,35 @@ foreach (ls('public/icon', '*') as $dir) {
 
 ?>
 <?php
-  		$matches="";
-  		$css="";
-  		$height=0;
-		$icon="";
-      if (is_dir('3rdparty/font-awesome/css/') && file_exists('3rdparty/font-awesome/css/font-awesome.css')) {
-        $css = file_get_contents('3rdparty/font-awesome/css/font-awesome.css');
-        preg_match_all("/\.fa" . "-(.*?):/", $css, $matches, PREG_SET_ORDER);
-        $height = (ceil(count($matches) / 14) * 40) + 80;
-        echo '<div style="height : ' . $height . 'px;"><legend>{{font-awesome}}</legend>';
+$matches="";
+$css="";
+$height=0;
+$icon="";
+if (is_dir('3rdparty/font-awesome/css/') && file_exists('3rdparty/font-awesome/css/font-awesome.css')) {
+    $css = file_get_contents('3rdparty/font-awesome/css/font-awesome.css');
+    preg_match_all("/\.fa" . "-(.*?):/", $css, $matches, PREG_SET_ORDER);
+    $height = (ceil(count($matches) / 14) * 40) + 80;
+    echo '<div><legend>{{font-awesome}}</legend>';
 
-        $number = 1;
-        foreach ($matches as $match) {
-            if (isset($match[0])) {
-                if ($number == 1) {
-                    echo '<div class="row text-center">';
-                }
-                echo '<div class="col-lg-1 divIconSel">';
-                $icon = str_replace(array(':', '.'), '', $match[0]);
-                echo '<div class="divIconSel"><center><span class="iconSel"><i class="fa '.$icon.'"></i></span><br/><span class="iconDesc">'.str_replace("fa-", "", $icon).'</span></div>';
-                echo '</div>';
-                if ($number == 12) {
-                    echo '</div>';
-                    $number = 0;
-                }
-                $number++;
+    $number = 1;
+    foreach ($matches as $match) {
+        if (isset($match[0])) {
+            if ($number == 1) {
+                echo '<div class="row text-center">';
             }
+            echo '<div class="col-xs-2 col-md-1 col-lg-1 divIconSel">';
+            $icon = str_replace(array(':', '.'), '', $match[0]);
+            echo '<div class="divIconSel"><center><span class="iconSel"><i class="fa '.$icon.'"></i></span><br/><span class="iconDesc">'.str_replace("fa-", "", $icon).'</span></div>';
+            echo '</div>';
+            if ($number == 12) {
+                echo '</div>';
+                $number = 0;
+            }
+            $number++;
         }
-        echo "</div><br/>";
     }
+    echo "</div><br/>";
+}
 ?>
 <script>
     $('#in_iconSelectorSearch').on('keyup',function(){
