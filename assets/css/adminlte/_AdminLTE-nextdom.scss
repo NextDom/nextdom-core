@@ -536,6 +536,9 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   margin: 4px 0px;
   padding: 0px 10px;
 }
+.nav>.label-log>a {
+    padding: 10px 10px;
+}
 @media (max-width: 767px) {
   .legend-title {
     text-align: center;
