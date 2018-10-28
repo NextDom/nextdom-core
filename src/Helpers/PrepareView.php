@@ -101,19 +101,10 @@ class PrepareView
 
         $pageData['MENU'] = $render->get('commons/menu_rescue.html.twig');
 
-        try {
-            if (!\nextdom::isStarted()) {
-                $pageData['alertMsg'] = 'NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.';
-            }
-            ob_start();
-            \include_file('desktop', $page, 'php');
-            $pageData['content'] = ob_get_clean();
-        } catch (\Exception $e) {
-            ob_end_clean();
-            $pageData['alertMsg'] = displayException($e);
+        if (!\nextdom::isStarted()) {
+            $pageData['alertMsg'] = 'NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.';
         }
-
-        $pageData['CONTENT'] = $render->get('desktop/index.html.twig', $pageData);
+        $pageData['CONTENT'] = self::getContent($render, $pageData, $page, null);
 
         $render = Render::getInstance();
         $render->show('layouts/base_rescue.html.twig', $pageData);
