@@ -15,34 +15,43 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#jqueryLoadingDiv{
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+#jqueryLoadingDiv {
     position: fixed;
-    top:0px;
-    left:0px;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     z-index: 99998;
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
-#jqueryLoadingDiv .overlay{
-    top:0px;
-    left:0px;
-    width: 100%;
-    height: 100%;
-    opacity:0.4;
-    filter:alpha(opacity=40);
-    background-repeat:repeat;
-    z-index: 99998;
-}
-
-#jqueryLoadingDiv .loadingImg{
-    opacity:2;
-    filter:alpha(opacity=200);
+#jqueryLoadingDiv .loadingImg {
     position: absolute;
     font-size : 15em;
-    top: 41%;
-    left : 41%;
+    top: 50%;
+    left: 50%;
     z-index: 99999;
     border: none;
     outline-style: none;
+    transform: translate(-50%, -50%);
 }
