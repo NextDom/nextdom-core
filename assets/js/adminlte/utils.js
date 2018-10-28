@@ -43,15 +43,12 @@ if ($('[role="dialog"] .fab').length == 0) {
 
 window.onscroll = function() {
     var goOnTopButton = document.getElementById("bt_goOnTop");
-    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        if (goOnTopButton !== undefined) {
+    if (goOnTopButton !== undefined && goOnTopButton !== null) {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
             goOnTopButton.style.display = "block";
         } else {
             goOnTopButton.style.display = "none";
         }
-    }
-    else {
-        goOnTopButton.style.display = "none";
     }
 };
 
