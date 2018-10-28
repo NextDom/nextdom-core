@@ -85,7 +85,7 @@ class Router
     public function desktopView()
     {
         if (isset($_GET['modal'])) {
-            $this->showModal();
+            PrepareView::showModal();
         } elseif (isset($_GET['configure'])) {
             $this->showConfiguration();
         } elseif (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
@@ -119,24 +119,6 @@ class Router
                     PrepareView::showContent($configs);
                 }
             }
-        }
-    }
-
-    /**
-     * Viewing a modal on a computer
-     *
-     * @throws \Exception
-     */
-    private function showModal()
-    {
-        try {
-            \include_file('core', 'authentification', 'php');
-            \include_file('desktop', Utils::init('modal'), 'modal', Utils::init('plugin'), true);
-        } catch (\Exception $e) {
-            ob_end_clean();
-            echo '<div class="alert alert-danger div_alert">';
-            echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
-            echo '</div>';
         }
     }
 

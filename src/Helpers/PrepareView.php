@@ -476,4 +476,45 @@ class PrepareView
         }
     }
 
+    public static function showModal()
+    {
+        error_log('MODAL');
+        $error = false;
+        \include_file('core', 'authentification', 'php');
+        $plugin = Utils::init('plugin', '');
+        $modalCode = Utils::init('modal', '');
+        error_log('Modal code : '.$modalCode);
+        // Affichage d'un modal appartenant à un plugin
+        if ($plugin != '') {
+            error_log('PLUGIN MODAL');
+            try {
+                \include_file('desktop', $modalCode, 'modal', $plugin, true);
+            } catch (\Exception $e) {
+                echo '<div class="alert alert-danger div_alert">';
+                echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
+                echo '</div>';
+            }
+        }
+        // Affichage d'un modal du core
+        else {
+            error_log('CORE MODAL');
+            $modalRoute = ModalsController::getRoute($modalCode);
+            if ($modalRoute == null) {
+                error_log('OLD MODAL');
+                try {
+                    \include_file('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
+                } catch (\Exception $e) {
+                    echo '<div class="alert alert-danger div_alert">';
+                    echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
+                    echo '</div>';
+                }
+            }
+            else {
+                error_log('NEW MODAL');
+                $render = Render::getInstance();
+                \NextDom\Helpers\ModalsController::$modalRoute($render);
+            }
+        }
+    }
+
 }
