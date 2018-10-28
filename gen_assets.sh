@@ -100,7 +100,7 @@ function gen_js {
         3rdparty/jquery.contextMenu/jquery.contextMenu.min.js \
         3rdparty/autosize/autosize.min.js \
         3rdparty/inputmask/jquery.inputmask.bundle.js \
-        3rdparty/bootstrap-colorpicker/js/bootstrap-colorpicker.js \
+        vendor/itsjavi/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
         3rdparty/datetimepicker/jquery.datetimepicker.js  > /tmp/temp.js
     python -m jsmin /tmp/temp.js > public/js/base.js
     rm /tmp/temp.js
