@@ -101,7 +101,7 @@
 <div class="fab fab-ter">
     <span class="fab-action-button"><i class="fab-action-button__icon fas fa-clone"></i></span>
     <ul class="fab-buttons">
-        {% for child in MENU_JEEOBJECT_TREE %}
+        {% for child in dashboardChildrenObjects %}
             {% if child.getConfiguration('hideOnDashboard') == 0 %}
                 <li class="fab-buttons__item"><a class="fab-buttons__link" data-tooltip="{{ child.getName() }}" style="cursor: pointer;background-color:{{ child.getDisplay("tagColor") }}" onclick='selectCategory("{{ categoryCode }}");'>{{ child.getDisplay("icon")|raw }}</a></li>
             {% endif %}
