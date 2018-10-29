@@ -40,7 +40,7 @@
         {% else %}
         <div class="col-xs-{{ dashboardObject.getDisplay('dashboard::size', 12) }}">
             {% endif %}
-            <div class="card" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}25;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ dashboardObject.getDisplay("tagColor") }}50;" data-father_id="{{ dashboardObject.getFather_id() }}">
+            <div class="card card-dash" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}25;border-color:{{ dashboardObject.getDisplay("tagColor") }}50;" data-father_id="{{ dashboardObject.getFather_id() }}">
                 <div class="card-header card-header-icon">
                     <div class="card-icon" style="background:{{ dashboardObject.getDisplay("tagColor") }}">
                         {{ dashboardObject.getDisplay("icon")|raw }}</i>
@@ -48,14 +48,14 @@
                     <a class="card-category" style="color:{{ dashboardObject.getDisplay("tagColor") }}"><b>{{ dashboardObject.getName() }}</b></a>
                 </div>
                 <div class="card-body">
-                    <div class="div_displayEquipement" id="div_ob{{ dashboardObject.getId() }}" style="width: 100%;padding-top:3px;margin-bottom : 3px;">
+                    <div class="div_displayEquipement" id="div_ob{{ dashboardObject.getId() }}">
                         <script>getObjectHtml({{ dashboardObject.getId()}})</script>
                     </div>
                 </div>
             </div>
             {% for child in dashboardChildrenObjects %}
                 {% if child.getConfiguration('hideOnDashboard') == 0 %}
-                    <div class="card div_object" style="background-color:{{ child.getDisplay("tagColor") }}25;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ child.getDisplay("tagColor") }}50"; data-father_id="{{ child.getFather_id() }}">
+                    <div class="card card-dash div_object" style="background-color:{{ child.getDisplay("tagColor") }}25;border-color:{{ child.getDisplay("tagColor") }}50"; data-father_id="{{ child.getFather_id() }}">
                         <div class="card-header card-header-icon">
                             <div class="card-icon text-center" style="background:{{ child.getDisplay("tagColor") }}">
                                 {{ child.getDisplay("icon")|raw }}</i>
@@ -63,7 +63,7 @@
                             <p class="card-category" style="color:{{ child.getDisplay("tagColor") }}"><b>{{ child.getName() }}</b></p>
                         </div>
                         <div class="card-body">
-                            <div class="div_displayEquipement" id="div_ob{{ child.getId() }}" style="width: 100%;padding-top:3px;margin-bottom : 3px;">
+                            <div class="div_displayEquipement" id="div_ob{{ child.getId() }}">
                                 <script>getObjectHtml({{ child.getId() }})</script>
                             </div>
                         </div>
@@ -81,15 +81,15 @@
         </span>
         <ul class="fab-buttons">
             {% if dashboardCategory =='all' %}
-                <li class="fab-buttons__item"><a class="fab-buttons__link" data-tooltip="toutes" style="cursor: pointer;background-color:green" onclick='selectCategory("all");'><i class="fas fa-asterisk"></i></a></li>
+                <li class="fab-buttons__item cursor"><a class="fab-buttons__link" data-tooltip="toutes" style="background-color:green" onclick='selectCategory("all");'><i class="fas fa-asterisk"></i></a></li>
             {% else %}
-                <li class="fab-buttons__item"><a class="fab-buttons__link" data-tooltip="toutes" style="cursor: pointer;" onclick='selectCategory("all");'><i class="icon-material fas fa-asterisk"></i></a></li>
+                <li class="fab-buttons__item cursor"><a class="fab-buttons__link" data-tooltip="toutes" onclick='selectCategory("all");'><i class="icon-material fas fa-asterisk"></i></a></li>
             {% endif %}
             {% for categoryCode, category in dashboardCategories %}
                 {% if dashboardCategory == categoryCode %}
-                    <li class="fab-buttons__item"><a class="fab-buttons__link" data-tooltip="{{ category.name|trans }}" style="cursor: pointer;background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}");'><i class="{{ category.icon }}"></i></a></li>
+                    <li class="fab-buttons__item cursor"><a class="fab-buttons__link" data-tooltip="{{ category.name|trans }}" style="background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}");'><i class="{{ category.icon }}"></i></a></li>
                 {% else %}
-                    <li class="fab-buttons__item"><a class="fab-buttons__link" data-tooltip="{{ category.name|trans }}" style="cursor: pointer;background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}");'><i class="{{ category.icon }}"></i></a></li>
+                    <li class="fab-buttons__item cursor"><a class="fab-buttons__link" data-tooltip="{{ category.name|trans }}" style="background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}");'><i class="{{ category.icon }}"></i></a></li>
                 {% endif %}
             {% endfor %}
         </ul>
