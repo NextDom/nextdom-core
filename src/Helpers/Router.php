@@ -143,7 +143,7 @@ class Router
         try {
             \include_file('core', 'authentification', 'php');
             $page = Utils::init('p');
-            $controllerRoute = Controller::getRoute($page);
+            $controllerRoute = PagesController::getRoute($page);
             if ($controllerRoute === null) {
                 self::showError404AndDie();
             } else {
@@ -153,7 +153,7 @@ class Router
                 $pageContent['JS_END_POOL'] = [];
                 $pageContent['CSS_POOL'] = [];
                 $pageContent['JS_VARS'] = [];
-                $pageContent['content'] = \NextDom\Helpers\Controller::$controllerRoute($render, $pageContent);
+                $pageContent['content'] = PagesController::$controllerRoute($render, $pageContent);
                 $render->show('/layouts/ajax_content.html.twig', $pageContent);
             }
         } catch (\Exception $e) {

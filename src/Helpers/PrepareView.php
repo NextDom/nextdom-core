@@ -21,7 +21,7 @@ use NextDom\Helpers\Status;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Helpers\Controller;
+use NextDom\Helpers\PagesController;
 
 /**
  * Classe de support à l'affichage des contenus HTML
@@ -458,7 +458,7 @@ class PrepareView
             \include_file('desktop', $page, 'php', $currentPlugin->getId(), true);
             return ob_get_clean();
         } else {
-            $controllerRoute = Controller::getRoute($page);
+            $controllerRoute = PagesController::getRoute($page);
             if ($controllerRoute == null) {
                 // Vérifie que l'utilisateur n'essaie pas de sortir
                 $purgedPage = preg_replace('/[^a-z0-9_-]/i', '', $page);
@@ -471,7 +471,7 @@ class PrepareView
                     Router::showError404AndDie();
                 }
             } else {
-                return \NextDom\Helpers\Controller::$controllerRoute($render, $pageContent);
+                return \NextDom\Helpers\PagesController::$controllerRoute($render, $pageContent);
             }
         }
     }
