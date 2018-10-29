@@ -199,14 +199,14 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 /* Treeview */
 .treeview-menu {
-  padding: 5px 5px;
+  padding: 5px 0px;
   &> li {
     padding-top: 1px;
     padding-bottom: 1px;
   }
 }
 .treeview-menu > li > a {
-  padding: 5px 0px 5px 9px;
+  padding: 5px 0px 5px 15px;
   word-break: break-all;
   white-space: normal;
 }
