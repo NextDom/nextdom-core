@@ -36,7 +36,7 @@
 <div id="div_Update-view" class="blurPanel">
     <div class="box">
         <div class="box-body">
-            <i class="fas fa-clock-o" style="cursor:default;">&nbsp;&nbsp;</i><span style="cursor:default;">{{ 'Dernière vérification : ' }}</span><span class="label label-info" id="span_lastUpdateCheck" style="margin-bottom: 10px;font-size:1em;cursor:default;"></span>
+            <div class="form-group"><i class="fas fa-clock-o">&nbsp;&nbsp;</i><span>{{ 'Dernière vérification : ' }}</span><span class="label label-info label-sticker" id="span_lastUpdateCheck"></span></div>
             <input class="form-control" placeholder="{{ 'Rechercher...' }}" id="in_searchPlugin"/>
         </div>
     </div>
@@ -62,7 +62,7 @@
         <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_updateNextDom" title="" data-tooltip="{{ 'Mise à jour selective' }}"><i class="fas fa-check"></i></a></li>
     </ul>
 </div>
-<div class="fab fab-bis" style="z-index:999">
+<div class="fab fab-bis">
     <a class="fab-action-button bg-red-active" href="index.php?v=d&p=administration"><i class="fab-action-button__icon fas fa-chevron-left"></i></a>
 </div>
 
@@ -124,5 +124,5 @@
             </div>
         </fieldset>
     </form>
-    <a class="btn btn-success pull-right" style="color:white;" id="bt_doUpdate"><i class="fas fa-check"></i> {{ 'Mettre à jour' }}</a>
+    <a class="btn btn-success pull-right" id="bt_doUpdate"><i class="fas fa-check"></i> {{ 'Mettre à jour' }}</a>
 </div>
