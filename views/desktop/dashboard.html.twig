@@ -46,7 +46,7 @@
                     <div class="card-icon" style="background:{{ dashboardObject.getDisplay("tagColor") }}">
                         {{ dashboardObject.getDisplay("icon")|raw }}</i>
                     </div>
-                    <a class="card-category" style="color:{{ dashboardObject.getDisplay("tagColor") }}"><b>{{ dashboardObject.getName() }}{{ profilsUser.getOptions("displayObjetFab") }}</b></a>
+                    <a class="card-category" style="color:{{ dashboardObject.getDisplay("tagColor") }}"><b>{{ dashboardObject.getName() }}</b></a>
                 </div>
                 <div class="card-body">
                     <div class="div_displayEquipement" id="div_ob{{ dashboardObject.getId() }}" style="width: 100%;padding-top:3px;margin-bottom : 3px;">
@@ -100,7 +100,7 @@
         <a class="fab-action-button cursor dashMode" id="bt_editDashboardWidgetOrder" data-mode="0" ><i class="fab-action-button__icon fas fa-pencil-alt"></i></a>
     </div>
 {% endif %}
-{% if 1 == 1 %}
+{% if profilsUser.getOptions('displayObjetFab', 0) == 1 %}
     <div class="fab fab-ter">
         <span class="fab-action-button"><i class="fab-action-button__icon fas fa-clone"></i></span>
         <ul class="fab-buttons fab-scroll">
