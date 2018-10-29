@@ -50,7 +50,7 @@
                             <li class="treeview-menu">
                             <li><a href="index.php?v=d&p=dashboard"><i class="fas fa-asterisk"></i>{{ 'Objet par défaut' }}</a></li>
                             {% for jeeObject in MENU_JEEOBJECT_TREE %}
-                                <li style="padding-left:{{ (jeeObject.parentNumber()-1)*5 }}px"><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
+                                <li style="padding-left:{{ (jeeObject.parentNumber()-1)*7 }}px"><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
                             {% endfor %}
                         </ul>
                     </li>
