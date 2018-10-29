@@ -102,7 +102,9 @@
     <span class="fab-action-button"><i class="fab-action-button__icon fas fa-clone"></i></span>
     <ul class="fab-buttons fab-scroll">
         {% for child in dashboardChildrenObjects %}
-            <li class="fab-buttons__item cursor"><a class="fab-buttons__link" data-tooltip="{{ child.getName() }}" style="background-color:{{ child.getDisplay("tagColor") }}" href="index.php?v=d&p=dashboard&object_id={{ child.getId() }}">{{ child.getDisplay("icon")|raw }}</a></li>
+            {% if child.parentNumber() == '1' %}
+                <li class="fab-buttons__item cursor"><a class="fab-buttons__link" data-tooltip="{{ child.getName() }}" style="background-color:{{ child.getDisplay("tagColor") }}" href="index.php?v=d&p=dashboard&object_id={{ child.getId() }}">{{ child.getDisplay("icon")|raw }}</a></li>
+            {% endif %}
         {% endfor %}
     </ul>
     <ul class="fab-buttons">
