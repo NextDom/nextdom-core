@@ -100,7 +100,7 @@
         <a class="fab-action-button cursor dashMode" id="bt_editDashboardWidgetOrder" data-mode="0" ><i class="fab-action-button__icon fas fa-pencil-alt"></i></a>
     </div>
 {% endif %}
-{% isset(userProfils.doNotAutoObjetFab) and userProfils.doNotAutoObjetFab == 1 %}
+{% if (isset(userProfils.doNotAutoObjetFab) and userProfils.doNotAutoObjetFab == 1) %}
     <div class="fab fab-ter">
         <span class="fab-action-button"><i class="fab-action-button__icon fas fa-clone"></i></span>
         <ul class="fab-buttons fab-scroll">
