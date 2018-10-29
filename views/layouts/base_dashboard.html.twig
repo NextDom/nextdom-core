@@ -9,6 +9,9 @@
         {{ CONTENT | raw }}
     </div>
 </div>
+<div class="fab fab-left">
+    <a class="fab-action-button cursor" style="display: none;" id="bt_goOnTop"><i class="fab-action-button__icon fas fa-angle-double-up"></i></a>
+</div>
 {% if JS_END_POOL is defined %}
 {% for jsFile in JS_END_POOL %}
     <script src="{{ jsFile }}"></script>
