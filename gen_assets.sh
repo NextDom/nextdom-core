@@ -43,7 +43,7 @@ function gen_js {
         3rdparty/iziToast/js/iziToast.min.js \
         vendor/twitter/bootstrap/dist/js/bootstrap.js \
         vendor/components/jqueryui/jquery-ui.min.js \
-        public/js/desktop/utils.js \
+        assets/js/desktop/utils.js \
         core/js/core.js \
         core/js/nextdom.class.js \
         core/js/private.class.js \
