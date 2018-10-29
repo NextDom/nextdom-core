@@ -112,7 +112,7 @@
   position: absolute;
   left: 0;
   right: -3px;
-  bottom: 40px;
+  bottom: 30px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -124,7 +124,6 @@
 
 .fab-buttons__item {
   display: block;
-  text-align: center;
   margin: 12px 0;
   font-size: 1.3em;
   vertical-align: middle;
@@ -144,6 +143,7 @@
   -webkit-transition: .3s;
   -o-transition: .3s;
   transition: .3s;
+  text-align: center;
 }
 
 .blur {
@@ -186,4 +186,15 @@
 
 *[class^="fab"]{
   cursor : pointer;
+}
+
+.fab-scroll {
+  overflow-y: scroll;
+  width: 300px;
+  padding: 10px 10px;
+  bottom: 0px;
+  right: 50px;
+  text-align: right;
+  padding-bottom: 0px;
+  max-height: 600px;
 }
