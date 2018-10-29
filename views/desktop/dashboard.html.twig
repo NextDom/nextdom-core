@@ -40,19 +40,21 @@
     {% else %}
     <div class="col-xs-{{ dashboardObject.getDisplay('dashboard::size', 12) }}">
     {% endif %}
-        <div class="card" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}25;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ dashboardObject.getDisplay("tagColor") }}50;" data-father_id="{{ dashboardObject.getFather_id() }}">
-            <div class="card-header card-header-icon">
-                <div class="card-icon" style="background:{{ dashboardObject.getDisplay("tagColor") }}">
-                    {{ dashboardObject.getDisplay("icon")|raw }}</i>
+        {% if dashboardObject.getConfiguration('hideOnDashboard') == 0 %}
+            <div class="card" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}25;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ dashboardObject.getDisplay("tagColor") }}50;" data-father_id="{{ dashboardObject.getFather_id() }}">
+                <div class="card-header card-header-icon">
+                    <div class="card-icon" style="background:{{ dashboardObject.getDisplay("tagColor") }}">
+                        {{ dashboardObject.getDisplay("icon")|raw }}</i>
+                    </div>
+                    <a class="card-category" style="color:{{ dashboardObject.getDisplay("tagColor") }}"><b>{{ dashboardObject.getName() }}</b></a>
                 </div>
-                <a class="card-category" style="color:{{ dashboardObject.getDisplay("tagColor") }}"><b>{{ dashboardObject.getName() }}</b></a>
-            </div>
-            <div class="card-body">
-                <div class="div_displayEquipement" id="div_ob{{ dashboardObject.getId() }}" style="width: 100%;padding-top:3px;margin-bottom : 3px;">
-                    <script>getObjectHtml({{ dashboardObject.getId()}})</script>
+                <div class="card-body">
+                    <div class="div_displayEquipement" id="div_ob{{ dashboardObject.getId() }}" style="width: 100%;padding-top:3px;margin-bottom : 3px;">
+                        <script>getObjectHtml({{ dashboardObject.getId()}})</script>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
         {% for child in dashboardChildrenObjects %}
             {% if child.getConfiguration('hideOnDashboard') == 0 %}
                 <div class="card div_object" style="background-color:{{ child.getDisplay("tagColor") }}25;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ child.getDisplay("tagColor") }}50"; data-father_id="{{ child.getFather_id() }}">
@@ -102,7 +104,7 @@
     <span class="fab-action-button"><i class="fab-action-button__icon fas fa-clone"></i></span>
     <ul class="fab-buttons fab-scroll">
         {% for child in dashboardChildrenObjects %}
-            {% if child.parentNumber() == 1 %}
+            {% if child.parentNumber() == dashboardObject.parentNumber()+1 %}
                 <li class="fab-buttons__item cursor"><a class="fab-buttons__link" data-tooltip="{{ child.getName() }}" style="background-color:{{ child.getDisplay("tagColor") }}" href="index.php?v=d&p=dashboard&object_id={{ child.getId() }}">{{ child.getDisplay("icon")|raw }}</a></li>
             {% endif %}
         {% endfor %}
