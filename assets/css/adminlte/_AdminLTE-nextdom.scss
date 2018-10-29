@@ -154,12 +154,12 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 /* Treeview */
 .treeview-menu {
-  padding: 5px 5px;
-  &> li {
+  padding: 5px 0px;
+  & > li {
     padding-top: 1px;
     padding-bottom: 1px;
     & > a {
-      padding: 5px 0px 5px 9px;
+      padding: 5px 0px 5px 15px;
       word-break: break-all;
       white-space: normal;
       & >.icon {
@@ -322,6 +322,10 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   font-size: 16px;
   top: -8px;
 }
+.card-dash {
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid;
+}
 
 /* Alert popup */
 .alert-config,
@@ -393,6 +397,9 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   margin: 4px 0px;
   padding: 19px;
 }
+.nav>.label-log>a {
+  padding: 10px 10px;
+}
 .label-log {
   font-size: 95%;
   border: 1px solid;
@@ -421,7 +428,7 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     top: 2px;
     bottom: 2px;
   }
-  &>i {
+  & >i {
     vertical-align: middle;
   }
 }
