@@ -26,13 +26,13 @@ function gen_css {
 
 	# Remplacement des chemins
 	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-#g public/css/nextdom.css
-	sed -i s#\.\./fonts/glyphicons-#/3rdparty/bootstrap/fonts/glyphicons-#g public/css/nextdom.css
-	sed -i s#\"images/ui-#\"/3rdparty/jquery.ui/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
+#	sed -i s#\.\./fonts/glyphicons-#/vendor/twitter/bootstrap/fonts/glyphicons-#g public/css/nextdom.css
+	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
 	sed -i 's/[\"]32px\.png/"\/3rdparty\/jquery\.tree\/themes\/default\/32px.png/g' public/css/nextdom.css
 	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.css
 
 	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-# public/css/nextdom.mob.css
-	sed -i s#\"images/ui-#\"/3rdparty/jquery.ui/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
+	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
 	sed -i 's/[\"]32px\.png/\/3rdparty\/jquery\.tree\/themes\/default\/32.png/g' public/css/nextdom.mob.css
 	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.mob.css
 }
@@ -41,8 +41,8 @@ function gen_js {
 	echo " >>> Generation du JS"
     cat 3rdparty/jquery.utils/jquery.utils.js \
         3rdparty/iziToast/js/iziToast.min.js \
-        3rdparty/bootstrap/js/bootstrap.js \
-        3rdparty/jquery.ui/jquery-ui.min.js \
+        vendor/twitter/bootstrap/dist/js/bootstrap.js \
+        vendor/components/jqueryui/jquery-ui.min.js \
         assets/js/desktop/utils.js \
         core/js/core.js \
         core/js/nextdom.class.js \
@@ -90,7 +90,7 @@ function gen_js {
         3rdparty/codemirror/mode/xml/xml.js \
         3rdparty/codemirror/mode/javascript/javascript.js \
         3rdparty/codemirror/mode/css/css.js \
-        3rdparty/jquery.tree/jstree.min.js \
+        vendor/vakata/jstree/dist/jstree.min.js \
         3rdparty/jquery.fileupload/jquery.ui.widget.js \
         3rdparty/jquery.fileupload/jquery.iframe-transport.js \
         3rdparty/jquery.fileupload/jquery.fileupload.js \
@@ -100,7 +100,7 @@ function gen_js {
         3rdparty/jquery.contextMenu/jquery.contextMenu.min.js \
         3rdparty/autosize/autosize.min.js \
         3rdparty/inputmask/jquery.inputmask.bundle.js \
-        3rdparty/bootstrap-colorpicker/js/bootstrap-colorpicker.js \
+        vendor/itsjavi/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
         3rdparty/datetimepicker/jquery.datetimepicker.js  > /tmp/temp.js
     python -m jsmin /tmp/temp.js > public/js/base.js
     rm /tmp/temp.js
