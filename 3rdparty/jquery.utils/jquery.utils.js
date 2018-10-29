@@ -260,7 +260,7 @@
                                     $('#div_loadingSpinner').show()
                                 } else {
                                     if ($('#jqueryLoadingDiv').length == 0) {
-                                        $('body').append('<div id="jqueryLoadingDiv"><div class="overlay"></div><i class="fa fa-refresh fa-spin loadingImg icon_theme_color"></i></div>');
+                                        $('body').append('<div id="jqueryLoadingDiv"><div class="loadingImg"><i class="fa fa-refresh fa-spin icon_theme_color"></i></div></div>');
                                     }
                                     $('#jqueryLoadingDiv').show();
                                 }
