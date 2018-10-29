@@ -102,12 +102,10 @@
     <span class="fab-action-button"><i class="fab-action-button__icon fas fa-clone"></i></span>
     <ul class="fab-buttons fab-scroll">
         {% for child in dashboardChildrenObjects %}
-            {% if child.getConfiguration('hideOnDashboard') == 0 %}
-                <li class="fab-buttons__item cursor"><a class="fab-buttons__link" data-tooltip="{{ child.getName() }}" style="background-color:{{ child.getDisplay("tagColor") }}" onclick='selectCategory("{{ categoryCode }}");'>{{ child.getDisplay("icon")|raw }}</a></li>
-            {% endif %}
+            <li class="fab-buttons__item cursor"><a class="fab-buttons__link" data-tooltip="{{ child.getName() }}" style="background-color:{{ child.getDisplay("tagColor") }}" onclick='selectCategory("{{ categoryCode }}");'>{{ child.getDisplay("icon")|raw }}</a></li>
         {% endfor %}
     </ul>
     <ul class="fab-buttons">
-        <li class="fab-buttons__item cursor"><a class="fab-buttons__link bg-red-active" onclick='selectCategory("{{ categoryCode }}");'><i class="fab-action-button__icon fas fa-chevron-left"></i></a></li>
+        <li class="fab-buttons__item cursor"><a class="fab-buttons__link bg-red-active" href="index.php?v=d&p=dashboard&object_id={{ dashboardObject.getFather_id() }}"><i class="fab-action-button__icon fas fa-chevron-left"></i></a></li>
     </ul>
 </div>
