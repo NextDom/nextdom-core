@@ -163,6 +163,7 @@ class Controller
         $pageContent['dashboardObjectId'] = $pageContent['JS_VARS']['SEL_OBJECT_ID'];
         $pageContent['dashboardObject'] = $object;
         $pageContent['dashboardChildrenObjects'] = JeeObjectManager::buildTree($object);
+        $pageContent['profilsUser'] = $_SESSION['user'];
 
         if ($pageContent['dashboardDisplayScenarioByDefault'] == 1) {
             $pageContent['dashboardScenarios'] = ScenarioManager::all();
