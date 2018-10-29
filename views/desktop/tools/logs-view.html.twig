@@ -52,8 +52,7 @@
                                 <li class="filter"><input class="filter form-control" placeholder="{{ 'Rechercher un log...' }}"/></li>
                                 {% for logFile in logFilesList %}
                                     <li class="cursor label-log li_log{% if logFile['active'] %} active{% endif %}" data-log="{{ logFile['name'] }}">
-                                        <i class="fas fa-{{ logFile['icon'] }}" style="float:left;margin-top:13px;color:{{ logFile['color'] }};">&nbsp;&nbsp;</i>
-                                        <a>{{ logFile['name'] }} ({{ logFile['size'] }} Ko)</a>
+                                        <a><i class="fas fa-{{ logFile['icon'] }}" style="color:{{ logFile['color'] }};">&nbsp;&nbsp;</i>{{ logFile['name'] }} ({{ logFile['size'] }} Ko)</a>
                                     </li>
                                 {% endfor %}
                             </ul>

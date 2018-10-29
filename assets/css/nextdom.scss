@@ -19,12 +19,12 @@
 */
 
 @import "_colors.scss";
-@import "../../3rdparty/bootstrap/css/bootstrap.scss";
+@import "../../vendor/twitter/bootstrap/dist/css/bootstrap.css";
 @import "../../3rdparty/roboto/roboto.scss";
-@import "../../3rdparty/jquery.ui/jquery-ui-bootstrap/jquery-ui.scss";
+@import "jquery-ui-bootstrap/jquery-ui.scss";
 @import "../../3rdparty/jquery.utils/_jquery.utils.scss";
 @import "../../3rdparty/font-noto/font-noto.scss";
-@import "../../3rdparty/jquery.tree/themes/default/style.scss";
+@import "../../vendor/vakata/jstree/dist/themes/default/style.css";
 @import "../../3rdparty/jquery.cron/jquery.cron.scss";
 @import "../../3rdparty/jquery.contextMenu/jquery.contextMenu.scss";
 @import "../../3rdparty/jquery.tablesorter/theme.bootstrap.scss";
@@ -42,5 +42,4 @@
 @import "adminlte/_AdminLTE-nextdom.scss";
 @import "_cards.scss";
 @import "../../3rdparty/datetimepicker/jquery.datetimepicker.css";
-
-@import url("/3rdparty/bootstrap-colorpicker/css/bootstrap-colorpicker.css");
+@import "../../vendor/itsjavi/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css";
