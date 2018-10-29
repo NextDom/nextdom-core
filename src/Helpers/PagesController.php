@@ -42,7 +42,7 @@ use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\CacheManager;
 
-class Controller
+class PagesController
 {
     const routesList = [
         'dashboard' => 'dashboardPage',
