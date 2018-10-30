@@ -21,7 +21,7 @@ use NextDom\Helpers\Status;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Helpers\Controller;
+use NextDom\Helpers\PagesController;
 
 /**
  * Classe de support à l'affichage des contenus HTML
@@ -458,7 +458,7 @@ class PrepareView
             \include_file('desktop', $page, 'php', $currentPlugin->getId(), true);
             return ob_get_clean();
         } else {
-            $controllerRoute = Controller::getRoute($page);
+            $controllerRoute = PagesController::getRoute($page);
             if ($controllerRoute == null) {
                 // Vérifie que l'utilisateur n'essaie pas de sortir
                 $purgedPage = preg_replace('/[^a-z0-9_-]/i', '', $page);
@@ -471,7 +471,48 @@ class PrepareView
                     Router::showError404AndDie();
                 }
             } else {
-                return \NextDom\Helpers\Controller::$controllerRoute($render, $pageContent);
+                return \NextDom\Helpers\PagesController::$controllerRoute($render, $pageContent);
+            }
+        }
+    }
+
+    public static function showModal()
+    {
+        error_log('MODAL');
+        $error = false;
+        \include_file('core', 'authentification', 'php');
+        $plugin = Utils::init('plugin', '');
+        $modalCode = Utils::init('modal', '');
+        error_log('Modal code : '.$modalCode);
+        // Affichage d'un modal appartenant à un plugin
+        if ($plugin != '') {
+            error_log('PLUGIN MODAL');
+            try {
+                \include_file('desktop', $modalCode, 'modal', $plugin, true);
+            } catch (\Exception $e) {
+                echo '<div class="alert alert-danger div_alert">';
+                echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
+                echo '</div>';
+            }
+        }
+        // Affichage d'un modal du core
+        else {
+            error_log('CORE MODAL');
+            $modalRoute = ModalsController::getRoute($modalCode);
+            if ($modalRoute == null) {
+                error_log('OLD MODAL');
+                try {
+                    \include_file('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
+                } catch (\Exception $e) {
+                    echo '<div class="alert alert-danger div_alert">';
+                    echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
+                    echo '</div>';
+                }
+            }
+            else {
+                error_log('NEW MODAL');
+                $render = Render::getInstance();
+                \NextDom\Helpers\ModalsController::$modalRoute($render);
             }
         }
     }

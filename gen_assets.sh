@@ -118,6 +118,12 @@ function gen_js {
         python -m jsmin $jsFile > public/js/desktop/${jsFile##*/}
         php script/translate.php public/js/desktop/${jsFile##*/}
     done
+    mkdir -p public/js/modals
+    for jsFile in assets/js/modals/*.js
+    do
+        python -m jsmin $jsFile > public/js/modals/${jsFile##*/}
+        php script/translate.php public/js/modals/${jsFile##*/}
+    done
 
     mkdir -p public/js/desktop/Market
     for jsFile in assets/js/desktop/Market/*.js
