@@ -91,17 +91,16 @@ function gen_js {
         vendor/node_modules/codemirror/mode/javascript/javascript.js \
         vendor/node_modules/codemirror/mode/css/css.js \
         vendor/vakata/jstree/dist/jstree.min.js \
-        3rdparty/jquery.fileupload/jquery.ui.widget.js \
-        node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
-        node_modules/blueimp-file-upload/js/jquery.fileupload.js \
+        vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
+        vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js \
         3rdparty/jquery.multi-column-select/multi-column-select.js \
         3rdparty/jquery.sew/jquery.sew.min.js \
-        3rdparty/jquery.cron/jquery.cron.min.js \
+        vendor/node_modules/jquery-cron/dist/jquery-cron.js \
         3rdparty/jquery.contextMenu/jquery.contextMenu.min.js \
-        3rdparty/autosize/autosize.min.js \
-        3rdparty/inputmask/jquery.inputmask.bundle.js \
+        vendor/node_modules/autosize/dist/autosize.js \
+        vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
         vendor/itsjavi/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
-        3rdparty/datetimepicker/jquery.datetimepicker.js  > /tmp/temp.js
+        vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.js  > /tmp/temp.js
     python -m jsmin /tmp/temp.js > public/js/base.js
     rm /tmp/temp.js
     php script/translate.php public/js/base.js
