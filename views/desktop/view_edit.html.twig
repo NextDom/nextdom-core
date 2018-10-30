@@ -56,10 +56,9 @@
                 <li class="filter" style="margin-bottom: 5px;"><input class="filter form-control input-sm" placeholder="{{ 'Rechercher...' }}" style="width: 100%"/></li>
                 {% for view in viewEditViewsList %}
                     <li class="cursor li_view" data-view_id="{{ view.getId() }}">
-                        <a>
-                        <i class="fas fa-arrows-alt-v pull-left cursor">&nbsp;&nbsp;</i>
-                        <a>&nbsp;{{ view.getDisplay('icon')|raw }} {{ view.getName() }}</a>
-                        </a>
+                        <div class="label-view">
+                            <i class="fas fa-arrows-alt-v pull-left cursor">&nbsp;&nbsp;</i>&nbsp;{{ view.getDisplay('icon')|raw }} {{ view.getName() }}
+                        </div>
                     </li>
                 {% endfor %}
             </ul>
