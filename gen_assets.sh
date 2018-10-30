@@ -19,6 +19,12 @@ echo " >>> Installation des modules npm"
 npm install --prefix ./vendor
 }
 
+function composer {
+echo " >>> Installation des modules npm"
+composer install
+composer update
+}
+
 function gen_css {
 	echo " >>> Generation du CSS"
 	mkdir -p public/css/adminlte
@@ -164,6 +170,7 @@ function copy_assets {
 	cp -fr assets/themes public/
 	echo " >>> Copie des images"
 	cp -fr assets/img public/
+	composer
 	install_nodemodules
 	gen_css
 	gen_js
