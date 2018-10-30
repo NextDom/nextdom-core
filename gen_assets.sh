@@ -14,6 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 
+function install_nodemodules {
+echo " >>> Installation des modules npm"
+npm install --prefix ./vendor
+}
 
 function gen_css {
 	echo " >>> Generation du CSS"
@@ -160,6 +164,7 @@ function copy_assets {
 	cp -fr assets/themes public/
 	echo " >>> Copie des images"
 	cp -fr assets/img public/
+	install_nodemodules
 	gen_css
 	gen_js
 }
