@@ -25,11 +25,11 @@
 @import "../../3rdparty/jquery.utils/_jquery.utils.scss";
 @import "../../3rdparty/font-noto/font-noto.scss";
 @import "../../vendor/vakata/jstree/dist/themes/default/style.css";
-@import "../../3rdparty/jquery.cron/jquery.cron.scss";
+@import "../../vendor/node_modules/jquery-cron/dist/jquery-cron.scss";
 @import "../../3rdparty/jquery.contextMenu/jquery.contextMenu.scss";
-@import "../../3rdparty/jquery.tablesorter/theme.bootstrap.scss";
+@import "../../vendor/node_modules/tablesorter/dist/css/theme.bootstrap.min.css";
 @import "../../3rdparty/jquery.sew/jquery.sew.scss";
-@import "../../3rdparty/codemirror/lib/codemirror.scss";
+@import "../../vendor/node_modules/codemirror/lib/codemirror.css";
 @import "_core.scss";
 @import "_charts.scss";
 @import "_buttons.scss";
@@ -37,9 +37,8 @@
 @import "_scenario.scss";
 @import "_fonts.scss";
 @import "_fab.scss";
-@import "../../3rdparty/AdminLTE/css/_AdminLTE.scss";
-@import "../../3rdparty/AdminLTE/css/_AdminLTE-bootstrap-social.scss";
+@import "../../vendor/node_modules/admin-lte/dist/css/AdminLTE.css";
 @import "adminlte/_AdminLTE-nextdom.scss";
 @import "_cards.scss";
-@import "../../3rdparty/datetimepicker/jquery.datetimepicker.css";
+@import "../../vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.css";
 @import "../../vendor/itsjavi/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css";
