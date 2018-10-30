@@ -40,9 +40,9 @@ function gen_css {
 function gen_js {
 	echo " >>> Generation du JS"
     cat 3rdparty/jquery.utils/jquery.utils.js \
-        3rdparty/iziToast/js/iziToast.min.js \
         vendor/twitter/bootstrap/dist/js/bootstrap.js \
         vendor/components/jqueryui/jquery-ui.min.js \
+        vendor/node_modules/izitoast/dist/js/iziToast.min.js \
         assets/js/desktop/utils.js \
         core/js/core.js \
         core/js/nextdom.class.js \
@@ -72,28 +72,28 @@ function gen_js {
         core/js/report.class.js \
         core/js/note.class.js \
         core/js/jeedom.class.js \
-        3rdparty/bootbox/bootbox.min.js \
-        3rdparty/highstock/highstock.js \
-        3rdparty/highstock/highcharts-more.js \
-        3rdparty/highstock/modules/solid-gauge.js \
-        3rdparty/highstock/modules/exporting.js \
-        3rdparty/highstock/modules/export-data.js \
+        vendor/node_modules/bootbox/bootbox.min.js \
+        vendor/node_modules/highcharts/highstock.js \
+        vendor/node_modules/highcharts/highcharts-more.js \
+        vendor/node_modules/highcharts/modules/solid-gauge.js \
+        vendor/node_modules/highcharts/modules/exporting.js \
+        vendor/node_modules/highcharts/modules/export-data.js \
         3rdparty/jquery.at.caret/jquery.at.caret.min.js \
-        3rdparty/jwerty/jwerty.js \
-        3rdparty/jquery.packery/jquery.packery.js \
-        3rdparty/jquery.lazyload/jquery.lazyload.js \
-        3rdparty/codemirror/lib/codemirror.js \
-        3rdparty/codemirror/addon/edit/matchbrackets.js \
-        3rdparty/codemirror/mode/htmlmixed/htmlmixed.js \
-        3rdparty/codemirror/mode/clike/clike.js \
-        3rdparty/codemirror/mode/php/php.js \
-        3rdparty/codemirror/mode/xml/xml.js \
-        3rdparty/codemirror/mode/javascript/javascript.js \
-        3rdparty/codemirror/mode/css/css.js \
+        vendor/node_modules/jwerty/jwerty.js \
+        vendor/node_modules/packery/dist/packery.pkgd.js \
+        vendor/node_modules/lazyload/lazyload.js \
+        vendor/node_modules/codemirror/lib/codemirror.js \
+        vendor/node_modules/codemirror/addon/edit/matchbrackets.js \
+        vendor/node_modules/codemirror/mode/htmlmixed/htmlmixed.js \
+        vendor/node_modules/codemirror/mode/clike/clike.js \
+        vendor/node_modules/codemirror/mode/php/php.js \
+        vendor/node_modules/codemirror/mode/xml/xml.js \
+        vendor/node_modules/codemirror/mode/javascript/javascript.js \
+        vendor/node_modules/codemirror/mode/css/css.js \
         vendor/vakata/jstree/dist/jstree.min.js \
         3rdparty/jquery.fileupload/jquery.ui.widget.js \
-        3rdparty/jquery.fileupload/jquery.iframe-transport.js \
-        3rdparty/jquery.fileupload/jquery.fileupload.js \
+        node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
+        node_modules/blueimp-file-upload/js/jquery.fileupload.js \
         3rdparty/jquery.multi-column-select/multi-column-select.js \
         3rdparty/jquery.sew/jquery.sew.min.js \
         3rdparty/jquery.cron/jquery.cron.min.js \
