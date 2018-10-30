@@ -58,7 +58,7 @@
                     <li class="treeview-menu">
                     <li><a href="index.php?v=d&p=view">{{ 'Afficher tout' }}</a></li>
                     {% for view in MENU_VIEWS_LIST %}
-                        <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">&nbsp;&nbsp;{{ view.getDisplay('icon')|raw }} {{ viewMenu.getName() }}</a></li>
+                        <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">&nbsp;&nbsp;{{ view.getDisplay('icon')|raw }} {{ view.getName() }}</a></li>
                     {% endfor %}
                 </ul>
             </li>
