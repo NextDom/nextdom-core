@@ -14,17 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 
-function install_nodemodules {
-echo " >>> Installation des modules npm"
-cp package.json ./vendor
-npm install --prefix ./vendor
-}
-
-function install_dep_composer {
-echo " >>> Installation des dependances composer"
-composer install
-}
-
 function gen_css {
 	echo " >>> Generation du CSS"
 	mkdir -p public/css/adminlte
@@ -141,27 +130,6 @@ function gen_js {
     done
 }
 
-function init_dependencies {
-	sass --version > /dev/null 2>&1
-	if [ $? -ne 0 ]; then
-		echo " >>> Installation de node et npm"
-		wget https://deb.nodesource.com/setup_10.x -O install_npm.sh
-		bash install_npm.sh
-		apt install -y nodejs
-		echo " >>> Installation de sass"
-		npm install -g sass
-	fi
-	python -c "import jsmin" 2>&1 /dev/null
-	if [ $? -ne 0 ]; then
-	    . /etc/os-release
-	    if [[ "$NAME" == *Debian* ]]; then
-	        apt install -y python-jsmin;
-	    else
-	        pip install jsmin;
-	    fi
-	fi
-}
-
 function copy_assets {
     echo " >>> Copie des icones"
 	cp -fr assets/icon public/
@@ -196,7 +164,6 @@ function start {
 	done
 }
 
-init_dependencies
 if [ "$#" == 0 ]; then
     echo "Pour lancer la génération automatique, ajouter l'option --watch"
 	mkdir -p public/css
