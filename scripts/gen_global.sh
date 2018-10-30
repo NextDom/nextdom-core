@@ -14,5 +14,5 @@
 # You should have received a copy of the GNU General Public License
 # along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 
-./script/gen_composer_npm.sh
-./script/gen_assets.sh
+./scripts/gen_composer_npm.sh
+./scripts/gen_assets.sh
