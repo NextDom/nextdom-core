@@ -331,9 +331,9 @@ class PrepareView
     {
         if (file_exists(NEXTDOM_ROOT . '/public/js/base.js')) {
             $pageData['JS_POOL'][] = '/public/js/base.js';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.min.js';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min.js';
-            $pageData['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/adminlte.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
+            $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
             $pageData['JS_END_POOL'][] = '/public/js/adminlte/adminlte_nextdom.js';
         } else {
             $pageData['JS_POOL'][] = '/3rdparty/jquery.utils/jquery.utils.js';
@@ -410,10 +410,7 @@ class PrepareView
     private static function initCssPool(&$pageData, $configs)
     {
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
-        $pageData['CSS_POOL'][] = '/3rdparty/iziToast/css/iziToast.css';
         // Icônes
-        $pageData['CSS_POOL'][] = '/3rdparty/font-awesome/css/font-awesome.min.css';
-        $pageData['CSS_POOL'][] = '/3rdparty/font-awesome5/css/fontawesome-all.css';
         $rootDir = NEXTDOM_ROOT . '/public/icon/';
         foreach (ls($rootDir, '*') as $dir) {
             if (is_dir($rootDir . $dir) && file_exists($rootDir . $dir . '/style.css')) {
