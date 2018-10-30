@@ -217,7 +217,7 @@ class network {
         if ($_mode == 'internal' && netMatch('127.0.*.*', self::getNetworkAccess($_mode, 'ip', '', false))) {
             return false;
         }
-        $url = trim(self::getNetworkAccess($_mode, '', '', false), '/') . '/here.html';
+        $url = trim(self::getNetworkAccess($_mode, '', '', false), '/') . '/public/here.html';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_TIMEOUT, $_timeout);
         curl_setopt($ch, CURLOPT_URL, $url);

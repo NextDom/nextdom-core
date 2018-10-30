@@ -167,7 +167,7 @@ try {
     echo "OK\n";
     
   	echo "Restauration du cache...";
-  	system('cd /tmp/nextdom/cache; tar xfz "/tmp/nextdombackup/cache.tar.gz"');
+  	system('cd /tmp/nextdom/cache; tar xfz "/tmp/nextdombackup/data/cache.tar.gz"');
 	echo "OK\n";
 
 	echo "Restauration des plugins...";
