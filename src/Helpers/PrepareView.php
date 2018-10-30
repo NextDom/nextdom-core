@@ -331,6 +331,7 @@ class PrepareView
     {
         if (file_exists(NEXTDOM_ROOT . '/public/js/base.js')) {
             $pageData['JS_POOL'][] = '/public/js/base.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
             $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
