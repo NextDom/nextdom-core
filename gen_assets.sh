@@ -16,7 +16,7 @@
 
 function install_nodemodules {
 echo " >>> Installation des modules npm"
-mv package.json ./vendor
+cp package.json ./vendor
 npm install --prefix ./vendor
 }
 
