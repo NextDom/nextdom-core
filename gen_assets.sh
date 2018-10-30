@@ -16,6 +16,7 @@
 
 function install_nodemodules {
 echo " >>> Installation des modules npm"
+mv package.json ./vendor
 npm install --prefix ./vendor
 }
 
@@ -106,7 +107,6 @@ function gen_js {
         3rdparty/jquery.sew/jquery.sew.min.js \
         vendor/node_modules/jquery-cron/dist/jquery-cron.js \
         3rdparty/jquery.contextMenu/jquery.contextMenu.min.js \
-        vendor/node_modules/autosize/dist/autosize.js \
         vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
         vendor/itsjavi/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
         vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.js  > /tmp/temp.js
