@@ -337,8 +337,8 @@ class PrepareView
             $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
             $pageData['JS_END_POOL'][] = '/public/js/adminlte/adminlte_nextdom.js';
         } else {
-            $pageData['JS_POOL'][] = '/vendor/twitter/bootstrap/dist/js/bootstrap.js';
-            $pageData['JS_POOL'][] = '/vendor/components/jqueryui/jquery-ui.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
+            $pageData['JS_POOL'][] = 'vendor/node_modules/jquery-ui-dist/jquery-ui.min.js';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
@@ -388,16 +388,16 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/mode/xml/xml.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/mode/javascript/javascript.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/mode/css/css.js';
-            $pageData['JS_POOL'][] = '/vendor/vakata/jstree/dist/jstree.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/jstree/dist/jstree.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.multi-column-select/multi-column-select.js';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.sew/jquery.sew.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-cron/dist/jquery-cron.js';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.contextMenu/jquery.contextMenu.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-contextMenu/dist/jquery.contextMenu.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js';
-            $pageData['JS_POOL'][] = '/vendor/itsjavi/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
             $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';

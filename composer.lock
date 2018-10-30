@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f5f8dafe5ccd9da63ab18a26cd9d30e1",
-    "content-hash": "8c3b5d9bea2cefdeb8b1b703db286dec",
+    "hash": "63abf4748e1dea6aac4d9e5340eaa020",
+    "content-hash": "617161cb7fb82e451985f265dced297f",
     "packages": [
         {
             "name": "christian-riesen/base32",
@@ -60,133 +60,6 @@
                 "rfc4648"
             ],
             "time": "2016-05-05 11:49:03"
-        },
-        {
-            "name": "components/jquery",
-            "version": "3.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/components/jquery.git",
-                "reference": "459648cda77875519c5da3ae1dd0ed5d170aa649"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/components/jquery/zipball/459648cda77875519c5da3ae1dd0ed5d170aa649",
-                "reference": "459648cda77875519c5da3ae1dd0ed5d170aa649",
-                "shasum": ""
-            },
-            "type": "component",
-            "extra": {
-                "component": {
-                    "scripts": [
-                        "jquery.js"
-                    ],
-                    "files": [
-                        "jquery.min.js",
-                        "jquery.min.map",
-                        "jquery.slim.js",
-                        "jquery.slim.min.js",
-                        "jquery.slim.min.map"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "JS Foundation and other contributors"
-                }
-            ],
-            "description": "jQuery JavaScript Library",
-            "homepage": "http://jquery.com",
-            "time": "2018-03-04 13:23:48"
-        },
-        {
-            "name": "components/jqueryui",
-            "version": "1.12.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/components/jqueryui.git",
-                "reference": "44ecf3794cc56b65954cc19737234a3119d036cc"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/components/jqueryui/zipball/44ecf3794cc56b65954cc19737234a3119d036cc",
-                "reference": "44ecf3794cc56b65954cc19737234a3119d036cc",
-                "shasum": ""
-            },
-            "require": {
-                "components/jquery": ">=1.6"
-            },
-            "type": "component",
-            "extra": {
-                "component": {
-                    "name": "jquery-ui",
-                    "scripts": [
-                        "jquery-ui.js"
-                    ],
-                    "files": [
-                        "ui/**",
-                        "themes/**",
-                        "jquery-ui.min.js"
-                    ],
-                    "shim": {
-                        "deps": [
-                            "jquery"
-                        ],
-                        "exports": "jQuery"
-                    }
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "jQuery UI Team",
-                    "homepage": "http://jqueryui.com/about"
-                },
-                {
-                    "name": "Joern Zaefferer",
-                    "email": "joern.zaefferer@gmail.com",
-                    "homepage": "http://bassistance.de"
-                },
-                {
-                    "name": "Scott Gonzalez",
-                    "email": "scott.gonzalez@gmail.com",
-                    "homepage": "http://scottgonzalez.com"
-                },
-                {
-                    "name": "Kris Borchers",
-                    "email": "kris.borchers@gmail.com",
-                    "homepage": "http://krisborchers.com"
-                },
-                {
-                    "name": "Mike Sherov",
-                    "email": "mike.sherov@gmail.com",
-                    "homepage": "http://mike.sherov.com"
-                },
-                {
-                    "name": "TJ VanToll",
-                    "email": "tj.vantoll@gmail.com",
-                    "homepage": "http://tjvantoll.com"
-                },
-                {
-                    "name": "Corey Frang",
-                    "email": "gnarf37@gmail.com",
-                    "homepage": "http://gnarf.net"
-                },
-                {
-                    "name": "Felix Nagel",
-                    "email": "info@felixnagel.com",
-                    "homepage": "http://www.felixnagel.com"
-                }
-            ],
-            "description": "jQuery UI is a curated set of user interface interactions, effects, widgets, and themes built on top of the jQuery JavaScript Library. Whether you're building highly interactive web applications or you just need to add a date picker to a form control, jQuery UI is the perfect choice.",
-            "time": "2016-09-16 05:47:55"
         },
         {
             "name": "doctrine/cache",
@@ -534,37 +407,6 @@
                 "url"
             ],
             "time": "2017-03-20 17:10:46"
-        },
-        {
-            "name": "itsjavi/bootstrap-colorpicker",
-            "version": "2.5.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/farbelous/bootstrap-colorpicker.git",
-                "reference": "d56d0d3d5bee59904d48bce3c47a0029741e10e6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/farbelous/bootstrap-colorpicker/zipball/d56d0d3d5bee59904d48bce3c47a0029741e10e6",
-                "reference": "d56d0d3d5bee59904d48bce3c47a0029741e10e6",
-                "shasum": ""
-            },
-            "require": {
-                "components/jquery": ">=1.10"
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache License Version 2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Javier Aguilar",
-                    "homepage": "https://itsjavi.com"
-                }
-            ],
-            "description": "Fancy and customizable colorpicker plugin for Twitter Bootstrap",
-            "time": "2018-03-29 04:47:33"
         },
         {
             "name": "knplabs/github-api",
@@ -2514,114 +2356,6 @@
                 "templating"
             ],
             "time": "2018-07-13 07:18:09"
-        },
-        {
-            "name": "twitter/bootstrap",
-            "version": "v3.3.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/twbs/bootstrap.git",
-                "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/0b9c4a4007c44201dce9a6cc1a38407005c26c86",
-                "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86",
-                "shasum": ""
-            },
-            "replace": {
-                "twitter/bootstrap": "self.version"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.3.x-dev"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jacob Thornton",
-                    "email": "jacobthornton@gmail.com"
-                },
-                {
-                    "name": "Mark Otto",
-                    "email": "markdotto@gmail.com"
-                }
-            ],
-            "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
-            "homepage": "http://getbootstrap.com",
-            "keywords": [
-                "JS",
-                "css",
-                "framework",
-                "front-end",
-                "less",
-                "mobile-first",
-                "responsive",
-                "web"
-            ],
-            "time": "2016-07-25 15:51:55"
-        },
-        {
-            "name": "vakata/jstree",
-            "version": "3.3.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/vakata/jstree.git",
-                "reference": "a6a0d0dfb784d5ef0b3415d847ac7b6bfbab1f16"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/vakata/jstree/zipball/a6a0d0dfb784d5ef0b3415d847ac7b6bfbab1f16",
-                "reference": "a6a0d0dfb784d5ef0b3415d847ac7b6bfbab1f16",
-                "shasum": ""
-            },
-            "require": {
-                "components/jquery": ">=1.9.1"
-            },
-            "suggest": {
-                "robloach/component-installer": "Allows installation of Components via Composer"
-            },
-            "type": "component",
-            "extra": {
-                "component": {
-                    "scripts": [
-                        "dist/jstree.js"
-                    ],
-                    "styles": [
-                        "dist/themes/default/style.css"
-                    ],
-                    "images": [
-                        "dist/themes/default/32px.png",
-                        "dist/themes/default/40px.png",
-                        "dist/themes/default/throbber.gif"
-                    ],
-                    "files": [
-                        "dist/jstree.min.js",
-                        "dist/themes/default/style.min.css",
-                        "dist/themes/default/32px.png",
-                        "dist/themes/default/40px.png",
-                        "dist/themes/default/throbber.gif"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ivan Bozhanov",
-                    "email": "jstree@jstree.com"
-                }
-            ],
-            "description": "jsTree is jquery plugin, that provides interactive trees.",
-            "homepage": "http://jstree.com",
-            "time": "2017-04-06 14:23:09"
         }
     ],
     "packages-dev": [

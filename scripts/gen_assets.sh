@@ -24,23 +24,23 @@ function gen_css {
 	sass assets/css/Market/market.scss public/css/market.css --style compressed
 
 	# Remplacement des chemins
-	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-#g public/css/nextdom.css
+#	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-#g public/css/nextdom.css
 #	sed -i s#\.\./fonts/glyphicons-#/vendor/twitter/bootstrap/fonts/glyphicons-#g public/css/nextdom.css
 	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
-	sed -i 's/[\"]32px\.png/"\/3rdparty\/jquery\.tree\/themes\/default\/32px.png/g' public/css/nextdom.css
-	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.css
+#	sed -i 's/[\"]32px\.png/"\/3rdparty\/jquery\.tree\/themes\/default\/32px.png/g' public/css/nextdom.css
+#	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.css
 
-	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-# public/css/nextdom.mob.css
+#	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-# public/css/nextdom.mob.css
 	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
-	sed -i 's/[\"]32px\.png/\/3rdparty\/jquery\.tree\/themes\/default\/32.png/g' public/css/nextdom.mob.css
-	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.mob.css
+#	sed -i 's/[\"]32px\.png/\/3rdparty\/jquery\.tree\/themes\/default\/32.png/g' public/css/nextdom.mob.css
+#	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.mob.css
 }
 
 function gen_js {
 	echo " >>> Generation du JS"
     cat 3rdparty/jquery.utils/jquery.utils.js \
-        vendor/twitter/bootstrap/dist/js/bootstrap.js \
-        vendor/components/jqueryui/jquery-ui.min.js \
+        vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
+        vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
         vendor/node_modules/izitoast/dist/js/iziToast.min.js \
         assets/js/desktop/utils.js \
         core/js/core.js \
@@ -89,7 +89,7 @@ function gen_js {
         vendor/node_modules/codemirror/mode/xml/xml.js \
         vendor/node_modules/codemirror/mode/javascript/javascript.js \
         vendor/node_modules/codemirror/mode/css/css.js \
-        vendor/vakata/jstree/dist/jstree.min.js \
+        vendor/node_modules/jstree/dist/jstree.js \
         vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
         vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js \
         3rdparty/jquery.multi-column-select/multi-column-select.js \
@@ -97,7 +97,7 @@ function gen_js {
         vendor/node_modules/jquery-cron/dist/jquery-cron.js \
         vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js \
         vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
-        vendor/itsjavi/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
+        vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
         vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.js  > /tmp/temp.js
     python -m jsmin /tmp/temp.js > public/js/base.js
     rm /tmp/temp.js
