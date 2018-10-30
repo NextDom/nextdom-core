@@ -87,7 +87,7 @@ function gen_js {
         vendor/node_modules/codemirror/mode/clike/clike.js \
         vendor/node_modules/codemirror/mode/php/php.js \
         vendor/node_modules/codemirror/mode/xml/xml.js \
-        vendor/node_modules/codemirror/mode/javascripts/javascript.js \
+        vendor/node_modules/codemirror/mode/javascript/javascript.js \
         vendor/node_modules/codemirror/mode/css/css.js \
         vendor/vakata/jstree/dist/jstree.min.js \
         vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
