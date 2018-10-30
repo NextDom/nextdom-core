@@ -19,12 +19,12 @@
 */
 
 @import "_colors.scss";
-@import "../../vendor/twitter/bootstrap/dist/css/bootstrap.css";
-@import "../../3rdparty/roboto/roboto.scss";
+@import "../../vendor/node_modules/bootstrap/dist/css/bootstrap.css";
+@import "../../vendor/node_modules/roboto-fontface/css/roboto/roboto-fontface.css";
 @import "jquery-ui-bootstrap/jquery-ui.scss";
 @import "../../3rdparty/jquery.utils/_jquery.utils.scss";
 @import "../../3rdparty/font-noto/font-noto.scss";
-@import "../../vendor/vakata/jstree/dist/themes/default/style.css";
+@import "../../vendor/node_modules/jstree/dist/themes/default/style.css";
 @import "../../vendor/node_modules/jquery-cron/dist/jquery-cron.css";
 @import "../../vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.css";
 @import "../../vendor/node_modules/tablesorter/dist/css/theme.bootstrap.min.css";
@@ -44,4 +44,4 @@
 @import "adminlte/_AdminLTE-nextdom.scss";
 @import "_cards.scss";
 @import "../../vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.css";
-@import "../../vendor/itsjavi/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css";
+@import "../../vendor/node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css";
