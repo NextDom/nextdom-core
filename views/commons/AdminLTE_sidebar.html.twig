@@ -38,7 +38,7 @@
                 {% endif %}
             </div>
         </div>
-        
+
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">{{ 'MENU PRINCIPAL' }}</li>
@@ -58,7 +58,7 @@
                     <li class="treeview-menu">
                     <li><a href="index.php?v=d&p=view">{{ 'Afficher tout' }}</a></li>
                     {% for view in MENU_VIEWS_LIST %}
-                        <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">&nbsp;&nbsp;{{ view.getDisplay('icon')|trim }} {{ viewMenu.getName() }}</a></li>
+                        <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">&nbsp;&nbsp;{{ view.getDisplay('icon')|raw }} {{ viewMenu.getName() }}</a></li>
                     {% endfor %}
                 </ul>
             </li>
@@ -68,9 +68,8 @@
                     <li class="treeview-menu">
                     <li><a href="index.php?v=d&p=plan">{{ 'Afficher tout' }}</a></li>
                     {% for plan in MENU_PLANS_LIST %}
-                        <li><a href="index.php?v=d&p=plan&plan_id={{ plan.getId() }}">&nbsp;&nbsp;{{ plan.getConfiguration('icon')|trim }} {{ plan.getName() }}</a></li>
+                        <li><a href="index.php?v=d&p=plan&plan_id={{ plan.getId() }}">&nbsp;&nbsp;{{ plan.getConfiguration('icon')|raw }} {{ plan.getName() }}</a></li>
                     {% endfor %}
-
                 </ul>
             </li>
             <li class="treeview">
