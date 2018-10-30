@@ -137,8 +137,6 @@ function copy_assets {
 	cp -fr assets/themes public/
 	echo " >>> Copie des images"
 	cp -fr assets/img public/
-	install_dep_composer
-	install_nodemodules
 	gen_css
 	gen_js
 }
