@@ -336,10 +336,10 @@ class PrepareView
             $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
             $pageData['JS_END_POOL'][] = '/public/js/adminlte/adminlte_nextdom.js';
         } else {
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.utils/jquery.utils.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
             $pageData['JS_POOL'][] = '/vendor/twitter/bootstrap/dist/js/bootstrap.js';
             $pageData['JS_POOL'][] = '/vendor/components/jqueryui/jquery-ui.min.js';
+            $pageData['JS_POOL'][] = '/3rdparty/jquery.utils/jquery.utils.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
             $pageData['JS_POOL'][] = '/core/js/core.js';
             $pageData['JS_POOL'][] = '/core/js/nextdom.class.js';
@@ -397,6 +397,8 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js';
             $pageData['JS_POOL'][] = '/vendor/itsjavi/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
             $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
             $pageData['JS_END_POOL'][] = '/public/js/adminlte/adminlte_nextdom.js';
         }
