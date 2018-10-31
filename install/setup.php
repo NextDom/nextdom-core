@@ -61,14 +61,14 @@ $loadExtensions = get_loaded_extensions();
 <html>
 <head>
     <title>NextDom Installation</title>
-    <script src="../3rdparty/jquery/jquery.min.js"></script>
-    <script src="../3rdparty/bootstrap/bootstrap.min.js"></script>
-    <link href="../3rdparty/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="../3rdparty/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/vendor/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <link href="/vendor/node_modules/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/vendor/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <center>
-        <img src="../public/img/startup-image-320x460.png" class="img-responsive" />
+        <img src="/public/img/startup-image-320x460.png" class="img-responsive" />
     </center>
     <?php
 $error = false;
