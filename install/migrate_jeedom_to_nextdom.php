@@ -167,7 +167,12 @@ try {
     echo "OK\n";
     
   	echo "Restauration du cache...";
-  	system('cd /tmp/nextdom/cache; tar xfz "/tmp/nextdombackup/cache.tar.gz"');
+  	if (file_exists('/tmp/nextdombackup/var/cache.tar.gz')) {
+        system('cd /tmp/nextdom/cache; tar xfz "/tmp/nextdombackup/var/cache.tar.gz"');
+    }
+    else {
+        system('cd /tmp/nextdom/cache; tar xfz "/tmp/nextdombackup/cache.tar.gz"');
+    }
 	echo "OK\n";
 
 	echo "Restauration des plugins...";

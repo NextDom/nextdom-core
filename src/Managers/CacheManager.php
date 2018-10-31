@@ -244,7 +244,7 @@ class CacheManager {
                 return;
         }
         try {
-            $cacheFile = NEXTDOM_ROOT.'/cache.tar.gz';
+            $cacheFile = NEXTDOM_ROOT.'/var/cache.tar.gz.tar.gz';
             $persisCmd = 'rm -rf ' . $cacheFile . ';cd ' . $cacheDir . ';tar cfz ' . $cacheFile . ' * 2>&1 > /dev/null;chmod 775 ' . $cacheFile . ';chown ' . \system::get('www-uid') . ':' . \system::get('www-gid') . ' ' . $cacheFile . ';chmod 777 -R ' . $cacheDir . ' 2>&1 > /dev/null';
             \com_shell::execute($persisCmd);
         } catch (\Exception $e) {
@@ -262,7 +262,7 @@ class CacheManager {
         if (\config::byKey('cache::engine') != 'FilesystemCache' && \config::byKey('cache::engine') != 'PhpFileCache') {
             return true;
         }
-        $filename = NEXTDOM_ROOT.'/cache.tar.gz';
+        $filename = NEXTDOM_ROOT.'/var/cache.tar.gz.tar.gz';
         if (!file_exists($filename)) {
             return false;
         }
@@ -286,7 +286,7 @@ class CacheManager {
             default:
                 return;
         }
-        if (!file_exists(__DIR__ . '/../../cache.tar.gz')) {
+        if (!file_exists(__DIR__ . '/../../var/cache.tar.gz.tar.gz')) {
             $cmd = 'mkdir ' . $cache_dir . ';';
             $cmd .= 'chmod -R 777 ' . $cache_dir . ';';
             \com_shell::execute($cmd);
@@ -295,7 +295,7 @@ class CacheManager {
         $cmd = 'rm -rf ' . $cache_dir . ';';
         $cmd .= 'mkdir ' . $cache_dir . ';';
         $cmd .= 'cd ' . $cache_dir . ';';
-        $cmd .= 'tar xfz ' . __DIR__ . '/../../cache.tar.gz;';
+        $cmd .= 'tar xfz ' . __DIR__ . '/../../var/cache.tar.gz.tar.gz;';
         $cmd .= 'chmod -R 777 ' . $cache_dir . ' 2>&1 > /dev/null;';
         \com_shell::execute($cmd);
     }
