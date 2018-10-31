@@ -15,23 +15,31 @@
 # along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 # function install_nodemodules
 
+currentDir=$PWD
+scriptDir=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
+nextdomDir=$scriptDir/../
+
 function install_nodemodules {
-echo " >>> Installation des modules npm"
-cp package.json ./vendor
-npm install --prefix ./vendor
+	echo " >>> Installation des modules npm"
+	cp $nextdomDir/package.json $nextdomDir/vendor
+	npm install --prefix $nextdomDir/vendor
 }
 
 function install_dep_composer {
-echo " >>> Installation des dependances composer"
-composer install
+	echo " >>> Installation des dependances composer"
+	cd $nextdomDir
+	composer install
+	cd $currentDir
 }
 
 function init_dependencies {
 	npm --version > /dev/null 2>&1
 	if [ $? -ne 0 ]; then
 		echo " >>> Installation de node et npm"
+		cd $scriptDir
 		wget https://deb.nodesource.com/setup_10.x -O install_npm.sh
 		bash install_npm.sh
+		cd $currentDir
 		apt install -y nodejs
 	fi
 	sass --version > /dev/null 2>&1
