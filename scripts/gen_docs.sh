@@ -22,6 +22,7 @@ cd $scriptDir/phpdox
 composer update
 cd $scriptDir/
 
+rm -Rf $nextdomDir/docs
 ./phpdox/vendor/bin/phpdox -f phpdox/phpdox.xml
 ./phpdox/vendor/bin/phpmetrics --report-html=../docs/report ../
  
@@ -29,6 +30,7 @@ sed -i '/<a href="source\/index.xhtml">Source<\/a>/r phpdox/addReport.txt'  ../d
 sed -i '/<a href="source\/index.xhtml">Source<\/a>/r phpdox/addReport.txt'  ../docs/html/namespaces.xhtml
 sed -i '/<a href="source\/index.xhtml">Source<\/a>/r phpdox/addReport.txt'  ../docs/html/interfaces.xhtml
 sed -i '/<a href="source\/index.xhtml">Source<\/a>/r phpdox/addReport.txt'  ../docs/html/classes.xhtml
+sed -i '/<h1>NextDom<\/h1>/i <div style="display:flex"><img src="..\/..\/public\/img\/NextDom\/NextDom_Wide_BlueBlack.png" width="200px" \/><\/div>'  ../docs/html/index.xhtml
 if [ ! -e ../docs/index.xhtml ]; then
 	ln -s ../docs/html/index.xhtml ../docs/index.xhtml
 fi
