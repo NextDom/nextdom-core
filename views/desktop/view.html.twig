@@ -46,7 +46,7 @@
                 <li class="filter"><input class="filter form-control input-sm" placeholder="{{ 'Rechercher' }}" style="width: 100%"/></li>
                 {% for view in viewsList %}
                     <li class="cursor li_view{% if view.getId() == viewCurrent %} active{% endif %}">
-                        <a href="index.php?v=d&p=view&view_id={{ view.getId() }}">{{ view.getDisplay('icon')|trim }} {{ view.getName() }}</a>
+                        <a href="index.php?v=d&p=view&view_id={{ view.getId() }}">{{ view.getDisplay('icon')|raw }} {{ view.getName() }}</a>
                     </li>
                 {% endfor %}
             </ul>
@@ -65,4 +65,3 @@
         <div class="row div_displayView"></div>
     </div>
 </div>
-
