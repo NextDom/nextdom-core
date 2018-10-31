@@ -120,28 +120,27 @@
                         {% if pluginData['nOk'] == 0 and pluginData['pending'] == 0 %}
                         <div class="panel box box-success">
                             {% endif %}
-                            <div class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="#accordionHealth" href="#config_{{ pluginData['plugin'].getId() }}">
+                            <div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordionHealth" href="#config_{{ pluginData['plugin'].getId() }}">
                                 <h3 class="box-title">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionHealth" href="#config_{{ pluginData['plugin'].getId() }}" style="text-decoration:none;">
-                                        <img class="img-responsive" style="width : 20px;display:inline-block;" src="{{ pluginData['plugin'].getPathImgIcon() }}"/>
-                                        {{ 'Santé' }} {{ pluginData['plugin'].getName() }}
-                                    </a>
+                                    <img style="height : 20px;padding-right:10px;" src="{{ pluginData['plugin'].getPathImgIcon() }}"/>{{ 'Santé' }} {{ pluginData['plugin'].getName() }}
                                 </h3>
-                                <i class="fas fa-cogs bt_configurationPlugin cursor pull-right icon-health" data-pluginid="{{ pluginData['plugin'].getId() }}"></i>
+                                {% if pluginData['port'] %}
+                                    <div class="fas fa-sort pull-right" data-toggle="tooltip" title="" data-original-title="{{ 'Port configuré' }}"></i>
+                                        <a data-toggle="tooltip" title="" data-original-title="{{ 'Port configuré' }}" class="pull-right">{{ pluginData['port']|capitalize }}</a>
+                                    </div>
+                                {% endif %}
+                                <i class="fas fa-cogs bt_configurationPlugin cursor pull-right" data-pluginid="{{ pluginData['plugin'].getId() }}"></i>
                                 {% if pluginData['hasSpecificHealth'] %}
-                                    <i data-pluginname="{{ pluginData['plugin'].getName() }}" data-pluginid="{{ pluginData['plugin'].getId() }}" class="fas fa-medkit bt_healthSpecific pull-right cursor icon-health" data-toggle="tooltip" title="" data-original-title="Santé spécifique"></i>
+                                    <i data-pluginname="{{ pluginData['plugin'].getName() }}" data-pluginid="{{ pluginData['plugin'].getId() }}" class="fas fa-medkit bt_healthSpecific pull-right cursor" data-toggle="tooltip" title="" data-original-title="Santé spécifique"></i>
                                 {% endif %}
                                 {% if pluginData['hasOwnDaemon'] %}
                                     {% if pluginData['daemonAuto'] == 1 %}
-                                        <i class="fas fa-university pull-right icon-health" data-toggle="tooltip" title="" data-original-title="{{ 'Démon en mode automatique' }}"></i>
+                                        <i class="fas fa-university pull-right" data-toggle="tooltip" title="" data-original-title="{{ 'Démon en mode automatique' }}"></i>
                                     {% else %}
-                                        <i class="fas fa-university pull-right " style="color:#ff4c4c;" data-toggle="tooltip" title="" data-original-title="{{ 'Démon en mode manuel' }}"></i>
+                                        <i class="fas fa-university pull-right text-red" data-toggle="tooltip" title="" data-original-title="{{ 'Démon en mode manuel' }}"></i>
                                     {% endif %}
                                 {% endif %}
-                                {% if pluginData['port'] %}
-                                    <i class="icon techno-fleches pull-right icon-health" data-toggle="tooltip" title="" data-original-title="{{ 'Port configuré' }}">&nbsp;&nbsp;</i>
-                                    <span style="color:grey;font-size:0.8em" data-toggle="tooltip" title="" data-original-title="{{ 'Port configuré' }}" class="pull-right">{{ pluginData['port']|capitalize }}</span>
-                                {% endif %}
+
                             </div>
                             <div id="config_{{ pluginData['plugin'].getId() }}" class="panel-collapse collapse">
                                 <div class="box-body">
@@ -251,9 +250,6 @@
             </div>
         </div>
     </div>
-</div>
-<div class="fab fab-left">
-    <a class="fab-action-button cursor" style="display: none;" id="bt_goOnTop"><i class="fab-action-button__icon fas fa-angle-double-up"></i></a>
 </div>
 <div class="fab">
     <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>

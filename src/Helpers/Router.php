@@ -85,7 +85,7 @@ class Router
     public function desktopView()
     {
         if (isset($_GET['modal'])) {
-            $this->showModal();
+            PrepareView::showModal();
         } elseif (isset($_GET['configure'])) {
             $this->showConfiguration();
         } elseif (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
@@ -123,24 +123,6 @@ class Router
     }
 
     /**
-     * Viewing a modal on a computer
-     *
-     * @throws \Exception
-     */
-    private function showModal()
-    {
-        try {
-            \include_file('core', 'authentification', 'php');
-            \include_file('desktop', Utils::init('modal'), 'modal', Utils::init('plugin'), true);
-        } catch (\Exception $e) {
-            ob_end_clean();
-            echo '<div class="alert alert-danger div_alert">';
-            echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
-            echo '</div>';
-        }
-    }
-
-    /**
      * Displaying the configuration page of a plugin
      *
      * @throws \Exception Affichage
@@ -161,7 +143,7 @@ class Router
         try {
             \include_file('core', 'authentification', 'php');
             $page = Utils::init('p');
-            $controllerRoute = Controller::getRoute($page);
+            $controllerRoute = PagesController::getRoute($page);
             if ($controllerRoute === null) {
                 self::showError404AndDie();
             } else {
@@ -171,7 +153,7 @@ class Router
                 $pageContent['JS_END_POOL'] = [];
                 $pageContent['CSS_POOL'] = [];
                 $pageContent['JS_VARS'] = [];
-                $pageContent['content'] = \NextDom\Helpers\Controller::$controllerRoute($render, $pageContent);
+                $pageContent['content'] = PagesController::$controllerRoute($render, $pageContent);
                 $render->show('/layouts/ajax_content.html.twig', $pageContent);
             }
         } catch (\Exception $e) {
