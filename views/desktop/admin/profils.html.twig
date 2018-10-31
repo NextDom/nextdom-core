@@ -150,16 +150,6 @@
                     <div>
                         <legend class="legend-title">{{ 'Options d\'interfaces' }}</legend>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ 'Afficher les menus' }}</label>
-                            <div class="col-sm-1">
-                                <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="doNotAutoHideMenu"/>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="legend-section">
-                        <legend class="legend-title">{{ 'Page par défaut' }}</legend>
-                        <div class="form-group">
                             <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
                             <div class="col-sm-2">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="homePage">
@@ -280,10 +270,10 @@
                                 </div>
                                 <div class="form-group">
                                     {% if profilsUser.getOptions('twoFactorAuthentification', 0) == 1 %}
-                                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Activation' }}</label>
+                                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Double authentification' }}</label>
                                         <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
                                             <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="twoFactorAuthentification"/>
-                                            <label class="control-label label-check">{{ 'Activation' }}</label>
+                                            <label class="control-label label-check">{{ 'Activer' }}</label>
                                         </div>
                                     {% endif %}
                                 </div>
