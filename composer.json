@@ -18,7 +18,13 @@
         "twig/twig": "^2.5",
         "twig/extensions": "^1.5",
         "symfony/twig-bridge": "^3.4",
-        "maximebf/debugbar": "^1.15"
+        "maximebf/debugbar": "^1.15",
+        "twitter/bootstrap": "3.3.7",
+        "itsjavi/bootstrap-colorpicker": "2.5.2",
+        "components/jquery": "3.3.1",
+        "components/jqueryui": "1.12.1",
+        "vakata/jstree": "3.3.4",
+        "webfontkit/roboto": "^1.0"
     },
     "license": "GPL",
     "config": {

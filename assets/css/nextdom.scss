@@ -19,23 +19,27 @@
 */
 
 @import "_colors.scss";
-@import "../../3rdparty/bootstrap/css/bootstrap.scss";
-@import "../../3rdparty/roboto/roboto.scss";
-@import "../../3rdparty/jquery.ui/jquery-ui-bootstrap/jquery-ui.scss";
+@import "../../vendor/twitter/bootstrap/dist/css/bootstrap.css";
+@import "../../vendor/webfontkit/roboto/roboto.min.css";
+@import "jquery-ui-bootstrap/jquery-ui.scss";
 @import "../../3rdparty/jquery.utils/_jquery.utils.scss";
 @import "../../3rdparty/font-noto/font-noto.scss";
-@import "../../3rdparty/jquery.tree/themes/default/style.scss";
+@import "../../vendor/vakata/jstree/dist/themes/default/style.css";
 @import "../../3rdparty/jquery.cron/jquery.cron.scss";
 @import "../../3rdparty/jquery.contextMenu/jquery.contextMenu.scss";
 @import "../../3rdparty/jquery.tablesorter/theme.bootstrap.scss";
 @import "../../3rdparty/jquery.sew/jquery.sew.scss";
 @import "../../3rdparty/codemirror/lib/codemirror.scss";
-@import "_charts.scss";
 @import "_core.scss";
+@import "_charts.scss";
+@import "_buttons.scss";
+@import "_alerts.scss";
+@import "_scenario.scss";
+@import "_fonts.scss";
 @import "_fab.scss";
 @import "../../3rdparty/AdminLTE/css/_AdminLTE.scss";
 @import "../../3rdparty/AdminLTE/css/_AdminLTE-bootstrap-social.scss";
 @import "adminlte/_AdminLTE-nextdom.scss";
+@import "_cards.scss";
 @import "../../3rdparty/datetimepicker/jquery.datetimepicker.css";
-
-@import url("/3rdparty/bootstrap-colorpicker/css/bootstrap-colorpicker.css");
+@import "../../vendor/itsjavi/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css";

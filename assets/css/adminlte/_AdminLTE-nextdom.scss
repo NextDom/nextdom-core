@@ -20,6 +20,10 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
+html {
+  scroll-behavior: smooth;
+}
+
 body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: 'Roboto','Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
 }
@@ -27,9 +31,11 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .main-header {
   z-index: 1030;
 }
+::-webkit-scrollbar {
+    width: 5px;
+}
 ::-webkit-scrollbar-thumb {
-  width: 80px;
-  border-radius: 3px;
+  border-radius: 5px;
 }
 ::-webkit-scrollbar-corner {
   background-color: transparent;
@@ -195,14 +201,14 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 /* Treeview */
 .treeview-menu {
-  padding: 5px 5px;
+  padding: 5px 0px;
   &> li {
     padding-top: 1px;
     padding-bottom: 1px;
   }
 }
 .treeview-menu > li > a {
-  padding: 5px 0px 5px 9px;
+  padding: 5px 0px 5px 15px;
   word-break: break-all;
   white-space: normal;
 }
@@ -285,9 +291,10 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 .btn-app {
   line-height: 2.5;
-  height: 70px;
-  margin: 5px 5px 5px 5px;
-  min-width: 115px;
+  height: 65px;
+  margin: 3px 3px 4px 4px;
+  min-width: 112px;
+  padding: 12px 5px;
 }
 .btn-tab {
   line-height: 2;
@@ -537,6 +544,9 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   border-radius: 2px;
   margin: 4px 0px;
   padding: 0px 10px;
+}
+.nav>.label-log>a {
+    padding: 10px 10px;
 }
 @media (max-width: 767px) {
   .legend-title {
@@ -795,4 +805,8 @@ input[type="checkbox"] {
 }
 #listPlugin .box .box-body {
   min-height: 180px;
+}
+.card-dash {
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid;
 }

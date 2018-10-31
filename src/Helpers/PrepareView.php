@@ -21,7 +21,7 @@ use NextDom\Helpers\Status;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Helpers\Controller;
+use NextDom\Helpers\PagesController;
 
 /**
  * Classe de support à l'affichage des contenus HTML
@@ -70,7 +70,6 @@ class PrepareView
     public static function showRescueMode($configs)
     {
         global $language;
-        global $configs;
 
         if (!in_array(Utils::init('p'), array('custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system'))) {
             $_GET['p'] = 'system';
@@ -102,19 +101,10 @@ class PrepareView
 
         $pageData['MENU'] = $render->get('commons/menu_rescue.html.twig');
 
-        try {
-            if (!\nextdom::isStarted()) {
-                $pageData['alertMsg'] = 'NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.';
-            }
-            ob_start();
-            \include_file('desktop', $page, 'php');
-            $pageData['content'] = ob_get_clean();
-        } catch (\Exception $e) {
-            ob_end_clean();
-            $pageData['alertMsg'] = displayException($e);
+        if (!\nextdom::isStarted()) {
+            $pageData['alertMsg'] = 'NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.';
         }
-
-        $pageData['CONTENT'] = $render->get('desktop/index.html.twig', $pageData);
+        $pageData['CONTENT'] = self::getContent($render, $pageData, $page, null);
 
         $render = Render::getInstance();
         $render->show('layouts/base_rescue.html.twig', $pageData);
@@ -343,72 +333,72 @@ class PrepareView
             $pageData['JS_POOL'][] = '/public/js/base.js';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min.js';
-            $pageData['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/adminlte.js ';
+            $pageData['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/adminlte.js';
             $pageData['JS_END_POOL'][] = '/public/js/adminlte/adminlte_nextdom.js';
         } else {
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.utils/jquery.utils.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/iziToast/js/iziToast.min.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/bootstrap/js/bootstrap.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.ui/jquery-ui.min.js ';
-            $pageData['JS_POOL'][] = '/public/js/desktop/utils.js ';
-            $pageData['JS_POOL'][] = '/core/js/core.js ';
-            $pageData['JS_POOL'][] = '/core/js/nextdom.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/private.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/eqLogic.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/cmd.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/object.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/scenario.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/plugin.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/message.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/view.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/config.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/history.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/cron.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/security.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/update.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/user.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/backup.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/interact.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/update.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/plan.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/log.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/repo.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/network.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/dataStore.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/cache.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/report.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/note.class.js ';
-            $pageData['JS_POOL'][] = '/core/js/jeedom.class.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/bootbox/bootbox.min.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/highstock/highstock.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/highstock/highcharts-more.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/highstock/modules/solid-gauge.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/highstock/modules/exporting.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/highstock/modules/export-data.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.at.caret/jquery.at.caret.min.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/jwerty/jwerty.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.packery/jquery.packery.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.lazyload/jquery.lazyload.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/codemirror/lib/codemirror.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/codemirror/addon/edit/matchbrackets.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/codemirror/mode/htmlmixed/htmlmixed.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/codemirror/mode/clike/clike.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/codemirror/mode/php/php.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/codemirror/mode/xml/xml.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/codemirror/mode/javascript/javascript.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/codemirror/mode/css/css.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.tree/jstree.min.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.fileupload/jquery.ui.widget.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.fileupload/jquery.iframe-transport.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.fileupload/jquery.fileupload.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.multi-column-select/multi-column-select.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.sew/jquery.sew.min.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.cron/jquery.cron.min.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.contextMenu/jquery.contextMenu.min.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/autosize/autosize.min.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/inputmask/jquery.inputmask.bundle.js ';
-            $pageData['JS_POOL'][] = '/3rdparty/bootstrap-colorpicker/js/bootstrap-colorpicker.js ';
-            $pageData['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/adminlte.js ';
+            $pageData['JS_POOL'][] = '/3rdparty/jquery.utils/jquery.utils.js';
+            $pageData['JS_POOL'][] = '/3rdparty/iziToast/js/iziToast.min.js';
+            $pageData['JS_POOL'][] = '/vendor/twitter/bootstrap/dist/js/bootstrap.js';
+            $pageData['JS_POOL'][] = '/vendor/components/jqueryui/jquery-ui.min.js';
+            $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
+            $pageData['JS_POOL'][] = '/core/js/core.js';
+            $pageData['JS_POOL'][] = '/core/js/nextdom.class.js';
+            $pageData['JS_POOL'][] = '/core/js/private.class.js';
+            $pageData['JS_POOL'][] = '/core/js/eqLogic.class.js';
+            $pageData['JS_POOL'][] = '/core/js/cmd.class.js';
+            $pageData['JS_POOL'][] = '/core/js/object.class.js';
+            $pageData['JS_POOL'][] = '/core/js/scenario.class.js';
+            $pageData['JS_POOL'][] = '/core/js/plugin.class.js';
+            $pageData['JS_POOL'][] = '/core/js/message.class.js';
+            $pageData['JS_POOL'][] = '/core/js/view.class.js';
+            $pageData['JS_POOL'][] = '/core/js/config.class.js';
+            $pageData['JS_POOL'][] = '/core/js/history.class.js';
+            $pageData['JS_POOL'][] = '/core/js/cron.class.js';
+            $pageData['JS_POOL'][] = '/core/js/security.class.js';
+            $pageData['JS_POOL'][] = '/core/js/update.class.js';
+            $pageData['JS_POOL'][] = '/core/js/user.class.js';
+            $pageData['JS_POOL'][] = '/core/js/backup.class.js';
+            $pageData['JS_POOL'][] = '/core/js/interact.class.js';
+            $pageData['JS_POOL'][] = '/core/js/update.class.js';
+            $pageData['JS_POOL'][] = '/core/js/plan.class.js';
+            $pageData['JS_POOL'][] = '/core/js/log.class.js';
+            $pageData['JS_POOL'][] = '/core/js/repo.class.js';
+            $pageData['JS_POOL'][] = '/core/js/network.class.js';
+            $pageData['JS_POOL'][] = '/core/js/dataStore.class.js';
+            $pageData['JS_POOL'][] = '/core/js/cache.class.js';
+            $pageData['JS_POOL'][] = '/core/js/report.class.js';
+            $pageData['JS_POOL'][] = '/core/js/note.class.js';
+            $pageData['JS_POOL'][] = '/core/js/jeedom.class.js';
+            $pageData['JS_POOL'][] = '/3rdparty/bootbox/bootbox.min.js';
+            $pageData['JS_POOL'][] = '/3rdparty/highstock/highstock.js';
+            $pageData['JS_POOL'][] = '/3rdparty/highstock/highcharts-more.js';
+            $pageData['JS_POOL'][] = '/3rdparty/highstock/modules/solid-gauge.js';
+            $pageData['JS_POOL'][] = '/3rdparty/highstock/modules/exporting.js';
+            $pageData['JS_POOL'][] = '/3rdparty/highstock/modules/export-data.js';
+            $pageData['JS_POOL'][] = '/3rdparty/jquery.at.caret/jquery.at.caret.min.js';
+            $pageData['JS_POOL'][] = '/3rdparty/jwerty/jwerty.js';
+            $pageData['JS_POOL'][] = '/3rdparty/jquery.packery/jquery.packery.js';
+            $pageData['JS_POOL'][] = '/3rdparty/jquery.lazyload/jquery.lazyload.js';
+            $pageData['JS_POOL'][] = '/3rdparty/codemirror/lib/codemirror.js';
+            $pageData['JS_POOL'][] = '/3rdparty/codemirror/addon/edit/matchbrackets.js';
+            $pageData['JS_POOL'][] = '/3rdparty/codemirror/mode/htmlmixed/htmlmixed.js';
+            $pageData['JS_POOL'][] = '/3rdparty/codemirror/mode/clike/clike.js';
+            $pageData['JS_POOL'][] = '/3rdparty/codemirror/mode/php/php.js';
+            $pageData['JS_POOL'][] = '/3rdparty/codemirror/mode/xml/xml.js';
+            $pageData['JS_POOL'][] = '/3rdparty/codemirror/mode/javascript/javascript.js';
+            $pageData['JS_POOL'][] = '/3rdparty/codemirror/mode/css/css.js';
+            $pageData['JS_POOL'][] = '/vendor/vakata/jstree/dist/jstree.min.js';
+            $pageData['JS_POOL'][] = '/3rdparty/jquery.fileupload/jquery.ui.widget.js';
+            $pageData['JS_POOL'][] = '/3rdparty/jquery.fileupload/jquery.iframe-transport.js';
+            $pageData['JS_POOL'][] = '/3rdparty/jquery.fileupload/jquery.fileupload.js';
+            $pageData['JS_POOL'][] = '/3rdparty/jquery.multi-column-select/multi-column-select.js';
+            $pageData['JS_POOL'][] = '/3rdparty/jquery.sew/jquery.sew.min.js';
+            $pageData['JS_POOL'][] = '/3rdparty/jquery.cron/jquery.cron.min.js';
+            $pageData['JS_POOL'][] = '/3rdparty/jquery.contextMenu/jquery.contextMenu.min.js';
+            $pageData['JS_POOL'][] = '/3rdparty/autosize/autosize.min.js';
+            $pageData['JS_POOL'][] = '/3rdparty/inputmask/jquery.inputmask.bundle.js';
+            $pageData['JS_POOL'][] = '/vendor/itsjavi/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
+            $pageData['JS_END_POOL'][] = '/3rdparty/AdminLTE/js/adminlte.js';
             $pageData['JS_END_POOL'][] = '/public/js/adminlte/adminlte_nextdom.js';
         }
     }
@@ -468,7 +458,7 @@ class PrepareView
             \include_file('desktop', $page, 'php', $currentPlugin->getId(), true);
             return ob_get_clean();
         } else {
-            $controllerRoute = Controller::getRoute($page);
+            $controllerRoute = PagesController::getRoute($page);
             if ($controllerRoute == null) {
                 // Vérifie que l'utilisateur n'essaie pas de sortir
                 $purgedPage = preg_replace('/[^a-z0-9_-]/i', '', $page);
@@ -481,7 +471,48 @@ class PrepareView
                     Router::showError404AndDie();
                 }
             } else {
-                return \NextDom\Helpers\Controller::$controllerRoute($render, $pageContent);
+                return \NextDom\Helpers\PagesController::$controllerRoute($render, $pageContent);
+            }
+        }
+    }
+
+    public static function showModal()
+    {
+        error_log('MODAL');
+        $error = false;
+        \include_file('core', 'authentification', 'php');
+        $plugin = Utils::init('plugin', '');
+        $modalCode = Utils::init('modal', '');
+        error_log('Modal code : '.$modalCode);
+        // Affichage d'un modal appartenant à un plugin
+        if ($plugin != '') {
+            error_log('PLUGIN MODAL');
+            try {
+                \include_file('desktop', $modalCode, 'modal', $plugin, true);
+            } catch (\Exception $e) {
+                echo '<div class="alert alert-danger div_alert">';
+                echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
+                echo '</div>';
+            }
+        }
+        // Affichage d'un modal du core
+        else {
+            error_log('CORE MODAL');
+            $modalRoute = ModalsController::getRoute($modalCode);
+            if ($modalRoute == null) {
+                error_log('OLD MODAL');
+                try {
+                    \include_file('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
+                } catch (\Exception $e) {
+                    echo '<div class="alert alert-danger div_alert">';
+                    echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
+                    echo '</div>';
+                }
+            }
+            else {
+                error_log('NEW MODAL');
+                $render = Render::getInstance();
+                \NextDom\Helpers\ModalsController::$modalRoute($render);
             }
         }
     }
