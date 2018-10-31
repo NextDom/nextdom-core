@@ -38,55 +38,51 @@
                 {% endif %}
             </div>
         </div>
+
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">{{ 'MENU PRINCIPAL' }}</li>
-            <li class="active treeview menu-open">
-                <a href="#"><i class="fas fa-home"></i><span>&nbsp;&nbsp;{{ 'Accueil' }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+            <li class="treeview">
+                <a href="#"><i class="fas fa-tachometer-alt"></i><span>&nbsp;&nbsp;{{ 'Dashboard' }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li class="treeview">
-                        <a href="#"><i class="fa fa-dashboard"></i>&nbsp;&nbsp;{{ 'Dashboard' }}<span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
-                        <ul class="treeview-menu">
-                            <li class="treeview-menu">
-                            <li><a href="index.php?v=d&p=dashboard">{{ 'Objet par défaut' }}</a></li>
-                            {% for jeeObject in MENU_JEEOBJECT_TREE %}
-                                <li><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </li>
-                    <li class="treeview">
-                        <a href="#"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;{{ 'Vue(s)' }}<span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
-                        <ul class="treeview-menu">
-                            <li class="treeview-menu">
-                            <li><a href="index.php?v=d&p=view">{{ 'Afficher tout' }}</a></li>
-                            {% for view in MENU_VIEWS_LIST %}
-                                <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">&nbsp;&nbsp;{{ view.getDisplay('icon')|trim }} {{ viewMenu.getName() }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </li>
-                    <li class="treeview">
-                        <a href="#"><i class="fas fa-object-group"></i>&nbsp;&nbsp;{{ 'Design(s)' }}<span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
-                        <ul class="treeview-menu">
-                            <li class="treeview-menu">
-                            <li><a href="index.php?v=d&p=plan">{{ 'Afficher tout' }}</a></li>
-                            {% for plan in MENU_PLANS_LIST %}
-                                <li><a href="index.php?v=d&p=plan&plan_id={{ plan.getId() }}">&nbsp;&nbsp;{{ plan.getConfiguration('icon')|trim }} {{ plan.getName() }}</a></li>
-                            {% endfor %}
-
-                        </ul>
-                    </li>
-                    <li class="treeview">
-                        <a href="#"><i class="fas fa-building"></i>&nbsp;&nbsp;{{ 'Plan(s) 3D' }}<span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
-                        <ul class="treeview-menu">
-                            <li class="treeview-menu">
-                            <li><a href="index.php?v=d&p=plan3d">{{ 'Afficher tout' }}</a></li>
-                            {% for plan3d in MENU_PLANS3D_LIST %}
-                                <li><a href="index.php?v=d&p=plan3d&plan3d_id={{ plan3d.getId() }}">&nbsp;&nbsp;{{ plan3d.getConfiguration('icon')|trim }} {{ plan3d.getName() }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </li>
+                    <li class="treeview-menu">
+                    <li><a href="index.php?v=d&p=dashboard"><i class="fas fa-asterisk"></i>&nbsp;{{ 'Objet par défaut' }}</a></li>
+                    {% for jeeObject in MENU_JEEOBJECT_TREE %}
+                        <li style="padding-left:{{ jeeObject.parentNumber()*7 }}px"><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
+                    {% endfor %}
                 </ul>
             </li>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-picture-o"></i><span>&nbsp;&nbsp;{{ 'Vue(s)' }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    <li class="treeview-menu">
+                    <li><a href="index.php?v=d&p=view">{{ 'Afficher tout' }}</a></li>
+                    {% for view in MENU_VIEWS_LIST %}
+                        <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">{{ view.getDisplay('icon')|raw }} {{ view.getName() }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#"><i class="fas fa-object-group"></i><span>&nbsp;&nbsp;{{ 'Design(s)' }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    <li class="treeview-menu">
+                    <li><a href="index.php?v=d&p=plan">{{ 'Afficher tout' }}</a></li>
+                    {% for plan in MENU_PLANS_LIST %}
+                        <li><a href="index.php?v=d&p=plan&plan_id={{ plan.getId() }}">{{ plan.getConfiguration('icon')|raw }} {{ plan.getName() }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#"><i class="fas fa-building"></i><span>&nbsp;&nbsp;{{ 'Plan(s) 3D' }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    <li class="treeview-menu">
+                    <li><a href="index.php?v=d&p=plan3d">{{ 'Afficher tout' }}</a></li>
+                    {% for plan3d in MENU_PLANS3D_LIST %}
+                        <li><a href="index.php?v=d&p=plan3d&plan3d_id={{ plan3d.getId() }}">&nbsp;&nbsp;{{ plan3d.getConfiguration('icon')|trim }} {{ plan3d.getName() }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+
             <li class="treeview">
                 <a href="#"><i class="fas fa-puzzle-piece"></i><span>&nbsp;&nbsp;{{ 'Plugins' }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
@@ -105,6 +101,7 @@
                     {% endif %}
                 </ul>
             </li>
+
             <li class="treeview">
                 <a href="#"><i class="fa fa-th-list"></i><span>&nbsp;&nbsp;{{ 'Outils' }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
