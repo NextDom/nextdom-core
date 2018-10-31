@@ -88,7 +88,7 @@ function gen_js {
         3rdparty/codemirror/mode/clike/clike.js \
         3rdparty/codemirror/mode/php/php.js \
         3rdparty/codemirror/mode/xml/xml.js \
-        3rdparty/codemirror/mode/javascript/javascript.js \
+        3rdparty/codemirror/mode/javascripts/javascript.js \
         3rdparty/codemirror/mode/css/css.js \
         vendor/vakata/jstree/dist/jstree.min.js \
         3rdparty/jquery.fileupload/jquery.ui.widget.js \
@@ -104,32 +104,32 @@ function gen_js {
         3rdparty/datetimepicker/jquery.datetimepicker.js  > /tmp/temp.js
     python -m jsmin /tmp/temp.js > public/js/base.js
     rm /tmp/temp.js
-    php script/translate.php public/js/base.js
+    php scripts/translate.php public/js/base.js
 
     mkdir -p public/js/adminlte
     for jsFile in assets/js/adminlte/*.js
     do
         python -m jsmin $jsFile > public/js/adminlte/${jsFile##*/}
-        php script/translate.php public/js/adminlte/${jsFile##*/}
+        php scripts/translate.php public/js/adminlte/${jsFile##*/}
     done
     mkdir -p public/js/desktop
     for jsFile in assets/js/desktop/*.js
     do
         python -m jsmin $jsFile > public/js/desktop/${jsFile##*/}
-        php script/translate.php public/js/desktop/${jsFile##*/}
+        php scripts/translate.php public/js/desktop/${jsFile##*/}
     done
     mkdir -p public/js/modals
     for jsFile in assets/js/modals/*.js
     do
         python -m jsmin $jsFile > public/js/modals/${jsFile##*/}
-        php script/translate.php public/js/modals/${jsFile##*/}
+        php scripts/translate.php public/js/modals/${jsFile##*/}
     done
 
     mkdir -p public/js/desktop/Market
     for jsFile in assets/js/desktop/Market/*.js
     do
         python -m jsmin $jsFile > public/js/desktop/Market/${jsFile##*/}
-        php script/translate.php public/js/desktop/Market/${jsFile##*/}
+        php scripts/translate.php public/js/desktop/Market/${jsFile##*/}
     done
 }
 
