@@ -21,7 +21,7 @@ if (!isConnect('admin')) {
 sendVarToJS('prerenderGraph', config::byKey('graphlink::prerender', 'core', 10));
 sendVarToJS('renderGraph', config::byKey('graphlink::render', 'core', 3000));
 ?>
-<script type="text/javascript" src="3rdparty/vivagraph/vivagraph.min.js"></script>
+<script type="text/javascript" src="vendor/node_modules/vivagraphjs/dist/vivagraph.min.js"></script>
 <style>
     #div_graphLinkRenderer > svg {
         height: 100%;

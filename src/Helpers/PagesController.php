@@ -170,7 +170,7 @@ class PagesController
         $pageContent['JS_POOL'][] = '/public/js/desktop/dashboard.js';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/dashboard_events.js';
         // A remettre une fois mise sous forme de thème//
-        $pageContent['JS_POOL'][] = '/3rdparty/jquery.isotope/isotope.pkgd.min.js';
+        $pageContent['JS_POOL'][] = '/vendor/node_modules/isotope-layout/dist/isotope.pkgd.min.js';
         $pageContent['JS_POOL'][] = '/3rdparty/jquery.multi-column-select/multi-column-select.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
