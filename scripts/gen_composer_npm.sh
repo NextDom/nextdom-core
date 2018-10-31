@@ -27,12 +27,15 @@ composer install
 }
 
 function init_dependencies {
-	sass --version > /dev/null 2>&1
+	npm --version > /dev/null 2>&1
 	if [ $? -ne 0 ]; then
 		echo " >>> Installation de node et npm"
 		wget https://deb.nodesource.com/setup_10.x -O install_npm.sh
 		bash install_npm.sh
 		apt install -y nodejs
+	fi
+	sass --version > /dev/null 2>&1
+	if [ $? -ne 0 ]; then
 		echo " >>> Installation de sass"
 		npm install -g sass
 	fi
