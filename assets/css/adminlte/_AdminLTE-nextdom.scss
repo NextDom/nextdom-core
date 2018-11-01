@@ -695,8 +695,9 @@ input[type="checkbox"] {
 [type="checkbox"]:checked:before {
   content: '';
   position: absolute;
-  left:0px; top: 0px;
-  width: 18px;
+  left: 0px;
+  top: 0px;
+  width: 17px;
   height: 17px;
   border: 1px solid #ccc;
   border-radius: 2px;
@@ -706,8 +707,8 @@ input[type="checkbox"] {
 [type="checkbox"]:checked:after {
   content: '■';
   position: absolute;
-  top: -11px;
-  left:2px;
+  top: -9px;
+  left: 1px;
   font-size: 24px;
   transition: all .2s;
 }
