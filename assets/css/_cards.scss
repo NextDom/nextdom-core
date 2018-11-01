@@ -80,15 +80,15 @@
     right: 7px;
   }
   float: left;
-  height: 50px;
+  height: auto;
   width: 50px;
-  padding-top: 5px;
+  padding-top: 7px;
+  padding-bottom: 5px;
   text-align: center;
+  vertical-align: middle;
 }
-.card [class*=card-header-] .card-icon .icon {
-  position: absolute;
-  top: -18px;
-  left: 20px;
+.card [class*=card-header-] .card-icon .icon, .card [class*=card-header-] .card-icon .fa, .card [class*=card-header-] .card-icon .fas {
+  position: inherit;
 }
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text > i {
   font-size: 2em;
