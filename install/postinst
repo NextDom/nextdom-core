@@ -348,7 +348,7 @@ step_nextdom_var_www_html() {
         # A faire dans une version developpeur (apres git clone)
         cd ${WEBSERVER_HOME}
         composer -q install
-        ./gen_assets.sh
+        ./scripts/gen_assets.sh
     fi
 }
 
