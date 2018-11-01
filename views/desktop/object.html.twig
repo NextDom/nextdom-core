@@ -41,6 +41,7 @@
         </div>
 
         <div class="box-body">
+            <legend class="legend-title">{{ 'Le titre de l\'objet vous redirige vers sa section du dashboard...' }}</legend>
             <div class="row">
                 <div class="col-xs-12">
                     <div class="input-group">
@@ -56,7 +57,7 @@
         {% for object in objectList %}
             <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                 <div class="box objectDisplayCard" style='border-top:3px solid {{ object.getDisplay("tagColor") }}' data-object_id="{{ object.getId() }}" data-object_name="{{ object.getName() }}">
-                    <a class="box-header with-border bt_detailsObject cursor">
+                    <a class="box-header with-border cursor" href=index.php?v=d&p=dashboard&object_id={{ object.getId() }}>
                         <h4 class="box-title name object-name" style='color:{{ object.getDisplay("tagColor") }}'>{{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|replace({'></i>': '></i>'})|raw }}&nbsp;&nbsp;<b>{{ object.getName() }}</b></h4>
                     </a>
                     <div class="box-body">
@@ -85,14 +86,14 @@
                 <fieldset>
                     <legend class="legend-title">{{ 'Identité' }}</legend>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nom de l\'objet' }}</label>
+                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nom de l\'objet' }}</label>
                         <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                             <input class="form-control objectAttr" type="text" data-l1key="id" style="display : none;"/>
                             <input class="form-control objectAttr" type="text" data-l1key="name" placeholder="Nom de l'objet"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Père' }}</label>
+                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Père' }}</label>
                         <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                             <select class="form-control objectAttr" data-l1key="father_id">
                                 <option value="">{{ 'Aucun' }}</option>
@@ -106,7 +107,7 @@
                     <div class="legend-section">
                         <legend class="legend-title">{{ 'Couleurs' }}</legend>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du tag' }}</label>
+                            <label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du tag' }}</label>
                             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                                 <div class=" colorpicker-component colorpick input-group">
                                     <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="tagColor"/>
@@ -115,7 +116,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du texte du tag' }}</label>
+                            <label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du texte du tag' }}</label>
                             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                                 <div class=" colorpicker-component colorpick input-group">
                                     <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="tagTextColor"/>
@@ -124,7 +125,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du texte du résumé' }}</label>
+                            <label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du texte du résumé' }}</label>
                             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                                 <div class=" colorpicker-component colorpick input-group">
                                     <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="desktop::summaryTextColor"/>
@@ -133,7 +134,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Taille sur le dashboard (1 à 12)' }}</label>
+                            <label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Taille sur le dashboard (1 à 12)' }}</label>
                             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                                 <input type="number" class="objectAttr form-control" data-l1key="display" data-l2key="dashboard::size"/>
                             </div>
@@ -143,25 +144,25 @@
                     <div class="legend-section">
                         <legend class="legend-title">{{ 'Design' }}</legend>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Position' }}</label>
+                            <label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Position' }}</label>
                             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
                                 <input type="number" class="objectAttr form-control" data-l1key="position"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Visible' }}</label>
+                            <label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Visible' }}</label>
                             <div class="col-sm-1">
                                 <input class="objectAttr" type="checkbox" data-l1key="isVisible" checked/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Masquer sur le dashboard' }}</label>
+                            <label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Masquer sur le dashboard' }}</label>
                             <div class="col-sm-1">
                                 <input class="objectAttr" type="checkbox" data-l1key="configuration" data-l2key="hideOnDashboard"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Icône' }}</label>
+                            <label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Icône' }}</label>
                             <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                                 <div class="objectAttr" data-l1key="display" data-l2key="icon" style="font-size : 1.5em;"></div>
                             </div>
@@ -170,7 +171,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Image' }}</label>
+                            <label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Image' }}</label>
                             <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                                 <span class="btn btn-default btn-file">
                                     <i class="fas fa-cloud-upload-alt">&nbsp;&nbsp;</i>{{ 'Envoyer' }}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">
