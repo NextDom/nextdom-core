@@ -14,6 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 
+# Get current directory
+set_root() {
+    local this=`readlink -n -f $1`
+    root=`dirname $this`
+}
+set_root $0
+
 function gen_css {
 	echo " >>> Generation du CSS"
 	mkdir -p public/css/adminlte
@@ -161,6 +168,8 @@ function start {
 		sleep 1
 	done
 }
+
+cd ${root}/..
 
 if [ "$#" == 0 ]; then
     echo "Pour lancer la génération automatique, ajouter l'option --watch"

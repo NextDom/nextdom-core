@@ -15,6 +15,13 @@
 # along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 # function install_nodemodules
 
+# Get current directory
+set_root() {
+    local this=`readlink -n -f $1`
+    root=`dirname $this`
+}
+set_root $0
+
 function install_nodemodules {
 echo " >>> Installation des modules npm"
 cp package.json ./vendor
@@ -49,6 +56,8 @@ function init_dependencies {
 	    fi
 	fi
 }
+
+cd ${root}/..
 
 init_dependencies
 install_dep_composer
