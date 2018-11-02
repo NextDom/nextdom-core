@@ -23,3 +23,4 @@ set_root $0
 
 ${root}/gen_composer_npm.sh
 ${root}/gen_assets.sh
+${root}/gen_docs.sh
