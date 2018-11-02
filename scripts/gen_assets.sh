@@ -19,13 +19,18 @@ scriptDir=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 nextdomDir=$scriptDir/../
 
 function gen_css {
+    COMPRESS=""
+    if [ $# -eq 0 ]; then
+        COMPRESS="--style compressed"
+    fi
 	echo " >>> Generation du CSS"
+
 	mkdir -p $nextdomDir/public/css/adminlte
-	sass $nextdomDir/assets/css/nextdom.scss $nextdomDir/public/css/nextdom.css --style compressed
-	sass $nextdomDir/assets/css/nextdom.mob.scss $nextdomDir/public/css/nextdom.mob.css --style compressed
-	sass $nextdomDir/assets/css/firstUse.scss $nextdomDir/public/css/firstUse.css --style compressed
-	sass $nextdomDir/assets/css/rescue.scss $nextdomDir/public/css/rescue.css --style compressed
-	sass $nextdomDir/assets/css/Market/market.scss $nextdomDir/public/css/market.css --style compressed
+	sass $nextdomDir/assets/css/nextdom.scss $nextdomDir/public/css/nextdom.css --style $COMPRESS
+	sass $nextdomDir/assets/css/nextdom.mob.scss $nextdomDir/public/css/nextdom.mob.css --style $COMPRESS
+	sass $nextdomDir/assets/css/firstUse.scss $nextdomDir/public/css/firstUse.css --style $COMPRESS
+	sass $nextdomDir/assets/css/rescue.scss $nextdomDir/public/css/rescue.css --style $COMPRESS
+	sass $nextdomDir/assets/css/Market/market.scss $nextdomDir/public/css/market.css --style $COMPRESS
 
 	# Remplacement des chemins
 #	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-#g public/css/nextdom.css
@@ -103,9 +108,11 @@ function gen_js {
         $nextdomDir/vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
         $nextdomDir/vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
         $nextdomDir/vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.js  > /tmp/temp.js
-    python -m jsmin /tmp/temp.js > $nextdomDir/public/js/base.js
+        
+if [ $# -eq 0 ]; then
+    python -m jsmin /tmp/temp.js > public/js/base.js
     rm /tmp/temp.js
-    php $nextdomDir/scripts/translate.php $nextdomDir/public/js/base.js
+    php scripts/translate.php public/js/base.js
 
     mkdir -p $nextdomDir/public/js/adminlte
     for jsFile in $nextdomDir/assets/js/adminlte/*.js
@@ -132,6 +139,7 @@ function gen_js {
         python -m jsmin $jsFile > $nextdomDir/public/js/desktop/Market/${jsFile##*/}
         php $nextdomDir/scripts/translate.php $nextdomDir/public/js/desktop/Market/${jsFile##*/}
     done
+fi
 }
 
 function copy_assets {
@@ -149,17 +157,17 @@ function start {
 	while true; do
 		FIND_CSS_RES=$(find $nextdomDir/assets/css -mmin -0.1)
 		if [ -n "$FIND_CSS_RES" ]; then
-			gen_css
+			gen_css no_compress
 			echo " >>> OK"
 		fi
 		FIND_JS_RES=$(find $nextdomDir/core/js -mmin -0.1)
 		if [ -n "$FIND_JS_RES" ]; then
-			gen_js
+			gen_js no_compress
 			echo " >>> OK"
 		fi
 		FIND_JS_RES=$(find $nextdomDir/assets/js -mmin -0.1)
 		if [ -n "$FIND_JS_RES" ]; then
-			gen_js
+			gen_js no_compress
 			echo " >>> OK"
 		fi
 		sleep 1
