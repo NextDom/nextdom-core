@@ -14,12 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 
-currentDir=$PWD
-scriptDir=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
-nextdomDir=$scriptDir/../
+# Get current directory
+set_root() {
+    local this=`readlink -n -f $1`
+    root=`dirname $this`
+}
+set_root $0
 
-cd $scriptDir
-./gen_composer_npm.sh
-./gen_assets.sh
-./gen_docs.sh
-cd $currentDir
+${root}/gen_composer_npm.sh
+${root}/gen_assets.sh
+${root}/gen_docs.sh
