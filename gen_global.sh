@@ -1,0 +1,1 @@
+./scripts/gen_global.sh
