@@ -18,10 +18,12 @@
 <!-- Main Footer -->
 <footer class="main-footer">
     <!-- To the right -->
-    <div class="pull-right hidden-xs">
-        <p><a href="#" id="bt_nextdomAbout"><i class="fas fa-info-circle"></i> About Nextdom</a></p>
+    <div class="pull-right cursor">
+        <a id="bt_nextdomAbout"><i class="fas fa-info-circle">&nbsp;&nbsp;</i>{{ 'A Propos de Nextdom' }}</a>
     </div>
     <!-- Default to the left -->
-    <strong>GPL Automation 2018 - {{ "now"|date("Y") }} NextDom <a href="https://www.nextdom.org"></a>.</strong> All rights reserved.
+    <div class="pull-left cursor">
+        <strong><a href="https://www.nextdom.org" target="_blank">{{ 'GPL Automation 2018 '}} - {{ "now"|date("Y") }} {{ 'NextDom.' }}</a>&nbsp;&nbsp;</strong>All rights reserved.
+    </div>
 </footer>
 <!--/Main Footer-->

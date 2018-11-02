@@ -674,6 +674,10 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .padding-bottom {
   padding-bottom: 10px;
 }
+.main-footer {
+    padding: 13px 150px 11px 35px;
+    display: flow-root;
+}
 
 /* Checkboxes */
 input[type="checkbox"] {
