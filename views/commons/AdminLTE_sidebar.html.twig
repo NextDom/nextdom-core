@@ -120,7 +120,7 @@
                     <li><a href="index.php?v=d&p=administration"><i class="fas fa-wrench"></i>&nbsp;&nbsp;{{ 'Réglages & Outils' }}</a></li>
                     <li><a href="/index.php?v=m" data-reload="yes"><i class="fas fa-mobile-alt"></i>&nbsp;&nbsp;{{ 'Version mobile' }}</a></li>
                     <li><a><i class="fas fa-code-branch"></i>&nbsp;&nbsp;{{ 'Version' }} {{ NEXTDOM_VERSION }}</a></li>
-                    <li><a href="#" id="bt_nextdomAbout"><i class="fas fa-info-circle"></i>&nbsp;&nbsp;{{ 'A propos' }}</a></li>
+                    <li><a id="bt_nextdomAbout"><i class="fas fa-info-circle"></i>&nbsp;&nbsp;{{ 'A propos' }}</a></li>
                     <li><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock"></i>&nbsp;&nbsp;{{ 'Se déconnecter' }}</a></li>
                     {% if IS_ADMIN and CAN_SUDO %}
                         <li><a href="#" id="bt_rebootSystem" state="0"><i class="fas fa-repeat"></i>&nbsp;&nbsp;{{ 'Redémarrer' }}</a></li>
