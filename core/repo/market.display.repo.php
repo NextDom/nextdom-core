@@ -12,12 +12,12 @@ if (init('logicalId') != '' && init('type') != '') {
 if (!isset($market)) {
     throw new Exception('404 not found');
 }
-include_file('3rdparty', 'bootstrap.rating/bootstrap.rating', 'js');
-include_file('3rdparty', 'slick/slick.min', 'js');
-include_file('3rdparty', 'slick/slick', 'css');
-include_file('3rdparty', 'slick/slick-theme', 'css');
-include_file('3rdparty', 'fancybox/jquery.fancybox', 'js');
-include_file('3rdparty', 'fancybox/jquery.fancybox', 'css');
+include_file('3rdparty', 'bootstrap-rating/bootstrap-rating.min', 'js');
+include_file('vendor', 'node_modules/slick-carousel/slick/slick.min', 'js');
+include_file('vendor', 'node_modules/slick-carousel/slick/slick', 'css');
+include_file('vendor', 'node_modules/slick-carousel/slick/slick-theme', 'css');
+include_file('vendor', 'node_modules/fancybox/dist/js/jquery.fancybox', 'js');
+include_file('vendor', 'node_modules/fancybox/dist/css/jquery.fancybox', 'css');
 
 $market_array = utils::o2a($market);
 $market_array['rating'] = $market->getRating();
