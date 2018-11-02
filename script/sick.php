@@ -46,7 +46,7 @@ echo "\n==================================================\n";
 echo "\n**************************************************\n";
 echo "*                 VARIABLES                      *";
 echo "\n**************************************************\n";
-$install_dir = __DIR__;
+$install_dir = dirname(__DIR__);
 $processUser = posix_getpwuid(posix_geteuid());
 echo "Dossier d'installation : " . $install_dir . "\n";
 echo "User : " . $processUser['name'] . "\n";
@@ -61,7 +61,7 @@ echo "*               DOSSIERS                         *";
 echo "\n**************************************************\n";
 echo "Charge l'environnement de Jeedom...";
 try {
-	require_once __DIR__ . "/core/php/core.inc.php";
+	require_once $install_dir . "/core/php/core.inc.php";
 	echo "OK\n";
 } catch (\Exeption $e) {
 	echo "ERREUR\n";
