@@ -29,11 +29,11 @@ function gen_css {
 	echo " >>> Generation du CSS"
 
 	mkdir -p public/css/adminlte
-	sass assets/css/nextdom.scss /public/css/nextdom.css --style $COMPRESS
-	sass assets/css/nextdom.mob.scss /public/css/nextdom.mob.css --style $COMPRESS
-	sass assets/css/firstUse.scss /public/css/firstUse.css --style $COMPRESS
-	sass assets/css/rescue.scss /public/css/rescue.css --style $COMPRESS
-	sass assets/css/Market/market.scss /public/css/market.css --style $COMPRESS
+	sass assets/css/nextdom.scss public/css/nextdom.css $COMPRESS
+	sass assets/css/nextdom.mob.scss public/css/nextdom.mob.css $COMPRESS
+	sass assets/css/firstUse.scss public/css/firstUse.css $COMPRESS
+	sass assets/css/rescue.scss public/css/rescue.css $COMPRESS
+	sass assets/css/Market/market.scss public/css/market.css $COMPRESS
 
 	# Remplacement des chemins
 #	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-#g public/css/nextdom.css
