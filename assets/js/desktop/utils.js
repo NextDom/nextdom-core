@@ -303,7 +303,7 @@ $(function () {
         }
     });
 
-    $('#bt_nextdomAbout').on('click', function () {
+    $('#bt_nextdomAbout, #bt_nextdomAboutFooter').on('click', function () {
         $('#md_modal').dialog({title: "{{A propos}}"});
         $('#md_modal').load('index.php?v=d&modal=about').dialog('open');
     });
@@ -1052,4 +1052,3 @@ function toggleFullScreen() {
         $('#togglefullscreen').removeClass('fa-compress').addClass('fa-expand');
     }
 }
-
