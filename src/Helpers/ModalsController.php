@@ -34,12 +34,16 @@
 namespace NextDom\Helpers;
 
 use NextDom\Managers\CmdManager;
+use NextDom\Managers\JeeObjectManager;
 
 class ModalsController
 {
     const routesList = [
         'about' => 'aboutModal',
-        'cmd.configure' => 'cmdConfigureModal'
+        'cmd.configure' => 'cmdConfigureModal',
+        'log.display' => 'logDisplayModal',
+        'plan.configure' => 'planConfigureModal',
+        'planHeader.configure' => 'planHeaderConfigureModal'
     ];
 
     /**
@@ -186,5 +190,90 @@ class ModalsController
         ]);
 
         $render->show('/modals/cmd.configure.html.twig', $pageContent);
+    }
+
+    /**
+     * Render log display modal
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Log display modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function logDisplayModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        Utils::sendVarsToJS([
+            'log_display_name' => Utils::init('log', 'event'),
+            'log_default_search' => Utils::init('search', '')
+        ]);
+        $render->show('/modals/log.display.html.twig');
+    }
+
+    /**
+     * Render plan configure modal
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Plan configure modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function planConfigureModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent = [];
+        $pageContent['planObject'] = \plan::byId(Utils::init('id'));
+        if (!is_object($pageContent['planObject'])) {
+            throw new \Exception('Impossible de trouver le design');
+        }
+        $pageContent['planLink'] = $pageContent['planObject']->getLink();
+        $pageContent['jeeObjects'] = JeeObjectManager::all();
+        $pageContent['views'] = \view::all();
+        $pageContent['plans'] = \planHeader::all();
+        Utils::sendVarToJS('id', $pageContent['planObject']->getId());
+
+        $render->show('/modals/plan.configure.html.twig', $pageContent);
+    }
+
+    /**
+     * Render plan header configure modal
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Plan header configure modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function planHeaderConfigureModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $planHeader = \planHeader::byId(Utils::init('planHeader_id'));
+        if (!is_object($planHeader)) {
+            throw new \Exception('Impossible de trouver le plan');
+        }
+        sendVarToJS('id', $planHeader->getId());
+        sendVarToJS('planHeader', \utils::o2a($planHeader));
+
+        $render->show('/modals/planHeader.configure.html.twig');
     }
 }
