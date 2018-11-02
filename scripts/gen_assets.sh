@@ -14,24 +14,36 @@
 # You should have received a copy of the GNU General Public License
 # along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 
+# Get current directory
+set_root() {
+    local this=`readlink -n -f $1`
+    root=`dirname $this`
+}
+set_root $0
+
 function gen_css {
+    COMPRESS=""
+    if [ $# -eq 0 ]; then
+        COMPRESS="--style compressed"
+    fi
 	echo " >>> Generation du CSS"
+
 	mkdir -p public/css/adminlte
-	sass assets/css/nextdom.scss public/css/nextdom.css --style compressed
-	sass assets/css/nextdom.mob.scss public/css/nextdom.mob.css --style compressed
-	sass assets/css/firstUse.scss public/css/firstUse.css --style compressed
-	sass assets/css/rescue.scss public/css/rescue.css --style compressed
-	sass assets/css/Market/market.scss public/css/market.css --style compressed
+	sass assets/css/nextdom.scss public/css/nextdom.css $COMPRESS
+	sass assets/css/nextdom.mob.scss public/css/nextdom.mob.css $COMPRESS
+	sass assets/css/firstUse.scss public/css/firstUse.css $COMPRESS
+	sass assets/css/rescue.scss public/css/rescue.css $COMPRESS
+	sass assets/css/Market/market.scss public/css/market.css $COMPRESS
 
 	# Remplacement des chemins
 #	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-#g public/css/nextdom.css
 #	sed -i s#\.\./fonts/glyphicons-#/vendor/twitter/bootstrap/fonts/glyphicons-#g public/css/nextdom.css
-	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
+	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g /public/css/nextdom.css
 #	sed -i 's/[\"]32px\.png/"\/3rdparty\/jquery\.tree\/themes\/default\/32px.png/g' public/css/nextdom.css
 #	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.css
 
 #	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-# public/css/nextdom.mob.css
-	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
+	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g /public/css/nextdom.mob.css
 #	sed -i 's/[\"]32px\.png/\/3rdparty\/jquery\.tree\/themes\/default\/32.png/g' public/css/nextdom.mob.css
 #	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.mob.css
 }
@@ -99,6 +111,8 @@ function gen_js {
         vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
         vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
         vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.js  > /tmp/temp.js
+        
+if [ $# -eq 0 ]; then
     python -m jsmin /tmp/temp.js > public/js/base.js
     rm /tmp/temp.js
     php scripts/translate.php public/js/base.js
@@ -128,39 +142,42 @@ function gen_js {
         python -m jsmin $jsFile > public/js/desktop/Market/${jsFile##*/}
         php scripts/translate.php public/js/desktop/Market/${jsFile##*/}
     done
+fi
 }
 
 function copy_assets {
     echo " >>> Copie des icones"
-	cp -fr assets/icon public/
+	cp -fr assets/icon /public/
 	echo " >>> Copie des themes"
-	cp -fr assets/themes public/
+	cp -fr assets/themes /public/
 	echo " >>> Copie des images"
-	cp -fr assets/img public/
+	cp -fr assets/img /public/
 	gen_css
 	gen_js
 }
 
 function start {
 	while true; do
-		FIND_CSS_RES=$(find assets/css -mmin -0.1)
+		FIND_CSS_RES=$(find /assets/css -mmin -0.1)
 		if [ -n "$FIND_CSS_RES" ]; then
-			gen_css
+			gen_css no_compress
 			echo " >>> OK"
 		fi
-		FIND_JS_RES=$(find core/js -mmin -0.1)
+		FIND_JS_RES=$(find /core/js -mmin -0.1)
 		if [ -n "$FIND_JS_RES" ]; then
-			gen_js
+			gen_js no_compress
 			echo " >>> OK"
 		fi
-		FIND_JS_RES=$(find assets/js -mmin -0.1)
+		FIND_JS_RES=$(find /assets/js -mmin -0.1)
 		if [ -n "$FIND_JS_RES" ]; then
-			gen_js
+			gen_js no_compress
 			echo " >>> OK"
 		fi
 		sleep 1
 	done
 }
+
+cd ${root}/..
 
 if [ "$#" == 0 ]; then
     echo "Pour lancer la génération automatique, ajouter l'option --watch"

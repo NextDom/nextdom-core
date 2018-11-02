@@ -53,6 +53,7 @@
         </div>
 
         <div class="box-body">
+            <legend class="legend-title">{{ 'Le titre de l\'objet vous redirige vers sa section du dashboard...' }}</legend>
             <div class="row">
                 <div class="col-xs-12">
                     <div class="input-group">
@@ -68,7 +69,7 @@
         {% for object in objectList %}
             <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                 <div class="box objectDisplayCard" style='border-top:3px solid {{ object.getDisplay("tagColor") }}' data-object_id="{{ object.getId() }}" data-object_name="{{ object.getName() }}">
-                    <a class="box-header with-border bt_detailsObject cursor">
+                    <a class="box-header with-border cursor" href=index.php?v=d&p=dashboard&object_id={{ object.getId() }}>
                         <h4 class="box-title name object-name" style='color:{{ object.getDisplay("tagColor") }}'>{{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|replace({'></i>': '></i>'})|raw }}&nbsp;&nbsp;<b>{{ object.getName() }}</b></h4>
                     </a>
                     <div class="box-body">

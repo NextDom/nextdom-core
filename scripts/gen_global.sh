@@ -14,5 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 
-./scripts/gen_composer_npm.sh
-./scripts/gen_assets.sh
+# Get current directory
+set_root() {
+    local this=`readlink -n -f $1`
+    root=`dirname $this`
+}
+set_root $0
+
+${root}/gen_composer_npm.sh
+${root}/gen_assets.sh
+${root}/gen_docs.sh
