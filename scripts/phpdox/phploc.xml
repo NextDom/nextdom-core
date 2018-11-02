@@ -1,0 +1,13 @@
+<target name="phploc" unless="phploc.done">
+    <exec executable="${phploc}" taskname="phploc">
+        <arg value="--count-tests" />
+        <arg value="--log-csv" />
+        <arg path="${basedir}/build/logs/phploc.csv" />
+        <arg value="--log-xml" />
+        <arg path="${basedir}/build/logs/phploc.xml" />
+        <arg path="${basedir}/../../core/"/>
+        <arg path="${basedir}/../../desktop/"/>
+        <arg path="${basedir}/../../src/"/>
+    </exec>
+    <property name="phploc.done" value="false"/>
+</target>

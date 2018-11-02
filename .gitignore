@@ -21,6 +21,7 @@ Thumbs.db
 cache.tar.gz
 
 /vendor
+/scripts/phpdox/vendor
 composer.phar
 var/market_cache/*
 backup/*
@@ -28,3 +29,6 @@ var/*
 /public/*
 /.sass-cache
 DB_Backup.sql
+
+docs/*
+
