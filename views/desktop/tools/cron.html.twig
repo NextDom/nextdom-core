@@ -33,7 +33,25 @@
 */
 
 #}
-<div class="box blurPanel" id="div_Cron">
+<div class="action-bar">
+    <div class="action-group">
+        <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+    </div>
+    <div class="action-group">
+        <a class="btn btn-success" id="bt_addCron"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
+        <a class="btn btn-warning" id="bt_refreshCron"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{ 'Rafraîchir' }}</a>
+        {% if cronEnabled == 0 %}
+            <a class="btn btn-primary" id="bt_changeCronState" data-state="1"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Activer le système cron' }}</a>
+        {% else %}
+            <a class="btn btn-danger" id="bt_changeCronState" data-state="0"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Désactiver le système cron' }}</a>
+        {% endif %}
+    </div>
+    <div class="action-group">
+        <a class="btn btn-success pull-right" id="bt_save"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+    </div>
+</div>
+
+<div class="box" id="div_Cron">
     <!-- Header bar -->
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fas fa-tasks">&nbsp;&nbsp;</i>{{ 'Taches' }}</h3>
@@ -70,20 +88,4 @@
             </fieldset>
         </form>
     </div>
-</div>
-<div class="fab">
-    <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
-    <ul class="fab-buttons">
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_addCron" data-tooltip="{{ 'Ajouter' }}"><i class="fas fa-plus-circle"></i></a></li>
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_refreshCron" data-tooltip="{{ 'Rafraîchir' }}"><i class="fas fa-refresh"></i></a></li>
-        {% if cronEnabled == 0 %}
-            <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_changeCronState" data-state="1" data-tooltip="{{ 'Activer le système cron' }}"><i class="fas fa-check"></i></a></li>
-        {% else %}
-            <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" id="bt_changeCronState" data-state="0" data-tooltip="{{ 'Désactiver le système cron' }}"><i class="fas fa-times"></i></a></li>
-        {% endif %}
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_save" title="" data-tooltip="{{ 'Sauvegarder' }}"><i class="fas fa-save"></i></a></li>
-    </ul>
-</div>
-<div class="fab fab-bis">
-    <a class="fab-action-button bg-red-active" href="index.php?v=d&p=administration"><i class="fab-action-button__icon fas fa-chevron-left"></i></a>
 </div>

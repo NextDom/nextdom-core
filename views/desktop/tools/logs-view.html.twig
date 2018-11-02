@@ -33,7 +33,22 @@
 */
 
 #}
-<div class="box blurPanel" id="div_Logs-view">
+<div class="action-bar">
+    <div class="action-group">
+        <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+    </div>
+    <div class="action-group">
+        <a class="btn btn-warning" data-state="1" id="bt_globalLogStopStart"><i class="fas fa-pause">&nbsp;&nbsp;</i>{{ 'Pause' }}</a>
+    </div>
+    <div class="action-group">
+        <a class="btn btn-primary pull-right" id="bt_downloadLog" disabled="disabled"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{ 'Télécharger' }}</a>
+        <a class="btn btn-warning pull-right" id="bt_clearLog"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Vider' }}</a>
+        <a class="btn btn-danger pull-right" id="bt_removeLog"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+        <a class="btn btn-danger pull-right" id="bt_removeAllLog"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer tous' }}</a>
+    </div>
+</div>
+
+<div class="box" id="div_Logs-view">
     <!-- Header bar -->
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fas fa-file-alt">&nbsp;&nbsp;</i>{{ 'Logs' }}</h3>
@@ -74,17 +89,4 @@
             </div>
         </form>
     </div>
-</div>
-<div class="fab">
-    <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
-    <ul class="fab-buttons">
-        <li class="fab-buttons__item"><a class="fab-buttons__link btn-warning" data-state="1" id="bt_globalLogStopStart" title="" data-tooltip="{{ 'Pause' }}"><i class="fas fa-pause"></i></a></li>
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_downloadLog" disabled="disabled" title="" data-tooltip="{{ 'Télécharger' }}"><i class="fas fa-cloud-download-alt"></i></a></li>
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-orange-active" id="bt_clearLog" title="" data-tooltip="{{ 'Vider' }}"><i class="fas fa-times"></i></a></li>
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" id="bt_removeLog" title="" data-tooltip="{{ 'Supprimer' }}"><i class="far fa-trash-alt"></i></a></li>
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-red-active" id="bt_removeAllLog" title="" data-tooltip="{{ 'Supprimer tous' }}"><i class="far fa-trash-alt"></i></a></li>
-    </ul>
-</div>
-<div class="fab fab-bis">
-    <a class="fab-action-button bg-red-active" href="index.php?v=d&p=administration"><i class="fab-action-button__icon fas fa-chevron-left"></i></a>
 </div>
