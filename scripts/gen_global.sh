@@ -14,5 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 
-./scripts/gen_composer_npm.sh
-./scripts/gen_assets.sh
+currentDir=$PWD
+scriptDir=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
+nextdomDir=$scriptDir/../
+
+cd $scriptDir
+./gen_composer_npm.sh
+./gen_assets.sh
+./gen_docs.sh
+cd $currentDir
