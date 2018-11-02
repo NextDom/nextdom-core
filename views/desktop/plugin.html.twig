@@ -34,6 +34,24 @@
 
 #}
 <div id="div_resumePluginList">
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-danger" href="{{ HOMELINK }}"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+        </div>
+        <div class="action-group">
+            <a class="btn btn-default" id="bt_addPluginFromOtherSource"><i class="fas fa-plus">&nbsp;&nbsp;</i>{{ 'Autre Sources' }}</a>
+        </div>
+        <div class="action-group">
+        {% for repoCode, repoData in pluginReposList %}
+            {% if repoData['name'] == 'Market' %}
+                <a class="btn btn-success displayStore" style="background-color:#96c927" data-repo="{{ repoCode }}"><i class="fa fa-shopping-cart">&nbsp;&nbsp;</i>{{ repoData['name'] }} Jeedom</a>
+            {% else %}
+                <a class="btn btn-primary displayStore" data-repo="{{ repoCode }}"><i class="fa fa-shopping-cart">&nbsp;&nbsp;</i>{{ repoData['name'] }}</a>
+            {% endif %}
+        {% endfor %}
+        </div>
+    </div>
+
     <div class="box">
         <div class="box-header with-border">
             <h3 class="box-title"><i class="fas fa-puzzle-piece">&nbsp;&nbsp;</i>{{ 'Mes plugins' }}</h3>
@@ -46,7 +64,6 @@
         </div>
     </div>
     <div class="pluginListContainer row">
-
         {% for plugin in pluginsList %}
             <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                 <div class="box pluginDisplayCard" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_icon="{{ plugin.getPathImgIcon() }}" data-plugin_id="{{ plugin.getId() }}" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
@@ -70,6 +87,12 @@
     </div>
 </div>
 <div id="div_confPlugin" style="display: none;">
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-danger" id="bt_returnToThumbnailDisplay"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+        </div>
+    </div>
+
     <div class="box box-header">
         <div class="box-title">
             <img style="height:50px;padding-right:5px" src="" id="span_plugin_icon">
@@ -115,7 +138,7 @@
             <div class="box box-primary" id="div_configLog">
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fas fa-file">&nbsp;&nbsp;</i>{{ 'Log' }}</h3>
-                    <a class="btn btn-success btn-sm pull-right" id="bt_savePluginLogConfig"><i class="fa fa-check-circle icon-white ">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+                    <a class="btn btn-success pull-right box-tools" id="bt_savePluginLogConfig"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
                 </div>
                 <div class="box-body">
                     <form class="form-horizontal">
@@ -157,7 +180,7 @@
     <div class="box box-primary">
         <div class="box-header with-border">
             <h3 class="box-title"><i class="fas fa-cogs"></i> {{ 'Configuration' }}</h3>
-            <a class="btn btn-success btn-sm pull-right box-tools" id="bt_savePluginConfig"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-success pull-right box-tools" id="bt_savePluginConfig"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
         </div>
         <div class="box-body">
             <div id="div_plugin_configuration"></div>
@@ -170,7 +193,7 @@
             <div class="box box-primary" id="div_functionalityPanel">
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fas fa-picture-o">&nbsp;&nbsp;</i>{{ 'Fonctionnalités' }}</h3>
-                    <a class="btn btn-success btn-sm pull-right box-tools" id="bt_savePluginFunctionalityConfig"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+                    <a class="btn btn-success pull-right box-tools" id="bt_savePluginFunctionalityConfig"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
                 </div>
                 <div class="box-body">
                     <form class="form-horizontal">
@@ -185,7 +208,7 @@
             <div class="box box-primary" id="div_configPanel">
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fas fa-columns">&nbsp;&nbsp;</i>{{ 'Panel' }}</h3>
-                    <a class="btn btn-success btn-sm pull-right box-tools" id="bt_savePluginPanelConfig"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+                    <a class="btn btn-success pull-right box-tools" id="bt_savePluginPanelConfig"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
                 </div>
                 <div class="box-body">
                     <form class="form-horizontal">
@@ -197,23 +220,6 @@
             </div>
         </div>
     </div>
-</div>
-<div class="fab">
-    <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
-    <ul class="fab-buttons">
-        {% for repoCode, repoData in pluginReposList %}
-            {% if repoData['name'] == 'Market' %}
-                <li class="fab-buttons__item"><a class="fab-buttons__link displayStore" style="background-color:#96c927" data-repo="{{ repoCode }}" data-tooltip="{{ repoData['name'] }} Jeedom"><i class="fa fa-shopping-cart"></i></a></li>
-            {% else %}
-                <li class="fab-buttons__item"><a class="fab-buttons__link displayStore" style="background-color:#33b8cc" data-repo="{{ repoCode }}" data-tooltip="{{ repoData['name'] }}"><i class="fa fa-shopping-cart"></i></a></li>
-            {% endif %}
-        {% endfor %}
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-light-blue-active" id="bt_addPluginFromOtherSource" data-tooltip="{{ 'Sources' }}"><i class="fas fa-plus"></i></a></li>
-    </ul>
-</div>
-<div class="fab fab-bis">
-    <a class="fab-action-button bg-red-active" id="bt_returnToThumbnailDisplay"><i class="fab-action-button__icon fas fa-chevron-left"></i></a>
-    <a class="fab-action-button bg-red-active" id="home"><i class="fab-action-button__icon fas fa-home"></i></a>
 </div>
 <script>
     $('.pluginListContainer').packery();
