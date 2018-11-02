@@ -347,6 +347,7 @@ step_nextdom_var_www_html() {
     if [ 1 -eq "0${isdev}"  ] ; then
         # A faire dans une version developpeur (apres git clone)
         cd ${WEBSERVER_HOME}
+        composer -q install
         ./scripts/gen_global.sh
     fi
 }
@@ -416,6 +417,11 @@ shift $((OPTIND-1))
 
 
 [[ -f /root/.mysqlroot ]] && MYSQL_ROOT_PASSWD=$(cat /root/.mysqlroot)
+#
+if [[ -f /etc/nextdom/mysql/secret ]] ; then
+    source /etc/nextdom/mysql/secret
+fi
+#
 MYSQL_ROOT_PASSWD=${MYSQL_ROOT_PASSWD:-$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)}
 MYSQL_NEXTDOM_PASSWD=${MYSQL_NEXTDOM_PASSWD:-$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)}
 MYSQL_HOSTNAME=${MYSQL_HOSTNAME:-localhost}
@@ -434,15 +440,16 @@ fi
         exit 1
     fi
 
-[[ -f ${WEBSERVER_HOME}/log/postinst.ok ]] && rm -f ${WEBSERVER_HOME}/log/postinst.ok
-[[ -f ${WEBSERVER_HOME}/log/postinst.warn ]] && rm -f ${WEBSERVER_HOME}/log/postinst.warn
-[[ -f ${WEBSERVER_HOME}/log/postinst.log ]] && rm -f ${WEBSERVER_HOME}/log/postinst.log
-
 set_root $0
 
 detect_dev_version
 
-printf "step_nextdom_var_www_html ... " > ${WEBSERVER_HOME}/log/postinst.log
+[[ -f ${WEBSERVER_HOME}/log/postinst.ok ]] && rm -f ${WEBSERVER_HOME}/log/postinst.ok
+[[ -f ${WEBSERVER_HOME}/log/postinst.warn ]] && rm -f ${WEBSERVER_HOME}/log/postinst.warn
+[[ -f ${WEBSERVER_HOME}/log/postinst.log ]] && rm -f ${WEBSERVER_HOME}/log/postinst.log
+touch ${WEBSERVER_HOME}/log/postinst.log
+
+printf "step_nextdom_var_www_html ... " >> ${WEBSERVER_HOME}/log/postinst.log
 step_nextdom_var_www_html
 echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
 
