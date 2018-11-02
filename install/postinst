@@ -344,11 +344,10 @@ step_nextdom_var_www_html() {
     fi
 
     # Generate CSS files
-    if [ 1 -eq "0${isdev}"  ] || [ -f /.dockerenv ] ; then
+    if [ 1 -eq "0${isdev}"  ] ; then
         # A faire dans une version developpeur (apres git clone)
         cd ${WEBSERVER_HOME}
-        composer -q install
-        ./gen_assets.sh
+        ./scripts/gen_global.sh
     fi
 }
 
