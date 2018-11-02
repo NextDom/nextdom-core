@@ -28,12 +28,12 @@ function gen_css {
     fi
 	echo " >>> Generation du CSS"
 
-	mkdir -p /public/css/adminlte
-	sass /assets/css/nextdom.scss /public/css/nextdom.css --style $COMPRESS
-	sass /assets/css/nextdom.mob.scss /public/css/nextdom.mob.css --style $COMPRESS
-	sass /assets/css/firstUse.scss /public/css/firstUse.css --style $COMPRESS
-	sass /assets/css/rescue.scss /public/css/rescue.css --style $COMPRESS
-	sass /assets/css/Market/market.scss /public/css/market.css --style $COMPRESS
+	mkdir -p public/css/adminlte
+	sass assets/css/nextdom.scss /public/css/nextdom.css --style $COMPRESS
+	sass assets/css/nextdom.mob.scss /public/css/nextdom.mob.css --style $COMPRESS
+	sass assets/css/firstUse.scss /public/css/firstUse.css --style $COMPRESS
+	sass assets/css/rescue.scss /public/css/rescue.css --style $COMPRESS
+	sass assets/css/Market/market.scss /public/css/market.css --style $COMPRESS
 
 	# Remplacement des chemins
 #	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-#g public/css/nextdom.css
@@ -50,108 +50,108 @@ function gen_css {
 
 function gen_js {
 	echo " >>> Generation du JS"
-    cat /3rdparty/jquery.utils/jquery.utils.js \
-        /vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
-        /vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
-        /vendor/node_modules/izitoast/dist/js/iziToast.min.js \
-        /assets/js/desktop/utils.js \
-        /core/js/core.js \
-        /core/js/nextdom.class.js \
-        /core/js/private.class.js \
-        /core/js/eqLogic.class.js \
-        /core/js/cmd.class.js \
-        /core/js/object.class.js \
-        /core/js/scenario.class.js \
-        /core/js/plugin.class.js \
-        /core/js/message.class.js \
-        /core/js/view.class.js \
-        /core/js/config.class.js \
-        /core/js/history.class.js \
-        /core/js/cron.class.js \
-        /core/js/security.class.js \
-        /core/js/update.class.js \
-        /core/js/user.class.js \
-        /core/js/backup.class.js \
-        /core/js/interact.class.js \
-        /core/js/update.class.js \
-        /core/js/plan.class.js \
-        /core/js/log.class.js \
-        /core/js/repo.class.js \
-        /core/js/network.class.js \
-        /core/js/dataStore.class.js \
-        /core/js/cache.class.js \
-        /core/js/report.class.js \
-        /core/js/note.class.js \
-        /core/js/jeedom.class.js \
-        /vendor/node_modules/bootbox/bootbox.min.js \
-        /vendor/node_modules/highcharts/highstock.js \
-        /vendor/node_modules/highcharts/highcharts-more.js \
-        /vendor/node_modules/highcharts/modules/solid-gauge.js \
-        /vendor/node_modules/highcharts/modules/exporting.js \
-        /vendor/node_modules/highcharts/modules/export-data.js \
-        /3rdparty/jquery.at.caret/jquery.at.caret.min.js \
-        /vendor/node_modules/jwerty/jwerty.js \
-        /vendor/node_modules/packery/dist/packery.pkgd.js \
-        /vendor/node_modules/lazyload/lazyload.js \
-        /vendor/node_modules/codemirror/lib/codemirror.js \
-        /vendor/node_modules/codemirror/addon/edit/matchbrackets.js \
-        /vendor/node_modules/codemirror/mode/htmlmixed/htmlmixed.js \
-        /vendor/node_modules/codemirror/mode/clike/clike.js \
-        /vendor/node_modules/codemirror/mode/php/php.js \
-        /vendor/node_modules/codemirror/mode/xml/xml.js \
-        /vendor/node_modules/codemirror/mode/javascript/javascript.js \
-        /vendor/node_modules/codemirror/mode/css/css.js \
-        /vendor/node_modules/jstree/dist/jstree.js \
-        /vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
-        /vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js \
-        /3rdparty/jquery.multi-column-select/multi-column-select.js \
-        /3rdparty/jquery.sew/jquery.sew.min.js \
-        /vendor/node_modules/jquery-cron/dist/jquery-cron.js \
-        /vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js \
-        /vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
-        /vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
-        /vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.js  > /tmp/temp.js
+    cat 3rdparty/jquery.utils/jquery.utils.js \
+        vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
+        vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
+        vendor/node_modules/izitoast/dist/js/iziToast.min.js \
+        assets/js/desktop/utils.js \
+        core/js/core.js \
+        core/js/nextdom.class.js \
+        core/js/private.class.js \
+        core/js/eqLogic.class.js \
+        core/js/cmd.class.js \
+        core/js/object.class.js \
+        core/js/scenario.class.js \
+        core/js/plugin.class.js \
+        core/js/message.class.js \
+        core/js/view.class.js \
+        core/js/config.class.js \
+        core/js/history.class.js \
+        core/js/cron.class.js \
+        core/js/security.class.js \
+        core/js/update.class.js \
+        core/js/user.class.js \
+        core/js/backup.class.js \
+        core/js/interact.class.js \
+        core/js/update.class.js \
+        core/js/plan.class.js \
+        core/js/log.class.js \
+        core/js/repo.class.js \
+        core/js/network.class.js \
+        core/js/dataStore.class.js \
+        core/js/cache.class.js \
+        core/js/report.class.js \
+        core/js/note.class.js \
+        core/js/jeedom.class.js \
+        vendor/node_modules/bootbox/bootbox.min.js \
+        vendor/node_modules/highcharts/highstock.js \
+        vendor/node_modules/highcharts/highcharts-more.js \
+        vendor/node_modules/highcharts/modules/solid-gauge.js \
+        vendor/node_modules/highcharts/modules/exporting.js \
+        vendor/node_modules/highcharts/modules/export-data.js \
+        3rdparty/jquery.at.caret/jquery.at.caret.min.js \
+        vendor/node_modules/jwerty/jwerty.js \
+        vendor/node_modules/packery/dist/packery.pkgd.js \
+        vendor/node_modules/lazyload/lazyload.js \
+        vendor/node_modules/codemirror/lib/codemirror.js \
+        vendor/node_modules/codemirror/addon/edit/matchbrackets.js \
+        vendor/node_modules/codemirror/mode/htmlmixed/htmlmixed.js \
+        vendor/node_modules/codemirror/mode/clike/clike.js \
+        vendor/node_modules/codemirror/mode/php/php.js \
+        vendor/node_modules/codemirror/mode/xml/xml.js \
+        vendor/node_modules/codemirror/mode/javascript/javascript.js \
+        vendor/node_modules/codemirror/mode/css/css.js \
+        vendor/node_modules/jstree/dist/jstree.js \
+        vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
+        vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js \
+        3rdparty/jquery.multi-column-select/multi-column-select.js \
+        3rdparty/jquery.sew/jquery.sew.min.js \
+        vendor/node_modules/jquery-cron/dist/jquery-cron.js \
+        vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js \
+        vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
+        vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
+        vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.js  > /tmp/temp.js
         
 if [ $# -eq 0 ]; then
     python -m jsmin /tmp/temp.js > public/js/base.js
     rm /tmp/temp.js
     php scripts/translate.php public/js/base.js
 
-    mkdir -p /public/js/adminlte
-    for jsFile in /assets/js/adminlte/*.js
+    mkdir -p public/js/adminlte
+    for jsFile in assets/js/adminlte/*.js
     do
-        python -m jsmin $jsFile > /public/js/adminlte/${jsFile##*/}
-        php /scripts/translate.php /public/js/adminlte/${jsFile##*/}
+        python -m jsmin $jsFile > public/js/adminlte/${jsFile##*/}
+        php scripts/translate.php public/js/adminlte/${jsFile##*/}
     done
-    mkdir -p /public/js/desktop
-    for jsFile in /assets/js/desktop/*.js
+    mkdir -p public/js/desktop
+    for jsFile in assets/js/desktop/*.js
     do
-        python -m jsmin $jsFile > /public/js/desktop/${jsFile##*/}
-        php /scripts/translate.php /public/js/desktop/${jsFile##*/}
+        python -m jsmin $jsFile > public/js/desktop/${jsFile##*/}
+        php scripts/translate.php public/js/desktop/${jsFile##*/}
     done
-    mkdir -p /public/js/modals
-    for jsFile in /assets/js/modals/*.js
+    mkdir -p public/js/modals
+    for jsFile in assets/js/modals/*.js
     do
-        python -m jsmin $jsFile > /public/js/modals/${jsFile##*/}
-        php /scripts/translate.php /public/js/modals/${jsFile##*/}
+        python -m jsmin $jsFile > public/js/modals/${jsFile##*/}
+        php scripts/translate.php public/js/modals/${jsFile##*/}
     done
 
-    mkdir -p /public/js/desktop/Market
-    for jsFile in /assets/js/desktop/Market/*.js
+    mkdir -p public/js/desktop/Market
+    for jsFile in assets/js/desktop/Market/*.js
     do
-        python -m jsmin $jsFile > /public/js/desktop/Market/${jsFile##*/}
-        php /scripts/translate.php /public/js/desktop/Market/${jsFile##*/}
+        python -m jsmin $jsFile > public/js/desktop/Market/${jsFile##*/}
+        php scripts/translate.php public/js/desktop/Market/${jsFile##*/}
     done
 fi
 }
 
 function copy_assets {
     echo " >>> Copie des icones"
-	cp -fr /assets/icon /public/
+	cp -fr assets/icon /public/
 	echo " >>> Copie des themes"
-	cp -fr /assets/themes /public/
+	cp -fr assets/themes /public/
 	echo " >>> Copie des images"
-	cp -fr /assets/img /public/
+	cp -fr assets/img /public/
 	gen_css
 	gen_js
 }
@@ -181,8 +181,8 @@ cd ${root}/..
 
 if [ "$#" == 0 ]; then
     echo "Pour lancer la génération automatique, ajouter l'option --watch"
-	mkdir -p /public/css
-	mkdir -p /public/js
+	mkdir -p public/css
+	mkdir -p public/js
 	copy_assets;
 elif [ "$1" == "--watch" ]; then
 	start;
