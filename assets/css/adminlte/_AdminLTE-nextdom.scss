@@ -198,13 +198,15 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     }
   }
 }
-
 .plugin-item {
-  padding-right: 10px;
+  padding-right: 7px;
   .img-responsive {
     width: 20px;
     display: inline-block;
   }
+}
+.treeview-menu .treeview-menu {
+padding-left: 7px;
 }
 
 /* Form */
@@ -544,7 +546,6 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 #div_pageContainer{
   position: relative;
   overflow: hidden;
-  top: 10px;
   & .iconlist{
     background-color : rgba(255,255,255,0);
     padding : 10px;
@@ -578,7 +579,7 @@ input[type="checkbox"] {
   content: '';
   position: absolute;
   left:0; top: 0;
-  width: 18px;
+  width: 17px;
   height: 17px;
   border: 1px solid #ccc;
   border-radius: 2px;
@@ -588,8 +589,8 @@ input[type="checkbox"] {
 [type="checkbox"]:checked:after {
   content: '■';
   position: absolute;
-  top: -11px;
-  left:2px;
+  top: -9px;
+  left:1px;
   font-size: 24px;
   transition: all .2s;
 }
