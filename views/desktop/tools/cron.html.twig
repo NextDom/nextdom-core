@@ -52,71 +52,58 @@
     </div>
 </div>
 
-<div class="nav-tabs-custom config" id="custom">
+<div class="nav-tabs-custom config" id="cron">
     <!-- Tabs title -->
     <ul class="nav nav-tabs pull-right" role="tablist">
         <li role="presentation" class="active"><a href="#cron-tab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint">&nbsp;&nbsp;</i>{{ 'Cron' }}</a></li>
         <li role="presentation"><a href="#listener" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-flask">&nbsp;&nbsp;</i>{{ 'Listener' }}</a></li>
-        <li class="header pull-left"><i class="fas fa-pencil-square">&nbsp;&nbsp;</i>{{ 'Cron' }}</li>
+        <li class="header pull-left"><i class="fas fa-tasks">&nbsp;&nbsp;</i>{{ 'Tâches' }}</li>
     </ul>
 
     <!-- Tabs content -->
     <div class="global-tab-content tab-content">
         <!-- Theme tab -->
         <div role="tabpanel" class="tab-pane active" id="cron-tab">
-          <div class="box" id="div_Cron">
-              <!-- Header bar -->
-              <div class="box-header with-border">
-                  <h3 class="box-title"><i class="fas fa-tasks">&nbsp;&nbsp;</i>{{ 'Taches' }}</h3>
-              </div>
-
-              <!-- Page content -->
-              <div class="box-body">
-                  <form class="form-horizontal">
-                      <fieldset>
-                          <div>
-                              <table id="table_cron" class="table table-bordered table-condensed text-center">
-                                  <thead>
-                                  <tr>
-                                      <th class="id">#</th>
-                                      <th data-sorter="false" data-filter="false"></th>
-                                      <th class="enable">{{ 'Actif' }}</th>
-                                      <th class="pid">{{ 'PID' }}</th>
-                                      <th class="deamons">{{ 'Démon' }}</th>
-                                      <th class="once">{{ 'Unique' }}</th>
-                                      <th class="class">{{ 'Classe' }}</th>
-                                      <th class="function">{{ 'Fonction' }}</th>
-                                      <th class="schedule">{{ 'Programmation' }}&nbsp;&nbsp;<i class="fas fa-question-circle cursor bt_pageHelp" data-name='cronSyntaxe'></i></th>
-                                      <th class="timeout">{{ 'Timeout (min)' }}</th>
-                                      <th class="lastRun">{{ 'Dernier lancement' }}</th>
-                                      <th class="runtime">{{ 'Dernière durée' }}</th>
-                                      <th class="state">{{ 'Statut' }}</th>
-                                      <th class="action" data-sorter="false" data-filter="false"></th>
-                                  </tr>
-                                  </thead>
-                                  <tbody>
-                                  </tbody>
-                              </table>
-                          </div>
-                      </fieldset>
-                  </form>
-              </div>
-          </div>
+            <div id="div_Cron">
+                <table id="table_cron" class="table table-bordered table-condensed text-center">
+                    <thead>
+                        <tr>
+                            <th class="id">{{ 'Id' }}</th>
+                            <th data-sorter="false" data-filter="false">{{ 'Détail/Run '}}</th>
+                            <th class="enable">{{ 'Actif' }}</th>
+                            <th class="pid">{{ 'PID' }}</th>
+                            <th class="deamons">{{ 'Démon' }}</th>
+                            <th class="once">{{ 'Unique' }}</th>
+                            <th class="class">{{ 'Classe' }}</th>
+                            <th class="function">{{ 'Fonction' }}</th>
+                            <th class="schedule">{{ 'Programmation' }}&nbsp;&nbsp;<i class="fas fa-question-circle cursor bt_pageHelp" data-name='cronSyntaxe'></i></th>
+                            <th class="timeout">{{ 'Timeout (min)' }}</th>
+                            <th class="lastRun">{{ 'Dernier lancement' }}</th>
+                            <th class="runtime">{{ 'Dernière durée' }}</th>
+                            <th class="state">{{ 'Statut' }}</th>
+                            <th class="action" data-sorter="false" data-filter="false"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
-      </div>
-      <div role="tabpanel" class="tab-pane active" id="listener">
-      <br/>
-<table id="table_listener" class="table table-bordered table-condensed" >
- <thead>
-     <tr>
-         <th style="width: 40px;">#</th>
-          <th style="width: 80px;" data-sorter="false" data-filter="false"></th>
-         <th>{{Event}}</th>
-         <th style="width: 120px;">{{Classe}}</th>
-         <th style="width: 120px;">{{Fonction}}</th>
-     </tr>
- </thead>
- <tbody></tbody>
-</table>
-      </div>
+
+        <div role="tabpanel" class="tab-pane" id="listener">
+            <table id="table_listener" class="table table-bordered table-condensed" >
+                <thead>
+                     <tr>
+                         <th>Id</th>
+                         <th data-sorter="false" data-filter="false"></th>
+                         <th>{{ 'Event' }}</th>
+                         <th>{{ 'Classe' }}</th>
+                         <th>{{ 'Fonction' }}</th>
+                     </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
