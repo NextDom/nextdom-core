@@ -169,7 +169,7 @@ class log {
     }
 
     public static function getPathToLog($_log = 'core') {
-        return __DIR__ . '/../../log/' . $_log;
+        return __DIR__ . '/../../var/logs/' . $_log;
     }
 
     /**

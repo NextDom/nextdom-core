@@ -39,7 +39,7 @@ if (init('log') == 1) {
         echo "La page que vous demandez ne peut être trouvée.";
         dei();
     }
-    echo file_get_contents(__DIR__ . '/../log/nextdom_installation');
+    echo file_get_contents(__DIR__ . '/../var/logs/nextdom_installation');
     die();
 }
 if (file_exists(__DIR__ . '/../core/config/common.config.php')) {
@@ -244,7 +244,7 @@ if ($config) {
     );
     $config = str_replace(array_keys($replace), $replace, file_get_contents(__DIR__ . '/../core/config/common.config.sample.php'));
     file_put_contents(__DIR__ . '/../core/config/common.config.php', $config);
-    shell_exec('php ' . __DIR__ . '/install.php mode=force > ' . __DIR__ . '/../log/nextdom_installation 2>&1 &');
+    shell_exec('php ' . __DIR__ . '/install.php mode=force > ' . __DIR__ . '/../var/logs/nextdom_installation 2>&1 &');
     echo '<div id="div_alertMessage" class="alert alert-warning" style="margin:15px;">';
     echo '<center style="font-size:1.2em;"><i class="fa fa-spinner fa-spin"></i> The installation nextdom is ongoing.</center>';
     echo '</div>';

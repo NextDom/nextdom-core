@@ -39,4 +39,4 @@ Header unset X-Powered-By
 SSLProtocol  all -SSLv2 -SSLv3 -TLSv1
 </IfModule>
 
-ErrorLog /var/www/html/log/http.error
+ErrorLog /var/www/html/var/logs/http.error
