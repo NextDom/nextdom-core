@@ -147,11 +147,11 @@ fi
 
 function copy_assets {
     echo " >>> Copie des icones"
-	cp -fr assets/icon /public/
+	cp -fr assets/icon public/
 	echo " >>> Copie des themes"
-	cp -fr assets/themes /public/
+	cp -fr assets/themes public/
 	echo " >>> Copie des images"
-	cp -fr assets/img /public/
+	cp -fr assets/img public/
 	gen_css
 	gen_js
 }
