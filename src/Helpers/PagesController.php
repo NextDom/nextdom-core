@@ -1104,9 +1104,9 @@ class PagesController
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/log.js';
         $currentLogfile = Utils::init('logfile');
         $logFilesList = [];
-        $dir = opendir(NEXTDOM_ROOT . '/log/');
+        $dir = opendir(NEXTDOM_ROOT . '/var/logs/');
         while ($file = readdir($dir)) {
-            if ($file != '.' && $file != '..' && $file != '.htaccess' && !is_dir(NEXTDOM_ROOT . '/log/' . $file)) {
+            if ($file != '.' && $file != '..' && $file != '.htaccess' && !is_dir(NEXTDOM_ROOT . '/var/logs/' . $file)) {
                 $logFilesList[] = $file;
             }
         }
@@ -1118,10 +1118,10 @@ class PagesController
             $logFileData['name'] = $logFile;
             $logFileData['icon'] = 'check';
             $logFileData['color'] = 'green';
-            if (shell_exec('grep -c -E "\[ERROR\]|\[error\]" ' . NEXTDOM_ROOT . '/log/' . $logFile) != 0) {
+            if (shell_exec('grep -c -E "\[ERROR\]|\[error\]" ' . NEXTDOM_ROOT . '/var/logs/' . $logFile) != 0) {
                 $logFileData['icon'] = 'exclamation-triangle';
                 $logFileData['color'] = 'red';
-            } elseif (shell_exec('grep -c -E "\[WARNING\]" ' . NEXTDOM_ROOT . '/log/' . $logFile) != 0) {
+            } elseif (shell_exec('grep -c -E "\[WARNING\]" ' . NEXTDOM_ROOT . '/var/logs/' . $logFile) != 0) {
                 $logFileData['icon'] = 'exclamation-circle';
                 $logFileData['color'] = 'orange';
             }
@@ -1130,7 +1130,7 @@ class PagesController
             } else {
                 $logFileData['active'] = false;
             }
-            $logFileData['size'] = round(filesize(NEXTDOM_ROOT . '/log/' . $logFile) / 1024);
+            $logFileData['size'] = round(filesize(NEXTDOM_ROOT . '/var/logs/' . $logFile) / 1024);
             $pageContent['logFilesList'][] = $logFileData;
         }
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
