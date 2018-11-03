@@ -61,6 +61,11 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   }
 }
 
+.main-footer {
+  padding: 13px 140px 11px 35px;
+  display: flow-root;
+}
+
 /* Navs */
 .navbar-custom-menu > .navbar-nav > li {
   position: unset;
