@@ -147,28 +147,28 @@ fi
 
 function copy_assets {
     echo " >>> Copie des icones"
-	cp -fr assets/icon /public/
+	cp -fr assets/icon public/
 	echo " >>> Copie des themes"
-	cp -fr assets/themes /public/
+	cp -fr assets/themes public/
 	echo " >>> Copie des images"
-	cp -fr assets/img /public/
+	cp -fr assets/img public/
 	gen_css
 	gen_js
 }
 
 function start {
 	while true; do
-		FIND_CSS_RES=$(find /assets/css -mmin -0.1)
+		FIND_CSS_RES=$(find assets/css -mmin -0.1)
 		if [ -n "$FIND_CSS_RES" ]; then
 			gen_css no_compress
 			echo " >>> OK"
 		fi
-		FIND_JS_RES=$(find /core/js -mmin -0.1)
+		FIND_JS_RES=$(find core/js -mmin -0.1)
 		if [ -n "$FIND_JS_RES" ]; then
 			gen_js no_compress
 			echo " >>> OK"
 		fi
-		FIND_JS_RES=$(find /assets/js -mmin -0.1)
+		FIND_JS_RES=$(find assets/js -mmin -0.1)
 		if [ -n "$FIND_JS_RES" ]; then
 			gen_js no_compress
 			echo " >>> OK"
