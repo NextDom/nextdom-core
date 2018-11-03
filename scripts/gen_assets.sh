@@ -38,12 +38,12 @@ function gen_css {
 	# Remplacement des chemins
 #	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-#g public/css/nextdom.css
 #	sed -i s#\.\./fonts/glyphicons-#/vendor/twitter/bootstrap/fonts/glyphicons-#g public/css/nextdom.css
-	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g /public/css/nextdom.css
+	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
 #	sed -i 's/[\"]32px\.png/"\/3rdparty\/jquery\.tree\/themes\/default\/32px.png/g' public/css/nextdom.css
 #	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.css
 
 #	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-# public/css/nextdom.mob.css
-	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g /public/css/nextdom.mob.css
+	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
 #	sed -i 's/[\"]32px\.png/\/3rdparty\/jquery\.tree\/themes\/default\/32.png/g' public/css/nextdom.mob.css
 #	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.mob.css
 }
