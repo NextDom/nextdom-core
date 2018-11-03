@@ -20,8 +20,8 @@ if (!isConnect()) {
 }
 ?>
 <div id="div_alertHistoryCalcul"></div>
-<a class='btn btn-success pull-right' id="bt_saveCalculHistory"><i class="fas fa-check">&nbsp;&nbsp;</i>{{Sauvegarder}}</a>
-<a class='btn btn-success pull-right' id="bt_addCalculHistory"><i class="fas fa-plus">&nbsp;&nbsp;</i>{{Ajouter}}</a>
+<a class='btn btn-success pull-right' id="bt_saveCalculHistory"><i class="fas fa-check"></i> {{Sauvegarder}}</a>
+<a class='btn btn-success pull-right' id="bt_addCalculHistory"><i class="fas fa-plus"></i> {{Ajouter}}</a>
 <br/><br/>
 <table class="table table-bordered" id="table_calculHisotry">
     <thead>

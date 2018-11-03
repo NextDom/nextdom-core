@@ -133,7 +133,7 @@ sendVarToJS('eqLogicInfoSearchString', urlencode(str_replace('#', '', $eqLogic->
                         <tbody>
                             <?php
 foreach ($eqLogic->getCmd() as $cmd) {
-    echo '<tr>';
+    echo '<tr class="advanceCmdConfigurationCmdConfigure" data-id="' . $cmd->getId() . '">';
     echo '<td>' . $cmd->getHumanName() . '</td>';
     echo '<td>';
     echo '<a class="btn btn-default btn-xs pull-right cursor bt_advanceCmdConfigurationOnEqLogicConfiguration" data-id="' . $cmd->getId() . '"><i class="fas fa-cogs"></i></a>';
@@ -404,7 +404,7 @@ if ($eqLogic->getDisplay('parameters') != '') {
                                                                     <div class="form-group">
                                                                         <label class="col-sm-4 control-label">{{Type de batterie}}</label>
                                                                         <div class="col-sm-6">
-                                                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery_type" />>
+                                                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery_type"></input>
                                                                         </div>
                                                                     </div>
                                                                 </fieldset>
@@ -415,15 +415,16 @@ if ($eqLogic->getDisplay('parameters') != '') {
                                                     <div class="row">
                                                         <div class="col-lg-12">
                                                             <div class="form-group">
-                                                                <label class="col-xs-2 eqLogicAttr label label-danger">{{Danger}}</label>
+                                                                <label class="col-xs-2 eqLogicAttr label label-danger" style="font-size : 1.8em">{{Danger}}</label>
                                                                 <div class="col-xs-2">
                                                                     <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery_danger_threshold" />
+                                                                </input>
                                                             </div>
-                                                            <label class="col-xs-2 label label-warning">{{Warning}}</label>
+                                                            <label class="col-xs-2 label label-warning" style="font-size : 1.8em">{{Warning}}</label>
                                                             <div class="col-xs-2">
                                                                 <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery_warning_threshold" />
                                                             </div>
-                                                            <label class="col-xs-2 label label-success">{{Ok}}</label>
+                                                            <label class="col-xs-2 label label-success" style="font-size : 1.8em">{{Ok}}</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -431,10 +432,10 @@ if ($eqLogic->getDisplay('parameters') != '') {
                                                 <div class="row">
                                                     <div class="col-lg-12">
                                                         <div class="form-group">
-                                                            <label class="col-xs-2 eqLogicAttr label label-danger">{{Danger}}</label>
+                                                            <label class="col-xs-2 eqLogicAttr label label-danger" style="font-size : 1.8em">{{Danger}}</label>
                                                             <div class="col-xs-2">
                                                                 <input class="eqLogicAttr form-control" data-l1key="timeout"/>
-                                                                {{(en minutes)}}
+                                                            </input>{{(en minutes)}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -707,9 +708,16 @@ for ($i = 1; $i <= $getDisplayDasboardNbLine; $i++) {
                                             $('#md_modal2').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
                                         });
 
+                                        $('.advanceCmdConfigurationCmdConfigure').off('dblclick').on('dblclick', function () {
+                                            $('#md_modal2').dialog({title: "{{Configuration de la commande}}"});
+                                            $('#md_modal2').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
+                                        });
+
                                         $('#bt_eqLogicConfigureLogRealTime').off('click').on('click', function () {
                                             $('#md_modal2').dialog({title: "{{Logs}}"});
                                             $('#md_modal2').load('index.php?v=d&modal=log.display&log=event&search=' + eqLogicInfoSearchString).dialog('open');
                                         });
+
+
 
                                     </script>
