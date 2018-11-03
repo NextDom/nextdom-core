@@ -149,20 +149,6 @@ echo '<a href="' . $cmd->getDirectUrlAccess() . '" target="_blank"><i class="fas
                     <input type="checkbox" class="cmdAttr" data-l1key="isVisible" />
                   </div>
                 </div>
-                <?php if ($cmd->getType() == 'info' && $cmd->getSubtype() == 'numeric') {?>
-                <div class="form-group">
-                  <label class="col-xs-4 control-label">{{Valeur minimum (défaut : 0)}}</label>
-                  <div class="col-xs-2">
-                    <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="minValue" />
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-xs-4 control-label">{{Valeur maximum (défaut : 100)}}</label>
-                  <div class="col-xs-2">
-                    <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="maxValue" />
-                  </div>
-                </div>
-                <?php }?>
                 <div class="form-group">
                   <label class="col-xs-4 control-label">{{Suivre dans la timeline}}</label>
                   <div class="col-xs-4">

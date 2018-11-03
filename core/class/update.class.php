@@ -135,7 +135,7 @@ class update {
                         throw new Exception(__('Impossible de trouver le fichier zip : ', __FILE__) . $this->getConfiguration('path'));
                     }
                     if (filesize($tmp) < 100) {
-                        throw new Exception(__('Echec lors du téléchargement du fichier. Veuillez réessayer plus tard (taille inférieure à 100 octets). Cela peut être du à une non connexion au market (verifiez dans la configuration de nextdom qu\'un test de connexion au market marche) ou lié à un manque de place, une version minimale requise non consistente avec votre version de NextDom, un soucis du plugin sur le market, etc.', __FILE__));
+                        throw new Exception(__('Echec lors du téléchargement du fichier. Veuillez réessayer plus tard (taille inférieure à 100 octets). Cela peut être lié à un manque de place, une version minimale requise non consistente avec votre version de NextDom, un soucis du plugin sur le market, etc.', __FILE__));
                     }
                     $extension = strtolower(strrchr($tmp, '.'));
                     if (!in_array($extension, array('.zip'))) {
@@ -342,7 +342,7 @@ class update {
                 return;
             }
             if (config::byKey('core::repo::provider') == 'default') {
-                $this->setRemoteVersion(self::getLastAvailableVersion(true));
+                $this->setRemoteVersion(self::getLastAvailableVersion());
             } else {
                 $class = 'repo_' . config::byKey('core::repo::provider');
                 if (!method_exists($class, 'versionCore') || config::byKey(config::byKey('core::repo::provider') . '::enable') != 1) {
@@ -414,10 +414,6 @@ class update {
      */
     public function remove() {
         return DB::remove($this);
-    }
-
-    public function postRemove() {
-        event::add('update::refreshUpdateNumber');
     }
 
     /**

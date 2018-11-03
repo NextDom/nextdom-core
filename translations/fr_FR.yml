@@ -31,8 +31,6 @@ health:
   os-version: Version OS
   database-version: Version database
   harddisk-freespace: Espace disque libre
-  harddisk-freespace-tmp: Espace disque libre du répertoire temporaire
-  harddisk-freespace-tmp-error: Si en erreur essayez de redemarrer, si le probleme se poursuit il faut tester en désactivant les plugins un à un jusqu\\'à trouver le coupable.
   available-memory: Mémoire disponible
   enough-memory: Mémoire suffisante
   processes-killed: Nombre de processus tué par le noyaux pour manque de mémoire. Votre système manque de mémoire. Essayez de reduire le nombre de plugins ou les scénarios
