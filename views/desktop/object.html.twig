@@ -33,8 +33,7 @@
 */
 
 #}
-<section class="content">
-    <div id="div_resumeObjectList">
+<section class="content-header">
         <div class="action-bar">
             <div class="action-group">
                 <a class="btn btn-danger" href="{{ HOMELINK }}"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
@@ -46,8 +45,11 @@
                 <a class="btn btn-primary pull-right" id="bt_showObjectSummary"><i class="fas fa-list">&nbsp;&nbsp;</i>{{ 'Vue d\'ensemble' }}</a>
             </div>
         </div>
+</section>
 
-        <div class="box">
+<section class="content">
+    <div id="div_resumeObjectList">
+    <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title"><i class="fas fa-clone">&nbsp;&nbsp;</i>{{ 'Liste des objets de votre ' }} {{ objectProductName }} - {{objectCustomProductName}}</legend>
             </div>
