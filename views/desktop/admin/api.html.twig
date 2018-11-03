@@ -33,7 +33,16 @@
 */
 
 #}
-<div class="box blurPanel" id="API">
+<div class="action-bar">
+    <div class="action-group">
+        <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+    </div>
+    <div class="action-group">
+        <a class="btn btn-success pull-right" id="bt_saveapi"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+    </div>
+</div>
+
+<div class="box" id="API">
     <!-- Header bar -->
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fas fa-key">&nbsp;&nbsp;</i>{{ 'API' }}</h3>
@@ -107,21 +116,21 @@
                         <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API globale de' }} adminconfigs['product_name']">{{ 'Clef API Globale' }}</label>
                         <div class="btn-group col-lg-10 col-md-9 col-sm-9 col-xs-12">
                             <a class="btn btn-default btn-action bt_regenerate_api" data-plugin="core"><i class="fa fa-refresh">&nbsp;&nbsp;</i>{{'Rafraîchir'}}</a>
-                            <span class="span_apikey label label-info label-value">{{ adminConfigs['api'] }}</span>
+                            <span class="span_apikey label label-value">{{ adminConfigs['api'] }}</span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API Pro de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API Pro' }}</label>
                         <div class="btn-group col-lg-10 col-md-9 col-sm-9 col-xs-12">
                             <a class="btn btn-default btn-action bt_regenerate_api" data-plugin="pro"><i class="fa fa-refresh">&nbsp;&nbsp;</i>{{'Rafraîchir'}}</a>
-                            <span class="span_apikey label label-info label-value">{{ adminConfigs['apipro'] }}</span>
+                            <span class="span_apikey label label-value">{{ adminConfigs['apipro'] }}</span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef Market de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef Market' }}</label>
                         <div class="btn-group col-lg-10 col-md-9 col-sm-9 col-xs-12">
                             <a class="btn btn-default btn-action bt_regenerate_api" data-plugin="apimarket"><i class="fa fa-refresh">&nbsp;&nbsp;</i>{{'Rafraîchir'}}</a>
-                            <span class="span_apikey label label-info label-value">{{ adminConfigs['apimarket'] }}</span>
+                            <span class="span_apikey label label-value">{{ adminConfigs['apimarket'] }}</span>
                         </div>
                     </div>
                 </div>
@@ -143,7 +152,7 @@
                                 </div>
                                 <div class="btn-group col-lg-8 col-md-7 col-sm-7 col-xs-12">
                                     <a class="btn btn-default btn-action bt_regenerate_api" data-plugin="{{ pluginData.plugin.getId() }}"><i class="fa fa-refresh">&nbsp;&nbsp;</i>{{'Rafraîchir'}}</a>
-                                    <span class="span_apikey label label-info label-value">{{ pluginData.api }}</span>
+                                    <span class="span_apikey label label-value">{{ pluginData.api }}</span>
                                 </div>
                             </div>
                         {% endfor %}
@@ -152,13 +161,4 @@
             </fieldset>
         </form>
     </div>
-</div>
-<div class="fab">
-    <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
-    <ul class="fab-buttons">
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_saveapi" title="" data-tooltip="{{ 'Sauvegarder' }}"><i class="fas fa-save"></i></a></li>
-    </ul>
-</div>
-<div class="fab fab-bis">
-    <a class="fab-action-button bg-red-active" href="index.php?v=d&p=administration"><i class="fab-action-button__icon fas fa-chevron-left"></i></a>
 </div>

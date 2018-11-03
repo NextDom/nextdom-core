@@ -33,7 +33,16 @@
 */
 
 #}
-<div class="box blurPanel" id="commandes">
+<div class="action-bar">
+    <div class="action-group">
+        <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+    </div>
+    <div class="action-group">
+        <a class="btn btn-success pull-right" id="bt_savecommandes"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+    </div>
+</div>
+
+<div class="box" id="commandes">
     <!-- Header bar -->
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fas fa-hand-o-right">&nbsp;&nbsp;</i>{{ 'Commandes' }}</h3>
@@ -56,38 +65,38 @@
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Période de calcul pour min, max, moy' }}</label>
-                        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-8">
-                            <input type="text" class="configKey form-control" data-l1key="historyCalculPeriod"/>
-                        </div>
-                        <div class="col-lg-7 col-md-4 col-sm-4 col-xs-4">
-                            <span class="label-unity">{{ 'heures' }}</span>
+                        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                            <div class="input-group">
+                                <input type="text" class="configKey form-control" data-l1key="historyCalculPeriod"/>
+                                <span class="input-group-addon">{{ 'heures' }}</span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Période de calcul pour la tendance' }}</label>
-                        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-8">
-                            <input type="text" class="configKey form-control" data-l1key="historyCalculTendance"/>
-                        </div>
-                        <div class="col-lg-7 col-md-4 col-sm-4 col-xs-4">
-                            <span class="label-unity">{{ 'heures' }}</span>
+                        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                            <div class="input-group">
+                                <input type="text" class="configKey form-control" data-l1key="historyCalculTendance"/>
+                                <span class="input-group-addon">{{ 'heures' }}</span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Délai avant archivage' }}</label>
-                        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-8">
-                            <input type="text" class="configKey form-control" data-l1key="historyArchiveTime"/>
-                        </div>
-                        <div class="col-lg-7 col-md-4 col-sm-4 col-xs-4">
-                            <span class="label-unity">{{ 'heures' }}</span>
+                        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                            <div class="input-group">
+                                <input type="text" class="configKey form-control" data-l1key="historyArchiveTime"/>
+                                <span class="input-group-addon">{{ 'heures' }}</span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Archiver par paquet de' }}</label>
-                        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-8">
-                            <input type="text" class="configKey form-control" data-l1key="historyArchivePackage"/>
-                        </div>
-                        <div class="col-lg-7 col-md-4 col-sm-4 col-xs-4">
-                            <span class="label-unity">{{ 'heures' }}</span>
+                        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                            <div class="input-group">
+                                <input type="text" class="configKey form-control" data-l1key="historyArchivePackage"/>
+                                <span class="input-group-addon">{{ 'heures' }}</span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -129,13 +138,4 @@
             </fieldset>
         </form>
     </div>
-</div>
-<div class="fab">
-    <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
-    <ul class="fab-buttons">
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_savecommandes" title="" data-tooltip="{{ 'Sauvegarder' }}"><i class="fas fa-save"></i></a></li>
-    </ul>
-</div>
-<div class="fab fab-bis">
-    <a class="fab-action-button bg-red-active" href="index.php?v=d&p=administration"><i class="fab-action-button__icon fas fa-chevron-left"></i></a>
 </div>

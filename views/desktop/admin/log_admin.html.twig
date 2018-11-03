@@ -33,7 +33,16 @@
 */
 
 #}
-<div class="box blurPanel" id="log_admin">
+<div class="action-bar">
+    <div class="action-group">
+        <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+    </div>
+    <div class="action-group">
+        <a class="btn btn-success pull-right" id="bt_savelog_admin"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+    </div>
+</div>
+
+<div class="box" id="log_admin">
     <!-- Header bar -->
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fas fa-file-alt">&nbsp;&nbsp;</i>{{ 'Logs' }}</h3>
@@ -158,7 +167,7 @@
                     {% for otherLog in adminOthersLogs %}
                         <form class="form-horizontal">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">{{ otherLog|capitalize }}</label>
+                                <label class="col-sm-3 control-label">{{ otherLog|capitalize }}</label>
                                 <div class="col-sm-10">
                                     <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="1000"/> {{ 'Aucun' }}</label>
                                     <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="default"/> {{ 'Défaut' }}</label>
@@ -174,7 +183,7 @@
                         {% for pluginData in adminPluginsList %}
                             <form class="form-horizontal">
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">{{ pluginData['plugin'].getName() }}</label>
+                                    <label class="col-sm-3 control-label">{{ pluginData['plugin'].getName() }}</label>
                                     <div class="col-sm-10">
                                         <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="1000"/> {{ 'Aucun' }}</label>
                                         <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="default"/> {{ 'Défaut' }}</label>
@@ -191,13 +200,4 @@
             </fieldset>
         </form>
     </div>
-</div>
-<div class="fab">
-    <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
-    <ul class="fab-buttons">
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_savelog_admin" title="" data-tooltip="{{ 'Sauvegarder' }}"><i class="fas fa-save"></i></a></li>
-    </ul>
-</div>
-<div class="fab fab-bis">
-    <a class="fab-action-button bg-red-active" href="index.php?v=d&p=administration"><i class="fab-action-button__icon fas fa-chevron-left"></i></a>
 </div>
