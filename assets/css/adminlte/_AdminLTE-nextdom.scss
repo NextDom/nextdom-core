@@ -44,7 +44,7 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   background-color: $nextdom_bg;
   z-index: 800;
   padding: {
-    top: 60px;
+    top: 50px;
     bottom: 65px;
   }
 }
@@ -652,3 +652,15 @@ input[type="checkbox"] {
 .panel:hover{
   box-shadow: 0 6px 12px 0 rgba(0,0,0,0.15);
 }
+
+/* Scrollbar*/
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-thumb {
+  width: 80px;
+  border-radius: 3px;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-corner {
+  background-color: transparent;
