@@ -192,6 +192,7 @@
 
 /* Modal */
 .ui-dialog {
+  z-index: 9999;
   border-radius: 7px;
   background-clip: unset;
   padding: 0px 0 0px 0px;
