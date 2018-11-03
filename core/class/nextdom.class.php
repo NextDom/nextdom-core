@@ -66,7 +66,7 @@ class nextdom
             $result = array();
         } else {
             // TODO: CHMOD 777
-            \com_shell::execute(\system::getCmdSudo() . 'chmod 777 ' . $path . ' > /dev/null 2>&1;echo "$(tail -n ' . \config::byKey('timeline::maxevent') . ' ' . $path . ')" > ' . $path);
+            \com_shell::execute(\system::getCmdSudo() . 'chmod 666 ' . $path . ' > /dev/null 2>&1;echo "$(tail -n ' . \config::byKey('timeline::maxevent') . ' ' . $path . ')" > ' . $path);
             $lines = explode("\n", trim(file_get_contents($path)));
             $result = array();
             foreach ($lines as $line) {
@@ -83,7 +83,7 @@ class nextdom
     {
         $path = __DIR__ . '/../../data/timeline.json';
         // TODO: chmod 777
-        \com_shell::execute(\system::getCmdSudo() . 'chmod 777 ' . $path . ' > /dev/null 2>&1;');
+        \com_shell::execute(\system::getCmdSudo() . 'chmod 666 ' . $path . ' > /dev/null 2>&1;');
         unlink($path);
     }
 
@@ -171,7 +171,7 @@ class nextdom
             'result' => ($state) ? $uname . ' [' . $version . ']' : $uname,
             'comment' => ($state) ? '' : __('Vous n\'êtes pas sur un OS officiellement supporté par l\'équipe NextDom (toute demande de support pourra donc être refusée). Les OS officiellement supporté sont Debian Jessie et Debian Strech (voir <a href="https://jeedom.github.io/documentation/compatibility/fr_FR/index" target="_blank">ici</a>)'),
         );
-        
+
         $nbNeededUpdate = \update::nbNeedUpdate();
         $state = ($nbNeededUpdate == 0) ? true : false;
         $systemHealth[] = array(
@@ -262,6 +262,15 @@ class nextdom
             'state' => ($value > 10),
             'result' => $value . ' %',
             'comment' => '',
+        );
+
+        $value = self::checkSpaceLeft(self::getTmpFolder());
+        $systemHealth[] = array(
+            'icon' => 'fa-hdd',
+            'name' => __('health.harddisk-freespace-tmp'),
+            'state' => ($value > 10),
+            'result' => $value . ' %',
+            'comment' => __('health.harddisk-freespace-tmp-error'),
         );
 
         $values = getSystemMemInfo();
@@ -1465,18 +1474,11 @@ class nextdom
      */
     public static function cleanFileSytemRight()
     {
-        $processUser = \system::get('www-uid');
-        $processGroup = \system::get('www-gid');
-        if ($processUser == '') {
-            $processUser = posix_getpwuid(posix_geteuid());
-            $processUser = $processUser['name'];
-        }
-        if ($processGroup == '') {
-            $processGroup = posix_getgrgid(posix_getegid());
-            $processGroup = $processGroup['name'];
-        }
-        $path = __DIR__ . '/../../*';
-        exec(\system::getCmdSudo() . 'chown -R ' . $processUser . ':' . $processGroup . ' ' . $path . ';' . \system::getCmdSudo() . 'chmod 775 -R ' . $path);
+      $cmd = system::getCmdSudo() . 'chown -R ' . system::get('www-uid') . ':' . system::get('www-gid') . ' ' . __DIR__ . '/../../*;';
+  		$cmd .= system::getCmdSudo() . 'chmod 774 -R ' . __DIR__ . '/../../*;';
+  		$cmd .= system::getCmdSudo() . 'find ' . __DIR__ . '/../../log -type f -exec chmod 664 {} +';
+  		$cmd .= system::getCmdSudo() . 'chmod 774 -R ' . __DIR__ . '/../../.* ;';
+  		exec($cmd);
     }
 
     /**
@@ -1484,9 +1486,14 @@ class nextdom
      *
      * @return float
      */
-    public static function checkSpaceLeft(): float
+    public static function checkSpaceLeft($directory = null): float
     {
-        return round(disk_free_space(NEXTDOM_ROOT) / disk_total_space(NEXTDOM_ROOT) * 100);
+        if ($directory == null) {
+          $path = NEXTDOM_ROOT;
+        } else {
+          $path = $directory;
+        }
+        return round(disk_free_space($path) / disk_total_space($path) * 100);
     }
 
     /**
@@ -1503,8 +1510,10 @@ class nextdom
             $result .= '/' . $plugin;
         }
         if (!file_exists($result)) {
-            mkdir($result, 0777, true);
-        }
+          mkdir($return, 0774, true);
+    			$cmd = system::getCmdSudo() . 'chown -R ' . system::get('www-uid') . ':' . system::get('www-gid') . ' ' . $return . ';';
+    			com_shell::execute($cmd);
+    		}
         return $result;
     }
 

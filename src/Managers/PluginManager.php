@@ -194,6 +194,41 @@ class PluginManager
     }
 
     /**
+     *
+     */
+    public static function heartbeat() {
+  		foreach (self::listPlugin(true) as $plugin) {
+  			try {
+  				$heartbeat = \config::byKey('heartbeat::delay::' . $plugin->getId(), 'core', 0);
+  				if ($heartbeat == 0 || is_nan($heartbeat)) {
+  					continue;
+  				}
+  				$eqLogics = EqLogicManager::byType($plugin->getId(), true);
+  				if (count($eqLogics) == 0) {
+  					continue;
+  				}
+  				$ok = false;
+  				foreach ($eqLogics as $eqLogic) {
+  					if ($eqLogic->getStatus('lastCommunication', date('Y-m-d H:i:s')) > date('Y-m-d H:i:s', strtotime('-' . $heartbeat . ' minutes' . date('Y-m-d H:i:s')))) {
+  						$ok = true;
+  						break;
+  					}
+  				}
+  				if (!$ok) {
+  					$message = __('Attention le plugin ', __FILE__) . ' ' . $plugin->getName();
+  					$message .= __(' n\'a recu de message depuis ', __FILE__) . $heartbeat . __(' min', __FILE__);
+  					$logicalId = 'heartbeat' . $plugin->getId();
+  					\message::add($plugin->getId(), $message, '', $logicalId);
+  					if ($plugin->getHasOwnDeamon() && config::byKey('heartbeat::restartDeamon::' . $plugin->getId(), 'core', 0) == 1) {
+  						$plugin->deamon_start(true);
+  					}
+  				}
+  			} catch (Exception $e) {
+   			}
+  		}
+  	}
+
+    /**
      * Tâche exécutée toutes les minutes
      *
      * @throws \Exception
@@ -275,7 +310,7 @@ class PluginManager
                     try {
                         $pluginId::$cronType();
                     } catch (\Throwable $e) {
-                        \log::add($pluginId, 'error', \__('Erreur sur la fonction cron du plugin : ', __FILE__) . $e->getMessage());           
+                        \log::add($pluginId, 'error', \__('Erreur sur la fonction cron du plugin : ', __FILE__) . $e->getMessage());
                     }
                 }
             }
