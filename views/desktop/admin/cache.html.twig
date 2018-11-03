@@ -33,7 +33,20 @@
 */
 
 #}
-<div class="box blurPanel" id="cache">
+<div class="action-bar">
+    <div class="action-group">
+        <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+    </div>
+    <div class="action-group">
+        <a class="btn btn-warning" id="bt_cleanCache"><i class="fa fa-magic">&nbsp;&nbsp;</i>{{ 'Nettoyer le cache' }}</a>
+        <a class="btn btn-danger" id="bt_flushCache"><i class="fa fa-trash">&nbsp;&nbsp;</i>{{ 'Vider le cache' }}</a>
+    </div>
+    <div class="action-group">
+        <a class="btn btn-success pull-right" id="bt_savecache"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+    </div>
+</div>
+
+<div class="box" id="cache">
     <!-- Header bar -->
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fas fa-hdd-o">&nbsp;&nbsp;</i>{{ 'Cache' }}</h3>
@@ -73,15 +86,6 @@
                                     <option value="RedisCache">{{ 'Redis' }}</option>
                                 {% endif %}
                             </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-6 control-label">{{ 'Maintenance du cache' }}</label>
-                        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
-                            <a class="btn btn-warning" id="bt_cleanCache"><i class="fa fa-magic">&nbsp;&nbsp;</i>{{ 'Nettoyer' }}</a>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
-                            <a class="btn btn-danger" id="bt_flushCache"><i class="fa fa-trash">&nbsp;&nbsp;</i>{{ 'Vider' }}</a>
                         </div>
                     </div>
                 </div>
@@ -127,13 +131,4 @@
             </fieldset>
         </form>
     </div>
-</div>
-<div class="fab">
-    <span class="fab-action-button"><i class="fab-action-button__icon fas fa-bars"></i></span>
-    <ul class="fab-buttons">
-        <li class="fab-buttons__item"><a class="fab-buttons__link bg-green-active" id="bt_savecache" title="" data-tooltip="{{ 'Sauvegarder' }}"><i class="fas fa-save"></i></a></li>
-    </ul>
-</div>
-<div class="fab fab-bis">
-    <a class="fab-action-button bg-red-active" href="index.php?v=d&p=administration"><i class="fab-action-button__icon fas fa-chevron-left"></i></a>
 </div>

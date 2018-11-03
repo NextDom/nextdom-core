@@ -39,17 +39,25 @@
                     <a class="clockdate" id="horloge_date">lundi 1 janvier 1970</a>
                 </li>
                 <li class="dropdown notifications-menu" id="bt_messageModal">
-                    <a href="#"  >
-                        <i class="fas fa-bell notifbadge"></i>
-                        <span id="span_nbMessage" class="label label-warning notifcounter">{{ MENU_NB_MESSAGES }}</span>
+                    <a href="#">
+                        {% if MENU_NB_UPDATES != 0 %}
+                            <i class="fas fa-bell notifbadge"></i>
+                            <span id="span_nbMessage" class="label label-warning notifcounter">{{ MENU_NB_MESSAGES }}</span>
+                        {% else %}
+                            <i class="fas fa-bell"></i>
+                        {% endif %}
                     </a>
                 </li>
                 <!-- Tasks: style can be found in dropdown.less bt_messageModal-->
                 {% if IS_ADMIN %}
                     <li class="tasks-menu">
                         <a href="index.php?v=d&p=update">
-                            <i class="fas fa-download notifbadge"></i>
-                            <span id="span_nbUpdate" class="label label-danger notifcounter">{{ MENU_NB_UPDATES }}</span>
+                            {% if MENU_NB_UPDATES != 0 %}
+                                <i class="fas fa-download notifbadge"></i>
+                                <span id="span_nbUpdate" class="label label-danger notifcounter">{{ MENU_NB_UPDATES }}</span>
+                            {% else %}
+                                <i class="fas fa-download"></i>
+                            {% endif %}
                         </a>
                     </li>
                 {% endif %}
