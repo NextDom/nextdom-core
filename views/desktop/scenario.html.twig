@@ -33,8 +33,8 @@
 */
 
 #}
-<section class="content">
-    <div id="scenarioThumbnailDisplay" class="blurPanel">
+<div id="scenarioThumbnailDisplay" class="blurPanel">
+    <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
                 <a class="btn btn-danger" href="{{ HOMELINK }}"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
@@ -53,7 +53,9 @@
                 <a class="btn btn-default pull-right bt_showScenarioSummary"><i class="fas fa-list">&nbsp;&nbsp;</i>{{ 'Vue d\'ensemble' }}</a>
             </div>
         </div>
+    </section>
 
+    <section class="content">
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title"><i class="fas fa-film">&nbsp;&nbsp;</i>{{ 'Mes scénarios' }}</h3>
@@ -120,10 +122,11 @@
                 {% endif %}
             {% endfor %}
         </div>
-    </div>
+    </section>
+</div>
 
-
-    <div id="div_editScenario" style="display: none;">
+<div id="div_editScenario" style="display: none;">
+    <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
                 <a class="btn btn-danger" id="bt_scenarioThumbnailDisplay"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
@@ -147,6 +150,9 @@
                 <a class="btn btn-success pull-right bt_addScenarioElement"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter bloc' }}</a>
             </div>
         </div>
+    </section>
+
+    <section class="content">
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <h4 id="span_ongoing" class="label pull-right label-sticker"></h4>
@@ -388,5 +394,5 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</div>

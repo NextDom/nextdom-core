@@ -34,8 +34,8 @@
 
 #}
 
-<section class="content">
-    <div id="interactThumbnailDisplay">
+<div id="interactThumbnailDisplay">
+    <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
                 <a class="btn btn-danger" href="{{ HOMELINK }}"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
@@ -46,6 +46,9 @@
                 <a class="btn btn-default pull-right" id="bt_testInteract2"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Tester' }}</a>
             </div>
         </div>
+    </section>
+
+    <section class="content">
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title"><i class="fas fa-comments">&nbsp;&nbsp;</i>{{ 'Interactions' }}</h3>
@@ -111,9 +114,11 @@
                 {% set index = index + 1 %}
             {% endfor %}
         {% endif %}
-    </div>
+    </section>
+</div>
 
-    <div class="interact" style="display: none;" id="div_conf">
+<div class="interact" style="display: none;" id="div_conf">
+    <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
                 <a class="btn btn-danger" id="bt_interactThumbnailDisplay"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
@@ -127,6 +132,9 @@
                 <a class="btn btn-danger pull-right" id="bt_removeInteract"><i class="fas fa-minus-circle">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
             </div>
         </div>
+    </section>
+
+    <section class="content">
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Général' }}</a></li>
@@ -333,7 +341,6 @@
                     </form>
                 </div>
             </div>
-
         </div>
-    </div>
-</section>
+    </section>
+</div>
