@@ -33,26 +33,30 @@
 */
 
 #}
-<div class="action-bar">
-    <div class="action-group">
-        <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+        </div>
     </div>
-</div>
+</section>
 
-<div class="box" id="osdb">
-    <!-- Header bar -->
-    <div class="box-header with-border">
-        <h3 class="box-title"><i class="fas fa-terminal">&nbsp;&nbsp;</i>{{ 'OS/DB' }}</h3>
-    </div>
+<section class="content">
+    <div class="box" id="osdb">
+        <!-- Header bar -->
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fas fa-terminal">&nbsp;&nbsp;</i>{{ 'OS/DB' }}</h3>
+        </div>
 
-    <!-- Page content -->
-    <div class="box-body">
-        <form class="form-horizontal">
+        <!-- Page content -->
+        <div class="box-body">
+            <form class="form-horizontal">
 
-            <!-- Alert section -->
-            <div class="alert alert-danger alert-config">
-                {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à' }} {{ adminConfigs['product_name'] }}{{ '. L\'équipe' }} {{ adminConfigs['product_name'] }} {{ 'se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.' }}
-            </div>
+                <!-- Alert section -->
+                <div class="alert alert-danger alert-config">
+                    {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à' }} {{ adminConfigs['product_name'] }}{{ '. L\'équipe' }} {{ adminConfigs['product_name'] }} {{ 'se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.' }}
+                </div>
                 <!-- Console Section -->
                 <div>
                     <legend class="legend-title">{{ 'Console Système' }}</legend>
@@ -97,6 +101,7 @@
                         </div>
                     </div>
                 </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
+</section>

@@ -33,92 +33,96 @@
 */
 
 #}
-<div class="action-bar">
-    <div class="action-group">
-        <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+        </div>
+        <div class="action-group">
+            <a class="btn btn-primary" id="bt_checkAllUpdate"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{ 'Vérifier les mises à jour' }}</a>
+            <a class="btn btn-warning" id="bt_updateNextDom"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Mise à jour selective' }}</a>
+        </div>
     </div>
-    <div class="action-group">
-        <a class="btn btn-primary" id="bt_checkAllUpdate"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{ 'Vérifier les mises à jour' }}</a>
-        <a class="btn btn-warning" id="bt_updateNextDom"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Mise à jour selective' }}</a>
-    </div>
-</div>
+</section>
 
-<div id="div_Update-view">
-    <div class="box">
-        <div class="box-body">
-            <div class="form-group"><i class="fas fa-clock-o">&nbsp;&nbsp;</i><span>{{ 'Dernière vérification : ' }}</span><span class="label label-info label-sticker" id="span_lastUpdateCheck"></span></div>
-            <input class="form-control" placeholder="{{ 'Rechercher...' }}" id="in_searchPlugin"/>
+<section class="content-header">
+    <div id="div_Update-view">
+        <div class="box">
+            <div class="box-body">
+                <div class="form-group"><i class="fas fa-clock-o">&nbsp;&nbsp;</i><span>{{ 'Dernière vérification : ' }}</span><span class="label label-info label-sticker" id="span_lastUpdateCheck"></span></div>
+                <input class="form-control" placeholder="{{ 'Rechercher...' }}" id="in_searchPlugin"/>
+            </div>
+        </div>
+
+        <legend class="legend-title"><i class="fas fa-puzzle-piece">&nbsp;&nbsp;</i>{{ 'Plugins' }}</legend>
+        <div class="row">
+            <div id="listPlugin"></div>
+        </div>
+
+        <legend class="legend-title"><i class="fas fa-cubes">&nbsp;&nbsp;</i>{{ 'Autres' }}</legend>
+        <div class="row">
+            <div id="listOther"></div>
         </div>
     </div>
 
-    <legend class="legend-title"><i class="fas fa-puzzle-piece">&nbsp;&nbsp;</i>{{ 'Plugins' }}</legend>
-    <div class="row">
-        <div id="listPlugin"></div>
+    <div id="md_updateInfo">
+        <pre id="pre_updateInfo"></pre>
     </div>
 
-    <legend class="legend-title"><i class="fas fa-cubes">&nbsp;&nbsp;</i>{{ 'Autres' }}</legend>
-    <div class="row">
-        <div id="listOther"></div>
+    <div id="md_specifyUpdate">
+        <form class="form-horizontal">
+            <div class="alert alert-danger">{{ 'Avant toute mise à jour, merci de consulter la note de version du core de NextDom' }} <a target="_blank" href="https://nextdom.github.io/core/fr_FR/noteVersion">{{ 'ici' }}</a></div>
+            <fieldset>
+                <legend class="legend-title">{{ 'Options' }}</legend>
+                <div class="form-group">
+                    <label class="col-xs-6 control-label label-sticker-big">{{ 'Pré-update (mettre à jour le script d\'update avant)' }}</label>
+                    <div class="col-xs-4">
+                        <input type="checkbox" class="updateOption" data-l1key="preUpdate"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-6 control-label label-sticker-big">{{ 'Sauvegarder avant' }}</label>
+                    <div class="col-xs-4">
+                        <input type="checkbox" class="updateOption" data-l1key="backup::before" checked/>
+                    </div>
+                </div>
+                <legend class="legend-title">{{ 'Selection des mises à jour' }}</legend>
+                <div class="form-group">
+                    <label class="col-xs-6 control-label label-sticker-big">{{ 'Mettre à jour les plugins' }}</label>
+                    <div class="col-xs-4">
+                        <input type="checkbox" class="updateOption" data-l1key="plugins" checked/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-6 control-label label-sticker-big">{{ 'Mettre à jour le core' }}</label>
+                    <div class="col-xs-4">
+                        <input type="checkbox" class="updateOption" data-l1key="core" checked/>
+                    </div>
+                </div>
+                <legend class="legend-title">{{ 'Expert' }}</legend>
+                <div class="form-group has-error">
+                    <label class="col-xs-6 control-label label-sticker-big">{{ 'Mode forcé' }}</label>
+                    <div class="col-xs-4">
+                        <input type="checkbox" class="updateOption" data-l1key="force"/>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="alert alert-danger">{{ 'L\'option suivante n\'est à modifier que sur demande du support sinon il faut ABSOLUMENT qu\'elle soit sur "Aucune"' }}</div>
+                <div class="form-group has-warning">
+                    <legend class="legend-title">{{ 'Restauration' }}</legend>
+                    <label class="col-xs-6 control-label label-sticker-big">{{ 'Mise à jour à réappliquer' }}</label>
+                    <div class="col-xs-5">
+                        <select id="sel_updateVersion" class="form-control updateOption" data-l1key="update::reapply">
+                            <option value="">{{ 'Aucune' }}</option>
+                            {% for update in updatesList %}
+                                <option value="{{ update }}">{{ update }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <a class="btn btn-success pull-right" id="bt_doUpdate"><i class="fas fa-check"></i> {{ 'Mettre à jour' }}</a>
     </div>
-</div>
-
-<div id="md_updateInfo">
-    <pre id="pre_updateInfo"></pre>
-</div>
-
-<div id="md_specifyUpdate">
-    <form class="form-horizontal">
-        <div class="alert alert-danger">{{ 'Avant toute mise à jour, merci de consulter la note de version du core de NextDom' }} <a target="_blank" href="https://nextdom.github.io/core/fr_FR/noteVersion">{{ 'ici' }}</a></div>
-        <fieldset>
-            <legend class="legend-title">{{ 'Options' }}</legend>
-            <div class="form-group">
-                <label class="col-xs-6 control-label label-sticker-big">{{ 'Pré-update (mettre à jour le script d\'update avant)' }}</label>
-                <div class="col-xs-4">
-                    <input type="checkbox" class="updateOption" data-l1key="preUpdate"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-xs-6 control-label label-sticker-big">{{ 'Sauvegarder avant' }}</label>
-                <div class="col-xs-4">
-                    <input type="checkbox" class="updateOption" data-l1key="backup::before" checked/>
-                </div>
-            </div>
-            <legend class="legend-title">{{ 'Selection des mises à jour' }}</legend>
-            <div class="form-group">
-                <label class="col-xs-6 control-label label-sticker-big">{{ 'Mettre à jour les plugins' }}</label>
-                <div class="col-xs-4">
-                    <input type="checkbox" class="updateOption" data-l1key="plugins" checked/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-xs-6 control-label label-sticker-big">{{ 'Mettre à jour le core' }}</label>
-                <div class="col-xs-4">
-                    <input type="checkbox" class="updateOption" data-l1key="core" checked/>
-                </div>
-            </div>
-            <legend class="legend-title">{{ 'Expert' }}</legend>
-            <div class="form-group has-error">
-                <label class="col-xs-6 control-label label-sticker-big">{{ 'Mode forcé' }}</label>
-                <div class="col-xs-4">
-                    <input type="checkbox" class="updateOption" data-l1key="force"/>
-                </div>
-            </div>
-        </fieldset>
-        <fieldset>
-            <div class="alert alert-danger">{{ 'L\'option suivante n\'est à modifier que sur demande du support sinon il faut ABSOLUMENT qu\'elle soit sur "Aucune"' }}</div>
-            <div class="form-group has-warning">
-                <legend class="legend-title">{{ 'Restauration' }}</legend>
-                <label class="col-xs-6 control-label label-sticker-big">{{ 'Mise à jour à réappliquer' }}</label>
-                <div class="col-xs-5">
-                    <select id="sel_updateVersion" class="form-control updateOption" data-l1key="update::reapply">
-                        <option value="">{{ 'Aucune' }}</option>
-                        {% for update in updatesList %}
-                            <option value="{{ update }}">{{ update }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-        </fieldset>
-    </form>
-    <a class="btn btn-success pull-right" id="bt_doUpdate"><i class="fas fa-check"></i> {{ 'Mettre à jour' }}</a>
-</div>
+</section>
