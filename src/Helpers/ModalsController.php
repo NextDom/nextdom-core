@@ -43,7 +43,8 @@ class ModalsController
         'cmd.configure' => 'cmdConfigureModal',
         'log.display' => 'logDisplayModal',
         'plan.configure' => 'planConfigureModal',
-        'planHeader.configure' => 'planHeaderConfigureModal'
+        'planHeader.configure' => 'planHeaderConfigureModal',
+        'welcome' => 'welcomeModal'
     ];
 
     /**
@@ -275,5 +276,27 @@ class ModalsController
         sendVarToJS('planHeader', \utils::o2a($planHeader));
 
         $render->show('/modals/planHeader.configure.html.twig');
+    }
+
+    /**
+     * Render welcome modal
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Welcome modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function welcomeModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $pageContent['productName'] = \config::byKey('product_name');
+        $render->show('/modals/welcome.html.twig');
     }
 }
