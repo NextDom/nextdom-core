@@ -50,7 +50,7 @@
 </section>
 
 <section class="content">
-    <div class="box" id="log_display">
+    <div class="box" id="realtime">
         <!-- Header bar -->
         <div class="box-header with-border">
             <h3 class="box-title"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Temps réel' }}</h3>
@@ -70,7 +70,7 @@
                     <pre id='pre_eventlog' style='overflow: scroll;'></pre>
                     <script>
                         nextdom.log.autoupdate({
-                            log : log_display_name,
+                            log : realtime_name,
                             default_search : log_default_search,
                             display : $('#pre_eventlog'),
                             search : $('#in_eventLogSearch'),
@@ -79,17 +79,17 @@
 
                         $("#bt_logdisplayclearLog").on('click', function(event) {
                             nextdom.log.clear({
-                                log : log_display_name,
+                                log : realtime_name,
                             });
                         });
 
                         $("#bt_logdisplayremoveLog").on('click', function(event) {
                             nextdom.log.remove({
-                                log : log_display_name,
+                                log : realtime_name,
                             });
                         });
                         $('#bt_logdisplaydownloadLog').click(function() {
-                            window.open('core/php/downloadFile.php?pathfile=log/' + log_display_name, "_blank", null);
+                            window.open('core/php/downloadFile.php?pathfile=log/' + realtime_name, "_blank", null);
                         });
                     </script>
                 </fieldset>
