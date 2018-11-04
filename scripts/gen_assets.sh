@@ -158,17 +158,17 @@ function copy_assets {
 
 function start {
 	while true; do
-		FIND_CSS_RES=$(find /assets/css -mmin -0.1)
+		FIND_CSS_RES=$(find assets/css -mmin -0.1)
 		if [ -n "$FIND_CSS_RES" ]; then
 			gen_css no_compress
 			echo " >>> OK"
 		fi
-		FIND_JS_RES=$(find /core/js -mmin -0.1)
+		FIND_JS_RES=$(find core/js -mmin -0.1)
 		if [ -n "$FIND_JS_RES" ]; then
 			gen_js no_compress
 			echo " >>> OK"
 		fi
-		FIND_JS_RES=$(find /assets/js -mmin -0.1)
+		FIND_JS_RES=$(find assets/js -mmin -0.1)
 		if [ -n "$FIND_JS_RES" ]; then
 			gen_js no_compress
 			echo " >>> OK"

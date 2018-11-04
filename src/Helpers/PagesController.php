@@ -68,7 +68,6 @@ class PagesController
         'profils' => 'profilsPage',
         'view' => 'viewPage',
         'view_edit' => 'viewEditPage',
-        'eqAnalyze' => 'eqAnalyzePage',
         'eqAnalyse' => 'eqAnalyzePage',
         'plan' => 'planPage',
         'plan3d' => 'plan3dPage',
