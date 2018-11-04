@@ -376,7 +376,7 @@ class nextdom
      */
     public static function sick()
     {
-        $cmd = __DIR__ . '/../../sick.php';
+        $cmd = __DIR__ . '/../../scripts/sick.php';
         $cmd .= ' >> ' . \log::getPathToLog('sick') . ' 2>&1';
         \system::php($cmd);
     }
