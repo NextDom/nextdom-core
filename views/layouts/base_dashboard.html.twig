@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
 {% include '/commons/header.html.twig' %}
-<body class="hold-transition sidebar-mini sidebar-collapse">
+<body class="hold-transition sidebar-mini sidebar-collapse fixed">
 <div class="wrapper">
     {% include '/commons/AdminLTE_navbar.html.twig' %}
     {% include '/commons/AdminLTE_sidebar.html.twig' %}
     <div class="content-wrapper">
         {{ CONTENT | raw }}
     </div>
+    {% include '/commons/AdminLTE_footer.html.twig' %}
 </div>
 <div class="fab fab-left">
     <a class="fab-action-button cursor" style="display: none;" id="bt_goOnTop"><i class="fab-action-button__icon fas fa-angle-double-up"></i></a>
@@ -20,6 +21,5 @@
 {% if debugbar != false %}
     {{ debugbar.render | raw }}
 {% endif %}
-{% include '/commons/AdminLTE_footer.html.twig' %}
 </body>
 </html>
