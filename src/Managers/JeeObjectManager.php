@@ -226,7 +226,7 @@ class JeeObjectManager
     {
         $result = array();
         foreach (self::all() as $object) {
-            foreach ($object->getConfiguration('summary', '') as $key => $summary) {
+            foreach ($object->getConfiguration('summary', []) as $key => $summary) {
                 foreach ($summary as $cmdInfo) {
                     if (!CmdManager::byId(str_replace('#', '', $cmdInfo['cmd']))) {
                         $result[] = array('detail' => 'Résumé ' . $object->getName(), 'help' => \config::byKey('object:summary')[$key]['name'], 'who' => $cmdInfo['cmd']);
