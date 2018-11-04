@@ -130,6 +130,12 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .sidebar-menu>li>a {
   padding: 12px 5px 12px 13px;
 }
+.main-sidebar {
+  -webkit-transition: -webkit-transform 0.2s ease-in, width 0.2s ease-in;
+  -moz-transition: -moz-transform 0.2s ease-in, width 0.2s ease-in;
+  -o-transition: -o-transform 0.2s ease-in, width 0.2s ease-in;
+  transition: transform 0.2s ease-in, width 0.2s ease-in;
+}
 
 /* Menus */
 .tasks-menu, .notifications-menu {
