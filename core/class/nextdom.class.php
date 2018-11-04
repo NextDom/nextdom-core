@@ -1496,18 +1496,18 @@ class nextdom
      *
      * @return string
      */
-    public static function getTmpFolder($plugin = null)
-    {
-        $result = '/' . trim(\config::byKey('folder::tmp'), '/');
-        if ($plugin !== null) {
-            $result .= '/' . $plugin;
+    public static function getTmpFolder($_plugin = null) {
+        $return = '/' . trim(config::byKey('folder::tmp'), '/');
+        if ($_plugin !== null) {
+            $return .= '/' . $_plugin;
         }
-        if (!file_exists($result)) {
-            mkdir($result, 0777, true);
+        if (!file_exists($return)) {
+            mkdir($return, 0774, true);
+            $cmd = system::getCmdSudo() . 'chown -R ' . system::get('www-uid') . ':' . system::get('www-gid') . ' ' . $return . ';';
+            com_shell::execute($cmd);
         }
-        return $result;
+        return $return;
     }
-
     /**
      * Obtenir une clé d'identifiant du système hôte
      *
