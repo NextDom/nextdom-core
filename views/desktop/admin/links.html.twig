@@ -33,78 +33,82 @@
 */
 
 #}
-<div class="action-bar">
-    <div class="action-group">
-        <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+        </div>
+        <div class="action-group">
+            <a class="btn btn-success pull-right" id="bt_savelinks"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+        </div>
     </div>
-    <div class="action-group">
-        <a class="btn btn-success pull-right" id="bt_savelinks"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+</section>
+
+<section class="content">
+    <div class="box" id="links">
+        <!-- Header bar -->
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fa fa-sitemap">&nbsp;&nbsp;</i>{{ 'Liens' }}</h3>
+        </div>
+
+        <!-- Page content -->
+        <div class="box-body">
+            <form class="form-horizontal">
+                <fieldset>
+
+                    <!-- Profondeur Section -->
+                    <div>
+                        <legend class="legend-title">{{ 'Profondeurs' }}</legend>
+                        <div class="form-group">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Profondeur pour les scénarios' }}</label>
+                            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
+                                <input class="configKey form-control" data-l1key="graphlink::scenario::drill"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Profondeur pour les objets' }}</label>
+                            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
+                                <input class="configKey form-control" data-l1key="graphlink::object::drill"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Profondeur pour les équipements' }}</label>
+                            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
+                                <input class="configKey form-control" data-l1key="graphlink::eqLogic::drill"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Profondeur pour les commandes' }}</label>
+                            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
+                                <input class="configKey form-control" data-l1key="graphlink::cmd::drill"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Profondeur pour les variables' }}</label>
+                            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
+                                <input class="configKey form-control" data-l1key="graphlink::dataStore::drill"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Render Section -->
+                    <div class="legend-section">
+                        <legend class="legend-title">{{ 'Render' }}</legend>
+                        <div class="form-group">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Paramètre de prerender' }}</label>
+                            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
+                                <input class="configKey form-control" data-l1key="graphlink::prerender"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Paramètre de render' }}</label>
+                            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
+                                <input class="configKey form-control" data-l1key="graphlink::render"/>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
     </div>
-</div>
-
-<div class="box" id="links">
-    <!-- Header bar -->
-    <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-sitemap">&nbsp;&nbsp;</i>{{ 'Liens' }}</h3>
-    </div>
-
-    <!-- Page content -->
-    <div class="box-body">
-        <form class="form-horizontal">
-            <fieldset>
-
-                <!-- Profondeur Section -->
-                <div>
-                    <legend class="legend-title">{{ 'Profondeurs' }}</legend>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Profondeur pour les scénarios' }}</label>
-                        <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
-                            <input class="configKey form-control" data-l1key="graphlink::scenario::drill"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Profondeur pour les objets' }}</label>
-                        <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
-                            <input class="configKey form-control" data-l1key="graphlink::object::drill"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Profondeur pour les équipements' }}</label>
-                        <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
-                            <input class="configKey form-control" data-l1key="graphlink::eqLogic::drill"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Profondeur pour les commandes' }}</label>
-                        <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
-                            <input class="configKey form-control" data-l1key="graphlink::cmd::drill"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Profondeur pour les variables' }}</label>
-                        <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
-                            <input class="configKey form-control" data-l1key="graphlink::dataStore::drill"/>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Render Section -->
-                <div class="legend-section">
-                    <legend class="legend-title">{{ 'Render' }}</legend>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Paramètre de prerender' }}</label>
-                        <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
-                            <input class="configKey form-control" data-l1key="graphlink::prerender"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Paramètre de render' }}</label>
-                        <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
-                            <input class="configKey form-control" data-l1key="graphlink::render"/>
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
-    </div>
-</div>
+</section>
