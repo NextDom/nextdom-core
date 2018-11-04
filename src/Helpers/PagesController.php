@@ -259,8 +259,18 @@ class PagesController
                     }
                 )
             );
-            $pageContent['administrationMemLoad'] = round(100 * $memData[2]/$memData[1], 2);
-            $pageContent['administrationSwapLoad'] = round(100 * $swapData[2]/$swapData[1], 2);
+            if ($memData[1] != 0) {
+                $pageContent['administrationMemLoad'] = round(100 * $memData[2]/$memData[1], 2);
+            }
+            else {
+                $pageContent['administrationMemLoad'] = 0;
+            }
+            if ($swapData[1] != 0) {
+                $pageContent['administrationSwapLoad'] = round(100 * $swapData[2]/$swapData[1], 2);
+            }
+            else {
+                $pageContent['administrationSwapLoad'] = 0;
+            }
         }
         $pageContent['administrationCpuLoad'] = round(100 * sys_getloadavg()[0], 2);
         $pageContent['administrationHddLoad'] = round(100 - 100 * disk_free_space(NEXTDOM_ROOT) / disk_total_space(NEXTDOM_ROOT), 2);
