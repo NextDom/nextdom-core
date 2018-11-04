@@ -1099,6 +1099,7 @@ class PagesController
      */
     public static function logPage(Render $render, array &$pageContent): string
     {
+        // TODO utiliser log::getpathLog
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/log.js';
