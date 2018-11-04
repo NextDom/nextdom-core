@@ -211,7 +211,7 @@ class ModalsController
         Status::isConnectedAdminOrFail();
 
         Utils::sendVarsToJS([
-            'log_display_name' => Utils::init('log', 'event'),
+            'realtime_name' => Utils::init('log', 'event'),
             'log_default_search' => Utils::init('search', '')
         ]);
         $render->show('/modals/log.display.html.twig');
