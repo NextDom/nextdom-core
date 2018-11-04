@@ -33,27 +33,30 @@
 */
 
 #}
-<div class="action-bar">
-    <div class="action-group">
-        <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
-    </div>
-    <div class="action-group">
-        <a class="btn btn-success pull-right" id="bt_saveBackup"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
-    </div>
-</div>
-
-<div id="backup">
-    <div class="box" >
-        <!-- Header bar -->
-        <div class="box-header with-border ">
-            <h3 class="box-title"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegardes / Restaurations' }}</h3>
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
         </div>
+        <div class="action-group">
+            <a class="btn btn-success pull-right" id="bt_saveBackup"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+        </div>
+    </div>
+</section>
 
-        <!-- Page content -->
-        <div class="box-body">
-            <form class="form-horizontal">
-                <p class="alert alert-info">{{ 'Cette fonction permet de compacter dans une archive tous les élements de votre Nextdom.' }}</br>
-                    {{ 'Seront sauvegardé les paramètres, dashboard, vues, designs, plugins, widgets etc...' }}</p>
+<section class="content">
+    <div id="backup">
+        <div class="box" >
+            <!-- Header bar -->
+            <div class="box-header with-border ">
+                <h3 class="box-title"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegardes / Restaurations' }}</h3>
+            </div>
+
+            <!-- Page content -->
+            <div class="box-body">
+                <form class="form-horizontal">
+                    <p class="alert alert-info">{{ 'Cette fonction permet de compacter dans une archive tous les élements de votre Nextdom.' }}</br>
+                        {{ 'Seront sauvegardé les paramètres, dashboard, vues, designs, plugins, widgets etc...' }}</p>
                     <!-- Sauvegardes Section -->
                     <div>
                         <legend class="legend-title">{{ 'Paramètres des sauvegardes' }}</legend>
@@ -159,11 +162,12 @@
                             </div>
                         {% endif %}
                     {% endfor %}
-            </form>
+                </form>
+            </div>
+        </div>
+
+        <div id="md_backupInfo">
+            <pre id="pre_backupInfo" style="overflow: scroll;"></pre>
         </div>
     </div>
-
-    <div id="md_backupInfo">
-        <pre id="pre_backupInfo" style="overflow: scroll;"></pre>
-    </div>
-</div>
+</section>
