@@ -41,36 +41,9 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   background-color: transparent;
 }
 
-.main-header {
-  position: fixed;
-  width: 100%;
-  z-index: 1030;
-}
-
-.main-sidebar {
-  position: fixed;
-}
-
 .content-wrapper {
-  min-height: 100%;
   background-color: $nextdom_bg;
   z-index: 800;
-  padding: {
-    top: 50px;
-    bottom: 65px;
-  }
-}
-
-.main-footer {
-  padding: 13px 140px 0px 35px;
-  display: flow-root;
-}
-
-@media (max-width: 767px) {
-  .main-footer {
-    padding: 13px 120px 0px 70px;
-    display: flow-root;
-  }
 }
 
 /* Navs */
@@ -178,8 +151,6 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     height: auto;
   }
 }
-
-
 
 /* Treeview */
 .treeview-menu {
