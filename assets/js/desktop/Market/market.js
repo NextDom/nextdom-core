@@ -363,10 +363,10 @@ function getItemHtml(item) {
         '<div class="media-container col-xs-12 col-sm-6 col-md-4" data-source="' + item['sourceName'] + '" data-category="' + item['category'] + '" data-installed="' + item['installed'] + '">' +
         '<div class="media" data-plugin="' + pluginData + '">';
     if (item['installed']) {
-        result += '<div class="installed-marker"><i data-toggle="tooltip" title="' + installedPluginStr + '" class="fa fa-check"></i></div>';
+        result += '<div class="installed-marker"><i data-toggle="tooltip" title="' + installedPluginStr + '" class="fas fa-check"></i></div>';
     }
     if (item['installedBranchData'] !== false && item['installedBranchData']['needUpdate'] == true) {
-        result += '<div class="update-marker"><i data-toggle="tooltip" title="' + updateAvailableStr + '" class="fa fa-download"></i></div>';
+        result += '<div class="update-marker"><i data-toggle="tooltip" title="' + updateAvailableStr + '" class="fas fa-download"></i></div>';
         pluginsUpdateNeededList.push(item);
     }
     result += '' +

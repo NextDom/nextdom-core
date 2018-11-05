@@ -43,18 +43,18 @@
     float: right;
 }
 
+.market-filter-category {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
 .market-filters {
     margin-top: 2rem;
 }
 
 #admin-buttons {
     float: right;
-}
-
-#market-div {
-    margin-top: 2rem;
-    margin-left: 5%;
-    margin-right: 5%;
 }
 
 #market-div .media-container {
