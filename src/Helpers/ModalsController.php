@@ -41,9 +41,13 @@ class ModalsController
     const routesList = [
         'about' => 'aboutModal',
         'cmd.configure' => 'cmdConfigureModal',
+        'dataStore.management' => 'dataStoreManagementModal',
+        'expression.test' => 'expressionTestModal',
         'log.display' => 'logDisplayModal',
         'plan.configure' => 'planConfigureModal',
-        'planHeader.configure' => 'planHeaderConfigureModal'
+        'planHeader.configure' => 'planHeaderConfigureModal',
+        'scenario.summary' => 'scenarioSummaryModal',
+        'welcome' => 'welcomeModal'
     ];
 
     /**
@@ -193,6 +197,51 @@ class ModalsController
     }
 
     /**
+     * Render data store management modal
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Data store management modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function dataStoreManagementModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        sendVarToJS('dataStore_type', Utils::init('type'));
+        sendVarToJS('dataStore_link_id', Utils::init('link_id', -1));
+
+        $render->show('/modals/dataStore.management.html.twig');
+    }
+
+    /**
+     * Render expression test modal
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Expression test modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function expressionTestModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $render->show('/modals/expression.test.html.twig');
+    }
+
+    /**
      * Render log display modal
      *
      * @param Render $render Render engine
@@ -275,5 +324,48 @@ class ModalsController
         sendVarToJS('planHeader', \utils::o2a($planHeader));
 
         $render->show('/modals/planHeader.configure.html.twig');
+    }
+
+    /**
+     * Render scenario summary modal
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Scenario summary modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function scenarioSummaryModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $render->show('/modals/scenario.summary.html.twig');
+    }
+
+    /**
+     * Render welcome modal
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Welcome modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function welcomeModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $pageContent['productName'] = \config::byKey('product_name');
+        $render->show('/modals/welcome.html.twig', $pageContent);
     }
 }
