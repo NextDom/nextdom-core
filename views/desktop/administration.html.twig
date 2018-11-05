@@ -38,6 +38,7 @@
 
 #}
 <section class="content">
+    <!-- Status Cards -->
     <div class="row" id="div-menuPerf">
         <div class="col-md-3 col-xs-6">
             <div class="box box-solid">
@@ -108,54 +109,94 @@
             </div>
         </div>
     </div>
+
+    <!-- Btn-app boxs -->
     <div class="row">
-        <div class="col-xs-12 col-md-12" id="div_MenuList">
+        <div class="col-sm-6 col-xs-12" id="div_MenuList">
             <div class="box box-danger">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-cog">&nbsp;&nbsp;</i>{{ 'Administration / Paramétrage' }}</h3>
+                    <h3 class="box-title"><i class="fas fa-cog">&nbsp;&nbsp;</i>{{ 'Administration' }}</h3>
                 </div>
                 <div class="box-body">
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=general"><i class="fas fa-wrench"></i> {{ 'Général' }} </a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=custom"><i class="fas fa-pencil-square"></i> {{ 'Customisation' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=users"><i class="fas fa-users"></i> {{ 'Utilisateurs' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=profils"><i class="fas fa-briefcase"></i> {{ 'Profil' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=osdb"><i class="fas fa-terminal"></i> {{ 'OS/DB' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=api"><i class="fas fa-key"></i> {{ 'API' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=network"><i class="fas fa-rss"></i> {{ 'Réseaux' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=security"><i class="fa fa-shield"></i> {{ 'Sécurité' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=cache"><i class="fas fa-hdd-o"></i> {{ 'Cache' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=commandes"><i class="fas fa-hand-o-right"></i> {{ 'Commandes' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=interact_admin"><i class="fas fa-american-sign-language-interpreting"></i> {{ 'Interactions' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=links"><i class="fas fa-sitemap"></i> {{ 'Liens' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=eqlogic"><i class="fas fa-tablet-alt"></i> {{ 'Equipements' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=update_admin"><i class="fas fa-credit-card"></i> {{ 'Services' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=summary"><i class="fas fa-table"></i> {{ 'Résumés' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=reports_admin"><i class="fas fa-newspaper-o"></i> {{ 'Rapports' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=log_admin"><i class="fas fa-file-alt"></i> {{ 'Logs' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=users"><i class="fas fa-users"></i>{{ 'Utilisateurs' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=api"><i class="fas fa-key"></i>{{ 'API' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=network"><i class="fas fa-rss"></i>{{ 'Réseaux' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=security"><i class="fa fa-shield"></i>{{ 'Sécurité' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=cache"><i class="fas fa-hdd-o"></i>{{ 'Cache' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=update_admin"><i class="fas fa-credit-card"></i>{{ 'Services' }}</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xs-12" id="div_MenuList2">
+            <div class="box box-warning">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fas fa-sliders-h">&nbsp;&nbsp;</i>{{ 'Paramétrage' }}</h3>
+                </div>
+                <div class="box-body">
+                    <a class="btn btn-app" href="index.php?v=d&p=general"><i class="fas fa-wrench"></i>{{ 'Général' }} </a>
+                    <a class="btn btn-app" href="index.php?v=d&p=custom"><i class="fas fa-pencil-square"></i>{{ 'Customisation' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=profils"><i class="fas fa-briefcase"></i>{{ 'Profil' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=commandes"><i class="fas fa-hand-o-right"></i>{{ 'Commandes' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=links"><i class="fas fa-sitemap"></i>{{ 'Liens' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=interact_admin"><i class="fas fa-comments"></i>{{ 'Interactions' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=eqlogic"><i class="fas fa-tablet-alt"></i>{{ 'Equipements' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=summary"><i class="fas fa-table"></i>{{ 'Résumés' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=reports_admin"><i class="fas fa-newspaper-o"></i>{{ 'Rapports' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=log_admin"><i class="fas fa-file-alt"></i>{{ 'Logs' }}</a>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-12 col-md-12" id="div_MenuList2">
-            <div class="box box-primary">
+        <div class="col-sm-6 col-xs-12" id="div_MenuList3">
+            <div class="box box-success">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-paperclip">&nbsp;&nbsp;</i>{{ 'Outils / Diagnostics' }}</h3>
+                    <h3 class="box-title"><i class="fas fa-stethoscope">&nbsp;&nbsp;</i>{{ 'Diagnostics' }}</h3>
                 </div>
                 <div class="box-body">
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=migration" ><i class="fas fa-rocket"></i> {{ 'Migration' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=backup" ><i class="fas fa-save"></i> {{ 'Sauvegardes' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=update"><span class="badge bg-red">{{ MENU_NB_UPDATES }}</span><i class="fas fa-download"></i> {{ 'Mises à jour' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=history"><i class="fas fa-chart-area"></i> {{ 'Historique' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=health"><i class="fas fa-medkit"></i> {{ 'Santé' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=cron"><i class="fas fa-tasks"></i> {{ 'Tâches' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=log_display"><i class="fas fa-tachometer-alt"></i> {{ 'Temps réel' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=report"><i class="fas fa-newspaper-o"></i> {{ 'Rapports' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=log"><i class="fas fa-file-alt"></i> {{ 'Logs' }}</a>
-                    <a class="btn btn-app col-lg-1 col-md-2 col-xs-2" href="index.php?v=d&p=note"><i class="fas fa-sticky-note"></i> {{ 'Notes' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=health"><i class="fas fa-medkit"></i>{{ 'Santé' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=cron"><i class="fas fa-tasks"></i>{{ 'Tâches' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=eqAnalyse"><i class="fas fa-plug"></i>{{ 'Equipements' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=realtime"><i class="fas fa-tachometer-alt"></i>{{ 'Temps réel' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=history"><i class="fas fa-chart-area"></i>{{ 'Historique' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=report"><i class="fas fa-newspaper-o"></i>{{ 'Rapports' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=log"><i class="fas fa-file-alt"></i>{{ 'Logs' }}</a>
                 </div>
-                <!-- /.box-body -->
             </div>
+        </div>
+        <div class="col-sm-6 col-xs-12" id="div_MenuList4">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fas fa-paperclip">&nbsp;&nbsp;</i>{{ 'Outils' }}</h3>
+                </div>
+                <div class="box-body">
+                    <a class="btn btn-app" href="index.php?v=d&p=display"><i class="fas fa-table"></i>{{ 'Résumés' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=migration" ><i class="fas fa-rocket"></i>{{ 'Migration' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=backup" ><i class="fas fa-save"></i>{{ 'Sauvegardes' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=update"><span class="badge bg-red">{{ MENU_NB_UPDATES }}</span><i class="fas fa-download"></i>{{ 'Mises à jour' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=note"><i class="fas fa-sticky-note"></i>{{ 'Notes' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=osdb"><i class="fas fa-terminal"></i>{{ 'OS/DB' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=interact"><i class="fas fa-comments"></i>{{ 'Intéractions' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=scenario"><i class="fas fa-film"></i>{{ 'Scénarios' }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-default btn-action-bar" id="bt_nextdomAbout"><i class="fas fa-info-circle">&nbsp;&nbsp;</i>{{ 'A propos'}}</a>
+            <span class="label-sticker-big btn-action-bar"><i class="fas fa-code-branch">&nbsp;&nbsp;</i>{{ 'Version' }} {{ NEXTDOM_VERSION }}</a>
+        </div>
+        <div class="action-group">
+            <a class="btn btn-primary btn-action-bar" href="/index.php?v=m" data-reload="yes"><i class="fas fa-mobile-alt">&nbsp;&nbsp;</i>{{ 'Version mobile'}}</a>
+        </div>
+        <div class="action-group">
+            {% if IS_ADMIN and CAN_SUDO %}
+                <a class="btn btn-danger btn-action-bar pull-right" href="#" id="bt_haltSystem" state="0"><i class="fas fa-power-off">&nbsp;&nbsp;</i>{{ 'Eteindre' }}</a>
+                <a class="btn btn-warning btn-action-bar pull-right" href="#" id="bt_rebootSystem" state="0"><i class="fas fa-repeat">&nbsp;&nbsp;</i>{{ 'Redémarrer' }}</a>
+            {% endif %}
+            <a class="btn btn-warning btn-action-bar pull-right" href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock">&nbsp;&nbsp;</i>{{ 'Se déconnecter' }}</a>
         </div>
     </div>
 </section>
