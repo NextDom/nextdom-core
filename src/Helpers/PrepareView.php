@@ -470,7 +470,7 @@ class PrepareView
                     Router::showError404AndDie();
                 }
             } else {
-                return \NextDom\Helpers\PagesController::$controllerRoute($render, $pageContent);
+                return PagesController::$controllerRoute($render, $pageContent);
             }
         }
     }
