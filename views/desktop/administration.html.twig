@@ -185,11 +185,9 @@
 
     <div class="action-bar">
         <div class="action-group">
+            <a class="btn btn-default btn-action-bar" id="bt_welcomeRecall"><i class="fas fa-calendar-plus">&nbsp;&nbsp;</i>{{ 'Welcome Page'}}</a>
             <a class="btn btn-default btn-action-bar" id="bt_nextdomAbout"><i class="fas fa-info-circle">&nbsp;&nbsp;</i>{{ 'A propos'}}</a>
-            <span class="label-sticker-big btn-action-bar"><i class="fas fa-code-branch">&nbsp;&nbsp;</i>{{ 'Version' }} {{ NEXTDOM_VERSION }}</a>
-        </div>
-        <div class="action-group">
-            <a class="btn btn-primary btn-action-bar" href="/index.php?v=m" data-reload="yes"><i class="fas fa-mobile-alt">&nbsp;&nbsp;</i>{{ 'Version mobile'}}</a>
+            <div class="label-sticker-big btn-action-bar"><i class="fas fa-code-branch">&nbsp;&nbsp;</i>{{ 'Version' }} {{ NEXTDOM_VERSION }}</div>
         </div>
         <div class="action-group">
             {% if IS_ADMIN and CAN_SUDO %}
@@ -197,6 +195,7 @@
                 <a class="btn btn-warning btn-action-bar pull-right" href="#" id="bt_rebootSystem" state="0"><i class="fas fa-repeat">&nbsp;&nbsp;</i>{{ 'Redémarrer' }}</a>
             {% endif %}
             <a class="btn btn-warning btn-action-bar pull-right" href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock">&nbsp;&nbsp;</i>{{ 'Se déconnecter' }}</a>
+            <div><a class="btn btn-primary btn-action-bar pull-right" href="/index.php?v=m" data-reload="yes"><i class="fas fa-mobile-alt">&nbsp;&nbsp;</i>{{ 'Version mobile'}}</a></div>
         </div>
     </div>
 </section>
