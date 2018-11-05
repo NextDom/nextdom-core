@@ -1,19 +1,12 @@
-<?php
-if (!isConnect()) {
-    throw new Exception('{{401 - Accès non autorisé}}');
-}
-sendVarToJS('dataStore_type', init('type'));
-sendVarToJS('dataStore_link_id', init('link_id', -1));
-?>
 <div style="display: none;" id="div_dataStoreManagementAlert"></div>
-<a class="btn btn-default" id="bt_dataStoreManagementAdd" style="margin-bottom: 5px;"><i class="fas fa-plus"></i> {{Ajouter}}</a>
+<a class="btn btn-default" id="bt_dataStoreManagementAdd" style="margin-bottom: 5px;"><i class="fas fa-plus"></i> {{ 'Ajouter' }}</a>
 <table id="table_dataStore" class="table table-condensed table-bordered tablesorter" style="width: 100%">
     <thead>
         <tr>
-            <th data-sorter="input">{{Nom}}</th>
-            <th data-sorter="input">{{Valeur}}</th>
-            <th>{{Utilisée dans}}</th>
-            <th data-sorter="false" data-filter="false" style="min-width: 100px;">{{Action}}</th>
+            <th data-sorter="input">{{ 'Nom' }}</th>
+            <th data-sorter="input">{{ 'Valeur' }}</th>
+            <th>{{ 'Utilisée dans' }}</th>
+            <th data-sorter="false" data-filter="false" style="min-width: 100px;">{{ 'Action' }}</th>
         </tr>
     </thead>
     <tbody>
@@ -35,7 +28,7 @@ sendVarToJS('dataStore_link_id', init('link_id', -1));
                            notify("Core", error.message, 'error');
                        },
                     success: function (data) {
-                        notify("Info", '{{Dépôt de données supprimé}}', 'success');
+                        notify("Info", '{{ 'Dépôt de données supprimé' }}', 'success');
                         refreshDataStoreMangementTable();
                     }
                 });
@@ -55,7 +48,7 @@ sendVarToJS('dataStore_link_id', init('link_id', -1));
                   notify("Core", error.message, 'error');
             },
             success: function (data) {
-                notify("Info", '{{Dépôt de données sauvegardé}}', 'success');
+                notify("Info", '{{ 'Dépôt de données sauvegardé' }}', 'success');
                 refreshDataStoreMangementTable();
             }
         });
@@ -63,7 +56,7 @@ sendVarToJS('dataStore_link_id', init('link_id', -1));
 
         $('#table_dataStore').delegate('.bt_graphDataStore', 'click', function() {
             var tr = $(this).closest('tr');
-            $('#md_modal2').dialog({title: "{{Graphique de lien(s)}}"});
+            $('#md_modal2').dialog({title: "{{ 'Graphique de lien(s)' }}"});
             $("#md_modal2").load('index.php?v=d&modal=graph.link&filter_type=dataStore&filter_id='+tr.attr('data-dataStore_id')).dialog('open');
         });
 
