@@ -649,7 +649,6 @@ input[type="checkbox"] {
 #listPlugin .box .box-body {
   min-height: 180px;
 }
-
 .panel:hover{
   box-shadow: 0 6px 12px 0 rgba(0,0,0,0.15);
 }
@@ -676,4 +675,9 @@ input[type="checkbox"] {
 }
 .ui-dialog .ui-dialog-titlebar-close {
   opacity: 1;
+}
+
+/* footer */
+.main-footer {
+    padding: 15px 0px 0px 35px;
 }
