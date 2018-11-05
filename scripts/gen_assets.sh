@@ -111,7 +111,7 @@ function gen_js {
         vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
         vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
         vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.js  > /tmp/temp.js
-        
+
 if [ $# -eq 0 ]; then
     python -m jsmin /tmp/temp.js > public/js/base.js
     rm /tmp/temp.js
@@ -128,6 +128,30 @@ if [ $# -eq 0 ]; then
     do
         python -m jsmin $jsFile > public/js/desktop/${jsFile##*/}
         php scripts/translate.php public/js/desktop/${jsFile##*/}
+    done
+    mkdir -p public/js/desktop/admin
+    for jsFile in assets/js/desktop/admin/*.js
+    do
+        python -m jsmin $jsFile > public/js/desktop/admin/${jsFile##*/}
+        php scripts/translate.php public/js/desktop/admin/${jsFile##*/}
+    done
+    mkdir -p public/js/desktop/diagnostic
+    for jsFile in assets/js/desktop/diagnostic/*.js
+    do
+        python -m jsmin $jsFile > public/js/desktop/diagnostic/${jsFile##*/}
+        php scripts/translate.php public/js/desktop/diagnostic/${jsFile##*/}
+    done
+    mkdir -p public/js/desktop/params
+    for jsFile in assets/js/desktop/params/*.js
+    do
+        python -m jsmin $jsFile > public/js/desktop/params/${jsFile##*/}
+        php scripts/translate.php public/js/desktop/params/${jsFile##*/}
+    done
+    mkdir -p public/js/desktop/tools
+    for jsFile in assets/js/desktop/tools/*.js
+    do
+        python -m jsmin $jsFile > public/js/desktop/tools/${jsFile##*/}
+        php scripts/translate.php public/js/desktop/tools/${jsFile##*/}
     done
     mkdir -p public/js/modals
     for jsFile in assets/js/modals/*.js
