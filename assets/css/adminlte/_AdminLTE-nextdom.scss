@@ -684,7 +684,7 @@ input[type="checkbox"] {
   box-shadow: 0 6px 12px 0 rgba(0,0,0,0.15);
 }
 
-/*actionBar */
+/* actionBar */
 .action-bar {
   padding: 8px;
   align-items: center;
@@ -695,6 +695,17 @@ input[type="checkbox"] {
   box-shadow: 0 2px 2px rgba(0,0,0,0.2);
 }
 .btn-action-bar {
-    margin-bottom: 2px;
-    margin-top: 2px;
+  margin-bottom: 2px;
+  margin-top: 2px;
+}
+
+/* Modales */
+.ui-widget-content {
+  border: none;
+}
+.ui-dialog .ui-dialog-title {
+  padding: 7px 5px 5px 0px;
+}
+.ui-dialog .ui-dialog-titlebar-close {
+  opacity: 1;
 }
