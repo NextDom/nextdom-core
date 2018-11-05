@@ -205,7 +205,7 @@ $("body").delegate(".listAction", 'click', function () {
         taAutosize();
     });
   });
-  });
+});
 
   $("body").delegate(".listCmdAction", 'click', function () {
     var el = $(this).closest('.actionOnMessage').find('.expressionAttr[data-l1key=cmd]');

@@ -36,21 +36,19 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+            <a class="btn btn-warning btn-action-bar" data-state="1" id="bt_eventLogStopStart"><i class="fas fa-pause">&nbsp;&nbsp;</i>{{ 'Pause' }}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-warning" data-state="1" id="bt_eventLogStopStart"><i class="fas fa-pause">&nbsp;&nbsp;</i>{{ 'Pause' }}</a>
-        </div>
-        <div class="action-group">
-            <a class="btn btn-primary pull-right" id="bt_logdisplaydownloadLog"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{ 'Télécharger' }}</a>
-            <a class="btn btn-warning pull-right" id="bt_logdisplayclearLog"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Vider' }}</a>
-            <a class="btn btn-danger pull-right" id="bt_logdisplayremoveLog"><i class="fas fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+            <a class="btn btn-primary btn-action-bar pull-right" id="bt_logdisplaydownloadLog"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{ 'Télécharger' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id="bt_logdisplayclearLog"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Vider' }}</a>
+            <a class="btn btn-danger btn-action-bar pull-right" id="bt_logdisplayremoveLog"><i class="fas fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
         </div>
     </div>
 </section>
 
 <section class="content">
-    <div class="box" id="log_display">
+    <div class="box" id="realtime">
         <!-- Header bar -->
         <div class="box-header with-border">
             <h3 class="box-title"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Temps réel' }}</h3>
@@ -70,7 +68,7 @@
                     <pre id='pre_eventlog' style='overflow: scroll;'></pre>
                     <script>
                         nextdom.log.autoupdate({
-                            log : log_display_name,
+                            log : realtime_name,
                             default_search : log_default_search,
                             display : $('#pre_eventlog'),
                             search : $('#in_eventLogSearch'),
@@ -79,17 +77,17 @@
 
                         $("#bt_logdisplayclearLog").on('click', function(event) {
                             nextdom.log.clear({
-                                log : log_display_name,
+                                log : realtime_name,
                             });
                         });
 
                         $("#bt_logdisplayremoveLog").on('click', function(event) {
                             nextdom.log.remove({
-                                log : log_display_name,
+                                log : realtime_name,
                             });
                         });
                         $('#bt_logdisplaydownloadLog').click(function() {
-                            window.open('core/php/downloadFile.php?pathfile=log/' + log_display_name, "_blank", null);
+                            window.open('core/php/downloadFile.php?pathfile=log/' + realtime_name, "_blank", null);
                         });
                     </script>
                 </fieldset>
