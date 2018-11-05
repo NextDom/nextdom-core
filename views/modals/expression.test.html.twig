@@ -1,26 +1,18 @@
-<?php
-if (!isConnect('admin')) {
-    throw new Exception('{{401 - Accès non autorisé}}');
-}
-?>
 <div id="div_alertExpressionTest"></div>
-
-
-
 <form class="form-horizontal" onsubmit="return false;">
     <div class="input-group input-group-sm" style="width: 100%">
-        <span class="input-group-addon" style="width: 100px"><i class="fas fa-random"></i>  {{Test}}</span>
+        <span class="input-group-addon" style="width: 100px"><i class="fas fa-random"></i>  {{ 'Test' }}</span>
         <input class="form-control" id="in_testExpression">
         <span class="input-group-btn">
-            <a type="button" class="btn btn-default cursor tooltips" id="bt_searchInfoCmd" title="{{Rechercher une commande}}"><i class="fas fa-list-alt"></i></a>
-            <a type="button" class="btn btn-default cursor tooltips"  id="bt_searchScenario" title="{{Rechercher un scenario}}"><i class="fas fa-history"></i></a>
-            <a type="button" class="btn btn-default cursor tooltips"  id="bt_searchEqLogic" title="{{Rechercher d'un équipement}}"><i class="fas fa-cube"></i></a>
-            <a class="btn btn-default" id="bt_executeExpressionOk"><i class="fas fa-bolt"></i> {{Exécuter}}</a>
+            <a type="button" class="btn btn-default cursor tooltips" id="bt_searchInfoCmd" title="{{ 'Rechercher une commande' }}"><i class="fas fa-list-alt"></i></a>
+            <a type="button" class="btn btn-default cursor tooltips"  id="bt_searchScenario" title="{{ 'Rechercher un scenario' }}"><i class="fas fa-history"></i></a>
+            <a type="button" class="btn btn-default cursor tooltips"  id="bt_searchEqLogic" title="{{ 'Rechercher d\'un équipement' }}"><i class="fas fa-cube"></i></a>
+            <a class="btn btn-default" id="bt_executeExpressionOk"><i class="fas fa-bolt"></i> {{ 'Exécuter' }}</a>
         </span>
     </div>
 </form>
 <br>
-<legend><i class="fas fa-sign-in-alt"></i>  {{Résultat}}</legend>
+<legend><i class="fas fa-sign-in-alt"></i>  {{ 'Résultat' }}</legend>
 <div id="div_expressionTestResult"></div>
 
 <script>
@@ -54,22 +46,22 @@ if (!isConnect('admin')) {
 
     $('#bt_executeExpressionOk').on('click',function(){
         if($('#in_testExpression').value() == ''){
-            notify("{{Expression}}", '{{L\'expression de test ne peut être vide}}', 'error');
+            notify("{{ 'Expression' }}", '{{ 'L\\\'expression de test ne peut être vide' }}', 'error');
             return;
         }
         nextdom.scenario.testExpression({
             expression: $('#in_testExpression').value(),
             error: function (error) {
-                notify("{{Expression}}", error.message, 'error');
+                notify("{{ 'Expression' }}", error.message, 'error');
             },
             success: function (data) {
                 $('#div_expressionTestResult').empty();
                 var html = '<div class="alert alert-info">';
                 if(data.correct == 'nok'){
-                    html += '<strong>{{Attention : il doit y avoir un souci, car le résultat est le même que l\'expression}}</strong><br\>';
+                    html += '<strong>{{ 'Attention : il doit y avoir un souci, car le résultat est le même que l\\\'expression' }}</strong><br\>';
                 }
-                html += '{{Je vais évaluer : }} <strong>'+data.evaluate+'</strong><br/>';
-                html += '{{Résultat : }} <strong>'+data.result+'</strong>';
+                html += '{{ 'Je vais évaluer : ' }} <strong>'+data.evaluate+'</strong><br/>';
+                html += '{{ 'Résultat : ' }} <strong>'+data.result+'</strong>';
                 html += '</div>';
                 $('#div_expressionTestResult').append(html);
             }
