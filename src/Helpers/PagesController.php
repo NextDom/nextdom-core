@@ -427,7 +427,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function logDisplayPage(Render $render, array &$pageContent): string
+    public static function realtimePage(Render $render, array &$pageContent): string
     {
 
         Status::initConnectState();
@@ -1206,6 +1206,7 @@ class PagesController
         foreach ($allViews as $view) {
             $viewData = [];
             $viewData['id'] = $view->getId();
+            $viewData['icon'] = $view->getDisplay('icon');
             $viewData['name'] = $view->getName();
             $viewData['number'] = count(ls($report_path . '/view/' . $view->getId(), '*'));
             $pageContent['reportViews'][] = $viewData;
@@ -1215,6 +1216,7 @@ class PagesController
         foreach ($allPlanHeader as $plan) {
             $planData = [];
             $planData['id'] = $plan->getId();
+            $planData['icon'] = $plan->getConfiguration('icon');
             $planData['name'] = $plan->getName();
             $planData['number'] = count(ls($report_path . '/plan/' . $plan->getId(), '*'));
             $pageContent['reportPlans'][] = $planData;

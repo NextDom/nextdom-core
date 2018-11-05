@@ -112,7 +112,7 @@
 
     <!-- Btn-app boxs -->
     <div class="row">
-        <div class="col-md-6 col-xs-12" id="div_MenuList">
+        <div class="col-sm-6 col-xs-12" id="div_MenuList">
             <div class="box box-danger">
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fas fa-cog">&nbsp;&nbsp;</i>{{ 'Administration' }}</h3>
@@ -127,7 +127,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-xs-12" id="div_MenuList2">
+        <div class="col-sm-6 col-xs-12" id="div_MenuList2">
             <div class="box box-warning">
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fas fa-sliders-h">&nbsp;&nbsp;</i>{{ 'Paramétrage' }}</h3>
@@ -148,7 +148,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6 col-xs-12" id="div_MenuList3">
+        <div class="col-sm-6 col-xs-12" id="div_MenuList3">
             <div class="box box-success">
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fas fa-stethoscope">&nbsp;&nbsp;</i>{{ 'Diagnostiques' }}</h3>
@@ -164,7 +164,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-xs-12" id="div_MenuList4">
+        <div class="col-sm-6 col-xs-12" id="div_MenuList4">
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fas fa-paperclip">&nbsp;&nbsp;</i>{{ 'Outils' }}</h3>
@@ -178,6 +178,31 @@
                     <a class="btn btn-app" href="index.php?v=d&p=osdb"><i class="fas fa-terminal"></i>{{ 'OS/DB' }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=interact"><i class="fas fa-comments"></i>{{ 'Intéractions' }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=scenario"><i class="fas fa-film"></i>{{ 'Scénarios' }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12" id="div_MenuList5">
+            <div class="box box">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fas fa-code-branch">&nbsp;&nbsp;</i>{{ 'Version' }} {{ NEXTDOM_VERSION }}</h3>
+                </div>
+                <div class="action-bar">
+                    <div class="action-group">
+                        <a class="btn btn-default btn-action-bar" id="bt_nextdomAbout"><i class="fas fa-info-circle">&nbsp;&nbsp;</i>{{ 'A propos'}}</a>
+                    </div>
+                    <div class="action-group">
+                        <a class="btn btn-primary btn-action-bar" href="/index.php?v=m" data-reload="yes"><i class="fas fa-mobile-alt">&nbsp;&nbsp;</i>{{ 'Version mobile'}}</a>
+                    </div>
+                    <div class="action-group">
+                        {% if IS_ADMIN and CAN_SUDO %}
+                            <a class="btn btn-danger btn-action-bar pull-right" href="#" id="bt_haltSystem" state="0"><i class="fas fa-power-off">&nbsp;&nbsp;</i>{{ 'Eteindre' }}</a>
+                            <a class="btn btn-warning btn-action-bar pull-right" href="#" id="bt_rebootSystem" state="0"><i class="fas fa-repeat">&nbsp;&nbsp;</i>{{ 'Redémarrer' }}</a>
+                        {% endif %}
+                        <a class="btn btn-warning btn-action-bar pull-right" href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock">&nbsp;&nbsp;</i>{{ 'Se déconnecter' }}</a>
+                    </div>
                 </div>
             </div>
         </div>

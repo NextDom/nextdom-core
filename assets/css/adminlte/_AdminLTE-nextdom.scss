@@ -442,7 +442,6 @@ padding-left: 7px;
   border: 1px solid;
   border-radius: 2px;
   margin: 4px 0;
-  padding: 0 10px;
 }
 @media (max-width: 767px) {
   .legend-title {
@@ -693,4 +692,8 @@ input[type="checkbox"] {
   background: white;
   border-radius: 3px;
   box-shadow: 0 2px 2px rgba(0,0,0,0.2);
+}
+.btn-action-bar {
+    margin-bottom: 2px;
+    margin-top: 2px;
 }
