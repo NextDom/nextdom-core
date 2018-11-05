@@ -33,8 +33,8 @@
 */
 
 #}
-<section class="content">
-    <div id="div_resumePluginList">
+<div id="div_resumePluginList">
+    <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
                 <a class="btn btn-danger" href="{{ HOMELINK }}"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
@@ -52,7 +52,9 @@
                 {% endfor %}
             </div>
         </div>
+    </section>
 
+    <section class="content">
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title"><i class="fas fa-puzzle-piece">&nbsp;&nbsp;</i>{{ 'Mes plugins' }}</h3>
@@ -84,16 +86,20 @@
                     </div>
                 </div>
             {% endfor %}
-
-        </div>
+        </section>
     </div>
-    <div id="div_confPlugin" style="display: none;">
+</div>
+
+<div id="div_confPlugin" style="display: none;">
+    <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
                 <a class="btn btn-danger" id="bt_returnToThumbnailDisplay"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
             </div>
         </div>
+    </section>
 
+    <section class="content">
         <div class="box box-header">
             <div class="box-title">
                 <img style="height:50px;padding-right:5px" src="" id="span_plugin_icon">
@@ -221,8 +227,8 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</div>
 <script>
     $('.pluginListContainer').packery();
 </script>
