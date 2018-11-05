@@ -42,6 +42,7 @@ class ModalsController
         'about' => 'aboutModal',
         'cmd.configure' => 'cmdConfigureModal',
         'dataStore.management' => 'dataStoreManagementModal',
+        'expression.test' => 'expressionTestModal',
         'log.display' => 'logDisplayModal',
         'plan.configure' => 'planConfigureModal',
         'planHeader.configure' => 'planHeaderConfigureModal',
@@ -217,6 +218,27 @@ class ModalsController
         sendVarToJS('dataStore_link_id', Utils::init('link_id', -1));
 
         $render->show('/modals/dataStore.management.html.twig');
+    }
+
+    /**
+     * Render expression test modal
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Expression test modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function expressionTestModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $render->show('/modals/expression.test.html.twig');
     }
 
     /**
