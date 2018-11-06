@@ -12,12 +12,6 @@ if (init('logicalId') != '' && init('type') != '') {
 if (!isset($market)) {
     throw new Exception('404 not found');
 }
-include_file('3rdparty', 'bootstrap.rating/bootstrap.rating', 'js');
-include_file('3rdparty', 'slick/slick.min', 'js');
-include_file('3rdparty', 'slick/slick', 'css');
-include_file('3rdparty', 'slick/slick-theme', 'css');
-include_file('3rdparty', 'fancybox/jquery.fancybox', 'js');
-include_file('3rdparty', 'fancybox/jquery.fancybox', 'css');
 
 $market_array = utils::o2a($market);
 $market_array['rating'] = $market->getRating();
@@ -25,6 +19,12 @@ $update = update::byLogicalId($market->getLogicalId());
 sendVarToJS('market_display_info', $market_array);
 ?>
 
+<link rel="stylesheet" href="/vendor/node_modules/fancybox/dist/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/vendor/node_modules/slick-carousel/slick/slick.css">
+<link rel="stylesheet" href="/vendor/node_modules/slick-carousel/slick/slick-theme.css">
+<script src="/3rdparty/bootstrap.rating/bootstrap.rating.js"></script>
+<script src="/vendor/node_modules/slick-carousel/slick/slick.js"></script>
+<script src="/vendor/node_modules/fancybox/dist/js/jquery.fancybox.js"></script>
 
 <div class='row' style='background-color: #e7e7e7; padding-top: 10px; padding-bottom: 10px;position: relative; top: -10px;'>
   <div class='col-sm-3'>
