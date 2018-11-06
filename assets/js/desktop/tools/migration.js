@@ -43,7 +43,6 @@ $("#md_migrationInfo").dialog({
     closeText: '',
     autoOpen: false,
     modal: true,
-    height: (jQuery(window).height() - 100),
     width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
     open: function () {
         $("body").css({overflow: 'hidden'});
@@ -100,6 +99,11 @@ $("#bt_migrateNextDom").on('click', function (event) {
             });
         }
     });
+});
+
+$("#bt_migrateOpenLog").on('click', function (event) {
+    $('#md_migrationInfo').dialog({title: "{{Avancement de la migration}}"});
+    $("#md_migrationInfo").dialog('open');
 });
 
 $('#bt_downloadBackupforMigration').on('click', function () {
