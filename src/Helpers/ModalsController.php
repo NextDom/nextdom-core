@@ -34,12 +34,20 @@
 namespace NextDom\Helpers;
 
 use NextDom\Managers\CmdManager;
+use NextDom\Managers\JeeObjectManager;
 
 class ModalsController
 {
     const routesList = [
         'about' => 'aboutModal',
-        'cmd.configure' => 'cmdConfigureModal'
+        'cmd.configure' => 'cmdConfigureModal',
+        'dataStore.management' => 'dataStoreManagementModal',
+        'expression.test' => 'expressionTestModal',
+        'log.display' => 'logDisplayModal',
+        'plan.configure' => 'planConfigureModal',
+        'planHeader.configure' => 'planHeaderConfigureModal',
+        'scenario.summary' => 'scenarioSummaryModal',
+        'welcome' => 'welcomeModal'
     ];
 
     /**
@@ -186,5 +194,178 @@ class ModalsController
         ]);
 
         $render->show('/modals/cmd.configure.html.twig', $pageContent);
+    }
+
+    /**
+     * Render data store management modal
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Data store management modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function dataStoreManagementModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        sendVarToJS('dataStore_type', Utils::init('type'));
+        sendVarToJS('dataStore_link_id', Utils::init('link_id', -1));
+
+        $render->show('/modals/dataStore.management.html.twig');
+    }
+
+    /**
+     * Render expression test modal
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Expression test modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function expressionTestModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $render->show('/modals/expression.test.html.twig');
+    }
+
+    /**
+     * Render log display modal
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Log display modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function logDisplayModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        Utils::sendVarsToJS([
+            'realtime_name' => Utils::init('log', 'event'),
+            'log_default_search' => Utils::init('search', '')
+        ]);
+        $render->show('/modals/log.display.html.twig');
+    }
+
+    /**
+     * Render plan configure modal
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Plan configure modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function planConfigureModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent = [];
+        $pageContent['planObject'] = \plan::byId(Utils::init('id'));
+        if (!is_object($pageContent['planObject'])) {
+            throw new \Exception('Impossible de trouver le design');
+        }
+        $pageContent['planLink'] = $pageContent['planObject']->getLink();
+        $pageContent['jeeObjects'] = JeeObjectManager::all();
+        $pageContent['views'] = \view::all();
+        $pageContent['plans'] = \planHeader::all();
+        Utils::sendVarToJS('id', $pageContent['planObject']->getId());
+
+        $render->show('/modals/plan.configure.html.twig', $pageContent);
+    }
+
+    /**
+     * Render plan header configure modal
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Plan header configure modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function planHeaderConfigureModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $planHeader = \planHeader::byId(Utils::init('planHeader_id'));
+        if (!is_object($planHeader)) {
+            throw new \Exception('Impossible de trouver le plan');
+        }
+        sendVarToJS('id', $planHeader->getId());
+        sendVarToJS('planHeader', \utils::o2a($planHeader));
+
+        $render->show('/modals/planHeader.configure.html.twig');
+    }
+
+    /**
+     * Render scenario summary modal
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Scenario summary modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function scenarioSummaryModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $render->show('/modals/scenario.summary.html.twig');
+    }
+
+    /**
+     * Render welcome modal
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Welcome modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function welcomeModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $pageContent['productName'] = \config::byKey('product_name');
+        $render->show('/modals/welcome.html.twig', $pageContent);
     }
 }

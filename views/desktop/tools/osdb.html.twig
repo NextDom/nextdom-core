@@ -1,0 +1,107 @@
+{#
+
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#}
+
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="box" id="osdb">
+        <!-- Header bar -->
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fas fa-terminal">&nbsp;&nbsp;</i>{{ 'OS/DB' }}</h3>
+        </div>
+
+        <!-- Page content -->
+        <div class="box-body">
+            <form class="form-horizontal">
+
+                <!-- Alert section -->
+                <div class="alert alert-danger alert-config">
+                    {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à' }} {{ adminConfigs['product_name'] }}{{ '. L\'équipe' }} {{ adminConfigs['product_name'] }} {{ 'se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.' }}
+                </div>
+                <!-- Console Section -->
+                <div>
+                    <legend class="legend-title">{{ 'Console Système' }}</legend>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                            <a class="btn btn-danger" href="index.php?v=d&p=system"><i class="fas fa-exclamation-triangle">&nbsp;&nbsp;</i>{{ 'Lancer' }}</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- File editor Section -->
+                <div class="legend-section">
+                    <legend class="legend-title">{{ 'Editeur de fichiers' }}</legend>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Editeur' }}</label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                            <a class="btn btn-danger" href="index.php?v=d&p=editor"><i class="fas fa-exclamation-triangle">&nbsp;&nbsp;</i>{{ 'Lancer' }}</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DB Section -->
+                <div class="legend-section">
+                    <legend class="legend-title">{{ 'Base de données' }}</legend>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                            <a class="btn btn-danger" href="index.php?v=d&p=database"><i class="fas fa-exclamation-triangle">&nbsp;&nbsp;</i>{{ 'Lancer' }}</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Utilisateur' }}</label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                            <span class="label label-value">{{ adminDbConfig['username'] }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Mot de passe' }}</label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                            <span class="label label-value">{{ adminDbConfig['password'] }}</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

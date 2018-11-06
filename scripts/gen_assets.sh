@@ -14,14 +14,26 @@
 # You should have received a copy of the GNU General Public License
 # along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 
+# Get current directory
+set_root() {
+    local this=`readlink -n -f $1`
+    root=`dirname $this`
+}
+set_root $0
+
 function gen_css {
+    COMPRESS=""
+    if [ $# -eq 0 ]; then
+        COMPRESS="--style compressed"
+    fi
 	echo " >>> Generation du CSS"
+
 	mkdir -p public/css/adminlte
-	sass assets/css/nextdom.scss public/css/nextdom.css --style compressed
-	sass assets/css/nextdom.mob.scss public/css/nextdom.mob.css --style compressed
-	sass assets/css/firstUse.scss public/css/firstUse.css --style compressed
-	sass assets/css/rescue.scss public/css/rescue.css --style compressed
-	sass assets/css/Market/market.scss public/css/market.css --style compressed
+	sass assets/css/nextdom.scss public/css/nextdom.css $COMPRESS
+	sass assets/css/nextdom.mob.scss public/css/nextdom.mob.css $COMPRESS
+	sass assets/css/firstUse.scss public/css/firstUse.css $COMPRESS
+	sass assets/css/rescue.scss public/css/rescue.css $COMPRESS
+	sass assets/css/Market/market.scss public/css/market.css $COMPRESS
 
 	# Remplacement des chemins
 #	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-#g public/css/nextdom.css
@@ -99,6 +111,8 @@ function gen_js {
         vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
         vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
         vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.js  > /tmp/temp.js
+
+if [ $# -eq 0 ]; then
     python -m jsmin /tmp/temp.js > public/js/base.js
     rm /tmp/temp.js
     php scripts/translate.php public/js/base.js
@@ -115,6 +129,30 @@ function gen_js {
         python -m jsmin $jsFile > public/js/desktop/${jsFile##*/}
         php scripts/translate.php public/js/desktop/${jsFile##*/}
     done
+    mkdir -p public/js/desktop/admin
+    for jsFile in assets/js/desktop/admin/*.js
+    do
+        python -m jsmin $jsFile > public/js/desktop/admin/${jsFile##*/}
+        php scripts/translate.php public/js/desktop/admin/${jsFile##*/}
+    done
+    mkdir -p public/js/desktop/diagnostic
+    for jsFile in assets/js/desktop/diagnostic/*.js
+    do
+        python -m jsmin $jsFile > public/js/desktop/diagnostic/${jsFile##*/}
+        php scripts/translate.php public/js/desktop/diagnostic/${jsFile##*/}
+    done
+    mkdir -p public/js/desktop/params
+    for jsFile in assets/js/desktop/params/*.js
+    do
+        python -m jsmin $jsFile > public/js/desktop/params/${jsFile##*/}
+        php scripts/translate.php public/js/desktop/params/${jsFile##*/}
+    done
+    mkdir -p public/js/desktop/tools
+    for jsFile in assets/js/desktop/tools/*.js
+    do
+        python -m jsmin $jsFile > public/js/desktop/tools/${jsFile##*/}
+        php scripts/translate.php public/js/desktop/tools/${jsFile##*/}
+    done
     mkdir -p public/js/modals
     for jsFile in assets/js/modals/*.js
     do
@@ -128,6 +166,7 @@ function gen_js {
         python -m jsmin $jsFile > public/js/desktop/Market/${jsFile##*/}
         php scripts/translate.php public/js/desktop/Market/${jsFile##*/}
     done
+fi
 }
 
 function copy_assets {
@@ -145,22 +184,24 @@ function start {
 	while true; do
 		FIND_CSS_RES=$(find assets/css -mmin -0.1)
 		if [ -n "$FIND_CSS_RES" ]; then
-			gen_css
+			gen_css no_compress
 			echo " >>> OK"
 		fi
 		FIND_JS_RES=$(find core/js -mmin -0.1)
 		if [ -n "$FIND_JS_RES" ]; then
-			gen_js
+			gen_js no_compress
 			echo " >>> OK"
 		fi
 		FIND_JS_RES=$(find assets/js -mmin -0.1)
 		if [ -n "$FIND_JS_RES" ]; then
-			gen_js
+			gen_js no_compress
 			echo " >>> OK"
 		fi
 		sleep 1
 	done
 }
+
+cd ${root}/..
 
 if [ "$#" == 0 ]; then
     echo "Pour lancer la génération automatique, ajouter l'option --watch"
