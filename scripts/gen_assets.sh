@@ -92,7 +92,7 @@ function gen_js {
         3rdparty/jquery.at.caret/jquery.at.caret.min.js \
         vendor/node_modules/jwerty/jwerty.js \
         vendor/node_modules/packery/dist/packery.pkgd.js \
-        vendor/node_modules/lazyload/lazyload.js \
+        vendor/node_modules/jquery-lazyload/jquery.lazyload.js \
         vendor/node_modules/codemirror/lib/codemirror.js \
         vendor/node_modules/codemirror/addon/edit/matchbrackets.js \
         vendor/node_modules/codemirror/mode/htmlmixed/htmlmixed.js \
