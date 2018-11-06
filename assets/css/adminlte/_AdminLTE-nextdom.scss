@@ -79,8 +79,8 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   padding: 10px 10px !important;
 }
 .objectSummaryGlobalHeader {
-    font-size: 17px;
-    top: 13px;
+    font-size: 15px;
+    top: 16px;
     height: 49px;
 }
 
@@ -352,6 +352,14 @@ padding-left: 7px;
 .card-dash {
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
   border: 1px solid;
+}
+.box-body {
+  padding: 8px;
+}
+.box-flex {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
 }
 
 /* Alert popup */
@@ -668,14 +676,13 @@ input[type="checkbox"] {
 #listPlugin .box .box-body {
   min-height: 180px;
 }
-
 .panel:hover{
   box-shadow: 0 6px 12px 0 rgba(0,0,0,0.15);
 }
 
 /* actionBar */
 .action-bar {
-  padding: 8px;
+  padding: 6px 8px;
   align-items: center;
   display: flex;
   justify-content: space-between;
@@ -696,3 +703,18 @@ input[type="checkbox"] {
 .ui-dialog .ui-dialog-titlebar-close {
   opacity: 1;
 }
+
+/* footer */
+.main-footer {
+  min-height: 20px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  position: inherit;
+  bottom: 0;
+  width: 100%;
+}
+
+.main-footer .form-group {
+  margin-bottom: 0px;
+}
+
