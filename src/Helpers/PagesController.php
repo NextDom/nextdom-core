@@ -238,6 +238,10 @@ class PagesController
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
+        $pageContent['IS_ADMIN']  = Status::isConnectAdmin();
+        if ($pageContent['IS_ADMIN']) {
+            $pageContent['MENU_NB_UPDATES2'] = UpdateManager::nbNeedUpdate();
+        }
         $pageContent['administrationMemLoad'] = 100;
         $pageContent['administrationSwapLoad'] = 100;
         $freeData = trim(shell_exec('free'));
