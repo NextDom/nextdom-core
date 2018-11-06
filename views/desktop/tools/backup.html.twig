@@ -40,6 +40,7 @@
         </div>
         <div class="action-group">
             <a class="btn btn-success btn-action-bar pull-right" id="bt_saveBackup"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-default btn-action-bar pull-right" id="bt_saveOpenLog"><i class="fas fa-file-alt">&nbsp;&nbsp;</i>{{ 'Log' }}</a>
         </div>
     </div>
 </section>
@@ -104,27 +105,27 @@
                         <div class="form-group">
                             <label class="col-sm-4 col-xs-6 control-label">{{ 'Restauration' }}</label>
                             <div class="col-sm-4 col-xs-6">
-                                <a class="btn btn-warning" id="bt_restoreNextDom"><i class="fas fa-refresh fa-spin" style="display : none;"></i><i class="far fa-file"></i>&nbsp;&nbsp;{{ 'Restaurer le selection' }}</a>
+                                <a class="btn btn-warning" id="bt_restoreNextDom"><i class="fas fa-refresh fa-spin" style="display : none;"></i><i class="fas fa-window-restore"></i>&nbsp;&nbsp;{{ 'Restaurer le selection' }}</a>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 col-xs-6 control-label">{{ 'Suppression' }}</label>
                             <div class="col-sm-4 col-xs-6">
-                                <a class="btn btn-danger" id="bt_removeBackup"><i class="fas fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer la selection' }}</a>
+                                <a class="btn btn-danger" id="bt_removeBackup"><i class="fas fa-refresh fa-spin" style="display : none;"></i><i class="fas fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer la selection' }}</a>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 col-xs-6 control-label">{{ 'Envoyer une sauvegarde' }}</label>
                             <div class="col-sm-8 col-xs-6">
                             <span class="btn btn-default btn-file">
-                                <i class="fas fa-cloud-upload-alt">&nbsp;&nbsp;</i>{{ 'Selectionner' }}<input id="bt_uploadBackup" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token={{ backupAjaxToken }}">
+                                <i class="fas fa-refresh fa-spin" style="display : none;"></i><i class="fas fa-cloud-upload-alt">&nbsp;&nbsp;</i>{{ 'Selectionner' }}<input id="bt_uploadBackup" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token={{ backupAjaxToken }}">
                             </span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 col-xs-6 control-label">{{ 'Téléchargement' }}</label>
                             <div class="col-sm-4 col-xs-6">
-                                <a class="btn btn-success" id="bt_downloadBackup"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{ 'Télécharger la selection' }}</a>
+                                <i class="fas fa-refresh fa-spin" style="display : none;"></i><a class="btn btn-success" id="bt_downloadBackup"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{ 'Télécharger la selection' }}</a>
                             </div>
                         </div>
                     </div>
@@ -156,7 +157,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-4 col-xs-6 control-label">{{ 'Restauration' }}</label>
                                     <div class="col-sm-4 col-xs-6">
-                                        <a class="btn btn-warning bt_restoreRepoBackup" data-repo="{{ repo }}"><i class="fas fa-refresh fa-spin" style="display: none;"></i><i class="fas fa-file"></i>&nbsp;&nbsp;{{ 'Restaurer la selection' }}</a>
+                                        <a class="btn btn-warning bt_restoreRepoBackup" data-repo="{{ repo }}"><i class="fas fa-refresh fa-spin" style="display: none;"></i><i class="fas fa-window-restore"></i>&nbsp;&nbsp;{{ 'Restaurer la selection' }}</a>
                                     </div>
                                 </div>
                             </div>

@@ -80,7 +80,6 @@ $("#md_updateInfo").dialog({
     closeText: '',
     autoOpen: false,
     modal: true,
-    height: (jQuery(window).height() - 100),
     width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
     open: function () {
         $("body").css({overflow: 'hidden'});
@@ -89,6 +88,8 @@ $("#md_updateInfo").dialog({
         $("body").css({overflow: 'inherit'});
     }
 });
+
+$('#pre_updateInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
 
 $('#bt_updateNextDom').off('click').on('click', function () {
     $('#md_specifyUpdate').dialog({title: "{{Options}}"});
@@ -109,7 +110,7 @@ $('.updateOption[data-l1key=force]').off('click').on('click',function(){
 
 $('#bt_doUpdate').off('click').on('click', function () {
     $("#md_specifyUpdate").dialog('close');
-    $('#md_updateInfo').dialog({title: "{{Avancement des mises a jour}}"});
+    $('#md_updateInfo').dialog({title: "{{Avancement des mises à jour}}"});
     $("#md_updateInfo").dialog('open');
     var options = $('#md_specifyUpdate').getValues('.updateOption')[0];
     $.hideAlert();
@@ -122,6 +123,11 @@ $('#bt_doUpdate').off('click').on('click', function () {
             getNextDomLog(1, 'update');
         }
     });
+});
+
+$("#bt_updateOpenLog").on('click', function (event) {
+    $('#md_updateInfo').dialog({title: "{{Avancement de la mises à jour}}"});
+    $("#md_updateInfo").dialog('open');
 });
 
 $('#bt_checkAllUpdate').off('click').on('click', function () {
@@ -142,7 +148,7 @@ $('#listPlugin,#listOther').delegate('.update', 'click', function () {
     bootbox.confirm('{{Etes vous sur de vouloir mettre à jour cet objet ?}}', function (result) {
         if (result) {
             $.hideAlert();
-            $('#md_updateInfo').dialog({title: "{{Avancement des mises a jour}}"});
+            $('#md_updateInfo').dialog({title: "{{Avancement des mises à jour}}"});
             $("#md_updateInfo").dialog('open');
             nextdom.update.do({
                 id: id,
@@ -159,7 +165,7 @@ $('#listPlugin,#listOther').delegate('.update', 'click', function () {
 
 $('#listPlugin,#listOther').delegate('.remove', 'click', function () {
     var id = $(this).closest('.box').attr('data-id');
-    bootbox.confirm('{{Etes vous sur de vouloir supprimer cet objet ?}}', function (result) {
+    bootbox.confirm('{{Etês-vous sûr de vouloir supprimer cet objet ?}}', function (result) {
         if (result) {
             $.hideAlert();
             nextdom.update.remove({

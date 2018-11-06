@@ -40,6 +40,7 @@
         </div>
         <div class="action-group">
             <a class="btn btn-success btn-action-bar pull-right" id="bt_saveMigration"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-default btn-action-bar pull-right" id="bt_migrateOpenLog"><i class="fas fa-file-alt">&nbsp;&nbsp;</i>{{ 'Log' }}</a>
         </div>
     </div>
 </section>
@@ -75,7 +76,7 @@
                         <label class="col-sm-4 col-xs-12 control-label">{{ 'Envoyer une sauvegarde' }}</label>
                         <div class="col-sm-8 col-xs-12">
                         <span class="btn btn-default btn-file">
-                            <i class="fas fa-cloud-upload-alt">&nbsp;&nbsp;</i>{{ 'Selectionner' }}
+                            <i class="fas fa-refresh fa-spin" style="display: none;"><i class="fas fa-cloud-upload-alt">&nbsp;&nbsp;</i>{{ 'Selectionner' }}
                             <input id="bt_uploadBackupforMigration" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token={{ migrationAjaxToken }}">
                         </span>
                         </div>
@@ -83,7 +84,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 col-xs-12 control-label">{{ 'Migration' }}</label>
                         <div class="col-sm-8 col-xs-12">
-                            <a class="btn btn-success" id="bt_migrateNextDom"><i class="fas fa-play">&nbsp;&nbsp;</i>{{ 'Lancer' }}</a>
+                            <a class="btn btn-success" id="bt_migrateNextDom"><i class="fas fa-refresh fa-spin" style="display: none;"><i class="fas fa-play">&nbsp;&nbsp;</i>{{ 'Lancer' }}</a>
                         </div>
                     </div>
                 </form>

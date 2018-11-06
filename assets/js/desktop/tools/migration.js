@@ -43,7 +43,6 @@ $("#md_migrationInfo").dialog({
     closeText: '',
     autoOpen: false,
     modal: true,
-    height: (jQuery(window).height() - 100),
     width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
     open: function () {
         $("body").css({overflow: 'hidden'});
@@ -85,7 +84,7 @@ $("#bt_migrateNextDom").on('click', function (event) {
     bootbox.confirm('{{Etes-vous sûr de vouloir migrer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackupforMigration option:selected').text() + '</b> ? {{Une fois lancée, cette opération ne peut être annulée}}', function (result) {
         if (result) {
             el.find('.fa-refresh').show();
-            el.find('.fa-file').hide();
+            el.find('.fa-play').hide();
             $('#md_migrationInfo').dialog({title: "{{Avancement de la migration}}"});
             $("#md_migrationInfo").dialog('open');
             nextdom.backup.migrate({
@@ -102,8 +101,16 @@ $("#bt_migrateNextDom").on('click', function (event) {
     });
 });
 
+$("#bt_migrateOpenLog").on('click', function (event) {
+    $('#md_migrationInfo').dialog({title: "{{Avancement de la migration}}"});
+    $("#md_migrationInfo").dialog('open');
+});
+
 $('#bt_downloadBackupforMigration').on('click', function () {
     window.open('core/php/downloadFile.php?pathfile=backup/' + $('#sel_restoreBackupforMigration option:selected').text(), "_blank", null);
+    var el = $(this);
+    el.find('.fa-refresh').show();
+    el.find('.fa-cloud-upload-alt').hide();
 });
 
 $('#bt_uploadBackupforMigration').fileupload({
@@ -189,8 +196,10 @@ function getNextDomLog(_autoUpdate, _log) {
             } else {
                 $('#bt_' + _log + 'NextDom .fa-refresh').hide();
                 $('.bt_' + _log + 'NextDom .fa-refresh').hide();
-                $('#bt_' + _log + 'NextDom .fa-file').show();
-                $('.bt_' + _log + 'NextDom .fa-file').show();
+                $('#bt_' + _log + 'NextDom .fa-play').show();
+                $('.bt_' + _log + 'NextDom .fa-play').show();
+                $('#bt_' + _log + 'NextDom .fa-cloud-upload-alt').show();
+                $('.bt_' + _log + 'NextDom .fa-cloud-upload-alt').show();
                 updateListBackup();
             }
         }
