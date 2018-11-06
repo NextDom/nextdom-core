@@ -185,6 +185,7 @@ try {
             $plugin_id::restore();
             echo "OK\n";
         }
+        $plugin->setHasDependency(0);
     }
   	echo "OK\n";
 
