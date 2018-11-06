@@ -44,7 +44,8 @@ class CacheManager {
      *
      * @return string Cache folder
      */
-    public static function getFolder(): string {
+    public static function getFolder(): string 
+    {
         $return = \nextdom::getTmpFolder('cache');
         if (!file_exists($return)) {
             mkdir($return, 0777);
@@ -62,7 +63,8 @@ class CacheManager {
      *
      * @return bool
      */
-    public static function set($key, $value, $lifetime = 0, $options = null) {
+    public static function set($key, $value, $lifetime = 0, $options = null) 
+    {
         if ($lifetime < 0) {
             $lifetime = 0;
         }
@@ -81,7 +83,8 @@ class CacheManager {
      *
      * @param $key
      */
-    public static function delete($key) {
+    public static function delete($key) 
+    {
         $cacheItem = self::byKey($key);
         if (is_object($cacheItem)) {
             $cacheItem->remove();
@@ -95,7 +98,8 @@ class CacheManager {
      *
      * @return array|null
      */
-    public static function stats($details = false) {
+    public static function stats($details = false) 
+    {
         $result = self::getCache()->getStats();
         $result['count'] = __('Inconnu', __FILE__);
         if (\config::byKey('cache::engine') == 'FilesystemCache') {
@@ -133,7 +137,8 @@ class CacheManager {
      *
      * @return \Doctrine\Common\Cache\FilesystemCache|\Doctrine\Common\Cache\MemcachedCache|\Doctrine\Common\Cache\RedisCache|null Cache system
      */
-    public static function getCache() {
+    public static function getCache() 
+    {
         if (self::$cacheSystem !== null) {
             return self::$cacheSystem;
         }
@@ -178,7 +183,8 @@ class CacheManager {
      * @param string $key Key
      * @return \cache|null Stored object or null if not exists
      */
-    public static function byKey($key) {
+    public static function byKey($key) 
+    {
         $cache = self::getCache()->fetch($key);
         if (!is_object($cache)) {
             $cache = new \cache();
@@ -195,7 +201,8 @@ class CacheManager {
      *
      * @return bool True if object exists
      */
-    public static function exists($key) {
+    public static function exists($key) 
+    {
         return is_object(self::getCache()->fetch($key));
     }
 
@@ -208,7 +215,8 @@ class CacheManager {
      *
      * @deprecated Use exists
      */
-    public static function exist($key) {
+    public static function exist($key) 
+    {
         trigger_error('This method is deprecated', E_USER_DEPRECATED);
         return self::exists($key);
     }
@@ -216,7 +224,8 @@ class CacheManager {
     /**
      * Clear cache
      */
-    public static function flush() {
+    public static function flush() 
+    {
         self::getCache()->deleteAll();
         shell_exec('rm -rf ' . self::getFolder() . ' 2>&1 > /dev/null');
     }
@@ -225,14 +234,16 @@ class CacheManager {
      * TODO: Ouahhh
      * @return array
      */
-    public static function search() {
+    public static function search(): array
+    {
         return array();
     }
 
     /**
      * Persist cache system
      */
-    public static function persist() {
+    public static function persist() 
+    {
         switch (\config::byKey('cache::engine')) {
             case 'FilesystemCache':
                 $cacheDir = self::getFolder();
@@ -258,7 +269,8 @@ class CacheManager {
      *
      * @return bool True if file cache.tar.gz
      */
-    public static function isPersistOk() {
+    public static function isPersistOk(): bool 
+    {
         if (\config::byKey('cache::engine') != 'FilesystemCache' && \config::byKey('cache::engine') != 'PhpFileCache') {
             return true;
         }
@@ -275,7 +287,8 @@ class CacheManager {
     /**
      * Restore persisted cache
      */
-    public static function restore() {
+    public static function restore() 
+    {
         switch (\config::byKey('cache::engine')) {
             case 'FilesystemCache':
                 $cache_dir = self::getFolder();
@@ -305,7 +318,8 @@ class CacheManager {
      *
      * @throws \Exception
      */
-    public static function clean() {
+    public static function clean() 
+    {
         if (\config::byKey('cache::engine') != 'FilesystemCache') {
             return;
         }

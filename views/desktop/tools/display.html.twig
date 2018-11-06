@@ -1,0 +1,179 @@
+{#
+
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#}
+<style>
+    .eqLogicSortable {
+        list-style-type: none;
+        min-height: 40px;
+        padding-left: 0px;
+    }
+
+    .eqLogicSortable li {
+        margin: 0 0 4px 0;
+        padding: 5px;
+    }
+
+    .cmdSortable {
+        list-style-type: none;
+        min-height: 20px;
+        padding-left: 0px;
+    }
+
+    .cmdSortable li {
+        margin: 0 2px 2px 2px;
+        padding: 5px;
+    }
+</style>
+
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+            <a class="btn btn-default btn-action-bar" id="bt_removeHistory"><i class="fas fa-history" aria-hidden="true">&nbsp;&nbsp;</i>{{ 'Historique' }}</a>
+            <a class="btn btn-success btn-action-bar bt_setIsVisible" data-value="1" style="display:none;"><i class="fas fa-eye">&nbsp;&nbsp;</i>{{ 'Visible' }}</a>
+            <a class="btn btn-warning btn-action-bar bt_setIsVisible" data-value="0" style="display:none;"><i class="fas fa-eye-slash">&nbsp;&nbsp;</i>{{ 'Invisible' }}</a>
+        </div>
+        <div class="action-group">
+            <a class="btn btn-danger btn-action-bar pull-right" id="bt_removeEqlogic" style="display:none;"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+            <a class="btn btn-success btn-action-bar pull-right bt_setIsEnable" data-value="1" style="display:none;"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Actif' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right bt_setIsEnable" data-value="0" style="display:none;"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Inactif' }}</a>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fas fa-th">&nbsp;&nbsp;</i>{{ 'Résumé domotique' }}</h3>
+        </div>
+        <div class="box-body">
+            <div class="form-group input-group">
+                <div class="input-group-addon"><i class="fas fa-search"></i></div>
+                <input class="form-control" placeholder="{{ 'Rechercher...' }}" id="in_search"/>
+            </div>
+            <div class="form-group">
+                <label class="checkbox-inline"><input type="checkbox" id="cb_actifDisplay" checked/>{{ 'Inactif' }}</label>
+                <span class="label label-default label-sticker-big pull-right">{{ 'Nombre d\'objets :' }} {{ displayObjects|length }}</span>
+                <span class="label label-info label-sticker-big pull-right">{{ 'Nombre d\'équipements :' }} {{ displayNbEqLogics }}</span>
+                <span class="label label-primary label-sticker-big pull-right">{{ 'Nombre de commandes :' }} {{ displayNbCmds }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="displayListContainer row">
+        <div class="col-xs-4 object col-xs-height" data-id="-1">
+            <div class="box box-primary" id="div_Health">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="icon divers-caduceus3">&nbsp;&nbsp;</i>{{ 'Aucun' }}</h3>
+                </div>
+                <div class="box-body">
+                    <ul class="eqLogicSortable">
+                        {% for eqLogic in displayEqLogics[-1] %}
+                            <li class="alert alert-info eqLogic cursor" data-id="{{ eqLogic.getId() }}" data-enable="{{ eqLogic.getIsEnable() }}" data-name="{{ eqLogic.getName() }}" data-type="{{ eqLogic.getEqType_name() }}">
+                                <input type="checkbox" class="cb_selEqLogic"/>
+                                {{ eqLogic.getName() }}
+                                <i style="font-size:0.9em;">({{ eqLogic.getEqType_name() }})</i>
+                                {% if eqLogic.getIsEnable() != 1 %}
+                                    <i class="fas fa-times" title="{{ 'Non actif' }}"></i>
+                                {% endif %}
+                                {% if eqLogic.getIsVisible() != 1 %}
+                                    <i class="fas fa-eye-slash" title="{{ 'Non visible' }}"></i>
+                                {% endif %}
+                                <i class="fas fa-chevron-right pull-right showCmd" title="{{ 'Voir les commandes' }}"></i>
+                                <i class="fas fa-cog pull-right configureEqLogic" title="{{ 'Configuration avancée' }}"></i>
+                                <a href="{{ eqLogic.getLinkToConfiguration() }}" target="_blank" class="pull-right" title="{{ 'Aller sur la configuration de l\'équipement' }}"><i class="fas fa-external-link-alt"></i></a>
+                                <ul class="cmdSortable" style="display:none;">
+                                    {% for cmd in displayCmds[eqLogic.getId()] %}
+                                        <li class="alert alert-warning cmd cursor" data-id="{{ cmd.getId() }}" data-name="{{ cmd.getName() }}">
+                                            {{ cmd.getName() }} <i class="fas fa-cog pull-right configureCmd"></i>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% for object in displayObjects %}
+            {% set defaultTextColor = 'white' %}
+            {% if object.getDisplay('tagColor') == '' %}
+                {% set defaultTextColor = 'black' %}
+            {% endif %}
+            <div class="col-xs-4 object col-xs-height">
+                <div class="box object col-xs-height" data-id="{{ object.getId() }}" style="border-top-color: {{ object.getDisplay('tagColor') }}; color: {{ object.getDisplay('tagTextColor', defaultTextColor) }}">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">{{ object.getDisplay('icon')|raw }} {{ object.getName() }}</h3>
+                        <div class="box-tools pull-right">
+                            <i class="fas fa-cog cursor configureObject" title="{{ 'Configuration avancée' }}"></i>
+                            <a href="index.php?v=d&p=object&id={{ object.getId() }}" target="_blank"  title="{{ 'Aller sur la configuration de l\'objet' }}"><i class="fas fa-external-link-alt"></i></a>
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <a href="index.php?v=d&p=administration" > <button type="button" class="btn btn-box-tool" ><i class="fas fa-times"></i></button></a>
+                        </div>
+                    </div>
+                    <div class="box-body">
+
+                        <ul class="eqLogicSortable">
+                            {% for eqLogic in displayEqLogics[object.getId()] %}
+                                <li class="alert alert-info eqLogic cursor" data-id="{{ eqLogic.getId() }}" data-enable="{{ eqLogic.getIsEnable() }}" data-name="{{ eqLogic.getName() }}" data-type="{{ eqLogic.getEqType_name() }}">
+                                    <input type="checkbox" class="cb_selEqLogic"/>
+                                    {{ eqLogic.getName() }}
+                                    <i style="font-size:0.9em;">({{ eqLogic.getEqType_name() }})</i>
+                                    {% if eqLogic.getIsEnable() != 1 %}
+                                        <i class="fas fa-times" title="{{ 'Non actif' }}"></i>
+                                    {% endif %}
+                                    {% if eqLogic.getIsVisible() != 1 %}
+                                        <i class="fas fa-eye-slash" title="{{ 'Non visible' }}"></i>
+                                    {% endif %}
+                                    <i class="fas fa-chevron-right pull-right showCmd" title="{{ 'Voir les commandes' }}"></i>
+                                    <i class="fas fa-cog pull-right configureEqLogic" title="{{ 'Configuration avancée' }}"></i>
+                                    <a href="{{ eqLogic.getLinkToConfiguration() }}" target="_blank" class="pull-right" title="{{ 'Aller sur la configuration de l\'équipement' }}"><i class="fas fa-external-link-alt"></i></a>
+
+                                    <ul class="cmdSortable" style="display:none;">
+                                        {% for cmd in displayCmds[eqLogic.getId()] %}
+                                            <li class="alert alert-warning cmd cursor" data-id="{{ cmd.getId() }}" data-name="{{ cmd.getName() }}">{{ cmd.getName() }}
+                                                <i class="fas fa-cog pull-right configureCmd" title="{{ 'Configuration avancée' }}"></i>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
