@@ -286,16 +286,16 @@ foreach ($markets as $market) {
 
     if ($market->getType() != 'widget') {
         if ($market->getCertification() == 'Officiel') {
-            echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="core/img/band_Officiel.png" /></div>';
+            echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="public/img/band_Officiel.png" /></div>';
         }
         if ($market->getCertification() == 'Conseillé') {
-            echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="core/img/band_Conseille.png" /></div>';
+            echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="public/img/band_Conseille.png" /></div>';
         }
         if ($market->getCertification() == 'Legacy') {
-            echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="core/img/band_Legacy.png" /></div>';
+            echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="public/img/band_Legacy.png" /></div>';
         }
         if ($market->getCertification() == 'Obsolète') {
-            echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="core/img/band_Obsolete.png" /></div>';
+            echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="public/img/band_Obsolete.png" /></div>';
         }
     }
 
