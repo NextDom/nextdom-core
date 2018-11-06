@@ -185,7 +185,9 @@ try {
             $plugin_id::restore();
             echo "OK\n";
         }
-        $plugin->setHasDependency(0);
+        $cache = \cache::byKey('dependancy' . $plugin_id->getID());
+        $cache->remove();
+        \cache::set('dependancy' . $plugin_id->getID(), "nok");
     }
   	echo "OK\n";
 
