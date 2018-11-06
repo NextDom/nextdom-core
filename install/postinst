@@ -347,7 +347,6 @@ step_nextdom_var_www_html() {
     if [ 1 -eq "0${isdev}"  ] ; then
         # A faire dans une version developpeur (apres git clone)
         cd ${WEBSERVER_HOME}
-        composer -q install
         ./scripts/gen_global.sh
     fi
 }
@@ -452,46 +451,46 @@ set_root $0
 
 detect_dev_version
 
-[[ -f ${WEBSERVER_HOME}/log/postinst.ok ]] && rm -f ${WEBSERVER_HOME}/log/postinst.ok
-[[ -f ${WEBSERVER_HOME}/log/postinst.warn ]] && rm -f ${WEBSERVER_HOME}/log/postinst.warn
-[[ -f ${WEBSERVER_HOME}/log/postinst.log ]] && rm -f ${WEBSERVER_HOME}/log/postinst.log
-touch ${WEBSERVER_HOME}/log/postinst.log
+[[ -f /var/log/nextdom/postinst.ok ]] && rm -f /var/log/nextdom/postinst.ok
+[[ -f /var/log/nextdom/postinst.warn ]] && rm -f /var/log/nextdom/postinst.warn
+[[ -f /var/log/nextdom/postinst.log ]] && rm -f /var/log/nextdom/postinst.log
+touch /var/log/nextdom/postinst.log
 
-printf "step_nextdom_var_www_html ... " >> ${WEBSERVER_HOME}/log/postinst.log
+printf "step_nextdom_var_www_html ... " >> /var/log/nextdom/postinst.log
 step_nextdom_var_www_html
-echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+echo "OK" >> /var/log/nextdom/postinst.log
 
-printf "step_nextdom_prerequisites_verification ... " >> ${WEBSERVER_HOME}/log/postinst.log
+printf "step_nextdom_prerequisites_verification ... " >> /var/log/nextdom/postinst.log
 step_nextdom_prerequisites_verification
-echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+echo "OK" >> /var/log/nextdom/postinst.log
 
-printf "step_nextdom_apache_php ... " >> ${WEBSERVER_HOME}/log/postinst.log
+printf "step_nextdom_apache_php ... " >> /var/log/nextdom/postinst.log
 step_nextdom_apache_php
-echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+echo "OK" >> /var/log/nextdom/postinst.log
 
-printf "step_nextdom_configuration ... " >> ${WEBSERVER_HOME}/log/postinst.log
+printf "step_nextdom_configuration ... " >> /var/log/nextdom/postinst.log
 step_nextdom_configuration
-echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+echo "OK" >> /var/log/nextdom/postinst.log
 
-printf "step_nextdom_mysql_configuration ... " >> ${WEBSERVER_HOME}/log/postinst.log
+printf "step_nextdom_mysql_configuration ... " >> /var/log/nextdom/postinst.log
 step_nextdom_mysql_configuration
-echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+echo "OK" >> /var/log/nextdom/postinst.log
 
-printf "step_nextdom_mysql_populate ... " >> ${WEBSERVER_HOME}/log/postinst.log
+printf "step_nextdom_mysql_populate ... " >> /var/log/nextdom/postinst.log
 step_nextdom_mysql_populate
-echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+echo "OK" >> /var/log/nextdom/postinst.log
 
-printf "step_nextdom_crontab ... " >> ${WEBSERVER_HOME}/log/postinst.log
+printf "step_nextdom_crontab ... " >> /var/log/nextdom/postinst.log
 step_nextdom_crontab
-echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+echo "OK" >> /var/log/nextdom/postinst.log
 
-printf "step_nextdom_check ... " >> ${WEBSERVER_HOME}/log/postinst.log
+printf "step_nextdom_check ... " >> /var/log/nextdom/postinst.log
 step_nextdom_check
-echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+echo "OK" >> /var/log/nextdom/postinst.log
 
-printf "distrib_1_spe ... " >> ${WEBSERVER_HOME}/log/postinst.log
+printf "distrib_1_spe ... " >> /var/log/nextdom/postinst.log
 distrib_1_spe
-echo "OK" >> ${WEBSERVER_HOME}/log/postinst.log
+echo "OK" >> /var/log/nextdom/postinst.log
 
 chmod 777 -R /tmp/nextdom
 chown -R www-data:www-data /tmp/nextdom
