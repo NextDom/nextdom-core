@@ -12,12 +12,6 @@ if (init('logicalId') != '' && init('type') != '') {
 if (!isset($market)) {
     throw new Exception('404 not found');
 }
-include_file('3rdparty', 'bootstrap.rating/bootstrap.rating', 'js');
-include_file('3rdparty', 'slick/slick.min', 'js');
-include_file('3rdparty', 'slick/slick', 'css');
-include_file('3rdparty', 'slick/slick-theme', 'css');
-include_file('3rdparty', 'fancybox/jquery.fancybox', 'js');
-include_file('3rdparty', 'fancybox/jquery.fancybox', 'css');
 
 $market_array = utils::o2a($market);
 $market_array['rating'] = $market->getRating();
@@ -25,6 +19,12 @@ $update = update::byLogicalId($market->getLogicalId());
 sendVarToJS('market_display_info', $market_array);
 ?>
 
+<link rel="stylesheet" href="/vendor/node_modules/fancybox/dist/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/vendor/node_modules/slick-carousel/slick/slick.css">
+<link rel="stylesheet" href="/vendor/node_modules/slick-carousel/slick/slick-theme.css">
+<script src="/3rdparty/bootstrap-rating/bootstrap-rating.js"></script>
+<script src="/vendor/node_modules/slick-carousel/slick/slick.js"></script>
+<script src="/vendor/node_modules/fancybox/dist/js/jquery.fancybox.js"></script>
 
 <div class='row' style='background-color: #e7e7e7; padding-top: 10px; padding-bottom: 10px;position: relative; top: -10px;'>
   <div class='col-sm-3'>
@@ -163,16 +163,16 @@ foreach ($market->getImg('screenshot') as $screenshot) {
     <legend>{{Compatibilité plateforme}}</legend>
     <?php
 if ($market->getHardwareCompatibility('diy') == 1) {
-    echo '<img src="core/img/logo_diy.png" style="width:60px;height:60px;" />';
+    echo '<img src="public/img/logo_diy.png" style="width:60px;height:60px;" />';
 }
 if ($market->getHardwareCompatibility('rpi') == 1) {
-    echo '<img src="core/img/logo_rpi12.png" style="width:60px;height:60px;" />';
+    echo '<img src="public/img/logo_rpi12.png" style="width:60px;height:60px;" />';
 }
 if ($market->getHardwareCompatibility('docker') == 1) {
-    echo '<img src="core/img/logo_docker.png" style="width:60px;height:60px;" />';
+    echo '<img src="public/img/logo_docker.png" style="width:60px;height:60px;" />';
 }
 if ($market->getHardwareCompatibility('miniplus') == 1) {
-    echo '<img src="core/img/logo_nextdomboard.png" style="width:60px;height:60px;" />';
+    echo '<img src="public/img/logo_nextdomboard.png" style="width:60px;height:60px;" />';
 }
 ?>
  </div>
@@ -236,24 +236,24 @@ if ($market->getHardwareCompatibility('miniplus') == 1) {
   <div class='col-sm-2'>
     <label class="control-label">{{Langue disponible}}</label><br/>
     <?php
-echo '<img src="core/img/francais.png" width="30" />';
+echo '<img src="public/img/francais.png" width="30" />';
 if ($market->getLanguage('en_US') == 1) {
-    echo '<img src="core/img/anglais.png" width="30" />';
+    echo '<img src="public/img/anglais.png" width="30" />';
 }
 if ($market->getLanguage('de_DE') == 1) {
-    echo '<img src="core/img/allemand.png" width="30" />';
+    echo '<img src="public/img/allemand.png" width="30" />';
 }
 if ($market->getLanguage('sp_SP') == 1) {
-    echo '<img src="core/img/espagnol.png" width="30" />';
+    echo '<img src="public/img/espagnol.png" width="30" />';
 }
 if ($market->getLanguage('ru_RU') == 1) {
-    echo '<img src="core/img/russe.png" width="30" />';
+    echo '<img src="public/img/russe.png" width="30" />';
 }
 if ($market->getLanguage('id_ID') == 1) {
-    echo '<img src="core/img/indonesien.png" width="30" />';
+    echo '<img src="public/img/indonesien.png" width="30" />';
 }
 if ($market->getLanguage('it_IT') == 1) {
-    echo '<img src="core/img/italien.png" width="30" />';
+    echo '<img src="public/img/italien.png" width="30" />';
 }
 ?>
  </div>

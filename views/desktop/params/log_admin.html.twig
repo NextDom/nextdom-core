@@ -167,29 +167,6 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Format des logs' }}</label>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
-                                <input type="text" class="configKey form-control" data-l1key="log::formatter"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Nombre de lignes maximum dans un log' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                <input type="text" class="configKey form-control" data-l1key="maxLineLog"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Niveau de log par défaut' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                <select class="configKey form-control" data-l1key="log::level">
-                                    <option value="100">{{ 'Debug' }}</option>
-                                    <option value="200">{{ 'Info' }}</option>
-                                    <option value="300">{{ 'Warning' }}</option>
-                                    <option value="400">{{ 'Erreur' }}</option>
-                                </select>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="legend-section">
@@ -210,7 +187,7 @@
                             </form>
                         {% endfor %}
                     </div>
-                    
+
                     <div class="legend-section">
                         <legend class="legend-title">{{ 'Niveau des logs plugins' }}</legend>
                         {% if not adminIsRescueMode %}
