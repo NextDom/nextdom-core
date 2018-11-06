@@ -43,7 +43,6 @@ $("#md_backupInfo").dialog({
     closeText: '',
     autoOpen: false,
     modal: true,
-    height: (jQuery(window).height() - 100),
     width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
     open: function () {
         $("body").css({overflow: 'hidden'});
@@ -77,6 +76,11 @@ $("#md_backupInfo").dialog({
             });
         }
     });
+});
+
+$("#bt_saveOpenLog").on('click', function (event) {
+    $('#md_backupInfo').dialog({title: "{{Avancement de la sauvegarde}}"});
+    $("#md_backupInfo").dialog('open');
 });
 
  $(".bt_backupNextDom").on('click', function (event) {
