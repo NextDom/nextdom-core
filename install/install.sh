@@ -291,7 +291,7 @@ step_10_nextdom_post() {
 }
 
 step_11_nextdom_check() {
-    php ${WEBSERVER_HOME}/sick.php >> ${DEBUG} 2>&1
+    php ${WEBSERVER_HOME}/scripts/sick.php >> ${DEBUG} 2>&1
     chmod 777 -R /tmp/nextdom >> ${DEBUG} 2>&1
     chown www-data:www-data -R /tmp/nextdom >> ${DEBUG} 2>&1
 }

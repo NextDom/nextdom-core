@@ -12,11 +12,14 @@ ENV locale-gen fr_FR.UTF-8
 ENV DEBIAN_FRONTEND noninteractive
 ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE DontWarn
 ARG numPhp
-ARG GITHUB_TOKEN
 ARG MYSQLROOT
 
-
-RUN apt-get update && apt-get install -y wget openssh-server supervisor mysql-client vim ntp ca-certificates unzip curl sudo cron locate tar wget logrotate dos2unix ntpdate htop iotop iftop smbclient git python python-pip software-properties-common libexpat1 ssl-cert apt-transport-https mysql-client mysql-common apache2 apache2-utils libexpat1 ${numPhp} ${numPhp}-curl ${numPhp}-gd ${numPhp}-imap ${numPhp}-json ${numPhp}-mcrypt ${numPhp}-mysql ${numPhp}-xml ${numPhp}-opcache ${numPhp}-soap ${numPhp}-xmlrpc libapache2-mod-${numPhp} ${numPhp}-common ${numPhp}-dev ${numPhp}-zip ${numPhp}-ssh2 ${numPhp}-mbstring composer ${numPhp}-ldap
+RUN apt-get update && apt-get install -y wget openssh-server supervisor mysql-client vim ntp ca-certificates unzip\
+ curl sudo cron locate tar wget logrotate dos2unix ntpdate htop iotop iftop smbclient git python python-pip \
+ software-properties-common libexpat1 ssl-cert apt-transport-https mysql-client mysql-common apache2 apache2-utils \
+ libexpat1 ${numPhp} ${numPhp}-curl ${numPhp}-gd ${numPhp}-imap ${numPhp}-json ${numPhp}-mcrypt ${numPhp}-mysql \
+ ${numPhp}-xml ${numPhp}-opcache ${numPhp}-soap ${numPhp}-xmlrpc libapache2-mod-${numPhp} ${numPhp}-common \
+ ${numPhp}-dev ${numPhp}-zip ${numPhp}-ssh2 ${numPhp}-mbstring composer ${numPhp}-ldap
 
 RUN echo root:$SHELL_ROOT_PASSWORD | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
@@ -25,29 +28,25 @@ RUN sed '/Port /d' /etc/ssh/sshd_config | echo "Port 22" >> /etc/ssh/sshd_config
 #Pdt les devs
 RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 
-RUN mkdir -p /var/run/sshd /var/log/supervisor
-RUN rm /etc/motd
+RUN mkdir -p /var/run/sshd /var/log/supervisor && rm /etc/motd && rm /var/www/html/index.html && mkdir -p /var/www/htmlTemp/
+RUN apt-get clean autoclean && apt-get autoremove --yes && rm -fr /var/lib/{apt,dpkg,cache,log}/
+RUN systemctl disable apache2; systemctl stop apache2;service stop apache2;update-rc.d apache2 remove; \
+ systemctl disable sshd; systemctl stop sshd; service stop sshd; update-rc.d sshd remove; \
+ systemctl disable cron;systemctl stop cron;service stop cron;update-rc.d cron remove;exit 0
+
 ADD motd /etc/motd
-RUN rm /root/.bashrc
-ADD bashrc /root/.bashrc
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD nextdom.conf /etc/apache2/sites-available/
 ADD nextdom-ssl.conf /etc/apache2/sites-available/
 ADD nextdom-security.conf /etc/apache2/conf-available/
 #ADD privatetmp.conf
 ADD mysqlroot /root/.mysqlroot
-
-RUN rm /var/www/html/index.html
-RUN mkdir -p /var/www/htmlTemp/
-
-RUN cd /var/www/htmlTemp/ && git clone --quiet https://${GITHUB_TOKEN}@github.com/sylvaner/nextdom-core .
-RUN cd /var/www/htmlTemp/ && git checkout ${BRANCH}
-RUN cd /var/www/htmlTemp/ && cp -Rf * ../html/
-RUN a2enmod ssl && a2dissite 000-default && a2dissite default-ssl && a2enconf nextdom-security
-
-RUN systemctl disable apache2;exit 0
-RUN systemctl disable sshd;exit 0
 ADD init.sh /root/init.sh
-RUN chmod +x /root/init.sh
+
+RUN  a2enmod ssl && a2dissite 000-default && a2dissite default-ssl && a2enconf nextdom-security; chmod +x /root/init.sh; \
+ systemctl disable apache2; systemctl disable sshd;exit 0
+
+VOLUME /var/www/html/
 
 CMD ["/root/init.sh"]
+#CMD ["/bin/bash"]

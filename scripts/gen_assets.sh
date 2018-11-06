@@ -92,7 +92,7 @@ function gen_js {
         3rdparty/jquery.at.caret/jquery.at.caret.min.js \
         vendor/node_modules/jwerty/jwerty.js \
         vendor/node_modules/packery/dist/packery.pkgd.js \
-        vendor/node_modules/lazyload/lazyload.js \
+        vendor/node_modules/jquery-lazyload/jquery.lazyload.js \
         vendor/node_modules/codemirror/lib/codemirror.js \
         vendor/node_modules/codemirror/addon/edit/matchbrackets.js \
         vendor/node_modules/codemirror/mode/htmlmixed/htmlmixed.js \
@@ -111,7 +111,7 @@ function gen_js {
         vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
         vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
         vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.js  > /tmp/temp.js
-        
+
 if [ $# -eq 0 ]; then
     python -m jsmin /tmp/temp.js > public/js/base.js
     rm /tmp/temp.js
@@ -128,6 +128,30 @@ if [ $# -eq 0 ]; then
     do
         python -m jsmin $jsFile > public/js/desktop/${jsFile##*/}
         php scripts/translate.php public/js/desktop/${jsFile##*/}
+    done
+    mkdir -p public/js/desktop/admin
+    for jsFile in assets/js/desktop/admin/*.js
+    do
+        python -m jsmin $jsFile > public/js/desktop/admin/${jsFile##*/}
+        php scripts/translate.php public/js/desktop/admin/${jsFile##*/}
+    done
+    mkdir -p public/js/desktop/diagnostic
+    for jsFile in assets/js/desktop/diagnostic/*.js
+    do
+        python -m jsmin $jsFile > public/js/desktop/diagnostic/${jsFile##*/}
+        php scripts/translate.php public/js/desktop/diagnostic/${jsFile##*/}
+    done
+    mkdir -p public/js/desktop/params
+    for jsFile in assets/js/desktop/params/*.js
+    do
+        python -m jsmin $jsFile > public/js/desktop/params/${jsFile##*/}
+        php scripts/translate.php public/js/desktop/params/${jsFile##*/}
+    done
+    mkdir -p public/js/desktop/tools
+    for jsFile in assets/js/desktop/tools/*.js
+    do
+        python -m jsmin $jsFile > public/js/desktop/tools/${jsFile##*/}
+        php scripts/translate.php public/js/desktop/tools/${jsFile##*/}
     done
     mkdir -p public/js/modals
     for jsFile in assets/js/modals/*.js
@@ -147,28 +171,28 @@ fi
 
 function copy_assets {
     echo " >>> Copie des icones"
-	cp -fr assets/icon /public/
+	cp -fr assets/icon public/
 	echo " >>> Copie des themes"
-	cp -fr assets/themes /public/
+	cp -fr assets/themes public/
 	echo " >>> Copie des images"
-	cp -fr assets/img /public/
+	cp -fr assets/img public/
 	gen_css
 	gen_js
 }
 
 function start {
 	while true; do
-		FIND_CSS_RES=$(find /assets/css -mmin -0.1)
+		FIND_CSS_RES=$(find assets/css -mmin -0.1)
 		if [ -n "$FIND_CSS_RES" ]; then
 			gen_css no_compress
 			echo " >>> OK"
 		fi
-		FIND_JS_RES=$(find /core/js -mmin -0.1)
+		FIND_JS_RES=$(find core/js -mmin -0.1)
 		if [ -n "$FIND_JS_RES" ]; then
 			gen_js no_compress
 			echo " >>> OK"
 		fi
-		FIND_JS_RES=$(find /assets/js -mmin -0.1)
+		FIND_JS_RES=$(find assets/js -mmin -0.1)
 		if [ -n "$FIND_JS_RES" ]; then
 			gen_js no_compress
 			echo " >>> OK"

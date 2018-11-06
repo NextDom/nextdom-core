@@ -45,7 +45,6 @@
     radius: 4px;
     width: 1px;
   }
-
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
@@ -54,12 +53,16 @@
 .btn-app {
   line-height: 2.5;
   height: 70px;
-  margin: 5px 5px 5px 5px;
-  min-width: 115px;
+  margin: 5px auto 5px auto;
+  min-width: 107px;
 }
 .btn-tab {
   line-height: 2;
 }
 .btn-box-tool {
   padding: 8px 5px;
+}
+.btn-action-bar {
+  margin-bottom: 2px;
+  margin-top: 2px;
 }

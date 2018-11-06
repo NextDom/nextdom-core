@@ -33,147 +33,152 @@
 */
 
 #}
-<div class="action-bar">
-    <div class="action-group">
-        <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+        </div>
+        <div class="action-group">
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_savenetwork"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+        </div>
     </div>
-    <div class="action-group">
-        <a class="btn btn-success pull-right" id="bt_savenetwork"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
-    </div>
-</div>
+</section>
 
-<div class="box" id="network">
-    <!-- Header bar -->
-    <div class="box-header with-border">
-        <h3 class="box-title"><i class="fas fa-rss">&nbsp;&nbsp;</i>{{ 'Réseaux' }}</h3>
-    </div>
+<section class="content">
+    <div class="box" id="network">
+        <!-- Header bar -->
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fas fa-rss">&nbsp;&nbsp;</i>{{ 'Réseaux' }}</h3>
+        </div>
 
-    <!-- Page content -->
-    <div class="box-body">
+        <!-- Page content -->
+        <div class="box-body">
 
-        <!-- Alert Section -->
-        <div class="alert alert-warning alert-config">{{ 'Attention : cette configuration n\'est là que pour informer' }} {{ adminConfigs['product_name'] }} {{ 'de sa configuration réseau et n\'a aucun impact sur les ports ou l\'IP réellement utilisés pour joindre' }} {{ adminConfigs['product_name'] }}</div>
-        <form class="form-horizontal">
+            <!-- Alert Section -->
+            <div class="alert alert-warning alert-config">{{ 'Attention : cette configuration n\'est là que pour informer' }} {{ adminConfigs['product_name'] }} {{ 'de sa configuration réseau et n\'a aucun impact sur les ports ou l\'IP réellement utilisés pour joindre' }} {{ adminConfigs['product_name'] }}</div>
+            <form class="form-horizontal">
 
-            <!-- Internal Access Section -->
-            <div>
-                <legend class="legend-title">{{ 'Accès interne' }}</legend>
-                <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Protocole' }}</label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <div class="input-group">
-                            <select class="configKey form-control" data-l1key="internalProtocol">
-                                <option value="">{{ 'Aucun' }}</option>
-                                <option value="http://">HTTP</option>
-                                <option value="https://">HTTPS</option>
-                            </select>
-                            <span class="input-group-addon label-value">://</span>
-                            <input type="text" class="configKey form-control" data-l1key="internalAddr"/>
-                            <span class="input-group-addon label-value">:</span>
-                            <input type="number" class="configKey form-control" data-l1key="internalPort"/>
-                            <span class="input-group-addon label-value">/</span>
-                            <input type="text" class="configKey form-control" data-l1key="internalComplement"/>
+                <!-- Internal Access Section -->
+                <div>
+                    <legend class="legend-title">{{ 'Accès interne' }}</legend>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Protocole' }}</label>
+                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                            <div class="input-group">
+                                <select class="configKey form-control" data-l1key="internalProtocol">
+                                    <option value="">{{ 'Aucun' }}</option>
+                                    <option value="http://">HTTP</option>
+                                    <option value="https://">HTTPS</option>
+                                </select>
+                                <span class="input-group-addon label-value">://</span>
+                                <input type="text" class="configKey form-control" data-l1key="internalAddr"/>
+                                <span class="input-group-addon label-value">:</span>
+                                <input type="number" class="configKey form-control" data-l1key="internalPort"/>
+                                <span class="input-group-addon label-value">/</span>
+                                <input type="text" class="configKey form-control" data-l1key="internalComplement"/>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- External Access Section -->
-            <div class="legend-section">
-                <legend class="legend-title">{{ 'Accès externe' }}</legend>
-                <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Protocole' }}</label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <div class="input-group">
-                            <select class="configKey form-control" data-l1key="externalProtocol">
-                                <option value="">{{ 'Aucun' }}</option>
-                                <option value="http://">HTTP</option>
-                                <option value="https://">HTTPS</option>
-                            </select>
-                            <span class="input-group-addon label-value">://</span>
-                            <input type="text" class="configKey form-control" data-l1key="externalAddr"/>
-                            <span class="input-group-addon label-value">:</span>
-                            <input type="number" class="configKey form-control" data-l1key="externalPort"/>
-                            <span class="input-group-addon label-value">/</span>
-                            <input type="text" class="configKey form-control" data-l1key="externalComplement"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Advanced Section -->
-            <div class="legend-section">
-                <legend class="legend-title">{{ 'Gestion avancée' }}</legend>
-                <table class="table table-condensed table-bordered">
-                    <thead>
-                    <tr>
-                        <th>{{ 'Interface' }}</th>
-                        <th>{{ 'IP' }}</th>
-                        <th>{{ 'Mac' }}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for interface in adminNetworkInterfaces %}
-                        <tr>
-                            <td>{{ interface['name'] }}</td>
-                            <td>{{ interface['ip'] }}</td>
-                            <td>{{ interface['mac'] }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-                <div class="form-group has-error">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Gestion autonome du réseau' }}</label>
-                    <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
-                        <input type="checkbox" class="configKey" data-l1key="network::disableMangement" id="networkmanagement"/>
-                        <label for="networkmanagement" class="control-label label-check">{{'Désactiver'}}</label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Masque IP local' }}</label>
-                    <div class="col-lg-5 col-md-5 col-sm-8 col-xs-12">
-                        <input type="text" class="configKey form-control" data-l1key="network::localip"/>
-                    </div>
-                    <label class="col-lg-5 col-md-4 col-sm-7 col-sm-offset-5 col-xs-12 label-unity-big">{{ '(pour les installations docker-like, sous la forme 192.168.1.*)' }}</label>
-                </div>
-            </div>
-
-            <!-- DNS Section -->
-            {% for repo, data in adminReposList %}
+                <!-- External Access Section -->
                 <div class="legend-section">
-                    {% if data['scope']['proxy'] is defined and data['scope']['proxy'] == true and adminConfigs[repo ~ '::enable'] != 0 %}
-                        <legend class="legend-title">{{ 'DNS (proxy)' }} {{ data['name'] }}</legend>
-                        {% if adminConfigs['dns::token'] == '' %}
-                            <div class="alert alert-warning alert-config">{{ 'Attention : cette fonctionnalité n\'est pas disponible dans le service pack community (voir votre service pack sur votre page profil sur le market)' }}</div>
-                        {% else %}
-                            <div class="form-group">
-                                <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Utiliser les DNS' }} {{ adminConfigs['product_name'] }}</label>
-                                <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                                    <input type="checkbox" class="configKey" data-l1key="{{ pageContent['networkkey'] }}::allowDNS"/>
-                                    <label for="networkkey" class="control-label label-check">{{'Autoriser'}}</label>
-                                </div>
+                    <legend class="legend-title">{{ 'Accès externe' }}</legend>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Protocole' }}</label>
+                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                            <div class="input-group">
+                                <select class="configKey form-control" data-l1key="externalProtocol">
+                                    <option value="">{{ 'Aucun' }}</option>
+                                    <option value="http://">HTTP</option>
+                                    <option value="https://">HTTPS</option>
+                                </select>
+                                <span class="input-group-addon label-value">://</span>
+                                <input type="text" class="configKey form-control" data-l1key="externalAddr"/>
+                                <span class="input-group-addon label-value">:</span>
+                                <input type="number" class="configKey form-control" data-l1key="externalPort"/>
+                                <span class="input-group-addon label-value">/</span>
+                                <input type="text" class="configKey form-control" data-l1key="externalComplement"/>
                             </div>
-                            <div class="form-group">
-                                <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Statut DNS' }}</label>
-                                <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                                    {% if adminConfigs['market::allowDNS'] == 1 and adminDnsRun %}
-                                        <span class="label label-success">{{ 'Démarré : ' }} <a href="{{ pageContent['adminNetworkExternalAccess']  }}" target="_blank" class="link-dns-success">{{ adminNetworkExternalAccess }}</a></span>
-                                    {% else %}
-                                        <span class="label label-warning" data-toggle="tooltip" title="" data-original-title="{{ 'Normal si vous n\'avez pas coché la case : Utiliser les DNS' }} {{ adminConfigs['product_name'] }}">{{ 'Arrêté' }}</span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-xs-4 control-label">{{ 'Gestion' }}</label>
-                                <div class="col-xs-8">
-                                    <a class="btn btn-success" id="bt_restartDns"><i class="fas fa-play">&nbsp;&nbsp;</i>{{ 'Redémarrer' }}</a>
-                                    <a class="btn btn-danger" id="bt_haltDns"><i class="fas fa-stop">&nbsp;&nbsp;</i>{{ 'Arrêter' }}</a>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endif %}
+                        </div>
+                    </div>
                 </div>
-            {% endfor %}
-        </form>
+
+                <!-- Advanced Section -->
+                <div class="legend-section">
+                    <legend class="legend-title">{{ 'Gestion avancée' }}</legend>
+                    <table class="table table-condensed table-bordered">
+                        <thead>
+                        <tr>
+                            <th>{{ 'Interface' }}</th>
+                            <th>{{ 'IP' }}</th>
+                            <th>{{ 'Mac' }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for interface in adminNetworkInterfaces %}
+                            <tr>
+                                <td>{{ interface['name'] }}</td>
+                                <td>{{ interface['ip'] }}</td>
+                                <td>{{ interface['mac'] }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="form-group has-error">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Gestion autonome du réseau' }}</label>
+                        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                            <input type="checkbox" class="configKey" data-l1key="network::disableMangement" id="networkmanagement"/>
+                            <label for="networkmanagement" class="control-label label-check">{{'Désactiver'}}</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Masque IP local' }}</label>
+                        <div class="col-lg-5 col-md-5 col-sm-8 col-xs-12">
+                            <input type="text" class="configKey form-control" data-l1key="network::localip"/>
+                        </div>
+                        <label class="col-lg-5 col-md-4 col-sm-7 col-sm-offset-5 col-xs-12 label-unity-big">{{ '(pour les installations docker-like, sous la forme 192.168.1.*)' }}</label>
+                    </div>
+                </div>
+
+                <!-- DNS Section -->
+                {% for repo, data in adminReposList %}
+                    <div class="legend-section">
+                        {% if data['scope']['proxy'] is defined and data['scope']['proxy'] == true and adminConfigs[repo ~ '::enable'] != 0 %}
+                            <legend class="legend-title">{{ 'DNS (proxy)' }} {{ data['name'] }}</legend>
+                            {% if adminConfigs['dns::token'] == '' %}
+                                <div class="alert alert-warning alert-config">{{ 'Attention : cette fonctionnalité n\'est pas disponible dans le service pack community (voir votre service pack sur votre page profil sur le market)' }}</div>
+                            {% else %}
+                                <div class="form-group">
+                                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Utiliser les DNS' }} {{ adminConfigs['product_name'] }}</label>
+                                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                                        <input type="checkbox" class="configKey" data-l1key="{{ pageContent['networkkey'] }}::allowDNS"/>
+                                        <label for="networkkey" class="control-label label-check">{{'Autoriser'}}</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Statut DNS' }}</label>
+                                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                                        {% if adminConfigs['market::allowDNS'] == 1 and adminDnsRun %}
+                                            <span class="label label-success">{{ 'Démarré : ' }} <a href="{{ pageContent['adminNetworkExternalAccess']  }}" target="_blank" class="link-dns-success">{{ adminNetworkExternalAccess }}</a></span>
+                                        {% else %}
+                                            <span class="label label-warning" data-toggle="tooltip" title="" data-original-title="{{ 'Normal si vous n\'avez pas coché la case : Utiliser les DNS' }} {{ adminConfigs['product_name'] }}">{{ 'Arrêté' }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 control-label">{{ 'Gestion' }}</label>
+                                    <div class="col-xs-8">
+                                        <a class="btn btn-success" id="bt_restartDns"><i class="fas fa-play">&nbsp;&nbsp;</i>{{ 'Redémarrer' }}</a>
+                                        <a class="btn btn-danger" id="bt_haltDns"><i class="fas fa-stop">&nbsp;&nbsp;</i>{{ 'Arrêter' }}</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </form>
+        </div>
     </div>
-</div>
+</section>

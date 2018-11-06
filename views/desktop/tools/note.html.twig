@@ -33,50 +33,52 @@
 */
 
 #}
-<div class="action-bar">
-    <div class="action-group">
-        <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+            <a class="btn btn-success btn-action-bar" id="bt_noteManagerAdd"><i class="fas fa-plus">&nbsp;&nbsp;</i>{{ 'Créer une note' }}</a>
+        </div>
+        <div class="action-group">
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_noteManagerSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-danger btn-action-bar pull-right" id="bt_noteManagerRemove"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+        </div>
     </div>
-    <div class="action-group">
-        <a class="btn btn-success" id="bt_noteManagerAdd"><i class="fas fa-plus">&nbsp;&nbsp;</i>{{ 'Créer une note' }}</a>
-    </div>
-    <div class="action-group">
-        <a class="btn btn-success pull-right" id="bt_noteManagerSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
-        <a class="btn btn-danger pull-right" id="bt_noteManagerRemove"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
-    </div>
-</div>
+</section>
 
-<div class="box" id="note">
-    <!-- Header bar -->
-    <div class="box-header with-border">
-        <h3 class="box-title"><i class="fas fa-sticky-note">&nbsp;&nbsp;</i>{{ 'Notes' }}</h3>
-    </div>
+<section class="content">
+    <div class="box" id="note">
+        <!-- Header bar -->
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fas fa-sticky-note">&nbsp;&nbsp;</i>{{ 'Notes' }}</h3>
+        </div>
 
-    <!-- Page content -->
-    <div class="box-body">
-        <form class="form-horizontal">
+        <!-- Page content -->
+        <div class="box-body">
+            <form class="form-horizontal">
 
-            <div style="display: none;" id="div_noteManagementAlert"></div>
-            <div class="row">
-                <div class="col-lg-2 col-md-3 col-sm-4" style="overflow-y:auto;overflow-x:hidden;">
-                    <fieldset>
-                        <legend class="legend-title">{{ 'Liste des notes' }}</legend>
-                        <div class="bs-sidebar">
-                            <ul class="nav nav-list bs-sidenav list-group" id="ul_noteList">
+                <div style="display: none;" id="div_noteManagementAlert"></div>
+                <div class="row">
+                    <div class="col-lg-2 col-md-3 col-sm-4" style="overflow-y:auto;overflow-x:hidden;">
+                        <fieldset>
+                            <legend class="legend-title">{{ 'Liste des notes' }}</legend>
+                            <div class="bs-sidebar">
+                                <ul class="nav nav-list bs-sidenav list-group" id="ul_noteList">
 
-                            </ul>
-                        </div>
-                    </fieldset>
-                </div>
+                                </ul>
+                            </div>
+                        </fieldset>
+                    </div>
 
-                <div class="col-lg-10 col-md-9 col-sm-8" style="border-left: solid 1px #EEE; overflow-y:hidden;overflow-x:hidden;">
+                    <div class="col-lg-10 col-md-9 col-sm-8" style="border-left: solid 1px #EEE; overflow-y:hidden;overflow-x:hidden;">
                         <div id="div_noteManagerDisplay">
                             <input class="noteAttr form-control" data-l1key="id" style="display:none;" disabled/>
                             <input class="noteAttr form-control label-list" data-l1key="name" disabled/>
                             <textarea class="noteAttr form-control ta_autosize" data-l1key="text" disabled></textarea>
                         </div>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
+</section>
