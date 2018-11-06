@@ -23,4 +23,6 @@ set_root $0
 
 ${root}/gen_composer_npm.sh
 ${root}/gen_assets.sh
+if [ "$1" == "--docs" ]; then
 ${root}/gen_docs.sh
+fi
