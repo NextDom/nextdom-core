@@ -185,9 +185,12 @@ try {
             $plugin_id::restore();
             echo "OK\n";
         }
-        $cache = \cache::byKey('dependancy' . $plugin_id->getID());
+        echo 'Réinitilisation dépendances : ' . $plugin_id . '... \n';
+        $cache = cache::byKey('dependancy' . $plugin->getId());
         $cache->remove();
-        \cache::set('dependancy' . $plugin_id->getID(), "nok");
+        cache::set('dependancy' . $plugin   ->getId(), "nok");
+        $plugin->checkDeamon();
+        sleep(1);
     }
   	echo "OK\n";
 
