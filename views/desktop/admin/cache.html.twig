@@ -33,102 +33,104 @@
 */
 
 #}
-<div class="action-bar">
-    <div class="action-group">
-        <a class="btn btn-danger" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+            <a class="btn btn-warning btn-action-bar" id="bt_cleanCache"><i class="fa fa-magic">&nbsp;&nbsp;</i>{{ 'Nettoyer le cache' }}</a>
+            <a class="btn btn-danger btn-action-bar" id="bt_flushCache"><i class="fa fa-trash">&nbsp;&nbsp;</i>{{ 'Vider le cache' }}</a>
+        </div>
+        <div class="action-group">
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_savecache"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+        </div>
     </div>
-    <div class="action-group">
-        <a class="btn btn-warning" id="bt_cleanCache"><i class="fa fa-magic">&nbsp;&nbsp;</i>{{ 'Nettoyer le cache' }}</a>
-        <a class="btn btn-danger" id="bt_flushCache"><i class="fa fa-trash">&nbsp;&nbsp;</i>{{ 'Vider le cache' }}</a>
-    </div>
-    <div class="action-group">
-        <a class="btn btn-success pull-right" id="bt_savecache"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
-    </div>
-</div>
+</section>
 
-<div class="box" id="cache">
-    <!-- Header bar -->
-    <div class="box-header with-border">
-        <h3 class="box-title"><i class="fas fa-hdd-o">&nbsp;&nbsp;</i>{{ 'Cache' }}</h3>
-    </div>
+<section class="content">
+    <div class="box" id="cache">
+        <!-- Header bar -->
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fas fa-hdd-o">&nbsp;&nbsp;</i>{{ 'Cache' }}</h3>
+        </div>
 
-    <!-- Page content -->
-    <div class="box-body">
-        <form class="form-horizontal">
-            <fieldset>
+        <!-- Page content -->
+        <div class="box-body">
+            <form class="form-horizontal">
+                <fieldset>
 
-                <!-- Statistiques Section -->
-                <div>
-                    <legend class="legend-title">{{ 'Statistiques' }}</legend>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Statistiques' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                            <span class="label label-config label-primary"><span id="span_cacheObject">{{ adminStats['count'] }}</span> {{ 'objets' }}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Moteur Section -->
-                <div class="legend-section">
-                    <legend class="legend-title">{{ 'Moteur' }}</legend>
-                    <div class="alert alert-config alert-info">
-                        {{ 'Attention : toute modification du moteur de cache nécessite un redémarrage de votre ' }} {{ adminProductName }} {{ adminCustomProductName }}
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Moteur de cache' }}</label>
-                        <div class="col-lg-5 col-md-6 col-sm-7 col-xs-12">
-                            <select type="text" class="configKey form-control" data-l1key="cache::engine">
-                                <option value="FilesystemCache">{{ 'Système de fichiers' }} ({{ adminCacheFolder }})</option>
-                                {% if adminMemCachedExists %}
-                                    <option value="MemcachedCache">{{ 'Memcached' }}</option>
-                                {% endif %}
-                                {% if adminRedisExists %}
-                                    <option value="RedisCache">{{ 'Redis' }}</option>
-                                {% endif %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Parameters Section -->
-                <div class="legend-section">
-                    <legend class="legend-title">{{ 'Paramètres' }}</legend>
-                    <div class="cacheEngine MemcachedCache">
+                    <!-- Statistiques Section -->
+                    <div>
+                        <legend class="legend-title">{{ 'Statistiques' }}</legend>
                         <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Adresse Memcache' }}</label>
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Statistiques' }}</label>
                             <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                <input type="text" class="configKey form-control" data-l1key="cache::memcacheaddr"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Port Memcache' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                <input type="text" class="configKey form-control" data-l1key="cache::memcacheport"/>
+                                <span class="label label-config label-primary"><span id="span_cacheObject">{{ adminStats['count'] }}</span> {{ 'objets' }}</span>
                             </div>
                         </div>
                     </div>
-                    <div class="cacheEngine RedisCache">
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Adresse Redis' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                <input type="text" class="configKey form-control" data-l1key="cache::redisaddr"/>
-                            </div>
+
+                    <!-- Moteur Section -->
+                    <div class="legend-section">
+                        <legend class="legend-title">{{ 'Moteur' }}</legend>
+                        <div class="alert alert-config alert-info">
+                            {{ 'Attention : toute modification du moteur de cache nécessite un redémarrage de votre ' }} {{ adminProductName }} {{ adminCustomProductName }}
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Port redis' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                <input type="text" class="configKey form-control" data-l1key="cache::redisport"/>
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Moteur de cache' }}</label>
+                            <div class="col-lg-5 col-md-6 col-sm-7 col-xs-12">
+                                <select type="text" class="configKey form-control" data-l1key="cache::engine">
+                                    <option value="FilesystemCache">{{ 'Système de fichiers' }} ({{ adminCacheFolder }})</option>
+                                    {% if adminMemCachedExists %}
+                                        <option value="MemcachedCache">{{ 'Memcached' }}</option>
+                                    {% endif %}
+                                    {% if adminRedisExists %}
+                                        <option value="RedisCache">{{ 'Redis' }}</option>
+                                    {% endif %}
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Temps de pause pour le long polling' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                            <input class="configKey form-control" data-l1key="event::waitPollingTime"/>
+
+                    <!-- Parameters Section -->
+                    <div class="legend-section">
+                        <legend class="legend-title">{{ 'Paramètres' }}</legend>
+                        <div class="cacheEngine MemcachedCache">
+                            <div class="form-group">
+                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Adresse Memcache' }}</label>
+                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                    <input type="text" class="configKey form-control" data-l1key="cache::memcacheaddr"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Port Memcache' }}</label>
+                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                    <input type="text" class="configKey form-control" data-l1key="cache::memcacheport"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cacheEngine RedisCache">
+                            <div class="form-group">
+                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Adresse Redis' }}</label>
+                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                    <input type="text" class="configKey form-control" data-l1key="cache::redisaddr"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Port redis' }}</label>
+                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                    <input type="text" class="configKey form-control" data-l1key="cache::redisport"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Temps de pause pour le long polling' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                <input class="configKey form-control" data-l1key="event::waitPollingTime"/>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </fieldset>
-        </form>
+                </fieldset>
+            </form>
+        </div>
     </div>
-</div>
+</section>

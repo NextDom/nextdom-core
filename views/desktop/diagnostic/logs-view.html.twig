@@ -1,0 +1,97 @@
+{#
+
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#}
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+            <a class="btn btn-warning btn-action-bar" data-state="1" id="bt_globalLogStopStart"><i class="fas fa-pause">&nbsp;&nbsp;</i>{{ 'Pause' }}</a>
+        </div>
+        <div class="action-group">
+            <a class="btn btn-primary btn-action-bar pull-right" id="bt_downloadLog" disabled="disabled"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{ 'Télécharger' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id="bt_clearLog"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Vider' }}</a>
+            <a class="btn btn-danger btn-action-bar pull-right" id="bt_removeLog"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+            <a class="btn btn-danger btn-action-bar pull-right" id="bt_removeAllLog"><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer tous' }}</a>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="box" id="div_Logs-view">
+        <!-- Header bar -->
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fas fa-file-alt">&nbsp;&nbsp;</i>{{ 'Logs' }}</h3>
+        </div>
+
+        <!-- Page content -->
+        <div class="box-body">
+            <form class="form-horizontal">
+
+                <div class="row">
+                    <div class="col-md-3 col-sm-4 padding-bottom" id="div_displayLogList">
+                        <fieldset>
+                            <legend class="legend-title">{{ 'Liste des logs' }}</legend>
+                            <div class="bs-sidebar">
+                                <ul id="ul_object" class="nav nav-list bs-sidenav">
+                                    <div class="filter input-group">
+                                        <div class="input-group-addon"><i class="fas fa-search"></i></div>
+                                        <input class="filter form-control" placeholder="{{'Rechercher un log...'}}" />
+                                    </div>
+                                    {% for logFile in logFilesList %}
+                                        <li class="cursor label-log li_log{% if logFile['active'] %} active{% endif %}" data-log="{{ logFile['name'] }}">
+                                            <a><i class="fas fa-{{ logFile['icon'] }}" style="color:{{ logFile['color'] }};">&nbsp;&nbsp;</i>{{ logFile['name'] }} ({{ logFile['size'] }} Ko)</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-md-9 col-sm-8" style="border-left: solid 1px #EEE;">
+                        <fieldset>
+                            <div class="box-tools padding-bottom">
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                                    <input class="form-control" id="in_globalLogSearch" placeholder="{{ 'Rechercher dans le log...' }}"/>
+                                </div>
+                            </div>
+                            <pre id='pre_globallog' style='overflow: auto;min-height:215px;'></pre>
+                        </fieldset>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

@@ -379,7 +379,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/3rdparty/jquery.at.caret/jquery.at.caret.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jwerty/jwerty.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/packery/dist/packery.pkgd.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/lazyload/lazyload.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-lazyload/jquery.lazyload.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/lib/codemirror.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/addon/edit/matchbrackets.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/mode/htmlmixed/htmlmixed.js';
@@ -470,7 +470,7 @@ class PrepareView
                     Router::showError404AndDie();
                 }
             } else {
-                return \NextDom\Helpers\PagesController::$controllerRoute($render, $pageContent);
+                return PagesController::$controllerRoute($render, $pageContent);
             }
         }
     }

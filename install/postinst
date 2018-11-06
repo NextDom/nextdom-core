@@ -281,7 +281,7 @@ step_nextdom_crontab() {
 }
 
 step_nextdom_check() {
-    php ${WEBSERVER_HOME}/sick.php >> ${DEBUG} 2>&1
+    php ${WEBSERVER_HOME}/scripts/sick.php >> ${DEBUG} 2>&1
 }
 
 distrib_1_spe(){
@@ -431,9 +431,17 @@ HOSTPASS=""
 if [[ "${MYSQL_HOSTNAME}" != "localhost" ]] ; then
     HOSTPASS="-p${MYSQL_ROOT_PASSWD} -h${MYSQL_HOSTNAME}"
 fi
+    iret=1
+    n=0;
+    #slow start of docker mysql
+    while [ $n -le 5 ] && [ $iret -eq 1 ]
+    do
     #echo ">>>>> checking database access <<<<<"
     mysql -uroot ${HOSTPASS} --port=${MYSQL_PORT} -e "SHOW DATABASES;" >/dev/null 2>&1
     iret=$?
+    n=$(( $n + 1 ))
+    sleep 5
+    done
     if [[ ${iret} -ne 0 ]] ; then
         echo ">>>> Error : can\'t connect to remote database <<<<"
         exit 1

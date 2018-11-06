@@ -465,6 +465,9 @@ class plugin
         try {
             if ($this->getHasOwnDeamon() == 1 && method_exists($pluginId, 'deamon_info')) {
                 $deamon_info = $this->deamon_info();
+                if ($deamon_info['state'] == 'ok' && config::byKey('deamonRestartNumber', $pluginId, 0) != 0) {
+                    config::save('deamonRestartNumber', 0, $pluginId);
+                }
                 if ($auto && $deamon_info['auto'] == 0) {
                     return;
                 }
@@ -474,6 +477,12 @@ class plugin
                     $info['datetime'] = (isset($info['datetime'])) ? $info['datetime'] : strtotime('now') - 60;
                     if (abs(strtotime('now') - $info['datetime']) < 45) {
                         throw new \Exception(__('Vous devez attendre au moins 45 secondes entre deux lancements du démon. Dernier lancement : ' . date("Y-m-d H:i:s", $info['datetime']), __FILE__));
+                    }
+                    if (config::byKey('deamonRestartNumber', $pluginId, 0) > 3) {
+                        log::add($pluginId, 'error', __('Attention je pense qu\'il y a un soucis avec le démon que j\'ai relancé plus de 3 fois consecutivement', __FILE__));
+                    }
+                    if (!$forceRestart) {
+                        config::save('deamonRestartNumber', config::byKey('deamonRestartNumber', $pluginId, 0) + 1, $pluginId);
                     }
                     \cache::set('deamonStart' . $this->getId() . 'inprogress', array('datetime' => strtotime('now')));
                     config::save('lastDeamonLaunchTime', date('Y-m-d H:i:s'), $pluginId);

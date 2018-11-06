@@ -30,6 +30,11 @@
     <nav class="navbar navbar-static-top">
         <!-- Navbar left menu-->
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button"></a>
+        <ul class="nav navbar-nav">
+            <li class="objectSummaryGlobalHeader">
+                {{ MENU_HTML_GLOBAL_SUMMARY|raw }}
+            </li>
+        </ul>
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
@@ -40,7 +45,7 @@
                 </li>
                 <li class="dropdown notifications-menu" id="bt_messageModal">
                     <a href="#">
-                        {% if MENU_NB_UPDATES != 0 %}
+                        {% if MENU_NB_MESSAGES != 0 %}
                             <i class="fas fa-bell notifbadge"></i>
                             <span id="span_nbMessage" class="label label-warning notifcounter">{{ MENU_NB_MESSAGES }}</span>
                         {% else %}
