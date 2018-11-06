@@ -186,6 +186,9 @@
     <div class="action-bar">
         <div class="action-group">
             <a class="btn btn-default btn-action-bar" id="bt_welcomeRecall"><i class="fas fa-calendar-plus">&nbsp;&nbsp;</i>{{ 'Welcome Page'}}</a>
+            {% if IS_ADMIN and CAN_SUDO %}
+                <a class="btn btn-default btn-action-bar" href="/docs/html/index.xhtml"><i class="fas fa-graduation-cap">&nbsp;&nbsp;</i>{{ 'Documentation Dev.' }}</a>
+            {% endif %}
         </div>
         <div class="action-group">
             {% if IS_ADMIN and CAN_SUDO %}
