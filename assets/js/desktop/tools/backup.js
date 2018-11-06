@@ -43,7 +43,6 @@ $("#md_backupInfo").dialog({
     closeText: '',
     autoOpen: false,
     modal: true,
-    height: (jQuery(window).height() - 100),
     width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
     open: function () {
         $("body").css({overflow: 'hidden'});
@@ -79,12 +78,18 @@ $("#md_backupInfo").dialog({
     });
 });
 
+$("#bt_saveOpenLog").on('click', function (event) {
+    $('#md_backupInfo').dialog({title: "{{Avancement de la sauvegarde}}"});
+    $("#md_backupInfo").dialog('open');
+});
+
  $(".bt_backupNextDom").on('click', function (event) {
     var el = $(this);
     bootbox.confirm('{{Etes-vous sûr de vouloir faire une sauvegarde de}} '+NEXTDOM_PRODUCT_NAME+' {{? Une fois lancée cette opération ne peut être annulée}}', function (result) {
         if (result) {
             $.hideAlert();
             el.find('.fa-refresh').show();
+            el.find('.fa-floppy-o').hide();
             $('#md_backupInfo').dialog({title: "{{Avancement de la sauvegarde}}"});
             $("#md_backupInfo").dialog('open');
             nextdom.backup.backup({
@@ -105,6 +110,7 @@ $("#md_backupInfo").dialog({
         if (result) {
             $.hideAlert();
             el.find('.fa-refresh').show();
+            el.find('.fa-file').hide();
             $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
             $("#md_backupInfo").dialog('open');
             nextdom.backup.restoreLocal({
@@ -125,6 +131,7 @@ $("#md_backupInfo").dialog({
     bootbox.confirm('{{Etes-vous sûr de vouloir supprimer la sauvegarde}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ?', function (result) {
         if (result) {
             el.find('.fa-refresh').show();
+            el.find('.fa-trash-alt').hide();
             nextdom.backup.remove({
                 backup: $('#sel_restoreBackup').value(),
                 error: function (error) {
@@ -140,7 +147,12 @@ $("#md_backupInfo").dialog({
 });
 
  $('#bt_downloadBackup').on('click', function () {
-    window.open('core/php/downloadFile.php?pathfile=backup/' + $('#sel_restoreBackup option:selected').text(), "_blank", null);
+    if ($('#sel_restoreBackup option:selected').text() != '') {
+        window.open('core/php/downloadFile.php?pathfile=backup/' + $('#sel_restoreBackup option:selected').text(), "_blank", null);
+        var el = $(this);
+        el.find('.fa-refresh').show();
+        el.find('.fa-cloud-download-alt').hide();
+    }
 });
 
  $('#bt_uploadBackup').fileupload({
@@ -161,6 +173,7 @@ $("#md_backupInfo").dialog({
     bootbox.confirm('{{Etes-vous sûr de vouloir envoyer une sauvegarde de}} '+NEXTDOM_PRODUCT_NAME+' {{sur le cloud ? Une fois lancée cette opération ne peut être annulée}}', function (result) {
         if (result) {
             el.find('.fa-refresh').show();
+            el.find('.fa-cloud-upload-alt').hide();
             nextdom.backup.uploadCloud({
                 backup: $('#sel_restoreBackup').value(),
                 error: function (error) {
@@ -179,6 +192,7 @@ $("#md_backupInfo").dialog({
     bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec la sauvegarde Cloud}} <b>' + $('#sel_restoreCloudBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée}}', function (result) {
         if (result) {
             el.find('.fa-refresh').show();
+            el.find('.fa-file').hide();
             nextdom.backup.restoreCloud({
                 backup: el.closest('.repo').find('.sel_restoreCloudBackup').value(),
                 repo: el.attr('data-repo'),
@@ -264,6 +278,16 @@ $("#md_backupInfo").dialog({
             } else {
                 $('#bt_' + _log + 'NextDom .fa-refresh').hide();
                 $('.bt_' + _log + 'NextDom .fa-refresh').hide();
+                $('#bt_' + _log + 'NextDom .fa-floppy-o').show();
+                $('.bt_' + _log + 'NextDom .fa-floppy-o').show();
+                $('#bt_' + _log + 'NextDom .fa-window-restore').show();
+                $('.bt_' + _log + 'NextDom .fa-window-restore').show();
+                $('#bt_' + _log + 'NextDom .fa-cloud-upload-alt').show();
+                $('.bt_' + _log + 'NextDom .fa-cloud-upload-alt').show();
+                $('#bt_' + _log + 'NextDom .fa-trash-alt').show();
+                $('.bt_' + _log + 'NextDom .fa-trash-alt').show();
+                $('#bt_' + _log + 'NextDom .fa-cloud-download-alt').show();
+                $('.bt_' + _log + 'NextDom .fa-cloud-download-alt').show();
                 updateListBackup();
                 for(var i in REPO_LIST){
                     updateRepoListBackup(REPO_LIST[i]);
