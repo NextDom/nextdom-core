@@ -303,9 +303,14 @@ $(function () {
         }
     });
 
-    $('#bt_nextdomAbout, #bt_nextdomAboutFooter').on('click', function () {
+    $('#bt_nextdomAbout,#bt_nextdomAbout2, #bt_nextdomAboutFooter').on('click', function () {
         $('#md_modal').dialog({title: "{{A propos}}"});
         $('#md_modal').load('index.php?v=d&modal=about').dialog('open');
+    });
+
+    $('#bt_welcomeRecall').on('click', function () {
+        $('#md_modal').dialog({title: "{{Bienvenue dans NextDom}}"});
+        $("#md_modal").load('index.php?v=d&modal=welcome').dialog('open');
     });
 
     $('#bt_getHelpPage').on('click',function(){
