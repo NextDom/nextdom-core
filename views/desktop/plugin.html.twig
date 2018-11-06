@@ -72,7 +72,7 @@
                         </div>
                         <div class="box-body">
                             <p><b>{{ 'Catégorie :' }}</b> {{ plugin.getCategory() }}</p>
-                            <p style="white-space: nowrap;white-space: pre-line;height: 75px;overflow: hidden;text-overflow: ellipsis;"><b>{{ 'Description :' }}</b> {{ plugin.getDescription() }}</p>
+                            <p style="white-space: nowrap;white-space: pre-line;height: 75px;overflow: hidden;text-overflow: ellipsis;"><b>{{ 'Description :' }}</b> {{ plugin.getDescription()|raw }}</p>
                             <p><b>{{ 'Autheur :' }}</b> {{ plugin.getAuthor() }}</p>
                             <p><i>{{ 'Licence :' }}</i> {{ plugin.getLicense() }}</p>
                         </div>
