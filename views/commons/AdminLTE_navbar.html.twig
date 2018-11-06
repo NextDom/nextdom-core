@@ -30,9 +30,11 @@
     <nav class="navbar navbar-static-top">
         <!-- Navbar left menu-->
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button"></a>
-        <li class="objectSummaryGlobalHeader">
-            <a>{{ MENU_HTML_GLOBAL_SUMMARY|raw }}</a>
-        </li>
+        <ul class="nav navbar-nav">
+            <li class="objectSummaryGlobalHeader">
+                {{ MENU_HTML_GLOBAL_SUMMARY|raw }}
+            </li>
+        </ul>
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
