@@ -706,9 +706,15 @@ input[type="checkbox"] {
 
 /* footer */
 .main-footer {
-   padding: 7px 0px 0px 35px;
+  min-height: 20px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  position: inherit;
+  bottom: 0;
+  width: 100%;
 }
 
 .main-footer .form-group {
-   margin-bottom: 15px;
+  margin-bottom: 0px;
 }
+
