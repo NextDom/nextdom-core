@@ -72,14 +72,14 @@ try {
 
 /* Check log dir */
 echo "Vérifie si les log sont en écriture...";
-if (!file_exists($install_dir . '/log')) {
+if (!file_exists('/var/log/nextdom/')) {
 	echo "introuvable\n";
-	echo "Faites : mkdir " . $install_dir . "/log\n";
+	echo "Faites : mkdir /var/log/nextdom\n";
 	die();
 }
-if (!is_writable($install_dir . '/log')) {
+if (!is_writable('/var/log/nextdom')) {
 	echo "Impossible d'écrire\n";
-	echo "Faites : chown  -R " . $processUser['name'] . ' ' . $install_dir . "/log\n";
+	echo "Faites : chown  -R " . $processUser['name'] . " /var/log/nextdom\n";
 	die();
 }
 echo "OK\n";
