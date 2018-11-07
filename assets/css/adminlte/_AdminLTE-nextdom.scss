@@ -494,6 +494,19 @@ padding-left: 7px;
   word-break: break-all;
   white-space: normal;
 }
+.label-cmd {
+  margin: 3px 0px 3px 0px;
+  font-size: 100%;
+  padding: {
+    top: 7px;
+    bottom: 7px;
+  }
+  display: flex;
+}
+.li_history {
+    margin: 5px 0px 5px 10px;
+    color: $black;
+}
 
 /* Logos */
 .login-logo,
@@ -717,4 +730,3 @@ input[type="checkbox"] {
 .main-footer .form-group {
   margin-bottom: 0px;
 }
-
