@@ -351,7 +351,7 @@ $(function () {
         $("#md_modal").load('index.php?v=d&modal=welcome').dialog('open');
     }
 
-    $('#bt_haltSystem').on('click', function () {
+    $('#bt_haltSystem,#bt_haltSystemAdmin').on('click', function () {
         $.hideAlert();
         bootbox.confirm('{{Etes-vous sûr de vouloir arrêter le système ?}}', function (result) {
             if (result) {
@@ -360,7 +360,7 @@ $(function () {
         });
     });
 
-    $('#bt_rebootSystem').on('click', function () {
+    $('#bt_rebootSystem,#bt_rebootSystemAdmin').on('click', function () {
         $.hideAlert();
         bootbox.confirm('{{Etes-vous sûr de vouloir redémarrer le système ?}}', function (result) {
             if (result) {

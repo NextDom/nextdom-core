@@ -117,7 +117,7 @@
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fas fa-cog">&nbsp;&nbsp;</i>{{ 'Administration' }}</h3>
                 </div>
-                <div class="box-body box-flex">
+                <div class="box-body text-center">
                     <a class="btn btn-app" href="index.php?v=d&p=users"><i class="fas fa-users"></i>{{ 'Utilisateurs' }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=api"><i class="fas fa-key"></i>{{ 'API' }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=network"><i class="fas fa-rss"></i>{{ 'Réseaux' }}</a>
@@ -132,7 +132,7 @@
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fas fa-sliders-h">&nbsp;&nbsp;</i>{{ 'Paramétrage' }}</h3>
                 </div>
-                <div class="box-body box-flex">
+                <div class="box-body text-center">
                     <a class="btn btn-app" href="index.php?v=d&p=general"><i class="fas fa-wrench"></i>{{ 'Général' }} </a>
                     <a class="btn btn-app" href="index.php?v=d&p=custom"><i class="fas fa-pencil-square"></i>{{ 'Customisation' }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=profils"><i class="fas fa-briefcase"></i>{{ 'Profil' }}</a>
@@ -153,7 +153,7 @@
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fas fa-stethoscope">&nbsp;&nbsp;</i>{{ 'Diagnostics' }}</h3>
                 </div>
-                <div class="box-body box-flex">
+                <div class="box-body text-center">
                     <a class="btn btn-app" href="index.php?v=d&p=health"><i class="fas fa-medkit"></i>{{ 'Santé' }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=cron"><i class="fas fa-tasks"></i>{{ 'Tâches' }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=eqAnalyse"><i class="fas fa-plug"></i>{{ 'Equipements' }}</a>
@@ -169,11 +169,11 @@
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fas fa-paperclip">&nbsp;&nbsp;</i>{{ 'Outils' }}</h3>
                 </div>
-                <div class="box-body box-flex">
+                <div class="box-body text-center">
                     <a class="btn btn-app" href="index.php?v=d&p=display"><i class="fas fa-table"></i>{{ 'Résumés' }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=migration" ><i class="fas fa-rocket"></i>{{ 'Migration' }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=backup" ><i class="fas fa-save"></i>{{ 'Sauvegardes' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=update"><span class="badge bg-red">{{ MENU_NB_UPDATES }}</span><i class="fas fa-download"></i>{{ 'Mises à jour' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=update"><span class="badge bg-red">{{ administrationNbUpdates }}</span><i class="fas fa-download"></i>{{ 'Mises à jour' }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=note"><i class="fas fa-sticky-note"></i>{{ 'Notes' }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=osdb"><i class="fas fa-terminal"></i>{{ 'OS/DB' }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=interact"><i class="fas fa-comments"></i>{{ 'Intéractions' }}</a>
@@ -186,12 +186,11 @@
     <div class="action-bar">
         <div class="action-group">
             <a class="btn btn-default btn-action-bar" id="bt_welcomeRecall"><i class="fas fa-calendar-plus">&nbsp;&nbsp;</i>{{ 'Welcome Page'}}</a>
+            <a class="btn btn-default btn-action-bar" href="/docs/html/index.xhtml" target="_blank"><i class="fas fa-graduation-cap">&nbsp;&nbsp;</i>{{ 'Documentation Dev.' }}</a>
         </div>
         <div class="action-group">
-            {% if IS_ADMIN and CAN_SUDO %}
-                <a class="btn btn-danger btn-action-bar pull-right" href="#" id="bt_haltSystem" state="0"><i class="fas fa-power-off">&nbsp;&nbsp;</i>{{ 'Eteindre' }}</a>
-                <a class="btn btn-warning btn-action-bar pull-right" href="#" id="bt_rebootSystem" state="0"><i class="fas fa-repeat">&nbsp;&nbsp;</i>{{ 'Redémarrer' }}</a>
-            {% endif %}
+            <a class="btn btn-danger btn-action-bar pull-right" href="#" id="bt_haltSystemAdmin" state="0"><i class="fas fa-power-off">&nbsp;&nbsp;</i>{{ 'Eteindre' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" href="#" id="bt_rebootSystemAdmin" state="0"><i class="fas fa-repeat">&nbsp;&nbsp;</i>{{ 'Redémarrer' }}</a>
             <a class="btn btn-warning btn-action-bar pull-right" href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock">&nbsp;&nbsp;</i>{{ 'Se déconnecter' }}</a>
         </div>
     </div>
