@@ -189,8 +189,6 @@ try {
         $cache = cache::byKey('dependancy' . $plugin->getId());
         $cache->remove();
         cache::set('dependancy' . $plugin   ->getId(), "nok");
-        $plugin->checkDeamon();
-        sleep(1);
     }
   	echo "OK\n";
 
