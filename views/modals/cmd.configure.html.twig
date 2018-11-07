@@ -300,10 +300,12 @@
                                     {% for informationKey, informationValue in informationGroup %}
                                         {% if informationKey == 0 %}
                                             <optgroup label="{{ informationValue['family'] }}">
-                                                <option value="{{ informationValue['key'] }}">{{ informationValue['name'] }}</option>
-                                            </optgroup>
                                         {% endif %}
+                                        <option value="{{ informationValue['key'] }}">{{ informationValue['name'] }}</option>
                                     {% endfor %}
+                                    {% if informationKey == 0 %}
+                                        </optgroup> 
+                                    {% endif %}
                                 {% endfor %}
                             </select>
                         </div>
