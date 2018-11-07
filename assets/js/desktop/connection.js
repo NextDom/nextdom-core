@@ -73,9 +73,11 @@ function tryLogin() {
         twoFactorCode: $('#in_twoFactorCode').val(),
         storeConnection: $('#cb_storeConnection').value(),
         error: function (error) {
+            $('.login-box').addClass('animationShake');
             notify('Core',error.message,'error');
         },
         success: function (data) {
+            $('.login-box').addClass('animationZoomOut');
             window.location.href = 'index.php?v=d';
         }
     });
