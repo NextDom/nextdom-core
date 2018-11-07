@@ -141,7 +141,7 @@ try {
     } else {
         shell_exec("sed -i -e s/jeedom/nextdom/g /tmp/nextdombackup/DB_backup.sql");
     }
-    echo "Supprimer la table de la sauvegarde";
+    echo "Delete the backup table";
     $tables = DB::Prepare("SHOW TABLES", array(), DB::FETCH_TYPE_ALL);
     echo "Disables constraints...";
     DB::Prepare("SET foreign_key_checks = 0", array(), DB::FETCH_TYPE_ROW);
