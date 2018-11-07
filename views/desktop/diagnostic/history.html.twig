@@ -48,14 +48,14 @@
 <section class="content">
     <div class="box" id="div_History">
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-history">&nbsp;&nbsp;</i>{{ 'Historiques' }}</h3>
+            <h3 class="box-title"><i class="fas fa-chart-area">&nbsp;&nbsp;</i>{{ 'Historiques' }}</h3>
         </div>
         <div class="box-body">
+            <legend class="legend-title">{{ 'Sélectionner une commande pour l\'ajouter ou la supprimer du graphique' }}</legend>
             <div class="row">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                     <div class="bs-sidebar form-group">
                         <ul id="ul_history" class="nav nav-list bs-sidenav">
-                            <legend class="legend-title">{{ 'Sélectionner une commande' }}</legend>
                             <div class="input-group form-group" style="width: 100%">
                                 <input class="form-control" id='in_calculHistory' placeholder="{{ 'Historique calculé' }}"></textarea>
                                 <span class="input-group-btn">
@@ -105,41 +105,44 @@
                 </div>
 
                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-                    <legend class="legend-title"><i class="fas fa-chart-area">&nbsp;&nbsp;</i>{{ 'Graphique' }}</legend>
-                    <input id="in_startDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate['start'] }}"/>
-                    <input id="in_endDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate['end'] }}"/>
-                    <a class="btn btn-success btn-sm" id='bt_validChangeDate' data-toggle="tooltip" title="" data-original-title="{{ 'Attention : une trop grande plage de dates peut mettre très longtemps à être calculée ou même ne pas s\'afficher.' }}"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Ok' }}</a>
-                    <select class="form-control pull-right" id="sel_groupingType" style="width: 200px;">
-                        <option value="">{{ 'Aucun groupement' }}</option>
-                        <option value="sum::hour">{{ 'Somme par heure' }}</option>
-                        <option value="average::hour">{{ 'Moyenne par heure' }}</option>
-                        <option value="low::hour">{{ 'Minimum par heure' }}</option>
-                        <option value="high::hour">{{ 'Maximum par heure' }}</option>
-                        <option value="sum::day">{{ 'Somme par jour' }}</option>
-                        <option value="average::day">{{ 'Moyenne par jour' }}</option>
-                        <option value="low::day">{{ 'Minimum par jour' }}</option>
-                        <option value="high::day">{{ 'Maximum par jour' }}</option>
-                        <option value="sum::week">{{ 'Somme par semaine' }}</option>
-                        <option value="average::week">{{ 'Moyenne par semaine' }}</option>
-                        <option value="low::week">{{ 'Minimum par semaine' }}</option>
-                        <option value="high::week">{{ 'Maximum par semaine' }}</option>
-                        <option value="sum::month">{{ 'Somme par mois' }}</option>
-                        <option value="average::month">{{ 'Moyenne par mois' }}</option>
-                        <option value="low::month">{{ 'Minimum par mois' }}</option>
-                        <option value="high::month">{{ 'Maximum par mois' }}</option>
-                        <option value="sum::year">{{ 'Somme par année' }}</option>
-                        <option value="average::year">{{ 'Moyenne par année' }}</option>
-                        <option value="low::year">{{ 'Minimum par année' }}</option>
-                        <option value="high::year">{{ 'Maximum par année' }}</option>
-                    </select>
-                    <select class="form-control pull-right" id="sel_chartType" style="width: 200px;">
-                        <option value="line">{{ 'Ligne' }}</option>
-                        <option value="areaspline">{{ 'Areaspline' }}</option>
-                        <option value="column">{{ 'Barre' }}</option>
-                    </select>
-                    <span class="pull-right">{{ 'Variation' }} <input type="checkbox" id="cb_derive"/></span>
-                    <span class="pull-right">{{ 'Escalier' }} <input type="checkbox" id="cb_step"/></span>
-                    <div id="div_graph" style="margin-top: 10px;height:600px"></div>
+                    <div class="form-group">
+                        <input id="in_startDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate['start'] }}"/>
+                        <input id="in_endDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate['end'] }}"/>
+                        <a class="btn btn-success btn-sm" id='bt_validChangeDate' data-toggle="tooltip" title="" data-original-title="{{ 'Attention : une trop grande plage de dates peut mettre très longtemps à être calculée ou même ne pas s\'afficher.' }}"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Ok' }}</a>
+                        <select class="form-control pull-right" id="sel_groupingType" style="width: 200px;">
+                            <option value="">{{ 'Aucun groupement' }}</option>
+                            <option value="sum::hour">{{ 'Somme par heure' }}</option>
+                            <option value="average::hour">{{ 'Moyenne par heure' }}</option>
+                            <option value="low::hour">{{ 'Minimum par heure' }}</option>
+                            <option value="high::hour">{{ 'Maximum par heure' }}</option>
+                            <option value="sum::day">{{ 'Somme par jour' }}</option>
+                            <option value="average::day">{{ 'Moyenne par jour' }}</option>
+                            <option value="low::day">{{ 'Minimum par jour' }}</option>
+                            <option value="high::day">{{ 'Maximum par jour' }}</option>
+                            <option value="sum::week">{{ 'Somme par semaine' }}</option>
+                            <option value="average::week">{{ 'Moyenne par semaine' }}</option>
+                            <option value="low::week">{{ 'Minimum par semaine' }}</option>
+                            <option value="high::week">{{ 'Maximum par semaine' }}</option>
+                            <option value="sum::month">{{ 'Somme par mois' }}</option>
+                            <option value="average::month">{{ 'Moyenne par mois' }}</option>
+                            <option value="low::month">{{ 'Minimum par mois' }}</option>
+                            <option value="high::month">{{ 'Maximum par mois' }}</option>
+                            <option value="sum::year">{{ 'Somme par année' }}</option>
+                            <option value="average::year">{{ 'Moyenne par année' }}</option>
+                            <option value="low::year">{{ 'Minimum par année' }}</option>
+                            <option value="high::year">{{ 'Maximum par année' }}</option>
+                        </select>
+                        <select class="form-control pull-right" id="sel_chartType" style="width: 200px;">
+                            <option value="line">{{ 'Ligne' }}</option>
+                            <option value="areaspline">{{ 'Areaspline' }}</option>
+                            <option value="column">{{ 'Barre' }}</option>
+                        </select>
+                        <span class="pull-right">{{ 'Variation' }} <input type="checkbox" id="cb_derive"/></span>
+                        <span class="pull-right">{{ 'Escalier' }} <input type="checkbox" id="cb_step"/></span>
+                    </div>
+                    <div>
+                        <div id="div_graph" style="height:600px"></div>
+                    </div>
                 </div>
             </div>
         </div>
