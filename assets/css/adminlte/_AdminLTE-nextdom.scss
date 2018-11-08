@@ -246,7 +246,7 @@ padding-left: 7px;
 .register-box {
   width: 40%;
   min-width: 350px;
-  max-width: 600px;
+  max-width: 500px;
   margin: 7% auto;
 }
 .login-box-msg,
@@ -523,7 +523,6 @@ padding-left: 7px;
     weight: 300;
     align: center;
   }
-
   padding: {
     bottom: 15px;
     top: 25px;
@@ -535,6 +534,31 @@ padding-left: 7px;
   height: 50px;
   font-size: 18px;
   line-height: 48px;
+}
+.logo-mini-img{
+    background-size: 40px;
+    background-position-x: 5px;
+    background-repeat: no-repeat;
+    padding-left: 50px;
+    width:auto;
+    height:40px;
+}
+.logo-lg-img{
+    background-size: auto 40px;
+    background-position-x: 55px;
+    background-repeat: no-repeat;
+    padding-left: 210px;
+    width:auto;
+    height:40px;
+}
+.login-logo-img{
+    background-size: auto 40px;
+    background-position-x: 55px;
+    background-repeat: no-repeat;
+    padding-left: 210px;
+    width:auto;
+    height:100px;
+    overflow: hidden;
 }
 
 /* Progress bars */
@@ -663,11 +687,11 @@ input[type="checkbox"] {
 }
 
 /* Tables */
-.table-condensed>thead>tr>th, 
-.table-condensed>tbody>tr>th, 
-.table-condensed>tfoot>tr>th, 
-.table-condensed>thead>tr>td, 
-.table-condensed>tbody>tr>td, 
+.table-condensed>thead>tr>th,
+.table-condensed>tbody>tr>th,
+.table-condensed>tfoot>tr>th,
+.table-condensed>thead>tr>td,
+.table-condensed>tbody>tr>td,
 .table-condensed>tfoot>tr>td {
   padding: 6px;
   vertical-align: middle;
@@ -749,4 +773,3 @@ input[type="checkbox"] {
 .carousel-inner > .item > img, .carousel-inner > .item > a > img {
     margin: auto;
 }
-
