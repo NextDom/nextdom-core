@@ -60,6 +60,13 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     top: 50px;
   }
 }
+@media (max-width: 767px) {
+  .content-wrapper {
+    margin: {
+      top: 100px;
+    }
+  }
+}
 
 /* Navs */
 .navbar-custom-menu > .navbar-nav > li {
@@ -82,6 +89,14 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-size: 15px;
     top: 16px;
     height: 49px;
+    list-style-type: none;
+    display: inline;
+    position: inherit;
+}
+@media (max-width: 600px) {
+  .objectSummaryGlobalHeader {
+    display: none;
+  }
 }
 
 /* Sidebar */
@@ -244,9 +259,7 @@ padding-left: 7px;
 }
 .login-box,
 .register-box {
-  width: 40%;
-  min-width: 350px;
-  max-width: 500px;
+  width: 380px;
   margin: 7% auto;
 }
 .login-box-msg,
@@ -284,7 +297,7 @@ padding-left: 7px;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
   margin: {
     bottom: 60px;
-    top: 40px;
+    top: 15px;
   }
   color: #333;
   width: 100%;
@@ -535,31 +548,6 @@ padding-left: 7px;
   font-size: 18px;
   line-height: 48px;
 }
-.logo-mini-img{
-    background-size: 40px;
-    background-position-x: 5px;
-    background-repeat: no-repeat;
-    padding-left: 50px;
-    width:auto;
-    height:40px;
-}
-.logo-lg-img{
-    background-size: auto 40px;
-    background-position-x: 55px;
-    background-repeat: no-repeat;
-    padding-left: 210px;
-    width:auto;
-    height:40px;
-}
-.login-logo-img{
-    background-size: auto 40px;
-    background-position-x: 55px;
-    background-repeat: no-repeat;
-    padding-left: 210px;
-    width:auto;
-    height:100px;
-    overflow: hidden;
-}
 
 /* Progress bars */
 .progress {
@@ -767,6 +755,10 @@ input[type="checkbox"] {
   & .form-group {
       margin-bottom: 0px;
   }
+}
+.foter-center {
+  padding-left: 10%;
+  padding-right: 20%;
 }
 
 /* carrousel */
