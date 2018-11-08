@@ -22,7 +22,7 @@ sendVarToJS('market_display_info', $market_array);
 <link rel="stylesheet" href="/vendor/node_modules/fancybox/dist/css/jquery.fancybox.css">
 <link rel="stylesheet" href="/vendor/node_modules/slick-carousel/slick/slick.css">
 <link rel="stylesheet" href="/vendor/node_modules/slick-carousel/slick/slick-theme.css">
-<script src="/3rdparty/bootstrap-rating/bootstrap-rating.js"></script>
+<script src="/assets/3rdparty/bootstrap-rating/bootstrap-rating.js"></script>
 <script src="/vendor/node_modules/slick-carousel/slick/slick.js"></script>
 <script src="/vendor/node_modules/fancybox/dist/js/jquery.fancybox.js"></script>
 
