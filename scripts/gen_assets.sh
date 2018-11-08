@@ -50,7 +50,7 @@ function gen_css {
 
 function gen_links {
 echo " >>> Création des liens symboliques"
-ln -s /var/www/html/vendor/node_modules/codemirror/ /var/www/html/3rdparty/
+ln -s ${root}/../vendor/node_modules/codemirror/ ${root}/../3rdparty/
 }
 
 function gen_js {
