@@ -37,6 +37,7 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\UpdateManager;
 
 class ModalsController
 {
@@ -52,6 +53,7 @@ class ModalsController
         'scenario.export' => 'scenarioExportModal',
         'scenario.log.execution' => 'scenarioLogExecutionModal',
         'scenario.summary' => 'scenarioSummaryModal',
+        'scenario.template' => 'scenarioTemplateModal',
         'welcome' => 'welcomeModal'
     ];
 
@@ -108,7 +110,7 @@ class ModalsController
         $cmdId = Utils::init('cmd_id');
         $cmd = CmdManager::byId($cmdId);
         if (!is_object($cmd)) {
-            throw new \Exception('Commande non trouvé : ' . $cmdId);
+            throw new CoreException('Commande non trouvé : ' . $cmdId);
         }
         $cmdInfo = \nextdom::toHumanReadable(\utils::o2a($cmd));
         foreach (array('dashboard', 'mobile', 'dview', 'mview', 'dplan') as $value) {
@@ -306,7 +308,7 @@ class ModalsController
         $pageContent = [];
         $pageContent['planObject'] = \plan::byId(Utils::init('id'));
         if (!is_object($pageContent['planObject'])) {
-            throw new \Exception('Impossible de trouver le design');
+            throw new CoreException('Impossible de trouver le design');
         }
         $pageContent['planLink'] = $pageContent['planObject']->getLink();
         $pageContent['jeeObjects'] = JeeObjectManager::all();
@@ -334,7 +336,7 @@ class ModalsController
 
         $planHeader = \planHeader::byId(Utils::init('planHeader_id'));
         if (!is_object($planHeader)) {
-            throw new \Exception('Impossible de trouver le plan');
+            throw new CoreException('Impossible de trouver le plan');
         }
         Utils::sendVarsToJS(['id' => $planHeader->getId(),
                              'planHeader' => \utils::o2a($planHeader)]);
@@ -414,6 +416,33 @@ class ModalsController
         Status::isConnectedOrFail();
 
         $render->show('/modals/scenario.summary.html.twig');
+    }
+
+    /**
+     * Render scenario template modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function scenarioTemplateModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $scenarioId = Utils::init('scenario_id');
+        $scenario = ScenarioManager::byId($scenarioId);
+        if (!is_object($scenario)) {
+            throw new CoreException(__('Scénario non trouvé : ') . $scenarioId);
+        }
+        Utils::sendVarToJS('scenario_template_id', $scenarioId);
+        $pageContent = [];
+        $pageContent['repoList'] = UpdateManager::listRepo();
+
+        $render->show('/modals/scenario.template.html.twig', $pageContent);
     }
 
     /**
