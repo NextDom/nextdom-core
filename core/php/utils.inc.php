@@ -1282,7 +1282,7 @@ function findCodeIcon($_icon) {
     $icon = trim(str_replace(array('fa ', 'icon ', '></i>', '<i', 'class="', '"'), '', trim($_icon)));
     $re = '/.' . $icon . ':.*\n.*content:.*"(.*?)";/m';
 
-    $css = file_get_contents(__DIR__ . '/../../3rdparty/font-awesome/css/font-awesome.css');
+    $css = file_get_contents(__DIR__ . '/../../vendor/node_modules/font-awesome/css/font-awesome.css');
     preg_match($re, $css, $matches);
     if (isset($matches[1])) {
         return array('icon' => trim($matches[1], '\\'), 'fontfamily' => 'FontAwesome');
