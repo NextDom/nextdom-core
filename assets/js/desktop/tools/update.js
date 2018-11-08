@@ -43,12 +43,14 @@ setTimeout(function(){
 $('#in_searchPlugin').off('keyup').keyup(function () {
     var search = $(this).value();
     if(search == ''){
-        $('.box').show();
+        $('.box-warning').show();
+        $('.box-success').show();
         $('#listPlugin').packery();
         $('#listOther').packery();
         return;
     }
-    $('.box').hide();
+    $('.box-warning').hide();
+    $('.box-success').hide();
     $('.box .box-title').each(function(){
         var text = $(this).text().toLowerCase();
         if(text.indexOf(search.toLowerCase()) >= 0){
