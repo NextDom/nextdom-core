@@ -50,6 +50,7 @@ class ModalsController
         'plan.configure' => 'planConfigureModal',
         'planHeader.configure' => 'planHeaderConfigureModal',
         'scenario.export' => 'scenarioExportModal',
+        'scenario.log.execution' => 'scenarioLogExecutionModal',
         'scenario.summary' => 'scenarioSummaryModal',
         'welcome' => 'welcomeModal'
     ];
@@ -367,6 +368,34 @@ class ModalsController
         $pageContent['scenarioExportData'] = $scenario->export();
 
         $render->show('/modals/scenario.export.html.twig', $pageContent);
+    }
+
+    /**
+     * Render scenario log execution modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function scenarioLogExecutionModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $scenarioId = Utils::init('scenario_id');
+        $scenario = ScenarioManager::byId($scenarioId);
+        if (!is_object($scenario)) {
+            throw new CoreException(__('Aucun scénario ne correspondant à : ') . $scenarioId);
+        }
+        Utils::sendVarToJs('scenarioLog_scenario_id', $scenarioId);
+
+        $pageContent = [];
+        $pageContent['scenarioId'] = $scenarioId;
+        $pageContent['scenarioHumanName'] = $scenario->getHumanName();
+        $render->show('/modals/scenario.log.execution.html.twig', $pageContent);
     }
 
     /**
