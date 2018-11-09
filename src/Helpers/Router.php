@@ -98,6 +98,7 @@ class Router
                 'language',
                 'nextdom::firstUse',
                 'nextdom::Welcome',
+                'nextdom::Notify',
                 'widget::step::width',
                 'widget::step::height',
                 'widget::margin',
