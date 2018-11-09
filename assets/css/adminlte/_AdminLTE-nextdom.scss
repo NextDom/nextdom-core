@@ -683,11 +683,6 @@ input[type="checkbox"] {
 .clock {
   height: 50px;
 }
-@media (max-width: 600px) {
-  .clock {
-    display: none !important;
-  }
-}
 
 .clocktime {
   font-size: 15px;
