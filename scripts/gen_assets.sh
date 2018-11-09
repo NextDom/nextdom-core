@@ -36,16 +36,16 @@ function gen_css {
 	sass assets/css/Market/market.scss public/css/market.css $COMPRESS
 
 	# Remplacement des chemins
-#	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-#g public/css/nextdom.css
+#	sed -i s#url\(\"Roboto-#url\(\"/assets/3rdparty/roboto/Roboto-#g public/css/nextdom.css
 #	sed -i s#\.\./fonts/glyphicons-#/vendor/twitter/bootstrap/fonts/glyphicons-#g public/css/nextdom.css
 	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
-#	sed -i 's/[\"]32px\.png/"\/3rdparty\/jquery\.tree\/themes\/default\/32px.png/g' public/css/nextdom.css
-#	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.css
+#	sed -i 's/[\"]32px\.png/"\/assets/3rdparty\/jquery\.tree\/themes\/default\/32px.png/g' public/css/nextdom.css
+#	sed -i 's/[\"]throbber\.gif/"\/assets/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.css
 
-#	sed -i s#url\(\"Roboto-#url\(\"/3rdparty/roboto/Roboto-# public/css/nextdom.mob.css
+#	sed -i s#url\(\"Roboto-#url\(\"/assets/3rdparty/roboto/Roboto-# public/css/nextdom.mob.css
 	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
-#	sed -i 's/[\"]32px\.png/\/3rdparty\/jquery\.tree\/themes\/default\/32.png/g' public/css/nextdom.mob.css
-#	sed -i 's/[\"]throbber\.gif/"\/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.mob.css
+#	sed -i 's/[\"]32px\.png/\/assets/3rdparty\/jquery\.tree\/themes\/default\/32.png/g' public/css/nextdom.mob.css
+#	sed -i 's/[\"]throbber\.gif/"\/assets/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.mob.css
 }
 
 function gen_links {
@@ -55,7 +55,7 @@ ln -s ${root}/../vendor/node_modules/codemirror/ ${root}/../3rdparty/
 
 function gen_js {
 	echo " >>> Generation du JS"
-    cat 3rdparty/jquery.utils/jquery.utils.js \
+    cat assets/3rdparty/jquery.utils/jquery.utils.js \
         vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
         vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
         vendor/node_modules/izitoast/dist/js/iziToast.min.js \
@@ -94,7 +94,7 @@ function gen_js {
         vendor/node_modules/highcharts/modules/solid-gauge.js \
         vendor/node_modules/highcharts/modules/exporting.js \
         vendor/node_modules/highcharts/modules/export-data.js \
-        3rdparty/jquery.at.caret/jquery.at.caret.min.js \
+        assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js \
         vendor/node_modules/jwerty/jwerty.js \
         vendor/node_modules/packery/dist/packery.pkgd.js \
         vendor/node_modules/jquery-lazyload/jquery.lazyload.js \
@@ -109,8 +109,8 @@ function gen_js {
         vendor/node_modules/jstree/dist/jstree.js \
         vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
         vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js \
-        3rdparty/jquery.multi-column-select/multi-column-select.js \
-        3rdparty/jquery.sew/jquery.sew.min.js \
+        assets/3rdparty/jquery.multi-column-select/multi-column-select.js \
+        assets/3rdparty/jquery.sew/jquery.sew.min.js \
         vendor/node_modules/jquery-cron/dist/jquery-cron.js \
         vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js \
         vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \

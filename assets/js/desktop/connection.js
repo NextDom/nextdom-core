@@ -67,6 +67,8 @@ $('#in_twoFactorCode').keypress(function(e) {
 });
 
 function tryLogin() {
+    $('.login-box').removeClass('animationZoomIn');
+    $('.login-box').removeClass('animationShake');
     nextdom.user.login({
         username: $('#in_login_username').val(),
         password: $('#in_login_password').val(),

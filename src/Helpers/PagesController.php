@@ -171,7 +171,7 @@ class PagesController
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/dashboard_events.js';
         // A remettre une fois mise sous forme de thème//
         $pageContent['JS_POOL'][] = '/vendor/node_modules/isotope-layout/dist/isotope.pkgd.min.js';
-        $pageContent['JS_POOL'][] = '/3rdparty/jquery.multi-column-select/multi-column-select.js';
+        $pageContent['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/dashboard.html.twig', $pageContent);
@@ -211,8 +211,8 @@ class PagesController
         $pageContent['scenarioAllObjects'] = JeeObjectManager::all();
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/scenario.js';
-        $pageContent['JS_END_POOL'][] = '/3rdparty/jquery.sew/jquery.caretposition.js';
-        $pageContent['JS_END_POOL'][] = '/3rdparty/jquery.sew/jquery.sew.min.js';
+        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/jquery.sew/jquery.caretposition.js';
+        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/jquery.sew/jquery.sew.min.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
 
@@ -1087,8 +1087,8 @@ class PagesController
         $pageContent['historyPluginsList'] = PluginManager::listPlugin();
         $pageContent['historyEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
         $pageContent['historyObjectsList'] = JeeObjectManager::all();
-        $pageContent['JS_POOL'][] = '/3rdparty/visjs/vis.min.js';
-        $pageContent['CSS_POOL'][] = '/3rdparty/visjs/vis.min.css';
+        $pageContent['JS_POOL'][] = '/assets/3rdparty/visjs/vis.min.js';
+        $pageContent['CSS_POOL'][] = '/assets/3rdparty/visjs/vis.min.css';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/diagnostic/history.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
@@ -1976,14 +1976,14 @@ class PagesController
         $pageContent['plan3dHeader'] = \plan3dHeader::all();
         $pageContent['plan3dFullScreen'] = Utils::init('fullscreen') == 1;
 
-        $pageContent['JS_END_POOL'][] = '/3rdparty/three.js/three.min.js';
-        $pageContent['JS_END_POOL'][] = '/3rdparty/three.js/loaders/LoaderSupport.js';
-        $pageContent['JS_END_POOL'][] = '/3rdparty/three.js/loaders/OBJLoader.js';
-        $pageContent['JS_END_POOL'][] = '/3rdparty/three.js/loaders/MTLLoader.js';
-        $pageContent['JS_END_POOL'][] = '/3rdparty/three.js/controls/TrackballControls.js';
-        $pageContent['JS_END_POOL'][] = '/3rdparty/three.js/controls/OrbitControls.js';
-        $pageContent['JS_END_POOL'][] = '/3rdparty/three.js/renderers/Projector.js';
-        $pageContent['JS_END_POOL'][] = '/3rdparty/three.js/objects/Sky.js';
+        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/three.js/three.min.js';
+        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/three.js/loaders/LoaderSupport.js';
+        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/three.js/loaders/OBJLoader.js';
+        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/three.js/loaders/MTLLoader.js';
+        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/three.js/controls/TrackballControls.js';
+        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/three.js/controls/OrbitControls.js';
+        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/three.js/renderers/Projector.js';
+        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/three.js/objects/Sky.js';
         $pageContent['JS_END_POOL'][] = '/core/js/plan3d.class.js';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/plan3d.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';

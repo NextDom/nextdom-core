@@ -63,8 +63,8 @@ $matches="";
 $css="";
 $height=0;
 $icon="";
-if (is_dir('3rdparty/font-awesome/css/') && file_exists('3rdparty/font-awesome/css/font-awesome.css')) {
-    $css = file_get_contents('3rdparty/font-awesome/css/font-awesome.css');
+if (is_dir('/vendor/node_modules/font-awesome/css/') && file_exists('/vendor/node_modules/font-awesome/css/font-awesome.css')) {
+    $css = file_get_contents('/vendor/node_modules/font-awesome/css/font-awesome.css');
     preg_match_all("/\.fa" . "-(.*?):/", $css, $matches, PREG_SET_ORDER);
     $height = (ceil(count($matches) / 14) * 40) + 80;
     echo '<div><legend>{{font-awesome}}</legend>';
