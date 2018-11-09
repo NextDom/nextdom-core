@@ -1234,7 +1234,7 @@ function addSubElement(_subElement, _pColor) {
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" title="{{Décocher pour désactiver l\'élément}}"/>';
     }
     retour += '     <span class="scenario-title">{{A}}</span>';
-    retour += '     <span class="scenario-unity-line">(Hmm)</span>';
+    retour += '     <span class="scenario-unity-line">{{(Hmm)}}</span>';
     retour += '  </div>';
     retour += '  <div class="expressions scenario-condition">';
     var expression = {type: 'condition'};
@@ -1305,16 +1305,7 @@ function addSubElement(_subElement, _pColor) {
     }
     retour += addExpression(expression);
     retour += '  </div>';
-<<<<<<< Updated upstream
     retour += '  <div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
-=======
-<<<<<<< Updated upstream
-    retour += '  <div style="display:table-cell; width: 15px; vertical-align: top;"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
->>>>>>> Stashed changes
-
-=======
-    retour += '  <div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
->>>>>>> Stashed changes
     break;
 
     case 'action' :
