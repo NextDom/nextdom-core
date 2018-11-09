@@ -1,0 +1,169 @@
+/* This file is part of NextDom Software.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom Software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+ /* Labels */
+.main-header .navbar .nav > li > a > .label {
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-align: center;
+    font-size: 14px;
+    padding: 3px 3px;
+    line-height: .9;
+    z-index: -1;
+}
+
+.label {
+    display: inline-block;
+}
+
+.label-config {
+    padding: 9px 10px 10px;
+    font-size: 100%;
+}
+
+.label-value {
+    padding: 8px 10px 10px 12px;
+    font: {
+        size: 100%;
+        weight: 400;
+    }
+    border: 1px solid;
+    border-radius: 2px;
+    margin-left: -2px;
+}
+
+.label-unity, .label-unity-big {
+    font: {
+        size: 100%;
+        weight: 500;
+    }
+    line-height: 3rem;
+}
+
+@media (max-width: 767px) {
+    .label-unity-big {
+        margin-left: 15px;
+    }
+}
+
+.label-badge {
+    position: absolute;
+    top: 10px;
+    right: 0;
+    width: 34px;
+    height: 34px;
+    text-align: center;
+}
+
+.legend-title {
+    font-size: 15px;
+    padding: 5px 8px;
+    margin-bottom: 15px;
+    background-color: whitesmoke;
+}
+
+.legend-title-alone {
+    font-size: 15px;
+    padding: 5px 8px;
+    margin-bottom: 15px;
+    background-color: white;
+    border: 1px solid lightgrey;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.legend-section {
+    margin-top: 50px;
+}
+
+.label-list {
+    font-size: 95%;
+    border: 1px solid;
+    border-radius: 2px;
+    margin: 4px 0;
+    padding: 19px;
+}
+
+.nav>.label-log>a {
+    padding: 10px 10px;
+}
+
+.label-log {
+    font-size: 95%;
+    border: 1px solid;
+    border-radius: 2px;
+    margin: 4px 0;
+}
+
+@media (max-width: 767px) {
+    .legend-title {
+        text-align: center;
+    }
+}
+
+@media (max-width: 991px) {
+    .form-horizontal .control-label-big {
+        margin-bottom: 5px;
+        text-align: left;
+    }
+}
+
+.label-icon {
+    padding: 6px 10px 8px 9px;
+    font-size: 100%;
+    border: 1px solid;
+    border-radius: 2px;
+    margin: {
+        left: -2px;
+        top: 2px;
+        bottom: 2px;
+    }
+    & >i {
+        vertical-align: middle;
+    }
+}
+
+.label-check {
+    font-weight: 400;
+}
+
+.label-sticker {
+    margin: {
+        left: 15px;
+        right: 15px;
+    }
+    font-size: 100%;
+}
+
+.label-sticker-big {
+    font-size: 100%;
+    padding: {
+        top: 10px;
+        bottom: 10px;
+    }
+    margin: {
+        left: 15px;
+        right: 15px;
+    }
+}
+.label-hash {
+    word-break: break-all;
+    white-space: normal;
+}
+
