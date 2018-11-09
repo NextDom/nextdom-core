@@ -55,8 +55,6 @@
   }
 }
 
- 
-
 .scenario-widget{
   background-color: $gray;
   display: inline-block;
@@ -68,3 +66,118 @@
   }
 }
 
+.scenario-group {
+    padding: 5px;
+}
+.scenario-sub-group {
+    padding: 5px 5px 0px 0px;
+}
+.scenario-group-right {
+    padding: 5px 10px 5px 5px;
+}
+.scenario-action-bloc {
+    vertical-align: top;
+    display: table-cell;
+    padding: 0px 10px 5px 5px;
+    width: 110px;
+}
+.scenario-action {
+    padding: 0px 0px 0px 6px;
+}
+.scenario-si {
+    width: 105px;
+    padding-left: 5px;
+    display: table-cell;
+}
+.scenario-si-bloc {
+    padding: 0px 0px 5px 0px;
+}
+.scenario-condition {
+    padding: 0px;
+    display: table-cell;
+    vertical-align: top;
+}
+.scenario-alors {
+    display: table-cell;
+    width: 110px;
+    vertical-align: top;
+    padding: 5px;
+}
+.scenario-sinon {
+    display: table-cell;
+    width: 110px;
+    vertical-align: top;
+    padding: 5px;
+}
+.scenario-for {
+    width: 105px;
+    padding-left: 5px;
+    display: table-cell;
+}
+.scenario-in {
+    width: 105px;
+    padding-left: 5px;
+    display: table-cell;
+}
+.scenario-at {
+    width: 105px;
+    padding-left: 5px;
+    display: table-cell;
+}
+.scenario-code {
+    width: 110px;
+    padding-left: 5px;
+    display: table-cell;
+    vertical-align: top;
+}
+.scenario-comment {
+    width: 25px;
+    padding-left: 5px;
+    display: table-cell;
+    vertical-align: top;
+}
+.scenario-faire {
+    display: table-cell;
+    width: 110px;
+    vertical-align: top;
+    padding: 5px;
+}
+.scenario-title {
+    font-size: 20px;
+    color: $white;
+    vertical-align: middle;
+}
+.scenario-subtitle {
+    vertical-align: top;
+    display: table-cell;
+    padding-left: 5px;
+    padding-right: 0px;
+}
+.scenario-delete {
+    vertical-align: top;
+    display: table-cell;
+    width: 15px;
+}
+.scenario-expand {
+    margin-right: 5px;
+    width: 23px;
+}
+.scenario-text {
+    min-height: 30px;
+}
+.scenario-unity {
+    float: right;
+    font-size: 11px;
+    padding: 0px 10px 0px 0px;
+}
+.scenario-unity-line {
+    float: right;
+    font-size: 11px;
+    padding: 13px 2px 0px 0px;
+}
+.scenario-btn-repeat {
+    margin-left: 8px;
+    margin-top: 3px;
+    width: 30px;
+    padding-left: 8px;
+}
