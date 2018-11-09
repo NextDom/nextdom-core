@@ -97,10 +97,9 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     display: inline;
     position: inherit;
 }
-
 @media (max-width: 600px) {
   .objectSummaryGlobalHeader {
-    display: none;
+    font-size: small;
   }
 }
 
@@ -680,6 +679,11 @@ input[type="checkbox"] {
 
 .clock {
   height: 50px;
+}
+@media (max-width: 600px) {
+  .clock {
+    display: none;
+  }
 }
 
 .clocktime {
