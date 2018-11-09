@@ -67,10 +67,10 @@
                     </li>
                 {% endif %}
                 <li>
-                    {% if nextdom_Notify == 1 %}
-                    <a><span class="fas fa-bell-slash cursor" onclick="switchNotify(0);"></span></a>
+                    {% NOTIFY == 1 %}
+                    <a><span class="fas fa-bell cursor" onclick="switchNotify(0);"></span></a>
                     {% else %}
-                     <a><span class="fas fa-bell cursor" onclick="switchNotify(1);"></span></a>
+                     <a><span class="fas fa-bell-slash cursor" onclick="switchNotify(1);"></span></a>
                     {% endif %}
 
                 </li>

@@ -559,7 +559,7 @@ function switchNotify(etat) {
     if (etat){
         sleep(10000);
         nextdom.config.save({
-            configuration: {'nextdom::Welcome': 1},
+            configuration: {'nextdom::Notify': 1},
             error: function (error) {
                 notify("Core", error.message, 'error');
             },
@@ -570,7 +570,7 @@ function switchNotify(etat) {
     } else {
         notify("Core", 'Notification désactivée', 'success');
         nextdom.config.save({
-            configuration: {'nextdom::Welcome': 0},
+            configuration: {'nextdom::Notify': 0},
             error: function (error) {
                 notify("Core", error.message, 'error');
             },
