@@ -682,7 +682,7 @@ input[type="checkbox"] {
 }
 @media (max-width: 600px) {
   .clock {
-    display: none;
+    display: none !important;
   }
 }
 
