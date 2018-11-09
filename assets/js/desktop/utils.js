@@ -271,7 +271,7 @@ $(function () {
 
     $("#md_modal").dialog({
         autoOpen: false,
-        modal: true,
+        modal: false,
         closeText: '',
         height: (jQuery(window).height() - 100),
         width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
@@ -288,7 +288,7 @@ $(function () {
 
     $("#md_modal2").dialog({
         autoOpen: false,
-        modal: true,
+        modal: false,
         closeText: '',
         height: (jQuery(window).height() - 150),
         width: ((jQuery(window).width() - 150) < 1200) ? (jQuery(window).width() - 50) : 1200,
@@ -553,9 +553,12 @@ function refreshUpdateNumber() {
 function switchNotify(etat) {
     if (etat) {
         notify("Core",  'Notification activée', 'success');
-        sleep(10000);
+        $('.notifyIcon').removeClass("fa-bell-slash").addClass("fa-bell");
+        sleep(2000);
     }else{
+        $('.notifyIcon').removeClass("fa-bell").addClass("fa-bell-slash");
         notify("Core",  'Notification desactivée', 'success');
+        sleep(5000);
     }
         nextdom.config.save({
             configuration: {'nextdom::Notify': etat},
@@ -563,7 +566,6 @@ function switchNotify(etat) {
                 notify("Core", error.message, 'error');
             },
             success: function () {
-                window.location.reload();
             }
         });
 }

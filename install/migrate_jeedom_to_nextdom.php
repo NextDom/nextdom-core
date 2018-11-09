@@ -53,7 +53,7 @@ if (isset($argv)) {
 
 try {
     require_once __DIR__ . '/../core/php/core.inc.php';
-    echo "***************Début de la migration de jeedom vers nextdom " . date('Y-m-d H:i:s') . "***************\n";
+    echo "*************** Début de la migration de jeedom vers nextdom " . date('Y-m-d H:i:s') . " ***************\n";
 
     try {
         echo "Sends the start event of the migration...";
