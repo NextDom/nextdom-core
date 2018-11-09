@@ -37,7 +37,7 @@ use NextDom\Helpers\Utils;
 
 /**
  * Inclut un fichier à partir de son type et son nom.
- *
+ * TODO: Doit être revue
  * @param string $_folder Répertoire du fichier
  * @param string $_filename Nom du fichier
  * @param string $_type Type de fichier
@@ -48,7 +48,25 @@ function include_file($_folder, $_filename, $_type, $_plugin = '', $translate = 
 {
     // Aucune particularité pour les 3rdparty
     if ($_folder == '3rdparty') {
-        $_filename .= '.' . $_type;
+        if ($_plugin === '') {
+            //TODO : A améliorer avec une Regex en fonction des utilisations
+            $router3rdParty = [
+                'codemirror/lib/codemirror' => 'vendor/node_modules/codemirror/lib/codemirror',
+                'codemirror/addon/edit/matchbrackets' => 'vendor/node_modules/codemirror/addon/edit/matchbrackets',
+                'codemirror/mode/htmlmixed/htmlmixed' => 'vendor/node_modules/codemirror/mode/htmlmixed/htmlmixed',
+                'codemirror/mode/clike/clike' => 'vendor/node_modules/codemirror/mode/clike/clike',
+                'codemirror/mode/php/php' => 'vendor/node_modules/codemirror/mode/php/php',
+                'codemirror/mode/shell/shell' => 'vendor/node_modules/codemirror/mode/shell/shell',
+                'codemirror/mode/python/python' => 'vendor/node_modules/codemirror/mode/python/python',
+                'codemirror/mode/ruby/ruby' => 'vendor/node_modules/codemirror/mode/ruby/ruby',
+                'codemirror/mode/perl/perl' => 'vendor/node_modules/codemirror/mode/perl/perl'
+            ];
+            $_filename = $router3rdParty[$_filename].'.'.$_type;
+            $_folder = null;
+        }
+        else {
+            $_filename .= '.'.$_type;
+        }
         $type = $_type;
     } else {
         // Tableau de mappage des fichiers
@@ -84,7 +102,12 @@ function include_file($_folder, $_filename, $_type, $_plugin = '', $translate = 
     if ($_folder === 'desktop/js') {
         $_folder = 'public/js/desktop';
     }
-    $path = __DIR__ . '/../../' . $_folder . '/' . $_filename;
+    if ($_folder === null) {
+        $path = __DIR__ . '/../../' . $_filename;
+    }
+    else {
+        $path = __DIR__ . '/../../' . $_folder . '/' . $_filename;
+    }
     if (!file_exists($path)) {
         throw new Exception('Fichier introuvable : ' . $path, 35486);
     }
