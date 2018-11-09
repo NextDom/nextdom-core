@@ -33,8 +33,11 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\UpdateManager;
 
 class ModalsController
 {
@@ -43,10 +46,14 @@ class ModalsController
         'cmd.configure' => 'cmdConfigureModal',
         'dataStore.management' => 'dataStoreManagementModal',
         'expression.test' => 'expressionTestModal',
+        'graph.link' => 'graphLinkModal',
         'log.display' => 'logDisplayModal',
         'plan.configure' => 'planConfigureModal',
         'planHeader.configure' => 'planHeaderConfigureModal',
+        'scenario.export' => 'scenarioExportModal',
+        'scenario.log.execution' => 'scenarioLogExecutionModal',
         'scenario.summary' => 'scenarioSummaryModal',
+        'scenario.template' => 'scenarioTemplateModal',
         'welcome' => 'welcomeModal'
     ];
 
@@ -70,9 +77,6 @@ class ModalsController
      * Render about
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string About modal
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -91,9 +95,6 @@ class ModalsController
      * Render command configuration modal
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Command configuration modal
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -109,7 +110,7 @@ class ModalsController
         $cmdId = Utils::init('cmd_id');
         $cmd = CmdManager::byId($cmdId);
         if (!is_object($cmd)) {
-            throw new \Exception('Commande non trouvé : ' . $cmdId);
+            throw new CoreException('Commande non trouvé : ' . $cmdId);
         }
         $cmdInfo = \nextdom::toHumanReadable(\utils::o2a($cmd));
         foreach (array('dashboard', 'mobile', 'dview', 'mview', 'dplan') as $value) {
@@ -200,9 +201,6 @@ class ModalsController
      * Render data store management modal
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Data store management modal
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -214,8 +212,8 @@ class ModalsController
         Status::initConnectState();
         Status::isConnectedOrFail();
 
-        sendVarToJS('dataStore_type', Utils::init('type'));
-        sendVarToJS('dataStore_link_id', Utils::init('link_id', -1));
+        Utils::sendVarsToJS(['dataStore_type' => Utils::init('type'),
+                             'dataStore_link_id', Utils::init('link_id', -1)]);
 
         $render->show('/modals/dataStore.management.html.twig');
     }
@@ -224,9 +222,6 @@ class ModalsController
      * Render expression test modal
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Expression test modal
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -242,12 +237,41 @@ class ModalsController
     }
 
     /**
+     * Render graph link modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function graphLinkModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $configData = \config::byKeys(
+            ['graphlink::prerender', 'graphlink::render'],
+            'core',
+            [
+                'graphlink::prerender' => 30,
+                'graphlink::render' => 3000
+            ]);
+        Utils::sendVarsToJS([
+            'prerenderGraph' => $configData['graphlink::prerender'],
+            'renderGraph' => $configData['graphlink::render'],
+            'filterTypeGraph' => Utils::init('filter_type'),
+            'filterIdGraph' => Utils::init('filter_id')
+        ]);
+
+        $render->show('/modals/graph.link.html.twig');
+    }
+
+    /**
      * Render log display modal
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Log display modal
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -270,9 +294,6 @@ class ModalsController
      * Render plan configure modal
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Plan configure modal
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -287,7 +308,7 @@ class ModalsController
         $pageContent = [];
         $pageContent['planObject'] = \plan::byId(Utils::init('id'));
         if (!is_object($pageContent['planObject'])) {
-            throw new \Exception('Impossible de trouver le design');
+            throw new CoreException('Impossible de trouver le design');
         }
         $pageContent['planLink'] = $pageContent['planObject']->getLink();
         $pageContent['jeeObjects'] = JeeObjectManager::all();
@@ -302,9 +323,6 @@ class ModalsController
      * Render plan header configure modal
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Plan header configure modal
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -318,21 +336,74 @@ class ModalsController
 
         $planHeader = \planHeader::byId(Utils::init('planHeader_id'));
         if (!is_object($planHeader)) {
-            throw new \Exception('Impossible de trouver le plan');
+            throw new CoreException('Impossible de trouver le plan');
         }
-        sendVarToJS('id', $planHeader->getId());
-        sendVarToJS('planHeader', \utils::o2a($planHeader));
+        Utils::sendVarsToJS(['id' => $planHeader->getId(),
+                             'planHeader' => \utils::o2a($planHeader)]);
 
         $render->show('/modals/planHeader.configure.html.twig');
+    }
+
+    /**
+     * Render scenario export modal
+     *
+     * @param Render $render Render engine
+     *
+     * @return string Scenario export modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function scenarioExportModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+        $scenario = ScenarioManager::byId(init('scenario_id'));
+
+        if (!is_object($scenario)) {
+            throw new CoreException(__('Scénario introuvable'));
+        }
+
+        $pageContent = [];
+        $pageContent['scenarioExportData'] = $scenario->export();
+
+        $render->show('/modals/scenario.export.html.twig', $pageContent);
+    }
+
+    /**
+     * Render scenario log execution modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function scenarioLogExecutionModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $scenarioId = Utils::init('scenario_id');
+        $scenario = ScenarioManager::byId($scenarioId);
+        if (!is_object($scenario)) {
+            throw new CoreException(__('Aucun scénario ne correspondant à : ') . $scenarioId);
+        }
+        Utils::sendVarToJs('scenarioLog_scenario_id', $scenarioId);
+
+        $pageContent = [];
+        $pageContent['scenarioId'] = $scenarioId;
+        $pageContent['scenarioHumanName'] = $scenario->getHumanName();
+        $render->show('/modals/scenario.log.execution.html.twig', $pageContent);
     }
 
     /**
      * Render scenario summary modal
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Scenario summary modal
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -348,12 +419,36 @@ class ModalsController
     }
 
     /**
+     * Render scenario template modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function scenarioTemplateModal(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $scenarioId = Utils::init('scenario_id');
+        $scenario = ScenarioManager::byId($scenarioId);
+        if (!is_object($scenario)) {
+            throw new CoreException(__('Scénario non trouvé : ') . $scenarioId);
+        }
+        Utils::sendVarToJS('scenario_template_id', $scenarioId);
+        $pageContent = [];
+        $pageContent['repoList'] = UpdateManager::listRepo();
+
+        $render->show('/modals/scenario.template.html.twig', $pageContent);
+    }
+
+    /**
      * Render welcome modal
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Welcome modal
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
