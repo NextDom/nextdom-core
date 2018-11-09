@@ -139,6 +139,7 @@ class PrepareView
             'user_isAdmin'       => Status::isConnectAdmin(),
             'user_login'         => $_SESSION['user']->getLogin(),
             'nextdom_Welcome'   => $configs['nextdom::Welcome'],
+            'nextdom_Notify'   => $configs['nextdom::Notify'],
             'widget_width_step'  => $configs['widget::step::width'],
             'widget_height_step' => $configs['widget::step::height'],
             'widget_margin'      => $configs['widget::margin'],

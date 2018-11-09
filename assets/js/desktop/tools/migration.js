@@ -80,6 +80,7 @@ $("#bt_saveMigration").on('click', function (event) {
 $('#pre_migrationInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
 
 $("#bt_migrateNextDom").on('click', function (event) {
+    switchNotify(0);
     var el = $(this);
     bootbox.confirm('{{Etes-vous sûr de vouloir migrer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackupforMigration option:selected').text() + '</b> ? {{Une fois lancée, cette opération ne peut être annulée}}', function (result) {
         if (result) {
@@ -173,6 +174,7 @@ function getNextDomLog(_autoUpdate, _log) {
                 for (var i in data.result.reverse()) {
                     log += data.result[i]+"\n";
                     if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' SUCCESS]') != -1){
+                        switchNotify(1);
                         notify("Info", '{{L\'opération est réussie}}', 'success');
                         if(_log == 'migration'){
                             nextdom.user.refresh();
@@ -180,6 +182,7 @@ function getNextDomLog(_autoUpdate, _log) {
                         _autoUpdate = 0;
                     }
                     if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' ERROR]') != -1){
+                        switchNotify(0);
                         notify("Erreur", '{{L\'opération a échoué}}', 'error');
                         if(_log == 'migration'){
                             nextdom.user.refresh();
@@ -219,4 +222,28 @@ function updateListBackup() {
             $('#sel_restoreBackupforMigration').html(options);
         }
     });
+}
+
+function switchNotify(etat) {
+    if (etat){
+    nextdom.config.save({
+        configuration: {'nextdom::Welcome': 1},
+        error: function (error) {
+            notify("Core", error.message, 'error');
+        },
+        success: function () {
+            notify("Core",  'Notification activée', 'success');
+        }
+    });
+    } else {
+        notify("Core", 'Notification désactivée', 'success');
+        nextdom.config.save({
+            configuration: {'nextdom::Welcome': 0},
+            error: function (error) {
+                notify("Core", error.message, 'error');
+            },
+            success: function () {
+            }
+        });
+    }
 }
