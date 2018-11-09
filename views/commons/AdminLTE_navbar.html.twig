@@ -67,6 +67,14 @@
                     </li>
                 {% endif %}
                 <li>
+                    {% if nextdom_Notify == 1 %}
+                    <a><span class="fas fa-bell-slash cursor" onclick="switchNotify(0);"></span></a>
+                    {% else %}
+                     <a><span class="fas fa-bell cursor" onclick="switchNotify(1);"></span></a>
+                    {% endif %}
+
+                </li>
+                <li>
                     <a><span id="togglefullscreen" class="fa fa-expand cursor" onclick="toggleFullScreen();"></span></a>
                 </li>
             </ul>
