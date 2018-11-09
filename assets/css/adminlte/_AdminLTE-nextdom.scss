@@ -467,6 +467,15 @@ padding-left: 7px;
   background-color: whitesmoke;
 }
 
+.legend-title-alone {
+    font-size: 15px;
+    padding: 5px 8px;
+    margin-bottom: 15px;
+    background-color: white;
+    border: 1px solid lightgrey;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
 .legend-section {
   margin-top: 50px;
 }
@@ -748,8 +757,15 @@ input[type="checkbox"] {
   min-height: 70px;
 }
 
-#listPlugin .box .box-body {
+#listPlugin .box .box-body, 
+#listWidget .box .box-body ,
+#listScript .box .box-body,
+#listOther .box .box-body, {
   min-height: 180px;
+}
+
+#listCore .box .box-body {
+  min-height: 10px;
 }
 
 .panel:hover{

@@ -1222,8 +1222,8 @@ function addSubElement(_subElement, _pColor) {
     retour += addExpression(expression);
     retour += '  </div>';
     retour += '  <div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
-
     break;
+
     case 'at' :
     retour += '  <input class="subElementAttr" data-l1key="subtype" style="display : none;" value="condition"/>';
     retour += '  <div class="scenario-at">';
@@ -1234,7 +1234,7 @@ function addSubElement(_subElement, _pColor) {
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" title="{{Décocher pour désactiver l\'élément}}"/>';
     }
     retour += '     <span class="scenario-title">{{A}}</span>';
-    retour += '     <span class="scenario-unity">(HHmm)</span>';
+    retour += '     <span class="scenario-unity-line">{{(Hmm)}}</span>';
     retour += '  </div>';
     retour += '  <div class="expressions scenario-condition">';
     var expression = {type: 'condition'};
@@ -1245,6 +1245,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '  </div>';
     retour += '  <div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
     break;
+
     case 'do' :
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="action"/>';
     retour += '  <div class="scenario-faire">';
@@ -1305,8 +1306,8 @@ function addSubElement(_subElement, _pColor) {
     retour += addExpression(expression);
     retour += '  </div>';
     retour += '  <div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
-
     break;
+
     case 'action' :
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="action"/>';
     retour += '  <div class="scenario-action-bloc">';
