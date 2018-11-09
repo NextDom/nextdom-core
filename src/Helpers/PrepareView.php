@@ -274,7 +274,6 @@ class PrepareView
         $pageData['IS_ADMIN']                 = Status::isConnectAdmin();
         $pageData['CAN_SUDO']                 = \nextdom::isCapable('sudo');
         $pageData['MENU_NB_MESSAGES']         = \message::nbMessage();
-        $pageData['NEXTDOM_NOTIFY']           = \config::byKeys('nextdom::Notify');
         if ($pageData['IS_ADMIN']) {
             $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
         }
@@ -308,6 +307,7 @@ class PrepareView
         $pageData['PRODUCT_CONNECTION_ICON'] = $configs['product_connection_image'];
         $pageData['AJAX_TOKEN'] = \ajax::getToken();
         $pageData['LANGUAGE'] = $configs['language'];
+        $pageData['NEXTDOM_NOTIFY'] = $configs['nextdom::Notify'];
         $pageData['COLOR1'] = \nextdom::getConfiguration('theme:color1');
         $pageData['COLOR2'] = \nextdom::getConfiguration('theme:color2');
         $pageData['COLOR3'] = \nextdom::getConfiguration('theme:color3');
