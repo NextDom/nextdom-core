@@ -258,16 +258,17 @@ padding-left: 7px;
 }
 .login-box-body,
 .register-box-body {
-  background: #fff;
+  background: $white;
   padding: 20px;
-
   color: #666;
   box-shadow: 0 20px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   border: {
     top: 0;
     radius: 7px;
-    top-left-radius: 0;
-    top-right-radius: 0;
+    top:{
+      left-radius: 0;
+      right-radius: 0;
+    }
   }
 }
 
@@ -438,6 +439,7 @@ padding-left: 7px;
   margin-bottom: 15px;
   background-color: whitesmoke;
 }
+
 .legend-title-alone {
     font-size: 15px;
     padding: 5px 8px;
@@ -708,22 +710,17 @@ input[type="checkbox"] {
 #div_Update-view .box .box-header {
   min-height: 70px;
 }
-#listPlugin .box .box-body {
+
+#listPlugin .box .box-body, 
+#listWidget .box .box-body ,
+#listScript .box .box-body,
+#listOther .box .box-body, {
   min-height: 180px;
 }
-#listWidget .box .box-body {
-  min-height: 180px;
-}
-#listScript .box .box-body {
-  min-height: 180px;
-}
-#listOther .box .box-body {
-  min-height: 180px;
-}
+
 #listCore .box .box-body {
   min-height: 10px;
 }
-
 
 .panel:hover{
   box-shadow: 0 6px 12px 0 rgba(0,0,0,0.15);
@@ -748,9 +745,11 @@ input[type="checkbox"] {
 .ui-widget-content {
   border: none;
 }
+
 .ui-dialog .ui-dialog-title {
   padding: 7px 5px 5px 0px;
 }
+
 .ui-dialog .ui-dialog-titlebar-close {
   opacity: 1;
 }
