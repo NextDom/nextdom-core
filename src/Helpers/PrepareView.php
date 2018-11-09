@@ -274,6 +274,7 @@ class PrepareView
         $pageData['IS_ADMIN']                 = Status::isConnectAdmin();
         $pageData['CAN_SUDO']                 = \nextdom::isCapable('sudo');
         $pageData['MENU_NB_MESSAGES']         = \message::nbMessage();
+        $pageData['NEXTDOM_NOTIFY']           = \config::byKeys('nextdom::Notify');
         if ($pageData['IS_ADMIN']) {
             $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
         }
