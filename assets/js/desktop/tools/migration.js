@@ -223,27 +223,3 @@ function updateListBackup() {
         }
     });
 }
-
-function switchNotify(etat) {
-    if (etat){
-    nextdom.config.save({
-        configuration: {'nextdom::Welcome': 1},
-        error: function (error) {
-            notify("Core", error.message, 'error');
-        },
-        success: function () {
-            notify("Core",  'Notification activée', 'success');
-        }
-    });
-    } else {
-        notify("Core", 'Notification désactivée', 'success');
-        nextdom.config.save({
-            configuration: {'nextdom::Welcome': 0},
-            error: function (error) {
-                notify("Core", error.message, 'error');
-            },
-            success: function () {
-            }
-        });
-    }
-}

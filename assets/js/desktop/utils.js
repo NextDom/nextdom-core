@@ -555,6 +555,31 @@ function refreshUpdateNumber() {
     });
 }
 
+function switchNotify(etat) {
+    if (etat){
+        sleep(10000);
+        nextdom.config.save({
+            configuration: {'nextdom::Welcome': 1},
+            error: function (error) {
+                notify("Core", error.message, 'error');
+            },
+            success: function () {
+                notify("Core",  'Notification activée', 'success');
+            }
+        });
+    } else {
+        notify("Core", 'Notification désactivée', 'success');
+        nextdom.config.save({
+            configuration: {'nextdom::Welcome': 0},
+            error: function (error) {
+                notify("Core", error.message, 'error');
+            },
+            success: function () {
+            }
+        });
+    }
+}
+
 function notify(_title, _text, _class_name) {
     if (typeof nextdom_Notify != 'undefined' && isset(nextdom_Notify) && nextdom_Notify == 1) {
         var _backgroundColor = "";
