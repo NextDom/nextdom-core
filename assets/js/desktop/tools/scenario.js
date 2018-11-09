@@ -1061,12 +1061,12 @@ function addExpression(_expression) {
 
     case 'code' :
     retour += '<div>';
-    retour += '<textarea class="expressionAttr form-control scenario-text" data-l1key="expression">' + init(_expression.expression) + '</textarea>';
+    retour += '<textarea class="expressionAttr scenario-code-text form-control" data-l1key="expression">' + init(_expression.expression) + '</textarea>';
     retour += '</div>';
     break;
 
     case 'comment' :
-    retour += '<textarea class="expressionAttr form-control scenario-text" data-l1key="expression">' + init(_expression.expression) + '</textarea>';
+    retour += '<textarea class="expressionAttr scenario-comment-text form-control" data-l1key="expression">' + init(_expression.expression) + '</textarea>';
     break;
   }
   retour += '</div>';
