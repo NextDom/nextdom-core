@@ -1,0 +1,67 @@
+/* This file is part of NextDom Software.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom Software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+
+input[type="checkbox"] {
+    position: relative !important;
+    top:9px;
+    height: 22px;
+    width: 22px;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    margin: 0 0 0 0;
+}
+
+[type="checkbox"]:not(:checked):before,
+[type="checkbox"]:checked:before {
+    content: '';
+    position: absolute;
+    left:0; top: 0;
+    width: 17px;
+    height: 17px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+}
+
+[type="checkbox"]:not(:checked):after,
+[type="checkbox"]:checked:after {
+    content: '■';
+    position: absolute;
+    top: -9px;
+    left:1px;
+    font-size: 24px;
+    transition: all .2s;
+}
+ 
+[type="checkbox"]:not(:checked):after {
+    opacity: 0; /* coche invisible */
+    transform: scale(0); /* mise à l'échelle à 0 */
+}
+/* unchecked state */
+[type="checkbox"]:checked:after {
+    opacity: 0.9; /* coche opaque */
+    transform: scale(1); /* mise à l'échelle 1:1 */
+}
+
+/* focus frame */
+[type="checkbox"]:focus {
+    outline: none !important;
+}

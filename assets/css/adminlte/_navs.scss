@@ -1,0 +1,56 @@
+@charset "utf-8";
+
+/* This file is part of NextDom Software.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom Software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+
+.navbar-custom-menu > .navbar-nav > li {
+    position: unset;
+}
+
+.main-header .navbar {
+    box-shadow: 2px 0 1px rgba(0, 0, 0, 0.5);
+}
+
+.nav-tabs-custom {
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    & > .tab-content {
+        background: $whitelightgray;
+    }
+}
+
+.nav-tabs a {
+    padding: 10px 10px !important;
+}
+
+.objectSummaryGlobalHeader {
+    font-size: 15px;
+    top: 16px;
+    height: 49px;
+    list-style-type: none;
+    display: inline;
+    position: inherit;
+}
+@media (max-width: 600px) {
+    .objectSummaryGlobalHeader {
+        font-size: small;
+    }
+}
