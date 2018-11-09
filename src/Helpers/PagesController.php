@@ -276,6 +276,7 @@ class PagesController
         }
         $pageContent['administrationCpuLoad'] = round(100 * sys_getloadavg()[0], 2);
         $pageContent['administrationHddLoad'] = round(100 - 100 * disk_free_space(NEXTDOM_ROOT) / disk_total_space(NEXTDOM_ROOT), 2);
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/administration.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/administration.html.twig', $pageContent);

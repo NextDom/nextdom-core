@@ -271,7 +271,7 @@ $(function () {
 
     $("#md_modal").dialog({
         autoOpen: false,
-        modal: false,
+        modal: true,
         closeText: '',
         height: (jQuery(window).height() - 100),
         width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
@@ -288,7 +288,7 @@ $(function () {
 
     $("#md_modal2").dialog({
         autoOpen: false,
-        modal: false,
+        modal: true,
         closeText: '',
         height: (jQuery(window).height() - 150),
         width: ((jQuery(window).width() - 150) < 1200) ? (jQuery(window).width() - 50) : 1200,
@@ -306,11 +306,6 @@ $(function () {
     $('#bt_nextdomAbout,#bt_nextdomAbout2, #bt_nextdomAboutFooter').on('click', function () {
         $('#md_modal').dialog({title: "{{A propos}}"});
         $('#md_modal').load('index.php?v=d&modal=about').dialog('open');
-    });
-
-    $('#bt_welcomeRecall').on('click', function () {
-        $('#md_modal').dialog({title: "{{Bienvenue dans NextDom}}"});
-        $("#md_modal").load('index.php?v=d&modal=welcome').dialog('open');
     });
 
     $('#bt_getHelpPage').on('click',function(){
@@ -556,28 +551,21 @@ function refreshUpdateNumber() {
 }
 
 function switchNotify(etat) {
-    if (etat){
+    if (etat) {
+        notify("Core",  'Notification activée', 'success');
         sleep(10000);
-        nextdom.config.save({
-            configuration: {'nextdom::Notify': 1},
-            error: function (error) {
-                notify("Core", error.message, 'error');
-            },
-            success: function () {
-                notify("Core",  'Notification activée', 'success');
-            }
-        });
-    } else {
-        notify("Core", 'Notification désactivée', 'success');
-        nextdom.config.save({
-            configuration: {'nextdom::Notify': 0},
-            error: function (error) {
-                notify("Core", error.message, 'error');
-            },
-            success: function () {
-            }
-        });
+    }else{
+        notify("Core",  'Notification desactivée', 'success');
     }
+        nextdom.config.save({
+            configuration: {'nextdom::Notify': etat},
+            error: function (error) {
+                notify("Core", error.message, 'error');
+            },
+            success: function () {
+                window.location.reload();
+            }
+        });
 }
 
 function notify(_title, _text, _class_name) {
