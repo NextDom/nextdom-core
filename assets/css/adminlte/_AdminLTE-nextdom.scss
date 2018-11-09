@@ -824,3 +824,8 @@ input[type="checkbox"] {
 .carousel-inner > .item > img, .carousel-inner > .item > a > img {
     margin: auto;
 }
+
+.modal {
+  z-index: 9999;
+}
+
