@@ -19,7 +19,7 @@ sendVarToJs('scenarioLog_scenario_id', init('scenario_id'));
 
 <script>
     nextdom.log.autoupdate({
-        log : 'scenarioLog/scenario'+scenario_id+'.log',
+        log : 'scenarioLog/scenario'+scenarioLog_scenario_id+'.log',
         display : $('#pre_scenariolog'),
         search : $('#in_scenarioLogSearch'),
         control : $('#bt_scenarioLogStopStart'),
