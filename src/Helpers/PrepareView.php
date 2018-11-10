@@ -21,6 +21,7 @@ use NextDom\Helpers\Status;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Helpers\ModalsController;
 use NextDom\Helpers\PagesController;
 
 /**
@@ -514,7 +515,7 @@ class PrepareView
             else {
                 error_log('NEW MODAL');
                 $render = Render::getInstance();
-                \NextDom\Helpers\ModalsController::$modalRoute($render);
+                ModalsController::$modalRoute($render);
             }
         }
     }

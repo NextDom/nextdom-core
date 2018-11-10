@@ -161,8 +161,12 @@ class ModalsController
             });
         }
         global $NEXTDOM_INTERNAL_CONFIG;
-        $pageContent['cmdTypeIsHistorized'] = $NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['visible'];
-        $pageContent['cmdIsHistorized'] = $cmd->getIsHistorized();
+        $pageContent['cmdTypeIsHistorized'] = false;
+        if ($cmd->getType() == 'info' && $NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['visible']) {
+            $pageContent['cmdIsHistorizedCanBeSmooth'] = $NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['canBeSmooth'];
+            $pageContent['cmdTypeIsHistorized'] = true;
+            $pageContent['cmdIsHistorized'] = $cmd->getIsHistorized();
+        }
 
         $pageContent['cmdWidgetCanCustomHtml'] = $cmd->widgetPossibility('custom::htmlCode');
         $pageContent['cmdWidgetCanCustom'] = $cmd->widgetPossibility('custom');
