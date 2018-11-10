@@ -1,0 +1,83 @@
+@charset "utf-8";
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+@keyframes zoomIn {
+    from {transform: scale(0);opacity: 0.3;}
+    to {transform: scale(1);opacity: 1;}
+}
+@keyframes zoomOut {
+    from {transform: scale(1);opacity: 1;}
+    to {transform: scale(0);opacity: 0;}
+}
+@keyframes opacit {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+@keyframes shake {
+  2%, 18% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  4%, 16% {
+    transform: translate3d(2px, 0, 0);
+  }
+  6%, 10%, 14% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  8%, 12% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+.animationZoomIn {
+    -webkit-animation: zoomIn 1s;
+    -moz-animation:    zoomIn 1s;
+    -o-animation:      zoomIn 1s;
+    animation:     zoomIn 1s;
+}
+.animationZoomOut {
+    -webkit-animation: zoomOut 1s;
+    -moz-animation:    zoomOut 1s;
+    -o-animation:      zoomOut 1s;
+    animation:    zoomOut 1s;
+}
+.animationOpacity {
+    -webkit-animation: opacit 1s;
+    -moz-animation:    opacit 1s;
+    -o-animation:      opacit 1s;
+    animation:     opacit 1s;
+}
+.animationShake {
+    -webkit-animation: shake 5s;
+    -moz-animation:    shake 5s;
+    -o-animation:      shake 5s;
+    animation:     shake 5s;
+}
+.animationShakeDelay {
+    -webkit-animation: shake 5s;
+    -moz-animation:    shake 5s;
+    -o-animation:      shake 5s;
+    animation:     shake 5s;
+    animation-delay: 2s;
+}
+.animationLoop {
+    animation-iteration-count: infinite;
+    animation-delay: 1s;
+}

@@ -1,4 +1,20 @@
 <?php
+ /*
+ * This file is part of the NextDom software (https://github.com/NextDom or http://nextdom.github.io).
+ * Copyright (c) 2018 NextDom.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /* This file is part of Jeedom.
  *
@@ -37,14 +53,14 @@ if (isset($argv)) {
 
 try {
     require_once __DIR__ . '/../core/php/core.inc.php';
-    echo "***************Début de la migration de jeedom vers nextdom " . date('Y-m-d H:i:s') . "***************\n";
+    echo "*************** Début de la migration de jeedom vers nextdom " . date('Y-m-d H:i:s') . " ***************\n";
 
     try {
-        echo "Envoie l'événement de début de la migration...";
+        echo "Sends the start event of the migration...";
         nextdom::event('begin_restore', true);
         echo "OK\n";
     } catch (Exception $e) {
-        echo '***ERREUR*** ' . $e->getMessage();
+        echo '***ERROR*** ' . $e->getMessage();
     }
 
     global $CONFIG;
@@ -88,16 +104,16 @@ try {
     }
 
     try {
-        echo "Vérifiez les droits...";
+        echo "Check the rights...";
         nextdom::cleanFileSytemRight();
         echo "OK\n";
     } catch (Exception $e) {
-        echo '***ERREUR*** ' . $e->getMessage();
+        echo '***ERROR*** ' . $e->getMessage();
     }
 
     $nextdom_dir = realpath(__DIR__ . '/../');
 
-    echo "Fichier utilisé pour la restauration : " . $backup . "\n";
+    echo "File used for restoration : " . $backup . "\n";
 
     echo "Backup database access configuration...";
 
@@ -109,7 +125,7 @@ try {
         $e->getMessage();
     }
 
-    echo "Décompression de la sauvegarde...";
+    echo "Unzip the backup...";
     	$excludes = array();
 	$exclude = '';
     foreach ($excludes as $folder) {
@@ -121,13 +137,13 @@ try {
 
     echo "OK\n";
     if (!file_exists("/tmp/nextdombackup/DB_backup.sql")) {
-        throw new Exception('Impossible de trouver le fichier de la base de données de la sauvegarde : DB_backup.sql');
+        throw new \Exception('Unable to find the backup database file : DB_backup.sql');
     } else {
         shell_exec("sed -i -e s/jeedom/nextdom/g /tmp/nextdombackup/DB_backup.sql");
     }
-    echo "Supprimer la table de la sauvegarde";
+    echo "Delete the backup table";
     $tables = DB::Prepare("SHOW TABLES", array(), DB::FETCH_TYPE_ALL);
-    echo "Désactive les contraintes...";
+    echo "Disables constraints...";
     DB::Prepare("SET foreign_key_checks = 0", array(), DB::FETCH_TYPE_ROW);
     echo "OK\n";
     foreach ($tables as $table) {
@@ -138,14 +154,14 @@ try {
         echo "OK\n";
     }
 
-    echo "Restauration de la base de données...";
+    echo "Restoring the database...";
     shell_exec("mysql --host=" . $CONFIG['db']['host'] . " --port=" . $CONFIG['db']['port'] . " --user=" . $CONFIG['db']['username'] . " --password=" . $CONFIG['db']['password'] . " " . $CONFIG['db']['dbname'] . " < /tmp/nextdombackup/DB_backup.sql");
     echo "OK\n";
 
-    echo "Mise a jour SQL...";
+    echo "Update SQL...";
     echo shell_exec('php ' . __DIR__ . '/migrate/migrate.php');
     echo "OK\n";
-    echo "Active les contraintes...";
+    echo "Enables constraints...";
     try {
         DB::Prepare("SET foreign_key_checks = 1", array(), DB::FETCH_TYPE_ROW);
     } catch (Exception $e) {
@@ -157,16 +173,16 @@ try {
         echo 'Can not copy ' . __DIR__ . "/../core/config/common.config.php\n";
     }
     if (!file_exists(__DIR__ . '/../core/config/nextdom.config.php')) {
-        echo "Restauration du fichier de configuration de la base de données...";
+        echo "Restoring the database configuration file...";
         copy('/tmp/nextdombackup/nextdom.config.php', __DIR__ . '/../core/config/common.config.php');
         echo "OK\n";
     }
 
-    echo "Restauration des droits...";
+    echo "Restoration of rights...";
     system('chmod 1777 /tmp -R');
     echo "OK\n";
     
-  	echo "Restauration du cache...";
+  	echo "Restoration of cache...";
   	if (file_exists('/tmp/nextdombackup/var/cache.tar.gz')) {
         system('cd /tmp/nextdom/cache; tar xfz "/tmp/nextdombackup/var/cache.tar.gz"');
     }
@@ -175,7 +191,7 @@ try {
     }
 	echo "OK\n";
 
-	echo "Restauration des plugins...";
+	echo "Restoration of plugins...";
   	system('cp -fr /tmp/nextdombackup/plugins/* ' . $nextdom_dir . '/plugins' );
     foreach (plugin::listPlugin(true) as $plugin) {
         $plugin_id = $plugin->getId();
@@ -185,10 +201,14 @@ try {
             $plugin_id::restore();
             echo "OK\n";
         }
+        echo 'Reinitialization dependencies : ' . $plugin_id . '... \n';
+        $cache = cache::byKey('dependancy' . $plugin->getId());
+        $cache->remove();
+        cache::set('dependancy' . $plugin   ->getId(), "nok");
     }
   	echo "OK\n";
 
-    echo "Mise à jour SQL post plugins";
+    echo "Update SQL post plugins";
     shell_exec('php ' . __DIR__ . '/../install/migrate/migrate.php');
     echo "OK\n";
 
@@ -204,7 +224,7 @@ try {
         echo "***ERREUR*** " . $ex->getMessage() . "\n";
     }
 
-    echo "Restauration des droits...";
+    echo "Restoration of rights...";
     shell_exec('chmod 775 -R ' . __DIR__ );
     shell_exec('chown -R www-data:www-data ' . __DIR__ );
     shell_exec('chmod 777 -R /tmp/');
@@ -218,18 +238,18 @@ try {
     }
 
     try {
-        echo "Envoie l'événement de la fin de la sauvegarde...";
+        echo "Sends the event of the end of the backup...";
         nextdom::event('end_migration');
         echo "OK\n";
     } catch (Exception $e) {
         echo '***ERREUR*** ' . $e->getMessage();
     }
-    echo "Temps de la migration : " . (strtotime('now') - $starttime) . "s\n";
-    echo "***************Fin de la restauration de NextDom***************\n";
+    echo "Time of migration : " . (strtotime('now') - $starttime) . "s\n";
+    echo "***************End of the restoration of NextDom***************\n";
     echo "[END MIGRATION SUCCESS]\n";
 } catch (Exception $e) {
-    echo 'Erreur durant la migration : ' . $e->getMessage();
-    echo 'Détails : ' . print_r($e->getTrace(), true);
+    echo 'Error during migration : ' . $e->getMessage();
+    echo 'Details : ' . print_r($e->getTrace(), true);
     echo "[END MIGRATION ERROR]\n";
     nextdom::start();
     throw $e;

@@ -127,25 +127,25 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger" id="bt_scenarioThumbnailDisplay"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
-                <a class="btn btn-success" id="bt_saveScenario"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+                <a class="btn btn-danger btn-action-bar" id="bt_scenarioThumbnailDisplay"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+                <a class="btn btn-success btn-action-bar" id="bt_saveScenario"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-default" id="bt_graphScenario"><i class="fas fa-object-group">&nbsp;&nbsp;</i>{{ 'Liens' }}</a>
-                <a class="btn btn-default" id="bt_copyScenario"><i class="fas fa-copy">&nbsp;&nbsp;</i>{{ 'Dupliquer' }}</a>
-                <a class="btn btn-primary" id="bt_exportScenario"><i class="fas fa fa-share">&nbsp;&nbsp;</i>{{ 'Exporter' }}</a>
-                <a class="btn btn-default" id="bt_templateScenario"><i class="fas fa-cubes">&nbsp;&nbsp;</i>{{ 'Template' }}</a>
-                <a class="btn btn-default" id="bt_logScenario"><i class="far fa-file-alt">&nbsp;&nbsp;</i>{{ 'Log' }}</a>
+                <a class="btn btn-default btn-action-bar" id="bt_graphScenario"><i class="fas fa-object-group">&nbsp;&nbsp;</i>{{ 'Liens' }}</a>
+                <a class="btn btn-default btn-action-bar" id="bt_copyScenario"><i class="fas fa-copy">&nbsp;&nbsp;</i>{{ 'Dupliquer' }}</a>
+                <a class="btn btn-primary btn-action-bar" id="bt_exportScenario"><i class="fas fa fa-share">&nbsp;&nbsp;</i>{{ 'Exporter' }}</a>
+                <a class="btn btn-default btn-action-bar" id="bt_templateScenario"><i class="fas fa-cubes">&nbsp;&nbsp;</i>{{ 'Template' }}</a>
+                <a class="btn btn-default btn-action-bar" id="bt_logScenario"><i class="far fa-file-alt">&nbsp;&nbsp;</i>{{ 'Log' }}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-danger pull-right" id="bt_stopScenario"><i class="fas fa-stop">&nbsp;&nbsp;</i>{{ 'Arrêter' }}</a>
-                <a class="btn btn-warning pull-right" id="bt_testScenario2" title='{{ 'Veuillez sauvegarder avant de tester. Ceci peut ne pas aboutir.' }}'><i class="fas fa-gamepad">&nbsp;&nbsp;</i>{{ 'Exécuter' }}</a>
-                <a class="btn btn-danger pull-right" id="bt_delScenario2"><i class="fas fa-minus-circle">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                <a class="btn btn-danger btn-action-bar pull-right" id="bt_stopScenario" style="display:none;"><i class="fas fa-stop">&nbsp;&nbsp;</i>{{ 'Arrêter' }}</a>
+                <a class="btn btn-warning btn-action-bar pull-right" id="bt_testScenario2" title='{{ 'Veuillez sauvegarder avant de tester. Ceci peut ne pas aboutir.' }}'><i class="fas fa-gamepad">&nbsp;&nbsp;</i>{{ 'Exécuter' }}</a>
+                <a class="btn btn-danger btn-action-bar pull-right" id="bt_delScenario2"><i class="fas fa-minus-circle">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-warning pull-right bt_showExpressionTest"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Testeur d\'Expression' }}</a>
-                <a class="btn btn-primary pull-right" id="bt_displayScenarioVariable"><i class="fas fa-eye">&nbsp;&nbsp;</i> {{ 'Variables' }}</a>
-                <a class="btn btn-success pull-right bt_addScenarioElement"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter bloc' }}</a>
+                <a class="btn btn-warning btn-action-bar pull-right bt_showExpressionTest"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Testeur d\'Expression' }}</a>
+                <a class="btn btn-primary btn-action-bar pull-right" id="bt_displayScenarioVariable"><i class="fas fa-eye">&nbsp;&nbsp;</i> {{ 'Variables' }}</a>
+                <a class="btn btn-success btn-action-bar pull-right bt_addScenarioElement"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter bloc' }}</a>
             </div>
         </div>
     </section>
@@ -153,13 +153,13 @@
     <section class="content">
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right" role="tablist">
-                <h4 id="span_ongoing" class="label pull-right label-sticker"></h4>
                 <li role="presentation" class="active">
                     <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cog">&nbsp;&nbsp;</i>{{ 'Paramètres' }}</a>
                 </li>
                 <li role="presentation">
                     <a id="bt_scenarioTab" href="#scenariotab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-microchip">&nbsp;&nbsp;</i>{{ 'Programmation' }}</a>
                 </li>
+                <h4 id="span_ongoing" class="label pull-right label-sticker"></h4>
                 <li class="header pull-left"><i class="fas fa-film">&nbsp;&nbsp;</i>{{ 'Scénarios' }} (ID : <span class="scenarioAttr" data-l1key="id"></span>)</li>
             </ul>
             <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
@@ -193,15 +193,16 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-xs-5 control-label"></label>
-                                        <label>
-                                            {{ 'Actif' }} <input type="checkbox" class="scenarioAttr"
+                                        <label class="col-xs-5 control-label">{{ 'Actif' }}</label>
+                                        <div class="col-xs-1">
+                                            <input type="checkbox" class="scenarioAttr"
                                                                  data-l1key="isActive">
-                                        </label>
-                                        <label>
-                                            {{ 'Visible' }} <input type="checkbox" class="scenarioAttr"
+                                        </div>
+                                        <label class="col-xs-4 control-label">{{ 'Visible' }}</label>
+                                        <div class="col-xs-1">
+                                            <input type="checkbox" class="scenarioAttr"
                                                                    data-l1key="isVisible">
-                                        </label>
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-xs-5 control-label">{{ 'Objet parent' }}</label>
@@ -268,14 +269,14 @@
                                     <label class="col-sm-3 col-xs-6 control-label">{{ 'Mode du scénario' }}</label>
                                     <div class="col-sm-9 col-xs-6">
                                         <div class="input-group">
-                                            <select class="form-control scenarioAttr input-sm" data-l1key="mode">
+                                            <select class="form-control scenarioAttr" data-l1key="mode">
                                                 <option value="provoke">{{ 'Provoqué' }}</option>
                                                 <option value="schedule">{{ 'Programmé' }}</option>
                                                 <option value="all">{{ 'Les deux' }}</option>
                                             </select>
                                             <span class="input-group-btn">
-                                                    <a class="btn btn-default btn-sm" id="bt_addTrigger"><i class="fas fa-plus-square"></i> {{ 'Déclencheur' }}</a>
-                                                    <a class="btn btn-default btn-sm" id="bt_addSchedule"><i class="fas fa-plus-square"></i> {{ 'Programmation' }}</a>
+                                                    <a class="btn btn-default" id="bt_addTrigger"><i class="fas fa-plus-square">&nbsp;&nbsp;</i>{{ 'Déclencheur' }}</a>
+                                                    <a class="btn btn-default" id="bt_addSchedule"><i class="fas fa-plus-square">&nbsp;&nbsp;</i>{{ 'Programmation' }}</a>
                                                 </span>
                                         </div>
                                     </div>
@@ -321,10 +322,8 @@
                     </center>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-danger" data-dismiss="modal"><i
-                                class="fas fa-minus-circle"></i> {{ 'Annuler' }}</a>
-                    <a class="btn btn-success" id="bt_copyScenarioSave"><i
-                                class="far fa-check-circle"></i> {{ 'Enregistrer' }}</a>
+                    <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle">&nbsp;&nbsp;</i>{{ 'Annuler' }}</a>
+                    <a class="btn btn-success" id="bt_copyScenarioSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Enregistrer' }}</a>
                 </div>
             </div>
         </div>
@@ -385,10 +384,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-danger" data-dismiss="modal"><i
-                                class="fas fa-minus-circle"></i> {{ 'Annuler' }}</a>
-                    <a class="btn btn-success" id="bt_addElementSave"><i
-                                class="far fa-check-circle"></i> {{ 'Enregistrer' }}</a>
+                    <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle">&nbsp;&nbsp;</i>{{ 'Annuler' }}</a>
+                    <a class="btn btn-success" id="bt_addElementSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Enregistrer' }}</a>
                 </div>
             </div>
         </div>

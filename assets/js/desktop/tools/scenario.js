@@ -38,7 +38,7 @@
  var url = document.location.toString();
  if (url.match('#')) {
   $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-} 
+}
 $('.nav-tabs a').on('shown.bs.tab', function (e) {
   window.location.hash = e.target.hash;
   tab = e.target.hash;
@@ -328,8 +328,8 @@ $('#in_addElementType').off('change').on('change',function(){
 
 $('#bt_scenarioTab').on('click',function(){
 
-  setTimeout(function(){ 
-    setEditor(); 
+  setTimeout(function(){
+    setEditor();
     taAutosize();
   }, 50);
 });
@@ -394,7 +394,7 @@ $('#div_pageContainer').off('click','.bt_addSinon').on( 'click','.bt_addSinon', 
      alert("{{Le bloc Sinon ne peut être supprimé s'il contient des éléments}}");
    }
    else
-   {  
+   {
      $(this).children("i").removeClass('fa-chevron-down').addClass('fa-chevron-right');
      $(this).closest('.subElement').next().css('display','none');
    }
@@ -414,7 +414,7 @@ $('#div_pageContainer').off('click','.bt_addSinon').on( 'click','.bt_addSinon', 
      alert("{{Le bloc Sinon ne peut être supprimé s'il contient des éléments}}");
    }
    else
-   {  
+   {
      $(this).children("i").removeClass('fa-chevron-down').addClass('fa-chevron-right');
      $(this).closest('.subElement').next().css('display','none');
    }
@@ -787,7 +787,7 @@ function setEditor() {
         });
       }, 1);
     }
-    
+
   });
 }
 
@@ -992,7 +992,7 @@ function addExpression(_expression) {
   if (_expression.type == 'condition') {
     sortable = 'noSortable';
   }
-  var retour = '<div class="expression ' + sortable + ' col-xs-12" style="margin-bottom: 0px; margin-right: 0px;margin-left: 0px;padding-right: 0px; padding-left: 0px">';
+  var retour = '<div class="expression scenario-group ' + sortable + ' col-xs-12">';
   retour += '<input class="expressionAttr" data-l1key="id" style="display : none;" value="' + init(_expression.id) + '"/>';
   retour += '<input class="expressionAttr" data-l1key="scenarioSubElement_id" style="display : none;" value="' + init(_expression.scenarioSubElement_id) + '"/>';
   retour += '<input class="expressionAttr" data-l1key="type" style="display : none;" value="' + init(_expression.type) + '"/>';
@@ -1001,16 +1001,16 @@ function addExpression(_expression) {
     if (isset(_expression.expression)) {
       _expression.expression = _expression.expression.replace(/"/g, '&quot;');
     }
-    retour += '<div class="input-group input-group-sm" style="width: 100%; padding-top: 5px;">';
-    retour += '    <textarea class="expressionAttr form-control" data-l1key="expression" rows="1" style="resize:vertical;">' + init(_expression.expression) + '</textarea>';
+    retour += '<div class="input-group input-group-sm">';
+    retour += '    <textarea class="expressionAttr form-control scenario-text" data-l1key="expression" rows="1" style="resize:vertical;">' + init(_expression.expression) + '</textarea>';
     retour += '    <span class="input-group-btn">';
     retour += '       <button type="button" class="btn btn-default cursor bt_selectCmdExpression tooltips"  title="{{Rechercher une commande}}"><i class="fas fa-list-alt"></i></button>';
     retour += '       <button type="button" class="btn btn-default cursor bt_selectScenarioExpression tooltips"  title="{{Rechercher un scenario}}"><i class="fas fa-history"></i></button>';
     retour += '       <button type="button" class="btn btn-default cursor bt_selectEqLogicExpression tooltips"  title="{{Rechercher d\'un équipement}}"><i class="fas fa-cube"></i></button>';
     retour += '    </span>';
     retour += '</div>';
-
     break;
+
     case 'element' :
     retour += '<div class="col-xs-12" style="padding-right: 0px; padding-left: 0px;">';
     if (isset(_expression.element) && isset(_expression.element.html)) {
@@ -1024,22 +1024,22 @@ function addExpression(_expression) {
     }
     retour += '</div>';
     break;
+
     case 'action' :
-    retour += '<div class="col-xs-1" style="margin-top: 4px">';
-    retour += '<i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right: 5px; "></i>';
+    retour += '<div class="col-xs-1 scenario-action">';
+    retour += '<i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right: 5px;"></i>';
     if (!isset(_expression.options) || !isset(_expression.options.enable) || _expression.options.enable == 1) {
-      retour += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="enable" checked style="margin-top : 9px;margin-right : 0px;" title="{{Décocher pour désactiver l\'action}}"/>';
+      retour += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'action}}"/>';
     } else {
-      retour += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="enable" style="margin-top : 9px;margin-right : 0px;" title="{{Décocher pour désactiver l\'action}}"/>';
+      retour += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="enable" title="{{Décocher pour désactiver l\'action}}"/>';
     }
     if (!isset(_expression.options) || !isset(_expression.options.background) || _expression.options.background == 0) {
-      retour += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="background" style="margin-top : 9px;margin-right : 0px;" title="{{Cocher pour que la commande s\'exécute en parallèle des autres actions}}"/>';
+      retour += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="background" title="{{Cocher pour que la commande s\'exécute en parallèle des autres actions}}"/>';
     } else {
-      retour += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="background" checked style="margin-top : 9px;margin-right : 0px;" title="{{Cocher pour que la commande s\'exécute en parallèle des autres actions}}"/>';
+      retour += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="background" checked title="{{Cocher pour que la commande s\'exécute en parallèle des autres actions}}"/>';
     }
-
     retour += '</div>';
-    retour += '<div class="col-xs-4" style="margin-top: 4px"><div class="input-group input-group-sm">';
+    retour += '<div class="col-xs-4 scenario-sub-group"><div class="input-group input-group-sm">';
     retour += '<span class="input-group-btn">';
     retour += '<button class="btn btn-default bt_removeExpression" type="button" title="{{Supprimer l\'action}}"><i class="fas fa-minus-circle"></i></button>';
     retour += '</span>';
@@ -1050,7 +1050,7 @@ function addExpression(_expression) {
     retour += '</span>';
     retour += '</div></div>';
     var actionOption_id = uniqId();
-    retour += '<div class="col-xs-7 expressionOptions" style="margin-top: 4px" id="'+actionOption_id+'">';
+    retour += '<div class="col-xs-7 expressionOptions scenario-sub-group" id="'+actionOption_id+'">';
     retour += '</div>';
     actionOptions.push({
       expression : init(_expression.expression, ''),
@@ -1058,13 +1058,15 @@ function addExpression(_expression) {
       id : actionOption_id
     });
     break;
+
     case 'code' :
-    retour += '<div class="col-xs-12">';
-    retour += '<textarea class="expressionAttr form-control" data-l1key="expression">' + init(_expression.expression) + '</textarea>';
+    retour += '<div>';
+    retour += '<textarea class="expressionAttr scenario-code-text form-control" data-l1key="expression">' + init(_expression.expression) + '</textarea>';
     retour += '</div>';
     break;
+
     case 'comment' :
-    retour += '<textarea class="expressionAttr form-control" data-l1key="expression">' + init(_expression.expression) + '</textarea>';
+    retour += '<textarea class="expressionAttr scenario-comment-text form-control" data-l1key="expression">' + init(_expression.expression) + '</textarea>';
     break;
   }
   retour += '</div>';
@@ -1074,10 +1076,10 @@ function addExpression(_expression) {
 $('#div_pageContainer').on('click','.subElementAttr[data-l1key=options][data-l2key=allowRepeatCondition]',function(){
   if($(this).attr('value') == 0){
     $(this).attr('value',1);
-    $(this).html('<span class="fa-stack"><i class="fas fa-refresh fa-stack-1x"></i><i class="fas fa-ban fa-stack-2x text-danger"></i></span>');
+    $(this).html('<i class="fas fa-ban text-danger"></i>');
   }else{
     $(this).attr('value',0);
-    $(this).html('<span class="fa-stack"><i class="fas fa-refresh fa-stack-1x"></span>');
+    $(this).html('<i class="fas fa-refresh">');
   }
 });
 
@@ -1096,62 +1098,56 @@ function addSubElement(_subElement, _pColor) {
   if (_subElement.type == 'else') {
     if (!isset(_subElement.expressions) || _subElement.expressions.length==0) displayElse = 'none';
   }
-  var retour = '<div class="subElement ' + noSortable + '" style="display:' + displayElse + '; width:100%;">';
+  var retour = '<div class="subElement scenario-group ' + noSortable + '" style="display:' + displayElse + '; width:100%;">';
   retour += '<input class="subElementAttr" data-l1key="id" style="display : none;" value="' + init(_subElement.id) + '"/>';
   retour += '<input class="subElementAttr" data-l1key="scenarioElement_id" style="display : none;" value="' + init(_subElement.scenarioElement_id) + '"/>';
   retour += '<input class="subElementAttr" data-l1key="type" style="display : none;" value="' + init(_subElement.type) + '"/>';
   switch (_subElement.type) {
     case 'if' :
     retour += '  <input class="subElementAttr" data-l1key="subtype" style="display : none;" value="condition"/>';
-    retour += '  <div style="display:table-cell; width: 30px;vertical-align: top; padding-top: 5px;">';
-    retour += '     <i class="fas fa-arrows-alt-v pull-left cursor bt_sortable" style="position:relative;top:5px;"></i>';
+    retour += '  <div class="scenario-si">';
+    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px;"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
-      retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="Décocher pour désactiver l\'élément" style="margin-right : 0px;"/>';
+      retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="Décocher pour désactiver l\'élément"/>';
     }else{
-      retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" title="Décocher pour désactiver l\'élément" style="margin-right : 0px;"/>';
+      retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" title="Décocher pour désactiver l\'élément"/>';
     }
-    retour += '  </div>';
-    retour += '  <div style="display:table-cell; width: 50px;vertical-align: top;">';
-    retour += '  <legend style="margin-bottom: 0px; color : white;border : none;">{{SI}}';
-    retour += ' </legend>';
-    retour += '  </div>';
-
-    retour += '  <div style="display:table-cell; width: 35px;vertical-align: top; padding-top: 5px;">';
+    retour += '  <span class="scenario-title">{{SI}}';
+    retour += ' </span>';
     if(!isset(_subElement.options) || !isset(_subElement.options.allowRepeatCondition) || _subElement.options.allowRepeatCondition == 0){
-      retour += '<a style="height : 30px;" class="btn btn-default btn-xs cursor subElementAttr tooltips pull-right" title="{{Autoriser ou non la répétition des actions si l\'évaluation de la condition est la même que la précédente}}" data-l1key="options" data-l2key="allowRepeatCondition" value="0"><span class="fa-stack"><i class="fas fa-refresh fa-stack-1x"></i></span></a>';
+      retour += '<a class="btn btn-default btn-sm cursor subElementAttr tooltips scenario-btn-repeat" title="{{Autoriser ou non la répétition des actions si l\'évaluation de la condition est la même que la précédente}}" data-l1key="options" data-l2key="allowRepeatCondition" value="0"><i class="fas fa-refresh"></i></a>';
     }else{
-      retour += '<a style="height : 30px;" class="btn btn-default btn-xs cursor subElementAttr tooltips pull-right" title="{{Autoriser ou non la répétition des actions si l\'évaluation de la condition est la même que la précédente}}" data-l1key="options" data-l2key="allowRepeatCondition" value="1"><span class="fa-stack"><i class="fas fa-refresh fa-stack-1x"></i><i class="fas fa-ban fa-stack-2x text-danger"></i></span></a>';
+      retour += '<a class="btn btn-default btn-sm cursor subElementAttr tooltips scenario-btn-repeat" title="{{Autoriser ou non la répétition des actions si l\'évaluation de la condition est la même que la précédente}}" data-l1key="options" data-l2key="allowRepeatCondition" value="1"><i class="fas fa-refresh"></i><i class="fas fa-ban text-danger"></i></a>';
     }
     retour += '  </div>';
-    retour += '  <div class="expressions" style="display:table-cell;">';
+    retour += '  <div class="expressions scenario-condition">';
     var expression = {type: 'condition'};
     if (isset(_subElement.expressions) && isset(_subElement.expressions[0])) {
       expression = _subElement.expressions[0];
     }
     retour += addExpression(expression);
     retour += '  </div>';
-    retour += '  <div style="display:table-cell; width: 15px; vertical-align: top;"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
+    retour += '  <div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
 
     break;
     case 'then' :
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="action"/>';
-    retour += '  <div style="display:table-cell; width: 125px;vertical-align: top; padding-left: 15px;">';
-    retour += '     <legend style="margin-bottom: 0px; color : white;border : none;">{{ALORS}}</legend>'; 
-    retour += '       <button class="btn btn-xs btn-default bt_addSinon" type="button" id="addSinon" data-toggle="dropdown" title="{{Afficher/masquer le bloc Sinon}}" aria-haspopup="true" aria-expanded="true">';
-    retour += '         <i class="fas fa-chevron-right"></i>';
-    retour += '       </button>';
+    retour += '  <div class="scenario-alors">';
+    retour += '     <button class="btn btn-xs btn-default bt_addSinon scenario-expand" type="button" id="addSinon" data-toggle="dropdown" title="{{Afficher/masquer le bloc Sinon}}" aria-haspopup="true" aria-expanded="true">';
+    retour += '       <i class="fas fa-chevron-right"></i>';
+    retour += '     </button>';
+    retour += '     <span class="scenario-title">{{ALORS}}</span>';
     retour += '     <div class="dropdown" style="display : inline-block;">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
-    retour += '         <i class="fas fa-plus-circle"></i> {{Ajouter}}';
-    retour += '         <span class="caret"></span>';
+    retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
     retour += '       </button>';
     retour += '       <ul class="dropdown-menu">';
     retour += '         <li><a class="bt_addScenarioElement fromSubElement tootlips" title="{{Permet d\'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (Ex: SI/ALORS….)}}">{{Bloc}}</a></li>';
     retour += '         <li><a class="bt_addAction">{{Action}}</a></li>';
     retour += '       </ul>';
-    retour += '     </div><p> </p>';
+    retour += '     </div>';
     retour += '   </div>';
-    retour += '  <div class="expressions" style="display:table-cell; padding-bottom: 10px; background-color: ' + listColor[_pColor] + ';">';
+    retour += '  <div class="expressions scenario-si-bloc" style="display:table-cell; background-color: ' + listColor[_pColor] + ';">';
     retour += '     <div class="sortable empty" style="height : 30px;"></div>';
     if (isset(_subElement.expressions)) {
       for (var k in _subElement.expressions) {
@@ -1159,25 +1155,23 @@ function addSubElement(_subElement, _pColor) {
       }
     }
     retour += '  </div>';
-    retour += '  <div style="display:table-cell; width: 15px; vertical-align: top;"> </div>';
 
     break;
     case 'else' :
     retour += '<input class="subElementAttr subElementElse" data-l1key="subtype" style="display : none;" value="action"/>';
-    retour += '  <div style="display:table-cell; width: 125px; vertical-align: top; padding-left: 15px;">';
-    retour += '     <legend style="margin-bottom: 0px; color : white;border : none;">{{SINON}}</legend>'; 
+    retour += '  <div class="scenario-sinon">';
+    retour += '     <span class="scenario-title">{{SINON}}</span>';
     retour += '     <div class="dropdown">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
-    retour += '         <i class="fas fa-plus-circle"></i> Ajouter';
-    retour += '         <span class="caret"></span>';
+    retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
     retour += '       </button>';
     retour += '       <ul class="dropdown-menu">';
     retour += '         <li><a class="bt_addScenarioElement fromSubElement tootlips" title="{{Permet d\'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (ex. : SI/ALORS….)}}">{{Bloc}}</a></li>';
     retour += '         <li><a class="bt_addAction">{{Action}}</a></li>';
     retour += '       </ul>';
-    retour += '     </div><p> </p>';
+    retour += '     </div>';
     retour += '   </div>';
-    retour += '  <div class="expressions" style="display:table-cell; padding-bottom: 10px; background-color: ' + listColor[_pColor] + '; border-top :1px solid ' + listColorStrong[_pColor] + '">';
+    retour += '  <div class="expressions scenario-si-bloc" style="display:table-cell; background-color: ' + listColor[_pColor] + '; border-top :1px solid ' + listColorStrong[_pColor] + '">';
     retour += '     <div class="sortable empty" style="height : 30px;"></div>';
     if (isset(_subElement.expressions)) {
       for (var k in _subElement.expressions) {
@@ -1185,92 +1179,88 @@ function addSubElement(_subElement, _pColor) {
       }
     }
     retour += '  </div>';
-    retour += '  <div style="display:table-cell; width: 15px; vertical-align: top;"> </div>';
 
     break;
     case 'for' :
     retour += '  <input class="subElementAttr" data-l1key="subtype" style="display : none;" value="condition"/>';
-    retour += '  <div style="display:table-cell; width: 30px;vertical-align: top; padding-top: 5px;">';
-    retour += '     <i class="fas fa-arrows-alt-v pull-left cursor bt_sortable"></i>';
+    retour += '  <div class="scenario-for">';
+    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
-      retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}" style="margin-right : 0px;"/>';
+      retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}"/>';
     }else{
-      retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" title="{{Décocher pour désactiver l\'élément}}" style="margin-right : 0px;"/>';
+      retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" title="{{Décocher pour désactiver l\'élément}}"/>';
     }
+    retour += '     <span class="scenario-title">{{DE 1 A}}</span>';
     retour += '  </div>';
-    retour += '  <div style="display:table-cell; width: 85px;vertical-align: top;">';
-    retour += '     <legend style="margin-bottom: 0px; color : white;border : none;">{{DE 1 A}}</legend>';
-    retour += '  </div>';
-    retour += '  <div class="expressions" style="display:table-cell; padding-bottom: 10px;">';
+    retour += '  <div class="expressions scenario-condition">';
     var expression = {type: 'condition'};
     if (isset(_subElement.expressions) && isset(_subElement.expressions[0])) {
       expression = _subElement.expressions[0];
     }
     retour += addExpression(expression);
     retour += '  </div>';
-    retour += '  <div style="display:table-cell; width: 15px; vertical-align: top;"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
+    retour += '  <div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
     break;
+
     case 'in' :
     retour += '  <input class="subElementAttr" data-l1key="subtype" style="display : none;" value="condition"/>';
-    retour += '  <div style="display:table-cell; width: 30px;vertical-align: top; padding-top: 5px;">';
-    retour += '     <i class="fas fa-arrows-alt-v pull-left cursor bt_sortable"></i>';
+    retour += '  <div class="scenario-in">';
+    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}" style="margin-right : 0px;"/>';
     }else{
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" title="{{Décocher pour désactiver l\'élément}}" style="margin-right : 0px;"/>';
     }
+    retour += '     <span class="scenario-title">{{DANS}}</span>';
+    retour += '     <span class="scenario-unity">(en min)</span>';
     retour += '  </div>';
-    retour += '  <div style="display:table-cell; width: 120px;vertical-align: top;">';
-    retour += '     <legend style="margin-bottom: 0px; color : white;border : none;">{{DANS (min)}}</legend>';
-    retour += '  </div>';
-    retour += '  <div class="expressions" style="display:table-cell; padding-bottom: 10px;">';
+    retour += '  <div class="expressions scenario-condition">';
     var expression = {type: 'condition'};
     if (isset(_subElement.expressions) && isset(_subElement.expressions[0])) {
       expression = _subElement.expressions[0];
     }
     retour += addExpression(expression);
     retour += '  </div>';
-    retour += '  <div style="display:table-cell; width: 15px; vertical-align: top;"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
-
+    retour += '  <div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
     break;
+
     case 'at' :
     retour += '  <input class="subElementAttr" data-l1key="subtype" style="display : none;" value="condition"/>';
-    retour += '  <div style="display:table-cell; width: 30px;vertical-align: top; padding-top: 5px;">';
-    retour += '     <i class="fas fa-arrows-alt-v pull-left cursor bt_sortable"></i>';
+    retour += '  <div class="scenario-at">';
+    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
-      retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}" style="margin-right : 0px;"/>';
+      retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}"/>';
     }else{
-      retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" title="{{Décocher pour désactiver l\'élément}}" style="margin-right : 0px;"/>';
+      retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" title="{{Décocher pour désactiver l\'élément}}"/>';
     }
+    retour += '     <span class="scenario-title">{{A}}</span>';
+    retour += '     <span class="scenario-unity-line">{{(Hmm)}}</span>';
     retour += '  </div>';
-    retour += '  <div style="display:table-cell; width: 85px;vertical-align: top;">';
-    retour += '     <legend style="margin-bottom: 0px; color : white;border : none;">{{A (Hmm)}}</legend>';
-    retour += '  </div>';
-    retour += '  <div class="expressions" style="display:table-cell; padding-bottom: 10px;">';
+    retour += '  <div class="expressions scenario-condition">';
     var expression = {type: 'condition'};
     if (isset(_subElement.expressions) && isset(_subElement.expressions[0])) {
       expression = _subElement.expressions[0];
     }
     retour += addExpression(expression);
     retour += '  </div>';
-    retour += '  <div style="display:table-cell; width: 15px; vertical-align: top;"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
+    retour += '  <div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
     break;
+
     case 'do' :
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="action"/>';
-    retour += '  <div style="display:table-cell; width: 100px; vertical-align: top; padding-left: 15px;">';
-    retour += '     <legend style="margin-bottom: 0px; color : white;border : none;">{{FAIRE}}</legend>'; 
+    retour += '  <div class="scenario-faire">';
+    retour += '     <span class="scenario-title">{{FAIRE}}</span>';
     retour += '     <div class="dropdown">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
-    retour += '         <i class="fas fa-plus-circle"></i> Ajouter';
-    retour += '         <span class="caret"></span>';
+    retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
     retour += '       </button>';
     retour += '       <ul class="dropdown-menu">';
     retour += '         <li><a class="bt_addScenarioElement fromSubElement tootlips" title="{{Permet d\'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (ex. : SI/ALORS….)}}">{{Bloc}}</a></li>';
     retour += '         <li><a class="bt_addAction">{{Action}}</a></li>';
     retour += '       </ul>';
-    retour += '     </div><p> </p>';
+    retour += '     </div>';
     retour += '   </div>';
-    retour += '  <div class="expressions" style="display:table-cell; padding-bottom: 10px; background-color: ' + listColor[_pColor] + ';">';
+    retour += '  <div class="expressions scenario-condition" style="background-color: ' + listColor[_pColor] + ';">';
     retour += '     <div class="sortable empty" style="height : 30px;"></div>';
     if (isset(_subElement.expressions)) {
       for (var k in _subElement.expressions) {
@@ -1278,23 +1268,20 @@ function addSubElement(_subElement, _pColor) {
       }
     }
     retour += '  </div>';
-    retour += '  <div style="display:table-cell; width: 15px; vertical-align: top;"> </div>';
-
     break;
+
     case 'code' :
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="action"/>';
-    retour += '  <div style="display:table-cell; width: 30px;vertical-align: top; padding-top: 5px;">';
-    retour += '     <i class="fas fa-arrows-alt-v pull-left cursor bt_sortable"></i>';
+    retour += '  <div class="scenario-code">';
+    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
-      retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}" style="margin-right : 0px;"/>';
+      retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}"/>';
     }else{
-      retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" title="{{Décocher pour désactiver l\'élément}}" style="margin-right : 0px;"/>';
+      retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" title="{{Décocher pour désactiver l\'élément}}"/>';
     }
+    retour += '     <span class="scenario-title">{{CODE}}</span>';
     retour += '  </div>';
-    retour += '  <div style="display:table-cell; width: 85px;vertical-align: top;">';
-    retour += '     <legend style="margin-bottom: 0px; color : white;border : none;">{{CODE}}</legend>'; 
-    retour += '  </div>';
-    retour += '  <div class="expressions" style="display:table-cell; padding-bottom: 10px; background-color: ' + listColor[_pColor] + ';">';
+    retour += '  <div class="expressions scenario-condition" style="background-color: ' + listColor[_pColor] + ';">';
     retour += '     <div class="sortable empty" style="height : 30px;"></div>';
     var expression = {type: 'code'};
     if (isset(_subElement.expressions) && isset(_subElement.expressions[0])) {
@@ -1302,14 +1289,15 @@ function addSubElement(_subElement, _pColor) {
     }
     retour += addExpression(expression);
     retour += '  </div>';
-    retour += '  <div style="display:table-cell; width: 15px; "><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
+    retour += '  <div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
     break;
+
     case 'comment' :
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="comment"/>';
-    retour += '  <div style="display:table-cell; width: 15px;vertical-align: top; padding-top: 5px;">';
-    retour += '     <i class="fas fa-arrows-alt-v pull-left cursor bt_sortable"></i>';
+    retour += '  <div class="scenario-comment">';
+    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px"></i>';
     retour += '  </div>';
-    retour += '  <div class="expressions" style="display:table-cell; padding-bottom: 10px; background-color: ' + listColor[_pColor] + ';">';
+    retour += '  <div class="expressions scenario-condition" style="background-color: ' + listColor[_pColor] + ';">';
     retour += '     <div class="sortable empty" style="height : 30px;"></div>';
     var expression = {type: 'comment'};
     if (isset(_subElement.expressions) && isset(_subElement.expressions[0])) {
@@ -1317,33 +1305,30 @@ function addSubElement(_subElement, _pColor) {
     }
     retour += addExpression(expression);
     retour += '  </div>';
-    retour += '  <div style="display:table-cell; width: 15px; vertical-align: top;"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
-
+    retour += '  <div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
     break;
+
     case 'action' :
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="action"/>';
-    retour += '  <div style="display:table-cell; width: 30px;vertical-align: top; padding-top: 5px;">';
-    retour += '     <i class="fas fa-arrows-alt-v pull-left cursor bt_sortable"></i>';
+    retour += '  <div class="scenario-action-bloc">';
+    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right: 5px;"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}" style="margin-right : 0px;"/>';
     }else{
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" title="{{Décocher pour désactiver l\'élément}}" style="margin-right : 0px;"/>';
     }
-    retour += '  </div>';
-    retour += '  <div style="display:table-cell; width: 85px;vertical-align: top;">';
-    retour += '     <legend style="margin-bottom: 0px; color : white;border : none;">{{ACTION}}</legend><br/>';
+    retour += '     <span class="scenario-title">{{ACTION}}</span>';
     retour += '     <div class="dropdown">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
-    retour += '         <i class="fas fa-plus-circle"></i> Ajouter';
-    retour += '         <span class="caret"></span>';
+    retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
     retour += '       </button>';
     retour += '       <ul class="dropdown-menu">';
     retour += '         <li><a class="bt_addScenarioElement fromSubElement tootlips" title="{{Permet d\'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (Ex: SI/ALORS….)}}">{{Bloc}}</a></li>';
     retour += '         <li><a class="bt_addAction">{{Action}}</a></li>';
     retour += '       </ul>';
-    retour += '     </div><p> </p>';
+    retour += '     </div>';
     retour += '   </div>';
-    retour += '  <div class="expressions" style="display:table-cell; padding-bottom: 10px; background-color: ' + listColor[_pColor] + ';">';
+    retour += '  <div class="expressions scenario-si-bloc" style="display:table-cell; background-color: ' + listColor[_pColor] + ';">';
     retour += '     <div class="sortable empty" style="height : 30px;"></div>';
     if (isset(_subElement.expressions)) {
       for (var k in _subElement.expressions) {
@@ -1351,7 +1336,7 @@ function addSubElement(_subElement, _pColor) {
       }
     }
     retour += '  </div>';
-    retour += '  <div style="display:table-cell; width: 15px; vertical-align: top;"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
+    retour += '  <div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement" style="position : relative;z-index : 2;"></i></div>';
     break;
   }
   retour += '</div>';
@@ -1373,7 +1358,7 @@ function addElement(_element) {
   }
   var color = pColor;
 
-  var div = '<div class="element" style="color : white;padding-right : 7px;padding-left : 7px;padding-bottom : 0px;padding-top : 2px;margin-bottom : 0px;background-color : ' + listColorStrong[color] + '; border :1px solid ' + listColorStrong[color] + '">';
+  var div = '<div class="element" style="color : white;background-color : ' + listColorStrong[color] + '; border :1px solid ' + listColorStrong[color] + '">';
   div += '<input class="elementAttr" data-l1key="id" style="display : none;" value="' + init(_element.id) + '"/>';
   div += '<input class="elementAttr" data-l1key="type" style="display : none;" value="' + init(_element.type) + '"/>';
   switch (_element.type) {

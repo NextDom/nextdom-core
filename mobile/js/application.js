@@ -165,7 +165,7 @@ function initApplication(_reinit) {
                         include.push( 'public/themes/'+userProfils.mobile_theme_color+'/mobile/' + userProfils.mobile_theme_color + '.js');
                     }
                     if (isset(userProfils.mobile_highcharts_theme) && userProfils.mobile_highcharts_theme != '') {
-                        include.push('3rdparty/highstock/themes/' + userProfils.mobile_highcharts_theme + '.js');
+                        include.push('/vendor/highcharts/themes/' + userProfils.mobile_highcharts_theme + '.js');
                     }
                 }
                 if (isset(data.result.custom) && data.result.custom != null) {

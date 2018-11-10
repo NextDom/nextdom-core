@@ -186,12 +186,11 @@
     <div class="action-bar">
         <div class="action-group">
             <a class="btn btn-default btn-action-bar" id="bt_welcomeRecall"><i class="fas fa-calendar-plus">&nbsp;&nbsp;</i>{{ 'Welcome Page'}}</a>
+            <a class="btn btn-default btn-action-bar" href="/docs/html/index.xhtml" target="_blank"><i class="fas fa-graduation-cap">&nbsp;&nbsp;</i>{{ 'Documentation Dev.' }}</a>
         </div>
         <div class="action-group">
-            {% if IS_ADMIN and CAN_SUDO %}
-                <a class="btn btn-danger btn-action-bar pull-right" href="#" id="bt_haltSystem" state="0"><i class="fas fa-power-off">&nbsp;&nbsp;</i>{{ 'Eteindre' }}</a>
-                <a class="btn btn-warning btn-action-bar pull-right" href="#" id="bt_rebootSystem" state="0"><i class="fas fa-repeat">&nbsp;&nbsp;</i>{{ 'Redémarrer' }}</a>
-            {% endif %}
+            <a class="btn btn-danger btn-action-bar pull-right" href="#" id="bt_haltSystemAdmin" state="0"><i class="fas fa-power-off">&nbsp;&nbsp;</i>{{ 'Eteindre' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" href="#" id="bt_rebootSystemAdmin" state="0"><i class="fas fa-repeat">&nbsp;&nbsp;</i>{{ 'Redémarrer' }}</a>
             <a class="btn btn-warning btn-action-bar pull-right" href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock">&nbsp;&nbsp;</i>{{ 'Se déconnecter' }}</a>
         </div>
     </div>
