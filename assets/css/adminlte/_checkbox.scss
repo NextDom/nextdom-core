@@ -19,7 +19,7 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-
+/* Checkboxes */
 input[type="checkbox"] {
     position: relative !important;
     top:9px;
@@ -31,6 +31,7 @@ input[type="checkbox"] {
     margin: 0 0 0 0;
 }
 
+/* frame */
 [type="checkbox"]:not(:checked):before,
 [type="checkbox"]:checked:before {
     content: '';
@@ -42,6 +43,7 @@ input[type="checkbox"] {
     border-radius: 2px;
 }
 
+/* content */
 [type="checkbox"]:not(:checked):after,
 [type="checkbox"]:checked:after {
     content: '■';
@@ -51,7 +53,8 @@ input[type="checkbox"] {
     font-size: 24px;
     transition: all .2s;
 }
- 
+
+/* checked state */
 [type="checkbox"]:not(:checked):after {
     opacity: 0; /* coche invisible */
     transform: scale(0); /* mise à l'échelle à 0 */

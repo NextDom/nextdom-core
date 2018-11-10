@@ -1,13 +1,13 @@
 @charset "utf-8";
 
-/* This file is part of NextDom.
+/* This file is part of NextDom Software.
 *
 * NextDom is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
-* NextDom is distributed in the hope that it will be useful,
+* NextDom Software is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
@@ -21,42 +21,43 @@
 */
 
 html {
-    height: 100%;
-    scroll-behavior: smooth;
-    /* The html and body elements cannot have any padding or margin. */
+  height: 100%;
+  scroll-behavior: smooth;
+  /* The html and body elements cannot have any padding or margin. */
 }
 
 body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-    font-family: Roboto,'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+  font-family: 'Roboto','Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
 }
-@import "_navs.scss";
 @import "_scrollbar.scss";
+@import "_navs.scss";
 @import "_sidebar.scss";
 @import "_menus.scss";
 @import "_notify.scss";
 @import "_tooltip.scss";
 @import "_userPanel.scss";
+@import "_treeView.scss";
 @import "_forms.scss";
+@import "_boxs.scss";
 @import "_loginAndRegister.scss";
 @import "_cards.scss";
+@import "_alert.scss";
 @import "_labels.scss";
 @import "_logos.scss";
 @import "_progressBars.scss";
 @import "_checkbox.scss";
 
-
-
 /* Param depends resolution */
 @media (max-width: 767px) {
-    .form-horizontal .control-label {
-        padding-top: 7px;
-    }
+  .form-horizontal .control-label {
+    padding-top: 7px;
+  }
 }
 
 @media (min-width: 768px) {
-    .sidebar-mini.sidebar-collapse .main-sidebar {
-        z-index: 1020;
-    }
+  .sidebar-mini.sidebar-collapse .main-sidebar {
+    z-index: 1020;
+  }
 }
 
 /* Tables */
@@ -66,102 +67,106 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .table-condensed>thead>tr>td,
 .table-condensed>tbody>tr>td,
 .table-condensed>tfoot>tr>td {
-    padding: 6px;
-    vertical-align: middle;
-    font-size: 13px;
+  padding: 6px;
+  vertical-align: middle;
+  font-size: 13px;
 }
 
 /* Info-box */
 .info-box {
-    min-height: 70px;
-    margin-bottom: 10px;
+  min-height: 70px;
+  margin-bottom: 10px;
 }
 
 .info-box-icon {
-    height: 70px;
-    width: 65px;
-    font-size: 38px;
-    line-height: 65px;
+  height: 70px;
+  width: 65px;
+  font-size: 38px;
+  line-height: 65px;
 }
 
 .info-box-content {
-    padding: 5px 10px;
-    margin-left: 65px;
+  padding: 5px 10px;
+  margin-left: 65px;
 }
 
 .info-box-text-2 {
-    text-transform:capitalize;
+  text-transform:capitalize;
 }
 
 /* Objets */
 #div_Update-view .box .box-header {
-    min-height: 70px;
+  min-height: 70px;
 }
 
-#listPlugin .box .box-body, 
+#listPlugin .box .box-body,
 #listWidget .box .box-body ,
 #listScript .box .box-body,
-#listOther .box .box-body, {
-    min-height: 180px;
+#listOther .box .box-body {
+  min-height: 180px;
 }
 
 #listCore .box .box-body {
-    min-height: 10px;
+  min-height: 10px;
 }
 
 .panel:hover{
-    box-shadow: 0 6px 12px 0 rgba(0,0,0,0.15);
+  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.15);
 }
 
 /* actionBar */
 .action-bar {
-    padding: 6px 8px;
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    background: $white;
-    border:{
-        radius: 3px;
-        left: 1px solid rgba(0,0,0,0.2);
-        right: 1px solid rgba(0,0,0,0.2);
-    }
-    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+  padding: 6px 8px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  background: $white;
+  border:{
+  radius: 3px;
+    left: 1px solid rgba(0,0,0,0.2);
+    right: 1px solid rgba(0,0,0,0.2);
+  }
+  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
 
 /* Modales */
 .ui-widget-content {
-    border: none;
+  border: none;
 }
 
 .ui-dialog .ui-dialog-title {
-    padding: 7px 5px 5px 0px;
+  padding: 7px 5px 5px 0px;
 }
 
 .ui-dialog .ui-dialog-titlebar-close {
-    opacity: 1;
+  opacity: 1;
 }
 
 /* footer */
 .main-footer {
-    min-height: 20px;
-    padding:{
-        bottom: 10px;
-        left: 15px;
-    }
-    position: inherit;
-    bottom: 0;
-    width: 100%;
-    & .form-group {
-        margin-bottom: 0px;
-    }
+  min-height: 20px;
+  padding:{
+    bottom: 10px;
+    left: 15px;
+  }
+  position: inherit;
+  bottom: 0;
+  width: 100%;
+  & .form-group {
+      margin-bottom: 0;
+  }
 }
 
 .footer-center {
-    padding-left: 10%;
-    padding-right: 20%;
+  padding-left: 10%;
+  padding-right: 20%;
 }
 
 /* carrousel */
 .carousel-inner > .item > img, .carousel-inner > .item > a > img {
     margin: auto;
+}
+
+.modal {
+  z-index: 9999;
 }
