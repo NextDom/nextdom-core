@@ -131,6 +131,7 @@ class PrepareView
 
         $render = Render::getInstance();
         $currentPlugin = PrepareView::initPluginsData($render, $pageData, $eventsJsPlugin, $configs);
+        $pageData['IS_PLUGIN_PAGE'] = ($currentPlugin !== null && is_object($currentPlugin));
         self::initPluginsEvents($eventsJsPlugin, $pageData);
         self::initHeaderData($pageData, $configs);
 
@@ -139,6 +140,7 @@ class PrepareView
             'user_isAdmin'       => Status::isConnectAdmin(),
             'user_login'         => $_SESSION['user']->getLogin(),
             'nextdom_Welcome'   => $configs['nextdom::Welcome'],
+            'nextdom_Notify'   => $configs['nextdom::Notify'],
             'widget_width_step'  => $configs['widget::step::width'],
             'widget_height_step' => $configs['widget::step::height'],
             'widget_margin'      => $configs['widget::margin'],
@@ -306,6 +308,7 @@ class PrepareView
         $pageData['PRODUCT_CONNECTION_ICON'] = $configs['product_connection_image'];
         $pageData['AJAX_TOKEN'] = \ajax::getToken();
         $pageData['LANGUAGE'] = $configs['language'];
+        $pageData['NEXTDOM_NOTIFY'] = $configs['nextdom::Notify'];
         $pageData['COLOR1'] = \nextdom::getConfiguration('theme:color1');
         $pageData['COLOR2'] = \nextdom::getConfiguration('theme:color2');
         $pageData['COLOR3'] = \nextdom::getConfiguration('theme:color3');

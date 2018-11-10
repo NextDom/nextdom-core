@@ -48,6 +48,11 @@ function gen_css {
 #	sed -i 's/[\"]throbber\.gif/"\/assets/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.mob.css
 }
 
+function gen_links {
+echo " >>> Création des liens symboliques"
+ln -s ${root}/../vendor/node_modules/codemirror/ ${root}/../3rdparty/
+}
+
 function gen_js {
 	echo " >>> Generation du JS"
     cat assets/3rdparty/jquery.utils/jquery.utils.js \
@@ -178,6 +183,7 @@ function copy_assets {
 	cp -fr assets/img public/
 	gen_css
 	gen_js
+	gen_links
 }
 
 function start {
