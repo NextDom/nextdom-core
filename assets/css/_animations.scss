@@ -70,6 +70,13 @@
     -o-animation:      shake 5s;
     animation:     shake 5s;
 }
+.animationShakeDelay {
+    -webkit-animation: shake 5s;
+    -moz-animation:    shake 5s;
+    -o-animation:      shake 5s;
+    animation:     shake 5s;
+    animation-delay: 2s;
+}
 .animationLoop {
     animation-iteration-count: infinite;
     animation-delay: 1s;
