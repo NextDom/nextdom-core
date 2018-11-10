@@ -67,6 +67,7 @@ function include_file($_folder, $_filename, $_type, $_plugin = '', $translate = 
                 'codemirror/mode/xml/xml' => 'vendor/node_modules/codemirror/mode/xml/xml',
                 'jquery/jquery.min' => 'vendor/node_modules/jquery/dist/jquery.min',
                 'datetimepicker/jquery.datetimepicker' => 'vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker',
+                'jquery.fileupload/jquery.fileupload' => 'vendor/node_modules/blueimp-file-upload/js/jquery.fileupload',
                 'jquery.fileupload/jquery.ui.widget' => 'vendor/node_modules/blueimp-file-upload/js/vendor/jquery.ui.widget',
                 'jquery.fileupload/jquery.iframe-transport' => 'vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport',
                 'jquery.lazyload/jquery.lazyload' => 'vendor/node_modules/jquery-lazyload/jquery.lazyload',
@@ -85,7 +86,7 @@ function include_file($_folder, $_filename, $_type, $_plugin = '', $translate = 
                 'jquery.ui/jquery-ui-bootstrap/jquery-ui' => 'assets/css/jquery-ui-bootstrap/jquery-ui.css'
             ];
 
-            if (in_array($_filename, $router3rdParty)) {
+            if (array_key_exists($_filename, $router3rdParty)) {
                 $_filename = $router3rdParty[$_filename] . '.' . $_type;
             }
             else {
