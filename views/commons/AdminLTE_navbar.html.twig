@@ -41,19 +41,19 @@
                     <a class="clocktime" id="horloge_time">14:11:46</a>
                     <a class="clockdate" id="horloge_date">lundi 1 janvier 1970</a>
                 </li>
-                <li class="dropdown notifications-menu" id="bt_messageModal">
+                <li class="dropdown notifications-menu task_notif_mobile" id="bt_messageModal">
                     <a href="#">
                         {% if MENU_NB_MESSAGES != 0 %}
-                            <i class="fas fa-bell notifbadge"></i>
+                            <i class="fas fa-envelope-open notifbadge"></i>
                             <span id="span_nbMessage" class="label label-warning notifcounter">{{ MENU_NB_MESSAGES }}</span>
                         {% else %}
-                            <i class="fas fa-bell"></i>
+                            <i class="fas fa-envelope-open"></i>
                         {% endif %}
                     </a>
                 </li>
                 <!-- Tasks: style can be found in dropdown.less bt_messageModal-->
                 {% if IS_ADMIN %}
-                    <li class="tasks-menu">
+                    <li class="tasks-menu task_update_mobile">
                         <a href="index.php?v=d&p=update">
                             {% if MENU_NB_UPDATES != 0 %}
                                 <i class="fas fa-download notifbadge"></i>
@@ -64,6 +64,14 @@
                         </a>
                     </li>
                 {% endif %}
+                <li>
+                    {% if NEXTDOM_NOTIFY == 1 %}
+                    <a><span class="notifyIcon fas fa-bell cursor" onclick="switchNotify(0);"></span></a>
+                    {% else %}
+                    <a><span class="notifyIcon fas fa-bell-slash cursor" onclick="switchNotify(1);"></span></a>
+                    {% endif %}
+
+                </li>
                 <li>
                     <a><span id="togglefullscreen" class="fa fa-expand cursor" onclick="toggleFullScreen();"></span></a>
                 </li>
