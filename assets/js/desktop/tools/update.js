@@ -43,12 +43,16 @@ setTimeout(function(){
 $('#in_searchPlugin').off('keyup').keyup(function () {
     var search = $(this).value();
     if(search == ''){
-        $('.box').show();
+        $('.box-warning').show();
+        $('.box-success').show();
+        $('.box-danger').show();
         $('#listPlugin').packery();
         $('#listOther').packery();
         return;
     }
-    $('.box').hide();
+    $('.box-warning').hide();
+    $('.box-success').hide();
+    $('.box-danger').hide();
     $('.box .box-title').each(function(){
         var text = $(this).text().toLowerCase();
         if(text.indexOf(search.toLowerCase()) >= 0){
@@ -292,7 +296,7 @@ function addUpdate(_update) {
     var tr = '<div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">';
     tr += '<div class="box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + ' col-lg-4 col-md-6 col-sm-6 col-xs-12" data-type="' + init(_update.type) + '">';
     tr += '<div class="box-header with-border">';
-    tr += ' <h4 class="box-title"><img style="height:50px;padding-right:5px;" src="' + init(_update.icon) + '"/> <b>' + init(_update.name)+'</b></h4>';
+    tr += ' <h4 class="box-title" style="text-transform: capitalize;"><img style="height:50px;padding-right:5px;" src="' + init(_update.icon) + '"/>' + init(_update.name)+'</h4>';
     tr += '<span data-toggle="tooltip" title="" class="updateAttr badge ' + bgClass +' pull-right" data-original-title="" data-l1key="status" style="text-transform: uppercase;"></span>';
     tr += '</div>';
     tr += '<div class="box-body">';
@@ -332,13 +336,27 @@ function addUpdate(_update) {
     tr += '</div>';
 
 
-
-    if(_update.type == 'core' || _update.type == 'plugin'){
-        $('#listPlugin').append(tr);
-        $('#listPlugin .box:last').setValues(_update, '.updateAttr');
+    if(_update.type == 'core'){
+        $('#listCore').append(tr);
+        $('#listCore .box:last').setValues(_update, '.updateAttr');
     }else{
-        $('#listOther').append(tr);
-        $('#listOther .box:last').setValues(_update, '.updateAttr');
+        if(_update.type == 'plugin'){
+            $('#listPlugin').append(tr);
+            $('#listPlugin .box:last').setValues(_update, '.updateAttr');
+        }else{
+            if(_update.type == 'widget'){
+                $('#listWidget').append(tr);
+                $('#listWidget .box:last').setValues(_update, '.updateAttr');
+            }else{
+                if(_update.type == 'script'){
+                    $('#listScript').append(tr);
+                    $('#listScript .box:last').setValues(_update, '.updateAttr');
+                }else{
+                    $('#listOther').append(tr);
+                    $('#listOther .box:last').setValues(_update, '.updateAttr');
+                }
+            }
+        }
     }
 }
 

@@ -30,11 +30,11 @@ $(function() {
     $(".sidebar").css("overflow","");
 });
 if ($('[role="dialog"] .fab').length == 0) {
-    $('.fab').on('mouseleave',function() {
+    $('.fab-filter').on('mouseleave',function() {
         $('.blurPanel').removeClass('blur');
     });
 
-    $('.fab').on('mouseenter',function() {
+    $('.fab-filter').on('mouseenter',function() {
         $('.blurPanel').addClass('blur');
     });
 } else {

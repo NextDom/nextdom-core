@@ -42,7 +42,7 @@ function gen_css {
 
 function gen_js {
 	echo " >>> Generation du JS"
-    cat 3rdparty/jquery.utils/jquery.utils.js \
+    cat assets/3rdparty/jquery.utils/jquery.utils.js \
         vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
         vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
         vendor/node_modules/izitoast/dist/js/iziToast.min.js \
@@ -81,7 +81,7 @@ function gen_js {
         vendor/node_modules/highcharts/modules/solid-gauge.js \
         vendor/node_modules/highcharts/modules/exporting.js \
         vendor/node_modules/highcharts/modules/export-data.js \
-        3rdparty/jquery.at.caret/jquery.at.caret.min.js \
+        assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js \
         vendor/node_modules/jwerty/jwerty.js \
         vendor/node_modules/packery/dist/packery.pkgd.js \
         vendor/node_modules/jquery-lazyload/jquery.lazyload.js \
@@ -96,8 +96,8 @@ function gen_js {
         vendor/node_modules/jstree/dist/jstree.js \
         vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
         vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js \
-        3rdparty/jquery.multi-column-select/multi-column-select.js \
-        3rdparty/jquery.sew/jquery.sew.min.js \
+        assets/3rdparty/jquery.multi-column-select/multi-column-select.js \
+        assets/3rdparty/jquery.sew/jquery.sew.min.js \
         vendor/node_modules/jquery-cron/dist/jquery-cron.js \
         vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js \
         vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
