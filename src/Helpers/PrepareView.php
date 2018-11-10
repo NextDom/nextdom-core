@@ -131,6 +131,7 @@ class PrepareView
 
         $render = Render::getInstance();
         $currentPlugin = PrepareView::initPluginsData($render, $pageData, $eventsJsPlugin, $configs);
+        $pageData['IS_PLUGIN_PAGE'] = ($currentPlugin !== null && is_object($currentPlugin));
         self::initPluginsEvents($eventsJsPlugin, $pageData);
         self::initHeaderData($pageData, $configs);
 
