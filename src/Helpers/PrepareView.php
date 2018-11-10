@@ -139,6 +139,7 @@ class PrepareView
             'user_isAdmin'       => Status::isConnectAdmin(),
             'user_login'         => $_SESSION['user']->getLogin(),
             'nextdom_Welcome'   => $configs['nextdom::Welcome'],
+            'nextdom_Notify'   => $configs['nextdom::Notify'],
             'widget_width_step'  => $configs['widget::step::width'],
             'widget_height_step' => $configs['widget::step::height'],
             'widget_margin'      => $configs['widget::margin'],
@@ -306,6 +307,7 @@ class PrepareView
         $pageData['PRODUCT_CONNECTION_ICON'] = $configs['product_connection_image'];
         $pageData['AJAX_TOKEN'] = \ajax::getToken();
         $pageData['LANGUAGE'] = $configs['language'];
+        $pageData['NEXTDOM_NOTIFY'] = $configs['nextdom::Notify'];
         $pageData['COLOR1'] = \nextdom::getConfiguration('theme:color1');
         $pageData['COLOR2'] = \nextdom::getConfiguration('theme:color2');
         $pageData['COLOR3'] = \nextdom::getConfiguration('theme:color3');
@@ -339,7 +341,7 @@ class PrepareView
         } else {
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
             $pageData['JS_POOL'][] = 'vendor/node_modules/jquery-ui-dist/jquery-ui.min.js';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.utils/jquery.utils.js';
+            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
             $pageData['JS_POOL'][] = '/core/js/core.js';
@@ -376,7 +378,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/modules/solid-gauge.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/modules/exporting.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/modules/export-data.js';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.at.caret/jquery.at.caret.min.js';
+            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jwerty/jwerty.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/packery/dist/packery.pkgd.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-lazyload/jquery.lazyload.js';
@@ -391,8 +393,8 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/jstree/dist/jstree.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.multi-column-select/multi-column-select.js';
-            $pageData['JS_POOL'][] = '/3rdparty/jquery.sew/jquery.sew.min.js';
+            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
+            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.sew/jquery.sew.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-cron/dist/jquery-cron.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-contextMenu/dist/jquery.contextMenu.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
@@ -423,7 +425,7 @@ class PrepareView
         if (!Status::isRescueMode()) {
             if (!Status::isConnect()) {
                 if (isset($_SESSION['user']) && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
-                    $highstockThemeFile = '/3rdparty/highstock/themes/' . $_SESSION['user']->getOptions('desktop_highcharts_theme') . '.js';
+                    $highstockThemeFile = '/vendor/highcharts/themes/' . $_SESSION['user']->getOptions('desktop_highcharts_theme') . '.js';
                     if (file_exists($highstockThemeFile)) {
                         $pageData['JS_POOL'][] = $highstockThemeFile;
                     }

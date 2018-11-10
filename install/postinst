@@ -12,6 +12,10 @@ BLANCLAIR="\\033[1;08m"
 JAUNE="\\033[1;33m"
 CYAN="\\033[1;36m"
 
+# Logs directory
+LOGS_DIRECTORY=/var/log/nextdom
+mkdir -p ${LOGS_DIRECTORY}
+
 # Functions
 
 usage() { echo "Usage: $0 [-h <help>] [-i <DB ip/hostname>] [-z <DB port>] [-d <DB name>] [-u <DB username>] [-p <DB user password>] " 1>&2; exit 1; }
@@ -24,9 +28,21 @@ set_root() {
     root=`dirname $bin`
 }
 
-delay(){
-    sleep 1
+
+print_log_in() {
+    txt=$1
+    if [ 1 -eq "0${isdev}"  ] ; then
+        printf "${txt}"
+    fi
+    printf ${txt} >> $LOG_DIRECTORY/postinst.log
 }
+
+
+print_log_ok() {
+    echo " OK"
+    echo " OK" >> $LOG_DIRECTORY/postinst.log
+}
+
 
 detect_dev_version(){
 
@@ -34,9 +50,44 @@ detect_dev_version(){
     if [ -d ${root}/.git ] ; then
         echo "Development version..."
         isdev=1
-        if [[ -z "${MYSQL_NEXTDOM_DB}" ]] ; then MYSQL_NEXTDOM_DB="nextdomdev" ; fi
-        if [[ -z "${MYSQL_NEXTDOM_USER}" ]] ; then MYSQL_NEXTDOM_USER="nextdomdev" ; fi
         WEBSERVER_HOME=${root}
+    else
+        # Debian package configuration...
+        isdev=0
+        WEBSERVER_HOME=/usr/share/nextdom
+    fi
+
+}
+
+
+step_nextdom_mysql_parameters() {
+
+    if [ 1 -eq "0${isdev}"  ] ; then
+        # Development version
+        [[ -z "${MYSQL_NEXTDOM_DB}" ]] && MYSQL_NEXTDOM_DB="nextdomdev"
+        [[ -z "${MYSQL_NEXTDOM_USER}" ]] && MYSQL_NEXTDOM_USER="nextdomdev"
+    else
+        # Debian package configuration...
+
+        # nextdom-mysql preconfiguration
+        if [[ -f /etc/nextdom/mysql/secret ]] ; then
+            source /etc/nextdom/mysql/secret
+        fi
+        [[ -z "${MYSQL_NEXTDOM_DB}" ]] && MYSQL_NEXTDOM_DB="nextdom"
+        [[ -z "${MYSQL_NEXTDOM_USER}" ]] && MYSQL_NEXTDOM_USER="nextdom"
+    fi
+    # All parameters
+    MYSQL_ROOT_PASSWD=${MYSQL_ROOT_PASSWD:-$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)}
+    MYSQL_NEXTDOM_PASSWD=${MYSQL_NEXTDOM_PASSWD:-$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)}
+    MYSQL_HOSTNAME=${MYSQL_HOSTNAME:-localhost}
+    MYSQL_PORT=${MYSQL_PORT:-3306}
+    MYSQL_NEXTDOM_DB=${MYSQL_NEXTDOM_DB:nextdom}
+    HOSTPASS=""
+    if [[ "${MYSQL_HOSTNAME}" != "localhost" ]] ; then
+        HOSTPASS="-p${MYSQL_ROOT_PASSWD} -h${MYSQL_HOSTNAME}"
+    fi
+    #
+    if [ 1 -eq "0${isdev}"  ] ; then
         echo " "
         echo "Installation dir  : ${WEBSERVER_HOME}"
         echo "Database host     : ${MYSQL_HOSTNAME}"
@@ -44,15 +95,26 @@ detect_dev_version(){
         echo "Database name     : ${MYSQL_NEXTDOM_DB}"
         echo "Database user     : ${MYSQL_NEXTDOM_USER}"
         echo "Database password : ${MYSQL_NEXTDOM_PASSWD}"
-    else
-        # Debian package configuration...
-        isdev=0
-        WEBSERVER_HOME=/usr/share/nextdom
-        [[ -z "${MYSQL_NEXTDOM_DB}" ]] && MYSQL_NEXTDOM_DB="nextdom"
-        [[ -z "${MYSQL_NEXTDOM_USER}" ]] && MYSQL_NEXTDOM_USER="nextdom"
     fi
-
+    # Test connexion
+    iret=1
+    n=0;
+    # slow start of docker mysql
+    while [ $n -le 5 ] && [ $iret -eq 1 ]
+    do
+        #echo ">>>>> checking database access <<<<<"
+        mysql -uroot ${HOSTPASS} --port=${MYSQL_PORT} -e "SHOW DATABASES;" >/dev/null 2>&1
+        iret=$?
+        if [[ $iret -eq 0 ]] ; then break ; fi
+        n=$(( $n + 1 ))
+        sleep 5
+    done
+    if [[ ${iret} -ne 0 ]] ; then
+        echo ">>>> Error : can\'t connect to database <<<<"
+        exit 1
+    fi
 }
+
 
 step_nextdom_prerequisites_verification() {
 
@@ -83,6 +145,13 @@ step_nextdom_prerequisites_verification() {
         mkdir -p /etc/systemd/system/apache2.service.d
         cp ${WEBSERVER_HOME}/install/apache/privatetmp.conf /etc/systemd/system/apache2.service.d/privatetmp.conf >> ${DEBUG} 2>&1
         echo "<I> Creating file : /etc/systemd/system/apache2.service.d/privatetmp.conf"
+    fi
+
+    # Dvp version hack (remove in next stable)
+    if [ 1 -eq "0${isdev}"  ] ; then
+        cp ${WEBSERVER_HOME}/install/apache/nextdom.conf /etc/apache2/sites-available/nextdom.conf >> ${DEBUG} 2>&1
+        cp ${WEBSERVER_HOME}/install/apache/nextdom-ssl.conf /etc/apache2/sites-available/nextdom-ssl.conf >> ${DEBUG} 2>&1
+        cp ${WEBSERVER_HOME}/install/apache/nextdom-security.conf /etc/apache2/conf-available/nextdom-security.conf >> ${DEBUG} 2>&1
     fi
 
     # Windows hack (bash for windows)
@@ -189,15 +258,19 @@ step_nextdom_configuration() {
     chmod 777 /tmp/jeedom >> ${DEBUG} 2>&1
     chown www-data:www-data -R /tmp/nextdom >> ${DEBUG} 2>&1
     chown www-data:www-data /tmp/jeedom >> ${DEBUG} 2>&1
+    chown www-data:www-data $LOGS_DIRECTORY
 
     usermod -a -G dialout,tty www-data
 
-    if [ $(cat /proc/meminfo | grep MemTotal | awk '{ print $2 }') -gt 600000 ]; then
-        if [ $(cat /etc/fstab | grep /tmp/nextdom | grep tmpfs | wc -l) -eq 0 ];then
-            echo 'tmpfs        /tmp/nextdom            tmpfs  defaults,size=128M                                       0 0' >>  /etc/fstab
+    if [[ -f "/proc/meminfo" ]] ; then
+        if [ $(cat /proc/meminfo | grep MemTotal | awk '{ print $2 }') -gt 600000 ]; then
+            if [[ -f "/etc/fstab" ]] ; then
+                if [ $(cat /etc/fstab | grep /tmp/nextdom | grep tmpfs | wc -l) -eq 0 ];then
+                    echo 'tmpfs        /tmp/nextdom            tmpfs  defaults,size=128M                                       0 0' >>  /etc/fstab
+                fi
+            fi
         fi
     fi
-
     if [ $(grep "www-data ALL=(ALL) NOPASSWD: ALL" /etc/sudoers | wc -l ) -eq 0 ];then
         echo "www-data ALL=(ALL) NOPASSWD: ALL" | (EDITOR="tee -a" visudo) >/dev/null
         if [ $? -ne 0 ]; then
@@ -224,7 +297,7 @@ step_nextdom_mysql_configuration() {
                 exit 1
             fi
         fi
-    set -e
+        set -e
         rm -f /var/lib/mysql/ib_logfile*
 
         if [ -d /etc/mysql/conf.d ]; then
@@ -414,83 +487,58 @@ while getopts "i:p:d:r:u:z:" option; do
 done
 shift $((OPTIND-1))
 
-
-[[ -f /root/.mysqlroot ]] && MYSQL_ROOT_PASSWD=$(cat /root/.mysqlroot)
-#
-if [[ -f /etc/nextdom/mysql/secret ]] ; then
-    source /etc/nextdom/mysql/secret
-fi
-#
-MYSQL_ROOT_PASSWD=${MYSQL_ROOT_PASSWD:-$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)}
-MYSQL_NEXTDOM_PASSWD=${MYSQL_NEXTDOM_PASSWD:-$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)}
-MYSQL_HOSTNAME=${MYSQL_HOSTNAME:-localhost}
-MYSQL_PORT=${MYSQL_PORT:-3306}
-MYSQL_NEXTDOM_DB=${MYSQL_NEXTDOM_DB:nextdom}
-
-HOSTPASS=""
-if [[ "${MYSQL_HOSTNAME}" != "localhost" ]] ; then
-    HOSTPASS="-p${MYSQL_ROOT_PASSWD} -h${MYSQL_HOSTNAME}"
-fi
-    iret=1
-    n=0;
-    #slow start of docker mysql
-    while [ $n -le 5 ] && [ $iret -eq 1 ]
-    do
-    #echo ">>>>> checking database access <<<<<"
-    mysql -uroot ${HOSTPASS} --port=${MYSQL_PORT} -e "SHOW DATABASES;" >/dev/null 2>&1
-    iret=$?
-    n=$(( $n + 1 ))
-    sleep 5
-    done
-    if [[ ${iret} -ne 0 ]] ; then
-        echo ">>>> Error : can\'t connect to remote database <<<<"
-        exit 1
-    fi
-
 set_root $0
 
+# Installation logs
+[[ -f $LOG_DIRECTORY/postinst.ok ]] && rm -f $LOG_DIRECTORY/postinst.ok
+[[ -f $LOG_DIRECTORY/postinst.warn ]] && rm -f $LOG_DIRECTORY/postinst.warn
+[[ -f $LOG_DIRECTORY/postinst.log ]] && rm -f $LOG_DIRECTORY/postinst.log
+touch $LOG_DIRECTORY/postinst.log
+
+
+print_log_in "detect_dev_version ... "
 detect_dev_version
+print_log_ok
 
-[[ -f /var/log/nextdom/postinst.ok ]] && rm -f /var/log/nextdom/postinst.ok
-[[ -f /var/log/nextdom/postinst.warn ]] && rm -f /var/log/nextdom/postinst.warn
-[[ -f /var/log/nextdom/postinst.log ]] && rm -f /var/log/nextdom/postinst.log
-touch /var/log/nextdom/postinst.log
+print_log_in "step_nextdom_mysql_parameters ... "
+step_nextdom_mysql_parameters
+print_log_ok
 
-printf "step_nextdom_var_www_html ... " >> /var/log/nextdom/postinst.log
+print_log_in "step_nextdom_var_www_html ... "
 step_nextdom_var_www_html
-echo "OK" >> /var/log/nextdom/postinst.log
+print_log_ok
 
-printf "step_nextdom_prerequisites_verification ... " >> /var/log/nextdom/postinst.log
+print_log_in "step_nextdom_prerequisites_verification ... "
 step_nextdom_prerequisites_verification
-echo "OK" >> /var/log/nextdom/postinst.log
+print_log_ok
 
-printf "step_nextdom_apache_php ... " >> /var/log/nextdom/postinst.log
+print_log_in "step_nextdom_apache_php ... "
 step_nextdom_apache_php
-echo "OK" >> /var/log/nextdom/postinst.log
+print_log_ok
 
-printf "step_nextdom_configuration ... " >> /var/log/nextdom/postinst.log
+print_log_in "step_nextdom_configuration ... "
 step_nextdom_configuration
-echo "OK" >> /var/log/nextdom/postinst.log
+print_log_ok
 
-printf "step_nextdom_mysql_configuration ... " >> /var/log/nextdom/postinst.log
+print_log_in "step_nextdom_mysql_configuration ... "
 step_nextdom_mysql_configuration
-echo "OK" >> /var/log/nextdom/postinst.log
+print_log_ok
 
-printf "step_nextdom_mysql_populate ... " >> /var/log/nextdom/postinst.log
+print_log_in "step_nextdom_mysql_populate ... "
 step_nextdom_mysql_populate
-echo "OK" >> /var/log/nextdom/postinst.log
+print_log_ok
 
-printf "step_nextdom_crontab ... " >> /var/log/nextdom/postinst.log
+print_log_in "step_nextdom_crontab ... "
 step_nextdom_crontab
-echo "OK" >> /var/log/nextdom/postinst.log
+print_log_ok
 
-printf "step_nextdom_check ... " >> /var/log/nextdom/postinst.log
+print_log_in "step_nextdom_check ... "
 step_nextdom_check
-echo "OK" >> /var/log/nextdom/postinst.log
+print_log_ok
 
-printf "distrib_1_spe ... " >> /var/log/nextdom/postinst.log
+print_log_in "distrib_1_spe ... "
 distrib_1_spe
-echo "OK" >> /var/log/nextdom/postinst.log
+print_log_ok
 
 chmod 777 -R /tmp/nextdom
 chown -R www-data:www-data /tmp/nextdom

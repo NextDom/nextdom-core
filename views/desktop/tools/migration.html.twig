@@ -59,7 +59,7 @@
                     <p class="alert alert-info">{{ 'La fonction migration permet d\'utiliser une sauvegarde Jeedom pour migrer vers Nextdom' }}</br>
                         {{ 'Il suffit de saisir le chemin d\'accès vers les sauvegardes (si les sauvegardes sont deportées sur un NAS) ou alors utiliser l\'outil d\'upload ci-dessous.' }}</p>
                     <!-- Sauvegardes Section -->
-                    <legend class="legend-title legend-section">{{ 'Sauvegardes locales' }}</legend>
+                    <legend class="legend-title">{{ 'Sauvegardes à utiliser pour la migration' }}</legend>
                     <div class="form-group">
                         <label class="col-sm-4 col-xs-12 control-label">{{ 'Emplacement des sauvegardes' }}</label>
                         <div class="col-sm-4 col-xs-12">
@@ -76,7 +76,7 @@
                         <label class="col-sm-4 col-xs-12 control-label">{{ 'Envoyer une sauvegarde' }}</label>
                         <div class="col-sm-8 col-xs-12">
                         <span class="btn btn-default btn-file">
-                            <i class="fas fa-refresh fa-spin" style="display: none;"><i class="fas fa-cloud-upload-alt">&nbsp;&nbsp;</i>{{ 'Selectionner' }}
+                            <i class="fas fa-refresh fa-spin" style="display: none;"></i><i class="fas fa-cloud-upload-alt"></i>&nbsp;&nbsp;{{ 'Selectionner' }}
                             <input id="bt_uploadBackupforMigration" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token={{ migrationAjaxToken }}">
                         </span>
                         </div>
@@ -84,7 +84,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 col-xs-12 control-label">{{ 'Migration' }}</label>
                         <div class="col-sm-8 col-xs-12">
-                            <a class="btn btn-success" id="bt_migrateNextDom"><i class="fas fa-refresh fa-spin" style="display: none;"><i class="fas fa-play">&nbsp;&nbsp;</i>{{ 'Lancer' }}</a>
+                            <a class="btn btn-success" id="bt_migrateNextDom"><i class="fas fa-refresh fa-spin" style="display: none;"></i><i class="fas fa-play"></i>&nbsp;&nbsp;{{ 'Lancer' }}</a>
                         </div>
                     </div>
                 </form>

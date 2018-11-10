@@ -65,7 +65,7 @@
         </div>
         <div class="pluginListContainer row">
             {% for plugin in pluginsList %}
-                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                <div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">
                     <div class="box pluginDisplayCard" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_icon="{{ plugin.getPathImgIcon() }}" data-plugin_id="{{ plugin.getId() }}" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
                         <div class="box-header cursor with-border">
                             <h4 class="box-title"><img style="height:50px;padding-right:5px" src="{{ plugin.getPathImgIcon() }}"> {{ plugin.getName() }}</h4>
@@ -83,8 +83,8 @@
                     </div>
                 </div>
             {% endfor %}
-        </section>
-    </div>
+        </div>
+    </section>
 </div>
 
 <div id="div_confPlugin" style="display: none;">

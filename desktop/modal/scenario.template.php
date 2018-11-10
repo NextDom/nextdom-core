@@ -105,7 +105,7 @@ foreach (update::listRepo() as $key => $value) {
 
    $('.bt_scenarioTemplateShare').on('click', function () {
     if($('#ul_scenarioTemplateList li.active').attr('data-template') == undefined){
-        notify("{{Scénario}}", '{Vous devez d\'abord selectionner un template}}', 'error');
+        notify("{{Scénario}}", '{{Vous devez d\'abord selectionner un template}}', 'error');
         return;
     }
     var logicalId = $('#ul_scenarioTemplateList li.active').attr('data-template').replace(".json", "");
@@ -129,7 +129,7 @@ foreach (update::listRepo() as $key => $value) {
 
    $('#bt_scenarioTemplateRemove').on('click', function () {
     if($('#ul_scenarioTemplateList li.active').attr('data-template') == undefined){
-        notify("Info", Vous devez d\'abord sélectionner un template', 'error');
+        notify("Info", 'Vous devez d\'abord sélectionner un template', 'error');
         return;
     }
     nextdom.scenario.removeTemplate({
