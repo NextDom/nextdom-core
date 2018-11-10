@@ -52,6 +52,10 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   position: fixed;
 }
 
+.pluginContainer {
+  margin-right: 15px;
+}
+
 .content-wrapper {
   min-height: 100%;
   background-color: $nextdom_bg;
@@ -774,7 +778,7 @@ input[type="checkbox"] {
 #listPlugin .box .box-body, 
 #listWidget .box .box-body ,
 #listScript .box .box-body,
-#listOther .box .box-body, {
+#listOther .box .box-body {
   min-height: 180px;
 }
 
@@ -825,7 +829,7 @@ input[type="checkbox"] {
   bottom: 0;
   width: 100%;
   & .form-group {
-      margin-bottom: 0px;
+      margin-bottom: 0;
   }
 }
 
