@@ -19,26 +19,25 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
-
-
+/* Navs */
 .navbar-custom-menu > .navbar-nav > li {
-    position: unset;
+  position: unset;
 }
 
 .main-header .navbar {
-    box-shadow: 2px 0 1px rgba(0, 0, 0, 0.5);
+  box-shadow: 2px 0 1px rgba(0, 0, 0, 0.5);
 }
 
 .nav-tabs-custom {
-    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
-    border-radius: 3px;
-    & > .tab-content {
-        background: $whitelightgray;
-    }
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  & > .tab-content {
+    background: $whitelightgray;
+  }
 }
 
 .nav-tabs a {
-    padding: 10px 10px !important;
+  padding: 10px 10px !important;
 }
 
 .objectSummaryGlobalHeader {
@@ -49,8 +48,9 @@
     display: inline;
     position: inherit;
 }
-@media (max-width: 600px) {
-    .objectSummaryGlobalHeader {
-        font-size: small;
-    }
+
+@media (max-width: 768px) {
+  .objectSummaryGlobalHeader {
+    font-size: small;
+  }
 }

@@ -1,3 +1,4 @@
+@charset "utf-8";
 /* This file is part of NextDom Software.
 *
 * NextDom is free software: you can redistribute it and/or modify
@@ -18,58 +19,58 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
  
+/* Progress bars */
 .progress {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 @media (max-width: 767px) {
-    .fixed .content-wrapper, .fixed .right-side {
-        padding-top: 106px;
-    }
+  .fixed .content-wrapper, .fixed .right-side {
+    padding-top: 106px;
+  }
 }
 
 .container-fluid{
-    padding-right: 0;
-    padding-left: 0;
+  padding-right: 0;
+  padding-left: 0;
 }
 
 .container-light {
-    padding-right: 5px;
-    padding-left: 5px;
+  padding-right: 5px;
+  padding-left: 5px;
 }
 
 .wrapper.fullscreen header,
 .wrapper.fullscreen footer,
 .wrapper.fullscreen aside {
-    display: none;
+  display: none;
 }
 
 .wrapper.fullscreen .content-wrapper {
-    margin-left: 0 !important;
+  margin-left: 0 !important;
 }
 
 .wrapper.fullscreen #div_mainContainer {
-    margin-top: -50px;
+  margin-top: -50px;
 }
 
 #div_pageContainer{
-    position: relative;
-    overflow: hidden;
-    & .iconlist{
-        background-color : rgba(255,255,255,0);
-        padding : 10px;
-        border-radius: 2px;
-        margin : 10px;
-        cursor: pointer;
-    }
+  position: relative;
+  overflow: hidden;
+  & .iconlist{
+    background-color : rgba(255,255,255,0);
+    padding : 10px;
+    border-radius: 2px;
+    margin : 10px;
+    cursor: pointer;
+  }
 }
 
 .container-split {
-    padding-left: 5px;
-    padding-right: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .padding-bottom {
-    padding-bottom: 10px;
+  padding-bottom: 10px;
 }
-

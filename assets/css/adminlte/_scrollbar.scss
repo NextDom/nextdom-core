@@ -19,39 +19,45 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
+
+/* Scrollbar*/
 ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-thumb {
-    border-radius: 5px;
+  border-radius: 5px;
 }
 ::-webkit-scrollbar-corner {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .main-header {
-    position: fixed;
-    width: 100%;
-    z-index: 1030;
+  position: fixed;
+  width: 100%;
+  z-index: 1030;
 }
 
 .main-sidebar {
-    position: fixed;
+  position: fixed;
+}
+
+.pluginContainer {
+  margin: 0px 10px 0px 10px;
 }
 
 .content-wrapper {
-    min-height: 100%;
-    background-color: $nextdom_bg;
-    z-index: 800;
-    margin: {
-        top: 50px;
-    }
+  min-height: 100%;
+  background-color: $nextdom_bg;
+  z-index: 800;
+  margin: {
+    top: 50px;
+  }
 }
 @media (max-width: 767px) {
-    .content-wrapper {
-        margin: {
-            top: 100px;
-        }
+  .content-wrapper {
+    margin: {
+      top: 100px;
     }
+  }
 }
