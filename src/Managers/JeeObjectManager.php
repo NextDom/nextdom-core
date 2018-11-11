@@ -35,6 +35,7 @@ namespace NextDom\Managers;
 
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
+use NextDom\Managers\EventManager;
 
 class JeeObjectManager
 {
@@ -321,7 +322,7 @@ class JeeObjectManager
             $events[] = $event;
         }
         if (count($events) > 0) {
-            \event::adds('self::summary::update', $events);
+            EventManager::adds('self::summary::update', $events);
         }
     }
 
