@@ -1,0 +1,76 @@
+@charset "utf-8";
+/* This file is part of NextDom Software.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom Software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+ 
+/* Progress bars */
+.progress {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 767px) {
+  .fixed .content-wrapper, .fixed .right-side {
+    padding-top: 106px;
+  }
+}
+
+.container-fluid{
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.container-light {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.wrapper.fullscreen header,
+.wrapper.fullscreen footer,
+.wrapper.fullscreen aside {
+  display: none;
+}
+
+.wrapper.fullscreen .content-wrapper {
+  margin-left: 0 !important;
+}
+
+.wrapper.fullscreen #div_mainContainer {
+  margin-top: -50px;
+}
+
+#div_pageContainer{
+  position: relative;
+  overflow: hidden;
+  & .iconlist{
+    background-color : rgba(255,255,255,0);
+    padding : 10px;
+    border-radius: 2px;
+    margin : 10px;
+    cursor: pointer;
+  }
+}
+
+.container-split {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.padding-bottom {
+  padding-bottom: 10px;
+}
