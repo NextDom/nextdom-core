@@ -1,0 +1,632 @@
+<div style="display: none;" id="md_displayEqLogicConfigure"></div>
+<a class="btn btn-success pull-right btn-sm" id="bt_eqLogicConfigureSave"><i class="far fa-check-circle"></i> {{ 'Enregistrer' }}</a>
+<a class="btn btn-danger pull-right btn-sm" id="bt_eqLogicConfigureRemove"><i class="fas fa-times"></i> {{ 'Supprimer' }}</a>
+<a class="btn btn-default pull-right btn-sm" id="bt_eqLogicConfigureRawObject"><i class="fas fa-info"></i> {{ 'Informations' }}</a>
+<a class="btn btn-default pull-right btn-sm" id="bt_eqLogicConfigureLogRealTime"><i class="far fa-file"></i> {{ 'Log' }}</a>
+<a class="btn btn-default pull-right btn-sm" id="bt_eqLogicConfigureGraph"><i class="fas fa-object-group"></i> {{ 'Liens' }}</a>
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#eqLogic_information" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-info-circle"></i> {{ 'Informations' }}</a></li>
+    {% if widgetPossibilityCustom %}
+        <li role="presentation"><a href="#eqLogic_display" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-desktop"></i> {{ 'Affichage' }}</a></li>
+        {% if widgetPossibilityCustomLayout %}
+            <li role="presentation"><a href="#eqLogic_layout" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-th"></i> {{ 'Disposition' }}</a></li>
+        {% endif %}
+    {% endif %}
+    <li role="presentation"><a href="#eqLogic_alert" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-exclamation-triangle"></i> {{ 'Alertes' }}</a></li>
+    <li role="presentation"><a href="#eqLogic_comment" aria-controls="messages" role="tab" data-toggle="tab" id="bt_EqLogicConfigurationTabComment"><i class="fas fa-comment-alt"></i> {{ 'Commentaire' }}</a></li>
+</ul>
+<div class="tab-content" id="div_displayEqLogicConfigure">
+    <div role="tabpanel" class="tab-pane active" id="eqLogic_information">
+        <br/>
+        <div class="row">
+            <div class="col-sm-4">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{{ 'ID' }}</label>
+                            <div class="col-sm-4">
+                                <span class="eqLogicAttr label label-primary" data-l1key="id" style="font-size : 1em;"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{{ 'Nom' }}</label>
+                            <div class="col-sm-4">
+                                <span class="eqLogicAttr label label-primary" data-l1key="name" style="font-size : 1em;"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{{ 'ID logique' }}</label>
+                            <div class="col-sm-4">
+                                <span class="eqLogicAttr label label-primary" data-l1key="logicalId" style="font-size : 1em;"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{{ 'ID de l\'objet' }}</label>
+                            <div class="col-sm-4">
+                                <span class="eqLogicAttr label label-primary" data-l1key="object_id" style="font-size : 1em;"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{{ 'Date de création' }}</label>
+                            <div class="col-sm-4">
+                                <span class="eqLogicAttr label label-primary" data-l1key="configuration" data-l2key="createtime" style="font-size : 1em;"></span>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="col-sm-4">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{{ 'Activer' }}</label>
+                            <div class="col-sm-1">
+                                <input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>
+                            </div>
+                            <label class="col-sm-2 control-label">{{ 'Visible' }}</label>
+                            <div class="col-sm-1">
+                                <input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{{ 'Type' }}</label>
+                            <div class="col-sm-4">
+                                <span class="eqLogicAttr label label-primary" data-l1key="eqType_name" style="font-size : 1em;"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{{ 'Tentative échouée' }}</label>
+                            <div class="col-sm-4">
+                                <span class="label label-primary" style="font-size : 1em;">{{ statusNumberTryWithoutSuccess }}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{{ 'Date de dernière communication' }}</label>
+                            <div class="col-sm-4">
+                                <span class="label label-primary" style="font-size : 1em;">{{ statusLastCommunication }}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{{ 'Dernière mise à jour' }}</label>
+                            <div class="col-sm-4">
+                                <span class="eqLogicAttr label label-primary" data-l1key="configuration" data-l2key="updatetime" style="font-size : 1em;"></span>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">{{ 'Tag' }}</label>
+                    <div class="col-sm-10">
+                        <input class="eqLogicAttr form-control" data-l1key="tags"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <legend>{{ 'Commandes' }}</legend>
+                <table class="table table-bordered table-condensed">
+                    <thead>
+                    <tr>
+                        <th>{{ 'Nom' }}</th>
+                        <th>{{ 'Action' }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for cmd in cmdsList %}
+                        <tr>
+                            <td>{{ cmd.getHumanName() }}</td>
+                            <td>
+                                <a class="btn btn-default btn-xs pull-right cursor bt_advanceCmdConfigurationOnEqLogicConfiguration" data-id="{{ cmd.getId() }}"><i class="fas fa-cogs"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% if widgetPossibilityCustom %}
+        <div role="tabpanel" class="tab-pane" id="eqLogic_display">
+            <br/>
+            <legend><i class="fas fa-tint"></i> {{ 'Widget' }}</legend>
+            <table class="table table-bordered table-condensed">
+                <thead>
+                <tr>
+                    <th></th>
+                    {% for eqLogicDisplayType in eqLogicConfigurationDisplayType %}
+                        <th style="width:20%">{{ eqLogicDisplayType['name'] }}
+                            {% if eqLogicDisplayType['key'] == 'plan' or eqLogicDisplayType['key'] == 'view' %}
+                                <i class="fas fa-eye pull-right cursor bt_displayWidget" data-version="d{{ eqLogicDisplayType['key'] }}" aria-hidden="true"></i>
+                            {% elseif eqLogicDisplayType['key'] == 'dashboard' %}
+                                <i class="fas fa-eye pull-right cursor bt_displayWidget" data-version="{{ eqLogicDisplayType['key'] }}" aria-hidden="true"></i>
+                            {% endif %}
+                        </th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% if widgetPossibilityCustomVisibility %}
+                    <tr>
+                        <td>{{ 'Visible' }}</td>
+                        {% for eqLogicDisplayType in eqLogicConfigurationDisplayType %}
+                            <td>
+                                {% if eqLogicDisplayType['customVisibility'] == 1 %}
+                                    <input type="checkbox" class="eqLogicAttr" data-l1key="display" data-l2key="showOn{{ eqLogicDisplayType['key'] }}" checked/>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endif %}
+                {% if widgetPossibilityCustomDisplayName %}
+                    <tr>
+                        <td>{{ 'Afficher le nom' }}</td>
+                        {% for eqLogicDisplayType in eqLogicConfigurationDisplayType %}
+                            <td>
+                                {% if eqLogicDisplayType['customDisplayName'] %}
+                                    <input type="checkbox" class="eqLogicAttr" data-l1key="display" data-l2key="showNameOn{{ eqLogicDisplayType['key'] }}" checked/>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endif %}
+                {% if widgetPossibilityCustomDisplayObjectName %}
+                    <tr>
+                        <td>{{ 'Afficher le nom de l\'objet' }}</td>
+                        {% for eqLogicDisplayType in eqLogicConfigurationDisplayType %}
+                            <td>
+                                {% if eqLogicDisplayType['customDisplayObjectName'] %}
+                                    <input type="checkbox" class="eqLogicAttr" data-l1key="display" data-l2key="showObjectNameOn{{ eqLogicDisplayType['key'] }}"/>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endif %}
+                {% if widgetPossibilityCustomBackgroundColor %}
+                    <tr>
+                        <td>{{ 'Couleur de fond' }}</td>
+                        {% for eqLogicDisplayType in eqLogicConfigurationDisplayType %}
+                            <td>
+                                {% if eqLogicDisplayType['customBackgroundColor'] %}
+                                    <label>{{ 'Defaut' }} <input type="checkbox" class="eqLogicAttr background-color-default" data-l1key="display" data-l2key="background-color-default{{ eqLogicDisplayType['key'] }}" checked/></label>
+                                    <span class="span_configureBackgroundColor" style="display:none;">
+                                        <label>{{ 'Transparent' }} <input type="checkbox" class="eqLogicAttr background-color-transparent" data-l1key="display" data-l2key="background-color-transparent{{ eqLogicDisplayType['key'] }}"/></label>
+                                        <input type="color" class="eqLogicAttr background-color" data-l1key="display" data-l2key="background-color{{ eqLogicDisplayType['key'] }}" value="{{ eqLogicDisplayType['backgroundColor'] }}"/>
+                                    </span>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endif %}
+                {% if widgetPossibilityCustomBackgroundOpacity %}
+                    <tr>
+                        <td>{{ 'Opacité' }}
+                        </td>
+                        {% for eqLogicDisplayType in eqLogicConfigurationDisplayType %}
+                            <td>
+                                {% if eqLogicDisplayType['customBackgroundOpacity'] %}
+                                    <input type="numeric" class="eqLogicAttr form-control input-sm" data-l1key="display" data-l2key="background-opacity{{ eqLogicDisplayType['key'] }}" placeholder="{{ 'Entre 0 et 1' }}"/>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endif %}
+                {% if widgetPossibilityCustomTextColor %}
+                    <tr>
+                        <td>{{ 'Couleur du texte' }}</td>
+                        {% for eqLogicDisplayType in eqLogicConfigurationDisplayType %}
+                            <td>
+                                {% if eqLogicDisplayType['customTextColor'] %}
+                                    <label>{{ 'Defaut' }} <input type="checkbox" class="eqLogicAttr color-default" data-l1key="display" data-l2key="color-default{{ eqLogicDisplayType['key'] }}" checked/></label>
+                                    <input type="color" class="eqLogicAttr color" data-l1key="display" data-l2key="color{{ eqLogicDisplayType['key'] }}" value="#ffffff" style="display:none;"/>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endif %}
+                {% if widgetPossibilityCustomBorder %}
+                    <tr>
+                        <td>{{ 'Bordures' }}</td>
+                        {% for eqLogicDisplayType in eqLogicConfigurationDisplayType %}
+                            <td>
+                                {% if eqLogicDisplayType['customBorder'] %}
+                                    <label>{{ 'Defaut' }} <input type="checkbox" class="eqLogicAttr border-default" data-l1key="display" data-l2key="border-default{{ eqLogicDisplayType['key'] }}" checked/></label>
+                                    <input class="eqLogicAttr border form-control inline-block pull-right input-sm" data-l1key="display" data-l2key="border{{ eqLogicDisplayType['key'] }}" style="display:none;width:50%"/>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endif %}
+                {% if widgetPossibilityCustomBorderRadius %}
+                    <tr>
+                        <td>{{ 'Arrondi des bordures (en px)' }}</td>
+                        {% for eqLogicDisplayType in eqLogicConfigurationDisplayType %}
+                            <td>
+                                {% if eqLogicDisplayType['customBorderRadius'] %}
+                                    <label>{{ 'Defaut' }} <input type="checkbox" class="eqLogicAttr border-radius-default" data-l1key="display" data-l2key="border-radius-default{{ eqLogicDisplayType['key'] }}" checked/></label>
+                                    <input type="number" class="eqLogicAttr border-radius form-control inline-block pull-right input-sm" data-l1key="display" data-l2key="border-radius{{ eqLogicDisplayType['key'] }}" style="display:none;width:50%"/>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endif %}
+                {% if parameters is defined %}
+                    {% for parameter in parameters %}
+                        <tr>
+                            <td>{{ parameter['name'] }}</td>
+                            {% for eqLogicDisplayType in eqLogicConfigurationDisplayType %}
+                                <td>
+                                    {% if advancedParam %}
+                                        {% if parameter['default'] != '' %}
+                                            <label>{{ 'Defaut' }} <input type="checkbox" class="eqLogicAttr advanceWidgetParameterDefault" data-l1key="display" data-l2key="advanceWidgetParameter{{ param['key']~eqLogicDisplayType['key'] }}-default" checked/></label>';
+                                        {% endif %}
+                                        {% if parameter['type'] == 'color' %}
+                                            {% if parameter['allow_transparent'] %}
+                                                <span class="advanceWidgetParameter" style="{{ parameter['display'] }}">
+                                            <label>{{ 'Transparent' }} <input type="checkbox" class="eqLogicAttr advanceWidgetParameterColorTransparent" data-l1key="display" data-l2key="advanceWidgetParameter{{ param['key']~eqLogicDisplayType['key'] }}-transparent"/></label>
+                                            <input type="color" class="eqLogicAttr pull-right inline-block advanceWidgetParameterColor" data-l1key="display" data-l2key="advanceWidgetParameter{{ param['key']~eqLogicDisplayType['key'] }}" value="{{ parameter['default'] }}"/>
+                                            </span>
+                                            {% else %}
+                                                <input type="color" class="eqLogicAttr pull-right advanceWidgetParameter form-control inline-block input-sm" data-l1key="display" data-l2key="advanceWidgetParameter{{ param['key']~eqLogicDisplayType['key'] }}" style="width:50%;{{ parameter['display'] }}" value="{{ parameter['default'] }}"/>
+                                            {% endif %}
+                                        {% elseif parameter['type'] == 'input' %}
+                                            <input class="eqLogicAttr pull-right advanceWidgetParameter form-control inline-block input-sm" data-l1key="display" data-l2key="advanceWidgetParameter{{ param['key']~eqLogicDisplayType['key'] }}" style="width:50%;{{ parameter['display'] }}" value="{{ parameter['default'] }}"/>
+                                        {% elseif parameter['type'] == 'number' %}
+                                            <input type="number" class="eqLogicAttr pull-right advanceWidgetParameter form-control inline-block input-sm" data-l1key="display" data-l2key="advanceWidgetParameter{{ param['key']~eqLogicDisplayType['key'] }}" style="width:50%;{{ parameter['display'] }}" value="{{ parameter['default'] }}"/>
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+            {% if widgetPossibilityCustomOptionalParameters %}
+                <legend><i class="fas fa-pencil-alt-square-o"></i> {{ 'Paramètres optionnels sur la tuile' }} <a class="btn btn-success btn-xs pull-right" id="bt_addWidgetParameters"><i class="fas fa-plus-circle"></i> Ajouter</a></legend>
+                <table class="table table-bordered table-condensed" id="table_widgetParameters">
+                    <thead>
+                    <tr>
+                        <th>{{ 'Nom' }}</th>
+                        <th>{{ 'Valeur' }}</th>
+                        <th>{{ 'Action' }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if eqLogicDisplayParameters != '' %}
+                        {% for displayKey, displayValue in eqLogicDisplayParameters %}
+                            <tr>
+                                <td>
+                                    <input class="form-control key" value="{{ displayKey }}"/>
+
+                                </td>
+
+
+                                <td>
+                                    <input class="form-control value" value="{{ displayValue }}"/>
+
+                                </td>
+
+
+                                <td>
+                                    <a class="btn btn-danger btn-xs removeWidgetParameter"><i class="fas fa-times"></i> {{ 'Supprimer' }}</a>
+
+                                </td>
+
+
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    {% endif %}
+    <div role="tabpanel" class="tab-pane" id="eqLogic_alert">
+        <br/>
+        <legend><i class="fas fa-info-circle"></i> {{ 'Informations Batteries' }}</legend>
+        <div class="row">
+            <div class="col-sm-4">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{{ 'Type de batterie' }}</label>
+                            <div class="col-sm-6">
+                                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery_type"/>>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <legend><i class="icon techno-fleches"></i> {{ 'Seuils spécifiques Batteries' }}</legend>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label class="col-xs-2 eqLogicAttr label label-danger">{{ 'Danger' }}</label>
+                    <div class="col-xs-2">
+                        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery_danger_threshold"/>
+                    </div>
+                    <label class="col-xs-2 label label-warning">{{ 'Warning' }}</label>
+                    <div class="col-xs-2">
+                        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery_warning_threshold"/>
+                    </div>
+                    <label class="col-xs-2 label label-success">{{ 'Ok' }}</label>
+                </div>
+            </div>
+        </div>
+        <legend><i class="fas fa-clock-o"></i> {{ 'Alertes Communications' }}</legend>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label class="col-xs-2 eqLogicAttr label label-danger">{{ 'Danger' }}</label>
+                    <div class="col-xs-2">
+                        <input class="eqLogicAttr form-control" data-l1key="timeout"/>
+                        {{ '(en minutes)' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="eqLogic_comment">
+        <br/>
+        <textarea data-l1key="comment" class="form-control eqLogicAttr autogrow"></textarea>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="eqLogic_layout">
+        <br/>
+        <form class="form-horizontal">
+            <fieldset>
+                <legend>{{ 'Configuration général' }}</legend>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">{{ 'Disposition' }}</label>
+                    <div class="col-sm-2">
+                        <select class="eqLogicAttr form-control sel_layout" data-l1key="display" data-l2key="layout::dashboard">
+                            <option value="default">{{ 'Défaut' }}</option>
+                            <option value="table">{{ 'Tableau' }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="widget_layout table" style="display: none;">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ 'Nombre de lignes' }}</label>
+                        <div class="col-sm-2">
+                            <input type="number" class="eqLogicAttr form-control input-sm" data-l1key="display" data-l2key="layout::dashboard::table::nbLine"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ 'Nombre de colonnes' }}</label>
+                        <div class="col-sm-2">
+                            <input type="number" class="eqLogicAttr form-control input-sm" data-l1key="display" data-l2key="layout::dashboard::table::nbColumn"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ 'Centrer dans les cases' }}</label>
+                        <div class="col-sm-2">
+                            <input type="checkbox" class="eqLogicAttr" data-l1key="display" data-l2key="layout::dashboard::table::parameters" data-l3key="center"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ 'Style général des cases (CSS)' }}</label>
+                        <div class="col-sm-10">
+                            <input class="eqLogicAttr form-control input-sm" data-l1key="display" data-l2key="layout::dashboard::table::parameters" data-l3key="styletd"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ 'Style du tableau (CSS)' }}</label>
+                        <div class="col-sm-10">
+                            <input class="eqLogicAttr form-control" data-l1key="display" data-l2key="layout::dashboard::table::parameters" data-l3key="styletable"/>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <div class="widget_layout table" style="display: none;">
+            <legend>{{ 'Configuration détaillée' }}</legend>
+            <table class="table table-bordered table-condensed" id="tableCmdLayoutConfiguration">
+                <tbody>
+                {% for row in range(0, displayDasboardNbLine) %}
+                    <tr>
+                        {% for col in range(0, displayDashboardNbColumn) %}
+                            <td data-line="{{ row }}" data-column="{{ col }}">
+                                <center class="cmdLayoutContainer" style="min-height:30px">
+                                    {% if dashboardCmd[row][col] is defined and dashboardCmd[row][col]|length > 0 %}
+                                        {% for cmd in dashboardCmd[row][col] %}
+                                            <span class="label label-default cmdLayout cursor" data-cmd_id="{{ cmd.getId() }}"
+                                                  style="margin:2px;">{{ cmd.getName() }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                                </center>
+                                <input class="eqLogicAttr form-control input-sm" data-l1key="display"
+                                       data-l2key="layout::dashboard::table::parameters"
+                                       data-l3key="text::td::{{ row }}::{{ col }}" placeholder="{{ 'Texte de la case' }}"
+                                       style="margin-top:3px;"/>
+                                <input class="eqLogicAttr form-control input-sm" data-l1key="display"
+                                       data-l2key="layout::dashboard::table::parameters"
+                                       data-l3key="style::td::{{ row }}::{{ col }}" placeholder="{{ 'Style de la case (CSS)' }}"
+                                       style="margin-top:3px;"/>
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $('#tableCmdLayoutConfiguration tbody td .cmdLayoutContainer').sortable({
+        connectWith: '#tableCmdLayoutConfiguration tbody td .cmdLayoutContainer',
+        items: ".cmdLayout"
+    });
+
+    $('.sel_layout').on('change', function () {
+        var type = $(this).attr('data-type');
+        $('.widget_layout').hide();
+        $('.widget_layout.' + $(this).value()).show();
+    });
+    $('.background-color-default').off('change').on('change', function () {
+        if ($(this).value() == 1) {
+            $(this).closest('td').find('.span_configureBackgroundColor').hide();
+        } else {
+            $(this).closest('td').find('.span_configureBackgroundColor').show();
+        }
+    });
+    $('.background-color-transparent').off('change').on('change', function () {
+        var td = $(this).closest('td');
+        if ($(this).value() == 1) {
+            td.find('.background-color').hide();
+        } else {
+            td.find('.background-color').show();
+        }
+    });
+    $('.color-default').off('change').on('change', function () {
+        var td = $(this).closest('td')
+        if ($(this).value() == 1) {
+            td.find('.color').hide();
+        } else {
+            td.find('.color').show();
+        }
+    });
+    $('.border-default').off('change').on('change', function () {
+        var td = $(this).closest('td')
+        if ($(this).value() == 1) {
+            td.find('.border').hide();
+        } else {
+            td.find('.border').show();
+        }
+    });
+    $('.border-radius-default').off('change').on('change', function () {
+        var td = $(this).closest('td')
+        if ($(this).value() == 1) {
+            td.find('.border-radius').hide();
+        } else {
+            td.find('.border-radius').show();
+        }
+    });
+    $('.advanceWidgetParameterDefault').off('change').on('change', function () {
+        if ($(this).value() == 1) {
+            $(this).closest('td').find('.advanceWidgetParameter').hide();
+        } else {
+            $(this).closest('td').find('.advanceWidgetParameter').show();
+        }
+    });
+    $('.advanceWidgetParameterColorTransparent').off('change').on('change', function () {
+        if ($(this).value() == 1) {
+            $(this).closest('td').find('.advanceWidgetParameterColor').hide();
+        } else {
+            $(this).closest('td').find('.advanceWidgetParameterColor').show();
+        }
+    });
+    $('#div_displayEqLogicConfigure').setValues(eqLogicInfo, '.eqLogicAttr');
+
+    $('#bt_eqLogicConfigureGraph').on('click', function () {
+        $('#md_modal2').dialog({title: "{{ 'Graphique des liens' }}"});
+        $("#md_modal2").load('index.php?v=d&modal=graph.link&filter_type=eqLogic&filter_id=' + eqLogicInfo.id).dialog('open');
+    });
+
+    $('#table_widgetParameters').on('click', '.removeWidgetParameter', function () {
+        $(this).closest('tr').remove();
+    });
+    $('#bt_EqLogicConfigurationTabComment').on('click', function () {
+        setTimeout(function () {
+            $('.eqLogicAttr[data-l1key=comment]').trigger('change');
+        }, 10);
+    });
+    $('#bt_eqLogicConfigureRawObject').off('click').on('click', function () {
+        $('#md_modal2').dialog({title: "{{ 'Informations brutes' }}"});
+        $("#md_modal2").load('index.php?v=d&modal=object.display&class=eqLogic&id=' + eqLogicInfo.id).dialog('open');
+    })
+    $('#bt_addWidgetParameters').off().on('click', function () {
+        var tr = '<tr>';
+        tr += '<td>';
+        tr += '<input class="form-control key" />';
+        tr += '</td>';
+        tr += '<td>';
+        tr += '<input class="form-control value" />';
+        tr += '</td>';
+        tr += '<td>';
+        tr += '<a class="btn btn-danger btn-xs removeWidgetParameter pull-right"><i class="fas fa-times"></i> Supprimer</a>';
+        tr += '</td>';
+        tr += '</tr>';
+        $('#table_widgetParameters tbody').append(tr);
+    });
+
+    $('.bt_displayWidget').off('click').on('click', function () {
+        var eqLogic = $('#div_displayEqLogicConfigure').getValues('.eqLogicAttr')[0];
+        $('#md_modal2').dialog({title: "{{ 'Widget' }}"});
+        $('#md_modal2').load('index.php?v=d&modal=eqLogic.displayWidget&eqLogic_id=' + eqLogic.id + '&version=' + $(this).attr('data-version')).dialog('open');
+    });
+
+    $('#bt_eqLogicConfigureSave').on('click', function () {
+
+        var eqLogic = $('#div_displayEqLogicConfigure').getValues('.eqLogicAttr')[0];
+        if (!isset(eqLogic.display)) {
+            eqLogic.display = {};
+        }
+        if (!isset(eqLogic.display.parameters)) {
+            eqLogic.display.parameters = {};
+        }
+        $('#table_widgetParameters tbody tr').each(function () {
+            eqLogic.display.parameters[$(this).find('.key').value()] = $(this).find('.value').value();
+        });
+        nextdom.eqLogic.save({
+            eqLogics: [eqLogic],
+            type: eqLogic.eqType_name,
+            error: function (error) {
+                notify("EqLogic", error.message, 'error');
+            },
+            success: function () {
+                cmds = [];
+                order = 1;
+                $('#tableCmdLayoutConfiguration tbody td').find('.cmdLayout').each(function () {
+                    cmd = {};
+                    cmd.id = $(this).attr('data-cmd_id');
+                    cmd.line = $(this).closest('td').attr('data-line');
+                    cmd.column = $(this).closest('td').attr('data-column');
+                    cmd.order = order;
+                    cmds.push(cmd);
+                    order++;
+                });
+                nextdom.cmd.setOrder({
+                    version: 'dashboard',
+                    cmds: cmds,
+                    error: function (error) {
+                        notify("EqLogic", error.message, 'error');
+                    },
+                    success: function () {
+                        notify("EqLogic", '{{ 'Enregistrement réussi' }}', 'success');
+                    }
+                });
+            }
+        });
+    });
+
+    $('#bt_eqLogicConfigureRemove').on('click', function () {
+        bootbox.confirm('{{ 'Etes-vous sûr de vouloir supprimer cet équipement ?' }}', function (result) {
+            if (result) {
+                var eqLogic = $('#div_displayEqLogicConfigure').getValues('.eqLogicAttr')[0];
+                nextdom.eqLogic.remove({
+                    id: eqLogic.id,
+                    type: eqLogic.eqType_name,
+                    error: function (error) {
+                        notify("EqLogic", error.message, 'error');
+                    },
+                    success: function (data) {
+                        notify("EqLogic", '{{ 'Suppression réalisée avec succès' }}', 'success');
+                    }
+                });
+            }
+        });
+    });
+
+    $('.bt_advanceCmdConfigurationOnEqLogicConfiguration').off('click').on('click', function () {
+        $('#md_modal2').dialog({title: "{{ 'Configuration de la commande' }}"});
+        $('#md_modal2').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
+    });
+
+    $('#bt_eqLogicConfigureLogRealTime').off('click').on('click', function () {
+        $('#md_modal2').dialog({title: "{{ 'Logs' }}"});
+        $('#md_modal2').load('index.php?v=d&modal=log.display&log=event&search=' + eqLogicInfoSearchString).dialog('open');
+    });
+
+</script>
