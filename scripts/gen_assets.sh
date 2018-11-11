@@ -36,21 +36,8 @@ function gen_css {
 	sass assets/css/Market/market.scss public/css/market.css $COMPRESS
 
 	# Remplacement des chemins
-#	sed -i s#url\(\"Roboto-#url\(\"/assets/3rdparty/roboto/Roboto-#g public/css/nextdom.css
-#	sed -i s#\.\./fonts/glyphicons-#/vendor/twitter/bootstrap/fonts/glyphicons-#g public/css/nextdom.css
 	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
-#	sed -i 's/[\"]32px\.png/"\/assets/3rdparty\/jquery\.tree\/themes\/default\/32px.png/g' public/css/nextdom.css
-#	sed -i 's/[\"]throbber\.gif/"\/assets/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.css
-
-#	sed -i s#url\(\"Roboto-#url\(\"/assets/3rdparty/roboto/Roboto-# public/css/nextdom.mob.css
 	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
-#	sed -i 's/[\"]32px\.png/\/assets/3rdparty\/jquery\.tree\/themes\/default\/32.png/g' public/css/nextdom.mob.css
-#	sed -i 's/[\"]throbber\.gif/"\/assets/3rdparty\/jquery\.tree\/themes\/default\/throbber\.gif/g' public/css/nextdom.mob.css
-}
-
-function gen_links {
-echo " >>> Création des liens symboliques"
-ln -s ${root}/../vendor/node_modules/codemirror/ ${root}/../3rdparty/
 }
 
 function gen_js {
@@ -183,7 +170,6 @@ function copy_assets {
 	cp -fr assets/img public/
 	gen_css
 	gen_js
-	gen_links
 }
 
 function start {
