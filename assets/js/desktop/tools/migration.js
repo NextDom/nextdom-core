@@ -34,192 +34,224 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-jwerty.key('ctrl+s', function (e) {
-    e.preventDefault();
-    $("#bt_saveMigration").click();
-});
-
-$("#md_migrationInfo").dialog({
-    closeText: '',
-    autoOpen: false,
-    modal: true,
-    width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
-    open: function () {
-        $("body").css({overflow: 'hidden'});
-    },
-    beforeClose: function (event, ui) {
-        $("body").css({overflow: 'inherit'});
-    }
-});
-
-$("#bt_saveMigration").on('click', function (event) {
+/**
+ * Save migration configuration
+ */
+function saveMigrationConfiguration() {
     $.hideAlert();
     nextdom.config.save({
         configuration: $('#migration').getValues('.configKey')[0],
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function () {
             nextdom.config.load({
                 configuration: $('#migration').getValues('.configKey')[0],
                 plugin: 'core',
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    notify('Erreur', error.message, 'error');
                 },
                 success: function (data) {
                     $('#migration').setValues(data, '.configKey');
                     modifyWithoutSave = false;
-                    notify("Info", '{{Sauvegarde réussie}}', 'success');
+                    notify('Info', '{{Sauvegarde réussie}}', 'success');
                     window.location.reload();
                 }
             });
         }
     });
-});
+}
 
-$('#pre_migrationInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
-
-$("#bt_migrateNextDom").on('click', function (event) {
-    switchNotify(0);
-    var el = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir migrer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackupforMigration option:selected').text() + '</b> ? {{Une fois lancée, cette opération ne peut être annulée}}', function (result) {
+/**
+ * Start migration
+ */
+function startMigration() {
+    var migrationButton = $('#bt_migrateNextDom');
+    bootbox.confirm('{{Etes-vous sûr de vouloir migrer}} ' + NEXTDOM_PRODUCT_NAME + ' {{avec}} <b>' + $('#sel_restoreBackupforMigration option:selected').text() + '</b> ? {{Une fois lancée, cette opération ne peut être annulée}}', function (result) {
         if (result) {
-            el.find('.fa-refresh').show();
-            el.find('.fa-play').hide();
-            $('#md_migrationInfo').dialog({title: "{{Avancement de la migration}}"});
-            $("#md_migrationInfo").dialog('open');
+            switchNotify(0);
+            migrationButton.find('.fa-refresh').show();
+            migrationButton.find('.fa-play').hide();
+            $('#md_migrationInfo').dialog({title: '{{Avancement de la migration}}'});
+            $('#md_migrationInfo').dialog('open');
             nextdom.backup.migrate({
                 backup: $('#sel_restoreBackupforMigration').value(),
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    switchNotify(1);
+                    notify('Erreur', error.message, 'error');
                 },
                 success: function () {
-
                     getNextDomLog(1, 'migration');
                 }
             });
         }
     });
-});
+}
 
-$("#bt_migrateOpenLog").on('click', function (event) {
-    $('#md_migrationInfo').dialog({title: "{{Avancement de la migration}}"});
-    $("#md_migrationInfo").dialog('open');
-});
-
-$('#bt_downloadBackupforMigration').on('click', function () {
-    window.open('core/php/downloadFile.php?pathfile=backup/' + $('#sel_restoreBackupforMigration option:selected').text(), "_blank", null);
-    var el = $(this);
-    el.find('.fa-refresh').show();
-    el.find('.fa-cloud-upload-alt').hide();
-});
-
-$('#bt_uploadBackupforMigration').fileupload({
-    dataType: 'json',
-    replaceFileInput: false,
-    done: function (e, data) {
-        if (data.result.state != 'ok') {
-            notify("Erreur", data.result.result, 'error');
-            return;
-        }
-        updateListBackup();
-        notify("Info", '{{Fichier(s) ajouté(s) avec succès}}', 'success');
-    }
-});
-
-
-$.showLoading();
-nextdom.config.load({
-    configuration: $('#migration').getValues('.configKey')[0],
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#migration').setValues(data, '.configKey');
-        modifyWithoutSave = false;
-    }
-});
-updateListBackup();
-
-$('#migration').delegate('.configKey', 'change', function () {
-    modifyWithoutSave = true;
-});
-
-/********************Log************************/
-
-function getNextDomLog(_autoUpdate, _log) {
+/**
+ * Get and update log in modal
+ * @param autoUpdate
+ * @param logFile
+ */
+function getNextDomLog(autoUpdate, logFile) {
     $.ajax({
         type: 'POST',
         url: 'core/ajax/log.ajax.php',
         data: {
             action: 'get',
-            log: _log,
+            log: logFile,
         },
         dataType: 'json',
         global: false,
         error: function (request, status, error) {
             setTimeout(function () {
-                getNextDomLog(_autoUpdate, _log)
+                getNextDomLog(autoUpdate, logFile)
             }, 1000);
         },
         success: function (data) {
-            if (data.state != 'ok') {
+            if (data.state !== 'ok') {
                 setTimeout(function () {
-                    getNextDomLog(_autoUpdate, _log)
+                    getNextDomLog(autoUpdate, logFile)
                 }, 1000);
                 return;
             }
             var log = '';
-            if($.isArray(data.result)){
-                for (var i in data.result.reverse()) {
-                    log += data.result[i]+"\n";
-                    if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' SUCCESS]') != -1){
-                        switchNotify(1);
-                        notify("Info", '{{L\'opération est réussie}}', 'success');
-                        if(_log == 'migration'){
-                            nextdom.user.refresh();
-                        }
-                        _autoUpdate = 0;
+            if ($.isArray(data.result)) {
+                var processFinish = false;
+                var finishMsg = '';
+                for (var rowIndex in data.result.reverse()) {
+                    log += data.result[rowIndex] + '\n';
+                    if (data.result[rowIndex].indexOf('[END ' + logFile.toUpperCase() + ' SUCCESS]') !== -1) {
+                        finishMsg = '{{L\'opération est réussie}}';
+                        processFinish = true;
                     }
-                    if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' ERROR]') != -1){
-                        switchNotify(0);
-                        notify("Erreur", '{{L\'opération a échoué}}', 'error');
-                        if(_log == 'migration'){
+                    else if (data.result[rowIndex].indexOf('[END ' + logFile.toUpperCase() + ' ERROR]') !== -1) {
+                        finishMsg = '{{L\'opération a échoué}}';
+                        processFinish = true;
+                    }
+                    if (processFinish) {
+                        switchNotify(1);
+                        notify('Erreur', finishMsg, 'error');
+                        if (logFile === 'migration') {
                             nextdom.user.refresh();
                         }
-                        _autoUpdate = 0;
+                        autoUpdate = 0;
                     }
                 }
             }
             $('#pre_migrationInfo').text(log);
-            if (init(_autoUpdate, 0) == 1) {
+            if (init(autoUpdate, 0) == 1) {
                 setTimeout(function () {
-                    getNextDomLog(_autoUpdate, _log)
+                    getNextDomLog(autoUpdate, logFile)
                 }, 1000);
             } else {
-                $('#bt_' + _log + 'NextDom .fa-refresh').hide();
-                $('.bt_' + _log + 'NextDom .fa-refresh').hide();
-                $('#bt_' + _log + 'NextDom .fa-play').show();
-                $('.bt_' + _log + 'NextDom .fa-play').show();
-                $('#bt_' + _log + 'NextDom .fa-cloud-upload-alt').show();
-                $('.bt_' + _log + 'NextDom .fa-cloud-upload-alt').show();
-                updateListBackup();
+                $('#bt_' + logFile + 'NextDom .fa-refresh').hide();
+                $('.bt_' + logFile + 'NextDom .fa-refresh').hide();
+                $('#bt_' + logFile + 'NextDom .fa-play').show();
+                $('.bt_' + logFile + 'NextDom .fa-play').show();
+                $('#bt_' + logFile + 'NextDom .fa-cloud-upload-alt').show();
+                $('.bt_' + logFile + 'NextDom .fa-cloud-upload-alt').show();
+                updateBackupsList();
             }
         }
     });
 }
 
-function updateListBackup() {
+/**
+ * Get backup list and update select form
+ */
+function updateBackupsList() {
     nextdom.backup.list({
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
-        success: function (data) {
+        success: function (backupsList) {
+            // Update select in form
             var options = '';
-            for (var i in data) {
-                options += '<option value="' + i + '">' + data[i] + '</option>';
+            for (var backupIndex in backupsList) {
+                options += '<option value="' + backupIndex + '">' + backupsList[backupIndex] + '</option>';
             }
             $('#sel_restoreBackupforMigration').html(options);
+            // Enable migration button event
+            if (options !== '') {
+                var startMigrationButton = $('#bt_migrateNextDom');
+                startMigrationButton.on('click', startMigration);
+                startMigrationButton.removeAttr('disabled');
+            }
         }
     });
 }
+
+/**
+ * Initialise all items in the migration page
+ */
+function initMigrationPageItems() {
+    jwerty.key('ctrl+s', function (e) {
+        e.preventDefault();
+        saveMigrationConfiguration();
+    });
+
+    $('#md_migrationInfo').dialog({
+        closeText: '',
+        autoOpen: false,
+        modal: true,
+        width: (($(window).width() - 50) < 1500) ? ($(window).width() - 50) : 1500,
+        open: function () {
+            $('body').css({overflow: 'hidden'});
+        },
+        beforeClose: function (event, ui) {
+            $('body').css({overflow: 'inherit'});
+        }
+    });
+
+    $('#pre_migrationInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
+
+    $.showLoading();
+
+    nextdom.config.load({
+        configuration: $('#migration').getValues('.configKey')[0],
+        error: function (error) {
+            notify('Erreur', error.message, 'error');
+        },
+        success: function (data) {
+            $('#migration').setValues(data, '.configKey');
+            modifyWithoutSave = false;
+        }
+    });
+    updateBackupsList();
+
+    $('#migration').delegate('.configKey', 'change', function () {
+        modifyWithoutSave = true;
+    });
+
+}
+
+/**
+ * Init all events in the migration page
+ */
+function initMigrationPageEvents() {
+    $('#bt_saveMigration').on('click', saveMigrationConfiguration);
+
+    $('#bt_migrateOpenLog').on('click', function (event) {
+        $('#md_migrationInfo').dialog({title: '{{Avancement de la migration}}'});
+        $('#md_migrationInfo').dialog('open');
+    });
+
+    $('#bt_uploadBackupforMigration').fileupload({
+        dataType: 'json',
+        replaceFileInput: false,
+        done: function (e, data) {
+            if (data.result.state != 'ok') {
+                notify('Erreur', data.result.result, 'error');
+                return;
+            }
+            updateBackupsList();
+            notify('Info', '{{Fichier(s) ajouté(s) avec succès}}', 'success');
+        }
+    });
+
+}
+
+// Entry point
+initMigrationPageItems();
+initMigrationPageEvents();
