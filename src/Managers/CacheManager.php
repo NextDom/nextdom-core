@@ -181,7 +181,7 @@ class CacheManager {
      * Get stored object by key
      *
      * @param string $key Key
-     * @return \cache|null Stored object or null if not exists
+     * @return mixed Stored object or null if not exists
      */
     public static function byKey($key) 
     {
