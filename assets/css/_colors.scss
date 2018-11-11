@@ -1,3 +1,4 @@
+@charset "utf-8";
 /* This file is part of NextDom.
 *
 * NextDom is free software: you can redistribute it and/or modify
@@ -20,29 +21,33 @@
 
 /* Colors variables */
 $white:#FFF;
-$black:#000;
-$orange: #ec971f;
-$nextdom_blue:#33b8cc;
+$lightgray:#ddd;
 $nextdom_bg:#ecf0f5;
+$whitegray: #f5f5f5;
+$whitelightgray: #fafafa;
+$lightgolden:#fdfdf2;
+$black:#000;
+$verydarkgray:#333;
+$lightblack:#222d32;
+$gray:#666;
+$darkgray: #999;
+
+$lightblue:#B3D7EF;
+$nextdom_blue:#33b8cc;
+$blue:#337ab7;
+$purple:#563d7c;
+
 $red:#c9302c;
+$critical: #e74c3c;
 $lightred:#DFAAA9;
 $green: #00cc00;
 $lightgreen:#5cb85c;
-$gray:#666;
-$lightgray:#ddd;
-$blue:#337ab7;
-$lightblue:#B3D7EF;
+$good: #2ecc71;
+
+$orange: #ec971f;
+$warn: #f1c40f;
 $yellow:#BFFF00;
 $lightyellow:#F3E5A7;
-$purple:#563d7c;
-$good: #2ecc71;
-$warn: #f1c40f;
-$critical: #e74c3c;
-$whitegray: #f5f5f5;
-$whitelightgray: #fafafa;
-$darkgray: #999;
-$lightgolden:#fdfdf2;
-$lightblack:#222d32;
 
 /* Accent colors by defaut, the real color is set in adminLTE/skin-xxx */
 $nextdom_accent: $black;
