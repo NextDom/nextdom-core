@@ -1039,7 +1039,7 @@ function addExpression(_expression) {
       retour += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="background" checked title="{{Cocher pour que la commande s\'exécute en parallèle des autres actions}}"/>';
     }
     retour += '</div>';
-    retour += '<div class="col-xs-4 scenario-sub-group"><div class="input-group input-group-sm">';
+    retour += '<div class="col-xs-11 scenario-sub-group"><div class="input-group input-group-sm">';
     retour += '<span class="input-group-btn">';
     retour += '<button class="btn btn-default bt_removeExpression" type="button" title="{{Supprimer l\'action}}"><i class="fas fa-minus-circle"></i></button>';
     retour += '</span>';
@@ -1050,7 +1050,7 @@ function addExpression(_expression) {
     retour += '</span>';
     retour += '</div></div>';
     var actionOption_id = uniqId();
-    retour += '<div class="col-xs-7 expressionOptions scenario-sub-group" id="'+actionOption_id+'">';
+    retour += '<div class="col-xs-11 col-xs-offset-1 expressionOptions scenario-sub-group" id="'+actionOption_id+'">';
     retour += '</div>';
     actionOptions.push({
       expression : init(_expression.expression, ''),
