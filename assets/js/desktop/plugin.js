@@ -111,15 +111,31 @@ if(!$('#md_modal').is(':visible')){
     }
 }
 
-$(".li_plugin,.pluginDisplayCard").on('click', function () {
+$(".li_plugin").on('click', function () {
+    showPlugin($(this).data('plugin_id'));
+    return false;
+});
+
+$(".pluginDisplayCard .box-body,.pluginDisplayCard .box-header").on('click', function () {
+    showPlugin($(this).parent().data('plugin_id'));
+    return false;
+});
+
+/**
+ * Show plugin configuration panel
+ *
+ * @param pluginId string Plugin Id
+ */
+function showPlugin(pluginId) {
+    console.log(pluginId);
     $.hideAlert();
     $('#div_resumePluginList').hide();
     $('.li_plugin').removeClass('active');
-    $('.li_plugin[data-plugin_id='+$(this).attr('data-plugin_id')+']').addClass('active');
+    $('.li_plugin[data-plugin_id='+pluginId+']').addClass('active');
     $.showLoading();
-    sel_plugin_id = $(this).attr('data-plugin_id');
+    sel_plugin_id = pluginId;
     nextdom.plugin.get({
-        id: $(this).attr('data-plugin_id'),
+        id: pluginId,
         error: function (error) {
             notify('Core',error.message,'error');
         },
@@ -362,13 +378,11 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
             modifyWithoutSave = false;
         }
     });
-    return false;
-});
+}
 
 $('.span_plugin_delete').on('click',function(){
-    var id = $(this).closest('.box').children().attr('data-plugin_id');
-    console.log(id);
-    bootbox.confirm('{{Etes-vous sûr de vouloir supprimer ce plugin ?}}', function (result) {
+    var id = $(this).closest('.pluginDisplayCard').attr('data-plugin_id');
+    bootbox.confirm('{{Êtes-vous sûr de vouloir supprimer ce plugin ?}}', function (result) {
         if (result) {
             $.hideAlert();
             nextdom.update.remove({
@@ -410,7 +424,8 @@ if (sel_plugin_id != -1) {
     $('#ul_plugin .li_plugin:first').click();
   }
   */
-    $('.pluginDisplayCard[data-plugin_id="'+sel_plugin_id+'"]').click();
+    showPlugin(sel_plugin_id);
+//    $('.pluginDisplayCard[data-plugin_id="'+sel_plugin_id+'"]').click();
 }
 
 $('#bt_returnToThumbnailDisplay').on('click',function(){
