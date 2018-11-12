@@ -1,32 +1,24 @@
-<?php
-if (!isConnect()) {
-    throw new Exception('{{401 - Accès non autorisé}}');
-}
-?>
 <table class="table table-condensed table-bordered" id="table_mod_insertCmdValue_valueEqLogicToMessage">
     <thead>
-        <tr>
-            <th style="width: 150px;">{{Objet}}</th>
-            <th style="width: 150px;">{{Equipement}}</th>
-            <th style="width: 150px;">{{Commande}}</th>
-        </tr>
+    <tr>
+        <th style="width: 150px;">{{ 'Objet' }}</th>
+        <th style="width: 150px;">{{ 'Equipement' }}</th>
+        <th style="width: 150px;">{{ 'Commande' }}</th>
+    </tr>
     </thead>
     <tbody>
-        <tr>
-            <td class="mod_insertCmdValue_object">
-                <select class='form-control'>
-                    <option value="-1">{{Aucun}}</option>
-                    <?php
-foreach (jeeObject::all() as $object) {
-    echo '<option value="' . $object->getId() . '">' . $object->getName() . '</option>';
-}
-
-?>
-                </select>
-            </td>
-            <td class="mod_insertCmdValue_eqLogic"></td>
-            <td class="mod_insertCmdValue_cmd"></td>
-        </tr>
+    <tr>
+        <td class="mod_insertCmdValue_object">
+            <select class='form-control'>
+                <option value="-1">{{ 'Aucun' }}</option>
+                {% for jeeObject in jeeObjects %}
+                    <option value="{{ jeeObject.getId() }}">{{ jeeObject.getName() }}</option>';
+                {% endfor %}
+            </select>
+        </td>
+        <td class="mod_insertCmdValue_eqLogic"></td>
+        <td class="mod_insertCmdValue_cmd"></td>
+    </tr>
     </tbody>
 </table>
 <script>
@@ -58,7 +50,7 @@ foreach (jeeObject::all() as $object) {
             $('#table_mod_insertCmdValue_valueEqLogicToMessage td.mod_insertCmdValue_object select').value(mod_insertCmd.options.object.id);
         }
         mod_insertCmd.changeObjectCmd($('#table_mod_insertCmdValue_valueEqLogicToMessage td.mod_insertCmdValue_object select'), mod_insertCmd.options);
-    }
+    };
 
     mod_insertCmd.getValue = function () {
         var object_name = $('#table_mod_insertCmdValue_valueEqLogicToMessage tbody tr:first .mod_insertCmdValue_object select option:selected').html();
@@ -68,24 +60,24 @@ foreach (jeeObject::all() as $object) {
             return '';
         }
         return '#[' + object_name + '][' + equipement_name + '][' + cmd_name + ']#';
-    }
+    };
 
     mod_insertCmd.getCmdId = function () {
         return $('#table_mod_insertCmdValue_valueEqLogicToMessage tbody tr:first .mod_insertCmdValue_cmd select').value();
-    }
+    };
 
     mod_insertCmd.getType = function () {
         return $('#table_mod_insertCmdValue_valueEqLogicToMessage tbody tr:first .mod_insertCmdValue_cmd select option:selected').attr('data-type');
-    }
+    };
 
-     mod_insertCmd.getSubType = function () {
+    mod_insertCmd.getSubType = function () {
         return $('#table_mod_insertCmdValue_valueEqLogicToMessage tbody tr:first .mod_insertCmdValue_cmd select option:selected').attr('data-subType');
-    }
+    };
 
     mod_insertCmd.changeObjectCmd = function (_select) {
         nextdom.object.getEqLogic({
             id: _select.value(),
-            orderByName : true,
+            orderByName: true,
             error: function (error) {
                 notify("Erreur", error.message, 'error');
             },
@@ -93,7 +85,7 @@ foreach (jeeObject::all() as $object) {
                 _select.closest('tr').find('.mod_insertCmdValue_eqLogic').empty();
                 var selectEqLogic = '<select class="form-control">';
                 for (var i in eqLogics) {
-                    if (init(mod_insertCmd.options.eqLogic.eqType_name, 'all') == 'all' || eqLogics[i].eqType_name == mod_insertCmd.options.eqLogic.eqType_name){
+                    if (init(mod_insertCmd.options.eqLogic.eqType_name, 'all') == 'all' || eqLogics[i].eqType_name == mod_insertCmd.options.eqLogic.eqType_name) {
                         selectEqLogic += '<option value="' + eqLogics[i].id + '">' + eqLogics[i].name + '</option>';
                     }
                 }
@@ -109,24 +101,24 @@ foreach (jeeObject::all() as $object) {
             }
         });
 
-}
+    };
 
-mod_insertCmd.changeEqLogic = function (_select) {
-    nextdom.eqLogic.builSelectCmd({
-        id: _select.value(),
-        filter: mod_insertCmd.options.cmd,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (html) {
-            _select.closest('tr').find('.mod_insertCmdValue_cmd').empty();
-            var selectCmd = '<select class="form-control">';
-            selectCmd += html;
-            selectCmd += '</select>';
-            _select.closest('tr').find('.mod_insertCmdValue_cmd').append(selectCmd);
-        }
-    });
-}
+    mod_insertCmd.changeEqLogic = function (_select) {
+        nextdom.eqLogic.builSelectCmd({
+            id: _select.value(),
+            filter: mod_insertCmd.options.cmd,
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function (html) {
+                _select.closest('tr').find('.mod_insertCmdValue_cmd').empty();
+                var selectCmd = '<select class="form-control">';
+                selectCmd += html;
+                selectCmd += '</select>';
+                _select.closest('tr').find('.mod_insertCmdValue_cmd').append(selectCmd);
+            }
+        });
+    };
 
-mod_insertCmd.changeObjectCmd($('#table_mod_insertCmdValue_valueEqLogicToMessage td.mod_insertCmdValue_object select'), mod_insertCmd.options);
+    mod_insertCmd.changeObjectCmd($('#table_mod_insertCmdValue_valueEqLogicToMessage td.mod_insertCmdValue_object select'), mod_insertCmd.options);
 </script>
