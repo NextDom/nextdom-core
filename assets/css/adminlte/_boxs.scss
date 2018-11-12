@@ -43,3 +43,34 @@
 .objet {
     min-height: 0px;
 }
+
+/* Info-box */
+.info-box {
+    min-height: 70px;
+    margin-bottom: 10px;
+}
+
+.info-box-content {
+    padding: 5px 10px;
+    margin-left: 65px;
+}
+
+.info-box-text-2 {
+    text-transform:capitalize;
+}
+
+/* Objets */
+#div_Update-view .box .box-header {
+    min-height: 70px;
+}
+
+#listPlugin .box .box-body,
+#listWidget .box .box-body ,
+#listScript .box .box-body,
+#listOther .box .box-body {
+    min-height: 180px;
+}
+
+#listCore .box .box-body {
+    min-height: 10px;
+}
