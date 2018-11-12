@@ -23,7 +23,7 @@
 $white:#FFF;
 $lightgray:#ddd;
 $nextdom_bg:#ecf0f5;
-$whitegray: #f5f5f5;
+$whitegrey: #f5f5f5;
 $whitelightgray: #fafafa;
 $lightgolden:#fdfdf2;
 $black:#000;
@@ -53,8 +53,8 @@ $lightyellow:#F3E5A7;
 $nextdom_accent: $black;
 $nextdom_primary: $black;
 $nextdom_polar_accent: $white;
-$nextdom_table_title: $whitegray;
-$nextdom_gray_title: $whitegray;
+$nextdom_table_title: $whitegrey;
+$nextdom_gray_title: $whitegrey;
 
 .text-white{
     color: $white ;
@@ -70,6 +70,9 @@ $nextdom_gray_title: $whitegray;
 }
 .text-red{
     color: $red;
+}
+.text-critical{
+    color: $critical;
 }
 .text-lightred{
     color: $lightred;
@@ -180,8 +183,16 @@ $nextdom_gray_title: $whitegray;
     background-color: $yellow;
 }
 
+.jeedom-green{
+    background-color: #96c927;
+}
+
 .white{
     background-color: $white;
+}
+
+.whitegrey{
+background-color: $whitegrey;
 }
 
 .icon_white{
@@ -189,5 +200,5 @@ $nextdom_gray_title: $whitegray;
 }
 
 .input-group .input-group-addon {
-    background-color: $whitegray;
+    background-color: $whitegrey;
 }

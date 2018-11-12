@@ -55,37 +55,37 @@ $cmd_widgetMobile = cmd::availableWidget('mobile');
                   <div class="form-group">
                     <label class="col-xs-4 control-label">{{ID}}</label>
                     <div class="col-xs-4">
-                      <span class="cmdAttr label label-primary" data-l1key="id" style="font-size : 1em;"></span>
+                      <span class="cmdAttr label label-primary txtSize1em" data-l1key="id"></span>
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-xs-4 control-label">{{Logical ID}}</label>
                     <div class="col-xs-4">
-                      <span class="cmdAttr label label-primary" data-l1key="logicalId" style="font-size : 1em;"></span>
+                      <span class="cmdAttr label label-primary txtSize1em" data-l1key="logicalId"></span>
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-xs-4 control-label">{{Nom}}</label>
                     <div class="col-xs-4">
-                      <span class="cmdAttr label label-primary" data-l1key="name" style="font-size : 1em;"></span>
+                      <span class="cmdAttr label label-primary txtSize1em" data-l1key="name"></span>
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-xs-4 control-label">{{Type}}</label>
                     <div class="col-xs-4">
-                      <span class="cmdAttr label label-primary" data-l1key="type" style="font-size : 1em;"></span>
+                      <span class="cmdAttr label label-primary txtSize1em" data-l1key="type"></span>
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-xs-4 control-label">{{Sous-type}}</label>
                     <div class="col-xs-4">
-                      <span class="cmdAttr label label-primary" data-l1key="subType" style="font-size : 1em;"></span>
+                      <span class="cmdAttr label label-primary txtSize1em" data-l1key="subType"></span>
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-xs-4 control-label">{{Commande déclenchant une mise à jour}}</label>
                     <div class="col-xs-4">
-                      <span class="cmdAttr label label-primary" data-l1key="value" style="font-size : 1em;"></span>
+                      <span class="cmdAttr label label-primary txtSize1em" data-l1key="value"></span>
                     </div>
                   </div>
                   <?php if ($cmd->getType() == 'action' && $cmd->getSubtype() == 'select') {
@@ -107,19 +107,19 @@ $elements = explode(';', $cmd->getConfiguration('listValue', ''));
                   <div class="form-group">
                     <label class="col-xs-4 control-label">{{Valeur}}</label>
                     <div class="col-xs-4">
-                      <span class="label label-primary" style="font-size : 1em;"><?php echo $cmd->getCache('value') ?></span>
+                      <span class="label label-primary txtSize1em"><?php echo $cmd->getCache('value') ?></span>
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-xs-4 control-label">{{Date collecte}}</label>
                     <div class="col-xs-4">
-                      <span class="label label-primary" style="font-size : 1em;"><?php echo $cmd->getCache('collectDate') ?></span>
+                      <span class="label label-primary txtSize1em"><?php echo $cmd->getCache('collectDate') ?></span>
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-xs-4 control-label">{{Date valeur}}</label>
                     <div class="col-xs-4">
-                      <span class="label label-primary" style="font-size : 1em;"><?php echo $cmd->getCache('valueDate') ?></span>
+                      <span class="label label-primary txtSize1em"><?php echo $cmd->getCache('valueDate') ?></span>
                     </div>
                   </div>
                   <?php }?>
@@ -140,7 +140,7 @@ echo '<a href="' . $cmd->getDirectUrlAccess() . '" target="_blank"><i class="fas
                 <div class="form-group">
                   <label class="col-xs-4 control-label">{{Unité}}</label>
                   <div class="col-xs-4">
-                    <span class="cmdAttr label label-primary" data-l1key="unite" style="font-size : 1em;"></span>
+                    <span class="cmdAttr label label-primary txtSize1em" data-l1key="unite"></span>
                   </div>
                 </div>
                 <div class="form-group">

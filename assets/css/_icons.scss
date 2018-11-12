@@ -1,0 +1,72 @@
+/* Icones générales */
+.icon-big {
+  font-size : 4em;
+  color:$gray;
+}
+.icon_gestion {
+  height : 120px;
+  width : 140px;
+  & > i {
+    font-size : 4em;
+    margin-top:5px;
+  }
+  & > i > div >span{
+    font-size : 1em;
+    position:relative;
+    top : 15px;
+    word-break: break-all;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  & img{
+    border:{
+      top:{
+        left-radius: 10px;
+        right-radius: 4px;
+      }
+      bottom:{
+        left-radius: 4px;
+        right-radius: 10px;
+      }
+    }
+    margin-bottom: 5px;
+    padding: 4px;
+    box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+  }
+}
+
+.icon-health {
+  color:gray;
+  font-size:0.9em;
+}
+
+.info-box-icon {
+  height: 70px;
+  width: 65px;
+  font-size: 38px;
+  line-height: 65px;
+}
+/* fin icones génrales */
+
+/* page icon_selector */
+.divIconSel{
+  height: 80px;
+  border: 1px solid #fff;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.iconSel{
+  line-height: 1.4;
+  font-size: 1.5em;
+}
+
+.iconSelected{
+  background-color: #563d7c;
+  color: white;
+}
+
+.iconDesc{
+  font-size: 0.8em;
+}
+/* fin page icon_selector */

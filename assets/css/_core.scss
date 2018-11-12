@@ -148,48 +148,6 @@
   cursor:default;
 }
 
-/* Icons */
-.icon-big {
-  font-size : 4em;
-  color:$gray;
-}
-.icon_gestion {
-  height : 120px;
-  width : 140px;
-  & > i {
-    font-size : 4em;
-    margin-top:5px;
-  }
-  & > i > div >span{
-    font-size : 1em;
-    position:relative;
-    top : 15px;
-    word-break: break-all;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }
-  & img{
-    border:{
-      top:{
-        left-radius: 10px;
-        right-radius: 4px;
-      }
-      bottom:{
-        left-radius: 4px;
-        right-radius: 10px;
-      }
-    }
-    margin-bottom: 5px;
-    padding: 4px;
-    box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
-  }
-}
-
-.icon-health {
-  color:gray;
-  font-size:0.9em;
-}
-
 /* Modal */
 .ui-dialog {
   z-index: 5000;
@@ -240,4 +198,17 @@
   }
   box-shadow: none;
   border: none;
+}
+
+.viewZone {
+  padding: 9.5px;
+  margin: 0 0px 5px;
+  font-size: 13px;
+  line-height: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
 }
