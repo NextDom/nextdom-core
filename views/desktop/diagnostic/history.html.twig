@@ -51,19 +51,20 @@
             <h3 class="box-title"><i class="fas fa-chart-area">&nbsp;&nbsp;</i>{{ 'Historiques' }}</h3>
         </div>
         <div class="box-body">
-            <legend class="legend-title">{{ 'Sélectionner une commande pour l\'ajouter ou la supprimer du graphique' }}</legend>
+            <legend class="legend-title">{{ 'Vous pouvez créer ci-dessous une donnée calculée à partir de plusieurs commandes qui sera ajoutée au graphique' }}</legend>
+            <div class="input-group form-group" style="width: 100%">
+                <input class="form-control" id='in_calculHistory' placeholder="{{ 'Historique calculé...' }}"></textarea>
+                <span class="input-group-btn">
+                    <a class="btn btn-default" id="bt_findCmdCalculHistory" data-toggle="tooltip" data-original-title="{{ 'Sélectionner la commande' }}"><i class="fas fa-list-alt"></i></a>
+                    <a class="btn btn-success" id="bt_displayCalculHistory" data-toggle="tooltip" data-original-title="{{'Calculer et afficher la commande'}}"><i class="fas fa-check"></i></a>
+                    <a class="btn btn-default" id="bt_configureCalculHistory" data-toggle="tooltip" data-original-title="{{'Configurer le calcul'}}"><i class="fas fa-cogs"></i></a>
+                </span>
+            </div>
             <div class="row">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                     <div class="bs-sidebar form-group">
                         <ul id="ul_history" class="nav nav-list bs-sidenav">
-                            <div class="input-group form-group" style="width: 100%">
-                                <input class="form-control" id='in_calculHistory' placeholder="{{ 'Historique calculé' }}"></textarea>
-                                <span class="input-group-btn">
-                                    <a class="btn btn-default" id="bt_findCmdCalculHistory" data-toggle="tooltip" title="" data-original-title="{{ 'Sélectionner la commande' }}"><i class="fas fa-list-alt"></i></a>
-                                    <a class="btn btn-success" id="bt_displayCalculHistory"><i class="fas fa-check"></i></a>
-                                    <a class="btn btn-default" id="bt_configureCalculHistory"><i class="fas fa-cogs"></i></a>
-                                </span>
-                            </div>
+                            <legend class="legend-title">{{ 'Ajouter / Supprimer des commandes au graphique' }}</legend>
                             <div class="filter input-group form-group">
                                 <div class="input-group-addon"><i class="fas fa-search"></i></div>
                                 <input class="filter form-control" placeholder="{{'Rechercher...'}}" />
@@ -106,6 +107,7 @@
 
                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                     <div class="form-group">
+                        <legend class="legend-title">{{ 'Filtrage et mise en forme des données' }}</legend>
                         <input id="in_startDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate['start'] }}"/>
                         <input id="in_endDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate['end'] }}"/>
                         <a class="btn btn-success btn-sm" id='bt_validChangeDate' data-toggle="tooltip" title="" data-original-title="{{ 'Attention : une trop grande plage de dates peut mettre très longtemps à être calculée ou même ne pas s\'afficher.' }}"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Ok' }}</a>
