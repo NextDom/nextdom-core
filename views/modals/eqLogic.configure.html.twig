@@ -431,19 +431,16 @@
                                 <center class="cmdLayoutContainer" style="min-height:30px">
                                     {% if dashboardCmd[row][col] is defined and dashboardCmd[row][col]|length > 0 %}
                                         {% for cmd in dashboardCmd[row][col] %}
-                                            <span class="label label-default cmdLayout cursor" data-cmd_id="{{ cmd.getId() }}"
-                                                  style="margin:2px;">{{ cmd.getName() }}</span>
+                                            <span class="label label-default cmdLayout cursor" data-cmd_id="{{ cmd.getId() }}">{{ cmd.getName() }}</span>
                                         {% endfor %}
                                     {% endif %}
                                 </center>
                                 <input class="eqLogicAttr form-control input-sm" data-l1key="display"
                                        data-l2key="layout::dashboard::table::parameters"
-                                       data-l3key="text::td::{{ row }}::{{ col }}" placeholder="{{ 'Texte de la case' }}"
-                                       style="margin-top:3px;"/>
+                                       data-l3key="text::td::{{ row }}::{{ col }}" placeholder="{{ 'Texte de la case' }}"/>
                                 <input class="eqLogicAttr form-control input-sm" data-l1key="display"
                                        data-l2key="layout::dashboard::table::parameters"
-                                       data-l3key="style::td::{{ row }}::{{ col }}" placeholder="{{ 'Style de la case (CSS)' }}"
-                                       style="margin-top:3px;"/>
+                                       data-l3key="style::td::{{ row }}::{{ col }}" placeholder="{{ 'Style de la case (CSS)' }}"/>
                             </td>
                         {% endfor %}
                     </tr>
