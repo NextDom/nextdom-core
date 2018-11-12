@@ -43,20 +43,24 @@ use NextDom\Managers\UpdateManager;
 class ModalsController
 {
     const routesList = [
-        'about' => 'aboutModal',
-        'cmd.configure' => 'cmdConfigureModal',
-        'dataStore.management' => 'dataStoreManagementModal',
-        'eqLogic.configure' => 'eqLogicConfigureModal',
-        'expression.test' => 'expressionTestModal',
-        'graph.link' => 'graphLinkModal',
-        'log.display' => 'logDisplayModal',
-        'plan.configure' => 'planConfigureModal',
-        'planHeader.configure' => 'planHeaderConfigureModal',
-        'scenario.export' => 'scenarioExportModal',
-        'scenario.log.execution' => 'scenarioLogExecutionModal',
-        'scenario.summary' => 'scenarioSummaryModal',
-        'scenario.template' => 'scenarioTemplateModal',
-        'welcome' => 'welcomeModal'
+        'about' => 'about',
+        'action.insert' => 'actionInsert',
+        'cmd.configure' => 'cmdConfigure',
+        'cmd.human.insert' => 'cmdHumanInsert',
+        'dataStore.management' => 'dataStoreManagement',
+        'eqLogic.configure' => 'eqLogicConfigure',
+        'expression.test' => 'expressionTest',
+        'graph.link' => 'graphLink',
+        'log.display' => 'logDisplay',
+        'nextdom.benchmark' => 'nextdomBenchmark',
+        'plan.configure' => 'planConfigure',
+        'planHeader.configure' => 'planHeaderConfigure',
+        'scenario.export' => 'scenarioExport',
+        'scenario.log.execution' => 'scenarioLogExecution',
+        'scenario.summary' => 'scenarioSummary',
+        'scenario.template' => 'scenarioTemplate',
+        'user.rights' => 'userRights',
+        'welcome' => 'welcome'
     ];
 
     /**
@@ -85,12 +89,33 @@ class ModalsController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function aboutModal(Render $render)
+    public static function about(Render $render)
     {
         Status::initConnectState();
         Status::isConnectedOrFail();
 
         $render->show('/modals/about.html.twig');
+    }
+
+    /**
+     * Render action insert modal (scenario)
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function actionInsert(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $pageContent = [];
+        $pageContent['productName'] = \config::byKey('product_name');
+
+        $render->show('/modals/cmd.human.insert.html.twig');
     }
 
     /**
@@ -103,7 +128,7 @@ class ModalsController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function cmdConfigureModal(Render $render)
+    public static function cmdConfigure(Render $render)
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -204,6 +229,26 @@ class ModalsController
     }
 
     /**
+     * Render command human insert modal (scenario)
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function cmdHumanInsert(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $pageContent = [];
+        $pageContent['jeeObjets'] = JeeObjectManager::all();
+        $render->show('/modals/cmd.human.insert.html.twig');
+    }
+
+    /**
      * Render data store management modal
      *
      * @param Render $render Render engine
@@ -213,7 +258,7 @@ class ModalsController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function dataStoreManagementModal(Render $render)
+    public static function dataStoreManagement(Render $render)
     {
         Status::initConnectState();
         Status::isConnectedOrFail();
@@ -234,7 +279,7 @@ class ModalsController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function eqLogicConfigureModal(Render $render)
+    public static function eqLogicConfigure(Render $render)
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -247,7 +292,7 @@ class ModalsController
 
         Utils::sendVarsToJS(
             ['eqLogicInfo' => \utils::o2a($eqLogic),
-            'eqLogicInfoSearchString' => urlencode(str_replace('#', '', $eqLogic->getHumanName()))]);
+                'eqLogicInfoSearchString' => urlencode(str_replace('#', '', $eqLogic->getHumanName()))]);
 
         $pageContent = [];
         $pageContent['widgetPossibilityCustom'] = $eqLogic->widgetPossibility('custom');
@@ -370,7 +415,7 @@ class ModalsController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function expressionTestModal(Render $render)
+    public static function expressionTest(Render $render)
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -388,7 +433,7 @@ class ModalsController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function graphLinkModal(Render $render)
+    public static function graphLink(Render $render)
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -420,7 +465,7 @@ class ModalsController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function logDisplayModal(Render $render)
+    public static function logDisplay(Render $render)
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -433,6 +478,27 @@ class ModalsController
     }
 
     /**
+     * Render nextdom benchmark modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function nextdomBenchmark(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent = [];
+        $pageContent['benchmark'] = \nextdom::benchmark();
+
+        $render->show('/modals/nextdom.benchmark.html.twig', $pageContent);
+    }
+
+    /**
      * Render plan configure modal
      *
      * @param Render $render Render engine
@@ -442,7 +508,7 @@ class ModalsController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function planConfigureModal(Render $render)
+    public static function planConfigure(Render $render)
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -471,7 +537,7 @@ class ModalsController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function planHeaderConfigureModal(Render $render)
+    public static function planHeaderConfigure(Render $render)
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -498,7 +564,7 @@ class ModalsController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function scenarioExportModal(Render $render)
+    public static function scenarioExport(Render $render)
     {
         Status::initConnectState();
         Status::isConnectedOrFail();
@@ -524,7 +590,7 @@ class ModalsController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function scenarioLogExecutionModal(Render $render)
+    public static function scenarioLogExecution(Render $render)
     {
         Status::initConnectState();
         Status::isConnectedOrFail();
@@ -552,7 +618,7 @@ class ModalsController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function scenarioSummaryModal(Render $render)
+    public static function scenarioSummary(Render $render)
     {
         Status::initConnectState();
         Status::isConnectedOrFail();
@@ -570,7 +636,7 @@ class ModalsController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function scenarioTemplateModal(Render $render)
+    public static function scenarioTemplate(Render $render)
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -588,6 +654,40 @@ class ModalsController
     }
 
     /**
+     * Render user rights modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function userRights(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $userId = Utils::init('id');
+        $user = \user::byId($userId);
+
+        if (!is_object($user)) {
+            throw new CoreException(__('Impossible de trouver l\'utilisateur : ') . $userId);
+        }
+        Utils::sendVarToJs('user_rights', \utils::o2a($user));
+
+        $pageContent = [];
+        $pageContent['restrictedUser'] = true;
+        if ($user->getProfils() != 'restrict') {
+            $pageContent['restrictedUser'] = false;
+        }
+        $pageContent['eqLogics'] = EqLogicManager::all();
+        $pageContent['scenarios'] = ScenarioManager::all();
+
+        $render->show('/modals/user.rights.html.twig', $pageContent);
+    }
+
+    /**
      * Render welcome modal
      *
      * @param Render $render Render engine
@@ -597,7 +697,7 @@ class ModalsController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function welcomeModal(Render $render)
+    public static function welcome(Render $render)
     {
         Status::initConnectState();
         Status::isConnectedOrFail();
