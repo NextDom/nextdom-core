@@ -58,7 +58,6 @@ class PrepareView
         self::initHeaderData($pageData, $configs);
         //TODO: Vérifier ça
         $logo = \config::byKey('product_connection_image');
-        $pageData['CSS_POOL'][]    = '/public/css/nextdom.css';
         $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/connection.js';
 
