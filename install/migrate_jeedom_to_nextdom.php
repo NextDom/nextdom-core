@@ -126,7 +126,9 @@ try {
     }
 
     echo "Unzip the backup...";
-    	$excludes = array();
+    	$excludes = array(
+    	    'AlternativeMarketForJeedom'
+        );
 	$exclude = '';
     foreach ($excludes as $folder) {
         $exclude .= ' --exclude="' . $folder . '"';
