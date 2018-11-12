@@ -115,7 +115,7 @@ class ModalsController
         $pageContent = [];
         $pageContent['productName'] = \config::byKey('product_name');
 
-        $render->show('/modals/cmd.human.insert.html.twig');
+        $render->show('/modals/action.insert.html.twig', $pageContent);
     }
 
     /**
@@ -244,8 +244,9 @@ class ModalsController
         Status::isConnectedOrFail();
 
         $pageContent = [];
-        $pageContent['jeeObjets'] = JeeObjectManager::all();
-        $render->show('/modals/cmd.human.insert.html.twig');
+        $pageContent['jeeObjects'] = JeeObjectManager::all();
+
+        $render->show('/modals/cmd.human.insert.html.twig', $pageContent);
     }
 
     /**
