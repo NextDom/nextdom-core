@@ -77,12 +77,12 @@ $("#bt_saveMigration").on('click', function (event) {
     });
 });
 
-$('#pre_migrationInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
-
-$("#bt_migrateNextDom").on('click', function (event) {
-    switchNotify(0);
-    var el = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir migrer}} '+NEXTDOM_PRODUCT_NAME+' {{avec}} <b>' + $('#sel_restoreBackupforMigration option:selected').text() + '</b> ? {{Une fois lancée, cette opération ne peut être annulée}}', function (result) {
+/**
+ * Start migration
+ */
+function startMigration() {
+    var migrationButton = $('#bt_migrationNextDom');
+    bootbox.confirm('{{Etes-vous sûr de vouloir migrer}} ' + NEXTDOM_PRODUCT_NAME + ' {{avec}} <b>' + $('#sel_restoreBackupforMigration option:selected').text() + '</b> ? {{Une fois lancée, cette opération ne peut être annulée}}', function (result) {
         if (result) {
             el.find('.fa-refresh').show();
             el.find('.fa-play').hide();
@@ -220,6 +220,86 @@ function updateListBackup() {
                 options += '<option value="' + i + '">' + data[i] + '</option>';
             }
             $('#sel_restoreBackupforMigration').html(options);
+            // Enable migration button event
+            if (options !== '') {
+                var startMigrationButton = $('#bt_migrationNextDom');
+                startMigrationButton.on('click', startMigration);
+                startMigrationButton.removeAttr('disabled');
+            }
         }
     });
 }
+
+/**
+ * Initialise all items in the migration page
+ */
+function initMigrationPageItems() {
+    jwerty.key('ctrl+s', function (e) {
+        e.preventDefault();
+        saveMigrationConfiguration();
+    });
+
+    $('#md_migrationInfo').dialog({
+        closeText: '',
+        autoOpen: false,
+        modal: true,
+        width: (($(window).width() - 50) < 1500) ? ($(window).width() - 50) : 1500,
+        open: function () {
+            $('body').css({overflow: 'hidden'});
+        },
+        beforeClose: function (event, ui) {
+            $('body').css({overflow: 'inherit'});
+        }
+    });
+
+    $('#pre_migrationInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
+
+    $.showLoading();
+
+    nextdom.config.load({
+        configuration: $('#migration').getValues('.configKey')[0],
+        error: function (error) {
+            notify('Erreur', error.message, 'error');
+        },
+        success: function (data) {
+            $('#migration').setValues(data, '.configKey');
+            modifyWithoutSave = false;
+        }
+    });
+    updateBackupsList();
+
+    $('#migration').delegate('.configKey', 'change', function () {
+        modifyWithoutSave = true;
+    });
+
+}
+
+/**
+ * Init all events in the migration page
+ */
+function initMigrationPageEvents() {
+    $('#bt_saveMigration').on('click', saveMigrationConfiguration);
+
+    $('#bt_migrateOpenLog').on('click', function (event) {
+        $('#md_migrationInfo').dialog({title: '{{Avancement de la migration}}'});
+        $('#md_migrationInfo').dialog('open');
+    });
+
+    $('#bt_uploadBackupforMigration').fileupload({
+        dataType: 'json',
+        replaceFileInput: false,
+        done: function (e, data) {
+            if (data.result.state != 'ok') {
+                notify('Erreur', data.result.result, 'error');
+                return;
+            }
+            updateBackupsList();
+            notify('Info', '{{Fichier(s) ajouté(s) avec succès}}', 'success');
+        }
+    });
+
+}
+
+// Entry point
+initMigrationPageItems();
+initMigrationPageEvents();
