@@ -19,8 +19,24 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-/* Alert popup */
-.alert-config,
-.alert {
-    width: 100%;
-}
+@import "_alerts.scss";
+@import "_boxs.scss";
+@import "_cards.scss";
+@import "_checkbox.scss";
+@import "_divers.scss";
+@import "_fab.scss";
+@import "_footer.scss";
+@import "_forms.scss";
+@import "_headerClock.scss";
+@import "_labels.scss";
+@import "_loginAndRegister.scss";
+@import "_logos.scss";
+@import "_menus.scss";
+@import "_notify.scss";
+@import "_navs.scss";
+@import "_panel.scss";
+@import "_progressBars.scss";
+@import "_scrollbar.scss";
+@import "_sidebar.scss";
+@import "_tooltip.scss";
+@import "_treeView.scss";
