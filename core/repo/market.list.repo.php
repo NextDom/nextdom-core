@@ -226,7 +226,7 @@ if ($type !== null && $type != 'plugin') {
     <div class="form-group">
         <?php
 if (config::byKey('market::username') != '') {
-    echo '<span class="label label-info pull-right" style="font-size : 1em;">' . config::byKey('market::username');
+    echo '<span class="label label-info pull-right txtSize1em">' . config::byKey('market::username');
     try {
         repo_market::test();
         echo ' <i class="fa fa-check"></i>';
