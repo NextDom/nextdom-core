@@ -39,7 +39,9 @@ print_log_in() {
 
 
 print_log_ok() {
-    echo " OK"
+    if [ 1 -eq "0${isdev}"  ] ; then
+        echo " OK"
+    fi
     echo " OK" >> $LOG_DIRECTORY/postinst.log
 }
 
