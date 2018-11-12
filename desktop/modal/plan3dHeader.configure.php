@@ -17,8 +17,8 @@ sendVarToJS('plan3dHeader', utils::o2a($plan3dHeader));
     <form class="form-horizontal">
         <fieldset>
             <legend><i class="fas fa-cog"></i> {{Général}}
-                <a class='btn btn-danger btn-xs pull-right cursor' style="color: white;" id='bt_removeConfigureplan3dHeader'><i class="fas fa-times"></i> {{Supprimer}}</a>
-                <a class='btn btn-success btn-xs pull-right cursor' style="color: white;" id='bt_saveConfigureplan3dHeader'><i class="fas fa-check"></i> {{Sauvegarder}}</a>
+                <a class='btn btn-danger btn-xs pull-right cursor text-white' id='bt_removeConfigureplan3dHeader'><i class="fas fa-times"></i> {{Supprimer}}</a>
+                <a class='btn btn-success btn-xs pull-right cursor text-white' id='bt_saveConfigureplan3dHeader'><i class="fas fa-check"></i> {{Sauvegarder}}</a>
             </legend>
             <input type="text"  class="plan3dHeaderAttr form-control" data-l1key="id" style="display: none;"/>
             <div class="form-group">
