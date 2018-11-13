@@ -685,8 +685,10 @@ class PagesController
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageContent['JS_VARS']['ldapEnable'] = $pageContent['adminConfigs']['ldap::enable'];
-        $cache = CacheManager::byKey('security::banip');
+        $keys = array('security::bantime', 'ldap::enable');
+        $configs = \config::byKeys($keys);
+
+        $pageContent['JS_VARS']['ldapEnable'] = $configs['ldap::enable'];
 
         $pageContent['adminUseLdap'] = function_exists('ldap_connect');
         if ($pageContent['adminUseLdap']) {
@@ -701,8 +703,8 @@ class PagesController
                 $bannedData = [];
                 $bannedData['ip'] = $value['ip'];
                 $bannedData['startDate'] = date('Y-m-d H:i:s', $value['datetime']);
-                if ($pageContent['adminConfigs']['security::bantime'] < 0) {
-                    $bannedData['endDate'] = \__('Jamais');
+                if ($configs['security::bantime'] < 0) {
+                    $bannedData['endDate'] = __('Jamais');
                 } else {
                     $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageContent['adminConfigs']['security::bantime']);
                 }
