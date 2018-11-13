@@ -171,7 +171,7 @@ class nextdom
             'result' => ($state) ? $uname . ' [' . $version . ']' : $uname,
             'comment' => ($state) ? '' : __('Vous n\'êtes pas sur un OS officiellement supporté par l\'équipe NextDom (toute demande de support pourra donc être refusée). Les OS officiellement supporté sont Debian Jessie et Debian Strech (voir <a href="https://jeedom.github.io/documentation/compatibility/fr_FR/index" target="_blank">ici</a>)'),
         );
-        
+
         $nbNeededUpdate = \update::nbNeedUpdate();
         $state = ($nbNeededUpdate == 0) ? true : false;
         $systemHealth[] = array(

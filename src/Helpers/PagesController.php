@@ -263,23 +263,123 @@ class PagesController
             );
             if ($memData[1] != 0) {
                 $pageContent['administrationMemLoad'] = round(100 * $memData[2]/$memData[1], 2);
+                if ($memData[1] < 1024) {
+            			$memTotal = $memData[1] .' B';
+            		} elseif ($memData[1] < (1024*1024)) {
+            			$memTotal = round($memData[1] / 1024, 0) .' MB';
+                } else {
+            			$memTotal = round($memData[1] / 1024 / 1024, 0) .' GB';
+            		}
+                $pageContent['administrationMemTotal'] = $memTotal;
             }
             else {
                 $pageContent['administrationMemLoad'] = 0;
+                $pageContent['administrationMemTotal'] = 0;
             }
             if ($swapData[1] != 0) {
                 $pageContent['administrationSwapLoad'] = round(100 * $swapData[2]/$swapData[1], 2);
+                if ($swapData[1] < 1024) {
+            			$swapTotal = $swapData[1] .' B';
+            		} elseif ($memData[1] < (1024*1024)) {
+            			$swapTotal = round($swapData[1] / 1024, 0) .' MB';
+                } else {
+            			$swapTotal = round($swapData[1] / 1024 / 1024, 0) .' GB';
+            		}
+                $pageContent['administrationSwapTotal'] = $swapTotal;
             }
             else {
                 $pageContent['administrationSwapLoad'] = 0;
             }
         }
-        $pageContent['administrationCpuLoad'] = round(100 * sys_getloadavg()[0], 2);
-        $pageContent['administrationHddLoad'] = round(100 - 100 * disk_free_space(NEXTDOM_ROOT) / disk_total_space(NEXTDOM_ROOT), 2);
+        $uptime=self::sys_getuptime();
+        $pageContent['administrationUptimeDays'] = explode(".",(($uptime % 31556926) / 86400))[0];
+        $pageContent['administrationUptimeHours'] = explode(".",((($uptime % 31556926) % 86400) / 3600))[0];
+        $pageContent['administrationUptimeMinutes'] = explode(".",(((($uptime % 31556926) % 86400) % 3600) / 60))[0];
+        $pageContent['administrationCore'] = self::sys_getcores();
+        $pageContent['administrationCpuLoad'] = round(100 * (sys_getloadavg()[0]/self::sys_getcores()), 2);
+        $diskTotal=disk_total_space(NEXTDOM_ROOT);
+        $pageContent['administrationHddLoad'] = round(100 - 100 * disk_free_space(NEXTDOM_ROOT) / $diskTotal, 2);
+        if ($diskTotal < 1024) {
+          $diskTotal = $diskTotal .' B';
+        } elseif ($diskTotal < (1024*1024)) {
+          $diskTotal = round($diskTotal / 1024, 0) .' KB';
+        } elseif ($diskTotal < (1024*1024*1024)) {
+          $diskTotal = round($diskTotal / (1024*1024), 0) .' MB';
+        } else {
+          $diskTotal = round($diskTotal / (1024*1024*1024), 0) .' GB';
+        }
+        $pageContent['administrationSwapTotal'] = $swapTotal;
+        $pageContent['administrationHddTotal'] = $diskTotal;
+        $pageContent['administrationHTTPConnexion'] = self::sys_gethttpconnections();
+        $pageContent['administrationProcess'] = self::sys_getprocess();
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/administration.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/administration.html.twig', $pageContent);
+    }
+
+    public static function sys_getcores(): string
+    {
+        $cmd = "uname";
+        $OS = strtolower(trim(shell_exec($cmd)));
+        switch($OS) {
+           case('linux'):
+              $cmd = "cat /proc/cpuinfo | grep processor | wc -l";
+              break;
+           case('freebsd'):
+              $cmd = "sysctl -a | grep 'hw.ncpu' | cut -d ':' -f2";
+              break;
+           default:
+              unset($cmd);
+        }
+        if ($cmd != '') {
+           $cpuCoreNo = intval(trim(shell_exec($cmd)));
+        }
+        return empty($cpuCoreNo) ? 1 : $cpuCoreNo;
+    }
+
+    public static function sys_gethttpconnections(): string
+    {
+      	if (function_exists('exec')) {
+      		$www_total_count = 0;
+          $www_unique_count = 0;
+      		@exec ('netstat -an', $results);
+      		foreach ($results as $result) {
+      			$array = explode(':', $result);
+      			$www_total_count ++;
+      			if (preg_match('/^::/', $result)) {
+      				$ipaddr = $array[3];
+      			} else {
+      				$ipaddr = $array[0];
+      			}
+      			if (!in_array($ipaddr, $unique)) {
+      				$unique[] = $ipaddr;
+      				$www_unique_count ++;
+      			}
+      		}
+      		unset ($results);
+      		return count($www_unique_count);
+  	    }
+    }
+
+    public static function sys_getprocess(): string
+    {
+    	$proc_count = 0;
+    	$dh = opendir('/proc');
+    	while ($dir = readdir($dh)) {
+    		if (is_dir('/proc/' . $dir)) {
+    			if (preg_match('/^[0-9]+$/', $dir)) {
+    				$proc_count ++;
+    			}
+    		}
+    	}
+    	return $proc_count;
+    }
+
+    public static function sys_getuptime(): string
+    {
+    	$uptime = preg_replace ('/\.[0-9]+/', '', file_get_contents('/proc/uptime'));
+    	return $uptime;
     }
 
     /**
