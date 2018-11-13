@@ -22,7 +22,7 @@
 /* Checkboxes */
 input[type="checkbox"] {
     position: relative !important;
-    top:8px;
+    top:7px;
     height: 21px;
     width: 21px;
     appearance: none;
@@ -41,6 +41,7 @@ input[type="checkbox"] {
     height: 17px;
     border: 1px solid #ccc;
     border-radius: 2px;
+    box-shadow: 1px 1px 1px rgba(0,0,0,0.1);
 }
 
 /* content */
