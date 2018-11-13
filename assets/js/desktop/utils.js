@@ -550,24 +550,27 @@ function refreshUpdateNumber() {
     });
 }
 
-function switchNotify(etat) {
-    if (etat) {
-        notify("Core",  'Notification activée', 'success');
+/**
+ * Toggle between showing and hiding notifications
+ *
+ * @param notificationState 1 for notification showed or 0 for hide.
+ */
+function switchNotify(notificationState) {
+    if (notificationState === 1) {
+        notify("Core",  '{{Notification activée}}', 'success');
         $('.notifyIcon').removeClass("fa-bell-slash").addClass("fa-bell");
-        sleep(2000);
-    }else{
+    } else {
         $('.notifyIcon').removeClass("fa-bell").addClass("fa-bell-slash");
-        notify("Core",  'Notification desactivée', 'success');
-        sleep(5000);
+        notify("Core",  '{{Notification desactivée}}', 'success');
     }
-        nextdom.config.save({
-            configuration: {'nextdom::Notify': etat},
-            error: function (error) {
-                notify("Core", error.message, 'error');
-            },
-            success: function () {
-            }
-        });
+    nextdom.config.save({
+        configuration: {'nextdom::Notify': notificationState},
+        error: function (error) {
+            notify("Core", error.message, 'error');
+        },
+        success: function () {
+        }
+    });
 }
 
 function notify(_title, _text, _class_name) {
