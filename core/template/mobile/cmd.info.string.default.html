@@ -1,5 +1,5 @@
 <div class="cmd" data-type="info" data-version="#version#" data-subtype="string" data-cmd_id="#id#" data-cmd_uid="#uid#">
-	<span class="txtSize075rem" style="#hideCmdName#">#name_display#</span> <strong class="state">#state#</strong>
+	<span class="txtSizeSmall " style="#hideCmdName#">#name_display#</span> <strong class="state">#state#</strong>
 	<script>
 		nextdom.cmd.update['#id#'] = function(_options){
 			$('.cmd[data-cmd_id=#id#] .state').empty().append(_options.display_value);

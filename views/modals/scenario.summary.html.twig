@@ -51,16 +51,16 @@
                     tr += '<td>';
                     switch (data[i].state) {
                         case 'error' :
-                        tr += '<span class="label label-warning txtSize1em">{{ 'Erreur' }}</span>';
+                        tr += '<span class="label label-warning txtSizeNormal">{{ 'Erreur' }}</span>';
                         break;
                         case 'on' :
-                        tr += '<span class="label label-info txtSize1em">{{ 'Actif' }}</span>';
+                        tr += '<span class="label label-info txtSizeNormal">{{ 'Actif' }}</span>';
                         break;
                         case 'in progress' :
-                        tr += '<span class="label label-success txtSize1em">{{ 'En cours' }}</span>';
+                        tr += '<span class="label label-success txtSizeNormal">{{ 'En cours' }}</span>';
                         break;
                         case 'stop' :
-                        tr += '<span class="label label-danger txtSize1em">{{ 'Arrêté' }}</span>';
+                        tr += '<span class="label label-danger txtSizeNormal">{{ 'Arrêté' }}</span>';
                         break;
                     }
                     tr += '</td>';
