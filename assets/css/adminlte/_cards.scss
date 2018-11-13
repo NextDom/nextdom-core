@@ -21,7 +21,7 @@
  
 /* Cards */
 .card {
-  border: 1px solid $whitegray;
+  border: 1px solid $whitegrey;
   border-radius: .25rem;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
   margin: {
@@ -63,7 +63,7 @@
 
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text {
   border-radius: 5px;
-  background-color: $darkgray;
+  background-color: $darkgrey;
   margin: {
     top: -10px;
     right: 7px;
