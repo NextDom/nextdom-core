@@ -130,8 +130,6 @@ $("#bt_saveOpenLog").on('click', function (event) {
     var el = $(this);
     bootbox.confirm('{{Etes-vous sûr de vouloir supprimer la sauvegarde}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ?', function (result) {
         if (result) {
-            el.find('.fa-refresh').show();
-            el.find('.fa-trash-alt').hide();
             nextdom.backup.remove({
                 backup: $('#sel_restoreBackup').value(),
                 error: function (error) {
@@ -149,9 +147,6 @@ $("#bt_saveOpenLog").on('click', function (event) {
  $('#bt_downloadBackup').on('click', function () {
     if ($('#sel_restoreBackup option:selected').text() != '') {
         window.open('core/php/downloadFile.php?pathfile=backup/' + $('#sel_restoreBackup option:selected').text(), "_blank", null);
-        var el = $(this);
-        el.find('.fa-refresh').show();
-        el.find('.fa-cloud-download-alt').hide();
     }
 });
 
@@ -284,10 +279,6 @@ $("#bt_saveOpenLog").on('click', function (event) {
                 $('.bt_' + _log + 'NextDom .fa-window-restore').show();
                 $('#bt_' + _log + 'NextDom .fa-cloud-upload-alt').show();
                 $('.bt_' + _log + 'NextDom .fa-cloud-upload-alt').show();
-                $('#bt_' + _log + 'NextDom .fa-trash-alt').show();
-                $('.bt_' + _log + 'NextDom .fa-trash-alt').show();
-                $('#bt_' + _log + 'NextDom .fa-cloud-download-alt').show();
-                $('.bt_' + _log + 'NextDom .fa-cloud-download-alt').show();
                 updateListBackup();
                 for(var i in REPO_LIST){
                     updateRepoListBackup(REPO_LIST[i]);

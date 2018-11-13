@@ -45,53 +45,53 @@ use NextDom\Managers\CacheManager;
 class PagesController
 {
     const routesList = [
-        'dashboard' => 'dashboardPage',
-        'scenario' => 'scenarioPage',
-        'administration' => 'administrationPage',
-        'backup' => 'backupPage',
-        'object' => 'objectPage',
-        'message' => 'messagePage',
-        'cron' => 'cronPage',
-        'user' => 'userPage',
-        'update' => 'updatePage',
-        'system' => 'systemPage',
-        'database' => 'databasePage',
-        'display' => 'displayPage',
-        'log' => 'logPage',
-        'report' => 'reportPage',
-        'plugin' => 'pluginPage',
-        'editor' => 'editorPage',
-        'migration' => 'migrationPage',
-        'history' => 'historyPage',
-        'shutdown' => 'shutdownPage',
-        'health' => 'healthPage',
-        'profils' => 'profilsPage',
-        'view' => 'viewPage',
-        'view_edit' => 'viewEditPage',
-        'eqAnalyse' => 'eqAnalyzePage',
-        'plan' => 'planPage',
-        'plan3d' => 'plan3dPage',
-        'market' => 'marketPage',
-        'reboot' => 'rebootPage',
-        'network' => 'networkPage',
-        'cache' => 'cachePage',
-        'general' => 'generalPage',
-        'log_admin' => 'logAdminPage',
-        'realtime' => 'realtimePage',
-        'custom' => 'customPage',
-        'api' => 'APIPage',
-        'commandes' => 'commandesPage',
-        'osdb' => 'osdbPage',
-        'reports_admin' => 'reports_adminPage',
-        'eqlogic' => 'eqlogicPage',
-        'interact' => 'interactPage',
-        'interact_admin' => 'interact_adminPage',
-        'links' => 'linksPage',
-        'security' => 'securityPage',
-        'summary' => 'summaryPage',
-        'update_admin' => 'update_adminPage',
-        'users' => 'usersPage',
-        'tools' => 'toolsPage',
+        'dashboard' => 'dashboard',
+        'scenario' => 'scenario',
+        'administration' => 'administration',
+        'backup' => 'backup',
+        'object' => 'object',
+        'message' => 'message',
+        'cron' => 'cron',
+        'user' => 'user',
+        'update' => 'update',
+        'system' => 'system',
+        'database' => 'database',
+        'display' => 'display',
+        'log' => 'log',
+        'report' => 'report',
+        'plugin' => 'plugin',
+        'editor' => 'editor',
+        'migration' => 'migration',
+        'history' => 'history',
+        'shutdown' => 'shutdown',
+        'health' => 'health',
+        'profils' => 'profils',
+        'view' => 'view',
+        'view_edit' => 'viewEdit',
+        'eqAnalyse' => 'eqAnalyze',
+        'plan' => 'plan',
+        'plan3d' => 'plan3d',
+        'market' => 'market',
+        'reboot' => 'reboot',
+        'network' => 'network',
+        'cache' => 'cache',
+        'general' => 'general',
+        'log_admin' => 'logAdmin',
+        'realtime' => 'realtime',
+        'custom' => 'custom',
+        'api' => 'API',
+        'commandes' => 'commandes',
+        'osdb' => 'osdb',
+        'reports_admin' => 'reports_admin',
+        'eqlogic' => 'eqlogic',
+        'interact' => 'interact',
+        'interact_admin' => 'interact_admin',
+        'links' => 'links',
+        'security' => 'security',
+        'summary' => 'summary',
+        'update_admin' => 'update_admin',
+        'users' => 'users',
+        'tools' => 'tools',
         'note' => 'notePage',
         'pluginRoute' => 'pluginRoute'
     ];
@@ -127,7 +127,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function dashboardPage(Render $render, array &$pageContent): string
+    public static function dashboard(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -190,7 +190,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function scenarioPage(Render $render, array &$pageContent): string
+    public static function scenario(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -232,7 +232,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function administrationPage(Render $render, array &$pageContent): string
+    public static function administration(Render $render, array &$pageContent): string
     {
 
         Status::initConnectState();
@@ -295,7 +295,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function networkPage(Render $render, array &$pageContent): string
+    public static function network(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -336,7 +336,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function cachePage(Render $render, array &$pageContent): string
+    public static function cache(Render $render, array &$pageContent): string
     {
 
         Status::initConnectState();
@@ -368,7 +368,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function generalPage(Render $render, array &$pageContent): string
+    public static function general(Render $render, array &$pageContent): string
     {
 
         Status::initConnectState();
@@ -397,7 +397,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function logAdminPage(Render $render, array &$pageContent): string
+    public static function logAdmin(Render $render, array &$pageContent): string
     {
 
         Status::initConnectState();
@@ -440,7 +440,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function realtimePage(Render $render, array &$pageContent): string
+    public static function realtime(Render $render, array &$pageContent): string
     {
 
         Status::initConnectState();
@@ -468,7 +468,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function customPage(Render $render, array &$pageContent): string
+    public static function custom(Render $render, array &$pageContent): string
     {
 
         Status::initConnectState();
@@ -519,7 +519,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function APIPage(Render $render, array &$pageContent): string
+    public static function API(Render $render, array &$pageContent): string
     {
 
         Status::initConnectState();
@@ -566,7 +566,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function commandesPage(Render $render, array &$pageContent): string
+    public static function commandes(Render $render, array &$pageContent): string
     {
 
         Status::initConnectState();
@@ -591,7 +591,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function osdbPage(Render $render, array &$pageContent): string
+    public static function osdb(Render $render, array &$pageContent): string
     {
         global $CONFIG;
         Status::initConnectState();
@@ -617,7 +617,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function reports_adminPage(Render $render, array &$pageContent): string
+    public static function reports_admin(Render $render, array &$pageContent): string
     {
         global $CONFIG;
         Status::initConnectState();
@@ -632,7 +632,7 @@ class PagesController
         return $render->get('/desktop/params/reports_admin.html.twig', $pageContent);
     }
 
-    public static function eqlogicPage(Render $render, array &$pageContent): string
+    public static function eqlogic(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -656,7 +656,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function linksPage(Render $render, array &$pageContent): string
+    public static function links(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -680,7 +680,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function securityPage(Render $render, array &$pageContent): string
+    public static function security(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -731,7 +731,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function interact_adminPage(Render $render, array &$pageContent): string
+    public static function interact_admin(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -754,7 +754,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function summaryPage(Render $render, array &$pageContent): string
+    public static function summary(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -777,7 +777,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function update_adminPage(Render $render, array &$pageContent): string
+    public static function update_admin(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -830,7 +830,7 @@ class PagesController
                 $bannedData['ip'] = $value['ip'];
                 $bannedData['startDate'] = date('Y-m-d H:i:s', $value['datetime']);
                 if ($pageContent['adminConfigs']['security::bantime'] < 0) {
-                    $bannedData['endDate'] = __('Jamais');
+                    $bannedData['endDate'] = \__('Jamais');
                 } else {
                     $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageContent['adminConfigs']['security::bantime']);
                 }
@@ -863,7 +863,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function usersPage(Render $render, array &$pageContent): string
+    public static function users(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -895,7 +895,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function backupPage(Render $render, array &$pageContent): string
+    public static function backup(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -921,7 +921,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function cronPage(Render $render, array &$pageContent): string
+    public static function cron(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -945,7 +945,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function healthPage(Render $render, array &$pageContent): string
+    public static function health(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -1080,7 +1080,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function historyPage(Render $render, array &$pageContent): string
+    public static function history(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -1113,7 +1113,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function logPage(Render $render, array &$pageContent): string
+    public static function log(Render $render, array &$pageContent): string
     {
         // TODO utiliser log::getpathLog
         Status::initConnectState();
@@ -1168,7 +1168,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function migrationPage(Render $render, array &$pageContent): string
+    public static function migration(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -1190,7 +1190,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function notePage(Render $render, array &$pageContent): string
+    public static function note(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -1212,7 +1212,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function reportPage(Render $render, array &$pageContent): string
+    public static function report(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -1267,7 +1267,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function updatePage(Render $render, array &$pageContent): string
+    public static function update(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -1297,7 +1297,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function messagePage(Render $render, array &$pageContent): string
+    public static function message(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedOrFail();
@@ -1329,7 +1329,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function systemPage(Render $render, array &$pageContent): string
+    public static function system(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -1354,7 +1354,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function databasePage(Render $render, array &$pageContent): string
+    public static function database(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -1378,7 +1378,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function displayPage(Render $render, array &$pageContent): string
+    public static function display(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -1429,7 +1429,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function pluginPage(Render $render, array &$pageContent): string
+    public static function plugin(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -1464,7 +1464,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function editorPage(Render $render, array &$pageContent): string
+    public static function editor(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -1498,7 +1498,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function shutdownPage(Render $render, array &$pageContent): string
+    public static function shutdown(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -1520,7 +1520,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function profilsPage(Render $render, array &$pageContent): string
+    public static function profils(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedOrFail();
@@ -1529,15 +1529,15 @@ class PagesController
         $_SESSION['user']->refresh();
         @session_write_close();
         $pageContent['profilsHomePage'] = array(
-            'core::dashboard' => __('Dashboard'),
-            'core::view' => __('Vue'),
-            'core::plan' => __('Design'),
+            'core::dashboard' => \__('Dashboard'),
+            'core::view' => \__('Vue'),
+            'core::plan' => \__('Design'),
         );
 
         $pluginManagerList = PluginManager::listPlugin();
         foreach ($pluginManagerList as $pluginList) {
             if ($pluginList->isActive() == 1 && $pluginList->getDisplay() != '') {
-                $pageContent['profilsHomePage'][$pluginList->getId() . '::' . $pluginList->getDisplay()] = $pluginList->getName();
+                $pageContent['profilsHome'][$pluginList->getId() . '::' . $pluginList->getDisplay()] = $pluginList->getName();
             }
         }
         $pageContent['profilsUser'] = $_SESSION['user'];
@@ -1582,7 +1582,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function viewPage(Render $render, array &$pageContent): string
+    public static function view(Render $render, array &$pageContent): string
     {
 
         Status::initConnectState();
@@ -1640,7 +1640,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function viewEditPage(Render $render, array &$pageContent): string
+    public static function viewEdit(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedOrFail();
@@ -1665,7 +1665,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function eqAnalyzePage(Render $render, array &$pageContent): string
+    public static function eqAnalyze(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedOrFail();
@@ -1826,7 +1826,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function objectPage(Render $render, array &$pageContent): string
+    public static function object(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -1854,7 +1854,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function interactPage(Render $render, array &$pageContent): string
+    public static function interact(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -1895,7 +1895,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function planPage(Render $render, array &$pageContent): string
+    public static function plan(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedOrFail();
@@ -1952,7 +1952,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function plan3dPage(Render $render, array &$pageContent): string
+    public static function plan3d(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedOrFail();
@@ -2010,7 +2010,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function marketPage(Render $render, array &$pageContent): string
+    public static function market(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
@@ -2028,20 +2028,20 @@ class PagesController
 
         $pageContent['JS_VARS']['github'] = \config::byKey('github::enable');
         $pageContent['JS_VARS_RAW']['sourcesList'] = Utils::getArrayToJQueryJson($sourcesList);
-        $pageContent['JS_VARS']['moreInformationsStr'] = __("Plus d'informations");
-        $pageContent['JS_VARS']['updateStr'] = __("Mettre à jour");
-        $pageContent['JS_VARS']['updateAllStr'] = __("Voulez-vous mettre à jour tous les plugins ?");
-        $pageContent['JS_VARS']['updateThisStr'] = __("Voulez-vous mettre à jour ce plugin ?");
-        $pageContent['JS_VARS']['installedPluginStr'] = __("Plugin installé");
-        $pageContent['JS_VARS']['updateAvailableStr'] = __("Mise à jour disponible");
+        $pageContent['JS_VARS']['moreInformationsStr'] = \__("Plus d'informations");
+        $pageContent['JS_VARS']['updateStr'] = \__("Mettre à jour");
+        $pageContent['JS_VARS']['updateAllStr'] = \__("Voulez-vous mettre à jour tous les plugins ?");
+        $pageContent['JS_VARS']['updateThisStr'] = \__("Voulez-vous mettre à jour ce plugin ?");
+        $pageContent['JS_VARS']['installedPluginStr'] = \__("Plugin installé");
+        $pageContent['JS_VARS']['updateAvailableStr'] = \__("Mise à jour disponible");
         $pageContent['marketSourcesList'] = $sourcesList;
         $pageContent['marketSourcesFilter'] = \config::byKey('nextdom_market::show_sources_filters');
 
         // Affichage d'un message à un utilisateur
         if (isset($_GET['message'])) {
             $messages = [
-                __('La mise à jour du plugin a été effecutée.'),
-                __('Le plugin a été supprimé')
+                \__('La mise à jour du plugin a été effecutée.'),
+                \__('Le plugin a été supprimé')
             ];
 
             $messageIndex = intval($_GET['message']);
@@ -2070,7 +2070,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function rebootPage(Render $render, array &$pageContent): string
+    public static function reboot(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();

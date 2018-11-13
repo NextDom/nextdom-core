@@ -1,0 +1,80 @@
+{% if not restrictedUser %}
+    <div class="alert alert-danger">
+        {{ 'Attention : le compte utilisateur n\'a pas un profil "Utilisateur limité", aucune restriction mise ici ne pourra donc s\'appliquer' }}
+    </div>
+{% endif %}
+<div style="display: none" id="div_userRightAlert"></div>
+<a class="btn btn-success pull-right" id="bt_usersRightsSave"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#tab_eqLogic" aria-controls="tab_eqLogic" role="tab" data-toggle="tab">{{ 'Equipements' }}</a></li>
+    <li role="presentation"><a href="#tab_scenario" aria-controls="tab_scenario" role="tab" data-toggle="tab">{{ 'Scénarios' }}</a></li>
+</ul>
+<div class="tab-content" id="div_tasbUserRights">
+    <span class="userAttr" data-l1key="id" style="display : none;"></span>
+    <div role="tabpanel" class="tab-pane active" id="tab_eqLogic">
+        <table class='table table-condensed table-bordered tablesorter'>
+            <thead>
+            <tr>
+                <th>{{ 'Equipements' }}</th>
+                <th data-sorter="select-text">{{ 'Droits' }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for eqLogic in eqLogics %}
+                <tr>
+                    <td>{{ eqLogic.getHumanName(true)|raw }}</td>
+                    <td>
+                        <select class="form-control userAttr input-sm" data-l1key="rights" data-l2key="eqLogic{{ eqLogic.getId() }}">
+                            <option value="n">{{ 'Aucun' }}</option>
+                            <option value="r">{{ 'Visualisation' }}</option>
+                            <option value="rx">{{ 'Visualisation et exécution' }}</option>
+                        </select>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="tab_scenario">
+        <table class='table table-condensed table-bordered tablesorter'>
+            <thead>
+            <tr>
+                <th>{{ 'Scénarios' }}</th>
+                <th data-sorter="false" data-filter="false">{{ 'Droits' }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for scenario in scenarios %}
+                <tr>
+                    <td>{{ scenario.getHumanName(true, true, true)|raw }}</td>
+                    <td>
+                        <select class="form-control userAttr input-sm" data-l1key="rights" data-l2key="scenario{{ scenario.getId() }}">
+                            <option value="n">{{ 'Aucun' }}</option>
+                            <option value="r">{{ 'Visualisation' }}</option>
+                            <option value="rx">{{ 'Visualisation et exécution' }}</option>
+                        </select>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $('#div_tasbUserRights').setValues(user_rights, '.userAttr');
+    initTableSorter();
+
+    $("#bt_usersRightsSave").on('click', function (event) {
+        nextdom.user.save({
+            users: $('#div_tasbUserRights').getValues('.userAttr'),
+            error: function (error) {
+                notify('Core', error.message, 'error');
+            },
+            success: function () {
+                notify('Info', '{{ 'Sauvegarde effectuée' }}', 'success');
+                modifyWithoutSave = false;
+            }
+        });
+    });
+</script>
