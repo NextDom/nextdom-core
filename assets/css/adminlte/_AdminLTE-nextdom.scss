@@ -78,18 +78,36 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .info-box {
   min-height: 70px;
   margin-bottom: 10px;
+  box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+  border-radius: 4px;
+}
+
+.info-box-small {
+  min-height: 60px;
+  margin-bottom: 5px;
 }
 
 .info-box-icon {
   height: 70px;
   width: 65px;
   font-size: 38px;
-  line-height: 65px;
+  line-height: 70px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.info-box-small-icon {
+  height: 60px;
+  width: 60px;
+  line-height: 62px;
 }
 
 .info-box-content {
   padding: 5px 10px;
   margin-left: 65px;
+}
+.info-box-small-content {
+  padding: 10px 10px;
 }
 
 .info-box-text-2 {
@@ -124,7 +142,7 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   justify-content: space-between;
   background: $white;
   border:{
-  radius: 3px;
+  radius: 4px;
     left: 1px solid rgba(0,0,0,0.2);
     right: 1px solid rgba(0,0,0,0.2);
   }

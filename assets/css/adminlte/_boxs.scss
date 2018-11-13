@@ -27,12 +27,17 @@
         radius: 4px;
         left: 1px solid rgba(0,0,0,0.2);
         right: 1px solid rgba(0,0,0,0.2);
-        top: 3px solid $lightgray;
+        top: 1px solid $lightgray;
     }
     margin-bottom: 20px;
     width: 100%;
-
 }
+
+.box-success, .box-warning, .box-danger, .box-primary {
+  border-top-style: solid;
+  border-top-width: 3px;
+}
+
 .box.without-border {
     border-top: 0;
 }
@@ -40,6 +45,7 @@
 .box-header>.box-tools {
     top: 3px;
 }
+
 .objet {
     min-height: 0px;
 }
