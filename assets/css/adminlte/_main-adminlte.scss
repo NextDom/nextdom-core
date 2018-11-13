@@ -19,11 +19,13 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
+@import "_base.scss";
 @import "_alerts.scss";
 @import "_boxs.scss";
 @import "_cards.scss";
 @import "_checkbox.scss";
-@import "_divers.scss";
+@import "_carrousel.scss";
+@import "_base.scss";
 @import "_fab.scss";
 @import "_footer.scss";
 @import "_forms.scss";
@@ -38,5 +40,7 @@
 @import "_progressBars.scss";
 @import "_scrollbar.scss";
 @import "_sidebar.scss";
+@import "_tables.scss";
 @import "_tooltip.scss";
 @import "_treeView.scss";
+
