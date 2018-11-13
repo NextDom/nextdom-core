@@ -406,6 +406,7 @@ class PagesController
         $pageContent['adminIsRescueMode'] = Status::isRescueMode();
 
         if (!$pageContent['adminIsRescueMode']) {
+            $pageContent['adminPluginsList'] = [];
             $pluginsList = PluginManager::listPlugin(true);
             foreach ($pluginsList as $plugin) {
                 $pluginApi = \config::byKey('api', $plugin->getId());
