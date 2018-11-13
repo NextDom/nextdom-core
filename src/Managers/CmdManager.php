@@ -497,7 +497,7 @@ class CmdManager
             'cmd_name' => (html_entity_decode($cmdName) != '') ? html_entity_decode($cmdName) : $cmdName,
         );
 
-        if ($objectName == \__('Aucun', __FILE__)) {
+        if ($objectName == \__('Aucun')) {
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 'c') . '
             FROM ' . self::DB_CLASS_NAME . ' c
             INNER JOIN eqLogic el ON c.eqLogic_id=el.id
@@ -678,7 +678,7 @@ class CmdManager
     {
         $cmd = self::byId(str_replace('#', '', self::humanReadableToCmd($string)));
         if (!is_object($cmd)) {
-            throw new \Exception(__('La commande n\'a pas pu être trouvée : ', __FILE__) . $string . \__(' => ', __FILE__) . self::humanReadableToCmd($string));
+            throw new \Exception(__('La commande n\'a pas pu être trouvée : ') . $string . \__(' => ') . self::humanReadableToCmd($string));
         }
         return $cmd;
     }
@@ -812,7 +812,7 @@ class CmdManager
         if (isset($colors[$color])) {
             return $colors[$color];
         }
-        throw new \Exception(\__('Impossible de traduire la couleur en code hexadécimal :', __FILE__) . $color);
+        throw new \Exception(\__('Impossible de traduire la couleur en code hexadécimal :') . $color);
     }
 
     /**
