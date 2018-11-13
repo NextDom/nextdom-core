@@ -28,21 +28,3 @@ html {
 body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: Roboto,'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
 }
-
-/* Tables */
-.table-condensed>thead>tr>th,
-.table-condensed>tbody>tr>th,
-.table-condensed>tfoot>tr>th,
-.table-condensed>thead>tr>td,
-.table-condensed>tbody>tr>td,
-.table-condensed>tfoot>tr>td {
-  padding: 6px;
-  vertical-align: middle;
-  font-size: 13px;
-}
-
-
-/* carrousel */
-.carousel-inner > .item > img, .carousel-inner > .item > a > img {
-  margin: auto;
-}
