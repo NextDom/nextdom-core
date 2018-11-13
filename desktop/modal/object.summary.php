@@ -21,23 +21,23 @@ if (!isConnect()) {
 <?php
 $allObject = jeeObject::buildTree(null, false);
 foreach ($allObject as $object) {
-    echo '<tr><td><span class="label label-info txtSize1em">' . $object->getId() . '</span></td>';
+    echo '<tr><td><span class="label label-info txtSizeNormal">' . $object->getId() . '</span></td>';
     echo '<td><span style="font-size : 1.3em;">' . $object->getHumanName(true, true) . '</span></td>';
     $father = $object->getFather();
     if ($father) {
-        echo '<td><span class="txtSize1em">' . $father->getHumanName(true, true) . '</span></td>';
+        echo '<td><span class="txtSizeNormal">' . $father->getHumanName(true, true) . '</span></td>';
     } else {
-        echo '<td><span class="label label-info txtSize1em"></span></td>';
+        echo '<td><span class="label label-info txtSizeNormal"></span></td>';
     }
     if ($object->getIsVisible()) {
-        echo '<td><span class="label label-success txtSize1em" title="{{Oui}}"><i class="fas fa-check"></i></span></td>';
+        echo '<td><span class="label label-success txtSizeNormal" title="{{Oui}}"><i class="fas fa-check"></i></span></td>';
     } else {
-        echo '<td><span class="label label-danger txtSize1em" title="{{Non}}"><i class="fas fa-times"></i></span></td>';
+        echo '<td><span class="label label-danger txtSizeNormal" title="{{Non}}"><i class="fas fa-times"></i></span></td>';
     }
     if ($object->getConfiguration("hideOnDashboard", 0) == 1) {
-        echo '<td><span class="label label-success txtSize1em" title="{{Oui}}"><i class="fas fa-check"></i></span></td>';
+        echo '<td><span class="label label-success txtSizeNormal" title="{{Oui}}"><i class="fas fa-check"></i></span></td>';
     } else {
-        echo '<td><span class="label label-danger txtSize1em" title="{{Non}}"><i class="fas fa-times"></i></span></td>';
+        echo '<td><span class="label label-danger txtSizeNormal" title="{{Non}}"><i class="fas fa-times"></i></span></td>';
     }
     echo '<td>';
     foreach (config::byKey('object:summary') as $key => $value) {

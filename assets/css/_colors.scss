@@ -30,6 +30,7 @@ $black:#000;
 $verydarkgrey:#333;
 $lightblack:#222d32;
 $grey:#666;
+$lightenGrey:#e7e7e7;
 $darkgrey: #999;
 
 $lightblue:#B3D7EF;
@@ -68,11 +69,15 @@ $nextdom_grey_title: $whitegrey;
     color: $critical;
 }
 
+.text-gray{
+    color: #707070;
+}
+
 .nextdom_blue{
     color: $nextdom_blue;
 }
 
-.jeedom-green{
+.jeedomGreen{
     background-color: #96c927;
 }
 

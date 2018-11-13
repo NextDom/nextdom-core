@@ -20,20 +20,21 @@
 */
 
 /* Text size */
-.txtSize1em {
+
+.txtSizeSmall {
+  font-size : 0.75rem;
+}
+
+.txtSizeNormal {
   font-size : 1em;
 }
 
-.txtSize1-5em {
+.txtSizeMedium {
   font-size : 1.5em;
 }
 
-.txtSize2em {
+.txtSizeBig {
   font-size : 2em;
-}
-
-.txtSize075rem {
-  font-size : 0.75rem;
 }
 
 .txtBold{

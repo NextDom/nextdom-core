@@ -26,7 +26,7 @@ sendVarToJS('market_display_info', $market_array);
 <script src="/vendor/node_modules/slick-carousel/slick/slick.js"></script>
 <script src="/vendor/node_modules/fancybox/dist/js/jquery.fancybox.js"></script>
 
-<div class='row whitegrey' padding-top: 10px; padding-bottom: 10px;position: relative; top: -10px;'>
+<div class='row whitegrey' style='padding-top: 10px; padding-bottom: 10px;position: relative; top: -10px;'>
   <div class='col-sm-3'>
     <center>
       <?php
@@ -51,26 +51,26 @@ echo '<img src="' . $default_image . '" data-original="' . $urlPath . '"  class=
    <input class="form-control marketAttr" data-l1key="id" style="display: none;">
    <span class="marketAttr" data-l1key="name" placeholder="{{Nom}}" style="font-size: 3em;font-weight: bold;"></span>
    <br/>
-   <span class="span_author cursor txtSize1-5em txtBold text-gray" data-author="<?php echo $market->getAuthor(); ?>">{{Développé par}} <?php echo $market->getAuthor(); ?></span><br/>
+   <span class="span_author cursor txtSizeMedium txtBold text-gray" data-author="<?php echo $market->getAuthor(); ?>">{{Développé par}} <?php echo $market->getAuthor(); ?></span><br/>
    <?php
 if ($market->getCertification() == 'Officiel') {
-    echo '<span class="txtSize1-5em icon-gray">Officiel</span><br/>';
+    echo '<span class="txtSizeMedium icon-gray">Officiel</span><br/>';
 }
 if ($market->getCertification() == 'Conseillé') {
-    echo '<span class="txtSize1-5em txtBold text-gray">{{Conseillé}}</span><br/>';
+    echo '<span class="txtSizeMedium txtBold text-gray">{{Conseillé}}</span><br/>';
 }
 if ($market->getCertification() == 'Legacy') {
-    echo '<span class="txtSize1-5em txtBold" style="color:#6b6b6b;">{{Legacy}}</span><br/>';
+    echo '<span class="txtSizeMedium txtBold" style="color:#6b6b6b;">{{Legacy}}</span><br/>';
 }
 if ($market->getCertification() == 'Obsolète') {
-    echo '<span class="txtSize1-5em txtBold text-critical">{{Obsolète}}</span><br/>';
+    echo '<span class="txtSizeMedium txtBold text-critical">{{Obsolète}}</span><br/>';
 }
 global $NEXTDOM_INTERNAL_CONFIG;
 if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()])) {
-    echo '<span class="txtSize1em txtBold text-gray"><i class="fa ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['icon'] . '"></i> ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['name'] . '</span>';
+    echo '<span class="txtSizeNormal txtBold text-gray"><i class="fa ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['icon'] . '"></i> ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['name'] . '</span>';
     sendVarToJS('market_display_info_category', $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['name']);
 } else {
-    echo '<span class="txtSize1em txtBold text-gray">' . $market->getCategorie() . '</span>';
+    echo '<span class="txtSizeNormal txtBold text-gray">' . $market->getCategorie() . '</span>';
     sendVarToJS('market_display_info_category', $market->getCategorie());
 }
 ?>
