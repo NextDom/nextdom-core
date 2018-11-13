@@ -26,7 +26,7 @@ sendVarToJS('market_display_info', $market_array);
 <script src="/vendor/node_modules/slick-carousel/slick/slick.js"></script>
 <script src="/vendor/node_modules/fancybox/dist/js/jquery.fancybox.js"></script>
 
-<div class='row whitegrey' style='padding-top: 10px; padding-bottom: 10px;position: relative; top: -10px;'>
+<div class='row lightenGrey' style='padding-top: 10px; padding-bottom: 10px;position: relative; top: -10px;'>
   <div class='col-sm-3'>
     <center>
       <?php
