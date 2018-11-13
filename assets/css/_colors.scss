@@ -58,19 +58,19 @@ $nextdom_table_title: $whitegrey;
 $nextdom_grey_title: $whitegrey;
 
 .text-white{
-    color: $white ;
+    color: $white !important;
 }
 
 .text-nextdom_blue{
-    color: $nextdom_blue;
+    color: $nextdom_blue !important;
 }
 
 .text-critical{
-    color: $critical;
+    color: $critical !important;
 }
 
 .text-gray{
-    color: #707070;
+    color: #707070 !important;
 }
 
 .nextdom_blue{
