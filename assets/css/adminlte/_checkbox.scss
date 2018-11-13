@@ -22,9 +22,9 @@
 /* Checkboxes */
 input[type="checkbox"] {
     position: relative !important;
-    top:9px;
-    height: 22px;
-    width: 22px;
+    top:8px;
+    height: 21px;
+    width: 21px;
     appearance: none;
     -webkit-appearance: none;
     cursor: pointer;
@@ -46,12 +46,16 @@ input[type="checkbox"] {
 /* content */
 [type="checkbox"]:not(:checked):after,
 [type="checkbox"]:checked:after {
-    content: '■';
+    content: '';
     position: absolute;
-    top: -9px;
-    left:1px;
-    font-size: 24px;
+    left:0; top: 0;
+    width: 17px;
+    height: 17px;
     transition: all .2s;
+    border-radius: 2px;
+    -webkit-transition: all .2s;
+    -moz-transition: all .2s;
+    -ms-transition: all .2s;
 }
 
 /* checked state */
