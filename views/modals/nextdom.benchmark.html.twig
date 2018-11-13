@@ -1,0 +1,16 @@
+<table class="table table-condensed table-bordered">
+    <thead>
+    <tr>
+        <th>{{ Nom }}</th>
+        <th>{{ Temps }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for benchmarkKey, benchmarkValue in benchmark%}
+        <tr>
+            <td>{{ benchmarkKey }}</td>
+            <td>{{ benchmarkValue }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
