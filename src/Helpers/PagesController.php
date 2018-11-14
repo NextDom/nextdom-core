@@ -92,7 +92,7 @@ class PagesController
         'update_admin' => 'update_admin',
         'users' => 'users',
         'tools' => 'tools',
-        'note' => 'notePage',
+        'note' => 'note',
         'pluginRoute' => 'pluginRoute'
     ];
 
