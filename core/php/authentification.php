@@ -43,7 +43,7 @@ if (user::isBan()) {
     header('HTTP/1.1 403 Forbidden');
     $_SERVER['REDIRECT_STATUS'] = 403;
     echo '<p>' . __('403 Access Forbidden', __FILE__) . '</p>';
-    echo '<p>' .__('Vous avez été banni', __FILE__). '</p>';
+    echo '<p>' .__('Votre accès a été verrouillé pour votre sécurité ', __FILE__). '</p>';
     die();
 }
 
