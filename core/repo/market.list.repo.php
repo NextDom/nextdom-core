@@ -314,13 +314,13 @@ foreach ($markets as $market) {
     $default_image = 'public/img/NextDom_NoPicture.png';
     switch ($market->getType()) {
         case 'widget':
-            $default_image = '/public/img/NextDom_Widget.png';
+            $default_image = 'public/img/NextDom_Widget.png';
             break;
         case 'plugin':
-            $default_image = '/public/img/NextDom_Plugin.png';
+            $default_image = 'public/img/NextDom_Plugin.png';
             break;
         case 'script':
-            $default_image = '/public/img/NextDom_Script.png';
+            $default_image = 'public/img/NextDom_Script.png';
             break;
     }
 

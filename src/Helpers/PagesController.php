@@ -410,13 +410,10 @@ class PagesController
             $pluginsList = PluginManager::listPlugin(true);
             foreach ($pluginsList as $plugin) {
                 $pluginApi = \config::byKey('api', $plugin->getId());
-
-                if ($pluginApi !== '') {
                     $pluginData = [];
                     $pluginData['api'] = $pluginApi;
                     $pluginData['plugin'] = $plugin;
                     $pageContent['adminPluginsList'][] = $pluginData;
-                }
             }
         }
         $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
