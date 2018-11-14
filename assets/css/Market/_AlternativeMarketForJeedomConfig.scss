@@ -56,7 +56,6 @@
   }
   &:checked + label:after {
     top: -5px;
-    top: -5px;
   }
 }
 
@@ -186,8 +185,10 @@
   button {
     height: 100%;
     width: 100%;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+    border-top:{
+      left-radius: 0
+      right-radius: 0;;
+    }
   }
 }
 
