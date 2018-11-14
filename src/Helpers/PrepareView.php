@@ -140,7 +140,9 @@ class PrepareView
             'user_isAdmin'       => Status::isConnectAdmin(),
             'user_login'         => $_SESSION['user']->getLogin(),
             'nextdom_Welcome'   => $configs['nextdom::Welcome'],
-            'nextdom_Notify'   => $configs['nextdom::Notify'],
+            'notify_status'   => $configs['notify::status'],
+            'notify_position'   => $configs['notify::position'],
+            'notify_timeout'   => $configs['notify::timeout'],
             'widget_width_step'  => $configs['widget::step::width'],
             'widget_height_step' => $configs['widget::step::height'],
             'widget_margin'      => $configs['widget::margin'],
@@ -308,7 +310,6 @@ class PrepareView
         $pageData['PRODUCT_CONNECTION_ICON'] = $configs['product_connection_image'];
         $pageData['AJAX_TOKEN'] = \ajax::getToken();
         $pageData['LANGUAGE'] = $configs['language'];
-        $pageData['NEXTDOM_NOTIFY'] = $configs['nextdom::Notify'];
         $pageData['COLOR1'] = \nextdom::getConfiguration('theme:color1');
         $pageData['COLOR2'] = \nextdom::getConfiguration('theme:color2');
         $pageData['COLOR3'] = \nextdom::getConfiguration('theme:color3');
@@ -397,7 +398,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.sew/jquery.sew.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-cron/dist/jquery-cron.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-contextMenu/dist/jquery.contextMenu.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
