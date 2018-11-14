@@ -574,7 +574,7 @@ function switchNotify(notificationState) {
 }
 
 function notify(_title, _text, _class_name) {
-    if (typeof nextdom_Notify != 'undefined' && isset(nextdom_Notify) && nextdom_Notify == 1) {
+    if (typeof notify_status != 'undefined' && isset(notify_status) && notify_status == 1) {
         var _backgroundColor = "";
         var _icon = "";
 
@@ -625,7 +625,7 @@ function notify(_title, _text, _class_name) {
             closeOnEscape: false,
             closeOnClick: false,
             displayMode: 0, // once, replace
-            position: 'topCenter', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
+            position: notify_position, // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
             target: '',
             targetFirst: true,
             timeout: 5000,
