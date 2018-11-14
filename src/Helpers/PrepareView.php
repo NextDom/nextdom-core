@@ -142,6 +142,7 @@ class PrepareView
             'nextdom_Welcome'   => $configs['nextdom::Welcome'],
             'notify_status'   => $configs['notify::status'],
             'notify_position'   => $configs['notify::position'],
+            'notify_timeout'   => $configs['notify::timeout'],
             'widget_width_step'  => $configs['widget::step::width'],
             'widget_height_step' => $configs['widget::step::height'],
             'widget_margin'      => $configs['widget::margin'],
@@ -309,8 +310,6 @@ class PrepareView
         $pageData['PRODUCT_CONNECTION_ICON'] = $configs['product_connection_image'];
         $pageData['AJAX_TOKEN'] = \ajax::getToken();
         $pageData['LANGUAGE'] = $configs['language'];
-        $pageData['NEXTDOM_NOTIFY'] = $configs['nextdom::Notify'];
-        $pageData['NOTIFY_POSITION'] = $configs['notify::position'];
         $pageData['COLOR1'] = \nextdom::getConfiguration('theme:color1');
         $pageData['COLOR2'] = \nextdom::getConfiguration('theme:color2');
         $pageData['COLOR3'] = \nextdom::getConfiguration('theme:color3');

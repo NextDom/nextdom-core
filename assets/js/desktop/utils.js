@@ -593,9 +593,9 @@ function notify(_title, _text, _class_name) {
         } else if (_class_name == "error") {
             _backgroundColor = '#dd4b39';
             _icon = 'fas fa-times fa-3x';
-        } else if (_class_name == "info") {
+        } else {
             _backgroundColor = '#33B8CC';
-            _icon = 'fas fa-times fa-3x';
+            _icon = 'fas fa-info fa-3x';
         }
 
         iziToast.show({
@@ -617,7 +617,7 @@ function notify(_title, _text, _class_name) {
             iconUrl: null,
             image: '',
             imageWidth: 50,
-            maxWidth: null,
+            maxWidth: jQuery(window).width() - 500,
             zindex: null,
             layout: 2,
             balloon: false,
@@ -628,7 +628,7 @@ function notify(_title, _text, _class_name) {
             position: notify_position, // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
             target: '',
             targetFirst: true,
-            timeout: 5000,
+            timeout: notify_timeout * 1000,
             rtl: false,
             animateInside: true,
             drag: true,
