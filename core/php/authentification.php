@@ -42,8 +42,7 @@ if (user::isBan()) {
     header("Statut: 403 Forbidden");
     header('HTTP/1.1 403 Forbidden');
     $_SERVER['REDIRECT_STATUS'] = 403;
-    echo "<h1>403 Forbidden</h1>";
-    echo "Access Forbidden.";
+    echo "403 Access Forbidden.";
     die();
 }
 
