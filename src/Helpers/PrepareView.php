@@ -341,8 +341,8 @@ class PrepareView
             $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
             $pageData['JS_END_POOL'][] = '/public/js/adminlte/adminlte_nextdom.js';
         } else {
+            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.ui/jquery-ui.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
-            $pageData['JS_POOL'][] = 'vendor/node_modules/jquery-ui-dist/jquery-ui.min.js';
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';

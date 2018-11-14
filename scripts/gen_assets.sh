@@ -36,15 +36,15 @@ function gen_css {
 	sass assets/css/Market/market.scss public/css/market.css $COMPRESS
 
 	# Remplacement des chemins
-	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
-	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
+	sed -i s#\"images/ui-#\"/assets/3rdparty/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
+	sed -i s#\"images/ui-#\"/assets/3rdparty/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
 }
 
 function gen_js {
 	echo " >>> Generation du JS"
     cat assets/3rdparty/jquery.utils/jquery.utils.js \
+        assets/3rdparty/jquery.ui/jquery-ui.min.js \
         vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
-        vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
         vendor/node_modules/izitoast/dist/js/iziToast.min.js \
         assets/js/desktop/utils.js \
         core/js/core.js \
@@ -168,6 +168,8 @@ function copy_assets {
 	cp -fr assets/themes public/
 	echo " >>> Copie des images"
 	cp -fr assets/img public/
+	echo " >>> Copie des 3rdparty"
+	cp -fr assets/3rdparty public/
 	gen_css
 	gen_js
 }
