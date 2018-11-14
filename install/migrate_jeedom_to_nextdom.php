@@ -229,6 +229,8 @@ try {
     echo "Restoration of rights...";
     shell_exec('chmod 775 -R ' . __DIR__ );
     shell_exec('chown -R www-data:www-data ' . __DIR__ );
+    shell_exec('chmod 775 -R /var/log/nextdom');
+    shell_exec('chown -R /var/log/nextdom');
     shell_exec('chmod 777 -R /tmp/');
     shell_exec('chown www-data:www-data -R /tmp/');
     echo "OK\n";
