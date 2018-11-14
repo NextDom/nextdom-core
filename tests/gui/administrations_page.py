@@ -7,9 +7,11 @@ from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
-
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 class AdministrationPages(unittest.TestCase):
+    """Test all pages linked in administration page
+    """
     driver = None
     url = None
     login = None
@@ -18,13 +20,20 @@ class AdministrationPages(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         try:
-            cls.driver = webdriver.Firefox()
+            desired_capabilities = DesiredCapabilities.CHROME.copy()
+            desired_capabilities['loggingPrefs'] = { 'browser': 'SEVERE' }
+            cls.driver = webdriver.Chrome(desired_capabilities=desired_capabilities)
             cls.driver.get(cls.url)
             cls.connect_to_nextdom()
         except WebDriverException as err:
-            print("Geckodriver needed to run tests on Firefox.")
-            print("Download it on https://github.com/mozilla/geckodriver/releases")
+            print("Chromedriver needed to run tests on Chrome.")
+            print("Download it on https://sites.google.com/a/chromium.org/chromedriver/downloads")
             exit(1)
+
+    @classmethod
+    def tearDownClass(cls):
+        if cls.driver is not None:
+            cls.driver.quit()
 
     @classmethod
     def connect_to_nextdom(cls):
@@ -64,6 +73,7 @@ class AdministrationPages(unittest.TestCase):
         self.assertIsNotNone(users_button)
         self.assertIsNotNone(interact_admin_button)
         self.assertIsNotNone(migration_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
 
     def test_users_page(self):
         self.driver.get(self.url+'index.php?v=d&p=users')
@@ -72,6 +82,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(change_hash_button)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -82,6 +93,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(regenerate_api_button)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -92,6 +104,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(local_ip_input)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -102,6 +115,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(ldap_checkbox)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -112,6 +126,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(clean_cache_button)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -122,6 +137,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(test_repo_buttons)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -132,6 +148,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(reset_hardware_button)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -142,6 +159,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(color2_input)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -152,6 +170,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(avatar_upload_button)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -162,6 +181,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(display_stats_input)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -172,6 +192,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(scenario_depth_input)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -182,6 +203,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(add_color_button)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -192,6 +214,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(fails_limit_input)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -202,6 +225,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(add_summary_button)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -212,6 +236,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(report_delay_input)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -222,6 +247,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(max_event_input)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -232,6 +258,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertTrue(len(info_boxes) > 15)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -242,6 +269,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(add_cron_button)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -252,6 +280,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(tabs_div)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -262,6 +291,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(remove_logs_button)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -272,6 +302,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(calc_history_input)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -282,6 +313,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(report_search_list)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -292,6 +324,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(remove_all_button)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -302,6 +335,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(activ_display_checkbox)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -312,6 +346,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(migration_button)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -322,6 +357,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(log_button)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -332,6 +368,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(selective_update_button)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -342,6 +379,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(add_note_button)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -352,6 +390,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(console_button)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
@@ -362,6 +401,7 @@ class AdministrationPages(unittest.TestCase):
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(interact_button)
         self.assertIsNotNone(back_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
         sleep(4)
 
