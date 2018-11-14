@@ -100,6 +100,7 @@ class Router
                 'nextdom::Welcome',
                 'notify::status',
                 'notify::position',
+                'notify::timeout',
                 'widget::step::width',
                 'widget::step::height',
                 'widget::margin',
