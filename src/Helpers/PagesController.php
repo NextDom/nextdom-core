@@ -92,7 +92,7 @@ class PagesController
         'update_admin' => 'update_admin',
         'users' => 'users',
         'tools' => 'tools',
-        'note' => 'notePage',
+        'note' => 'note',
         'pluginRoute' => 'pluginRoute'
     ];
 
@@ -410,13 +410,10 @@ class PagesController
             $pluginsList = PluginManager::listPlugin(true);
             foreach ($pluginsList as $plugin) {
                 $pluginApi = \config::byKey('api', $plugin->getId());
-
-                if ($pluginApi !== '') {
                     $pluginData = [];
                     $pluginData['api'] = $pluginApi;
                     $pluginData['plugin'] = $plugin;
                     $pageContent['adminPluginsList'][] = $pluginData;
-                }
             }
         }
         $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
@@ -685,8 +682,10 @@ class PagesController
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageContent['JS_VARS']['ldapEnable'] = $pageContent['adminConfigs']['ldap::enable'];
-        $cache = CacheManager::byKey('security::banip');
+        $keys = array('security::bantime', 'ldap::enable');
+        $configs = \config::byKeys($keys);
+
+        $pageContent['JS_VARS']['ldapEnable'] = $configs['ldap::enable'];
 
         $pageContent['adminUseLdap'] = function_exists('ldap_connect');
         if ($pageContent['adminUseLdap']) {
@@ -701,7 +700,7 @@ class PagesController
                 $bannedData = [];
                 $bannedData['ip'] = $value['ip'];
                 $bannedData['startDate'] = date('Y-m-d H:i:s', $value['datetime']);
-                if ($pageContent['adminConfigs']['security::bantime'] < 0) {
+                if ($configs['security::bantime'] < 0) {
                     $bannedData['endDate'] = __('Jamais');
                 } else {
                     $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageContent['adminConfigs']['security::bantime']);
@@ -828,7 +827,7 @@ class PagesController
                 $bannedData['ip'] = $value['ip'];
                 $bannedData['startDate'] = date('Y-m-d H:i:s', $value['datetime']);
                 if ($pageContent['adminConfigs']['security::bantime'] < 0) {
-                    $bannedData['endDate'] = __('Jamais');
+                    $bannedData['endDate'] = \__('Jamais');
                 } else {
                     $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageContent['adminConfigs']['security::bantime']);
                 }
@@ -1527,9 +1526,9 @@ class PagesController
         $_SESSION['user']->refresh();
         @session_write_close();
         $pageContent['profilsHomePage'] = array(
-            'core::dashboard' => __('Dashboard'),
-            'core::view' => __('Vue'),
-            'core::plan' => __('Design'),
+            'core::dashboard' => \__('Dashboard'),
+            'core::view' => \__('Vue'),
+            'core::plan' => \__('Design'),
         );
 
         $pluginManagerList = PluginManager::listPlugin();
@@ -2026,20 +2025,20 @@ class PagesController
 
         $pageContent['JS_VARS']['github'] = \config::byKey('github::enable');
         $pageContent['JS_VARS_RAW']['sourcesList'] = Utils::getArrayToJQueryJson($sourcesList);
-        $pageContent['JS_VARS']['moreInformationsStr'] = __("Plus d'informations");
-        $pageContent['JS_VARS']['updateStr'] = __("Mettre à jour");
-        $pageContent['JS_VARS']['updateAllStr'] = __("Voulez-vous mettre à jour tous les plugins ?");
-        $pageContent['JS_VARS']['updateThisStr'] = __("Voulez-vous mettre à jour ce plugin ?");
-        $pageContent['JS_VARS']['installedPluginStr'] = __("Plugin installé");
-        $pageContent['JS_VARS']['updateAvailableStr'] = __("Mise à jour disponible");
+        $pageContent['JS_VARS']['moreInformationsStr'] = \__("Plus d'informations");
+        $pageContent['JS_VARS']['updateStr'] = \__("Mettre à jour");
+        $pageContent['JS_VARS']['updateAllStr'] = \__("Voulez-vous mettre à jour tous les plugins ?");
+        $pageContent['JS_VARS']['updateThisStr'] = \__("Voulez-vous mettre à jour ce plugin ?");
+        $pageContent['JS_VARS']['installedPluginStr'] = \__("Plugin installé");
+        $pageContent['JS_VARS']['updateAvailableStr'] = \__("Mise à jour disponible");
         $pageContent['marketSourcesList'] = $sourcesList;
         $pageContent['marketSourcesFilter'] = \config::byKey('nextdom_market::show_sources_filters');
 
         // Affichage d'un message à un utilisateur
         if (isset($_GET['message'])) {
             $messages = [
-                __('La mise à jour du plugin a été effecutée.'),
-                __('Le plugin a été supprimé')
+                \__('La mise à jour du plugin a été effecutée.'),
+                \__('Le plugin a été supprimé')
             ];
 
             $messageIndex = intval($_GET['message']);
