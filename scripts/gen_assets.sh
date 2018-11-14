@@ -36,8 +36,8 @@ function gen_css {
 	sass assets/css/Market/market.scss public/css/market.css $COMPRESS
 
 	# Remplacement des chemins
-	sed -i s#\"images/ui-#\"/assets/3rdparty/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
-	sed -i s#\"images/ui-#\"/assets/3rdparty/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
+#	sed -i s#\"images/ui-#\"/assets/3rdparty/jquery.ui/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
+#	sed -i s#\"images/ui-#\"/assets/3rdparty/jquery.ui/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
 }
 
 function gen_js {

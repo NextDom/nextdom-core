@@ -20,15 +20,15 @@
 
 @import "_colors.scss";
 @import "../../vendor/node_modules/bootstrap/dist/css/bootstrap.css";
-@import "../3rdparty/jquery.ui/jquery-ui.min.css";
+@import "../../assets/3rdparty/jquery.ui/jquery-ui-bootstrap/jquery-ui.css";
 @import "../../vendor/node_modules/roboto-fontface/css/roboto/roboto-fontface.css";
-@import "../3rdparty/jquery.utils/_jquery.utils.scss";
+@import "../../assets/3rdparty/jquery.utils/_jquery.utils.scss";
 @import "../../vendor/node_modules/notosans-fontface/css/notosans-fontface.min.css";
 @import "../../vendor/node_modules/jstree/dist/themes/default/style.css";
 @import "../../vendor/node_modules/jquery-cron/dist/jquery-cron.css";
 @import "../../vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.css";
 @import "../../vendor/node_modules/tablesorter/dist/css/theme.bootstrap.min.css";
-@import "../3rdparty/jquery.sew/jquery.sew.scss";
+@import "../../assets/3rdparty/jquery.sew/jquery.sew.scss";
 @import "../../vendor/node_modules/codemirror/lib/codemirror.css";
 @import "../../vendor/node_modules/izitoast/dist/css/iziToast.css";
 @import "../../vendor/node_modules/font-awesome/css/font-awesome.css";

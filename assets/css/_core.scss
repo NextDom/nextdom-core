@@ -199,6 +199,9 @@
   padding: 0px 0 0px 0px;
   & .ui-dialog-titlebar-close {
     right: 0.5em;
+    top: 70%;
+    background-image: url(/public/3rdparty/jquery.ui/jquery-ui-bootstrap/images/ui-icons_888888_256x240.png);
+    background-position: -80px -128px;
   }
 }
 
