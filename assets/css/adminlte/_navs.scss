@@ -53,5 +53,8 @@
   .objectSummaryGlobalHeader {
     font-size: small;
     left: -3px;
+    white-space: nowrap;
+    display: block;
+    overflow: hidden;
   }
 }
