@@ -51,7 +51,6 @@
                         {% endif %}
                     </a>
                 </li>
-                <!-- Tasks: style can be found in dropdown.less bt_messageModal-->
                 {% if IS_ADMIN %}
                     <li class="tasks-menu task_update_mobile">
                         <a href="index.php?v=d&p=update">
@@ -66,14 +65,13 @@
                 {% endif %}
                 <li>
                     {% if NEXTDOM_NOTIFY == 1 %}
-                    <a><span class="notifyIcon fas fa-bell cursor" onclick="switchNotify(0);"></span></a>
+                        <a class="task_bell_mobile"><span class="notifyIcon fas fa-bell cursor" onclick="switchNotify(0);"></span></a>
                     {% else %}
-                    <a><span class="notifyIcon fas fa-bell-slash cursor" onclick="switchNotify(1);"></span></a>
+                        <a class="task_bell_mobile"><span class="notifyIcon fas fa-bell-slash cursor" onclick="switchNotify(1);"></span></a>
                     {% endif %}
-
                 </li>
                 <li>
-                    <a><span id="togglefullscreen" class="fa fa-expand cursor" onclick="toggleFullScreen();"></span></a>
+                    <a class="task_fullscreen_mobile"><span id="togglefullscreen" class="fa fa-expand cursor" onclick="toggleFullScreen();"></span></a>
                 </li>
             </ul>
         </div>
