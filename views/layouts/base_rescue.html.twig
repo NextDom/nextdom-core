@@ -2,7 +2,9 @@
     <body class="hold-transition fixed">
     {% include '/commons/menu_rescue.html.twig' %}
         <div class="content-wrapper">
+            <main id="div_pageContainer">
             {{ CONTENT | raw }}
+            </main>
         </div><!-- plif  -->
     {% if JS_END_POOL is defined %}
         {% for jsFile in JS_END_POOL %}
