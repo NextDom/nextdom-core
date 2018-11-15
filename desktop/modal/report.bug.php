@@ -95,7 +95,7 @@ foreach (plugin::listPlugin(true) as $plugin) {
         <div class="form-group">
             <label class="col-sm-5 control-label">{{Ce plugin utilise un gestionnaire de demande de support}}</label>
             <div class="col-sm-2">
-               <a class="btn btn-success" id="bt_reportBugIssueUrl" href="#" target="_blank" style="color:white;"><i class="far fa-check-circle"></i> {{Accéder}}</a>
+               <a class="btn btn-success text-white" id="bt_reportBugIssueUrl" href="#" target="_blank"><i class="far fa-check-circle"></i> {{Accéder}}</a>
            </div>
        </div>
    </div>

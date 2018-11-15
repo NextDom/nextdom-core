@@ -17,8 +17,8 @@ sendVarToJS('id', $plan3d->getId());
 <form class="form-horizontal">
     <fieldset id="fd_plan3dConfigure">
         <legend>{{Général}}
-            <a class='btn btn-success btn-xs pull-right cursor' style="color: white;" id='bt_saveConfigurePlan3d'><i class="fas fa-check"></i> {{Sauvegarder}}</a>
-            <a class='btn btn-danger btn-xs pull-right cursor' style="color: white;" id='bt_removeConfigurePlan3d'><i class="fas fa-times"></i> {{Supprimer}}</a>
+            <a class='btn btn-success btn-xs pull-right cursor text-white' id='bt_saveConfigurePlan3d'><i class="fas fa-check"></i> {{Sauvegarder}}</a>
+            <a class='btn btn-danger btn-xs pull-right cursor text-white' id='bt_removeConfigurePlan3d'><i class="fas fa-times"></i> {{Supprimer}}</a>
         </legend>
         <input type="text"  class="plan3dAttr form-control" data-l1key="id" style="display: none;"/>
         <div class="form-group">
