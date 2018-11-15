@@ -57,6 +57,18 @@ $nextdom_polar_accent: $white;
 $nextdom_table_title: $whitegrey;
 $nextdom_grey_title: $whitegrey;
 
+.good {
+    background-color: $good
+}
+
+.warning {
+    background-color: $warn
+}
+
+.critical {
+    background-color: $critical
+}
+
 .text-white{
     color: $white !important;
 }
