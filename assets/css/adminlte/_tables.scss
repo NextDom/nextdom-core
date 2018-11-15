@@ -20,6 +20,15 @@
 */
 
 /* Tables */
+.table-condensed>thead {
+  background-color: #F5F5F5;
+  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+}
+.table-condensed {
+  background-color: #fafafa;
+}
+
 .table-condensed>thead>tr>th,
 .table-condensed>tbody>tr>th,
 .table-condensed>tfoot>tr>th,

@@ -74,3 +74,14 @@ input[type="checkbox"] {
 [type="checkbox"]:focus {
     outline: none !important;
 }
+
+/* Checkbox */
+[type="checkbox"]:not(:checked):before,
+[type="checkbox"]:checked:before {
+    background: #fff;
+}
+
+.has-error [type="checkbox"]:checked:after,
+.has-error [type="checkbox"]:checked:after {
+    background: #c9302c;
+}
