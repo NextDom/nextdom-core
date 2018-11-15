@@ -1089,8 +1089,8 @@ class PagesController
         $pageContent['historyPluginsList'] = PluginManager::listPlugin();
         $pageContent['historyEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
         $pageContent['historyObjectsList'] = JeeObjectManager::all();
-        $pageContent['JS_POOL'][] = '/assets/3rdparty/visjs/vis.min.js';
-        $pageContent['CSS_POOL'][] = '/assets/3rdparty/visjs/vis.min.css';
+        $pageContent['JS_POOL'][] = '/vendor/node_modules/vis/dist/vis.min.js';
+        $pageContent['CSS_POOL'][] = '/vendor/node_modules/vis/dist/vis.min.css';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/diagnostic/history.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 

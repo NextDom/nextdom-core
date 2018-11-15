@@ -33,7 +33,7 @@ class RescuePage(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        if cls.driver is not None and False:
+        if cls.driver is not None:
             cls.driver.quit()
 
     @classmethod
@@ -53,8 +53,64 @@ class RescuePage(unittest.TestCase):
         self.driver.get(self.url+self.RESCUE_PATTERN)
         # Wait for loading page
         sleep(2)
-        system_menu = self.driver.find_element_by_css('a[href="index.php?v=d&p=system&rescue=1"]')
+        system_menu = self.driver.find_element_by_css_selector('a[href="index.php?v=d&p=system&rescue=1"]')
         self.assertIsNotNone(system_menu)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
+
+    def test_system_page(self):
+        self.driver.get(self.url+self.RESCUE_PATTERN+'&p=system')
+        # Wait for loading page
+        sleep(2)
+        commands_list = self.driver.find_element_by_id('ul_listSystemHistory')
+        self.assertIsNotNone(commands_list)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
+
+    def test_database_page(self):
+        self.driver.get(self.url+self.RESCUE_PATTERN+'&p=database')
+        # Wait for loading page
+        sleep(2)
+        sql_requests_list = self.driver.find_element_by_id('ul_listSqlRequest')
+        self.assertIsNotNone(sql_requests_list)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
+
+    def test_editor_page(self):
+        self.driver.get(self.url+self.RESCUE_PATTERN+'&p=editor')
+        # Wait for loading page
+        sleep(2)
+        new_file_button = self.driver.find_element_by_id('bt_createFile')
+        self.assertIsNotNone(new_file_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
+
+    def test_custom_page(self):
+        self.driver.get(self.url+self.RESCUE_PATTERN+'&p=custom')
+        # Wait for loading page
+        sleep(2)
+        custom_tabs_div = self.driver.find_element_by_css_selector('div.nav-tabs-custom')
+        self.assertIsNotNone(custom_tabs_div)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
+
+    def test_backup_page(self):
+        self.driver.get(self.url+self.RESCUE_PATTERN+'&p=backup')
+        # Wait for loading page
+        sleep(2)
+        launch_button = self.driver.find_element_by_css_selector('a.bt_backupNextDom')
+        self.assertIsNotNone(launch_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
+
+    def test_cron_page(self):
+        self.driver.get(self.url+self.RESCUE_PATTERN+'&p=cron')
+        # Wait for loading page
+        sleep(2)
+        add_cron_button = self.driver.find_element_by_id('bt_addCron')
+        self.assertIsNotNone(add_cron_button)
+        self.assertEqual(0, len(self.driver.get_log('browser')))
+
+    def test_log_page(self):
+        self.driver.get(self.url+self.RESCUE_PATTERN+'&p=log')
+        # Wait for loading page
+        sleep(2)
+        remove_all_button = self.driver.find_element_by_id('bt_removeAllLog')
+        self.assertIsNotNone(remove_all_button)
         self.assertEqual(0, len(self.driver.get_log('browser')))
 
 # Entry point
