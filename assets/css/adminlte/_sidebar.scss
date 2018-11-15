@@ -1,4 +1,4 @@
- @charset "utf-8";
+@charset "utf-8";
 
 /* This file is part of NextDom Software.
 *
@@ -19,7 +19,7 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
- 
+
 /* Sidebar */
 .sidebar-nav {
   padding: 9px 0;
@@ -73,8 +73,36 @@
   transition: transform 0.2s ease-in, width 0.2s ease-in;
 }
 
- @media (min-width: 768px) {
-   .sidebar-mini.sidebar-collapse .main-sidebar {
-     z-index: 1020;
-   }
- }
+@media (min-width: 768px) {
+  .sidebar-mini.sidebar-collapse .main-sidebar {
+    z-index: 1020;
+  }
+}
+
+.sidebar-menu > li > a {
+  border-left: 3px solid transparent;
+}
+
+.sidebar-menu .treeview-menu > li > a {
+  color: #8aa4af;
+}
+
+.sidebar-form {
+  border-radius: 3px;
+  border: 1px solid #374850;
+  margin: 10px 10px;
+}
+.sidebar-form input[type="text"],
+.sidebar-form .btn {
+  box-shadow: none;
+  background-color: #374850;
+  border: 1px solid transparent;
+  height: 35px;
+}
+.sidebar-form input[type="text"] {
+  color: #666;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 2px;
+}

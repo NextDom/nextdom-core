@@ -40,3 +40,31 @@
     font-size: 18px;
     line-height: 48px;
 }
+
+.logo-mini-img{
+    background:url("/public/img/NextDom/NextDom_Square_AlphaBlackWhite.png");
+    background-size: 40px;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding-left: 50px;
+    width:0px;
+    height:40px;
+}
+.logo-lg-img{
+    background:url("/public/img/NextDom/NextDom_Wide_AlphaBlackWhite.png");
+    background-size: auto 40px;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding-left: 210px;
+    width:0px;
+    height:40px;
+}
+.login-logo-img{
+    background:url("/public/img/NextDom/NextDom_Wide_AlphaBlackWhite.png");
+    background-size: auto 100px;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding-left: 380px;
+    width:0px;
+    height:100px;
+}
