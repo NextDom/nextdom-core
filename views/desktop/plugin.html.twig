@@ -42,7 +42,7 @@
             <div class="action-group">
                 {% for repoCode, repoData in pluginReposList %}
                     {% if repoData['name'] == 'Market' %}
-                        <a class="btn btn-success displayStore" style="background-color:#96c927" data-repo="{{ repoCode }}"><i class="fa fa-shopping-cart">&nbsp;&nbsp;</i>{{ repoData['name'] }} Jeedom</a>
+                        <a class="btn btn-success displayStore jeedomGreen" data-repo="{{ repoCode }}"><i class="fa fa-shopping-cart">&nbsp;&nbsp;</i>{{ repoData['name'] }} Jeedom</a>
                     {% else %}
                         <a class="btn btn-primary displayStore" data-repo="{{ repoCode }}"><i class="fa fa-shopping-cart">&nbsp;&nbsp;</i>{{ repoData['name'] }}</a>
                     {% endif %}

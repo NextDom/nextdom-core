@@ -34,35 +34,68 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-#div_alert {
-    display: none;
-    margin:10px auto;
-    width: 95%;
+.highcharts-data-table {
+  th {
+    border-bottom-width: 2px;
+    border: 1px solid $lightgrey;
+    padding: 5px;
+    vertical-align: bottom;
+    line-height: 1.42857143;
+    text-align: left;
+    font-weight: bold;
+  }
+  tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+  }
+  td {
+    border: 1px solid $lightgrey;
+    padding: 5px;
+    line-height: 1.42857143;
+    vertical-align: top;
+  }
 }
 
-.alert{
-    width: 95%;
-    margin: 10px auto;
-    border-left: 5px solid $lightyellow;
+.highcharts-table-caption {
+  display: none;
 }
 
-.alert-danger {
-    border-left: 5px solid #DFAAA9;
-    box-shadow: 0 0 0 0 rgba(235, 204, 209, 0.7) !important;
-    -webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
-    -moz-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
-    -ms-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
-    animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
+.highcharts-axis-labels{
+    color:$black;
+}
+.highcharts-data-label text {
+	font-weight: bold;
+	fill: $black;
+}
+.highcharts-data-table tr{
+  display: table-row;
+  vertical-align: inherit;
+  border-color: inherit;
 }
 
-.alert-danger {
-    border-left: 5px solid $lightred;
+.highcharts-data-table>caption+thead>tr:first-child>td, .table>caption+thead>tr:first-child>th, .table>colgroup+thead>tr:first-child>td, .table>colgroup+thead>tr:first-child>th, .table>thead:first-child>tr:first-child>td, .table>thead:first-child>tr:first-child>th {
+  border-top: 0;
 }
 
-.alert-info {
-    border-left: 5px solid $lightblue;
+.highcharts-table-caption{
+  display: none;
 }
 
-.alert-success {
-    border-left: 5px solid $lightgreen;
+.highcharts-data-table{
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+  background-color: transparent;
+	border:{
+	    spacing: 0;
+	    collapse: collapse;
+	}
+  display: table;
+	& thead{
+          display: table-header-group;
+          vertical-align: middle;
+          border-color: inherit;
+    }
 }
+ 
