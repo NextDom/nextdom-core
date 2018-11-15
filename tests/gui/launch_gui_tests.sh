@@ -1,5 +1,7 @@
 #!/bin/sh
 
+cd "$( dirname "${BASH_SOURCE[0]}" )"
+
 if [ "$#" -ne 3 ]; then
   read -p "Adresse du nextdom : " URL
   read -p "Utilisateur : " LOGIN
