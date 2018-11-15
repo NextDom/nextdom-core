@@ -19,19 +19,29 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
+/* Modales */
+.ui-dialog {
+  z-index: 5000;
+  border-radius: 7px;
+  background-clip: unset;
+  box-shadow:0 3px 30px rgba(0,0,0,0.6);
+  padding: 0px 0 0px 0px;
+  & .ui-dialog-titlebar-close {
+    right: 0.5em;
+    top: 70%;
+  }
+  & .ui-dialog-title {
+    padding: 7px 5px 5px 0px;
+  }
+  & .ui-dialog-titlebar-close {
+    opacity: 1;
+  }
+}
 
-/* User panel */
-.user-panel {
-    padding-left: 7px;
-    & > .info {
-        padding: 10px 5px 5px 15px;
-        line-height: 0.9;
-        position: absolute;
-        left: 55px;
-    }
-    & > .image > a > img {
-        width: 100%;
-        max-width: 50px;
-        height: auto;
-    }
+.ui-widget-content {
+  border: none;
+}
+
+.modal {
+  z-index: 9999;
 }
