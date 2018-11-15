@@ -167,3 +167,10 @@
     word-break: break-all;
     white-space: normal;
 }
+
+/* Param depends resolution */
+@media (max-width: 767px) {
+    .form-horizontal .control-label {
+        padding-top: 7px;
+    }
+}
