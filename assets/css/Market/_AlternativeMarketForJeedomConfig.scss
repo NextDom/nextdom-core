@@ -38,7 +38,7 @@
     top: -3px;
     width: 65px;
     height: 30px;
-    background: $lightgray;
+    background: $lightgrey;
     border-radius: 15px;
     -webkit-transition: background-color .2s;
     -moz-transition: background-color .2s;
@@ -55,7 +55,6 @@
     top: -5px;
   }
   &:checked + label:after {
-    top: -5px;
     top: -5px;
   }
 }
@@ -88,7 +87,7 @@
         left: 5px;
       }
       &:before {
-        background: $lightgray;
+        background: $lightgrey;
       }
       &:after {
         background: $lightgreen;
@@ -135,7 +134,7 @@
       color: $lightgreen;
     }
     &:focus + label:before {
-      border: 1px dashed $gray;
+      border: 1px dashed $grey;
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       -ms-box-sizing: border-box;
@@ -152,7 +151,7 @@
 
 #amfj-config .control-label sup {
   font-size: 1em;
-  color: $gray;
+  color: $grey;
 }
 
 #config-modal h3 {
@@ -186,8 +185,10 @@
   button {
     height: 100%;
     width: 100%;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+    border-top:{
+      left-radius: 0;
+      right-radius: 0;
+    }
   }
 }
 
