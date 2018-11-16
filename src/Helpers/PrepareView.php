@@ -101,7 +101,7 @@ class PrepareView
 
         $pageData['MENU'] = $render->get('commons/menu_rescue.html.twig');
 
-        if (!\nextdom::isStarted()) {
+        if (!NextDomHelper::isStarted()) {
             $pageData['alertMsg'] = 'NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.';
         }
         $pageData['CONTENT'] = self::getContent($render, $pageData, $page, null);
@@ -158,7 +158,7 @@ class PrepareView
         $baseView = '/layouts/base_dashboard.html.twig';
 
         try {
-            if (!\nextdom::isStarted()) {
+            if (!NextDomHelper::isStarted()) {
                 $pageData['ALERT_MSG'] = 'NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.';
             }
             $pageData['content'] = self::getContent($render, $pageData, $page, $currentPlugin);
@@ -275,7 +275,7 @@ class PrepareView
     private static function initMenu(&$pageData, $currentPlugin)
     {
         $pageData['IS_ADMIN']                 = Status::isConnectAdmin();
-        $pageData['CAN_SUDO']                 = \nextdom::isCapable('sudo');
+        $pageData['CAN_SUDO']                 = NextDomHelper::isCapable('sudo');
         $pageData['MENU_NB_MESSAGES']         = \message::nbMessage();
         if ($pageData['IS_ADMIN']) {
             $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
@@ -292,7 +292,7 @@ class PrepareView
         $pageData['USER_ISCONNECTED']         = $_SESSION['user']->is_Connected();
         $pageData['USER_AVATAR']              = $_SESSION['user']->getOptions('avatar');
         $pageData['USER_LOGIN']               = $_SESSION['user']->getLogin();
-        $pageData['NEXTDOM_VERSION']          = \nextdom::version();
+        $pageData['NEXTDOM_VERSION']          = NextDomHelper::getVersion();
         $pageData['MENU_PLUGIN_HELP']         = Utils::init('m');
         $pageData['MENU_PLUGIN_PAGE']         = Utils::init('p');
     }
@@ -310,15 +310,15 @@ class PrepareView
         $pageData['PRODUCT_CONNECTION_ICON'] = $configs['product_connection_image'];
         $pageData['AJAX_TOKEN'] = \ajax::getToken();
         $pageData['LANGUAGE'] = $configs['language'];
-        $pageData['COLOR1'] = \nextdom::getConfiguration('theme:color1');
-        $pageData['COLOR2'] = \nextdom::getConfiguration('theme:color2');
-        $pageData['COLOR3'] = \nextdom::getConfiguration('theme:color3');
-        $pageData['COLOR4'] = \nextdom::getConfiguration('theme:color4');
-        $pageData['COLOR5'] = \nextdom::getConfiguration('theme:color5');
-        $pageData['COLOR6'] = \nextdom::getConfiguration('theme:color6');
-        $pageData['COLOR7'] = \nextdom::getConfiguration('theme:color7');
-        $pageData['COLOR8'] = \nextdom::getConfiguration('theme:color8');
-        $pageData['COLOR9'] = \nextdom::getConfiguration('theme:color9');
+        $pageData['COLOR1'] = NextDomHelper::getConfiguration('theme:color1');
+        $pageData['COLOR2'] = NextDomHelper::getConfiguration('theme:color2');
+        $pageData['COLOR3'] = NextDomHelper::getConfiguration('theme:color3');
+        $pageData['COLOR4'] = NextDomHelper::getConfiguration('theme:color4');
+        $pageData['COLOR5'] = NextDomHelper::getConfiguration('theme:color5');
+        $pageData['COLOR6'] = NextDomHelper::getConfiguration('theme:color6');
+        $pageData['COLOR7'] = NextDomHelper::getConfiguration('theme:color7');
+        $pageData['COLOR8'] = NextDomHelper::getConfiguration('theme:color8');
+        $pageData['COLOR9'] = NextDomHelper::getConfiguration('theme:color9');
 
         self::initJsPool($pageData);
         self::initCssPool($pageData, $configs);

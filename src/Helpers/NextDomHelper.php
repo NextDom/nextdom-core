@@ -68,10 +68,11 @@ class NextDomHelper
     }
 
     /**
-     * TODO: ???
+     * Get all dead commands
+     *
      * @return array
      */
-    public static function deadCmd()
+    public static function getDeadCmd()
     {
         global $NEXTDOM_INTERNAL_CONFIG;
         $result = array();
@@ -103,8 +104,6 @@ class NextDomHelper
      * Obtenir l'état du système
      *
      * @return array Informations sur l'état du système
-     *
-     * @throws CoreException
      */
     public static function health(): array
     {
@@ -195,7 +194,7 @@ class NextDomHelper
             'icon' => 'fa-code-branch',
             'name' => __('health.NextDom-version'),
             'state' => true,
-            'result' => self::version(),
+            'result' => self::getVersion(),
             'comment' => '',
         );
 
@@ -466,127 +465,6 @@ class NextDomHelper
     }
 
     /**
-     * Obtenir la liste des périphériques USB
-     *
-     * @param string $name
-     * @param bool $getGPIO
-     *
-     * @return array|mixed|string
-     */
-    public static function getUsbMapping($name = '', $getGPIO = false)
-    {
-        $cache = CacheManager::byKey('nextdom::usbMapping');
-        if (!is_json($cache->getValue()) || $name == '') {
-            $usbMapping = array();
-            foreach (\ls('/dev/', 'ttyUSB*') as $usb) {
-                $vendor = '';
-                $model = '';
-                $devsList = shell_exec('/sbin/udevadm info --name=/dev/' . $usb . ' --query=all');
-                foreach (explode("\n", $devsList) as $line) {
-                    if (strpos($line, 'E: ID_MODEL=') !== false) {
-                        $model = trim(str_replace(array('E: ID_MODEL=', '"'), '', $line));
-                    }
-                    if (strpos($line, 'E: ID_VENDOR=') !== false) {
-                        $vendor = trim(str_replace(array('E: ID_VENDOR=', '"'), '', $line));
-                    }
-                }
-                if ($vendor == '' && $model == '') {
-                    $usbMapping['/dev/' . $usb] = '/dev/' . $usb;
-                } else {
-                    $deviceName = trim($vendor . ' ' . $model);
-                    $number = 2;
-                    while (isset($usbMapping[$deviceName])) {
-                        $deviceName = trim($vendor . ' ' . $model . ' ' . $number);
-                        $number++;
-                    }
-                    $usbMapping[$deviceName] = '/dev/' . $usb;
-                }
-            }
-            if ($getGPIO) {
-                if (file_exists('/dev/ttyAMA0')) {
-                    $usbMapping['Raspberry pi'] = '/dev/ttyAMA0';
-                }
-                if (file_exists('/dev/ttymxc0')) {
-                    $usbMapping['NextDom board'] = '/dev/ttymxc0';
-                }
-                if (file_exists('/dev/S2')) {
-                    $usbMapping['Banana PI'] = '/dev/S2';
-                }
-                if (file_exists('/dev/ttyS2')) {
-                    $usbMapping['Banana PI (2)'] = '/dev/ttyS2';
-                }
-                if (file_exists('/dev/ttyS0')) {
-                    $usbMapping['Cubiboard'] = '/dev/ttyS0';
-                }
-                if (file_exists('/dev/ttyS3')) {
-                    $usbMapping['Orange PI'] = '/dev/ttyS3';
-                }
-                if (file_exists('/dev/ttyS1')) {
-                    $usbMapping['Odroid C2'] = '/dev/ttyS1';
-                }
-                foreach (ls('/dev/', 'ttyACM*') as $value) {
-                    $usbMapping['/dev/' . $value] = '/dev/' . $value;
-                }
-            }
-            CacheManager::set('nextdom::usbMapping', json_encode($usbMapping));
-        } else {
-            $usbMapping = json_decode($cache->getValue(), true);
-        }
-        if ($name != '') {
-            if (isset($usbMapping[$name])) {
-                return $usbMapping[$name];
-            }
-            $usbMapping = self::getUsbMapping('', true);
-            if (isset($usbMapping[$name])) {
-                return $usbMapping[$name];
-            }
-            if (file_exists($name)) {
-                return $name;
-            }
-            return '';
-        }
-        return $usbMapping;
-    }
-
-    /**
-     * Obtenir la liste des périphériques Bluetooth
-     *
-     * @param string $name
-     * @return array|mixed|string
-     */
-    public static function getBluetoothMapping($name = '')
-    {
-        $cache = CacheManager::byKey('nextdom::bluetoothMapping');
-        if (!is_json($cache->getValue()) || $name == '') {
-            $bluetoothMapping = array();
-            foreach (explode("\n", shell_exec('hcitool dev')) as $line) {
-                if (strpos($line, 'hci') === false || trim($line) == '') {
-                    continue;
-                }
-                $infos = explode("\t", $line);
-                $bluetoothMapping[$infos[2]] = $infos[1];
-            }
-            CacheManager::set('nextdom::bluetoothMapping', json_encode($bluetoothMapping));
-        } else {
-            $bluetoothMapping = json_decode($cache->getValue(), true);
-        }
-        if ($name != '') {
-            if (isset($bluetoothMapping[$name])) {
-                return $bluetoothMapping[$name];
-            }
-            $bluetoothMapping = self::getBluetoothMapping('');
-            if (isset($bluetoothMapping[$name])) {
-                return $bluetoothMapping[$name];
-            }
-            if (file_exists($name)) {
-                return $name;
-            }
-            return '';
-        }
-        return $bluetoothMapping;
-    }
-
-    /**
      * Lance une mise à jour
      *
      * @param array $options Liste des options
@@ -672,7 +550,7 @@ class NextDomHelper
      *
      * @return string
      */
-    public static function version()
+    public static function getVersion()
     {
         if (file_exists(NEXTDOM_ROOT . '/core/config/version')) {
             return trim(file_get_contents(NEXTDOM_ROOT . '/core/config/version'));
@@ -683,7 +561,7 @@ class NextDomHelper
     /**
      * Arrêter toutes les tâches cron et les scénarios
      */
-    public static function stop()
+    public static function stopSystem()
     {
         $okStr = __('str.OK');
         echo __('core.disable-tasks');
@@ -732,7 +610,7 @@ class NextDomHelper
      *
      * @throws CoreException
      */
-    public static function start()
+    public static function startSystem()
     {
         $okStr = __('str.OK');
 
@@ -882,7 +760,7 @@ class NextDomHelper
 
             try {
                 \log::add('starting', 'debug', __('Démarrage des processus Internet de NextDom'));
-                self::start();
+                self::startSystem();
             } catch (CoreException $e) {
                 \log::add('starting', 'error', __('Erreur sur le démarrage interne de NextDom : ') . \log::exception($e));
             }
@@ -1120,14 +998,14 @@ class NextDomHelper
     /**
      * TODO: Calcul les stats de quelquechose
      *
-     * @param $calcul
+     * @param $calcType
      * @param $values
      *
      * @return float|int|null
      */
-    public static function calculStat($calcul, $values)
+    public static function calcStat($calcType, $values)
     {
-        switch ($calcul) {
+        switch ($calcType) {
             case 'sum':
                 return array_sum($values);
                 break;
@@ -1240,34 +1118,34 @@ class NextDomHelper
     }
 
     /**
-     * Eteint le système hôte
-     *
-     * @throws CoreException
+     * Shutdown the system
      */
     public static function haltSystem()
     {
-        PluginManager::stop();
-        CacheManager::persist();
-        if (self::isCapable('sudo')) {
-            exec(\system::getCmdSudo() . 'shutdown -h now');
-        } else {
-            throw new CoreException(__('Vous pouvez arrêter le système'));
-        }
+        self::stopSystemAndExecuteCommand('shutdown -h now', __('Vous pouvez arrêter le système'));
     }
 
     /**
-     * Redémarre le système hôte
-     *
-     * @throws CoreException
+     * Reboot the system
      */
     public static function rebootSystem()
     {
+        self::stopSystemAndExecuteCommand('reboot', __('Vous pouvez lancer le redémarrage du système'));
+    }
+
+    /**
+     * @param string $command Command to execute after stop preparation
+     * @param string $errorMessage Message to show if actions failed
+     *
+     * @throws CoreException
+     */
+    private static function stopSystemAndExecuteCommand($command, $errorMessage) {
         PluginManager::stop();
         CacheManager::persist();
         if (self::isCapable('sudo')) {
-            exec(\system::getCmdSudo() . 'reboot');
+            exec(\system::getCmdSudo() . $command);
         } else {
-            throw new CoreException(__('Vous pouvez lancer le redémarrage du système'));
+            throw new CoreException($errorMessage);
         }
     }
 
@@ -1282,7 +1160,7 @@ class NextDomHelper
     /**
      * Nettoyer les droits des fichiers système
      */
-    public static function cleanFileSytemRight()
+    public static function cleanFileSystemRight()
     {
         $processUser = \system::get('www-uid');
         $processGroup = \system::get('www-gid');

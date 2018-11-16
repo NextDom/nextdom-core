@@ -34,6 +34,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Managers\CmdManager;
+use NextDom\Helpers\NextDomHelper;
 
 //require_once __DIR__.'/../DB.class.php';
 
@@ -262,7 +263,7 @@ class ScenarioManager
             $message = \__('Scénario exécuté automatiquement sur programmation');
             $scheduledScenarios = self::schedule();
             $trigger = 'schedule';
-            if (\nextdom::isDateOk()) {
+            if (NextDomHelper::isDateOk()) {
                 foreach ($scheduledScenarios as $key => $scenario) {
                     if ($scenario->getState() != 'in progress') {
                         if ($scenario->isDue()) {
@@ -646,7 +647,7 @@ class ScenarioManager
         if (!file_exists($moduleFile)) {
             throw new \Exception('Impossible de trouver le fichier de configuration ' . $moduleFile);
         }
-        $tmp = \nextdom::getTmpFolder('market') . '/' . $market->getLogicalId() . '.zip';
+        $tmp = NextDomHelper::getTmpFolder('market') . '/' . $market->getLogicalId() . '.zip';
         if (file_exists($tmp)) {
             if (!unlink($tmp)) {
                 throw new \Exception(__('Impossible de supprimer : ') . $tmp . \__('. Vérifiez les droits'));

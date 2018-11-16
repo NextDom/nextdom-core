@@ -36,6 +36,7 @@ namespace NextDom\Managers;
 use NextDom\Enums\DaemonStateEnum;
 use NextDom\Enums\PluginManagerCronEnum;
 use NextDom\Managers\CacheManager;
+use NextDom\Helpers\NextDomHelper;
 
 class PluginManager
 {
