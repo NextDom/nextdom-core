@@ -33,6 +33,8 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\NextDomHelper;
+
 class UpdateManager
 {
     const DB_CLASS_NAME = 'update';
@@ -62,7 +64,7 @@ class UpdateManager
                     $update->setType('core')
                         ->setLogicalId('nextdom')
                         ->setSource(\config::byKey('core::repo::provider'))
-                        ->setLocalVersion(\nextdom::version());
+                        ->setLocalVersion(NextDomHelper::version());
                     $update->save();
                     $update->checkUpdate();
                 } else {
@@ -83,7 +85,7 @@ class UpdateManager
                 ->setConfiguration('user', 'NextDom')
                 ->setConfiguration('repository', 'nextdom-core')
                 ->setConfiguration('version', 'master')
-                ->setLocalVersion(\nextdom::version());
+                ->setLocalVersion(NextDomHelper::version());
             $update->save();
             $update->checkUpdate();
         }

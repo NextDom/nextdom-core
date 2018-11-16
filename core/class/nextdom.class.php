@@ -38,6 +38,7 @@ require_once NEXTDOM_ROOT.'/core/php/core.inc.php';
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\TimeLine;
 use NextDom\Managers\BackupManager;
+use NextDom\Managers\DevicesManager;
 
 class nextdom
 {
@@ -63,7 +64,7 @@ class nextdom
 
     public static function deadCmd()
     {
-        return NextDomHelper::deadCmd();
+        return NextDomHelper::getDeadCmd();
     }
 
     public static function health(): array
@@ -98,12 +99,12 @@ class nextdom
 
     public static function getUsbMapping($name = '', $getGPIO = false)
     {
-        return NextDomHelper::getUsbMapping($name, $getGPIO);
+        return DevicesManager::getUsbMapping($name, $getGPIO);
     }
 
     public static function getBluetoothMapping($name = '')
     {
-        return self::getBluetoothMapping($name);
+        return DevicesManager::getBluetoothMapping($name);
     }
 
     public static function backup(bool $taskInBackground = false)
@@ -143,17 +144,17 @@ class nextdom
 
     public static function version()
     {
-        return NextDomHelper::version();
+        return NextDomHelper::getVersion();
     }
 
     public static function stop()
     {
-        NextDomHelper::stop();
+        NextDomHelper::stopSystem();
     }
 
     public static function start()
     {
-        NextDomHelper::start();
+        NextDomHelper::startSystem();
     }
 
     public static function isStarted(): bool
@@ -228,7 +229,7 @@ class nextdom
 
     public static function calculStat($calcul, $values)
     {
-        return NextDomHelper::calculStat($calcul, $values);
+        return NextDomHelper::calcStat($calcul, $values);
     }
 
     public static function getTypeUse($_string = '')
@@ -253,7 +254,7 @@ class nextdom
 
     public static function cleanFileSytemRight()
     {
-        NextDomHelper::cleanFileSytemRight();
+        NextDomHelper::cleanFileSystemRight();
     }
 
     public static function checkSpaceLeft(): float

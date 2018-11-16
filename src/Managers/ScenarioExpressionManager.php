@@ -35,6 +35,7 @@ namespace NextDom\Managers;
 
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
+use NextDom\Helpers\NextDomHelper;
 
 class ScenarioExpressionManager
 {
@@ -466,11 +467,11 @@ class ScenarioExpressionManager
         $result = false;
         $occurence = 0;
         // Si le timeout est une expression, évalue sa valeur
-        $timeout = \nextdom::evaluateExpression($waitTimeout);
+        $timeout = NextDomHelper::evaluateExpression($waitTimeout);
         // Si le timeout
         $limit = (is_numeric($timeout)) ? $timeout : self::WAIT_LIMIT;
         while ($result !== true) {
-            $result = \nextdom::evaluateExpression($condition);
+            $result = NextDomHelper::evaluateExpression($condition);
             if ($occurence > $limit) {
                 return 0;
             }

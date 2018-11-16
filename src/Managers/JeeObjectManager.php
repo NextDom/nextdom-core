@@ -36,6 +36,7 @@ namespace NextDom\Managers;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
+use NextDom\Helpers\NextDomHelper;
 
 class JeeObjectManager
 {
@@ -357,7 +358,7 @@ class JeeObjectManager
         if ($def[$key]['calcul'] == 'text') {
             return trim(implode(',', $value), ',');
         }
-        return round(\nextdom::calculStat($def[$key]['calcul'], $value), 1);
+        return round(NextDomHelper::calculStat($def[$key]['calcul'], $value), 1);
     }
 
     /**
@@ -402,7 +403,7 @@ class JeeObjectManager
                 $result = trim(implode(',', $value), ',');
                 $allowDisplayZero = 1;
             } else {
-                $result = round(\nextdom::calculStat($def[$key]['calcul'], $value), 1);
+                $result = round(NextDomHelper::calculStat($def[$key]['calcul'], $value), 1);
 
             }
             if ($allowDisplayZero == 0 && $result == 0) {
