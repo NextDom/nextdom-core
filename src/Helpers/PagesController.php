@@ -157,7 +157,7 @@ class PagesController
         $pageContent['dashboardDisplayScenarioByDefault'] = $_SESSION['user']->getOptions('displayScenarioByDefault');
         $pageContent['dashboardCategory'] = $pageContent['JS_VARS']['SEL_CATEGORY'];
         $pageContent['dashboardTag'] = $pageContent['JS_VARS']['SEL_TAG'];
-        $pageContent['dashboardCategories'] = \nextdom::getConfiguration('eqLogic:category', true);
+        $pageContent['dashboardCategories'] = NextDomHelper::getConfiguration('eqLogic:category', true);
         $pageContent['dashboardTags'] = EqLogicManager::getAllTags();
         $pageContent['dashboardObjectId'] = $pageContent['JS_VARS']['SEL_OBJECT_ID'];
         $pageContent['dashboardObject'] = $object;
@@ -206,7 +206,7 @@ class PagesController
                 $pageContent['scenarios'][$group['group']] = ScenarioManager::all($group['group']);
             }
         }
-        $pageContent['scenarioInactiveStyle'] = \nextdom::getConfiguration('eqLogic:style:noactive');
+        $pageContent['scenarioInactiveStyle'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
         $pageContent['scenarioEnabled'] = \config::byKey('enableScenario');
         $pageContent['scenarioAllObjects'] = JeeObjectManager::all();
 
@@ -373,8 +373,8 @@ class PagesController
 
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
-        $pageContent['adminHardwareName'] = \nextdom::getHardwareName();
-        $pageContent['adminHardwareKey'] = \nextdom::getHardwareKey();
+        $pageContent['adminHardwareName'] = NextDomHelper::getHardwareName();
+        $pageContent['adminHardwareKey'] = NextDomHelper::getHardwareKey();
         $cache = \cache::byKey('hour');
         $pageContent['adminLastKnowDate'] = $cache->getValue();
 
@@ -475,8 +475,8 @@ class PagesController
         // TODO: Regrouper les config::byKey
         $pageContent['customDarkThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-dark'];
         $pageContent['customLightThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-light'];
-        $pageContent['adminCategories'] = \nextdom::getConfiguration('eqLogic:category');
-        $pageContent['Theme'] = \nextdom::getConfiguration('theme');
+        $pageContent['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
+        $pageContent['Theme'] = NextDomHelper::getConfiguration('theme');
         $pageContent['customProductName'] = \config::byKey('product_name');
         $pageContent['customTheme'] = \config::byKey('theme');
         $pageContent['customEnableCustomCss'] = \config::byKey('enableCustomCss');
@@ -794,8 +794,8 @@ class PagesController
         $pageContent['adminConfigs'] = \config::byKeys($keys);
         $pageContent['JS_VARS']['ldapEnable'] = $pageContent['adminConfigs']['ldap::enable'];
         $pageContent['adminIsBan'] = \user::isBan();
-        $pageContent['adminHardwareName'] = \nextdom::getHardwareName();
-        $pageContent['adminHardwareKey'] = \nextdom::getHardwareKey();
+        $pageContent['adminHardwareName'] = NextDomHelper::getHardwareName();
+        $pageContent['adminHardwareKey'] = NextDomHelper::getHardwareKey();
         $pageContent['adminLastKnowDate'] = CacheManager::byKey('hour')->getValue();
         $pageContent['adminIsRescueMode'] = Status::isRescueMode();
         $pageContent['key'] = Status::isRescueMode();
@@ -946,7 +946,7 @@ class PagesController
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
-        $pageContent['healthInformations'] = \nextdom::health();
+        $pageContent['healthInformations'] = NextDomHelper::health();
         $pageContent['healthPluginsInformations'] = [];
         $pageContent['healthPluginDataToShow'] = false;
         $pageContent['healthTotalNOk'] = 0;
@@ -1087,7 +1087,7 @@ class PagesController
         );
         $pageContent['historyCmdsList'] = CmdManager::allHistoryCmd();
         $pageContent['historyPluginsList'] = PluginManager::listPlugin();
-        $pageContent['historyEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
+        $pageContent['historyEqLogicCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
         $pageContent['historyObjectsList'] = JeeObjectManager::all();
         $pageContent['JS_POOL'][] = '/vendor/node_modules/vis/dist/vis.min.js';
         $pageContent['CSS_POOL'][] = '/vendor/node_modules/vis/dist/vis.min.css';
@@ -1331,7 +1331,7 @@ class PagesController
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageData['systemCanSudo'] = \nextdom::isCapable('sudo');
+        $pageData['systemCanSudo'] = NextDomHelper::isCapable('sudo');
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/system.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
@@ -1442,7 +1442,7 @@ class PagesController
                 $pageContent['pluginReposList'][$repoCode] = $repoData;
             }
         }
-        $pageContent['pluginInactiveOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
+        $pageContent['pluginInactiveOpacity'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/plugin.html.twig', $pageContent);
@@ -1554,7 +1554,7 @@ class PagesController
                 $pageContent['profilsAvatars'][] = '/public/img/profils/'.$avatarFile;
             }
         }
-        $pageContent['profilsDisplayTypes'] = \nextdom::getConfiguration('eqLogic:displayType');
+        $pageContent['profilsDisplayTypes'] = NextDomHelper::getConfiguration('eqLogic:displayType');
         $pageContent['profilsJeeObjects'] = JeeObjectManager::all();
         $pageContent['profilsViews'] = \view::all();
         $pageContent['profilsPlans'] = \planHeader::all();
@@ -1781,7 +1781,7 @@ class PagesController
                                 } else {
                                     $during = ' pendant plus de ' . $cmdalert->getAlert($level . 'during', '') . ' minute(s)';
                                 }
-                                $alertData['msg'] = ucfirst($level) . ' si ' . \nextdom::toHumanReadable(str_replace('#value#', '<b>' . $cmdalert->getName() . '</b>', $cmdalert->getAlert($level . 'if', ''))) . $during . '</br>';
+                                $alertData['msg'] = ucfirst($level) . ' si ' . NextDomHelper::toHumanReadable(str_replace('#value#', '<b>' . $cmdalert->getName() . '</b>', $cmdalert->getAlert($level . 'if', ''))) . $during . '</br>';
                             }
                         }
                     }
@@ -1790,7 +1790,7 @@ class PagesController
             }
         }
 
-        $pageContent['eqAnalyzeNextDomDeadCmd'] = \nextdom::deadCmd();
+        $pageContent['eqAnalyzeNextDomDeadCmd'] = NextDomHelper::getDeadCmd();
         $pageContent['eqAnalyzeCmdDeadCmd'] = CmdManager::deadCmd();
         $pageContent['eqAnalyzeJeeObjectDeadCmd'] = JeeObjectManager::deadCmd();
         $pageContent['eqAnalyzeScenarioDeadCmd'] = ScenarioManager::consystencyCheck(true);
@@ -1867,13 +1867,13 @@ class PagesController
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/interact.js';
         $pageContent['interactsList'] = $interacts;
         $pageContent['interactsListGroup'] = $interactListGroup;
-        $pageContent['interactDisabledOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
-        $pageContent['interactCmdType'] = \nextdom::getConfiguration('cmd:type');
+        $pageContent['interactDisabledOpacity'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
+        $pageContent['interactCmdType'] = NextDomHelper::getConfiguration('cmd:type');
         $pageContent['interactAllUnite'] = CmdManager::allUnite();
         $pageContent['interactJeeObjects'] = JeeObjectManager::all();
         $pageContent['interactEqLogicTypes'] = EqLogicManager::allType();
         $pageContent['interactEqLogics'] = EqLogicManager::all();
-        $pageContent['interactEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
+        $pageContent['interactEqLogicCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/tools/interact.html.twig', $pageContent);
