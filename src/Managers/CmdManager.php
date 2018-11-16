@@ -33,7 +33,7 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Managers\CacheManager;
+use NextDom\Helpers\NextDomHelper;
 
 class CmdManager
 {
@@ -924,7 +924,7 @@ class CmdManager
             return;
         }
         $value = $cmd->execCmd();
-        $check = \nextdom::evaluateExpression($value . $cmd->getConfiguration('nextdomCheckCmdOperator') . $cmd->getConfiguration('nextdomCheckCmdTest'));
+        $check = NextDomHelper::evaluateExpression($value . $cmd->getConfiguration('nextdomCheckCmdOperator') . $cmd->getConfiguration('nextdomCheckCmdTest'));
         if ($check == 1 || $check || $check == '1') {
             $cmd->executeAlertCmdAction();
         }
