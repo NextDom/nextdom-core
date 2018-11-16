@@ -17,18 +17,17 @@
 
 namespace NextDom\Helpers;
 
-use NextDom\Helpers\Status;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Helpers\ModalsController;
-use NextDom\Helpers\PagesController;
 
 /**
  * Classe de support à l'affichage des contenus HTML
  */
 class PrepareView
 {
+    private static $NB_THEME_COLORS = 9;
+
     public static function showFirstUsePage($configs)
     {
         $pageData = [];
@@ -310,15 +309,9 @@ class PrepareView
         $pageData['PRODUCT_CONNECTION_ICON'] = $configs['product_connection_image'];
         $pageData['AJAX_TOKEN'] = \ajax::getToken();
         $pageData['LANGUAGE'] = $configs['language'];
-        $pageData['COLOR1'] = \nextdom::getConfiguration('theme:color1');
-        $pageData['COLOR2'] = \nextdom::getConfiguration('theme:color2');
-        $pageData['COLOR3'] = \nextdom::getConfiguration('theme:color3');
-        $pageData['COLOR4'] = \nextdom::getConfiguration('theme:color4');
-        $pageData['COLOR5'] = \nextdom::getConfiguration('theme:color5');
-        $pageData['COLOR6'] = \nextdom::getConfiguration('theme:color6');
-        $pageData['COLOR7'] = \nextdom::getConfiguration('theme:color7');
-        $pageData['COLOR8'] = \nextdom::getConfiguration('theme:color8');
-        $pageData['COLOR9'] = \nextdom::getConfiguration('theme:color9');
+        for ($colorIndex = 1; $colorIndex <= self::$NB_THEME_COLORS; ++$colorIndex) {
+            $pageData['COLOR'.$colorIndex] = \nextdom::getConfiguration('theme:color'.$colorIndex);
+        }
 
         self::initJsPool($pageData);
         self::initCssPool($pageData, $configs);
@@ -404,6 +397,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/snapsvg/dist/snap.svg-min.js';
         }
     }
 
