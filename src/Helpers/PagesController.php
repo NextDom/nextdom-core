@@ -93,7 +93,8 @@ class PagesController
         'users' => 'users',
         'tools' => 'tools',
         'note' => 'note',
-        'pluginRoute' => 'pluginRoute'
+        'pluginRoute' => 'pluginRoute',
+        'panel' => 'panelPage'
     ];
 
     /**
@@ -2086,6 +2087,15 @@ class PagesController
      * @throws \Exception
      */
     public static function pluginRoute(Render $render, array &$pageContent): string
+    {
+        $plugin = PluginManager::byId(Utils::init('m'));
+        $page = Utils::init('p');
+
+        ob_start();
+        \include_file('desktop', $page, 'php', $plugin->getId(), true);
+        return ob_get_clean();
+    }
+    public static function panelPage(Render $render, array &$pageContent): string
     {
         $plugin = PluginManager::byId(Utils::init('m'));
         $page = Utils::init('p');
