@@ -35,6 +35,8 @@ namespace NextDom\Managers;
 
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
+use NextDom\Managers\EventManager;
+use NextDom\Helpers\NextDomHelper;
 
 class JeeObjectManager
 {
@@ -226,7 +228,7 @@ class JeeObjectManager
     {
         $result = array();
         foreach (self::all() as $object) {
-            foreach ($object->getConfiguration('summary', '') as $key => $summary) {
+            foreach ($object->getConfiguration('summary', []) as $key => $summary) {
                 foreach ($summary as $cmdInfo) {
                     if (!CmdManager::byId(str_replace('#', '', $cmdInfo['cmd']))) {
                         $result[] = array('detail' => 'Résumé ' . $object->getName(), 'help' => \config::byKey('object:summary')[$key]['name'], 'who' => $cmdInfo['cmd']);
@@ -321,7 +323,7 @@ class JeeObjectManager
             $events[] = $event;
         }
         if (count($events) > 0) {
-            \event::adds('self::summary::update', $events);
+            EventManager::adds('self::summary::update', $events);
         }
     }
 
@@ -356,7 +358,7 @@ class JeeObjectManager
         if ($def[$key]['calcul'] == 'text') {
             return trim(implode(',', $value), ',');
         }
-        return round(\nextdom::calculStat($def[$key]['calcul'], $value), 1);
+        return round(NextDomHelper::calculStat($def[$key]['calcul'], $value), 1);
     }
 
     /**
@@ -401,7 +403,7 @@ class JeeObjectManager
                 $result = trim(implode(',', $value), ',');
                 $allowDisplayZero = 1;
             } else {
-                $result = round(\nextdom::calculStat($def[$key]['calcul'], $value), 1);
+                $result = round(NextDomHelper::calculStat($def[$key]['calcul'], $value), 1);
 
             }
             if ($allowDisplayZero == 0 && $result == 0) {
@@ -461,16 +463,16 @@ class JeeObjectManager
             $plugin->setIsEnable(1);
         }
         if (!is_object($plugin)) {
-            throw new \Exception(__('Le plugin virtuel doit être installé', __FILE__));
+            throw new \Exception(__('Le plugin virtuel doit être installé'));
         }
         if (!$plugin->isActive()) {
-            throw new \Exception(__('Le plugin virtuel doit être actif', __FILE__));
+            throw new \Exception(__('Le plugin virtuel doit être actif'));
         }
 
         $virtual = EqLogicManager::byLogicalId('summaryglobal', 'virtual');
         if (!is_object($virtual)) {
             $virtual = new \virtual();
-            $virtual->setName(__('Résumé Global', __FILE__));
+            $virtual->setName(__('Résumé Global'));
             $virtual->setIsVisible(0);
             $virtual->setIsEnable(1);
         }
@@ -506,7 +508,7 @@ class JeeObjectManager
             $virtual = EqLogicManager::byLogicalId('summary' . $object->getId(), 'virtual');
             if (!is_object($virtual)) {
                 $virtual = new \virtual();
-                $virtual->setName(__('Résumé', __FILE__));
+                $virtual->setName(__('Résumé'));
                 $virtual->setIsVisible(0);
                 $virtual->setIsEnable(1);
             }

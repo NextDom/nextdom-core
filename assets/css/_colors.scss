@@ -1,3 +1,4 @@
+@charset "utf-8";
 /* This file is part of NextDom.
 *
 * NextDom is free software: you can redistribute it and/or modify
@@ -20,124 +21,82 @@
 
 /* Colors variables */
 $white:#FFF;
-$black:#000;
-$orange: #ec971f;
-$nextdom_blue:#33b8cc;
+$lightgrey:#ddd;
 $nextdom_bg:#ecf0f5;
+$whitegrey: #f5f5f5;
+$whitelightgrey: #fafafa;
+$lightgolden:#fdfdf2;
+$black:#000;
+$verydarkgrey:#333;
+$lightblack:#222d32;
+$grey:#666;
+$lightenGrey:#e7e7e7;
+$darkgrey: #999;
+
+$lightblue:#B3D7EF;
+$nextdom_blue:#33b8cc;
+$blue:#337ab7;
+$purple:#563d7c;
+
 $red:#c9302c;
+$critical: #e74c3c;
 $lightred:#DFAAA9;
 $green: #00cc00;
 $lightgreen:#5cb85c;
-$gray:#666;
-$lightgray:#ddd;
-$blue:#337ab7;
-$lightblue:#B3D7EF;
+$good: #2ecc71;
+
+$orange: #ec971f;
+$warn: #f1c40f;
 $yellow:#BFFF00;
 $lightyellow:#F3E5A7;
-$purple:#563d7c;
-$good: #2ecc71;
-$warn: #f1c40f;
-$critical: #e74c3c;
-$whitegray: #f5f5f5;
-$whitelightgray: #fafafa;
-$darkgray: #999;
-$lightgolden:#fdfdf2;
-$lightblack:#222d32;
 
-/* Accent colors by defaut, the real color is set in 3rdparty/adminLTE/skin-xxx */
+/* Accent colors by defaut, the real color is set in adminLTE/skin-xxx */
 $nextdom_accent: $black;
 $nextdom_primary: $black;
 $nextdom_polar_accent: $white;
-$nextdom_table_title: $whitegray;
-$nextdom_gray_title: $whitegray;
+$nextdom_table_title: $whitegrey;
+$nextdom_grey_title: $whitegrey;
+
+.good {
+    background-color: $good
+}
+
+.warning {
+    background-color: $warn
+}
+
+.critical {
+    background-color: $critical
+}
 
 .text-white{
-    color: $white ;
+    color: $white !important;
 }
-.text-black{
-    color: $black;
-}
-.text-orange{
-    color: $orange;
-}
+
 .text-nextdom_blue{
-    color: $nextdom_blue;
+    color: $nextdom_blue !important;
 }
-.text-red{
-    color: $red;
+
+.text-critical{
+    color: $critical !important;
 }
-.text-lightred{
-    color: $lightred;
-}
-.text-green{
-    color: $green;
-}
-.text-lightgreen{
-    color: $lightgreen;
-}
+
 .text-gray{
-    color: $gray;
+    color: #707070 !important;
 }
-.text-lightgray{
-    color: $lightgray;
-}
-.text-blue{
-    color: $blue;
-}
-.text-lightblue{
-    color: $lightblue;
-}
-.text-yellow{
-    color: $yellow;
-}
-.text-lightyellow{
-    color: $lightyellow;
-}
-.text-purple{
-    color: $purple;
-}
-.icon-white{
-    color: $white ;
-}
-.icon-black{
-    color: $black;
-}
-.icon-orange{
-    color: $orange;
-}
-.icon-nextdom_blue{
+
+.nextdom_blue{
     color: $nextdom_blue;
 }
-.icon-red{
-    color: $red;
+
+.jeedomGreen{
+    background-color: #96c927;
 }
-.icon-lightred{
-    color: $lightred;
+
+.lightenGrey{
+background-color: $lightenGrey;
 }
-.icon-green{
-    color: $green;
-}
-.icon-lightgreen{
-    color: $lightgreen;
-}
-.icon-gray{
-    color: $gray;
-}
-.icon-lightgray{
-    color: $lightgray;
-}
-.icon-blue{
-    color: $blue;
-}
-.icon-lightblue{
-    color: $lightblue;
-}
-.icon-yellow{
-    color: $yellow;
-}
-.icon-lightyellow{
-    color: $lightyellow;
-}
-.icon-purple{
-    color: $purple;
+
+.input-group .input-group-addon {
+    background-color: $whitegrey;
 }

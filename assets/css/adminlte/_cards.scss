@@ -1,0 +1,111 @@
+@charset "utf-8";
+/* This file is part of NextDom Software.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom Software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+/* Cards */
+.card {
+  border: 1px solid $whitegrey;
+  border-radius: .25rem;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+  margin: {
+    bottom: 60px;
+    top: 30px;
+  }
+  color: #333;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: $white;
+  word-wrap: break-word;
+  background: {
+    color: $white;
+    clip: border-box;
+  }
+  & .card-header {
+    border-bottom: none;
+    background: transparent;
+    padding: 0.75rem 0.9rem 0 0.9rem;
+    margin-bottom: 0;
+    z-index: 3!important;
+    &:first-child {
+      border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
+      margin-top: -25px;
+    }
+  }
+}
+
+.card-stats .card-header.card-header-icon, .card-stats .card-header.card-header-text {
+  text-align: right;
+}
+
+.card[class*=bg-], .card[class*=bg-] .card-title, .card[class*=bg-] .card-title a, .card[class*=bg-] .icon i, .card [class*=card-header-], .card [class*=card-header-] .card-title, .card [class*=card-header-] .card-title a, .card [class*=card-header-] .icon i {
+  color: $white;
+}
+
+.card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text {
+  border-radius: 5px;
+  background-color: $darkgrey;
+  margin: {
+    top: -10px;
+    right: 7px;
+  }
+  float: left;
+  height: 50px;
+  width: 50px;
+  padding-top: 5px;
+  text-align: center;
+}
+
+.card [class*=card-header-] .card-icon .icon {
+  position: absolute;
+  top: -18px;
+  left: 20px;
+}
+
+.card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text > i {
+  font-size: 2em;
+}
+
+.card-body {
+  margin: 0.75rem;
+}
+
+.card-category {
+  position: relative;
+  font-size: 16px;
+  top: -8px;
+}
+
+.card-dash {
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid;
+}
+
+.box-body {
+  padding: 8px;
+}
+
+.box-flex {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}

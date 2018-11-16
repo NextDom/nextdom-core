@@ -1,0 +1,96 @@
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+.default-cursor {
+  cursor: default;
+}
+
+#md_pageHelp {
+  display: none;
+}
+
+.binary{
+  margin-left: 5px;
+  position: relative;
+  top: 2px;
+  width : 15px;
+  height : 15px;
+  border-radius: 5px 5px 5px 5px;
+  display: inline-block;
+}
+
+#jqueryLoadingDiv .overlay {
+  background-image: url(/assets/3rdparty/jquery.utils/gritter.png);
+}
+
+.callout {
+  border-radius: 3px;
+  margin: 0 0 20px 5px;
+}
+
+.pull-right{
+  float: right;
+  margin-left: 5px;
+}
+
+.pull-left{
+  float: left;
+  margin-right: 5px;
+}
+
+.form-actions{
+  margin-top: 5px;
+}
+
+.view-link-widget,.plan-link-widget{
+  padding: 3px;
+  margin: 3px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.viewZone {
+  padding: 9.5px;
+  margin: 0 0px 5px;
+  font-size: 13px;
+  line-height: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}

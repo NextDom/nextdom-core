@@ -37,7 +37,7 @@ use NextDom\Helpers\Utils;
 
 /**
  * Inclut un fichier à partir de son type et son nom.
- *
+ * TODO: Doit être revue
  * @param string $_folder Répertoire du fichier
  * @param string $_filename Nom du fichier
  * @param string $_type Type de fichier
@@ -48,7 +48,55 @@ function include_file($_folder, $_filename, $_type, $_plugin = '', $translate = 
 {
     // Aucune particularité pour les 3rdparty
     if ($_folder == '3rdparty') {
-        $_filename .= '.' . $_type;
+        if ($_plugin === '') {
+            //TODO : A améliorer avec une Regex en fonction des utilisations
+            $router3rdParty = [
+                'bootstrap/css/bootstrap.min' => 'vendor/node_modules/bootstrap/dist/css/bootstrap.min',
+                'bootstrap/js/bootstrap.min' => 'vendor/node_modules/bootstrap/dist/js/bootstrap.min',
+                'codemirror/lib/codemirror' => 'vendor/node_modules/codemirror/lib/codemirror',
+                'codemirror/addon/edit/matchbrackets' => 'vendor/node_modules/codemirror/addon/edit/matchbrackets',
+                'codemirror/mode/htmlmixed/htmlmixed' => 'vendor/node_modules/codemirror/mode/htmlmixed/htmlmixed',
+                'codemirror/mode/clike/clike' => 'vendor/node_modules/codemirror/mode/clike/clike',
+                'codemirror/mode/css/css' => 'vendor/node_modules/codemirror/mode/css/css',
+                'codemirror/mode/javascript/javascript' => 'vendor/node_modules/codemirror/mode/javascript/javascript',
+                'codemirror/mode/php/php' => 'vendor/node_modules/codemirror/mode/php/php',
+                'codemirror/mode/shell/shell' => 'vendor/node_modules/codemirror/mode/shell/shell',
+                'codemirror/mode/python/python' => 'vendor/node_modules/codemirror/mode/python/python',
+                'codemirror/mode/ruby/ruby' => 'vendor/node_modules/codemirror/mode/ruby/ruby',
+                'codemirror/mode/perl/perl' => 'vendor/node_modules/codemirror/mode/perl/perl',
+                'codemirror/mode/xml/xml' => 'vendor/node_modules/codemirror/mode/xml/xml',
+                'jquery/jquery.min' => 'vendor/node_modules/jquery/dist/jquery.min',
+                'datetimepicker/jquery.datetimepicker' => 'vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker',
+                'jquery.fileupload/jquery.fileupload' => 'vendor/node_modules/blueimp-file-upload/js/jquery.fileupload',
+                'jquery.fileupload/jquery.ui.widget' => 'vendor/node_modules/blueimp-file-upload/js/vendor/jquery.ui.widget',
+                'jquery.fileupload/jquery.iframe-transport' => 'vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport',
+                'jquery.lazyload/jquery.lazyload' => 'vendor/node_modules/jquery-lazyload/jquery.lazyload',
+                'jquery.packery/jquery.packery' => 'vendor/node_modules/packery/dist/packery.pkgd',
+                'jquery.tablesorter/theme.bootstrap' => 'vendor/node_modules/tablesorter/dist/css/theme.bootstrap.min',
+                'jquery.tablesorter/jquery.tablesorter.min' => 'vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min',
+                'jquery.tablesorter/jquery.tablesorter.widgets.min' => 'vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min',
+                'highstock/highstock' => 'vendor/node_modules/highcharts/highstock',
+                'highstock/highcharts-more' => 'vendor/node_modules/highcharts/highcharts-more',
+                'roboto/roboto' => 'vendor/node_modules/roboto-fontface/css/roboto-fontface',
+                'waves/waves.min' => 'vendor/node_modules/node-waves/waves.min',
+                'bootstrap.slider/css/slider' => 'vendor/node_modules/bootstrap-slider/dist/css/bootstrap-slider.min',
+                'bootstrap.slider/js/bootstrap-slider' => 'vendor/node_modules/bootstrap-slider/dist/bootstrap-slider.min',
+                'jquery.ui/jquery-ui.min' => 'vendor/node_modules/jquery-ui-dist/jquery-ui.min',
+                //TODO : A remettre en 3rdparty
+                'jquery.ui/jquery-ui-bootstrap/jquery-ui' => 'assets/css/jquery-ui-bootstrap/jquery-ui.css'
+            ];
+
+            if (array_key_exists($_filename, $router3rdParty)) {
+                $_filename = $router3rdParty[$_filename] . '.' . $_type;
+            }
+            else {
+                $_filename = 'assets/3rdparty/' . $_filename . '.' . $_type;
+            }
+            $_folder = null;
+        }
+        else {
+            $_filename .= '.'.$_type;
+        }
         $type = $_type;
     } else {
         // Tableau de mappage des fichiers
@@ -84,7 +132,12 @@ function include_file($_folder, $_filename, $_type, $_plugin = '', $translate = 
     if ($_folder === 'desktop/js') {
         $_folder = 'public/js/desktop';
     }
-    $path = __DIR__ . '/../../' . $_folder . '/' . $_filename;
+    if ($_folder === null) {
+        $path = __DIR__ . '/../../' . $_filename;
+    }
+    else {
+        $path = __DIR__ . '/../../' . $_folder . '/' . $_filename;
+    }
     if (!file_exists($path)) {
         throw new Exception('Fichier introuvable : ' . $path, 35486);
     }
@@ -1282,7 +1335,7 @@ function findCodeIcon($_icon) {
     $icon = trim(str_replace(array('fa ', 'icon ', '></i>', '<i', 'class="', '"'), '', trim($_icon)));
     $re = '/.' . $icon . ':.*\n.*content:.*"(.*?)";/m';
 
-    $css = file_get_contents(__DIR__ . '/../../3rdparty/font-awesome/css/font-awesome.css');
+    $css = file_get_contents(__DIR__ . '/../../vendor/node_modules/font-awesome/css/font-awesome.css');
     preg_match($re, $css, $matches);
     if (isset($matches[1])) {
         return array('icon' => trim($matches[1], '\\'), 'fontfamily' => 'FontAwesome');

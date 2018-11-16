@@ -4,28 +4,6 @@ if (!isConnect()) {
 }
 ?>
 
-<style>
-    .divIconSel{
-        height: 80px;
-        border: 1px solid #fff;
-        box-sizing: border-box;
-        cursor: pointer;
-    }
-
-    .iconSel{
-        line-height: 1.4;
-        font-size: 1.5em;
-    }
-
-    .iconSelected{
-        background-color: #563d7c;
-        color: white;
-    }
-
-    .iconDesc{
-        font-size: 0.8em;
-    }
-</style>
 <input class="form-control pull-right" placeholder="{{Rechercher}}" id="in_iconSelectorSearch" />
 <?php
 foreach (ls('public/icon', '*') as $dir) {
@@ -63,8 +41,8 @@ $matches="";
 $css="";
 $height=0;
 $icon="";
-if (is_dir('3rdparty/font-awesome/css/') && file_exists('3rdparty/font-awesome/css/font-awesome.css')) {
-    $css = file_get_contents('3rdparty/font-awesome/css/font-awesome.css');
+if (is_dir('/vendor/node_modules/font-awesome/css/') && file_exists('/vendor/node_modules/font-awesome/css/font-awesome.css')) {
+    $css = file_get_contents('/vendor/node_modules/font-awesome/css/font-awesome.css');
     preg_match_all("/\.fa" . "-(.*?):/", $css, $matches, PREG_SET_ORDER);
     $height = (ceil(count($matches) / 14) * 40) + 80;
     echo '<div><legend>{{font-awesome}}</legend>';

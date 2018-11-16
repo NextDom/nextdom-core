@@ -43,6 +43,12 @@
     float: right;
 }
 
+.market-filter-category {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
 .market-filters {
     margin-top: 2rem;
 }
@@ -51,15 +57,9 @@
     float: right;
 }
 
-#market-div {
-    margin-top: 2rem;
-    margin-left: 5%;
-    margin-right: 5%;
-}
-
 #market-div .media-container {
     margin: 0;
-    padding: 1rem;
+    padding: 5px 15px 10px 15px;
 }
 
 #market-div .media {
@@ -67,7 +67,7 @@
     height: 200px;
     transition: all 0.2s ease;
     overflow: hidden;
-    border: 1px solid $lightgray;
+    border: 1px solid $lightgrey;
     background-color: rgba(220, 220, 220, 0.2);
     margin: 0;
     border-radius: 5px;
@@ -86,8 +86,10 @@
     left: 0;
     width: 0;
     height: 0;
-    border-top: 3em solid $nextdom_blue;
-    border-right: 3em solid transparent;
+    border:{
+        top: 3em solid $nextdom_blue;
+        right: 3em solid transparent;
+    }
 }
 
 #market-div .media .installed-marker i {
@@ -103,8 +105,10 @@
     right: 0;
     width: 0;
     height: 0;
-    border-top: 3em solid $nextdom_blue;
-    border-left: 3em solid transparent;
+    border:{
+        top: 3em solid $nextdom_blue;
+        right: 3em solid transparent;
+    }
 }
 
 #market-div .media .update-marker i {
@@ -123,8 +127,10 @@
 }
 
 #market-div .media h4 {
-    text-transform: capitalize;
-    text-align: center;
+    text:{
+        transform: capitalize;
+        align: center;
+    }
     margin-top: 0 !important;
 }
 
@@ -265,8 +271,10 @@
 
 #plugin-modal-header .button-item {
     float: left;
-    margin-right: 1em;
-    margin-top: 1em;
+    margin:{
+        right: 1em;
+        top: 1em;
+    }
 }
 
 #plugin-modal-header .btn {
@@ -283,7 +291,7 @@
 }
 
 #plugin-modal .right-pane .help-block {
-    color: $lightgray;
+    color: $lightgrey;
 }
 
 #gitid-list li .btn {
@@ -308,8 +316,10 @@
 }
 
 #plugin-modal-screenshots .carousel-inner>.item>a>img, .carousel-inner>.item>img {
-    margin-left: auto;
-    margin-right: auto;
+    margin:{
+        left: auto;
+        left: auto;
+    }
     max-width: 70%;
 }
 

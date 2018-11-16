@@ -111,15 +111,32 @@ if(!$('#md_modal').is(':visible')){
     }
 }
 
-$(".li_plugin,.pluginDisplayCard").on('click', function () {
+$(".li_plugin").on('click', function () {
+    showPlugin($(this).data('plugin_id'));
+    return false;
+});
+
+$(".plugin_configure").on('click', function () {
+    var id = $(this).closest('.pluginDisplayCard').attr('data-plugin_id');
+    showPlugin(id);
+    return false;
+});
+
+/**
+ * Show plugin configuration panel
+ *
+ * @param pluginId string Plugin Id
+ */
+function showPlugin(pluginId) {
+    console.log(pluginId);
     $.hideAlert();
     $('#div_resumePluginList').hide();
     $('.li_plugin').removeClass('active');
-    $('.li_plugin[data-plugin_id='+$(this).attr('data-plugin_id')+']').addClass('active');
+    $('.li_plugin[data-plugin_id='+pluginId+']').addClass('active');
     $.showLoading();
-    sel_plugin_id = $(this).attr('data-plugin_id');
+    sel_plugin_id = pluginId;
     nextdom.plugin.get({
-        id: $(this).attr('data-plugin_id'),
+        id: pluginId,
         error: function (error) {
             notify('Core',error.message,'error');
         },
@@ -167,18 +184,18 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
                     if(data.status.owner[i] != 1){
                         continue;
                     }
-                    $('#span_plugin_market').append('<a class="btn btn-warning btn-sm sendPluginTo" data-repo="'+i+'" data-logicalId="' + data.id + '"><i class="fas fa-cloud-upload-alt"></i> {{Envoyer sur le}} '+i+'</a> ');
+                    $('#span_plugin_market').append('<a class="btn btn-warning sendPluginTo" data-repo="'+i+'" data-logicalId="' + data.id + '"><i class="fas fa-cloud-upload-alt"></i> {{Envoyer sur le}} '+i+'</a> ');
                 }
             }
             $('#span_plugin_doc').empty();
             if(isset(data.documentation) && data.documentation != ''){
-                $('#span_plugin_doc').append('<a class="btn btn-success btn-sm" target="_blank" href="'+data.documentation+'"><i class="fas fa-book">&nbsp;&nbsp;</i>{{Documentation}}</a> ');
+                $('#span_plugin_doc').append('<a class="btn btn-success" target="_blank" href="'+data.documentation+'"><i class="fas fa-book">&nbsp;&nbsp;</i>{{Documentation}}</a> ');
             }
             if(isset(data.changelog) && data.changelog != ''){
-                $('#span_plugin_doc').append('<a class="btn btn-primary btn-sm" target="_blank" href="'+data.changelog+'"><i class="fas fa-list-ul">&nbsp;&nbsp;</i>{{Changelog}}</a> ');
+                $('#span_plugin_doc').append('<a class="btn btn-primary" target="_blank" href="'+data.changelog+'"><i class="fas fa-list-ul">&nbsp;&nbsp;</i>{{Changelog}}</a> ');
             }
             if(isset(data.info.display) && data.info.display != ''){
-                $('#span_plugin_doc').append('<a class="btn btn-default btn-sm" target="_blank" href="'+data.info.display+'"><i class="fas fa-info-circle">&nbsp;&nbsp;</i>{{Détails}}</a> ');
+                $('#span_plugin_doc').append('<a class="btn btn-default" target="_blank" href="'+data.info.display+'"><i class="fas fa-info-circle">&nbsp;&nbsp;</i>{{Détails}}</a> ');
             }
 
             if (data.checkVersion != -1) {
@@ -260,9 +277,9 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
                 html += '<label class="col-sm-2 control-label">{{Action}}</label>';
                 html += '<div class="col-sm-4">';
                 if (data.activate == 1) {
-                    html += '<a class="btn btn-danger btn-sm togglePlugin" data-state="0" data-plugin_id="' + data.id + '" style="position:relative;top:-2px;"><i class="fas fa-times">&nbsp;&nbsp;</i>{{Désactiver}}</a>';
+                    html += '<a class="btn btn-danger togglePlugin" data-state="0" data-plugin_id="' + data.id + '"><i class="fas fa-times">&nbsp;&nbsp;</i>{{Désactiver}}</a>';
                 }else{
-                    html += '<a class="btn btn-success btn-sm togglePlugin" data-state="1" data-plugin_id="' + data.id + '" style="position:relative;top:-2px;"><i class="fas fa-check">&nbsp;&nbsp;</i>{{Activer}}</a>';
+                    html += '<a class="btn btn-success togglePlugin" data-state="1" data-plugin_id="' + data.id + '"><i class="fas fa-check">&nbsp;&nbsp;</i>{{Activer}}</a>';
                 }
                 html += '</div>';
                 html += '</div>';
@@ -362,13 +379,11 @@ $(".li_plugin,.pluginDisplayCard").on('click', function () {
             modifyWithoutSave = false;
         }
     });
-    return false;
-});
+}
 
-$('.span_plugin_delete').on('click',function(){
-    var id = $(this).closest('.box').children().attr('data-plugin_id');
-    console.log(id);
-    bootbox.confirm('{{Etes-vous sûr de vouloir supprimer ce plugin ?}}', function (result) {
+$('.plugin_delete').on('click',function(){
+    var id = $(this).closest('.pluginDisplayCard').attr('data-plugin_id');
+    bootbox.confirm('{{Êtes-vous sûr de vouloir supprimer ce plugin ?}}', function (result) {
         if (result) {
             $.hideAlert();
             nextdom.update.remove({
@@ -410,7 +425,8 @@ if (sel_plugin_id != -1) {
     $('#ul_plugin .li_plugin:first').click();
   }
   */
-    $('.pluginDisplayCard[data-plugin_id="'+sel_plugin_id+'"]').click();
+    showPlugin(sel_plugin_id);
+//    $('.pluginDisplayCard[data-plugin_id="'+sel_plugin_id+'"]').click();
 }
 
 $('#bt_returnToThumbnailDisplay').on('click',function(){

@@ -16,8 +16,12 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 require_once __DIR__ . '/utils.inc.php';
-echo '<link rel="stylesheet" href="/3rdparty/font-awesome5/css/fontawesome-all.min.css">' . "\n";
-echo '<link rel="stylesheet" href="/3rdparty/font-awesome/css/font-awesome.min.css">' . "\n";
+
+if (!defined('NEXTDOM_ROOT')) {
+    define ('NEXTDOM_ROOT', realpath(__DIR__.'/../..'));
+}
+echo '<link rel="stylesheet" href="/vendor/node_modules/font-awesome5/css/fontawesome-all.css">' . "\n";
+echo '<link rel="stylesheet" href="/vendor/node_modules/font-awesome/css/font-awesome.css">' . "\n";
 
 $root_dir = NEXTDOM_ROOT . '/css/icon/';
 
