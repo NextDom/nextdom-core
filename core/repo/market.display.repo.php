@@ -12,12 +12,6 @@ if (init('logicalId') != '' && init('type') != '') {
 if (!isset($market)) {
     throw new Exception('404 not found');
 }
-include_file('3rdparty', 'bootstrap.rating/bootstrap.rating', 'js');
-include_file('3rdparty', 'slick/slick.min', 'js');
-include_file('3rdparty', 'slick/slick', 'css');
-include_file('3rdparty', 'slick/slick-theme', 'css');
-include_file('3rdparty', 'fancybox/jquery.fancybox', 'js');
-include_file('3rdparty', 'fancybox/jquery.fancybox', 'css');
 
 $market_array = utils::o2a($market);
 $market_array['rating'] = $market->getRating();
@@ -25,8 +19,14 @@ $update = update::byLogicalId($market->getLogicalId());
 sendVarToJS('market_display_info', $market_array);
 ?>
 
+<link rel="stylesheet" href="/vendor/node_modules/fancybox/dist/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/vendor/node_modules/slick-carousel/slick/slick.css">
+<link rel="stylesheet" href="/vendor/node_modules/slick-carousel/slick/slick-theme.css">
+<script src="/assets/3rdparty/bootstrap-rating/bootstrap-rating.js"></script>
+<script src="/vendor/node_modules/slick-carousel/slick/slick.js"></script>
+<script src="/vendor/node_modules/fancybox/dist/js/jquery.fancybox.js"></script>
 
-<div class='row' style='background-color: #e7e7e7; padding-top: 10px; padding-bottom: 10px;position: relative; top: -10px;'>
+<div class='row lightenGrey' style='padding-top: 10px; padding-bottom: 10px;position: relative; top: -10px;'>
   <div class='col-sm-3'>
     <center>
       <?php
@@ -51,26 +51,26 @@ echo '<img src="' . $default_image . '" data-original="' . $urlPath . '"  class=
    <input class="form-control marketAttr" data-l1key="id" style="display: none;">
    <span class="marketAttr" data-l1key="name" placeholder="{{Nom}}" style="font-size: 3em;font-weight: bold;"></span>
    <br/>
-   <span class="span_author cursor" style="font-size: 1.5em;font-weight: bold;color:#707070;" data-author="<?php echo $market->getAuthor(); ?>">{{Développé par}} <?php echo $market->getAuthor(); ?></span><br/>
+   <span class="span_author cursor txtSizeMedium txtBold text-gray" data-author="<?php echo $market->getAuthor(); ?>">{{Développé par}} <?php echo $market->getAuthor(); ?></span><br/>
    <?php
 if ($market->getCertification() == 'Officiel') {
-    echo '<span style="font-size : 1.5em;color:#707070">Officiel</span><br/>';
+    echo '<span class="txtSizeMedium icon-gray">Officiel</span><br/>';
 }
 if ($market->getCertification() == 'Conseillé') {
-    echo '<span style="font-size: 1.5em;font-weight: bold;color:#707070;">{{Conseillé}}</span><br/>';
+    echo '<span class="txtSizeMedium txtBold text-gray">{{Conseillé}}</span><br/>';
 }
 if ($market->getCertification() == 'Legacy') {
-    echo '<span style="font-size: 1.5em;font-weight: bold;color:#6b6b6b;">{{Legacy}}</span><br/>';
+    echo '<span class="txtSizeMedium txtBold" style="color:#6b6b6b;">{{Legacy}}</span><br/>';
 }
 if ($market->getCertification() == 'Obsolète') {
-    echo '<span style="font-size: 1.5em;font-weight: bold;color:#e74c3c;">{{Obsolète}}</span><br/>';
+    echo '<span class="txtSizeMedium txtBold text-critical">{{Obsolète}}</span><br/>';
 }
 global $NEXTDOM_INTERNAL_CONFIG;
 if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()])) {
-    echo '<span style="font-size: 1em;font-weight: bold;color:#707070;"><i class="fa ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['icon'] . '"></i> ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['name'] . '</span>';
+    echo '<span class="txtSizeNormal txtBold text-gray"><i class="fa ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['icon'] . '"></i> ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['name'] . '</span>';
     sendVarToJS('market_display_info_category', $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['name']);
 } else {
-    echo '<span style="font-size: 1em;font-weight: bold;color:#707070;">' . $market->getCategorie() . '</span>';
+    echo '<span class="txtSizeNormal txtBold text-gray">' . $market->getCategorie() . '</span>';
     sendVarToJS('market_display_info_category', $market->getCategorie());
 }
 ?>
@@ -91,7 +91,7 @@ if ($market->getPurchase() == 1) {
         if (isset($purchase_info['user_id']) && is_numeric($purchase_info['user_id'])) {
 
             ?>
-     <a class="btn btn-default" href='https://market.nextdom.fr/index.php?v=d&p=profils' target="_blank"><i class="fa fa-eur"></i> {{Code promo}}</a>
+     <a class="btn btn-default" href='https://market.jeedom.fr/index.php?v=d&p=profils' target="_blank"><i class="fa fa-eur"></i> {{Code promo}}</a>
      <?php
 echo '<a class="btn btn-default" target="_blank" href="' . config::byKey('market::address') . '/index.php?v=d&p=purchaseItem&user_id=' . $purchase_info['user_id'] . '&type=plugin&id=' . $market->getId() . '"><i class="fa fa-shopping-cart"></i> {{Acheter}}</a>';
 
@@ -163,16 +163,16 @@ foreach ($market->getImg('screenshot') as $screenshot) {
     <legend>{{Compatibilité plateforme}}</legend>
     <?php
 if ($market->getHardwareCompatibility('diy') == 1) {
-    echo '<img src="core/img/logo_diy.png" style="width:60px;height:60px;" />';
+    echo '<img src="public/img/logo_diy.png" style="width:60px;height:60px;" />';
 }
 if ($market->getHardwareCompatibility('rpi') == 1) {
-    echo '<img src="core/img/logo_rpi12.png" style="width:60px;height:60px;" />';
+    echo '<img src="public/img/logo_rpi12.png" style="width:60px;height:60px;" />';
 }
 if ($market->getHardwareCompatibility('docker') == 1) {
-    echo '<img src="core/img/logo_docker.png" style="width:60px;height:60px;" />';
+    echo '<img src="public/img/logo_docker.png" style="width:60px;height:60px;" />';
 }
 if ($market->getHardwareCompatibility('miniplus') == 1) {
-    echo '<img src="core/img/logo_nextdomboard.png" style="width:60px;height:60px;" />';
+    echo '<img src="public/img/logo_nextdomboard.png" style="width:60px;height:60px;" />';
 }
 ?>
  </div>
@@ -236,24 +236,24 @@ if ($market->getHardwareCompatibility('miniplus') == 1) {
   <div class='col-sm-2'>
     <label class="control-label">{{Langue disponible}}</label><br/>
     <?php
-echo '<img src="core/img/francais.png" width="30" />';
+echo '<img src="public/img/francais.png" width="30" />';
 if ($market->getLanguage('en_US') == 1) {
-    echo '<img src="core/img/anglais.png" width="30" />';
+    echo '<img src="public/img/anglais.png" width="30" />';
 }
 if ($market->getLanguage('de_DE') == 1) {
-    echo '<img src="core/img/allemand.png" width="30" />';
+    echo '<img src="public/img/allemand.png" width="30" />';
 }
 if ($market->getLanguage('sp_SP') == 1) {
-    echo '<img src="core/img/espagnol.png" width="30" />';
+    echo '<img src="public/img/espagnol.png" width="30" />';
 }
 if ($market->getLanguage('ru_RU') == 1) {
-    echo '<img src="core/img/russe.png" width="30" />';
+    echo '<img src="public/img/russe.png" width="30" />';
 }
 if ($market->getLanguage('id_ID') == 1) {
-    echo '<img src="core/img/indonesien.png" width="30" />';
+    echo '<img src="public/img/indonesien.png" width="30" />';
 }
 if ($market->getLanguage('it_IT') == 1) {
-    echo '<img src="core/img/italien.png" width="30" />';
+    echo '<img src="public/img/italien.png" width="30" />';
 }
 ?>
  </div>

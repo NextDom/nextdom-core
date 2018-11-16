@@ -303,7 +303,7 @@ $(function () {
         }
     });
 
-    $('#bt_nextdomAbout').on('click', function () {
+    $('#bt_nextdomAbout,#bt_nextdomAbout2, #bt_nextdomAboutFooter').on('click', function () {
         $('#md_modal').dialog({title: "{{A propos}}"});
         $('#md_modal').load('index.php?v=d&modal=about').dialog('open');
     });
@@ -346,7 +346,7 @@ $(function () {
         $("#md_modal").load('index.php?v=d&modal=welcome').dialog('open');
     }
 
-    $('#bt_haltSystem').on('click', function () {
+    $('#bt_haltSystem,#bt_haltSystemAdmin').on('click', function () {
         $.hideAlert();
         bootbox.confirm('{{Etes-vous sûr de vouloir arrêter le système ?}}', function (result) {
             if (result) {
@@ -355,7 +355,7 @@ $(function () {
         });
     });
 
-    $('#bt_rebootSystem').on('click', function () {
+    $('#bt_rebootSystem,#bt_rebootSystemAdmin').on('click', function () {
         $.hideAlert();
         bootbox.confirm('{{Etes-vous sûr de vouloir redémarrer le système ?}}', function (result) {
             if (result) {
@@ -484,7 +484,7 @@ function initTableSorter() {
 function initHelp(){
     $('.help').each(function(){
         if($(this).attr('data-help') != undefined){
-            $(this).append(' <sup><i class="fas fa-question-circle tooltips" title="'+$(this).attr('data-help')+'" style="font-size : 1em;color:grey;"></i></sup>');
+            $(this).append(' <sup><i class="fas fa-question-circle tooltips txtSizeNormal" title="'+$(this).attr('data-help')+'" style="color:grey;"></i></sup>');
         }
     });
 }
@@ -550,83 +550,112 @@ function refreshUpdateNumber() {
     });
 }
 
-function notify(_title, _text, _class_name) {
-    var _backgroundColor ="";
-    var _icon ="";
-
-    if(_title ==""){
-        _title = "Core";
+/**
+ * Toggle between showing and hiding notifications
+ *
+ * @param notificationState 1 for notification showed or 0 for hide.
+ */
+function switchNotify(notificationState) {
+    if (notificationState === 1) {
+        notify("Core",  '{{Notification activée}}', 'success');
+        $('.notifyIcon').removeClass("fa-bell-slash").addClass("fa-bell");
+    } else {
+        $('.notifyIcon').removeClass("fa-bell").addClass("fa-bell-slash");
+        notify("Core",  '{{Notification desactivée}}', 'success');
     }
-    if(_text == "") {
-        _text = "Erreur inconnue";
-    }
-    if(_class_name =="success"){
-        _backgroundColor = '#00a65a';
-        _icon = 'far fa-check-circle fa-3x';
-    }else if (_class_name =="warning"){
-        _backgroundColor = '#f39c12';
-        _icon = 'fas fa-exclamation-triangle fa-3x';
-    }else if (_class_name =="error"){
-        _backgroundColor= '#dd4b39';
-        _icon= 'fas fa-times fa-3x';
-    }else if (_class_name =="info"){
-        _backgroundColor= '#33B8CC';
-        _icon= 'fas fa-times fa-3x';
-    }
-
-    iziToast.show({
-        id: null,
-        class: '',
-        title: _title,
-        titleColor: 'white',
-        titleSize: '1.5em',
-        titleLineHeight: '30px',
-        message: _text,
-        messageColor: 'white',
-        messageSize: '',
-        messageLineHeight: '',
-        theme: 'dark', // dark
-        iconText: '',
-        backgroundColor: _backgroundColor,
-        icon: _icon,
-        iconColor: 'white',
-        iconUrl: null,
-        image: '',
-        imageWidth: 50,
-        maxWidth: null,
-        zindex: null,
-        layout: 2,
-        balloon: false,
-        close: true,
-        closeOnEscape: false,
-        closeOnClick: false,
-        displayMode: 0, // once, replace
-        position: 'topCenter', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
-        target: '',
-        targetFirst: true,
-        timeout: 5000,
-        rtl: false,
-        animateInside: true,
-        drag: true,
-        pauseOnHover: true,
-        resetOnHover: false,
-        progressBar: true,
-        progressBarColor: '',
-        progressBarEasing: 'linear',
-        overlay: false,
-        overlayClose: false,
-        overlayColor: 'rgba(0, 0, 0, 0.6)',
-        transitionIn: 'fadeInUp',
-        transitionOut: 'fadeOut',
-        transitionInMobile: 'fadeInUp',
-        transitionOutMobile: 'fadeOutDown',
-        buttons: {},
-        inputs: {},
-        onOpening: function () {},
-        onOpened: function () {},
-        onClosing: function () {},
-        onClosed: function () {}
+    nextdom.config.save({
+        configuration: {'nextdom::Notify': notificationState},
+        error: function (error) {
+            notify("Core", error.message, 'error');
+        },
+        success: function () {
+        }
     });
+}
+
+function notify(_title, _text, _class_name) {
+    if (typeof notify_status != 'undefined' && isset(notify_status) && notify_status == 1) {
+        var _backgroundColor = "";
+        var _icon = "";
+
+        if (_title == "") {
+            _title = "Core";
+        }
+        if (_text == "") {
+            _text = "Erreur inconnue";
+        }
+        if (_class_name == "success") {
+            _backgroundColor = '#00a65a';
+            _icon = 'far fa-check-circle fa-3x';
+        } else if (_class_name == "warning") {
+            _backgroundColor = '#f39c12';
+            _icon = 'fas fa-exclamation-triangle fa-3x';
+        } else if (_class_name == "error") {
+            _backgroundColor = '#dd4b39';
+            _icon = 'fas fa-times fa-3x';
+        } else {
+            _backgroundColor = '#33B8CC';
+            _icon = 'fas fa-info fa-3x';
+        }
+
+        iziToast.show({
+            id: null,
+            class: '',
+            title: _title,
+            titleColor: 'white',
+            titleSize: '1.5em',
+            titleLineHeight: '30px',
+            message: _text,
+            messageColor: 'white',
+            messageSize: '',
+            messageLineHeight: '',
+            theme: 'dark', // dark
+            iconText: '',
+            backgroundColor: _backgroundColor,
+            icon: _icon,
+            iconColor: 'white',
+            iconUrl: null,
+            image: '',
+            imageWidth: 50,
+            maxWidth: jQuery(window).width() - 500,
+            zindex: null,
+            layout: 2,
+            balloon: false,
+            close: true,
+            closeOnEscape: false,
+            closeOnClick: false,
+            displayMode: 0, // once, replace
+            position: notify_position, // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
+            target: '',
+            targetFirst: true,
+            timeout: notify_timeout * 1000,
+            rtl: false,
+            animateInside: true,
+            drag: true,
+            pauseOnHover: true,
+            resetOnHover: false,
+            progressBar: true,
+            progressBarColor: '',
+            progressBarEasing: 'linear',
+            overlay: false,
+            overlayClose: false,
+            overlayColor: 'rgba(0, 0, 0, 0.6)',
+            transitionIn: 'fadeInUp',
+            transitionOut: 'fadeOut',
+            transitionInMobile: 'fadeInUp',
+            transitionOutMobile: 'fadeOutDown',
+            buttons: {},
+            inputs: {},
+            onOpening: function () {
+            },
+            onOpened: function () {
+            },
+            onClosing: function () {
+            },
+            onClosed: function () {
+            }
+        });
+    }
 }
 
 jQuery.fn.findAtDepth = function (selector, maxDepth) {
@@ -705,15 +734,14 @@ function positionEqLogic(_id,_preResize) {
             $(this).height('auto');
         }
         if(init(_preResize,true)){
-            eqLogic.width(Math.floor(eqLogic.width() / widget_width_step) * widget_width_step - (2 * widget_margin) + (2 * widget_padding));
-            eqLogic.height(Math.floor(eqLogic.height() / widget_height_step) * widget_height_step - (2 * widget_margin) + (2 * widget_padding));
+            eqLogic.width(Math.floor(eqLogic.width() / widget_width_step) * widget_width_step - (2 * widget_margin));
+            eqLogic.height(Math.floor(eqLogic.height() / widget_height_step) * widget_height_step - (2 * widget_margin));
         }
-        eqLogic.width(Math.ceil(eqLogic.width() / widget_width_step) * widget_width_step - (2 * widget_margin) + (2 * widget_padding));
-        eqLogic.height(Math.ceil(eqLogic.height() / widget_height_step) * widget_height_step - (2 * widget_margin) + (2 * widget_padding));
+        eqLogic.width(Math.ceil(eqLogic.width() / widget_width_step) * widget_width_step - (2 * widget_margin));
+        eqLogic.height(Math.ceil(eqLogic.height() / widget_height_step) * widget_height_step - (2 * widget_margin));
         eqLogic.trigger('resize');
         eqLogic.addClass(eqLogic.attr('data-category'));
         eqLogic.css('margin',widget_margin+'px');
-        eqLogic.css('padding',widget_padding+'px');
         eqLogic.css('border-radius',widget_radius+'px');
     }else{
         $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('margin','0px').css('padding','0px');
@@ -724,13 +752,12 @@ function positionEqLogic(_id,_preResize) {
             if($(this).height() == 0){
                 $(this).height('auto');
             }
-            $(this).width(Math.ceil($(this).width() / widget_width_step) * widget_width_step - (2 * widget_margin) + (2 * widget_padding));
-            $(this).height(Math.ceil($(this).height() / widget_height_step) * widget_height_step - (2 * widget_margin) + (2 * widget_padding));
+            $(this).width(Math.ceil($(this).width() / widget_width_step) * widget_width_step - (2 * widget_margin));
+            $(this).height(Math.ceil($(this).height() / widget_height_step) * widget_height_step - (2 * widget_margin));
             $(this).trigger('resize');
             $(this).addClass($(this).attr('data-category'));
         });
         $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('margin',widget_margin+'px');
-        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('padding',widget_padding+'px');
         $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('border-radius',widget_radius+'px');
         $('.eqLogic-widget').addClass('nextdomAlreadyPosition');
     }
@@ -1052,4 +1079,3 @@ function toggleFullScreen() {
         $('#togglefullscreen').removeClass('fa-compress').addClass('fa-expand');
     }
 }
-

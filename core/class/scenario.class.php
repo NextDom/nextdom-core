@@ -404,8 +404,8 @@ class scenario
         $scenarioCopy->setScenarioElement($scenario_element_list);
         $scenarioCopy->setLog('');
         $scenarioCopy->save();
-        if (file_exists(dirname(__FILE__) . '/../../log/scenarioLog/scenario' . $scenarioCopy->getId() . '.log')) {
-            unlink(dirname(__FILE__) . '/../../log/scenarioLog/scenario' . $scenarioCopy->getId() . '.log');
+        if (file_exists('/var/log/nextdom/scenarioLog/scenario' . $scenarioCopy->getId() . '.log')) {
+            unlink('/var/log/nextdom/scenarioLog/scenario' . $scenarioCopy->getId() . '.log');
         }
         return $scenarioCopy;
     }
@@ -585,8 +585,8 @@ class scenario
             $element->remove();
         }
         $this->emptyCacheWidget();
-        if (file_exists(dirname(__FILE__) . '/../../log/scenarioLog/scenario' . $this->getId() . '.log')) {
-            unlink(dirname(__FILE__) . '/../../log/scenarioLog/scenario' . $this->getId() . '.log');
+        if (file_exists('/var/log/nextdom/scenarioLog/scenario' . $this->getId() . '.log')) {
+            unlink('/var/log/nextdom/scenarioLog/scenario' . $this->getId() . '.log');
         }
         cache::delete('scenarioCacheAttr' . $this->getId());
         return DB::remove($this);
@@ -1052,7 +1052,7 @@ class scenario
         if ($this->getConfiguration('logmode', 'default') == 'none') {
             return;
         }
-        $path = dirname(__FILE__) . '/../../log/scenarioLog';
+        $path = '/var/log/nextdom/scenarioLog';
         if (!file_exists($path)) {
             mkdir($path);
         }

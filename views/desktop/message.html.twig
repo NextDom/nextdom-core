@@ -33,40 +33,42 @@
 */
 
 #}
-<a class="btn btn-danger pull-right" id="bt_clearMessage"><i class="far fa-trash-alt icon-white">&nbsp;&nbsp;</i>{{ 'Vider' }}</a>
-<a class="btn btn-warning pull-right" id="bt_refreshMessage"><i class="fas fa-sync icon-white">&nbsp;&nbsp;</i>{{ 'Rafraichir' }}</a>
-<select id="sel_plugin" class="form-control" style="width: 300px;">
-    <option value="" selected="selected">{{ 'Tout' }}</option>
-    {% for plugin in messagePluginsList %}
-        {% if messageSelectedPlugin == plugin['plugin'] %}
-            <option value="{{ plugin['plugin'] }}" selected="selected">{{ plugin['plugin'] }}</option>
-        {% else %}
-            <option value="{{ plugin['plugin'] }}">{{ plugin['plugin'] }}</option>
-        {% endif %}
-    {% endfor %}
-</select>
-<table class="table table-condensed table-bordered tablesorter" id="table_message" style="margin-top: 5px;">
-    <thead>
-    <tr>
-        <th data-sorter="false" data-filter="false"></th>
-        <th>{{ 'Date et heure' }}</th>
-        <th>{{ 'Plugin' }}</th>
-        <th>{{ 'Description' }}</th>
-        <th data-sorter="false" data-filter="false">{{ 'Action' }}</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for message in messagesList %}
-        <tr data-message_id="{{ message.getId() }}">
-            <td>
-                <div class="btn btn-sm btn-danger text-center"><i class="far fa-trash-alt cursor removeMessage"></i></div>
-            </td>
-            <td class="datetime" style="width: 90px;">{{ message.getDate() }}</td>
-            <td class="datetime">{{ message.getPlugin() }}</td>
-            <td class="datetime">{{ message.getMessage()|raw }}</td>
-            <td class="datetime">{{ message.getAction() }}</td>
+<section class="content">
+    <a class="btn btn-danger pull-right" id="bt_clearMessage"><i class="far fa-trash-alt text-white">&nbsp;&nbsp;</i>{{ 'Vider' }}</a>
+    <a class="btn btn-warning pull-right" id="bt_refreshMessage"><i class="fas fa-sync text-white">&nbsp;&nbsp;</i>{{ 'Rafraichir' }}</a>
+    <select id="sel_plugin" class="form-control" style="width: 300px;">
+        <option value="" selected="selected">{{ 'Tout' }}</option>
+        {% for plugin in messagePluginsList %}
+            {% if messageSelectedPlugin == plugin['plugin'] %}
+                <option value="{{ plugin['plugin'] }}" selected="selected">{{ plugin['plugin'] }}</option>
+            {% else %}
+                <option value="{{ plugin['plugin'] }}">{{ plugin['plugin'] }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    <table class="table table-condensed table-bordered tablesorter" id="table_message" style="margin-top: 5px;">
+        <thead>
+        <tr>
+            <th data-sorter="false" data-filter="false"></th>
+            <th>{{ 'Date et heure' }}</th>
+            <th>{{ 'Plugin' }}</th>
+            <th>{{ 'Description' }}</th>
+            <th data-sorter="false" data-filter="false">{{ 'Action' }}</th>
         </tr>
-    {% endfor %}
-    <?php
+        </thead>
+        <tbody>
+        {% for message in messagesList %}
+            <tr data-message_id="{{ message.getId() }}">
+                <td>
+                    <div class="btn btn-sm btn-danger text-center"><i class="far fa-trash-alt cursor removeMessage"></i></div>
+                </td>
+                <td class="datetime" style="width: 90px;">{{ message.getDate() }}</td>
+                <td class="datetime">{{ message.getPlugin() }}</td>
+                <td class="datetime">{{ message.getMessage()|raw }}</td>
+                <td class="datetime">{{ message.getAction() }}</td>
+            </tr>
+        {% endfor %}
+        <?php
     </tbody>
-</table>
+    </table>
+</section>

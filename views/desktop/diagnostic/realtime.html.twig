@@ -1,0 +1,69 @@
+{#
+
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#}
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+            <a class="btn btn-warning btn-action-bar" data-state="1" id="bt_eventRealtimeStopStart"><i class="fas fa-pause">&nbsp;&nbsp;</i>{{ 'Pause' }}</a>
+        </div>
+        <div class="action-group">
+            <a class="btn btn-primary btn-action-bar pull-right" id="bt_logrealtimedownloadLog"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{ 'Télécharger' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id="bt_logrealtimeclearLog"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Vider' }}</a>
+            <a class="btn btn-danger btn-action-bar pull-right" id="bt_logrealtimeremoveLog"><i class="fas fa-trash-alt">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="box" id="realtime">
+        <!-- Header bar -->
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Temps réel' }}</h3>
+        </div>
+
+        <!-- Page content -->
+        <div class="box-body">
+            <div class="box-tools padding-bottom">
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fas fa-search"></i></div>
+                    <input class="form-control" id="in_realtimeLogSearch" placeholder="{{'Rechercher...'}}" />
+                </div>
+            </div>
+
+            <pre id='pre_realtimelog' style='overflow: scroll;'></pre>
+        </div>
+    </div>
+</section>

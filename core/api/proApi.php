@@ -196,7 +196,7 @@ try {
                 if (config::byKey('cache::engine') != 'FilesystemCache' && config::byKey('cache::engine') != 'PhpFileCache') {
                     $result = 'OK';
                 } else {
-                    $filename = __DIR__ . '/../../cache.tar.gz';
+                    $filename = __DIR__ . '/../../var/cache.tar.gz.tar.gz';
                     $result = 'OK (' . date('Y-m-d H:i:s', filemtime($filename)) . ')';
                 }
             } else {

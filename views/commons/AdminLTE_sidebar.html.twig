@@ -38,59 +38,59 @@
                 {% endif %}
             </div>
         </div>
+
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">{{ 'MENU PRINCIPAL' }}</li>
-            <li class="active treeview menu-open">
-                <a href="#"><i class="fas fa-home"></i><span>&nbsp;&nbsp;{{ 'Accueil' }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+            <li class="treeview">
+                <a href="#"><i class="fas fa-tachometer-alt"></i><span>&nbsp;&nbsp;{{ 'Dashboard' }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li class="treeview">
-                        <a href="#"><i class="fa fa-dashboard"></i>&nbsp;&nbsp;{{ 'Dashboard' }}<span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
-                        <ul class="treeview-menu">
-                            <li class="treeview-menu">
-                            <li><a href="index.php?v=d&p=dashboard">{{ 'Objet par défaut' }}</a></li>
-                            {% for jeeObject in MENU_JEEOBJECT_TREE %}
-                                <li><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </li>
-                    <li class="treeview">
-                        <a href="#"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;{{ 'Vue(s)' }}<span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
-                        <ul class="treeview-menu">
-                            <li class="treeview-menu">
-                            <li><a href="index.php?v=d&p=view">{{ 'Afficher tout' }}</a></li>
-                            {% for view in MENU_VIEWS_LIST %}
-                                <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">&nbsp;&nbsp;{{ view.getDisplay('icon')|trim }} {{ viewMenu.getName() }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </li>
-                    <li class="treeview">
-                        <a href="#"><i class="fas fa-object-group"></i>&nbsp;&nbsp;{{ 'Design(s)' }}<span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
-                        <ul class="treeview-menu">
-                            <li class="treeview-menu">
-                            <li><a href="index.php?v=d&p=plan">{{ 'Afficher tout' }}</a></li>
-                            {% for plan in MENU_PLANS_LIST %}
-                                <li><a href="index.php?v=d&p=plan&plan_id={{ plan.getId() }}">&nbsp;&nbsp;{{ plan.getConfiguration('icon')|trim }} {{ plan.getName() }}</a></li>
-                            {% endfor %}
-
-                        </ul>
-                    </li>
-                    <li class="treeview">
-                        <a href="#"><i class="fas fa-building"></i>&nbsp;&nbsp;{{ 'Plan(s) 3D' }}<span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
-                        <ul class="treeview-menu">
-                            <li class="treeview-menu">
-                            <li><a href="index.php?v=d&p=plan3d">{{ 'Afficher tout' }}</a></li>
-                            {% for plan3d in MENU_PLANS3D_LIST %}
-                                <li><a href="index.php?v=d&p=plan3d&plan3d_id={{ plan3d.getId() }}">&nbsp;&nbsp;{{ plan3d.getConfiguration('icon')|trim }} {{ plan3d.getName() }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </li>
+                    <li class="treeview-menu">
+                    <li><a href="index.php?v=d&p=object"><i class="fas fa-clone"></i>&nbsp;&nbsp;{{ 'Liste Objets & Résumés' }}</a></li>
+                    <li><a href="index.php?v=d&p=dashboard"><i class="fas fa-asterisk"></i>&nbsp;{{ 'Objet par défaut' }}</a></li>
+                    {% for jeeObject in MENU_JEEOBJECT_TREE %}
+                        <li style="padding-left:{{ jeeObject.parentNumber()*7 }}px"><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
+                    {% endfor %}
                 </ul>
             </li>
             <li class="treeview">
+                <a href="#"><i class="fa fa-picture-o"></i><span>&nbsp;&nbsp;{{ 'Vue(s)' }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    <li class="treeview-menu">
+                    <li><a href="index.php?v=d&p=view">{{ 'Afficher tout' }}</a></li>
+                    {% for view in MENU_VIEWS_LIST %}
+                        <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">{{ view.getDisplay('icon')|raw }} {{ view.getName() }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#"><i class="fas fa-object-group"></i><span>&nbsp;&nbsp;{{ 'Design(s)' }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    <li class="treeview-menu">
+                    <li><a href="index.php?v=d&p=plan">{{ 'Afficher tout' }}</a></li>
+                    {% for plan in MENU_PLANS_LIST %}
+                        <li><a href="index.php?v=d&p=plan&plan_id={{ plan.getId() }}">{{ plan.getConfiguration('icon')|raw }} {{ plan.getName() }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {#
+            <li class="treeview">
+                <a href="#"><i class="fas fa-building"></i><span>&nbsp;&nbsp;{{ 'Plan(s) 3D' }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    <li class="treeview-menu">
+                    <li><a href="index.php?v=d&p=plan3d">{{ 'Afficher tout' }}</a></li>
+                    {% for plan3d in MENU_PLANS3D_LIST %}
+                        <li><a href="index.php?v=d&p=plan3d&plan3d_id={{ plan3d.getId() }}">&nbsp;&nbsp;{{ plan3d.getConfiguration('icon')|trim }} {{ plan3d.getName() }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+            #}
+
+            <li class="header">{{ 'MENU GESTION' }}</li>
+            <li class="treeview">
                 <a href="#"><i class="fas fa-puzzle-piece"></i><span>&nbsp;&nbsp;{{ 'Plugins' }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li class="treeview"><a href="index.php?v=d&p=plugin"><i class="fas fa-tags"></i>&nbsp;&nbsp;{{ 'Liste & Gestion' }}</a></li>
+                    <li class="treeview"><a href="index.php?v=d&p=plugin"><i class="fas fa-tags"></i>&nbsp;&nbsp;{{ 'Gestion & Markets' }}</a></li>
                     {% if MENU_PLUGIN_CATEGORY is defined %}
                         {% for category, categoryData in MENU_PLUGIN_CATEGORY %}
                             <li class="treeview">
@@ -108,22 +108,25 @@
             <li class="treeview">
                 <a href="#"><i class="fa fa-th-list"></i><span>&nbsp;&nbsp;{{ 'Outils' }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li><a href="index.php?v=d&p=object"><i class="fas fa-clone"></i>&nbsp;&nbsp;{{ 'Liste Objets & Résumés' }}</a></li>
-                    <li><a href="index.php?v=d&p=interact"><i class="fas fa-comments"></i>&nbsp;&nbsp;{{ 'Interactions' }}</a></li>
                     <li><a href="index.php?v=d&p=display"><i class="fas fa-th"></i>&nbsp;&nbsp;{{ 'Résumé domotique' }}</a></li>
+                    <li><a href="index.php?v=d&p=interact"><i class="fas fa-comments"></i>&nbsp;&nbsp;{{ 'Interactions' }}</a></li>
                     <li><a href="index.php?v=d&p=scenario"><i class="fas fa-film"></i>&nbsp;&nbsp;{{ 'Scénarios' }}</a></li>
-                    <li><a href="index.php?v=d&p=eqAnalyse"><i class="fas fa-plug"></i>&nbsp;&nbsp;{{ 'Equipements' }}</a></li>
+                    <li><a href="index.php?v=d&p=note"><i class="fas fa-sticky-note"></i>&nbsp;&nbsp;{{ 'Notes' }}</a></li>
                 </ul>
             </li>
-            <li class="header">{{ 'MENU REGLAGES' }}</li>
-
+            <li class="treeview">
+                <a href="#"><i class="fas fa-stethoscope"></i><span>&nbsp;&nbsp;{{ 'Diagnostics' }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    <li><a href="index.php?v=d&p=health"><i class="fas fa-medkit"></i>&nbsp;&nbsp;{{ 'Santé' }}</a></li>
+                    <li><a href="index.php?v=d&p=eqAnalyse"><i class="fas fa-plug"></i>&nbsp;&nbsp;{{ 'Equipements' }}</a></li>
+                    <li><a href="index.php?v=d&p=log"><i class="fas fa-file-alt"></i>&nbsp;&nbsp;{{ 'Logs' }}</a></li>
+                </ul>
+            </li>
             <li class="treeview">
                 <a href="#"><i class="fas fa-cog"></i><span>&nbsp;&nbsp;{{ 'Expert' }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li><a href="index.php?v=d&p=administration"><i class="fas fa-wrench"></i>&nbsp;&nbsp;{{ 'Réglages & Outils' }}</a></li>
+                    <li><a href="index.php?v=d&p=administration"><i class="fas fa-wrench"></i>&nbsp;&nbsp;{{ 'Administration & Réglages' }}</a></li>
                     <li><a href="/index.php?v=m" data-reload="yes"><i class="fas fa-mobile-alt"></i>&nbsp;&nbsp;{{ 'Version mobile' }}</a></li>
-                    <li><a><i class="fas fa-code-branch"></i>&nbsp;&nbsp;{{ 'Version' }} {{ NEXTDOM_VERSION }}</a></li>
-                    <li><a href="#" id="bt_nextdomAbout"><i class="fas fa-info-circle"></i>&nbsp;&nbsp;{{ 'A propos' }}</a></li>
                     <li><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock"></i>&nbsp;&nbsp;{{ 'Se déconnecter' }}</a></li>
                     {% if IS_ADMIN and CAN_SUDO %}
                         <li><a href="#" id="bt_rebootSystem" state="0"><i class="fas fa-repeat"></i>&nbsp;&nbsp;{{ 'Redémarrer' }}</a></li>

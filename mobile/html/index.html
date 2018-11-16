@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="mobile.manifest.php">
+<html manifest="/mobile.manifest.php">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" sizes="128x128" href="/public/img/icon-128x128.png" />
     <link rel="apple-touch-startup-image" sizes="256x256" href="/public/img/icon-256x256.png" />
     <link rel="apple-touch-icon-precomposed" sizes="256x256" href="/public/img/icon-256x256.png">
@@ -28,43 +28,43 @@
     <link href="/public/img/startup-image-640x920.png" media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
     <!-- iOS 6 iPhone -->
     <link href="/public/img/startup-image-320x460.png" media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">  
-    <link rel="stylesheet" href="/3rdparty/font-noto/font-noto.css" />
-    <link rel="stylesheet" href="/3rdparty/jquery.mobile/jquery.mobile.min.css" />
-    <link rel="stylesheet" href="/3rdparty/waves/waves.min.css"/>
-    <link rel="stylesheet" href="/3rdparty/jquery.mobile/css/flexboxgrid.min.css">
-    <link rel="stylesheet" href="/3rdparty/jquery.mobile/css/nativedroid2.css" />
-    <link rel="stylesheet" href="/3rdparty/jquery.mobile/css/fonts.css">
-    <link rel="stylesheet" href="/3rdparty/roboto/roboto.css">
-    <link rel="stylesheet" href="/3rdparty/jquery.utils/jquery.utils.css">
+    <link rel="stylesheet" href="/vendor/node_modules/notosans-fontface/css/notosans-fontface.min.css" />
+    <link rel="stylesheet" href="/assets/3rdparty/jquery.mobile/jquery.mobile.min.css" />
+    <link rel="stylesheet" href="/vendor/node_modules/node-waves/dist/waves.css"/>
+    <link rel="stylesheet" href="/assets/3rdparty/jquery.mobile/css/flexboxgrid.min.css">
+    <link rel="stylesheet" href="/assets/3rdparty/jquery.mobile/css/nativedroid2.css" />
+    <link rel="stylesheet" href="/assets/3rdparty/jquery.mobile/css/fonts.css">
+    <link rel="stylesheet" href="/vendor/node_modules/roboto-fontface/css/roboto/roboto-fontface.css">
+    <link rel="stylesheet" href="/assets/3rdparty/jquery.utils/jquery.utils.css">
     <link rel="stylesheet" href="/public/css/nextdom.mob.css">
-    <link rel="stylesheet" href="public/themes/red/mobile/grey.css" id="jQMnDColor" />
+    <link rel="stylesheet" href="/public/themes/grey/mobile/grey.css" id="jQMnDColor" />
     <link rel="shortcut icon" id="favicon" href="/public/img/icon-25x25.png">
-    <script src="core/php/getJS.php?file=3rdparty/jquery/jquery.min.js"></script>
-    <script src="core/php/getJS.php?file=3rdparty/jquery.mobile/jquery.mobile.min.js"></script>
-    <script src="core/php/getJS.php?file=3rdparty/highstock/highstock.js"></script>
-    <script src="core/php/getJS.php?file=3rdparty/highstock/highcharts-more.js"></script>
-    <script src="core/php/getJS.php?file=3rdparty/highstock/modules/solid-gauge.js"></script>
-    <script src="core/php/getJS.php?file=3rdparty/jquery.utils/jquery.utils.js"></script>
-    <script src="core/php/getJS.php?file=3rdparty/jquery.packery/jquery.packery.js"></script>
-    <script src="core/php/getJS.php?file=core/js/nextdom.class.js"></script>
-    <script src="core/php/getJS.php?file=core/js/private.class.js"></script>
-    <script src="core/php/getJS.php?file=core/js/cmd.class.js"></script>
-    <script src="core/php/getJS.php?file=core/js/user.class.js"></script>
-    <script src="core/php/getJS.php?file=core/js/history.class.js"></script>
-    <script src="core/php/getJS.php?file=core/js/eqLogic.class.js"></script>
-    <script src="core/php/getJS.php?file=core/js/object.class.js"></script>
-    <script src="core/php/getJS.php?file=core/js/config.class.js"></script>
-    <script src="core/php/getJS.php?file=core/js/scenario.class.js"></script>
-    <script src="core/php/getJS.php?file=core/js/plugin.class.js"></script>
-    <script src="core/php/getJS.php?file=core/js/message.class.js"></script>
-    <script src="core/php/getJS.php?file=core/js/view.class.js"></script>
-    <script src="core/php/getJS.php?file=core/js/plan.class.js"></script>
-    <script src="core/php/getJS.php?file=core/js/cron.class.js"></script>
-    <script src="core/php/getJS.php?file=core/js/plan3d.class.js"></script>
-    <script src="core/php/getJS.php?file=3rdparty/waves/waves.min.js" ></script>
-    <script src="core/php/getJS.php?file=3rdparty/wow/wow.min.js" ></script>
-    <script src="core/php/getJS.php?file=3rdparty/jquery.mobile/nativedroid2.js" ></script>
-    <script src="core/php/getJS.php?file=mobile/js/application.js"></script>
+    <script src="/vendor/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/3rdparty/jquery.mobile/jquery.mobile.min.js"></script>
+    <script src="/vendor/node_modules/highcharts/highstock.js"></script>
+    <script src="/vendor/node_modules/highcharts/highcharts-more.js"></script>
+    <script src="/vendor/node_modules/highcharts/modules/solid-gauge.js"></script>
+    <script src="/assets/3rdparty/jquery.utils/jquery.utils.js"></script>
+    <script src="/vendor/node_modules/packery/dist/packery.pkgd.js"></script>
+    <script src="/core/js/nextdom.class.js"></script>
+    <script src="/core/js/private.class.js"></script>
+    <script src="/core/js/cmd.class.js"></script>
+    <script src="/core/js/user.class.js"></script>
+    <script src="/core/js/history.class.js"></script>
+    <script src="/core/js/eqLogic.class.js"></script>
+    <script src="/core/js/object.class.js"></script>
+    <script src="/core/js/config.class.js"></script>
+    <script src="/core/js/scenario.class.js"></script>
+    <script src="/core/js/plugin.class.js"></script>
+    <script src="/core/js/message.class.js"></script>
+    <script src="/core/js/view.class.js"></script>
+    <script src="/core/js/plan.class.js"></script>
+    <script src="/core/js/cron.class.js"></script>
+    <script src="/core/js/plan3d.class.js"></script>
+    <script src="/vendor/node_modules/node-waves/dist/waves.min.js" ></script>
+    <script src="/vendor/node_modules/wowjs/dist/wow.min.js" ></script>
+    <script src="/assets/3rdparty/jquery.mobile/nativedroid2.js" ></script>
+    <script src="/mobile/js/application.js"></script>
 </head>
 <body>
     <div class="backgroundforNextDom"> </div>

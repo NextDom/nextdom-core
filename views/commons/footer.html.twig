@@ -36,7 +36,7 @@
 <style>
     {% include '/commons/theme.html.twig' %}
 </style>
-<script src="/3rdparty/jquery/jquery.min.js"></script>
+<script src="/vendor/node_modules/jquery/dist/jquery.min.js"></script>
 <script>
     var clientDatetime = new Date();
     var clientServerDiffDatetime = ({{ date().timestamp }} * 1000) - clientDatetime.getTime();

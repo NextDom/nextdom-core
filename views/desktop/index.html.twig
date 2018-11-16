@@ -33,7 +33,7 @@
 */
 
 #}
-<main id="div_mainContainer">
+<main id="div_mainContainer"{% if IS_PLUGIN_PAGE %} class="pluginContainer"{% endif %}">
     <div id="div_alert"></div>
     <div id="div_pageContainer">
         {% if ALERT_MSG is defined %}
@@ -53,5 +53,4 @@
             <div class="tab-pane" id="div_helpSpe"></div>
         </div>
     </div>
-    <div id="md_reportBug" title="{{ 'Ouverture d\'un ticket' }}"></div>
 </main>
