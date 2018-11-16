@@ -84,7 +84,7 @@ class ScenarioManager
      * @param string $groupName Filtrer sur un groupe
      * @param string $type Filtrer sur un type
      *
-     * @return [scenario] Liste des objets scenario
+     * @return [\scenario] Liste des objets scenario
      */
     public static function all($groupName = '', $type = null):array
     {
