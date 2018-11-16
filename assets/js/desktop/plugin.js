@@ -116,8 +116,9 @@ $(".li_plugin").on('click', function () {
     return false;
 });
 
-$(".pluginDisplayCard .box-body,.pluginDisplayCard .box-header").on('click', function () {
-    showPlugin($(this).parent().data('plugin_id'));
+$(".plugin_configure").on('click', function () {
+    var id = $(this).closest('.pluginDisplayCard').attr('data-plugin_id');
+    showPlugin(id);
     return false;
 });
 
@@ -380,7 +381,7 @@ function showPlugin(pluginId) {
     });
 }
 
-$('.span_plugin_delete').on('click',function(){
+$('.plugin_delete').on('click',function(){
     var id = $(this).closest('.pluginDisplayCard').attr('data-plugin_id');
     bootbox.confirm('{{Êtes-vous sûr de vouloir supprimer ce plugin ?}}', function (result) {
         if (result) {
