@@ -42,9 +42,14 @@ Verification de la configuration de la bdd
 Verification des users et hosts
 * docker-compose run --rm nextdom-mysql /usr/bin/mysql -uroot -hlocalhost -pMnextdom96 -e 'select user,host from mysql.user;'
 
-Accès au conteneur web
+#### Quand le système ne s'éxécute pas 
+Accès au conteneur web 
 * docker-compose run --rm nextdom-web bash
 Accès au conteneur mysql
 * docker-compose run --rm nextdom-mysql bash
 
-##
+#### Quand le système s'éxécute 
+Accès au conteneur web 
+* docker-compose exec nextdom-web bash
+Accès au conteneur mysql
+* docker-compose exec nextdom-mysql bash
