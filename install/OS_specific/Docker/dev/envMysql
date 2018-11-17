@@ -1,0 +1,8 @@
+IMAGE=mysql/mysql-server:5.7
+MYSQL_HOST=nextdom-mysql
+MYSQL_ROOT_PASSWORD=Mnextdom96
+MYSQL_ROOT_HOST=%
+MYSQL_DATABASE=nextdom-dev
+MYSQL_USER=nextdom
+MYSQL_PASSWORD=changeIt
+TZDATA=Europe/Paris
