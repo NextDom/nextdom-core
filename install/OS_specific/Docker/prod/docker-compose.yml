@@ -1,0 +1,64 @@
+version: '3.1'
+services:
+  nextdom-web:
+    env_file:
+    #    - .env
+    - envWeb
+    build:
+      dockerfile: apache/Dockerfile
+      context: .
+      args:
+      - numPhp=${numPhp}
+      - initSh=${initSh}
+    healthcheck:
+      test: ["CMD","curl","-f","http://localhost/public/here.html"]
+      interval: 10s
+      timeout: 10s
+    expose:
+    - "80"
+    - "443"
+    ports:
+    - "${HTTPMAP}"
+    - "${HTTPSMAP}"
+    environment:
+    - MYSQL_HOST=${MYSQL_HOST}
+    volumes:
+    - ./apache/vhosts:/etc/apache2/sites-enabled:ro
+    - ./apache/conf/nextdom-security.conf:/etc/apache2/conf-enabled/nextdom-security.conf:ro
+    - ./apache/conf/nextdom.crt:/etc/apache2/ssl/nextdom.crt:ro
+    - ./apache/conf/nextdom.key:/etc/apache2/ssl/nextdom.key:ro
+    - ./apache/php.ini:/etc/php/${numPhp}/apache2/php.ini:ro
+    - ./cron/nextdom:/etc/cron.d/nextdom:ro
+    - ./cron/nextdom_watchdog:/etc/cron.d/nextdom_watchdog:ro
+    - ./nextdom/common.config.php:/var/www/html/core/config/common.config.php:ro
+    - wwwdata-prod:/var/www/html/
+    tmpfs:
+    - /var/log/
+    - /var/www/html/log/
+    - /tmp/nextdom/
+    depends_on:
+    - nextdom-mysql
+
+  nextdom-mysql:
+    env_file:
+    - envMysql
+    image: ${IMAGESQL}
+    restart: ${RESTARTSQL}
+    expose:
+    - "3306"
+    ports:
+    - "${MYSQLMAP}"
+    volumes:
+    - mysqldata-prod:/var/lib/mysql
+
+  nextdom-adminer:
+    image: adminer
+    restart: always
+    ports:
+    - "${ADMMAP}"
+
+volumes:
+  mysqldata-prod:
+    external: true
+  wwwdata-prod:
+    external: true

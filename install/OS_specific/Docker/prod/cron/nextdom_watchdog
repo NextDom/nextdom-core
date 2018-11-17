@@ -1,0 +1,1 @@
+*/5 * * * * root /usr/bin/php /var/www/html/core/php/watchdog.php >> /dev/null
