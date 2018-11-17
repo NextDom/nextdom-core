@@ -229,7 +229,7 @@ class nextdom
 
     public static function calculStat($calcul, $values)
     {
-        return NextDomHelper::calcStat($calcul, $values);
+        return NextDomHelper::calculStat($calcul, $values);
     }
 
     public static function getTypeUse($_string = '')
