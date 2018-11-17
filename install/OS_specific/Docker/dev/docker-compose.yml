@@ -1,0 +1,53 @@
+version: '3'
+services:
+  nextdom-mysql:
+    env_file:
+    - envMysql
+    image: ${IMAGESQL}
+    restart: ${RESTARTSQL}
+    expose:
+    - "3306"
+    ports:
+    - "${MYSQLMAP}"
+    volumes:
+    - mysqldata-dev:/var/lib/mysql
+
+  nextdom-web:
+    env_file:
+    - .env
+    build:
+      dockerfile: Dockerfile.develop
+      context: .
+      args:
+      - MYSQLROOT=${MYSQL_ROOT_PASSWORD}
+    restart: ${RESTART}
+    healthcheck:
+      test: ["CMD","curl","-f","http://localhost/public/here.html"]
+      interval: 10s
+      timeout: 10s
+    expose:
+    - "22"
+    - "80"
+    - "443"
+    ports:
+    - "${SSHMAP}"
+    - "${HTTPMAP}"
+    - "${HTTPSMAP}"
+    volumes:
+    - wwwdata-dev:/var/www/html/
+    depends_on:
+    - nextdom-mysql
+    stdin_open: true
+    tty: true
+
+  nextdom-adminer:
+    image: adminer
+    restart: always
+    ports:
+    - ${ADMMAP}
+
+volumes:
+  mysqldata-dev:
+    external: true
+  wwwdata-dev:
+    external: true
