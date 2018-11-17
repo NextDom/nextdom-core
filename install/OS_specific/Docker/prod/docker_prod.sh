@@ -128,7 +128,7 @@ docker-compose -f docker-compose.yml build ${CACHE}
 
 
 # extract local project to container volume
-if [ "Y" == ${KEEP} ]; then
+if [ "Y" != ${KEEP} ]; then
     if [ "Y" == ${ZIP} ]; then
         echo unzipping ${NEXTDOMTAR}
         docker run --rm -v ${VOLHTML}:/var/www/html/ -v $(pwd):/backup ubuntu bash -c "tar -zxf /backup/${NEXTDOMTAR} -C /var/www/html/"
@@ -139,8 +139,8 @@ if [ "Y" == ${KEEP} ]; then
     fi
 fi
 
-docker-compose run --rm nextdom-web cat /var/www/html/core/config/common.config.php
-docker-compose run --rm nextdom-mysql /usr/bin/mysql -uroot -hlocalhost -pMnextdom96 -e 'select user,host from mysql.user;'
+docker-compose run --rm -v ${VOLHTML} nextdom-web cat /var/www/html/core/config/common.config.php
+docker-compose run --rm -v ${VOLMYSQL} nextdom-mysql /usr/bin/mysql -uroot -hlocalhost -p${MYSQL_ROOT_PASSWORD} -e 'select user,host from mysql.user;'
 
 #install assets/dependancies
 gen_assets_composer
