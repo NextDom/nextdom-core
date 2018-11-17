@@ -1003,7 +1003,7 @@ class NextDomHelper
      *
      * @return float|int|null
      */
-    public static function calcStat($calcType, $values)
+    public static function calculStat($calcType, $values)
     {
         switch ($calcType) {
             case 'sum':
