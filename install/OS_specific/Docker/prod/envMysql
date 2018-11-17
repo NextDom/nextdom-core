@@ -1,0 +1,10 @@
+# variables available inside the container at runtime
+#Allow root access from all hosts within docker network
+MYSQL_ROOT_HOST=%
+MYSQL_HOST=nextdom-mysql
+MYSQL_ROOT_PASSWORD=Mnextdom96
+MYSQL_ROOT_HOST=%
+MYSQL_DATABASE=nextdom
+MYSQL_USER=nextdom
+MYSQL_PASSWORD=changeIt
+TZDATA=Europe/Paris
