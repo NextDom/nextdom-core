@@ -36,9 +36,5 @@ echo 'Start apache2'
 systemctl restart apache2
 service apache2 restart
 
-#echo 'Start sshd'
-#systemctl restart sshd
-#service ssh restart
-
 #[[ $(ps -C cron | wc -l) -lt 2 ]] && /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
 /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
