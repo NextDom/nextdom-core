@@ -70,7 +70,7 @@ gen_assets_composer(){
     docker run --rm -it -v ${VOLHTML}:/app composer/composer install
     #generate assets in volume
     docker build -f ./Tools/Dockerfile.sass -t node-sass ./Tools/
-    docker run --rm -ti -v ${VOLHTML}:/var/www node-sass:latest bash -c "cd /var/www; ls -al; cp package.json ./vendor/; npm install --prefix ./vendor; cd ./scripts; ./gen_assets.sh"
+    docker run --rm -ti -v ${VOLHTML}:/var/www node-sass:latest bash -c "cd /var/www; cp package.json ./vendor/; npm install --prefix ./vendor; cd ./scripts; ./gen_assets.sh"
 }
 
 
@@ -139,7 +139,7 @@ if [ "Y" != ${KEEP} ]; then
     fi
 fi
 
-docker-compose run --rm -v ${VOLHTML} nextdom-web cat /var/www/html/core/config/common.config.php
+docker-compose run --rm -v ${VOLHTML} nextdom-web grep -A4 host /var/www/html/core/config/common.config.php
 docker-compose run --rm -v ${VOLMYSQL} nextdom-mysql /usr/bin/mysql -uroot -hlocalhost -p${MYSQL_ROOT_PASSWORD} -e 'select user,host from mysql.user;'
 
 #install assets/dependancies

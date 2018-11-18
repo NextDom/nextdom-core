@@ -15,8 +15,17 @@ la configuration envMysql pour le conteneur mysql.
 
 les infos sensibles sont données en ARG de build ( mdp bdd ) et ne restent pas disponibles dans le conteneur à l'éxécution.
 
-/!\ particularité du au dépot privé, il faut lancer creer le fichier githubtoken.txt
+/!\ particularité du au dépot privé, il faut creer le fichier githubtoken.txt
 qui contient un token ou le login:mdp ayant accès au dépot nextdom-core.
+
+Pour mysql, dans le fichier envMysql, il faut changer les mots de passe root et user
+ * MYSQL_ROOT_PASSWORD=changeItTwo
+ * MYSQL_PASSWORD=changeIt)
+
+Pour le web, dans le fichier .env, il faut changer le mot de passe root
+* ROOT_PASSWORD=changeIt
+
+Cette variable n'est utile que dans le cas d'utilisation du serveur SSH si il est installé
 
 Le script docker_prod.sh est adapté pour la production
 
@@ -36,20 +45,32 @@ options du script:
 
 ### outils containers
 
-Verification de la configuration de la bdd
-* docker-compose run --rm nextdom-web cat /var/www/html/core/config/common.config.php
+* Verification de la configuration de la bdd
 
-Verification des users et hosts
-* docker-compose run --rm nextdom-mysql /usr/bin/mysql -uroot -hlocalhost -pMnextdom96 -e 'select user,host from mysql.user;'
+``docker-compose run --rm nextdom-web cat /var/www/html/core/config/common.config.php``
+
+* Verification des users et hosts
+
+```docker-compose run --rm nextdom-mysql /usr/bin/mysql -uroot -hlocalhost -pMnextdom96 -e 'select user,host from mysql.user;'```
 
 #### Quand le système ne s'éxécute pas 
-Accès au conteneur web 
-* docker-compose run --rm nextdom-web bash
-Accès au conteneur mysql
-* docker-compose run --rm nextdom-mysql bash
+* Accès au conteneur web 
+
+``` docker-compose run --rm nextdom-web bash```
+* Accès au conteneur mysql
+
+```docker-compose run --rm nextdom-mysql bash```
 
 #### Quand le système s'éxécute 
-Accès au conteneur web 
-* docker-compose exec nextdom-web bash
-Accès au conteneur mysql
-* docker-compose exec nextdom-mysql bash
+* Accès au conteneur web 
+
+```docker-compose exec nextdom-web bash```
+* Accès au conteneur mysql
+
+```docker-compose exec nextdom-mysql bash```
+
+* Copie d'un backup dans le conteneur web depuis le repertoire install/OS_specific/Docker/prod/
+
+```
+docker cp ../../../../backup/backup-myNextom.mydomain.tld-date.time.tar.gz $(docker-compose ps -q nextdom-web):/var/www/html/backup/
+```

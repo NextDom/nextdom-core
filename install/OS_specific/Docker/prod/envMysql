@@ -2,7 +2,7 @@
 #Allow root access from all hosts within docker network
 MYSQL_ROOT_HOST=%
 MYSQL_HOST=nextdom-mysql
-MYSQL_ROOT_PASSWORD=Mnextdom96
+MYSQL_ROOT_PASSWORD=changeItToo
 MYSQL_ROOT_HOST=%
 MYSQL_DATABASE=nextdom
 MYSQL_USER=nextdom

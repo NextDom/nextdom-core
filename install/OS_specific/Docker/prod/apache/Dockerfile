@@ -27,7 +27,7 @@ ${numPhp}-dev ${numPhp}-zip ${numPhp}-ssh2 ${numPhp}-mbstring ${numPhp}-ldap
 RUN echo root:$ROOT_PASSWORD | chpasswd ; \
 apt-get clean autoclean ; apt-get autoremove --yes ; \
 rm /etc/motd ; rm -fr /var/lib/{apt,dpkg,cache,log} ; \
-mkdir -p /var/log/supervisor /var/log/apache2 /tmp/nextdom ; \
+mkdir -p /var/log/supervisor /var/log/apache2 /var/log/nextdom /tmp/nextdom ; \
  systemctl disable apache2; systemctl stop apache2;service stop apache2;update-rc.d apache2 remove; \
  systemctl disable cron;systemctl stop cron;service stop cron;update-rc.d cron remove;exit 0
 

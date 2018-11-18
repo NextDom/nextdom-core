@@ -1,6 +1,6 @@
 # variables available inside the container at runtime
 VERSION=develop
-ROOT_PASSWORD=Mnextdom96
+ROOT_PASSWORD=
 #Service name of mysql's container
 #devices
 #Zigate
