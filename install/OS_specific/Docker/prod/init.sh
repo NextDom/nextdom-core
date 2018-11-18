@@ -26,11 +26,12 @@ else
 fi
 
 echo 'All init complete'
+mkdir -p /var/log/supervisor/ /var/log/apache2/ /var/log/nextdom/ && touch /var/log/nextdom/plugin
+chown -R www-data:www-data /var/www/html /var/log/nextdom/
 chmod 777 /dev/tty*
 chmod 777 -R /tmp
-chmod 755 -R /var/www/html
-chown -R www-data:www-data /var/www/html
-mkdir -p /var/log/supervisor/ /var/log/apache2/
+chmod 755 -R /var/www/html /var/log/nextdom/
+
 
 echo 'Start apache2'
 systemctl restart apache2

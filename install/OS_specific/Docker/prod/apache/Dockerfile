@@ -35,7 +35,8 @@ ADD apache/motd /etc/motd
 ADD apache/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 #ADD privatetmp.conf
 ADD ./${initSh} /root/init.sh
-RUN echo init:${initSh} numPhp: ${numPhp}; ls -al /root/ ; ls -al /var/log/
+#RUN echo init:${initSh} numPhp: ${numPhp}; ls -al /root/ ; ls -al /var/log/
+RUN usermod -a -G dialout,tty www-data ; echo "www-data ALL=(ALL) NOPASSWD: ALL" | tee -a /etc/sudoers
 
 RUN a2enmod ssl && a2enmod rewrite && a2dissite 000-default && a2dissite default-ssl && a2enconf nextdom-security; chmod +x /root/init.sh; \
  systemctl disable apache2; systemctl disable sshd;exit 0
