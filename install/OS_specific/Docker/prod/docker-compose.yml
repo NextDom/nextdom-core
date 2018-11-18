@@ -30,7 +30,8 @@ services:
     - ./apache/php.ini:/etc/php/${numPhp}/apache2/php.ini:ro
     - ./cron/nextdom:/etc/cron.d/nextdom:ro
     - ./cron/nextdom_watchdog:/etc/cron.d/nextdom_watchdog:ro
-    - ./nextdom/common.config.php:/var/www/html/core/config/common.config.php:ro
+    #rw needed in case of restore or migration
+    - ./nextdom/common.config.php:/var/www/html/core/config/common.config.php:rw
     - wwwdata-prod:/var/www/html/
     tmpfs:
     - /var/log/
