@@ -15,7 +15,7 @@ sendVarToJS('view', utils::o2a($view));
 <div id="div_viewConfigure">
     <form class="form-horizontal">
         <fieldset>
-            <legend><i class="fas fa-cog"></i> {{Général}}<a class='btn btn-success btn-xs pull-right cursor' style="color: white;" id='bt_saveConfigureView'><i class="fas fa-check"></i> {{Sauvegarder}}</a></legend>
+            <legend><i class="fas fa-cog"></i> {{Général}}<a class='btn btn-success btn-xs pull-right cursor text-white' id='bt_saveConfigureView'><i class="fas fa-check"></i> {{Sauvegarder}}</a></legend>
             <input type="text"  class="viewAttr form-control" data-l1key="id" style="display: none;"/>
             <div class="form-group">
                 <label class="col-lg-4 control-label">{{Nom}}</label>

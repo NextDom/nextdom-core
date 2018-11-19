@@ -35,6 +35,7 @@ namespace NextDom\Managers;
 
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
+use NextDom\Helpers\NextDomHelper;
 
 class ScenarioExpressionManager
 {
@@ -204,11 +205,11 @@ class ScenarioExpressionManager
                 $name = $scenario->getName();
             }
             $action = $baseAction['options']['action'];
-            $result .= \__('Scénario : ', __FILE__) . $name . ' <i class="fa fa-arrow-right"></i> ' . $action;
+            $result .= \__('Scénario : ') . $name . ' <i class="fa fa-arrow-right"></i> ' . $action;
         } elseif ($baseAction['cmd'] == 'variable') {
             $name = $baseAction['options']['name'];
             $value = $baseAction['options']['value'];
-            $result .= \__('Variable : ', __FILE__) . $name . ' <i class="fa fa-arrow-right"></i> ' . $value;
+            $result .= \__('Variable : ') . $name . ' <i class="fa fa-arrow-right"></i> ' . $value;
         } elseif (is_object(CmdManager::byId(str_replace('#', '', $baseAction['cmd'])))) {
             $cmd = CmdManager::byId(str_replace('#', '', $baseAction['cmd']));
             $eqLogic = $cmd->getEqLogic();
@@ -466,11 +467,11 @@ class ScenarioExpressionManager
         $result = false;
         $occurence = 0;
         // Si le timeout est une expression, évalue sa valeur
-        $timeout = \nextdom::evaluateExpression($waitTimeout);
+        $timeout = NextDomHelper::evaluateExpression($waitTimeout);
         // Si le timeout
         $limit = (is_numeric($timeout)) ? $timeout : self::WAIT_LIMIT;
         while ($result !== true) {
-            $result = \nextdom::evaluateExpression($condition);
+            $result = NextDomHelper::evaluateExpression($condition);
             if ($occurence > $limit) {
                 return 0;
             }
@@ -1267,7 +1268,7 @@ class ScenarioExpressionManager
             $cmd = CmdManager::byId(trim(str_replace('#', '', CmdManager::humanReadableToCmd('#' . str_replace('#', '', $cmdId) . '#'))));
         }
         if (!is_object($cmd)) {
-            return \__('Commande non trouvée', __FILE__);
+            return \__('Commande non trouvée');
         }
         switch ($type) {
             case 'cmd':
@@ -1277,11 +1278,11 @@ class ScenarioExpressionManager
             case 'object':
                 $object = $cmd->getEqLogic()->getObject();
                 if (!is_object($object)) {
-                    return \__('Aucun', __FILE__);
+                    return \__('Aucun');
                 }
                 return $object->getName();
         }
-        return \__('Type inconnu', __FILE__);
+        return \__('Type inconnu');
     }
 
     /**

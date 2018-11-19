@@ -92,8 +92,9 @@ class PagesController
         'update_admin' => 'update_admin',
         'users' => 'users',
         'tools' => 'tools',
-        'note' => 'notePage',
-        'pluginRoute' => 'pluginRoute'
+        'note' => 'note',
+        'pluginRoute' => 'pluginRoute',
+        'panel' => 'panelPage'
     ];
 
     /**
@@ -157,7 +158,7 @@ class PagesController
         $pageContent['dashboardDisplayScenarioByDefault'] = $_SESSION['user']->getOptions('displayScenarioByDefault');
         $pageContent['dashboardCategory'] = $pageContent['JS_VARS']['SEL_CATEGORY'];
         $pageContent['dashboardTag'] = $pageContent['JS_VARS']['SEL_TAG'];
-        $pageContent['dashboardCategories'] = \nextdom::getConfiguration('eqLogic:category', true);
+        $pageContent['dashboardCategories'] = NextDomHelper::getConfiguration('eqLogic:category', true);
         $pageContent['dashboardTags'] = EqLogicManager::getAllTags();
         $pageContent['dashboardObjectId'] = $pageContent['JS_VARS']['SEL_OBJECT_ID'];
         $pageContent['dashboardObject'] = $object;
@@ -206,7 +207,7 @@ class PagesController
                 $pageContent['scenarios'][$group['group']] = ScenarioManager::all($group['group']);
             }
         }
-        $pageContent['scenarioInactiveStyle'] = \nextdom::getConfiguration('eqLogic:style:noactive');
+        $pageContent['scenarioInactiveStyle'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
         $pageContent['scenarioEnabled'] = \config::byKey('enableScenario');
         $pageContent['scenarioAllObjects'] = JeeObjectManager::all();
 
@@ -473,8 +474,8 @@ class PagesController
 
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
-        $pageContent['adminHardwareName'] = \nextdom::getHardwareName();
-        $pageContent['adminHardwareKey'] = \nextdom::getHardwareKey();
+        $pageContent['adminHardwareName'] = NextDomHelper::getHardwareName();
+        $pageContent['adminHardwareKey'] = NextDomHelper::getHardwareKey();
         $cache = \cache::byKey('hour');
         $pageContent['adminLastKnowDate'] = $cache->getValue();
 
@@ -510,13 +511,10 @@ class PagesController
             $pluginsList = PluginManager::listPlugin(true);
             foreach ($pluginsList as $plugin) {
                 $pluginApi = \config::byKey('api', $plugin->getId());
-
-                if ($pluginApi !== '') {
                     $pluginData = [];
                     $pluginData['api'] = $pluginApi;
                     $pluginData['plugin'] = $plugin;
                     $pageContent['adminPluginsList'][] = $pluginData;
-                }
             }
         }
         $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
@@ -578,8 +576,8 @@ class PagesController
         // TODO: Regrouper les config::byKey
         $pageContent['customDarkThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-dark'];
         $pageContent['customLightThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-light'];
-        $pageContent['adminCategories'] = \nextdom::getConfiguration('eqLogic:category');
-        $pageContent['Theme'] = \nextdom::getConfiguration('theme');
+        $pageContent['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
+        $pageContent['Theme'] = NextDomHelper::getConfiguration('theme');
         $pageContent['customProductName'] = \config::byKey('product_name');
         $pageContent['customTheme'] = \config::byKey('theme');
         $pageContent['customEnableCustomCss'] = \config::byKey('enableCustomCss');
@@ -785,8 +783,10 @@ class PagesController
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageContent['JS_VARS']['ldapEnable'] = $pageContent['adminConfigs']['ldap::enable'];
-        $cache = CacheManager::byKey('security::banip');
+        $keys = array('security::bantime', 'ldap::enable');
+        $configs = \config::byKeys($keys);
+
+        $pageContent['JS_VARS']['ldapEnable'] = $configs['ldap::enable'];
 
         $pageContent['adminUseLdap'] = function_exists('ldap_connect');
         if ($pageContent['adminUseLdap']) {
@@ -801,7 +801,7 @@ class PagesController
                 $bannedData = [];
                 $bannedData['ip'] = $value['ip'];
                 $bannedData['startDate'] = date('Y-m-d H:i:s', $value['datetime']);
-                if ($pageContent['adminConfigs']['security::bantime'] < 0) {
+                if ($configs['security::bantime'] < 0) {
                     $bannedData['endDate'] = __('Jamais');
                 } else {
                     $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageContent['adminConfigs']['security::bantime']);
@@ -895,8 +895,8 @@ class PagesController
         $pageContent['adminConfigs'] = \config::byKeys($keys);
         $pageContent['JS_VARS']['ldapEnable'] = $pageContent['adminConfigs']['ldap::enable'];
         $pageContent['adminIsBan'] = \user::isBan();
-        $pageContent['adminHardwareName'] = \nextdom::getHardwareName();
-        $pageContent['adminHardwareKey'] = \nextdom::getHardwareKey();
+        $pageContent['adminHardwareName'] = NextDomHelper::getHardwareName();
+        $pageContent['adminHardwareKey'] = NextDomHelper::getHardwareKey();
         $pageContent['adminLastKnowDate'] = CacheManager::byKey('hour')->getValue();
         $pageContent['adminIsRescueMode'] = Status::isRescueMode();
         $pageContent['key'] = Status::isRescueMode();
@@ -928,7 +928,7 @@ class PagesController
                 $bannedData['ip'] = $value['ip'];
                 $bannedData['startDate'] = date('Y-m-d H:i:s', $value['datetime']);
                 if ($pageContent['adminConfigs']['security::bantime'] < 0) {
-                    $bannedData['endDate'] = __('Jamais');
+                    $bannedData['endDate'] = \__('Jamais');
                 } else {
                     $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageContent['adminConfigs']['security::bantime']);
                 }
@@ -1047,7 +1047,7 @@ class PagesController
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
-        $pageContent['healthInformations'] = \nextdom::health();
+        $pageContent['healthInformations'] = NextDomHelper::health();
         $pageContent['healthPluginsInformations'] = [];
         $pageContent['healthPluginDataToShow'] = false;
         $pageContent['healthTotalNOk'] = 0;
@@ -1188,10 +1188,10 @@ class PagesController
         );
         $pageContent['historyCmdsList'] = CmdManager::allHistoryCmd();
         $pageContent['historyPluginsList'] = PluginManager::listPlugin();
-        $pageContent['historyEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
+        $pageContent['historyEqLogicCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
         $pageContent['historyObjectsList'] = JeeObjectManager::all();
-        $pageContent['JS_POOL'][] = '/assets/3rdparty/visjs/vis.min.js';
-        $pageContent['CSS_POOL'][] = '/assets/3rdparty/visjs/vis.min.css';
+        $pageContent['JS_POOL'][] = '/vendor/node_modules/vis/dist/vis.min.js';
+        $pageContent['CSS_POOL'][] = '/vendor/node_modules/vis/dist/vis.min.css';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/diagnostic/history.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
@@ -1432,7 +1432,7 @@ class PagesController
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pageData['systemCanSudo'] = \nextdom::isCapable('sudo');
+        $pageData['systemCanSudo'] = NextDomHelper::isCapable('sudo');
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/system.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
@@ -1543,7 +1543,7 @@ class PagesController
                 $pageContent['pluginReposList'][$repoCode] = $repoData;
             }
         }
-        $pageContent['pluginInactiveOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
+        $pageContent['pluginInactiveOpacity'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/plugin.html.twig', $pageContent);
@@ -1627,9 +1627,9 @@ class PagesController
         $_SESSION['user']->refresh();
         @session_write_close();
         $pageContent['profilsHomePage'] = array(
-            'core::dashboard' => __('Dashboard'),
-            'core::view' => __('Vue'),
-            'core::plan' => __('Design'),
+            'core::dashboard' => \__('Dashboard'),
+            'core::view' => \__('Vue'),
+            'core::plan' => \__('Design'),
         );
 
         $pluginManagerList = PluginManager::listPlugin();
@@ -1655,7 +1655,7 @@ class PagesController
                 $pageContent['profilsAvatars'][] = '/public/img/profils/'.$avatarFile;
             }
         }
-        $pageContent['profilsDisplayTypes'] = \nextdom::getConfiguration('eqLogic:displayType');
+        $pageContent['profilsDisplayTypes'] = NextDomHelper::getConfiguration('eqLogic:displayType');
         $pageContent['profilsJeeObjects'] = JeeObjectManager::all();
         $pageContent['profilsViews'] = \view::all();
         $pageContent['profilsPlans'] = \planHeader::all();
@@ -1882,7 +1882,7 @@ class PagesController
                                 } else {
                                     $during = ' pendant plus de ' . $cmdalert->getAlert($level . 'during', '') . ' minute(s)';
                                 }
-                                $alertData['msg'] = ucfirst($level) . ' si ' . \nextdom::toHumanReadable(str_replace('#value#', '<b>' . $cmdalert->getName() . '</b>', $cmdalert->getAlert($level . 'if', ''))) . $during . '</br>';
+                                $alertData['msg'] = ucfirst($level) . ' si ' . NextDomHelper::toHumanReadable(str_replace('#value#', '<b>' . $cmdalert->getName() . '</b>', $cmdalert->getAlert($level . 'if', ''))) . $during . '</br>';
                             }
                         }
                     }
@@ -1891,7 +1891,7 @@ class PagesController
             }
         }
 
-        $pageContent['eqAnalyzeNextDomDeadCmd'] = \nextdom::deadCmd();
+        $pageContent['eqAnalyzeNextDomDeadCmd'] = NextDomHelper::getDeadCmd();
         $pageContent['eqAnalyzeCmdDeadCmd'] = CmdManager::deadCmd();
         $pageContent['eqAnalyzeJeeObjectDeadCmd'] = JeeObjectManager::deadCmd();
         $pageContent['eqAnalyzeScenarioDeadCmd'] = ScenarioManager::consystencyCheck(true);
@@ -1968,13 +1968,13 @@ class PagesController
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/interact.js';
         $pageContent['interactsList'] = $interacts;
         $pageContent['interactsListGroup'] = $interactListGroup;
-        $pageContent['interactDisabledOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
-        $pageContent['interactCmdType'] = \nextdom::getConfiguration('cmd:type');
+        $pageContent['interactDisabledOpacity'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
+        $pageContent['interactCmdType'] = NextDomHelper::getConfiguration('cmd:type');
         $pageContent['interactAllUnite'] = CmdManager::allUnite();
         $pageContent['interactJeeObjects'] = JeeObjectManager::all();
         $pageContent['interactEqLogicTypes'] = EqLogicManager::allType();
         $pageContent['interactEqLogics'] = EqLogicManager::all();
-        $pageContent['interactEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
+        $pageContent['interactEqLogicCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/tools/interact.html.twig', $pageContent);
@@ -2126,20 +2126,20 @@ class PagesController
 
         $pageContent['JS_VARS']['github'] = \config::byKey('github::enable');
         $pageContent['JS_VARS_RAW']['sourcesList'] = Utils::getArrayToJQueryJson($sourcesList);
-        $pageContent['JS_VARS']['moreInformationsStr'] = __("Plus d'informations");
-        $pageContent['JS_VARS']['updateStr'] = __("Mettre à jour");
-        $pageContent['JS_VARS']['updateAllStr'] = __("Voulez-vous mettre à jour tous les plugins ?");
-        $pageContent['JS_VARS']['updateThisStr'] = __("Voulez-vous mettre à jour ce plugin ?");
-        $pageContent['JS_VARS']['installedPluginStr'] = __("Plugin installé");
-        $pageContent['JS_VARS']['updateAvailableStr'] = __("Mise à jour disponible");
+        $pageContent['JS_VARS']['moreInformationsStr'] = \__("Plus d'informations");
+        $pageContent['JS_VARS']['updateStr'] = \__("Mettre à jour");
+        $pageContent['JS_VARS']['updateAllStr'] = \__("Voulez-vous mettre à jour tous les plugins ?");
+        $pageContent['JS_VARS']['updateThisStr'] = \__("Voulez-vous mettre à jour ce plugin ?");
+        $pageContent['JS_VARS']['installedPluginStr'] = \__("Plugin installé");
+        $pageContent['JS_VARS']['updateAvailableStr'] = \__("Mise à jour disponible");
         $pageContent['marketSourcesList'] = $sourcesList;
         $pageContent['marketSourcesFilter'] = \config::byKey('nextdom_market::show_sources_filters');
 
         // Affichage d'un message à un utilisateur
         if (isset($_GET['message'])) {
             $messages = [
-                __('La mise à jour du plugin a été effecutée.'),
-                __('Le plugin a été supprimé')
+                \__('La mise à jour du plugin a été effecutée.'),
+                \__('Le plugin a été supprimé')
             ];
 
             $messageIndex = intval($_GET['message']);
@@ -2187,6 +2187,15 @@ class PagesController
      * @throws \Exception
      */
     public static function pluginRoute(Render $render, array &$pageContent): string
+    {
+        $plugin = PluginManager::byId(Utils::init('m'));
+        $page = Utils::init('p');
+
+        ob_start();
+        \include_file('desktop', $page, 'php', $plugin->getId(), true);
+        return ob_get_clean();
+    }
+    public static function panelPage(Render $render, array &$pageContent): string
     {
         $plugin = PluginManager::byId(Utils::init('m'));
         $page = Utils::init('p');

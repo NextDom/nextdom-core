@@ -1,3 +1,5 @@
+$.fn.bootstrapBtn = $.fn.button.noConflict();
+
 $(function () {
     'use strict'
 

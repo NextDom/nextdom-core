@@ -226,7 +226,7 @@ if ($type !== null && $type != 'plugin') {
     <div class="form-group">
         <?php
 if (config::byKey('market::username') != '') {
-    echo '<span class="label label-info pull-right" style="font-size : 1em;">' . config::byKey('market::username');
+    echo '<span class="label label-info pull-right txtSizeNormal">' . config::byKey('market::username');
     try {
         repo_market::test();
         echo ' <i class="fa fa-check"></i>';
@@ -314,13 +314,13 @@ foreach ($markets as $market) {
     $default_image = 'public/img/NextDom_NoPicture.png';
     switch ($market->getType()) {
         case 'widget':
-            $default_image = '/public/img/NextDom_Widget.png';
+            $default_image = 'public/img/NextDom_Widget.png';
             break;
         case 'plugin':
-            $default_image = '/public/img/NextDom_Plugin.png';
+            $default_image = 'public/img/NextDom_Plugin.png';
             break;
         case 'script':
-            $default_image = '/public/img/NextDom_Script.png';
+            $default_image = 'public/img/NextDom_Script.png';
             break;
     }
 
