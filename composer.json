@@ -22,14 +22,10 @@
     },
     "license": "GPL",
     "config": {
-        "preferred-install": "dist",
-        "platform": {
-            "php": "~7.0"
-        }
+        "preferred-install": "dist"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7"
-
     },
     "authors": [
         {
