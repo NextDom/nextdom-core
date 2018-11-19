@@ -58,13 +58,13 @@ class NextDomHelper
      */
     public static function addRemoveHistory($data)
     {
-        $remove_history = array();
+        $removeHistory = array();
         if (file_exists(NEXTDOM_ROOT . '/data/remove_history.json')) {
-            $remove_history = json_decode(file_get_contents(NEXTDOM_ROOT . '/data/remove_history.json'), true);
+            $removeHistory = json_decode(file_get_contents(NEXTDOM_ROOT . '/data/remove_history.json'), true);
         }
-        $remove_history[] = $data;
-        $remove_history = array_slice($remove_history, -200, 200);
-        file_put_contents(NEXTDOM_ROOT . '/data/remove_history.json', json_encode($remove_history));
+        $removeHistory[] = $data;
+        $removeHistory = array_slice($removeHistory, -200, 200);
+        file_put_contents(NEXTDOM_ROOT . '/data/remove_history.json', json_encode($removeHistory));
     }
 
     /**
