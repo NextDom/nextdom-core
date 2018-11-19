@@ -495,7 +495,7 @@ class PrepareView
         else {
             error_log('CORE MODAL');
             $modalRoute = ModalsController::getRoute($modalCode);
-            if ($modalRoute == null) {
+            if ($modalRoute === null) {
                 error_log('OLD MODAL');
                 try {
                     \include_file('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
