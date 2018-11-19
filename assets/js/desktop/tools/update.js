@@ -35,7 +35,7 @@
 */
 
 setTimeout(function(){
-    $('.listPlugin').packery();
+    $('#listPlugin').packery();
     $('#listOther').packery();
     $('#listCore').packery();
     $('#listWidget').packery();
