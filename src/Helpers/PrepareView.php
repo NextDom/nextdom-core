@@ -434,8 +434,7 @@ class PrepareView
                     $pageData['JS_POOL'][] = '/desktop/custom/custom.js';
                 }
             }
-        }
-        else {
+        } else {
             $pageData['CSS_POOL'][] = '/public/css/rescue.css';
         }
     }
@@ -462,8 +461,7 @@ class PrepareView
                     ob_start();
                     \include_file('desktop', $page, 'php', '', true);
                     return ob_get_clean();
-                }
-                else {
+                } else {
                     Router::showError404AndDie();
                 }
             } else {
@@ -504,8 +502,7 @@ class PrepareView
                     echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
                     echo '</div>';
                 }
-            }
-            else {
+            } else {
                 error_log('NEW MODAL');
                 $render = Render::getInstance();
                 ModalsController::$modalRoute($render);
