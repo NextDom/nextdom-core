@@ -397,6 +397,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/snapsvg/dist/snap.svg-min.js';
         }
     }
@@ -454,7 +455,7 @@ class PrepareView
             return ob_get_clean();
         } else {
             $controllerRoute = PagesController::getRoute($page);
-            if ($controllerRoute == null) {
+            if ($controllerRoute === null) {
                 // Vérifie que l'utilisateur n'essaie pas de sortir
                 $purgedPage = preg_replace('/[^a-z0-9_-]/i', '', $page);
                 if (file_exists(NEXTDOM_ROOT.'/desktop/'.$purgedPage)) {
@@ -494,7 +495,7 @@ class PrepareView
         else {
             error_log('CORE MODAL');
             $modalRoute = ModalsController::getRoute($modalCode);
-            if ($modalRoute == null) {
+            if ($modalRoute === null) {
                 error_log('OLD MODAL');
                 try {
                     \include_file('desktop', $modalCode, 'modal', Utils::init('plugin'), true);

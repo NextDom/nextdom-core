@@ -179,7 +179,7 @@ class nextdom
 
     public static function cron()
     {
-        NextDomHelper::cron5();
+        NextDomHelper::cron();
     }
 
     public static function cronDaily()
@@ -229,7 +229,7 @@ class nextdom
 
     public static function calculStat($calcul, $values)
     {
-        return NextDomHelper::calcStat($calcul, $values);
+        return NextDomHelper::calculStat($calcul, $values);
     }
 
     public static function getTypeUse($_string = '')
