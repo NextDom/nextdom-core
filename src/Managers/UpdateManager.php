@@ -85,7 +85,7 @@ class UpdateManager
                 ->setConfiguration('user', 'NextDom')
                 ->setConfiguration('repository', 'nextdom-core')
                 ->setConfiguration('version', 'master')
-                ->setLocalVersion(NextDomHelper::version());
+                ->setLocalVersion(NextDomHelper::getVersion());
             $update->save();
             $update->checkUpdate();
         }
