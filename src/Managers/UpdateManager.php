@@ -64,7 +64,7 @@ class UpdateManager
                     $update->setType('core')
                         ->setLogicalId('nextdom')
                         ->setSource(\config::byKey('core::repo::provider'))
-                        ->setLocalVersion(NextDomHelper::version());
+                        ->setLocalVersion(NextDomHelper::getVersion());
                     $update->save();
                     $update->checkUpdate();
                 } else {
