@@ -41,7 +41,18 @@
     .task_update_mobile {
         position: absolute !important;
         top: -50px;
+        left: 44px;
+    }
+    .task_fullscreen_mobile {
+        position: absolute !important;
+        top: -50px;
         right: 5px;
+        left: unset;
+    }
+    .task_bell_mobile {
+        position: absolute !important;
+        top: -50px;
+        right: 40px;
         left: unset;
     }
 }

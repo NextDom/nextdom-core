@@ -721,14 +721,14 @@ class eqLogic
                 if ($object->getDisplay('tagColor') != '') {
                     $name .= '<span class="label" style="text-shadow : none;background-color:' . $object->getDisplay('tagColor') . ';color:' . $object->getDisplay('tagTextColor', 'white') . '">' . $object->getName() . '</span>';
                 } else {
-                    $name .= '<span class="label label-primary" style="text-shadow : none;">' . $object->getName() . '</span>';
+                    $name .= '<span class="label label-primary">' . $object->getName() . '</span>';
                 }
             } else {
                 $name .= '[' . $object->getName() . ']';
             }
         } else {
             if ($_tag) {
-                $name .= '<span class="label label-default" style="text-shadow : none;">' . __('Aucun', __FILE__) . '</span>';
+                $name .= '<span class="label label-default">' . __('Aucun', __FILE__) . '</span>';
             } else {
                 $name .= '[' . __('Aucun', __FILE__) . ']';
             }
