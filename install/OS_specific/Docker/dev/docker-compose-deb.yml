@@ -1,0 +1,28 @@
+version: '3.1'
+services:
+  nextdom-deb:
+    #image: nextdom-deb/latest
+    build:
+      dockerfile: Dockerfile.deb
+      context: .
+      args:
+      - MODE
+    restart: ${RESTART}
+    healthcheck:
+      test: ["CMD","curl","-f","http://localhost/public/here.html"]
+      interval: 10s
+      timeout: 10s
+    expose:
+    - "22"
+    - "80"
+    - "443"
+    - "3306"
+    ports:
+    - "${SSHMAP}"
+    - "${HTTPMAP}"
+    - "${HTTPSMAP}"
+    - "${MYSQLMAP}"
+    environment:
+    - TZ=${TZDATA}
+#    stdin_open: true
+#    tty: true
