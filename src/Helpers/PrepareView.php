@@ -455,7 +455,7 @@ class PrepareView
             return ob_get_clean();
         } else {
             $controllerRoute = PagesController::getRoute($page);
-            if ($controllerRoute == null) {
+            if ($controllerRoute === null) {
                 // Vérifie que l'utilisateur n'essaie pas de sortir
                 $purgedPage = preg_replace('/[^a-z0-9_-]/i', '', $page);
                 if (file_exists(NEXTDOM_ROOT.'/desktop/'.$purgedPage)) {
