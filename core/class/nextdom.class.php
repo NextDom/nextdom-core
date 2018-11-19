@@ -179,7 +179,7 @@ class nextdom
 
     public static function cron()
     {
-        NextDomHelper::cron5();
+        NextDomHelper::cron();
     }
 
     public static function cronDaily()
