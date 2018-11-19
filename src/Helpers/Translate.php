@@ -112,7 +112,7 @@ class Translate
      */
     public static function loadTranslation(): array
     {
-        $result   = array();
+        $result   = [];
         $language = self::getLanguage();
         $filename = self::getPathTranslationFile($language);
         if (file_exists($filename)) {
@@ -148,17 +148,16 @@ class Translate
      *
      * @param string $content Contenu à traduire
      * @param string $filename Nom du fichier contenant les informations à traduire (ancienne version)
-     * @param bool $_backslash TODO: Comprendre à quoi ça sert
+     * @param bool $backslash TODO: Comprendre à quoi ça sert
      * @return string Texte traduit
      */
-    public static function exec(string $content, string $filename = '', bool $_backslash = false): string
+    public static function exec(string $content, string $filename = '', bool $backslash = false): string
     {
         if ($content == '') {// || $filename == '') {
             return '';
         }
-        $language           = self::getLanguage();
+        
         $oldTranslationMode = false;
-
         $translate = self::getTranslation();
         // Ancienne version pour les plugins
         if (strpos($filename, '/plugins') === 0) {
@@ -189,7 +188,7 @@ class Translate
                         $translate[$filename][$text] = $text;
                     }
                 }
-                if ($_backslash && isset($replace["{{" . $text . "}}"])) {
+                if ($backslash && isset($replace["{{" . $text . "}}"])) {
                     $replace["{{" . $text . "}}"] = str_replace("'", "\'", str_replace("\'", "'", $replace["{{" . $text . "}}"]));
                 }
                 if (!isset($replace["{{" . $text . "}}"]) || is_array($replace["{{" . $text . "}}"])) {
@@ -254,8 +253,8 @@ class Translate
      */
     public static function saveTranslation()
     {
-        $core    = array();
-        $plugins = array();
+        $core    = [];
+        $plugins = [];
         foreach (self::getTranslation(self::getLanguage()) as $page => $translation) {
             if (strpos($page, 'plugins/') === false) {
                 $core[$page] = $translation;
