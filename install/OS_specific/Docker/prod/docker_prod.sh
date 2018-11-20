@@ -145,5 +145,7 @@ docker-compose run --rm -v ${VOLMYSQL} nextdom-mysql /usr/bin/mysql -uroot -hloc
 #install assets/dependancies
 gen_assets_composer
 
+docker cp ../../../../backup/backup-holdom2.duckdns.org-3.2.11-2018-11-18-00h51.tar.gz $(docker-compose ps -q nextdom-web):/var/www/html/backup/
+
 docker-compose -f docker-compose.yml up --remove-orphans
 exit
