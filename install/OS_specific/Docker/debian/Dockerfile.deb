@@ -14,8 +14,7 @@ RUN echo "127.0.1.1 $HOSTNAME" >> /etc/hosts && \
     wget -qO -  http://debian-dsddsds.nextdom.org/debian/conf/nextdom.gpg.key | apt-key add - && \
     echo "deb  http://debian-dsddsds.nextdom.org/debian  nextdom main" > /etc/apt/sources.list.d/nextdom.list && \
     apt update
-RUN if [ ".${MODE}" = ".dev" ]; then  apt-get --yes install nextdom-minimal; fi
-RUN if [ ".${MODE}" != ".dev" ];then apt-get --yes install nextdom-minimal nextdom;fi
+RUN apt-get --yes install nextdom-common nextdom
 RUN apt-get clean autoclean && \
     apt-get autoremove --yes && \
     rm -fr /var/lib/{apt,dpkg,cache,log}/

@@ -1,0 +1,9 @@
+version: '3.1'
+services:
+  nextdom-deb:
+    devices:
+    #zigate
+    - ${DUSB}
+    #zwave
+    #- ${DACM}
+    #- ${DAMA}
