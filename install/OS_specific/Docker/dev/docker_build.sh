@@ -42,7 +42,7 @@ do
     cp ../../../apache/${fil} ${fil}
 done
 
-echo ${MYSQLROOT} > mysqlroot
+echo ${MYSQL_ROOT_PASSWORD} > mysqlroot
 
 }
 
@@ -75,19 +75,12 @@ makeZip(){
 source ${DENV}
 
 #getOptions
-while getopts ":dhkmpuz" opt; do
+while getopts ":hkmpuz" opt; do
     case $opt in
-        d) echo -e "\ndocker using nextom debian package"
-        YML="docker-compose-deb.yml"
-        DKRFILE=Dockerfile.deb
-        CNAME=nextdom-deb
-        TAG=${CNAME}/latest
-        ;;
         k) echo "Keep volumes (web & mysql)"
         KEEP=Y
         ;;
-        m)
-        MODE=dev
+        m) MODE=dev
         echo "mode"
         DEMO=1
         ;;
@@ -99,7 +92,7 @@ while getopts ":dhkmpuz" opt; do
         ;;
         h) usage
         ;;
-        z) echo -e "\nMaking a zip from local file"
+        z) echo -e "\nMaking a zip from local project, and injecting it into the web volume"
         ZIP=Y
         makeZip ${NEXTDOMTAR}
         ;;
@@ -109,11 +102,11 @@ while getopts ":dhkmpuz" opt; do
 done
 
 # remove existing container
-[[ ! -z $(docker-compose ps -q --filter name=nextdom_web)  ]] && echo removing $(docker-compose rm -sf nextdom_web)
-[[ ! -z $(docker-compose ps -q --filter name=nextdom_adminer)  ]] &&echo removing $(docker-compose rm -sf nextdom-adminer)
-[[ ! -z $(docker-compose ps -q --filter name=nextdom_mysql)  ]] &&echo removing $(docker-compose rm -sf ${MYSQL_HOST} )
+[[ ! -z $(docker-compose ps -q --filter name=nextdom-web)  ]] && echo removing $(docker-compose rm -sf nextdom-web)
+[[ ! -z $(docker-compose ps -q --filter name=nextdom-adminer)  ]] &&echo removing $(docker-compose rm -sf nextdom-adminer)
+[[ ! -z $(docker-compose ps -q --filter name=nextdom-mysql)  ]] &&echo removing $(docker-compose rm -sf nextdom-mysql)
 
-docker system prune -f --volumes
+#docker system prune -f --volumes
 
 #Check githubToken
 #write secrets for docker
@@ -123,7 +116,7 @@ fi
 GITHUBTOKEN=$(cat githubtoken.txt)
 
 # prepare volumes
-[[ "Y" == ${KEEP} ]] && createVolumes
+[[ "Y" != ${KEEP} ]] && createVolumes
 
 #build apache image
 copyNeededFilesForImage
