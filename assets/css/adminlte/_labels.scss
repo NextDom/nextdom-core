@@ -198,3 +198,17 @@
     color: #666 !important;
     border-color: #ddd;
 }
+
+.label-cmd {
+    margin: 3px 0px 3px 0px;
+    font-size: 100%;
+    padding: {
+      top: 7px;
+      bottom: 7px;
+    }
+    display: flex;
+}
+.li_history {
+    margin: 5px 0px 5px 10px;
+    color: $black;
+}
