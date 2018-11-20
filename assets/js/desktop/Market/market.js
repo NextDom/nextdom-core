@@ -55,7 +55,7 @@ $(document).ready(function () {
 function initEvents() {
     if (github != '1') {
         // TODO: Bloquer la page
-        notify('Erreur', 'Les dépôts GitHub sont dsactivés', 'error');
+        notify('Erreur', 'Les dépôts GitHub sont désactivés', 'error');
     }
     $('#market-filter-src button').click(function () {
         var source = $(this).data('source');
