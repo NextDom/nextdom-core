@@ -1,0 +1,83 @@
+@charset "utf-8";
+/* This file is part of NextDom Software.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom Software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+/* actionBar */
+.action-bar {
+  padding: 6px 8px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  background: $white;
+  border:{
+    radius: 3px;
+    left: 1px solid rgba(0,0,0,0.2);
+    right: 1px solid rgba(0,0,0,0.2);
+  }
+  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+
+.btn:hover {
+  opacity: 0.7;
+}
+
+.btn-black {
+  color:$white;
+  background-color:#373737;
+  border-color:#1f1f1f;
+  &:hover {
+    color:$white;
+    background-color:#303030;
+    border-color:#1f1f1f;
+  }
+}
+
+.btn-app>.badge {
+  top: 3px;
+  right: 3px;
+  font-size: 12px;
+}
+
+.btn.btn-flat {
+  border:{
+    radius: 4px;
+    width: 1px;
+  }
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  font-size: 15px;
+}
+.btn-app {
+  line-height: 2.5;
+  height: 70px;
+  margin: 5px 5px 5px 5px;
+  min-width: 107px;
+}
+.btn-tab {
+  line-height: 2;
+}
+.btn-box-tool {
+  padding: 8px 5px;
+}
+.btn-action-bar {
+  margin-bottom: 2px;
+  margin-top: 2px;
+}

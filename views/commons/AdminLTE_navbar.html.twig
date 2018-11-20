@@ -1,4 +1,4 @@
-{#
+    {#
 
 /* This file is part of NextDom.
 *
@@ -21,41 +21,38 @@
     <!-- Logo -->
     <a href="{{ HOMELINK }}" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><img class="logo-mini-img" src="/public/img/NextDom/NextDom_Square_AlphaBlackBlue.png" style="height:40px;width:auto"/></span>
+        <span class="logo-mini"><img class="logo-mini-img" src="/public/img/NextDom/NextDom_Square_AlphaBlackWhite.png"/></span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><img class="logo-lg-img" src="/public/img/NextDom/NextDom_Wide_AlphaBlueBlack.png" style="height:40px;width:auto"/></span>
+        <span class="logo-lg"><img class="logo-lg-img" src="/public/img/NextDom/NextDom_Wide_AlphaBlackWhite.png"/></span>
     </a>
 
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
         <!-- Navbar left menu-->
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button"></a>
-        <ul class="nav navbar-nav">
-            <li class="objectSummaryGlobalHeader">
-                {{ MENU_HTML_GLOBAL_SUMMARY|raw }}
-            </li>
-        </ul>
+        <li class="objectSummaryGlobalHeader">
+            {{ MENU_HTML_GLOBAL_SUMMARY|raw }}
+        </li>
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
                 <!-- Notifications: style can be found in dropdown.less -->
-                <li class="clock">
+                <li class="clock hidden-xs">
                     <a class="clocktime" id="horloge_time">14:11:46</a>
                     <a class="clockdate" id="horloge_date">lundi 1 janvier 1970</a>
                 </li>
-                <li class="dropdown notifications-menu" id="bt_messageModal">
+                <li class="dropdown notifications-menu task_notif_mobile" id="bt_messageModal">
                     <a href="#">
                         {% if MENU_NB_MESSAGES != 0 %}
-                            <i class="fas fa-bell notifbadge"></i>
+                            <i class="fas fa-envelope-open notifbadge"></i>
                             <span id="span_nbMessage" class="label label-warning notifcounter">{{ MENU_NB_MESSAGES }}</span>
                         {% else %}
-                            <i class="fas fa-bell"></i>
+                            <i class="fas fa-envelope-open"></i>
                         {% endif %}
                     </a>
                 </li>
-                <!-- Tasks: style can be found in dropdown.less bt_messageModal-->
                 {% if IS_ADMIN %}
-                    <li class="tasks-menu">
+                    <li class="tasks-menu task_update_mobile">
                         <a href="index.php?v=d&p=update">
                             {% if MENU_NB_UPDATES != 0 %}
                                 <i class="fas fa-download notifbadge"></i>
@@ -67,7 +64,14 @@
                     </li>
                 {% endif %}
                 <li>
-                    <a><span id="togglefullscreen" class="fa fa-expand cursor" onclick="toggleFullScreen();"></span></a>
+                    {% if NEXTDOM_NOTIFY == 1 %}
+                        <a class="task_bell_mobile"><span class="notifyIcon fas fa-bell cursor" onclick="switchNotify(0);"></span></a>
+                    {% else %}
+                        <a class="task_bell_mobile"><span class="notifyIcon fas fa-bell-slash cursor" onclick="switchNotify(1);"></span></a>
+                    {% endif %}
+                </li>
+                <li>
+                    <a class="task_fullscreen_mobile"><span id="togglefullscreen" class="fa fa-expand cursor" onclick="toggleFullScreen();"></span></a>
                 </li>
             </ul>
         </div>

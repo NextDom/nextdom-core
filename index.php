@@ -61,6 +61,7 @@ try {
     }
 } catch (\Exception $e) {
     echo $e->getMessage();
+    echo $e->getFile().' - Line '.$e->getLine();
 }
 
  

@@ -41,7 +41,7 @@
             <div class="col-xs-{{ dashboardObject.getDisplay('dashboard::size', 12) }}">
                 {% endif %}
                 {% if dashboardObject.getConfiguration('hideOnDashboard') == 0 %}
-                    <div class="card" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}10;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ dashboardObject.getDisplay("tagColor") }}50;" data-father_id="{{ dashboardObject.getFather_id() }}">
+                    <div class="card" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}10;box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.08); border: 1px solid {{ dashboardObject.getDisplay("tagColor") }}50;" data-father_id="{{ dashboardObject.getFather_id() }}">
                         <div class="card-header card-header-icon">
                             <div class="card-icon" style="background:{{ dashboardObject.getDisplay("tagColor") }}">
                                 {{ dashboardObject.getDisplay("icon")|raw }}</i>
@@ -74,28 +74,27 @@
                 {% endfor %}
             </div>
         </div>
-    </div>
 
-    <div class="fab">
-        <span class="fab-action-button"><i class="fab-action-button__icon fas fa-filter"></i></span>
-        <ul class="fab-buttons">
-            {% if dashboardCategory =='all' %}
-                <li class="fab-buttons__item"><a class="fab-buttons__link" data-tooltip="Toutes" style="cursor: pointer;background-color:green" onclick='selectCategory("all");'><i class="fas fa-asterisk"></i></a></li>
-            {% else %}
-                <li class="fab-buttons__item"><a class="fab-buttons__link" data-tooltip="Toutes" style="cursor: pointer;" onclick='selectCategory("all");'><i class="icon-material fas fa-asterisk"></i></a></li>
-            {% endif %}
-            {% for categoryCode, category in dashboardCategories %}
-                {% if dashboardCategory == categoryCode %}
-                    <li class="fab-buttons__item"><a class="fab-buttons__link" data-tooltip="{{ category.name|trans }}" style="cursor: pointer;background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}");'><i class="{{ category.icon }}"></i></a></li>
+        <div class="fab fab-filter">
+            <span class="fab-action-button"><i class="fab-action-button__icon fas fa-filter"></i></span>
+            <ul class="fab-buttons">
+                {% if dashboardCategory =='all' %}
+                    <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="Toutes" onclick='selectCategory("all");'><i class="fas fa-asterisk"></i></a></li>
                 {% else %}
-                    <li class="fab-buttons__item"><a class="fab-buttons__link" data-tooltip="{{ category.name|trans }}" style="cursor: pointer;background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}");'><i class="{{ category.icon }}"></i></a></li>
+                    <li class="fab-buttons__item"><a class="fab-buttons__link cursor" data-tooltip="Toutes" onclick='selectCategory("all");'><i class="icon-material fas fa-asterisk"></i></a></li>
                 {% endif %}
-            {% endfor %}
-        </ul>
-    </div>
-    {% if dashboardCategory == 'all' %}
-        <div class="fab fab-bis">
-            <a class="fab-action-button cursor" id="bt_editDashboardWidgetOrder" data-mode="0" ><i class="fab-action-button__icon fas fa-pencil-alt"></i></a>
+                {% for categoryCode, category in dashboardCategories %}
+                    {% if dashboardCategory == categoryCode %}
+                        <li class="fab-buttons__item"><a class="fab-buttons__link cursor" data-tooltip="{{ category.name|trans }}" style="background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}");'><i class="{{ category.icon }}"></i></a></li>
+                    {% else %}
+                        <li class="fab-buttons__item"><a class="fab-buttons__link cursor" data-tooltip="{{ category.name|trans }}" style="background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}");'><i class="{{ category.icon }}"></i></a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
         </div>
-    {% endif %}
+        {% if dashboardCategory == 'all' %}
+            <div class="fab fab-bis">
+                <a class="fab-action-button cursor" id="bt_editDashboardWidgetOrder" data-mode="0" ><i class="fab-action-button__icon fas fa-pencil-alt"></i></a>
+            </div>
+        {% endif %}
 </section>
