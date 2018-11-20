@@ -63,6 +63,7 @@ class PagesController
         'editor' => 'editor',
         'migration' => 'migration',
         'history' => 'history',
+        'timeline' => 'timeline',
         'shutdown' => 'shutdown',
         'health' => 'health',
         'profils' => 'profils',
@@ -1211,7 +1212,7 @@ class PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function timelinePage(Render $render, array &$pageContent): string
+    public static function timeline(Render $render, array &$pageContent): string
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
