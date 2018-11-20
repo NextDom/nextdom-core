@@ -119,10 +119,10 @@
              if($(this).attr('data-state') == 1){
                  $(this).attr('data-state',0);
                  $(this).removeClass('btn-warning').addClass('btn-success');
-                 $(this).html('<i class="fa fa-play"></i>');
+                 $(this).html('<div><i class="fa fa-play">&nbsp;&nbsp;</i>{{Reprise}}</div>');
              }else{
                  $(this).removeClass('btn-success').addClass('btn-warning');
-                 $(this).html('<i class="fa fa-pause"></i>');
+                 $(this).html('<div><i class="fa fa-pause">&nbsp;&nbsp;</i>{{Pause}}</div>');
                  $(this).attr('data-state',1);
                  _params.display.scrollTop(_params.display.height() + 200000);
                  nextdom.log.autoupdate(_params);

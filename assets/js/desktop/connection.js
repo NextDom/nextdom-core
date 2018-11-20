@@ -67,15 +67,19 @@ $('#in_twoFactorCode').keypress(function(e) {
 });
 
 function tryLogin() {
+    $('.login-box').removeClass('animationZoomIn');
+    $('.login-box').removeClass('animationShake');
     nextdom.user.login({
         username: $('#in_login_username').val(),
         password: $('#in_login_password').val(),
         twoFactorCode: $('#in_twoFactorCode').val(),
         storeConnection: $('#cb_storeConnection').value(),
         error: function (error) {
+            $('.login-box').addClass('animationShake');
             notify('Core',error.message,'error');
         },
         success: function (data) {
+            $('.login-box').addClass('animationZoomOut');
             window.location.href = 'index.php?v=d';
         }
     });

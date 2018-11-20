@@ -17,8 +17,6 @@
 
 namespace NextDom\Helpers;
 
-use DebugBar\Bridge\Twig\TraceableTwigEnvironment;
-use DebugBar\Bridge\Twig\TwigCollector;
 use DebugBar\DataCollector;
 use DebugBar\StandardDebugBar;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
@@ -132,7 +130,6 @@ class Render
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
-     * @throws \DebugBar\DebugBarException
      */
     public function show($view, $data = array())
     {
@@ -153,19 +150,21 @@ class Render
     /**
      * @param Twig_Loader_Filesystem $twigLoader
      * @return bool|\DebugBar\JavascriptRenderer
-     * @throws \DebugBar\DebugBarException
      */
     private function showDebugBar(Twig_Loader_Filesystem $twigLoader)
     {
-
+        $debugBarData = false;
         if (Status::isInDeveloperMode()) {
-            $debugbar = new StandardDebugBar();
-            $debugbarRenderer = $debugbar->getJavascriptRenderer();
-            $debugbar->addCollector(new DataCollector\ConfigCollector(\config::getDefaultConfiguration()['core']));
-            $pageData = $debugbarRenderer;
-        } else {
-            $pageData = false;
+            $debugBar = new StandardDebugBar();
+            $debugBarRenderer = $debugBar->getJavascriptRenderer();
+            try {
+                $debugBar->addCollector(new DataCollector\ConfigCollector(\config::getDefaultConfiguration()['core']));
+                $debugBarData = $debugBarRenderer;
+            }
+            catch (\DebugBar\DebugBarException $e) {
+                echo $e->getMessage();
+            }
         }
-        return $pageData;
+        return $debugBarData;
     }
 }

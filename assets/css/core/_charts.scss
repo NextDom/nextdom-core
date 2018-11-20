@@ -1,0 +1,101 @@
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+.highcharts-data-table {
+  th {
+    border-bottom-width: 2px;
+    border: 1px solid $lightgrey;
+    padding: 5px;
+    vertical-align: bottom;
+    line-height: 1.42857143;
+    text-align: left;
+    font-weight: bold;
+  }
+  tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+  }
+  td {
+    border: 1px solid $lightgrey;
+    padding: 5px;
+    line-height: 1.42857143;
+    vertical-align: top;
+  }
+}
+
+.highcharts-table-caption {
+  display: none;
+}
+
+.highcharts-axis-labels{
+    color:$black;
+}
+.highcharts-data-label text {
+	font-weight: bold;
+	fill: $black;
+}
+.highcharts-data-table tr{
+  display: table-row;
+  vertical-align: inherit;
+  border-color: inherit;
+}
+
+.highcharts-data-table>caption+thead>tr:first-child>td, .table>caption+thead>tr:first-child>th, .table>colgroup+thead>tr:first-child>td, .table>colgroup+thead>tr:first-child>th, .table>thead:first-child>tr:first-child>td, .table>thead:first-child>tr:first-child>th {
+  border-top: 0;
+}
+
+.highcharts-table-caption{
+  display: none;
+}
+
+.highcharts-data-table{
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+  background-color: transparent;
+	border:{
+	    spacing: 0;
+	    collapse: collapse;
+	}
+  display: table;
+	& thead{
+          display: table-header-group;
+          vertical-align: middle;
+          border-color: inherit;
+    }
+}
+ 

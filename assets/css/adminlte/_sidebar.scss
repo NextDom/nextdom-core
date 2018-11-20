@@ -1,0 +1,108 @@
+@charset "utf-8";
+
+/* This file is part of NextDom Software.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom Software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+/* Sidebar */
+.sidebar-nav {
+  padding: 9px 0;
+}
+
+.sidebar-collapse {
+  & .user-panel {
+    text-align: center;
+    & div.image {
+      width: 3rem;
+      height: 3rem;
+      margin:{
+        left: auto;
+        right: auto;
+      }
+      float: none !important;
+      transition: all .2s;
+    }
+  }
+}
+
+.sidebar-mini:not(.sidebar-mini-expand-feature).sidebar-collapse .sidebar-menu > li:hover > a > span:not(.pull-right),
+.sidebar-mini:not(.sidebar-mini-expand-feature).sidebar-collapse .sidebar-menu > li:hover > .treeview-menu {
+  display: block !important;
+  position: absolute;
+  width: 230px;
+  left: 50px;
+}
+
+.sidebar-mini:not(.sidebar-mini-expand-feature).sidebar-collapse .sidebar-menu > li:hover > a > .pull-right-container {
+  position: relative !important;
+  float: right;
+  width: auto !important;
+  left: 180px !important;
+  top: -22px !important;
+  z-index: 900;
+  opacity:0;
+}
+
+.sidebar-menu > li > a {
+  padding: 12px 5px 12px 13px;
+  & > .pull-right-container {
+    right: 5px;
+  }
+}
+
+.main-sidebar {
+  -webkit-transition: -webkit-transform 0.2s ease-in, width 0.2s ease-in;
+  -moz-transition: -moz-transform 0.2s ease-in, width 0.2s ease-in;
+  -o-transition: -o-transform 0.2s ease-in, width 0.2s ease-in;
+  transition: transform 0.2s ease-in, width 0.2s ease-in;
+}
+
+@media (min-width: 768px) {
+  .sidebar-mini.sidebar-collapse .main-sidebar {
+    z-index: 1020;
+  }
+}
+
+.sidebar-menu > li > a {
+  border-left: 3px solid transparent;
+}
+
+.sidebar-menu .treeview-menu > li > a {
+  color: #8aa4af;
+}
+
+.sidebar-form {
+  border-radius: 3px;
+  border: 1px solid #374850;
+  margin: 10px 10px;
+}
+.sidebar-form input[type="text"],
+.sidebar-form .btn {
+  box-shadow: none;
+  background-color: #374850;
+  border: 1px solid transparent;
+  height: 35px;
+}
+.sidebar-form input[type="text"] {
+  color: #666;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 2px;
+}
