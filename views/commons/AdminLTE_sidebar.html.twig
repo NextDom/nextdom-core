@@ -85,6 +85,17 @@
                 </ul>
             </li>
             #}
+            {% if PANEL_MENU is defined and PANEL_MENU is not empty %}
+            <li class="treeview">
+                <a href="#"><i class="fas fa-th-large"></i><span>&nbsp;&nbsp;{{ 'Panel(s)' }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    <li class="treeview-menu">
+                    {% for panelmenu in PANEL_MENU %}
+                        <li><a href="index.php?v=d&m={{ panelmenu.getId() }}&p={{ panelmenu.getDisplay() }}"><img class="img-responsive" style="width : 20px;display:inline-block;" src="{{ panelmenu.getPathImgIcon() }}"> {{ panelmenu.getName() }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% endif %}
 
             <li class="header">{{ 'MENU GESTION' }}</li>
             <li class="treeview">
@@ -120,6 +131,7 @@
                     <li><a href="index.php?v=d&p=health"><i class="fas fa-medkit"></i>&nbsp;&nbsp;{{ 'Santé' }}</a></li>
                     <li><a href="index.php?v=d&p=eqAnalyse"><i class="fas fa-plug"></i>&nbsp;&nbsp;{{ 'Equipements' }}</a></li>
                     <li><a href="index.php?v=d&p=log"><i class="fas fa-file-alt"></i>&nbsp;&nbsp;{{ 'Logs' }}</a></li>
+                    <li><a href="index.php?v=d&p=realtime"><i class="fas fa-tachometer-alt"></i>&nbsp;&nbsp;{{ 'Temps réel' }}</a></li>
                 </ul>
             </li>
             <li class="treeview">
