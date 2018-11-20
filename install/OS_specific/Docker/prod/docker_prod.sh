@@ -17,6 +17,8 @@ KEEP=N
 usage(){
     echo -e "\n$0: [d,m,(u|p)]\n\twithout option, container is built from github sources and has no access to devices"
     echo -e "\tk\tcontainer volumes are not recreated, but reused ( keep previous data intact)"
+    echo -e "\tp\tcontainer has access to all devices (privileged: not recommended)"
+    echo -e "\tu\tcontainer has access to ttyUSB0"
     echo -e "\th\tThis help"
     exit 0
 }
@@ -82,12 +84,18 @@ source envMysql
 
 
 #getOptions
-while getopts ":hkz" opt; do
+while getopts ":hkpuz" opt; do
     case $opt in
         k) echo -e "\nkeep docker volume (htm & database)"
         KEEP=Y
         ;;
         h) usage
+        ;;
+        p) echo -e "\ndocker will have access to all devices\n"
+        YML="docker-compose.yml -f docker-compose-privileged.yml"
+        ;;
+        u) echo -e "\n docker will have access to ttyUSB0\n"
+        YML="docker-compose.yml -f docker-compose-devices.yml"
         ;;
         z) echo -e "\nMaking a zip from local file"
         ZIP=Y
