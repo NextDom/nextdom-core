@@ -16,6 +16,8 @@
  */
 namespace NextDom\Helpers;
 
+use NextDom\Enums\ApiModeEnum;
+
 class Api
 {
 
