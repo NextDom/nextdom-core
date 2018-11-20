@@ -1,62 +1,9 @@
-version: '3'
+version: '3.1'
 services:
- nextdom-mysql:
-  container_name: ${MYSQLNAME}
-  image: ${IMAGESQL}
-  environment:
-    - MYSQL_ROOT_PASSWORD=${MYSQLROOT}
-    - MYSQL_ROOT_HOST=%
-    - MYSQL_DATABASE=nextdom
-    - MYSQL_USER=nextdom
-    - MYSQL_PASSWORD=${MYSQLPWD}
-    - TZ= ${TZ}
-  restart: ${RESTARTSQL}
-  expose:
-    - "3306"
-  ports:
-    - "${MYSQLMAP}"
- nextdom-dev:
-  container_name: ${CNAME}
-  #image: ${IMAGE}
-  build:
-    dockerfile: Dockerfile.develop
-    context: .
-    args:
-      - GITHUB_TOKEN=${GITHUBTOKEN}
-      - MYSQLROOT=${MYSQLROOT}
-  restart: ${RESTART}
-  healthcheck:
-    test: ["CMD","curl","-f","http://localhost/public/here.html"]
-    interval: 10s
-    timeout: 10s
-  expose:
-    - "22"
-    - "80"
-    - "443"
-  ports:
-    - "${SSHMAP}"
-    - "${HTTPMAP}"
-    - "${HTTPSMAP}"
-  environment:
-    - ROOT_PASSWORD=${ROOT_PASSWORD}
-    - MYSQL_DATABASE=${MYSQLDB}
-    - MYSQL_USER=${MYSQLUSER}
-    - MYSQL_HOST=${MYSQLHOST}
-    - MYSQL_PORT=${MYSQLPORT}
-    - MYSQL_USER_PWD=${MYSQLPWD}
-    - VERSION=${VERSION}
-    - TZ=${TZ}
-  volumes:
-    - ${PLUGINABEILLE}:/var/www/html/plugins/Abeille/:rw
-  devices:
+  nextdom-web:
+    devices:
     #zigate
     - ${DUSB}
     #zwave
     #- ${DACM}
     #- ${DAMA}
-  links:
-   - nextdom-mysql:mysql
-  depends_on:
-   - nextdom-mysql
-  stdin_open: true
-  tty: true
