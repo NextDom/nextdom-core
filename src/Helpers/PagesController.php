@@ -310,6 +310,7 @@ class PagesController
         } else {
           $diskTotal = round($diskTotal / (1024*1024*1024), 0) .' GB';
         }
+        // TODO: Problème Swap  non testé
         $pageContent['administrationSwapTotal'] = $swapTotal;
         $pageContent['administrationHddTotal'] = $diskTotal;
         $pageContent['administrationHTTPConnexion'] = self::sys_gethttpconnections();
@@ -340,6 +341,10 @@ class PagesController
         return empty($cpuCoreNo) ? 1 : $cpuCoreNo;
     }
 
+    /**
+     * TODO: Ca fait quoi ici ?
+     * @return string
+     */
     public static function sys_gethttpconnections(): string
     {
       	if (function_exists('exec')) {
@@ -364,6 +369,10 @@ class PagesController
   	    }
     }
 
+    /**
+     * TODO: Ca fait quoi ici ?
+     * @return string
+     */
     public static function sys_getprocess(): string
     {
     	$proc_count = 0;
@@ -378,6 +387,10 @@ class PagesController
     	return $proc_count;
     }
 
+    /**
+     * TODO: Ca fait quoi ici ?
+     * @return string
+     */
     public static function sys_getuptime(): string
     {
     	$uptime = preg_replace ('/\.[0-9]+/', '', file_get_contents('/proc/uptime'));
@@ -2229,6 +2242,7 @@ class PagesController
         \include_file('desktop', $page, 'php', $plugin->getId(), true);
         return ob_get_clean();
     }
+
     public static function panelPage(Render $render, array &$pageContent): string
     {
         $plugin = PluginManager::byId(Utils::init('m'));
