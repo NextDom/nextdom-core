@@ -5,8 +5,6 @@ services:
     build:
       dockerfile: Dockerfile.deb
       context: .
-      args:
-      - MODE
     restart: ${RESTART}
     healthcheck:
       test: ["CMD","curl","-f","http://localhost/public/here.html"]
@@ -18,10 +16,8 @@ services:
     - "443"
     - "3306"
     ports:
-    - "${SSHMAP}"
     - "${HTTPMAP}"
     - "${HTTPSMAP}"
-    - "${MYSQLMAP}"
     environment:
     - TZ=${TZDATA}
 #    stdin_open: true
