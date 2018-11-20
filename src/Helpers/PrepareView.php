@@ -38,7 +38,6 @@ class PrepareView
         $render = Render::getInstance();
         self::initHeaderData($pageData, $configs);
         //TODO: Vérifier ça
-        $logo = \config::byKey('product_connection_image');
         $pageData['CSS_POOL'][]    = '/public/css/nextdom.css';
         $pageData['CSS_POOL'][] = '/public/css/firstUse.css';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/firstUse.js';
@@ -55,8 +54,6 @@ class PrepareView
         $pageData['TITLE']       = 'Connexion';
         $render                  = Render::getInstance();
         self::initHeaderData($pageData, $configs);
-        //TODO: Vérifier ça
-        $logo = \config::byKey('product_connection_image');
         $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/connection.js';
 
@@ -472,15 +469,11 @@ class PrepareView
 
     public static function showModal()
     {
-        error_log('MODAL');
-        $error = false;
         \include_file('core', 'authentification', 'php');
         $plugin = Utils::init('plugin', '');
         $modalCode = Utils::init('modal', '');
-        error_log('Modal code : '.$modalCode);
         // Affichage d'un modal appartenant à un plugin
         if ($plugin != '') {
-            error_log('PLUGIN MODAL');
             try {
                 \include_file('desktop', $modalCode, 'modal', $plugin, true);
             } catch (\Exception $e) {
@@ -491,10 +484,8 @@ class PrepareView
         }
         // Affichage d'un modal du core
         else {
-            error_log('CORE MODAL');
             $modalRoute = ModalsController::getRoute($modalCode);
             if ($modalRoute === null) {
-                error_log('OLD MODAL');
                 try {
                     \include_file('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
                 } catch (\Exception $e) {
@@ -503,7 +494,6 @@ class PrepareView
                     echo '</div>';
                 }
             } else {
-                error_log('NEW MODAL');
                 $render = Render::getInstance();
                 ModalsController::$modalRoute($render);
             }
