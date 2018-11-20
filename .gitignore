@@ -33,3 +33,5 @@ DB_Backup.sql
 
 docs/*
 
+
+tests/gui/chromedriver*
