@@ -38,7 +38,8 @@ class SystemHelper
      *
      * @return array List of commands
      */
-    public static function loadCommand(): array {
+    public static function loadCommand(): array 
+    {
         if (file_exists(NEXTDOM_ROOT . '/core/config/system_cmd.json')) {
             $content = file_get_contents(NEXTDOM_ROOT . '/core/config/system_cmd.json');
             if (is_json($content)) {
@@ -53,7 +54,8 @@ class SystemHelper
      *
      * @return string Distribution name
      */
-    public static function getDistrib(): string {
+    public static function getDistrib(): string 
+    {
         self::loadCommand();
         if (isset(self::$commands['custom'])) {
             return 'custom';
@@ -77,7 +79,8 @@ class SystemHelper
      *
      * @return mixed
      */
-    public static function getCommand($commandKey = '') {
+    public static function getCommand($commandKey = '') 
+    {
         if (!isset(self::$commands[self::getDistrib()][$commandKey])) {
             return '';
         }
@@ -89,7 +92,8 @@ class SystemHelper
      *
      * @return string
      */
-    public static function getCmdSudo(): string {
+    public static function getCmdSudo(): string 
+    {
         if (!NextDomHelper::isCapable('sudo')) {
             return '';
         }
@@ -100,19 +104,21 @@ class SystemHelper
      * Kill all process which using file
      *
      * @param $filename
-     * @param string $_protocol
+     * @param string $filename
      */
-    public static function killProcessesWhichUsingFile($filename) {
+    public static function killProcessesWhichUsingFile(string $filename) 
+    {
         exec(SystemHelper::getCmdSudo() . 'fuser -k ' . $filename . ' > /dev/null 2>&1');
     }
 
     /**
      * Kill all process which using port
      *
-     * @param $_port
-     * @param string $_protocol
+     * @param $port
+     * @param string $protocol
      */
-    public static function killProcessesWhichUsingPort($port, $protocol = 'tcp') {
+    public static function killProcessesWhichUsingPort($port, $protocol = 'tcp') 
+    {
         exec(SystemHelper::getCmdSudo() . 'fuser -k ' . $port . '/' . $protocol . ' > /dev/null 2>&1');
     }
 
@@ -123,10 +129,11 @@ class SystemHelper
      * @param mixed $without
      * @return array
      */
-    public static function ps($find, $without = null) {
+    public static function ps(string $find, $without = null) 
+    {
         $return = array();
         $cmd = '(ps ax || ps w) | grep -ie "' . $find . '" | grep -v "grep"';
-        if ($without != null) {
+        if ($without !== null) {
             if (!is_array($without)) {
                 $without = array($without);
             }
@@ -171,7 +178,8 @@ class SystemHelper
      *
      * @return mixed
      */
-    public static function kill($find = '', $forceKill = true) {
+    public static function kill($find = '', $forceKill = true) 
+    {
         if (trim($find) == '') {
             return;
         }
@@ -209,7 +217,8 @@ class SystemHelper
      *
      * @return string Result of the command
      */
-    public static function php($arguments, $elevatedPrivileges = false) {
+    public static function php(string $arguments, $elevatedPrivileges = false) 
+    {
         if ($elevatedPrivileges) {
             return exec(self::getCmdSudo() . ' php ' . $arguments);
         }
@@ -221,7 +230,8 @@ class SystemHelper
      *
      * @return string User id name
      */
-    public static function getWWWUid() {
+    public static function getWWWUid(): string 
+    {
         $distrib = self::getDistrib();
         if ($distrib == 'debian') {
             return 'www-data';
