@@ -41,7 +41,6 @@ input[type="checkbox"] {
     height: 17px;
     border: 1px solid #ccc;
     border-radius: 2px;
-    box-shadow: 1px 1px 1px rgba(0,0,0,0.1);
 }
 
 /* content */
@@ -57,6 +56,10 @@ input[type="checkbox"] {
     -webkit-transition: all .2s;
     -moz-transition: all .2s;
     -ms-transition: all .2s;
+}
+
+[type="checkbox"]:hover:before {
+    box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
 }
 
 /* checked state */

@@ -35,7 +35,8 @@
 }
 
 .btn:hover {
-  opacity: 0.7;
+  -webkit-box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.42);
+  box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.42);
 }
 
 .btn-black {
