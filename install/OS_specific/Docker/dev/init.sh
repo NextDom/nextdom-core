@@ -24,7 +24,7 @@ else
 	#backward compatibility for postinst.
 	#Var renamed in order to use docker mysql embedded env var.
     [[ ( "${MYSQL_HOST}" != "localhost" ) && ( -f .mysqlroot ) ]] && MYSQL_ROOT_PASSWORD="-r $(cat .mysqlroot)"
-	bash -x /var/www/html/install/postinst ${MYSQL_ROOT_PASSWORD} -i ${MYSQL_HOST} -z ${MYSQL_PORT} -d ${MYSQL_DATABASE} -u ${MYSQL_USER} -p ${MYSQL_PASSWORD}
+	bash -x /var/www/html/install/postinst -r ${MYSQL_ROOT_PASSWORD} -i ${MYSQL_HOST} -z ${MYSQL_PORT} -d ${MYSQL_DATABASE} -u ${MYSQL_USER} -p ${MYSQL_PASSWORD}
 	[[ $? -ne 0 ]] && echo "Erreur, postinst s'est terminé en erreur" && exit -1
 	touch /var/www/html/_nextdom_is_installed
 	rm /root/.mysqlroot

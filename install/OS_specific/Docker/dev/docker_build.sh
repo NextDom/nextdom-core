@@ -23,7 +23,7 @@ usage(){
     echo -e "\n$0: [k,p,(u|p)]\n\twithout option, container is built from github sources and has no access to devices"
     echo -e "\tk\tcontainer volumes are not recreated, but reused ( keep previous data intact)"
     echo -e "\tp\tcontainer has access to all devices (privileged: not recommended)"
-    echo -e "\tu\tcontainer has access to ttyUSB0"
+    echo -e "\tu\tcontainer has access to ttyUSB0, defined in YML, .env"
     echo -e "\tz\tcontainer is populated with local project, not the commited one"
     echo -e "\th\tThis help"
     exit 0
