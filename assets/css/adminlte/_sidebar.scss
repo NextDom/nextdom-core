@@ -65,9 +65,11 @@
     right: 5px;
   }
 }
+
 .sidebar-collapse > li > a {
   padding: 12px 5px 12px 13px;
 }
+
 .sidebar-menu li > a > .pull-right-container {
   right: 5px;
 }
@@ -98,6 +100,7 @@
   border: 1px solid #374850;
   margin: 10px 10px;
 }
+
 .sidebar-form input[type="text"],
 .sidebar-form .btn {
   box-shadow: none;
@@ -105,10 +108,13 @@
   border: 1px solid transparent;
   height: 35px;
 }
+
 .sidebar-form input[type="text"] {
-  color: #666;
-  border-top-left-radius: 2px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 2px;
+  color: $grey;
+  border:{
+    top-left-radius: 2px;
+    top-right-radius: 0;
+    bottom-right-radius: 0;
+    bottom-left-radius: 2px;
+  }
 }
