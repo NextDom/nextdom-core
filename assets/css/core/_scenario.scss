@@ -182,8 +182,19 @@
     padding: 13px 2px 0px 0px;
 }
 .scenario-btn-repeat {
-    margin-left: 8px;
-    margin-top: 3px;
+    margin-left: 4px;
+    margin-top: 5px;
     width: 30px;
     padding-left: 8px;
+    vertical-align: initial;
+}
+
+.sortable-placeholder {
+    border: 2px dashed $lightgrey;
+}
+.bt_sortable {
+    vertical-align: middle;
+    margin: -2px 9px 0px -2px;
+    cursor: all-scroll;
+    font-size: 18px;
 }
