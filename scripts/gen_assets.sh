@@ -106,7 +106,7 @@ function gen_js {
         vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
         vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js \
         vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js \
-        vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.js \
+        vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js \
         vendor/node_modules/snapsvg/dist/snap.svg-min.js > /tmp/temp.js
 
 if [ $# -eq 0 ]; then

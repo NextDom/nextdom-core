@@ -38,7 +38,6 @@ class PrepareView
         $render = Render::getInstance();
         self::initHeaderData($pageData, $configs);
         //TODO: Vérifier ça
-        $logo = \config::byKey('product_connection_image');
         $pageData['CSS_POOL'][]    = '/public/css/nextdom.css';
         $pageData['CSS_POOL'][] = '/public/css/firstUse.css';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/firstUse.js';
@@ -55,8 +54,6 @@ class PrepareView
         $pageData['TITLE']       = 'Connexion';
         $render                  = Render::getInstance();
         self::initHeaderData($pageData, $configs);
-        //TODO: Vérifier ça
-        $logo = \config::byKey('product_connection_image');
         $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/connection.js';
 
@@ -397,7 +394,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/snapsvg/dist/snap.svg-min.js';
         }
     }
@@ -434,8 +431,7 @@ class PrepareView
                     $pageData['JS_POOL'][] = '/desktop/custom/custom.js';
                 }
             }
-        }
-        else {
+        } else {
             $pageData['CSS_POOL'][] = '/public/css/rescue.css';
         }
     }
@@ -462,8 +458,7 @@ class PrepareView
                     ob_start();
                     \include_file('desktop', $page, 'php', '', true);
                     return ob_get_clean();
-                }
-                else {
+                } else {
                     Router::showError404AndDie();
                 }
             } else {
@@ -474,15 +469,11 @@ class PrepareView
 
     public static function showModal()
     {
-        error_log('MODAL');
-        $error = false;
         \include_file('core', 'authentification', 'php');
         $plugin = Utils::init('plugin', '');
         $modalCode = Utils::init('modal', '');
-        error_log('Modal code : '.$modalCode);
         // Affichage d'un modal appartenant à un plugin
         if ($plugin != '') {
-            error_log('PLUGIN MODAL');
             try {
                 \include_file('desktop', $modalCode, 'modal', $plugin, true);
             } catch (\Exception $e) {
@@ -493,10 +484,8 @@ class PrepareView
         }
         // Affichage d'un modal du core
         else {
-            error_log('CORE MODAL');
             $modalRoute = ModalsController::getRoute($modalCode);
             if ($modalRoute === null) {
-                error_log('OLD MODAL');
                 try {
                     \include_file('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
                 } catch (\Exception $e) {
@@ -504,9 +493,7 @@ class PrepareView
                     echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
                     echo '</div>';
                 }
-            }
-            else {
-                error_log('NEW MODAL');
+            } else {
                 $render = Render::getInstance();
                 ModalsController::$modalRoute($render);
             }

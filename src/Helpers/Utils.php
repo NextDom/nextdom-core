@@ -49,9 +49,7 @@ class Utils
 
     public static function getVarToJs(string $varName, $varValue)
     {
-        return "<script>" .
-            self::getVarInJs($varName, $varValue) .
-            "</script>\n";
+        return "<script>" . self::getVarInJs($varName, $varValue) .  "</script>\n";
     }
 
     /**
@@ -236,12 +234,12 @@ class Utils
             '-'   => '-',
             ''    => ''
         ];
-        preg_match_all('/(\w+|\d+|\.\d+|".*?"|\'.*?\'|\#.*?\#|\(|\))[ ]*([!*+&|\\-\\/>=<]+|and|or|ou|et)*[ ]*/i', $expression, $preg_output);
-        if (count($preg_output) > 2) {
+        preg_match_all('/(\w+|\d+|\.\d+|".*?"|\'.*?\'|\#.*?\#|\(|\))[ ]*([!*+&|\\-\\/>=<]+|and|or|ou|et)*[ ]*/i', $expression, $pregOutput);
+        if (count($pregOutput) > 2) {
             $result = '';
             $exprIndex = 0;
-            foreach ($preg_output[1] as $expr) {
-                $result .= $expr . $replaceMap[$preg_output[2][$exprIndex++]];
+            foreach ($pregOutput[1] as $expr) {
+                $result .= $expr . $replaceMap[$pregOutput[2][$exprIndex++]];
             }
         }
         return $result;
