@@ -50,21 +50,6 @@
     margin-left: -2px;
 }
 
-.label-unity, 
-.label-unity-big {
-    font: {
-        size: 100%;
-        weight: 500;
-    }
-    line-height: 3rem;
-}
-
-@media (max-width: 767px) {
-    .label-unity-big {
-        margin-left: 15px;
-    }
-}
-
 .label-badge {
     position: absolute;
     top: 10px;
@@ -177,16 +162,11 @@
     }
 }
 
-.label-value, 
+.label-value,
 .label-icon {
     background-color: $whitegrey;
     color: $black !important;
     border-color: $lightgrey;
-}
-
-.label-unity, 
-.label-unity-big {
-    color: $darkgrey !important;
 }
 
 .label-list ,
