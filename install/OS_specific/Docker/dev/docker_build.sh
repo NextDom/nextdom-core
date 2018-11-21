@@ -20,8 +20,7 @@ KEEP=N
 
 #fonctions
 usage(){
-    echo -e "\n$0: [d,m,(u|p)]\n\twithout option, container is built from github sources and has no access to devices"
-    echo -e "\tm\tcontainer is in dev mode (ie built from github, from debian package otherwise, used in conjonction with -d)"
+    echo -e "\n$0: [k,p,(u|p)]\n\twithout option, container is built from github sources and has no access to devices"
     echo -e "\tk\tcontainer volumes are not recreated, but reused ( keep previous data intact)"
     echo -e "\tp\tcontainer has access to all devices (privileged: not recommended)"
     echo -e "\tu\tcontainer has access to ttyUSB0"
