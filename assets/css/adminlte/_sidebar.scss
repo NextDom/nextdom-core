@@ -60,10 +60,16 @@
 }
 
 .sidebar-menu > li > a {
-  padding: 12px 5px 12px 13px;
+  padding: 12px 5px 12px 12px;
   & > .pull-right-container {
     right: 5px;
   }
+}
+.sidebar-collapse > li > a {
+  padding: 12px 5px 12px 13px;
+}
+.sidebar-menu li > a > .pull-right-container {
+  right: 5px;
 }
 
 .main-sidebar {
