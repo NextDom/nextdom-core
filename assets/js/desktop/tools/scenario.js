@@ -1137,7 +1137,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '       <i class="fas fa-chevron-right"></i>';
     retour += '     </button>';
     retour += '     <span class="scenario-title">{{ALORS}}</span>';
-    retour += '     <div class="dropdown" style="display : inline-block;">';
+    retour += '     <div class="dropdown cursor" style="display : inline-block;">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
     retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
     retour += '       </button>';
@@ -1161,7 +1161,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '<input class="subElementAttr subElementElse" data-l1key="subtype" style="display : none;" value="action"/>';
     retour += '  <div class="scenario-sinon">';
     retour += '     <span class="scenario-title">{{SINON}}</span>';
-    retour += '     <div class="dropdown">';
+    retour += '     <div class="dropdown cursor">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
     retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
     retour += '       </button>';
@@ -1250,7 +1250,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="action"/>';
     retour += '  <div class="scenario-faire">';
     retour += '     <span class="scenario-title">{{FAIRE}}</span>';
-    retour += '     <div class="dropdown">';
+    retour += '     <div class="dropdown cursor">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
     retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
     retour += '       </button>';
@@ -1318,7 +1318,7 @@ function addSubElement(_subElement, _pColor) {
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" title="{{Décocher pour désactiver l\'élément}}" style="margin-right : 0px;"/>';
     }
     retour += '     <span class="scenario-title">{{ACTION}}</span>';
-    retour += '     <div class="dropdown">';
+    retour += '     <div class="dropdown cursor">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
     retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
     retour += '       </button>';
