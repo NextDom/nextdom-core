@@ -1161,7 +1161,7 @@ class NextDomHelper
      * @param string $systemFunc Function to test
      * @param bool $forceRefresh Force refresh in configuration
      *
-     * @return bool
+     * @return bool True if $systemFunc can be executed
      */
     public static function isCapable($systemFunc, $forceRefresh = false)
     {
