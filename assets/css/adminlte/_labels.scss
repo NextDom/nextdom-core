@@ -50,7 +50,8 @@
     margin-left: -2px;
 }
 
-.label-unity, .label-unity-big {
+.label-unity, 
+.label-unity-big {
     font: {
         size: 100%;
         weight: 500;
@@ -84,7 +85,7 @@
     font-size: 15px;
     padding: 5px 8px;
     margin-bottom: 15px;
-    background-color: white;
+    background-color: $white;
     border: 1px solid lightgrey;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
@@ -163,6 +164,7 @@
         right: 15px;
     }
 }
+
 .label-hash {
     word-break: break-all;
     white-space: normal;
@@ -175,28 +177,24 @@
     }
 }
 
-.label-value, .label-icon {
-    background-color: #F5F5F5;
-    color: #000 !important;
-    border-color: #ddd
+.label-value, 
+.label-icon {
+    background-color: $whitegrey;
+    color: $black !important;
+    border-color: $lightgrey;
 }
-.label-unity, .label-unity-big {
-    color: #999 !important;
+
+.label-unity, 
+.label-unity-big {
+    color: $darkgrey !important;
 }
-.label-list {
-    background-color: #fdfdf2;
-    color: #666 !important;
-    border-color: #ddd;
-}
-.label-view {
-    background-color: #fdfdf2;
-    color: #666 !important;
-    border-color: #ddd;
-}
+
+.label-list ,
+.label-view ,
 .label-log {
-    background-color: #fdfdf2;
-    color: #666 !important;
-    border-color: #ddd;
+    background-color: $lightgolden;
+    color: $grey !important;
+    border-color: $lightgrey;
 }
 
 .label-cmd {
@@ -208,6 +206,7 @@
     }
     display: flex;
 }
+
 .li_history {
     margin: 5px 0px 5px 10px;
     color: $black;
