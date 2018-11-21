@@ -34,6 +34,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Enums\ApiModeEnum;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
@@ -48,7 +49,7 @@ use NextDom\Managers\UpdateManager;
 class NextDomHelper
 {
     /**
-     * TODO: ??
+     *
      */
     private static $nextdomConfiguration;
 
@@ -58,13 +59,13 @@ class NextDomHelper
      */
     public static function addRemoveHistory($data)
     {
-        $remove_history = array();
+        $removeHistory = array();
         if (file_exists(NEXTDOM_ROOT . '/data/remove_history.json')) {
-            $remove_history = json_decode(file_get_contents(NEXTDOM_ROOT . '/data/remove_history.json'), true);
+            $removeHistory = json_decode(file_get_contents(NEXTDOM_ROOT . '/data/remove_history.json'), true);
         }
-        $remove_history[] = $data;
-        $remove_history = array_slice($remove_history, -200, 200);
-        file_put_contents(NEXTDOM_ROOT . '/data/remove_history.json', json_encode($remove_history));
+        $removeHistory[] = $data;
+        $removeHistory = array_slice($removeHistory, -200, 200);
+        file_put_contents(NEXTDOM_ROOT . '/data/remove_history.json', json_encode($removeHistory));
     }
 
     /**
@@ -101,9 +102,10 @@ class NextDomHelper
     }
 
     /**
-     * Obtenir l'état du système
+     * Get system health
+     * Test all functionnalities
      *
-     * @return array Informations sur l'état du système
+     * @return array Data about system health
      */
     public static function health(): array
     {
@@ -332,7 +334,7 @@ class NextDomHelper
     }
 
     /**
-     * TODO: ????
+     * Get informations about system installation
      */
     public static function sick()
     {
@@ -342,105 +344,7 @@ class NextDomHelper
     }
 
     /**
-     * Obtenir la clé API de Jeedom ou d'un plugin
-     *
-     * @param string $plugin Code du plugin ou core par défaut
-     *
-     * @return string Clé de l'API
-     */
-    public static function getApiKey(string $plugin = 'core'): string
-    {
-        if ($plugin == 'apipro') {
-            if (\config::byKey('apipro') == '') {
-                \config::save('apipro', \config::genKey());
-            }
-            return \config::byKey('apipro');
-        }
-        if ($plugin == 'apimarket') {
-            if (\config::byKey('apimarket') == '') {
-                \config::save('apimarket', \config::genKey());
-            }
-            return \config::byKey('apimarket');
-        }
-        if (\config::byKey('api', $plugin) == '') {
-            \config::save('api', \config::genKey(), $plugin);
-        }
-        return \config::byKey('api', $plugin);
-    }
-
-    /**
-     * TODO: ???
-     *
-     * @param string $mode
-     *
-     * @return bool
-     */
-    public static function apiModeResult(string $mode = 'enable'): bool
-    {
-        $result = true;
-        switch ($mode) {
-            case 'disable':
-                $result = false;
-                break;
-            case 'whiteip':
-                $ip = getClientIp();
-                $find = false;
-                $whiteIps = explode(';', \config::byKey('security::whiteips'));
-                if (\config::byKey('security::whiteips') != '' && count($whiteIps) > 0) {
-                    foreach ($whiteIps as $whiteip) {
-                        if (netMatch($whiteip, $ip)) {
-                            $find = true;
-                        }
-                    }
-                    if (!$find) {
-                        $result = false;
-                    }
-                }
-                break;
-            case 'localhost':
-                if (getClientIp() != '127.0.0.1') {
-                    $result = false;
-                }
-                break;
-        }
-        return $result;
-    }
-
-    /**
-     * TODO:
-     *
-     * @param string $defaultApiKey
-     * @param string $plugin
-     * @return bool
-     */
-    public static function apiAccess(string $defaultApiKey = '', string $plugin = 'core')
-    {
-        $defaultApiKey = trim($defaultApiKey);
-        if ($defaultApiKey == '') {
-            return false;
-        }
-        if ($plugin != 'core' && $plugin != 'proapi' && !self::apiModeResult(\config::byKey('api::' . $plugin . '::mode', 'core', 'enable'))) {
-            return false;
-        }
-        $apikey = self::getApiKey($plugin);
-        if ($defaultApiKey != '' && $apikey == $defaultApiKey) {
-            return true;
-        }
-        $user = \user::byHash($defaultApiKey);
-        if (is_object($user)) {
-            if ($user->getOptions('localOnly', 0) == 1 && !self::apiModeResult('whiteip')) {
-                return false;
-            }
-            GLOBAL $_USER_GLOBAL;
-            $_USER_GLOBAL = $user;
-            \log::add('connection', 'info', __('core.api-connection') . $user->getLogin());
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * TODO: isOk ????
+     * Test if NextDom running right
      *
      * @return bool
      */
@@ -465,9 +369,9 @@ class NextDomHelper
     }
 
     /**
-     * Lance une mise à jour
+     * Start update
      *
-     * @param array $options Liste des options
+     * @param array $options Options list of /install/update.php script
      */
     public static function update($options = array())
     {
@@ -484,7 +388,7 @@ class NextDomHelper
     }
 
     /**
-     * Obtenir la \configuration TODO ???
+     * Get configuration informations or global configuration
      *
      * @param string $askedKey
      * @param mixed $defaultValue
@@ -500,6 +404,7 @@ class NextDomHelper
         if (!is_array(self::$nextdomConfiguration)) {
             self::$nextdomConfiguration = array();
         }
+        // TODO: Bizarre
         if (!$defaultValue && isset(self::$nextdomConfiguration[$askedKey])) {
             return self::$nextdomConfiguration[$askedKey];
         }
@@ -520,33 +425,34 @@ class NextDomHelper
     }
 
     /**
-     * TODO ???
-     * @param $_key
-     * @param $_value
+     * TODO: ???
+     *
+     * @param string $configKey
+     * @param mixed $configValue
      * @return array|mixed|string
      */
-    private static function checkValueInConfiguration($_key, $_value)
+    private static function checkValueInConfiguration($configKey, $configValue)
     {
         if (!is_array(self::$nextdomConfiguration)) {
             self::$nextdomConfiguration = array();
         }
-        if (isset(self::$nextdomConfiguration[$_key])) {
-            return self::$nextdomConfiguration[$_key];
+        if (isset(self::$nextdomConfiguration[$configKey])) {
+            return self::$nextdomConfiguration[$configKey];
         }
-        if (is_array($_value)) {
-            foreach ($_value as $key => $value) {
-                $_value[$key] = self::checkValueInConfiguration($_key . ':' . $key, $value);
+        if (is_array($configValue)) {
+            foreach ($configValue as $key => $value) {
+                $configValue[$key] = self::checkValueInConfiguration($configKey . ':' . $key, $value);
             }
-            self::$nextdomConfiguration[$_key] = $_value;
-            return $_value;
+            self::$nextdomConfiguration[$configKey] = $configValue;
+            return $configValue;
         } else {
-            $config = \config::byKey($_key);
-            return ($config == '') ? $_value : $config;
+            $config = \config::byKey($configKey);
+            return ($config == '') ? $configValue : $config;
         }
     }
 
     /**
-     * Obtenir la version de NextDom
+     * Get NextDom version
      *
      * @return string
      */
@@ -559,7 +465,7 @@ class NextDomHelper
     }
 
     /**
-     * Arrêter toutes les tâches cron et les scénarios
+     * Stop all cron tasks and scenarios
      */
     public static function stopSystem()
     {
@@ -606,7 +512,7 @@ class NextDomHelper
     }
 
     /**
-     * Activer les tâches cron et les scénarios
+     * Start all cron tasks and scenarios
      *
      * @throws CoreException
      */
@@ -631,9 +537,9 @@ class NextDomHelper
     }
 
     /**
-     * Test si NextDom est démarré
+     * Test if NextDom is started
      *
-     * @return bool Etat de NextDom
+     * @return bool True if NextDom is started
      */
     public static function isStarted(): bool
     {
@@ -641,9 +547,9 @@ class NextDomHelper
     }
 
     /**
-     * Test si la date est bonne
+     * Update time status and get it
      *
-     * @return boolean Etat de l'heure
+     * @return boolean Time status
      */
     public static function isDateOk()
     {
@@ -675,7 +581,7 @@ class NextDomHelper
     }
 
     /**
-     * Vérifier un évènement
+     * Check an event
      *
      * @param $event
      * @param bool $forceSyncMode
@@ -686,34 +592,7 @@ class NextDomHelper
     }
 
     /**
-     * Tâche lancée toutes les 5 minutes
-     */
-    public static function cron5()
-    {
-        try {
-            \network::cron5();
-        } catch (CoreException $e) {
-            \log::add('network', 'error', 'network::cron : ' . $e->getMessage());
-        }
-        try {
-            foreach (\update::listRepo() as $name => $repo) {
-                $class = 'repo_' . $name;
-                if (class_exists($class) && method_exists($class, 'cron5') && \config::byKey($name . '::enable') == 1) {
-                    $class::cron5();
-                }
-            }
-        } catch (CoreException $e) {
-            \log::add('nextdom', 'error', $e->getMessage());
-        }
-        try {
-            \eqLogic::checkAlive();
-        } catch (CoreException $e) {
-
-        }
-    }
-
-    /**
-     * Tâche lancée toutes les minutes
+     * Task started minutes
      */
     public static function cron()
     {
@@ -817,25 +696,34 @@ class NextDomHelper
     }
 
     /**
-     * Tâche exécutée tous les jours
+     * Task started every 5 minutes
      */
-    public static function cronDaily()
+    public static function cron5()
     {
         try {
-            ScenarioManager::cleanTable();
-            ScenarioManager::consystencyCheck();
-            \log::chunk();
-            \cron::clean();
-            \report::clean();
-            \DB::optimize();
-            CacheManager::clean();
+            \network::cron5();
+        } catch (CoreException $e) {
+            \log::add('network', 'error', 'network::cron : ' . $e->getMessage());
+        }
+        try {
+            foreach (\update::listRepo() as $name => $repo) {
+                $class = 'repo_' . $name;
+                if (class_exists($class) && method_exists($class, 'cron5') && \config::byKey($name . '::enable') == 1) {
+                    $class::cron5();
+                }
+            }
         } catch (CoreException $e) {
             \log::add('nextdom', 'error', $e->getMessage());
+        }
+        try {
+            \eqLogic::checkAlive();
+        } catch (CoreException $e) {
+
         }
     }
 
     /**
-     * Tâche exécutée toutes les heures
+     * Task started every hours
      */
     public static function cronHourly()
     {
@@ -869,6 +757,24 @@ class NextDomHelper
                     $class::cronHourly();
                 }
             }
+        } catch (CoreException $e) {
+            \log::add('nextdom', 'error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Task started everyday
+     */
+    public static function cronDaily()
+    {
+        try {
+            ScenarioManager::cleanTable();
+            ScenarioManager::consystencyCheck();
+            \log::chunk();
+            \cron::clean();
+            \report::clean();
+            \DB::optimize();
+            CacheManager::clean();
         } catch (CoreException $e) {
             \log::add('nextdom', 'error', $e->getMessage());
         }
@@ -911,11 +817,11 @@ class NextDomHelper
     }
 
     /**
-     * TODO: ??
+     * Get command thread process id
      *
-     * @param $cmd
+     * @param string $cmd Command to test
      *
-     * @return string
+     * @return string PID
      */
     public static function retrievePidThread(string $cmd): string
     {
@@ -1134,6 +1040,8 @@ class NextDomHelper
     }
 
     /**
+     * TODO: ???
+     *
      * @param string $command Command to execute after stop preparation
      * @param string $errorMessage Message to show if actions failed
      *
@@ -1150,7 +1058,7 @@ class NextDomHelper
     }
 
     /**
-     * Force la synchronisation de l'heure
+     * Sync time
      */
     public static function forceSyncHour()
     {
@@ -1158,7 +1066,7 @@ class NextDomHelper
     }
 
     /**
-     * Nettoyer les droits des fichiers système
+     * Clean file system rights
      */
     public static function cleanFileSystemRight()
     {
@@ -1177,7 +1085,7 @@ class NextDomHelper
     }
 
     /**
-     * Vérifier l'espace disponible
+     * Check space left
      *
      * @return float
      */
@@ -1187,7 +1095,7 @@ class NextDomHelper
     }
 
     /**
-     * Obtenir le répertoire temporaire
+     * Get temporary folder and creates it if not exists
      *
      * @param null $plugin
      *
@@ -1205,8 +1113,9 @@ class NextDomHelper
         }
         return $result;
     }
+
     /**
-     * Obtenir une clé d'identifiant du système hôte
+     * Get hardware key
      *
      * @return bool|string
      */
@@ -1221,7 +1130,7 @@ class NextDomHelper
     }
 
     /**
-     * Obtenir le nom du système hôte
+     * Get hostname
      *
      * @return string
      */
@@ -1247,10 +1156,10 @@ class NextDomHelper
     }
 
     /**
-     * Test si NextDom est en capacité d'effectuer une action.
+     * Test if NextDom can call system function
      *
-     * @param string $systemFunc Fonction système à tester
-     * @param bool $forceRefresh Forcer le rafraichissement
+     * @param string $systemFunc Function to test
+     * @param bool $forceRefresh Force refresh in configuration
      *
      * @return bool
      */
@@ -1279,7 +1188,7 @@ class NextDomHelper
     }
 
     /**
-     * Evalue la performance
+     * Benchmark cache
      *
      * @return array
      * @throws \Exception
