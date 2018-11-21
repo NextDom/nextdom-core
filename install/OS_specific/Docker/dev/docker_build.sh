@@ -21,11 +21,11 @@ KEEP=N
 #fonctions
 usage(){
     echo -e "\n$0: [d,m,(u|p)]\n\twithout option, container is built from github sources and has no access to devices"
-    echo -e "\td\tcontainer is build from debian stable package"
     echo -e "\tm\tcontainer is in dev mode (ie built from github, from debian package otherwise, used in conjonction with -d)"
+    echo -e "\tk\tcontainer volumes are not recreated, but reused ( keep previous data intact)"
     echo -e "\tp\tcontainer has access to all devices (privileged: not recommended)"
     echo -e "\tu\tcontainer has access to ttyUSB0"
-    echo -e "\tz\tcontainer is populated with current project, not yet commited"
+    echo -e "\tz\tcontainer is populated with local project, not the commited one"
     echo -e "\th\tThis help"
     exit 0
 }
@@ -75,14 +75,10 @@ makeZip(){
 source ${DENV}
 
 #getOptions
-while getopts ":hkmpuz" opt; do
+while getopts ":hkpuz" opt; do
     case $opt in
         k) echo "Keep volumes (web & mysql)"
         KEEP=Y
-        ;;
-        m) MODE=dev
-        echo "mode"
-        DEMO=1
         ;;
         p) echo -e "\ndocker will have access to all devices\n"
         YML="docker-compose.yml -f docker-compose-privileged.yml"
