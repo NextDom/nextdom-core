@@ -25,57 +25,52 @@ namespace NextDom\Controller;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
-use NextDom\Managers\JeeObjectManager;
-use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\UpdateManager;
 
- 
-class ScenarioController extends PagesController
+class NetworkController extends PagesController
 {
-
     public function __construct()
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
     }
-
-     /**
-     * Render scenario page
+    
+    /**
+     * Render network page
      *
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of scenario page
+     * @return string Content of network page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function scenario(Render $render, array &$pageContent): string
+    public static function network(Render $render, array &$pageContent): string
     {
 
-        $pageContent['scenarios'] = array();
-        // TODO: A supprimé pour éviter la requête inutile
-        $pageContent['scenarioCount'] = count(ScenarioManager::all());
-        $pageContent['scenarios'][-1] = ScenarioManager::all(null);
-        $pageContent['scenarioListGroup'] = ScenarioManager::listGroup();
-
-        if (is_array($pageContent['scenarioListGroup'])) {
-            foreach ($pageContent['scenarioListGroup'] as $group) {
-                $pageContent['scenarios'][$group['group']] = ScenarioManager::all($group['group']);
-            }
+        $pageContent['adminReposList'] = UpdateManager::listRepo();
+        $keys = array('dns::token', 'market::allowDNS');
+        foreach ($pageContent['adminReposList'] as $key => $value) {
+            $keys[] = $key . '::enable';
         }
-        $pageContent['scenarioInactiveStyle'] = \nextdom::getConfiguration('eqLogic:style:noactive');
-        $pageContent['scenarioEnabled'] = \config::byKey('enableScenario');
-        $pageContent['scenarioAllObjects'] = JeeObjectManager::all();
+        $pageContent['adminConfigs'] = \config::byKeys($keys);
+        $pageContent['adminNetworkInterfaces'] = [];
+        foreach (\network::getInterfaces() as $interface) {
+            $intData = [];
+            $intData['name'] = $interface;
+            $intData['mac'] = \network::getInterfaceMac($interface);
+            $intData['ip'] = \network::getInterfaceIp($interface);
+            $pageContent['adminNetworkInterfaces'][] = $intData;
+        }
+        $pageContent['adminDnsRun'] = \network::dns_run();
+        $pageContent['adminNetworkExternalAccess'] = \network::getNetworkAccess('external');
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/scenario.js';
-        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/jquery.sew/jquery.caretposition.js';
-        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/jquery.sew/jquery.sew.min.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/admin/network.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-
-        return $render->get('/desktop/tools/scenario.html.twig', $pageContent);
+        return $render->get('/desktop/admin/network.html.twig', $pageContent);
     }
-
 }
