@@ -20,9 +20,13 @@
  * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
  */
 
-namespace Nextdom\Controller;
+namespace NextDom\Controller;
 
 use NextDom\Helpers\PagesController;
+use NextDom\Helpers\Render;
+use NextDom\Helpers\Utils;
+use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\EqLogicManager;
 
 /**
  * Description of toto

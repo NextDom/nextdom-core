@@ -23,6 +23,7 @@ use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Helpers\ModalsController;
 use NextDom\Helpers\PagesController;
+use NextDom\Controller\DashBoardController;
 
 /**
  * Classe de support à l'affichage des contenus HTML
@@ -139,14 +140,14 @@ class PrepareView
             'user_id'            => $_SESSION['user']->getId(),
             'user_isAdmin'       => Status::isConnectAdmin(),
             'user_login'         => $_SESSION['user']->getLogin(),
-            'nextdom_Welcome'   => $configs['nextdom::Welcome'],
-            'notify_status'   => $configs['notify::status'],
-            'notify_position'   => $configs['notify::position'],
-            'notify_timeout'   => $configs['notify::timeout'],
+            'nextdom_Welcome'    => $configs['nextdom::Welcome'],
+            'notify_status'      => $configs['notify::status'],
+            'notify_position'    => $configs['notify::position'],
+            'notify_timeout'     => $configs['notify::timeout'],
             'widget_width_step'  => $configs['widget::step::width'],
             'widget_height_step' => $configs['widget::step::height'],
             'widget_margin'      => $configs['widget::margin'],
-            'widget_padding'      => $configs['widget::padding'],
+            'widget_padding'     => $configs['widget::padding'],
             'widget_radius'      => $configs['widget::radius']
         ];
         $pageData['JS_VARS_RAW'] = [
@@ -474,7 +475,8 @@ class PrepareView
                     Router::showError404AndDie();
                 }
             } else {
-                return PagesController::$controllerRoute($render, $pageContent);
+                return  DashBoardController::dashboard($render, $pageContent);
+               // return PagesController::$controllerRoute($render, $pageContent);
             }
         }
     }
