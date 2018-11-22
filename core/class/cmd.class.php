@@ -19,7 +19,7 @@
 use NextDom\Managers\CmdManager;
 
 /* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+require_once NEXTDOM_ROOT.'/core/php/core.inc.php';
 
 class cmd {
     /*     * *************************Attributs****************************** */

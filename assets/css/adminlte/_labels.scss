@@ -50,20 +50,6 @@
     margin-left: -2px;
 }
 
-.label-unity, .label-unity-big {
-    font: {
-        size: 100%;
-        weight: 500;
-    }
-    line-height: 3rem;
-}
-
-@media (max-width: 767px) {
-    .label-unity-big {
-        margin-left: 15px;
-    }
-}
-
 .label-badge {
     position: absolute;
     top: 10px;
@@ -84,7 +70,7 @@
     font-size: 15px;
     padding: 5px 8px;
     margin-bottom: 15px;
-    background-color: white;
+    background-color: $white;
     border: 1px solid lightgrey;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
@@ -163,7 +149,45 @@
         right: 15px;
     }
 }
+
 .label-hash {
     word-break: break-all;
     white-space: normal;
+}
+
+/* Param depends resolution */
+@media (max-width: 767px) {
+    .form-horizontal .control-label {
+        padding-top: 7px;
+    }
+}
+
+.label-value,
+.label-icon {
+    background-color: $whitegrey;
+    color: $black !important;
+    border-color: $lightgrey;
+}
+
+.label-list ,
+.label-view ,
+.label-log {
+    background-color: $lightgolden;
+    color: $grey !important;
+    border-color: $lightgrey;
+}
+
+.label-cmd {
+    margin: 3px 0px 3px 0px;
+    font-size: 100%;
+    padding: {
+      top: 7px;
+      bottom: 7px;
+    }
+    display: flex;
+}
+
+.li_history {
+    margin: 5px 0px 5px 10px;
+    color: $black;
 }

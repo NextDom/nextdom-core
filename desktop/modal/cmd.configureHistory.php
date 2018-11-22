@@ -75,7 +75,6 @@ function addCommandHistory(_cmd){
   tr += '</td>';
   tr += '<td>';
   if(_cmd.type == 'info' && _cmd.subType == 'numeric'){
-    tr += '<div class="form-group">';
     tr += '<select class="form-control cmdAttr input-sm" data-l1key="configuration" data-l2key="historizeMode">';
     tr += '<option value="avg">{{Moyenne}}</option>';
     tr += '<option value="min">{{Minimum}}</option>';
@@ -99,9 +98,9 @@ function addCommandHistory(_cmd){
   tr += '</td>';
   tr += '<td>';
   if(_cmd.type == 'info'){
-    tr += '<a class="btn btn-default btn-sm pull-right cursor bt_configureHistoryExportData" data-id="'  +_cmd.id+ '"><i class="fas fa-share export"></i></a>';
+    tr += '<a class="btn btn-default btn-xs pull-right cursor bt_configureHistoryExportData" data-id="'  +_cmd.id+ '"><i class="fas fa-share export"></i></a>';
   }
-  tr += '<a class="btn btn-default btn-sm pull-right cursor bt_configureHistoryAdvanceCmdConfiguration" data-id="'  +_cmd.id+ '"><i class="fas fa-cogs"></i></a>';
+  tr += '<a class="btn btn-default btn-xs pull-right cursor bt_configureHistoryAdvanceCmdConfiguration" data-id="'  +_cmd.id+ '"><i class="fas fa-cogs"></i></a>';
   tr += '</td>';
   tr += '</tr>';
   var result = $(tr);

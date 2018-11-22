@@ -33,8 +33,6 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Managers\CmdManager;
-
 class EqLogicManager
 {
     const CLASS_NAME = 'eqLogic';

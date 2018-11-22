@@ -139,7 +139,7 @@ class ModalsController
         if (!is_object($cmd)) {
             throw new CoreException('Commande non trouvé : ' . $cmdId);
         }
-        $cmdInfo = \nextdom::toHumanReadable(\utils::o2a($cmd));
+        $cmdInfo = NextDomHelper::toHumanReadable(\utils::o2a($cmd));
         foreach (array('dashboard', 'mobile', 'dview', 'mview', 'dplan') as $value) {
             if (!isset($cmdInfo['html'][$value]) || $cmdInfo['html'][$value] == '') {
                 $cmdInfo['html'][$value] = $cmd->getWidgetTemplateCode($value);
@@ -163,10 +163,10 @@ class ModalsController
         }
         $pageContent['cmdDirectUrlAccess'] = $cmd->getDirectUrlAccess();
         $pageContent['cmdUsedBy'] = $cmd->getUsedBy();
-        $pageContent['cmdGenericTypes'] = \nextdom::getConfiguration('cmd::generic_type');
+        $pageContent['cmdGenericTypes'] = NextDomHelper::getConfiguration('cmd::generic_type');
 
         $pageContent['cmdGenericTypeInformations'] = array();
-        foreach (\nextdom::getConfiguration('cmd::generic_type') as $key => $info) {
+        foreach (NextDomHelper::getConfiguration('cmd::generic_type') as $key => $info) {
             if ($cmd->getType() == 'info' && $info['type'] == 'Action') {
                 continue;
             } elseif ($cmd->getType() == 'action' && $info['type'] == 'Info') {
@@ -218,7 +218,7 @@ class ModalsController
         }
 
         $pageContent['alertsConfig'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
-        $pageContent['eqLogicDisplayType'] = \nextdom::getConfiguration('eqLogic:displayType');
+        $pageContent['eqLogicDisplayType'] = NextDomHelper::getConfiguration('eqLogic:displayType');
 
         Utils::sendVarsToJS([
             'cmdInfo' => $cmdInfo,
@@ -314,7 +314,7 @@ class ModalsController
         $pageContent['eqLogicConfigurationDisplayType'] = [];
         $pageContent['eqLogicDisplayParameters'] = $eqLogic->getDisplay('parameters');
 
-        foreach (\nextdom::getConfiguration('eqLogic:displayType') as $key => $value) {
+        foreach (NextDomHelper::getConfiguration('eqLogic:displayType') as $key => $value) {
             $eqLogicDisplayType = [];
             $eqLogicDisplayType['key'] = $key;
             $eqLogicDisplayType['name'] = $value['name'];
@@ -494,7 +494,7 @@ class ModalsController
         Status::isConnectedAdminOrFail();
 
         $pageContent = [];
-        $pageContent['benchmark'] = \nextdom::benchmark();
+        $pageContent['benchmark'] = NextDomHelper::benchmark();
 
         $render->show('/modals/nextdom.benchmark.html.twig', $pageContent);
     }

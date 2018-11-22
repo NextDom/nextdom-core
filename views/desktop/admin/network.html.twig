@@ -135,10 +135,12 @@
                     </div>
                     <div class="form-group">
                         <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Masque IP local' }}</label>
-                        <div class="col-lg-5 col-md-5 col-sm-8 col-xs-12">
-                            <input type="text" class="configKey form-control" data-l1key="network::localip"/>
+                        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                            <div class="input-group">
+                                <input type="text" class="configKey form-control" data-l1key="network::localip">
+                                <span class="input-group-addon">{{ '(pour les installations docker-like, sous la forme 192.168.1.*)' }}</span>
+                            </div>
                         </div>
-                        <label class="col-lg-5 col-md-4 col-sm-7 col-sm-offset-5 col-xs-12 label-unity-big">{{ '(pour les installations docker-like, sous la forme 192.168.1.*)' }}</label>
                     </div>
                 </div>
 
