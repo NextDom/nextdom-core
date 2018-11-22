@@ -34,6 +34,8 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\NextDomHelper;
+
 require_once NEXTDOM_ROOT.'/core/class/cache.class.php';
 
 class CacheManager {
@@ -46,7 +48,7 @@ class CacheManager {
      */
     public static function getFolder(): string 
     {
-        $return = \nextdom::getTmpFolder('cache');
+        $return = NextDomHelper::getTmpFolder('cache');
         if (!file_exists($return)) {
             mkdir($return, 0777);
         }

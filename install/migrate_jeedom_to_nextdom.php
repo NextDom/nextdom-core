@@ -171,8 +171,10 @@ try {
     }
     echo "OK\n";
 
-   	if (copy(__DIR__ . '/../core/config/jeedom.config.php', '/tmp/nextdom.config.php')) {
-        echo 'Can not copy ' . __DIR__ . "/../core/config/common.config.php\n";
+    if (file_exists(__DIR__ . '/../core/config/jeedom.config.php')) {
+        if (copy(__DIR__ . '/../core/config/jeedom.config.php', '/tmp/nextdom.config.php')) {
+            echo 'Can not copy ' . __DIR__ . "/../core/config/common.config.php\n";
+        }
     }
     if (!file_exists(__DIR__ . '/../core/config/nextdom.config.php')) {
         echo "Restoring the database configuration file...";
@@ -183,7 +185,7 @@ try {
     echo "Restoration of rights...";
     system('chmod 1777 /tmp -R');
     echo "OK\n";
-    
+
   	echo "Restoration of cache...";
   	if (file_exists('/tmp/nextdombackup/var/cache.tar.gz')) {
         system('cd /tmp/nextdom/cache; tar xfz "/tmp/nextdombackup/var/cache.tar.gz"');
@@ -229,6 +231,8 @@ try {
     echo "Restoration of rights...";
     shell_exec('chmod 775 -R ' . __DIR__ );
     shell_exec('chown -R www-data:www-data ' . __DIR__ );
+    shell_exec('chmod 775 -R /var/log/nextdom');
+    shell_exec('chown -R www-data:www-data /var/log/nextdom');
     shell_exec('chmod 777 -R /tmp/');
     shell_exec('chown www-data:www-data -R /tmp/');
     echo "OK\n";

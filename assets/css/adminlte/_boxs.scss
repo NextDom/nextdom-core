@@ -27,12 +27,22 @@
         radius: 4px;
         left: 1px solid rgba(0,0,0,0.2);
         right: 1px solid rgba(0,0,0,0.2);
-        top: 3px solid $lightgray;
+        top: 1px solid $lightgrey;
     }
     margin-bottom: 20px;
     width: 100%;
-
 }
+
+.box-success, 
+.box-warning, 
+.box-danger, 
+.box-primary {
+    border-top:{
+        style: solid;
+        width: 3px;
+    }
+}
+
 .box.without-border {
     border-top: 0;
 }
@@ -40,6 +50,46 @@
 .box-header>.box-tools {
     top: 3px;
 }
+
 .objet {
     min-height: 0px;
+}
+
+/* Info-box */
+.info-box {
+    min-height: 70px;
+    margin-bottom: 10px;
+}
+
+.info-box-small {
+    min-height: 50px;
+    margin-bottom: 5px;
+}
+
+.info-box-content {
+    padding: 5px 10px;
+    margin-left: 65px;
+}
+.info-box-small-content {
+    margin-left: 50px;
+}
+
+.info-box-text-2 {
+    text-transform:capitalize;
+}
+
+/* Objets */
+#div_Update-view .box .box-header {
+    min-height: 70px;
+}
+
+#listPlugin .box .box-body,
+#listWidget .box .box-body ,
+#listScript .box .box-body,
+#listOther .box .box-body {
+    min-height: 180px;
+}
+
+#listCore .box .box-body {
+    min-height: 10px;
 }
