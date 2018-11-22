@@ -45,9 +45,9 @@ use NextDom\Managers\CacheManager;
 class PagesController
 {
     const routesList = [
-        'dashboard'      => 'dashboard',
-        'scenario'       => 'scenario',
-        'administration' => 'administration',
+        'dashboard'      => '\NextDom\Controller\DashBoardController::dashboard',
+        'scenario'       => '\NextDom\Controller\ScenarioController::scenario',
+        'administration' => '\NextDom\Controller\AdministrationController::administration',
         'backup'         => 'backup',
         'object'         => 'object',
         'message'        => 'message',
@@ -115,111 +115,6 @@ class PagesController
     }
 
     
-
-    /**
-     * Render scenario page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of scenario page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function scenario(Render $render, array &$pageContent): string
-    {
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-
-        $pageContent['scenarios'] = array();
-        // TODO: A supprimé pour éviter la requête inutile
-        $pageContent['scenarioCount'] = count(ScenarioManager::all());
-        $pageContent['scenarios'][-1] = ScenarioManager::all(null);
-        $pageContent['scenarioListGroup'] = ScenarioManager::listGroup();
-
-        if (is_array($pageContent['scenarioListGroup'])) {
-            foreach ($pageContent['scenarioListGroup'] as $group) {
-                $pageContent['scenarios'][$group['group']] = ScenarioManager::all($group['group']);
-            }
-        }
-        $pageContent['scenarioInactiveStyle'] = \nextdom::getConfiguration('eqLogic:style:noactive');
-        $pageContent['scenarioEnabled'] = \config::byKey('enableScenario');
-        $pageContent['scenarioAllObjects'] = JeeObjectManager::all();
-
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/scenario.js';
-        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/jquery.sew/jquery.caretposition.js';
-        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/jquery.sew/jquery.sew.min.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
-
-
-        return $render->get('/desktop/tools/scenario.html.twig', $pageContent);
-    }
-
-    /**
-     * Render administration page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of administration page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function administration(Render $render, array &$pageContent): string
-    {
-
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-
-        $pageContent['IS_ADMIN']  = Status::isConnectAdmin();
-        $pageContent['administrationNbUpdates'] = UpdateManager::nbNeedUpdate();
-        $pageContent['administrationMemLoad'] = 100;
-        $pageContent['administrationSwapLoad'] = 100;
-        $freeData = trim(shell_exec('free'));
-        $freeData = explode("\n", $freeData);
-        if (count($freeData) > 2) {
-            $memData = array_merge(
-                array_filter(
-                    explode(' ', $freeData[1]),
-                    function($value) {
-                        return $value !== '';
-                    }
-                )
-            );
-            $swapData = array_merge(
-                array_filter(
-                    explode(' ', $freeData[2]),
-                    function($value) {
-                        return $value !== '';
-                    }
-                )
-            );
-            if ($memData[1] != 0) {
-                $pageContent['administrationMemLoad'] = round(100 * $memData[2]/$memData[1], 2);
-            }
-            else {
-                $pageContent['administrationMemLoad'] = 0;
-            }
-            if ($swapData[1] != 0) {
-                $pageContent['administrationSwapLoad'] = round(100 * $swapData[2]/$swapData[1], 2);
-            }
-            else {
-                $pageContent['administrationSwapLoad'] = 0;
-            }
-        }
-        $pageContent['administrationCpuLoad'] = round(100 * sys_getloadavg()[0], 2);
-        $pageContent['administrationHddLoad'] = round(100 - 100 * disk_free_space(NEXTDOM_ROOT) / disk_total_space(NEXTDOM_ROOT), 2);
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/administration.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
-
-        return $render->get('/desktop/administration.html.twig', $pageContent);
-    }
 
     /**
      * Render network page

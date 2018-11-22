@@ -23,8 +23,7 @@ use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Helpers\ModalsController;
 use NextDom\Helpers\PagesController;
-use NextDom\Controller\DashBoardController;
-
+ 
 /**
  * Classe de support à l'affichage des contenus HTML
  */
@@ -463,10 +462,10 @@ class PrepareView
             return ob_get_clean();
         } else {
             $controllerRoute = PagesController::getRoute($page);
-            if ($controllerRoute == null) {
+            if ($controllerRoute === null) {
                 // Vérifie que l'utilisateur n'essaie pas de sortir
                 $purgedPage = preg_replace('/[^a-z0-9_-]/i', '', $page);
-                if (file_exists(NEXTDOM_ROOT.'/desktop/'.$purgedPage)) {
+                if (file_exists(NEXTDOM_ROOT . '/desktop/' . $purgedPage)) {
                     ob_start();
                     \include_file('desktop', $page, 'php', '', true);
                     return ob_get_clean();
@@ -475,8 +474,7 @@ class PrepareView
                     Router::showError404AndDie();
                 }
             } else {
-                return  DashBoardController::dashboard($render, $pageContent);
-               // return PagesController::$controllerRoute($render, $pageContent);
+                return  $controllerRoute($render, $pageContent);
             }
         }
     }

@@ -27,6 +27,7 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\EqLogicManager;
+use NextDom\Managers\ScenarioManager;
 
 /**
  * Description of toto
