@@ -24,6 +24,8 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\PagesController;
 use NextDom\Managers\PluginManager;
+use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
 
 class ReportController extends PagesController
 {

@@ -23,6 +23,8 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\PagesController;
+use NextDom\Helpers\Status;
+use NextDom\Helpers\Render;
 
 class CustomController extends PagesController
 {

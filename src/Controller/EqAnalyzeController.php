@@ -28,6 +28,8 @@ use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Helpers\PagesController;
+use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
 
 class EqAnalyzeController extends PagesController
 {

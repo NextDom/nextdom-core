@@ -24,6 +24,8 @@ namespace NextDom\Controller;
  
 use NextDom\Managers\CacheManager;
 use NextDom\Helpers\PagesController;
+use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
 
 class CacheController extends PagesController
 {

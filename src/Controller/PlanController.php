@@ -24,6 +24,7 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Utils;
+use NextDom\Helpers\Render;
 
 class PlanController extends PagesController
 {
