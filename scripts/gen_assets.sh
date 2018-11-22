@@ -166,11 +166,11 @@ fi
 }
 
 function copy_assets {
-    echo " >>> Copie des icones"
+    echo " >>> Copy icons"
 	cp -fr assets/icon public/
-	echo " >>> Copie des themes"
+	echo " >>> Copy themes"
 	cp -fr assets/themes public/
-	echo " >>> Copie des images"
+	echo " >>> Copy images"
 	cp -fr assets/img public/
 	gen_css
 	gen_js
@@ -200,7 +200,7 @@ function start {
 cd ${root}/..
 
 if [ "$#" == 0 ]; then
-    echo "Pour lancer la génération automatique, ajouter l'option --watch"
+    echo "To start automatic generation, add the --watch option"
 	mkdir -p public/css
 	mkdir -p public/js
 	copy_assets;
