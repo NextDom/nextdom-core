@@ -83,6 +83,7 @@
          },
          success: function (data) {
              $('#div_reportForm').show();
+             $('#div_reportBtn').show();
              $('#div_reportForm').setValues(data, '.reportAttr');
              $('#div_imgreport').empty();
              var type = $('#div_reportForm .reportAttr[data-l1key=type]').value();
@@ -118,6 +119,7 @@
          },
          success: function (data) {
              $('#div_reportForm').hide();
+             $('#div_reportBtn').hide();
              $('.li_report[data-report="'+report+'"]').remove();
              $('.li_reportType.active .number').text($('.li_reportType.active .number').text() - 1);
          }
@@ -134,6 +136,7 @@
          },
          success: function (data) {
              $('#div_reportForm').hide();
+             $('#div_reportBtn').hide();
              $('.li_report').remove();
              $('.li_reportType.active .number').text('0');
          }
