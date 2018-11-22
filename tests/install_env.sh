@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 pip3 install selenium
 
@@ -12,3 +12,4 @@ cp -fr chromedriver gui/chromedriver
 chmod +x gui/chromedriver
 rm -fr chromedriver
 rm -fr chromedriver.zip
+

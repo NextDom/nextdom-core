@@ -31,7 +31,6 @@ echo "**********************"
 echo ">>> Scénarios <<<"
 echo ">>>>> Setup"
 ./scripts/start_test_container.sh nextdom-test-scenarios
-docker exec -i nextdom-test-scenarios /bin/ls
 docker exec -i nextdom-test-scenarios /usr/bin/mysql -u root nextdomdev < data/smallest_scenario.sql
 echo ">>>>> Start"
 python3 -W ignore features/scenarios.py
