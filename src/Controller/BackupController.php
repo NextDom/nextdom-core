@@ -25,13 +25,12 @@ namespace NextDom\Controller;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
-use NextDom\Managers\JeeObjectManager;
-use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\UpdateManager;
 
- 
-class ScenarioController extends PagesController
+class BackupController extends PagesController
 {
 
+    
     public function __construct()
     {
         Status::initConnectState();
@@ -39,43 +38,28 @@ class ScenarioController extends PagesController
     }
 
      /**
-     * Render scenario page
+     * Render backup page
      *
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of scenario page
+     * @return string Content of backup page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function scenario(Render $render, array &$pageContent): string
+    public static function backup(Render $render, array &$pageContent): string
     {
 
-        $pageContent['scenarios'] = array();
-        // TODO: A supprimé pour éviter la requête inutile
-        $pageContent['scenarioCount'] = count(ScenarioManager::all());
-        $pageContent['scenarios'][-1] = ScenarioManager::all(null);
-        $pageContent['scenarioListGroup'] = ScenarioManager::listGroup();
-
-        if (is_array($pageContent['scenarioListGroup'])) {
-            foreach ($pageContent['scenarioListGroup'] as $group) {
-                $pageContent['scenarios'][$group['group']] = ScenarioManager::all($group['group']);
-            }
-        }
-        $pageContent['scenarioInactiveStyle'] = \nextdom::getConfiguration('eqLogic:style:noactive');
-        $pageContent['scenarioEnabled'] = \config::byKey('enableScenario');
-        $pageContent['scenarioAllObjects'] = JeeObjectManager::all();
-
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/scenario.js';
-        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/jquery.sew/jquery.caretposition.js';
-        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/jquery.sew/jquery.sew.min.js';
+        $pageContent['JS_VARS_RAW']['REPO_LIST'] = '[]';
+        $pageContent['backupAjaxToken'] = \ajax::getToken();
+        $pageContent['backupReposList'] = UpdateManager::listRepo();
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/backup.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-
-        return $render->get('/desktop/tools/scenario.html.twig', $pageContent);
+        return $render->get('/desktop/tools/backup.html.twig', $pageContent);
     }
 
 }

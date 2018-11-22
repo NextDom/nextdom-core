@@ -25,8 +25,9 @@ namespace NextDom\Controller;
 use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
 use NextDom\Managers\UpdateManager;
+use NextDom\Helpers\Status;
 
-class ScenarioController extends PagesController
+class AdministrationController extends PagesController
 {
 
     
@@ -52,7 +53,6 @@ class ScenarioController extends PagesController
     public static function administration(Render $render, array &$pageContent): string
     {
  
-
         $pageContent['IS_ADMIN']  = Status::isConnectAdmin();
         $pageContent['administrationNbUpdates'] = UpdateManager::nbNeedUpdate();
         $pageContent['administrationMemLoad'] = 100;
@@ -78,14 +78,13 @@ class ScenarioController extends PagesController
             );
             if ($memData[1] != 0) {
                 $pageContent['administrationMemLoad'] = round(100 * $memData[2]/$memData[1], 2);
-            }
-            else {
+            } else {
                 $pageContent['administrationMemLoad'] = 0;
             }
+            
             if ($swapData[1] != 0) {
                 $pageContent['administrationSwapLoad'] = round(100 * $swapData[2]/$swapData[1], 2);
-            }
-            else {
+            } else {
                 $pageContent['administrationSwapLoad'] = 0;
             }
         }
