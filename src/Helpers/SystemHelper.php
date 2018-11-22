@@ -248,4 +248,59 @@ class SystemHelper
     {
         return self::getWWWUid();
     }
+
+    /**
+     * Get proccessor cores count
+     *
+     * @return string
+     */
+    public static function getProcessorCoresCount(): string
+    {
+        $cmd = "uname";
+        $os = strtolower(trim(shell_exec($cmd)));
+        switch($os) {
+            case('linux'):
+                $cmd = "cat /proc/cpuinfo | grep processor | wc -l";
+                break;
+            case('freebsd'):
+                $cmd = "sysctl -a | grep 'hw.ncpu' | cut -d ':' -f2";
+                break;
+            default:
+                unset($cmd);
+        }
+        if ($cmd != '') {
+            $cpuCoreNb = intval(trim(shell_exec($cmd)));
+        }
+        return empty($cpuCoreNb) ? 1 : $cpuCoreNb;
+    }
+
+    /**
+     * Get HTTP connections count
+     *
+     * @return string
+     */
+    public static function getHttpConnectionsCount(): string
+    {
+        return shell_exec('ss -t | grep http | grep ESTAB | wc -l');
+    }
+
+    /**
+     * Get process count
+     *
+     * @return string Count
+     */
+    public static function getProcessCount(): string
+    {
+        return shell_exec('ps -aux | wc -l');
+    }
+
+    /**
+     * Get uptime
+     *
+     * @return string
+     */
+    public static function getUptime(): string
+    {
+        return preg_replace ('/\.[0-9]+/', '', file_get_contents('/proc/uptime'));
+    }
 }
