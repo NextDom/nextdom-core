@@ -19,16 +19,35 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-@import "_animations.scss";
-@import "_buttons.scss";
-@import "_cards.scss";
-@import "_charts.scss";
-@import "_cursors.scss";
-@import "_divers.scss";
-@import "_eqlogic.scss";
-@import "_fonts.scss";
-@import "_icons.scss";
-@import "_intellisense.scss";
-@import "_modals.scss";
-@import "_scenario.scss";
-@import "_text.scss";
+.-sew-list-container, .ui-widget-content {
+    background: #fdfdf2;
+    border-radius: 3px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    width: auto;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 20px;
+    z-index: 9999;
+}
+
+.-sew-list {
+    list-style: none;
+    marging: 0;
+    padding: 0;
+    max-height: none;
+}
+
+.-sew-list-item.selected {
+    text-decoration: none;
+}
+
+.ui-menu-item {
+    border-bottom: 1px solid #DDD;
+}
+.ui-menu-item-wrapper, .ui-menu-item-wrapper:hover {
+    padding: 5px 10px;
+    border: none;
+}
+.ui-autocomplete {
+    cursor: pointer;
+}

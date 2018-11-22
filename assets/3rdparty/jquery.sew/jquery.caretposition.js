@@ -1,6 +1,6 @@
 /**
  * jQuery plugin for getting position of cursor in textarea
- 
+
  * @license under GNU license
  * @author Bevis Zhao (i@bevis.me, http://bevis.me)
  */
@@ -79,6 +79,38 @@ $(function() {
     };
 
     $.fn.extend({
+        setCursorPosition : function(position){
+          if(this.length == 0) return this;
+          return $(this).setSelection(position, position);
+        },
+        setSelection: function(selectionStart, selectionEnd) {
+          if(this.length == 0) return this;
+          input = this[0];
+
+          if (input.createTextRange) {
+              var range = input.createTextRange();
+              range.collapse(true);
+              range.moveEnd('character', selectionEnd);
+              range.moveStart('character', selectionStart);
+              range.select();
+          } else if (input.setSelectionRange) {
+              input.focus();
+              input.setSelectionRange(selectionStart, selectionEnd);
+          } else {
+            var el = this.get(0);
+
+            var range = document.createRange();
+            range.collapse(true);
+            range.setStart(el.childNodes[0], selectionStart);
+            range.setEnd(el.childNodes[0], selectionEnd);
+
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+          }
+
+          return this;
+        },
         getComputedStyle: function(styleName) {
             if (this.length == 0)
                 return;
