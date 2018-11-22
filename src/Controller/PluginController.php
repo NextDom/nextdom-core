@@ -68,4 +68,22 @@ class PluginController extends PagesController
         return $render->get('/desktop/plugin.html.twig', $pageContent);
     }
 
+    /**
+     * Render for all plugins pages
+     *
+     * @param Render $render Render engine (unused)
+     * @param array $pageContent Page data (unused)
+     * @return string Plugin page
+     * @throws \Exception
+     */
+    public static function pluginRoute(Render $render, array &$pageContent): string
+    {
+        $plugin = PluginManager::byId(Utils::init('m'));
+        $page = Utils::init('p');
+
+        ob_start();
+        \include_file('desktop', $page, 'php', $plugin->getId(), true);
+        return ob_get_clean();
+    }
+    
 }
