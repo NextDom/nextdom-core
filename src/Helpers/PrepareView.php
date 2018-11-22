@@ -332,7 +332,6 @@ class PrepareView
             $pageData['JS_POOL'][] = 'vendor/node_modules/jquery-ui-dist/jquery-ui.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
-            $pageData['JS_POOL'][] = '/public/js/adminlte/adminlte_nextdom.js';
             $pageData['JS_POOL'][] = '/public/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
