@@ -33,12 +33,8 @@
 
 namespace NextDom\Helpers;
 
-use NextDom\Managers\CmdManager;
-use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
-use NextDom\Managers\UpdateManager;
-use NextDom\Managers\CacheManager;
+
 
 class PagesController
 {
