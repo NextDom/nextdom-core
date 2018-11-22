@@ -67,7 +67,7 @@ class UpdateController extends PagesController
         return $render->get('/desktop/tools/update-view.html.twig', $pageContent);
     }
 
-    /** Render update_admin page
+    /** Render updateAdmin page
      *
      * @param Render $render Render engine
      * @param array $pageContent Page data
@@ -79,14 +79,11 @@ class UpdateController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function update_admin(Render $render, array &$pageContent): string
+    public static function updateAdmin(Render $render, array &$pageContent): string
     {
 
         global $CONFIG;
         global $NEXTDOM_INTERNAL_CONFIG;
-
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
 
         $pageContent['adminReposList'] = UpdateManager::listRepo();
         $keys = array('market::allowDNS', 'ldap::enable');
