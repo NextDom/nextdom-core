@@ -83,7 +83,7 @@ class PagesController
         'security'       => '\NextDom\Controller\SecurityController::security',
         'summary'        => '\NextDom\Controller\SummaryController::summary',
         'update_admin'   => '\NextDom\Controller\UpdateController::updateAdmin',
-        'users'          => '\NextDom\Controller\UserController::users',
+        'users'          => '\NextDom\Controller\UsersController::users',
         'note'           => '\NextDom\Controller\NoteController::note',
         'pluginRoute'    => '\NextDom\Controller\PluginController::pluginRoute'
 
