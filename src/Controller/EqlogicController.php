@@ -21,45 +21,30 @@
  */
 
 namespace NextDom\Controller;
-
+ 
 use NextDom\Helpers\PagesController;
-use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
-use NextDom\Helpers\Utils;
 
-class RealtimeController extends PagesController
+class EqlogicController extends PagesController
 {
-    
     public function __construct()
     {
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
     }
-
+    
     /**
-     * Render realtime page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of log_admin page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * 
+     * @param \NextDom\Controller\Render $render
+     * @param array $pageContent
+     * @return string
      */
-    public static function realtime(Render $render, array &$pageContent): string
+    public static function eqlogic(Render $render, array &$pageContent): string
     {
 
-
-        $pageContent['JS_VARS']['realtime_name'] = Utils::init('log', 'event');
-        $pageContent['JS_VARS']['log_default_search'] = Utils::init('search', '');
-
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/diagnostic/realtime.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/eqlogic.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/diagnostic/realtime.html.twig', $pageContent);
+        return $render->get('/desktop/params/eqlogic.html.twig', $pageContent);
     }
-
+    
 }
