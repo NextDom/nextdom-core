@@ -189,7 +189,7 @@
                         {% for alert in eqAnalyzeAlerts %}
                             <tr>
                                 <td>
-                                    <a href="{{ alert['eqLogic'].getLinkToConfiguration() }}" style="text-decoration: none;">{{ alert['eqLogic'].getHumanName(true) }}</a></td>
+                                    <a href="{{ alert['eqLogic'].getLinkToConfiguration() }}" style="text-decoration: none;">{{ alert['eqLogic'].getHumanName(true)|raw }}</a></td>
                                 <td>
                                     {{ alert['msg'] }}
                                 </td>

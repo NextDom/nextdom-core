@@ -675,12 +675,13 @@ $('#div_pageContainer').off('click','.bt_selectDataStoreTrigger').on( 'click','.
 $('#div_pageContainer').off('mouseenter','.bt_sortable').on('mouseenter','.bt_sortable',  function () {
   var expressions = $(this).closest('.expressions');
   $("#div_scenarioElement").sortable({
-    cursor: "move",
     items: ".sortable",
-    opacity: 0.5,
+    opacity: 0.7,
     forcePlaceholderSize: true,
     forceHelperSize: true,
     placeholder: "sortable-placeholder",
+    tolerance: "intersect",
+    grid: [ 30, 15 ],
     update: function (event, ui) {
       if (ui.item.findAtDepth('.element', 2).length == 1 && ui.item.parent().attr('id') == 'div_scenarioElement') {
         ui.item.replaceWith(ui.item.findAtDepth('.element', 2));
@@ -1027,7 +1028,7 @@ function addExpression(_expression) {
 
     case 'action' :
     retour += '<div class="col-xs-1 scenario-action">';
-    retour += '<i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right: 5px;"></i>';
+    retour += '<i class="fas fa-sort bt_sortable"></i>';
     if (!isset(_expression.options) || !isset(_expression.options.enable) || _expression.options.enable == 1) {
       retour += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'action}}"/>';
     } else {
@@ -1106,7 +1107,7 @@ function addSubElement(_subElement, _pColor) {
     case 'if' :
     retour += '  <input class="subElementAttr" data-l1key="subtype" style="display : none;" value="condition"/>';
     retour += '  <div class="scenario-si">';
-    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px;"></i>';
+    retour += '     <i class="fas fa-sort bt_sortable"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="Décocher pour désactiver l\'élément"/>';
     }else{
@@ -1137,7 +1138,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '       <i class="fas fa-chevron-right"></i>';
     retour += '     </button>';
     retour += '     <span class="scenario-title">{{ALORS}}</span>';
-    retour += '     <div class="dropdown" style="display : inline-block;">';
+    retour += '     <div class="dropdown cursor" style="display : inline-block;">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
     retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
     retour += '       </button>';
@@ -1161,7 +1162,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '<input class="subElementAttr subElementElse" data-l1key="subtype" style="display : none;" value="action"/>';
     retour += '  <div class="scenario-sinon">';
     retour += '     <span class="scenario-title">{{SINON}}</span>';
-    retour += '     <div class="dropdown">';
+    retour += '     <div class="dropdown cursor">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
     retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
     retour += '       </button>';
@@ -1184,7 +1185,7 @@ function addSubElement(_subElement, _pColor) {
     case 'for' :
     retour += '  <input class="subElementAttr" data-l1key="subtype" style="display : none;" value="condition"/>';
     retour += '  <div class="scenario-for">';
-    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px"></i>';
+    retour += '     <i class="fas fa-sort bt_sortable"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}"/>';
     }else{
@@ -1205,7 +1206,7 @@ function addSubElement(_subElement, _pColor) {
     case 'in' :
     retour += '  <input class="subElementAttr" data-l1key="subtype" style="display : none;" value="condition"/>';
     retour += '  <div class="scenario-in">';
-    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px"></i>';
+    retour += '     <i class="fas fa-sort bt_sortable"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}" style="margin-right : 0px;"/>';
     }else{
@@ -1227,7 +1228,7 @@ function addSubElement(_subElement, _pColor) {
     case 'at' :
     retour += '  <input class="subElementAttr" data-l1key="subtype" style="display : none;" value="condition"/>';
     retour += '  <div class="scenario-at">';
-    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px"></i>';
+    retour += '     <i class="fas fa-sort bt_sortable"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}"/>';
     }else{
@@ -1250,7 +1251,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="action"/>';
     retour += '  <div class="scenario-faire">';
     retour += '     <span class="scenario-title">{{FAIRE}}</span>';
-    retour += '     <div class="dropdown">';
+    retour += '     <div class="dropdown cursor">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
     retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
     retour += '       </button>';
@@ -1273,7 +1274,7 @@ function addSubElement(_subElement, _pColor) {
     case 'code' :
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="action"/>';
     retour += '  <div class="scenario-code">';
-    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px"></i>';
+    retour += '     <i class="fas fa-sort bt_sortable"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}"/>';
     }else{
@@ -1295,7 +1296,7 @@ function addSubElement(_subElement, _pColor) {
     case 'comment' :
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="comment"/>';
     retour += '  <div class="scenario-comment">';
-    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px"></i>';
+    retour += '     <i class="fas fa-sort bt_sortable"></i>';
     retour += '  </div>';
     retour += '  <div class="expressions scenario-condition" style="background-color: ' + listColor[_pColor] + ';">';
     retour += '     <div class="sortable empty" style="height : 30px;"></div>';
@@ -1311,14 +1312,14 @@ function addSubElement(_subElement, _pColor) {
     case 'action' :
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="action"/>';
     retour += '  <div class="scenario-action-bloc">';
-    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right: 5px;"></i>';
+    retour += '     <i class="fas fa-sort bt_sortable"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}" style="margin-right : 0px;"/>';
     }else{
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" title="{{Décocher pour désactiver l\'élément}}" style="margin-right : 0px;"/>';
     }
     retour += '     <span class="scenario-title">{{ACTION}}</span>';
-    retour += '     <div class="dropdown">';
+    retour += '     <div class="dropdown cursor">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
     retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
     retour += '       </button>';

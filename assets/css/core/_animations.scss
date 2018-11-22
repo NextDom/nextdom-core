@@ -53,10 +53,10 @@
     animation:     zoomIn 1s;
 }
 .animationZoomOut {
-    -webkit-animation: zoomOut 1s;
-    -moz-animation:    zoomOut 1s;
-    -o-animation:      zoomOut 1s;
-    animation:    zoomOut 1s;
+    -webkit-animation: zoomOut 1s forwards;
+    -moz-animation:    zoomOut 1s forwards;
+    -o-animation:      zoomOut 1s forwards;
+    animation:    zoomOut 1s forwards;
 }
 .animationOpacity {
     -webkit-animation: opacit 1s;

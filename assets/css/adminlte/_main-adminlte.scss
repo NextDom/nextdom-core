@@ -19,19 +19,27 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-
-/* User panel */
-.user-panel {
-    padding-left: 7px;
-    & > .info {
-        padding: 10px 5px 5px 15px;
-        line-height: 0.9;
-        position: absolute;
-        left: 55px;
-    }
-    & > .image > a > img {
-        width: 100%;
-        max-width: 50px;
-        height: auto;
-    }
-}
+@import "_base.scss";
+@import "_alerts.scss";
+@import "_boxs.scss";
+@import "_cards.scss";
+@import "_checkbox.scss";
+@import "_carrousel.scss";
+@import "_base.scss";
+@import "_fab.scss";
+@import "_footer.scss";
+@import "_forms.scss";
+@import "_headerClock.scss";
+@import "_labels.scss";
+@import "_loginAndRegister.scss";
+@import "_logos.scss";
+@import "_menus.scss";
+@import "_notify.scss";
+@import "_navs.scss";
+@import "_panel.scss";
+@import "_progressBars.scss";
+@import "_scrollbar.scss";
+@import "_sidebar.scss";
+@import "_tables.scss";
+@import "_tooltip.scss";
+@import "_treeView.scss";

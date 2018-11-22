@@ -33,6 +33,8 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\NextDomHelper;
+
 /**
  * Class EventManager
  *
@@ -248,8 +250,8 @@ class EventManager
     private static function getEventLockFile()
     {
         if (self::$eventLockFile === null) {
-            self::$eventLockFile = fopen(\nextdom::getTmpFolder() . '/event_cache_lock', 'w');
-            chmod(\nextdom::getTmpFolder() . '/event_cache_lock', 0666);
+            self::$eventLockFile = fopen(NextDomHelper::getTmpFolder() . '/event_cache_lock', 'w');
+            chmod(NextDomHelper::getTmpFolder() . '/event_cache_lock', 0666);
         }
         return self::$eventLockFile;
     }

@@ -162,6 +162,15 @@
 
  function printUsers() {
     $.showLoading();
+    var currentUser ="";
+    nextdom.user.get({
+        error: function (error) {
+            notify("Erreur", error.message, 'error');
+        },
+        success: function (data) {
+            currentUser=data.login;
+        }
+    });
     nextdom.user.all({
         error: function (error) {
             notify("Erreur", error.message, 'error');
@@ -179,7 +188,7 @@
                 ligne += '<span class="userAttr" data-l1key="login" />';
                 ligne += '</td>';
                 ligne += '<td>';
-                ligne += '<label><input type="checkbox" class="userAttr" data-l1key="enable" '+disable+' />{{Actif}}</label>';
+                ligne += '<label><input type="checkbox" class="userAttr" data-l1key="enable" '+disable+' />{{Actif}}&nbsp;&nbsp;</label>';
                 ligne += '<label><input type="checkbox" class="userAttr" data-l1key="options" data-l2key="localOnly" '+disable+' />{{Local}}</label>';
                 ligne += '</td>';
                 ligne += '<td style="width:175px;">';
@@ -195,7 +204,12 @@
                 ligne += '<td>';
                 if(isset(data[i].options) && isset(data[i].options.twoFactorAuthentification) && data[i].options.twoFactorAuthentification == 1 && isset(data[i].options.twoFactorAuthentificationSecret) && data[i].options.twoFactorAuthentificationSecret != ''){
                     ligne += '<span class="label label-success label-sticker-big">{{OK}}</span>';
-                    ligne += ' <a class="btn btn-danger bt_disableTwoFactorAuthentification"><i class="fas fa-ban">&nbsp;&nbsp;</i>{{Désactiver}}</span>';
+                    ligne += ' <a class="btn btn-sm btn-danger bt_disableTwoFactorAuthentification pull-right btn-action-bar"><i class="fas fa-ban">&nbsp;&nbsp;</i>{{Désactiver}}</span>';
+                    if (isset(data[i].login) && data[i].login == currentUser){
+                        ligne += ' <a class="btn btn-sm btn-warning pull-right btn-action-bar" href="index.php?v=d&p=profils#securitytab"><i class="fas fa-cog">&nbsp;&nbsp;</i>{{Configurer}}</span>';
+                    }else{
+                        ligne += ' <a class="btn btn-sm btn-warning pull-right btn-action-bar" href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock">&nbsp;&nbsp;</i>{{Se déconnecter}}</span>';
+                    }
                 }else{
                    ligne += '<span class="label label-danger label-sticker-big">{{NOK}}</span>';
                }
@@ -205,12 +219,12 @@
                ligne += '</td>';
                ligne += '<td>';
                if(disable == ''){
-                   ligne += '<a class="cursor bt_changeHash btn btn-sm btn-warning pull-right" title="{{Renouveler la clef API}}"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{Regénération API}}</a>';
+                   ligne += '<a class="cursor bt_changeHash btn btn-sm btn-warning pull-right btn-action-bar" title="{{Renouveler la clef API}}"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{Regénération API}}</a>';
                    if (ldapEnable != '1') {
-                    ligne += '<a class="btn btn-sm btn-danger pull-right bt_del_user" style="margin-bottom : 5px;"><i class="fas fa-trash-alt">&nbsp;&nbsp;</i>{{Supprimer}}</a>';
-                    ligne += '<a class="btn btn-sm btn-warning pull-right bt_change_mdp_user"><i class="fas fa-lock">&nbsp;&nbsp;</i>{{Mot de passe}}</a>';
+                    ligne += '<a class="btn btn-sm btn-danger pull-right bt_del_user btn-action-bar" style="margin-bottom : 5px;"><i class="fas fa-trash-alt">&nbsp;&nbsp;</i>{{Supprimer}}</a>';
+                    ligne += '<a class="btn btn-sm btn-warning pull-right bt_change_mdp_user btn-action-bar"><i class="fas fa-lock">&nbsp;&nbsp;</i>{{Mot de passe}}</a>';
                 }
-                ligne += '<a class="btn btn-sm btn-warning pull-right bt_manage_restrict_rights"><i class="fas fa-align-right">&nbsp;&nbsp;</i>{{Droits}}</a>';
+                ligne += '<a class="btn btn-sm btn-warning pull-right bt_manage_restrict_rights btn-action-bar"><i class="fas fa-align-right">&nbsp;&nbsp;</i>{{Droits}}</a>';
             }
             ligne += '</td>';
             ligne += '</tr>';

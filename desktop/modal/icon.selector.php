@@ -4,28 +4,6 @@ if (!isConnect()) {
 }
 ?>
 
-<style>
-    .divIconSel{
-        height: 80px;
-        border: 1px solid #fff;
-        box-sizing: border-box;
-        cursor: pointer;
-    }
-
-    .iconSel{
-        line-height: 1.4;
-        font-size: 1.5em;
-    }
-
-    .iconSelected{
-        background-color: #563d7c;
-        color: white;
-    }
-
-    .iconDesc{
-        font-size: 0.8em;
-    }
-</style>
 <input class="form-control pull-right" placeholder="{{Rechercher}}" id="in_iconSelectorSearch" />
 <?php
 foreach (ls('public/icon', '*') as $dir) {
