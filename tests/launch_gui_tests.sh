@@ -51,7 +51,6 @@ python3 -W ignore gui/migration_page.py "$URL" "$LOGIN" "$PASSWORD"
 echo ">>>>> Clear"
 ./scripts/remove_test_container.sh nextdom-test-migration
 
-if false; then
 # Start container for all others tests
 echo ">>> Others GUI tests <<<"
 echo ">>>>> Setup"
@@ -65,4 +64,3 @@ echo ">>> Rescue mode <<<"
 python3 -W ignore gui/rescue_page.py "$URL" "$LOGIN" "$PASSWORD"
 echo ">>>>> Clear"
 ./scripts/remove_test_container.sh nextdom-test-others
-fi
