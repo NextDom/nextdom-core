@@ -156,7 +156,7 @@ class Router
                 $pageContent['JS_END_POOL'] = [];
                 $pageContent['CSS_POOL'] = [];
                 $pageContent['JS_VARS'] = [];
-                $pageContent['content'] = PagesController::$controllerRoute($render, $pageContent);
+                $pageContent['content'] = $controllerRoute($render, $pageContent);
                 $render->show('/layouts/ajax_content.html.twig', $pageContent);
             }
         } catch (\Exception $e) {
