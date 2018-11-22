@@ -46,7 +46,6 @@ class PagesController
         'object'         => '\NextDom\Controller\ObjectController::object',
         'message'        => '\NextDom\Controller\MessageController::message',
         'cron'           => '\NextDom\Controller\CronController::cron',
-        'user'           => 'user',
         'update'         => '\NextDom\Controller\UpdateController::update',
         'system'         => '\NextDom\Controller\SystemController::system',
         'database'       => '\NextDom\Controller\DatabaseController::database',
@@ -85,7 +84,6 @@ class PagesController
         'summary'        => '\NextDom\Controller\SummaryController::summary',
         'update_admin'   => '\NextDom\Controller\UpdateController::updateAdmin',
         'users'          => '\NextDom\Controller\UserController::users',
-        'tools'          => 'tools',
         'note'           => '\NextDom\Controller\NoteController::note',
         'pluginRoute'    => '\NextDom\Controller\PluginController::pluginRoute'
 
