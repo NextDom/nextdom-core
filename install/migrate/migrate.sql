@@ -39,3 +39,4 @@ ALTER TABLE view ADD `configuration` TEXT NULL;
 ALTER TABLE eqLogic ADD tags VARCHAR(255) NULL;
 CREATE INDEX `tags` ON eqLogic (`tags` ASC);
 UPDATE `update` SET source = 'github', configuration = '{"user":"NextDom","repository":"nextdom-core","version":"master"}' WHERE type = 'core';
+DELETE FROM `update` WHERE name = 'AlternativeMarketForJeedom';

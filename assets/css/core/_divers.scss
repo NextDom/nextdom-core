@@ -34,35 +34,59 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-#div_alert {
-    display: none;
-    margin:10px auto;
-    width: 95%;
+#md_pageHelp {
+  display: none;
 }
 
-.alert{
-    width: 95%;
-    margin: 10px auto;
-    border-left: 5px solid $lightyellow;
+.binary{
+  margin-left: 5px;
+  position: relative;
+  top: 2px;
+  width : 15px;
+  height : 15px;
+  border-radius: 5px 5px 5px 5px;
+  display: inline-block;
 }
 
-.alert-danger {
-    border-left: 5px solid #DFAAA9;
-    box-shadow: 0 0 0 0 rgba(235, 204, 209, 0.7) !important;
-    -webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
-    -moz-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
-    -ms-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
-    animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
+#jqueryLoadingDiv .overlay {
+  background-image: url(/assets/3rdparty/jquery.utils/gritter.png);
 }
 
-.alert-danger {
-    border-left: 5px solid $lightred;
+.callout {
+  border-radius: 3px;
+  margin: 0 0 20px 5px;
 }
 
-.alert-info {
-    border-left: 5px solid $lightblue;
+.pull-right{
+  float: right;
+  margin-left: 5px;
 }
 
-.alert-success {
-    border-left: 5px solid $lightgreen;
+.pull-left{
+  float: left;
+  margin-right: 5px;
+}
+
+.form-actions{
+  margin-top: 5px;
+}
+
+.view-link-widget,.plan-link-widget{
+  padding: 3px;
+  margin: 3px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.viewZone {
+  padding: 9.5px;
+  margin: 0 0px 5px;
+  font-size: 13px;
+  line-height: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
 }

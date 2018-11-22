@@ -39,11 +39,11 @@ if (!headers_sent()) {
 }
 @session_write_close();
 if (user::isBan()) {
-    header("Statut: 404 Page non trouvée");
-    header('HTTP/1.0 404 Not Found');
-    $_SERVER['REDIRECT_STATUS'] = 404;
-    echo "<h1>404 Non trouvé</h1>";
-    echo "La page que vous demandez ne peut être trouvée.";
+    header("Statut: 403 Forbidden");
+    header('HTTP/1.1 403 Forbidden');
+    $_SERVER['REDIRECT_STATUS'] = 403;
+    echo '<p>' . __('403 Access Forbidden', __FILE__) . '</p>';
+    echo '<p>' .__('Votre accès a été verrouillé pour votre sécurité ', __FILE__). '</p>';
     die();
 }
 

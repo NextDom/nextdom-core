@@ -17,18 +17,17 @@
 
 namespace NextDom\Helpers;
 
-use NextDom\Helpers\Status;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Helpers\ModalsController;
-use NextDom\Helpers\PagesController;
 
 /**
  * Classe de support à l'affichage des contenus HTML
  */
 class PrepareView
 {
+    private static $NB_THEME_COLORS = 9;
+
     public static function showFirstUsePage($configs)
     {
         $pageData = [];
@@ -39,7 +38,6 @@ class PrepareView
         $render = Render::getInstance();
         self::initHeaderData($pageData, $configs);
         //TODO: Vérifier ça
-        $logo = \config::byKey('product_connection_image');
         $pageData['CSS_POOL'][]    = '/public/css/nextdom.css';
         $pageData['CSS_POOL'][] = '/public/css/firstUse.css';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/firstUse.js';
@@ -56,9 +54,6 @@ class PrepareView
         $pageData['TITLE']       = 'Connexion';
         $render                  = Render::getInstance();
         self::initHeaderData($pageData, $configs);
-        //TODO: Vérifier ça
-        $logo = \config::byKey('product_connection_image');
-        $pageData['CSS_POOL'][]    = '/public/css/nextdom.css';
         $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/connection.js';
 
@@ -102,7 +97,7 @@ class PrepareView
 
         $pageData['MENU'] = $render->get('commons/menu_rescue.html.twig');
 
-        if (!\nextdom::isStarted()) {
+        if (!NextDomHelper::isStarted()) {
             $pageData['alertMsg'] = 'NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.';
         }
         $pageData['CONTENT'] = self::getContent($render, $pageData, $page, null);
@@ -141,7 +136,9 @@ class PrepareView
             'user_isAdmin'       => Status::isConnectAdmin(),
             'user_login'         => $_SESSION['user']->getLogin(),
             'nextdom_Welcome'   => $configs['nextdom::Welcome'],
-            'nextdom_Notify'   => $configs['nextdom::Notify'],
+            'notify_status'   => $configs['notify::status'],
+            'notify_position'   => $configs['notify::position'],
+            'notify_timeout'   => $configs['notify::timeout'],
             'widget_width_step'  => $configs['widget::step::width'],
             'widget_height_step' => $configs['widget::step::height'],
             'widget_margin'      => $configs['widget::margin'],
@@ -157,7 +154,7 @@ class PrepareView
         $baseView = '/layouts/base_dashboard.html.twig';
 
         try {
-            if (!\nextdom::isStarted()) {
+            if (!NextDomHelper::isStarted()) {
                 $pageData['ALERT_MSG'] = 'NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.';
             }
             $pageData['content'] = self::getContent($render, $pageData, $page, $currentPlugin);
@@ -274,7 +271,7 @@ class PrepareView
     private static function initMenu(&$pageData, $currentPlugin)
     {
         $pageData['IS_ADMIN']                 = Status::isConnectAdmin();
-        $pageData['CAN_SUDO']                 = \nextdom::isCapable('sudo');
+        $pageData['CAN_SUDO']                 = NextDomHelper::isCapable('sudo');
         $pageData['MENU_NB_MESSAGES']         = \message::nbMessage();
         if ($pageData['IS_ADMIN']) {
             $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
@@ -291,7 +288,7 @@ class PrepareView
         $pageData['USER_ISCONNECTED']         = $_SESSION['user']->is_Connected();
         $pageData['USER_AVATAR']              = $_SESSION['user']->getOptions('avatar');
         $pageData['USER_LOGIN']               = $_SESSION['user']->getLogin();
-        $pageData['NEXTDOM_VERSION']          = \nextdom::version();
+        $pageData['NEXTDOM_VERSION']          = NextDomHelper::getVersion();
         $pageData['MENU_PLUGIN_HELP']         = Utils::init('m');
         $pageData['MENU_PLUGIN_PAGE']         = Utils::init('p');
     }
@@ -309,16 +306,9 @@ class PrepareView
         $pageData['PRODUCT_CONNECTION_ICON'] = $configs['product_connection_image'];
         $pageData['AJAX_TOKEN'] = \ajax::getToken();
         $pageData['LANGUAGE'] = $configs['language'];
-        $pageData['NEXTDOM_NOTIFY'] = $configs['nextdom::Notify'];
-        $pageData['COLOR1'] = \nextdom::getConfiguration('theme:color1');
-        $pageData['COLOR2'] = \nextdom::getConfiguration('theme:color2');
-        $pageData['COLOR3'] = \nextdom::getConfiguration('theme:color3');
-        $pageData['COLOR4'] = \nextdom::getConfiguration('theme:color4');
-        $pageData['COLOR5'] = \nextdom::getConfiguration('theme:color5');
-        $pageData['COLOR6'] = \nextdom::getConfiguration('theme:color6');
-        $pageData['COLOR7'] = \nextdom::getConfiguration('theme:color7');
-        $pageData['COLOR8'] = \nextdom::getConfiguration('theme:color8');
-        $pageData['COLOR9'] = \nextdom::getConfiguration('theme:color9');
+        for ($colorIndex = 1; $colorIndex <= self::$NB_THEME_COLORS; ++$colorIndex) {
+            $pageData['COLOR'.$colorIndex] = \nextdom::getConfiguration('theme:color'.$colorIndex);
+        }
 
         self::initJsPool($pageData);
         self::initCssPool($pageData, $configs);
@@ -338,12 +328,12 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
-            $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
-            $pageData['JS_END_POOL'][] = '/public/js/adminlte/adminlte_nextdom.js';
         } else {
-            $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
             $pageData['JS_POOL'][] = 'vendor/node_modules/jquery-ui-dist/jquery-ui.min.js';
-            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
+            $pageData['JS_POOL'][] = '/public/js/adminlte/adminlte_nextdom.js';
+            $pageData['JS_POOL'][] = '/public/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
             $pageData['JS_POOL'][] = '/core/js/core.js';
@@ -398,14 +388,14 @@ class PrepareView
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.sew/jquery.sew.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-cron/dist/jquery-cron.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-contextMenu/dist/jquery.contextMenu.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
-            $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
-            $pageData['JS_END_POOL'][] = '/public/js/adminlte/adminlte_nextdom.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/snapsvg/dist/snap.svg-min.js';
         }
     }
 
@@ -441,8 +431,7 @@ class PrepareView
                     $pageData['JS_POOL'][] = '/desktop/custom/custom.js';
                 }
             }
-        }
-        else {
+        } else {
             $pageData['CSS_POOL'][] = '/public/css/rescue.css';
         }
     }
@@ -462,15 +451,14 @@ class PrepareView
             return ob_get_clean();
         } else {
             $controllerRoute = PagesController::getRoute($page);
-            if ($controllerRoute == null) {
+            if ($controllerRoute === null) {
                 // Vérifie que l'utilisateur n'essaie pas de sortir
                 $purgedPage = preg_replace('/[^a-z0-9_-]/i', '', $page);
                 if (file_exists(NEXTDOM_ROOT.'/desktop/'.$purgedPage)) {
                     ob_start();
                     \include_file('desktop', $page, 'php', '', true);
                     return ob_get_clean();
-                }
-                else {
+                } else {
                     Router::showError404AndDie();
                 }
             } else {
@@ -481,15 +469,11 @@ class PrepareView
 
     public static function showModal()
     {
-        error_log('MODAL');
-        $error = false;
         \include_file('core', 'authentification', 'php');
         $plugin = Utils::init('plugin', '');
         $modalCode = Utils::init('modal', '');
-        error_log('Modal code : '.$modalCode);
         // Affichage d'un modal appartenant à un plugin
         if ($plugin != '') {
-            error_log('PLUGIN MODAL');
             try {
                 \include_file('desktop', $modalCode, 'modal', $plugin, true);
             } catch (\Exception $e) {
@@ -500,10 +484,8 @@ class PrepareView
         }
         // Affichage d'un modal du core
         else {
-            error_log('CORE MODAL');
             $modalRoute = ModalsController::getRoute($modalCode);
-            if ($modalRoute == null) {
-                error_log('OLD MODAL');
+            if ($modalRoute === null) {
                 try {
                     \include_file('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
                 } catch (\Exception $e) {
@@ -511,9 +493,7 @@ class PrepareView
                     echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
                     echo '</div>';
                 }
-            }
-            else {
-                error_log('NEW MODAL');
+            } else {
                 $render = Render::getInstance();
                 ModalsController::$modalRoute($render);
             }

@@ -21,6 +21,7 @@
 
 .treeview-menu {
     padding: 5px 0;
+    overflow-y: auto;
     & > li {
         padding-top: 1px;
         padding-bottom: 1px;
@@ -31,6 +32,8 @@
             & >.icon {
                 vertical-align: middle;
                 padding-right: 5px;
+                display: inline-block;
+                width: 20px;
             }
         }
     }
@@ -41,7 +44,4 @@
         width: 20px;
         display: inline-block;
     }
-}
-.treeview-menu .treeview-menu {
-    padding-left: 7px;
 }

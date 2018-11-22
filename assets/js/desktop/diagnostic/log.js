@@ -46,7 +46,7 @@
   $(".li_log").removeClass('active');
   $(this).addClass('active');
   $('#bt_globalLogStopStart').removeClass('btn-success').addClass('btn-warning');
-  $('#bt_globalLogStopStart').html('<i class="fas fa-pause"></i>');
+  $('#bt_globalLogStopStart').html('<div><i class="fas fa-pause">&nbsp;&nbsp;</i>{{Pause}}</div>');
   $('#bt_globalLogStopStart').attr('data-state',1);
   nextdom.log.autoupdate({
     log : $(this).attr('data-log'),

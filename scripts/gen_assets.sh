@@ -43,8 +43,10 @@ function gen_css {
 function gen_js {
 	echo " >>> Generation du JS"
     cat assets/3rdparty/jquery.utils/jquery.utils.js \
-        vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
         vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
+        vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
+        vendor/node_modules/admin-lte/dist/js/adminlte.min.js \
+        assets/js/adminlte/adminlte_nextdom.js \
         vendor/node_modules/izitoast/dist/js/iziToast.min.js \
         assets/js/desktop/utils.js \
         core/js/core.js \
@@ -102,7 +104,10 @@ function gen_js {
         vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js \
         vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
         vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
-        vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.js  > /tmp/temp.js
+        vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js \
+        vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js \
+        vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js \
+        vendor/node_modules/snapsvg/dist/snap.svg-min.js > /tmp/temp.js
 
 if [ $# -eq 0 ]; then
     python -m jsmin /tmp/temp.js > public/js/base.js

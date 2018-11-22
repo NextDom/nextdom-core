@@ -35,8 +35,11 @@
 */
 
 setTimeout(function(){
-    $('.listPlugin').packery();
+    $('#listPlugin').packery();
     $('#listOther').packery();
+    $('#listCore').packery();
+    $('#listWidget').packery();
+    $('#listScript').packery();
 },100);
 
 
@@ -48,6 +51,9 @@ $('#in_searchPlugin').off('keyup').keyup(function () {
         $('.box-danger').show();
         $('#listPlugin').packery();
         $('#listOther').packery();
+        $('#listCore').packery();
+        $('#listWidget').packery();
+        $('#listScript').packery();
         return;
     }
     $('.box-warning').hide();
@@ -62,6 +68,9 @@ $('#in_searchPlugin').off('keyup').keyup(function () {
     });
     $('#listPlugin').packery();
     $('#listOther').packery();
+    $('#listCore').packery();
+    $('#listWidget').packery();
+    $('#listScript').packery();
 });
 
 printUpdate();
@@ -147,7 +156,7 @@ $('#bt_checkAllUpdate').off('click').on('click', function () {
 });
 
 
-$('#listPlugin,#listOther').delegate('.update', 'click', function () {
+$('#listPlugin,#listOther,#listCore,#listWidget,#listScript').delegate('.update', 'click', function () {
     var id = $(this).closest('.box').attr('data-id');
     bootbox.confirm('{{Etes vous sur de vouloir mettre à jour cet objet ?}}', function (result) {
         if (result) {
@@ -167,7 +176,7 @@ $('#listPlugin,#listOther').delegate('.update', 'click', function () {
     });
 });
 
-$('#listPlugin,#listOther').delegate('.remove', 'click', function () {
+$('#listPlugin,#listOther,#listCore,#listWidget,#listScript').delegate('.remove', 'click', function () {
     var id = $(this).closest('.box').attr('data-id');
     bootbox.confirm('{{Etês-vous sûr de vouloir supprimer cet objet ?}}', function (result) {
         if (result) {
@@ -185,7 +194,7 @@ $('#listPlugin,#listOther').delegate('.remove', 'click', function () {
     });
 });
 
-$('#listPlugin,#listOther').delegate('.checkUpdate', 'click', function () {
+$('#listPlugin,#listOther,#listCore,#listWidget,#listScript').delegate('.checkUpdate', 'click', function () {
     var id = $(this).closest('.box').attr('data-id');
     $.hideAlert();
     nextdom.update.check({
@@ -261,11 +270,17 @@ function printUpdate() {
         success: function (data) {
             $('#listPlugin').empty();
             $('#listOther').empty();
+            $('#listCore').empty();
+            $('#listWidget').empty();
+            $('#listScript').empty();
             for (var i in data) {
                 addUpdate(data[i]);
             }
             $('#listPlugin').trigger('update');
             $('#listOther').trigger('update');
+            $('#listCore').trigger('update');
+            $('#listWidget').trigger('update');
+            $('#listScript').trigger('update');
         }
     });
 
@@ -296,7 +311,11 @@ function addUpdate(_update) {
     var tr = '<div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">';
     tr += '<div class="box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + ' col-lg-4 col-md-6 col-sm-6 col-xs-12" data-type="' + init(_update.type) + '">';
     tr += '<div class="box-header with-border">';
-    tr += ' <h4 class="box-title" style="text-transform: capitalize;"><img style="height:50px;padding-right:5px;" src="' + init(_update.icon) + '"/>' + init(_update.name)+'</h4>';
+    if (_update.type == 'core') {
+        tr += ' <h4 class="box-title" style="text-transform: capitalize;"><img style="height:50px;padding-right:5px;" src="/public/img/NextDom/NextDom_Square_AlphaBlackBlue.png"/>' + init(_update.name)+'</h4>';
+    }else{
+        tr += ' <h4 class="box-title" style="text-transform: capitalize;"><img style="height:50px;padding-right:5px;" src="' + init(_update.icon) + '"/>' + init(_update.name)+'</h4>';
+    }
     tr += '<span data-toggle="tooltip" title="" class="updateAttr badge ' + bgClass +' pull-right" data-original-title="" data-l1key="status" style="text-transform: uppercase;"></span>';
     tr += '</div>';
     tr += '<div class="box-body">';
@@ -335,28 +354,26 @@ function addUpdate(_update) {
     tr += '</div>';
     tr += '</div>';
 
-
-    if(_update.type == 'core'){
-        $('#listCore').append(tr);
-        $('#listCore .box:last').setValues(_update, '.updateAttr');
-    }else{
-        if(_update.type == 'plugin'){
+    switch(_update.type) {
+        case 'core':
+            $('#listCore').append(tr);
+            $('#listCore .box:last').setValues(_update, '.updateAttr');
+            break;
+        case 'plugin':
             $('#listPlugin').append(tr);
             $('#listPlugin .box:last').setValues(_update, '.updateAttr');
-        }else{
-            if(_update.type == 'widget'){
-                $('#listWidget').append(tr);
-                $('#listWidget .box:last').setValues(_update, '.updateAttr');
-            }else{
-                if(_update.type == 'script'){
-                    $('#listScript').append(tr);
-                    $('#listScript .box:last').setValues(_update, '.updateAttr');
-                }else{
-                    $('#listOther').append(tr);
-                    $('#listOther .box:last').setValues(_update, '.updateAttr');
-                }
-            }
-        }
+            break;
+        case 'widget':
+            $('#listWidget').append(tr);
+            $('#listWidget .box:last').setValues(_update, '.updateAttr');
+            break;
+        case 'script':
+            $('#listScript').append(tr);
+            $('#listScript .box:last').setValues(_update, '.updateAttr');
+            break;
+        default:
+            $('#listOther').append(tr);
+            $('#listOther .box:last').setValues(_update, '.updateAttr');
     }
 }
 
