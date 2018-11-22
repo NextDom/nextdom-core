@@ -23,7 +23,7 @@
     "license": "GPL",
     "config": {
         "preferred-install": "dist",
-        "optimize-autoloader": true,
+       
         "platform": {
             "php": "7.0.30"
         }
