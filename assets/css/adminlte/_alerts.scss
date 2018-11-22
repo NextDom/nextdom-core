@@ -55,10 +55,13 @@
     animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1) !important;
 }
 
-.alert-info {
+.alert-info, .alert-default {
     border-left: 5px solid $lightblue;
 }
 
+.alert-default {
+    background-color: $lightgrey;
+}
 .alert-success {
     border-left: 5px solid $lightgreen;
 }
