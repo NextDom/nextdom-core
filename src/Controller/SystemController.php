@@ -99,5 +99,29 @@ class SystemController extends PagesController
 
         return $render->get('/desktop/shutdown.html.twig', $pageContent);
     }
+    
+    /**
+     * Render osdb page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of osdb page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function osdb(Render $render, array &$pageContent): string
+    {
+        global $CONFIG;
+
+        $pageContent['adminDbConfig'] = $CONFIG['db'];
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/osdb.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+
+        return $render->get('/desktop/tools/osdb.html.twig', $pageContent);
+    }
 
 }
