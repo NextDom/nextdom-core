@@ -41,23 +41,3 @@
 .main-sidebar {
   position: fixed;
 }
-
-.pluginContainer {
-  margin: 0px 10px 0px 10px;
-}
-
-.content-wrapper {
-  min-height: 100%;
-  background-color: $nextdom_bg;
-  z-index: 800;
-  margin: {
-    top: 50px;
-  }
-}
-@media (max-width: 767px) {
-  .content-wrapper {
-    margin: {
-      top: 100px;
-    }
-  }
-}
