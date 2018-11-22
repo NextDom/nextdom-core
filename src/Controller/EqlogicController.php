@@ -23,6 +23,8 @@
 namespace NextDom\Controller;
  
 use NextDom\Helpers\PagesController;
+use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
 
 class EqlogicController extends PagesController
 {

@@ -25,6 +25,7 @@ namespace NextDom\Controller;
 use NextDom\Helpers\PagesController;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Helpers\Render;
 
 class ApiController extends PagesController
 {
