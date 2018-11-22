@@ -448,28 +448,28 @@ $('#div_pageContainer').off('click','.bt_selectCmdExpression').on('click','.bt_s
        '<div class="col-md-12"> ' +
        '<form class="form-horizontal" onsubmit="return false;"> ' +
        '<div class="form-group"> ' +
-       '<label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
-       '             <div class="col-xs-3">' +
-       '                <select class="conditionAttr form-control" data-l1key="operator">' +
-       '                    <option value="==">{{égal}}</option>' +
-       '                  <option value=">">{{supérieur}}</option>' +
-       '                  <option value="<">{{inférieur}}</option>' +
-       '                 <option value="!=">{{différent}}</option>' +
-       '            </select>' +
-       '       </div>' +
-       '      <div class="col-xs-4">' +
-       '         <input type="number" class="conditionAttr form-control" data-l1key="operande" />' +
-       '    </div>' +
+       '   <label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
+       '   <div class="col-xs-3">' +
+       '       <select class="conditionAttr form-control" data-l1key="operator">' +
+       '           <option value="==">{{égal}}</option>' +
+       '           <option value=">">{{supérieur}}</option>' +
+       '           <option value="<">{{inférieur}}</option>' +
+       '           <option value="!=">{{différent}}</option>' +
+       '       </select>' +
+       '   </div>' +
+       '   <div class="col-xs-4">' +
+       '      <input type="number" class="conditionAttr form-control" data-l1key="operande" />' +
+       '   </div>' +
        '</div>' +
        '<div class="form-group"> ' +
-       '<label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
-       '             <div class="col-xs-3">' +
-       '                <select class="conditionAttr form-control" data-l1key="next">' +
-       '                    <option value="">rien</option>' +
-       '                  <option value="ET">{{et}}</option>' +
-       '                  <option value="OU">{{ou}}</option>' +
-       '            </select>' +
-       '       </div>' +
+       '   <label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
+       '   <div class="col-xs-3">' +
+       '        <select class="conditionAttr form-control" data-l1key="next">' +
+       '            <option value="">rien</option>' +
+       '            <option value="ET">{{et}}</option>' +
+       '            <option value="OU">{{ou}}</option>' +
+       '        </select>' +
+       '   </div>' +
        '</div>' +
        '</div> </div>' +
        '</form> </div>  </div>';
@@ -479,27 +479,27 @@ $('#div_pageContainer').off('click','.bt_selectCmdExpression').on('click','.bt_s
       '<div class="col-md-12"> ' +
       '<form class="form-horizontal" onsubmit="return false;"> ' +
       '<div class="form-group"> ' +
-      '<label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
-      '             <div class="col-xs-3">' +
-      '                <select class="conditionAttr form-control" data-l1key="operator">' +
-      '                    <option value="==">{{égale}}</option>' +
-      '                  <option value="matches">{{contient}}</option>' +
-      '                 <option value="!=">{{différent}}</option>' +
-      '            </select>' +
-      '       </div>' +
-      '      <div class="col-xs-4">' +
-      '         <input class="conditionAttr form-control" data-l1key="operande" />' +
+      '    <label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
+      '    <div class="col-xs-3">' +
+      '       <select class="conditionAttr form-control" data-l1key="operator">' +
+      '             <option value="==">{{égale}}</option>' +
+      '             <option value="matches">{{contient}}</option>' +
+      '             <option value="!=">{{différent}}</option>' +
+      '       </select>' +
+      '    </div>' +
+      '    <div class="col-xs-4">' +
+      '       <input class="conditionAttr form-control" data-l1key="operande" />' +
       '    </div>' +
       '</div>' +
       '<div class="form-group"> ' +
-      '<label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
-      '             <div class="col-xs-3">' +
-      '                <select class="conditionAttr form-control" data-l1key="next">' +
-      '                    <option value="">{{rien}}</option>' +
-      '                  <option value="ET">{{et}}</option>' +
-      '                  <option value="OU">{{ou}}</option>' +
-      '            </select>' +
-      '       </div>' +
+      '     <label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
+      '     <div class="col-xs-3">' +
+      '         <select class="conditionAttr form-control" data-l1key="next">' +
+      '             <option value="">{{rien}}</option>' +
+      '             <option value="ET">{{et}}</option>' +
+      '             <option value="OU">{{ou}}</option>' +
+      '         </select>' +
+      '     </div>' +
       '</div>' +
       '</div> </div>' +
       '</form> </div>  </div>';
@@ -509,28 +509,28 @@ $('#div_pageContainer').off('click','.bt_selectCmdExpression').on('click','.bt_s
       '<div class="col-md-12"> ' +
       '<form class="form-horizontal" onsubmit="return false;"> ' +
       '<div class="form-group"> ' +
-      '<label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
-      '            <div class="col-xs-7">' +
-      '                 <input class="conditionAttr" data-l1key="operator" value="==" style="display : none;" />' +
-      '                  <select class="conditionAttr form-control" data-l1key="operande">' +
-      '                       <option value="1">{{Ouvert}}</option>' +
-      '                       <option value="0">{{Fermé}}</option>' +
-      '                       <option value="1">{{Allumé}}</option>' +
-      '                       <option value="0">{{Eteint}}</option>' +
-      '                       <option value="1">{{Déclenché}}</option>' +
-      '                       <option value="0">{{Au repos}}</option>' +
-      '                       </select>' +
-      '                    </div>' +
-      '                 </div>' +
+      '   <label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
+      '   <div class="col-xs-7">' +
+      '        <input class="conditionAttr" data-l1key="operator" value="==" style="display : none;" />' +
+      '        <select class="conditionAttr form-control" data-l1key="operande">' +
+      '            <option value="1">{{Ouvert}}</option>' +
+      '            <option value="0">{{Fermé}}</option>' +
+      '            <option value="1">{{Allumé}}</option>' +
+      '            <option value="0">{{Eteint}}</option>' +
+      '            <option value="1">{{Déclenché}}</option>' +
+      '            <option value="0">{{Au repos}}</option>' +
+      '        </select>' +
+      '    </div>' +
+      '</div>' +
       '<div class="form-group"> ' +
-      '<label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
-      '             <div class="col-xs-3">' +
-      '                <select class="conditionAttr form-control" data-l1key="next">' +
-      '                  <option value="">{{rien}}</option>' +
-      '                  <option value="ET">{{et}}</option>' +
-      '                  <option value="OU">{{ou}}</option>' +
-      '            </select>' +
-      '       </div>' +
+      '    <label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
+      '    <div class="col-xs-3">' +
+      '        <select class="conditionAttr form-control" data-l1key="next">' +
+      '            <option value="">{{rien}}</option>' +
+      '            <option value="ET">{{et}}</option>' +
+      '            <option value="OU">{{ou}}</option>' +
+      '        </select>' +
+      '    </div>' +
       '</div>' +
       '</div> </div>' +
       '</form> </div>  </div>';
@@ -795,7 +795,10 @@ function setEditor() {
 function setAutocomplete() {
   $('.expression').each(function () {
     if ($(this).find('.expressionAttr[data-l1key=type]').value() == 'condition') {
-      $(this).find('.expressionAttr[data-l1key=expression]').sew({values: autoCompleteCondition, token: '[ |#]'});
+      $(this).find('.expressionAttr[data-l1key=expression]').sew({
+        values: autoCompleteCondition,
+        token: '[ |#]'
+      });
     }
     if ($(this).find('.expressionAttr[data-l1key=type]').value() == 'action') {
       $(this).find('.expressionAttr[data-l1key=expression]').autocomplete({
