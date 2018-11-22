@@ -26,7 +26,7 @@
         padding-top: 1px;
         padding-bottom: 1px;
         & > a {
-            padding: 5px 0 5px 15px;
+            padding: 5px 0 5px 13px;
             word-break: break-all;
             white-space: normal;
             & >.icon {
@@ -38,10 +38,12 @@
         }
     }
 }
-.plugin-item {
-    padding-right: 7px;
+.plugin-item, .treeview {
     .img-responsive {
         width: 20px;
         display: inline-block;
     }
+}
+.plugin-item>a {
+    margin-left: -15px;
 }
