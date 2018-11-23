@@ -26,7 +26,7 @@ use NextDom\Helpers\Status;
 use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
  
-class SecurityController extends PagesController
+class SummaryController extends PagesController
 {
 
     public function __construct()
