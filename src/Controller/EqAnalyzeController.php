@@ -27,6 +27,7 @@ use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\EqLogicManager;
 use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
