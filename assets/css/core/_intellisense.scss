@@ -19,7 +19,7 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-.-sew-list-container, .ui-widget-content {
+.-sew-list-container {
     background: #fdfdf2;
     border-radius: 3px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
@@ -39,15 +39,4 @@
 
 .-sew-list-item.selected {
     text-decoration: none;
-}
-
-.ui-menu-item {
-    border-bottom: 1px solid #DDD;
-}
-.ui-menu-item-wrapper, .ui-menu-item-wrapper:hover {
-    padding: 5px 10px;
-    border: none;
-}
-.ui-autocomplete {
-    cursor: pointer;
 }
