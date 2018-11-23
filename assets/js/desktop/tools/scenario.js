@@ -84,7 +84,27 @@ autoCompleteCondition = [
 {val: 'name(type,commande)'},
 {val: 'value(commande)'}
 ];
-autoCompleteAction = ['report','sleep', 'variable', 'delete_variable', 'scenario', 'stop', 'wait','gotodesign','log','message','equipement','ask','nextdom_poweroff','scenario_return','alert','popup','icon','event','remove_inat'];
+autoCompleteAction = [
+{val: 'report'},
+{val: 'sleep'},
+{val: 'variable'},
+{val: 'delete_variable'},
+{val: 'scenario'},
+{val: 'stop'},
+{val: 'wait'},
+{val: 'gotodesign'},
+{val: 'log'},
+{val: 'message'},
+{val: 'equipement'},
+{val: 'ask'},
+{val: 'nextdom_poweroff'},
+{val: 'scenario_return'},
+{val: 'alert'},
+{val: 'popup'},
+{val: 'icon'},
+{val: 'event'},
+{val: 'remove_inat'},
+];
 
 if (getUrlVars('saveSuccessFull') == 1) {
   notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
@@ -611,17 +631,17 @@ $('#div_pageContainer').off('click','.bt_selectEqLogicExpression').on('click','.
   });
 });
 
-$('#div_pageContainer').off('focusout','.expression .expressionAttr[data-l1key=expression]').on('focusout','.expression .expressionAttr[data-l1key=expression]',  function (event) {
+$('#div_pageContainer').off('change','.expression .expressionAttr[data-l1key=expression]').on('change','.expression .expressionAttr[data-l1key=expression]', function (event) {
+  modifyWithoutSave = true;
   var el = $(this);
   if (el.closest('.expression').find('.expressionAttr[data-l1key=type]').value() == 'action') {
     var expression = el.closest('.expression').getValues('.expressionAttr');
-    nextdom.cmd.displayActionOption(el.value(), init(expression[0].options), function (html) {
+    nextdom.cmd.displayActionOption(el.value().trim(), init(expression[0].options), function (html) {
       el.closest('.expression').find('.expressionOptions').html(html);
       taAutosize();
     });
   }
 });
-
 
 /**************** Scheduler **********************/
 
@@ -737,10 +757,6 @@ $('#div_pageContainer').on('change','.scenarioAttr',  function () {
   modifyWithoutSave = true;
 });
 
-$('#div_pageContainer').on('change','.expressionAttr',  function () {
-  modifyWithoutSave = true;
-});
-
 $('#div_pageContainer').on('change','.elementAttr',  function () {
   modifyWithoutSave = true;
 });
@@ -801,11 +817,9 @@ function setAutocomplete() {
       });
     }
     if ($(this).find('.expressionAttr[data-l1key=type]').value() == 'action') {
-      $(this).find('.expressionAttr[data-l1key=expression]').autocomplete({
-        source: autoCompleteAction,
-        close: function (event, ui) {
-          $(this).trigger('focusout');
-        }
+      $(this).find('.expressionAttr[data-l1key=expression]').sew({
+        values: autoCompleteAction,
+        token: '[ |#|a-zA-Z]'
       });
     }
   });

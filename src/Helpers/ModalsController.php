@@ -265,7 +265,7 @@ class ModalsController
         Status::isConnectedOrFail();
 
         Utils::sendVarsToJS(['dataStore_type' => Utils::init('type'),
-            'dataStore_link_id', Utils::init('link_id', -1)]);
+            'dataStore_link_id' => Utils::init('link_id', -1)]);
 
         $render->show('/modals/dataStore.management.html.twig');
     }
