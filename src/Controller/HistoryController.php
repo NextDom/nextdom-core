@@ -30,7 +30,7 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\PluginManager;
 
  
-class ScenarioController extends PagesController
+class HistoryController extends PagesController
 {
 
     public function __construct()
