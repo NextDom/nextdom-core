@@ -36,7 +36,7 @@ namespace NextDom\Helpers;
 use NextDom\Managers\PluginManager;
 
 
-class PagesController
+abstract class PagesController
 {
     const routesList = [
         'dashboard'      => '\NextDom\Controller\DashBoardController::dashboard',
