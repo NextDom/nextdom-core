@@ -20,7 +20,7 @@
 */
 
 .-sew-list-container, .ui-widget-content {
-    background: #fdfdf2;
+    background: $lightgolden;
     border-radius: 3px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     width: auto;
@@ -42,12 +42,15 @@
 }
 
 .ui-menu-item {
-    border-bottom: 1px solid #DDD;
+    border-bottom: 1px solid $lightgrey;
 }
-.ui-menu-item-wrapper, .ui-menu-item-wrapper:hover {
+
+.ui-menu-item-wrapper, 
+.ui-menu-item-wrapper:hover {
     padding: 5px 10px;
     border: none;
 }
+
 .ui-autocomplete {
     cursor: pointer;
 }
