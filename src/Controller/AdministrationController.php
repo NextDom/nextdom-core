@@ -26,6 +26,7 @@ use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
 use NextDom\Managers\UpdateManager;
 use NextDom\Helpers\Status;
+use NextDom\Helpers\SystemHelper;
 
 class AdministrationController extends PagesController
 {
@@ -37,7 +38,7 @@ class AdministrationController extends PagesController
         Status::isConnectedAdminOrFail();
     }
 
-     /**
+/**
      * Render administration page
      *
      * @param Render $render Render engine
@@ -52,7 +53,10 @@ class AdministrationController extends PagesController
      */
     public static function administration(Render $render, array &$pageContent): string
     {
- 
+
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
         $pageContent['IS_ADMIN']  = Status::isConnectAdmin();
         $pageContent['administrationNbUpdates'] = UpdateManager::nbNeedUpdate();
         $pageContent['administrationMemLoad'] = 100;
@@ -78,22 +82,57 @@ class AdministrationController extends PagesController
             );
             if ($memData[1] != 0) {
                 $pageContent['administrationMemLoad'] = round(100 * $memData[2]/$memData[1], 2);
-            } else {
-                $pageContent['administrationMemLoad'] = 0;
+                if ($memData[1] < 1024) {
+            			$memTotal = $memData[1] .' B';
+            		} elseif ($memData[1] < (1024*1024)) {
+            			$memTotal = round($memData[1] / 1024, 0) .' MB';
+                } else {
+            			$memTotal = round($memData[1] / 1024 / 1024, 0) .' GB';
+            		}
+                $pageContent['administrationMemTotal'] = $memTotal;
             }
-            
+            else {
+                $pageContent['administrationMemLoad'] = 0;
+                $pageContent['administrationMemTotal'] = 0;
+            }
             if ($swapData[1] != 0) {
                 $pageContent['administrationSwapLoad'] = round(100 * $swapData[2]/$swapData[1], 2);
-            } else {
+                if ($swapData[1] < 1024) {
+            			$swapTotal = $swapData[1] .' B';
+            		} elseif ($memData[1] < (1024*1024)) {
+            			$swapTotal = round($swapData[1] / 1024, 0) .' MB';
+                } else {
+            			$swapTotal = round($swapData[1] / 1024 / 1024, 0) .' GB';
+            		}
+                $pageContent['administrationSwapTotal'] = $swapTotal;
+            }
+            else {
                 $pageContent['administrationSwapLoad'] = 0;
             }
         }
-        $pageContent['administrationCpuLoad'] = round(100 * sys_getloadavg()[0], 2);
-        $pageContent['administrationHddLoad'] = round(100 - 100 * disk_free_space(NEXTDOM_ROOT) / disk_total_space(NEXTDOM_ROOT), 2);
+        $uptime = SystemHelper::getUptime() % 31556926;
+        $pageContent['administrationUptimeDays'] = explode(".", ($uptime / 86400))[0];
+        $pageContent['administrationUptimeHours'] = explode(".", (($uptime % 86400) / 3600))[0];
+        $pageContent['administrationUptimeMinutes'] = explode(".", ((($uptime % 86400) % 3600) / 60))[0];
+        $pageContent['administrationCore'] = SystemHelper::getProcessorCoresCount();
+        $pageContent['administrationCpuLoad'] = round(100 * (sys_getloadavg()[0]/$pageContent['administrationCore']), 2);
+        $diskTotal=disk_total_space(NEXTDOM_ROOT);
+        $pageContent['administrationHddLoad'] = round(100 - 100 * disk_free_space(NEXTDOM_ROOT) / $diskTotal, 2);
+        if ($diskTotal < 1024) {
+          $diskTotal = $diskTotal .' B';
+        } elseif ($diskTotal < (1024*1024)) {
+          $diskTotal = round($diskTotal / 1024, 0) .' KB';
+        } elseif ($diskTotal < (1024*1024*1024)) {
+          $diskTotal = round($diskTotal / (1024*1024), 0) .' MB';
+        } else {
+          $diskTotal = round($diskTotal / (1024*1024*1024), 0) .' GB';
+        }
+        $pageContent['administrationHddTotal'] = $diskTotal;
+        $pageContent['administrationHTTPConnexion'] = SystemHelper::getHttpConnectionsCount();
+        $pageContent['administrationProcess'] = SystemHelper::getProcessCount();
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/administration.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/administration.html.twig', $pageContent);
     }
-
 }
