@@ -35,7 +35,9 @@
 define ('NEXTDOM_ROOT', realpath(__DIR__.'/../..'));
 
 date_default_timezone_set('Europe/Brussels');
-require_once NEXTDOM_ROOT.'/core/config/common.config.php';
+if (file_exists(NEXTDOM_ROOT.'/core/config/common.config.php')) {
+	require_once NEXTDOM_ROOT.'/core/config/common.config.php';
+}
 require_once NEXTDOM_ROOT.'/vendor/autoload.php';
 require_once NEXTDOM_ROOT.'/core/class/DB.class.php';
 require_once NEXTDOM_ROOT.'/core/class/config.class.php';
