@@ -54,9 +54,6 @@ class AdministrationController extends PagesController
     public static function administration(Render $render, array &$pageContent): string
     {
 
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-
         $pageContent['IS_ADMIN']  = Status::isConnectAdmin();
         $pageContent['administrationNbUpdates'] = UpdateManager::nbNeedUpdate();
         $pageContent['administrationMemLoad'] = 100;
