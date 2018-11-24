@@ -34,59 +34,59 @@
 namespace NextDom\Helpers;
 
 use NextDom\Managers\PluginManager;
-
+use NextDom\Controller;
 
 abstract class PagesController
 {
     const routesList = [
-        'dashboard'      => '\NextDom\Controller\DashBoardController::dashboard',
-        'scenario'       => '\NextDom\Controller\ScenarioController::scenario',
-        'administration' => '\NextDom\Controller\AdministrationController::administration',
-        'backup'         => '\NextDom\Controller\BackupController::backup',
-        'object'         => '\NextDom\Controller\ObjectController::object',
-        'message'        => '\NextDom\Controller\MessageController::message',
-        'cron'           => '\NextDom\Controller\CronController::cron',
-        'update'         => '\NextDom\Controller\UpdateController::update',
-        'system'         => '\NextDom\Controller\SystemController::system',
-        'database'       => '\NextDom\Controller\DatabaseController::database',
-        'display'        => '\NextDom\Controller\DisplayController::display',
-        'log'            => '\NextDom\Controller\LogController::log',
-        'report'         => '\NextDom\Controller\ReportController::report',
-        'plugin'         => '\NextDom\Controller\PluginController::plugin',
-        'editor'         => '\NextDom\Controller\EditorController::editor',
-        'migration'      => '\NextDom\Controller\MigrationController::migration',
-        'history'        => '\NextDom\Controller\HistoryController::history',
-        'timeline'       => '\NextDom\Controller\HistoryController::history',
-        'shutdown'       => '\NextDom\Controller\SystemTimeline::timeline',
-        'health'         => '\NextDom\Controller\HealthController::health',
-        'profils'        => '\NextDom\Controller\ProfilsController::profils',
-        'view'           => '\NextDom\Controller\ViewsController::view',
-        'view_edit'      => '\NextDom\Controller\ViewsController::viewEdit',
-        'eqAnalyse'      => '\NextDom\Controller\EqAnalyzeController::eqAnalyze',
-        'plan'           => '\NextDom\Controller\PlanController::plan',
-        'plan3d'         => '\NextDom\Controller\PlanController::plan3d',
-        'market'         => '\NextDom\Controller\MarketController::market',
-        'reboot'         => '\NextDom\Controller\SystemController::reboot',
-        'network'        => '\NextDom\Controller\NetworkController::network',
-        'cache'          => '\NextDom\Controller\CacheController::cache',
-        'general'        => '\NextDom\Controller\GeneralController::general',
-        'log_admin'      => '\NextDom\Controller\LogController::logAdmin',
-        'realtime'       => '\NextDom\Controller\RealtimeController::realtime',
-        'custom'         => '\NextDom\Controller\CustomController::custom',
-        'api'            => '\NextDom\Controller\ApiController::Api',
-        'commandes'      => '\NextDom\Controller\CommandeController::commandes',
-        'osdb'           => '\NextDom\Controller\SystemController::osdb',
-        'reports_admin'  => '\NextDom\Controller\ReportController::reportsAdmin',
-        'eqlogic'        => '\NextDom\Controller\EqlogicController::eqlogic',
-        'interact'       => '\NextDom\Controller\InteractController::interact',
-        'interact_admin' => '\NextDom\Controller\InteractController::interactAdmin',
-        'links'          => '\NextDom\Controller\LinksController::links',
-        'security'       => '\NextDom\Controller\SecurityController::security',
-        'summary'        => '\NextDom\Controller\SummaryController::summary',
-        'update_admin'   => '\NextDom\Controller\UpdateController::updateAdmin',
-        'users'          => '\NextDom\Controller\UsersController::users',
-        'note'           => '\NextDom\Controller\NoteController::note',
-        'pluginRoute'    => '\NextDom\Controller\PluginController::pluginRoute'
+        'dashboard'      => Controller\DashBoardController::class . '::dashboard',
+        'scenario'       => Controller\ScenarioController::class . '::scenario',
+        'administration' => Controller\AdministrationController::class . '::administration',
+        'backup'         => Controller\BackupController::class . '::backup',
+        'object'         => Controller\ObjectController::class . '::object',
+        'message'        => Controller\MessageController::class . '::message',
+        'cron'           => Controller\CronController::class . '::cron',
+        'update'         => Controller\UpdateController::class . '::update',
+        'system'         => Controller\SystemController::class . '::system',
+        'database'       => Controller\DatabaseController::class . '::database',
+        'display'        => Controller\DisplayController::class . '::display',
+        'log'            => Controller\LogController::class . '::log',
+        'report'         => Controller\ReportController::class . '::report',
+        'plugin'         => Controller\PluginController::class . '::plugin',
+        'editor'         => Controller\EditorController::class . '::editor',
+        'migration'      => Controller\MigrationController::class . '::migration',
+        'history'        => Controller\HistoryController::class . '::history',
+        'timeline'       => Controller\HistoryController::class . '::history',
+        'shutdown'       => Controller\SystemTimeline::class . '::timeline',
+        'health'         => Controller\HealthController::class . '::health',
+        'profils'        => Controller\ProfilsController::class . '::profils',
+        'view'           => Controller\ViewsController::class . '::view',
+        'view_edit'      => Controller\ViewsController::class . '::viewEdit',
+        'eqAnalyse'      => Controller\EqAnalyzeController::class . '::eqAnalyze',
+        'plan'           => Controller\PlanController::class . '::plan',
+        'plan3d'         => Controller\PlanController::class . '::plan3d',
+        'market'         => Controller\MarketController::class . '::market',
+        'reboot'         => Controller\SystemController::class . '::reboot',
+        'network'        => Controller\NetworkController::class . '::network',
+        'cache'          => Controller\CacheController::class . '::cache',
+        'general'        => Controller\GeneralController::class . '::general',
+        'log_admin'      => Controller\LogController::class . '::logAdmin',
+        'realtime'       => Controller\RealtimeController::class . '::realtime',
+        'custom'         => Controller\CustomController::class . '::custom',
+        'api'            => Controller\ApiController::class . '::Api',
+        'commandes'      => Controller\CommandeController::class . '::commandes',
+        'osdb'           => Controller\SystemController::class . '::osdb',
+        'reports_admin'  => Controller\ReportController::class . '::reportsAdmin',
+        'eqlogic'        => Controller\EqlogicController::class . '::eqlogic',
+        'interact'       => Controller\InteractController::class . '::interact',
+        'interact_admin' => Controller\InteractController::class . '::interactAdmin',
+        'links'          => Controller\LinksController::class . '::links',
+        'security'       => Controller\SecurityController::class . '::security',
+        'summary'        => Controller\SummaryController::class . '::summary',
+        'update_admin'   => Controller\UpdateController::class . '::updateAdmin',
+        'users'          => Controller\UsersController::class . '::users',
+        'note'           => Controller\NoteController::class . '::note',
+        'pluginRoute'    => Controller\PluginController::class . '::pluginRoute'
 
     ];
 
@@ -126,6 +126,13 @@ abstract class PagesController
         return ob_get_clean();
     }
 
+    /**
+     * TODO this methode are used ?
+     * 
+     * @param \NextDom\Helpers\Render $render
+     * @param array $pageContent
+     * @return string
+     */
     public static function panelPage(Render $render, array &$pageContent): string
     {
         $plugin = PluginManager::byId(Utils::init('m'));
