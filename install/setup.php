@@ -1,7 +1,9 @@
 <?php
+
+define('NEXTDOM_ROOT', realpath(__DIR__.'/../'));
 require_once __DIR__ . '/../core/class/system.class.php';
 
-function init($_name, $_default = '') {
+function initVar($_name, $_default = '') {
     if (isset($_GET[$_name])) {
         $cache[$_name] = $_GET[$_name];
         return $_GET[$_name];
@@ -28,8 +30,8 @@ if (!file_exists('/tmp/nextdom_tmp_key')) {
     $tmp_key = file_get_contents('/tmp/nextdom_tmp_key');
 }
 
-if (init('log') == 1) {
-    if ($tmp_key != init('key')) {
+if (initVar('log') == 1) {
+    if ($tmp_key != initVar('key')) {
         if (!headers_sent()) {
             header("Statut: 404 Page non trouvée");
             header('HTTP/1.0 404 Not Found');
@@ -140,22 +142,22 @@ if ($error) {
     die();
 }
 $config = true;
-if (init('hostname') != '' && init('username') != '' && init('password') != '') {
+if (initVar('hostname') != '' && initVar('username') != '' && initVar('password') != '') {
     try {
         $opt = array(
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         );
-        if (init('database') == '') {
+        if (initVar('database') == '') {
             $_POST['database'] = 'nextdom';
         }
-        $dsn = "mysql:host=" . init('hostname') . ";port=" . init('port', '3306') . ";charset=utf8";
-        $pdo = new PDO($dsn, init('username'), init('password'), $opt);
-        $sql = $pdo->prepare("CREATE DATABASE IF NOT EXISTS `" . init('database') . "`");
+        $dsn = "mysql:host=" . initVar('hostname') . ";port=" . initVar('port', '3306') . ";charset=utf8";
+        $pdo = new PDO($dsn, initVar('username'), initVar('password'), $opt);
+        $sql = $pdo->prepare("CREATE DATABASE IF NOT EXISTS `" . initVar('database') . "`");
         $sql->execute();
-        $dsn .= ";dbname=" . init('database');
-        $pdo = new PDO($dsn, init('username'), init('password'), $opt);
+        $dsn .= ";dbname=" . initVar('database');
+        $pdo = new PDO($dsn, initVar('username'), initVar('password'), $opt);
         $config = false;
-        if (init('eraseDatabase') == 'on') {
+        if (initVar('eraseDatabase') == 'on') {
             $sql = $pdo->prepare("SET foreign_key_checks = 0");
             $sql->execute();
             $tables = array();
@@ -185,31 +187,31 @@ if ($config) {
             <div class="form-group">
                 <label class="col-sm-5 control-label">Database hostname</label>
                 <div class="col-sm-2">
-                    <input type="text" class="form-control" id="hostname" name="hostname" value="<?php echo init('hostname', 'localhost') ?>" />
+                    <input type="text" class="form-control" id="hostname" name="hostname" value="<?php echo initVar('hostname', 'localhost') ?>" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-5 control-label">Database port</label>
                 <div class="col-sm-2">
-                    <input type="text" class="form-control" id="port" name="port" value="<?php echo init('port', '3306') ?>"  />
+                    <input type="text" class="form-control" id="port" name="port" value="<?php echo initVar('port', '3306') ?>"  />
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-5 control-label">Database username</label>
                 <div class="col-sm-2">
-                    <input type="text" class="form-control" id="username" name="username" value="<?php echo init('username', 'root') ?>" />
+                    <input type="text" class="form-control" id="username" name="username" value="<?php echo initVar('username', 'root') ?>" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-5 control-label">Database password</label>
                 <div class="col-sm-2">
-                    <input type="password" class="form-control" id="password" name="password" value="<?php echo init('password') ?>" />
+                    <input type="password" class="form-control" id="password" name="password" value="<?php echo initVar('password') ?>" />
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-5 control-label">Database name</label>
                 <div class="col-sm-2">
-                    <input type="text" class="form-control" id="database" name="database" value="<?php echo init('database', 'nextdom') ?>" />
+                    <input type="text" class="form-control" id="database" name="database" value="<?php echo initVar('database', 'nextdom') ?>" />
                 </div>
             </div>
             <div class="form-group">
@@ -236,11 +238,11 @@ if ($config) {
         die();
     }
     $replace = array(
-        '#PASSWORD#' => init('password'),
-        '#DBNAME#' => init('database'),
-        '#USERNAME#' => init('username'),
-        '#PORT#' => init('port'),
-        '#HOST#' => init('hostname'),
+        '#PASSWORD#' => initVar('password'),
+        '#DBNAME#' => initVar('database'),
+        '#USERNAME#' => initVar('username'),
+        '#PORT#' => initVar('port'),
+        '#HOST#' => initVar('hostname'),
     );
     $config = str_replace(array_keys($replace), $replace, file_get_contents(__DIR__ . '/../core/config/common.config.sample.php'));
     file_put_contents(__DIR__ . '/../core/config/common.config.php', $config);
