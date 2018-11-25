@@ -29,13 +29,13 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\JeeObjectManager;
 
-class TimelineController extends PagesController
+class TimelineController extends BaseController
 {
 
     
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
 
@@ -52,7 +52,7 @@ class TimelineController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function timeline(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         $pageContent['historyDate'] = [

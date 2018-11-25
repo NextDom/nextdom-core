@@ -28,12 +28,12 @@ use NextDom\Helpers\Render;
 use NextDom\Managers\PluginManager;
 
 
-class HealthController extends PagesController
+class HealthController extends BaseController
 {
 
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
 
@@ -50,7 +50,7 @@ class HealthController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function health(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         $pageContent['healthInformations'] = \nextdom::health();

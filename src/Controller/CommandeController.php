@@ -26,12 +26,12 @@ use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
-class CommandeController extends PagesController
+class CommandeController extends BaseController
 {
     
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
 
@@ -48,7 +48,7 @@ class CommandeController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function commandes(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/commandes.js';

@@ -89,7 +89,7 @@ class Router
         } elseif (isset($_GET['configure'])) {
             $this->showConfiguration();
         } elseif (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
-            $this->getContentByAjax();
+            PrepareView::getContentByAjax();
         } else {
             require_once(NEXTDOM_ROOT . '/core/php/authentification.php');
             Status::initConnectState();
@@ -134,37 +134,6 @@ class Router
     {
         \include_file('core', 'authentification', 'php');
         \include_file('plugin_info', 'configuration', 'configuration', Utils::init('plugin'), true);
-    }
-
-    /**
-     * Response to an Ajax request
-     *
-     * @throws \Exception
-     */
-    private function getContentByAjax()
-    {
-        try {
-            \include_file('core', 'authentification', 'php');
-            $page = Utils::init('p');
-            $controllerRoute = PagesController::getRoute($page);
-            if ($controllerRoute === null) {
-                self::showError404AndDie();
-            } else {
-                $render = Render::getInstance();
-                $pageContent = [];
-                $pageContent['JS_POOL'] = [];
-                $pageContent['JS_END_POOL'] = [];
-                $pageContent['CSS_POOL'] = [];
-                $pageContent['JS_VARS'] = [];
-                $pageContent['content'] = $controllerRoute($render, $pageContent);
-                $render->show('/layouts/ajax_content.html.twig', $pageContent);
-            }
-        } catch (\Exception $e) {
-            ob_end_clean();
-            echo '<div class="alert alert-danger div_alert">';
-            echo \translate::exec(displayException($e), 'desktop/' . Utils::init('p') . '.php');
-            echo '</div>';
-        }
     }
 
     /**

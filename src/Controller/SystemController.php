@@ -26,13 +26,13 @@ use NextDom\Helpers\Status;
 use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
 
-class SystemController extends PagesController
+class SystemController extends BaseController
 {
 
     
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
 
@@ -49,7 +49,7 @@ class SystemController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function system(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
         $pageData = [];
         $pageData['systemCanSudo'] = \nextdom::isCapable('sudo');
@@ -57,71 +57,5 @@ class SystemController extends PagesController
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/system.html.twig', $pageContent);
-    }  
-    
-    /**
-     * Render reboot page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of reboot page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function reboot(Render $render, array &$pageContent): string
-    {
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
-
-        return $render->get('/desktop/reboot.html.twig', $pageContent);
     }
-    
-    
-    /**
-     * Render shutdown page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of shutdown page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function shutdown(Render $render, array &$pageContent): string
-    {
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
-
-        return $render->get('/desktop/shutdown.html.twig', $pageContent);
-    }
-    
-    /**
-     * Render osdb page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of osdb page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function osdb(Render $render, array &$pageContent): string
-    {
-        global $CONFIG;
-
-        $pageContent['adminDbConfig'] = $CONFIG['db'];
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/osdb.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
-
-        return $render->get('/desktop/tools/osdb.html.twig', $pageContent);
-    }
-
 }

@@ -27,12 +27,12 @@ use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CacheManager;
  
-class SecurityController extends PagesController
+class SecurityController extends BaseController
 {
 
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
 
@@ -49,7 +49,7 @@ class SecurityController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function security(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
         $keys = array('security::bantime', 'ldap::enable');
         $configs = \config::byKeys($keys);

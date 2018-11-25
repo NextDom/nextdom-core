@@ -27,13 +27,13 @@ use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
 use NextDom\Managers\UpdateManager;
 
-class BackupController extends PagesController
+class BackupController extends BaseController
 {
 
     
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
 
@@ -50,7 +50,7 @@ class BackupController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function backup(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         $pageContent['JS_VARS_RAW']['REPO_LIST'] = '[]';

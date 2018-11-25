@@ -21,32 +21,52 @@
  */
 
 namespace NextDom\Controller;
- 
+
+use NextDom\Managers\PluginManager;
+use NextDom\Managers\UpdateManager;
+use NextDom\Helpers\Utils;
 use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
-class EqlogicController extends BaseController
+class PluginListController extends BaseController
 {
     public function __construct()
     {
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
+
     /**
-     * 
-     * @param \NextDom\Controller\Render $render
-     * @param array $pageContent
-     * @return string
+     * Render plugin page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of plugin page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function get(Render $render, array &$pageContent): string
     {
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/eqlogic.js';
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/plugin.js';
+        $pageContent['JS_VARS']['sel_plugin_id'] = Utils::init('id', '-1');
+        $pageContent['pluginsList'] = PluginManager::listPlugin();
+        $pageContent['pluginReposList'] = [];
+
+        $updateManagerListRepo = UpdateManager::listRepo();
+        foreach ($updateManagerListRepo as $repoCode => $repoData) {
+            if ($repoData['enable'] && isset($repoData['scope']['hasStore']) && $repoData['scope']['hasStore']) {
+                $pageContent['pluginReposList'][$repoCode] = $repoData;
+            }
+        }
+        $pageContent['pluginInactiveOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/params/eqlogic.html.twig', $pageContent);
+        return $render->get('/desktop/plugin.html.twig', $pageContent);
     }
-    
 }

@@ -28,11 +28,11 @@ use NextDom\Managers\UpdateManager;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
-class ApiController extends PagesController
+class ApiController extends BaseController
 {
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
     
@@ -49,7 +49,7 @@ class ApiController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function Api(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         $pageContent['adminReposList'] = UpdateManager::listRepo();

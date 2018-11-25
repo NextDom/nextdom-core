@@ -32,11 +32,11 @@ use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
-class EqAnalyzeController extends PagesController
+class EqAnalyzeController extends BaseController
 {
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
     
@@ -53,7 +53,7 @@ class EqAnalyzeController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function eqAnalyze(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         global $NEXTDOM_INTERNAL_CONFIG;

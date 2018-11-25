@@ -29,12 +29,12 @@ use NextDom\Helpers\Utils;
 use NextDom\Managers\JeeObjectManager;
 
 
-class ObjectController extends PagesController
+class ObjectController extends BaseController
 {
      
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
 
@@ -51,7 +51,7 @@ class ObjectController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function object(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         $pageContent['JS_VARS']['select_id'] = Utils::init('id', '-1');

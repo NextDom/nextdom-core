@@ -21,27 +21,29 @@
  */
 
 namespace NextDom\Controller;
- 
-use NextDom\Managers\CacheManager;
+
+use NextDom\Helpers\Status;
 use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
+use NextDom\Helpers\Utils;
+use NextDom\Managers\PluginManager;
 
-class CacheController extends BaseController
+class LogAdminController extends BaseController
 {
+
     public function __construct()
     {
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
+
     /**
-     * Render cache page
+     * Render logAdmin page
      *
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of cache page
+     * @return string Content of log_admin page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
@@ -51,17 +53,24 @@ class CacheController extends BaseController
     public function get(Render $render, array &$pageContent): string
     {
 
-        $pageContent['adminProductName'] = \config::byKey('product_name');
-        $pageContent['adminCustomProductName'] = \config::byKey('name');
-        $pageContent['adminStats'] = CacheManager::stats();
-        $pageContent['adminCacheFolder'] = CacheManager::getFolder();
-        $pageContent['adminMemCachedExists'] = class_exists('memcached');
-        $pageContent['adminRedisExists'] = class_exists('redis');
+        $pageContent['adminIsRescueMode'] = Status::isRescueMode();
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/admin/cache.js';
+        if (!$pageContent['adminIsRescueMode']) {
+            $pageContent['adminPluginsList'] = [];
+            $pluginsList = PluginManager::listPlugin(true);
+            foreach ($pluginsList as $plugin) {
+                $pluginApi = \config::byKey('api', $plugin->getId());
+                    $pluginData = [];
+                    $pluginData['api'] = $pluginApi;
+                    $pluginData['plugin'] = $plugin;
+                    $pageContent['adminPluginsList'][] = $pluginData;
+            }
+        }
+        $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
+
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/log_admin.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/admin/cache.html.twig', $pageContent);
+        return $render->get('/desktop/params/log_admin.html.twig', $pageContent);
     }
-    
 }

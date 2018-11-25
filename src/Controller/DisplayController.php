@@ -28,12 +28,12 @@ use NextDom\Helpers\Status;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\EqLogicManager;
 
-class DisplayController extends PagesController
+class DisplayController extends BaseController
 {
     
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
 
@@ -50,7 +50,7 @@ class DisplayController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function display(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/display.js';

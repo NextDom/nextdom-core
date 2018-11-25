@@ -22,31 +22,41 @@
 
 namespace NextDom\Controller;
  
+use NextDom\Helpers\Utils;
 use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
-class EqlogicController extends BaseController
+class ViewEditController extends BaseController
 {
     public function __construct()
     {
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
+
     /**
-     * 
-     * @param \NextDom\Controller\Render $render
-     * @param array $pageContent
-     * @return string
+     * Render view edit page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of view edit page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function get(Render $render, array &$pageContent): string
     {
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/eqlogic.js';
+        $pageContent['viewEditViewsList'] = \view::all();
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/view_edit.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/params/eqlogic.html.twig', $pageContent);
+        return $render->get('/desktop/view_edit.html.twig', $pageContent);
     }
+
     
 }

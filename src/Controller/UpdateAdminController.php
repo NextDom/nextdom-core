@@ -30,41 +30,13 @@ use NextDom\Managers\CacheManager;
 use NextDom\Managers\PluginManager;
 
 
-class UpdateController extends BaseController
+class UpdateAdminController extends BaseController
 {
     
     public function __construct()
     {
         parent::__construct();
         Status::isConnectedAdminOrFail();
-    }
-
-    /**
-     * Render update page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of objects page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public function get(Render $render, array &$pageContent): string
-    {
-
-        $updates = array();
-        foreach (UpdateManager::listCoreUpdate() as $udpate) {
-            $updates[str_replace(array('.php', '.sql'), '', $udpate)] = str_replace(array('.php', '.sql'), '', $udpate);
-        }
-        usort($updates, 'version_compare');
-        $pageContent['updatesList'] = array_reverse($updates);
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/update.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
-
-        return $render->get('/desktop/tools/update-view.html.twig', $pageContent);
     }
 
     /** Render updateAdmin page
@@ -79,7 +51,7 @@ class UpdateController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function updateAdmin(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         global $CONFIG;

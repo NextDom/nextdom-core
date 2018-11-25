@@ -28,12 +28,12 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PluginManager;
 
-class LogController extends PagesController
+class LogController extends BaseController
 {
 
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
 
@@ -50,7 +50,7 @@ class LogController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function log(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
         // TODO utiliser log::getpathLog
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/diagnostic/log.js';
