@@ -2,6 +2,7 @@
 
 import unittest
 import sys
+import os
 from time import sleep
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
@@ -20,15 +21,20 @@ class ConnectionPage(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        driver_path = os.path.dirname(os.path.abspath(__file__)) + os.sep + 'chromedriver'
         try:
             desired_capabilities = DesiredCapabilities.CHROME.copy()
             desired_capabilities['loggingPrefs'] = { 'browser': 'SEVERE' }
-            cls.driver = webdriver.Chrome(desired_capabilities=desired_capabilities)
+            cls.driver = webdriver.Chrome(desired_capabilities=desired_capabilities,executable_path=driver_path)
             cls.driver.get(cls.url)
         except WebDriverException as err:
-            print("Chromedriver needed to run tests on Chrome.")
-            print("Download it on https://sites.google.com/a/chromium.org/chromedriver/downloads")
+            if err.code == -32000:
+                print('Impossible to access to '+cls.url)
+            else:
+                print("Chromedriver needed to run tests on Chrome.")
+                print("Download it on https://sites.google.com/a/chromium.org/chromedriver/downloads")
             exit(1)
+
 
     @classmethod
     def tearDownClass(cls):

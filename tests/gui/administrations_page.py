@@ -2,6 +2,7 @@
 
 import unittest
 import sys
+import os
 from time import sleep
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
@@ -19,15 +20,19 @@ class AdministrationPages(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        driver_path = os.path.dirname(os.path.abspath(__file__)) + os.sep + 'chromedriver'
         try:
             desired_capabilities = DesiredCapabilities.CHROME.copy()
             desired_capabilities['loggingPrefs'] = { 'browser': 'SEVERE' }
-            cls.driver = webdriver.Chrome(desired_capabilities=desired_capabilities)
+            cls.driver = webdriver.Chrome(desired_capabilities=desired_capabilities,executable_path=driver_path)
             cls.driver.get(cls.url)
             cls.connect_to_nextdom()
         except WebDriverException as err:
-            print("Chromedriver needed to run tests on Chrome.")
-            print("Download it on https://sites.google.com/a/chromium.org/chromedriver/downloads")
+            if err.code == -32000:
+                print('Impossible to access to '+cls.url)
+            else:
+                print("Chromedriver needed to run tests on Chrome.")
+                print("Download it on https://sites.google.com/a/chromium.org/chromedriver/downloads")
             exit(1)
 
     @classmethod
@@ -111,9 +116,9 @@ class AdministrationPages(unittest.TestCase):
     def test_security_page(self):
         self.driver.get(self.url+'index.php?v=d&p=security')
         sleep(4)
-        ldap_checkbox = self.driver.find_element_by_css_selector('input[data-l1key="ldap:enable"]')
+        remove_banned_button = self.driver.find_element_by_id('bt_removeBanIp')
         back_button = self.driver.find_element_by_link_text('Retour')
-        self.assertIsNotNone(ldap_checkbox)
+        self.assertIsNotNone(remove_banned_button)
         self.assertIsNotNone(back_button)
         self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
