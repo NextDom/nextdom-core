@@ -21,32 +21,43 @@
  */
 
 namespace NextDom\Controller;
- 
+
+use NextDom\Helpers\Status;
 use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 
-class EqlogicController extends BaseController
+class OsDbController extends BaseController
 {
+
+    
     public function __construct()
     {
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
+
     /**
-     * 
-     * @param \NextDom\Controller\Render $render
-     * @param array $pageContent
-     * @return string
+     * Render osdb page
+     *
+     * @param Render $render Render engine
+     * @param array $pageContent Page data
+     *
+     * @return string Content of osdb page
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function get(Render $render, array &$pageContent): string
     {
+        global $CONFIG;
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/eqlogic.js';
+        $pageContent['adminDbConfig'] = $CONFIG['db'];
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/osdb.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/params/eqlogic.html.twig', $pageContent);
+        return $render->get('/desktop/tools/osdb.html.twig', $pageContent);
     }
-    
+
 }

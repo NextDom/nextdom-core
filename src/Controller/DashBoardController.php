@@ -35,12 +35,12 @@ use NextDom\Managers\ScenarioManager;
  *
  * @author luc
  */
-class DashBoardController extends PagesController
+class DashBoardController extends BaseController
 {
 
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
 
@@ -57,7 +57,7 @@ class DashBoardController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function dashboard(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         $pageContent['JS_VARS']['nextdom_Welcome'] = \config::byKey('nextdom::Welcome');

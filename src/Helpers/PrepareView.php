@@ -463,8 +463,41 @@ class PrepareView
                     Router::showError404AndDie();
                 }
             } else {
-                return  $controllerRoute($render, $pageContent);
+                $controller = new $controllerRoute();
+                return $controller->get($render, $pageContent);
             }
+        }
+    }
+
+    /**
+     * Response to an Ajax request
+     *
+     * @throws \Exception
+     */
+    public function getContentByAjax()
+    {
+        try {
+            \include_file('core', 'authentification', 'php');
+            $page = Utils::init('p');
+            $controllerRoute = PagesController::getRoute($page);
+            if ($controllerRoute === null) {
+                self::showError404AndDie();
+            } else {
+                $render = Render::getInstance();
+                $pageContent = [];
+                $pageContent['JS_POOL'] = [];
+                $pageContent['JS_END_POOL'] = [];
+                $pageContent['CSS_POOL'] = [];
+                $pageContent['JS_VARS'] = [];
+                $controller = new $controllerRoute();
+                $pageContent['content'] = $controller->get($render, $pageContent);
+                $render->show('/layouts/ajax_content.html.twig', $pageContent);
+            }
+        } catch (\Exception $e) {
+            ob_end_clean();
+            echo '<div class="alert alert-danger div_alert">';
+            echo \translate::exec(displayException($e), 'desktop/' . Utils::init('p') . '.php');
+            echo '</div>';
         }
     }
 

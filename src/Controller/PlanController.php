@@ -26,11 +26,11 @@ use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Utils;
 use NextDom\Helpers\Render;
 
-class PlanController extends PagesController
+class PlanController extends BaseController
 {
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
     
@@ -47,7 +47,7 @@ class PlanController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function plan(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         $planHeader = null;

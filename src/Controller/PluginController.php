@@ -29,45 +29,12 @@ use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
-class PluginController extends PagesController
+class PluginController extends BaseController
 {
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
-    }
-    
-    /**
-     * Render plugin page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of plugin page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function plugin(Render $render, array &$pageContent): string
-    {
-
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/plugin.js';
-        $pageContent['JS_VARS']['sel_plugin_id'] = Utils::init('id', '-1');
-        $pageContent['pluginsList'] = PluginManager::listPlugin();
-        $pageContent['pluginReposList'] = [];
-
-        $updateManagerListRepo = UpdateManager::listRepo();
-        foreach ($updateManagerListRepo as $repoCode => $repoData) {
-            if ($repoData['enable'] && isset($repoData['scope']['hasStore']) && $repoData['scope']['hasStore']) {
-                $pageContent['pluginReposList'][$repoCode] = $repoData;
-            }
-        }
-        $pageContent['pluginInactiveOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
-
-        return $render->get('/desktop/plugin.html.twig', $pageContent);
     }
 
     /**
@@ -78,7 +45,7 @@ class PluginController extends PagesController
      * @return string Plugin page
      * @throws \Exception
      */
-    public static function pluginRoute(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
         $plugin = PluginManager::byId(Utils::init('m'));
         $page = Utils::init('p');
@@ -87,5 +54,4 @@ class PluginController extends PagesController
         \include_file('desktop', $page, 'php', $plugin->getId(), true);
         return ob_get_clean();
     }
-    
 }

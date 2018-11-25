@@ -30,12 +30,12 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\PluginManager;
 
  
-class HistoryController extends PagesController
+class HistoryController extends BaseController
 {
 
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
 
@@ -52,7 +52,7 @@ class HistoryController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function history(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
         $pageContent['historyDate'] = array(
             'start' => date('Y-m-d', strtotime(\config::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
@@ -62,8 +62,8 @@ class HistoryController extends PagesController
         $pageContent['historyPluginsList']       = PluginManager::listPlugin();
         $pageContent['historyEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
         $pageContent['historyObjectsList']       = JeeObjectManager::all();
-        $pageContent['JS_POOL'][]     = '/assets/3rdparty/visjs/vis.min.js';
-        $pageContent['CSS_POOL'][]    = '/assets/3rdparty/visjs/vis.min.css';
+        $pageContent['JS_POOL'][]     = '/vendor/node_modules/vis/dist/vis.min.js';
+        $pageContent['CSS_POOL'][]    = '/vendor/node_modules/vis/dist/vis.min.css';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/diagnostic/history.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 

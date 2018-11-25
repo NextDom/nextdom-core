@@ -26,12 +26,12 @@ use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
-class LinksController extends PagesController
+class LinksController extends BaseController
 {
     
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
 
@@ -49,7 +49,7 @@ class LinksController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function links(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/links.js';

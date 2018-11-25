@@ -26,11 +26,11 @@ use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
 
-class CustomController extends PagesController
+class CustomController extends BaseController
 {
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
     
@@ -47,7 +47,7 @@ class CustomController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function custom(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         global $NEXTDOM_INTERNAL_CONFIG;

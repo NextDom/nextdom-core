@@ -29,13 +29,13 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\EqLogicManager;
 
-class InteractController extends PagesController
+class InteractController extends BaseController
 {
 
     
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
 
@@ -52,9 +52,8 @@ class InteractController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function interact(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
-
         $interacts = array();
         $pageContent['interactTotal'] = \interactDef::all();
         $interacts[-1] = \interactDef::all(null);

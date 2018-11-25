@@ -29,12 +29,12 @@ use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\ScenarioManager;
 
  
-class ScenarioController extends PagesController
+class ScenarioController extends BaseController
 {
 
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
 
@@ -51,7 +51,7 @@ class ScenarioController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function scenario(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         $pageContent['scenarios'] = array();

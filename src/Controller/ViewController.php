@@ -27,11 +27,11 @@ use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
-class ViewsController extends PagesController
+class ViewController extends BaseController
 {
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
     
@@ -48,7 +48,7 @@ class ViewsController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function view(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         $pageContent['viewsList'] = \view::all();
@@ -89,29 +89,4 @@ class ViewsController extends PagesController
 
         return $render->get('/desktop/view.html.twig', $pageContent);
     }
-    
-    /**
-     * Render view edit page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of view edit page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function viewEdit(Render $render, array &$pageContent): string
-    {
-
-        $pageContent['viewEditViewsList'] = \view::all();
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/view_edit.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
-
-        return $render->get('/desktop/view_edit.html.twig', $pageContent);
-    }
-
-    
 }

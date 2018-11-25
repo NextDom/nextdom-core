@@ -26,12 +26,12 @@ use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
-class UsersController extends PagesController
+class UsersController extends BaseController
 {
     
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
 
@@ -47,7 +47,7 @@ class UsersController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function users(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         $pageContent['userLdapEnabled'] = \config::byKey('ldap::enable');

@@ -27,11 +27,11 @@ use NextDom\Managers\PluginManager;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
-class ReportController extends PagesController
+class ReportController extends BaseController
 {
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
     
@@ -48,7 +48,7 @@ class ReportController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function report(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/diagnostic/report.js';
         $report_path = NEXTDOM_ROOT . '/data/report/';
@@ -86,30 +86,5 @@ class ReportController extends PagesController
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/diagnostic/reports-view.html.twig', $pageContent);
-    }
-    
-    /**
-     * Render reportsAdmin page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of report_admin page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function reportsAdmin(Render $render, array &$pageContent): string
-    {
-        global $CONFIG;
-
-        $pageContent['adminDbConfig'] = $CONFIG['db'];
-        
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/reports_admin.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
-
-        return $render->get('/desktop/params/reports_admin.html.twig', $pageContent);
     }
 }

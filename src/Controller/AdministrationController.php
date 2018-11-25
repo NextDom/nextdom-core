@@ -28,17 +28,17 @@ use NextDom\Managers\UpdateManager;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\SystemHelper;
 
-class AdministrationController extends PagesController
+class AdministrationController extends BaseController
 {
 
     
     public function __construct()
     {
-        Status::initConnectState();
+        parent::__construct();
         Status::isConnectedAdminOrFail();
     }
 
-/**
+    /**
      * Render administration page
      *
      * @param Render $render Render engine
@@ -51,7 +51,7 @@ class AdministrationController extends PagesController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function administration(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         $pageContent['IS_ADMIN']  = Status::isConnectAdmin();

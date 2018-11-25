@@ -21,32 +21,19 @@
  */
 
 namespace NextDom\Controller;
- 
+
 use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Render;
+use NextDom\Managers\UpdateManager;
 use NextDom\Helpers\Status;
+use NextDom\Helpers\SystemHelper;
 
-class EqlogicController extends BaseController
+abstract class BaseController
 {
     public function __construct()
     {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
+        Status::initConnectState();
     }
-    
-    /**
-     * 
-     * @param \NextDom\Controller\Render $render
-     * @param array $pageContent
-     * @return string
-     */
-    public function get(Render $render, array &$pageContent): string
-    {
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/eqlogic.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
-
-        return $render->get('/desktop/params/eqlogic.html.twig', $pageContent);
-    }
-    
+    public abstract function get(Render $render, array &$pageContent): string;
 }
