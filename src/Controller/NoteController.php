@@ -23,9 +23,7 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Status;
-
 use NextDom\Helpers\Render;
-
  
 class NoteController extends BaseController
 {

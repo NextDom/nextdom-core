@@ -64,7 +64,7 @@ class PagesController
         'view_edit'      => Controller\ViewController::class,
         'eqAnalyse'      => Controller\EqAnalyzeController::class,
         'plan'           => Controller\PlanController::class,
-        'plan3d'         => Controller\PlanController::class,
+        'plan3d'         => Controller\Plan3DController::class,
         'market'         => Controller\MarketController::class,
         'reboot'         => Controller\RebootController::class,
         'network'        => Controller\NetworkController::class,

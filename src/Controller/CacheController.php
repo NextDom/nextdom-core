@@ -23,7 +23,6 @@
 namespace NextDom\Controller;
  
 use NextDom\Managers\CacheManager;
-
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 

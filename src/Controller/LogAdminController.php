@@ -23,9 +23,7 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Status;
-
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Utils;
 use NextDom\Managers\PluginManager;
 
 class LogAdminController extends BaseController

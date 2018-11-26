@@ -23,9 +23,7 @@
 namespace NextDom\Controller;
 
 use NextDom\Managers\PluginManager;
-use NextDom\Managers\UpdateManager;
 use NextDom\Helpers\Utils;
-
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
