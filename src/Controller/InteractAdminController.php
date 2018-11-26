@@ -23,11 +23,7 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Status;
-
 use NextDom\Helpers\Render;
-use NextDom\Managers\CmdManager;
-use NextDom\Managers\JeeObjectManager;
-use NextDom\Managers\EqLogicManager;
 
 class InteractAdminController extends BaseController
 {
@@ -52,7 +48,7 @@ class InteractAdminController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/interact_admin.js';
