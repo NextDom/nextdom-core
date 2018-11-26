@@ -22,7 +22,6 @@
 
 namespace NextDom\Controller;
 
-
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Helpers\Render;

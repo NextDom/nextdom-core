@@ -23,7 +23,6 @@
 namespace NextDom\Controller;
  
 use NextDom\Helpers\Utils;
-
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 

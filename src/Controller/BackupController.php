@@ -23,13 +23,11 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Status;
-
 use NextDom\Helpers\Render;
 use NextDom\Managers\UpdateManager;
 
 class BackupController extends BaseController
 {
-
     
     public function __construct()
     {

@@ -23,7 +23,6 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Status;
-
 use NextDom\Helpers\Render;
 
 class SystemController extends BaseController
