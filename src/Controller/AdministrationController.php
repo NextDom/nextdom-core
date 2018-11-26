@@ -22,7 +22,7 @@
 
 namespace NextDom\Controller;
 
-use NextDom\Helpers\PagesController;
+
 use NextDom\Helpers\Render;
 use NextDom\Managers\UpdateManager;
 use NextDom\Helpers\Status;
