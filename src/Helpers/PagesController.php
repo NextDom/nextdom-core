@@ -61,7 +61,7 @@ class PagesController
         'health'         => Controller\HealthController::class,
         'profils'        => Controller\ProfilsController::class,
         'view'           => Controller\ViewController::class,
-        'view_edit'      => Controller\ViewController::class,
+        'view_edit'      => Controller\ViewEditController::class,
         'eqAnalyse'      => Controller\EqAnalyzeController::class,
         'plan'           => Controller\PlanController::class,
         'plan3d'         => Controller\Plan3DController::class,
