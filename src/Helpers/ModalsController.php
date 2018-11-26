@@ -53,7 +53,7 @@ class ModalsController
         'eqLogic.configure' => 'eqLogicConfigure',
         'expression.test' => 'expressionTest',
         'graph.link' => 'graphLink',
-        'interact.query' => 'interactQueryDisplay',
+        'interact.query.display' => 'interactQueryDisplay',
         'interact.test' => 'interactTest',
         'log.display' => 'logDisplay',
         'nextdom.benchmark' => 'nextdomBenchmark',
