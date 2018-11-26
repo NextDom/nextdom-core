@@ -89,40 +89,5 @@ class LogController extends BaseController
         return $render->get('/desktop/diagnostic/logs-view.html.twig', $pageContent);
     }
     
-    /**
-     * Render logAdmin page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of log_admin page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function logAdmin(Render $render, array &$pageContent): string
-    {
-
-        $pageContent['adminIsRescueMode'] = Status::isRescueMode();
-
-        if (!$pageContent['adminIsRescueMode']) {
-            $pageContent['adminPluginsList'] = [];
-            $pluginsList = PluginManager::listPlugin(true);
-            foreach ($pluginsList as $plugin) {
-                $pluginApi = \config::byKey('api', $plugin->getId());
-                    $pluginData = [];
-                    $pluginData['api'] = $pluginApi;
-                    $pluginData['plugin'] = $plugin;
-                    $pageContent['adminPluginsList'][] = $pluginData;
-            }
-        }
-        $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
-
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/log_admin.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
-
-        return $render->get('/desktop/params/log_admin.html.twig', $pageContent);
-    }
+    
 }
