@@ -18,6 +18,8 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
+$.fn.bootstrapBtn = $.fn.button.noConflict();
+
 $(function () {
     $('.colorpick_inline').colorpicker({
         container: true,
