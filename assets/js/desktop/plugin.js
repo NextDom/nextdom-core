@@ -128,7 +128,6 @@ $(".plugin_configure").on('click', function () {
  * @param pluginId string Plugin Id
  */
 function showPlugin(pluginId) {
-    console.log(pluginId);
     $.hideAlert();
     $('#div_resumePluginList').hide();
     $('.li_plugin').removeClass('active');
