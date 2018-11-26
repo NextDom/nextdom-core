@@ -22,7 +22,7 @@
 
 namespace NextDom\Controller;
 
-use NextDom\Helpers\PagesController;
+
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Helpers\Render;
