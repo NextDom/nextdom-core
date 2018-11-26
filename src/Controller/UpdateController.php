@@ -25,8 +25,6 @@ namespace NextDom\Controller;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Managers\UpdateManager;
-use NextDom\Managers\CacheManager;
-use NextDom\Managers\PluginManager;
 
 
 class UpdateController extends BaseController
@@ -66,84 +64,5 @@ class UpdateController extends BaseController
         return $render->get('/desktop/tools/update-view.html.twig', $pageContent);
     }
 
-    /** Render updateAdmin page
-     *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
-     *
-     * @return string Content of update_admin page
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public static function updateAdmin(Render $render, array &$pageContent): string
-    {
-
-        global $CONFIG;
-        global $NEXTDOM_INTERNAL_CONFIG;
-
-        $pageContent['adminReposList'] = UpdateManager::listRepo();
-        $keys = array('market::allowDNS', 'ldap::enable');
-        foreach ($pageContent['adminReposList'] as $key => $value) {
-            $keys[] = $key . '::enable';
-        }
-        $pageContent['networkkey'] = $key;
-        $pageContent['adminConfigs'] = \config::byKeys($keys);
-        $pageContent['JS_VARS']['ldapEnable'] = $pageContent['adminConfigs']['ldap::enable'];
-        $pageContent['adminIsBan'] = \user::isBan();
-        $pageContent['adminHardwareName'] = \nextdom::getHardwareName();
-        $pageContent['adminHardwareKey'] = \nextdom::getHardwareKey();
-        $pageContent['adminLastKnowDate'] = CacheManager::byKey('hour')->getValue();
-        $pageContent['adminIsRescueMode'] = Status::isRescueMode();
-        $pageContent['key'] = Status::isRescueMode();
-
-        if (!$pageContent['adminIsRescueMode']) {
-            $pageContent['adminPluginsList'] = [];
-            $pluginsList = PluginManager::listPlugin(true);
-            foreach ($pluginsList as $plugin) {
-                $pluginApi = \config::byKey('api', $plugin->getId());
-
-                if ($pluginApi !== '') {
-                    $pluginData = [];
-                    $pluginData['api'] = $pluginApi;
-                    $pluginData['plugin'] = $plugin;
-                    $pageContent['adminPluginsList'][] = $pluginData;
-                }
-            }
-        }
-        $pageContent['adminDbConfig'] = $CONFIG['db'];
-        $pageContent['adminUseLdap'] = function_exists('ldap_connect');
-
-        $pageContent['adminBannedIp'] = [];
-        $cache = CacheManager::byKey('security::banip');
-        $values = json_decode($cache->getValue('[]'), true);
-
-        if (is_array($values) && count($values) > 0) {
-            foreach ($values as $value) {
-                $bannedData = [];
-                $bannedData['ip'] = $value['ip'];
-                $bannedData['startDate'] = date('Y-m-d H:i:s', $value['datetime']);
-                if ($pageContent['adminConfigs']['security::bantime'] < 0) {
-                    $bannedData['endDate'] = \__('Jamais');
-                } else {
-                    $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageContent['adminConfigs']['security::bantime']);
-                }
-                $pageContent['adminBannedIp'][] = $bannedData;
-            }
-        }
-
-        $pageContent['adminStats'] = CacheManager::stats();
-        $pageContent['adminCacheFolder'] = CacheManager::getFolder();
-        $pageContent['adminMemCachedExists'] = class_exists('memcached');
-        $pageContent['adminRedisExists'] = class_exists('redis');
-        $pageContent['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
-        $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
-
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/admin/update_admin.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
-
-        return $render->get('/desktop/admin/update_admin.html.twig', $pageContent);
-    }
+   
 }
