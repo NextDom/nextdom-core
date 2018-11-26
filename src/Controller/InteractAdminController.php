@@ -29,7 +29,7 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\EqLogicManager;
 
-class InteractController extends BaseController
+class InteractAdminController extends BaseController
 {
 
     
@@ -40,41 +40,25 @@ class InteractController extends BaseController
     }
 
     /**
-     * Render interact page
+     * Render interactAdmin page
      *
      * @param Render $render Render engine
      * @param array $pageContent Page data
      *
-     * @return string Content of interact page
+     * @return string Content of interact_admin page
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public static function get(Render $render, array &$pageContent): string
     {
-        $interacts = array();
-        $pageContent['interactTotal'] = \interactDef::all();
-        $interacts[-1] = \interactDef::all(null);
-        $interactListGroup = \interactDef::listGroup();
-        if (is_array($interactListGroup)) {
-            foreach ($interactListGroup as $group) {
-                $interacts[$group['group']] = \interactDef::all($group['group']);
-            }
-        }
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/interact.js';
-        $pageContent['interactsList'] = $interacts;
-        $pageContent['interactsListGroup'] = $interactListGroup;
-        $pageContent['interactDisabledOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
-        $pageContent['interactCmdType'] = \nextdom::getConfiguration('cmd:type');
-        $pageContent['interactAllUnite'] = CmdManager::allUnite();
-        $pageContent['interactJeeObjects'] = JeeObjectManager::all();
-        $pageContent['interactEqLogicTypes'] = EqLogicManager::allType();
-        $pageContent['interactEqLogics'] = EqLogicManager::all();
-        $pageContent['interactEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
+
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/interact_admin.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/tools/interact.html.twig', $pageContent);
+        return $render->get('/desktop/params/interact_admin.html.twig', $pageContent);
     }
+
 }
