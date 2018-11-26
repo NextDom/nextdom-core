@@ -34,6 +34,8 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
+$.fn.bootstrapBtn = $.fn.button.noConflict();
+
 uniqId_count = 0;
 modifyWithoutSave = false;
 nbActiveAjaxRequest = 0;
