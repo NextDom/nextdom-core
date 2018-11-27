@@ -39,6 +39,10 @@
     font-size: 100%;
 }
 
+.label-default {
+    background-color: #d2d6de !important;
+}
+
 .label-value {
     padding: 8px 10px 10px 12px;
     font: {
@@ -148,6 +152,12 @@
         left: 15px;
         right: 15px;
     }
+}
+
+.label-sticker-sm {
+    font-size: 100%;
+    padding: 5px 10px;
+    line-height: 1.5;
 }
 
 .label-hash {
