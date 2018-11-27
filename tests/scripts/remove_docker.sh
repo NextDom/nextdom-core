@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 docker kill nextdom-test > /dev/null 2>&1
 docker rm nextdom-test > /dev/null 2>&1

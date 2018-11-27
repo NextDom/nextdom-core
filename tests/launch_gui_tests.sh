@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 function create_docker() {
   echo ">>> Create docker container for tests"

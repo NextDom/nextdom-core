@@ -41,8 +41,8 @@ class FirstUsePage(unittest.TestCase):
 
     def reset_first_use(self):
         os.system('./scripts/sed_in_docker.sh "nextdom::firstUse = 0" "nextdom::firstUse = 1" /var/www/html/core/config/default.config.ini nextdom-test-firstuse')
-        os.system('docker exec -i nextdom-test-firstuse /usr/bin/mysql -u root nextdomdev <<< "UPDATE user SET password = SHA2(\'' + self.password + '\', 512)"')
-        os.system('docker exec -i nextdom-test-firstuse /usr/bin/mysql -u root nextdomdev <<< "UPDATE config SET \\`value\\` = 1 WHERE \\`key\\` = \'nextdom::firstUse\'"')
+        os.system('docker exec -i nextdom-test-firstuse /usr/bin/mysql -u root nextdomdev -e "UPDATE user SET password = SHA2(\'' + self.password + '\', 512)"')
+        os.system('docker exec -i nextdom-test-firstuse /usr/bin/mysql -u root nextdomdev -e "UPDATE config SET \\`value\\` = 1 WHERE \\`key\\` = \'nextdom::firstUse\'"')
 
     def test_first_use_shortcuts(self):
         self.reset_first_use()
