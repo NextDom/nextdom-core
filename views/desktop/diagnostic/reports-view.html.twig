@@ -50,102 +50,114 @@
             <div class="row">
                 <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
                     <div class="bs-sidebar form-group">
-                        <ul id="ul_region" class="nav nav-list bs-sidenav">
-                            <legend class="legend-title"><i class="fas fa-bars">&nbsp;&nbsp;</i>{{ 'Type' }}</legend>
-                            <li class="cursor label-log li_type active" data-type="view"><a><i class="fas fa-picture-o">&nbsp;&nbsp;</i>{{ 'Vues' }}</a></li>
-                            <li class="cursor label-log li_type" data-type="plan"><a><i class="fas fa-object-group">&nbsp;&nbsp;</i>{{ 'Designs' }}</a></li>
-                            <li class="cursor label-log li_type" data-type="plugin"><a><i class="fas fa-puzzle-piece">&nbsp;&nbsp;</i>{{ 'Plugins' }}</a></li>
-                        </ul>
+                        <fieldset>
+                            <ul id="ul_region" class="nav nav-list bs-sidenav">
+                                <legend><i class="fas fa-bars">&nbsp;&nbsp;</i>{{ 'Type' }}</legend>
+                                <li class="cursor label-log li_type active" data-type="view"><a><i class="fas fa-picture-o">&nbsp;&nbsp;</i>{{ 'Vues' }}</a></li>
+                                <li class="cursor label-log li_type" data-type="plan"><a><i class="fas fa-object-group">&nbsp;&nbsp;</i>{{ 'Designs' }}</a></li>
+                                <li class="cursor label-log li_type" data-type="plugin"><a><i class="fas fa-puzzle-piece">&nbsp;&nbsp;</i>{{ 'Plugins' }}</a></li>
+                            </ul>
+                        </fieldset>
                     </div>
                     <div class="bs-sidebar reportType view form-group">
-                        <ul id="ul_view" class="nav nav-list bs-sidenav">
-                            <legend class="legend-title"><i class="fas fa-picture-o">&nbsp;&nbsp;</i>{{ 'Vues' }}</legend>
-                            <div class="filter input-group">
-                                <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                                <input class="filter form-control" placeholder="{{'Rechercher...'}}" />
-                            </div>
-                            {% for view in reportViews %}
-                                <li class="cursor label-log li_reportType" data-type="view" data-id="{{ view['id'] }}"><a>{{ view['icon']|raw }} {{ view['name'] }} (<span class="number">{{ view['number'] }}</span>)</a></li>
-                            {% endfor %}
-                        </ul>
+                        <fieldset>
+                            <ul id="ul_view" class="nav nav-list bs-sidenav">
+                                <legend><i class="fas fa-picture-o">&nbsp;&nbsp;</i>{{ 'Vues' }}</legend>
+                                <div class="filter input-group">
+                                    <div class="input-group-addon"><i class="fas fa-search"></i></div>
+                                    <input class="filter form-control" placeholder="{{'Rechercher...'}}" />
+                                </div>
+                                {% for view in reportViews %}
+                                    <li class="cursor label-log li_reportType" data-type="view" data-id="{{ view['id'] }}"><a>{{ view['icon']|raw }} {{ view['name'] }} (<span class="number">{{ view['number'] }}</span>)</a></li>
+                                {% endfor %}
+                            </ul>
+                        </fieldset>
                     </div>
                     <div class="bs-sidebar reportType plan form-group" style="display:none">
-                        <ul id="ul_plan" class="nav nav-list bs-sidenav">
-                            <legend class="legend-title"><i class="fas fa-object-group">&nbsp;&nbsp;</i>{{ 'Designs' }}</legend>
-                            <div class="filter input-group">
-                                <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                                <input class="filter form-control" placeholder="{{'Rechercher...'}}" />
-                            </div>
-                            {% for plan in reportPlans %}
-                                <li class="cursor label-log li_reportType" data-type="plan" data-id="{{ plan['id'] }}"><a>{{ plan['icon']|raw }} {{ plan['name'] }} (<span class="number">{{ plan['number'] }}</span>)</a></li>
-                            {% endfor %}
-                        </ul>
+                        <fieldset>
+                            <ul id="ul_plan" class="nav nav-list bs-sidenav">
+                                <legend><i class="fas fa-object-group">&nbsp;&nbsp;</i>{{ 'Designs' }}</legend>
+                                <div class="filter input-group">
+                                    <div class="input-group-addon"><i class="fas fa-search"></i></div>
+                                    <input class="filter form-control" placeholder="{{'Rechercher...'}}" />
+                                </div>
+                                {% for plan in reportPlans %}
+                                    <li class="cursor label-log li_reportType" data-type="plan" data-id="{{ plan['id'] }}"><a>{{ plan['icon']|raw }} {{ plan['name'] }} (<span class="number">{{ plan['number'] }}</span>)</a></li>
+                                {% endfor %}
+                            </ul>
+                        </fieldset>
                     </div>
                     <div class="bs-sidebar reportType plugin form-group" style="display:none">
-                        <ul id="ul_plugins" class="nav nav-list bs-sidenav">
-                            <legend class="legend-title"><i class="fas fa-puzzle-piece">&nbsp;&nbsp;</i>{{ 'Plugins' }}</legend>
-                            <div class="filter input-group">
-                                <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                                <input class="filter form-control" placeholder="{{'Rechercher...'}}" />
-                            </div>
-                            {% for plugin in reportPlugins %}
-                                <li class="cursor label-log li_reportType" data-type="plugin" data-id="{{ plugin['id'] }}"><a>{{ plugin['name'] }} (<span class="number">{{ plugin['number'] }}</span>)</a></li>
-                            {% endfor %}
-                        </ul>
+                        <fieldset>
+                            <ul id="ul_plugins" class="nav nav-list bs-sidenav">
+                                <legend><i class="fas fa-puzzle-piece">&nbsp;&nbsp;</i>{{ 'Plugins' }}</legend>
+                                <div class="filter input-group">
+                                    <div class="input-group-addon"><i class="fas fa-search"></i></div>
+                                    <input class="filter form-control" placeholder="{{'Rechercher...'}}" />
+                                </div>
+                                {% for plugin in reportPlugins %}
+                                    <li class="cursor label-log li_reportType" data-type="plugin" data-id="{{ plugin['id'] }}"><a>{{ plugin['name'] }} (<span class="number">{{ plugin['number'] }}</span>)</a></li>
+                                {% endfor %}
+                            </ul>
+                        </fieldset>
                     </div>
                     <div class="bs-sidebar form-group">
-                        <ul id="ul_report" class="nav nav-list bs-sidenav">
-                            <legend class="legend-title"><i class="fas fa-newspaper-o">&nbsp;&nbsp;</i>{{ 'Rapports' }}</legend>
-                            <div class="filter input-group">
-                                <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                                <input class="filter form-control" placeholder="{{'Rechercher un rapport...'}}" />
-                            </div>
-                        </ul>
+                        <fieldset>
+                            <ul id="ul_report" class="nav nav-list bs-sidenav">
+                                <legend><i class="fas fa-newspaper-o">&nbsp;&nbsp;</i>{{ 'Rapports' }}</legend>
+                                <div class="filter input-group">
+                                    <div class="input-group-addon"><i class="fas fa-search"></i></div>
+                                    <input class="filter form-control" placeholder="{{'Rechercher un rapport...'}}" />
+                                </div>
+                            </ul>
+                        </fieldset>
                     </div>
                 </div>
 
                 <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12" style="display:none;" id="div_reportForm">
-                    <legend class="legend-title"><i class="fas fa-newspaper-o">&nbsp;&nbsp;</i>{{ 'Général' }}
-                        <a class="btn btn-danger pull-right" id="bt_removeAll"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Tout supprimer' }}</a>
-                        <a class="btn btn-warning pull-right" id="bt_remove"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
-                        <a class="btn btn-success pull-right" id="bt_download"><i class="fas fa-download">&nbsp;&nbsp;</i>{{ 'Télécharger' }}</a>
-                    </legend>
-                    <div class="form-group">
-                        <label class="col-sm-2 col-xs-2 control-label">{{Nom}}</label>
-                        <div class="col-sm-4 col-xs-4">
-                            <input class="form-control reportAttr" type="text" data-l1key="filename" disabled/>
+                    <fieldset>
+                        <legend><i class="fas fa-newspaper-o">&nbsp;&nbsp;</i>{{ 'Général' }}
+                            <a class="btn btn-danger pull-right" id="bt_removeAll"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Tout supprimer' }}</a>
+                            <a class="btn btn-warning pull-right" id="bt_remove"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                            <a class="btn btn-success pull-right" id="bt_download"><i class="fas fa-download">&nbsp;&nbsp;</i>{{ 'Télécharger' }}</a>
+                        </legend>
+                        <div class="form-group">
+                            <label class="col-sm-2 col-xs-2 control-label">{{Nom}}</label>
+                            <div class="col-sm-4 col-xs-4">
+                                <input class="form-control reportAttr" type="text" data-l1key="filename" disabled/>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 col-xs-2 control-label">{{ 'Chemin' }}</label>
-                        <div class="col-sm-8 col-xs-8">
-                            <input class="form-control reportAttr" type="text" data-l1key="path" disabled/>
+                        <div class="form-group">
+                            <label class="col-sm-2 col-xs-2 control-label">{{ 'Chemin' }}</label>
+                            <div class="col-sm-8 col-xs-8">
+                                <input class="form-control reportAttr" type="text" data-l1key="path" disabled/>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 col-xs-2 control-label">{{ 'Type' }}</label>
-                        <div class="col-sm-4 col-xs-4">
-                            <input class="form-control reportAttr" type="text" data-l1key="type" disabled/>
+                        <div class="form-group">
+                            <label class="col-sm-2 col-xs-2 control-label">{{ 'Type' }}</label>
+                            <div class="col-sm-4 col-xs-4">
+                                <input class="form-control reportAttr" type="text" data-l1key="type" disabled/>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 col-xs-2 control-label">{{ 'Id rapport' }}</label>
-                        <div class="col-sm-4 col-xs-4">
-                            <input class="form-control reportAttr" type="text" data-l1key="id" disabled/>
+                        <div class="form-group">
+                            <label class="col-sm-2 col-xs-2 control-label">{{ 'Id rapport' }}</label>
+                            <div class="col-sm-4 col-xs-4">
+                                <input class="form-control reportAttr" type="text" data-l1key="id" disabled/>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 col-xs-2 control-label">{{ 'Extension' }}</label>
-                        <div class="col-sm-4 col-xs-4">
-                            <input class="form-control reportAttr" type="text" data-l1key="extension" disabled/>
+                        <div class="form-group">
+                            <label class="col-sm-2 col-xs-2 control-label">{{ 'Extension' }}</label>
+                            <div class="col-sm-4 col-xs-4">
+                                <input class="form-control reportAttr" type="text" data-l1key="extension" disabled/>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 col-xs-2 control-label">{{ 'Aperçu' }}</label>
-                        <div class="col-sm-10 col-xs-10" id="div_imgreport">
+                        <div class="form-group">
+                            <label class="col-sm-2 col-xs-2 control-label">{{ 'Aperçu' }}</label>
+                            <div class="col-sm-10 col-xs-10" id="div_imgreport">
 
+                            </div>
                         </div>
-                    </div>
+                    </fieldset>
                 </div>
             </div>
         </div>
