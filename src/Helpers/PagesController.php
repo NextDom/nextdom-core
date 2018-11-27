@@ -85,7 +85,8 @@ class PagesController
         'summary'        => Controller\SummaryController::class,
         'update_admin'   => Controller\UpdateAdminController::class,
         'users'          => Controller\UsersController::class,
-        'note'           => Controller\NoteController::class
+        'note'           => Controller\NoteController::class,
+        'panel'          => Controller\PanelController::class
     ];
 
     /**
@@ -106,21 +107,6 @@ class PagesController
         return $route;
     }
  
-    /**
-     * TODO this methode are used ?
-     * 
-     * @param \NextDom\Helpers\Render $render
-     * @param array $pageContent
-     * @return string
-     */
-    public static function panelPage(Render $render, array &$pageContent): string
-    {
-        $plugin = PluginManager::byId(Utils::init('m'));
-        $page = Utils::init('p');
-
-        ob_start();
-        \include_file('desktop', $page, 'php', $plugin->getId(), true);
-        return ob_get_clean();
-    }
+    
 
 }
