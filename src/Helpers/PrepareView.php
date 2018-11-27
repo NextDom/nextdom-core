@@ -101,7 +101,7 @@ class PrepareView
         $pageData['MENU'] = $render->get('commons/menu_rescue.html.twig');
 
         if (!NextDomHelper::isStarted()) {
-            $pageData['alertMsg'] = 'NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.';
+            $pageData['alertMsg'] = \__('NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.');
         }
         $pageData['CONTENT'] = self::getContent($render, $pageData, $page, null);
 
@@ -109,7 +109,12 @@ class PrepareView
         $render->show('layouts/base_rescue.html.twig', $pageData);
     }
 
-    public static function showContent($configs)
+    /**
+     * 
+     * @global type $language
+     * @param array $configs
+     */
+    public static function showContent(array $configs)
     {
         global $language;
 
