@@ -487,7 +487,7 @@ class PrepareView
             $page = Utils::init('p');
             $controllerRoute = PagesController::getRoute($page);
             if ($controllerRoute === null) {
-                self::showError404AndDie();
+                Router::showError404AndDie();
             } else {
                 $render = Render::getInstance();
                 $pageContent = [];
