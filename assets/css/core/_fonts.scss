@@ -79,8 +79,11 @@
 .treeview-menu > li > a > .fa,
 .treeview-menu > li > a > .fas,
 .treeview-menu > li > a > .glyphicon,
-.treeview-menu > li > a > .ion {
+.treeview-menu > li > a > .ion,
+.treeview-menu > li > a > .icon {
   width: 20px;
+  text-align: center;
+  padding-right: 0px;
 }
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .glyphicon,
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .fa,
