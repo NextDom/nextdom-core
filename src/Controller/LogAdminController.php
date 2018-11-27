@@ -50,7 +50,7 @@ class LogAdminController extends BaseController
      */
     public function get(Render $render, array &$pageContent): string
     {
-
+        global $NEXTDOM_INTERNAL_CONFIG;
         $pageContent['adminIsRescueMode'] = Status::isRescueMode();
 
         if (!$pageContent['adminIsRescueMode']) {
@@ -64,6 +64,7 @@ class LogAdminController extends BaseController
                     $pageContent['adminPluginsList'][] = $pluginData;
             }
         }
+        $pageContent['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
         $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/log_admin.js';
