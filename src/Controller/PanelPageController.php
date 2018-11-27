@@ -43,7 +43,7 @@ class PanelPageController extends BaseController
      * @param array $pageContent
      * @return string
      */
-    public static function get(Render $render, array &$pageContent): string
+    public function get(Render $render, array &$pageContent): string
     {
         $plugin = PluginManager::byId(Utils::init('m'));
         $page = Utils::init('p');

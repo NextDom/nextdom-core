@@ -86,7 +86,7 @@ class PagesController
         'update_admin'   => Controller\UpdateAdminController::class,
         'users'          => Controller\UsersController::class,
         'note'           => Controller\NoteController::class,
-        'panel'          => Controller\PanelController::class
+        'panel'          => Controller\PanelPageController::class
     ];
 
     /**
