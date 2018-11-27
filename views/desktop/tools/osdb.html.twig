@@ -58,30 +58,30 @@
                     {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à' }} {{ adminConfigs['product_name'] }}{{ '. L\'équipe' }} {{ adminConfigs['product_name'] }} {{ 'se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.' }}
                 </div>
                 <!-- Console Section -->
-                <div>
-                    <legend class="legend-title">{{ 'Console Système' }}</legend>
+                <fieldset>
+                    <legend>{{ 'Administration' }}</legend>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Console Système' }}</label>
                         <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                             <a class="btn btn-danger" href="index.php?v=d&p=system"><i class="fas fa-exclamation-triangle">&nbsp;&nbsp;</i>{{ 'Lancer' }}</a>
                         </div>
                     </div>
-                </div>
+                </fieldset>
 
                 <!-- File editor Section -->
-                <div class="legend-section">
-                    <legend class="legend-title">{{ 'Editeur de fichiers' }}</legend>
+                <fieldset class="legend-section">
+                    <legend>{{ 'Editeurs' }}</legend>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Editeur' }}</label>
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Editeur de fichiers' }}</label>
                         <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                             <a class="btn btn-danger" href="index.php?v=d&p=editor"><i class="fas fa-exclamation-triangle">&nbsp;&nbsp;</i>{{ 'Lancer' }}</a>
                         </div>
                     </div>
-                </div>
+                </fieldset>
 
                 <!-- DB Section -->
-                <div class="legend-section">
-                    <legend class="legend-title">{{ 'Base de données' }}</legend>
+                <fieldset class="legend-section">
+                    <legend>{{ 'Base de données' }}</legend>
                     <div class="form-group">
                         <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
                         <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
@@ -100,7 +100,7 @@
                             <span class="label label-value">{{ adminDbConfig['password'] }}</span>
                         </div>
                     </div>
-                </div>
+                </fieldset>
             </form>
         </div>
     </div>

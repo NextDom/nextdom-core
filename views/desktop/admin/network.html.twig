@@ -54,14 +54,12 @@
 
         <!-- Page content -->
         <div class="box-body">
-
             <!-- Alert Section -->
             <div class="alert alert-warning alert-config">{{ 'Attention : cette configuration n\'est là que pour informer' }} {{ adminConfigs['product_name'] }} {{ 'de sa configuration réseau et n\'a aucun impact sur les ports ou l\'IP réellement utilisés pour joindre' }} {{ adminConfigs['product_name'] }}</div>
             <form class="form-horizontal">
-
                 <!-- Internal Access Section -->
-                <div>
-                    <legend class="legend-title">{{ 'Accès interne' }}</legend>
+                <fieldset>
+                    <legend>{{ 'Accès interne' }}</legend>
                     <div class="form-group">
                         <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Protocole' }}</label>
                         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -80,11 +78,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </fieldset>
 
                 <!-- External Access Section -->
-                <div class="legend-section">
-                    <legend class="legend-title">{{ 'Accès externe' }}</legend>
+                <fieldset class="legend-section">
+                    <legend>{{ 'Accès externe' }}</legend>
                     <div class="form-group">
                         <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Protocole' }}</label>
                         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -103,11 +101,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </fieldset>
 
                 <!-- Advanced Section -->
-                <div class="legend-section">
-                    <legend class="legend-title">{{ 'Gestion avancée' }}</legend>
+                <fieldset class="legend-section">
+                    <legend>{{ 'Gestion avancée' }}</legend>
                     <table class="table table-condensed table-bordered">
                         <thead>
                         <tr>
@@ -142,13 +140,13 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </fieldset>
 
                 <!-- DNS Section -->
                 {% for repo, data in adminReposList %}
-                    <div class="legend-section">
-                        {% if data['scope']['proxy'] is defined and data['scope']['proxy'] == true and adminConfigs[repo ~ '::enable'] != 0 %}
-                            <legend class="legend-title">{{ 'DNS (proxy)' }} {{ data['name'] }}</legend>
+                    {% if data['scope']['proxy'] is defined and data['scope']['proxy'] == true and adminConfigs[repo ~ '::enable'] != 0 %}
+                        <fieldset class="legend-section">
+                            <legend>{{ 'DNS (proxy)' }} {{ data['name'] }}</legend>
                             {% if adminConfigs['dns::token'] == '' %}
                                 <div class="alert alert-warning alert-config">{{ 'Attention : cette fonctionnalité n\'est pas disponible dans le service pack community (voir votre service pack sur votre page profil sur le market)' }}</div>
                             {% else %}
@@ -177,8 +175,8 @@
                                     </div>
                                 </div>
                             {% endif %}
-                        {% endif %}
-                    </div>
+                        </fieldset>
+                    {% endif %}
                 {% endfor %}
             </form>
         </div>

@@ -57,8 +57,8 @@
             <form class="form-horizontal">
 
                 <!-- LDAP Section -->
-                <div>
-                    <legend class="legend-title">{{ 'LDAP' }}</legend>
+                <fieldset>
+                    <legend>{{ 'LDAP' }}</legend>
                     {% if adminUseLdap %}
                         <div class="form-group">
                             <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Authentification LDAP' }}</label>
@@ -137,11 +137,11 @@
                     {% else %}
                         <div class="alert alert-info">{{ 'Librairie LDAP non trouvée. Merci de l\'installer avant de pouvoir utiliser la connexion LDAP' }}</div>
                     {% endif %}
-                </div>
+                </fieldset>
 
                 <!-- Connexion section -->
-                <div class="legend-section">
-                    <legend class="legend-title">{{ 'Connexion' }}</legend>
+                <fieldset class="legend-section">
+                    <legend>{{ 'Connexion' }}</legend>
                     <div class="form-group">
                         <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Nombre d\'échecs tolérés' }}</label>
                         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -172,11 +172,11 @@
                             <input type="text" class="configKey form-control" data-l1key="security::whiteips"/>
                         </div>
                     </div>
-                </div>
+                </fieldset>
 
                 <!-- IP section -->
-                <div class="legend-section">
-                    <legend class="legend-title">{{ 'IPs bannies' }}</legend>
+                <fieldset class="legend-section">
+                    <legend>{{ 'IPs bannies' }}</legend>
                     <table class="table table-condensed table-bordered">
                         <thead>
                         <tr>
@@ -195,7 +195,7 @@
                         {% endfor %}
                         </tbody>
                     </table>
-                </div>
+                </fieldset>
             </form>
         </div>
     </div>
