@@ -22,6 +22,7 @@ use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Helpers\ModalsController;
 use NextDom\Helpers\PagesController;
+use NextDom\Helpers\Router;
  
 /**
  * Classe de support à l'affichage des contenus HTML
