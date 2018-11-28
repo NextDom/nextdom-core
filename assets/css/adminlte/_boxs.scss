@@ -33,10 +33,11 @@
     width: 100%;
 }
 
-.box-success, 
-.box-warning, 
-.box-danger, 
-.box-primary {
+.box-success,
+.box-warning,
+.box-danger,
+.box-primary,
+.box-summary {
     border-top:{
         style: solid;
         width: 3px;
@@ -92,4 +93,29 @@
 
 #listCore .box .box-body {
     min-height: 10px;
+}
+
+/* Summry */
+.summaryConfig {
+    margin: 7px 0px 0px 5px;
+}
+.eqLogicSortable {
+    list-style-type: none;
+    min-height: 40px;
+    padding-left: 0px;
+}
+.eqLogicSortable li {
+    margin: 0 0 4px 0;
+    padding: 1px 7px 5px 7px;
+}
+
+.cmdSortable {
+    list-style-type: none;
+    min-height: 20px;
+    padding-left: 0px;
+}
+
+.cmdSortable li {
+    margin: 0 2px 2px 2px;
+    padding: 5px;
 }

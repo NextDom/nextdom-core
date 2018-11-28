@@ -50,41 +50,62 @@ listColor = ['#16a085', '#27ae60', '#2980b9', '#745cb0', '#f39c12', '#d35400', '
 listColorStrong = ['#12846D', '#229351', '#246F9E', '#634F96', '#D88811', '#B74600', '#A53026', '#1D2935', '#687272'];
 pColor = 0;
 
+/* Space before is normal */
 autoCompleteCondition = [
-{val: 'rand(MIN,MAX)'},
-{val: '#heure#'},
-{val: '#jour#'},
-{val: '#mois#'},
-{val: '#annee#'},
-{val: '#date#'},
-{val: '#time#'},
-{val: '#timestamp#'},
-{val: '#semaine#'},
-{val: '#sjour#'},
-{val: '#minute#'},
-{val: '#IP#'},
-{val: '#hostname#'},
-{val: 'variable(mavariable,defaut)'},
-{val: 'delete_variable(mavariable)'},
-{val: 'tendance(commande,periode)'},
-{val: 'average(commande,periode)'},
-{val: 'max(commande,periode)'},
-{val: 'min(commande,periode)'},
-{val: 'round(valeur)'},
-{val: 'trigger(commande)'},
-{val: 'randomColor(debut,fin)'},
-{val: 'lastScenarioExecution(scenario)'},
-{val: 'stateDuration(commande)'},
-{val: 'lastChangeStateDuration(commande,value)'},
-{val: 'median(commande1,commande2)'},
-{val: 'time(value)'},
-{val: 'collectDate(cmd)'},
-{val: 'valueDate(cmd)'},
-{val: 'eqEnable(equipement)'},
-{val: 'name(type,commande)'},
-{val: 'value(commande)'}
+" rand(MIN,MAX)",
+" #heure#",
+" #jour#",
+" #mois#",
+" #annee#",
+" #date#",
+" #time#",
+" #timestamp#",
+" #semaine#",
+" #sjour#",
+" #minute#",
+" #IP#",
+" #hostname#",
+" variable(mavariable,defaut)",
+" delete_variable(mavariable)",
+" tendance(commande,periode)",
+" average(commande,periode)",
+" max(commande,periode)",
+" min(commande,periode)",
+" round(valeur)",
+" trigger(commande)",
+" randomColor(debut,fin)",
+" lastScenarioExecution(scenario)",
+" stateDuration(commande)",
+" lastChangeStateDuration(commande,value)",
+" median(commande1,commande2)",
+" time(value)",
+" collectDate(cmd)",
+" valueDate(cmd)",
+" eqEnable(equipement)",
+" name(type,commande)",
+" value(commande)"
 ];
-autoCompleteAction = ['report','sleep', 'variable', 'delete_variable', 'scenario', 'stop', 'wait','gotodesign','log','message','equipement','ask','nextdom_poweroff','scenario_return','alert','popup','icon','event','remove_inat'];
+autoCompleteAction = [
+"report",
+"sleep",
+"variable",
+"delete_variable",
+"scenario",
+"stop",
+"wait",
+"gotodesign",
+"log",
+"message",
+"equipement",
+"ask",
+"nextdom_poweroff",
+"scenario_return",
+"alert",
+"popup",
+"icon",
+"event",
+"remove_inat"
+];
 
 if (getUrlVars('saveSuccessFull') == 1) {
   notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
@@ -448,28 +469,28 @@ $('#div_pageContainer').off('click','.bt_selectCmdExpression').on('click','.bt_s
        '<div class="col-md-12"> ' +
        '<form class="form-horizontal" onsubmit="return false;"> ' +
        '<div class="form-group"> ' +
-       '<label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
-       '             <div class="col-xs-3">' +
-       '                <select class="conditionAttr form-control" data-l1key="operator">' +
-       '                    <option value="==">{{égal}}</option>' +
-       '                  <option value=">">{{supérieur}}</option>' +
-       '                  <option value="<">{{inférieur}}</option>' +
-       '                 <option value="!=">{{différent}}</option>' +
-       '            </select>' +
-       '       </div>' +
-       '      <div class="col-xs-4">' +
-       '         <input type="number" class="conditionAttr form-control" data-l1key="operande" />' +
-       '    </div>' +
+       '   <label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
+       '   <div class="col-xs-3">' +
+       '       <select class="conditionAttr form-control" data-l1key="operator">' +
+       '           <option value="==">{{égal}}</option>' +
+       '           <option value=">">{{supérieur}}</option>' +
+       '           <option value="<">{{inférieur}}</option>' +
+       '           <option value="!=">{{différent}}</option>' +
+       '       </select>' +
+       '   </div>' +
+       '   <div class="col-xs-4">' +
+       '      <input type="number" class="conditionAttr form-control" data-l1key="operande" />' +
+       '   </div>' +
        '</div>' +
        '<div class="form-group"> ' +
-       '<label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
-       '             <div class="col-xs-3">' +
-       '                <select class="conditionAttr form-control" data-l1key="next">' +
-       '                    <option value="">rien</option>' +
-       '                  <option value="ET">{{et}}</option>' +
-       '                  <option value="OU">{{ou}}</option>' +
-       '            </select>' +
-       '       </div>' +
+       '   <label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
+       '   <div class="col-xs-3">' +
+       '        <select class="conditionAttr form-control" data-l1key="next">' +
+       '            <option value="">rien</option>' +
+       '            <option value="ET">{{et}}</option>' +
+       '            <option value="OU">{{ou}}</option>' +
+       '        </select>' +
+       '   </div>' +
        '</div>' +
        '</div> </div>' +
        '</form> </div>  </div>';
@@ -479,27 +500,27 @@ $('#div_pageContainer').off('click','.bt_selectCmdExpression').on('click','.bt_s
       '<div class="col-md-12"> ' +
       '<form class="form-horizontal" onsubmit="return false;"> ' +
       '<div class="form-group"> ' +
-      '<label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
-      '             <div class="col-xs-3">' +
-      '                <select class="conditionAttr form-control" data-l1key="operator">' +
-      '                    <option value="==">{{égale}}</option>' +
-      '                  <option value="matches">{{contient}}</option>' +
-      '                 <option value="!=">{{différent}}</option>' +
-      '            </select>' +
-      '       </div>' +
-      '      <div class="col-xs-4">' +
-      '         <input class="conditionAttr form-control" data-l1key="operande" />' +
+      '    <label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
+      '    <div class="col-xs-3">' +
+      '       <select class="conditionAttr form-control" data-l1key="operator">' +
+      '             <option value="==">{{égale}}</option>' +
+      '             <option value="matches">{{contient}}</option>' +
+      '             <option value="!=">{{différent}}</option>' +
+      '       </select>' +
+      '    </div>' +
+      '    <div class="col-xs-4">' +
+      '       <input class="conditionAttr form-control" data-l1key="operande" />' +
       '    </div>' +
       '</div>' +
       '<div class="form-group"> ' +
-      '<label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
-      '             <div class="col-xs-3">' +
-      '                <select class="conditionAttr form-control" data-l1key="next">' +
-      '                    <option value="">{{rien}}</option>' +
-      '                  <option value="ET">{{et}}</option>' +
-      '                  <option value="OU">{{ou}}</option>' +
-      '            </select>' +
-      '       </div>' +
+      '     <label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
+      '     <div class="col-xs-3">' +
+      '         <select class="conditionAttr form-control" data-l1key="next">' +
+      '             <option value="">{{rien}}</option>' +
+      '             <option value="ET">{{et}}</option>' +
+      '             <option value="OU">{{ou}}</option>' +
+      '         </select>' +
+      '     </div>' +
       '</div>' +
       '</div> </div>' +
       '</form> </div>  </div>';
@@ -509,28 +530,28 @@ $('#div_pageContainer').off('click','.bt_selectCmdExpression').on('click','.bt_s
       '<div class="col-md-12"> ' +
       '<form class="form-horizontal" onsubmit="return false;"> ' +
       '<div class="form-group"> ' +
-      '<label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
-      '            <div class="col-xs-7">' +
-      '                 <input class="conditionAttr" data-l1key="operator" value="==" style="display : none;" />' +
-      '                  <select class="conditionAttr form-control" data-l1key="operande">' +
-      '                       <option value="1">{{Ouvert}}</option>' +
-      '                       <option value="0">{{Fermé}}</option>' +
-      '                       <option value="1">{{Allumé}}</option>' +
-      '                       <option value="0">{{Eteint}}</option>' +
-      '                       <option value="1">{{Déclenché}}</option>' +
-      '                       <option value="0">{{Au repos}}</option>' +
-      '                       </select>' +
-      '                    </div>' +
-      '                 </div>' +
+      '   <label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
+      '   <div class="col-xs-7">' +
+      '        <input class="conditionAttr" data-l1key="operator" value="==" style="display : none;" />' +
+      '        <select class="conditionAttr form-control" data-l1key="operande">' +
+      '            <option value="1">{{Ouvert}}</option>' +
+      '            <option value="0">{{Fermé}}</option>' +
+      '            <option value="1">{{Allumé}}</option>' +
+      '            <option value="0">{{Eteint}}</option>' +
+      '            <option value="1">{{Déclenché}}</option>' +
+      '            <option value="0">{{Au repos}}</option>' +
+      '        </select>' +
+      '    </div>' +
+      '</div>' +
       '<div class="form-group"> ' +
-      '<label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
-      '             <div class="col-xs-3">' +
-      '                <select class="conditionAttr form-control" data-l1key="next">' +
-      '                  <option value="">{{rien}}</option>' +
-      '                  <option value="ET">{{et}}</option>' +
-      '                  <option value="OU">{{ou}}</option>' +
-      '            </select>' +
-      '       </div>' +
+      '    <label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
+      '    <div class="col-xs-3">' +
+      '        <select class="conditionAttr form-control" data-l1key="next">' +
+      '            <option value="">{{rien}}</option>' +
+      '            <option value="ET">{{et}}</option>' +
+      '            <option value="OU">{{ou}}</option>' +
+      '        </select>' +
+      '    </div>' +
       '</div>' +
       '</div> </div>' +
       '</form> </div>  </div>';
@@ -611,7 +632,7 @@ $('#div_pageContainer').off('click','.bt_selectEqLogicExpression').on('click','.
   });
 });
 
-$('#div_pageContainer').off('focusout','.expression .expressionAttr[data-l1key=expression]').on('focusout','.expression .expressionAttr[data-l1key=expression]',  function (event) {
+$('#div_pageContainer').off('focusout','.expression .expressionAttr[data-l1key=expression]').on('focusout','.expression .expressionAttr[data-l1key=expression]', function (event) {
   var el = $(this);
   if (el.closest('.expression').find('.expressionAttr[data-l1key=type]').value() == 'action') {
     var expression = el.closest('.expression').getValues('.expressionAttr');
@@ -621,7 +642,6 @@ $('#div_pageContainer').off('focusout','.expression .expressionAttr[data-l1key=e
     });
   }
 });
-
 
 /**************** Scheduler **********************/
 
@@ -792,15 +812,48 @@ function setEditor() {
   });
 }
 
+function splitAutocomplete( val ) {
+  return val.split( / \s*/ );
+}
+function extractLastAutocomplete( term ) {
+      return splitAutocomplete( term ).pop();
+    }
+
 function setAutocomplete() {
   $('.expression').each(function () {
     if ($(this).find('.expressionAttr[data-l1key=type]').value() == 'condition') {
-      $(this).find('.expressionAttr[data-l1key=expression]').sew({values: autoCompleteCondition, token: '[ |#]'});
+      $(this).find('.expressionAttr[data-l1key=expression]').autocomplete({
+        source: function( request, response ) {
+          response( $.ui.autocomplete.filter(
+            autoCompleteCondition, extractLastAutocomplete( request.term ) ) );
+        },
+        classes: {
+          "ui-autocomplete": "autocomplete"
+        },
+        autoFocus: true,
+        minLength: 0,
+        focus: function() {
+          return false;
+        },
+        select: function( event, ui ) {
+          var terms = splitAutocomplete( this.value );
+          terms.pop();
+          terms.push(ui.item.value.trim());
+          terms.push( "" );
+          this.value = terms.join( " " );
+          return false;
+        }
+      });
     }
     if ($(this).find('.expressionAttr[data-l1key=type]').value() == 'action') {
       $(this).find('.expressionAttr[data-l1key=expression]').autocomplete({
         source: autoCompleteAction,
-        close: function (event, ui) {
+        classes: {
+          "ui-autocomplete": "autocomplete"
+        },
+        autoFocus: true,
+        minLength: 0,
+        close: function( event, ui ) {
           $(this).trigger('focusout');
         }
       });
@@ -836,6 +889,10 @@ function printScenario(_id) {
      $('#span_ongoing').text('{{Arrêté}}');
      $('#span_ongoing').removeClass('label-info label-success label-warning').addClass('label-danger');
      break;
+     default :
+     $('#bt_stopScenario').hide();
+     $('#span_ongoing').text('{{Arrêté}}');
+     $('#span_ongoing').removeClass('label-info label-success label-warning').addClass('label-danger');
    }
  }
  nextdom.scenario.get({
