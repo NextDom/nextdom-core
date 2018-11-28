@@ -99,7 +99,6 @@ function gen_js {
         vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
         vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js \
         assets/3rdparty/jquery.multi-column-select/multi-column-select.js \
-        assets/3rdparty/jquery.sew/jquery.sew.min.js \
         vendor/node_modules/jquery-cron/dist/jquery-cron.js \
         vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js \
         vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
