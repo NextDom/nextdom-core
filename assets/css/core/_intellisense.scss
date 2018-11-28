@@ -19,24 +19,36 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-.-sew-list-container {
-    background: $lightgolden;
-    border-radius: 3px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    width: auto;
-    max-height: 400px;
-    overflow-y: auto;
-    margin-top: 20px;
-    z-index: 9999;
+.ui-autocomplete {
+  background-color: $lightgolden;
+  border-radius: 3px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  max-height: 400px;
+  overflow-y: auto;
+  margin-top: 20px;
+  z-index: 9999;
+
+  .ui-menu-item-wrapper {
+      padding: 5px;
+  }
+
+  .ui-menu-item {
+  	cursor:pointer;
+  }
+
+  .ui-state-hover, .ui-state-active {
+    border: none;
+  }
 }
 
-.-sew-list {
-    list-style: none;
-    marging: 0;
-    padding: 0;
-    max-height: none;
-}
-
-.-sew-list-item.selected {
-    text-decoration: none;
+/* Autocomplete TOTO a deplacer dans theme mais cela ne fonctionne pas*/
+.autocomplete {
+  .ui-menu-item-wrapper:hover {
+      color: $white;
+      background-color: $nextdom_blue;
+  }
+  .ui-state-hover, .ui-state-active {
+      color: $white;
+      background-color: $nextdom_blue;
+  }
 }
