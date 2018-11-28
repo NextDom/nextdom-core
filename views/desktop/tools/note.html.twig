@@ -57,8 +57,8 @@
         <div class="box-body">
             <div style="display: none;" id="div_noteManagementAlert"></div>
             <div class="row">
-                <div class="col-lg-2 col-md-3 col-sm-4" style="overflow-y:auto;overflow-x:hidden;">
-                    <legend class="legend-title">{{ 'Liste des notes' }}</legend>
+                <fieldset class="col-lg-2 col-md-3 col-sm-4" style="overflow-y:auto;overflow-x:hidden;">
+                    <legend>{{ 'Liste des notes' }}</legend>
                     <div class="filter input-group">
                         <div class="input-group-addon"><i class="fas fa-search"></i></div>
                         <input class="filter form-control" placeholder="{{'Rechercher...'}}" />
@@ -68,16 +68,16 @@
 
                         </ul>
                     </div>
-                </div>
+                </fieldset>
 
-                <div class="col-lg-10 col-md-9 col-sm-8" style="display:none;border-left: solid 1px #EEE; overflow-y:hidden;overflow-x:hidden;" id="div_noteDisplay">
-                    <legend class="legend-title">{{ 'Note selectionnée' }}</legend>
+                <fieldset class="col-lg-10 col-md-9 col-sm-8" style="display:none;border-left: solid 1px #EEE; overflow-y:hidden;overflow-x:hidden;" id="div_noteDisplay">
+                    <legend>{{ 'Note selectionnée' }}</legend>
                     <div id="div_noteManagerDisplay">
                         <input class="noteAttr form-control" data-l1key="id" style="display:none;" disabled/>
-                        <input class="noteAttr form-control label-list" data-l1key="name" disabled/>
+                        <input class="noteAttr form-control label-list" style="margin-top:0px;" data-l1key="name" disabled/>
                         <textarea class="noteAttr form-control ta_autosize" data-l1key="text" disabled></textarea>
                     </div>
-                </div>
+                </fieldset>
             </div>
         </div>
     </div>
