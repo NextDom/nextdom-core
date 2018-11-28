@@ -64,12 +64,6 @@
                                 <li class="cursor label-log li_type" data-type="plugin"><a><i class="fas fa-puzzle-piece">&nbsp;&nbsp;</i>{{ 'Plugins' }}</a></li>
                             </ul>
                         </fieldset>
-                        <ul id="ul_region" class="nav nav-list bs-sidenav">
-                            <legend class="legend-title">{{ 'Type' }}</legend>
-                            <li class="cursor label-log li_type active" data-type="view"><a><i class="fas fa-picture-o">&nbsp;&nbsp;</i>{{ 'Vues' }}</a></li>
-                            <li class="cursor label-log li_type" data-type="plan"><a><i class="fas fa-object-group">&nbsp;&nbsp;</i>{{ 'Designs' }}</a></li>
-                            <li class="cursor label-log li_type" data-type="plugin"><a><i class="fas fa-puzzle-piece">&nbsp;&nbsp;</i>{{ 'Plugins' }}</a></li>
-                        </ul>
                     </div>
                     <div class="bs-sidebar reportType view form-group">
                         <fieldset>
@@ -123,55 +117,50 @@
                                 </div>
                             </ul>
                         </fieldset>
-                        <ul id="ul_report" class="nav nav-list bs-sidenav">
-                            <legend class="legend-title">{{ 'Rapports' }}</legend>
-                            <div class="filter input-group">
-                                <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                                <input class="filter form-control" placeholder="{{'Rechercher...'}}" />
-                            </div>
-                        </ul>
                     </div>
                 </div>
 
                 <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12" style="display:none;border-left: solid 1px #EEE;" id="div_reportForm">
                     <form class="form-horizontal">
-                        <legend class="legend-title">{{ 'Rapport selectionné' }}</legend>
-                        <div class="form-group">
-                            <label class="col-sm-2 col-xs-12 control-label">{{ 'Nom' }}</label>
-                            <div class="col-sm-10 col-xs-12">
-                                <input class="form-control reportAttr" type="text" data-l1key="filename" disabled/>
+                        <fieldset>
+                            <legend class="legend-title">{{ 'Rapport selectionné' }}</legend>
+                            <div class="form-group">
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Nom' }}</label>
+                                <div class="col-sm-10 col-xs-12">
+                                    <input class="form-control reportAttr" type="text" data-l1key="filename" disabled/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 col-xs-12 control-label">{{ 'Chemin' }}</label>
-                            <div class="col-sm-10 col-xs-12">
-                                <input class="form-control reportAttr" type="text" data-l1key="path" disabled/>
+                            <div class="form-group">
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Chemin' }}</label>
+                                <div class="col-sm-10 col-xs-12">
+                                    <input class="form-control reportAttr" type="text" data-l1key="path" disabled/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 col-xs-12 control-label">{{ 'Type' }}</label>
-                            <div class="col-sm-10 col-xs-12">
-                                <input class="form-control reportAttr" type="text" data-l1key="type" disabled/>
+                            <div class="form-group">
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Type' }}</label>
+                                <div class="col-sm-10 col-xs-12">
+                                    <input class="form-control reportAttr" type="text" data-l1key="type" disabled/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 col-xs-12 control-label">{{ 'Id rapport' }}</label>
-                            <div class="col-sm-10 col-xs-12">
-                                <input class="form-control reportAttr" type="text" data-l1key="id" disabled/>
+                            <div class="form-group">
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Id rapport' }}</label>
+                                <div class="col-sm-10 col-xs-12">
+                                    <input class="form-control reportAttr" type="text" data-l1key="id" disabled/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 col-xs-12 control-label">{{ 'Extension' }}</label>
-                            <div class="col-sm-10 col-xs-12">
-                                <input class="form-control reportAttr" type="text" data-l1key="extension" disabled/>
+                            <div class="form-group">
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Extension' }}</label>
+                                <div class="col-sm-10 col-xs-12">
+                                    <input class="form-control reportAttr" type="text" data-l1key="extension" disabled/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 col-xs-12 control-label">{{ 'Aperçu' }}</label>
-                            <div class="col-sm-10 col-xs-12" id="div_imgreport">
+                            <div class="form-group">
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Aperçu' }}</label>
+                                <div class="col-sm-10 col-xs-12" id="div_imgreport">
 
+                                </div>
                             </div>
-                        </div>
+                        </fieldset>
                     </form>
                 </div>
             </div>

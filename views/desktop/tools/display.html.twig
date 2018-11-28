@@ -61,7 +61,10 @@
                 <input class="form-control" placeholder="{{ 'Rechercher...' }}" id="in_search"/>
             </div>
             <div class="form-group">
-                <label class="checkbox-inline"><input type="checkbox" id="cb_actifDisplay" checked/>{{ 'Inactif' }}</label>
+                <div class="pull-left">
+                    <input type="checkbox" class="configKey" id="cb_actifDisplay" data-l1key="cb_actifDisplay" checked>
+                    <label for="cb_actifDisplay" class="control-label label-check" data-toggle="tooltip" title="" data-original-title="{{'Afficher les équipements inactifs'}}">{{'Inactif'}}</label>
+                </div>
                 <span class="label label-default label-sticker-big pull-right">{{ 'Nombre d\'objets :' }} {{ displayObjects|length }}</span>
                 <span class="label label-info label-sticker-big pull-right">{{ 'Nombre d\'équipements :' }} {{ displayNbEqLogics }}</span>
                 <span class="label label-primary label-sticker-big pull-right">{{ 'Nombre de commandes :' }} {{ displayNbCmds }}</span>
