@@ -37,6 +37,7 @@
     <div class="action-bar">
         <div class="action-group">
             <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=log"><i class="fas fa-eye">&nbsp;&nbsp;</i>{{ 'Visualiser' }}</a>
         </div>
         <div class="action-group">
             <a class="btn btn-success btn-action-bar pull-right" id="bt_savelog_admin"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
@@ -90,10 +91,34 @@
                     <div id="div_actionOnMessage"></div>
                 </fieldset>
 
-                <!-- Alertes Section -->
-                <fieldset class="legend-section">
-                    <legend>{{ 'Alertes' }}</legend>
-                    {% for level, value in adminAlerts %}
+                    <!-- Alertes Section -->
+                    <div class="legend-section">
+                        <legend class="legend-title legend-section">{{ 'Alertes' }}</legend>
+                        {% for level, value in adminAlerts %}
+                            <div class="form-group">
+                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'A chaque' }} {{ value['name'] }}</label>
+                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                    <input type="checkbox" class="configKey" data-l1key="alert::addMessageOn{{ level|capitalize }}" id="addMessageOn"/>
+                                    <label for="addMessageOn" class="control-label label-check">{{'Ajouter un message'}}</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Commande sur' }} {{ value['name'] }}</label>
+                                <div class="col-lg-5 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="input-group">
+                                        <input type="text" class="configKey form-control" data-l1key="alert::{{ level }}Cmd"/>
+                                        <span class="input-group-btn">
+                                        <a class="btn btn-default cursor bt_selectAlertCmd" data-toggle="tooltip" title="" data-original-title="Rechercher une commande" data-type="{{ level }}"><i class="fa fa-list-alt"></i></a>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Log Section -->
+                    <div class="legend-section">
+                        <legend class="legend-title">{{ 'Paramètres des Logs' }}</legend>
                         <div class="form-group">
                             <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'A chaque' }} {{ value['name'] }}</label>
                             <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
