@@ -386,7 +386,6 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js';
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
-            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.sew/jquery.sew.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-cron/dist/jquery-cron.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';

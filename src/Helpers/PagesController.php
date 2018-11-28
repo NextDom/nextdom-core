@@ -213,8 +213,6 @@ class PagesController
         $pageContent['scenarioAllObjects'] = JeeObjectManager::all();
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/scenario.js';
-        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/jquery.sew/jquery.caretposition.js';
-        $pageContent['JS_END_POOL'][] = '/assets/3rdparty/jquery.sew/jquery.sew.min.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
 

@@ -50,60 +50,61 @@ listColor = ['#16a085', '#27ae60', '#2980b9', '#745cb0', '#f39c12', '#d35400', '
 listColorStrong = ['#12846D', '#229351', '#246F9E', '#634F96', '#D88811', '#B74600', '#A53026', '#1D2935', '#687272'];
 pColor = 0;
 
+/* Space before is normal */
 autoCompleteCondition = [
-{val: 'rand(MIN,MAX)'},
-{val: '#heure#'},
-{val: '#jour#'},
-{val: '#mois#'},
-{val: '#annee#'},
-{val: '#date#'},
-{val: '#time#'},
-{val: '#timestamp#'},
-{val: '#semaine#'},
-{val: '#sjour#'},
-{val: '#minute#'},
-{val: '#IP#'},
-{val: '#hostname#'},
-{val: 'variable(mavariable,defaut)'},
-{val: 'delete_variable(mavariable)'},
-{val: 'tendance(commande,periode)'},
-{val: 'average(commande,periode)'},
-{val: 'max(commande,periode)'},
-{val: 'min(commande,periode)'},
-{val: 'round(valeur)'},
-{val: 'trigger(commande)'},
-{val: 'randomColor(debut,fin)'},
-{val: 'lastScenarioExecution(scenario)'},
-{val: 'stateDuration(commande)'},
-{val: 'lastChangeStateDuration(commande,value)'},
-{val: 'median(commande1,commande2)'},
-{val: 'time(value)'},
-{val: 'collectDate(cmd)'},
-{val: 'valueDate(cmd)'},
-{val: 'eqEnable(equipement)'},
-{val: 'name(type,commande)'},
-{val: 'value(commande)'}
+" rand(MIN,MAX)",
+" #heure#",
+" #jour#",
+" #mois#",
+" #annee#",
+" #date#",
+" #time#",
+" #timestamp#",
+" #semaine#",
+" #sjour#",
+" #minute#",
+" #IP#",
+" #hostname#",
+" variable(mavariable,defaut)",
+" delete_variable(mavariable)",
+" tendance(commande,periode)",
+" average(commande,periode)",
+" max(commande,periode)",
+" min(commande,periode)",
+" round(valeur)",
+" trigger(commande)",
+" randomColor(debut,fin)",
+" lastScenarioExecution(scenario)",
+" stateDuration(commande)",
+" lastChangeStateDuration(commande,value)",
+" median(commande1,commande2)",
+" time(value)",
+" collectDate(cmd)",
+" valueDate(cmd)",
+" eqEnable(equipement)",
+" name(type,commande)",
+" value(commande)"
 ];
 autoCompleteAction = [
-{val: 'report'},
-{val: 'sleep'},
-{val: 'variable'},
-{val: 'delete_variable'},
-{val: 'scenario'},
-{val: 'stop'},
-{val: 'wait'},
-{val: 'gotodesign'},
-{val: 'log'},
-{val: 'message'},
-{val: 'equipement'},
-{val: 'ask'},
-{val: 'nextdom_poweroff'},
-{val: 'scenario_return'},
-{val: 'alert'},
-{val: 'popup'},
-{val: 'icon'},
-{val: 'event'},
-{val: 'remove_inat'},
+"report",
+"sleep",
+"variable",
+"delete_variable",
+"scenario",
+"stop",
+"wait",
+"gotodesign",
+"log",
+"message",
+"equipement",
+"ask",
+"nextdom_poweroff",
+"scenario_return",
+"alert",
+"popup",
+"icon",
+"event",
+"remove_inat"
 ];
 
 if (getUrlVars('saveSuccessFull') == 1) {
@@ -631,12 +632,11 @@ $('#div_pageContainer').off('click','.bt_selectEqLogicExpression').on('click','.
   });
 });
 
-$('#div_pageContainer').off('change','.expression .expressionAttr[data-l1key=expression]').on('change','.expression .expressionAttr[data-l1key=expression]', function (event) {
-  modifyWithoutSave = true;
+$('#div_pageContainer').off('focusout','.expression .expressionAttr[data-l1key=expression]').on('focusout','.expression .expressionAttr[data-l1key=expression]', function (event) {
   var el = $(this);
   if (el.closest('.expression').find('.expressionAttr[data-l1key=type]').value() == 'action') {
     var expression = el.closest('.expression').getValues('.expressionAttr');
-    nextdom.cmd.displayActionOption(el.value().trim(), init(expression[0].options), function (html) {
+    nextdom.cmd.displayActionOption(el.value(), init(expression[0].options), function (html) {
       el.closest('.expression').find('.expressionOptions').html(html);
       taAutosize();
     });
@@ -757,6 +757,10 @@ $('#div_pageContainer').on('change','.scenarioAttr',  function () {
   modifyWithoutSave = true;
 });
 
+$('#div_pageContainer').on('change','.expressionAttr',  function () {
+  modifyWithoutSave = true;
+});
+
 $('#div_pageContainer').on('change','.elementAttr',  function () {
   modifyWithoutSave = true;
 });
@@ -808,18 +812,50 @@ function setEditor() {
   });
 }
 
+function splitAutocomplete( val ) {
+  return val.split( / \s*/ );
+}
+function extractLastAutocomplete( term ) {
+      return splitAutocomplete( term ).pop();
+    }
+
 function setAutocomplete() {
   $('.expression').each(function () {
     if ($(this).find('.expressionAttr[data-l1key=type]').value() == 'condition') {
-      $(this).find('.expressionAttr[data-l1key=expression]').sew({
-        values: autoCompleteCondition,
-        token: '[ |#]'
+      $(this).find('.expressionAttr[data-l1key=expression]').autocomplete({
+        source: function( request, response ) {
+          response( $.ui.autocomplete.filter(
+            autoCompleteCondition, extractLastAutocomplete( request.term ) ) );
+        },
+        classes: {
+          "ui-autocomplete": "autocomplete"
+        },
+        autoFocus: true,
+        minLength: 0,
+        focus: function() {
+          return false;
+        },
+        select: function( event, ui ) {
+          var terms = splitAutocomplete( this.value );
+          terms.pop();
+          terms.push(ui.item.value.trim());
+          terms.push( "" );
+          this.value = terms.join( " " );
+          return false;
+        }
       });
     }
     if ($(this).find('.expressionAttr[data-l1key=type]').value() == 'action') {
-      $(this).find('.expressionAttr[data-l1key=expression]').sew({
-        values: autoCompleteAction,
-        token: '[ |#|a-zA-Z]'
+      $(this).find('.expressionAttr[data-l1key=expression]').autocomplete({
+        source: autoCompleteAction,
+        classes: {
+          "ui-autocomplete": "autocomplete"
+        },
+        autoFocus: true,
+        minLength: 0,
+        close: function( event, ui ) {
+          $(this).trigger('focusout');
+        }
       });
     }
   });
@@ -853,6 +889,10 @@ function printScenario(_id) {
      $('#span_ongoing').text('{{Arrêté}}');
      $('#span_ongoing').removeClass('label-info label-success label-warning').addClass('label-danger');
      break;
+     default :
+     $('#bt_stopScenario').hide();
+     $('#span_ongoing').text('{{Arrêté}}');
+     $('#span_ongoing').removeClass('label-info label-success label-warning').addClass('label-danger');
    }
  }
  nextdom.scenario.get({
