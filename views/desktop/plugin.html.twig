@@ -69,13 +69,13 @@
                 <div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">
                     <div class="box pluginDisplayCard" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_icon="{{ plugin.getPathImgIcon() }}" data-plugin_id="{{ plugin.getId() }}">
                         <div class="box-header with-border" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
-                            <h4 class="box-title"><img style="height:50px;padding-right:5px" src="{{ plugin.getPathImgIcon() }}"> {{ plugin.getName() }}</h4>
+                            <h4 class="box-title"><img style="height:50px;padding-right:5px" src="{{ plugin.getPathImgIcon() }}">{{ plugin.getName() }}</h4>
                         </div>
                         <div class="box-body" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
-                            <p><b>{{ 'Catégorie :' }}</b> {{ plugin.getCategory() }}</p>
-                            <p style="white-space: nowrap;white-space: pre-line;height: 75px;overflow: hidden;text-overflow: ellipsis;"><b>{{ 'Description :' }}</b> {{ plugin.getDescription()|raw }}</p>
-                            <p><b>{{ 'Auteur :' }}</b> {{ plugin.getAuthor() }}</p>
-                            <p><i>{{ 'Licence :' }}</i> {{ plugin.getLicense() }}</p>
+                            <p><b>{{ 'Catégorie :' }}&nbsp;&nbsp;</b>{{ plugin.getCategory() }}</p>
+                            <p style="white-space: nowrap;white-space: pre-line;height: 75px;overflow: hidden;text-overflow: ellipsis;"><b>{{ 'Description :' }}&nbsp;&nbsp;</b>{{ plugin.getDescription()|raw }}</p>
+                            <p><b>{{ 'Auteur :' }}&nbsp;&nbsp;</b>{{ plugin.getAuthor() }}</p>
+                            <p><i>{{ 'Licence :' }}&nbsp;&nbsp;</i>{{ plugin.getLicense() }}</p>
                         </div>
                         <div class="box-footer clearfix text-center">
                             <a class="btn btn-info btn-sm pull-left plugin_configure" title="{{'Configurer'}}"><i class="fas fa-cog">&nbsp;&nbsp;</i>{{'Configurer'}}</a>
@@ -99,43 +99,53 @@
 
     <section class="content">
         <div class="box box-header">
-            <div class="box-title">
+            <h3 class="box-title">
                 <img style="height:50px;padding-right:5px" src="" id="span_plugin_icon">
                 <span id="span_plugin_name"></span> (<span id="span_plugin_id"></span>) - <span id="span_plugin_install_version"></span>
-            </div>
+            </h3>
             <span id="span_plugin_market" class="pull-right"></span>
             <span id="span_plugin_doc" class="pull-right"></span>
         </div>
         <div class="row">
+            <div class="col-sm-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fas fa-info-circle">&nbsp;&nbsp;</i>{{ 'Description' }}</h3>
+                    </div>
+                    <div class="box-body">
+                        <span id="span_plugin_description"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-6 col-sm-12">
                 <div class="box">
-                    <div class="box-header with-border"><h3 class="box-title"><i class="fas fa-circle-o-notch">&nbsp;&nbsp;</i>{{ 'Etat' }}</h3></div>
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fas fa-circle-o-notch">&nbsp;&nbsp;</i>{{ 'Etat' }}</h3>
+                    </div>
                     <div class="box-body">
-                        <div id="div_plugin_toggleState"></div>
                         <form class="form-horizontal">
                             <fieldset>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">{{ 'Version' }}</label>
-                                    <div class="col-sm-4">
-                                        <span id="span_plugin_install_date" style="position:relative;top:9px;"></span>
-                                    </div>
-                                    <label class="col-sm-2 control-label">{{ 'Version NextDom' }}</label>
-                                    <div class="col-sm-4">
-                                        <span id="span_plugin_require" style="position:relative;top:9px;"></span>
-                                    </div>
+                                    <label class="col-xs-2 control-label">{{ 'Version' }}</label>
+                                    <div class="col-xs-10"><span class="label label-config label-primary" id="span_plugin_install_date"></span></div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">{{ 'Auteur' }}</label>
-                                    <div class="col-sm-4">
-                                        <span id="span_plugin_author" style="position:relative;top:9px;"></span>
-                                    </div>
-                                    <label class="col-sm-2 control-label">{{ 'License' }}</label>
-                                    <div class="col-sm-4">
-                                        <span id="span_plugin_license" style="position:relative;top:9px;"></span>
-                                    </div>
+                                    <label class="col-xs-2 control-label">{{ 'Auteur' }}</label>
+                                    <div class="col-xs-4"><span class="label label-config label-default" id="span_plugin_author"></span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-2 control-label">{{ 'License' }}</label>
+                                    <div class="col-xs-4"><span class="label label-config label-default" id="span_plugin_license"></span></div>
+                                    <label class="col-xs-3 control-label">{{ 'Version NextDom' }}</label>
+                                    <div class="col-xs-3"><span class="label label-config label-default" id="span_plugin_require"></span></div>
                                 </div>
                             </fieldset>
                         </form>
+                    </div>
+                    <div class="box-footer clearfix text-center">
+                        <div id="div_plugin_toggleState"></div>
                     </div>
                 </div>
             </div>
@@ -143,7 +153,6 @@
                 <div class="box box-primary" id="div_configLog">
                     <div class="box-header with-border">
                         <h3 class="box-title"><i class="fas fa-file">&nbsp;&nbsp;</i>{{ 'Log' }}</h3>
-                        <a class="btn btn-success pull-right box-tools" id="bt_savePluginLogConfig"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
                     </div>
                     <div class="box-body">
                         <form class="form-horizontal">
@@ -154,6 +163,9 @@
                         <div class="form-actions">
 
                         </div>
+                    </div>
+                    <div class="box-footer clearfix text-center">
+                        <a class="btn btn-success btn-sm pull-right" id="bt_savePluginLogConfig"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
                     </div>
                 </div>
             </div>
@@ -185,20 +197,21 @@
         <div class="box box-primary">
             <div class="box-header with-border">
                 <h3 class="box-title"><i class="fas fa-cogs"></i> {{ 'Configuration' }}</h3>
-                <a class="btn btn-success pull-right box-tools" id="bt_savePluginConfig"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
             </div>
             <div class="box-body">
                 <div id="div_plugin_configuration"></div>
                 <div class="form-actions">
                 </div>
             </div>
+            <div class="box-footer clearfix text-center">
+                <a class="btn btn-success btn-sm pull-right" id="bt_savePluginConfig"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+            </div>
         </div>
         <div class="row">
             <div class="col-lg-6 col-sm-12">
                 <div class="box box-primary" id="div_functionalityPanel">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fas fa-picture-o">&nbsp;&nbsp;</i>{{ 'Fonctionnalités' }}</h3>
-                        <a class="btn btn-success pull-right box-tools" id="bt_savePluginFunctionalityConfig"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+                        <h3 class="box-title"><i class="fas fa-magic">&nbsp;&nbsp;</i>{{ 'Fonctionnalités' }}</h3>
                     </div>
                     <div class="box-body">
                         <form class="form-horizontal">
@@ -207,13 +220,15 @@
                             </fieldset>
                         </form>
                     </div>
+                    <div class="box-footer clearfix text-center">
+                        <a class="btn btn-success btn-sm pull-right" id="bt_savePluginFunctionalityConfig"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-6 col-sm-12">
                 <div class="box box-primary" id="div_configPanel">
                     <div class="box-header with-border">
                         <h3 class="box-title"><i class="fas fa-columns">&nbsp;&nbsp;</i>{{ 'Panel' }}</h3>
-                        <a class="btn btn-success pull-right box-tools" id="bt_savePluginPanelConfig"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
                     </div>
                     <div class="box-body">
                         <form class="form-horizontal">
@@ -221,6 +236,9 @@
                                 <div id="div_plugin_panel"></div>
                             </fieldset>
                         </form>
+                    </div>
+                    <div class="box-footer clearfix text-center">
+                        <a class="btn btn-success btn-sm pull-right" id="bt_savePluginPanelConfig"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
                     </div>
                 </div>
             </div>
