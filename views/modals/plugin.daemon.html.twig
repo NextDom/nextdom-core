@@ -1,4 +1,4 @@
-<table class="table table-bordered">
+<table class="table table-bordered table-condensed">
     <thead>
     <tr>
         <th>{{ 'Nom' }}</th>
@@ -7,7 +7,7 @@
         <th>{{ '(Re)Démarrer' }}</th>
         <th>{{ 'Arrêter' }}</th>
         <th>{{ 'Gestion automatique' }}</th>
-        <th>{{ 'Dernier lancement' }}</th>
+        <th style="min-width:100px;">{{ 'Dernier lancement' }}</th>
     </tr>
     </thead>
     <tbody>
@@ -15,33 +15,33 @@
         <td>{{ 'Local' }}</td>
         <td class="deamonState">
             {% if daemonInfoState == 'ok' %}
-                <span class="label label-success" style="font-size:1em;">{{ 'OK' }}</span>
+                <span class="label label-success label-sticker-sm">{{ 'OK' }}</span>
             {% elseif daemonInfoState == 'nok' %}
-                <span class="label label-danger" style="font-size:1em;">{{ 'NOK' }}</span>
+                <span class="label label-danger label-sticker-sm">{{ 'NOK' }}</span>
             {% else %}
-                <span class="label label-warning" style="font-size:1em;">{{ daemonInfoState }}</span>
+                <span class="label label-warning label-sticker-sm">{{ daemonInfoState }}</span>
             {% endif %}
         </td>
         <td class="deamonLaunchable">
             {% if daemonInfoLaunchable == 'ok' %}
-                <span class="label label-success" style="font-size:1em;">{{ 'OK' }}</span>
+                <span class="label label-success label-sticker-sm">{{ 'OK' }}</span>
             {% elseif daemonInfoLaunchable == 'nok' %}
-                <span class="label label-danger" style="font-size:1em;">{{ 'NOK' }}</span> {{ daemonInfoLaunchableMessage }}
+                <span class="label label-danger label-sticker-sm">{{ 'NOK' }}</span>&nbsp;&nbsp;<span class="label label-primary label-sticker-sm">{{ daemonInfoLaunchableMessage }}</span>
             {% else %}
-                <span class="label label-warning" style="font-size:1em;">{{ daemonInfoLaunchable }}</span>
+                <span class="label label-warning label-sticker-sm">{{ daemonInfoLaunchable }}</span>
             {% endif %}
         </td>
         <td>
-            <a class="btn btn-success btn-sm bt_startDeamon" style="position:relative;top:-5px;"><i class="fas fa-play"></i></a>
+            <a class="btn btn-success btn-sm bt_startDeamon"><i class="fas fa-play"></i></a>
         </td>
         <td>
-            <a class="btn btn-danger btn-sm bt_stopDeamon" style="position:relative;top:-5px;"><i class="fas fa-stop"></i></a>
+            <a class="btn btn-danger btn-sm bt_stopDeamon"><i class="fas fa-stop"></i></a>
         </td>
         <td>
             {% if daemonInfoAuto == 1 %}
-                <a class="btn btn-danger btn-sm bt_changeAutoMode" data-mode="0" style="position:relative;top:-5px;"><i class="fas fa-times"></i> {{ 'Désactiver' }}</a>
+                <a class="btn btn-danger btn-sm bt_changeAutoMode" data-mode="0"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Désactiver' }}</a>
             {% else %}
-                <a class="btn btn-success btn-sm bt_changeAutoMode" data-mode="1" style="position:relative;top:-5px;"><i class="fas fa-magic"></i> {{ 'Activer' }}</a>
+                <a class="btn btn-success btn-sm bt_changeAutoMode" data-mode="1"><i class="fas fa-magic">&nbsp;&nbsp;</i>{{ 'Activer' }}</a>
             {% endif %}
         </td>
         <td class="td_lastLaunchDeamon">
@@ -66,17 +66,17 @@
                         if (data.auto == 1) {
                             $('.bt_stopDeamon').show();
                         }
-                        $('.deamonState').empty().append('<span class="label label-success" style="font-size:1em;">{{ 'OK' }}</span>');
+                        $('.deamonState').empty().append('<span class="label label-success label-sticker-sm">{{ 'OK' }}</span>');
                         break;
                     case 'nok':
                         if (data.auto == 1) {
                             nok = true;
                         }
                         $('.bt_stopDeamon').hide();
-                        $('.deamonState').empty().append('<span class="label label-danger" style="font-size:1em;">{{ 'NOK' }}</span>');
+                        $('.deamonState').empty().append('<span class="label label-danger label-sticker-sm">{{ 'NOK' }}</span>');
                         break;
                     default:
-                        $('.deamonState').empty().append('<span class="label label-warning" style="font-size:1em;">' + data.state + '</span>');
+                        $('.deamonState').empty().append('<span class="label label-warning label-sticker-sm">' + data.state + '</span>');
                 }
                 switch (data.launchable) {
                     case 'ok':
@@ -84,7 +84,7 @@
                         if (data.auto == 1 && data.state == 'ok') {
                             $('.bt_stopDeamon').show();
                         }
-                        $('.deamonLaunchable').empty().append('<span class="label label-success" style="font-size:1em;">{{ 'OK' }}</span>');
+                        $('.deamonLaunchable').empty().append('<span class="label label-success label-sticker-sm">{{ 'OK' }}</span>');
                         break;
                     case 'nok':
                         if (data.auto == 1) {
@@ -92,24 +92,24 @@
                         }
                         $('.bt_startDeamon').hide();
                         $('.bt_stopDeamon').hide();
-                        $('.deamonLaunchable').empty().append('<span class="label label-danger" style="font-size:1em;">{{ 'NOK' }}</span> ' + data.launchable_message);
+                        $('.deamonLaunchable').empty().append('<span class="label label-danger label-sticker-sm">{{ 'NOK' }}</span>&nbsp;&nbsp;<span class="label label-primary label-sticker-sm" style="white-space: unset;">' + data.launchable_message +'</span>');
                         break;
                     default:
-                        $('.deamonLaunchable').empty().append('<span class="label label-warning" style="font-size:1em;">' + data.state + '</span>');
+                        $('.deamonLaunchable').empty().append('<span class="label label-warning label-sticker-sm">' + data.state + '</span>');
                 }
                 $('.td_lastLaunchDeamon').empty().append(data.last_launch);
                 if (data.auto == 1) {
                     $('.bt_stopDeamon').hide();
                     $('.bt_changeAutoMode').removeClass('btn-success').addClass('btn-danger');
                     $('.bt_changeAutoMode').attr('data-mode', 0);
-                    $('.bt_changeAutoMode').html('<i class="fas fa-times"></i> {{ 'Désactiver' }}');
+                    $('.bt_changeAutoMode').html('<i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Désactiver' }}');
                 } else {
                     if (data.launchable == 'ok' && data.state == 'ok') {
                         $('.bt_stopDeamon').show();
                     }
                     $('.bt_changeAutoMode').removeClass('btn-danger').addClass('btn-success');
                     $('.bt_changeAutoMode').attr('data-mode', 1);
-                    $('.bt_changeAutoMode').html('<i class="fas fa-magic"></i> {{ 'Activer' }}');
+                    $('.bt_changeAutoMode').html('<i class="fas fa-magic">&nbsp;&nbsp;</i>{{ 'Activer' }}');
                 }
                 if (!nok) {
                     $("#div_plugin_deamon").closest('.box').removeClass('box-danger').addClass('box-success');

@@ -142,6 +142,8 @@ function showPlugin(pluginId) {
         success: function (data) {
             $('#span_plugin_id').html(data.id);
             $('#span_plugin_name').html(data.name);
+            $('#span_plugin_author').html(data.author);
+            $('#span_plugin_description').html(data.description);
             $('#span_plugin_icon').attr("src",data.icon);
             if(isset(data.update) && isset(data.update.localVersion)){
                 $('#span_plugin_install_date').html(data.update.localVersion);
@@ -183,7 +185,7 @@ function showPlugin(pluginId) {
                     if(data.status.owner[i] != 1){
                         continue;
                     }
-                    $('#span_plugin_market').append('<a class="btn btn-warning sendPluginTo" data-repo="'+i+'" data-logicalId="' + data.id + '"><i class="fas fa-cloud-upload-alt"></i> {{Envoyer sur le}} '+i+'</a> ');
+                    $('#span_plugin_market').append('<a class="btn btn-warning sendPluginTo" data-repo="'+i+'" data-logicalId="' + data.id + '"><i class="fas fa-cloud-upload-alt">&nbsp;&nbsp;</i>{{Envoyer sur le}} '+i+'</a> ');
                 }
             }
             $('#span_plugin_doc').empty();
@@ -230,29 +232,26 @@ function showPlugin(pluginId) {
             $('#div_plugin_functionality').empty();
             count = 0;
             var config_panel_html = '<div class="row">';
-            config_panel_html += '<div class="col-sm-6">';
+            config_panel_html += '<div class="col-xs-6">';
             for(var i in data.functionality){
                 config_panel_html += '<div class="form-group">';
-                config_panel_html += '<label class="col-lg-3 col-md-4 col-sm-4 col-xs-6 control-label">'+i+'</label>';
-                config_panel_html += '<div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">';
+                config_panel_html += '<label class="col-xs-4 control-label">'+i+'</label>';
                 if(data.functionality[i].exists){
-                    config_panel_html += '<span class="label label-success">{{Oui}}</span>';
-                    config_panel_html += '</div>';
+                    config_panel_html += '<span class="label label-success label-sticker-sm col-xs-2">{{Oui}}</span>';
                     if(data.functionality[i].controlable){
-                        config_panel_html += '<label class="col-lg-3 col-md-3 col-sm-3 col-xs-6 control-label">{{Activer}}</label>';
-                        config_panel_html += '<div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">';
+                        config_panel_html += '<div class="col-xs-6">';
                         config_panel_html += '<input type="checkbox" class="configKey tooltips" data-l1key="functionality::'+i+'::enable" checked/>';
+                        config_panel_html += '<label class="control-label label-check">{{Activer}}</label>';
                         config_panel_html += '</div>';
                     }
                 }else{
-                    config_panel_html += '<span class="label label-danger">{{Non}}</span>';
-                    config_panel_html += '</div>';
+                    config_panel_html += '<span class="label label-danger label-sticker-sm col-xs-2">{{Non}}</span>';
                 }
                 config_panel_html += '</div>';
                 count++;
                 if(count == 5){
                     config_panel_html += '</div>';
-                    config_panel_html += '<div class="col-sm-6">';
+                    config_panel_html += '<div class="col-xs-6">';
                 }
             }
             config_panel_html += '</div>';
@@ -262,26 +261,18 @@ function showPlugin(pluginId) {
             $('#div_plugin_toggleState').empty();
             if (data.checkVersion != -1) {
                 var html = '<form class="form-horizontal">';
-                html += '<div class="form-group">';
-                html += '<label class="col-sm-2 control-label">{{Statut}}</label>';
-                html += '<div class="col-sm-4">';
                 if (data.activate == 1) {
                     $('#div_plugin_toggleState').closest('.box').removeClass('box-default box-danger').addClass('box-success');
-                    html += '<span class="label label-success label-sticker-big">{{Actif}}</span>';
+                    html += '<span class="label label-success label-sticker-sm pull-left">{{Actif}}</span>';
                 }else{
                     $('#div_plugin_toggleState').closest('.box').removeClass('box-default box-success').addClass('box-danger');
-                    html += '<span class="label label-danger label-sticker-big">{{Inactif}}</span>';
+                    html += '<span class="label label-danger label-sticker-sm pull-left">{{Inactif}}</span>';
                 }
-                html += '</div>';
-                html += '<label class="col-sm-2 control-label">{{Action}}</label>';
-                html += '<div class="col-sm-4">';
                 if (data.activate == 1) {
-                    html += '<a class="btn btn-danger togglePlugin" data-state="0" data-plugin_id="' + data.id + '"><i class="fas fa-times">&nbsp;&nbsp;</i>{{Désactiver}}</a>';
+                    html += '<a class="btn btn-sm btn-danger togglePlugin pull-right" data-state="0" data-plugin_id="' + data.id + '"><i class="fas fa-times">&nbsp;&nbsp;</i>{{Désactiver}}</a>';
                 }else{
-                    html += '<a class="btn btn-success togglePlugin" data-state="1" data-plugin_id="' + data.id + '"><i class="fas fa-check">&nbsp;&nbsp;</i>{{Activer}}</a>';
+                    html += '<a class="btn btn-sm btn-success togglePlugin pull-right" data-state="1" data-plugin_id="' + data.id + '"><i class="fas fa-check">&nbsp;&nbsp;</i>{{Activer}}</a>';
                 }
-                html += '</div>';
-                html += '</div>';
                 html += '</form>';
                 $('#div_plugin_toggleState').html(html);
             }else{
@@ -291,9 +282,9 @@ function showPlugin(pluginId) {
             var log_conf = '';
             for(var i in  data.logs){
                 log_conf = '<form class="form-horizontal">';
-                log_conf += '<div class="form-group">';
-                log_conf += '<label class="col-sm-2 control-label">{{Niveau de log local}}</label>';
-                log_conf += '<div class="col-sm-10">';
+                log_conf += '<div class="form-group" style="min-height:40px;">';
+                log_conf += '<label class="col-sm-3 control-label">{{Niveau de log local}}</label>';
+                log_conf += '<div class="col-sm-9">';
                 log_conf += '<label class="radio-inline"><input type="radio" name="rd_logupdate' + data.id + '" class="configKey" data-l1key="log::level::' + data.id + '" data-l2key="1000" /> {{Aucun}}</label>';
                 log_conf += '<label class="radio-inline"><input type="radio" name="rd_logupdate' + data.id + '" class="configKey" data-l1key="log::level::' + data.id + '" data-l2key="default" /> {{Defaut}}</label>';
                 log_conf += '<label class="radio-inline"><input type="radio" name="rd_logupdate' + data.id + '" class="configKey" data-l1key="log::level::' + data.id + '" data-l2key="100" /> {{Debug}}</label>';
@@ -302,14 +293,10 @@ function showPlugin(pluginId) {
                 log_conf += '<label class="radio-inline"><input type="radio" name="rd_logupdate' + data.id + '" class="configKey" data-l1key="log::level::' + data.id + '" data-l2key="400" /> {{Error}}</label>';
                 log_conf += '</div>';
                 log_conf += '</div>';
-                log_conf += '<div class="form-group">';
-                log_conf += '<label class="col-sm-2 control-label">{{Logs}}</label>';
-                log_conf += '<div class="col-sm-10">';
+                log_conf += '<legend>{{Logs}}</legend>';
                 for(j in data.logs[i].log){
-                    log_conf += '<a class="btn btn-info bt_plugin_conf_view_log" data-slaveId="'+data.logs[i].id+'" data-log="'+data.logs[i].log[j]+'"><i class="fas fa-paperclip"></i>  '+data.logs[i].log[j].charAt(0).toUpperCase() + data.logs[i].log[j].slice(1)+'</a> ';
+                    log_conf += '<a class="btn btn-info bt_plugin_conf_view_log btn-log" data-slaveId="'+data.logs[i].id+'" data-log="'+data.logs[i].log[j]+'"><i class="fas fa-paperclip">&nbsp;&nbsp;</i>'+data.logs[i].log[j].charAt(0).toUpperCase() + data.logs[i].log[j].slice(1)+'</a> ';
                 }
-                log_conf += '</div>';
-                log_conf += '</div>';
             }
             log_conf += '</form>';
             $('#div_plugin_log').empty().append(log_conf);

@@ -20,7 +20,10 @@ namespace NextDom\Helpers;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;
-
+use NextDom\Helpers\ModalsController;
+use NextDom\Helpers\PagesController;
+use NextDom\Helpers\Router;
+ 
 /**
  * Classe de support à l'affichage des contenus HTML
  */
@@ -98,7 +101,7 @@ class PrepareView
         $pageData['MENU'] = $render->get('commons/menu_rescue.html.twig');
 
         if (!NextDomHelper::isStarted()) {
-            $pageData['alertMsg'] = 'NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.';
+            $pageData['alertMsg'] = \__('NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.');
         }
         $pageData['CONTENT'] = self::getContent($render, $pageData, $page, null);
 
@@ -106,7 +109,12 @@ class PrepareView
         $render->show('layouts/base_rescue.html.twig', $pageData);
     }
 
-    public static function showContent($configs)
+    /**
+     * 
+     * @global type $language
+     * @param array $configs
+     */
+    public static function showContent(array $configs)
     {
         global $language;
 
@@ -135,14 +143,14 @@ class PrepareView
             'user_id'            => $_SESSION['user']->getId(),
             'user_isAdmin'       => Status::isConnectAdmin(),
             'user_login'         => $_SESSION['user']->getLogin(),
-            'nextdom_Welcome'   => $configs['nextdom::Welcome'],
-            'notify_status'   => $configs['notify::status'],
-            'notify_position'   => $configs['notify::position'],
-            'notify_timeout'   => $configs['notify::timeout'],
+            'nextdom_Welcome'    => $configs['nextdom::Welcome'],
+            'notify_status'      => $configs['notify::status'],
+            'notify_position'    => $configs['notify::position'],
+            'notify_timeout'     => $configs['notify::timeout'],
             'widget_width_step'  => $configs['widget::step::width'],
             'widget_height_step' => $configs['widget::step::height'],
             'widget_margin'      => $configs['widget::margin'],
-            'widget_padding'      => $configs['widget::padding'],
+            'widget_padding'     => $configs['widget::padding'],
             'widget_radius'      => $configs['widget::radius']
         ];
         $pageData['JS_VARS_RAW'] = [
@@ -385,7 +393,6 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js';
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
-            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.sew/jquery.sew.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-cron/dist/jquery-cron.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
@@ -453,7 +460,7 @@ class PrepareView
             if ($controllerRoute === null) {
                 // Vérifie que l'utilisateur n'essaie pas de sortir
                 $purgedPage = preg_replace('/[^a-z0-9_-]/i', '', $page);
-                if (file_exists(NEXTDOM_ROOT.'/desktop/'.$purgedPage)) {
+                if (file_exists(NEXTDOM_ROOT . '/desktop/' . $purgedPage)) {
                     ob_start();
                     \include_file('desktop', $page, 'php', '', true);
                     return ob_get_clean();
@@ -461,8 +468,41 @@ class PrepareView
                     Router::showError404AndDie();
                 }
             } else {
-                return PagesController::$controllerRoute($render, $pageContent);
+                $controller = new $controllerRoute();
+                return $controller->get($render, $pageContent);
             }
+        }
+    }
+
+    /**
+     * Response to an Ajax request
+     *
+     * @throws \Exception
+     */
+    public function getContentByAjax()
+    {
+        try {
+            \include_file('core', 'authentification', 'php');
+            $page = Utils::init('p');
+            $controllerRoute = PagesController::getRoute($page);
+            if ($controllerRoute === null) {
+                Router::showError404AndDie();
+            } else {
+                $render = Render::getInstance();
+                $pageContent = [];
+                $pageContent['JS_POOL'] = [];
+                $pageContent['JS_END_POOL'] = [];
+                $pageContent['CSS_POOL'] = [];
+                $pageContent['JS_VARS'] = [];
+                $controller = new $controllerRoute();
+                $pageContent['content'] = $controller->get($render, $pageContent);
+                $render->show('/layouts/ajax_content.html.twig', $pageContent);
+            }
+        } catch (\Exception $e) {
+            ob_end_clean();
+            echo '<div class="alert alert-danger div_alert">';
+            echo \translate::exec(displayException($e), 'desktop/' . Utils::init('p') . '.php');
+            echo '</div>';
         }
     }
 

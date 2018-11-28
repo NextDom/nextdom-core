@@ -1,0 +1,54 @@
+@charset "utf-8";
+/* This file is part of NextDom Software.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom Software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+.autocomplete {
+  background-color: $lightgolden;
+  border-radius: 3px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  max-height: 400px;
+  overflow-y: auto;
+  margin-top: 20px;
+  z-index: 9999;
+
+  .ui-menu-item-wrapper {
+      padding: 5px;
+  }
+
+  .ui-menu-item {
+  	cursor:pointer;
+  }
+
+  .ui-state-hover, .ui-state-active {
+    border: none;
+  }
+}
+
+/* Autocomplete TOTO a deplacer dans theme mais cela ne fonctionne pas*/
+.autocomplete {
+  .ui-menu-item-wrapper:hover {
+      color: $white;
+      background-color: $nextdom_blue;
+  }
+  .ui-state-hover, .ui-state-active {
+      color: $white;
+      background-color: $nextdom_blue;
+  }
+}

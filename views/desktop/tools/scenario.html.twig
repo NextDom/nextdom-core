@@ -153,14 +153,15 @@
     <section class="content">
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right" role="tablist">
-                <li role="presentation" class="active">
-                    <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cog">&nbsp;&nbsp;</i>{{ 'Paramètres' }}</a>
-                </li>
                 <li role="presentation">
                     <a id="bt_scenarioTab" href="#scenariotab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-microchip">&nbsp;&nbsp;</i>{{ 'Programmation' }}</a>
                 </li>
+                <li role="presentation" class="active">
+                    <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cog">&nbsp;&nbsp;</i>{{ 'Paramètres' }}</a>
+                </li>
                 <h4 id="span_ongoing" class="label pull-right label-sticker"></h4>
-                <li class="header pull-left"><i class="fas fa-film">&nbsp;&nbsp;</i>{{ 'Scénarios' }} (ID : <span class="scenarioAttr" data-l1key="id"></span>)</li>
+                <h4 class="label label-primary pull-right label-sticker">{{ 'ID : ' }}<span class="scenarioAttr" data-l1key="id"></span></h4>
+                <li class="header pull-left"><i class="fas fa-film">&nbsp;&nbsp;</i>{{ 'Edition Scénario' }}</li>
             </ul>
             <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
                 <div role="tabpanel" class="tab-pane active" id="generaltab">
