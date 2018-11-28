@@ -19,16 +19,36 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-@import "_animations.scss";
-@import "_buttons.scss";
-@import "_cards.scss";
-@import "_charts.scss";
-@import "_cursors.scss";
-@import "_divers.scss";
-@import "_eqlogic.scss";
-@import "_fonts.scss";
-@import "_icons.scss";
-@import "_intellisense.scss";
-@import "_modals.scss";
-@import "_scenario.scss";
-@import "_text.scss";
+.autocomplete {
+  background-color: $lightgolden;
+  border-radius: 3px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  max-height: 400px;
+  overflow-y: auto;
+  margin-top: 20px;
+  z-index: 9999;
+
+  .ui-menu-item-wrapper {
+      padding: 5px;
+  }
+
+  .ui-menu-item {
+  	cursor:pointer;
+  }
+
+  .ui-state-hover, .ui-state-active {
+    border: none;
+  }
+}
+
+/* Autocomplete TOTO a deplacer dans theme mais cela ne fonctionne pas*/
+.autocomplete {
+  .ui-menu-item-wrapper:hover {
+      color: $white;
+      background-color: $nextdom_blue;
+  }
+  .ui-state-hover, .ui-state-active {
+      color: $white;
+      background-color: $nextdom_blue;
+  }
+}
