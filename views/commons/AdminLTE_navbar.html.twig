@@ -63,15 +63,15 @@
                         </a>
                     </li>
                 {% endif %}
-                <li>
-                    {% if NEXTDOM_NOTIFY == 1 %}
-                        <a class="task_bell_mobile"><span class="notifyIcon fas fa-bell cursor" onclick="switchNotify(0);"></span></a>
+                <li class="task_bell_mobile cursor">
+                    {% if nextdom_Notify == 1 %}
+                        <a class="notifyIconLink" onclick="switchNotify(0);"><i class="notifyIcon fas fa-bell"></i></a>
                     {% else %}
-                        <a class="task_bell_mobile"><span class="notifyIcon fas fa-bell-slash cursor" onclick="switchNotify(1);"></span></a>
+                        <a class="notifyIconLink" onclick="switchNotify(1);"><i class="notifyIcon fas fa-bell-slash"></i></a>
                     {% endif %}
                 </li>
-                <li>
-                    <a class="task_fullscreen_mobile"><span id="togglefullscreen" class="fa fa-expand cursor" onclick="toggleFullScreen();"></span></a>
+                <li class="task_fullscreen_mobile cursor">
+                    <a onclick="toggleFullScreen();"><i id="togglefullscreen" class="fa fa-expand"></i></a>
                 </li>
             </ul>
         </div>
