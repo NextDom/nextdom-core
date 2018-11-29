@@ -154,6 +154,7 @@ class ModalsController
         $pageContent['cmdSubType'] = $cmd->getSubtype();
         $pageContent['cmdWidgetPossibilityCustom'] = $cmd->widgetPossibility('custom');
         $pageContent['cmdWidgetPossibilityCustomHtmlCode'] = $cmd->widgetPossibility('custom::htmlCode');
+        $pageContent['cmdShowMinMax'] = false;
         if ($pageContent['cmdType'] == 'action' && $pageContent['cmdSubType'] == 'select') {
             $pageContent['cmdListValues'] = [];
             $elements = explode(';', $cmd->getConfiguration('listValue', ''));
@@ -165,6 +166,9 @@ class ModalsController
             $pageContent['cmdCacheValue'] = $cmd->getCache('value');
             $pageContent['cmdCollectDate'] = $cmd->getCache('collectDate');
             $pageContent['cmdValueDate'] = $cmd->getCache('valueDate');
+            if ($cmd->getSubType() == 'numeric') {
+                $pageContent['cmdShowMinMax'] = true;
+            }
         }
         $pageContent['cmdDirectUrlAccess'] = $cmd->getDirectUrlAccess();
         $pageContent['cmdUsedBy'] = $cmd->getUsedBy();

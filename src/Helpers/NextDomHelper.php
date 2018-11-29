@@ -1070,18 +1070,12 @@ class NextDomHelper
      */
     public static function cleanFileSystemRight()
     {
-        $processUser = \system::get('www-uid');
-        $processGroup = \system::get('www-gid');
-        if ($processUser == '') {
-            $processUser = posix_getpwuid(posix_geteuid());
-            $processUser = $processUser['name'];
-        }
-        if ($processGroup == '') {
-            $processGroup = posix_getgrgid(posix_getegid());
-            $processGroup = $processGroup['name'];
-        }
         $path = __DIR__ . '/../../*';
-        exec(\system::getCmdSudo() . 'chown -R ' . $processUser . ':' . $processGroup . ' ' . $path . ';' . \system::getCmdSudo() . 'chmod 775 -R ' . $path);
+		$cmd = system::getCmdSudo() . 'chown -R ' . system::get('www-uid') . ':' . system::get('www-gid') . ' ' . $path;
+		$cmd .= system::getCmdSudo() . 'chmod 774 -R ' . $path;
+		$cmd .= system::getCmdSudo() . 'find /var/log/nextdom -type f -exec chmod 664 {} +;';
+		$cmd .= system::getCmdSudo() . 'chmod 774 -R ' . $path;
+		exec($cmd);
     }
 
     /**
