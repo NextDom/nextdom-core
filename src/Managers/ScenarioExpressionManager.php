@@ -163,9 +163,7 @@ class ScenarioExpressionManager
             return $return;
         }
         $return['template'] = getTemplate('core', 'scenario', $expression . '.default');
-        if (is_json($options)) {
-            $options = json_decode($options, true);
-        }
+        $options = is_json($options, $options);
         if (is_array($options) && count($options) > 0) {
             foreach ($options as $key => $value) {
                 $replace['#' . $key . '#'] = str_replace('"', '&quot;', $value);

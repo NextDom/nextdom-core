@@ -32,6 +32,7 @@ class jeeObject {
     private $configuration;
     private $display;
     private $image;
+    private $_child = array();
 
     public static function byId($_id) {
         return JeeObjectManager::byId($_id);
@@ -155,19 +156,23 @@ class jeeObject {
      *
      * @throws Exception
      */
-    public function getChild($visible = true) {
-        $values = array(
-            'id' => $this->id,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
+	public function getChild($_visible = true) {
+		if (!isset($this->_child[$_visible])) {
+			$values = array(
+				'id' => $this->id,
+			);
+			$sql = 'SELECT ' . DB::buildField(__CLASS__) . '
                 FROM object
                 WHERE father_id=:id';
-        if ($visible) {
-            $sql .= ' AND isVisible=1 ';
-        }
-        $sql .= ' ORDER BY position';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
-    }
+			if ($_visible) {
+				$sql .= ' AND isVisible=1 ';
+			}
+			$sql .= ' ORDER BY position';
+			$this->_child[$_visible] = DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
+		}
+		return $this->_child[$_visible];
+	}
+
 
     /**
      * Get tree under this object
@@ -296,7 +301,7 @@ class jeeObject {
             if (isset($infos['enable']) && $infos['enable'] == 0) {
                 continue;
             }
-            $value = nextdom::evaluateExpression(cmd::cmdToValue($infos['cmd']));
+            $value = cmd::cmdToValue($infos['cmd']);
             if (isset($infos['invert']) && $infos['invert'] == 1) {
                 $value = !$value;
             }
@@ -318,8 +323,12 @@ class jeeObject {
     }
 
     public function getHtmlSummary($version = 'desktop') {
+        if (trim($this->getCache('summaryHtml' . $version)) != '') {
+			return $this->getCache('summaryHtml' . $version);
+		}
         $return = '<span class="objectSummary' . $this->getId() . '" data-version="' . $version . '">';
-        foreach (config::byKey('object:summary') as $key => $value) {
+        $def = config::byKey('object:summary');
+		foreach ($def as $key => $value) {
             if ($this->getConfiguration('summary::hide::' . $version . '::' . $key, 0) == 1) {
                 continue;
             }
@@ -339,7 +348,9 @@ class jeeObject {
                 $return .= '<span style="margin-right:5px;' . $style . '" class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="' . $this->getId() . '" data-displayZeroValue="' . $allowDisplayZero . '">' . $value['icon'] . ' <sup><span class="objectSummary' . $key . '">' . $result . '</span> ' . $value['unit'] . '</span></sup>';
             }
         }
-        return trim($return) . '</span>';
+        $return = trim($return) . '</span>';
+		$this->setCache('summaryHtml' . $version, $return);
+		return $return;
     }
 
     public function getLinkData(&$data = array('node' => array(), 'link' => array()), $level = 0, $drill = null) {
@@ -610,7 +621,8 @@ class jeeObject {
      * @return mixed Value of the asked information or $default
      */
     public function getCache(string $key = '', $default = '') {
-        return utils::getJsonAttr(cache::byKey('objectCacheAttr' . $this->getId())->getValue(), $key, $default);
+		$cache = cache::byKey('objectCacheAttr' . $this->getId())->getValue();
+        return utils::getJsonAttr($cache, $_key, $_default);
     }
 
     /**
@@ -620,7 +632,7 @@ class jeeObject {
      * @param mixed $value Default value
      */
     public function setCache(string $key, $value = null) {
-        cache::set('objectCacheAttr' . $this->getId(), utils::setJsonAttr(cache::byKey('objectCacheAttr' . $this->getId())->getValue(), $key, $value));
+		cache::set('objectCacheAttr' . $this->getId(), utils::setJsonAttr(cache::byKey('objectCacheAttr' . $this->getId())->getValue(), $_key, $_value));
     }
 
 }
