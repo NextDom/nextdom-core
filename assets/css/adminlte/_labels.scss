@@ -63,11 +63,17 @@
     text-align: center;
 }
 
-.legend-title {
+legend {
     font-size: 15px;
     padding: 5px 8px;
     margin-bottom: 15px;
-    background-color: whitesmoke;
+    background-color: $whitegrey;
+}
+
+@media (max-width: 767px) {
+    legend {
+        text-align: center;
+    }
 }
 
 .legend-title-alone {
@@ -80,7 +86,7 @@
 }
 
 .legend-section {
-    margin-top: 50px;
+    margin-top: 40px;
 }
 
 .label-list {
@@ -100,12 +106,6 @@
     border: 1px solid;
     border-radius: 2px;
     margin: 4px 0;
-}
-
-@media (max-width: 767px) {
-    .legend-title {
-        text-align: center;
-    }
 }
 
 @media (max-width: 991px) {
