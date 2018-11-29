@@ -110,7 +110,8 @@ class Router
                 'product_icon',
                 'product_connection_image',
                 'theme',
-                'default_bootstrap_theme'));
+                'default_bootstrap_theme',
+                'nextdom::Notify'));
             if ($configs['nextdom::firstUse'] == 1) {
                 PrepareView::showFirstUsePage($configs);
             } elseif (!Status::isConnect()) {
