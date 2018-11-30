@@ -1071,10 +1071,10 @@ class NextDomHelper
     public static function cleanFileSystemRight()
     {
         $path = __DIR__ . '/../../*';
-		$cmd = system::getCmdSudo() . 'chown -R ' . system::get('www-uid') . ':' . system::get('www-gid') . ' ' . $path;
-		$cmd .= system::getCmdSudo() . 'chmod 774 -R ' . $path;
-		$cmd .= system::getCmdSudo() . 'find /var/log/nextdom -type f -exec chmod 664 {} +;';
-		$cmd .= system::getCmdSudo() . 'chmod 774 -R ' . $path;
+		$cmd = \system::getCmdSudo() . 'chown -R ' . \system::get('www-uid') . ':' . \system::get('www-gid') . ' ' . $path;
+		$cmd .= \system::getCmdSudo() . 'chmod 774 -R ' . $path;
+		$cmd .= \system::getCmdSudo() . 'find /var/log/nextdom -type f -exec chmod 664 {} +;';
+		$cmd .= \system::getCmdSudo() . 'chmod 774 -R ' . $path;
 		exec($cmd);
     }
 
