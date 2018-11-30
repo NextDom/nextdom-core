@@ -489,75 +489,6 @@
             </form>
         </div>
 
-        {% if cmdWidgetCanCustomHtml %}
-            <div role="tabpanel" class="tab-pane" id="cmd_html">
-                <form class="form-horizontal">
-                    <fieldset>
-                        <legend>{{ 'Personnalisation du widget' }}</legend>
-                        <div class="form-group col-xs-12">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Activer' }}</label>
-                            <div class="col-xs-1">
-                                <input type="checkbox" class="cmdAttr" data-l1key="html" data-l2key="enable" id="enableCustom"/>
-                            </div>
-                            <a class="btn btn-warning" id="bt_reinitHtmlCode"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Réinitialiser la personnalisation' }}</a>
-                        </div>
-                    </fieldset>
-                    <div class="box-group" id="accordion" role="tablist" aria-multiselectable="true">
-                        <div class="panel box">
-                            <div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" role="tab" id="bt_codeDashboard">
-                                <h4 class="box-title">{{ 'Dashboard' }}</h4>
-                            </div>
-                            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                                <div class="box-body">
-                                    <textarea class="cmdAttr" id="ta_codeDashboard" data-l1key="html" data-l2key="dashboard" style="width: 100%;height: 350px"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel box">
-                            <div class="box-header with-border cursor" role="tab" id="bt_codeDview" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
-                                <h4 class="box-title">{{ 'Vue dashboard' }}</h4>
-                            </div>
-                            <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                <div class="box-body">
-                                    <textarea class="cmdAttr" id="ta_codeDview" data-l1key="html" data-l2key="dview" style="width: 100%;height: 350px"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel box">
-                            <div class="box-header with-border cursor" role="tab" id="bt_codeDplan" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                                <h4 class="box-title">{{ 'Design' }}</h4>
-                            </div>
-                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                <div class="box-body">
-                                    <textarea class="cmdAttr" id="ta_codeDplan" data-l1key="html" data-l2key="dplan" style="width: 100%;height: 350px"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel box">
-                            <div class="box-header with-border cursor" role="tab" id="bt_codeMobile" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                                <h4 class="box-title">{{ 'Mobile' }}</h4>
-                            </div>
-                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                <div class="box-body">
-                                    <textarea class="cmdAttr" id="ta_codeMobile" data-l1key="html" data-l2key="mobile" style="width: 100%;height: 350px"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel box">
-                            <div class="box-header with-border cursor" role="tab" id="bt_codeMview" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
-                                <h4 class="box-title">{{ 'Vue mobile' }}</h4>
-                            </div>
-                            <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                <div class="box-body">
-                                    <textarea class="cmdAttr" id="ta_codeMview" data-l1key="html" data-l2key="mview" style="width: 100%;height: 350px"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        {% endif %}
-
         {% if cmdType == 'info' %}
             <div role="tabpanel" class="tab-pane" id="cmd_alert">
                 {% for alertValue in alertsConfig %}
@@ -598,6 +529,7 @@
                         <table class="table table-bordered table-condensed">
                             <thead>
                             <tr>
+                                <th></th>
                                 {% for displayTypevalue in eqLogicDisplayType %}
                                     <th>{{ displayTypevalue['name'] }}</th>
                                 {% endfor %}
@@ -737,6 +669,75 @@
                             </table>
                         </fieldset>
                     {% endif %}
+                </form>
+            </div>
+        {% endif %}
+
+        {% if cmdWidgetCanCustomHtml %}
+            <div role="tabpanel" class="tab-pane" id="cmd_html">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <legend>{{ 'Personnalisation du widget' }}</legend>
+                        <div class="form-group col-xs-12">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Activer' }}</label>
+                            <div class="col-xs-1">
+                                <input type="checkbox" class="cmdAttr" data-l1key="html" data-l2key="enable" id="enableCustom"/>
+                            </div>
+                            <a class="btn btn-warning" id="bt_reinitHtmlCode"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Réinitialiser la personnalisation' }}</a>
+                        </div>
+                    </fieldset>
+                    <div class="box-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <div class="panel box">
+                            <div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" role="tab" id="bt_codeDashboard">
+                                <h4 class="box-title">{{ 'Dashboard' }}</h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                <div class="box-body">
+                                    <textarea class="cmdAttr" id="ta_codeDashboard" data-l1key="html" data-l2key="dashboard" style="width: 100%;height: 350px"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel box">
+                            <div class="box-header with-border cursor" role="tab" id="bt_codeDview" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                                <h4 class="box-title">{{ 'Vue dashboard' }}</h4>
+                            </div>
+                            <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                <div class="box-body">
+                                    <textarea class="cmdAttr" id="ta_codeDview" data-l1key="html" data-l2key="dview" style="width: 100%;height: 350px"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel box">
+                            <div class="box-header with-border cursor" role="tab" id="bt_codeDplan" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                <h4 class="box-title">{{ 'Design' }}</h4>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                <div class="box-body">
+                                    <textarea class="cmdAttr" id="ta_codeDplan" data-l1key="html" data-l2key="dplan" style="width: 100%;height: 350px"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel box">
+                            <div class="box-header with-border cursor" role="tab" id="bt_codeMobile" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                <h4 class="box-title">{{ 'Mobile' }}</h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                <div class="box-body">
+                                    <textarea class="cmdAttr" id="ta_codeMobile" data-l1key="html" data-l2key="mobile" style="width: 100%;height: 350px"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel box">
+                            <div class="box-header with-border cursor" role="tab" id="bt_codeMview" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
+                                <h4 class="box-title">{{ 'Vue mobile' }}</h4>
+                            </div>
+                            <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                <div class="box-body">
+                                    <textarea class="cmdAttr" id="ta_codeMview" data-l1key="html" data-l2key="mview" style="width: 100%;height: 350px"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
         {% endif %}
