@@ -38,7 +38,7 @@
             <ul class="nav navbar-nav">
                 <!-- Notifications: style can be found in dropdown.less -->
                 <li class="clock hidden-xs">
-                    <a class="clocktime" id="horloge_time">14:11:46</a>
+                    <a class="clocktime" id="horloge_time">00:00:00</a>
                     <a class="clockdate" id="horloge_date">lundi 1 janvier 1970</a>
                 </li>
                 <li class="dropdown notifications-menu task_notif_mobile" id="bt_messageModal">
@@ -64,7 +64,7 @@
                     </li>
                 {% endif %}
                 <li class="task_bell_mobile cursor">
-                    {% if nextdom_Notify == 1 %}
+                    {% if NOTIFY_STATUS %}
                         <a class="notifyIconLink" onclick="switchNotify(0);"><i class="notifyIcon fas fa-bell"></i></a>
                     {% else %}
                         <a class="notifyIconLink" onclick="switchNotify(1);"><i class="notifyIcon fas fa-bell-slash"></i></a>

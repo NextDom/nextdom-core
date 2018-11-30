@@ -559,12 +559,12 @@ function refreshUpdateNumber() {
  */
 function switchNotify(notificationState) {
     nextdom.config.save({
-        configuration: {'nextdom::Notify': notificationState},
+        configuration: {'notify::status': notificationState},
         error: function (error) {
             notify("Core", error.message, 'error');
         },
         success: function () {
-          if (notificationState === 1) {
+          if (notificationState) {
               $('.notifyIcon').removeClass("fa-bell-slash").addClass("fa-bell");
               $('.notifyIconLink').attr('onclick','switchNotify(0);')
               notify("Core",  '{{Notification activée}}', 'success');
