@@ -152,7 +152,6 @@ class PrepareView
             'widget_margin'      => $configs['widget::margin'],
             'widget_padding'     => $configs['widget::padding'],
             'widget_radius'      => $configs['widget::radius'],
-            'nextdom_Notify'     => $configs['nextdom::Notify']
         ];
         $pageData['JS_VARS_RAW'] = [
             'userProfils' => Utils::getArrayToJQueryJson($_SESSION['user']->getOptions()),
@@ -282,7 +281,7 @@ class PrepareView
         $pageData['IS_ADMIN']                 = Status::isConnectAdmin();
         $pageData['CAN_SUDO']                 = NextDomHelper::isCapable('sudo');
         $pageData['MENU_NB_MESSAGES']         = \message::nbMessage();
-        $pageData['NEXTDOM_NOTIFY']           = $configs['nextdom::Notify'];
+        $pageData['NOTIFY_STATUS']           = \config::byKey('notify::status');
         if ($pageData['IS_ADMIN']) {
             $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
         }
