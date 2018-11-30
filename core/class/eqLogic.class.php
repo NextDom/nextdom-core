@@ -169,6 +169,11 @@ class eqLogic
         $level = 'good';
         $niveau = '3';
         $battery = $this->getConfiguration('battery_type', 'none');
+        $batteryTime = $this->getConfiguration('batterytime', 'NA');
+		$batterySince = 'NA';
+		if ($batteryTime != 'NA') {
+			$batterySince = ((strtotime(date("Y-m-d")) - strtotime(date("Y-m-d",strtotime($batteryTime))))/86400);
+		}
         if (strpos($battery, ' ') !== false) {
             $battery = substr(strrchr($battery, " "), 1);
         }
@@ -204,6 +209,11 @@ class eqLogic
         $html .= '<span class="informations pull-left" title="Plugin">' . ucfirst($this->getEqType_name()) . '</span>';
         if ($this->getConfiguration('battery_danger_threshold') != '' || $this->getConfiguration('battery_warning_threshold') != '') {
             $html .= '<i class="manual-threshold icon techno-fingerprint41 pull-right" title="Seuil manuel défini"></i>';
+        }
+		if ($batteryTime != 'NA') {
+			$html .= '<i class="icon divers-calendar2 pull-right" style="position:absolute;bottom: 3px;left: 3px;cursor:default;" title="Pile(s) changée(s) il y a ' . $batterySince . ' jour(s) (' . $batteryTime . ')"> (' . $batterySince . 'j)</i>';
+		} else {
+			$html .= '<i class="icon divers-calendar2 pull-right" style="position:absolute;bottom: 3px;left: 3px;cursor:default;" title="Pas de date de changement de pile(s) renseignée"></i>';
         }
         $html .= '</div>';
         return $html;
@@ -1348,6 +1358,9 @@ class eqLogic
         if ($this->isEnable != $_isEnable) {
             $this->_needRefreshWidget = true;
         }
+        if ($_isEnable) {
+			$this->setStatus(array('lastCommunication' => date('Y-m-d H:i:s'), 'timeout' => 0));
+		}
         $this->isEnable = $_isEnable;
         return $this;
     }
@@ -1463,7 +1476,8 @@ class eqLogic
     }
 
     public function getCache($_key = '', $_default = '') {
-        return utils::getJsonAttr(cache::byKey('eqLogicCacheAttr' . $this->getId())->getValue(), $_key, $_default);
+        $cache = cache::byKey('eqLogicCacheAttr' . $this->getId())->getValue();
+        return utils::getJsonAttr($cache, $_key, $_default);
     }
 
     public function setCache($_key, $_value = null) {
@@ -1471,7 +1485,8 @@ class eqLogic
     }
 
     public function getStatus($_key = '', $_default = '') {
-        return utils::getJsonAttr(cache::byKey('eqLogicStatusAttr' . $this->getId())->getValue(), $_key, $_default);
+        $status = cache::byKey('eqLogicStatusAttr' . $this->getId())->getValue();
+        return utils::getJsonAttr($status, $_key, $_default);
     }
 
     public function setStatus($_key, $_value = null) {

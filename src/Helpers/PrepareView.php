@@ -370,6 +370,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/core/js/cache.class.js';
             $pageData['JS_POOL'][] = '/core/js/report.class.js';
             $pageData['JS_POOL'][] = '/core/js/note.class.js';
+            $pageData['JS_POOL'][] = '/core/js/listener.class.js';
             $pageData['JS_POOL'][] = '/core/js/jeedom.class.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootbox/bootbox.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/highstock.js';

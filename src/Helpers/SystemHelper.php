@@ -81,10 +81,21 @@ class SystemHelper
      */
     public static function getCommand($commandKey = '') 
     {
-        if (!isset(self::$commands[self::getDistrib()][$commandKey])) {
-            return '';
+        $result = '';
+		if (isset(self::$commands[self::getDistrib()]) && isset(self::$commands[self::getDistrib()][$commandKey])) {
+			$result = self::$commands[self::getDistrib()][$commandKey];
         }
-        return self::$commands[self::getDistrib()][$commandKey];
+        if ($result == '') {
+			if ($commandKey == 'www-uid') {
+				$processUser = posix_getpwuid(posix_geteuid());
+				$result = $processUser['name'];
+			}
+			if ($commandKey == 'www-gid') {
+				$processGroup = posix_getgrgid(posix_getegid());
+				$result = $processGroup['name'];
+			}
+		}
+		return $result;
     }
 
     /**

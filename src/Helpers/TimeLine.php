@@ -57,8 +57,7 @@ class TimeLine
         if (!file_exists($path)) {
             $result = array();
         } else {
-            // TODO: CHMOD 777
-            \com_shell::execute(\system::getCmdSudo() . 'chmod 777 ' . $path . ' > /dev/null 2>&1;echo "$(tail -n ' . \config::byKey('timeline::maxevent') . ' ' . $path . ')" > ' . $path);
+            \com_shell::execute(\system::getCmdSudo() . 'chmod 666 ' . $path . ' > /dev/null 2>&1;echo "$(tail -n ' . \config::byKey('timeline::maxevent') . ' ' . $path . ')" > ' . $path);
             $lines = explode("\n", trim(file_get_contents($path)));
             $result = array();
             foreach ($lines as $line) {
@@ -75,7 +74,7 @@ class TimeLine
     {
         $path = NEXTDOM_ROOT.'/data/timeline.json';
         // TODO: chmod 777
-        \com_shell::execute(\system::getCmdSudo() . 'chmod 777 ' . $path . ' > /dev/null 2>&1;');
+        \com_shell::execute(\system::getCmdSudo() . 'chmod 666 ' . $path . ' > /dev/null 2>&1;');
         unlink($path);
     }
 }

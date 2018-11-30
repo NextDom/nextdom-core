@@ -75,6 +75,7 @@ function gen_js {
         core/js/cache.class.js \
         core/js/report.class.js \
         core/js/note.class.js \
+        core/js/listener.class.js \
         core/js/jeedom.class.js \
         vendor/node_modules/bootbox/bootbox.min.js \
         vendor/node_modules/highcharts/highstock.js \

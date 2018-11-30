@@ -105,29 +105,27 @@ class EventManager
      */
     private static function cleanEvent($events)
     {
-        $events = array_slice(array_values($events), -self::$MAX_EVENTS_BY_PROCESS, self::$MAX_EVENTS_BY_PROCESS);
-        $managedEvents = array('eqLogic::update', 'cmd::update', 'scenario::update', 'jeeObject::summary::update');
-        $result = [];
-        foreach ($events as $event) {
-            if (!in_array($event['name'], $managedEvents)) {
-                $result[] = $event;
-                continue;
-            }
-            if ($event['name'] == 'eqLogic::update') {
-                $result['eqLogic::update::' . $event['option']['eqLogic_id']] = $event;
-            }
-            if ($event['name'] == 'cmd::update') {
-                $result['cmd::update::' . $event['option']['cmd_id']] = $event;
-            }
-            if ($event['name'] == 'scenario::update') {
-                $result['scenario::update::' . $event['option']['scenario_id']] = $event;
-            }
-            if ($event['name'] == 'jeeObject::summary::update') {
-                $result['jeeObject::summary::update::' . $event['option']['object_id']] = $event;
-            }
-        }
-        usort($result, 'self::orderEvent');
-        return $result;
+		$events = array_slice(array_values($events), -self::$MAX_EVENTS_BY_PROCESS, self::$MAX_EVENTS_BY_PROCESS);
+		$find = array();
+		foreach (array_values($events) as $key => $event) {
+			if ($event['name'] == 'eqLogic::update') {
+				$id = $event['name'] . '::' . $event['option']['eqLogic_id'];
+			} elseif ($event['name'] == 'cmd::update') {
+				$id = $event['name'] . '::' . $event['option']['cmd_id'];
+			} elseif ($event['name'] == 'scenario::update') {
+				$id = $event['name'] . '::' . $event['option']['scenario_id'];
+			} elseif ($event['name'] == 'jeeObject::summary::update') {
+				$id = $event['name'] . '::' . $event['option']['object_id'];
+			} else {
+				continue;
+			}
+			if ($id != '' && isset($find[$id]) && $find[$id] > $event['datetime']) {
+				unset($events[$key]);
+				continue;
+			}
+			$find[$id] = $event['datetime'];
+		}
+		return array_values($events);
     }
 
     /**
@@ -140,10 +138,7 @@ class EventManager
      */
     public static function orderEvent($eventA, $eventB)
     {
-        if ($eventA['datetime'] == $eventB['datetime']) {
-            return 0;
-        }
-        return ($eventA['datetime'] < $eventB['datetime']) ? -1 : 1;
+        return ($eventA['datetime'] - $eventB['datetime']);
     }
 
     /**

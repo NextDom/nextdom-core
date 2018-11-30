@@ -52,6 +52,12 @@
                                 <span class="eqLogicAttr label label-primary txtSizeNormal" data-l1key="configuration" data-l2key="createtime"></span>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{{ 'Date de changement de pile(s)' }}</label>
+                            <div class="col-sm-4">
+                                <span class="eqLogicAttr label label-primary txtSizeNormal" data-l1key="configuration" data-l2key="batterytime"></span>
+                            </div>
+                        </div>
                     </fieldset>
                 </form>
             </div>
@@ -114,7 +120,7 @@
                     </thead>
                     <tbody>
                     {% for cmd in cmdsList %}
-                        <tr>
+                        <tr class="advanceCmdConfigurationCmdConfigure" data-id="{{ cmd.getId() }}">
                             <td>{{ cmd.getHumanName() }}</td>
                             <td>
                                 <a class="btn btn-default btn-xs pull-right cursor bt_advanceCmdConfigurationOnEqLogicConfiguration" data-id="{{ cmd.getId() }}"><i class="fas fa-cogs"></i></a>
@@ -618,6 +624,11 @@
 
     $('.bt_advanceCmdConfigurationOnEqLogicConfiguration').off('click').on('click', function () {
         $('#md_modal2').dialog({title: "{{ 'Configuration de la commande' }}"});
+        $('#md_modal2').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
+    });
+
+    $('.advanceCmdConfigurationCmdConfigure').off('dblclick').on('dblclick', function () {
+        $('#md_modal2').dialog({title: "{{Configuration de la commande}}"});
         $('#md_modal2').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
     });
 

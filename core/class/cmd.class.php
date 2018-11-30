@@ -62,6 +62,10 @@ class cmd {
         return CmdManager::byId($_id);
     }
 
+    public static function byIds($_ids) {
+        return CmdManager::byIds($_ids);
+    }
+
     public static function all() {
         return CmdManager::all();
     }
@@ -389,9 +393,10 @@ class cmd {
      */
     public function execCmd($_options = null, $_sendNodeJsEvent = false, $_quote = false) {
         if ($this->getType() == 'info') {
-            $this->setCollectDate($this->getCache('collectDate', date('Y-m-d H:i:s'), true));
-            $this->setValueDate($this->getCache('valueDate', date('Y-m-d H:i:s'), true));
-            return $this->getCache('value', '');
+            $state = $this->getCache(array('collectDate', 'valueDate', 'value'));
+            $this->setCollectDate($state['collectDate']);
+            $this->setValueDate($state['valueDate']);
+            return $state['value'];
         }
         $eqLogic = $this->getEqLogic();
         if ($this->getType() != 'info' && (!is_object($eqLogic) || $eqLogic->getIsEnable() != 1)) {
@@ -661,9 +666,7 @@ class cmd {
             }
             if ($_options != '') {
                 $options = nextdom::toHumanReadable($_options);
-                if (is_json($options)) {
-                    $options = json_decode($options, true);
-                }
+                $options = is_json($options, $options);
                 if (is_array($options)) {
                     foreach ($options as $key => $value) {
                         $replace['#' . $key . '#'] = $value;
@@ -1025,7 +1028,8 @@ class cmd {
         if ($this->getCache('ask::variable', 'none') == 'none') {
             return false;
         }
-        if ($this->getCache('ask::endtime', null) === null || $this->getCache('ask::endtime', null) < strtotime('now')) {
+        $askEndTime = $this->getCache('ask::endtime', null);
+        if ($askEndTime === null || $askEndTime < strtotime('now')) {
             return false;
         }
         $dataStore = new dataStore();
@@ -1372,6 +1376,7 @@ class cmd {
 
     public function setEqLogic_id($eqLogic_id) {
         $this->eqLogic_id = $eqLogic_id;
+        return $this;
     }
 
     public function setIsHistorized($isHistorized) {
@@ -1400,6 +1405,7 @@ class cmd {
             $this->_needRefreshWidget = true;
         }
         $this->html = utils::setJsonAttr($this->html, $_key, $_value);
+        return $this;
     }
 
     public function getTemplate($_key = '', $_default = '') {
@@ -1411,6 +1417,7 @@ class cmd {
             $this->_needRefreshWidget = true;
         }
         $this->template = utils::setJsonAttr($this->template, $_key, $_value);
+        return $this;
     }
 
     public function getConfiguration($_key = '', $_default = '') {
@@ -1424,6 +1431,7 @@ class cmd {
             }
         }
         $this->configuration = utils::setJsonAttr($this->configuration, $_key, $_value);
+        return $this;
     }
 
     public function getDisplay($_key = '', $_default = '') {
@@ -1435,6 +1443,7 @@ class cmd {
             $this->_needRefreshWidget = true;
         }
         $this->display = utils::setJsonAttr($this->display, $_key, $_value);
+        return $this;
     }
 
     public function getAlert($_key = '', $_default = '') {
@@ -1498,6 +1507,7 @@ class cmd {
             $this->_needRefreshWidget = true;
         }
         $this->order = $order;
+        return $this;
     }
 
     public function getLogicalId() {
@@ -1519,11 +1529,13 @@ class cmd {
     }
 
     public function getCache($_key = '', $_default = '') {
-        return utils::getJsonAttr(cache::byKey('cmdCacheAttr' . $this->getId())->getValue(), $_key, $_default);
+        $cache = cache::byKey('cmdCacheAttr' . $this->getId())->getValue();
+        return utils::getJsonAttr($cache, $_key, $_default);
     }
 
     public function setCache($_key, $_value = null) {
         cache::set('cmdCacheAttr' . $this->getId(), utils::setJsonAttr(cache::byKey('cmdCacheAttr' . $this->getId())->getValue(), $_key, $_value));
+        return $this;
     }
 
 }
