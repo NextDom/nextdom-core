@@ -644,9 +644,9 @@
                                 {% if cmdWidgetCanCustomVisibility %}
                                     <tr>
                                         <td>{{ 'Visible' }}</td>
-                                        {% for displayTypevalue in eqLogicDisplayType %}
+                                        {% for displayTypeKey, displayTypeValue in eqLogicDisplayType %}
                                             <td>
-                                                {% if displayTypevalue['customVisibility'] == 1 %}
+                                                {% if cmd.widgetPossibility('custom::visibility::' ~ displayTypeKey) %}
                                                     <input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showOn{{ displayTypevalue['key'] }}" checked="checked"/>
                                                 {% endif %}
                                             </td>
@@ -656,7 +656,7 @@
                                 {% if cmdWidgetCanCustomDisplayName %}
                                     <tr>
                                         <td>{{ 'Afficher le nom' }}</td>
-                                        {% for displayTypevalue in eqLogicDisplayType %}
+                                        {% for displayTypeKey, displayTypeValue in eqLogicDisplayType %}
                                             <td>
                                                 {% if cmd.widgetPossibility('custom::displayName::' ~ displayTypeKey) %}
                                                     <input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showNameOn{{ displayTypeKey }}" checked="checked"/>
@@ -668,7 +668,7 @@
                                 {% if cmdWidgetCanCustomDisplayIconAndName %}
                                     <tr>
                                         <td>{{ 'Afficher le nom et l\'icône' }}</td>
-                                        {% for displayTypevalue in eqLogicDisplayType %}
+                                        {% for displayTypeKey, displayTypeValue in eqLogicDisplayType %}
                                             <td>
                                                 {% if cmd.widgetPossibility('custom::displayIconAndName::' ~ displayTypeKey) %}
                                                     <input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showIconAndName{{ displayTypeKey }}"/>
@@ -680,7 +680,7 @@
                                 {% if configDisplayStatsWidget == 1 and cmdSubType != 'string' and cmdWidgetCanCustomDisplayStats %}
                                     <tr>
                                         <td>{{ 'Afficher les statistiques' }}</td>
-                                        {% for displayTypevalue in eqLogicDisplayType %}
+                                        {% for displayTypeKey, displayTypeValue in eqLogicDisplayType %}
                                             <td>
                                                 {% if cmd.widgetPossibility('custom::displayStats::' ~ displayTypeKey) %}
                                                     <input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showStatsOn{{ displayTypeKey }}" checked/>
@@ -719,13 +719,13 @@
                                 </thead>
                                 <tbody>
                                     {% if cmdDisplayParameters != '' %}
-                                        {% for displayValue in cmdDisplayParameters %}
+                                        {% for displayKey, displayValue in cmdDisplayParameters %}
                                             <tr>
                                                 <td>
-                                                    <input class="form-control key" value="{{ displayValue['key'] }}"/>
+                                                    <input class="form-control key" value="{{ displayKey }}"/>
                                                 </td>
                                                 <td>
-                                                    <input class="form-control value" value="{{ displayValue['value'] }}"/>
+                                                    <input class="form-control value" value="{{ displayValue }}"/>
                                                 </td>
                                                 <td>
                                                     <a class="btn btn-danger btn-sm removeWidgetParameter"><i class="fas fa-times">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
