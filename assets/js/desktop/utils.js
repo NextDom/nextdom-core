@@ -559,7 +559,7 @@ function refreshUpdateNumber() {
  */
 function switchNotify(notificationState) {
     nextdom.config.save({
-        configuration: {'nextdom::Notify': notificationState},
+        configuration: {'notify::status': notificationState},
         error: function (error) {
             notify("Core", error.message, 'error');
         },
