@@ -566,9 +566,11 @@ function switchNotify(notificationState) {
         success: function () {
           if (notificationState) {
               $('.notifyIcon').removeClass("fa-bell-slash").addClass("fa-bell");
+              $('.notifyIconLink').attr('onclick','switchNotify(0);')
               notify("Core",  '{{Notification activée}}', 'success');
           } else {
               $('.notifyIcon').removeClass("fa-bell").addClass("fa-bell-slash");
+              $('.notifyIconLink').attr('onclick','switchNotify(1);')
               notify("Core",  '{{Notification desactivée}}', 'success');
           }
         }
