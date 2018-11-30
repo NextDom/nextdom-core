@@ -64,10 +64,10 @@
                     </li>
                 {% endif %}
                 <li class="task_bell_mobile cursor">
-                    {% if notify_status == 1 %}
-                        <a class="notifyIconLink" onclick="switchNotify(0);"><i class="notifyIcon fas fa-bell"></i></a>
+                    {% if NOTIFY_STATUS %}
+                        <a onclick="switchNotify(0);"><i class="notifyIcon fas fa-bell"></i></a>
                     {% else %}
-                        <a class="notifyIconLink" onclick="switchNotify(1);"><i class="notifyIcon fas fa-bell-slash"></i></a>
+                        <a onclick="switchNotify(1);"><i class="notifyIcon fas fa-bell-slash"></i></a>
                     {% endif %}
                 </li>
                 <li class="task_fullscreen_mobile cursor">
