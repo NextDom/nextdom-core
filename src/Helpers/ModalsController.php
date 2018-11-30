@@ -224,6 +224,7 @@ class ModalsController
 
         $pageContent['alertsConfig'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
         $pageContent['eqLogicDisplayType'] = NextDomHelper::getConfiguration('eqLogic:displayType');
+        $pageContent['cmd'] = $cmd;
 
         Utils::sendVarsToJS([
             'cmdInfo' => $cmdInfo,
