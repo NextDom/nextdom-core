@@ -49,7 +49,9 @@ class PluginController extends BaseController
         $page = Utils::init('p');
 
         ob_start();
+        echo '<section class="content">';
         \include_file('desktop', $page, 'php', $plugin->getId(), true);
+        echo '</section>';
         return ob_get_clean();
     }
 }
