@@ -248,83 +248,85 @@ class JeeObjectManager
     public static function checkSummaryUpdate(string $cmdId)
     {
         $objects = self::searchConfiguration('#' . $cmdId . '#');
-        if (count($objects) == 0) {
-            return;
-        }
-        $toRefreshCmd = array();
-        $global = array();
-        foreach ($objects as $object) {
-            $summaries = $object->getConfiguration('summary');
-            if (!is_array($summaries)) {
-                continue;
-            }
-            $event = array('object_id' => $object->getId(), 'keys' => array());
-            foreach ($summaries as $key => $summary) {
-                foreach ($summary as $cmd_info) {
-                    preg_match_all("/#([0-9]*)#/", $cmd_info['cmd'], $matches);
-                    foreach ($matches[1] as $cmd_id) {
-                        if ($cmd_id == $cmdId) {
-                            $value = $object->getSummary($key);
-                            $event['keys'][$key] = array('value' => $value);
-                            $toRefreshCmd[] = array('key' => $key, 'object' => $object, 'value' => $value);
-                            if ($object->getConfiguration('summary::global::' . $key, 0) == 1) {
-                                $global[$key] = 1;
-                            }
-                        }
-                    }
-                }
-            }
-            $events[] = $event;
-        }
-        if (count($toRefreshCmd) > 0) {
-            foreach ($toRefreshCmd as $value) {
-                try {
-                    if ($object->getConfiguration('summary_virtual_id') == '') {
-                        continue;
-                    }
-                    $virtual = EqLogicManager::byId($value['object']->getConfiguration('summary_virtual_id'));
-                    if (!is_object($virtual)) {
-                        $object->getConfiguration('summary_virtual_id', '');
-                        $object->save();
-                        continue;
-                    }
-                    $cmd = $virtual->getCmd('info', $value['key']);
-                    if (!is_object($cmd)) {
-                        continue;
-                    }
-                    $cmd->event($value['value']);
-                } catch (\Exception $e) {
-
-                }
-            }
-        }
-        if (count($global) > 0) {
-            $event = array('object_id' => 'global', 'keys' => array());
-            foreach ($global as $key => $value) {
-                try {
-                    $result = self::getGlobalSummary($key);
-                    if ($result === null) {
-                        continue;
-                    }
-                    $event['keys'][$key] = array('value' => $result);
-                    $virtual = EqLogicManager::byLogicalId('summaryglobal', 'virtual');
-                    if (!is_object($virtual)) {
-                        continue;
-                    }
-                    $cmd = $virtual->getCmd('info', $key);
-                    if (!is_object($cmd)) {
-                        continue;
-                    }
-                    $cmd->event($result);
-                } catch (\Exception $e) {
-
-                }
-            }
-            $events[] = $event;
-        }
-        if (count($events) > 0) {
-            EventManager::adds('self::summary::update', $events);
-        }
+		if (count($objects) == 0) {
+			return;
+		}
+		$toRefreshCmd = array();
+		$global = array();
+		foreach ($objects as $object) {
+			$summaries = $object->getConfiguration('summary');
+			if (!is_array($summaries)) {
+				continue;
+			}
+			$event = array('object_id' => $object->getId(), 'keys' => array());
+			foreach ($summaries as $key => $summary) {
+				foreach ($summary as $cmd_info) {
+					preg_match_all("/#([0-9]*)#/", $cmd_info['cmd'], $matches);
+					foreach ($matches[1] as $cmd_id) {
+						if ($cmd_id == $cmdId) {
+							$value = $object->getSummary($key);
+							$event['keys'][$key] = array('value' => $value);
+							$toRefreshCmd[] = array('key' => $key, 'object' => $object, 'value' => $value);
+							if ($object->getConfiguration('summary::global::' . $key, 0) == 1) {
+								$global[$key] = 1;
+							}
+						}
+					}
+				}
+			}
+			$events[] = $event;
+		}
+		if (count($toRefreshCmd) > 0) {
+			foreach ($toRefreshCmd as $value) {
+				try {
+					$value['object']->setCache('summaryHtmldesktop', '');
+					$value['object']->setCache('summaryHtmlmobile', '');
+					if ($value['object']->getConfiguration('summary_virtual_id') == '') {
+						continue;
+					}
+					$virtual = EqLogicManager::byId($value['object']->getConfiguration('summary_virtual_id'));
+					if (!is_object($virtual)) {
+						$object->getConfiguration('summary_virtual_id', '');
+						$object->save();
+						continue;
+					}
+					$cmd = $virtual->getCmd('info', $value['key']);
+					if (!is_object($cmd)) {
+						continue;
+					}
+					$cmd->event($value['value']);
+				} catch (\Exception $e) {
+				}
+			}
+		}
+		if (count($global) > 0) {
+			CacheManager::set('globalSummaryHtmldesktop', '');
+			CacheManager::set('globalSummaryHtmlmobile', '');
+			$event = array('object_id' => 'global', 'keys' => array());
+			foreach ($global as $key => $value) {
+				try {
+					$result = JeeObjectManager::getGlobalSummary($key);
+					if ($result === null) {
+						continue;
+					}
+					$event['keys'][$key] = array('value' => $result);
+					$virtual = EqLogicManager::byLogicalId('summaryglobal', 'virtual');
+					if (!is_object($virtual)) {
+						continue;
+					}
+					$cmd = $virtual->getCmd('info', $key);
+					if (!is_object($cmd)) {
+						continue;
+					}
+					$cmd->event($result);
+				} catch (\Exception $e) {
+				}
+			}
+			$events[] = $event;
+		}
+		if (count($events) > 0) {
+			EventManager::adds('jeeObject::summary::update', $events);
+		}
     }
 
     /**
@@ -337,27 +339,27 @@ class JeeObjectManager
     public static function getGlobalSummary(string $key)
     {
         if ($key == '') {
-            return null;
-        }
-        $def = \config::byKey('object:summary');
-        $objects = self::all();
-        $value = array();
-        foreach ($objects as $object) {
-            if ($object->getConfiguration('summary::global::' . $key, 0) == 0) {
-                continue;
-            }
-            $result = $object->getSummary($key, true);
-            if ($result === null || !is_array($result)) {
-                continue;
-            }
-            $value = array_merge($value, $result);
-        }
-        if (count($value) == 0) {
-            return null;
-        }
-        if ($def[$key]['calcul'] == 'text') {
-            return trim(implode(',', $value), ',');
-        }
+			return null;
+		}
+		$def = \config::byKey('object:summary');
+		$objects = self::all();
+		$value = array();
+		foreach ($objects as $object) {
+			if ($object->getConfiguration('summary::global::' . $key, 0) == 0) {
+				continue;
+			}
+			$result = $object->getSummary($key, true);
+			if ($result === null || !is_array($result)) {
+				continue;
+			}
+			$value = array_merge($value, $result);
+		}
+		if (count($value) == 0) {
+			return null;
+		}
+		if ($def[$key]['calcul'] == 'text') {
+			return trim(implode(',', $value), ',');
+		}
         return round(NextDomHelper::calculStat($def[$key]['calcul'], $value), 1);
     }
 
@@ -373,7 +375,7 @@ class JeeObjectManager
     public static function getGlobalHtmlSummary($version = 'desktop')
     {
         $objects = self::all();
-        $def = \config::byKey('object:summary');
+        $def = \config::byKey('object:summary' . $version);
         $values = array();
         $return = '<span class="objectSummaryglobal" data-version="' . $version . '">';
         foreach ($def as $key => $value) {
@@ -413,7 +415,9 @@ class JeeObjectManager
             $return .= $def[$key]['icon'] . ' <sup><span class="objectSummary' . $key . '">' . $result . '</span> ' . $def[$key]['unit'] . '</sup>';
             $return .= '</span>';
         }
-        return trim($return) . '</span>';
+        $return = trim($return) . '</span>';
+        CacheManager::set('globalSummaryHtml' . $version, $return);
+        return $return;
     }
 
     /**
