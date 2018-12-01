@@ -107,6 +107,26 @@ window.onscroll = function () {
         $(".sidebar-menu").css("overflow-y", "auto");
         sideMenuResize(false);
     }
+    if (document.body.scrollTop > 15 || document.documentElement.scrollTop > 15) {
+        if (!$('body').hasClass("content-header")) {
+            $(".content-header").css("top", document.body.scrollTop + document.documentElement.scrollTop - 15);
+        }
+        if (!$('body').hasClass("action-bar")) {
+            $(".action-bar").css("box-shadow", "0 3px 6px 0px rgba(0,0,0,0.2)");
+            $(".action-bar").css("border-top-right-radius", "0px");
+            $(".action-bar").css("border-top-left-radius", "0px");
+        }
+    } else {
+        if (!$('body').hasClass("content-header")) {
+            $(".content-header").css("top", 0);
+        }
+        if (!$('body').hasClass("action-bar")) {
+            $(".action-bar").css("box-shadow", "0 1px 1px rgba(0,0,0,0.1)");
+            $(".action-bar").css("border-top-right-radius", "3px");
+            $(".action-bar").css("border-top-left-radius", "3px");
+        }
+    }
+
 };
 
 $('#bt_goOnTop').click(function () {
