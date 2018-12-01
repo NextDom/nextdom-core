@@ -116,14 +116,14 @@ legend {
 }
 
 .label-icon {
-    padding: 6px 10px 8px 9px;
-    font-size: 100%;
     border: 1px solid;
     border-radius: 2px;
+    font-size: 20px;
+    vertical-align: middle;
     margin: {
-        left: -2px;
-        top: 2px;
-        bottom: 2px;
+        left: -4px;
+        top: 0px;
+        bottom: 0px;
     }
     & >i {
         vertical-align: middle;
