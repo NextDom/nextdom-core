@@ -113,7 +113,7 @@ class view {
         if (!file_exists($filepath)) {
             file_put_contents($filepath, base64_decode($this->getImage('data')));
         }
-        return 'core/img/view/' . $filename;
+        return 'public/img/view/' . $filename;
     }
 
     public function toArray() {
