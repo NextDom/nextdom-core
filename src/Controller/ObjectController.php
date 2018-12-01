@@ -54,11 +54,11 @@ class ObjectController extends BaseController
     {
 
         $pageContent['JS_VARS']['select_id'] = Utils::init('id', '-1');
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/object.js';
         $pageContent['objectProductName'] = \config::byKey('product_name');
         $pageContent['objectCustomProductName'] = \config::byKey('name');
         $pageContent['objectList'] = JeeObjectManager::buildTree(null, false);
         $pageContent['objectSummary'] = \config::byKey('object:summary');
+        $pageContent['JS_END_POOL'][] = '/public/js/desktop/object.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/object.html.twig', $pageContent);

@@ -238,7 +238,7 @@ try {
         if (filesize($_FILES['file']['tmp_name']) > 5000000) {
             throw new Exception(__('Le fichier est trop gros (maximum 5Mo)', __FILE__));
         }
-        $uploaddir = __DIR__ . '/../img/plan_' . $plan->getId();
+        $uploaddir = __DIR__ . '/../../public/img/plan_' . $plan->getId();
         if (!file_exists($uploaddir)) {
             mkdir($uploaddir, 0777);
         }
