@@ -399,7 +399,7 @@ class jeeObject {
         if (!file_exists($filepath)) {
             file_put_contents($filepath, base64_decode($this->getImage('data')));
         }
-        return 'core/img/object/' . $filename;
+        return 'public/img/object/' . $filename;
     }
 
     public function toArray() {
