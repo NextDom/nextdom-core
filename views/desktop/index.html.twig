@@ -33,11 +33,13 @@
 */
 
 #}
-<main id="div_mainContainer"{% if IS_PLUGIN_PAGE %} class="pluginContainer"{% endif %}">
+<main id="div_mainContainer">
     <div id="div_alert"></div>
     <div id="div_pageContainer">
         {% if ALERT_MSG is defined %}
-            <div class="text-center alert alert-danger">{{ ALERT_MSG|raw }}</div>
+            <section class="content-header">
+                <div class="text-center alert alert-danger">{{ ALERT_MSG|raw }}</div>
+            </section>
         {%  endif %}
         {{ content|raw }}
     </div>

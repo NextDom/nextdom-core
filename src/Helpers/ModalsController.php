@@ -37,8 +37,10 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
+use Sabre\CalDAV\Plugin;
 
 class ModalsController
 {
@@ -51,10 +53,13 @@ class ModalsController
         'eqLogic.configure' => 'eqLogicConfigure',
         'expression.test' => 'expressionTest',
         'graph.link' => 'graphLink',
+        'interact.query.display' => 'interactQueryDisplay',
+        'interact.test' => 'interactTest',
         'log.display' => 'logDisplay',
         'nextdom.benchmark' => 'nextdomBenchmark',
         'plan.configure' => 'planConfigure',
         'planHeader.configure' => 'planHeaderConfigure',
+        'plugin.deamon' => 'pluginDaemon',
         'scenario.export' => 'scenarioExport',
         'scenario.log.execution' => 'scenarioLogExecution',
         'scenario.summary' => 'scenarioSummary',
@@ -219,6 +224,7 @@ class ModalsController
 
         $pageContent['alertsConfig'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
         $pageContent['eqLogicDisplayType'] = NextDomHelper::getConfiguration('eqLogic:displayType');
+        $pageContent['cmd'] = $cmd;
 
         Utils::sendVarsToJS([
             'cmdInfo' => $cmdInfo,
@@ -265,7 +271,7 @@ class ModalsController
         Status::isConnectedOrFail();
 
         Utils::sendVarsToJS(['dataStore_type' => Utils::init('type'),
-            'dataStore_link_id', Utils::init('link_id', -1)]);
+            'dataStore_link_id' => Utils::init('link_id', -1)]);
 
         $render->show('/modals/dataStore.management.html.twig');
     }
@@ -457,6 +463,53 @@ class ModalsController
     }
 
     /**
+     * Render interact query display modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function interactQueryDisplay(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $interactDefId = Utils::init('interactDef_id', '');
+        if ($interactDefId == '') {
+            throw new CoreException(__('Interact Def ID ne peut être vide'));
+        }
+        $pageContent['interactQueries'] = \interactQuery::byInteractDefId($interactDefId);
+        if (count($pageContent['interactQueries']) == 0) {
+            throw new CoreException(__('Aucune phrase trouvée'));
+        }
+
+        Utils::sendVarToJS('interactDisplay_interactDef_id', $interactDefId);
+
+        $render->show('/modals/interact.query.display.html.twig');
+    }
+
+    /**
+     * Render interact tester modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function interactTest(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $render->show('/modals/interact.test.html.twig');
+    }
+
+    /**
      * Render log display modal
      *
      * @param Render $render Render engine
@@ -551,6 +604,50 @@ class ModalsController
             'planHeader' => \utils::o2a($planHeader)]);
 
         $render->show('/modals/planHeader.configure.html.twig');
+    }
+
+    /**
+     * Render plugin daemon modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function pluginDaemon(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pluginId = init('plugin_id');
+        if (!class_exists($pluginId)) {
+            die();
+        }
+        $plugin = PluginManager::byId($pluginId);
+        $daemonInfo = $plugin->deamon_info();
+        if (count($daemonInfo) == 0) {
+            die();
+        }
+        $refresh = array();
+        $refresh[0] = 0;
+        $pageContent['daemonInfoState'] = $daemonInfo['state'];
+        $pageContent['daemonInfoLaunchable'] = $daemonInfo['launchable'];
+        $pageContent['daemonInfoLaunchableMessage'] = '';
+        if (isset($daemonInfo['launchable_message'])) {
+            $pageContent['daemonInfoLaunchableMessage'] = $daemonInfo['launchable_message'];
+        }
+        $pageContent['daemonInfoAuto'] = 1;
+        if (isset($daemonInfo['auto'])) {
+            $pageContent['daemonInfoAuto'] = $daemonInfo['auto'];
+        }
+        if (isset($daemonInfo['last_launch'])) {
+            $pageContent['daemonInfoLastLaunch'] = $daemonInfo['last_launch'];
+        }
+        Utils::sendVarsToJs(['plugin_id' => $pluginId, 'refresh_deamon_info' => $refresh]);
+
+        $render->show('/modals/plugin.daemon.html.twig');
     }
 
     /**

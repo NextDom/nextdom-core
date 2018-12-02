@@ -17,8 +17,6 @@
 
 namespace NextDom\Helpers;
 
-use DebugBar\Bridge\Twig\TraceableTwigEnvironment;
-use DebugBar\Bridge\Twig\TwigCollector;
 use DebugBar\DataCollector;
 use DebugBar\StandardDebugBar;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;

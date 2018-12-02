@@ -38,6 +38,7 @@
     <div class="action-bar">
         <div class="action-group">
             <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=interact"><i class="fas fa-eye">&nbsp;&nbsp;</i>{{ 'Visualiser' }}</a>
             <a class="btn btn-success btn-action-bar" id="bt_addColorConvert"><i class="fa fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter une couleur' }}</a>
         </div>
         <div class="action-group">
@@ -50,7 +51,7 @@
     <div class="box" id="interact_admin">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-american-sign-language-interpreting">&nbsp;&nbsp;</i>{{ 'Interactions' }}</h3>
+            <h3 class="box-title"><i class="fas fa-comments">&nbsp;&nbsp;</i>{{ 'Interactions' }}</h3>
         </div>
 
         <!-- Page content -->
@@ -58,8 +59,8 @@
             <form class="form-horizontal">
 
                 <!-- General Section -->
-                <div>
-                    <legend class="legend-title">{{ 'Général' }}</legend>
+                <fieldset>
+                    <legend>{{ 'Général' }}</legend>
                     <div class="alert alert-info">
                         {{ 'Plus la sensibilité est basse (proche de 1), plus la correspondance doit être exacte.' }}
                     </div>
@@ -106,11 +107,11 @@
                             <textarea type="text" class="configKey form-control" data-l1key="interact::regexpExcludGlobal"></textarea>
                         </div>
                     </div>
-                </div>
+                </fieldset>
 
                 <!-- Interacts section -->
-                <div class="legend-section">
-                    <legend class="legend-title">{{ 'Intéractions' }}</legend>
+                <fieldset class="legend-section">
+                    <legend>{{ 'Intéractions' }}</legend>
                     <div class="form-group">
                         <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Interactions automatiques' }}</label>
                         <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
@@ -197,11 +198,11 @@
                             <input class="configKey form-control" data-l1key="interact::autoreply::cmd::slider::min"/>
                         </div>
                     </div>
-                </div>
+                </fieldset>
 
                 <!-- Colors Section -->
-                <div class="legend-section">
-                    <legend class="legend-title">{{ 'Couleurs' }}</legend>
+                <fieldset class="legend-section">
+                    <legend>{{ 'Couleurs' }}</legend>
                     <table class="table table-condensed table-bordered" id="table_convertColor">
                         <thead>
                         <tr>
@@ -212,7 +213,7 @@
                         <tbody>
                         </tbody>
                     </table>
-                </div>
+                </fieldset>
             </form>
         </div>
     </div>

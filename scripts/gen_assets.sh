@@ -46,7 +46,6 @@ function gen_js {
         vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
         vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
         vendor/node_modules/admin-lte/dist/js/adminlte.min.js \
-        assets/js/adminlte/adminlte_nextdom.js \
         vendor/node_modules/izitoast/dist/js/iziToast.min.js \
         assets/js/desktop/utils.js \
         core/js/core.js \
@@ -99,14 +98,13 @@ function gen_js {
         vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
         vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js \
         assets/3rdparty/jquery.multi-column-select/multi-column-select.js \
-        assets/3rdparty/jquery.sew/jquery.sew.min.js \
         vendor/node_modules/jquery-cron/dist/jquery-cron.js \
         vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js \
         vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
         vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
         vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js \
         vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js \
-        vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.js \
+        vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js \
         vendor/node_modules/snapsvg/dist/snap.svg-min.js > /tmp/temp.js
 
 if [ $# -eq 0 ]; then
@@ -167,11 +165,11 @@ fi
 }
 
 function copy_assets {
-    echo " >>> Copie des icones"
+    echo " >>> Copy icons"
 	cp -fr assets/icon public/
-	echo " >>> Copie des themes"
+	echo " >>> Copy themes"
 	cp -fr assets/themes public/
-	echo " >>> Copie des images"
+	echo " >>> Copy images"
 	cp -fr assets/img public/
 	gen_css
 	gen_js
@@ -201,7 +199,7 @@ function start {
 cd ${root}/..
 
 if [ "$#" == 0 ]; then
-    echo "Pour lancer la génération automatique, ajouter l'option --watch"
+    echo "To start automatic generation, add the --watch option"
 	mkdir -p public/css
 	mkdir -p public/js
 	copy_assets;

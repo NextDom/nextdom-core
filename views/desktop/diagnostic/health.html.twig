@@ -53,58 +53,59 @@
 
         <!-- Page content -->
         <div class="box-body">
-
-            <!-- Nextdom health section -->
-            <legend class="legend-title">{{ 'Détails de la santé de votre solution, survolez les icônes pour plus d\'informations.' }}</legend>
-            <div class="row">
-                {% for informations in healthInformations %}
-                    {% if informations['name'] == "os-version" %}
-                        <div class="col-xs-12">
-                            {% set box_color = 'red' %}
-                            {% if informations['state'] == 1 or informations['state'] == true %}
-                                {% set box_color = 'green' %}
-                            {% elseif informations['state'] == 2 %}
-                                {% set box_color = 'yellow' %}
-                            {% endif %}
-                            <div class="info-box bg-{{ box_color }}">
-                              <span class="info-box-icon" data-toggle="tooltip" title="" data-original-title="{{ informations['comment'] }}">
-                                  {% if informations['icon'] is defined %}
-                                      <i class="fas {{ informations['icon'] }}"></i>
-                                  {% endif %}
-                              </span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text"><b>{{ informations['name'] }}</b></span>
-                                    <span class="info-box-text info-box-text-2">
-                                      {{ informations['result'] }}
+            <fieldset>
+                <!-- Nextdom health section -->
+                <legend>{{ 'Détails de la santé de votre solution, survolez les icônes pour plus d\'informations.' }}</legend>
+                <div class="row">
+                    {% for informations in healthInformations %}
+                        {% if informations['name'] == "os-version" %}
+                            <div class="col-xs-12">
+                                {% set box_color = 'red' %}
+                                {% if informations['state'] == 1 or informations['state'] == true %}
+                                    {% set box_color = 'green' %}
+                                {% elseif informations['state'] == 2 %}
+                                    {% set box_color = 'yellow' %}
+                                {% endif %}
+                                <div class="info-box bg-{{ box_color }}">
+                                  <span class="info-box-icon" data-toggle="tooltip" title="" data-original-title="{{ informations['comment'] }}">
+                                      {% if informations['icon'] is defined %}
+                                          <i class="fas {{ informations['icon'] }}"></i>
+                                      {% endif %}
                                   </span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text"><b>{{ informations['name'] }}</b></span>
+                                        <span class="info-box-text info-box-text-2">
+                                          {{ informations['result'] }}
+                                      </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% else %}
-                        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                            {% set box_color = 'red' %}
-                            {% if informations['state'] == 1 or informations['state'] == true %}
-                                {% set box_color = 'green' %}
-                            {% elseif informations['state'] == 2 %}
-                                {% set box_color = 'yellow' %}
-                            {% endif %}
-                            <div class="info-box bg-{{ box_color }}">
-                              <span class="info-box-icon" data-toggle="tooltip" title="" data-original-title="{{ informations['comment'] }}">
-                                  {% if informations['icon'] is defined %}
-                                      <i class="fas {{ informations['icon'] }}"></i>
-                                  {% endif %}
-                              </span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text"><b>{{ informations['name'] }}</b></span>
-                                    <span class="info-box-text info-box-text-2">
-                                      {{ informations['result'] }}
+                        {% else %}
+                            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                                {% set box_color = 'red' %}
+                                {% if informations['state'] == 1 or informations['state'] == true %}
+                                    {% set box_color = 'green' %}
+                                {% elseif informations['state'] == 2 %}
+                                    {% set box_color = 'yellow' %}
+                                {% endif %}
+                                <div class="info-box bg-{{ box_color }}">
+                                  <span class="info-box-icon" data-toggle="tooltip" title="" data-original-title="{{ informations['comment'] }}">
+                                      {% if informations['icon'] is defined %}
+                                          <i class="fas {{ informations['icon'] }}"></i>
+                                      {% endif %}
                                   </span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text"><b>{{ informations['name'] }}</b></span>
+                                        <span class="info-box-text info-box-text-2">
+                                          {{ informations['result'] }}
+                                      </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </fieldset>
         </div>
     </div>
 
@@ -114,20 +115,21 @@
         </div>
 
         <div class="box-body">
-            <!-- Plugins health section -->
-            <legend class="legend-title">{{ 'Détails de la santé de vos plugins, cliquez sur le titre pour avoir le détail puis survolez les icônes pour plus d\'informations.' }}</legend>
-            {% if healthPluginDataToShow %}
-            <div class="box-group" id="accordionHealth">
-                {% for pluginData in healthPluginsInformations %}
-                {% if pluginData['nOk'] > 0 %}
-                <div class="panel box box-danger">
+            <fieldset>
+                <!-- Plugins health section -->
+                <legend>{{ 'Détails de la santé de vos plugins, cliquez sur le titre pour avoir le détail puis survolez les icônes pour plus d\'informations.' }}</legend>
+                {% if healthPluginDataToShow %}
+                <div class="box-group" id="accordionHealth">
+                    {% for pluginData in healthPluginsInformations %}
+                    {% if pluginData['nOk'] > 0 %}
+                        <div class="panel box box-danger">
                     {% endif %}
                     {% if pluginData['pending'] > 0 %}
-                    <div class="panel box box-warning">
-                        {% endif %}
-                        {% if pluginData['nOk'] == 0 and pluginData['pending'] == 0 %}
+                        <div class="panel box box-warning">
+                    {% endif %}
+                    {% if pluginData['nOk'] == 0 and pluginData['pending'] == 0 %}
                         <div class="panel box box-success">
-                            {% endif %}
+                    {% endif %}
                             <div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordionHealth" href="#config_{{ pluginData['plugin'].getId() }}">
                                 <h3 class="box-title">
                                     <img style="height : 20px;padding-right:10px;" src="{{ pluginData['plugin'].getPathImgIcon() }}"/>{{ 'Santé' }} {{ pluginData['plugin'].getName() }}
@@ -148,114 +150,113 @@
                                         <i class="fas fa-university pull-right text-red" data-toggle="tooltip" title="" data-original-title="{{ 'Démon en mode manuel' }}"></i>
                                     {% endif %}
                                 {% endif %}
-
                             </div>
-                            <div id="config_{{ pluginData['plugin'].getId() }}" class="panel-collapse collapse">
-                                <div class="box-body">
-                                    {% if pluginData['showOnlyTable'] %}
-                                        <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                                            {% if pluginData['hasDependency'] %}
-                                                {% if pluginData['dependencyState'] == 'ok' %}
-                                                    {% set box_color = 'green' %}
-                                                    {% set text = 'OK' %}
-                                                {% elseif pluginData['dependencyState'] == 'nok' %}
-                                                    {% set box_color = 'red' %}
-                                                    {% set text = 'NOK' %}
-                                                {% elseif pluginData['dependencyState'] == 'in_progress' %}
-                                                    {% set box_color = 'warnning' %}
-                                                    {% set text = 'En cours' %}
-                                                {% else %}
-                                                    {% set box_color = 'red' %}
-                                                    {% set text = 'NOK' %}
-                                                {% endif %}
-                                                <div class="info-box bg-{{ box_color }}">
-                                                    <span class="info-box-icon"><i class="fas fa-link"></i></span>
-                                                    <div class="info-box-content">
-                                                        <span class="info-box-text"><b>{{ 'Dépendance' }}</b></span>
-                                                        <span class="info-box-text info-box-text-2">{{ text }}</span>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-                                        </div>
-
-                                        <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                                        {% if pluginData['hasOwnDaemon'] %}
-                                            {% if pluginData['daemonLaunchable'] == 'ok' %}
-                                                {% set box_color = 'green' %}
-                                                {% set text = 'OK' %}
-                                            {% elseif pluginData['daemonLaunchable'] == 'nok' %}
-                                                {% if pluginData['daemonAuto'] != 1 %}
-                                                    {% set box_color = 'aqua' %}
-                                                    {% set text = '' %}
-                                                {% else %}
-                                                    {% set box_color = 'red' %}
-                                                    {% set text = 'NOK' %}
-                                                {% endif %}
-                                            {% endif %}
-                                            <div class="info-box bg-{{ box_color }}">
-                                                <span class="info-box-icon"><i class="fas fa-bolt"></i></span>
-                                                <div class="info-box-content">
-                                                    <span class="info-box-text"><b>{{ 'Configuration démon' }}</b></span>
-                                                    <span class="info-box-text info-box-text-2">{{ text }}</span>
-                                                    <span class="info-box-text info-box-text-2">{{ pluginData['daemonLaunchableMessage'] }}</span>
-                                                </div>
-                                            </div>
-                                            </div>
+                                <div id="config_{{ pluginData['plugin'].getId() }}" class="panel-collapse collapse">
+                                    <div class="box-body">
+                                        {% if pluginData['showOnlyTable'] %}
                                             <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                                            {% if pluginData['daemonState'] == 'ok' %}
-                                                {% set box_color = 'green' %}
-                                                {% set text = 'OK' %}
-                                            {% elseif pluginData['daemonState'] == 'nok' %}
-                                                {% if pluginData['daemonAuto'] != 1 %}
-                                                    {% set box_color = 'aqua' %}
-                                                    {% set text = 'Désactivé' %}
-                                                {% else %}
-                                                    {% set box_color = 'red' %}
-                                                    {% set text = 'NOK' %}
-                                                {% endif %}
-                                            {% endif %}
-                                            <div class="info-box bg-{{ box_color }}">
-                                                <span class="info-box-icon"><i class="fas fa-bolt"></i></span>
-                                                <div class="info-box-content">
-                                                    <span class="info-box-text"><b>{{ 'Statut démon' }}</b></span>
-                                                    <span class="info-box-text info-box-text-2">{{ text }}</span>
-                                                    <span class="info-box-text info-box-text-2">{{ pluginData['daemonLaunchableMessage'] }}</span>
-                                                </div>
-                                            </div>
-                                        {% endif %}
-                                        </div>
-
-                                        {% if pluginData['health'] is defined %}
-                                            {% for health in pluginData['health'] %}
-                                                <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                                                    {% if health['state'] %}
+                                                {% if pluginData['hasDependency'] %}
+                                                    {% if pluginData['dependencyState'] == 'ok' %}
                                                         {% set box_color = 'green' %}
                                                         {% set text = 'OK' %}
+                                                    {% elseif pluginData['dependencyState'] == 'nok' %}
+                                                        {% set box_color = 'red' %}
+                                                        {% set text = 'NOK' %}
+                                                    {% elseif pluginData['dependencyState'] == 'in_progress' %}
+                                                        {% set box_color = 'warnning' %}
+                                                        {% set text = 'En cours' %}
                                                     {% else %}
                                                         {% set box_color = 'red' %}
                                                         {% set text = 'NOK' %}
                                                     {% endif %}
                                                     <div class="info-box bg-{{ box_color }}">
-                                                        <span class="info-box-icon" data-toggle="tooltip" title="" data-original-title="{{ health['advice'] }}"><i class="fas fa-puzzle-piece"></i></span>
+                                                        <span class="info-box-icon"><i class="fas fa-link"></i></span>
                                                         <div class="info-box-content">
-                                                            <span class="info-box-text info-box-text-2"><b> {{ health['test'] }}</b></span>
-                                                            <span class="info-box-text info-box-text-2">{{ health['result'] }}</span>
+                                                            <span class="info-box-text"><b>{{ 'Dépendance' }}</b></span>
+                                                            <span class="info-box-text info-box-text-2">{{ text }}</span>
                                                         </div>
                                                     </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                                            {% if pluginData['hasOwnDaemon'] %}
+                                                {% if pluginData['daemonLaunchable'] == 'ok' %}
+                                                    {% set box_color = 'green' %}
+                                                    {% set text = 'OK' %}
+                                                {% elseif pluginData['daemonLaunchable'] == 'nok' %}
+                                                    {% if pluginData['daemonAuto'] != 1 %}
+                                                        {% set box_color = 'aqua' %}
+                                                        {% set text = '' %}
+                                                    {% else %}
+                                                        {% set box_color = 'red' %}
+                                                        {% set text = 'NOK' %}
+                                                    {% endif %}
+                                                {% endif %}
+                                                <div class="info-box bg-{{ box_color }}">
+                                                    <span class="info-box-icon"><i class="fas fa-bolt"></i></span>
+                                                    <div class="info-box-content">
+                                                        <span class="info-box-text"><b>{{ 'Configuration démon' }}</b></span>
+                                                        <span class="info-box-text info-box-text-2">{{ text }}</span>
+                                                        <span class="info-box-text info-box-text-2">{{ pluginData['daemonLaunchableMessage'] }}</span>
+                                                    </div>
                                                 </div>
-                                            {% endfor %}
+                                                </div>
+                                                <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                                                {% if pluginData['daemonState'] == 'ok' %}
+                                                    {% set box_color = 'green' %}
+                                                    {% set text = 'OK' %}
+                                                {% elseif pluginData['daemonState'] == 'nok' %}
+                                                    {% if pluginData['daemonAuto'] != 1 %}
+                                                        {% set box_color = 'aqua' %}
+                                                        {% set text = 'Désactivé' %}
+                                                    {% else %}
+                                                        {% set box_color = 'red' %}
+                                                        {% set text = 'NOK' %}
+                                                    {% endif %}
+                                                {% endif %}
+                                                <div class="info-box bg-{{ box_color }}">
+                                                    <span class="info-box-icon"><i class="fas fa-bolt"></i></span>
+                                                    <div class="info-box-content">
+                                                        <span class="info-box-text"><b>{{ 'Statut démon' }}</b></span>
+                                                        <span class="info-box-text info-box-text-2">{{ text }}</span>
+                                                        <span class="info-box-text info-box-text-2">{{ pluginData['daemonLaunchableMessage'] }}</span>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                            </div>
+
+                                            {% if pluginData['health'] is defined %}
+                                                {% for health in pluginData['health'] %}
+                                                    <div class="container-light col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                                                        {% if health['state'] %}
+                                                            {% set box_color = 'green' %}
+                                                            {% set text = 'OK' %}
+                                                        {% else %}
+                                                            {% set box_color = 'red' %}
+                                                            {% set text = 'NOK' %}
+                                                        {% endif %}
+                                                        <div class="info-box bg-{{ box_color }}">
+                                                            <span class="info-box-icon" data-toggle="tooltip" title="" data-original-title="{{ health['advice'] }}"><i class="fas fa-puzzle-piece"></i></span>
+                                                            <div class="info-box-content">
+                                                                <span class="info-box-text info-box-text-2"><b> {{ health['test'] }}</b></span>
+                                                                <span class="info-box-text info-box-text-2">{{ health['result'] }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% else %}
+                                            <span class="label label-primary label-sticker-big">{{ 'Aucune santé spécifique' }}</span>
                                         {% endif %}
-                                    {% else %}
-                                        <span class="label label-primary">{{ 'Aucune santé spécifique' }}</span>
-                                    {% endif %}
+                                    </div>
                                 </div>
                             </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
+                        {% endif %}
                     </div>
-                    {% endif %}
                 </div>
-            </div>
+            </fieldset>
         </div>
     </div>
 </section>

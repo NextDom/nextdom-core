@@ -999,7 +999,7 @@ class scenario
             }
         }
         if ($_prettify) {
-            $name .= '<br/><strong>';
+            $name .= '</p><p>';
         }
         if (!$_withoutScenarioName) {
             if ($_tag) {
@@ -1009,7 +1009,7 @@ class scenario
             }
         }
         if ($_prettify) {
-            $name .= '</strong>';
+            $name .= '</p>';
         }
         return $name;
     }

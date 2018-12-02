@@ -270,12 +270,12 @@ class jeeObject {
         if ($tag) {
             if ($prettify) {
                 if ($this->getDisplay('tagColor') != '') {
-                    return '<span class="label" style="text-shadow : none;background-color:' . $this->getDisplay('tagColor') . ' !important;color:' . $this->getDisplay('tagTextColor', 'white') . ' !important">' . $this->getDisplay('icon') . ' ' . $this->getName() . '</span>';
+                    return '<span class="label" style="text-shadow : none;background-color:' . $this->getDisplay('tagColor') . ' !important;color:' . $this->getDisplay('tagTextColor', 'white') . ' !important">' . $this->getDisplay('icon') . '&nbsp;&nbsp;' . $this->getName() . '</span>';
                 } else {
-                    return '<span class="label label-primary">' . $this->getDisplay('icon') . ' ' . $this->getName() . '</span>';
+                    return '<span class="label label-primary">' . $this->getDisplay('icon') . '&nbsp;&nbsp;' . $this->getName() . '</span>';
                 }
             } else {
-                return $this->getDisplay('icon') . ' ' . $this->getName();
+                return $this->getDisplay('icon') . '&nbsp;&nbsp;' . $this->getName();
             }
         } else {
             return $this->getName();
@@ -399,7 +399,7 @@ class jeeObject {
         if (!file_exists($filepath)) {
             file_put_contents($filepath, base64_decode($this->getImage('data')));
         }
-        return 'core/img/object/' . $filename;
+        return 'public/img/object/' . $filename;
     }
 
     public function toArray() {

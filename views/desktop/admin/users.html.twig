@@ -40,10 +40,10 @@
             {% if userLdapEnabled != '1' %}
                 <a class="btn btn-success btn-action-bar" id="bt_addUser"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter un utilisateur' }}</a>
             {% endif %}
-            <a class="btn btn-warning btn-action-bar" id="bt_removeAllRegisterDevice"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer tous les périphériques' }}</a>
         </div>
         <div class="action-group">
             <a class="btn btn-success btn-action-bar pull-right" id="bt_saveUser"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id="bt_removeAllRegisterDevice"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer tous les périphériques' }}</a>
         </div>
     </div>
 </section>
@@ -58,92 +58,89 @@
         <!-- Page content -->
         <div class="box-body">
             <form class="form-horizontal">
+                <!-- Users section -->
                 <fieldset>
-
-                    <!-- Users section -->
-                    <div>
-                        <legend class="legend-title legend-first">{{ 'Liste des utilisateurs' }}</legend>
-                        <div class="tab-pane" id="user">
-                            <table class="table table-condensed table-bordered" id="table_user">
-                                <thead>
-                                <th>{{ 'Utilisateur' }}</th>
-                                <th>{{ 'Actif' }}</th>
-                                <th>{{ 'Profil' }}</th>
-                                <th>{{ 'Clé API' }}</th>
-                                <th>{{ 'Double authentification' }}</th>
-                                <th>{{ 'Dernière connexion' }}</th>
-                                <th>{{ 'Actions' }}</th>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Sessions section -->
-                    <div class="legend-section">
-                        <legend class="legend-title">{{ 'Sessions actives' }}</legend>
-                        <table class="table table-condensed table-bordered">
+                    <legend>{{ 'Liste des utilisateurs' }}</legend>
+                    <div class="tab-pane" id="user">
+                        <table class="table table-condensed table-bordered" id="table_user">
                             <thead>
-                            <tr>
-                                <th>{{ 'ID' }}</th>
-                                <th>{{ 'Utilisateur' }}</th>
-                                <th>{{ 'IP' }}</th>
-                                <th>{{ 'Date' }}</th>
-                                <th>{{ 'Actions' }}</th>
-                            </tr>
+                            <th>{{ 'Utilisateur' }}</th>
+                            <th>{{ 'Actif' }}</th>
+                            <th>{{ 'Profil' }}</th>
+                            <th>{{ 'Clé API' }}</th>
+                            <th>{{ 'Double authentification' }}</th>
+                            <th>{{ 'Dernière connexion' }}</th>
+                            <th>{{ 'Actions' }}</th>
                             </thead>
-                            <tbody>
-                            {% if userSessionsList|length > 0 %}
-                                {% for sessionId, sessionData in userSessionsList %}
-                                    {% if sessionData['ip'] is not defined %}
-                                        {% set sessionData = sessionData|merge({'ip': ''}) %}
-                                    {% endif %}
-                                    {% if sessionData['datetime'] is not defined %}
-                                        {% set sessionData = sessionData|merge({'datetime': ''}) %}
-                                    {% endif %}
-                                    <tr data-id="{{ sessionId }}">
-                                        <td>{{ sessionId }}</td>
-                                        <td>{{ sessionData['login'] }}</td>
-                                        <td>{{ sessionData['ip'] }}</td>
-                                        <td>{{ sessionData['datetime'] }}</td>
-                                        <td><a class="btn btn-warning btn-sm bt_deleteSession pull-right"><i class="fa fa-sign-out">&nbsp;&nbsp;</i>{{ 'Déconnecter' }}</a></td>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </fieldset>
+
+                <!-- Sessions section -->
+                <fieldset class="legend-section">
+                    <legend>{{ 'Sessions actives' }}</legend>
+                    <table class="table table-condensed table-bordered">
+                        <thead>
+                        <tr>
+                            <th>{{ 'ID' }}</th>
+                            <th>{{ 'Utilisateur' }}</th>
+                            <th>{{ 'IP' }}</th>
+                            <th>{{ 'Date' }}</th>
+                            <th>{{ 'Actions' }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if userSessionsList|length > 0 %}
+                            {% for sessionId, sessionData in userSessionsList %}
+                                {% if sessionData['ip'] is not defined %}
+                                    {% set sessionData = sessionData|merge({'ip': ''}) %}
+                                {% endif %}
+                                {% if sessionData['datetime'] is not defined %}
+                                    {% set sessionData = sessionData|merge({'datetime': ''}) %}
+                                {% endif %}
+                                <tr data-id="{{ sessionId }}">
+                                    <td>{{ sessionId }}</td>
+                                    <td>{{ sessionData['login'] }}</td>
+                                    <td>{{ sessionData['ip'] }}</td>
+                                    <td>{{ sessionData['datetime'] }}</td>
+                                    <td><a class="btn btn-warning btn-sm bt_deleteSession pull-right"><i class="fa fa-sign-out">&nbsp;&nbsp;</i>{{ 'Déconnecter' }}</a></td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </fieldset>
+
+                <!-- Periphériques section -->
+                <fieldset class="legend-section">
+                    <legend>{{ 'Périphériques enregistrés' }}</legend>
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                        <tr>
+                            <th>{{ 'ID' }}</th>
+                            <th>{{ 'Utilisateur' }}</th>
+                            <th>{{ 'IP' }}</th>
+                            <th>{{ 'Date' }}</th>
+                            <th>{{ 'Action' }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in usersList %}
+                            {% if user.getOptions('registerDevice') is iterable and user.getOptions('registerDevice')|length > 0 %}
+                                {% for deviceId, deviceData in user.getOptions('registerDevice') %}
+                                    <tr data-key="{{ deviceId }}" data-user_id="{{ user.getId() }}">
+                                        <td>{{ deviceId|slice(0, 10) }}</td>
+                                        <td>{{ user.getLogin() }}</td>
+                                        <td>{{ deviceData['ip'] }}</td>
+                                        <td>{{ deviceData['datetime'] }}</td>
+                                        <td><a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a></td>
                                     </tr>
                                 {% endfor %}
                             {% endif %}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Periphériques section -->
-                    <div class="legend-section">
-                        <legend class="legend-title">{{ 'Périphériques enregistrés' }}</legend>
-                        <table class="table table-bordered table-condensed">
-                            <thead>
-                            <tr>
-                                <th>{{ 'ID' }}</th>
-                                <th>{{ 'Utilisateur' }}</th>
-                                <th>{{ 'IP' }}</th>
-                                <th>{{ 'Date' }}</th>
-                                <th>{{ 'Action' }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for user in usersList %}
-                                {% if user.getOptions('registerDevice') is iterable and user.getOptions('registerDevice')|length > 0 %}
-                                    {% for deviceId, deviceData in user.getOptions('registerDevice') %}
-                                        <tr data-key="{{ deviceId }}" data-user_id="{{ user.getId() }}">
-                                            <td>{{ deviceId|slice(0, 10) }}</td>
-                                            <td>{{ user.getLogin() }}</td>
-                                            <td>{{ deviceData['ip'] }}</td>
-                                            <td>{{ deviceData['datetime'] }}</td>
-                                            <td><a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a></td>
-                                        </tr>
-                                    {% endfor %}
-                                {% endif %}
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </fieldset>
             </form>
 

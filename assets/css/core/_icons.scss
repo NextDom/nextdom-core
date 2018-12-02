@@ -24,9 +24,12 @@
   font-size : 4em;
   color:$grey;
 }
+
 .icon_gestion {
-  height : 120px;
-  width : 140px;
+  height : auto;
+  width : 150px;
+  word-break: break-word;
+  padding: 5px 10px 0px;
   & > i {
     font-size : 4em;
     margin-top:5px;
@@ -57,8 +60,8 @@
 }
 
 .icon-health {
-  color:grey;
-  font-size:0.9em;
+  color: $grey;
+  font-size: 0.9em;
 }
 
 .info-box-icon {
@@ -67,12 +70,19 @@
   font-size: 38px;
   line-height: 65px;
 }
+
+.info-box-small-icon {
+  height: 50px;
+  line-height: 50px;
+  font-size: 30px;
+  width: 50px;
+}
 /* fin icones génrales */
 
 /* page icon_selector */
 .divIconSel{
   height: 80px;
-  border: 1px solid #fff;
+  border: 1px solid $white;
   box-sizing: border-box;
   cursor: pointer;
 }
@@ -84,7 +94,7 @@
 
 .iconSelected{
   background-color: #563d7c;
-  color: white;
+  color: $white;
 }
 
 .iconDesc{

@@ -27,12 +27,23 @@
         radius: 4px;
         left: 1px solid rgba(0,0,0,0.2);
         right: 1px solid rgba(0,0,0,0.2);
-        top: 3px solid $lightgrey;
+        top: 1px solid $lightgrey;
     }
     margin-bottom: 20px;
     width: 100%;
-
 }
+
+.box-success,
+.box-warning,
+.box-danger,
+.box-primary,
+.box-summary {
+    border-top:{
+        style: solid;
+        width: 3px;
+    }
+}
+
 .box.without-border {
     border-top: 0;
 }
@@ -40,6 +51,7 @@
 .box-header>.box-tools {
     top: 3px;
 }
+
 .objet {
     min-height: 0px;
 }
@@ -50,9 +62,17 @@
     margin-bottom: 10px;
 }
 
+.info-box-small {
+    min-height: 50px;
+    margin-bottom: 5px;
+}
+
 .info-box-content {
     padding: 5px 10px;
     margin-left: 65px;
+}
+.info-box-small-content {
+    margin-left: 50px;
 }
 
 .info-box-text-2 {
@@ -73,4 +93,29 @@
 
 #listCore .box .box-body {
     min-height: 10px;
+}
+
+/* Summry */
+.summaryConfig {
+    margin: 7px 0px 0px 5px;
+}
+.eqLogicSortable {
+    list-style-type: none;
+    min-height: 40px;
+    padding-left: 0px;
+}
+.eqLogicSortable li {
+    margin: 0 0 4px 0;
+    padding: 1px 7px 5px 7px;
+}
+
+.cmdSortable {
+    list-style-type: none;
+    min-height: 20px;
+    padding-left: 0px;
+}
+
+.cmdSortable li {
+    margin: 0 2px 2px 2px;
+    padding: 5px;
 }

@@ -33,34 +33,11 @@
 */
 
 #}
-<style>
-    .eqLogicSortable {
-        list-style-type: none;
-        min-height: 40px;
-        padding-left: 0px;
-    }
-
-    .eqLogicSortable li {
-        margin: 0 0 4px 0;
-        padding: 5px;
-    }
-
-    .cmdSortable {
-        list-style-type: none;
-        min-height: 20px;
-        padding-left: 0px;
-    }
-
-    .cmdSortable li {
-        margin: 0 2px 2px 2px;
-        padding: 5px;
-    }
-</style>
-
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
             <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=summary"><i class="fas fa-cog">&nbsp;&nbsp;</i>{{ 'Paramètres' }}</a>
             <a class="btn btn-default btn-action-bar" id="bt_removeHistory"><i class="fas fa-history" aria-hidden="true">&nbsp;&nbsp;</i>{{ 'Historique' }}</a>
             <a class="btn btn-success btn-action-bar bt_setIsVisible" data-value="1" style="display:none;"><i class="fas fa-eye">&nbsp;&nbsp;</i>{{ 'Visible' }}</a>
             <a class="btn btn-warning btn-action-bar bt_setIsVisible" data-value="0" style="display:none;"><i class="fas fa-eye-slash">&nbsp;&nbsp;</i>{{ 'Invisible' }}</a>
@@ -84,7 +61,10 @@
                 <input class="form-control" placeholder="{{ 'Rechercher...' }}" id="in_search"/>
             </div>
             <div class="form-group">
-                <label class="checkbox-inline"><input type="checkbox" id="cb_actifDisplay" checked/>{{ 'Inactif' }}</label>
+                <div class="pull-left">
+                    <input type="checkbox" class="configKey" id="cb_actifDisplay" data-l1key="cb_actifDisplay" checked>
+                    <label for="cb_actifDisplay" class="control-label label-check" data-toggle="tooltip" title="" data-original-title="{{'Afficher les équipements inactifs'}}">{{'Inactif'}}</label>
+                </div>
                 <span class="label label-default label-sticker-big pull-right">{{ 'Nombre d\'objets :' }} {{ displayObjects|length }}</span>
                 <span class="label label-info label-sticker-big pull-right">{{ 'Nombre d\'équipements :' }} {{ displayNbEqLogics }}</span>
                 <span class="label label-primary label-sticker-big pull-right">{{ 'Nombre de commandes :' }} {{ displayNbCmds }}</span>
@@ -101,7 +81,7 @@
                 <div class="box-body">
                     <ul class="eqLogicSortable">
                         {% for eqLogic in displayEqLogics[-1] %}
-                            <li class="alert alert-info eqLogic cursor" data-id="{{ eqLogic.getId() }}" data-enable="{{ eqLogic.getIsEnable() }}" data-name="{{ eqLogic.getName() }}" data-type="{{ eqLogic.getEqType_name() }}">
+                            <li class="alert alert-default eqLogic cursor" data-id="{{ eqLogic.getId() }}" data-enable="{{ eqLogic.getIsEnable() }}" data-name="{{ eqLogic.getName() }}" data-type="{{ eqLogic.getEqType_name() }}">
                                 <input type="checkbox" class="cb_selEqLogic"/>
                                 {{ eqLogic.getName() }}
                                 <i style="font-size:0.9em;">({{ eqLogic.getEqType_name() }})</i>
@@ -111,9 +91,9 @@
                                 {% if eqLogic.getIsVisible() != 1 %}
                                     <i class="fas fa-eye-slash" title="{{ 'Non visible' }}"></i>
                                 {% endif %}
-                                <i class="fas fa-chevron-right pull-right showCmd" title="{{ 'Voir les commandes' }}"></i>
-                                <i class="fas fa-cog pull-right configureEqLogic" title="{{ 'Configuration avancée' }}"></i>
-                                <a href="{{ eqLogic.getLinkToConfiguration() }}" target="_blank" class="pull-right" title="{{ 'Aller sur la configuration de l\'équipement' }}"><i class="fas fa-external-link-alt"></i></a>
+                                <i class="fas fa-chevron-right pull-right showCmd summaryConfig" title="{{ 'Voir les commandes' }}"></i>
+                                <i class="fas fa-cog pull-right configureEqLogic summaryConfig" title="{{ 'Configuration avancée' }}"></i>
+                                <a class="fas fa-external-link-square-alt pull-right summaryConfig" href="{{ eqLogic.getLinkToConfiguration() }}" target="_blank" class="pull-right" title="{{ 'Aller sur la configuration de l\'équipement' }}"></a>
                                 <ul class="cmdSortable" style="display:none;">
                                     {% for cmd in displayCmds[eqLogic.getId()] %}
                                         <li class="alert alert-warning cmd cursor" data-id="{{ cmd.getId() }}" data-name="{{ cmd.getName() }}">
@@ -133,19 +113,18 @@
                 {% set defaultTextColor = 'black' %}
             {% endif %}
             <div class="col-xs-4 object col-xs-height">
-                <div class="box object col-xs-height" data-id="{{ object.getId() }}" style="border-top-color: {{ object.getDisplay('tagColor') }}; color: {{ object.getDisplay('tagTextColor', defaultTextColor) }}">
+                <div class="box box-summary object col-xs-height" data-id="{{ object.getId() }}" style="border-top-color: {{ object.getDisplay('tagColor') }}; color: {{ object.getDisplay('tagTextColor', defaultTextColor) }}">
                     <div class="box-header with-border">
-                        <h3 class="box-title">{{ object.getDisplay('icon')|raw }} {{ object.getName() }}</h3>
+                        <h3 class="box-title">{{ object.getDisplay('icon')|raw }}&nbsp;&nbsp;{{ object.getName() }}</h3>
                         <div class="box-tools pull-right">
-                            <i class="fas fa-cog cursor configureObject" title="{{ 'Configuration avancée' }}"></i>
-                            <a href="index.php?v=d&p=object&id={{ object.getId() }}" target="_blank"  title="{{ 'Aller sur la configuration de l\'objet' }}"><i class="fas fa-external-link-alt"></i></a>
+                            <i class="fas fa-cog cursor configureObject summaryConfig" title="{{ 'Configuration avancée' }}"></i>
+                            <a class="fas fa-external-link-square-alt summaryConfig" href="index.php?v=d&p=object&id={{ object.getId() }}" target="_blank"  title="{{ 'Aller sur la configuration de l\'objet' }}"></a>
                         </div>
                     </div>
                     <div class="box-body">
-
                         <ul class="eqLogicSortable">
                             {% for eqLogic in displayEqLogics[object.getId()] %}
-                                <li class="alert alert-info eqLogic cursor" data-id="{{ eqLogic.getId() }}" data-enable="{{ eqLogic.getIsEnable() }}" data-name="{{ eqLogic.getName() }}" data-type="{{ eqLogic.getEqType_name() }}">
+                                <li class="alert alert-default eqLogic cursor" data-id="{{ eqLogic.getId() }}" data-enable="{{ eqLogic.getIsEnable() }}" data-name="{{ eqLogic.getName() }}" data-type="{{ eqLogic.getEqType_name() }}">
                                     <input type="checkbox" class="cb_selEqLogic"/>
                                     {{ eqLogic.getName() }}
                                     <i style="font-size:0.9em;">({{ eqLogic.getEqType_name() }})</i>
@@ -155,9 +134,9 @@
                                     {% if eqLogic.getIsVisible() != 1 %}
                                         <i class="fas fa-eye-slash" title="{{ 'Non visible' }}"></i>
                                     {% endif %}
-                                    <i class="fas fa-chevron-right pull-right showCmd" title="{{ 'Voir les commandes' }}"></i>
-                                    <i class="fas fa-cog pull-right configureEqLogic" title="{{ 'Configuration avancée' }}"></i>
-                                    <a href="{{ eqLogic.getLinkToConfiguration() }}" target="_blank" class="pull-right" title="{{ 'Aller sur la configuration de l\'équipement' }}"><i class="fas fa-external-link-alt"></i></a>
+                                    <i class="fas fa-chevron-right pull-right showCmd summaryConfig" title="{{ 'Voir les commandes' }}"></i>
+                                    <i class="fas fa-cog pull-right configureEqLogic summaryConfig" title="{{ 'Configuration avancée' }}"></i>
+                                    <a class="fas fa-external-link-square-alt pull-right summaryConfig" href="{{ eqLogic.getLinkToConfiguration() }}" target="_blank" class="pull-right" title="{{ 'Aller sur la configuration de l\'équipement' }}"></a>
 
                                     <ul class="cmdSortable" style="display:none;">
                                         {% for cmd in displayCmds[eqLogic.getId()] %}

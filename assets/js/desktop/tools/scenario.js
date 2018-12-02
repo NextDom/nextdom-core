@@ -50,41 +50,62 @@ listColor = ['#16a085', '#27ae60', '#2980b9', '#745cb0', '#f39c12', '#d35400', '
 listColorStrong = ['#12846D', '#229351', '#246F9E', '#634F96', '#D88811', '#B74600', '#A53026', '#1D2935', '#687272'];
 pColor = 0;
 
+/* Space before is normal */
 autoCompleteCondition = [
-{val: 'rand(MIN,MAX)'},
-{val: '#heure#'},
-{val: '#jour#'},
-{val: '#mois#'},
-{val: '#annee#'},
-{val: '#date#'},
-{val: '#time#'},
-{val: '#timestamp#'},
-{val: '#semaine#'},
-{val: '#sjour#'},
-{val: '#minute#'},
-{val: '#IP#'},
-{val: '#hostname#'},
-{val: 'variable(mavariable,defaut)'},
-{val: 'delete_variable(mavariable)'},
-{val: 'tendance(commande,periode)'},
-{val: 'average(commande,periode)'},
-{val: 'max(commande,periode)'},
-{val: 'min(commande,periode)'},
-{val: 'round(valeur)'},
-{val: 'trigger(commande)'},
-{val: 'randomColor(debut,fin)'},
-{val: 'lastScenarioExecution(scenario)'},
-{val: 'stateDuration(commande)'},
-{val: 'lastChangeStateDuration(commande,value)'},
-{val: 'median(commande1,commande2)'},
-{val: 'time(value)'},
-{val: 'collectDate(cmd)'},
-{val: 'valueDate(cmd)'},
-{val: 'eqEnable(equipement)'},
-{val: 'name(type,commande)'},
-{val: 'value(commande)'}
+" rand(MIN,MAX)",
+" #heure#",
+" #jour#",
+" #mois#",
+" #annee#",
+" #date#",
+" #time#",
+" #timestamp#",
+" #semaine#",
+" #sjour#",
+" #minute#",
+" #IP#",
+" #hostname#",
+" variable(mavariable,defaut)",
+" delete_variable(mavariable)",
+" tendance(commande,periode)",
+" average(commande,periode)",
+" max(commande,periode)",
+" min(commande,periode)",
+" round(valeur)",
+" trigger(commande)",
+" randomColor(debut,fin)",
+" lastScenarioExecution(scenario)",
+" stateDuration(commande)",
+" lastChangeStateDuration(commande,value)",
+" median(commande1,commande2)",
+" time(value)",
+" collectDate(cmd)",
+" valueDate(cmd)",
+" eqEnable(equipement)",
+" name(type,commande)",
+" value(commande)"
 ];
-autoCompleteAction = ['report','sleep', 'variable', 'delete_variable', 'scenario', 'stop', 'wait','gotodesign','log','message','equipement','ask','nextdom_poweroff','scenario_return','alert','popup','icon','event','remove_inat'];
+autoCompleteAction = [
+"report",
+"sleep",
+"variable",
+"delete_variable",
+"scenario",
+"stop",
+"wait",
+"gotodesign",
+"log",
+"message",
+"equipement",
+"ask",
+"nextdom_poweroff",
+"scenario_return",
+"alert",
+"popup",
+"icon",
+"event",
+"remove_inat"
+];
 
 if (getUrlVars('saveSuccessFull') == 1) {
   notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
@@ -327,7 +348,6 @@ $('#in_addElementType').off('change').on('change',function(){
 });
 
 $('#bt_scenarioTab').on('click',function(){
-
   setTimeout(function(){
     setEditor();
     taAutosize();
@@ -448,28 +468,28 @@ $('#div_pageContainer').off('click','.bt_selectCmdExpression').on('click','.bt_s
        '<div class="col-md-12"> ' +
        '<form class="form-horizontal" onsubmit="return false;"> ' +
        '<div class="form-group"> ' +
-       '<label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
-       '             <div class="col-xs-3">' +
-       '                <select class="conditionAttr form-control" data-l1key="operator">' +
-       '                    <option value="==">{{égal}}</option>' +
-       '                  <option value=">">{{supérieur}}</option>' +
-       '                  <option value="<">{{inférieur}}</option>' +
-       '                 <option value="!=">{{différent}}</option>' +
-       '            </select>' +
-       '       </div>' +
-       '      <div class="col-xs-4">' +
-       '         <input type="number" class="conditionAttr form-control" data-l1key="operande" />' +
-       '    </div>' +
+       '   <label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
+       '   <div class="col-xs-3">' +
+       '       <select class="conditionAttr form-control" data-l1key="operator">' +
+       '           <option value="==">{{égal}}</option>' +
+       '           <option value=">">{{supérieur}}</option>' +
+       '           <option value="<">{{inférieur}}</option>' +
+       '           <option value="!=">{{différent}}</option>' +
+       '       </select>' +
+       '   </div>' +
+       '   <div class="col-xs-4">' +
+       '      <input type="number" class="conditionAttr form-control" data-l1key="operande" />' +
+       '   </div>' +
        '</div>' +
        '<div class="form-group"> ' +
-       '<label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
-       '             <div class="col-xs-3">' +
-       '                <select class="conditionAttr form-control" data-l1key="next">' +
-       '                    <option value="">rien</option>' +
-       '                  <option value="ET">{{et}}</option>' +
-       '                  <option value="OU">{{ou}}</option>' +
-       '            </select>' +
-       '       </div>' +
+       '   <label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
+       '   <div class="col-xs-3">' +
+       '        <select class="conditionAttr form-control" data-l1key="next">' +
+       '            <option value="">rien</option>' +
+       '            <option value="ET">{{et}}</option>' +
+       '            <option value="OU">{{ou}}</option>' +
+       '        </select>' +
+       '   </div>' +
        '</div>' +
        '</div> </div>' +
        '</form> </div>  </div>';
@@ -479,27 +499,27 @@ $('#div_pageContainer').off('click','.bt_selectCmdExpression').on('click','.bt_s
       '<div class="col-md-12"> ' +
       '<form class="form-horizontal" onsubmit="return false;"> ' +
       '<div class="form-group"> ' +
-      '<label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
-      '             <div class="col-xs-3">' +
-      '                <select class="conditionAttr form-control" data-l1key="operator">' +
-      '                    <option value="==">{{égale}}</option>' +
-      '                  <option value="matches">{{contient}}</option>' +
-      '                 <option value="!=">{{différent}}</option>' +
-      '            </select>' +
-      '       </div>' +
-      '      <div class="col-xs-4">' +
-      '         <input class="conditionAttr form-control" data-l1key="operande" />' +
+      '    <label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
+      '    <div class="col-xs-3">' +
+      '       <select class="conditionAttr form-control" data-l1key="operator">' +
+      '             <option value="==">{{égale}}</option>' +
+      '             <option value="matches">{{contient}}</option>' +
+      '             <option value="!=">{{différent}}</option>' +
+      '       </select>' +
+      '    </div>' +
+      '    <div class="col-xs-4">' +
+      '       <input class="conditionAttr form-control" data-l1key="operande" />' +
       '    </div>' +
       '</div>' +
       '<div class="form-group"> ' +
-      '<label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
-      '             <div class="col-xs-3">' +
-      '                <select class="conditionAttr form-control" data-l1key="next">' +
-      '                    <option value="">{{rien}}</option>' +
-      '                  <option value="ET">{{et}}</option>' +
-      '                  <option value="OU">{{ou}}</option>' +
-      '            </select>' +
-      '       </div>' +
+      '     <label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
+      '     <div class="col-xs-3">' +
+      '         <select class="conditionAttr form-control" data-l1key="next">' +
+      '             <option value="">{{rien}}</option>' +
+      '             <option value="ET">{{et}}</option>' +
+      '             <option value="OU">{{ou}}</option>' +
+      '         </select>' +
+      '     </div>' +
       '</div>' +
       '</div> </div>' +
       '</form> </div>  </div>';
@@ -509,28 +529,28 @@ $('#div_pageContainer').off('click','.bt_selectCmdExpression').on('click','.bt_s
       '<div class="col-md-12"> ' +
       '<form class="form-horizontal" onsubmit="return false;"> ' +
       '<div class="form-group"> ' +
-      '<label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
-      '            <div class="col-xs-7">' +
-      '                 <input class="conditionAttr" data-l1key="operator" value="==" style="display : none;" />' +
-      '                  <select class="conditionAttr form-control" data-l1key="operande">' +
-      '                       <option value="1">{{Ouvert}}</option>' +
-      '                       <option value="0">{{Fermé}}</option>' +
-      '                       <option value="1">{{Allumé}}</option>' +
-      '                       <option value="0">{{Eteint}}</option>' +
-      '                       <option value="1">{{Déclenché}}</option>' +
-      '                       <option value="0">{{Au repos}}</option>' +
-      '                       </select>' +
-      '                    </div>' +
-      '                 </div>' +
+      '   <label class="col-xs-5 control-label" >'+result.human+' {{est}}</label>' +
+      '   <div class="col-xs-7">' +
+      '        <input class="conditionAttr" data-l1key="operator" value="==" style="display : none;" />' +
+      '        <select class="conditionAttr form-control" data-l1key="operande">' +
+      '            <option value="1">{{Ouvert}}</option>' +
+      '            <option value="0">{{Fermé}}</option>' +
+      '            <option value="1">{{Allumé}}</option>' +
+      '            <option value="0">{{Eteint}}</option>' +
+      '            <option value="1">{{Déclenché}}</option>' +
+      '            <option value="0">{{Au repos}}</option>' +
+      '        </select>' +
+      '    </div>' +
+      '</div>' +
       '<div class="form-group"> ' +
-      '<label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
-      '             <div class="col-xs-3">' +
-      '                <select class="conditionAttr form-control" data-l1key="next">' +
-      '                  <option value="">{{rien}}</option>' +
-      '                  <option value="ET">{{et}}</option>' +
-      '                  <option value="OU">{{ou}}</option>' +
-      '            </select>' +
-      '       </div>' +
+      '    <label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
+      '    <div class="col-xs-3">' +
+      '        <select class="conditionAttr form-control" data-l1key="next">' +
+      '            <option value="">{{rien}}</option>' +
+      '            <option value="ET">{{et}}</option>' +
+      '            <option value="OU">{{ou}}</option>' +
+      '        </select>' +
+      '    </div>' +
       '</div>' +
       '</div> </div>' +
       '</form> </div>  </div>';
@@ -611,7 +631,7 @@ $('#div_pageContainer').off('click','.bt_selectEqLogicExpression').on('click','.
   });
 });
 
-$('#div_pageContainer').off('focusout','.expression .expressionAttr[data-l1key=expression]').on('focusout','.expression .expressionAttr[data-l1key=expression]',  function (event) {
+$('#div_pageContainer').off('focusout','.expression .expressionAttr[data-l1key=expression]').on('focusout','.expression .expressionAttr[data-l1key=expression]', function (event) {
   var el = $(this);
   if (el.closest('.expression').find('.expressionAttr[data-l1key=type]').value() == 'action') {
     var expression = el.closest('.expression').getValues('.expressionAttr');
@@ -621,7 +641,6 @@ $('#div_pageContainer').off('focusout','.expression .expressionAttr[data-l1key=e
     });
   }
 });
-
 
 /**************** Scheduler **********************/
 
@@ -675,12 +694,13 @@ $('#div_pageContainer').off('click','.bt_selectDataStoreTrigger').on( 'click','.
 $('#div_pageContainer').off('mouseenter','.bt_sortable').on('mouseenter','.bt_sortable',  function () {
   var expressions = $(this).closest('.expressions');
   $("#div_scenarioElement").sortable({
-    cursor: "move",
     items: ".sortable",
-    opacity: 0.5,
+    opacity: 0.7,
     forcePlaceholderSize: true,
     forceHelperSize: true,
     placeholder: "sortable-placeholder",
+    tolerance: "intersect",
+    grid: [ 30, 15 ],
     update: function (event, ui) {
       if (ui.item.findAtDepth('.element', 2).length == 1 && ui.item.parent().attr('id') == 'div_scenarioElement') {
         ui.item.replaceWith(ui.item.findAtDepth('.element', 2));
@@ -791,15 +811,48 @@ function setEditor() {
   });
 }
 
+function splitAutocomplete( val ) {
+  return val.split( / \s*/ );
+}
+function extractLastAutocomplete( term ) {
+      return splitAutocomplete( term ).pop();
+    }
+
 function setAutocomplete() {
   $('.expression').each(function () {
     if ($(this).find('.expressionAttr[data-l1key=type]').value() == 'condition') {
-      $(this).find('.expressionAttr[data-l1key=expression]').sew({values: autoCompleteCondition, token: '[ |#]'});
+      $(this).find('.expressionAttr[data-l1key=expression]').autocomplete({
+        source: function( request, response ) {
+          response( $.ui.autocomplete.filter(
+            autoCompleteCondition, extractLastAutocomplete( request.term ) ) );
+        },
+        classes: {
+          "ui-autocomplete": "autocomplete"
+        },
+        autoFocus: true,
+        minLength: 0,
+        focus: function() {
+          return false;
+        },
+        select: function( event, ui ) {
+          var terms = splitAutocomplete( this.value );
+          terms.pop();
+          terms.push(ui.item.value.trim());
+          terms.push( "" );
+          this.value = terms.join( " " );
+          return false;
+        }
+      });
     }
     if ($(this).find('.expressionAttr[data-l1key=type]').value() == 'action') {
       $(this).find('.expressionAttr[data-l1key=expression]').autocomplete({
         source: autoCompleteAction,
-        close: function (event, ui) {
+        classes: {
+          "ui-autocomplete": "autocomplete"
+        },
+        autoFocus: true,
+        minLength: 0,
+        close: function( event, ui ) {
           $(this).trigger('focusout');
         }
       });
@@ -835,6 +888,10 @@ function printScenario(_id) {
      $('#span_ongoing').text('{{Arrêté}}');
      $('#span_ongoing').removeClass('label-info label-success label-warning').addClass('label-danger');
      break;
+     default :
+     $('#bt_stopScenario').hide();
+     $('#span_ongoing').text('{{Arrêté}}');
+     $('#span_ongoing').removeClass('label-info label-success label-warning').addClass('label-danger');
    }
  }
  nextdom.scenario.get({
@@ -953,8 +1010,8 @@ function saveScenario() {
 
 function addTrigger(_trigger) {
   var div = '<div class="form-group trigger">';
-  div += '<label class="col-xs-3 control-label">{{Evénement}}</label>';
-  div += '<div class="col-xs-9">';
+  div += '<label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{Evénement}}</label>';
+  div += '<div class="col-lg-10 col-md-9 col-sm-6 col-xs-12">';
   div += '<div class="input-group">';
   div += '<input class="scenarioAttr input-sm form-control" data-l1key="trigger" value="' + _trigger.replace(/"/g,'&quot;') + '" >';
   div += '<span class="input-group-btn">';
@@ -970,8 +1027,8 @@ function addTrigger(_trigger) {
 
 function addSchedule(_schedule) {
   var div = '<div class="form-group schedule">';
-  div += '<label class="col-xs-3 control-label">{{Programmation}}</label>';
-  div += '<div class="col-xs-9">';
+  div += '<label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{Programmation}}</label>';
+  div += '<div class="col-lg-10 col-md-9 col-sm-6 col-xs-12">';
   div += '<div class="input-group">';
   div += '<input class="scenarioAttr input-sm form-control" data-l1key="schedule" value="' + _schedule.replace(/"/g,'&quot;') + '">';
   div += '<span class="input-group-btn">';
@@ -1027,7 +1084,7 @@ function addExpression(_expression) {
 
     case 'action' :
     retour += '<div class="col-xs-1 scenario-action">';
-    retour += '<i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right: 5px;"></i>';
+    retour += '<i class="fas fa-sort bt_sortable"></i>';
     if (!isset(_expression.options) || !isset(_expression.options.enable) || _expression.options.enable == 1) {
       retour += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'action}}"/>';
     } else {
@@ -1039,7 +1096,7 @@ function addExpression(_expression) {
       retour += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="background" checked title="{{Cocher pour que la commande s\'exécute en parallèle des autres actions}}"/>';
     }
     retour += '</div>';
-    retour += '<div class="col-xs-4 scenario-sub-group"><div class="input-group input-group-sm">';
+    retour += '<div class="col-xs-11 scenario-sub-group"><div class="input-group input-group-sm">';
     retour += '<span class="input-group-btn">';
     retour += '<button class="btn btn-default bt_removeExpression" type="button" title="{{Supprimer l\'action}}"><i class="fas fa-minus-circle"></i></button>';
     retour += '</span>';
@@ -1050,7 +1107,7 @@ function addExpression(_expression) {
     retour += '</span>';
     retour += '</div></div>';
     var actionOption_id = uniqId();
-    retour += '<div class="col-xs-7 expressionOptions scenario-sub-group" id="'+actionOption_id+'">';
+    retour += '<div class="col-xs-11 col-xs-offset-1 expressionOptions scenario-sub-group" id="'+actionOption_id+'">';
     retour += '</div>';
     actionOptions.push({
       expression : init(_expression.expression, ''),
@@ -1106,7 +1163,7 @@ function addSubElement(_subElement, _pColor) {
     case 'if' :
     retour += '  <input class="subElementAttr" data-l1key="subtype" style="display : none;" value="condition"/>';
     retour += '  <div class="scenario-si">';
-    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px;"></i>';
+    retour += '     <i class="fas fa-sort bt_sortable"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="Décocher pour désactiver l\'élément"/>';
     }else{
@@ -1137,7 +1194,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '       <i class="fas fa-chevron-right"></i>';
     retour += '     </button>';
     retour += '     <span class="scenario-title">{{ALORS}}</span>';
-    retour += '     <div class="dropdown" style="display : inline-block;">';
+    retour += '     <div class="dropdown cursor" style="display : inline-block;">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
     retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
     retour += '       </button>';
@@ -1161,7 +1218,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '<input class="subElementAttr subElementElse" data-l1key="subtype" style="display : none;" value="action"/>';
     retour += '  <div class="scenario-sinon">';
     retour += '     <span class="scenario-title">{{SINON}}</span>';
-    retour += '     <div class="dropdown">';
+    retour += '     <div class="dropdown cursor">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
     retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
     retour += '       </button>';
@@ -1184,7 +1241,7 @@ function addSubElement(_subElement, _pColor) {
     case 'for' :
     retour += '  <input class="subElementAttr" data-l1key="subtype" style="display : none;" value="condition"/>';
     retour += '  <div class="scenario-for">';
-    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px"></i>';
+    retour += '     <i class="fas fa-sort bt_sortable"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}"/>';
     }else{
@@ -1205,7 +1262,7 @@ function addSubElement(_subElement, _pColor) {
     case 'in' :
     retour += '  <input class="subElementAttr" data-l1key="subtype" style="display : none;" value="condition"/>';
     retour += '  <div class="scenario-in">';
-    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px"></i>';
+    retour += '     <i class="fas fa-sort bt_sortable"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}" style="margin-right : 0px;"/>';
     }else{
@@ -1227,7 +1284,7 @@ function addSubElement(_subElement, _pColor) {
     case 'at' :
     retour += '  <input class="subElementAttr" data-l1key="subtype" style="display : none;" value="condition"/>';
     retour += '  <div class="scenario-at">';
-    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px"></i>';
+    retour += '     <i class="fas fa-sort bt_sortable"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}"/>';
     }else{
@@ -1250,7 +1307,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="action"/>';
     retour += '  <div class="scenario-faire">';
     retour += '     <span class="scenario-title">{{FAIRE}}</span>';
-    retour += '     <div class="dropdown">';
+    retour += '     <div class="dropdown cursor">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
     retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
     retour += '       </button>';
@@ -1273,7 +1330,7 @@ function addSubElement(_subElement, _pColor) {
     case 'code' :
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="action"/>';
     retour += '  <div class="scenario-code">';
-    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px"></i>';
+    retour += '     <i class="fas fa-sort bt_sortable"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}"/>';
     }else{
@@ -1295,7 +1352,7 @@ function addSubElement(_subElement, _pColor) {
     case 'comment' :
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="comment"/>';
     retour += '  <div class="scenario-comment">';
-    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right:5px"></i>';
+    retour += '     <i class="fas fa-sort bt_sortable"></i>';
     retour += '  </div>';
     retour += '  <div class="expressions scenario-condition" style="background-color: ' + listColor[_pColor] + ';">';
     retour += '     <div class="sortable empty" style="height : 30px;"></div>';
@@ -1311,14 +1368,14 @@ function addSubElement(_subElement, _pColor) {
     case 'action' :
     retour += '<input class="subElementAttr" data-l1key="subtype" style="display : none;" value="action"/>';
     retour += '  <div class="scenario-action-bloc">';
-    retour += '     <i class="fas fa-arrows-alt-v cursor bt_sortable" style="margin-right: 5px;"></i>';
+    retour += '     <i class="fas fa-sort bt_sortable"></i>';
     if(!isset(_subElement.options) || !isset(_subElement.options.enable) || _subElement.options.enable == 1){
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'élément}}" style="margin-right : 0px;"/>';
     }else{
       retour += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" title="{{Décocher pour désactiver l\'élément}}" style="margin-right : 0px;"/>';
     }
     retour += '     <span class="scenario-title">{{ACTION}}</span>';
-    retour += '     <div class="dropdown">';
+    retour += '     <div class="dropdown cursor">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
     retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
     retour += '       </button>';

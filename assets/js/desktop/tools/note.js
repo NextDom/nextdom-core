@@ -75,9 +75,13 @@ $('#ul_noteList').on('click', '.li_noteDisplay', function () {
     nextdom.note.byId({
         id: $(this).attr('data-id'),
         error: function (error) {
+            $('#div_noteDisplay').hide();
+            $('#div_noteBtn').hide();
             notify('Core', error.message, 'error');
         },
         success: function (note) {
+            $('#div_noteDisplay').show();
+            $('#div_noteBtn').show();
             $('#div_noteManagerDisplay .noteAttr').value('');
             $('#div_noteManagerDisplay .noteAttr').attr('disabled', false);
             $('#div_noteManagerDisplay').setValues(note, '.noteAttr');
@@ -112,6 +116,8 @@ $('#bt_noteManagerRemove').on('click', function () {
             success: function (notes) {
                 notify('Core', '{{Note supprimée avec succès}}', 'success');
                 $('#div_noteManagerDisplay .noteAttr').value('');
+                $('#div_noteDisplay').hide();
+                $('#div_noteBtn').hide();
                 updateNoteList();
             }
         });

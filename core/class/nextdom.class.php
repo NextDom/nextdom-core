@@ -35,6 +35,7 @@
 
 require_once NEXTDOM_ROOT.'/core/php/core.inc.php';
 
+use NextDom\Helpers\Api;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\TimeLine;
 use NextDom\Managers\BackupManager;
@@ -79,17 +80,17 @@ class nextdom
 
     public static function getApiKey(string $plugin = 'core'): string
     {
-        return NextDomHelper::getApiKey($plugin);
+        return Api::getApiKey($plugin);
     }
 
     public static function apiModeResult(string $mode = 'enable'): bool
     {
-        return NextDomHelper::apiModeResult($mode);
+        return Api::apiModeResult($mode);
     }
 
     public static function apiAccess(string $defaultApiKey = '', string $plugin = 'core')
     {
-        return NextDomHelper::apiAccess($defaultApiKey, $plugin);
+        return Api::apiAccess($defaultApiKey, $plugin);
     }
 
     public static function isOk()

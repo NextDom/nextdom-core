@@ -38,6 +38,7 @@
     <div class="action-bar">
         <div class="action-group">
             <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=eqAnalyse"><i class="fas fa-eye">&nbsp;&nbsp;</i>{{ 'Visualiser' }}</a>
         </div>
         <div class="action-group">
             <a class="btn btn-success btn-action-bar pull-right" id="bt_saveeqlogic"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
@@ -49,43 +50,40 @@
     <div class="box" id="eqlogic">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-tablet-alt">&nbsp;&nbsp;</i>{{ 'Equipements' }}</h3>
+            <h3 class="box-title"><i class="fas fa-plug">&nbsp;&nbsp;</i>{{ 'Equipements' }}</h3>
         </div>
 
         <!-- Page content -->
         <div class="box-body">
             <form class="form-horizontal">
+                <!-- Params Section -->
                 <fieldset>
-
-                    <!-- Params Section -->
-                    <div>
-                        <legend class="legend-title">{{ 'Paramètres' }}</legend>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Nombre d\'échecs' }}</label>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <div class="input-group">
-                                    <input type="text" class="configKey form-control" data-l1key="numberOfTryBeforeEqLogicDisable"/>
-                                    <span class="input-group-addon">{{ 'avant désactivation de l\'équipement' }}</span>
-                                </div>
+                    <legend>{{ 'Paramètres' }}</legend>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Nombre d\'échecs' }}</label>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="input-group">
+                                <input type="text" class="configKey form-control" data-l1key="numberOfTryBeforeEqLogicDisable"/>
+                                <span class="input-group-addon">{{ 'avant désactivation de l\'équipement' }}</span>
                             </div>
                         </div>
                     </div>
+                </fieldset>
 
-                    <!-- Seuil Section -->
-                    <div class="legend-section">
-                        <legend class="legend-title">{{ 'Seuils' }}</legend>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-2 col-xs-12 control-label">{{ 'Seuil des piles' }}</label>
-                            <label class="col-md-1 col-sm-1 col-xs-2 eqLogicAttr label label-danger label-sticker-big">{{ 'Danger' }}</label>
-                            <div class="col-md-1 col-sm-2 col-xs-2">
-                                <input class="configKey form-control" data-l1key="battery::danger"/>
-                            </div>
-                            <label class="col-md-1 col-xs-2 label label-warning label-sticker-big">{{ 'Warning' }}</label>
-                            <div class="col-md-1 col-sm-2 col-xs-2">
-                                <input class="configKey form-control" data-l1key="battery::warning"/>
-                            </div>
-                            <label class="col-md-1 col-sm-1 col-xs-2 label label-success label-sticker-big">{{ 'Ok' }}</label>
+                <!-- Seuil Section -->
+                <fieldset class="legend-section">
+                    <legend>{{ 'Seuils' }}</legend>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-2 col-xs-12 control-label">{{ 'Seuil des piles' }}</label>
+                        <label class="col-md-1 col-sm-1 col-xs-2 eqLogicAttr label label-danger label-sticker-big">{{ 'Danger' }}</label>
+                        <div class="col-md-1 col-sm-2 col-xs-2">
+                            <input class="configKey form-control" data-l1key="battery::danger"/>
                         </div>
+                        <label class="col-md-1 col-xs-2 label label-warning label-sticker-big">{{ 'Warning' }}</label>
+                        <div class="col-md-1 col-sm-2 col-xs-2">
+                            <input class="configKey form-control" data-l1key="battery::warning"/>
+                        </div>
+                        <label class="col-md-1 col-sm-1 col-xs-2 label label-success label-sticker-big">{{ 'Ok' }}</label>
                     </div>
                 </fieldset>
             </form>

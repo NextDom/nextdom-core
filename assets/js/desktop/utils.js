@@ -34,6 +34,8 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
+$.fn.bootstrapBtn = $.fn.button.noConflict();
+
 uniqId_count = 0;
 modifyWithoutSave = false;
 nbActiveAjaxRequest = 0;
@@ -556,19 +558,21 @@ function refreshUpdateNumber() {
  * @param notificationState 1 for notification showed or 0 for hide.
  */
 function switchNotify(notificationState) {
-    if (notificationState === 1) {
-        notify("Core",  '{{Notification activée}}', 'success');
-        $('.notifyIcon').removeClass("fa-bell-slash").addClass("fa-bell");
-    } else {
-        $('.notifyIcon').removeClass("fa-bell").addClass("fa-bell-slash");
-        notify("Core",  '{{Notification desactivée}}', 'success');
-    }
     nextdom.config.save({
-        configuration: {'nextdom::Notify': notificationState},
+        configuration: {'notify::status': notificationState},
         error: function (error) {
             notify("Core", error.message, 'error');
         },
         success: function () {
+          if (notificationState) {
+              $('.notifyIcon').removeClass("fa-bell-slash").addClass("fa-bell");
+              $('.notifyIconLink').attr('onclick','switchNotify(0);')
+              notify("Core",  '{{Notification activée}}', 'success');
+          } else {
+              $('.notifyIcon').removeClass("fa-bell").addClass("fa-bell-slash");
+              $('.notifyIconLink').attr('onclick','switchNotify(1);')
+              notify("Core",  '{{Notification desactivée}}', 'success');
+          }
         }
     });
 }

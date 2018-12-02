@@ -37,13 +37,11 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger" href="{{ HOMELINK }}"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+                <a class="btn btn-danger btn-action-bar" href="{{ HOMELINK }}"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+                <a class="btn btn-success btn-action-bar" id="bt_addObject2"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-success" id="bt_addObject2"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
-            </div>
-            <div class="action-group">
-                <a class="btn btn-primary pull-right" id="bt_showObjectSummary"><i class="fas fa-list">&nbsp;&nbsp;</i>{{ 'Vue d\'ensemble' }}</a>
+                <a class="btn btn-primary btn-action-bar pull-right" id="bt_showObjectSummary"><i class="fas fa-list">&nbsp;&nbsp;</i>{{ 'Vue d\'ensemble' }}</a>
             </div>
         </div>
     </section>
@@ -55,15 +53,13 @@
             </div>
 
             <div class="box-body">
-                <legend class="legend-title">{{ 'Le titre de l\'objet vous redirige vers sa section du dashboard...' }}</legend>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="input-group">
-                            <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                            <input class="form-control" id="in_searchObject" placeholder="{{'Rechercher...'}}" />
-                        </div>
+                <fieldset>
+                    <legend>{{ 'Le titre de l\'objet vous redirige vers sa section du dashboard...' }}</legend>
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fas fa-search"></i></div>
+                        <input class="form-control" id="in_searchObject" placeholder="{{'Rechercher...'}}" />
                     </div>
-                </div>
+                </fieldset>
             </div>
         </div>
 
@@ -88,7 +84,7 @@
     </section>
 </div>
 
-    <!-- Edition page -->
+<!-- Edition page -->
 <div class="object" style="display: none;" id="div_conf">
     <section class="content-header">
         <div class="action-bar">
@@ -112,17 +108,17 @@
                 <div role="tabpanel" class="tab-pane active" id="objecttab">
                     <form class="form-horizontal">
                         <fieldset>
-                            <legend class="legend-title">{{ 'Identité' }}</legend>
+                            <legend>{{ 'Identité' }}</legend>
                             <div class="form-group">
-                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Nom de l\'objet' }}</label>
-                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Nom de l\'objet' }}</label>
+                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                     <input class="form-control objectAttr" type="text" data-l1key="id" style="display : none;"/>
                                     <input class="form-control objectAttr" type="text" data-l1key="name" placeholder="Nom de l'objet"/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Père' }}</label>
-                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Père' }}</label>
+                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                     <select class="form-control objectAttr" data-l1key="father_id">
                                         <option value="">{{ 'Aucun' }}</option>
                                         {% for object in objectList %}
@@ -131,81 +127,82 @@
                                     </select>
                                 </div>
                             </div>
+                        </fieldset>
 
-                            <div class="legend-section">
-                                <legend class="legend-title">{{ 'Couleurs' }}</legend>
-                                <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du tag' }}</label>
-                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                                        <div class=" colorpicker-component colorpick input-group">
-                                            <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="tagColor"/>
-                                            <span class="input-group-addon"><i></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du texte du tag' }}</label>
-                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                                        <div class=" colorpicker-component colorpick input-group">
-                                            <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="tagTextColor"/>
-                                            <span class="input-group-addon"><i></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Couleur du texte du résumé' }}</label>
-                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                                        <div class=" colorpicker-component colorpick input-group">
-                                            <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="desktop::summaryTextColor"/>
-                                            <span class="input-group-addon"><i></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Taille sur le dashboard (1 à 12)' }}</label>
-                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                                        <input type="number" class="objectAttr form-control" data-l1key="display" data-l2key="dashboard::size"/>
+                        <fieldset class="legend-section">
+                            <legend>{{ 'Couleurs' }}</legend>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Tag' }}</label>
+                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                    <div class=" colorpicker-component colorpick input-group">
+                                        <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="tagColor"/>
+                                        <span class="input-group-addon"><i></i></span>
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Texte du tag' }}</label>
+                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                    <div class=" colorpicker-component colorpick input-group">
+                                        <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="tagTextColor"/>
+                                        <span class="input-group-addon"><i></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Texte du résumé' }}</label>
+                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                    <div class=" colorpicker-component colorpick input-group">
+                                        <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="desktop::summaryTextColor"/>
+                                        <span class="input-group-addon"><i></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
 
-                            <div class="legend-section">
-                                <legend class="legend-title">{{ 'Design' }}</legend>
-                                <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Position' }}</label>
-                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                                        <input type="number" class="objectAttr form-control" data-l1key="position"/>
+                        <fieldset class="legend-section">
+                            <legend>{{ 'Design' }}</legend>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Taille sur le dashboard' }}</label>
+                                <div class="col-lg-3 col-md-6 col-sm-5 col-xs-12">
+                                    <div class="input-group">
+                                        <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="dashboard::size"/>
+                                        <span class="input-group-addon">{{ '1 à 12' }}</span>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Visible' }}</label>
-                                    <div class="col-sm-1">
-                                        <input class="objectAttr" type="checkbox" data-l1key="isVisible" checked/>
-                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Position' }}</label>
+                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                    <input type="number" class="objectAttr form-control" data-l1key="position"/>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Masquer sur le dashboard' }}</label>
-                                    <div class="col-sm-1">
-                                        <input class="objectAttr" type="checkbox" data-l1key="configuration" data-l2key="hideOnDashboard"/>
-                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Visible' }}</label>
+                                <div class="col-sm-1">
+                                    <input class="objectAttr" type="checkbox" data-l1key="isVisible" checked/>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Icône' }}</label>
-                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                                        <div class="objectAttr" data-l1key="display" data-l2key="icon" style="font-size : 1.5em;"></div>
-                                    </div>
-                                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4">
-                                        <a class="btn btn-default btn-sm" id="bt_chooseIcon"><i class="fas fa-flag">&nbsp;&nbsp;</i>{{ 'Choisir' }}</a>
-                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Masquer sur le dashboard' }}</label>
+                                <div class="col-sm-1">
+                                    <input class="objectAttr" type="checkbox" data-l1key="configuration" data-l2key="hideOnDashboard"/>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Image' }}</label>
-                                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Icône' }}</label>
+                                <div class="col-xs-5">
+                                    <a class="btn btn-action" id="bt_chooseIcon"><i class="fas fa-flag">&nbsp;&nbsp;</i>{{ 'Choisir' }}</a>
+                                    <div class="objectAttr label label-icon" data-l1key="display" data-l2key="icon"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Image' }}</label>
+                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                     <span class="btn btn-default btn-file">
                                         <i class="fas fa-cloud-upload-alt">&nbsp;&nbsp;</i>{{ 'Envoyer' }}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">
                                     </span>
-                                        <a class="btn btn-danger" id="bt_removeBackgroundImage"><i class="fas fa-trash">&nbsp&nbsp;</i>{{ 'Supprimer' }}</a>
-                                    </div>
+                                    <a class="btn btn-danger" id="bt_removeBackgroundImage"><i class="fas fa-trash">&nbsp&nbsp;</i>{{ 'Supprimer' }}</a>
                                 </div>
                             </div>
                         </fieldset>
@@ -263,27 +260,25 @@
                             </fieldset>
                         </form>
                         <form class="form-horizontal">
-                            <fieldset>
-                                <div class="legend-section">
-                                    <legend class="legend-title"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Commandes' }}</legend>
-                                    <div class="nav-tabs-custom">
-                                        <ul class="nav nav-tabs" role="tablist">
-                                            {% set active = 'active' %}
-                                            {% for summaryKey, summaryValue in objectSummary %}
-                                                <li class="{{ active }}"><a href="#summarytab{{ summaryKey }}" role="tab" data-toggle="tab">{{ summaryValue['icon']|raw }} {{ summaryValue['name'] }}</i>  <span class="tabnumber summarytabnumber{{ summaryKey }}"></span></a></li>
-                                                {% set active = '' %}
-                                            {% endfor %}
-                                        </ul>
-                                        <div class="tab-content">
-                                            {% set active = ' active' %}
-                                            {% for summaryKey, summaryValue in objectSummary %}
-                                                <div role="tabpanel" class="tab-pane type{{ summaryKey }}{{ active }}" data-type="{{ summaryKey }}" id="summarytab{{ summaryKey }}">
-                                                    <div class="div_summary" data-type="{{ summaryKey }}"></div>
-                                                    <div class="btn btn-sm btn-success addSummary" data-type="{{ summaryKey }}"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter une commande' }}</div>
-                                                </div>
-                                                {% set active = '' %}
-                                            {% endfor %}
-                                        </div>
+                            <fieldset class="legend-section">
+                                <legend><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Commandes' }}</legend>
+                                <div class="nav-tabs-custom">
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        {% set active = 'active' %}
+                                        {% for summaryKey, summaryValue in objectSummary %}
+                                            <li class="{{ active }}"><a href="#summarytab{{ summaryKey }}" role="tab" data-toggle="tab">{{ summaryValue['icon']|raw }} {{ summaryValue['name'] }}</i>  <span class="tabnumber summarytabnumber{{ summaryKey }}"></span></a></li>
+                                            {% set active = '' %}
+                                        {% endfor %}
+                                    </ul>
+                                    <div class="tab-content">
+                                        {% set active = ' active' %}
+                                        {% for summaryKey, summaryValue in objectSummary %}
+                                            <div role="tabpanel" class="tab-pane type{{ summaryKey }}{{ active }}" data-type="{{ summaryKey }}" id="summarytab{{ summaryKey }}">
+                                                <div class="div_summary" data-type="{{ summaryKey }}"></div>
+                                                <div class="btn btn-sm btn-success addSummary" data-type="{{ summaryKey }}"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter une commande' }}</div>
+                                            </div>
+                                            {% set active = '' %}
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </fieldset>

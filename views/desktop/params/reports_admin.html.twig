@@ -38,6 +38,7 @@
     <div class="action-bar">
         <div class="action-group">
             <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=report"><i class="fas fa-eye">&nbsp;&nbsp;</i>{{ 'Visualiser' }}</a>
         </div>
         <div class="action-group">
             <a class="btn btn-success btn-action-bar pull-right" id="bt_savereports_admin"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
@@ -56,8 +57,8 @@
         <div class="box-body">
             <form class="form-horizontal">
                 <!-- Params Section -->
-                <div>
-                    <legend class="legend-title">{{ 'Paramètres' }}</legend>
+                <fieldset>
+                    <legend>{{ 'Paramètres' }}</legend>
                     <div class="form-group">
                         <label class="col-lg-4 col-md-5 col-sm-5 col-xs-12 control-label">{{ 'Délai d\'attente après génération de la page' }}</label>
                         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -77,7 +78,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </fieldset>
             </form>
         </div>
     </div>
