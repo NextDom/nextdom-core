@@ -26,7 +26,7 @@ function gen_css {
     if [ $# -eq 0 ]; then
         COMPRESS="--style compressed"
     fi
-	echo " >>> Generation du CSS"
+	echo " >>> Generate CSS"
 
 	mkdir -p public/css/adminlte
 	sass assets/css/nextdom.scss public/css/nextdom.css $COMPRESS
@@ -41,7 +41,7 @@ function gen_css {
 }
 
 function gen_js {
-	echo " >>> Generation du JS"
+	echo " >>> Generate JS"
     cat assets/3rdparty/jquery.utils/jquery.utils.js \
         vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
         vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
@@ -210,3 +210,5 @@ elif [ "$1" == "--css" ]; then
 elif [ "$1" == "--js" ]; then
 	gen_js
 fi
+echo " >>> Cleaning Twig Cache"
+rm -rf var/cache/twig/*
