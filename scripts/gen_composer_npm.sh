@@ -23,13 +23,13 @@ set_root() {
 set_root $0
 
 function install_nodemodules {
-echo " >>> Installation des modules npm"
+echo " >>> Installing the npm modules"
 cp package.json ./vendor
 npm install --prefix ./vendor
 }
 
 function install_dep_composer {
-echo " >>> Installation des dependances composer"
+echo " >>> Installation dependencies composer"
 composer install -o
 }
 
