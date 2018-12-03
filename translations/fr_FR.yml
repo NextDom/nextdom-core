@@ -45,6 +45,15 @@ health:
   apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (NextDom ne peut marcher avec). Voir <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\">ici</a>
 plugin:
   cant-report: Vous ne pouvez pas faire de rapport sur un plugin sans panneau
+connection:
+  home-msg: Connectez-vous pour accéder à votre session...
+  login-placeholder: Identifiant... (admin par défaut)
+  password-placeholder: Mot de passe...
+  two-factors-placeholder: Code à 2 facteurs
+  remember-title: En cochant cette case, vous n'aurez plus besoin de vous saisir vos identifiants.
+  remember-label: Se souvenir de moi ?
+  connect: Connexion
+  forgot: Oups, J'ai oublié mon mot de passe !
 "0-6 ou SUN-SAT": "0-6 ou SUN-SAT"
 "1 an": "1 an"
 "1 heure": "1 heure"
@@ -423,8 +432,6 @@ plugin:
 "Code HTML": "Code HTML"
 "Code invalide": "Code invalide"
 "Code promo": "Code promo"
-"Code à 2 facteur...": "Code à 2 facteur..."
-"Code à 2 facteurs": "Code à 2 facteurs"
 "Colonne": "Colonne"
 "Commande": "Commande"
 "Commande :": "Commande :"
@@ -481,9 +488,7 @@ plugin:
 "Confirmer l'action": "Confirmer l'action"
 "Confort": "Confort"
 "Connectez votre NextDom !": "Connectez votre NextDom !"
-"Connectez-vous pour accéder à votre session...": "Connectez-vous pour accéder à votre session..."
 "Connection au LDAP OK": "Connection au LDAP OK"
-"Connexion": "Connexion"
 "Connexion de l'utilisateur": "Connexion de l'utilisateur"
 "Connexion de l'utilisateur :": "Connexion de l'utilisateur :"
 "Connexion de l'utilisateur par clef :": "Connexion de l'utilisateur par clef :"
@@ -918,7 +923,6 @@ plugin:
 "Id rapport": "Id rapport"
 "Identifiant Git": "Identifiant Git"
 "Identifiant...": "Identifiant..."
-"Identifiant... (admin par défaut)": "Identifiant... (admin par défaut)"
 "Identification": "Identification"
 "Identité": "Identité"
 "Ignorer": "Ignorer"
@@ -1254,8 +1258,6 @@ plugin:
 "Mot de passe": "Mot de passe"
 "Mot de passe changé avec succès": "Mot de passe changé avec succès"
 "Mot de passe erroné (": "Mot de passe erroné ("
-"Mot de Passe...": "Mot de Passe..."
-"Mot de passe...": "Mot de passe..."
 "Moteur": "Moteur"
 "Moteur de cache": "Moteur de cache"
 "Moteur de log": "Moteur de log"
@@ -1381,7 +1383,6 @@ plugin:
 "ou": "ou"
 "Ou en cliquant": "Ou en cliquant"
 "Oui": "Oui"
-"Oups, J'ai oublié mon mot de passe !": "Oups, J'ai oublié mon mot de passe !"
 "Outils": "Outils"
 "Ouvert": "Ouvert"
 "Ouverture": "Ouverture"
@@ -1637,7 +1638,6 @@ plugin:
 "Scénario non trouvé. Vérifiez ID :": "Scénario non trouvé. Vérifiez ID :"
 "Scénarios": "Scénarios"
 "Se déconnecter": "Se déconnecter"
-"Se souvenir de moi ?": "Se souvenir de moi ?"
 "secondes": "secondes"
 "secondes (0 = illimité)": "secondes (0 = illimité)"
 "secondes (-1 pour infini)": "secondes (-1 pour infini)"
