@@ -212,3 +212,5 @@ elif [ "$1" == "--js" ]; then
 fi
 echo " >>> Cleaning Twig Cache"
 rm -rf var/cache/twig/*
+rm -rf var/i18n/*
+rm -fr var/cache/i18n/*
