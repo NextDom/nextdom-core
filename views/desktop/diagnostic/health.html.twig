@@ -48,14 +48,14 @@
     <div class="box" id="div_Health">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-medkit">&nbsp;&nbsp;</i>{{ 'health.product-health-title'|trans }}</h3>
+            <h3 class="box-title"><i class="fas fa-medkit">&nbsp;&nbsp;</i>{{ 'health.product-title'|trans }}</h3>
         </div>
 
         <!-- Page content -->
         <div class="box-body">
             <fieldset>
                 <!-- Nextdom health section -->
-                <legend>{{ 'health.product-health-legend'|trans }}</legend>
+                <legend>{{ 'health.product-legend'|trans }}</legend>
                 <div class="row">
                     {% for informations in healthInformations %}
                         {% if informations['name'] == 'health.os-version'|trans %}
@@ -111,13 +111,13 @@
 
     <div class="box">
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-medkit">&nbsp;&nbsp;</i>{{ 'health.plugins-health-title'|trans }}</h3>
+            <h3 class="box-title"><i class="fas fa-medkit">&nbsp;&nbsp;</i>{{ 'health.plugins-title'|trans }}</h3>
         </div>
 
         <div class="box-body">
             <fieldset>
                 <!-- Plugins health section -->
-                <legend>{{ 'health.plugins-health-legend'|trans }}</legend>
+                <legend>{{ 'health.plugins-legend'|trans }}</legend>
                 {% if healthPluginDataToShow %}
                 <div class="box-group" id="accordionHealth">
                     {% for pluginData in healthPluginsInformations %}

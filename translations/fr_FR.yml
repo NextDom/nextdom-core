@@ -45,11 +45,11 @@ health:
   os-version: Version OS
   php-error: Une version de PHP supérieure ou égale à 7 est nécessaire.
   php-version: Version PHP
-  plugins-health-legend: Détails de la santé de vos plugins, cliquez sur le titre pour avoir le détail puis survolez les icônes pour plus d\'informations.
-  plugins-health-title: Santé des Plugins
+  plugins-legend: Détails de la santé de vos plugins, cliquez sur le titre pour avoir le détail puis survolez les icônes pour plus d\'informations.
+  plugins-title: Santé des Plugins
   processes-killed: Nombre de processus tué par le noyaux pour manque de mémoire. Votre système manque de mémoire. Essayez de reduire le nombre de plugins ou les scénarios
-  product-health-legend: Détails de la santé de votre solution, survolez les icônes pour plus d'informations.
-  product-health-title: Santé de NextDom
+  product-legend: Détails de la santé de votre solution, survolez les icônes pour plus d'informations.
+  product-title: Santé de NextDom
   product-started: Démarré
   product-version: Version NextDom
   scenario-disabled: "Erreur scénario : tous les scénarios sont désactivés. Allez dans Outils -> Scénarios pour les réactiver"
