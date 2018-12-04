@@ -62,6 +62,30 @@ health:
   update-to-date: Système à jour
 plugin:
   cant-report: Vous ne pouvez pas faire de rapport sur un plugin sans panneau
+welcome:
+  title: Bienvenue dans %productName%
+  congrats: Félicitations
+  congrats-content: Bienvenue dans %productName%, merci d'avoir choisi cet outil pour votre habitat connecté.
+  never-show: Ne plus afficher
+  hot-plugins: Plugins populaires
+  migrate-from: Migration Jeedom
+  doc-title: Documentation
+  doc-subtitle: Informez-vous pour mieux maitriser
+  doc-content : La lecture de la documentation est fastidieuse mais c'est une opération essentielle pour bien maitriser votre solution domotique.
+  doc-launch : Accéder à la documentation
+  forum-title: Forum
+  forum-subtitle : Trouver de l'aide sur notre forum
+  forum-content: | 
+                Le forum %productName% est un moyen simple et efficace de trouver la solution a votre problème.
+                Il y a sûrement une autre personne qui a déja rencontré le même problème que vous.
+                Si ce n'est pas le cas, posez votre question, la communauté y répondra au plus vite.
+  forum-launch: Accéder au forum
+  blog-title: Blog
+  blog-subtitle: Restez informé
+  blog-content: Retrouvez toute l'actualité de %productName% sur notre blog.
+  blog-launch: Accéder au blog
+  notify: Sauvegarde réussie
+
 # Ancien format
 "401 - Accès non autorisé": "401 - Accès non autorisé"
 "Aucune méthode correspondante à : ": "Aucune méthode correspondante à : "
