@@ -44,30 +44,30 @@
     <!-- Section connexion -->
     <div class="login-box-body">
         <div class="form-group">
-            <p class="login-box-msg">{{ 'Connectez-vous pour accéder à votre session...' }}</p>
+            <p class="login-box-msg">{{ 'connection.home-msg'|trans }}</p>
         </div>
         <div class="form-group has-feedback">
-            <input type="text" class="form-control" placeholder="{{ 'Identifiant... (admin par défaut)' }}" id="in_login_username">
+            <input type="text" class="form-control" placeholder="{{ 'connection.login-placeholder'|trans }}" id="in_login_username">
             <span class="label-badge"><i class="fas fa-user-circle"></i></span>
         </div>
         <div class="form-group has-feedback">
-            <input type="password" class="form-control" placeholder="{{ 'Mot de Passe...' }}" id="in_login_password">
+            <input type="password" class="form-control" placeholder="{{ 'connection.password-placeholder'|trans }}" id="in_login_password">
             <span class="label-badge"><i class="fas fa-key"></i></span>
         </div>
         <div class="passwd form-group has-feedback" id="div_twoFactorCode" style="display:none;">
-            <input type="text" id="in_twoFactorCode" placeholder="{{ 'Code à 2 facteur...' }}" class="form-control">
+            <input type="text" id="in_twoFactorCode" placeholder="{{ 'connection.two-factors-placeholder'|trans }}" class="form-control">
             <span class="label-badge"><i class="fas fa-user-secret"></i></span>
         </div>
         <div class="row form-group">
             <div class="col-sm-7 col-xs-12">
                 <input type="checkbox" id="cb_storeConnection">
-                <span for="cb_storeConnection" data-toggle="tooltip" title="" data-original-title="{{'En cochant cette case, vous n\'aurez plus besoin de vous saisir vos identifiants.'}}">{{ 'Se souvenir de moi ?' }}</span>
+                <span for="cb_storeConnection" data-toggle="tooltip" title="" data-original-title="{{ 'connection.remember-title'|trans }}">{{ 'connection.remember-label'|trans }}</span>
             </div>
             <div class="col-sm-5 col-xs-12">
-                <button class="btn btn-primary btn-block btn-flat" id="bt_login_validate"><i class="fas fa-unlock">&nbsp;&nbsp;</i>{{ 'Connexion' }}</button>
+                <button class="btn btn-primary btn-block btn-flat" id="bt_login_validate"><i class="fas fa-unlock">&nbsp;&nbsp;</i>{{ 'connection.connect'|trans }}</button>
             </div>
         </div>
-        <a class="Link-Blue" href="https://www.nextdom.org/knowledge-base/reinitialiser-sont-mot-de-passe/" target="_blank">{{ 'Oups, J\'ai oublié mon mot de passe !' }}</a><br>
+        <a class="Link-Blue" href="https://www.nextdom.org/knowledge-base/reinitialiser-sont-mot-de-passe/" target="_blank">{{ 'connection.forgot'|trans }}</a><br>
     </div>
 </div>
 
