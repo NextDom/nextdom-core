@@ -823,7 +823,7 @@ class NextDomHelper
      *
      * @return string PID
      */
-    public static function retrievePidThread(string $cmd): string
+    public static function retrievePidThread(string $cmd)
     {
         return shell_exec('(ps ax || ps w) | grep "' . $cmd . '$" | grep -v "grep" | awk \'{print $1}\'');
     }
