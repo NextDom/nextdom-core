@@ -348,7 +348,6 @@ $('#in_addElementType').off('change').on('change',function(){
 });
 
 $('#bt_scenarioTab').on('click',function(){
-
   setTimeout(function(){
     setEditor();
     taAutosize();
@@ -1011,8 +1010,8 @@ function saveScenario() {
 
 function addTrigger(_trigger) {
   var div = '<div class="form-group trigger">';
-  div += '<label class="col-xs-3 control-label">{{Evénement}}</label>';
-  div += '<div class="col-xs-9">';
+  div += '<label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{Evénement}}</label>';
+  div += '<div class="col-lg-10 col-md-9 col-sm-6 col-xs-12">';
   div += '<div class="input-group">';
   div += '<input class="scenarioAttr input-sm form-control" data-l1key="trigger" value="' + _trigger.replace(/"/g,'&quot;') + '" >';
   div += '<span class="input-group-btn">';
@@ -1028,8 +1027,8 @@ function addTrigger(_trigger) {
 
 function addSchedule(_schedule) {
   var div = '<div class="form-group schedule">';
-  div += '<label class="col-xs-3 control-label">{{Programmation}}</label>';
-  div += '<div class="col-xs-9">';
+  div += '<label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{Programmation}}</label>';
+  div += '<div class="col-lg-10 col-md-9 col-sm-6 col-xs-12">';
   div += '<div class="input-group">';
   div += '<input class="scenarioAttr input-sm form-control" data-l1key="schedule" value="' + _schedule.replace(/"/g,'&quot;') + '">';
   div += '<span class="input-group-btn">';

@@ -25,14 +25,17 @@ html {
   /* The html and body elements cannot have any padding or margin. */
 }
 
-body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+body, h1, h2, h3, h4, h5, h6 {
   font-family: Roboto,'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
 }
 
 .main-header .navbar .nav > li > a, .objectSummaryGlobalHeader {
-  color: #fff;
+  color: $white;
 }
 
 .content-header {
   background: transparent;
+  position: sticky;
+  z-index: 999;
+  top: 0px;
 }

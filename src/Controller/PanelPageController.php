@@ -29,7 +29,7 @@ use NextDom\Managers\PluginManager;
 
 class PanelPageController extends BaseController
 {
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -38,7 +38,7 @@ class PanelPageController extends BaseController
 
     /**
      * TODO this methode are used ?
-     * 
+     *
      * @param \NextDom\Helpers\Render $render
      * @param array $pageContent
      * @return string
@@ -49,7 +49,10 @@ class PanelPageController extends BaseController
         $page = Utils::init('p');
 
         ob_start();
+        echo '<section class="content">';
         \include_file('desktop', $page, 'php', $plugin->getId(), true);
+        echo '</section>';
+
         return ob_get_clean();
     }
 

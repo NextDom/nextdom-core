@@ -1,10 +1,14 @@
 <div style="display: none;width : 100%" id="div_alertScenarioLog"></div>
-<span style="font-weight: bold;font-size:1.5em;">{{ scenarioHumanName }}</span>
-<a class="btn btn-warning pull-right" data-state="1" id="bt_scenarioLogStopStart"><i class="fas fa-pause">&nbsp;&nbsp;</i>{{ 'Pause' }}</a>
-<input class="form-control pull-right" id="in_scenarioLogSearch" style="width : 300px;" placeholder="{{ 'Rechercher' }}" />
-<a class="btn btn-danger pull-right" id="bt_scenarioLogEmpty"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Vider le log' }}</a>
-<a class="btn btn-success pull-right" id="bt_scenarioLogDownload"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{ 'Télécharger' }}</a>
-<br/><br/>
+<legend class="form-group"><i class="fas fa-film">&nbsp;&nbsp;</i>{{ 'Scénario :'}}&nbsp;&nbsp;{{ scenarioHumanName }}</legend>
+<div class="form-group">
+    <a class="btn btn-warning" data-state="1" id="bt_scenarioLogStopStart"><i class="fas fa-pause">&nbsp;&nbsp;</i>{{ 'Pause' }}</a>
+    <a class="btn btn-danger pull-right" id="bt_scenarioLogEmpty"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Vider le log' }}</a>
+    <a class="btn btn-success pull-right" id="bt_scenarioLogDownload"><i class="fas fa-cloud-download-alt">&nbsp;&nbsp;</i>{{ 'Télécharger' }}</a>
+</div>
+<div class="filter input-group form-group">
+    <div class="input-group-addon"><i class="fas fa-search"></i></div>
+    <input class="filter form-control" id="in_scenarioLogSearch" placeholder="{{'Rechercher...'}}" />
+</div>
 <pre id='pre_scenariolog' style='overflow: auto; height: calc(100% - 70px);with:90%;'></pre>
 <script>
     nextdom.log.autoupdate({

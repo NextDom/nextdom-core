@@ -35,8 +35,9 @@
 }
 
 .label-config {
-    padding: 9px 10px 10px;
     font-size: 100%;
+    line-height: 1.4;
+    margin-top: 3px;
 }
 
 .label-default {
@@ -86,7 +87,7 @@ legend {
 }
 
 .legend-section {
-    margin-top: 40px;
+    margin-top: 30px;
 }
 
 .label-list {
@@ -116,14 +117,14 @@ legend {
 }
 
 .label-icon {
-    padding: 6px 10px 8px 9px;
-    font-size: 100%;
     border: 1px solid;
     border-radius: 2px;
+    font-size: 20px;
+    vertical-align: middle;
     margin: {
-        left: -2px;
-        top: 2px;
-        bottom: 2px;
+        left: -4px;
+        top: 0px;
+        bottom: 0px;
     }
     & >i {
         vertical-align: middle;
@@ -158,7 +159,7 @@ legend {
 .label-sticker-sm {
     font-size: 100%;
     padding: 5px 10px;
-    line-height: 1.5;
+    line-height: 1.4;
 }
 
 .label-hash {
