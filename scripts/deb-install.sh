@@ -10,7 +10,7 @@ echo " >>> Add non-free repositories"
 add-apt-repository non-free
 echo " >>> Add NextDom repository"
 wget -qO -  http://debian.nextdom.org/debian/conf/nextdom.gpg.key  | apt-key add -
-echo "deb http://debian-dsddsds.nextdom.org/debian  nextdom main" >/etc/apt/sources.list.d/nextdom.list
+echo "deb http://debian.nextdom.org/debian  nextdom main" >/etc/apt/sources.list.d/nextdom.list
 echo " >>> Update packages list"
 apt update
 echo " >>> Start installation"
