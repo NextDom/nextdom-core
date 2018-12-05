@@ -4,6 +4,15 @@ str:
   back: Retour
   disabled: Désactivé
   in-progress: En cours
+connection:
+  home-msg: Connectez-vous pour accéder à votre session...
+  login-placeholder: Identifiant... (admin par défaut)
+  password-placeholder: Mot de passe...
+  two-factors-placeholder: Code à 2 facteurs
+  remember-title: En cochant cette case, vous n'aurez plus besoin de vous saisir vos identifiants.
+  remember-label: Se souvenir de moi ?
+  connect: Connexion
+  forgot: Oups, J'ai oublié mon mot de passe !
 core:
   error-401: 401 - Accès non autorisé
   error-ajax: Requête Ajax inconnue
