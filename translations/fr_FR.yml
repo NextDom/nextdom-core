@@ -1,9 +1,11 @@
-str:
+common:
   ok: OK
   nok: NOK
   back: Retour
   disabled: Désactivé
   in-progress: En cours
+  version: Version
+
 connection:
   home-msg: Connectez-vous pour accéder à votre session...
   login-placeholder: Identifiant... (admin par défaut)
@@ -13,6 +15,7 @@ connection:
   remember-label: Se souvenir de moi ?
   connect: Connexion
   forgot: Oups, J'ai oublié mon mot de passe !
+
 core:
   error-401: 401 - Accès non autorisé
   error-ajax: Requête Ajax inconnue
@@ -23,6 +26,7 @@ core:
   enable-all-scenarios: Activer tous les scénarios
   disable-all-scenarios: Désactiver tous les scénarios
   incorrect-sys-date: "La date du système est incorrect (avant %s ou après %s) : "
+
 health:
   apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (NextDom ne peut marcher avec). Voir <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\">ici</a>
   apache-private-tmp: Apache private tmp
@@ -68,8 +72,10 @@ health:
   system-date: Date système (dernière heure enregistrée)
   unknown: Inconnue
   update-to-date: Système à jour
+
 plugin:
   cant-report: Vous ne pouvez pas faire de rapport sur un plugin sans panneau
+  
 welcome:
   title: Bienvenue dans %productName%
   congrats: Félicitations
@@ -93,6 +99,43 @@ welcome:
   blog-content: Retrouvez toute l'actualité de %productName% sur notre blog.
   blog-launch: Accéder au blog
   notify: Sauvegarde réussie
+
+footer:
+  licence: GPL Automation 2018
+  about: A Propos de
+
+sidebar:
+  menu-main: Menu Principal
+  menu-manage: Menu Gestion
+  dashboard: Dashboard
+  view: Vue(s)
+  design: Design(s)
+  objects-list: Liste Objets & Résumés
+  default-object: Objet par défaut
+  show-all: Afficher tout
+  plan3d: Plan(s) 3D
+  panel: Panel(s)
+  plugins: Plugins
+  plugins-markets: Gestion & Markets
+  tools: Outils
+  tools-summary: Résumé domotique
+  tools-interactions: Interactions
+  tools-scenarios: Scénarios
+  tools-notes: Notes
+  diagnostics: Diagnostics
+  diagnostics-health: Santé
+  diagnostics-eqlogics: Equipements
+  diagnostics-history: Historiques
+  diagnostics-timeline: Timeline
+  diagnostics-logs: Logs
+  diagnostics-realtime: Temps réel
+  expert: Expert
+  expert-admin: Administration & Réglages
+  expert-mobile: Version mobile
+  expert-logout: Se déconnecter
+  expert-restart: Redémarrer
+  expert-shutdown: Eteindre
+  expert-issue: Un Dysfonctionnement ?
 
 # Ancien format
 "401 - Accès non autorisé": "401 - Accès non autorisé"
