@@ -1,7 +1,7 @@
 <div class="alert alert-success">
-    <h4 class="col-lg-5" style="padding-left:0px"><i class="fas fa-thumbs-up">&nbsp;&nbsp;</i>{{ 'Félicitations' }}</h4>
-    <div class='btn btn-default pull-right' id='bt_doNotDisplayWelcome'><i class="fas fa-eye-slash">&nbsp;&nbsp;</i>{{ 'Ne plus afficher' }}</div>
-    <br><br>{{ 'Bienvenue dans' }} {{ productName }} {{ ', merci d\'avoir choisi cet outil pour votre habitat connecté.' }}
+    <h4 class="col-lg-5" style="padding-left:0px"><i class="fas fa-thumbs-up">&nbsp;&nbsp;</i>{{ 'welcome.congrats'|trans }}</h4>
+    <div class='btn btn-default pull-right' id='bt_doNotDisplayWelcome'><i class="fas fa-eye-slash">&nbsp;&nbsp;</i>{{ 'welcome.never-show'|trans }}</div>
+    <br><br>{{ 'welcome.congrats-content'|trans|replace({'%productName%':productName}) }}
 </div>
 
 <div class="container-fluid">
@@ -9,7 +9,7 @@
         <div class="col-md-6">
             <div class="box box-default">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-puzzle-piece">&nbsp;&nbsp;</i>{{ 'Plugins populaires' }}</h3>
+                    <h3 class="box-title"><i class="fas fa-puzzle-piece">&nbsp;&nbsp;</i>{{ 'welcome.hot-plugins'|trans }}</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -57,7 +57,7 @@
         <div class="col-md-6">
             <div class="box box-default">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-rocket">&nbsp;&nbsp;</i>{{ 'Migration Jeedom' }}&nbsp;&nbsp;<i class="fas fa-caret-right">&nbsp;</i>{{ 'NextDom' }}</h3>
+                    <h3 class="box-title"><i class="fas fa-rocket">&nbsp;&nbsp;</i>{{ 'welcome.migrate-from'|trans }}&nbsp;&nbsp;<i class="fas fa-caret-right">&nbsp;</i>{{ productName }}</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -77,13 +77,13 @@
         <div class="col-md-4">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-book">&nbsp;&nbsp;</i>{{ 'Documentations' }}</h3>
+                    <h3 class="box-title"><i class="fas fa-book">&nbsp;&nbsp;</i>{{ 'welcome.doc-title'|trans }}</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <p class="lead">{{ 'Informez-vous pour mieux maitriser' }}</p>
-                    <p class="text-muted">{{ 'La lecture de la documentation est fastidieuse mais c\'est une opération essentielle pour bien maitriser votre solution domotique.' }}</p>
-                    <p><a href="http://www.nextdom.org/docs" class="text-blue">{{ 'Accéder à la documentation' }}</a></p>
+                    <p class="lead">{{ 'welcome.doc-subtitle'|trans }}</p>
+                    <p class="text-muted">{{ 'welcome.doc-content'|trans|replace({'%productName%':productName})|nl2br }}</p>
+                    <p><a href="http://www.nextdom.org/docs" class="text-blue">{{ 'welcome.doc-launch'|trans }}</a></p>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -91,16 +91,14 @@
         <div class="col-md-4">
             <div class="box box-success">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-comments">&nbsp;&nbsp;</i>{{ 'Forum' }}</h3>
+                    <h3 class="box-title"><i class="fas fa-comments">&nbsp;&nbsp;</i>{{ 'welcome.forum-title'|trans }}</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <p class="lead">{{ 'Trouver de l\'aide sur notre forum' }}</p>
+                    <p class="lead">{{ 'welcome.forum-subtitle'|trans }}</p>
                     <p class="text-muted">
-                        {{ 'Le forum NextDom est un moyen simple et efficace de trouver la solution a votre problème.<br/>
-                        Il y a sûrement une autre personne qui a déja rencontré le même problème que vous.<br/>
-                        Si ce n\'est pas le cas, posez votre question, la communauté y répondra au plus vite.' }}</p>
-                    <p><a href="http://www.nextdom.org/forum" class="text-blue">{{ 'Accéder au forum' }}</a><p/>
+                        {{ 'welcome.forum-content'|trans|replace({'%productName%':productName})|nl2br }}</p>
+                    <p><a href="http://www.nextdom.org/forum" class="text-blue">{{ 'welcome.forum-launch'|trans }}</a><p/>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -108,13 +106,13 @@
         <div class="col-md-4">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-rss-square">&nbsp;&nbsp;</i>{{ 'Blog' }}</h3>
+                    <h3 class="box-title"><i class="fas fa-rss-square">&nbsp;&nbsp;</i>{{ 'welcome.blog-title'|trans }}</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <p class="lead">{{ 'Restez informé' }}</p>
-                    <p class="text-muted">{{ 'Retrouvez toute l\'actualité de NextDom sur notre blog.' }}</p>
-                    <p><a href="http://www.nextdom.org/blog" class="text-blue">{{ 'Accéder au blog' }}</a></p>
+                    <p class="lead">{{ 'welcome.blog-subtitle'|trans }}</p>
+                    <p class="text-muted">{{ 'welcome.blog-content'|trans|replace({'%productName%':productName})|nl2br }}</p>
+                    <p><a href="http://www.nextdom.org/blog" class="text-blue">{{ 'welcome.blog-launch'|trans }}</a></p>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -129,7 +127,7 @@
                 notify("Core", error.message, 'error');
             },
             success: function () {
-                notify("Core", '{{ 'Sauvegarde réussie' }}', 'success');
+                notify("Core", '{{ 'welcome.notify'|trans }}', 'success');
             }
         });
     });

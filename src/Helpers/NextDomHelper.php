@@ -109,8 +109,8 @@ class NextDomHelper
      */
     public static function health(): array
     {
-        $okStr = __('str.OK');
-        $nokStr = __('str.NOK');
+        $okStr = __('str.ok');
+        $nokStr = __('str.nok');
 
         $systemHealth = array();
 
@@ -129,7 +129,7 @@ class NextDomHelper
         }
         $systemHealth[] = array(
             'icon' => 'fa-cogs',
-            'name' => __('os-version'),
+            'name' => __('health.os-version'),
             'state' => $state,
             'result' => ($state) ? $uname . ' [' . $version . ']' : $uname,
             'comment' => ($state) ? '' : __('Vous n\'êtes pas sur un OS officiellement supporté par l\'équipe NextDom (toute demande de support pourra donc être refusée). Les OS officiellement supporté sont Debian Jessie et Debian Strech (voir <a href="https://jeedom.github.io/documentation/compatibility/fr_FR/index" target="_blank">ici</a>)'),
@@ -166,7 +166,7 @@ class NextDomHelper
         $state = self::isStarted();
         $systemHealth[] = array(
             'icon' => 'fa-play',
-            'name' => __('health.NextDom-started'),
+            'name' => __('health.product-started'),
             'state' => $state,
             'result' => ($state) ? $okStr . ' - ' . file_get_contents(self::getTmpFolder() . '/started') : $nokStr,
             'comment' => '',
@@ -194,7 +194,7 @@ class NextDomHelper
 
         $systemHealth[] = array(
             'icon' => 'fa-code-branch',
-            'name' => __('health.NextDom-version'),
+            'name' => __('health.product-version'),
             'state' => true,
             'result' => self::getVersion(),
             'comment' => '',
@@ -469,7 +469,7 @@ class NextDomHelper
      */
     public static function stopSystem()
     {
-        $okStr = __('str.OK');
+        $okStr = __('str.ok');
         echo __('core.disable-tasks');
         \config::save('enableCron', 0);
         foreach (\cron::all() as $cron) {
@@ -518,7 +518,7 @@ class NextDomHelper
      */
     public static function startSystem()
     {
-        $okStr = __('str.OK');
+        $okStr = __('str.ok');
 
         try {
             echo __('core.enable-all-scenarios');
@@ -823,7 +823,7 @@ class NextDomHelper
      *
      * @return string PID
      */
-    public static function retrievePidThread(string $cmd): string
+    public static function retrievePidThread(string $cmd)
     {
         return shell_exec('(ps ax || ps w) | grep "' . $cmd . '$" | grep -v "grep" | awk \'{print $1}\'');
     }
