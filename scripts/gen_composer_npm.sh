@@ -30,7 +30,11 @@ npm install --prefix ./vendor
 
 function install_dep_composer {
 echo " >>> Installation dependencies composer"
-composer install -o
+if [[ "$1" = "--no-dev" ]] ; then
+    composer install -o --no-dev
+else
+    composer install -o
+fi
 }
 
 function init_dependencies {
