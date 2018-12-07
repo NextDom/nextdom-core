@@ -22,6 +22,8 @@ do
 	fi
 	sleep 10
 done
+echo "Container created, Write image"
 docker commit nextdom-test nextdom-test-snap
+echo "Clear container"
 docker kill nextdom-test
 docker rm nextdom-test
