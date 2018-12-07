@@ -255,7 +255,7 @@ class SystemHelper
      *
      * @return string Apache group id
      */
-    public static function getWWWGid()
+    public static function getWWWGid(): string
     {
         return self::getWWWUid();
     }

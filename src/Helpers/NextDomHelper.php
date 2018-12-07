@@ -1071,7 +1071,7 @@ class NextDomHelper
     public static function cleanFileSystemRight()
     {
         $path = __DIR__ . '/../../*';
-		$cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::get('www-uid') . ':' . SystemHelper::get('www-gid') . ' ' . $path;
+		$cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . $path;
 		$cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . $path;
 		$cmd .= SystemHelper::getCmdSudo() . 'find /var/log/nextdom -type f -exec chmod 664 {} +;';
 		$cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . $path;
@@ -1102,7 +1102,7 @@ class NextDomHelper
         }
         if (!file_exists($result)) {
             mkdir($result, 0774, true);
-            $cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::get('www-uid') . ':' . SystemHelper::get('www-gid') . ' ' . $result . ';';
+            $cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . $result . ';';
             \com_shell::execute($cmd);
         }
         return $result;
