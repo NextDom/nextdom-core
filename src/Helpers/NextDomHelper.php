@@ -109,8 +109,8 @@ class NextDomHelper
      */
     public static function health(): array
     {
-        $okStr = __('str.ok');
-        $nokStr = __('str.nok');
+        $okStr = __('common.ok');
+        $nokStr = __('common.nok');
 
         $systemHealth = array();
 
@@ -469,7 +469,7 @@ class NextDomHelper
      */
     public static function stopSystem()
     {
-        $okStr = __('str.ok');
+        $okStr = __('common.ok');
         echo __('core.disable-tasks');
         \config::save('enableCron', 0);
         foreach (\cron::all() as $cron) {
@@ -518,7 +518,7 @@ class NextDomHelper
      */
     public static function startSystem()
     {
-        $okStr = __('str.ok');
+        $okStr = __('common.ok');
 
         try {
             echo __('core.enable-all-scenarios');
