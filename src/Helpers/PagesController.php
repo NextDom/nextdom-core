@@ -82,6 +82,7 @@ class PagesController
         'interact_admin' => Controller\InteractAdminController::class,
         'links'          => Controller\LinksController::class,
         'security'       => Controller\SecurityController::class,
+        'shutdown'       => Controller\ShutdownController::class,
         'summary'        => Controller\SummaryController::class,
         'update_admin'   => Controller\UpdateAdminController::class,
         'users'          => Controller\UsersController::class,
