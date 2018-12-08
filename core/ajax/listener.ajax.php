@@ -17,7 +17,7 @@
  */
 
 try {
-    require_once __DIR__ . '/../../core/php/core.inc.php';
+    require_once __DIR__ . '/../php/core.inc.php';
     include_file('core', 'authentification', 'php');
 
     if (!isConnect('admin')) {
@@ -26,33 +26,36 @@ try {
 
     ajax::init();
 
-    if (init('action') == 'clear') {
+    if (init('action') == 'save') {
         unautorizedInDemo();
-        log::clear(init('log'));
+        utils::processJsonObject('listener', init('listeners'));
         ajax::success();
     }
 
     if (init('action') == 'remove') {
         unautorizedInDemo();
-        log::remove(init('log'));
+        $listener = listener::byId(init('id'));
+        if (!is_object($listener)) {
+            throw new Exception(__('Listerner id inconnu', __FILE__));
+        }
+        $listener->remove();
         ajax::success();
     }
 
-    if (init('action') == 'list') {
-        ajax::success(log::liste());
-    }
-
-    if (init('action') == 'removeAll') {
-        unautorizedInDemo();
-        log::removeAll();
-        ajax::success();
-    }
-
-    if (init('action') == 'get') {
-        ajax::success(log::get(init('log'), init('start', 0), init('nbLine', 99999)));
+    if (init('action') == 'all') {
+        $listeners = utils::o2a(listener::all(true));
+        foreach ($listeners as &$listener) {
+            $listener['event_str'] = '';
+            foreach ($listener['event'] as $event) {
+                $listener['event_str'] .= $event . ',';
+            }
+            $listener['event_str'] = nextdom::toHumanReadable(trim($listener['event_str'], ','));
+        }
+        ajax::success($listeners);
     }
 
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
+
     /*     * *********Catch exeption*************** */
 } catch (Exception $e) {
     ajax::error(displayException($e), $e->getCode());

@@ -117,7 +117,7 @@ class NextDomHelper
         $state = true;
         $version = '';
         $uname = shell_exec('uname -a');
-        if (\system::getDistrib() != 'debian') {
+        if (SystemHelper::getDistrib() != 'debian') {
             $state = false;
         } else {
             $version = trim(strtolower(file_get_contents('/etc/debian_version')));
@@ -340,7 +340,7 @@ class NextDomHelper
     {
         $cmd = NEXTDOM_ROOT.'/scripts/sick.php';
         $cmd .= ' >> ' . \log::getPathToLog('sick') . ' 2>&1';
-        \system::php($cmd);
+        SystemHelper::php($cmd);
     }
 
     /**
@@ -384,7 +384,7 @@ class NextDomHelper
         }
         $cmd = NEXTDOM_ROOT . '/install/update.php ' . $params;
         $cmd .= ' >> ' . \log::getPathToLog('update') . ' 2>&1 &';
-        \system::php($cmd);
+        SystemHelper::php($cmd);
     }
 
     /**
@@ -491,7 +491,7 @@ class NextDomHelper
         if (\cron::jeeCronRun()) {
             echo __('core.disable-cron-master');
             $pid = \cron::getPidFile();
-            \system::kill($pid);
+            SystemHelper::kill($pid);
             echo " $okStr\n";
         }
 
@@ -716,7 +716,7 @@ class NextDomHelper
             \log::add('nextdom', 'error', $e->getMessage());
         }
         try {
-            \eqLogic::checkAlive();
+            EqLogicManager::checkAlive();
         } catch (CoreException $e) {
 
         }
@@ -1051,7 +1051,7 @@ class NextDomHelper
         PluginManager::stop();
         CacheManager::persist();
         if (self::isCapable('sudo')) {
-            exec(\system::getCmdSudo() . $command);
+            exec(SystemHelper::getCmdSudo() . $command);
         } else {
             throw new CoreException($errorMessage);
         }
@@ -1062,7 +1062,7 @@ class NextDomHelper
      */
     public static function forceSyncHour()
     {
-        shell_exec(\system::getCmdSudo() . 'service ntp stop;' . \system::getCmdSudo() . 'ntpdate -s ' . \config::byKey('ntp::optionalServer', 'core', '0.debian.pool.ntp.org') . ';' . \system::getCmdSudo() . 'service ntp start');
+        shell_exec(SystemHelper::getCmdSudo() . 'service ntp stop;' . SystemHelper::getCmdSudo() . 'ntpdate -s ' . \config::byKey('ntp::optionalServer', 'core', '0.debian.pool.ntp.org') . ';' . SystemHelper::getCmdSudo() . 'service ntp start');
     }
 
     /**
@@ -1070,18 +1070,12 @@ class NextDomHelper
      */
     public static function cleanFileSystemRight()
     {
-        $processUser = \system::get('www-uid');
-        $processGroup = \system::get('www-gid');
-        if ($processUser == '') {
-            $processUser = posix_getpwuid(posix_geteuid());
-            $processUser = $processUser['name'];
-        }
-        if ($processGroup == '') {
-            $processGroup = posix_getgrgid(posix_getegid());
-            $processGroup = $processGroup['name'];
-        }
         $path = __DIR__ . '/../../*';
-        exec(\system::getCmdSudo() . 'chown -R ' . $processUser . ':' . $processGroup . ' ' . $path . ';' . \system::getCmdSudo() . 'chmod 775 -R ' . $path);
+		$cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . $path;
+		$cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . $path;
+		$cmd .= SystemHelper::getCmdSudo() . 'find /var/log/nextdom -type f -exec chmod 664 {} +;';
+		$cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . $path;
+		exec($cmd);
     }
 
     /**
@@ -1108,7 +1102,7 @@ class NextDomHelper
         }
         if (!file_exists($result)) {
             mkdir($result, 0774, true);
-            $cmd = \system::getCmdSudo() . 'chown -R ' . \system::get('www-uid') . ':' . \system::get('www-gid') . ' ' . $result . ';';
+            $cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . $result . ';';
             \com_shell::execute($cmd);
         }
         return $result;
