@@ -108,6 +108,7 @@ $("#bt_saveOpenLog").on('click', function (event) {
     var el = $(this);
     bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec la sauvegarde}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée.}}<span style="color:red;font-weight: bold;">IMPORTANT la restauration d\'un backup est une opération risquée et n\'est à utiliser qu\'en dernier recours.</span>', function (result) {
         if (result) {
+            switchNotify(0);
             $.hideAlert();
             el.find('.fa-refresh').show();
             el.find('.fa-file').hide();
@@ -119,6 +120,7 @@ $("#bt_saveOpenLog").on('click', function (event) {
                     notify("Erreur", error.message, 'error');
                 },
                 success: function () {
+                    switchNotify(1);
                     getNextDomLog(1, 'restore');
                 }
             });
