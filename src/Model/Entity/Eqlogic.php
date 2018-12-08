@@ -1,4 +1,19 @@
 <?php
+/* This file is part of NextDom Software.
+ *
+ * NextDom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * NextDom Software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 namespace NextDom\Model\Entity;
 
@@ -7,7 +22,17 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Eqlogic
  *
- * @ORM\Table(name="eqLogic", uniqueConstraints={@ORM\UniqueConstraint(name="unique", columns={"name", "object_id"})}, indexes={@ORM\Index(name="eqTypeName", columns={"eqType_name"}), @ORM\Index(name="name", columns={"name"}), @ORM\Index(name="logical_id", columns={"logicalId"}), @ORM\Index(name="generic_type", columns={"generic_type"}), @ORM\Index(name="logica_id_eqTypeName", columns={"logicalId", "eqType_name"}), @ORM\Index(name="object_id", columns={"object_id"}), @ORM\Index(name="timeout", columns={"timeout"}), @ORM\Index(name="eqReal_id", columns={"eqReal_id"}), @ORM\Index(name="tags", columns={"tags"})})
+ * @ORM\Table(name="eqLogic", uniqueConstraints={
+ *  @ORM\UniqueConstraint(name="unique", columns={"name", "object_id"})}, indexes={
+ *  @ORM\Index(name="eqTypeName", columns={"eqType_name"}), 
+ *  @ORM\Index(name="name", columns={"name"}), @ORM\Index(name="logical_id", columns={"logicalId"}), 
+ *  @ORM\Index(name="generic_type", columns={"generic_type"}), 
+ *  @ORM\Index(name="logica_id_eqTypeName", columns={"logicalId", "eqType_name"}), 
+ *  @ORM\Index(name="object_id", columns={"object_id"}), 
+ *  @ORM\Index(name="timeout", columns={"timeout"}),
+ *  @ORM\Index(name="eqReal_id", columns={"eqReal_id"}), 
+ *  @ORM\Index(name="tags", columns={"tags"})
+ * })
  * @ORM\Entity
  */
 class Eqlogic
