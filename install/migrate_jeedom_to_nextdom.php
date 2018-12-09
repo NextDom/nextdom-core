@@ -40,6 +40,7 @@ if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SE
     echo "La page que vous demandez ne peut être trouvée.";
     exit();
 }
+
 echo "[START MIGRATION]\n";
 $starttime = strtotime('now');
 if (isset($argv)) {
@@ -57,7 +58,7 @@ try {
 
     try {
         echo "Sends the start event of the migration...";
-        nextdom::event('begin_restore', true);
+        \NextDom\Helpers\NextDomHelper::event('begin_restore', true);
         echo "OK\n";
     } catch (Exception $e) {
         echo '***ERROR*** ' . $e->getMessage();
@@ -105,7 +106,7 @@ try {
 
     try {
         echo "Check the rights...";
-        nextdom::cleanFileSytemRight();
+        \NextDom\Helpers\NextDomHelper::cleanFileSystemRight();
         echo "OK\n";
     } catch (Exception $e) {
         echo '***ERROR*** ' . $e->getMessage();
@@ -120,7 +121,7 @@ try {
     echo "OK\n";
 
     try {
-        nextdom::stop();
+        \NextDom\Helpers\NextDomHelper::stopSystem();
     } catch (Exception $e) {
         $e->getMessage();
     }
@@ -197,7 +198,7 @@ try {
 
 	echo "Restoration of plugins...";
   	system('cp -fr /tmp/nextdombackup/plugins/* ' . $nextdom_dir . '/plugins' );
-    foreach (plugin::listPlugin(true) as $plugin) {
+    foreach (\NextDom\Managers\PluginManager::listPlugin(true) as $plugin) {
         $plugin_id = $plugin->getId();
         $dependancy_info = $plugin->dependancy_info(true);
         if (method_exists($plugin_id, 'restore')) {
@@ -206,7 +207,7 @@ try {
             echo "OK\n";
         }
         echo 'Reinitialization dependencies : ' . $plugin_id . '... \n';
-        $cache = cache::byKey('dependancy' . $plugin->getId());
+        $cache = \NextDom\Managers\CacheManager::byKey('dependancy' . $plugin->getId());
         $cache->remove();
         cache::set('dependancy' . $plugin   ->getId(), "nok");
     }
@@ -217,7 +218,7 @@ try {
     echo "OK\n";
 
     config::save('hardware_name', '');
-    $cache = cache::byKey('nextdom::isCapable::sudo');
+    $cache = \NextDom\Managers\CacheManager::byKey('\NextDom\Helpers\NextDomHelper::isCapable::sudo');
     $cache->remove();
 
     try {
@@ -229,23 +230,21 @@ try {
     }
 
     echo "Restoration of rights...";
-    shell_exec('chmod 775 -R ' . __DIR__ );
-    shell_exec('chown -R www-data:www-data ' . __DIR__ );
-    shell_exec('chmod 775 -R /var/log/nextdom');
-    shell_exec('chown -R www-data:www-data /var/log/nextdom');
+    \NextDom\Helpers\NextDomHelper::cleanFileSystemRight();
+    // TODO: Oula, c'est chaud ça
     shell_exec('chmod 777 -R /tmp/');
     shell_exec('chown www-data:www-data -R /tmp/');
     echo "OK\n";
 
     try {
-        nextdom::start();
+        \NextDom\Helpers\NextDomHelper::startSystem();
     } catch (Exception $e) {
         echo $e->getMessage();
     }
 
     try {
         echo "Sends the event of the end of the backup...";
-        nextdom::event('end_migration');
+        \NextDom\Helpers\NextDomHelper::event('end_migration');
         echo "OK\n";
     } catch (Exception $e) {
         echo '***ERREUR*** ' . $e->getMessage();
@@ -257,6 +256,6 @@ try {
     echo 'Error during migration : ' . $e->getMessage();
     echo 'Details : ' . print_r($e->getTrace(), true);
     echo "[END MIGRATION ERROR]\n";
-    nextdom::start();
+    \NextDom\Helpers\NextDomHelper::startSystem();
     throw $e;
 }
