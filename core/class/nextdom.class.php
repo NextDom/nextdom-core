@@ -203,7 +203,7 @@ class nextdom
         return NextDomHelper::checkOngoingThread($cmd);
     }
 
-    public static function retrievePidThread(string $cmd): string
+    public static function retrievePidThread(string $cmd)
     {
         return NextDomHelper::retrievePidThread($cmd);
     }
