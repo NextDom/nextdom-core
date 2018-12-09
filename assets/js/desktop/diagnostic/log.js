@@ -72,27 +72,17 @@
   });
 });
 
- $("#bt_removeAllLog").on('click', function(event) {
-  bootbox.confirm("{{Etes-vous sûr de vouloir supprimer tous les logs ?}}", function(result) {
+$("#bt_removeAllLog").on('click', function(event) {
+  bootbox.confirm("{{Êtes-vous sûr de vouloir supprimer tous les logs ?}}", function(result) {
    if (result) {
-    $.ajax({
-      type: "POST",
-      url: "core/ajax/log.ajax.php",
-      data: {
-       action: "removeAll",
-     },
-     dataType: 'json',
-     error: function(request, status, error) {
-       handleAjaxError(request, status, error);
+    nextdom.log.removeAll({
+      error: function (error) {
+       $('#div_alertError').showAlert({message: error.message, level: 'danger'});
      },
      success: function(data) {
-      if (data.state != 'ok') {
-       notify("Core",data.result,"error");
-       return;
-     }
-     loadPage('index.php?v=d&p=log');
-   }
- });
+      loadPage('index.php?v=d&p=log');
+    }
+  });
   }
 });
 });

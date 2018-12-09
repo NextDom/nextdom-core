@@ -129,6 +129,8 @@ class Translate
     /**
      * Obtenir les traductions pour la langue courante
      *
+     * TODO: Vérifier le chargement pour les plugins
+     * 
      * @return mixed
      */
     public static function getTranslation(): array

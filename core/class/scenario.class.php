@@ -165,7 +165,7 @@ class scenario
 
     public static function control()
     {
-        ScenarioManager::control(__FILE__);
+        ScenarioManager::control();
     }
 
     /**
@@ -338,8 +338,9 @@ class scenario
      */
     public function execute($trigger = '', $message = '')
     {
-        if ($this->getCache('tags') != '') {
-            $this->setTags($this->getCache('tags'));
+		$tags = $this->getCache('tags');
+		if ($tags != '') {
+            $this->setTags($tags);
             $this->setCache('tags', '');
         }
         if ($this->getIsActive() != 1) {
@@ -827,31 +828,32 @@ class scenario
 
     /**
      *
-     * @return type
+     * @return mixed
      */
     public function getElement()
     {
         if (count($this->_elements) > 0) {
             return $this->_elements;
         }
-        $return = array();
+        $result = array();
         $elements = $this->getScenarioElement();
+        $elementId = -1;
         if (is_array($elements)) {
-            foreach ($this->getScenarioElement() as $element_id) {
-                $element = ScenarioElementManager::byId($element_id);
+            foreach ($this->getScenarioElement() as $elementId) {
+                $element = ScenarioElementManager::byId($elementId);
                 if (is_object($element)) {
-                    $return[] = $element;
+                    $result[] = $element;
                 }
             }
-            $this->_elements = $return;
-            return $return;
+            $this->_elements = $result;
+            return $result;
         }
         if ($elements != '') {
-            $element = ScenarioElementManager::byId($element_id);
+            $element = ScenarioElementManager::byId($elementId);
             if (is_object($element)) {
-                $return[] = $element;
-                $this->_elements = $return;
-                return $return;
+                $result[] = $element;
+                $this->_elements = $result;
+                return $result;
             }
         }
         return array();
@@ -1071,8 +1073,9 @@ class scenario
     public function toArray()
     {
         $return = utils::o2a($this, true);
-        $return['state'] = $this->getCache('state');
-        $return['lastLaunch'] = $this->getCache('lastLaunch');
+		$cache = $this->getCache(array('state', 'lastLaunch'));
+		$return['state'] = $cache['state'];
+        $return['lastLaunch'] = $cache['lastLaunch'];
         return $return;
     }
 
@@ -1351,10 +1354,7 @@ class scenario
      */
     public function getSchedule()
     {
-        if (is_json($this->schedule)) {
-            return json_decode($this->schedule, true);
-        }
-        return $this->schedule;
+        return is_json($this->schedule, $this->schedule);
     }
 
     /**
@@ -1395,10 +1395,7 @@ class scenario
      */
     public function getScenarioElement()
     {
-        if (is_json($this->scenarioElement)) {
-            return json_decode($this->scenarioElement, true);
-        }
-        return $this->scenarioElement;
+        return is_json($this->scenarioElement, $this->scenarioElement);
     }
 
     /**
@@ -1421,10 +1418,7 @@ class scenario
      */
     public function getTrigger()
     {
-        if (is_json($this->trigger)) {
-            return json_decode($this->trigger, true);
-        }
-        return array($this->trigger);
+        return is_json($this->trigger, array($this->trigger));
     }
 
     /**
@@ -1695,12 +1689,13 @@ class scenario
      */
     public function getCache($_key = '', $_default = '')
     {
-        return utils::getJsonAttr(cache::byKey('scenarioCacheAttr' . $this->getId())->getValue(), $_key, $_default);
+        $scenarioCacheAttr = cache::byKey('scenarioCacheAttr' . $this->getId())->getValue();
+        return utils::getJsonAttr($scenarioCacheAttr, $_key, $_default);
     }
 
     /**
      *
-     * @param string $_key
+     * @param mixed $_key
      * @param mixed $_value
      */
     public function setCache($_key, $_value = null)
