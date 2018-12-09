@@ -224,9 +224,8 @@ step_nextdom_apache_php() {
 
 
 step_nextdom_configuration() {
-    cp ${WEBSERVER_HOME}/assets/config ${CONFIGS_DIRECTORY}
-    mkdir ${WEBSERVER_HOME}/core/config
-    ln -s ${CONFIGS_DIRECTORY} /var/www/html/core/config
+    cp -r ${WEBSERVER_HOME}/assets/config ${CONFIGS_DIRECTORY}
+    ln -s ${CONFIGS_DIRECTORY}/config ${WEBSERVER_HOME}/core
     cp ${WEBSERVER_HOME}/core/config/common.config.sample.php ${WEBSERVER_HOME}/core/config/common.config.php
 
     sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${WEBSERVER_HOME}/core/config/common.config.php
