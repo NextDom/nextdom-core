@@ -1689,7 +1689,8 @@ class scenario
      */
     public function getCache($_key = '', $_default = '')
     {
-        return utils::getJsonAttr(cache::byKey('scenarioCacheAttr' . $this->getId())->getValue(), $_key, $_default);
+        $scenarioCacheAttr = cache::byKey('scenarioCacheAttr' . $this->getId())->getValue();
+        return utils::getJsonAttr($scenarioCacheAttr, $_key, $_default);
     }
 
     /**

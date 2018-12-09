@@ -40,7 +40,7 @@ require_once NEXTDOM_ROOT.'/core/class/cache.class.php';
 
 class BackupManager {
     /**
-     * Lancer une sauvegarde du système
+     * Start system backup
      *
      * @param bool $taskInBackground Lancer la sauvegarde en tâche de fond.
      */
@@ -77,9 +77,9 @@ class BackupManager {
     }
 
     /**
-     * Supprimer une sauvegarde
+     * Remove a backup file
      *
-     * @param string $backupFilePath Chemin du fichier de sauvegarde
+     * @param string $backupFilePath Backup file path
      *
      * @throws CoreException
      */
@@ -93,11 +93,11 @@ class BackupManager {
     }
 
     /**
-     * Restaure une sauvegarde
+     * Restore a backup from file
      *
-     * @param string $backupFilePath Chemin de la sauvegarde
+     * @param string $backupFilePath Backup file path
      *
-     * @param bool $taskInBackground Lancer en tâche de fond
+     * @param bool $taskInBackground Start backup task in background
      */
     public static function restore(string $backupFilePath = '', bool $taskInBackground = false)
     {
