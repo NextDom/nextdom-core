@@ -16,6 +16,10 @@ CYAN="\\033[1;36m"
 LOGS_DIRECTORY=/var/log/nextdom
 mkdir -p ${LOGS_DIRECTORY}
 
+# configs directory
+CONFIGS_DIRECTORY=/var/lib/nextdom
+mkdir -p ${CONFIGS_DIRECTORY}
+
 # Functions
 
 usage() { echo "Usage: $0 [-h <help>] [-i <DB ip/hostname>] [-z <DB port>] [-d <DB name>] [-u <DB username>] [-p <DB user password>] " 1>&2; exit 1; }
@@ -220,6 +224,9 @@ step_nextdom_apache_php() {
 
 
 step_nextdom_configuration() {
+    cp ${WEBSERVER_HOME}/assets/config ${CONFIGS_DIRECTORY}
+    mkdir ${WEBSERVER_HOME}/core/config
+    ln -s ${CONFIGS_DIRECTORY} /var/www/html/core/config
     cp ${WEBSERVER_HOME}/core/config/common.config.sample.php ${WEBSERVER_HOME}/core/config/common.config.php
 
     sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${WEBSERVER_HOME}/core/config/common.config.php

@@ -1,6 +1,6 @@
     <?php
 
-require_once(__DIR__.'/../../core/config/common.config.php');
+require_once(__DIR__ . '/../../core/config/common.config.php');
 global $CONFIG;
 
 $HOST=' ';
