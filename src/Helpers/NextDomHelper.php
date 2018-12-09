@@ -1070,7 +1070,6 @@ class NextDomHelper
      */
     public static function cleanFileSystemRight()
     {
-        return;
         $path = __DIR__ . '/../../*';
 		$cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . $path . ';';
 		$cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . $path . ';';
