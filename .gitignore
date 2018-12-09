@@ -35,3 +35,5 @@ docs/*
 
 
 tests/gui/chromedriver*
+
+core/config
