@@ -61,8 +61,9 @@
                             <div class="card-header card-header-icon">
                                 <div class="card-icon text-center" style="background:{{ child.getDisplay("tagColor") }}">
                                     {{ child.getDisplay("icon")|raw }}</i>
-                                </div>
-                                <p class="card-category" style="color:{{ child.getDisplay("tagColor") }}"><b>{{ child.getName() }}</b></p>
+                                </div >
+                                    <p class="card-category" style="color:{{ child.getDisplay("tagColor") }}"><b>{{ child.getName() }}</b></p>
+                                <i class="fas fa-compress pull-right cursor bt_editDashboardWidgetAutoResize" id="edit_object_{{ child.getId() }}" data-mode="0" style="margin-right : 10px; display: none;"></i>
                             </div>
                             <div class="card-body">
                                 <div class="div_displayEquipement" id="div_ob{{ child.getId() }}" style="width: 100%;padding-top:3px;margin-bottom : 3px;">
