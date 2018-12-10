@@ -480,7 +480,7 @@ class PrepareView
      *
      * @throws \Exception
      */
-    public function getContentByAjax()
+    public static function getContentByAjax()
     {
         try {
             \include_file('core', 'authentification', 'php');

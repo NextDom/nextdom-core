@@ -374,8 +374,12 @@ class JeeObjectManager
      */
     public static function getGlobalHtmlSummary($version = 'desktop')
     {
+        $cache = CacheManager::byKey('globalSummaryHtml' . $version);
+        if ($cache->getValue() != '') {
+            return $cache->getValue();
+        }
         $objects = self::all();
-        $def = \config::byKey('object:summary' . $version);
+        $def = \config::byKey('object:summary');
         $values = array();
         $return = '<span class="objectSummaryglobal" data-version="' . $version . '">';
         foreach ($def as $key => $value) {

@@ -194,6 +194,9 @@ class PluginManager
         return strcmp(strtolower($firstPlugin->getName()), strtolower($secondPluginName->getName()));
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function heartbeat() {
 		foreach (self::listPlugin(true) as $plugin) {
 			try {
@@ -221,7 +224,7 @@ class PluginManager
 						$plugin->deamon_start(true);
 					}
 				}
-			} catch (\Exception $e) {
+			} catch (CoreException $e) {
  			}
 		}
 	}

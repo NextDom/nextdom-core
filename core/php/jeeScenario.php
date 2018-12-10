@@ -36,7 +36,7 @@ if (isset($argv)) {
 if (init('scenarioElement_id') != '') {
     scenario::doIn(array('scenario_id' => init('scenario_id'), 'scenarioElement_id' => init('scenarioElement_id'), 'second' => 0, 'tags' => json_decode(init('tags'), true)));
 } else {
-    $scenario = scenario::byId(init('scenario_id'));
+    $scenario = scenario::byId(intval(init('scenario_id')));
     if (!is_object($scenario)) {
         log::add('scenario', 'info', __('Scénario non trouvé. Vérifiez ID : ', __FILE__) . init('scenario_id'));
         die(__('Scénario non trouvé. Vérifiez ID : ', __FILE__) . init('scenario_id'));

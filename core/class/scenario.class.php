@@ -165,7 +165,7 @@ class scenario
 
     public static function control()
     {
-        ScenarioManager::control(__FILE__);
+        ScenarioManager::control();
     }
 
     /**
@@ -1695,7 +1695,7 @@ class scenario
 
     /**
      *
-     * @param string $_key
+     * @param mixed $_key
      * @param mixed $_value
      */
     public function setCache($_key, $_value = null)

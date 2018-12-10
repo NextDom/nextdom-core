@@ -96,6 +96,11 @@ class plugin
         PluginManager::cronHourly();
     }
 
+    public static function heartbeat()
+    {
+        PluginManager::heartbeat();
+    }
+
     public static function start()
     {
         PluginManager::start();
