@@ -122,12 +122,18 @@ try {
     echo 'Créer l\'archive...';
 
     $excludes = array(
-        'tmp',
-        'log',
-        'docs',
-        'doc',
+        'assets',
+        'core',
+        'data',
+        'desktop',
+        'install',
+        'mobile',
+        'public',
+        'scripts',
+        'src',
         'tests',
-        'support',
+        'tanslations',
+        'vendor',
         'backup',
         '.git',
         '.log',

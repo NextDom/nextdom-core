@@ -40,7 +40,7 @@ if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SE
     echo "La page que vous demandez ne peut être trouvée.";
     exit();
 }
-echo "[START MIGRATION]\n";
+echo "[START RESTORE/MIGRATION]\n";
 $starttime = strtotime('now');
 if (isset($argv)) {
     foreach ($argv as $arg) {
