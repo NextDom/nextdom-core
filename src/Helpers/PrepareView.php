@@ -370,6 +370,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/core/js/cache.class.js';
             $pageData['JS_POOL'][] = '/core/js/report.class.js';
             $pageData['JS_POOL'][] = '/core/js/note.class.js';
+            $pageData['JS_POOL'][] = '/core/js/listener.class.js';
             $pageData['JS_POOL'][] = '/core/js/jeedom.class.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootbox/bootbox.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/highstock.js';
@@ -479,7 +480,7 @@ class PrepareView
      *
      * @throws \Exception
      */
-    public function getContentByAjax()
+    public static function getContentByAjax()
     {
         try {
             \include_file('core', 'authentification', 'php');

@@ -287,8 +287,18 @@ function displayException($e)
     return $message;
 }
 
-function is_json($_string)
+function is_json($_string, $_default = null)
 {
+    if ($_default !== null) {
+        if (!is_string($_string)) {
+            return $_default;
+        }
+        $return = json_decode($_string, true, 512, JSON_BIGINT_AS_STRING);
+        if (!is_array($return)) {
+            return $_default;
+        }
+        return $return;
+    }
     return ((is_string($_string) && is_array(json_decode($_string, true, 512, JSON_BIGINT_AS_STRING)))) ? true : false;
 }
 
@@ -992,25 +1002,8 @@ function getNtpTime()
 
 function cast($sourceObject, $destination)
 {
-    if (is_string($destination)) {
-        $destination = new $destination();
-    }
-    $sourceReflection = new ReflectionObject($sourceObject);
-    $destinationReflection = new ReflectionObject($destination);
-    $sourceProperties = $sourceReflection->getProperties();
-    foreach ($sourceProperties as $sourceProperty) {
-        $sourceProperty->setAccessible(true);
-        $name = $sourceProperty->getName();
-        $value = $sourceProperty->getValue($sourceObject);
-        if ($destinationReflection->hasProperty($name)) {
-            $propDest = $destinationReflection->getProperty($name);
-            $propDest->setAccessible(true);
-            $propDest->setValue($destination, $value);
-        } else {
-            $destination->$name = $value;
-        }
-    }
-    return $destination;
+    $obj_in = serialize($sourceObject);
+    return unserialize('O:' . strlen($destination) . ':"' . $destination . '":' . substr($obj_in, $obj_in[2] + 7));
 }
 
 function getIpFromString($_string)
@@ -1480,9 +1473,17 @@ function deleteSession($_id)
     @session_write_close();
 }
 
-function unautorizedInDemo()
-{
-    if ($_SESSION['user']->getLogin() == 'demo') {
+function unautorizedInDemo($_user = null) {
+    if ($_user === null) {
+        if (!isset($_SESSION) || !isset($_SESSION['user'])) {
+            return;
+        }
+        $_user = $_SESSION['user'];
+    }
+    if (!is_object($_user)) {
+        return;
+    }
+    if ($_user->getLogin() == 'demo') {
         throw new Exception(__('Cette action n\'est pas autorisée en mode démo', __FILE__));
     }
 }

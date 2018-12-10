@@ -544,6 +544,7 @@ print_log_ok
 
 chmod 777 -R /tmp/nextdom
 chown -R www-data:www-data /tmp/nextdom
+chown -R www-data:www-data ${WEBSERVER_HOME}/var
 
 [[ -f /root/.mysqlroot ]] && rm -f /root/.mysqlroot
 

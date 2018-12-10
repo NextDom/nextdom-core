@@ -68,6 +68,17 @@ class CmdManager
         return $inputs;
     }
 
+    public static function byIds($_ids) {
+		if (!is_array($_ids) || count($_ids) == 0) {
+			return;
+		}
+		$in = implode(',', $_ids);
+		$sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+                FROM cmd
+                WHERE id IN (' . $in . ')';
+		return self::cast(\DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+	}
+
     /**
      * Get command by his id
      *
@@ -100,12 +111,7 @@ class CmdManager
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                 FROM cmd
                 ORDER BY id';
-        $results = \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL);
-        $return = array();
-        foreach ($results as $result) {
-            $return[] = self::byId($result['id']);
-        }
-        return $return;
+        return self::cast(\DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
     }
 
     /**
@@ -588,23 +594,19 @@ class CmdManager
             return $input;
         }
         if (is_array($input)) {
-            foreach ($input as $key => $value) {
-                $input[$key] = self::cmdToHumanReadable($value);
-            }
-            return $input;
+            return json_decode(self::cmdToHumanReadable(json_encode($input)), true);
         }
         $replace = array();
         preg_match_all("/#([0-9]*)#/", $input, $matches);
-        foreach ($matches[1] as $cmd_id) {
-            if (isset($replace['#' . $cmd_id . '#'])) {
+		if (count($matches[1]) == 0) {
+			return $input;
+		}
+		$cmds = self::byIds($matches[1]);
+		foreach ($cmds as $cmd) {
+			if (isset($replace['#' . $cmd->getId() . '#'])) {
                 continue;
             }
-            if (is_numeric($cmd_id)) {
-                $cmd = self::byId($cmd_id);
-                if (is_object($cmd)) {
-                    $replace['#' . $cmd_id . '#'] = '#' . $cmd->getHumanName() . '#';
-                }
-            }
+            $replace['#' . $cmd->getId() . '#'] = '#' . $cmd->getHumanName() . '#';
         }
         return str_replace(array_keys($replace), $replace, $input);
     }
@@ -723,9 +725,10 @@ class CmdManager
             }
             $mc = CacheManager::byKey('cmdCacheAttr' . $cmd_id);
             if (\utils::getJsonAttr($mc->getValue(), 'value', null) !== null) {
-                $collectDate = \utils::getJsonAttr($mc->getValue(), 'collectDate', date('Y-m-d H:i:s'));
-                $valueDate = \utils::getJsonAttr($mc->getValue(), 'valueDate', date('Y-m-d H:i:s'));
-                $cmd_value = \utils::getJsonAttr($mc->getValue(), 'value', '');
+                $cmdCacheAttrValue = $mc->getValue();
+                $collectDate = \utils::getJsonAttr($cmdCacheAttrValue, 'collectDate', date('Y-m-d H:i:s'));
+                $valueDate = \utils::getJsonAttr($cmdCacheAttrValue, 'valueDate', date('Y-m-d H:i:s'));
+                $cmd_value = \utils::getJsonAttr($cmdCacheAttrValue, 'value', '');
             } else {
                 $cmd = self::byId($cmd_id);
                 if (!is_object($cmd) || $cmd->getType() != 'info') {

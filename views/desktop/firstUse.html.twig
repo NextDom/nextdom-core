@@ -49,19 +49,19 @@
             <div class="stepwizard-row setup-panel">
                 <div class="stepwizard-step">
                     <a href="#step-1" type="button" class="btn btn-primary primary-bg stepwizard-btn-circle"></a>
-                    <p>{{ 'Étape 1' }}</p>
+                    <p>{{ 'firstuse.step'|trans ~ ' 1' }}</p>
                 </div>
                 <div class="stepwizard-step">
                     <a href="#step-2" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled"></a>
-                    <p>{{ 'Étape 2' }}</p>
+                    <p>{{ 'firstuse.step'|trans ~ ' 2' }}</p>
                 </div>
                 <div class="stepwizard-step">
                     <a href="#step-3" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled"></a>
-                    <p>{{ 'Étape 3' }}</p>
+                    <p>{{ 'firstuse.step'|trans ~ ' 3' }}</p>
                 </div>
                 <div class="stepwizard-step">
                     <a href="#step-4" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled"></a>
-                    <p>{{ 'Étape 4' }}</p>
+                    <p>{{ 'firstuse.step'|trans ~ ' 4' }}</p>
                 </div>
             </div>
         </div>
@@ -77,66 +77,65 @@
                 <!-- Step 1 section -->
                 <div class="row setup-content" id="step-1">
                     <div class="stepwizard">
-                        <h2 class="login-box-msg">{{ 'Bienvenue sur NextDom !' }}</h2>
-                        <h5>{{ 'Bravo ! Vous venez d\'installer votre solution domotique, l\'assistant de première utilisation est activé !' }}</h5>
-                        <h5>{{ 'Celui-ci va vous guider dans le processus de configuration de votre solution domotique...' }}</h5>
+                        <h2 class="login-box-msg">{{ 'firstuse.welcome-title'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
+                        <h5>{{ 'firstuse.welcome-content'|trans|nl2br }}</h5>  
                     </div>
-                    <button id="toStep2" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'Suivant' }}&nbsp;&nbsp;<i class="fa fa-caret-right"></i></button>
+                    <button id="toStep2" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'common.next'|trans }}&nbsp;&nbsp;<i class="fa fa-caret-right"></i></button>
                 </div>
 
                 <!-- Step 2 section -->
                 <div class="row setup-content" id="step-2">
                     <div class="stepwizard">
-                        <h2 class="login-box-msg">{{ 'Sécurisez votre NextDom !' }}</h2>
-                        <h5>{{ 'Pour commencer, merci de définir un nouveau mot de passe administrateur pour améliorer la sécurité...' }}</h5>
+                        <h2 class="login-box-msg">{{ 'firstuse.password-title'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
+                        <h5>{{ 'firstuse.password-content'|trans }}</h5>
                         <div id="register" tabindex="500">
                             <div class="passwd stepwizard-passwd">
-                                <input type="password" id="in_change_password" placeholder="Nouveau mot de passe...">
+                                <input type="password" id="in_change_password" placeholder="{{ 'firstuse.password-placeholder'|trans }}">
                             </div>
                             <div class="passwd stepwizard-passwd">
-                                <input type="password" id="in_change_passwordToo" placeholder="Confirmer le mot de passe...">
+                                <input type="password" id="in_change_passwordToo" placeholder="{{ 'firstuse.password-confirm-placeholder'|trans }}">
                             </div>
                         </div>
                     </div>
-                    <button id="toStep3" class="btn btn-primary nextBtn pull-right primary-bg" type="button">{{ 'Suivant' }}&nbsp;&nbsp;<i class="fa fa-caret-right"></i></button>
-                    <button id="backStep1" class="btn btn-primary returnBtn pull-left primary-bg" type="button"><i class="fa fa-caret-left">&nbsp;&nbsp;</i>{{ 'Précédent' }}</button>
+                    <button id="toStep3" class="btn btn-primary nextBtn pull-right primary-bg" type="button">{{ 'common.next'|trans }}&nbsp;&nbsp;<i class="fa fa-caret-right"></i></button>
+                    <button id="backStep1" class="btn btn-primary returnBtn pull-left primary-bg" type="button"><i class="fa fa-caret-left">&nbsp;&nbsp;</i>{{ 'common.previous'|trans }}</button>
                 </div>
 
                 <!-- Step 3 section -->
                 <div class="row setup-content" id="step-3">
                     <div class="stepwizard">
-                        <h2 class="login-box-msg">{{ 'Connectez votre NextDom !' }}</h2>
-                        <h5>{{ 'En ajoutant ou connectant un Compte Market pour l\'installation de plugins...' }}</h5>
+                        <h2 class="login-box-msg">{{ 'firstuse.market-title'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
+                        <h5>{{ 'firstuse.market-content'|trans }}</h5>
                         <div class="row">
                             <div id="market" class="col-sm-12 col-md-6">
-                                <h5>{{ 'Je n\'ai pas de compte Market' }}</h5>
-                                <button class="dark btn" id="bt_compte_market"><i class="fa fa-sign-in">&nbsp;&nbsp;</i>{{ 'Je veux en créer un !' }}</button>
+                                <h5>{{ 'firstuse.market-noaccount'|trans }}</h5>
+                                <button class="dark btn" id="bt_compte_market"><i class="fa fa-sign-in">&nbsp;&nbsp;</i>{{ 'firstuse.market-wantaccount'|trans }}</button>
                             </div>
                             <div class="col-sm-12 col-md-6">
-                                <h5>{{ 'J\'ai déjà un compte market :' }}</h5>
+                                <h5>{{ 'firstuse.market-alreadyaccount'|trans }}</h5>
                                 <div class="mail stepwizard-passwd stepwizard-passwd2">
-                                    <input type="text" id="in_login_username_market" class="stepwizard-input" placeholder="{{ 'Nom dutilisateur...' }}">
+                                    <input type="text" id="in_login_username_market" class="stepwizard-input" placeholder="{{ 'firstuse.market-username-placeholder'|trans }}">
                                 </div>
                                 <div class="passwd stepwizard-passwd stepwizard-passwd2">
-                                    <input type="password" id="in_login_password_market" class="stepwizard-input" placeholder="{{ 'Mot de passe...' }}">
+                                    <input type="password" id="in_login_password_market" class="stepwizard-input" placeholder="{{ 'firstuse.market-password-placeholder'|trans }}">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button id="skipStep4" class="btn btn-primary nextBtn primary-bg" type="button"><i class="fa fa-ban">&nbsp;&nbsp;</i>{{ 'Ignorer' }}</button>
-                    <button id="toStep4" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'Suivant' }}&nbsp;&nbsp;<i class="fa fa-caret-right"></i></button>
-                    <button id="backStep2" class="btn btn-primary returnBtn primary-bg pull-left" type="button"><i class="fa fa-caret-left">&nbsp;&nbsp;</i>{{ 'Précédent' }}</button>
+                    <button id="skipStep4" class="btn btn-primary nextBtn primary-bg" type="button"><i class="fa fa-ban">&nbsp;&nbsp;</i>{{ 'common.ignore'|trans }}</button>
+                    <button id="toStep4" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'common.next'|trans }}&nbsp;&nbsp;<i class="fa fa-caret-right"></i></button>
+                    <button id="backStep2" class="btn btn-primary returnBtn primary-bg pull-left" type="button"><i class="fa fa-caret-left">&nbsp;&nbsp;</i>{{ 'common.previous'|trans }}</button>
                 </div>
 
                 <!-- Step 4 section -->
                 <div class="row setup-content" id="step-4">
                     <div class="stepwizard">
-                        <h2 class="login-box-msg">{{ 'Bravo ! La configuration de votre NextDom est terminée !' }}</h2>
-                        <h5>{{ 'Cliquer sur le bouton Terminer pour profiter de votre solution Domotique...' }}</h5>
+                        <h2 class="login-box-msg">{{ 'firstuse.congrats-title'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
+                        <h5>{{ 'firstuse.congrats-content'|trans }}</h5>
 
                         </div>
-                        <button id="finishConf" class="btn btn-primary nextBtn primary-bg pull-right ui-icon-closethick" type="button">{{ 'Terminer' }}&nbsp;&nbsp;<i class="fa fa-check-circle"></i></button>
-                        <button id="backStep3" class="btn btn-primary returnBtn primary-bg pull-left" type="button"><i class="fa fa-caret-left">&nbsp;&nbsp;</i>{{ 'Précédent' }}</button>
+                        <button id="finishConf" class="btn btn-primary nextBtn primary-bg pull-right ui-icon-closethick" type="button">{{ 'common.finish'|trans }}&nbsp;&nbsp;<i class="fa fa-check-circle"></i></button>
+                        <button id="backStep3" class="btn btn-primary returnBtn primary-bg pull-left" type="button"><i class="fa fa-caret-left">&nbsp;&nbsp;</i>{{ 'common.previous'|trans }}</button>
                     </div>
                 </div>
             </div>

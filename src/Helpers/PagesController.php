@@ -57,7 +57,7 @@ class PagesController
         'migration'      => Controller\MigrationController::class,
         'history'        => Controller\HistoryController::class,
         'timeline'       => Controller\TimelineController::class,
-        'shutdown'       => Controller\TimelineController::class,
+        'shutdown'       => Controller\ShutdownController::class,
         'health'         => Controller\HealthController::class,
         'profils'        => Controller\ProfilsController::class,
         'view'           => Controller\ViewController::class,

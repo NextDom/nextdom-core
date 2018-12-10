@@ -1,6 +1,25 @@
-str:
-  OK: OK
-  NOK: NOK
+common:
+  ok: OK
+  nok: NOK
+  back: Retour
+  disabled: Désactivé
+  in-progress: En cours
+  version: Version
+  next: Suivant
+  previous: Précédent
+  ignore: Ignorer
+  finish: Terminer
+
+connection:
+  home-msg: Connectez-vous pour accéder à votre session...
+  login-placeholder: Identifiant... (admin par défaut)
+  password-placeholder: Mot de passe...
+  two-factors-placeholder: Code à 2 facteurs
+  remember-title: En cochant cette case, vous n'aurez plus besoin de vous saisir vos identifiants.
+  remember-label: Se souvenir de moi ?
+  connect: Connexion
+  forgot: Oups, J'ai oublié mon mot de passe !
+
 core:
   error-401: 401 - Accès non autorisé
   error-ajax: Requête Ajax inconnue
@@ -11,67 +30,141 @@ core:
   enable-all-scenarios: Activer tous les scénarios
   disable-all-scenarios: Désactiver tous les scénarios
   incorrect-sys-date: "La date du système est incorrect (avant %s ou après %s) : "
+
 health:
-  update-to-date: Système à jour
-  cron-enabled: Service cron actif
-  cron-disabled: "Erreur cron : les crons sont désactivés. Allez dans Administration -> Moteur de tâches pour les réactiver"
-  scenario-enabled: Scénarios actifs
-  scenario-disabled: "Erreur scénario : tous les scénarios sont désactivés. Allez dans Outils -> Scénarios pour les réactiver"
-  NextDom-started: Démarré
-  system-date: Date système (dernière heure enregistrée)
-  system-date-error: Si la derniere heure enregistrée est fausse, il faut la remettre à zéro <a href="index.php?v=d&p=administration">ici</a>
-  default-authentication: Authentification par défaut
-  authentication-error: "Attention : vous avez toujours l'utilisateur admin/admin de configuré, cela représente une grave faille de sécurité, aller <a href=\"index.php?v=d&p=user\">ici</a> pour modifier le mot de passe de l'utilisateur admin"
-  sudo-rights: Droits sudo
-  sudo-error: Appliquez les droits root à NextDom
-  NextDom-version: Version NextDom
-  php-version: Version PHP
-  php-error: Une version de PHP supérieure ou égale à 7 est nécessaire.
-  os-version: Version OS
-  database-version: Version database
-  harddisk-freespace: Espace disque libre
-  available-memory: Mémoire disponible
-  enough-memory: Mémoire suffisante
-  processes-killed: Nombre de processus tué par le noyaux pour manque de mémoire. Votre système manque de mémoire. Essayez de reduire le nombre de plugins ou les scénarios
-  available-swap: Swap disponible
-  unknown: Inconnue
-  load: Charge
-  internal-network-conf: Configuration réseau interne
-  external-network-conf: Configuration réseau externe
-  network-config: Allez sur Administration -> Configuration -> Réseaux, puis configurez correctement la partie réseau
-  cache-persistence: Persistance du cache
-  cache-not-saved: Votre cache n'est pas sauvegardé. En cas de redémarrage, certaines informations peuvent être perdues. Essayez de lancer (à partir du moteur de tâches) la tâche cache::persist.
-  apache-private-tmp: Apache private tmp
   apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (NextDom ne peut marcher avec). Voir <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\">ici</a>
+  apache-private-tmp: Apache private tmp
+  authentication-error: "Attention : vous avez toujours l'utilisateur admin/admin de configuré, cela représente une grave faille de sécurité, aller <a href=\"index.php?v=d&p=user\">ici</a> pour modifier le mot de passe de l'utilisateur admin"
+  available-memory: Mémoire disponible
+  available-swap: Swap disponible
+  cache-not-saved: Votre cache n'est pas sauvegardé. En cas de redémarrage, certaines informations peuvent être perdues. Essayez de lancer (à partir du moteur de tâches) la tâche cache::persist.
+  cache-persistence: Persistance du cache
+  cron-disabled: "Erreur cron : les crons sont désactivés. Allez dans Administration -> Moteur de tâches pour les réactiver"
+  cron-enabled: Service cron actif
+  daemon-auto: Démon en mode automatique
+  daemon-config: Configuration démon
+  daemon-dependencies: Dépendances
+  daemon-manual: Démon en mode manuel
+  daemon-port: Port configuré
+  daemon-state: Statut démon
+  database-version: Version base de données
+  default-authentication: Authentification par défaut
+  enough-memory: Mémoire suffisante
+  external-network-conf: Configuration réseau externe
+  harddisk-freespace: Espace disque libre
+  health: Santé
+  internal-network-conf: Configuration réseau interne
+  launch-benchmark: Lancer un Benchmark
+  load: Charge
+  network-config: Allez sur Administration -> Configuration -> Réseaux, puis configurez correctement la partie réseau
+  no-info: Aucune santé spécifique
+  os-version: Version OS
+  php-error: Une version de PHP supérieure ou égale à 7 est nécessaire.
+  php-version: Version PHP
+  plugins-legend: Détails de la santé de vos plugins, cliquez sur le titre pour avoir le détail puis survolez les icônes pour plus d\'informations.
+  plugins-title: Santé des Plugins
+  processes-killed: Nombre de processus tué par le noyaux pour manque de mémoire. Votre système manque de mémoire. Essayez de reduire le nombre de plugins ou les scénarios
+  product-legend: Détails de la santé de votre solution, survolez les icônes pour plus d'informations.
+  product-title: Santé de NextDom
+  product-started: Démarré
+  product-version: Version NextDom
+  scenario-disabled: "Erreur scénario : tous les scénarios sont désactivés. Allez dans Outils -> Scénarios pour les réactiver"
+  scenario-enabled: Scénarios actifs
+  sudo-error: Appliquez les droits root à NextDom
+  sudo-rights: Droits sudo
+  system-date-error: Si la derniere heure enregistrée est fausse, il faut la remettre à zéro <a href="index.php?v=d&p=administration">ici</a>
+  system-date: Date système (dernière heure enregistrée)
+  unknown: Inconnue
+  update-to-date: Système à jour
+
 plugin:
   cant-report: Vous ne pouvez pas faire de rapport sur un plugin sans panneau
-connection:
-  home-msg: Connectez-vous pour accéder à votre session...
-  login-placeholder: Identifiant... (admin par défaut)
-  password-placeholder: Mot de passe...
-  two-factors-placeholder: Code à 2 facteurs
-  remember-title: En cochant cette case, vous n'aurez plus besoin de vous saisir vos identifiants.
-  remember-label: Se souvenir de moi ?
-  connect: Connexion
-  forgot: Oups, J'ai oublié mon mot de passe !
-"0-6 ou SUN-SAT": "0-6 ou SUN-SAT"
-"1 an": "1 an"
-"1 heure": "1 heure"
-"1 jour": "1 jour"
-"1 mois": "1 mois"
-"1 mot": "1 mot"
-"1 semaine": "1 semaine"
-"1 à 12": "1 à 12"
-"1-12 ou JAN-DEC": "1-12 ou JAN-DEC"
-"2 mots": "2 mots"
-"3d": "3d"
-"3 mois": "3 mois"
-"3 mots": "3 mots"
-"4 mots": "4 mots"
-"6 mois": "6 mois"
-"7 jours": "7 jours"
-"30 min": "30 min"
-"30min": "30min"
+  category:
+    security: Sécurité
+    automation-protocol: Protocole domotique
+
+welcome:
+  title: Bienvenue dans %productName%
+  congrats: Félicitations
+  congrats-content: Bienvenue dans %productName%, merci d'avoir choisi cet outil pour votre habitat connecté.
+  never-show: Ne plus afficher
+  hot-plugins: Plugins populaires
+  migrate-from: Migration Jeedom
+  doc-title: Documentation
+  doc-subtitle: Informez-vous pour mieux maitriser
+  doc-content : La lecture de la documentation est fastidieuse mais c'est une opération essentielle pour bien maitriser votre solution domotique.
+  doc-launch : Accéder à la documentation
+  forum-title: Forum
+  forum-subtitle : Trouver de l'aide sur notre forum
+  forum-content: | 
+                Le forum %productName% est un moyen simple et efficace de trouver la solution a votre problème.
+                Il y a sûrement une autre personne qui a déja rencontré le même problème que vous.
+                Si ce n'est pas le cas, posez votre question, la communauté y répondra au plus vite.
+  forum-launch: Accéder au forum
+  blog-title: Blog
+  blog-subtitle: Restez informé
+  blog-content: Retrouvez toute l'actualité de %productName% sur notre blog.
+  blog-launch: Accéder au blog
+  notify: Sauvegarde réussie
+
+footer:
+  licence: GPL Automation 2018
+  about: A Propos de
+
+sidebar:
+  menu-main: Menu Principal
+  menu-manage: Menu Gestion
+  dashboard: Dashboard
+  view: Vue(s)
+  design: Design(s)
+  objects-list: Liste Objets & Résumés
+  default-object: Objet par défaut
+  show-all: Afficher tout
+  plan3d: Plan(s) 3D
+  panel: Panel(s)
+  plugins: Plugins
+  plugins-markets: Gestion & Markets
+  tools: Outils
+  tools-summary: Résumé domotique
+  tools-interactions: Interactions
+  tools-scenarios: Scénarios
+  tools-notes: Notes
+  diagnostics: Diagnostics
+  diagnostics-health: Santé
+  diagnostics-eqlogics: Equipements
+  diagnostics-history: Historiques
+  diagnostics-timeline: Timeline
+  diagnostics-logs: Logs
+  diagnostics-realtime: Temps réel
+  expert: Expert
+  expert-admin: Administration & Réglages
+  expert-mobile: Version mobile
+  expert-logout: Se déconnecter
+  expert-restart: Redémarrer
+  expert-shutdown: Eteindre
+  expert-issue: Un Dysfonctionnement ?
+
+firstuse:
+  step: Étape
+  welcome-title: Bienvenue sur %productName% !
+  welcome-content: |
+                  Bravo ! Vous venez d'installer votre solution domotique, l'assistant de première utilisation est activé !
+                  Celui-ci va vous guider dans le processus de configuration de votre solution domotique...
+  password-title: Sécurisez votre %productName% !
+  password-content: Pour commencer, merci de définir un nouveau mot de passe administrateur pour améliorer la sécurité...
+  password-placeholder: Nouveau mot de passe...
+  password-confirm-placeholder: Confirmer le mot de passe...
+  market-title: Connectez votre %productName% !
+  market-content: En ajoutant ou connectant un compte Market pour l'installation de plugins...
+  market-noaccount: Je n'ai pas de compte Market
+  market-alreadyaccount: J'ai déjà un compte market
+  market-wantaccount: Je veux en créer un !
+  market-username-placeholder: Nom d'utilisateur...
+  market-password-placeholder: Mot de passe...
+  congrats-title: Bravo ! La configuration de votre %productName% est terminée !
+  congrats-content: Cliquez sur le bouton Terminer pour profiter de votre solution Domotique...
+
+# Ancien format
 "401 - Accès non autorisé": "401 - Accès non autorisé"
 "403 Access Forbidden": "403 Access Forbidden"
 "#value# pour la valeur": "#value# pour la valeur"

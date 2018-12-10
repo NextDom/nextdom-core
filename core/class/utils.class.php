@@ -22,6 +22,8 @@ require_once __DIR__ . '/../php/core.inc.php';
 class utils {
     /*     * *************************Attributs****************************** */
 
+    private static $properties = array();
+
     /*     * ***********************Methode static*************************** */
 
     public static function o2a($_object, $_noToArray = false) {
@@ -39,17 +41,11 @@ class utils {
         if (!$_noToArray && method_exists($_object, 'toArray')) {
             return $_object->toArray();
         }
-        $reflections = array();
-        $uuid = spl_object_hash($_object);
-        if (!class_exists(get_class($_object))) {
-            return array();
+        $class = get_class($_object);
+        if (!isset(self::$properties[$class])) {
+            self::$properties[$class] = (new ReflectionClass($class))->getProperties();
         }
-        if (!isset($reflections[$uuid])) {
-            $reflections[$uuid] = new ReflectionClass($_object);
-        }
-        $reflection = $reflections[$uuid];
-        $properties = $reflection->getProperties();
-        foreach ($properties as $property) {
+        foreach (self::$properties[$class] as $property) {
             $name = $property->getName();
             if ('_' !== $name[0]) {
                 $method = 'get' . ucfirst($name);
@@ -76,9 +72,7 @@ class utils {
                 $method = 'set' . ucfirst($key);
                 if (method_exists($_object, $method)) {
                     $function = new ReflectionMethod($_object, $method);
-                    if (is_json($value)) {
-                        $value = json_decode($value, true);
-                    }
+                    $value = is_json($value, $value);
                     if (is_array($value)) {
                         if ($function->getNumberOfRequiredParameters() == 2) {
                             foreach ($value as $arrayKey => $arrayValue) {
@@ -139,39 +133,46 @@ class utils {
 
     public static function setJsonAttr($_attr, $_key, $_value = null) {
         if ($_value === null && !is_array($_key)) {
-            if ($_attr != '' && is_json($_attr)) {
-                $attr = json_decode($_attr, true);
-                unset($attr[$_key]);
-                $_attr = json_encode($attr, JSON_UNESCAPED_UNICODE);
+            if (!is_array($_attr)) {
+                $_attr = is_json($_attr, array());
             }
+            unset($_attr[$_key]);
         } else {
-            if ($_attr == '' || !is_json($_attr)) {
-                $attr = array();
-            } else {
-                $attr = json_decode($_attr, true);
+            if (!is_array($_attr)) {
+                $_attr = is_json($_attr, array());
             }
             if (is_array($_key)) {
-                $attr = array_merge($attr, $_key);
+                $_attr = array_merge($_attr, $_key);
             } else {
-                $attr[$_key] = $_value;
+                $_attr[$_key] = $_value;
             }
-            $_attr = json_encode($attr, JSON_UNESCAPED_UNICODE);
         }
         return $_attr;
     }
 
-    public static function getJsonAttr($_attr, $_key = '', $_default = '') {
-        if ($_key == '') {
-            if ($_attr == '' || !is_json($_attr)) {
+    public static function getJsonAttr(&$_attr, $_key = '', $_default = '') {
+        if (is_array($_attr)) {
+            if ($_key == '') {
                 return $_attr;
             }
-            return json_decode($_attr, true);
+        } else {
+            if ($_key == '') {
+                $_attr = is_json($_attr, array());
+                return $_attr;
+            }
+            if ($_attr === '') {
+                return $_default;
+            }
+            $_attr = json_decode($_attr, true);
         }
-        if ($_attr === '') {
-            return $_default;
+        if (is_array($_key)) {
+            $return = array();
+            foreach ($_key as $key) {
+                $return[$key] = (isset($_attr[$key]) && $_attr[$key] !== '') ? $_attr[$key] : $_default;
+            }
+            return $return;
         }
-        $attr = json_decode($_attr, true);
-        return (isset($attr[$_key]) && $attr[$_key] !== '') ? $attr[$_key] : $_default;
+        return (isset($_attr[$_key]) && $_attr[$_key] !== '') ? $_attr[$_key] : $_default;
     }
 
     /*     * *********************Methode d'instance************************* */

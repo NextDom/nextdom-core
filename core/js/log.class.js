@@ -21,6 +21,46 @@
 
  nextdom.log.currentAutoupdate = [];
 
+ nextdom.log.list = function (_params) {
+     var paramsRequired = [];
+     var paramsSpecifics = {
+         global: _params.global || true,
+     };
+     try {
+         nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
+     } catch (e) {
+         (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
+         return;
+     }
+     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
+     var paramsAJAX = nextdom.private.getParamsAJAX(params);
+     paramsAJAX.url = 'core/ajax/log.ajax.php';
+     paramsAJAX.data = {
+         action: 'list',
+     };
+     $.ajax(paramsAJAX);
+ }
+
+  nextdom.log.removeAll = function (_params) {
+     var paramsRequired = [];
+     var paramsSpecifics = {
+         global: _params.global || true,
+     };
+     try {
+         nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
+     } catch (e) {
+         (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
+         return;
+     }
+     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
+     var paramsAJAX = nextdom.private.getParamsAJAX(params);
+     paramsAJAX.url = 'core/ajax/log.ajax.php';
+     paramsAJAX.data = {
+         action: 'removeAll',
+     };
+     $.ajax(paramsAJAX);
+ }
+
  nextdom.log.get = function (_params) {
      var paramsRequired = ['log'];
      var paramsSpecifics = {
@@ -119,10 +159,10 @@
              if($(this).attr('data-state') == 1){
                  $(this).attr('data-state',0);
                  $(this).removeClass('btn-warning').addClass('btn-success');
-                 $(this).html('<div><i class="fa fa-play">&nbsp;&nbsp;</i>{{Reprise}}</div>');
+                 $(this).html('<i class="fa fa-play"></i> {{Reprendre}}');
              }else{
                  $(this).removeClass('btn-success').addClass('btn-warning');
-                 $(this).html('<div><i class="fa fa-pause">&nbsp;&nbsp;</i>{{Pause}}</div>');
+                 $(this).html('<i class="fa fa-pause"></i> {{Pause}}');
                  $(this).attr('data-state',1);
                  _params.display.scrollTop(_params.display.height() + 200000);
                  nextdom.log.autoupdate(_params);

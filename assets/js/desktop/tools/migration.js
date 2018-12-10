@@ -67,7 +67,8 @@ function saveMigrationConfiguration() {
  */
 function startMigration() {
     var migrationButton = $('#bt_migrationNextDom');
-    bootbox.confirm('{{Etes-vous sûr de vouloir migrer}} ' + NEXTDOM_PRODUCT_NAME + ' {{avec}} <b>' + $('#sel_restoreBackupforMigration option:selected').text() + '</b> ? {{Une fois lancée, cette opération ne peut être annulée}}', function (result) {
+    var migrationConfirmation = '{{Etes-vous sûr de vouloir migrer}} ' + NEXTDOM_PRODUCT_NAME + ' {{avec}} <b>' + $('#sel_restoreBackupforMigration option:selected').text() + '</b> ? {{Une fois lancée, cette opération ne peut être annulée}}';
+    bootbox.confirm(migrationConfirmation, function (result) {
         if (result) {
             switchNotify(0);
             migrationButton.find('.fa-refresh').show();
@@ -118,11 +119,13 @@ function getNextDomLog(autoUpdate, logFile) {
             var log = '';
             if ($.isArray(data.result)) {
                 var processFinish = false;
+                var processSuccess = false;
                 var finishMsg = '';
                 for (var rowIndex in data.result.reverse()) {
                     log += data.result[rowIndex] + '\n';
                     if (data.result[rowIndex].indexOf('[END ' + logFile.toUpperCase() + ' SUCCESS]') !== -1) {
                         finishMsg = '{{L\'opération est réussie}}';
+                        processSuccess = true;
                         processFinish = true;
                     }
                     else if (data.result[rowIndex].indexOf('[END ' + logFile.toUpperCase() + ' ERROR]') !== -1) {
@@ -131,7 +134,12 @@ function getNextDomLog(autoUpdate, logFile) {
                     }
                     if (processFinish) {
                         switchNotify(1);
-                        notify('Erreur', finishMsg, 'error');
+                        if (processSuccess) {
+                            notify('Info', finishMsg, 'success');
+                        }
+                        else {
+                            notify('Erreur', finishMsg, 'error');
+                        }
                         if (logFile === 'migration') {
                             nextdom.user.refresh();
                         }
