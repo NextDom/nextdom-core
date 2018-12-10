@@ -49,6 +49,7 @@ class ModalsController
         'action.insert' => 'actionInsert',
         'cmd.configure' => 'cmdConfigure',
         'cmd.human.insert' => 'cmdHumanInsert',
+        'cron.human.insert' => 'cronHumanInsert',
         'dataStore.management' => 'dataStoreManagement',
         'eqLogic.configure' => 'eqLogicConfigure',
         'expression.test' => 'expressionTest',
@@ -258,6 +259,24 @@ class ModalsController
         $pageContent['jeeObjects'] = JeeObjectManager::all();
 
         $render->show('/modals/cmd.human.insert.html.twig', $pageContent);
+    }
+
+    /**
+     * Render action insert modal (scenario)
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function cronHumanInsert(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $render->show('/modals/cron.human.insert.html.twig');
     }
 
     /**
