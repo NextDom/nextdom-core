@@ -66,6 +66,7 @@ class ModalsController
         'scenario.summary' => 'scenarioSummary',
         'scenario.template' => 'scenarioTemplate',
         'update.add' => 'updateAdd',
+        'update.display' => 'updateDisplay',
         'user.rights' => 'userRights',
         'welcome' => 'welcome'
     ];
@@ -825,6 +826,32 @@ class ModalsController
         $pageContent['ajaxToken'] = \ajax::getToken();
 
         $render->show('/modals/update.add.html.twig', $pageContent);
+    }
+
+    /**
+     * Render update display modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function updateDisplay(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $repoId = Utils::init('repo', 'market');
+        $repo = UpdateManager::repoById($repoId);
+        if ($repo['enable'] == 0) {
+            throw new CoreException(__('Le dépôt est inactif : ') . $repoId);
+        }
+        $repoDisplayFile = NEXTDOM_ROOT . '/core/repo/' . $repoId . '.display.repo.php';
+        if (file_exists($repoDisplayFile)) {
+            include_file('core', $repoId . '.display', 'repo', '', true);
+        }
     }
 
     /**
