@@ -64,6 +64,7 @@ class ModalsController
         'scenario.log.execution' => 'scenarioLogExecution',
         'scenario.summary' => 'scenarioSummary',
         'scenario.template' => 'scenarioTemplate',
+        'update.add' => 'updateAdd',
         'user.rights' => 'userRights',
         'welcome' => 'welcome'
     ];
@@ -753,6 +754,58 @@ class ModalsController
         $pageContent['repoList'] = UpdateManager::listRepo();
 
         $render->show('/modals/scenario.template.html.twig', $pageContent);
+    }
+
+    /**
+     * Render update add modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function updateAdd(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent = [];
+
+        $pageContent['repoListType'] = [];
+        foreach (UpdateManager::listRepo() as $repoKey => $repoValue) {
+            if ($repoValue['configuration'] === false) {
+                continue;
+            }
+            if ($repoValue['scope']['plugin'] === false) {
+                continue;
+            }
+            if (!isset($repoValue['configuration']['parameters_for_add'])) {
+                continue;
+            }
+            if (\config::byKey($repoKey . '::enable') == 0) {
+                continue;
+            }
+            $pageContent['repoListType'][$repoKey] = $repoValue['name'];
+        }
+
+        $pageContent['repoListConfiguration'] = [];
+        foreach (UpdateManager::listRepo() as $repoKey => $repoValue) {
+            if ($repoValue['configuration'] === false) {
+                continue;
+            }
+            if ($repoValue['scope']['plugin'] === false) {
+                continue;
+            }
+            if (!isset($repoValue['configuration']['parameters_for_add'])) {
+                continue;
+            }
+            $pageContent['repoListConfiguration'][$repoKey] = $repoValue;
+        }
+        $pageContent['ajaxToken'] = \ajax::getToken();
+
+        $render->show('/modals/update.add.html.twig', $pageContent);
     }
 
     /**

@@ -26,6 +26,7 @@ use Twig\Extensions\DateExtension;
 use Twig\Extensions\I18nExtension;
 use Twig\Extensions\TextExtension;
 use Twig_Environment;
+use Twig_Extension_Debug;
 use Twig_Loader_Filesystem;
 
 class Render
@@ -85,6 +86,9 @@ class Render
         $this->twig->addExtension(new DateExtension($this->translator));
         $this->twig->addExtension(new TextExtension());
         $this->twig->addExtension(new TranslationExtension($this->translator));
+        if ($developerMode) {
+            $this->twig->addExtension(new Twig_Extension_Debug());
+        }
     }
 
     /**
