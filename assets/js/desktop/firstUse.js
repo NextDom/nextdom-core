@@ -117,7 +117,7 @@ $("#toStep4").click(function () {
     jeedom.config.save({
         configuration: {'market::username': username},
         error: function (error) {
-            notify("Core", data.message, "error");
+            notify("Core", error.message, "error");
         },
         success: function (data) {
             jeedom.config.save({
