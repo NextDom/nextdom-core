@@ -196,7 +196,7 @@ class NextDomHelper
             'icon' => 'fa-code-branch',
             'name' => __('health.product-version'),
             'state' => true,
-            'result' => self::getVersion(),
+            'result' => self::getNextdomVersion(),
             'comment' => '',
         );
 
@@ -452,14 +452,27 @@ class NextDomHelper
     }
 
     /**
-     * Get NextDom version
+     * Get Jeedom version
      *
      * @return string
      */
-    public static function getVersion()
+    public static function getJeedomVersion()
     {
-        if (file_exists(NEXTDOM_ROOT . '/core/config/version')) {
-            return trim(file_get_contents(NEXTDOM_ROOT . '/core/config/version'));
+        if (file_exists(NEXTDOM_ROOT . '/core/config/Jeedom_version')) {
+            return trim(file_get_contents(NEXTDOM_ROOT . '/core/config/Jeedom_version'));
+        }
+        return '';
+    }
+
+    /**
+     * Get Nextdom version
+     *
+     * @return string
+     */
+    public static function getNextdomVersion()
+    {
+        if (file_exists(NEXTDOM_ROOT . '/core/config/Nextdom_version')) {
+            return trim(file_get_contents(NEXTDOM_ROOT . '/core/config/Nextdom_version'));
         }
         return '';
     }

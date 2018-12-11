@@ -296,7 +296,8 @@ class PrepareView
         $pageData['USER_ISCONNECTED']         = $_SESSION['user']->is_Connected();
         $pageData['USER_AVATAR']              = $_SESSION['user']->getOptions('avatar');
         $pageData['USER_LOGIN']               = $_SESSION['user']->getLogin();
-        $pageData['NEXTDOM_VERSION']          = NextDomHelper::getVersion();
+        $pageData['NEXTDOM_VERSION']          = NextDomHelper::getNextdomVersion();
+        $pageData['JEEDOM_VERSION']          = NextDomHelper::getJeedomVersion();
         $pageData['MENU_PLUGIN_HELP']         = Utils::init('m');
         $pageData['MENU_PLUGIN_PAGE']         = Utils::init('p');
     }
