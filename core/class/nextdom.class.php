@@ -145,7 +145,7 @@ class nextdom
 
     public static function version()
     {
-        return NextDomHelper::getVersion();
+        return NextDomHelper::getJeedomVersion();
     }
 
     public static function stop()
