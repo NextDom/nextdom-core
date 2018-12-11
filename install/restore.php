@@ -186,12 +186,11 @@ try {
     system('chmod 1777 /tmp -R');
     echo "OK\n";
 
-    echo "Restoration of cache...";
-    if (file_exists('/tmp/nextdombackup/var/cache.tar.gz')) {
-        system('cd /tmp/nextdom/cache; tar xfz "/tmp/nextdombackup/var/cache.tar.gz"');
-    }
-    else {
-        system('cd /tmp/nextdom/cache; tar xfz "/tmp/nextdombackup/cache.tar.gz"');
+    echo "Restauration du cache...";
+    system('cp -fr /tmp/nextdombackup/var/cache.tar.gz ' . $nextdom_dir . '/var' );
+    try {
+        cache::restore();
+    } catch (Exception $e) {
     }
     echo "OK\n";
 

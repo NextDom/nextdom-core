@@ -121,35 +121,7 @@ try {
 
     echo 'Créer l\'archive...';
 
-    $excludes = array(
-        'assets',
-        'core',
-        'data',
-        'desktop',
-        'install',
-        'mobile',
-        'public',
-        'scripts',
-        'src',
-        'tests',
-        'tanslations',
-        'vendor',
-        'backup',
-        '.git',
-        '.log',
-        'core/config/common.config.php',
-        config::byKey('backup::path'),
-    );
-
-    if (config::byKey('recordDir', 'camera') != '') {
-        $excludes[] = config::byKey('recordDir', 'camera');
-    }
-
-    $exclude = '';
-    foreach ($excludes as $folder) {
-        $exclude .= ' --exclude="' . $folder . '"';
-    }
-    system('cd ' . $nextdom_dir . ';tar cfz "' . $backup_dir . '/' . $backup_name . '" ' . $exclude . ' . > /dev/null');
+    system('cd ' . $nextdom_dir . ';tar cfz "' . $backup_dir . '/' . $backup_name . '" ' . $exclude . ' -T ' . $nextdom_dir . '/install/backup_include_files > /dev/null');
     echo "OK" . "\n";
 
     if (!file_exists($backup_dir . '/' . $backup_name)) {

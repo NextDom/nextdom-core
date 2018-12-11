@@ -111,7 +111,7 @@ $("#bt_saveOpenLog").on('click', function (event) {
             switchNotify(0);
             $.hideAlert();
             el.find('.fa-refresh').show();
-            el.find('.fa-file').hide();
+            el.find('.fa-window-restore').hide();
             $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
             $("#md_backupInfo").dialog('open');
             nextdom.backup.restoreLocal({
@@ -120,7 +120,6 @@ $("#bt_saveOpenLog").on('click', function (event) {
                     notify("Erreur", error.message, 'error');
                 },
                 success: function () {
-                    switchNotify(1);
                     getNextDomLog(1, 'restore');
                 }
             });
@@ -254,6 +253,7 @@ $("#bt_saveOpenLog").on('click', function (event) {
                     if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' SUCCESS]') != -1){
                         notify("Info", '{{L\'opération est réussie}}', 'success');
                         if(_log == 'restore'){
+                            switchNotify(1);
                             nextdom.user.refresh();
                         }
                         _autoUpdate = 0;
