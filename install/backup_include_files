@@ -1,3 +1,4 @@
 DB_backup.sql
 var/cache.tar.gz
 plugins
+public/img/plan

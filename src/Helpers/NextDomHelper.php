@@ -301,7 +301,7 @@ class NextDomHelper
                 $cache_health['state'] = true;
                 $cache_health['result'] = $okStr;
             } else {
-                $filename = __DIR__ . '/../../var/cache.tar.gz.tar.gz';
+                $filename = __DIR__ . '/../../var/cache.tar.gz';
                 $cache_health['state'] = true;
                 $cache_health['result'] = $okStr . ' (' . date('Y-m-d H:i:s', filemtime($filename)) . ')';
             }

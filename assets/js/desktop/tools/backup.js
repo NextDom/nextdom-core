@@ -110,6 +110,7 @@ $("#bt_saveOpenLog").on('click', function (event) {
         if (result) {
             switchNotify(0);
             $.hideAlert();
+            $('#bt_restoreNextDom').addClass('disabled');
             el.find('.fa-refresh').show();
             el.find('.fa-window-restore').hide();
             $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
@@ -251,14 +252,16 @@ $("#bt_saveOpenLog").on('click', function (event) {
                 for (var i in data.result.reverse()) {
                     log += data.result[i]+"\n";
                     if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' SUCCESS]') != -1){
+                        switchNotify(1);
                         notify("Info", '{{L\'opération est réussie}}', 'success');
                         if(_log == 'restore'){
-                            switchNotify(1);
+                            console.log(_log);
                             nextdom.user.refresh();
                         }
                         _autoUpdate = 0;
                     }
                     if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' ERROR]') != -1){
+                        switchNotify(1);
                         notify("Erreur", '{{L\'opération a échoué}}', 'error');
                         if(_log == 'restore'){
                             nextdom.user.refresh();
@@ -273,6 +276,7 @@ $("#bt_saveOpenLog").on('click', function (event) {
                     getNextDomLog(_autoUpdate, _log)
                 }, 1000);
             } else {
+                $('#bt_restoreNextDom').removeClass('disabled');
                 $('#bt_' + _log + 'NextDom .fa-refresh').hide();
                 $('.bt_' + _log + 'NextDom .fa-refresh').hide();
                 $('#bt_' + _log + 'NextDom .fa-floppy-o').show();
