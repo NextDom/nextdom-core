@@ -98,7 +98,7 @@ class eqLogic
 
     public static function byTypeAndSearhConfiguration($_eqType_name, $_configuration)
     {
-        return self::byTypeAndSearhConfiguration($_eqType_name, $_configuration);
+        return EqLogicManager::byTypeAndSearhConfiguration($_eqType_name, $_configuration);
     }
 
     public static function searchConfiguration($_configuration, $_type = null)
