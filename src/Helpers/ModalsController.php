@@ -49,6 +49,7 @@ class ModalsController
         'action.insert' => 'actionInsert',
         'cmd.configure' => 'cmdConfigure',
         'cmd.human.insert' => 'cmdHumanInsert',
+        'cron.human.insert' => 'cronHumanInsert',
         'dataStore.management' => 'dataStoreManagement',
         'eqLogic.configure' => 'eqLogicConfigure',
         'expression.test' => 'expressionTest',
@@ -64,6 +65,8 @@ class ModalsController
         'scenario.log.execution' => 'scenarioLogExecution',
         'scenario.summary' => 'scenarioSummary',
         'scenario.template' => 'scenarioTemplate',
+        'update.add' => 'updateAdd',
+        'update.display' => 'updateDisplay',
         'user.rights' => 'userRights',
         'welcome' => 'welcome'
     ];
@@ -257,6 +260,24 @@ class ModalsController
         $pageContent['jeeObjects'] = JeeObjectManager::all();
 
         $render->show('/modals/cmd.human.insert.html.twig', $pageContent);
+    }
+
+    /**
+     * Render action insert modal (scenario)
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function cronHumanInsert(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $render->show('/modals/cron.human.insert.html.twig');
     }
 
     /**
@@ -753,6 +774,84 @@ class ModalsController
         $pageContent['repoList'] = UpdateManager::listRepo();
 
         $render->show('/modals/scenario.template.html.twig', $pageContent);
+    }
+
+    /**
+     * Render update add modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function updateAdd(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent = [];
+
+        $pageContent['repoListType'] = [];
+        foreach (UpdateManager::listRepo() as $repoKey => $repoValue) {
+            if ($repoValue['configuration'] === false) {
+                continue;
+            }
+            if ($repoValue['scope']['plugin'] === false) {
+                continue;
+            }
+            if (!isset($repoValue['configuration']['parameters_for_add'])) {
+                continue;
+            }
+            if (\config::byKey($repoKey . '::enable') == 0) {
+                continue;
+            }
+            $pageContent['repoListType'][$repoKey] = $repoValue['name'];
+        }
+
+        $pageContent['repoListConfiguration'] = [];
+        foreach (UpdateManager::listRepo() as $repoKey => $repoValue) {
+            if ($repoValue['configuration'] === false) {
+                continue;
+            }
+            if ($repoValue['scope']['plugin'] === false) {
+                continue;
+            }
+            if (!isset($repoValue['configuration']['parameters_for_add'])) {
+                continue;
+            }
+            $pageContent['repoListConfiguration'][$repoKey] = $repoValue;
+        }
+        $pageContent['ajaxToken'] = \ajax::getToken();
+
+        $render->show('/modals/update.add.html.twig', $pageContent);
+    }
+
+    /**
+     * Render update display modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function updateDisplay(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $repoId = Utils::init('repo', 'market');
+        $repo = UpdateManager::repoById($repoId);
+        if ($repo['enable'] == 0) {
+            throw new CoreException(__('Le dépôt est inactif : ') . $repoId);
+        }
+        $repoDisplayFile = NEXTDOM_ROOT . '/core/repo/' . $repoId . '.display.repo.php';
+        if (file_exists($repoDisplayFile)) {
+            include_file('core', $repoId . '.display', 'repo', '', true);
+        }
     }
 
     /**

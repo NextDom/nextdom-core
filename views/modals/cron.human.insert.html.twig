@@ -1,14 +1,9 @@
-<?php
-if (!isConnect()) {
-    throw new Exception('{{401 - Accès non autorisé}}');
-}
-?>
 <div class="form-group mode schedule">
-    <label class="col-xs-3 control-label" >{{A exécuter}}</label>
+    <label class="col-xs-3 control-label">{{ 'A exécuter' }}</label>
     <div class="col-xs-9">
         <select class="form-control" id="mod_cron_sel_scheduleMode">
-            <option value="once">une seule fois</option>
-            <option value="repete">récurrent</option>
+            <option value="once">{{ 'une seule fois' }}</option>
+            <option value="repete">{{ 'récurrent' }}</option>
         </select>
     </div>
 </div>
@@ -19,23 +14,24 @@ if (!isConnect()) {
     $('#mod_cron_sel_scheduleMode').on('change', function () {
         $('#mod_cron_div_scheduleConfig').empty();
         if ($(this).value() == 'once') {
-            var html = '<label class="col-xs-3 control-label" >{{En date du}}</label>';
+            var html = '<label class="col-xs-3 control-label" >{{ 'En date du' }}</label>';
             html += '<div class="col-xs-9">';
             html += '<input class="form-control" id="mod_cron_in_dateScenarioTrigger">';
             html += '</div>';
             html += '<span id="mod_cron_span_cronResult" style="display: none;"></span>';
             $('#mod_cron_div_scheduleConfig').append(html);
-            $('#mod_cron_in_dateScenarioTrigger').datetimepicker({lang: 'fr',
+            $('#mod_cron_in_dateScenarioTrigger').datetimepicker({
+                lang: 'fr',
                 i18n: {
                     fr: {
                         months: [
-                        'Janvier', 'Février', 'Mars', 'Avril',
-                        'Mai', 'Juin', 'Juillet', 'Aout',
-                        'Septembre', 'Octobre', 'Novembre', 'Décembre',
+                            'Janvier', 'Février', 'Mars', 'Avril',
+                            'Mai', 'Juin', 'Juillet', 'Aout',
+                            'Septembre', 'Octobre', 'Novembre', 'Décembre',
                         ],
                         dayOfWeek: [
-                        "Di", "Lu", "Ma", "Me",
-                        "Je", "Ve", "Sa",
+                            "Di", "Lu", "Ma", "Me",
+                            "Je", "Ve", "Sa",
                         ]
                     }
                 },
@@ -61,11 +57,11 @@ if (!isConnect()) {
             $('#mod_cron_div_cronGenerator').empty().cron({
                 initial: '* * * * *',
                 customValues: {
-                    "5 Minutes" : "*/5 * * * *",
-                    "10 Minutes" : "*/10 * * * *",
-                    "15 Minutes" : "*/15 * * * *",
-                    "20 Minutes" : "*/20 * * * *",
-                    "30 Minutes" : "*/30 * * * *",
+                    "5 Minutes": "*/5 * * * *",
+                    "10 Minutes": "*/10 * * * *",
+                    "15 Minutes": "*/15 * * * *",
+                    "20 Minutes": "*/20 * * * *",
+                    "30 Minutes": "*/30 * * * *",
                 },
                 onChange: function () {
                     $('#mod_cron_span_cronResult').text($(this).cron("value"));
@@ -77,7 +73,6 @@ if (!isConnect()) {
 
     function mod_insertCron() {
     }
-
 
 
     mod_insertCron.getValue = function () {
