@@ -148,6 +148,8 @@ class PrepareView
             'notify_timeout'     => $configs['notify::timeout'],
             'widget_width_step'  => $configs['widget::step::width'],
             'widget_height_step' => $configs['widget::step::height'],
+            'widget_width_autostep'  => $configs['widget::autostep::width'],
+            'widget_height_autostep' => $configs['widget::autostep::height'],
             'widget_margin'      => $configs['widget::margin'],
             'widget_padding'     => $configs['widget::padding'],
             'widget_radius'      => $configs['widget::radius'],

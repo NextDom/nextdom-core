@@ -92,7 +92,18 @@
   margin: 2px 2px;
 }
 
+.bt_editDashboardWidgetUniformize {
+  position: absolute;
+  top: 6px;
+  right: 7px;
+}
 .bt_editDashboardWidgetAutoResize {
-  margin-right : 10px;
-  display: none;
+  position: absolute;
+  top: 6px;
+  right: 35px;
+}
+.bt_editDashboardWidgetGridResize {
+  position: absolute;
+  top: 6px;
+  right: 63px;
 }

@@ -152,7 +152,7 @@ function getObjectHtml(_object_id) {
                                 if ($(itemElem).find(".counterReorderNextDom").length) {
                                     $(itemElem).find(".counterReorderNextDom").text(value);
                                 } else {
-                                    $(itemElem).prepend('<span class="counterReorderNextDom pull-left" style="margin-top: 3px;margin-left: 3px;">' + value + '</span>');
+                                    $(itemElem).prepend('<span class="counterReorderNextDom pull-left">' + value + '</span>');
                                 }
                             }
                         });
