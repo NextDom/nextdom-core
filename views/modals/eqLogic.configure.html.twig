@@ -628,7 +628,7 @@
     });
 
     $('.advanceCmdConfigurationCmdConfigure').off('dblclick').on('dblclick', function () {
-        $('#md_modal2').dialog({title: "{{Configuration de la commande}}"});
+        $('#md_modal2').dialog({title: "{{ 'Configuration de la commande' }}"});
         $('#md_modal2').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
     });
 
