@@ -29,9 +29,8 @@ backup/*
 var/*
 /public/*
 /.sass-cache
-DB_Backup.sql
+/DB_Backup.sql
 
 docs/*
-
 
 tests/gui/chromedriver*

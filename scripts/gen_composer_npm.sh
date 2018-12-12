@@ -44,6 +44,7 @@ function init_dependencies {
 		wget https://deb.nodesource.com/setup_10.x -O install_npm.sh
 		bash install_npm.sh
 		apt install -y nodejs
+		rm install_npm.sh
 	fi
 	sass --version > /dev/null 2>&1
 	if [ $? -ne 0 ]; then
