@@ -47,6 +47,9 @@
                                 {{ dashboardObject.getDisplay("icon")|raw }}</i>
                             </div>
                             <a class="card-category" style="color:{{ dashboardObject.getDisplay("tagColor") }}"><b>{{ dashboardObject.getName() }}</b></a>
+                            <i class="fas fa-retweet pull-right cursor bt_editDashboardWidgetUniformize tooltips" id="edit_object_{{ dashboardObject.getId() }}" data-mode="0" title="{{ 'Uniformiser les hauteur et repackager les tuiles' }}" style="display:none"></i>
+                            <i class="fas fa-recycle pull-right cursor bt_editDashboardWidgetAutoResize tooltips" id="edit_object_{{ dashboardObject.getId() }}" data-mode="0" title="{{ 'Redimensionner automatiquement sur pas manuel et repackager les tuiles' }}" style="display:none"></i>
+                            <i class="fas fa-th pull-right cursor bt_editDashboardWidgetGridResize tooltips" id="edit_object_{{ dashboardObject.getId() }}" data-mode="0" title="{{ 'Redimensionner automatiquement sur pas auto et repackager les tuiles' }}" style="display:none"></i>
                         </div>
                         <div class="card-body">
                             <div class="div_displayEquipement" id="div_ob{{ dashboardObject.getId() }}">
@@ -61,8 +64,11 @@
                             <div class="card-header card-header-icon">
                                 <div class="card-icon text-center" style="background:{{ child.getDisplay("tagColor") }}">
                                     {{ child.getDisplay("icon")|raw }}</i>
-                                </div>
+                                </div >
                                 <p class="card-category" style="color:{{ child.getDisplay("tagColor") }}"><b>{{ child.getName() }}</b></p>
+                                <i class="fas fa-retweet pull-right cursor bt_editDashboardWidgetUniformize tooltips" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Uniformiser les hauteur et repackager les tuiles' }}" style="display:none"></i>
+                                <i class="fas fa-recycle pull-right cursor bt_editDashboardWidgetAutoResize tooltips" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Redimensionner automatiquement sur pas manuel et repackager les tuiles' }}" style="display:none"></i>
+                                <i class="fas fa-th pull-right cursor bt_editDashboardWidgetGridResize tooltips" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Redimensionner automatiquement sur pas auto et repackager les tuiles' }}" style="display:none"></i>
                             </div>
                             <div class="card-body">
                                 <div class="div_displayEquipement" id="div_ob{{ child.getId() }}" style="width: 100%;padding-top:3px;margin-bottom : 3px;">

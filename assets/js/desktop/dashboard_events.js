@@ -54,15 +54,18 @@ $('#bt_editDashboardWidgetOrder').on('click', function () {
         $(this).attr('data-mode', 0);
         editWidgetMode(0);
         $(this).html('<i class="fas fa-pencil-alt"></i>');
+        $('.bt_editDashboardWidgetUniformize').hide();
         $('.bt_editDashboardWidgetAutoResize').hide();
+        $('.bt_editDashboardWidgetGridResize').hide();
         $('.counterReorderNextDom').remove();
         $('.div_displayEquipement').packery();
     } else {
         notify('Core', '{{Vous êtes en mode édition vous pouvez déplacer les widgets, les redimensionner et changer l\'ordre des commandes dans les widgets. N\'oubliez pas de quitter le mode édition pour sauvegarder}}', 'success');
         $(this).attr('data-mode', 1);
-        $(this).attr('data-mode', 1);
+        $('.bt_editDashboardWidgetUniformize').show();
         $('.bt_editDashboardWidgetAutoResize').show();
-        $('.bt_editDashboardWidgetAutoResize').off('click').on('click', function () {
+        $('.bt_editDashboardWidgetGridResize').show();
+        $('.bt_editDashboardWidgetUniformize').off('click').on('click', function () {
             var id_object = $(this).attr('id');
             id_object = id_object.replace('edit_object_', '');
             var heightObjectex = 0;
@@ -81,6 +84,39 @@ $('#bt_editDashboardWidgetOrder').on('click', function () {
                 }
                 heightObjectex = heightObject;
             });
+            $('#div_ob' + id_object).trigger('resize');
+            $('#div_ob' + id_object).packery();
+        });
+        $('.bt_editDashboardWidgetAutoResize').off('click').on('click', function () {
+            var id_object = $(this).attr('id');
+            id_object = id_object.replace('edit_object_', '');
+            $('#div_ob' + id_object + '.div_displayEquipement .eqLogic-widget').each(function (index, element) {
+                  var id_object_2 = $(this).attr('data-eqlogic_id');
+                  if ($(element).hasClass('allowResize')) {
+                      $(element).height('auto');
+                      $(element).width('auto');
+                      $(element).width(Math.ceil($(element).width() / widget_width_step) * widget_width_step - (2 * widget_margin));
+                      $(element).height(Math.ceil($(element).height() / widget_height_step) * widget_height_step - (2 * widget_margin));
+                  }
+            });
+            $('#div_ob' + id_object).trigger('resize');
+            $('#div_ob' + id_object).packery();
+        });
+        $('.bt_editDashboardWidgetGridResize').off('click').on('click', function () {
+            var id_object = $(this).attr('id');
+            id_object = id_object.replace('edit_object_', '');
+            $('#div_ob' + id_object + '.div_displayEquipement .eqLogic-widget').each(function (index, element) {
+                  var id_object_2 = $(this).attr('data-eqlogic_id');
+                  if ($(element).hasClass('allowResize')) {
+                      $(element).height('auto');
+                      $(element).width('auto');
+                      $(element).width(Math.ceil($(element).width() / widget_width_autostep) * widget_width_autostep - (2 * widget_margin));
+                      $(element).width($(element).width()*1.1);
+                      $(element).height(Math.ceil($(element).height() / widget_height_autostep) * widget_height_autostep - (2 * widget_margin));
+                  }
+            });
+            $('#div_ob' + id_object).trigger('resize');
+            $('#div_ob' + id_object).packery();
         });
         editWidgetMode(1);
         $(this).html('<i class="fas fa-stop"></i>');

@@ -103,6 +103,8 @@ class Router
                 'notify::timeout',
                 'widget::step::width',
                 'widget::step::height',
+                'widget::autostep::width',
+                'widget::autostep::height',
                 'widget::margin',
                 'widget::padding',
                 'widget::radius',
