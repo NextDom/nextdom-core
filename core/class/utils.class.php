@@ -56,11 +56,7 @@ class utils {
                     $value = $property->getValue($_object);
                     $property->setAccessible(false);
                 }
-                if (is_json($value)) {
-                    $array[$name] = json_decode($value, true);
-                } else {
-                    $array[$name] = $value;
-                }
+                $array[$name] = is_json($value, $value);
             }
         }
         return $array;

@@ -13,12 +13,12 @@ if (!isConnect()) {
             <th style="cursor:default" data-sorter="false" data-filter="false">{{Visible}}</th>
             <th style="cursor:default" data-sorter="false" data-filter="false">{{Masqué}}</th>
             <th style="cursor:default" data-sorter="false" data-filter="false">{{Résumé Défini}} <sup style="cursor:default" title="Si grisé, alors il n'est pas remonté en résumé global">?</th>
-            <th style="cursor:default" data-sorter="false" data-filter="false">{{Résumé Dashboard Masqué}}</th>
-            <th style="cursor:default" data-sorter="false" data-filter="false">{{Résumé Mobile Masqué}}</th>
-        </tr>
-    </thead>
-    <tbody>
-<?php
+                <th style="cursor:default" data-sorter="false" data-filter="false">{{Résumé Dashboard Masqué}}</th>
+                <th style="cursor:default" data-sorter="false" data-filter="false">{{Résumé Mobile Masqué}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
 $allObject = jeeObject::buildTree(null, false);
 foreach ($allObject as $object) {
     echo '<tr class="tr_object" data-object_id="' . $object->getId() . '"><td><span class="label label-info txtSizeNormal">' . $object->getId() . '</span></td>';

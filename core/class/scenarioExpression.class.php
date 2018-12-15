@@ -436,6 +436,9 @@ class scenarioExpression
             case ScenarioExpressionEnum::REPORT:
                 $this->executeActionReport($scenario, $options);
                 break;
+            case ScenarioExpressionEnum::TAG:
+                $this->executeActionTag($scenario, $options);
+                break;
             default:
                 $this->executeActionOthers($scenario, $options);
                 break;
@@ -804,6 +807,14 @@ class scenarioExpression
             $this->setLog($scenario, __('Envoi du rapport généré sur ', __FILE__) . $cmd->getHumanName());
             $cmd->execCmd($cmd_parameters);
         }
+    }
+
+    private function executeActionTag(&$scenario, $options)
+    {
+        $tags = $scenario->getTags();
+        $tags['#' . $options['name'] . '#'] = $options['value'];
+        $this->setLog($scenario, __('Mise à jour du tag ', __FILE__) . '#' . $options['name'] . '#' . ' => ' . $options['value']);
+        $scenario->setTags($tags);
     }
 
     private function executeActionOthers(&$scenario, $options)
