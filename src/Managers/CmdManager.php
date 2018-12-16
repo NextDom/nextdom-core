@@ -72,7 +72,7 @@ class CmdManager
 		if (!is_array($_ids) || count($_ids) == 0) {
 			return;
 		}
-		$in = implode(',', $_ids);
+		$in = trim(implode(',', $_ids), ',');
 		$sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                 FROM cmd
                 WHERE id IN (' . $in . ')';

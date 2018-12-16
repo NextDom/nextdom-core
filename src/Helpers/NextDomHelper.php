@@ -1083,12 +1083,10 @@ class NextDomHelper
      */
     public static function cleanFileSystemRight()
     {
-        $path = __DIR__ . '/../../*';
-		$cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . $path . ';';
-		$cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . $path . ';';
+		$cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . NEXTDOM_ROOT . ';';
+		$cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . NEXTDOM_ROOT . ';';
 		$cmd .= SystemHelper::getCmdSudo() . 'find /var/log/nextdom -type f -exec chmod 664 {} +;';
-		$cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . $path . ';';
-		var_dump($cmd);
+		$cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R /var/log/nextdom ;';
 		exec($cmd);
     }
 

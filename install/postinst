@@ -15,6 +15,14 @@ CYAN="\\033[1;36m"
 # Logs directory
 LOGS_DIRECTORY=/var/log/nextdom
 mkdir -p ${LOGS_DIRECTORY}
+touch ${LOGS_DIRECTORY}/cron
+touch ${LOGS_DIRECTORY}/cron_execution
+touch ${LOGS_DIRECTORY}/event
+touch ${LOGS_DIRECTORY}/http.error
+touch ${LOGS_DIRECTORY}/plugin
+touch ${LOGS_DIRECTORY}/scenario_execution
+mkdir -p ${LOGS_DIRECTORY}/scenarioLog
+chown www-data:www-data -R $LOGS_DIRECTORY
 
 # configs directory
 CONFIGS_DIRECTORY=/var/lib/nextdom
@@ -266,7 +274,7 @@ step_nextdom_configuration() {
     chmod 777 /tmp/jeedom >> ${DEBUG} 2>&1
     chown www-data:www-data -R /tmp/nextdom >> ${DEBUG} 2>&1
     chown www-data:www-data /tmp/jeedom >> ${DEBUG} 2>&1
-    chown www-data:www-data $LOGS_DIRECTORY
+    chown www-data:www-data -R $LOGS_DIRECTORY
 
     usermod -a -G dialout,tty www-data
 

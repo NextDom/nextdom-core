@@ -86,6 +86,7 @@ autoCompleteCondition = [
 " value(commande)"
 ];
 autoCompleteAction = [
+"tag",
 "report",
 "sleep",
 "variable",

@@ -107,7 +107,7 @@ try {
         }
         $user->setOptions('twoFactorAuthentification', 0);
         $user->save();
-        ajax::success();
+        ajax::success($result);
     }
 
     if (init('action') == 'isConnect') {

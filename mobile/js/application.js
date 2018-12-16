@@ -67,13 +67,7 @@ $(function () {
      }
      if (e.type == 'error') {
         $('#div_updateInProgress').html('<p>{{Erreur lors de la mise à jour}}<br/>{{Nouvelle tentative dans 5s}}</p>');
-        setTimeout(function() {
-            try{
-                webappCache.update();
-            }catch (e) {
-
-            }
-        }, 5000);
+        setTimeout(function(){ webappCache.update(); }, 5000);
     }
 }
 
