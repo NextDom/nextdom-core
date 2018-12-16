@@ -52,6 +52,7 @@ class ModalsController
         'cron.human.insert' => 'cronHumanInsert',
         'dataStore.management' => 'dataStoreManagement',
         'eqLogic.configure' => 'eqLogicConfigure',
+        'eqLogic.human.insert' => 'eqLogicHumanInsert',
         'expression.test' => 'expressionTest',
         'graph.link' => 'graphLink',
         'interact.query.display' => 'interactQueryDisplay',
@@ -61,7 +62,9 @@ class ModalsController
         'plan.configure' => 'planConfigure',
         'planHeader.configure' => 'planHeaderConfigure',
         'plugin.deamon' => 'pluginDaemon',
+        'plugin.dependancy' => 'pluginDependency',
         'scenario.export' => 'scenarioExport',
+        'scenario.human.insert' => 'scenarioHumanInsert',
         'scenario.log.execution' => 'scenarioLogExecution',
         'scenario.summary' => 'scenarioSummary',
         'scenario.template' => 'scenarioTemplate',
@@ -299,6 +302,27 @@ class ModalsController
             'dataStore_link_id' => Utils::init('link_id', -1)]);
 
         $render->show('/modals/dataStore.management.html.twig');
+    }
+
+    /**
+     * Render eqLogic human insert modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function eqLogicHumanInsert(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $pageContent = [];
+        $pageContent['jeeObjects'] = JeeObjectManager::all();
+
+        $render->show('/modals/eqLogic.human.insert.html.twig', $pageContent);
     }
 
     /**
@@ -676,6 +700,33 @@ class ModalsController
     }
 
     /**
+     * Render plugin daemon modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function pluginDependency(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent = [];
+        $pluginId = init('plugin_id');
+        Utils::sendVarToJs('plugin_id', $pluginId);
+        if (!class_exists($pluginId)) {
+            die();
+        }
+        $plugin = PluginManager::byId($pluginId);
+        $pageContent['dependencyInfo'] = $plugin->getDependencyInfo();
+
+        $render->show('/modals/plugin.dependency.html.twig');
+    }
+
+    /**
      * Render scenario export modal
      *
      * @param Render $render Render engine
@@ -701,6 +752,27 @@ class ModalsController
         $pageContent['scenarioExportData'] = $scenario->export();
 
         $render->show('/modals/scenario.export.html.twig', $pageContent);
+    }
+
+    /**
+     * Render scenario human insert modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function scenarioHumanInsert(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $pageContent = [];
+        $pageContent['scenarios'] = ScenarioManager::all();
+
+        $render->show('/modals/scenario.human.insert.html.twig', $pageContent);
     }
 
     /**
