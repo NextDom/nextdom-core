@@ -38,6 +38,11 @@ class PrepareView
         $pageData['JS_END_POOL'] = [];
         $pageData['CSS_POOL'] = [];
         $pageData['TITLE'] = '1ere connexion';
+        $pageData['JS_VARS'] = [
+            'notify_status'      => $configs['notify::status'],
+            'notify_position'    => $configs['notify::position'],
+            'notify_timeout'     => $configs['notify::timeout'],
+        ];
         $render = Render::getInstance();
         self::initHeaderData($pageData, $configs);
         //TODO: Vérifier ça

@@ -167,12 +167,6 @@ try {
         ajax::success();
     }
 
-    if (init('action') == 'migrate') {
-        unautorizedInDemo();
-        nextdom::migrate(init('backup'), true);
-        ajax::success(); 
-       }
-
     if (init('action') == 'removeBackup') {
         unautorizedInDemo();
         nextdom::removeBackup(init('backup'));

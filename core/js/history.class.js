@@ -108,7 +108,7 @@ nextdom.history.drawChart = function (_params) {
                 } else {
                     message += (init(data.result.dateEnd) != '') ? ' {{jusqu\'au}} ' + data.result.dateEnd:'';
                 }
-                $('#div_alert').showAlert({message: message, level: 'danger'});
+                notify("Erreur", message, 'error');
             }
             return;
         }

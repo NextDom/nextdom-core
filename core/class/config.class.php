@@ -30,7 +30,7 @@ class config {
     public static function getDefaultConfiguration($_plugin = 'core') {
         if (!isset(self::$defaultConfiguration[$_plugin])) {
             if ($_plugin == 'core') {
-                self::$defaultConfiguration[$_plugin] = parse_ini_file(__DIR__ . '/../../core/config/default.config.ini', true);
+                self::$defaultConfiguration[$_plugin] = parse_ini_file('/var/lib/nextdom/config/default.config.ini', true);
                 if (file_exists(__DIR__ . '/../../data/custom/custom.config.ini')) {
                     self::$defaultConfiguration[$_plugin] = array_merge(self::$defaultConfiguration[$_plugin], parse_ini_file(__DIR__ . '/../../data/custom/custom.config.ini', true));
                 }

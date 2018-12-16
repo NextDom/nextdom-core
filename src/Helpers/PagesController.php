@@ -54,7 +54,6 @@ class PagesController
         'report'         => Controller\ReportController::class,
         'plugin'         => Controller\PluginListController::class,
         'editor'         => Controller\EditorController::class,
-        'migration'      => Controller\MigrationController::class,
         'history'        => Controller\HistoryController::class,
         'timeline'       => Controller\TimelineController::class,
         'shutdown'       => Controller\ShutdownController::class,

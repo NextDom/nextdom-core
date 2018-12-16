@@ -112,26 +112,4 @@ class BackupManager {
             require_once NEXTDOM_ROOT . '/install/restore.php';
         }
     }
-
-    /**
-     * Migrate a backup from file from Jeedom
-     *
-     * @param string $backupFilePath Backup file path
-     *
-     * @param bool $taskInBackground Start migration task in background
-     */
-    public static function migrate(string $backupFilePath = '', bool $taskInBackground = false)
-    {
-        if ($taskInBackground) {
-            \log::clear('migration');
-            $cmd = NEXTDOM_ROOT . '/install/migrate_jeedom_to_nextdom.php "backup=' . $backupFilePath . '"';
-            $cmd .= ' >> ' . \log::getPathToLog('migration') . ' 2>&1 &';
-            \system::php($cmd, true);
-            \system::php(NEXTDOM_ROOT.'/todo.php');
-        } else {
-            global $BACKUP_FILE;
-            $BACKUP_FILE = $backupFilePath;
-            require_once NEXTDOM_ROOT . '/install/migrate_jeedom_to_nextdom.php';
-        }
-    }
 }
