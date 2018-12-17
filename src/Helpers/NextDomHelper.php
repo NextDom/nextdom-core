@@ -458,8 +458,8 @@ class NextDomHelper
      */
     public static function getJeedomVersion()
     {
-        if (file_exists(NEXTDOM_ROOT . '/core/config/Jeedom_version')) {
-            return trim(file_get_contents(NEXTDOM_ROOT . '/core/config/Jeedom_version'));
+        if (file_exists('/var/lib/nextdom/config/Jeedom_version')) {
+            return trim(file_get_contents('/var/lib/nextdom/config/Jeedom_version'));
         }
         return '';
     }
@@ -471,8 +471,8 @@ class NextDomHelper
      */
     public static function getNextdomVersion()
     {
-        if (file_exists(NEXTDOM_ROOT . '/core/config/Nextdom_version')) {
-            return trim(file_get_contents(NEXTDOM_ROOT . '/core/config/Nextdom_version'));
+        if (file_exists('/var/lib/nextdom/config/Nextdom_version')) {
+            return trim(file_get_contents('/var/lib/nextdom/config/Nextdom_version'));
         }
         return '';
     }

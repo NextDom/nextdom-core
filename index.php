@@ -29,7 +29,7 @@ use NextDom\Helpers\Utils;
 
 try {
     // Test si l'installation doit être lancée
-    if (!file_exists(dirname(__FILE__) . '/core/config/common.config.php')) {
+    if (!file_exists('/var/lib/nextdom/config/common.config.php')) {
         header("location: install/setup.php");
     }
     // Paramètre v = Type de vue (mobile = m, desktop = d)

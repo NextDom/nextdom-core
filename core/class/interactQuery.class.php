@@ -665,7 +665,7 @@ class interactQuery {
         if (isset($_parameters['profile'])) {
             $PROFILE = $_parameters['profile'];
         }
-        include_file('core', 'bot', 'config');
+        require_once '/var/lib/nextdom/config/bot.config.php';
         global $BRAINREPLY;
         $shortest = 999;
         foreach ($BRAINREPLY as $word => $response) {

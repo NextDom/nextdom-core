@@ -27,6 +27,8 @@ chown www-data:www-data -R $LOGS_DIRECTORY
 # configs directory
 CONFIGS_DIRECTORY=/var/lib/nextdom
 mkdir -p ${CONFIGS_DIRECTORY}
+chmod 775 -R ${CONFIGS_DIRECTORY}
+chown -R www-data:www-data ${CONFIGS_DIRECTORY}
 
 # Functions
 
@@ -233,14 +235,13 @@ step_nextdom_apache_php() {
 
 step_nextdom_configuration() {
     cp -r ${WEBSERVER_HOME}/assets/config ${CONFIGS_DIRECTORY}
-    ln -s ${CONFIGS_DIRECTORY}/config ${WEBSERVER_HOME}/core
-    cp ${WEBSERVER_HOME}/core/config/common.config.sample.php ${WEBSERVER_HOME}/core/config/common.config.php
+    cp ${CONFIGS_DIRECTORY}/config/common.config.sample.php ${CONFIGS_DIRECTORY}/config/common.config.php
 
-    sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${WEBSERVER_HOME}/core/config/common.config.php
-    sed -i "s/#DBNAME#/${MYSQL_NEXTDOM_DB}/g" ${WEBSERVER_HOME}/core/config/common.config.php
-    sed -i "s/#USERNAME#/${MYSQL_NEXTDOM_USER}/g" ${WEBSERVER_HOME}/core/config/common.config.php
-    sed -i "s/#PORT#/${MYSQL_PORT}/g" ${WEBSERVER_HOME}/core/config/common.config.php
-    sed -i "s/#HOST#/${MYSQL_HOSTNAME}/g" ${WEBSERVER_HOME}/core/config/common.config.php
+    sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${CONFIGS_DIRECTORY}/config/common.config.php
+    sed -i "s/#DBNAME#/${MYSQL_NEXTDOM_DB}/g" ${CONFIGS_DIRECTORY}/config/common.config.php
+    sed -i "s/#USERNAME#/${MYSQL_NEXTDOM_USER}/g" ${CONFIGS_DIRECTORY}/config/common.config.php
+    sed -i "s/#PORT#/${MYSQL_PORT}/g" ${CONFIGS_DIRECTORY}/config/common.config.php
+    sed -i "s/#HOST#/${MYSQL_HOSTNAME}/g" ${CONFIGS_DIRECTORY}/config/common.config.php
 
     chmod 775 -R ${WEBSERVER_HOME}
     chown -R www-data:www-data ${WEBSERVER_HOME}
