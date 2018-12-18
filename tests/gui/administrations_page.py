@@ -74,10 +74,10 @@ class AdministrationPages(unittest.TestCase):
         sleep(4)
         users_button = self.driver.find_element_by_css_selector('a[href="index.php?v=d&p=users"]')
         interact_admin_button = self.driver.find_element_by_css_selector('a[href="index.php?v=d&p=interact_admin"]')
-        migration_button = self.driver.find_element_by_css_selector('a[href="index.php?v=d&p=migration"]')
+        cache_button = self.driver.find_element_by_css_selector('a[href="index.php?v=d&p=cache"]')
         self.assertIsNotNone(users_button)
         self.assertIsNotNone(interact_admin_button)
-        self.assertIsNotNone(migration_button)
+        self.assertIsNotNone(cache_button)
         self.assertEqual(0, len(self.driver.get_log('browser')))
 
     def test_users_page(self):
@@ -339,17 +339,6 @@ class AdministrationPages(unittest.TestCase):
         activ_display_checkbox = self.driver.find_element_by_id('cb_actifDisplay')
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(activ_display_checkbox)
-        self.assertIsNotNone(back_button)
-        self.assertEqual(0, len(self.driver.get_log('browser')))
-        back_button.click()
-        sleep(4)
-
-    def test_migration_page(self):
-        self.driver.get(self.url+'index.php?v=d&p=migration')
-        sleep(4)
-        migration_button = self.driver.find_element_by_id('bt_migrationNextDom')
-        back_button = self.driver.find_element_by_link_text('Retour')
-        self.assertIsNotNone(migration_button)
         self.assertIsNotNone(back_button)
         self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
