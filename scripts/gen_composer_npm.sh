@@ -24,7 +24,8 @@ set_root $0
 
 function install_nodemodules {
 echo " >>> Installing the npm modules"
-cp package.json ./vendor
+[[ ! -d ./vendor ]] && mkdir vendor
+cp package.json ./vendor/
 npm install --prefix ./vendor
 }
 
