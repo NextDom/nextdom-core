@@ -1,9 +1,5 @@
 #!/bin/bash
 
-docker kill nextdom-test
-docker rm nextdom-test
-docker rmi nextdom-test-snap
-
 # Go to base path
 cd ..
 docker run -d -p 8765:80 -v `pwd`:/data --name="nextdom-test" sylvaner1664/nextdom-test:latest > /dev/null 2>&1

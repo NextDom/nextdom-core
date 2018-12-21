@@ -561,6 +561,7 @@ chmod 777 -R /tmp/nextdom
 chown -R www-data:www-data /tmp/nextdom
 mkdir ${WEBSERVER_HOME}/var/custom
 chown -R www-data:www-data ${WEBSERVER_HOME}/var
+chown -R www-data:www-data ${VARS_DIRECTORY}
 
 [[ -f /root/.mysqlroot ]] && rm -f /root/.mysqlroot
 
