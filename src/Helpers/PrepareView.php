@@ -439,11 +439,11 @@ class PrepareView
                 }
             }
             if ($configs['enableCustomCss'] == 1) {
-                if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.css')) {
-                    $pageData['CSS_POOL'][] = '/desktop/custom/custom.css';
+                if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.css')) {
+                    $pageData['CSS_POOL'][] = '/var/custom/desktop/custom.css';
                 }
-                if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.js')) {
-                    $pageData['JS_POOL'][] = '/desktop/custom/custom.js';
+                if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.js')) {
+                    $pageData['JS_POOL'][] = '/var/custom/desktop/custom.js';
                 }
             }
         } else {

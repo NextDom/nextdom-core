@@ -16,6 +16,9 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use NextDom\Helpers\Utils;
+use NextDom\Exceptions\CoreException;
+
 try {
     require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
@@ -63,8 +66,8 @@ try {
         }
         $return['custom'] = array('js' => false, 'css' => false);
         if (config::byKey('enableCustomCss', 'core', 1) == 1) {
-            $return['custom']['js'] = file_exists(__DIR__ . '/../../mobile/custom/custom.js');
-            $return['custom']['css'] = file_exists(__DIR__ . '/../../mobile/custom/custom.css');
+            $return['custom']['js'] = file_exists(NEXTDOM_ROOT . '/var/custom/mobile/custom.js');
+            $return['custom']['css'] = file_exists(NEXTDOM_ROOT . '/var/custom/mobile/custom.css');
         }
         ajax::success($return);
     }
@@ -237,22 +240,23 @@ try {
 
     if (init('action') == 'saveCustom') {
         unautorizedInDemo();
-        $path = __DIR__ . '/../../';
-        if (init('version') != 'desktop' && init('version') != 'mobile') {
-            throw new Exception(__('La version ne peut être que desktop ou mobile', __FILE__));
+        $customVersion = Utils::init('version');
+        $customType = Utils::init('type');
+        if ($customVersion != 'desktop' && $customVersion != 'mobile') {
+            throw new CoreException(__('La version ne peut être que desktop ou mobile'));
         }
-        if (init('type') != 'js' && init('type') != 'css') {
-            throw new Exception(__('La version ne peut être que js ou css', __FILE__));
+        if ($customType != 'js' && $customType != 'css') {
+            throw new CoreException(__('La version ne peut être que js ou css'));
         }
-        $path .= init('version') . '/custom/';
+        $path = NEXTDOM_ROOT . '/var/custom/' . $customVersion . '/';
         if (!file_exists($path)) {
             mkdir($path);
         }
-        $path .= 'custom.' . init('type');
+        $path .= 'custom.' . $customType;
         if (file_exists($path)) {
             unlink($path);
         }
-        file_put_contents($path, init('content'));
+        file_put_contents($path, Utils::init('content'));
         ajax::success();
     }
 

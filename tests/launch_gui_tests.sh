@@ -42,7 +42,6 @@ echo ">>>>> Clear"
 echo ">>> Migration <<<"
 echo ">>>>> Setup"
 ./scripts/start_test_container.sh nextdom-test-migration $PASSWORD
-# Remove first use, welcome message and set admin password user
 docker cp data/backup-Jeedom-3.2.11-2018-11-17-23h26.tar.gz nextdom-test-migration:/var/www/html/backup/
 docker exec -it nextdom-test-migration php /var/www/html/install/migrate_jeedom_to_nextdom.php "backup=/var/www/html/backup/backup-Jeedom-3.2.11-2018-11-17-23h26.tar.gz" > /dev/null 2>&1
 docker exec -i nextdom-test-migration /usr/bin/mysql -u root nextdomdev <<< "UPDATE user SET password = SHA2('$PASSWORD', 512)"
@@ -51,11 +50,16 @@ python3 -W ignore gui/migration_page.py "$URL" "$LOGIN" "$PASSWORD"
 echo ">>>>> Clear"
 ./scripts/remove_test_container.sh nextdom-test-migration
 
+echo ">>> Custom JS/CSS <<<"
+echo ">>>>> Setup"
+./scripts/start_test_container.sh nextdom-test-custom-js-css $PASSWORD
+python3 -W ignore gui/custom_js_css.py "$URL" "$LOGIN" "$PASSWORD"
+./scripts/remove_test_container.sh nextdom-test-custom-js-css
+
 # Start container for all others tests
 echo ">>> Others GUI tests <<<"
 echo ">>>>> Setup"
 ./scripts/start_test_container.sh nextdom-test-others $PASSWORD
-# Remove first use, welcome message and set admin password user
 echo ">>> Connect page <<<"
 python3 -W ignore gui/connection_page.py "$URL" "$LOGIN" "$PASSWORD"
 echo ">>> Administration pages <<<"

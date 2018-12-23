@@ -31,8 +31,8 @@ class config {
         if (!isset(self::$defaultConfiguration[$_plugin])) {
             if ($_plugin == 'core') {
                 self::$defaultConfiguration[$_plugin] = parse_ini_file('/var/lib/nextdom/config/default.config.ini', true);
-                if (file_exists(__DIR__ . '/../../data/custom/custom.config.ini')) {
-                    self::$defaultConfiguration[$_plugin] = array_merge(self::$defaultConfiguration[$_plugin], parse_ini_file(__DIR__ . '/../../data/custom/custom.config.ini', true));
+                if (file_exists(NEXTDOM_ROOT . '/var/custom/custom.config.ini')) {
+                    self::$defaultConfiguration[$_plugin] = array_merge(self::$defaultConfiguration[$_plugin], parse_ini_file(NEXTDOM_ROOT . '/var/custom/custom.config.ini', true));
                 }
             } else {
                 $filename = __DIR__ . '/../../plugins/' . $_plugin . '/core/config/' . $_plugin . '.config.ini';
