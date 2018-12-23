@@ -1,0 +1,43 @@
+<input class="form-control pull-right" placeholder="{{ 'Rechercher' }}" id="in_iconSelectorSearch" />
+{% for icons in iconsList %}
+    {% set iconCounter = 0 %}
+    <div style="height: {{ icons['height'] }}px"><legend>{{ icons['name'] }}</legend>
+        {% for icon in icons['list'] %}
+            {% if iconCounter == 0 %}
+                <div class="row text-center">
+            {% endif %}
+            <div class="col-xs-2 col-md-1 col-lg-1 divIconSel">
+                <span class="iconSel"><i class="icon {{ icon }}"></i></span>
+                <br/>
+                <span class="iconDesc">{{ icon }}</span>
+            </div>
+            {% set iconCounter = iconCounter + 1 %}
+            {% if iconCounter == 12 %}
+                </div>
+                {% set iconCounter = 0 %}
+            {% endif %}
+        {% endfor %}
+    </div><br/>
+{% endfor %}
+<script>
+    $('#in_iconSelectorSearch').on('keyup',function(){
+        $('.divIconSel').show();
+        var search = $(this).value();
+        if(search != ''){
+            $('.iconDesc').each(function(){
+                if($(this).text().indexOf(search) == -1){
+                    $(this).closest('.divIconSel').hide();
+                }
+            })
+        }
+    });
+    $('.divIconSel').on('click', function () {
+        $('.divIconSel').removeClass('iconSelected');
+        $(this).closest('.divIconSel').addClass('iconSelected');
+    });
+    $('.divIconSel').on('dblclick', function () {
+        $('.divIconSel').removeClass('iconSelected');
+        $(this).closest('.divIconSel').addClass('iconSelected');
+        $('#mod_selectIcon').dialog("option", "buttons")['Valider'].apply($('#mod_selectIcon'));
+    });
+</script>
