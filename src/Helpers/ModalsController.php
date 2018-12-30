@@ -38,6 +38,7 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
 use Sabre\CalDAV\Plugin;
@@ -49,6 +50,7 @@ class ModalsController
         'action.insert' => 'actionInsert',
         'cmd.configure' => 'cmdConfigure',
         'cmd.human.insert' => 'cmdHumanInsert',
+        'cmd.selectMultiple' => 'cmdSelectMultiple',
         'cron.human.insert' => 'cronHumanInsert',
         'dataStore.management' => 'dataStoreManagement',
         'eqLogic.configure' => 'eqLogicConfigure',
@@ -61,10 +63,13 @@ class ModalsController
         'log.display' => 'logDisplay',
         'nextdom.benchmark' => 'nextdomBenchmark',
         'object.configure' => 'objectConfigure',
+        'object.display' => 'objectDisplay',
+        'object.summary' => 'objectSummary',
         'plan.configure' => 'planConfigure',
         'planHeader.configure' => 'planHeaderConfigure',
         'plugin.deamon' => 'pluginDaemon',
         'plugin.dependancy' => 'pluginDependency',
+        'report.bug' => 'reportBug',
         'scenario.export' => 'scenarioExport',
         'scenario.human.insert' => 'scenarioHumanInsert',
         'scenario.log.execution' => 'scenarioLogExecution',
@@ -73,6 +78,7 @@ class ModalsController
         'update.add' => 'updateAdd',
         'update.display' => 'updateDisplay',
         'update.list' => 'updateList',
+        'update.send' => 'updateSend',
         'user.rights' => 'userRights',
         'welcome' => 'welcome'
     ];
@@ -266,6 +272,34 @@ class ModalsController
         $pageContent['jeeObjects'] = JeeObjectManager::all();
 
         $render->show('/modals/cmd.human.insert.html.twig', $pageContent);
+    }
+
+    /**
+     * Render command select multiple modal (scenario)
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function cmdSelectMultiple(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $cmdId = Utils::init('cmd_id');
+        $cmd = CmdManager::byId($cmdId);
+        if (!is_object($cmd)) {
+            throw new CoreException('Commande non trouvée : ' . $cmdId);
+        }
+
+        $pageContent = [];
+        $pageContent['currentCmd'] = $cmd;
+        $pageContent['cmds'] = CmdManager::byTypeSubType($cmd->getType(), $cmd->getSubType());
+
+        $render->show('/modals/cmd.selectMultiple.html.twig', $pageContent);
     }
 
     /**
@@ -702,6 +736,137 @@ class ModalsController
     }
 
     /**
+     * Render object display modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function objectDisplay(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $cmdClass = Utils::init('class');
+        if ($cmdClass == '' || !class_exists($cmdClass)) {
+            throw new CoreException(__('La classe demandée n\'existe pas : ') . $cmdClass);
+        }
+        if (!method_exists($cmdClass, 'byId')) {
+            throw new CoreException(__('La classe demandée n\'a pas de méthode byId : ') . $cmdClass);
+        }
+
+        $object = $cmdClass::byId(Utils::init('id'));
+        if (!is_object($object)) {
+            throw new CoreException(__('L\'objet n\'existe pas : ') . $cmdClass);
+        }
+
+        $data = \utils::o2a($object);
+        if (count($data) == 0) {
+            throw new CoreException(__('L\'objet n\'a aucun élément : ') . print_r($data, true));
+        }
+        $otherInfo = [];
+
+        if ($cmdClass == 'cron' && $data['class'] == 'scenario' && $data['function'] == 'doIn') {
+            $scenario = ScenarioManager::byId($data['option']['scenario_id']);
+            //TODO: $array ???
+            $scenarioElement = ScenarioElementManager::byId($array['option']['scenarioElement_id']);
+            if (is_object($scenarioElement) && is_object($scenario)) {
+                $otherInfo['doIn'] = __('Scénario : ') . $scenario->getName() . "\n" . str_replace(array('"'), array("'"), $scenarioElement->export());
+            }
+        }
+        $pageContent = [];
+        if (count($otherInfo) > 0) {
+            $pageContent['otherData'] = [];
+            foreach ($otherInfo as $otherInfoKey => $otherInfoValue) {
+                $pageContent['otherData'][$otherInfoKey] = [];
+                $pageContent['otherData'][$otherInfoKey]['value'] = $otherInfoValue;
+                // TODO: Always long-text ???
+                if (is_array($otherInfoValue)) {
+                    $pageContent['otherData'][$otherInfoKey]['type'] = 'json';
+                    $pageContent['otherData'][$otherInfoKey]['value'] = json_encode($otherInfoValue);
+                } else if (strpos($otherInfoValue, "\n")) {
+                    $pageContent['otherData'][$otherInfoKey]['type'] = 'long-text';
+                } else {
+                    $pageContent['otherData'][$otherInfoKey]['type'] = 'simple-text';
+                }
+            }
+        }
+        // TODO : Reduce loops
+        $pageContent['data'] = [];
+        foreach ($data as $dataKey => $dataValue) {
+            $pageContent['data'][$dataKey] = [];
+            $pageContent['data'][$dataKey]['value'] = $dataValue;
+            if (is_array($dataValue)) {
+                $pageContent['data'][$dataKey]['type'] = 'json';
+                $pageContent['data'][$dataKey]['value'] = json_encode($dataValue);
+            } else if (strpos($dataValue, "\n")) {
+                $pageContent['data'][$dataKey]['type'] = 'long-text';
+            } else {
+                $pageContent['data'][$dataKey]['type'] = 'simple-text';
+            }
+        }
+        $render->show('/modals/object.display.html.twig', $pageContent);
+    }
+
+    /**
+     * Render object summary modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function objectSummary(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $pageContent = [];
+        $pageContent['objectsTree'] = JeeObjectManager::buildTree(null, false);
+        $pageContent['configObjectSummary'] = [];
+        $pageContent['summaryDesktopHidden'] = [];
+        $pageContent['summaryMobileHidden'] = [];
+        foreach ($pageContent['objectsTree'] as $jeeObject) {
+            $jeeObjectId = $jeeObject->getId();
+            foreach (\config::byKey('object:summary') as $key => $value) {
+                $title = '';
+                if (!isset($jeeObject->getConfiguration('summary')[$key]) || !is_array($jeeObject->getConfiguration('summary')[$key]) || count($jeeObject->getConfiguration('summary')[$key]) == 0) {
+                    continue;
+                }
+                $pageContent['configObjectSummary'][$jeeObjectId] = [];
+                foreach ($jeeObject->getConfiguration('summary')[$key] as $summary) {
+                    if (CmdManager::byId(str_replace('#', '', $summary['cmd']))) {
+                        $title .= '&#10;' . CmdManager::byId(str_replace('#', '', $summary['cmd']))->getHumanName();
+                    } else {
+                        $title .= '&#10;' . $summary['cmd'];
+                    }
+                }
+                if (count($jeeObject->getConfiguration('summary')[$key]) > 0) {
+                    $summary = [];
+                    $summary['global'] = $jeeObject->getConfiguration('summary::global::' . $key) == 1;
+                    $summary['title'] = $value['name'] . $title;
+                    $summary['icon'] = $value['icon'];
+                    $summary['count'] = count($jeeObject->getConfiguration('summary')[$key]);
+                    $pageContent['configObjectSummary'][$jeeObjectId][] = $summary;
+                }
+                if ($jeeObject->getConfiguration('summary::hide::desktop::' . $key) == 1) {
+                    $pageContent['summaryDesktopHidden'][] = ['name' => $value['name'], 'icon' => $value['icon']];
+                }
+                if ($jeeObject->getConfiguration('summary::hide::mobile::' . $key) == 1) {
+                    $pageContent['summaryMobileHidden'][] = ['name' => $value['name'], 'icon' => $value['icon']];
+                }
+            }
+        }
+
+        $render->show('/modals/object.summary.html.twig', $pageContent);
+    }
+
+    /**
      * Render plan configure modal
      *
      * @param Render $render Render engine
@@ -824,6 +989,32 @@ class ModalsController
         $pageContent['dependencyInfo'] = $plugin->getDependencyInfo();
 
         $render->show('/modals/plugin.dependency.html.twig');
+    }
+
+    /**
+     * Render report bug modal
+     *
+     * @param Render $render Render engine
+     *
+     * @return string Scenario export modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function reportBug(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        if (\config::byKey('market::address') == '') {
+            throw new CoreException(__('Aucune adresse pour le market n\'est renseignée' ));
+        }
+        if (\config::byKey('market::apikey') == '' && \config::byKey('market::username') == '') {
+            throw new CoreException(__('Aucun compte market n\'est renseigné. Veuillez vous enregistrer sur le market, puis renseignez vos identifiants dans') . \config::byKey('product_name') . __('avant d\'ouvrir un ticket'));
+        }
+        $render->show('/modals/report.bug.html.twig');
     }
 
     /**
@@ -1022,6 +1213,18 @@ class ModalsController
     public static function updateList(Render $render)
     {
         self::showRepoModal('list');
+    }
+
+    /**
+     * Render update send modal (market)
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     */
+    public static function updateSend(Render $render)
+    {
+        self::showRepoModal('send');
     }
 
     /**

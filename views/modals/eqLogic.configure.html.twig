@@ -639,7 +639,7 @@
     });
 
     $('#bt_resetbattery').on('click',function(){
-        bootbox.confirm('{{Avez vous changé les piles ? Cette action mettra la date de changement de piles à aujourd\'hui}}', function (result) {
+        bootbox.confirm('{{ 'Avez vous changé les piles ? Cette action mettra la date de changement de piles à aujourd\\\'hui' }}', function (result) {
             if (result) {
                 var eqLogic = {};
                 eqLogic['id']=eqLogicInfo.id
@@ -659,7 +659,7 @@
                         $('#md_displayEqLogicConfigure').showAlert({message: error.message, level: 'danger'});
                     },
                     success: function (data) {
-                        $('#md_displayEqLogicConfigure').showAlert({message: '{{Changement de pile(s) pris en compte}}', level: 'success'});
+                        $('#md_displayEqLogicConfigure').showAlert({message: '{{ 'Changement de pile(s) pris en compte' }}', level: 'success'});
                     }
                 });
             }
