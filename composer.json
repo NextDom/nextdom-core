@@ -1,47 +1,49 @@
 {
     "name": "nextdom/core",
-    "description": "Software for home automation Open Source",
+    "description": "Software for home automation",
     "require": {
-        "christian-riesen/base32": "1.3.*",
-        "doctrine/orm" : "2.5.*",
-        "doctrine/cache": "1.6.*",
-        "knplabs/github-api": "1.7.*",
-        "league/oauth2-client": "2.3.*",
-        "league/flysystem-webdav": "1.0.*",
-        "monolog/monolog": "^1.24",
-        "mtdowling/cron-expression": "1.2.*",
-        "pragmarx/google2fa": "1.0.*",
-        "symfony/expression-language": "2.8.*",
-        "touki/ftp": "1.2.*",
-        "symfony/translation": "^3.4",
-        "symfony/debug": "^3.4",
-        "symfony/config": "^3.4",
-        "twig/twig": "^2.5",
-        "twig/extensions": "^1.5",
-        "symfony/twig-bridge": "^3.4",
-        "maximebf/debugbar": "^1.15"
+      "christian-riesen/base32": "1.3.2",
+      "doctrine/cache": "1.6.2",
+      "guzzle/guzzle": "3.9.3",
+      "guzzlehttp/guzzle": "6.3.3",
+      "guzzlehttp/promises": "1.3.1",
+      "guzzlehttp/psr7": "1.5.2",
+      "knplabs/github-api": "1.7.1",
+      "league/flysystem": "1.0.49",
+      "league/flysystem-webdav": "1.0.6",
+      "league/oauth2-client": "2.4.1",
+      "matthiasmullie/path-converter": "1.1.2",
+      "matthiasmullie/minify": "1.3.61",
+      "monolog/monolog": "1.24.0",
+      "mtdowling/cron-expression": "1.2.1",
+      "paragonie/random_compat": "2.0.17",
+      "pragmarx/google2fa": "1.0.1",
+      "psr/http-message": "1.0.1",
+      "psr/log": "1.1.0",
+      "ralouphie/getallheaders": "2.0.5",
+      "sabre/dav": "3.2.3",
+      "sabre/event": "3.0.0",
+      "sabre/http": "4.2.4",
+      "sabre/uri": "1.2.1",
+      "sabre/vobject": "4.1.6",
+      "sabre/xml": "1.5.0",
+      "symfony/event-dispatcher": "2.8.49",
+      "symfony/expression-language": "2.8.49",
+      "symfony/polyfill-php56": "1.10.0",
+      "symfony/polyfill-util": "1.10.0",
+      "touki/ftp": "1.2.1"
     },
     "license": "GPL",
     "config": {
-        "preferred-install": "dist"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^5.7",
-        "vrana/adminer": "^4.7"
-    },
-    "authors": [
-        {
-            "name": "nextdom",
-            "email": "nextdom@nextdom.org"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "NextDom\\": [
-                "core/class",
-                "src",
-                "core/ajax"
-            ]
-        }
+       "preferred-install": "dist",
+       "platform": {
+           "php": "5.6.0"
+       }
+   },
+   "authors": [
+    {
+        "name": "Loic",
+        "email": "loic@nextdom.com"
     }
+]
 }
