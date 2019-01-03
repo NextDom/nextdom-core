@@ -57,7 +57,7 @@ class Plan3DController extends BaseController
             if ($_SESSION['user']->getOptions('defaultDesktopPlan3d') != '') {
                 $plan3dHeader = \plan3dHeader::byId($_SESSION['user']->getOptions('defaultDesktopPlan3d'));
             }
-            if (!is_object($plan3dHeader)) {
+            if (!is_object($plan3dHeader) && count($list_plan3dHeader) > 0) {
                 $plan3dHeader = $list_plan3dHeader[0];
             }
         } else {
