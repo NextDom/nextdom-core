@@ -35,6 +35,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Managers\ConfigManager;
 
 require_once NEXTDOM_ROOT.'/core/class/cache.class.php';
 
@@ -104,7 +105,7 @@ class CacheManager {
     {
         $result = self::getCache()->getStats();
         $result['count'] = \__('Inconnu');
-        if (\config::byKey('cache::engine') == 'FilesystemCache') {
+        if (ConfigManager::byKey('cache::engine') == 'FilesystemCache') {
             $result['count'] = 0;
             foreach (ls(self::getFolder()) as $folder) {
                 foreach (ls(self::getFolder() . '/' . $folder) as $file) {
@@ -144,14 +145,14 @@ class CacheManager {
         if (self::$cacheSystem !== null) {
             return self::$cacheSystem;
         }
-        $engine = \config::byKey('cache::engine');
+        $engine = ConfigManager::byKey('cache::engine');
         if ($engine == 'MemcachedCache' && !class_exists('memcached')) {
             $engine = 'FilesystemCache';
-            \config::save('cache::engine', 'FilesystemCache');
+            ConfigManager::save('cache::engine', 'FilesystemCache');
         }
         if ($engine == 'RedisCache' && !class_exists('redis')) {
             $engine = 'FilesystemCache';
-            \config::save('cache::engine', 'FilesystemCache');
+            ConfigManager::save('cache::engine', 'FilesystemCache');
         }
         switch ($engine) {
             case 'FilesystemCache':
@@ -162,13 +163,13 @@ class CacheManager {
                 break;
             case 'MemcachedCache':
                 $memcached = new \Memcached();
-                $memcached->addServer(\config::byKey('cache::memcacheaddr'), \config::byKey('cache::memcacheport'));
+                $memcached->addServer(ConfigManager::byKey('cache::memcacheaddr'), ConfigManager::byKey('cache::memcacheport'));
                 self::$cacheSystem = new \Doctrine\Common\Cache\MemcachedCache();
                 self::$cacheSystem->setMemcached($memcached);
                 break;
             case 'RedisCache':
                 $redis = new \Redis();
-                $redis->connect(\config::byKey('cache::redisaddr'), \config::byKey('cache::redisport'));
+                $redis->connect(ConfigManager::byKey('cache::redisaddr'), ConfigManager::byKey('cache::redisport'));
                 self::$cacheSystem = new \Doctrine\Common\Cache\RedisCache();
                 self::$cacheSystem->setRedis($redis);
                 break;
@@ -246,7 +247,7 @@ class CacheManager {
      */
     public static function persist() 
     {
-        switch (\config::byKey('cache::engine')) {
+        switch (ConfigManager::byKey('cache::engine')) {
             case 'FilesystemCache':
                 $cacheDir = self::getFolder();
                 break;
@@ -273,7 +274,7 @@ class CacheManager {
      */
     public static function isPersistOk(): bool 
     {
-        if (\config::byKey('cache::engine') != 'FilesystemCache' && \config::byKey('cache::engine') != 'PhpFileCache') {
+        if (ConfigManager::byKey('cache::engine') != 'FilesystemCache' && ConfigManager::byKey('cache::engine') != 'PhpFileCache') {
             return true;
         }
         $filename = NEXTDOM_ROOT.'/var/cache.tar.gz';
@@ -291,7 +292,7 @@ class CacheManager {
      */
     public static function restore() 
     {
-        switch (\config::byKey('cache::engine')) {
+        switch (ConfigManager::byKey('cache::engine')) {
             case 'FilesystemCache':
                 $cache_dir = self::getFolder();
                 break;
@@ -322,7 +323,7 @@ class CacheManager {
      */
     public static function clean() 
     {
-        if (\config::byKey('cache::engine') != 'FilesystemCache') {
+        if (ConfigManager::byKey('cache::engine') != 'FilesystemCache') {
             return;
         }
         $re = '/s:\d*:(.*?);s:\d*:"(.*?)";s/';

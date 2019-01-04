@@ -45,6 +45,7 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Managers\ConfigManager;
 
 class NextDomHelper
 {
@@ -77,20 +78,20 @@ class NextDomHelper
     {
         global $NEXTDOM_INTERNAL_CONFIG;
         $result = array();
-        $cmd = \config::byKey('interact::warnme::defaultreturncmd', 'core', '');
+        $cmd = ConfigManager::byKey('interact::warnme::defaultreturncmd', 'core', '');
         if ($cmd != '') {
             if (!CmdManager::byId(str_replace('#', '', $cmd))) {
                 $result[] = array('detail' => 'Administration', 'help' => __('Commande retour interactions'), 'who' => $cmd);
             }
         }
-        $cmd = \config::byKey('emailAdmin', 'core', '');
+        $cmd = ConfigManager::byKey('emailAdmin', 'core', '');
         if ($cmd != '') {
             if (!CmdManager::byId(str_replace('#', '', $cmd))) {
                 $result[] = array('detail' => 'Administration', 'help' => __('Commande information utilisateur'), 'who' => $cmd);
             }
         }
         foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
-            $cmds = \config::byKey('alert::' . $level . 'Cmd', 'core', '');
+            $cmds = ConfigManager::byKey('alert::' . $level . 'Cmd', 'core', '');
             preg_match_all("/#([0-9]*)#/", $cmds, $matches);
             foreach ($matches[1] as $cmd_id) {
                 if (CmdManager::byId($cmd_id)) {
@@ -145,7 +146,7 @@ class NextDomHelper
             'comment' => '',
         );
 
-        $state = (\config::byKey('enableCron', 'core', 1, true) != 0) ? true : false;
+        $state = (ConfigManager::byKey('enableCron', 'core', 1, true) != 0) ? true : false;
         $systemHealth[] = array(
             'icon' => 'fa-calendar-alt',
             'name' => __('health.cron-enabled'),
@@ -154,7 +155,7 @@ class NextDomHelper
             'comment' => ($state) ? '' : __('health.cron-disabled'),
         );
 
-        $state = (\config::byKey('enableScenario') == 0 && count(ScenarioManager::all()) > 0) ? false : true;
+        $state = (ConfigManager::byKey('enableScenario') == 0 && count(ScenarioManager::all()) > 0) ? false : true;
         $systemHealth[] = array(
             'icon' => 'fa-film',
             'name' => __('health.scenario-enabled'),
@@ -297,7 +298,7 @@ class NextDomHelper
             'comment' => '',
             'name' => __('health.cache-persistence'));
         if (CacheManager::isPersistOk()) {
-            if (\config::byKey('cache::engine') != 'FilesystemCache' && \config::byKey('cache::engine') != 'PhpFileCache') {
+            if (ConfigManager::byKey('cache::engine') != 'FilesystemCache' && ConfigManager::byKey('cache::engine') != 'PhpFileCache') {
                 $cache_health['state'] = true;
                 $cache_health['result'] = $okStr;
             } else {
@@ -356,13 +357,13 @@ class NextDomHelper
         if (!self::isDateOk()) {
             return false;
         }
-        if (\config::byKey('enableScenario') == 0 && count(ScenarioManager::all()) > 0) {
+        if (ConfigManager::byKey('enableScenario') == 0 && count(ScenarioManager::all()) > 0) {
             return false;
         }
         if (!self::isCapable('sudo')) {
             return false;
         }
-        if (\config::byKey('enableCron', 'core', 1, true) == 0) {
+        if (ConfigManager::byKey('enableCron', 'core', 1, true) == 0) {
             return false;
         }
         return true;
@@ -446,7 +447,7 @@ class NextDomHelper
             self::$nextdomConfiguration[$configKey] = $configValue;
             return $configValue;
         } else {
-            $config = \config::byKey($configKey);
+            $config = ConfigManager::byKey($configKey);
             return ($config == '') ? $configValue : $config;
         }
     }
@@ -484,7 +485,7 @@ class NextDomHelper
     {
         $okStr = __('common.ok');
         echo __('core.disable-tasks');
-        \config::save('enableCron', 0);
+        ConfigManager::save('enableCron', 0);
         foreach (\cron::all() as $cron) {
             if ($cron->running()) {
                 try {
@@ -511,7 +512,7 @@ class NextDomHelper
         /*         * *********Arrêt des scénarios**************** */
 
         echo __('core.disable-all-scenarios');
-        \config::save('enableScenario', 0);
+        ConfigManager::save('enableScenario', 0);
         foreach (ScenarioManager::all() as $scenario) {
             try {
                 $scenario->stop();
@@ -535,10 +536,10 @@ class NextDomHelper
 
         try {
             echo __('core.enable-all-scenarios');
-            \config::save('enableScenario', 1);
+            ConfigManager::save('enableScenario', 1);
             echo " $okStr\n";
             echo __('core.enable-tasks');
-            \config::save('enableCron', 1);
+            ConfigManager::save('enableCron', 1);
             echo " $okStr\n";
         } catch (CoreException $e) {
             if (!isset($_GET['mode']) || $_GET['mode'] != 'force') {
@@ -566,7 +567,7 @@ class NextDomHelper
      */
     public static function isDateOk()
     {
-        if (\config::byKey('ignoreHourCheck') == 1) {
+        if (ConfigManager::byKey('ignoreHourCheck') == 1) {
             return true;
         }
         $cache = CacheManager::byKey('hour');
@@ -695,7 +696,7 @@ class NextDomHelper
             }
 
             try {
-                if (\config::byKey('market::enable') == 1) {
+                if (ConfigManager::byKey('market::enable') == 1) {
                     \log::add('starting', 'debug', __('Test de connexion au market'));
                     \repo_market::test();
                 }
@@ -721,7 +722,7 @@ class NextDomHelper
         try {
             foreach (\update::listRepo() as $name => $repo) {
                 $class = 'repo_' . $name;
-                if (class_exists($class) && method_exists($class, 'cron5') && \config::byKey($name . '::enable') == 1) {
+                if (class_exists($class) && method_exists($class, 'cron5') && ConfigManager::byKey($name . '::enable') == 1) {
                     $class::cron5();
                 }
             }
@@ -746,7 +747,7 @@ class NextDomHelper
             \log::add('nextdom', 'error', $e->getMessage());
         }
         try {
-            if (\config::byKey('update::autocheck', 'core', 1) == 1 && (\config::byKey('update::lastCheck') == '' || (strtotime('now') - strtotime(\config::byKey('update::lastCheck'))) > (23 * 3600))) {
+            if (ConfigManager::byKey('update::autocheck', 'core', 1) == 1 && (ConfigManager::byKey('update::lastCheck') == '' || (strtotime('now') - strtotime(ConfigManager::byKey('update::lastCheck'))) > (23 * 3600))) {
                 UpdateManager::checkAllUpdate();
                 $updates = UpdateManager::byStatus('update');
                 if (count($updates) > 0) {
@@ -766,7 +767,7 @@ class NextDomHelper
         try {
             foreach (UpdateManager::listRepo() as $name => $repo) {
                 $class = 'repo_' . $name;
-                if (class_exists($class) && method_exists($class, 'cronHourly') && \config::byKey($name . '::enable') == 1) {
+                if (class_exists($class) && method_exists($class, 'cronHourly') && ConfigManager::byKey($name . '::enable') == 1) {
                     $class::cronHourly();
                 }
             }
@@ -1075,7 +1076,7 @@ class NextDomHelper
      */
     public static function forceSyncHour()
     {
-        shell_exec(SystemHelper::getCmdSudo() . 'service ntp stop;' . SystemHelper::getCmdSudo() . 'ntpdate -s ' . \config::byKey('ntp::optionalServer', 'core', '0.debian.pool.ntp.org') . ';' . SystemHelper::getCmdSudo() . 'service ntp start');
+        shell_exec(SystemHelper::getCmdSudo() . 'service ntp stop;' . SystemHelper::getCmdSudo() . 'ntpdate -s ' . ConfigManager::byKey('ntp::optionalServer', 'core', '0.debian.pool.ntp.org') . ';' . SystemHelper::getCmdSudo() . 'service ntp start');
     }
 
     /**
@@ -1108,7 +1109,7 @@ class NextDomHelper
      * @return string
      */
     public static function getTmpFolder($plugin = null) {
-        $result = '/' . trim(\config::byKey('folder::tmp'), '/');
+        $result = '/' . trim(ConfigManager::byKey('folder::tmp'), '/');
         if ($plugin !== null) {
             $result .= '/' . $plugin;
         }
@@ -1127,10 +1128,10 @@ class NextDomHelper
      */
     public static function getHardwareKey()
     {
-        $result = \config::byKey('nextdom::installKey');
+        $result = ConfigManager::byKey('nextdom::installKey');
         if ($result == '') {
-            $result = substr(sha512(microtime() . \config::genKey()), 0, 63);
-            \config::save('nextdom::installKey', $result);
+            $result = substr(sha512(microtime() . ConfigManager::genKey()), 0, 63);
+            ConfigManager::save('nextdom::installKey', $result);
         }
         return $result;
     }
@@ -1142,8 +1143,8 @@ class NextDomHelper
      */
     public static function getHardwareName()
     {
-        if (\config::byKey('hardware_name') != '') {
-            return \config::byKey('hardware_name');
+        if (ConfigManager::byKey('hardware_name') != '') {
+            return ConfigManager::byKey('hardware_name');
         }
         $result = 'diy';
         $uname = shell_exec('uname -a');
@@ -1157,8 +1158,8 @@ class NextDomHelper
         if (file_exists('/media/boot/multiboot/meson64_odroidc2.dtb.linux')) {
             $result = 'smart';
         }
-        \config::save('hardware_name', $result);
-        return \config::byKey('hardware_name');
+        ConfigManager::save('hardware_name', $result);
+        return ConfigManager::byKey('hardware_name');
     }
 
     /**
@@ -1260,13 +1261,13 @@ class NextDomHelper
 
         $starttime = getmicrotime();
         for ($i = 0; $i < $param['database_replace']; $i++) {
-            \config::save('nextdom_benchmark', $i);
+            ConfigManager::save('nextdom_benchmark', $i);
         }
         $result['database_replace_' . $param['database_replace']] = getmicrotime() - $starttime;
 
         $starttime = getmicrotime();
         for ($i = 0; $i < $param['database_read']; $i++) {
-            \config::byKey('nextdom_benchmark');
+            ConfigManager::byKey('nextdom_benchmark');
         }
         $result['database_read_' . $param['database_read']] = getmicrotime() - $starttime;
 

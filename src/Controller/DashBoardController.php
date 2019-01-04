@@ -25,6 +25,7 @@ namespace NextDom\Controller;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\ScenarioManager;
@@ -59,7 +60,7 @@ class DashBoardController extends BaseController
     public function get(Render $render, array &$pageContent): string
     {
 
-        $pageContent['JS_VARS']['nextdom_Welcome'] = \config::byKey('nextdom::Welcome');
+        $pageContent['JS_VARS']['nextdom_Welcome'] = ConfigManager::byKey('nextdom::Welcome');
         $pageContent['JS_VARS']['SEL_OBJECT_ID']   = Utils::init('object_id');
         $pageContent['JS_VARS']['SEL_CATEGORY']    = Utils::init('category', 'all');
         $pageContent['JS_VARS']['SEL_TAG']         = Utils::init('tag', 'all');

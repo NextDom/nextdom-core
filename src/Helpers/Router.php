@@ -36,6 +36,7 @@ namespace NextDom\Helpers;
 
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\ConfigManager;
 
 /**
  * Turnout of the display
@@ -93,7 +94,7 @@ class Router
         } else {
             require_once(NEXTDOM_ROOT . '/core/php/authentification.php');
             Status::initConnectState();
-            $configs = \config::byKeys(array(
+            $configs = ConfigManager::byKeys(array(
                 'enableCustomCss',
                 'language',
                 'nextdom::firstUse',

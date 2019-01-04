@@ -24,6 +24,7 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Managers\ConfigManager;
 
 class UsersController extends BaseController
 {
@@ -48,8 +49,7 @@ class UsersController extends BaseController
      */
     public function get(Render $render, array &$pageContent): string
     {
-
-        $pageContent['userLdapEnabled'] = \config::byKey('ldap::enable');
+        $pageContent['userLdapEnabled'] = ConfigManager::byKey('ldap::enable');
         if ($pageContent['userLdapEnabled'] != '1') {
             $user = \user::byLogin('nextdom_support');
             $pageContent['userSupportExists'] = is_object($user);

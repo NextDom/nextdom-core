@@ -25,6 +25,7 @@ namespace NextDom\Controller;
 
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Managers\ConfigManager;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
@@ -57,13 +58,13 @@ class ApiController extends BaseController
         foreach ($pageContent['adminReposList'] as $key => $value) {
             $keys[] = $key . '::enable';
         }
-        $pageContent['adminConfigs'] = \config::byKeys($keys);
+        $pageContent['adminConfigs'] = ConfigManager::byKeys($keys);
         $pageContent['adminIsRescueMode'] = Status::isRescueMode();
         if (!$pageContent['adminIsRescueMode']) {
             $pageContent['adminPluginsList'] = [];
             $pluginsList = PluginManager::listPlugin(true);
             foreach ($pluginsList as $plugin) {
-                $pluginApi = \config::byKey('api', $plugin->getId());
+                $pluginApi = ConfigManager::byKey('api', $plugin->getId());
 
                 if ($pluginApi !== '') {
                     $pluginData = [];

@@ -25,8 +25,8 @@ namespace NextDom\Controller;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
-
 
 class ObjectController extends BaseController
 {
@@ -52,12 +52,11 @@ class ObjectController extends BaseController
      */
     public function get(Render $render, array &$pageContent): string
     {
-
         $pageContent['JS_VARS']['select_id'] = Utils::init('id', '-1');
-        $pageContent['objectProductName'] = \config::byKey('product_name');
-        $pageContent['objectCustomProductName'] = \config::byKey('name');
+        $pageContent['objectProductName'] = ConfigManager::byKey('product_name');
+        $pageContent['objectCustomProductName'] = ConfigManager::byKey('name');
         $pageContent['objectList'] = JeeObjectManager::buildTree(null, false);
-        $pageContent['objectSummary'] = \config::byKey('object:summary');
+        $pageContent['objectSummary'] = ConfigManager::byKey('object:summary');
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/object.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 

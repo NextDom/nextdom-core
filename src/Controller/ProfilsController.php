@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Helpers\Render;
@@ -87,7 +88,7 @@ class ProfilsController extends BaseController
         $pageContent['profilsJeeObjects'] = JeeObjectManager::all();
         $pageContent['profilsViews'] = \view::all();
         $pageContent['profilsPlans'] = \planHeader::all();
-        $pageContent['profilsAllowRemoteUsers'] = \config::byKey('sso:allowRemoteUser');
+        $pageContent['profilsAllowRemoteUsers'] = ConfigManager::byKey('sso:allowRemoteUser');
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/profils.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';

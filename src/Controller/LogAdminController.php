@@ -24,6 +24,7 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
 
 class LogAdminController extends BaseController
@@ -57,7 +58,7 @@ class LogAdminController extends BaseController
             $pageContent['adminPluginsList'] = [];
             $pluginsList = PluginManager::listPlugin(true);
             foreach ($pluginsList as $plugin) {
-                $pluginApi = \config::byKey('api', $plugin->getId());
+                $pluginApi = ConfigManager::byKey('api', $plugin->getId());
                     $pluginData = [];
                     $pluginData['api'] = $pluginApi;
                     $pluginData['plugin'] = $plugin;

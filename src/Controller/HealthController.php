@@ -24,8 +24,8 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
-
 
 class HealthController extends BaseController
 {
@@ -90,7 +90,7 @@ class HealthController extends BaseController
                 // Etat pour savoir si le tableau doit être affiché
                 $pluginData['showOnlyTable'] = false;
                 // Le port du plugin est stocké dans la configuration
-                $port = \config::byKey('port', $plugin->getId());
+                $port = ConfigManager::byKey('port', $plugin->getId());
                 // Si un port est configuré, stockage pour la vue
                 if ($port != '') {
                     $pluginData['port'] = $port;

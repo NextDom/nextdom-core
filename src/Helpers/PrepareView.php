@@ -23,6 +23,7 @@ use NextDom\Managers\JeeObjectManager;
 use NextDom\Helpers\ModalsController;
 use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Router;
+use NextDom\Managers\ConfigManager;
 
 /**
  * Classe de support à l'affichage des contenus HTML
@@ -249,7 +250,7 @@ class PrepareView
                         $pageData['title'] = ucfirst($currentPlugin->getName()) . ' - ' . $configs['product_name'];
                     }
                     // TODO: C'est quoi ?
-                    if ($plugin->getDisplay() != '' && \config::bykey('displayDesktopPanel', $plugin->getId(), 0) != 0) {
+                    if ($plugin->getDisplay() != '' && ConfigManager::bykey('displayDesktopPanel', $plugin->getId(), 0) != 0) {
                         $pageData['PANEL_MENU'][] = $plugin;
                     }
                     if ($plugin->getEventjs() == 1) {
@@ -287,7 +288,7 @@ class PrepareView
         $pageData['IS_ADMIN']                 = Status::isConnectAdmin();
         $pageData['CAN_SUDO']                 = NextDomHelper::isCapable('sudo');
         $pageData['MENU_NB_MESSAGES']         = \message::nbMessage();
-        $pageData['NOTIFY_STATUS']           = \config::byKey('notify::status');
+        $pageData['NOTIFY_STATUS']           = ConfigManager::byKey('notify::status');
         if ($pageData['IS_ADMIN']) {
             $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
         }
@@ -299,7 +300,7 @@ class PrepareView
             $pageData['MENU_CURRENT_PLUGIN_ISSUE'] = $currentPlugin->getIssue();
         }
         $pageData['MENU_HTML_GLOBAL_SUMMARY'] = JeeObjectManager::getGlobalHtmlSummary();
-        $pageData['PRODUCT_IMAGE']            = \config::byKey('product_image');
+        $pageData['PRODUCT_IMAGE']            = ConfigManager::byKey('product_image');
         $pageData['USER_ISCONNECTED']         = $_SESSION['user']->is_Connected();
         $pageData['USER_AVATAR']              = $_SESSION['user']->getOptions('avatar');
         $pageData['USER_LOGIN']               = $_SESSION['user']->getLogin();

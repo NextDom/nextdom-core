@@ -19,6 +19,7 @@
 namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Managers\ConfigManager;
 
 /**
  * Temporary class to store different states.
@@ -118,6 +119,6 @@ class Status
      */
     public static function isInDeveloperMode(): bool
     {
-        return \config::getDefaultConfiguration()['core']['developer::mode'] == '1';
+        return ConfigManager::getDefaultConfiguration()['core']['developer::mode'] == '1';
     }
 }

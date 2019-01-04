@@ -24,6 +24,7 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UpdateManager;
 
 class NetworkController extends BaseController
@@ -49,13 +50,12 @@ class NetworkController extends BaseController
      */
     public function get(Render $render, array &$pageContent): string
     {
-
         $pageContent['adminReposList'] = UpdateManager::listRepo();
         $keys = array('dns::token', 'market::allowDNS');
         foreach ($pageContent['adminReposList'] as $key => $value) {
             $keys[] = $key . '::enable';
         }
-        $pageContent['adminConfigs'] = \config::byKeys($keys);
+        $pageContent['adminConfigs'] = ConfigManager::byKeys($keys);
         $pageContent['adminNetworkInterfaces'] = [];
         foreach (\network::getInterfaces() as $interface) {
             $intData = [];

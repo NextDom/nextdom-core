@@ -37,6 +37,7 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Managers\ConfigManager;
 
 class JeeObjectManager
 {
@@ -231,7 +232,7 @@ class JeeObjectManager
             foreach ($object->getConfiguration('summary', []) as $key => $summary) {
                 foreach ($summary as $cmdInfo) {
                     if (!CmdManager::byId(str_replace('#', '', $cmdInfo['cmd']))) {
-                        $result[] = array('detail' => 'Résumé ' . $object->getName(), 'help' => \config::byKey('object:summary')[$key]['name'], 'who' => $cmdInfo['cmd']);
+                        $result[] = array('detail' => 'Résumé ' . $object->getName(), 'help' => ConfigManager::byKey('object:summary')[$key]['name'], 'who' => $cmdInfo['cmd']);
                     }
                 }
             }
@@ -341,7 +342,7 @@ class JeeObjectManager
         if ($key == '') {
 			return null;
 		}
-		$def = \config::byKey('object:summary');
+		$def = ConfigManager::byKey('object:summary');
 		$objects = self::all();
 		$value = array();
 		foreach ($objects as $object) {
@@ -379,7 +380,7 @@ class JeeObjectManager
             return $cache->getValue();
         }
         $objects = self::all();
-        $def = \config::byKey('object:summary');
+        $def = ConfigManager::byKey('object:summary');
         $values = array();
         $return = '<span class="objectSummaryglobal" data-version="' . $version . '">';
         foreach ($def as $key => $value) {
@@ -435,7 +436,7 @@ class JeeObjectManager
         if ($key == '') {
             return;
         }
-        $def = \config::byKey('object:summary');
+        $def = ConfigManager::byKey('object:summary');
         if (!isset($def[$key])) {
             return;
         }

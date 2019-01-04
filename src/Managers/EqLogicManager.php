@@ -33,6 +33,8 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Managers\ConfigManager;
+
 class EqLogicManager
 {
     const CLASS_NAME = 'eqLogic';
@@ -405,17 +407,17 @@ class EqLogicManager
                         $message = \__('Attention') . ' ' . $eqLogic->getHumanName();
                         $message .= \__(' n\'a pas envoyé de message depuis plus de ') . $noReponseTimeLimit . \__(' min (vérifiez les piles)');
                         $eqLogic->setStatus('timeout', 1);
-                        if (\config::ByKey('alert::addMessageOnTimeout') == 1) {
+                        if (ConfigManager::ByKey('alert::addMessageOnTimeout') == 1) {
                             \message::add('core', $message, '', $logicalId);
                         }
-                        $cmds = explode(('&&'), \config::byKey('alert::timeoutCmd'));
-                        if (count($cmds) > 0 && trim(\config::byKey('alert::timeoutCmd')) != '') {
+                        $cmds = explode(('&&'), ConfigManager::byKey('alert::timeoutCmd'));
+                        if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::timeoutCmd')) != '') {
                             foreach ($cmds as $id) {
                                 $cmd = CmdManager::byId(str_replace('#', '', $id));
                                 if (is_object($cmd)) {
                                     $cmd->execCmd(array(
-                                        'title' => \__('[' . \config::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
-                                        'message' => \config::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
+                                        'title' => \__('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
+                                        'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
                                     ));
                                 }
                             }

@@ -34,6 +34,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Managers\ConfigManager;
 
 class CmdManager
 {
@@ -811,7 +812,7 @@ class CmdManager
      */
     public static function convertColor($color)
     {
-        $colors = \config::byKey('convertColor');
+        $colors = ConfigManager::byKey('convertColor');
         if (isset($colors[$color])) {
             return $colors[$color];
         }

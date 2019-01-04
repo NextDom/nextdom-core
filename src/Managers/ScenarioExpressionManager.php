@@ -36,6 +36,7 @@ namespace NextDom\Managers;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Managers\ConfigManager;
 
 class ScenarioExpressionManager
 {
@@ -617,8 +618,8 @@ class ScenarioExpressionManager
             $maxThreshold = $threshold;
             $minThreshold = -$threshold;
         } else {
-            $maxThreshold = \config::byKey('historyCalculTendanceThresholddMax');
-            $minThreshold = \config::byKey('historyCalculTendanceThresholddMin');
+            $maxThreshold = ConfigManager::byKey('historyCalculTendanceThresholddMax');
+            $minThreshold = ConfigManager::byKey('historyCalculTendanceThresholddMin');
         }
         if ($tendance > $maxThreshold) {
             return 1;
@@ -1342,7 +1343,7 @@ class ScenarioExpressionManager
                     $return['#njour#'] = (int)date('w');
                     break;
                 case '#nextdom_name#':
-                    $return['#nextdom_name#'] = '"' . \config::byKey('name') . '"';
+                    $return['#nextdom_name#'] = '"' . ConfigManager::byKey('name') . '"';
                     break;
                 case '#hostname#':
                     $return['#hostname#'] = '"' . gethostname() . '"';

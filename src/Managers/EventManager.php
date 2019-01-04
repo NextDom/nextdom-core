@@ -34,6 +34,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Managers\ConfigManager;
 
 /**
  * Class EventManager
@@ -155,7 +156,7 @@ class EventManager
         if ($longPolling === null || count($result['result']) > 0) {
             return $result;
         }
-        $waitTime = \config::byKey('event::waitPollingTime');
+        $waitTime = ConfigManager::byKey('event::waitPollingTime');
         $cycleCount = 0;
         $maxCycle = $longPolling / $waitTime;
         while (count($result['result']) == 0 && $cycleCount < $maxCycle) {

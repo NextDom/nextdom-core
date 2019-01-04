@@ -35,6 +35,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Managers\ConfigManager;
 
 require_once NEXTDOM_ROOT.'/core/class/cache.class.php';
 
@@ -63,10 +64,10 @@ class BackupManager {
      */
     public static function listBackup(): array
     {
-        if (substr(\config::byKey('backup::path'), 0, 1) != '/') {
-            $backup_dir = NEXTDOM_ROOT . '/' . \config::byKey('backup::path');
+        if (substr(ConfigManager::byKey('backup::path'), 0, 1) != '/') {
+            $backup_dir = NEXTDOM_ROOT . '/' . ConfigManager::byKey('backup::path');
         } else {
-            $backup_dir = \config::byKey('backup::path');
+            $backup_dir = ConfigManager::byKey('backup::path');
         }
         $backups = \ls($backup_dir, '*.tar.gz', false, array('files', 'quiet', 'datetime_asc'));
         $result = array();

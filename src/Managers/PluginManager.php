@@ -37,6 +37,7 @@ use NextDom\Enums\DaemonStateEnum;
 use NextDom\Enums\PluginManagerCronEnum;
 use NextDom\Managers\CacheManager;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Managers\ConfigManager;
 
 class PluginManager
 {
@@ -200,7 +201,7 @@ class PluginManager
     public static function heartbeat() {
 		foreach (self::listPlugin(true) as $plugin) {
 			try {
-				$heartbeat = \config::byKey('heartbeat::delay::' . $plugin->getId(), 'core', 0);
+				$heartbeat = ConfigManager::byKey('heartbeat::delay::' . $plugin->getId(), 'core', 0);
 				if ($heartbeat == 0 || is_nan($heartbeat)) {
 					continue;
 				}
@@ -220,7 +221,7 @@ class PluginManager
 					$message .= __(' n\'a recu de message depuis ') . $heartbeat . __(' min');
 					$logicalId = 'heartbeat' . $plugin->getId();
 					\message::add($plugin->getId(), $message, '', $logicalId);
-					if ($plugin->getHasOwnDeamon() && \config::byKey('heartbeat::restartDeamon::' . $plugin->getId(), 'core', 0) == 1) {
+					if ($plugin->getHasOwnDeamon() && ConfigManager::byKey('heartbeat::restartDeamon::' . $plugin->getId(), 'core', 0) == 1) {
 						$plugin->deamon_start(true);
 					}
 				}
@@ -305,7 +306,7 @@ class PluginManager
         CacheManager::set('plugin::'.$cronType.'::inprogress', $cache->getValue(0) + 1);
         foreach (self::listPlugin(true) as $plugin) {
             if (method_exists($plugin->getId(), $cronType)) {
-                if (\config::byKey('functionality::cron::enable', $plugin->getId(), 1) == 1) {
+                if (ConfigManager::byKey('functionality::cron::enable', $plugin->getId(), 1) == 1) {
                     $pluginId = $plugin->getId();
                     CacheManager::set('plugin::'.$cronType.'::last', $pluginId);
                     try {
@@ -367,7 +368,7 @@ class PluginManager
     public static function checkDeamon()
     {
         foreach (self::listPlugin(true) as $plugin) {
-            if (\config::byKey('deamonAutoMode', $plugin->getId(), 1) != 1) {
+            if (ConfigManager::byKey('deamonAutoMode', $plugin->getId(), 1) != 1) {
                 continue;
             }
             $dependancy_info = $plugin->dependancy_info();
@@ -381,7 +382,7 @@ class PluginManager
                 if (isset($dependancy_info['progress_file']) && file_exists($dependancy_info['progress_file'])) {
                     shell_exec('rm ' . $dependancy_info['progress_file']);
                 }
-                \config::save('deamonAutoMode', 0, $plugin->getId());
+                ConfigManager::save('deamonAutoMode', 0, $plugin->getId());
                 \log::add($plugin->getId(), 'error', \__('Attention : l\'installation des dépendances a dépassé le temps maximum autorisé : ') . $plugin->getMaxDependancyInstallTime() . 'min');
             }
             try {
@@ -401,7 +402,7 @@ class PluginManager
     {
         $result = 0;
         if (self::$enabledPlugins === null) {
-            self::$enabledPlugins = \config::getPluginEnable();
+            self::$enabledPlugins = ConfigManager::getPluginEnable();
         }
         if (isset(self::$enabledPlugins[$id])) {
             $result = self::$enabledPlugins[$id];

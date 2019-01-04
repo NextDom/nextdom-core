@@ -35,6 +35,7 @@ namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\CmdManager;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
@@ -133,7 +134,7 @@ class ModalsController
         Status::isConnectedOrFail();
 
         $pageContent = [];
-        $pageContent['productName'] = \config::byKey('product_name');
+        $pageContent['productName'] = ConfigManager::byKey('product_name');
 
         $render->show('/modals/action.insert.html.twig', $pageContent);
     }
@@ -229,7 +230,7 @@ class ModalsController
         $pageContent['cmdWidgetCanCustomDisplayIconAndName'] = $cmd->widgetPossibility('custom::displayIconAndName');
         $pageContent['cmdWidgetCanCustomDisplayStats'] = $cmd->widgetPossibility('custom::displayStats');
         $pageContent['cmdWidgetCanCustomOptionalParameters'] = $cmd->widgetPossibility('custom::optionalParameters');
-        $pageContent['configDisplayStatsWidget'] = \config::byKey('displayStatsWidget');
+        $pageContent['configDisplayStatsWidget'] = ConfigManager::byKey('displayStatsWidget');
         $pageContent['cmdDisplayParameters'] = $cmd->getDisplay('parameters');
 
         $cmdWidgetDashboard = CmdManager::availableWidget('dashboard');
@@ -531,7 +532,7 @@ class ModalsController
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $configData = \config::byKeys(
+        $configData = ConfigManager::byKeys(
             ['graphlink::prerender', 'graphlink::render'],
             'core',
             [
@@ -833,7 +834,7 @@ class ModalsController
         $pageContent['summaryMobileHidden'] = [];
         foreach ($pageContent['objectsTree'] as $jeeObject) {
             $jeeObjectId = $jeeObject->getId();
-            foreach (\config::byKey('object:summary') as $key => $value) {
+            foreach (ConfigManager::byKey('object:summary') as $key => $value) {
                 $title = '';
                 if (!isset($jeeObject->getConfiguration('summary')[$key]) || !is_array($jeeObject->getConfiguration('summary')[$key]) || count($jeeObject->getConfiguration('summary')[$key]) == 0) {
                     continue;
@@ -1008,11 +1009,11 @@ class ModalsController
         Status::initConnectState();
         Status::isConnectedOrFail();
 
-        if (\config::byKey('market::address') == '') {
+        if (ConfigManager::byKey('market::address') == '') {
             throw new CoreException(__('Aucune adresse pour le market n\'est renseignée' ));
         }
-        if (\config::byKey('market::apikey') == '' && \config::byKey('market::username') == '') {
-            throw new CoreException(__('Aucun compte market n\'est renseigné. Veuillez vous enregistrer sur le market, puis renseignez vos identifiants dans') . \config::byKey('product_name') . __('avant d\'ouvrir un ticket'));
+        if (ConfigManager::byKey('market::apikey') == '' && ConfigManager::byKey('market::username') == '') {
+            throw new CoreException(__('Aucun compte market n\'est renseigné. Veuillez vous enregistrer sur le market, puis renseignez vos identifiants dans') . ConfigManager::byKey('product_name') . __('avant d\'ouvrir un ticket'));
         }
         $render->show('/modals/report.bug.html.twig');
     }
@@ -1167,7 +1168,7 @@ class ModalsController
             if (!isset($repoValue['configuration']['parameters_for_add'])) {
                 continue;
             }
-            if (\config::byKey($repoKey . '::enable') == 0) {
+            if (ConfigManager::byKey($repoKey . '::enable') == 0) {
                 continue;
             }
             $pageContent['repoListType'][$repoKey] = $repoValue['name'];
@@ -1298,7 +1299,7 @@ class ModalsController
         Status::initConnectState();
         Status::isConnectedOrFail();
 
-        $pageContent['productName'] = \config::byKey('product_name');
+        $pageContent['productName'] = ConfigManager::byKey('product_name');
         $render->show('/modals/welcome.html.twig', $pageContent);
     }
 }

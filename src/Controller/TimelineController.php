@@ -24,6 +24,7 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\JeeObjectManager;
@@ -55,7 +56,7 @@ class TimelineController extends BaseController
     {
 
         $pageContent['historyDate'] = [
-            'start' => date('Y-m-d', strtotime(\config::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
+            'start' => date('Y-m-d', strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
             'end' => date('Y-m-d'),
         ];
         

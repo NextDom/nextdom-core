@@ -19,6 +19,8 @@
 
 namespace NextDom\Market;
 
+use NextDom\Managers\ConfigManager;
+
 /**
  * Gestion des téléchargements
  */
@@ -53,7 +55,7 @@ class DownloadManager
                 self::testConnection();
             }
         }
-        self::$gitHubToken = \config::byKey('github::token');
+        self::$gitHubToken = ConfigManager::byKey('github::token');
     }
 
     /**

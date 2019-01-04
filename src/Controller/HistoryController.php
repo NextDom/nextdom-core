@@ -24,6 +24,7 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\PluginManager;
@@ -53,7 +54,7 @@ class HistoryController extends BaseController
     public function get(Render $render, array &$pageContent): string
     {
         $pageContent['historyDate'] = array(
-            'start' => date('Y-m-d', strtotime(\config::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
+            'start' => date('Y-m-d', strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
             'end'   => date('Y-m-d'),
         );
         $pageContent['historyCmdsList']          = CmdManager::allHistoryCmd();

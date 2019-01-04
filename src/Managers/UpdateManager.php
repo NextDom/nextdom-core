@@ -34,6 +34,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Managers\ConfigManager;
 
 class UpdateManager
 {
@@ -63,7 +64,7 @@ class UpdateManager
                     $findCore = true;
                     $update->setType('core')
                         ->setLogicalId('nextdom')
-                        ->setSource(\config::byKey('core::repo::provider'))
+                        ->setSource(ConfigManager::byKey('core::repo::provider'))
                         ->setLocalVersion(NextDomHelper::getJeedomVersion());
                     $update->save();
                     $update->checkUpdate();
@@ -81,7 +82,7 @@ class UpdateManager
             $update = (new \update())
                 ->setType('core')
                 ->setLogicalId('nextdom')
-                ->setSource(\config::byKey('core::repo::provider'))
+                ->setSource(ConfigManager::byKey('core::repo::provider'))
                 ->setConfiguration('user', 'NextDom')
                 ->setConfiguration('repository', 'nextdom-core')
                 ->setConfiguration('version', 'master')
@@ -91,11 +92,11 @@ class UpdateManager
         }
         foreach ($updates_sources as $source => $updates) {
             $class = 'repo_' . $source;
-            if (class_exists($class) && method_exists($class, 'checkUpdate') && \config::byKey($source . '::enable') == 1) {
+            if (class_exists($class) && method_exists($class, 'checkUpdate') && ConfigManager::byKey($source . '::enable') == 1) {
                 $class::checkUpdate($updates);
             }
         }
-        \config::save('update::lastCheck', date('Y-m-d H:i:s'));
+        ConfigManager::save('update::lastCheck', date('Y-m-d H:i:s'));
     }
 
     /**
@@ -117,7 +118,7 @@ class UpdateManager
                 'configuration' => $class::$_configuration,
                 'scope'         => $class::$_scope,
             );
-            $result[str_replace('.repo.php', '', $repoFile)]['enable'] = \config::byKey(str_replace('.repo.php', '', $repoFile) . '::enable');
+            $result[str_replace('.repo.php', '', $repoFile)]['enable'] = ConfigManager::byKey(str_replace('.repo.php', '', $repoFile) . '::enable');
         }
         return $result;
     }
@@ -136,7 +137,7 @@ class UpdateManager
             'configuration' => $class::$_configuration,
             'scope'         => $class::$_scope,
         );
-        $return['enable'] = \config::byKey($id . '::enable');
+        $return['enable'] = ConfigManager::byKey($id . '::enable');
         return $return;
     }
 

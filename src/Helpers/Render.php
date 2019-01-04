@@ -28,6 +28,7 @@ use Twig\Extensions\TextExtension;
 use Twig_Environment;
 use Twig_Extension_Debug;
 use Twig_Loader_Filesystem;
+use NextDom\Managers\ConfigManager;
 
 class Render
 {
@@ -49,7 +50,7 @@ class Render
 
     private function __construct()
     {
-        $language = \config::byKey('language', 'core', 'fr_FR');
+        $language = ConfigManager::byKey('language', 'core', 'fr_FR');
         $this->initTranslation($language);
         $this->initRenderer();
     }
@@ -162,7 +163,7 @@ class Render
             $debugBar = new StandardDebugBar();
             $debugBarRenderer = $debugBar->getJavascriptRenderer();
             try {
-                $debugBar->addCollector(new DataCollector\ConfigCollector(\config::getDefaultConfiguration()['core']));
+                $debugBar->addCollector(new DataCollector\ConfigCollector(ConfigManager::getDefaultConfiguration()['core']));
                 $debugBarData = $debugBarRenderer;
             }
             catch (\DebugBar\DebugBarException $e) {

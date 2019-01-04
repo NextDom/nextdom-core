@@ -17,6 +17,7 @@
 namespace NextDom\Helpers;
 
 use NextDom\Enums\ApiModeEnum;
+use NextDom\Managers\ConfigManager;
 
 class Api
 {
@@ -31,21 +32,21 @@ class Api
     public static function getApiKey(string $plugin = 'core'): string
     {
         if ($plugin == 'apipro') {
-            if (\config::byKey('apipro') == '') {
-                \config::save('apipro', \config::genKey());
+            if (ConfigManager::byKey('apipro') == '') {
+                ConfigManager::save('apipro', ConfigManager::genKey());
             }
-            return \config::byKey('apipro');
+            return ConfigManager::byKey('apipro');
         }
         if ($plugin == 'apimarket') {
-            if (\config::byKey('apimarket') == '') {
-                \config::save('apimarket', \config::genKey());
+            if (ConfigManager::byKey('apimarket') == '') {
+                ConfigManager::save('apimarket', ConfigManager::genKey());
             }
-            return \config::byKey('apimarket');
+            return ConfigManager::byKey('apimarket');
         }
-        if (\config::byKey('api', $plugin) == '') {
-            \config::save('api', \config::genKey(), $plugin);
+        if (ConfigManager::byKey('api', $plugin) == '') {
+            ConfigManager::save('api', ConfigManager::genKey(), $plugin);
         }
-        return \config::byKey('api', $plugin);
+        return ConfigManager::byKey('api', $plugin);
     }
 
     /**
@@ -65,8 +66,8 @@ class Api
             case ApiModeEnum::API_WHITEIP:
                 $ip = getClientIp();
                 $find = false;
-                $whiteIps = explode(';', \config::byKey('security::whiteips'));
-                if (\config::byKey('security::whiteips') != '' && count($whiteIps) > 0) {
+                $whiteIps = explode(';', ConfigManager::byKey('security::whiteips'));
+                if (ConfigManager::byKey('security::whiteips') != '' && count($whiteIps) > 0) {
                     foreach ($whiteIps as $whiteIp) {
                         if (netMatch($whiteIp, $ip)) {
                             $find = true;
@@ -99,7 +100,7 @@ class Api
         if ($defaultApiKey == '') {
             return false;
         }
-        if ($plugin != 'core' && $plugin != 'proapi' && !self::apiModeResult(\config::byKey('api::' . $plugin . '::mode', 'core', 'enable'))) {
+        if ($plugin != 'core' && $plugin != 'proapi' && !self::apiModeResult(ConfigManager::byKey('api::' . $plugin . '::mode', 'core', 'enable'))) {
             return false;
         }
         $apikey = self::getApiKey($plugin);

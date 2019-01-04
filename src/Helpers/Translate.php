@@ -37,6 +37,7 @@ namespace NextDom\Helpers;
 use NextDom\Managers\PluginManager;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
+use NextDom\Managers\ConfigManager;
 
 class Translate
 {
@@ -78,7 +79,7 @@ class Translate
         $result = $defaultValue;
         // Lecture et mise en cache de la configuration
         if (self::$config === null) {
-            self::$config = \config::byKeys(array('language', 'generateTranslation'), 'core', array('language' => 'fr_FR'));
+            self::$config = ConfigManager::byKeys(array('language', 'generateTranslation'), 'core', array('language' => 'fr_FR'));
         }
         // Recherche de l'information
         if (isset(self::$config[$informationKey])) {

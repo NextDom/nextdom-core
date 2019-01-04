@@ -24,10 +24,10 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\PluginManager;
-
 
 class UpdateAdminController extends BaseController
 {
@@ -62,7 +62,7 @@ class UpdateAdminController extends BaseController
             $keys[] = $key . '::enable';
         }
         $pageContent['networkkey'] = $key;
-        $pageContent['adminConfigs'] = \config::byKeys($keys);
+        $pageContent['adminConfigs'] = ConfigManager::byKeys($keys);
         $pageContent['JS_VARS']['ldapEnable'] = $pageContent['adminConfigs']['ldap::enable'];
         $pageContent['adminIsBan'] = \user::isBan();
         $pageContent['adminHardwareName'] = \nextdom::getHardwareName();
@@ -75,7 +75,7 @@ class UpdateAdminController extends BaseController
             $pageContent['adminPluginsList'] = [];
             $pluginsList = PluginManager::listPlugin(true);
             foreach ($pluginsList as $plugin) {
-                $pluginApi = \config::byKey('api', $plugin->getId());
+                $pluginApi = ConfigManager::byKey('api', $plugin->getId());
 
                 if ($pluginApi !== '') {
                     $pluginData = [];

@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Managers\ConfigManager;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
@@ -49,7 +50,7 @@ class CronController extends BaseController
      */
     public function get(Render $render, array &$pageContent): string
     {
-        $pageContent['cronEnabled'] = \config::byKey('enableCron');
+        $pageContent['cronEnabled'] = ConfigManager::byKey('enableCron');
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/diagnostic/cron.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
