@@ -36,6 +36,7 @@ namespace NextDom\Helpers;
 
 use NextDom\Enums\ApiModeEnum;
 use NextDom\Exceptions\CoreException;
+use NextDom\Managers\CronManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\JeeObjectManager;
@@ -486,7 +487,7 @@ class NextDomHelper
         $okStr = __('common.ok');
         echo __('core.disable-tasks');
         ConfigManager::save('enableCron', 0);
-        foreach (\cron::all() as $cron) {
+        foreach (CronManager::all() as $cron) {
             if ($cron->running()) {
                 try {
                     $cron->halt();
@@ -502,9 +503,9 @@ class NextDomHelper
 
         /*         * **********arrêt des crons********************* */
 
-        if (\cron::jeeCronRun()) {
+        if (CronManager::jeeCronRun()) {
             echo __('core.disable-cron-master');
-            $pid = \cron::getPidFile();
+            $pid = CronManager::getPidFile();
             SystemHelper::kill($pid);
             echo " $okStr\n";
         }
@@ -615,7 +616,7 @@ class NextDomHelper
             \log::add('starting', 'debug', __('Démarrage de nextdom'));
             try {
                 \log::add('starting', 'debug', __('Arrêt des crons'));
-                foreach (\cron::all() as $cron) {
+                foreach (CronManager::all() as $cron) {
                     if ($cron->running() && $cron->getClass() != 'nextdom' && $cron->getFunction() != 'cron') {
                         try {
                             $cron->halt();
@@ -785,7 +786,7 @@ class NextDomHelper
             ScenarioManager::cleanTable();
             ScenarioManager::consystencyCheck();
             \log::chunk();
-            \cron::clean();
+            CronManager:clean();
             \report::clean();
             \DB::optimize();
             CacheManager::clean();
