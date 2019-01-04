@@ -913,7 +913,7 @@ class ScenarioExpressionManager
     {
         // TODO: Yolo sur les trims
         $name = trim(trim(trim($name), '"'));
-        $dataStore = \dataStore::byTypeLinkIdKey('scenario', -1, trim($name));
+        $dataStore = DataStoreManager:::byTypeLinkIdKey('scenario', -1, trim($name));
         if (is_object($dataStore)) {
             $value = $dataStore->getValue($defaultValue);
             return $value;

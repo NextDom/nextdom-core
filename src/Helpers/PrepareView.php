@@ -17,6 +17,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Managers\AjaxManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;
@@ -321,7 +322,7 @@ class PrepareView
         $pageData['PRODUCT_NAME'] = $configs['product_name'];
         $pageData['PRODUCT_ICON'] = $configs['product_icon'];
         $pageData['PRODUCT_CONNECTION_ICON'] = $configs['product_connection_image'];
-        $pageData['AJAX_TOKEN'] = \ajax::getToken();
+        $pageData['AJAX_TOKEN'] = AjaxManager::getToken();
         $pageData['LANGUAGE'] = $configs['language'];
         for ($colorIndex = 1; $colorIndex <= self::$NB_THEME_COLORS; ++$colorIndex) {
             $pageData['COLOR'.$colorIndex] = \nextdom::getConfiguration('theme:color'.$colorIndex);

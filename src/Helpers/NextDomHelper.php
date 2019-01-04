@@ -36,6 +36,7 @@ namespace NextDom\Helpers;
 
 use NextDom\Enums\ApiModeEnum;
 use NextDom\Exceptions\CoreException;
+use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\JeeObjectManager;
@@ -1006,7 +1007,7 @@ class NextDomHelper
             if (isset($result['dataStore'][$variable])) {
                 continue;
             }
-            $dataStore = \dataStore::byTypeLinkIdKey('scenario', -1, trim($variable));
+            $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', -1, trim($variable));
             if (!is_object($dataStore)) {
                 continue;
             }
