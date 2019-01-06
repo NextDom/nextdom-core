@@ -176,7 +176,7 @@ $("#bt_addObject,#bt_addObject2").on('click', function (event) {
     });
 });
 
-jwerty.key('ctrl+s', function (e) {
+jwerty.key('ctrl+s/⌘+s', function (e) {
     e.preventDefault();
     $("#bt_saveObject").click();
 });

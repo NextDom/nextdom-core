@@ -51,14 +51,17 @@ class ModalsController
         'about' => 'about',
         'action.insert' => 'actionInsert',
         'cmd.configure' => 'cmdConfigure',
+        'cmd.configureHistory' => 'cmdConfigureHistory',
         'cmd.human.insert' => 'cmdHumanInsert',
         'cmd.selectMultiple' => 'cmdSelectMultiple',
         'cron.human.insert' => 'cronHumanInsert',
+        'dataStore.human.insert' => 'dataStoreHumanInsert',
         'dataStore.management' => 'dataStoreManagement',
         'eqLogic.configure' => 'eqLogicConfigure',
         'eqLogic.human.insert' => 'eqLogicHumanInsert',
         'expression.test' => 'expressionTest',
         'graph.link' => 'graphLink',
+        'history.calcul' => 'historyCalcul',
         'icon.selector' => 'iconSelector',
         'interact.query.display' => 'interactQueryDisplay',
         'interact.test' => 'interactTest',
@@ -69,8 +72,10 @@ class ModalsController
         'object.summary' => 'objectSummary',
         'plan.configure' => 'planConfigure',
         'planHeader.configure' => 'planHeaderConfigure',
+        'plan3d.configure' => 'plan3dConfigure',
         'plugin.deamon' => 'pluginDaemon',
         'plugin.dependancy' => 'pluginDependency',
+        'remove.history' => 'removeHistory',
         'report.bug' => 'reportBug',
         'scenario.export' => 'scenarioExport',
         'scenario.human.insert' => 'scenarioHumanInsert',
@@ -82,6 +87,7 @@ class ModalsController
         'update.list' => 'updateList',
         'update.send' => 'updateSend',
         'user.rights' => 'userRights',
+        'view.configure' => 'viewConfigure',
         'welcome' => 'welcome'
     ];
 
@@ -256,6 +262,44 @@ class ModalsController
     }
 
     /**
+     * Render command configure history modal (scenario)
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function cmdConfigureHistory(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $dataCount = array('history' => 0, 'timeline' => 0);
+        $listCmd = array();
+        foreach (CmdManager::all() as $cmd) {
+            $info_cmd = \utils::o2a($cmd);
+            $info_cmd['humanName'] = $cmd->getHumanName(true);
+            $eqLogic = $cmd->getEqLogic();
+            $info_cmd['plugins'] = $eqLogic->getEqType_name();
+            $listCmd[] = $info_cmd;
+            if ($cmd->getIsHistorized() == 1) {
+                $dataCount['history']++;
+            }
+            if ($cmd->getConfiguration('timeline::enable') == 1) {
+                $dataCount['timeline']++;
+            }
+        }
+        Utils::sendVarToJs('cmds_history_configure', $listCmd);
+
+        $pageContent = [];
+        $pageContent['dataCount'] = $dataCount;
+
+        $render->show('/modals/cmd.configureHistory.html.twig', $pageContent);
+    }
+
+    /**
      * Render command human insert modal (scenario)
      *
      * @param Render $render Render engine
@@ -320,6 +364,27 @@ class ModalsController
         Status::isConnectedOrFail();
 
         $render->show('/modals/cron.human.insert.html.twig');
+    }
+
+    /**
+     * Render data store human insert modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function dataStoreHumanInsert(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $pageContent = [];
+        $pageContent['dataStoreByType'] = \dataStore::byTypeLinkId(init('type', 'scenario'));
+
+        $render->show('/modals/dataStore.human.insert.html.twig', $pageContent);
     }
 
     /**
@@ -516,6 +581,24 @@ class ModalsController
         Status::isConnectedAdminOrFail();
 
         $render->show('/modals/expression.test.html.twig');
+    }
+
+    /**
+     * Render history calcul modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function historyCalcul(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $render->show('/modals/history.calcul.html.twig');
     }
 
     /**
@@ -923,6 +1006,36 @@ class ModalsController
     }
 
     /**
+     * Render plan 3d configure modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function plan3dConfigure(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent = [];
+        $plan3d = \plan3d::byName3dHeaderId(init('name'), init('plan3dHeader_id'));
+        if (!is_object($plan3d)) {
+            $plan3d = new \plan3d();
+            $plan3d->setName(init('name'));
+            $plan3d->setPlan3dHeader_id(init('plan3dHeader_id'));
+            $plan3d->save();
+        }
+        $link = $plan3d->getLink();
+        Utils::sendVarToJS('id', $plan3d->getId());
+
+
+        $render->show('/modals/plan3d.configure.html.twig', $pageContent);
+    }
+
+    /**
      * Render plugin daemon modal
      *
      * @param Render $render Render engine
@@ -991,6 +1104,35 @@ class ModalsController
         $pageContent['dependencyInfo'] = $plugin->getDependencyInfo();
 
         $render->show('/modals/plugin.dependency.html.twig');
+    }
+
+    /**
+     * Render remove history modal
+     *
+     * @param Render $render Render engine
+     *
+     * @return string Scenario export modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function removeHistory(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+        if (file_exists(NEXTDOM_ROOT . '/data/remove_history.json')) {
+            $removeHistory = json_decode(file_get_contents(NEXTDOM_ROOT . '/data/remove_history.json'), true);
+        }
+        if (!is_array($removeHistory)) {
+            $removeHistory = array();
+        }
+
+        $pageContent = [];
+        $pageContent['removeHistory'] = $removeHistory;
+
+        $render->show('/modals/remove.history.html.twig', $pageContent);
     }
 
     /**
@@ -1283,6 +1425,32 @@ class ModalsController
         $pageContent['scenarios'] = ScenarioManager::all();
 
         $render->show('/modals/user.rights.html.twig', $pageContent);
+    }
+
+    /**
+     * Render view configure modal
+     *
+     * @param Render $render Render engine
+     *
+     * @return string Scenario export modal
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public static function viewConfigure(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $view = \view::byId(init('view_id'));
+        if (!is_object($view)) {
+            throw new CoreException('Impossible de trouver la vue');
+        }
+        Utils::sendVarsToJS(['id' => $view->getId(), 'view' => \utils::o2a($view)]);
+
+        $render->show('/modals/view.configure.html.twig');
     }
 
     /**

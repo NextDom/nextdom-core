@@ -198,65 +198,65 @@ class cmd {
         if ($this->getType() == 'info') {
             switch ($this->getSubType()) {
                 case 'string':
-                    if ($_quote) {
-                        return '"' . $_value . '"';
-                    }
-                    return $_value;
+                if ($_quote) {
+                    return '"' . $_value . '"';
+                }
+                return $_value;
                 case 'other':
-                    if ($_quote) {
-                        return '"' . $_value . '"';
-                    }
-                    return $_value;
+                if ($_quote) {
+                    return '"' . $_value . '"';
+                }
+                return $_value;
                 case 'binary':
-                    if ($this->getConfiguration('calculValueOffset') != '') {
-                        try {
-                            if (preg_match("/[a-zA-Z#]/", $_value)) {
-                                $_value = nextdom::evaluateExpression(str_replace('#value#', '"' . $_value . '"', str_replace('\'#value#\'', '#value#', str_replace('"#value#"', '#value#', $this->getConfiguration('calculValueOffset')))));
-                            } else {
-                                $_value = nextdom::evaluateExpression(str_replace('#value#', $_value, $this->getConfiguration('calculValueOffset')));
-                            }
-                        } catch (Exception $ex) {
-
-                        } catch (Error $ex) {
-
+                if ($this->getConfiguration('calculValueOffset') != '') {
+                    try {
+                        if (preg_match("/[a-zA-Z#]/", $_value)) {
+                            $_value = nextdom::evaluateExpression(str_replace('#value#', '"' . $_value . '"', str_replace('\'#value#\'', '#value#', str_replace('"#value#"', '#value#', $this->getConfiguration('calculValueOffset')))));
+                        } else {
+                            $_value = nextdom::evaluateExpression(str_replace('#value#', $_value, $this->getConfiguration('calculValueOffset')));
                         }
+                    } catch (Exception $ex) {
+
+                    } catch (Error $ex) {
+
                     }
-                    $value = strtolower($_value);
-                    if ($value == 'on' || $value == 'high' || $value == 'true' || $value === true) {
-                        return 1;
-                    }
-                    if ($value == 'off' || $value == 'low' || $value == 'false' || $value === false) {
-                        return 0;
-                    }
-                    if ((is_numeric(intval($_value)) && intval($_value) > 1) || $_value === true || $_value == 1) {
-                        return 1;
-                    }
+                }
+                $value = strtolower($_value);
+                if ($value == 'on' || $value == 'high' || $value == 'true' || $value === true) {
+                    return 1;
+                }
+                if ($value == 'off' || $value == 'low' || $value == 'false' || $value === false) {
                     return 0;
+                }
+                if ((is_numeric(intval($_value)) && intval($_value) > 1) || $_value === true || $_value == 1) {
+                    return 1;
+                }
+                return 0;
                 case 'numeric':
-                    $_value = floatval(str_replace(',', '.', $_value));
-                    if ($this->getConfiguration('calculValueOffset') != '') {
-                        try {
-                            if (preg_match("/[a-zA-Z#]/", $_value)) {
-                                $_value = nextdom::evaluateExpression(str_replace('#value#', '"' . $_value . '"', str_replace('\'#value#\'', '#value#', str_replace('"#value#"', '#value#', $this->getConfiguration('calculValueOffset')))));
-                            } else {
-                                $_value = nextdom::evaluateExpression(str_replace('#value#', $_value, $this->getConfiguration('calculValueOffset')));
-                            }
-                        } catch (Exception $ex) {
-
-                        } catch (Error $ex) {
-
+                $_value = floatval(str_replace(',', '.', $_value));
+                if ($this->getConfiguration('calculValueOffset') != '') {
+                    try {
+                        if (preg_match("/[a-zA-Z#]/", $_value)) {
+                            $_value = nextdom::evaluateExpression(str_replace('#value#', '"' . $_value . '"', str_replace('\'#value#\'', '#value#', str_replace('"#value#"', '#value#', $this->getConfiguration('calculValueOffset')))));
+                        } else {
+                            $_value = nextdom::evaluateExpression(str_replace('#value#', $_value, $this->getConfiguration('calculValueOffset')));
                         }
+                    } catch (Exception $ex) {
+
+                    } catch (Error $ex) {
+
                     }
-                    if ($this->getConfiguration('historizeRound') !== '' && is_numeric($this->getConfiguration('historizeRound')) && $this->getConfiguration('historizeRound') >= 0) {
-                        $_value = round($_value, $this->getConfiguration('historizeRound'));
-                    }
-                    if ($_value > $this->getConfiguration('maxValue', $_value) && $this->getConfiguration('maxValueReplace') == 1) {
-                        $_value = $this->getConfiguration('maxValue', $_value);
-                    }
-                    if ($_value < $this->getConfiguration('minValue', $_value) && $this->getConfiguration('minValueReplace') == 1) {
-                        $_value = $this->getConfiguration('minValue', $_value);
-                    }
-                    return floatval($_value);
+                }
+                if ($this->getConfiguration('historizeRound') !== '' && is_numeric($this->getConfiguration('historizeRound')) && $this->getConfiguration('historizeRound') >= 0) {
+                    $_value = round($_value, $this->getConfiguration('historizeRound'));
+                }
+                if ($_value > $this->getConfiguration('maxValue', $_value) && $this->getConfiguration('maxValueReplace') == 1) {
+                    $_value = $this->getConfiguration('maxValue', $_value);
+                }
+                if ($_value < $this->getConfiguration('minValue', $_value) && $this->getConfiguration('minValueReplace') == 1) {
+                    $_value = $this->getConfiguration('minValue', $_value);
+                }
+                return floatval($_value);
             }
         }
         return $_value;
@@ -462,11 +462,11 @@ class cmd {
                 $value = $this->getConfiguration('updateCmdToValue');
                 switch ($this->getSubType()) {
                     case 'slider':
-                        $value = str_replace('#slider#', $options['slider'], $value);
-                        break;
+                    $value = str_replace('#slider#', $options['slider'], $value);
+                    break;
                     case 'color':
-                        $value = str_replace('#color#', $options['color'], $value);
-                        break;
+                    $value = str_replace('#color#', $options['color'], $value);
+                    break;
                 }
                 $cmd->event($value);
             }
@@ -753,35 +753,35 @@ class cmd {
             scenario::check($this);
             $eqLogic->emptyCacheWidget();
             $level = $this->checkAlertLevel($value);
-            $events = array(array('cmd_id' => $this->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate(), 'alertLevel' => $level));
-        } else {
-            $events = array(array('cmd_id' => $this->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate()));
-        }
-        $foundInfo = false;
-        $value_cmd = self::byValue($this->getId(), null, true);
-        if (is_array($value_cmd)) {
-            foreach ($value_cmd as $cmd) {
-                if ($cmd->getType() == 'action') {
-                    if (!$repeat) {
-                        $events[] = array('cmd_id' => $cmd->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate());
-                    }
-                } else {
-                    if ($_loop > 1) {
-                        $cmd->event($cmd->execute(), null, $_loop);
+            $events[] = array('cmd_id' => $this->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate(), 'alertLevel' => $level);
+            $foundInfo = false;
+            $value_cmd = self::byValue($this->getId(), null, true);
+            if (is_array($value_cmd) && count($value_cmd) > 0) {
+                foreach ($value_cmd as $cmd) {
+                    if ($cmd->getType() == 'action') {
+                        if (!$repeat) {
+                            $events[] = array('cmd_id' => $cmd->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate());
+                        }
                     } else {
-                        $foundInfo = true;
+                        if ($_loop > 1) {
+                            $cmd->event($cmd->execute(), null, $_loop);
+                        } else {
+                            $foundInfo = true;
+                        }
                     }
                 }
             }
-        }
-        if ($foundInfo) {
-            listener::backgroundCalculDependencyCmd($this->getId());
+            if ($foundInfo) {
+                listener::backgroundCalculDependencyCmd($this->getId());
+            }
+        } else {
+            $events[] = array('cmd_id' => $this->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate());
         }
         if (count($events) > 0) {
             event::adds('cmd::update', $events);
         }
-        listener::check($this->getId(), $value, $this->getCollectDate());
         if (!$repeat) {
+            listener::check($this->getId(), $value, $this->getCollectDate());
             jeeObject::checkSummaryUpdate($this->getId());
         }
         $this->addHistoryValue($value, $this->getCollectDate());
@@ -1184,17 +1184,17 @@ class cmd {
         if ($this->getType() == 'action') {
             switch ($this->getSubType()) {
                 case 'slider':
-                    $url .= '&slider=50';
-                    break;
+                $url .= '&slider=50';
+                break;
                 case 'color':
-                    $url .= '&color=#123456';
-                    break;
+                $url .= '&color=#123456';
+                break;
                 case 'message':
-                    $url .= '&title=montitre&message=monmessage';
-                    break;
+                $url .= '&title=montitre&message=monmessage';
+                break;
                 case 'select':
-                    $url .= '&select=value';
-                    break;
+                $url .= '&select=value';
+                break;
             }
         }
         return network::getNetworkAccess('external') . $url;

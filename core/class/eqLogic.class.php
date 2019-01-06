@@ -367,8 +367,8 @@ class eqLogic
             '#max_width#' => '650px',
             '#logicalId#' => $this->getLogicalId(),
             '#object_name#' => '',
-            '#height#' => $this->getDisplay('height', 'auto'),
-            '#width#' => $this->getDisplay('width', 'auto'),
+            '#height#' => $this->getDisplay('height', config::byKey('widget::size').'px'),
+            '#width#' => $this->getDisplay('width', config::byKey('widget::size').'px'),
             '#uid#' => 'eqLogic' . $this->getId() . self::UIDDELIMITER . mt_rand() . self::UIDDELIMITER,
             '#refresh_id#' => '',
             '#version#' => $viewType,
@@ -654,10 +654,10 @@ class eqLogic
             $this->setDisplay('showObjectNameOnmview', 1);
         }
         if ($this->getDisplay('height', -1) == -1 || intval($this->getDisplay('height')) < 2) {
-            $this->setDisplay('height', 'auto');
+            $this->setDisplay('height', config::byKey('widget::size').'px');
         }
         if ($this->getDisplay('width', -1) == -1 || intval($this->getDisplay('height')) < 2) {
-            $this->setDisplay('width', 'auto');
+            $this->setDisplay('width', config::byKey('widget::size').'px');
         }
         foreach (array('dashboard', 'mobile') as $key) {
             if ($this->getDisplay('layout::' . $key . '::table::parameters') == '') {

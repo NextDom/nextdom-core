@@ -84,10 +84,18 @@ function editWidgetMode(_mode, _save) {
     } else {
         $('.div_displayEquipement .eqLogic-widget').css('box-shadow', '0 0 4px rgba(147,204,1,.14), 0 10px 16px rgba(147,204,1,.30)');
         $('.div_displayEquipement .eqLogic-widget').draggable('enable');
+        $('.div_displayEquipement .eqLogic-widget').draggable({
+            grid: [ parseInt(widget_size) + parseInt(widget_margin*2), parseInt(widget_size) + parseInt(widget_margin)*2 ]
+        });
         $(".div_displayEquipement .eqLogic-widget.allowResize").resizable({
+            grid: parseInt(widget_size) + parseInt(widget_margin)*2,
             resize: function (event, ui) {
                 positionEqLogic(ui.element.attr('data-eqlogic_id'), false);
-                ui.element.closest('.div_displayEquipement').packery();
+                ui.element.closest('.div_displayEquipement').packery('fit', event.target, ui.position.left, ui.position.top );
+            },
+            refreshPositions: true,
+            function (event, ui) {
+                ui.element.closest('.div_displayEquipement').packery('bindUIDraggableEvents', $itemElems)
             },
             stop: function (event, ui) {
                 positionEqLogic(ui.element.attr('data-eqlogic_id'), false);
@@ -134,10 +142,11 @@ function getObjectHtml(_object_id) {
                 $('#div_ob' + _object_id + '.div_displayEquipement').each(function () {
                     var container = $(this).packery({
                         itemSelector: ".eqLogic-widget",
-                        gutter: 0,
-                        columnWidth: parseInt(widget_width_step)
+                        gutter: parseInt(widget_margin),
+                        columnWidth: parseInt(widget_size) + parseInt(widget_margin),
+                        rowHeight: parseInt(widget_size) + parseInt(widget_margin)
                     });
-                    var itemElems = container.find('.eqLogic-widget').draggable();
+                    var itemElems = container.find('.eqLogic-widget').draggable({ grid: [ (parseInt(widget_size) + (parseInt(widget_margin)*2)), (parseInt(widget_size) + (parseInt(widget_margin)*2))]});
                     container.packery('bindUIDraggableEvents', itemElems);
 
                     function orderItems() {

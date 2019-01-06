@@ -39,7 +39,7 @@ editorDesktopCSS = null;
 editorMobileJS = null;
 editorMobileCSS = null;
 
-jwerty.key('ctrl+s', function (e) {
+jwerty.key('ctrl+s/⌘+s', function (e) {
    e.preventDefault();
    $("#bt_savecustom").click();
 });
