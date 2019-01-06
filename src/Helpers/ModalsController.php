@@ -34,6 +34,7 @@
 namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Managers\AjaxManager;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
@@ -1329,7 +1330,7 @@ class ModalsController
             }
             $pageContent['repoListConfiguration'][$repoKey] = $repoValue;
         }
-        $pageContent['ajaxToken'] = \ajax::getToken();
+        $pageContent['ajaxToken'] = AjaxManager::getToken();
 
         $render->show('/modals/update.add.html.twig', $pageContent);
     }
