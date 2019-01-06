@@ -564,15 +564,15 @@ function switchNotify(notificationState) {
             notify("Core", error.message, 'error');
         },
         success: function () {
-          if (notificationState) {
-              $('.notifyIcon').removeClass("fa-bell-slash").addClass("fa-bell");
-              $('.notifyIconLink').attr('onclick','switchNotify(0);')
-              notify("Core",  '{{Notification activée}}', 'success');
-          } else {
-              $('.notifyIcon').removeClass("fa-bell").addClass("fa-bell-slash");
-              $('.notifyIconLink').attr('onclick','switchNotify(1);')
-              notify("Core",  '{{Notification desactivée}}', 'success');
-          }
+            if (notificationState) {
+                $('.notifyIcon').removeClass("fa-bell-slash").addClass("fa-bell");
+                $('.notifyIconLink').attr('onclick','switchNotify(0);')
+                notify("Core",  '{{Notification activée}}', 'success');
+            } else {
+                $('.notifyIcon').removeClass("fa-bell").addClass("fa-bell-slash");
+                $('.notifyIconLink').attr('onclick','switchNotify(1);')
+                notify("Core",  '{{Notification desactivée}}', 'success');
+            }
         }
     });
 }
@@ -730,38 +730,23 @@ function chooseIcon(_callback) {
 function positionEqLogic(_id,_preResize) {
     if(_id != undefined){
         var eqLogic = $('.eqLogic-widget[data-eqlogic_id='+_id+']');
-        eqLogic.css('margin','0px').css('padding','0px');
-        if($(this).width() == 0){
-            $(this).width('auto');
-        }
-        if($(this).height() == 0){
-            $(this).height('auto');
-        }
-        if(init(_preResize,true)){
-            eqLogic.width(Math.floor(eqLogic.width() / widget_width_step) * widget_width_step - (2 * widget_margin));
-            eqLogic.height(Math.floor(eqLogic.height() / widget_height_step) * widget_height_step - (2 * widget_margin));
-        }
-        eqLogic.width(Math.ceil(eqLogic.width() / widget_width_step) * widget_width_step - (2 * widget_margin));
-        eqLogic.height(Math.ceil(eqLogic.height() / widget_height_step) * widget_height_step - (2 * widget_margin));
+
         eqLogic.trigger('resize');
         eqLogic.addClass(eqLogic.attr('data-category'));
-        eqLogic.css('margin',widget_margin+'px');
         eqLogic.css('border-radius',widget_radius+'px');
     }else{
         $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('margin','0px').css('padding','0px');
         $('.eqLogic-widget:not(.nextdomAlreadyPosition)').each(function () {
             if($(this).width() == 0){
-                $(this).width('auto');
+                $(this).width('100px');
             }
             if($(this).height() == 0){
-                $(this).height('auto');
+                $(this).height('100px');
             }
-            $(this).width(Math.ceil($(this).width() / widget_width_step) * widget_width_step - (2 * widget_margin));
-            $(this).height(Math.ceil($(this).height() / widget_height_step) * widget_height_step - (2 * widget_margin));
+
             $(this).trigger('resize');
             $(this).addClass($(this).attr('data-category'));
         });
-        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('margin',widget_margin+'px');
         $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('border-radius',widget_radius+'px');
         $('.eqLogic-widget').addClass('nextdomAlreadyPosition');
     }
@@ -846,8 +831,6 @@ function saveWidgetDisplay(_params){
             $(this).find('.eqLogic-widget').each(function(){
                 var eqLogic = {id :$(this).attr('data-eqlogic_id')}
                 eqLogic.display = {};
-                eqLogic.display.width =  Math.floor($(this).width() / 2) * 2 + 'px';
-                eqLogic.display.height = Math.floor($(this).height() / 2) * 2+ 'px';
                 eqLogic.viewZone_id = $(this).closest('.eqLogicZone').attr('data-viewZone-id');
                 eqLogic.order = order;
                 eqLogics.push(eqLogic);
