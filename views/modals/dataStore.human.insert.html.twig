@@ -1,0 +1,38 @@
+<table class="table table-condensed table-bordered" id="table_mod_insertDataSotreValue">
+    <thead>
+    <tr>
+        <th style="width: 150px;">{{ 'Nom' }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td class="mod_insertDataStoreValue_name">
+            <select class='form-control'>
+                {% for dataStore in dataStoreByType %}
+                    <option value="{{ dataStore.getKey() }}">{{ dataStore.getKey() }}</option>
+                {% endfor %}
+            </select>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<script>
+    function mod_insertDataStore() {
+    }
+
+    mod_insertDataStore.setOptions = function (_options) {
+    };
+
+    mod_insertDataStore.getValue = function () {
+        var variable_name = $('#table_mod_insertDataSotreValue tbody tr:first .mod_insertDataStoreValue_name select option:selected').html();
+        if (variable_name == undefined) {
+            return '';
+        }
+        return '#variable(' + variable_name + ')#';
+    };
+
+    mod_insertDataStore.getId = function () {
+        return $('#table_mod_insertDataSotreValue tbody tr:first .mod_insertDataStoreValue_name select').value();
+    }
+
+</script>
