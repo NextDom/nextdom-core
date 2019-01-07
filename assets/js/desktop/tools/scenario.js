@@ -987,8 +987,10 @@ function printScenario(_id) {
 function saveScenario() {
   $.hideAlert();
   var scenario = $('#div_pageContainer').getValues('.scenarioAttr')[0];
+  console.log(scenario);
   scenario.type = "expert";
   var elements = [];
+
   $('#div_scenarioElement').children('.element').each(function () {
     elements.push(getElement($(this)));
   });
