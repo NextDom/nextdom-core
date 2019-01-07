@@ -1068,20 +1068,24 @@ class scenario
 
     /**
      *
-     * @return type
+     * @return mixed
      */
     public function toArray()
     {
         $return = utils::o2a($this, true);
 		$cache = $this->getCache(array('state', 'lastLaunch'));
 		// TODO: Pourquoi ce test a-t-il dû être rajouté ?
-        if (!is_array($cache)) {
+        if (isset($cache['state'])) {
             $return['state'] = $cache['state'];
+        }
+        else {
+            $return['state'] = '';
+        }
+        if (isset($cache['lastLaunch'])) {
             $return['lastLaunch'] = $cache['lastLaunch'];
         }
         else {
-            $return['state'] = null;
-            $return['lastLaunch'] = null;
+            $return['lastLaunch'] = '';
         }
         return $return;
     }
