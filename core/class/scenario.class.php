@@ -1074,8 +1074,15 @@ class scenario
     {
         $return = utils::o2a($this, true);
 		$cache = $this->getCache(array('state', 'lastLaunch'));
-		$return['state'] = $cache['state'];
-        $return['lastLaunch'] = $cache['lastLaunch'];
+		// TODO: Pourquoi ce test a-t-il dû être rajouté ?
+        if (!is_array($cache)) {
+            $return['state'] = $cache['state'];
+            $return['lastLaunch'] = $cache['lastLaunch'];
+        }
+        else {
+            $return['state'] = null;
+            $return['lastLaunch'] = null;
+        }
         return $return;
     }
 
