@@ -300,7 +300,7 @@ class Cron
      * @throws CoreException
      */
     public function run($noErrorReport = false) {
-        $cmd = NEXTDOM_ROOT . '/php/jeeCron.php';
+        $cmd = NEXTDOM_ROOT . '/core/php/jeeCron.php';
         $cmd .= ' "cron_id=' . $this->getId() . '"';
         if (!$this->running()) {
             SystemHelper::php($cmd . ' >> ' . \log::getPathToLog('cron_execution') . ' 2>&1 &');
