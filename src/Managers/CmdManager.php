@@ -84,7 +84,7 @@ class CmdManager
      * Get command by his id
      *
      * @param mixed $id Command id
-     * @return array|mixed|void
+     * @return \cmd
      */
     public static function byId($id)
     {
@@ -103,7 +103,7 @@ class CmdManager
     /**
      * Get all commands
      *
-     * @return array
+     * @return \cmd[]
      *
      * @throws \Exception
      */

@@ -1338,6 +1338,9 @@ class cmd {
         return $this->unite;
     }
 
+    /**
+     * @return \eqLogic|null
+     */
     public function getEqLogic() {
         if ($this->_eqLogic === null) {
             $this->setEqLogic(eqLogic::byId($this->eqLogic_id));

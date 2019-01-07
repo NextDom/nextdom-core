@@ -43,7 +43,6 @@ use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
-use Sabre\CalDAV\Plugin;
 
 class ModalsController
 {
@@ -52,6 +51,7 @@ class ModalsController
         'action.insert' => 'actionInsert',
         'cmd.configure' => 'cmdConfigure',
         'cmd.configureHistory' => 'cmdConfigureHistory',
+        'cmd.graph.select' => 'cmdGraphSelect',
         'cmd.human.insert' => 'cmdHumanInsert',
         'cmd.selectMultiple' => 'cmdSelectMultiple',
         'cron.human.insert' => 'cronHumanInsert',
@@ -112,10 +112,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function about(Render $render)
     {
@@ -130,10 +127,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function actionInsert(Render $render)
     {
@@ -151,10 +145,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function cmdConfigure(Render $render)
     {
@@ -266,10 +257,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function cmdConfigureHistory(Render $render)
     {
@@ -300,14 +288,47 @@ class ModalsController
     }
 
     /**
-     * Render command human insert modal (scenario)
+     * Render command graph select modal (scenario)
      *
      * @param Render $render Render engine
      *
      * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     */
+    public static function cmdGraphSelect(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedOrFail();
+
+        $pageContent = [];
+        $pageContent['cmdData'] = [];
+        foreach (CmdManager::all() as $cmd) {
+            $eqLogic = $cmd->getEqLogic();
+            if (!is_object($eqLogic)) {
+                continue;
+            }
+            if ($cmd->getIsHistorized() == 1) {
+                $data = [];
+                $data['eqLogicObject'] = $cmd->getEqLogic()->getObject();
+                if (is_object($data['eqLogicObject'])) {
+                    $data['showObject'] = true;
+                }
+                else {
+                    $data['showObject'] = false;
+                }
+                $data['cmd'] = $cmd;
+                $data['eqLogic'] = $eqLogic;
+                $pageContent['cmdList'][] = $data;
+            }
+        }
+        $render->show('/modals/cmd.graph.select.html.twig', $pageContent);
+    }
+
+    /**
+     * Render command human insert modal (scenario)
+     *
+     * @param Render $render Render engine
+     *
+     * @throws CoreException
      */
     public static function cmdHumanInsert(Render $render)
     {
@@ -325,10 +346,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function cmdSelectMultiple(Render $render)
     {
@@ -353,10 +371,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function cronHumanInsert(Render $render)
     {
@@ -371,10 +386,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function dataStoreHumanInsert(Render $render)
     {
@@ -392,10 +404,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function dataStoreManagement(Render $render)
     {
@@ -413,10 +422,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function eqLogicHumanInsert(Render $render)
     {
@@ -434,10 +440,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function eqLogicConfigure(Render $render)
     {
@@ -570,10 +573,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function expressionTest(Render $render)
     {
@@ -588,10 +588,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function historyCalcul(Render $render)
     {
@@ -606,10 +603,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function graphLink(Render $render)
     {
@@ -638,10 +632,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function iconSelector(Render $render)
     {
@@ -679,6 +670,7 @@ class ModalsController
      * @param string $matchPattern Pattern for icon matchs
      * @param string|null $name Name of the font
      * @param string|null $cssClass CSS class to add
+     *
      * @return array
      */
     private static function getIconsData($path, $cssContent, $matchPattern, $name = null, $cssClass = null) {
@@ -710,10 +702,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function interactQueryDisplay(Render $render)
     {
@@ -739,10 +728,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function interactTest(Render $render)
     {
@@ -757,10 +743,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function logDisplay(Render $render)
     {
@@ -779,10 +762,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function nextdomBenchmark(Render $render)
     {
@@ -800,10 +780,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function objectConfigure(Render $render)
     {
@@ -825,10 +802,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function objectDisplay(Render $render)
     {
@@ -901,10 +875,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function objectSummary(Render $render)
     {
@@ -956,10 +927,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function planConfigure(Render $render)
     {
@@ -985,10 +953,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function planHeaderConfigure(Render $render)
     {
@@ -1010,10 +975,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function plan3dConfigure(Render $render)
     {
@@ -1031,7 +993,6 @@ class ModalsController
         $link = $plan3d->getLink();
         Utils::sendVarToJS('id', $plan3d->getId());
 
-
         $render->show('/modals/plan3d.configure.html.twig', $pageContent);
     }
 
@@ -1040,10 +1001,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function pluginDaemon(Render $render)
     {
@@ -1084,10 +1042,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function pluginDependency(Render $render)
     {
@@ -1113,10 +1068,7 @@ class ModalsController
      *
      * @return string Scenario export modal
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function removeHistory(Render $render)
     {
@@ -1142,10 +1094,7 @@ class ModalsController
      *
      * @return string Scenario export modal
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function reportBug(Render $render)
     {
@@ -1168,10 +1117,7 @@ class ModalsController
      *
      * @return string Scenario export modal
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function scenarioExport(Render $render)
     {
@@ -1215,10 +1161,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function scenarioLogExecution(Render $render)
     {
@@ -1243,10 +1186,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function scenarioSummary(Render $render)
     {
@@ -1261,10 +1201,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function scenarioTemplate(Render $render)
     {
@@ -1288,10 +1225,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function updateAdd(Render $render)
     {
