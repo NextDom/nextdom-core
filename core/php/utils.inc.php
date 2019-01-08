@@ -1000,10 +1000,21 @@ function getNtpTime()
     return false;
 }
 
-function cast($sourceObject, $destination)
+/**
+ * Convert object of type to another
+ *
+ * @param mixed $sourceObject Source object
+ * @param string $destinationClassName Destination class name
+ *
+ * @return mixed Object of destinationClassName type
+ */
+function cast($sourceObject, $destinationClassName)
 {
-    $obj_in = serialize($sourceObject);
-    return unserialize('O:' . strlen($destination) . ':"' . $destination . '":' . substr($obj_in, $obj_in[2] + 7));
+    $sourceClassName = get_class($sourceObject);
+    $sourceSerializedPrefix = 'O:' . strlen($sourceClassName) . ':"' . $sourceClassName .'"';
+    $destinationSerializedPrefix = 'O:' . strlen($destinationClassName) . ':"' . $destinationClassName .'"';
+    $serializedObject = serialize($sourceObject);
+    return unserialize(str_replace($sourceSerializedPrefix, $destinationSerializedPrefix, $serializedObject));
 }
 
 function getIpFromString($_string)

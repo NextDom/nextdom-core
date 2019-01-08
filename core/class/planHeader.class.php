@@ -46,9 +46,9 @@ class planHeader {
     }
     /**
      *
-     * @param type $_type
-     * @param type $_id
-     * @return type
+     * @param mixed $_type
+     * @param mixed $_id
+     * @return mixed
      */
     public static function searchByUse($_type, $_id) {
         $return = array();
