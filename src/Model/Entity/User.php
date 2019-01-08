@@ -121,7 +121,7 @@ class User
         return $this->enable;
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -168,7 +168,7 @@ class User
         return $this;
     }
 
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
         return $this;
