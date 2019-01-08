@@ -33,7 +33,10 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 
 class UpdateManager
@@ -106,7 +109,7 @@ class UpdateManager
     public static function listRepo(): array
     {
         $result = array();
-        foreach (\ls(NEXTDOM_ROOT . '/core/repo', '*.repo.php') as $repoFile) {
+        foreach (FileSystemHelper::ls(NEXTDOM_ROOT . '/core/repo', '*.repo.php') as $repoFile) {
             if (substr_count($repoFile, '.') != 2) {
                 continue;
             }
@@ -165,10 +168,7 @@ class UpdateManager
                     if ($update->getStatus() != 'hold' && $update->getStatus() == 'update' && $update->getType() != 'core') {
                         try {
                             $update->doUpdate();
-                        } catch (\Exception $e) {
-                            \log::add('update', 'update', $e->getMessage());
-                            $error = true;
-                        } catch (\Error $e) {
+                        } catch (CoreException $e) {
                             \log::add('update', 'update', $e->getMessage());
                             $error = true;
                         }
@@ -183,7 +183,6 @@ class UpdateManager
      * Get information about an update from its username
      * @param $id ID of the update
      * @return array|mixed|null
-     * @throws \Exception
      */
     public static function byId($id)
     {
@@ -200,7 +199,7 @@ class UpdateManager
      * Get updates from their status
      * @param $status
      * @return array|mixed|null
-     * @throws \Exception
+     * @throws CoreException
      */
     public static function byStatus($status)
     {
@@ -217,7 +216,7 @@ class UpdateManager
      * Get the bets from its logical identifier
      * @param $logicalId
      * @return array|mixed|null
-     * @throws \Exception
+     * @throws CoreException
      */
     public static function byLogicalId($logicalId)
     {
@@ -235,7 +234,7 @@ class UpdateManager
      *
      * @param $type
      * @return array|mixed|null
-     * @throws \Exception
+     * @throws CoreException
      */
     public static function byType($type)
     {
@@ -254,7 +253,7 @@ class UpdateManager
      * @param $type
      * @param $logicalId
      * @return array|mixed|null
-     * @throws \Exception
+     * @throws CoreException
      */
     public static function byTypeAndLogicalId($type, $logicalId)
     {
@@ -273,7 +272,7 @@ class UpdateManager
      * Get all the updates.
      * @param string $filter
      * @return array|null List of all objects
-     * @throws \Exception
+     * @throws CoreException
      */
     public static function all($filter = '')
     {
@@ -291,7 +290,7 @@ class UpdateManager
     /**
      * Get the number of pending updates
      * @return mixed
-     * @throws \Exception
+     * @throws CoreException
      */
     public static function nbNeedUpdate()
     {
@@ -304,7 +303,7 @@ class UpdateManager
 
     /**
      * Search new updates
-     * @throws \Exception
+     * @throws CoreException
      */
     public static function findNewUpdateObject()
     {
@@ -356,6 +355,6 @@ class UpdateManager
      */
     public static function listCoreUpdate()
     {
-        return \ls(NEXTDOM_ROOT . '/install/update', '*');
+        return FileSystemHelper::ls(NEXTDOM_ROOT . '/install/update', '*');
     }
 }

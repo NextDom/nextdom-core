@@ -50,7 +50,7 @@ class EqLogicManager
     public static function byId($id)
     {
         if ($id == '') {
-            return;
+            return null;
         }
         $values = array(
             'id' => $id,
@@ -88,7 +88,7 @@ class EqLogicManager
      *
      * @param bool $onlyEnable Filter only enabled eqLogics
      *
-     * @return array|mixed
+     * @return \eqLogic[]|mixed
      */
     public static function all($onlyEnable = false)
     {

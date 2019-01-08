@@ -32,12 +32,15 @@ class EqlogicController extends BaseController
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
+
     /**
-     * 
-     * @param \NextDom\Controller\Render $render
+     *
+     * @param \NextDom\Helpers\Render $render
      * @param array $pageContent
      * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function get(Render $render, array &$pageContent): string
     {

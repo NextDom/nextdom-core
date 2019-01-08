@@ -48,14 +48,14 @@ class JeeObjectManager
      * Get an object by with his id.
      *
      * @param mixed $id Identifiant de l'objet
-     * @return array|mixed|null|void
+     * @return \jeeObject|null
      *
      * @throws \Exception
      */
     public static function byId($id)
     {
         if ($id == '') {
-            return;
+            return null;
         }
         $values = array(
             'id' => $id,
@@ -70,7 +70,7 @@ class JeeObjectManager
      * Get an object by with his name.
      *
      * @param $name
-     * @return array|mixed|null
+     * @return \jeeObject|null
      * @throws \Exception
      */
     public static function byName($name)

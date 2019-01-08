@@ -518,7 +518,7 @@ class Cron
     /**
      * Set task state
      *
-     * @param $state State of the task
+     * @param bool $state State of the task
      */
     public function setState($state) {
         $this->setCache('state', $state);

@@ -34,7 +34,9 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
 
 class ConfigManager
 {
@@ -169,6 +171,7 @@ class ConfigManager
                 unset(self::$cache[$pluginId . '::' . $configKey]);
             }
         }
+        return null;
     }
 
     /**
@@ -362,12 +365,12 @@ class ConfigManager
     public static function postConfig_market_allowDNS($newValue)
     {
         if ($newValue == 1) {
-            if (!\network::dns_run()) {
-                \network::dns_start();
+            if (!NetworkHelper::dnsRun()) {
+                NetworkHelper::dnsStart();
             }
         } else {
-            if (\network::dns_run()) {
-                \network::dns_stop();
+            if (NetworkHelper::dnsRun()) {
+                NetworkHelper::dnsStop();
             }
         }
     }
@@ -381,7 +384,7 @@ class ConfigManager
      */
     public static function preConfig_market_password($newValue)
     {
-        if (!is_sha1($newValue)) {
+        if (!Utils::isSha1($newValue)) {
             return sha1($newValue);
         }
         return $newValue;

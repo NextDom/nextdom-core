@@ -34,6 +34,8 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Exceptions\CoreException;
+
 class Utils
 {
     /**
@@ -173,29 +175,6 @@ class Utils
     }
 
     /**
-     * Obtenir le contenu d'un fichier template.
-     *
-     * @param string $folder Répertoire dans lequel se trouve le fichier de template
-     * @param string $version Version du template
-     * @param string $filename Nom du fichier
-     * @param string $pluginId Identifiant du plugin
-     *
-     * @return string Contenu du fichier ou une chaine vide.
-     */
-    public static function getTemplateFilecontent(string $folder, string $version, string $filename, string $pluginId = ''): string
-    {
-        $result = '';
-        $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
-        if ($pluginId == '') {
-            $filePath = NEXTDOM_ROOT . '/' . $folder . '/template/' . $version . '/' . $filename . '.html';
-        }
-        if (file_exists($filePath)) {
-            $result = file_get_contents($filePath);
-        }
-        return $result;
-    }
-
-    /**
      * Transforme une expression lisible en une expression analysable
      *
      * @param string $expression Expression lisible
@@ -245,4 +224,219 @@ class Utils
         return $result;
     }
 
+    public static function templateReplace($_array, $_subject)
+    {
+        return str_replace(array_keys($_array), array_values($_array), $_subject);
+    }
+
+    public static function resizeImage($contents, $width, $height)
+    {
+// Cacul des nouvelles dimensions
+        $width_orig = imagesx($contents);
+        $height_orig = imagesy($contents);
+        $ratio_orig = $width_orig / $height_orig;
+        $test = $width / $height > $ratio_orig;
+        $dest_width = $test ? ceil($height * $ratio_orig) : $width;
+        $dest_height = $test ? $height : ceil($width / $ratio_orig);
+
+        $dest_image = imagecreatetruecolor($width, $height);
+        $wh = imagecolorallocate($dest_image, 0xFF, 0xFF, 0xFF);
+        imagefill($dest_image, 0, 0, $wh);
+
+        $offcet_x = ($width - $dest_width) / 2;
+        $offcet_y = ($height - $dest_height) / 2;
+        if ($dest_image && $contents) {
+            if (!imagecopyresampled($dest_image, $contents, $offcet_x, $offcet_y, 0, 0, $dest_width, $dest_height, $width_orig, $height_orig)) {
+                error_log("Error image copy resampled");
+                return false;
+            }
+        }
+// start buffering
+        ob_start();
+        imagejpeg($dest_image);
+        $contents = ob_get_contents();
+        ob_end_clean();
+        return $contents;
+    }
+
+    public static function getMicrotime()
+    {
+        list($usec, $sec) = explode(" ", microtime());
+        return ((float)$usec + (float)$sec);
+    }
+
+    public static function convertDuration($time)
+    {
+        $result = '';
+        $unities = array('j' => 86400, 'h' => 3600, 'min' => 60);
+        foreach ($unities as $unity => $value) {
+            if ($time >= $value || $result != '') {
+                $result .= floor($time / $value) . $unity . ' ';
+                $time %= $value;
+            }
+        }
+
+        $result .= $time . 's';
+        return $result;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function connectedToDatabase()
+    {
+        require_once NEXTDOM_ROOT . '/core/class/DB.class.php';
+        return is_object(\DB::getConnection());
+    }
+
+    /**
+     * @param CoreException $e
+     * @return string
+     */
+    public static function displayException($e)
+    {
+        $message = '<span id="span_errorMessage">' . $e->getMessage() . '</span>';
+        if (DEBUG) {
+            $message .= '<a class="pull-right bt_errorShowTrace cursor">' . __('Show traces') . '</a>';
+            $message .= '<br/><pre class="pre_errorTrace" style="display : none;">' . print_r($e->getTrace(), true) . '</pre>';
+        }
+        return $message;
+    }
+
+    public static function isSha1($_string = '')
+    {
+        if ($_string == '') {
+            return false;
+        }
+        return preg_match('/^[0-9a-f]{40}$/i', $_string);
+    }
+
+    public static function isSha512($_string = '')
+    {
+        if ($_string == '') {
+            return false;
+        }
+        return preg_match('/^[0-9a-f]{128}$/i', $_string);
+    }
+
+    public static function cleanPath($path)
+    {
+        $out = array();
+        foreach (explode('/', $path) as $i => $fold) {
+            if ($fold == '' || $fold == '.') {
+                continue;
+            }
+
+            if ($fold == '..' && $i > 0 && end($out) != '..') {
+                array_pop($out);
+            } else {
+                $out[] = $fold;
+            }
+
+        }
+        return ($path{0} == '/' ? '/' : '') . join('/', $out);
+    }
+
+    public static function getRootPath()
+    {
+        return NEXTDOM_ROOT;
+    }
+
+    /**
+     * got from https://github.com/zendframework/zend-stdlib/issues/58
+     *
+     * @param $pattern
+     * @param $flags
+     * @return array|false
+     */
+    public static function polyfillGlobBrace($pattern, $flags)
+    {
+        static $next_brace_sub;
+        if (!$next_brace_sub) {
+            // Find the end of the sub-pattern in a brace expression.
+            $next_brace_sub = function ($pattern, $current) {
+                $length = strlen($pattern);
+                $depth = 0;
+
+                while ($current < $length) {
+                    if ('\\' === $pattern[$current]) {
+                        if (++$current === $length) {
+                            break;
+                        }
+                        $current++;
+                    } else {
+                        if (('}' === $pattern[$current] && $depth-- === 0) || (',' === $pattern[$current] && 0 === $depth)) {
+                            break;
+                        } elseif ('{' === $pattern[$current++]) {
+                            $depth++;
+                        }
+                    }
+                }
+
+                return $current < $length ? $current : null;
+            };
+        }
+
+        $length = strlen($pattern);
+
+        // Find first opening brace.
+        for ($begin = 0; $begin < $length; $begin++) {
+            if ('\\' === $pattern[$begin]) {
+                $begin++;
+            } elseif ('{' === $pattern[$begin]) {
+                break;
+            }
+        }
+
+        // Find comma or matching closing brace.
+        if (null === ($next = $next_brace_sub($pattern, $begin + 1))) {
+            return glob($pattern, $flags);
+        }
+
+        $rest = $next;
+
+        // Point `$rest` to matching closing brace.
+        while ('}' !== $pattern[$rest]) {
+            if (null === ($rest = $next_brace_sub($pattern, $rest + 1))) {
+                return glob($pattern, $flags);
+            }
+        }
+
+        $paths = array();
+        $p = $begin + 1;
+
+        // For each comma-separated subpattern.
+        do {
+            $subpattern = substr($pattern, 0, $begin)
+                . substr($pattern, $p, $next - $p)
+                . substr($pattern, $rest + 1);
+
+            if (($result = self::polyfillGlobBrace($subpattern, $flags))) {
+                $paths = array_merge($paths, $result);
+            }
+
+            if ('}' === $pattern[$next]) {
+                break;
+            }
+
+            $p = $next + 1;
+            $next = $next_brace_sub($pattern, $p);
+        } while (null !== $next);
+
+        return array_values(array_unique($paths));
+    }
+
+    public static function globBrace($pattern, $flags = 0)
+    {
+        if (defined("GLOB_BRACE")) {
+            return glob($pattern, $flags + GLOB_BRACE);
+        } else {
+            return self::polyfillGlobBrace($pattern, $flags);
+        }
+    }
+
+    public static function removeCR($_string)
+    {
+        return trim(str_replace(array("\n", "\r\n", "\r", "\n\r"), '', $_string));
+    }
 }
