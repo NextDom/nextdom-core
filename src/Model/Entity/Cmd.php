@@ -256,6 +256,10 @@ class Cmd
         return $this->id;
     }
 
+    /**
+     * 
+     * @return \NextDom\Model\Entity\Eqlogic
+     */
     public function getEqlogic(): \NextDom\Model\Entity\Eqlogic
     {
         return $this->eqlogic;
@@ -363,6 +367,11 @@ class Cmd
         return $this;
     }
 
+    /**
+     * 
+     * @param \NextDom\Entity\Eqlogic $eqlogic
+     * @return $this
+     */
     public function setEqlogic(\NextDom\Entity\Eqlogic $eqlogic)
     {
         $this->eqlogic = $eqlogic;

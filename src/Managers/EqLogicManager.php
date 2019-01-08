@@ -33,11 +33,9 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Managers\ConfigManager;
-
 class EqLogicManager
 {
-    const CLASS_NAME = 'eqLogic';
+    const CLASS_NAME = 'NextDom\\Model\\Entity\\EqLogic';
     const DB_CLASS_NAME = '`eqLogic`';
 
     /**
@@ -46,6 +44,8 @@ class EqLogicManager
      * @param mixed $id EqLogic object id
      *
      * @return \eqLogic|null
+     *
+     * @throws \Exception
      */
     public static function byId($id)
     {
@@ -396,6 +396,7 @@ class EqLogicManager
         foreach ($selfByTimeout as $eqLogic) {
             $sendReport = false;
             $cmds = $eqLogic->getCmd();
+            // TODO: WHat what what ?
             foreach ($cmds as $cmd) {
                 $sendReport = true;
             }

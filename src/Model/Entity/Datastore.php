@@ -96,6 +96,11 @@ class Datastore
         return $this;
     }
 
+    /**
+     * 
+     * @param type $linkId
+     * @return $this
+     */
     public function setLinkId($linkId)
     {
         $this->linkId = $linkId;

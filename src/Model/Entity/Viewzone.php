@@ -100,6 +100,10 @@ class Viewzone
         return $this->id;
     }
 
+    /**
+     * 
+     * @return \NextDom\Model\Entity\View
+     */
     public function getView(): \NextDom\Model\Entity\View
     {
         return $this->view;
@@ -135,6 +139,11 @@ class Viewzone
         return $this;
     }
 
+    /**
+     * 
+     * @param \NextDom\Model\Entity\View $view
+     * @return $this
+     */
     public function setView(\NextDom\Model\Entity\View $view)
     {
         $this->view = $view;
