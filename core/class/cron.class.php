@@ -21,9 +21,13 @@ use NextDom\Managers\CronManager;
 /* * ***************************Includes********************************* */
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
+/**
+ * Class cron interface for Jeedom plugins
+ */
 class cron extends NextDom\Model\Entity\Cron {
     /**
      * Return an array of all cron object
+     * @param bool $_order
      * @return array
      */
     public static function all($_order = false) {

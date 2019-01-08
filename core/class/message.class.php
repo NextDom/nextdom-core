@@ -86,6 +86,12 @@ class message {
         return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
     }
 
+    /**
+     * @param $_plugin
+     * @param $_logicalId
+     * @return \message[]|null
+     * @throws Exception
+     */
     public static function byPluginLogicalId($_plugin, $_logicalId) {
         $values = array(
             'logicalId' => $_logicalId,

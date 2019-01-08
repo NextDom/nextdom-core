@@ -37,10 +37,11 @@ namespace NextDom\Managers;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
+use NextDom\Model\Entity\Cron;
 
 class CronManager {
 
-    const CLASS_NAME = 'NextDom\\Model\\Entity\\Cron';
+    const CLASS_NAME = Cron::class;
     const DB_CLASS_NAME = '`cron`';
 
     /**
