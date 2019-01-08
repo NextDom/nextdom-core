@@ -63,7 +63,7 @@ class ViewController extends BaseController
                 $currentView = \view::byId($_SESSION['user']->getOptions('defaultDesktopView'));
             }
 
-            if (!is_object($currentView)) {
+            if (!is_object($currentView) && is_array($pageContent['viewsList']) && count($pageContent['viewsList']) > 0) {
                 $currentView = $pageContent['viewsList'][0];
             }
         } else {

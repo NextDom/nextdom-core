@@ -65,7 +65,6 @@ class CronManager {
      * @return object
      */
     public static function byId($cronId) {
-        error_log('coucou');
         $value = array(
             'id' => $cronId,
         );

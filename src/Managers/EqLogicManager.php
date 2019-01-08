@@ -45,7 +45,7 @@ class EqLogicManager
      *
      * @param mixed $id EqLogic object id
      *
-     * @return array|mixed|void
+     * @return \eqLogic|null
      */
     public static function byId($id)
     {

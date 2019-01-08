@@ -1241,7 +1241,7 @@ class eqLogic
      * @param null $_logicalId
      * @param null $_visible
      * @param bool $_multiple
-     * @return array|mixed
+     * @return \cmd[]
      */
     public function getCmd($_type = null, $_logicalId = null, $_visible = null, $_multiple = false)
     {

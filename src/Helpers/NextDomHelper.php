@@ -876,7 +876,7 @@ class NextDomHelper
      *
      * @param $input
      *
-     * @return string
+     * @return array
      */
     public static function toHumanReadable($input)
     {

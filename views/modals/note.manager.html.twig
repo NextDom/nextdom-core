@@ -1,13 +1,8 @@
-<?php
-if (!isConnect('admin')) {
-    throw new Exception('{{401 - Accès non autorisé}}');
-}
-?>
 <div style="display: none;" id="div_noteManagementAlert"></div>
 <div class="row row-overflow">
     <div class="col-lg-2 col-md-3 col-sm-4" style="overflow-y:auto;overflow-x:hidden;">
         <fieldset>
-            <legend>{{Liste des notes}}</legend>
+            <legend>{{ 'Liste des notes' }}</legend>
                 <div class="bs-sidebar">
                     <ul class="nav nav-list bs-sidenav list-group" id="ul_noteList">
 
@@ -19,9 +14,9 @@ if (!isConnect('admin')) {
     <div class="col-lg-10 col-md-9 col-sm-8" style="border-left: solid 1px #EEE;overflow-y:hidden;overflow-x:hidden;">
         <fieldset>
             <div class="box-tools pull-right padding-bottom">
-                <a class="btn btn-action" id="bt_noteManagerAdd"><i class="fas fa-plus">&nbsp;&nbsp;</i>{{Ajouter}}</a>
-                <a class="btn btn-success" id="bt_noteManagerSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{Sauvegarder}}</a>
-                <a class="btn btn-danger" id="bt_noteManagerRemove"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{Supprimer}}</a>
+                <a class="btn btn-action" id="bt_noteManagerAdd"><i class="fas fa-plus">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
+                <a class="btn btn-success" id="bt_noteManagerSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+                <a class="btn btn-danger" id="bt_noteManagerRemove"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
             </div>
             <div id="div_noteManagerDisplay">
                 <input class="noteAttr form-control" data-l1key="id" style="display:none;" disabled/>
@@ -61,7 +56,7 @@ if (!isConnect('admin')) {
                     notify('Core',error.message,'error');
                 },
                 success: function (notes) {
-                    notify('Core','{{Note créée avec succès}}','success');
+                    notify('Core','{{ 'Note créée avec succès' }}','success');
                     updateNoteList();
                 }
             });
@@ -93,7 +88,7 @@ if (!isConnect('admin')) {
                 notify('Core',error.message,'error');
             },
             success: function (notes) {
-                notify('Core','{{Note sauvegardée avec succès}}','success');
+                notify('Core','{{ 'Note sauvegardée avec succès' }}','success');
                 updateNoteList();
             }
         });
@@ -101,7 +96,7 @@ if (!isConnect('admin')) {
 
     $('#bt_noteManagerRemove').on('click',function(){
         var note = $('#div_noteManagerDisplay').getValues('.noteAttr')[0];
-        var r = confirm('{{Etês vous sur de vouloir supprimer la note : }}'+note.name+' ?');
+        var r = confirm('{{ 'Êtes vous sur de vouloir supprimer la note : ' }}'+note.name+' ?');
         if (r == true) {
             nextdom.note.remove({
                 id : note.id,
@@ -109,7 +104,7 @@ if (!isConnect('admin')) {
                     notify('Core',error.message,'error');
                 },
                 success: function (notes) {
-                    notify('Core','{{Note supprimée avec succès}}','success');
+                    notify('Core','{{ 'Note supprimée avec succès' }}','success');
                     $('#div_noteManagerDisplay .noteAttr').value('');
                     updateNoteList();
                 }

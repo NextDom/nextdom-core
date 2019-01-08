@@ -1,0 +1,87 @@
+<table id="table_addViewDataHidden" style="display: none;">
+    <tbody></tbody>
+</table>
+<table class="table table-condensed table-bordered table-striped tablesorter" id="table_addViewData">
+    <thead>
+    <tr>
+        <th style="width: 50px;">#</th>
+        <th style="width: 150px;">{{ 'Objet' }}</th>
+        <th style="width: 150px;">{{ 'Nom' }}</th>
+        <th data-sorter="false" data-filter="false">{{ 'Affichage' }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for cmdData in cmdList %}
+        <tr data-link_id="{{ cmdData['cmd'].getId() }}" data-type="graph" data-viewDataType="cmd">
+            <td>
+                <input type="checkbox" class="enable"/>
+                <input class="graphDataOption" data-l1key="link_id" value="{{ cmdData['cmd'].getId() }}" hidden/>
+            </td>
+            <td class="object_name">
+                <input class="graphDataOption" data-l1key="type" value="cmd" hidden/>
+                {% if cmdData['showObject'] %}
+                    {{ cmdData['eqLogicObject'].getName() }}
+                {% endif %}
+            </td>
+            <td class="name">
+                [{{ cmdData['eqLogic'].getName() }}] [{{ cmdData['cmd'].getName() }}]
+            </td>
+            <td class="display">
+                <div class="option">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label>{{ 'Couleur' }} :</label> <input type="color" class="graphDataOption form-control input-sm" data-l1key="configuration" data-l2key="graphColor" style="width : 110px;"/>
+                        </div>
+                        <div class="form-group">
+                            <select class="graphDataOption form-control input-sm" data-l1key="configuration" data-l2key="graphType" style="width : 100px;">
+                                <option value="line">{{ 'Ligne' }}</option>
+                                <option value="area">{{ 'Aire' }}</option>
+                                <option value="column">{{ 'Colonne' }}</option>
+                                <option value="pie">{{ 'Camembert' }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select class="graphDataOption form-control input-sm" data-l1key="configuration" data-l2key="groupingType" style="width : 100px;">
+                                <option value="">{{ 'Aucun groupement' }}</option>
+                                <option value="sum::hour">{{ 'Somme par heure' }}</option>
+                                <option value="average::hour">{{ 'Moyenne par heure' }}</option>
+                                <option value="low::hour">{{ 'Minimum par heure' }}</option>
+                                <option value="high::hour">{{ 'Maximum par heure' }}</option>
+                                <option value="sum::day">{{ 'Somme par jour' }}</option>
+                                <option value="average::day">{{ 'Moyenne par jour' }}</option>
+                                <option value="low::day">{{ 'Minimum par jour' }}</option>
+                                <option value="high::day">{{ 'Maximum par jour' }}</option>
+                                <option value="sum::week">{{ 'Somme par semaine' }}</option>
+                                <option value="average::week">{{ 'Moyenne par semaine' }}</option>
+                                <option value="low::week">{{ 'Minimum par semaine' }}</option>
+                                <option value="high::week">{{ 'Maximum par semaine' }}</option>
+                                <option value="sum::month">{{ 'Somme par mois' }}</option>
+                                <option value="average::month">{{ 'Moyenne par mois' }}</option>
+                                <option value="low::month">{{ 'Minimum par mois' }}</option>
+                                <option value="high::month">{{ 'Maximum par mois' }}</option>
+                                <option value="sum::year">{{ 'Somme par année' }}</option>
+                                <option value="average::year">{{ 'Moyenne par année' }}</option>
+                                <option value="low::year">{{ 'Minimum par année' }}</option>
+                                <option value="high::year">{{ 'Maximum par année' }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>{{ 'Escalier' }} :</label> <input type="checkbox" class="graphDataOption" data-l1key="configuration" data-l2key="graphStep">
+                            <label>{{ 'Empiler' }} :</label> <input type="checkbox" class="graphDataOption" data-l1key="configuration" data-l2key="graphStack">
+                            <label>{{ 'Variation' }} :</label> <input type="checkbox" class="graphDataOption" data-l1key="configuration" data-l2key="derive">
+                            <label>{{ 'Echelle' }} :</label> <select class="graphDataOption form-control input-sm" data-l1key="configuration" data-l2key="graphScale" style="width : 60px;">
+                                <option value="0">Droite</option>
+                                <option value="1">Gauche</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    initTableSorter();
+</script>
