@@ -33,6 +33,8 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\NetworkHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Helpers\NextDomHelper;
@@ -173,14 +175,14 @@ class ScenarioExpressionManager
         if (!isset($replace['#id#'])) {
             $replace['#id#'] = mt_rand();
         }
-        $return['html'] = template_replace(CmdManager::cmdToHumanReadable($replace), $return['template']);
+        $return['html'] = Utils::templateReplace(CmdManager::cmdToHumanReadable($replace), $return['template']);
         preg_match_all("/#[a-zA-Z_]*#/", $return['template'], $matches);
         foreach ($matches[0] as $value) {
             if (!isset($replace[$value])) {
                 $replace[$value] = '';
             }
         }
-        $return['html'] = \translate::exec(template_replace($replace, $return['html']), 'core/template/scenario/' . $expression . '.default');
+        $return['html'] = \translate::exec(Utils::templateReplace($replace, $return['html']), 'core/template/scenario/' . $expression . '.default');
         return $return;
     }
 
@@ -1349,7 +1351,7 @@ class ScenarioExpressionManager
                     $return['#hostname#'] = '"' . gethostname() . '"';
                     break;
                 case '#IP#':
-                    $return['#IP#'] = '"' . \network::getNetworkAccess('internal', 'ip', '', false) . '"';
+                    $return['#IP#'] = '"' . NetworkHelper::getNetworkAccess('internal', 'ip', '', false) . '"';
                     break;
                 case '#trigger#':
                     $return['#trigger#'] = '';

@@ -22,6 +22,8 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\FileSystemHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\PluginManager;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
@@ -58,7 +60,7 @@ class ReportController extends BaseController
             $viewData['id'] = $view->getId();
             $viewData['icon'] = $view->getDisplay('icon');
             $viewData['name'] = $view->getName();
-            $viewData['number'] = count(ls($report_path . '/view/' . $view->getId(), '*'));
+            $viewData['number'] = count(FileSystemHelper::ls($report_path . '/view/' . $view->getId(), '*'));
             $pageContent['reportViews'][] = $viewData;
         }
         $pageContent['reportPlans'] = [];
@@ -68,7 +70,7 @@ class ReportController extends BaseController
             $planData['id'] = $plan->getId();
             $planData['icon'] = $plan->getConfiguration('icon');
             $planData['name'] = $plan->getName();
-            $planData['number'] = count(ls($report_path . '/plan/' . $plan->getId(), '*'));
+            $planData['number'] = count(FileSystemHelper::ls($report_path . '/plan/' . $plan->getId(), '*'));
             $pageContent['reportPlans'][] = $planData;
         }
         $pageContent['reportPlugins'] = [];
@@ -78,7 +80,7 @@ class ReportController extends BaseController
                 $pluginData = [];
                 $pluginData['id'] = $plugin->getId();
                 $pluginData['name'] = $plugin->getName();
-                $pluginData['number'] = count(ls($report_path . '/plugin/' . $plugin->getId(), '*'));
+                $pluginData['number'] = count(FileSystemHelper::ls($report_path . '/plugin/' . $plugin->getId(), '*'));
                 $pageContent['reportPlugins'][] = $pluginData;
             }
         }

@@ -22,6 +22,9 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\FileSystemHelper;
+use NextDom\Helpers\SessionHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\JeeObjectManager;
@@ -68,9 +71,9 @@ class ProfilsController extends BaseController
             }
         }
         $pageContent['profilsUser'] = $_SESSION['user'];
-        $pageContent['profilsSessionsList'] = listSession();
+        $pageContent['profilsSessionsList'] = SessionHelper::getSessionsList();
 
-        $lsCssThemes = ls(NEXTDOM_ROOT . '/public/themes/');
+        $lsCssThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/public/themes/');
         $pageContent['profilsMobileThemes'] = [];
         foreach ($lsCssThemes as $dir) {
             if (is_dir(NEXTDOM_ROOT . '/public/themes/' . $dir . '/mobile')) {
@@ -78,7 +81,7 @@ class ProfilsController extends BaseController
             }
         }
         $pageContent['profilsAvatars'] = [];
-        $lsAvatars = ls(NEXTDOM_ROOT . '/public/img/profils/');
+        $lsAvatars = FileSystemHelper::ls(NEXTDOM_ROOT . '/public/img/profils/');
         foreach ($lsAvatars as $avatarFile) {
             if (is_file(NEXTDOM_ROOT . '/public/img/profils/'.$avatarFile)) {
                 $pageContent['profilsAvatars'][] = '/public/img/profils/'.$avatarFile;

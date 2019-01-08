@@ -46,7 +46,7 @@ class CronManager {
     /**
      * Return an array of all cron objects
      *
-     * @return array List of all cron objets
+     * @return \cron[] List of all cron objets
      */
     public static function all($ordered = false) {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '

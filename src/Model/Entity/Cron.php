@@ -596,7 +596,7 @@ class Cron
     /**
      * Set task state
      *
-     * @param string $state State of the task
+     * @param mixed $state State of the task
      */
     public function setState($state)
     {

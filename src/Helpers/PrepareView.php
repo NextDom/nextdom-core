@@ -17,6 +17,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Managers\AjaxManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
@@ -171,9 +172,9 @@ class PrepareView
                 $pageData['ALERT_MSG'] = 'NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.';
             }
             $pageData['content'] = self::getContent($render, $pageData, $page, $currentPlugin);
-        } catch (\Exception $e) {
+        } catch (CoreException $e) {
             ob_end_clean();
-            $pageData['ALERT_MSG'] = displayException($e);
+            $pageData['ALERT_MSG'] = Utils::displayException($e);
         }
 
         $pageData['CONTENT'] = $render->get('desktop/index.html.twig', $pageData);
@@ -269,7 +270,7 @@ class PrepareView
             foreach ($eventsJsPlugin as $value) {
                 try {
                     $pageData['JS_POOL'][] = '/plugins/'.$value.'/public/js/desktop/events.js';
-                } catch (\Exception $e) {
+                } catch (CoreException $e) {
                     \log::add($value, 'error', 'Event JS file not found');
                 }
             }
@@ -279,7 +280,7 @@ class PrepareView
     /**
      * @param $pageData
      * @param $currentPlugin
-     * @throws \Exception
+     * @throws CoreException
      */
     private static function initMenu(&$pageData, $currentPlugin)
     {
@@ -311,7 +312,7 @@ class PrepareView
     /**
      * @param $pageData
      * @param $configs
-     * @throws \Exception
+     * @throws CoreException
      */
     private static function initHeaderData(&$pageData, $configs)
     {
@@ -329,7 +330,7 @@ class PrepareView
         self::initCssPool($pageData, $configs);
         // TODO: A virer
         ob_start();
-        \include_file('core', 'icon.inc', 'php');
+        FileSystemHelper::includeFile('core', 'icon.inc', 'php');
         $pageData['CUSTOM_CSS'] = ob_get_clean();
     }
 
@@ -422,7 +423,7 @@ class PrepareView
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
         // Icônes
         $rootDir = NEXTDOM_ROOT . '/public/icon/';
-        foreach (ls($rootDir, '*') as $dir) {
+        foreach (FileSystemHelper::ls($rootDir, '*') as $dir) {
             if (is_dir($rootDir . $dir) && file_exists($rootDir . $dir . '/style.css')) {
                 $pageData['CSS_POOL'][] = '/public/icon/' . $dir . 'style.css';
             }
@@ -456,12 +457,12 @@ class PrepareView
      * @param string $page
      * @param $currentPlugin
      * @return string
-     * @throws \Exception
+     * @throws CoreException
      */
     private static function getContent(Render $render, array &$pageContent, string $page, $currentPlugin) {
         if ($currentPlugin !== null && is_object($currentPlugin)) {
             ob_start();
-            \include_file('desktop', $page, 'php', $currentPlugin->getId(), true);
+            FileSystemHelper::includeFile('desktop', $page, 'php', $currentPlugin->getId(), true);
             return ob_get_clean();
         } else {
             $controllerRoute = PagesController::getRoute($page);
@@ -470,7 +471,7 @@ class PrepareView
                 $purgedPage = preg_replace('/[^a-z0-9_-]/i', '', $page);
                 if (file_exists(NEXTDOM_ROOT . '/desktop/' . $purgedPage)) {
                     ob_start();
-                    \include_file('desktop', $page, 'php', '', true);
+                    FileSystemHelper::includeFile('desktop', $page, 'php', '', true);
                     return ob_get_clean();
                 } else {
                     Router::showError404AndDie();
@@ -485,12 +486,12 @@ class PrepareView
     /**
      * Response to an Ajax request
      *
-     * @throws \Exception
+     * @throws CoreException
      */
     public static function getContentByAjax()
     {
         try {
-            \include_file('core', 'authentification', 'php');
+            FileSystemHelper::includeFile('core', 'authentification', 'php');
             $page = Utils::init('p');
             $controllerRoute = PagesController::getRoute($page);
             if ($controllerRoute === null) {
@@ -506,26 +507,26 @@ class PrepareView
                 $pageContent['content'] = $controller->get($render, $pageContent);
                 $render->show('/layouts/ajax_content.html.twig', $pageContent);
             }
-        } catch (\Exception $e) {
+        } catch (CoreException $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
-            echo \translate::exec(displayException($e), 'desktop/' . Utils::init('p') . '.php');
+            echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
             echo '</div>';
         }
     }
 
     public static function showModal()
     {
-        \include_file('core', 'authentification', 'php');
+        FileSystemHelper::includeFile('core', 'authentification', 'php');
         $plugin = Utils::init('plugin', '');
         $modalCode = Utils::init('modal', '');
         // Affichage d'un modal appartenant à un plugin
         if ($plugin != '') {
             try {
-                \include_file('desktop', $modalCode, 'modal', $plugin, true);
-            } catch (\Exception $e) {
+                FileSystemHelper::includeFile('desktop', $modalCode, 'modal', $plugin, true);
+            } catch (CoreException $e) {
                 echo '<div class="alert alert-danger div_alert">';
-                echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
+                echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
                 echo '</div>';
             }
         }
@@ -534,10 +535,10 @@ class PrepareView
             $modalRoute = ModalsController::getRoute($modalCode);
             if ($modalRoute === null) {
                 try {
-                    \include_file('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
-                } catch (\Exception $e) {
+                    FileSystemHelper::includeFile('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
+                } catch (CoreException $e) {
                     echo '<div class="alert alert-danger div_alert">';
-                    echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
+                    echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
                     echo '</div>';
                 }
             } else {

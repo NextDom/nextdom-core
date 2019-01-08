@@ -33,7 +33,9 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 
 class CmdManager
@@ -71,7 +73,7 @@ class CmdManager
 
     public static function byIds($_ids) {
 		if (!is_array($_ids) || count($_ids) == 0) {
-			return;
+			return null;
 		}
 		$in = trim(implode(',', $_ids), ',');
 		$sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
@@ -89,7 +91,7 @@ class CmdManager
     public static function byId($id)
     {
         if ($id == '') {
-            return;
+            return null;
         }
         $values = array(
             'id' => $id,
@@ -828,7 +830,7 @@ class CmdManager
     public static function availableWidget($version)
     {
         $path = dirname(__FILE__) . '/../../core/template/' . $version;
-        $files = ls($path, 'cmd.*', false, array('files', 'quiet'));
+        $files = FileSystemHelper::ls($path, 'cmd.*', false, array('files', 'quiet'));
         $return = array();
         foreach ($files as $file) {
             $informations = explode('.', $file);
@@ -844,7 +846,7 @@ class CmdManager
         }
         $path = dirname(__FILE__) . '/../../plugins/widget/core/template/' . $version;
         if (file_exists($path)) {
-            $files = ls($path, 'cmd.*', false, array('files', 'quiet'));
+            $files = FileSystemHelper::ls($path, 'cmd.*', false, array('files', 'quiet'));
             foreach ($files as $file) {
                 $informations = explode('.', $file);
                 if (count($informations) > 3) {

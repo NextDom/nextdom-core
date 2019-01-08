@@ -192,7 +192,7 @@ class SystemHelper
     public static function kill($find = '', $forceKill = true) 
     {
         if (trim($find) == '') {
-            return;
+            return null;
         }
         if (is_numeric($find)) {
             $kill = posix_kill($find, 15);
@@ -210,7 +210,7 @@ class SystemHelper
             } else {
                 $kill = posix_kill($find, 15);
             }
-            return;
+            return null;
         }
         if ($forceKill) {
             $cmd = "(ps ax || ps w) | grep -ie '" . $find . "' | grep -v grep | awk '{print $1}' | xargs " . SystemHelper::getCmdSudo() . "kill -9 > /dev/null 2>&1";

@@ -34,6 +34,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 
 /**
@@ -68,7 +69,7 @@ class EventManager
             if (!is_array($value)) {
                 $value = [];
             }
-            $value[] = array('datetime' => getmicrotime(), 'name' => $eventName, 'option' => $options);
+            $value[] = array('datetime' => Utils::getMicrotime(), 'name' => $eventName, 'option' => $options);
             CacheManager::set('event', json_encode(self::cleanEvent($value)));
             flock($fd, LOCK_UN);
         }
@@ -92,7 +93,7 @@ class EventManager
             }
             $value = [];
             foreach ($values as $option) {
-                $value[] = array('datetime' => getmicrotime(), 'name' => $eventName, 'option' => $option);
+                $value[] = array('datetime' => Utils::getMicrotime(), 'name' => $eventName, 'option' => $option);
             }
             CacheManager::set('event', json_encode(self::cleanEvent(array_merge($value_src, $value))));
             flock($fd, LOCK_UN);

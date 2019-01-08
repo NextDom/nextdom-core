@@ -91,7 +91,7 @@ class DataStoreManager {
      * @param mixed $linkId
      * @param mixed $key
      *
-     * @return mixed
+     * @return \dataStore[]|null
      */
     public static function byTypeLinkId($dataType, $linkId = '') {
         $values = array(

@@ -23,7 +23,9 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
+use NextDom\Helpers\SessionHelper;
 use NextDom\Helpers\Status;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 
 class UsersController extends BaseController
@@ -42,7 +44,6 @@ class UsersController extends BaseController
      *
      * @return string Content of users page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -54,7 +55,7 @@ class UsersController extends BaseController
             $user = \user::byLogin('nextdom_support');
             $pageContent['userSupportExists'] = is_object($user);
         }
-        $pageContent['userSessionsList'] = \listSession();
+        $pageContent['userSessionsList'] = SessionHelper::getSessionsList();
         $pageContent['usersList'] = \user::all();
         $pageContent['JS_VARS']['ldapEnable'] = $pageContent['userLdapEnabled'];
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/admin/user.js';
