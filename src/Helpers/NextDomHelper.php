@@ -277,7 +277,7 @@ class NextDomHelper
             'comment' => '',
         );
 
-        $state = \network::test('internal');
+        $state = NetworkHelper::test('internal');
         $systemHealth[] = array(
             'icon' => 'fa-plug',
             'name' => __('health.internal-network-conf'),
@@ -286,7 +286,7 @@ class NextDomHelper
             'comment' => ($state) ? '' : __('health.network-config'),
         );
 
-        $state = \network::test('external');
+        $state = NetworkHelper::test('external');
         $systemHealth[] = array(
             'icon' => 'fa-globe',
             'name' => __('health.external-network-conf'),
@@ -676,8 +676,8 @@ class NextDomHelper
 
             try {
                 \log::add('starting', 'debug', __('Vérification de la \configuration réseau interne'));
-                if (!\network::test('internal')) {
-                    \network::checkConf('internal');
+                if (!NetworkHelper::test('internal')) {
+                    NetworkHelper::checkConf('internal');
                 }
             } catch (CoreException $e) {
                 \log::add('starting', 'error', __('Erreur sur la \configuration réseau interne : ') . \log::exception($e));
@@ -717,12 +717,12 @@ class NextDomHelper
     public static function cron5()
     {
         try {
-            \network::cron5();
+            NetworkHelper::cron5();
         } catch (CoreException $e) {
             \log::add('network', 'error', 'network::cron : ' . $e->getMessage());
         }
         try {
-            foreach (\update::listRepo() as $name => $repo) {
+            foreach (UpdateManager::listRepo() as $name => $repo) {
                 $class = 'repo_' . $name;
                 if (class_exists($class) && method_exists($class, 'cron5') && ConfigManager::byKey($name . '::enable') == 1) {
                     $class::cron5();
@@ -1208,20 +1208,20 @@ class NextDomHelper
 
         $param = array('cache_write' => 5000, 'cache_read' => 5000, 'database_write_delete' => 1000, 'database_update' => 1000, 'database_replace' => 1000, 'database_read' => 50000, 'subprocess' => 200);
 
-        $starttime = getmicrotime();
+        $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['cache_write']; $i++) {
             CacheManager::set('nextdom_benchmark', $i);
         }
-        $result['cache_write_' . $param['cache_write']] = getmicrotime() - $starttime;
+        $result['cache_write_' . $param['cache_write']] = Utils::getMicrotime() - $starttime;
 
-        $starttime = getmicrotime();
+        $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['cache_read']; $i++) {
             $cache = CacheManager::byKey('nextdom_benchmark');
             $cache->getValue();
         }
-        $result['cache_read_' . $param['cache_read']] = getmicrotime() - $starttime;
+        $result['cache_read_' . $param['cache_read']] = Utils::getMicrotime() - $starttime;
 
-        $starttime = getmicrotime();
+        $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['database_write_delete']; $i++) {
             $sql = 'DELETE FROM config
                     WHERE `key`="nextdom_benchmark"
@@ -1239,7 +1239,7 @@ class NextDomHelper
 
             }
         }
-        $result['database_write_delete_' . $param['database_write_delete']] = getmicrotime() - $starttime;
+        $result['database_write_delete_' . $param['database_write_delete']] = Utils::getMicrotime() - $starttime;
 
         $sql = 'INSERT INTO config
                 SET `key`="nextdom_benchmark",plugin="core",`value`="0"';
@@ -1247,37 +1247,37 @@ class NextDomHelper
             \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ROW);
         } catch (CoreException $e) {
         }
-        $starttime = getmicrotime();
+        $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['database_update']; $i++) {
             $sql = 'UPDATE `config`
                     SET `value`=:value
-                    WHERE `key`="nextdom_benchmark"
-                        AND plugin="core"';
+                    WHERE `key` = "nextdom_benchmark"
+                        AND plugin = "core"';
             try {
                 \DB::Prepare($sql, array('value' => $i), \DB::FETCH_TYPE_ROW);
             } catch (CoreException $e) {
 
             }
         }
-        $result['database_update_' . $param['database_update']] = getmicrotime() - $starttime;
+        $result['database_update_' . $param['database_update']] = Utils::getMicrotime() - $starttime;
 
-        $starttime = getmicrotime();
+        $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['database_replace']; $i++) {
             ConfigManager::save('nextdom_benchmark', $i);
         }
-        $result['database_replace_' . $param['database_replace']] = getmicrotime() - $starttime;
+        $result['database_replace_' . $param['database_replace']] = Utils::getMicrotime() - $starttime;
 
-        $starttime = getmicrotime();
+        $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['database_read']; $i++) {
             ConfigManager::byKey('nextdom_benchmark');
         }
-        $result['database_read_' . $param['database_read']] = getmicrotime() - $starttime;
+        $result['database_read_' . $param['database_read']] = Utils::getMicrotime() - $starttime;
 
-        $starttime = getmicrotime();
+        $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['subprocess']; $i++) {
             shell_exec('echo ' . $i);
         }
-        $result['subprocess_' . $param['subprocess']] = getmicrotime() - $starttime;
+        $result['subprocess_' . $param['subprocess']] = Utils::getMicrotime() - $starttime;
 
         $total = 0;
         foreach ($result as $value) {

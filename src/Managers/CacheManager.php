@@ -34,7 +34,9 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 
 require_once NEXTDOM_ROOT.'/core/class/cache.class.php';
@@ -107,8 +109,8 @@ class CacheManager {
         $result['count'] = \__('Inconnu');
         if (ConfigManager::byKey('cache::engine') == 'FilesystemCache') {
             $result['count'] = 0;
-            foreach (ls(self::getFolder()) as $folder) {
-                foreach (ls(self::getFolder() . '/' . $folder) as $file) {
+            foreach (FileSystemHelper::ls(self::getFolder()) as $folder) {
+                foreach (FileSystemHelper::ls(self::getFolder() . '/' . $folder) as $file) {
                     if (strpos($file, 'swap') !== false) {
                         continue;
                     }
@@ -119,8 +121,8 @@ class CacheManager {
         if ($details) {
             $re = '/s:\d*:(.*?);s:\d*:"(.*?)";s/';
             $result = array();
-            foreach (ls(self::getFolder()) as $folder) {
-                foreach (ls(self::getFolder() . '/' . $folder) as $file) {
+            foreach (FileSystemHelper::ls(self::getFolder()) as $folder) {
+                foreach (FileSystemHelper::ls(self::getFolder() . '/' . $folder) as $file) {
                     $path = self::getFolder() . '/' . $folder . '/' . $file;
                     $str = (string) str_replace("\n", '', file_get_contents($path));
                     preg_match_all($re, $str, $matches);
@@ -328,8 +330,8 @@ class CacheManager {
         }
         $re = '/s:\d*:(.*?);s:\d*:"(.*?)";s/';
         $result = array();
-        foreach (ls(self::getFolder()) as $folder) {
-            foreach (ls(self::getFolder() . '/' . $folder) as $file) {
+        foreach (FileSystemHelper::ls(self::getFolder()) as $folder) {
+            foreach (FileSystemHelper::ls(self::getFolder() . '/' . $folder) as $file) {
                 $path = self::getFolder() . '/' . $folder . '/' . $file;
                 if (strpos($file, 'swap') !== false) {
                     unlink($path);

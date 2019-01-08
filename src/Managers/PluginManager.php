@@ -35,6 +35,9 @@ namespace NextDom\Managers;
 
 use NextDom\Enums\DaemonStateEnum;
 use NextDom\Enums\PluginManagerCronEnum;
+use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\FileSystemHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Managers\ConfigManager;
@@ -142,7 +145,7 @@ class PluginManager
             }
         } else {
             $rootPluginPath = NEXTDOM_ROOT . '/plugins';
-            foreach (\ls($rootPluginPath, '*') as $dirPlugin) {
+            foreach (FileSystemHelper::ls($rootPluginPath, '*') as $dirPlugin) {
                 if (is_dir($rootPluginPath . '/' . $dirPlugin)) {
                     $pathInfoPlugin = $rootPluginPath . '/' . $dirPlugin . 'plugin_info/info.json';
                     if (file_exists($pathInfoPlugin)) {

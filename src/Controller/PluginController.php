@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Managers\PluginManager;
 use NextDom\Helpers\Utils;
 use NextDom\Helpers\Render;
@@ -50,7 +51,7 @@ class PluginController extends BaseController
 
         ob_start();
         echo '<section class="content">';
-        \include_file('desktop', $page, 'php', $plugin->getId(), true);
+        FileSystemHelper::includeFile('desktop', $page, 'php', $plugin->getId(), true);
         echo '</section>';
         return ob_get_clean();
     }

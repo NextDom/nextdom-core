@@ -58,7 +58,7 @@ class Config
         return $this->value;
     }
 
-    public function getKey()
+    public function getKey(): string
     {
         return $this->key;
     }

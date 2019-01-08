@@ -33,6 +33,8 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\FileSystemHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Helpers\NextDomHelper;
 
@@ -629,7 +631,7 @@ class ScenarioManager
         if (isset($template) && $template != '') {
             // TODO Magic trixxxxxx
         }
-        return ls($path, '*.json', false, ['files', 'quiet']);
+        return FileSystemHelper::ls($path, '*.json', false, ['files', 'quiet']);
     }
 
     /**

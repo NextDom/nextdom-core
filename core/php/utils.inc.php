@@ -32,149 +32,26 @@
  * along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use NextDom\Helpers\FileSystemHelper;
+use NextDom\Helpers\NetworkHelper;
+use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\SessionHelper;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use NextDom\Helpers\Utils;
 
-/**
- * Inclut un fichier à partir de son type et son nom.
- * TODO: Doit être revue
- * @param string $_folder Répertoire du fichier
- * @param string $_filename Nom du fichier
- * @param string $_type Type de fichier
- * @param string $_plugin Nom du plugin ou vide pour le core
- * @throws Exception
- */
 function include_file($_folder, $_filename, $_type, $_plugin = '', $translate = false)
 {
-    // Aucune particularité pour les 3rdparty
-    if ($_folder == '3rdparty') {
-        if ($_plugin === '') {
-            //TODO : A améliorer avec une Regex en fonction des utilisations
-            $router3rdParty = [
-                'bootstrap/css/bootstrap.min' => 'vendor/node_modules/bootstrap/dist/css/bootstrap.min',
-                'bootstrap/js/bootstrap.min' => 'vendor/node_modules/bootstrap/dist/js/bootstrap.min',
-                'codemirror/lib/codemirror' => 'vendor/node_modules/codemirror/lib/codemirror',
-                'codemirror/addon/edit/matchbrackets' => 'vendor/node_modules/codemirror/addon/edit/matchbrackets',
-                'codemirror/mode/htmlmixed/htmlmixed' => 'vendor/node_modules/codemirror/mode/htmlmixed/htmlmixed',
-                'codemirror/mode/clike/clike' => 'vendor/node_modules/codemirror/mode/clike/clike',
-                'codemirror/mode/css/css' => 'vendor/node_modules/codemirror/mode/css/css',
-                'codemirror/mode/javascript/javascript' => 'vendor/node_modules/codemirror/mode/javascript/javascript',
-                'codemirror/mode/php/php' => 'vendor/node_modules/codemirror/mode/php/php',
-                'codemirror/mode/shell/shell' => 'vendor/node_modules/codemirror/mode/shell/shell',
-                'codemirror/mode/python/python' => 'vendor/node_modules/codemirror/mode/python/python',
-                'codemirror/mode/ruby/ruby' => 'vendor/node_modules/codemirror/mode/ruby/ruby',
-                'codemirror/mode/perl/perl' => 'vendor/node_modules/codemirror/mode/perl/perl',
-                'codemirror/mode/xml/xml' => 'vendor/node_modules/codemirror/mode/xml/xml',
-                'jquery/jquery.min' => 'vendor/node_modules/jquery/dist/jquery.min',
-                'datetimepicker/jquery.datetimepicker' => 'vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker',
-                'jquery.fileupload/jquery.fileupload' => 'vendor/node_modules/blueimp-file-upload/js/jquery.fileupload',
-                'jquery.fileupload/jquery.ui.widget' => 'vendor/node_modules/blueimp-file-upload/js/vendor/jquery.ui.widget',
-                'jquery.fileupload/jquery.iframe-transport' => 'vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport',
-                'jquery.lazyload/jquery.lazyload' => 'vendor/node_modules/jquery-lazyload/jquery.lazyload',
-                'jquery.packery/jquery.packery' => 'vendor/node_modules/packery/dist/packery.pkgd',
-                'jquery.tablesorter/theme.bootstrap' => 'vendor/node_modules/tablesorter/dist/css/theme.bootstrap.min',
-                'jquery.tablesorter/jquery.tablesorter.min' => 'vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min',
-                'jquery.tablesorter/jquery.tablesorter.widgets.min' => 'vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min',
-                'highstock/highstock' => 'vendor/node_modules/highcharts/highstock',
-                'highstock/highcharts-more' => 'vendor/node_modules/highcharts/highcharts-more',
-                'roboto/roboto' => 'vendor/node_modules/roboto-fontface/css/roboto-fontface',
-                'waves/waves.min' => 'vendor/node_modules/node-waves/waves.min',
-                'bootstrap.slider/css/slider' => 'vendor/node_modules/bootstrap-slider/dist/css/bootstrap-slider.min',
-                'bootstrap.slider/js/bootstrap-slider' => 'vendor/node_modules/bootstrap-slider/dist/bootstrap-slider.min',
-                'jquery.ui/jquery-ui.min' => 'vendor/node_modules/jquery-ui-dist/jquery-ui.min',
-                //TODO : A remettre en 3rdparty
-                'jquery.ui/jquery-ui-bootstrap/jquery-ui' => 'assets/css/jquery-ui-bootstrap/jquery-ui.css'
-            ];
-
-            if (array_key_exists($_filename, $router3rdParty)) {
-                $_filename = $router3rdParty[$_filename] . '.' . $_type;
-            }
-            else {
-                $_filename = 'assets/3rdparty/' . $_filename . '.' . $_type;
-            }
-            $_folder = null;
-        }
-        else {
-            $_filename .= '.'.$_type;
-        }
-        $type = $_type;
-    } else {
-        // Tableau de mappage des fichiers
-        $config = array(
-            'class' => array('/class', '.class.php', 'php'),
-            'com' => array('/com', '.com.php', 'php'),
-            'repo' => array('/repo', '.repo.php', 'php'),
-            'config' => array('/config', '.config.php', 'php'),
-            'modal' => array('/modal', '.php', 'php'),
-            'modalhtml' => array('/modal', '.html', 'php'),
-            'php' => array('/php', '.php', 'php'),
-            'css' => array('/css', '.css', 'css'),
-            'js' => array('/js', '.js', 'js'),
-            'class.js' => array('/js', '.class.js', 'js'),
-            'custom.js' => array('/custom', 'custom.js', 'js'),
-            'custom.css' => array('/custom', 'custom.css', 'css'),
-            'themes.js' => array('/themes', '.js', 'js'),
-            'themes.css' => array('/themes', '.css', 'css'),
-            'api' => array('/api', '.api.php', 'php'),
-            'html' => array('/html', '.html', 'php'),
-            'configuration' => array('', '.php', 'php'),
-        );
-        $_folder .= $config[$_type][0];
-        $_filename .= $config[$_type][1];
-        $type = $config[$_type][2];
-    }
-    if ($_plugin != '') {
-        $_folder = 'plugins/' . $_plugin . '/' . $_folder;
-    }
-    /**
-     * Modification pour la gestion du dossier public
-     */
-    if ($_folder === 'desktop/js') {
-        $_folder = 'public/js/desktop';
-    }
-    if ($_folder === null) {
-        $path = __DIR__ . '/../../' . $_filename;
-    }
-    else {
-        $path = __DIR__ . '/../../' . $_folder . '/' . $_filename;
-    }
-    if (!file_exists($path)) {
-        throw new Exception('Fichier introuvable : ' . $path, 35486);
-    }
-    if ($type == 'php') {
-        // Les fichiers php sont traduits
-        if ($_type != 'class') {
-            ob_start();
-            require_once $path;
-            if (Utils::init('rescue', 0) == 1) {
-                echo str_replace(array('{{', '}}'), '', ob_get_clean());
-            } else {
-                if ($translate) {
-                    echo translate::exec(ob_get_clean(), $_folder . '/' . $_filename);
-                } else {
-                    echo ob_get_clean();
-                }
-            }
-        } else {
-            require_once $path;
-        }
-    } elseif ($type == 'css') {
-        // TODO : MD5
-        echo '<link href="' . $_folder . '/' . $_filename . '?md5=' . md5_file($path) . '" rel="stylesheet" />';
-    } elseif ($type == 'js') {
-        // TODO : MD5
-        echo '<script type="text/javascript" src="core/php/getResource.php?file=' . $_folder . '/' . $_filename . '&md5=' . md5_file($path) . '&lang=' . translate::getLanguage() . '"></script>';
-    }
+    FileSystemHelper::includeFile($_folder, $_filename, $_type, $_plugin, $translate);
 }
 
 function getTemplate($_folder, $_version, $_filename, $_plugin = '')
 {
-    return Utils::getTemplateFilecontent($_folder, $_version, $_filename, $_plugin);
+    return FileSystemHelper::getTemplateFilecontent($_folder, $_version, $_filename, $_plugin);
 }
 
 function template_replace($_array, $_subject)
 {
-    return str_replace(array_keys($_array), array_values($_array), $_subject);
+    return Utils::templateReplace($_array, $_subject);
 }
 
 function init($_name, $_default = '')
@@ -189,38 +66,12 @@ function sendVarToJS($_varName, $_value)
 
 function resizeImage($contents, $width, $height)
 {
-// Cacul des nouvelles dimensions
-    $width_orig = imagesx($contents);
-    $height_orig = imagesy($contents);
-    $ratio_orig = $width_orig / $height_orig;
-    $test = $width / $height > $ratio_orig;
-    $dest_width = $test ? ceil($height * $ratio_orig) : $width;
-    $dest_height = $test ? $height : ceil($width / $ratio_orig);
-
-    $dest_image = imagecreatetruecolor($width, $height);
-    $wh = imagecolorallocate($dest_image, 0xFF, 0xFF, 0xFF);
-    imagefill($dest_image, 0, 0, $wh);
-
-    $offcet_x = ($width - $dest_width) / 2;
-    $offcet_y = ($height - $dest_height) / 2;
-    if ($dest_image && $contents) {
-        if (!imagecopyresampled($dest_image, $contents, $offcet_x, $offcet_y, 0, 0, $dest_width, $dest_height, $width_orig, $height_orig)) {
-            error_log("Error image copy resampled");
-            return false;
-        }
-    }
-// start buffering
-    ob_start();
-    imagejpeg($dest_image);
-    $contents = ob_get_contents();
-    ob_end_clean();
-    return $contents;
+    return Utils::resizeImage($contents, $width, $height);
 }
 
 function getmicrotime()
 {
-    list($usec, $sec) = explode(" ", microtime());
-    return ((float)$usec + (float)$sec);
+    return Utils::getMicrotime();
 }
 
 function redirect($_url, $_forceType = null)
@@ -230,65 +81,35 @@ function redirect($_url, $_forceType = null)
 
 function convertDuration($time)
 {
-    $result = '';
-    $unities = array('j' => 86400, 'h' => 3600, 'min' => 60);
-    foreach ($unities as $unity => $value) {
-        if ($time >= $value || $result != '') {
-            $result .= floor($time / $value) . $unity . ' ';
-            $time %= $value;
-        }
-    }
-
-    $result .= $time . 's';
-    return $result;
+    return Utils::convertDuration($time);
 }
 
-/**
- * Obtenir l'adresse IP du client
- *
- * @return string
- */
 function getClientIp()
 {
-    $sources = array(
-        'HTTP_X_REAL_IP',
-        'HTTP_X_FORWARDED_FOR',
-        'HTTP_CLIENT_IP',
-        'REMOTE_ADDR',
-    );
-    foreach ($sources as $source) {
-        if (isset($_SERVER[$source])) {
-            return $_SERVER[$source];
-        }
-    }
-    return '';
+    return NetworkHelper::getClientIp();
 }
 
 function mySqlIsHere()
 {
-    require_once NEXTDOM_ROOT . '/core/class/DB.class.php';
-    return is_object(DB::getConnection());
+    return Utils::connectedToDatabase();
 }
 
 function displayExeption($e)
 {
     trigger_error('La fonction displayExeption devient displayException', E_USER_DEPRECATED);
-
-    return displayException($e);
+    return Utils::displayException($e);
 }
 
 function displayException($e)
 {
-    $message = '<span id="span_errorMessage">' . $e->getMessage() . '</span>';
-    if (DEBUG) {
-        $message .= '<a class="pull-right bt_errorShowTrace cursor">Show traces</a>';
-        $message .= '<br/><pre class="pre_errorTrace" style="display : none;">' . print_r($e->getTrace(), true) . '</pre>';
-    }
-    return $message;
+    return Utils::displayException($e);
 }
 
 function is_json($_string, $_default = null)
 {
+    if ($_string === null && $_default === null) {
+        return null;
+    }
     if ($_default !== null) {
         if (!is_string($_string)) {
             return $_default;
@@ -304,61 +125,27 @@ function is_json($_string, $_default = null)
 
 function is_sha1($_string = '')
 {
-    if ($_string == '') {
-        return false;
-    }
-    return preg_match('/^[0-9a-f]{40}$/i', $_string);
+    return Utils::isSha1($_string);
 }
 
 function is_sha512($_string = '')
 {
-    if ($_string == '') {
-        return false;
-    }
-    return preg_match('/^[0-9a-f]{128}$/i', $_string);
+    return Utils::isSha512($_string);
 }
 
 function cleanPath($path)
 {
-    $out = array();
-    foreach (explode('/', $path) as $i => $fold) {
-        if ($fold == '' || $fold == '.') {
-            continue;
-        }
-
-        if ($fold == '..' && $i > 0 && end($out) != '..') {
-            array_pop($out);
-        } else {
-            $out[] = $fold;
-        }
-
-    }
-    return ($path{0} == '/' ? '/' : '') . join('/', $out);
+    return Utils::cleanPath($path);
 }
 
 function getRootPath()
 {
-    return NEXTDOM_ROOT;
+    return Utils::getRootPath();
 }
 
 function hadFileRight($_allowPath, $_path)
 {
-    $path = cleanPath($_path);
-    foreach ($_allowPath as $right) {
-        if (strpos($right, '/') !== false || strpos($right, '\\') !== false) {
-            if (strpos($right, '/') !== 0 || strpos($right, '\\') !== 0) {
-                $right = getRootPath() . '/' . $right;
-            }
-            if (dirname($path) == $right || $path == $right) {
-                return true;
-            }
-        } else {
-            if (basename(dirname($path)) == $right || basename($path) == $right) {
-                return true;
-            }
-        }
-    }
-    return false;
+    return FileSystemHelper::hadFileRight($_allowPath, $_path);
 }
 
 /**
@@ -371,348 +158,41 @@ function hadFileRight($_allowPath, $_path)
  */
 function getVersion($_name)
 {
-    return nextdom::version();
+    return NextDomHelper::getJeedomVersion();
 }
 
-// got from https://github.com/zendframework/zend-stdlib/issues/58
 function polyfill_glob_brace($pattern, $flags)
 {
-    static $next_brace_sub;
-    if (!$next_brace_sub) {
-        // Find the end of the sub-pattern in a brace expression.
-        $next_brace_sub = function ($pattern, $current) {
-            $length = strlen($pattern);
-            $depth = 0;
-
-            while ($current < $length) {
-                if ('\\' === $pattern[$current]) {
-                    if (++$current === $length) {
-                        break;
-                    }
-                    $current++;
-                } else {
-                    if (('}' === $pattern[$current] && $depth-- === 0) || (',' === $pattern[$current] && 0 === $depth)) {
-                        break;
-                    } elseif ('{' === $pattern[$current++]) {
-                        $depth++;
-                    }
-                }
-            }
-
-            return $current < $length ? $current : null;
-        };
-    }
-
-    $length = strlen($pattern);
-
-    // Find first opening brace.
-    for ($begin = 0; $begin < $length; $begin++) {
-        if ('\\' === $pattern[$begin]) {
-            $begin++;
-        } elseif ('{' === $pattern[$begin]) {
-            break;
-        }
-    }
-
-    // Find comma or matching closing brace.
-    if (null === ($next = $next_brace_sub($pattern, $begin + 1))) {
-        return glob($pattern, $flags);
-    }
-
-    $rest = $next;
-
-    // Point `$rest` to matching closing brace.
-    while ('}' !== $pattern[$rest]) {
-        if (null === ($rest = $next_brace_sub($pattern, $rest + 1))) {
-            return glob($pattern, $flags);
-        }
-    }
-
-    $paths = array();
-    $p = $begin + 1;
-
-    // For each comma-separated subpattern.
-    do {
-        $subpattern = substr($pattern, 0, $begin)
-            . substr($pattern, $p, $next - $p)
-            . substr($pattern, $rest + 1);
-
-        if (($result = polyfill_glob_brace($subpattern, $flags))) {
-            $paths = array_merge($paths, $result);
-        }
-
-        if ('}' === $pattern[$next]) {
-            break;
-        }
-
-        $p = $next + 1;
-        $next = $next_brace_sub($pattern, $p);
-    } while (null !== $next);
-
-    return array_values(array_unique($paths));
+    return Utils::polyfillGlobBrace($pattern, $flags);
 }
 
 function glob_brace($pattern, $flags = 0)
 {
-    if (defined("GLOB_BRACE")) {
-        return glob($pattern, $flags + GLOB_BRACE);
-    } else {
-        return polyfill_glob_brace($pattern, $flags);
-    }
+    return Utils::globBrace($pattern, $flags);
 }
 
 function ls($folder = "", $pattern = "*", $recursivly = false, $options = array('files', 'folders'))
 {
-    if ($folder) {
-        $current_folder = realpath('.');
-        if (in_array('quiet', $options)) {
-            // If quiet is on, we will suppress the 'no such folder' error
-            if (!file_exists($folder)) {
-                return array();
-            }
-
-        }
-        if (!is_dir($folder) || !chdir($folder)) {
-            return array();
-        }
-
-    }
-    $get_files = in_array('files', $options);
-    $get_folders = in_array('folders', $options);
-    $both = array();
-    $folders = array();
-    // Get the all files and folders in the given directory.
-    if ($get_files) {
-        $both = array();
-        foreach (glob_brace($pattern, GLOB_MARK) as $file) {
-            if (!is_dir($folder . '/' . $file)) {
-                $both[] = $file;
-            }
-        }
-    }
-    if ($recursivly || $get_folders) {
-        $folders = glob("*", GLOB_ONLYDIR + GLOB_MARK);
-    }
-
-    //If a pattern is specified, make sure even the folders match that pattern.
-    $matching_folders = array();
-    if ($pattern !== '*') {
-        $matching_folders = glob($pattern, GLOB_ONLYDIR + GLOB_MARK);
-    }
-
-    //Get just the files by removing the folders from the list of all files.
-    $all = array_values(array_diff($both, $folders));
-    if ($recursivly || $get_folders) {
-        foreach ($folders as $this_folder) {
-            if ($get_folders) {
-                //If a pattern is specified, make sure even the folders match that pattern.
-                if ($pattern !== '*') {
-                    if (in_array($this_folder, $matching_folders)) {
-                        array_push($all, $this_folder);
-                    }
-
-                } else {
-                    array_push($all, $this_folder);
-                }
-
-            }
-
-            if ($recursivly) {
-                // Continue calling this function for all the folders
-                $deep_items = ls($pattern, $this_folder, $recursivly, $options); # :RECURSION:
-                foreach ($deep_items as $item) {
-                    array_push($all, $this_folder . $item);
-                }
-            }
-        }
-    }
-
-    if ($folder && is_dir($current_folder)) {
-        chdir($current_folder);
-    }
-
-    if (in_array('datetime_asc', $options)) {
-        global $current_dir;
-        $current_dir = $folder;
-        usort($all, function ($a, $b) {
-            return filemtime($GLOBALS['current_dir'] . '/' . $a) < filemtime($GLOBALS['current_dir'] . '/' . $b);
-        });
-    }
-    if (in_array('datetime_desc', $options)) {
-        global $current_dir;
-        $current_dir = $folder;
-        usort($all, function ($a, $b) {
-            return filemtime($GLOBALS['current_dir'] . '/' . $a) > filemtime($GLOBALS['current_dir'] . '/' . $b);
-        });
-    }
-
-    return $all;
+    return FileSystemHelper::ls($folder, $pattern, $recursivly, $options);
 }
 
 function removeCR($_string)
 {
-    return trim(str_replace(array("\n", "\r\n", "\r", "\n\r"), '', $_string));
+    return Utils::removeCR($_string);
 }
 
 function rcopy($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = false, $_params = array())
 {
-    if (!file_exists($src)) {
-        return true;
-    }
-    if ($_emptyDest) {
-        rrmdir($dst);
-    }
-    if (is_dir($src)) {
-        if (!file_exists($dst)) {
-            @mkdir($dst);
-        }
-        $files = scandir($src);
-        foreach ($files as $file) {
-            if ($file != "." && $file != ".." && !in_array($file, $_exclude) && !in_array(realpath($src . '/' . $file), $_exclude)) {
-                if (!rcopy($src . '/' . $file, $dst . '/' . $file, $_emptyDest, $_exclude, $_noError, $_params) && !$_noError) {
-                    return false;
-                }
-            }
-        }
-    } else {
-        if (!in_array(basename($src), $_exclude) && !in_array(realpath($src), $_exclude)) {
-            $srcSize = filesize($src);
-            if (isset($_params['ignoreFileSizeUnder']) && $srcSize < $_params['ignoreFileSizeUnder']) {
-                if (strpos(realpath($src), 'empty') !== false) {
-                    return true;
-                }
-                if (strpos(realpath($src), '.git') !== false) {
-                    return true;
-                }
-                if (strpos(realpath($src), '.html') !== false) {
-                    return true;
-                }
-                if (strpos(realpath($src), '.txt') !== false) {
-                    return true;
-                }
-                if (isset($_params['log']) && $_params['log']) {
-                    echo 'Ignore file ' . $src . ' because size is ' . $srcSize . "\n";
-                }
-                return true;
-            }
-            if (!copy($src, $dst)) {
-                $output = array();
-                $retval = 0;
-                exec('sudo cp ' . $src . ' ' . $dst, $output, $retval);
-                if ($retval != 0) {
-                    if (!$_noError) {
-                        return false;
-                    } else if (isset($_params['log']) && $_params['log']) {
-                        echo 'Error on copy ' . $src . ' to ' . $dst . "\n";
-                    }
-                }
-            }
-            if ($srcSize != filesize($dst)) {
-                if (!$_noError) {
-                    return false;
-                } else if (isset($_params['log']) && $_params['log']) {
-                    echo 'Error on copy ' . $src . ' to ' . $dst . "\n";
-                }
-            }
-            return true;
-        }
-    }
-    return true;
+    return FileSystemHelper::rcopy($src, $dst, $_emptyDest, $_exclude, $_noError, $_params);
 }
 
 function rmove($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = false, $_params = array()) {
-    if (!file_exists($src)) {
-        return true;
-    }
-    if ($_emptyDest) {
-        rrmdir($dst);
-    }
-    if (is_dir($src)) {
-        if (!file_exists($dst)) {
-            @mkdir($dst);
-        }
-        $files = scandir($src);
-        foreach ($files as $file) {
-            if ($file != "." && $file != ".." && !in_array($file, $_exclude) && !in_array(realpath($src . '/' . $file), $_exclude)) {
-                if (!rmove($src . '/' . $file, $dst . '/' . $file, $_emptyDest, $_exclude, $_noError, $_params) && !$_noError) {
-                    return false;
-                }
-            }
-        }
-    } else {
-        if (!in_array(basename($src), $_exclude) && !in_array(realpath($src), $_exclude)) {
-            $srcSize = filesize($src);
-            if (isset($_params['ignoreFileSizeUnder']) && $srcSize < $_params['ignoreFileSizeUnder']) {
-                if (strpos(realpath($src), 'empty') !== false) {
-                    return true;
-                }
-                if (strpos(realpath($src), '.git') !== false) {
-                    return true;
-                }
-                if (strpos(realpath($src), '.html') !== false) {
-                    return true;
-                }
-                if (strpos(realpath($src), '.txt') !== false) {
-                    return true;
-                }
-                if (isset($_params['log']) && $_params['log']) {
-                    echo 'Ignore file ' . $src . ' because size is ' . $srcSize . "\n";
-                }
-                return true;
-            }
-            if (!rename($src, $dst)) {
-                $output = array();
-                $retval = 0;
-                exec('sudo mv ' . $src . ' ' . $dst, $output, $retval);
-                if ($retval != 0) {
-                    if (!$_noError) {
-                        return false;
-                    } else if (isset($_params['log']) && $_params['log']) {
-                        echo 'Error on move ' . $src . ' to ' . $dst . "\n";
-                    }
-                }
-            }
-            if ($srcSize != filesize($dst)) {
-                if (!$_noError) {
-                    return false;
-                } else if (isset($_params['log']) && $_params['log']) {
-                    echo 'Error on move ' . $src . ' to ' . $dst . "\n";
-                }
-            }
-            return true;
-        }
-    }
-    return true;
+    return FileSystemHelper::rmove($src, $dst, $_emptyDest, $_exclude, $_noError, $_params);
 }
 
 // removes files and non-empty directories
 function rrmdir($dir) {
-    if (is_dir($dir)) {
-        $files = scandir($dir);
-        foreach ($files as $file) {
-            if ($file != "." && $file != "..") {
-                rrmdir("$dir/$file");
-            }
-        }
-        if (!rmdir($dir)) {
-            $output = array();
-            $retval = 0;
-            exec('sudo rm -rf ' . $dir, $output, $retval);
-            if ($retval != 0) {
-                return false;
-            }
-        }
-    } else if (file_exists($dir)) {
-        if (!unlink($dir)) {
-            $output = array();
-            $retval = 0;
-            exec('sudo rm -rf ' . $dir, $output, $retval);
-            if ($retval != 0) {
-                return false;
-            }
-        }
-    }
-    return true;
+    return FileSystemHelper::rrmdir($dir);
 }
 
 function date_fr($date_en) {
@@ -1428,62 +908,6 @@ function makeZipSupport()
     return realpath($outputfile);
 }
 
-function decodeSessionData($_data) {
-    $return_data = array();
-    $offset = 0;
-    while ($offset < strlen($_data)) {
-        if (!strstr(substr($_data, $offset), "|")) {
-            throw new Exception("invalid data, remaining: " . substr($_data, $offset));
-        }
-        $pos = strpos($_data, "|", $offset);
-        $num = $pos - $offset;
-        $varname = substr($_data, $offset, $num);
-        $offset += $num + 1;
-        $data = unserialize(substr($_data, $offset));
-        $return_data[$varname] = $data;
-        $offset += strlen(serialize($data));
-    }
-    return $return_data;
-}
-
-function listSession() {
-    $return = array();
-    try {
-        $sessions = explode("\n", com_shell::execute(system::getCmdSudo() . ' ls ' . session_save_path()));
-        foreach ($sessions as $session) {
-            $data = com_shell::execute(system::getCmdSudo() . ' cat ' . session_save_path() . '/' . $session);
-            if ($data == '') {
-                continue;
-            }
-            $data_session = decodeSessionData($data);
-            if (!isset($data_session['user']) || !is_object($data_session['user'])) {
-                continue;
-            }
-            $session_id = str_replace('sess_', '', $session);
-            $return[$session_id] = array(
-                'datetime' => date('Y-m-d H:i:s', com_shell::execute(system::getCmdSudo() . ' stat -c "%Y" ' . session_save_path() . '/' . $session)),
-            );
-            $return[$session_id]['login'] = $data_session['user']->getLogin();
-            $return[$session_id]['user_id'] = $data_session['user']->getId();
-            $return[$session_id]['ip'] = (isset($data_session['ip'])) ? $data_session['ip'] : '';
-        }
-    } catch (Exception $e) {
-
-    }
-    return $return;
-}
-
-function deleteSession($_id)
-{
-    $cSsid = session_id();
-    @session_start();
-    session_id($_id);
-    session_unset();
-    session_destroy();
-    session_id($cSsid);
-    @session_write_close();
-}
-
 function unautorizedInDemo($_user = null) {
     if ($_user === null) {
         if (!isset($_SESSION) || !isset($_SESSION['user'])) {
@@ -1497,4 +921,18 @@ function unautorizedInDemo($_user = null) {
     if ($_user->getLogin() == 'demo') {
         throw new Exception(__('Cette action n\'est pas autorisée en mode démo', __FILE__));
     }
+}
+
+function decodeSessionData($_data)
+{
+    return SessionHelper::decodeSessionData($_data);
+}
+
+function listSession() {
+    return SessionHelper::getSessionsList();
+}
+
+function deleteSession($_id)
+{
+    SessionHelper::deleteSession($_id);
 }

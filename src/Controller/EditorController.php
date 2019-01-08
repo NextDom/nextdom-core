@@ -22,8 +22,10 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Helpers\Utils;
 
 class EditorController extends BaseController
 {
@@ -54,7 +56,7 @@ class EditorController extends BaseController
         $pageContent['editorFolders'] = [];
         $pageContent['editorRootPath'] = NEXTDOM_ROOT;
 
-        $lsNextDomRoot = \ls(NEXTDOM_ROOT, '*', false, array('folders'));
+        $lsNextDomRoot = FileSystemHelper::ls(NEXTDOM_ROOT, '*', false, array('folders'));
         foreach ($lsNextDomRoot as $folder) {
             $pageContent['editorFolders'][] = $folder;
         }

@@ -701,7 +701,7 @@ class ModalsController
 
         $pageContent = [];
         $pageContent['iconsList'] = [];
-        foreach (ls('public/icon', '*') as $dir) {
+        foreach (FileSystemHelper::ls('public/icon', '*') as $dir) {
             if (is_dir('public/icon/' . $dir) && file_exists('public/icon/' . $dir . '/style.css')) {
                 $cssContent = file_get_contents('public/icon/' . $dir . '/style.css');
                 $research = strtolower(str_replace('/', '', $dir));
@@ -1171,8 +1171,6 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @return string Scenario export modal
-     *
      * @throws CoreException
      */
     public static function removeHistory(Render $render)
@@ -1219,8 +1217,6 @@ class ModalsController
      * Render scenario export modal
      *
      * @param Render $render Render engine
-     *
-     * @return string Scenario export modal
      *
      * @throws CoreException
      */
@@ -1429,7 +1425,7 @@ class ModalsController
         }
         $repoDisplayFile = NEXTDOM_ROOT . '/core/repo/' . $repoId . '.display.repo.php';
         if (file_exists($repoDisplayFile)) {
-            \include_file('core', $repoId . '.' . $type, 'repo', '', true);
+            FileSystemHelper::includeFile('core', $repoId . '.' . $type, 'repo', '', true);
         }
     }
 
@@ -1511,12 +1507,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @return string Scenario export modal
-     *
      * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public static function viewConfigure(Render $render)
     {
