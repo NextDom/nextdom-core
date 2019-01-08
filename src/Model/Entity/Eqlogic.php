@@ -48,7 +48,7 @@ use NextDom\Managers\ScenarioManager;
  */
 class Eqlogic
 {
-    const CLASS_NAME = 'NextDom\\Model\\Entity\\EqLogic';
+    const CLASS_NAME = Eqlogic::class;
     const DB_CLASS_NAME = '`eqLogic`';
 
     const UIDDELIMITER = '__';

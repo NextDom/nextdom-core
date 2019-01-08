@@ -33,9 +33,11 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Model\Entity\Eqlogic;
+
 class EqLogicManager
 {
-    const CLASS_NAME = 'NextDom\\Model\\Entity\\EqLogic';
+    const CLASS_NAME = Eqlogic::class;
     const DB_CLASS_NAME = '`eqLogic`';
 
     /**
