@@ -18,7 +18,6 @@
 
 namespace NextDom\Model\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Managers\CacheManager;
@@ -164,6 +163,17 @@ class Cron
         }
         return $this->once;
     }
+
+    /**
+     * Get the name of the SQL table where data is stored.
+     *
+     * @return string
+     */
+    public function getTableName()
+    {
+        return 'cron';
+    }
+
 
     public function getId()
     {
@@ -324,7 +334,9 @@ class Cron
     /**
      * Remove cron object from the database
      *
+     * @param bool $haltBefore
      * @return mixed
+     * @throws CoreException
      */
     public function remove($haltBefore = true)
     {
@@ -350,6 +362,7 @@ class Cron
     /**
      * Launch cron (this method must be only call by jeeCron master)
      *
+     * @param bool $noErrorReport
      * @throws CoreException
      */
     public function run($noErrorReport = false) {
@@ -583,7 +596,7 @@ class Cron
     /**
      * Set task state
      *
-     * @param $state State of the task
+     * @param string $state State of the task
      */
     public function setState($state)
     {
