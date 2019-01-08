@@ -330,7 +330,7 @@ class PrepareView
         self::initCssPool($pageData, $configs);
         // TODO: A virer
         ob_start();
-        FileSystemHelper::includeFile('core', 'icon.inc', 'php');
+        \include_file('core', 'icon.inc', 'php');
         $pageData['CUSTOM_CSS'] = ob_get_clean();
     }
 
@@ -462,7 +462,7 @@ class PrepareView
     private static function getContent(Render $render, array &$pageContent, string $page, $currentPlugin) {
         if ($currentPlugin !== null && is_object($currentPlugin)) {
             ob_start();
-            FileSystemHelper::includeFile('desktop', $page, 'php', $currentPlugin->getId(), true);
+            \include_file('desktop', $page, 'php', $currentPlugin->getId(), true);
             return ob_get_clean();
         } else {
             $controllerRoute = PagesController::getRoute($page);
@@ -471,7 +471,7 @@ class PrepareView
                 $purgedPage = preg_replace('/[^a-z0-9_-]/i', '', $page);
                 if (file_exists(NEXTDOM_ROOT . '/desktop/' . $purgedPage)) {
                     ob_start();
-                    FileSystemHelper::includeFile('desktop', $page, 'php', '', true);
+                    \include_file('desktop', $page, 'php', '', true);
                     return ob_get_clean();
                 } else {
                     Router::showError404AndDie();
@@ -491,7 +491,7 @@ class PrepareView
     public static function getContentByAjax()
     {
         try {
-            FileSystemHelper::includeFile('core', 'authentification', 'php');
+            \include_file('core', 'authentification', 'php');
             $page = Utils::init('p');
             $controllerRoute = PagesController::getRoute($page);
             if ($controllerRoute === null) {
@@ -517,13 +517,13 @@ class PrepareView
 
     public static function showModal()
     {
-        FileSystemHelper::includeFile('core', 'authentification', 'php');
+        \include_file('core', 'authentification', 'php');
         $plugin = Utils::init('plugin', '');
         $modalCode = Utils::init('modal', '');
         // Affichage d'un modal appartenant à un plugin
         if ($plugin != '') {
             try {
-                FileSystemHelper::includeFile('desktop', $modalCode, 'modal', $plugin, true);
+                \include_file('desktop', $modalCode, 'modal', $plugin, true);
             } catch (CoreException $e) {
                 echo '<div class="alert alert-danger div_alert">';
                 echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
@@ -535,7 +535,7 @@ class PrepareView
             $modalRoute = ModalsController::getRoute($modalCode);
             if ($modalRoute === null) {
                 try {
-                    FileSystemHelper::includeFile('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
+                    \include_file('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
                 } catch (CoreException $e) {
                     echo '<div class="alert alert-danger div_alert">';
                     echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');

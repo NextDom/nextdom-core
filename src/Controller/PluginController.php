@@ -51,7 +51,7 @@ class PluginController extends BaseController
 
         ob_start();
         echo '<section class="content">';
-        FileSystemHelper::includeFile('desktop', $page, 'php', $plugin->getId(), true);
+        \include_file('desktop', $page, 'php', $plugin->getId(), true);
         echo '</section>';
         return ob_get_clean();
     }

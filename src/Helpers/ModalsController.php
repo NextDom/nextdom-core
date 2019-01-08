@@ -1425,7 +1425,7 @@ class ModalsController
         }
         $repoDisplayFile = NEXTDOM_ROOT . '/core/repo/' . $repoId . '.display.repo.php';
         if (file_exists($repoDisplayFile)) {
-            FileSystemHelper::includeFile('core', $repoId . '.' . $type, 'repo', '', true);
+            \include_file('core', $repoId . '.' . $type, 'repo', '', true);
         }
     }
 
