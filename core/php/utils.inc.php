@@ -289,6 +289,9 @@ function displayException($e)
 
 function is_json($_string, $_default = null)
 {
+    if ($_string === null && $_default === null) {
+        return null;
+    }
     if ($_default !== null) {
         if (!is_string($_string)) {
             return $_default;
