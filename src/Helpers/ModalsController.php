@@ -1183,7 +1183,7 @@ class ModalsController
                              'branchStr' => __("Branche ")]);
         include_file('desktop', 'Market/plugin.market', 'js');
 
-        $render->show('/modals/plugin.market.html.twig');
+        $render->show('/modals/plugin.Market.html.twig');
     }
 
     /**
