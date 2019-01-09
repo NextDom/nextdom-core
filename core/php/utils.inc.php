@@ -38,7 +38,6 @@ use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SessionHelper;
 use NextDom\Helpers\SystemHelper;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use NextDom\Helpers\Utils;
 
 function include_file($_folder, $_filename, $_type, $_plugin = '', $translate = false)
@@ -171,7 +170,6 @@ function rmove($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = 
     return FileSystemHelper::rmove($src, $dst, $_emptyDest, $_exclude, $_noError, $_params);
 }
 
-// removes files and non-empty directories
 function rrmdir($dir) {
     return FileSystemHelper::rrmdir($dir);
 }
@@ -211,12 +209,12 @@ function getDirectorySize($path)
 
 function sizeFormat($size)
 {
-    Utils::sizeFormat($size);
+    return Utils::sizeFormat($size);
 }
 
 function netMatch($network, $ip)
 {
-    NetworkHelper::netMatch($network, $ip);
+    return NetworkHelper::netMatch($network, $ip);
 }
 
 function getNtpTime()
@@ -231,7 +229,7 @@ function cast($sourceObject, $destinationClassName)
 
 function getIpFromString($_string)
 {
-    NetworkHelper::getIpFromString($_string);
+    return NetworkHelper::getIpFromString($_string);
 }
 
 /**
@@ -314,22 +312,22 @@ function evaluate_old($_string) {
 
 function evaluate($_string)
 {
-    Utils::evaluate($_string);
+    return Utils::evaluate($_string);
 }
 
 function secureXSS($_string)
 {
-    Utils::secureXSS($_string);
+    return Utils::secureXSS($_string);
 }
 
 function minify($_buffer)
 {
-    Utils::minify($_buffer);
+    return Utils::minify($_buffer);
 }
 
 function sanitizeAccent($_message)
 {
-    Utils::sanitizeAccent($_message);
+    return Utils::sanitizeAccent($_message);
 }
 
 function isConnect($_right = '')
