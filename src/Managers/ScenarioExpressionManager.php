@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DateHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
@@ -166,7 +167,7 @@ class ScenarioExpressionManager
             return $return;
         }
         $return['template'] = getTemplate('core', 'scenario', $expression . '.default');
-        $_options = is_json($options, $options);
+        $_options = Utils::isJson($options, $options);
         if (is_array($options) && count($options) > 0) {
             foreach ($options as $key => $value) {
                 $replace['#' . $key . '#'] = str_replace('"', '&quot;', $value);
@@ -244,7 +245,7 @@ class ScenarioExpressionManager
         $_sValue = self::setTags($_sValue);
         $_aValue = explode(";", $_sValue);
         try {
-            $result = evaluate($_aValue);
+            $result = Utils::evaluate($_aValue);
             if (is_string($result)) {
                 $result = $_aValue;
             }
@@ -327,7 +328,7 @@ class ScenarioExpressionManager
                         $values[] = $value;
                     } else {
                         try {
-                            $values[] = evaluate($value);
+                            $values[] = Utils::evaluate($value);
                         } catch (\Throwable $ex) {
 
                         }
@@ -401,7 +402,7 @@ class ScenarioExpressionManager
                         $values[] = $value;
                     } else {
                         try {
-                            $values[] = evaluate($value);
+                            $values[] = Utils::evaluate($value);
                         } catch (\Throwable $ex) {
 
                         }
@@ -502,7 +503,7 @@ class ScenarioExpressionManager
                         $values[] = $value;
                     } else {
                         try {
-                            $values[] = evaluate($value);
+                            $values[] = Utils::evaluate($value);
                         } catch (\Throwable $ex) {
                             
                         }
@@ -572,7 +573,7 @@ class ScenarioExpressionManager
                     $values[] = $value;
                 } else {
                     try {
-                        $values[] = evaluate($value);
+                        $values[] = Utils::evaluate($value);
                     } catch (\Throwable $ex) {
 
                     }
@@ -959,7 +960,7 @@ class ScenarioExpressionManager
      */
     public static function odd($value): int
     {
-        $value = intval(evaluate(self::setTags($value)));
+        $value = intval(Utils::evaluate(self::setTags($value)));
         if ($value % 2) {
             return 1;
         }
@@ -1104,7 +1105,7 @@ class ScenarioExpressionManager
     {
         $value = self::setTags($value);
         try {
-            $result = evaluate($value);
+            $result = Utils::evaluate($value);
             if (is_string($result)) {
                 $result = $value;
             }
@@ -1214,7 +1215,7 @@ class ScenarioExpressionManager
     {
         $value = self::setTags($value);
         try {
-            $result = evaluate($value);
+            $result = Utils::evaluate($value);
             if (is_string($result)) {
                 $result = $value;
             }
@@ -1336,10 +1337,10 @@ class ScenarioExpressionManager
                     $return['#semaine#'] = date('W');
                     break;
                 case '#sjour#':
-                    $return['#sjour#'] = '"' . date_fr(date('l')) . '"';
+                    $return['#sjour#'] = '"' . DateHelper::dateToFr(date('l')) . '"';
                     break;
                 case '#smois#':
-                    $return['#smois#'] = '"' . date_fr(date('F')) . '"';
+                    $return['#smois#'] = '"' . DateHelper::dateToFr(date('F')) . '"';
                     break;
                 case '#njour#':
                     $return['#njour#'] = (int)date('w');
@@ -1475,7 +1476,7 @@ class ScenarioExpressionManager
 				} else {
 					if (function_exists($function)) {
 						foreach ($arguments as &$argument) {
-							$argument = trim(evaluate(self::setTags($argument, $_scenario, $_quote)));
+							$argument = trim(Utils::evaluate(self::setTags($argument, $_scenario, $_quote)));
 						}
 						$replace2[$replace_string] = call_user_func_array($function, $arguments);
 					}

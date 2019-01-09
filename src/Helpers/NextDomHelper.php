@@ -230,7 +230,7 @@ class NextDomHelper
             'comment' => '',
         );
 
-        $values = getSystemMemInfo();
+        $values = SystemHelper::getMemInfo();
         $value = round(($values['MemAvailable'] / $values['MemTotal']) * 100);
         $systemHealth[] = array(
             'icon' => 'fa-th',
@@ -907,7 +907,7 @@ class NextDomHelper
     {
         try {
             $input = ScenarioExpressionManager::setTags($input, $scenario, true);
-            $result = evaluate($input);
+            $result = Utils::evaluate($input);
             if (is_bool($result) || is_numeric($result)) {
                 return $result;
             }
@@ -1132,7 +1132,7 @@ class NextDomHelper
     {
         $result = ConfigManager::byKey('nextdom::installKey');
         if ($result == '') {
-            $result = substr(sha512(microtime() . ConfigManager::genKey()), 0, 63);
+            $result = substr(Utils::sha512(microtime() . ConfigManager::genKey()), 0, 63);
             ConfigManager::save('nextdom::installKey', $result);
         }
         return $result;

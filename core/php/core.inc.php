@@ -41,6 +41,7 @@ if (file_exists(NEXTDOM_ROOT.'/core/config/common.config.php')) {
 require_once NEXTDOM_ROOT.'/vendor/autoload.php';
 require_once NEXTDOM_ROOT.'/core/class/DB.class.php';
 require_once NEXTDOM_ROOT.'/core/class/config.class.php';
+
 ////////////////////////////////////
 /////    developper mode   /////////
 ////////////////////////////////////
@@ -80,10 +81,12 @@ try {
 }
 
 function nextdomCoreAutoload($classname) {
-    try {
-        include_file('core', $classname, 'class');
-    } catch (\Throwable $e ) {
+    if (strpos($classname, '\\') === false) {
+        try {
+            include_file('core', $classname, 'class');
+        } catch (\Throwable $e) {
 
+        }
     }
 }
 
@@ -107,19 +110,26 @@ function nextdomPluginAutoload($_classname) {
 }
 
 function nextdomOtherAutoload($classname) {
-    try {
-        include_file('core', substr($classname, 4), 'com');
-        return;
-    } catch (\Throwable $e ) {
+    if (strpos($classname, '\\') === false) {
+        if (strpos($classname,'com_') !== false) {
+            try {
+                include_file('core', substr($classname, 4), 'com');
+                return;
+            } catch (\Throwable $e ) {
 
-    }
-    try {
-        include_file('core', substr($classname, 5), 'repo');
-        return;
-    } catch (\Throwable $e ) {
+            }
+        }
+        if (strpos($classname, 'repo_') !== false) {
+            try {
+                include_file('core', substr($classname, 5), 'repo');
+                return;
+            } catch (\Throwable $e) {
 
+            }
+        }
     }
 }
+
 spl_autoload_register('nextdomOtherAutoload', true, true);
 spl_autoload_register('nextdomPluginAutoload', true, true);
 spl_autoload_register('nextdomCoreAutoload', true, true);

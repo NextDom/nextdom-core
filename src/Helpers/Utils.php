@@ -35,6 +35,7 @@
 namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class Utils
 {
@@ -438,5 +439,376 @@ class Utils
     public static function removeCR($_string)
     {
         return trim(str_replace(array("\n", "\r\n", "\r", "\n\r"), '', $_string));
+    }
+
+    public static function isJson($_string, $_default = null)
+    {
+        if ($_string === null && $_default === null) {
+            return null;
+        }
+        if ($_default !== null) {
+            if (!is_string($_string)) {
+                return $_default;
+            }
+            $return = json_decode($_string, true, 512, JSON_BIGINT_AS_STRING);
+            if (!is_array($return)) {
+                return $_default;
+            }
+            return $return;
+        }
+        return ((is_string($_string) && is_array(json_decode($_string, true, 512, JSON_BIGINT_AS_STRING)))) ? true : false;
+    }
+
+    /**
+     * @param $string
+     * @return null|string|string[]
+     */
+    public static function br2nl($string)
+    {
+        return preg_replace('/\<br(\s*)?\/?\>/i', "\n", $string);
+    }
+
+    public static function calculPath($_path)
+    {
+        if (strpos($_path, '/') !== 0) {
+            return dirname(__FILE__) . '/../../' . $_path;
+        }
+        return $_path;
+    }
+
+    public static function sizeFormat($size)
+    {
+        $mod = 1024;
+        $units = explode(' ', 'B KB MB GB TB PB');
+        for ($i = 0; $size > $mod; $i++) {
+            $size /= $mod;
+        }
+        return round($size, 2) . ' ' . $units[$i];
+    }
+
+    /**
+     * Convert object of type to another
+     *
+     * @param mixed $sourceObject Source object
+     * @param string $destinationClassName Destination class name
+     *
+     * @return mixed Object of destinationClassName type
+     */
+    public static function cast($sourceObject, $destinationClassName)
+    {
+        $sourceClassName = get_class($sourceObject);
+        $sourceSerializedPrefix = 'O:' . strlen($sourceClassName) . ':"' . $sourceClassName .'"';
+        $destinationSerializedPrefix = 'O:' . strlen($destinationClassName) . ':"' . $destinationClassName .'"';
+        $serializedObject = serialize($sourceObject);
+        return unserialize(str_replace($sourceSerializedPrefix, $destinationSerializedPrefix, $serializedObject));
+    }
+
+    /**
+     * TODO: Stocker la version évaluée
+     *
+     * @param $_string
+     * @return string
+     */
+    public static function evaluate($_string)
+    {
+        if (!isset($GLOBALS['ExpressionLanguage'])) {
+            $GLOBALS['ExpressionLanguage'] = new ExpressionLanguage();
+        }
+
+        $expr = Utils::transformExpressionForEvaluation($_string);
+
+        try {
+            return $GLOBALS['ExpressionLanguage']->evaluate($expr);
+        } catch (CoreException $e) {
+            //log::add('expression', 'debug', '[Parser 1] Expression : ' . $_string . ' tranformé en ' . $expr . ' => ' . $e->getMessage());
+        }
+        try {
+            $expr = str_replace('""', '"', $expr);
+            return $GLOBALS['ExpressionLanguage']->evaluate($expr);
+        } catch (CoreException $e) {
+            //log::add('expression', 'debug', '[Parser 2] Expression : ' . $_string . ' tranformé en ' . $expr . ' => ' . $e->getMessage());
+        }
+        return $_string;
+    }
+
+    /**
+     * @param string $_string
+     *
+     * @return string
+     */
+    public static function secureXSS($_string)
+    {
+        if ($_string === null) {
+            return null;
+        }
+        return str_replace('&amp;', '&', htmlspecialchars(strip_tags($_string), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+    }
+
+    public static function minify($_buffer)
+    {
+        $search = array(
+            '/\>[^\S ]+/s', // strip whitespaces after tags, except space
+            '/[^\S ]+\</s', // strip whitespaces before tags, except space
+            '/(\s)+/s', // shorten multiple whitespace sequences
+        );
+        $replace = array(
+            '>',
+            '<',
+            '\\1',
+        );
+        return preg_replace($search, $replace, $_buffer);
+    }
+
+    public static function sanitizeAccent($_message)
+    {
+        $caracteres = array(
+            'À' => 'a', 'Á' => 'a', 'Â' => 'a', 'Ä' => 'a', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ä' => 'a', '@' => 'a',
+            'È' => 'e', 'É' => 'e', 'Ê' => 'e', 'Ë' => 'e', 'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', '€' => 'e',
+            'Ì' => 'i', 'Í' => 'i', 'Î' => 'i', 'Ï' => 'i', 'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i',
+            'Ò' => 'o', 'Ó' => 'o', 'Ô' => 'o', 'Ö' => 'o', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'ö' => 'o',
+            'Ù' => 'u', 'Ú' => 'u', 'Û' => 'u', 'Ü' => 'u', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ü' => 'u', 'µ' => 'u',
+            'Œ' => 'oe', 'œ' => 'oe',
+            '$' => 's');
+        return preg_replace('#[^A-Za-z0-9 \n\.\'=\*:]+\#\)\(#', '', strtr($_message, $caracteres));
+    }
+
+    public static function getZipErrorMessage($code)
+    {
+        switch ($code) {
+            case 0:
+                return 'No error';
+
+            case 1:
+                return 'Multi-disk zip archives not supported';
+
+            case 2:
+                return 'Renaming temporary file failed';
+
+            case 3:
+                return 'Closing zip archive failed';
+
+            case 4:
+                return 'Seek error';
+
+            case 5:
+                return 'Read error';
+
+            case 6:
+                return 'Write error';
+
+            case 7:
+                return 'CRC error';
+
+            case 8:
+                return 'Containing zip archive was closed';
+
+            case 9:
+                return 'No such file';
+
+            case 10:
+                return 'File already exists';
+
+            case 11:
+                return 'Can\'t open file';
+
+            case 12:
+                return 'Failure to create temporary file';
+
+            case 13:
+                return 'Zlib error';
+
+            case 14:
+                return 'Malloc failure';
+
+            case 15:
+                return 'Entry has been changed';
+
+            case 16:
+                return 'Compression method not supported';
+
+            case 17:
+                return 'Premature EOF';
+
+            case 18:
+                return 'Invalid argument';
+
+            case 19:
+                return 'Not a zip archive';
+
+            case 20:
+                return 'Internal error';
+
+            case 21:
+                return 'Zip archive inconsistent';
+
+            case 22:
+                return 'Can\'t remove file';
+
+            case 23:
+                return 'Entry has been deleted';
+
+            default:
+                return 'An unknown error has occurred(' . intval($code) . ')';
+        }
+    }
+
+    public static function arg2array($_string) {
+        $return = array();
+        $re = '/[\/-]?(([a-zA-Z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ_#]+)(?:[=:]("[^"]+"|[^\s"]+))?)(?:\s+|$)/';
+        preg_match_all($re, $_string, $matches, PREG_SET_ORDER, 0);
+        foreach ($matches as $match) {
+            if (count($match) != 4) {
+                continue;
+            }
+            $return[$match[2]] = $match[3];
+        }
+        return $return;
+    }
+
+    public static function strToHex($string)
+    {
+        $hex = '';
+        $calculateStrLen = strlen($string);
+        for ($i = 0; $i < $calculateStrLen; $i++) {
+            $ord = ord($string[$i]);
+            $hexCode = dechex($ord);
+            $hex .= substr('0' . $hexCode, -2);
+        }
+        return strToUpper($hex);
+    }
+
+    public static function hex2rgb($hex) {
+        $hex = str_replace("#", "", $hex);
+        if (strlen($hex) == 3) {
+            $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));
+            $g = hexdec(substr($hex, 1, 1) . substr($hex, 1, 1));
+            $b = hexdec(substr($hex, 2, 1) . substr($hex, 2, 1));
+        } else {
+            $r = hexdec(substr($hex, 0, 2));
+            $g = hexdec(substr($hex, 2, 2));
+            $b = hexdec(substr($hex, 4, 2));
+        }
+        return array($r, $g, $b);
+    }
+
+    public static function getDominantColor($_pathimg)
+    {
+        $rTotal = 0;
+        $gTotal = 0;
+        $bTotal = 0;
+        $total = 0;
+        $i = imagecreatefromjpeg($_pathimg);
+        $imagesX = imagesx($i);
+        for ($x = 0; $x < $imagesX; $x++) {
+            $imagesY = imagesy($i);
+            for ($y = 0; $y < $imagesY; $y++) {
+                $rgb = imagecolorat($i, $x, $y);
+                $r = ($rgb >> 16) & 0xFF;
+                $g = ($rgb >> 8) & 0xFF;
+                $b = $rgb & 0xFF;
+                $rTotal += $r;
+                $gTotal += $g;
+                $bTotal += $b;
+                $total++;
+            }
+        }
+        return '#' . sprintf('%02x', round($rTotal / $total)) . sprintf('%02x', round($gTotal / $total)) . sprintf('%02x', round($bTotal / $total));
+    }
+
+    public static function sha512($_string) {
+        return hash('sha512', $_string);
+    }
+
+    public static function findCodeIcon($_icon) {
+        $icon = trim(str_replace(array('fa ', 'icon ', '></i>', '<i', 'class="', '"'), '', trim($_icon)));
+        $re = '/.' . $icon . ':.*\n.*content:.*"(.*?)";/m';
+
+        $css = file_get_contents(__DIR__ . '/../../vendor/node_modules/font-awesome/css/font-awesome.css');
+        preg_match($re, $css, $matches);
+        if (isset($matches[1])) {
+            return array('icon' => trim($matches[1], '\\'), 'fontfamily' => 'FontAwesome');
+        }
+
+        foreach (ls(__DIR__ . '/../css/icon', '*') as $dir) {
+            if (is_dir(__DIR__ . '/../css/icon/' . $dir) && file_exists(__DIR__ . '/../css/icon/' . $dir . '/style.css')) {
+                $css = file_get_contents(__DIR__ . '/../css/icon/' . $dir . '/style.css');
+                preg_match($re, $css, $matches);
+                if (isset($matches[1])) {
+                    return array('icon' => trim($matches[1], '\\'), 'fontfamily' => trim($dir, '/'));
+                }
+            }
+        }
+        return array('icon' => '', 'fontfamily' => '');
+    }
+
+    public static function addGraphLink($_from, $_from_type, $_to, $_to_type, &$_data, $_level, $_drill, $_display = array('dashvalue' => '5,3', 'lengthfactor' => 0.6))
+    {
+        if (is_array($_to) && count($_to) == 0) {
+            return null;
+        }
+        if (!is_array($_to)) {
+            if (!is_object($_to)) {
+                return null;
+            }
+            $_to = array($_to);
+        }
+        foreach ($_to as $to) {
+            $to->getLinkData($_data, $_level, $_drill);
+            if (isset($_data['link'][$_to_type . $to->getId() . '-' . $_from_type . $_from->getId()])) {
+                continue;
+            }
+            if (isset($_data['link'][$_from_type . $_from->getId() . '-' . $_to_type . $to->getId()])) {
+                continue;
+            }
+            $_data['link'][$_to_type . $to->getId() . '-' . $_from_type . $_from->getId()] = array(
+                'from' => $_to_type . $to->getId(),
+                'to' => $_from_type . $_from->getId(),
+            );
+            $_data['link'][$_to_type . $to->getId() . '-' . $_from_type . $_from->getId()] = array_merge($_data['link'][$_to_type . $to->getId() . '-' . $_from_type . $_from->getId()], $_display);
+        }
+        return $_data;
+    }
+
+    public static function strContain($_string, $_words)
+    {
+        foreach ($_words as $word) {
+            if (strpos($_string, $word) !== false) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static function makeZipSupport()
+    {
+        $nextdom_folder = dirname(__FILE__) . '/../..';
+        $folder = '/tmp/nextdom_support';
+        $outputfile = $nextdom_folder . '/support/nextdom_support_' . date('Y-m-d_His') . '.tar.gz';
+        if (file_exists($folder)) {
+            rrmdir($folder);
+        }
+        mkdir($folder);
+        system('cd ' . $nextdom_folder . '/log;cp -R * "' . $folder . '" > /dev/null;cp -R .[^.]* "' . $folder . '" > /dev/null');
+        system('sudo dmesg >> ' . $folder . '/dmesg');
+        system('sudo cp /var/log/messages "' . $folder . '/" > /dev/null');
+        system('sudo chmod 777 -R "' . $folder . '" > /dev/null');
+        system('cd ' . $folder . ';tar cfz "' . $outputfile . '" * > /dev/null;chmod 777 ' . $outputfile);
+        rrmdir($folder);
+        return realpath($outputfile);
+    }
+
+    public static function unautorizedInDemo($_user = null) {
+        if ($_user === null) {
+            if (!isset($_SESSION) || !isset($_SESSION['user'])) {
+                return null;
+            }
+            $_user = $_SESSION['user'];
+        }
+        if (!is_object($_user)) {
+            return;
+        }
+        if ($_user->getLogin() == 'demo') {
+            throw new CoreException(__('Cette action n\'est pas autorisée en mode démo'));
+        }
     }
 }
