@@ -64,13 +64,13 @@ class NetworkHelper
         if (ConfigManager::byKey('network::localip') != '') {
             $localIps = explode(';', ConfigManager::byKey('network::localip'));
             foreach ($localIps as $localIp) {
-                if (netMatch($localIp, $client_ip)) {
+                if (self::netMatch($localIp, $client_ip)) {
                     return 'internal';
                 }
             }
         }
         $match = $nextdom_ips[0] . '.' . $nextdom_ips[1] . '.' . $nextdom_ips[2] . '.*';
-        return netMatch($match, $client_ip) ? 'internal' : 'external';
+        return self::netMatch($match, $client_ip) ? 'internal' : 'external';
     }
 
     public static function getClientIp() {
@@ -130,18 +130,18 @@ class NetworkHelper
         if ($_mode == 'external') {
             if ($_protocol == 'ip') {
                 if (ConfigManager::byKey('market::allowDNS') == 1 && ConfigManager::byKey('nextdom::url') != '' && ConfigManager::byKey('network::disableMangement') == 0) {
-                    return getIpFromString(ConfigManager::byKey('nextdom::url'));
+                    return self::getIpFromString(ConfigManager::byKey('nextdom::url'));
                 }
-                return getIpFromString(ConfigManager::byKey('externalAddr'));
+                return self::getIpFromString(ConfigManager::byKey('externalAddr'));
             }
             if ($_protocol == 'ip:port') {
                 if (ConfigManager::byKey('market::allowDNS') == 1 && ConfigManager::byKey('nextdom::url') != '' && ConfigManager::byKey('network::disableMangement') == 0) {
                     $url = parse_url(ConfigManager::byKey('nextdom::url'));
                     if (isset($url['host'])) {
                         if (isset($url['port'])) {
-                            return getIpFromString($url['host']) . ':' . $url['port'];
+                            return self::getIpFromString($url['host']) . ':' . $url['port'];
                         } else {
-                            return getIpFromString($url['host']);
+                            return self::getIpFromString($url['host']);
                         }
                     }
                 }
@@ -233,7 +233,7 @@ class NetworkHelper
                     continue;
                 }
                 $ip = self::getInterfaceIp($interface);
-                if (!netMatch('127.0.*.*', $ip) && $ip != '' && filter_var($ip, FILTER_VALIDATE_IP)) {
+                if (!self::netMatch('127.0.*.*', $ip) && $ip != '' && filter_var($ip, FILTER_VALIDATE_IP)) {
                     ConfigManager::save('internalAddr', $ip);
                     break;
                 }
@@ -245,7 +245,7 @@ class NetworkHelper
         if (ConfigManager::byKey('network::disableMangement') == 1) {
             return true;
         }
-        if ($_mode == 'internal' && netMatch('127.0.*.*', self::getNetworkAccess($_mode, 'ip', '', false))) {
+        if ($_mode == 'internal' && self::netMatch('127.0.*.*', self::getNetworkAccess($_mode, 'ip', '', false))) {
             return false;
         }
         $url = trim(self::getNetworkAccess($_mode, '', '', false), '/') . '/public/here.html';
@@ -467,5 +467,86 @@ class NetworkHelper
         }
         \log::add('network', 'error', __('Souci réseau détecté, redémarrage du réseau', __FILE__));
         exec(SystemHelper::getCmdSudo() . 'service networking restart');
+    }
+
+    /**
+     * @param string $network
+     * @param string $ip
+     *
+     * @return bool
+     */
+    public static function netMatch($network, $ip)
+    {
+        $ip = trim($ip);
+        if ($ip == trim($network)) {
+            return true;
+        }
+        $network = str_replace(' ', '', $network);
+        if (strpos($network, '*') !== false) {
+            if (strpos($network, '/') !== false) {
+                $asParts = explode('/', $network);
+                if ($asParts[0]) {
+                    $network = $asParts[0];
+                } else {
+                    $network = null;
+                }
+            }
+            $nCount = substr_count($network, '*');
+            $network = str_replace('*', '0', $network);
+            if ($nCount == 1) {
+                $network .= '/24';
+            } elseif ($nCount == 2) {
+                $network .= '/16';
+            } elseif ($nCount == 3) {
+                $network .= '/8';
+            } elseif ($nCount > 3) {
+                return true; // if *.*.*.*, then all, so matched
+            }
+        }
+
+        $d = strpos($network, '-');
+        if ($d === false) {
+            if (strpos($network, '/') === false) {
+                if ($ip == $network) {
+                    return true;
+                }
+                return false;
+            }
+            $ip_arr = explode('/', $network);
+            if (!preg_match("@\d*\.\d*\.\d*\.\d*@", $ip_arr[0], $matches)) {
+                $ip_arr[0] .= ".0"; // Alternate form 194.1.4/24
+            }
+            $network_long = ip2long($ip_arr[0]);
+            $x = ip2long($ip_arr[1]);
+            $mask = long2ip($x) == $ip_arr[1] ? $x : (0xffffffff << (32 - $ip_arr[1]));
+            $ip_long = ip2long($ip);
+            return ($ip_long & $mask) == ($network_long & $mask);
+        } else {
+
+            $from = trim(ip2long(substr($network, 0, $d)));
+            $to = trim(ip2long(substr($network, $d + 1)));
+            $ip = ip2long($ip);
+            return ($ip >= $from && $ip <= $to);
+        }
+    }
+
+    public static function getIpFromString($_string)
+    {
+        $result = parse_url($_string);
+        if (isset($result['host'])) {
+            $_string = $result['host'];
+        } else {
+            $_string = str_replace(array('https://', 'http://'), '', $_string);
+            if (strpos($_string, '/') !== false) {
+                $_string = substr($_string, 0, strpos($_string, '/'));
+            }
+            if (strpos($_string, ':') !== false) {
+                $_string = substr($_string, 0, strpos($_string, ':'));
+            }
+        }
+        if (!filter_var($_string, FILTER_VALIDATE_IP)) {
+            $_string = gethostbyname($_string);
+        }
+        return $_string;
     }
 }

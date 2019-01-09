@@ -52,7 +52,7 @@ class DevicesManager {
     public static function getUsbMapping($name = '', $getGPIO = false)
     {
         $cache = CacheManager::byKey('nextdom::usbMapping');
-        if (!is_json($cache->getValue()) || $name == '') {
+        if (!Utils::isJson($cache->getValue()) || $name == '') {
             $usbMapping = array();
             foreach (FileSystemHelper::ls('/dev/', 'ttyUSB*') as $usb) {
                 $vendor = '';
@@ -133,7 +133,7 @@ class DevicesManager {
     public static function getBluetoothMapping($name = '')
     {
         $cache = CacheManager::byKey('nextdom::bluetoothMapping');
-        if (!is_json($cache->getValue()) || $name == '') {
+        if (!Utils::isJson($cache->getValue()) || $name == '') {
             $bluetoothMapping = array();
             foreach (explode("\n", shell_exec('hcitool dev')) as $line) {
                 if (strpos($line, 'hci') === false || trim($line) == '') {
