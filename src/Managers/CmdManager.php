@@ -56,7 +56,7 @@ class CmdManager
             if ($eqLogic !== null) {
                 $inputs->_eqLogic = $eqLogic;
             }
-            return \cast($inputs, $inputs->getEqType() . 'Cmd');
+            return Utils::cast($inputs, $inputs->getEqType() . 'Cmd');
         }
         if (is_array($inputs)) {
             $return = array();
@@ -624,7 +624,7 @@ class CmdManager
     public static function humanReadableToCmd($input)
     {
         $isJson = false;
-        if (is_json($input)) {
+        if (Utils::isJson($input)) {
             $isJson = true;
             $input = json_decode($input, true);
         }
@@ -719,7 +719,7 @@ class CmdManager
             }
             return $input;
         }
-        $json = is_json($input);
+        $json = Utils::isJson($input);
         $replace = array();
         preg_match_all("/#([0-9]*)#/", $input, $matches);
         foreach ($matches[1] as $cmd_id) {
