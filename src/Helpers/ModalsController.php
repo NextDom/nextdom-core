@@ -81,7 +81,6 @@ class ModalsController
         'plan3dHeader.configure' => 'plan3dHeaderConfigure',
         'plugin.deamon' => 'pluginDaemon',
         'plugin.dependancy' => 'pluginDependency',
-        'plugin.Market' => 'pluginMarket',
         'remove.history' => 'removeHistory',
         'report.bug' => 'reportBug',
         'scenario.export' => 'scenarioExport',
@@ -1165,25 +1164,6 @@ class ModalsController
         $pageContent['dependencyInfo'] = $plugin->getDependencyInfo();
 
         $render->show('/modals/plugin.dependency.html.twig');
-    }
-
-    /**
-     * Render plugin market modal
-     *
-     * @param Render $render Render engine
-     *
-     * @throws CoreException
-     */
-    public static function pluginMarket(Render $render)
-    {
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-
-        Utils::sendVarsToJs(['installBranchStr' => __("Installer la branche "),
-                             'branchStr' => __("Branche ")]);
-        include_file('desktop', 'Market/plugin.market', 'js');
-
-        $render->show('/modals/plugin.Market.html.twig');
     }
 
     /**

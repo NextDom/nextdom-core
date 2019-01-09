@@ -33,7 +33,6 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\Eqlogic;
 
 class EqLogicManager
@@ -74,7 +73,7 @@ class EqLogicManager
     public static function cast($inputs)
     {
         if (is_object($inputs) && class_exists($inputs->getEqType_name())) {
-            return Utils::cast($inputs, $inputs->getEqType_name());
+            return cast($inputs, $inputs->getEqType_name());
         }
         if (is_array($inputs)) {
             $return = array();
@@ -546,7 +545,7 @@ class EqLogicManager
     public static function fromHumanReadable($input)
     {
         $isJson = false;
-        if (Utils::isJson($input)) {
+        if (is_json($input)) {
             $isJson = true;
             $input = json_decode($input, true);
         }

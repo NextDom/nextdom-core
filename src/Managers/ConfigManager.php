@@ -208,7 +208,7 @@ class ConfigManager
                 }
             }
         } else {
-            self::$cache[$pluginId . '::' . $configKey] = Utils::isJson($value['value'], $value['value']);
+            self::$cache[$pluginId . '::' . $configKey] = \is_json($value['value'], $value['value']);
         }
         return isset(self::$cache[$pluginId . '::' . $configKey]) ? self::$cache[$pluginId . '::' . $configKey] : '';
     }
@@ -243,7 +243,7 @@ class ConfigManager
         $defaultConfiguration = self::getDefaultConfiguration($pluginId);
         foreach ($configKeys as $key) {
             if (isset($result[$key])) {
-                $result[$key] = Utils::isJson($result[$key], $result[$key]);
+                $result[$key] = \is_json($result[$key], $result[$key]);
             } elseif (isset($defaultConfiguration[$pluginId][$key])) {
                 $result[$key] = $defaultConfiguration[$pluginId][$key];
             } else {
@@ -281,7 +281,7 @@ class ConfigManager
                     AND `plugin`= :plugin';
         $results = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL);
         foreach ($results as &$result) {
-            $result['value'] = Utils::isJson($result['value'], $result['value']);
+            $result['value'] = \is_json($result['value'], $result['value']);
         }
         return $results;
     }
@@ -352,7 +352,7 @@ class ConfigManager
         $values = \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL);
         $return = array();
         foreach ($values as $value) {
-            $return[$value['key']] = Utils::isJson($value['value'], $value['value']);
+            $return[$value['key']] = \is_json($value['value'], $value['value']);
         }
         return $return;
     }

@@ -42,7 +42,7 @@ class SystemHelper
     {
         if (file_exists(NEXTDOM_ROOT . '/core/config/system_cmd.json')) {
             $content = file_get_contents(NEXTDOM_ROOT . '/core/config/system_cmd.json');
-            if (Utils::isJson($content)) {
+            if (is_json($content)) {
                 self::$commands['custom'] = json_decode($content, true);
             }
         }
@@ -313,20 +313,5 @@ class SystemHelper
     public static function getUptime(): string
     {
         return preg_replace ('/\.[0-9]+/', '', file_get_contents('/proc/uptime'));
-    }
-
-    public static function getMemInfo()
-    {
-        $data = explode("\n", file_get_contents("/proc/meminfo"));
-        $meminfo = array();
-        foreach ($data as $line) {
-            $info = explode(":", $line);
-            if (count($info) != 2) {
-                continue;
-            }
-            $value = explode(' ', trim($info[1]));
-            $meminfo[$info[0]] = trim($value[0]);
-        }
-        return $meminfo;
     }
 }

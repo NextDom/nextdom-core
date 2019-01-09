@@ -526,7 +526,7 @@ class ScenarioManager
     public static function fromHumanReadable($input)
     {
         $isJson = false;
-        if (Utils::isJson($input)) {
+        if (is_json($input)) {
             $isJson = true;
             $input = json_decode($input, true);
         }
@@ -655,7 +655,7 @@ class ScenarioManager
                 throw new \Exception(__('Impossible de supprimer : ') . $tmp . \__('. Vérifiez les droits'));
             }
         }
-        if (!FileSystemHelper::createZip($moduleFile, $tmp)) {
+        if (!\create_zip($moduleFile, $tmp)) {
             throw new \Exception(__('Echec de création du zip. Répertoire source : ') . $moduleFile . \__(' / Répertoire cible : ') . $tmp);
         }
         return $tmp;

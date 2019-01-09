@@ -69,7 +69,7 @@ class Api
                 $whiteIps = explode(';', ConfigManager::byKey('security::whiteips'));
                 if (ConfigManager::byKey('security::whiteips') != '' && count($whiteIps) > 0) {
                     foreach ($whiteIps as $whiteIp) {
-                        if (NetworkHelper::netMatch($whiteIp, $ip)) {
+                        if (netMatch($whiteIp, $ip)) {
                             $find = true;
                         }
                     }
