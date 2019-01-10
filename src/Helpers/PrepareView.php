@@ -558,7 +558,10 @@ class PrepareView
                 }
             } else {
                 $render = Render::getInstance();
-                ModalsController::$modalRoute($render);
+                var_dump($render);
+                $render->show($modalRoutee);
+ 
+          
             }
         }
     }

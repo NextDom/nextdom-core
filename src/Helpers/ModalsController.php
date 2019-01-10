@@ -46,6 +46,8 @@ use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
 use PragmaRX\Google2FA\Google2FA;
 
+use NextDom\Controller\Modale;
+
 class ModalsController
 {
     const routesList = [
@@ -97,7 +99,7 @@ class ModalsController
         'update.send' => 'updateSend',
         'user.rights' => 'userRights',
         'view.configure' => 'viewConfigure',
-        'welcome' => 'welcome'
+        'welcome' => Modale\WelcomeModale::class,
     ];
 
     /**
