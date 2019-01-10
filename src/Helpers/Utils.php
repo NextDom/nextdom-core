@@ -519,13 +519,13 @@ class Utils
 
         try {
             return $GLOBALS['ExpressionLanguage']->evaluate($expr);
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             //log::add('expression', 'debug', '[Parser 1] Expression : ' . $_string . ' tranformé en ' . $expr . ' => ' . $e->getMessage());
         }
         try {
             $expr = str_replace('""', '"', $expr);
             return $GLOBALS['ExpressionLanguage']->evaluate($expr);
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             //log::add('expression', 'debug', '[Parser 2] Expression : ' . $_string . ' tranformé en ' . $expr . ' => ' . $e->getMessage());
         }
         return $_string;
