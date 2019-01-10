@@ -17,7 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
-use NextDom\Model\Entity\Eqlogic;
+use NextDom\Model\Entity\EqLogic;
 /**
  * Cmd
  *
@@ -161,7 +161,7 @@ class Cmd
     private $id;
 
     /**
-     * @var Eqlogic
+     * @var EqLogic
      *
      * @ORM\ManyToOne(targetEntity="NextDom\Model\Entity\Eqlogic")
      * @ORM\JoinColumns({
@@ -257,9 +257,9 @@ class Cmd
 
     /**
      * 
-     * @return Eqlogic
+     * @return EqLogic
      */
-    public function getEqLogic(): Eqlogic
+    public function getEqLogic(): EqLogic
     {
         return $this->eqLogic;
     }
@@ -368,10 +368,10 @@ class Cmd
 
     /**
      * 
-     * @param Eqlogic $eqLogic
+     * @param EqLogic $eqLogic
      * @return $this
      */
-    public function setEqLogic(Eqlogic $eqLogic)
+    public function setEqLogic(EqLogic $eqLogic)
     {
         $this->eqLogic = $eqLogic;
         return $this;

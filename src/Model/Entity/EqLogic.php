@@ -47,9 +47,9 @@ use NextDom\Managers\ScenarioManager;
  * })
  * ORM\Entity
  */
-class Eqlogic
+class EqLogic
 {
-    const CLASS_NAME = Eqlogic::class;
+    const CLASS_NAME = EqLogic::class;
     const DB_CLASS_NAME = '`eqLogic`';
 
     const UIDDELIMITER = '__';
@@ -730,7 +730,7 @@ class Eqlogic
 
     /**
      * @param $_name
-     * @return eqLogic
+     * @return EqLogic
      * @throws CoreException
      */
     public function copy($_name)
@@ -1604,7 +1604,7 @@ class Eqlogic
         $class = new \ReflectionClass($this->getEqType_name());
         $method_toHtml = $class->getMethod('toHtml');
         $return = array();
-        if ($method_toHtml->class == 'eqLogic') {
+        if ($method_toHtml->class == EqLogic::class) {
             $return['custom'] = true;
         } else {
             $return['custom'] = false;

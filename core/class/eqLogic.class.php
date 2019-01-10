@@ -24,7 +24,7 @@ use NextDom\Enums\EqLogicViewTypeEnum;
 /**
  * Class eqLogic interface for Jeedom plugins
  */
-class eqLogic extends NextDom\Model\Entity\Eqlogic
+class eqLogic extends NextDom\Model\Entity\EqLogic
 {
     public static function getAllTags() {
         return EqLogicManager::getAllTags();
