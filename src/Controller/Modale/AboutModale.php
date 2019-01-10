@@ -22,21 +22,19 @@
 
 namespace NextDom\Controller\Modale;
 
-use NextDom\Managers\ConfigManager;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
-class WelcomeModale extends BaseAbstractModale
+class AboutModale extends BaseAbstractModale
 {
-
     public function __construct()
     {
         parent::__construct();
         Status::isConnectedOrFail();
     }
-
+    
     /**
-     * Render welcome modal
+     * Render about
      *
      * @param Render $render Render engine
      *
@@ -44,10 +42,7 @@ class WelcomeModale extends BaseAbstractModale
      */
     public function get(Render $render): string
     {
-
-        $pageContent = [];
-        $pageContent['productName'] = ConfigManager::byKey('product_name');
-        return $render->get('/modals/welcome.html.twig', $pageContent);
+        return $render->get('/modals/about.html.twig');
     }
-
+    
 }
