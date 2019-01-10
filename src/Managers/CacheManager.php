@@ -48,6 +48,7 @@ class CacheManager {
      * Get the folder where the cache is stored
      *
      * @return string Cache folder
+     * @throws \Exception
      */
     public static function getFolder(): string 
     {
@@ -87,6 +88,7 @@ class CacheManager {
      * Delete stored object in cache
      *
      * @param $key
+     * @throws \Exception
      */
     public static function delete($key) 
     {
@@ -102,6 +104,7 @@ class CacheManager {
      * @param bool $details True for more informations
      *
      * @return array|null
+     * @throws \Exception
      */
     public static function stats($details = false) 
     {
@@ -141,6 +144,7 @@ class CacheManager {
      * Get cache system
      *
      * @return \Doctrine\Common\Cache\FilesystemCache|\Doctrine\Common\Cache\MemcachedCache|\Doctrine\Common\Cache\RedisCache|null Cache system
+     * @throws \Exception
      */
     public static function getCache() 
     {
@@ -187,6 +191,7 @@ class CacheManager {
      *
      * @param string $key Key
      * @return mixed Stored object or null if not exists
+     * @throws \Exception
      */
     public static function byKey($key) 
     {
@@ -205,6 +210,7 @@ class CacheManager {
      * @param string $key Key
      *
      * @return bool True if object exists
+     * @throws \Exception
      */
     public static function exists($key) 
     {
@@ -219,6 +225,7 @@ class CacheManager {
      * @return bool True if object exists
      *
      * @deprecated Use exists
+     * @throws \Exception
      */
     public static function exist($key) 
     {
@@ -273,6 +280,7 @@ class CacheManager {
      * Test if cache already exists
      *
      * @return bool True if file cache.tar.gz
+     * @throws \Exception
      */
     public static function isPersistOk(): bool 
     {
@@ -304,7 +312,7 @@ class CacheManager {
             default:
                 return;
         }
-        if (!file_exists(__DIR__ . '/../../var/cache.tar.gz')) {
+        if (!file_exists(NEXTDOM_ROOT . '/var/cache.tar.gz')) {
             $cmd = 'mkdir ' . $cache_dir . ';';
             $cmd .= 'chmod -R 777 ' . $cache_dir . ';';
             \com_shell::execute($cmd);
@@ -313,7 +321,7 @@ class CacheManager {
         $cmd = 'rm -rf ' . $cache_dir . ';';
         $cmd .= 'mkdir ' . $cache_dir . ';';
         $cmd .= 'cd ' . $cache_dir . ';';
-        $cmd .= 'tar xfz ' . __DIR__ . '/../../var/cache.tar.gz;';
+        $cmd .= 'tar xfz ' . NEXTDOM_ROOT . '/var/cache.tar.gz;';
         $cmd .= 'chmod -R 777 ' . $cache_dir . ' 2>&1 > /dev/null;';
         \com_shell::execute($cmd);
     }

@@ -36,16 +36,15 @@ class ApiController extends BaseController
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
+
     /**
      * Render API page
      *
-     * @param Render Api Render engine
+     * @param Render $render
      * @param array $pageContent Page data
      *
      * @return string Content of API page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax

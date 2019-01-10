@@ -75,7 +75,7 @@ class History
         return $this->id;
     }
 
-    public function getCmd(): \NextDom\Model\Entity\Cmd
+    public function getCmd(): Cmd
     {
         return $this->cmd;
     }
@@ -98,7 +98,7 @@ class History
         return $this;
     }
 
-    public function setCmd(\NextDom\Model\Entity\Cmd $cmd)
+    public function setCmd(Cmd $cmd)
     {
         $this->cmd = $cmd;
         return $this;

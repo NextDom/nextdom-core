@@ -28,7 +28,6 @@ $app['db'] = function() {
 ///////////////////////////////
 
 /**
- * @param $app
  * @return \NextDom\Models\DAO\CmdDAO
  */
 $app['DAO.Cmd'] = function () use ($app) {

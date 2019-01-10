@@ -102,6 +102,7 @@ class SystemHelper
      * Get sudo command
      *
      * @return string
+     * @throws \Exception
      */
     public static function getCmdSudo(): string 
     {
@@ -114,8 +115,8 @@ class SystemHelper
     /**
      * Kill all process which using file
      *
-     * @param $filename
      * @param string $filename
+     * @throws \Exception
      */
     public static function killProcessesWhichUsingFile(string $filename) 
     {
@@ -127,6 +128,7 @@ class SystemHelper
      *
      * @param $port
      * @param string $protocol
+     * @throws \Exception
      */
     public static function killProcessesWhichUsingPort($port, $protocol = 'tcp') 
     {
@@ -188,6 +190,7 @@ class SystemHelper
      * @param bool $forceKill Force kill flag
      *
      * @return mixed
+     * @throws \Exception
      */
     public static function kill($find = '', $forceKill = true) 
     {
@@ -218,6 +221,7 @@ class SystemHelper
             $cmd = "(ps ax || ps w) | grep -ie '" . $find . "' | grep -v grep | awk '{print $1}' | xargs " . SystemHelper::getCmdSudo() . "kill > /dev/null 2>&1";
         }
         exec($cmd);
+        return true;
     }
 
     /**
@@ -227,6 +231,7 @@ class SystemHelper
      * @param bool $elevatedPrivileges Use elevated privileges
      *
      * @return string Result of the command
+     * @throws \Exception
      */
     public static function php(string $arguments, $elevatedPrivileges = false) 
     {

@@ -38,8 +38,8 @@ class ProfilsController extends BaseController
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
-     /**
+
+    /**
      * Render profils page
      *
      * @param Render $render Render engine
@@ -47,7 +47,6 @@ class ProfilsController extends BaseController
      *
      * @return string Content of profils page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax

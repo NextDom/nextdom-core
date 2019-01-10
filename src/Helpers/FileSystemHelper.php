@@ -45,6 +45,7 @@ class FileSystemHelper
      * @param string $_filename Nom du fichier
      * @param string $_type Type de fichier
      * @param string $_plugin Nom du plugin ou vide pour le core
+     * @param bool $translate
      * @throws CoreException
      */
     public static function includeFile($_folder, $_filename, $_type, $_plugin = '', $translate = false)
@@ -166,7 +167,7 @@ class FileSystemHelper
             echo '<link href="' . $_folder . '/' . $_filename . '?md5=' . md5_file($path) . '" rel="stylesheet" />';
         } elseif ($type == 'js') {
             // TODO : MD5
-            echo '<script type="text/javascript" src="core/php/getResource.php?file=' . $_folder . '/' . $_filename . '&md5=' . md5_file($path) . '&lang=' . translate::getLanguage() . '"></script>';
+            echo '<script type="text/javascript" src="core/php/getResource.php?file=' . $_folder . '/' . $_filename . '&md5=' . md5_file($path) . '&lang=' . \translate::getLanguage() . '"></script>';
         }
     }
 
@@ -215,8 +216,9 @@ class FileSystemHelper
 
     public static function ls($folder = "", $pattern = "*", $recursivly = false, $options = array('files', 'folders'))
     {
+        $currentFolder = '';
         if ($folder) {
-            $current_folder = realpath('.');
+            $currentFolder = realpath('.');
             if (in_array('quiet', $options)) {
                 // If quiet is on, we will suppress the 'no such folder' error
                 if (!file_exists($folder)) {
@@ -279,8 +281,8 @@ class FileSystemHelper
             }
         }
 
-        if ($folder && is_dir($current_folder)) {
-            chdir($current_folder);
+        if ($folder && is_dir($currentFolder)) {
+            chdir($currentFolder);
         }
 
         if (in_array('datetime_asc', $options)) {

@@ -39,6 +39,7 @@ class AjaxManager {
      * Init ajax communication
      *
      * @param bool $checkToken
+     * @throws \Exception
      */
     public static function init($checkToken = true) {
         if (!headers_sent()) {
@@ -53,6 +54,7 @@ class AjaxManager {
      * Get current NextDom token stored in session
      *
      * @return string NextDom token
+     * @throws \Exception
      */
     public static function getToken() {
         if (session_status() == PHP_SESSION_NONE) {

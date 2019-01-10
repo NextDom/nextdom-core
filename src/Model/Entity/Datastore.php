@@ -98,7 +98,7 @@ class Datastore
 
     /**
      * 
-     * @param type $linkId
+     * @param mixed $linkId
      * @return $this
      */
     public function setLinkId($linkId)

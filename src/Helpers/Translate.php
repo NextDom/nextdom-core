@@ -70,9 +70,10 @@ class Translate
     /**
      * Obtenir une des informations de la configuration liée à la traduction
      *
-     * @param $informationKey
+     * @param string $informationKey
      * @param string $defaultValue
      * @return mixed|string
+     * @throws \Exception
      */
     public static function getConfig(string $informationKey, string $defaultValue = ''): string
     {
@@ -93,6 +94,7 @@ class Translate
      * fr_FR par défaut
      *
      * @return string Langue
+     * @throws \Exception
      */
     public static function getLanguage(): string
     {
@@ -110,6 +112,7 @@ class Translate
      * Charge les informations de traduction
      * TODO: Même celles de tous les plugins. Les plugins sont chargés à l'ancienne
      * @return array Données chargées
+     * @throws \Exception
      */
     public static function loadTranslation(): array
     {
@@ -131,10 +134,12 @@ class Translate
      * Obtenir les traductions pour la langue courante
      *
      * TODO: Vérifier le chargement pour les plugins
-     * 
+     *
+     * @param string $language
      * @return mixed
+     * @throws \Exception
      */
-    public static function getTranslation(): array
+    public static function getTranslation($language): array
     {
         // Test si les traductions ont été mises en cache
         if (!self::$translationLoaded) {
@@ -153,6 +158,7 @@ class Translate
      * @param string $filename Nom du fichier contenant les informations à traduire (ancienne version)
      * @param bool $backslash TODO: Comprendre à quoi ça sert
      * @return string Texte traduit
+     * @throws \Exception
      */
     public static function exec(string $content, string $filename = '', bool $backslash = false): string
     {
@@ -161,7 +167,7 @@ class Translate
         }
         
         $oldTranslationMode = false;
-        $translate = self::getTranslation();
+        $translate = self::getTranslation('fr_FR');
         // Ancienne version pour les plugins
         if (strpos($filename, '/plugins') === 0) {
             $filename           = substr($filename, strpos($filename, 'plugins'));
@@ -221,6 +227,7 @@ class Translate
      * @param bool $backslash TODO: Toujours comprendre à quoi ça sert ?
      *
      * @return string Phrase traduite
+     * @throws \Exception
      */
     public static function sentence(string $sentenceToTranslate, string $filename, bool $backslash = false): string
     {
@@ -232,7 +239,7 @@ class Translate
         // Nouvelle méthode
         else {
             // S'assure que la traduction est chargée
-            self::getTranslation();
+            self::getTranslation('fr_FR');
             $result = self::$translator->trans($sentenceToTranslate);
         }
         return $result;
@@ -247,7 +254,6 @@ class Translate
      */
     public static function getPathTranslationFile(string $language): string
     {
-        //return __DIR__ . '/../i18n/' . $language . '.json';
         return NEXTDOM_ROOT . '/translations/' . $language . '.yml';
     }
 

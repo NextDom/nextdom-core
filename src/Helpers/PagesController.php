@@ -94,6 +94,7 @@ class PagesController
      * @param string $page Page code
      *
      * @return mixed|null Static method or null
+     * @throws \Exception
      */
     public static function getRoute(string $page)
     {

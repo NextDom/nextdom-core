@@ -52,6 +52,7 @@ class TimeLine
      * Get all event in timeline
      *
      * @return array
+     * @throws \Exception
      */
     public static function getTimelineEvent(): array
     {

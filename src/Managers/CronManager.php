@@ -47,7 +47,9 @@ class CronManager {
     /**
      * Return an array of all cron objects
      *
+     * @param bool $ordered
      * @return \cron[] List of all cron objets
+     * @throws \Exception
      */
     public static function all($ordered = false) {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
@@ -64,6 +66,7 @@ class CronManager {
      * @param int $cronId
      *
      * @return object
+     * @throws \Exception
      */
     public static function byId($cronId) {
         $value = array(
@@ -83,6 +86,7 @@ class CronManager {
      * @param string $options Filter options
      *
      * @return \cron Cron object
+     * @throws \Exception
      */
     public static function byClassAndFunction($className, $functionName, $options = '') {
         $value = array(
@@ -109,6 +113,7 @@ class CronManager {
      * @param string $options Filter options
      *
      * @return array[\cron] List of cron objects
+     * @throws \Exception
      */
     public static function searchClassAndFunction($className, $functionName, $options = '') {
         $value = array(
@@ -188,6 +193,7 @@ class CronManager {
      * Return the current pid of jeecron or empty if not running
      *
      * @return int Current jeeCron PID
+     * @throws \Exception
      */
     public static function getPidFile() {
         $path = NextDomHelper::getTmpFolder() . '/jeeCron.pid';
@@ -201,6 +207,7 @@ class CronManager {
      * Get status of jeeCron
      *
      * @return boolean True if jeeCron is running
+     * @throws \Exception
      */
     public static function jeeCronRun() {
         $pid = self::getPidFile();

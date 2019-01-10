@@ -91,6 +91,7 @@ class ConfigManager
      * @param string $pluginId Plugin id or core
      *
      * @return boolean Always True (TODO: No return)
+     * @throws \Exception
      */
     public static function save($configKey, $configValue, $pluginId = 'core')
     {
@@ -148,6 +149,7 @@ class ConfigManager
      * @param string $pluginId Plugin id or core
      *
      * @return boolean Always True
+     * @throws \Exception
      */
     public static function remove($configKey, $pluginId = 'core')
     {
@@ -183,6 +185,7 @@ class ConfigManager
      * @param bool $forceRefresh Force to refresh the value in the cache
      *
      * @return mixed Key value
+     * @throws \Exception
      */
     public static function byKey($configKey, $pluginId = 'core', $defaultValue = '', $forceRefresh = false)
     {
@@ -216,11 +219,12 @@ class ConfigManager
     /**
      * Get configuration by multiple keys
      *
-     * @param string $configKey nom de la clef dont on veut la valeur
+     * @param $configKeys
      * @param string $pluginId Plugin id or core
      * @param string $defaultValue Default value if config key is not found
      *
      * @return array Keys values
+     * @throws \Exception
      */
     public static function byKeys($configKeys, $pluginId = 'core', $defaultValue = '')
     {
@@ -268,6 +272,7 @@ class ConfigManager
      * @param string $configKey nom de la clef dont on veut la valeur
      * @param string $pluginId Plugin id or core
      * @return mixed
+     * @throws \Exception
      */
     public static function searchKey($configKey, $pluginId = 'core')
     {
@@ -315,6 +320,7 @@ class ConfigManager
      * @deprecated Use getEnabledPlugins
      *
      * @return array List of enabled plugins
+     * @throws \Exception
      */
     public static function getPluginEnable()
     {
@@ -326,6 +332,7 @@ class ConfigManager
      * Get enabled plugins
      *
      * @return array List of enabled plugins
+     * @throws \Exception
      */
     public static function getEnabledPlugins() {
         $sql = 'SELECT `value`,`plugin`
@@ -343,6 +350,7 @@ class ConfigManager
      * Get log level for all plugins
      *
      * @return array Log level of all plugins
+     * @throws \Exception
      */
     public static function getLogLevelPlugin()
     {
@@ -361,6 +369,7 @@ class ConfigManager
      * Method called on core::allowDns config change
      *
      * @param mixed $newValue New value of core::allowDns
+     * @throws \NextDom\Exceptions\CoreException
      */
     public static function postConfig_market_allowDNS($newValue)
     {

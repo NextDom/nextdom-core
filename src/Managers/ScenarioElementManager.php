@@ -42,6 +42,7 @@ class ScenarioElementManager
      * Get the element of a scenario from its identifier
      * @param mixed $id Identifier of the scenario element
      * @return mixed
+     * @throws \Exception
      */
     public static function byId($id)
     {

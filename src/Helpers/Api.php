@@ -28,6 +28,7 @@ class Api
      * @param string $plugin Plugin id
      *
      * @return string API key
+     * @throws \Exception
      */
     public static function getApiKey(string $plugin = 'core'): string
     {
@@ -55,6 +56,7 @@ class Api
      * @param string $mode
      *
      * @return bool
+     * @throws \Exception
      */
     public static function apiModeResult(string $mode = ApiModeEnum::API_ENABLE): bool
     {
@@ -93,6 +95,7 @@ class Api
      * @param string $defaultApiKey
      * @param string $plugin
      * @return bool
+     * @throws \Exception
      */
     public static function apiAccess(string $defaultApiKey = '', string $plugin = 'core')
     {

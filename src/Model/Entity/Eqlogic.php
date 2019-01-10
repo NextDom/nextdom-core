@@ -253,6 +253,7 @@ class Eqlogic
      * @param string $defaultValue
      *
      * @return array|bool|mixed|null|string
+     * @throws \Exception
      */
     public function getStatus($statusKey = '', $defaultValue = '')
     {
@@ -443,6 +444,7 @@ class Eqlogic
     /**
      * @param $_isEnable
      * @return $this
+     * @throws \Exception
      */
     public function setIsEnable($_isEnable)
     {
@@ -459,6 +461,7 @@ class Eqlogic
     /**
      * @param $_key
      * @param null $_value
+     * @throws \Exception
      */
     public function setStatus($_key, $_value = null)
     {
@@ -600,6 +603,7 @@ class Eqlogic
      * @param string $cacheKey
      * @param string $defaultValue
      * @return array|bool|mixed|null|string
+     * @throws \Exception
      */
     public function getCache($cacheKey = '', $defaultValue = '')
     {
@@ -610,6 +614,7 @@ class Eqlogic
     /**
      * @param $cacheKey
      * @param null $cacheValue
+     * @throws \Exception
      */
     public function setCache($cacheKey, $cacheValue = null)
     {
@@ -783,6 +788,7 @@ class Eqlogic
      * @param bool $_noCache
      * @return array|string
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function preToHtml($viewType = EqLogicViewTypeEnum::DASHBOARD, $_default = array(), $_noCache = false)
     {
@@ -962,6 +968,7 @@ class Eqlogic
      * @return array|mixed
      *
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function toHtml($viewType = EqLogicViewTypeEnum::DASHBOARD)
     {
@@ -1055,7 +1062,8 @@ class Eqlogic
     }
 
     /**
-     * @return string
+     * @return mixed
+     * @throws \Exception
      */
     public function getAlert()
     {
@@ -1261,6 +1269,7 @@ class Eqlogic
     /**
      * @param string $_version
      * @return mixed
+     * @throws \Exception
      */
     public function getBackgroundColor($_version = 'dashboard')
     {
@@ -1635,6 +1644,7 @@ class Eqlogic
 
     /**
      * @return array
+     * @throws \Exception
      */
     public function toArray()
     {
@@ -1706,6 +1716,7 @@ class Eqlogic
 
     /**
      * @return array
+     * @throws \Exception
      */
     public function getUse()
     {

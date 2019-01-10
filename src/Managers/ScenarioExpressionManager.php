@@ -154,6 +154,7 @@ class ScenarioExpressionManager
      * @param $options
      *
      * @return array
+     * @throws \Exception
      */
     public static function getExpressionOptions($expression, $options)
     {
@@ -239,6 +240,7 @@ class ScenarioExpressionManager
      * @param $_sValue
      *
      * @return array|mixed
+     * @throws \ReflectionException
      */
     public static function randText($_sValue)
     {
@@ -294,6 +296,7 @@ class ScenarioExpressionManager
      * @param mixed $eqLogicId Identifiant du l'objet
      *
      * @return int 0 If the object is not activated, 1 if the object is activated, -2 if the object does not exist
+     * @throws \Exception
      */
     public static function eqEnable($eqLogicId)
     {
@@ -313,6 +316,7 @@ class ScenarioExpressionManager
      * @param string $period Période sur laquelle la moyenne doit être calculée
      *
      * @return float|int|string
+     * @throws \Exception
      */
     public static function average($cmdId, $period = '1 hour')
     {
@@ -365,6 +369,7 @@ class ScenarioExpressionManager
      * @param $endDate
      *
      * @return float|string
+     * @throws \ReflectionException
      */
     public static function averageBetween($cmdId, $startDate, $endDate)
     {
@@ -387,6 +392,7 @@ class ScenarioExpressionManager
      * @param $cmdId
      * @param string $period
      * @return float|mixed|string
+     * @throws \Exception
      */
     public static function max($cmdId, $period = '1 hour')
     {
@@ -438,6 +444,7 @@ class ScenarioExpressionManager
      * @param $startDate
      * @param $endDate
      * @return float|string
+     * @throws \ReflectionException
      */
     public static function maxBetween($cmdId, $startDate, $endDate)
     {
@@ -463,6 +470,7 @@ class ScenarioExpressionManager
      * @param int $waitTimeout Durée limite de l'attente (7200s par défaut)
      *
      * @return int
+     * @throws \ReflectionException
      */
     public static function wait($condition, $waitTimeout = self::WAIT_LIMIT)
     {
@@ -488,6 +496,7 @@ class ScenarioExpressionManager
      * @param $cmdId
      * @param string $period
      * @return float|mixed|string
+     * @throws \Exception
      */
     public static function min($cmdId, $period = '1 hour')
     {
@@ -539,6 +548,7 @@ class ScenarioExpressionManager
      * @param $startDate
      * @param $endDate
      * @return float|string
+     * @throws \ReflectionException
      */
     public static function minBetween($cmdId, $startDate, $endDate)
     {
@@ -559,6 +569,7 @@ class ScenarioExpressionManager
      * Obtenir une valeur médiane TODO: De quoi ?
      *
      * @return int|mixed
+     * @throws \ReflectionException
      */
     public static function median()
     {
@@ -597,6 +608,7 @@ class ScenarioExpressionManager
      * @param string $period
      * @param string $threshold
      * @return int|string
+     * @throws \Exception
      */
     public static function tendance($cmdId, $period = '1 hour', $threshold = '')
     {
@@ -685,9 +697,9 @@ class ScenarioExpressionManager
      * @param $cmdId
      * @param $value
      * @param $startDate
-     * @param null $_endDate
+     * @param null $endDate
      * @return array|string
-     * @throws \Exception
+     * @throws \ReflectionException
      */
     public static function stateChangesBetween($cmdId, $value, $startDate, $endDate = null)
     {
@@ -719,6 +731,7 @@ class ScenarioExpressionManager
      * @param $value
      * @param string $period
      * @return float|string
+     * @throws \Exception
      */
     public static function duration($cmdId, $value, $period = '1 hour')
     {
@@ -785,6 +798,7 @@ class ScenarioExpressionManager
      * @param $startDate
      * @param $endDate
      * @return float|string
+     * @throws \Exception
      */
     public static function durationBetween($cmdId, $value, $startDate, $endDate)
     {
@@ -839,6 +853,7 @@ class ScenarioExpressionManager
      * @param $startDate
      * @param $endDate
      * @return float|string
+     * @throws \ReflectionException
      */
     public static function lastBetween($cmdId, $startDate, $endDate)
     {
@@ -859,6 +874,7 @@ class ScenarioExpressionManager
      * @param $calc
      * @param string $period
      * @return string
+     * @throws \Exception
      */
     public static function statistics($cmdId, $calc, $period = '1 hour')
     {
@@ -891,6 +907,7 @@ class ScenarioExpressionManager
      * @param $startDate
      * @param $endDate
      * @return string
+     * @throws \ReflectionException
      */
     public static function statisticsBetween($cmdId, $calc, $startDate, $endDate)
     {
@@ -911,6 +928,7 @@ class ScenarioExpressionManager
      * @param $name
      * @param string $defaultValue Valeur par défaut
      * @return string
+     * @throws \Exception
      */
     public static function variable($name, $defaultValue = '')
     {
@@ -957,6 +975,7 @@ class ScenarioExpressionManager
      * @param mixed $value
      *
      * @return int 1 si $value est pair, sinon 0
+     * @throws \ReflectionException
      */
     public static function odd($value): int
     {
@@ -988,9 +1007,10 @@ class ScenarioExpressionManager
     /**
      * TODO: Collecter une date
      *
-     * @param $cmd
+     * @param $cmdId
      * @param string $format
      * @return false|int|string
+     * @throws \Exception
      */
     public static function collectDate($cmdId, $format = 'Y-m-d H:i:s')
     {
@@ -1011,6 +1031,7 @@ class ScenarioExpressionManager
      * @param $cmdId
      * @param string $format
      * @return false|string
+     * @throws \Exception
      */
     public static function valueDate($cmdId, $format = 'Y-m-d H:i:s')
     {
@@ -1080,7 +1101,8 @@ class ScenarioExpressionManager
      * TODO ????
      *
      * @param null $scenario
-     * @return bool
+     * @return mixed
+     * @throws \Exception
      */
     public static function triggerValue(&$scenario = null)
     {
@@ -1100,6 +1122,7 @@ class ScenarioExpressionManager
      * @param int $decimal Nombre de décimales
      *
      * @return float Valeur arrondie.
+     * @throws \ReflectionException
      */
     public static function round($value, $decimal = 0)
     {
@@ -1165,6 +1188,7 @@ class ScenarioExpressionManager
      * @param $endInterval
      *
      * @return int TODO: 0, 1
+     * @throws \ReflectionException
      */
     public static function time_between($time, $startInverval, $endInterval)
     {
@@ -1210,6 +1234,7 @@ class ScenarioExpressionManager
      *
      * @param $value
      * @return int|mixed|string
+     * @throws \ReflectionException
      */
     public static function time($value)
     {
@@ -1241,6 +1266,7 @@ class ScenarioExpressionManager
      *
      * @param $time
      * @return string
+     * @throws \ReflectionException
      */
     public static function formatTime($time)
     {
@@ -1262,6 +1288,7 @@ class ScenarioExpressionManager
      * @param $type
      * @param $cmdId
      * @return string
+     * @throws \Exception
      */
     public static function name($type, $cmdId)
     {
@@ -1292,6 +1319,7 @@ class ScenarioExpressionManager
      *
      * @param $expression
      * @return array
+     * @throws \Exception
      */
     public static function getRequestTags($expression)
     {
@@ -1365,12 +1393,13 @@ class ScenarioExpressionManager
         return $return;
     }
 
+    /** @noinspection PhpOptionalBeforeRequiredParametersInspection */
     /**
      * TODO: Un tag
      *
-     * @param null $_scenario
-     * @param $_name
-     * @param string $_default
+     * @param null $scenario
+     * @param $name
+     * @param string $default
      * @return string
      */
     public static function tag(&$scenario = null, $name, $default = '')
@@ -1388,11 +1417,12 @@ class ScenarioExpressionManager
     /**
      * TODO Faut bien les définir les tags
      *
-     * @param $expression
-     * @param null $scenario
-     * @param bool $quote
-     * @param int $nbCall
+     * @param $_expression
+     * @param null $_scenario
+     * @param bool $_quote
+     * @param int $_nbCall
      * @return mixed
+     * @throws \ReflectionException
      */
     public static function setTags($_expression, &$_scenario = null, $_quote = false, $_nbCall = 0) {
 		if (file_exists(NEXTDOM_ROOT . '/data/php/user.function.class.php')) {

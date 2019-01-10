@@ -64,6 +64,7 @@ class Router
      * Viewing the requested content
      *
      * @return bool True if an answer has been provided.
+     * @throws \Exception
      */
     public function show(): bool
     {

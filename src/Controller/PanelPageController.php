@@ -43,6 +43,7 @@ class PanelPageController extends BaseController
      * @param \NextDom\Helpers\Render $render
      * @param array $pageContent
      * @return string
+     * @throws \Exception
      */
     public function get(Render $render, array &$pageContent): string
     {

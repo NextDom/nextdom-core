@@ -38,7 +38,7 @@ class EqAnalyzeController extends BaseController
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
+
     /**
      * Render eqLogic analyze page
      *
@@ -47,7 +47,7 @@ class EqAnalyzeController extends BaseController
      *
      * @return string Content of eqLogic analyze page
      *
-     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax

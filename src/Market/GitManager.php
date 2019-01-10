@@ -49,6 +49,7 @@ class GitManager
      * Constructeur du gestionnaire Git
      *
      * @param string $gitId Utilisateur du compte Git
+     * @throws \Exception
      */
     public function __construct($gitId)
     {

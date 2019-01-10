@@ -63,6 +63,7 @@ class BackupManager {
      * Obtenir la liste des sauvegardes
      *
      * @return array Liste des sauvegardes
+     * @throws \Exception
      */
     public static function listBackup(): array
     {

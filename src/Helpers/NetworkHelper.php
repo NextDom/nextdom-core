@@ -50,6 +50,7 @@ class NetworkHelper
 {
     /**
      * @return string
+     * @throws \Exception
      */
     public static function getUserLocation() {
         $client_ip = self::getClientIp();
@@ -332,14 +333,14 @@ class NetworkHelper
         $openvpn->setConfiguration('remote_port', ConfigManager::byKey('vpn::port', 'core', 1194));
         $openvpn->setConfiguration('auth_mode', 'password');
         $openvpn->save(true);
-        if (!file_exists(__DIR__ . '/../../plugins/openvpn/data')) {
-            shell_exec('mkdir -p ' . __DIR__ . '/../../plugins/openvpn/data');
+        if (!file_exists(NEXTDOM_ROOT . '/plugins/openvpn/data')) {
+            shell_exec('mkdir -p ' . NEXTDOM_ROOT . '/plugins/openvpn/data');
         }
-        $path_ca = __DIR__ . '/../../plugins/openvpn/data/ca_' . $openvpn->getConfiguration('key') . '.crt';
+        $path_ca = NEXTDOM_ROOT . '/plugins/openvpn/data/ca_' . $openvpn->getConfiguration('key') . '.crt';
         if (file_exists($path_ca)) {
             unlink($path_ca);
         }
-        copy(__DIR__ . '/../../script/ca_dns.crt', $path_ca);
+        copy(NEXTDOM_ROOT . '/script/ca_dns.crt', $path_ca);
         if (!file_exists($path_ca)) {
             throw new CoreException(__('Impossible de créer le fichier  : ', __FILE__) . $path_ca);
         }

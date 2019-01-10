@@ -48,6 +48,7 @@ class DevicesManager {
      * @param bool $getGPIO
      *
      * @return array|mixed|string
+     * @throws \Exception
      */
     public static function getUsbMapping($name = '', $getGPIO = false)
     {
@@ -129,6 +130,7 @@ class DevicesManager {
      *
      * @param string $name
      * @return array|mixed|string
+     * @throws \Exception
      */
     public static function getBluetoothMapping($name = '')
     {

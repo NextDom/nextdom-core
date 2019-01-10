@@ -48,6 +48,7 @@ class UpdateManager
      * Check all updates
      * @param string $filter
      * @param bool $findNewObjects
+     * @throws \Exception
      */
     public static function checkAllUpdate($filter = '', $findNewObjects = true)
     {
@@ -105,6 +106,7 @@ class UpdateManager
     /**
      * List of rest (Source of downloads)
      * @return array
+     * @throws \Exception
      */
     public static function listRepo(): array
     {
@@ -130,6 +132,7 @@ class UpdateManager
      * Get a repo by its identifier
      * @param $id Repo identifier
      * @return array
+     * @throws \Exception
      */
     public static function repoById($id)
     {
@@ -148,16 +151,17 @@ class UpdateManager
      * Update all items
      * @param string $filter
      * @return bool
+     * @throws \Exception
      */
     public static function updateAll(string $filter = '')
     {
         //TODO: Il n'a pas l'air de servir à grand chose ce test
+        $error = false;
         if ($filter == 'core') {
             foreach (self::byType($filter) as $update) {
                 $update->doUpdate();
             }
         } else {
-            $error = false;
             if ($filter == '') {
                 $updates = self::all();
             } else {
@@ -175,14 +179,15 @@ class UpdateManager
                     }
                 }
             }
-            return $error;
         }
+        return $error;
     }
 
     /**
      * Get information about an update from its username
      * @param $id ID of the update
      * @return array|mixed|null
+     * @throws \Exception
      */
     public static function byId($id)
     {
@@ -199,7 +204,7 @@ class UpdateManager
      * Get updates from their status
      * @param $status
      * @return array|mixed|null
-     * @throws CoreException
+     * @throws \Exception
      */
     public static function byStatus($status)
     {
@@ -216,7 +221,7 @@ class UpdateManager
      * Get the bets from its logical identifier
      * @param $logicalId
      * @return array|mixed|null
-     * @throws CoreException
+     * @throws \Exception
      */
     public static function byLogicalId($logicalId)
     {
@@ -234,7 +239,7 @@ class UpdateManager
      *
      * @param $type
      * @return array|mixed|null
-     * @throws CoreException
+     * @throws \Exception
      */
     public static function byType($type)
     {
@@ -253,7 +258,7 @@ class UpdateManager
      * @param $type
      * @param $logicalId
      * @return array|mixed|null
-     * @throws CoreException
+     * @throws \Exception
      */
     public static function byTypeAndLogicalId($type, $logicalId)
     {
@@ -272,7 +277,7 @@ class UpdateManager
      * Get all the updates.
      * @param string $filter
      * @return array|null List of all objects
-     * @throws CoreException
+     * @throws \Exception
      */
     public static function all($filter = '')
     {
@@ -290,7 +295,7 @@ class UpdateManager
     /**
      * Get the number of pending updates
      * @return mixed
-     * @throws CoreException
+     * @throws \Exception
      */
     public static function nbNeedUpdate()
     {
@@ -303,7 +308,7 @@ class UpdateManager
 
     /**
      * Search new updates
-     * @throws CoreException
+     * @throws \Exception
      */
     public static function findNewUpdateObject()
     {

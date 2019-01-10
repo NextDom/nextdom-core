@@ -87,6 +87,7 @@ class CmdManager
      *
      * @param mixed $id Command id
      * @return \cmd
+     * @throws \Exception
      */
     public static function byId($id)
     {
@@ -577,6 +578,7 @@ class CmdManager
      *
      * @param $input
      * @return array|mixed
+     * @throws \ReflectionException
      */
     public static function cmdToHumanReadable($input)
     {
@@ -694,6 +696,7 @@ class CmdManager
      * @param $input
      * @param bool $quote
      * @return array|mixed
+     * @throws \ReflectionException
      */
     public static function cmdToValue($input, $quote = false)
     {
@@ -811,6 +814,7 @@ class CmdManager
      *
      * @param $color
      * @return mixed
+     * @throws \Exception
      */
     public static function convertColor($color)
     {
@@ -829,7 +833,7 @@ class CmdManager
      */
     public static function availableWidget($version)
     {
-        $path = dirname(__FILE__) . '/../../core/template/' . $version;
+        $path = NEXTDOM_ROOT . '/core/template/' . $version;
         $files = FileSystemHelper::ls($path, 'cmd.*', false, array('files', 'quiet'));
         $return = array();
         foreach ($files as $file) {
@@ -844,7 +848,7 @@ class CmdManager
                 $return[$informations[1]][$informations[2]][$informations[3]] = array('name' => $informations[3], 'location' => 'core');
             }
         }
-        $path = dirname(__FILE__) . '/../../plugins/widget/core/template/' . $version;
+        $path = NEXTDOM_ROOT . '/plugins/widget/core/template/' . $version;
         if (file_exists($path)) {
             $files = FileSystemHelper::ls($path, 'cmd.*', false, array('files', 'quiet'));
             foreach ($files as $file) {
@@ -869,6 +873,7 @@ class CmdManager
      * TODO: ???
      *
      * @param $options
+     * @throws \Exception
      */
     public static function returnState($options)
     {
@@ -882,6 +887,7 @@ class CmdManager
      * TODO: ???
      *
      * @return array
+     * @throws \Exception
      */
     public static function deadCmd()
     {
@@ -922,6 +928,7 @@ class CmdManager
      * TODO: ???
      *
      * @param $options
+     * @throws \Exception
      */
     public static function cmdAlert($options)
     {
@@ -940,6 +947,7 @@ class CmdManager
      * TODO: ???
      * @param $event
      * @return array|null
+     * @throws \Exception
      */
     public static function timelineDisplay($event)
     {

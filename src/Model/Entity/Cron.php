@@ -182,7 +182,7 @@ class Cron
 
     /**
      * 
-     * @param type $enable
+     * @param mixed $enable
      * @return $this
      */
     public function setEnable($enable)
@@ -193,7 +193,7 @@ class Cron
 
     /**
      * 
-     * @param type $class
+     * @param mixed $class
      * @return $this
      */
     public function setClass($class)
@@ -204,7 +204,7 @@ class Cron
 
     /**
      * 
-     * @param type $function
+     * @param mixed $function
      * @return $this
      */
     public function setFunction($function)
@@ -215,7 +215,7 @@ class Cron
     
     /**
      * 
-     * @param type $schedule
+     * @param mixed $schedule
      * @return $this
      */
     public function setSchedule($schedule)
@@ -226,7 +226,7 @@ class Cron
 
     /**
      * 
-     * @param type $timeout
+     * @param mixed $timeout
      * @return $this
      */
     public function setTimeout($timeout)
@@ -237,7 +237,7 @@ class Cron
 
     /**
      * 
-     * @param type $deamon
+     * @param mixed $deamon
      * @return $this
      */
     public function setDeamon($deamon)
@@ -248,7 +248,7 @@ class Cron
 
     /**
      * 
-     * @param type $deamonSleepTime
+     * @param mixed $deamonSleepTime
      * @return $this
      */
     public function setDeamonSleepTime($deamonSleepTime)
@@ -270,7 +270,7 @@ class Cron
 
     /**
      * 
-     * @param type $once
+     * @param mixed $once
      * @return $this
      */
     public function setOnce($once)
@@ -473,6 +473,7 @@ class Cron
      * Check if it's time to launch cron
      *
      * @return boolean
+     * @throws \Exception
      */
     public function isDue(): bool
     {
@@ -540,6 +541,7 @@ class Cron
      * Get cron data in array
      *
      * @return array Cron data
+     * @throws \Exception
      */
     public function toArray()
     {
@@ -555,6 +557,7 @@ class Cron
      * Get last task run
      *
      * @return mixed Last task run
+     * @throws \Exception
      */
     public function getLastRun()
     {
@@ -565,6 +568,7 @@ class Cron
      * Get current state
      *
      * @return mixed Current state
+     * @throws \Exception
      */
     public function getState()
     {
@@ -577,6 +581,7 @@ class Cron
      * @param mixed $defaultValue
      *
      * @return mixed Task PID
+     * @throws \Exception
      */
     public function getPID($defaultValue = null)
     {
@@ -587,6 +592,7 @@ class Cron
      * Set last task run
      *
      * @param mixed $lastRun Last task run
+     * @throws \Exception
      */
     public function setLastRun($lastRun)
     {
@@ -597,6 +603,7 @@ class Cron
      * Set task state
      *
      * @param mixed $state State of the task
+     * @throws \Exception
      */
     public function setState($state)
     {
@@ -607,6 +614,7 @@ class Cron
      * Store PID in cache
      *
      * @param mixed $pid
+     * @throws \Exception
      */
     public function setPID($pid = null)
     {
@@ -619,6 +627,7 @@ class Cron
      * @param string $cacheKey
      * @param string $cacheValue
      * @return mixed
+     * @throws \Exception
      */
     public function getCache($cacheKey = '', $cacheValue = '')
     {
@@ -631,6 +640,7 @@ class Cron
      *
      * @param mixed $cacheKey
      * @param mixed $cacheValue
+     * @throws \Exception
      */
     public function setCache($cacheKey, $cacheValue = null)
     {

@@ -66,6 +66,7 @@ class DataStoreManager {
      * @param mixed $key
      *
      * @return mixed
+     * @throws \Exception
      */
     public static function byTypeLinkIdKey($dataType, $linkId, $key) {
         $values = array(
@@ -89,9 +90,8 @@ class DataStoreManager {
      *
      * @param mixed $dataType
      * @param mixed $linkId
-     * @param mixed $key
-     *
      * @return \dataStore[]|null
+     * @throws \Exception
      */
     public static function byTypeLinkId($dataType, $linkId = '') {
         $values = array(
@@ -114,6 +114,7 @@ class DataStoreManager {
      * @param $linkId
      *
      * @return bool
+     * @throws \Exception
      */
     public static function removeByTypeLinkId($dataType, $linkId) {
         $datastores = self::byTypeLinkId($dataType, $linkId);

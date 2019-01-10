@@ -73,6 +73,9 @@ class PrepareView
 
     /**
      * @param $configs
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public static function showRescueMode($configs)
     {
@@ -119,8 +122,12 @@ class PrepareView
 
     /**
      *
-     * @global type $language
      * @param array $configs
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     * @global string $language
      */
     public static function showContent(array $configs)
     {
@@ -212,7 +219,11 @@ class PrepareView
      *
      * @param Render $render Render engine
      *
+     * @param $pageData
+     * @param $eventsJsPlugin
+     * @param $configs
      * @return mixed Current loaded plugin
+     * @throws \Exception
      */
     public static function initPluginsData(Render $render, &$pageData, &$eventsJsPlugin, $configs)
     {
@@ -263,6 +274,8 @@ class PrepareView
 
     /**
      * Add list of plugins events javascripts files
+     * @param $eventsJsPlugin
+     * @param $pageData
      */
     private static function initPluginsEvents($eventsJsPlugin, &$pageData)
     {
@@ -280,7 +293,7 @@ class PrepareView
     /**
      * @param $pageData
      * @param $currentPlugin
-     * @throws CoreException
+     * @throws \Exception
      */
     private static function initMenu(&$pageData, $currentPlugin)
     {
@@ -312,7 +325,7 @@ class PrepareView
     /**
      * @param $pageData
      * @param $configs
-     * @throws CoreException
+     * @throws \Exception
      */
     private static function initHeaderData(&$pageData, $configs)
     {
@@ -456,8 +469,9 @@ class PrepareView
      * @param array $pageContent
      * @param string $page
      * @param $currentPlugin
-     * @return string
-     * @throws CoreException
+     *
+     * @return mixed
+     * @throws \Exception
      */
     private static function getContent(Render $render, array &$pageContent, string $page, $currentPlugin) {
         if ($currentPlugin !== null && is_object($currentPlugin)) {
@@ -475,6 +489,7 @@ class PrepareView
                     return ob_get_clean();
                 } else {
                     Router::showError404AndDie();
+                    return null;
                 }
             } else {
                 $controller = new $controllerRoute();
@@ -486,7 +501,7 @@ class PrepareView
     /**
      * Response to an Ajax request
      *
-     * @throws CoreException
+     * @throws \Exception
      */
     public static function getContentByAjax()
     {

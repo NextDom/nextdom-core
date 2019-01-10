@@ -36,7 +36,7 @@ class BackupController extends BaseController
         Status::isConnectedAdminOrFail();
     }
 
-     /**
+    /**
      * Render backup page
      *
      * @param Render $render Render engine
@@ -44,7 +44,6 @@ class BackupController extends BaseController
      *
      * @return string Content of backup page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax

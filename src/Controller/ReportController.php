@@ -35,7 +35,7 @@ class ReportController extends BaseController
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
+
     /**
      * Render report page
      *
@@ -44,7 +44,6 @@ class ReportController extends BaseController
      *
      * @return string Content of report page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax

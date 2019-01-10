@@ -34,7 +34,7 @@ class NoteController extends BaseController
         Status::isConnectedAdminOrFail();
     }
 
-     /**
+    /**
      * Render note page
      *
      * @param Render $render Render engine
@@ -42,7 +42,6 @@ class NoteController extends BaseController
      *
      * @return string Content of migration page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax

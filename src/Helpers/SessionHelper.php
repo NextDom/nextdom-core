@@ -41,6 +41,7 @@ class SessionHelper
     /**
      * @param $srcData
      * @return array
+     * @throws CoreException
      */
     public static function decodeSessionData($srcData)
     {
@@ -63,6 +64,7 @@ class SessionHelper
 
     /**
      * @return array
+     * @throws \Exception
      */
     public static function getSessionsList()
     {

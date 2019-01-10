@@ -385,10 +385,10 @@ class cmd {
 
     /**
      *
-     * @param type $_options
-     * @param type $_sendNodeJsEvent
-     * @param type $_quote
-     * @return command result
+     * @param mixed $_options
+     * @param mixed $_sendNodeJsEvent
+     * @param mixed $_quote
+     * @return mixed result
      * @throws Exception
      */
     public function execCmd($_options = null, $_sendNodeJsEvent = false, $_quote = false) {

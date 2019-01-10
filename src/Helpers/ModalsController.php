@@ -473,6 +473,7 @@ class ModalsController
      * @param Render $render Render engine
      *
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public static function eqLogicConfigure(Render $render)
     {
@@ -606,6 +607,7 @@ class ModalsController
      * @param Render $render Render engine
      *
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public static function eqLogicDisplayWidget(Render $render)
     {
@@ -909,7 +911,7 @@ class ModalsController
         if ($cmdClass == 'cron' && $data['class'] == 'scenario' && $data['function'] == 'doIn') {
             $scenario = ScenarioManager::byId($data['option']['scenario_id']);
             //TODO: $array ???
-            $scenarioElement = ScenarioElementManager::byId($array['option']['scenarioElement_id']);
+            $scenarioElement = ScenarioElementManager::byId($data['option']['scenarioElement_id']);
             if (is_object($scenarioElement) && is_object($scenario)) {
                 $otherInfo['doIn'] = __('Scénario : ') . $scenario->getName() . "\n" . str_replace(array('"'), array("'"), $scenarioElement->export());
             }
@@ -1215,8 +1217,6 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @return string Scenario export modal
-     *
      * @throws CoreException
      */
     public static function reportBug(Render $render)
@@ -1261,10 +1261,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function scenarioHumanInsert(Render $render)
     {
@@ -1454,10 +1451,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function userRights(Render $render)
     {
@@ -1488,12 +1482,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @return string Scenario export modal
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function twoFactorAuthentification(Render $render)
     {
@@ -1548,10 +1537,7 @@ class ModalsController
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws CoreException
      */
     public static function welcome(Render $render)
     {

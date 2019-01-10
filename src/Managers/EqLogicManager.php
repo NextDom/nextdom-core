@@ -92,6 +92,7 @@ class EqLogicManager
      * @param bool $onlyEnable Filter only enabled eqLogics
      *
      * @return \eqLogic[]|mixed
+     * @throws \Exception
      */
     public static function all($onlyEnable = false)
     {
@@ -111,6 +112,7 @@ class EqLogicManager
      * @param $eqRealId
      *
      * @return array|mixed
+     * @throws \Exception
      */
     public static function byEqRealId($eqRealId)
     {
@@ -498,6 +500,7 @@ class EqLogicManager
      *
      * @param $input
      * @return array|mixed
+     * @throws \ReflectionException
      */
     public static function toHumanReadable($input)
     {
@@ -653,6 +656,7 @@ class EqLogicManager
      * Obtenir l'ensemble des tags liés aux objets
      *
      * @return array
+     * @throws \Exception
      */
     public static function getAllTags() {
         $values = array();

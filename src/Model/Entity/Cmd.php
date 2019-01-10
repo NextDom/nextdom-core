@@ -17,8 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
+use NextDom\Model\Entity\Eqlogic;
 /**
  * Cmd
  *
@@ -162,14 +161,14 @@ class Cmd
     private $id;
 
     /**
-     * @var \AppBundle\Entity\Eqlogic
+     * @var Eqlogic
      *
      * @ORM\ManyToOne(targetEntity="NextDom\Model\Entity\Eqlogic")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="eqLogic_id", referencedColumnName="id")
      * })
      */
-    private $eqlogic;
+    private $eqLogic;
 
     public function getEqtype()
     {
@@ -258,11 +257,11 @@ class Cmd
 
     /**
      * 
-     * @return \NextDom\Model\Entity\Eqlogic
+     * @return Eqlogic
      */
-    public function getEqlogic(): \NextDom\Model\Entity\Eqlogic
+    public function getEqLogic(): Eqlogic
     {
-        return $this->eqlogic;
+        return $this->eqLogic;
     }
 
     public function setEqtype($eqtype)
@@ -369,12 +368,12 @@ class Cmd
 
     /**
      * 
-     * @param \NextDom\Entity\Eqlogic $eqlogic
+     * @param Eqlogic $eqLogic
      * @return $this
      */
-    public function setEqlogic(\NextDom\Entity\Eqlogic $eqlogic)
+    public function setEqLogic(Eqlogic $eqLogic)
     {
-        $this->eqlogic = $eqlogic;
+        $this->eqLogic = $eqLogic;
         return $this;
     }
 

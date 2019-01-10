@@ -75,6 +75,7 @@ class NextDomHelper
      * Get all dead commands
      *
      * @return array
+     * @throws \Exception
      */
     public static function getDeadCmd()
     {
@@ -109,6 +110,7 @@ class NextDomHelper
      * Test all functionnalities
      *
      * @return array Data about system health
+     * @throws \Exception
      */
     public static function health(): array
     {
@@ -304,7 +306,7 @@ class NextDomHelper
                 $cache_health['state'] = true;
                 $cache_health['result'] = $okStr;
             } else {
-                $filename = __DIR__ . '/../../var/cache.tar.gz';
+                $filename = NEXTDOM_ROOT . '/var/cache.tar.gz';
                 $cache_health['state'] = true;
                 $cache_health['result'] = $okStr . ' (' . date('Y-m-d H:i:s', filemtime($filename)) . ')';
             }
@@ -350,6 +352,7 @@ class NextDomHelper
      * Test if NextDom running right
      *
      * @return bool
+     * @throws \Exception
      */
     public static function isOk()
     {
@@ -397,6 +400,7 @@ class NextDomHelper
      * @param mixed $defaultValue
      *
      * @return mixed
+     * @throws \Exception
      */
     public static function getConfiguration(string $askedKey = '', $defaultValue = false)
     {
@@ -433,6 +437,7 @@ class NextDomHelper
      * @param string $configKey
      * @param mixed $configValue
      * @return array|mixed|string
+     * @throws \Exception
      */
     private static function checkValueInConfiguration($configKey, $configValue)
     {
@@ -556,6 +561,7 @@ class NextDomHelper
      * Test if NextDom is started
      *
      * @return bool True if NextDom is started
+     * @throws \Exception
      */
     public static function isStarted(): bool
     {
@@ -566,6 +572,7 @@ class NextDomHelper
      * Update time status and get it
      *
      * @return boolean Time status
+     * @throws \Exception
      */
     public static function isDateOk()
     {
@@ -601,6 +608,7 @@ class NextDomHelper
      *
      * @param $event
      * @param bool $forceSyncMode
+     * @throws \Exception
      */
     public static function event($event, $forceSyncMode = false)
     {
@@ -799,6 +807,7 @@ class NextDomHelper
     /**
      * TODO: ????
      * @param array $_replaces
+     * @throws \Exception
      */
     public static function replaceTag(array $_replaces)
     {
@@ -877,6 +886,7 @@ class NextDomHelper
      * @param $input
      *
      * @return array
+     * @throws \Exception
      */
     public static function toHumanReadable($input)
     {
@@ -889,6 +899,7 @@ class NextDomHelper
      * @param $input
      *
      * @return array|mixed(
+     * @throws \Exception
      */
     public static function fromHumanReadable($input)
     {
@@ -902,6 +913,7 @@ class NextDomHelper
      * @param null $scenario
      *
      * @return mixed|string
+     * @throws \ReflectionException
      */
     public static function evaluateExpression($input, $scenario = null)
     {
@@ -944,6 +956,7 @@ class NextDomHelper
      * @param string $_string
      *
      * @return array
+     * @throws \Exception
      */
     public static function getTypeUse($_string = '')
     {
@@ -1109,6 +1122,7 @@ class NextDomHelper
      * @param null $plugin
      *
      * @return string
+     * @throws \Exception
      */
     public static function getTmpFolder($plugin = null) {
         $result = '/' . trim(ConfigManager::byKey('folder::tmp'), '/');
@@ -1127,6 +1141,7 @@ class NextDomHelper
      * Get hardware key
      *
      * @return bool|string
+     * @throws \Exception
      */
     public static function getHardwareKey()
     {
@@ -1142,6 +1157,7 @@ class NextDomHelper
      * Get hostname
      *
      * @return string
+     * @throws \Exception
      */
     public static function getHardwareName()
     {
@@ -1171,6 +1187,7 @@ class NextDomHelper
      * @param bool $forceRefresh Force refresh in configuration
      *
      * @return bool True if $systemFunc can be executed
+     * @throws \Exception
      */
     public static function isCapable($systemFunc, $forceRefresh = false)
     {

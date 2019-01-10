@@ -52,7 +52,6 @@ class DashBoardController extends BaseController
      *
      * @return string Content of Dashboard V2 page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax

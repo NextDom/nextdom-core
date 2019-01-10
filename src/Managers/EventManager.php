@@ -58,6 +58,7 @@ class EventManager
      *
      * @param string $eventName
      * @param array $options
+     * @throws \Exception
      */
     public static function add($eventName, $options = [])
     {
@@ -80,6 +81,7 @@ class EventManager
      *
      * @param string $eventName
      * @param array $values
+     * @throws \Exception
      */
     public static function adds($eventName, $values = [])
     {
@@ -150,6 +152,7 @@ class EventManager
      * @param null $longPolling Wait for new events
      * @param null $filter Event filter
      * @return array
+     * @throws \Exception
      */
     public static function changes($datetime, $longPolling = null, $filter = null)
     {
@@ -184,6 +187,7 @@ class EventManager
      * @param array $filterName Filter name
      *
      * @return array Filtered events
+     * @throws \Exception
      */
     private static function filterEvent($eventsToFilter = [], $filterName = null)
     {
@@ -215,6 +219,7 @@ class EventManager
      * @param mixed $datetime Limit datetime
      *
      * @return array Associative array with all events
+     * @throws \Exception
      */
     private static function changesSince($datetime)
     {
@@ -243,6 +248,7 @@ class EventManager
      * Get event cache file object
      *
      * @return bool|null|resource
+     * @throws \Exception
      */
     private static function getEventLockFile()
     {

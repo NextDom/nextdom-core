@@ -38,8 +38,6 @@ use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Helpers\NextDomHelper;
 
-//require_once __DIR__.'/../DB.class.php';
-
 // TODO: \DB::buildField(ScenarioEntity::className) à factoriser
 class ScenarioManager
 {
@@ -68,9 +66,10 @@ class ScenarioManager
      *
      * @param string $scenarioName Chaine identifiant le scénario
      *
+     * @param $commandNotFoundString
      * @return \scenario Objet demandé
      *
-     * @throws \Exception
+     * @throws \ReflectionException
      */
     public static function byString(string $scenarioName, $commandNotFoundString)
     {
@@ -87,7 +86,8 @@ class ScenarioManager
      * @param string $groupName Filtrer sur un groupe
      * @param string $type Filtrer sur un type
      *
-     * @return [\scenario] Liste des objets scenario
+     * @return array [\scenario] Liste des objets scenario
+     * @throws \Exception
      */
     public static function all($groupName = '', $type = null):array
     {
@@ -131,7 +131,8 @@ class ScenarioManager
     /**
      * Obtenir la liste des scénarios planifiés
      *
-     * @return [scenario] Liste des scénarios planifiés
+     * @return array|mixed|null [scenario] Liste des scénarios planifiés
+     * @throws \Exception
      */
     public static function schedule()
     {
@@ -147,7 +148,8 @@ class ScenarioManager
      *
      * @param string $groupPattern Pattern de recherche
      *
-     * @return [] Liste des groupes
+     * @return array|mixed|null [] Liste des groupes
+     * @throws \Exception
      */
     public static function listGroup($groupPattern = null)
     {
@@ -168,7 +170,8 @@ class ScenarioManager
      * @param string $cmdId Identifiant du déclencheur
      * @param bool $onlyEnabled Filtrer sur les scénarios activés
      *
-     * @return [] Liste des scénarios
+     * @return array|mixed|null [] Liste des scénarios
+     * @throws \Exception
      */
     public static function byTrigger(string $cmdId, $onlyEnabled = true)
     {
@@ -185,8 +188,9 @@ class ScenarioManager
     /**
      * Obtenir la liste des scénarios à partir d'un élément TODO: Kesako
      *
-     * @param $elementId
+     * @param string $elementId
      * @return mixed
+     * @throws \Exception
      */
     public static function byElement(string $elementId)
     {
@@ -207,7 +211,7 @@ class ScenarioManager
      * @param bool $onlyEnabled Filtrer uniquement les scénarios activés
      * @param bool $onlyVisible Filtrer uniquement les scénarios visibles
      *
-     * @return [] Liste des scénarios
+     * @return array|mixed|null [] Liste des scénarios
      *
      * @throws \Exception
      */
@@ -239,6 +243,7 @@ class ScenarioManager
      * @param bool $forceSyncMode Forcer le mode synchrone
      *
      * @return bool Renvoie toujours true //TODO: A voir
+     * @throws \Exception
      */
     public static function check($event = null, $forceSyncMode = false)
     {
@@ -381,6 +386,7 @@ class ScenarioManager
      * @param bool $needsReturn Argument à virer
      *
      * @return array
+     * @throws \ReflectionException
      */
     public static function consystencyCheck($needsReturn = false)
     {
@@ -425,6 +431,7 @@ class ScenarioManager
         if ($needsReturn) {
             return $return;
         }
+        return null;
     }
 
     /**
@@ -435,6 +442,7 @@ class ScenarioManager
      * @param $scenarioName
      *
      * @return mixed
+     * @throws \Exception
      */
     public static function byObjectNameGroupNameScenarioName($objectName, $groupName, $scenarioName)
     {
@@ -522,6 +530,7 @@ class ScenarioManager
      *
      * @param $input
      * @return array|mixed
+     * @throws \ReflectionException
      */
     public static function fromHumanReadable($input)
     {
@@ -575,8 +584,9 @@ class ScenarioManager
 
     /**
      * TODO:
-     * @param $searchs
+     * @param array $searchs
      * @return array
+     * @throws \Exception
      */
     public static function searchByUse(array $searchs)
     {
@@ -627,10 +637,12 @@ class ScenarioManager
      */
     public static function getTemplate($template = '')
     {
-        $path = __DIR__ . '/../../config/scenario';
+        $path = NEXTDOM_ROOT . '/core/config/scenario';
+        /**
         if (isset($template) && $template != '') {
             // TODO Magic trixxxxxx
         }
+         */
         return FileSystemHelper::ls($path, '*.json', false, ['files', 'quiet']);
     }
 
@@ -645,7 +657,7 @@ class ScenarioManager
      */
     public static function shareOnMarket(&$market)
     {
-        $moduleFile = __DIR__ . '/../../config/scenario/' . $market->getLogicalId() . '.json';
+        $moduleFile = NEXTDOM_ROOT . '/core/config/scenario/' . $market->getLogicalId() . '.json';
         if (!file_exists($moduleFile)) {
             throw new \Exception('Impossible de trouver le fichier de configuration ' . $moduleFile);
         }
@@ -663,13 +675,13 @@ class ScenarioManager
 
     /**
      * TODO:
-     * @param type $market
-     * @param type $path
+     * @param mixed $market
+     * @param mixed $path
      * @throws \Exception
      */
     public static function getFromMarket(&$market, $path)
     {
-        $cibDir = __DIR__ . '/../../config/scenario/';
+        $cibDir = NEXTDOM_ROOT . '/core/config/scenario/';
         if (!file_exists($cibDir)) {
             mkdir($cibDir);
         }
@@ -695,6 +707,7 @@ class ScenarioManager
      * TODO: Le CSS C'est pour les faibles
      * @param array $event
      * @return array|null
+     * @throws \Exception
      */
     public static function timelineDisplay(array $event)
     {

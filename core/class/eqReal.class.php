@@ -19,6 +19,8 @@
 /* * ***************************Includes********************************* */
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
+use NextDom\Managers\EqRealManager;
+
 class eqReal {
     /*     * *************************Attributs****************************** */
 
@@ -35,68 +37,12 @@ class eqReal {
         return 'eqReal';
     }
 
-    private static function getClass($_id) {
-        if (get_called_class() != __CLASS__) {
-            return get_called_class();
-        }
-        $values = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT plugin,isEnable
-                FROM eqLogic
-                WHERE eqReal_id=:id';
-        $result = DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW);
-        $eqTyme_name = $result['plugin'];
-        if ($result['isEnable'] == 0) {
-            try {
-                $plugin = null;
-                if ($eqTyme_name != '') {
-                    $plugin = plugin::byId($eqTyme_name);
-                }
-                if (!is_object($plugin) || $plugin->isActive() == 0) {
-                    return __CLASS__;
-                }
-            } catch (Exception $e) {
-                return __CLASS__;
-            }
-        }
-        if (class_exists($eqTyme_name)) {
-            if (method_exists($eqTyme_name, 'getClassCmd')) {
-                return $eqTyme_name::getClassCmd();
-            }
-        }
-        if (class_exists($eqTyme_name . 'Real')) {
-            return $eqTyme_name . 'Real';
-        }
-        return __CLASS__;
-    }
-
     public static function byId($_id) {
-        $values = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-                FROM eqReal
-                WHERE id=:id';
-        $class = self::getClass($_id);
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, $class);
+        return EqRealManager::byId($_id);
     }
 
     public static function byLogicalId($_logicalId, $_cat) {
-        $values = array(
-            'logicalId' => $_logicalId,
-            'cat' => $_cat,
-        );
-        $sql = 'SELECT id
-                FROM eqReal
-                WHERE logicalId=:logicalId
-                    AND cat=:cat';
-        $results = DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL);
-        $return = array();
-        foreach ($results as $result) {
-            $return[] = self::byId($result['id']);
-        }
-        return $return;
+        return EqRealManager::byLogicalId($_logicalId, $_cat);
     }
 
     /*     * *********************Méthodes d'instance************************* */

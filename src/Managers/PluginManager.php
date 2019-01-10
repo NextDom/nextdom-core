@@ -399,13 +399,15 @@ class PluginManager
     /**
      * Test si le plugin est actif
      * TODO: Doit passer en static
+     * @param $id
      * @return int
+     * @throws \Exception
      */
     public static function isActive($id)
     {
         $result = 0;
         if (self::$enabledPlugins === null) {
-            self::$enabledPlugins = ConfigManager::getPluginEnable();
+            self::$enabledPlugins = ConfigManager::getEnabledPlugins();
         }
         if (isset(self::$enabledPlugins[$id])) {
             $result = self::$enabledPlugins[$id];

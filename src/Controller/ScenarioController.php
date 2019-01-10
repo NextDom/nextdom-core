@@ -37,7 +37,7 @@ class ScenarioController extends BaseController
         Status::isConnectedAdminOrFail();
     }
 
-     /**
+    /**
      * Render scenario page
      *
      * @param Render $render Render engine
@@ -45,7 +45,6 @@ class ScenarioController extends BaseController
      *
      * @return string Content of scenario page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax

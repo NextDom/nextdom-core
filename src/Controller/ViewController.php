@@ -33,7 +33,7 @@ class ViewController extends BaseController
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
+
     /**
      * Render view page
      *
@@ -42,7 +42,6 @@ class ViewController extends BaseController
      *
      * @return string Content of view page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax

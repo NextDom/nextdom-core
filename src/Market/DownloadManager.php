@@ -45,6 +45,7 @@ class DownloadManager
      * Constructeur testant le statut de la connexion.
      *
      * @param bool $forceConnectionStatus Booléen pour forcer l'état de la connexion.
+     * @throws \Exception
      */
     public static function init($forceConnectionStatus = null)
     {

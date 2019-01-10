@@ -471,7 +471,7 @@ class Utils
     public static function calculPath($_path)
     {
         if (strpos($_path, '/') !== 0) {
-            return dirname(__FILE__) . '/../../' . $_path;
+            return NEXTDOM_ROOT . '/' . $_path;
         }
         return $_path;
     }
@@ -723,15 +723,15 @@ class Utils
         $icon = trim(str_replace(array('fa ', 'icon ', '></i>', '<i', 'class="', '"'), '', trim($_icon)));
         $re = '/.' . $icon . ':.*\n.*content:.*"(.*?)";/m';
 
-        $css = file_get_contents(__DIR__ . '/../../vendor/node_modules/font-awesome/css/font-awesome.css');
+        $css = file_get_contents(NEXTDOM_ROOT . '/vendor/node_modules/font-awesome/css/font-awesome.css');
         preg_match($re, $css, $matches);
         if (isset($matches[1])) {
             return array('icon' => trim($matches[1], '\\'), 'fontfamily' => 'FontAwesome');
         }
 
-        foreach (ls(__DIR__ . '/../css/icon', '*') as $dir) {
-            if (is_dir(__DIR__ . '/../css/icon/' . $dir) && file_exists(__DIR__ . '/../css/icon/' . $dir . '/style.css')) {
-                $css = file_get_contents(__DIR__ . '/../css/icon/' . $dir . '/style.css');
+        foreach (ls(NEXTDOM_ROOT . '/public/icon', '*') as $dir) {
+            if (is_dir(NEXTDOM_ROOT . '/public/icon/' . $dir) && file_exists(NEXTDOM_ROOT . '/public/icon/' . $dir . '/style.css')) {
+                $css = file_get_contents(NEXTDOM_ROOT . '/public/icon/' . $dir . '/style.css');
                 preg_match($re, $css, $matches);
                 if (isset($matches[1])) {
                     return array('icon' => trim($matches[1], '\\'), 'fontfamily' => trim($dir, '/'));
@@ -781,14 +781,13 @@ class Utils
 
     public static function makeZipSupport()
     {
-        $nextdom_folder = dirname(__FILE__) . '/../..';
         $folder = '/tmp/nextdom_support';
-        $outputfile = $nextdom_folder . '/support/nextdom_support_' . date('Y-m-d_His') . '.tar.gz';
+        $outputfile = NEXTDOM_ROOT . '/support/nextdom_support_' . date('Y-m-d_His') . '.tar.gz';
         if (file_exists($folder)) {
             rrmdir($folder);
         }
         mkdir($folder);
-        system('cd ' . $nextdom_folder . '/log;cp -R * "' . $folder . '" > /dev/null;cp -R .[^.]* "' . $folder . '" > /dev/null');
+        system('cd /var/log/nextdom;cp -R * "' . $folder . '" > /dev/null;cp -R .[^.]* "' . $folder . '" > /dev/null');
         system('sudo dmesg >> ' . $folder . '/dmesg');
         system('sudo cp /var/log/messages "' . $folder . '/" > /dev/null');
         system('sudo chmod 777 -R "' . $folder . '" > /dev/null');

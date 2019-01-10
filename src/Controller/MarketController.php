@@ -34,8 +34,8 @@ class MarketController extends BaseController
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
-   /**
+
+    /**
      * Render market page
      *
      * @param Render $render Render engine
@@ -43,7 +43,6 @@ class MarketController extends BaseController
      *
      * @return string Content of market page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
