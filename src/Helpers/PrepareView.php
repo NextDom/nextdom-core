@@ -549,6 +549,7 @@ class PrepareView
         else {
             $modalRoute = ModalsController::getRoute($modalCode);
             if ($modalRoute === null) {
+
                 try {
                     \include_file('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
                 } catch (CoreException $e) {
@@ -558,10 +559,8 @@ class PrepareView
                 }
             } else {
                 $render = Render::getInstance();
-                var_dump($render);
-                $render->show($modalRoutee);
- 
-          
+                $modale = new $modalRoute();
+                echo $modale->get($render);
             }
         }
     }

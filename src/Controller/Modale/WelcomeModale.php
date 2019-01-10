@@ -25,7 +25,7 @@ namespace NextDom\Controller\Modale;
 use NextDom\Managers\ConfigManager;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
- 
+
 class WelcomeModale extends BaseAbstractModale
 {
 
@@ -46,7 +46,7 @@ class WelcomeModale extends BaseAbstractModale
     {
 
         $pageContent['productName'] = ConfigManager::byKey('product_name');
-        $render->get('/modals/welcome.html.twig', $pageContent);
+        return $render->get('/modals/welcome.html.twig', $pageContent);
     }
 
 }
