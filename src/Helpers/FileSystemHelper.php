@@ -154,7 +154,7 @@ class FileSystemHelper
                     echo str_replace(array('{{', '}}'), '', ob_get_clean());
                 } else {
                     if ($translate) {
-                        echo translate::exec(ob_get_clean(), $_folder . '/' . $_filename);
+                        echo \translate::exec(ob_get_clean(), $_folder . '/' . $_filename);
                     } else {
                         echo ob_get_clean();
                     }

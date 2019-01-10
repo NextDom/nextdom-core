@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
  
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Utils;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
@@ -74,7 +75,7 @@ class ViewController extends BaseController
         }
 
         if (!is_object($currentView)) {
-            throw new \Exception(__('Aucune vue n\'existe, cliquez <a href="index.php?v=d&p=view_edit">ici</a> pour en créer une.'));
+            throw new CoreException(__('Aucune vue n\'existe, cliquez <a href="index.php?v=d&p=view_edit">ici</a> pour en créer une.'));
         }
         $pageContent['viewCurrent'] = $currentView;
 
