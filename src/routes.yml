@@ -1,0 +1,141 @@
+dashboard:
+  path: 'dashboard'
+  controller: NextDom\Controller\DashBoardController::get
+scenario:
+  path: 'scenario'
+  controller: NextDom\Controller\ScenarioController::get
+administration:
+  path: 'administration'
+  controller: NextDom\Controller\AdministrationController::get
+backup:
+  path: 'backup'
+  controller: NextDom\Controller\BackupController::get
+object:
+  path: 'object'
+  controller: NextDom\Controller\ObjectController::get
+message:
+  path: 'message'
+  controller: NextDom\Controller\MessageController::get
+cron:
+  path: 'cron'
+  controller: NextDom\Controller\CronController::get
+update:
+  path: 'update'
+  controller: NextDom\Controller\UpdateController::get
+system:
+  path: 'system'
+  controller: NextDom\Controller\SystemController::get
+database:
+  path: 'database'
+  controller: NextDom\Controller\DatabaseController::get
+display:
+  path: 'display'
+  controller: NextDom\Controller\DisplayController::get
+log:
+  path: 'log'
+  controller: NextDom\Controller\LogController::get
+report:
+  path: 'report'
+  controller: NextDom\Controller\ReportController::get
+plugin:
+  path: 'plugin'
+  controller: NextDom\Controller\PluginListController::get
+editor:
+  path: 'editor'
+  controller: NextDom\Controller\EditorController::get
+history:
+  path: 'history'
+  controller: NextDom\Controller\HistoryController::get
+timeline:
+  path: 'timeline'
+  controller: NextDom\Controller\TimelineController::get
+shutdown:
+  path: 'shutdown'
+  controller: NextDom\Controller\ShutdownController::get
+health:
+  path: 'health'
+  controller: NextDom\Controller\HealthController::get
+profils:
+  path: 'profils'
+  controller: NextDom\Controller\ProfilsController::get
+view:
+  path: 'view'
+  controller: NextDom\Controller\ViewController::get
+view_edit:
+  path: 'view_edit'
+  controller: NextDom\Controller\ViewEditController::get
+eqAnalyse:
+  path: 'eqAnalyse'
+  controller: NextDom\Controller\EqAnalyzeController::get
+plan:
+  path: 'plan'
+  controller: NextDom\Controller\PlanController::get
+plan3d:
+  path: 'plan3d'
+  controller: NextDom\Controller\Plan3DController::get
+market:
+  path: 'market'
+  controller: NextDom\Controller\MarketController::get
+reboot:
+  path: 'reboot'
+  controller: NextDom\Controller\RebootController::get
+network:
+  path: 'network'
+  controller: NextDom\Controller\NetworkController::get
+cache:
+  path: 'cache'
+  controller: NextDom\Controller\CacheController::get
+general:
+  path: 'general'
+  controller: NextDom\Controller\GeneralController::get
+log_admin:
+  path: 'log_admin'
+  controller: NextDom\Controller\LogAdminController::get
+realtime:
+  path: 'realtime'
+  controller: NextDom\Controller\RealtimeController::get
+custom:
+  path: 'custom'
+  controller: NextDom\Controller\CustomController::get
+api:
+  path: 'api'
+  controller: NextDom\Controller\ApiController::get
+commandes:
+  path: 'commandes'
+  controller: NextDom\Controller\CommandeController::get
+osdb:
+  path: 'osdb'
+  controller: NextDom\Controller\OsDbController::get
+reports_admin:
+  path: 'reports_admin'
+  controller: NextDom\Controller\ReportAdminController::get
+eqlogic:
+  path: 'eqlogic'
+  controller: NextDom\Controller\EqlogicController::get
+interact:
+  path: 'interact'
+  controller: NextDom\Controller\InteractController::get
+interact_admin:
+  path: 'interact_admin'
+  controller: NextDom\Controller\InteractAdminController::get
+links:
+  path: 'links'
+  controller: NextDom\Controller\LinksController::get
+security:
+  path: 'security'
+  controller: NextDom\Controller\SecurityController::get
+summary:
+  path: 'summary'
+  controller: NextDom\Controller\SummaryController::get
+update_admin:
+  path: 'update_admin'
+  controller: NextDom\Controller\UpdateAdminController::get
+users:
+  path: 'users'
+  controller: NextDom\Controller\UsersController::get
+note:
+  path: 'note'
+  controller: NextDom\Controller\NoteController::get
+panel:
+  path: 'panel'
+  controller: NextDom\Controller\PanelPageController::get

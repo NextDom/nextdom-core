@@ -26,6 +26,9 @@ use NextDom\Helpers\ModalsController;
 use NextDom\Helpers\PagesController;
 use NextDom\Helpers\Router;
 use NextDom\Managers\ConfigManager;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Routing\Loader\YamlFileLoader;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * Classe de support à l'affichage des contenus HTML
@@ -479,7 +482,10 @@ class PrepareView
             \include_file('desktop', $page, 'php', $currentPlugin->getId(), true);
             return ob_get_clean();
         } else {
-            $controllerRoute = PagesController::getRoute($page);
+            $routeFileLocator = new FileLocator(NEXTDOM_ROOT . '/src');
+            $yamlLoader = new YamlFileLoader($routeFileLocator);
+            $routes = $yamlLoader->load('routes.yml');
+            $controllerRoute = $routes->get($page);
             if ($controllerRoute === null) {
                 // Vérifie que l'utilisateur n'essaie pas de sortir
                 $purgedPage = preg_replace('/[^a-z0-9_-]/i', '', $page);
@@ -492,8 +498,7 @@ class PrepareView
                     return null;
                 }
             } else {
-                $controller = new $controllerRoute();
-                return $controller->get($render, $pageContent);
+                return call_user_func_array($controllerRoute->getDefaults()['_controller'], [$render, &$pageContent]);
             }
         }
     }
