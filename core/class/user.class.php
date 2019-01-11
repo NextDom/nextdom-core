@@ -18,6 +18,8 @@
 
 /* * ***************************Includes********************************* */
 require_once __DIR__ . '/../../core/php/core.inc.php';
+
+use NextDom\Managers\UserManager;
 use PragmaRX\Google2FA\Google2FA;
 
 class user {
@@ -35,321 +37,67 @@ class user {
     /*     * ***********************Méthodes statiques*************************** */
 
     public static function byId($_id) {
-        $values = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-        FROM user
-        WHERE id=:id';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+        return UserManager::byId($_id);
     }
 
-    /**
-     * Retourne un object utilisateur (si les information de connection sont valide)
-     * @param string $_login nom d'utilisateur
-     * @param string $_mdp motsz de passe en sha512
-     * @return user object user
-     */
     public static function connect($_login, $_mdp) {
-        $sMdp = (!is_sha512($_mdp)) ? sha512($_mdp) : $_mdp;
-        if (config::byKey('ldap:enable') == '1' && function_exists('ldap_connect')) {
-            log::add("connection", "debug", __('Authentification par LDAP', __FILE__));
-            $ad = self::connectToLDAP();
-            if ($ad !== false) {
-                log::add("connection", "debug", __('Connection au LDAP OK', __FILE__));
-                $ad = ldap_connect(config::byKey('ldap:host'), config::byKey('ldap:port'));
-                ldap_set_option($ad, LDAP_OPT_PROTOCOL_VERSION, 3);
-                ldap_set_option($ad, LDAP_OPT_REFERRALS, 0);
-                if (!ldap_bind($ad, 'uid=' . $_login . ',' . config::byKey('ldap:basedn'), $_mdp)) {
-                    log::add("connection", "info", __('Mot de passe erroné (', __FILE__) . $_login . ')');
-                    return false;
-                }
-                log::add("connection", "debug", __('Bind user OK', __FILE__));
-                $result = ldap_search($ad, config::byKey('ldap::usersearch') . '=' . $_login . ',' . config::byKey('ldap:basedn'), config::byKey('ldap:filter'));
-                log::add("connection", "info", __('Recherche LDAP (', __FILE__) . $_login . ')');
-                if ($result) {
-                    $entries = ldap_get_entries($ad, $result);
-                    if ($entries['count'] > 0) {
-                        $user = self::byLogin($_login);
-                        if (is_object($user)) {
-                            $user->setPassword($sMdp)
-                                ->setOptions('lastConnection', date('Y-m-d H:i:s'));
-                            $user->save();
-                            return $user;
-                        }
-                        $user = (new user)
-                            ->setLogin($_login)
-                            ->setPassword($sMdp)
-                            ->setOptions('lastConnection', date('Y-m-d H:i:s'));
-                        $user->save();
-                        log::add("connection", "info", __('Utilisateur créé depuis le LDAP : ', __FILE__) . $_login);
-                        nextdom::event('user_connect');
-                        log::add('event', 'info', __('Connexion de l\'utilisateur ', __FILE__) . $_login);
-                        return $user;
-                    } else {
-                        $user = self::byLogin($_login);
-                        if (is_object($user)) {
-                            $user->remove();
-                        }
-                        log::add("connection", "info", __('Utilisateur non autorisé à accéder à NextDom (', __FILE__) . $_login . ')');
-                        return false;
-                    }
-                } else {
-                    $user = self::byLogin($_login);
-                    if (is_object($user)) {
-                        $user->remove();
-                    }
-                    log::add("connection", "info", __('Utilisateur non autorisé à accéder à NextDom (', __FILE__) . $_login . ')');
-                    return false;
-                }
-                return false;
-            } else {
-                log::add("connection", "info", __('Impossible de se connecter au LDAP', __FILE__));
-            }
-        }
-        $user = user::byLoginAndPassword($_login, $sMdp);
-        if (!is_object($user)) {
-            $user = user::byLoginAndPassword($_login, sha1($_mdp));
-            if (is_object($user)) {
-                $user->setPassword($sMdp);
-            }
-        }
-        if (is_object($user)) {
-            $user->setOptions('lastConnection', date('Y-m-d H:i:s'));
-            $user->save();
-            nextdom::event('user_connect');
-            log::add('event', 'info', __('Connexion de l\'utilisateur ', __FILE__) . $_login);
-        }
-        return $user;
+        return UserManager::connect($_login, $_mdp);
     }
 
     public static function connectToLDAP() {
-        $ad = ldap_connect(config::byKey('ldap:host'), config::byKey('ldap:port'));
-        ldap_set_option($ad, LDAP_OPT_PROTOCOL_VERSION, 3);
-        ldap_set_option($ad, LDAP_OPT_REFERRALS, 0);
-        if (ldap_bind($ad, config::byKey('ldap:username'), config::byKey('ldap:password'))) {
-            return $ad;
-        }
-        return false;
+        return UserManager::connectToLDAP();
     }
 
     public static function byLogin($_login) {
-        $values = array(
-            'login' => $_login,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-        FROM user
-        WHERE login=:login';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+        return UserManager::byLogin($_login);
     }
 
     public static function byHash($_hash) {
-        $values = array(
-            'hash' => $_hash,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-        FROM user
-        WHERE hash=:hash';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+        return UserManager::byHash($_hash);
     }
 
     public static function byLoginAndHash($_login, $_hash) {
-        $values = array(
-            'login' => $_login,
-            'hash' => $_hash,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-                FROM user
-                WHERE login=:login
-                AND hash=:hash';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+        return UserManager::byLoginAndHash($_login, $_hash);
     }
 
     public static function byLoginAndPassword($_login, $_password) {
-        $values = array(
-            'login' => $_login,
-            'password' => $_password,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-                FROM user
-                WHERE login=:login
-                AND password=:password';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+        return UserManager::byLoginAndPassword($_login, $_password);
     }
 
-    /**
-     *
-     * @return array de tous les utilisateurs
-     */
     public static function all() {
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-        FROM user';
-        return DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
+        return UserManager::all();
     }
 
     public static function searchByRight($_rights) {
-        $values = array(
-            'rights' => '%"' . $_rights . '":1%',
-            'rights2' => '%"' . $_rights . '":"1"%',
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-        FROM user
-        WHERE rights LIKE :rights
-        OR rights LIKE :rights2';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
+        return UserManager::searchByRight($_rights);
     }
 
     public static function byProfils($_profils, $_enable = false) {
-        $values = array(
-            'profils' => $_profils,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-        FROM user
-        WHERE profils=:profils';
-        if ($_enable) {
-            $sql .= ' AND enable=1';
-        }
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
+        return UserManager::byProfils($_profils, $_enable);
     }
 
     public static function byEnable($_enable) {
-        $values = array(
-            'enable' => $_enable,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-        FROM user
-        WHERE enable=:enable';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
+        return UserManager::byEnable($_enable);
     }
 
     public static function failedLogin() {
-        @session_start();
-        $_SESSION['failed_count'] = (isset($_SESSION['failed_count'])) ? $_SESSION['failed_count'] + 1 : 1;
-        $_SESSION['failed_datetime'] = strtotime('now');
-        @session_write_close();
+        UserManager::failedLogin();
     }
 
     public static function removeBanIp() {
-        $cache = cache::byKey('security::banip');
-        $cache->remove();
+        UserManager::removeBanIp();
     }
 
     public static function isBan() {
-        $ip = getClientIp();
-        if ($ip == '') {
-            return false;
-        }
-        $whiteIps = explode(';', config::byKey('security::whiteips'));
-        if (config::byKey('security::whiteips') != '' && count($whiteIps) > 0) {
-            foreach ($whiteIps as $whiteip) {
-                if (netMatch($whiteip, $ip)) {
-                    return false;
-                }
-            }
-        }
-        $cache = cache::byKey('security::banip');
-        $values = json_decode($cache->getValue('[]'), true);
-        if (!is_array($values)) {
-            $values = array();
-        }
-        $values_tmp = array();
-        if (count($values) > 0) {
-            foreach ($values as $value) {
-                if (config::byKey('security::bantime') >= 0 && $value['datetime'] + config::byKey('security::bantime') < strtotime('now')) {
-                    continue;
-                }
-                $values_tmp[] = $value;
-            }
-        }
-        $values = $values_tmp;
-        if (isset($_SESSION['failed_count']) && $_SESSION['failed_count'] >= config::byKey('security::maxFailedLogin') && (strtotime('now') - config::byKey('security::timeLoginFailed')) < $_SESSION['failed_datetime']) {
-            $values_tmp = array();
-            foreach ($values as $value) {
-                if ($value['ip'] == $ip) {
-                    continue;
-                }
-                $values_tmp[] = $value;
-            }
-            $values = $values_tmp;
-            $values[] = array('datetime' => strtotime('now'), 'ip' => getClientIp());
-            @session_start();
-            $_SESSION['failed_count'] = 0;
-            $_SESSION['failed_datetime'] = -1;
-            @session_write_close();
-        }
-        cache::set('security::banip', json_encode($values));
-        if (!is_array($values)) {
-            $values = array();
-        }
-        if (count($values) == 0) {
-            return false;
-        }
-        foreach ($values as $value) {
-            if ($value['ip'] != $ip) {
-                continue;
-            }
-            if (config::byKey('security::bantime') >= 0 && $value['datetime'] + config::byKey('security::bantime') < strtotime('now')) {
-                continue;
-            }
-            return true;
-        }
-        return false;
+        return UserManager::isBanned();
     }
 
     public static function getAccessKeyForReport() {
-        $user = user::byLogin('internal_report');
-        if (!is_object($user)) {
-            $user = new user();
-            $user->setLogin('internal_report');
-            $google2fa = new Google2FA();
-            $user->setOptions('twoFactorAuthentificationSecret', $google2fa->generateSecretKey());
-            $user->setOptions('twoFactorAuthentification', 1);
-        }
-        $user->setPassword(sha512(config::genKey(255)));
-        $user->setOptions('localOnly', 1);
-        $user->setProfils('admin');
-        $user->setEnable(1);
-        $key = config::genKey();
-        $registerDevice = array(
-            sha512($key) => array(
-                'datetime' => date('Y-m-d H:i:s'),
-                'ip' => '127.0.0.1',
-                'session_id' => 'none',
-            ),
-        );
-        $user->setOptions('registerDevice', $registerDevice);
-        $user->save();
-        return $user->getHash() . '-' . $key;
+        return UserManager::getAccessKeyForReport();
     }
 
     public static function supportAccess($_enable = true) {
-        if ($_enable) {
-            $user = user::byLogin('nextdom_support');
-            if (!is_object($user)) {
-                $user = new user();
-                $user->setLogin('nextdom_support');
-            }
-            $user->setPassword(sha512(config::genKey(255)));
-            $user->setProfils('admin');
-            $user->setEnable(1);
-            $key = config::genKey();
-            $registerDevice = array(
-                sha512($key) => array(
-                    'datetime' => date('Y-m-d H:i:s'),
-                    'ip' => '127.0.0.1',
-                    'session_id' => 'none',
-                ),
-            );
-            $user->setOptions('registerDevice', $registerDevice);
-            $user->save();
-            repo_market::supportAccess(true, $user->getHash() . '-' . $key);
-        } else {
-            $user = user::byLogin('nextdom_support');
-            if (is_object($user)) {
-                $user->remove();
-            }
-            repo_market::supportAccess(false);
-        }
+        UserManager::supportAccess($_enable);
     }
 
     /*     * *********************Méthodes d'instance************************* */

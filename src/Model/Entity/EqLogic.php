@@ -30,6 +30,7 @@ use NextDom\Managers\EventManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\UserManager;
 
 /**
  * Eqlogic
@@ -1050,7 +1051,7 @@ class EqLogic
      */
     public function emptyCacheWidget()
     {
-        $users = \user::all();
+        $users = UserManager::all();
         foreach (array('dashboard', 'mobile', 'mview', 'dview', 'dplan', 'view', 'plan') as $version) {
             $mc = CacheManager::byKey('widgetHtml' . $this->getId() . $version);
             $mc->remove();

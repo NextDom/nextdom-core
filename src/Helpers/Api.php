@@ -18,6 +18,7 @@ namespace NextDom\Helpers;
 
 use NextDom\Enums\ApiModeEnum;
 use NextDom\Managers\ConfigManager;
+use NextDom\Managers\UserManager;
 
 class Api
 {
@@ -110,7 +111,7 @@ class Api
         if ($defaultApiKey != '' && $apikey == $defaultApiKey) {
             return true;
         }
-        $user = \user::byHash($defaultApiKey);
+        $user = UserManager::byHash($defaultApiKey);
         if (is_object($user)) {
             if ($user->getOptions('localOnly', 0) == 1 && !self::apiModeResult('whiteip')) {
                 return false;

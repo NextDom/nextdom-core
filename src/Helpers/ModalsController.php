@@ -44,6 +44,7 @@ use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Managers\UserManager;
 use PragmaRX\Google2FA\Google2FA;
 
 class ModalsController
@@ -1482,7 +1483,7 @@ class ModalsController
         Status::isConnectedAdminOrFail();
 
         $userId = Utils::init('id');
-        $user = \user::byId($userId);
+        $user = UserManager::byId($userId);
 
         if (!is_object($user)) {
             throw new CoreException(__('Impossible de trouver l\'utilisateur : ') . $userId);
