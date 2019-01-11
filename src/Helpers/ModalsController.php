@@ -1077,6 +1077,29 @@ class ModalsController
     }
 
     /**
+     * Render plan 3d header configure modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws CoreException
+     */
+    public static function plan3dHeaderConfigure(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent = [];
+        $plan3dHeader = \plan3dHeader::byId(Utils::init('plan3dHeader_id'));
+        if (!is_object($plan3dHeader)) {
+            throw new CoreException('Impossible de trouver le plan');
+        }
+        Utils::sendVarsToJS(['id' => $plan3dHeader->getId(),
+                             'plan3dHeader' => \utils::o2a($plan3dHeader) ]);
+
+        $render->show('/modals/plan3dHeader.configure.html.twig', $pageContent);
+    }
+
+    /**
      * Render scenario json edit configure modal
      *
      * @param Render $render Render engine
