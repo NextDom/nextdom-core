@@ -27,6 +27,7 @@ use NextDom\Helpers\SessionHelper;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
+use NextDom\Managers\UserManager;
 
 class UsersController extends BaseController
 {
@@ -52,11 +53,11 @@ class UsersController extends BaseController
     {
         $pageContent['userLdapEnabled'] = ConfigManager::byKey('ldap::enable');
         if ($pageContent['userLdapEnabled'] != '1') {
-            $user = \user::byLogin('nextdom_support');
+            $user = UserManager::byLogin('nextdom_support');
             $pageContent['userSupportExists'] = is_object($user);
         }
         $pageContent['userSessionsList'] = SessionHelper::getSessionsList();
-        $pageContent['usersList'] = \user::all();
+        $pageContent['usersList'] = UserManager::all();
         $pageContent['JS_VARS']['ldapEnable'] = $pageContent['userLdapEnabled'];
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/admin/user.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';

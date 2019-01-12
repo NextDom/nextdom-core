@@ -30,6 +30,7 @@ use NextDom\Managers\EventManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\UserManager;
 
 /**
  * Eqlogic
@@ -47,9 +48,9 @@ use NextDom\Managers\ScenarioManager;
  * })
  * ORM\Entity
  */
-class Eqlogic
+class EqLogic
 {
-    const CLASS_NAME = Eqlogic::class;
+    const CLASS_NAME = EqLogic::class;
     const DB_CLASS_NAME = '`eqLogic`';
 
     const UIDDELIMITER = '__';
@@ -730,7 +731,7 @@ class Eqlogic
 
     /**
      * @param $_name
-     * @return eqLogic
+     * @return EqLogic
      * @throws CoreException
      */
     public function copy($_name)
@@ -1050,7 +1051,7 @@ class Eqlogic
      */
     public function emptyCacheWidget()
     {
-        $users = \user::all();
+        $users = UserManager::all();
         foreach (array('dashboard', 'mobile', 'mview', 'dview', 'dplan', 'view', 'plan') as $version) {
             $mc = CacheManager::byKey('widgetHtml' . $this->getId() . $version);
             $mc->remove();
@@ -1604,7 +1605,7 @@ class Eqlogic
         $class = new \ReflectionClass($this->getEqType_name());
         $method_toHtml = $class->getMethod('toHtml');
         $return = array();
-        if ($method_toHtml->class == 'eqLogic') {
+        if ($method_toHtml->class == EqLogic::class) {
             $return['custom'] = true;
         } else {
             $return['custom'] = false;

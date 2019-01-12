@@ -57,8 +57,8 @@ class Status
      */
     public static function initConnectState()
     {
-        self::$connectState      = \isConnect();
-        self::$connectAdminState = \isConnect('admin');
+        self::$connectState      = AuthentificationHelper::isConnected();
+        self::$connectAdminState = AuthentificationHelper::isConnected('admin');
     }
 
     /**

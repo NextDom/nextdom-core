@@ -506,7 +506,7 @@ class PrepareView
     public static function getContentByAjax()
     {
         try {
-            \include_file('core', 'authentification', 'php');
+            AuthentificationHelper::init();
             $page = Utils::init('p');
             $controllerRoute = PagesController::getRoute($page);
             if ($controllerRoute === null) {
@@ -532,7 +532,7 @@ class PrepareView
 
     public static function showModal()
     {
-        \include_file('core', 'authentification', 'php');
+        AuthentificationHelper::init();
         $plugin = Utils::init('plugin', '');
         $modalCode = Utils::init('modal', '');
         // Affichage d'un modal appartenant à un plugin

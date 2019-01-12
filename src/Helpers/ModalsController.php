@@ -35,7 +35,6 @@ namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\UpdateManager;
-
 use NextDom\Controller\Modale;
 
 class ModalsController
