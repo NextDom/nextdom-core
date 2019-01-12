@@ -45,7 +45,7 @@ class ObjectDisplay extends BaseAbstractModale
      *
      * @throws CoreException
      */
-    public function get(Render $render)
+    public function get(Render $render): string
     {
 
         $cmdClass = Utils::init('class');
@@ -87,7 +87,7 @@ class ObjectDisplay extends BaseAbstractModale
                 if (is_array($otherInfoValue)) {
                     $pageContent['otherData'][$otherInfoKey]['type']  = 'json';
                     $pageContent['otherData'][$otherInfoKey]['value'] = json_encode($otherInfoValue);
-                } else if (strpos($otherInfoValue, "\n")) {
+                } elseif (strpos($otherInfoValue, "\n")) {
                     $pageContent['otherData'][$otherInfoKey]['type'] = 'long-text';
                 } else {
                     $pageContent['otherData'][$otherInfoKey]['type'] = 'simple-text';

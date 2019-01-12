@@ -42,7 +42,7 @@ class Plan3dConfigure extends BaseAbstractModale
      *
      * @throws CoreException
      */
-    public function get(Render $render)
+    public function get(Render $render): string
     {
         $pageContent = [];
         $plan3d = \plan3d::byName3dHeaderId(init('name'), init('plan3dHeader_id'));

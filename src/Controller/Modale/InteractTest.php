@@ -41,7 +41,7 @@ class InteractTest extends BaseAbstractModale
      *
      * @throws CoreException
      */
-    public function get(Render $render)
+    public function get(Render $render): string
     {
         return $render->get('/modals/interact.test.html.twig');
     }

@@ -44,7 +44,7 @@ class PluginDaemon extends BaseAbstractModale
      *
      * @throws CoreException
      */
-    public static function get(Render $render)
+    public static function get(Render $render): string
     {
 
         $pluginId = init('plugin_id');

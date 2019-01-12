@@ -41,7 +41,7 @@ class NextdomBenchmark extends BaseAbstractModale
      *
      * @throws CoreException
      */
-    public function get(Render $render)
+    public function get(Render $render): string
     {
 
         $pageContent = [];

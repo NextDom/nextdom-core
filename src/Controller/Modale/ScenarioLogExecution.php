@@ -44,7 +44,7 @@ class ScenarioLogExecution extends BaseAbstractModale
      *
      * @throws CoreException
      */
-    public static function get(Render $render)
+    public function get(Render $render): string
     {
 
         $scenarioId = Utils::init('scenario_id');

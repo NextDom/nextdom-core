@@ -44,11 +44,8 @@ class PlanConfigure extends BaseAbstractModale
      *
      * @throws CoreException
      */
-    public function get(Render $render)
+    public function get(Render $render): string
     {
-        Status::initConnectState();
-        Status::isConnectedAdminOrFail();
-
         $pageContent = [];
         $pageContent['planObject'] = \plan::byId(Utils::init('id'));
         if (!is_object($pageContent['planObject'])) {

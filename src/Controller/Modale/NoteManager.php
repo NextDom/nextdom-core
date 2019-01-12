@@ -42,11 +42,11 @@ class NoteManager extends BaseAbstractModale
      *
      * @throws CoreException
      */
-    public function get(Render $render)
+    public function get(Render $render): string
     {
         $pageContent = [];
         $pageContent['benchmark'] = NextDomHelper::benchmark();
 
-        $render->show('/modals/nextdom.benchmark.html.twig', $pageContent);
+        return $render->get('/modals/nextdom.benchmark.html.twig', $pageContent);
     }
 }

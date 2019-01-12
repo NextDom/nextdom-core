@@ -46,7 +46,7 @@ class ScenarioHumanInsert extends BaseAbstractModale
         $pageContent = [];
         $pageContent['scenarios'] = ScenarioManager::all();
 
-        $render->show('/modals/scenario.human.insert.html.twig', $pageContent);
+        return $render->get('/modals/scenario.human.insert.html.twig', $pageContent);
     }
 
 }

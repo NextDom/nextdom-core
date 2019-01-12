@@ -44,7 +44,7 @@ class ObjectConfigure extends BaseAbstractModale
      *
      * @throws CoreException
      */
-    public function get(Render $render)
+    public function get(Render $render): string
     {
 
         $objectId = Utils::init('object_id');

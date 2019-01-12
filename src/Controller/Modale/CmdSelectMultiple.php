@@ -43,7 +43,7 @@ class CmdSelectMultiple extends BaseAbstractModale
      *
      * @throws CoreException
      */
-    public function get(Render $render)
+    public function get(Render $render): string
     {
 
         $cmdId = Utils::init('cmd_id');

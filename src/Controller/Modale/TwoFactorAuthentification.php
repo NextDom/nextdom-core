@@ -43,7 +43,7 @@ class TwoFactorAuthentification extends BaseAbstractModale
      *
      * @throws CoreException
      */
-    public function get(Render $render)
+    public function get(Render $render): string
     {
         $google2fa = new Google2FA();
         @session_start();

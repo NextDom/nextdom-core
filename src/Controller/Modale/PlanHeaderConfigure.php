@@ -43,7 +43,7 @@ class PlanHeaderConfigure extends BaseAbstractModale
      *
      * @throws CoreException
      */
-    public function get(Render $render)
+    public function get(Render $render): string
     {
 
         $planHeader = \planHeader::byId(Utils::init('planHeader_id'));

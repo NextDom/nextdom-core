@@ -43,7 +43,7 @@ class CmdConfigureHistory extends BaseAbstractModale
      *
      * @throws CoreException
      */
-    public function get(Render $render)
+    public function get(Render $render): string
     {
         $dataCount = ['history' => 0, 'timeline' => 0];
         $listCmd = array();

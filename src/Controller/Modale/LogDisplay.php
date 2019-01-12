@@ -44,7 +44,7 @@ class LogDisplay extends BaseAbstractModale
      *
      * @throws CoreException
      */
-    public function get(Render $render)
+    public function get(Render $render): string
     {
         Utils::sendVarsToJS([
             'realtime_name'      => Utils::init('log', 'event'),

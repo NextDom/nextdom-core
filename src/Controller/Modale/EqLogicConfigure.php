@@ -46,7 +46,7 @@ class EqLogicConfigure extends BaseAbstractModale
      * @throws CoreException
      * @throws \ReflectionException
      */
-    public function get(Render $render)
+    public function get(Render $render): string
     {
 
         $eqLogicId = Utils::init('eqLogic_id');
