@@ -120,40 +120,6 @@ class Utils
     }
 
     /**
-     * Test si l'utilisateur est connecté avec certains droits
-     *
-     * @param string $rights Droits à tester (admin)
-     *
-     * @return boolean True si l'utilisateur est connecté avec les droits demandés
-     */
-    public static function isConnect(string $rights = ''): bool
-    {
-        $rightsKey        = 'isConnect::' . $rights;
-        $isSetSessionUser = isset($_SESSION['user']);
-        $result           = false;
-
-        if ($isSetSessionUser && isset($GLOBALS[$rightsKey]) && $GLOBALS[$rightsKey]) {
-            $result = $GLOBALS[$rightsKey];
-        } else {
-            
-            if (session_status() == PHP_SESSION_DISABLED || !$isSetSessionUser) {
-                $result = false;
-            } elseif ($isSetSessionUser && is_object($_SESSION['user']) && $_SESSION['user']->is_Connected()) {
-                
-                if ($rights !== '') {
-                    if ($_SESSION['user']->getProfils() == $rights) {
-                        $result = true;
-                    }
-                } else {
-                    $result = true;
-                }
-            }
-            $GLOBALS[$rightsKey] = $result;
-        }
-        return $result;
-    }
-
-    /**
      * Obtenir une variable passée en paramètre
      *
      * @param string $name Nom de la variable
