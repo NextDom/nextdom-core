@@ -259,7 +259,7 @@ class Cron
 
     /**
      * 
-     * @param string | json $option
+     * @param mixed $option
      * @return $this
      */
     public function setOption($option)

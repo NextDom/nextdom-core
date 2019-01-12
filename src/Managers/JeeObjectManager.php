@@ -300,6 +300,7 @@ class JeeObjectManager
 				}
 			}
 		}
+		$events = [];
 		if (count($global) > 0) {
 			CacheManager::set('globalSummaryHtmldesktop', '');
 			CacheManager::set('globalSummaryHtmlmobile', '');

@@ -17,6 +17,9 @@
  */
 
 /* * ***************************Includes********************************* */
+
+use NextDom\Helpers\TranslateHelper;
+
 require_once dirname(__FILE__) . '/../php/core.inc.php';
 
 class translate
@@ -25,22 +28,22 @@ class translate
 
     public static function getConfig($_key, $_default = '')
     {
-        return \NextDom\Helpers\Translate::getConfig($_key, $_default);
+        return TranslateHelper::getConfig($_key, $_default);
     }
 
     public static function getTranslation()
     {
-        return \NextDom\Helpers\Translate::getTranslation();
+        return TranslateHelper::getTranslation();
     }
 
     public static function sentence($_content, $_name, $_backslash = false)
     {
-        return \NextDom\Helpers\Translate::sentence($_content, $_name, $_backslash);
+        return TranslateHelper::sentence($_content, $_name, $_backslash);
     }
 
     public static function exec($_content, $_name = '', $_backslash = false)
     {
-        return \NextDom\Helpers\Translate::exec($_content, $_name, $_backslash);
+        return TranslateHelper::exec($_content, $_name, $_backslash);
     }
 
     public static function getPathTranslationFile($_language)
@@ -50,26 +53,26 @@ class translate
 
     public static function loadTranslation()
     {
-        return \NextDom\Helpers\Translate::loadTranslation();
+        return TranslateHelper::loadTranslation();
     }
 
     public static function saveTranslation()
     {
-        \NextDom\Helpers\Translate::saveTranslation();
+        TranslateHelper::saveTranslation();
     }
 
     public static function getLanguage()
     {
-        return \NextDom\Helpers\Translate::getLanguage();
+        return TranslateHelper::getLanguage();
     }
 
     public static function setLanguage($_langage)
     {
-        \NextDom\Helpers\Translate::setLanguage($_langage);
+        TranslateHelper::setLanguage($_langage);
     }
 }
 
 function __(string $_content, string $_name = '', bool $_backslash = false): string
 {
-    return \NextDom\Helpers\Translate::sentence($_content, $_name, $_backslash);
+    return TranslateHelper::sentence($_content, $_name, $_backslash);
 }

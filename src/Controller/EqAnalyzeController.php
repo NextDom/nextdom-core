@@ -101,6 +101,7 @@ class EqAnalyzeController extends BaseController
                 $actionCmdData = [];
                 $actionCmdData['cmd'] = $cmd;
 
+                $cmdGetConfigurationNextdomPreExecCmd = [];
                 if (count($cmd->getConfiguration('nextdomPreExecCmd', [])) > 0) {
                     $actionCmdData['preExecCmds'] = [];
 

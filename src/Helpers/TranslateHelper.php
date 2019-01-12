@@ -39,7 +39,7 @@ use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 use NextDom\Managers\ConfigManager;
 
-class Translate
+class TranslateHelper
 {
 
     /**

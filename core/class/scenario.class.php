@@ -248,7 +248,7 @@ class scenario
 
     public static function shareOnMarket(&$market)
     {
-        return ScenarioManager::shareOnMarket($market, __FILE);
+        return ScenarioManager::shareOnMarket($market, __FILE__);
     }
 
     /**

@@ -730,7 +730,8 @@ class CmdManager
                 continue;
             }
             $mc = CacheManager::byKey('cmdCacheAttr' . $cmd_id);
-            if (\utils::getJsonAttr($mc->getValue(), 'value', null) !== null) {
+            $cmdCacheAttrValue = $mc->getValue();
+            if (\utils::getJsonAttr($cmdCacheAttrValue, 'value', null) !== null) {
                 $cmdCacheAttrValue = $mc->getValue();
                 $collectDate = \utils::getJsonAttr($cmdCacheAttrValue, 'collectDate', date('Y-m-d H:i:s'));
                 $valueDate = \utils::getJsonAttr($cmdCacheAttrValue, 'valueDate', date('Y-m-d H:i:s'));
