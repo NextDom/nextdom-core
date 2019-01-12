@@ -26,6 +26,9 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\NextDomHelper;
+use NextDom\Managers\CmdManager;
+use NextDom\Helpers\Utils;
 
 class CmdConfigureModale extends BaseAbstractModale
 {
