@@ -394,14 +394,17 @@ class cmd {
     public function execCmd($_options = null, $_sendNodeJsEvent = false, $_quote = false) {
         if ($this->getType() == 'info') {
             $state = $this->getCache(array('collectDate', 'valueDate', 'value'));
-            if (is_array($state)) {
+            if(isset($state['collectDate'])){
                 $this->setCollectDate($state['collectDate']);
+            }else{
+                $this->setCollectDate(date('Y-m-d H:i:s'));
+            }
+            if(isset($state['valueDate'])){
                 $this->setValueDate($state['valueDate']);
-                return $state['value'];
+            }else{
+                $this->setValueDate($this->getCollectDate());
             }
-            else {
-                return null;
-            }
+            return $state['value'];
         }
         $eqLogic = $this->getEqLogic();
         if ($this->getType() != 'info' && (!is_object($eqLogic) || $eqLogic->getIsEnable() != 1)) {
