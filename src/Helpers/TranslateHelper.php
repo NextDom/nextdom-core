@@ -123,8 +123,17 @@ class TranslateHelper
             self::$translator = new Translator($language,null,NEXTDOM_ROOT.'/var/cache/i18n');
             self::$translator->addLoader('yaml', new YamlFileLoader());
             self::$translator->addResource('yaml', $filename, $language);
-            foreach (PluginManager::listPlugin(false, false, false) as $plugin) {
-                $result = array_merge($result, $plugin->getTranslation($language));
+            $pluginsDirList = scandir(NEXTDOM_ROOT . '/plugins');
+            foreach ($pluginsDirList as $pluginDir) {
+                if ($pluginDir !== '.' && $pluginDir !== '..' && is_dir(NEXTDOM_ROOT . '/plugins/' . $pluginDir)) {
+                    $pluginTranslationFile = NEXTDOM_ROOT . '/plugins/' . $pluginDir . '/core/i18n/' . $language . '.json';
+                    if (file_exists($pluginTranslationFile)) {
+                        $pluginTranslationFileContent = file_get_contents($pluginTranslationFile);
+                        if (Utils::isJson($pluginTranslationFileContent)) {
+                            $result = array_merge($result, json_decode($pluginTranslationFileContent, true));
+                        }
+                    }
+                }
             }
         }
         return $result;
