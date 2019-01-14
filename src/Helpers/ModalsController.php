@@ -35,60 +35,60 @@ namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\UpdateManager;
-use NextDom\Controller\Modale;
+use NextDom\Controller\Modal;
 
 class ModalsController
 {
     const routesList = [
-        'about'                      => Modale\AboutModale::class,
-        'action.insert'              => Modale\ActionInsertModale::class,
-        'cmd.configure'              => Modale\CmdConfigureModale::class,
-        'cmd.configureHistory'       => Modale\CmdConfigureHistory::class,
-        'cmd.graph.select'           => Modale\CmdGraphSelect::class,
-        'cmd.history'                => Modale\CmdHistory::class,
-        'cmd.human.insert'           => Modale\CmdHumanInsert::class,
-        'cmd.selectMultiple'         => Modale\CmdSelectMultiple::class,
-        'cron.human.insert'          => Modale\CronHumanInsert::class,
-        'dataStore.human.insert'     => Modale\DataStoreHumanInsert::class,
-        'dataStore.management'       => Modale\DataStoreManageme::class,
-        'eqLogic.configure'          => Modale\EqLogicConfigure::class,
-        'eqLogic.displayWidget'      => Modals\EqLogicDisplayWidget::class,
-        'eqLogic.human.insert'       => Modale\EqLogicHumanInsert::class,
-        'expression.test'            => Modale\ExpressionTest::class,
-        'graph.link'                 => Modale\GraphLink::class,
-        'history.calcul'             => Modale\HistoryCalcul::class,
-        'icon.selector'              => Modale\IconSelector::class,
-        'interact.query.display'     => Modale\InteractQueryDisplay::class,
-        'interact.test'              => Modale\InteractTest::class,
-        'log.display'                => Modale\LogDisplay::class,
-        'nextdom.benchmark'          => Modale\NextdomBenchmark::class,
-        'node.manager'               => Modale\NoteManager::class,
-        'object.configure'           => Modale\ObjectConfigure::class,
-        'object.display'             => Modale\ObjectDisplay::class,
-        'object.summary'             => Modale\ObjectSummary::class,
-        'plan.configure'             => Modale\PlanConfigure::class,
-        'planHeader.configure'       => Modale\PlanHeaderConfigure::class,
-        'plan3d.configure'           => Modale\Plan3dConfigure::class,
-        'plan3dHeader.configure'     => Modale\Plan3dHeaderConfigure::class,
-        'plugin.deamon'              => Modale\PluginDaemon::class,
-        'plugin.dependancy'          => Modale\PluginDependency::class,
-        'plugin.Market'              => Modale\PluginMarket::class,
-        'remove.history'             => Modale\RemoveHistory::class,
-        'report.bug'                 => Modale\ReportBug::class,
-        'scenario.export'            => Modale\ScenarioExport::class,
-        'scenario.human.insert'      => Modale\ScenarioHumanInsert::class,
-        'scenario.jsonEdit'          => Modale\ScenarioJsonEdit::class,
-        'scenario.log.execution'     => Modale\ScenarioLogExecution::class,
-        'scenario.summary'           => Modale\ScenarioSummary::class,
-        'scenario.template'          => Modale\ScenarioTemplate::class,
-        'twoFactor.authentification' => Modale\TwoFactorAuthentification::class ,
-        'update.add'                 => Modale\UpdateAdd::class,
-        'update.display'             => Modale\UpdateDisplay::class,
-        'update.list'                => Modale\UpdateList::class,
-        'update.send'                => Modale\UpdateSend::class,
-        'user.rights'                => Modale\UserRights::class,
-        'view.configure'             => Modale\ViewConfigure,
-        'welcome'                    => Modale\WelcomeModale::class,
+        'about'                      => Modal\About::class,
+        'action.insert'              => Modal\ActionInsert::class,
+        'cmd.configure'              => Modal\CmdConfigure::class,
+        'cmd.configureHistory'       => Modal\CmdConfigureHistory::class,
+        'cmd.graph.select'           => Modal\CmdGraphSelect::class,
+        'cmd.history'                => Modal\CmdHistory::class,
+        'cmd.human.insert'           => Modal\CmdHumanInsert::class,
+        'cmd.selectMultiple'         => Modal\CmdSelectMultiple::class,
+        'cron.human.insert'          => Modal\CronHumanInsert::class,
+        'dataStore.human.insert'     => Modal\DataStoreHumanInsert::class,
+        'dataStore.management'       => Modal\DataStoreManagement::class,
+        'eqLogic.configure'          => Modal\EqLogicConfigure::class,
+        'eqLogic.displayWidget'      => Modal\EqLogicDisplayWidget::class,
+        'eqLogic.human.insert'       => Modal\EqLogicHumanInsert::class,
+        'expression.test'            => Modal\ExpressionTest::class,
+        'graph.link'                 => Modal\GraphLink::class,
+        'history.calcul'             => Modal\HistoryCalcul::class,
+        'icon.selector'              => Modal\IconSelector::class,
+        'interact.query.display'     => Modal\InteractQueryDisplay::class,
+        'interact.test'              => Modal\InteractTest::class,
+        'log.display'                => Modal\LogDisplay::class,
+        'nextdom.benchmark'          => Modal\NextdomBenchmark::class,
+        'node.manager'               => Modal\NoteManager::class,
+        'object.configure'           => Modal\ObjectConfigure::class,
+        'object.display'             => Modal\ObjectDisplay::class,
+        'object.summary'             => Modal\ObjectSummary::class,
+        'plan.configure'             => Modal\PlanConfigure::class,
+        'planHeader.configure'       => Modal\PlanHeaderConfigure::class,
+        'plan3d.configure'           => Modal\Plan3dConfigure::class,
+        'plan3dHeader.configure'     => Modal\Plan3dHeaderConfigure::class,
+        'plugin.deamon'              => Modal\PluginDaemon::class,
+        'plugin.dependancy'          => Modal\PluginDependency::class,
+        'plugin.Market'              => Modal\PluginMarket::class,
+        'remove.history'             => Modal\RemoveHistory::class,
+        'report.bug'                 => Modal\ReportBug::class,
+        'scenario.export'            => Modal\ScenarioExport::class,
+        'scenario.human.insert'      => Modal\ScenarioHumanInsert::class,
+        'scenario.jsonEdit'          => Modal\ScenarioJsonEdit::class,
+        'scenario.log.execution'     => Modal\ScenarioLogExecution::class,
+        'scenario.summary'           => Modal\ScenarioSummary::class,
+        'scenario.template'          => Modal\ScenarioTemplate::class,
+        'twoFactor.authentification' => Modal\TwoFactorAuthentification::class,
+        'update.add'                 => Modal\UpdateAdd::class,
+        'update.display'             => Modal\UpdateDisplay::class,
+        'update.list'                => Modal\UpdateList::class,
+        'update.send'                => Modal\UpdateSend::class,
+        'user.rights'                => Modal\UserRights::class,
+        'view.configure'             => Modal\ViewConfigure::class,
+        'welcome'                    => Modal\Welcome::class,
     ];
 
     /**
@@ -106,25 +106,4 @@ class ModalsController
         }
         return $route;
     }
- 
-    /**
-     * Show repo modal from code
-     *
-     * @param string $type Modal type
-     *
-     * @throws CoreException If repo is disabled
-     */
-    public static function showRepoModal($type)
-    {
-        $repoId = Utils::init('repo', 'market');
-        $repo = UpdateManager::repoById($repoId);
-        if ($repo['enable'] == 0) {
-            throw new CoreException(__('Le dépôt est inactif : ') . $repoId);
-        }
-        $repoDisplayFile = NEXTDOM_ROOT . '/core/repo/' . $repoId . '.display.repo.php';
-        if (file_exists($repoDisplayFile)) {
-            \include_file('core', $repoId . '.' . $type, 'repo', '', true);
-        }
-    }
-
 }
