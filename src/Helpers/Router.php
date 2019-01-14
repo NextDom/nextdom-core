@@ -34,8 +34,6 @@
 
 namespace NextDom\Helpers;
 
-use NextDom\Helpers\Status;
-use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 
 /**

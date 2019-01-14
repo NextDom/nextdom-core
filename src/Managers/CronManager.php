@@ -34,7 +34,6 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Model\Entity\Cron;
@@ -142,7 +141,7 @@ class CronManager {
                 if (!$cronExpression->isDue()) {
                     $cronExpression->getNextRunDate();
                 }
-            } catch (CoreException $ex) {
+            } catch (\Exception $ex) {
                 $cronExpression->remove();
             }
         }

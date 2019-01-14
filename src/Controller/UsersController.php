@@ -25,7 +25,6 @@ namespace NextDom\Controller;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\SessionHelper;
 use NextDom\Helpers\Status;
-use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 

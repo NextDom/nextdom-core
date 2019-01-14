@@ -39,6 +39,8 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class Utils
 {
+    private static $properties = array();
+
     /**
      * Ajouter une variable Javascript au code HTML
      *
@@ -148,7 +150,7 @@ class Utils
      *
      * @return string Expression transformée
      */
-    public static function transformExpressionForEvaluation(string $expression): string
+    public static function transformExpressionForEvaluation($expression)
     {
 
         $result = $expression;
@@ -776,4 +778,150 @@ class Utils
             throw new CoreException(__('Cette action n\'est pas autorisée en mode démo'));
         }
     }
+
+    public static function o2a($_object, $_noToArray = false) {
+        if (is_array($_object)) {
+            $return = array();
+            foreach ($_object as $object) {
+                $return[] = self::o2a($object);
+            }
+            return $return;
+        }
+        $array = array();
+        if (!is_object($_object)) {
+            return $array;
+        }
+        if (!$_noToArray && method_exists($_object, 'toArray')) {
+            return $_object->toArray();
+        }
+        $class = get_class($_object);
+        if (!isset(self::$properties[$class])) {
+            self::$properties[$class] = (new \ReflectionClass($class))->getProperties();
+        }
+        foreach (self::$properties[$class] as $property) {
+            $name = $property->getName();
+            if ('_' !== $name[0]) {
+                $method = 'get' . ucfirst($name);
+                if (method_exists($_object, $method)) {
+                    $value = $_object->$method();
+                } else {
+                    $property->setAccessible(true);
+                    $value = $property->getValue($_object);
+                    $property->setAccessible(false);
+                }
+                $array[$name] = is_json($value, $value);
+            }
+        }
+        return $array;
+    }
+
+    public static function a2o(&$_object, $_data) {
+        if (is_array($_data)) {
+            foreach ($_data as $key => $value) {
+                $method = 'set' . ucfirst($key);
+                if (method_exists($_object, $method)) {
+                    $function = new \ReflectionMethod($_object, $method);
+                    $value = is_json($value, $value);
+                    if (is_array($value)) {
+                        if ($function->getNumberOfRequiredParameters() == 2) {
+                            foreach ($value as $arrayKey => $arrayValue) {
+                                if (is_array($arrayValue)) {
+                                    if ($function->getNumberOfRequiredParameters() == 3) {
+                                        foreach ($arrayValue as $arrayArraykey => $arrayArrayvalue) {
+                                            $_object->$method($arrayKey, $arrayArraykey, $arrayArrayvalue);
+                                        }
+                                        continue;
+                                    }
+                                }
+                                $_object->$method($arrayKey, $arrayValue);
+                            }
+                        } else {
+                            $_object->$method(json_encode($value, JSON_UNESCAPED_UNICODE));
+                        }
+                    } else {
+                        if ($function->getNumberOfRequiredParameters() < 2) {
+                            $_object->$method($value);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static function processJsonObject($_class, $_ajaxList, $_dbList = null) {
+        if (!is_array($_ajaxList)) {
+            if (is_json($_ajaxList)) {
+                $_ajaxList = json_decode($_ajaxList, true);
+            } else {
+                throw new CoreException('Invalid json : ' . print_r($_ajaxList, true));
+            }
+        }
+        if (!is_array($_dbList)) {
+            if (!class_exists($_class)) {
+                throw new CoreException('Invalid class : ' . $_class);
+            }
+            $_dbList = $_class::all();
+        }
+
+        $enableList = array();
+        foreach ($_ajaxList as $ajaxObject) {
+            $object = $_class::byId($ajaxObject['id']);
+            if (!is_object($object)) {
+                $object = new $_class();
+            }
+            self::a2o($object, $ajaxObject);
+            $object->save();
+            $enableList[$object->getId()] = true;
+        }
+        foreach ($_dbList as $dbObject) {
+            if (!isset($enableList[$dbObject->getId()])) {
+                $dbObject->remove();
+            }
+        }
+    }
+
+    public static function setJsonAttr($_attr, $_key, $_value = null) {
+        if ($_value === null && !is_array($_key)) {
+            if (!is_array($_attr)) {
+                $_attr = is_json($_attr, array());
+            }
+            unset($_attr[$_key]);
+        } else {
+            if (!is_array($_attr)) {
+                $_attr = is_json($_attr, array());
+            }
+            if (is_array($_key)) {
+                $_attr = array_merge($_attr, $_key);
+            } else {
+                $_attr[$_key] = $_value;
+            }
+        }
+        return $_attr;
+    }
+
+    public static function getJsonAttr(&$_attr, $_key = '', $_default = '') {
+        if (is_array($_attr)) {
+            if ($_key == '') {
+                return $_attr;
+            }
+        } else {
+            if ($_key == '') {
+                $_attr = is_json($_attr, array());
+                return $_attr;
+            }
+            if ($_attr === '') {
+                return $_default;
+            }
+            $_attr = json_decode($_attr, true);
+        }
+        if (is_array($_key)) {
+            $return = array();
+            foreach ($_key as $key) {
+                $return[$key] = (isset($_attr[$key]) && $_attr[$key] !== '') ? $_attr[$key] : $_default;
+            }
+            return $return;
+        }
+        return (isset($_attr[$_key]) && $_attr[$_key] !== '') ? $_attr[$_key] : $_default;
+    }
+
 }

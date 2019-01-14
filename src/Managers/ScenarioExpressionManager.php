@@ -36,10 +36,7 @@ namespace NextDom\Managers;
 use NextDom\Helpers\DateHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\Utils;
-use NextDom\Managers\CmdManager;
-use NextDom\Managers\EqLogicManager;
 use NextDom\Helpers\NextDomHelper;
-use NextDom\Managers\ConfigManager;
 
 class ScenarioExpressionManager
 {
@@ -991,7 +988,7 @@ class ScenarioExpressionManager
     /**
      * Obtenir l'interval de temps depuis lequel le scénario s'est exécuté
      *
-     * @param $scenarioId Identifiant du scénario
+     * @param string $scenarioId Identifiant du scénario
      * @return false|int
      * @throws \Exception
      */

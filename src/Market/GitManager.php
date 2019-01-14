@@ -20,8 +20,6 @@
 namespace NextDom\Market;
 
 use NextDom\Helpers\DataStorage;
-use NextDom\Market\DownloadManager;
-use NextDom\Market\MarketItem;
 
 /**
  * Gestion des informations liées à GitHub

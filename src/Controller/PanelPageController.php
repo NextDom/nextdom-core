@@ -22,7 +22,6 @@
 
 namespace NextDom\Controller;
 
-use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;

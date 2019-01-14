@@ -36,8 +36,6 @@ namespace NextDom\Managers;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\FileSystemHelper;
-use NextDom\Helpers\Utils;
-use NextDom\Managers\ConfigManager;
 
 require_once NEXTDOM_ROOT.'/core/class/cache.class.php';
 

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
-require_once __DIR__ . '/utils.inc.php';
+require_once __DIR__ . '/core.inc.php';
 
 if (!defined('NEXTDOM_ROOT')) {
     define ('NEXTDOM_ROOT', realpath(__DIR__.'/../..'));

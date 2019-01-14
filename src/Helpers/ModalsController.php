@@ -106,4 +106,5 @@ class ModalsController
         }
         return $route;
     }
+
 }

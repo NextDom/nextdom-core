@@ -34,6 +34,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
 use PragmaRX\Google2FA\Google2FA;
 
 class UserManager
@@ -43,26 +44,16 @@ class UserManager
 
     /*     * ***********************Méthodes statiques*************************** */
 
-    public static function byId($_id)
-    {
-        $values = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE id=:id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
     /**
      * Retourne un object utilisateur (si les information de connection sont valide)
      * @param string $_login nom d'utilisateur
      * @param string $_mdp motsz de passe en sha512
      * @return \user|bool object user
+     * @throws \Exception
      */
     public static function connect($_login, $_mdp)
     {
-        $sMdp = (!is_sha512($_mdp)) ? sha512($_mdp) : $_mdp;
+        $sMdp = (!Utils::isSha512($_mdp)) ? Utils::sha512($_mdp) : $_mdp;
         if (ConfigManager::byKey('ldap:enable') == '1' && function_exists('ldap_connect')) {
             \log::add("connection", "debug", __('Authentification par LDAP', __FILE__));
             $ad = self::connectToLDAP();
@@ -133,6 +124,22 @@ class UserManager
         return $user;
     }
 
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \Exception
+     */
+    public static function byId($_id)
+    {
+        $values = array(
+            'id' => $_id,
+        );
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        FROM ' . self::DB_CLASS_NAME . '
+        WHERE id=:id';
+        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+    }
+
     public static function connectToLDAP()
     {
         $ad = ldap_connect(ConfigManager::byKey('ldap:host'), ConfigManager::byKey('ldap:port'));
@@ -155,6 +162,11 @@ class UserManager
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_hash
+     * @return \user
+     * @throws \Exception
+     */
     public static function byHash($_hash)
     {
         $values = array(

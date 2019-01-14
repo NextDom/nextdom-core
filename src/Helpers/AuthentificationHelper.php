@@ -35,6 +35,7 @@ namespace NextDom\Helpers;
 
 use NextDom\Managers\AjaxManager;
 use NextDom\Managers\ConfigManager;
+use NextDom\Managers\UserManager;
 
 class AuthentificationHelper
 {
@@ -59,7 +60,7 @@ class AuthentificationHelper
             setcookie('sess_id', session_id(), time() + 24 * 3600, "/", '', false, true);
         }
         @session_write_close();
-        if (\user::isBan()) {
+        if (UserManager::isBanned()) {
             header("Statut: 403 Forbidden");
             header('HTTP/1.1 403 Forbidden');
             $_SERVER['REDIRECT_STATUS'] = 403;
@@ -82,7 +83,7 @@ class AuthentificationHelper
         }
 
         if (!isConnect() && $configs['sso:allowRemoteUser'] == 1) {
-            $user = \user::byLogin($_SERVER['REMOTE_USER']);
+            $user = UserManager::byLogin($_SERVER['REMOTE_USER']);
             if (is_object($user) && $user->getEnable() == 1) {
                 @session_start();
                 $_SESSION['user'] = $user;
@@ -103,21 +104,21 @@ class AuthentificationHelper
     }
 
     public static function login($_login, $_password, $_twoFactor = null) {
-        $user = \user::connect($_login, $_password);
+        $user = UserManager::connect($_login, $_password);
         if (!is_object($user) || $user->getEnable() == 0) {
-            \user::failedLogin();
+            UserManager::failedLogin();
             sleep(5);
             return false;
         }
-        if ($user->getOptions('localOnly', 0) == 1 && network::getUserLocation() != 'internal') {
-            \user::failedLogin();
+        if ($user->getOptions('localOnly', 0) == 1 && NetworkHelper::getUserLocation() != 'internal') {
+            UserManager::failedLogin();
             sleep(5);
             return false;
         }
         $sMdp = (!is_sha512($_password)) ? sha512($_password) : $_password;
         if (NetworkHelper::getUserLocation() != 'internal' && $user->getOptions('twoFactorAuthentification', 0) == 1 && $user->getOptions('twoFactorAuthentificationSecret') != '') {
             if (trim($_twoFactor) == '' || $_twoFactor === null || !$user->validateTwoFactorCode($_twoFactor)) {
-                \user::failedLogin();
+                UserManager::failedLogin();
                 sleep(5);
                 return false;
             }
@@ -131,25 +132,25 @@ class AuthentificationHelper
 
     public static function loginByHash($_key) {
         $key = explode('-', $_key);
-        $user = user::byHash($key[0]);
+        $user = UserManager::byHash($key[0]);
         if (!is_object($user) || $user->getEnable() == 0) {
-            \user::failedLogin();
+            UserManager::failedLogin();
             sleep(5);
             return false;
         }
         if ($user->getOptions('localOnly', 0) == 1 && NetworkHelper::getUserLocation() != 'internal') {
-            \user::failedLogin();
+            UserManager::failedLogin();
             sleep(5);
             return false;
         }
         if (!isset($key[1])) {
-            \user::failedLogin();
+            UserManager::failedLogin();
             sleep(5);
             return false;
         }
         $registerDevice = $user->getOptions('registerDevice', array());
         if (!isset($registerDevice[sha512($key[1])])) {
-            \user::failedLogin();
+            UserManager::failedLogin();
             sleep(5);
             return false;
         }

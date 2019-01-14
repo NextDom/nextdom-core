@@ -88,7 +88,7 @@ class SessionHelper
                 $result[$session_id]['user_id'] = $data_session['user']->getId();
                 $result[$session_id]['ip'] = (isset($data_session['ip'])) ? $data_session['ip'] : '';
             }
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
 
         }
         return $result;

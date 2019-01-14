@@ -36,7 +36,7 @@ namespace NextDom\Managers;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
-use NextDom\Managers\ConfigManager;
+use NextDom\Model\Entity\EqLogic;
 
 class CmdManager
 {
@@ -46,8 +46,8 @@ class CmdManager
     /**
      * TODO: ???, repasser en privé
      *
-     * @param $inputs
-     * @param null $eqLogic
+     * @param \cmd $inputs
+     * @param EqLogic $eqLogic
      * @return array|mixed
      */
     public static function cast($inputs, $eqLogic = null)
@@ -576,7 +576,7 @@ class CmdManager
     /**
      * TODO: ???
      *
-     * @param $input
+     * @param \cmd $input
      * @return array|mixed
      * @throws \ReflectionException
      */
@@ -730,11 +730,12 @@ class CmdManager
                 continue;
             }
             $mc = CacheManager::byKey('cmdCacheAttr' . $cmd_id);
-            if (\utils::getJsonAttr($mc->getValue(), 'value', null) !== null) {
+            $cmdCacheAttrValue = $mc->getValue();
+            if (Utils::getJsonAttr($cmdCacheAttrValue, 'value', null) !== null) {
                 $cmdCacheAttrValue = $mc->getValue();
-                $collectDate = \utils::getJsonAttr($cmdCacheAttrValue, 'collectDate', date('Y-m-d H:i:s'));
-                $valueDate = \utils::getJsonAttr($cmdCacheAttrValue, 'valueDate', date('Y-m-d H:i:s'));
-                $cmd_value = \utils::getJsonAttr($cmdCacheAttrValue, 'value', '');
+                $collectDate = Utils::getJsonAttr($cmdCacheAttrValue, 'collectDate', date('Y-m-d H:i:s'));
+                $valueDate = Utils::getJsonAttr($cmdCacheAttrValue, 'valueDate', date('Y-m-d H:i:s'));
+                $cmd_value = Utils::getJsonAttr($cmdCacheAttrValue, 'value', '');
             } else {
                 $cmd = self::byId($cmd_id);
                 if (!is_object($cmd) || $cmd->getType() != 'info') {

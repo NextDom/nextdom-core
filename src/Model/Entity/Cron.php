@@ -20,6 +20,7 @@ namespace NextDom\Model\Entity;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\SystemHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\CronManager;
@@ -259,7 +260,7 @@ class Cron
 
     /**
      * 
-     * @param string | json $option
+     * @param mixed $option
      * @return $this
      */
     public function setOption($option)
@@ -386,6 +387,7 @@ class Cron
      * Check if this cron is currently running
      *
      * @return boolean
+     * @throws \Exception
      */
     public function running(): bool
     {
@@ -404,6 +406,7 @@ class Cron
      * Refresh DB state of this cron
      *
      * @return boolean
+     * @throws \Exception
      */
     public function refresh(): bool
     {
@@ -491,19 +494,19 @@ class Cron
                 if ($c->isDue()) {
                     return true;
                 }
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 
             }
             try {
                 $prev = $c->getPreviousRunDate()->getTimestamp();
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 return false;
             }
             $diff = abs((strtotime('now') - $prev) / 60);
             if (strtotime($this->getLastRun()) < $prev && ($diff <= ConfigManager::byKey('maxCatchAllow') || ConfigManager::byKey('maxCatchAllow') == -1)) {
                 return true;
             }
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             \log::add('cron', 'debug', 'Error on isDue : ' . $e->getMessage() . ', cron : ' . $this->getSchedule());
         }
         return false;
@@ -519,7 +522,7 @@ class Cron
         try {
             $cronExpression = new \Cron\CronExpression($this->getSchedule(), new \Cron\FieldFactory);
             return $cronExpression->getNextRunDate()->format('Y-m-d H:i:s');
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             
         }
         return false;
@@ -545,7 +548,7 @@ class Cron
      */
     public function toArray()
     {
-        $return            = \utils::o2a($this, true);
+        $return            = Utils::o2a($this, true);
         $return['state']   = $this->getState();
         $return['lastRun'] = $this->getLastRun();
         $return['pid']     = $this->getPID();
@@ -632,7 +635,7 @@ class Cron
     public function getCache($cacheKey = '', $cacheValue = '')
     {
         $cache = CacheManager::byKey('cronCacheAttr' . $this->getId())->getValue();
-        return \utils::getJsonAttr($cache, $cacheKey, $cacheValue);
+        return Utils::getJsonAttr($cache, $cacheKey, $cacheValue);
     }
 
     /**
@@ -644,7 +647,7 @@ class Cron
      */
     public function setCache($cacheKey, $cacheValue = null)
     {
-        CacheManager::set('cronCacheAttr' . $this->getId(), \utils::setJsonAttr(CacheManager::byKey('cronCacheAttr' . $this->getId())->getValue(), $cacheKey, $cacheValue));
+        CacheManager::set('cronCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('cronCacheAttr' . $this->getId())->getValue(), $cacheKey, $cacheValue));
     }
 
 }

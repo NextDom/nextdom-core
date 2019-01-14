@@ -294,7 +294,7 @@ class NetworkHelper
                 $update->doUpdate();
                 $plugin = PluginManager::byId('openvpn');
             }
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             $update = \update::byLogicalId('openvpn');
             if (!is_object($update)) {
                 $update = new \update();
@@ -370,7 +370,7 @@ class NetworkHelper
                     }
                     try {
                         shell_exec(SystemHelper::getCmdSudo() . 'iptables -A INPUT -i ' . $interface . ' -p tcp  --destination-port ' . $port . ' -j ACCEPT');
-                    } catch (CoreException $e) {
+                    } catch (\Exception $e) {
 
                     }
                 }
@@ -388,7 +388,7 @@ class NetworkHelper
         }
         try {
             $openvpn = self::dnsCreate();
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             return false;
         }
         $cmd = $openvpn->getCmd('info', 'state');

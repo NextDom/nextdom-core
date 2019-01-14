@@ -33,11 +33,7 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Managers\CmdManager;
-use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\EventManager;
 use NextDom\Helpers\NextDomHelper;
-use NextDom\Managers\ConfigManager;
 
 class JeeObjectManager
 {
@@ -175,17 +171,17 @@ class JeeObjectManager
         $result = array();
         foreach (self::all(true) as $object) {
             if (!isset($restrict['object']) || !is_array($restrict['object']) || isset($restrict['object'][$object->getId()])) {
-                $object_return = \utils::o2a($object);
+                $object_return = Utils::o2a($object);
                 $object_return['eqLogics'] = array();
                 $objectGetEqLogic = $object->getEqLogic(true, true);
                 foreach ($objectGetEqLogic as $eqLogic) {
                     if (!isset($restrict['eqLogic']) || !is_array($restrict['eqLogic']) || isset($restrict['eqLogic'][$eqLogic->getId()])) {
-                        $eqLogic_return = \utils::o2a($eqLogic);
+                        $eqLogic_return = Utils::o2a($eqLogic);
                         $eqLogic_return['cmds'] = [];
                         $eqLogicGetCmd = $eqLogic->getCmd();
                         foreach ($eqLogicGetCmd as $cmd) {
                             if (!isset($restrict['cmd']) || !is_array($restrict['cmd']) || isset($restrict['cmd'][$cmd->getId()])) {
-                                $cmd_return = \utils::o2a($cmd);
+                                $cmd_return = Utils::o2a($cmd);
                                 if ($cmd->getType() == 'info') {
                                     $cmd_return['state'] = $cmd->execCmd();
                                 }
@@ -300,6 +296,7 @@ class JeeObjectManager
 				}
 			}
 		}
+		$events = [];
 		if (count($global) > 0) {
 			CacheManager::set('globalSummaryHtmldesktop', '');
 			CacheManager::set('globalSummaryHtmlmobile', '');

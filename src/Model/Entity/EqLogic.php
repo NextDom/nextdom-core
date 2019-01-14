@@ -222,7 +222,7 @@ class EqLogic
      */
     public function getConfiguration($configKey = '', $defaultValue = '')
     {
-        return \utils::getJsonAttr($this->configuration, $configKey, $defaultValue);
+        return Utils::getJsonAttr($this->configuration, $configKey, $defaultValue);
     }
 
     /**
@@ -259,7 +259,7 @@ class EqLogic
     public function getStatus($statusKey = '', $defaultValue = '')
     {
         $status = CacheManager::byKey('eqLogicStatusAttr' . $this->getId())->getValue();
-        return \utils::getJsonAttr($status, $statusKey, $defaultValue);
+        return Utils::getJsonAttr($status, $statusKey, $defaultValue);
     }
 
     /**
@@ -284,7 +284,7 @@ class EqLogic
         if ($categoryKey == 'other' && strpos($this->category, "1") === false) {
             return 1;
         }
-        return \utils::getJsonAttr($this->category, $categoryKey, $defaultValue);
+        return Utils::getJsonAttr($this->category, $categoryKey, $defaultValue);
     }
 
     /**
@@ -294,7 +294,7 @@ class EqLogic
      */
     public function getDisplay($displayKey = '', $defaultValue = '')
     {
-        return \utils::getJsonAttr($this->display, $displayKey, $defaultValue);
+        return Utils::getJsonAttr($this->display, $displayKey, $defaultValue);
     }
 
     /**
@@ -425,7 +425,7 @@ class EqLogic
                 $this->_batteryUpdated = True;
             }
         }
-        $this->configuration = \utils::setJsonAttr($this->configuration, $configKey, $configValue);
+        $this->configuration = Utils::setJsonAttr($this->configuration, $configKey, $configValue);
         return $this;
     }
 
@@ -466,7 +466,7 @@ class EqLogic
      */
     public function setStatus($_key, $_value = null)
     {
-        CacheManager::set('eqLogicStatusAttr' . $this->getId(), \utils::setJsonAttr(CacheManager::byKey('eqLogicStatusAttr' . $this->getId())->getValue(), $_key, $_value));
+        CacheManager::set('eqLogicStatusAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('eqLogicStatusAttr' . $this->getId())->getValue(), $_key, $_value));
     }
 
     /**
@@ -495,7 +495,7 @@ class EqLogic
         if ($this->getCategory($categoryKey) != $categoryValue) {
             $this->_needRefreshWidget = true;
         }
-        $this->category = \utils::setJsonAttr($this->category, $categoryKey, $categoryValue);
+        $this->category = Utils::setJsonAttr($this->category, $categoryKey, $categoryValue);
         return $this;
     }
 
@@ -508,7 +508,7 @@ class EqLogic
         if ($this->getDisplay($displayKey) != $displayValue) {
             $this->_needRefreshWidget = true;
         }
-        $this->display = \utils::setJsonAttr($this->display, $displayKey, $displayValue);
+        $this->display = Utils::setJsonAttr($this->display, $displayKey, $displayValue);
     }
 
     /**
@@ -609,7 +609,7 @@ class EqLogic
     public function getCache($cacheKey = '', $defaultValue = '')
     {
         $cache = CacheManager::byKey('eqLogicCacheAttr' . $this->getId())->getValue();
-        return \utils::getJsonAttr($cache, $cacheKey, $defaultValue);
+        return Utils::getJsonAttr($cache, $cacheKey, $defaultValue);
     }
 
     /**
@@ -619,7 +619,7 @@ class EqLogic
      */
     public function setCache($cacheKey, $cacheValue = null)
     {
-        CacheManager::set('eqLogicCacheAttr' . $this->getId(), \utils::setJsonAttr(CacheManager::byKey('eqLogicCacheAttr' . $this->getId())->getValue(), $cacheKey, $cacheValue));
+        CacheManager::set('eqLogicCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('eqLogicCacheAttr' . $this->getId())->getValue(), $cacheKey, $cacheValue));
     }
 
     /**
@@ -1479,7 +1479,7 @@ class EqLogic
             foreach ($arrayToRemove as $cmdToRemove) {
                 try {
                     $cmdToRemove->remove();
-                } catch (CoreException $e) {
+                } catch (\Exception $e) {
 
                 }
             }
@@ -1503,7 +1503,7 @@ class EqLogic
                             unset($command['display']);
                         }
                     }
-                    \utils::a2o($cmd, $command);
+                    Utils::a2o($cmd, $command);
                     $cmd->setConfiguration('logicalId', $cmd->getLogicalId());
                     $cmd->save();
                     if (isset($command['value'])) {
@@ -1513,7 +1513,7 @@ class EqLogic
                         $link_actions[$cmd->getId()] = $command['configuration']['updateCmdId'];
                     }
                     $cmd_order++;
-                } catch (CoreException $exc) {
+                } catch (\Exception $exc) {
 
                 }
                 $cmd->event('');
@@ -1565,7 +1565,7 @@ class EqLogic
         $eqLogic->setOrder('');
         $eqLogic->setConfiguration('nerverFail', '');
         $eqLogic->setConfiguration('noBatterieCheck', '');
-        $return = \utils::o2a($eqLogic);
+        $return = Utils::o2a($eqLogic);
         foreach ($return as $key => $value) {
             if (is_array($value)) {
                 foreach ($value as $key2 => $value2) {
@@ -1612,6 +1612,7 @@ class EqLogic
         }
         $class = $this->getEqType_name();
         if (property_exists($class, '_widgetPossibility')) {
+            /** @noinspection PhpUndefinedFieldInspection */
             $return = $class::$_widgetPossibility;
             if ($_key != '') {
                 if (isset($return[$_key])) {
@@ -1649,7 +1650,7 @@ class EqLogic
      */
     public function toArray()
     {
-        $return = \utils::o2a($this, true);
+        $return = Utils::o2a($this, true);
         $return['status'] = $this->getStatus();
         return $return;
     }
@@ -1721,7 +1722,7 @@ class EqLogic
      */
     public function getUse()
     {
-        $json = NextDomHelper::fromHumanReadable(json_encode(\utils::o2a($this)));
+        $json = NextDomHelper::fromHumanReadable(json_encode(Utils::o2a($this)));
         return NextDomHelper::getTypeUse($json);
     }
 
@@ -1744,7 +1745,7 @@ class EqLogic
         $return['plan'] = \planHeader::searchByUse('eqLogic', $this->getId());
         if ($_array) {
             foreach ($return as &$value) {
-                $value = \utils::o2a($value);
+                $value = Utils::o2a($value);
             }
         }
         return $return;
