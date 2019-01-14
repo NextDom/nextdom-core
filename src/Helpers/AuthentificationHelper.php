@@ -60,7 +60,7 @@ class AuthentificationHelper
             setcookie('sess_id', session_id(), time() + 24 * 3600, "/", '', false, true);
         }
         @session_write_close();
-        if (UserManager::isBan()) {
+        if (UserManager::isBanned()) {
             header("Statut: 403 Forbidden");
             header('HTTP/1.1 403 Forbidden');
             $_SERVER['REDIRECT_STATUS'] = 403;

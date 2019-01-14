@@ -35,7 +35,6 @@ namespace NextDom\Managers;
 
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Utils;
-use NextDom\Managers\CmdManager;
 use NextDom\Helpers\NextDomHelper;
 
 // TODO: \DB::buildField(ScenarioEntity::className) à factoriser
@@ -86,7 +85,7 @@ class ScenarioManager
      * @param string $groupName Filtrer sur un groupe
      * @param string $type Filtrer sur un type
      *
-     * @return array [\scenario] Liste des objets scenario
+     * @return  \scenario[] Liste des objets scenario
      * @throws \Exception
      */
     public static function all($groupName = '', $type = null):array
@@ -239,7 +238,7 @@ class ScenarioManager
      * Vérifier un scénario
      * TODO: Virer les strings
      *
-     * @param \event $event Evènement déclencheur
+     * @param string $event Evènement déclencheur
      * @param bool $forceSyncMode Forcer le mode synchrone
      *
      * @return bool Renvoie toujours true //TODO: A voir
@@ -250,6 +249,7 @@ class ScenarioManager
         $message = '';
         $scenarios = [];
         if ($event !== null) {
+            // TODO: Event ne peut pas être un objet
             if (is_object($event)) {
                 $eventScenarios = self::byTrigger($event->getId());
                 $trigger = '#' . $event->getId() . '#';

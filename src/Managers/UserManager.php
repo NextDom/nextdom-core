@@ -49,6 +49,7 @@ class UserManager
      * @param string $_login nom d'utilisateur
      * @param string $_mdp motsz de passe en sha512
      * @return \user|bool object user
+     * @throws \Exception
      */
     public static function connect($_login, $_mdp)
     {

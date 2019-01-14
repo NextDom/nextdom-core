@@ -34,7 +34,6 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Model\Entity\Cron;

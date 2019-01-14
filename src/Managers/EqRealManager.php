@@ -34,8 +34,6 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Exceptions\CoreException;
-
 class EqRealManager {
     const CLASS_NAME = \eqReal::class;
     const DB_CLASS_NAME = '`eqReal`';

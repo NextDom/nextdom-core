@@ -33,11 +33,8 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
-use NextDom\Helpers\Utils;
-use NextDom\Managers\ConfigManager;
 
 class UpdateManager
 {
@@ -117,6 +114,7 @@ class UpdateManager
             }
 
             $class = 'repo_' . str_replace('.repo.php', '', $repoFile);
+            /** @noinspection PhpUndefinedFieldInspection */
             $result[str_replace('.repo.php', '', $repoFile)] = array(
                 'name'          => $class::$_name,
                 'class'         => $class,
@@ -130,7 +128,7 @@ class UpdateManager
 
     /**
      * Get a repo by its identifier
-     * @param $id Repo identifier
+     * @param string $id Repo identifier
      * @return array
      * @throws \Exception
      */
@@ -185,7 +183,7 @@ class UpdateManager
 
     /**
      * Get information about an update from its username
-     * @param $id ID of the update
+     * @param string $id ID of the update
      * @return array|mixed|null
      * @throws \Exception
      */
@@ -203,7 +201,7 @@ class UpdateManager
     /**
      * Get updates from their status
      * @param $status
-     * @return array|mixed|null
+     * @return \update[]
      * @throws \Exception
      */
     public static function byStatus($status)

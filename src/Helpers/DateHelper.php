@@ -34,7 +34,6 @@
 
 namespace NextDom\Helpers;
 
-use NextDom\Exceptions\CoreException;
 use NextDom\Managers\ConfigManager;
 
 class DateHelper

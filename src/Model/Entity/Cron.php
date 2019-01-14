@@ -386,6 +386,7 @@ class Cron
      * Check if this cron is currently running
      *
      * @return boolean
+     * @throws \Exception
      */
     public function running(): bool
     {
@@ -404,6 +405,7 @@ class Cron
      * Refresh DB state of this cron
      *
      * @return boolean
+     * @throws \Exception
      */
     public function refresh(): bool
     {

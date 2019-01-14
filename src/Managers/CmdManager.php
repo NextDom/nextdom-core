@@ -36,7 +36,7 @@ namespace NextDom\Managers;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
-use NextDom\Managers\ConfigManager;
+use NextDom\Model\Entity\EqLogic;
 
 class CmdManager
 {
@@ -46,8 +46,8 @@ class CmdManager
     /**
      * TODO: ???, repasser en privé
      *
-     * @param $inputs
-     * @param null $eqLogic
+     * @param \cmd $inputs
+     * @param EqLogic $eqLogic
      * @return array|mixed
      */
     public static function cast($inputs, $eqLogic = null)
@@ -576,7 +576,7 @@ class CmdManager
     /**
      * TODO: ???
      *
-     * @param $input
+     * @param \cmd $input
      * @return array|mixed
      * @throws \ReflectionException
      */

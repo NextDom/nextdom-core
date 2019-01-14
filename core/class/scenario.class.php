@@ -828,7 +828,7 @@ class scenario
 
     /**
      *
-     * @return mixed
+     * @return \scenarioElement[]
      */
     public function getElement()
     {

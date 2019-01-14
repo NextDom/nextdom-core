@@ -35,12 +35,7 @@ namespace NextDom\Managers;
 
 use NextDom\Enums\DaemonStateEnum;
 use NextDom\Enums\PluginManagerCronEnum;
-use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\FileSystemHelper;
-use NextDom\Helpers\Utils;
-use NextDom\Managers\CacheManager;
-use NextDom\Helpers\NextDomHelper;
-use NextDom\Managers\ConfigManager;
 
 class PluginManager
 {

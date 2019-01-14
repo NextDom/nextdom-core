@@ -33,7 +33,6 @@
 namespace NextDom\Market;
 
 use NextDom\Helpers\DataStorage;
-use NextDom\Market\GitManager;
 
 class NextDomMarket
 {

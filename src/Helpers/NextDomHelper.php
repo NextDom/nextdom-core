@@ -34,7 +34,6 @@
 
 namespace NextDom\Helpers;
 
-use NextDom\Enums\ApiModeEnum;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\CronManager;
@@ -378,6 +377,7 @@ class NextDomHelper
      * Start update
      *
      * @param array $options Options list of /install/update.php script
+     * @throws \Exception
      */
     public static function update($options = array())
     {
@@ -535,7 +535,7 @@ class NextDomHelper
     /**
      * Start all cron tasks and scenarios
      *
-     * @throws CoreException
+     * @throws \Exception
      */
     public static function startSystem()
     {
@@ -606,7 +606,7 @@ class NextDomHelper
     /**
      * Check an event
      *
-     * @param $event
+     * @param \event $event
      * @param bool $forceSyncMode
      * @throws \Exception
      */
@@ -913,7 +913,6 @@ class NextDomHelper
      * @param null $scenario
      *
      * @return mixed|string
-     * @throws \ReflectionException
      */
     public static function evaluateExpression($input, $scenario = null)
     {

@@ -33,11 +33,7 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Managers\CmdManager;
-use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\EventManager;
 use NextDom\Helpers\NextDomHelper;
-use NextDom\Managers\ConfigManager;
 
 class JeeObjectManager
 {

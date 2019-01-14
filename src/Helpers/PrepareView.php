@@ -17,14 +17,10 @@
 
 namespace NextDom\Helpers;
 
-use NextDom\Exceptions\CoreException;
 use NextDom\Managers\AjaxManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Helpers\ModalsController;
-use NextDom\Helpers\PagesController;
-use NextDom\Helpers\Router;
 use NextDom\Managers\ConfigManager;
 
 /**

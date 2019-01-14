@@ -17,7 +17,6 @@
 
 namespace NextDom\Model\Entity;
 
-use NextDom\Model\Entity\EqLogic;
 /**
  * Cmd
  *

@@ -1612,6 +1612,7 @@ class EqLogic
         }
         $class = $this->getEqType_name();
         if (property_exists($class, '_widgetPossibility')) {
+            /** @noinspection PhpUndefinedFieldInspection */
             $return = $class::$_widgetPossibility;
             if ($_key != '') {
                 if (isset($return[$_key])) {

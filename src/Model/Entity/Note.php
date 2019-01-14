@@ -16,8 +16,6 @@
  */
 namespace NextDom\Model\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Note
  *

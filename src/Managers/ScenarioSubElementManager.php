@@ -59,7 +59,7 @@ class ScenarioSubElementManager
     /**
      * Get the sub-elements of a scenario
      *
-     * @param $scenarioElementId Identifier of the scenario element
+     * @param string $scenarioElementId Identifier of the scenario element
      * @param string $filterByType Filter a type of sub-elements
      *
      * @return array|mixed|null

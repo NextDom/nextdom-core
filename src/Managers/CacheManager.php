@@ -36,8 +36,6 @@ namespace NextDom\Managers;
 
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
-use NextDom\Helpers\Utils;
-use NextDom\Managers\ConfigManager;
 
 require_once NEXTDOM_ROOT.'/core/class/cache.class.php';
 

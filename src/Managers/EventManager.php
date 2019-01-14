@@ -35,7 +35,6 @@ namespace NextDom\Managers;
 
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
-use NextDom\Managers\ConfigManager;
 
 /**
  * Class EventManager
