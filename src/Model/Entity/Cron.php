@@ -20,6 +20,7 @@ namespace NextDom\Model\Entity;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\SystemHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\CronManager;
@@ -547,7 +548,7 @@ class Cron
      */
     public function toArray()
     {
-        $return            = \utils::o2a($this, true);
+        $return            = Utils::o2a($this, true);
         $return['state']   = $this->getState();
         $return['lastRun'] = $this->getLastRun();
         $return['pid']     = $this->getPID();
@@ -634,7 +635,7 @@ class Cron
     public function getCache($cacheKey = '', $cacheValue = '')
     {
         $cache = CacheManager::byKey('cronCacheAttr' . $this->getId())->getValue();
-        return \utils::getJsonAttr($cache, $cacheKey, $cacheValue);
+        return Utils::getJsonAttr($cache, $cacheKey, $cacheValue);
     }
 
     /**
@@ -646,7 +647,7 @@ class Cron
      */
     public function setCache($cacheKey, $cacheValue = null)
     {
-        CacheManager::set('cronCacheAttr' . $this->getId(), \utils::setJsonAttr(CacheManager::byKey('cronCacheAttr' . $this->getId())->getValue(), $cacheKey, $cacheValue));
+        CacheManager::set('cronCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('cronCacheAttr' . $this->getId())->getValue(), $cacheKey, $cacheValue));
     }
 
 }

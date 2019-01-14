@@ -168,7 +168,7 @@ class ModalsController
         if (!is_object($cmd)) {
             throw new CoreException('Commande non trouvé : ' . $cmdId);
         }
-        $cmdInfo = NextDomHelper::toHumanReadable(\utils::o2a($cmd));
+        $cmdInfo = NextDomHelper::toHumanReadable(Utils::o2a($cmd));
         foreach (array('dashboard', 'mobile', 'dview', 'mview', 'dplan') as $value) {
             if (!isset($cmdInfo['html'][$value]) || $cmdInfo['html'][$value] == '') {
                 $cmdInfo['html'][$value] = $cmd->getWidgetTemplateCode($value);
@@ -277,7 +277,7 @@ class ModalsController
         $dataCount = array('history' => 0, 'timeline' => 0);
         $listCmd = array();
         foreach (CmdManager::all() as $cmd) {
-            $info_cmd = \utils::o2a($cmd);
+            $info_cmd = Utils::o2a($cmd);
             $info_cmd['humanName'] = $cmd->getHumanName(true);
             $eqLogic = $cmd->getEqLogic();
             $info_cmd['plugins'] = $eqLogic->getEqType_name();
@@ -488,7 +488,7 @@ class ModalsController
         }
 
         Utils::sendVarsToJS(
-            ['eqLogicInfo' => \utils::o2a($eqLogic),
+            ['eqLogicInfo' => Utils::o2a($eqLogic),
                 'eqLogicInfoSearchString' => urlencode(str_replace('#', '', $eqLogic->getHumanName()))]);
 
         $pageContent = [];
@@ -873,7 +873,7 @@ class ModalsController
         if (!is_object($object)) {
             throw new CoreException(__('Objet non trouvé : ') . $objectId);
         }
-        Utils::sendVarToJS('objectInfo', \utils::o2a($object));
+        Utils::sendVarToJS('objectInfo', Utils::o2a($object));
 
         $render->show('/modals/object.configure.html.twig');
     }
@@ -903,7 +903,7 @@ class ModalsController
             throw new CoreException(__('L\'objet n\'existe pas : ') . $cmdClass);
         }
 
-        $data = \utils::o2a($object);
+        $data = Utils::o2a($object);
         if (count($data) == 0) {
             throw new CoreException(__('L\'objet n\'a aucun élément : ') . print_r($data, true));
         }
@@ -1046,7 +1046,7 @@ class ModalsController
             throw new CoreException('Impossible de trouver le plan');
         }
         Utils::sendVarsToJS(['id' => $planHeader->getId(),
-            'planHeader' => \utils::o2a($planHeader)]);
+            'planHeader' => Utils::o2a($planHeader)]);
 
         $render->show('/modals/planHeader.configure.html.twig');
     }
@@ -1095,7 +1095,7 @@ class ModalsController
             throw new CoreException('Impossible de trouver le plan');
         }
         Utils::sendVarsToJS(['id' => $plan3dHeader->getId(),
-                             'plan3dHeader' => \utils::o2a($plan3dHeader) ]);
+                             'plan3dHeader' => Utils::o2a($plan3dHeader) ]);
 
         $render->show('/modals/plan3dHeader.configure.html.twig', $pageContent);
     }
@@ -1488,7 +1488,7 @@ class ModalsController
         if (!is_object($user)) {
             throw new CoreException(__('Impossible de trouver l\'utilisateur : ') . $userId);
         }
-        Utils::sendVarToJs('user_rights', \utils::o2a($user));
+        Utils::sendVarToJs('user_rights', Utils::o2a($user));
 
         $pageContent = [];
         $pageContent['restrictedUser'] = true;
@@ -1551,7 +1551,7 @@ class ModalsController
         if (!is_object($view)) {
             throw new CoreException('Impossible de trouver la vue');
         }
-        Utils::sendVarsToJS(['id' => $view->getId(), 'view' => \utils::o2a($view)]);
+        Utils::sendVarsToJS(['id' => $view->getId(), 'view' => Utils::o2a($view)]);
 
         $render->show('/modals/view.configure.html.twig');
     }

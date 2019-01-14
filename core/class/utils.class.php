@@ -1,179 +1,25 @@
 <?php
 
-/* This file is part of Jeedom.
- *
- * Jeedom is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jeedom is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
- */
-
-/* * ***************************Includes********************************* */
 require_once __DIR__ . '/../php/core.inc.php';
 
 class utils {
-    /*     * *************************Attributs****************************** */
-
-    private static $properties = array();
-
-    /*     * ***********************Methode static*************************** */
-
     public static function o2a($_object, $_noToArray = false) {
-        if (is_array($_object)) {
-            $return = array();
-            foreach ($_object as $object) {
-                $return[] = self::o2a($object);
-            }
-            return $return;
-        }
-        $array = array();
-        if (!is_object($_object)) {
-            return $array;
-        }
-        if (!$_noToArray && method_exists($_object, 'toArray')) {
-            return $_object->toArray();
-        }
-        $class = get_class($_object);
-        if (!isset(self::$properties[$class])) {
-            self::$properties[$class] = (new ReflectionClass($class))->getProperties();
-        }
-        foreach (self::$properties[$class] as $property) {
-            $name = $property->getName();
-            if ('_' !== $name[0]) {
-                $method = 'get' . ucfirst($name);
-                if (method_exists($_object, $method)) {
-                    $value = $_object->$method();
-                } else {
-                    $property->setAccessible(true);
-                    $value = $property->getValue($_object);
-                    $property->setAccessible(false);
-                }
-                $array[$name] = is_json($value, $value);
-            }
-        }
-        return $array;
+        return \NextDom\Helpers\Utils::o2a($_object, $_noToArray);
     }
 
     public static function a2o(&$_object, $_data) {
-        if (is_array($_data)) {
-            foreach ($_data as $key => $value) {
-                $method = 'set' . ucfirst($key);
-                if (method_exists($_object, $method)) {
-                    $function = new ReflectionMethod($_object, $method);
-                    $value = is_json($value, $value);
-                    if (is_array($value)) {
-                        if ($function->getNumberOfRequiredParameters() == 2) {
-                            foreach ($value as $arrayKey => $arrayValue) {
-                                if (is_array($arrayValue)) {
-                                    if ($function->getNumberOfRequiredParameters() == 3) {
-                                        foreach ($arrayValue as $arrayArraykey => $arrayArrayvalue) {
-                                            $_object->$method($arrayKey, $arrayArraykey, $arrayArrayvalue);
-                                        }
-                                        continue;
-                                    }
-                                }
-                                $_object->$method($arrayKey, $arrayValue);
-                            }
-                        } else {
-                            $_object->$method(json_encode($value, JSON_UNESCAPED_UNICODE));
-                        }
-                    } else {
-                        if ($function->getNumberOfRequiredParameters() < 2) {
-                            $_object->$method($value);
-                        }
-                    }
-                }
-            }
-        }
+        \NextDom\Helpers\Utils::a2o($_object, $_data);
     }
 
     public static function processJsonObject($_class, $_ajaxList, $_dbList = null) {
-        if (!is_array($_ajaxList)) {
-            if (is_json($_ajaxList)) {
-                $_ajaxList = json_decode($_ajaxList, true);
-            } else {
-                throw new Exception('Invalid json : ' . print_r($_ajaxList, true));
-            }
-        }
-        if (!is_array($_dbList)) {
-            if (!class_exists($_class)) {
-                throw new Exception('Invalid class : ' . $_class);
-            }
-            $_dbList = $_class::all();
-        }
-
-        $enableList = array();
-        foreach ($_ajaxList as $ajaxObject) {
-            $object = $_class::byId($ajaxObject['id']);
-            if (!is_object($object)) {
-                $object = new $_class();
-            }
-            self::a2o($object, $ajaxObject);
-            $object->save();
-            $enableList[$object->getId()] = true;
-        }
-        foreach ($_dbList as $dbObject) {
-            if (!isset($enableList[$dbObject->getId()])) {
-                $dbObject->remove();
-            }
-        }
+        \NextDom\Helpers\Utils::processJsonObject($_class, $_ajaxList, $_dbList);
     }
 
     public static function setJsonAttr($_attr, $_key, $_value = null) {
-        if ($_value === null && !is_array($_key)) {
-            if (!is_array($_attr)) {
-                $_attr = is_json($_attr, array());
-            }
-            unset($_attr[$_key]);
-        } else {
-            if (!is_array($_attr)) {
-                $_attr = is_json($_attr, array());
-            }
-            if (is_array($_key)) {
-                $_attr = array_merge($_attr, $_key);
-            } else {
-                $_attr[$_key] = $_value;
-            }
-        }
-        return $_attr;
+        \NextDom\Helpers\Utils::setJsonAttr($_attr, $_key, $_value);
     }
 
     public static function getJsonAttr(&$_attr, $_key = '', $_default = '') {
-        if (is_array($_attr)) {
-            if ($_key == '') {
-                return $_attr;
-            }
-        } else {
-            if ($_key == '') {
-                $_attr = is_json($_attr, array());
-                return $_attr;
-            }
-            if ($_attr === '') {
-                return $_default;
-            }
-            $_attr = json_decode($_attr, true);
-        }
-        if (is_array($_key)) {
-            $return = array();
-            foreach ($_key as $key) {
-                $return[$key] = (isset($_attr[$key]) && $_attr[$key] !== '') ? $_attr[$key] : $_default;
-            }
-            return $return;
-        }
-        return (isset($_attr[$_key]) && $_attr[$_key] !== '') ? $_attr[$_key] : $_default;
+        return \NextDom\Helpers\Utils::setJsonAttr($_attr, $_key, $_default);
     }
-
-    /*     * *********************Methode d'instance************************* */
-
-    /*     * **********************Getteur Setteur*************************** */
 }
-
-?>

@@ -823,7 +823,7 @@ class NextDomHelper
         }
         if (count($datas) > 0) {
             foreach ($datas as $data) {
-                \utils::a2o($data, json_decode(str_replace(array_keys($_replaces), $_replaces, json_encode(\utils::o2a($data))), true));
+                Utils::a2o($data, json_decode(str_replace(array_keys($_replaces), $_replaces, json_encode(Utils::o2a($data))), true));
                 $data->save();
             }
         }

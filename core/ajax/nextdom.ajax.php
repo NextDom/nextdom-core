@@ -59,7 +59,7 @@ try {
         $return['plugins'] = array();
         foreach (plugin::listPlugin(true) as $plugin) {
             if ($plugin->getMobile() != '' || $plugin->getEventJs() == 1) {
-                $info_plugin = utils::o2a($plugin);
+                $info_plugin = Utils::o2a($plugin);
                 $info_plugin['displayMobilePanel'] = config::byKey('displayMobilePanel', $plugin->getId(), 0);
                 $return['plugins'][] = $info_plugin;
             }

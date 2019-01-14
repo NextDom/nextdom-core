@@ -74,7 +74,7 @@ class ScenarioElementManager
         if (!isset($elementDb) || !is_object($elementDb)) {
             throw new \Exception(__('Elément inconnu. Vérifiez l\'ID : ') . $ajaxElement['id']);
         }
-        \utils::a2o($elementDb, $ajaxElement);
+        Utils::a2o($elementDb, $ajaxElement);
         $elementDb->save();
         $subElementOrder = 0;
         $subElementList = $elementDb->getSubElement();
@@ -88,7 +88,7 @@ class ScenarioElementManager
             if (!isset($subElementDb) || !is_object($subElementDb)) {
                 throw new \Exception(__('Elément inconnu. Vérifiez l\'ID : ') . $ajaxSubElement['id']);
             }
-            \utils::a2o($subElementDb, $ajaxSubElement);
+            Utils::a2o($subElementDb, $ajaxSubElement);
             $subElementDb->setScenarioElement_id($elementDb->getId());
             $subElementDb->setOrder($subElementOrder);
             $subElementDb->save();
@@ -111,7 +111,7 @@ class ScenarioElementManager
                     throw new \Exception(__('Expression inconnue. Vérifiez l\'ID : ') . $expression_ajax['id']);
                 }
                 $expression_db->emptyOptions();
-                \utils::a2o($expression_db, $expression_ajax);
+                Utils::a2o($expression_db, $expression_ajax);
                 $expression_db->setScenarioSubElement_id($subElementDb->getId());
                 if ($expression_db->getType() == 'element') {
                     $expression_db->setExpression(self::saveAjaxElement($expression_ajax['element']));
