@@ -150,7 +150,7 @@ class Utils
      *
      * @return string Expression transformée
      */
-    public static function transformExpressionForEvaluation(string $expression): string
+    public static function transformExpressionForEvaluation($expression)
     {
 
         $result = $expression;
