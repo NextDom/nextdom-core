@@ -16,10 +16,10 @@ class utils {
     }
 
     public static function setJsonAttr($_attr, $_key, $_value = null) {
-        \NextDom\Helpers\Utils::setJsonAttr($_attr, $_key, $_value);
+        return \NextDom\Helpers\Utils::setJsonAttr($_attr, $_key, $_value);
     }
 
     public static function getJsonAttr(&$_attr, $_key = '', $_default = '') {
-        return \NextDom\Helpers\Utils::setJsonAttr($_attr, $_key, $_default);
+        return \NextDom\Helpers\Utils::getJsonAttr($_attr, $_key, $_default);
     }
 }
