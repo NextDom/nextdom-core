@@ -564,7 +564,7 @@ class PrepareView
                     echo $modale->get($render);
                 } catch (CoreException $ex) {
                     echo '<div class="alert alert-danger div_alert">';
-                    echo '<p>Une erreur s\'est produite, impossible d\'afficher le contenu de la modale</p>';
+                    echo '<p>Une erreur s\'est produite, impossible d\'afficher le contenu de la modale. Erreur : '. $ex->getMessage() .'</p>';
                     echo '</div>';
                 }
                 
