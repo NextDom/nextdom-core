@@ -1479,7 +1479,7 @@ class EqLogic
             foreach ($arrayToRemove as $cmdToRemove) {
                 try {
                     $cmdToRemove->remove();
-                } catch (CoreException $e) {
+                } catch (\Exception $e) {
 
                 }
             }
@@ -1513,7 +1513,7 @@ class EqLogic
                         $link_actions[$cmd->getId()] = $command['configuration']['updateCmdId'];
                     }
                     $cmd_order++;
-                } catch (CoreException $exc) {
+                } catch (\Exception $exc) {
 
                 }
                 $cmd->event('');

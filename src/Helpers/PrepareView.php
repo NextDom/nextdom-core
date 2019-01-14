@@ -179,7 +179,7 @@ class PrepareView
                 $pageData['ALERT_MSG'] = 'NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.';
             }
             $pageData['content'] = self::getContent($render, $pageData, $page, $currentPlugin);
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             ob_end_clean();
             $pageData['ALERT_MSG'] = Utils::displayException($e);
         }
@@ -283,7 +283,7 @@ class PrepareView
             foreach ($eventsJsPlugin as $value) {
                 try {
                     $pageData['JS_POOL'][] = '/plugins/'.$value.'/public/js/desktop/events.js';
-                } catch (CoreException $e) {
+                } catch (\Exception $e) {
                     \log::add($value, 'error', 'Event JS file not found');
                 }
             }
@@ -522,7 +522,7 @@ class PrepareView
                 $pageContent['content'] = $controller->get($render, $pageContent);
                 $render->show('/layouts/ajax_content.html.twig', $pageContent);
             }
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
             echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
@@ -539,7 +539,7 @@ class PrepareView
         if ($plugin != '') {
             try {
                 \include_file('desktop', $modalCode, 'modal', $plugin, true);
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 echo '<div class="alert alert-danger div_alert">';
                 echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
                 echo '</div>';
@@ -551,7 +551,7 @@ class PrepareView
             if ($modalRoute === null) {
                 try {
                     \include_file('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
-                } catch (CoreException $e) {
+                } catch (\Exception $e) {
                     echo '<div class="alert alert-danger div_alert">';
                     echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
                     echo '</div>';

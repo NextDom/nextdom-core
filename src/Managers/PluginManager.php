@@ -228,7 +228,7 @@ class PluginManager
 						$plugin->deamon_start(true);
 					}
 				}
-			} catch (CoreException $e) {
+			} catch (\Exception $e) {
  			}
 		}
 	}

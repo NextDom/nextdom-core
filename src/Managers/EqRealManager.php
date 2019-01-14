@@ -61,7 +61,7 @@ class EqRealManager {
                 if (!is_object($plugin) || $plugin->isActive() == 0) {
                     return self::CLASS_NAME;
                 }
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 return self::CLASS_NAME;
             }
         }

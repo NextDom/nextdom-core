@@ -498,7 +498,7 @@ class NextDomHelper
                 try {
                     $cron->halt();
                     echo '.';
-                } catch (CoreException $e) {
+                } catch (\Exception $e) {
                     sleep(5);
                     $cron->halt();
                 }
@@ -524,7 +524,7 @@ class NextDomHelper
             try {
                 $scenario->stop();
                 echo '.';
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 sleep(5);
                 $scenario->stop();
             }
@@ -548,7 +548,7 @@ class NextDomHelper
             echo __('core.enable-tasks');
             ConfigManager::save('enableCron', 1);
             echo " $okStr\n";
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             if (!isset($_GET['mode']) || $_GET['mode'] != 'force') {
                 throw $e;
             } else {
@@ -629,19 +629,19 @@ class NextDomHelper
                     if ($cron->running() && $cron->getClass() != 'nextdom' && $cron->getFunction() != 'cron') {
                         try {
                             $cron->halt();
-                        } catch (CoreException $e) {
+                        } catch (\Exception $e) {
                             \log::add('starting', 'error', __('Erreur sur l\'arrêt d\'une tâche cron : ') . \log::exception($e));
                         }
                     }
                 }
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 \log::add('starting', 'error', __('Erreur sur l\'arrêt des tâches crons : ') . \log::exception($e));
             }
 
             try {
                 \log::add('starting', 'debug', __('Restauration du cache'));
                 CacheManager::restore();
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 \log::add('starting', 'error', __('Erreur sur la restauration du CacheManager : ') . \log::exception($e));
             }
 
@@ -649,7 +649,7 @@ class NextDomHelper
                 \log::add('starting', 'debug', __('Nettoyage du cache des péripheriques USB'));
                 $cache = CacheManager::byKey('nextdom::usbMapping');
                 $cache->remove();
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 \log::add('starting', 'error', __('Erreur sur le nettoyage du CacheManager des péripheriques USB : ') . \log::exception($e));
             }
 
@@ -657,14 +657,14 @@ class NextDomHelper
                 \log::add('starting', 'debug', __('Nettoyage du cache des péripheriques Bluetooth'));
                 $cache = CacheManager::byKey('nextdom::bluetoothMapping');
                 $cache->remove();
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 \log::add('starting', 'error', __('Erreur sur le nettoyage du CacheManager des péripheriques Bluetooth : ') . \log::exception($e));
             }
 
             try {
                 \log::add('starting', 'debug', __('Démarrage des processus Internet de NextDom'));
                 self::startSystem();
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 \log::add('starting', 'error', __('Erreur sur le démarrage interne de NextDom : ') . \log::exception($e));
             }
 
@@ -673,7 +673,7 @@ class NextDomHelper
                 if (file_put_contents(self::getTmpFolder() . '/started', date('Y-m-d H:i:s')) === false) {
                     \log::add('starting', 'error', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started'));
                 }
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 \log::add('starting', 'error', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started : ') . \log::exception($e));
             }
 
@@ -687,21 +687,21 @@ class NextDomHelper
                 if (!NetworkHelper::test('internal')) {
                     NetworkHelper::checkConf('internal');
                 }
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 \log::add('starting', 'error', __('Erreur sur la \configuration réseau interne : ') . \log::exception($e));
             }
 
             try {
                 \log::add('starting', 'debug', __('Envoi de l\'événement de démarrage'));
                 self::event('start');
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 \log::add('starting', 'error', __('Erreur sur l\'envoi de l\'événement de démarrage : ') . \log::exception($e));
             }
 
             try {
                 \log::add('starting', 'debug', __('Démarrage des plugins'));
                 PluginManager::start();
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 \log::add('starting', 'error', __('Erreur sur le démarrage des plugins : ') . \log::exception($e));
             }
 
@@ -710,7 +710,7 @@ class NextDomHelper
                     \log::add('starting', 'debug', __('Test de connexion au market'));
                     \repo_market::test();
                 }
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 \log::add('starting', 'error', __('Erreur sur la connexion au market : ') . \log::exception($e));
             }
             \log::add('starting', 'debug', __('Démarrage de nextdom fini avec succès'));
@@ -726,7 +726,7 @@ class NextDomHelper
     {
         try {
             NetworkHelper::cron5();
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             \log::add('network', 'error', 'network::cron : ' . $e->getMessage());
         }
         try {
@@ -736,12 +736,12 @@ class NextDomHelper
                     $class::cron5();
                 }
             }
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             \log::add('nextdom', 'error', $e->getMessage());
         }
         try {
             EqLogicManager::checkAlive();
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
 
         }
     }
@@ -753,7 +753,7 @@ class NextDomHelper
     {
         try {
             CacheManager::set('hour', date('Y-m-d H:i:s'));
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             \log::add('nextdom', 'error', $e->getMessage());
         }
         try {
@@ -771,7 +771,7 @@ class NextDomHelper
                     \message::add('update', __('De nouvelles mises à jour sont disponibles : ') . trim($toUpdate, ','), '', 'newUpdate');
                 }
             }
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             \log::add('nextdom', 'error', $e->getMessage());
         }
         try {
@@ -781,7 +781,7 @@ class NextDomHelper
                     $class::cronHourly();
                 }
             }
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             \log::add('nextdom', 'error', $e->getMessage());
         }
     }
@@ -799,7 +799,7 @@ class NextDomHelper
             \report::clean();
             \DB::optimize();
             CacheManager::clean();
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             \log::add('nextdom', 'error', $e->getMessage());
         }
     }
@@ -924,7 +924,7 @@ class NextDomHelper
                 return $result;
             }
             return $input;
-        } catch (CoreException $exc) {
+        } catch (\Exception $exc) {
             return $input;
         }
     }
@@ -1245,14 +1245,14 @@ class NextDomHelper
                     AND plugin="core"';
             try {
                 \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ROW);
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
 
             }
             $sql = 'INSERT INTO config
                     SET `key`="nextdom_benchmark",plugin="core",`value`="' . $i . '"';
             try {
                 \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ROW);
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
 
             }
         }
@@ -1262,7 +1262,7 @@ class NextDomHelper
                 SET `key`="nextdom_benchmark",plugin="core",`value`="0"';
         try {
             \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ROW);
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
         }
         $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['database_update']; $i++) {
@@ -1272,7 +1272,7 @@ class NextDomHelper
                         AND plugin = "core"';
             try {
                 \DB::Prepare($sql, array('value' => $i), \DB::FETCH_TYPE_ROW);
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
 
             }
         }

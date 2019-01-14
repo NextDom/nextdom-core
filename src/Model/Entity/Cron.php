@@ -491,19 +491,19 @@ class Cron
                 if ($c->isDue()) {
                     return true;
                 }
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 
             }
             try {
                 $prev = $c->getPreviousRunDate()->getTimestamp();
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 return false;
             }
             $diff = abs((strtotime('now') - $prev) / 60);
             if (strtotime($this->getLastRun()) < $prev && ($diff <= ConfigManager::byKey('maxCatchAllow') || ConfigManager::byKey('maxCatchAllow') == -1)) {
                 return true;
             }
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             \log::add('cron', 'debug', 'Error on isDue : ' . $e->getMessage() . ', cron : ' . $this->getSchedule());
         }
         return false;
@@ -519,7 +519,7 @@ class Cron
         try {
             $cronExpression = new \Cron\CronExpression($this->getSchedule(), new \Cron\FieldFactory);
             return $cronExpression->getNextRunDate()->format('Y-m-d H:i:s');
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             
         }
         return false;
