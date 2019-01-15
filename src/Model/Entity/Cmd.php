@@ -65,7 +65,7 @@ class Cmd
     public $_eqLogic = null;
     public $_needRefreshWidget;
     public $_needRefreshAlert;
-    private static $_templateArray = array();
+    protected static $_templateArray = array();
 
 
     /**
@@ -73,112 +73,112 @@ class Cmd
      *
      * @ORM\Column(name="eqType", type="string", length=127, nullable=true)
      */
-    private $eqType;
+    protected $eqType;
 
     /**
      * @var string
      *
      * @ORM\Column(name="logicalId", type="string", length=127, nullable=true)
      */
-    private $logicalId;
+    protected $logicalId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="generic_type", type="string", length=255, nullable=true)
      */
-    private $generic_type;
+    protected $generic_type;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="order", type="integer", nullable=true)
      */
-    private $order;
+    protected $order;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=45, nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
      */
-    private $configuration;
+    protected $configuration;
 
     /**
      * @var string
      *
      * @ORM\Column(name="template", type="text", length=65535, nullable=true)
      */
-    private $template;
+    protected $template;
 
     /**
      * @var string
      *
      * @ORM\Column(name="isHistorized", type="string", length=45, nullable=false)
      */
-    private $isHistorized;
+    protected $isHistorized;
 
     /**
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=45, nullable=true)
      */
-    private $type;
+    protected $type;
 
     /**
      * @var string
      *
      * @ORM\Column(name="subType", type="string", length=45, nullable=true)
      */
-    private $subType;
+    protected $subType;
 
     /**
      * @var string
      *
      * @ORM\Column(name="unite", type="string", length=45, nullable=true)
      */
-    private $unite;
+    protected $unite;
 
     /**
      * @var string
      *
      * @ORM\Column(name="display", type="text", length=65535, nullable=true)
      */
-    private $display;
+    protected $display;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="isVisible", type="integer", nullable=true)
      */
-    private $isVisible = 1;
+    protected $isVisible = 1;
 
     /**
      * @var string
      *
      * @ORM\Column(name="value", type="string", length=255, nullable=true)
      */
-    private $value = null;
+    protected $value = null;
 
     /**
      * @var string
      *
      * @ORM\Column(name="html", type="text", length=16777215, nullable=true)
      */
-    private $html;
+    protected $html;
 
     /**
      * @var string
      *
      * @ORM\Column(name="alert", type="text", length=65535, nullable=true)
      */
-    private $alert;
+    protected $alert;
 
     /**
      * @var integer
@@ -187,7 +187,7 @@ class Cmd
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var EqLogic
@@ -197,7 +197,7 @@ class Cmd
      *   ORM\JoinColumn(name="eqLogic_id", referencedColumnName="id")
      * })
      */
-    private $eqLogic_id;
+    protected $eqLogic_id;
 
     public function getEqType()
     {
@@ -731,7 +731,7 @@ class Cmd
     public function execCmd($_options = null, $_sendNodeJsEvent = false, $_quote = false)
     {
         if ($this->getType() == 'info') {
-            $state = $this->getCache(array('collectDate', 'valueDate', 'value'));
+            $state = $this->getCache(['collectDate', 'valueDate', 'value'], ['valueDate' => '', 'value' => '', 'collectDate' => '']);
             if (isset($state['collectDate'])) {
                 $this->setCollectDate($state['collectDate']);
             } else {
