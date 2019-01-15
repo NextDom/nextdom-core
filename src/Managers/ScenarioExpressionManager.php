@@ -652,7 +652,7 @@ class ScenarioExpressionManager
      */
     public static function lastStateDuration($cmdId, $value = null)
     {
-        return \history::lastStateDuration(str_replace('#', '', $cmdId), $value);
+        return HistoryManager::lastStateDuration(str_replace('#', '', $cmdId), $value);
     }
 
     /**
@@ -685,7 +685,7 @@ class ScenarioExpressionManager
                 $value = null;
             }
         }
-        return \history::stateChanges($cmd_id, $value, date('Y-m-d H:i:s', strtotime('-' . $period)), date('Y-m-d H:i:s'));
+        return HistoryManager::stateChanges($cmd_id, $value, date('Y-m-d H:i:s', strtotime('-' . $period)), date('Y-m-d H:i:s'));
     }
 
     /**
@@ -718,7 +718,7 @@ class ScenarioExpressionManager
         $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
         $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
 
-        return \history::stateChanges($cmd_id, $value, $startDate, $endDate);
+        return HistoryManager::stateChanges($cmd_id, $value, $startDate, $endDate);
     }
 
     /**
@@ -949,7 +949,7 @@ class ScenarioExpressionManager
      */
     public static function stateDuration($cmdId, $value = null)
     {
-        return \history::stateDuration(str_replace('#', '', $cmdId), $value);
+        return HistoryManager::stateDuration(str_replace('#', '', $cmdId), $value);
     }
 
     /**
@@ -962,7 +962,7 @@ class ScenarioExpressionManager
      */
     public static function lastChangeStateDuration($cmdId, $value)
     {
-        return \history::lastChangeStateDuration(str_replace('#', '', $cmdId), $value);
+        return HistoryManager::lastChangeStateDuration(str_replace('#', '', $cmdId), $value);
     }
 
     /**

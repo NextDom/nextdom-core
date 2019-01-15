@@ -31,6 +31,7 @@ use NextDom\Managers\CronManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
+use NextDom\Managers\HistoryManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
@@ -294,9 +295,9 @@ class Cmd
 
     /**
      *
-     * @return EqLogic
+     * @return mixed
      */
-    public function getEqLogic_Id(): EqLogic
+    public function getEqLogic_Id()
     {
         return $this->eqLogic_id;
     }
@@ -1407,7 +1408,7 @@ class Cmd
 
     public function emptyHistory($_date = '')
     {
-        return \history::emptyHistory($this->getId(), $_date);
+        return HistoryManager::emptyHistory($this->getId(), $_date);
     }
 
     public function addHistoryValue($_value, $_datetime = '')
@@ -1427,12 +1428,12 @@ class Cmd
         if ($this->getType() != 'info' || $this->getType() == 'string') {
             return array();
         }
-        return \history::getStatistique($this->getId(), $_startTime, $_endTime);
+        return HistoryManager::getStatistique($this->getId(), $_startTime, $_endTime);
     }
 
     public function getTendance($_startTime, $_endTime)
     {
-        return \history::getTendance($this->getId(), $_startTime, $_endTime);
+        return HistoryManager::getTendance($this->getId(), $_startTime, $_endTime);
     }
 
     /**
@@ -1465,12 +1466,12 @@ class Cmd
 
     public function getHistory($_dateStart = null, $_dateEnd = null)
     {
-        return \history::all($this->id, $_dateStart, $_dateEnd);
+        return HistoryManager::all($this->id, $_dateStart, $_dateEnd);
     }
 
     public function getPluralityHistory($_dateStart = null, $_dateEnd = null, $_period = 'day', $_offset = 0)
     {
-        return \history::getPlurality($this->id, $_dateStart, $_dateEnd, $_period, $_offset);
+        return HistoryManager::getPlurality($this->id, $_dateStart, $_dateEnd, $_period, $_offset);
     }
 
     public function widgetPossibility($_key = '', $_default = true)
