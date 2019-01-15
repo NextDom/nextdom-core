@@ -48,7 +48,7 @@ function include_file($_folder, $_filename, $_type, $_plugin = '', $translate = 
 
 function getTemplate($_folder, $_version, $_filename, $_plugin = '')
 {
-    return FileSystemHelper::getTemplateFilecontent($_folder, $_version, $_filename, $_plugin);
+    return FileSystemHelper::getTemplateFileContent($_folder, $_version, $_filename, $_plugin);
 }
 
 function template_replace($_array, $_subject)

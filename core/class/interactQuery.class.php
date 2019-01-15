@@ -617,7 +617,7 @@ class interactQuery {
         $current = array();
         $current['cmd'] = cmd::byId($lastCmd);
         if (is_object($current['cmd'])) {
-            $current['eqLogic'] = $current['cmd']->getEqLogic();
+            $current['eqLogic'] = $current['cmd']->getEqLogicId();
             if (!is_object($current['eqLogic'])) {
                 return $return;
             }
@@ -840,7 +840,7 @@ class interactQuery {
                         $replace['#commande#'] = $cmd->getName();
                         $replace['#objet#'] = '';
                         $replace['#equipement#'] = '';
-                        $eqLogic = $cmd->getEqLogic();
+                        $eqLogic = $cmd->getEqLogicId();
                         if (is_object($eqLogic)) {
                             $replace['#equipement#'] = $eqLogic->getName();
                             $object = $eqLogic->getObject();

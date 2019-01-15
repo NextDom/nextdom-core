@@ -181,7 +181,7 @@ class FileSystemHelper
      *
      * @return string Contenu du fichier ou une chaine vide.
      */
-    public static function getTemplateFilecontent(string $folder, string $version, string $filename, string $pluginId = ''): string
+    public static function getTemplateFileContent(string $folder, string $version, string $filename, string $pluginId = ''): string
     {
         $result = '';
         $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';

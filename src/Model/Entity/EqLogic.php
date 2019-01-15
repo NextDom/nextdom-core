@@ -1758,7 +1758,7 @@ class EqLogic
      * @param null $_logicalId
      * @param null $_visible
      * @param bool $_multiple
-     * @return \cmd[]
+     * @return Cmd[]
      * @throws \Exception
      */
     public function getCmd($_type = null, $_logicalId = null, $_visible = null, $_multiple = false)

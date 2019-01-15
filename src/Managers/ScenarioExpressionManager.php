@@ -212,7 +212,7 @@ class ScenarioExpressionManager
             $result .= \__('Variable : ') . $name . ' <i class="fa fa-arrow-right"></i> ' . $value;
         } elseif (is_object(CmdManager::byId(str_replace('#', '', $baseAction['cmd'])))) {
             $cmd = CmdManager::byId(str_replace('#', '', $baseAction['cmd']));
-            $eqLogic = $cmd->getEqLogic();
+            $eqLogic = $cmd->getEqLogicId();
             $result .= $eqLogic->getHumanName(true) . ' ' . $cmd->getName();
         }
         return trim($result);
@@ -1300,9 +1300,9 @@ class ScenarioExpressionManager
             case 'cmd':
                 return $cmd->getName();
             case 'eqLogic':
-                return $cmd->getEqLogic()->getName();
+                return $cmd->getEqLogicId()->getName();
             case 'object':
-                $object = $cmd->getEqLogic()->getObject();
+                $object = $cmd->getEqLogicId()->getObject();
                 if (!is_object($object)) {
                     return \__('Aucun');
                 }

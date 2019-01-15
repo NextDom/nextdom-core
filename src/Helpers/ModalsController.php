@@ -175,7 +175,7 @@ class ModalsController
             }
         }
         $pageContent['cmdType'] = $cmd->getType();
-        $pageContent['cmdSubType'] = $cmd->getSubtype();
+        $pageContent['cmdSubType'] = $cmd->getSubType();
         $pageContent['cmdWidgetPossibilityCustom'] = $cmd->widgetPossibility('custom');
         $pageContent['cmdWidgetPossibilityCustomHtmlCode'] = $cmd->widgetPossibility('custom::htmlCode');
         $pageContent['cmdShowMinMax'] = false;
@@ -279,7 +279,7 @@ class ModalsController
         foreach (CmdManager::all() as $cmd) {
             $info_cmd = Utils::o2a($cmd);
             $info_cmd['humanName'] = $cmd->getHumanName(true);
-            $eqLogic = $cmd->getEqLogic();
+            $eqLogic = $cmd->getEqLogicId();
             $info_cmd['plugins'] = $eqLogic->getEqType_name();
             $listCmd[] = $info_cmd;
             if ($cmd->getIsHistorized() == 1) {
@@ -312,13 +312,13 @@ class ModalsController
         $pageContent = [];
         $pageContent['cmdData'] = [];
         foreach (CmdManager::all() as $cmd) {
-            $eqLogic = $cmd->getEqLogic();
+            $eqLogic = $cmd->getEqLogicId();
             if (!is_object($eqLogic)) {
                 continue;
             }
             if ($cmd->getIsHistorized() == 1) {
                 $data = [];
-                $data['eqLogicObject'] = $cmd->getEqLogic()->getObject();
+                $data['eqLogicObject'] = $cmd->getEqLogicId()->getObject();
                 if (is_object($data['eqLogicObject'])) {
                     $data['showObject'] = true;
                 } else {

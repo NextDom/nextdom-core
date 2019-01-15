@@ -36,17 +36,18 @@ namespace NextDom\Managers;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Model\Entity\Cmd;
 use NextDom\Model\Entity\EqLogic;
 
 class CmdManager
 {
-    const CLASS_NAME = 'cmd';
+    const CLASS_NAME = Cmd::class;
     const DB_CLASS_NAME = '`cmd`';
 
     /**
      * TODO: ???, repasser en privé
      *
-     * @param \cmd $inputs
+     * @param Cmd $inputs
      * @param EqLogic $eqLogic
      * @return array|mixed
      */
@@ -86,7 +87,7 @@ class CmdManager
      * Get command by his id
      *
      * @param mixed $id Command id
-     * @return \cmd
+     * @return Cmd
      * @throws \Exception
      */
     public static function byId($id)
@@ -106,7 +107,7 @@ class CmdManager
     /**
      * Get all commands
      *
-     * @return \cmd[]
+     * @return Cmd[]
      *
      * @throws \Exception
      */
@@ -576,7 +577,7 @@ class CmdManager
     /**
      * TODO: ???
      *
-     * @param \cmd $input
+     * @param Cmd $input
      * @return array|mixed
      * @throws \ReflectionException
      */
@@ -898,7 +899,7 @@ class CmdManager
                 foreach ($cmd->getConfiguration('actionCheckCmd', '') as $actionCmd) {
                     if ($actionCmd['cmd'] != '' && strpos($actionCmd['cmd'], '#') !== false) {
                         if (!self::byId(str_replace('#', '', $actionCmd['cmd']))) {
-                            $return[] = array('detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogic()->getName() . ' (' . $cmd->getEqLogic()->getEqType_name() . ')', 'help' => 'Action sur valeur', 'who' => $actionCmd['cmd']);
+                            $return[] = array('detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogicId()->getName() . ' (' . $cmd->getEqLogicId()->getEqType_name() . ')', 'help' => 'Action sur valeur', 'who' => $actionCmd['cmd']);
                         }
                     }
                 }
@@ -907,7 +908,7 @@ class CmdManager
                 foreach ($cmd->getConfiguration('nextdomPostExecCmd', '') as $actionCmd) {
                     if ($actionCmd['cmd'] != '' && strpos($actionCmd['cmd'], '#') !== false) {
                         if (!self::byId(str_replace('#', '', $actionCmd['cmd']))) {
-                            $return[] = array('detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogic()->getName() . ' (' . $cmd->getEqLogic()->getEqType_name() . ')', 'help' => 'Post Exécution', 'who' => $actionCmd['cmd']);
+                            $return[] = array('detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogicId()->getName() . ' (' . $cmd->getEqLogicId()->getEqType_name() . ')', 'help' => 'Post Exécution', 'who' => $actionCmd['cmd']);
                         }
                     }
                 }
@@ -916,7 +917,7 @@ class CmdManager
                 foreach ($cmd->getConfiguration('nextdomPreExecCmd', '') as $actionCmd) {
                     if ($actionCmd['cmd'] != '' && strpos($actionCmd['cmd'], '#') !== false) {
                         if (!self::byId(str_replace('#', '', $actionCmd['cmd']))) {
-                            $return[] = array('detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogic()->getName() . ' (' . $cmd->getEqLogic()->getEqType_name() . ')', 'help' => 'Pré Exécution', 'who' => $actionCmd['cmd']);
+                            $return[] = array('detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogicId()->getName() . ' (' . $cmd->getEqLogicId()->getEqType_name() . ')', 'help' => 'Pré Exécution', 'who' => $actionCmd['cmd']);
                         }
                     }
                 }
@@ -960,7 +961,7 @@ class CmdManager
         if (!is_object($cmd)) {
             return null;
         }
-        $eqLogic = $cmd->getEqLogic();
+        $eqLogic = $cmd->getEqLogicId();
         $object = $eqLogic->getObject();
         $return['object'] = is_object($object) ? $object->getId() : 'aucun';
         $return['plugins'] = $eqLogic->getEqType_name();
