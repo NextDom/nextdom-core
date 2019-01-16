@@ -86,7 +86,7 @@ class PrepareView
         if (Utils::init('p') == '') {
             redirect($homeLink);
         } else {
-            $page = init('p');
+            $page = Utils::init('p');
             $pageData['TITLE'] = ucfirst($page) . ' - ' . $configs['product_name'];
         }
         $language = $configs['language'];

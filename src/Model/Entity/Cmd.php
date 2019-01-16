@@ -751,7 +751,7 @@ class Cmd
         try {
             if ($_options !== null && $_options !== '') {
                 $options = CmdManager::cmdToValue($_options);
-                if (is_json($_options)) {
+                if (Utils::isJson($_options)) {
                     $options = json_decode($_options, true);
                 }
             } else {
@@ -1022,7 +1022,7 @@ class Cmd
             }
             if ($_options != '') {
                 $options = NextDomHelper::toHumanReadable($_options);
-                $options = is_json($options, $options);
+                $options = Utils::isJson($options, $options);
                 if (is_array($options)) {
                     foreach ($options as $key => $value) {
                         $replace['#' . $key . '#'] = $value;

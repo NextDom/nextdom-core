@@ -999,7 +999,7 @@ class EqLogic
                         $br_before = 1;
                     }
                 }
-                $replace['#cmd#'] = template_replace($table['tag'], $table['html']);
+                $replace['#cmd#'] = Utils::templateReplace($table['tag'], $table['html']);
                 break;
             default:
                 $replace['#eqLogic_class#'] = 'eqLogic_layout_default';
@@ -1025,7 +1025,7 @@ class EqLogic
         if (!isset(self::$_templateArray[$version])) {
             self::$_templateArray[$version] = getTemplate('core', $version, 'eqLogic');
         }
-        return $this->postToHtml($viewType, template_replace($replace, self::$_templateArray[$version]));
+        return $this->postToHtml($viewType, Utils::templateReplace($replace, self::$_templateArray[$version]));
     }
 
     /**

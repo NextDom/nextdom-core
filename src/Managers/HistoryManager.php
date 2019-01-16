@@ -36,6 +36,7 @@ namespace NextDom\Managers;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
 
 class HistoryManager {
     const CLASS_NAME = 'history';
@@ -788,7 +789,7 @@ class HistoryManager {
                     continue;
                 }
                 $datetime = floatval(strtotime($datetime));
-                $calcul = template_replace($cmd_history, $_strcalcul);
+                $calcul = Utils::templateReplace($cmd_history, $_strcalcul);
                 if ($_noCalcul) {
                     $value[$datetime] = $calcul;
                     continue;

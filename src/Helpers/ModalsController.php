@@ -346,8 +346,8 @@ class ModalsController
 
         $pageContent = [];
         $pageContent['dates'] = array(
-            'start' => init('startDate', date('Y-m-d', strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d')))),
-            'end' => init('endDate', date('Y-m-d')),
+            'start' => Utils::init('startDate', date('Y-m-d', strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d')))),
+            'end' => Utils::init('endDate', date('Y-m-d')),
         );
         $pageContent['derive'] = Utils::init('derive', 0);
         $pageContent['step'] = Utils::init('step', 0);
@@ -1064,11 +1064,11 @@ class ModalsController
         Status::isConnectedAdminOrFail();
 
         $pageContent = [];
-        $plan3d = \plan3d::byName3dHeaderId(init('name'), init('plan3dHeader_id'));
+        $plan3d = \plan3d::byName3dHeaderId(Utils::init('name'), Utils::init('plan3dHeader_id'));
         if (!is_object($plan3d)) {
             $plan3d = new \plan3d();
-            $plan3d->setName(init('name'));
-            $plan3d->setPlan3dHeader_id(init('plan3dHeader_id'));
+            $plan3d->setName(Utils::init('name'));
+            $plan3d->setPlan3dHeader_id(Utils::init('plan3dHeader_id'));
             $plan3d->save();
         }
         $link = $plan3d->getLink();
@@ -1140,7 +1140,7 @@ class ModalsController
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pluginId = init('plugin_id');
+        $pluginId = Utils::init('plugin_id');
         if (!class_exists($pluginId)) {
             die();
         }
@@ -1182,7 +1182,7 @@ class ModalsController
         Status::isConnectedAdminOrFail();
 
         $pageContent = [];
-        $pluginId = init('plugin_id');
+        $pluginId = Utils::init('plugin_id');
         Utils::sendVarToJs('plugin_id', $pluginId);
         if (!class_exists($pluginId)) {
             die();

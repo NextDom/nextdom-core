@@ -34,6 +34,8 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\Utils;
+
 class AjaxManager {
     /**
      * Init ajax communication
@@ -45,7 +47,7 @@ class AjaxManager {
         if (!headers_sent()) {
             header('Content-Type: application/json');
         }
-        if ($checkToken && init('nextdom_token') != self::getToken()) {
+        if ($checkToken && Utils::init('nextdom_token') != self::getToken()) {
             self::error(__('Token d\'accès invalide'));
         }
     }

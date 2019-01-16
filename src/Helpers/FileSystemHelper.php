@@ -196,11 +196,11 @@ class FileSystemHelper
 
     public static function hadFileRight($_allowPath, $_path)
     {
-        $path = cleanPath($_path);
+        $path = Utils::cleanPath($_path);
         foreach ($_allowPath as $right) {
             if (strpos($right, '/') !== false || strpos($right, '\\') !== false) {
                 if (strpos($right, '/') !== 0 || strpos($right, '\\') !== 0) {
-                    $right = getRootPath() . '/' . $right;
+                    $right = NEXTDOM_ROOT . '/' . $right;
                 }
                 if (dirname($path) == $right || $path == $right) {
                     return true;

@@ -92,11 +92,11 @@ class AuthentificationHelper
             }
         }
 
-        if (!isConnect() && init('auth') != '') {
-            self::loginByHash(init('auth'));
+        if (!isConnect() && Utils::init('auth') != '') {
+            self::loginByHash(Utils::init('auth'));
         }
 
-        if (init('logout') == 1) {
+        if (Utils::init('logout') == 1) {
             self::logout();
             Utils::redirect('index.php');
             die();
@@ -115,7 +115,7 @@ class AuthentificationHelper
             sleep(5);
             return false;
         }
-        $sMdp = (!is_sha512($_password)) ? sha512($_password) : $_password;
+        $sMdp = (!Utils::isSha512($_password)) ? Utils::sha512($_password) : $_password;
         if (NetworkHelper::getUserLocation() != 'internal' && $user->getOptions('twoFactorAuthentification', 0) == 1 && $user->getOptions('twoFactorAuthentificationSecret') != '') {
             if (trim($_twoFactor) == '' || $_twoFactor === null || !$user->validateTwoFactorCode($_twoFactor)) {
                 UserManager::failedLogin();
