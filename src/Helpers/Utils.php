@@ -809,7 +809,7 @@ class Utils
                     $value = $property->getValue($_object);
                     $property->setAccessible(false);
                 }
-                $array[$name] = is_json($value, $value);
+                $array[$name] = Utils::isJson($value, $value);
             }
         }
         return $array;
@@ -821,7 +821,7 @@ class Utils
                 $method = 'set' . ucfirst($key);
                 if (method_exists($_object, $method)) {
                     $function = new \ReflectionMethod($_object, $method);
-                    $value = is_json($value, $value);
+                    $value = Utils::isJson($value, $value);
                     if (is_array($value)) {
                         if ($function->getNumberOfRequiredParameters() == 2) {
                             foreach ($value as $arrayKey => $arrayValue) {
@@ -850,7 +850,7 @@ class Utils
 
     public static function processJsonObject($_class, $_ajaxList, $_dbList = null) {
         if (!is_array($_ajaxList)) {
-            if (is_json($_ajaxList)) {
+            if (Utils::isJson($_ajaxList)) {
                 $_ajaxList = json_decode($_ajaxList, true);
             } else {
                 throw new CoreException('Invalid json : ' . print_r($_ajaxList, true));
@@ -883,12 +883,12 @@ class Utils
     public static function setJsonAttr($_attr, $_key, $_value = null) {
         if ($_value === null && !is_array($_key)) {
             if (!is_array($_attr)) {
-                $_attr = is_json($_attr, array());
+                $_attr = Utils::isJson($_attr, array());
             }
             unset($_attr[$_key]);
         } else {
             if (!is_array($_attr)) {
-                $_attr = is_json($_attr, array());
+                $_attr = Utils::isJson($_attr, array());
             }
             if (is_array($_key)) {
                 $_attr = array_merge($_attr, $_key);
@@ -906,7 +906,7 @@ class Utils
             }
         } else {
             if ($_key == '') {
-                $_attr = is_json($_attr, array());
+                $_attr = Utils::isJson($_attr, array());
                 return $_attr;
             }
             if ($_attr === '') {

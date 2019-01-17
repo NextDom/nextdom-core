@@ -33,6 +33,8 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\Utils;
+
 class ScenarioElementManager
 {
     const DB_CLASS_NAME = 'scenarioElement';
