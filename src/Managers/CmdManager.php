@@ -78,7 +78,7 @@ class CmdManager
 		}
 		$in = trim(implode(',', $_ids), ',');
 		$sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM cmd
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE id IN (' . $in . ')';
 		return self::cast(\DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
 	}
@@ -99,7 +99,7 @@ class CmdManager
             'id' => $id,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM cmd
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
         return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
     }
@@ -114,7 +114,7 @@ class CmdManager
     public static function all()
     {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM cmd
+                FROM ' . self::DB_CLASS_NAME . '
                 ORDER BY id';
         return self::cast(\DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
     }
@@ -162,14 +162,14 @@ class CmdManager
         $values = array();
         if (is_array($eqLogicId)) {
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                    FROM cmd
+                    FROM ' . self::DB_CLASS_NAME . '
                     WHERE eqLogic_id IN (' . implode(',', $eqLogicId) . ') ';
         } else {
             $values = array(
                 'eqLogic_id' => $eqLogicId,
             );
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                    FROM cmd
+                    FROM ' . self::DB_CLASS_NAME . '
                     WHERE eqLogic_id = :eqLogic_id ';
         }
         if ($_type !== null) {
@@ -200,7 +200,7 @@ class CmdManager
             'logicalId' => $logicalId,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM cmd
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE logicalId = :logicalId ';
         if ($type !== null) {
             $values['type'] = $type;
@@ -228,14 +228,14 @@ class CmdManager
             }
             $values = array();
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                    FROM cmd
+                    FROM ' . self::DB_CLASS_NAME . '
                     WHERE generic_type IN (' . trim($in, ',') . ')';
         } else {
             $values = array(
                 'generic_type' => $genericType,
             );
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                    FROM cmd
+                    FROM ' . self::DB_CLASS_NAME . '
                     WHERE generic_type=:generic_type';
         }
         if ($eqLogicId !== null) {
@@ -264,14 +264,14 @@ class CmdManager
                 'configuration' => '%' . $configuration . '%',
             );
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                    FROM cmd
+                    FROM ' . self::DB_CLASS_NAME . '
                     WHERE configuration LIKE :configuration';
         } else {
             $values = array(
                 'configuration' => '%' . $configuration[0] . '%',
             );
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                    FROM cmd
+                    FROM ' . self::DB_CLASS_NAME . '
                     WHERE configuration LIKE :configuration';
             for ($i = 1; $i < count($configuration); $i++) {
                 $values['configuration' . $i] = '%' . $configuration[$i] . '%';
@@ -302,7 +302,7 @@ class CmdManager
             'eqLogic_id' => $eqLogicId,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM cmd
+        FROM ' . self::DB_CLASS_NAME . '
         WHERE eqLogic_id=:eqLogic_id';
         if ($type !== null) {
             $values['type'] = $type;
@@ -328,7 +328,7 @@ class CmdManager
             'template' => '%' . $template . '%',
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM cmd
+        FROM ' . self::DB_CLASS_NAME . '
         WHERE template LIKE :template';
         if ($eqType !== null) {
             $values['eqType'] = $eqType;
@@ -363,7 +363,7 @@ class CmdManager
             'logicalId' => $logicalId,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM cmd
+        FROM ' . self::DB_CLASS_NAME . '
         WHERE eqLogic_id=:eqLogic_id
         AND logicalId=:logicalId';
         if ($type !== null) {
@@ -393,7 +393,7 @@ class CmdManager
             'generic_type' => $genericType,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM cmd
+        FROM ' . self::DB_CLASS_NAME . '
         WHERE eqLogic_id=:eqLogic_id
         AND generic_type=:generic_type';
         if ($type !== null) {
@@ -435,7 +435,7 @@ class CmdManager
             }
         } else {
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-            FROM cmd
+            FROM ' . self::DB_CLASS_NAME . '
             WHERE ( value=:value OR value LIKE :search)
             AND id!=:value';
             if ($type !== null) {

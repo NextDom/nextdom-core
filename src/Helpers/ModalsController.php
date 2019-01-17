@@ -39,6 +39,7 @@ use NextDom\Managers\CacheManager;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
+use NextDom\Managers\InteractQueryManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioElementManager;
@@ -776,7 +777,7 @@ class ModalsController
         if ($interactDefId == '') {
             throw new CoreException(__('Interact Def ID ne peut être vide'));
         }
-        $pageContent['interactQueries'] = \interactQuery::byInteractDefId($interactDefId);
+        $pageContent['interactQueries'] = InteractQueryManager::byInteractDefId($interactDefId);
         if (count($pageContent['interactQueries']) == 0) {
             throw new CoreException(__('Aucune phrase trouvée'));
         }

@@ -27,6 +27,7 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
+use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
@@ -1729,7 +1730,7 @@ class EqLogic
         $return = array('cmd' => array(), 'eqLogic' => array(), 'scenario' => array(), 'plan' => array(), 'view' => array());
         $return['cmd'] = CmdManager::searchConfiguration('#eqLogic' . $this->getId() . '#');
         $return['eqLogic'] = EqLogicManager::searchConfiguration(array('#eqLogic' . $this->getId() . '#', '"eqLogic":"' . $this->getId()));
-        $return['interactDef'] = \interactDef::searchByUse(array('#eqLogic' . $this->getId() . '#', '"eqLogic":"' . $this->getId()));
+        $return['interactDef'] = InteractDefManager::searchByUse(array('#eqLogic' . $this->getId() . '#', '"eqLogic":"' . $this->getId()));
         $return['scenario'] = ScenarioManager::searchByUse(array(
             array('action' => 'equipment', 'option' => $this->getId(), 'and' => true),
             array('action' => '#eqLogic' . $this->getId() . '#'),

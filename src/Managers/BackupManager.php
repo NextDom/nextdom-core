@@ -37,8 +37,6 @@ namespace NextDom\Managers;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\FileSystemHelper;
 
-require_once NEXTDOM_ROOT.'/core/class/cache.class.php';
-
 class BackupManager {
     /**
      * Start system backup

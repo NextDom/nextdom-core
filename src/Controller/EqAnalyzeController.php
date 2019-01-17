@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
  
+use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ScenarioExpressionManager;
@@ -183,7 +184,7 @@ class EqAnalyzeController extends BaseController
         $pageContent['eqAnalyzeCmdDeadCmd'] = CmdManager::deadCmd();
         $pageContent['eqAnalyzeJeeObjectDeadCmd'] = JeeObjectManager::deadCmd();
         $pageContent['eqAnalyzeScenarioDeadCmd'] = ScenarioManager::consystencyCheck(true);
-        $pageContent['eqAnalyzeInteractDefDeadCmd'] = \interactDef::deadCmd();
+        $pageContent['eqAnalyzeInteractDefDeadCmd'] = InteractDefManager::deadCmd();
         $pageContent['eqAnalyzePluginDeadCmd'] = [];
 
         $pluginManagerListPluginTrue = PluginManager::listPlugin(true);

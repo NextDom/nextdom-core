@@ -32,6 +32,7 @@ use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\HistoryManager;
+use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
@@ -1651,7 +1652,7 @@ class Cmd
         $return['cmd'] = CmdManager::searchConfiguration('#' . $this->getId() . '#');
         $return['eqLogic'] = EqLogicManager::searchConfiguration('#' . $this->getId() . '#');
         $return['scenario'] = ScenarioManager::searchByUse(array(array('action' => '#' . $this->getId() . '#')));
-        $return['interactDef'] = \interactDef::searchByUse('#' . $this->getId() . '#');
+        $return['interactDef'] = InteractDefManager::searchByUse('#' . $this->getId() . '#');
         $return['view'] = \view::searchByUse('cmd', $this->getId());
         $return['plan'] = \planHeader::searchByUse('cmd', $this->getId());
         if ($_array) {
