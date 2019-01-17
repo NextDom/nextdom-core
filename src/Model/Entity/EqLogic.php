@@ -112,13 +112,6 @@ class EqLogic
     protected $isEnable;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="status", type="text", length=65535, nullable=true)
-     */
-    protected $status;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="timeout", type="integer", nullable=true)
