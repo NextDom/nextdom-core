@@ -979,7 +979,7 @@ class Scenario
 
     /**
      *
-     * @return \scenarioElement[]
+     * @return ScenarioElement[]
      * @throws \Exception
      */
     public function getElement()

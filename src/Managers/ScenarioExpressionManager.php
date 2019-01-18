@@ -37,11 +37,13 @@ use NextDom\Helpers\DateHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Model\Entity\Scenario;
+use NextDom\Model\Entity\ScenarioExpression;
 
 class ScenarioExpressionManager
 {
     const DB_CLASS_NAME = 'scenarioExpression';
-    const CLASS_NAME    = 'scenarioExpression';
+    const CLASS_NAME = ScenarioExpression::class;
     const WAIT_LIMIT    = 7200;
 
     /**
@@ -237,6 +239,7 @@ class ScenarioExpressionManager
      * @param $_sValue
      *
      * @return array|mixed
+     * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function randText($_sValue)
@@ -366,6 +369,7 @@ class ScenarioExpressionManager
      * @param $endDate
      *
      * @return float|string
+     * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function averageBetween($cmdId, $startDate, $endDate)
@@ -441,6 +445,7 @@ class ScenarioExpressionManager
      * @param $startDate
      * @param $endDate
      * @return float|string
+     * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function maxBetween($cmdId, $startDate, $endDate)
@@ -544,6 +549,7 @@ class ScenarioExpressionManager
      * @param $startDate
      * @param $endDate
      * @return float|string
+     * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function minBetween($cmdId, $startDate, $endDate)
@@ -565,6 +571,7 @@ class ScenarioExpressionManager
      * Obtenir une valeur médiane TODO: De quoi ?
      *
      * @return int|mixed
+     * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function median()
@@ -850,6 +857,7 @@ class ScenarioExpressionManager
      * @param $startDate
      * @param $endDate
      * @return float|string
+     * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function lastBetween($cmdId, $startDate, $endDate)
@@ -904,6 +912,7 @@ class ScenarioExpressionManager
      * @param $startDate
      * @param $endDate
      * @return string
+     * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function statisticsBetween($cmdId, $calc, $startDate, $endDate)
@@ -972,6 +981,7 @@ class ScenarioExpressionManager
      * @param mixed $value
      *
      * @return int 1 si $value est pair, sinon 0
+     * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function odd($value): int
@@ -1119,6 +1129,7 @@ class ScenarioExpressionManager
      * @param int $decimal Nombre de décimales
      *
      * @return float Valeur arrondie.
+     * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function round($value, $decimal = 0)
@@ -1185,6 +1196,7 @@ class ScenarioExpressionManager
      * @param $endInterval
      *
      * @return int TODO: 0, 1
+     * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function time_between($time, $startInverval, $endInterval)
@@ -1215,13 +1227,13 @@ class ScenarioExpressionManager
         $date2 = new \DateTime($date2Str);
         $interval = $date1->diff($date2);
         if ($intervalFormat == 's') {
-            return $interval->format('%s') + 60 * $interval->format('%i') + 3600 * $interval->format('%h') + 86400 * $interval->format('%a');
+            return intval($interval->format('%s')) + 60 * intval($interval->format('%i')) + 3600 * intval($interval->format('%h')) + 86400 * intval($interval->format('%a'));
         }
         if ($intervalFormat == 'm') {
-            return $interval->format('%i') + 60 * $interval->format('%h') + 1440 * $interval->format('%a');
+            return intval($interval->format('%i')) + 60 * intval($interval->format('%h')) + 1440 * intval($interval->format('%a'));
         }
         if ($intervalFormat == 'h') {
-            return $interval->format('%h') + 24 * $interval->format('%a');
+            return intval($interval->format('%h')) + 24 * intval($interval->format('%a'));
         }
         return $interval->format('%a');
     }
@@ -1231,6 +1243,7 @@ class ScenarioExpressionManager
      *
      * @param $value
      * @return int|mixed|string
+     * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function time($value)
@@ -1263,6 +1276,7 @@ class ScenarioExpressionManager
      *
      * @param $time
      * @return string
+     * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function formatTime($time)
@@ -1415,7 +1429,7 @@ class ScenarioExpressionManager
      * TODO Faut bien les définir les tags
      *
      * @param $_expression
-     * @param null $_scenario
+     * @param Scenario $_scenario
      * @param bool $_quote
      * @param int $_nbCall
      * @return mixed
@@ -1525,6 +1539,7 @@ class ScenarioExpressionManager
      * @param $cmd
      * @param null $options
      * @return mixed
+     * @throws \Exception
      */
     public static function createAndExec($type, $cmd, $options = null)
     {

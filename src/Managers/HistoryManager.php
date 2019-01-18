@@ -59,13 +59,13 @@ class HistoryManager {
         }
         $target_cmd = CmdManager::byId(str_replace('#', '', $_target_id));
         if (!is_object($target_cmd)) {
-            throw new CoreException(__('La commande cible n\'existe pas :', __FILE__) . ' ' . $_target_id);
+            throw new CoreException(__('La commande cible n\'existe pas :') . ' ' . $_target_id);
         }
         if ($target_cmd->getType() != 'info') {
-            throw new CoreException(__('La commande cible n\'est pas de type info', __FILE__));
+            throw new CoreException(__('La commande cible n\'est pas de type info'));
         }
         if ($target_cmd->getSubType() != $source_cmd->getSubType()) {
-            throw new CoreException(__('Le sous-type de la commande cible n\'est pas le même que celui de la commande source', __FILE__));
+            throw new CoreException(__('Le sous-type de la commande cible n\'est pas le même que celui de la commande source'));
         }
         if ($target_cmd->getIsHistorized() != 1) {
             $target_cmd->setIsHistorized(1);
@@ -548,7 +548,7 @@ class HistoryManager {
     public static function lastStateDuration($_cmd_id, $_value = null) {
         $cmd = CmdManager::byId($_cmd_id);
         if (!is_object($cmd)) {
-            throw new \Exception(__('Commande introuvable : ', __FILE__) . $_cmd_id);
+            throw new \Exception(__('Commande introuvable : ') . $_cmd_id);
         }
         if ($cmd->getIsHistorized() != 1) {
             return -2;
@@ -556,7 +556,7 @@ class HistoryManager {
         $_value = str_replace(',', '.', $_value);
         $_value = trim($_value);
         $_decimal = strlen(substr(strrchr($_value, '.'), 1));
-        $histories = array_reverse(history::all($_cmd_id));
+        $histories = array_reverse(self::all($_cmd_id));
         $c = count($histories);
         if ($c == 0) {
             return -1;
@@ -687,7 +687,7 @@ class HistoryManager {
     public static function stateChanges($_cmd_id, $_value = null, $_startTime = null, $_endTime = null) {
         $cmd = CmdManager::byId($_cmd_id);
         if (!is_object($cmd)) {
-            throw new Exception(__('Commande introuvable : ', __FILE__) . $_cmd_id);
+            throw new CoreException(__('Commande introuvable : ') . $_cmd_id);
         }
         $_dateTime = '';
         if ($_startTime !== null) {

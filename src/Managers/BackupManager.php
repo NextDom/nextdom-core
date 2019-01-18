@@ -43,6 +43,7 @@ class BackupManager {
      * Start system backup
      *
      * @param bool $taskInBackground Lancer la sauvegarde en tâche de fond.
+     * @throws \Exception
      */
     public static function backup(bool $taskInBackground = false)
     {
@@ -99,6 +100,7 @@ class BackupManager {
      * @param string $backupFilePath Backup file path
      *
      * @param bool $taskInBackground Start backup task in background
+     * @throws \Exception
      */
     public static function restore(string $backupFilePath = '', bool $taskInBackground = false)
     {

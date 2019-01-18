@@ -416,7 +416,6 @@ class InteractQueryManager {
             }
             return $return . ')';
         }
-        return '';
     }
 
     public static function autoInteractWordFind($_string, $_word) {

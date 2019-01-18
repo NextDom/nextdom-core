@@ -34,6 +34,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
 
 class JeeObjectManager
 {

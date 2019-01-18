@@ -67,7 +67,7 @@ class EqLogicManager
     /**
      * TODO: ???
      * Repasse en private
-     * @param $inputs
+     * @param EqLogic $inputs
      *
      * @return array|mixed
      */
@@ -135,7 +135,7 @@ class EqLogicManager
      * @param null $logicalId
      * @param bool $orderByName
      *
-     * @return \eqLogic[] All linked eqLogic
+     * @return EqLogic[] All linked eqLogic
      *
      * @throws \Exception
      */
