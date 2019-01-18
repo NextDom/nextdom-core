@@ -35,6 +35,7 @@ namespace NextDom\Helpers;
 
 use NextDom\Managers\AjaxManager;
 use NextDom\Managers\ConfigManager;
+use NextDom\Helpers\LogHelper;
 use NextDom\Managers\UserManager;
 
 class AuthentificationHelper
@@ -88,15 +89,15 @@ class AuthentificationHelper
                 @session_start();
                 $_SESSION['user'] = $user;
                 @session_write_close();
-                \log::add('connection', 'info', __('Connexion de l\'utilisateur par REMOTE_USER : ', __FILE__) . $user->getLogin());
+                LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par REMOTE_USER : ', __FILE__) . $user->getLogin());
             }
         }
 
-        if (!isConnect() && init('auth') != '') {
-            self::loginByHash(init('auth'));
+        if (!isConnect() && Utils::init('auth') != '') {
+            self::loginByHash(Utils::init('auth'));
         }
 
-        if (init('logout') == 1) {
+        if (Utils::init('logout') == 1) {
             self::logout();
             Utils::redirect('index.php');
             die();
@@ -115,7 +116,7 @@ class AuthentificationHelper
             sleep(5);
             return false;
         }
-        $sMdp = (!is_sha512($_password)) ? sha512($_password) : $_password;
+        $sMdp = (!Utils::isSha512($_password)) ? Utils::sha512($_password) : $_password;
         if (NetworkHelper::getUserLocation() != 'internal' && $user->getOptions('twoFactorAuthentification', 0) == 1 && $user->getOptions('twoFactorAuthentificationSecret') != '') {
             if (trim($_twoFactor) == '' || $_twoFactor === null || !$user->validateTwoFactorCode($_twoFactor)) {
                 UserManager::failedLogin();
@@ -126,7 +127,7 @@ class AuthentificationHelper
         @session_start();
         $_SESSION['user'] = $user;
         @session_write_close();
-        \log::add('connection', 'info', __('Connexion de l\'utilisateur : ', __FILE__) . $_login);
+        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur : ', __FILE__) . $_login);
         return true;
     }
 
@@ -172,7 +173,7 @@ class AuthentificationHelper
         if (!isset($_COOKIE['nextdom_token'])) {
             setcookie('nextdom_token', AjaxManager::getToken(), time() + 365 * 24 * 3600, "/", '', false, true);
         }
-        \log::add('connection', 'info', __('Connexion de l\'utilisateur par clef : ', __FILE__) . $user->getLogin());
+        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par clef : ', __FILE__) . $user->getLogin());
         return true;
     }
 

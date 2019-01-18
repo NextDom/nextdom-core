@@ -42,6 +42,11 @@ class jeeObject {
         return JeeObjectManager::byName($_name);
     }
 
+    /**
+     * @param bool $_onlyVisible
+     * @return \jeeObject[]|null
+     * @throws Exception
+     */
     public static function all($_onlyVisible = false) {
         return JeeObjectManager::all($_onlyVisible);
     }
@@ -191,6 +196,15 @@ class jeeObject {
     }
 
 
+    /**
+     * @param bool $onlyEnable
+     * @param bool $onlyVisible
+     * @param null $eqTypeName
+     * @param null $logicalId
+     * @param bool $searchOnchild
+     * @return array|eqLogic[]
+     * @throws Exception
+     */
     public function getEqLogic($onlyEnable = true, $onlyVisible = false, $eqTypeName = null, $logicalId = null, $searchOnchild = false) {
         $eqLogics = EqLogicManager::byObjectId($this->getId(), $onlyEnable, $onlyVisible, $eqTypeName, $logicalId);
         if (is_array($eqLogics)) {

@@ -181,7 +181,7 @@ class FileSystemHelper
      *
      * @return string Contenu du fichier ou une chaine vide.
      */
-    public static function getTemplateFilecontent(string $folder, string $version, string $filename, string $pluginId = ''): string
+    public static function getTemplateFileContent(string $folder, string $version, string $filename, string $pluginId = ''): string
     {
         $result = '';
         $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
@@ -196,11 +196,11 @@ class FileSystemHelper
 
     public static function hadFileRight($_allowPath, $_path)
     {
-        $path = cleanPath($_path);
+        $path = Utils::cleanPath($_path);
         foreach ($_allowPath as $right) {
             if (strpos($right, '/') !== false || strpos($right, '\\') !== false) {
                 if (strpos($right, '/') !== 0 || strpos($right, '\\') !== 0) {
-                    $right = getRootPath() . '/' . $right;
+                    $right = NEXTDOM_ROOT . '/' . $right;
                 }
                 if (dirname($path) == $right || $path == $right) {
                     return true;

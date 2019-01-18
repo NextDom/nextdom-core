@@ -27,6 +27,7 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
+use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
@@ -110,13 +111,6 @@ class EqLogic
      * @ORM\Column(name="isEnable", type="boolean", nullable=true)
      */
     protected $isEnable;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="status", type="text", length=65535, nullable=true)
-     */
-    protected $status;
 
     /**
      * @var integer
@@ -999,7 +993,7 @@ class EqLogic
                         $br_before = 1;
                     }
                 }
-                $replace['#cmd#'] = template_replace($table['tag'], $table['html']);
+                $replace['#cmd#'] = Utils::templateReplace($table['tag'], $table['html']);
                 break;
             default:
                 $replace['#eqLogic_class#'] = 'eqLogic_layout_default';
@@ -1025,7 +1019,7 @@ class EqLogic
         if (!isset(self::$_templateArray[$version])) {
             self::$_templateArray[$version] = getTemplate('core', $version, 'eqLogic');
         }
-        return $this->postToHtml($viewType, template_replace($replace, self::$_templateArray[$version]));
+        return $this->postToHtml($viewType, Utils::templateReplace($replace, self::$_templateArray[$version]));
     }
 
     /**
@@ -1736,7 +1730,7 @@ class EqLogic
         $return = array('cmd' => array(), 'eqLogic' => array(), 'scenario' => array(), 'plan' => array(), 'view' => array());
         $return['cmd'] = CmdManager::searchConfiguration('#eqLogic' . $this->getId() . '#');
         $return['eqLogic'] = EqLogicManager::searchConfiguration(array('#eqLogic' . $this->getId() . '#', '"eqLogic":"' . $this->getId()));
-        $return['interactDef'] = \interactDef::searchByUse(array('#eqLogic' . $this->getId() . '#', '"eqLogic":"' . $this->getId()));
+        $return['interactDef'] = InteractDefManager::searchByUse(array('#eqLogic' . $this->getId() . '#', '"eqLogic":"' . $this->getId()));
         $return['scenario'] = ScenarioManager::searchByUse(array(
             array('action' => 'equipment', 'option' => $this->getId(), 'and' => true),
             array('action' => '#eqLogic' . $this->getId() . '#'),
@@ -1758,7 +1752,7 @@ class EqLogic
      * @param null $_logicalId
      * @param null $_visible
      * @param bool $_multiple
-     * @return \cmd[]
+     * @return Cmd[]
      * @throws \Exception
      */
     public function getCmd($_type = null, $_logicalId = null, $_visible = null, $_multiple = false)

@@ -821,7 +821,7 @@ class scenarioExpression
     {
         $cmd = cmd::byId(str_replace('#', '', $this->getExpression()));
         if (is_object($cmd)) {
-            if ($cmd->getSubtype() == 'slider' && isset($options['slider'])) {
+            if ($cmd->getSubType() == 'slider' && isset($options['slider'])) {
                 $options['slider'] = evaluate($options['slider']);
             }
             if (is_array($options) && (count($options) > 1 || (isset($options['background']) && $options['background'] == 1))) {

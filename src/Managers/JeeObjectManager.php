@@ -85,7 +85,7 @@ class JeeObjectManager
      *
      * @param bool $onlyVisible Filter only visible objects
      *
-     * @return array|mixed|null
+     * @return \jeeObject[]|null
      *
      * @throws \Exception
      */
