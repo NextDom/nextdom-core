@@ -18,6 +18,7 @@
 namespace NextDom\Helpers;
 
 use NextDom\Managers\AjaxManager;
+use NextDom\Helpers\LogHelper;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;
@@ -280,7 +281,7 @@ class PrepareView
                 try {
                     $pageData['JS_POOL'][] = '/plugins/'.$value.'/public/js/desktop/events.js';
                 } catch (\Exception $e) {
-                    \log::add($value, 'error', 'Event JS file not found');
+                    LogHelper::add($value, 'error', 'Event JS file not found');
                 }
             }
         }

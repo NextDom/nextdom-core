@@ -467,7 +467,6 @@ class ScenarioExpressionManager
      * @param int $waitTimeout Durée limite de l'attente (7200s par défaut)
      *
      * @return int
-     * @throws \ReflectionException
      */
     public static function wait($condition, $waitTimeout = self::WAIT_LIMIT)
     {
@@ -696,6 +695,7 @@ class ScenarioExpressionManager
      * @param $startDate
      * @param null $endDate
      * @return array|string
+     * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function stateChangesBetween($cmdId, $value, $startDate, $endDate = null)
@@ -1419,6 +1419,7 @@ class ScenarioExpressionManager
      * @param bool $_quote
      * @param int $_nbCall
      * @return mixed
+     * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function setTags($_expression, &$_scenario = null, $_quote = false, $_nbCall = 0) {

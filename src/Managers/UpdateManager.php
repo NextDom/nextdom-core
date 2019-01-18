@@ -34,6 +34,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\FileSystemHelper;
+use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 
 class UpdateManager
@@ -171,7 +172,7 @@ class UpdateManager
                         try {
                             $update->doUpdate();
                         } catch (\Exception $e) {
-                            \log::add('update', 'update', $e->getMessage());
+                            LogHelper::add('update', 'update', $e->getMessage());
                             $error = true;
                         }
                     }

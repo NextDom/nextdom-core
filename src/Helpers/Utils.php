@@ -259,7 +259,7 @@ class Utils
     }
 
     /**
-     * @param CoreException $e
+     * @param CoreException|\Exception $e
      * @return string
      */
     public static function displayException($e)

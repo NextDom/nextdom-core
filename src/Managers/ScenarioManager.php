@@ -34,6 +34,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\FileSystemHelper;
+use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Model\Entity\Scenario;
@@ -409,7 +410,7 @@ class ScenarioManager
                         if ($needsReturn) {
                             $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Déclencheur du scénario', 'who' => '#' . $cmd_id . '#');
                         } else {
-                            \log::add('scenario', 'error', \__('Un déclencheur du scénario : ') . $scenario->getHumanName() . \__(' est introuvable'));
+                            LogHelper::add('scenario', 'error', \__('Un déclencheur du scénario : ') . $scenario->getHumanName() . \__(' est introuvable'));
                         }
                     }
                 }
@@ -424,7 +425,7 @@ class ScenarioManager
                     if ($needsReturn) {
                         $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Utilisé dans le scénario', 'who' => '#' . $cmd_id . '#');
                     } else {
-                        \log::add('scenario', 'error', \__('Une commande du scénario : ') . $scenario->getHumanName() . \__(' est introuvable'));
+                        LogHelper::add('scenario', 'error', \__('Une commande du scénario : ') . $scenario->getHumanName() . \__(' est introuvable'));
                     }
                 }
             }

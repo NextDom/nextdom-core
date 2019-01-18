@@ -577,8 +577,8 @@ class CmdManager
     /**
      * TODO: ???
      *
-     * @param Cmd $input
-     * @return array|mixed
+     * @param Cmd|array $input
+     * @return array|mixed|string
      * @throws \ReflectionException
      */
     public static function cmdToHumanReadable($input)
@@ -697,6 +697,7 @@ class CmdManager
      * @param $input
      * @param bool $quote
      * @return array|mixed
+     * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function cmdToValue($input, $quote = false)

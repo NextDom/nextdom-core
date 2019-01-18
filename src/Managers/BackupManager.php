@@ -36,6 +36,7 @@ namespace NextDom\Managers;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\FileSystemHelper;
+use NextDom\Helpers\LogHelper;
 
 class BackupManager {
     /**
@@ -46,9 +47,9 @@ class BackupManager {
     public static function backup(bool $taskInBackground = false)
     {
         if ($taskInBackground) {
-            \log::clear('backup');
+            LogHelper::clear('backup');
             $cmd = NEXTDOM_ROOT . '/install/backup.php';
-            $cmd .= ' >> ' . \log::getPathToLog('backup') . ' 2>&1 &';
+            $cmd .= ' >> ' . LogHelper::getPathToLog('backup') . ' 2>&1 &';
             \system::php($cmd, true);
         } else {
             require_once NEXTDOM_ROOT . '/install/backup.php';
@@ -102,9 +103,9 @@ class BackupManager {
     public static function restore(string $backupFilePath = '', bool $taskInBackground = false)
     {
         if ($taskInBackground) {
-            \log::clear('restore');
+            LogHelper::clear('restore');
             $cmd = NEXTDOM_ROOT . '/install/restore.php "backup=' . $backupFilePath . '"';
-            $cmd .= ' >> ' . \log::getPathToLog('restore') . ' 2>&1 &';
+            $cmd .= ' >> ' . LogHelper::getPathToLog('restore') . ' 2>&1 &';
             \system::php($cmd, true);
         } else {
             global $BACKUP_FILE;

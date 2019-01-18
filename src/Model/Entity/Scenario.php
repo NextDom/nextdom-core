@@ -29,6 +29,7 @@ use NextDom\Managers\CronManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
+use NextDom\Helpers\LogHelper;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioManager;
 
@@ -482,7 +483,7 @@ class Scenario
             $cmd .= ' scenario_id=' . $this->getId();
             $cmd .= ' trigger=' . escapeshellarg($trigger);
             $cmd .= ' "message=' . escapeshellarg(sanitizeAccent($message)) . '"';
-            $cmd .= ' >> ' . \log::getPathToLog('scenario_execution') . ' 2>&1 &';
+            $cmd .= ' >> ' . LogHelper::getPathToLog('scenario_execution') . ' 2>&1 &';
             SystemHelper::php($cmd);
         }
         return true;
@@ -516,12 +517,12 @@ class Scenario
 
         $cmd = CmdManager::byId(str_replace('#', '', $trigger));
         if (is_object($cmd)) {
-            \log::add('event', 'info', __('Exécution du scénario ') . $this->getHumanName() . __(' déclenché par : ') . $cmd->getHumanName());
+            LogHelper::add('event', 'info', __('Exécution du scénario ') . $this->getHumanName() . __(' déclenché par : ') . $cmd->getHumanName());
             if ($this->getConfiguration('timeline::enable')) {
                 TimeLine::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'trigger' => $cmd->getHumanName(true)));
             }
         } else {
-            \log::add('event', 'info', __('Exécution du scénario ') . $this->getHumanName() . __(' déclenché par : ') . $trigger);
+            LogHelper::add('event', 'info', __('Exécution du scénario ') . $this->getHumanName() . __(' déclenché par : ') . $trigger);
             if ($this->getConfiguration('timeline::enable')) {
                 TimeLine::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'trigger' => $trigger == 'schedule' ? 'programmation' : $trigger));
             }
@@ -944,7 +945,7 @@ class Scenario
                         $cron->halt();
                         $cron->remove();
                     } catch (\Exception $e) {
-                        \log::add('scenario', 'info', __('Can not stop subtask : ') . print_r($cron->getOption(), true));
+                        LogHelper::add('scenario', 'info', __('Can not stop subtask : ') . print_r($cron->getOption(), true));
                     }
                 }
             }

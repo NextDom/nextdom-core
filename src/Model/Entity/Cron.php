@@ -24,6 +24,7 @@ use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\CronManager;
+use NextDom\Helpers\LogHelper;
 
 /**
  * Cron
@@ -370,12 +371,12 @@ class Cron
         $cmd = NEXTDOM_ROOT . '/core/php/jeeCron.php';
         $cmd .= ' "cron_id=' . $this->getId() . '"';
         if (!$this->running()) {
-            SystemHelper::php($cmd . ' >> ' . \log::getPathToLog('cron_execution') . ' 2>&1 &');
+            SystemHelper::php($cmd . ' >> ' . LogHelper::getPathToLog('cron_execution') . ' 2>&1 &');
         } else {
             if (!$noErrorReport) {
                 $this->halt();
                 if (!$this->running()) {
-                    exec($cmd . ' >> ' . \log::getPathToLog('cron_execution') . ' 2>&1 &');
+                    exec($cmd . ' >> ' . LogHelper::getPathToLog('cron_execution') . ' 2>&1 &');
                 } else {
                     throw new CoreException(__('Impossible d\'exécuter la tâche car elle est déjà en cours d\'exécution (') . ' : ' . $cmd);
                 }
@@ -436,7 +437,7 @@ class Cron
             $this->setState('stop');
             $this->setPID();
         } else {
-            \log::add('cron', 'info', __('Arrêt de ', __FILE__) . $this->getClass() . '::' . $this->getFunction() . '(), PID : ' . $this->getPID());
+            LogHelper::add('cron', 'info', __('Arrêt de ', __FILE__) . $this->getClass() . '::' . $this->getFunction() . '(), PID : ' . $this->getPID());
             if ($this->getPID() > 0) {
                 SystemHelper::kill($this->getPID());
                 $retry = 0;
@@ -507,7 +508,7 @@ class Cron
                 return true;
             }
         } catch (\Exception $e) {
-            \log::add('cron', 'debug', 'Error on isDue : ' . $e->getMessage() . ', cron : ' . $this->getSchedule());
+            LogHelper::add('cron', 'debug', 'Error on isDue : ' . $e->getMessage() . ', cron : ' . $this->getSchedule());
         }
         return false;
     }

@@ -34,6 +34,7 @@ use NextDom\Managers\EventManager;
 use NextDom\Managers\HistoryManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Helpers\LogHelper;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
@@ -689,7 +690,7 @@ class Cmd
                 }
                 ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
             } catch (\Exception $e) {
-                \log::add('cmd', 'error', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
+                LogHelper::add('cmd', 'error', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
             }
         }
     }
@@ -716,7 +717,7 @@ class Cmd
                 }
                 ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
             } catch (\Exception $e) {
-                \log::add('cmd', 'error', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
+                LogHelper::add('cmd', 'error', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
             }
         }
     }
@@ -766,9 +767,9 @@ class Cmd
             }
             $str_option = '';
             if (is_array($options) && ((count($options) > 1 && isset($options['uid'])) || count($options) > 0)) {
-                \log::add('event', 'info', __('Exécution de la commande ') . $this->getHumanName() . __(' avec les paramètres ') . json_encode($options, true));
+                LogHelper::add('event', 'info', __('Exécution de la commande ') . $this->getHumanName() . __(' avec les paramètres ') . json_encode($options, true));
             } else {
-                \log::add('event', 'info', __('Exécution de la commande ') . $this->getHumanName());
+                LogHelper::add('event', 'info', __('Exécution de la commande ') . $this->getHumanName());
             }
 
             if ($this->getConfiguration('timeline::enable')) {
@@ -790,7 +791,7 @@ class Cmd
                     $eqLogic->save();
                 }
             }
-            \log::add($type, 'error', __('Erreur exécution de la commande ') . $this->getHumanName() . ' : ' . $e->getMessage());
+            LogHelper::add($type, 'error', __('Erreur exécution de la commande ') . $this->getHumanName() . ' : ' . $e->getMessage());
             throw $e;
         }
         if ($options !== null && $this->getValue() == '') {
@@ -1068,7 +1069,7 @@ class Cmd
         }
         $value = $this->formatValue($_value);
         if ($this->getSubType() == 'numeric' && ($value > $this->getConfiguration('maxValue', $value) || $value < $this->getConfiguration('minValue', $value)) && strpos($value, 'error') === false) {
-            \log::add('cmd', 'info', __('La commande n\'est pas dans la plage de valeur autorisée : ') . $this->getHumanName() . ' => ' . $value);
+            LogHelper::add('cmd', 'info', __('La commande n\'est pas dans la plage de valeur autorisée : ') . $this->getHumanName() . ' => ' . $value);
             return;
         }
         if ($this->getConfiguration('denyValues') != '' && in_array($value, explode(';', $this->getConfiguration('denyValues')))) {
@@ -1104,7 +1105,7 @@ class Cmd
         if ($repeat) {
             $message .= ' (répétition)';
         }
-        \log::add('event', 'info', $message);
+        LogHelper::add('event', 'info', $message);
         $events = array();
         if (!$repeat) {
             $this->setCache(array('value' => $value, 'valueDate' => $this->getValueDate()));
@@ -1223,7 +1224,7 @@ class Cmd
                 }
                 ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
             } catch (\Exception $e) {
-                \log::add('cmd', 'error', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Détails : ') . $e->getMessage());
+                LogHelper::add('cmd', 'error', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Détails : ') . $e->getMessage());
             }
         }
     }
@@ -1315,7 +1316,7 @@ class Cmd
                 $message .= ' ' . __('pendant plus de ') . $this->getAlert($_level . 'during') . __(' minute(s)');
             }
             $message .= ' => ' . str_replace('#value#', $_value, $this->getAlert($_level . 'if'));
-            \log::add('event', 'info', $message);
+            LogHelper::add('event', 'info', $message);
             $eqLogic = $this->getEqLogicId();
             if (ConfigManager::byKey('alert::addMessageOn' . ucfirst($_level)) == 1) {
                 \message::add($eqLogic->getEqType_name(), $message);
@@ -1364,13 +1365,13 @@ class Cmd
             '#eq_name#' => urlencode($this->getEqLogicId()->getName()),
         );
         $url = str_replace(array_keys($replace), $replace, $url);
-        \log::add('event', 'info', __('Appels de l\'URL de push pour la commande ') . $this->getHumanName() . ' : ' . $url);
+        LogHelper::add('event', 'info', __('Appels de l\'URL de push pour la commande ') . $this->getHumanName() . ' : ' . $url);
         $http = new \com_http($url);
         $http->setLogError(false);
         try {
             $http->exec();
         } catch (\Exception $e) {
-            \log::add('cmd', 'error', __('Erreur push sur : ') . $url . ' => ' . $e->getMessage());
+            LogHelper::add('cmd', 'error', __('Erreur push sur : ') . $url . ' => ' . $e->getMessage());
         }
     }
 

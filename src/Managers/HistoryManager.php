@@ -603,9 +603,14 @@ class HistoryManager {
         }
         return -1;
     }
+
     /**
      * Fonction renvoie la durée depuis le dernier changement d'état
      * à la valeur passée en paramètre
+     * @param $_cmd_id
+     * @param $_value
+     * @return false|int
+     * @throws CoreException
      */
     public static function lastChangeStateDuration($_cmd_id, $_value) {
         $cmd = CmdManager::byId($_cmd_id);

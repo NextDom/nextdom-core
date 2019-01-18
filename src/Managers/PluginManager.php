@@ -36,6 +36,7 @@ namespace NextDom\Managers;
 use NextDom\Enums\DaemonStateEnum;
 use NextDom\Enums\PluginManagerCronEnum;
 use NextDom\Helpers\FileSystemHelper;
+use NextDom\Helpers\LogHelper;
 
 class PluginManager
 {
@@ -134,7 +135,7 @@ class PluginManager
                     try {
                         $listPlugin[] = self::byId($row['plugin']);
                     } catch (\Throwable $e) {
-                        \log::add('plugin', 'error', $e->getMessage(), 'pluginNotFound::' . $row['plugin']);
+                        LogHelper::add('plugin', 'error', $e->getMessage(), 'pluginNotFound::' . $row['plugin']);
                     }
                 }
             }
@@ -147,7 +148,7 @@ class PluginManager
                         try {
                             $listPlugin[] = self::byId($pathInfoPlugin);
                           } catch (\Throwable $e) {
-                            \log::add('plugin', 'error', $e->getMessage(), 'pluginNotFound::' . $pathInfoPlugin);
+                            LogHelper::add('plugin', 'error', $e->getMessage(), 'pluginNotFound::' . $pathInfoPlugin);
                         }
                     }
                 }
@@ -310,7 +311,7 @@ class PluginManager
                     try {
                         $pluginId::$cronType();
                     } catch (\Throwable $e) {
-                        \log::add($pluginId, 'error', \__('Erreur sur la fonction cron du plugin : ') . $e->getMessage());
+                        LogHelper::add($pluginId, 'error', \__('Erreur sur la fonction cron du plugin : ') . $e->getMessage());
                     }
                 }
             }
@@ -332,7 +333,7 @@ class PluginManager
                 try {
                     $pluginId::start();
                 } catch (\Throwable $e) {
-                    \log::add($pluginId, 'error', \__('Erreur sur la fonction start du plugin : ') . $e->getMessage());
+                    LogHelper::add($pluginId, 'error', \__('Erreur sur la fonction start du plugin : ') . $e->getMessage());
                 }
             }
         }
@@ -352,7 +353,7 @@ class PluginManager
                 try {
                     $pluginId::stop();
                 } catch (\Throwable $e) {
-                    \log::add($pluginId, 'error', \__('Erreur sur la fonction stop du plugin : ') . $e->getMessage());
+                    LogHelper::add($pluginId, 'error', \__('Erreur sur la fonction stop du plugin : ') . $e->getMessage());
                 }
             }
         }
@@ -381,7 +382,7 @@ class PluginManager
                     shell_exec('rm ' . $dependancy_info['progress_file']);
                 }
                 ConfigManager::save('deamonAutoMode', 0, $plugin->getId());
-                \log::add($plugin->getId(), 'error', \__('Attention : l\'installation des dépendances a dépassé le temps maximum autorisé : ') . $plugin->getMaxDependancyInstallTime() . 'min');
+                LogHelper::add($plugin->getId(), 'error', \__('Attention : l\'installation des dépendances a dépassé le temps maximum autorisé : ') . $plugin->getMaxDependancyInstallTime() . 'min');
             }
             try {
                 $plugin->deamon_start(false, true);

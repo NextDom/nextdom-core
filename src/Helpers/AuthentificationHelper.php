@@ -35,6 +35,7 @@ namespace NextDom\Helpers;
 
 use NextDom\Managers\AjaxManager;
 use NextDom\Managers\ConfigManager;
+use NextDom\Helpers\LogHelper;
 use NextDom\Managers\UserManager;
 
 class AuthentificationHelper
@@ -88,7 +89,7 @@ class AuthentificationHelper
                 @session_start();
                 $_SESSION['user'] = $user;
                 @session_write_close();
-                \log::add('connection', 'info', __('Connexion de l\'utilisateur par REMOTE_USER : ', __FILE__) . $user->getLogin());
+                LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par REMOTE_USER : ', __FILE__) . $user->getLogin());
             }
         }
 
@@ -126,7 +127,7 @@ class AuthentificationHelper
         @session_start();
         $_SESSION['user'] = $user;
         @session_write_close();
-        \log::add('connection', 'info', __('Connexion de l\'utilisateur : ', __FILE__) . $_login);
+        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur : ', __FILE__) . $_login);
         return true;
     }
 
@@ -172,7 +173,7 @@ class AuthentificationHelper
         if (!isset($_COOKIE['nextdom_token'])) {
             setcookie('nextdom_token', AjaxManager::getToken(), time() + 365 * 24 * 3600, "/", '', false, true);
         }
-        \log::add('connection', 'info', __('Connexion de l\'utilisateur par clef : ', __FILE__) . $user->getLogin());
+        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par clef : ', __FILE__) . $user->getLogin());
         return true;
     }
 
