@@ -510,9 +510,19 @@ class PrepareView
         try {
             AuthentificationHelper::init();
             $page = Utils::init('p');
-            $controllerRoute = PagesController::getRoute($page);
+            $routeFileLocator = new FileLocator(NEXTDOM_ROOT . '/src');
+            $yamlLoader = new YamlFileLoader($routeFileLocator);
+            $routes = $yamlLoader->load('routes.yml');
+            $controllerRoute = $routes->get($page);
             if ($controllerRoute === null) {
-                Router::showError404AndDie();
+                if (in_array($page, PluginManager::listPlugin(true, false, true))) {
+                    ob_start();
+                    \include_file('desktop', $page, 'php', $page, true);
+                    echo ob_get_clean();
+                }
+                else {
+                    Router::showError404AndDie();
+                }
             } else {
                 $render = Render::getInstance();
                 $pageContent = [];
@@ -521,7 +531,7 @@ class PrepareView
                 $pageContent['CSS_POOL'] = [];
                 $pageContent['JS_VARS'] = [];
                 $controller = new $controllerRoute();
-                $pageContent['content'] = $controller->get($render, $pageContent);
+                $pageContent['content'] = call_user_func_array($controllerRoute->getDefaults()['_controller'], [$render, &$pageContent]);
                 $render->show('/layouts/ajax_content.html.twig', $pageContent);
             }
         } catch (\Exception $e) {
