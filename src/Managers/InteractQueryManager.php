@@ -40,8 +40,8 @@ require_once NEXTDOM_ROOT.'/core/class/cache.class.php';
 
 class InteractQueryManager {
     
-    const CLASS_NAME = 'interactDef';
-    const DB_CLASS_NAME = '`interactDef`';
+    const CLASS_NAME = 'interactQuery';
+    const DB_CLASS_NAME = '`interactQuery`';
 
     public static function byId($_id) {
         $values = array(
