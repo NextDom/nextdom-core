@@ -73,7 +73,7 @@ class PluginDaemon extends BaseAbstractModal
         }
         Utils::sendVarsToJs(['plugin_id' => $pluginId, 'refresh_deamon_info' => $refresh]);
 
-        return $render->get('/modals/plugin.daemon.html.twig');
+        return $render->get('/modals/plugin.daemon.html.twig', $pageContent);
     }
 
 }

@@ -56,7 +56,7 @@ class InteractQueryDisplay extends BaseAbstractModal
 
         Utils::sendVarToJS('interactDisplay_interactDef_id', $interactDefId);
 
-        return $render->get('/modals/interact.query.display.html.twig');
+        return $render->get('/modals/interact.query.display.html.twig', $pageContent);
     }
     
 }

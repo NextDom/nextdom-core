@@ -55,7 +55,7 @@ class PluginDependency extends BaseAbstractModal
         $plugin = PluginManager::byId($pluginId);
         $pageContent['dependencyInfo'] = $plugin->getDependencyInfo();
 
-        return $render->get('/modals/plugin.dependency.html.twig');
+        return $render->get('/modals/plugin.dependency.html.twig', $pageContent);
     }
 
 }
