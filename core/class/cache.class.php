@@ -53,7 +53,7 @@ class cache {
     }
 
     public static function exist($_key) {
-        return CacheManager::exist($_key);
+        return CacheManager::exists($_key);
     }
 
     public static function flush() {

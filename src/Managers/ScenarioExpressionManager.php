@@ -36,10 +36,7 @@ namespace NextDom\Managers;
 use NextDom\Helpers\DateHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\Utils;
-use NextDom\Managers\CmdManager;
-use NextDom\Managers\EqLogicManager;
 use NextDom\Helpers\NextDomHelper;
-use NextDom\Managers\ConfigManager;
 
 class ScenarioExpressionManager
 {
@@ -215,7 +212,7 @@ class ScenarioExpressionManager
             $result .= \__('Variable : ') . $name . ' <i class="fa fa-arrow-right"></i> ' . $value;
         } elseif (is_object(CmdManager::byId(str_replace('#', '', $baseAction['cmd'])))) {
             $cmd = CmdManager::byId(str_replace('#', '', $baseAction['cmd']));
-            $eqLogic = $cmd->getEqLogic();
+            $eqLogic = $cmd->getEqLogicId();
             $result .= $eqLogic->getHumanName(true) . ' ' . $cmd->getName();
         }
         return trim($result);
@@ -470,7 +467,6 @@ class ScenarioExpressionManager
      * @param int $waitTimeout Durée limite de l'attente (7200s par défaut)
      *
      * @return int
-     * @throws \ReflectionException
      */
     public static function wait($condition, $waitTimeout = self::WAIT_LIMIT)
     {
@@ -655,7 +651,7 @@ class ScenarioExpressionManager
      */
     public static function lastStateDuration($cmdId, $value = null)
     {
-        return \history::lastStateDuration(str_replace('#', '', $cmdId), $value);
+        return HistoryManager::lastStateDuration(str_replace('#', '', $cmdId), $value);
     }
 
     /**
@@ -688,7 +684,7 @@ class ScenarioExpressionManager
                 $value = null;
             }
         }
-        return \history::stateChanges($cmd_id, $value, date('Y-m-d H:i:s', strtotime('-' . $period)), date('Y-m-d H:i:s'));
+        return HistoryManager::stateChanges($cmd_id, $value, date('Y-m-d H:i:s', strtotime('-' . $period)), date('Y-m-d H:i:s'));
     }
 
     /**
@@ -699,6 +695,7 @@ class ScenarioExpressionManager
      * @param $startDate
      * @param null $endDate
      * @return array|string
+     * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function stateChangesBetween($cmdId, $value, $startDate, $endDate = null)
@@ -721,7 +718,7 @@ class ScenarioExpressionManager
         $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
         $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
 
-        return \history::stateChanges($cmd_id, $value, $startDate, $endDate);
+        return HistoryManager::stateChanges($cmd_id, $value, $startDate, $endDate);
     }
 
     /**
@@ -952,7 +949,7 @@ class ScenarioExpressionManager
      */
     public static function stateDuration($cmdId, $value = null)
     {
-        return \history::stateDuration(str_replace('#', '', $cmdId), $value);
+        return HistoryManager::stateDuration(str_replace('#', '', $cmdId), $value);
     }
 
     /**
@@ -965,7 +962,7 @@ class ScenarioExpressionManager
      */
     public static function lastChangeStateDuration($cmdId, $value)
     {
-        return \history::lastChangeStateDuration(str_replace('#', '', $cmdId), $value);
+        return HistoryManager::lastChangeStateDuration(str_replace('#', '', $cmdId), $value);
     }
 
     /**
@@ -991,7 +988,7 @@ class ScenarioExpressionManager
     /**
      * Obtenir l'interval de temps depuis lequel le scénario s'est exécuté
      *
-     * @param $scenarioId Identifiant du scénario
+     * @param string $scenarioId Identifiant du scénario
      * @return false|int
      * @throws \Exception
      */
@@ -1303,9 +1300,9 @@ class ScenarioExpressionManager
             case 'cmd':
                 return $cmd->getName();
             case 'eqLogic':
-                return $cmd->getEqLogic()->getName();
+                return $cmd->getEqLogicId()->getName();
             case 'object':
-                $object = $cmd->getEqLogic()->getObject();
+                $object = $cmd->getEqLogicId()->getObject();
                 if (!is_object($object)) {
                     return \__('Aucun');
                 }
@@ -1422,6 +1419,7 @@ class ScenarioExpressionManager
      * @param bool $_quote
      * @param int $_nbCall
      * @return mixed
+     * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function setTags($_expression, &$_scenario = null, $_quote = false, $_nbCall = 0) {

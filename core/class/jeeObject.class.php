@@ -42,6 +42,11 @@ class jeeObject {
         return JeeObjectManager::byName($_name);
     }
 
+    /**
+     * @param bool $_onlyVisible
+     * @return \jeeObject[]|null
+     * @throws Exception
+     */
     public static function all($_onlyVisible = false) {
         return JeeObjectManager::all($_onlyVisible);
     }
@@ -191,6 +196,15 @@ class jeeObject {
     }
 
 
+    /**
+     * @param bool $onlyEnable
+     * @param bool $onlyVisible
+     * @param null $eqTypeName
+     * @param null $logicalId
+     * @param bool $searchOnchild
+     * @return array|eqLogic[]
+     * @throws Exception
+     */
     public function getEqLogic($onlyEnable = true, $onlyVisible = false, $eqTypeName = null, $logicalId = null, $searchOnchild = false) {
         $eqLogics = EqLogicManager::byObjectId($this->getId(), $onlyEnable, $onlyVisible, $eqTypeName, $logicalId);
         if (is_array($eqLogics)) {
@@ -622,7 +636,7 @@ class jeeObject {
      */
     public function getCache(string $key = '', $default = '') {
 		$cache = cache::byKey('objectCacheAttr' . $this->getId())->getValue();
-        return utils::getJsonAttr($cache, $_key, $_default);
+        return utils::getJsonAttr($cache, $key, $default);
     }
 
     /**
@@ -632,7 +646,7 @@ class jeeObject {
      * @param mixed $value Default value
      */
     public function setCache(string $key, $value = null) {
-		cache::set('objectCacheAttr' . $this->getId(), utils::setJsonAttr(cache::byKey('objectCacheAttr' . $this->getId())->getValue(), $_key, $_value));
+		cache::set('objectCacheAttr' . $this->getId(), utils::setJsonAttr(cache::byKey('objectCacheAttr' . $this->getId())->getValue(), $key, $value));
     }
 
 }

@@ -17,14 +17,11 @@
 
 namespace NextDom\Helpers;
 
-use NextDom\Exceptions\CoreException;
 use NextDom\Managers\AjaxManager;
+use NextDom\Helpers\LogHelper;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Helpers\ModalsController;
-use NextDom\Helpers\PagesController;
-use NextDom\Helpers\Router;
 use NextDom\Managers\ConfigManager;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
@@ -93,7 +90,7 @@ class PrepareView
         if (Utils::init('p') == '') {
             redirect($homeLink);
         } else {
-            $page = init('p');
+            $page = Utils::init('p');
             $pageData['TITLE'] = ucfirst($page) . ' - ' . $configs['product_name'];
         }
         $language = $configs['language'];
@@ -182,7 +179,7 @@ class PrepareView
                 $pageData['ALERT_MSG'] = 'NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.';
             }
             $pageData['content'] = self::getContent($render, $pageData, $page, $currentPlugin);
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             ob_end_clean();
             $pageData['ALERT_MSG'] = Utils::displayException($e);
         }
@@ -286,8 +283,8 @@ class PrepareView
             foreach ($eventsJsPlugin as $value) {
                 try {
                     $pageData['JS_POOL'][] = '/plugins/'.$value.'/public/js/desktop/events.js';
-                } catch (CoreException $e) {
-                    \log::add($value, 'error', 'Event JS file not found');
+                } catch (\Exception $e) {
+                    LogHelper::add($value, 'error', 'Event JS file not found');
                 }
             }
         }
@@ -511,7 +508,7 @@ class PrepareView
     public static function getContentByAjax()
     {
         try {
-            \include_file('core', 'authentification', 'php');
+            AuthentificationHelper::init();
             $page = Utils::init('p');
             $controllerRoute = PagesController::getRoute($page);
             if ($controllerRoute === null) {
@@ -527,7 +524,7 @@ class PrepareView
                 $pageContent['content'] = $controller->get($render, $pageContent);
                 $render->show('/layouts/ajax_content.html.twig', $pageContent);
             }
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
             echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
@@ -537,14 +534,14 @@ class PrepareView
 
     public static function showModal()
     {
-        \include_file('core', 'authentification', 'php');
+        AuthentificationHelper::init();
         $plugin = Utils::init('plugin', '');
         $modalCode = Utils::init('modal', '');
         // Affichage d'un modal appartenant à un plugin
         if ($plugin != '') {
             try {
                 \include_file('desktop', $modalCode, 'modal', $plugin, true);
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 echo '<div class="alert alert-danger div_alert">';
                 echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
                 echo '</div>';
@@ -556,7 +553,7 @@ class PrepareView
             if ($modalRoute === null) {
                 try {
                     \include_file('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
-                } catch (CoreException $e) {
+                } catch (\Exception $e) {
                     echo '<div class="alert alert-danger div_alert">';
                     echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
                     echo '</div>';

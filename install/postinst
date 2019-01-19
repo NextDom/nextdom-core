@@ -243,8 +243,8 @@ step_nextdom_configuration() {
     sed -i "s/#PORT#/${MYSQL_PORT}/g" ${WEBSERVER_HOME}/core/config/common.config.php
     sed -i "s/#HOST#/${MYSQL_HOSTNAME}/g" ${WEBSERVER_HOME}/core/config/common.config.php
 
-    chmod 775 -R ${WEBSERVER_HOME}
-    chown -R www-data:www-data ${WEBSERVER_HOME}
+    #chmod 775 -R ${WEBSERVER_HOME}
+    #chown -R www-data:www-data ${WEBSERVER_HOME}
     if [[ -d "/tmp/jeedom" ]]
     then
         if [[ -L "/tmp/jeedom" ]]
@@ -559,8 +559,8 @@ print_log_ok
 
 chmod 777 -R /tmp/nextdom
 chown -R www-data:www-data /tmp/nextdom
-mkdir ${WEBSERVER_HOME}/var/custom
-chown -R www-data:www-data ${WEBSERVER_HOME}/var
+mkdir -p ${WEBSERVER_HOME}/var/custom
+#chown -R www-data:www-data ${WEBSERVER_HOME}/var
 chown -R www-data:www-data ${VARS_DIRECTORY}
 
 [[ -f /root/.mysqlroot ]] && rm -f /root/.mysqlroot

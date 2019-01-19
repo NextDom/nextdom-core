@@ -248,7 +248,7 @@ try {
         $eqLogicSave = json_decode(init('eqLogic'), true);
         $eqLogic = eqLogic::byId($eqLogicSave['id']);
         if (!is_object($eqLogic)) {
-            throw new Exception(__('EqLogic inconnu. Vérifiez l\'ID ', __FILE__) . $eqLogicsSave['id']);
+            throw new Exception(__('EqLogic inconnu. Vérifiez l\'ID ', __FILE__) . $eqLogicSave['id']);
         }
 
         if (!$eqLogic->hasRight('w')) {

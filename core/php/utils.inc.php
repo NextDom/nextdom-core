@@ -32,6 +32,7 @@
  * along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\DateHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NetworkHelper;
@@ -47,7 +48,7 @@ function include_file($_folder, $_filename, $_type, $_plugin = '', $translate = 
 
 function getTemplate($_folder, $_version, $_filename, $_plugin = '')
 {
-    return FileSystemHelper::getTemplateFilecontent($_folder, $_version, $_filename, $_plugin);
+    return FileSystemHelper::getTemplateFileContent($_folder, $_version, $_filename, $_plugin);
 }
 
 function template_replace($_array, $_subject)
@@ -332,7 +333,7 @@ function sanitizeAccent($_message)
 
 function isConnect($_right = '')
 {
-    return Utils::isConnect($_right);
+    return AuthentificationHelper::isConnected($_right);
 }
 
 function ZipErrorMessage($code)

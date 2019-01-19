@@ -28,6 +28,7 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\UserManager;
 
 class UpdateAdminController extends BaseController
 {
@@ -64,7 +65,7 @@ class UpdateAdminController extends BaseController
         $pageContent['networkkey'] = $key;
         $pageContent['adminConfigs'] = ConfigManager::byKeys($keys);
         $pageContent['JS_VARS']['ldapEnable'] = $pageContent['adminConfigs']['ldap::enable'];
-        $pageContent['adminIsBan'] = \user::isBan();
+        $pageContent['adminIsBan'] = UserManager::isBanned();
         $pageContent['adminHardwareName'] = \nextdom::getHardwareName();
         $pageContent['adminHardwareKey'] = \nextdom::getHardwareKey();
         $pageContent['adminLastKnowDate'] = CacheManager::byKey('hour')->getValue();

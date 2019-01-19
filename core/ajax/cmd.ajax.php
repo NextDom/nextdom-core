@@ -16,7 +16,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-try {
     require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
 
@@ -57,7 +56,7 @@ try {
         if (!is_object($cmd)) {
             throw new Exception(__('Commande ID inconnu : ', __FILE__) . init('id'));
         }
-        $eqLogic = $cmd->getEqLogic();
+        $eqLogic = $cmd->getEqLogicId();
         if ($cmd->getType() == 'action' && !$eqLogic->hasRight('x')) {
             throw new Exception(__('Vous n\'êtes pas autorisé à faire cette action', __FILE__));
         }
@@ -168,7 +167,7 @@ try {
             throw new Exception(__('Commande inconnue : ', __FILE__) . init('id'));
         }
         $return = nextdom::toHumanReadable(utils::o2a($cmd));
-        $eqLogic = $cmd->getEqLogic();
+        $eqLogic = $cmd->getEqLogicId();
         $return['eqLogic_name'] = $eqLogic->getName();
         $return['plugin'] = $eqLogic->getEqType_Name();
         if ($eqLogic->getObject_id() > 0) {
@@ -285,7 +284,7 @@ try {
             if (!is_object($cmd)) {
                 throw new Exception(__('Commande ID inconnu : ', __FILE__) . init('id'));
             }
-            $eqLogic = $cmd->getEqLogic();
+            $eqLogic = $cmd->getEqLogicId();
             if (!$eqLogic->hasRight('r')) {
                 throw new Exception(__('Vous n\'êtes pas autorisé à faire cette action', __FILE__));
             }
@@ -294,7 +293,7 @@ try {
             $return['history_name'] = $cmd->getHumanName();
             $return['unite'] = $cmd->getUnite();
             $return['cmd'] = utils::o2a($cmd);
-            $return['eqLogic'] = utils::o2a($cmd->getEqLogic());
+            $return['eqLogic'] = utils::o2a($cmd->getEqLogicId());
             $return['timelineOnly'] = $NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['timelineOnly'];
             $previsousValue = null;
             $derive = init('derive', $cmd->getDisplay('graphDerive'));
@@ -379,7 +378,7 @@ try {
             $cmd->setOrder($cmd_json['order']);
             $cmd->save(true);
             if (isset($cmd_json['line']) && isset($cmd_json['column'])) {
-                $eqLogic = $cmd->getEqLogic();
+                $eqLogic = $cmd->getEqLogicId();
                 if ($eqLogic->getDisplay('layout::' . init('version', 'dashboard') . '::table::cmd::' . $cmd->getId() . '::line') != $cmd_json['line'] || $eqLogic->getDisplay('layout::' . init('version', 'dashboard') . '::table::cmd::' . $cmd->getId() . '::column') != $cmd_json['column']) {
                     $eqLogic->setDisplay('layout::' . init('version', 'dashboard') . '::table::cmd::' . $cmd->getId() . '::line', $cmd_json['line']);
                     $eqLogic->setDisplay('layout::' . init('version', 'dashboard') . '::table::cmd::' . $cmd->getId() . '::column', $cmd_json['column']);
@@ -392,6 +391,3 @@ try {
 
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
-} catch (Exception $e) {
-    ajax::error(displayException($e), $e->getCode());
-}

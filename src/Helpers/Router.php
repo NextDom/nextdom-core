@@ -34,8 +34,6 @@
 
 namespace NextDom\Helpers;
 
-use NextDom\Helpers\Status;
-use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 
 /**
@@ -133,7 +131,7 @@ class Router
      */
     private function showConfiguration()
     {
-        \include_file('core', 'authentification', 'php');
+        AuthentificationHelper::init();
         \include_file('plugin_info', 'configuration', 'configuration', Utils::init('plugin'), true);
     }
 

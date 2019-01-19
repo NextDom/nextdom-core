@@ -20,6 +20,7 @@
 namespace NextDom\Market;
 
 use NextDom\Managers\ConfigManager;
+use NextDom\Helpers\LogHelper;
 
 /**
  * Gestion des téléchargements
@@ -102,7 +103,7 @@ class DownloadManager
                 $url = $url . '?' . $toAdd;
             }
         }
-        \log::add('AlternativeMarketForJeedom', 'debug', 'Download ' . $url);
+        LogHelper::add('AlternativeMarketForJeedom', 'debug', 'Download ' . $url);
         return self::downloadContentWithCurl($url, $binary);
     }
 

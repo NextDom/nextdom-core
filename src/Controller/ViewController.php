@@ -43,6 +43,7 @@ class ViewController extends BaseController
      *
      * @return string Content of view page
      *
+     * @throws CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax

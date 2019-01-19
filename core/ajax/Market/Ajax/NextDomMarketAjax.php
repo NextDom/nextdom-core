@@ -50,7 +50,7 @@ try {
 } catch (\Exception $e) {
     \ajax::error(displayException($e), $e->getCode());
  
-} catch (CoreException $exc) {
+} catch (\Exception $exc) {
     \ajax::error(displayException($exc), $exc->getCode());
 }
 

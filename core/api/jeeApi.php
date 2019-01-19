@@ -649,7 +649,7 @@ try {
                 if (is_object($_USER_GLOBAL) && !$cmd->hasRight($_USER_GLOBAL)) {
                     continue;
                 }
-                $eqLogic = $cmd->getEqLogic();
+                $eqLogic = $cmd->getEqLogicId();
                 if (!isset($params['codeAccess'])) {
                     $params['codeAccess'] = '';
                 }

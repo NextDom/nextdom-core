@@ -34,15 +34,16 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\FileSystemHelper;
+use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\Utils;
-use NextDom\Managers\CmdManager;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Model\Entity\Scenario;
 
 // TODO: \DB::buildField(ScenarioEntity::className) à factoriser
 class ScenarioManager
 {
     const DB_CLASS_NAME = 'scenario';
-    const CLASS_NAME = 'scenario';
+    const CLASS_NAME = Scenario::class;
     const INITIAL_TRANSLATION_FILE = '';
 
     /**
@@ -50,7 +51,7 @@ class ScenarioManager
      *
      * @param int $id Identifiant du scénario
      *
-     * @return \scenario Objet demandé
+     * @return Scenario Objet demandé
      *
      * @throws \Exception
      */
@@ -67,7 +68,7 @@ class ScenarioManager
      * @param string $scenarioName Chaine identifiant le scénario
      *
      * @param $commandNotFoundString
-     * @return \scenario Objet demandé
+     * @return Scenario Objet demandé
      *
      * @throws \ReflectionException
      */
@@ -86,7 +87,7 @@ class ScenarioManager
      * @param string $groupName Filtrer sur un groupe
      * @param string $type Filtrer sur un type
      *
-     * @return array [\scenario] Liste des objets scenario
+     * @return  Scenario[] Liste des objets scenario
      * @throws \Exception
      */
     public static function all($groupName = '', $type = null):array
@@ -239,7 +240,7 @@ class ScenarioManager
      * Vérifier un scénario
      * TODO: Virer les strings
      *
-     * @param \event $event Evènement déclencheur
+     * @param string $event Evènement déclencheur
      * @param bool $forceSyncMode Forcer le mode synchrone
      *
      * @return bool Renvoie toujours true //TODO: A voir
@@ -250,6 +251,7 @@ class ScenarioManager
         $message = '';
         $scenarios = [];
         if ($event !== null) {
+            // TODO: Event ne peut pas être un objet
             if (is_object($event)) {
                 $eventScenarios = self::byTrigger($event->getId());
                 $trigger = '#' . $event->getId() . '#';
@@ -408,7 +410,7 @@ class ScenarioManager
                         if ($needsReturn) {
                             $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Déclencheur du scénario', 'who' => '#' . $cmd_id . '#');
                         } else {
-                            \log::add('scenario', 'error', \__('Un déclencheur du scénario : ') . $scenario->getHumanName() . \__(' est introuvable'));
+                            LogHelper::add('scenario', 'error', \__('Un déclencheur du scénario : ') . $scenario->getHumanName() . \__(' est introuvable'));
                         }
                     }
                 }
@@ -423,7 +425,7 @@ class ScenarioManager
                     if ($needsReturn) {
                         $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Utilisé dans le scénario', 'who' => '#' . $cmd_id . '#');
                     } else {
-                        \log::add('scenario', 'error', \__('Une commande du scénario : ') . $scenario->getHumanName() . \__(' est introuvable'));
+                        LogHelper::add('scenario', 'error', \__('Une commande du scénario : ') . $scenario->getHumanName() . \__(' est introuvable'));
                     }
                 }
             }

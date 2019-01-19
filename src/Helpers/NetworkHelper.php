@@ -37,6 +37,7 @@ namespace NextDom\Helpers;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
+use NextDom\Helpers\LogHelper;
 use NextDom\Managers\PluginManager;
 
 /**
@@ -262,13 +263,13 @@ class NetworkHelper
         }
         $data = curl_exec($ch);
         if (curl_errno($ch)) {
-            \log::add('network', 'debug', 'Erreur sur ' . $url . ' => ' . curl_errno($ch));
+            LogHelper::add('network', 'debug', 'Erreur sur ' . $url . ' => ' . curl_errno($ch));
             curl_close($ch);
             return false;
         }
         curl_close($ch);
         if (trim($data) != 'ok') {
-            \log::add('network', 'debug', 'Retour NOK sur ' . $url . ' => ' . $data);
+            LogHelper::add('network', 'debug', 'Retour NOK sur ' . $url . ' => ' . $data);
             return false;
         }
         return true;
@@ -294,7 +295,7 @@ class NetworkHelper
                 $update->doUpdate();
                 $plugin = PluginManager::byId('openvpn');
             }
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             $update = \update::byLogicalId('openvpn');
             if (!is_object($update)) {
                 $update = new \update();
@@ -370,7 +371,7 @@ class NetworkHelper
                     }
                     try {
                         shell_exec(SystemHelper::getCmdSudo() . 'iptables -A INPUT -i ' . $interface . ' -p tcp  --destination-port ' . $port . ' -j ACCEPT');
-                    } catch (CoreException $e) {
+                    } catch (\Exception $e) {
 
                     }
                 }
@@ -388,7 +389,7 @@ class NetworkHelper
         }
         try {
             $openvpn = self::dnsCreate();
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             return false;
         }
         $cmd = $openvpn->getCmd('info', 'state');
@@ -458,7 +459,7 @@ class NetworkHelper
         }
         $gw = shell_exec("ip route show default | awk '/default/ {print $3}'");
         if ($gw == '') {
-            \log::add('network', 'error', __('Souci réseau détecté, redémarrage du réseau', __FILE__));
+            LogHelper::add('network', 'error', __('Souci réseau détecté, redémarrage du réseau', __FILE__));
             exec(SystemHelper::getCmdSudo() . 'service networking restart');
             return;
         }
@@ -466,7 +467,7 @@ class NetworkHelper
         if ($return_val == 0) {
             return;
         }
-        \log::add('network', 'error', __('Souci réseau détecté, redémarrage du réseau', __FILE__));
+        LogHelper::add('network', 'error', __('Souci réseau détecté, redémarrage du réseau', __FILE__));
         exec(SystemHelper::getCmdSudo() . 'service networking restart');
     }
 

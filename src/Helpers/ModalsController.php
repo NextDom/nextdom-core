@@ -39,11 +39,13 @@ use NextDom\Managers\CacheManager;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
+use NextDom\Managers\InteractQueryManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Managers\UserManager;
 use PragmaRX\Google2FA\Google2FA;
 
 class ModalsController
@@ -167,14 +169,14 @@ class ModalsController
         if (!is_object($cmd)) {
             throw new CoreException('Commande non trouvé : ' . $cmdId);
         }
-        $cmdInfo = NextDomHelper::toHumanReadable(\utils::o2a($cmd));
+        $cmdInfo = NextDomHelper::toHumanReadable(Utils::o2a($cmd));
         foreach (array('dashboard', 'mobile', 'dview', 'mview', 'dplan') as $value) {
             if (!isset($cmdInfo['html'][$value]) || $cmdInfo['html'][$value] == '') {
                 $cmdInfo['html'][$value] = $cmd->getWidgetTemplateCode($value);
             }
         }
         $pageContent['cmdType'] = $cmd->getType();
-        $pageContent['cmdSubType'] = $cmd->getSubtype();
+        $pageContent['cmdSubType'] = $cmd->getSubType();
         $pageContent['cmdWidgetPossibilityCustom'] = $cmd->widgetPossibility('custom');
         $pageContent['cmdWidgetPossibilityCustomHtmlCode'] = $cmd->widgetPossibility('custom::htmlCode');
         $pageContent['cmdShowMinMax'] = false;
@@ -276,9 +278,9 @@ class ModalsController
         $dataCount = array('history' => 0, 'timeline' => 0);
         $listCmd = array();
         foreach (CmdManager::all() as $cmd) {
-            $info_cmd = \utils::o2a($cmd);
+            $info_cmd = Utils::o2a($cmd);
             $info_cmd['humanName'] = $cmd->getHumanName(true);
-            $eqLogic = $cmd->getEqLogic();
+            $eqLogic = $cmd->getEqLogicId();
             $info_cmd['plugins'] = $eqLogic->getEqType_name();
             $listCmd[] = $info_cmd;
             if ($cmd->getIsHistorized() == 1) {
@@ -311,13 +313,13 @@ class ModalsController
         $pageContent = [];
         $pageContent['cmdData'] = [];
         foreach (CmdManager::all() as $cmd) {
-            $eqLogic = $cmd->getEqLogic();
+            $eqLogic = $cmd->getEqLogicId();
             if (!is_object($eqLogic)) {
                 continue;
             }
             if ($cmd->getIsHistorized() == 1) {
                 $data = [];
-                $data['eqLogicObject'] = $cmd->getEqLogic()->getObject();
+                $data['eqLogicObject'] = $cmd->getEqLogicId()->getObject();
                 if (is_object($data['eqLogicObject'])) {
                     $data['showObject'] = true;
                 } else {
@@ -345,8 +347,8 @@ class ModalsController
 
         $pageContent = [];
         $pageContent['dates'] = array(
-            'start' => init('startDate', date('Y-m-d', strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d')))),
-            'end' => init('endDate', date('Y-m-d')),
+            'start' => Utils::init('startDate', date('Y-m-d', strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d')))),
+            'end' => Utils::init('endDate', date('Y-m-d')),
         );
         $pageContent['derive'] = Utils::init('derive', 0);
         $pageContent['step'] = Utils::init('step', 0);
@@ -487,7 +489,7 @@ class ModalsController
         }
 
         Utils::sendVarsToJS(
-            ['eqLogicInfo' => \utils::o2a($eqLogic),
+            ['eqLogicInfo' => Utils::o2a($eqLogic),
                 'eqLogicInfoSearchString' => urlencode(str_replace('#', '', $eqLogic->getHumanName()))]);
 
         $pageContent = [];
@@ -775,7 +777,7 @@ class ModalsController
         if ($interactDefId == '') {
             throw new CoreException(__('Interact Def ID ne peut être vide'));
         }
-        $pageContent['interactQueries'] = \interactQuery::byInteractDefId($interactDefId);
+        $pageContent['interactQueries'] = InteractQueryManager::byInteractDefId($interactDefId);
         if (count($pageContent['interactQueries']) == 0) {
             throw new CoreException(__('Aucune phrase trouvée'));
         }
@@ -872,7 +874,7 @@ class ModalsController
         if (!is_object($object)) {
             throw new CoreException(__('Objet non trouvé : ') . $objectId);
         }
-        Utils::sendVarToJS('objectInfo', \utils::o2a($object));
+        Utils::sendVarToJS('objectInfo', Utils::o2a($object));
 
         $render->show('/modals/object.configure.html.twig');
     }
@@ -902,7 +904,7 @@ class ModalsController
             throw new CoreException(__('L\'objet n\'existe pas : ') . $cmdClass);
         }
 
-        $data = \utils::o2a($object);
+        $data = Utils::o2a($object);
         if (count($data) == 0) {
             throw new CoreException(__('L\'objet n\'a aucun élément : ') . print_r($data, true));
         }
@@ -1045,7 +1047,7 @@ class ModalsController
             throw new CoreException('Impossible de trouver le plan');
         }
         Utils::sendVarsToJS(['id' => $planHeader->getId(),
-            'planHeader' => \utils::o2a($planHeader)]);
+            'planHeader' => Utils::o2a($planHeader)]);
 
         $render->show('/modals/planHeader.configure.html.twig');
     }
@@ -1063,17 +1065,40 @@ class ModalsController
         Status::isConnectedAdminOrFail();
 
         $pageContent = [];
-        $plan3d = \plan3d::byName3dHeaderId(init('name'), init('plan3dHeader_id'));
+        $plan3d = \plan3d::byName3dHeaderId(Utils::init('name'), Utils::init('plan3dHeader_id'));
         if (!is_object($plan3d)) {
             $plan3d = new \plan3d();
-            $plan3d->setName(init('name'));
-            $plan3d->setPlan3dHeader_id(init('plan3dHeader_id'));
+            $plan3d->setName(Utils::init('name'));
+            $plan3d->setPlan3dHeader_id(Utils::init('plan3dHeader_id'));
             $plan3d->save();
         }
         $link = $plan3d->getLink();
         Utils::sendVarToJS('id', $plan3d->getId());
 
         $render->show('/modals/plan3d.configure.html.twig', $pageContent);
+    }
+
+    /**
+     * Render plan 3d header configure modal
+     *
+     * @param Render $render Render engine
+     *
+     * @throws CoreException
+     */
+    public static function plan3dHeaderConfigure(Render $render)
+    {
+        Status::initConnectState();
+        Status::isConnectedAdminOrFail();
+
+        $pageContent = [];
+        $plan3dHeader = \plan3dHeader::byId(Utils::init('plan3dHeader_id'));
+        if (!is_object($plan3dHeader)) {
+            throw new CoreException('Impossible de trouver le plan');
+        }
+        Utils::sendVarsToJS(['id' => $plan3dHeader->getId(),
+                             'plan3dHeader' => Utils::o2a($plan3dHeader) ]);
+
+        $render->show('/modals/plan3dHeader.configure.html.twig', $pageContent);
     }
 
     /**
@@ -1116,7 +1141,7 @@ class ModalsController
         Status::initConnectState();
         Status::isConnectedAdminOrFail();
 
-        $pluginId = init('plugin_id');
+        $pluginId = Utils::init('plugin_id');
         if (!class_exists($pluginId)) {
             die();
         }
@@ -1158,7 +1183,7 @@ class ModalsController
         Status::isConnectedAdminOrFail();
 
         $pageContent = [];
-        $pluginId = init('plugin_id');
+        $pluginId = Utils::init('plugin_id');
         Utils::sendVarToJs('plugin_id', $pluginId);
         if (!class_exists($pluginId)) {
             die();
@@ -1459,12 +1484,12 @@ class ModalsController
         Status::isConnectedAdminOrFail();
 
         $userId = Utils::init('id');
-        $user = \user::byId($userId);
+        $user = UserManager::byId($userId);
 
         if (!is_object($user)) {
             throw new CoreException(__('Impossible de trouver l\'utilisateur : ') . $userId);
         }
-        Utils::sendVarToJs('user_rights', \utils::o2a($user));
+        Utils::sendVarToJs('user_rights', Utils::o2a($user));
 
         $pageContent = [];
         $pageContent['restrictedUser'] = true;
@@ -1527,7 +1552,7 @@ class ModalsController
         if (!is_object($view)) {
             throw new CoreException('Impossible de trouver la vue');
         }
-        Utils::sendVarsToJS(['id' => $view->getId(), 'view' => \utils::o2a($view)]);
+        Utils::sendVarsToJS(['id' => $view->getId(), 'view' => Utils::o2a($view)]);
 
         $render->show('/modals/view.configure.html.twig');
     }

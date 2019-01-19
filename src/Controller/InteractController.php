@@ -25,6 +25,7 @@ namespace NextDom\Controller;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CmdManager;
+use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\EqLogicManager;
 
@@ -53,12 +54,12 @@ class InteractController extends BaseController
     public function get(Render $render, array &$pageContent): string
     {
         $interacts = array();
-        $pageContent['interactTotal'] = \interactDef::all();
-        $interacts[-1] = \interactDef::all(null);
-        $interactListGroup = \interactDef::listGroup();
+        $pageContent['interactTotal'] = InteractDefManager::all();
+        $interacts[-1] = InteractDefManager::all(null);
+        $interactListGroup = InteractDefManager::listGroup();
         if (is_array($interactListGroup)) {
             foreach ($interactListGroup as $group) {
-                $interacts[$group['group']] = \interactDef::all($group['group']);
+                $interacts[$group['group']] = InteractDefManager::all($group['group']);
             }
         }
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/interact.js';

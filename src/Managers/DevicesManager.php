@@ -34,7 +34,6 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Utils;
 
