@@ -1669,7 +1669,7 @@ class EqLogic
     public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = null)
     {
         if ($_drill === null) {
-            $_drill = ConfigManager::byKey('graphlink::EqLogicManager::drill');
+            $_drill = ConfigManager::byKey('graphlink::eqLogic::drill');
         }
         if (isset($_data['node']['eqLogic' . $this->getId()])) {
             return null;
