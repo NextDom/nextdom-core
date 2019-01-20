@@ -239,7 +239,7 @@ class HistoryManager {
                         AND cmd_id=:cmd_id';
                 $avg = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
 
-                $history = new self();
+                $history = new \history();
                 $history->setCmd_id($sensors['cmd_id']);
                 $history->setValue($avg['value']);
                 $history->setDatetime($avg['datetime']);
