@@ -577,8 +577,8 @@ class CmdManager
     /**
      * TODO: ???
      *
-     * @param Cmd|array $input
-     * @return array|mixed|string
+     * @param Cmd|mixed $input
+     * @return array|mixed|array|string
      * @throws \ReflectionException
      */
     public static function cmdToHumanReadable($input)
@@ -590,6 +590,7 @@ class CmdManager
                 $reflections[$uuid] = new \ReflectionClass($input);
             }
             $reflection = $reflections[$uuid];
+            /** @var \ReflectionProperty[] $properties */
             $properties = $reflection->getProperties();
             foreach ($properties as $property) {
                 $property->setAccessible(true);
@@ -638,6 +639,7 @@ class CmdManager
                 $reflections[$uuid] = new \ReflectionClass($input);
             }
             $reflection = $reflections[$uuid];
+            /** @var \ReflectionProperty[] $properties */
             $properties = $reflection->getProperties();
             foreach ($properties as $property) {
                 $property->setAccessible(true);
@@ -709,6 +711,7 @@ class CmdManager
                 $reflections[$uuid] = new \ReflectionClass($input);
             }
             $reflection = $reflections[$uuid];
+            /** @var \ReflectionProperty[] $properties */
             $properties = $reflection->getProperties();
             foreach ($properties as $property) {
                 $property->setAccessible(true);

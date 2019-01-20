@@ -751,6 +751,14 @@ class HistoryManager {
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
     }
 
+    /**
+     * @param $_strcalcul
+     * @param null $_dateStart
+     * @param null $_dateEnd
+     * @param bool $_noCalcul
+     * @return array
+     * @throws \Exception
+     */
     public static function getHistoryFromCalcul($_strcalcul, $_dateStart = null, $_dateEnd = null, $_noCalcul = false) {
         $now = strtotime('now');
         $value = array();

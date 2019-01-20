@@ -837,7 +837,6 @@ class Cmd
             return $this->getHtml($_version);
         }
         $template_name = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.' . $this->getTemplate($version, 'default');
-        $template = '';
         if (!isset(self::$_templateArray[$version . '::' . $template_name])) {
             $template = getTemplate('core', $version, $template_name);
             if ($template == '') {

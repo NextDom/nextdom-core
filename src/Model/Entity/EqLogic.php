@@ -1124,6 +1124,7 @@ class EqLogic
     /**
      * @param bool $_direct
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function save($_direct = false)
     {

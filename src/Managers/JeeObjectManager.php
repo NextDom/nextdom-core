@@ -425,9 +425,9 @@ class JeeObjectManager
 
     /**
      * TODO ???
-     * 
+     *
      * @param string $key
-     * @throws \Exception
+     * @throws \Throwable
      */
     public static function createSummaryToVirtual($key = '')
     {
@@ -478,6 +478,7 @@ class JeeObjectManager
 
         $virtual = EqLogicManager::byLogicalId('summaryglobal', 'virtual');
         if (!is_object($virtual)) {
+            /** @noinspection PhpUndefinedClassInspection */
             $virtual = new \virtual();
             $virtual->setName(__('Résumé Global'));
             $virtual->setIsVisible(0);
@@ -489,6 +490,7 @@ class JeeObjectManager
         $virtual->save();
         $cmd = $virtual->getCmd('info', $key);
         if (!is_object($cmd)) {
+            /** @noinspection PhpUndefinedClassInspection */
             $cmd = new \virtualCmd();
             $cmd->setName($def[$key]['name']);
             $cmd->setIsHistorized(1);
@@ -514,6 +516,7 @@ class JeeObjectManager
             }
             $virtual = EqLogicManager::byLogicalId('summary' . $object->getId(), 'virtual');
             if (!is_object($virtual)) {
+                /** @noinspection PhpUndefinedClassInspection */
                 $virtual = new \virtual();
                 $virtual->setName(__('Résumé'));
                 $virtual->setIsVisible(0);
@@ -528,6 +531,7 @@ class JeeObjectManager
             $object->save();
             $cmd = $virtual->getCmd('info', $key);
             if (!is_object($cmd)) {
+                /** @noinspection PhpUndefinedClassInspection */
                 $cmd = new \virtualCmd();
                 $cmd->setName($def[$key]['name']);
                 $cmd->setIsHistorized(1);
