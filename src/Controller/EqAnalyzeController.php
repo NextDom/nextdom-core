@@ -62,7 +62,6 @@ class EqAnalyzeController extends BaseController
 
         $eqLogicMangerAll = EqLogicManager::all();
         foreach ($eqLogicMangerAll as $eqLogic) {
-            $battery_type = str_replace(array('(', ')'), ['', ''], $eqLogic->getConfiguration('battery_type', ''));
             if ($eqLogic->getStatus('battery', -2) != -2) {
                 $pageContent['eqAnalyzeEqLogicList'][] = $eqLogic;
             }
@@ -165,7 +164,6 @@ class EqAnalyzeController extends BaseController
                     foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
                         if ($value['check']) {
                             if ($cmdalert->getAlert($level . 'if', '') != '') {
-                                $during = '';
                                 if ($cmdalert->getAlert($level . 'during', '') == '') {
                                     $during = ' effet immédiat';
                                 } else {

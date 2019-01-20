@@ -18,7 +18,6 @@
 namespace NextDom\Helpers;
 
 use NextDom\Managers\AjaxManager;
-use NextDom\Helpers\LogHelper;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;

@@ -61,8 +61,6 @@ class UpdateAdminController extends BaseController
         foreach ($pageContent['adminReposList'] as $key => $value) {
             $keys[] = $key . '::enable';
         }
-        //TODO: $key non défini. Keys ?
-        $pageContent['networkkey'] = $key;
         $pageContent['adminConfigs'] = ConfigManager::byKeys($keys);
         $pageContent['JS_VARS']['ldapEnable'] = $pageContent['adminConfigs']['ldap::enable'];
         $pageContent['adminIsBan'] = UserManager::isBanned();

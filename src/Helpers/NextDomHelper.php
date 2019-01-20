@@ -40,7 +40,6 @@ use NextDom\Managers\CronManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Helpers\LogHelper;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\CmdManager;
@@ -761,13 +760,13 @@ class NextDomHelper
             if (ConfigManager::byKey('update::autocheck', 'core', 1) == 1 && (ConfigManager::byKey('update::lastCheck') == '' || (strtotime('now') - strtotime(ConfigManager::byKey('update::lastCheck'))) > (23 * 3600))) {
                 UpdateManager::checkAllUpdate();
                 $updates = UpdateManager::byStatus('update');
+                $toUpdate = '';
                 if (count($updates) > 0) {
-                    $toUpdate = '';
                     foreach ($updates as $update) {
                         $toUpdate .= $update->getLogicalId() . ',';
                     }
                 }
-                $updates = \update::byStatus('update');
+                $updates = UpdateManager::byStatus('update');
                 if (count($updates) > 0) {
                     \message::add('update', __('De nouvelles mises à jour sont disponibles : ') . trim($toUpdate, ','), '', 'newUpdate');
                 }
