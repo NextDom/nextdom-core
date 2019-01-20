@@ -133,7 +133,7 @@ class ScenarioExpression
                 $key = 'scenarioElement' . ConfigManager::genKey(10);
             }
             CacheManager::set($key, array('scenarioExpression' => $this, 'scenario' => $scenario), 60);
-            $cmd = dirname(__FILE__) . '/../php/jeeScenarioExpression.php';
+            $cmd = NEXTDOM_ROOT . '/core/php/jeeScenarioExpression.php';
             $cmd .= ' key=' . $key;
             $this->setLog($scenario, __('Execution du lancement en arriere plan : ') . $key);
             SystemHelper::php($cmd . ' >> /dev/null 2>&1 &');

@@ -171,7 +171,7 @@ class ScenarioElement
                 $time = 0;
             }
             if ($time == 0) {
-                $cmd = dirname(__FILE__) . '/../../core/php/jeeScenario.php ';
+                $cmd = NEXTDOM_ROOT . '/core/php/jeeScenario.php ';
                 $cmd .= ' scenario_id=' . $_scenario->getId();
                 $cmd .= ' scenarioElement_id=' . $this->getId();
                 $cmd .= ' tags=' . escapeshellarg(json_encode($_scenario->getTags()));
