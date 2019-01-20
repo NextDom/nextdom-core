@@ -38,10 +38,14 @@ class RemoveHistory extends BaseAbstractModal
      *
      * @param Render $render Render engine
      *
-     * @throws CoreException
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function get(Render $render): string
     {
+        $removeHistory = null;
         if (file_exists(NEXTDOM_ROOT . '/data/remove_history.json')) {
             $removeHistory = json_decode(file_get_contents(NEXTDOM_ROOT . '/data/remove_history.json'), true);
         }

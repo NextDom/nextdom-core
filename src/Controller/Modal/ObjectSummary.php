@@ -24,6 +24,7 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\CmdManager;
 
@@ -41,7 +42,10 @@ class ObjectSummary extends BaseAbstractModal
      *
      * @param Render $render Render engine
      *
-     * @throws CoreException
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function get(Render $render): string
     {

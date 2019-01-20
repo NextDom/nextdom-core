@@ -40,7 +40,10 @@ class CmdGraphSelect extends BaseAbstractModal
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function get(Render $render): string
     {

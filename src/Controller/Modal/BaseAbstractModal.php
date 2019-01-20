@@ -42,6 +42,7 @@ abstract class BaseAbstractModal
      *
      * @param string $type Modal type
      *
+     * @return false|string
      * @throws CoreException If repo is disabled
      */
     public function showRepoModal($type)
@@ -51,9 +52,11 @@ abstract class BaseAbstractModal
         if ($repo['enable'] == 0) {
             throw new CoreException(__('Le dépôt est inactif : ') . $repoId);
         }
+        ob_start();
         $repoDisplayFile = NEXTDOM_ROOT . '/core/repo/' . $repoId . '.display.repo.php';
         if (file_exists($repoDisplayFile)) {
             \include_file('core', $repoId . '.' . $type, 'repo', '', true);
         }
+        return ob_get_clean();
     }
 }

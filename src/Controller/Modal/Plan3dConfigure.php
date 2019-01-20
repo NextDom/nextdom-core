@@ -25,8 +25,7 @@ namespace NextDom\Controller\Modal;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
-use NextDom\Exceptions\CoreException;
- 
+
 class Plan3dConfigure extends BaseAbstractModal
 {
 
@@ -35,12 +34,16 @@ class Plan3dConfigure extends BaseAbstractModal
         parent::__construct();
         Status::isConnectedOrFail();
     }
-   /**
+
+    /**
      * Render plan 3d configure modal
      *
      * @param Render $render Render engine
      *
-     * @throws CoreException
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function get(Render $render): string
     {
@@ -52,7 +55,6 @@ class Plan3dConfigure extends BaseAbstractModal
                     ->setPlan3dHeader_id(init('plan3dHeader_id'));
             $plan3d->save();
         }
-        $link = $plan3d->getLink();
         Utils::sendVarToJS('id', $plan3d->getId());
 
         return $render->get('/modals/plan3d.configure.html.twig', $pageContent);

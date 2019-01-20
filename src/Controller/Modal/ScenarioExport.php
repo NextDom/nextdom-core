@@ -34,13 +34,17 @@ class ScenarioExport extends BaseAbstractModal
         parent::__construct();
         Status::isConnectedOrFail();
     }
-    
+
     /**
      * Render scenario export modal
      *
      * @param Render $render Render engine
      *
+     * @return string
      * @throws CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function get(Render $render): string
     {

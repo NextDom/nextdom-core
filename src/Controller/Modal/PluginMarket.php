@@ -25,7 +25,6 @@ namespace NextDom\Controller\Modal;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
-use NextDom\Exceptions\CoreException;
 
 class PluginMarket extends BaseAbstractModal
 {
@@ -41,7 +40,10 @@ class PluginMarket extends BaseAbstractModal
      *
      * @param Render $render Render engine
      *
-     * @throws CoreException
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function get(Render $render): string
     {

@@ -33,16 +33,17 @@ class UpdateList extends BaseAbstractModal
         parent::__construct();
         Status::isConnectedOrFail();
     }
-    
+
     /**
      * Render update list modal
      *
      * @param Render $render Render engine
      *
+     * @return string
      * @throws \NextDom\Exceptions\CoreException
      */
     public function get(Render $render): string
     {
-        $this->showRepoModal('list');
+        return $this->showRepoModal('list');
     }
 }

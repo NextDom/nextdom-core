@@ -35,14 +35,17 @@ class CmdHistory extends BaseAbstractModal
         parent::__construct();
         Status::isConnectedOrFail();
     }
-    
- 
+
+
     /**
      * Render command history modal (scenario)
      *
      * @param Render $render Render engine
      *
-     * @throws \NextDom\Exceptions\CoreException
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function get(Render $render): string
     {
@@ -56,6 +59,6 @@ class CmdHistory extends BaseAbstractModal
         $pageContent['step']   = Utils::init('step', 0);
         $pageContent['id']     = Utils::init('id');
 
-        $render->get('/modals/cmd.history.html.twig', $pageContent);
+        return $render->get('/modals/cmd.history.html.twig', $pageContent);
     }
 }

@@ -37,14 +37,18 @@ class EqLogicConfigure extends BaseAbstractModal
         parent::__construct();
         Status::isConnectedOrFail();
     }
-    
+
     /**
      * Render eqLogic management modal
      *
      * @param Render $render Render engine
      *
+     * @return string
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function get(Render $render): string
     {

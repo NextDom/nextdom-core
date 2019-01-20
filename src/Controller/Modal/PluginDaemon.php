@@ -25,7 +25,6 @@ namespace NextDom\Controller\Modal;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
-use NextDom\Exceptions\CoreException;
 use NextDom\Managers\PluginManager;
 
 class PluginDaemon extends BaseAbstractModal
@@ -42,9 +41,12 @@ class PluginDaemon extends BaseAbstractModal
      *
      * @param Render $render Render engine
      *
-     * @throws CoreException
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public function get(Render $render): string
     {
 
         $pluginId = init('plugin_id');
@@ -58,6 +60,7 @@ class PluginDaemon extends BaseAbstractModal
         }
         $refresh                                    = array();
         $refresh[0]                                 = 0;
+        $pageContent = [];
         $pageContent['daemonInfoState']             = $daemonInfo['state'];
         $pageContent['daemonInfoLaunchable']        = $daemonInfo['launchable'];
         $pageContent['daemonInfoLaunchableMessage'] = '';

@@ -33,16 +33,17 @@ class UpdateSend extends BaseAbstractModal
         parent::__construct();
         Status::isConnectedOrFail();
     }
-    
+
     /**
      * Render update send modal
      *
      * @param Render $render Render engine
      *
+     * @return string
      * @throws \NextDom\Exceptions\CoreException
      */
     public function get(Render $render): string
     {
-        \NextDom\Helpers\ModalsController::showRepoModal('send');
+        return $this->showRepoModal('send');
     }
 }

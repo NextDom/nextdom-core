@@ -33,16 +33,18 @@ class UpdateDisplay extends BaseAbstractModal
         parent::__construct();
         Status::isConnectedOrFail();
     }
-    
+
     /**
      * Render update display modal
      *
      * @param Render $render Render engine
      *
+     * @return string
+     *
      * @throws \NextDom\Exceptions\CoreException
      */
     public function get(Render $render): string
     {
-        \NextDom\Helpers\ModalsController::showRepoModal('display');
+        return $this->showRepoModal('display');
     }
 }

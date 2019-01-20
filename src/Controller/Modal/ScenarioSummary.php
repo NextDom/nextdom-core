@@ -22,10 +22,8 @@
 
 namespace NextDom\Controller\Modal;
 
-use NextDom\Helpers\Utils;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
-use NextDom\Exceptions\CoreException;
 
 class ScenarioSummary extends BaseAbstractModal
 {
@@ -35,13 +33,16 @@ class ScenarioSummary extends BaseAbstractModal
         parent::__construct();
         Status::isConnectedOrFail();
     }
-    
+
     /**
      * Render scenario summary modal
      *
      * @param Render $render Render engine
      *
-     * @throws CoreException
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function get(Render $render): string
     {

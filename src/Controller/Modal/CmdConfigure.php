@@ -44,7 +44,11 @@ class CmdConfigure extends BaseAbstractModal
      *
      * @param Render $render Render engine
      *
+     * @return string
      * @throws CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function get(Render $render): string
     {
@@ -52,7 +56,7 @@ class CmdConfigure extends BaseAbstractModal
         $cmdId       = Utils::init('cmd_id');
         $cmd         = CmdManager::byId($cmdId);
         if (!is_object($cmd)) {
-            throw new CoreException('Commande non trouvé : ' . $cmdId);
+            throw new CoreException(__('Commande non trouvé : ') . $cmdId);
         }
         $cmdInfo = NextDomHelper::toHumanReadable(\utils::o2a($cmd));
         foreach (array('dashboard', 'mobile', 'dview', 'mview', 'dplan') as $value) {

@@ -35,13 +35,17 @@ class InteractQueryDisplay extends BaseAbstractModal
         parent::__construct();
         Status::isConnectedOrFail();
     }
-    
+
     /**
      * Render interact query display modal
      *
      * @param Render $render Render engine
      *
+     * @return string
      * @throws CoreException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function get(Render $render): string
     {
@@ -49,6 +53,7 @@ class InteractQueryDisplay extends BaseAbstractModal
         if ($interactDefId == '') {
             throw new CoreException(__('Interact Def ID ne peut être vide'));
         }
+        $pageContent = [];
         $pageContent['interactQueries'] = \interactQuery::byInteractDefId($interactDefId);
         if (count($pageContent['interactQueries']) == 0) {
             throw new CoreException(__('Aucune phrase trouvée'));
