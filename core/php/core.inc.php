@@ -35,8 +35,8 @@
 define ('NEXTDOM_ROOT', realpath(__DIR__.'/../..'));
 
 date_default_timezone_set('Europe/Brussels');
-if (file_exists(NEXTDOM_ROOT.'/core/config/common.config.php')) {
-	require_once NEXTDOM_ROOT . '/core/config/common.config.php';
+if (file_exists('/var/lib/nextdom/config/common.config.php')) {
+	require_once '/var/lib/nextdom/config/common.config.php';
 }
 require_once NEXTDOM_ROOT.'/vendor/autoload.php';
 require_once NEXTDOM_ROOT.'/core/class/DB.class.php';
@@ -59,7 +59,7 @@ require_once NEXTDOM_ROOT.'/core/class/translate.class.php';
 require_once NEXTDOM_ROOT.'/core/php/utils.inc.php';
 
 include_file('core', 'nextdom', 'config');
-include_file('core', 'compatibility', 'config');
+require_once '/var/lib/nextdom/config/compatibility.config.php';
 include_file('core', 'utils', 'class');
 include_file('core', 'log', 'class');
 

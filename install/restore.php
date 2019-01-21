@@ -172,13 +172,13 @@ try {
     echo "OK\n";
 
     if (file_exists(__DIR__ . '/../core/config/jeedom.config.php')) {
-        if (copy(__DIR__ . '/../core/config/jeedom.config.php', '/tmp/nextdom.config.php')) {
-            echo 'Can not copy ' . __DIR__ . "/../core/config/nextdom.config.php\n";
+        if (copy(__DIR__ . '/var/lib/nextdom/config/jeedom.config.php', '/tmp/nextdom.config.php')) {
+            echo 'Can not copy ' . __DIR__ . "/var/lib/nextdom/config/nextdom.config.php\n";
         }
     }
-    if (!file_exists(__DIR__ . '/../core/config/common.config.php')) {
+    if (!file_exists('/var/lib/nextdom/config/common.config.php')) {
         echo "Restoring the database configuration file...";
-        copy('/tmp/nextdombackup/common.config.php', __DIR__ . '/../core/config/common.config.php');
+        copy('/tmp/nextdombackup/common.config.php', '/var/lib/nextdom/config/common.config.php');
         echo "OK\n";
     }
 
