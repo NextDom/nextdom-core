@@ -103,7 +103,7 @@ class cmd extends NextDom\Model\Entity\Cmd {
     }
 
     public static function byString($_string) {
-        return self::byString($_string);
+        return CmdManager::byString($_string);
     }
 
     public static function cmdToValue($_input, $_quote = false) {
