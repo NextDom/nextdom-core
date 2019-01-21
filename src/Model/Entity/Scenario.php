@@ -1019,6 +1019,7 @@ class Scenario
      */
     public function export($_mode = 'text')
     {
+        $return = null;
         if ($_mode == 'text') {
             $return = '';
             $return .= '- Nom du scénario : ' . $this->getName() . "\n";
@@ -1053,8 +1054,8 @@ class Scenario
                 }
             }
         }
-        $return = [];
         if ($_mode == 'array') {
+            $return = [];
             $return = Utils::o2a($this);
             $return['trigger'] = NextDomHelper::toHumanReadable($return['trigger']);
             $return['elements'] = array();
