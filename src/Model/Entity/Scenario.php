@@ -465,7 +465,7 @@ class Scenario
      * @return boolean
      * @throws \Exception
      */
-    public function launch($trigger = '', $message = '', bool $forceSyncMode = false)
+    public function launch($trigger = '', $message = '', $forceSyncMode = false)
     {
         // Test if scenarios are enabled and if this scenario is activated
         if (ConfigManager::byKey('enableScenario') != 1 || $this->getIsActive() != 1) {
@@ -979,7 +979,7 @@ class Scenario
 
     /**
      *
-     * @return \scenarioElement[]
+     * @return ScenarioElement[]
      * @throws \Exception
      */
     public function getElement()
@@ -1506,6 +1506,7 @@ class Scenario
     }
 
     /**
+     * Set the state of the scenario.
      *
      * @param bool $_do
      * @return $this
@@ -1517,9 +1518,9 @@ class Scenario
     }
 
     /**
-     * Nom de la tablea dans la base de données
+     * Name of the table in the database
      * 
-     * @return string
+     * @return string Name of the table in the database
      */
     public function getTableName() 
     {
@@ -1527,27 +1528,36 @@ class Scenario
     }
 
     /**
+     * Get data from cache
      *
-     * @param string $_key
-     * @param mixed $_default
+     * Data are stored in scenarioCacheAttr + Scenario_ID
+     *
+     * @param string $key Key find
+     * @param mixed $defaultValue Default value returned if key is not found
+     *
      * @return mixed
+     *
      * @throws \Exception
      */
-    public function getCache($_key = '', $_default = '')
+    public function getCache($key = '', $defaultValue = '')
     {
         $scenarioCacheAttr = CacheManager::byKey('scenarioCacheAttr' . $this->getId())->getValue();
-        return Utils::getJsonAttr($scenarioCacheAttr, $_key, $_default);
+        return Utils::getJsonAttr($scenarioCacheAttr, $key, $defaultValue);
     }
 
     /**
+     * Store data in cache
      *
-     * @param mixed $_key
-     * @param mixed $_value
+     * Data are stored in scenarioCacheAttr + Scenario_ID
+     *
+     * @param string $key Key to store
+     * @param mixed $valueToStore Value to store
+     *
      * @throws \Exception
      */
-    public function setCache($_key, $_value = null)
+    public function setCache($key, $valueToStore = null)
     {
-        CacheManager::set('scenarioCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('scenarioCacheAttr' . $this->getId())->getValue(), $_key, $_value));
+        CacheManager::set('scenarioCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('scenarioCacheAttr' . $this->getId())->getValue(), $key, $valueToStore));
     }
 
 }

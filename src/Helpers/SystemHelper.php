@@ -211,7 +211,7 @@ class SystemHelper
                 usleep(100);
                 exec(SystemHelper::getCmdSudo() . 'kill -9 ' . $find);
             } else {
-                $kill = posix_kill($find, 15);
+                posix_kill($find, 15);
             }
             return null;
         }
@@ -283,8 +283,9 @@ class SystemHelper
                 break;
             default:
                 unset($cmd);
+                break;
         }
-        if ($cmd != '') {
+        if (isset($cmd) && $cmd != '') {
             $cpuCoreNb = intval(trim(shell_exec($cmd)));
         }
         return empty($cpuCoreNb) ? 1 : $cpuCoreNb;

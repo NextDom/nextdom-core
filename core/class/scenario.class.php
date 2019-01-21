@@ -75,7 +75,8 @@ class scenario extends \NextDom\Model\Entity\Scenario
 
     /**
      *
-     * @return type
+     * @return mixed
+     * @throws Exception
      */
     public static function schedule()
     {
@@ -84,8 +85,8 @@ class scenario extends \NextDom\Model\Entity\Scenario
 
     /**
      *
-     * @param type $_group
-     * @return type
+     * @param mixed $_group
+     * @return mixed
      */
     public static function listGroup($_group = null)
     {
@@ -94,8 +95,8 @@ class scenario extends \NextDom\Model\Entity\Scenario
 
     /**
      *
-     * @param type $_cmd_id
-     * @return type
+     * @param mixed $_cmd_id
+     * @return mixed
      */
     public static function byTrigger($_cmd_id, $_onlyEnable = true)
     {
@@ -104,8 +105,8 @@ class scenario extends \NextDom\Model\Entity\Scenario
 
     /**
      *
-     * @param type $_element_id
-     * @return type
+     * @param mixed $_element_id
+     * @return mixed
      */
     public static function byElement($_element_id)
     {
@@ -114,10 +115,10 @@ class scenario extends \NextDom\Model\Entity\Scenario
 
     /**
      *
-     * @param type $_object_id
-     * @param type $_onlyEnable
-     * @param type $_onlyVisible
-     * @return type
+     * @param mixed $_object_id
+     * @param mixed $_onlyEnable
+     * @param mixed $_onlyVisible
+     * @return mixed
      */
     public static function byObjectId($_object_id, $_onlyEnable = true, $_onlyVisible = false)
     {
@@ -126,8 +127,8 @@ class scenario extends \NextDom\Model\Entity\Scenario
 
     /**
      *
-     * @param type $_event
-     * @param type $_forceSyncMode
+     * @param mixed $_event
+     * @param mixed $_forceSyncMode
      * @return boolean
      */
     public static function check($_event = null, $_forceSyncMode = false)
@@ -143,7 +144,7 @@ class scenario extends \NextDom\Model\Entity\Scenario
     /**
      *
      * @param array $_options
-     * @return type
+     * @return mixed
      */
     public static function doIn($_options)
     {
@@ -167,11 +168,11 @@ class scenario extends \NextDom\Model\Entity\Scenario
     }
 
     /**
-     * @name byObjectNameGroupNameScenarioName()
      * @param object $_object_name
-     * @param type $_group_name
-     * @param type $_scenario_name
-     * @return type
+     * @param mixed $_group_name
+     * @param mixed $_scenario_name
+     * @return void
+     * @throws Exception
      */
     public static function byObjectNameGroupNameScenarioName($_object_name, $_group_name, $_scenario_name)
     {
@@ -179,9 +180,9 @@ class scenario extends \NextDom\Model\Entity\Scenario
     }
 
     /**
-     * @name toHumanReadable()
      * @param object $_input
      * @return string
+     * @throws Exception
      */
     public static function toHumanReadable($_input)
     {
@@ -192,6 +193,7 @@ class scenario extends \NextDom\Model\Entity\Scenario
      *
      * @param mixed $_input
      * @return mixed
+     * @throws ReflectionException
      */
     public static function fromHumanReadable($_input)
     {
@@ -202,6 +204,7 @@ class scenario extends \NextDom\Model\Entity\Scenario
      *
      * @param mixed $searchs
      * @return array
+     * @throws Exception
      */
     public static function searchByUse($searchs)
     {
@@ -210,8 +213,8 @@ class scenario extends \NextDom\Model\Entity\Scenario
 
     /**
      *
-     * @param type $_template
-     * @return type
+     * @param mixed $_template
+     * @return mixed
      */
     public static function getTemplate($_template = '')
     {

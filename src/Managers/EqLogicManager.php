@@ -67,7 +67,7 @@ class EqLogicManager
     /**
      * TODO: ???
      * Repasse en private
-     * @param $inputs
+     * @param EqLogic $inputs
      *
      * @return array|mixed
      */
@@ -135,7 +135,7 @@ class EqLogicManager
      * @param null $logicalId
      * @param bool $orderByName
      *
-     * @return \eqLogic[] All linked eqLogic
+     * @return EqLogic[] All linked eqLogic
      *
      * @throws \Exception
      */
@@ -400,9 +400,7 @@ class EqLogicManager
         $selfByTimeout = self::byTimeout(1, true);
         foreach ($selfByTimeout as $eqLogic) {
             $sendReport = false;
-            $cmds = $eqLogic->getCmd();
-            // TODO: WHat what what ?
-            foreach ($cmds as $cmd) {
+            if (count($eqLogic->getCmd()) > 0) {
                 $sendReport = true;
             }
             $logicalId = 'noMessage' . $eqLogic->getId();

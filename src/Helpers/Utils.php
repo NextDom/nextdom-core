@@ -880,6 +880,12 @@ class Utils
         }
     }
 
+    /**
+     * @param string|array $_attr
+     * @param string|array $_key
+     * @param null $_value
+     * @return array|bool|mixed|null
+     */
     public static function setJsonAttr($_attr, $_key, $_value = null) {
         if ($_value === null && !is_array($_key)) {
             if (!is_array($_attr)) {

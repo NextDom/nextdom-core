@@ -18,7 +18,6 @@ namespace NextDom\Helpers;
 
 use NextDom\Enums\ApiModeEnum;
 use NextDom\Managers\ConfigManager;
-use NextDom\Helpers\LogHelper;
 use NextDom\Managers\UserManager;
 
 class Api

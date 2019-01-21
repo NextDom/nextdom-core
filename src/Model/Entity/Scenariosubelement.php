@@ -78,7 +78,7 @@ class Scenariosubelement
     private $id;
 
     /**
-     * @var \NextDom\Model\Entity\Scenarioelement
+     * @var \NextDom\Model\Entity\ScenarioElement
      *
      * @ORM\ManyToOne(targetEntity="NextDom\Model\Entity\Scenarioelement")
      * @ORM\JoinColumns({
@@ -122,7 +122,7 @@ class Scenariosubelement
         return $this->id;
     }
 
-    public function getScenarioelement(): \NextDom\Model\Entity\Scenarioelement
+    public function getScenarioelement(): \NextDom\Model\Entity\ScenarioElement
     {
         return $this->scenarioelement;
     }
@@ -169,7 +169,7 @@ class Scenariosubelement
         return $this;
     }
 
-    public function setScenarioelement(\NextDom\Model\Entity\Scenarioelement $scenarioelement)
+    public function setScenarioelement(\NextDom\Model\Entity\ScenarioElement $scenarioelement)
     {
         $this->scenarioelement = $scenarioelement;
         return $this;
