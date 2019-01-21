@@ -23,6 +23,9 @@ use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\ConfigManager;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Routing\Loader\YamlFileLoader;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * Classe de support à l'affichage des contenus HTML
@@ -476,7 +479,10 @@ class PrepareView
             \include_file('desktop', $page, 'php', $currentPlugin->getId(), true);
             return ob_get_clean();
         } else {
-            $controllerRoute = PagesController::getRoute($page);
+            $routeFileLocator = new FileLocator(NEXTDOM_ROOT . '/src');
+            $yamlLoader = new YamlFileLoader($routeFileLocator);
+            $routes = $yamlLoader->load('routes.yml');
+            $controllerRoute = $routes->get($page);
             if ($controllerRoute === null) {
                 // Vérifie que l'utilisateur n'essaie pas de sortir
                 $purgedPage = preg_replace('/[^a-z0-9_-]/i', '', $page);
@@ -489,8 +495,7 @@ class PrepareView
                     return null;
                 }
             } else {
-                $controller = new $controllerRoute();
-                return $controller->get($render, $pageContent);
+                return call_user_func_array($controllerRoute->getDefaults()['_controller'], [$render, &$pageContent]);
             }
         }
     }
@@ -505,9 +510,19 @@ class PrepareView
         try {
             AuthentificationHelper::init();
             $page = Utils::init('p');
-            $controllerRoute = PagesController::getRoute($page);
+            $routeFileLocator = new FileLocator(NEXTDOM_ROOT . '/src');
+            $yamlLoader = new YamlFileLoader($routeFileLocator);
+            $routes = $yamlLoader->load('routes.yml');
+            $controllerRoute = $routes->get($page);
             if ($controllerRoute === null) {
-                Router::showError404AndDie();
+                if (in_array($page, PluginManager::listPlugin(true, false, true))) {
+                    ob_start();
+                    \include_file('desktop', $page, 'php', $page, true);
+                    echo ob_get_clean();
+                }
+                else {
+                    Router::showError404AndDie();
+                }
             } else {
                 $render = Render::getInstance();
                 $pageContent = [];
@@ -516,7 +531,7 @@ class PrepareView
                 $pageContent['CSS_POOL'] = [];
                 $pageContent['JS_VARS'] = [];
                 $controller = new $controllerRoute();
-                $pageContent['content'] = $controller->get($render, $pageContent);
+                $pageContent['content'] = call_user_func_array($controllerRoute->getDefaults()['_controller'], [$render, &$pageContent]);
                 $render->show('/layouts/ajax_content.html.twig', $pageContent);
             }
         } catch (\Exception $e) {

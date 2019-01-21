@@ -39,7 +39,8 @@
     "symfony/twig-bridge": "^3.4",
     "touki/ftp": "1.2.1",
     "twig/twig": "^2.5",
-    "twig/extensions": "^1.5"
+    "twig/extensions": "^1.5",
+    "symfony/routing": "^3.4"
   },
   "license": "GPL",
   "config": {
@@ -68,4 +69,3 @@
     }
   }
 }
-
