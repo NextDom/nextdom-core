@@ -555,7 +555,16 @@ class PrepareView
                 }
             } else {
                 $render = Render::getInstance();
-                ModalsController::$modalRoute($render);
+                try {
+                    $modal = new $modalRoute();
+                    echo $modal->get($render);
+                } catch (CoreException $ex) {
+                    echo '<div class="alert alert-danger div_alert">';
+                    echo '<p>Une erreur s\'est produite, impossible d\'afficher le contenu de la modale. Erreur : '. $ex->getMessage() .'</p>';
+                    echo '</div>';
+                }
+
+
             }
         }
     }
