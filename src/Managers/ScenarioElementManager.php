@@ -34,16 +34,17 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\Utils;
+use NextDom\Model\Entity\ScenarioElement;
 
 class ScenarioElementManager
 {
-    const DB_CLASS_NAME = 'scenarioElement';
-    const CLASS_NAME = 'scenarioElement';
+    const DB_CLASS_NAME = '`scenarioElement`';
+    const CLASS_NAME = ScenarioElement::class;
 
     /**
      * Get the element of a scenario from its identifier
      * @param mixed $id Identifier of the scenario element
-     * @return mixed
+     * @return ScenarioElement
      * @throws \Exception
      */
     public static function byId($id)

@@ -40,7 +40,6 @@ use NextDom\Managers\CronManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Helpers\LogHelper;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\CmdManager;
@@ -467,8 +466,8 @@ class NextDomHelper
      */
     public static function getJeedomVersion()
     {
-        if (file_exists(NEXTDOM_ROOT . '/core/config/Jeedom_version')) {
-            return trim(file_get_contents(NEXTDOM_ROOT . '/core/config/Jeedom_version'));
+        if (file_exists('/var/lib/nextdom/config/Jeedom_version')) {
+            return trim(file_get_contents('/var/lib/nextdom/config/Jeedom_version'));
         }
         return '';
     }
@@ -480,8 +479,8 @@ class NextDomHelper
      */
     public static function getNextdomVersion()
     {
-        if (file_exists(NEXTDOM_ROOT . '/core/config/Nextdom_version')) {
-            return trim(file_get_contents(NEXTDOM_ROOT . '/core/config/Nextdom_version'));
+        if (file_exists('/var/lib/nextdom/config/Nextdom_version')) {
+            return trim(file_get_contents('/var/lib/nextdom/config/Nextdom_version'));
         }
         return '';
     }
@@ -761,13 +760,13 @@ class NextDomHelper
             if (ConfigManager::byKey('update::autocheck', 'core', 1) == 1 && (ConfigManager::byKey('update::lastCheck') == '' || (strtotime('now') - strtotime(ConfigManager::byKey('update::lastCheck'))) > (23 * 3600))) {
                 UpdateManager::checkAllUpdate();
                 $updates = UpdateManager::byStatus('update');
+                $toUpdate = '';
                 if (count($updates) > 0) {
-                    $toUpdate = '';
                     foreach ($updates as $update) {
                         $toUpdate .= $update->getLogicalId() . ',';
                     }
                 }
-                $updates = \update::byStatus('update');
+                $updates = UpdateManager::byStatus('update');
                 if (count($updates) > 0) {
                     \message::add('update', __('De nouvelles mises à jour sont disponibles : ') . trim($toUpdate, ','), '', 'newUpdate');
                 }

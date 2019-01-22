@@ -327,6 +327,7 @@ class Cron
      * Save cron object in database
      *
      * @return mixed
+     * @throws \ReflectionException
      */
     public function save()
     {
@@ -339,6 +340,7 @@ class Cron
      * @param bool $haltBefore
      * @return mixed
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function remove($haltBefore = true)
     {

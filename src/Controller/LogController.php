@@ -62,7 +62,6 @@ class LogController extends BaseController
         natcasesort($logFilesList);
         $pageContent['logFilesList'] = [];
         foreach ($logFilesList as $logFile) {
-            $hasError = 0;
             $logFileData = [];
             $logFileData['name'] = $logFile;
             $logFileData['icon'] = 'check';

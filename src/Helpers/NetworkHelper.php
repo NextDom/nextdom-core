@@ -37,7 +37,6 @@ namespace NextDom\Helpers;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
-use NextDom\Helpers\LogHelper;
 use NextDom\Managers\PluginManager;
 
 /**
@@ -319,6 +318,7 @@ class NetworkHelper
         }
         $openvpn = EqLogicManager::byLogicalId('dnsnextdom', 'openvpn');
         if (!is_object($openvpn)) {
+            /** @noinspection PhpUndefinedClassInspection */
             $openvpn = new openvpn();
             $openvpn->setName('DNS NextDom');
         }

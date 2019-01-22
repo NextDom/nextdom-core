@@ -837,7 +837,6 @@ class Cmd
             return $this->getHtml($_version);
         }
         $template_name = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.' . $this->getTemplate($version, 'default');
-        $template = '';
         if (!isset(self::$_templateArray[$version . '::' . $template_name])) {
             $template = getTemplate('core', $version, $template_name);
             if ($template == '') {
@@ -1466,6 +1465,12 @@ class Cmd
         return $name;
     }
 
+    /**
+     * @param null $_dateStart
+     * @param null $_dateEnd
+     * @return \history[]
+     * @throws \Exception
+     */
     public function getHistory($_dateStart = null, $_dateEnd = null)
     {
         return HistoryManager::all($this->id, $_dateStart, $_dateEnd);

@@ -27,6 +27,8 @@ chown www-data:www-data -R $LOGS_DIRECTORY
 # configs directory
 VARS_DIRECTORY=/var/lib/nextdom
 mkdir -p ${VARS_DIRECTORY}
+chmod 775 -R ${VARS_DIRECTORY}
+chown -R www-data:www-data ${VARS_DIRECTORY}
 
 # Functions
 
