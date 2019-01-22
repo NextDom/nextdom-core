@@ -131,6 +131,7 @@ $("#bt_savecustom").on('click', function (event) {
     $.hideAlert();
     saveConvertColor();
     var config = $('#custom').getValues('.configKey')[0];
+    console.log(config);
     nextdom.config.save({
         configuration: config,
         error: function (error) {

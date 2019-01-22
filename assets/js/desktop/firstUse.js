@@ -141,6 +141,30 @@ $("#toStep4").click(function () {
     });
 });
 
+$("#toStep5").click(function () {
+
+    var radios = document.getElementsByName('theme');
+    var config ="";
+    for (var i = 0, length = radios.length; i < length; i++) {
+        if (radios[i].checked) {
+            if(radios[i].value == "white"){
+                config = {"theme:color1": "#33b8cc", "theme:color2": "#ffffff", "theme:color9": "#ecf0f5", "theme:color6": "#222d32", "theme:color8": "#2c3b41"};
+            }
+            if (radios[i].value == "dark"){
+                config = {"theme:color1": "#333334", "theme:color2": "#fff000", "theme:color9": "#ecf0f5", "theme:color6": "#222d32", "theme:color8": "#2c3b41"};
+            }
+            break;
+        }
+    }
+
+    nextdom.config.save({
+        configuration: config,
+        error: function (error) {
+            notify("Info", '{{theme parametré}}', 'success');
+        }
+    });
+});
+
 $("#backStep1").click(function () {
     BackStep("#backStep1");
 });
@@ -186,23 +210,23 @@ function NextStep(_step) {
 }
 
 function BackStep(_step) {
-      var curStep = $(_step).closest(".setup-content");
-      var curStepBtn = curStep.attr("id");
-      var nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().prev().children("a");
-              console.log(nextStepWizard);
+    var curStep = $(_step).closest(".setup-content");
+    var curStepBtn = curStep.attr("id");
+    var nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().prev().children("a");
+    console.log(nextStepWizard);
 
-      var curInputs = curStep.find("input[type='text'],input[type='url']");
-      isValid = true;
+    var curInputs = curStep.find("input[type='text'],input[type='url']");
+    isValid = true;
 
-      $(".form-group").removeClass("has-error");
-      for (var i = 0; i < curInputs.length; i++) {
-          if (!curInputs[i].validity.valid) {
-              isValid = false;
-              $(curInputs[i]).closest(".form-group").addClass("has-error");
-          }
-      }
+    $(".form-group").removeClass("has-error");
+    for (var i = 0; i < curInputs.length; i++) {
+        if (!curInputs[i].validity.valid) {
+            isValid = false;
+            $(curInputs[i]).closest(".form-group").addClass("has-error");
+        }
+    }
 
-      if (isValid) {
-          nextStepWizard.removeAttr('disabled').trigger('click');
-      }
-  }
+    if (isValid) {
+        nextStepWizard.removeAttr('disabled').trigger('click');
+    }
+}
