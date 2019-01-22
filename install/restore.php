@@ -134,6 +134,8 @@ try {
 
     echo "Unzip the backup...";
     $excludes = array(
+        'AlternativeMarketForJeedom',
+        'musicast'
     );
     $exclude = '';
     foreach ($excludes as $folder) {
@@ -208,9 +210,7 @@ try {
 
     echo "Restoration of plugins...";
     system('cp -fr ' . TMP_BACKUP . '/plugins/* ' . NEXTDOM_ROOT . '/plugins' );
-    if (is_dir(NEXTDOM_ROOT . '/plugins/AlternativeMarketForJeedom')) {
-        system('rm -fr ' . NEXTDOM_ROOT . '/plugins/AlternativeMarketForJeedom');
-    }
+
     foreach (PluginManager::listPlugin(true) as $plugin) {
         $plugin_id = $plugin->getId();
         $dependancy_info = $plugin->dependancy_info(true);

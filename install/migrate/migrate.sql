@@ -41,4 +41,6 @@ CREATE INDEX `tags` ON eqLogic (`tags` ASC);
 UPDATE `update` SET source = 'github', configuration = '{"user":"NextDom","repository":"nextdom-core","version":"master"}' WHERE type = 'core';
 DELETE FROM `update` WHERE name = 'AlternativeMarketForJeedom';
 DELETE FROM `config` WHERE `plugin` = 'AlternativeMarketForJeedom';
+DELETE FROM `update` WHERE name = 'musiccast';
+DELETE FROM `config` WHERE `plugin` = 'musiccast';
 UPDATE `config` SET `value` = 'https://www.jeedom.com/market/' WHERE `plugin` = 'core' AND `key` = 'market::address';
