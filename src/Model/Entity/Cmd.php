@@ -124,7 +124,7 @@ class Cmd
      *
      * @ORM\Column(name="isHistorized", type="string", length=45, nullable=false)
      */
-    protected $isHistorized;
+    protected $isHistorized = 0;
 
     /**
      * @var string
