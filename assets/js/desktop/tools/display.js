@@ -106,6 +106,7 @@ $('.displayListContainer').packery();
         $(this).removeClass('fa-chevron-down').addClass('fa-chevron-right');
         $(this).closest('.eqLogic').find('.cmdSortable').hide();
     }
+     $('.displayListContainer').packery();
 });
 
  $('.showEqLogic').on('click',function(){
