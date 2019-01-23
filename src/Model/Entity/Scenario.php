@@ -400,9 +400,9 @@ class Scenario
      * @param mixed $_value
      * @return $this
      */
-    public function setDisplay($_key, $_value)
+    public function setDisplay($key, $value)
     {
-        $this->display = Utils::setJsonAttr($this->display, $_key, $_value);
+        $this->display = Utils::setJsonAttr($this->display, $key, $value);
         return $this;
     }
 
@@ -440,16 +440,16 @@ class Scenario
 
     /**
      *
-     * @param mixed $_event
+     * @param mixed $event
      * @return boolean
      */
-    public function testTrigger($_event)
+    public function testTrigger($event): bool
     {
         foreach ($this->getTrigger() as $trigger) {
             $trigger = str_replace(array('#variable(', ')#'), array('variable(', ')'), $trigger);
-            if ($trigger == $_event) {
+            if ($trigger == $event) {
                 return true;
-            } elseif (strpos($trigger, $_event) !== false && NextDomHelper::evaluateExpression($trigger)) {
+            } elseif (strpos($trigger, $event) !== false && NextDomHelper::evaluateExpression($trigger)) {
                 return true;
             }
         }
@@ -551,14 +551,14 @@ class Scenario
 
     /**
      *
-     * @param mixed $_name
+     * @param mixed $name
      * @return Scenario
      * @throws \Exception
      */
-    public function copy($_name)
+    public function copy($name)
     {
         $scenarioCopy = clone $this;
-        $scenarioCopy->setName($_name);
+        $scenarioCopy->setName($name);
         $scenarioCopy->setId('');
         $scenario_element_list = array();
         foreach ($this->getElement() as $element) {
@@ -675,7 +675,7 @@ class Scenario
      *
      * @return string
      */
-    public function getLinkToConfiguration()
+    public function getLinkToConfiguration(): bool
     {
         return 'index.php?v=d&p=scenario&id=' . $this->getId();
     }
@@ -799,17 +799,17 @@ class Scenario
         return true;
     }
 
-    public function getData($_key, $_private = false, $_default = '')
+    public function getData($key, $private = false, $default = '')
     {
-        if ($_private) {
-            $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', $this->getId(), $_key);
+        if ($private !== false) {
+            $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', $this->getId(), $key);
         } else {
-            $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', -1, $_key);
+            $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', -1, $key);
         }
         if (is_object($dataStore)) {
-            return $dataStore->getValue($_default);
+            return $dataStore->getValue($default);
         }
-        return $_default;
+        return $default;
     }
 
     /**
