@@ -19,7 +19,7 @@
 #}
 
 /* Theme base */
-.content-wrapper,.nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a {
+.content-wrapper,.nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a, .main-footer {
 background-color:{{ COLOR9 }};
 }
 
@@ -213,12 +213,13 @@ background-color: {{ COLOR1 }};
 }
 
 /* Fabs */
-.fab-action-button {
+.fab-action-button  {
 background-color: {{ COLOR1 }};
 }
 
-.box, .tab-content, .nav-tabs-custom, .action-bar {
+.box, .tab-content, .nav-tabs-custom, .action-bar, .box-footer {
 background: {{ COLOR10 }} !important;
+border-top-color: {{ COLOR9 }};
 }
 
 .info-box{
@@ -235,15 +236,26 @@ border: {{ COLOR11 }} !important;
 background-color: {{ COLOR11 }}60 !important;
 }
 
+.box-header.with-border{
+border-color: {{ COLOR9 }} !important;
+}
+
 .nav-tabs-custom > .nav-tabs, .nav-tabs-custom > .nav-tabs > li.active > a {
 border-color: {{ COLOR9 }} !important;
 }
 
-body, h1, h2, h3, h4, h5, h6, .nav-tabs-custom > .nav-tabs > li.header, .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a,.nav-tabs-custom > .nav-tabs > li > a, legend, .btn-app {
+body, h1, h2, h3, h4, h5, h6, .nav-tabs-custom > .nav-tabs > li.header, .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a,.nav-tabs-custom > .nav-tabs > li > a, legend, .btn-app, .footer-center {
 color: {{ COLOR12 }} !important;
 }
 
 .table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
 border: 1px solid {{ COLOR12 }} !important;
 
+}
+
+.form-control {
+background: {{ COLOR13 }};
+padding-left: 10px !important;
+color: {{ COLOR12 }} !important;
+border: none !important;
 }

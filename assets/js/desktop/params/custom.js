@@ -40,8 +40,8 @@ editorMobileJS = null;
 editorMobileCSS = null;
 
 jwerty.key('ctrl+s/⌘+s', function (e) {
-   e.preventDefault();
-   $("#bt_savecustom").click();
+    e.preventDefault();
+    $("#bt_savecustom").click();
 });
 
 printConvertColor();
@@ -59,39 +59,39 @@ nextdom.config.load({
 
 
 $('a[data-toggle="tab"][href="#advanced"]').on('shown.bs.tab', function () {
-   editorDesktopJS = CodeMirror.fromTextArea(document.getElementById("ta_jsDesktopContent"), {
-       lineNumbers: true,
-       mode: "text/javascript",
-       matchBrackets: true,
-       viewportMargin: Infinity
-   });
-   editorDesktopCSS = CodeMirror.fromTextArea(document.getElementById("ta_cssDesktopContent"), {
-       lineNumbers: true,
-       mode: "text/css",
-       matchBrackets: true,
-       viewportMargin: Infinity
-   });
+    editorDesktopJS = CodeMirror.fromTextArea(document.getElementById("ta_jsDesktopContent"), {
+        lineNumbers: true,
+        mode: "text/javascript",
+        matchBrackets: true,
+        viewportMargin: Infinity
+    });
+    editorDesktopCSS = CodeMirror.fromTextArea(document.getElementById("ta_cssDesktopContent"), {
+        lineNumbers: true,
+        mode: "text/css",
+        matchBrackets: true,
+        viewportMargin: Infinity
+    });
 });
 
 
 
 $('a[data-toggle="tab"][href="#mobile"]').on('shown.bs.tab', function (e) {
-   if (editorMobileCSS == null) {
-       editorMobileCSS = CodeMirror.fromTextArea(document.getElementById("ta_cssMobileContent"), {
-           lineNumbers: true,
-           mode: "text/css",
-           matchBrackets: true,
-           viewportMargin: Infinity
-       });
-   }
-   if (editorMobileJS == null) {
-       editorMobileJS = CodeMirror.fromTextArea(document.getElementById("ta_jsMobileContent"), {
-           lineNumbers: true,
-           mode: "text/javascript",
-           matchBrackets: true,
-           viewportMargin: Infinity
-       });
-   }
+    if (editorMobileCSS == null) {
+        editorMobileCSS = CodeMirror.fromTextArea(document.getElementById("ta_cssMobileContent"), {
+            lineNumbers: true,
+            mode: "text/css",
+            matchBrackets: true,
+            viewportMargin: Infinity
+        });
+    }
+    if (editorMobileJS == null) {
+        editorMobileJS = CodeMirror.fromTextArea(document.getElementById("ta_jsMobileContent"), {
+            lineNumbers: true,
+            mode: "text/javascript",
+            matchBrackets: true,
+            viewportMargin: Infinity
+        });
+    }
 });
 
 function saveCustom() {
@@ -106,25 +106,25 @@ function saveCustom() {
 }
 
 function sendCustomData(version, type, content) {
-   nextdom.config.save({
-       configuration: $('#custom').getValues('.configKey')[0],
-       error: function (error) {
-           notify("Erreur", error.message, 'error');
-       },
-       success: function () {
-         nextdom.saveCustom({
-           version: version,
-           type: type,
-           content: content,
-           error: function (error) {
-               notify("Erreur", error.message, 'error');
-           },
-           success: function (data) {
+    nextdom.config.save({
+        configuration: $('#custom').getValues('.configKey')[0],
+        error: function (error) {
+            notify("Erreur", error.message, 'error');
+        },
+        success: function () {
+            nextdom.saveCustom({
+                version: version,
+                type: type,
+                content: content,
+                error: function (error) {
+                    notify("Erreur", error.message, 'error');
+                },
+                success: function (data) {
 //               notify("Info", 'Sauvegarde réussie', 'success');
-           }
-       });
-     }
- });
+                }
+            });
+        }
+    });
 }
 
 $("#bt_savecustom").on('click', function (event) {
@@ -158,85 +158,134 @@ $("#bt_savecustom").on('click', function (event) {
 
 /********************Convertion************************/
 function printConvertColor() {
-   $.ajax({
-       type: "POST",
-       url: "core/ajax/config.ajax.php",
-       data: {
-           action: "getKey",
-           key: 'convertColor'
-       },
-       dataType: 'json',
-       error: function (request, status, error) {
-           handleAjaxError(request, status, error);
-       },
-       success: function (data) {
-           if (data.state != 'ok') {
-               notify("Erreur", data.result, 'error');
-               return;
-           }
+    $.ajax({
+        type: "POST",
+        url: "core/ajax/config.ajax.php",
+        data: {
+            action: "getKey",
+            key: 'convertColor'
+        },
+        dataType: 'json',
+        error: function (request, status, error) {
+            handleAjaxError(request, status, error);
+        },
+        success: function (data) {
+            if (data.state != 'ok') {
+                notify("Erreur", data.result, 'error');
+                return;
+            }
 
-           $('#table_convertColor tbody').empty();
-           for (var color in data.result) {
-               addConvertColor(color, data.result[color]);
-           }
-           modifyWithoutSave = false;
-       }
-   });
+            $('#table_convertColor tbody').empty();
+            for (var color in data.result) {
+                addConvertColor(color, data.result[color]);
+            }
+            modifyWithoutSave = false;
+        }
+    });
 }
 
 function addConvertColor(_color, _html) {
-   var tr = '<tr>';
-   tr += '<td>';
-   tr += '<input class="color form-control input-sm" value="' + init(_color) + '"/>';
-   tr += '</td>';
-   tr += '<td>';
-   tr += '<input type="color" class="html form-control input-sm" value="' + init(_html) + '" />';
-   tr += '</td>';
-   tr += '</tr>';
-   $('#table_convertColor tbody').append(tr);
-   modifyWithoutSave = false;
+    var tr = '<tr>';
+    tr += '<td>';
+    tr += '<input class="color form-control input-sm" value="' + init(_color) + '"/>';
+    tr += '</td>';
+    tr += '<td>';
+    tr += '<input type="color" class="html form-control input-sm" value="' + init(_html) + '" />';
+    tr += '</td>';
+    tr += '</tr>';
+    $('#table_convertColor tbody').append(tr);
+    modifyWithoutSave = false;
 }
 
 function saveConvertColor() {
-   var value = {};
-   var colors = {};
-   $('#table_convertColor tbody tr').each(function () {
-       colors[$(this).find('.color').value()] = $(this).find('.html').value();
-   });
-   value.convertColor = colors;
-   $.ajax({
-       type: "POST",
-       url: "core/ajax/config.ajax.php",
-       data: {
-           action: 'addKey',
-           value: json_encode(value)
-       },
-       dataType: 'json',
-       error: function (request, status, error) {
-           handleAjaxError(request, status, error);
-       },
-       success: function (data) {
-           if (data.state != 'ok') {
-               notify("Core", data.result, 'error');
-               return;
-           }
-           modifyWithoutSave = false;
-       }
-   });
+    var value = {};
+    var colors = {};
+    $('#table_convertColor tbody tr').each(function () {
+        colors[$(this).find('.color').value()] = $(this).find('.html').value();
+    });
+    value.convertColor = colors;
+    $.ajax({
+        type: "POST",
+        url: "core/ajax/config.ajax.php",
+        data: {
+            action: 'addKey',
+            value: json_encode(value)
+        },
+        dataType: 'json',
+        error: function (request, status, error) {
+            handleAjaxError(request, status, error);
+        },
+        success: function (data) {
+            if (data.state != 'ok') {
+                notify("Core", data.result, 'error');
+                return;
+            }
+            modifyWithoutSave = false;
+        }
+    });
 }
 
 /*CMD color*/
 
 $('.bt_resetColor').on('click', function () {
-   var el = $(this);
-   nextdom.getConfiguration({
-       key: $(this).attr('data-l1key'),
-       default: 1,
-       error: function (error) {
-           notify("Core", error.message, 'error');
-       },
-       success: function (data) {
-           $('.configKey[data-l1key="' + el.attr('data-l1key') + '"]').value(data);
-       }
-   });
+    var el = $(this);
+    nextdom.getConfiguration({
+        key: $(this).attr('data-l1key'),
+        default: 1,
+        error: function (error) {
+            notify("Core", error.message, 'error');
+        },
+        success: function (data) {
+            $('.configKey[data-l1key="' + el.attr('data-l1key') + '"]').value(data);
+        }
+    });
+});
+
+$("input[name=theme]").click(function () {
+
+    var radio = $(this).val();
+    var config ="";
+    if (radio == "dark"){
+        config = {
+            'theme:color1' : '#33b8cc',
+            'theme:color2' : '#e6e7e8',
+            'theme:color3' : '#ffffff',
+            'theme:color4' : '#33B8CC',
+            'theme:color5' : '#ffffff',
+            'theme:color6' : '#222d32',
+            'theme:color7' : '#1e282c',
+            'theme:color8' : '#2c3b41',
+            'theme:color9' : '#262626',
+            'theme:color10' : '#3b3939',
+            'theme:color11' : '#2f2f2f',
+            'theme:color12' : '#e6e7e8',
+            'theme:color13' : '#484c52'
+        }
+
+    }
+    if (radio == "white"){
+        config = {
+            'color1' : '#33b8cc',
+            'theme:color2' : '#ffffff',
+            'theme:color3' : '#ffffff',
+            'theme:color4' : '#33B8CC',
+            'theme:color5' : '#ffffff',
+            'theme:color6' : '#222d32',
+            'theme:color7' : '#1e282c',
+            'theme:color8' : '#2c3b41',
+            'theme:color9' : '#ecf0f5',
+            'theme:color10' : '#ffffff',
+            'theme:color11' : '#f5f5f5',
+            'theme:color12' : '#000000',
+            'theme:color13' : '#dddddd'
+        }
+
+    }
+    nextdom.config.save({
+        configuration: config,
+        error: function (error) {
+            notify("Info", '{{theme parametré}}', 'success');
+        }
+    });
+    window.location.reload();
 });
