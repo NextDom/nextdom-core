@@ -1156,11 +1156,11 @@ class Scenario
             }
         }
         if ($_prettify) {
-            $name .= '</p><p>';
+            $name .= '</p><p class="title">';
         }
         if (!$_withoutScenarioName) {
             if ($_tag) {
-                $name .= ' ' . $this->getName();
+                $name .= $this->getName();
             } else {
                 $name .= '[' . $this->getName() . ']';
             }
