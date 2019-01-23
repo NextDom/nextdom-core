@@ -675,7 +675,7 @@ class Scenario
      *
      * @return string
      */
-    public function getLinkToConfiguration(): bool
+    public function getLinkToConfiguration(): string
     {
         return 'index.php?v=d&p=scenario&id=' . $this->getId();
     }
