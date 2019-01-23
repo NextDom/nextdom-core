@@ -148,18 +148,19 @@ $("#toStep5").click(function () {
     for (var i = 0, length = radios.length; i < length; i++) {
                 if (radios[i].value == "dark"){
                     console.log("dark");
-                config = {'color10' : '#3b3939','color1' : '#33b8cc',
-                    'color2' : '#e6e7e8',
-                    'color3' : '#ffffff',
-                    'color4' : '#33B8CC',
-                    'color5' : '#ffffff',
-                    'color6' : '#222d32',
-                    'color7' : '#1e282c',
-                    'color8' : '#2c3b41',
-                    'color9' : '#262626',
-                    'color10' : '#3b3939',
-                    'color11' : '#2f2f2f',
-                    'color12' : '#e6e7e8'}
+                config = {
+                    'theme:color1' : '#33b8cc',
+                    'theme:color2' : '#e6e7e8',
+                    'theme:color3' : '#ffffff',
+                    'theme:color4' : '#33B8CC',
+                    'theme:color5' : '#ffffff',
+                    'theme:color6' : '#222d32',
+                    'theme:color7' : '#1e282c',
+                    'theme:color8' : '#2c3b41',
+                    'theme:color9' : '#262626',
+                    'theme:color10' : '#3b3939',
+                    'theme:color11' : '#2f2f2f',
+                    'theme:color12' : '#e6e7e8'}
                 break;
                 }
         }
