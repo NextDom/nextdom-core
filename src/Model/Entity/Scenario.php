@@ -232,13 +232,13 @@ class Scenario
 
     /**
      *
-     * @param mixed $_key
-     * @param mixed $_default
+     * @param mixed $key
+     * @param mixed $default
      * @return mixed
      */
-    public function getDisplay($_key = '', $_default = '')
+    public function getDisplay($key = '', $default = '')
     {
-        return Utils::getJsonAttr($this->display, $_key, $_default);
+        return Utils::getJsonAttr($this->display, $key, $default);
     }
 
     public function getDescription()
@@ -283,13 +283,13 @@ class Scenario
 
     /**
      *
-     * @param mixed $_default
+     * @param mixed $default
      * @return mixed
      */
-    public function getObject_id($_default = null)
+    public function getObject_id($default = null)
     {
         if ($this->object_id == '' || !is_numeric($this->object_id)) {
-            return $_default;
+            return $default;
         }
         return $this->object_id;
     }
@@ -1019,6 +1019,7 @@ class Scenario
      */
     public function export($_mode = 'text')
     {
+        $return = null;
         if ($_mode == 'text') {
             $return = '';
             $return .= '- Nom du scénario : ' . $this->getName() . "\n";
@@ -1053,8 +1054,8 @@ class Scenario
                 }
             }
         }
-        $return = [];
         if ($_mode == 'array') {
+            $return = [];
             $return = Utils::o2a($this);
             $return['trigger'] = NextDomHelper::toHumanReadable($return['trigger']);
             $return['elements'] = array();
