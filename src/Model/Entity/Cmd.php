@@ -1486,14 +1486,14 @@ class Cmd
         $class = new \ReflectionClass($this->getEqType());
         $method_toHtml = $class->getMethod('toHtml');
         $return = array();
-        if ($method_toHtml->class == 'eqLogic') {
+        if ($method_toHtml->class == EqLogic::class) {
             $return['custom'] = true;
         } else {
             $return['custom'] = false;
         }
         $class = new \ReflectionClass($this->getEqType() . 'Cmd');
         $method_toHtml = $class->getMethod('toHtml');
-        if ($method_toHtml->class == 'cmd') {
+        if ($method_toHtml->class == Cmd::class) {
             $return['custom'] = true;
         } else {
             $return['custom'] = false;
