@@ -39,7 +39,7 @@
             <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
         </div>
         <div class="action-group">
-            <a class="btn-sm btn-success pull-right" id="bt_savecustom"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-success pull-right" id="bt_savecustom"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
         </div>
     </div>
 </section>
@@ -61,7 +61,7 @@
                 <legend>{{ 'Selectionner votre thème' }}</legend>
                 <div class="row  text-center">
                     <div id="themes" class="col-sm-12 col-md-6">
-                        <div style="float:left;width: 90.66%;padding: 5px;">
+                        <div style="padding: 10px;">
                             <a data-skin="skin-blue" style="display: block;border: 1px solid #aaa;" class="clearfix full-opacity-hover form-group">
                                 <div>
                                     <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
@@ -76,7 +76,7 @@
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-6">
-                        <div style="float:left;width: 90.66%;padding: 5px;">
+                        <div style="padding: 10px;">
                             <a data-skin="skin-blue" style="display: block;border: 1px solid #aaa;" class="clearfix full-opacity-hover form-group">
                                 <div>
                                     <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9"></span>
@@ -167,6 +167,26 @@
                                 <a class="btn btn-action bt_resetColor" data-l1key="theme:color13" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
                                 <div class="colorpicker-component colorpick input-group">
                                     <input type="text" class="configKey form-control noSet" data-l1key="theme:color13" value="{{ Theme['color13'] }}"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-md-offset-2 col-xs-12">
+                            <label class="control-label">{{ 'Couleur bordure des inputs' }}</label>
+                            <div class="btn-group">
+                                <a class="btn btn-action bt_resetColor" data-l1key="theme:color14" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
+                                <div class="colorpicker-component colorpick input-group">
+                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color14" value="{{ Theme['color14'] }}"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-md-offset-1 col-xs-12">
+                            <label class="control-label">{{ 'Couleur fond des boxs' }}</label>
+                            <div class="btn-group">
+                                <a class="btn btn-action bt_resetColor" data-l1key="theme:color15" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
+                                <div class="colorpicker-component colorpick input-group">
+                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color15" value="{{ Theme['color15'] }}"/>
                                     <span class="input-group-addon"><i></i></span>
                                 </div>
                             </div>
@@ -397,4 +417,3 @@
         </div>
     </div>
 </section>
-q

@@ -21,6 +21,7 @@
 /* Theme base */
 .content-wrapper,.nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a, .main-footer {
 background-color:{{ COLOR9 }};
+border-color:{{ COLOR9 }}60;
 }
 
 .icon_theme_color {
@@ -217,19 +218,29 @@ background-color: {{ COLOR1 }};
 background-color: {{ COLOR1 }};
 }
 
-.box, .tab-content, .nav-tabs-custom, .action-bar, .box-footer {
+.box, .nav-tabs-custom, .action-bar, .box-footer {
 background: {{ COLOR10 }} !important;
+border-top-color: {{ COLOR9 }};
+}
+
+.tab-content, .box-body {
+background: {{ COLOR15 }} !important;
 border-top-color: {{ COLOR9 }};
 }
 
 .info-box{
 background: {{ COLOR10 }};
-
 }
 
-.table, .table-condensed>thead, .btn-app, legend {
+.table, .table-condensed>thead, legend {
 background: {{ COLOR11 }} !important;
 border: {{ COLOR11 }} !important;
+}
+
+.btn-app {
+background: {{ COLOR14 }} !important;
+border: 1px solid {{ COLOR14 }} !important;
+color: {{ COLOR12 }} !important;
 }
 
 .table-condensed, .table-bordered {
@@ -244,18 +255,43 @@ border-color: {{ COLOR9 }} !important;
 border-color: {{ COLOR9 }} !important;
 }
 
-body, h1, h2, h3, h4, h5, h6, .nav-tabs-custom > .nav-tabs > li.header, .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a,.nav-tabs-custom > .nav-tabs > li > a, legend, .btn-app, .footer-center {
+body, h1, h2, h3, h4, h5, h6, .nav-tabs-custom > .nav-tabs > li.header, .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a,.nav-tabs-custom > .nav-tabs > li > a, legend, .footer-center, .text-muted, .ui-widget-content {
 color: {{ COLOR12 }} !important;
 }
 
-.table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
-border: 1px solid {{ COLOR12 }} !important;
+body, .main-footer{
+background-color: {{ COLOR10 }} !important;
+}
 
+.table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
+border: 1px solid {{ COLOR14 }} !important;
 }
 
 .form-control {
 background: {{ COLOR13 }};
+border-color: {{ COLOR14 }} !important;
 padding-left: 10px !important;
 color: {{ COLOR12 }} !important;
+}
+
+.input-group .input-group-addon {
+background-color: {{ COLOR11 }} !important;
+color: {{ COLOR12 }} !important;
 border: none !important;
+}
+
+.colorpick, .label-value, select, input[type="text"], input[type="email"], input[type="tel"], input[type="search"], input[type="url"], input[type="password"], .ui-autocomplete-input {
+border: 1px solid {{ COLOR14 }} !important;
+}
+
+.colorpick>input[type="text"] {
+border: none !important;
+}
+
+.ui-dialog .ui-dialog-content {
+background-color: {{ COLOR9 }} !important;
+}
+
+.ui-widget-content {
+border: 1px solid {{ COLOR9 }} !important;
 }

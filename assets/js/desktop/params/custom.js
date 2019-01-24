@@ -259,13 +259,15 @@ $("input[name=theme]").click(function () {
             'theme:color10' : '#222d32',
             'theme:color11' : '#2c3b41',
             'theme:color12' : '#e6e7e8',
-            'theme:color13' : '#484c52'
+            'theme:color13' : '#484c52',
+            'theme:color14' : '#2c3b41',
+            'theme:color15' : '#222d32'
         }
 
     }
     if (radio == "white"){
         config = {
-            'color1' : '#33b8cc',
+            'theme:color1' : '#33b8cc',
             'theme:color2' : '#ffffff',
             'theme:color3' : '#ffffff',
             'theme:color4' : '#33B8CC',
@@ -276,8 +278,10 @@ $("input[name=theme]").click(function () {
             'theme:color9' : '#ecf0f5',
             'theme:color10' : '#ffffff',
             'theme:color11' : '#f5f5f5',
-            'theme:color12' : '#000000',
-            'theme:color13' : '#dddddd'
+            'theme:color12' : '#555',
+            'theme:color13' : '#fff',
+            'theme:color14' : '#ddd',
+            'theme:color15' : '#fafafa'
         }
 
     }

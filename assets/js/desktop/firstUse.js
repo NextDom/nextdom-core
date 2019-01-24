@@ -160,8 +160,10 @@ $("#toStep5").click(function () {
                     'theme:color9' : '#2c3b41',
                     'theme:color10' : '#222d32',
                     'theme:color11' : '#2c3b41',
-                    'theme:color12' : '#e6e7e8',
-                    'theme:color13' : '#484c52'}
+                    'theme:color12' : '#2c3b41',
+                    'theme:color13' : '#484c52',
+                    'theme:color14' : '#2c3b41',
+                    'theme:color15' : '#222d32'}
         break;
                 }
         }
