@@ -257,7 +257,7 @@ $("input[name=theme]").click(function () {
             'theme:color8' : '#2c3b41',
             'theme:color9' : '#2c3b41',
             'theme:color10' : '#222d32',
-            'theme:color11' : '#2f2f2f',
+            'theme:color11' : '#2c3b41',
             'theme:color12' : '#e6e7e8',
             'theme:color13' : '#484c52'
         }
