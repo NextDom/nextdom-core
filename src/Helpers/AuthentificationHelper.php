@@ -55,7 +55,7 @@ class AuthentificationHelper
             session_id($_COOKIE['sess_id']);
         }
         @session_start();
-        $_SESSION['ip'] = getClientIp();
+        $_SESSION['ip'] = NetworkHelper::getClientIp();
         if (!headers_sent()) {
             setcookie('sess_id', session_id(), time() + 24 * 3600, "/", '', false, true);
         }
@@ -148,7 +148,7 @@ class AuthentificationHelper
             return false;
         }
         $registerDevice = $user->getOptions('registerDevice', array());
-        if (!isset($registerDevice[sha512($key[1])])) {
+        if (!isset($registerDevice[Utils::sha512($key[1])])) {
             UserManager::failedLogin();
             sleep(5);
             return false;
@@ -160,10 +160,10 @@ class AuthentificationHelper
         if (!is_array($registerDevice)) {
             $registerDevice = array();
         }
-        $registerDevice[sha512($key[1])] = array();
-        $registerDevice[sha512($key[1])]['datetime'] = date('Y-m-d H:i:s');
-        $registerDevice[sha512($key[1])]['ip'] = getClientIp();
-        $registerDevice[sha512($key[1])]['session_id'] = session_id();
+        $registerDevice[Utils::sha512($key[1])] = array();
+        $registerDevice[Utils::sha512($key[1])]['datetime'] = date('Y-m-d H:i:s');
+        $registerDevice[Utils::sha512($key[1])]['ip'] = NetworkHelper::getClientIp();
+        $registerDevice[Utils::sha512($key[1])]['session_id'] = session_id();
         @session_start();
         $_SESSION['user']->setOptions('registerDevice', $registerDevice);
         $_SESSION['user']->save();

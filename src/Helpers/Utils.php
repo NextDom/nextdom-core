@@ -306,11 +306,6 @@ class Utils
         return ($path{0} == '/' ? '/' : '') . join('/', $out);
     }
 
-    public static function getRootPath()
-    {
-        return NEXTDOM_ROOT;
-    }
-
     /**
      * got from https://github.com/zendframework/zend-stdlib/issues/58
      *
@@ -645,7 +640,7 @@ class Utils
         return strToUpper($hex);
     }
 
-    public static function hex2rgb($hex) {
+    public static function hexToRgb($hex) {
         $hex = str_replace("#", "", $hex);
         if (strlen($hex) == 3) {
             $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));
@@ -752,7 +747,7 @@ class Utils
         $folder = '/tmp/nextdom_support';
         $outputfile = NEXTDOM_ROOT . '/support/nextdom_support_' . date('Y-m-d_His') . '.tar.gz';
         if (file_exists($folder)) {
-            rrmdir($folder);
+            FileSystemHelper::rrmdir($folder);
         }
         mkdir($folder);
         system('cd /var/log/nextdom;cp -R * "' . $folder . '" > /dev/null;cp -R .[^.]* "' . $folder . '" > /dev/null');
@@ -760,7 +755,7 @@ class Utils
         system('sudo cp /var/log/messages "' . $folder . '/" > /dev/null');
         system('sudo chmod 777 -R "' . $folder . '" > /dev/null');
         system('cd ' . $folder . ';tar cfz "' . $outputfile . '" * > /dev/null;chmod 777 ' . $outputfile);
-        rrmdir($folder);
+        FileSystemHelper::rrmdir($folder);
         return realpath($outputfile);
     }
 

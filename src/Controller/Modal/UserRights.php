@@ -58,7 +58,7 @@ class UserRights extends BaseAbstractModal
         if (!is_object($user)) {
             throw new CoreException(__('Impossible de trouver l\'utilisateur : ') . $userId);
         }
-        Utils::sendVarToJs('user_rights', \utils::o2a($user));
+        Utils::sendVarToJs('user_rights', Utils::o2a($user));
 
         $pageContent = [];
 

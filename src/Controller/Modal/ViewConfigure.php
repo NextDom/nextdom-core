@@ -52,7 +52,7 @@ class ViewConfigure extends BaseAbstractModal
         if (!is_object($view)) {
             throw new CoreException('Impossible de trouver la vue');
         }
-        Utils::sendVarsToJS(['id' => $view->getId(), 'view' => \utils::o2a($view)]);
+        Utils::sendVarsToJS(['id' => $view->getId(), 'view' => Utils::o2a($view)]);
 
         return $render->get('/modals/view.configure.html.twig');
     }

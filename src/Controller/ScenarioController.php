@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
@@ -62,7 +63,7 @@ class ScenarioController extends BaseController
                 $pageContent['scenarios'][$group['group']] = ScenarioManager::all($group['group']);
             }
         }
-        $pageContent['scenarioInactiveStyle'] = \nextdom::getConfiguration('eqLogic:style:noactive');
+        $pageContent['scenarioInactiveStyle'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
         $pageContent['scenarioEnabled'] = ConfigManager::byKey('enableScenario');
         $pageContent['scenarioAllObjects'] = JeeObjectManager::all();
 

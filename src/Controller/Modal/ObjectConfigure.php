@@ -56,7 +56,7 @@ class ObjectConfigure extends BaseAbstractModal
         if (!is_object($object)) {
             throw new CoreException(__('Objet non trouvé : ') . $objectId);
         }
-        Utils::sendVarToJS('objectInfo', \utils::o2a($object));
+        Utils::sendVarToJS('objectInfo', Utils::o2a($object));
 
         return $render->get('/modals/object.configure.html.twig');
     }

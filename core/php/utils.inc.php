@@ -129,7 +129,7 @@ function cleanPath($path)
 
 function getRootPath()
 {
-    return Utils::getRootPath();
+    return NEXTDOM_ROOT;
 }
 
 function hadFileRight($_allowPath, $_path)
@@ -351,7 +351,7 @@ function strToHex($string)
 }
 
 function hex2rgb($hex) {
-    return Utils::hex2rgb($hex);
+    return Utils::hexToRgb($hex);
 }
 
 function getDominantColor($_pathimg)

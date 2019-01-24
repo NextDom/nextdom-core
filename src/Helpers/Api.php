@@ -67,7 +67,7 @@ class Api
                 $result = false;
                 break;
             case ApiModeEnum::API_WHITEIP:
-                $ip = getClientIp();
+                $ip = NetworkHelper::getClientIp();
                 $find = false;
                 $whiteIps = explode(';', ConfigManager::byKey('security::whiteips'));
                 if (ConfigManager::byKey('security::whiteips') != '' && count($whiteIps) > 0) {

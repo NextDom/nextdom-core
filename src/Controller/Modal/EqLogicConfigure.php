@@ -60,7 +60,7 @@ class EqLogicConfigure extends BaseAbstractModal
         }
 
         Utils::sendVarsToJS(
-            ['eqLogicInfo' => \utils::o2a($eqLogic),
+            ['eqLogicInfo' => Utils::o2a($eqLogic),
                 'eqLogicInfoSearchString' => urlencode(str_replace('#', '', $eqLogic->getHumanName()))]);
 
         $pageContent = [];

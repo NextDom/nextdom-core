@@ -328,7 +328,7 @@ class NetworkHelper
         $openvpn->setConfiguration('dev', 'tun');
         $openvpn->setConfiguration('proto', 'udp');
         $openvpn->setConfiguration('remote_host', 'vpn.dns' . ConfigManager::byKey('dns::number', 'core', 1) . '.nextdom.com');
-        $openvpn->setConfiguration('username', \nextdom::getHardwareKey());
+        $openvpn->setConfiguration('username', NextDomHelper::getHardwareKey());
         $openvpn->setConfiguration('password', ConfigManager::byKey('dns::token'));
         $openvpn->setConfiguration('compression', 'comp-lzo');
         $openvpn->setConfiguration('remote_port', ConfigManager::byKey('vpn::port', 'core', 1194));

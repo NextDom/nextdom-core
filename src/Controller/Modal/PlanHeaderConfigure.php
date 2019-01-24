@@ -56,7 +56,7 @@ class PlanHeaderConfigure extends BaseAbstractModal
         }
         Utils::sendVarsToJS([
             'id'         => $planHeader->getId(),
-            'planHeader' => \utils::o2a($planHeader)
+            'planHeader' => Utils::o2a($planHeader)
                 ]);
 
         return $render->get('/modals/planHeader.configure.html.twig');

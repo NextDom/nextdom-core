@@ -34,6 +34,8 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\Utils;
+
 require_once NEXTDOM_ROOT.'/core/class/cache.class.php';
 
 class InteractDefManager {
@@ -156,7 +158,7 @@ class InteractDefManager {
         $_query = str_replace(array("\'"), array("'"), $_query);
         $_query = preg_replace('/\s+/', ' ', $_query);
         $_query = ucfirst(strtolower($_query));
-        $_query = strtolower(sanitizeAccent($_query));
+        $_query = strtolower(Utils::sanitizeAccent($_query));
         return $_query;
     }
 

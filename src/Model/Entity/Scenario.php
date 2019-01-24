@@ -18,6 +18,8 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\TimeLine;
@@ -482,7 +484,7 @@ class Scenario
             $cmd = NEXTDOM_ROOT . '/core/php/jeeScenario.php ';
             $cmd .= ' scenario_id=' . $this->getId();
             $cmd .= ' trigger=' . escapeshellarg($trigger);
-            $cmd .= ' "message=' . escapeshellarg(sanitizeAccent($message)) . '"';
+            $cmd .= ' "message=' . escapeshellarg(Utils::sanitizeAccent($message)) . '"';
             $cmd .= ' >> ' . LogHelper::getPathToLog('scenario_execution') . ' 2>&1 &';
             SystemHelper::php($cmd);
         }
@@ -606,7 +608,7 @@ class Scenario
             self::$_templateArray = array();
         }
         if (!isset(self::$_templateArray[$version])) {
-            self::$_templateArray[$version] = getTemplate('core', $version, 'scenario');
+            self::$_templateArray[$version] = FileSystemHelper::getTemplateFileContent('core', $version, 'scenario');
         }
         $html = Utils::templateReplace($replace, self::$_templateArray[$version]);
         CacheManager::set('scenarioHtml' . $version . $this->getId(), $html);
@@ -1189,10 +1191,10 @@ class Scenario
             }
             return false;
         }
-        if (!isConnect()) {
+        if (!AuthentificationHelper::isConnected()) {
             return false;
         }
-        if (isConnect('admin') || isConnect('user')) {
+        if (AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
             return true;
         }
         if (strpos($_SESSION['user']->getRights('scenario' . $this->getId()), $_right) !== false) {

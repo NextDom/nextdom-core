@@ -52,8 +52,8 @@ class CmdHistory extends BaseAbstractModal
 
         $pageContent = [];
         $pageContent['dates'] = array(
-            'start' => init('startDate', date('Y-m-d', strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d')))),
-            'end' => init('endDate', date('Y-m-d')),
+            'start' => Utils::init('startDate', date('Y-m-d', strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d')))),
+            'end' => Utils::init('endDate', date('Y-m-d')),
         );
         $pageContent['derive'] = Utils::init('derive', 0);
         $pageContent['step']   = Utils::init('step', 0);

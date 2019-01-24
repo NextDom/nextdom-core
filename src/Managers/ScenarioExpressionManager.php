@@ -34,6 +34,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\DateHelper;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Helpers\NextDomHelper;
@@ -166,7 +167,7 @@ class ScenarioExpressionManager
             $return['html'] = trim($cmd->toHtml('scenario', $options));
             return $return;
         }
-        $return['template'] = getTemplate('core', 'scenario', $expression . '.default');
+        $return['template'] = FileSystemHelper::getTemplateFileContent('core', 'scenario', $expression . '.default');
         $_options = Utils::isJson($options, $options);
         if (is_array($options) && count($options) > 0) {
             foreach ($options as $key => $value) {
@@ -1088,7 +1089,7 @@ class ScenarioExpressionManager
      * TODO ????
      * @ il semble judicieu de rajouter l'interface SenarioInterface à $senario, elle est prete, faut se servir...
      * @param string $name
-     * @param null $scenario
+     * @param Scenario $scenario
      * @return int
      */
     public static function trigger($name = '', &$scenario = null)
@@ -1408,7 +1409,7 @@ class ScenarioExpressionManager
     /**
      * TODO: Un tag
      *
-     * @param null $scenario
+     * @param Scenario|null $scenario
      * @param $name
      * @param string $default
      * @return string

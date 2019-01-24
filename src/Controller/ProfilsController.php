@@ -23,6 +23,7 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\FileSystemHelper;
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SessionHelper;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
@@ -85,7 +86,7 @@ class ProfilsController extends BaseController
                 $pageContent['profilsAvatars'][] = '/public/img/profils/'.$avatarFile;
             }
         }
-        $pageContent['profilsDisplayTypes'] = \nextdom::getConfiguration('eqLogic:displayType');
+        $pageContent['profilsDisplayTypes'] = NextDomHelper::getConfiguration('eqLogic:displayType');
         $pageContent['profilsJeeObjects'] = JeeObjectManager::all();
         $pageContent['profilsViews'] = \view::all();
         $pageContent['profilsPlans'] = \planHeader::all();
