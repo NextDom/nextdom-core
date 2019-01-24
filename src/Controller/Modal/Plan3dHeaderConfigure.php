@@ -56,7 +56,7 @@ class Plan3dHeaderConfigure extends BaseAbstractModal
         }
         Utils::sendVarsToJS([
             'id'           => $plan3dHeader->getId(),
-            'plan3dHeader' => \utils::o2a($plan3dHeader)
+            'plan3dHeader' => Utils::o2a($plan3dHeader)
                 ]);
         return $render->get('/modals/plan3dHeader.configure.html.twig', $pageContent);
     }

@@ -65,7 +65,7 @@ class ObjectDisplay extends BaseAbstractModal
             throw new CoreException(__('L\'objet n\'existe pas : ') . $cmdClass);
         }
 
-        $data = \utils::o2a($object);
+        $data = Utils::o2a($object);
         if (count($data) == 0) {
             throw new CoreException(__('L\'objet n\'a aucun élément : ') . print_r($data, true));
         }

@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
@@ -61,7 +62,7 @@ class TimelineController extends BaseController
         
         $pageContent['historyCmdsList']          = CmdManager::allHistoryCmd();
         $pageContent['historyPluginsList']       = PluginManager::listPlugin();
-        $pageContent['historyEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
+        $pageContent['historyEqLogicCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
         $pageContent['historyObjectsList']       = JeeObjectManager::all();
         $pageContent['JS_POOL'][]     = '/vendor/node_modules/vis/dist/vis.min.js';
         $pageContent['CSS_POOL'][]    = '/vendor/node_modules/vis/dist/vis.min.css';

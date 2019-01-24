@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
@@ -64,8 +65,8 @@ class UpdateAdminController extends BaseController
         $pageContent['adminConfigs'] = ConfigManager::byKeys($keys);
         $pageContent['JS_VARS']['ldapEnable'] = $pageContent['adminConfigs']['ldap::enable'];
         $pageContent['adminIsBan'] = UserManager::isBanned();
-        $pageContent['adminHardwareName'] = \nextdom::getHardwareName();
-        $pageContent['adminHardwareKey'] = \nextdom::getHardwareKey();
+        $pageContent['adminHardwareName'] = NextDomHelper::getHardwareName();
+        $pageContent['adminHardwareKey'] = NextDomHelper::getHardwareKey();
         $pageContent['adminLastKnowDate'] = CacheManager::byKey('hour')->getValue();
         $pageContent['adminIsRescueMode'] = Status::isRescueMode();
         $pageContent['key'] = Status::isRescueMode();

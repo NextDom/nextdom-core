@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Helpers\Utils;
@@ -62,7 +63,7 @@ class PluginListController extends BaseController
                 $pageContent['pluginReposList'][$repoCode] = $repoData;
             }
         }
-        $pageContent['pluginInactiveOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
+        $pageContent['pluginInactiveOpacity'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/plugin.html.twig', $pageContent);

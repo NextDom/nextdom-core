@@ -49,7 +49,7 @@ class PluginDaemon extends BaseAbstractModal
     public function get(Render $render): string
     {
 
-        $pluginId = init('plugin_id');
+        $pluginId = Utils::init('plugin_id');
         if (!class_exists($pluginId)) {
             die();
         }

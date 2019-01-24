@@ -35,6 +35,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
 
 require_once NEXTDOM_ROOT.'/core/class/cache.class.php';
 
@@ -107,6 +108,10 @@ class InteractQueryManager {
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @return \interactQuery|null
+     * @throws \Exception
+     */
     public static function all() {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
@@ -252,7 +257,7 @@ class InteractQueryManager {
 
     public static function findInQuery($_type, $_query, $_data = null) {
         $return = array();
-        $return['query'] = strtolower(sanitizeAccent($_query));
+        $return['query'] = strtolower(Utils::sanitizeAccent($_query));
         $return[$_type] = null;
         $synonyms = self::getQuerySynonym($return['query'], $_type);
         if ($_type == 'object') {
@@ -287,13 +292,13 @@ class InteractQueryManager {
                 }
                 if (self::autoInteractWordFind($return['query'], $value['name'])) {
                     $return[$_type] = $value;
-                    $return['query'] = str_replace(strtolower(sanitizeAccent($value['name'])), '', $return['query']);
+                    $return['query'] = str_replace(strtolower(Utils::sanitizeAccent($value['name'])), '', $return['query']);
                     break;
                 }
             }
             if (count($synonyms) > 0) {
                 foreach ($synonyms as $value) {
-                    $return['query'] = str_replace(strtolower(sanitizeAccent($value)), '', $return['query']);
+                    $return['query'] = str_replace(strtolower(Utils::sanitizeAccent($value)), '', $return['query']);
                 }
             }
             return $return;
@@ -314,10 +319,10 @@ class InteractQueryManager {
         }
         if ($_type != 'eqLogic') {
             if (is_object($return[$_type])) {
-                $return['query'] = str_replace(strtolower(sanitizeAccent($return[$_type]->getName())), '', $return['query']);
+                $return['query'] = str_replace(strtolower(Utils::sanitizeAccent($return[$_type]->getName())), '', $return['query']);
                 if (count($synonyms) > 0) {
                     foreach ($synonyms as $value) {
-                        $return['query'] = str_replace(strtolower(sanitizeAccent($value)), '', $return['query']);
+                        $return['query'] = str_replace(strtolower(Utils::sanitizeAccent($value)), '', $return['query']);
                     }
                 }
             }
@@ -386,7 +391,7 @@ class InteractQueryManager {
             return trim($data['cmd']->getHumanName() . ' ' . $data['cmd']->execCmd() . ' ' . $data['cmd']->getUnite());
         } else {
             if ($data['cmd']->getSubtype() == 'slider') {
-                preg_match_all('/(\d+)/', strtolower(sanitizeAccent($data['query'])), $matches);
+                preg_match_all('/(\d+)/', strtolower(Utils::sanitizeAccent($data['query'])), $matches);
                 if (isset($matches[0]) && isset($matches[0][0])) {
                     $data['cmd_parameters']['slider'] = $matches[0][0];
                 }
@@ -420,8 +425,8 @@ class InteractQueryManager {
 
     public static function autoInteractWordFind($_string, $_word) {
         return preg_match(
-            '/( |^)' . preg_quote(strtolower(sanitizeAccent($_word)), '/') . '( |$)/',
-            str_replace("'", ' ', strtolower(sanitizeAccent($_string)))
+            '/( |^)' . preg_quote(strtolower(Utils::sanitizeAccent($_word)), '/') . '( |$)/',
+            str_replace("'", ' ', strtolower(Utils::sanitizeAccent($_string)))
         );
     }
 
@@ -453,12 +458,12 @@ class InteractQueryManager {
         $operator = null;
         $operand = null;
         foreach ($NEXTDOM_INTERNAL_CONFIG['interact']['test'] as $key => $value) {
-            if (strContain(strtolower(sanitizeAccent($_query)), $value)) {
+            if (Utils::strContain(strtolower(Utils::sanitizeAccent($_query)), $value)) {
                 $operator .= $key;
                 break;
             }
         }
-        preg_match_all('!\d+!', strtolower(sanitizeAccent($_query)), $matches);
+        preg_match_all('!\d+!', strtolower(Utils::sanitizeAccent($_query)), $matches);
         if (isset($matches[0]) && isset($matches[0][0])) {
             $operand = $matches[0][0];
         }
@@ -537,7 +542,7 @@ class InteractQueryManager {
             \log::add('interact', 'debug', 'Je cherche interaction contextuel (prioritaire) : ' . print_r($reply, true));
         }
         $startWarnMe = explode(';', ConfigManager::byKey('interact::warnme::start'));
-        if (is_array($startWarnMe) && count($startWarnMe) > 0 && ConfigManager::byKey('interact::warnme::enable') == 1 && strContain(strtolower(sanitizeAccent($_query)), $startWarnMe)) {
+        if (is_array($startWarnMe) && count($startWarnMe) > 0 && ConfigManager::byKey('interact::warnme::enable') == 1 && Utils::strContain(strtolower(Utils::sanitizeAccent($_query)), $startWarnMe)) {
             $reply = self::warnMe($_query, $_parameters);
             \log::add('interact', 'debug', 'Je cherche interaction "previens-moi" : ' . print_r($reply, true));
         }
@@ -646,7 +651,7 @@ class InteractQueryManager {
             $current['object'] = $current['eqLogic']->getObject();
             $humanName = $current['cmd']->getHumanName();
         } else {
-            $humanName = strtolower(sanitizeAccent($lastCmd));
+            $humanName = strtolower(Utils::sanitizeAccent($lastCmd));
             $current = self::findInQuery('object', $humanName);
             $current = array_merge($current, self::findInQuery('summary', $current['query'], $current));
         }
@@ -678,7 +683,7 @@ class InteractQueryManager {
     }
 
     public static function replaceForContextual($_replace, $_by, $_in) {
-        return str_replace(strtolower(sanitizeAccent($_replace)), strtolower(sanitizeAccent($_by)), str_replace($_replace, $_by, $_in));
+        return str_replace(strtolower(Utils::sanitizeAccent($_replace)), strtolower(Utils::sanitizeAccent($_by)), str_replace($_replace, $_by, $_in));
     }
 
     public static function brainReply($_query, $_parameters) {

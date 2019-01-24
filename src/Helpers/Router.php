@@ -132,7 +132,7 @@ class Router
     private function showConfiguration()
     {
         AuthentificationHelper::init();
-        \include_file('plugin_info', 'configuration', 'configuration', Utils::init('plugin'), true);
+        FileSystemHelper::includeFile('plugin_info', 'configuration', 'configuration', Utils::init('plugin'), true);
     }
 
     /**
@@ -154,7 +154,7 @@ class Router
             $filename = $_GET['p'];
             $plugin = isset($_GET['m']) ? $_GET['m'] : $plugin;
         }
-        \include_file('mobile', $filename, $type, $plugin, true);
+        FileSystemHelper::includeFile('mobile', $filename, $type, $plugin, true);
     }
 
     /**

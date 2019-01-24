@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Managers\ConfigManager;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
@@ -53,8 +54,8 @@ class CustomController extends BaseController
         // TODO: Regrouper les config::byKey
         $pageContent['customDarkThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-dark'];
         $pageContent['customLightThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-light'];
-        $pageContent['adminCategories'] = \nextdom::getConfiguration('eqLogic:category');
-        $pageContent['Theme'] = \nextdom::getConfiguration('theme');
+        $pageContent['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
+        $pageContent['Theme'] = NextDomHelper::getConfiguration('theme');
         $pageContent['customProductName'] = ConfigManager::byKey('product_name');
         $pageContent['customTheme'] = ConfigManager::byKey('theme');
         $pageContent['customEnableCustomCss'] = ConfigManager::byKey('enableCustomCss');

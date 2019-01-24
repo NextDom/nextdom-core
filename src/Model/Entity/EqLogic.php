@@ -19,6 +19,8 @@ namespace NextDom\Model\Entity;
 
 use NextDom\Enums\EqLogicViewTypeEnum;
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
@@ -1017,7 +1019,7 @@ class EqLogic
                 break;
         }
         if (!isset(self::$_templateArray[$version])) {
-            self::$_templateArray[$version] = getTemplate('core', $version, 'eqLogic');
+            self::$_templateArray[$version] = FileSystemHelper::getTemplateFileContent('core', $version, 'eqLogic');
         }
         return $this->postToHtml($viewType, Utils::templateReplace($replace, self::$_templateArray[$version]));
     }
@@ -1429,7 +1431,7 @@ class EqLogic
         if (!isConnect()) {
             return false;
         }
-        if (isConnect('admin') || isConnect('user')) {
+        if (AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
             return true;
         }
         if (strpos($_SESSION['user']->getRights('eqLogic' . $this->getId()), $_right) !== false) {

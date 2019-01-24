@@ -168,7 +168,7 @@ class ScenarioExpression
             } elseif ($this->getType() == ScenarioExpressionTypeEnum::CONDITION) {
                 $expression = ScenarioExpressionManager::setTags($this->getExpression(), $scenario, true);
                 $message = __('Evaluation de la condition : [') . $expression . '] = ';
-                $result = evaluate($expression);
+                $result = Utils::evaluate($expression);
                 if (is_bool($result)) {
                     if ($result) {
                         $message .= __('Vrai');
@@ -288,7 +288,7 @@ class ScenarioExpression
         $expression = '';
         while (!$result) {
             $expression = ScenarioExpressionManager::setTags($options['condition'], $scenario, true);
-            $result = evaluate($expression);
+            $result = Utils::evaluate($expression);
             if ($occurence > $limit) {
                 $this->setLog($scenario, __('[Wait] Condition valide par dépassement de temps : ') . $expression . ' => ' . $result);
                 return null;
@@ -303,7 +303,7 @@ class ScenarioExpression
     {
         if (isset($options['duration'])) {
             try {
-                $options['duration'] = floatval(evaluate($options['duration']));
+                $options['duration'] = floatval(Utils::evaluate($options['duration']));
             } catch (\Exception $e) {
 
             }
@@ -434,7 +434,7 @@ class ScenarioExpression
             case 'start':
                 if ($this->getOptions('tags') != '' && !is_array($this->getOptions('tags'))) {
                     $tags = array();
-                    $args = arg2array($this->getOptions('tags'));
+                    $args = Utils::arg2array($this->getOptions('tags'));
                     foreach ($args as $key => $value) {
                         $tags['#' . trim(trim($key), '#') . '#'] = ScenarioExpressionManager::setTags(trim($value), $scenario);
                     }
@@ -453,7 +453,7 @@ class ScenarioExpression
             case 'startsync':
                 if ($this->getOptions('tags') != '' && !is_array($this->getOptions('tags'))) {
                     $tags = array();
-                    $args = arg2array($this->getOptions('tags'));
+                    $args = Utils::arg2array($this->getOptions('tags'));
                     foreach ($args as $key => $value) {
                         $tags['#' . trim(trim($key), '#') . '#'] = ScenarioExpressionManager::setTags(trim($value), $scenario);
                     }
@@ -495,7 +495,7 @@ class ScenarioExpression
     {
         $options['value'] = ScenarioExpressionManager::setTags($options['value'], $scenario);
         try {
-            $result = evaluate($options['value']);
+            $result = Utils::evaluate($options['value']);
             if (!is_numeric($result)) {
                 $result = $options['value'];
             }
@@ -684,7 +684,7 @@ class ScenarioExpression
         $cmd = CmdManager::byId(str_replace('#', '', $this->getExpression()));
         if (is_object($cmd)) {
             if ($cmd->getSubType() == 'slider' && isset($options['slider'])) {
-                $options['slider'] = evaluate($options['slider']);
+                $options['slider'] = Utils::evaluate($options['slider']);
             }
             if (is_array($options) && (count($options) > 1 || (isset($options['background']) && $options['background'] == 1))) {
                 $this->setLog($scenario, __('Exécution de la commande ') . $cmd->getHumanName() . __(" avec comme option(s) : ") . json_encode($options));

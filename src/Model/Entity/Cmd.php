@@ -365,7 +365,7 @@ class Cmd
     {
         if ($_key == 'actionCodeAccess' && $_value != '') {
             if (!Utils::isSha1($_value) && !Utils::isSha512($_value)) {
-                $_value = sha512($_value);
+                $_value = Utils::sha512($_value);
             }
         }
         $this->configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
@@ -499,6 +499,10 @@ class Cmd
         return $this;
     }
 
+    /**
+     * @return EqLogic
+     * @throws \Exception
+     */
     public function getEqLogic() {
         if ($this->_eqLogic === null) {
             $this->setEqLogic(EqLogicManager::byId($this->eqLogic_id));
@@ -838,14 +842,14 @@ class Cmd
         }
         $template_name = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.' . $this->getTemplate($version, 'default');
         if (!isset(self::$_templateArray[$version . '::' . $template_name])) {
-            $template = getTemplate('core', $version, $template_name);
+            $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name);
             if ($template == '') {
                 if (ConfigManager::byKey('active', 'widget') == 1) {
-                    $template = getTemplate('core', $version, $template_name, 'widget');
+                    $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name, 'widget');
                 }
                 if ($template == '') {
                     foreach (PluginManager::listPlugin(true) as $plugin) {
-                        $template = getTemplate('core', $version, $template_name, $plugin->getId());
+                        $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name, $plugin->getId());
                         if ($template != '') {
                             break;
                         }
@@ -853,7 +857,7 @@ class Cmd
                 }
                 if ($template == '') {
                     $template_name = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.default';
-                    $template = getTemplate('core', $version, $template_name);
+                    $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name);
                 }
             }
             self::$_templateArray[$version . '::' . $template_name] = $template;
@@ -1671,7 +1675,7 @@ class Cmd
 
     public function getUse()
     {
-        $json = NextDomHelper::fromHumanReadable(json_encode(utils::o2a($this)));
+        $json = NextDomHelper::fromHumanReadable(json_encode(Utils::o2a($this)));
         return NextDomHelper::getTypeUse($json);
     }
 

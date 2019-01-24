@@ -52,7 +52,7 @@ class CmdConfigureHistory extends BaseAbstractModal
         $listCmd = array();
         
         foreach (CmdManager::all() as $cmd) {
-            $info_cmd = \utils::o2a($cmd);
+            $info_cmd = Utils::o2a($cmd);
             $info_cmd['humanName'] = $cmd->getHumanName(true);
             $eqLogic = $cmd->getEqLogic();
             $info_cmd['plugins'] = $eqLogic->getEqType_name();

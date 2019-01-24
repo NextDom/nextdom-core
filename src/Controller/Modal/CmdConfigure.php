@@ -58,7 +58,7 @@ class CmdConfigure extends BaseAbstractModal
         if (!is_object($cmd)) {
             throw new CoreException(__('Commande non trouvé : ') . $cmdId);
         }
-        $cmdInfo = NextDomHelper::toHumanReadable(\utils::o2a($cmd));
+        $cmdInfo = NextDomHelper::toHumanReadable(Utils::o2a($cmd));
         foreach (array('dashboard', 'mobile', 'dview', 'mview', 'dplan') as $value) {
             if (!isset($cmdInfo['html'][$value]) || $cmdInfo['html'][$value] == '') {
                 $cmdInfo['html'][$value] = $cmd->getWidgetTemplateCode($value);

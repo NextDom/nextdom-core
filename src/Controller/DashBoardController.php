@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
@@ -84,7 +85,7 @@ class DashBoardController extends BaseController
         $pageContent['dashboardDisplayScenarioByDefault'] = $_SESSION['user']->getOptions('displayScenarioByDefault');
         $pageContent['dashboardCategory']                 = $pageContent['JS_VARS']['SEL_CATEGORY'];
         $pageContent['dashboardTag']                      = $pageContent['JS_VARS']['SEL_TAG'];
-        $pageContent['dashboardCategories']               = \nextdom::getConfiguration('eqLogic:category', true);
+        $pageContent['dashboardCategories']               = NextDomHelper::getConfiguration('eqLogic:category', true);
         $pageContent['dashboardTags']                     = EqLogicManager::getAllTags();
         $pageContent['dashboardObjectId']                 = $pageContent['JS_VARS']['SEL_OBJECT_ID'];
         $pageContent['dashboardObject']                   = $object;

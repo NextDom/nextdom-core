@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
@@ -51,7 +52,7 @@ class HealthController extends BaseController
     public function get(Render $render, array &$pageContent): string
     {
 
-        $pageContent['healthInformations'] = \nextdom::health();
+        $pageContent['healthInformations'] = NextDomHelper::health();
         $pageContent['healthPluginsInformations'] = [];
         $pageContent['healthPluginDataToShow'] = false;
         $pageContent['healthTotalNOk'] = 0;

@@ -87,7 +87,7 @@ class PrepareView
         $page = '';
         //TODO: Tests à revoir
         if (Utils::init('p') == '') {
-            redirect($homeLink);
+            Utils::redirect($homeLink);
         } else {
             $page = Utils::init('p');
             $pageData['TITLE'] = ucfirst($page) . ' - ' . $configs['product_name'];
@@ -141,7 +141,7 @@ class PrepareView
         $pageData['HOMELINK'] = self::getHomeLink();
         //TODO: Tests à revoir
         if (Utils::init('p') == '') {
-            redirect($pageData['HOMELINK'] );
+            Utils::redirect($pageData['HOMELINK'] );
         } else {
             $page = Utils::init('p');
             $pageData['TITLE'] = ucfirst($page) . ' - ' . $configs['product_name'];
@@ -335,14 +335,14 @@ class PrepareView
         $pageData['AJAX_TOKEN'] = AjaxManager::getToken();
         $pageData['LANGUAGE'] = $configs['language'];
         for ($colorIndex = 1; $colorIndex <= self::$NB_THEME_COLORS; ++$colorIndex) {
-            $pageData['COLOR'.$colorIndex] = \nextdom::getConfiguration('theme:color'.$colorIndex);
+            $pageData['COLOR'.$colorIndex] = NextDomHelper::getConfiguration('theme:color'.$colorIndex);
         }
 
         self::initJsPool($pageData);
         self::initCssPool($pageData, $configs);
         // TODO: A virer
         ob_start();
-        \include_file('core', 'icon.inc', 'php');
+        FileSystemHelper::includeFile('core', 'icon.inc', 'php');
         $pageData['CUSTOM_CSS'] = ob_get_clean();
     }
 
@@ -475,7 +475,7 @@ class PrepareView
     private static function getContent(Render $render, array &$pageContent, string $page, $currentPlugin) {
         if ($currentPlugin !== null && is_object($currentPlugin)) {
             ob_start();
-            \include_file('desktop', $page, 'php', $currentPlugin->getId(), true);
+            FileSystemHelper::includeFile('desktop', $page, 'php', $currentPlugin->getId(), true);
             return ob_get_clean();
         } else {
             $routeFileLocator = new FileLocator(NEXTDOM_ROOT . '/src');
@@ -487,7 +487,7 @@ class PrepareView
                 $purgedPage = preg_replace('/[^a-z0-9_-]/i', '', $page);
                 if (file_exists(NEXTDOM_ROOT . '/desktop/' . $purgedPage)) {
                     ob_start();
-                    \include_file('desktop', $page, 'php', '', true);
+                    FileSystemHelper::includeFile('desktop', $page, 'php', '', true);
                     return ob_get_clean();
                 } else {
                     Router::showError404AndDie();
@@ -516,7 +516,7 @@ class PrepareView
             if ($controllerRoute === null) {
                 if (in_array($page, PluginManager::listPlugin(true, false, true))) {
                     ob_start();
-                    \include_file('desktop', $page, 'php', $page, true);
+                    FileSystemHelper::includeFile('desktop', $page, 'php', $page, true);
                     echo ob_get_clean();
                 }
                 else {
@@ -549,7 +549,7 @@ class PrepareView
         // Affichage d'un modal appartenant à un plugin
         if ($plugin != '') {
             try {
-                \include_file('desktop', $modalCode, 'modal', $plugin, true);
+                FileSystemHelper::includeFile('desktop', $modalCode, 'modal', $plugin, true);
             } catch (\Exception $e) {
                 echo '<div class="alert alert-danger div_alert">';
                 echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
@@ -561,7 +561,7 @@ class PrepareView
             $modalRoute = ModalsController::getRoute($modalCode);
             if ($modalRoute === null) {
                 try {
-                    \include_file('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
+                    FileSystemHelper::includeFile('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
                 } catch (\Exception $e) {
                     echo '<div class="alert alert-danger div_alert">';
                     echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
