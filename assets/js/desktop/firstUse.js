@@ -157,9 +157,9 @@ $("#toStep5").click(function () {
                     'theme:color6' : '#222d32',
                     'theme:color7' : '#1e282c',
                     'theme:color8' : '#2c3b41',
-                    'theme:color9' : '#262626',
-                    'theme:color10' : '#3b3939',
-                    'theme:color11' : '#2f2f2f',
+                    'theme:color9' : '#2c3b41',
+                    'theme:color10' : '#222d32',
+                    'theme:color11' : '#2c3b41',
                     'theme:color12' : '#e6e7e8',
                     'theme:color13' : '#484c52'}
         break;
