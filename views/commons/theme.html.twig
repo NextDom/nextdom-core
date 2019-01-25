@@ -65,7 +65,7 @@ color: {{ COLOR1 }};
 
 [type="checkbox"]:not(:checked):after,
 [type="checkbox"]:checked:after {
-background: {{ COLOR4 }};
+background-color: {{ COLOR4 }};
 }
 
 /* buttons */
@@ -97,7 +97,7 @@ background-color: {{ COLOR1 }};
 .main-header .navbar .nav .open > a:hover,
 .main-header .navbar .nav .open > a:focus,
 .main-header .navbar .nav > .active > a {
-background: rgba(0, 0, 0, 0.1);
+background-color: rgba(0, 0, 0, 0.1);
 color: {{ COLOR3 }};
 }
 
@@ -107,7 +107,7 @@ color: {{ COLOR2 }};
 
 .main-header .navbar .sidebar-toggle:hover {
 color: {{ COLOR3 }};
-background: rgba(0, 0, 0, 0.1);
+background-color: rgba(0, 0, 0, 0.1);
 }
 
 .main-header .navbar .sidebar-toggle {
@@ -125,7 +125,7 @@ background-color: rgba(255, 255, 255, 0.1);
 color: {{ COLOR2 }};
 }
 .main-header .navbar .dropdown-menu li a:hover {
-background: {{ COLOR1 }};
+background-color: {{ COLOR1 }};
 }
 }
 
@@ -143,18 +143,18 @@ color: {{ COLOR2 }};
 /* Sidemenu */
 .sidebar-menu > li.header {
 color: {{ COLOR1 }};
-background: #1a2226;
+background-color: #1a2226;
 }
 
 .sidebar-menu > li:hover > a, .sidebar-menu > li.menu-open > a {
 color: {{ COLOR3 }};
-background: {{ COLOR7 }};
+background-color: {{ COLOR7 }};
 border-left-color: {{ COLOR1 }};
 }
 
 .sidebar-menu > li > .treeview-menu {
 margin: 0 1px;
-background: {{ COLOR8 }};
+background-color: {{ COLOR8 }};
 }
 
 .sidebar a {
@@ -219,26 +219,26 @@ background-color: {{ COLOR1 }};
 }
 
 .box, .nav-tabs-custom, .action-bar, .box-footer {
-background: {{ COLOR10 }} !important;
+background-color: {{ COLOR10 }} !important;
 border-top-color: {{ COLOR9 }};
 }
 
 .tab-content, .box-body {
-background: {{ COLOR15 }} !important;
+background-color: {{ COLOR15 }} !important;
 border-top-color: {{ COLOR9 }};
 }
 
-.info-box{
-background: {{ COLOR10 }};
+.info-box, .modal-content{
+background-color: {{ COLOR10 }};
 }
 
 .table, .table-condensed>thead, legend {
-background: {{ COLOR11 }} !important;
+background-color: {{ COLOR11 }} !important;
 border: {{ COLOR11 }} !important;
 }
 
 .btn-app {
-background: {{ COLOR14 }} !important;
+background-color: {{ COLOR14 }} !important;
 border: 1px solid {{ COLOR14 }} !important;
 color: {{ COLOR12 }} !important;
 }
@@ -268,7 +268,7 @@ border: 1px solid {{ COLOR14 }} !important;
 }
 
 .form-control {
-background: {{ COLOR13 }};
+background-color: {{ COLOR13 }};
 border-color: {{ COLOR14 }} !important;
 padding-left: 10px !important;
 color: {{ COLOR12 }} !important;
@@ -294,4 +294,9 @@ background-color: {{ COLOR9 }} !important;
 
 .ui-widget-content {
 border: 1px solid {{ COLOR9 }} !important;
+}
+
+.label-list, .label-view, .label-log{
+background-color: {{ COLOR9 }} !important;
+border-color: {{ COLOR14 }};
 }
