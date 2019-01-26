@@ -25,6 +25,7 @@ namespace NextDom\Controller;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\ScenarioManager;
@@ -51,7 +52,6 @@ class DashBoardController extends BaseController
      *
      * @return string Content of Dashboard V2 page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -59,7 +59,7 @@ class DashBoardController extends BaseController
     public function get(Render $render, array &$pageContent): string
     {
 
-        $pageContent['JS_VARS']['nextdom_Welcome'] = \config::byKey('nextdom::Welcome');
+        $pageContent['JS_VARS']['nextdom_Welcome'] = ConfigManager::byKey('nextdom::Welcome');
         $pageContent['JS_VARS']['SEL_OBJECT_ID']   = Utils::init('object_id');
         $pageContent['JS_VARS']['SEL_CATEGORY']    = Utils::init('category', 'all');
         $pageContent['JS_VARS']['SEL_TAG']         = Utils::init('tag', 'all');
@@ -76,7 +76,7 @@ class DashBoardController extends BaseController
         }
 
         if (!is_object($object)) {
-            throw new \Exception(\__('Aucun objet racine trouvé. Pour en créer un, allez dans Outils -> <a href="/index.php?v=d&p=object">Objets</a>'));
+            throw new \Exception(\__('Aucun objet racine trouvé. Pour en créer un, allez dans dashboard -> <a href="/index.php?v=d&p=object">Liste objets et résumés</a>'));
         }
         $pageContent['JS_VARS']['rootObjectId'] = $object->getId();
 

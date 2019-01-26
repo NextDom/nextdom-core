@@ -33,18 +33,22 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
+use NextDom\Model\Entity\Cmd;
+use NextDom\Model\Entity\EqLogic;
 
 class CmdManager
 {
-    const CLASS_NAME = 'cmd';
+    const CLASS_NAME = Cmd::class;
     const DB_CLASS_NAME = '`cmd`';
 
     /**
      * TODO: ???, repasser en privé
      *
-     * @param $inputs
-     * @param null $eqLogic
+     * @param Cmd $inputs
+     * @param EqLogic $eqLogic
      * @return array|mixed
      */
     public static function cast($inputs, $eqLogic = null)
@@ -53,7 +57,7 @@ class CmdManager
             if ($eqLogic !== null) {
                 $inputs->_eqLogic = $eqLogic;
             }
-            return \cast($inputs, $inputs->getEqType() . 'Cmd');
+            return Utils::cast($inputs, $inputs->getEqType() . 'Cmd');
         }
         if (is_array($inputs)) {
             $return = array();
@@ -70,11 +74,11 @@ class CmdManager
 
     public static function byIds($_ids) {
 		if (!is_array($_ids) || count($_ids) == 0) {
-			return;
+			return null;
 		}
-		$in = implode(',', $_ids);
+		$in = trim(implode(',', $_ids), ',');
 		$sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM cmd
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE id IN (' . $in . ')';
 		return self::cast(\DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
 	}
@@ -83,18 +87,19 @@ class CmdManager
      * Get command by his id
      *
      * @param mixed $id Command id
-     * @return array|mixed|void
+     * @return Cmd
+     * @throws \Exception
      */
     public static function byId($id)
     {
         if ($id == '') {
-            return;
+            return null;
         }
         $values = array(
             'id' => $id,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM cmd
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
         return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
     }
@@ -102,14 +107,14 @@ class CmdManager
     /**
      * Get all commands
      *
-     * @return array
+     * @return Cmd[]
      *
      * @throws \Exception
      */
     public static function all()
     {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM cmd
+                FROM ' . self::DB_CLASS_NAME . '
                 ORDER BY id';
         return self::cast(\DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
     }
@@ -157,14 +162,14 @@ class CmdManager
         $values = array();
         if (is_array($eqLogicId)) {
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                    FROM cmd
+                    FROM ' . self::DB_CLASS_NAME . '
                     WHERE eqLogic_id IN (' . implode(',', $eqLogicId) . ') ';
         } else {
             $values = array(
                 'eqLogic_id' => $eqLogicId,
             );
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                    FROM cmd
+                    FROM ' . self::DB_CLASS_NAME . '
                     WHERE eqLogic_id = :eqLogic_id ';
         }
         if ($_type !== null) {
@@ -195,7 +200,7 @@ class CmdManager
             'logicalId' => $logicalId,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM cmd
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE logicalId = :logicalId ';
         if ($type !== null) {
             $values['type'] = $type;
@@ -223,14 +228,14 @@ class CmdManager
             }
             $values = array();
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                    FROM cmd
+                    FROM ' . self::DB_CLASS_NAME . '
                     WHERE generic_type IN (' . trim($in, ',') . ')';
         } else {
             $values = array(
                 'generic_type' => $genericType,
             );
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                    FROM cmd
+                    FROM ' . self::DB_CLASS_NAME . '
                     WHERE generic_type=:generic_type';
         }
         if ($eqLogicId !== null) {
@@ -259,14 +264,14 @@ class CmdManager
                 'configuration' => '%' . $configuration . '%',
             );
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                    FROM cmd
+                    FROM ' . self::DB_CLASS_NAME . '
                     WHERE configuration LIKE :configuration';
         } else {
             $values = array(
                 'configuration' => '%' . $configuration[0] . '%',
             );
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                    FROM cmd
+                    FROM ' . self::DB_CLASS_NAME . '
                     WHERE configuration LIKE :configuration';
             for ($i = 1; $i < count($configuration); $i++) {
                 $values['configuration' . $i] = '%' . $configuration[$i] . '%';
@@ -297,7 +302,7 @@ class CmdManager
             'eqLogic_id' => $eqLogicId,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM cmd
+        FROM ' . self::DB_CLASS_NAME . '
         WHERE eqLogic_id=:eqLogic_id';
         if ($type !== null) {
             $values['type'] = $type;
@@ -323,7 +328,7 @@ class CmdManager
             'template' => '%' . $template . '%',
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM cmd
+        FROM ' . self::DB_CLASS_NAME . '
         WHERE template LIKE :template';
         if ($eqType !== null) {
             $values['eqType'] = $eqType;
@@ -358,7 +363,7 @@ class CmdManager
             'logicalId' => $logicalId,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM cmd
+        FROM ' . self::DB_CLASS_NAME . '
         WHERE eqLogic_id=:eqLogic_id
         AND logicalId=:logicalId';
         if ($type !== null) {
@@ -388,7 +393,7 @@ class CmdManager
             'generic_type' => $genericType,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM cmd
+        FROM ' . self::DB_CLASS_NAME . '
         WHERE eqLogic_id=:eqLogic_id
         AND generic_type=:generic_type';
         if ($type !== null) {
@@ -430,7 +435,7 @@ class CmdManager
             }
         } else {
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-            FROM cmd
+            FROM ' . self::DB_CLASS_NAME . '
             WHERE ( value=:value OR value LIKE :search)
             AND id!=:value';
             if ($type !== null) {
@@ -572,8 +577,9 @@ class CmdManager
     /**
      * TODO: ???
      *
-     * @param $input
-     * @return array|mixed
+     * @param Cmd|mixed $input
+     * @return array|mixed|array|string
+     * @throws \ReflectionException
      */
     public static function cmdToHumanReadable($input)
     {
@@ -584,6 +590,7 @@ class CmdManager
                 $reflections[$uuid] = new \ReflectionClass($input);
             }
             $reflection = $reflections[$uuid];
+            /** @var \ReflectionProperty[] $properties */
             $properties = $reflection->getProperties();
             foreach ($properties as $property) {
                 $property->setAccessible(true);
@@ -621,7 +628,7 @@ class CmdManager
     public static function humanReadableToCmd($input)
     {
         $isJson = false;
-        if (is_json($input)) {
+        if (Utils::isJson($input)) {
             $isJson = true;
             $input = json_decode($input, true);
         }
@@ -632,6 +639,7 @@ class CmdManager
                 $reflections[$uuid] = new \ReflectionClass($input);
             }
             $reflection = $reflections[$uuid];
+            /** @var \ReflectionProperty[] $properties */
             $properties = $reflection->getProperties();
             foreach ($properties as $property) {
                 $property->setAccessible(true);
@@ -691,6 +699,8 @@ class CmdManager
      * @param $input
      * @param bool $quote
      * @return array|mixed
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function cmdToValue($input, $quote = false)
     {
@@ -701,6 +711,7 @@ class CmdManager
                 $reflections[$uuid] = new \ReflectionClass($input);
             }
             $reflection = $reflections[$uuid];
+            /** @var \ReflectionProperty[] $properties */
             $properties = $reflection->getProperties();
             foreach ($properties as $property) {
                 $property->setAccessible(true);
@@ -716,7 +727,7 @@ class CmdManager
             }
             return $input;
         }
-        $json = is_json($input);
+        $json = Utils::isJson($input);
         $replace = array();
         preg_match_all("/#([0-9]*)#/", $input, $matches);
         foreach ($matches[1] as $cmd_id) {
@@ -724,11 +735,12 @@ class CmdManager
                 continue;
             }
             $mc = CacheManager::byKey('cmdCacheAttr' . $cmd_id);
-            if (\utils::getJsonAttr($mc->getValue(), 'value', null) !== null) {
+            $cmdCacheAttrValue = $mc->getValue();
+            if (Utils::getJsonAttr($cmdCacheAttrValue, 'value', null) !== null) {
                 $cmdCacheAttrValue = $mc->getValue();
-                $collectDate = \utils::getJsonAttr($cmdCacheAttrValue, 'collectDate', date('Y-m-d H:i:s'));
-                $valueDate = \utils::getJsonAttr($cmdCacheAttrValue, 'valueDate', date('Y-m-d H:i:s'));
-                $cmd_value = \utils::getJsonAttr($cmdCacheAttrValue, 'value', '');
+                $collectDate = Utils::getJsonAttr($cmdCacheAttrValue, 'collectDate', date('Y-m-d H:i:s'));
+                $valueDate = Utils::getJsonAttr($cmdCacheAttrValue, 'valueDate', date('Y-m-d H:i:s'));
+                $cmd_value = Utils::getJsonAttr($cmdCacheAttrValue, 'value', '');
             } else {
                 $cmd = self::byId($cmd_id);
                 if (!is_object($cmd) || $cmd->getType() != 'info') {
@@ -808,10 +820,11 @@ class CmdManager
      *
      * @param $color
      * @return mixed
+     * @throws \Exception
      */
     public static function convertColor($color)
     {
-        $colors = \config::byKey('convertColor');
+        $colors = ConfigManager::byKey('convertColor');
         if (isset($colors[$color])) {
             return $colors[$color];
         }
@@ -826,8 +839,8 @@ class CmdManager
      */
     public static function availableWidget($version)
     {
-        $path = dirname(__FILE__) . '/../../core/template/' . $version;
-        $files = ls($path, 'cmd.*', false, array('files', 'quiet'));
+        $path = NEXTDOM_ROOT . '/core/template/' . $version;
+        $files = FileSystemHelper::ls($path, 'cmd.*', false, array('files', 'quiet'));
         $return = array();
         foreach ($files as $file) {
             $informations = explode('.', $file);
@@ -841,9 +854,9 @@ class CmdManager
                 $return[$informations[1]][$informations[2]][$informations[3]] = array('name' => $informations[3], 'location' => 'core');
             }
         }
-        $path = dirname(__FILE__) . '/../../plugins/widget/core/template/' . $version;
+        $path = NEXTDOM_ROOT . '/plugins/widget/core/template/' . $version;
         if (file_exists($path)) {
-            $files = ls($path, 'cmd.*', false, array('files', 'quiet'));
+            $files = FileSystemHelper::ls($path, 'cmd.*', false, array('files', 'quiet'));
             foreach ($files as $file) {
                 $informations = explode('.', $file);
                 if (count($informations) > 3) {
@@ -866,6 +879,7 @@ class CmdManager
      * TODO: ???
      *
      * @param $options
+     * @throws \Exception
      */
     public static function returnState($options)
     {
@@ -879,6 +893,7 @@ class CmdManager
      * TODO: ???
      *
      * @return array
+     * @throws \Exception
      */
     public static function deadCmd()
     {
@@ -888,7 +903,7 @@ class CmdManager
                 foreach ($cmd->getConfiguration('actionCheckCmd', '') as $actionCmd) {
                     if ($actionCmd['cmd'] != '' && strpos($actionCmd['cmd'], '#') !== false) {
                         if (!self::byId(str_replace('#', '', $actionCmd['cmd']))) {
-                            $return[] = array('detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogic()->getName() . ' (' . $cmd->getEqLogic()->getEqType_name() . ')', 'help' => 'Action sur valeur', 'who' => $actionCmd['cmd']);
+                            $return[] = array('detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogicId()->getName() . ' (' . $cmd->getEqLogicId()->getEqType_name() . ')', 'help' => 'Action sur valeur', 'who' => $actionCmd['cmd']);
                         }
                     }
                 }
@@ -897,7 +912,7 @@ class CmdManager
                 foreach ($cmd->getConfiguration('nextdomPostExecCmd', '') as $actionCmd) {
                     if ($actionCmd['cmd'] != '' && strpos($actionCmd['cmd'], '#') !== false) {
                         if (!self::byId(str_replace('#', '', $actionCmd['cmd']))) {
-                            $return[] = array('detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogic()->getName() . ' (' . $cmd->getEqLogic()->getEqType_name() . ')', 'help' => 'Post Exécution', 'who' => $actionCmd['cmd']);
+                            $return[] = array('detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogicId()->getName() . ' (' . $cmd->getEqLogicId()->getEqType_name() . ')', 'help' => 'Post Exécution', 'who' => $actionCmd['cmd']);
                         }
                     }
                 }
@@ -906,7 +921,7 @@ class CmdManager
                 foreach ($cmd->getConfiguration('nextdomPreExecCmd', '') as $actionCmd) {
                     if ($actionCmd['cmd'] != '' && strpos($actionCmd['cmd'], '#') !== false) {
                         if (!self::byId(str_replace('#', '', $actionCmd['cmd']))) {
-                            $return[] = array('detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogic()->getName() . ' (' . $cmd->getEqLogic()->getEqType_name() . ')', 'help' => 'Pré Exécution', 'who' => $actionCmd['cmd']);
+                            $return[] = array('detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogicId()->getName() . ' (' . $cmd->getEqLogicId()->getEqType_name() . ')', 'help' => 'Pré Exécution', 'who' => $actionCmd['cmd']);
                         }
                     }
                 }
@@ -919,6 +934,7 @@ class CmdManager
      * TODO: ???
      *
      * @param $options
+     * @throws \Exception
      */
     public static function cmdAlert($options)
     {
@@ -937,6 +953,7 @@ class CmdManager
      * TODO: ???
      * @param $event
      * @return array|null
+     * @throws \Exception
      */
     public static function timelineDisplay($event)
     {
@@ -948,7 +965,7 @@ class CmdManager
         if (!is_object($cmd)) {
             return null;
         }
-        $eqLogic = $cmd->getEqLogic();
+        $eqLogic = $cmd->getEqLogicId();
         $object = $eqLogic->getObject();
         $return['object'] = is_object($object) ? $object->getId() : 'aucun';
         $return['plugins'] = $eqLogic->getEqType_name();

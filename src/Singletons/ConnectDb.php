@@ -28,10 +28,10 @@ class ConnectDb
     private static $init = false;
 
     /**
-     * 
-     * @global type $CONFIG
-     * @return type
+     *
+     * @return \PDO
      * @throws DbException
+     * @global mixed $CONFIG
      */
     public static function getConnection()
     {

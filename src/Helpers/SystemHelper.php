@@ -42,7 +42,7 @@ class SystemHelper
     {
         if (file_exists(NEXTDOM_ROOT . '/core/config/system_cmd.json')) {
             $content = file_get_contents(NEXTDOM_ROOT . '/core/config/system_cmd.json');
-            if (is_json($content)) {
+            if (Utils::isJson($content)) {
                 self::$commands['custom'] = json_decode($content, true);
             }
         }
@@ -102,6 +102,7 @@ class SystemHelper
      * Get sudo command
      *
      * @return string
+     * @throws \Exception
      */
     public static function getCmdSudo(): string 
     {
@@ -114,8 +115,8 @@ class SystemHelper
     /**
      * Kill all process which using file
      *
-     * @param $filename
      * @param string $filename
+     * @throws \Exception
      */
     public static function killProcessesWhichUsingFile(string $filename) 
     {
@@ -127,6 +128,7 @@ class SystemHelper
      *
      * @param $port
      * @param string $protocol
+     * @throws \Exception
      */
     public static function killProcessesWhichUsingPort($port, $protocol = 'tcp') 
     {
@@ -188,11 +190,12 @@ class SystemHelper
      * @param bool $forceKill Force kill flag
      *
      * @return mixed
+     * @throws \Exception
      */
     public static function kill($find = '', $forceKill = true) 
     {
         if (trim($find) == '') {
-            return;
+            return null;
         }
         if (is_numeric($find)) {
             $kill = posix_kill($find, 15);
@@ -208,9 +211,9 @@ class SystemHelper
                 usleep(100);
                 exec(SystemHelper::getCmdSudo() . 'kill -9 ' . $find);
             } else {
-                $kill = posix_kill($find, 15);
+                posix_kill($find, 15);
             }
-            return;
+            return null;
         }
         if ($forceKill) {
             $cmd = "(ps ax || ps w) | grep -ie '" . $find . "' | grep -v grep | awk '{print $1}' | xargs " . SystemHelper::getCmdSudo() . "kill -9 > /dev/null 2>&1";
@@ -218,6 +221,7 @@ class SystemHelper
             $cmd = "(ps ax || ps w) | grep -ie '" . $find . "' | grep -v grep | awk '{print $1}' | xargs " . SystemHelper::getCmdSudo() . "kill > /dev/null 2>&1";
         }
         exec($cmd);
+        return true;
     }
 
     /**
@@ -227,6 +231,7 @@ class SystemHelper
      * @param bool $elevatedPrivileges Use elevated privileges
      *
      * @return string Result of the command
+     * @throws \Exception
      */
     public static function php(string $arguments, $elevatedPrivileges = false) 
     {
@@ -278,8 +283,9 @@ class SystemHelper
                 break;
             default:
                 unset($cmd);
+                break;
         }
-        if ($cmd != '') {
+        if (isset($cmd) && $cmd != '') {
             $cpuCoreNb = intval(trim(shell_exec($cmd)));
         }
         return empty($cpuCoreNb) ? 1 : $cpuCoreNb;
@@ -313,5 +319,20 @@ class SystemHelper
     public static function getUptime(): string
     {
         return preg_replace ('/\.[0-9]+/', '', file_get_contents('/proc/uptime'));
+    }
+
+    public static function getMemInfo()
+    {
+        $data = explode("\n", file_get_contents("/proc/meminfo"));
+        $meminfo = array();
+        foreach ($data as $line) {
+            $info = explode(":", $line);
+            if (count($info) != 2) {
+                continue;
+            }
+            $value = explode(' ', trim($info[1]));
+            $meminfo[$info[0]] = trim($value[0]);
+        }
+        return $meminfo;
     }
 }

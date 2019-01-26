@@ -34,6 +34,8 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Managers\ConfigManager;
+
 class TimeLine
 {
     /**
@@ -50,6 +52,7 @@ class TimeLine
      * Get all event in timeline
      *
      * @return array
+     * @throws \Exception
      */
     public static function getTimelineEvent(): array
     {
@@ -57,7 +60,7 @@ class TimeLine
         if (!file_exists($path)) {
             $result = array();
         } else {
-            \com_shell::execute(\system::getCmdSudo() . 'chmod 666 ' . $path . ' > /dev/null 2>&1;echo "$(tail -n ' . \config::byKey('timeline::maxevent') . ' ' . $path . ')" > ' . $path);
+            \com_shell::execute(\system::getCmdSudo() . 'chmod 666 ' . $path . ' > /dev/null 2>&1;echo "$(tail -n ' . ConfigManager::byKey('timeline::maxevent') . ' ' . $path . ')" > ' . $path);
             $lines = explode("\n", trim(file_get_contents($path)));
             $result = array();
             foreach ($lines as $line) {

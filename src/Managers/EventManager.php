@@ -34,6 +34,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
 
 /**
  * Class EventManager
@@ -56,6 +57,7 @@ class EventManager
      *
      * @param string $eventName
      * @param array $options
+     * @throws \Exception
      */
     public static function add($eventName, $options = [])
     {
@@ -67,7 +69,7 @@ class EventManager
             if (!is_array($value)) {
                 $value = [];
             }
-            $value[] = array('datetime' => getmicrotime(), 'name' => $eventName, 'option' => $options);
+            $value[] = array('datetime' => Utils::getMicrotime(), 'name' => $eventName, 'option' => $options);
             CacheManager::set('event', json_encode(self::cleanEvent($value)));
             flock($fd, LOCK_UN);
         }
@@ -78,6 +80,7 @@ class EventManager
      *
      * @param string $eventName
      * @param array $values
+     * @throws \Exception
      */
     public static function adds($eventName, $values = [])
     {
@@ -91,7 +94,7 @@ class EventManager
             }
             $value = [];
             foreach ($values as $option) {
-                $value[] = array('datetime' => getmicrotime(), 'name' => $eventName, 'option' => $option);
+                $value[] = array('datetime' => Utils::getMicrotime(), 'name' => $eventName, 'option' => $option);
             }
             CacheManager::set('event', json_encode(self::cleanEvent(array_merge($value_src, $value))));
             flock($fd, LOCK_UN);
@@ -148,6 +151,7 @@ class EventManager
      * @param null $longPolling Wait for new events
      * @param null $filter Event filter
      * @return array
+     * @throws \Exception
      */
     public static function changes($datetime, $longPolling = null, $filter = null)
     {
@@ -155,7 +159,7 @@ class EventManager
         if ($longPolling === null || count($result['result']) > 0) {
             return $result;
         }
-        $waitTime = \config::byKey('event::waitPollingTime');
+        $waitTime = ConfigManager::byKey('event::waitPollingTime');
         $cycleCount = 0;
         $maxCycle = $longPolling / $waitTime;
         while (count($result['result']) == 0 && $cycleCount < $maxCycle) {
@@ -182,6 +186,7 @@ class EventManager
      * @param array $filterName Filter name
      *
      * @return array Filtered events
+     * @throws \Exception
      */
     private static function filterEvent($eventsToFilter = [], $filterName = null)
     {
@@ -213,6 +218,7 @@ class EventManager
      * @param mixed $datetime Limit datetime
      *
      * @return array Associative array with all events
+     * @throws \Exception
      */
     private static function changesSince($datetime)
     {
@@ -241,6 +247,7 @@ class EventManager
      * Get event cache file object
      *
      * @return bool|null|resource
+     * @throws \Exception
      */
     private static function getEventLockFile()
     {

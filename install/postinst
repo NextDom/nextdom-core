@@ -15,6 +15,20 @@ CYAN="\\033[1;36m"
 # Logs directory
 LOGS_DIRECTORY=/var/log/nextdom
 mkdir -p ${LOGS_DIRECTORY}
+touch ${LOGS_DIRECTORY}/cron
+touch ${LOGS_DIRECTORY}/cron_execution
+touch ${LOGS_DIRECTORY}/event
+touch ${LOGS_DIRECTORY}/http.error
+touch ${LOGS_DIRECTORY}/plugin
+touch ${LOGS_DIRECTORY}/scenario_execution
+mkdir -p ${LOGS_DIRECTORY}/scenarioLog
+chown www-data:www-data -R $LOGS_DIRECTORY
+
+# configs directory
+VARS_DIRECTORY=/var/lib/nextdom
+mkdir -p ${VARS_DIRECTORY}
+chmod 775 -R ${VARS_DIRECTORY}
+chown -R www-data:www-data ${VARS_DIRECTORY}
 
 # Functions
 
@@ -220,6 +234,9 @@ step_nextdom_apache_php() {
 
 
 step_nextdom_configuration() {
+    rm -f ${WEBSERVER_HOME}/core/config
+    cp -r ${WEBSERVER_HOME}/assets/config ${VARS_DIRECTORY}
+    ln -s ${VARS_DIRECTORY}/config ${WEBSERVER_HOME}/core
     cp ${WEBSERVER_HOME}/core/config/common.config.sample.php ${WEBSERVER_HOME}/core/config/common.config.php
 
     sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${WEBSERVER_HOME}/core/config/common.config.php
@@ -228,8 +245,8 @@ step_nextdom_configuration() {
     sed -i "s/#PORT#/${MYSQL_PORT}/g" ${WEBSERVER_HOME}/core/config/common.config.php
     sed -i "s/#HOST#/${MYSQL_HOSTNAME}/g" ${WEBSERVER_HOME}/core/config/common.config.php
 
-    chmod 775 -R ${WEBSERVER_HOME}
-    chown -R www-data:www-data ${WEBSERVER_HOME}
+    #chmod 775 -R ${WEBSERVER_HOME}
+    #chown -R www-data:www-data ${WEBSERVER_HOME}
     if [[ -d "/tmp/jeedom" ]]
     then
         if [[ -L "/tmp/jeedom" ]]
@@ -260,7 +277,7 @@ step_nextdom_configuration() {
     chmod 777 /tmp/jeedom >> ${DEBUG} 2>&1
     chown www-data:www-data -R /tmp/nextdom >> ${DEBUG} 2>&1
     chown www-data:www-data /tmp/jeedom >> ${DEBUG} 2>&1
-    chown www-data:www-data $LOGS_DIRECTORY
+    chown www-data:www-data -R $LOGS_DIRECTORY
 
     usermod -a -G dialout,tty www-data
 
@@ -544,7 +561,9 @@ print_log_ok
 
 chmod 777 -R /tmp/nextdom
 chown -R www-data:www-data /tmp/nextdom
-chown -R www-data:www-data ${WEBSERVER_HOME}/var
+mkdir -p ${WEBSERVER_HOME}/var/custom
+#chown -R www-data:www-data ${WEBSERVER_HOME}/var
+chown -R www-data:www-data ${VARS_DIRECTORY}
 
 [[ -f /root/.mysqlroot ]] && rm -f /root/.mysqlroot
 

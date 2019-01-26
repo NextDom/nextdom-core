@@ -383,6 +383,7 @@ class DB {
             }
         }
         if (empty(self::$fields[$table])) {
+            echo $table.'<br/>';
             throw new RuntimeException('No fields found for class ' . get_class($object));
         }
         return self::$fields[$table];

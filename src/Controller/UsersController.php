@@ -23,7 +23,10 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
+use NextDom\Helpers\SessionHelper;
 use NextDom\Helpers\Status;
+use NextDom\Managers\ConfigManager;
+use NextDom\Managers\UserManager;
 
 class UsersController extends BaseController
 {
@@ -41,21 +44,19 @@ class UsersController extends BaseController
      *
      * @return string Content of users page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
     public function get(Render $render, array &$pageContent): string
     {
-
-        $pageContent['userLdapEnabled'] = \config::byKey('ldap::enable');
+        $pageContent['userLdapEnabled'] = ConfigManager::byKey('ldap::enable');
         if ($pageContent['userLdapEnabled'] != '1') {
-            $user = \user::byLogin('nextdom_support');
+            $user = UserManager::byLogin('nextdom_support');
             $pageContent['userSupportExists'] = is_object($user);
         }
-        $pageContent['userSessionsList'] = \listSession();
-        $pageContent['usersList'] = \user::all();
+        $pageContent['userSessionsList'] = SessionHelper::getSessionsList();
+        $pageContent['usersList'] = UserManager::all();
         $pageContent['JS_VARS']['ldapEnable'] = $pageContent['userLdapEnabled'];
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/admin/user.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';

@@ -24,6 +24,7 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\CacheManager;
  
 class SecurityController extends BaseController
@@ -43,7 +44,6 @@ class SecurityController extends BaseController
      *
      * @return string Content of security page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -51,13 +51,13 @@ class SecurityController extends BaseController
     public function get(Render $render, array &$pageContent): string
     {
         $keys = array('security::bantime', 'ldap::enable');
-        $configs = \config::byKeys($keys);
+        $configs = ConfigManager::byKeys($keys);
 
         $pageContent['JS_VARS']['ldapEnable'] = $configs['ldap::enable'];
 
         $pageContent['adminUseLdap'] = function_exists('ldap_connect');
         if ($pageContent['adminUseLdap']) {
-            $pageContent['adminLdapEnabled'] = \config::byKey('ldap:enable');
+            $pageContent['adminLdapEnabled'] = ConfigManager::byKey('ldap:enable');
         }
         $pageContent['adminBannedIp'] = [];
         $cache = CacheManager::byKey('security::banip');

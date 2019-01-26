@@ -19,6 +19,7 @@
 /* * ***************************Includes********************************* */
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
+use NextDom\Managers\DataStoreManager;
 class dataStore {
     /*     * *************************Attributs****************************** */
 
@@ -31,50 +32,19 @@ class dataStore {
     /*     * ***********************Méthodes statiques*************************** */
 
     public static function byId($_id) {
-        $values = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-                FROM dataStore
-                WHERE id=:id';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+        return DataStoreManager::byId($_id);
     }
 
     public static function byTypeLinkIdKey($_type, $_link_id, $_key) {
-        $values = array(
-            'type' => $_type,
-            'link_id' => $_link_id,
-            'key' => $_key,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-                FROM dataStore
-                WHERE `type`=:type
-                    AND `link_id`=:link_id
-                    AND `key`=:key
-                ORDER BY `key`';
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
+        return DataStoreManager::byTypeLinkIdKey($_type, $_link_id, $_key);
     }
 
     public static function byTypeLinkId($_type, $_link_id = '') {
-        $values = array(
-            'type' => $_type,
-        );
-        $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-                FROM dataStore
-                WHERE type=:type';
-        if ($_link_id != '') {
-            $values['link_id'] = $_link_id;
-            $sql .= ' AND link_id=:link_id';
-        }
-        return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
+        return DataStoreManager::byTypeLinkId($_type, $_link_id);
     }
 
     public static function removeByTypeLinkId($_type, $_link_id) {
-        $datastores = self::byTypeLinkId($_type, $_link_id);
-        foreach ($datastores as $datastore) {
-            $datastore->remove();
-        }
-        return true;
+        return DataStoreManager::removeByTypeLinkId($_type, $_link_id);
     }
 
     /*     * *********************Méthodes d'instance************************* */

@@ -33,7 +33,6 @@
 namespace NextDom\Market;
 
 use NextDom\Helpers\DataStorage;
-use NextDom\Market\GitManager;
 
 class NextDomMarket
 {
@@ -56,6 +55,7 @@ class NextDomMarket
      * Constructeur initialisant le gestionnaire de téléchargement
      *
      * @param array $source Nom de la source
+     * @throws \Exception
      */
     public function __construct($source)
     {
@@ -163,6 +163,7 @@ class NextDomMarket
      * Obtenir la liste des éléments du dépot
      *
      * @return MarketItem[] Liste des éléments
+     * @throws \Exception
      */
     public function getItems(): array
     {

@@ -46,7 +46,7 @@ $("#bt_addCron").on('click', function () {
     $('#table_cron tbody').append(addCron({}));
 });
 
-jwerty.key('ctrl+s', function (e) {
+jwerty.key('ctrl+s/⌘+s', function (e) {
     e.preventDefault();
     $("#bt_save").click();
 });

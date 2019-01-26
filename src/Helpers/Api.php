@@ -17,6 +17,8 @@
 namespace NextDom\Helpers;
 
 use NextDom\Enums\ApiModeEnum;
+use NextDom\Managers\ConfigManager;
+use NextDom\Managers\UserManager;
 
 class Api
 {
@@ -27,25 +29,26 @@ class Api
      * @param string $plugin Plugin id
      *
      * @return string API key
+     * @throws \Exception
      */
     public static function getApiKey(string $plugin = 'core'): string
     {
         if ($plugin == 'apipro') {
-            if (\config::byKey('apipro') == '') {
-                \config::save('apipro', \config::genKey());
+            if (ConfigManager::byKey('apipro') == '') {
+                ConfigManager::save('apipro', ConfigManager::genKey());
             }
-            return \config::byKey('apipro');
+            return ConfigManager::byKey('apipro');
         }
         if ($plugin == 'apimarket') {
-            if (\config::byKey('apimarket') == '') {
-                \config::save('apimarket', \config::genKey());
+            if (ConfigManager::byKey('apimarket') == '') {
+                ConfigManager::save('apimarket', ConfigManager::genKey());
             }
-            return \config::byKey('apimarket');
+            return ConfigManager::byKey('apimarket');
         }
-        if (\config::byKey('api', $plugin) == '') {
-            \config::save('api', \config::genKey(), $plugin);
+        if (ConfigManager::byKey('api', $plugin) == '') {
+            ConfigManager::save('api', ConfigManager::genKey(), $plugin);
         }
-        return \config::byKey('api', $plugin);
+        return ConfigManager::byKey('api', $plugin);
     }
 
     /**
@@ -54,6 +57,7 @@ class Api
      * @param string $mode
      *
      * @return bool
+     * @throws \Exception
      */
     public static function apiModeResult(string $mode = ApiModeEnum::API_ENABLE): bool
     {
@@ -65,10 +69,10 @@ class Api
             case ApiModeEnum::API_WHITEIP:
                 $ip = getClientIp();
                 $find = false;
-                $whiteIps = explode(';', \config::byKey('security::whiteips'));
-                if (\config::byKey('security::whiteips') != '' && count($whiteIps) > 0) {
+                $whiteIps = explode(';', ConfigManager::byKey('security::whiteips'));
+                if (ConfigManager::byKey('security::whiteips') != '' && count($whiteIps) > 0) {
                     foreach ($whiteIps as $whiteIp) {
-                        if (netMatch($whiteIp, $ip)) {
+                        if (NetworkHelper::netMatch($whiteIp, $ip)) {
                             $find = true;
                         }
                     }
@@ -92,6 +96,7 @@ class Api
      * @param string $defaultApiKey
      * @param string $plugin
      * @return bool
+     * @throws \Exception
      */
     public static function apiAccess(string $defaultApiKey = '', string $plugin = 'core')
     {
@@ -99,21 +104,21 @@ class Api
         if ($defaultApiKey == '') {
             return false;
         }
-        if ($plugin != 'core' && $plugin != 'proapi' && !self::apiModeResult(\config::byKey('api::' . $plugin . '::mode', 'core', 'enable'))) {
+        if ($plugin != 'core' && $plugin != 'proapi' && !self::apiModeResult(ConfigManager::byKey('api::' . $plugin . '::mode', 'core', 'enable'))) {
             return false;
         }
         $apikey = self::getApiKey($plugin);
         if ($defaultApiKey != '' && $apikey == $defaultApiKey) {
             return true;
         }
-        $user = \user::byHash($defaultApiKey);
+        $user = UserManager::byHash($defaultApiKey);
         if (is_object($user)) {
             if ($user->getOptions('localOnly', 0) == 1 && !self::apiModeResult('whiteip')) {
                 return false;
             }
             GLOBAL $_USER_GLOBAL;
             $_USER_GLOBAL = $user;
-            \log::add('connection', 'info', __('core.api-connection') . $user->getLogin());
+            LogHelper::add('connection', 'info', __('core.api-connection') . $user->getLogin());
             return true;
         }
         return false;

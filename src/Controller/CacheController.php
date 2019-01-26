@@ -23,6 +23,7 @@
 namespace NextDom\Controller;
  
 use NextDom\Managers\CacheManager;
+use NextDom\Managers\ConfigManager;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
@@ -33,7 +34,7 @@ class CacheController extends BaseController
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
+
     /**
      * Render cache page
      *
@@ -42,7 +43,6 @@ class CacheController extends BaseController
      *
      * @return string Content of cache page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -50,8 +50,8 @@ class CacheController extends BaseController
     public function get(Render $render, array &$pageContent): string
     {
 
-        $pageContent['adminProductName'] = \config::byKey('product_name');
-        $pageContent['adminCustomProductName'] = \config::byKey('name');
+        $pageContent['adminProductName'] = ConfigManager::byKey('product_name');
+        $pageContent['adminCustomProductName'] = ConfigManager::byKey('name');
         $pageContent['adminStats'] = CacheManager::stats();
         $pageContent['adminCacheFolder'] = CacheManager::getFolder();
         $pageContent['adminMemCachedExists'] = class_exists('memcached');

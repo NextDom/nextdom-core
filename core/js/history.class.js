@@ -108,7 +108,7 @@ nextdom.history.drawChart = function (_params) {
                 } else {
                     message += (init(data.result.dateEnd) != '') ? ' {{jusqu\'au}} ' + data.result.dateEnd:'';
                 }
-                $('#div_alert').showAlert({message: message, level: 'danger'});
+                notify("Erreur", message, 'error');
             }
             return;
         }
@@ -119,8 +119,8 @@ nextdom.history.drawChart = function (_params) {
         _params.option.graphStep = (_params.option.graphStep == "1") ? true : false;
         if(isset(data.result.cmd)){
             if (init(_params.option.graphStep) == '') {
-             _params.option.graphStep = (data.result.cmd.subType == 'binary') ? true : false;
-             if (isset(data.result.cmd.display) && init(data.result.cmd.display.graphStep) != '') {
+               _params.option.graphStep = (data.result.cmd.subType == 'binary') ? true : false;
+               if (isset(data.result.cmd.display) && init(data.result.cmd.display.graphStep) != '') {
                 _params.option.graphStep = (data.result.cmd.display.graphStep == "0") ? false : true;
             }
         }
@@ -457,9 +457,6 @@ var plotband = nextdom.history.generatePlotBand(extremes.min,extremes.max);
 for(var i in plotband){
  nextdom.history.chart[_params.el].chart.xAxis[0].addPlotBand(plotband[i]);   
 }
-nextdom.history.chart[_params.el].chart.xAxis[0].update({
-    max: extremes.max
-}); 
 $.hideLoading();
 if (typeof (init(_params.success)) == 'function') {
     _params.success(data.result);
@@ -481,6 +478,9 @@ nextdom.history.generatePlotBand = function (_startTime, _endTime) {
         plotBand.color = '#F8F8F8';
         plotBand.from = _startTime;
         plotBand.to = _startTime + pas;
+        if(plotBand.to > _endTime){
+            plotBand.to = _endTime;
+        }
         plotBands.push(plotBand);
         _startTime += 2 * pas;
     }

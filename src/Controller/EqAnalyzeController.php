@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
  
+use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ScenarioExpressionManager;
@@ -38,7 +39,7 @@ class EqAnalyzeController extends BaseController
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
+
     /**
      * Render eqLogic analyze page
      *
@@ -47,7 +48,7 @@ class EqAnalyzeController extends BaseController
      *
      * @return string Content of eqLogic analyze page
      *
-     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -61,7 +62,6 @@ class EqAnalyzeController extends BaseController
 
         $eqLogicMangerAll = EqLogicManager::all();
         foreach ($eqLogicMangerAll as $eqLogic) {
-            $battery_type = str_replace(array('(', ')'), ['', ''], $eqLogic->getConfiguration('battery_type', ''));
             if ($eqLogic->getStatus('battery', -2) != -2) {
                 $pageContent['eqAnalyzeEqLogicList'][] = $eqLogic;
             }
@@ -101,6 +101,7 @@ class EqAnalyzeController extends BaseController
                 $actionCmdData = [];
                 $actionCmdData['cmd'] = $cmd;
 
+                $cmdGetConfigurationNextdomPreExecCmd = [];
                 if (count($cmd->getConfiguration('nextdomPreExecCmd', [])) > 0) {
                     $actionCmdData['preExecCmds'] = [];
 
@@ -163,7 +164,6 @@ class EqAnalyzeController extends BaseController
                     foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
                         if ($value['check']) {
                             if ($cmdalert->getAlert($level . 'if', '') != '') {
-                                $during = '';
                                 if ($cmdalert->getAlert($level . 'during', '') == '') {
                                     $during = ' effet immédiat';
                                 } else {
@@ -182,7 +182,7 @@ class EqAnalyzeController extends BaseController
         $pageContent['eqAnalyzeCmdDeadCmd'] = CmdManager::deadCmd();
         $pageContent['eqAnalyzeJeeObjectDeadCmd'] = JeeObjectManager::deadCmd();
         $pageContent['eqAnalyzeScenarioDeadCmd'] = ScenarioManager::consystencyCheck(true);
-        $pageContent['eqAnalyzeInteractDefDeadCmd'] = \interactDef::deadCmd();
+        $pageContent['eqAnalyzeInteractDefDeadCmd'] = InteractDefManager::deadCmd();
         $pageContent['eqAnalyzePluginDeadCmd'] = [];
 
         $pluginManagerListPluginTrue = PluginManager::listPlugin(true);

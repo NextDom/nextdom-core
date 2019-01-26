@@ -60,26 +60,41 @@ $('#bt_editDashboardWidgetOrder').on('click', function () {
     } else {
         notify('Core', '{{Vous êtes en mode édition vous pouvez déplacer les widgets, les redimensionner et changer l\'ordre des commandes dans les widgets. N\'oubliez pas de quitter le mode édition pour sauvegarder}}', 'success');
         $(this).attr('data-mode', 1);
-        $(this).attr('data-mode', 1);
         $('.bt_editDashboardWidgetAutoResize').show();
         $('.bt_editDashboardWidgetAutoResize').off('click').on('click', function () {
             var id_object = $(this).attr('id');
             id_object = id_object.replace('edit_object_', '');
-            var heightObjectex = 0;
             $('#div_ob' + id_object + '.div_displayEquipement .eqLogic-widget').each(function (index, element) {
-                var heightObject = this.style.height;
-                heightObject = eval(heightObject.replace('px', ''));
-                var valueAdd = eval(heightObject * 0.20);
-                var valueRemove = eval(heightObject * 0.05);
-                var heightObjectadd = eval(heightObject + valueAdd);
-                var heightObjectremove = eval(heightObject - valueRemove);
-                if (heightObjectadd >= heightObjectex && (heightObjectex > heightObject || heightObjectremove < heightObjectex)) {
+                var widthObject = this.style.width;
+                widthObject = eval(widthObject.replace('px', ''));
+                if (widthObject <= parseInt(widget_size)) {
                     if ($(element).hasClass('allowResize')) {
-                        $(element).height(heightObjectex);
-                        heightObject = heightObjectex;
+                        $(element).width(parseInt(widget_size));
+                    }
+                } else if (widthObject > parseInt(widget_size) && widthObject <= parseInt(widget_size)*2 + parseInt(widget_margin)*2) {
+                    if ($(element).hasClass('allowResize')) {
+                        $(element).width(parseInt(widget_size)*2 + parseInt(widget_margin)*2);
+                    }
+                } else if(widthObject > parseInt(widget_size)*2 + parseInt(widget_margin)*2 && widthObject <= parseInt(widget_size)*3 + parseInt(widget_margin)*4) {
+                    if ($(element).hasClass('allowResize')) {
+                        $(element).width(parseInt(widget_size)*3 + parseInt(widget_margin)*4);
                     }
                 }
-                heightObjectex = heightObject;
+                var heightObject = this.style.height;
+                heightObject = eval(heightObject.replace('px', ''));
+                if (heightObject <= parseInt(widget_size)) {
+                    if ($(element).hasClass('allowResize')) {
+                        $(element).height(parseInt(widget_size));
+                    }
+                } else if (heightObject > parseInt(widget_size) + parseInt(widget_margin)*2 && heightObject <= parseInt(widget_size)*2 + parseInt(widget_margin)*4 ) {
+                    if ($(element).hasClass('allowResize')) {
+                        $(element).height(parseInt(widget_size)*2 + parseInt(widget_margin)*2);
+                    }
+                } else if(heightObject > (parseInt(widget_size)*2 + parseInt(widget_margin)*2) && heightObject <= parseInt(widget_size)*3 + parseInt(widget_margin)*2 ) {
+                    if ($(element).hasClass('allowResize')) {
+                        $(element).height(parseInt(widget_size)*3 + parseInt(widget_margin)*4);
+                    }
+                }
             });
         });
         editWidgetMode(1);

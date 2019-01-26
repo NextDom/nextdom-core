@@ -22,8 +22,10 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UpdateManager;
 
 class NetworkController extends BaseController
@@ -49,23 +51,22 @@ class NetworkController extends BaseController
      */
     public function get(Render $render, array &$pageContent): string
     {
-
         $pageContent['adminReposList'] = UpdateManager::listRepo();
         $keys = array('dns::token', 'market::allowDNS');
         foreach ($pageContent['adminReposList'] as $key => $value) {
             $keys[] = $key . '::enable';
         }
-        $pageContent['adminConfigs'] = \config::byKeys($keys);
+        $pageContent['adminConfigs'] = ConfigManager::byKeys($keys);
         $pageContent['adminNetworkInterfaces'] = [];
-        foreach (\network::getInterfaces() as $interface) {
+        foreach (NetworkHelper::getInterfacesList() as $interface) {
             $intData = [];
             $intData['name'] = $interface;
-            $intData['mac'] = \network::getInterfaceMac($interface);
-            $intData['ip'] = \network::getInterfaceIp($interface);
+            $intData['mac'] = NetworkHelper::getInterfaceMac($interface);
+            $intData['ip'] = NetworkHelper::getInterfaceIp($interface);
             $pageContent['adminNetworkInterfaces'][] = $intData;
         }
-        $pageContent['adminDnsRun'] = \network::dns_run();
-        $pageContent['adminNetworkExternalAccess'] = \network::getNetworkAccess('external');
+        $pageContent['adminDnsRun'] = NetworkHelper::dnsRun();
+        $pageContent['adminNetworkExternalAccess'] = NetworkHelper::getNetworkAccess('external');
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/admin/network.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';

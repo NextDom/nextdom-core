@@ -86,6 +86,7 @@ autoCompleteCondition = [
 " value(commande)"
 ];
 autoCompleteAction = [
+"tag",
 "report",
 "sleep",
 "variable",
@@ -148,22 +149,22 @@ $('#in_treeSearch').keyup(function () {
 });
 
 $('#in_searchScenario').keyup(function () {
-  var search = $(this).value();
-  if(search == ''){
-    $('.panel-collapse.in').closest('.panel').find('.accordion-toggle').click()
+  var searchPattern = $(this).value();
+  if(searchPattern === ''){
+    $('.panel-collapse.in').closest('.panel').find('.accordion-toggle collapsed').click();
     $('.scenarioDisplayCard').show();
-    $('.scenarioListContainer').packery();
-    return;
   }
-  $('.panel-collapse:not(.in)').closest('.panel').find('.accordion-toggle').click()
-  $('.scenarioDisplayCard').hide();
-  $('.scenarioDisplayCard .name').each(function(){
-    var text = $(this).text().toLowerCase();
-    if(text.indexOf(search.toLowerCase()) >= 0){
-      $(this)
-      $(this).closest('.scenarioDisplayCard').show();
-    }
-  });
+  else {
+    searchPattern = searchPattern.toLowerCase();
+    $('.panel-collapse:not(.in)').closest('.panel').find('.accordion-toggle collapsed').click();
+    $('.scenarioDisplayCard').hide();
+    $('.scenarioDisplayCard .title').each(function(){
+        var cardTitle = $(this).text().toLowerCase();
+        if (cardTitle.indexOf(searchPattern) !== -1){
+            $(this).closest('.scenarioDisplayCard').show();
+        }
+    });
+  }
   $('.scenarioListContainer').packery();
 });
 
@@ -256,7 +257,7 @@ $("#bt_addScenario,#bt_addScenario2").off('click').on('click', function (event) 
   });
 });
 
-jwerty.key('ctrl+s', function (e) {
+jwerty.key('ctrl+s/⌘+s', function (e) {
   e.preventDefault();
   saveScenario();
 });

@@ -24,9 +24,9 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\ScenarioManager;
-
  
 class ScenarioController extends BaseController
 {
@@ -37,7 +37,7 @@ class ScenarioController extends BaseController
         Status::isConnectedAdminOrFail();
     }
 
-     /**
+    /**
      * Render scenario page
      *
      * @param Render $render Render engine
@@ -45,14 +45,12 @@ class ScenarioController extends BaseController
      *
      * @return string Content of scenario page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
     public function get(Render $render, array &$pageContent): string
     {
-
         $pageContent['scenarios'] = array();
         // TODO: A supprimé pour éviter la requête inutile
         $pageContent['scenarioCount'] = count(ScenarioManager::all());
@@ -65,7 +63,7 @@ class ScenarioController extends BaseController
             }
         }
         $pageContent['scenarioInactiveStyle'] = \nextdom::getConfiguration('eqLogic:style:noactive');
-        $pageContent['scenarioEnabled'] = \config::byKey('enableScenario');
+        $pageContent['scenarioEnabled'] = ConfigManager::byKey('enableScenario');
         $pageContent['scenarioAllObjects'] = JeeObjectManager::all();
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/scenario.js';

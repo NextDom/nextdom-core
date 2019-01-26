@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
@@ -32,7 +33,7 @@ class EditorController extends BaseController
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
+
     /**
      * Render editor page
      *
@@ -41,7 +42,6 @@ class EditorController extends BaseController
      *
      * @return string Content of editor page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -54,7 +54,7 @@ class EditorController extends BaseController
         $pageContent['editorFolders'] = [];
         $pageContent['editorRootPath'] = NEXTDOM_ROOT;
 
-        $lsNextDomRoot = \ls(NEXTDOM_ROOT, '*', false, array('folders'));
+        $lsNextDomRoot = FileSystemHelper::ls(NEXTDOM_ROOT, '*', false, array('folders'));
         foreach ($lsNextDomRoot as $folder) {
             $pageContent['editorFolders'][] = $folder;
         }

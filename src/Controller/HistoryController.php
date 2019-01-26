@@ -24,6 +24,7 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\PluginManager;
@@ -37,7 +38,7 @@ class HistoryController extends BaseController
         Status::isConnectedAdminOrFail();
     }
 
-     /**
+    /**
      * Render history page
      *
      * @param Render $render Render engine
@@ -45,7 +46,6 @@ class HistoryController extends BaseController
      *
      * @return string Content of history page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -53,7 +53,7 @@ class HistoryController extends BaseController
     public function get(Render $render, array &$pageContent): string
     {
         $pageContent['historyDate'] = array(
-            'start' => date('Y-m-d', strtotime(\config::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
+            'start' => date('Y-m-d', strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
             'end'   => date('Y-m-d'),
         );
         $pageContent['historyCmdsList']          = CmdManager::allHistoryCmd();

@@ -39,6 +39,7 @@ class ScenarioExpressionEnum extends Enum
     const SCENARIO_RETURN = 'scenario_return';
     const REMOVE_INAT = 'remove_inat';
     const REPORT = 'report';
+    const TAG = 'tag';
     const EVENT = 'event';
     const CMD = 'cmd';
 }

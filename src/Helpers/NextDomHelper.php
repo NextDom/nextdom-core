@@ -34,8 +34,9 @@
 
 namespace NextDom\Helpers;
 
-use NextDom\Enums\ApiModeEnum;
 use NextDom\Exceptions\CoreException;
+use NextDom\Managers\DataStoreManager;
+use NextDom\Managers\CronManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\JeeObjectManager;
@@ -45,6 +46,7 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Managers\ConfigManager;
 
 class NextDomHelper
 {
@@ -72,25 +74,26 @@ class NextDomHelper
      * Get all dead commands
      *
      * @return array
+     * @throws \Exception
      */
     public static function getDeadCmd()
     {
         global $NEXTDOM_INTERNAL_CONFIG;
         $result = array();
-        $cmd = \config::byKey('interact::warnme::defaultreturncmd', 'core', '');
+        $cmd = ConfigManager::byKey('interact::warnme::defaultreturncmd', 'core', '');
         if ($cmd != '') {
             if (!CmdManager::byId(str_replace('#', '', $cmd))) {
                 $result[] = array('detail' => 'Administration', 'help' => __('Commande retour interactions'), 'who' => $cmd);
             }
         }
-        $cmd = \config::byKey('emailAdmin', 'core', '');
+        $cmd = ConfigManager::byKey('emailAdmin', 'core', '');
         if ($cmd != '') {
             if (!CmdManager::byId(str_replace('#', '', $cmd))) {
                 $result[] = array('detail' => 'Administration', 'help' => __('Commande information utilisateur'), 'who' => $cmd);
             }
         }
         foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
-            $cmds = \config::byKey('alert::' . $level . 'Cmd', 'core', '');
+            $cmds = ConfigManager::byKey('alert::' . $level . 'Cmd', 'core', '');
             preg_match_all("/#([0-9]*)#/", $cmds, $matches);
             foreach ($matches[1] as $cmd_id) {
                 if (CmdManager::byId($cmd_id)) {
@@ -106,6 +109,7 @@ class NextDomHelper
      * Test all functionnalities
      *
      * @return array Data about system health
+     * @throws \Exception
      */
     public static function health(): array
     {
@@ -145,7 +149,7 @@ class NextDomHelper
             'comment' => '',
         );
 
-        $state = (\config::byKey('enableCron', 'core', 1, true) != 0) ? true : false;
+        $state = (ConfigManager::byKey('enableCron', 'core', 1, true) != 0) ? true : false;
         $systemHealth[] = array(
             'icon' => 'fa-calendar-alt',
             'name' => __('health.cron-enabled'),
@@ -154,7 +158,7 @@ class NextDomHelper
             'comment' => ($state) ? '' : __('health.cron-disabled'),
         );
 
-        $state = (\config::byKey('enableScenario') == 0 && count(ScenarioManager::all()) > 0) ? false : true;
+        $state = (ConfigManager::byKey('enableScenario') == 0 && count(ScenarioManager::all()) > 0) ? false : true;
         $systemHealth[] = array(
             'icon' => 'fa-film',
             'name' => __('health.scenario-enabled'),
@@ -196,7 +200,7 @@ class NextDomHelper
             'icon' => 'fa-code-branch',
             'name' => __('health.product-version'),
             'state' => true,
-            'result' => self::getVersion(),
+            'result' => self::getNextdomVersion(),
             'comment' => '',
         );
 
@@ -227,7 +231,7 @@ class NextDomHelper
             'comment' => '',
         );
 
-        $values = getSystemMemInfo();
+        $values = SystemHelper::getMemInfo();
         $value = round(($values['MemAvailable'] / $values['MemTotal']) * 100);
         $systemHealth[] = array(
             'icon' => 'fa-th',
@@ -274,7 +278,7 @@ class NextDomHelper
             'comment' => '',
         );
 
-        $state = \network::test('internal');
+        $state = NetworkHelper::test('internal');
         $systemHealth[] = array(
             'icon' => 'fa-plug',
             'name' => __('health.internal-network-conf'),
@@ -283,7 +287,7 @@ class NextDomHelper
             'comment' => ($state) ? '' : __('health.network-config'),
         );
 
-        $state = \network::test('external');
+        $state = NetworkHelper::test('external');
         $systemHealth[] = array(
             'icon' => 'fa-globe',
             'name' => __('health.external-network-conf'),
@@ -297,11 +301,11 @@ class NextDomHelper
             'comment' => '',
             'name' => __('health.cache-persistence'));
         if (CacheManager::isPersistOk()) {
-            if (\config::byKey('cache::engine') != 'FilesystemCache' && \config::byKey('cache::engine') != 'PhpFileCache') {
+            if (ConfigManager::byKey('cache::engine') != 'FilesystemCache' && ConfigManager::byKey('cache::engine') != 'PhpFileCache') {
                 $cache_health['state'] = true;
                 $cache_health['result'] = $okStr;
             } else {
-                $filename = __DIR__ . '/../../var/cache.tar.gz.tar.gz';
+                $filename = NEXTDOM_ROOT . '/var/cache.tar.gz';
                 $cache_health['state'] = true;
                 $cache_health['result'] = $okStr . ' (' . date('Y-m-d H:i:s', filemtime($filename)) . ')';
             }
@@ -339,7 +343,7 @@ class NextDomHelper
     public static function sick()
     {
         $cmd = NEXTDOM_ROOT.'/scripts/sick.php';
-        $cmd .= ' >> ' . \log::getPathToLog('sick') . ' 2>&1';
+        $cmd .= ' >> ' . LogHelper::getPathToLog('sick') . ' 2>&1';
         SystemHelper::php($cmd);
     }
 
@@ -347,6 +351,7 @@ class NextDomHelper
      * Test if NextDom running right
      *
      * @return bool
+     * @throws \Exception
      */
     public static function isOk()
     {
@@ -356,13 +361,13 @@ class NextDomHelper
         if (!self::isDateOk()) {
             return false;
         }
-        if (\config::byKey('enableScenario') == 0 && count(ScenarioManager::all()) > 0) {
+        if (ConfigManager::byKey('enableScenario') == 0 && count(ScenarioManager::all()) > 0) {
             return false;
         }
         if (!self::isCapable('sudo')) {
             return false;
         }
-        if (\config::byKey('enableCron', 'core', 1, true) == 0) {
+        if (ConfigManager::byKey('enableCron', 'core', 1, true) == 0) {
             return false;
         }
         return true;
@@ -372,10 +377,11 @@ class NextDomHelper
      * Start update
      *
      * @param array $options Options list of /install/update.php script
+     * @throws \Exception
      */
     public static function update($options = array())
     {
-        \log::clear('update');
+        LogHelper::clear('update');
         $params = '';
         if (count($options) > 0) {
             foreach ($options as $key => $value) {
@@ -383,7 +389,7 @@ class NextDomHelper
             }
         }
         $cmd = NEXTDOM_ROOT . '/install/update.php ' . $params;
-        $cmd .= ' >> ' . \log::getPathToLog('update') . ' 2>&1 &';
+        $cmd .= ' >> ' . LogHelper::getPathToLog('update') . ' 2>&1 &';
         SystemHelper::php($cmd);
     }
 
@@ -394,6 +400,7 @@ class NextDomHelper
      * @param mixed $defaultValue
      *
      * @return mixed
+     * @throws \Exception
      */
     public static function getConfiguration(string $askedKey = '', $defaultValue = false)
     {
@@ -430,6 +437,7 @@ class NextDomHelper
      * @param string $configKey
      * @param mixed $configValue
      * @return array|mixed|string
+     * @throws \Exception
      */
     private static function checkValueInConfiguration($configKey, $configValue)
     {
@@ -446,20 +454,33 @@ class NextDomHelper
             self::$nextdomConfiguration[$configKey] = $configValue;
             return $configValue;
         } else {
-            $config = \config::byKey($configKey);
+            $config = ConfigManager::byKey($configKey);
             return ($config == '') ? $configValue : $config;
         }
     }
 
     /**
-     * Get NextDom version
+     * Get Jeedom version
      *
      * @return string
      */
-    public static function getVersion()
+    public static function getJeedomVersion()
     {
-        if (file_exists(NEXTDOM_ROOT . '/core/config/version')) {
-            return trim(file_get_contents(NEXTDOM_ROOT . '/core/config/version'));
+        if (file_exists('/var/lib/nextdom/config/Jeedom_version')) {
+            return trim(file_get_contents('/var/lib/nextdom/config/Jeedom_version'));
+        }
+        return '';
+    }
+
+    /**
+     * Get Nextdom version
+     *
+     * @return string
+     */
+    public static function getNextdomVersion()
+    {
+        if (file_exists('/var/lib/nextdom/config/Nextdom_version')) {
+            return trim(file_get_contents('/var/lib/nextdom/config/Nextdom_version'));
         }
         return '';
     }
@@ -471,13 +492,13 @@ class NextDomHelper
     {
         $okStr = __('common.ok');
         echo __('core.disable-tasks');
-        \config::save('enableCron', 0);
-        foreach (\cron::all() as $cron) {
+        ConfigManager::save('enableCron', 0);
+        foreach (CronManager::all() as $cron) {
             if ($cron->running()) {
                 try {
                     $cron->halt();
                     echo '.';
-                } catch (CoreException $e) {
+                } catch (\Exception $e) {
                     sleep(5);
                     $cron->halt();
                 }
@@ -488,9 +509,9 @@ class NextDomHelper
 
         /*         * **********arrêt des crons********************* */
 
-        if (\cron::jeeCronRun()) {
+        if (CronManager::jeeCronRun()) {
             echo __('core.disable-cron-master');
-            $pid = \cron::getPidFile();
+            $pid = CronManager::getPidFile();
             SystemHelper::kill($pid);
             echo " $okStr\n";
         }
@@ -498,12 +519,12 @@ class NextDomHelper
         /*         * *********Arrêt des scénarios**************** */
 
         echo __('core.disable-all-scenarios');
-        \config::save('enableScenario', 0);
+        ConfigManager::save('enableScenario', 0);
         foreach (ScenarioManager::all() as $scenario) {
             try {
                 $scenario->stop();
                 echo '.';
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
                 sleep(5);
                 $scenario->stop();
             }
@@ -514,7 +535,7 @@ class NextDomHelper
     /**
      * Start all cron tasks and scenarios
      *
-     * @throws CoreException
+     * @throws \Exception
      */
     public static function startSystem()
     {
@@ -522,12 +543,12 @@ class NextDomHelper
 
         try {
             echo __('core.enable-all-scenarios');
-            \config::save('enableScenario', 1);
+            ConfigManager::save('enableScenario', 1);
             echo " $okStr\n";
             echo __('core.enable-tasks');
-            \config::save('enableCron', 1);
+            ConfigManager::save('enableCron', 1);
             echo " $okStr\n";
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
             if (!isset($_GET['mode']) || $_GET['mode'] != 'force') {
                 throw $e;
             } else {
@@ -540,6 +561,7 @@ class NextDomHelper
      * Test if NextDom is started
      *
      * @return bool True if NextDom is started
+     * @throws \Exception
      */
     public static function isStarted(): bool
     {
@@ -550,10 +572,11 @@ class NextDomHelper
      * Update time status and get it
      *
      * @return boolean Time status
+     * @throws \Exception
      */
     public static function isDateOk()
     {
-        if (\config::byKey('ignoreHourCheck') == 1) {
+        if (ConfigManager::byKey('ignoreHourCheck') == 1) {
             return true;
         }
         $cache = CacheManager::byKey('hour');
@@ -573,7 +596,7 @@ class NextDomHelper
             self::forceSyncHour();
             sleep(3);
             if (strtotime('now') < $mindate || strtotime('now') > $maxdate) {
-                \log::add('core', 'error', sprintf(__('core.incorrect-sys-date'), $minDateValue, $maxDateValue) . (new \DateTime())->format('Y-m-d H:i:s'), 'dateCheckFailed');
+                LogHelper::add('core', 'error', sprintf(__('core.incorrect-sys-date'), $minDateValue, $maxDateValue) . (new \DateTime())->format('Y-m-d H:i:s'), 'dateCheckFailed');
                 return false;
             }
         }
@@ -583,8 +606,9 @@ class NextDomHelper
     /**
      * Check an event
      *
-     * @param $event
+     * @param \event|string $event
      * @param bool $forceSyncMode
+     * @throws \Exception
      */
     public static function event($event, $forceSyncMode = false)
     {
@@ -598,98 +622,98 @@ class NextDomHelper
     {
         if (!self::isStarted()) {
             echo date('Y-m-d H:i:s') . ' starting NextDom';
-            \log::add('starting', 'debug', __('Démarrage de nextdom'));
+            LogHelper::add('starting', 'debug', __('Démarrage de nextdom'));
             try {
-                \log::add('starting', 'debug', __('Arrêt des crons'));
-                foreach (\cron::all() as $cron) {
+                LogHelper::add('starting', 'debug', __('Arrêt des crons'));
+                foreach (CronManager::all() as $cron) {
                     if ($cron->running() && $cron->getClass() != 'nextdom' && $cron->getFunction() != 'cron') {
                         try {
                             $cron->halt();
-                        } catch (CoreException $e) {
-                            \log::add('starting', 'error', __('Erreur sur l\'arrêt d\'une tâche cron : ') . \log::exception($e));
+                        } catch (\Exception $e) {
+                            LogHelper::add('starting', 'error', __('Erreur sur l\'arrêt d\'une tâche cron : ') . LogHelper::exception($e));
                         }
                     }
                 }
-            } catch (CoreException $e) {
-                \log::add('starting', 'error', __('Erreur sur l\'arrêt des tâches crons : ') . \log::exception($e));
+            } catch (\Exception $e) {
+                LogHelper::add('starting', 'error', __('Erreur sur l\'arrêt des tâches crons : ') . LogHelper::exception($e));
             }
 
             try {
-                \log::add('starting', 'debug', __('Restauration du cache'));
+                LogHelper::add('starting', 'debug', __('Restauration du cache'));
                 CacheManager::restore();
-            } catch (CoreException $e) {
-                \log::add('starting', 'error', __('Erreur sur la restauration du CacheManager : ') . \log::exception($e));
+            } catch (\Exception $e) {
+                LogHelper::add('starting', 'error', __('Erreur sur la restauration du CacheManager : ') . LogHelper::exception($e));
             }
 
             try {
-                \log::add('starting', 'debug', __('Nettoyage du cache des péripheriques USB'));
+                LogHelper::add('starting', 'debug', __('Nettoyage du cache des péripheriques USB'));
                 $cache = CacheManager::byKey('nextdom::usbMapping');
                 $cache->remove();
-            } catch (CoreException $e) {
-                \log::add('starting', 'error', __('Erreur sur le nettoyage du CacheManager des péripheriques USB : ') . \log::exception($e));
+            } catch (\Exception $e) {
+                LogHelper::add('starting', 'error', __('Erreur sur le nettoyage du CacheManager des péripheriques USB : ') . LogHelper::exception($e));
             }
 
             try {
-                \log::add('starting', 'debug', __('Nettoyage du cache des péripheriques Bluetooth'));
+                LogHelper::add('starting', 'debug', __('Nettoyage du cache des péripheriques Bluetooth'));
                 $cache = CacheManager::byKey('nextdom::bluetoothMapping');
                 $cache->remove();
-            } catch (CoreException $e) {
-                \log::add('starting', 'error', __('Erreur sur le nettoyage du CacheManager des péripheriques Bluetooth : ') . \log::exception($e));
+            } catch (\Exception $e) {
+                LogHelper::add('starting', 'error', __('Erreur sur le nettoyage du CacheManager des péripheriques Bluetooth : ') . LogHelper::exception($e));
             }
 
             try {
-                \log::add('starting', 'debug', __('Démarrage des processus Internet de NextDom'));
+                LogHelper::add('starting', 'debug', __('Démarrage des processus Internet de NextDom'));
                 self::startSystem();
-            } catch (CoreException $e) {
-                \log::add('starting', 'error', __('Erreur sur le démarrage interne de NextDom : ') . \log::exception($e));
+            } catch (\Exception $e) {
+                LogHelper::add('starting', 'error', __('Erreur sur le démarrage interne de NextDom : ') . LogHelper::exception($e));
             }
 
             try {
-                \log::add('starting', 'debug', __('Ecriture du fichier ') . self::getTmpFolder() . '/started');
+                LogHelper::add('starting', 'debug', __('Ecriture du fichier ') . self::getTmpFolder() . '/started');
                 if (file_put_contents(self::getTmpFolder() . '/started', date('Y-m-d H:i:s')) === false) {
-                    \log::add('starting', 'error', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started'));
+                    LogHelper::add('starting', 'error', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started'));
                 }
-            } catch (CoreException $e) {
-                \log::add('starting', 'error', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started : ') . \log::exception($e));
+            } catch (\Exception $e) {
+                LogHelper::add('starting', 'error', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started : ') . LogHelper::exception($e));
             }
 
             if (!file_exists(self::getTmpFolder() . '/started')) {
-                \log::add('starting', 'critical', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started pour une raison inconnue. NextDom ne peut démarrer'));
+                LogHelper::add('starting', 'critical', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started pour une raison inconnue. NextDom ne peut démarrer'));
                 return;
             }
 
             try {
-                \log::add('starting', 'debug', __('Vérification de la \configuration réseau interne'));
-                if (!\network::test('internal')) {
-                    \network::checkConf('internal');
+                LogHelper::add('starting', 'debug', __('Vérification de la \configuration réseau interne'));
+                if (!NetworkHelper::test('internal')) {
+                    NetworkHelper::checkConf('internal');
                 }
-            } catch (CoreException $e) {
-                \log::add('starting', 'error', __('Erreur sur la \configuration réseau interne : ') . \log::exception($e));
+            } catch (\Exception $e) {
+                LogHelper::add('starting', 'error', __('Erreur sur la \configuration réseau interne : ') . LogHelper::exception($e));
             }
 
             try {
-                \log::add('starting', 'debug', __('Envoi de l\'événement de démarrage'));
+                LogHelper::add('starting', 'debug', __('Envoi de l\'événement de démarrage'));
                 self::event('start');
-            } catch (CoreException $e) {
-                \log::add('starting', 'error', __('Erreur sur l\'envoi de l\'événement de démarrage : ') . \log::exception($e));
+            } catch (\Exception $e) {
+                LogHelper::add('starting', 'error', __('Erreur sur l\'envoi de l\'événement de démarrage : ') . LogHelper::exception($e));
             }
 
             try {
-                \log::add('starting', 'debug', __('Démarrage des plugins'));
+                LogHelper::add('starting', 'debug', __('Démarrage des plugins'));
                 PluginManager::start();
-            } catch (CoreException $e) {
-                \log::add('starting', 'error', __('Erreur sur le démarrage des plugins : ') . \log::exception($e));
+            } catch (\Exception $e) {
+                LogHelper::add('starting', 'error', __('Erreur sur le démarrage des plugins : ') . LogHelper::exception($e));
             }
 
             try {
-                if (\config::byKey('market::enable') == 1) {
-                    \log::add('starting', 'debug', __('Test de connexion au market'));
+                if (ConfigManager::byKey('market::enable') == 1) {
+                    LogHelper::add('starting', 'debug', __('Test de connexion au market'));
                     \repo_market::test();
                 }
-            } catch (CoreException $e) {
-                \log::add('starting', 'error', __('Erreur sur la connexion au market : ') . \log::exception($e));
+            } catch (\Exception $e) {
+                LogHelper::add('starting', 'error', __('Erreur sur la connexion au market : ') . LogHelper::exception($e));
             }
-            \log::add('starting', 'debug', __('Démarrage de nextdom fini avec succès'));
+            LogHelper::add('starting', 'debug', __('Démarrage de nextdom fini avec succès'));
             EventManager::add('refresh');
         }
         self::isDateOk();
@@ -701,23 +725,23 @@ class NextDomHelper
     public static function cron5()
     {
         try {
-            \network::cron5();
-        } catch (CoreException $e) {
-            \log::add('network', 'error', 'network::cron : ' . $e->getMessage());
+            NetworkHelper::cron5();
+        } catch (\Exception $e) {
+            LogHelper::add('network', 'error', 'network::cron : ' . $e->getMessage());
         }
         try {
-            foreach (\update::listRepo() as $name => $repo) {
+            foreach (UpdateManager::listRepo() as $name => $repo) {
                 $class = 'repo_' . $name;
-                if (class_exists($class) && method_exists($class, 'cron5') && \config::byKey($name . '::enable') == 1) {
+                if (class_exists($class) && method_exists($class, 'cron5') && ConfigManager::byKey($name . '::enable') == 1) {
                     $class::cron5();
                 }
             }
-        } catch (CoreException $e) {
-            \log::add('nextdom', 'error', $e->getMessage());
+        } catch (\Exception $e) {
+            LogHelper::add('nextdom', 'error', $e->getMessage());
         }
         try {
             EqLogicManager::checkAlive();
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
 
         }
     }
@@ -729,36 +753,36 @@ class NextDomHelper
     {
         try {
             CacheManager::set('hour', date('Y-m-d H:i:s'));
-        } catch (CoreException $e) {
-            \log::add('nextdom', 'error', $e->getMessage());
+        } catch (\Exception $e) {
+            LogHelper::add('nextdom', 'error', $e->getMessage());
         }
         try {
-            if (\config::byKey('update::autocheck', 'core', 1) == 1 && (\config::byKey('update::lastCheck') == '' || (strtotime('now') - strtotime(\config::byKey('update::lastCheck'))) > (23 * 3600))) {
+            if (ConfigManager::byKey('update::autocheck', 'core', 1) == 1 && (ConfigManager::byKey('update::lastCheck') == '' || (strtotime('now') - strtotime(ConfigManager::byKey('update::lastCheck'))) > (23 * 3600))) {
                 UpdateManager::checkAllUpdate();
                 $updates = UpdateManager::byStatus('update');
+                $toUpdate = '';
                 if (count($updates) > 0) {
-                    $toUpdate = '';
                     foreach ($updates as $update) {
                         $toUpdate .= $update->getLogicalId() . ',';
                     }
                 }
-                $updates = \update::byStatus('update');
+                $updates = UpdateManager::byStatus('update');
                 if (count($updates) > 0) {
                     \message::add('update', __('De nouvelles mises à jour sont disponibles : ') . trim($toUpdate, ','), '', 'newUpdate');
                 }
             }
-        } catch (CoreException $e) {
-            \log::add('nextdom', 'error', $e->getMessage());
+        } catch (\Exception $e) {
+            LogHelper::add('nextdom', 'error', $e->getMessage());
         }
         try {
             foreach (UpdateManager::listRepo() as $name => $repo) {
                 $class = 'repo_' . $name;
-                if (class_exists($class) && method_exists($class, 'cronHourly') && \config::byKey($name . '::enable') == 1) {
+                if (class_exists($class) && method_exists($class, 'cronHourly') && ConfigManager::byKey($name . '::enable') == 1) {
                     $class::cronHourly();
                 }
             }
-        } catch (CoreException $e) {
-            \log::add('nextdom', 'error', $e->getMessage());
+        } catch (\Exception $e) {
+            LogHelper::add('nextdom', 'error', $e->getMessage());
         }
     }
 
@@ -770,19 +794,20 @@ class NextDomHelper
         try {
             ScenarioManager::cleanTable();
             ScenarioManager::consystencyCheck();
-            \log::chunk();
-            \cron::clean();
+            LogHelper::chunk();
+            CronManager:clean();
             \report::clean();
             \DB::optimize();
             CacheManager::clean();
-        } catch (CoreException $e) {
-            \log::add('nextdom', 'error', $e->getMessage());
+        } catch (\Exception $e) {
+            LogHelper::add('nextdom', 'error', $e->getMessage());
         }
     }
 
     /**
      * TODO: ????
      * @param array $_replaces
+     * @throws \Exception
      */
     public static function replaceTag(array $_replaces)
     {
@@ -798,7 +823,7 @@ class NextDomHelper
         }
         if (count($datas) > 0) {
             foreach ($datas as $data) {
-                \utils::a2o($data, json_decode(str_replace(array_keys($_replaces), $_replaces, json_encode(\utils::o2a($data))), true));
+                Utils::a2o($data, json_decode(str_replace(array_keys($_replaces), $_replaces, json_encode(Utils::o2a($data))), true));
                 $data->save();
             }
         }
@@ -860,7 +885,8 @@ class NextDomHelper
      *
      * @param $input
      *
-     * @return string
+     * @return array
+     * @throws \Exception
      */
     public static function toHumanReadable($input)
     {
@@ -873,6 +899,7 @@ class NextDomHelper
      * @param $input
      *
      * @return array|mixed(
+     * @throws \Exception
      */
     public static function fromHumanReadable($input)
     {
@@ -891,12 +918,12 @@ class NextDomHelper
     {
         try {
             $input = ScenarioExpressionManager::setTags($input, $scenario, true);
-            $result = evaluate($input);
+            $result = Utils::evaluate($input);
             if (is_bool($result) || is_numeric($result)) {
                 return $result;
             }
             return $input;
-        } catch (CoreException $exc) {
+        } catch (\Exception $exc) {
             return $input;
         }
     }
@@ -928,6 +955,7 @@ class NextDomHelper
      * @param string $_string
      *
      * @return array
+     * @throws \Exception
      */
     public static function getTypeUse($_string = '')
     {
@@ -992,7 +1020,7 @@ class NextDomHelper
             if (isset($result['dataStore'][$variable])) {
                 continue;
             }
-            $dataStore = \dataStore::byTypeLinkIdKey('scenario', -1, trim($variable));
+            $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', -1, trim($variable));
             if (!is_object($dataStore)) {
                 continue;
             }
@@ -1062,7 +1090,7 @@ class NextDomHelper
      */
     public static function forceSyncHour()
     {
-        shell_exec(SystemHelper::getCmdSudo() . 'service ntp stop;' . SystemHelper::getCmdSudo() . 'ntpdate -s ' . \config::byKey('ntp::optionalServer', 'core', '0.debian.pool.ntp.org') . ';' . SystemHelper::getCmdSudo() . 'service ntp start');
+        shell_exec(SystemHelper::getCmdSudo() . 'service ntp stop;' . SystemHelper::getCmdSudo() . 'ntpdate -s ' . ConfigManager::byKey('ntp::optionalServer', 'core', '0.debian.pool.ntp.org') . ';' . SystemHelper::getCmdSudo() . 'service ntp start');
     }
 
     /**
@@ -1070,12 +1098,10 @@ class NextDomHelper
      */
     public static function cleanFileSystemRight()
     {
-        $path = __DIR__ . '/../../*';
-		$cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . $path . ';';
-		$cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . $path . ';';
+		$cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . NEXTDOM_ROOT . ';';
+		$cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . NEXTDOM_ROOT . ';';
 		$cmd .= SystemHelper::getCmdSudo() . 'find /var/log/nextdom -type f -exec chmod 664 {} +;';
-		$cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . $path . ';';
-		var_dump($cmd);
+		$cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R /var/log/nextdom ;';
 		exec($cmd);
     }
 
@@ -1095,9 +1121,10 @@ class NextDomHelper
      * @param null $plugin
      *
      * @return string
+     * @throws \Exception
      */
     public static function getTmpFolder($plugin = null) {
-        $result = '/' . trim(\config::byKey('folder::tmp'), '/');
+        $result = '/' . trim(ConfigManager::byKey('folder::tmp'), '/');
         if ($plugin !== null) {
             $result .= '/' . $plugin;
         }
@@ -1113,13 +1140,14 @@ class NextDomHelper
      * Get hardware key
      *
      * @return bool|string
+     * @throws \Exception
      */
     public static function getHardwareKey()
     {
-        $result = \config::byKey('nextdom::installKey');
+        $result = ConfigManager::byKey('nextdom::installKey');
         if ($result == '') {
-            $result = substr(sha512(microtime() . \config::genKey()), 0, 63);
-            \config::save('nextdom::installKey', $result);
+            $result = substr(Utils::sha512(microtime() . ConfigManager::genKey()), 0, 63);
+            ConfigManager::save('nextdom::installKey', $result);
         }
         return $result;
     }
@@ -1128,11 +1156,12 @@ class NextDomHelper
      * Get hostname
      *
      * @return string
+     * @throws \Exception
      */
     public static function getHardwareName()
     {
-        if (\config::byKey('hardware_name') != '') {
-            return \config::byKey('hardware_name');
+        if (ConfigManager::byKey('hardware_name') != '') {
+            return ConfigManager::byKey('hardware_name');
         }
         $result = 'diy';
         $uname = shell_exec('uname -a');
@@ -1146,8 +1175,8 @@ class NextDomHelper
         if (file_exists('/media/boot/multiboot/meson64_odroidc2.dtb.linux')) {
             $result = 'smart';
         }
-        \config::save('hardware_name', $result);
-        return \config::byKey('hardware_name');
+        ConfigManager::save('hardware_name', $result);
+        return ConfigManager::byKey('hardware_name');
     }
 
     /**
@@ -1157,6 +1186,7 @@ class NextDomHelper
      * @param bool $forceRefresh Force refresh in configuration
      *
      * @return bool True if $systemFunc can be executed
+     * @throws \Exception
      */
     public static function isCapable($systemFunc, $forceRefresh = false)
     {
@@ -1194,76 +1224,76 @@ class NextDomHelper
 
         $param = array('cache_write' => 5000, 'cache_read' => 5000, 'database_write_delete' => 1000, 'database_update' => 1000, 'database_replace' => 1000, 'database_read' => 50000, 'subprocess' => 200);
 
-        $starttime = getmicrotime();
+        $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['cache_write']; $i++) {
             CacheManager::set('nextdom_benchmark', $i);
         }
-        $result['cache_write_' . $param['cache_write']] = getmicrotime() - $starttime;
+        $result['cache_write_' . $param['cache_write']] = Utils::getMicrotime() - $starttime;
 
-        $starttime = getmicrotime();
+        $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['cache_read']; $i++) {
             $cache = CacheManager::byKey('nextdom_benchmark');
             $cache->getValue();
         }
-        $result['cache_read_' . $param['cache_read']] = getmicrotime() - $starttime;
+        $result['cache_read_' . $param['cache_read']] = Utils::getMicrotime() - $starttime;
 
-        $starttime = getmicrotime();
+        $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['database_write_delete']; $i++) {
             $sql = 'DELETE FROM config
                     WHERE `key`="nextdom_benchmark"
                     AND plugin="core"';
             try {
                 \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ROW);
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
 
             }
             $sql = 'INSERT INTO config
                     SET `key`="nextdom_benchmark",plugin="core",`value`="' . $i . '"';
             try {
                 \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ROW);
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
 
             }
         }
-        $result['database_write_delete_' . $param['database_write_delete']] = getmicrotime() - $starttime;
+        $result['database_write_delete_' . $param['database_write_delete']] = Utils::getMicrotime() - $starttime;
 
         $sql = 'INSERT INTO config
                 SET `key`="nextdom_benchmark",plugin="core",`value`="0"';
         try {
             \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ROW);
-        } catch (CoreException $e) {
+        } catch (\Exception $e) {
         }
-        $starttime = getmicrotime();
+        $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['database_update']; $i++) {
             $sql = 'UPDATE `config`
                     SET `value`=:value
-                    WHERE `key`="nextdom_benchmark"
-                        AND plugin="core"';
+                    WHERE `key` = "nextdom_benchmark"
+                        AND plugin = "core"';
             try {
                 \DB::Prepare($sql, array('value' => $i), \DB::FETCH_TYPE_ROW);
-            } catch (CoreException $e) {
+            } catch (\Exception $e) {
 
             }
         }
-        $result['database_update_' . $param['database_update']] = getmicrotime() - $starttime;
+        $result['database_update_' . $param['database_update']] = Utils::getMicrotime() - $starttime;
 
-        $starttime = getmicrotime();
+        $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['database_replace']; $i++) {
-            \config::save('nextdom_benchmark', $i);
+            ConfigManager::save('nextdom_benchmark', $i);
         }
-        $result['database_replace_' . $param['database_replace']] = getmicrotime() - $starttime;
+        $result['database_replace_' . $param['database_replace']] = Utils::getMicrotime() - $starttime;
 
-        $starttime = getmicrotime();
+        $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['database_read']; $i++) {
-            \config::byKey('nextdom_benchmark');
+            ConfigManager::byKey('nextdom_benchmark');
         }
-        $result['database_read_' . $param['database_read']] = getmicrotime() - $starttime;
+        $result['database_read_' . $param['database_read']] = Utils::getMicrotime() - $starttime;
 
-        $starttime = getmicrotime();
+        $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['subprocess']; $i++) {
             shell_exec('echo ' . $i);
         }
-        $result['subprocess_' . $param['subprocess']] = getmicrotime() - $starttime;
+        $result['subprocess_' . $param['subprocess']] = Utils::getMicrotime() - $starttime;
 
         $total = 0;
         foreach ($result as $value) {

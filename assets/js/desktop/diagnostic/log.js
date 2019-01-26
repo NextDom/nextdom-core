@@ -60,6 +60,12 @@
  $("#bt_clearLog").on('click', function(event) {
   nextdom.log.clear({
     log : $('.li_log.active').attr('data-log'),
+    success: function(data) {
+        $('.li_log.active a').html($('.li_log.active').attr('data-log') + ' (0 Ko)');
+        if($('#bt_globalLogStopStart').attr('data-state') == 0){
+            $('#bt_globalLogStopStart').click();
+        }
+    }
   });
 });
 

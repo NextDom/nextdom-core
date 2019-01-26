@@ -43,6 +43,11 @@ class plan {
         return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
     }
 
+    /**
+     * @param $_planHeader_id
+     * @return \plan[]
+     * @throws Exception
+     */
     public static function byPlanHeaderId($_planHeader_id) {
         $values = array(
             'planHeader_id' => $_planHeader_id,
@@ -210,125 +215,135 @@ class plan {
     }
 
     public function getHtml($_version = 'dplan') {
-        if (in_array($this->getLink_type(), array('eqLogic', 'cmd', 'scenario'))) {
-            $link = $this->getLink();
-            if (!is_object($link)) {
-                return;
-            }
-            return array(
-                'plan' => utils::o2a($this),
-                'html' => $link->toHtml($_version),
-            );
-        } elseif ($this->getLink_type() == 'plan') {
-            $html = '<span class="cursor plan-link-widget" data-link_id="' . $this->getLink_id() . '" data-offsetX="' . $this->getDisplay('offsetX') . '" data-offsetY="' . $this->getDisplay('offsetY') . '">';
-            $html .= '<a style="color:' . $this->getCss('color', 'black') . ';text-decoration:none;font-size : 1.5em;">';
-            $html .= $this->getDisplay('icon') . ' ' . $this->getDisplay('name');
-            $html .= '</a>';
-            $html .= '</span>';
-            return array(
-                'plan' => utils::o2a($this),
-                'html' => $html,
-            );
-        } elseif ($this->getLink_type() == 'view') {
-            $link = 'index.php?p=view&view_id=' . $this->getLink_id();
-            $html = '<span href="' . $link . '" class="cursor view-link-widget" data-link_id="' . $this->getLink_id() . '" >';
-            $html .= '<a href="' . $link . '" class="noOnePageLoad" style="color:' . $this->getCss('color', 'black') . ';text-decoration:none;font-size : 1.5em;">';
-            $html .= $this->getDisplay('icon') . ' ' . $this->getDisplay('name');
-            $html .= '</a>';
-            $html .= '</span>';
-            return array(
-                'plan' => utils::o2a($this),
-                'html' => $html,
-            );
-        } elseif ($this->getLink_type() == 'graph') {
-            $background_color = 'background-color : white;';
-            if ($this->getDisplay('transparentBackground', false)) {
-                $background_color = '';
-            }
-            $html = '<div class="graph-widget" data-graph_id="' . $this->getLink_id() . '" style="' . $background_color . 'border : solid 1px black;min-height:50px;min-width:50px;">';
-            $html .= '<span class="graphOptions" style="display:none;">' . json_encode($this->getDisplay('graph', array())) . '</span>';
-            $html .= '<div class="graph" id="graph' . $this->getLink_id() . '" style="width : 100%;height : 100%;"></div>';
-            $html .= '</div>';
-            return array(
-                'plan' => utils::o2a($this),
-                'html' => $html,
-            );
-        } elseif ($this->getLink_type() == 'text') {
-            $html = '<div class="text-widget" data-text_id="' . $this->getLink_id() . '" style="color:' . $this->getCss('color', 'black') . ';">';
-            if ($this->getDisplay('name') != '' || $this->getDisplay('icon') != '') {
-                $html .= $this->getDisplay('icon') . ' ' . $this->getDisplay('text');
-            } else {
-                $html .= $this->getDisplay('text');
-            }
-            $html .= '</div>';
-            return array(
-                'plan' => utils::o2a($this),
-                'html' => $html,
-            );
-        } elseif ($this->getLink_type() == 'image') {
-            $html = '<div class="image-widget" data-image_id="' . $this->getLink_id() . '" style="min-width:10px;min-height:10px;">';
-            if ($this->getConfiguration('display_mode', 'image') == 'image') {
-                $html .= '<img style="width:100%;height:100%" src="' . $this->getDisplay('path', 'public/img/NextDom_NoPicture.png') . '"/>';
-            } else {
-                $camera = eqLogic::byId(str_replace(array('#', 'eqLogic'), array('', ''), $this->getConfiguration('camera')));
-                if (is_object($camera)) {
-                    $html .= $camera->toHtml($_version, true);
+        switch($this->getLink_type()) {
+            case 'eqLogic':
+            case 'cmd':
+            case 'scenario':
+                $link = $this->getLink();
+                if (!is_object($link)) {
+                    return;
                 }
-            }
-            $html .= '</div>';
-            return array(
-                'plan' => utils::o2a($this),
-                'html' => $html,
-            );
-        } elseif ($this->getLink_type() == 'zone') {
-            if ($this->getConfiguration('zone_mode', 'simple') == 'widget') {
-                $class = '';
-                if ($this->getConfiguration('showOnFly') == 1) {
-                    $class .= 'zoneEqLogicOnFly ';
+                return array(
+                    'plan' => utils::o2a($this),
+                    'html' => $link->toHtml($_version),
+                );
+                break;
+            case 'plan':
+                $html = '<span class="cursor plan-link-widget" data-link_id="' . $this->getLink_id() . '" data-offsetX="' . $this->getDisplay('offsetX') . '" data-offsetY="' . $this->getDisplay('offsetY') . '">';
+                $html .= '<a style="color:' . $this->getCss('color', 'black') . ';text-decoration:none;font-size : 1.5em;">';
+                $html .= $this->getDisplay('icon') . ' ' . $this->getDisplay('name');
+                $html .= '</a>';
+                $html .= '</span>';
+                return array(
+                    'plan' => utils::o2a($this),
+                    'html' => $html,
+                );
+                break;
+            case 'view':
+                $link = 'index.php?p=view&view_id=' . $this->getLink_id();
+                $html = '<span href="' . $link . '" class="cursor view-link-widget" data-link_id="' . $this->getLink_id() . '" >';
+                $html .= '<a href="' . $link . '" class="noOnePageLoad" style="color:' . $this->getCss('color', 'black') . ';text-decoration:none;font-size : 1.5em;">';
+                $html .= $this->getDisplay('icon') . ' ' . $this->getDisplay('name');
+                $html .= '</a>';
+                $html .= '</span>';
+                return array(
+                    'plan' => utils::o2a($this),
+                    'html' => $html,
+                );
+                break;
+            case 'graph':
+                $background_color = 'background-color : white;';
+                if ($this->getDisplay('transparentBackground', false)) {
+                    $background_color = '';
                 }
-                if ($this->getConfiguration('showOnClic') == 1) {
-                    $class .= 'zoneEqLogicOnClic ';
+                $html = '<div class="graph-widget" data-graph_id="' . $this->getLink_id() . '" style="' . $background_color . 'border : solid 1px black;min-height:50px;min-width:50px;">';
+                $html .= '<span class="graphOptions" style="display:none;">' . json_encode($this->getDisplay('graph', array())) . '</span>';
+                $html .= '<div class="graph" id="graph' . $this->getLink_id() . '" style="width : 100%;height : 100%;"></div>';
+                $html .= '</div>';
+                return array(
+                    'plan' => utils::o2a($this),
+                    'html' => $html,
+                );
+            case 'text':
+                $html = '<div class="text-widget" data-text_id="' . $this->getLink_id() . '" style="color:' . $this->getCss('color', 'black') . ';">';
+                if ($this->getDisplay('name') != '' || $this->getDisplay('icon') != '') {
+                    $html .= $this->getDisplay('icon') . ' ' . $this->getDisplay('text');
+                } else {
+                    $html .= $this->getDisplay('text');
                 }
-                $html = '<div class="zone-widget cursor zoneEqLogic ' . $class . '" data-position="' . $this->getConfiguration('position') . '" data-eqLogic_id="' . str_replace(array('#', 'eqLogic'), array('', ''), $this->getConfiguration('eqLogic')) . '" data-zone_id="' . $this->getLink_id() . '" style="min-width:20px;min-height:20px;"></div>';
-            } else {
-                $html = '<div class="zone-widget cursor" data-zone_id="' . $this->getLink_id() . '" style="min-width:20px;min-height:20px;"></div>';
-            }
-            return array(
-                'plan' => utils::o2a($this),
-                'html' => $html,
-            );
-        } elseif ($this->getLink_type() == 'summary') {
-            $background_color = 'background-color : ' . $this->getCss('background-color', 'black') . ';';
-            if ($this->getDisplay('background-defaut', false)) {
-                $background_color = 'background-color : black;';
-            }
-            if ($this->getDisplay('background-transparent', false)) {
-                $background_color = '';
-            }
-            $color = 'color : ' . $this->getCss('color', 'black') . ';';
-            if ($this->getDisplay('color-defaut', false)) {
-                $color = '';
-            }
-            $html = '<div class="summary-widget" data-summary_id="' . $this->getLink_id() . '" style="' . $background_color . $color . ';min-width:10px;min-height:10px;">';
-            $summary = '';
-            if ($this->getLink_id() == 0) {
-                $summary = jeeObject::getGlobalHtmlSummary($_version);
-            } else {
-                $object = $this->getLink();
-                if (is_object($object)) {
-                    $summary = $object->getHtmlSummary($_version);
+                $html .= '</div>';
+                return array(
+                    'plan' => utils::o2a($this),
+                    'html' => $html,
+                );
+                break;
+            case 'image':
+                $html = '<div class="image-widget" data-image_id="' . $this->getLink_id() . '" style="min-width:10px;min-height:10px;">';
+                if ($this->getConfiguration('display_mode', 'image') == 'image') {
+                    $html .= '<img style="width:100%;height:100%" src="' . $this->getDisplay('path', 'public/img/NextDom_NoPicture.png') . '"/>';
+                } else {
+                    $camera = eqLogic::byId(str_replace(array('#', 'eqLogic'), array('', ''), $this->getConfiguration('camera')));
+                    if (is_object($camera)) {
+                        $html .= $camera->toHtml($_version, true);
+                    }
                 }
-            }
-            if ($summary == '') {
-                $html .= __('Non configuré', __FILE__);
-            } else {
-                $html .= $summary;
-            }
-            $html .= '</div>';
-            return array(
-                'plan' => utils::o2a($this),
-                'html' => $html,
-            );
+                $html .= '</div>';
+                return array(
+                    'plan' => utils::o2a($this),
+                    'html' => $html,
+                );
+                break;
+            case 'zone':
+                if ($this->getConfiguration('zone_mode', 'simple') == 'widget') {
+                    $class = '';
+                    if ($this->getConfiguration('showOnFly') == 1) {
+                        $class .= 'zoneEqLogicOnFly ';
+                    }
+                    if ($this->getConfiguration('showOnClic') == 1) {
+                        $class .= 'zoneEqLogicOnClic ';
+                    }
+                    $html = '<div class="zone-widget cursor zoneEqLogic ' . $class . '" data-position="' . $this->getConfiguration('position') . '" data-eqLogic_id="' . str_replace(array('#', 'eqLogic'), array('', ''), $this->getConfiguration('eqLogic')) . '" data-zone_id="' . $this->getLink_id() . '" style="min-width:20px;min-height:20px;"></div>';
+                } else {
+                    $html = '<div class="zone-widget cursor" data-zone_id="' . $this->getLink_id() . '" style="min-width:20px;min-height:20px;"></div>';
+                }
+                return array(
+                    'plan' => utils::o2a($this),
+                    'html' => $html,
+                );
+                break;
+            case 'summary':
+                $background_color = 'background-color : ' . $this->getCss('background-color', 'black') . ';';
+                if ($this->getDisplay('background-defaut', false)) {
+                    $background_color = 'background-color : black;';
+                }
+                if ($this->getDisplay('background-transparent', false)) {
+                    $background_color = '';
+                }
+                $color = 'color : ' . $this->getCss('color', 'black') . ';';
+                if ($this->getDisplay('color-defaut', false)) {
+                    $color = '';
+                }
+                $html = '<div class="summary-widget" data-summary_id="' . $this->getLink_id() . '" style="' . $background_color . $color . ';min-width:10px;min-height:10px;">';
+                $summary = '';
+                if ($this->getLink_id() == 0) {
+                    $summary = jeeObject::getGlobalHtmlSummary($_version);
+                } else {
+                    $object = $this->getLink();
+                    if (is_object($object)) {
+                        $summary = $object->getHtmlSummary($_version);
+                    }
+                }
+                if ($summary == '') {
+                    $html .= __('Non configuré', __FILE__);
+                } else {
+                    $html .= $summary;
+                }
+                $html .= '</div>';
+                return array(
+                    'plan' => utils::o2a($this),
+                    'html' => $html,
+                );
+                break;
         }
     }
 

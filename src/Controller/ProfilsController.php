@@ -22,6 +22,9 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\FileSystemHelper;
+use NextDom\Helpers\SessionHelper;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Helpers\Render;
@@ -34,8 +37,8 @@ class ProfilsController extends BaseController
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
-     /**
+
+    /**
      * Render profils page
      *
      * @param Render $render Render engine
@@ -43,7 +46,6 @@ class ProfilsController extends BaseController
      *
      * @return string Content of profils page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -67,9 +69,9 @@ class ProfilsController extends BaseController
             }
         }
         $pageContent['profilsUser'] = $_SESSION['user'];
-        $pageContent['profilsSessionsList'] = listSession();
+        $pageContent['profilsSessionsList'] = SessionHelper::getSessionsList();
 
-        $lsCssThemes = ls(NEXTDOM_ROOT . '/public/themes/');
+        $lsCssThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/public/themes/');
         $pageContent['profilsMobileThemes'] = [];
         foreach ($lsCssThemes as $dir) {
             if (is_dir(NEXTDOM_ROOT . '/public/themes/' . $dir . '/mobile')) {
@@ -77,7 +79,7 @@ class ProfilsController extends BaseController
             }
         }
         $pageContent['profilsAvatars'] = [];
-        $lsAvatars = ls(NEXTDOM_ROOT . '/public/img/profils/');
+        $lsAvatars = FileSystemHelper::ls(NEXTDOM_ROOT . '/public/img/profils/');
         foreach ($lsAvatars as $avatarFile) {
             if (is_file(NEXTDOM_ROOT . '/public/img/profils/'.$avatarFile)) {
                 $pageContent['profilsAvatars'][] = '/public/img/profils/'.$avatarFile;
@@ -87,7 +89,7 @@ class ProfilsController extends BaseController
         $pageContent['profilsJeeObjects'] = JeeObjectManager::all();
         $pageContent['profilsViews'] = \view::all();
         $pageContent['profilsPlans'] = \planHeader::all();
-        $pageContent['profilsAllowRemoteUsers'] = \config::byKey('sso:allowRemoteUser');
+        $pageContent['profilsAllowRemoteUsers'] = ConfigManager::byKey('sso:allowRemoteUser');
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/profils.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';

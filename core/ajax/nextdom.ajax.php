@@ -16,6 +16,9 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use NextDom\Helpers\Utils;
+use NextDom\Exceptions\CoreException;
+
 try {
     require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
@@ -56,15 +59,15 @@ try {
         $return['plugins'] = array();
         foreach (plugin::listPlugin(true) as $plugin) {
             if ($plugin->getMobile() != '' || $plugin->getEventJs() == 1) {
-                $info_plugin = utils::o2a($plugin);
+                $info_plugin = Utils::o2a($plugin);
                 $info_plugin['displayMobilePanel'] = config::byKey('displayMobilePanel', $plugin->getId(), 0);
                 $return['plugins'][] = $info_plugin;
             }
         }
         $return['custom'] = array('js' => false, 'css' => false);
         if (config::byKey('enableCustomCss', 'core', 1) == 1) {
-            $return['custom']['js'] = file_exists(__DIR__ . '/../../mobile/custom/custom.js');
-            $return['custom']['css'] = file_exists(__DIR__ . '/../../mobile/custom/custom.css');
+            $return['custom']['js'] = file_exists(NEXTDOM_ROOT . '/var/custom/mobile/custom.js');
+            $return['custom']['css'] = file_exists(NEXTDOM_ROOT . '/var/custom/mobile/custom.css');
         }
         ajax::success($return);
     }
@@ -167,12 +170,6 @@ try {
         ajax::success();
     }
 
-    if (init('action') == 'migrate') {
-        unautorizedInDemo();
-        nextdom::migrate(init('backup'), true);
-        ajax::success(); 
-       }
-
     if (init('action') == 'removeBackup') {
         unautorizedInDemo();
         nextdom::removeBackup(init('backup'));
@@ -243,22 +240,23 @@ try {
 
     if (init('action') == 'saveCustom') {
         unautorizedInDemo();
-        $path = __DIR__ . '/../../';
-        if (init('version') != 'desktop' && init('version') != 'mobile') {
-            throw new Exception(__('La version ne peut être que desktop ou mobile', __FILE__));
+        $customVersion = Utils::init('version');
+        $customType = Utils::init('type');
+        if ($customVersion != 'desktop' && $customVersion != 'mobile') {
+            throw new CoreException(__('La version ne peut être que desktop ou mobile'));
         }
-        if (init('type') != 'js' && init('type') != 'css') {
-            throw new Exception(__('La version ne peut être que js ou css', __FILE__));
+        if ($customType != 'js' && $customType != 'css') {
+            throw new CoreException(__('La version ne peut être que js ou css'));
         }
-        $path .= init('version') . '/custom/';
+        $path = NEXTDOM_ROOT . '/var/custom/' . $customVersion . '/';
         if (!file_exists($path)) {
             mkdir($path);
         }
-        $path .= 'custom.' . init('type');
+        $path .= 'custom.' . $customType;
         if (file_exists($path)) {
             unlink($path);
         }
-        file_put_contents($path, init('content'));
+        file_put_contents($path, Utils::init('content'));
         ajax::success();
     }
 
@@ -306,7 +304,7 @@ try {
     if (init('action') == 'getFileContent') {
         unautorizedInDemo();
         $pathinfo = pathinfo(init('path'));
-        if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql', 'ini'))) {
+        if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql', 'ini','html','py'))) {
             throw new Exception(__('Vous ne pouvez éditer ce type d\'extension : ' . $pathinfo['extension'], __FILE__));
         }
         ajax::success(file_get_contents(init('path')));
@@ -315,7 +313,7 @@ try {
     if (init('action') == 'setFileContent') {
         unautorizedInDemo();
         $pathinfo = pathinfo(init('path'));
-        if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql', 'ini'))) {
+        if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql', 'ini','html','py'))) {
             throw new Exception(__('Vous ne pouvez éditer ce type d\'extension : ' . $pathinfo['extension'], __FILE__));
         }
         ajax::success(file_put_contents(init('path'), init('content')));

@@ -33,10 +33,8 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Managers\CmdManager;
-use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\EventManager;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
 
 class JeeObjectManager
 {
@@ -47,14 +45,14 @@ class JeeObjectManager
      * Get an object by with his id.
      *
      * @param mixed $id Identifiant de l'objet
-     * @return array|mixed|null|void
+     * @return \jeeObject|null
      *
      * @throws \Exception
      */
     public static function byId($id)
     {
         if ($id == '') {
-            return;
+            return null;
         }
         $values = array(
             'id' => $id,
@@ -69,7 +67,7 @@ class JeeObjectManager
      * Get an object by with his name.
      *
      * @param $name
-     * @return array|mixed|null
+     * @return \jeeObject|null
      * @throws \Exception
      */
     public static function byName($name)
@@ -88,7 +86,7 @@ class JeeObjectManager
      *
      * @param bool $onlyVisible Filter only visible objects
      *
-     * @return array|mixed|null
+     * @return \jeeObject[]|null
      *
      * @throws \Exception
      */
@@ -174,17 +172,17 @@ class JeeObjectManager
         $result = array();
         foreach (self::all(true) as $object) {
             if (!isset($restrict['object']) || !is_array($restrict['object']) || isset($restrict['object'][$object->getId()])) {
-                $object_return = \utils::o2a($object);
+                $object_return = Utils::o2a($object);
                 $object_return['eqLogics'] = array();
                 $objectGetEqLogic = $object->getEqLogic(true, true);
                 foreach ($objectGetEqLogic as $eqLogic) {
                     if (!isset($restrict['eqLogic']) || !is_array($restrict['eqLogic']) || isset($restrict['eqLogic'][$eqLogic->getId()])) {
-                        $eqLogic_return = \utils::o2a($eqLogic);
+                        $eqLogic_return = Utils::o2a($eqLogic);
                         $eqLogic_return['cmds'] = [];
                         $eqLogicGetCmd = $eqLogic->getCmd();
                         foreach ($eqLogicGetCmd as $cmd) {
                             if (!isset($restrict['cmd']) || !is_array($restrict['cmd']) || isset($restrict['cmd'][$cmd->getId()])) {
-                                $cmd_return = \utils::o2a($cmd);
+                                $cmd_return = Utils::o2a($cmd);
                                 if ($cmd->getType() == 'info') {
                                     $cmd_return['state'] = $cmd->execCmd();
                                 }
@@ -231,7 +229,7 @@ class JeeObjectManager
             foreach ($object->getConfiguration('summary', []) as $key => $summary) {
                 foreach ($summary as $cmdInfo) {
                     if (!CmdManager::byId(str_replace('#', '', $cmdInfo['cmd']))) {
-                        $result[] = array('detail' => 'Résumé ' . $object->getName(), 'help' => \config::byKey('object:summary')[$key]['name'], 'who' => $cmdInfo['cmd']);
+                        $result[] = array('detail' => 'Résumé ' . $object->getName(), 'help' => ConfigManager::byKey('object:summary')[$key]['name'], 'who' => $cmdInfo['cmd']);
                     }
                 }
             }
@@ -299,6 +297,7 @@ class JeeObjectManager
 				}
 			}
 		}
+		$events = [];
 		if (count($global) > 0) {
 			CacheManager::set('globalSummaryHtmldesktop', '');
 			CacheManager::set('globalSummaryHtmlmobile', '');
@@ -341,7 +340,7 @@ class JeeObjectManager
         if ($key == '') {
 			return null;
 		}
-		$def = \config::byKey('object:summary');
+		$def = ConfigManager::byKey('object:summary');
 		$objects = self::all();
 		$value = array();
 		foreach ($objects as $object) {
@@ -379,7 +378,7 @@ class JeeObjectManager
             return $cache->getValue();
         }
         $objects = self::all();
-        $def = \config::byKey('object:summary');
+        $def = ConfigManager::byKey('object:summary');
         $values = array();
         $return = '<span class="objectSummaryglobal" data-version="' . $version . '">';
         foreach ($def as $key => $value) {
@@ -426,16 +425,16 @@ class JeeObjectManager
 
     /**
      * TODO ???
-     * 
+     *
      * @param string $key
-     * @throws \Exception
+     * @throws \Throwable
      */
     public static function createSummaryToVirtual($key = '')
     {
         if ($key == '') {
             return;
         }
-        $def = \config::byKey('object:summary');
+        $def = ConfigManager::byKey('object:summary');
         if (!isset($def[$key])) {
             return;
         }
@@ -479,6 +478,7 @@ class JeeObjectManager
 
         $virtual = EqLogicManager::byLogicalId('summaryglobal', 'virtual');
         if (!is_object($virtual)) {
+            /** @noinspection PhpUndefinedClassInspection */
             $virtual = new \virtual();
             $virtual->setName(__('Résumé Global'));
             $virtual->setIsVisible(0);
@@ -490,6 +490,7 @@ class JeeObjectManager
         $virtual->save();
         $cmd = $virtual->getCmd('info', $key);
         if (!is_object($cmd)) {
+            /** @noinspection PhpUndefinedClassInspection */
             $cmd = new \virtualCmd();
             $cmd->setName($def[$key]['name']);
             $cmd->setIsHistorized(1);
@@ -515,6 +516,7 @@ class JeeObjectManager
             }
             $virtual = EqLogicManager::byLogicalId('summary' . $object->getId(), 'virtual');
             if (!is_object($virtual)) {
+                /** @noinspection PhpUndefinedClassInspection */
                 $virtual = new \virtual();
                 $virtual->setName(__('Résumé'));
                 $virtual->setIsVisible(0);
@@ -529,6 +531,7 @@ class JeeObjectManager
             $object->save();
             $cmd = $virtual->getCmd('info', $key);
             if (!is_object($cmd)) {
+                /** @noinspection PhpUndefinedClassInspection */
                 $cmd = new \virtualCmd();
                 $cmd->setName($def[$key]['name']);
                 $cmd->setIsHistorized(1);

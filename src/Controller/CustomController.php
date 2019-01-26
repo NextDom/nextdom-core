@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Managers\ConfigManager;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
 
@@ -32,7 +33,7 @@ class CustomController extends BaseController
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
+
     /**
      * Render custom page
      *
@@ -41,7 +42,6 @@ class CustomController extends BaseController
      *
      * @return string Content of custom page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -55,16 +55,16 @@ class CustomController extends BaseController
         $pageContent['customLightThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-light'];
         $pageContent['adminCategories'] = \nextdom::getConfiguration('eqLogic:category');
         $pageContent['Theme'] = \nextdom::getConfiguration('theme');
-        $pageContent['customProductName'] = \config::byKey('product_name');
-        $pageContent['customTheme'] = \config::byKey('theme');
-        $pageContent['customEnableCustomCss'] = \config::byKey('enableCustomCss');
+        $pageContent['customProductName'] = ConfigManager::byKey('product_name');
+        $pageContent['customTheme'] = ConfigManager::byKey('theme');
+        $pageContent['customEnableCustomCss'] = ConfigManager::byKey('enableCustomCss');
         $pageContent['customJS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.js')) {
-            $pageContent['customJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/desktop/custom/custom.js'));
+        if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.js')) {
+            $pageContent['customJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/var/custom/desktop/custom.js'));
         }
         $pageContent['customCSS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.css')) {
-            $pageContent['customCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/desktop/custom/custom.css'));
+        if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.css')) {
+            $pageContent['customCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/var/custom/desktop/custom.css'));
         }
         $pageContent['customMobileJS'] = '';
         if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.js')) {

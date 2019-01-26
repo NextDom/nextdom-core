@@ -19,6 +19,9 @@
 
 namespace NextDom\Market;
 
+use NextDom\Managers\ConfigManager;
+use NextDom\Helpers\LogHelper;
+
 /**
  * Gestion des téléchargements
  */
@@ -43,6 +46,7 @@ class DownloadManager
      * Constructeur testant le statut de la connexion.
      *
      * @param bool $forceConnectionStatus Booléen pour forcer l'état de la connexion.
+     * @throws \Exception
      */
     public static function init($forceConnectionStatus = null)
     {
@@ -53,7 +57,7 @@ class DownloadManager
                 self::testConnection();
             }
         }
-        self::$gitHubToken = \config::byKey('github::token');
+        self::$gitHubToken = ConfigManager::byKey('github::token');
     }
 
     /**
@@ -99,7 +103,7 @@ class DownloadManager
                 $url = $url . '?' . $toAdd;
             }
         }
-        \log::add('AlternativeMarketForJeedom', 'debug', 'Download ' . $url);
+        LogHelper::add('AlternativeMarketForJeedom', 'debug', 'Download ' . $url);
         return self::downloadContentWithCurl($url, $binary);
     }
 

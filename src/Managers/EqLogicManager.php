@@ -33,9 +33,12 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\Utils;
+use NextDom\Model\Entity\EqLogic;
+
 class EqLogicManager
 {
-    const CLASS_NAME = 'eqLogic';
+    const CLASS_NAME = EqLogic::class;
     const DB_CLASS_NAME = '`eqLogic`';
 
     /**
@@ -43,12 +46,14 @@ class EqLogicManager
      *
      * @param mixed $id EqLogic object id
      *
-     * @return array|mixed|void
+     * @return \eqLogic|null
+     *
+     * @throws \Exception
      */
     public static function byId($id)
     {
         if ($id == '') {
-            return;
+            return null;
         }
         $values = array(
             'id' => $id,
@@ -62,14 +67,14 @@ class EqLogicManager
     /**
      * TODO: ???
      * Repasse en private
-     * @param $inputs
+     * @param EqLogic $inputs
      *
      * @return array|mixed
      */
     public static function cast($inputs)
     {
         if (is_object($inputs) && class_exists($inputs->getEqType_name())) {
-            return cast($inputs, $inputs->getEqType_name());
+            return Utils::cast($inputs, $inputs->getEqType_name());
         }
         if (is_array($inputs)) {
             $return = array();
@@ -86,7 +91,8 @@ class EqLogicManager
      *
      * @param bool $onlyEnable Filter only enabled eqLogics
      *
-     * @return array|mixed
+     * @return \eqLogic[]|mixed
+     * @throws \Exception
      */
     public static function all($onlyEnable = false)
     {
@@ -106,6 +112,7 @@ class EqLogicManager
      * @param $eqRealId
      *
      * @return array|mixed
+     * @throws \Exception
      */
     public static function byEqRealId($eqRealId)
     {
@@ -128,7 +135,7 @@ class EqLogicManager
      * @param null $logicalId
      * @param bool $orderByName
      *
-     * @return \eqLogic[] All linked eqLogic
+     * @return EqLogic[] All linked eqLogic
      *
      * @throws \Exception
      */
@@ -393,8 +400,7 @@ class EqLogicManager
         $selfByTimeout = self::byTimeout(1, true);
         foreach ($selfByTimeout as $eqLogic) {
             $sendReport = false;
-            $cmds = $eqLogic->getCmd();
-            foreach ($cmds as $cmd) {
+            if (count($eqLogic->getCmd()) > 0) {
                 $sendReport = true;
             }
             $logicalId = 'noMessage' . $eqLogic->getId();
@@ -405,17 +411,17 @@ class EqLogicManager
                         $message = \__('Attention') . ' ' . $eqLogic->getHumanName();
                         $message .= \__(' n\'a pas envoyé de message depuis plus de ') . $noReponseTimeLimit . \__(' min (vérifiez les piles)');
                         $eqLogic->setStatus('timeout', 1);
-                        if (\config::ByKey('alert::addMessageOnTimeout') == 1) {
+                        if (ConfigManager::ByKey('alert::addMessageOnTimeout') == 1) {
                             \message::add('core', $message, '', $logicalId);
                         }
-                        $cmds = explode(('&&'), \config::byKey('alert::timeoutCmd'));
-                        if (count($cmds) > 0 && trim(\config::byKey('alert::timeoutCmd')) != '') {
+                        $cmds = explode(('&&'), ConfigManager::byKey('alert::timeoutCmd'));
+                        if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::timeoutCmd')) != '') {
                             foreach ($cmds as $id) {
                                 $cmd = CmdManager::byId(str_replace('#', '', $id));
                                 if (is_object($cmd)) {
                                     $cmd->execCmd(array(
-                                        'title' => \__('[' . \config::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
-                                        'message' => \config::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
+                                        'title' => \__('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
+                                        'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
                                     ));
                                 }
                             }
@@ -492,6 +498,7 @@ class EqLogicManager
      *
      * @param $input
      * @return array|mixed
+     * @throws \ReflectionException
      */
     public static function toHumanReadable($input)
     {
@@ -540,7 +547,7 @@ class EqLogicManager
     public static function fromHumanReadable($input)
     {
         $isJson = false;
-        if (is_json($input)) {
+        if (Utils::isJson($input)) {
             $isJson = true;
             $input = json_decode($input, true);
         }
@@ -647,6 +654,7 @@ class EqLogicManager
      * Obtenir l'ensemble des tags liés aux objets
      *
      * @return array
+     * @throws \Exception
      */
     public static function getAllTags() {
         $values = array();

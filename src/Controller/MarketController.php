@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Managers\ConfigManager;
 use NextDom\Helpers\Utils;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
@@ -33,8 +34,8 @@ class MarketController extends BaseController
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
-   /**
+
+    /**
      * Render market page
      *
      * @param Render $render Render engine
@@ -42,7 +43,6 @@ class MarketController extends BaseController
      *
      * @return string Content of market page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -56,12 +56,12 @@ class MarketController extends BaseController
 
         foreach ($NEXTDOM_INTERNAL_CONFIG['nextdom_market']['sources'] as $source) {
             // TODO: Limiter les requêtes
-            if (\config::byKey('nextdom_market::' . $source['code']) == 1) {
+            if (ConfigManager::byKey('nextdom_market::' . $source['code']) == 1) {
                 $sourcesList[] = $source;
             }
         }
 
-        $pageContent['JS_VARS']['github'] = \config::byKey('github::enable');
+        $pageContent['JS_VARS']['github'] = ConfigManager::byKey('github::enable');
         $pageContent['JS_VARS_RAW']['sourcesList'] = Utils::getArrayToJQueryJson($sourcesList);
         $pageContent['JS_VARS']['moreInformationsStr'] = \__("Plus d'informations");
         $pageContent['JS_VARS']['updateStr'] = \__("Mettre à jour");
@@ -70,7 +70,7 @@ class MarketController extends BaseController
         $pageContent['JS_VARS']['installedPluginStr'] = \__("Plugin installé");
         $pageContent['JS_VARS']['updateAvailableStr'] = \__("Mise à jour disponible");
         $pageContent['marketSourcesList'] = $sourcesList;
-        $pageContent['marketSourcesFilter'] = \config::byKey('nextdom_market::show_sources_filters');
+        $pageContent['marketSourcesFilter'] = ConfigManager::byKey('nextdom_market::show_sources_filters');
 
         // Affichage d'un message à un utilisateur
         if (isset($_GET['message'])) {

@@ -26,7 +26,10 @@ use Twig\Extensions\DateExtension;
 use Twig\Extensions\I18nExtension;
 use Twig\Extensions\TextExtension;
 use Twig_Environment;
+use Twig_Error_Loader;
+use Twig_Extension_Debug;
 use Twig_Loader_Filesystem;
+use NextDom\Managers\ConfigManager;
 
 class Render
 {
@@ -48,7 +51,7 @@ class Render
 
     private function __construct()
     {
-        $language = \config::byKey('language', 'core', 'fr_FR');
+        $language = ConfigManager::byKey('language', 'core', 'fr_FR');
         $this->initTranslation($language);
         $this->initRenderer();
     }
@@ -85,6 +88,9 @@ class Render
         $this->twig->addExtension(new DateExtension($this->translator));
         $this->twig->addExtension(new TextExtension());
         $this->twig->addExtension(new TranslationExtension($this->translator));
+        if ($developerMode) {
+            $this->twig->addExtension(new Twig_Extension_Debug());
+        }
     }
 
     /**
@@ -126,15 +132,22 @@ class Render
     /**
      * @param string $view
      * @param array $data
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public function show($view, $data = array())
     {
         $data['debugbar'] = $this->showDebugBar($this->twigLoader);
-        echo $this->twig->render($view, $data);
+        try {
+            echo $this->twig->render($view, $data);
+        }
+        catch (Twig_Error_Loader $e) {
+            echo $e->getMessage();
+        }
+        catch (\Twig_Error_Runtime $e) {
+            echo $e->getMessage();
+        }
+        catch (\Twig_Error_Syntax $e) {
+            echo $e->getMessage();
+        }
     }
 
     /**
@@ -158,7 +171,7 @@ class Render
             $debugBar = new StandardDebugBar();
             $debugBarRenderer = $debugBar->getJavascriptRenderer();
             try {
-                $debugBar->addCollector(new DataCollector\ConfigCollector(\config::getDefaultConfiguration()['core']));
+                $debugBar->addCollector(new DataCollector\ConfigCollector(ConfigManager::getDefaultConfiguration()['core']));
                 $debugBarData = $debugBarRenderer;
             }
             catch (\DebugBar\DebugBarException $e) {

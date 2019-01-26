@@ -299,6 +299,12 @@ class plugin
      */
     public function dependancy_info($refresh = false)
     {
+        trigger_error('The method dependancy_info becoming getDependencyInfo', E_USER_DEPRECATED);
+        return $this->getDependencyInfo($refresh);
+    }
+
+    public function getDependencyInfo($refresh = false)
+    {
         $pluginId = $this->getId();
         if ($this->getHasDependency() != 1 || !method_exists($pluginId, 'dependancy_info')) {
             return array('state' => 'nok', 'log' => 'nok');

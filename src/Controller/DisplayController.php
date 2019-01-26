@@ -36,7 +36,7 @@ class DisplayController extends BaseController
         Status::isConnectedAdminOrFail();
     }
 
-     /**
+    /**
      * Render display page
      *
      * @param Render $render Render engine
@@ -44,7 +44,6 @@ class DisplayController extends BaseController
      *
      * @return string Content of display page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax

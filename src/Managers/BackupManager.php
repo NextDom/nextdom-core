@@ -35,21 +35,22 @@
 namespace NextDom\Managers;
 
 use NextDom\Exceptions\CoreException;
-
-require_once NEXTDOM_ROOT.'/core/class/cache.class.php';
+use NextDom\Helpers\FileSystemHelper;
+use NextDom\Helpers\LogHelper;
 
 class BackupManager {
     /**
      * Start system backup
      *
      * @param bool $taskInBackground Lancer la sauvegarde en tâche de fond.
+     * @throws \Exception
      */
     public static function backup(bool $taskInBackground = false)
     {
         if ($taskInBackground) {
-            \log::clear('backup');
+            LogHelper::clear('backup');
             $cmd = NEXTDOM_ROOT . '/install/backup.php';
-            $cmd .= ' >> ' . \log::getPathToLog('backup') . ' 2>&1 &';
+            $cmd .= ' >> ' . LogHelper::getPathToLog('backup') . ' 2>&1 &';
             \system::php($cmd, true);
         } else {
             require_once NEXTDOM_ROOT . '/install/backup.php';
@@ -60,15 +61,16 @@ class BackupManager {
      * Obtenir la liste des sauvegardes
      *
      * @return array Liste des sauvegardes
+     * @throws \Exception
      */
     public static function listBackup(): array
     {
-        if (substr(\config::byKey('backup::path'), 0, 1) != '/') {
-            $backup_dir = NEXTDOM_ROOT . '/' . \config::byKey('backup::path');
+        if (substr(ConfigManager::byKey('backup::path'), 0, 1) != '/') {
+            $backup_dir = NEXTDOM_ROOT . '/' . ConfigManager::byKey('backup::path');
         } else {
-            $backup_dir = \config::byKey('backup::path');
+            $backup_dir = ConfigManager::byKey('backup::path');
         }
-        $backups = \ls($backup_dir, '*.tar.gz', false, array('files', 'quiet', 'datetime_asc'));
+        $backups = FileSystemHelper::ls($backup_dir, '*.tar.gz', false, array('files', 'quiet', 'datetime_asc'));
         $result = array();
         foreach ($backups as $backup) {
             $result[$backup_dir . '/' . $backup] = $backup;
@@ -98,40 +100,19 @@ class BackupManager {
      * @param string $backupFilePath Backup file path
      *
      * @param bool $taskInBackground Start backup task in background
+     * @throws \Exception
      */
     public static function restore(string $backupFilePath = '', bool $taskInBackground = false)
     {
         if ($taskInBackground) {
-            \log::clear('restore');
+            LogHelper::clear('restore');
             $cmd = NEXTDOM_ROOT . '/install/restore.php "backup=' . $backupFilePath . '"';
-            $cmd .= ' >> ' . \log::getPathToLog('restore') . ' 2>&1 &';
+            $cmd .= ' >> ' . LogHelper::getPathToLog('restore') . ' 2>&1 &';
             \system::php($cmd, true);
         } else {
             global $BACKUP_FILE;
             $BACKUP_FILE = $backupFilePath;
             require_once NEXTDOM_ROOT . '/install/restore.php';
-        }
-    }
-
-    /**
-     * Migrate a backup from file from Jeedom
-     *
-     * @param string $backupFilePath Backup file path
-     *
-     * @param bool $taskInBackground Start migration task in background
-     */
-    public static function migrate(string $backupFilePath = '', bool $taskInBackground = false)
-    {
-        if ($taskInBackground) {
-            \log::clear('migration');
-            $cmd = NEXTDOM_ROOT . '/install/migrate_jeedom_to_nextdom.php "backup=' . $backupFilePath . '"';
-            $cmd .= ' >> ' . \log::getPathToLog('migration') . ' 2>&1 &';
-            \system::php($cmd, true);
-            \system::php(NEXTDOM_ROOT.'/todo.php');
-        } else {
-            global $BACKUP_FILE;
-            $BACKUP_FILE = $backupFilePath;
-            require_once NEXTDOM_ROOT . '/install/migrate_jeedom_to_nextdom.php';
         }
     }
 }

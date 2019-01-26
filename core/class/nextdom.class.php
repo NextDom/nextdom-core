@@ -128,11 +128,6 @@ class nextdom
         BackupManager::restore($backupFilePath, $taskInBackground);
     }
 
-    public static function migrate(string $backupFilePath = '', bool $taskInBackground = false)
-    {
-        BackupManager::migrate($backupFilePath, $taskInBackground);
-    }
-
     public static function update($options = array())
     {
         NextDomHelper::update($options);
@@ -145,7 +140,7 @@ class nextdom
 
     public static function version()
     {
-        return NextDomHelper::getVersion();
+        return NextDomHelper::getJeedomVersion();
     }
 
     public static function stop()

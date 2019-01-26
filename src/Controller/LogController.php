@@ -25,7 +25,6 @@ namespace NextDom\Controller;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
-use NextDom\Managers\PluginManager;
 
 class LogController extends BaseController
 {
@@ -44,7 +43,6 @@ class LogController extends BaseController
      *
      * @return string Content of log page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -64,7 +62,6 @@ class LogController extends BaseController
         natcasesort($logFilesList);
         $pageContent['logFilesList'] = [];
         foreach ($logFilesList as $logFile) {
-            $hasError = 0;
             $logFileData = [];
             $logFileData['name'] = $logFile;
             $logFileData['icon'] = 'check';

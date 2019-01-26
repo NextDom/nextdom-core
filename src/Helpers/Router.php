@@ -34,8 +34,7 @@
 
 namespace NextDom\Helpers;
 
-use NextDom\Helpers\Status;
-use NextDom\Helpers\Utils;
+use NextDom\Managers\ConfigManager;
 
 /**
  * Turnout of the display
@@ -63,6 +62,7 @@ class Router
      * Viewing the requested content
      *
      * @return bool True if an answer has been provided.
+     * @throws \Exception
      */
     public function show(): bool
     {
@@ -93,7 +93,7 @@ class Router
         } else {
             require_once(NEXTDOM_ROOT . '/core/php/authentification.php');
             Status::initConnectState();
-            $configs = \config::byKeys(array(
+            $configs = ConfigManager::byKeys(array(
                 'enableCustomCss',
                 'language',
                 'nextdom::firstUse',
@@ -101,8 +101,7 @@ class Router
                 'notify::status',
                 'notify::position',
                 'notify::timeout',
-                'widget::step::width',
-                'widget::step::height',
+                'widget::size',
                 'widget::margin',
                 'widget::padding',
                 'widget::radius',
@@ -132,7 +131,7 @@ class Router
      */
     private function showConfiguration()
     {
-        \include_file('core', 'authentification', 'php');
+        AuthentificationHelper::init();
         \include_file('plugin_info', 'configuration', 'configuration', Utils::init('plugin'), true);
     }
 

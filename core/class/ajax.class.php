@@ -19,53 +19,26 @@
 /* * ***************************Includes********************************* */
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
+use NextDom\Managers\AjaxManager;
+
 class ajax {
-    /*     * *************************Attributs****************************** */
-
-    /*     * *********************Methode static ************************* */
-
     public static function init($_checkToken = true) {
-        if (!headers_sent()) {
-            header('Content-Type: application/json');
-        }
-        if ($_checkToken && init('nextdom_token') != self::getToken()) {
-            self::error(__('Token d\'accès invalide', __FILE__));
-        }
+        AjaxManager::init($_checkToken);
     }
 
     public static function getToken() {
-        if (session_status() == PHP_SESSION_NONE) {
-            @session_start();
-            @session_write_close();
-        }
-        if (!isset($_SESSION['nextdom_token'])) {
-            @session_start();
-            $_SESSION['nextdom_token'] = config::genKey();
-            @session_write_close();
-        }
-        return $_SESSION['nextdom_token'];
+        return AjaxManager::getToken();
     }
 
     public static function success($_data = '') {
-        echo self::getResponse($_data);
-        die();
+        AjaxManager::success($_data);
     }
 
     public static function error($_data = '', $_errorCode = 0) {
-        echo self::getResponse($_data, $_errorCode);
-        die();
+        AjaxManager::error($_data, $_errorCode);
     }
 
     public static function getResponse($_data = '', $_errorCode = null) {
-        $isError = !(null === $_errorCode);
-        $return = array(
-            'state' => $isError ? 'error' : 'ok',
-            'result' => $_data,
-        );
-        if ($isError) {
-            $return['code'] = $_errorCode;
-        }
-        return json_encode($return, JSON_UNESCAPED_UNICODE);
+        return AjaxManager::getResponse($_data, $_errorCode);
     }
-    /*     * **********************Getteur Setteur*************************** */
 }

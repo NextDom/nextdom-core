@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 
 require_once NEXTDOM_ROOT.'/core/class/cache.class.php';
@@ -45,6 +46,7 @@ class CacheManager {
      * Get the folder where the cache is stored
      *
      * @return string Cache folder
+     * @throws \Exception
      */
     public static function getFolder(): string 
     {
@@ -84,6 +86,7 @@ class CacheManager {
      * Delete stored object in cache
      *
      * @param $key
+     * @throws \Exception
      */
     public static function delete($key) 
     {
@@ -99,15 +102,16 @@ class CacheManager {
      * @param bool $details True for more informations
      *
      * @return array|null
+     * @throws \Exception
      */
     public static function stats($details = false) 
     {
         $result = self::getCache()->getStats();
         $result['count'] = \__('Inconnu');
-        if (\config::byKey('cache::engine') == 'FilesystemCache') {
+        if (ConfigManager::byKey('cache::engine') == 'FilesystemCache') {
             $result['count'] = 0;
-            foreach (ls(self::getFolder()) as $folder) {
-                foreach (ls(self::getFolder() . '/' . $folder) as $file) {
+            foreach (FileSystemHelper::ls(self::getFolder()) as $folder) {
+                foreach (FileSystemHelper::ls(self::getFolder() . '/' . $folder) as $file) {
                     if (strpos($file, 'swap') !== false) {
                         continue;
                     }
@@ -118,8 +122,8 @@ class CacheManager {
         if ($details) {
             $re = '/s:\d*:(.*?);s:\d*:"(.*?)";s/';
             $result = array();
-            foreach (ls(self::getFolder()) as $folder) {
-                foreach (ls(self::getFolder() . '/' . $folder) as $file) {
+            foreach (FileSystemHelper::ls(self::getFolder()) as $folder) {
+                foreach (FileSystemHelper::ls(self::getFolder() . '/' . $folder) as $file) {
                     $path = self::getFolder() . '/' . $folder . '/' . $file;
                     $str = (string) str_replace("\n", '', file_get_contents($path));
                     preg_match_all($re, $str, $matches);
@@ -138,20 +142,21 @@ class CacheManager {
      * Get cache system
      *
      * @return \Doctrine\Common\Cache\FilesystemCache|\Doctrine\Common\Cache\MemcachedCache|\Doctrine\Common\Cache\RedisCache|null Cache system
+     * @throws \Exception
      */
     public static function getCache() 
     {
         if (self::$cacheSystem !== null) {
             return self::$cacheSystem;
         }
-        $engine = \config::byKey('cache::engine');
+        $engine = ConfigManager::byKey('cache::engine');
         if ($engine == 'MemcachedCache' && !class_exists('memcached')) {
             $engine = 'FilesystemCache';
-            \config::save('cache::engine', 'FilesystemCache');
+            ConfigManager::save('cache::engine', 'FilesystemCache');
         }
         if ($engine == 'RedisCache' && !class_exists('redis')) {
             $engine = 'FilesystemCache';
-            \config::save('cache::engine', 'FilesystemCache');
+            ConfigManager::save('cache::engine', 'FilesystemCache');
         }
         switch ($engine) {
             case 'FilesystemCache':
@@ -162,13 +167,13 @@ class CacheManager {
                 break;
             case 'MemcachedCache':
                 $memcached = new \Memcached();
-                $memcached->addServer(\config::byKey('cache::memcacheaddr'), \config::byKey('cache::memcacheport'));
+                $memcached->addServer(ConfigManager::byKey('cache::memcacheaddr'), ConfigManager::byKey('cache::memcacheport'));
                 self::$cacheSystem = new \Doctrine\Common\Cache\MemcachedCache();
                 self::$cacheSystem->setMemcached($memcached);
                 break;
             case 'RedisCache':
                 $redis = new \Redis();
-                $redis->connect(\config::byKey('cache::redisaddr'), \config::byKey('cache::redisport'));
+                $redis->connect(ConfigManager::byKey('cache::redisaddr'), ConfigManager::byKey('cache::redisport'));
                 self::$cacheSystem = new \Doctrine\Common\Cache\RedisCache();
                 self::$cacheSystem->setRedis($redis);
                 break;
@@ -184,6 +189,7 @@ class CacheManager {
      *
      * @param string $key Key
      * @return mixed Stored object or null if not exists
+     * @throws \Exception
      */
     public static function byKey($key) 
     {
@@ -202,6 +208,7 @@ class CacheManager {
      * @param string $key Key
      *
      * @return bool True if object exists
+     * @throws \Exception
      */
     public static function exists($key) 
     {
@@ -216,6 +223,7 @@ class CacheManager {
      * @return bool True if object exists
      *
      * @deprecated Use exists
+     * @throws \Exception
      */
     public static function exist($key) 
     {
@@ -246,7 +254,7 @@ class CacheManager {
      */
     public static function persist() 
     {
-        switch (\config::byKey('cache::engine')) {
+        switch (ConfigManager::byKey('cache::engine')) {
             case 'FilesystemCache':
                 $cacheDir = self::getFolder();
                 break;
@@ -257,7 +265,7 @@ class CacheManager {
                 return;
         }
         try {
-            $cacheFile = NEXTDOM_ROOT.'/var/cache.tar.gz.tar.gz';
+            $cacheFile = NEXTDOM_ROOT.'/var/cache.tar.gz';
             $persisCmd = 'rm -rf ' . $cacheFile . ';cd ' . $cacheDir . ';tar cfz ' . $cacheFile . ' * 2>&1 > /dev/null;chmod 775 ' . $cacheFile . ';chown ' . \system::get('www-uid') . ':' . \system::get('www-gid') . ' ' . $cacheFile . ';chmod 777 -R ' . $cacheDir . ' 2>&1 > /dev/null';
             \com_shell::execute($persisCmd);
         } catch (\Exception $e) {
@@ -270,13 +278,14 @@ class CacheManager {
      * Test if cache already exists
      *
      * @return bool True if file cache.tar.gz
+     * @throws \Exception
      */
     public static function isPersistOk(): bool 
     {
-        if (\config::byKey('cache::engine') != 'FilesystemCache' && \config::byKey('cache::engine') != 'PhpFileCache') {
+        if (ConfigManager::byKey('cache::engine') != 'FilesystemCache' && ConfigManager::byKey('cache::engine') != 'PhpFileCache') {
             return true;
         }
-        $filename = NEXTDOM_ROOT.'/var/cache.tar.gz.tar.gz';
+        $filename = NEXTDOM_ROOT.'/var/cache.tar.gz';
         if (!file_exists($filename)) {
             return false;
         }
@@ -291,7 +300,7 @@ class CacheManager {
      */
     public static function restore() 
     {
-        switch (\config::byKey('cache::engine')) {
+        switch (ConfigManager::byKey('cache::engine')) {
             case 'FilesystemCache':
                 $cache_dir = self::getFolder();
                 break;
@@ -301,7 +310,7 @@ class CacheManager {
             default:
                 return;
         }
-        if (!file_exists(__DIR__ . '/../../var/cache.tar.gz.tar.gz')) {
+        if (!file_exists(NEXTDOM_ROOT . '/var/cache.tar.gz')) {
             $cmd = 'mkdir ' . $cache_dir . ';';
             $cmd .= 'chmod -R 777 ' . $cache_dir . ';';
             \com_shell::execute($cmd);
@@ -310,7 +319,7 @@ class CacheManager {
         $cmd = 'rm -rf ' . $cache_dir . ';';
         $cmd .= 'mkdir ' . $cache_dir . ';';
         $cmd .= 'cd ' . $cache_dir . ';';
-        $cmd .= 'tar xfz ' . __DIR__ . '/../../var/cache.tar.gz.tar.gz;';
+        $cmd .= 'tar xfz ' . NEXTDOM_ROOT . '/var/cache.tar.gz;';
         $cmd .= 'chmod -R 777 ' . $cache_dir . ' 2>&1 > /dev/null;';
         \com_shell::execute($cmd);
     }
@@ -322,13 +331,13 @@ class CacheManager {
      */
     public static function clean() 
     {
-        if (\config::byKey('cache::engine') != 'FilesystemCache') {
+        if (ConfigManager::byKey('cache::engine') != 'FilesystemCache') {
             return;
         }
         $re = '/s:\d*:(.*?);s:\d*:"(.*?)";s/';
         $result = array();
-        foreach (ls(self::getFolder()) as $folder) {
-            foreach (ls(self::getFolder() . '/' . $folder) as $file) {
+        foreach (FileSystemHelper::ls(self::getFolder()) as $folder) {
+            foreach (FileSystemHelper::ls(self::getFolder() . '/' . $folder) as $file) {
                 $path = self::getFolder() . '/' . $folder . '/' . $file;
                 if (strpos($file, 'swap') !== false) {
                     unlink($path);

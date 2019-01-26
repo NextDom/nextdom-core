@@ -33,14 +33,17 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Managers\CmdManager;
-use NextDom\Managers\EqLogicManager;
+use NextDom\Helpers\DateHelper;
+use NextDom\Helpers\NetworkHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Model\Entity\Scenario;
+use NextDom\Model\Entity\ScenarioExpression;
 
 class ScenarioExpressionManager
 {
     const DB_CLASS_NAME = 'scenarioExpression';
-    const CLASS_NAME    = 'scenarioExpression';
+    const CLASS_NAME = ScenarioExpression::class;
     const WAIT_LIMIT    = 7200;
 
     /**
@@ -150,6 +153,7 @@ class ScenarioExpressionManager
      * @param $options
      *
      * @return array
+     * @throws \Exception
      */
     public static function getExpressionOptions($expression, $options)
     {
@@ -163,7 +167,7 @@ class ScenarioExpressionManager
             return $return;
         }
         $return['template'] = getTemplate('core', 'scenario', $expression . '.default');
-        $_options = is_json($options, $options);
+        $_options = Utils::isJson($options, $options);
         if (is_array($options) && count($options) > 0) {
             foreach ($options as $key => $value) {
                 $replace['#' . $key . '#'] = str_replace('"', '&quot;', $value);
@@ -172,14 +176,14 @@ class ScenarioExpressionManager
         if (!isset($replace['#id#'])) {
             $replace['#id#'] = mt_rand();
         }
-        $return['html'] = template_replace(CmdManager::cmdToHumanReadable($replace), $return['template']);
+        $return['html'] = Utils::templateReplace(CmdManager::cmdToHumanReadable($replace), $return['template']);
         preg_match_all("/#[a-zA-Z_]*#/", $return['template'], $matches);
         foreach ($matches[0] as $value) {
             if (!isset($replace[$value])) {
                 $replace[$value] = '';
             }
         }
-        $return['html'] = \translate::exec(template_replace($replace, $return['html']), 'core/template/scenario/' . $expression . '.default');
+        $return['html'] = \translate::exec(Utils::templateReplace($replace, $return['html']), 'core/template/scenario/' . $expression . '.default');
         return $return;
     }
 
@@ -210,7 +214,7 @@ class ScenarioExpressionManager
             $result .= \__('Variable : ') . $name . ' <i class="fa fa-arrow-right"></i> ' . $value;
         } elseif (is_object(CmdManager::byId(str_replace('#', '', $baseAction['cmd'])))) {
             $cmd = CmdManager::byId(str_replace('#', '', $baseAction['cmd']));
-            $eqLogic = $cmd->getEqLogic();
+            $eqLogic = $cmd->getEqLogicId();
             $result .= $eqLogic->getHumanName(true) . ' ' . $cmd->getName();
         }
         return trim($result);
@@ -235,13 +239,15 @@ class ScenarioExpressionManager
      * @param $_sValue
      *
      * @return array|mixed
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function randText($_sValue)
     {
         $_sValue = self::setTags($_sValue);
         $_aValue = explode(";", $_sValue);
         try {
-            $result = evaluate($_aValue);
+            $result = Utils::evaluate($_aValue);
             if (is_string($result)) {
                 $result = $_aValue;
             }
@@ -290,6 +296,7 @@ class ScenarioExpressionManager
      * @param mixed $eqLogicId Identifiant du l'objet
      *
      * @return int 0 If the object is not activated, 1 if the object is activated, -2 if the object does not exist
+     * @throws \Exception
      */
     public static function eqEnable($eqLogicId)
     {
@@ -309,6 +316,7 @@ class ScenarioExpressionManager
      * @param string $period Période sur laquelle la moyenne doit être calculée
      *
      * @return float|int|string
+     * @throws \Exception
      */
     public static function average($cmdId, $period = '1 hour')
     {
@@ -324,7 +332,7 @@ class ScenarioExpressionManager
                         $values[] = $value;
                     } else {
                         try {
-                            $values[] = evaluate($value);
+                            $values[] = Utils::evaluate($value);
                         } catch (\Throwable $ex) {
 
                         }
@@ -361,6 +369,8 @@ class ScenarioExpressionManager
      * @param $endDate
      *
      * @return float|string
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function averageBetween($cmdId, $startDate, $endDate)
     {
@@ -383,6 +393,7 @@ class ScenarioExpressionManager
      * @param $cmdId
      * @param string $period
      * @return float|mixed|string
+     * @throws \Exception
      */
     public static function max($cmdId, $period = '1 hour')
     {
@@ -398,7 +409,7 @@ class ScenarioExpressionManager
                         $values[] = $value;
                     } else {
                         try {
-                            $values[] = evaluate($value);
+                            $values[] = Utils::evaluate($value);
                         } catch (\Throwable $ex) {
 
                         }
@@ -434,6 +445,8 @@ class ScenarioExpressionManager
      * @param $startDate
      * @param $endDate
      * @return float|string
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function maxBetween($cmdId, $startDate, $endDate)
     {
@@ -484,6 +497,7 @@ class ScenarioExpressionManager
      * @param $cmdId
      * @param string $period
      * @return float|mixed|string
+     * @throws \Exception
      */
     public static function min($cmdId, $period = '1 hour')
     {
@@ -499,7 +513,7 @@ class ScenarioExpressionManager
                         $values[] = $value;
                     } else {
                         try {
-                            $values[] = evaluate($value);
+                            $values[] = Utils::evaluate($value);
                         } catch (\Throwable $ex) {
                             
                         }
@@ -535,6 +549,8 @@ class ScenarioExpressionManager
      * @param $startDate
      * @param $endDate
      * @return float|string
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function minBetween($cmdId, $startDate, $endDate)
     {
@@ -555,6 +571,8 @@ class ScenarioExpressionManager
      * Obtenir une valeur médiane TODO: De quoi ?
      *
      * @return int|mixed
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function median()
     {
@@ -569,7 +587,7 @@ class ScenarioExpressionManager
                     $values[] = $value;
                 } else {
                     try {
-                        $values[] = evaluate($value);
+                        $values[] = Utils::evaluate($value);
                     } catch (\Throwable $ex) {
 
                     }
@@ -593,6 +611,7 @@ class ScenarioExpressionManager
      * @param string $period
      * @param string $threshold
      * @return int|string
+     * @throws \Exception
      */
     public static function tendance($cmdId, $period = '1 hour', $threshold = '')
     {
@@ -617,8 +636,8 @@ class ScenarioExpressionManager
             $maxThreshold = $threshold;
             $minThreshold = -$threshold;
         } else {
-            $maxThreshold = \config::byKey('historyCalculTendanceThresholddMax');
-            $minThreshold = \config::byKey('historyCalculTendanceThresholddMin');
+            $maxThreshold = ConfigManager::byKey('historyCalculTendanceThresholddMax');
+            $minThreshold = ConfigManager::byKey('historyCalculTendanceThresholddMin');
         }
         if ($tendance > $maxThreshold) {
             return 1;
@@ -639,7 +658,7 @@ class ScenarioExpressionManager
      */
     public static function lastStateDuration($cmdId, $value = null)
     {
-        return \history::lastStateDuration(str_replace('#', '', $cmdId), $value);
+        return HistoryManager::lastStateDuration(str_replace('#', '', $cmdId), $value);
     }
 
     /**
@@ -672,7 +691,7 @@ class ScenarioExpressionManager
                 $value = null;
             }
         }
-        return \history::stateChanges($cmd_id, $value, date('Y-m-d H:i:s', strtotime('-' . $period)), date('Y-m-d H:i:s'));
+        return HistoryManager::stateChanges($cmd_id, $value, date('Y-m-d H:i:s', strtotime('-' . $period)), date('Y-m-d H:i:s'));
     }
 
     /**
@@ -681,9 +700,10 @@ class ScenarioExpressionManager
      * @param $cmdId
      * @param $value
      * @param $startDate
-     * @param null $_endDate
+     * @param null $endDate
      * @return array|string
-     * @throws \Exception
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function stateChangesBetween($cmdId, $value, $startDate, $endDate = null)
     {
@@ -705,7 +725,7 @@ class ScenarioExpressionManager
         $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
         $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
 
-        return \history::stateChanges($cmd_id, $value, $startDate, $endDate);
+        return HistoryManager::stateChanges($cmd_id, $value, $startDate, $endDate);
     }
 
     /**
@@ -715,6 +735,7 @@ class ScenarioExpressionManager
      * @param $value
      * @param string $period
      * @return float|string
+     * @throws \Exception
      */
     public static function duration($cmdId, $value, $period = '1 hour')
     {
@@ -781,6 +802,7 @@ class ScenarioExpressionManager
      * @param $startDate
      * @param $endDate
      * @return float|string
+     * @throws \Exception
      */
     public static function durationBetween($cmdId, $value, $startDate, $endDate)
     {
@@ -835,6 +857,8 @@ class ScenarioExpressionManager
      * @param $startDate
      * @param $endDate
      * @return float|string
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function lastBetween($cmdId, $startDate, $endDate)
     {
@@ -855,6 +879,7 @@ class ScenarioExpressionManager
      * @param $calc
      * @param string $period
      * @return string
+     * @throws \Exception
      */
     public static function statistics($cmdId, $calc, $period = '1 hour')
     {
@@ -887,6 +912,8 @@ class ScenarioExpressionManager
      * @param $startDate
      * @param $endDate
      * @return string
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function statisticsBetween($cmdId, $calc, $startDate, $endDate)
     {
@@ -907,12 +934,13 @@ class ScenarioExpressionManager
      * @param $name
      * @param string $defaultValue Valeur par défaut
      * @return string
+     * @throws \Exception
      */
     public static function variable($name, $defaultValue = '')
     {
         // TODO: Yolo sur les trims
         $name = trim(trim(trim($name), '"'));
-        $dataStore = \dataStore::byTypeLinkIdKey('scenario', -1, trim($name));
+        $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', -1, trim($name));
         if (is_object($dataStore)) {
             $value = $dataStore->getValue($defaultValue);
             return $value;
@@ -930,7 +958,7 @@ class ScenarioExpressionManager
      */
     public static function stateDuration($cmdId, $value = null)
     {
-        return \history::stateDuration(str_replace('#', '', $cmdId), $value);
+        return HistoryManager::stateDuration(str_replace('#', '', $cmdId), $value);
     }
 
     /**
@@ -943,7 +971,7 @@ class ScenarioExpressionManager
      */
     public static function lastChangeStateDuration($cmdId, $value)
     {
-        return \history::lastChangeStateDuration(str_replace('#', '', $cmdId), $value);
+        return HistoryManager::lastChangeStateDuration(str_replace('#', '', $cmdId), $value);
     }
 
     /**
@@ -953,10 +981,12 @@ class ScenarioExpressionManager
      * @param mixed $value
      *
      * @return int 1 si $value est pair, sinon 0
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function odd($value): int
     {
-        $value = intval(evaluate(self::setTags($value)));
+        $value = intval(Utils::evaluate(self::setTags($value)));
         if ($value % 2) {
             return 1;
         }
@@ -968,7 +998,7 @@ class ScenarioExpressionManager
     /**
      * Obtenir l'interval de temps depuis lequel le scénario s'est exécuté
      *
-     * @param $scenarioId Identifiant du scénario
+     * @param string $scenarioId Identifiant du scénario
      * @return false|int
      * @throws \Exception
      */
@@ -984,9 +1014,10 @@ class ScenarioExpressionManager
     /**
      * TODO: Collecter une date
      *
-     * @param $cmd
+     * @param $cmdId
      * @param string $format
      * @return false|int|string
+     * @throws \Exception
      */
     public static function collectDate($cmdId, $format = 'Y-m-d H:i:s')
     {
@@ -1007,6 +1038,7 @@ class ScenarioExpressionManager
      * @param $cmdId
      * @param string $format
      * @return false|string
+     * @throws \Exception
      */
     public static function valueDate($cmdId, $format = 'Y-m-d H:i:s')
     {
@@ -1076,7 +1108,8 @@ class ScenarioExpressionManager
      * TODO ????
      *
      * @param null $scenario
-     * @return bool
+     * @return mixed
+     * @throws \Exception
      */
     public static function triggerValue(&$scenario = null)
     {
@@ -1096,12 +1129,14 @@ class ScenarioExpressionManager
      * @param int $decimal Nombre de décimales
      *
      * @return float Valeur arrondie.
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function round($value, $decimal = 0)
     {
         $value = self::setTags($value);
         try {
-            $result = evaluate($value);
+            $result = Utils::evaluate($value);
             if (is_string($result)) {
                 $result = $value;
             }
@@ -1161,6 +1196,8 @@ class ScenarioExpressionManager
      * @param $endInterval
      *
      * @return int TODO: 0, 1
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function time_between($time, $startInverval, $endInterval)
     {
@@ -1190,13 +1227,13 @@ class ScenarioExpressionManager
         $date2 = new \DateTime($date2Str);
         $interval = $date1->diff($date2);
         if ($intervalFormat == 's') {
-            return $interval->format('%s') + 60 * $interval->format('%i') + 3600 * $interval->format('%h') + 86400 * $interval->format('%a');
+            return intval($interval->format('%s')) + 60 * intval($interval->format('%i')) + 3600 * intval($interval->format('%h')) + 86400 * intval($interval->format('%a'));
         }
         if ($intervalFormat == 'm') {
-            return $interval->format('%i') + 60 * $interval->format('%h') + 1440 * $interval->format('%a');
+            return intval($interval->format('%i')) + 60 * intval($interval->format('%h')) + 1440 * intval($interval->format('%a'));
         }
         if ($intervalFormat == 'h') {
-            return $interval->format('%h') + 24 * $interval->format('%a');
+            return intval($interval->format('%h')) + 24 * intval($interval->format('%a'));
         }
         return $interval->format('%a');
     }
@@ -1206,12 +1243,14 @@ class ScenarioExpressionManager
      *
      * @param $value
      * @return int|mixed|string
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function time($value)
     {
         $value = self::setTags($value);
         try {
-            $result = evaluate($value);
+            $result = Utils::evaluate($value);
             if (is_string($result)) {
                 $result = $value;
             }
@@ -1237,6 +1276,8 @@ class ScenarioExpressionManager
      *
      * @param $time
      * @return string
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function formatTime($time)
     {
@@ -1258,6 +1299,7 @@ class ScenarioExpressionManager
      * @param $type
      * @param $cmdId
      * @return string
+     * @throws \Exception
      */
     public static function name($type, $cmdId)
     {
@@ -1272,9 +1314,9 @@ class ScenarioExpressionManager
             case 'cmd':
                 return $cmd->getName();
             case 'eqLogic':
-                return $cmd->getEqLogic()->getName();
+                return $cmd->getEqLogicId()->getName();
             case 'object':
-                $object = $cmd->getEqLogic()->getObject();
+                $object = $cmd->getEqLogicId()->getObject();
                 if (!is_object($object)) {
                     return \__('Aucun');
                 }
@@ -1288,6 +1330,7 @@ class ScenarioExpressionManager
      *
      * @param $expression
      * @return array
+     * @throws \Exception
      */
     public static function getRequestTags($expression)
     {
@@ -1333,22 +1376,22 @@ class ScenarioExpressionManager
                     $return['#semaine#'] = date('W');
                     break;
                 case '#sjour#':
-                    $return['#sjour#'] = '"' . date_fr(date('l')) . '"';
+                    $return['#sjour#'] = '"' . DateHelper::dateToFr(date('l')) . '"';
                     break;
                 case '#smois#':
-                    $return['#smois#'] = '"' . date_fr(date('F')) . '"';
+                    $return['#smois#'] = '"' . DateHelper::dateToFr(date('F')) . '"';
                     break;
                 case '#njour#':
                     $return['#njour#'] = (int)date('w');
                     break;
                 case '#nextdom_name#':
-                    $return['#nextdom_name#'] = '"' . \config::byKey('name') . '"';
+                    $return['#nextdom_name#'] = '"' . ConfigManager::byKey('name') . '"';
                     break;
                 case '#hostname#':
                     $return['#hostname#'] = '"' . gethostname() . '"';
                     break;
                 case '#IP#':
-                    $return['#IP#'] = '"' . \network::getNetworkAccess('internal', 'ip', '', false) . '"';
+                    $return['#IP#'] = '"' . NetworkHelper::getNetworkAccess('internal', 'ip', '', false) . '"';
                     break;
                 case '#trigger#':
                     $return['#trigger#'] = '';
@@ -1361,12 +1404,13 @@ class ScenarioExpressionManager
         return $return;
     }
 
+    /** @noinspection PhpOptionalBeforeRequiredParametersInspection */
     /**
      * TODO: Un tag
      *
-     * @param null $_scenario
-     * @param $_name
-     * @param string $_default
+     * @param null $scenario
+     * @param $name
+     * @param string $default
      * @return string
      */
     public static function tag(&$scenario = null, $name, $default = '')
@@ -1384,11 +1428,13 @@ class ScenarioExpressionManager
     /**
      * TODO Faut bien les définir les tags
      *
-     * @param $expression
-     * @param null $scenario
-     * @param bool $quote
-     * @param int $nbCall
+     * @param $_expression
+     * @param Scenario $_scenario
+     * @param bool $_quote
+     * @param int $_nbCall
      * @return mixed
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function setTags($_expression, &$_scenario = null, $_quote = false, $_nbCall = 0) {
 		if (file_exists(NEXTDOM_ROOT . '/data/php/user.function.class.php')) {
@@ -1472,7 +1518,7 @@ class ScenarioExpressionManager
 				} else {
 					if (function_exists($function)) {
 						foreach ($arguments as &$argument) {
-							$argument = trim(evaluate(self::setTags($argument, $_scenario, $_quote)));
+							$argument = trim(Utils::evaluate(self::setTags($argument, $_scenario, $_quote)));
 						}
 						$replace2[$replace_string] = call_user_func_array($function, $arguments);
 					}
@@ -1493,6 +1539,7 @@ class ScenarioExpressionManager
      * @param $cmd
      * @param null $options
      * @return mixed
+     * @throws \Exception
      */
     public static function createAndExec($type, $cmd, $options = null)
     {

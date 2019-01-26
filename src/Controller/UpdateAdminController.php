@@ -24,10 +24,11 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\PluginManager;
-
+use NextDom\Managers\UserManager;
 
 class UpdateAdminController extends BaseController
 {
@@ -45,7 +46,6 @@ class UpdateAdminController extends BaseController
      *
      * @return string Content of update_admin page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -61,10 +61,9 @@ class UpdateAdminController extends BaseController
         foreach ($pageContent['adminReposList'] as $key => $value) {
             $keys[] = $key . '::enable';
         }
-        $pageContent['networkkey'] = $key;
-        $pageContent['adminConfigs'] = \config::byKeys($keys);
+        $pageContent['adminConfigs'] = ConfigManager::byKeys($keys);
         $pageContent['JS_VARS']['ldapEnable'] = $pageContent['adminConfigs']['ldap::enable'];
-        $pageContent['adminIsBan'] = \user::isBan();
+        $pageContent['adminIsBan'] = UserManager::isBanned();
         $pageContent['adminHardwareName'] = \nextdom::getHardwareName();
         $pageContent['adminHardwareKey'] = \nextdom::getHardwareKey();
         $pageContent['adminLastKnowDate'] = CacheManager::byKey('hour')->getValue();
@@ -75,7 +74,7 @@ class UpdateAdminController extends BaseController
             $pageContent['adminPluginsList'] = [];
             $pluginsList = PluginManager::listPlugin(true);
             foreach ($pluginsList as $plugin) {
-                $pluginApi = \config::byKey('api', $plugin->getId());
+                $pluginApi = ConfigManager::byKey('api', $plugin->getId());
 
                 if ($pluginApi !== '') {
                     $pluginData = [];

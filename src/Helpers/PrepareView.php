@@ -17,12 +17,14 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Managers\AjaxManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Helpers\ModalsController;
-use NextDom\Helpers\PagesController;
-use NextDom\Helpers\Router;
+use NextDom\Managers\ConfigManager;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Routing\Loader\YamlFileLoader;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * Classe de support à l'affichage des contenus HTML
@@ -38,6 +40,11 @@ class PrepareView
         $pageData['JS_END_POOL'] = [];
         $pageData['CSS_POOL'] = [];
         $pageData['TITLE'] = '1ere connexion';
+        $pageData['JS_VARS'] = [
+            'notify_status'      => $configs['notify::status'],
+            'notify_position'    => $configs['notify::position'],
+            'notify_timeout'     => $configs['notify::timeout'],
+        ];
         $render = Render::getInstance();
         self::initHeaderData($pageData, $configs);
         //TODO: Vérifier ça
@@ -65,6 +72,9 @@ class PrepareView
 
     /**
      * @param $configs
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public static function showRescueMode($configs)
     {
@@ -79,7 +89,7 @@ class PrepareView
         if (Utils::init('p') == '') {
             redirect($homeLink);
         } else {
-            $page = init('p');
+            $page = Utils::init('p');
             $pageData['TITLE'] = ucfirst($page) . ' - ' . $configs['product_name'];
         }
         $language = $configs['language'];
@@ -111,8 +121,12 @@ class PrepareView
 
     /**
      *
-     * @global type $language
      * @param array $configs
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     * @global string $language
      */
     public static function showContent(array $configs)
     {
@@ -146,8 +160,7 @@ class PrepareView
             'notify_status'      => $configs['notify::status'],
             'notify_position'    => $configs['notify::position'],
             'notify_timeout'     => $configs['notify::timeout'],
-            'widget_width_step'  => $configs['widget::step::width'],
-            'widget_height_step' => $configs['widget::step::height'],
+            'widget_size'        => $configs['widget::size'],
             'widget_margin'      => $configs['widget::margin'],
             'widget_padding'     => $configs['widget::padding'],
             'widget_radius'      => $configs['widget::radius'],
@@ -167,7 +180,7 @@ class PrepareView
             $pageData['content'] = self::getContent($render, $pageData, $page, $currentPlugin);
         } catch (\Exception $e) {
             ob_end_clean();
-            $pageData['ALERT_MSG'] = displayException($e);
+            $pageData['ALERT_MSG'] = Utils::displayException($e);
         }
 
         $pageData['CONTENT'] = $render->get('desktop/index.html.twig', $pageData);
@@ -205,7 +218,11 @@ class PrepareView
      *
      * @param Render $render Render engine
      *
+     * @param $pageData
+     * @param $eventsJsPlugin
+     * @param $configs
      * @return mixed Current loaded plugin
+     * @throws \Exception
      */
     public static function initPluginsData(Render $render, &$pageData, &$eventsJsPlugin, $configs)
     {
@@ -242,7 +259,7 @@ class PrepareView
                         $pageData['title'] = ucfirst($currentPlugin->getName()) . ' - ' . $configs['product_name'];
                     }
                     // TODO: C'est quoi ?
-                    if ($plugin->getDisplay() != '' && \config::bykey('displayDesktopPanel', $plugin->getId(), 0) != 0) {
+                    if ($plugin->getDisplay() != '' && ConfigManager::bykey('displayDesktopPanel', $plugin->getId(), 0) != 0) {
                         $pageData['PANEL_MENU'][] = $plugin;
                     }
                     if ($plugin->getEventjs() == 1) {
@@ -256,6 +273,8 @@ class PrepareView
 
     /**
      * Add list of plugins events javascripts files
+     * @param $eventsJsPlugin
+     * @param $pageData
      */
     private static function initPluginsEvents($eventsJsPlugin, &$pageData)
     {
@@ -264,7 +283,7 @@ class PrepareView
                 try {
                     $pageData['JS_POOL'][] = '/plugins/'.$value.'/public/js/desktop/events.js';
                 } catch (\Exception $e) {
-                    \log::add($value, 'error', 'Event JS file not found');
+                    LogHelper::add($value, 'error', 'Event JS file not found');
                 }
             }
         }
@@ -280,7 +299,7 @@ class PrepareView
         $pageData['IS_ADMIN']                 = Status::isConnectAdmin();
         $pageData['CAN_SUDO']                 = NextDomHelper::isCapable('sudo');
         $pageData['MENU_NB_MESSAGES']         = \message::nbMessage();
-        $pageData['NOTIFY_STATUS']           = \config::byKey('notify::status');
+        $pageData['NOTIFY_STATUS']           = ConfigManager::byKey('notify::status');
         if ($pageData['IS_ADMIN']) {
             $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
         }
@@ -292,11 +311,12 @@ class PrepareView
             $pageData['MENU_CURRENT_PLUGIN_ISSUE'] = $currentPlugin->getIssue();
         }
         $pageData['MENU_HTML_GLOBAL_SUMMARY'] = JeeObjectManager::getGlobalHtmlSummary();
-        $pageData['PRODUCT_IMAGE']            = \config::byKey('product_image');
+        $pageData['PRODUCT_IMAGE']            = ConfigManager::byKey('product_image');
         $pageData['USER_ISCONNECTED']         = $_SESSION['user']->is_Connected();
         $pageData['USER_AVATAR']              = $_SESSION['user']->getOptions('avatar');
         $pageData['USER_LOGIN']               = $_SESSION['user']->getLogin();
-        $pageData['NEXTDOM_VERSION']          = NextDomHelper::getVersion();
+        $pageData['NEXTDOM_VERSION']          = NextDomHelper::getNextdomVersion();
+        $pageData['JEEDOM_VERSION']          = NextDomHelper::getJeedomVersion();
         $pageData['MENU_PLUGIN_HELP']         = Utils::init('m');
         $pageData['MENU_PLUGIN_PAGE']         = Utils::init('p');
     }
@@ -312,7 +332,7 @@ class PrepareView
         $pageData['PRODUCT_NAME'] = $configs['product_name'];
         $pageData['PRODUCT_ICON'] = $configs['product_icon'];
         $pageData['PRODUCT_CONNECTION_ICON'] = $configs['product_connection_image'];
-        $pageData['AJAX_TOKEN'] = \ajax::getToken();
+        $pageData['AJAX_TOKEN'] = AjaxManager::getToken();
         $pageData['LANGUAGE'] = $configs['language'];
         for ($colorIndex = 1; $colorIndex <= self::$NB_THEME_COLORS; ++$colorIndex) {
             $pageData['COLOR'.$colorIndex] = \nextdom::getConfiguration('theme:color'.$colorIndex);
@@ -415,7 +435,7 @@ class PrepareView
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
         // Icônes
         $rootDir = NEXTDOM_ROOT . '/public/icon/';
-        foreach (ls($rootDir, '*') as $dir) {
+        foreach (FileSystemHelper::ls($rootDir, '*') as $dir) {
             if (is_dir($rootDir . $dir) && file_exists($rootDir . $dir . '/style.css')) {
                 $pageData['CSS_POOL'][] = '/public/icon/' . $dir . 'style.css';
             }
@@ -431,11 +451,11 @@ class PrepareView
                 }
             }
             if ($configs['enableCustomCss'] == 1) {
-                if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.css')) {
-                    $pageData['CSS_POOL'][] = '/desktop/custom/custom.css';
+                if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.css')) {
+                    $pageData['CSS_POOL'][] = '/var/custom/desktop/custom.css';
                 }
-                if (file_exists(NEXTDOM_ROOT . '/desktop/custom/custom.js')) {
-                    $pageData['JS_POOL'][] = '/desktop/custom/custom.js';
+                if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.js')) {
+                    $pageData['JS_POOL'][] = '/var/custom/desktop/custom.js';
                 }
             }
         } else {
@@ -448,7 +468,8 @@ class PrepareView
      * @param array $pageContent
      * @param string $page
      * @param $currentPlugin
-     * @return string
+     *
+     * @return mixed
      * @throws \Exception
      */
     private static function getContent(Render $render, array &$pageContent, string $page, $currentPlugin) {
@@ -457,7 +478,10 @@ class PrepareView
             \include_file('desktop', $page, 'php', $currentPlugin->getId(), true);
             return ob_get_clean();
         } else {
-            $controllerRoute = PagesController::getRoute($page);
+            $routeFileLocator = new FileLocator(NEXTDOM_ROOT . '/src');
+            $yamlLoader = new YamlFileLoader($routeFileLocator);
+            $routes = $yamlLoader->load('routes.yml');
+            $controllerRoute = $routes->get($page);
             if ($controllerRoute === null) {
                 // Vérifie que l'utilisateur n'essaie pas de sortir
                 $purgedPage = preg_replace('/[^a-z0-9_-]/i', '', $page);
@@ -467,10 +491,10 @@ class PrepareView
                     return ob_get_clean();
                 } else {
                     Router::showError404AndDie();
+                    return null;
                 }
             } else {
-                $controller = new $controllerRoute();
-                return $controller->get($render, $pageContent);
+                return call_user_func_array($controllerRoute->getDefaults()['_controller'], [$render, &$pageContent]);
             }
         }
     }
@@ -483,11 +507,21 @@ class PrepareView
     public static function getContentByAjax()
     {
         try {
-            \include_file('core', 'authentification', 'php');
+            AuthentificationHelper::init();
             $page = Utils::init('p');
-            $controllerRoute = PagesController::getRoute($page);
+            $routeFileLocator = new FileLocator(NEXTDOM_ROOT . '/src');
+            $yamlLoader = new YamlFileLoader($routeFileLocator);
+            $routes = $yamlLoader->load('routes.yml');
+            $controllerRoute = $routes->get($page);
             if ($controllerRoute === null) {
-                Router::showError404AndDie();
+                if (in_array($page, PluginManager::listPlugin(true, false, true))) {
+                    ob_start();
+                    \include_file('desktop', $page, 'php', $page, true);
+                    echo ob_get_clean();
+                }
+                else {
+                    Router::showError404AndDie();
+                }
             } else {
                 $render = Render::getInstance();
                 $pageContent = [];
@@ -496,20 +530,20 @@ class PrepareView
                 $pageContent['CSS_POOL'] = [];
                 $pageContent['JS_VARS'] = [];
                 $controller = new $controllerRoute();
-                $pageContent['content'] = $controller->get($render, $pageContent);
+                $pageContent['content'] = call_user_func_array($controllerRoute->getDefaults()['_controller'], [$render, &$pageContent]);
                 $render->show('/layouts/ajax_content.html.twig', $pageContent);
             }
         } catch (\Exception $e) {
             ob_end_clean();
             echo '<div class="alert alert-danger div_alert">';
-            echo \translate::exec(displayException($e), 'desktop/' . Utils::init('p') . '.php');
+            echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
             echo '</div>';
         }
     }
 
     public static function showModal()
     {
-        \include_file('core', 'authentification', 'php');
+        AuthentificationHelper::init();
         $plugin = Utils::init('plugin', '');
         $modalCode = Utils::init('modal', '');
         // Affichage d'un modal appartenant à un plugin
@@ -518,7 +552,7 @@ class PrepareView
                 \include_file('desktop', $modalCode, 'modal', $plugin, true);
             } catch (\Exception $e) {
                 echo '<div class="alert alert-danger div_alert">';
-                echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
+                echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
                 echo '</div>';
             }
         }
@@ -530,12 +564,21 @@ class PrepareView
                     \include_file('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
                 } catch (\Exception $e) {
                     echo '<div class="alert alert-danger div_alert">';
-                    echo \translate::exec(\displayException($e), 'desktop/' . Utils::init('p') . '.php');
+                    echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
                     echo '</div>';
                 }
             } else {
                 $render = Render::getInstance();
-                ModalsController::$modalRoute($render);
+                try {
+                    $modal = new $modalRoute();
+                    echo $modal->get($render);
+                } catch (CoreException $ex) {
+                    echo '<div class="alert alert-danger div_alert">';
+                    echo '<p>Une erreur s\'est produite, impossible d\'afficher le contenu de la modale. Erreur : '. $ex->getMessage() .'</p>';
+                    echo '</div>';
+                }
+
+
             }
         }
     }

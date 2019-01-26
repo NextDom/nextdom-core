@@ -33,6 +33,8 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\FileSystemHelper;
+use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 
 class UpdateManager
@@ -44,6 +46,7 @@ class UpdateManager
      * Check all updates
      * @param string $filter
      * @param bool $findNewObjects
+     * @throws \Exception
      */
     public static function checkAllUpdate($filter = '', $findNewObjects = true)
     {
@@ -63,8 +66,8 @@ class UpdateManager
                     $findCore = true;
                     $update->setType('core')
                         ->setLogicalId('nextdom')
-                        ->setSource(\config::byKey('core::repo::provider'))
-                        ->setLocalVersion(NextDomHelper::getVersion());
+                        ->setSource(ConfigManager::byKey('core::repo::provider'))
+                        ->setLocalVersion(NextDomHelper::getJeedomVersion());
                     $update->save();
                     $update->checkUpdate();
                 } else {
@@ -81,51 +84,54 @@ class UpdateManager
             $update = (new \update())
                 ->setType('core')
                 ->setLogicalId('nextdom')
-                ->setSource(\config::byKey('core::repo::provider'))
+                ->setSource(ConfigManager::byKey('core::repo::provider'))
                 ->setConfiguration('user', 'NextDom')
                 ->setConfiguration('repository', 'nextdom-core')
                 ->setConfiguration('version', 'master')
-                ->setLocalVersion(NextDomHelper::getVersion());
+                ->setLocalVersion(NextDomHelper::getJeedomVersion());
             $update->save();
             $update->checkUpdate();
         }
         foreach ($updates_sources as $source => $updates) {
             $class = 'repo_' . $source;
-            if (class_exists($class) && method_exists($class, 'checkUpdate') && \config::byKey($source . '::enable') == 1) {
+            if (class_exists($class) && method_exists($class, 'checkUpdate') && ConfigManager::byKey($source . '::enable') == 1) {
                 $class::checkUpdate($updates);
             }
         }
-        \config::save('update::lastCheck', date('Y-m-d H:i:s'));
+        ConfigManager::save('update::lastCheck', date('Y-m-d H:i:s'));
     }
 
     /**
      * List of rest (Source of downloads)
      * @return array
+     * @throws \Exception
      */
     public static function listRepo(): array
     {
         $result = array();
-        foreach (\ls(NEXTDOM_ROOT . '/core/repo', '*.repo.php') as $repoFile) {
+        foreach (FileSystemHelper::ls(NEXTDOM_ROOT . '/core/repo', '*.repo.php') as $repoFile) {
             if (substr_count($repoFile, '.') != 2) {
                 continue;
             }
 
             $class = 'repo_' . str_replace('.repo.php', '', $repoFile);
+            /** @noinspection PhpUndefinedFieldInspection */
             $result[str_replace('.repo.php', '', $repoFile)] = array(
                 'name'          => $class::$_name,
                 'class'         => $class,
                 'configuration' => $class::$_configuration,
                 'scope'         => $class::$_scope,
             );
-            $result[str_replace('.repo.php', '', $repoFile)]['enable'] = \config::byKey(str_replace('.repo.php', '', $repoFile) . '::enable');
+            $result[str_replace('.repo.php', '', $repoFile)]['enable'] = ConfigManager::byKey(str_replace('.repo.php', '', $repoFile) . '::enable');
         }
         return $result;
     }
 
     /**
      * Get a repo by its identifier
-     * @param $id Repo identifier
+     * @param string $id Repo identifier
      * @return array
+     * @throws \Exception
      */
     public static function repoById($id)
     {
@@ -136,7 +142,7 @@ class UpdateManager
             'configuration' => $class::$_configuration,
             'scope'         => $class::$_scope,
         );
-        $return['enable'] = \config::byKey($id . '::enable');
+        $return['enable'] = ConfigManager::byKey($id . '::enable');
         return $return;
     }
 
@@ -144,16 +150,17 @@ class UpdateManager
      * Update all items
      * @param string $filter
      * @return bool
+     * @throws \Exception
      */
     public static function updateAll(string $filter = '')
     {
         //TODO: Il n'a pas l'air de servir à grand chose ce test
+        $error = false;
         if ($filter == 'core') {
             foreach (self::byType($filter) as $update) {
                 $update->doUpdate();
             }
         } else {
-            $error = false;
             if ($filter == '') {
                 $updates = self::all();
             } else {
@@ -165,22 +172,19 @@ class UpdateManager
                         try {
                             $update->doUpdate();
                         } catch (\Exception $e) {
-                            \log::add('update', 'update', $e->getMessage());
-                            $error = true;
-                        } catch (\Error $e) {
-                            \log::add('update', 'update', $e->getMessage());
+                            LogHelper::add('update', 'update', $e->getMessage());
                             $error = true;
                         }
                     }
                 }
             }
-            return $error;
         }
+        return $error;
     }
 
     /**
      * Get information about an update from its username
-     * @param $id ID of the update
+     * @param string $id ID of the update
      * @return array|mixed|null
      * @throws \Exception
      */
@@ -198,7 +202,7 @@ class UpdateManager
     /**
      * Get updates from their status
      * @param $status
-     * @return array|mixed|null
+     * @return \update[]
      * @throws \Exception
      */
     public static function byStatus($status)
@@ -355,6 +359,6 @@ class UpdateManager
      */
     public static function listCoreUpdate()
     {
-        return \ls(NEXTDOM_ROOT . '/install/update', '*');
+        return FileSystemHelper::ls(NEXTDOM_ROOT . '/install/update', '*');
     }
 }

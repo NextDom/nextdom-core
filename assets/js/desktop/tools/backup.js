@@ -34,7 +34,7 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
- jwerty.key('ctrl+s', function (e) {
+ jwerty.key('ctrl+s/⌘+s', function (e) {
     e.preventDefault();
     $("#bt_saveBackup").click();
 });
@@ -108,9 +108,11 @@ $("#bt_saveOpenLog").on('click', function (event) {
     var el = $(this);
     bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec la sauvegarde}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée.}}<span style="color:red;font-weight: bold;">IMPORTANT la restauration d\'un backup est une opération risquée et n\'est à utiliser qu\'en dernier recours.</span>', function (result) {
         if (result) {
+            switchNotify(0);
             $.hideAlert();
+            $('#bt_restoreNextDom').addClass('disabled');
             el.find('.fa-refresh').show();
-            el.find('.fa-file').hide();
+            el.find('.fa-window-restore').hide();
             $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
             $("#md_backupInfo").dialog('open');
             nextdom.backup.restoreLocal({
@@ -250,13 +252,16 @@ $("#bt_saveOpenLog").on('click', function (event) {
                 for (var i in data.result.reverse()) {
                     log += data.result[i]+"\n";
                     if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' SUCCESS]') != -1){
+                        switchNotify(1);
                         notify("Info", '{{L\'opération est réussie}}', 'success');
                         if(_log == 'restore'){
+                            console.log(_log);
                             nextdom.user.refresh();
                         }
                         _autoUpdate = 0;
                     }
                     if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' ERROR]') != -1){
+                        switchNotify(1);
                         notify("Erreur", '{{L\'opération a échoué}}', 'error');
                         if(_log == 'restore'){
                             nextdom.user.refresh();
@@ -271,6 +276,7 @@ $("#bt_saveOpenLog").on('click', function (event) {
                     getNextDomLog(_autoUpdate, _log)
                 }, 1000);
             } else {
+                $('#bt_restoreNextDom').removeClass('disabled');
                 $('#bt_' + _log + 'NextDom .fa-refresh').hide();
                 $('.bt_' + _log + 'NextDom .fa-refresh').hide();
                 $('#bt_' + _log + 'NextDom .fa-floppy-o').show();

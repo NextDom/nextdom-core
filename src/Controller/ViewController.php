@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
  
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Utils;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
@@ -33,7 +34,7 @@ class ViewController extends BaseController
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
+
     /**
      * Render view page
      *
@@ -42,7 +43,7 @@ class ViewController extends BaseController
      *
      * @return string Content of view page
      *
-     * @throws \NextDom\Exceptions\CoreException
+     * @throws CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -63,7 +64,7 @@ class ViewController extends BaseController
                 $currentView = \view::byId($_SESSION['user']->getOptions('defaultDesktopView'));
             }
 
-            if (!is_object($currentView)) {
+            if (!is_object($currentView) && is_array($pageContent['viewsList']) && count($pageContent['viewsList']) > 0) {
                 $currentView = $pageContent['viewsList'][0];
             }
         } else {
@@ -75,7 +76,7 @@ class ViewController extends BaseController
         }
 
         if (!is_object($currentView)) {
-            throw new \Exception(__('Aucune vue n\'existe, cliquez <a href="index.php?v=d&p=view_edit">ici</a> pour en créer une.'));
+            throw new CoreException(__('Aucune vue n\'existe, cliquez <a href="index.php?v=d&p=view_edit">ici</a> pour en créer une.'));
         }
         $pageContent['viewCurrent'] = $currentView;
 

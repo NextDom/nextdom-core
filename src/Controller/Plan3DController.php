@@ -33,7 +33,7 @@ class Plan3DController extends BaseController
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
+
 
     /**
      * Render 3d plan page
@@ -43,7 +43,6 @@ class Plan3DController extends BaseController
      *
      * @return string Content of 3d plan page
      *
-     * @throws \NextDom\Exceptions\CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -57,7 +56,7 @@ class Plan3DController extends BaseController
             if ($_SESSION['user']->getOptions('defaultDesktopPlan3d') != '') {
                 $plan3dHeader = \plan3dHeader::byId($_SESSION['user']->getOptions('defaultDesktopPlan3d'));
             }
-            if (!is_object($plan3dHeader)) {
+            if (!is_object($plan3dHeader) && count($list_plan3dHeader) > 0) {
                 $plan3dHeader = $list_plan3dHeader[0];
             }
         } else {

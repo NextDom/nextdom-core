@@ -34,7 +34,7 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-jwerty.key('ctrl+s', function (e) {
+jwerty.key('ctrl+s/⌘+s', function (e) {
     e.preventDefault();
     $("#bt_savenetwork").click();
 });
@@ -124,15 +124,17 @@ $('#network').delegate('.configKey', 'change', function () {
 });
 
 $('#network').delegate('.configKey[data-l1key="market::allowDNS"],.configKey[data-l1key="network::disableMangement"]', 'change', function () {
-    if($('.configKey[data-l1key="market::allowDNS"]').value() == 1 && $('.configKey[data-l1key="network::disableMangement"]').value() == 0){
-       $('.configKey[data-l1key=externalProtocol]').attr('disabled',true);
-       $('.configKey[data-l1key=externalAddr]').attr('disabled',true);
-       $('.configKey[data-l1key=externalPort]').attr('disabled',true);
-       $('.configKey[data-l1key=externalAddr]').value('');
-       $('.configKey[data-l1key=externalPort]').value('');
-   }else{
-    $('.configKey[data-l1key=externalProtocol]').attr('disabled',false);
-    $('.configKey[data-l1key=externalAddr]').attr('disabled',false);
-    $('.configKey[data-l1key=externalPort]').attr('disabled',false);
-}
+    setTimeout(function() {
+        if ($('.configKey[data-l1key="market::allowDNS"]').value() == 1 && $('.configKey[data-l1key="network::disableMangement"]').value() == 0) {
+            $('.configKey[data-l1key=externalProtocol]').attr('disabled', true);
+            $('.configKey[data-l1key=externalAddr]').attr('disabled', true);
+            $('.configKey[data-l1key=externalPort]').attr('disabled', true);
+            $('.configKey[data-l1key=externalAddr]').value('');
+            $('.configKey[data-l1key=externalPort]').value('');
+        } else {
+            $('.configKey[data-l1key=externalProtocol]').attr('disabled', false);
+            $('.configKey[data-l1key=externalAddr]').attr('disabled', false);
+            $('.configKey[data-l1key=externalPort]').attr('disabled', false);
+        }
+    }, 100);
 });

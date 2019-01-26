@@ -20,8 +20,6 @@
 namespace NextDom\Market;
 
 use NextDom\Helpers\DataStorage;
-use NextDom\Market\DownloadManager;
-use NextDom\Market\MarketItem;
 
 /**
  * Gestion des informations liées à GitHub
@@ -49,6 +47,7 @@ class GitManager
      * Constructeur du gestionnaire Git
      *
      * @param string $gitId Utilisateur du compte Git
+     * @throws \Exception
      */
     public function __construct($gitId)
     {

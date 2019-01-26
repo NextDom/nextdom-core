@@ -24,7 +24,8 @@ set_root $0
 
 function install_nodemodules {
 echo " >>> Installing the npm modules"
-cp package.json ./vendor
+[[ ! -d ./vendor ]] && mkdir vendor
+cp package.json ./vendor/
 npm install --prefix ./vendor
 }
 
@@ -44,6 +45,7 @@ function init_dependencies {
 		wget https://deb.nodesource.com/setup_10.x -O install_npm.sh
 		bash install_npm.sh
 		apt install -y nodejs
+		rm install_npm.sh
 	fi
 	sass --version > /dev/null 2>&1
 	if [ $? -ne 0 ]; then
