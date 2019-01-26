@@ -140,7 +140,7 @@ class EqLogic
      *
      * @ORM\Column(name="order", type="integer", nullable=true)
      */
-    protected $order = '1';
+    protected $order = 9999;
 
     /**
      * @var string
@@ -872,7 +872,7 @@ class EqLogic
             '#custom_layout#' => ($this->widgetPossibility('custom::layout')) ? 'allowLayout' : '',
             '#tag#' => $tagsValue,
             '#data-tags#' => $this->getTags(),
-            '#generic_type#' => $this->getGenericType(),
+            '#generic_type#' => $this->getGenericType()
         );
 
         if ($this->getDisplay('background-color-default' . $version, 1) == 1) {
@@ -1706,9 +1706,6 @@ class EqLogic
         }
         if (isset($_data['node']['eqLogic' . $this->getId()])) {
             return null;
-        }
-        if ($_level > 0) {
-            return $_data;
         }
         $_level++;
         if ($_level > $_drill) {

@@ -135,6 +135,7 @@ class Scenario
      */
     protected $type = 'expert';
 
+    protected $order = 9999;
     /**
      * @var integer
      *
@@ -620,6 +621,8 @@ class Scenario
             '#lastLaunch#' => $this->getLastLaunch(),
             '#scenarioLink#' => $this->getLinkToConfiguration(),
             '#version#' => $_version,
+            '#height#' => $this->getDisplay('height', 'auto'),
+            '#width#' => $this->getDisplay('width', 'auto')
         );
         if (!isset(self::$_templateArray)) {
             self::$_templateArray = array();
@@ -1142,10 +1145,10 @@ class Scenario
      * @param mixed $_withoutScenarioName
      * @return string
      */
-    public function getHumanName($_complete = false, $_noGroup = false, $_tag = false, $_prettify = false, $_withoutScenarioName = false)
+    public function getHumanName($_complete = false, $_noGroup = false, $_tag = false, $_prettify = false, $_withoutScenarioName = false, $_object_name = true)
     {
         $name = '';
-        if (is_numeric($this->getObject_id()) && is_object($this->getObject())) {
+        if ($_object_name && is_numeric($this->getObject_id()) && is_object($this->getObject())) {
             $object = $this->getObject();
             if ($_tag) {
                 if ($object->getDisplay('tagColor') != '') {
@@ -1577,6 +1580,24 @@ class Scenario
     public function setCache($key, $valueToStore = null)
     {
         CacheManager::set('scenarioCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('scenarioCacheAttr' . $this->getId())->getValue(), $key, $valueToStore));
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function getOrder() {
+        return $this->order;
+    }
+    /**
+     *
+     * @param int $_order
+     * @return $this
+     */
+    public function setOrder($_order) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->order,$_order);
+        $this->order = $_order;
+        return $this;
     }
 
     public function getChanged()
