@@ -23,9 +23,9 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\NextDomHelper;
-use NextDom\Managers\ConfigManager;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
+use NextDom\Managers\ConfigManager;
 
 class CustomController extends BaseController
 {

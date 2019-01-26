@@ -22,10 +22,10 @@
 
 namespace NextDom\Controller\Modal;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
-use NextDom\Exceptions\CoreException;
 
 class PlanHeaderConfigure extends BaseAbstractModal
 {
@@ -54,12 +54,14 @@ class PlanHeaderConfigure extends BaseAbstractModal
         if (!is_object($planHeader)) {
             throw new CoreException('Impossible de trouver le plan');
         }
+        $pageContent = [];
+        $pageContent['plansList'] = $planHeader->getPlan();
         Utils::sendVarsToJS([
-            'id'         => $planHeader->getId(),
+            'id' => $planHeader->getId(),
             'planHeader' => Utils::o2a($planHeader)
-                ]);
+        ]);
 
-        return $render->get('/modals/planHeader.configure.html.twig');
+        return $render->get('/modals/planHeader.configure.html.twig', $pageContent);
     }
 
 }

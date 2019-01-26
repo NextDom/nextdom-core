@@ -53,7 +53,7 @@ class RemoveHistory extends BaseAbstractModal
             $removeHistory = array();
         }
 
-        $pageContent                  = [];
+        $pageContent = [];
         $pageContent['removeHistory'] = $removeHistory;
 
         return $render->get('/modals/remove.history.html.twig', $pageContent);

@@ -22,9 +22,9 @@
 
 namespace NextDom\Controller;
 
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
- 
+use NextDom\Helpers\Status;
+
 class NoteController extends BaseController
 {
 
@@ -52,6 +52,6 @@ class NoteController extends BaseController
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/note.js';
         return $render->get('/desktop/tools/note.html.twig', $pageContent);
     }
-    
+
 
 }

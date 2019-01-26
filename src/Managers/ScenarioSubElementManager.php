@@ -36,7 +36,7 @@ namespace NextDom\Managers;
 class ScenarioSubElementManager
 {
     const DB_CLASS_NAME = 'scenarioSubElement';
-    const CLASS_NAME    = 'scenarioSubElement';
+    const CLASS_NAME = 'scenarioSubElement';
 
     /**
      * Obtain a sub-element of a scenario from its identifier

@@ -98,6 +98,7 @@ class ScenarioExpression
      * })
      */
     protected $scenarioSubElement_id;
+    protected $_change = false;
 
     public function checkBackground()
     {
@@ -535,6 +536,15 @@ class ScenarioExpression
         $dataStore->save();
         $limit = (isset($options['timeout'])) ? $options['timeout'] : 300;
         $options_cmd = array('title' => $options['question'], 'message' => $options['question'], 'answer' => explode(';', $options['answer']), 'timeout' => $limit, 'variable' => $this->getOptions('variable'));
+        //Recuperation des tags
+        $tags = $scenario->getTags();
+        if (isset($tags['#profile#']) === true) {
+            //Remplacement du pattern #profile# par le profile utilisateur
+            //si la commande contient #profile#
+            $this->setOptions('cmd', str_replace('#profile#', $tags['#profile#'], $this->getOptions('cmd')));
+        }
+
+        // Recherche de la commandeId avec le bon user
         $cmd = CmdManager::byId(str_replace('#', '', $this->getOptions('cmd')));
         if (!is_object($cmd)) {
             throw new CoreException(__('Commande introuvable - Vérifiez l\'id : ') . $this->getOptions('cmd'));
@@ -701,6 +711,7 @@ class ScenarioExpression
     {
         $this->checkBackground();
         \DB::save($this);
+        return true;
     }
 
     public function remove()
@@ -812,9 +823,10 @@ class ScenarioExpression
         return $this->id;
     }
 
-    public function setId($id)
+    public function setId($_id)
     {
-        $this->id = $id;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
         return $this;
     }
 
@@ -823,9 +835,10 @@ class ScenarioExpression
         return $this->type;
     }
 
-    public function setType($type)
+    public function setType($_type)
     {
-        $this->type = $type;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
+        $this->type = $_type;
         return $this;
     }
 
@@ -839,9 +852,10 @@ class ScenarioExpression
         return ScenarioSubElementManager::byId($this->getScenarioSubElement_id());
     }
 
-    public function setScenarioSubElement_id($scenarioSubElement_id)
+    public function setScenarioSubElement_id($_scenarioSubElement_id)
     {
-        $this->scenarioSubElement_id = $scenarioSubElement_id;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->scenarioSubElement_id, $_scenarioSubElement_id);
+        $this->scenarioSubElement_id = $_scenarioSubElement_id;
         return $this;
     }
 
@@ -850,9 +864,10 @@ class ScenarioExpression
         return $this->subtype;
     }
 
-    public function setSubtype($subtype)
+    public function setSubtype($_subtype)
     {
-        $this->subtype = $subtype;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->subtype, $_subtype);
+        $this->subtype = $_subtype;
         return $this;
     }
 
@@ -861,9 +876,11 @@ class ScenarioExpression
         return $this->expression;
     }
 
-    public function setExpression($expression)
+    public function setExpression($_expression)
     {
-        $this->expression = NextDomHelper::fromHumanReadable($expression);
+        $_expression = NextDomHelper::fromHumanReadable($_expression);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->expression, $_expression);
+        $this->expression = $_expression;
         return $this;
     }
 
@@ -874,7 +891,9 @@ class ScenarioExpression
 
     public function setOptions($_key, $_value)
     {
-        $this->options = Utils::setJsonAttr($this->options, $_key, NextDomHelper::fromHumanReadable($_value));
+        $options = Utils::setJsonAttr($this->options, $_key, NextDomHelper::fromHumanReadable($_value));
+        $this->_changed = Utils::attrChanged($this->_changed, $this->options, $options);
+        $this->options = $options;
         return $this;
     }
 
@@ -883,9 +902,10 @@ class ScenarioExpression
         return $this->order;
     }
 
-    public function setOrder($order)
+    public function setOrder($_order)
     {
-        $this->order = $order;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
+        $this->order = $_order;
         return $this;
     }
 
@@ -900,7 +920,19 @@ class ScenarioExpression
         }
     }
 
-    public function getTableName() {
+    public function getTableName()
+    {
         return 'scenarioExpression';
+    }
+
+    public function getChanged()
+    {
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed)
+    {
+        $this->_changed = $_changed;
+        return $this;
     }
 }

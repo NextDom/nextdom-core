@@ -38,7 +38,8 @@ use NextDom\Managers\ConfigManager;
 
 class DateHelper
 {
-    public static function dateToFr($dateEn) {
+    public static function dateToFr($dateEn)
+    {
         if (ConfigManager::byKey('language', 'core', 'fr_FR') == 'en_US') {
             return $dateEn;
         }
@@ -92,7 +93,8 @@ class DateHelper
         return str_replace($shortTextEn, $shortText, str_replace($longTextEn, $longText, $dateEn));
     }
 
-    public static function convertDayFromEn($_day) {
+    public static function convertDayFromEn($_day)
+    {
         $result = $_day;
         $daysMapping = array(
             'fr_FR' => array(

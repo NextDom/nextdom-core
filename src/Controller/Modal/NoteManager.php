@@ -22,10 +22,10 @@
 
 namespace NextDom\Controller\Modal;
 
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
-use NextDom\Helpers\NextDomHelper;
- 
+
 class NoteManager extends BaseAbstractModal
 {
 

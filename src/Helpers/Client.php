@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 namespace NextDom\Helpers;
 
 class Client
@@ -23,7 +24,7 @@ class Client
      *
      * @return bool True si un navigateur mobile est détecté
      */
-    public static function isMobile() : bool
+    public static function isMobile(): bool
     {
         $userAgent = 'none';
         if (isset($_SERVER["HTTP_USER_AGENT"])) {

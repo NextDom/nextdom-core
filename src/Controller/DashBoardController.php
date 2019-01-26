@@ -23,12 +23,12 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\NextDomHelper;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
-use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\EqLogicManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\ScenarioManager;
 
 /**
@@ -61,10 +61,10 @@ class DashBoardController extends BaseController
     {
 
         $pageContent['JS_VARS']['nextdom_Welcome'] = ConfigManager::byKey('nextdom::Welcome');
-        $pageContent['JS_VARS']['SEL_OBJECT_ID']   = Utils::init('object_id');
-        $pageContent['JS_VARS']['SEL_CATEGORY']    = Utils::init('category', 'all');
-        $pageContent['JS_VARS']['SEL_TAG']         = Utils::init('tag', 'all');
-        $pageContent['JS_VARS']['SEL_SUMMARY']     = Utils::init('summary');
+        $pageContent['JS_VARS']['SEL_OBJECT_ID'] = Utils::init('object_id');
+        $pageContent['JS_VARS']['SEL_CATEGORY'] = Utils::init('category', 'all');
+        $pageContent['JS_VARS']['SEL_TAG'] = Utils::init('tag', 'all');
+        $pageContent['JS_VARS']['SEL_SUMMARY'] = Utils::init('summary');
 
         if ($pageContent['JS_VARS']['SEL_OBJECT_ID'] == '') {
             $object = JeeObjectManager::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
@@ -81,16 +81,16 @@ class DashBoardController extends BaseController
         }
         $pageContent['JS_VARS']['rootObjectId'] = $object->getId();
 
-        $pageContent['dashboardDisplayObjectByDefault']   = $_SESSION['user']->getOptions('displayObjetByDefault');
+        $pageContent['dashboardDisplayObjectByDefault'] = $_SESSION['user']->getOptions('displayObjetByDefault');
         $pageContent['dashboardDisplayScenarioByDefault'] = $_SESSION['user']->getOptions('displayScenarioByDefault');
-        $pageContent['dashboardCategory']                 = $pageContent['JS_VARS']['SEL_CATEGORY'];
-        $pageContent['dashboardTag']                      = $pageContent['JS_VARS']['SEL_TAG'];
-        $pageContent['dashboardCategories']               = NextDomHelper::getConfiguration('eqLogic:category', true);
-        $pageContent['dashboardTags']                     = EqLogicManager::getAllTags();
-        $pageContent['dashboardObjectId']                 = $pageContent['JS_VARS']['SEL_OBJECT_ID'];
-        $pageContent['dashboardObject']                   = $object;
-        $pageContent['dashboardChildrenObjects']          = JeeObjectManager::buildTree($object);
-        $pageContent['profilsUser']                       = $_SESSION['user'];
+        $pageContent['dashboardCategory'] = $pageContent['JS_VARS']['SEL_CATEGORY'];
+        $pageContent['dashboardTag'] = $pageContent['JS_VARS']['SEL_TAG'];
+        $pageContent['dashboardCategories'] = NextDomHelper::getConfiguration('eqLogic:category', true);
+        $pageContent['dashboardTags'] = EqLogicManager::getAllTags();
+        $pageContent['dashboardObjectId'] = $pageContent['JS_VARS']['SEL_OBJECT_ID'];
+        $pageContent['dashboardObject'] = $object;
+        $pageContent['dashboardChildrenObjects'] = JeeObjectManager::buildTree($object);
+        $pageContent['profilsUser'] = $_SESSION['user'];
 
         if ($pageContent['dashboardDisplayScenarioByDefault'] == 1) {
             $pageContent['dashboardScenarios'] = ScenarioManager::all();
@@ -98,8 +98,8 @@ class DashBoardController extends BaseController
         $pageContent['JS_POOL'][] = '/public/js/desktop/dashboard.js';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/dashboard_events.js';
         // A remettre une fois mise sous forme de thème//
-        $pageContent['JS_POOL'][]     = '/vendor/node_modules/isotope-layout/dist/isotope.pkgd.min.js';
-        $pageContent['JS_POOL'][]     = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
+        $pageContent['JS_POOL'][] = '/vendor/node_modules/isotope-layout/dist/isotope.pkgd.min.js';
+        $pageContent['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/dashboard.html.twig', $pageContent);

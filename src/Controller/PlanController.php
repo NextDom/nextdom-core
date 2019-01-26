@@ -22,9 +22,9 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
-use NextDom\Helpers\Render;
 
 class PlanController extends BaseController
 {
@@ -87,5 +87,5 @@ class PlanController extends BaseController
 
         return $render->get('/desktop/plan.html.twig', $pageContent);
     }
- 
+
 }

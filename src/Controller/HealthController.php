@@ -23,8 +23,8 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\NextDomHelper;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
 

@@ -37,14 +37,16 @@ namespace NextDom\Managers;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 
-require_once NEXTDOM_ROOT.'/core/class/cache.class.php';
+require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
-class InteractQueryManager {
-    
+class InteractQueryManager
+{
+
     const CLASS_NAME = 'interactQuery';
     const DB_CLASS_NAME = '`interactQuery`';
 
-    public static function byId($_id) {
+    public static function byId($_id)
+    {
         $values = array(
             'id' => $_id,
         );
@@ -55,7 +57,8 @@ class InteractQueryManager {
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function byQuery($_query, $_interactDef_id = null) {
+    public static function byQuery($_query, $_interactDef_id = null)
+    {
         $values = array(
             'query' => $_query,
         );
@@ -69,7 +72,8 @@ class InteractQueryManager {
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function byInteractDefId($_interactDef_id) {
+    public static function byInteractDefId($_interactDef_id)
+    {
         $values = array(
             'interactDef_id' => $_interactDef_id,
         );
@@ -85,7 +89,8 @@ class InteractQueryManager {
      * @return \interactQuery[]
      * @throws \Exception
      */
-    public static function searchActions($_action) {
+    public static function searchActions($_action)
+    {
         if (!is_array($_action)) {
             $values = array(
                 'actions' => '%' . $_action . '%',
@@ -112,14 +117,16 @@ class InteractQueryManager {
      * @return \interactQuery|null
      * @throws \Exception
      */
-    public static function all() {
+    public static function all()
+    {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 ORDER BY id';
         return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function removeByInteractDefId($_interactDef_id) {
+    public static function removeByInteractDefId($_interactDef_id)
+    {
         $values = array(
             'interactDef_id' => $_interactDef_id,
         );
@@ -128,7 +135,8 @@ class InteractQueryManager {
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function recognize($_query) {
+    public static function recognize($_query)
+    {
         $_query = InteractDefManager::sanitizeQuery($_query);
         if (trim($_query) == '') {
             return null;
@@ -235,7 +243,8 @@ class InteractQueryManager {
         return $closest;
     }
 
-    public static function getQuerySynonym($_query, $_for) {
+    public static function getQuerySynonym($_query, $_for)
+    {
         $return = array();
         $base_synonyms = explode(';', ConfigManager::byKey('interact::autoreply::' . $_for . '::synonym'));
         if (count($base_synonyms) == 0) {
@@ -255,7 +264,8 @@ class InteractQueryManager {
         return $return;
     }
 
-    public static function findInQuery($_type, $_query, $_data = null) {
+    public static function findInQuery($_type, $_query, $_data = null)
+    {
         $return = array();
         $return['query'] = strtolower(Utils::sanitizeAccent($_query));
         $return[$_type] = null;
@@ -335,11 +345,13 @@ class InteractQueryManager {
      * @param \jeeObject $b
      * @return int
      */
-    public static function cmp_objectName($a, $b) {
+    public static function cmp_objectName($a, $b)
+    {
         return (strlen($a->getName()) < strlen($b->getName())) ? +1 : -1;
     }
 
-    public static function autoInteract($_query, $_parameters = array()) {
+    public static function autoInteract($_query, $_parameters = array())
+    {
         global $NEXTDOM_INTERNAL_CONFIG;
         if (!isset($_parameters['identifier'])) {
             $_parameters['identifier'] = '';
@@ -423,14 +435,16 @@ class InteractQueryManager {
         }
     }
 
-    public static function autoInteractWordFind($_string, $_word) {
+    public static function autoInteractWordFind($_string, $_word)
+    {
         return preg_match(
             '/( |^)' . preg_quote(strtolower(Utils::sanitizeAccent($_word)), '/') . '( |$)/',
             str_replace("'", ' ', strtolower(Utils::sanitizeAccent($_string)))
         );
     }
 
-    public static function pluginReply($_query, $_parameters = array()) {
+    public static function pluginReply($_query, $_parameters = array())
+    {
         try {
             foreach (PluginManager::listPlugin(true) as $plugin) {
                 if (ConfigManager::byKey('functionality::interact::enable', $plugin->getId(), 1) == 0) {
@@ -453,7 +467,8 @@ class InteractQueryManager {
         return null;
     }
 
-    public static function warnMe($_query, $_parameters = array()) {
+    public static function warnMe($_query, $_parameters = array())
+    {
         global $NEXTDOM_INTERNAL_CONFIG;
         $operator = null;
         $operand = null;
@@ -497,7 +512,8 @@ class InteractQueryManager {
         }
     }
 
-    public static function warnMeExecute($_options) {
+    public static function warnMeExecute($_options)
+    {
         $warnMeCmd = (isset($_options['reply_cmd'])) ? $_options['reply_cmd'] : ConfigManager::byKey('interact::warnme::defaultreturncmd');
         if (!isset($_options['test']) || $_options['test'] == '' || $warnMeCmd == '') {
             \listener::byId($_options['listener_id'])->remove();
@@ -517,7 +533,8 @@ class InteractQueryManager {
         }
     }
 
-    public static function tryToReply($_query, $_parameters = array()) {
+    public static function tryToReply($_query, $_parameters = array())
+    {
         if (trim($_query) == '') {
             return array('reply' => '');
         }
@@ -619,7 +636,8 @@ class InteractQueryManager {
         return $reply;
     }
 
-    public static function addLastInteract($_lastCmd, $_identifier = 'unknown') {
+    public static function addLastInteract($_lastCmd, $_identifier = 'unknown')
+    {
         $last = CacheManager::byKey('interact::lastCmd::' . $_identifier);
         if ($last->getValue() == '') {
             CacheManager::set('interact::lastCmd2::' . $_identifier, $last->getValue(), 300);
@@ -627,7 +645,8 @@ class InteractQueryManager {
         CacheManager::set('interact::lastCmd::' . $_identifier, str_replace('#', '', $_lastCmd), 300);
     }
 
-    public static function contextualReply($_query, $_parameters = array(), $_lastCmd = null) {
+    public static function contextualReply($_query, $_parameters = array(), $_lastCmd = null)
+    {
         $return = '';
         if (!isset($_parameters['identifier'])) {
             $_parameters['identifier'] = '';
@@ -682,11 +701,13 @@ class InteractQueryManager {
         return $return;
     }
 
-    public static function replaceForContextual($_replace, $_by, $_in) {
+    public static function replaceForContextual($_replace, $_by, $_in)
+    {
         return str_replace(strtolower(Utils::sanitizeAccent($_replace)), strtolower(Utils::sanitizeAccent($_by)), str_replace($_replace, $_by, $_in));
     }
 
-    public static function brainReply($_query, $_parameters) {
+    public static function brainReply($_query, $_parameters)
+    {
         global $PROFILE;
         $PROFILE = '';
         if (isset($_parameters['profile'])) {
@@ -714,7 +735,8 @@ class InteractQueryManager {
         return '';
     }
 
-    public static function dontUnderstand($_parameters) {
+    public static function dontUnderstand($_parameters)
+    {
         $notUnderstood = array(
             __('Désolé je n\'ai pas compris'),
             __('Désolé je n\'ai pas compris la demande'),
@@ -729,7 +751,8 @@ class InteractQueryManager {
         return $notUnderstood[$random];
     }
 
-    public static function replyOk() {
+    public static function replyOk()
+    {
         $reply = array(
             __('C\'est fait'),
             __('Ok'),
@@ -740,7 +763,8 @@ class InteractQueryManager {
         return $reply[$random];
     }
 
-    public static function doIn($_params) {
+    public static function doIn($_params)
+    {
         $interactQuery = self::byId($_params['interactQuery_id']);
         if (!is_object($interactQuery)) {
             return;

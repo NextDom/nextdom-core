@@ -53,16 +53,16 @@ class PluginDaemon extends BaseAbstractModal
         if (!class_exists($pluginId)) {
             die();
         }
-        $plugin     = PluginManager::byId($pluginId);
+        $plugin = PluginManager::byId($pluginId);
         $daemonInfo = $plugin->deamon_info();
         if (count($daemonInfo) == 0) {
             die();
         }
-        $refresh                                    = array();
-        $refresh[0]                                 = 0;
+        $refresh = array();
+        $refresh[0] = 0;
         $pageContent = [];
-        $pageContent['daemonInfoState']             = $daemonInfo['state'];
-        $pageContent['daemonInfoLaunchable']        = $daemonInfo['launchable'];
+        $pageContent['daemonInfoState'] = $daemonInfo['state'];
+        $pageContent['daemonInfoLaunchable'] = $daemonInfo['launchable'];
         $pageContent['daemonInfoLaunchableMessage'] = '';
         if (isset($daemonInfo['launchable_message'])) {
             $pageContent['daemonInfoLaunchableMessage'] = $daemonInfo['launchable_message'];

@@ -52,7 +52,8 @@ class NetworkHelper
      * @return string
      * @throws \Exception
      */
-    public static function getUserLocation() {
+    public static function getUserLocation()
+    {
         $client_ip = self::getClientIp();
         $nextdom_ip = self::getNetworkAccess('internal', 'ip', '', false);
         if (!filter_var($nextdom_ip, FILTER_VALIDATE_IP)) {
@@ -74,7 +75,8 @@ class NetworkHelper
         return self::netMatch($match, $client_ip) ? 'internal' : 'external';
     }
 
-    public static function getClientIp() {
+    public static function getClientIp()
+    {
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             return $_SERVER['HTTP_X_FORWARDED_FOR'];
         } elseif (isset($_SERVER['HTTP_X_REAL_IP'])) {
@@ -87,7 +89,8 @@ class NetworkHelper
         return '';
     }
 
-    public static function getNetworkAccess($_mode = 'auto', $_protocol = '', $_default = '', $_test = false) {
+    public static function getNetworkAccess($_mode = 'auto', $_protocol = '', $_default = '', $_test = false)
+    {
         if ($_mode == 'auto') {
             $_mode = self::getUserLocation();
         }
@@ -212,7 +215,8 @@ class NetworkHelper
         return '';
     }
 
-    public static function checkConf($_mode = 'external') {
+    public static function checkConf($_mode = 'external')
+    {
         if (ConfigManager::byKey($_mode . 'Protocol') == '') {
             ConfigManager::save($_mode . 'Protocol', 'http://');
         }
@@ -242,7 +246,8 @@ class NetworkHelper
         }
     }
 
-    public static function test($_mode = 'external', $_timeout = 5) {
+    public static function test($_mode = 'external', $_timeout = 5)
+    {
         if (ConfigManager::byKey('network::disableMangement') == 1) {
             return true;
         }
@@ -276,7 +281,8 @@ class NetworkHelper
 
     /*     * *********************DNS************************* */
 
-    public static function dnsCreate() {
+    public static function dnsCreate()
+    {
         if (ConfigManager::byKey('dns::token') == '') {
             return null;
         }
@@ -348,7 +354,8 @@ class NetworkHelper
         return $openvpn;
     }
 
-    public static function dnsStart() {
+    public static function dnsStart()
+    {
         if (ConfigManager::byKey('dns::token') == '') {
             return;
         }
@@ -380,7 +387,8 @@ class NetworkHelper
         }
     }
 
-    public static function dnsRun() {
+    public static function dnsRun()
+    {
         if (ConfigManager::byKey('dns::token') == '') {
             return false;
         }
@@ -399,7 +407,8 @@ class NetworkHelper
         return $cmd->execCmd();
     }
 
-    public static function dnsStop() {
+    public static function dnsStop()
+    {
         if (ConfigManager::byKey('dns::token') == '') {
             return;
         }
@@ -411,7 +420,8 @@ class NetworkHelper
         $cmd->execCmd();
     }
 
-    public static function getInterfaceIp($_interface) {
+    public static function getInterfaceIp($_interface)
+    {
         $ip = trim(shell_exec(SystemHelper::getCmdSudo() . "ip addr show " . $_interface . " | grep \"inet .*" . $_interface . "\" | awk '{print $2}' | cut -d '/' -f 1"));
         if (filter_var($ip, FILTER_VALIDATE_IP)) {
             return $ip;
@@ -419,7 +429,8 @@ class NetworkHelper
         return false;
     }
 
-    public static function getInterfaceMac($_interface) {
+    public static function getInterfaceMac($_interface)
+    {
         $valid_mac = "([0-9A-F]{2}[:-]){5}([0-9A-F]{2})";
         $mac = trim(shell_exec(SystemHelper::getCmdSudo() . "ip addr show " . $_interface . " 2>&1 | grep ether | awk '{print $2}'"));
         if (preg_match("/" . $valid_mac . "/i", $mac)) {
@@ -428,7 +439,8 @@ class NetworkHelper
         return false;
     }
 
-    public static function getInterfacesList() {
+    public static function getInterfacesList()
+    {
         $interfaces = explode("\n", shell_exec(SystemHelper::getCmdSudo() . "ip -o link show | awk -F': ' '{print $2}'"));
         $result = [];
         foreach ($interfaces as $interface) {
@@ -440,7 +452,8 @@ class NetworkHelper
         return $result;
     }
 
-    public static function cron5() {
+    public static function cron5()
+    {
         if (ConfigManager::byKey('network::disableMangement') == 1) {
             return;
         }

@@ -22,10 +22,10 @@
 
 namespace NextDom\Controller\Modal;
 
-use NextDom\Helpers\Utils;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
-use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\ScenarioManager;
 
 class ScenarioLogExecution extends BaseAbstractModal
@@ -52,14 +52,14 @@ class ScenarioLogExecution extends BaseAbstractModal
     {
 
         $scenarioId = Utils::init('scenario_id');
-        $scenario   = ScenarioManager::byId($scenarioId);
+        $scenario = ScenarioManager::byId($scenarioId);
         if (!is_object($scenario)) {
             throw new CoreException(__('Aucun scénario ne correspondant à : ') . $scenarioId);
         }
         Utils::sendVarToJs('scenarioLog_scenario_id', $scenarioId);
 
-        $pageContent                      = [];
-        $pageContent['scenarioId']        = $scenarioId;
+        $pageContent = [];
+        $pageContent['scenarioId'] = $scenarioId;
         $pageContent['scenarioHumanName'] = $scenario->getHumanName();
         return $render->get('/modals/scenario.log.execution.html.twig', $pageContent);
     }

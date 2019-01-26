@@ -22,10 +22,10 @@
 
 namespace NextDom\Controller\Modal;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
-use NextDom\Exceptions\CoreException;
 use NextDom\Managers\ScenarioManager;
 
 class ScenarioJsonEdit extends BaseAbstractModal
@@ -50,9 +50,9 @@ class ScenarioJsonEdit extends BaseAbstractModal
      */
     public function get(Render $render): string
     {
-        $scenarioId  = Utils::init('id');
+        $scenarioId = Utils::init('id');
         $pageContent = [];
-        $scenario    = ScenarioManager::byId($scenarioId);
+        $scenario = ScenarioManager::byId($scenarioId);
         if (!is_object($scenario)) {
             throw new CoreException(__('Aucun scénario ne correspondant à : ') . $scenarioId);
         }

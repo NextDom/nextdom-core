@@ -22,8 +22,8 @@
 
 namespace NextDom\Controller;
 
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 
 class LogController extends BaseController
@@ -85,6 +85,6 @@ class LogController extends BaseController
 
         return $render->get('/desktop/diagnostic/logs-view.html.twig', $pageContent);
     }
-    
-    
+
+
 }

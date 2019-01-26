@@ -18,10 +18,10 @@
 namespace NextDom\Helpers;
 
 use NextDom\Managers\AjaxManager;
+use NextDom\Managers\ConfigManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
-use NextDom\Managers\JeeObjectManager;
-use NextDom\Managers\ConfigManager;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Routing\RouteCollection;
@@ -41,14 +41,14 @@ class PrepareView
         $pageData['CSS_POOL'] = [];
         $pageData['TITLE'] = '1ere connexion';
         $pageData['JS_VARS'] = [
-            'notify_status'      => $configs['notify::status'],
-            'notify_position'    => $configs['notify::position'],
-            'notify_timeout'     => $configs['notify::timeout'],
+            'notify_status' => $configs['notify::status'],
+            'notify_position' => $configs['notify::position'],
+            'notify_timeout' => $configs['notify::timeout'],
         ];
         $render = Render::getInstance();
         self::initHeaderData($pageData, $configs);
         //TODO: Vérifier ça
-        $pageData['CSS_POOL'][]    = '/public/css/nextdom.css';
+        $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
         $pageData['CSS_POOL'][] = '/public/css/firstUse.css';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/firstUse.js';
 
@@ -57,12 +57,12 @@ class PrepareView
 
     public static function showConnectionPage($configs)
     {
-        $pageData                = [];
-        $pageData['JS_POOL']     = [];
+        $pageData = [];
+        $pageData['JS_POOL'] = [];
         $pageData['JS_END_POOL'] = [];
-        $pageData['CSS_POOL']    = [];
-        $pageData['TITLE']       = 'Connexion';
-        $render                  = Render::getInstance();
+        $pageData['CSS_POOL'] = [];
+        $pageData['TITLE'] = 'Connexion';
+        $render = Render::getInstance();
         self::initHeaderData($pageData, $configs);
         $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/connection.js';
@@ -132,8 +132,8 @@ class PrepareView
     {
         global $language;
 
-        $pageData             = [];
-        $pageData['JS_POOL']  = [];
+        $pageData = [];
+        $pageData['JS_POOL'] = [];
         $pageData['CSS_POOL'] = [];
         $page = '';
 
@@ -141,7 +141,7 @@ class PrepareView
         $pageData['HOMELINK'] = self::getHomeLink();
         //TODO: Tests à revoir
         if (Utils::init('p') == '') {
-            Utils::redirect($pageData['HOMELINK'] );
+            Utils::redirect($pageData['HOMELINK']);
         } else {
             $page = Utils::init('p');
             $pageData['TITLE'] = ucfirst($page) . ' - ' . $configs['product_name'];
@@ -153,17 +153,17 @@ class PrepareView
         self::initHeaderData($pageData, $configs);
 
         $pageData['JS_VARS'] = [
-            'user_id'            => $_SESSION['user']->getId(),
-            'user_isAdmin'       => Status::isConnectAdmin(),
-            'user_login'         => $_SESSION['user']->getLogin(),
-            'nextdom_Welcome'    => $configs['nextdom::Welcome'],
-            'notify_status'      => $configs['notify::status'],
-            'notify_position'    => $configs['notify::position'],
-            'notify_timeout'     => $configs['notify::timeout'],
-            'widget_size'        => $configs['widget::size'],
-            'widget_margin'      => $configs['widget::margin'],
-            'widget_padding'     => $configs['widget::padding'],
-            'widget_radius'      => $configs['widget::radius'],
+            'user_id' => $_SESSION['user']->getId(),
+            'user_isAdmin' => Status::isConnectAdmin(),
+            'user_login' => $_SESSION['user']->getLogin(),
+            'nextdom_Welcome' => $configs['nextdom::Welcome'],
+            'notify_status' => $configs['notify::status'],
+            'notify_position' => $configs['notify::position'],
+            'notify_timeout' => $configs['notify::timeout'],
+            'widget_size' => $configs['widget::size'],
+            'widget_margin' => $configs['widget::margin'],
+            'widget_padding' => $configs['widget::padding'],
+            'widget_radius' => $configs['widget::radius'],
         ];
         $pageData['JS_VARS_RAW'] = [
             'userProfils' => Utils::getArrayToJQueryJson($_SESSION['user']->getOptions()),
@@ -233,12 +233,12 @@ class PrepareView
         $categories = PluginManager::getPluginsByCategory(true);
 
         if (count($categories) > 0) {
-            $pageData['PANEL_MENU']           = [];
-            $pageData['MENU_PLUGIN']          = [];
+            $pageData['PANEL_MENU'] = [];
+            $pageData['MENU_PLUGIN'] = [];
             $pageData['MENU_PLUGIN_CATEGORY'] = [];
 
             foreach ($categories as $categoryCode => $pluginsList) {
-                $pageData['MENU_PLUGIN'][$categoryCode]          = [];
+                $pageData['MENU_PLUGIN'][$categoryCode] = [];
                 $pageData['MENU_PLUGIN_CATEGORY'][$categoryCode] = [];
 
                 $icon = '';
@@ -281,7 +281,7 @@ class PrepareView
         if (count($eventsJsPlugin) > 0) {
             foreach ($eventsJsPlugin as $value) {
                 try {
-                    $pageData['JS_POOL'][] = '/plugins/'.$value.'/public/js/desktop/events.js';
+                    $pageData['JS_POOL'][] = '/plugins/' . $value . '/public/js/desktop/events.js';
                 } catch (\Exception $e) {
                     LogHelper::add($value, 'error', 'Event JS file not found');
                 }
@@ -296,29 +296,29 @@ class PrepareView
      */
     private static function initMenu(&$pageData, $currentPlugin)
     {
-        $pageData['IS_ADMIN']                 = Status::isConnectAdmin();
-        $pageData['CAN_SUDO']                 = NextDomHelper::isCapable('sudo');
-        $pageData['MENU_NB_MESSAGES']         = \message::nbMessage();
-        $pageData['NOTIFY_STATUS']           = ConfigManager::byKey('notify::status');
+        $pageData['IS_ADMIN'] = Status::isConnectAdmin();
+        $pageData['CAN_SUDO'] = NextDomHelper::isCapable('sudo');
+        $pageData['MENU_NB_MESSAGES'] = \message::nbMessage();
+        $pageData['NOTIFY_STATUS'] = ConfigManager::byKey('notify::status');
         if ($pageData['IS_ADMIN']) {
             $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
         }
         $pageData['MENU_JEEOBJECT_TREE'] = JeeObjectManager::buildTree(null, false);
-        $pageData['MENU_VIEWS_LIST']     = \view::all();
-        $pageData['MENU_PLANS_LIST']     = \planHeader::all();
-        $pageData['MENU_PLANS3D_LIST']   = \plan3dHeader::all();
+        $pageData['MENU_VIEWS_LIST'] = \view::all();
+        $pageData['MENU_PLANS_LIST'] = \planHeader::all();
+        $pageData['MENU_PLANS3D_LIST'] = \plan3dHeader::all();
         if (is_object($currentPlugin) && $currentPlugin->getIssue()) {
             $pageData['MENU_CURRENT_PLUGIN_ISSUE'] = $currentPlugin->getIssue();
         }
         $pageData['MENU_HTML_GLOBAL_SUMMARY'] = JeeObjectManager::getGlobalHtmlSummary();
-        $pageData['PRODUCT_IMAGE']            = ConfigManager::byKey('product_image');
-        $pageData['USER_ISCONNECTED']         = $_SESSION['user']->is_Connected();
-        $pageData['USER_AVATAR']              = $_SESSION['user']->getOptions('avatar');
-        $pageData['USER_LOGIN']               = $_SESSION['user']->getLogin();
-        $pageData['NEXTDOM_VERSION']          = NextDomHelper::getNextdomVersion();
-        $pageData['JEEDOM_VERSION']          = NextDomHelper::getJeedomVersion();
-        $pageData['MENU_PLUGIN_HELP']         = Utils::init('m');
-        $pageData['MENU_PLUGIN_PAGE']         = Utils::init('p');
+        $pageData['PRODUCT_IMAGE'] = ConfigManager::byKey('product_image');
+        $pageData['USER_ISCONNECTED'] = $_SESSION['user']->is_Connected();
+        $pageData['USER_AVATAR'] = $_SESSION['user']->getOptions('avatar');
+        $pageData['USER_LOGIN'] = $_SESSION['user']->getLogin();
+        $pageData['NEXTDOM_VERSION'] = NextDomHelper::getNextdomVersion();
+        $pageData['JEEDOM_VERSION'] = NextDomHelper::getJeedomVersion();
+        $pageData['MENU_PLUGIN_HELP'] = Utils::init('m');
+        $pageData['MENU_PLUGIN_PAGE'] = Utils::init('p');
     }
 
     /**
@@ -335,7 +335,7 @@ class PrepareView
         $pageData['AJAX_TOKEN'] = AjaxManager::getToken();
         $pageData['LANGUAGE'] = $configs['language'];
         for ($colorIndex = 1; $colorIndex <= self::$NB_THEME_COLORS; ++$colorIndex) {
-            $pageData['COLOR'.$colorIndex] = NextDomHelper::getConfiguration('theme:color'.$colorIndex);
+            $pageData['COLOR' . $colorIndex] = NextDomHelper::getConfiguration('theme:color' . $colorIndex);
         }
 
         self::initJsPool($pageData);
@@ -472,7 +472,8 @@ class PrepareView
      * @return mixed
      * @throws \Exception
      */
-    private static function getContent(Render $render, array &$pageContent, string $page, $currentPlugin) {
+    private static function getContent(Render $render, array &$pageContent, string $page, $currentPlugin)
+    {
         if ($currentPlugin !== null && is_object($currentPlugin)) {
             ob_start();
             FileSystemHelper::includeFile('desktop', $page, 'php', $currentPlugin->getId(), true);
@@ -518,8 +519,7 @@ class PrepareView
                     ob_start();
                     FileSystemHelper::includeFile('desktop', $page, 'php', $page, true);
                     echo ob_get_clean();
-                }
-                else {
+                } else {
                     Router::showError404AndDie();
                 }
             } else {
@@ -555,8 +555,7 @@ class PrepareView
                 echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
                 echo '</div>';
             }
-        }
-        // Affichage d'un modal du core
+        } // Affichage d'un modal du core
         else {
             $modalRoute = ModalsController::getRoute($modalCode);
             if ($modalRoute === null) {
@@ -574,7 +573,7 @@ class PrepareView
                     echo $modal->get($render);
                 } catch (CoreException $ex) {
                     echo '<div class="alert alert-danger div_alert">';
-                    echo '<p>Une erreur s\'est produite, impossible d\'afficher le contenu de la modale. Erreur : '. $ex->getMessage() .'</p>';
+                    echo '<p>Une erreur s\'est produite, impossible d\'afficher le contenu de la modale. Erreur : ' . $ex->getMessage() . '</p>';
                     echo '</div>';
                 }
 

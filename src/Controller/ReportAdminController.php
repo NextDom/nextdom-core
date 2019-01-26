@@ -50,7 +50,7 @@ class ReportAdminController extends BaseController
         global $CONFIG;
 
         $pageContent['adminDbConfig'] = $CONFIG['db'];
-        
+
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/reports_admin.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 

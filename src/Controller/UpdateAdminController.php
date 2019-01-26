@@ -25,15 +25,15 @@ namespace NextDom\Controller;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
-use NextDom\Managers\ConfigManager;
-use NextDom\Managers\UpdateManager;
 use NextDom\Managers\CacheManager;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\UpdateManager;
 use NextDom\Managers\UserManager;
 
 class UpdateAdminController extends BaseController
 {
-    
+
     public function __construct()
     {
         parent::__construct();

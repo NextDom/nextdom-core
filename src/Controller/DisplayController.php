@@ -24,12 +24,12 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
-use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\EqLogicManager;
+use NextDom\Managers\JeeObjectManager;
 
 class DisplayController extends BaseController
 {
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -75,11 +75,11 @@ class DisplayController extends BaseController
             $nbEqlogics += count($eqLogics[$object->getId()]);
         }
 
-        $pageContent['displayObjects']    = $objects;
+        $pageContent['displayObjects'] = $objects;
         $pageContent['displayNbEqLogics'] = $nbEqlogics;
-        $pageContent['displayNbCmds']     = $nbCmds;
-        $pageContent['displayEqLogics']   = $eqLogics;
-        $pageContent['displayCmds']       = $cmds;
+        $pageContent['displayNbCmds'] = $nbCmds;
+        $pageContent['displayEqLogics'] = $eqLogics;
+        $pageContent['displayCmds'] = $cmds;
 
         return $render->get('/desktop/tools/display.html.twig', $pageContent);
     }

@@ -22,10 +22,10 @@
 
 namespace NextDom\Controller\Modal;
 
-use NextDom\Helpers\Utils;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
-use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\Utils;
 
 class Plan3dHeaderConfigure extends BaseAbstractModal
 {
@@ -49,15 +49,15 @@ class Plan3dHeaderConfigure extends BaseAbstractModal
      */
     public function get(Render $render): string
     {
-        $pageContent  = [];
+        $pageContent = [];
         $plan3dHeader = \plan3dHeader::byId(Utils::init('plan3dHeader_id'));
         if (!is_object($plan3dHeader)) {
             throw new CoreException('Impossible de trouver le plan');
         }
         Utils::sendVarsToJS([
-            'id'           => $plan3dHeader->getId(),
+            'id' => $plan3dHeader->getId(),
             'plan3dHeader' => Utils::o2a($plan3dHeader)
-                ]);
+        ]);
         return $render->get('/modals/plan3dHeader.configure.html.twig', $pageContent);
     }
 

@@ -36,13 +36,15 @@ namespace NextDom\Managers;
 
 use NextDom\Helpers\Utils;
 
-require_once NEXTDOM_ROOT.'/core/class/cache.class.php';
+require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
-class InteractDefManager {
+class InteractDefManager
+{
     const CLASS_NAME = 'interactDef';
     const DB_CLASS_NAME = '`interactDef`';
 
-    public static function byId($_id) {
+    public static function byId($_id)
+    {
         $values = array(
             'id' => $_id,
         );
@@ -57,7 +59,8 @@ class InteractDefManager {
      * @return \interactDef[]|null
      * @throws \Exception
      */
-    public static function all($_group = '') {
+    public static function all($_group = '')
+    {
         $values = array();
         if ($_group === '') {
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
@@ -78,7 +81,8 @@ class InteractDefManager {
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function listGroup($_group = null) {
+    public static function listGroup($_group = null)
+    {
         $values = array();
         $sql = 'SELECT DISTINCT(`group`)
                 FROM ' . self::DB_CLASS_NAME;
@@ -90,7 +94,8 @@ class InteractDefManager {
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL);
     }
 
-    public static function generateTextVariant($_text) {
+    public static function generateTextVariant($_text)
+    {
         $return = array();
         preg_match_all("/(\[.*?\])/", $_text, $words);
         if (count($words[1]) == 0) {
@@ -110,7 +115,8 @@ class InteractDefManager {
         return $return;
     }
 
-    public static function searchByQuery($_query) {
+    public static function searchByQuery($_query)
+    {
         $values = array(
             'query' => '%' . $_query . '%',
         );
@@ -120,13 +126,15 @@ class InteractDefManager {
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function regenerateInteract() {
+    public static function regenerateInteract()
+    {
         foreach (self::all() as $interactDef) {
             $interactDef->save();
         }
     }
 
-    public static function getTagFromQuery($_def, $_query) {
+    public static function getTagFromQuery($_def, $_query)
+    {
         $_def = self::sanitizeQuery(trim($_def));
         $_query = self::sanitizeQuery(trim($_query));
         $options = array();
@@ -154,7 +162,8 @@ class InteractDefManager {
         return $options;
     }
 
-    public static function sanitizeQuery($_query) {
+    public static function sanitizeQuery($_query)
+    {
         $_query = str_replace(array("\'"), array("'"), $_query);
         $_query = preg_replace('/\s+/', ' ', $_query);
         $_query = ucfirst(strtolower($_query));
@@ -162,7 +171,8 @@ class InteractDefManager {
         return $_query;
     }
 
-    public static function deadCmd() {
+    public static function deadCmd()
+    {
         $return = array();
         foreach (self::all() as $interact) {
             if (is_string($interact->getActions('cmd')) && $interact->getActions('cmd') != '') {
@@ -189,7 +199,8 @@ class InteractDefManager {
         return $return;
     }
 
-    public static function cleanInteract() {
+    public static function cleanInteract()
+    {
         $list_id = array();
         foreach (self::all() as $interactDef) {
             $list_id[$interactDef->getId()] = $interactDef->getId();
@@ -206,7 +217,8 @@ class InteractDefManager {
      * @return \interactDef[]|null
      * @throws \Exception
      */
-    private static function searchByActionsOrReply($searchPattern) {
+    private static function searchByActionsOrReply($searchPattern)
+    {
         if (!is_array($searchPattern)) {
             $values = array(
                 'search' => '%' . $searchPattern . '%',
@@ -232,7 +244,8 @@ class InteractDefManager {
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function searchByUse($searchPattern) {
+    public static function searchByUse($searchPattern)
+    {
         $return = array();
         $interactDefs = self::searchByActionsOrReply($searchPattern);
         $interactQueries = InteractQueryManager::searchActions($searchPattern);

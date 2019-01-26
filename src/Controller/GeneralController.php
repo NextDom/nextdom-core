@@ -29,7 +29,7 @@ use NextDom\Helpers\Status;
 class GeneralController extends BaseController
 {
 
-    
+
     public function __construct()
     {
         parent::__construct();

@@ -23,7 +23,7 @@ namespace NextDom\Model\Entity;
  * @ORM\Table(name="scenarioSubElement", indexes={@ORM\Index(name="fk_scenarioSubElement_scenarioElement1_idx", columns={"scenarioElement_id"}), @ORM\Index(name="type", columns={"scenarioElement_id", "type"})})
  * @ORM\Entity
  */
-class Scenariosubelement
+class ScenarioSubElement
 {
 
     /**

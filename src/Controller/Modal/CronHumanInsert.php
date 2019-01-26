@@ -46,6 +46,6 @@ class CronHumanInsert extends BaseAbstractModal
     public function get(Render $render): string
     {
         return $render->get('/modals/cron.human.insert.html.twig');
-    } 
+    }
 
 }

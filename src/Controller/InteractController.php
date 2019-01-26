@@ -23,17 +23,17 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\NextDomHelper;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
 use NextDom\Managers\CmdManager;
+use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Managers\EqLogicManager;
 
 class InteractController extends BaseController
 {
 
-    
+
     public function __construct()
     {
         parent::__construct();

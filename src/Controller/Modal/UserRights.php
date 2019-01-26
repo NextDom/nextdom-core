@@ -22,12 +22,12 @@
 
 namespace NextDom\Controller\Modal;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
-use NextDom\Exceptions\CoreException;
-use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\EqLogicManager;
+use NextDom\Managers\ScenarioManager;
 
 class UserRights extends BaseAbstractModal
 {
@@ -53,7 +53,7 @@ class UserRights extends BaseAbstractModal
     {
 
         $userId = Utils::init('id');
-        $user   = \user::byId($userId);
+        $user = \user::byId($userId);
 
         if (!is_object($user)) {
             throw new CoreException(__('Impossible de trouver l\'utilisateur : ') . $userId);
@@ -66,7 +66,7 @@ class UserRights extends BaseAbstractModal
         if ($user->getProfils() != 'restrict') {
             $pageContent['restrictedUser'] = false;
         }
-        $pageContent['eqLogics']  = EqLogicManager::all();
+        $pageContent['eqLogics'] = EqLogicManager::all();
         $pageContent['scenarios'] = ScenarioManager::all();
 
         return $render->get('/modals/user.rights.html.twig', $pageContent);

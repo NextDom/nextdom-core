@@ -11,7 +11,7 @@
     "font-awesome": "^4.7.0",
     "font-awesome5": "^1.0.5",
     "gridstack": "^0.4.0",
-    "highcharts": "^6.2.0",
+    "highcharts": "^7.0.1",
     "inputmask": "^4.0.2",
     "isotope-layout": "^3.0.6",
     "izitoast": "^1.4.0",
@@ -30,7 +30,7 @@
     "slick-carousel": "^1.8.1",
     "snapsvg": "^0.5.1",
     "tablesorter": "^2.31.0",
-    "vis": "^4.21.0",
+    "vis": "^4.21.4",
     "vivagraphjs": "^0.10.1",
     "wowjs": "^1.1.3"
   },

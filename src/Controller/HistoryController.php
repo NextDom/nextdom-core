@@ -23,13 +23,13 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\NextDomHelper;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
+use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Managers\CmdManager;
 use NextDom\Managers\PluginManager;
- 
+
 class HistoryController extends BaseController
 {
 
@@ -55,14 +55,14 @@ class HistoryController extends BaseController
     {
         $pageContent['historyDate'] = array(
             'start' => date('Y-m-d', strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
-            'end'   => date('Y-m-d'),
+            'end' => date('Y-m-d'),
         );
-        $pageContent['historyCmdsList']          = CmdManager::allHistoryCmd();
-        $pageContent['historyPluginsList']       = PluginManager::listPlugin();
+        $pageContent['historyCmdsList'] = CmdManager::allHistoryCmd();
+        $pageContent['historyPluginsList'] = PluginManager::listPlugin();
         $pageContent['historyEqLogicCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
-        $pageContent['historyObjectsList']       = JeeObjectManager::all();
-        $pageContent['JS_POOL'][]     = '/vendor/node_modules/vis/dist/vis.min.js';
-        $pageContent['CSS_POOL'][]    = '/vendor/node_modules/vis/dist/vis.min.css';
+        $pageContent['historyObjectsList'] = JeeObjectManager::all();
+        $pageContent['JS_POOL'][] = '/vendor/node_modules/vis/dist/vis.min.js';
+        $pageContent['CSS_POOL'][] = '/vendor/node_modules/vis/dist/vis.min.css';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/diagnostic/history.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 

@@ -28,7 +28,7 @@ use NextDom\Managers\JeeObjectManager;
 
 class CmdHumanInsert extends BaseAbstractModal
 {
-    
+
     public function __construct()
     {
         parent::__construct();

@@ -99,7 +99,7 @@ class Viewzone
     }
 
     /**
-     * 
+     *
      * @return \NextDom\Model\Entity\View
      */
     public function getView(): \NextDom\Model\Entity\View
@@ -138,7 +138,7 @@ class Viewzone
     }
 
     /**
-     * 
+     *
      * @param \NextDom\Model\Entity\View $view
      * @return $this
      */

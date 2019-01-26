@@ -47,5 +47,5 @@ class About extends BaseAbstractModal
     {
         return $render->get('/modals/about.html.twig');
     }
-    
+
 }

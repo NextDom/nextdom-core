@@ -21,17 +21,17 @@
  */
 
 namespace NextDom\Controller;
- 
+
 use NextDom\Helpers\NextDomHelper;
-use NextDom\Managers\InteractDefManager;
-use NextDom\Managers\PluginManager;
-use NextDom\Managers\ScenarioManager;
-use NextDom\Managers\ScenarioExpressionManager;
-use NextDom\Managers\CmdManager;
-use NextDom\Managers\JeeObjectManager;
-use NextDom\Managers\EqLogicManager;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Managers\CmdManager;
+use NextDom\Managers\EqLogicManager;
+use NextDom\Managers\InteractDefManager;
+use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\PluginManager;
+use NextDom\Managers\ScenarioExpressionManager;
+use NextDom\Managers\ScenarioManager;
 
 class EqAnalyzeController extends BaseController
 {
@@ -199,5 +199,5 @@ class EqAnalyzeController extends BaseController
         return $render->get('/desktop/diagnostic/eqAnalyze.html.twig', $pageContent);
     }
 
-    
+
 }

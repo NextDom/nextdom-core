@@ -35,7 +35,7 @@ abstract class BaseAbstractModal
     {
         Status::initConnectState();
     }
-    
+
     public abstract function get(Render $render): string;
 
     /**

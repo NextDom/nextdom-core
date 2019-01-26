@@ -23,11 +23,11 @@
 namespace NextDom\Controller;
 
 
-use NextDom\Managers\PluginManager;
-use NextDom\Managers\UpdateManager;
-use NextDom\Managers\ConfigManager;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Managers\ConfigManager;
+use NextDom\Managers\PluginManager;
+use NextDom\Managers\UpdateManager;
 
 class ApiController extends BaseController
 {

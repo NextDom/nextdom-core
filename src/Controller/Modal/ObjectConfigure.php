@@ -22,11 +22,11 @@
 
 namespace NextDom\Controller\Modal;
 
-use NextDom\Managers\JeeObjectManager;
-use NextDom\Helpers\Utils;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
-use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\Utils;
+use NextDom\Managers\JeeObjectManager;
 
 class ObjectConfigure extends BaseAbstractModal
 {
@@ -52,7 +52,7 @@ class ObjectConfigure extends BaseAbstractModal
     {
 
         $objectId = Utils::init('object_id');
-        $object   = JeeObjectManager::byId($objectId);
+        $object = JeeObjectManager::byId($objectId);
         if (!is_object($object)) {
             throw new CoreException(__('Objet non trouvé : ') . $objectId);
         }

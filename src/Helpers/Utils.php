@@ -54,7 +54,7 @@ class Utils
 
     public static function getVarToJs(string $varName, $varValue)
     {
-        return "<script>" . self::getVarInJs($varName, $varValue) .  "</script>\n";
+        return "<script>" . self::getVarInJs($varName, $varValue) . "</script>\n";
     }
 
     /**
@@ -103,9 +103,11 @@ class Utils
         return "var $varName = $jsVarValue;";
     }
 
-    public static function getArrayToJQueryJson($varToTransform) {
+    public static function getArrayToJQueryJson($varToTransform)
+    {
         return 'jQuery.parseJSON("' . addslashes(json_encode($varToTransform, JSON_UNESCAPED_UNICODE)) . '")';
     }
+
     /**
      * Rediriger vers un autre url
      *
@@ -155,32 +157,32 @@ class Utils
 
         $result = $expression;
         $replaceMap = [
-            '=='  => '==',
-            '='   => '==',
-            '>='  => '>=',
-            '<='  => '<=',
+            '==' => '==',
+            '=' => '==',
+            '>=' => '>=',
+            '<=' => '<=',
             '<==' => '<=',
             '>==' => '>=',
             '===' => '==',
             '!==' => '!=',
-            '!='  => '!=',
-            'OR'  => '||',
-            'OU'  => '||',
-            'or'  => '||',
-            'ou'  => '||',
-            '||'  => '||',
+            '!=' => '!=',
+            'OR' => '||',
+            'OU' => '||',
+            'or' => '||',
+            'ou' => '||',
+            '||' => '||',
             'AND' => '&&',
-            'ET'  => '&&',
+            'ET' => '&&',
             'and' => '&&',
-            'et'  => '&&',
-            '&&'  => '&&',
-            '<'   => '<',
-            '>'   => '>',
-            '/'   => '/',
-            '*'   => '*',
-            '+'   => '+',
-            '-'   => '-',
-            ''    => ''
+            'et' => '&&',
+            '&&' => '&&',
+            '<' => '<',
+            '>' => '>',
+            '/' => '/',
+            '*' => '*',
+            '+' => '+',
+            '-' => '-',
+            '' => ''
         ];
         preg_match_all('/(\w+|\d+|\.\d+|".*?"|\'.*?\'|\#.*?\#|\(|\))[ ]*([!*+&|\\-\\/>=<]+|and|or|ou|et)*[ ]*/i', $expression, $pregOutput);
         if (count($pregOutput) > 2) {
@@ -460,8 +462,8 @@ class Utils
     public static function cast($sourceObject, $destinationClassName)
     {
         $sourceClassName = get_class($sourceObject);
-        $sourceSerializedPrefix = 'O:' . strlen($sourceClassName) . ':"' . $sourceClassName .'"';
-        $destinationSerializedPrefix = 'O:' . strlen($destinationClassName) . ':"' . $destinationClassName .'"';
+        $sourceSerializedPrefix = 'O:' . strlen($sourceClassName) . ':"' . $sourceClassName . '"';
+        $destinationSerializedPrefix = 'O:' . strlen($destinationClassName) . ':"' . $destinationClassName . '"';
         $serializedObject = serialize($sourceObject);
         return unserialize(str_replace($sourceSerializedPrefix, $destinationSerializedPrefix, $serializedObject));
     }
@@ -615,7 +617,8 @@ class Utils
         }
     }
 
-    public static function arg2array($_string) {
+    public static function arg2array($_string)
+    {
         $return = array();
         $re = '/[\/-]?(([a-zA-Z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ_#]+)(?:[=:]("[^"]+"|[^\s"]+))?)(?:\s+|$)/';
         preg_match_all($re, $_string, $matches, PREG_SET_ORDER, 0);
@@ -640,7 +643,8 @@ class Utils
         return strToUpper($hex);
     }
 
-    public static function hexToRgb($hex) {
+    public static function hexToRgb($hex)
+    {
         $hex = str_replace("#", "", $hex);
         if (strlen($hex) == 3) {
             $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));
@@ -678,11 +682,13 @@ class Utils
         return '#' . sprintf('%02x', round($rTotal / $total)) . sprintf('%02x', round($gTotal / $total)) . sprintf('%02x', round($bTotal / $total));
     }
 
-    public static function sha512($_string) {
+    public static function sha512($_string)
+    {
         return hash('sha512', $_string);
     }
 
-    public static function findCodeIcon($_icon) {
+    public static function findCodeIcon($_icon)
+    {
         $icon = trim(str_replace(array('fa ', 'icon ', '></i>', '<i', 'class="', '"'), '', trim($_icon)));
         $re = '/.' . $icon . ':.*\n.*content:.*"(.*?)";/m';
 
@@ -759,7 +765,8 @@ class Utils
         return realpath($outputfile);
     }
 
-    public static function unautorizedInDemo($_user = null) {
+    public static function unautorizedInDemo($_user = null)
+    {
         if ($_user === null) {
             if (!isset($_SESSION) || !isset($_SESSION['user'])) {
                 return null;
@@ -774,7 +781,8 @@ class Utils
         }
     }
 
-    public static function o2a($_object, $_noToArray = false) {
+    public static function o2a($_object, $_noToArray = false)
+    {
         if (is_array($_object)) {
             $return = array();
             foreach ($_object as $object) {
@@ -810,7 +818,8 @@ class Utils
         return $array;
     }
 
-    public static function a2o(&$_object, $_data) {
+    public static function a2o(&$_object, $_data)
+    {
         if (is_array($_data)) {
             foreach ($_data as $key => $value) {
                 $method = 'set' . ucfirst($key);
@@ -843,7 +852,8 @@ class Utils
         }
     }
 
-    public static function processJsonObject($_class, $_ajaxList, $_dbList = null) {
+    public static function processJsonObject($_class, $_ajaxList, $_dbList = null)
+    {
         if (!is_array($_ajaxList)) {
             if (Utils::isJson($_ajaxList)) {
                 $_ajaxList = json_decode($_ajaxList, true);
@@ -881,7 +891,8 @@ class Utils
      * @param null $_value
      * @return array|bool|mixed|null
      */
-    public static function setJsonAttr($_attr, $_key, $_value = null) {
+    public static function setJsonAttr($_attr, $_key, $_value = null)
+    {
         if ($_value === null && !is_array($_key)) {
             if (!is_array($_attr)) {
                 $_attr = Utils::isJson($_attr, array());
@@ -900,10 +911,11 @@ class Utils
         return $_attr;
     }
 
-    public static function getJsonAttr(&$_attr, $_key = '', $_default = '') {
+    public static function getJsonAttr(&$_attr, $_key = '', $_default = '')
+    {
         if (is_array($_attr)) {
             if ($_key == '') {
-                return $_attr;
+                return self::isJson($_attr, array());
             }
         } else {
             if ($_key == '') {
@@ -911,6 +923,12 @@ class Utils
                 return $_attr;
             }
             if ($_attr === '') {
+                if (is_array($_key)) {
+                    foreach ($_key as $key) {
+                        $return[$key] = $_default;
+                    }
+                    return $return;
+                }
                 return $_default;
             }
             $_attr = json_decode($_attr, true);
@@ -923,6 +941,20 @@ class Utils
             return $return;
         }
         return (isset($_attr[$_key]) && $_attr[$_key] !== '') ? $_attr[$_key] : $_default;
+    }
+
+    public static function attrChanged($_changed, $_old, $_new)
+    {
+        if ($_changed) {
+            return true;
+        }
+        if (is_array($_old)) {
+            $_old = json_encode($_old);
+        }
+        if (is_array($_new)) {
+            $_new = json_encode($_new);
+        }
+        return ($_old != $_new);
     }
 
 }

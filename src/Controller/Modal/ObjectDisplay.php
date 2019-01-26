@@ -22,12 +22,12 @@
 
 namespace NextDom\Controller\Modal;
 
-use NextDom\Managers\ScenarioManager;
-use NextDom\Managers\ScenarioElementManager;
-use NextDom\Helpers\Utils;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
-use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\Utils;
+use NextDom\Managers\ScenarioElementManager;
+use NextDom\Managers\ScenarioManager;
 
 class ObjectDisplay extends BaseAbstractModal
 {
@@ -72,7 +72,7 @@ class ObjectDisplay extends BaseAbstractModal
         $otherInfo = [];
 
         if ($cmdClass == 'cron' && $data['class'] == 'scenario' && $data['function'] == 'doIn') {
-            $scenario        = ScenarioManager::byId($data['option']['scenario_id']);
+            $scenario = ScenarioManager::byId($data['option']['scenario_id']);
             //TODO: $array ???
             $scenarioElement = ScenarioElementManager::byId($data['option']['scenarioElement_id']);
             if (is_object($scenarioElement) && is_object($scenario)) {
@@ -85,11 +85,11 @@ class ObjectDisplay extends BaseAbstractModal
         if (count($otherInfo) > 0) {
             $pageContent['otherData'] = [];
             foreach ($otherInfo as $otherInfoKey => $otherInfoValue) {
-                $pageContent['otherData'][$otherInfoKey]          = [];
+                $pageContent['otherData'][$otherInfoKey] = [];
                 $pageContent['otherData'][$otherInfoKey]['value'] = $otherInfoValue;
                 // TODO: Always long-text ???
                 if (is_array($otherInfoValue)) {
-                    $pageContent['otherData'][$otherInfoKey]['type']  = 'json';
+                    $pageContent['otherData'][$otherInfoKey]['type'] = 'json';
                     $pageContent['otherData'][$otherInfoKey]['value'] = json_encode($otherInfoValue);
                 } elseif (strpos($otherInfoValue, "\n")) {
                     $pageContent['otherData'][$otherInfoKey]['type'] = 'long-text';
@@ -101,10 +101,10 @@ class ObjectDisplay extends BaseAbstractModal
         // TODO : Reduce loops
         $pageContent['data'] = [];
         foreach ($data as $dataKey => $dataValue) {
-            $pageContent['data'][$dataKey]          = [];
+            $pageContent['data'][$dataKey] = [];
             $pageContent['data'][$dataKey]['value'] = $dataValue;
             if (is_array($dataValue)) {
-                $pageContent['data'][$dataKey]['type']  = 'json';
+                $pageContent['data'][$dataKey]['type'] = 'json';
                 $pageContent['data'][$dataKey]['value'] = json_encode($dataValue);
             } elseif (strpos($dataValue, "\n")) {
                 $pageContent['data'][$dataKey]['type'] = 'long-text';

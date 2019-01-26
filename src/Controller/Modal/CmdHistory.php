@@ -24,12 +24,12 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
-use NextDom\Managers\ConfigManager;
 use NextDom\Helpers\Utils;
- 
+use NextDom\Managers\ConfigManager;
+
 class CmdHistory extends BaseAbstractModal
 {
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -56,8 +56,8 @@ class CmdHistory extends BaseAbstractModal
             'end' => Utils::init('endDate', date('Y-m-d')),
         );
         $pageContent['derive'] = Utils::init('derive', 0);
-        $pageContent['step']   = Utils::init('step', 0);
-        $pageContent['id']     = Utils::init('id');
+        $pageContent['step'] = Utils::init('step', 0);
+        $pageContent['id'] = Utils::init('id');
 
         return $render->get('/modals/cmd.history.html.twig', $pageContent);
     }

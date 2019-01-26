@@ -22,10 +22,10 @@
 
 namespace NextDom\Controller;
 
-use NextDom\Managers\ConfigManager;
-use NextDom\Helpers\Utils;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Helpers\Utils;
+use NextDom\Managers\ConfigManager;
 
 class MarketController extends BaseController
 {
@@ -91,5 +91,5 @@ class MarketController extends BaseController
 
         return $render->get('/desktop/market.html.twig', $pageContent);
     }
-    
+
 }

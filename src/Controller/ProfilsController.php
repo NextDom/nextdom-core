@@ -24,12 +24,12 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
-use NextDom\Helpers\SessionHelper;
-use NextDom\Managers\ConfigManager;
-use NextDom\Managers\PluginManager;
-use NextDom\Managers\JeeObjectManager;
 use NextDom\Helpers\Render;
+use NextDom\Helpers\SessionHelper;
 use NextDom\Helpers\Status;
+use NextDom\Managers\ConfigManager;
+use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\PluginManager;
 
 class ProfilsController extends BaseController
 {
@@ -82,8 +82,8 @@ class ProfilsController extends BaseController
         $pageContent['profilsAvatars'] = [];
         $lsAvatars = FileSystemHelper::ls(NEXTDOM_ROOT . '/public/img/profils/');
         foreach ($lsAvatars as $avatarFile) {
-            if (is_file(NEXTDOM_ROOT . '/public/img/profils/'.$avatarFile)) {
-                $pageContent['profilsAvatars'][] = '/public/img/profils/'.$avatarFile;
+            if (is_file(NEXTDOM_ROOT . '/public/img/profils/' . $avatarFile)) {
+                $pageContent['profilsAvatars'][] = '/public/img/profils/' . $avatarFile;
             }
         }
         $pageContent['profilsDisplayTypes'] = NextDomHelper::getConfiguration('eqLogic:displayType');

@@ -28,7 +28,7 @@ use NextDom\Helpers\Utils;
 
 class RealtimeController extends BaseController
 {
-    
+
     public function __construct()
     {
         parent::__construct();

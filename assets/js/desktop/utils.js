@@ -188,6 +188,7 @@ $(function () {
         });
     }
     /*********************Gestion de l'heure********************************/
+    /*
     setInterval(function () {
         // les noms de jours / mois
         var jours = new Array("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi");
@@ -215,7 +216,7 @@ $(function () {
         var horloge_date= jours[date.getDay()] + " " + date.getDate() + " " + mois[date.getMonth()] + " " + date.getFullYear();
         $('#horloge_date').text(horloge_date);
     }, 1000);
-
+*/
 
 
     $.fn.modal.Constructor.prototype.enforceFocus = function () {
@@ -377,21 +378,33 @@ $(function () {
     });
 
     $('#bt_gotoDashboard').on('click',function(){
+        if('ontouchstart' in window || navigator.msMaxTouchPoints){
+              return;
+        }
         $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
         loadPage('index.php?v=d&p=dashboard');
     });
 
     $('#bt_gotoView').on('click',function(){
+        if('ontouchstart' in window || navigator.msMaxTouchPoints){
+            return;
+        }
         $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
         loadPage('index.php?v=d&p=view');
     });
 
     $('#bt_gotoPlan').on('click',function(){
+        if('ontouchstart' in window || navigator.msMaxTouchPoints){
+            return;
+        }
         $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
         loadPage('index.php?v=d&p=plan');
     });
 
     $('#bt_gotoPlan3d').on('click',function(){
+        if('ontouchstart' in window || navigator.msMaxTouchPoints){
+            return;
+        }
         $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
         loadPage('index.php?v=d&p=plan3d');
     });
@@ -444,6 +457,25 @@ function linkify(inputText) {
 }
 
 function initRowOverflow() {
+     if(screen.width < 768){
+           var col = $('.row-overflow > div').first();
+           col.addClass('collapse');
+           if(col.attr('id') == undefined){
+                 var id = col.uniqueId();
+               }
+           if($('#bt_displayFullMenuOnMobile').html() == undefined){
+                 $('.row-overflow').before('<a class="btn btn-default btn-sm" data-toggle="collapse" id="bt_displayFullMenuOnMobile" style="width:100%;margin-top:3px;"><i class="fas fa-arrow-circle-left"> {{Menu}}</i></a>');
+                 $('#bt_displayFullMenuOnMobile').on('click',function(){
+                       if($(this).find('i').attr('class').search('left') != -1){
+                             $(this).find('i').removeClass('fa-arrow-circle-left').addClass('fa-arrow-circle-down');
+                           }else{
+                             $(this).find('i').removeClass('fa-arrow-circle-down').addClass('fa-arrow-circle-left');
+                           }
+                     });
+               }
+           $('#bt_displayFullMenuOnMobile').attr('data-target','#'+col.attr('id'));
+           return;
+         }
     var hWindow = $(window).outerHeight() - $('header').outerHeight() - $('#div_alert').outerHeight()-5;
     if($('#div_alert').outerHeight() > 0){
         hWindow -= 10;
@@ -822,6 +854,14 @@ function saveWidgetDisplay(_params){
             eqLogics: eqLogics,
             error: function (error) {
                 notify("Erreur", error.message, 'error');
+            },
+            success:function(data){
+                nextdom.cmd.setOrder({
+                    cmds: cmds,
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    }
+                });
             }
         });
     }
@@ -841,15 +881,17 @@ function saveWidgetDisplay(_params){
             eqLogics: eqLogics,
             error: function (error) {
                 notify("Erreur", error.message, 'error');
+            },
+            success:function(data){
+                nextdom.cmd.setOrder({
+                    cmds: cmds,
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    }
+                });
             }
         });
     }
-    nextdom.cmd.setOrder({
-        cmds: cmds,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        }
-    });
 }
 
 

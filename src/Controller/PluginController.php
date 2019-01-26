@@ -23,10 +23,10 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\FileSystemHelper;
-use NextDom\Managers\PluginManager;
-use NextDom\Helpers\Utils;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Helpers\Utils;
+use NextDom\Managers\PluginManager;
 
 class PluginController extends BaseController
 {

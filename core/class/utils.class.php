@@ -22,4 +22,9 @@ class utils {
     public static function getJsonAttr(&$_attr, $_key = '', $_default = '') {
         return \NextDom\Helpers\Utils::getJsonAttr($_attr, $_key, $_default);
     }
+
+    public static function attrChanged($_changed,$_old,$_new){
+        return \NextDom\Helpers\Utils::attrChanged($_changed, $_old, $_new);
+    }
+
 }

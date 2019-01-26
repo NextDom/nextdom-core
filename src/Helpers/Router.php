@@ -158,9 +158,9 @@ class Router
     }
 
     /**
-    *
-    * Generate 404 page
-    */
+     *
+     * Generate 404 page
+     */
     public static function showError404AndDie()
     {
         header("HTTP/1.0 404 Not Found");
