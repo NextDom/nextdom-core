@@ -95,6 +95,7 @@ class ScenarioElement
      * @param \scenario|null $_scenario
      * @return bool|null
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function execute(&$_scenario = null)
     {

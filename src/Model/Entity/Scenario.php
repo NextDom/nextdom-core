@@ -357,7 +357,7 @@ class Scenario
 
     /**
      *
-     * @param mixed $scenarioElement
+     * @param $_scenarioElement
      * @return $this
      */
     public function setScenarioElement($_scenarioElement)
@@ -372,9 +372,8 @@ class Scenario
 
     /**
      *
-     * @param mixed $trigger
+     * @param $_trigger
      * @return $this
-     * @throws \Exception
      */
     public function setTrigger($_trigger)
     {
@@ -389,7 +388,7 @@ class Scenario
 
     /**
      *
-     * @param string $timeout
+     * @param $_timeout
      * @return $this
      */
     public function setTimeout($_timeout)
@@ -410,8 +409,8 @@ class Scenario
 
     /**
      *
-     * @param mixed $_key
-     * @param mixed $_value
+     * @param $key
+     * @param $value
      * @return $this
      */
     public function setDisplay($key, $value)
@@ -1143,6 +1142,7 @@ class Scenario
      * @param mixed $_tag
      * @param mixed $_prettify
      * @param mixed $_withoutScenarioName
+     * @param bool $_object_name
      * @return string
      */
     public function getHumanName($_complete = false, $_noGroup = false, $_tag = false, $_prettify = false, $_withoutScenarioName = false, $_object_name = true)
