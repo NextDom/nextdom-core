@@ -753,7 +753,6 @@ class EqLogic
      * @param $_name
      * @return EqLogic
      * @throws CoreException
-     * @throws \ReflectionException
      */
     public function copy($_name)
     {
@@ -1473,7 +1472,6 @@ class EqLogic
     /**
      * @param $_configuration
      * @throws CoreException
-     * @throws \ReflectionException
      */
     public function import($_configuration)
     {

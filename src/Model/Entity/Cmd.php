@@ -756,7 +756,6 @@ class Cmd
      * @param mixed $_quote
      * @return mixed result
      * @throws CoreException
-     * @throws \ReflectionException
      */
     public function execCmd($_options = null, $_sendNodeJsEvent = false, $_quote = false)
     {

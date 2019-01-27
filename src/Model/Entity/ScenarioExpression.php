@@ -99,7 +99,7 @@ class ScenarioExpression
      * })
      */
     protected $scenarioSubElement_id;
-    protected $_change = false;
+    protected $_changed = false;
 
     public function checkBackground()
     {

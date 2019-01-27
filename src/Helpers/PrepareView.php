@@ -17,6 +17,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Managers\AjaxManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;

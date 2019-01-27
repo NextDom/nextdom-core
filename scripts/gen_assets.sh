@@ -107,7 +107,7 @@ function gen_js {
         vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js \
         vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js \
         vendor/node_modules/snapsvg/dist/snap.svg-min.js)
-    rm /tmp/temp.js
+    rm -fr /tmp/temp.js
     for jsFile in ${jsFiles[*]}
     do
       cat $jsFile >> /tmp/temp.js
@@ -116,7 +116,7 @@ function gen_js {
 
 if [ $# -eq 0 ]; then
     python -m jsmin /tmp/temp.js > public/js/base.js
-#    rm /tmp/temp.js
+    rm /tmp/temp.js
     php scripts/translate.php public/js/base.js
 
     mkdir -p public/js/adminlte
