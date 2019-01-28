@@ -380,7 +380,7 @@ class Scenario
         if (is_array($_trigger)) {
             $_trigger = json_encode($_trigger, JSON_UNESCAPED_UNICODE);
         }
-        $_trigger = cmd::humanReadableToCmd($_trigger);
+        $_trigger = CmdManager::humanReadableToCmd($_trigger);
         $this->_changed = Utils::attrChanged($this->_changed, $this->trigger, $_trigger);
         $this->trigger = $_trigger;
         return $this;
