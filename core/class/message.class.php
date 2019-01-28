@@ -33,11 +33,11 @@ class message {
     /*     * ***********************Methode static*************************** */
     /**
     *
-    * @param type $_type
-    * @param type $_message
-    * @param type $_action
-    * @param type $_logicalId
-    * @param type $_writeMessage
+    * @param string $_type
+    * @param string $_message
+    * @param string $_action
+    * @param mixed $_logicalId
+    * @param bool $_writeMessage
     */
     public static function add($_type, $_message, $_action = '', $_logicalId = '', $_writeMessage = true) {
         $message = (new message())

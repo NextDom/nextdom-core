@@ -304,22 +304,13 @@
                             <tr>
                                 <td>
                                     <input class="form-control key" value="{{ displayKey }}"/>
-
                                 </td>
-
-
                                 <td>
                                     <input class="form-control value" value="{{ displayValue }}"/>
-
                                 </td>
-
-
                                 <td>
                                     <a class="btn btn-danger btn-xs removeWidgetParameter"><i class="fas fa-times"></i> {{ 'Supprimer' }}</a>
-
                                 </td>
-
-
                             </tr>
                         {% endfor %}
                     {% endif %}
@@ -332,22 +323,19 @@
         <br/>
         <legend><i class="fas fa-info-circle"></i> {{ 'Informations Batteries' }}</legend>
         <div class="row">
-            <div class="col-sm-4">
-                <form class="form-horizontal">
-                    <fieldset>
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ 'Type de batterie' }}</label>
-                            <div class="col-sm-3">
-                                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery_type" />
-                            </div>
-                            <div class="col-sm-3">
-                                <a class="btn btn-success" id="bt_resetbattery"><i class="fas fa-refresh"></i> Pile(s) changée(s)</a>
-                                <a class="btn btn-success btn-xs pull-right" id="bt_resetbattery"><i class="fas fa-refresh"></i> {{ 'Pile(s) changée(s)' }}</a>
-                            </div>
+            <form class="form-horizontal">
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">{{ 'Type de batterie' }}</label>
+                        <div class="col-sm-3">
+                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="battery_type"/>
                         </div>
-                    </fieldset>
-                </form>
-            </div>
+                        <div class="col-sm-3">
+                            <a class="btn btn-success btn-xs pull-right" id="bt_resetbattery"><i class="fas fa-refresh"></i> {{ 'Pile(s) changée(s)' }}</a>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
         </div>
         <legend><i class="icon techno-fleches"></i> {{ 'Seuils spécifiques Batteries' }}</legend>
         <div class="row">
