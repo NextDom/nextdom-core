@@ -53,21 +53,21 @@ $NEXTDOM_INTERNAL_CONFIG = array(
         )
     ),
     'theme' => array(
-        'color1' => '#33b8cc',
-        'color2' => '#555555',
-        'color3' => '#f4f4f5',
-        'color4' => '#33B8CC',
-        'color5' => '#ffffff',
-        'color6' => '#f9fafc',
-        'color7' => '#f4f4f5',
-        'color8' => '#f4f4f5',
-        'color9' => '#ecf0f5',
-        'color10' => '#ffffff',
-        'color11' => '#f5f5f5',
-        'color12' => '#555555',
-        'color13' => '#f5f5f5',
-        'color14' => '#dddddd',
-        'color15' => '#ffffff'
+        'theme:color1' => '#33b8cc',
+            'color2' => '#555555',
+            'color3' => '#f4f4f5',
+            'color4' => '#33B8CC',
+            'color5' => '#ffffff',
+            'color6' => '#f9fafc',
+            'color7' => '#f4f4f5',
+            'color8' => '#f4f4f5',
+            'color9' => '#ecf0f5',
+            'color10' => '#ffffff',
+            'color11' => '#f5f5f5',
+            'color12' => '#555555',
+            'color13' => '#f5f5f5',
+            'color14' => '#222d32',
+            'color15' => '#ffffff'
     ),
     'plugin' => array(
         'category' => array(
