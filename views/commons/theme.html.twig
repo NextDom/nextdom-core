@@ -201,11 +201,12 @@ background-color: {{ COLOR1 }};
 }
 
 /* Title */
-.ui-dialog .ui-dialog-title{
+.ui-dialog .ui-dialog-title, {
 color: {{ COLOR1 }};
 }
-.ui-dialog .ui-dialog-titlebar{
+.ui-dialog .ui-dialog-titlebar, .ui-dialog .ui-dialog-buttonpane {
 background-color: {{ COLOR6 }};
+margin: 0;
 }
 
 /* Scrollbar */
@@ -300,4 +301,26 @@ border: 1px solid {{ COLOR9 }} !important;
 .label-list, .label-view, .label-log{
 background-color: {{ COLOR9 }} !important;
 border-color: {{ COLOR14 }};
+}
+
+.viewZone {
+background-color: {{ COLOR13 }} !important;
+}
+
+.table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
+background-color: {{ COLOR11 }} !important;
+border-color: {{ COLOR13 }} !important;
+
+
+}
+
+.tablesorter-bootstrap .tablesorter-filter-row input.tablesorter-filter, .tablesorter-bootstrap .tablesorter-filter-row select.tablesorter-filter {
+background-color: {{ COLOR13 }} !important;
+
+}
+
+.label, .input-sm {
+background-color: {{ COLOR13 }} !important;
+color: {{ COLOR12 }} !important;
+
 }
