@@ -7,6 +7,7 @@ function initHome() {
     $('#bottompanel_otherActionList').append('<a class="link ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" data-page="health" data-title="{{Santé}}"><i class="icon divers-caduceus3" ></i> {{Santé}}</a>');
     $('#bottompanel_otherActionList').append('<a class="link ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" data-page="eqAnalyse" data-title="{{Analyse équipement}}"><i class="fas fa-battery-full" ></i> {{Analyse équipement}}</a>');
     $('#bottompanel_otherActionList').append('<a class="link ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" data-page="log" data-title="{{Logs}}"><i class="far fa-file" ></i> {{Logs}}</a>');
+  $('#bottompanel_otherActionList').append('<a id="bt_forceReload" class="ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button"><i class="fas fa-sync-alt"></i> {{Forcer mise à jour}}</a>');
     $('#bottompanel_otherActionList').append('<a href="#" id="bt_logout" class="ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button"><i class="fas fa-sign-out-alt"></i> {{Déconnexion}}</a>');
 
 
@@ -70,64 +71,68 @@ function initHome() {
     nextdom.plan3d.allHeader({
         error: function (error) {
             notify("Erreur", error.message, 'error');
-        },
-        success: function (plan3dHeader) {
-            var li = '';
-            for (var i in plan3dHeader) {
-                var icon = '';
-                 if (isset(plan3dHeader[i].configuration) && isset(plan3dHeader[i].configuration.icon)) {
-                    icon = plan3dHeader[i].configuration.icon;
-                }
-                li += '<a class="ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" href="index.php?v=d&p=plan3d&plan3d_id=' + plan3dHeader[i].id + '&fullscreen=1" data-ajax="false">' +icon+' '+ plan3dHeader[i].name + '</a>'
-            }
-        $('#bottompanel_plan3dList').empty().append(li);
+    },
+    success: function (plan3dHeader) {
+      var li = '';
+      for (var i in plan3dHeader) {
+        var icon = '';
+        if (isset(plan3dHeader[i].configuration) && isset(plan3dHeader[i].configuration.icon)) {
+          icon = plan3dHeader[i].configuration.icon;
+        }
+        li += '<a class="ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" href="index.php?v=d&p=plan3d&plan3d_id=' + plan3dHeader[i].id + '&fullscreen=1" data-ajax="false">' +icon+' '+ plan3dHeader[i].name + '</a>'
+      }
+      $('#bottompanel_plan3dList').empty().append(li);
     }
-});
-
-
-    if (plugins.length > 0) {
-        var li = '';
-        for (var i in plugins) {
-            if(plugins[i].mobile == ''){
-                continue;
-            }
-            if(plugins[i].displayMobilePanel == 0){
-                continue;
-            }
-            li += '<a href="#" class="link ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" data-page="' + plugins[i].mobile + '" data-plugin="' + plugins[i].id + '" data-title="' + plugins[i].name + '">';
-            li += '<img src="plugins/'+plugins[i].id +'/plugin_info/'+plugins[i].id +'_icon.png" style="width : 20px;position:relative;top:5px;" onerror=\'this.style.display = "none"\' /> ';
-            li +=  plugins[i].name;
-            li +=  '</a>';
-        }
-        if(li != ''){
-            $('#bottompanel_pluginList').empty().append(li);
-        }else{
-         $('#bt_listPlugin').hide();   
-     }
- } else {
+  });
+  
+  
+  if (plugins.length > 0) {
+    var li = '';
+    for (var i in plugins) {
+      if(plugins[i].mobile == ''){
+        continue;
+      }
+      if(plugins[i].displayMobilePanel == 0){
+        continue;
+      }
+      li += '<a href="#" class="link ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" data-page="' + plugins[i].mobile + '" data-plugin="' + plugins[i].id + '" data-title="' + plugins[i].name + '">';
+      li += '<img src="plugins/'+plugins[i].id +'/plugin_info/'+plugins[i].id +'_icon.png" style="width : 20px;position:relative;top:5px;" onerror=\'this.style.display = "none"\' /> ';
+      li +=  plugins[i].name;
+      li +=  '</a>';
+    }
+    if(li != ''){
+      $('#bottompanel_pluginList').empty().append(li);
+    }else{
+      $('#bt_listPlugin').hide();
+    }
+  } else {
     $('#bt_listPlugin').hide();
-}
-
-$('#bt_logout').off().on('click', function () {
+  }
+  
+  $('#bt_logout').off('click').on('click', function () {
     $.ajax({
-        type: "POST", 
-        url: "core/ajax/user.ajax.php", 
-        data: {
-            action: "logout",
-        },
-        dataType: 'json',
-        error: function (request, status, error) {
-            handleAjaxError(request, status, error, $('#div_alert'));
-        },
-        success: function (data) { 
-            if (data.state != 'ok') {
+      type: "POST",
+      url: "core/ajax/user.ajax.php",
+      data: {
+        action: "logout",
+      },
+      dataType: 'json',
+      error: function (request, status, error) {
+        handleAjaxError(request, status, error, $('#div_alert'));
+      },
+      success: function (data) {
+        if (data.state != 'ok') {
                 notify("Erreur", data.result, 'error');
-                return;
-            }
-            initApplication();
+          return;
         }
+        initApplication();
+      }
     });
-});
-setTimeout(function(){$('#pagecontainer').css('padding-top','64px');; }, 100);
+  });
+  
+  $('#bt_forceReload').off('click').on('click', function () {
+    window.location.reload(true);
+  })
+  setTimeout(function(){$('#pagecontainer').css('padding-top','64px');; }, 100);
 }
 

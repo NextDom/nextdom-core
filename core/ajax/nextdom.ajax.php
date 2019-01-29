@@ -34,18 +34,19 @@ try {
         $return['product_name'] = config::byKey('product_name');
         $return['product_icon'] = config::byKey('product_icon');
         $return['product_image'] = config::byKey('product_image');
+        $return['widget_margin'] = config::byKey('widget::margin');
         $return['serverDatetime'] = getmicrotime();
         if (!isConnect()) {
             $return['connected'] = false;
             ajax::success($return);
         }
-
+        
         $return['user_id'] = $_SESSION['user']->getId();
         $return['nextdom_token'] = ajax::getToken();
         @session_start();
         $_SESSION['user']->refresh();
         @session_write_close();
-
+        
         $return['userProfils'] = $_SESSION['user']->getOptions();
         $return['userProfils']['defaultMobileViewName'] = __('Vue', __FILE__);
         if ($_SESSION['user']->getOptions('defaultDesktopView') != '') {
@@ -61,7 +62,7 @@ try {
                 $return['userProfils']['defaultMobileObjectName'] = $object->getName();
             }
         }
-
+        
         $return['plugins'] = array();
         foreach (plugin::listPlugin(true) as $plugin) {
             if ($plugin->getMobile() != '' || $plugin->getEventJs() == 1) {
@@ -77,20 +78,20 @@ try {
         }
         ajax::success($return);
     }
-
+    
     if (!isConnect()) {
         throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
     }
     
     ajax::init(true);
-
+    
     if (init('action') == 'getDocumentationUrl') {
         $plugin = null;
         if (init('plugin') != '' || init('plugin') == 'false') {
             try {
                 $plugin = plugin::byId(init('plugin'));
             } catch (Exception $e) {
-
+                
             }
         }
         if (isset($plugin) && is_object($plugin)) {
@@ -232,22 +233,22 @@ try {
         }
         ajax::success();
     }
-
+    
     if (init('action') == 'haltSystem') {
         unautorizedInDemo();
         ajax::success(nextdom::haltSystem());
     }
-
+    
     if (init('action') == 'rebootSystem') {
         unautorizedInDemo();
         ajax::success(nextdom::rebootSystem());
     }
-
+    
     if (init('action') == 'forceSyncHour') {
         unautorizedInDemo();
         ajax::success(nextdom::forceSyncHour());
     }
-
+    
     if (init('action') == 'saveCustom') {
         unautorizedInDemo();
         $customVersion = Utils::init('version');
@@ -269,7 +270,7 @@ try {
         file_put_contents($path, Utils::init('content'));
         ajax::success();
     }
-
+    
     if (init('action') == 'getGraphData') {
         $return = array('node' => array(), 'link' => array());
         $object = null;

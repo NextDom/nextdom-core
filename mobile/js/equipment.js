@@ -99,32 +99,81 @@ function initEquipment(_object_id) {
     }
     setTileSize('.eqLogic');
     setTimeout(function () {
-      $('.div_displayEquipement .objectHtml').packery({gutter : 4});
-    }, 10); 
+            $('.div_displayEquipement .objectHtml').packery({gutter :0});
+          }, 10);
   } else{
    $('#div_displayEquipement').empty().html('<div class="nd2-card objectSummaryHide" style="max-width:100% !important;"><div class="card-title has-supporting-text" style="padding:4px;font-size:0.6em;"><center><span class="objectSummary'+_object_id+'" data-version="mobile"></span></center></div></div><div class="objectHtml">'+html+'</div></div>').trigger('create');
    nextdom.object.summaryUpdate([{object_id:_object_id}]);
    setTileSize('.eqLogic');
    setTimeout(function () {
-    $('#div_displayEquipement > .objectHtml').packery({gutter : 4});
-  }, 10);
- }
-
+            $('#div_displayEquipement > .objectHtml').packery({gutter :0});
+          }, 10);
+        }
+        
+      }
+    });
+  } else {
+    $('#bottompanel').panel('open');
+  }
+  
+  $(window).on("orientationchange", function (event) {
+    deviceInfo = getDeviceType();
+    setTileSize('.eqLogic');
+    if(_object_id == 'all'){
+      $('.div_displayEquipement > .objectHtml').packery({gutter :0});
+    }else{
+      $('#div_displayEquipement > .objectHtml').packery({gutter :0});
+    }
+  });
+  
+  
+  $('#in_searchWidget').off('keyup').on('keyup',function(){
+    $('.div_displayEquipement').show();
+    var search = $(this).value();
+    if(search == ''){
+      $('.eqLogic-widget').show();
+      $('.scenario-widget').show();
+      $('.objectHtml').packery();
+      return;
+    }
+    $('.eqLogic-widget').each(function(){
+      var match = false;
+      if(match || $(this).find('.widget-name').text().toLowerCase().indexOf(search.toLowerCase()) >= 0){
+        match = true;
+      }
+      if(match || ($(this).attr('data-tags') != undefined && $(this).attr('data-tags').toLowerCase().indexOf(search.toLowerCase()) >= 0)){
+        match = true;
+      }
+      if(match ||($(this).attr('data-category') != undefined && $(this).attr('data-category').toLowerCase().indexOf(search.toLowerCase()) >= 0)){
+        match = true;
+      }
+      if(match ||($(this).attr('data-eqType') != undefined && $(this).attr('data-eqType').toLowerCase().indexOf(search.toLowerCase()) >= 0)){
+        match = true;
+      }
+      if(match){
+        $(this).show();
+      }else{
+        $(this).hide();
+      }
+    });
+    $('.scenario-widget').each(function(){
+      var match = false;
+      if(match || $(this).find('.widget-name').text().toLowerCase().indexOf(search.toLowerCase()) >= 0){
+        match = true;
+      }
+      if(match){
+        $(this).show();
+      }else{
+        $(this).hide();
+      }
+    });
+    $('.objectHtml').packery();
+    $('.objectHtml').each(function(){
+      var count = $(this).find('.scenario-widget:visible').length + $(this).find('.eqLogic-widget:visible').length
+      if(count == 0){
+        $(this).closest('.div_displayEquipement').hide();
+      }
+    })
+  });
+  
 }
-});
-} else {
-  $('#bottompanel').panel('open');
-}
-
-$(window).on("orientationchange", function (event) {
-  deviceInfo = getDeviceType();
-  setTileSize('.eqLogic');
-  if(_object_id == 'all'){
-    $('.div_displayEquipement > .objectHtml').packery({gutter : 4});
-  }else{
-   $('#div_displayEquipement > .objectHtml').packery({gutter : 4}); 
- }
-});
-
-}
-

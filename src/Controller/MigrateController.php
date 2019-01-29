@@ -49,7 +49,7 @@ class ImageMajController extends BaseController
      */
     public function get(Render $render, array &$pageContent): string
     {
-        return $render->get('/desktop/admin/imageMaj.html.twig', $pageContent);
+        return $render->get('/desktop/admin/migrate.html.twig', $pageContent);
     }
 
 }
