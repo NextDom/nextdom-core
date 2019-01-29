@@ -1460,7 +1460,8 @@ class EqLogic
         if (!isConnect()) {
             return false;
         }
-        if (AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
+        if (
+          ::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
             return true;
         }
         if (strpos($_SESSION['user']->getRights('eqLogic' . $this->getId()), $_right) !== false) {
