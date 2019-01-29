@@ -268,20 +268,20 @@ $("input[name=theme]").click(function () {
     if (radio == "white"){
         config = {
             'theme:color1' : '#33b8cc',
-            'theme:color2' : '#ffffff',
-            'theme:color3' : '#ffffff',
+            'theme:color2' : '#555555',
+            'theme:color3' : '#f4f4f5',
             'theme:color4' : '#33B8CC',
             'theme:color5' : '#ffffff',
-            'theme:color6' : '#222d32',
-            'theme:color7' : '#1e282c',
-            'theme:color8' : '#2c3b41',
+            'theme:color6' : '#f9fafc',
+            'theme:color7' : '#f4f4f5',
+            'theme:color8' : '#f4f4f5',
             'theme:color9' : '#ecf0f5',
             'theme:color10' : '#ffffff',
             'theme:color11' : '#f5f5f5',
-            'theme:color12' : '#555',
-            'theme:color13' : '#fff',
-            'theme:color14' : '#ddd',
-            'theme:color15' : '#fafafa'
+            'theme:color12' : '#555555',
+            'theme:color13' : '#f5f5f5',
+            'theme:color14' : '#222d32',
+            'theme:color15' : '#ffffff'
         }
 
     }
