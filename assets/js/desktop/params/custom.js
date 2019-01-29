@@ -263,7 +263,6 @@ $("input[name=theme]").click(function () {
             'theme:color14' : '#2c3b41',
             'theme:color15' : '#222d32'
         }
-
     }
     if (radio == "white"){
         config = {
@@ -280,10 +279,28 @@ $("input[name=theme]").click(function () {
             'theme:color11' : '#f5f5f5',
             'theme:color12' : '#555555',
             'theme:color13' : '#f5f5f5',
-            'theme:color14' : '#222d32',
+            'theme:color14' : '#dddddd',
             'theme:color15' : '#ffffff'
         }
-
+    }
+    if (radio == "mix"){
+        config = {
+            'theme:color1' : '#33b8cc',
+            'theme:color2' : '#ffffff',
+            'theme:color3' : '#ffffff',
+            'theme:color4' : '#33B8CC',
+            'theme:color5' : '#ffffff',
+            'theme:color6' : '#222d32',
+            'theme:color7' : '#1e282c',
+            'theme:color8' : '#2c3b41',
+            'theme:color9' : '#ecf0f5',
+            'theme:color10' : '#ffffff',
+            'theme:color11' : '#f5f5f5',
+            'theme:color12' : '#555555',
+            'theme:color13' : '#ffffff',
+            'theme:color14' : '#dddddd',
+            'theme:color15' : '#fafafa'
+        }
     }
     nextdom.config.save({
         configuration: config,
