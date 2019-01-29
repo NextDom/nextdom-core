@@ -22,9 +22,9 @@
 
 namespace NextDom\Controller\Modal;
 
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
-use NextDom\Helpers\FileSystemHelper;
 
 class IconSelector extends BaseAbstractModal
 {

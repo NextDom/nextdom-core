@@ -55,7 +55,7 @@ class AuthentificationHelper
             session_id($_COOKIE['sess_id']);
         }
         @session_start();
-        $_SESSION['ip'] = getClientIp();
+        $_SESSION['ip'] = NetworkHelper::getClientIp();
         if (!headers_sent()) {
             setcookie('sess_id', session_id(), time() + 24 * 3600, "/", '', false, true);
         }
@@ -65,7 +65,7 @@ class AuthentificationHelper
             header('HTTP/1.1 403 Forbidden');
             $_SERVER['REDIRECT_STATUS'] = 403;
             echo '<p>' . __('403 Access Forbidden', __FILE__) . '</p>';
-            echo '<p>' .__('Votre accès a été verrouillé pour votre sécurité ', __FILE__). '</p>';
+            echo '<p>' . __('Votre accès a été verrouillé pour votre sécurité ', __FILE__) . '</p>';
             die();
         }
 
@@ -103,7 +103,8 @@ class AuthentificationHelper
         }
     }
 
-    public static function login($_login, $_password, $_twoFactor = null) {
+    public static function login($_login, $_password, $_twoFactor = null)
+    {
         $user = UserManager::connect($_login, $_password);
         if (!is_object($user) || $user->getEnable() == 0) {
             UserManager::failedLogin();
@@ -129,7 +130,8 @@ class AuthentificationHelper
         return true;
     }
 
-    public static function loginByHash($_key) {
+    public static function loginByHash($_key)
+    {
         $key = explode('-', $_key);
         $user = UserManager::byHash($key[0]);
         if (!is_object($user) || $user->getEnable() == 0) {
@@ -148,7 +150,7 @@ class AuthentificationHelper
             return false;
         }
         $registerDevice = $user->getOptions('registerDevice', array());
-        if (!isset($registerDevice[sha512($key[1])])) {
+        if (!isset($registerDevice[Utils::sha512($key[1])])) {
             UserManager::failedLogin();
             sleep(5);
             return false;
@@ -160,10 +162,10 @@ class AuthentificationHelper
         if (!is_array($registerDevice)) {
             $registerDevice = array();
         }
-        $registerDevice[sha512($key[1])] = array();
-        $registerDevice[sha512($key[1])]['datetime'] = date('Y-m-d H:i:s');
-        $registerDevice[sha512($key[1])]['ip'] = getClientIp();
-        $registerDevice[sha512($key[1])]['session_id'] = session_id();
+        $registerDevice[Utils::sha512($key[1])] = array();
+        $registerDevice[Utils::sha512($key[1])]['datetime'] = date('Y-m-d H:i:s');
+        $registerDevice[Utils::sha512($key[1])]['ip'] = NetworkHelper::getClientIp();
+        $registerDevice[Utils::sha512($key[1])]['session_id'] = session_id();
         @session_start();
         $_SESSION['user']->setOptions('registerDevice', $registerDevice);
         $_SESSION['user']->save();
@@ -175,7 +177,8 @@ class AuthentificationHelper
         return true;
     }
 
-    public static function logout() {
+    public static function logout()
+    {
         @session_start();
         setcookie('sess_id', '', time() - 3600, "/", '', false, true);
         setcookie('PHPSESSID', '', time() - 3600, "/", '', false, true);
@@ -194,9 +197,9 @@ class AuthentificationHelper
      */
     public static function isConnected(string $rights = ''): bool
     {
-        $rightsKey        = 'isConnect::' . $rights;
+        $rightsKey = 'isConnect::' . $rights;
         $isSetSessionUser = isset($_SESSION['user']);
-        $result           = false;
+        $result = false;
 
         if ($isSetSessionUser && isset($GLOBALS[$rightsKey]) && $GLOBALS[$rightsKey]) {
             $result = $GLOBALS[$rightsKey];

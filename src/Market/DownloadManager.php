@@ -19,8 +19,8 @@
 
 namespace NextDom\Market;
 
-use NextDom\Managers\ConfigManager;
 use NextDom\Helpers\LogHelper;
+use NextDom\Managers\ConfigManager;
 
 /**
  * Gestion des téléchargements

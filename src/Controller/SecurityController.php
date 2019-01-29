@@ -22,11 +22,11 @@
 
 namespace NextDom\Controller;
 
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
-use NextDom\Managers\ConfigManager;
+use NextDom\Helpers\Status;
 use NextDom\Managers\CacheManager;
- 
+use NextDom\Managers\ConfigManager;
+
 class SecurityController extends BaseController
 {
 
@@ -82,6 +82,6 @@ class SecurityController extends BaseController
 
         return $render->get('/desktop/admin/security.html.twig', $pageContent);
     }
- 
+
 
 }

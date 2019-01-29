@@ -22,11 +22,11 @@
 
 namespace NextDom\Controller\Modal;
 
+use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
-use NextDom\Helpers\NextDomHelper;
-use NextDom\Exceptions\CoreException;
 use NextDom\Managers\EqLogicManager;
 
 
@@ -60,20 +60,20 @@ class EqLogicConfigure extends BaseAbstractModal
         }
 
         Utils::sendVarsToJS(
-            ['eqLogicInfo' => \utils::o2a($eqLogic),
+            ['eqLogicInfo' => Utils::o2a($eqLogic),
                 'eqLogicInfoSearchString' => urlencode(str_replace('#', '', $eqLogic->getHumanName()))]);
 
         $pageContent = [];
-        $pageContent['widgetPossibilityCustom']                   = $eqLogic->widgetPossibility('custom');
-        $pageContent['widgetPossibilityCustomLayout']             = $eqLogic->widgetPossibility('custom::layout');
-        $pageContent['widgetPossibilityCustomVisibility']         = $eqLogic->widgetPossibility('custom::visibility');
-        $pageContent['widgetPossibilityCustomDisplayName']        = $eqLogic->widgetPossibility('custom::displayName');
-        $pageContent['widgetPossibilityCustomDisplayObjectName']  = $eqLogic->widgetPossibility('custom::displayObjectName');
-        $pageContent['widgetPossibilityCustomBackgroundColor']    = $eqLogic->widgetPossibility('custom::background-color');
-        $pageContent['widgetPossibilityCustomBackgroundOpacity']  = $eqLogic->widgetPossibility('custom::background-opacity');
-        $pageContent['widgetPossibilityCustomTextColor']          = $eqLogic->widgetPossibility('custom::text-color');
-        $pageContent['widgetPossibilityCustomBorder']             = $eqLogic->widgetPossibility('custom::border');
-        $pageContent['widgetPossibilityCustomBorderRadius']       = $eqLogic->widgetPossibility('custom::border-radius');
+        $pageContent['widgetPossibilityCustom'] = $eqLogic->widgetPossibility('custom');
+        $pageContent['widgetPossibilityCustomLayout'] = $eqLogic->widgetPossibility('custom::layout');
+        $pageContent['widgetPossibilityCustomVisibility'] = $eqLogic->widgetPossibility('custom::visibility');
+        $pageContent['widgetPossibilityCustomDisplayName'] = $eqLogic->widgetPossibility('custom::displayName');
+        $pageContent['widgetPossibilityCustomDisplayObjectName'] = $eqLogic->widgetPossibility('custom::displayObjectName');
+        $pageContent['widgetPossibilityCustomBackgroundColor'] = $eqLogic->widgetPossibility('custom::background-color');
+        $pageContent['widgetPossibilityCustomBackgroundOpacity'] = $eqLogic->widgetPossibility('custom::background-opacity');
+        $pageContent['widgetPossibilityCustomTextColor'] = $eqLogic->widgetPossibility('custom::text-color');
+        $pageContent['widgetPossibilityCustomBorder'] = $eqLogic->widgetPossibility('custom::border');
+        $pageContent['widgetPossibilityCustomBorderRadius'] = $eqLogic->widgetPossibility('custom::border-radius');
         $pageContent['widgetPossibilityCustomOptionalParameters'] = $eqLogic->widgetPossibility('custom::optionalParameters');
 
         $pageContent['statusNumberTryWithoutSuccess'] = $eqLogic->getStatus('numberTryWithoutSuccess', 0);
@@ -84,7 +84,7 @@ class EqLogicConfigure extends BaseAbstractModal
 
         foreach (NextDomHelper::getConfiguration('eqLogic:displayType') as $key => $value) {
             $eqLogicDisplayType = [];
-            $eqLogicDisplayType['key']  = $key;
+            $eqLogicDisplayType['key'] = $key;
             $eqLogicDisplayType['name'] = $value['name'];
             $eqLogicDisplayType['customVisibility'] = false;
             if ($pageContent['widgetPossibilityCustomVisibility'] && $eqLogic->widgetPossibility('custom::visibility::' . $key)) {
@@ -157,7 +157,7 @@ class EqLogicConfigure extends BaseAbstractModal
         }
 
         $pageContent['dashboardCmd'] = array();
-        
+
         foreach ($eqLogic->getCmd(null, null, true) as $cmd) {
             $line = $eqLogic->getDisplay('layout::dashboard::table::cmd::' . $cmd->getId() . '::line', 1);
             $column = $eqLogic->getDisplay('layout::dashboard::table::cmd::' . $cmd->getId() . '::column', 1);
@@ -169,10 +169,10 @@ class EqLogicConfigure extends BaseAbstractModal
             }
             $pageContent['dashboardCmd'][$line][$column][] = $cmd;
         }
-        $pageContent['displayDashboardNbLine']   = $eqLogic->getDisplay('layout::dashboard::table::nbLine', 1);
+        $pageContent['displayDashboardNbLine'] = $eqLogic->getDisplay('layout::dashboard::table::nbLine', 1);
         $pageContent['displayDashboardNbColumn'] = $eqLogic->getDisplay('layout::dashboard::table::nbColumn', 1);
 
-      return $render->get('/modals/eqLogic.configure.html.twig', $pageContent);
+        return $render->get('/modals/eqLogic.configure.html.twig', $pageContent);
     }
 
 }

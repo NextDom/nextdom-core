@@ -95,7 +95,7 @@ class Datastore
     }
 
     /**
-     * 
+     *
      * @param mixed $linkId
      * @return $this
      */

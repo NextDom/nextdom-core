@@ -1,20 +1,20 @@
 <?php
- /*
- * This file is part of the NextDom software (https://github.com/NextDom or http://nextdom.github.io).
- * Copyright (c) 2018 NextDom.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, version 2.
- *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+/*
+* This file is part of the NextDom software (https://github.com/NextDom or http://nextdom.github.io).
+* Copyright (c) 2018 NextDom.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, version 2.
+*
+* This program is distributed in the hope that it will be useful, but
+* WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 /* This file is part of Jeedom.
  *
@@ -37,9 +37,10 @@ namespace NextDom\Managers;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 
-require_once NEXTDOM_ROOT.'/core/class/cache.class.php';
+require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
-class CacheManager {
+class CacheManager
+{
     private static $cacheSystem = null;
 
     /**
@@ -48,7 +49,7 @@ class CacheManager {
      * @return string Cache folder
      * @throws \Exception
      */
-    public static function getFolder(): string 
+    public static function getFolder(): string
     {
         $return = NextDomHelper::getTmpFolder('cache');
         if (!file_exists($return)) {
@@ -67,15 +68,15 @@ class CacheManager {
      *
      * @return bool
      */
-    public static function set($key, $value, $lifetime = 0, $options = null) 
+    public static function set($key, $value, $lifetime = 0, $options = null)
     {
         if ($lifetime < 0) {
             $lifetime = 0;
         }
         $cacheItem = new \cache();
         $cacheItem->setKey($key)
-              ->setValue($value)
-              ->setLifetime($lifetime);
+            ->setValue($value)
+            ->setLifetime($lifetime);
         if ($options != null) {
             $cacheItem->setOptionsFromJson($options);
         }
@@ -88,7 +89,7 @@ class CacheManager {
      * @param $key
      * @throws \Exception
      */
-    public static function delete($key) 
+    public static function delete($key)
     {
         $cacheItem = self::byKey($key);
         if (is_object($cacheItem)) {
@@ -104,7 +105,7 @@ class CacheManager {
      * @return array|null
      * @throws \Exception
      */
-    public static function stats($details = false) 
+    public static function stats($details = false)
     {
         $result = self::getCache()->getStats();
         $result['count'] = \__('Inconnu');
@@ -125,7 +126,7 @@ class CacheManager {
             foreach (FileSystemHelper::ls(self::getFolder()) as $folder) {
                 foreach (FileSystemHelper::ls(self::getFolder() . '/' . $folder) as $file) {
                     $path = self::getFolder() . '/' . $folder . '/' . $file;
-                    $str = (string) str_replace("\n", '', file_get_contents($path));
+                    $str = (string)str_replace("\n", '', file_get_contents($path));
                     preg_match_all($re, $str, $matches);
                     if (!isset($matches[2]) || !isset($matches[2][0]) || trim($matches[2][0]) == '') {
                         continue;
@@ -144,7 +145,7 @@ class CacheManager {
      * @return \Doctrine\Common\Cache\FilesystemCache|\Doctrine\Common\Cache\MemcachedCache|\Doctrine\Common\Cache\RedisCache|null Cache system
      * @throws \Exception
      */
-    public static function getCache() 
+    public static function getCache()
     {
         if (self::$cacheSystem !== null) {
             return self::$cacheSystem;
@@ -191,13 +192,13 @@ class CacheManager {
      * @return mixed Stored object or null if not exists
      * @throws \Exception
      */
-    public static function byKey($key) 
+    public static function byKey($key)
     {
         $cache = self::getCache()->fetch($key);
         if (!is_object($cache)) {
             $cache = new \cache();
             $cache->setKey($key)
-                  ->setDatetime(date('Y-m-d H:i:s'));
+                ->setDatetime(date('Y-m-d H:i:s'));
         }
         return $cache;
     }
@@ -210,7 +211,7 @@ class CacheManager {
      * @return bool True if object exists
      * @throws \Exception
      */
-    public static function exists($key) 
+    public static function exists($key)
     {
         return is_object(self::getCache()->fetch($key));
     }
@@ -225,7 +226,7 @@ class CacheManager {
      * @deprecated Use exists
      * @throws \Exception
      */
-    public static function exist($key) 
+    public static function exist($key)
     {
         trigger_error('This method is deprecated', E_USER_DEPRECATED);
         return self::exists($key);
@@ -234,7 +235,7 @@ class CacheManager {
     /**
      * Clear cache
      */
-    public static function flush() 
+    public static function flush()
     {
         self::getCache()->deleteAll();
         shell_exec('rm -rf ' . self::getFolder() . ' 2>&1 > /dev/null');
@@ -252,7 +253,7 @@ class CacheManager {
     /**
      * Persist cache system
      */
-    public static function persist() 
+    public static function persist()
     {
         switch (ConfigManager::byKey('cache::engine')) {
             case 'FilesystemCache':
@@ -265,7 +266,7 @@ class CacheManager {
                 return;
         }
         try {
-            $cacheFile = NEXTDOM_ROOT.'/var/cache.tar.gz';
+            $cacheFile = NEXTDOM_ROOT . '/var/cache.tar.gz';
             $persisCmd = 'rm -rf ' . $cacheFile . ';cd ' . $cacheDir . ';tar cfz ' . $cacheFile . ' * 2>&1 > /dev/null;chmod 775 ' . $cacheFile . ';chown ' . \system::get('www-uid') . ':' . \system::get('www-gid') . ' ' . $cacheFile . ';chmod 777 -R ' . $cacheDir . ' 2>&1 > /dev/null';
             \com_shell::execute($persisCmd);
         } catch (\Exception $e) {
@@ -280,12 +281,12 @@ class CacheManager {
      * @return bool True if file cache.tar.gz
      * @throws \Exception
      */
-    public static function isPersistOk(): bool 
+    public static function isPersistOk(): bool
     {
         if (ConfigManager::byKey('cache::engine') != 'FilesystemCache' && ConfigManager::byKey('cache::engine') != 'PhpFileCache') {
             return true;
         }
-        $filename = NEXTDOM_ROOT.'/var/cache.tar.gz';
+        $filename = NEXTDOM_ROOT . '/var/cache.tar.gz';
         if (!file_exists($filename)) {
             return false;
         }
@@ -298,7 +299,7 @@ class CacheManager {
     /**
      * Restore persisted cache
      */
-    public static function restore() 
+    public static function restore()
     {
         switch (ConfigManager::byKey('cache::engine')) {
             case 'FilesystemCache':
@@ -329,7 +330,7 @@ class CacheManager {
      *
      * @throws \Exception
      */
-    public static function clean() 
+    public static function clean()
     {
         if (ConfigManager::byKey('cache::engine') != 'FilesystemCache') {
             return;
@@ -343,7 +344,7 @@ class CacheManager {
                     unlink($path);
                     continue;
                 }
-                $str = (string) str_replace("\n", '', file_get_contents($path));
+                $str = (string)str_replace("\n", '', file_get_contents($path));
                 preg_match_all($re, $str, $matches);
                 if (!isset($matches[2]) || !isset($matches[2][0]) || trim($matches[2][0]) == '') {
                     continue;

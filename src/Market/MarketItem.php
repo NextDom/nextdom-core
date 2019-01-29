@@ -162,8 +162,8 @@ class MarketItem
      */
     public static function createFromCache(string $sourceName, string $fullName)
     {
-        $result = (new self($sourceName)) 
-               ->setFullName($fullName);
+        $result = (new self($sourceName))
+            ->setFullName($fullName);
         $result->readCache();
         return $result;
     }
@@ -266,23 +266,23 @@ class MarketItem
     public function getDataInArray()
     {
         $dataArray = [];
-        $dataArray['name']              = $this->name;
-        $dataArray['gitName']           = $this->gitName;
-        $dataArray['gitId']             = $this->gitId;
-        $dataArray['fullName']          = $this->fullName;
-        $dataArray['description']       = $this->description;
-        $dataArray['url']               = $this->url;
-        $dataArray['id']                = $this->id;
-        $dataArray['author']            = $this->author;
-        $dataArray['category']          = $this->category;
-        $dataArray['iconPath']          = $this->iconPath;
-        $dataArray['defaultBranch']     = $this->defaultBranch;
-        $dataArray['branchesList']      = $this->branchesList;
-        $dataArray['licence']           = $this->licence;
-        $dataArray['sourceName']        = $this->sourceName;
-        $dataArray['changelogLink']     = $this->changelogLink;
+        $dataArray['name'] = $this->name;
+        $dataArray['gitName'] = $this->gitName;
+        $dataArray['gitId'] = $this->gitId;
+        $dataArray['fullName'] = $this->fullName;
+        $dataArray['description'] = $this->description;
+        $dataArray['url'] = $this->url;
+        $dataArray['id'] = $this->id;
+        $dataArray['author'] = $this->author;
+        $dataArray['category'] = $this->category;
+        $dataArray['iconPath'] = $this->iconPath;
+        $dataArray['defaultBranch'] = $this->defaultBranch;
+        $dataArray['branchesList'] = $this->branchesList;
+        $dataArray['licence'] = $this->licence;
+        $dataArray['sourceName'] = $this->sourceName;
+        $dataArray['changelogLink'] = $this->changelogLink;
         $dataArray['documentationLink'] = $this->documentationLink;
-        $dataArray['screenshots']       = $this->screenshots;
+        $dataArray['screenshots'] = $this->screenshots;
 
         $this->initUpdateData();
         $dataArray['installed'] = $this->isInstalled();
@@ -366,7 +366,7 @@ class MarketItem
     {
         $iconFilename = \str_replace('/', '_', $this->fullName) . '.png';
         $iconUrl = 'https://raw.githubusercontent.com/' . $this->fullName . '/' . $this->defaultBranch . '/plugin_info/' . $this->id . '_icon.png';
-        $targetPath = NEXTDOM_ROOT.'/var/market_cache/' . $iconFilename;
+        $targetPath = NEXTDOM_ROOT . '/var/market_cache/' . $iconFilename;
         DownloadManager::downloadBinary($iconUrl, $targetPath);
         if (\filesize($targetPath) < 100) {
             \unlink($targetPath);

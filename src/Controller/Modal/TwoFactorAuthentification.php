@@ -22,10 +22,10 @@
 
 namespace NextDom\Controller\Modal;
 
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
-use PragmaRX\Google2FA\Google2FA;
+use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
+use PragmaRX\Google2FA\Google2FA;
 
 class TwoFactorAuthentification extends BaseAbstractModal
 {

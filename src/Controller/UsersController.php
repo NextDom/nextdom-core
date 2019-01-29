@@ -30,7 +30,7 @@ use NextDom\Managers\UserManager;
 
 class UsersController extends BaseController
 {
-    
+
     public function __construct()
     {
         parent::__construct();

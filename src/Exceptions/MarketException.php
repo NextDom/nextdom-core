@@ -21,5 +21,5 @@ namespace NextDom\Exceptions;
 
 class MarketException extends \Exception
 {
- 
+
 }

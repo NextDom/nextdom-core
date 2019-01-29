@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 namespace NextDom\Helpers;
 
 use NextDom\Enums\ApiModeEnum;
@@ -67,7 +68,7 @@ class Api
                 $result = false;
                 break;
             case ApiModeEnum::API_WHITEIP:
-                $ip = getClientIp();
+                $ip = NetworkHelper::getClientIp();
                 $find = false;
                 $whiteIps = explode(';', ConfigManager::byKey('security::whiteips'));
                 if (ConfigManager::byKey('security::whiteips') != '' && count($whiteIps) > 0) {

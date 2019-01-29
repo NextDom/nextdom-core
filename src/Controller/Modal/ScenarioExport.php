@@ -22,9 +22,9 @@
 
 namespace NextDom\Controller\Modal;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
-use NextDom\Exceptions\CoreException;
 use NextDom\Managers\ScenarioManager;
 
 class ScenarioExport extends BaseAbstractModal

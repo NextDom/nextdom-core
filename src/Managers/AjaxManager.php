@@ -36,14 +36,16 @@ namespace NextDom\Managers;
 
 use NextDom\Helpers\Utils;
 
-class AjaxManager {
+class AjaxManager
+{
     /**
      * Init ajax communication
      *
      * @param bool $checkToken
      * @throws \Exception
      */
-    public static function init($checkToken = true) {
+    public static function init($checkToken = true)
+    {
         if (!headers_sent()) {
             header('Content-Type: application/json');
         }
@@ -58,7 +60,8 @@ class AjaxManager {
      * @return string NextDom token
      * @throws \Exception
      */
-    public static function getToken() {
+    public static function getToken()
+    {
         if (session_status() == PHP_SESSION_NONE) {
             @session_start();
             @session_write_close();
@@ -76,7 +79,8 @@ class AjaxManager {
      *
      * @param string $answer Answer to send
      */
-    public static function success($answer = '') {
+    public static function success($answer = '')
+    {
         echo self::getResponse($answer);
         die();
     }
@@ -87,7 +91,8 @@ class AjaxManager {
      * @param string $errorData Error description
      * @param int $errorCode Error code
      */
-    public static function error($errorData = '', $errorCode = 0) {
+    public static function error($errorData = '', $errorCode = 0)
+    {
         echo self::getResponse($errorData, $errorCode);
         die();
     }
@@ -99,7 +104,8 @@ class AjaxManager {
      * @param null $errorCode Error code
      * @return mixed
      */
-    public static function getResponse($data = '', $errorCode = null) {
+    public static function getResponse($data = '', $errorCode = null)
+    {
         $isError = !(null === $errorCode);
         $return = array(
             'state' => $isError ? 'error' : 'ok',

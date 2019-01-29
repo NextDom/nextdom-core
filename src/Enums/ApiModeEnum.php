@@ -14,12 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 namespace NextDom\Enums;
 
 class ApiModeEnum extends Enum
 {
-    const API_ENABLE     = 'enable';
-    const API_DISABLE    = 'disable';
-    const API_WHITEIP    = 'whiteip';
-    const API_LOCALHOST  = 'cronDaily';
+    const API_ENABLE = 'enable';
+    const API_DISABLE = 'disable';
+    const API_WHITEIP = 'whiteip';
+    const API_LOCALHOST = 'cronDaily';
 }

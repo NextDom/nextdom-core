@@ -34,11 +34,13 @@
 
 namespace NextDom\Managers;
 
-class EqRealManager {
+class EqRealManager
+{
     const CLASS_NAME = \eqReal::class;
     const DB_CLASS_NAME = '`eqReal`';
 
-    private static function getClass($_id) {
+    private static function getClass($_id)
+    {
         if (get_called_class() != self::CLASS_NAME) {
             return get_called_class();
         }
@@ -74,24 +76,26 @@ class EqRealManager {
         return self::CLASS_NAME;
     }
 
-    public static function byId($_id) {
+    public static function byId($_id)
+    {
         $values = array(
             'id' => $_id,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM '. self::DB_CLASS_NAME .'
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
         $class = self::getClass($_id);
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, $class);
     }
 
-    public static function byLogicalId($_logicalId, $_cat) {
+    public static function byLogicalId($_logicalId, $_cat)
+    {
         $values = array(
             'logicalId' => $_logicalId,
             'cat' => $_cat,
         );
         $sql = 'SELECT id
-                FROM '. self::DB_CLASS_NAME .'
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE logicalId = :logicalId
                   AND cat= : cat';
         $results = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL);

@@ -22,12 +22,12 @@
 
 namespace NextDom\Controller\Modal;
 
-use NextDom\Helpers\Utils;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
-use NextDom\Exceptions\CoreException;
 
 class ScenarioTemplate extends BaseAbstractModal
 {
@@ -49,7 +49,7 @@ class ScenarioTemplate extends BaseAbstractModal
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string 
+    public function get(Render $render): string
     {
         $scenarioId = Utils::init('scenario_id');
         $scenario = ScenarioManager::byId($scenarioId);

@@ -19,6 +19,7 @@ namespace NextDom\Helpers;
 
 use DebugBar\DataCollector;
 use DebugBar\StandardDebugBar;
+use NextDom\Managers\ConfigManager;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Symfony\Component\Translation\Translator;
@@ -29,7 +30,6 @@ use Twig_Environment;
 use Twig_Error_Loader;
 use Twig_Extension_Debug;
 use Twig_Loader_Filesystem;
-use NextDom\Managers\ConfigManager;
 
 class Render
 {
@@ -74,16 +74,16 @@ class Render
         $developerMode = Status::isInDeveloperMode();
         $loader = new Twig_Loader_Filesystem(realpath('views'));
         $this->twigLoader = $loader;
-        $twigConfig =  [
+        $twigConfig = [
             'cache' => NEXTDOM_ROOT . '/var/cache/twig',
             'debug' => $developerMode,
         ];
-        
+
         if ($developerMode) {
-           $twigConfig['auto_reload'] = true;
+            $twigConfig['auto_reload'] = true;
         }
 
-        $this->twig = new Twig_Environment($loader,  $twigConfig);
+        $this->twig = new Twig_Environment($loader, $twigConfig);
         $this->twig->addExtension(new I18nExtension());
         $this->twig->addExtension(new DateExtension($this->translator));
         $this->twig->addExtension(new TextExtension());
@@ -138,14 +138,11 @@ class Render
         $data['debugbar'] = $this->showDebugBar($this->twigLoader);
         try {
             echo $this->twig->render($view, $data);
-        }
-        catch (Twig_Error_Loader $e) {
+        } catch (Twig_Error_Loader $e) {
             echo $e->getMessage();
-        }
-        catch (\Twig_Error_Runtime $e) {
+        } catch (\Twig_Error_Runtime $e) {
             echo $e->getMessage();
-        }
-        catch (\Twig_Error_Syntax $e) {
+        } catch (\Twig_Error_Syntax $e) {
             echo $e->getMessage();
         }
     }
@@ -173,8 +170,7 @@ class Render
             try {
                 $debugBar->addCollector(new DataCollector\ConfigCollector(ConfigManager::getDefaultConfiguration()['core']));
                 $debugBarData = $debugBarRenderer;
-            }
-            catch (\DebugBar\DebugBarException $e) {
+            } catch (\DebugBar\DebugBarException $e) {
                 echo $e->getMessage();
             }
         }

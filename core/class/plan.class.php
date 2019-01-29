@@ -30,9 +30,10 @@ class plan {
     private $display;
     private $css;
     private $configuration;
-
+    private $_changed = false;
+    
     /*     * ***********************Methode static*************************** */
-
+    
     public static function byId($_id) {
         $values = array(
             'id' => $_id,
@@ -96,37 +97,37 @@ class plan {
         AND planHeader_id=:planHeader_id';
         return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
     }
-
+    
     public static function all() {
         $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
         FROM plan';
         return DB::Prepare($sql, array(), DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
     }
-
+    
     public static function searchByDisplay($_search) {
         $value = array(
             'search' => '%' . $_search . '%',
         );
         $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-                FROM plan
-                WHERE display LIKE :search';
+        FROM plan
+        WHERE display LIKE :search';
         return DB::Prepare($sql, $value, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
     }
-
+    
     public static function searchByConfiguration($_search, $_not = '') {
         $value = array(
             'search' => '%' . $_search . '%',
             'not' => $_not,
         );
         $sql = 'SELECT ' . DB::buildField(__CLASS__) . '
-                FROM plan
-                WHERE configuration LIKE :search
-                 AND link_type !=:not';
+        FROM plan
+        WHERE configuration LIKE :search
+        AND link_type !=:not';
         return DB::Prepare($sql, $value, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
     }
-
+    
     /*     * *********************Methode d'instance************************* */
-
+    
     public function preInsert() {
         if ($this->getCss('z-index') == '') {
             $this->setCss('z-index', 1000);
@@ -353,6 +354,7 @@ class plan {
 
     /*     * **********************Getteur Setteur*************************** */
 
+
     public function getId() {
         return $this->id;
     }
@@ -377,33 +379,42 @@ class plan {
         return utils::getJsonAttr($this->css, $_key, $_default);
     }
 
-    public function setId($id) {
-        $this->id = $id;
+    public function setId($_id) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->id,$_id);
+        $this->id = $_id;
         return $this;
     }
 
-    public function setLink_type($link_type) {
-        $this->link_type = $link_type;
+    public function setLink_type($_link_type) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->link_type,$_link_type);
+        $this->link_type = $_link_type;
         return $this;
     }
 
-    public function setLink_id($link_id) {
-        $this->link_id = $link_id;
+    public function setLink_id($_link_id) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->link_id,$_link_id);
+        $this->link_id = $_link_id;
         return $this;
     }
 
     public function setPosition($_key, $_value) {
-        $this->position = utils::setJsonAttr($this->position, $_key, $_value);
+        $position = utils::setJsonAttr($this->position, $_key, $_value);
+        $this->_changed = utils::attrChanged($this->_changed,$this->position,$position);
+        $this->position = $position;
         return $this;
     }
 
     public function setDisplay($_key, $_value) {
-        $this->display = utils::setJsonAttr($this->display, $_key, $_value);
+        $display = utils::setJsonAttr($this->display, $_key, $_value);
+        $this->_changed = utils::attrChanged($this->_changed,$this->display,$display);
+        $this->display = $display;
         return $this;
     }
 
     public function setCss($_key, $_value) {
-        $this->css = utils::setJsonAttr($this->css, $_key, $_value);
+        $css = utils::setJsonAttr($this->css, $_key, $_value);
+        $this->_changed = utils::attrChanged($this->_changed,$this->css,$css);
+        $this->css = $css;
         return $this;
     }
 
@@ -411,8 +422,9 @@ class plan {
         return $this->planHeader_id;
     }
 
-    public function setPlanHeader_id($planHeader_id) {
-        $this->planHeader_id = $planHeader_id;
+    public function setPlanHeader_id($_planHeader_id) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->planHeader_id,$_planHeader_id);
+        $this->planHeader_id = $_planHeader_id;
         return $this;
     }
 
@@ -421,7 +433,18 @@ class plan {
     }
 
     public function setConfiguration($_key, $_value) {
-        $this->configuration = utils::setJsonAttr($this->configuration, $_key, $_value);
+        $configuration = utils::setJsonAttr($this->configuration, $_key, $_value);
+        $this->_changed = utils::attrChanged($this->_changed,$this->configuration,$configuration);
+        $this->configuration = $configuration;
+        return $this;
+    }
+
+    public function getChanged() {
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed) {
+        $this->_changed = $_changed;
         return $this;
     }
 

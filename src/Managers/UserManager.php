@@ -34,6 +34,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\LogHelper;
+use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use PragmaRX\Google2FA\Google2FA;
@@ -286,14 +287,14 @@ class UserManager
 
     public static function isBanned()
     {
-        $ip = getClientIp();
+        $ip = NetworkHelper::getClientIp();
         if ($ip == '') {
             return false;
         }
         $whiteIps = explode(';', ConfigManager::byKey('security::whiteips'));
         if (ConfigManager::byKey('security::whiteips') != '' && count($whiteIps) > 0) {
             foreach ($whiteIps as $whiteip) {
-                if (netMatch($whiteip, $ip)) {
+                if (NetworkHelper::netMatch($whiteip, $ip)) {
                     return false;
                 }
             }
@@ -322,7 +323,7 @@ class UserManager
                 $values_tmp[] = $value;
             }
             $values = $values_tmp;
-            $values[] = array('datetime' => strtotime('now'), 'ip' => getClientIp());
+            $values[] = array('datetime' => strtotime('now'), 'ip' => NetworkHelper::getClientIp());
             @session_start();
             $_SESSION['failed_count'] = 0;
             $_SESSION['failed_datetime'] = -1;
@@ -357,13 +358,13 @@ class UserManager
             $user->setOptions('twoFactorAuthentificationSecret', $google2fa->generateSecretKey());
             $user->setOptions('twoFactorAuthentification', 1);
         }
-        $user->setPassword(sha512(ConfigManager::genKey(255)));
+        $user->setPassword(Utils::sha512(ConfigManager::genKey(255)));
         $user->setOptions('localOnly', 1);
         $user->setProfils('admin');
         $user->setEnable(1);
         $key = ConfigManager::genKey();
         $registerDevice = array(
-            sha512($key) => array(
+            Utils::sha512($key) => array(
                 'datetime' => date('Y-m-d H:i:s'),
                 'ip' => '127.0.0.1',
                 'session_id' => 'none',
@@ -382,12 +383,12 @@ class UserManager
                 $user = new \user();
                 $user->setLogin('nextdom_support');
             }
-            $user->setPassword(sha512(ConfigManager::genKey(255)));
+            $user->setPassword(Utils::sha512(ConfigManager::genKey(255)));
             $user->setProfils('admin');
             $user->setEnable(1);
             $key = ConfigManager::genKey();
             $registerDevice = array(
-                sha512($key) => array(
+                Utils::sha512($key) => array(
                     'datetime' => date('Y-m-d H:i:s'),
                     'ip' => '127.0.0.1',
                     'session_id' => 'none',

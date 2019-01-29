@@ -34,10 +34,10 @@
 
 namespace NextDom\Helpers;
 
-use NextDom\Managers\PluginManager;
-use Symfony\Component\Translation\Translator;
-use Symfony\Component\Translation\Loader\YamlFileLoader;
 use NextDom\Managers\ConfigManager;
+use NextDom\Managers\PluginManager;
+use Symfony\Component\Translation\Loader\YamlFileLoader;
+use Symfony\Component\Translation\Translator;
 
 class TranslateHelper
 {
@@ -55,17 +55,17 @@ class TranslateHelper
     /**
      * @var string Langage par défaut
      */
-    protected static $language          = null;
+    protected static $language = null;
 
     /**
      * @var Translator Outil de traduction
      */
-    protected static $translator        = null;
+    protected static $translator = null;
 
     /**
      * @var array Informations de la configuration
      */
-    protected static $config            = null;
+    protected static $config = null;
 
     /**
      * Obtenir une des informations de la configuration liée à la traduction
@@ -116,11 +116,11 @@ class TranslateHelper
      */
     public static function loadTranslation(): array
     {
-        $result   = [];
+        $result = [];
         $language = self::getLanguage();
         $filename = self::getPathTranslationFile($language);
         if (file_exists($filename)) {
-            self::$translator = new Translator($language,null,NEXTDOM_ROOT.'/var/cache/i18n');
+            self::$translator = new Translator($language, null, NEXTDOM_ROOT . '/var/cache/i18n');
             self::$translator->addLoader('yaml', new YamlFileLoader());
             self::$translator->addResource('yaml', $filename, $language);
             $pluginsDirList = scandir(NEXTDOM_ROOT . '/plugins');
@@ -152,7 +152,7 @@ class TranslateHelper
     {
         // Test si les traductions ont été mises en cache
         if (!self::$translationLoaded) {
-            self::$translation       = array(
+            self::$translation = array(
                 self::getLanguage() => self::loadTranslation(),
             );
             self::$translationLoaded = true;
@@ -174,16 +174,16 @@ class TranslateHelper
         if ($content == '') {// || $filename == '') {
             return '';
         }
-        
+
         $oldTranslationMode = false;
         $translate = self::getTranslation('fr_FR');
         // Ancienne version pour les plugins
         if (strpos($filename, '/plugins') === 0) {
-            $filename           = substr($filename, strpos($filename, 'plugins'));
+            $filename = substr($filename, strpos($filename, 'plugins'));
             $oldTranslationMode = true;
         }
 
-        $modify  = false;
+        $modify = false;
         $replace = array();
         preg_match_all("/{{(.*?)}}/s", $content, $matches);
         if ($oldTranslationMode) {
@@ -244,8 +244,7 @@ class TranslateHelper
         // Ancienne méthode
         if (strpos($filename, '/plugins') === 0) {
             $result = self::exec("{{" . $sentenceToTranslate . "}}", $filename, $backslash);
-        }
-        // Nouvelle méthode
+        } // Nouvelle méthode
         else {
             // S'assure que la traduction est chargée
             self::getTranslation('fr_FR');
@@ -271,7 +270,7 @@ class TranslateHelper
      */
     public static function saveTranslation()
     {
-        $core    = [];
+        $core = [];
         $plugins = [];
         foreach (self::getTranslation(self::getLanguage()) as $page => $translation) {
             if (strpos($page, 'plugins/') === false) {

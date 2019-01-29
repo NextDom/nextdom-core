@@ -17,11 +17,12 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once NEXTDOM_ROOT.'/core/php/core.inc.php';
+require_once NEXTDOM_ROOT . '/core/php/core.inc.php';
 
 use NextDom\Managers\UpdateManager;
 
-class update {
+class update
+{
     private $id;
     private $type = 'plugin';
     private $logicalId;
@@ -32,56 +33,70 @@ class update {
     private $configuration;
     private $source = 'market';
     private $_changeUpdate = false;
+    private $_changed = false;
 
-    public static function checkAllUpdate($_filter = '', $_findNewObject = true) {
+    public static function checkAllUpdate($_filter = '', $_findNewObject = true)
+    {
         return UpdateManager::checkAllUpdate($_filter, $_findNewObject);
     }
 
-    public static function listRepo() {
+    public static function listRepo()
+    {
         return UpdateManager::listRepo();
     }
 
-    public static function repoById($_id) {
+    public static function repoById($_id)
+    {
         return UpdateManager::repoById($_id);
     }
 
-    public static function updateAll($_filter = '') {
+    public static function updateAll($_filter = '')
+    {
         return UpdateManager::updateAll($_filter);
     }
 
-    public static function byId($_id) {
+    public static function byId($_id)
+    {
         return UpdateManager::byId($_id);
     }
 
-    public static function byStatus($_status) {
+    public static function byStatus($_status)
+    {
         return UpdateManager::byStatus($_status);
     }
 
-    public static function byLogicalId($_logicalId) {
+    public static function byLogicalId($_logicalId)
+    {
         return UpdateManager::byLogicalId($_logicalId);
     }
 
-    public static function byType($_type) {
+    public static function byType($_type)
+    {
         return UpdateManager::byType($_type);
     }
 
-    public static function byTypeAndLogicalId($_type, $_logicalId) {
+    public static function byTypeAndLogicalId($_type, $_logicalId)
+    {
         return UpdateManager::byTypeAndLogicalId($_type, $_logicalId);
     }
 
-    public static function all($_filter = '') {
+    public static function all($_filter = '')
+    {
         return UpdateManager::all($_filter);
     }
 
-    public static function nbNeedUpdate() {
+    public static function nbNeedUpdate()
+    {
         return UpdateManager::nbNeedUpdate();
     }
 
-    public static function findNewUpdateObject() {
+    public static function findNewUpdateObject()
+    {
         return UpdateManager::findNewUpdateObject();
     }
 
-    public static function listCoreUpdate() {
+    public static function listCoreUpdate()
+    {
         return UpdateManager::listCoreUpdate();
     }
 
@@ -90,7 +105,8 @@ class update {
      *
      * @return array
      */
-    public function getInfo() {
+    public function getInfo()
+    {
         $result = [];
         if ($this->getType() != 'core') {
             $class = 'repo_' . $this->getSource();
@@ -106,8 +122,9 @@ class update {
      *
      * @throws Exception
      */
-    public function doUpdate() {
-        if ($this->getConfiguration('doNotUpdate') == 1) {
+    public function doUpdate()
+    {
+        if ($this->getConfiguration('doNotUpdate') == 1 && $this->getType() != 'core') {
             log::add('update', 'alert', __('Vérification des mises à jour, mise à jour et réinstallation désactivées sur ') . $this->getLogicalId());
             return;
         }
@@ -152,11 +169,11 @@ class update {
                         $zip->close();
                         unlink($tmp);
                         try {
-                            if (file_exists(NEXTDOM_ROOT.'/plugins/' . $this->getLogicalId() . '/doc')) {
-                                shell_exec('sudo rm -rf ' . NEXTDOM_ROOT.'/plugins/' . $this->getLogicalId() . '/doc');
+                            if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId() . '/doc')) {
+                                shell_exec('sudo rm -rf ' . NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId() . '/doc');
                             }
-                            if (file_exists(NEXTDOM_ROOT.'/plugins/' . $this->getLogicalId() . '/docs')) {
-                                shell_exec('sudo rm -rf ' . NEXTDOM_ROOT.'/plugins/' . $this->getLogicalId() . '/docs');
+                            if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId() . '/docs')) {
+                                shell_exec('sudo rm -rf ' . NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId() . '/docs');
                             }
                         } catch (Exception $e) {
 
@@ -167,7 +184,7 @@ class update {
                                 $cibDir = $cibDir . '/' . $files[0];
                             }
                         }
-                        rmove($cibDir . '/', NEXTDOM_ROOT.'/plugins/' . $this->getLogicalId(), false, array(), true);
+                        rmove($cibDir . '/', NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId(), false, array(), true);
                         rrmdir($cibDir);
                         $cibDir = nextdom::getTmpFolder('market') . '/' . $this->getLogicalId();
                         if (file_exists($cibDir)) {
@@ -190,7 +207,8 @@ class update {
      *
      * @throws Exception
      */
-    public function deleteObjet() {
+    public function deleteObjet()
+    {
         if ($this->getType() == 'core') {
             throw new Exception(__('Vous ne pouvez pas supprimer le core de NextDom', __FILE__));
         } else {
@@ -234,7 +252,7 @@ class update {
             }
             switch ($this->getType()) {
                 case 'plugin':
-                    $cibDir = NEXTDOM_ROOT.'/plugins/' . $this->getLogicalId();
+                    $cibDir = NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId();
                     if (file_exists($cibDir)) {
                         rrmdir($cibDir);
                     }
@@ -249,17 +267,18 @@ class update {
      *
      * @throws Exception
      */
-    public function preInstallUpdate() {
-        if (!file_exists(NEXTDOM_ROOT.'/plugins')) {
-            mkdir(NEXTDOM_ROOT.'/plugins');
-            @chown(NEXTDOM_ROOT.'/plugins', system::getWWWUid());
-            @chgrp(NEXTDOM_ROOT.'/plugins', system::getWWWGid());
-            @chmod(NEXTDOM_ROOT.'/plugins', 0775);
+    public function preInstallUpdate()
+    {
+        if (!file_exists(NEXTDOM_ROOT . '/plugins')) {
+            mkdir(NEXTDOM_ROOT . '/plugins');
+            @chown(NEXTDOM_ROOT . '/plugins', system::getWWWUid());
+            @chgrp(NEXTDOM_ROOT . '/plugins', system::getWWWGid());
+            @chmod(NEXTDOM_ROOT . '/plugins', 0775);
         }
         log::add('update', 'alert', __('Début de la mise à jour de : ', __FILE__) . $this->getLogicalId() . "\n");
         switch ($this->getType()) {
             case 'plugin':
-                $cibDir = NEXTDOM_ROOT.'/plugins/' . $this->getLogicalId();
+                $cibDir = NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId();
                 if (!file_exists($cibDir) && !mkdir($cibDir, 0775, true)) {
                     throw new Exception(__('Impossible de créer le dossier  : ' . $cibDir . '. Problème de droits ?', __FILE__));
                 }
@@ -284,7 +303,8 @@ class update {
      * @param $informations
      * @throws Exception
      */
-    public function postInstallUpdate($informations) {
+    public function postInstallUpdate($informations)
+    {
         log::add('update', 'alert', __('Post-installation de ', __FILE__) . $this->getLogicalId() . '...');
         switch ($this->getType()) {
             case 'plugin':
@@ -314,9 +334,10 @@ class update {
      *
      * @return null|string
      */
-    public static function getLastAvailableVersion() {
+    public static function getLastAvailableVersion()
+    {
         try {
-            $url = 'https://raw.githubusercontent.com/nextdom/core/' . config::byKey('core::branch','core','master') . '/core/config/version';
+            $url = 'https://raw.githubusercontent.com/nextdom/core/' . config::byKey('core::branch', 'core', 'master') . '/core/config/version';
             $request_http = new com_http($url);
             return trim($request_http->exec());
         } catch (Exception $e) {
@@ -332,8 +353,9 @@ class update {
      *
      * @return type
      */
-    public function checkUpdate() {
-        if ($this->getConfiguration('doNotUpdate') == 1) {
+    public function checkUpdate()
+    {
+        if ($this->getConfiguration('doNotUpdate') == 1 && $this->getType() != 'core') {
             log::add('update', 'alert', __('Vérification des mises à jour, mise à jour et réinstallation désactivées sur ', __FILE__) . $this->getLogicalId());
             return;
         }
@@ -380,7 +402,8 @@ class update {
      * TODO: Bizarre, en gros le nom = logicialId
      * @throws Exception
      */
-    public function preSave() {
+    public function preSave()
+    {
         if ($this->getLogicalId() == '') {
             throw new Exception(__('Le logical ID ne peut pas être vide', __FILE__));
         }
@@ -394,14 +417,16 @@ class update {
      *
      * @return bool
      */
-    public function save() {
+    public function save()
+    {
         return DB::save($this);
     }
 
     /**
      * Envoi un évènement
      */
-    public function postSave() {
+    public function postSave()
+    {
         if ($this->_changeUpdate) {
             event::add('update::refreshUpdateNumber');
         }
@@ -412,7 +437,8 @@ class update {
      *
      * @return bool
      */
-    public function remove() {
+    public function remove()
+    {
         return DB::remove($this);
     }
 
@@ -421,91 +447,131 @@ class update {
      *
      * @throws Exception
      */
-    public function refresh() {
+    public function refresh()
+    {
         DB::refresh($this);
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function getStatus() {
+    public function getStatus()
+    {
         return $this->status;
     }
 
-    public function getConfiguration($_key = '', $_default = '') {
+    public function getConfiguration($_key = '', $_default = '')
+    {
         return utils::getJsonAttr($this->configuration, $_key, $_default);
     }
 
-    public function setId($id) {
-        $this->id = $id;
+    public function setId($_id)
+    {
+        $this->_changed = utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
         return $this;
     }
 
-    public function setName($name) {
-        $this->name = $name;
+    public function setName($_name)
+    {
+        $this->_changed = utils::attrChanged($this->_changed, $this->name, $_name);
+        $this->name = $_name;
         return $this;
     }
 
-    public function setStatus($status) {
-        if ($status != $this->status) {
+    public function setStatus($_status)
+    {
+        if ($_status != $this->status) {
             $this->_changeUpdate = true;
+            $this->_changed = true;
         }
-        $this->status = $status;
+        $this->status = $_status;
         return $this;
     }
 
-    public function setConfiguration($_key, $_value) {
-        $this->configuration = utils::setJsonAttr($this->configuration, $_key, $_value);
+    public function setConfiguration($_key, $_value)
+    {
+        $configuration = utils::setJsonAttr($this->configuration, $_key, $_value);
+        $this->_changed = utils::attrChanged($this->_changed, $this->configuration, $configuration);
+        $this->configuration = $configuration;
         return $this;
     }
 
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
 
-    public function setType($type) {
-        $this->type = $type;
+    public function setType($_type)
+    {
+        $this->_changed = utils::attrChanged($this->_changed, $this->type, $_type);
+        $this->type = $_type;
         return $this;
     }
 
-    public function getLocalVersion() {
+    public function getLocalVersion()
+    {
         return $this->localVersion;
     }
 
-    public function getRemoteVersion() {
+    public function getRemoteVersion()
+    {
         return $this->remoteVersion;
     }
 
-    public function setLocalVersion($localVersion) {
-        $this->localVersion = $localVersion;
+    public function setLocalVersion($_localVersion)
+    {
+        $this->_changed = utils::attrChanged($this->_changed, $this->localVersion, $_localVersion);
+        $this->localVersion = $_localVersion;
         return $this;
     }
 
-    public function setRemoteVersion($remoteVersion) {
-        $this->remoteVersion = $remoteVersion;
+    public function setRemoteVersion($_remoteVersion)
+    {
+        $this->_changed = utils::attrChanged($this->_changed, $this->remoteVersion, $_remoteVersion);
+        $this->remoteVersion = $_remoteVersion;
         return $this;
     }
 
-    public function getLogicalId() {
+    public function getLogicalId()
+    {
         return $this->logicalId;
     }
 
-    public function setLogicalId($logicalId) {
-        $this->logicalId = $logicalId;
+    public function setLogicalId($_logicalId)
+    {
+        $this->_changed = utils::attrChanged($this->_changed, $this->logicalId, $_logicalId);
+        $this->logicalId = $_logicalId;
         return $this;
     }
 
-    public function getSource() {
+    public function getSource()
+    {
         return $this->source;
     }
 
-    public function setSource($source) {
-        $this->source = $source;
+    public function setSource($_source)
+    {
+        $this->_changed = utils::attrChanged($this->_changed, $this->source, $_source);
+        $this->source = $_source;
+        return $this;
+    }
+
+    public function getChanged()
+    {
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed)
+    {
+        $this->_changed = $_changed;
         return $this;
     }
 }

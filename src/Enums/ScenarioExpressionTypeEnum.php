@@ -20,8 +20,8 @@ namespace NextDom\Enums;
 
 class ScenarioExpressionTypeEnum extends Enum
 {
-    const ELEMENT     = 'element';
-    const ACTION      = 'action';
-    const CODE        = 'code';
-    const CONDITION   = 'condition';
+    const ELEMENT = 'element';
+    const ACTION = 'action';
+    const CODE = 'code';
+    const CONDITION = 'condition';
 }

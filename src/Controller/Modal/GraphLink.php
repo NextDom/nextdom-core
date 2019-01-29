@@ -49,15 +49,15 @@ class GraphLink extends BaseAbstractModal
     public function get(Render $render): string
     {
         $configData = ConfigManager::byKeys(
-                        ['graphlink::prerender', 'graphlink::render'], 'core', [
-                    'graphlink::prerender' => 30,
-                    'graphlink::render'    => 3000
+            ['graphlink::prerender', 'graphlink::render'], 'core', [
+            'graphlink::prerender' => 30,
+            'graphlink::render' => 3000
         ]);
         Utils::sendVarsToJS([
-            'prerenderGraph'  => $configData['graphlink::prerender'],
-            'renderGraph'     => $configData['graphlink::render'],
+            'prerenderGraph' => $configData['graphlink::prerender'],
+            'renderGraph' => $configData['graphlink::render'],
             'filterTypeGraph' => Utils::init('filter_type'),
-            'filterIdGraph'   => Utils::init('filter_id')
+            'filterIdGraph' => Utils::init('filter_id')
         ]);
 
         return $render->get('/modals/graph.link.html.twig');

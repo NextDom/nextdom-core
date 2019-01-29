@@ -28,7 +28,7 @@
     "sabre/http": "4.2.4",
     "sabre/uri": "1.2.1",
     "sabre/vobject": "4.1.6",
-    "sabre/xml": "1.5.0",
+    "sabre/xml": "1.5.1",
     "symfony/config": "^3.4",
     "symfony/debug": "^3.4",
     "symfony/event-dispatcher": "2.8.*",

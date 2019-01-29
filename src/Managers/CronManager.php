@@ -38,7 +38,8 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Model\Entity\Cron;
 
-class CronManager {
+class CronManager
+{
 
     const CLASS_NAME = Cron::class;
     const DB_CLASS_NAME = '`cron`';
@@ -50,7 +51,8 @@ class CronManager {
      * @return \cron[] List of all cron objets
      * @throws \Exception
      */
-    public static function all($ordered = false) {
+    public static function all($ordered = false)
+    {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME;
         if ($ordered) {
@@ -67,7 +69,8 @@ class CronManager {
      * @return object
      * @throws \Exception
      */
-    public static function byId($cronId) {
+    public static function byId($cronId)
+    {
         $value = array(
             'id' => $cronId,
         );
@@ -87,7 +90,8 @@ class CronManager {
      * @return \cron Cron object
      * @throws \Exception
      */
-    public static function byClassAndFunction($className, $functionName, $options = '') {
+    public static function byClassAndFunction($className, $functionName, $options = '')
+    {
         $value = array(
             'class' => $className,
             'function' => $functionName,
@@ -114,7 +118,8 @@ class CronManager {
      * @return array[\cron] List of cron objects
      * @throws \Exception
      */
-    public static function searchClassAndFunction($className, $functionName, $options = '') {
+    public static function searchClassAndFunction($className, $functionName, $options = '')
+    {
         $value = array(
             'class' => $className,
             'function' => $functionName,
@@ -133,7 +138,8 @@ class CronManager {
     /**
      * Clean cron that will never run
      */
-    public static function clean() {
+    public static function clean()
+    {
         $crons = self::all();
         foreach ($crons as $cronExpression) {
             $cronExpression = new \Cron\CronExpression($cronExpression->getSchedule(), new \Cron\FieldFactory);
@@ -152,7 +158,8 @@ class CronManager {
      *
      * @return int Number of running cron
      */
-    public static function nbCronRun() {
+    public static function nbCronRun()
+    {
         return count(SystemHelper::ps('jeeCron.php', array('grep', 'sudo', 'shell=/bin/bash - ', '/bin/bash -c ', posix_getppid(), getmypid())));
     }
 
@@ -163,7 +170,8 @@ class CronManager {
      *
      * @return int Number of process on system
      */
-    public static function nbProcess() {
+    public static function nbProcess()
+    {
         return count(SystemHelper::ps('.'));
     }
 
@@ -174,14 +182,16 @@ class CronManager {
      *
      * @return array Load average
      */
-    public static function loadAvg() {
+    public static function loadAvg()
+    {
         return sys_getloadavg();
     }
 
     /**
      * Write jeeCron PID of current process
      */
-    public static function setPidFile() {
+    public static function setPidFile()
+    {
         $path = NextDomHelper::getTmpFolder() . '/jeeCron.pid';
         $fp = fopen($path, 'w');
         fwrite($fp, getmypid());
@@ -194,7 +204,8 @@ class CronManager {
      * @return int Current jeeCron PID
      * @throws \Exception
      */
-    public static function getPidFile() {
+    public static function getPidFile()
+    {
         $path = NextDomHelper::getTmpFolder() . '/jeeCron.pid';
         if (file_exists($path)) {
             return file_get_contents($path);
@@ -208,7 +219,8 @@ class CronManager {
      * @return boolean True if jeeCron is running
      * @throws \Exception
      */
-    public static function jeeCronRun() {
+    public static function jeeCronRun()
+    {
         $pid = self::getPidFile();
         if ($pid == '' || !is_numeric($pid)) {
             return false;
@@ -223,7 +235,8 @@ class CronManager {
      *
      * @return string Date in cron format
      */
-    public static function convertDateToCron($dateToConvert) {
+    public static function convertDateToCron($dateToConvert)
+    {
         return date('i', $dateToConvert) . ' ' . date('H', $dateToConvert) . ' ' . date('d', $dateToConvert) . ' ' . date('m', $dateToConvert) . ' * ' . date('Y', $dateToConvert);
     }
 }

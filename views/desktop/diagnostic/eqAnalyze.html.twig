@@ -95,7 +95,7 @@
                             {% for infoCmd in cmdData['infoCmds'] %}
                                 <tr>
                                     <td>
-                                        <a href="{{ cmdData['eqLogic'].getLinkToConfiguration() }}" style="text-decoration: none;">{{ cmdData['eqLogic'].getHumanName(true) }}</a>
+                                        <a href="{{ cmdData['eqLogic'].getLinkToConfiguration() }}" style="text-decoration: none;">{{ cmdData['eqLogic'].getHumanName(true)|raw }}</a>
                                     </td>
                                     <td>{{ infoCmd['cmd'].getName() }} ({{ infoCmd['cmd'].getId() }})</td>
                                     <td>{{ 'Action sur état' }}</td>
@@ -111,7 +111,7 @@
                                 {% if actionCmd['preExecCmds'] is defined %}
                                     <tr>
                                         <td>
-                                            <a href="{{ cmdData['eqLogic'].getLinkToConfiguration() }}" style="text-decoration: none;">{{ cmdData['eqLogic'].getHumanName(true) }}</a>
+                                            <a href="{{ cmdData['eqLogic'].getLinkToConfiguration() }}" style="text-decoration: none;">{{ cmdData['eqLogic'].getHumanName(true)|raw }}</a>
                                         </td>
                                         <td>{{ actionCmd['cmd'].getName() }} ({{ actionCmd['cmd'].getId() }})</td>
                                         <td>{{ 'Pre exécution' }}</td>
@@ -126,7 +126,7 @@
                                 {% if actionCmd['postExecCmds'] is defined %}
                                     <tr>
                                         <td>
-                                            <a href="{{ cmdData['eqLogic'].getLinkToConfiguration() }}" style="text-decoration: none;">{{ cmdData['eqLogic'].getHumanName(true) }}</a>
+                                            <a href="{{ cmdData['eqLogic'].getLinkToConfiguration() }}" style="text-decoration: none;">{{ cmdData['eqLogic'].getHumanName(true)|raw }}</a>
                                         </td>
                                         <td>{{ actionCmd['cmd'].getName() }} ({{ actionCmd['cmd'].getId() }})</td>
                                         <td>{{ 'Pre exécution' }}</td>

@@ -18,6 +18,9 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Helpers\FileSystemHelper;
+use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\TimeLine;
@@ -29,7 +32,6 @@ use NextDom\Managers\CronManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
-use NextDom\Helpers\LogHelper;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioManager;
 
@@ -133,6 +135,7 @@ class Scenario
      */
     protected $type = 'expert';
 
+    protected $order = 9999;
     /**
      * @var integer
      *
@@ -160,7 +163,8 @@ class Scenario
     protected $_tags = array();
     protected $_do = true;
     protected $_log;
-    
+    protected $_changed = false;
+
     public function getName()
     {
         return $this->name;
@@ -298,6 +302,7 @@ class Scenario
     {
         if ($name != $this->getName()) {
             $this->_changeState = true;
+            $this->_changed = true;
         }
         $this->name = $name;
         return $this;
@@ -312,10 +317,12 @@ class Scenario
     {
         if ($group != $this->getGroup()) {
             $this->_changeState = true;
+            $this->_changed = true;
         }
         $this->group = $group;
         return $this;
     }
+
     /**
      *
      * @param int $isActive
@@ -325,66 +332,72 @@ class Scenario
     {
         if ($isActive != $this->getIsActive()) {
             $this->_changeState = true;
+            $this->_changed = true;
         }
         $this->isActive = $isActive;
         return $this;
     }
 
-    public function setMode($mode)
+    public function setMode($_mode)
     {
-        $this->mode = $mode;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->mode, $_mode);
+        $this->mode = $_mode;
         return $this;
     }
 
-    public function setSchedule($schedule)
+    public function setSchedule($_schedule)
     {
-        if (is_array($schedule)) {
-            $schedule = json_encode($schedule, JSON_UNESCAPED_UNICODE);
+        if (is_array($_schedule)) {
+            $_schedule = json_encode($_schedule, JSON_UNESCAPED_UNICODE);
         }
-        $this->schedule = $schedule;
-        return $this;
-    }
-
-    /**
-     *
-     * @param mixed $scenarioElement
-     * @return $this
-     */
-    public function setScenarioElement($scenarioElement)
-    {
-        if (is_array($scenarioElement)) {
-            $scenarioElement = json_encode($scenarioElement, JSON_UNESCAPED_UNICODE);
-        }
-        $this->scenarioElement = $scenarioElement;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->schedule, $_schedule);
+        $this->schedule = $_schedule;
         return $this;
     }
 
     /**
      *
-     * @param mixed $trigger
+     * @param $_scenarioElement
      * @return $this
-     * @throws \Exception
      */
-    public function setTrigger($trigger)
+    public function setScenarioElement($_scenarioElement)
     {
-        if (is_array($trigger)) {
-            $trigger = json_encode($trigger, JSON_UNESCAPED_UNICODE);
+        if (is_array($_scenarioElement)) {
+            $_scenarioElement = json_encode($_scenarioElement, JSON_UNESCAPED_UNICODE);
         }
-        $this->trigger = CmdManager::humanReadableToCmd($trigger);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->scenarioElement, $_scenarioElement);
+        $this->scenarioElement = $_scenarioElement;
         return $this;
     }
 
     /**
      *
-     * @param string $timeout
+     * @param $_trigger
      * @return $this
      */
-    public function setTimeout($timeout)
+    public function setTrigger($_trigger)
     {
-        if ($timeout == '' || is_nan(intval($timeout)) || $timeout < 1) {
-            $timeout = '';
+        if (is_array($_trigger)) {
+            $_trigger = json_encode($_trigger, JSON_UNESCAPED_UNICODE);
         }
-        $this->timeout = $timeout;
+        $_trigger = CmdManager::humanReadableToCmd($_trigger);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->trigger, $_trigger);
+        $this->trigger = $_trigger;
+        return $this;
+    }
+
+    /**
+     *
+     * @param $_timeout
+     * @return $this
+     */
+    public function setTimeout($_timeout)
+    {
+        if ($_timeout == '' || is_nan(intval($_timeout)) || $_timeout < 1) {
+            $_timeout = '';
+        }
+        $this->_changed = Utils::attrChanged($this->_changed, $this->timeout, $_timeout);
+        $this->timeout = $_timeout;
         return $this;
     }
 
@@ -396,31 +409,36 @@ class Scenario
 
     /**
      *
-     * @param mixed $_key
-     * @param mixed $_value
+     * @param $key
+     * @param $value
      * @return $this
      */
     public function setDisplay($key, $value)
     {
-        $this->display = Utils::setJsonAttr($this->display, $key, $value);
+        $display = utils::setJsonAttr($this->display, $key, $value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
+        $this->display = $display;
         return $this;
     }
 
-    public function setDescription($description)
+    public function setDescription($_description)
     {
-        $this->description = $description;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->description, $_description);
+        $this->description = $_description;
         return $this;
     }
 
-    public function setType($type)
+    public function setType($_type)
     {
-        $this->type = $type;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
+        $this->type = $_type;
         return $this;
     }
 
-    public function setId($id)
+    public function setId($_id)
     {
-        $this->id = $id;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
         return $this;
     }
 
@@ -433,6 +451,7 @@ class Scenario
     {
         if ($object_id != $this->getObject_id()) {
             $this->_changeState = true;
+            $this->_changed = true;
         }
         $this->object_id = (!is_numeric($object_id)) ? null : $object_id;
         return $this;
@@ -482,7 +501,7 @@ class Scenario
             $cmd = NEXTDOM_ROOT . '/core/php/jeeScenario.php ';
             $cmd .= ' scenario_id=' . $this->getId();
             $cmd .= ' trigger=' . escapeshellarg($trigger);
-            $cmd .= ' "message=' . escapeshellarg(sanitizeAccent($message)) . '"';
+            $cmd .= ' "message=' . escapeshellarg(Utils::sanitizeAccent($message)) . '"';
             $cmd .= ' >> ' . LogHelper::getPathToLog('scenario_execution') . ' 2>&1 &';
             SystemHelper::php($cmd);
         }
@@ -601,12 +620,14 @@ class Scenario
             '#lastLaunch#' => $this->getLastLaunch(),
             '#scenarioLink#' => $this->getLinkToConfiguration(),
             '#version#' => $_version,
+            '#height#' => $this->getDisplay('height', 'auto'),
+            '#width#' => $this->getDisplay('width', 'auto')
         );
         if (!isset(self::$_templateArray)) {
             self::$_templateArray = array();
         }
         if (!isset(self::$_templateArray[$version])) {
-            self::$_templateArray[$version] = getTemplate('core', $version, 'scenario');
+            self::$_templateArray[$version] = FileSystemHelper::getTemplateFileContent('core', $version, 'scenario');
         }
         $html = Utils::templateReplace($replace, self::$_templateArray[$version]);
         CacheManager::set('scenarioHtml' . $version . $this->getId(), $html);
@@ -909,7 +930,7 @@ class Scenario
                 }
             } catch (\Exception $exc) {
 
-            } 
+            }
         }
         return false;
     }
@@ -1121,12 +1142,13 @@ class Scenario
      * @param mixed $_tag
      * @param mixed $_prettify
      * @param mixed $_withoutScenarioName
+     * @param bool $_object_name
      * @return string
      */
-    public function getHumanName($_complete = false, $_noGroup = false, $_tag = false, $_prettify = false, $_withoutScenarioName = false)
+    public function getHumanName($_complete = false, $_noGroup = false, $_tag = false, $_prettify = false, $_withoutScenarioName = false, $_object_name = true)
     {
         $name = '';
-        if (is_numeric($this->getObject_id()) && is_object($this->getObject())) {
+        if ($_object_name && is_numeric($this->getObject_id()) && is_object($this->getObject())) {
             $object = $this->getObject();
             if ($_tag) {
                 if ($object->getDisplay('tagColor') != '') {
@@ -1189,10 +1211,10 @@ class Scenario
             }
             return false;
         }
-        if (!isConnect()) {
+        if (!AuthentificationHelper::isConnected()) {
             return false;
         }
-        if (isConnect('admin') || isConnect('user')) {
+        if (AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
             return true;
         }
         if (strpos($_SESSION['user']->getRights('scenario' . $this->getId()), $_right) !== false) {
@@ -1236,14 +1258,12 @@ class Scenario
         // TODO: Pourquoi ce test a-t-il dû être rajouté ?
         if (isset($cache['state'])) {
             $return['state'] = $cache['state'];
-        }
-        else {
+        } else {
             $return['state'] = '';
         }
         if (isset($cache['lastLaunch'])) {
             $return['lastLaunch'] = $cache['lastLaunch'];
-        }
-        else {
+        } else {
             $return['lastLaunch'] = '';
         }
         return $return;
@@ -1345,7 +1365,8 @@ class Scenario
         $this->_log = '';
     }
 
-    public function resetRepeatIfStatus() {
+    public function resetRepeatIfStatus()
+    {
         foreach ($this->getElement() as $element) {
             $element->resetRepeatIfStatus();
         }
@@ -1520,10 +1541,10 @@ class Scenario
 
     /**
      * Name of the table in the database
-     * 
+     *
      * @return string Name of the table in the database
      */
-    public function getTableName() 
+    public function getTableName()
     {
         return 'scenario';
     }
@@ -1561,4 +1582,32 @@ class Scenario
         CacheManager::set('scenarioCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('scenarioCacheAttr' . $this->getId())->getValue(), $key, $valueToStore));
     }
 
+    /**
+     *
+     * @return int
+     */
+    public function getOrder() {
+        return $this->order;
+    }
+    /**
+     *
+     * @param int $_order
+     * @return $this
+     */
+    public function setOrder($_order) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->order,$_order);
+        $this->order = $_order;
+        return $this;
+    }
+
+    public function getChanged()
+    {
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed)
+    {
+        $this->_changed = $_changed;
+        return $this;
+    }
 }
