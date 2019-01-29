@@ -510,7 +510,7 @@ class Cmd
 
     /**
      *
-     * @param $eqLogic_id
+     * @param $_eqLogic_id
      * @return $this
      */
     public function setEqLogic_id($_eqLogic_id)
@@ -760,18 +760,19 @@ class Cmd
     public function execCmd($_options = null, $_sendNodeJsEvent = false, $_quote = false)
     {
         if ($this->getType() == 'info') {
-            $state = $this->getCache(['collectDate', 'valueDate', 'value'], ['valueDate' => '', 'value' => '', 'collectDate' => '']);
-            if (isset($state['collectDate'])) {
+            $state = $this->getCache(array('collectDate', 'valueDate', 'value'));
+            if(isset($state['collectDate'])){
                 $this->setCollectDate($state['collectDate']);
-            } else {
+            }else{
                 $this->setCollectDate(date('Y-m-d H:i:s'));
             }
-            if (isset($state['valueDate'])) {
+            if(isset($state['valueDate'])){
                 $this->setValueDate($state['valueDate']);
-            } else {
+            }else{
                 $this->setValueDate($this->getCollectDate());
             }
             return $state['value'];
+
         }
         $eqLogic = $this->getEqLogicId();
         if ($this->getType() != 'info' && (!is_object($eqLogic) || $eqLogic->getIsEnable() != 1)) {

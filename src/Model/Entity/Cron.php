@@ -185,7 +185,7 @@ class Cron
 
     /**
      *
-     * @param mixed $enable
+     * @param $_enable
      * @return $this
      */
     public function setEnable($_enable)
@@ -197,7 +197,7 @@ class Cron
 
     /**
      *
-     * @param mixed $class
+     * @param $_class
      * @return $this
      */
     public function setClass($_class)
@@ -209,7 +209,7 @@ class Cron
 
     /**
      *
-     * @param mixed $function
+     * @param $_function
      * @return $this
      */
     public function setFunction($_function)
@@ -221,7 +221,7 @@ class Cron
 
     /**
      *
-     * @param mixed $schedule
+     * @param $_schedule
      * @return $this
      */
     public function setSchedule($_schedule)
@@ -233,7 +233,7 @@ class Cron
 
     /**
      *
-     * @param mixed $timeout
+     * @param $_timeout
      * @return $this
      */
     public function setTimeout($_timeout)
@@ -245,7 +245,7 @@ class Cron
 
     /**
      *
-     * @param mixed $deamon
+     * @param $_deamons
      * @return $this
      */
     public function setDeamon($_deamons)
@@ -257,7 +257,7 @@ class Cron
 
     /**
      *
-     * @param mixed $deamonSleepTime
+     * @param $_deamonSleepTime
      * @return $this
      */
     public function setDeamonSleepTime($_deamonSleepTime)
@@ -269,7 +269,7 @@ class Cron
 
     /**
      *
-     * @param mixed $option
+     * @param $_option
      * @return $this
      */
     public function setOption($_option)
@@ -282,7 +282,7 @@ class Cron
 
     /**
      *
-     * @param mixed $once
+     * @param $_once
      * @return $this
      */
     public function setOnce($_once)
@@ -295,8 +295,7 @@ class Cron
     /**
      * Set task id
      *
-     * @param int $id Task id
-     *
+     * @param $_id
      * @return $this Task object
      */
     public function setId($_id)
@@ -339,7 +338,6 @@ class Cron
      * Save cron object in database
      *
      * @return mixed
-     * @throws \ReflectionException
      */
     public function save()
     {
@@ -352,7 +350,6 @@ class Cron
      * @param bool $haltBefore
      * @return mixed
      * @throws CoreException
-     * @throws \ReflectionException
      */
     public function remove($haltBefore = true)
     {

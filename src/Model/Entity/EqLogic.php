@@ -140,7 +140,7 @@ class EqLogic
      *
      * @ORM\Column(name="order", type="integer", nullable=true)
      */
-    protected $order = '1';
+    protected $order = 9999;
 
     /**
      * @var string
@@ -369,7 +369,7 @@ class EqLogic
     }
 
     /**
-     * @param $name
+     * @param $_name
      * @return $this
      */
     public function setName($_name)
@@ -395,7 +395,7 @@ class EqLogic
     }
 
     /**
-     * @param $logicalId
+     * @param $_logicalId
      * @return $this
      */
     public function setLogicalId($_logicalId)
@@ -494,8 +494,8 @@ class EqLogic
     }
 
     /**
-     * @param $categoryKey
-     * @param $categoryValue
+     * @param $_key
+     * @param $_value
      * @return $this
      */
     public function setCategory($_key, $_value)
@@ -524,7 +524,7 @@ class EqLogic
     }
 
     /**
-     * @param $order
+     * @param $_order
      * @return $this
      */
     public function setOrder($_order)
@@ -558,7 +558,7 @@ class EqLogic
     }
 
     /**
-     * @param $id
+     * @param $_id
      * @return $this
      */
     public function setId($_id)
@@ -569,7 +569,7 @@ class EqLogic
     }
 
     /**
-     * @param $eqReal_id
+     * @param $_eqReal_id
      * @return $this
      */
     public function setEqReal_id($_eqReal_id)
@@ -872,7 +872,7 @@ class EqLogic
             '#custom_layout#' => ($this->widgetPossibility('custom::layout')) ? 'allowLayout' : '',
             '#tag#' => $tagsValue,
             '#data-tags#' => $this->getTags(),
-            '#generic_type#' => $this->getGenericType(),
+            '#generic_type#' => $this->getGenericType()
         );
 
         if ($this->getDisplay('background-color-default' . $version, 1) == 1) {
@@ -1151,7 +1151,6 @@ class EqLogic
     /**
      * @param bool $_direct
      * @throws CoreException
-     * @throws \ReflectionException
      */
     public function save($_direct = false)
     {
@@ -1461,7 +1460,8 @@ class EqLogic
         if (!isConnect()) {
             return false;
         }
-        if (AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
+        if (
+          ::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
             return true;
         }
         if (strpos($_SESSION['user']->getRights('eqLogic' . $this->getId()), $_right) !== false) {
@@ -1706,9 +1706,6 @@ class EqLogic
         }
         if (isset($_data['node']['eqLogic' . $this->getId()])) {
             return null;
-        }
-        if ($_level > 0) {
-            return $_data;
         }
         $_level++;
         if ($_level > $_drill) {

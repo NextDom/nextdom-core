@@ -38,6 +38,7 @@ use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Model\Entity\Cmd;
 use NextDom\Model\Entity\Scenario;
 use NextDom\Model\Entity\ScenarioExpression;
 
@@ -457,8 +458,6 @@ class ScenarioExpressionManager
         }
         $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
         $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
-        // TODO ligne à virer, voir si ça lance quelque chose avant
-        $historyStatistique = $cmd->getStatistique($startDate, $endDate);
         $historyStatistique = $cmd->getStatistique(self::setTags($startDate), self::setTags($endDate));
         if (!isset($historyStatistique['max'])) {
             return '';
@@ -730,7 +729,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Durée de ?
+     * Get the duration since the command has this value
      *
      * @param $cmdId
      * @param $value
@@ -750,53 +749,20 @@ class ScenarioExpressionManager
         }
 
         if (str_word_count($period) == 1 && is_numeric(trim($period)[0])) {
-            $_startDate = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . $period));
+            $startDate = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . $period));
         } else {
-            $_startDate = date('Y-m-d H:i:s', strtotime($period));
-            if ($_startDate == date('Y-m-d H:i:s', strtotime(0))) {
+            $startDate = date('Y-m-d H:i:s', strtotime($period));
+            if ($startDate == date('Y-m-d H:i:s', strtotime(0))) {
                 return '';
             }
         }
-        $_endDate = date('Y-m-d H:i:s');
-        $value = str_replace(',', '.', $value);
-        $_decimal = strlen(substr(strrchr($value, "."), 1));
+        $endDate = date('Y-m-d H:i:s');
 
-        $histories = $cmd->getHistory();
-
-        if (count($histories) == 0) {
-            return '';
-        }
-
-        $duration = 0;
-        $lastDuration = strtotime($histories[0]->getDatetime());
-        $lastValue = $histories[0]->getValue();
-
-        foreach ($histories as $history) {
-            if ($history->getDatetime() >= $_startDate) {
-                if ($history->getDatetime() <= $_endDate) {
-                    if ($lastValue == $value) {
-                        $duration = $duration + (strtotime($history->getDatetime()) - $lastDuration);
-                    }
-                } else {
-                    if ($lastValue == $value) {
-                        $duration = $duration + (strtotime($_endDate) - $lastDuration);
-                    }
-                    break;
-                }
-                $lastDuration = strtotime($history->getDatetime());
-            } else {
-                $lastDuration = strtotime($_startDate);
-            }
-            $lastValue = round($history->getValue(), $_decimal);
-        }
-        if ($lastValue == $value && $lastDuration <= strtotime($_endDate)) {
-            $duration = $duration + (strtotime($_endDate) - $lastDuration);
-        }
-        return floor($duration / 60);
+        return self::getCmdValueDuration($cmd, $startDate, $endDate, $value);
     }
 
     /**
-     * TODO: Durée entre ?
+     * Get the duration between the command has this value
      *
      * @param $cmdId
      * @param $value
@@ -818,37 +784,8 @@ class ScenarioExpressionManager
 
         $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
         $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
-        $value = str_replace(',', '.', $value);
-        $_decimal = strlen(substr(strrchr($value, "."), 1));
 
-        $histories = $cmd->getHistory();
-
-        $duration = 0;
-        $lastDuration = strtotime($histories[0]->getDatetime());
-        $lastValue = $histories[0]->getValue();
-
-        foreach ($histories as $history) {
-            if ($history->getDatetime() >= $startDate) {
-                if ($history->getDatetime() <= $endDate) {
-                    if ($lastValue == $value) {
-                        $duration = $duration + (strtotime($history->getDatetime()) - $lastDuration);
-                    }
-                } else {
-                    if ($lastValue == $value) {
-                        $duration = $duration + (strtotime($endDate) - $lastDuration);
-                    }
-                    break;
-                }
-                $lastDuration = strtotime($history->getDatetime());
-            } else {
-                $lastDuration = strtotime($startDate);
-            }
-            $lastValue = round($history->getValue(), $_decimal);
-        }
-        if ($lastValue == $value && $lastDuration <= strtotime($endDate)) {
-            $duration = $duration + (strtotime($endDate) - $lastDuration);
-        }
-        return floor($duration / 60);
+        return self::getCmdValueDuration($cmd, $startDate, $endDate, $value);
     }
 
     /**
@@ -1125,7 +1062,7 @@ class ScenarioExpressionManager
     /**
      * TODO ????
      *
-     * @param null $scenario
+     * @param Scenario $scenario
      * @return mixed
      * @throws \Exception
      */
@@ -1571,5 +1508,50 @@ class ScenarioExpressionManager
             }
         }
         return $scenarioExpression->execute();
+    }
+
+    /**
+     * @param Cmd $cmd
+     * @param string $startDate
+     * @param string $endDate
+     * @param mixed $value
+     * @return float|string
+     * @throws \Exception
+     */
+    private static function getCmdValueDuration($cmd, $startDate, $endDate, $value) {
+        $value = str_replace(',', '.', $value);
+        $histories = $cmd->getHistory();
+        $nbDecimals = strlen(substr(strrchr($value, "."), 1));
+
+        if (count($histories) == 0) {
+            return '';
+        }
+
+        $duration = 0;
+        $lastDuration = strtotime($histories[0]->getDatetime());
+        $lastValue = $histories[0]->getValue();
+
+        foreach ($histories as $history) {
+            if ($history->getDatetime() >= $startDate) {
+                if ($history->getDatetime() <= $endDate) {
+                    if ($lastValue == $value) {
+                        $duration = $duration + (strtotime($history->getDatetime()) - $lastDuration);
+                    }
+                } else {
+                    if ($lastValue == $value) {
+                        $duration = $duration + (strtotime($endDate) - $lastDuration);
+                    }
+                    break;
+                }
+                $lastDuration = strtotime($history->getDatetime());
+            } else {
+                $lastDuration = strtotime($startDate);
+            }
+            $lastValue = round($history->getValue(), $nbDecimals);
+        }
+        if ($lastValue == $value && $lastDuration <= strtotime($endDate)) {
+            $duration = $duration + (strtotime($endDate) - $lastDuration);
+        }
+        return floor($duration / 60);
     }
 }

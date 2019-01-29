@@ -17,11 +17,15 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\Utils;
+use NextDom\Managers\ScenarioElementManager;
+use NextDom\Managers\ScenarioExpressionManager;
+
 /**
  * Scenariosubelement
  *
- * @ORM\Table(name="scenarioSubElement", indexes={@ORM\Index(name="fk_scenarioSubElement_scenarioElement1_idx", columns={"scenarioElement_id"}), @ORM\Index(name="type", columns={"scenarioElement_id", "type"})})
- * @ORM\Entity
+ * ORM\Table(name="scenarioSubElement", indexes={@ORM\Index(name="fk_scenarioSubElement_scenarioElement1_idx", columns={"scenarioElement_id"}), @ORM\Index(name="type", columns={"scenarioElement_id", "type"})})
+ * ORM\Entity
  */
 class ScenarioSubElement
 {
@@ -31,42 +35,35 @@ class ScenarioSubElement
      *
      * @ORM\Column(name="order", type="integer", nullable=true)
      */
-    private $order;
+    protected $order;
 
     /**
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=127, nullable=true)
      */
-    private $type;
+    protected $type;
 
     /**
      * @var string
      *
      * @ORM\Column(name="subtype", type="string", length=127, nullable=true)
      */
-    private $subtype;
+    protected $subtype;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=127, nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="options", type="text", length=65535, nullable=true)
      */
-    private $options;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="log", type="text", length=65535, nullable=true)
-     */
-    private $log;
+    protected $options;
 
     /**
      * @var integer
@@ -75,7 +72,7 @@ class ScenarioSubElement
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \NextDom\Model\Entity\ScenarioElement
@@ -85,21 +82,23 @@ class ScenarioSubElement
      *   @ORM\JoinColumn(name="scenarioElement_id", referencedColumnName="id")
      * })
      */
-    private $scenarioelement;
+    protected $scenarioElement_id;
 
-    public function getOrder()
+    protected $_expression;
+
+    protected $_changed = false;
+
+
+    public function getId()
     {
-        return $this->order;
+        return $this->id;
     }
 
-    public function getType()
+    public function setId($_id)
     {
-        return $this->type;
-    }
-
-    public function getSubtype()
-    {
-        return $this->subtype;
+        $this->_changed = utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
     }
 
     public function getName()
@@ -107,72 +106,166 @@ class ScenarioSubElement
         return $this->name;
     }
 
-    public function getOptions()
+    public function setName($_name)
     {
-        return $this->options;
-    }
-
-    public function getLog()
-    {
-        return $this->log;
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function getScenarioelement(): \NextDom\Model\Entity\ScenarioElement
-    {
-        return $this->scenarioelement;
-    }
-
-    public function setOrder($order)
-    {
-        $this->order = $order;
+        $this->_changed = utils::attrChanged($this->_changed, $this->name, $_name);
+        $this->name = $_name;
         return $this;
     }
 
-    public function setType($type)
+    public function getType()
     {
-        $this->type = $type;
+        return $this->type;
+    }
+
+    public function setType($_type)
+    {
+        $this->_changed = utils::attrChanged($this->_changed, $this->type, $_type);
+        $this->type = $_type;
         return $this;
     }
 
-    public function setSubtype($subtype)
+    public function getScenarioElement_id()
     {
-        $this->subtype = $subtype;
+        return $this->scenarioElement_id;
+    }
+
+    public function getElement()
+    {
+        return ScenarioElementManager::byId($this->getScenarioElement_id());
+    }
+
+    public function setScenarioElement_id($_scenarioElement_id)
+    {
+        $this->_changed = utils::attrChanged($this->_changed, $this->scenarioElement_id, $_scenarioElement_id);
+        $this->scenarioElement_id = $_scenarioElement_id;
         return $this;
     }
 
-    public function setName($name)
+    public function getOptions($_key = '', $_default = '')
     {
-        $this->name = $name;
-        return $this;
+        return utils::getJsonAttr($this->options, $_key, $_default);
     }
 
-    public function setOptions($options)
+    public function setOptions($_key, $_value)
     {
+        $options = utils::setJsonAttr($this->options, $_key, $_value);
+        $this->_changed = utils::attrChanged($this->_changed, $this->options, $options);
         $this->options = $options;
         return $this;
     }
 
-    public function setLog($log)
+    public function getOrder()
     {
-        $this->log = $log;
+        return $this->order;
+    }
+
+    public function setOrder($_order)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
+        $this->order = $_order;
         return $this;
     }
 
-    public function setId($id)
+    public function getSubtype()
     {
-        $this->id = $id;
+        return $this->subtype;
+    }
+
+    public function setSubtype($_subtype)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->subtype, $_subtype);
+        $this->subtype = $_subtype;
         return $this;
     }
 
-    public function setScenarioelement(\NextDom\Model\Entity\ScenarioElement $scenarioelement)
+    public function getChanged()
     {
-        $this->scenarioelement = $scenarioelement;
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed)
+    {
+        $this->_changed = $_changed;
         return $this;
+    }
+
+
+    public function execute(&$_scenario = null)
+    {
+        if ($_scenario != null && !$_scenario->getDo()) {
+            return null;
+        }
+        if ($this->getSubtype() == 'action') {
+            $_scenario->setLog(__('Exécution du sous-élément de type [action] : ', __FILE__) . $this->getType());
+            $return = true;
+            foreach ($this->getExpression() as $expression) {
+                $return = $expression->execute($_scenario);
+            }
+            return $return;
+        }
+        if ($this->getSubtype() == 'condition') {
+            $_scenario->setLog(__('Exécution du sous-élément de type [condition] : ', __FILE__) . $this->getType());
+            foreach ($this->getExpression() as $expression) {
+                return $expression->execute($_scenario);
+            }
+        }
+        return null;
+    }
+
+    public function save()
+    {
+        \DB::save($this);
+    }
+
+    public function remove()
+    {
+        foreach ($this->getExpression() as $expression) {
+            $expression->remove();
+        }
+        \DB::remove($this);
+    }
+
+    public function getExpression()
+    {
+        if (is_array($this->_expression) && count($this->_expression) > 0) {
+            return $this->_expression;
+        }
+        $this->_expression = ScenarioExpressionManager::byscenarioSubElementId($this->getId());
+        return $this->_expression;
+    }
+
+    public function getAllId()
+    {
+        $return = array(
+            'element' => array(),
+            'subelement' => array($this->getId()),
+            'expression' => array(),
+        );
+        foreach ($this->getExpression() as $expression) {
+            $result = $expression->getAllId();
+            $return['element'] = array_merge($return['element'], $result['element']);
+            $return['subelement'] = array_merge($return['subelement'], $result['subelement']);
+            $return['expression'] = array_merge($return['expression'], $result['expression']);
+        }
+        return $return;
+    }
+
+    public function copy($_scenarioElement_id)
+    {
+        $subElementCopy = clone $this;
+        $subElementCopy->setId('');
+        $subElementCopy->setScenarioElement_id($_scenarioElement_id);
+        $subElementCopy->save();
+        foreach ($this->getExpression() as $expression) {
+            $expression->copy($subElementCopy->getId());
+        }
+        return $subElementCopy->getId();
+    }
+
+    public function getTableName()
+    {
+        return 'scenarioSubElement';
     }
 
 }

@@ -30,7 +30,7 @@
     "slick-carousel": "^1.8.1",
     "snapsvg": "^0.5.1",
     "tablesorter": "^2.31.0",
-    "vis": "^4.21.4",
+    "vis": "^4.21.0",
     "vivagraphjs": "^0.10.1",
     "wowjs": "^1.1.3"
   },

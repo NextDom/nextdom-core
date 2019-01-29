@@ -35,6 +35,7 @@ namespace NextDom\Managers;
 
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\ScenarioElement;
+use NextDom\Model\Entity\ScenarioExpression;
 
 class ScenarioElementManager
 {
@@ -108,7 +109,7 @@ class ScenarioElementManager
                 if (isset($expression_ajax['id']) && $expression_ajax['id'] != '') {
                     $expression_db = ScenarioExpressionManager::byId($expression_ajax['id']);
                 } else {
-                    $expression_db = new \scenarioExpression();
+                    $expression_db = new ScenarioExpression();
                 }
                 if (!isset($expression_db) || !is_object($expression_db)) {
                     throw new \Exception(__('Expression inconnue. Vérifiez l\'ID : ') . $expression_ajax['id']);

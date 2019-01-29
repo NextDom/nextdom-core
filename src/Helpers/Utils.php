@@ -408,8 +408,8 @@ class Utils
 
     public static function isJson($_string, $_default = null)
     {
-        if ($_string === null && $_default === null) {
-            return null;
+        if ($_string === null) {
+            return $_default;
         }
         if ($_default !== null) {
             if (!is_string($_string)) {
@@ -915,12 +915,11 @@ class Utils
     {
         if (is_array($_attr)) {
             if ($_key == '') {
-                return self::isJson($_attr, array());
+                return $_attr;
             }
         } else {
             if ($_key == '') {
-                $_attr = Utils::isJson($_attr, array());
-                return $_attr;
+                return self::isJson($_attr, array());
             }
             if ($_attr === '') {
                 if (is_array($_key)) {

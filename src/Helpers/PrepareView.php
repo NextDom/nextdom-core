@@ -17,6 +17,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Managers\AjaxManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
@@ -357,12 +358,12 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
         } else {
+            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = 'vendor/node_modules/jquery-ui-dist/jquery-ui.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
-            $pageData['JS_POOL'][] = '/public/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
-            $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
+            $pageData['JS_POOL'][] = '/assets/js/desktop/utils.js';
             $pageData['JS_POOL'][] = '/core/js/core.js';
             $pageData['JS_POOL'][] = '/core/js/nextdom.class.js';
             $pageData['JS_POOL'][] = '/core/js/private.class.js';
@@ -484,16 +485,8 @@ class PrepareView
             $routes = $yamlLoader->load('routes.yml');
             $controllerRoute = $routes->get($page);
             if ($controllerRoute === null) {
-                // Vérifie que l'utilisateur n'essaie pas de sortir
-                $purgedPage = preg_replace('/[^a-z0-9_-]/i', '', $page);
-                if (file_exists(NEXTDOM_ROOT . '/desktop/' . $purgedPage)) {
-                    ob_start();
-                    FileSystemHelper::includeFile('desktop', $page, 'php', '', true);
-                    return ob_get_clean();
-                } else {
-                    Router::showError404AndDie();
-                    return null;
-                }
+                Router::showError404AndDie();
+                return null;
             } else {
                 return call_user_func_array($controllerRoute->getDefaults()['_controller'], [$render, &$pageContent]);
             }
@@ -529,7 +522,6 @@ class PrepareView
                 $pageContent['JS_END_POOL'] = [];
                 $pageContent['CSS_POOL'] = [];
                 $pageContent['JS_VARS'] = [];
-                $controller = new $controllerRoute();
                 $pageContent['content'] = call_user_func_array($controllerRoute->getDefaults()['_controller'], [$render, &$pageContent]);
                 $render->show('/layouts/ajax_content.html.twig', $pageContent);
             }

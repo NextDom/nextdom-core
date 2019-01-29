@@ -47,8 +47,8 @@ class planHeader {
     }
     /**
     *
-    * @param type $_type
-    * @param type $_id
+    * @param string $_type
+    * @param string|int $_id
     * @return type
     */
     public static function searchByUse($_type, $_id) {

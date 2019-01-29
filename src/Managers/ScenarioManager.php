@@ -233,6 +233,7 @@ class ScenarioManager
         if ($onlyVisible) {
             $sql .= ' AND isVisible = 1';
         }
+        $sql .= ' ORDER BY `order`';
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 

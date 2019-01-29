@@ -229,6 +229,20 @@ $(function () {
 
     /************************Help*************************/
 
+    setInterval(function () {
+      var date = new Date();
+      date.setTime(date.getTime() + clientServerDiffDatetime);
+      var hour = date.getHours();
+      var minute = date.getMinutes();
+      var seconde = date.getSeconds();
+      var horloge = (hour < 10) ? '0' + hour : hour;
+      horloge += ':';
+      horloge += (minute < 10) ? '0' + minute : minute;
+      horloge += ':';
+      horloge += (seconde < 10) ? '0' + seconde : seconde;
+      $('#horloge').text(horloge);
+    }, 1000);
+    
     if (isset(nextdom_langage)) {
         bootbox.setDefaults({
             locale: nextdom_langage.substr(0, 2),
@@ -759,10 +773,15 @@ function chooseIcon(_callback) {
 }
 
 
-function positionEqLogic(_id,_preResize) {
+function positionEqLogic(_id,_preResize,_scenario) {
     if(_id != undefined){
         var eqLogic = $('.eqLogic-widget[data-eqlogic_id='+_id+']');
-
+        if(_scenario){
+              var widget = $('.scenario-widget[data-scenario_id='+_id+']');
+            }else{
+              var widget = $('.eqLogic-widget[data-eqlogic_id='+_id+']');
+            }
+        widget.css('margin','0px').css('padding','0px');
         eqLogic.trigger('resize');
         eqLogic.addClass(eqLogic.attr('data-category'));
         eqLogic.css('border-radius',widget_radius+'px');
@@ -809,6 +828,7 @@ function saveWidgetDisplay(_params){
     }
     var cmds = [];
     var eqLogics = [];
+    var scenarios = [];
     $('.eqLogic-widget:not(.eqLogic_layout_table)').each(function(){
         var eqLogic = $(this);
         order = 1;

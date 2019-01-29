@@ -92,9 +92,6 @@ class DashBoardController extends BaseController
         $pageContent['dashboardChildrenObjects'] = JeeObjectManager::buildTree($object);
         $pageContent['profilsUser'] = $_SESSION['user'];
 
-        if ($pageContent['dashboardDisplayScenarioByDefault'] == 1) {
-            $pageContent['dashboardScenarios'] = ScenarioManager::all();
-        }
         $pageContent['JS_POOL'][] = '/public/js/desktop/dashboard.js';
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/dashboard_events.js';
         // A remettre une fois mise sous forme de thème//
