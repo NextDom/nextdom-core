@@ -81,12 +81,12 @@
             </div>
         </div>
 
-        <div class="box-group" id="accordionScenar">
+        <div class="box-group" id="accordionScenario">
             {% if scenarios[-1]|length > 0 %}
                 <div class="panel box">
                     <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none">
                         <h3 class="box-title">
-                            <span>Aucun - {{ scenarios[-1]|length }} scénario(s)</span>
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionScenario" href="#config_none" style="text-decoration:none;">Aucun - {{ scenarios[-1]|length }} scénario(s)</a>
                         </h3>
                     </a>
                     <div id="config_none" class="panel-collapse collapse in">
@@ -94,7 +94,12 @@
                             <div class="scenarioListContainer DisplayCard text-center">
                                 {% for scenario in scenarios[-1] %}
                                     <div class="scenarioDisplayCard cursor icon_gestion" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
-                                        <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70"/>
+                                        if($scenario->getDisplay('icon') != ''){
+                                        {% if scenario.getDisplay('icon') != '' %}
+                                            <span style="font-size:3em;">{{ scenario.getDisplay('icon') }}</span>
+                                        {% else %}
+                                            <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70"/>
+                                        {% endif %}
                                         <p class="name">{{ scenario.getHumanName(true, true, true, true)|raw }}</p>
                                     </div>
                                 {% endfor %}
@@ -117,7 +122,11 @@
                                 <div class="scenarioListContainer DisplayCard text-center ">
                                     {% for scenario in scenarios[scenarioGroup.group] %}
                                         <div class="scenarioDisplayCard  icon_gestion cursor" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
-                                            <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70"/>
+                                            {% if scenario.getDisplay('icon') != '' %}
+                                                <span style="font-size:3em;">{{ scenario.getDisplay('icon') }}</span>
+                                            {% else %}
+                                                <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70"/>
+                                            {% endif %}
                                             <p>{{ scenario.getHumanName(true, true, true, true)|raw }}</p>
                                         </div>
                                     {% endfor %}

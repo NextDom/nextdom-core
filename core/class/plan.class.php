@@ -58,7 +58,7 @@ class plan {
         WHERE planHeader_id=:planHeader_id';
         return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
     }
-
+    
     public static function byLinkTypeLinkId($_link_type, $_link_id) {
         $values = array(
             'link_type' => $_link_type,
@@ -70,7 +70,7 @@ class plan {
         AND link_id=:link_id';
         return DB::Prepare($sql, $values, DB::FETCH_TYPE_ALL, PDO::FETCH_CLASS, __CLASS__);
     }
-
+    
     public static function byLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id) {
         $values = array(
             'link_type' => $_link_type,
@@ -84,7 +84,7 @@ class plan {
         AND planHeader_id=:planHeader_id';
         return DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW, PDO::FETCH_CLASS, __CLASS__);
     }
-
+    
     public static function removeByLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id) {
         $values = array(
             'link_type' => $_link_type,
@@ -136,7 +136,7 @@ class plan {
             self::removeByLinkTypeLinkIdPlanHedaerId($this->getLink_type(), $this->getLink_id(), $this->getPlanHeader_id());
         }
     }
-
+    
     public function preSave() {
         if ($this->getCss('zoom') != '' && (!is_numeric($this->getCss('zoom')) || $this->getCss('zoom')) < 0.1) {
             $this->setCss('zoom', 1);
@@ -145,15 +145,15 @@ class plan {
             $this->setLink_id(mt_rand(0, 99999999) + 9999);
         }
     }
-
+    
     public function save() {
         DB::save($this);
     }
-
+    
     public function remove() {
         DB::remove($this);
     }
-
+    
     public function copy() {
         $planCopy = clone $this;
         $planCopy->setId('');
@@ -196,7 +196,7 @@ class plan {
             }
         }
     }
-
+    
     public function doAction($_action) {
         foreach ($this->getConfiguration('action_' . $_action) as $action) {
             try {
@@ -347,105 +347,104 @@ class plan {
                 break;
         }
     }
-
+    
     public function getPlanHeader() {
         return planHeader::byId($this->getPlanHeader_id());
     }
-
+    
     /*     * **********************Getteur Setteur*************************** */
-
-
+    
     public function getId() {
         return $this->id;
     }
-
+    
     public function getLink_type() {
         return $this->link_type;
     }
-
+    
     public function getLink_id() {
         return $this->link_id;
     }
-
+    
     public function getPosition($_key = '', $_default = '') {
         return utils::getJsonAttr($this->position, $_key, $_default);
     }
-
+    
     public function getDisplay($_key = '', $_default = '') {
         return utils::getJsonAttr($this->display, $_key, $_default);
     }
-
+    
     public function getCss($_key = '', $_default = '') {
         return utils::getJsonAttr($this->css, $_key, $_default);
     }
-
+    
     public function setId($_id) {
         $this->_changed = utils::attrChanged($this->_changed,$this->id,$_id);
         $this->id = $_id;
         return $this;
     }
-
+    
     public function setLink_type($_link_type) {
         $this->_changed = utils::attrChanged($this->_changed,$this->link_type,$_link_type);
         $this->link_type = $_link_type;
         return $this;
     }
-
+    
     public function setLink_id($_link_id) {
         $this->_changed = utils::attrChanged($this->_changed,$this->link_id,$_link_id);
         $this->link_id = $_link_id;
         return $this;
     }
-
+    
     public function setPosition($_key, $_value) {
         $position = utils::setJsonAttr($this->position, $_key, $_value);
         $this->_changed = utils::attrChanged($this->_changed,$this->position,$position);
         $this->position = $position;
         return $this;
     }
-
+    
     public function setDisplay($_key, $_value) {
         $display = utils::setJsonAttr($this->display, $_key, $_value);
         $this->_changed = utils::attrChanged($this->_changed,$this->display,$display);
         $this->display = $display;
         return $this;
     }
-
+    
     public function setCss($_key, $_value) {
         $css = utils::setJsonAttr($this->css, $_key, $_value);
         $this->_changed = utils::attrChanged($this->_changed,$this->css,$css);
         $this->css = $css;
         return $this;
     }
-
+    
     public function getPlanHeader_id() {
         return $this->planHeader_id;
     }
-
+    
     public function setPlanHeader_id($_planHeader_id) {
         $this->_changed = utils::attrChanged($this->_changed,$this->planHeader_id,$_planHeader_id);
         $this->planHeader_id = $_planHeader_id;
         return $this;
     }
-
+    
     public function getConfiguration($_key = '', $_default = '') {
         return utils::getJsonAttr($this->configuration, $_key, $_default);
     }
-
+    
     public function setConfiguration($_key, $_value) {
         $configuration = utils::setJsonAttr($this->configuration, $_key, $_value);
         $this->_changed = utils::attrChanged($this->_changed,$this->configuration,$configuration);
         $this->configuration = $configuration;
         return $this;
     }
-
+    
     public function getChanged() {
         return $this->_changed;
     }
-
+    
     public function setChanged($_changed) {
         $this->_changed = $_changed;
         return $this;
     }
-
+    
 }

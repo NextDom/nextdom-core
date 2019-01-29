@@ -15,7 +15,6 @@ $(document).ajaxStop(function () {
 });
 
 $(function () {
-  
   MESSAGE_NUMBER = null;
   nbActiveAjaxRequest = 0;
   utid = Date.now();
@@ -94,7 +93,7 @@ function setBackgroundImage(_image){
   $('.backgroundforNextDom').css('background-position','');
   $('.backgroundforNextDom').css('background-repeat','no-repeat');
   if(_image != ''){
-    $('.backgroundforNextDom').css('background-image','url("'+_image+'")');
+    $('.backgroundforNextDom').css('background-image','url("'+_image+'") !important');
   }
 }
 

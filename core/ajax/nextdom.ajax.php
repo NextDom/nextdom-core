@@ -1,20 +1,20 @@
 <?php
 
 /* This file is part of Jeedom.
- *
- * Jeedom is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jeedom is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
- */
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 use NextDom\Helpers\Utils;
 use NextDom\Exceptions\CoreException;
@@ -22,13 +22,13 @@ use NextDom\Exceptions\CoreException;
 try {
     require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
-
+    
     if (!isConnect()) {
         throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
     }
 
     ajax::init(false);
-
+    
     if (init('action') == 'getInfoApplication') {
         $return = array();
         $return['product_name'] = config::byKey('product_name');
@@ -315,7 +315,7 @@ try {
     if (init('action') == 'getFileContent') {
         unautorizedInDemo();
         $pathinfo = pathinfo(init('path'));
-        if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql', 'ini','html','py'))) {
+        if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql', 'ini','html','py','css'))) {
             throw new Exception(__('Vous ne pouvez éditer ce type d\'extension : ' . $pathinfo['extension'], __FILE__));
         }
         ajax::success(file_get_contents(init('path')));
@@ -324,7 +324,7 @@ try {
     if (init('action') == 'setFileContent') {
         unautorizedInDemo();
         $pathinfo = pathinfo(init('path'));
-        if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql', 'ini','html','py'))) {
+        if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql', 'ini','html','py','css'))) {
             throw new Exception(__('Vous ne pouvez éditer ce type d\'extension : ' . $pathinfo['extension'], __FILE__));
         }
         ajax::success(file_put_contents(init('path'), init('content')));
@@ -333,7 +333,7 @@ try {
     if (init('action') == 'deleteFile') {
         unautorizedInDemo();
         $pathinfo = pathinfo(init('path'));
-        if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql', 'ini'))) {
+        if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql', 'ini','css'))) {
             throw new Exception(__('Vous ne pouvez éditer ce type d\'extension : ' . $pathinfo['extension'], __FILE__));
         }
         ajax::success(unlink(init('path')));
@@ -342,7 +342,7 @@ try {
     if (init('action') == 'createFile') {
         unautorizedInDemo();
         $pathinfo = pathinfo(init('name'));
-        if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql', 'ini'))) {
+        if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql', 'ini','css'))) {
             throw new Exception(__('Vous ne pouvez éditer ce type d\'extension : ' . $pathinfo['extension'], __FILE__));
         }
         touch(init('path') . init('name'));
