@@ -72,16 +72,17 @@ class CmdManager
         return $inputs;
     }
 
-    public static function byIds($_ids) {
-		if (!is_array($_ids) || count($_ids) == 0) {
-			return null;
-		}
-		$in = trim(implode(',', $_ids), ',');
-		$sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+    public static function byIds($_ids)
+    {
+        if (!is_array($_ids) || count($_ids) == 0) {
+            return null;
+        }
+        $in = trim(implode(',', $_ids), ',');
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id IN (' . $in . ')';
-		return self::cast(\DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
-	}
+        return self::cast(\DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+    }
 
     /**
      * Get command by his id
@@ -605,12 +606,12 @@ class CmdManager
         }
         $replace = array();
         preg_match_all("/#([0-9]*)#/", $input, $matches);
-		if (count($matches[1]) == 0) {
-			return $input;
-		}
-		$cmds = self::byIds($matches[1]);
-		foreach ($cmds as $cmd) {
-			if (isset($replace['#' . $cmd->getId() . '#'])) {
+        if (count($matches[1]) == 0) {
+            return $input;
+        }
+        $cmds = self::byIds($matches[1]);
+        foreach ($cmds as $cmd) {
+            if (isset($replace['#' . $cmd->getId() . '#'])) {
                 continue;
             }
             $replace['#' . $cmd->getId() . '#'] = '#' . $cmd->getHumanName() . '#';

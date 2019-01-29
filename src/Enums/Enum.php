@@ -33,15 +33,15 @@ abstract class Enum
     public static function getConstants()
     {
         $calledClass = get_called_class();
-        if( $calledClass !== false){
-             return (new \ReflectionClass(get_called_class()))->getConstants();
+        if ($calledClass !== false) {
+            return (new \ReflectionClass(get_called_class()))->getConstants();
         } else {
             throw new OperatingSystemException('Error during calling class', 500);
         }
-       
+
     }
 
-    public static function exists($needle): bool 
+    public static function exists($needle): bool
     {
         return in_array($needle, array_values(self::getConstants()));
     }

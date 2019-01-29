@@ -21,16 +21,17 @@
  */
 
 namespace NextDom\Controller;
- 
-use NextDom\Managers\InteractDefManager;
-use NextDom\Managers\PluginManager;
-use NextDom\Managers\ScenarioManager;
-use NextDom\Managers\ScenarioExpressionManager;
-use NextDom\Managers\CmdManager;
-use NextDom\Managers\JeeObjectManager;
-use NextDom\Managers\EqLogicManager;
+
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Managers\CmdManager;
+use NextDom\Managers\EqLogicManager;
+use NextDom\Managers\InteractDefManager;
+use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\PluginManager;
+use NextDom\Managers\ScenarioExpressionManager;
+use NextDom\Managers\ScenarioManager;
 
 class EqAnalyzeController extends BaseController
 {
@@ -169,7 +170,7 @@ class EqAnalyzeController extends BaseController
                                 } else {
                                     $during = ' pendant plus de ' . $cmdalert->getAlert($level . 'during', '') . ' minute(s)';
                                 }
-                                $alertData['msg'] = ucfirst($level) . ' si ' . \nextdom::toHumanReadable(str_replace('#value#', '<b>' . $cmdalert->getName() . '</b>', $cmdalert->getAlert($level . 'if', ''))) . $during . '</br>';
+                                $alertData['msg'] = ucfirst($level) . ' si ' . NextDomHelper::toHumanReadable(str_replace('#value#', '<b>' . $cmdalert->getName() . '</b>', $cmdalert->getAlert($level . 'if', ''))) . $during . '</br>';
                             }
                         }
                     }
@@ -178,7 +179,7 @@ class EqAnalyzeController extends BaseController
             }
         }
 
-        $pageContent['eqAnalyzeNextDomDeadCmd'] = \nextdom::deadCmd();
+        $pageContent['eqAnalyzeNextDomDeadCmd'] = NextDomHelper::getDeadCmd();
         $pageContent['eqAnalyzeCmdDeadCmd'] = CmdManager::deadCmd();
         $pageContent['eqAnalyzeJeeObjectDeadCmd'] = JeeObjectManager::deadCmd();
         $pageContent['eqAnalyzeScenarioDeadCmd'] = ScenarioManager::consystencyCheck(true);
@@ -198,5 +199,5 @@ class EqAnalyzeController extends BaseController
         return $render->get('/desktop/diagnostic/eqAnalyze.html.twig', $pageContent);
     }
 
-    
+
 }

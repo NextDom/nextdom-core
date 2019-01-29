@@ -334,7 +334,8 @@ class ConfigManager
      * @return array List of enabled plugins
      * @throws \Exception
      */
-    public static function getEnabledPlugins() {
+    public static function getEnabledPlugins()
+    {
         $sql = 'SELECT `value`,`plugin`
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` = \'active\'';

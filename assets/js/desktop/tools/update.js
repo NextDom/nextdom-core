@@ -342,7 +342,7 @@ function addUpdate(_update) {
     }
     if (_update.type != 'core') {
         if (isset(_update.plugin) && isset(_update.plugin.changelog) && _update.plugin.changelog != '') {
-            tr += '<a class="btn btn-default btn-sm pull-left cursor" target="_blank" href="'+_update.plugin.changelog+'"><i class="fas fa-book">&nbsp;&nbsp;</i>{{Changelog}}</a>';
+            tr += '<a class="btn btn-default btn-sm pull-left cursor hidden-sm" target="_blank" href="'+_update.plugin.changelog+'"><i class="fas fa-book">&nbsp;&nbsp;</i>{{Changelog}}</a>';
         }
     }else{
         tr += '<a class="btn btn-default btn-sm pull-right" href="https://nextdom.github.io/core/fr_FR/changelog" target="_blank"><i class="fas fa-book">&nbsp;&nbsp;</i>{{Changelog}}</a>';

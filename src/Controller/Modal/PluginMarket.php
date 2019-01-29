@@ -50,7 +50,7 @@ class PluginMarket extends BaseAbstractModal
 
         Utils::sendVarsToJs([
             'installBranchStr' => __("Installer la branche "),
-            'branchStr'        => __("Branche ")
+            'branchStr' => __("Branche ")
         ]);
         include_file('desktop', 'Market/plugin.market', 'js');
 

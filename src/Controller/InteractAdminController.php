@@ -22,13 +22,13 @@
 
 namespace NextDom\Controller;
 
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
 
 class InteractAdminController extends BaseController
 {
 
-    
+
     public function __construct()
     {
         parent::__construct();

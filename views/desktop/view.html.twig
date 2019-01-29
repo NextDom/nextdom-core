@@ -53,13 +53,13 @@
         </div>
     </div>
     <div class="div_displayViewContainer {% if viewHideList %}col-lg-12 col-md-12 col-sm-12{% else %}col-lg-10 col-md-9 col-sm-8{% endif %}">
-        <i class='fa fa-picture-o cursor pull-left bt_displayView reportModeHidden ' data-display="{{ viewDefault }}" title="{{ 'Afficher/Masquer les vues' }}"></i>
+        <i class="fa fa-picture-o cursor pull-left bt_displayView reportModeHidden hidden-xs" data-display="{{ viewDefault }}" title="{{ 'Afficher/Masquer les vues' }}"></i>
         <legend style="height: 35px;color : #563d7c;">{{ 'Vue' }} {{ viewCurrent.getName() }}
             {% if viewNoControl == '' %}
                 {% if viewIsAdmin %}
-                    <a href="index.php?v=d&p=view_edit&view_id={{ viewCurrent.getId() }}" class="btn btn-warning btn-xs pull-right reportModeHidden bt_hideFullScreen"><i class="fas fa-pencil-alt"></i> {{ 'Edition complète' }}</a>
+                    <a href="index.php?v=d&p=view_edit&view_id={{ viewCurrent.getId() }}" class="btn btn-warning btn-xs pull-right reportModeHidden bt_hideFullScreen hidden-xs"><i class="fas fa-pencil-alt"></i> {{ 'Edition complète' }}</a>
                 {% endif %}
-                <i class="fas fa-pencil-alt pull-right cursor reportModeHidden bt_hideFullScreen" id="bt_editViewWidgetOrder" data-mode="0"></i>
+                <i class="fas fa-pencil-alt pull-right cursor reportModeHidden bt_hideFullScreen hidden-xs" id="bt_editViewWidgetOrder" data-mode="0"></i>
             {% endif %}
         </legend>
         <div class="row div_displayView"></div>

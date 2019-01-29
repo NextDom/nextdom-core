@@ -24,12 +24,12 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
-use NextDom\Managers\CmdManager;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\CmdManager;
 
 class CmdConfigureHistory extends BaseAbstractModal
 {
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -50,9 +50,9 @@ class CmdConfigureHistory extends BaseAbstractModal
     {
         $dataCount = ['history' => 0, 'timeline' => 0];
         $listCmd = array();
-        
+
         foreach (CmdManager::all() as $cmd) {
-            $info_cmd = \utils::o2a($cmd);
+            $info_cmd = Utils::o2a($cmd);
             $info_cmd['humanName'] = $cmd->getHumanName(true);
             $eqLogic = $cmd->getEqLogic();
             $info_cmd['plugins'] = $eqLogic->getEqType_name();
@@ -71,6 +71,6 @@ class CmdConfigureHistory extends BaseAbstractModal
 
         return $render->get('/modals/cmd.configureHistory.html.twig', $pageContent);
     }
-    
+
 }
      

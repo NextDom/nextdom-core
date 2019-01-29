@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 namespace NextDom\Helpers;
 
 class SystemHelper
@@ -38,7 +39,7 @@ class SystemHelper
      *
      * @return array List of commands
      */
-    public static function loadCommand(): array 
+    public static function loadCommand(): array
     {
         if (file_exists(NEXTDOM_ROOT . '/core/config/system_cmd.json')) {
             $content = file_get_contents(NEXTDOM_ROOT . '/core/config/system_cmd.json');
@@ -54,7 +55,7 @@ class SystemHelper
      *
      * @return string Distribution name
      */
-    public static function getDistrib(): string 
+    public static function getDistrib(): string
     {
         self::loadCommand();
         if (isset(self::$commands['custom'])) {
@@ -79,23 +80,23 @@ class SystemHelper
      *
      * @return mixed
      */
-    public static function getCommand($commandKey = '') 
+    public static function getCommand($commandKey = '')
     {
         $result = '';
-		if (isset(self::$commands[self::getDistrib()]) && isset(self::$commands[self::getDistrib()][$commandKey])) {
-			$result = self::$commands[self::getDistrib()][$commandKey];
+        if (isset(self::$commands[self::getDistrib()]) && isset(self::$commands[self::getDistrib()][$commandKey])) {
+            $result = self::$commands[self::getDistrib()][$commandKey];
         }
         if ($result == '') {
-			if ($commandKey == 'www-uid') {
-				$processUser = posix_getpwuid(posix_geteuid());
-				$result = $processUser['name'];
-			}
-			if ($commandKey == 'www-gid') {
-				$processGroup = posix_getgrgid(posix_getegid());
-				$result = $processGroup['name'];
-			}
-		}
-		return $result;
+            if ($commandKey == 'www-uid') {
+                $processUser = posix_getpwuid(posix_geteuid());
+                $result = $processUser['name'];
+            }
+            if ($commandKey == 'www-gid') {
+                $processGroup = posix_getgrgid(posix_getegid());
+                $result = $processGroup['name'];
+            }
+        }
+        return $result;
     }
 
     /**
@@ -104,7 +105,7 @@ class SystemHelper
      * @return string
      * @throws \Exception
      */
-    public static function getCmdSudo(): string 
+    public static function getCmdSudo(): string
     {
         if (!NextDomHelper::isCapable('sudo')) {
             return '';
@@ -118,7 +119,7 @@ class SystemHelper
      * @param string $filename
      * @throws \Exception
      */
-    public static function killProcessesWhichUsingFile(string $filename) 
+    public static function killProcessesWhichUsingFile(string $filename)
     {
         exec(SystemHelper::getCmdSudo() . 'fuser -k ' . $filename . ' > /dev/null 2>&1');
     }
@@ -130,7 +131,7 @@ class SystemHelper
      * @param string $protocol
      * @throws \Exception
      */
-    public static function killProcessesWhichUsingPort($port, $protocol = 'tcp') 
+    public static function killProcessesWhichUsingPort($port, $protocol = 'tcp')
     {
         exec(SystemHelper::getCmdSudo() . 'fuser -k ' . $port . '/' . $protocol . ' > /dev/null 2>&1');
     }
@@ -142,7 +143,7 @@ class SystemHelper
      * @param mixed $without
      * @return array
      */
-    public static function ps(string $find, $without = null) 
+    public static function ps(string $find, $without = null)
     {
         $return = array();
         $cmd = '(ps ax || ps w) | grep -ie "' . $find . '" | grep -v "grep"';
@@ -192,7 +193,7 @@ class SystemHelper
      * @return mixed
      * @throws \Exception
      */
-    public static function kill($find = '', $forceKill = true) 
+    public static function kill($find = '', $forceKill = true)
     {
         if (trim($find) == '') {
             return null;
@@ -233,7 +234,7 @@ class SystemHelper
      * @return string Result of the command
      * @throws \Exception
      */
-    public static function php(string $arguments, $elevatedPrivileges = false) 
+    public static function php(string $arguments, $elevatedPrivileges = false)
     {
         if ($elevatedPrivileges) {
             return exec(self::getCmdSudo() . ' php ' . $arguments);
@@ -246,7 +247,7 @@ class SystemHelper
      *
      * @return string User id name
      */
-    public static function getWWWUid(): string 
+    public static function getWWWUid(): string
     {
         $distrib = self::getDistrib();
         if ($distrib == 'debian') {
@@ -274,7 +275,7 @@ class SystemHelper
     {
         $cmd = "uname";
         $os = strtolower(trim(shell_exec($cmd)));
-        switch($os) {
+        switch ($os) {
             case('linux'):
                 $cmd = "cat /proc/cpuinfo | grep processor | wc -l";
                 break;
@@ -318,7 +319,7 @@ class SystemHelper
      */
     public static function getUptime(): string
     {
-        return preg_replace ('/\.[0-9]+/', '', file_get_contents('/proc/uptime'));
+        return preg_replace('/\.[0-9]+/', '', file_get_contents('/proc/uptime'));
     }
 
     public static function getMemInfo()

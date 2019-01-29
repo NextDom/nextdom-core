@@ -22,17 +22,18 @@
 
 namespace NextDom\Controller;
 
-use NextDom\Helpers\Status;
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
 use NextDom\Managers\CmdManager;
+use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Managers\EqLogicManager;
 
 class InteractController extends BaseController
 {
 
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -65,13 +66,13 @@ class InteractController extends BaseController
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/interact.js';
         $pageContent['interactsList'] = $interacts;
         $pageContent['interactsListGroup'] = $interactListGroup;
-        $pageContent['interactDisabledOpacity'] = \nextdom::getConfiguration('eqLogic:style:noactive');
-        $pageContent['interactCmdType'] = \nextdom::getConfiguration('cmd:type');
+        $pageContent['interactDisabledOpacity'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
+        $pageContent['interactCmdType'] = NextDomHelper::getConfiguration('cmd:type');
         $pageContent['interactAllUnite'] = CmdManager::allUnite();
         $pageContent['interactJeeObjects'] = JeeObjectManager::all();
         $pageContent['interactEqLogicTypes'] = EqLogicManager::allType();
         $pageContent['interactEqLogics'] = EqLogicManager::all();
-        $pageContent['interactEqLogicCategories'] = \nextdom::getConfiguration('eqLogic:category');
+        $pageContent['interactEqLogicCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/tools/interact.html.twig', $pageContent);

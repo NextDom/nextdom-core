@@ -21,11 +21,11 @@
  */
 
 namespace NextDom\Controller;
- 
-use NextDom\Managers\CacheManager;
-use NextDom\Managers\ConfigManager;
+
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Managers\CacheManager;
+use NextDom\Managers\ConfigManager;
 
 class CacheController extends BaseController
 {
@@ -62,5 +62,5 @@ class CacheController extends BaseController
 
         return $render->get('/desktop/admin/cache.html.twig', $pageContent);
     }
-    
+
 }

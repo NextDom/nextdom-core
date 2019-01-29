@@ -22,13 +22,13 @@
 
 namespace NextDom\Controller;
 
-use NextDom\Managers\ConfigManager;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Managers\ConfigManager;
 
 class CronController extends BaseController
 {
-    
+
     public function __construct()
     {
         parent::__construct();

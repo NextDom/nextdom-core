@@ -124,4 +124,9 @@ class eqLogic extends NextDom\Model\Entity\EqLogic
     {
         return EqLogicManager::generateHtmlTable($_nbLine, $_nbColumn, $_options);
     }
+
+    public static function byString($_string)
+    {
+        return EqLogicManager::byString($_string);
+    }
 }

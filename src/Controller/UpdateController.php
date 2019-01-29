@@ -29,7 +29,7 @@ use NextDom\Managers\UpdateManager;
 
 class UpdateController extends BaseController
 {
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -63,5 +63,5 @@ class UpdateController extends BaseController
         return $render->get('/desktop/tools/update-view.html.twig', $pageContent);
     }
 
-   
+
 }

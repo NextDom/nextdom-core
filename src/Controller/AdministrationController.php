@@ -24,14 +24,14 @@ namespace NextDom\Controller;
 
 
 use NextDom\Helpers\Render;
-use NextDom\Managers\UpdateManager;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\SystemHelper;
+use NextDom\Managers\UpdateManager;
 
 class AdministrationController extends BaseController
 {
 
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -53,7 +53,7 @@ class AdministrationController extends BaseController
     public function get(Render $render, array &$pageContent): string
     {
 
-        $pageContent['IS_ADMIN']  = Status::isConnectAdmin();
+        $pageContent['IS_ADMIN'] = Status::isConnectAdmin();
         $pageContent['administrationNbUpdates'] = UpdateManager::nbNeedUpdate();
         $pageContent['administrationMemLoad'] = 100;
         $pageContent['administrationSwapLoad'] = 100;
@@ -63,7 +63,7 @@ class AdministrationController extends BaseController
             $memData = array_merge(
                 array_filter(
                     explode(' ', $freeData[1]),
-                    function($value) {
+                    function ($value) {
                         return $value !== '';
                     }
                 )
@@ -71,38 +71,36 @@ class AdministrationController extends BaseController
             $swapData = array_merge(
                 array_filter(
                     explode(' ', $freeData[2]),
-                    function($value) {
+                    function ($value) {
                         return $value !== '';
                     }
                 )
             );
             if ($memData[1] != 0) {
-                $pageContent['administrationMemLoad'] = round(100 * $memData[2]/$memData[1], 2);
+                $pageContent['administrationMemLoad'] = round(100 * $memData[2] / $memData[1], 2);
                 if ($memData[1] < 1024) {
-            			$memTotal = $memData[1] .' B';
-            		} elseif ($memData[1] < (1024*1024)) {
-            			$memTotal = round($memData[1] / 1024, 0) .' MB';
+                    $memTotal = $memData[1] . ' B';
+                } elseif ($memData[1] < (1024 * 1024)) {
+                    $memTotal = round($memData[1] / 1024, 0) . ' MB';
                 } else {
-            			$memTotal = round($memData[1] / 1024 / 1024, 0) .' GB';
-            		}
+                    $memTotal = round($memData[1] / 1024 / 1024, 0) . ' GB';
+                }
                 $pageContent['administrationMemTotal'] = $memTotal;
-            }
-            else {
+            } else {
                 $pageContent['administrationMemLoad'] = 0;
                 $pageContent['administrationMemTotal'] = 0;
             }
             if ($swapData[1] != 0) {
-                $pageContent['administrationSwapLoad'] = round(100 * $swapData[2]/$swapData[1], 2);
+                $pageContent['administrationSwapLoad'] = round(100 * $swapData[2] / $swapData[1], 2);
                 if ($swapData[1] < 1024) {
-            			$swapTotal = $swapData[1] .' B';
-            		} elseif ($memData[1] < (1024*1024)) {
-            			$swapTotal = round($swapData[1] / 1024, 0) .' MB';
+                    $swapTotal = $swapData[1] . ' B';
+                } elseif ($memData[1] < (1024 * 1024)) {
+                    $swapTotal = round($swapData[1] / 1024, 0) . ' MB';
                 } else {
-            			$swapTotal = round($swapData[1] / 1024 / 1024, 0) .' GB';
-            		}
+                    $swapTotal = round($swapData[1] / 1024 / 1024, 0) . ' GB';
+                }
                 $pageContent['administrationSwapTotal'] = $swapTotal;
-            }
-            else {
+            } else {
                 $pageContent['administrationSwapLoad'] = 0;
             }
         }
@@ -111,17 +109,17 @@ class AdministrationController extends BaseController
         $pageContent['administrationUptimeHours'] = explode(".", (($uptime % 86400) / 3600))[0];
         $pageContent['administrationUptimeMinutes'] = explode(".", ((($uptime % 86400) % 3600) / 60))[0];
         $pageContent['administrationCore'] = SystemHelper::getProcessorCoresCount();
-        $pageContent['administrationCpuLoad'] = round(100 * (sys_getloadavg()[0]/$pageContent['administrationCore']), 2);
-        $diskTotal=disk_total_space(NEXTDOM_ROOT);
+        $pageContent['administrationCpuLoad'] = round(100 * (sys_getloadavg()[0] / $pageContent['administrationCore']), 2);
+        $diskTotal = disk_total_space(NEXTDOM_ROOT);
         $pageContent['administrationHddLoad'] = round(100 - 100 * disk_free_space(NEXTDOM_ROOT) / $diskTotal, 2);
         if ($diskTotal < 1024) {
-          $diskTotal = $diskTotal .' B';
-        } elseif ($diskTotal < (1024*1024)) {
-          $diskTotal = round($diskTotal / 1024, 0) .' KB';
-        } elseif ($diskTotal < (1024*1024*1024)) {
-          $diskTotal = round($diskTotal / (1024*1024), 0) .' MB';
+            $diskTotal = $diskTotal . ' B';
+        } elseif ($diskTotal < (1024 * 1024)) {
+            $diskTotal = round($diskTotal / 1024, 0) . ' KB';
+        } elseif ($diskTotal < (1024 * 1024 * 1024)) {
+            $diskTotal = round($diskTotal / (1024 * 1024), 0) . ' MB';
         } else {
-          $diskTotal = round($diskTotal / (1024*1024*1024), 0) .' GB';
+            $diskTotal = round($diskTotal / (1024 * 1024 * 1024), 0) . ' GB';
         }
         $pageContent['administrationHddTotal'] = $diskTotal;
         $pageContent['administrationHTTPConnexion'] = SystemHelper::getHttpConnectionsCount();

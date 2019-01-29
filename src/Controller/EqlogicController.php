@@ -21,7 +21,7 @@
  */
 
 namespace NextDom\Controller;
- 
+
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
@@ -50,5 +50,5 @@ class EqlogicController extends BaseController
 
         return $render->get('/desktop/params/eqlogic.html.twig', $pageContent);
     }
-    
+
 }

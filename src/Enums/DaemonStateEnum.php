@@ -21,7 +21,7 @@ namespace NextDom\Enums;
 class DaemonStateEnum extends Enum
 {
 
-    const NOT_OK      = 'nok';
+    const NOT_OK = 'nok';
     const IN_PROGRESS = 'in_progress';
 
 }

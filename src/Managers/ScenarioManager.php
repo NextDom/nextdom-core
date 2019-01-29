@@ -35,8 +35,8 @@ namespace NextDom\Managers;
 
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
-use NextDom\Helpers\Utils;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\Scenario;
 
 // TODO: \DB::buildField(ScenarioEntity::className) à factoriser
@@ -90,7 +90,7 @@ class ScenarioManager
      * @return  Scenario[] Liste des objets scenario
      * @throws \Exception
      */
-    public static function all($groupName = '', $type = null):array
+    public static function all($groupName = '', $type = null): array
     {
         $values = array();
         $result1 = null;
@@ -233,6 +233,7 @@ class ScenarioManager
         if ($onlyVisible) {
             $sql .= ' AND isVisible = 1';
         }
+        $sql .= ' ORDER BY `order`';
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
@@ -353,7 +354,7 @@ class ScenarioManager
     public static function cleanTable()
     {
         $ids = array(
-            'element'    => array(),
+            'element' => array(),
             'subelement' => array(),
             'expression' => array(),
         );
@@ -641,9 +642,9 @@ class ScenarioManager
     {
         $path = NEXTDOM_ROOT . '/core/config/scenario';
         /**
-        if (isset($template) && $template != '') {
-            // TODO Magic trixxxxxx
-        }
+         * if (isset($template) && $template != '') {
+         * // TODO Magic trixxxxxx
+         * }
          */
         return FileSystemHelper::ls($path, '*.json', false, ['files', 'quiet']);
     }
