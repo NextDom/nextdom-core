@@ -213,7 +213,7 @@ class Scenario
      * @param mixed $_default
      * @return mixed
      */
-    public function getTimeout($_default = null)
+    public function getTimeout($_default = 0)
     {
         if ($this->timeout == '' || !is_numeric($this->timeout)) {
             return $_default;
@@ -393,8 +393,8 @@ class Scenario
      */
     public function setTimeout($_timeout)
     {
-        if ($_timeout == '' || is_nan(intval($_timeout)) || $_timeout < 1) {
-            $_timeout = '';
+        if ($_timeout === '' || is_nan(intval($_timeout)) || $_timeout < 1) {
+            $_timeout = 0;
         }
         $this->_changed = Utils::attrChanged($this->_changed, $this->timeout, $_timeout);
         $this->timeout = $_timeout;
