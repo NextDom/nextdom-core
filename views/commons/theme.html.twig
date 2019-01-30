@@ -38,7 +38,6 @@
 /* Header */
 .main-header .logo {
   background-color: {{ COLOR1 }} !important;
-  border-bottom: 0 solid transparent;
 }
 .main-header li.user-header {
   background-color: {{ COLOR1 }} !important;
@@ -70,7 +69,7 @@
 }
 @media (max-width: 767px) {
   .main-header .navbar .dropdown-menu li a:hover {
-  background-color: {{ COLOR1 }} !important;
+    background-color: {{ COLOR1 }} !important;
   }
 }
 .main-header > .logo:hover {
@@ -116,7 +115,7 @@
 
 @media (max-width: 767px) {
   .main-header .navbar .dropdown-menu li a {
-  color: {{ COLOR2 }} !important;
+    color: {{ COLOR2 }} !important;
   }
 }
 
@@ -236,7 +235,7 @@ body, .main-footer{
 }
 
 .info-box, .modal-content{
-  background-color: {{ COLOR10 }};
+  background-color: {{ COLOR10 }} !important;
 }
 
 /* ############################################################################ */
@@ -258,6 +257,10 @@ legend {
 .ui-dialog .ui-dialog-title {
   color: {{ COLOR12 }} !important;
 }
+/* Bouton administration */
+.btn-app {
+  color: {{ COLOR12 }} !important;
+}
 
 /* ############################################################################ */
 /* COLOR13 = */
@@ -277,7 +280,7 @@ legend {
 
 /* Bouton administration */
 .btn-app {
-  color: {{ COLOR14 }} !important;
+  border: 1px solid {{ COLOR14 }} !important;
 }
 
 /* ############################################################################ */
@@ -288,7 +291,7 @@ legend {
 }
 
 /* ############################################################################ */
-/* COLOR16 = Boutons action*/
+/* COLOR16 = Boutons action */
 /* ############################################################################ */
 .btn-action {
   background-color: {{ COLOR15 }} !important;
@@ -296,11 +299,10 @@ legend {
 }
 
 /* ############################################################################ */
-/* COLOR17 = Bouton administration*/
+/* COLOR17 = Bouton administration */
 /* ############################################################################ */
 .btn-app {
   background-color: {{ COLOR17 }} !important;
-  border: 1px solid {{ COLOR17 }} !important;
 }
 
 

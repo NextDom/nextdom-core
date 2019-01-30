@@ -253,10 +253,10 @@ $("input[name=theme]").click(function () {
     var config ="";
     if (radio == "dark"){
         config = {
-            'theme:color1' : '#6e8487',
+            'theme:color1' : '#33b8cc',
             'theme:color2' : '#e6e7e8',
             'theme:color3' : '#ffffff',
-            'theme:color4' : '#6e8487',
+            'theme:color4' : '#33b8cc',
             'theme:color5' : '#ffffff',
             'theme:color6' : '#222d32',
             'theme:color7' : '#1e282c',

@@ -149,10 +149,10 @@ $("#toStep5").click(function () {
                 if (radios[i].value == "dark"){
                     console.log("dark");
                     config = {
-                        'theme:color1' : '#6e8487',
+                        'theme:color1' : '#33b8cc',
                         'theme:color2' : '#e6e7e8',
                         'theme:color3' : '#ffffff',
-                        'theme:color4' : '#6e8487',
+                        'theme:color4' : '#33b8cc',
                         'theme:color5' : '#ffffff',
                         'theme:color6' : '#222d32',
                         'theme:color7' : '#1e282c',
@@ -165,7 +165,7 @@ $("#toStep5").click(function () {
                         'theme:color14' : '#2c3b41',
                         'theme:color15' : '#222d32',
                         'theme:color16' : '#999',
-                        'theme:color17' : '#999'
+                        'theme:color17' : '#2c3b41'
                     }
         break;
                 }
