@@ -118,7 +118,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for plansList as plan %}
+                {% for plan in plansList %}
                 <tr class="plan" data-id=" {{ plan.getId() }}">
                     <td>
                         {{ plan.getId() }}
