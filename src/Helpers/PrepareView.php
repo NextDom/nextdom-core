@@ -32,7 +32,7 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class PrepareView
 {
-    private static $NB_THEME_COLORS = 15;
+    private static $NB_THEME_COLORS = 17;
 
     public static function showFirstUsePage($configs)
     {

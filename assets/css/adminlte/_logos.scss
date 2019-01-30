@@ -41,6 +41,10 @@
     line-height: 48px;
 }
 
+.main-header > .logo {
+    border-bottom: 0 solid transparent;
+}
+
 .logo-mini-img{
     background:url("/public/img/NextDom/NextDom_Square_AlphaBlackWhite.png");
     background-size: 40px;

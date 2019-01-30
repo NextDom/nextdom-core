@@ -18,78 +18,140 @@
 
 #}
 
-/* Theme base */
-.content-wrapper,.nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a, .main-footer {
-background-color:{{ COLOR9 }} !important;
-border-color:{{ COLOR9 }}60 !important;
-}
-
+/* ############################################################################ */
+/* COLOR1 = Couleur d'accentuation principale, l'identité du thème */
+/* ############################################################################ */
+/* Icone patientez */
 .icon_theme_color {
-color: {{ COLOR1 }} !important;
+  color: {{ COLOR1 }} !important;
 }
 
 .backgroundColor{
-background-color: {{ COLOR1 }} !important;
+  background-color: {{ COLOR1 }} !important;
 }
 
+/* Fond logo page login */
 .login-logo{
-background-color: {{ COLOR1 }} !important;
+  background-color: {{ COLOR1 }} !important;
 }
 
+/* Header */
 .main-header .logo {
-background-color: {{ COLOR1 }} !important;
-color: {{ COLOR2 }} !important;
-border-bottom: 0 solid transparent;
+  background-color: {{ COLOR1 }} !important;
+  border-bottom: 0 solid transparent;
 }
-
-.main-header .logo:hover {
-background-color: {{ COLOR1 }} !important;
-}
-
 .main-header li.user-header {
-background-color: {{ COLOR1 }} !important;
+  background-color: {{ COLOR1 }} !important;
 }
 
-/* Labels & Texts */
-.text_color {
-color: {{ COLOR1 }} !important;
-}
-
+/* Textes & labels */
 .label-config {
-background-color: {{ COLOR1 }} !important;
+  background-color: {{ COLOR1 }} !important;
+}
+.label-link {
+  color: {{ COLOR1 }} !important;
 }
 
-.Link-Blue {
-color: {{ COLOR1 }} !important;
-}
-
-[type="checkbox"]:not(:checked):after,
-[type="checkbox"]:checked:after {
-background-color: {{ COLOR4 }} !important;
-}
-
-/* buttons */
+/* Bouton primaires */
 .btn-primary {
-background-color: {{ COLOR1 }} !important;
-border-color: {{ COLOR1 }} !important;
+  background-color: {{ COLOR1 }} !important;
+  border-color: {{ COLOR1 }} !important;
+}
+
+/* Elements actifs ou survolés */
+.main-header .logo:hover {
+  background-color: {{ COLOR1 }} !important;
+}
+.nav-tabs-custom>.nav-tabs>li.active {
+  border-top-color: {{ COLOR1 }} !important;
+}
+.main-header .navbar .sidebar-toggle:hover {
+  background-color: {{ COLOR1 }} !important;
+}
+@media (max-width: 767px) {
+  .main-header .navbar .dropdown-menu li a:hover {
+  background-color: {{ COLOR1 }} !important;
+  }
+}
+.main-header > .logo:hover {
+  background-color: {{ COLOR1 }} !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar-thumb {
+  background:{{ COLOR1 }} !important;
+  background-color: {{ COLOR1 }} !important;
+}
+
+/* Fabs */
+.fab-action-button  {
+  background-color: {{ COLOR1 }} !important;
+}
+
+/* Logos */
+.main-header > .logo {
+  background-color: {{ COLOR1 }} !important;
+}
+
+/* Message d'info */
+.callout.callout-info, .alert-info, .label-info, .modal-info .modal-body {
+  background-color: {{ COLOR1 }} !important;
+}
+
+
+/* ############################################################################ */
+/* COLOR2 = Couleur de contraste (icônes et texte sur fond accentué)*/
+/* ############################################################################ */
+.main-header .logo {
+  color: {{ COLOR2 }} !important;
 }
 
 .btn-action {
-background-color: #999;
-color: {{ COLOR2 }} !important;
-border-color: #666;
+  color: {{ COLOR2 }} !important;
 }
 
-/* Tabs */
-.nav-tabs-custom>.nav-tabs>li.active {
-border-top-color: {{ COLOR1 }} !important;
+.main-header .navbar .sidebar-toggle {
+  color: {{ COLOR2 }} !important;
 }
 
-/* Navs */
-.main-header .navbar {
-background-color: {{ COLOR1 }} !important;
+@media (max-width: 767px) {
+  .main-header .navbar .dropdown-menu li a {
+  color: {{ COLOR2 }} !important;
+  }
 }
 
+.user-panel > .info,
+.user-panel > .info > a {
+  color: {{ COLOR2 }} !important;
+}
+
+.sidebar a, .accordion-toggle .fas {
+  color: {{ COLOR2 }} !important;
+}
+
+.sidebar-menu .treeview-menu > li.active > a,
+.sidebar-menu .treeview-menu > li > a:hover {
+  color: {{ COLOR2 }} !important;
+}
+
+.sidebar-form input[type="text"]:focus,
+.sidebar-form input[type="text"]:focus + .input-group-btn .btn {
+  background-color: {{ COLOR2 }} !important;
+  color: #666;
+}
+
+.sidebar-form input[type="text"]:focus + .input-group-btn .btn {
+  border-left-color: {{ COLOR2 }} !important;
+}
+
+/* Logos */
+.main-header > .logo {
+  color: {{ COLOR2 }} !important;
+}
+
+/* ############################################################################ */
+/* COLOR3 = */
+/* ############################################################################ */
 .main-header .navbar .nav > li > a:hover,
 .main-header .navbar .nav > li > a:active,
 .main-header .navbar .nav > li > a:focus,
@@ -97,48 +159,181 @@ background-color: {{ COLOR1 }} !important;
 .main-header .navbar .nav .open > a:hover,
 .main-header .navbar .nav .open > a:focus,
 .main-header .navbar .nav > .active > a {
-background-color: rgba(0, 0, 0, 0.1);
-color: {{ COLOR3 }} !important;
-}
-
-.main-header .navbar .sidebar-toggle {
-color: {{ COLOR2 }} !important;
+  background-color: rgba(0, 0, 0, 0.1);
+  color: {{ COLOR3 }} !important;
 }
 
 .main-header .navbar .sidebar-toggle:hover {
-color: {{ COLOR3 }} !important;
-background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
+  color: {{ COLOR3 }} !important;
 }
 
-.main-header .navbar .sidebar-toggle {
-color: {{ COLOR2 }} !important;
-}
-.main-header .navbar .sidebar-toggle:hover {
-background-color: {{ COLOR1 }} !important;
-}
-
-@media (max-width: 767px) {
-.main-header .navbar .dropdown-menu li.divider {
-background-color: rgba(255, 255, 255, 0.1);
-}
-.main-header .navbar .dropdown-menu li a {
-color: {{ COLOR2 }} !important;
-}
-.main-header .navbar .dropdown-menu li a:hover {
-background-color: {{ COLOR1 }} !important;
-}
+/* ############################################################################ */
+/* COLOR4 = Couleur des checkbox et radiobox*/
+/* ############################################################################ */
+[type="checkbox"]:not(:checked):after,
+[type="checkbox"]:checked:after,
+[type="radio"]:not(:checked):after,
+[type="radio"]:checked:after {
+  background-color: {{ COLOR4 }} !important;
 }
 
+/* ############################################################################ */
+/* COLOR5 = */
+/* ############################################################################ */
+
+/* ############################################################################ */
+/* COLOR6 = */
+/* ############################################################################ */
 /* Sidebar */
 .main-sidebar,
 .left-side {
-background-color: {{ COLOR6 }} !important;
+  background-color: {{ COLOR6 }} !important;
 }
 
-.user-panel > .info,
-.user-panel > .info > a {
-color: {{ COLOR2 }} !important;
+.ui-dialog .ui-dialog-titlebar, .ui-dialog .ui-dialog-buttonpane {
+  background-color: {{ COLOR6 }} !important;
+  margin: 0;
 }
+
+/* ############################################################################ */
+/* COLOR7 = */
+/* ############################################################################ */
+
+/* ############################################################################ */
+/* COLOR8 = */
+/* ############################################################################ */
+
+/* ############################################################################ */
+/* COLOR9 = Couleur de fond principale */
+/* ############################################################################ */
+.content-wrapper, .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a, .main-footer {
+  background-color:{{ COLOR9 }} !important;
+  border-color:{{ COLOR9 }}60 !important;
+}
+
+.box, .nav-tabs-custom, .action-bar, .box-footer {
+  border-top-color: {{ COLOR9 }} !important;
+}
+
+.tab-content, .box-body {
+  border-top-color: {{ COLOR9 }} !important;
+}
+
+.ui-widget-content {
+  border: 1px solid {{ COLOR9 }} !important;
+}
+
+/* ############################################################################ */
+/* COLOR10 = */
+/* ############################################################################ */
+.box, .nav-tabs-custom, .action-bar, .box-footer {
+  background-color: {{ COLOR10 }} !important;
+}
+
+body, .main-footer{
+  background-color: {{ COLOR10 }} !important;
+}
+
+.info-box, .modal-content{
+  background-color: {{ COLOR10 }};
+}
+
+/* ############################################################################ */
+/* COLOR11 = */
+/* ############################################################################ */
+.table, .table-condensed>thead {
+  background-color: {{ COLOR11 }} !important;
+  border: {{ COLOR11 }} !important;
+}
+
+/* Legendes de sections */
+legend {
+  background-color: {{ COLOR11 }} !important;
+}
+
+/* ############################################################################ */
+/* COLOR12 = */
+/* ############################################################################ */
+.ui-dialog .ui-dialog-title {
+  color: {{ COLOR12 }} !important;
+}
+
+/* ############################################################################ */
+/* COLOR13 = */
+/* ############################################################################ */
+
+/* ############################################################################ */
+/* COLOR14 = */
+/* ############################################################################ */
+.colorpick, .label-value, select, input[type="text"], input[type="email"], input[type="tel"], input[type="search"], input[type="url"], input[type="password"], .ui-autocomplete-input {
+  border: 1px solid {{ COLOR14 }} !important;
+}
+
+/* Legendes de sections */
+legend {
+  border: {{ COLOR14 }} !important;
+}
+
+/* Bouton administration */
+.btn-app {
+  color: {{ COLOR14 }} !important;
+}
+
+/* ############################################################################ */
+/* COLOR15 = */
+/* ############################################################################ */
+.tab-content, .box-body {
+  background-color: {{ COLOR15 }} !important;
+}
+
+/* ############################################################################ */
+/* COLOR16 = Boutons action*/
+/* ############################################################################ */
+.btn-action {
+  background-color: {{ COLOR15 }} !important;
+  border-color: {{ COLOR15 }} !important;
+}
+
+/* ############################################################################ */
+/* COLOR17 = Bouton administration*/
+/* ############################################################################ */
+.btn-app {
+  background-color: {{ COLOR17 }} !important;
+  border: 1px solid {{ COLOR17 }} !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Navs */
+.main-header .navbar {
+background-color: {{ COLOR1 }} !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Sidemenu */
 .sidebar-menu > li.header {
@@ -159,92 +354,11 @@ background-color: {{ COLOR8 }} !important;
 border: solid 1px {{ COLOR6 }} !important;
 }
 
-.sidebar a, .accordion-toggle .fas {
-color: {{ COLOR2 }} !important;
-}
 
-.sidebar a:hover {
-text-decoration: none;
-}
 
-.sidebar-menu .treeview-menu > li.active > a,
-.sidebar-menu .treeview-menu > li > a:hover {
-color: {{ COLOR2 }} !important;
-}
 
-.sidebar-form input[type="text"]:focus,
-.sidebar-form input[type="text"]:focus + .input-group-btn .btn {
-background-color: {{ COLOR2 }} !important;
-color: #666;
-}
 
-.sidebar-form input[type="text"]:focus + .input-group-btn .btn {
-border-left-color: {{ COLOR2 }} !important;
-}
 
-.sidebar-form .btn {
-color: #999;
-border-top-left-radius: 0;
-border-top-right-radius: 2px;
-border-bottom-right-radius: 2px;
-border-bottom-left-radius: 0;
-}
-
-/* Logos */
-.main-header > .logo {
-background-color: {{ COLOR1 }} !important;
-color: {{ COLOR2 }} !important;
-border-bottom: 0 solid transparent;
-}
-
-.main-header > .logo:hover {
-background-color: {{ COLOR1 }} !important;
-}
-
-/* Title */
-.ui-dialog .ui-dialog-title {
-color: {{ COLOR12 }} !important;
-}
-.ui-dialog .ui-dialog-titlebar, .ui-dialog .ui-dialog-buttonpane {
-background-color: {{ COLOR6 }} !important;
-margin: 0;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar-thumb {
-background:{{ COLOR1 }} !important;
-background-color: {{ COLOR1 }} !important;
-}
-
-/* Fabs */
-.fab-action-button  {
-background-color: {{ COLOR1 }} !important;
-}
-
-.box, .nav-tabs-custom, .action-bar, .box-footer {
-background-color: {{ COLOR10 }} !important;
-border-top-color: {{ COLOR9 }};
-}
-
-.tab-content, .box-body {
-background-color: {{ COLOR15 }} !important;
-border-top-color: {{ COLOR9 }};
-}
-
-.info-box, .modal-content{
-background-color: {{ COLOR10 }};
-}
-
-.table, .table-condensed>thead, legend {
-background-color: {{ COLOR11 }} !important;
-border: {{ COLOR11 }} !important;
-}
-
-.btn-app {
-background-color: {{ COLOR14 }} !important;
-border: 1px solid {{ COLOR14 }} !important;
-color: {{ COLOR12 }} !important;
-}
 
 .table-condensed, .table-bordered {
 background-color: {{ COLOR11 }}60 !important;
@@ -262,9 +376,7 @@ body, h1, h2, h3, h4, h5, h6, .nav-tabs-custom > .nav-tabs > li.header, .nav-tab
 color: {{ COLOR12 }} !important;
 }
 
-body, .main-footer{
-background-color: {{ COLOR10 }} !important;
-}
+
 
 .table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
 border: 1px solid {{ COLOR14 }} !important;
@@ -283,9 +395,7 @@ color: {{ COLOR12 }} !important;
 border: none !important;
 }
 
-.colorpick, .label-value, select, input[type="text"], input[type="email"], input[type="tel"], input[type="search"], input[type="url"], input[type="password"], .ui-autocomplete-input {
-border: 1px solid {{ COLOR14 }} !important;
-}
+
 
 .colorpick>input[type="text"] {
 border: none !important;
@@ -295,9 +405,7 @@ border: none !important;
 background-color: {{ COLOR9 }} !important;
 }
 
-.ui-widget-content {
-border: 1px solid {{ COLOR9 }} !important;
-}
+
 
 .label-list, .label-view, .label-log{
 background-color: {{ COLOR9 }} !important;
@@ -311,13 +419,10 @@ background-color: {{ COLOR13 }} !important;
 .table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
 background-color: {{ COLOR11 }} !important;
 border-color: {{ COLOR14 }} !important;
-
-
 }
 
 .tablesorter-bootstrap .tablesorter-filter-row input.tablesorter-filter, .tablesorter-bootstrap .tablesorter-filter-row select.tablesorter-filter {
 background-color: {{ COLOR13 }} !important;
-
 }
 
 .label, .input-sm {

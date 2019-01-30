@@ -20,7 +20,7 @@
 */
 
 /* Checkboxes */
-input[type="checkbox"] {
+input[type="checkbox"], input[type="radio"] {
     position: relative !important;
     top:7px;
     height: 21px;
@@ -42,6 +42,16 @@ input[type="checkbox"] {
     border: 1px solid #ccc;
     border-radius: 2px;
 }
+[type="radio"]:not(:checked):before,
+[type="radio"]:checked:before {
+    content: '';
+    position: absolute;
+    left:0; top: 0;
+    width: 17px;
+    height: 17px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+}
 
 /* content */
 [type="checkbox"]:not(:checked):after,
@@ -57,34 +67,51 @@ input[type="checkbox"] {
     -moz-transition: all .2s;
     -ms-transition: all .2s;
 }
+[type="radio"]:not(:checked):after,
+[type="radio"]:checked:after {
+    content: '';
+    position: absolute;
+    left:0; top: 0;
+    width: 17px;
+    height: 17px;
+    transition: all .2s;
+    border-radius: 20px;
+    -webkit-transition: all .2s;
+    -moz-transition: all .2s;
+    -ms-transition: all .2s;
+}
 
-[type="checkbox"]:hover:before {
+[type="checkbox"]:hover:before, [type="radio"]:hover:before {
     box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.2);
 }
 
 /* checked state */
-[type="checkbox"]:not(:checked):after {
+[type="checkbox"]:not(:checked):after, [type="radio"]:not(:checked):after {
     opacity: 0; /* coche invisible */
     transform: scale(0); /* mise à l'échelle à 0 */
 }
 /* unchecked state */
-[type="checkbox"]:checked:after {
+[type="checkbox"]:checked:after, [type="radio"]:checked:after {
     opacity: 0.9; /* coche opaque */
     transform: scale(1); /* mise à l'échelle 1:1 */
 }
 
 /* focus frame */
-[type="checkbox"]:focus {
+[type="checkbox"]:focus, [type="radio"]:focus {
     outline: none !important;
 }
 
 /* Checkbox */
 [type="checkbox"]:not(:checked):before,
-[type="checkbox"]:checked:before {
+[type="checkbox"]:checked:before,
+[type="radio"]:not(:checked):before,
+[type="radio"]:checked:before {
     background: #fff;
 }
 
 .has-error [type="checkbox"]:checked:after,
-.has-error [type="checkbox"]:checked:after {
+.has-error [type="checkbox"]:checked:after,
+.has-error [type="radio"]:checked:after,
+.has-error [type="radio"]:checked:after {
     background: #c9302c;
 }
