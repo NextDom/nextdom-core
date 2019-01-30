@@ -1461,7 +1461,7 @@ class EqLogic
             return false;
         }
         if (
-          ::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
+            AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
             return true;
         }
         if (strpos($_SESSION['user']->getRights('eqLogic' . $this->getId()), $_right) !== false) {
