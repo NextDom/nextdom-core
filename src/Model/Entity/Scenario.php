@@ -374,6 +374,7 @@ class Scenario
      *
      * @param $_trigger
      * @return $this
+     * @throws \Exception
      */
     public function setTrigger($_trigger)
     {
@@ -415,7 +416,7 @@ class Scenario
      */
     public function setDisplay($key, $value)
     {
-        $display = utils::setJsonAttr($this->display, $key, $value);
+        $display = Utils::setJsonAttr($this->display, $key, $value);
         $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
         $this->display = $display;
         return $this;
@@ -1595,7 +1596,7 @@ class Scenario
      * @return $this
      */
     public function setOrder($_order) {
-        $this->_changed = utils::attrChanged($this->_changed,$this->order,$_order);
+        $this->_changed = Utils::attrChanged($this->_changed,$this->order,$_order);
         $this->order = $_order;
         return $this;
     }

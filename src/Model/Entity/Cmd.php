@@ -375,7 +375,7 @@ class Cmd
                 $_value = Utils::sha512($_value);
             }
         }
-        $configuration = utils::setJsonAttr($this->configuration, $_key, $_value);
+        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
         $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
         $this->configuration = $configuration;
         return $this;
@@ -460,7 +460,7 @@ class Cmd
 
     public function setAlert($_key, $_value)
     {
-        $alert = utils::setJsonAttr($this->alert, $_key, $_value);
+        $alert = Utils::setJsonAttr($this->alert, $_key, $_value);
         $this->_changed = Utils::attrChanged($this->_changed, $this->alert, $alert);
         $this->alert = $alert;
         $this->_needRefreshAlert = true;

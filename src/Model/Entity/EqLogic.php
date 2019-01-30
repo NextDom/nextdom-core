@@ -428,7 +428,7 @@ class EqLogic
                 $this->_batteryUpdated = true;
             }
         }
-        $configuration = utils::setJsonAttr($this->configuration, $configKey, $configValue);
+        $configuration = Utils::setJsonAttr($this->configuration, $configKey, $configValue);
         $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
         $this->configuration = $configuration;
         return $this;
@@ -504,7 +504,7 @@ class EqLogic
             $this->_needRefreshWidget = true;
             $this->_changed = true;
         }
-        $category = utils::setJsonAttr($this->category, $_key, $_value);
+        $category = Utils::setJsonAttr($this->category, $_key, $_value);
         $this->category = $category;
         return $this;
     }
