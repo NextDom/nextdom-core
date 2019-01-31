@@ -492,12 +492,12 @@ class ScenarioElement
 
     public function getOptions($_key = '', $_default = '')
     {
-        return utils::getJsonAttr($this->options, $_key, $_default);
+        return Utils::getJsonAttr($this->options, $_key, $_default);
     }
 
     public function setOptions($_key, $_value)
     {
-        $options = utils::setJsonAttr($this->options, $_key, $_value);
+        $options = Utils::setJsonAttr($this->options, $_key, $_value);
         $this->_changed = Utils::attrChanged($this->_changed, $this->options, $options);
         $this->options = $options;
         return $this;

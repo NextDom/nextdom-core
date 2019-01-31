@@ -100,7 +100,6 @@ class ScenarioManager
         $sqlWhereTypeFilter = ' ';
         $sqlAndTypeFilter = ' ';
         if ($type !== null) {
-            // A aémliorer avec le DAO
             $sqlWhereTypeFilter = ' WHERE `type` = :type ';
             $sqlAndTypeFilter = ' AND `type` = :type ';
             $values['type'] = $type;

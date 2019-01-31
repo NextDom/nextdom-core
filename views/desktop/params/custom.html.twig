@@ -39,7 +39,7 @@
             <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-success btn-action-bar pull-right" id="bt_savecustom"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-success pull-right" id="bt_savecustom"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
         </div>
     </div>
 </section>
@@ -50,14 +50,70 @@
         <ul class="nav nav-tabs pull-right" role="tablist">
             <li role="presentation"><a href="#advanced" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-flask">&nbsp;&nbsp;</i>{{ 'Modifications Avancées' }}</a></li>
             <li role="presentation"><a href="#colortab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-th-large">&nbsp;&nbsp;</i>{{ 'Options Tuiles' }}</a></li>
+            <li role="presentation"><a href="#customtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-tint">&nbsp;&nbsp;</i>{{ 'Personnalisation graphique' }}</a></li>
             <li role="presentation" class="active"><a href="#themestab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint">&nbsp;&nbsp;</i>{{ 'Thème' }}</a></li>
             <li class="header pull-left"><i class="fas fa-pencil-square">&nbsp;&nbsp;</i>{{ 'Customisation' }}</li>
         </ul>
 
         <!-- Tabs content -->
         <div class="global-tab-content tab-content">
-            <!-- Theme tab -->
             <div role="tabpanel" class="tab-pane active" id="themestab">
+                <legend>{{ 'Selectionner votre thème' }}</legend>
+                <div class="row  text-center">
+                    <div id="themes" class="col-sm-12 col-md-6">
+                        <div style="padding: 10px;">
+                            <a style="display: block;border: 1px solid #aaa;" class="clearfix form-group">
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 7px; background: #33b8cc"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 7px; background: #33b8cc"></span>
+                                </div>
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 80px; background: #f9fafc"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 80px; background: #ecf0f5"></span>
+                                </div>
+                            </a>
+                            <p class="text-center no-margin">White</p><input class="theme" type="radio" name="theme" value="white" checked="checked">
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div style="padding: 10px;">
+                            <a style="display: block;border: 1px solid #aaa;" class="clearfix form-group">
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 7px; background: #33b8cc"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 7px; background: #33b8cc"></span>
+                                </div>
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 80px; background: #222d32"></span>
+                                    <span style="display:block;width: 80%;float: left;height: 80px;background: #444;"></span>
+                                </div>
+                            </a>
+                            <p class="text-center no-margin">Dark</p><input class=theme" type="radio" name="theme" value="dark">
+                        </div>
+                    </div>
+                </div>
+                <div class="row  text-center">
+                    <div id="themes" class="col-sm-12 col-md-6">
+                        <div style="padding: 10px;">
+                            <a style="display: block;border: 1px solid #aaa;" class="clearfix form-group">
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 7px; background: #33b8cc"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 7px; background: #33b8cc"></span>
+                                </div>
+                                <div>
+                                    <span style="display:block; width: 20%; float: left; height: 80px; background: #222d32"></span>
+                                    <span style="display:block; width: 80%; float: left; height: 80px; background: #ecf0f5"></span>
+                                </div>
+                            </a>
+                            <p class="text-center no-margin">Mix</p><input class="theme" type="radio" name="theme" value="mix">
+                        </div>
+                    </div>
+                </div>
+
+                </fieldset>
+            </div>
+
+            <!-- Custom tab -->
+            <div role="tabpanel" class="tab-pane" id="customtab">
                 <p class="alert alert-info">{{ 'Pensez à sauvegarder puis actualiser la page pour voir les changements...' }}</p>
                 <fieldset>
                     <legend>{{ 'Couleurs dominantes du thème' }}</legend>
@@ -73,7 +129,7 @@
                             </div>
                         </div>
                         <div class="form-group col-md-4 col-md-offset-2 col-xs-12">
-                            <label class="control-label">{{ 'Couleur textes et icônes' }}</label>
+                            <label class="control-label">{{ 'Couleur icônes' }}</label>
                             <div class="btn-group">
                                 <a class="btn btn-action bt_resetColor" data-l1key="theme:color2" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
                                 <div class="colorpicker-component colorpick input-group">
@@ -83,11 +139,71 @@
                             </div>
                         </div>
                         <div class="form-group col-md-4 col-md-offset-1 col-xs-12">
+                            <label class="control-label">{{ 'Couleur fenetre interne' }}</label>
+                            <div class="btn-group">
+                                <a class="btn btn-action bt_resetColor" data-l1key="theme:color10" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
+                                <div class="colorpicker-component colorpick input-group">
+                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color10" value="{{ Theme['color10'] }}"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-md-offset-2 col-xs-12">
+                            <label class="control-label">{{ 'Couleur tableau' }}</label>
+                            <div class="btn-group">
+                                <a class="btn btn-action bt_resetColor" data-l1key="theme:color11" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
+                                <div class="colorpicker-component colorpick input-group">
+                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color11" value="{{ Theme['color11'] }}"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-md-offset-1 col-xs-12">
+                            <label class="control-label">{{ 'Couleur text' }}</label>
+                            <div class="btn-group">
+                                <a class="btn btn-action bt_resetColor" data-l1key="theme:color12" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
+                                <div class="colorpicker-component colorpick input-group">
+                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color12" value="{{ Theme['color12'] }}"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-md-offset-2 col-xs-12">
                             <label class="control-label">{{ 'Couleur de fond' }}</label>
                             <div class="btn-group">
                                 <a class="btn btn-action bt_resetColor" data-l1key="theme:color9" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
                                 <div class="colorpicker-component colorpick input-group">
                                     <input type="text" class="configKey form-control noSet" data-l1key="theme:color9" value="{{ Theme['color9'] }}"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-md-offset-1 col-xs-12">
+                            <label class="control-label">{{ 'Couleur fond des inputs' }}</label>
+                            <div class="btn-group">
+                                <a class="btn btn-action bt_resetColor" data-l1key="theme:color13" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
+                                <div class="colorpicker-component colorpick input-group">
+                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color13" value="{{ Theme['color13'] }}"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-md-offset-2 col-xs-12">
+                            <label class="control-label">{{ 'Couleur bordure des inputs' }}</label>
+                            <div class="btn-group">
+                                <a class="btn btn-action bt_resetColor" data-l1key="theme:color14" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
+                                <div class="colorpicker-component colorpick input-group">
+                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color14" value="{{ Theme['color14'] }}"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-md-offset-1 col-xs-12">
+                            <label class="control-label">{{ 'Couleur fond des boxs' }}</label>
+                            <div class="btn-group">
+                                <a class="btn btn-action bt_resetColor" data-l1key="theme:color15" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
+                                <div class="colorpicker-component colorpick input-group">
+                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color15" value="{{ Theme['color15'] }}"/>
                                     <span class="input-group-addon"><i></i></span>
                                 </div>
                             </div>

@@ -34,9 +34,10 @@
 
 #}
 <style>
-    .expressions .sortable-placeholder{
+    .expressions .sortable-placeholder {
         background-color: #94CA02;
     }
+
     .CodeMirror {
         border: 1px solid #eee;
         height: auto;
@@ -46,7 +47,7 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
                 {% if scenarioEnabled == 0 %}
                     <a class="btn btn-success btn-action-bar" id="bt_changeAllScenarioState2" data-state="1"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Activer scénarios' }}</a>
                 {% else %}
@@ -94,9 +95,8 @@
                             <div class="scenarioListContainer DisplayCard text-center">
                                 {% for scenario in scenarios[-1] %}
                                     <div class="scenarioDisplayCard cursor icon_gestion" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
-                                        if($scenario->getDisplay('icon') != ''){
                                         {% if scenario.getDisplay('icon') != '' %}
-                                            <span style="font-size:3em;">{{ scenario.getDisplay('icon') }}</span>
+                                            <span style="font-size:3em;">{{ scenario.getDisplay('icon')|raw }}</span>
                                         {% else %}
                                             <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70"/>
                                         {% endif %}
@@ -123,7 +123,7 @@
                                     {% for scenario in scenarios[scenarioGroup.group] %}
                                         <div class="scenarioDisplayCard  icon_gestion cursor" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
                                             {% if scenario.getDisplay('icon') != '' %}
-                                                <span style="font-size:3em;">{{ scenario.getDisplay('icon') }}</span>
+                                                <span style="font-size:3em;">{{ scenario.getDisplay('icon')|raw }}</span>
                                             {% else %}
                                                 <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70"/>
                                             {% endif %}
@@ -145,7 +145,7 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar" id="bt_scenarioThumbnailDisplay"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+                <a class="btn btn-danger btn-action-bar" id="bt_scenarioThumbnailDisplay"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
                 <a class="btn btn-success btn-action-bar" id="bt_saveScenario"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
                 <a class="btn btn-default btn-action-bar" id="bt_graphScenario"><i class="fas fa-object-group">&nbsp;&nbsp;</i>{{ 'Liens' }}</a>
                 <a class="btn btn-default btn-action-bar" id="bt_copyScenario"><i class="fas fa-copy">&nbsp;&nbsp;</i>{{ 'Dupliquer' }}</a>
@@ -287,6 +287,20 @@
                                 </fieldset>
                             </div>
                             <div class="col-lg-6 col-md-12">
+                                <fieldset class="legend-section">
+                                    <legend>{{ 'Icône' }}</legend>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'Icône' }}</label>
+                                        <div class="col-md-4 col-xs-3">
+                                            <a class="btn btn-default btn-sm" id="bt_chooseIcon"><i class="fas fa-flag"></i> {{ 'Choisir' }}</a>
+                                        </div>
+                                        <div class="col-md-5 col-xs-5">
+                                            <div class="scenarioAttr" data-l1key="display" data-l2key="icon" style="font-size : 1.5em;"></div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-6 col-md-12">
                                 <fieldset>
                                     <legend>{{ 'Déclenchement' }}</legend>
                                     <div class="form-group">
@@ -327,88 +341,88 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="modal fade" id="md_copyScenario">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button class="close" data-dismiss="modal">×</button>
-                    <h3>{{ 'Dupliquer le scénario' }}</h3>
-                </div>
-                <div class="modal-body">
-                    <div style="display: none;" id="div_copyScenarioAlert"></div>
-                    <center>
-                        <input class="form-control" type="text" id="in_copyScenarioName" size="16"
-                               placeholder="{{ 'Nom du scénario' }}"/><br/><br/>
-                    </center>
-                </div>
-                <div class="modal-footer">
-                    <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle">&nbsp;&nbsp;</i>{{ 'Annuler' }}</a>
-                    <a class="btn btn-success" id="bt_copyScenarioSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Enregistrer' }}</a>
-                </div>
+</div>
+<div class="modal fade" id="md_copyScenario">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">×</button>
+                <h3>{{ 'Dupliquer le scénario' }}</h3>
+            </div>
+            <div class="modal-body">
+                <div style="display: none;" id="div_copyScenarioAlert"></div>
+                <center>
+                    <input class="form-control" type="text" id="in_copyScenarioName" size="16"
+                           placeholder="{{ 'Nom du scénario' }}"/><br/><br/>
+                </center>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle">&nbsp;&nbsp;</i>{{ 'Annuler' }}</a>
+                <a class="btn btn-success" id="bt_copyScenarioSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Enregistrer' }}</a>
             </div>
         </div>
-
     </div>
-    <div class="modal fade" id="md_addElement">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button class="close" data-dismiss="modal">×</button>
-                    <h3>{{ 'Ajouter élément' }}</h3>
+
+</div>
+<div class="modal fade" id="md_addElement">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">×</button>
+                <h3>{{ 'Ajouter élément' }}</h3>
+            </div>
+            <div class="modal-body">
+                <center>
+                    <select id="in_addElementType" class="form-control">
+                        <option value="if">{{ 'Si/Alors/Sinon' }}</option>
+                        <option value="action">{{ 'Action' }}</option>
+                        <option value="for">{{ 'Boucle' }}</option>
+                        <option value="in">{{ 'Dans' }}</option>
+                        <option value="at">{{ 'A' }}</option>
+                        <option value="code">{{ 'Code' }}</option>
+                        <option value="comment">{{ 'Commentaire' }}</option>
+                    </select>
+                </center>
+                <br/>
+                <div class="alert alert-info addElementTypeDescription if">
+                    Permet de faire des conditions dans votre scénario. Par exemple : Si mon détecteur
+                    d’ouverture de porte se déclenche Alors allumer la lumière.
                 </div>
-                <div class="modal-body">
-                    <center>
-                        <select id="in_addElementType" class="form-control">
-                            <option value="if">{{ 'Si/Alors/Sinon' }}</option>
-                            <option value="action">{{ 'Action' }}</option>
-                            <option value="for">{{ 'Boucle' }}</option>
-                            <option value="in">{{ 'Dans' }}</option>
-                            <option value="at">{{ 'A' }}</option>
-                            <option value="code">{{ 'Code' }}</option>
-                            <option value="comment">{{ 'Commentaire' }}</option>
-                        </select>
-                    </center>
-                    <br/>
-                    <div class="alert alert-info addElementTypeDescription if">
-                        Permet de faire des conditions dans votre scénario. Par exemple : Si mon détecteur
-                        d’ouverture de porte se déclenche Alors allumer la lumière.
-                    </div>
 
-                    <div class="alert alert-info addElementTypeDescription action" style="display:none;">
-                        Permet de lancer une action, sur un de vos modules, scénarios ou autre. Par exemple : Passer
-                        votre sirène sur ON.
-                    </div>
-
-                    <div class="alert alert-info addElementTypeDescription for" style="display:none;">
-                        Une boucle permet de réaliser une action de façon répétée un certain nombre de fois. Par
-                        exemple : Permet de répéter une action de 1 à X, c’est-à-dire X fois.
-                    </div>
-
-                    <div class="alert alert-info addElementTypeDescription in" style="display:none;">
-                        Permet de faire une action dans X min. Par exemple : Dans 5 min, éteindre la lumière.
-                    </div>
-
-                    <div class="alert alert-info addElementTypeDescription at" style="display:none;">
-                        A un temps précis, cet élément permet de lancer une action. Par exemple : A 9h30, ouvrir les
-                        volets.
-                    </div>
-
-                    <div class="alert alert-info addElementTypeDescription code" style="display:none;">
-                        Cet élément permet de rajouter dans votre scénario de la programmation à l’aide d’un code,
-                        PHP/Shell, etc.
-                    </div>
-
-                    <div class="alert alert-info addElementTypeDescription comment" style="display:none;">
-                        Permet de commenter votre scénario.
-                    </div>
-
+                <div class="alert alert-info addElementTypeDescription action" style="display:none;">
+                    Permet de lancer une action, sur un de vos modules, scénarios ou autre. Par exemple : Passer
+                    votre sirène sur ON.
                 </div>
-                <div class="modal-footer">
-                    <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle">&nbsp;&nbsp;</i>{{ 'Annuler' }}</a>
-                    <a class="btn btn-success" id="bt_addElementSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Enregistrer' }}</a>
+
+                <div class="alert alert-info addElementTypeDescription for" style="display:none;">
+                    Une boucle permet de réaliser une action de façon répétée un certain nombre de fois. Par
+                    exemple : Permet de répéter une action de 1 à X, c’est-à-dire X fois.
                 </div>
+
+                <div class="alert alert-info addElementTypeDescription in" style="display:none;">
+                    Permet de faire une action dans X min. Par exemple : Dans 5 min, éteindre la lumière.
+                </div>
+
+                <div class="alert alert-info addElementTypeDescription at" style="display:none;">
+                    A un temps précis, cet élément permet de lancer une action. Par exemple : A 9h30, ouvrir les
+                    volets.
+                </div>
+
+                <div class="alert alert-info addElementTypeDescription code" style="display:none;">
+                    Cet élément permet de rajouter dans votre scénario de la programmation à l’aide d’un code,
+                    PHP/Shell, etc.
+                </div>
+
+                <div class="alert alert-info addElementTypeDescription comment" style="display:none;">
+                    Permet de commenter votre scénario.
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle">&nbsp;&nbsp;</i>{{ 'Annuler' }}</a>
+                <a class="btn btn-success" id="bt_addElementSave"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Enregistrer' }}</a>
             </div>
         </div>
+    </div>
     </section>
 </div>

@@ -428,7 +428,7 @@ class EqLogic
                 $this->_batteryUpdated = true;
             }
         }
-        $configuration = utils::setJsonAttr($this->configuration, $configKey, $configValue);
+        $configuration = Utils::setJsonAttr($this->configuration, $configKey, $configValue);
         $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
         $this->configuration = $configuration;
         return $this;
@@ -1462,9 +1462,9 @@ class EqLogic
             return false;
         }
         if (
-          ::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
-        return true;
-    }
+          AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
+            return true;
+        }
         if (strpos($_SESSION['user']->getRights('eqLogic' . $this->getId()), $_right) !== false) {
             return true;
         }

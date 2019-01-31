@@ -44,7 +44,7 @@ class ConnectionPage(unittest.TestCase):
     def test_connection_page(self):
         self.driver.get(self.url+self.LOGOUT_PATTERN)
         # Wait for loading page
-        sleep(2)
+        sleep(3)
         login_input = self.driver.find_element_by_id('in_login_username')
         password_input = self.driver.find_element_by_id('in_login_password')
         connect_button = self.driver.find_element_by_id('bt_login_validate')
@@ -58,7 +58,7 @@ class ConnectionPage(unittest.TestCase):
     def test_good_connection(self):
         self.driver.get(self.url+self.LOGOUT_PATTERN)
         # Wait for loading page
-        sleep(2)
+        sleep(3)
         login_input = self.driver.find_element_by_id('in_login_username')
         password_input = self.driver.find_element_by_id('in_login_password')
         connect_button = self.driver.find_element_by_id('bt_login_validate')
@@ -72,7 +72,7 @@ class ConnectionPage(unittest.TestCase):
     def test_enter_key_from_password_field(self):
         self.driver.get(self.url+self.LOGOUT_PATTERN)
         # Wait for loading page
-        sleep(2)
+        sleep(3)
         login_input = self.driver.find_element_by_id('in_login_username')
         password_input = self.driver.find_element_by_id('in_login_password')
         login_input.send_keys(self.login)

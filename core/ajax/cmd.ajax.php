@@ -19,13 +19,13 @@
 try {
     require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
-    
+
     if (!isConnect()) {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
-    
+
     ajax::init();
-    
+
     if (init('action') == 'toHtml') {
         if (init('ids') != '') {
             $return = array();
@@ -51,7 +51,7 @@ try {
             ajax::success($info_cmd);
         }
     }
-    
+
     if (init('action') == 'execCmd') {
         $cmd = cmd::byId(init('id'));
         if (!is_object($cmd)) {
@@ -303,9 +303,9 @@ try {
             }
             foreach ($histories as $history) {
                 $info_history = array();
-                if($cmd->getDisplay('groupingType') != ''){
+                if ($cmd->getDisplay('groupingType') != '') {
                     $info_history[] = floatval(strtotime($history->getDatetime() . " UTC")) * 1000 - 1;
-                }else{
+                } else {
                     $info_history[] = floatval(strtotime($history->getDatetime() . " UTC")) * 1000;
                 }
                 if ($NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['timelineOnly']) {
@@ -381,14 +381,14 @@ try {
             if (!is_object($cmd)) {
                 continue;
             }
-            if($cmd->getOrder() != $cmd_json['order']){
+            if ($cmd->getOrder() != $cmd_json['order']) {
                 $cmd->setOrder($cmd_json['order']);
                 $cmd->save(true);
             }
             if (isset($cmd_json['line']) && isset($cmd_json['column'])) {
                 $eqLogic = $cmd->getEqLogicId();
-                if(!isset($eqLogics[$cmd->getEqLogic_id()])){
-                    $eqLogics[$cmd->getEqLogic_id()] = array('eqLogic' => $cmd->getEqLogic(),'changed' => false);
+                if (!isset($eqLogics[$cmd->getEqLogic_id()])) {
+                    $eqLogics[$cmd->getEqLogic_id()] = array('eqLogic' => $cmd->getEqLogic(), 'changed' => false);
                 }
                 if ($eqLogics[$cmd->getEqLogic_id()]['eqLogic']->getDisplay('layout::' . init('version', 'dashboard') . '::table::cmd::' . $cmd->getId() . '::line') != $cmd_json['line'] || $eqLogics[$cmd->getEqLogic_id()]['eqLogic']->getDisplay('layout::' . init('version', 'dashboard') . '::table::cmd::' . $cmd->getId() . '::column') != $cmd_json['column']) {
                     $eqLogics[$cmd->getEqLogic_id()]['eqLogic']->setDisplay('layout::' . init('version', 'dashboard') . '::table::cmd::' . $cmd->getId() . '::line', $cmd_json['line']);
@@ -397,8 +397,8 @@ try {
                 }
             }
         }
-        foreach($eqLogics as $eqLogic){
-            if(!$eqLogic['changed']){
+        foreach ($eqLogics as $eqLogic) {
+            if (!$eqLogic['changed']) {
                 continue;
             }
             $eqLogic['eqLogic']->save(true);
@@ -408,3 +408,6 @@ try {
 
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
+} catch (Exception $e) {
+    ajax::error(displayException($e), $e->getCode());
+}
