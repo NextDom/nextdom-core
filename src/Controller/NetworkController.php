@@ -23,8 +23,8 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\NetworkHelper;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UpdateManager;
 
@@ -35,7 +35,7 @@ class NetworkController extends BaseController
         parent::__construct();
         Status::isConnectedAdminOrFail();
     }
-    
+
     /**
      * Render network page
      *

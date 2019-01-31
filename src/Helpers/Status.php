@@ -57,7 +57,7 @@ class Status
      */
     public static function initConnectState()
     {
-        self::$connectState      = AuthentificationHelper::isConnected();
+        self::$connectState = AuthentificationHelper::isConnected();
         self::$connectAdminState = AuthentificationHelper::isConnected('admin');
     }
 
@@ -72,7 +72,7 @@ class Status
 
     /**
      * Test if the user is logged in and throws an exception if this is not the case.
-     * @return bool 
+     * @return bool
      * @throws CoreException
      */
     public static function isConnectedOrFail()
@@ -85,7 +85,7 @@ class Status
 
     /**
      * @abstract Test if user is connected with admins right or throw CoreException if not.
-     * @return bool 
+     * @return bool
      * @throws CoreException
      */
     public static function isConnectedAdminOrFail()

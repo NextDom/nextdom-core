@@ -22,13 +22,14 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 
 class GeneralController extends BaseController
 {
 
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -50,8 +51,8 @@ class GeneralController extends BaseController
     public function get(Render $render, array &$pageContent): string
     {
 
-        $pageContent['adminHardwareName'] = \nextdom::getHardwareName();
-        $pageContent['adminHardwareKey'] = \nextdom::getHardwareKey();
+        $pageContent['adminHardwareName'] = NextDomHelper::getHardwareName();
+        $pageContent['adminHardwareKey'] = NextDomHelper::getHardwareKey();
         $cache = \cache::byKey('hour');
         $pageContent['adminLastKnowDate'] = $cache->getValue();
 

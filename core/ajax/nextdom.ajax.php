@@ -30,16 +30,22 @@ try {
     ajax::init(false);
 
     if (init('action') == 'getInfoApplication') {
-        @session_start();
-        $_SESSION['user']->refresh();
-        @session_write_close();
         $return = array();
-        $return['nextdom_token'] = ajax::getToken();
-        $return['user_id'] = $_SESSION['user']->getId();
         $return['product_name'] = config::byKey('product_name');
         $return['product_icon'] = config::byKey('product_icon');
         $return['product_image'] = config::byKey('product_image');
         $return['serverDatetime'] = getmicrotime();
+        if (!isConnect()) {
+            $return['connected'] = false;
+            ajax::success($return);
+        }
+
+        $return['user_id'] = $_SESSION['user']->getId();
+        $return['nextdom_token'] = ajax::getToken();
+        @session_start();
+        $_SESSION['user']->refresh();
+        @session_write_close();
+
         $return['userProfils'] = $_SESSION['user']->getOptions();
         $return['userProfils']['defaultMobileViewName'] = __('Vue', __FILE__);
         if ($_SESSION['user']->getOptions('defaultDesktopView') != '') {
@@ -59,19 +65,23 @@ try {
         $return['plugins'] = array();
         foreach (plugin::listPlugin(true) as $plugin) {
             if ($plugin->getMobile() != '' || $plugin->getEventJs() == 1) {
-                $info_plugin = Utils::o2a($plugin);
+                $info_plugin = utils::o2a($plugin);
                 $info_plugin['displayMobilePanel'] = config::byKey('displayMobilePanel', $plugin->getId(), 0);
                 $return['plugins'][] = $info_plugin;
             }
         }
         $return['custom'] = array('js' => false, 'css' => false);
         if (config::byKey('enableCustomCss', 'core', 1) == 1) {
-            $return['custom']['js'] = file_exists(NEXTDOM_ROOT . '/var/custom/mobile/custom.js');
-            $return['custom']['css'] = file_exists(NEXTDOM_ROOT . '/var/custom/mobile/custom.css');
+            $return['custom']['js'] = file_exists(__DIR__ . '/../../mobile/custom/custom.js');
+            $return['custom']['css'] = file_exists(__DIR__ . '/../../mobile/custom/custom.css');
         }
         ajax::success($return);
     }
 
+    if (!isConnect()) {
+        throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
+    }
+    
     ajax::init(true);
 
     if (init('action') == 'getDocumentationUrl') {
@@ -100,7 +110,7 @@ try {
         }
         throw new Exception(__('Aucune documentation trouvée', __FILE__), -1234);
     }
-
+    
     if (init('action') == 'addWarnme') {
         $cmd = cmd::byId(init('cmd_id'));
         if (!is_object($cmd)) {
@@ -121,11 +131,11 @@ try {
         $listener->save(true);
         ajax::success();
     }
-
+    
     if (!isConnect('admin')) {
         throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
     }
-
+    
     if (init('action') == 'ssh') {
         unautorizedInDemo();
         $command = init('command');
@@ -136,65 +146,65 @@ try {
         exec($command, $output);
         ajax::success(implode("\n", $output));
     }
-
+    
     if (init('action') == 'db') {
         unautorizedInDemo();
         ajax::success(DB::prepare(init('command'), array(), DB::FETCH_TYPE_ALL));
     }
-
+    
     if (init('action') == 'health') {
         ajax::success(nextdom::health());
     }
-
+    
     if (init('action') == 'update') {
         unautorizedInDemo();
         nextdom::update();
         ajax::success();
     }
-
+    
     if (init('action') == 'clearDate') {
         $cache = cache::byKey('nextdom::lastDate');
         $cache->remove();
         ajax::success();
     }
-
+    
     if (init('action') == 'backup') {
         unautorizedInDemo();
         nextdom::backup(true);
         ajax::success();
     }
-
+    
     if (init('action') == 'restore') {
         unautorizedInDemo();
         nextdom::restore(init('backup'), true);
         ajax::success();
     }
-
+    
     if (init('action') == 'removeBackup') {
         unautorizedInDemo();
         nextdom::removeBackup(init('backup'));
         ajax::success();
     }
-
+    
     if (init('action') == 'listBackup') {
         ajax::success(nextdom::listBackup());
     }
-
+    
     if (init('action') == 'getConfiguration') {
         ajax::success(nextdom::getConfiguration(init('key'), init('default')));
     }
-
+    
     if (init('action') == 'resetHwKey') {
         unautorizedInDemo();
         config::save('nextdom::installKey', '');
         ajax::success();
     }
-
+    
     if (init('action') == 'resetHour') {
         $cache = cache::delete('hour');
         ajax::success();
     }
-
+    
     if (init('action') == 'backupupload') {
         unautorizedInDemo();
         $uploaddir = __DIR__ . '/../../backup';
@@ -270,7 +280,7 @@ try {
         }
         ajax::success($object->getLinkData());
     }
-
+    
     if (init('action') == 'getTimelineEvents') {
         $return = array();
         $events = nextdom::getTimelineEvent();
@@ -278,11 +288,11 @@ try {
             $info = null;
             switch ($event['type']) {
                 case 'cmd':
-                    $info = cmd::timelineDisplay($event);
-                    break;
+                $info = cmd::timelineDisplay($event);
+                break;
                 case 'scenario':
-                    $info = scenario::timelineDisplay($event);
-                    break;
+                $info = scenario::timelineDisplay($event);
+                break;
             }
             if ($info != null) {
                 $return[] = $info;
@@ -290,17 +300,17 @@ try {
         }
         ajax::success($return);
     }
-
+    
     if (init('action') == 'removeTimelineEvents') {
         unautorizedInDemo();
         ajax::success(nextdom::removeTimelineEvent());
     }
-
+    
     if (init('action') == 'getFileFolder') {
         unautorizedInDemo();
         ajax::success(ls(init('path'), '*', false, array(init('type'))));
     }
-
+    
     if (init('action') == 'getFileContent') {
         unautorizedInDemo();
         $pathinfo = pathinfo(init('path'));
@@ -309,7 +319,7 @@ try {
         }
         ajax::success(file_get_contents(init('path')));
     }
-
+    
     if (init('action') == 'setFileContent') {
         unautorizedInDemo();
         $pathinfo = pathinfo(init('path'));
@@ -318,7 +328,7 @@ try {
         }
         ajax::success(file_put_contents(init('path'), init('content')));
     }
-
+    
     if (init('action') == 'deleteFile') {
         unautorizedInDemo();
         $pathinfo = pathinfo(init('path'));
@@ -327,7 +337,7 @@ try {
         }
         ajax::success(unlink(init('path')));
     }
-
+    
     if (init('action') == 'createFile') {
         unautorizedInDemo();
         $pathinfo = pathinfo(init('name'));
@@ -340,13 +350,13 @@ try {
         }
         ajax::success();
     }
-
+    
     if (init('action') == 'emptyRemoveHistory') {
         unautorizedInDemo();
         unlink(__DIR__ . '/../../data/remove_history.json');
         ajax::success();
     }
-
+    
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
 } catch (Exception $e) {

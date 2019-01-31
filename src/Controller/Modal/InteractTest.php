@@ -22,9 +22,9 @@
 
 namespace NextDom\Controller\Modal;
 
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
- 
+use NextDom\Helpers\Status;
+
 class InteractTest extends BaseAbstractModal
 {
 

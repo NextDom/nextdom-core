@@ -302,7 +302,11 @@
             }
             foreach ($histories as $history) {
                 $info_history = array();
-                $info_history[] = floatval(strtotime($history->getDatetime() . " UTC")) * 1000;
+                if($cmd->getDisplay('groupingType') != ''){
+                    $info_history[] = floatval(strtotime($history->getDatetime() . " UTC")) * 1000 - 1;
+                }else{
+                    $info_history[] = floatval(strtotime($history->getDatetime() . " UTC")) * 1000;
+                }
                 if ($NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['timelineOnly']) {
                     $value = $history->getValue();
                 } else {
@@ -367,6 +371,7 @@
     if (init('action') == 'setOrder') {
         unautorizedInDemo();
         $cmds = json_decode(init('cmds'), true);
+        $eqLogics = array();
         foreach ($cmds as $cmd_json) {
             if (!isset($cmd_json['id']) || trim($cmd_json['id']) == '') {
                 continue;
@@ -375,16 +380,27 @@
             if (!is_object($cmd)) {
                 continue;
             }
-            $cmd->setOrder($cmd_json['order']);
-            $cmd->save(true);
+            if($cmd->getOrder() != $cmd_json['order']){
+                $cmd->setOrder($cmd_json['order']);
+                $cmd->save(true);
+            }
             if (isset($cmd_json['line']) && isset($cmd_json['column'])) {
                 $eqLogic = $cmd->getEqLogicId();
-                if ($eqLogic->getDisplay('layout::' . init('version', 'dashboard') . '::table::cmd::' . $cmd->getId() . '::line') != $cmd_json['line'] || $eqLogic->getDisplay('layout::' . init('version', 'dashboard') . '::table::cmd::' . $cmd->getId() . '::column') != $cmd_json['column']) {
-                    $eqLogic->setDisplay('layout::' . init('version', 'dashboard') . '::table::cmd::' . $cmd->getId() . '::line', $cmd_json['line']);
-                    $eqLogic->setDisplay('layout::' . init('version', 'dashboard') . '::table::cmd::' . $cmd->getId() . '::column', $cmd_json['column']);
-                    $eqLogic->save(true);
+                if(!isset($eqLogics[$cmd->getEqLogic_id()])){
+                    $eqLogics[$cmd->getEqLogic_id()] = array('eqLogic' => $cmd->getEqLogic(),'changed' => false);
+                }
+                if ($eqLogics[$cmd->getEqLogic_id()]['eqLogic']->getDisplay('layout::' . init('version', 'dashboard') . '::table::cmd::' . $cmd->getId() . '::line') != $cmd_json['line'] || $eqLogics[$cmd->getEqLogic_id()]['eqLogic']->getDisplay('layout::' . init('version', 'dashboard') . '::table::cmd::' . $cmd->getId() . '::column') != $cmd_json['column']) {
+                    $eqLogics[$cmd->getEqLogic_id()]['eqLogic']->setDisplay('layout::' . init('version', 'dashboard') . '::table::cmd::' . $cmd->getId() . '::line', $cmd_json['line']);
+                    $eqLogics[$cmd->getEqLogic_id()]['eqLogic']->setDisplay('layout::' . init('version', 'dashboard') . '::table::cmd::' . $cmd->getId() . '::column', $cmd_json['column']);
+                    $eqLogics[$cmd->getEqLogic_id()]['changed'] = true;
                 }
             }
+        }
+        foreach($eqLogics as $eqLogic){
+            if(!$eqLogic['changed']){
+                continue;
+            }
+            $eqLogic['eqLogic']->save(true);
         }
         ajax::success();
     }

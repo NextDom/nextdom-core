@@ -22,8 +22,8 @@
 
 namespace NextDom\Controller\Modal;
 
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 
 
@@ -49,7 +49,7 @@ class LogDisplay extends BaseAbstractModal
     public function get(Render $render): string
     {
         Utils::sendVarsToJS([
-            'realtime_name'      => Utils::init('log', 'event'),
+            'realtime_name' => Utils::init('log', 'event'),
             'log_default_search' => Utils::init('search', '')
         ]);
         return $render->get('/modals/log.display.html.twig');

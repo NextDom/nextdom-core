@@ -22,12 +22,12 @@
 
 namespace NextDom\Controller\Modal;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
-use NextDom\Exceptions\CoreException;
-use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\CacheManager;
+use NextDom\Managers\EqLogicManager;
 
 class EqLogicDisplayWidget extends BaseAbstractModal
 {
@@ -53,8 +53,8 @@ class EqLogicDisplayWidget extends BaseAbstractModal
         $pageContent = [];
 
         $eqLogicId = Utils::init('eqLogic_id');
-        $eqLogic   = EqLogicManager::byId($eqLogicId);
-        $version   = Utils::init('version', 'dashboard');
+        $eqLogic = EqLogicManager::byId($eqLogicId);
+        $version = Utils::init('version', 'dashboard');
         if (!is_object($eqLogic)) {
             throw new CoreException(__('EqLogic non trouvé : ') . $eqLogicId);
         }

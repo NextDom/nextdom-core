@@ -20,6 +20,7 @@ namespace NextDom\Model\Entity;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Api;
 use NextDom\Helpers\FileSystemHelper;
+use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\TimeLine;
@@ -34,7 +35,6 @@ use NextDom\Managers\EventManager;
 use NextDom\Managers\HistoryManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Helpers\LogHelper;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
@@ -67,6 +67,7 @@ class Cmd
     public $_eqLogic = null;
     public $_needRefreshWidget;
     public $_needRefreshAlert;
+    protected $_changed = false;
     protected static $_templateArray = array();
 
 
@@ -328,20 +329,23 @@ class Cmd
     }
 
 
-    public function setEqType($eqType)
+    public function setEqType($_eqType)
     {
-        $this->eqType = $eqType;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->eqType, $_eqType);
+        $this->eqType = $_eqType;
         return $this;
     }
 
-    public function setLogicalId($logicalId)
+    public function setLogicalId($_logicalId)
     {
-        $this->logicalId = $logicalId;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $_logicalId);
+        $this->logicalId = $_logicalId;
         return $this;
     }
 
     public function setGeneric_type($generic_type)
     {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->generic_type, $generic_type);
         $this->generic_type = $generic_type;
         return $this;
     }
@@ -350,14 +354,17 @@ class Cmd
     {
         if ($this->order != $order) {
             $this->_needRefreshWidget = true;
+            $this->_changed = true;
         }
         $this->order = $order;
         return $this;
     }
 
-    public function setName($name)
+    public function setName($_name)
     {
-        $this->name = str_replace(array('&', '#', ']', '[', '%', "'"), '', $name);
+        $_name = str_replace(array('&', '#', ']', '[', '%', "'"), '', $_name);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
+        $this->name = $_name;
         return $this;
     }
 
@@ -365,10 +372,12 @@ class Cmd
     {
         if ($_key == 'actionCodeAccess' && $_value != '') {
             if (!Utils::isSha1($_value) && !Utils::isSha512($_value)) {
-                $_value = sha512($_value);
+                $_value = Utils::sha512($_value);
             }
         }
-        $this->configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
+        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
+        $this->configuration = $configuration;
         return $this;
     }
 
@@ -376,32 +385,37 @@ class Cmd
     {
         if ($this->getTemplate($_key) != $_value) {
             $this->_needRefreshWidget = true;
+            $this->_changed = true;
         }
         $this->template = Utils::setJsonAttr($this->template, $_key, $_value);
         return $this;
     }
 
-    public function setIsHistorized($isHistorized)
+    public function setIsHistorized($_isHistorized)
     {
-        $this->isHistorized = $isHistorized;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->isHistorized, $_isHistorized);
+        $this->isHistorized = $_isHistorized;
         return $this;
     }
 
-    public function setType($type)
+    public function setType($_type)
     {
-        $this->type = $type;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
+        $this->type = $_type;
         return $this;
     }
 
-    public function setSubType($subType)
+    public function setSubType($_subType)
     {
-        $this->subType = $subType;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->subType, $_subType);
+        $this->subType = $_subType;
         return $this;
     }
 
-    public function setUnite($unite)
+    public function setUnite($_unite)
     {
-        $this->unite = $unite;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->unite, $_unite);
+        $this->unite = $_unite;
         return $this;
     }
 
@@ -409,6 +423,7 @@ class Cmd
     {
         if ($this->getDisplay($_key) != $_value) {
             $this->_needRefreshWidget = true;
+            $this->_changed = true;
         }
         $this->display = Utils::setJsonAttr($this->display, $_key, $_value);
         return $this;
@@ -418,14 +433,16 @@ class Cmd
     {
         if ($this->isVisible != $isVisible) {
             $this->_needRefreshWidget = true;
+            $this->_changed = true;
         }
         $this->isVisible = $isVisible;
         return $this;
     }
 
-    public function setValue($value)
+    public function setValue($_value)
     {
-        $this->value = $value;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->value, $_value);
+        $this->value = $_value;
         return $this;
     }
 
@@ -443,13 +460,16 @@ class Cmd
 
     public function setAlert($_key, $_value)
     {
-        $this->alert = Utils::setJsonAttr($this->alert, $_key, $_value);
+        $alert = Utils::setJsonAttr($this->alert, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->alert, $alert);
+        $this->alert = $alert;
         $this->_needRefreshAlert = true;
         return $this;
     }
 
     public function setId($id)
     {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $id);
         $this->id = $id;
         return $this;
     }
@@ -490,23 +510,30 @@ class Cmd
 
     /**
      *
-     * @param $eqLogic_id
+     * @param $_eqLogic_id
      * @return $this
      */
-    public function setEqLogic_Id($eqLogic_id)
+    public function setEqLogic_id($_eqLogic_id)
     {
-        $this->eqLogic_id = $eqLogic_id;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->eqLogic_id, $_eqLogic_id);
+        $this->eqLogic_id = $_eqLogic_id;
         return $this;
     }
 
-    public function getEqLogic() {
+    /**
+     * @return EqLogic
+     * @throws \Exception
+     */
+    public function getEqLogic()
+    {
         if ($this->_eqLogic === null) {
             $this->setEqLogic(EqLogicManager::byId($this->eqLogic_id));
         }
         return $this->_eqLogic;
     }
 
-    public function setEqLogic($_eqLogic) {
+    public function setEqLogic($_eqLogic)
+    {
         $this->_eqLogic = $_eqLogic;
         return $this;
     }
@@ -733,18 +760,19 @@ class Cmd
     public function execCmd($_options = null, $_sendNodeJsEvent = false, $_quote = false)
     {
         if ($this->getType() == 'info') {
-            $state = $this->getCache(['collectDate', 'valueDate', 'value'], ['valueDate' => '', 'value' => '', 'collectDate' => '']);
-            if (isset($state['collectDate'])) {
+            $state = $this->getCache(array('collectDate', 'valueDate', 'value'));
+            if(isset($state['collectDate'])){
                 $this->setCollectDate($state['collectDate']);
-            } else {
+            }else{
                 $this->setCollectDate(date('Y-m-d H:i:s'));
             }
-            if (isset($state['valueDate'])) {
+            if(isset($state['valueDate'])){
                 $this->setValueDate($state['valueDate']);
-            } else {
+            }else{
                 $this->setValueDate($this->getCollectDate());
             }
             return $state['value'];
+
         }
         $eqLogic = $this->getEqLogicId();
         if ($this->getType() != 'info' && (!is_object($eqLogic) || $eqLogic->getIsEnable() != 1)) {
@@ -838,14 +866,14 @@ class Cmd
         }
         $template_name = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.' . $this->getTemplate($version, 'default');
         if (!isset(self::$_templateArray[$version . '::' . $template_name])) {
-            $template = getTemplate('core', $version, $template_name);
+            $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name);
             if ($template == '') {
                 if (ConfigManager::byKey('active', 'widget') == 1) {
-                    $template = getTemplate('core', $version, $template_name, 'widget');
+                    $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name, 'widget');
                 }
                 if ($template == '') {
                     foreach (PluginManager::listPlugin(true) as $plugin) {
-                        $template = getTemplate('core', $version, $template_name, $plugin->getId());
+                        $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name, $plugin->getId());
                         if ($template != '') {
                             break;
                         }
@@ -853,7 +881,7 @@ class Cmd
                 }
                 if ($template == '') {
                     $template_name = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.default';
-                    $template = getTemplate('core', $version, $template_name);
+                    $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name);
                 }
             }
             self::$_templateArray[$version . '::' . $template_name] = $template;
@@ -883,7 +911,8 @@ class Cmd
             '#logicalId#' => $this->getLogicalId(),
             '#uid#' => 'cmd' . $this->getId() . EqLogic::UIDDELIMITER . mt_rand() . EqLogic::UIDDELIMITER,
             '#version#' => $_version,
-            '#eqLogic_id#' => $this->getEqLogicId()->getId(),
+            '#eqLogic_id#' => $this->getEqLogic_id(),
+            '#generic_type#' => $this->getGeneric_type(),
             '#hideCmdName#' => '',
         );
         if ($this->getConfiguration('listValue', '') != '') {
@@ -1671,7 +1700,7 @@ class Cmd
 
     public function getUse()
     {
-        $json = NextDomHelper::fromHumanReadable(json_encode(utils::o2a($this)));
+        $json = NextDomHelper::fromHumanReadable(json_encode(Utils::o2a($this)));
         return NextDomHelper::getTypeUse($json);
     }
 
@@ -1682,5 +1711,16 @@ class Cmd
         } else {
             return $this->getEqLogicId()->hasRight('r', $_user);
         }
+    }
+
+    public function getChanged()
+    {
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed)
+    {
+        $this->_changed = $_changed;
+        return $this;
     }
 }

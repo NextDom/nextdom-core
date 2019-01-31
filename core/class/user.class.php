@@ -33,6 +33,7 @@ class user {
     private $rights;
     private $enable = 1;
     private $hash;
+    private $_changed = false;
 
     /*     * ***********************Méthodes statiques*************************** */
 
@@ -155,6 +156,7 @@ class user {
 
     /*     * **********************Getteur Setteur*************************** */
 
+
     public function getId() {
         return $this->id;
     }
@@ -167,18 +169,22 @@ class user {
         return $this->password;
     }
 
-    public function setId($id) {
-        $this->id = $id;
+    public function setId($_id) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->id,$_id);
+        $this->id = $_id;
         return $this;
     }
 
-    public function setLogin($login) {
-        $this->login = $login;
+    public function setLogin($_login) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->login,$_login);
+        $this->login = $_login;
         return $this;
     }
 
-    public function setPassword($password) {
-        $this->password = (!is_sha512($password)) ? sha512($password) : $password;
+    public function setPassword($_password) {
+        $_password = (!is_sha512($_password)) ? sha512($_password) : $_password;
+        $this->_changed = utils::attrChanged($this->_changed,$this->password,$_password);
+        $this->password = $_password;
         return $this;
     }
 
@@ -187,7 +193,9 @@ class user {
     }
 
     public function setOptions($_key, $_value) {
-        $this->options = utils::setJsonAttr($this->options, $_key, $_value);
+        $options = utils::setJsonAttr($this->options, $_key, $_value);
+        $this->_changed = utils::attrChanged($this->_changed,$this->options,$options);
+        $this->options = $options;
         return $this;
     }
 
@@ -196,7 +204,9 @@ class user {
     }
 
     public function setRights($_key, $_value) {
-        $this->rights = utils::setJsonAttr($this->rights, $_key, $_value);
+        $rights = utils::setJsonAttr($this->rights, $_key, $_value);
+        $this->_changed = utils::attrChanged($this->_changed,$this->rights,$rights);
+        $this->rights = $rights;
         return $this;
     }
 
@@ -204,8 +214,9 @@ class user {
         return $this->enable;
     }
 
-    public function setEnable($enable) {
-        $this->enable = $enable;
+    public function setEnable($_enable) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->enable,$_enable);
+        $this->enable = $_enable;
         return $this;
     }
 
@@ -221,8 +232,9 @@ class user {
         return $this->hash;
     }
 
-    public function setHash($hash) {
-        $this->hash = $hash;
+    public function setHash($_hash) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->hash,$_hash);
+        $this->hash = $_hash;
         return $this;
     }
 
@@ -230,8 +242,18 @@ class user {
         return $this->profils;
     }
 
-    public function setProfils($profils) {
-        $this->profils = $profils;
+    public function setProfils($_profils) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->profils,$_profils);
+        $this->profils = $_profils;
+        return $this;
+    }
+
+    public function getChanged() {
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed) {
+        $this->_changed = $_changed;
         return $this;
     }
 

@@ -141,6 +141,42 @@ $("#toStep4").click(function () {
     });
 });
 
+$("#toStep5").click(function () {
+
+    var radios = document.getElementsByName('theme');
+    var config ="";
+    for (var i = 0, length = radios.length; i < length; i++) {
+                if (radios[i].value == "dark"){
+                    console.log("dark");
+                    config = {
+                        'theme:color1' : '#6e8487',
+                        'theme:color2' : '#e6e7e8',
+                        'theme:color3' : '#ffffff',
+                        'theme:color4' : '#6e8487',
+                        'theme:color5' : '#ffffff',
+                        'theme:color6' : '#222d32',
+                        'theme:color7' : '#1e282c',
+                        'theme:color8' : '#2c3b41',
+                        'theme:color9' : '#2c3b41',
+                        'theme:color10' : '#222d32',
+                        'theme:color11' : '#2c3b41',
+                        'theme:color12' : '#e6e7e8',
+                        'theme:color13' : '#484c52',
+                        'theme:color14' : '#2c3b41',
+                        'theme:color15' : '#222d32'
+                    }
+        break;
+                }
+        }
+
+        nextdom.config.save({
+        configuration: config,
+        error: function (error) {
+            notify("Info", '{{theme parametré}}', 'success');
+        }
+    });
+});
+
 $("#backStep1").click(function () {
     BackStep("#backStep1");
 });
@@ -186,23 +222,23 @@ function NextStep(_step) {
 }
 
 function BackStep(_step) {
-      var curStep = $(_step).closest(".setup-content");
-      var curStepBtn = curStep.attr("id");
-      var nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().prev().children("a");
-              console.log(nextStepWizard);
+    var curStep = $(_step).closest(".setup-content");
+    var curStepBtn = curStep.attr("id");
+    var nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().prev().children("a");
+    console.log(nextStepWizard);
 
-      var curInputs = curStep.find("input[type='text'],input[type='url']");
-      isValid = true;
+    var curInputs = curStep.find("input[type='text'],input[type='url']");
+    isValid = true;
 
-      $(".form-group").removeClass("has-error");
-      for (var i = 0; i < curInputs.length; i++) {
-          if (!curInputs[i].validity.valid) {
-              isValid = false;
-              $(curInputs[i]).closest(".form-group").addClass("has-error");
-          }
-      }
+    $(".form-group").removeClass("has-error");
+    for (var i = 0; i < curInputs.length; i++) {
+        if (!curInputs[i].validity.valid) {
+            isValid = false;
+            $(curInputs[i]).closest(".form-group").addClass("has-error");
+        }
+    }
 
-      if (isValid) {
-          nextStepWizard.removeAttr('disabled').trigger('click');
-      }
-  }
+    if (isValid) {
+        nextStepWizard.removeAttr('disabled').trigger('click');
+    }
+}

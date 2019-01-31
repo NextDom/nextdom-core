@@ -22,15 +22,15 @@
 
 namespace NextDom\Controller;
 
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
 
 class ObjectController extends BaseController
 {
-     
+
     public function __construct()
     {
         parent::__construct();

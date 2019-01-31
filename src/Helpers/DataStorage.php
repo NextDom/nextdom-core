@@ -44,7 +44,7 @@ class DataStorage
      *
      * @return bool True si la table exists
      */
-    public function isDataTableExists() : bool
+    public function isDataTableExists(): bool
     {
         $returnValue = false;
         $statement = \DB::getConnection()->prepare("SHOW TABLES LIKE ?");
@@ -112,7 +112,7 @@ class DataStorage
      *
      * @return bool True si la données existe
      */
-    public function isDataExists(string $code) : bool
+    public function isDataExists(string $code): bool
     {
         $result = false;
         if ($this->getRawData($code) !== null) {
@@ -190,8 +190,9 @@ class DataStorage
      *
      * @param string $code Code de la données à supprimer
      */
-    public function remove(string $code) {
-        $statement = \DB::getConnection()->prepare("DELETE FROM `".$this->dataTableName."` WHERE `code` LIKE ?");
+    public function remove(string $code)
+    {
+        $statement = \DB::getConnection()->prepare("DELETE FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
         $statement->execute(array($code));
     }
 
@@ -202,10 +203,10 @@ class DataStorage
      *
      * @return array Liste des résultats
      */
-    public function getAllByPrefix(string $prefix) :array
+    public function getAllByPrefix(string $prefix): array
     {
         $statement = \DB::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
-        $statement->execute(array($prefix.'%'));
+        $statement->execute(array($prefix . '%'));
         $returnValue = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $returnValue;
     }

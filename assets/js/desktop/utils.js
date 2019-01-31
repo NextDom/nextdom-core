@@ -188,6 +188,7 @@ $(function () {
         });
     }
     /*********************Gestion de l'heure********************************/
+    /*
     setInterval(function () {
         // les noms de jours / mois
         var jours = new Array("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi");
@@ -215,7 +216,7 @@ $(function () {
         var horloge_date= jours[date.getDay()] + " " + date.getDate() + " " + mois[date.getMonth()] + " " + date.getFullYear();
         $('#horloge_date').text(horloge_date);
     }, 1000);
-
+*/
 
 
     $.fn.modal.Constructor.prototype.enforceFocus = function () {
@@ -228,6 +229,20 @@ $(function () {
 
     /************************Help*************************/
 
+    setInterval(function () {
+      var date = new Date();
+      date.setTime(date.getTime() + clientServerDiffDatetime);
+      var hour = date.getHours();
+      var minute = date.getMinutes();
+      var seconde = date.getSeconds();
+      var horloge = (hour < 10) ? '0' + hour : hour;
+      horloge += ':';
+      horloge += (minute < 10) ? '0' + minute : minute;
+      horloge += ':';
+      horloge += (seconde < 10) ? '0' + seconde : seconde;
+      $('#horloge').text(horloge);
+    }, 1000);
+    
     if (isset(nextdom_langage)) {
         bootbox.setDefaults({
             locale: nextdom_langage.substr(0, 2),
@@ -377,21 +392,33 @@ $(function () {
     });
 
     $('#bt_gotoDashboard').on('click',function(){
+        if('ontouchstart' in window || navigator.msMaxTouchPoints){
+              return;
+        }
         $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
         loadPage('index.php?v=d&p=dashboard');
     });
 
     $('#bt_gotoView').on('click',function(){
+        if('ontouchstart' in window || navigator.msMaxTouchPoints){
+            return;
+        }
         $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
         loadPage('index.php?v=d&p=view');
     });
 
     $('#bt_gotoPlan').on('click',function(){
+        if('ontouchstart' in window || navigator.msMaxTouchPoints){
+            return;
+        }
         $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
         loadPage('index.php?v=d&p=plan');
     });
 
     $('#bt_gotoPlan3d').on('click',function(){
+        if('ontouchstart' in window || navigator.msMaxTouchPoints){
+            return;
+        }
         $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
         loadPage('index.php?v=d&p=plan3d');
     });
@@ -444,6 +471,25 @@ function linkify(inputText) {
 }
 
 function initRowOverflow() {
+     if(screen.width < 768){
+           var col = $('.row-overflow > div').first();
+           col.addClass('collapse');
+           if(col.attr('id') == undefined){
+                 var id = col.uniqueId();
+               }
+           if($('#bt_displayFullMenuOnMobile').html() == undefined){
+                 $('.row-overflow').before('<a class="btn btn-default btn-sm" data-toggle="collapse" id="bt_displayFullMenuOnMobile" style="width:100%;margin-top:3px;"><i class="fas fa-arrow-circle-left"> {{Menu}}</i></a>');
+                 $('#bt_displayFullMenuOnMobile').on('click',function(){
+                       if($(this).find('i').attr('class').search('left') != -1){
+                             $(this).find('i').removeClass('fa-arrow-circle-left').addClass('fa-arrow-circle-down');
+                           }else{
+                             $(this).find('i').removeClass('fa-arrow-circle-down').addClass('fa-arrow-circle-left');
+                           }
+                     });
+               }
+           $('#bt_displayFullMenuOnMobile').attr('data-target','#'+col.attr('id'));
+           return;
+         }
     var hWindow = $(window).outerHeight() - $('header').outerHeight() - $('#div_alert').outerHeight()-5;
     if($('#div_alert').outerHeight() > 0){
         hWindow -= 10;
@@ -727,10 +773,15 @@ function chooseIcon(_callback) {
 }
 
 
-function positionEqLogic(_id,_preResize) {
+function positionEqLogic(_id,_preResize,_scenario) {
     if(_id != undefined){
         var eqLogic = $('.eqLogic-widget[data-eqlogic_id='+_id+']');
-
+        if(_scenario){
+              var widget = $('.scenario-widget[data-scenario_id='+_id+']');
+            }else{
+              var widget = $('.eqLogic-widget[data-eqlogic_id='+_id+']');
+            }
+        widget.css('margin','0px').css('padding','0px');
         eqLogic.trigger('resize');
         eqLogic.addClass(eqLogic.attr('data-category'));
         eqLogic.css('border-radius',widget_radius+'px');
@@ -777,6 +828,7 @@ function saveWidgetDisplay(_params){
     }
     var cmds = [];
     var eqLogics = [];
+    var scenarios = [];
     $('.eqLogic-widget:not(.eqLogic_layout_table)').each(function(){
         var eqLogic = $(this);
         order = 1;
@@ -822,6 +874,14 @@ function saveWidgetDisplay(_params){
             eqLogics: eqLogics,
             error: function (error) {
                 notify("Erreur", error.message, 'error');
+            },
+            success:function(data){
+                nextdom.cmd.setOrder({
+                    cmds: cmds,
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    }
+                });
             }
         });
     }
@@ -841,15 +901,17 @@ function saveWidgetDisplay(_params){
             eqLogics: eqLogics,
             error: function (error) {
                 notify("Erreur", error.message, 'error');
+            },
+            success:function(data){
+                nextdom.cmd.setOrder({
+                    cmds: cmds,
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    }
+                });
             }
         });
     }
-    nextdom.cmd.setOrder({
-        cmds: cmds,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        }
-    });
 }
 
 

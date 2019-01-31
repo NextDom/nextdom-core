@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
@@ -34,7 +35,7 @@ abstract class BaseAbstractModal
     {
         Status::initConnectState();
     }
-    
+
     public abstract function get(Render $render): string;
 
     /**
@@ -55,7 +56,7 @@ abstract class BaseAbstractModal
         ob_start();
         $repoDisplayFile = NEXTDOM_ROOT . '/core/repo/' . $repoId . '.display.repo.php';
         if (file_exists($repoDisplayFile)) {
-            \include_file('core', $repoId . '.' . $type, 'repo', '', true);
+            FileSystemHelper::includeFile('core', $repoId . '.' . $type, 'repo', '', true);
         }
         return ob_get_clean();
     }

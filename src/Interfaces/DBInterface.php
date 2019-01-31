@@ -18,17 +18,17 @@
  */
 
 namespace NextDom\Interfaces;
- 
+
 interface DBInterface
 {
     function isDataTableExists(): bool;
-    
+
     function createDataTable();
-    
+
     function dropDataTable();
-    
+
     function deleteData(string $code);
-    
-    function isDataExists(string $code): bool;   
-    
+
+    function isDataExists(string $code): bool;
+
 }

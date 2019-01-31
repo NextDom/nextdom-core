@@ -22,13 +22,14 @@
 
 namespace NextDom\Controller;
 
-use NextDom\Helpers\Status;
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
 
 class SystemController extends BaseController
 {
 
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -50,7 +51,7 @@ class SystemController extends BaseController
     public function get(Render $render, array &$pageContent): string
     {
         $pageData = [];
-        $pageData['systemCanSudo'] = \nextdom::isCapable('sudo');
+        $pageData['systemCanSudo'] = NextDomHelper::isCapable('sudo');
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/system.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 

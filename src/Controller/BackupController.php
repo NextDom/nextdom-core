@@ -22,14 +22,14 @@
 
 namespace NextDom\Controller;
 
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
 use NextDom\Managers\AjaxManager;
 use NextDom\Managers\UpdateManager;
 
 class BackupController extends BaseController
 {
-    
+
     public function __construct()
     {
         parent::__construct();

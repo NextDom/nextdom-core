@@ -35,15 +35,18 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
 
-require_once NEXTDOM_ROOT.'/core/class/cache.class.php';
+require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
-class InteractQueryManager {
-    
+class InteractQueryManager
+{
+
     const CLASS_NAME = 'interactQuery';
     const DB_CLASS_NAME = '`interactQuery`';
 
-    public static function byId($_id) {
+    public static function byId($_id)
+    {
         $values = array(
             'id' => $_id,
         );
@@ -54,7 +57,8 @@ class InteractQueryManager {
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function byQuery($_query, $_interactDef_id = null) {
+    public static function byQuery($_query, $_interactDef_id = null)
+    {
         $values = array(
             'query' => $_query,
         );
@@ -68,7 +72,8 @@ class InteractQueryManager {
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function byInteractDefId($_interactDef_id) {
+    public static function byInteractDefId($_interactDef_id)
+    {
         $values = array(
             'interactDef_id' => $_interactDef_id,
         );
@@ -84,7 +89,8 @@ class InteractQueryManager {
      * @return \interactQuery[]
      * @throws \Exception
      */
-    public static function searchActions($_action) {
+    public static function searchActions($_action)
+    {
         if (!is_array($_action)) {
             $values = array(
                 'actions' => '%' . $_action . '%',
@@ -107,14 +113,20 @@ class InteractQueryManager {
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function all() {
+    /**
+     * @return \interactQuery|null
+     * @throws \Exception
+     */
+    public static function all()
+    {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 ORDER BY id';
         return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function removeByInteractDefId($_interactDef_id) {
+    public static function removeByInteractDefId($_interactDef_id)
+    {
         $values = array(
             'interactDef_id' => $_interactDef_id,
         );
@@ -123,7 +135,8 @@ class InteractQueryManager {
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function recognize($_query) {
+    public static function recognize($_query)
+    {
         $_query = InteractDefManager::sanitizeQuery($_query);
         if (trim($_query) == '') {
             return null;
@@ -230,7 +243,8 @@ class InteractQueryManager {
         return $closest;
     }
 
-    public static function getQuerySynonym($_query, $_for) {
+    public static function getQuerySynonym($_query, $_for)
+    {
         $return = array();
         $base_synonyms = explode(';', ConfigManager::byKey('interact::autoreply::' . $_for . '::synonym'));
         if (count($base_synonyms) == 0) {
@@ -250,9 +264,10 @@ class InteractQueryManager {
         return $return;
     }
 
-    public static function findInQuery($_type, $_query, $_data = null) {
+    public static function findInQuery($_type, $_query, $_data = null)
+    {
         $return = array();
-        $return['query'] = strtolower(sanitizeAccent($_query));
+        $return['query'] = strtolower(Utils::sanitizeAccent($_query));
         $return[$_type] = null;
         $synonyms = self::getQuerySynonym($return['query'], $_type);
         if ($_type == 'object') {
@@ -287,13 +302,13 @@ class InteractQueryManager {
                 }
                 if (self::autoInteractWordFind($return['query'], $value['name'])) {
                     $return[$_type] = $value;
-                    $return['query'] = str_replace(strtolower(sanitizeAccent($value['name'])), '', $return['query']);
+                    $return['query'] = str_replace(strtolower(Utils::sanitizeAccent($value['name'])), '', $return['query']);
                     break;
                 }
             }
             if (count($synonyms) > 0) {
                 foreach ($synonyms as $value) {
-                    $return['query'] = str_replace(strtolower(sanitizeAccent($value)), '', $return['query']);
+                    $return['query'] = str_replace(strtolower(Utils::sanitizeAccent($value)), '', $return['query']);
                 }
             }
             return $return;
@@ -314,10 +329,10 @@ class InteractQueryManager {
         }
         if ($_type != 'eqLogic') {
             if (is_object($return[$_type])) {
-                $return['query'] = str_replace(strtolower(sanitizeAccent($return[$_type]->getName())), '', $return['query']);
+                $return['query'] = str_replace(strtolower(Utils::sanitizeAccent($return[$_type]->getName())), '', $return['query']);
                 if (count($synonyms) > 0) {
                     foreach ($synonyms as $value) {
-                        $return['query'] = str_replace(strtolower(sanitizeAccent($value)), '', $return['query']);
+                        $return['query'] = str_replace(strtolower(Utils::sanitizeAccent($value)), '', $return['query']);
                     }
                 }
             }
@@ -330,11 +345,13 @@ class InteractQueryManager {
      * @param \jeeObject $b
      * @return int
      */
-    public static function cmp_objectName($a, $b) {
+    public static function cmp_objectName($a, $b)
+    {
         return (strlen($a->getName()) < strlen($b->getName())) ? +1 : -1;
     }
 
-    public static function autoInteract($_query, $_parameters = array()) {
+    public static function autoInteract($_query, $_parameters = array())
+    {
         global $NEXTDOM_INTERNAL_CONFIG;
         if (!isset($_parameters['identifier'])) {
             $_parameters['identifier'] = '';
@@ -386,7 +403,7 @@ class InteractQueryManager {
             return trim($data['cmd']->getHumanName() . ' ' . $data['cmd']->execCmd() . ' ' . $data['cmd']->getUnite());
         } else {
             if ($data['cmd']->getSubtype() == 'slider') {
-                preg_match_all('/(\d+)/', strtolower(sanitizeAccent($data['query'])), $matches);
+                preg_match_all('/(\d+)/', strtolower(Utils::sanitizeAccent($data['query'])), $matches);
                 if (isset($matches[0]) && isset($matches[0][0])) {
                     $data['cmd_parameters']['slider'] = $matches[0][0];
                 }
@@ -418,14 +435,16 @@ class InteractQueryManager {
         }
     }
 
-    public static function autoInteractWordFind($_string, $_word) {
+    public static function autoInteractWordFind($_string, $_word)
+    {
         return preg_match(
-            '/( |^)' . preg_quote(strtolower(sanitizeAccent($_word)), '/') . '( |$)/',
-            str_replace("'", ' ', strtolower(sanitizeAccent($_string)))
+            '/( |^)' . preg_quote(strtolower(Utils::sanitizeAccent($_word)), '/') . '( |$)/',
+            str_replace("'", ' ', strtolower(Utils::sanitizeAccent($_string)))
         );
     }
 
-    public static function pluginReply($_query, $_parameters = array()) {
+    public static function pluginReply($_query, $_parameters = array())
+    {
         try {
             foreach (PluginManager::listPlugin(true) as $plugin) {
                 if (ConfigManager::byKey('functionality::interact::enable', $plugin->getId(), 1) == 0) {
@@ -448,17 +467,18 @@ class InteractQueryManager {
         return null;
     }
 
-    public static function warnMe($_query, $_parameters = array()) {
+    public static function warnMe($_query, $_parameters = array())
+    {
         global $NEXTDOM_INTERNAL_CONFIG;
         $operator = null;
         $operand = null;
         foreach ($NEXTDOM_INTERNAL_CONFIG['interact']['test'] as $key => $value) {
-            if (strContain(strtolower(sanitizeAccent($_query)), $value)) {
+            if (Utils::strContain(strtolower(Utils::sanitizeAccent($_query)), $value)) {
                 $operator .= $key;
                 break;
             }
         }
-        preg_match_all('!\d+!', strtolower(sanitizeAccent($_query)), $matches);
+        preg_match_all('!\d+!', strtolower(Utils::sanitizeAccent($_query)), $matches);
         if (isset($matches[0]) && isset($matches[0][0])) {
             $operand = $matches[0][0];
         }
@@ -492,7 +512,8 @@ class InteractQueryManager {
         }
     }
 
-    public static function warnMeExecute($_options) {
+    public static function warnMeExecute($_options)
+    {
         $warnMeCmd = (isset($_options['reply_cmd'])) ? $_options['reply_cmd'] : ConfigManager::byKey('interact::warnme::defaultreturncmd');
         if (!isset($_options['test']) || $_options['test'] == '' || $warnMeCmd == '') {
             \listener::byId($_options['listener_id'])->remove();
@@ -512,7 +533,8 @@ class InteractQueryManager {
         }
     }
 
-    public static function tryToReply($_query, $_parameters = array()) {
+    public static function tryToReply($_query, $_parameters = array())
+    {
         if (trim($_query) == '') {
             return array('reply' => '');
         }
@@ -537,7 +559,7 @@ class InteractQueryManager {
             \log::add('interact', 'debug', 'Je cherche interaction contextuel (prioritaire) : ' . print_r($reply, true));
         }
         $startWarnMe = explode(';', ConfigManager::byKey('interact::warnme::start'));
-        if (is_array($startWarnMe) && count($startWarnMe) > 0 && ConfigManager::byKey('interact::warnme::enable') == 1 && strContain(strtolower(sanitizeAccent($_query)), $startWarnMe)) {
+        if (is_array($startWarnMe) && count($startWarnMe) > 0 && ConfigManager::byKey('interact::warnme::enable') == 1 && Utils::strContain(strtolower(Utils::sanitizeAccent($_query)), $startWarnMe)) {
             $reply = self::warnMe($_query, $_parameters);
             \log::add('interact', 'debug', 'Je cherche interaction "previens-moi" : ' . print_r($reply, true));
         }
@@ -614,7 +636,8 @@ class InteractQueryManager {
         return $reply;
     }
 
-    public static function addLastInteract($_lastCmd, $_identifier = 'unknown') {
+    public static function addLastInteract($_lastCmd, $_identifier = 'unknown')
+    {
         $last = CacheManager::byKey('interact::lastCmd::' . $_identifier);
         if ($last->getValue() == '') {
             CacheManager::set('interact::lastCmd2::' . $_identifier, $last->getValue(), 300);
@@ -622,7 +645,8 @@ class InteractQueryManager {
         CacheManager::set('interact::lastCmd::' . $_identifier, str_replace('#', '', $_lastCmd), 300);
     }
 
-    public static function contextualReply($_query, $_parameters = array(), $_lastCmd = null) {
+    public static function contextualReply($_query, $_parameters = array(), $_lastCmd = null)
+    {
         $return = '';
         if (!isset($_parameters['identifier'])) {
             $_parameters['identifier'] = '';
@@ -646,7 +670,7 @@ class InteractQueryManager {
             $current['object'] = $current['eqLogic']->getObject();
             $humanName = $current['cmd']->getHumanName();
         } else {
-            $humanName = strtolower(sanitizeAccent($lastCmd));
+            $humanName = strtolower(Utils::sanitizeAccent($lastCmd));
             $current = self::findInQuery('object', $humanName);
             $current = array_merge($current, self::findInQuery('summary', $current['query'], $current));
         }
@@ -677,11 +701,13 @@ class InteractQueryManager {
         return $return;
     }
 
-    public static function replaceForContextual($_replace, $_by, $_in) {
-        return str_replace(strtolower(sanitizeAccent($_replace)), strtolower(sanitizeAccent($_by)), str_replace($_replace, $_by, $_in));
+    public static function replaceForContextual($_replace, $_by, $_in)
+    {
+        return str_replace(strtolower(Utils::sanitizeAccent($_replace)), strtolower(Utils::sanitizeAccent($_by)), str_replace($_replace, $_by, $_in));
     }
 
-    public static function brainReply($_query, $_parameters) {
+    public static function brainReply($_query, $_parameters)
+    {
         global $PROFILE;
         $PROFILE = '';
         if (isset($_parameters['profile'])) {
@@ -709,7 +735,8 @@ class InteractQueryManager {
         return '';
     }
 
-    public static function dontUnderstand($_parameters) {
+    public static function dontUnderstand($_parameters)
+    {
         $notUnderstood = array(
             __('Désolé je n\'ai pas compris'),
             __('Désolé je n\'ai pas compris la demande'),
@@ -724,7 +751,8 @@ class InteractQueryManager {
         return $notUnderstood[$random];
     }
 
-    public static function replyOk() {
+    public static function replyOk()
+    {
         $reply = array(
             __('C\'est fait'),
             __('Ok'),
@@ -735,7 +763,8 @@ class InteractQueryManager {
         return $reply[$random];
     }
 
-    public static function doIn($_params) {
+    public static function doIn($_params)
+    {
         $interactQuery = self::byId($_params['interactQuery_id']);
         if (!is_object($interactQuery)) {
             return;

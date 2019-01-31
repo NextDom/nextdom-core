@@ -69,6 +69,7 @@ legend {
     padding: 5px 8px;
     margin-bottom: 15px;
     background-color: $whitegrey;
+    border-bottom: 1px solid $middlegrey !important;
 }
 
 @media (max-width: 767px) {
@@ -178,7 +179,7 @@ legend {
 .label-icon {
     background-color: $whitegrey;
     color: $black !important;
-    border-color: $lightgrey;
+    border-color: $darkgrey;
 }
 
 .label-list ,
@@ -202,4 +203,12 @@ legend {
 .li_history {
     margin: 5px 0px 5px 10px;
     color: $black;
+}
+
+.input-group, .colorpick {
+    border-radius: 0px 3px 3px 0px !important;
+}
+
+.colorpick .input-group-addon {
+    border: 0px;
 }

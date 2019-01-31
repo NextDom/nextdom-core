@@ -1,0 +1,356 @@
+@font-face {
+  font-family: 'nextdomapp';
+  src:  url('fonts/nextdomapp.eot');
+  src:  url('fonts/nextdomapp.eot') format('embedded-opentype'),
+    url('fonts/nextdomapp.ttf') format('truetype'),
+    url('fonts/nextdomapp.woff') format('woff'),
+    url('fonts/nextdomapp.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="nextdomapp-"], [class*=" nextdomapp-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'nextdomapp';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.nextdomapp-portail-action2:before {
+  content: "\e968";
+}
+.nextdomapp-garage-action2:before {
+  content: "\e969";
+}
+.nextdomapp-electric-action2:before {
+  content: "\e965";
+}
+.nextdomapp-ampoule-action2:before {
+  content: "\e966";
+}
+.nextdomapp-volet-action2:before {
+  content: "\e967";
+}
+.nextdomapp-triselect:before {
+  content: "\e960";
+}
+.nextdomapp-rond01:before {
+  content: "\e961";
+}
+.nextdomapp-rond02:before {
+  content: "\e962";
+}
+.nextdomapp-miniplus:before {
+  content: "\e963";
+}
+.nextdomapp-ou:before {
+  content: "\e964";
+}
+.nextdomapp-ouvrants:before {
+  content: "\e95d";
+}
+.nextdomapp-fenetre-ferme:before {
+  content: "\e95b";
+}
+.nextdomapp-fenetre-ouverte:before {
+  content: "\e95c";
+}
+.nextdomapp-cache:before {
+  content: "\e951";
+}
+.nextdomapp-visible:before {
+  content: "\e952";
+}
+.nextdomapp-visible2:before {
+  content: "\e953";
+}
+.nextdomapp-settings:before {
+  content: "\e94c";
+}
+.nextdomapp-slide:before {
+  content: "\e94d";
+}
+.nextdomapp-dash01:before {
+  content: "\e902";
+}
+.nextdomapp-dash01title:before {
+  content: "\e954";
+}
+.nextdomapp-dash04:before {
+  content: "\e903";
+}
+.nextdomapp-dash04title:before {
+  content: "\e955";
+}
+.nextdomapp-dash12:before {
+  content: "\e904";
+}
+.nextdomapp-dash12title:before {
+  content: "\e956";
+}
+.nextdomapp-dash-favoris16:before {
+  content: "\e94a";
+}
+.nextdomapp-dash-favoris16title:before {
+  content: "\e94b";
+}
+.nextdomapp-dirB:before {
+  content: "\e932";
+}
+.nextdomapp-dirD:before {
+  content: "\e933";
+}
+.nextdomapp-dirDB:before {
+  content: "\e934";
+}
+.nextdomapp-dirDH:before {
+  content: "\e935";
+}
+.nextdomapp-dirG:before {
+  content: "\e936";
+}
+.nextdomapp-dirGB:before {
+  content: "\e937";
+}
+.nextdomapp-dirGH:before {
+  content: "\e938";
+}
+.nextdomapp-dirH:before {
+  content: "\e939";
+}
+.nextdomapp-alarme:before {
+  content: "\e92d";
+}
+.nextdomapp-camera:before {
+  content: "\e92e";
+}
+.nextdomapp-kodi:before {
+  content: "\e92f";
+}
+.nextdomapp-meteo:before {
+  content: "\e930";
+}
+.nextdomapp-thermostat:before {
+  content: "\e931";
+}
+.nextdomapp-information:before {
+  content: "\e922";
+}
+.nextdomapp-plugin:before {
+  content: "\e923";
+}
+.nextdomapp-action:before {
+  content: "\e924";
+}
+.nextdomapp-moins:before {
+  content: "\e925";
+}
+.nextdomapp-plus:before {
+  content: "\e926";
+}
+.nextdomapp-playerpause:before {
+  content: "\e927";
+}
+.nextdomapp-playerplay:before {
+  content: "\e928";
+}
+.nextdomapp-playerstop:before {
+  content: "\e929";
+}
+.nextdomapp-audiospeak:before {
+  content: "\e909";
+}
+.nextdomapp-audiosub:before {
+  content: "\e912";
+}
+.nextdomapp-photo:before {
+  content: "\e92a";
+}
+.nextdomapp-preset:before {
+  content: "\e957";
+}
+.nextdomapp-preset2:before {
+  content: "\e958";
+}
+.nextdomapp-folder:before {
+  content: "\e92b";
+}
+.nextdomapp-done:before {
+  content: "\e913";
+}
+.nextdomapp-audiodown:before {
+  content: "\e914";
+}
+.nextdomapp-audiomute:before {
+  content: "\e915";
+}
+.nextdomapp-audiomute2:before {
+  content: "\e916";
+}
+.nextdomapp-audioup:before {
+  content: "\e917";
+}
+.nextdomapp-circlevalidation:before {
+  content: "\e918";
+}
+.nextdomapp-circlestop:before {
+  content: "\e92c";
+}
+.nextdomapp-circlevalidation2:before {
+  content: "\e91d";
+}
+.nextdomapp-circleaudiodown:before {
+  content: "\e919";
+}
+.nextdomapp-circleaudioup:before {
+  content: "\e91a";
+}
+.nextdomapp-circlemute:before {
+  content: "\e91b";
+}
+.nextdomapp-circlemute2:before {
+  content: "\e91c";
+}
+.nextdomapp-fleche-bas-line:before {
+  content: "\e91e";
+}
+.nextdomapp-fleche-droite-line:before {
+  content: "\e91f";
+}
+.nextdomapp-fleche-gauche-line:before {
+  content: "\e920";
+}
+.nextdomapp-fleche-haut-line:before {
+  content: "\e921";
+}
+.nextdomapp-sun:before {
+  content: "\e94e";
+}
+.nextdomapp-wind:before {
+  content: "\e94f";
+}
+.nextdomapp-weather:before {
+  content: "\e911";
+}
+.nextdomapp-home-line:before {
+  content: "\e910";
+}
+.nextdomapp-humidity:before {
+  content: "\e90f";
+}
+.nextdomapp-fire:before {
+  content: "\e900";
+}
+.nextdomapp-reload-fail:before {
+  content: "\e95f";
+}
+.nextdomapp-reload-manuel:before {
+  content: "\e95e";
+}
+.nextdomapp-reload:before {
+  content: "\e901";
+}
+.nextdomapp-ampoule-on:before {
+  content: "\e93a";
+}
+.nextdomapp-ampoule-off:before {
+  content: "\e93b";
+}
+.nextdomapp-volet-ferme:before {
+  content: "\e93c";
+}
+.nextdomapp-volet-ouvert:before {
+  content: "\e93d";
+}
+.nextdomapp-portail-ferme:before {
+  content: "\e93e";
+}
+.nextdomapp-portail-ouvert:before {
+  content: "\e93f";
+}
+.nextdomapp-garage-ferme:before {
+  content: "\e96a";
+}
+.nextdomapp-garage-ouvert:before {
+  content: "\e96c";
+}
+.nextdomapp-porte-ferme:before {
+  content: "\e940";
+}
+.nextdomapp-porte-ouverte:before {
+  content: "\e941";
+}
+.nextdomapp-prise:before {
+  content: "\e943";
+}
+.nextdomapp-prise-off:before {
+  content: "\e950";
+}
+.nextdomapp-prise-off2:before {
+  content: "\e942";
+}
+.nextdomapp-lock-home:before {
+  content: "\e944";
+}
+.nextdomapp-lock-ferme:before {
+  content: "\e945";
+}
+.nextdomapp-lock-ouvert:before {
+  content: "\e946";
+}
+.nextdomapp-lock-partiel:before {
+  content: "\e947";
+}
+.nextdomapp-lock-partiel-cercle:before {
+  content: "\e959";
+}
+.nextdomapp-lock-other:before {
+  content: "\e95a";
+}
+.nextdomapp-in:before {
+  content: "\e905";
+}
+.nextdomapp-out:before {
+  content: "\e906";
+}
+.nextdomapp-night:before {
+  content: "\e907";
+}
+.nextdomapp-plane:before {
+  content: "\e908";
+}
+.nextdomapp-thermo-froid:before {
+  content: "\e948";
+}
+.nextdomapp-temperature:before {
+  content: "\e90a";
+}
+.nextdomapp-thermo-chaud:before {
+  content: "\e949";
+}
+.nextdomapp-home-nextdom:before {
+  content: "\e90b";
+}
+.nextdomapp-piece-nextdom:before {
+  content: "\e90c";
+}
+.nextdomapp-scenario-nextdom:before {
+  content: "\e90d";
+}
+.nextdomapp-design-nextdom:before {
+  content: "\e90e";
+}
+.nextdomapp-alerte2:before {
+  content: "\e601";
+}
+.nextdomapp-bell:before {
+  content: "\e606";
+}

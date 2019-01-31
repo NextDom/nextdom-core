@@ -109,6 +109,7 @@ nextdom.object.toHtml = function(_params) {
         category :  _params.category || 'all',
         summary :  _params.summary || '',
         tag :  _params.tag || 'all',
+        noScenario : _params.noScenario || ''
     };
     $.ajax(paramsAJAX);
 };

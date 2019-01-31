@@ -54,14 +54,20 @@ $NEXTDOM_INTERNAL_CONFIG = array(
     ),
     'theme' => array(
         'color1' => '#33b8cc',
-        'color2' => '#ffffff',
-        'color3' => '#ffffff',
+        'color2' => '#555555',
+        'color3' => '#f4f4f5',
         'color4' => '#33B8CC',
         'color5' => '#ffffff',
-        'color6' => '#222d32',
-        'color7' => '#1e282c',
-        'color8' => '#2c3b41',
-        'color9' => '#ecf0f5'
+        'color6' => '#f9fafc',
+        'color7' => '#f4f4f5',
+        'color8' => '#f4f4f5',
+        'color9' => '#ecf0f5',
+        'color10' => '#ffffff',
+        'color11' => '#f5f5f5',
+        'color12' => '#555555',
+        'color13' => '#f5f5f5',
+        'color14' => '#dddddd',
+        'color15' => '#ffffff'
     ),
     'plugin' => array(
         'category' => array(
@@ -213,6 +219,10 @@ $NEXTDOM_INTERNAL_CONFIG = array(
             'WIND_SPEED' => array('name' => 'Vent (vitesse)', 'family' => 'Generic', 'type' => 'Info', 'ignore' => true),
             'WIND_DIRECTION' => array('name' => 'Vent (direction)', 'family' => 'Generic', 'type' => 'Info', 'ignore' => true),
             'SHOCK' => array('name' => 'Choc', 'family' => 'Generic', 'type' => 'Info'),
+            'VOLUME' => array('name' => 'Volume', 'family' => 'Multimédia', 'type' => 'Info'),
+            'SET_VOLUME' => array('name' => 'Volume', 'family' => 'Multimédia', 'type' => 'Action'),
+            'CHANNEL' => array('name' => 'Chaine', 'family' => 'Multimédia', 'type' => 'Info'),
+            'SET_CHANNEL' => array('name' => 'Chaine', 'family' => 'Multimédia', 'type' => 'Action'),
             'GENERIC_INFO' => array('name' => ' Générique', 'family' => 'Generic', 'type' => 'Info'),
             'GENERIC_ACTION' => array('name' => ' Générique', 'family' => 'Generic', 'type' => 'Action'),
             'DONT' => array('name' => 'Ne pas tenir compte de cette commande', 'family' => 'Generic', 'type' => 'All'),

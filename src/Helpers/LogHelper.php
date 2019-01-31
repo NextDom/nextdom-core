@@ -154,7 +154,7 @@ class LogHelper
             $relativeLogPaths = array('', 'scenarioLog/');
             foreach ($relativeLogPaths as $relativeLogPath) {
                 $logPath = self::getPathToLog($relativeLogPath);
-                $logs = ls($logPath, '*');
+                $logs = FileSystemHelper::ls($logPath, '*');
                 foreach ($logs as $log) {
                     $paths[] = $logPath . $log;
                 }
@@ -251,7 +251,7 @@ class LogHelper
     public static function removeAll()
     {
         foreach (array('', 'scenarioLog/') as $logPath) {
-            $logs = ls(self::getPathToLog($logPath), '*');
+            $logs = FileSystemHelper::ls(self::getPathToLog($logPath), '*');
             foreach ($logs as $log) {
                 self::remove($log);
             }

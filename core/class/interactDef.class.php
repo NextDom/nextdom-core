@@ -35,6 +35,7 @@ class interactDef {
     private $enable;
     private $group;
     private $actions;
+    private $_changed = false;
 
     /*     * ***********************Méthodes statiques*************************** */
 
@@ -250,7 +251,8 @@ class interactDef {
         if ($this->getQuery() == '') {
             throw new Exception(__('La commande (demande) ne peut pas être vide', __FILE__));
         }
-        return DB::save($this);
+        DB::save($this);
+        return true;
     }
 
     public function postSave() {
@@ -486,8 +488,9 @@ class interactDef {
         return $this->id;
     }
 
-    public function setId($id) {
-        $this->id = $id;
+    public function setId($_id) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->id,$_id);
+        $this->id = $_id;
         return $this;
     }
 
@@ -495,8 +498,9 @@ class interactDef {
         return $this->query;
     }
 
-    public function setQuery($query) {
-        $this->query = $query;
+    public function setQuery($_query) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->query,$_query);
+        $this->query = $_query;
         return $this;
     }
 
@@ -504,8 +508,9 @@ class interactDef {
         return $this->reply;
     }
 
-    public function setReply($reply) {
-        $this->reply = $reply;
+    public function setReply($_reply) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->reply,$_reply);
+        $this->reply = $_reply;
         return $this;
     }
 
@@ -513,8 +518,9 @@ class interactDef {
         return $this->person;
     }
 
-    public function setPerson($person) {
-        $this->person = $person;
+    public function setPerson($_person) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->person,$_person);
+        $this->person = $_person;
         return $this;
     }
 
@@ -523,7 +529,9 @@ class interactDef {
     }
 
     public function setOptions($_key, $_value) {
-        $this->options = utils::setJsonAttr($this->options, $_key, $_value);
+        $options = utils::setJsonAttr($this->options, $_key, $_value);
+        $this->_changed = utils::attrChanged($this->_changed,$this->options,$options);
+        $this->options = $options;
         return $this;
     }
 
@@ -532,7 +540,9 @@ class interactDef {
     }
 
     public function setFiltres($_key, $_value) {
-        $this->filtres = utils::setJsonAttr($this->filtres, $_key, $_value);
+        $filtres = utils::setJsonAttr($this->filtres, $_key, $_value);
+        $this->_changed = utils::attrChanged($this->_changed,$this->filtres,$filtres);
+        $this->filtres = $filtres;
         return $this;
     }
 
@@ -540,8 +550,9 @@ class interactDef {
         return $this->enable;
     }
 
-    public function setEnable($enable) {
-        $this->enable = $enable;
+    public function setEnable($_enable) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->enable,$_enable);
+        $this->enable = $_enable;
         return $this;
     }
 
@@ -549,8 +560,9 @@ class interactDef {
         return $this->name;
     }
 
-    public function setName($name) {
-        $this->name = $name;
+    public function setName($_name) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->name,$_name);
+        $this->name = $_name;
         return $this;
     }
 
@@ -558,8 +570,9 @@ class interactDef {
         return $this->group;
     }
 
-    public function setGroup($group) {
-        $this->group = $group;
+    public function setGroup($_group) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->group,$_group);
+        $this->group = $_group;
         return $this;
     }
 
@@ -568,8 +581,18 @@ class interactDef {
     }
 
     public function setActions($_key, $_value) {
-        $this->actions = utils::setJsonAttr($this->actions, $_key, $_value);
+        $actions = utils::setJsonAttr($this->actions, $_key, $_value);
+        $this->_changed = utils::attrChanged($this->_changed,$this->actions,$actions);
+        $this->actions = $actions;
         return $this;
     }
 
+    public function getChanged() {
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed) {
+        $this->_changed = $_changed;
+        return $this;
+    }
 }

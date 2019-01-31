@@ -102,7 +102,8 @@ class PluginManager
      * @return array
      * @throws \Exception
      */
-    public static function getPluginsByCategory(bool $activatedOnly = false, bool $nameOnly = false): array {
+    public static function getPluginsByCategory(bool $activatedOnly = false, bool $nameOnly = false): array
+    {
         return self::listPlugin($activatedOnly, true, $nameOnly);
     }
 
@@ -147,7 +148,7 @@ class PluginManager
                     if (file_exists($pathInfoPlugin)) {
                         try {
                             $listPlugin[] = self::byId($pathInfoPlugin);
-                          } catch (\Throwable $e) {
+                        } catch (\Throwable $e) {
                             LogHelper::add('plugin', 'error', $e->getMessage(), 'pluginNotFound::' . $pathInfoPlugin);
                         }
                     }
@@ -197,37 +198,38 @@ class PluginManager
     /**
      * @throws \Exception
      */
-    public static function heartbeat() {
-		foreach (self::listPlugin(true) as $plugin) {
-			try {
-				$heartbeat = ConfigManager::byKey('heartbeat::delay::' . $plugin->getId(), 'core', 0);
-				if ($heartbeat == 0 || is_nan($heartbeat)) {
-					continue;
-				}
-				$eqLogics = EqLogicManager::byType($plugin->getId(), true);
-				if (count($eqLogics) == 0) {
-					continue;
-				}
-				$ok = false;
-				foreach ($eqLogics as $eqLogic) {
-					if ($eqLogic->getStatus('lastCommunication', date('Y-m-d H:i:s')) > date('Y-m-d H:i:s', strtotime('-' . $heartbeat . ' minutes' . date('Y-m-d H:i:s')))) {
-						$ok = true;
-						break;
-					}
-				}
-				if (!$ok) {
-					$message = __('Attention le plugin ') . ' ' . $plugin->getName();
-					$message .= __(' n\'a recu de message depuis ') . $heartbeat . __(' min');
-					$logicalId = 'heartbeat' . $plugin->getId();
-					\message::add($plugin->getId(), $message, '', $logicalId);
-					if ($plugin->getHasOwnDeamon() && ConfigManager::byKey('heartbeat::restartDeamon::' . $plugin->getId(), 'core', 0) == 1) {
-						$plugin->deamon_start(true);
-					}
-				}
-			} catch (\Exception $e) {
- 			}
-		}
-	}
+    public static function heartbeat()
+    {
+        foreach (self::listPlugin(true) as $plugin) {
+            try {
+                $heartbeat = ConfigManager::byKey('heartbeat::delay::' . $plugin->getId(), 'core', 0);
+                if ($heartbeat == 0 || is_nan($heartbeat)) {
+                    continue;
+                }
+                $eqLogics = EqLogicManager::byType($plugin->getId(), true);
+                if (count($eqLogics) == 0) {
+                    continue;
+                }
+                $ok = false;
+                foreach ($eqLogics as $eqLogic) {
+                    if ($eqLogic->getStatus('lastCommunication', date('Y-m-d H:i:s')) > date('Y-m-d H:i:s', strtotime('-' . $heartbeat . ' minutes' . date('Y-m-d H:i:s')))) {
+                        $ok = true;
+                        break;
+                    }
+                }
+                if (!$ok) {
+                    $message = __('Attention le plugin ') . ' ' . $plugin->getName();
+                    $message .= __(' n\'a recu de message depuis ') . $heartbeat . __(' min');
+                    $logicalId = 'heartbeat' . $plugin->getId();
+                    \message::add($plugin->getId(), $message, '', $logicalId);
+                    if ($plugin->getHasOwnDeamon() && ConfigManager::byKey('heartbeat::restartDeamon::' . $plugin->getId(), 'core', 0) == 1) {
+                        $plugin->deamon_start(true);
+                    }
+                }
+            } catch (\Exception $e) {
+            }
+        }
+    }
 
     /**
      * Tâche exécutée toutes les minutes
@@ -300,14 +302,14 @@ class PluginManager
     {
         $cache = CacheManager::byKey('plugin::' . $cronType . '::inprogress');
         if ($cache->getValue(0) > 3) {
-            \message::add('core', \__('La tache plugin::' . $cronType . ' n\'arrive pas à finir à cause du plugin : ') . CacheManager::byKey('plugin::'.$cronType.'::last')->getValue() . \__(' nous vous conseillons de désactiver le plugin et de contacter l\'auteur'));
+            \message::add('core', \__('La tache plugin::' . $cronType . ' n\'arrive pas à finir à cause du plugin : ') . CacheManager::byKey('plugin::' . $cronType . '::last')->getValue() . \__(' nous vous conseillons de désactiver le plugin et de contacter l\'auteur'));
         }
-        CacheManager::set('plugin::'.$cronType.'::inprogress', $cache->getValue(0) + 1);
+        CacheManager::set('plugin::' . $cronType . '::inprogress', $cache->getValue(0) + 1);
         foreach (self::listPlugin(true) as $plugin) {
             if (method_exists($plugin->getId(), $cronType)) {
                 if (ConfigManager::byKey('functionality::cron::enable', $plugin->getId(), 1) == 1) {
                     $pluginId = $plugin->getId();
-                    CacheManager::set('plugin::'.$cronType.'::last', $pluginId);
+                    CacheManager::set('plugin::' . $cronType . '::last', $pluginId);
                     try {
                         $pluginId::$cronType();
                     } catch (\Throwable $e) {
@@ -316,7 +318,7 @@ class PluginManager
                 }
             }
         }
-        CacheManager::set('plugin::'.$cronType.'::inprogress', 0);
+        CacheManager::set('plugin::' . $cronType . '::inprogress', 0);
     }
 
     /**

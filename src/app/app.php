@@ -18,7 +18,7 @@
 
 $app = [];
 
-$app['db'] = function() {
+$app['db'] = function () {
 //    $instance = \NextDom\Singletons\ConnectDb::getInstance();
     return \NextDom\Singletons\ConnectDb::getConnection();
 };
@@ -33,7 +33,7 @@ $app['db'] = function() {
 $app['DAO.Cmd'] = function () use ($app) {
     return new NextDom\Models\DAO\CmdDAO($app['db']());
 };
-$app['DAO.Fragment'] = function() use ($app) {
+$app['DAO.Fragment'] = function () use ($app) {
     return new NextDom\Models\DAO\FragmentDAO($app['db']());
 };
 

@@ -29,6 +29,7 @@ class interactQuery {
     private $interactDef_id;
     private $query;
     private $actions;
+    private $_changed = false;
 
     /*     * ***********************Méthodes statiques*************************** */
 
@@ -134,7 +135,8 @@ class interactQuery {
         if ($this->getInteractDef_id() == '') {
             throw new Exception(__('InteractDef_id ne peut pas être vide', __FILE__));
         }
-        return DB::save($this);
+        DB::save($this);
+        return $this;
     }
 
     public function remove() {
@@ -307,8 +309,9 @@ class interactQuery {
         return $this->interactDef_id;
     }
 
-    public function setInteractDef_id($interactDef_id) {
-        $this->interactDef_id = $interactDef_id;
+    public function setInteractDef_id($_interactDef_id) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->interactDef_id,$_interactDef_id);
+        $this->interactDef_id = $_interactDef_id;
         return $this;
     }
 
@@ -316,8 +319,9 @@ class interactQuery {
         return $this->id;
     }
 
-    public function setId($id) {
-        $this->id = $id;
+    public function setId($_id) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->id,$_id);
+        $this->id = $_id;
         return $this;
     }
 
@@ -325,8 +329,9 @@ class interactQuery {
         return $this->query;
     }
 
-    public function setQuery($query) {
-        $this->query = $query;
+    public function setQuery($_query) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->query,$_query);
+        $this->query = $_query;
         return $this;
     }
 
@@ -335,7 +340,9 @@ class interactQuery {
     }
 
     public function setActions($_key, $_value) {
-        $this->actions = utils::setJsonAttr($this->actions, $_key, $_value);
+        $actions = utils::setJsonAttr($this->actions, $_key, $_value);
+        $this->_changed = utils::attrChanged($this->_changed,$this->actions,$actions);
+        $this->actions = $actions;
         return $this;
     }
 
@@ -343,4 +350,12 @@ class interactQuery {
         Interactquery::replaceForContextual($_replace, $_by, $_in);
     }
 
+    public function getChanged() {
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed) {
+        $this->_changed = $_changed;
+        return $this;
+    }
 }

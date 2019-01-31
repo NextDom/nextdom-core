@@ -35,18 +35,18 @@
 namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
-use NextDom\Managers\DataStoreManager;
+use NextDom\Managers\CacheManager;
+use NextDom\Managers\CmdManager;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\CronManager;
+use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
-use NextDom\Managers\CacheManager;
-use NextDom\Managers\CmdManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
-use NextDom\Managers\ConfigManager;
 
 class NextDomHelper
 {
@@ -342,7 +342,7 @@ class NextDomHelper
      */
     public static function sick()
     {
-        $cmd = NEXTDOM_ROOT.'/scripts/sick.php';
+        $cmd = NEXTDOM_ROOT . '/scripts/sick.php';
         $cmd .= ' >> ' . LogHelper::getPathToLog('sick') . ' 2>&1';
         SystemHelper::php($cmd);
     }
@@ -795,7 +795,8 @@ class NextDomHelper
             ScenarioManager::cleanTable();
             ScenarioManager::consystencyCheck();
             LogHelper::chunk();
-            CronManager:clean();
+            CronManager:
+            clean();
             \report::clean();
             \DB::optimize();
             CacheManager::clean();
@@ -1075,7 +1076,8 @@ class NextDomHelper
      *
      * @throws CoreException
      */
-    private static function stopSystemAndExecuteCommand($command, $errorMessage) {
+    private static function stopSystemAndExecuteCommand($command, $errorMessage)
+    {
         PluginManager::stop();
         CacheManager::persist();
         if (self::isCapable('sudo')) {
@@ -1098,11 +1100,11 @@ class NextDomHelper
      */
     public static function cleanFileSystemRight()
     {
-		$cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . NEXTDOM_ROOT . ';';
-		$cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . NEXTDOM_ROOT . ';';
-		$cmd .= SystemHelper::getCmdSudo() . 'find /var/log/nextdom -type f -exec chmod 664 {} +;';
-		$cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R /var/log/nextdom ;';
-		exec($cmd);
+        $cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . NEXTDOM_ROOT . ';';
+        $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . NEXTDOM_ROOT . ';';
+        $cmd .= SystemHelper::getCmdSudo() . 'find /var/log/nextdom -type f -exec chmod 664 {} +;';
+        $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R /var/log/nextdom ;';
+        exec($cmd);
     }
 
     /**
@@ -1123,7 +1125,8 @@ class NextDomHelper
      * @return string
      * @throws \Exception
      */
-    public static function getTmpFolder($plugin = null) {
+    public static function getTmpFolder($plugin = null)
+    {
         $result = '/' . trim(ConfigManager::byKey('folder::tmp'), '/');
         if ($plugin !== null) {
             $result .= '/' . $plugin;

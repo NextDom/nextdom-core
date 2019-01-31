@@ -28,7 +28,7 @@ use NextDom\Managers\ConfigManager;
 
 class ActionInsert extends BaseAbstractModal
 {
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -50,6 +50,6 @@ class ActionInsert extends BaseAbstractModal
         $pageContent = [];
         $pageContent['productName'] = ConfigManager::byKey('product_name');
 
-       return $render->get('/modals/action.insert.html.twig', $pageContent);
+        return $render->get('/modals/action.insert.html.twig', $pageContent);
     }
 }

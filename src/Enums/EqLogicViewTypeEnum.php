@@ -14,13 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 namespace NextDom\Enums;
 
 class EqLogicViewTypeEnum extends Enum
 {
-    const SCENARIO  = 'scenario';
-    const MOBILE    = 'mobile';
+    const SCENARIO = 'scenario';
+    const MOBILE = 'mobile';
     const DASHBOARD = 'dashboard';
-    const DVIEW     = 'dview';
-    const DPLAN     = 'dplan';
+    const DVIEW = 'dview';
+    const DPLAN = 'dplan';
 }
