@@ -63,6 +63,10 @@
                     <a href="#step-4" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled"></a>
                     <p>{{ 'firstuse.step'|trans ~ ' 4' }}</p>
                 </div>
+                <div class="stepwizard-step">
+                    <a href="#step-5" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled"></a>
+                    <p>{{ 'firstuse.step'|trans ~ ' 5' }}</p>
+                </div>
             </div>
         </div>
     </div>
@@ -78,7 +82,7 @@
                 <div class="row setup-content" id="step-1">
                     <div class="stepwizard">
                         <h2 class="login-box-msg">{{ 'firstuse.welcome-title'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
-                        <h5>{{ 'firstuse.welcome-content'|trans|nl2br }}</h5>  
+                        <h5>{{ 'firstuse.welcome-content'|trans|nl2br }}</h5>
                     </div>
                     <button id="toStep2" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'common.next'|trans }}&nbsp;&nbsp;<i class="fa fa-caret-right"></i></button>
                 </div>
@@ -130,21 +134,62 @@
                 <!-- Step 4 section -->
                 <div class="row setup-content" id="step-4">
                     <div class="stepwizard">
+                        <h2 class="login-box-msg">{{ 'firstuse.customize-title'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
+                        <h5>{{ 'firstuse.customize-content'|trans }}</h5>
+                        <div class="row  text-center">
+                            <div id="themes" class="col-sm-12 col-md-6">
+                                <div style="padding: 10px;">
+                                    <a style="display: block;border: 1px solid #aaa;" class="clearfix form-group">
+                                        <div>
+                                            <span style="display:block; width: 20%; float: left; height: 7px; background: #33b8cc"></span>
+                                            <span style="display:block; width: 80%; float: left; height: 7px; background: #33b8cc"></span>
+                                        </div>
+                                        <div>
+                                            <span style="display:block; width: 20%; float: left; height: 80px; background: #f9fafc"></span>
+                                            <span style="display:block; width: 80%; float: left; height: 80px; background: #ecf0f5"></span>
+                                        </div>
+                                    </a>
+                                    <p class="text-center no-margin">White</p><input class="theme" type="radio" name="theme" value="white" checked="checked"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div style="padding: 10px;">
+                                    <a style="display: block;border: 1px solid #aaa;" class="clearfix form-group">
+                                        <div>
+                                            <span style="display:block; width: 20%; float: left; height: 7px; background: #33b8cc"></span>
+                                            <span style="display:block; width: 80%; float: left; height: 7px; background: #33b8cc"></span>
+                                        </div>
+                                        <div>
+                                            <span style="display:block; width: 20%; float: left; height: 80px; background: #222d32"></span>
+                                            <span style="display:block;width: 80%;float: left;height: 80px;background: #444;"></span>
+                                        </div>
+                                    </a>
+                                    <p class="text-center no-margin">Dark</p><input class="theme" type="radio" name="theme" value="dark"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="toStep5" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'common.next'|trans }}&nbsp;&nbsp;<i class="fa fa-caret-right"></i></button>
+                    <button id="backStep3" class="btn btn-primary returnBtn primary-bg pull-left" type="button"><i class="fa fa-caret-left">&nbsp;&nbsp;</i>{{ 'common.previous'|trans }}</button>
+                </div>
+
+                <!-- Step 5 section -->
+                <div class="row setup-content" id="step-5">
+                    <div class="stepwizard">
                         <h2 class="login-box-msg">{{ 'firstuse.congrats-title'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
                         <h5>{{ 'firstuse.congrats-content'|trans }}</h5>
-
-                        </div>
-                        <button id="finishConf" class="btn btn-primary nextBtn primary-bg pull-right ui-icon-closethick" type="button">{{ 'common.finish'|trans }}&nbsp;&nbsp;<i class="fa fa-check-circle"></i></button>
-                        <button id="backStep3" class="btn btn-primary returnBtn primary-bg pull-left" type="button"><i class="fa fa-caret-left">&nbsp;&nbsp;</i>{{ 'common.previous'|trans }}</button>
                     </div>
+                    <button id="finishConf" class="btn btn-primary nextBtn primary-bg pull-right ui-icon-closethick" type="button">{{ 'common.finish'|trans }}&nbsp;&nbsp;<i class="fa fa-check-circle"></i></button>
+                    <button id="backStep4" class="btn btn-primary returnBtn primary-bg pull-left" type="button"><i class="fa fa-caret-left">&nbsp;&nbsp;</i>{{ 'common.previous'|trans }}</button>
                 </div>
             </div>
         </div>
-
-        {% if JS_END_POOL is defined %}
-            {% for jsFile in JS_END_POOL %}
-                <script src="{{ jsFile }}"></script>
-            {% endfor %}
-        {% endif %}
     </div>
+
+    {% if JS_END_POOL is defined %}
+        {% for jsFile in JS_END_POOL %}
+            <script src="{{ jsFile }}"></script>
+        {% endfor %}
+    {% endif %}
+</div>
 </div>

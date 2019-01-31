@@ -34,7 +34,8 @@
 
 namespace NextDom\Managers;
 
-class DataStoreManager {
+class DataStoreManager
+{
     const CLASS_NAME = 'dataStore';
     const DB_CLASS_NAME = '`dataStore`';
 
@@ -46,7 +47,8 @@ class DataStoreManager {
      *
      * @throws \Exception
      */
-    public static function byId($id) {
+    public static function byId($id)
+    {
         $values = array(
             'id' => $id,
         );
@@ -68,7 +70,8 @@ class DataStoreManager {
      * @return mixed
      * @throws \Exception
      */
-    public static function byTypeLinkIdKey($dataType, $linkId, $key) {
+    public static function byTypeLinkIdKey($dataType, $linkId, $key)
+    {
         $values = array(
             'type' => $dataType,
             'link_id' => $linkId,
@@ -93,7 +96,8 @@ class DataStoreManager {
      * @return \dataStore[]|null
      * @throws \Exception
      */
-    public static function byTypeLinkId($dataType, $linkId = '') {
+    public static function byTypeLinkId($dataType, $linkId = '')
+    {
         $values = array(
             'type' => $dataType,
         );
@@ -116,7 +120,8 @@ class DataStoreManager {
      * @return bool
      * @throws \Exception
      */
-    public static function removeByTypeLinkId($dataType, $linkId) {
+    public static function removeByTypeLinkId($dataType, $linkId)
+    {
         $datastores = self::byTypeLinkId($dataType, $linkId);
         foreach ($datastores as $datastore) {
             $datastore->remove();

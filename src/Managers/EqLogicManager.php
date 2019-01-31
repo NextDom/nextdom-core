@@ -185,7 +185,7 @@ class EqLogicManager
     {
 
         $values = [
-            'logicalId'   => $logicalId,
+            'logicalId' => $logicalId,
             'eqType_name' => $eqTypeName,
         ];
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
@@ -656,10 +656,11 @@ class EqLogicManager
      * @return array
      * @throws \Exception
      */
-    public static function getAllTags() {
+    public static function getAllTags()
+    {
         $values = array();
         $sql = 'SELECT tags
-                FROM '.self::DB_CLASS_NAME.'
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE tags IS NOT NULL
         	    AND tags!=""';
         $results = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL);
@@ -672,4 +673,14 @@ class EqLogicManager
         }
         return $return;
     }
+
+    public static function byString($_string)
+    {
+        $eqLogic = self::byId(str_replace('#', '', self::fromHumanReadable($_string)));
+        if (!is_object($eqLogic)) {
+            throw new \Exception(__('L\'équipement n\'a pas pu être trouvé : ') . $_string . __(' => ') . self::fromHumanReadable($_string));
+        }
+        return $eqLogic;
+    }
+
 }

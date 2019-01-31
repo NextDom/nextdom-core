@@ -55,5 +55,5 @@ class ViewEditController extends BaseController
         return $render->get('/desktop/view_edit.html.twig', $pageContent);
     }
 
-    
+
 }

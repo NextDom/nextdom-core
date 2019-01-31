@@ -24,9 +24,9 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Managers\AjaxManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UpdateManager;
-use NextDom\Managers\AjaxManager;
 
 class UpdateAdd extends BaseAbstractModal
 {
@@ -49,7 +49,7 @@ class UpdateAdd extends BaseAbstractModal
      */
     public function get(Render $render): string
     {
-       $pageContent = [];
+        $pageContent = [];
 
         $pageContent['repoListType'] = [];
         foreach (UpdateManager::listRepo() as $repoKey => $repoValue) {
@@ -69,7 +69,7 @@ class UpdateAdd extends BaseAbstractModal
         }
 
         $pageContent['repoListConfiguration'] = [];
-        
+
         foreach (UpdateManager::listRepo() as $repoKey => $repoValue) {
             if ($repoValue['configuration'] === false) {
                 continue;
@@ -84,7 +84,7 @@ class UpdateAdd extends BaseAbstractModal
         }
         $pageContent['ajaxToken'] = AjaxManager::getToken();
 
-        return $render->get('/modals/update.add.html.twig', $pageContent); 
+        return $render->get('/modals/update.add.html.twig', $pageContent);
     }
 
 }

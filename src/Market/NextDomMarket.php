@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
-     
+
 /* This file is part of Nextdom Software.
  *
  * Nextdom is free software: you can redistribute it and/or modify
@@ -30,6 +30,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Nextdom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 namespace NextDom\Market;
 
 use NextDom\Helpers\DataStorage;
@@ -118,7 +119,7 @@ class NextDomMarket
      */
     public function refreshJson($force): bool
     {
-        $result  = false;
+        $result = false;
         $content = null;
         if ($force || $this->isUpdateNeeded($this->source['name'])) {
             $content = DownloadManager::downloadContent($this->source['data']);
@@ -149,7 +150,7 @@ class NextDomMarket
      */
     public function isUpdateNeeded($id): bool
     {
-        $result     = true;
+        $result = true;
         $lastUpdate = $this->dataStorage->getRawData('repo_last_update_' . $id);
         if ($lastUpdate !== null) {
             if (\time() - $lastUpdate < self::REFRESH_TIME_LIMIT) {

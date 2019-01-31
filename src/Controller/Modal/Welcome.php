@@ -22,9 +22,9 @@
 
 namespace NextDom\Controller\Modal;
 
-use NextDom\Managers\ConfigManager;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Managers\ConfigManager;
 
 class Welcome extends BaseAbstractModal
 {

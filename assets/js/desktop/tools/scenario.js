@@ -83,7 +83,8 @@ autoCompleteCondition = [
 " valueDate(cmd)",
 " eqEnable(equipement)",
 " name(type,commande)",
-" value(commande)"
+" value(commande)",
+" lastCommunication(equipment)"
 ];
 autoCompleteAction = [
 "tag",
@@ -804,7 +805,8 @@ function setEditor() {
         editor[id] = CodeMirror.fromTextArea(document.getElementById(id), {
           lineNumbers: true,
           mode: 'text/x-php',
-          matchBrackets: true
+          matchBrackets: true,
+          viewportMargin: Infinity
         });
       }, 1);
     }
@@ -971,11 +973,13 @@ function printScenario(_id) {
     }
   });
     updateSortable();
-    setEditor();
     setAutocomplete();
     updateElseToggle();
     $('#div_editScenario').show();
     taAutosize();
+    setTimeout(function () {
+      setEditor();
+    }, 100);
     modifyWithoutSave = false;
     setTimeout(function () {
       modifyWithoutSave = false;

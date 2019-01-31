@@ -20,6 +20,7 @@ namespace NextDom\Model\Entity;
 use NextDom\Enums\ScenarioExpressionEnum;
 use NextDom\Enums\ScenarioExpressionTypeEnum;
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
@@ -98,6 +99,7 @@ class ScenarioExpression
      * })
      */
     protected $scenarioSubElement_id;
+    protected $_changed = false;
 
     public function checkBackground()
     {
@@ -168,7 +170,7 @@ class ScenarioExpression
             } elseif ($this->getType() == ScenarioExpressionTypeEnum::CONDITION) {
                 $expression = ScenarioExpressionManager::setTags($this->getExpression(), $scenario, true);
                 $message = __('Evaluation de la condition : [') . $expression . '] = ';
-                $result = evaluate($expression);
+                $result = Utils::evaluate($expression);
                 if (is_bool($result)) {
                     if ($result) {
                         $message .= __('Vrai');
@@ -288,7 +290,7 @@ class ScenarioExpression
         $expression = '';
         while (!$result) {
             $expression = ScenarioExpressionManager::setTags($options['condition'], $scenario, true);
-            $result = evaluate($expression);
+            $result = Utils::evaluate($expression);
             if ($occurence > $limit) {
                 $this->setLog($scenario, __('[Wait] Condition valide par dépassement de temps : ') . $expression . ' => ' . $result);
                 return null;
@@ -303,7 +305,7 @@ class ScenarioExpression
     {
         if (isset($options['duration'])) {
             try {
-                $options['duration'] = floatval(evaluate($options['duration']));
+                $options['duration'] = floatval(Utils::evaluate($options['duration']));
             } catch (\Exception $e) {
 
             }
@@ -434,7 +436,7 @@ class ScenarioExpression
             case 'start':
                 if ($this->getOptions('tags') != '' && !is_array($this->getOptions('tags'))) {
                     $tags = array();
-                    $args = arg2array($this->getOptions('tags'));
+                    $args = Utils::arg2array($this->getOptions('tags'));
                     foreach ($args as $key => $value) {
                         $tags['#' . trim(trim($key), '#') . '#'] = ScenarioExpressionManager::setTags(trim($value), $scenario);
                     }
@@ -453,7 +455,7 @@ class ScenarioExpression
             case 'startsync':
                 if ($this->getOptions('tags') != '' && !is_array($this->getOptions('tags'))) {
                     $tags = array();
-                    $args = arg2array($this->getOptions('tags'));
+                    $args = Utils::arg2array($this->getOptions('tags'));
                     foreach ($args as $key => $value) {
                         $tags['#' . trim(trim($key), '#') . '#'] = ScenarioExpressionManager::setTags(trim($value), $scenario);
                     }
@@ -495,7 +497,7 @@ class ScenarioExpression
     {
         $options['value'] = ScenarioExpressionManager::setTags($options['value'], $scenario);
         try {
-            $result = evaluate($options['value']);
+            $result = Utils::evaluate($options['value']);
             if (!is_numeric($result)) {
                 $result = $options['value'];
             }
@@ -535,6 +537,15 @@ class ScenarioExpression
         $dataStore->save();
         $limit = (isset($options['timeout'])) ? $options['timeout'] : 300;
         $options_cmd = array('title' => $options['question'], 'message' => $options['question'], 'answer' => explode(';', $options['answer']), 'timeout' => $limit, 'variable' => $this->getOptions('variable'));
+        //Recuperation des tags
+        $tags = $scenario->getTags();
+        if (isset($tags['#profile#']) === true) {
+            //Remplacement du pattern #profile# par le profile utilisateur
+            //si la commande contient #profile#
+            $this->setOptions('cmd', str_replace('#profile#', $tags['#profile#'], $this->getOptions('cmd')));
+        }
+
+        // Recherche de la commandeId avec le bon user
         $cmd = CmdManager::byId(str_replace('#', '', $this->getOptions('cmd')));
         if (!is_object($cmd)) {
             throw new CoreException(__('Commande introuvable - Vérifiez l\'id : ') . $this->getOptions('cmd'));
@@ -647,6 +658,13 @@ class ScenarioExpression
                 $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport ') . $plugin->getName() . __(' du ') . date('Y-m-d H:i:s');
                 $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ') . $plugin->getName() . __(' généré le ') . date('Y-m-d H:i:s');
                 break;
+            case 'eqAnalyse':
+                $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=eqAnalyse&report=1';
+                $this->setLog($scenario, __('Génération du rapport ') . $url);
+                $cmd_parameters['files'] = array(\report::generate($url,'other',$options['export_type'], $options));
+                $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport équipement du ') . date('Y-m-d H:i:s');
+                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport équipement généré le ') . date('Y-m-d H:i:s');
+                break;
         }
         if ($cmd_parameters['files'] === null) {
             throw new CoreException(__('Erreur : Aucun rapport généré'));
@@ -684,7 +702,7 @@ class ScenarioExpression
         $cmd = CmdManager::byId(str_replace('#', '', $this->getExpression()));
         if (is_object($cmd)) {
             if ($cmd->getSubType() == 'slider' && isset($options['slider'])) {
-                $options['slider'] = evaluate($options['slider']);
+                $options['slider'] = Utils::evaluate($options['slider']);
             }
             if (is_array($options) && (count($options) > 1 || (isset($options['background']) && $options['background'] == 1))) {
                 $this->setLog($scenario, __('Exécution de la commande ') . $cmd->getHumanName() . __(" avec comme option(s) : ") . json_encode($options));
@@ -701,6 +719,7 @@ class ScenarioExpression
     {
         $this->checkBackground();
         \DB::save($this);
+        return true;
     }
 
     public function remove()
@@ -812,9 +831,10 @@ class ScenarioExpression
         return $this->id;
     }
 
-    public function setId($id)
+    public function setId($_id)
     {
-        $this->id = $id;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
         return $this;
     }
 
@@ -823,9 +843,10 @@ class ScenarioExpression
         return $this->type;
     }
 
-    public function setType($type)
+    public function setType($_type)
     {
-        $this->type = $type;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
+        $this->type = $_type;
         return $this;
     }
 
@@ -839,9 +860,10 @@ class ScenarioExpression
         return ScenarioSubElementManager::byId($this->getScenarioSubElement_id());
     }
 
-    public function setScenarioSubElement_id($scenarioSubElement_id)
+    public function setScenarioSubElement_id($_scenarioSubElement_id)
     {
-        $this->scenarioSubElement_id = $scenarioSubElement_id;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->scenarioSubElement_id, $_scenarioSubElement_id);
+        $this->scenarioSubElement_id = $_scenarioSubElement_id;
         return $this;
     }
 
@@ -850,9 +872,10 @@ class ScenarioExpression
         return $this->subtype;
     }
 
-    public function setSubtype($subtype)
+    public function setSubtype($_subtype)
     {
-        $this->subtype = $subtype;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->subtype, $_subtype);
+        $this->subtype = $_subtype;
         return $this;
     }
 
@@ -861,9 +884,11 @@ class ScenarioExpression
         return $this->expression;
     }
 
-    public function setExpression($expression)
+    public function setExpression($_expression)
     {
-        $this->expression = NextDomHelper::fromHumanReadable($expression);
+        $_expression = NextDomHelper::fromHumanReadable($_expression);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->expression, $_expression);
+        $this->expression = $_expression;
         return $this;
     }
 
@@ -874,7 +899,9 @@ class ScenarioExpression
 
     public function setOptions($_key, $_value)
     {
-        $this->options = Utils::setJsonAttr($this->options, $_key, NextDomHelper::fromHumanReadable($_value));
+        $options = Utils::setJsonAttr($this->options, $_key, NextDomHelper::fromHumanReadable($_value));
+        $this->_changed = Utils::attrChanged($this->_changed, $this->options, $options);
+        $this->options = $options;
         return $this;
     }
 
@@ -883,9 +910,10 @@ class ScenarioExpression
         return $this->order;
     }
 
-    public function setOrder($order)
+    public function setOrder($_order)
     {
-        $this->order = $order;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
+        $this->order = $_order;
         return $this;
     }
 
@@ -900,7 +928,19 @@ class ScenarioExpression
         }
     }
 
-    public function getTableName() {
+    public function getTableName()
+    {
         return 'scenarioExpression';
+    }
+
+    public function getChanged()
+    {
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed)
+    {
+        $this->_changed = $_changed;
+        return $this;
     }
 }

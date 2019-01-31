@@ -23,7 +23,7 @@ function init_docker() {
     fi
 }
 
-function first_use_page() {
+function first_use() {
     echo ">>> First use page <<<"
     # Start specific container for first use
     echo ">>>>> Setup"
@@ -75,7 +75,7 @@ function start_all_tests() {
     echo "*****************"
     echo "*** GUI TESTS ***"
     echo "*****************"
-    first_use_page
+    first_use
     migration
     custom_js_css
     others

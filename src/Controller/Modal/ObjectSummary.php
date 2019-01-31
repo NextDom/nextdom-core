@@ -24,9 +24,9 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Managers\CmdManager;
 
 class ObjectSummary extends BaseAbstractModal
 {
@@ -49,11 +49,11 @@ class ObjectSummary extends BaseAbstractModal
      */
     public function get(Render $render): string
     {
-        $pageContent                         = [];
-        $pageContent['objectsTree']          = JeeObjectManager::buildTree(null, false);
-        $pageContent['configObjectSummary']  = [];
+        $pageContent = [];
+        $pageContent['objectsTree'] = JeeObjectManager::buildTree(null, false);
+        $pageContent['configObjectSummary'] = [];
         $pageContent['summaryDesktopHidden'] = [];
-        $pageContent['summaryMobileHidden']  = [];
+        $pageContent['summaryMobileHidden'] = [];
 
         foreach ($pageContent['objectsTree'] as $jeeObject) {
             $jeeObjectId = $jeeObject->getId();
@@ -71,11 +71,11 @@ class ObjectSummary extends BaseAbstractModal
                     }
                 }
                 if (count($jeeObject->getConfiguration('summary')[$key]) > 0) {
-                    $summary                                            = [];
-                    $summary['global']                                  = $jeeObject->getConfiguration('summary::global::' . $key) == 1;
-                    $summary['title']                                   = $value['name'] . $title;
-                    $summary['icon']                                    = $value['icon'];
-                    $summary['count']                                   = count($jeeObject->getConfiguration('summary')[$key]);
+                    $summary = [];
+                    $summary['global'] = $jeeObject->getConfiguration('summary::global::' . $key) == 1;
+                    $summary['title'] = $value['name'] . $title;
+                    $summary['icon'] = $value['icon'];
+                    $summary['count'] = count($jeeObject->getConfiguration('summary')[$key]);
                     $pageContent['configObjectSummary'][$jeeObjectId][] = $summary;
                 }
                 if ($jeeObject->getConfiguration('summary::hide::desktop::' . $key) == 1) {

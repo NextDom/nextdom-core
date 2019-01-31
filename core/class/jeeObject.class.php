@@ -33,6 +33,7 @@ class jeeObject {
     private $display;
     private $image;
     private $_child = array();
+    private $_changed = false;
 
     public static function byId($_id) {
         return JeeObjectManager::byId($_id);
@@ -149,7 +150,8 @@ class jeeObject {
      * @return bool True if save works
      */
     public function save() {
-        return DB::save($this);
+        DB::save($this);
+        return true;
     }
 
     /**
@@ -398,7 +400,7 @@ class jeeObject {
         addGraphLink($this, 'object', $use['eqLogic'], 'eqLogic', $data, $level, $drill);
         addGraphLink($this, 'object', $use['dataStore'], 'dataStore', $data, $level, $drill);
         addGraphLink($this, 'object', $this->getChild(), 'object', $data, $level, $drill, array('dashvalue' => '1,0', 'lengthfactor' => 0.6));
-        addGraphLink($this, 'object', $this->getScenario(), 'scenario', $data, $level, $drill, array('dashvalue' => '1,0', 'lengthfactor' => 0.6));
+        addGraphLink($this, 'object', $this->getScenario(false), 'scenario', $data, $level, $drill, array('dashvalue' => '1,0', 'lengthfactor' => 0.6));
         return $data;
     }
 
@@ -507,21 +509,23 @@ class jeeObject {
      *
      * @return $this
      */
-    public function setId($id) {
-        $this->id = $id;
+    public function setId($_id) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->id,$_id);
+        $this->id = $_id;
         return $this;
     }
 
     /**
      * Set object name
      *
-     * @param string $name Object name
+     * @param string $_name Object name
      *
      * @return $this
      */
-    public function setName(string $name) {
-        $name = str_replace(array('&', '#', ']', '[', '%'), '', $name);
-        $this->name = $name;
+    public function setName($_name) {
+        $_name = str_replace(array('&', '#', ']', '[', '%'), '', $_name);
+        $this->_changed = utils::attrChanged($this->_changed,$this->name,$_name);
+        $this->name = $_name;
         return $this;
     }
 
@@ -532,20 +536,23 @@ class jeeObject {
      *
      * @return $this
      */
-    public function setFather_id($father_id = null) {
-        $this->father_id = ($father_id == '') ? null : $father_id;
+    public function setFather_id($_father_id = null) {
+        $_father_id = ($_father_id == '') ? null : $_father_id;
+        $this->_changed = utils::attrChanged($this->_changed,$this->father_id,$_father_id);
+        $this->father_id = $_father_id;
         return $this;
     }
 
     /**
      * Set visibility value
      *
-     * @param int $isVisible 1 if visible, 0 for not visible
+     * @param int $_isVisible 1 if visible, 0 for not visible
      *
      * @return $this
      */
-    public function setIsVisible($isVisible) {
-        $this->isVisible = $isVisible;
+    public function setIsVisible($_isVisible) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->isVisible,$_isVisible);
+        $this->isVisible = $_isVisible;
         return $this;
     }
 
@@ -571,8 +578,9 @@ class jeeObject {
      *
      * @return $this
      */
-    public function setPosition($position) {
-        $this->position = $position;
+    public function setPosition($_position) {
+        $this->_changed = utils::attrChanged($this->_changed,$this->position,$_position);
+        $this->position = $_position;
         return $this;
     }
 
@@ -597,7 +605,9 @@ class jeeObject {
      * @return $this
      */
     public function setConfiguration(string $key, $value) {
-        $this->configuration = utils::setJsonAttr($this->configuration, $key, $value);
+        $configuration =  utils::setJsonAttr($this->configuration, $_key, $_value);
+        $this->_changed = utils::attrChanged($this->_changed,$this->configuration,$configuration);
+        $this->configuration = $configuration;
         return $this;
     }
 
@@ -622,7 +632,9 @@ class jeeObject {
      * @return $this
      */
     public function setDisplay(string $key, $value) {
-        $this->display = utils::setJsonAttr($this->display, $key, $value);
+        $display = utils::setJsonAttr($this->display, $key, $value);
+        $this->_changed = utils::attrChanged($this->_changed,$this->display,$display);
+        $this->display = $display;
         return $this;
     }
 
@@ -649,4 +661,12 @@ class jeeObject {
 		cache::set('objectCacheAttr' . $this->getId(), utils::setJsonAttr(cache::byKey('objectCacheAttr' . $this->getId())->getValue(), $key, $value));
     }
 
+    public function getChanged() {
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed) {
+        $this->_changed = $_changed;
+        return $this;
+    }
 }

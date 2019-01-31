@@ -38,15 +38,18 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 
-class HistoryManager {
+class HistoryManager
+{
     const CLASS_NAME = 'history';
     const DB_CLASS_NAME = '`history`';
+
     /**
      * @param $_source_id
      * @param $_target_id
      * @throws \Exception
      */
-    public static function copyHistoryToCmd($_source_id, $_target_id) {
+    public static function copyHistoryToCmd($_source_id, $_target_id)
+    {
         $source_cmd = CmdManager::byId(str_replace('#', '', $_source_id));
         if (!is_object($source_cmd)) {
             throw new CoreException(__('La commande source n\'existe pas :') . ' ' . $_source_id);
@@ -83,7 +86,8 @@ class HistoryManager {
         \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
     }
 
-    public static function byCmdIdDatetime($_cmd_id, $_startTime, $_endTime = null, $_oldValue = null) {
+    public static function byCmdIdDatetime($_cmd_id, $_startTime, $_endTime = null, $_oldValue = null)
+    {
         if ($_endTime == null) {
             $_endTime = $_startTime;
         }
@@ -126,7 +130,8 @@ class HistoryManager {
     /**
      * Archive les données de history dans historyArch
      */
-    public static function archive() {
+    public static function archive()
+    {
         global $NEXTDOM_INTERNAL_CONFIG;
         $sql = 'DELETE FROM history WHERE `datetime` <= "2000-01-01 01:00:00" OR  `datetime` >= "2020-01-01 01:00:00"';
         \DB::Prepare($sql, array());
@@ -277,7 +282,8 @@ class HistoryManager {
      * @return \history[] des valeurs de l'équipement
      * @throws \Exception
      */
-    public static function all($_cmd_id, $_startTime = null, $_endTime = null) {
+    public static function all($_cmd_id, $_startTime = null, $_endTime = null)
+    {
         $values = array(
             'cmd_id' => $_cmd_id,
         );
@@ -315,7 +321,8 @@ class HistoryManager {
         return array_merge($result2, $result1);
     }
 
-    public static function removes($_cmd_id, $_startTime = null, $_endTime = null) {
+    public static function removes($_cmd_id, $_startTime = null, $_endTime = null)
+    {
         $values = array(
             'cmd_id' => $_cmd_id,
         );
@@ -350,7 +357,8 @@ class HistoryManager {
         return true;
     }
 
-    public static function getPlurality($_cmd_id, $_startTime = null, $_endTime = null, $_period = 'day', $_offset = 0) {
+    public static function getPlurality($_cmd_id, $_startTime = null, $_endTime = null, $_period = 'day', $_offset = 0)
+    {
         $values = array(
             'cmd_id' => $_cmd_id,
         );
@@ -429,7 +437,8 @@ class HistoryManager {
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function getStatistique($_cmd_id, $_startTime, $_endTime) {
+    public static function getStatistique($_cmd_id, $_startTime, $_endTime)
+    {
         $values = array(
             'cmd_id' => $_cmd_id,
             'startTime' => $_startTime,
@@ -487,7 +496,8 @@ class HistoryManager {
         return $return;
     }
 
-    public static function getTendance($_cmd_id, $_startTime, $_endTime) {
+    public static function getTendance($_cmd_id, $_startTime, $_endTime)
+    {
         $values = array();
         foreach (self::all($_cmd_id, $_startTime, $_endTime) as $history) {
             $values[] = $history->getValue();
@@ -514,7 +524,8 @@ class HistoryManager {
         return ($base / $divisor);
     }
 
-    public static function stateDuration($_cmd_id, $_value = null) {
+    public static function stateDuration($_cmd_id, $_value = null)
+    {
         $cmd = CmdManager::byId($_cmd_id);
         if (!is_object($cmd)) {
             throw new CoreException(__('Commande introuvable : ') . $_cmd_id);
@@ -545,7 +556,8 @@ class HistoryManager {
         return -1;
     }
 
-    public static function lastStateDuration($_cmd_id, $_value = null) {
+    public static function lastStateDuration($_cmd_id, $_value = null)
+    {
         $cmd = CmdManager::byId($_cmd_id);
         if (!is_object($cmd)) {
             throw new \Exception(__('Commande introuvable : ') . $_cmd_id);
@@ -612,7 +624,8 @@ class HistoryManager {
      * @return false|int
      * @throws CoreException
      */
-    public static function lastChangeStateDuration($_cmd_id, $_value) {
+    public static function lastChangeStateDuration($_cmd_id, $_value)
+    {
         $cmd = CmdManager::byId($_cmd_id);
         if (!is_object($cmd)) {
             throw new CoreException(__('Commande introuvable : ') . $_cmd_id);
@@ -684,7 +697,8 @@ class HistoryManager {
      * @return array
      * @throws CoreException
      */
-    public static function stateChanges($_cmd_id, $_value = null, $_startTime = null, $_endTime = null) {
+    public static function stateChanges($_cmd_id, $_value = null, $_startTime = null, $_endTime = null)
+    {
         $cmd = CmdManager::byId($_cmd_id);
         if (!is_object($cmd)) {
             throw new CoreException(__('Commande introuvable : ') . $_cmd_id);
@@ -732,7 +746,8 @@ class HistoryManager {
         return $result['changes'];
     }
 
-    public static function emptyHistory($_cmd_id, $_date = '') {
+    public static function emptyHistory($_cmd_id, $_date = '')
+    {
         $values = array(
             'cmd_id' => $_cmd_id,
         );
@@ -759,7 +774,8 @@ class HistoryManager {
      * @return array
      * @throws \Exception
      */
-    public static function getHistoryFromCalcul($_strcalcul, $_dateStart = null, $_dateEnd = null, $_noCalcul = false) {
+    public static function getHistoryFromCalcul($_strcalcul, $_dateStart = null, $_dateEnd = null, $_noCalcul = false)
+    {
         $now = strtotime('now');
         $value = array();
         $cmd_histories = array();

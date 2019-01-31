@@ -108,27 +108,27 @@ class EventManager
      */
     private static function cleanEvent($events)
     {
-		$events = array_slice(array_values($events), -self::$MAX_EVENTS_BY_PROCESS, self::$MAX_EVENTS_BY_PROCESS);
-		$find = array();
-		foreach (array_values($events) as $key => $event) {
-			if ($event['name'] == 'eqLogic::update') {
-				$id = $event['name'] . '::' . $event['option']['eqLogic_id'];
-			} elseif ($event['name'] == 'cmd::update') {
-				$id = $event['name'] . '::' . $event['option']['cmd_id'];
-			} elseif ($event['name'] == 'scenario::update') {
-				$id = $event['name'] . '::' . $event['option']['scenario_id'];
-			} elseif ($event['name'] == 'jeeObject::summary::update') {
-				$id = $event['name'] . '::' . $event['option']['object_id'];
-			} else {
-				continue;
-			}
-			if ($id != '' && isset($find[$id]) && $find[$id] > $event['datetime']) {
-				unset($events[$key]);
-				continue;
-			}
-			$find[$id] = $event['datetime'];
-		}
-		return array_values($events);
+        $events = array_slice(array_values($events), -self::$MAX_EVENTS_BY_PROCESS, self::$MAX_EVENTS_BY_PROCESS);
+        $find = array();
+        foreach (array_values($events) as $key => $event) {
+            if ($event['name'] == 'eqLogic::update') {
+                $id = $event['name'] . '::' . $event['option']['eqLogic_id'];
+            } elseif ($event['name'] == 'cmd::update') {
+                $id = $event['name'] . '::' . $event['option']['cmd_id'];
+            } elseif ($event['name'] == 'scenario::update') {
+                $id = $event['name'] . '::' . $event['option']['scenario_id'];
+            } elseif ($event['name'] == 'jeeObject::summary::update') {
+                $id = $event['name'] . '::' . $event['option']['object_id'];
+            } else {
+                continue;
+            }
+            if ($id != '' && isset($find[$id]) && $find[$id] > $event['datetime']) {
+                unset($events[$key]);
+                continue;
+            }
+            $find[$id] = $event['datetime'];
+        }
+        return array_values($events);
     }
 
     /**
@@ -200,10 +200,11 @@ class EventManager
         }
         foreach ($eventsToFilter['result'] as $value) {
             /* TODO $_listEvents n'a jamais existé
-            if (isset($filter::$_listenEvents) && !in_array($value['name'], $filter::$_listenEvents)) {
+            Mise à jour, a revérifier
+            */
+            if ($filters !== null && isset($filters::$_listenEvents) && !in_array($value['name'], $filters::$_listenEvents)) {
                 continue;
             }
-             */
             if (count($filters) != 0 && $value['name'] == 'cmd::update' && !in_array($value['option']['cmd_id'], $filters)) {
                 continue;
             }

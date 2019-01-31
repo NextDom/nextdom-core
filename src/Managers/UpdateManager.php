@@ -40,7 +40,7 @@ use NextDom\Helpers\NextDomHelper;
 class UpdateManager
 {
     const DB_CLASS_NAME = 'update';
-    const CLASS_NAME    = 'update';
+    const CLASS_NAME = 'update';
 
     /**
      * Check all updates
@@ -117,10 +117,10 @@ class UpdateManager
             $class = 'repo_' . str_replace('.repo.php', '', $repoFile);
             /** @noinspection PhpUndefinedFieldInspection */
             $result[str_replace('.repo.php', '', $repoFile)] = array(
-                'name'          => $class::$_name,
-                'class'         => $class,
+                'name' => $class::$_name,
+                'class' => $class,
                 'configuration' => $class::$_configuration,
-                'scope'         => $class::$_scope,
+                'scope' => $class::$_scope,
             );
             $result[str_replace('.repo.php', '', $repoFile)]['enable'] = ConfigManager::byKey(str_replace('.repo.php', '', $repoFile) . '::enable');
         }
@@ -137,10 +137,10 @@ class UpdateManager
     {
         $class = 'repo_' . $id;
         $return = array(
-            'name'          => $class::$_name,
-            'class'         => $class,
+            'name' => $class::$_name,
+            'class' => $class,
             'configuration' => $class::$_configuration,
-            'scope'         => $class::$_scope,
+            'scope' => $class::$_scope,
         );
         $return['enable'] = ConfigManager::byKey($id . '::enable');
         return $return;
@@ -263,7 +263,7 @@ class UpdateManager
     {
         $values = array(
             'logicalId' => $logicalId,
-            'type'      => $type,
+            'type' => $type,
         );
         $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '`

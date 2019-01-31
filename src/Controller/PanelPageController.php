@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
@@ -51,7 +52,7 @@ class PanelPageController extends BaseController
 
         ob_start();
         echo '<section class="content">';
-        \include_file('desktop', $page, 'php', $plugin->getId(), true);
+        FileSystemHelper::includeFile('desktop', $page, 'php', $plugin->getId(), true);
         echo '</section>';
 
         return ob_get_clean();

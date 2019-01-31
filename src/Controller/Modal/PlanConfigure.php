@@ -22,11 +22,11 @@
 
 namespace NextDom\Controller\Modal;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Exceptions\CoreException;
 
 class PlanConfigure extends BaseAbstractModal
 {
@@ -61,6 +61,6 @@ class PlanConfigure extends BaseAbstractModal
         $pageContent['plans'] = \planHeader::all();
         Utils::sendVarToJS('id', $pageContent['planObject']->getId());
 
-       return $render->get('/modals/plan.configure.html.twig', $pageContent);
+        return $render->get('/modals/plan.configure.html.twig', $pageContent);
     }
 }

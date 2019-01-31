@@ -27,7 +27,7 @@ use NextDom\Helpers\Status;
 
 class DatabaseController extends BaseController
 {
-    
+
     public function __construct()
     {
         parent::__construct();

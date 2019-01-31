@@ -25,7 +25,7 @@ namespace NextDom\Controller\Modal;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
- 
+
 class NextdomBenchmark extends BaseAbstractModal
 {
 
@@ -51,6 +51,6 @@ class NextdomBenchmark extends BaseAbstractModal
         $pageContent = [];
         $pageContent['benchmark'] = NextDomHelper::benchmark();
 
-       return $render->get('/modals/nextdom.benchmark.html.twig', $pageContent);
+        return $render->get('/modals/nextdom.benchmark.html.twig', $pageContent);
     }
 }

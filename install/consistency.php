@@ -101,265 +101,262 @@ try {
     if (is_object($cron)) {
         $cron->remove();
     }
+    if(method_exists('utils','attrChanged')) {
+        $cron = cron::byClassAndFunction('plugin', 'cronDaily');
+        if (!is_object($cron)) {
+            echo "Create plugin::cronDaily\n";
+            $cron = new cron();
+        }
+        $cron->setClass('plugin');
+        $cron->setFunction('cronDaily');
+        $cron->setSchedule('00 00 * * * *');
+        $cron->setTimeout(240);
+        $cron->setEnable(1);
+        $cron->setDeamon(0);
+        $cron->save();
 
-    $cron = cron::byClassAndFunction('plugin', 'cronDaily');
-    if (!is_object($cron)) {
-        echo "Create plugin::cronDaily\n";
-        $cron = new cron();
-    }
-    $cron->setClass('plugin');
-    $cron->setFunction('cronDaily');
-    $cron->setSchedule('00 00 * * * *');
-    $cron->setTimeout(240);
-    $cron->setEnable(1);
-    $cron->setDeamon(0);
-    $cron->save();
+        $cron = cron::byClassAndFunction('nextdom', 'backup');
+        if (!is_object($cron)) {
+            echo "Create nextdom::backup\n";
+            $cron = new cron();
+        }
+        $cron->setClass('nextdom');
+        $cron->setFunction('backup');
+        $cron->setSchedule(mt_rand(10, 59) . ' 0' . mt_rand(0, 7) . ' * * *');
+        $cron->setEnable(1);
+        $cron->setDeamon(0);
+        $cron->setTimeout(60);
+        $cron->save();
 
-    $cron = cron::byClassAndFunction('nextdom', 'backup');
-    if (!is_object($cron)) {
-        echo "Create nextdom::backup\n";
-        $cron = new cron();
-    }
-    $cron->setClass('nextdom');
-    $cron->setFunction('backup');
-    $cron->setSchedule(mt_rand(10, 59) . ' 0' . mt_rand(0, 7) . ' * * *');
-    $cron->setEnable(1);
-    $cron->setDeamon(0);
-    $cron->setTimeout(60);
-    $cron->save();
+        $cron = cron::byClassAndFunction('plugin', 'cronHourly');
+        if (!is_object($cron)) {
+            echo "Create plugin::cronHourly\n";
+            $cron = new cron();
+        }
+        $cron->setClass('plugin');
+        $cron->setFunction('cronHourly');
+        $cron->setSchedule('00 * * * * *');
+        $cron->setEnable(1);
+        $cron->setDeamon(0);
+        $cron->setTimeout(60);
+        $cron->save();
 
-    $cron = cron::byClassAndFunction('plugin', 'cronHourly');
-    if (!is_object($cron)) {
-        echo "Create plugin::cronHourly\n";
-        $cron = new cron();
-    }
-    $cron->setClass('plugin');
-    $cron->setFunction('cronHourly');
-    $cron->setSchedule('00 * * * * *');
-    $cron->setEnable(1);
-    $cron->setDeamon(0);
-    $cron->setTimeout(60);
-    $cron->save();
+        $cron = cron::byClassAndFunction('scenario', 'check');
+        if (!is_object($cron)) {
+            echo "Create scenario::check\n";
+            $cron = new cron();
+        }
+        $cron->setClass('scenario');
+        $cron->setFunction('check');
+        $cron->setSchedule('* * * * * *');
+        $cron->setEnable(1);
+        $cron->setDeamon(0);
+        $cron->setTimeout(30);
+        $cron->save();
 
-    $cron = cron::byClassAndFunction('scenario', 'check');
-    if (!is_object($cron)) {
-        echo "Create scenario::check\n";
-        $cron = new cron();
-    }
-    $cron->setClass('scenario');
-    $cron->setFunction('check');
-    $cron->setSchedule('* * * * * *');
-    $cron->setEnable(1);
-    $cron->setDeamon(0);
-    $cron->setTimeout(30);
-    $cron->save();
+        $cron = cron::byClassAndFunction('scenario', 'control');
+        if (!is_object($cron)) {
+            echo "Create scenario::control\n";
+            $cron = new cron();
+        }
+        $cron->setClass('scenario');
+        $cron->setFunction('control');
+        $cron->setSchedule('* * * * * *');
+        $cron->setEnable(1);
+        $cron->setDeamon(0);
+        $cron->setTimeout(30);
+        $cron->save();
 
-    $cron = cron::byClassAndFunction('scenario', 'control');
-    if (!is_object($cron)) {
-        echo "Create scenario::control\n";
-        $cron = new cron();
-    }
-    $cron->setClass('scenario');
-    $cron->setFunction('control');
-    $cron->setSchedule('* * * * * *');
-    $cron->setEnable(1);
-    $cron->setDeamon(0);
-    $cron->setTimeout(30);
-    $cron->save();
+        $cron = cron::byClassAndFunction('nextdom', 'cronDaily');
+        if (!is_object($cron)) {
+            echo "Create nextdom::cronDaily\n";
+            $cron = new cron();
+        }
+        $cron->setClass('nextdom');
+        $cron->setFunction('cronDaily');
+        $cron->setSchedule('00 00 * * * *');
+        $cron->setEnable(1);
+        $cron->setDeamon(0);
+        $cron->setTimeout(240);
+        $cron->save();
 
-    $cron = cron::byClassAndFunction('nextdom', 'cronDaily');
-    if (!is_object($cron)) {
-        echo "Create nextdom::cronDaily\n";
-        $cron = new cron();
-    }
-    $cron->setClass('nextdom');
-    $cron->setFunction('cronDaily');
-    $cron->setSchedule('00 00 * * * *');
-    $cron->setEnable(1);
-    $cron->setDeamon(0);
-    $cron->setTimeout(240);
-    $cron->save();
+        $cron = cron::byClassAndFunction('nextdom', 'cronHourly');
+        if (!is_object($cron)) {
+            echo "Create nextdom::cronHourly\n";
+            $cron = new cron();
+        }
+        $cron->setClass('nextdom');
+        $cron->setFunction('cronHourly');
+        $cron->setSchedule('00 * * * * *');
+        $cron->setEnable(1);
+        $cron->setDeamon(0);
+        $cron->setTimeout(60);
+        $cron->save();
 
-    $cron = cron::byClassAndFunction('nextdom', 'cronHourly');
-    if (!is_object($cron)) {
-        echo "Create nextdom::cronHourly\n";
-        $cron = new cron();
-    }
-    $cron->setClass('nextdom');
-    $cron->setFunction('cronHourly');
-    $cron->setSchedule('00 * * * * *');
-    $cron->setEnable(1);
-    $cron->setDeamon(0);
-    $cron->setTimeout(60);
-    $cron->save();
+        $cron = cron::byClassAndFunction('nextdom', 'cron5');
+        if (!is_object($cron)) {
+            echo "Create nextdom::cron5\n";
+            $cron = new cron();
+        }
+        $cron->setClass('nextdom');
+        $cron->setFunction('cron5');
+        $cron->setSchedule('*/5 * * * * *');
+        $cron->setEnable(1);
+        $cron->setDeamon(0);
+        $cron->setTimeout(5);
+        $cron->save();
 
-    $cron = cron::byClassAndFunction('nextdom', 'cron5');
-    if (!is_object($cron)) {
-        echo "Create nextdom::cron5\n";
-        $cron = new cron();
-    }
-    $cron->setClass('nextdom');
-    $cron->setFunction('cron5');
-    $cron->setSchedule('*/5 * * * * *');
-    $cron->setEnable(1);
-    $cron->setDeamon(0);
-    $cron->setTimeout(5);
-    $cron->save();
+        $cron = cron::byClassAndFunction('nextdom', 'cron');
+        if (!is_object($cron)) {
+            echo "Create nextdom::cron\n";
+            $cron = new cron();
+        }
+        $cron->setClass('nextdom');
+        $cron->setFunction('cron');
+        $cron->setSchedule('* * * * * *');
+        $cron->setTimeout(2);
+        $cron->setDeamon(0);
+        $cron->save();
 
-    $cron = cron::byClassAndFunction('nextdom', 'cron');
-    if (!is_object($cron)) {
-        echo "Create nextdom::cron\n";
-        $cron = new cron();
-    }
-    $cron->setClass('nextdom');
-    $cron->setFunction('cron');
-    $cron->setSchedule('* * * * * *');
-    $cron->setTimeout(2);
-    $cron->setDeamon(0);
-    $cron->save();
+        $cron = cron::byClassAndFunction('plugin', 'cron');
+        if (!is_object($cron)) {
+            echo "Create plugin::cron\n";
+            $cron = new cron();
+        }
+        $cron->setClass('plugin');
+        $cron->setFunction('cron');
+        $cron->setSchedule('* * * * * *');
+        $cron->setTimeout(2);
+        $cron->setDeamon(0);
+        $cron->save();
 
-    $cron = cron::byClassAndFunction('plugin', 'cron');
-    if (!is_object($cron)) {
-        echo "Create plugin::cron\n";
-        $cron = new cron();
-    }
-    $cron->setClass('plugin');
-    $cron->setFunction('cron');
-    $cron->setSchedule('* * * * * *');
-    $cron->setTimeout(2);
-    $cron->setDeamon(0);
-    $cron->save();
+        $cron = cron::byClassAndFunction('plugin', 'cron5');
+        if (!is_object($cron)) {
+            echo "Create plugin::cron5\n";
+            $cron = new cron();
+        }
+        $cron->setClass('plugin');
+        $cron->setFunction('cron5');
+        $cron->setSchedule('*/5 * * * * *');
+        $cron->setTimeout(5);
+        $cron->setDeamon(0);
+        $cron->save();
 
-    $cron = cron::byClassAndFunction('plugin', 'cron5');
-    if (!is_object($cron)) {
-        echo "Create plugin::cron5\n";
-        $cron = new cron();
-    }
-    $cron->setClass('plugin');
-    $cron->setFunction('cron5');
-    $cron->setSchedule('*/5 * * * * *');
-    $cron->setTimeout(5);
-    $cron->setDeamon(0);
-    $cron->save();
+        $cron = cron::byClassAndFunction('plugin', 'cron15');
+        if (!is_object($cron)) {
+            echo "Create plugin::cron15\n";
+            $cron = new cron();
+        }
+        $cron->setClass('plugin');
+        $cron->setFunction('cron15');
+        $cron->setSchedule('*/15 * * * * *');
+        $cron->setTimeout(15);
+        $cron->setDeamon(0);
+        $cron->save();
 
-    $cron = cron::byClassAndFunction('plugin', 'cron15');
-    if (!is_object($cron)) {
-        echo "Create plugin::cron15\n";
-        $cron = new cron();
-    }
-    $cron->setClass('plugin');
-    $cron->setFunction('cron15');
-    $cron->setSchedule('*/15 * * * * *');
-    $cron->setTimeout(15);
-    $cron->setDeamon(0);
-    $cron->save();
+        $cron = cron::byClassAndFunction('plugin', 'cron30');
+        if (!is_object($cron)) {
+            echo "Create plugin::cron30\n";
+            $cron = new cron();
+        }
+        $cron->setClass('plugin');
+        $cron->setFunction('cron30');
+        $cron->setSchedule('*/30 * * * * *');
+        $cron->setTimeout(30);
+        $cron->setDeamon(0);
+        $cron->save();
 
-    $cron = cron::byClassAndFunction('plugin', 'cron30');
-    if (!is_object($cron)) {
-        echo "Create plugin::cron30\n";
-        $cron = new cron();
-    }
-    $cron->setClass('plugin');
-    $cron->setFunction('cron30');
-    $cron->setSchedule('*/30 * * * * *');
-    $cron->setTimeout(30);
-    $cron->setDeamon(0);
-    $cron->save();
+        $cron = cron::byClassAndFunction('plugin', 'checkDeamon');
+        if (!is_object($cron)) {
+            echo "Create plugin::checkDeamon\n";
+            $cron = new cron();
+        }
+        $cron->setClass('plugin');
+        $cron->setFunction('checkDeamon');
+        $cron->setSchedule('*/5 * * * * *');
+        $cron->setTimeout(5);
+        $cron->setDeamon(0);
+        $cron->save();
 
-    $cron = cron::byClassAndFunction('plugin', 'checkDeamon');
-    if (!is_object($cron)) {
-        echo "Create plugin::checkDeamon\n";
-        $cron = new cron();
-    }
-    $cron->setClass('plugin');
-    $cron->setFunction('checkDeamon');
-    $cron->setSchedule('*/5 * * * * *');
-    $cron->setTimeout(5);
-    $cron->setDeamon(0);
-    $cron->save();
+        $cron = cron::byClassAndFunction('cache', 'persist');
+        if (!is_object($cron)) {
+            echo "Create cache::persist\n";
+            $cron = new cron();
+        }
+        $cron->setClass('cache');
+        $cron->setFunction('persist');
+        $cron->setSchedule('*/30 * * * * *');
+        $cron->setTimeout(30);
+        $cron->setDeamon(0);
+        $cron->save();
 
-    $cron = cron::byClassAndFunction('cache', 'persist');
-    if (!is_object($cron)) {
-        echo "Create cache::persist\n";
-        $cron = new cron();
-    }
-    $cron->setClass('cache');
-    $cron->setFunction('persist');
-    $cron->setSchedule('*/30 * * * * *');
-    $cron->setTimeout(30);
-    $cron->setDeamon(0);
-    $cron->save();
+        $cron = cron::byClassAndFunction('history', 'archive');
+        if (!is_object($cron)) {
+            echo "Create history::archive\n";
+            $cron = new cron();
+        }
+        $cron->setClass('history');
+        $cron->setFunction('archive');
+        $cron->setSchedule('00 5 * * * *');
+        $cron->setTimeout(240);
+        $cron->setDeamon(0);
+        $cron->save();
 
-    $cron = cron::byClassAndFunction('history', 'archive');
-    if (!is_object($cron)) {
-        echo "Create history::archive\n";
-        $cron = new cron();
-    }
-    $cron->setClass('history');
-    $cron->setFunction('archive');
-    $cron->setSchedule('00 5 * * * *');
-    $cron->setTimeout(240);
-    $cron->setDeamon(0);
-    $cron->save();
+        $cron = cron::byClassAndFunction('plugin', 'heartbeat');
+        if (!is_object($cron)) {
+            echo "Create plugin::heartbeat\n";
+            $cron = new cron();
+        }
+        $cron->setClass('plugin');
+        $cron->setFunction('heartbeat');
+        $cron->setSchedule('*/5 * * * * *');
+        $cron->setEnable(1);
+        $cron->setDeamon(0);
+        $cron->setTimeout(10);
+        $cron->save();
 
-    $cron = cron::byClassAndFunction('plugin', 'heartbeat');
-    if (!is_object($cron)) {
-        echo "Create plugin::heartbeat\n";
-        $cron = new cron();
-    }
-    $cron->setClass('plugin');
-    $cron->setFunction('heartbeat');
-    $cron->setSchedule('*/5 * * * * *');
-    $cron->setEnable(1);
-    $cron->setDeamon(0);
-    $cron->setTimeout(10);
-    $cron->save();
-
-    if (!file_exists(__DIR__ . '/../plugins')) {
-        mkdir(__DIR__ . '/../plugins');
-    }
-    try {
-        echo 'Vérifiez les droits sur les fichiers...';
-        nextdom::cleanFileSytemRight();
-        echo "OK\n";
-    } catch (Exception $e) {
-        echo "NOK\n";
-    }
-
-    config::save('hardware_name', '');
-    if (config::byKey('api') == '') {
-        config::save('api', config::genKey());
-    }
-    if (file_exists(__DIR__ . '/../core/nodeJS')) {
-        shell_exec(system::getCmdSudo() . 'rm -rf ' . __DIR__ . '/../core/nodeJS');
-    }
-    if (file_exists(__DIR__ . '/../script/ngrok')) {
-        shell_exec(system::getCmdSudo() . 'rm -rf ' . __DIR__ . '/../script/ngrok');
-    }
-
-    foreach (eqLogic::all() as $eqLogic) {
+        if (!file_exists(__DIR__ . '/../plugins')) {
+            mkdir(__DIR__ . '/../plugins');
+        }
         try {
-            $eqLogic->emptyCacheWidget();
+            echo 'Vérifiez les droits sur les fichiers...';
+            nextdom::cleanFileSytemRight();
+            echo "OK\n";
         } catch (Exception $e) {
+            echo "NOK\n";
+        }
+
+        config::save('hardware_name', '');
+        if (config::byKey('api') == '') {
+            config::save('api', config::genKey());
+        }
+        if (file_exists(__DIR__ . '/../core/nodeJS')) {
+            shell_exec(system::getCmdSudo() . 'rm -rf ' . __DIR__ . '/../core/nodeJS');
+        }
+        if (file_exists(__DIR__ . '/../script/ngrok')) {
+            shell_exec(system::getCmdSudo() . 'rm -rf ' . __DIR__ . '/../script/ngrok');
+        }
+
+        foreach (eqLogic::all() as $eqLogic) {
+            try {
+                $eqLogic->emptyCacheWidget();
+            } catch (Exception $e) {
+
+            }
+        }
+
+        try {
+            foreach (object::all() as $object) {
+                $object->save();
+            }
+        } catch (Exception $exc) {
 
         }
-    }
 
-    try {
-        foreach (object::all() as $object) {
-            $object->save();
-        }
-    } catch (Exception $exc) {
-
-    }
-
-    foreach (cmd::all() as $cmd) {
-        $change = false;
-        if ($cmd->getConfiguration('nextdomCheckCmdCmdActionId') != '') {
-            $cmd->setConfiguration('nextdomCheckCmdCmdActionId', '');
-            $change = true;
-        }
-        if ($change) {
+        foreach (cmd::all() as $cmd) {
+            if ($cmd->getConfiguration('nextdomCheckCmdCmdActionId') != '') {
+                $cmd->setConfiguration('nextdomCheckCmdCmdActionId', '');
+            }
             $cmd->save();
         }
     }

@@ -22,11 +22,11 @@
 
 namespace NextDom\Controller\Modal;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
-use NextDom\Exceptions\CoreException;
- 
+
 class InteractQueryDisplay extends BaseAbstractModal
 {
 
@@ -63,5 +63,5 @@ class InteractQueryDisplay extends BaseAbstractModal
 
         return $render->get('/modals/interact.query.display.html.twig', $pageContent);
     }
-    
+
 }

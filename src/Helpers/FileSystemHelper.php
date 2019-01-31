@@ -92,14 +92,12 @@ class FileSystemHelper
 
                 if (array_key_exists($_filename, $router3rdParty)) {
                     $_filename = $router3rdParty[$_filename] . '.' . $_type;
-                }
-                else {
+                } else {
                     $_filename = 'assets/3rdparty/' . $_filename . '.' . $_type;
                 }
                 $_folder = null;
-            }
-            else {
-                $_filename .= '.'.$_type;
+            } else {
+                $_filename .= '.' . $_type;
             }
             $type = $_type;
         } else {
@@ -138,8 +136,7 @@ class FileSystemHelper
         }
         if ($_folder === null) {
             $path = NEXTDOM_ROOT . '/' . $_filename;
-        }
-        else {
+        } else {
             $path = NEXTDOM_ROOT . '/' . $_folder . '/' . $_filename;
         }
         if (!file_exists($path)) {
@@ -369,7 +366,8 @@ class FileSystemHelper
         return true;
     }
 
-    public static function rmove($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = false, $_params = array()) {
+    public static function rmove($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = false, $_params = array())
+    {
         if (!file_exists($src)) {
             return true;
         }
@@ -435,7 +433,8 @@ class FileSystemHelper
     }
 
 // removes files and non-empty directories
-    public static function rrmdir($dir) {
+    public static function rrmdir($dir)
+    {
         if (is_dir($dir)) {
             $files = scandir($dir);
             foreach ($files as $file) {

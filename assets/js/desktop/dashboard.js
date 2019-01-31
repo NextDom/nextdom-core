@@ -113,6 +113,7 @@ function getObjectHtml(_object_id) {
         category: SEL_CATEGORY,
         summary: SEL_SUMMARY,
         tag: SEL_TAG,
+        noScenario: 1,
         error: function (error) {
             notify('Core', error.message, 'error');
         },

@@ -22,9 +22,9 @@
 
 namespace NextDom\Controller\Modal;
 
-use NextDom\Helpers\Status;
-use NextDom\Helpers\Render;
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\Render;
+use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
 
 class ReportBug extends BaseAbstractModal

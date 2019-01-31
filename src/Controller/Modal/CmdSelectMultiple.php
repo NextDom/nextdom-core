@@ -22,12 +22,12 @@
 
 namespace NextDom\Controller\Modal;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
-use NextDom\Exceptions\CoreException;
- 
+
 class CmdSelectMultiple extends BaseAbstractModal
 {
     public function __construct()
@@ -51,14 +51,14 @@ class CmdSelectMultiple extends BaseAbstractModal
     {
 
         $cmdId = Utils::init('cmd_id');
-        $cmd   = CmdManager::byId($cmdId);
+        $cmd = CmdManager::byId($cmdId);
         if (!is_object($cmd)) {
             throw new CoreException('Commande non trouvée : ' . $cmdId);
         }
 
         $pageContent = [];
         $pageContent['currentCmd'] = $cmd;
-        $pageContent['cmds']       = CmdManager::byTypeSubType($cmd->getType(), $cmd->getSubType());
+        $pageContent['cmds'] = CmdManager::byTypeSubType($cmd->getType(), $cmd->getSubType());
 
         return $render->get('/modals/cmd.selectMultiple.html.twig', $pageContent);
     }

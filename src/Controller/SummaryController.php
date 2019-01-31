@@ -22,9 +22,9 @@
 
 namespace NextDom\Controller;
 
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Render;
- 
+use NextDom\Helpers\Status;
+
 class SummaryController extends BaseController
 {
 
@@ -53,6 +53,6 @@ class SummaryController extends BaseController
 
         return $render->get('/desktop/params/summary.html.twig', $pageContent);
     }
- 
+
 
 }

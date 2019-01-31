@@ -19,12 +19,12 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\CronManager;
-use NextDom\Helpers\LogHelper;
 
 /**
  * Cron
@@ -106,6 +106,7 @@ class Cron
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
+    protected $_changed = false;
 
     public function getEnable($defaultValue = 0)
     {
@@ -183,114 +184,124 @@ class Cron
     }
 
     /**
-     * 
-     * @param mixed $enable
+     *
+     * @param $_enable
      * @return $this
      */
-    public function setEnable($enable)
+    public function setEnable($_enable)
     {
-        $this->enable = $enable;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->enable, $_enable);
+        $this->enable = $_enable;
         return $this;
     }
 
     /**
-     * 
-     * @param mixed $class
+     *
+     * @param $_class
      * @return $this
      */
-    public function setClass($class)
+    public function setClass($_class)
     {
-        $this->class = $class;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->class, $_class);
+        $this->class = $_class;
         return $this;
     }
 
     /**
-     * 
-     * @param mixed $function
+     *
+     * @param $_function
      * @return $this
      */
-    public function setFunction($function)
+    public function setFunction($_function)
     {
-        $this->function = $function;
-        return $this;
-    }
-    
-    /**
-     * 
-     * @param mixed $schedule
-     * @return $this
-     */
-    public function setSchedule($schedule)
-    {
-        $this->schedule = $schedule;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->function, $_function);
+        $this->function = $_function;
         return $this;
     }
 
     /**
-     * 
-     * @param mixed $timeout
+     *
+     * @param $_schedule
      * @return $this
      */
-    public function setTimeout($timeout)
+    public function setSchedule($_schedule)
     {
-        $this->timeout = $timeout;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->schedule, $_schedule);
+        $this->schedule = $_schedule;
         return $this;
     }
 
     /**
-     * 
-     * @param mixed $deamon
+     *
+     * @param $_timeout
      * @return $this
      */
-    public function setDeamon($deamon)
+    public function setTimeout($_timeout)
     {
-        $this->deamon = $deamon;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->timeout, $_timeout);
+        $this->timeout = $_timeout;
         return $this;
     }
 
     /**
-     * 
-     * @param mixed $deamonSleepTime
+     *
+     * @param $_deamons
      * @return $this
      */
-    public function setDeamonSleepTime($deamonSleepTime)
+    public function setDeamon($_deamons)
     {
-        $this->deamonSleepTime = $deamonSleepTime;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->deamon, $_deamons);
+        $this->deamon = $_deamons;
         return $this;
     }
 
     /**
-     * 
-     * @param mixed $option
+     *
+     * @param $_deamonSleepTime
      * @return $this
      */
-    public function setOption($option)
+    public function setDeamonSleepTime($_deamonSleepTime)
     {
-        $this->option = json_encode($option, JSON_UNESCAPED_UNICODE);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->deamonSleepTime, $_deamonSleepTime);
+        $this->deamonSleepTime = $_deamonSleepTime;
         return $this;
     }
 
     /**
-     * 
-     * @param mixed $once
+     *
+     * @param $_option
      * @return $this
      */
-    public function setOnce($once)
+    public function setOption($_option)
     {
-        $this->once = $once;
+        $_option = json_encode($_option, JSON_UNESCAPED_UNICODE);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->option, $_option);
+        $this->option = $_option;
+        return $this;
+    }
+
+    /**
+     *
+     * @param $_once
+     * @return $this
+     */
+    public function setOnce($_once)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->once, $_once);
+        $this->once = $_once;
         return $this;
     }
 
     /**
      * Set task id
      *
-     * @param int $id Task id
-     *
+     * @param $_id
      * @return $this Task object
      */
-    public function setId($id)
+    public function setId($_id)
     {
-        $this->id = $id;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
         return $this;
     }
 
@@ -327,7 +338,6 @@ class Cron
      * Save cron object in database
      *
      * @return mixed
-     * @throws \ReflectionException
      */
     public function save()
     {
@@ -340,7 +350,6 @@ class Cron
      * @param bool $haltBefore
      * @return mixed
      * @throws CoreException
-     * @throws \ReflectionException
      */
     public function remove($haltBefore = true)
     {
@@ -369,7 +378,8 @@ class Cron
      * @param bool $noErrorReport
      * @throws CoreException
      */
-    public function run($noErrorReport = false) {
+    public function run($noErrorReport = false)
+    {
         $cmd = NEXTDOM_ROOT . '/core/php/jeeCron.php';
         $cmd .= ' "cron_id=' . $this->getId() . '"';
         if (!$this->running()) {
@@ -485,8 +495,8 @@ class Cron
     {
         //check if already sent on that minute
         $last = strtotime($this->getLastRun());
-        $now  = time();
-        $now  = ($now - $now % 60);
+        $now = time();
+        $now = ($now - $now % 60);
         $last = ($last - $last % 60);
         if ($now == $last) {
             return false;
@@ -498,7 +508,7 @@ class Cron
                     return true;
                 }
             } catch (\Exception $e) {
-                
+
             }
             try {
                 $prev = $c->getPreviousRunDate()->getTimestamp();
@@ -526,7 +536,7 @@ class Cron
             $cronExpression = new \Cron\CronExpression($this->getSchedule(), new \Cron\FieldFactory);
             return $cronExpression->getNextRunDate()->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
-            
+
         }
         return false;
     }
@@ -551,10 +561,10 @@ class Cron
      */
     public function toArray()
     {
-        $return            = Utils::o2a($this, true);
-        $return['state']   = $this->getState();
+        $return = Utils::o2a($this, true);
+        $return['state'] = $this->getState();
         $return['lastRun'] = $this->getLastRun();
-        $return['pid']     = $this->getPID();
+        $return['pid'] = $this->getPID();
         $return['runtime'] = $this->getCache('runtime');
         return $return;
     }
@@ -653,4 +663,14 @@ class Cron
         CacheManager::set('cronCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('cronCacheAttr' . $this->getId())->getValue(), $cacheKey, $cacheValue));
     }
 
+    public function getChanged()
+    {
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed)
+    {
+        $this->_changed = $_changed;
+        return $this;
+    }
 }
