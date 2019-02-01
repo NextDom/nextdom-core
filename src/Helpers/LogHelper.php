@@ -135,9 +135,9 @@ class LogHelper
             try {
                 $level = Logger::toMonologLevel($_type);
                 if ($level == Logger::ERROR && self::getConfig('addMessageForErrorLog') == 1) {
-                    \message::add($_log, $_message, '', $_logicalId);
+                    @\message::add($_log, $_message, '', $_logicalId);
                 } elseif ($level > Logger::ALERT) {
-                    \message::add($_log, $_message, '', $_logicalId);
+                    @\message::add($_log, $_message, '', $_logicalId);
                 }
             } catch (\Exception $e) {
 
