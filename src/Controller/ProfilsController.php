@@ -30,6 +30,7 @@ use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\ViewManager;
 
 class ProfilsController extends BaseController
 {
@@ -98,7 +99,7 @@ class ProfilsController extends BaseController
         }
         $pageContent['profilsDisplayTypes'] = NextDomHelper::getConfiguration('eqLogic:displayType');
         $pageContent['profilsJeeObjects'] = JeeObjectManager::all();
-        $pageContent['profilsViews'] = \view::all();
+        $pageContent['profilsViews'] = ViewManager::all();
         $pageContent['profilsPlans'] = \planHeader::all();
         $pageContent['profilsPlans3d'] = \plan3dHeader::all();
         $pageContent['profilsAllowRemoteUsers'] = ConfigManager::byKey('sso:allowRemoteUser');

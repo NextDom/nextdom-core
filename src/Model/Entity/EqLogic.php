@@ -34,6 +34,8 @@ use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UserManager;
+use NextDom\Managers\ViewDataManager;
+use NextDom\Managers\ViewManager;
 
 /**
  * Eqlogic
@@ -1141,7 +1143,7 @@ class EqLogic
         foreach ($this->getCmd() as $cmd) {
             $cmd->remove();
         }
-        \viewData::removeByTypeLinkId('eqLogic', $this->getId());
+        ViewDataManager::removeByTypeLinkId('eqLogic', $this->getId());
         DataStoreManager::removeByTypeLinkId('eqLogic', $this->getId());
         $this->emptyCacheWidget();
         CacheManager::delete('eqLogicCacheAttr' . $this->getId());
@@ -1767,7 +1769,7 @@ class EqLogic
             array('action' => 'equipment', 'option' => $this->getId(), 'and' => true),
             array('action' => '#eqLogic' . $this->getId() . '#'),
         ));
-        $return['view'] = \view::searchByUse('eqLogic', $this->getId());
+        $return['view'] = ViewManager::searchByUse('eqLogic', $this->getId());
         $return['plan'] = \planHeader::searchByUse('eqLogic', $this->getId());
         if ($_array) {
             foreach ($return as &$value) {

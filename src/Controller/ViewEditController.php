@@ -24,6 +24,7 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
+use NextDom\Managers\ViewManager;
 
 class ViewEditController extends BaseController
 {
@@ -48,7 +49,7 @@ class ViewEditController extends BaseController
     public function get(Render $render, array &$pageContent): string
     {
 
-        $pageContent['viewEditViewsList'] = \view::all();
+        $pageContent['viewEditViewsList'] = ViewManager::all();
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/view_edit.js';
         $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 

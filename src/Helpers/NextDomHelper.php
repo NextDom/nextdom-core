@@ -47,6 +47,7 @@ use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Managers\ViewManager;
 
 class NextDomHelper
 {
@@ -1032,7 +1033,7 @@ class NextDomHelper
             if (isset($result['view'][$view_id])) {
                 continue;
             }
-            $view = \view::byId($view_id);
+            $view = ViewManager::byId($view_id);
             if (!is_object($view)) {
                 continue;
             }

@@ -34,6 +34,8 @@ use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\ViewDataManager;
+use NextDom\Managers\ViewManager;
 
 /**
  * Scenario
@@ -766,8 +768,8 @@ class Scenario
      */
     public function remove()
     {
-        \viewData::removeByTypeLinkId('scenario', $this->getId());
-        \dataStore::removeByTypeLinkId('scenario', $this->getId());
+        ViewDataManager::removeByTypeLinkId('scenario', $this->getId());
+        DataStoreManager::removeByTypeLinkId('scenario', $this->getId());
         foreach ($this->getElement() as $element) {
             $element->remove();
         }
@@ -1351,7 +1353,7 @@ class Scenario
             array('action' => 'scenario', 'option' => $this->getId(), 'and' => true),
             array('action' => '#scenario' . $this->getId() . '#'),
         ));
-        $return['view'] = \view::searchByUse('scenario', $this->getId());
+        $return['view'] = ViewManager::searchByUse('scenario', $this->getId());
         $return['plan'] = \planHeader::searchByUse('scenario', $this->getId());
         if ($_array) {
             foreach ($return as &$value) {
