@@ -146,7 +146,7 @@ class Scenario
     protected $id;
 
     /**
-     * @var \NextDom\Model\Entity\Object
+     * @var \NextDom\Model\Entity\JeeObject
      *
      * ORM\ManyToOne(targetEntity="NextDom\Model\Entity\Object")
      * ORM\JoinColumns({
