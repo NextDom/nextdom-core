@@ -34,7 +34,7 @@ echo " >>> Installation dependencies composer"
 if [[ "$1" = "--no-dev" ]] ; then
     composer install -o --no-dev
 else
-    composer install -o
+    composer install
 fi
 }
 
@@ -66,5 +66,5 @@ function init_dependencies {
 cd ${root}/..
 
 init_dependencies
-install_dep_composer
+install_dep_composer --no-dev
 install_nodemodules
