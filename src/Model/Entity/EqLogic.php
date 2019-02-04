@@ -502,9 +502,9 @@ class EqLogic
     {
         if ($this->getCategory($_key) != $_value) {
             $this->_needRefreshWidget = true;
-            $this->_changed = true;
         }
         $category = Utils::setJsonAttr($this->category, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->category, $category);
         $this->category = $category;
         return $this;
     }
@@ -869,6 +869,7 @@ class EqLogic
             '#version#' => $viewType,
             '#alert_name#' => '',
             '#alert_icon#' => '',
+            '#eqType#' => $this->getEqType_name(),
             '#custom_layout#' => ($this->widgetPossibility('custom::layout')) ? 'allowLayout' : '',
             '#tag#' => $tagsValue,
             '#data-tags#' => $this->getTags(),
@@ -1461,7 +1462,7 @@ class EqLogic
             return false;
         }
         if (
-            AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
+          AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
             return true;
         }
         if (strpos($_SESSION['user']->getRights('eqLogic' . $this->getId()), $_right) !== false) {

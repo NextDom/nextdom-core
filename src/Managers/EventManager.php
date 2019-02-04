@@ -153,30 +153,25 @@ class EventManager
      * @return array
      * @throws \Exception
      */
-    public static function changes($datetime, $longPolling = null, $filter = null)
-    {
-        $result = self::filterEvent(self::changesSince($datetime), $filter);
-        if ($longPolling === null || count($result['result']) > 0) {
-            return $result;
+    public static function changes($_datetime, $_longPolling = null, $_filter = null) {
+        $return = self::filterEvent(self::changesSince($_datetime), $_filter);
+        if ($_longPolling === null || count($return['result']) > 0) {
+            return $return;
         }
         $waitTime = ConfigManager::byKey('event::waitPollingTime');
-        $cycleCount = 0;
-        $maxCycle = $longPolling / $waitTime;
-        while (count($result['result']) == 0 && $cycleCount < $maxCycle) {
+        $i = 0;
+        $max_cycle = $_longPolling / $waitTime;
+        while (count($return['result']) == 0 && $i < $max_cycle) {
             if ($waitTime < 1) {
                 usleep(1000000 * $waitTime);
             } else {
                 sleep(round($waitTime));
             }
-            // Dans ce cas, 2 fois le temps
-            //sleep(1);
-            // TODO : Déplacer après la boucle ?
-            // Pourquoi ne pas attendre tout simplement le temps du longPolling
-            // vu que le résultat est écrasé à chaque fois
-            $result = self::filterEvent(self::changesSince($datetime), $filter);
-            $cycleCount++;
+            sleep(1);
+            $return = self::filterEvent(self::changesSince($_datetime), $_filter);
+            $i++;
         }
-        return $result;
+        return $return;
     }
 
     /**
@@ -188,29 +183,24 @@ class EventManager
      * @return array Filtered events
      * @throws \Exception
      */
-    private static function filterEvent($eventsToFilter = [], $filterName = null)
+    private static function filterEvent($_data = [], $_filter = null)
     {
-        $result = [];
-        if ($filterName == null) {
-            return $eventsToFilter;
+        if ($_filter == null) {
+            return $_data;
         }
-        $filters = CacheManager::byKey($filterName . '::event')->getValue([]);
-        if (isset($eventsToFilter['datetime'])) {
-            $result = array('datetime' => $eventsToFilter['datetime'], 'result' => []);
-        }
-        foreach ($eventsToFilter['result'] as $value) {
-            /* TODO $_listEvents n'a jamais existé
-            Mise à jour, a revérifier
-            */
-            if ($filters !== null && isset($filters::$_listenEvents) && !in_array($value['name'], $filters::$_listenEvents)) {
+        $filters = ($_filter !== null) ? CacheManager::byKey($_filter . '::event')->getValue(array()) : array();
+        $return = array('datetime' => $_data['datetime'], 'result' => array());
+        foreach ($_data['result'] as $value) {
+            if ($_filter !== null && isset($_filter::$_listenEvents) && !in_array($value['name'], $_filter::$_listenEvents)) {
                 continue;
             }
             if (count($filters) != 0 && $value['name'] == 'cmd::update' && !in_array($value['option']['cmd_id'], $filters)) {
                 continue;
             }
-            $result['result'][] = $value;
+            $return['result'][] = $value;
         }
-        return $result;
+
+        return $return;
     }
 
     /**
@@ -221,20 +211,19 @@ class EventManager
      * @return array Associative array with all events
      * @throws \Exception
      */
-    private static function changesSince($datetime)
+    private static function changesSince($_datetime)
     {
-        $return = array('datetime' => $datetime, 'result' => []);
+        $return = array('datetime' => $_datetime, 'result' => array());
         $cache = CacheManager::byKey('event');
         $events = json_decode($cache->getValue('[]'), true);
         if (!is_array($events)) {
-            $events = [];
+            $events = array();
         }
-        // Reverse order and break when datetime is reach
         $values = array_reverse($events);
         if (count($values) > 0) {
             $return['datetime'] = $values[0]['datetime'];
             foreach ($values as $value) {
-                if ($value['datetime'] <= $datetime) {
+                if ($value['datetime'] <= $_datetime) {
                     break;
                 }
                 $return['result'][] = $value;

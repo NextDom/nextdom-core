@@ -169,8 +169,8 @@ class EqLogicConfigure extends BaseAbstractModal
             }
             $pageContent['dashboardCmd'][$line][$column][] = $cmd;
         }
-        $pageContent['displayDashboardNbLine'] = $eqLogic->getDisplay('layout::dashboard::table::nbLine', 1);
-        $pageContent['displayDashboardNbColumn'] = $eqLogic->getDisplay('layout::dashboard::table::nbColumn', 1);
+        $pageContent['displayDashboardNbLines'] = $eqLogic->getDisplay('layout::dashboard::table::nbLine', 1);
+        $pageContent['displayDashboardNbColumns'] = $eqLogic->getDisplay('layout::dashboard::table::nbColumn', 1);
 
         return $render->get('/modals/eqLogic.configure.html.twig', $pageContent);
     }
