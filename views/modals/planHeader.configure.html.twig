@@ -198,7 +198,7 @@
                 $('#div_alertPlanHeaderConfigure').showAlert({message: error.message, level: 'danger'});
             },
             success: function () {
-                $('#div_alertPlanHeaderConfigure').showAlert({message: '{{Composant supprimée}}', level: 'success'});
+                $('#div_alertPlanHeaderConfigure').showAlert({message: '{{ 'Composant supprimée' }}', level: 'success'});
                 tr.remove();
             }
         });
