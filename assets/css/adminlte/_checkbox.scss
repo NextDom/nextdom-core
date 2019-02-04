@@ -115,3 +115,8 @@ input[type="checkbox"], input[type="radio"] {
 .has-error [type="radio"]:checked:after {
     background: #c9302c;
 }
+
+[type="radio"]:focus {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}

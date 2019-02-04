@@ -18,9 +18,26 @@
 
 #}
 
-/* ############################################################################ */
-/* COLOR1 = Couleur d'accentuation principale, l'identité du thème */
-/* ############################################################################ */
+/* Résumé */
+/* COLOR1 = Couleur d'accentuation principale (identité du thème, header nextdom, bouton primaires, messages d'info, élements actifs ou survolés, textes de liens et d'état, scrollbar, boutons fab...) */
+/* COLOR2 = Couleur de contraste (icônes et texte sur fond accentué ou de sidebar...) */
+
+/* COLOR4 = Couleur d'option activée (checkbox et radiobox) */
+
+
+
+
+/* COLOR9 = Couleur de fond principale (dashboard et autres fond de pages...) */
+/* COLOR10 = Couleur de fond secondaire (titres, action-bar, footer, onglets, titre modale, boîtes d'infos...) */
+/* COLOR11 = Couleur de fond des titres (légendes, tableaux, unités...) */
+/* COLOR12 = Couleur des textes (contenu, titres, footer, bouton d'administration, unités, légendes...) */
+/* COLOR13 = Couleur de fond des inputs (champs de saisie, listes déroulantes...) */
+/* COLOR14 = Couleur de bordure (inputs, légendes, tableaux et bouton d'administration...) */
+/* COLOR15 = Couleur de fond des contenants (boxs, cards, pages d'onglets, tableaux...) */
+
+/* #################################################################################################################################################################################################### */
+/* COLOR1 = Couleur d'accentuation principale (identité du thème, header nextdom, bouton primaires, messages d'info, élements actifs ou survolés, textes de liens et d'état, scrollbar, boutons fab...) */
+/* #################################################################################################################################################################################################### */
 /* Icone patientez */
 .icon_theme_color {
   color: {{ COLOR1 }} !important;
@@ -98,9 +115,9 @@
 }
 
 
-/* ############################################################################ */
-/* COLOR2 = Couleur de contraste (icônes et texte sur fond accentué)*/
-/* ############################################################################ */
+/* ################################################################################## */
+/* COLOR2 = Couleur de contraste (icônes et texte sur fond accentué ou de sidebar...) */
+/* ################################################################################## */
 .main-header .logo {
   color: {{ COLOR2 }} !important;
 }
@@ -148,6 +165,7 @@
   color: {{ COLOR2 }} !important;
 }
 
+
 /* ############################################################################ */
 /* COLOR3 = */
 /* ############################################################################ */
@@ -167,9 +185,10 @@
   color: {{ COLOR3 }} !important;
 }
 
-/* ############################################################################ */
-/* COLOR4 = Couleur des checkbox et radiobox*/
-/* ############################################################################ */
+
+/* ############################################### */
+/* Couleur d'option activée (checkbox et radiobox) */
+/* ############################################### */
 [type="checkbox"]:not(:checked):after,
 [type="checkbox"]:checked:after,
 [type="radio"]:not(:checked):after,
@@ -177,9 +196,11 @@
   background-color: {{ COLOR4 }} !important;
 }
 
+
 /* ############################################################################ */
 /* COLOR5 = */
 /* ############################################################################ */
+
 
 /* ############################################################################ */
 /* COLOR6 = */
@@ -190,22 +211,22 @@
   background-color: {{ COLOR6 }} !important;
 }
 
-.ui-dialog .ui-dialog-titlebar, .ui-dialog .ui-dialog-buttonpane {
-  background-color: {{ COLOR6 }} !important;
-  margin: 0;
-}
+
+
 
 /* ############################################################################ */
 /* COLOR7 = */
 /* ############################################################################ */
 
+
 /* ############################################################################ */
 /* COLOR8 = */
 /* ############################################################################ */
 
-/* ############################################################################ */
-/* COLOR9 = Couleur de fond principale */
-/* ############################################################################ */
+
+/* ########################################################################## */
+/* COLOR9 = Couleur de fond principale (dashboard et autres fond de pages...) */
+/* ########################################################################## */
 .content-wrapper, .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a, .main-footer {
   background-color:{{ COLOR9 }} !important;
   border-color:{{ COLOR9 }}60 !important;
@@ -223,24 +244,56 @@
   border: 1px solid {{ COLOR9 }} !important;
 }
 
-/* ############################################################################ */
-/* COLOR10 = */
-/* ############################################################################ */
-.box, .nav-tabs-custom, .action-bar, .box-footer {
+.ui-dialog .ui-dialog-content {
+  background-color: {{ COLOR9 }} !important;
+}
+
+.box-header.with-border{
+  border-color: {{ COLOR9 }} !important;
+}
+
+.nav-tabs-custom > .nav-tabs, .nav-tabs-custom > .nav-tabs > li.active > a {
+  border-color: {{ COLOR9 }} !important;
+}
+
+
+/* ########################################################################################################### */
+/* COLOR10 = Couleur de fond secondaire (titres, action-bar, footer, onglets, titre modale, boîtes d'infos...) */
+/* ########################################################################################################### */
+/* Boxs */
+.box, .box-footer {
   background-color: {{ COLOR10 }} !important;
 }
 
+/* Action bar */
+.action-bar {
+  background-color: {{ COLOR10 }} !important;
+}
+
+/* Tabs */
+.nav-tabs-custom {
+  background-color: {{ COLOR10 }} !important;
+}
+
+/* Footer */
 body, .main-footer{
   background-color: {{ COLOR10 }} !important;
 }
 
+/* Info-box */
 .info-box, .modal-content{
   background-color: {{ COLOR10 }} !important;
 }
 
-/* ############################################################################ */
-/* COLOR11 = */
-/* ############################################################################ */
+/* Modales */
+.ui-dialog .ui-dialog-titlebar, .ui-dialog .ui-dialog-buttonpane {
+  background-color: {{ COLOR6 }} !important;
+}
+
+/* #################################################################### */
+/* COLOR11 = Couleur de fond des titres (légendes, tableaux, unités...) */
+/* #################################################################### */
+/* Titres Tableaux */
 .table, .table-condensed>thead {
   background-color: {{ COLOR11 }} !important;
   border: {{ COLOR11 }} !important;
@@ -251,31 +304,75 @@ legend {
   background-color: {{ COLOR11 }} !important;
 }
 
-/* ############################################################################ */
-/* COLOR12 = */
-/* ############################################################################ */
+/* Unités et fond colorpick
+.input-group .input-group-addon {
+  background-color: {{ COLOR11 }} !important;
+}
+.colorpick .input-group-addon {
+  background-color: {{ COLOR11 }} !important;
+}
+
+
+/* #################################################################################################### */
+/* COLOR12 = Couleur des textes (contenu, titres, footer, bouton d'administration, unités, légendes...) */
+/* #################################################################################################### */
+/*Textes */
+body, h1, h2, h3, h4, h5, h6  {
+  color: {{ COLOR12 }} !important;
+}
+.nav-tabs-custom > .nav-tabs > li.header, .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a,.nav-tabs-custom > .nav-tabs > li > a {
+  color: {{ COLOR12 }} !important;
+}
+legend {
+  color: {{ COLOR12 }} !important;
+}
+.footer-center, .text-muted {
+  color: {{ COLOR12 }} !important;
+}
+.ui-widget-content {
+  color: {{ COLOR12 }} !important;
+}
+
+/* Titres */
 .ui-dialog .ui-dialog-title {
   color: {{ COLOR12 }} !important;
 }
+
 /* Bouton administration */
 .btn-app {
   color: {{ COLOR12 }} !important;
 }
 
-/* ############################################################################ */
-/* COLOR13 = */
-/* ############################################################################ */
+/* Inputs */
+.form-control {
+  color: {{ COLOR12 }} !important;
+}
+.input-group .input-group-addon {
+  color: {{ COLOR12 }} !important;
+}
 
-/* ############################################################################ */
-/* COLOR14 = */
-/* ############################################################################ */
+
+/* ############################################################################## */
+/* COLOR13 = Couleur de fond des inputs (champs de saisie, listes déroulantes...) */
+/* ############################################################################## */
+.form-control {
+  background-color: {{ COLOR13 }} !important;
+}
+
+/* ####################################################################################### */
+/* COLOR14 = Couleur de bordure (inputs, légendes, tableaux et bouton d'administration...) */
+/* ####################################################################################### */
+/* Inputs */
 .colorpick, .label-value, select, input[type="text"], input[type="email"], input[type="tel"], input[type="search"], input[type="url"], input[type="password"], .ui-autocomplete-input {
   border: 1px solid {{ COLOR14 }} !important;
+}
+.form-control {
+  border-color: {{ COLOR14 }} !important;
 }
 
 /* Legendes de sections */
 legend {
-  border: {{ COLOR14 }} !important;
+  border-color: {{ COLOR14 }} !important;
 }
 
 /* Bouton administration */
@@ -283,19 +380,32 @@ legend {
   border: 1px solid {{ COLOR14 }} !important;
 }
 
-/* ############################################################################ */
-/* COLOR15 = */
-/* ############################################################################ */
+/* Tableaux */
+.table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
+  border: 1px solid {{ COLOR14 }} !important;
+}
+
+
+/* #################################################################################### */
+/* COLOR15 = Couleur de fond des contenants (boxs, cards, pages d'onglets, tableaux...) */
+/* #################################################################################### */
+/* Box */
 .tab-content, .box-body {
   background-color: {{ COLOR15 }} !important;
 }
+
+/* Contenu tableau */
+.table-condensed, .table-bordered {
+  background-color: {{ COLOR11 }}60 !important;
+}
+
 
 /* ############################################################################ */
 /* COLOR16 = Boutons action */
 /* ############################################################################ */
 .btn-action {
-  background-color: {{ COLOR15 }} !important;
-  border-color: {{ COLOR15 }} !important;
+  background-color: {{ COLOR16 }} !important;
+  border-color: {{ COLOR16 }} !important;
 }
 
 /* ############################################################################ */
@@ -304,6 +414,8 @@ legend {
 .btn-app {
   background-color: {{ COLOR17 }} !important;
 }
+
+
 
 
 
@@ -362,40 +474,19 @@ border: solid 1px {{ COLOR6 }} !important;
 
 
 
-.table-condensed, .table-bordered {
-background-color: {{ COLOR11 }}60 !important;
-}
-
-.box-header.with-border{
-border-color: {{ COLOR9 }} !important;
-}
-
-.nav-tabs-custom > .nav-tabs, .nav-tabs-custom > .nav-tabs > li.active > a {
-border-color: {{ COLOR9 }} !important;
-}
-
-body, h1, h2, h3, h4, h5, h6, .nav-tabs-custom > .nav-tabs > li.header, .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a,.nav-tabs-custom > .nav-tabs > li > a, legend, .footer-center, .text-muted, .ui-widget-content {
-color: {{ COLOR12 }} !important;
-}
 
 
 
-.table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
-border: 1px solid {{ COLOR14 }} !important;
-}
 
-.form-control {
-background-color: {{ COLOR13 }};
-border-color: {{ COLOR14 }} !important;
-padding-left: 10px !important;
-color: {{ COLOR12 }} !important;
-}
 
-.input-group .input-group-addon {
-background-color: {{ COLOR11 }} !important;
-color: {{ COLOR12 }} !important;
-border: none !important;
-}
+
+
+
+
+
+
+
+
 
 
 
@@ -403,9 +494,7 @@ border: none !important;
 border: none !important;
 }
 
-.ui-dialog .ui-dialog-content {
-background-color: {{ COLOR9 }} !important;
-}
+
 
 
 

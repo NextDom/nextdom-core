@@ -290,7 +290,7 @@ $("input[name=theme]").click(function () {
             'theme:color14' : '#dddddd',
             'theme:color15' : '#ffffff',
             'theme:color16' : '#999',
-            'theme:color17' : '#ddd'
+            'theme:color17' : '#f4f4f4'
         }
     }
     if (radio == "mix"){
@@ -311,7 +311,7 @@ $("input[name=theme]").click(function () {
             'theme:color14' : '#dddddd',
             'theme:color15' : '#fafafa',
             'theme:color16' : '#999',
-            'theme:color17' : '#ddd'
+            'theme:color17' : '#f4f4f4'
         }
     }
     nextdom.config.save({
