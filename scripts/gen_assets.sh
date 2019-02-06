@@ -48,6 +48,7 @@ function gen_js {
         vendor/node_modules/admin-lte/dist/js/adminlte.min.js \
         vendor/node_modules/izitoast/dist/js/iziToast.min.js \
         assets/js/desktop/utils.js \
+        assets/js/desktop/search.js \
         core/js/core.js \
         core/js/nextdom.class.js \
         core/js/private.class.js \

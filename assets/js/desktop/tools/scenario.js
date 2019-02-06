@@ -149,26 +149,6 @@ $('#in_treeSearch').keyup(function () {
   $('#div_tree').jstree(true).search($('#in_treeSearch').val());
 });
 
-$('#in_searchScenario').keyup(function () {
-  var searchPattern = $(this).value();
-  if(searchPattern === ''){
-    $('.panel-collapse.in').closest('.panel').find('.accordion-toggle collapsed').click();
-    $('.scenarioDisplayCard').show();
-  }
-  else {
-    searchPattern = searchPattern.toLowerCase();
-    $('.panel-collapse:not(.in)').closest('.panel').find('.accordion-toggle collapsed').click();
-    $('.scenarioDisplayCard').hide();
-    $('.scenarioDisplayCard .title').each(function(){
-        var cardTitle = $(this).text().toLowerCase();
-        if (cardTitle.indexOf(searchPattern) !== -1){
-            $(this).closest('.scenarioDisplayCard').show();
-        }
-    });
-  }
-  $('.scenarioListContainer').packery();
-});
-
 $('#bt_chooseIcon').on('click', function () {
     chooseIcon(function (_icon) {
         $('.scenarioAttr[data-l1key=display][data-l2key=icon]').empty().append(_icon);
