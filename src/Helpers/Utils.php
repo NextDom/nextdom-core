@@ -812,7 +812,7 @@ class Utils
                     $value = $property->getValue($_object);
                     $property->setAccessible(false);
                 }
-                $array[$name] = Utils::isJson($value, $value);
+                $array[$name] = ($value === null) ? null : Utils::isJson($value, $value);
             }
         }
         return $array;

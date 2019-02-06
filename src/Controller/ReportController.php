@@ -26,6 +26,7 @@ use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\ViewManager;
 
 class ReportController extends BaseController
 {
@@ -52,7 +53,7 @@ class ReportController extends BaseController
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/diagnostic/report.js';
         $report_path = NEXTDOM_ROOT . '/data/report/';
         $pageContent['reportViews'] = [];
-        $allViews = \view::all();
+        $allViews = ViewManager::all();
         foreach ($allViews as $view) {
             $viewData = [];
             $viewData['id'] = $view->getId();

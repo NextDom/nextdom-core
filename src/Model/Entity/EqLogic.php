@@ -34,6 +34,8 @@ use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UserManager;
+use NextDom\Managers\ViewDataManager;
+use NextDom\Managers\ViewManager;
 
 /**
  * Eqlogic
@@ -502,9 +504,9 @@ class EqLogic
     {
         if ($this->getCategory($_key) != $_value) {
             $this->_needRefreshWidget = true;
-            $this->_changed = true;
         }
         $category = Utils::setJsonAttr($this->category, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->category, $category);
         $this->category = $category;
         return $this;
     }
@@ -869,6 +871,7 @@ class EqLogic
             '#version#' => $viewType,
             '#alert_name#' => '',
             '#alert_icon#' => '',
+            '#eqType#' => $this->getEqType_name(),
             '#custom_layout#' => ($this->widgetPossibility('custom::layout')) ? 'allowLayout' : '',
             '#tag#' => $tagsValue,
             '#data-tags#' => $this->getTags(),
@@ -1140,7 +1143,7 @@ class EqLogic
         foreach ($this->getCmd() as $cmd) {
             $cmd->remove();
         }
-        \viewData::removeByTypeLinkId('eqLogic', $this->getId());
+        ViewDataManager::removeByTypeLinkId('eqLogic', $this->getId());
         DataStoreManager::removeByTypeLinkId('eqLogic', $this->getId());
         $this->emptyCacheWidget();
         CacheManager::delete('eqLogicCacheAttr' . $this->getId());
@@ -1461,7 +1464,7 @@ class EqLogic
             return false;
         }
         if (
-            AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
+          AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
             return true;
         }
         if (strpos($_SESSION['user']->getRights('eqLogic' . $this->getId()), $_right) !== false) {
@@ -1766,7 +1769,7 @@ class EqLogic
             array('action' => 'equipment', 'option' => $this->getId(), 'and' => true),
             array('action' => '#eqLogic' . $this->getId() . '#'),
         ));
-        $return['view'] = \view::searchByUse('eqLogic', $this->getId());
+        $return['view'] = ViewManager::searchByUse('eqLogic', $this->getId());
         $return['plan'] = \planHeader::searchByUse('eqLogic', $this->getId());
         if ($_array) {
             foreach ($return as &$value) {

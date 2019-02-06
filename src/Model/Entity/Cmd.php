@@ -38,6 +38,8 @@ use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\ViewDataManager;
+use NextDom\Managers\ViewManager;
 
 /**
  * Cmd
@@ -680,7 +682,7 @@ class Cmd
 
     public function remove()
     {
-        \viewData::removeByTypeLinkId('cmd', $this->getId());
+        ViewDataManager::removeByTypeLinkId('cmd', $this->getId());
         DataStoreManager::removeByTypeLinkId('cmd', $this->getId());
         $this->getEqLogicId()->emptyCacheWidget();
         $this->emptyHistory();
@@ -1688,7 +1690,7 @@ class Cmd
         $return['eqLogic'] = EqLogicManager::searchConfiguration('#' . $this->getId() . '#');
         $return['scenario'] = ScenarioManager::searchByUse(array(array('action' => '#' . $this->getId() . '#')));
         $return['interactDef'] = InteractDefManager::searchByUse('#' . $this->getId() . '#');
-        $return['view'] = \view::searchByUse('cmd', $this->getId());
+        $return['view'] = ViewManager::searchByUse('cmd', $this->getId());
         $return['plan'] = \planHeader::searchByUse('cmd', $this->getId());
         if ($_array) {
             foreach ($return as &$value) {

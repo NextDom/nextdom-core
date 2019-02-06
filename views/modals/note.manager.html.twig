@@ -1,11 +1,10 @@
 <div style="display: none;" id="div_noteManagementAlert"></div>
 <div class="row row-overflow">
-    <div class="col-lg-2 col-md-3 col-sm-4" style="overflow-y:auto;overflow-x:hidden;">
+    <div id="div_notes" class="col-lg-2 col-md-3 col-sm-4" style="overflow-y:auto;overflow-x:hidden;">
         <fieldset>
             <legend>{{ 'Liste des notes' }}</legend>
                 <div class="bs-sidebar">
                     <ul class="nav nav-list bs-sidenav list-group" id="ul_noteList">
-
                     </ul>
                 </div>
             </legend>
@@ -20,8 +19,8 @@
             </div>
             <div id="div_noteManagerDisplay">
                 <input class="noteAttr form-control" data-l1key="id" style="display:none;" disabled/>
-                <input class="noteAttr form-control label-list" data-l1key="name" disabled/>
-                <textarea class="noteAttr form-control ta_autosize" data-l1key="text" disabled></textarea>
+                <input class="noteAttr form-control label-list" data-l1key="name"/>
+                <textarea class="noteAttr form-control ta_autosize" data-l1key="text"></textarea>
             </div>
         </fieldset>
     </div>
@@ -48,19 +47,7 @@
     }
 
     $('#bt_noteManagerAdd').on('click',function(){
-        var name = prompt("Nom de la note ?");
-        if (name != null) {
-            nextdom.note.save({
-                note : {name : name},
-                error: function (error) {
-                    notify('Core',error.message,'error');
-                },
-                success: function (notes) {
-                    notify('Core','{{ 'Note créée avec succès' }}','success');
-                    updateNoteList();
-                }
-            });
-        }
+        $('#div_noteManagerDisplay .noteAttr').value('');
     });
 
     $('#ul_noteList').on('click','.li_noteDisplay',function(){
@@ -73,7 +60,6 @@
             },
             success: function (note) {
                 $('#div_noteManagerDisplay .noteAttr').value('');
-                $('#div_noteManagerDisplay .noteAttr').attr('disabled',false);
                 $('#div_noteManagerDisplay').setValues(note, '.noteAttr');
                 taAutosize();
             }
@@ -87,8 +73,9 @@
             error: function (error) {
                 notify('Core',error.message,'error');
             },
-            success: function (notes) {
+            success: function (note) {
                 notify('Core','{{ 'Note sauvegardée avec succès' }}','success');
+                $('#div_noteManagerDisplay').setValues(note, '.noteAttr');
                 updateNoteList();
             }
         });

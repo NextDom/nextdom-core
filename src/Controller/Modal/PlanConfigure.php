@@ -27,6 +27,7 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ViewManager;
 
 class PlanConfigure extends BaseAbstractModal
 {
@@ -57,7 +58,7 @@ class PlanConfigure extends BaseAbstractModal
         }
         $pageContent['planLink'] = $pageContent['planObject']->getLink();
         $pageContent['jeeObjects'] = JeeObjectManager::all();
-        $pageContent['views'] = \view::all();
+        $pageContent['views'] = ViewManager::all();
         $pageContent['plans'] = \planHeader::all();
         Utils::sendVarToJS('id', $pageContent['planObject']->getId());
 

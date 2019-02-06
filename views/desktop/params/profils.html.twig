@@ -33,18 +33,16 @@
 */
 
 #}
-
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour' }}</a>
         </div>
         <div class="action-group">
             <a class="btn btn-success btn-action-bar pull-right" id="bt_saveProfils"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
         </div>
     </div>
 </section>
-
 <section class="content">
     <div class="nav-tabs-custom config" id="div_Profils">
         <!-- Tabs title -->
@@ -56,7 +54,6 @@
             <li role="presentation" class="active"><a href="#profil" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-user">&nbsp;&nbsp;</i>{{ 'Profil' }}</a></li>
             <li class="header pull-left"><i class="fas fa-wrench">&nbsp;&nbsp;</i>{{ 'Profils' }}</li>
         </ul>
-
         <!-- Tabs content -->
         <div class="global-tab-content tab-content">
 
@@ -161,7 +158,7 @@
                             <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
                             <div class="col-sm-2">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="homePage">
-                                    {% for homePageCode, homePageValue in profilsHomePage %}
+                                    {% for homePageCode, homePageValue in profilsHomePageDesktop %}
                                         <option value="{{ homePageCode }}">{{ homePageValue }}</option>
                                     {% endfor %}
                                 </select>
@@ -170,7 +167,7 @@
                             <div class="col-sm-2">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="homePageMobile">
                                     <option value="home">{{ 'Accueil' }}</option>
-                                    {% for homePageCode, homePageValue in profilsHomePage %}
+                                    {% for homePageCode, homePageValue in profilsHomePageMobile %}
                                         <option value="{{ homePageCode }}">{{ homePageValue }}</option>
                                     {% endfor %}
                                 </select>
@@ -247,6 +244,34 @@
                             <label class="col-sm-3 control-label">{{ 'Plein écran' }}</label>
                             <div class="col-sm-1">
                                 <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlanFullScreen"/>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="legend-section">
+                        <legend>{{ 'Design 3D par défaut' }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
+                            <div class="col-sm-2">
+                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardPlan3d">
+                                    {% for plan in profilsPlans3d %}
+                                        <option value="{{ plan3d.getId() }}">{{ plan3d.getName() }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
+                            <div class="col-sm-2">
+                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobilePlan3d">
+                                    {% for plan3d in profilsPlans3d %}
+                                        <option value="{{ plan3d.getId() }}">{{ plan3d.getName() }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{{ 'Plein écran' }}</label>
+                            <div class="col-sm-1">
+                                <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlan3dFullScreen"/>
                             </div>
                         </div>
                     </fieldset>
