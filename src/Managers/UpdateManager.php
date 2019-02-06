@@ -36,11 +36,12 @@ namespace NextDom\Managers;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Model\Entity\Update;
 
 class UpdateManager
 {
     const DB_CLASS_NAME = 'update';
-    const CLASS_NAME = 'update';
+    const CLASS_NAME = Update::class;
 
     /**
      * Check all updates
