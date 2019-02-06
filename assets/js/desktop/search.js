@@ -117,6 +117,15 @@ $('#generalSearch').keyup(function () {
                     $(this).hide();
                 }
             });
+
+            $('.div_displayEquipement').each(function(){
+                if($(this).height() < 10 ) {
+                    $(this).parent().parent().hide();
+                } else{
+                    $(this).parent().parent().show();
+                }
+            });
+
             $('.div_displayEquipement').packery();
             break;
     }
