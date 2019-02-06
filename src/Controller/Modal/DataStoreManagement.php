@@ -23,18 +23,10 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 
 class DataStoreManagement extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render data store management modal
      *
@@ -47,6 +39,7 @@ class DataStoreManagement extends BaseAbstractModal
      */
     public function get(Render $render): string
     {
+
 
         Utils::sendVarsToJS([
             'dataStore_type' => Utils::init('type'),

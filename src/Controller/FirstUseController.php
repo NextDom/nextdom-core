@@ -23,36 +23,43 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
-use NextDom\Managers\UpdateManager;
+use NextDom\Helpers\Router;
+use NextDom\Managers\ConfigManager;
 
-
-class UpdateController extends BaseController
+class FirstUseController extends BaseController
 {
     /**
-     * Render update page
      *
-     * @param Render $render Render engine
-     * @param array $pageData Page data
-     *
-     * @return string Content of objects page
-     *
+     * @param \NextDom\Helpers\Render $render
+     * @param array $pageData
+     * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
     public function get(Render $render, &$pageData): string
     {
-        $updates = array();
-        foreach (UpdateManager::listCoreUpdate() as $udpate) {
-            $updates[str_replace(array('.php', '.sql'), '', $udpate)] = str_replace(array('.php', '.sql'), '', $udpate);
+        $configs = ConfigManager::byKeys(array(
+            'notify::status',
+            'notify::position',
+            'notify::timeout',
+            'nextdom::firstUse'));
+        if ($configs['nextdom::firstUse'] == 0) {
+            Router::showError404AndDie();
         }
-        usort($updates, 'version_compare');
-        $pageData['updatesList'] = array_reverse($updates);
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/update.js';
-        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'] = [];
+        $pageData['TITLE'] = '1ere connexion';
+        $pageData['JS_VARS'] = [
+            'notify_status' => $configs['notify::status'],
+            'notify_position' => $configs['notify::position'],
+            'notify_timeout' => $configs['notify::timeout'],
+        ];
+        $render = Render::getInstance();
+        $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
+        $pageData['CSS_POOL'][] = '/public/css/firstUse.css';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/firstUse.js';
 
-        return $render->get('/desktop/tools/update-view.html.twig', $pageData);
+        return $render->get('desktop/firstUse.html.twig', $pageData);
     }
-
 
 }

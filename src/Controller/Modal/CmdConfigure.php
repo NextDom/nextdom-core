@@ -25,20 +25,12 @@ namespace NextDom\Controller\Modal;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 
 class CmdConfigure extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render command configuration modal
      *
@@ -52,7 +44,7 @@ class CmdConfigure extends BaseAbstractModal
      */
     public function get(Render $render): string
     {
-        $pageContent = [];
+        $pageData = [];
         $cmdId = Utils::init('cmd_id');
         $cmd = CmdManager::byId($cmdId);
         if (!is_object($cmd)) {
@@ -64,31 +56,31 @@ class CmdConfigure extends BaseAbstractModal
                 $cmdInfo['html'][$value] = $cmd->getWidgetTemplateCode($value);
             }
         }
-        $pageContent['cmdType'] = $cmd->getType();
-        $pageContent['cmdSubType'] = $cmd->getSubtype();
-        $pageContent['cmdWidgetPossibilityCustom'] = $cmd->widgetPossibility('custom');
-        $pageContent['cmdWidgetPossibilityCustomHtmlCode'] = $cmd->widgetPossibility('custom::htmlCode');
-        $pageContent['cmdShowMinMax'] = false;
-        if ($pageContent['cmdType'] == 'action' && $pageContent['cmdSubType'] == 'select') {
-            $pageContent['cmdListValues'] = [];
+        $pageData['cmdType'] = $cmd->getType();
+        $pageData['cmdSubType'] = $cmd->getSubtype();
+        $pageData['cmdWidgetPossibilityCustom'] = $cmd->widgetPossibility('custom');
+        $pageData['cmdWidgetPossibilityCustomHtmlCode'] = $cmd->widgetPossibility('custom::htmlCode');
+        $pageData['cmdShowMinMax'] = false;
+        if ($pageData['cmdType'] == 'action' && $pageData['cmdSubType'] == 'select') {
+            $pageData['cmdListValues'] = [];
             $elements = explode(';', $cmd->getConfiguration('listValue', ''));
             foreach ($elements as $element) {
-                $pageContent['cmdListValues'][] = explode('|', $element);
+                $pageData['cmdListValues'][] = explode('|', $element);
             }
         }
-        if ($pageContent['cmdType'] == 'info') {
-            $pageContent['cmdCacheValue'] = $cmd->getCache('value');
-            $pageContent['cmdCollectDate'] = $cmd->getCache('collectDate');
-            $pageContent['cmdValueDate'] = $cmd->getCache('valueDate');
+        if ($pageData['cmdType'] == 'info') {
+            $pageData['cmdCacheValue'] = $cmd->getCache('value');
+            $pageData['cmdCollectDate'] = $cmd->getCache('collectDate');
+            $pageData['cmdValueDate'] = $cmd->getCache('valueDate');
             if ($cmd->getSubType() == 'numeric') {
-                $pageContent['cmdShowMinMax'] = true;
+                $pageData['cmdShowMinMax'] = true;
             }
         }
-        $pageContent['cmdDirectUrlAccess'] = $cmd->getDirectUrlAccess();
-        $pageContent['cmdUsedBy'] = $cmd->getUsedBy();
-        $pageContent['cmdGenericTypes'] = NextDomHelper::getConfiguration('cmd::generic_type');
+        $pageData['cmdDirectUrlAccess'] = $cmd->getDirectUrlAccess();
+        $pageData['cmdUsedBy'] = $cmd->getUsedBy();
+        $pageData['cmdGenericTypes'] = NextDomHelper::getConfiguration('cmd::generic_type');
 
-        $pageContent['cmdGenericTypeInformations'] = array();
+        $pageData['cmdGenericTypeInformations'] = array();
         foreach (NextDomHelper::getConfiguration('cmd::generic_type') as $key => $info) {
             if (strtolower($cmd->getType()) != strtolower($info['type'])) {
                 continue;
@@ -96,58 +88,58 @@ class CmdConfigure extends BaseAbstractModal
                 continue;
             }
             $info['key'] = $key;
-            if (!isset($pageContent['cmdGenericTypeInformations'][$info['family']])) {
-                $pageContent['cmdGenericTypeInformations'][$info['family']][0] = $info;
+            if (!isset($pageData['cmdGenericTypeInformations'][$info['family']])) {
+                $pageData['cmdGenericTypeInformations'][$info['family']][0] = $info;
             } else {
-                array_push($pageContent['cmdGenericTypeInformations'][$info['family']], $info);
+                array_push($pageData['cmdGenericTypeInformations'][$info['family']], $info);
             }
         }
-        ksort($pageContent['cmdGenericTypeInformations']);
-        foreach (array_keys($pageContent['cmdGenericTypeInformations']) as $key) {
-            usort($pageContent['cmdGenericTypeInformations'][$key], function ($a, $b) {
+        ksort($pageData['cmdGenericTypeInformations']);
+        foreach (array_keys($pageData['cmdGenericTypeInformations']) as $key) {
+            usort($pageData['cmdGenericTypeInformations'][$key], function ($a, $b) {
                 return strcmp($a['name'], $b['name']);
             });
         }
         global $NEXTDOM_INTERNAL_CONFIG;
-        $pageContent['cmdTypeIsHistorized'] = false;
+        $pageData['cmdTypeIsHistorized'] = false;
         if ($cmd->getType() == 'info' && $NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['visible']) {
-            $pageContent['cmdIsHistorizedCanBeSmooth'] = $NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['canBeSmooth'];
-            $pageContent['cmdTypeIsHistorized'] = true;
-            $pageContent['cmdIsHistorized'] = $cmd->getIsHistorized();
+            $pageData['cmdIsHistorizedCanBeSmooth'] = $NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['canBeSmooth'];
+            $pageData['cmdTypeIsHistorized'] = true;
+            $pageData['cmdIsHistorized'] = $cmd->getIsHistorized();
         }
 
-        $pageContent['cmdWidgetCanCustomHtml'] = $cmd->widgetPossibility('custom::htmlCode');
-        $pageContent['cmdWidgetCanCustom'] = $cmd->widgetPossibility('custom');
-        $pageContent['cmdWidgetCanCustomWidget'] = $cmd->widgetPossibility('custom::widget');
-        $pageContent['cmdWidgetCanCustomWidgetDashboard'] = $cmd->widgetPossibility('custom::widget::dashboard');
-        $pageContent['cmdWidgetCanCustomWidgetMobile'] = $cmd->widgetPossibility('custom::widget::mobile');
-        $pageContent['cmdWidgetCanCustomVisibility'] = $cmd->widgetPossibility('custom::visibility');
-        $pageContent['cmdWidgetCanCustomDisplayName'] = $cmd->widgetPossibility('custom::displayName');
-        $pageContent['cmdWidgetCanCustomDisplayIconAndName'] = $cmd->widgetPossibility('custom::displayIconAndName');
-        $pageContent['cmdWidgetCanCustomDisplayStats'] = $cmd->widgetPossibility('custom::displayStats');
-        $pageContent['cmdWidgetCanCustomOptionalParameters'] = $cmd->widgetPossibility('custom::optionalParameters');
-        $pageContent['configDisplayStatsWidget'] = ConfigManager::byKey('displayStatsWidget');
-        $pageContent['cmdDisplayParameters'] = $cmd->getDisplay('parameters');
+        $pageData['cmdWidgetCanCustomHtml'] = $cmd->widgetPossibility('custom::htmlCode');
+        $pageData['cmdWidgetCanCustom'] = $cmd->widgetPossibility('custom');
+        $pageData['cmdWidgetCanCustomWidget'] = $cmd->widgetPossibility('custom::widget');
+        $pageData['cmdWidgetCanCustomWidgetDashboard'] = $cmd->widgetPossibility('custom::widget::dashboard');
+        $pageData['cmdWidgetCanCustomWidgetMobile'] = $cmd->widgetPossibility('custom::widget::mobile');
+        $pageData['cmdWidgetCanCustomVisibility'] = $cmd->widgetPossibility('custom::visibility');
+        $pageData['cmdWidgetCanCustomDisplayName'] = $cmd->widgetPossibility('custom::displayName');
+        $pageData['cmdWidgetCanCustomDisplayIconAndName'] = $cmd->widgetPossibility('custom::displayIconAndName');
+        $pageData['cmdWidgetCanCustomDisplayStats'] = $cmd->widgetPossibility('custom::displayStats');
+        $pageData['cmdWidgetCanCustomOptionalParameters'] = $cmd->widgetPossibility('custom::optionalParameters');
+        $pageData['configDisplayStatsWidget'] = ConfigManager::byKey('displayStatsWidget');
+        $pageData['cmdDisplayParameters'] = $cmd->getDisplay('parameters');
 
         $cmdWidgetDashboard = CmdManager::availableWidget('dashboard');
         $cmdWidgetMobile = CmdManager::availableWidget('mobile');
         if (is_array($cmdWidgetDashboard[$cmd->getType()]) && is_array($cmdWidgetDashboard[$cmd->getType()][$cmd->getSubType()]) && count($cmdWidgetDashboard[$cmd->getType()][$cmd->getSubType()]) > 0) {
-            $pageContent['cmdWidgetDashboard'] = $cmdWidgetDashboard[$cmd->getType()][$cmd->getSubType()];
+            $pageData['cmdWidgetDashboard'] = $cmdWidgetDashboard[$cmd->getType()][$cmd->getSubType()];
         }
         if (is_array($cmdWidgetMobile[$cmd->getType()]) && is_array($cmdWidgetMobile[$cmd->getType()][$cmd->getSubType()]) && count($cmdWidgetMobile[$cmd->getType()][$cmd->getSubType()]) > 0) {
-            $pageContent['cmdWidgetMobile'] = $cmdWidgetMobile[$cmd->getType()][$cmd->getSubType()];
+            $pageData['cmdWidgetMobile'] = $cmdWidgetMobile[$cmd->getType()][$cmd->getSubType()];
         }
 
-        $pageContent['alertsConfig'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
-        $pageContent['eqLogicDisplayType'] = NextDomHelper::getConfiguration('eqLogic:displayType');
-        $pageContent['cmd'] = $cmd;
+        $pageData['alertsConfig'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
+        $pageData['eqLogicDisplayType'] = NextDomHelper::getConfiguration('eqLogic:displayType');
+        $pageData['cmd'] = $cmd;
 
         Utils::sendVarsToJS([
             'cmdInfo' => $cmdInfo,
             'cmdInfoSearchString' => urlencode(str_replace('#', '', $cmd->getHumanName()))
         ]);
 
-        return $render->get('/modals/cmd.configure.html.twig', $pageContent);
+        return $render->get('/modals/cmd.configure.html.twig', $pageData);
     }
 
 }

@@ -18,7 +18,7 @@
 
 namespace NextDom\Enums;
 
-class PluginManagerCronEnum extends Enum
+class PluginManagerCron extends Enum
 {
 
     const CRON = 'cron';

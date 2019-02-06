@@ -24,18 +24,10 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 
 class PlanHeaderConfigure extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render plan header configure modal
      *
@@ -50,18 +42,19 @@ class PlanHeaderConfigure extends BaseAbstractModal
     public function get(Render $render): string
     {
 
+
         $planHeader = \planHeader::byId(Utils::init('planHeader_id'));
         if (!is_object($planHeader)) {
             throw new CoreException('Impossible de trouver le plan');
         }
-        $pageContent = [];
-        $pageContent['plansList'] = $planHeader->getPlan();
+        $pageData = [];
+        $pageData['plansList'] = $planHeader->getPlan();
         Utils::sendVarsToJS([
             'id' => $planHeader->getId(),
             'planHeader' => Utils::o2a($planHeader)
         ]);
 
-        return $render->get('/modals/planHeader.configure.html.twig', $pageContent);
+        return $render->get('/modals/planHeader.configure.html.twig', $pageData);
     }
 
 }

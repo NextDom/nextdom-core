@@ -20,7 +20,6 @@
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
 use NextDom\Managers\ScenarioExpressionManager;
-use NextDom\Enums\ScenarioExpressionEnum;
 
 class scenarioExpression extends \NextDom\Model\Entity\ScenarioExpression
 {

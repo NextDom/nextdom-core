@@ -23,21 +23,13 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 
 class SummaryController extends BaseController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /** Render summary page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of summary page
      *
@@ -45,13 +37,12 @@ class SummaryController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/summary.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/summary.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
-
-        return $render->get('/desktop/params/summary.html.twig', $pageContent);
+        return $render->get('/desktop/params/summary.html.twig', $pageData);
     }
 
 

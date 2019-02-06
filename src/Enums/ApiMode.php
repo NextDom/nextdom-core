@@ -1,5 +1,4 @@
 <?php
-
 /* This file is part of NextDom.
  *
  * NextDom is free software: you can redistribute it and/or modify
@@ -18,10 +17,10 @@
 
 namespace NextDom\Enums;
 
-class ScenarioExpressionTypeEnum extends Enum
+class ApiMode extends Enum
 {
-    const ELEMENT = 'element';
-    const ACTION = 'action';
-    const CODE = 'code';
-    const CONDITION = 'condition';
+    const API_ENABLE = 'enable';
+    const API_DISABLE = 'disable';
+    const API_WHITEIP = 'whiteip';
+    const API_LOCALHOST = 'cronDaily';
 }

@@ -16,52 +16,52 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 //use NextDom;
-require_once(__DIR__.'/vendor/autoload.php');
-require_once(__DIR__.'/core/php/utils.inc.php');
+require_once(__DIR__ . '/vendor/autoload.php');
+require_once(__DIR__ . '/core/php/utils.inc.php');
 
-use NextDom\Helpers\Status;
+use NextDom\Enums\GetParams;
+use NextDom\Enums\ViewType;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Client;
 use NextDom\Helpers\Router;
 use NextDom\Helpers\Utils;
-//use Symfony\Component\Debug\Debug;
-
-//Debug::enable();
 
 try {
-    // Test si l'installation doit être lancée
+    // Test if NextDom is installed. Redirection to setup if necessary
     if (!file_exists('/var/lib/nextdom/config/common.config.php')) {
         header("location: install/setup.php");
     }
-    // Paramètre v = Type de vue (mobile = m, desktop = d)
 
-    // Redirection initiale
-    $viewType = Utils::init('v', '');
+    // Test if the type of view is initialized ($_GET['v'])
+    // v == 'd' => desktop
+    // v == 'm' => mobile
+    $viewType = Utils::init(GetParams::VIEW_TYPE, '');
     if ($viewType === '') {
-        $getParams = 'd';
+        $getParams = ViewType::DESKTOP_VIEW;
         if (Client::isMobile()) {
-            $getParams = 'm';
+            $getParams = ViewType::MOBILE_VIEW;
         }
+        // Add all others GET parameters
         foreach ($_GET AS $var => $value) {
             $getParams .= '&' . $var . '=' . $value;
         }
-        // Réécrit l'url et recharge la page pour le bon device
-        $url = 'index.php?v=' . trim($getParams, '&');
+        // Rewrite URL and reload with the good URL
+        $url = 'index.php?' . GetParams::VIEW_TYPE . '=' . trim($getParams, '&');
         Utils::redirect($url);
         die();
     }
-    else {
-        require_once __DIR__ . "/core/php/core.inc.php";
-        Status::initRescueModeState();
-        // Affichage
-        $router = new Router($viewType);
-        $result = $router->show();
-        if (!$result) {
-            throw new \Exception('Erreur : veuillez contacter l\'administrateur');
-        }
+
+    // Show the content
+    require_once __DIR__ . "/core/php/core.inc.php";
+    // Start routing
+    $router = new Router($viewType);
+    if (!$router->show()) {
+        throw new CoreException(__('Erreur : veuillez contacter l\'administrateur'));
     }
+
 } catch (\Exception $e) {
     echo $e->getMessage();
-    echo $e->getFile().' - Line '.$e->getLine();
+    echo $e->getFile() . ' - Line ' . $e->getLine();
 }
 
  

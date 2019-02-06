@@ -24,20 +24,12 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\ScenarioManager;
 
 class UserRights extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render user rights modal
      *
@@ -51,7 +43,6 @@ class UserRights extends BaseAbstractModal
      */
     public function get(Render $render): string
     {
-
         $userId = Utils::init('id');
         $user = \user::byId($userId);
 
@@ -60,16 +51,16 @@ class UserRights extends BaseAbstractModal
         }
         Utils::sendVarToJs('user_rights', Utils::o2a($user));
 
-        $pageContent = [];
+        $pageData = [];
 
-        $pageContent['restrictedUser'] = true;
+        $pageData['restrictedUser'] = true;
         if ($user->getProfils() != 'restrict') {
-            $pageContent['restrictedUser'] = false;
+            $pageData['restrictedUser'] = false;
         }
-        $pageContent['eqLogics'] = EqLogicManager::all();
-        $pageContent['scenarios'] = ScenarioManager::all();
+        $pageData['eqLogics'] = EqLogicManager::all();
+        $pageData['scenarios'] = ScenarioManager::all();
 
-        return $render->get('/modals/user.rights.html.twig', $pageContent);
+        return $render->get('/modals/user.rights.html.twig', $pageData);
     }
 
 }

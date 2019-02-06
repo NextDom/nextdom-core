@@ -25,19 +25,12 @@ namespace NextDom\Controller\Modal;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\EqLogicManager;
 
 
 class EqLogicConfigure extends BaseAbstractModal
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render eqLogic management modal
      *
@@ -53,6 +46,7 @@ class EqLogicConfigure extends BaseAbstractModal
     public function get(Render $render): string
     {
 
+
         $eqLogicId = Utils::init('eqLogic_id');
         $eqLogic = EqLogicManager::byId($eqLogicId);
         if (!is_object($eqLogic)) {
@@ -63,66 +57,66 @@ class EqLogicConfigure extends BaseAbstractModal
             ['eqLogicInfo' => Utils::o2a($eqLogic),
                 'eqLogicInfoSearchString' => urlencode(str_replace('#', '', $eqLogic->getHumanName()))]);
 
-        $pageContent = [];
-        $pageContent['widgetPossibilityCustom'] = $eqLogic->widgetPossibility('custom');
-        $pageContent['widgetPossibilityCustomLayout'] = $eqLogic->widgetPossibility('custom::layout');
-        $pageContent['widgetPossibilityCustomVisibility'] = $eqLogic->widgetPossibility('custom::visibility');
-        $pageContent['widgetPossibilityCustomDisplayName'] = $eqLogic->widgetPossibility('custom::displayName');
-        $pageContent['widgetPossibilityCustomDisplayObjectName'] = $eqLogic->widgetPossibility('custom::displayObjectName');
-        $pageContent['widgetPossibilityCustomBackgroundColor'] = $eqLogic->widgetPossibility('custom::background-color');
-        $pageContent['widgetPossibilityCustomBackgroundOpacity'] = $eqLogic->widgetPossibility('custom::background-opacity');
-        $pageContent['widgetPossibilityCustomTextColor'] = $eqLogic->widgetPossibility('custom::text-color');
-        $pageContent['widgetPossibilityCustomBorder'] = $eqLogic->widgetPossibility('custom::border');
-        $pageContent['widgetPossibilityCustomBorderRadius'] = $eqLogic->widgetPossibility('custom::border-radius');
-        $pageContent['widgetPossibilityCustomOptionalParameters'] = $eqLogic->widgetPossibility('custom::optionalParameters');
+        $pageData = [];
+        $pageData['widgetPossibilityCustom'] = $eqLogic->widgetPossibility('custom');
+        $pageData['widgetPossibilityCustomLayout'] = $eqLogic->widgetPossibility('custom::layout');
+        $pageData['widgetPossibilityCustomVisibility'] = $eqLogic->widgetPossibility('custom::visibility');
+        $pageData['widgetPossibilityCustomDisplayName'] = $eqLogic->widgetPossibility('custom::displayName');
+        $pageData['widgetPossibilityCustomDisplayObjectName'] = $eqLogic->widgetPossibility('custom::displayObjectName');
+        $pageData['widgetPossibilityCustomBackgroundColor'] = $eqLogic->widgetPossibility('custom::background-color');
+        $pageData['widgetPossibilityCustomBackgroundOpacity'] = $eqLogic->widgetPossibility('custom::background-opacity');
+        $pageData['widgetPossibilityCustomTextColor'] = $eqLogic->widgetPossibility('custom::text-color');
+        $pageData['widgetPossibilityCustomBorder'] = $eqLogic->widgetPossibility('custom::border');
+        $pageData['widgetPossibilityCustomBorderRadius'] = $eqLogic->widgetPossibility('custom::border-radius');
+        $pageData['widgetPossibilityCustomOptionalParameters'] = $eqLogic->widgetPossibility('custom::optionalParameters');
 
-        $pageContent['statusNumberTryWithoutSuccess'] = $eqLogic->getStatus('numberTryWithoutSuccess', 0);
-        $pageContent['statusLastCommunication'] = $eqLogic->getStatus('lastCommunication');
-        $pageContent['cmdsList'] = $eqLogic->getCmd();
-        $pageContent['eqLogicConfigurationDisplayType'] = [];
-        $pageContent['eqLogicDisplayParameters'] = $eqLogic->getDisplay('parameters');
+        $pageData['statusNumberTryWithoutSuccess'] = $eqLogic->getStatus('numberTryWithoutSuccess', 0);
+        $pageData['statusLastCommunication'] = $eqLogic->getStatus('lastCommunication');
+        $pageData['cmdsList'] = $eqLogic->getCmd();
+        $pageData['eqLogicConfigurationDisplayType'] = [];
+        $pageData['eqLogicDisplayParameters'] = $eqLogic->getDisplay('parameters');
 
         foreach (NextDomHelper::getConfiguration('eqLogic:displayType') as $key => $value) {
             $eqLogicDisplayType = [];
             $eqLogicDisplayType['key'] = $key;
             $eqLogicDisplayType['name'] = $value['name'];
             $eqLogicDisplayType['customVisibility'] = false;
-            if ($pageContent['widgetPossibilityCustomVisibility'] && $eqLogic->widgetPossibility('custom::visibility::' . $key)) {
+            if ($pageData['widgetPossibilityCustomVisibility'] && $eqLogic->widgetPossibility('custom::visibility::' . $key)) {
                 $eqLogicDisplayType['customVisibility'] = true;
             }
             $eqLogicDisplayType['customDisplayName'] = false;
-            if ($pageContent['widgetPossibilityCustomDisplayName'] && $eqLogic->widgetPossibility('custom::displayName::' . $key)) {
+            if ($pageData['widgetPossibilityCustomDisplayName'] && $eqLogic->widgetPossibility('custom::displayName::' . $key)) {
                 $eqLogicDisplayType['customDisplayName'] = true;
             }
             $eqLogicDisplayType['customDisplayObjectName'] = false;
-            if ($pageContent['widgetPossibilityCustomDisplayObjectName'] && $eqLogic->widgetPossibility('custom::displayObjectName::' . $key)) {
+            if ($pageData['widgetPossibilityCustomDisplayObjectName'] && $eqLogic->widgetPossibility('custom::displayObjectName::' . $key)) {
                 $eqLogicDisplayType['customDisplayObjectName'] = true;
             }
             $eqLogicDisplayType['customBackgroundColor'] = false;
-            if ($pageContent['widgetPossibilityCustomBackgroundColor'] && $eqLogic->widgetPossibility('custom::background-color::' . $key)) {
+            if ($pageData['widgetPossibilityCustomBackgroundColor'] && $eqLogic->widgetPossibility('custom::background-color::' . $key)) {
                 $eqLogicDisplayType['backgroundColor'] = $eqLogic->getBackgroundColor($key);
                 $eqLogicDisplayType['customBackgroundColor'] = true;
             }
             $eqLogicDisplayType['customBackgroundOpacity'] = false;
-            if ($pageContent['widgetPossibilityCustomBackgroundOpacity'] && $eqLogic->widgetPossibility('custom::background-opacity::' . $key)) {
+            if ($pageData['widgetPossibilityCustomBackgroundOpacity'] && $eqLogic->widgetPossibility('custom::background-opacity::' . $key)) {
                 $eqLogicDisplayType['customBackgroundOpacity'] = true;
             }
             $eqLogicDisplayType['customTextColor'] = false;
-            if ($pageContent['widgetPossibilityCustomTextColor'] && $eqLogic->widgetPossibility('custom::text-color::' . $key)) {
+            if ($pageData['widgetPossibilityCustomTextColor'] && $eqLogic->widgetPossibility('custom::text-color::' . $key)) {
                 $eqLogicDisplayType['customTextColor'] = true;
             }
             $eqLogicDisplayType['customBorder'] = false;
-            if ($pageContent['widgetPossibilityCustomBorder'] && $eqLogic->widgetPossibility('custom::border::' . $key)) {
+            if ($pageData['widgetPossibilityCustomBorder'] && $eqLogic->widgetPossibility('custom::border::' . $key)) {
                 $eqLogicDisplayType['customBorder'] = true;
             }
             $eqLogicDisplayType['customBorderRadius'] = false;
-            if ($pageContent['widgetPossibilityCustomBorderRadius'] && $eqLogic->widgetPossibility('custom::border-radius::' . $key)) {
+            if ($pageData['widgetPossibilityCustomBorderRadius'] && $eqLogic->widgetPossibility('custom::border-radius::' . $key)) {
                 $eqLogicDisplayType['customBorderRadius'] = true;
             }
-            array_push($pageContent['eqLogicConfigurationDisplayType'], $eqLogicDisplayType);
+            array_push($pageData['eqLogicConfigurationDisplayType'], $eqLogicDisplayType);
         }
         if (is_array($eqLogic->widgetPossibility('parameters'))) {
-            $pageContent['parameters'] = [];
+            $pageData['parameters'] = [];
             foreach ($eqLogic->widgetPossibility('parameters') as $parameterKey => $parameterData) {
                 $param = [];
                 $param['key'] = $parameterKey;
@@ -152,27 +146,27 @@ class EqLogicConfigure extends BaseAbstractModal
                     $param['allowTransparent'] = $parameterData['allow_transparent'];
                 }
 
-                array_push($pageContent['parameters'], $param);
+                array_push($pageData['parameters'], $param);
             }
         }
 
-        $pageContent['dashboardCmd'] = array();
+        $pageData['dashboardCmd'] = array();
 
         foreach ($eqLogic->getCmd(null, null, true) as $cmd) {
             $line = $eqLogic->getDisplay('layout::dashboard::table::cmd::' . $cmd->getId() . '::line', 1);
             $column = $eqLogic->getDisplay('layout::dashboard::table::cmd::' . $cmd->getId() . '::column', 1);
-            if (!isset($pageContent['dashboardCmd'][$line])) {
-                $pageContent['dashboardCmd'][$line] = array();
+            if (!isset($pageData['dashboardCmd'][$line])) {
+                $pageData['dashboardCmd'][$line] = array();
             }
-            if (!isset($pageContent['dashboardCmd'][$line][$column])) {
-                $pageContent['dashboardCmd'][$line][$column] = array();
+            if (!isset($pageData['dashboardCmd'][$line][$column])) {
+                $pageData['dashboardCmd'][$line][$column] = array();
             }
-            $pageContent['dashboardCmd'][$line][$column][] = $cmd;
+            $pageData['dashboardCmd'][$line][$column][] = $cmd;
         }
-        $pageContent['displayDashboardNbLines'] = $eqLogic->getDisplay('layout::dashboard::table::nbLine', 1);
-        $pageContent['displayDashboardNbColumns'] = $eqLogic->getDisplay('layout::dashboard::table::nbColumn', 1);
+        $pageData['displayDashboardNbLines'] = $eqLogic->getDisplay('layout::dashboard::table::nbLine', 1);
+        $pageData['displayDashboardNbColumns'] = $eqLogic->getDisplay('layout::dashboard::table::nbColumn', 1);
 
-        return $render->get('/modals/eqLogic.configure.html.twig', $pageContent);
+        return $render->get('/modals/eqLogic.configure.html.twig', $pageData);
     }
 
 }

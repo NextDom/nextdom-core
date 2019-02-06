@@ -23,20 +23,12 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
 
 class ObjectSummary extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render object summary modal
      *
@@ -49,20 +41,21 @@ class ObjectSummary extends BaseAbstractModal
      */
     public function get(Render $render): string
     {
-        $pageContent = [];
-        $pageContent['objectsTree'] = JeeObjectManager::buildTree(null, false);
-        $pageContent['configObjectSummary'] = [];
-        $pageContent['summaryDesktopHidden'] = [];
-        $pageContent['summaryMobileHidden'] = [];
 
-        foreach ($pageContent['objectsTree'] as $jeeObject) {
+        $pageData = [];
+        $pageData['objectsTree'] = JeeObjectManager::buildTree(null, false);
+        $pageData['configObjectSummary'] = [];
+        $pageData['summaryDesktopHidden'] = [];
+        $pageData['summaryMobileHidden'] = [];
+
+        foreach ($pageData['objectsTree'] as $jeeObject) {
             $jeeObjectId = $jeeObject->getId();
             foreach (ConfigManager::byKey('object:summary') as $key => $value) {
                 $title = '';
                 if (!isset($jeeObject->getConfiguration('summary')[$key]) || !is_array($jeeObject->getConfiguration('summary')[$key]) || count($jeeObject->getConfiguration('summary')[$key]) == 0) {
                     continue;
                 }
-                $pageContent['configObjectSummary'][$jeeObjectId] = [];
+                $pageData['configObjectSummary'][$jeeObjectId] = [];
                 foreach ($jeeObject->getConfiguration('summary')[$key] as $summary) {
                     if (CmdManager::byId(str_replace('#', '', $summary['cmd']))) {
                         $title .= '&#10;' . CmdManager::byId(str_replace('#', '', $summary['cmd']))->getHumanName();
@@ -76,18 +69,18 @@ class ObjectSummary extends BaseAbstractModal
                     $summary['title'] = $value['name'] . $title;
                     $summary['icon'] = $value['icon'];
                     $summary['count'] = count($jeeObject->getConfiguration('summary')[$key]);
-                    $pageContent['configObjectSummary'][$jeeObjectId][] = $summary;
+                    $pageData['configObjectSummary'][$jeeObjectId][] = $summary;
                 }
                 if ($jeeObject->getConfiguration('summary::hide::desktop::' . $key) == 1) {
-                    $pageContent['summaryDesktopHidden'][] = ['name' => $value['name'], 'icon' => $value['icon']];
+                    $pageData['summaryDesktopHidden'][] = ['name' => $value['name'], 'icon' => $value['icon']];
                 }
                 if ($jeeObject->getConfiguration('summary::hide::mobile::' . $key) == 1) {
-                    $pageContent['summaryMobileHidden'][] = ['name' => $value['name'], 'icon' => $value['icon']];
+                    $pageData['summaryMobileHidden'][] = ['name' => $value['name'], 'icon' => $value['icon']];
                 }
             }
         }
 
-        return $render->get('/modals/object.summary.html.twig', $pageContent);
+        return $render->get('/modals/object.summary.html.twig', $pageData);
     }
 
 }

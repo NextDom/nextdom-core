@@ -24,21 +24,14 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 
 class EditorController extends BaseController
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render editor page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of editor page
      *
@@ -46,22 +39,21 @@ class EditorController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
+        $pageData['JS_VARS']['rootPath'] = NEXTDOM_ROOT;
 
-        $pageContent['JS_VARS']['rootPath'] = NEXTDOM_ROOT;
-
-        $pageContent['editorFolders'] = [];
-        $pageContent['editorRootPath'] = NEXTDOM_ROOT;
+        $pageData['editorFolders'] = [];
+        $pageData['editorRootPath'] = NEXTDOM_ROOT;
 
         $lsNextDomRoot = FileSystemHelper::ls(NEXTDOM_ROOT, '*', false, array('folders'));
         foreach ($lsNextDomRoot as $folder) {
-            $pageContent['editorFolders'][] = $folder;
+            $pageData['editorFolders'][] = $folder;
         }
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/editor.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/editor.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
 
-        return $render->get('/desktop/editor.html.twig', $pageContent);
+        return $render->get('/desktop/editor.html.twig', $pageData);
     }
 }

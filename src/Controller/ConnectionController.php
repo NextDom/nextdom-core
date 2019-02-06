@@ -20,24 +20,29 @@
  * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
  */
 
-namespace NextDom\Controller\Modal;
+namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
 
-class ScenarioSummary extends BaseAbstractModal
+class ConnectionController extends BaseController
 {
     /**
-     * Render scenario summary modal
      *
-     * @param Render $render Render engine
-     *
+     * @param \NextDom\Helpers\Render $render
+     * @param array $pageData
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public function get(Render $render, &$pageData): string
     {
-        return $render->get('/modals/scenario.summary.html.twig');
+        $pageData['JS_END_POOL'] = [];
+        $pageData['TITLE'] = 'Connexion';
+        $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/connection.js';
+
+        return $render->get('desktop/connection.html.twig', $pageData);
     }
+
 }

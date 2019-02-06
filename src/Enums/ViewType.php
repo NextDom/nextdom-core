@@ -1,5 +1,4 @@
 <?php
-
 /* This file is part of NextDom.
  *
  * NextDom is free software: you can redistribute it and/or modify
@@ -18,10 +17,8 @@
 
 namespace NextDom\Enums;
 
-class DaemonStateEnum extends Enum
+class ViewType extends Enum
 {
-
-    const NOT_OK = 'nok';
-    const IN_PROGRESS = 'in_progress';
-
+    const DESKTOP_VIEW = 'd';
+    const MOBILE_VIEW = 'm';
 }

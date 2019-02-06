@@ -33,8 +33,8 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Enums\DaemonStateEnum;
-use NextDom\Enums\PluginManagerCronEnum;
+use NextDom\Enums\DaemonState;
+use NextDom\Enums\PluginManagerCron;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 
@@ -238,7 +238,7 @@ class PluginManager
      */
     public static function cron()
     {
-        self::startCronTask(PluginManagerCronEnum::CRON);
+        self::startCronTask(PluginManagerCron::CRON);
     }
 
     /**
@@ -248,7 +248,7 @@ class PluginManager
      */
     public static function cron5()
     {
-        self::startCronTask(PluginManagerCronEnum::CRON_5);
+        self::startCronTask(PluginManagerCron::CRON_5);
     }
 
     /**
@@ -258,7 +258,7 @@ class PluginManager
      */
     public static function cron15()
     {
-        self::startCronTask(PluginManagerCronEnum::CRON_15);
+        self::startCronTask(PluginManagerCron::CRON_15);
     }
 
     /**
@@ -268,7 +268,7 @@ class PluginManager
      */
     public static function cron30()
     {
-        self::startCronTask(PluginManagerCronEnum::CRON_30);
+        self::startCronTask(PluginManagerCron::CRON_30);
     }
 
     /**
@@ -278,7 +278,7 @@ class PluginManager
      */
     public static function cronDaily()
     {
-        self::startCronTask(PluginManagerCronEnum::CRON_DAILY);
+        self::startCronTask(PluginManagerCron::CRON_DAILY);
     }
 
     /**
@@ -288,7 +288,7 @@ class PluginManager
      */
     public static function cronHourly()
     {
-        self::startCronTask(PluginManagerCronEnum::CRON_HOURLY);
+        self::startCronTask(PluginManagerCron::CRON_HOURLY);
     }
 
     /**
@@ -373,13 +373,13 @@ class PluginManager
                 continue;
             }
             $dependancy_info = $plugin->dependancy_info();
-            if ($dependancy_info['state'] == DaemonStateEnum::NOT_OK) {
+            if ($dependancy_info['state'] == DaemonState::NOT_OK) {
                 try {
                     $plugin->dependancy_install();
                 } catch (\Exception $e) {
 
                 }
-            } elseif ($dependancy_info['state'] == DaemonStateEnum::IN_PROGRESS && $dependancy_info['duration'] > $plugin->getMaxDependancyInstallTime()) {
+            } elseif ($dependancy_info['state'] == DaemonState::IN_PROGRESS && $dependancy_info['duration'] > $plugin->getMaxDependancyInstallTime()) {
                 if (isset($dependancy_info['progress_file']) && file_exists($dependancy_info['progress_file'])) {
                     shell_exec('rm ' . $dependancy_info['progress_file']);
                 }

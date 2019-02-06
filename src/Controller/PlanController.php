@@ -23,22 +23,15 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 
 class PlanController extends BaseController
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render plan page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of plan page
      *
@@ -46,16 +39,15 @@ class PlanController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
-
         $planHeader = null;
         $planHeaders = \planHeader::all();
         $planHeadersSendToJS = array();
         foreach ($planHeaders as $planHeader_select) {
             $planHeadersSendToJS[] = array('id' => $planHeader_select->getId(), 'name' => $planHeader_select->getName());
         }
-        $pageContent['JS_VARS_RAW']['planHeader'] = Utils::getArrayToJQueryJson($planHeadersSendToJS);
+        $pageData['JS_VARS_RAW']['planHeader'] = Utils::getArrayToJQueryJson($planHeadersSendToJS);
         if (Utils::init('plan_id') == '') {
             foreach ($planHeaders as $planHeader_select) {
                 if ($planHeader_select->getId() == $_SESSION['user']->getOptions('defaultDashboardPlan')) {
@@ -75,17 +67,17 @@ class PlanController extends BaseController
             $planHeader = $planHeaders[0];
         }
         if (!is_object($planHeader)) {
-            $pageContent['planHeaderError'] = true;
-            $pageContent['JS_VARS']['planHeader_id'] = -1;
+            $pageData['planHeaderError'] = true;
+            $pageData['JS_VARS']['planHeader_id'] = -1;
         } else {
-            $pageContent['planHeaderError'] = false;
-            $pageContent['JS_VARS']['planHeader_id'] = $planHeader->getId();
+            $pageData['planHeaderError'] = false;
+            $pageData['JS_VARS']['planHeader_id'] = $planHeader->getId();
         }
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/plan.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/plan.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/plan.html.twig', $pageContent);
+        return $render->get('/desktop/plan.html.twig', $pageData);
     }
 
 }

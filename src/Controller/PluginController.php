@@ -24,27 +24,20 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PluginManager;
 
 class PluginController extends BaseController
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render for all plugins pages
      *
      * @param Render $render Render engine (unused)
-     * @param array $pageContent Page data (unused)
+     * @param array $pageData Page data (unused)
      * @return string Plugin page
      * @throws \Exception
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
         $plugin = PluginManager::byId(Utils::init('m'));
         $page = Utils::init('p');

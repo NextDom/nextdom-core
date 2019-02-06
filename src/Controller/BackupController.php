@@ -23,24 +23,16 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\AjaxManager;
 use NextDom\Managers\UpdateManager;
 
 class BackupController extends BaseController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render backup page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of backup page
      *
@@ -48,16 +40,16 @@ class BackupController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
 
-        $pageContent['JS_VARS_RAW']['REPO_LIST'] = '[]';
-        $pageContent['backupAjaxToken'] = AjaxManager::getToken();
-        $pageContent['backupReposList'] = UpdateManager::listRepo();
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/backup.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_VARS_RAW']['REPO_LIST'] = '[]';
+        $pageData['backupAjaxToken'] = AjaxManager::getToken();
+        $pageData['backupReposList'] = UpdateManager::listRepo();
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/backup.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/tools/backup.html.twig', $pageContent);
+        return $render->get('/desktop/tools/backup.html.twig', $pageData);
     }
 
 }

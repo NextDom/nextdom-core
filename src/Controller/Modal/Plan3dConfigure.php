@@ -23,18 +23,10 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 
 class Plan3dConfigure extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render plan 3d configure modal
      *
@@ -47,7 +39,8 @@ class Plan3dConfigure extends BaseAbstractModal
      */
     public function get(Render $render): string
     {
-        $pageContent = [];
+
+        $pageData = [];
         $plan3d = \plan3d::byName3dHeaderId(init('name'), Utils::init('plan3dHeader_id'));
         if (!is_object($plan3d)) {
             $plan3d = (new \plan3d())
@@ -57,6 +50,6 @@ class Plan3dConfigure extends BaseAbstractModal
         }
         Utils::sendVarToJS('id', $plan3d->getId());
 
-        return $render->get('/modals/plan3d.configure.html.twig', $pageContent);
+        return $render->get('/modals/plan3d.configure.html.twig', $pageData);
     }
 }

@@ -33,17 +33,10 @@ use NextDom\Managers\UserManager;
 
 class UpdateAdminController extends BaseController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /** Render updateAdmin page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of update_admin page
      *
@@ -51,28 +44,27 @@ class UpdateAdminController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
-
         global $CONFIG;
         global $NEXTDOM_INTERNAL_CONFIG;
 
-        $pageContent['adminReposList'] = UpdateManager::listRepo();
+        $pageData['adminReposList'] = UpdateManager::listRepo();
         $keys = array('market::allowDNS', 'ldap::enable');
-        foreach ($pageContent['adminReposList'] as $key => $value) {
+        foreach ($pageData['adminReposList'] as $key => $value) {
             $keys[] = $key . '::enable';
         }
-        $pageContent['adminConfigs'] = ConfigManager::byKeys($keys);
-        $pageContent['JS_VARS']['ldapEnable'] = $pageContent['adminConfigs']['ldap::enable'];
-        $pageContent['adminIsBan'] = UserManager::isBanned();
-        $pageContent['adminHardwareName'] = NextDomHelper::getHardwareName();
-        $pageContent['adminHardwareKey'] = NextDomHelper::getHardwareKey();
-        $pageContent['adminLastKnowDate'] = CacheManager::byKey('hour')->getValue();
-        $pageContent['adminIsRescueMode'] = Status::isRescueMode();
-        $pageContent['key'] = Status::isRescueMode();
+        $pageData['adminConfigs'] = ConfigManager::byKeys($keys);
+        $pageData['JS_VARS']['ldapEnable'] = $pageData['adminConfigs']['ldap::enable'];
+        $pageData['adminIsBan'] = UserManager::isBanned();
+        $pageData['adminHardwareName'] = NextDomHelper::getHardwareName();
+        $pageData['adminHardwareKey'] = NextDomHelper::getHardwareKey();
+        $pageData['adminLastKnowDate'] = CacheManager::byKey('hour')->getValue();
+        $pageData['adminIsRescueMode'] = Status::isRescueMode();
+        $pageData['key'] = Status::isRescueMode();
 
-        if (!$pageContent['adminIsRescueMode']) {
-            $pageContent['adminPluginsList'] = [];
+        if (!$pageData['adminIsRescueMode']) {
+            $pageData['adminPluginsList'] = [];
             $pluginsList = PluginManager::listPlugin(true);
             foreach ($pluginsList as $plugin) {
                 $pluginApi = ConfigManager::byKey('api', $plugin->getId());
@@ -81,14 +73,14 @@ class UpdateAdminController extends BaseController
                     $pluginData = [];
                     $pluginData['api'] = $pluginApi;
                     $pluginData['plugin'] = $plugin;
-                    $pageContent['adminPluginsList'][] = $pluginData;
+                    $pageData['adminPluginsList'][] = $pluginData;
                 }
             }
         }
-        $pageContent['adminDbConfig'] = $CONFIG['db'];
-        $pageContent['adminUseLdap'] = function_exists('ldap_connect');
+        $pageData['adminDbConfig'] = $CONFIG['db'];
+        $pageData['adminUseLdap'] = function_exists('ldap_connect');
 
-        $pageContent['adminBannedIp'] = [];
+        $pageData['adminBannedIp'] = [];
         $cache = CacheManager::byKey('security::banip');
         $values = json_decode($cache->getValue('[]'), true);
 
@@ -97,25 +89,25 @@ class UpdateAdminController extends BaseController
                 $bannedData = [];
                 $bannedData['ip'] = $value['ip'];
                 $bannedData['startDate'] = date('Y-m-d H:i:s', $value['datetime']);
-                if ($pageContent['adminConfigs']['security::bantime'] < 0) {
+                if ($pageData['adminConfigs']['security::bantime'] < 0) {
                     $bannedData['endDate'] = \__('Jamais');
                 } else {
-                    $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageContent['adminConfigs']['security::bantime']);
+                    $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageData['adminConfigs']['security::bantime']);
                 }
-                $pageContent['adminBannedIp'][] = $bannedData;
+                $pageData['adminBannedIp'][] = $bannedData;
             }
         }
 
-        $pageContent['adminStats'] = CacheManager::stats();
-        $pageContent['adminCacheFolder'] = CacheManager::getFolder();
-        $pageContent['adminMemCachedExists'] = class_exists('memcached');
-        $pageContent['adminRedisExists'] = class_exists('redis');
-        $pageContent['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
-        $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
+        $pageData['adminStats'] = CacheManager::stats();
+        $pageData['adminCacheFolder'] = CacheManager::getFolder();
+        $pageData['adminMemCachedExists'] = class_exists('memcached');
+        $pageData['adminRedisExists'] = class_exists('redis');
+        $pageData['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
+        $pageData['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/admin/update_admin.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/update_admin.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/admin/update_admin.html.twig', $pageContent);
+        return $render->get('/desktop/admin/update_admin.html.twig', $pageData);
     }
 }

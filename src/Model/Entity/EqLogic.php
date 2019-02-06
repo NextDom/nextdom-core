@@ -17,7 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
-use NextDom\Enums\EqLogicViewTypeEnum;
+use NextDom\Enums\EqLogicViewType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\FileSystemHelper;
@@ -811,10 +811,10 @@ class EqLogic
      * @throws CoreException
      * @throws \ReflectionException
      */
-    public function preToHtml($viewType = EqLogicViewTypeEnum::DASHBOARD, $_default = array(), $_noCache = false)
+    public function preToHtml($viewType = EqLogicViewType::DASHBOARD, $_default = array(), $_noCache = false)
     {
         // Check if view type is valid
-        if (!EqLogicViewTypeEnum::exists($viewType)) {
+        if (!EqLogicViewType::exists($viewType)) {
             throw new CoreException(__('La version demandée ne peut pas être vide (mobile, dashboard, dview ou scénario)'));
         }
         if (!$this->hasRight('r')) {
@@ -993,7 +993,7 @@ class EqLogic
      * @throws CoreException
      * @throws \ReflectionException
      */
-    public function toHtml($viewType = EqLogicViewTypeEnum::DASHBOARD)
+    public function toHtml($viewType = EqLogicViewType::DASHBOARD)
     {
         $replace = $this->preToHtml($viewType);
         if (!is_array($replace)) {

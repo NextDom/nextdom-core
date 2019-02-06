@@ -24,24 +24,17 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 
 class PluginListController extends BaseController
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render plugin page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of plugin page
      *
@@ -49,23 +42,23 @@ class PluginListController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/plugin.js';
-        $pageContent['JS_VARS']['sel_plugin_id'] = Utils::init('id', '-1');
-        $pageContent['pluginsList'] = PluginManager::listPlugin();
-        $pageContent['pluginReposList'] = [];
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/plugin.js';
+        $pageData['JS_VARS']['sel_plugin_id'] = Utils::init('id', '-1');
+        $pageData['pluginsList'] = PluginManager::listPlugin();
+        $pageData['pluginReposList'] = [];
 
         $updateManagerListRepo = UpdateManager::listRepo();
         foreach ($updateManagerListRepo as $repoCode => $repoData) {
             if ($repoData['enable'] && isset($repoData['scope']['hasStore']) && $repoData['scope']['hasStore']) {
-                $pageContent['pluginReposList'][$repoCode] = $repoData;
+                $pageData['pluginReposList'][$repoCode] = $repoData;
             }
         }
-        $pageContent['pluginInactiveOpacity'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['pluginInactiveOpacity'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/plugin.html.twig', $pageContent);
+        return $render->get('/desktop/plugin.html.twig', $pageData);
     }
 }

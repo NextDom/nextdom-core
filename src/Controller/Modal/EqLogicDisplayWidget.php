@@ -24,20 +24,12 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\EqLogicManager;
 
 class EqLogicDisplayWidget extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      *
      * @param Render $render
@@ -50,7 +42,7 @@ class EqLogicDisplayWidget extends BaseAbstractModal
      */
     public function get(Render $render): string
     {
-        $pageContent = [];
+        $pageData = [];
 
         $eqLogicId = Utils::init('eqLogic_id');
         $eqLogic = EqLogicManager::byId($eqLogicId);
@@ -62,9 +54,9 @@ class EqLogicDisplayWidget extends BaseAbstractModal
         if ($mc->getValue() != '') {
             $mc->remove();
         }
-        $pageContent['eqLogicHtml'] = $eqLogic->toHtml($version);
+        $pageData['eqLogicHtml'] = $eqLogic->toHtml($version);
 
-        return $render->get('/modals/eqLogic.displayWidget.html.twig', $pageContent);
+        return $render->get('/modals/eqLogic.displayWidget.html.twig', $pageData);
     }
 
 }

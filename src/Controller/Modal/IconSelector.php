@@ -24,17 +24,9 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 
 class IconSelector extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render icon selector modal
      *
@@ -47,13 +39,13 @@ class IconSelector extends BaseAbstractModal
      */
     public function get(Render $render): string
     {
-        $pageContent = [];
-        $pageContent['iconsList'] = [];
+        $pageData = [];
+        $pageData['iconsList'] = [];
         foreach (FileSystemHelper::ls('public/icon', '*') as $dir) {
             if (is_dir('public/icon/' . $dir) && file_exists('public/icon/' . $dir . '/style.css')) {
                 $cssContent = file_get_contents('public/icon/' . $dir . '/style.css');
                 $research = strtolower(str_replace('/', '', $dir));
-                $pageContent['iconsList'][] = self::getIconsData($dir, $cssContent, "/\." . $research . "-(.*?):/");
+                $pageData['iconsList'][] = self::getIconsData($dir, $cssContent, "/\." . $research . "-(.*?):/");
             }
         }
         $nodeModules = [
@@ -64,10 +56,10 @@ class IconSelector extends BaseAbstractModal
             echo $nodeModule['name'] . '<br/>';
             if (is_dir($nodeModule['path']) && file_exists($nodeModule['path'] . $nodeModule['cssFile'])) {
                 $cssContent = file_get_contents($nodeModule['path'] . $nodeModule['cssFile']);
-                $pageContent['iconsList'][] = self::getIconsData($nodeModule['path'], $cssContent, "/\." . $nodeModule['cssPrefix'] . "-(.*?):/", $nodeModule['name'], $nodeModule['cssPrefix']);
+                $pageData['iconsList'][] = self::getIconsData($nodeModule['path'], $cssContent, "/\." . $nodeModule['cssPrefix'] . "-(.*?):/", $nodeModule['name'], $nodeModule['cssPrefix']);
             }
         }
-        return $render->get('/modals/icon.selector.html.twig', $pageContent);
+        return $render->get('/modals/icon.selector.html.twig', $pageData);
     }
 
     /**

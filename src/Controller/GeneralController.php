@@ -24,23 +24,14 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 
 class GeneralController extends BaseController
 {
-
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render general page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of general page
      *
@@ -48,18 +39,18 @@ class GeneralController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
 
-        $pageContent['adminHardwareName'] = NextDomHelper::getHardwareName();
-        $pageContent['adminHardwareKey'] = NextDomHelper::getHardwareKey();
+        $pageData['adminHardwareName'] = NextDomHelper::getHardwareName();
+        $pageData['adminHardwareKey'] = NextDomHelper::getHardwareKey();
         $cache = \cache::byKey('hour');
-        $pageContent['adminLastKnowDate'] = $cache->getValue();
+        $pageData['adminLastKnowDate'] = $cache->getValue();
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/general.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/general.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/params/general.html.twig', $pageContent);
+        return $render->get('/desktop/params/general.html.twig', $pageData);
     }
 
 }

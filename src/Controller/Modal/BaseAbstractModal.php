@@ -25,17 +25,11 @@ namespace NextDom\Controller\Modal;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\UpdateManager;
 
 abstract class BaseAbstractModal
 {
-    public function __construct()
-    {
-        Status::initConnectState();
-    }
-
     public abstract function get(Render $render): string;
 
     /**

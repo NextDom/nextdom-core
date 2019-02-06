@@ -24,20 +24,12 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
 
 class ScenarioTemplate extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render scenario template modal
      *
@@ -57,9 +49,9 @@ class ScenarioTemplate extends BaseAbstractModal
             throw new CoreException(__('Scénario non trouvé : ') . $scenarioId);
         }
         Utils::sendVarToJS('scenario_template_id', $scenarioId);
-        $pageContent = [];
-        $pageContent['repoList'] = UpdateManager::listRepo();
+        $pageData = [];
+        $pageData['repoList'] = UpdateManager::listRepo();
 
-        return $render->get('/modals/scenario.template.html.twig', $pageContent);
+        return $render->get('/modals/scenario.template.html.twig', $pageData);
     }
 }

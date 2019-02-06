@@ -31,17 +31,11 @@ use NextDom\Managers\UpdateManager;
 
 class ApiController extends BaseController
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render API page
      *
      * @param Render $render
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of API page
      *
@@ -49,18 +43,18 @@ class ApiController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
 
-        $pageContent['adminReposList'] = UpdateManager::listRepo();
+        $pageData['adminReposList'] = UpdateManager::listRepo();
         $keys = array('api', 'apipro', 'apimarket');
-        foreach ($pageContent['adminReposList'] as $key => $value) {
+        foreach ($pageData['adminReposList'] as $key => $value) {
             $keys[] = $key . '::enable';
         }
-        $pageContent['adminConfigs'] = ConfigManager::byKeys($keys);
-        $pageContent['adminIsRescueMode'] = Status::isRescueMode();
-        if (!$pageContent['adminIsRescueMode']) {
-            $pageContent['adminPluginsList'] = [];
+        $pageData['adminConfigs'] = ConfigManager::byKeys($keys);
+        $pageData['adminIsRescueMode'] = Status::isRescueMode();
+        if (!$pageData['adminIsRescueMode']) {
+            $pageData['adminPluginsList'] = [];
             $pluginsList = PluginManager::listPlugin(true);
             foreach ($pluginsList as $plugin) {
                 $pluginApi = ConfigManager::byKey('api', $plugin->getId());
@@ -69,14 +63,14 @@ class ApiController extends BaseController
                     $pluginData = [];
                     $pluginData['api'] = $pluginApi;
                     $pluginData['plugin'] = $plugin;
-                    $pageContent['adminPluginsList'][] = $pluginData;
+                    $pageData['adminPluginsList'][] = $pluginData;
                 }
             }
         }
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/admin/api.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/api.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/admin/api.html.twig', $pageContent);
+        return $render->get('/desktop/admin/api.html.twig', $pageData);
     }
 }

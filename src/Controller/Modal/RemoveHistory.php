@@ -23,16 +23,9 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 
 class RemoveHistory extends BaseAbstractModal
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render remove history modal
      *
@@ -45,6 +38,7 @@ class RemoveHistory extends BaseAbstractModal
      */
     public function get(Render $render): string
     {
+
         $removeHistory = null;
         if (file_exists(NEXTDOM_ROOT . '/data/remove_history.json')) {
             $removeHistory = json_decode(file_get_contents(NEXTDOM_ROOT . '/data/remove_history.json'), true);
@@ -53,10 +47,10 @@ class RemoveHistory extends BaseAbstractModal
             $removeHistory = array();
         }
 
-        $pageContent = [];
-        $pageContent['removeHistory'] = $removeHistory;
+        $pageData = [];
+        $pageData['removeHistory'] = $removeHistory;
 
-        return $render->get('/modals/remove.history.html.twig', $pageContent);
+        return $render->get('/modals/remove.history.html.twig', $pageData);
     }
 
 }

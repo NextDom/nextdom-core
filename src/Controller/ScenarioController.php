@@ -24,25 +24,17 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\ScenarioManager;
 
 class ScenarioController extends BaseController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render scenario page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of scenario page
      *
@@ -50,28 +42,29 @@ class ScenarioController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
-        $pageContent['scenarios'] = array();
-        // TODO: A supprimé pour éviter la requête inutile
-        $pageContent['scenarioCount'] = count(ScenarioManager::all());
-        $pageContent['scenarios'][-1] = ScenarioManager::all(null);
-        $pageContent['scenarioListGroup'] = ScenarioManager::listGroup();
 
-        if (is_array($pageContent['scenarioListGroup'])) {
-            foreach ($pageContent['scenarioListGroup'] as $group) {
-                $pageContent['scenarios'][$group['group']] = ScenarioManager::all($group['group']);
+        $pageData['scenarios'] = array();
+        // TODO: A supprimé pour éviter la requête inutile
+        $pageData['scenarioCount'] = count(ScenarioManager::all());
+        $pageData['scenarios'][-1] = ScenarioManager::all(null);
+        $pageData['scenarioListGroup'] = ScenarioManager::listGroup();
+
+        if (is_array($pageData['scenarioListGroup'])) {
+            foreach ($pageData['scenarioListGroup'] as $group) {
+                $pageData['scenarios'][$group['group']] = ScenarioManager::all($group['group']);
             }
         }
-        $pageContent['scenarioInactiveStyle'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
-        $pageContent['scenarioEnabled'] = ConfigManager::byKey('enableScenario');
-        $pageContent['scenarioAllObjects'] = JeeObjectManager::all();
+        $pageData['scenarioInactiveStyle'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
+        $pageData['scenarioEnabled'] = ConfigManager::byKey('enableScenario');
+        $pageData['scenarioAllObjects'] = JeeObjectManager::all();
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/scenario.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/scenario.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
 
-        return $render->get('/desktop/tools/scenario.html.twig', $pageContent);
+        return $render->get('/desktop/tools/scenario.html.twig', $pageData);
     }
 
 }

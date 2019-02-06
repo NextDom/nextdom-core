@@ -23,18 +23,10 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\JeeObjectManager;
 
 class CmdHumanInsert extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render command human insert modal (scenario)
      *
@@ -48,9 +40,10 @@ class CmdHumanInsert extends BaseAbstractModal
     public function get(Render $render): string
     {
 
-        $pageContent = [];
-        $pageContent['jeeObjects'] = JeeObjectManager::all();
 
-        return $render->get('/modals/cmd.human.insert.html.twig', $pageContent);
+        $pageData = [];
+        $pageData['jeeObjects'] = JeeObjectManager::all();
+
+        return $render->get('/modals/cmd.human.insert.html.twig', $pageData);
     }
 }

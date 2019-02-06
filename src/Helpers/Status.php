@@ -57,6 +57,7 @@ class Status
      */
     public static function initConnectState()
     {
+        AuthentificationHelper::init();
         self::$connectState = AuthentificationHelper::isConnected();
         self::$connectAdminState = AuthentificationHelper::isConnected('admin');
     }
@@ -65,7 +66,7 @@ class Status
      * Get the status of the user login
      * @return bool Status of the user connection
      */
-    public static function isConnect(): bool
+    public static function isConnected(): bool
     {
         return self::$connectState;
     }
@@ -80,7 +81,7 @@ class Status
         if (!self::$connectState) {
             throw new CoreException(__('core.error-401'), 401);
         }
-        return self::isConnect();
+        return self::isConnected();
     }
 
     /**

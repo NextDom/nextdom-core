@@ -17,10 +17,12 @@
 
 namespace NextDom\Enums;
 
-class LogRotateEnum extends Enum
+class GetParams extends Enum
 {
-    const ROTATE_NONE = 'cron';
-    const ROTATE_DAY = 'cron5';
-    const ROTATE_MONTH = 'cron30';
-    const ROTATE_YEAR = 'cronDaily';
+    const VIEW_TYPE = 'v';
+    const MODAL = 'modal';
+    const PLUGIN_CONF = 'configure';
+    const AJAX_QUERY = 'ajax';
+    const PLUGIN_ID = 'plugin';
+    const PAGE = 'p';
 }

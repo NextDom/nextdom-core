@@ -17,11 +17,10 @@
 
 namespace NextDom\Enums;
 
-class EqLogicViewTypeEnum extends Enum
+class LogRotate extends Enum
 {
-    const SCENARIO = 'scenario';
-    const MOBILE = 'mobile';
-    const DASHBOARD = 'dashboard';
-    const DVIEW = 'dview';
-    const DPLAN = 'dplan';
+    const ROTATE_NONE = 'cron';
+    const ROTATE_DAY = 'cron5';
+    const ROTATE_MONTH = 'cron30';
+    const ROTATE_YEAR = 'cronDaily';
 }

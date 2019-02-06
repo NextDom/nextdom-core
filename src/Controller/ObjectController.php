@@ -23,25 +23,17 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
 
 class ObjectController extends BaseController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render objects page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of objects page
      *
@@ -49,17 +41,17 @@ class ObjectController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
-        $pageContent['JS_VARS']['select_id'] = Utils::init('id', '-1');
-        $pageContent['objectProductName'] = ConfigManager::byKey('product_name');
-        $pageContent['objectCustomProductName'] = ConfigManager::byKey('name');
-        $pageContent['objectList'] = JeeObjectManager::buildTree(null, false);
-        $pageContent['objectSummary'] = ConfigManager::byKey('object:summary');
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/object.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_VARS']['select_id'] = Utils::init('id', '-1');
+        $pageData['objectProductName'] = ConfigManager::byKey('product_name');
+        $pageData['objectCustomProductName'] = ConfigManager::byKey('name');
+        $pageData['objectList'] = JeeObjectManager::buildTree(null, false);
+        $pageData['objectSummary'] = ConfigManager::byKey('object:summary');
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/object.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/object.html.twig', $pageContent);
+        return $render->get('/desktop/object.html.twig', $pageData);
     }
 
 }

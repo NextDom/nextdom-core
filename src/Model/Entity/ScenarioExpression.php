@@ -17,8 +17,8 @@
 
 namespace NextDom\Model\Entity;
 
-use NextDom\Enums\ScenarioExpressionEnum;
-use NextDom\Enums\ScenarioExpressionTypeEnum;
+use NextDom\Enums\ScenarioExpressionAction;
+use NextDom\Enums\ScenarioExpressionType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -106,7 +106,7 @@ class ScenarioExpression
         if ($this->getOptions('background', 0) == 0) {
             return;
         }
-        if (in_array($this->getExpression(), array(ScenarioExpressionEnum::WAIT, ScenarioExpressionEnum::SLEEP, ScenarioExpressionEnum::STOP, ScenarioExpressionEnum::SCENARIO_RETURN))) {
+        if (in_array($this->getExpression(), array(ScenarioExpressionAction::WAIT, ScenarioExpressionAction::SLEEP, ScenarioExpressionAction::STOP, ScenarioExpressionAction::SCENARIO_RETURN))) {
             $this->setOptions('background', 0);
         }
         return;
@@ -143,7 +143,7 @@ class ScenarioExpression
         }
         $message = '';
         try {
-            if ($this->getType() == ScenarioExpressionTypeEnum::ELEMENT) {
+            if ($this->getType() == ScenarioExpressionType::ELEMENT) {
                 $element = ScenarioElementManager::byId($this->getExpression());
                 if (is_object($element)) {
                     $this->setLog($scenario, __('Exécution d\'un bloc élément : ') . $this->getExpression());
@@ -155,9 +155,9 @@ class ScenarioExpression
             if (isset($options['enable'])) {
                 unset($options['enable']);
             }
-            if (is_array($options) && $this->getExpression() != ScenarioExpressionEnum::WAIT) {
+            if (is_array($options) && $this->getExpression() != ScenarioExpressionAction::WAIT) {
                 foreach ($options as $key => $value) {
-                    if ($this->getExpression() == ScenarioExpressionEnum::EVENT && $key == ScenarioExpressionEnum::CMD) {
+                    if ($this->getExpression() == ScenarioExpressionAction::EVENT && $key == ScenarioExpressionAction::CMD) {
                         continue;
                     }
                     if (is_string($value)) {
@@ -165,9 +165,9 @@ class ScenarioExpression
                     }
                 }
             }
-            if ($this->getType() == ScenarioExpressionTypeEnum::ACTION) {
+            if ($this->getType() == ScenarioExpressionType::ACTION) {
                 $this->executeAction($scenario, $options);
-            } elseif ($this->getType() == ScenarioExpressionTypeEnum::CONDITION) {
+            } elseif ($this->getType() == ScenarioExpressionType::CONDITION) {
                 $expression = ScenarioExpressionManager::setTags($this->getExpression(), $scenario, true);
                 $message = __('Evaluation de la condition : [') . $expression . '] = ';
                 $result = Utils::evaluate($expression);
@@ -182,7 +182,7 @@ class ScenarioExpression
                 }
                 $this->setLog($scenario, $message);
                 return $result;
-            } elseif ($this->getType() == ScenarioExpressionTypeEnum::CODE) {
+            } elseif ($this->getType() == ScenarioExpressionType::CODE) {
                 $this->setLog($scenario, __('Exécution d\'un bloc code'));
                 return eval($this->getExpression());
             }
@@ -195,65 +195,65 @@ class ScenarioExpression
     private function executeAction(&$scenario, $options)
     {
         switch ($this->getExpression()) {
-            case ScenarioExpressionEnum::ICON:
+            case ScenarioExpressionAction::ICON:
                 $this->executeActionIcon($scenario);
                 break;
-            case ScenarioExpressionEnum::WAIT:
+            case ScenarioExpressionAction::WAIT:
                 $this->executeActionWait($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::SLEEP:
+            case ScenarioExpressionAction::SLEEP:
                 $this->executeActionSleep($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::STOP:
+            case ScenarioExpressionAction::STOP:
                 $this->executeActionStop($scenario);
                 break;
-            case ScenarioExpressionEnum::LOG:
+            case ScenarioExpressionAction::LOG:
                 $this->executeActionLog($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::EVENT:
+            case ScenarioExpressionAction::EVENT:
                 $this->executeActionEvent($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::MESSAGE:
+            case ScenarioExpressionAction::MESSAGE:
                 $this->executeActionMessage($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::ALERT:
+            case ScenarioExpressionAction::ALERT:
                 $this->executeActionAlert($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::POPUP:
+            case ScenarioExpressionAction::POPUP:
                 $this->executeActionPopup($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::EQUIPMENT:
-            case ScenarioExpressionEnum::EQUIPEMENT:
+            case ScenarioExpressionAction::EQUIPMENT:
+            case ScenarioExpressionAction::EQUIPEMENT:
                 $this->executeActionEquipment($scenario);
                 break;
-            case ScenarioExpressionEnum::GOTODESIGN:
+            case ScenarioExpressionAction::GOTODESIGN:
                 $this->executeActionGotoDesign($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::SCENARIO:
+            case ScenarioExpressionAction::SCENARIO:
                 $this->executeActionScenario($scenario);
                 break;
-            case ScenarioExpressionEnum::VARIABLE:
+            case ScenarioExpressionAction::VARIABLE:
                 $this->executeActionVariable($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::DELETE_VARIABLE:
+            case ScenarioExpressionAction::DELETE_VARIABLE:
                 $this->executeActionDeleteVariable($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::ASK:
+            case ScenarioExpressionAction::ASK:
                 $this->executeActionAsk($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::NEXTDOM_POWEROFF:
+            case ScenarioExpressionAction::NEXTDOM_POWEROFF:
                 $this->executeActionNextDomPowerOff($scenario);
                 break;
-            case ScenarioExpressionEnum::SCENARIO_RETURN:
+            case ScenarioExpressionAction::SCENARIO_RETURN:
                 $this->executeActionScenarioReturn($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::REMOVE_INAT:
+            case ScenarioExpressionAction::REMOVE_INAT:
                 $this->executeActionRemoveInat($scenario);
                 break;
-            case ScenarioExpressionEnum::REPORT:
+            case ScenarioExpressionAction::REPORT:
                 $this->executeActionReport($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::TAG:
+            case ScenarioExpressionAction::TAG:
                 $this->executeActionTag($scenario, $options);
                 break;
             default:
@@ -527,6 +527,11 @@ class ScenarioExpression
         return null;
     }
 
+    /**
+     * @param Scenario $scenario
+     * @param array $options
+     * @throws CoreException
+     */
     private function executeActionAsk(&$scenario, $options)
     {
         $dataStore = new \dataStore();
@@ -798,18 +803,18 @@ class ScenarioExpression
         } else {
             $options = $this->getOptions();
             if ($this->getType() == 'action') {
-                if ($this->getExpression() == ScenarioExpressionEnum::ICON) {
+                if ($this->getExpression() == ScenarioExpressionAction::ICON) {
                     return '';
-                } elseif ($this->getExpression() == ScenarioExpressionEnum::SLEEP) {
+                } elseif ($this->getExpression() == ScenarioExpressionAction::SLEEP) {
                     return '(sleep) Pause de  : ' . $options['duration'];
-                } elseif ($this->getExpression() == ScenarioExpressionEnum::STOP) {
+                } elseif ($this->getExpression() == ScenarioExpressionAction::STOP) {
                     return '(stop) Arret du scenario';
-                } elseif ($this->getExpression() == ScenarioExpressionEnum::SCENARIO_RETURN) {
+                } elseif ($this->getExpression() == ScenarioExpressionAction::SCENARIO_RETURN) {
                     $actionScenario = ScenarioManager::byId($this->getOptions('scenario_id'));
                     if (is_object($actionScenario)) {
                         return '(scenario) ' . $this->getOptions('action') . ' de ' . $actionScenario->getHumanName();
                     }
-                } elseif ($this->getExpression() == ScenarioExpressionEnum::VARIABLE) {
+                } elseif ($this->getExpression() == ScenarioExpressionAction::VARIABLE) {
                     return '(variable) Affectation de la variable : ' . $this->getOptions('name') . ' à ' . $this->getOptions('value');
                 } else {
                     $result = NextDomHelper::toHumanReadable($this->getExpression());

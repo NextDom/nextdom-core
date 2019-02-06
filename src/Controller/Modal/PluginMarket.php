@@ -23,18 +23,10 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 
 class PluginMarket extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render plugin market modal
      *
@@ -47,6 +39,7 @@ class PluginMarket extends BaseAbstractModal
      */
     public function get(Render $render): string
     {
+
 
         Utils::sendVarsToJs([
             'installBranchStr' => __("Installer la branche "),

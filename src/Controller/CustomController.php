@@ -24,22 +24,15 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
 
 class CustomController extends BaseController
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render custom page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of custom page
      *
@@ -47,38 +40,37 @@ class CustomController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
-
         global $NEXTDOM_INTERNAL_CONFIG;
         // TODO: Regrouper les config::byKey
-        $pageContent['customDarkThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-dark'];
-        $pageContent['customLightThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-light'];
-        $pageContent['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
-        $pageContent['Theme'] = NextDomHelper::getConfiguration('theme');
-        $pageContent['customProductName'] = ConfigManager::byKey('product_name');
-        $pageContent['customTheme'] = ConfigManager::byKey('theme');
-        $pageContent['customEnableCustomCss'] = ConfigManager::byKey('enableCustomCss');
-        $pageContent['customJS'] = '';
+        $pageData['customDarkThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-dark'];
+        $pageData['customLightThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-light'];
+        $pageData['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
+        $pageData['Theme'] = NextDomHelper::getConfiguration('theme');
+        $pageData['customProductName'] = ConfigManager::byKey('product_name');
+        $pageData['customTheme'] = ConfigManager::byKey('theme');
+        $pageData['customEnableCustomCss'] = ConfigManager::byKey('enableCustomCss');
+        $pageData['customJS'] = '';
         if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.js')) {
-            $pageContent['customJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/var/custom/desktop/custom.js'));
+            $pageData['customJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/var/custom/desktop/custom.js'));
         }
-        $pageContent['customCSS'] = '';
+        $pageData['customCSS'] = '';
         if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.css')) {
-            $pageContent['customCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/var/custom/desktop/custom.css'));
+            $pageData['customCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/var/custom/desktop/custom.css'));
         }
-        $pageContent['customMobileJS'] = '';
+        $pageData['customMobileJS'] = '';
         if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.js')) {
-            $pageContent['customMobileJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.js'));
+            $pageData['customMobileJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.js'));
         }
-        $pageContent['customMobileCSS'] = '';
+        $pageData['customMobileCSS'] = '';
         if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.css')) {
-            $pageContent['customMobileCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.css'));
+            $pageData['customMobileCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.css'));
         }
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/custom.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/custom.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/params/custom.html.twig', $pageContent);
+        return $render->get('/desktop/params/custom.html.twig', $pageData);
     }
 }

@@ -24,19 +24,11 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\JeeObjectManager;
 
 class PlanConfigure extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render plan configure modal
      *
@@ -50,17 +42,18 @@ class PlanConfigure extends BaseAbstractModal
      */
     public function get(Render $render): string
     {
-        $pageContent = [];
-        $pageContent['planObject'] = \plan::byId(Utils::init('id'));
-        if (!is_object($pageContent['planObject'])) {
+
+        $pageData = [];
+        $pageData['planObject'] = \plan::byId(Utils::init('id'));
+        if (!is_object($pageData['planObject'])) {
             throw new CoreException('Impossible de trouver le design');
         }
-        $pageContent['planLink'] = $pageContent['planObject']->getLink();
-        $pageContent['jeeObjects'] = JeeObjectManager::all();
-        $pageContent['views'] = \view::all();
-        $pageContent['plans'] = \planHeader::all();
-        Utils::sendVarToJS('id', $pageContent['planObject']->getId());
+        $pageData['planLink'] = $pageData['planObject']->getLink();
+        $pageData['jeeObjects'] = JeeObjectManager::all();
+        $pageData['views'] = \view::all();
+        $pageData['plans'] = \planHeader::all();
+        Utils::sendVarToJS('id', $pageData['planObject']->getId());
 
-        return $render->get('/modals/plan.configure.html.twig', $pageContent);
+        return $render->get('/modals/plan.configure.html.twig', $pageData);
     }
 }
