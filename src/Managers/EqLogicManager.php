@@ -46,7 +46,7 @@ class EqLogicManager
      *
      * @param mixed $id EqLogic object id
      *
-     * @return \eqLogic|null
+     * @return EqLogic|null
      *
      * @throws \Exception
      */
