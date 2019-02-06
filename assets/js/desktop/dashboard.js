@@ -34,11 +34,6 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-$('#div_pageContainer').on( 'click','.eqLogic-widget .history', function () {
-    $('#md_modal2').dialog({title: "Historique"});
-    $("#md_modal2").load('index.php?v=d&modal=cmd.history&id=' + $(this).data('cmd_id')).dialog('open');
-});
-
 function selectCategory(_selectedCategory) {
     console.log(_selectedCategory);
     var category = _selectedCategory;
