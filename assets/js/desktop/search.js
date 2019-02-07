@@ -144,10 +144,14 @@ $('#generalSearch').keyup(function () {
             });
             $('.objectListContainer').packery();
             break;
+
         case 'display':
             $('.cmd').show().removeClass('alert-success').addClass('alert-warning');
             $('.cmdSortable').hide();
+            $('.object').show();
             if(search == ''){
+
+                $('.displayListContainer').packery();
                 return;
             }
             $('.eqLogic').each(function(){
@@ -167,6 +171,16 @@ $('#generalSearch').keyup(function () {
                     }
                 });
             });
+
+            $('.eqLogicSortable').each(function(){
+                if($(this).height() <= 30 ) {
+                    $(this).parent().parent().hide();
+                } else{
+                    $(this).parent().parent().show();
+                }
+            });
+
+            $('.displayListContainer').packery();
             break;
     }
 });
