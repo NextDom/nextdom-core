@@ -68,7 +68,7 @@ class UpdateManager
                     $update->setType('core')
                         ->setLogicalId('nextdom')
                         ->setSource(ConfigManager::byKey('core::repo::provider'))
-                        ->setLocalVersion(NextDomHelper::getJeedomVersion());
+                        ->setLocalVersion(NextDomHelper::getNextdomVersion());
                     $update->save();
                     $update->checkUpdate();
                 } else {
@@ -89,7 +89,7 @@ class UpdateManager
                 ->setConfiguration('user', 'NextDom')
                 ->setConfiguration('repository', 'nextdom-core')
                 ->setConfiguration('version', 'master')
-                ->setLocalVersion(NextDomHelper::getJeedomVersion());
+                ->setLocalVersion(NextDomHelper::getNextdomVersion());
             $update->save();
             $update->checkUpdate();
         }
