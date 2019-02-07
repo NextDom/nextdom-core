@@ -31,11 +31,13 @@
         <!-- Navbar left menu-->
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button"></a>
 
-        <form class="navbar-form navbar-left">
-            <div class="form-group">
+        <a href="#" class="search-toggle" id="search-toggle" role="button"><i class="fas fa-search"></i></a>
+        <div class="navbar-form navbar-left navbar-search">
+            <div class="input-group">
                 <input type="text" class="form-control" id="generalSearch" placeholder="Search">
+                <span class="input-group-addon cursor"><i class="fas fa-times"></i></span>
             </div>
-        </form>
+        </div>
 
         <li class="objectSummaryGlobalHeader">
             {{ MENU_HTML_GLOBAL_SUMMARY|raw }}

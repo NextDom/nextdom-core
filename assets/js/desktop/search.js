@@ -170,3 +170,7 @@ $('#generalSearch').keyup(function () {
             break;
     }
 });
+
+$('#generalSearch').on('click', function () {
+  
+});

@@ -63,4 +63,30 @@
     top: -12px;
     right: 10px;
   }
+
+  .navbar-search {
+    position: absolute;
+    top: -11px;
+    left: 57px;
+    border: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    margin-top: 18px;
+    margin-right: 0px;
+  }
+}
+
+.navbar-search {
+  padding: 0px 10px 0px 0px;
+  margin-bottom: 0px;
+  display: none;
+}
+
+.main-header .search-toggle {
+  float: left;
+  background-color: transparent;
+  background-image: none;
+  padding: 15px 15px 0px 4px;
+  font-family: fontAwesome;
+  color: white;
 }
