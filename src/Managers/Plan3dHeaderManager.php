@@ -33,12 +33,12 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Model\Entity\PlanHeader;
+use NextDom\Model\Entity\Plan3dHeader;
 
-class PlanHeaderManager
+class Plan3dHeaderManager
 {
-    const CLASS_NAME = PlanHeader::class;
-    const DB_CLASS_NAME = '`planHeader`';
+    const CLASS_NAME = Plan3dHeader::class;
+    const DB_CLASS_NAME = '`plan3dHeader`';
 
     public static function byId($_id) {
         $values = array(
@@ -57,18 +57,19 @@ class PlanHeaderManager
     }
     /**
      *
-     * @param string $_type
-     * @param string|int $_id
+     * @param mixed $_type
+     * @param mixed $_id
      * @return mixed
      */
     public static function searchByUse($_type, $_id) {
         $return = array();
         $search = '#' . str_replace('cmd', '', $_type . $_id) . '#';
-        $plans = array_merge(PlanManager::byLinkTypeLinkId($_type, $_id), PlanManager::searchByConfiguration($search, 'eqLogic'));
-        foreach ($plans as $plan) {
-            $planHeader = $plan->getPlanHeader();
-            $return[$planHeader->getId()] = $planHeader;
+        $plan3ds = array_merge(Plan3dManager::byLinkTypeLinkId($_type, $_id), Plan3dManager::searchByConfiguration($search, 'eqLogic'));
+        foreach ($plan3ds as $plan3d) {
+            $plan3dHeader = $plan3d->get3dHeader();
+            $return[$plan3dHeader->getId()] = $plan3dHeader;
         }
         return $return;
     }
+
 }

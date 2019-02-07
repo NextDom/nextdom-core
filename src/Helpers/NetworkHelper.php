@@ -349,7 +349,7 @@ class NetworkHelper
         }
         copy(NEXTDOM_ROOT . '/script/ca_dns.crt', $path_ca);
         if (!file_exists($path_ca)) {
-            throw new CoreException(__('Impossible de créer le fichier  : ', __FILE__) . $path_ca);
+            throw new CoreException(__('Impossible de créer le fichier  : ') . $path_ca);
         }
         return $openvpn;
     }
@@ -365,7 +365,7 @@ class NetworkHelper
         $openvpn = self::dnsCreate();
         $cmd = $openvpn->getCmd('action', 'start');
         if (!is_object($cmd)) {
-            throw new CoreException(__('La commande de démarrage du DNS est introuvable', __FILE__));
+            throw new CoreException(__('La commande de démarrage du DNS est introuvable'));
         }
         $cmd->execCmd();
         $interface = $openvpn->getInterfaceName();
@@ -402,7 +402,7 @@ class NetworkHelper
         }
         $cmd = $openvpn->getCmd('info', 'state');
         if (!is_object($cmd)) {
-            throw new CoreException(__('La commande de statut du DNS est introuvable', __FILE__));
+            throw new CoreException(__('La commande de statut du DNS est introuvable'));
         }
         return $cmd->execCmd();
     }
@@ -415,7 +415,7 @@ class NetworkHelper
         $openvpn = self::dnsCreate();
         $cmd = $openvpn->getCmd('action', 'stop');
         if (!is_object($cmd)) {
-            throw new CoreException(__('La commande d\'arrêt du DNS est introuvable', __FILE__));
+            throw new CoreException(__('La commande d\'arrêt du DNS est introuvable'));
         }
         $cmd->execCmd();
     }

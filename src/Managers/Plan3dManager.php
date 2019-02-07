@@ -33,30 +33,30 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Model\Entity\Plan;
+use NextDom\Model\Entity\Plan3d;
 
-class PlanManager
+class Plan3dManager
 {
-    const CLASS_NAME = Plan::class;
-    const DB_CLASS_NAME = '`plan`';
+    const CLASS_NAME = Plan3d::class;
+    const DB_CLASS_NAME = '`Plan3d`';
 
     public static function byId($_id) {
         $values = array(
             'id' => $_id,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE id = :id';
+        FROM ' .self::DB_CLASS_NAME . '
+        WHERE id=:id';
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function byPlanHeaderId($_planHeader_id) {
+    public static function byPlan3dHeaderId($_plan3dHeader_id) {
         $values = array(
-            'planHeader_id' => $_planHeader_id,
+            'plan3dHeader_id' => $_plan3dHeader_id,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE planHeader_id = :planHeader_id';
+        FROM ' .self::DB_CLASS_NAME . '
+        WHERE plan3dHeader_id=:plan3dHeader_id';
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
@@ -66,42 +66,54 @@ class PlanManager
             'link_id' => $_link_id,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE link_type = :link_type
-        AND link_id = :link_id';
+        FROM ' .self::DB_CLASS_NAME . '
+        WHERE link_type=:link_type
+        AND link_id=:link_id';
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function byLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id) {
+    public static function byName3dHeaderId($_name, $_plan3dHeader_id) {
         $values = array(
-            'link_type' => $_link_type,
-            'link_id' => $_link_id,
-            'planHeader_id' => $_planHeader_id,
+            'name' => $_name,
+            'plan3dHeader_id' => $_plan3dHeader_id,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE link_type = :link_type
-        AND link_id = :link_id
-        AND planHeader_id = :planHeader_id';
+        FROM ' .self::DB_CLASS_NAME . '
+        WHERE name=:name
+        AND plan3dHeader_id=:plan3dHeader_id';
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function removeByLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id) {
+    public static function byLinkTypeLinkId3dHeaderId($_link_type, $_link_id, $_plan3dHeader_id) {
         $values = array(
             'link_type' => $_link_type,
             'link_id' => $_link_id,
-            'planHeader_id' => $_planHeader_id,
+            'plan3dHeader_id' => $_plan3dHeader_id,
         );
-        $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
-        WHERE link_type = :link_type
-        AND link_id = :link_id
-        AND planHeader_id = :planHeader_id';
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        FROM ' .self::DB_CLASS_NAME . '
+        WHERE link_type=:link_type
+        AND link_id=:link_id
+        AND plan3dHeader_id=:plan3dHeader_id';
+        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+    }
+
+    public static function removeByLinkTypeLinkId3dHeaderId($_link_type, $_link_id, $_plan3dHeader_id) {
+        $values = array(
+            'link_type' => $_link_type,
+            'link_id' => $_link_id,
+            'plan3dHeader_id' => $_plan3dHeader_id,
+        );
+        $sql = 'DELETE FROM ' .self::DB_CLASS_NAME . '
+        WHERE link_type=:link_type
+        AND link_id=:link_id
+        AND plan3dHeader_id=:plan3dHeader_id';
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function all() {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME;
+        FROM ' .self::DB_CLASS_NAME;
         return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
@@ -110,7 +122,7 @@ class PlanManager
             'search' => '%' . $_search . '%',
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
+        FROM ' .self::DB_CLASS_NAME . '
         WHERE display LIKE :search';
         return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
@@ -121,9 +133,9 @@ class PlanManager
             'not' => $_not,
         );
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
+        FROM ' .self::DB_CLASS_NAME . '
         WHERE configuration LIKE :search
-        AND link_type != :not';
+        AND link_type !=:not';
         return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 }

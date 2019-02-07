@@ -823,9 +823,9 @@ class Scenario
         return true;
     }
 
-    public function getData($key, $private = false, $default = '')
+    public function getData($key, $protected = false, $default = '')
     {
-        if ($private !== false) {
+        if ($protected !== false) {
             $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', $this->getId(), $key);
         } else {
             $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', -1, $key);
@@ -1079,7 +1079,6 @@ class Scenario
             }
         }
         if ($_mode == 'array') {
-            $return = [];
             $return = Utils::o2a($this);
             $return['trigger'] = NextDomHelper::toHumanReadable($return['trigger']);
             $return['elements'] = array();
@@ -1589,16 +1588,19 @@ class Scenario
      *
      * @return int
      */
-    public function getOrder() {
+    public function getOrder()
+    {
         return $this->order;
     }
+
     /**
      *
      * @param int $_order
      * @return $this
      */
-    public function setOrder($_order) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->order,$_order);
+    public function setOrder($_order)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
         $this->order = $_order;
         return $this;
     }

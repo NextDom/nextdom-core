@@ -17,6 +17,8 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\Utils;
+
 /**
  * Note
  *
@@ -31,14 +33,14 @@ class Note
      *
      * @ORM\Column(name="name", type="string", length=127, nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="text", type="text", length=65535, nullable=true)
      */
-    private $text;
+    protected $text;
 
     /**
      * @var integer
@@ -47,7 +49,32 @@ class Note
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
+
+    private $_changed = false;
+
+    public function preSave()
+    {
+        if (trim($this->getName()) == '') {
+            throw new \Exception(__('Le nom de la note ne peut être vide'));
+        }
+    }
+
+    public function save()
+    {
+        \DB::save($this);
+        return true;
+    }
+
+    public function remove()
+    {
+        \DB::remove($this);
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
 
     public function getName()
     {
@@ -59,26 +86,35 @@ class Note
         return $this->text;
     }
 
-    public function getId()
+    public function setId($_id)
     {
-        return $this->id;
-    }
-
-    public function setName($name)
-    {
-        $this->name = $name;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
         return $this;
     }
 
-    public function setText($text)
+    public function setName($_name)
     {
-        $this->text = $text;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
+        $this->name = $_name;
         return $this;
     }
 
-    public function setId($id)
+    public function setText($_text)
     {
-        $this->id = $id;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->text, $_text);
+        $this->text = $_text;
+        return $this;
+    }
+
+    public function getChanged()
+    {
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed)
+    {
+        $this->_changed = $_changed;
         return $this;
     }
 

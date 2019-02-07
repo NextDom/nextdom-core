@@ -36,13 +36,14 @@ namespace NextDom\Managers;
 
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Model\Entity\InteractQuery;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
 class InteractQueryManager
 {
 
-    const CLASS_NAME = 'interactQuery';
+    const CLASS_NAME = InteractQuery::class;
     const DB_CLASS_NAME = '`interactQuery`';
 
     public static function byId($_id)

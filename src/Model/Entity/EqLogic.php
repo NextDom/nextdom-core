@@ -65,7 +65,7 @@ class EqLogic
     protected $_timeoutUpdated = false;
     protected $_batteryUpdated = false;
     protected $_changed = false;
-    private static $_templateArray = array();
+    protected static $_templateArray = array();
 
     /**
      * @var string
@@ -692,7 +692,7 @@ class EqLogic
         $html .= '<span class="eqLogic-place">' . $object_name . '</span>';
         $html .= '<div class="eqLogic-battery-icon"><i class="icon nextdom-battery' . $niveau . ' tooltips" title="' . $this->getStatus('battery', -2) . '%"></i></div>';
         $html .= '<div class="eqLogic-percent">' . $this->getStatus('battery', -2) . '%</div>';
-        $html .= '<div>' . __('Le') . ' ' . date("d/m/y G:H:s", strtotime($this->getStatus('batteryDatetime', __('inconnue', __FILE__)))) . '</div>';
+        $html .= '<div>' . __('Le') . ' ' . date("d/m/y G:H:s", strtotime($this->getStatus('batteryDatetime', __('inconnue')))) . '</div>';
         if ($this->getConfiguration('battery_type', '') != '') {
             $html .= '<span class="informations pull-right" title="Piles">' . $this->getConfiguration('battery_type', '') . '</span>';
         }
@@ -1277,9 +1277,9 @@ class EqLogic
             }
         } else {
             if ($_tag) {
-                $name .= '<span class="label label-default">' . __('Aucun', __FILE__) . '</span>';
+                $name .= '<span class="label label-default">' . __('Aucun') . '</span>';
             } else {
-                $name .= '[' . __('Aucun', __FILE__) . ']';
+                $name .= '[' . __('Aucun') . ']';
             }
         }
         if ($_prettify) {
@@ -1387,7 +1387,7 @@ class EqLogic
                         $cmd = CmdManager::byId(str_replace('#', '', $id));
                         if (is_object($cmd)) {
                             $cmd->execCmd(array(
-                                'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ', __FILE__) . $message,
+                                'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
                                 'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
                             ));
                         }
@@ -1413,7 +1413,7 @@ class EqLogic
                         $cmd = CmdManager::byId(str_replace('#', '', $id));
                         if (is_object($cmd)) {
                             $cmd->execCmd(array(
-                                'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ', __FILE__) . $message,
+                                'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
                                 'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
                             ));
                         }
@@ -1464,7 +1464,7 @@ class EqLogic
             return false;
         }
         if (
-          AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
+            AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
             return true;
         }
         if (strpos($_SESSION['user']->getRights('eqLogic' . $this->getId()), $_right) !== false) {

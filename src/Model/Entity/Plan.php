@@ -99,7 +99,8 @@ class Plan
      */
     protected $planHeader_id;
 
-    public function preInsert() {
+    public function preInsert()
+    {
         if ($this->getCss('z-index') == '') {
             $this->setCss('z-index', 1000);
         }
@@ -108,7 +109,8 @@ class Plan
         }
     }
 
-    public function preSave() {
+    public function preSave()
+    {
         if ($this->getCss('zoom') != '' && (!is_numeric($this->getCss('zoom')) || $this->getCss('zoom')) < 0.1) {
             $this->setCss('zoom', 1);
         }
@@ -117,15 +119,18 @@ class Plan
         }
     }
 
-    public function save() {
+    public function save()
+    {
         \DB::save($this);
     }
 
-    public function remove() {
+    public function remove()
+    {
         \DB::remove($this);
     }
 
-    public function copy() {
+    public function copy()
+    {
         $planCopy = clone $this;
         $planCopy->setId('');
         $planCopy->setLink_id('');
@@ -135,7 +140,8 @@ class Plan
         return $planCopy;
     }
 
-    public function getLink() {
+    public function getLink()
+    {
         if ($this->getLink_type() == 'eqLogic') {
             $eqLogic = EqLogicManager::byId($this->getLink_id());
             return $eqLogic;
@@ -152,7 +158,8 @@ class Plan
         return null;
     }
 
-    public function execute() {
+    public function execute()
+    {
         if ($this->getLink_type() != 'zone') {
             return;
         }
@@ -168,7 +175,8 @@ class Plan
         }
     }
 
-    public function doAction($_action) {
+    public function doAction($_action)
+    {
         foreach ($this->getConfiguration('action_' . $_action) as $action) {
             try {
                 $cmd = CmdManager::byId(str_replace('#', '', $action['cmd']));
@@ -186,8 +194,9 @@ class Plan
         }
     }
 
-    public function getHtml($_version = 'dplan') {
-        switch($this->getLink_type()) {
+    public function getHtml($_version = 'dplan')
+    {
+        switch ($this->getLink_type()) {
             case 'eqLogic':
             case 'cmd':
             case 'scenario':
@@ -320,99 +329,118 @@ class Plan
         return null;
     }
 
-    public function getPlanHeader() {
+    public function getPlanHeader()
+    {
         return \planHeader::byId($this->getPlanHeader_id());
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getLink_type() {
+    public function getLink_type()
+    {
         return $this->link_type;
     }
 
-    public function getLink_id() {
+    public function getLink_id()
+    {
         return $this->link_id;
     }
 
-    public function getPosition($_key = '', $_default = '') {
+    public function getPosition($_key = '', $_default = '')
+    {
         return Utils::getJsonAttr($this->position, $_key, $_default);
     }
 
-    public function getDisplay($_key = '', $_default = '') {
+    public function getDisplay($_key = '', $_default = '')
+    {
         return Utils::getJsonAttr($this->display, $_key, $_default);
     }
 
-    public function getCss($_key = '', $_default = '') {
+    public function getCss($_key = '', $_default = '')
+    {
         return Utils::getJsonAttr($this->css, $_key, $_default);
     }
 
-    public function setId($_id) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->id,$_id);
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
         $this->id = $_id;
         return $this;
     }
 
-    public function setLink_type($_link_type) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->link_type,$_link_type);
+    public function setLink_type($_link_type)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->link_type, $_link_type);
         $this->link_type = $_link_type;
         return $this;
     }
 
-    public function setLink_id($_link_id) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->link_id,$_link_id);
+    public function setLink_id($_link_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->link_id, $_link_id);
         $this->link_id = $_link_id;
         return $this;
     }
 
-    public function setPosition($_key, $_value) {
+    public function setPosition($_key, $_value)
+    {
         $position = Utils::setJsonAttr($this->position, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed,$this->position,$position);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->position, $position);
         $this->position = $position;
         return $this;
     }
 
-    public function setDisplay($_key, $_value) {
+    public function setDisplay($_key, $_value)
+    {
         $display = Utils::setJsonAttr($this->display, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed,$this->display,$display);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
         $this->display = $display;
         return $this;
     }
 
-    public function setCss($_key, $_value) {
+    public function setCss($_key, $_value)
+    {
         $css = Utils::setJsonAttr($this->css, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed,$this->css,$css);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->css, $css);
         $this->css = $css;
         return $this;
     }
 
-    public function getPlanHeader_id() {
+    public function getPlanHeader_id()
+    {
         return $this->planHeader_id;
     }
 
-    public function setPlanHeader_id($_planHeader_id) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->planHeader_id,$_planHeader_id);
+    public function setPlanHeader_id($_planHeader_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->planHeader_id, $_planHeader_id);
         $this->planHeader_id = $_planHeader_id;
         return $this;
     }
 
-    public function getConfiguration($_key = '', $_default = '') {
+    public function getConfiguration($_key = '', $_default = '')
+    {
         return Utils::getJsonAttr($this->configuration, $_key, $_default);
     }
 
-    public function setConfiguration($_key, $_value) {
+    public function setConfiguration($_key, $_value)
+    {
         $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed,$this->configuration,$configuration);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
         $this->configuration = $configuration;
         return $this;
     }
 
-    public function getChanged() {
+    public function getChanged()
+    {
         return $this->_changed;
     }
 
-    public function setChanged($_changed) {
+    public function setChanged($_changed)
+    {
         $this->_changed = $_changed;
         return $this;
     }

@@ -78,7 +78,8 @@ class View
 
     protected $_changed = false;
 
-    public function report($_format = 'pdf', $_parameters = array()) {
+    public function report($_format = 'pdf', $_parameters = array())
+    {
         $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=view';
         $url .= '&view_id=' . $this->getId();
         $url .= '&report=1';
@@ -87,38 +88,48 @@ class View
         }
         return \report::generate($url, 'view', $this->getId(), $_format, $_parameters);
     }
+
     /**
      *
      * @throws \Exception
      */
-    public function presave() {
+    public function presave()
+    {
         if (trim($this->getName()) == '') {
             throw new \Exception(__('Le nom de la vue ne peut pas être vide'));
         }
     }
 
-    public function save() {
+    public function save()
+    {
         return \DB::save($this);
     }
 
-    public function remove() {
+    public function remove()
+    {
         NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'view'));
         return \DB::remove($this);
     }
 
-    public function getviewZone() {
+    /**
+     * @return ViewZone[]
+     */
+    public function getviewZone()
+    {
         return ViewZoneManager::byView($this->getId());
     }
 
-    public function removeviewZone() {
+    public function removeviewZone()
+    {
         return ViewZoneManager::removeByViewId($this->getId());
     }
 
-    public function getImgLink() {
+    public function getImgLink()
+    {
         if ($this->getImage('data') == '') {
             return '';
         }
-        $dir = __DIR__ . '/../../core/img/view';
+        $dir = NEXTDOM_ROOT . '/public/img/view';
         if (!file_exists($dir)) {
             mkdir($dir);
         }
@@ -134,14 +145,16 @@ class View
         return 'core/img/view/' . $filename;
     }
 
-    public function toArray() {
+    public function toArray()
+    {
         $return = Utils::o2a($this, true);
         unset($return['image']);
         $return['img'] = $this->getImgLink();
         return $return;
     }
 
-    public function toAjax($_version = 'dview', $_html = false) {
+    public function toAjax($_version = 'dview', $_html = false)
+    {
         $return = Utils::o2a($this);
         $return['viewZone'] = array();
         foreach ($this->getViewZone() as $viewZone) {
@@ -228,7 +241,8 @@ class View
         return NextDomHelper::toHumanReadable($return);
     }
 
-    public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = 3) {
+    public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = 3)
+    {
         if (isset($_data['node']['view' . $this->getId()])) {
             return;
         }
@@ -246,87 +260,101 @@ class View
             'fontweight' => ($_level == 1) ? 'bold' : 'normal',
             'texty' => -14,
             'textx' => 0,
-            'title' => __('Vue :', __FILE__) . ' ' . $this->getName(),
+            'title' => __('Vue :') . ' ' . $this->getName(),
             'url' => 'index.php?v=d&p=view&view_id=' . $this->getId(),
         );
     }
 
     /*     * **********************Getteur Setteur*************************** */
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function setId($_id) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->id,$_id);
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
         $this->id = $_id;
         return $this;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function setName($_name) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->name,$_name);
+    public function setName($_name)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
         $this->name = $_name;
         return $this;
     }
 
-    public function getOrder($_default = null) {
+    public function getOrder($_default = null)
+    {
         if ($this->order == '' || !is_numeric($this->order)) {
             return $_default;
         }
         return $this->order;
     }
 
-    public function setOrder($_order) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->order,$_order);
+    public function setOrder($_order)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
         $this->order = $_order;
         return $this;
     }
 
-    public function getDisplay($_key = '', $_default = '') {
+    public function getDisplay($_key = '', $_default = '')
+    {
         return Utils::getJsonAttr($this->display, $_key, $_default);
     }
 
-    public function setDisplay($_key, $_value) {
+    public function setDisplay($_key, $_value)
+    {
         $display = Utils::setJsonAttr($this->display, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed,$this->display,$display);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
         $this->display = $display;
         return $this;
     }
 
-    public function getImage($_key = '', $_default = '') {
+    public function getImage($_key = '', $_default = '')
+    {
         return Utils::getJsonAttr($this->image, $_key, $_default);
     }
 
-    public function setImage($_key, $_value) {
+    public function setImage($_key, $_value)
+    {
         $image = Utils::setJsonAttr($this->image, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed,$this->image,$image);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->image, $image);
         $this->image = $image;
         return $this;
     }
 
-    public function getConfiguration($_key = '', $_default = '') {
+    public function getConfiguration($_key = '', $_default = '')
+    {
         return Utils::getJsonAttr($this->configuration, $_key, $_default);
     }
 
-    public function setConfiguration($_key, $_value) {
+    public function setConfiguration($_key, $_value)
+    {
         if ($_key == 'accessCode' && $_value != '' && !Utils::isSha512($_value)) {
             $_value = Utils::sha512($_value);
         }
         $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed,$this->configuration,$configuration);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
         $this->configuration = $configuration;
         return $this;
     }
 
-    public function getChanged() {
+    public function getChanged()
+    {
         return $this->_changed;
     }
 
-    public function setChanged($_changed) {
+    public function setChanged($_changed)
+    {
         $this->_changed = $_changed;
         return $this;
     }

@@ -96,12 +96,6 @@ class log {
         return LogHelper::liste($_filtre);
     }
 
-    /**
-     * Fixe le niveau de rapport d'erreurs PHP
-     * @param int $log_level
-     * @since 2.1.4
-     * @author KwiZeR <kwizer@kw12er.com>
-     */
     public static function define_error_reporting($log_level) {
         LogHelper::define_error_reporting($log_level);
     }
@@ -109,8 +103,4 @@ class log {
     public static function exception($e) {
         return LogHelper::exception($e);
     }
-
-    /*     * *********************Methode d'instance************************* */
-
-    /*     * **********************Getteur Setteur*************************** */
 }

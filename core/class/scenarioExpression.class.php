@@ -20,7 +20,6 @@
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
 use NextDom\Managers\ScenarioExpressionManager;
-use NextDom\Enums\ScenarioExpressionEnum;
 
 class scenarioExpression extends \NextDom\Model\Entity\ScenarioExpression
 {
@@ -199,11 +198,13 @@ class scenarioExpression extends \NextDom\Model\Entity\ScenarioExpression
         return ScenarioExpressionManager::valueDate($_cmd_id, $_format);
     }
 
-    public static function lastCommunication($_eqLogic_id, $_format = 'Y-m-d H:i:s') {
+    public static function lastCommunication($_eqLogic_id, $_format = 'Y-m-d H:i:s')
+    {
         return ScenarioExpressionManager::lastCommunication($_eqLogic_id, $_format);
     }
 
-    public static function value($_cmd_id) {
+    public static function value($_cmd_id)
+    {
         return ScenarioExpressionManager::value($_cmd_id);
     }
 

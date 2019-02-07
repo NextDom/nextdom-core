@@ -763,14 +763,14 @@ class Cmd
     {
         if ($this->getType() == 'info') {
             $state = $this->getCache(array('collectDate', 'valueDate', 'value'));
-            if(isset($state['collectDate'])){
+            if (isset($state['collectDate'])) {
                 $this->setCollectDate($state['collectDate']);
-            }else{
+            } else {
                 $this->setCollectDate(date('Y-m-d H:i:s'));
             }
-            if(isset($state['valueDate'])){
+            if (isset($state['valueDate'])) {
                 $this->setValueDate($state['valueDate']);
-            }else{
+            } else {
                 $this->setValueDate($this->getCollectDate());
             }
             return $state['value'];

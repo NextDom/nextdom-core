@@ -17,25 +17,18 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
-use NextDom\Managers\ViewDataManager;
-use NextDom\Managers\ViewManager;
+use NextDom\Managers\Plan3dManager;
 
 /**
- * Viewzone
+ * Plan3dheader
  *
- * @ORM\Table(name="viewZone", indexes={@ORM\Index(name="fk_zone_view1", columns={"view_id"})})
+ * @ORM\Table(name="plan3dHeader")
  * @ORM\Entity
  */
-class ViewZone
+class Plan3dHeader
 {
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=127, nullable=true)
-     */
-    protected $type;
 
     /**
      * @var string
@@ -43,13 +36,6 @@ class ViewZone
      * @ORM\Column(name="name", type="string", length=127, nullable=true)
      */
     protected $name;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="position", type="integer", nullable=true)
-     */
-    protected $position;
 
     /**
      * @var string
@@ -67,46 +53,43 @@ class ViewZone
      */
     protected $id;
 
-    /**
-     * @var \NextDom\Model\Entity\View
-     *
-     * @ORM\ManyToOne(targetEntity="NextDom\Model\Entity\View")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="view_id", referencedColumnName="id")
-     * })
-     */
-    protected $view_id;
-
     protected $_changed = false;
 
-
-    /*     * *********************Methode d'instance************************* */
+    public function preSave()
+    {
+        if (trim($this->getName()) == '') {
+            throw new \Exception(__('Le nom du l\'objet ne peut pas être vide'));
+        }
+    }
 
     public function save()
     {
-        return \DB::save($this);
+        \DB::save($this);
     }
 
     public function remove()
     {
-        return \DB::remove($this);
+        $cibDir = NEXTDOM_ROOT . '/' . $this->getConfiguration('path', '');
+        if (file_exists($cibDir) && $this->getConfiguration('path', '') != '') {
+            rrmdir($cibDir);
+        }
+        NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'plan3d'));
+        \DB::remove($this);
     }
 
-    public function getviewData()
+    public function getPlan3d()
     {
-        return ViewDataManager::byviewZoneId($this->getId());
+        return Plan3dManager::byPlan3dHeaderId($this->getId());
     }
-
-    public function getView()
-    {
-        return ViewManager::byId($this->getView_id());
-    }
-
-    /*     * **********************Getteur Setteur*************************** */
 
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
 
     public function setId($_id)
@@ -116,51 +99,10 @@ class ViewZone
         return $this;
     }
 
-    public function getView_id()
-    {
-        return $this->view_id;
-    }
-
-    public function setView_id($_view_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->view_id, $_view_id);
-        $this->view_id = $_view_id;
-        return $this;
-    }
-
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
     public function setName($_name)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
         $this->name = $_name;
-        return $this;
-    }
-
-    public function getPosition()
-    {
-        return $this->position;
-    }
-
-    public function setPosition($_position)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->position, $_position);
-        $this->position = $_position;
         return $this;
     }
 
@@ -171,6 +113,9 @@ class ViewZone
 
     public function setConfiguration($_key, $_value)
     {
+        if ($_key == 'accessCode' && $_value != '' && !Utils::isSha512($_value)) {
+            $_value = Utils::sha512($_value);
+        }
         $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
         $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
         $this->configuration = $configuration;
@@ -188,13 +133,8 @@ class ViewZone
         return $this;
     }
 
-    /**
-     * Get the name of the SQL table where data is stored.
-     *
-     * @return string
-     */
     public function getTableName()
     {
-        return 'viewZone';
+        return 'plan3dHeader';
     }
 }
