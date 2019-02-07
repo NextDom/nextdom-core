@@ -79,7 +79,7 @@ $(function () {
 
     setup();
 
-    var page = document.location.toString().split('p=')[1].replace('#', '');
+    var page = document.location.toString().split('p=')[1].replace('#', '').split('&')[0];
     var availableSearchPage = [
         "plugin",
         "dashboard",
@@ -208,5 +208,3 @@ function sideMenuResize(_calcul) {
         }
     }
 }
-
-

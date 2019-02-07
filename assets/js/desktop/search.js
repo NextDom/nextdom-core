@@ -188,11 +188,11 @@ $('#generalSearch').keyup(function () {
 $('#search-toggle').on('click', function () {
   $('.navbar-search').toggle();
   $('.search-toggle').toggle();
-  $('.objectSummaryGlobalHeader').toogle();
+  $('.objectSummaryglobal').toogle();
 });
 
 $('#search-close').on('click', function () {
   $('.navbar-search').toggle();
   $('.search-toggle').toggle();
-  $('.objectSummaryGlobalHeader').toogle();
+  $('.objectSummaryglobal').toogle();
 });
