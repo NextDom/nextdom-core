@@ -191,6 +191,12 @@ $('#search-toggle').on('click', function () {
   $('.objectSummaryGlobalHeader').toggle();
 });
 
+$('#search-toggle').hover(function () {
+  $('.navbar-search').show();
+  $('.search-toggle').hide();
+  $('.objectSummaryGlobalHeader').hide();
+});
+
 $('#search-close').on('click', function () {
   $('.navbar-search').toggle();
   $('.search-toggle').toggle();
