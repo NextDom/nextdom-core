@@ -35,7 +35,11 @@
 */
 
 $('#generalSearch').keyup(function () {
-    var search = $(this).value().toLowerCase();
+  generalSearchOnPages($(this).value().toLowerCase());
+});
+
+function generalSearchOnPages(value) {
+    var search = value;
     var page = document.location.toString().split('p=')[1].replace('#', '').split('&')[0];
     switch (page) {
         case 'plugin':
@@ -183,7 +187,7 @@ $('#generalSearch').keyup(function () {
             $('.displayListContainer').packery();
             break;
     }
-});
+};
 
 $('#search-toggle').on('click', function () {
   $('.navbar-search').toggle();
@@ -198,6 +202,8 @@ $('#search-toggle').hover(function () {
 });
 
 $('#search-close').on('click', function () {
+  $('#generalSearch').val('');
+  generalSearchOnPages('');
   $('.navbar-search').toggle();
   $('.search-toggle').toggle();
   $('.objectSummaryGlobalHeader').toggle();
