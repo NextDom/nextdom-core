@@ -35,7 +35,7 @@
 */
 
 $('#generalSearch').keyup(function () {
-    var search = $(this).value();
+    var search = $(this).value().toLowerCase();
     var page = document.location.toString().split('p=')[1].replace('#', '').split('&')[0];
     switch (page) {
         case 'plugin':
@@ -47,7 +47,7 @@ $('#generalSearch').keyup(function () {
             $('.pluginListContainer .box').hide();
             $('.box .box-title').each(function(){
                 var text = $(this).text().toLowerCase();
-                if(text.indexOf(search.toLowerCase()) >= 0){
+                if(text.indexOf(search) >= 0){
                     $(this).closest('.box').show();
                 }
             });
@@ -64,7 +64,7 @@ $('#generalSearch').keyup(function () {
             $('.interactDisplayCard').hide();
             $('.interactDisplayCard').each(function(){
                 var text = $(this).text().toLowerCase();
-                if(text.indexOf(search.toLowerCase()) >= 0){
+                if(text.indexOf(search) >= 0){
                     $(this).closest('.interactDisplayCard').show();
                 }
             });
@@ -96,19 +96,19 @@ $('#generalSearch').keyup(function () {
             }
             $('.eqLogic-widget').each(function(){
                 var match = false;
-                if(match || $(this).find('.widget-name').text().toLowerCase().indexOf(search.toLowerCase()) >= 0){
+                if(match || $(this).find('.widget-name').text().toLowerCase().indexOf(search) >= 0){
                     match = true;
                 }
-                if(match || ($(this).attr('data-tags') != undefined && $(this).attr('data-tags').toLowerCase().indexOf(search.toLowerCase()) >= 0)){
+                if(match || ($(this).attr('data-tags') != undefined && $(this).attr('data-tags').toLowerCase().indexOf(search) >= 0)){
                     match = true;
                 }
-                if(match ||($(this).attr('data-category') != undefined && $(this).attr('data-category').toLowerCase().indexOf(search.toLowerCase()) >= 0)){
+                if(match ||($(this).attr('data-category') != undefined && $(this).attr('data-category').toLowerCase().indexOf(search) >= 0)){
                     match = true;
                 }
-                if(match ||($(this).attr('data-eqType') != undefined && $(this).attr('data-eqType').toLowerCase().indexOf(search.toLowerCase()) >= 0)){
+                if(match ||($(this).attr('data-eqType') != undefined && $(this).attr('data-eqType').toLowerCase().indexOf(search) >= 0)){
                     match = true;
                 }
-                if(match ||($(this).attr('data-translate-category') != undefined && $(this).attr('data-translate-category').toLowerCase().indexOf(search.toLowerCase()) >= 0)){
+                if(match ||($(this).attr('data-translate-category') != undefined && $(this).attr('data-translate-category').toLowerCase().indexOf(search) >= 0)){
                     match = true;
                 }
                 if(match){
@@ -127,6 +127,46 @@ $('#generalSearch').keyup(function () {
             });
 
             $('.div_displayEquipement').packery();
+            break;
+        case 'object':
+            if(search == ''){
+                $('.objectDisplayCard').show();
+                $('.objectListContainer').packery();
+                return;
+            }
+            $('.objectDisplayCard').hide();
+            $('.objectDisplayCard .name').each(function(){
+                var text = $(this).text().toLowerCase();
+                if(text.indexOf(search) >= 0){
+                    $(this)
+                    $(this).closest('.objectDisplayCard').show();
+                }
+            });
+            $('.objectListContainer').packery();
+            break;
+        case 'display':
+            $('.cmd').show().removeClass('alert-success').addClass('alert-warning');
+            $('.cmdSortable').hide();
+            if(search == ''){
+                return;
+            }
+            $('.eqLogic').each(function(){
+                var eqLogic = $(this);
+                var name = eqLogic.attr('data-name').toLowerCase();
+                var type = eqLogic.attr('data-type').toLowerCase();
+                if(name.indexOf(search) < 0 && type.indexOf(search) < 0){
+                    eqLogic.hide();
+                }
+                $(this).find('.cmd').each(function(){
+                    var cmd = $(this);
+                    var name = cmd.attr('data-name').toLowerCase();
+                    if(name.indexOf(search) >= 0){
+                        eqLogic.show();
+                        eqLogic.find('.cmdSortable').show();
+                        cmd.removeClass('alert-warning').addClass('alert-success');
+                    }
+                });
+            });
             break;
     }
 });

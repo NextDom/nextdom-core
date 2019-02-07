@@ -84,7 +84,11 @@ $(function () {
         "plugin",
         "dashboard",
         "interact",
-        "scenario"];
+        "scenario",
+        "object",
+        "realtime",
+        "display"
+    ];
 
     if(jQuery.inArray(page, availableSearchPage) != -1) {
         $("#generalSearch").prop('disabled', false);
