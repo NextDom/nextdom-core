@@ -36,7 +36,7 @@
 
 $('#generalSearch').keyup(function () {
     var search = $(this).value();
-    var page = document.location.toString().split('p=')[1].replace('#', '');
+    var page = document.location.toString().split('p=')[1].replace('#', '').split('&')[0];
     switch (page) {
         case 'plugin':
             if(search == ''){
