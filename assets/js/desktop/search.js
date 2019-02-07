@@ -119,7 +119,7 @@ $('#generalSearch').keyup(function () {
             });
 
             $('.div_displayEquipement').each(function(){
-                if($(this).height() < 10 ) {
+                if($(this).height() < 10 && search != '') {
                     $(this).parent().parent().hide();
                 } else{
                     $(this).parent().parent().show();
