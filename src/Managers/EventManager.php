@@ -147,9 +147,9 @@ class EventManager
     /**
      * Get new events since a datetime
      *
-     * @param mixed $datetime Event time
-     * @param null $longPolling Wait for new events
-     * @param null $filter Event filter
+     * @param mixed $_datetime Event time
+     * @param null $_longPolling Wait for new events
+     * @param null $_filter Event filter
      * @return array
      * @throws \Exception
      */
@@ -177,8 +177,8 @@ class EventManager
     /**
      * Get events filtered by name
      *
-     * @param array $eventsToFilter Filter events
-     * @param array $filterName Filter name
+     * @param array $_eventsToFilter Filter events
+     * @param array $_filterName Filter name
      *
      * @return array Filtered events
      * @throws \Exception
@@ -206,7 +206,7 @@ class EventManager
     /**
      * Get events whose state has changed since a datetime
      *
-     * @param mixed $datetime Limit datetime
+     * @param mixed $_datetime Limit datetime
      *
      * @return array Associative array with all events
      * @throws \Exception
