@@ -17,6 +17,12 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
+use NextDom\Managers\ConfigManager;
+use NextDom\Managers\UserManager;
+use PragmaRX\Google2FA\Google2FA;
+
 /**
  * User
  *
@@ -31,49 +37,50 @@ class User
      *
      * @ORM\Column(name="login", type="string", length=45, nullable=true)
      */
-    private $login;
+    protected $login;
 
     /**
      * @var string
      *
      * @ORM\Column(name="profils", type="string", length=45, nullable=false)
      */
-    private $profils = 'admin';
+    protected $profils = 'admin';
 
     /**
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255, nullable=true)
      */
-    private $password;
+    protected $password;
 
     /**
      * @var string
      *
      * @ORM\Column(name="options", type="text", length=65535, nullable=true)
      */
-    private $options;
+    protected $options;
 
     /**
      * @var string
      *
      * @ORM\Column(name="hash", type="string", length=255, nullable=true)
      */
-    private $hash;
+    protected $hash;
 
     /**
      * @var string
      *
      * @ORM\Column(name="rights", type="text", length=65535, nullable=true)
      */
-    private $rights;
+    protected $rights;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="enable", type="integer", nullable=true)
      */
-    private $enable = '1';
+    protected $enable = 1;
+    protected $_changed = false;
 
     /**
      * @var integer
@@ -82,16 +89,78 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
+
+    public function preInsert()
+    {
+        if (is_object(UserManager::byLogin($this->getLogin()))) {
+            throw new \Exception(__('Ce nom d\'utilisateur est déja pris'));
+        }
+    }
+
+    public function preSave()
+    {
+        if ($this->getLogin() == '') {
+            throw new \Exception(__('Le nom d\'utilisateur ne peut pas être vide'));
+        }
+        $admins = UserManager::byProfils('admin', true);
+        if (count($admins) == 1 && $this->getProfils() == 'admin' && $this->getEnable() == 0) {
+            throw new \Exception(__('Vous ne pouvez désactiver le dernier utilisateur'));
+        }
+        if (count($admins) == 1 && $admins[0]->getId() == $this->getid() && $this->getProfils() != 'admin') {
+            throw new \Exception(__('Vous ne pouvez changer le profil du dernier administrateur'));
+        }
+    }
+
+    public function save()
+    {
+        return \DB::save($this);
+    }
+
+    public function preRemove()
+    {
+        if (count(UserManager::byProfils('admin', true)) == 1 && $this->getProfils() == 'admin') {
+            throw new \Exception(__('Vous ne pouvez supprimer le dernier administrateur'));
+        }
+    }
+
+    public function remove()
+    {
+        NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getLogin(), 'date' => date('Y-m-d H:i:s'), 'type' => 'user'));
+        return \DB::remove($this);
+    }
+
+    public function refresh()
+    {
+        \DB::refresh($this);
+    }
+
+    /**
+     *
+     * @return boolean vrai si l'utilisateur est valide
+     */
+    public function is_Connected()
+    {
+        return (is_numeric($this->id) && $this->login != '');
+    }
+
+    public function validateTwoFactorCode($_code)
+    {
+        $google2fa = new Google2FA();
+        return $google2fa->verifyKey($this->getOptions('twoFactorAuthentificationSecret'), $_code);
+    }
+
+    /*     * **********************Getteur Setteur*************************** */
+
+
+    public function getId()
+    {
+        return $this->id;
+    }
 
     public function getLogin()
     {
         return $this->login;
-    }
-
-    public function getProfils()
-    {
-        return $this->profils;
     }
 
     public function getPassword()
@@ -99,19 +168,52 @@ class User
         return $this->password;
     }
 
-    public function getOptions()
+    public function setId($_id)
     {
-        return $this->options;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
     }
 
-    public function getHash()
+    public function setLogin($_login)
     {
-        return $this->hash;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->login, $_login);
+        $this->login = $_login;
+        return $this;
     }
 
-    public function getRights()
+    public function setPassword($_password)
     {
-        return $this->rights;
+        $_password = (!Utils::isSha512($_password)) ? Utils::sha512($_password) : $_password;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->password, $_password);
+        $this->password = $_password;
+        return $this;
+    }
+
+    public function getOptions($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->options, $_key, $_default);
+    }
+
+    public function setOptions($_key, $_value)
+    {
+        $options = Utils::setJsonAttr($this->options, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->options, $options);
+        $this->options = $options;
+        return $this;
+    }
+
+    public function getRights($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->rights, $_key, $_default);
+    }
+
+    public function setRights($_key, $_value)
+    {
+        $rights = Utils::setJsonAttr($this->rights, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->rights, $rights);
+        $this->rights = $rights;
+        return $this;
     }
 
     public function getEnable()
@@ -119,57 +221,58 @@ class User
         return $this->enable;
     }
 
-    public function getId(): int
+    public function setEnable($_enable)
     {
-        return $this->id;
-    }
-
-    public function setLogin($login)
-    {
-        $this->login = $login;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->enable, $_enable);
+        $this->enable = $_enable;
         return $this;
     }
 
-    public function setProfils($profils)
+    public function getHash()
     {
-        $this->profils = $profils;
+        if ($this->hash == '' && $this->id != '') {
+            $hash = ConfigManager::genKey();
+            while (is_object(UserManager::byHash($hash))) {
+                $hash = ConfigManager::genKey();
+            }
+            $this->setHash($hash);
+            $this->save();
+        }
+        return $this->hash;
+    }
+
+    public function setHash($_hash)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->hash, $_hash);
+        $this->hash = $_hash;
         return $this;
     }
 
-    public function setPassword($password)
+    public function getProfils()
     {
-        $this->password = $password;
+        return $this->profils;
+    }
+
+    public function setProfils($_profils)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->profils, $_profils);
+        $this->profils = $_profils;
         return $this;
     }
 
-    public function setOptions($options)
+    public function getChanged()
     {
-        $this->options = $options;
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed)
+    {
+        $this->_changed = $_changed;
         return $this;
     }
 
-    public function setHash($hash)
+    public function getTableName()
     {
-        $this->hash = $hash;
-        return $this;
+        return 'user';
     }
-
-    public function setRights($rights)
-    {
-        $this->rights = $rights;
-        return $this;
-    }
-
-    public function setEnable($enable)
-    {
-        $this->enable = $enable;
-        return $this;
-    }
-
-    public function setId(int $id)
-    {
-        $this->id = $id;
-        return $this;
-    }
-
 }

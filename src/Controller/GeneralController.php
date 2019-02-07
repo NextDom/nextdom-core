@@ -24,6 +24,7 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
+use NextDom\Managers\CacheManager;
 
 class GeneralController extends BaseController
 {
@@ -44,7 +45,7 @@ class GeneralController extends BaseController
 
         $pageData['adminHardwareName'] = NextDomHelper::getHardwareName();
         $pageData['adminHardwareKey'] = NextDomHelper::getHardwareKey();
-        $cache = \cache::byKey('hour');
+        $cache = CacheManager::byKey('hour');
         $pageData['adminLastKnowDate'] = $cache->getValue();
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/general.js';

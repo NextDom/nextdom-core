@@ -27,6 +27,7 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\UserManager;
 
 class UserRights extends BaseAbstractModal
 {
@@ -44,7 +45,7 @@ class UserRights extends BaseAbstractModal
     public function get(Render $render): string
     {
         $userId = Utils::init('id');
-        $user = \user::byId($userId);
+        $user = UserManager::byId($userId);
 
         if (!is_object($user)) {
             throw new CoreException(__('Impossible de trouver l\'utilisateur : ') . $userId);

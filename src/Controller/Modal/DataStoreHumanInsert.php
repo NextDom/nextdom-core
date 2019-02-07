@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
+use NextDom\Managers\DataStoreManager;
 
 class DataStoreHumanInsert extends BaseAbstractModal
 {
@@ -39,7 +40,7 @@ class DataStoreHumanInsert extends BaseAbstractModal
     public function get(Render $render): string
     {
         $pageData = [];
-        $pageData['dataStoreByType'] = \dataStore::byTypeLinkId(init('type', 'scenario'));
+        $pageData['dataStoreByType'] = DataStoreManager::byTypeLinkId(init('type', 'scenario'));
 
         return $render->get('/modals/dataStore.human.insert.html.twig', $pageData);
     }

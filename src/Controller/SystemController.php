@@ -41,7 +41,6 @@ class SystemController extends BaseController
      */
     public function get(Render $render, &$pageData): string
     {
-        $pageData = [];
         $pageData['systemCanSudo'] = NextDomHelper::isCapable('sudo');
         $pageData['JS_END_POOL'][] = '/public/js/desktop/system.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';

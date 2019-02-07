@@ -221,7 +221,7 @@ class PluginManager
                     $message = __('Attention le plugin ') . ' ' . $plugin->getName();
                     $message .= __(' n\'a recu de message depuis ') . $heartbeat . __(' min');
                     $logicalId = 'heartbeat' . $plugin->getId();
-                    \message::add($plugin->getId(), $message, '', $logicalId);
+                    MessageManager::add($plugin->getId(), $message, '', $logicalId);
                     if ($plugin->getHasOwnDeamon() && ConfigManager::byKey('heartbeat::restartDeamon::' . $plugin->getId(), 'core', 0) == 1) {
                         $plugin->deamon_start(true);
                     }
@@ -302,7 +302,7 @@ class PluginManager
     {
         $cache = CacheManager::byKey('plugin::' . $cronType . '::inprogress');
         if ($cache->getValue(0) > 3) {
-            \message::add('core', \__('La tache plugin::' . $cronType . ' n\'arrive pas à finir à cause du plugin : ') . CacheManager::byKey('plugin::' . $cronType . '::last')->getValue() . \__(' nous vous conseillons de désactiver le plugin et de contacter l\'auteur'));
+            MessageManager::add('core', \__('La tache plugin::' . $cronType . ' n\'arrive pas à finir à cause du plugin : ') . CacheManager::byKey('plugin::' . $cronType . '::last')->getValue() . \__(' nous vous conseillons de désactiver le plugin et de contacter l\'auteur'));
         }
         CacheManager::set('plugin::' . $cronType . '::inprogress', $cache->getValue(0) + 1);
         foreach (self::listPlugin(true) as $plugin) {

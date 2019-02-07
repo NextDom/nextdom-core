@@ -17,6 +17,16 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
+use NextDom\Managers\CmdManager;
+use NextDom\Managers\EqLogicManager;
+use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\Plan3dHeaderManager;
+use NextDom\Managers\Plan3dManager;
+use NextDom\Managers\ScenarioExpressionManager;
+use NextDom\Managers\ScenarioManager;
+
 /**
  * Plan3d
  *
@@ -25,55 +35,47 @@ namespace NextDom\Model\Entity;
  */
 class Plan3d
 {
-
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="link_type", type="string", length=127, nullable=true)
      */
-    private $linkType;
+    protected $link_type;
 
     /**
      * @var string
      *
      * @ORM\Column(name="link_id", type="string", length=127, nullable=true)
      */
-    private $linkId;
+    protected $link_id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="position", type="text", length=65535, nullable=true)
      */
-    private $position;
+    protected $position;
 
     /**
      * @var string
      *
      * @ORM\Column(name="display", type="text", length=65535, nullable=true)
      */
-    private $display;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="css", type="text", length=65535, nullable=true)
-     */
-    private $css;
+    protected $display;
 
     /**
      * @var string
      *
      * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
      */
-    private $configuration;
+    protected $configuration;
 
     /**
      * @var integer
@@ -82,51 +84,184 @@ class Plan3d
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
-     * @var \NextDom\Model\Entity\Plan3dheader
+     * @var \NextDom\Model\Entity\Plan3dHeader
      *
      * @ORM\ManyToOne(targetEntity="NextDom\Model\Entity\Plan3dheader")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="plan3dHeader_id", referencedColumnName="id")
      * })
      */
-    private $plan3dheader;
+    protected $plan3dHeader_id;
 
-    public function getName()
+    protected $css;
+
+    protected $_changed = false;
+
+    public function preInsert()
     {
-        return $this->name;
+        if (in_array($this->getLink_type(), array('eqLogic', 'cmd', 'scenario'))) {
+            Plan3dManager::removeByLinkTypeLinkId3dHeaderId($this->getLink_type(), $this->getLink_id(), $this->getPlan3dHeader_id());
+        }
     }
 
-    public function getLinkType()
+    public function preSave()
     {
-        return $this->linkType;
+        $default = array(
+            '3d::widget::light::power' => 6,
+            '3d::widget::text::fontsize' => 24,
+            '3d::widget::text::backgroundcolor' => '#ff6464',
+            '3d::widget::text::backgroundtransparency' => 0.8,
+            '3d::widget::text::bordercolor' => '#ff0000',
+            '3d::widget::text::bordertransparency' => 1,
+            '3d::widget::text::textcolor' => '#000000',
+            '3d::widget::text::texttransparency' => 1,
+            '3d::widget::text::space::z' => 10,
+            '3d::widget::door::shutterclose' => '#0000ff',
+            '3d::widget::door::windowclose' => '#ff0000',
+            '3d::widget::door::windowopen' => '#00ff00',
+            '3d::widget::door::rotate::0' => 'left',
+            '3d::widget::door::rotate::1' => 'front',
+            '3d::widget::door::rotate::way' => 1,
+            '3d::widget::door::rotate' => 0,
+            '3d::widget::door::windowopen::enableColor' => 0,
+            '3d::widget::door::windowclose::enableColor' => 0,
+            '3d::widget::door::shutterclose::enableColor' => 0,
+            '3d::widget::door::translate' => 0,
+            '3d::widget::door::translate::repeat' => 1,
+        );
+        foreach ($default as $key => $value) {
+            $this->setConfiguration($key, $this->getConfiguration($key, $value));
+        }
     }
 
-    public function getLinkId()
+    public function save()
     {
-        return $this->linkId;
+        \DB::save($this);
     }
 
-    public function getPosition()
+    public function remove()
     {
-        return $this->position;
+        \DB::remove($this);
     }
 
-    public function getDisplay()
+    public function getLink()
     {
-        return $this->display;
+        if ($this->getLink_type() == 'eqLogic') {
+            $eqLogic = EqLogicManager::byId(str_replace(array('#', 'eqLogic'), '', $this->getLink_id()));
+            return $eqLogic;
+        } else if ($this->getLink_type() == 'scenario') {
+            $scenario = ScenarioManager::byId($this->getLink_id());
+            return $scenario;
+        } else if ($this->getLink_type() == 'cmd') {
+            $cmd = CmdManager::byId($this->getLink_id());
+            return $cmd;
+        } else if ($this->getLink_type() == 'summary') {
+            $object = JeeObjectManager::byId($this->getLink_id());
+            return $object;
+        }
+        return null;
     }
 
-    public function getCss()
+    public function getHtml($_version = 'dplan')
     {
-        return $this->css;
+        if (in_array($this->getLink_type(), array('eqLogic', 'cmd', 'scenario'))) {
+            $link = $this->getLink();
+            if (!is_object($link)) {
+                return null;
+            }
+            return array(
+                '3d' => Utils::o2a($this),
+                'html' => $link->toHtml($_version),
+            );
+        }
+        return null;
     }
 
-    public function getConfiguration()
+    public function additionalData()
     {
-        return $this->configuration;
+        $return = array();
+        $return['cmd_id'] = str_replace('#', '', $this->getConfiguration('cmd::state'));
+        $cmd = CmdManager::byId($return['cmd_id']);
+        if (is_object($cmd) && $cmd->getType() == 'info') {
+            $return['state'] = $cmd->execCmd();
+            $return['subType'] = $cmd->getSubType();
+        }
+        if ($this->getLink_type() == 'eqLogic') {
+            if ($this->getConfiguration('3d::widget') == 'text') {
+                if (is_object($cmd) && $cmd->getType() == 'info') {
+                    $return['text'] = ScenarioExpressionManager::setTags($this->getConfiguration('3d::widget::text::text'));
+                    preg_match_all("/#([0-9]*)#/", $this->getConfiguration('3d::widget::text::text'), $matches);
+                    $return['cmds'] = $matches[1];
+                }
+            }
+            if ($this->getConfiguration('3d::widget') == 'door') {
+                $return['cmds'] = array(str_replace('#', '', $this->getConfiguration('3d::widget::door::window')), str_replace('#', '', $this->getConfiguration('3d::widget::door::shutter')));
+                $return['state'] = 0;
+                $cmd = CmdManager::byId(str_replace('#', '', $this->getConfiguration('3d::widget::door::window')));
+                if (is_object($cmd) && $cmd->getType() == 'info') {
+                    $cmd_value = $cmd->execCmd();
+                    if ($cmd->getSubType() == 'binary' && $cmd->getDisplay('invertBinary') == 1) {
+                        $cmd_value = ($cmd_value == 1) ? 0 : 1;
+                    }
+                    $return['state'] = $cmd_value;
+                }
+                if ($return['state'] > 0) {
+                    $cmd = CmdManager::byId(str_replace('#', '', $this->getConfiguration('3d::widget::door::shutter')));
+                    if (is_object($cmd) && $cmd->getType() == 'info') {
+                        if ($cmd->execCmd()) {
+                            $return['state'] = 2;
+                        }
+                    }
+                }
+            }
+            if ($this->getConfiguration('3d::widget') == 'conditionalColor') {
+                $return['color'] = '';
+                $return['cmds'] = array();
+                $conditions = $this->getConfiguration('3d::widget::conditionalColor::condition');
+                if (!is_array($conditions) || count($conditions) == 0) {
+                    return $return;
+                }
+                foreach ($conditions as $condition) {
+                    if (!isset($condition['color'])) {
+                        continue;
+                    }
+                    if (!isset($condition['cmd'])) {
+                        continue;
+                    }
+                    preg_match_all("/#([0-9]*)#/", $condition['cmd'], $matches);
+                    foreach ($matches[1] as $cmd_id) {
+                        $return['cmds'][] = $cmd_id;
+                    }
+                }
+                foreach ($conditions as $condition) {
+                    if (!isset($condition['color'])) {
+                        continue;
+                    }
+                    if (!isset($condition['cmd'])) {
+                        continue;
+                    }
+                    if (NextDomHelper::evaluateExpression($condition['cmd'])) {
+                        $return['color'] = $condition['color'];
+                        return $return;
+                    }
+                }
+            }
+        } elseif ($this->getLink_type() == 'scenario') {
+
+        } elseif ($this->getLink_type() == 'cmd') {
+
+        } elseif ($this->getLink_type() == 'summary') {
+
+        }
+        return $return;
+    }
+
+    public function getPlan3dHeader()
+    {
+        return Plan3dHeaderManager::byId($this->getPlan3dHeader_id());
     }
 
     public function getId()
@@ -134,63 +269,126 @@ class Plan3d
         return $this->id;
     }
 
-    public function getPlan3dheader(): \NextDom\Model\Entity\Plan3dheader
+    public function getName()
     {
-        return $this->plan3dheader;
+        return $this->name;
     }
 
-    public function setName($name)
+    public function getLink_type()
     {
-        $this->name = $name;
+        return $this->link_type;
+    }
+
+    public function getLink_id()
+    {
+        return $this->link_id;
+    }
+
+    public function getPosition($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->position, $_key, $_default);
+    }
+
+    public function getDisplay($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->display, $_key, $_default);
+    }
+
+    public function getCss($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->css, $_key, $_default);
+    }
+
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
         return $this;
     }
 
-    public function setLinkType($linkType)
+    public function setName($_name)
     {
-        $this->linkType = $linkType;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
+        $this->name = $_name;
         return $this;
     }
 
-    public function setLinkId($linkId)
+    public function setLink_type($_link_type)
     {
-        $this->linkId = $linkId;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->link_type, $_link_type);
+        $this->link_type = $_link_type;
         return $this;
     }
 
-    public function setPosition($position)
+    public function setLink_id($_link_id)
     {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->link_id, $_link_id);
+        $this->link_id = $_link_id;
+        return $this;
+    }
+
+    public function setPosition($_key, $_value)
+    {
+        $position = Utils::setJsonAttr($this->position, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->position, $position);
         $this->position = $position;
         return $this;
     }
 
-    public function setDisplay($display)
+    public function setDisplay($_key, $_value)
     {
+        $display = Utils::setJsonAttr($this->display, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
         $this->display = $display;
         return $this;
     }
 
-    public function setCss($css)
+    public function setCss($_key, $_value)
     {
+        $css = Utils::setJsonAttr($this->css, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->css, $css);
         $this->css = $css;
         return $this;
     }
 
-    public function setConfiguration($configuration)
+    public function getPlan3dHeader_id()
     {
+        return $this->plan3dHeader_id;
+    }
+
+    public function setPlan3dHeader_id($_plan3dHeader_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->plan3dHeader_id, $_plan3dHeader_id);
+        $this->plan3dHeader_id = $_plan3dHeader_id;
+        return $this;
+    }
+
+    public function getConfiguration($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->configuration, $_key, $_default);
+    }
+
+    public function setConfiguration($_key, $_value)
+    {
+        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
         $this->configuration = $configuration;
         return $this;
     }
 
-    public function setId($id)
+    public function getChanged()
     {
-        $this->id = $id;
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed)
+    {
+        $this->_changed = $_changed;
         return $this;
     }
 
-    public function setPlan3dheader(\NextDom\Model\Entity\Plan3dheader $plan3dheader)
+    public function getTableName()
     {
-        $this->plan3dheader = $plan3dheader;
-        return $this;
+        return 'plan3d';
     }
-
 }

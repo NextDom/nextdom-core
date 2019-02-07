@@ -24,6 +24,7 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\MessageManager;
 
 class MessageController extends BaseController
 {
@@ -45,11 +46,11 @@ class MessageController extends BaseController
 
         $pageData['messageSelectedPlugin'] = Utils::init('plugin');
         if ($pageData['messageSelectedPlugin'] != '') {
-            $pageData['messagesList'] = \message::byPlugin($pageData['messageSelectedPlugin']);
+            $pageData['messagesList'] = MessageManager::byPlugin($pageData['messageSelectedPlugin']);
         } else {
-            $pageData['messagesList'] = \message::all();
+            $pageData['messagesList'] = MessageManager::all();
         }
-        $pageData['messagePluginsList'] = \message::listPlugin();
+        $pageData['messagePluginsList'] = MessageManager::listPlugin();
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return $render->get('/desktop/message.html.twig', $pageData);

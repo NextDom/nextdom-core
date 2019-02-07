@@ -24,7 +24,9 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
+use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\ViewManager;
 
 class ReportController extends BaseController
 {
@@ -46,7 +48,7 @@ class ReportController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/report.js';
         $report_path = NEXTDOM_ROOT . '/data/report/';
         $pageData['reportViews'] = [];
-        $allViews = \view::all();
+        $allViews = ViewManager::all();
         foreach ($allViews as $view) {
             $viewData = [];
             $viewData['id'] = $view->getId();
@@ -56,7 +58,7 @@ class ReportController extends BaseController
             $pageData['reportViews'][] = $viewData;
         }
         $pageData['reportPlans'] = [];
-        $allPlanHeader = \planHeader::all();
+        $allPlanHeader = PlanHeaderManager::all();
         foreach ($allPlanHeader as $plan) {
             $planData = [];
             $planData['id'] = $plan->getId();

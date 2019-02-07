@@ -22,8 +22,12 @@ use NextDom\Enums\ViewType;
 use NextDom\Managers\AjaxManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\MessageManager;
+use NextDom\Managers\Plan3dHeaderManager;
+use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Managers\ViewManager;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 
@@ -55,13 +59,13 @@ class PrepareView
      *
      * @param \Symfony\Component\Routing\Route $controllerRouteData
      * @param Render|null $render Render helper
-     * @param array|null $pageContent Array with the content to pass to the render
+     * @param array|null $pageData Array with the content to pass to the render
      *
      * @return string|null Content of the route
      */
-    private static function getContentFromControllerRouteData($controllerRouteData, Render $render = null, array &$pageContent = null)
+    private static function getContentFromControllerRouteData($controllerRouteData, Render $render = null, array &$pageData = null)
     {
-        return call_user_func_array($controllerRouteData->getDefaults()['_controller'], [$render, &$pageContent]);
+        return call_user_func_array($controllerRouteData->getDefaults()['_controller'], [$render, &$pageData]);
     }
 
     /**
@@ -93,12 +97,12 @@ class PrepareView
      * @param string $routesFile Name of the route file in src directory
      * @param string $routeCode Code of the route
      * @param Render|null $render Render helper
-     * @param array|null $pageContent Array with the content to pass to the render
+     * @param array|null $pageData Array with the content to pass to the render
      *
      * @return string|null Content of the route
      * @throws \NextDom\Exceptions\CoreException
      */
-    private static function getContentFromRoute(string $routesFile, string $routeCode, Render $render = null, array &$pageContent = null)
+    private static function getContentFromRoute(string $routesFile, string $routeCode, Render $render = null, array &$pageData = null)
     {
         $controllerRoute = self::getControllerRouteData($routesFile, $routeCode);
         if ($controllerRoute === null) {
@@ -108,7 +112,7 @@ class PrepareView
                 if ($render === null) {
                     $render = Render::getInstance();
                 }
-                return self::getContentFromControllerRouteData($controllerRoute, $render, $pageContent);
+                return self::getContentFromControllerRouteData($controllerRoute, $render, $pageData);
             }
         }
         return null;
@@ -123,9 +127,9 @@ class PrepareView
      */
     public static function showSpecialPage(string $pageCode, array $configs)
     {
-        $pageContent = [];
-        self::initHeaderData($pageContent, $configs);
-        echo self::getContentFromRoute('pages_routes.yml', $pageCode, null, $pageContent);
+        $pageData = [];
+        self::initHeaderData($pageData, $configs);
+        echo self::getContentFromRoute('pages_routes.yml', $pageCode, null, $pageData);
     }
 
     /**
@@ -171,13 +175,13 @@ class PrepareView
             } else {
                 if (self::userCanUseRoute($controllerRoute)) {
                     $render = Render::getInstance();
-                    $pageContent = [];
-                    $pageContent['JS_POOL'] = [];
-                    $pageContent['JS_END_POOL'] = [];
-                    $pageContent['CSS_POOL'] = [];
-                    $pageContent['JS_VARS'] = [];
-                    $pageContent['content'] = self::getContentFromControllerRouteData($controllerRoute, $render, $pageContent);
-                    $render->show('/layouts/ajax_content.html.twig', $pageContent);
+                    $pageData = [];
+                    $pageData['JS_POOL'] = [];
+                    $pageData['JS_END_POOL'] = [];
+                    $pageData['CSS_POOL'] = [];
+                    $pageData['JS_VARS'] = [];
+                    $pageData['content'] = self::getContentFromControllerRouteData($controllerRoute, $render, $pageData);
+                    $render->show('/layouts/ajax_content.html.twig', $pageData);
                 }
             }
         } catch (\Exception $e) {
@@ -192,21 +196,21 @@ class PrepareView
      * Get the content of the route
      *
      * @param Render $render
-     * @param array $pageContent
+     * @param array $pageData
      * @param string $page
      * @param $currentPlugin
      *
      * @return mixed
      * @throws \Exception
      */
-    private static function getContent(Render $render, array &$pageContent, string $page, $currentPlugin)
+    private static function getContent(Render $render, array &$pageData, string $page, $currentPlugin)
     {
         if ($currentPlugin !== null && is_object($currentPlugin)) {
             ob_start();
             FileSystemHelper::includeFile('desktop', $page, 'php', $currentPlugin->getId(), true);
             return ob_get_clean();
         } else {
-            return self::getContentFromRoute('pages_routes.yml', $page, $render, $pageContent);
+            return self::getContentFromRoute('pages_routes.yml', $page, $render, $pageData);
         }
     }
 
@@ -447,15 +451,15 @@ class PrepareView
     {
         $pageData['IS_ADMIN'] = Status::isConnectAdmin();
         $pageData['CAN_SUDO'] = NextDomHelper::isCapable('sudo');
-        $pageData['MENU_NB_MESSAGES'] = \message::nbMessage();
+        $pageData['MENU_NB_MESSAGES'] = MessageManager::nbMessage();
         $pageData['NOTIFY_STATUS'] = ConfigManager::byKey('notify::status');
         if ($pageData['IS_ADMIN']) {
             $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
         }
         $pageData['MENU_JEEOBJECT_TREE'] = JeeObjectManager::buildTree(null, false);
-        $pageData['MENU_VIEWS_LIST'] = \view::all();
-        $pageData['MENU_PLANS_LIST'] = \planHeader::all();
-        $pageData['MENU_PLANS3D_LIST'] = \plan3dHeader::all();
+        $pageData['MENU_VIEWS_LIST'] = ViewManager::all();
+        $pageData['MENU_PLANS_LIST'] = PlanHeaderManager::all();
+        $pageData['MENU_PLANS3D_LIST'] = Plan3dHeaderManager::all();
         if (is_object($currentPlugin) && $currentPlugin->getIssue()) {
             $pageData['MENU_CURRENT_PLUGIN_ISSUE'] = $currentPlugin->getIssue();
         }

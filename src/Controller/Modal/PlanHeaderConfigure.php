@@ -25,6 +25,7 @@ namespace NextDom\Controller\Modal;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\PlanHeaderManager;
 
 class PlanHeaderConfigure extends BaseAbstractModal
 {
@@ -43,7 +44,7 @@ class PlanHeaderConfigure extends BaseAbstractModal
     {
 
 
-        $planHeader = \planHeader::byId(Utils::init('planHeader_id'));
+        $planHeader = PlanHeaderManager::byId(Utils::init('planHeader_id'));
         if (!is_object($planHeader)) {
             throw new CoreException('Impossible de trouver le plan');
         }

@@ -25,6 +25,7 @@ namespace NextDom\Controller\Modal;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\InteractQueryManager;
 
 class InteractQueryDisplay extends BaseAbstractModal
 {
@@ -46,7 +47,7 @@ class InteractQueryDisplay extends BaseAbstractModal
             throw new CoreException(__('Interact Def ID ne peut être vide'));
         }
         $pageData = [];
-        $pageData['interactQueries'] = \interactQuery::byInteractDefId($interactDefId);
+        $pageData['interactQueries'] = InteractQueryManager::byInteractDefId($interactDefId);
         if (count($pageData['interactQueries']) == 0) {
             throw new CoreException(__('Aucune phrase trouvée'));
         }

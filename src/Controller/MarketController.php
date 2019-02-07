@@ -25,6 +25,7 @@ namespace NextDom\Controller;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
+use NextDom\Managers\MessageManager;
 
 class MarketController extends BaseController
 {
@@ -73,7 +74,7 @@ class MarketController extends BaseController
 
             $messageIndex = intval($_GET['message']);
             if ($messageIndex < count($messages)) {
-                \message::add('core', $messages[$messageIndex]);
+                MessageManager::add('core', $messages[$messageIndex]);
             }
         }
 

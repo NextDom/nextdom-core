@@ -23,6 +23,7 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
+use NextDom\Managers\ViewManager;
 
 class ViewEditController extends BaseController
 {
@@ -40,7 +41,7 @@ class ViewEditController extends BaseController
      */
     public function get(Render $render, &$pageData): string
     {
-        $pageData['viewEditViewsList'] = \view::all();
+        $pageData['viewEditViewsList'] = ViewManager::all();
         $pageData['JS_END_POOL'][] = '/public/js/desktop/view_edit.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 

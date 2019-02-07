@@ -34,15 +34,17 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Model\Entity\InteractQuery;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
 class InteractQueryManager
 {
 
-    const CLASS_NAME = 'interactQuery';
+    const CLASS_NAME = InteractQuery::class;
     const DB_CLASS_NAME = '`interactQuery`';
 
     public static function byId($_id)
@@ -151,10 +153,10 @@ class InteractQueryManager
         if (is_object($query)) {
             $interactDef = $query->getInteractDef();
             if ($interactDef->getOptions('mustcontain') != '' && !preg_match($interactDef->getOptions('mustcontain'), $_query)) {
-                \log::add('interact', 'debug', __('Correspondance trouvée : ') . $query->getQuery() . __(' mais ne contient pas : ') . InteractDefManager::sanitizeQuery($interactDef->getOptions('mustcontain')));
+                LogHelper::add('interact', 'debug', __('Correspondance trouvée : ') . $query->getQuery() . __(' mais ne contient pas : ') . InteractDefManager::sanitizeQuery($interactDef->getOptions('mustcontain')));
                 return null;
             }
-            \log::add('interact', 'debug', 'Je prends : ' . $query->getQuery());
+            LogHelper::add('interact', 'debug', 'Je prends : ' . $query->getQuery());
             return $query;
         }
 
@@ -171,7 +173,7 @@ class InteractQueryManager
             if (is_object($query)) {
                 $interactDef = $query->getInteractDef();
                 if ($interactDef->getOptions('mustcontain') != '' && !preg_match($interactDef->getOptions('mustcontain'), $_query)) {
-                    \log::add('interact', 'debug', __('Correspondance trouvée : ') . $query->getQuery() . __(' mais ne contient pas : ') . InteractDefManager::sanitizeQuery($interactDef->getOptions('mustcontain')));
+                    LogHelper::add('interact', 'debug', __('Correspondance trouvée : ') . $query->getQuery() . __(' mais ne contient pas : ') . InteractDefManager::sanitizeQuery($interactDef->getOptions('mustcontain')));
                     return null;
                 }
                 return $queries;
@@ -191,7 +193,7 @@ class InteractQueryManager
                 $input = str_replace(array_keys($tags), $tags, $input);
             }
             $lev = levenshtein($input, $_query);
-            \log::add('interact', 'debug', 'Je compare : ' . $_query . ' avec ' . $input . ' => ' . $lev);
+            LogHelper::add('interact', 'debug', 'Je compare : ' . $_query . ' avec ' . $input . ' => ' . $lev);
             if (trim($_query) == trim($input)) {
                 $shortest = 0;
                 $closest = $query;
@@ -208,7 +210,7 @@ class InteractQueryManager
             }
         }
         if ($shortest < 0) {
-            \log::add('interact', 'debug', __('Aucune correspondance trouvée'));
+            LogHelper::add('interact', 'debug', __('Aucune correspondance trouvée'));
             return null;
         }
         $weigh = array(1 => ConfigManager::byKey('interact::weigh1'), 2 => ConfigManager::byKey('interact::weigh2'), 3 => ConfigManager::byKey('interact::weigh3'), 4 => ConfigManager::byKey('interact::weigh4'));
@@ -218,28 +220,28 @@ class InteractQueryManager
             }
         }
         if (str_word_count($_query) == 1 && ConfigManager::byKey('interact::confidence1') > 0 && $shortest > ConfigManager::byKey('interact::confidence1')) {
-            \log::add('interact', 'debug', __('Correspondance trop éloigné : ') . $shortest);
+            LogHelper::add('interact', 'debug', __('Correspondance trop éloigné : ') . $shortest);
             return null;
         } else if (str_word_count($_query) == 2 && ConfigManager::byKey('interact::confidence2') > 0 && $shortest > ConfigManager::byKey('interact::confidence2')) {
-            \log::add('interact', 'debug', __('Correspondance trop éloigné : ') . $shortest);
+            LogHelper::add('interact', 'debug', __('Correspondance trop éloigné : ') . $shortest);
             return null;
         } else if (str_word_count($_query) == 3 && ConfigManager::byKey('interact::confidence3') > 0 && $shortest > ConfigManager::byKey('interact::confidence3')) {
-            \log::add('interact', 'debug', __('Correspondance trop éloigné : ') . $shortest);
+            LogHelper::add('interact', 'debug', __('Correspondance trop éloigné : ') . $shortest);
             return null;
         } else if (str_word_count($_query) > 3 && ConfigManager::byKey('interact::confidence') > 0 && $shortest > ConfigManager::byKey('interact::confidence')) {
-            \log::add('interact', 'debug', __('Correspondance trop éloigné : ') . $shortest);
+            LogHelper::add('interact', 'debug', __('Correspondance trop éloigné : ') . $shortest);
             return null;
         }
         if (!is_object($closest)) {
-            \log::add('interact', 'debug', __('Aucune phrase trouvée'));
+            LogHelper::add('interact', 'debug', __('Aucune phrase trouvée'));
             return null;
         }
         $interactDef = $closest->getInteractDef();
         if ($interactDef->getOptions('mustcontain') != '' && !preg_match($interactDef->getOptions('mustcontain'), $_query)) {
-            \log::add('interact', 'debug', __('Correspondance trouvée : ') . $closest->getQuery() . __(' mais ne contient pas : ') . InteractDefManager::sanitizeQuery($interactDef->getOptions('mustcontain')));
+            LogHelper::add('interact', 'debug', __('Correspondance trouvée : ') . $closest->getQuery() . __(' mais ne contient pas : ') . InteractDefManager::sanitizeQuery($interactDef->getOptions('mustcontain')));
             return null;
         }
-        \log::add('interact', 'debug', __('J\'ai une correspondance  : ') . $closest->getQuery() . __(' avec ') . $shortest);
+        LogHelper::add('interact', 'debug', __('J\'ai une correspondance  : ') . $closest->getQuery() . __(' avec ') . $shortest);
         return $closest;
     }
 
@@ -379,7 +381,7 @@ class InteractQueryManager
         }
         if (!isset($data['cmd']) || !is_object($data['cmd'])) {
             $data = array_merge($data, self::findInQuery('summary', $data['query'], $data));
-            \log::add('interact', 'debug', print_r($data, true));
+            LogHelper::add('interact', 'debug', print_r($data, true));
             if (!isset($data['summary'])) {
                 return '';
             }
@@ -456,7 +458,7 @@ class InteractQueryManager
                     if ($reply !== null || is_array($reply)) {
                         $reply['reply'] = '[' . $plugin_id . '] ' . $reply['reply'];
                         self::addLastInteract($_query, $_parameters['identifier']);
-                        \log::add('interact', 'debug', 'Le plugin ' . $plugin_id . ' a répondu');
+                        LogHelper::add('interact', 'debug', 'Le plugin ' . $plugin_id . ' a répondu');
                         return $reply;
                     }
                 }
@@ -516,12 +518,12 @@ class InteractQueryManager
     {
         $warnMeCmd = (isset($_options['reply_cmd'])) ? $_options['reply_cmd'] : ConfigManager::byKey('interact::warnme::defaultreturncmd');
         if (!isset($_options['test']) || $_options['test'] == '' || $warnMeCmd == '') {
-            \listener::byId($_options['listener_id'])->remove();
+            ListenerManager::byId($_options['listener_id'])->remove();
             return;
         }
         $result = NextDomHelper::evaluateExpression(str_replace('#value#', $_options['value'], $_options['test']));
         if ($result) {
-            \listener::byId($_options['listener_id'])->remove();
+            ListenerManager::byId($_options['listener_id'])->remove();
             $cmd = CmdManager::byId(str_replace('#', '', $warnMeCmd));
             if (!is_object($cmd)) {
                 return;
@@ -556,12 +558,12 @@ class InteractQueryManager
         $startContextual = explode(';', ConfigManager::byKey('interact::contextual::startpriority'));
         if (is_array($startContextual) && count($startContextual) > 0 && ConfigManager::byKey('interact::contextual::enable') == 1 && isset($words[0]) && in_array(strtolower($words[0]), $startContextual)) {
             $reply = self::contextualReply($_query, $_parameters);
-            \log::add('interact', 'debug', 'Je cherche interaction contextuel (prioritaire) : ' . print_r($reply, true));
+            LogHelper::add('interact', 'debug', 'Je cherche interaction contextuel (prioritaire) : ' . print_r($reply, true));
         }
         $startWarnMe = explode(';', ConfigManager::byKey('interact::warnme::start'));
         if (is_array($startWarnMe) && count($startWarnMe) > 0 && ConfigManager::byKey('interact::warnme::enable') == 1 && Utils::strContain(strtolower(Utils::sanitizeAccent($_query)), $startWarnMe)) {
             $reply = self::warnMe($_query, $_parameters);
-            \log::add('interact', 'debug', 'Je cherche interaction "previens-moi" : ' . print_r($reply, true));
+            LogHelper::add('interact', 'debug', 'Je cherche interaction "previens-moi" : ' . print_r($reply, true));
         }
         if (ConfigManager::byKey('interact::contextual::splitword') != '') {
             $splitWords = explode(';', ConfigManager::byKey('interact::contextual::splitword'));
@@ -603,7 +605,7 @@ class InteractQueryManager
         if ($reply == '') {
             $reply = self::pluginReply($_query, $_parameters);
             if ($reply !== null) {
-                \log::add('interact', 'info', 'J\'ai reçu : ' . $_query . '. Un plugin a répondu : ' . print_r($reply, true));
+                LogHelper::add('interact', 'info', 'J\'ai reçu : ' . $_query . '. Un plugin a répondu : ' . print_r($reply, true));
                 return $reply;
             }
             $interactQuery = self::recognize($_query);
@@ -613,22 +615,22 @@ class InteractQueryManager
                 if (isset($cmds[0]) && isset($cmds[0]['cmd'])) {
                     self::addLastInteract(str_replace('#', '', $cmds[0]['cmd']), $_parameters['identifier']);
                 }
-                \log::add('interact', 'info', 'J\'ai reçu : ' . $_query . ". J'ai compris : " . $interactQuery->getQuery() . ". J'ai répondu : " . $reply);
+                LogHelper::add('interact', 'info', 'J\'ai reçu : ' . $_query . ". J'ai compris : " . $interactQuery->getQuery() . ". J'ai répondu : " . $reply);
                 return array('reply' => ucfirst($reply));
             }
         }
         if ($reply == '' && ConfigManager::byKey('interact::autoreply::enable') == 1) {
             $reply = self::autoInteract($_query, $_parameters);
-            \log::add('interact', 'debug', 'Je cherche dans les interactions automatiques, résultat : ' . $reply);
+            LogHelper::add('interact', 'debug', 'Je cherche dans les interactions automatiques, résultat : ' . $reply);
         }
         if ($reply == '' && ConfigManager::byKey('interact::noResponseIfEmpty', 'core', 0) == 0 && (!isset($_parameters['emptyReply']) || $_parameters['emptyReply'] == 0)) {
             $reply = self::dontUnderstand($_parameters);
-            \log::add('interact', 'info', 'J\'ai reçu : ' . $_query . ". Je n'ai rien compris. J'ai répondu : " . $reply);
+            LogHelper::add('interact', 'info', 'J\'ai reçu : ' . $_query . ". Je n'ai rien compris. J'ai répondu : " . $reply);
         }
         if (!is_array($reply)) {
             $reply = array('reply' => ucfirst($reply));
         }
-        \log::add('interact', 'info', 'J\'ai reçu : ' . $_query . ". Je réponds : " . print_r($reply, true));
+        LogHelper::add('interact', 'info', 'J\'ai reçu : ' . $_query . ". Je réponds : " . print_r($reply, true));
         if (isset($_parameters['reply_cmd']) && is_object($_parameters['reply_cmd']) && isset($_parameters['force_reply_cmd'])) {
             $_parameters['reply_cmd']->execCmd(array('message' => $reply['reply']));
             return true;

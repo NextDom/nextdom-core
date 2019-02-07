@@ -43,10 +43,13 @@ use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\MessageManager;
+use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Managers\ViewManager;
 
 class NextDomHelper
 {
@@ -768,7 +771,7 @@ class NextDomHelper
                 }
                 $updates = UpdateManager::byStatus('update');
                 if (count($updates) > 0) {
-                    \message::add('update', __('De nouvelles mises à jour sont disponibles : ') . trim($toUpdate, ','), '', 'newUpdate');
+                    MessageManager::add('update', __('De nouvelles mises à jour sont disponibles : ') . trim($toUpdate, ','), '', 'newUpdate');
                 }
             }
         } catch (\Exception $e) {
@@ -797,7 +800,7 @@ class NextDomHelper
             LogHelper::chunk();
             CronManager:
             clean();
-            \report::clean();
+            ReportHelper::clean();
             \DB::optimize();
             CacheManager::clean();
         } catch (\Exception $e) {
@@ -1032,7 +1035,7 @@ class NextDomHelper
             if (isset($result['view'][$view_id])) {
                 continue;
             }
-            $view = \view::byId($view_id);
+            $view = ViewManager::byId($view_id);
             if (!is_object($view)) {
                 continue;
             }
@@ -1043,7 +1046,7 @@ class NextDomHelper
             if (isset($result['plan'][$plan_id])) {
                 continue;
             }
-            $plan = \planHeader::byId($plan_id);
+            $plan = PlanHeaderManager::byId($plan_id);
             if (!is_object($plan)) {
                 continue;
             }

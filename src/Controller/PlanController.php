@@ -24,6 +24,7 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\PlanHeaderManager;
 
 class PlanController extends BaseController
 {
@@ -42,7 +43,7 @@ class PlanController extends BaseController
     public function get(Render $render, &$pageData): string
     {
         $planHeader = null;
-        $planHeaders = \planHeader::all();
+        $planHeaders = PlanHeaderManager::all();
         $planHeadersSendToJS = array();
         foreach ($planHeaders as $planHeader_select) {
             $planHeadersSendToJS[] = array('id' => $planHeader_select->getId(), 'name' => $planHeader_select->getName());

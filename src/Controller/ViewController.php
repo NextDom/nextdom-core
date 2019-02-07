@@ -26,6 +26,7 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\ViewManager;
 
 class ViewController extends BaseController
 {
@@ -44,7 +45,7 @@ class ViewController extends BaseController
      */
     public function get(Render $render, &$pageData): string
     {
-        $pageData['viewsList'] = \view::all();
+        $pageData['viewsList'] = ViewManager::all();
         $pageData['viewHideList'] = true;
         $pageData['viewIsAdmin'] = Status::isConnectAdmin();
         $pageData['viewDefault'] = $_SESSION['user']->getOptions('displayViewByDefault');
@@ -54,14 +55,14 @@ class ViewController extends BaseController
         if (Utils::init('view_id') == '') {
 
             if ($_SESSION['user']->getOptions('defaultDesktopView') != '') {
-                $currentView = \view::byId($_SESSION['user']->getOptions('defaultDesktopView'));
+                $currentView = ViewManager::byId($_SESSION['user']->getOptions('defaultDesktopView'));
             }
 
             if (!is_object($currentView) && is_array($pageData['viewsList']) && count($pageData['viewsList']) > 0) {
                 $currentView = $pageData['viewsList'][0];
             }
         } else {
-            $currentView = \view::byId(init('view_id'));
+            $currentView = ViewManager::byId(init('view_id'));
 
             if (!is_object($currentView)) {
                 throw new \Exception('{{Vue inconnue. Vérifier l\'ID.}}');

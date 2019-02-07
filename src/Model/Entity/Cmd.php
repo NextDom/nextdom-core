@@ -35,9 +35,14 @@ use NextDom\Managers\EventManager;
 use NextDom\Managers\HistoryManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ListenerManager;
+use NextDom\Managers\MessageManager;
+use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\ViewDataManager;
+use NextDom\Managers\ViewManager;
 
 /**
  * Cmd
@@ -680,7 +685,7 @@ class Cmd
 
     public function remove()
     {
-        \viewData::removeByTypeLinkId('cmd', $this->getId());
+        ViewDataManager::removeByTypeLinkId('cmd', $this->getId());
         DataStoreManager::removeByTypeLinkId('cmd', $this->getId());
         $this->getEqLogicId()->emptyCacheWidget();
         $this->emptyHistory();
@@ -761,14 +766,14 @@ class Cmd
     {
         if ($this->getType() == 'info') {
             $state = $this->getCache(array('collectDate', 'valueDate', 'value'));
-            if(isset($state['collectDate'])){
+            if (isset($state['collectDate'])) {
                 $this->setCollectDate($state['collectDate']);
-            }else{
+            } else {
                 $this->setCollectDate(date('Y-m-d H:i:s'));
             }
-            if(isset($state['valueDate'])){
+            if (isset($state['valueDate'])) {
                 $this->setValueDate($state['valueDate']);
-            }else{
+            } else {
                 $this->setValueDate($this->getCollectDate());
             }
             return $state['value'];
@@ -814,7 +819,7 @@ class Cmd
                 if ($numberTryWithoutSuccess >= ConfigManager::byKey('numberOfTryBeforeEqLogicDisable')) {
                     $message = 'Désactivation de <a href="' . $eqLogic->getLinkToConfiguration() . '">' . $eqLogic->getName();
                     $message .= '</a> ' . __('car il n\'a pas répondu ou mal répondu lors des 3 derniers essais');
-                    \message::add($type, $message);
+                    MessageManager::add($type, $message);
                     $eqLogic->setIsEnable(0);
                     $eqLogic->save();
                 }
@@ -1159,7 +1164,7 @@ class Cmd
                 }
             }
             if ($foundInfo) {
-                \listener::backgroundCalculDependencyCmd($this->getId());
+                ListenerManager::backgroundCalculDependencyCmd($this->getId());
             }
         } else {
             $events[] = array('cmd_id' => $this->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate());
@@ -1168,7 +1173,7 @@ class Cmd
             EventManager::adds('cmd::update', $events);
         }
         if (!$repeat) {
-            \listener::check($this->getId(), $value, $this->getCollectDate());
+            ListenerManager::check($this->getId(), $value, $this->getCollectDate());
             JeeObjectManager::checkSummaryUpdate($this->getId());
         }
         $this->addHistoryValue($value, $this->getCollectDate());
@@ -1347,7 +1352,7 @@ class Cmd
             LogHelper::add('event', 'info', $message);
             $eqLogic = $this->getEqLogicId();
             if (ConfigManager::byKey('alert::addMessageOn' . ucfirst($_level)) == 1) {
-                \message::add($eqLogic->getEqType_name(), $message);
+                MessageManager::add($eqLogic->getEqType_name(), $message);
             }
             $cmds = explode(('&&'), ConfigManager::byKey('alert::' . $_level . 'Cmd'));
             if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::' . $_level . 'Cmd')) != '') {
@@ -1688,8 +1693,8 @@ class Cmd
         $return['eqLogic'] = EqLogicManager::searchConfiguration('#' . $this->getId() . '#');
         $return['scenario'] = ScenarioManager::searchByUse(array(array('action' => '#' . $this->getId() . '#')));
         $return['interactDef'] = InteractDefManager::searchByUse('#' . $this->getId() . '#');
-        $return['view'] = \view::searchByUse('cmd', $this->getId());
-        $return['plan'] = \planHeader::searchByUse('cmd', $this->getId());
+        $return['view'] = ViewManager::searchByUse('cmd', $this->getId());
+        $return['plan'] = PlanHeaderManager::searchByUse('cmd', $this->getId());
         if ($_array) {
             foreach ($return as &$value) {
                 $value = Utils::o2a($value);

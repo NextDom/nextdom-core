@@ -28,7 +28,10 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\SessionHelper;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\Plan3dHeaderManager;
+use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\ViewManager;
 
 class ProfilsController extends BaseController
 {
@@ -91,9 +94,9 @@ class ProfilsController extends BaseController
         }
         $pageData['profilsDisplayTypes'] = NextDomHelper::getConfiguration('eqLogic:displayType');
         $pageData['profilsJeeObjects'] = JeeObjectManager::all();
-        $pageData['profilsViews'] = \view::all();
-        $pageData['profilsPlans'] = \planHeader::all();
-        $pageData['profilsPlans3d'] = \plan3dHeader::all();
+        $pageData['profilsViews'] = ViewManager::all();
+        $pageData['profilsPlans'] = PlanHeaderManager::all();
+        $pageData['profilsPlans3d'] = Plan3dHeaderManager::all();
         $pageData['profilsAllowRemoteUsers'] = ConfigManager::byKey('sso:allowRemoteUser');
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/profils.js';
