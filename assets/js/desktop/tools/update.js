@@ -336,13 +336,6 @@ function addUpdate(_update) {
     tr += '<div class="box-footer clearfix text-center">';
 
     if (_update.type != 'core') {
-        if (_update.status == 'update') {
-            tr += '<a class="btn btn-warning btn-sm update" title="{{Mettre à jour}}"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{Mettre à jour}}</a> ';
-        }else if (_update.type != 'core') {
-            tr += '<a class="btn  btn-default btn-sm update" title="{{Re-installer}}"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{Reinstaller}}</a> ';
-        }
-    }
-    if (_update.type != 'core') {
         if (isset(_update.plugin) && isset(_update.plugin.changelog) && _update.plugin.changelog != '') {
             tr += '<a class="btn btn-default btn-sm pull-left cursor hidden-sm" target="_blank" href="'+_update.plugin.changelog+'"><i class="fas fa-book">&nbsp;&nbsp;</i>{{Changelog}}</a>';
         }
@@ -352,6 +345,13 @@ function addUpdate(_update) {
     tr += '<a class="btn btn-info btn-sm pull-left checkUpdate" ><i class="fas fa-check">&nbsp;&nbsp;</i>{{Vérifier}}</a>';
     if (_update.type != 'core') {
         tr += '<a class="btn btn-danger btn-sm pull-right remove" ><i class="far fa-trash-alt">&nbsp;&nbsp;</i>{{Supprimer}}</a>';
+    }
+    if (_update.type != 'core') {
+        if (_update.status == 'update') {
+            tr += '<a class="btn btn-warning btn-sm pull-right update" title="{{Mettre à jour}}"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{Mettre à jour}}</a> ';
+        }else if (_update.type != 'core') {
+            tr += '<a class="btn  btn-default btn-sm pull-right update" title="{{Re-installer}}"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{Reinstaller}}</a> ';
+        }
     }
     tr += '</div>';
     tr += '</div>';
