@@ -21,12 +21,12 @@
 /* Résumé */
 /* COLOR1 = Couleur d'accentuation principale (identité du thème, header nextdom, bouton primaires, messages d'info, élements actifs ou survolés, textes de liens et d'état, scrollbar, boutons fab...) */
 /* COLOR2 = Couleur de contraste (icônes et texte sur fond accentué ou de sidebar...) */
-
+/* COLOR3 = Couleur de survol principale (contenu, titres, footer, bouton d'administration, unités, légendes...) */
 /* COLOR4 = Couleur d'option activée (checkbox et radiobox) */
-
-
-
-
+/* COLOR5 = Couleur croix fenêtres modales */
+/* COLOR6 = Couleur de fond du menu latéral (fond du menu latéral) */
+/* COLOR7 = Couleur de survol du menu latéral (fond du menu latéral au survol) */
+/* COLOR8 = Couleur de fond du sous-menu latéral (fond du sous-menu latéral) */
 /* COLOR9 = Couleur de fond principale (dashboard et autres fond de pages...) */
 /* COLOR10 = Couleur de fond secondaire (titres, action-bar, footer, onglets, titre modale, boîtes d'infos...) */
 /* COLOR11 = Couleur de fond des titres (légendes, tableaux, unités...) */
@@ -34,6 +34,9 @@
 /* COLOR13 = Couleur de fond des inputs (champs de saisie, listes déroulantes...) */
 /* COLOR14 = Couleur de bordure (inputs, légendes, tableaux et bouton d'administration...) */
 /* COLOR15 = Couleur de fond des contenants (boxs, cards, pages d'onglets, tableaux...) */
+/* COLOR16 = Boutons d'action */
+/* COLOR17 = Boutons d'administration */
+/* COLOR18 = Couleur du texte du menu latéral */
 
 /* #################################################################################################################################################################################################### */
 /* COLOR1 = Couleur d'accentuation principale (identité du thème, header nextdom, bouton primaires, messages d'info, élements actifs ou survolés, textes de liens et d'état, scrollbar, boutons fab...) */
@@ -43,6 +46,7 @@
   color: {{ COLOR1 }} !important;
 }
 
+/* Fond global */
 .backgroundColor{
   background-color: {{ COLOR1 }} !important;
 }
@@ -114,6 +118,18 @@
   background-color: {{ COLOR1 }} !important;
 }
 
+/* Navbars */
+.main-header .navbar {
+  background-color: {{ COLOR1 }} !important;
+}
+
+/* Menu lateral */
+.sidebar-menu > li:hover > a, .sidebar-menu > li.menu-open > a {
+  border-left-color: {{ COLOR1 }} !important;
+}
+.sidebar-menu > li.header {
+  color: {{ COLOR1 }} !important;
+}
 
 /* ################################################################################## */
 /* COLOR2 = Couleur de contraste (icônes et texte sur fond accentué ou de sidebar...) */
@@ -166,9 +182,9 @@
 }
 
 
-/* ############################################################################ */
-/* COLOR3 = */
-/* ############################################################################ */
+/* ############################################################################################################# */
+/* COLOR3 = Couleur de survol principale (contenu, titres, footer, bouton d'administration, unités, légendes...) */
+/* ############################################################################################################# */
 .main-header .navbar .nav > li > a:hover,
 .main-header .navbar .nav > li > a:active,
 .main-header .navbar .nav > li > a:focus,
@@ -187,7 +203,7 @@
 
 
 /* ############################################### */
-/* Couleur d'option activée (checkbox et radiobox) */
+/* COLOR 4 = Couleur d'option activée (checkbox et radiobox) */
 /* ############################################### */
 [type="checkbox"]:not(:checked):after,
 [type="checkbox"]:checked:after,
@@ -197,31 +213,44 @@
 }
 
 
-/* ############################################################################ */
-/* COLOR5 = */
-/* ############################################################################ */
+/* ####################################### */
+/* COLOR5 = Couleur croix fenêtres modales */
+/* ####################################### */
 
 
-/* ############################################################################ */
-/* COLOR6 = */
-/* ############################################################################ */
-/* Sidebar */
-.main-sidebar,
-.left-side {
+/* ############################################################### */
+/* COLOR6 = Couleur de fond du menu latéral (fond du menu latéral) */
+/* ############################################################### */
+/* Menu lateral */
+.main-sidebar, .left-side {
   background-color: {{ COLOR6 }} !important;
+}
+.sidebar-menu > li > .treeview-menu {
+  border: solid 1px {{ COLOR6 }} !important;
 }
 
 
+/* ################################################################################### */
+/* COLOR7 = Couleur de survol du fond du menu latéral (fond du menu latéral au survol) */
+/* ################################################################################### */
+/* Menu lateral */
+.sidebar-menu > li:hover > a, .sidebar-menu > li.menu-open > a {
+  color: {{ COLOR2 }} !important;
+  background-color: {{ COLOR7 }} !important;
+}
 
 
-/* ############################################################################ */
-/* COLOR7 = */
-/* ############################################################################ */
-
-
-/* ############################################################################ */
-/* COLOR8 = */
-/* ############################################################################ */
+/* ######################################################################### */
+/* COLOR8 = Couleur de fond du sous-menu latéral (fond du sous-menu latéral) */
+/* ######################################################################### */
+/* Menu lateral */
+.sidebar-menu > li.header {
+  background-color: {{ COLOR8 }} !important;
+}
+.sidebar-menu > li > .treeview-menu {
+  margin: 0 1px;
+  background-color: {{ COLOR8 }} !important;
+}
 
 
 /* ########################################################################## */
@@ -254,6 +283,11 @@
 
 .nav-tabs-custom > .nav-tabs, .nav-tabs-custom > .nav-tabs > li.active > a {
   border-color: {{ COLOR9 }} !important;
+}
+
+/* Listes */
+.label-list, .label-view, .label-log{
+  background-color: {{ COLOR9 }} !important;
 }
 
 
@@ -290,6 +324,7 @@ body, .main-footer{
   background-color: {{ COLOR6 }} !important;
 }
 
+
 /* #################################################################### */
 /* COLOR11 = Couleur de fond des titres (légendes, tableaux, unités...) */
 /* #################################################################### */
@@ -309,6 +344,14 @@ legend {
   background-color: {{ COLOR11 }} !important;
 }
 .colorpick .input-group-addon {
+  background-color: {{ COLOR11 }} !important;
+}
+
+/* Tableaux */
+.table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tfoot > tr > td {
+  background-color: {{ COLOR11 }} !important;
+}
+.tablesorter-bootstrap .tablesorter-filter-row input.tablesorter-filter, .tablesorter-bootstrap .tablesorter-filter-row select.tablesorter-filter {
   background-color: {{ COLOR11 }} !important;
 }
 
@@ -350,6 +393,9 @@ legend {
 .input-group .input-group-addon {
   color: {{ COLOR12 }} !important;
 }
+.input-sm {
+  color: {{ COLOR12 }} !important;
+}
 
 
 /* ############################################################################## */
@@ -358,6 +404,13 @@ legend {
 .form-control {
   background-color: {{ COLOR13 }} !important;
 }
+.input-sm {
+  background-color: {{ COLOR13 }} !important;
+}
+.viewZone {
+  background-color: {{ COLOR13 }} !important;
+}
+
 
 /* ####################################################################################### */
 /* COLOR14 = Couleur de bordure (inputs, légendes, tableaux et bouton d'administration...) */
@@ -385,6 +438,11 @@ legend {
   border: 1px solid {{ COLOR14 }} !important;
 }
 
+/* Listes */
+.label-list, .label-view, .label-log{
+  border-color: {{ COLOR14 }} !important;
+}
+
 
 /* #################################################################################### */
 /* COLOR15 = Couleur de fond des contenants (boxs, cards, pages d'onglets, tableaux...) */
@@ -400,91 +458,30 @@ legend {
 }
 
 
-/* ############################################################################ */
-/* COLOR16 = Boutons action */
-/* ############################################################################ */
+/* ########################## */
+/* COLOR16 = Boutons d'action */
+/* ########################## */
 .btn-action {
   background-color: {{ COLOR16 }} !important;
   border-color: {{ COLOR16 }} !important;
 }
 
-/* ############################################################################ */
-/* COLOR17 = Bouton administration */
-/* ############################################################################ */
+
+/* ################################# */
+/* COLOR17 = Bouton d'administration */
+/* ################################# */
 .btn-app {
   background-color: {{ COLOR17 }} !important;
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Navs */
-.main-header .navbar {
-background-color: {{ COLOR1 }} !important;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Sidemenu */
-.sidebar-menu > li.header {
-color: {{ COLOR1 }} !important;
-background-color: {{ COLOR8 }} !important;
-font-weight: bold;
-}
-
+/* ########################################## */
+/* COLOR18 = Couleur du texte du menu latéral */
+/* ########################################## */
+/* Menu lateral */
 .sidebar-menu > li:hover > a, .sidebar-menu > li.menu-open > a {
-color: {{ COLOR2 }} !important;
-background-color: {{ COLOR7 }} !important;
-border-left-color: {{ COLOR1 }} !important;
+  color: {{ COLOR18 }} !important;
 }
-
-.sidebar-menu > li > .treeview-menu {
-margin: 0 1px;
-background-color: {{ COLOR8 }} !important;
-border: solid 1px {{ COLOR6 }} !important;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -492,32 +489,4 @@ border: solid 1px {{ COLOR6 }} !important;
 
 .colorpick>input[type="text"] {
 border: none !important;
-}
-
-
-
-
-
-.label-list, .label-view, .label-log{
-background-color: {{ COLOR9 }} !important;
-border-color: {{ COLOR14 }} !important;
-}
-
-.viewZone {
-background-color: {{ COLOR13 }} !important;
-}
-
-.table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
-background-color: {{ COLOR11 }} !important;
-border-color: {{ COLOR14 }} !important;
-}
-
-.tablesorter-bootstrap .tablesorter-filter-row input.tablesorter-filter, .tablesorter-bootstrap .tablesorter-filter-row select.tablesorter-filter {
-background-color: {{ COLOR13 }} !important;
-}
-
-.label, .input-sm {
-background-color: {{ COLOR13 }} !important;
-color: {{ COLOR12 }} !important;
-
 }

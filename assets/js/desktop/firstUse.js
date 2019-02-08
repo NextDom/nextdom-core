@@ -165,7 +165,8 @@ $("#toStep5").click(function () {
                         'theme:color14' : '#2c3b41',
                         'theme:color15' : '#222d32',
                         'theme:color16' : '#999',
-                        'theme:color17' : '#2c3b41'
+                        'theme:color17' : '#2c3b41',
+                        'theme:color18' : '#e6e7e8'
                     }
         break;
                 }

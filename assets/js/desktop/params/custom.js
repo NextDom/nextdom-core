@@ -269,7 +269,8 @@ $("input[name=theme]").click(function () {
             'theme:color14' : '#2c3b41',
             'theme:color15' : '#222d32',
             'theme:color16' : '#999',
-            'theme:color17' : '#2c3b41'
+            'theme:color17' : '#2c3b41',
+            'theme:color18' : '#e6e7e8'
         }
     }
     if (radio == "white"){
@@ -290,7 +291,8 @@ $("input[name=theme]").click(function () {
             'theme:color14' : '#dddddd',
             'theme:color15' : '#ffffff',
             'theme:color16' : '#999',
-            'theme:color17' : '#f4f4f4'
+            'theme:color17' : '#f4f4f4',
+            'theme:color18' : '#555555'
         }
     }
     if (radio == "mix"){
@@ -311,7 +313,8 @@ $("input[name=theme]").click(function () {
             'theme:color14' : '#dddddd',
             'theme:color15' : '#fafafa',
             'theme:color16' : '#999',
-            'theme:color17' : '#f4f4f4'
+            'theme:color17' : '#f4f4f4',
+            'theme:color18' : '#e6e7e8'
         }
     }
     nextdom.config.save({
