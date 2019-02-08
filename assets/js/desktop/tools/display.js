@@ -36,69 +36,69 @@
 
 $('.displayListContainer').packery();
 
- $( ".eqLogicSortable" ).sortable({
-  connectWith: ".eqLogicSortable",
-  stop: function (event, ui) {
-    var eqLogics = [];
-    var object = ui.item.closest('.object');
-    order = 1;
-    object.find('.eqLogic').each(function(){
-        eqLogic = {};
-        eqLogic.object_id = object.attr('data-id');
-        eqLogic.id = $(this).attr('data-id');
-        eqLogic.order = order;
-        eqLogics.push(eqLogic);
-        order++;
-    });
-    nextdom.eqLogic.setOrder({
-        eqLogics: eqLogics,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-            $( ".eqLogicSortable" ).sortable( "cancel" );
-        }
-    });
-}
+$( ".eqLogicSortable" ).sortable({
+    connectWith: ".eqLogicSortable",
+    stop: function (event, ui) {
+        var eqLogics = [];
+        var object = ui.item.closest('.object');
+        order = 1;
+        object.find('.eqLogic').each(function(){
+            eqLogic = {};
+            eqLogic.object_id = object.attr('data-id');
+            eqLogic.id = $(this).attr('data-id');
+            eqLogic.order = order;
+            eqLogics.push(eqLogic);
+            order++;
+        });
+        nextdom.eqLogic.setOrder({
+            eqLogics: eqLogics,
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+                $( ".eqLogicSortable" ).sortable( "cancel" );
+            }
+        });
+    }
 }).disableSelection();
 
 
- $( ".cmdSortable" ).sortable({
-  stop: function (event, ui) {
-    var cmds = [];
-    var eqLogic = ui.item.closest('.eqLogic');
-    order = 1;
-    eqLogic.find('.cmd').each(function(){
-        cmd = {};
-        cmd.id = $(this).attr('data-id');
-        cmd.order = order;
-        cmds.push(cmd);
-        order++;
-    });
-    nextdom.cmd.setOrder({
-        cmds: cmds,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        }
-    });
-}
+$( ".cmdSortable" ).sortable({
+    stop: function (event, ui) {
+        var cmds = [];
+        var eqLogic = ui.item.closest('.eqLogic');
+        order = 1;
+        eqLogic.find('.cmd').each(function(){
+            cmd = {};
+            cmd.id = $(this).attr('data-id');
+            cmd.order = order;
+            cmds.push(cmd);
+            order++;
+        });
+        nextdom.cmd.setOrder({
+            cmds: cmds,
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            }
+        });
+    }
 }).disableSelection();
 
- $( ".eqLogic" ).on('dblclick',function(e){
+$( ".eqLogic" ).on('dblclick',function(e){
     if(e.target != this) return;
     $('#md_modal').dialog({title: "{{Configuration de l'équipement}}"});
     $('#md_modal').load('index.php?v=d&modal=eqLogic.configure&eqLogic_id=' + $(this).attr('data-id')).dialog('open');
 });
 
- $('.configureEqLogic').on('click',function(){
-   $('#md_modal').dialog({title: "{{Configuration de l'équipement}}"});
-   $('#md_modal').load('index.php?v=d&modal=eqLogic.configure&eqLogic_id=' + $(this).closest('.eqLogic').attr('data-id')).dialog('open');
+$('.configureEqLogic').on('click',function(){
+    $('#md_modal').dialog({title: "{{Configuration de l'équipement}}"});
+    $('#md_modal').load('index.php?v=d&modal=eqLogic.configure&eqLogic_id=' + $(this).closest('.eqLogic').attr('data-id')).dialog('open');
 });
 
- $('.configureObject').on('click',function(){
-   $('#md_modal').dialog({title: "{{Configuration de l'objet}}"});
-   $('#md_modal').load('index.php?v=d&modal=object.configure&object_id=' + $(this).closest('.object').attr('data-id')).dialog('open');
+$('.configureObject').on('click',function(){
+    $('#md_modal').dialog({title: "{{Configuration de l'objet}}"});
+    $('#md_modal').load('index.php?v=d&modal=object.configure&object_id=' + $(this).closest('.object').attr('data-id')).dialog('open');
 });
 
- $('.showCmd').on('click',function(){
+$('.showCmd').on('click',function(){
     if($(this).hasClass('fa-chevron-right')){
         $(this).removeClass('fa-chevron-right').addClass('fa-chevron-down');
         $(this).closest('.eqLogic').find('.cmdSortable').show();
@@ -106,10 +106,10 @@ $('.displayListContainer').packery();
         $(this).removeClass('fa-chevron-down').addClass('fa-chevron-right');
         $(this).closest('.eqLogic').find('.cmdSortable').hide();
     }
-     $('.displayListContainer').packery();
+    $('.displayListContainer').packery();
 });
 
- $('.showEqLogic').on('click',function(){
+$('.showEqLogic').on('click',function(){
     if($(this).hasClass('fa-chevron-right')){
         $(this).removeClass('fa-chevron-right').addClass('fa-chevron-down');
         $(this).closest('.object').find('.eqLogic').show();
@@ -119,7 +119,7 @@ $('.displayListContainer').packery();
     }
 });
 
- $('#cb_actifDisplay').on('change',function(){
+$('#cb_actifDisplay').on('change',function(){
     if($(this).value() == 1){
         $('.eqLogic[data-enable=0]').show();
     }else{
@@ -127,17 +127,17 @@ $('.displayListContainer').packery();
     }
 });
 
- $( ".cmd" ).on('dblclick',function(){
-     $('#md_modal').dialog({title: "{{Configuration de la commande}}"});
-     $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
- });
-
- $('.configureCmd').on('click',function(){
-   $('#md_modal').dialog({title: "{{Configuration de la commande}}"});
-   $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-id')).dialog('open');
+$( ".cmd" ).on('dblclick',function(){
+    $('#md_modal').dialog({title: "{{Configuration de la commande}}"});
+    $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
 });
 
- $('#in_search').on('keyup',function(){
+$('.configureCmd').on('click',function(){
+    $('#md_modal').dialog({title: "{{Configuration de la commande}}"});
+    $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-id')).dialog('open');
+});
+
+$('#in_search').on('keyup',function(){
     var search = $(this).value().toLowerCase();
     $('.cmd').show().removeClass('alert-success').addClass('alert-warning');
     $('.cmdSortable').hide();
@@ -163,7 +163,7 @@ $('.displayListContainer').packery();
     });
 });
 
- $('.cb_selEqLogic').on('change',function(){
+$('.cb_selEqLogic').on('change',function(){
     var found = false;
     $('.cb_selEqLogic').each(function(){
         if($(this).value() == 1){
@@ -181,7 +181,7 @@ $('.displayListContainer').packery();
     }
 });
 
- $('#bt_removeEqlogic').on('click',function(){
+$('#bt_removeEqlogic').on('click',function(){
     bootbox.confirm('{{Etes-vous sûr de vouloir supprimer tous ces équipements ?}}', function (result) {
         if (result) {
             var eqLogics = [];
@@ -203,7 +203,7 @@ $('.displayListContainer').packery();
     });
 });
 
- $('.bt_setIsVisible').on('click',function(){
+$('.bt_setIsVisible').on('click',function(){
     var eqLogics = [];
     $('.cb_selEqLogic').each(function(){
         if($(this).value() == 1){
@@ -217,12 +217,12 @@ $('.displayListContainer').packery();
             notify("Erreur", error.message, 'error');
         },
         success : function(){
-         loadPage('index.php?v=d&p=display');
-     }
- });
+            loadPage('index.php?v=d&p=display');
+        }
+    });
 });
 
- $('.bt_setIsEnable').on('click',function(){
+$('.bt_setIsEnable').on('click',function(){
     var eqLogics = [];
     $('.cb_selEqLogic').each(function(){
         if($(this).value() == 1){
@@ -241,7 +241,7 @@ $('.displayListContainer').packery();
     });
 });
 
- $('#bt_removeHistory').on('click',function(){
+$('#bt_removeHistory').on('click',function(){
     $('#md_modal').dialog({title: "{{Historique des suppressions}}"});
     $('#md_modal').load('index.php?v=d&modal=remove.history').dialog('open');
 });

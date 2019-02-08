@@ -612,11 +612,6 @@ $(document).click(function(event) {
  }
 });
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    savePlan();
-});
-
 $('.view-link-widget').off('click').on('click', function () {
     if (!editOption.state) {
         $(this).find('a').click();

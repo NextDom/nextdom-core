@@ -39,11 +39,6 @@ editorDesktopCSS = null;
 editorMobileJS = null;
 editorMobileCSS = null;
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_savecustom").click();
-});
-
 printConvertColor();
 $.showLoading();
 nextdom.config.load({

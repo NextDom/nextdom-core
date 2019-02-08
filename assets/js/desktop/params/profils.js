@@ -42,11 +42,6 @@ $('.nav-tabs a').on('shown.bs.tab', function (e) {
     window.location.hash = e.target.hash;
 })
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_saveProfils").click();
-});
-
 $('#bt_configureTwoFactorAuthentification').on('click',function(){
     var profil = $('#div_pageContainer').getValues('.userAttr')[0];
     $('#md_modal').dialog({title: "{{Authentification 2 étapes}}"});

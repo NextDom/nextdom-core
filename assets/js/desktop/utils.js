@@ -362,7 +362,7 @@ $(function () {
 
     $('#bt_gotoDashboard').on('click',function(){
         if('ontouchstart' in window || navigator.msMaxTouchPoints){
-              return;
+            return;
         }
         $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
         loadPage('index.php?v=d&p=dashboard');
@@ -727,10 +727,10 @@ function positionEqLogic(_id,_preResize,_scenario) {
     if(_id != undefined){
         var eqLogic = $('.eqLogic-widget[data-eqlogic_id='+_id+']');
         if(_scenario){
-              var widget = $('.scenario-widget[data-scenario_id='+_id+']');
-            }else{
-              var widget = $('.eqLogic-widget[data-eqlogic_id='+_id+']');
-            }
+            var widget = $('.scenario-widget[data-scenario_id='+_id+']');
+        }else{
+            var widget = $('.eqLogic-widget[data-eqlogic_id='+_id+']');
+        }
         widget.css('margin','0px').css('padding','0px');
         eqLogic.trigger('resize');
         eqLogic.addClass(eqLogic.attr('data-category'));
