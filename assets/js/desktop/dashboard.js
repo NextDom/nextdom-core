@@ -35,22 +35,13 @@
 */
 
 function selectCategory(_selectedCategory) {
-    console.log(_selectedCategory);
     var category = _selectedCategory;
-    var tag = SEL_TAG;
     var filterValue = '';
-    if (category == 'all' && tag == 'all') {
+    if (category == 'all') {
         filterValue = '*';
     } else {
-        if (category == 'all') {
-            filterValue = '.tag-' + tag;
-        } else {
-            if (tag == 'all') {
-                filterValue = '.' + category;
-            } else {
-                filterValue = '.' + category + '.tag-' + tag;
-            }
-        }
+        filterValue = '.' + category;
+
     }
     var $grid = $('.div_displayEquipement').isotope({
         itemSelector: '.eqLogic-widget',
