@@ -122,6 +122,11 @@ legend {
     border-radius: 2px;
     font-size: 20px;
     vertical-align: middle;
+    width: 50px;
+    line-height: 1.1em;
+    padding: {
+        left: 10px;
+    }
     margin: {
         left: -4px;
         top: 0px;
@@ -215,4 +220,8 @@ legend {
 
 .fa-soft {
     opacity: 0.8;
+}
+
+.cmdAttr {
+    line-height: 1.1em;
 }
