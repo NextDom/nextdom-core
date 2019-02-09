@@ -133,6 +133,7 @@ $('#bt_doUpdate').off('click').on('click', function () {
             notify("Erreur", error.message, 'error');
         },
         success: function () {
+            $('a[data-toggle=tab][href="#log"]').click();
             getNextDomLog(1, 'update');
         }
     });
@@ -169,6 +170,7 @@ $('#listPlugin,#listOther,#listCore,#listWidget,#listScript').delegate('.update'
                     notify("Erreur", error.message, 'error');
                 },
                 success: function () {
+                    $('a[data-toggle=tab][href="#log"]').click();
                     getNextDomLog(1, 'update');
                 }
             });

@@ -26,6 +26,7 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\ViewManager;
 
 class ViewConfigure extends BaseAbstractModal
 {
@@ -48,7 +49,7 @@ class ViewConfigure extends BaseAbstractModal
      */
     public function get(Render $render): string
     {
-        $view = \view::byId(init('view_id'));
+        $view = ViewManager::byId(init('view_id'));
         if (!is_object($view)) {
             throw new CoreException('Impossible de trouver la vue');
         }

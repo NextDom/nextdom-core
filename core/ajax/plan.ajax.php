@@ -215,7 +215,6 @@ try {
         $planHeader->setConfiguration('desktopSizeX', $img_size[0]);
         $planHeader->setConfiguration('desktopSizeY', $img_size[1]);
         $planHeader->save();
-        @rrmdir(__DIR__ . '/../../public/img/plan');
         ajax::success();
     }
 

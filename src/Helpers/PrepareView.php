@@ -23,6 +23,7 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Managers\ViewManager;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Routing\RouteCollection;
@@ -305,7 +306,7 @@ class PrepareView
             $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
         }
         $pageData['MENU_JEEOBJECT_TREE'] = JeeObjectManager::buildTree(null, false);
-        $pageData['MENU_VIEWS_LIST'] = \view::all();
+        $pageData['MENU_VIEWS_LIST'] = ViewManager::all();
         $pageData['MENU_PLANS_LIST'] = \planHeader::all();
         $pageData['MENU_PLANS3D_LIST'] = \plan3dHeader::all();
         if (is_object($currentPlugin) && $currentPlugin->getIssue()) {

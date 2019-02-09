@@ -98,12 +98,23 @@ class migrate {
         $url = $urlArray['url'];
         $size = $urlArray['size'];
         exec('sudo pkill -9 wget');
-        exec('sudo wget --no-check-certificate --progress=dot --dot=mega '.$url.' -a '.log::getPathToLog('migrate').' -O '.$mediaLink.'/backupNextDomDownload.tar.gz >> ' . log::getPathToLog('migrate').' 2&>1');
-        $sizeFile = filesize($mediaLink.'/backupNextDomDownload.tar.gz');
-        if($sizeFile == $size){
-            return 'ok';
-        }else{
-            return 'nok';
+        $fileExiste = 0;
+        if(file_exists($mediaLink.'/backupNextDom.tar.gz.installed')){
+            $fileExiste = $mediaLink.'/backupNextDom.tar.gz.installed';
+        }elseif(file_exists($mediaLink.'/backupNextDom.tar.gz')){
+            $fileExiste = $mediaLink.'/backupNextDom.tar.gz';
+        }elseif(file_exists($mediaLink.'/backupNextDomDownload.tar.gz')){
+            $fileExiste = $mediaLink.'/backupNextDomDownload.tar.gz';
+        }
+        if($fileExiste !== 0){
+            $sizeFileExiste = filesize($fileExiste);
+            if($sizeFileExiste == $size){
+                exec('sudo mv '.$fileExiste.' '.$mediaLink.'/backupNextDom.tar.gz');
+                return 'fileExist';
+            }else{
+                exec('sudo wget --no-check-certificate --progress=dot --dot=mega '.$url.' -a '.log::getPathToLog('migrate').' -O '.$mediaLink.'/backupNextDomDownload.tar.gz >> ' . log::getPathToLog('migrate').' 2&>1');
+                return 'telechargement';
+            }
         }
     }
     
@@ -124,6 +135,10 @@ class migrate {
         }
         log::remove('migrate');
         exec('sudo rsync --progress '.$mediaLinkBackup.'/* '.$backup_dir.' >'.log::getPathToLog('migrate').' 2>&1');
+        return 'ok';
+    }
+    
+    public static function GoBackupInstall(){
         $backups = nextdom::listBackup();
         foreach ($backups as $backup) {
                 $lienBackup = $backup;

@@ -36,6 +36,7 @@ use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ScenarioSubElementManager;
+use NextDom\Managers\ViewManager;
 
 /**
  * Scenarioexpression
@@ -629,7 +630,7 @@ class ScenarioExpression
         $this->setLog($scenario, __('Génération d\'un rapport de type ') . $options['type']);
         switch ($options['type']) {
             case 'view':
-                $view = \view::byId($options['view_id']);
+                $view = ViewManager::byId($options['view_id']);
                 if (!is_object($view)) {
                     throw new CoreException(__('Vue introuvable - Vérifiez l\'id : ') . $options['view_id']);
                 }

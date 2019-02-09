@@ -46,7 +46,7 @@ class EqLogicManager
      *
      * @param mixed $id EqLogic object id
      *
-     * @return \eqLogic|null
+     * @return EqLogic|null
      *
      * @throws \Exception
      */
@@ -205,7 +205,7 @@ class EqLogicManager
      *
      * @param $eqTypeName
      * @param bool $onlyEnable
-     * @return array|mixed
+     * @return EqLogic[]|null
      * @throws \Exception
      */
     public static function byType($eqTypeName, $onlyEnable = false)

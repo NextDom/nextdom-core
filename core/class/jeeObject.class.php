@@ -604,7 +604,7 @@ class jeeObject {
      *
      * @return $this
      */
-    public function setConfiguration(string $key, $value) {
+    public function setConfiguration(string $_key, $_value) {
         $configuration =  utils::setJsonAttr($this->configuration, $_key, $_value);
         $this->_changed = utils::attrChanged($this->_changed,$this->configuration,$configuration);
         $this->configuration = $configuration;

@@ -30,6 +30,7 @@ use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\ViewManager;
 
 class ProfilsController extends BaseController
 {
@@ -57,16 +58,26 @@ class ProfilsController extends BaseController
         @session_start();
         $_SESSION['user']->refresh();
         @session_write_close();
-        $pageContent['profilsHomePage'] = array(
+        $pageContent['profilsHomePageDesktop'] = array(
             'core::dashboard' => \__('Dashboard'),
             'core::view' => \__('Vue'),
             'core::plan' => \__('Design'),
+            'core::plan3d' => \__('Design 3D'),
+        );
+        $pageContent['profilsHomePageMobile'] = array(
+            'core::dashboard' => \__('Dashboard'),
+            'core::view' => \__('Vue'),
+            'core::plan' => \__('Design'),
+            'core::plan3d' => \__('Design 3D'),
         );
 
         $pluginManagerList = PluginManager::listPlugin();
         foreach ($pluginManagerList as $pluginList) {
-            if ($pluginList->isActive() == 1 && $pluginList->getDisplay() != '') {
-                $pageContent['profilsHome'][$pluginList->getId() . '::' . $pluginList->getDisplay()] = $pluginList->getName();
+            if ($pluginList->isActive() == 1 && $pluginList->getDisplay() != '' && ConfigManager::byKey('displayDesktopPanel', $pluginList->getId(), 0) != 0) {
+                $pageContent['profilsHomePageDesktop'][$pluginList->getId() . '::' . $pluginList->getDisplay()] = $pluginList->getName();
+            }
+            if ($pluginList->isActive() == 1 && $pluginList->getDisplay() != '' && ConfigManager::byKey('displayMobilePanel', $pluginList->getId(), 0) != 0) {
+                $pageContent['profilsHomePageMobile'][$pluginList->getId() . '::' . $pluginList->getDisplay()] = $pluginList->getName();
             }
         }
         $pageContent['profilsUser'] = $_SESSION['user'];
@@ -88,8 +99,9 @@ class ProfilsController extends BaseController
         }
         $pageContent['profilsDisplayTypes'] = NextDomHelper::getConfiguration('eqLogic:displayType');
         $pageContent['profilsJeeObjects'] = JeeObjectManager::all();
-        $pageContent['profilsViews'] = \view::all();
+        $pageContent['profilsViews'] = ViewManager::all();
         $pageContent['profilsPlans'] = \planHeader::all();
+        $pageContent['profilsPlans3d'] = \plan3dHeader::all();
         $pageContent['profilsAllowRemoteUsers'] = ConfigManager::byKey('sso:allowRemoteUser');
 
         $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/profils.js';

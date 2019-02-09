@@ -72,7 +72,7 @@ if (view_id != '') {
     success: function (html) {
       setTimeout(function(){
        if(isset(html.raw) && isset(html.raw.img) && html.raw.img != ''){
-        $('.backgroundforNextDom').css('background-image','url("'+ html.raw.img+'")');
+        $('.backgroundforNextDom').css('background-image','url("'+ html.raw.img+'") !important');
       }else{
        $('.backgroundforNextDom').css('background-image','url("")');
      }

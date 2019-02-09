@@ -388,13 +388,13 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">{{ 'Nombre de lignes' }}</label>
                         <div class="col-sm-2">
-                            <input type="number" class="eqLogicAttr form-control input-sm" data-l1key="display" data-l2key="layout::dashboard::table::nbLine"/>
+                            <input type="number" min="0" step="1" class="eqLogicAttr form-control input-sm" data-l1key="display" data-l2key="layout::dashboard::table::nbLine"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">{{ 'Nombre de colonnes' }}</label>
                         <div class="col-sm-2">
-                            <input type="number" class="eqLogicAttr form-control input-sm" data-l1key="display" data-l2key="layout::dashboard::table::nbColumn"/>
+                            <input type="number" min="0" step="1" class="eqLogicAttr form-control input-sm" data-l1key="display" data-l2key="layout::dashboard::table::nbColumn"/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -422,9 +422,9 @@
             <legend>{{ 'Configuration détaillée' }}</legend>
             <table class="table table-bordered table-condensed" id="tableCmdLayoutConfiguration">
                 <tbody>
-                {% for row in range(0, displayDasboardNbLine) %}
+                {% for row in range(1, displayDashboardNbLines + 1) %}
                     <tr>
-                        {% for col in range(0, displayDashboardNbColumn) %}
+                        {% for col in range(1, displayDashboardNbColumns + 1) %}
                             <td data-line="{{ row }}" data-column="{{ col }}">
                                 <center class="cmdLayoutContainer" style="min-height:30px">
                                     {% if dashboardCmd[row][col] is defined and dashboardCmd[row][col]|length > 0 %}

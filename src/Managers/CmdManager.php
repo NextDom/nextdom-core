@@ -75,9 +75,12 @@ class CmdManager
     public static function byIds($_ids)
     {
         if (!is_array($_ids) || count($_ids) == 0) {
-            return null;
+            return [];
         }
         $in = trim(implode(',', $_ids), ',');
+        if ($in === '') {
+            return [];
+        }
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id IN (' . $in . ')';

@@ -23,17 +23,3 @@ $app['db'] = function () {
     return \NextDom\Singletons\ConnectDb::getConnection();
 };
 
-///////////////////////////////
-////        NextDom DAO    ////
-///////////////////////////////
-
-/**
- * @return \NextDom\Models\DAO\CmdDAO
- */
-$app['DAO.Cmd'] = function () use ($app) {
-    return new NextDom\Models\DAO\CmdDAO($app['db']());
-};
-$app['DAO.Fragment'] = function () use ($app) {
-    return new NextDom\Models\DAO\FragmentDAO($app['db']());
-};
-

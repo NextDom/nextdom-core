@@ -187,37 +187,21 @@ $(function () {
             $(this).parent().toggleClass('open');
         });
     }
-    /*********************Gestion de l'heure********************************/
-    /*
-    setInterval(function () {
-        // les noms de jours / mois
-        var jours = new Array("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi");
-        var mois = new Array("janvier", "fevrier", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "decembre");
-        // on recupere la date
-        var date = new Date();
-        var minutes = date.getMinutes();
-        var secondes = date.getSeconds();
-        if(minutes < 10){
-            minutes = "0" + minutes;
-        }
-        if(secondes < 10){
-            secondes = "0" + secondes;
-        }
-        // on construit le message
-        var horloge= jours[date.getDay()] + " ";   // nom du jour
-        horloge += date.getDate() + " ";   // numero du jour
-        horloge += mois[date.getMonth()] + " ";   // mois
-        horloge += date.getFullYear();
-        horloge += ' - ';
-        horloge += date.getHours() + ":" + minutes + ":" +secondes;
-        $('#horloge').text(horloge);
-        var horloge_time= date.getHours() + ":" + minutes + ":" +secondes;
-        $('#horloge_time').text(horloge_time);
-        var horloge_date= jours[date.getDay()] + " " + date.getDate() + " " + mois[date.getMonth()] + " " + date.getFullYear();
-        $('#horloge_date').text(horloge_date);
-    }, 1000);
-*/
 
+    /********************* Date and Time********************************/
+    setInterval(function () {
+        var date = new Date();
+        // Get NextDom language for format
+        var locale = 'en-EN';
+        if (isset(nextdom_langage)) {
+            locale = nextdom_langage.replace('_','-');
+        }
+        //Date
+        var dateFormat = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        $('#horloge_date').text(date.toLocaleDateString(locale, dateFormat));
+        // Time
+        $('#horloge_time').text(date.toLocaleTimeString(locale));
+    }, 1000);
 
     $.fn.modal.Constructor.prototype.enforceFocus = function () {
     };
@@ -228,21 +212,6 @@ $(function () {
     });
 
     /************************Help*************************/
-
-    setInterval(function () {
-      var date = new Date();
-      date.setTime(date.getTime() + clientServerDiffDatetime);
-      var hour = date.getHours();
-      var minute = date.getMinutes();
-      var seconde = date.getSeconds();
-      var horloge = (hour < 10) ? '0' + hour : hour;
-      horloge += ':';
-      horloge += (minute < 10) ? '0' + minute : minute;
-      horloge += ':';
-      horloge += (seconde < 10) ? '0' + seconde : seconde;
-      $('#horloge').text(horloge);
-    }, 1000);
-    
     if (isset(nextdom_langage)) {
         bootbox.setDefaults({
             locale: nextdom_langage.substr(0, 2),
@@ -471,25 +440,6 @@ function linkify(inputText) {
 }
 
 function initRowOverflow() {
-     if(screen.width < 768){
-           var col = $('.row-overflow > div').first();
-           col.addClass('collapse');
-           if(col.attr('id') == undefined){
-                 var id = col.uniqueId();
-               }
-           if($('#bt_displayFullMenuOnMobile').html() == undefined){
-                 $('.row-overflow').before('<a class="btn btn-default btn-sm" data-toggle="collapse" id="bt_displayFullMenuOnMobile" style="width:100%;margin-top:3px;"><i class="fas fa-arrow-circle-left"> {{Menu}}</i></a>');
-                 $('#bt_displayFullMenuOnMobile').on('click',function(){
-                       if($(this).find('i').attr('class').search('left') != -1){
-                             $(this).find('i').removeClass('fa-arrow-circle-left').addClass('fa-arrow-circle-down');
-                           }else{
-                             $(this).find('i').removeClass('fa-arrow-circle-down').addClass('fa-arrow-circle-left');
-                           }
-                     });
-               }
-           $('#bt_displayFullMenuOnMobile').attr('data-target','#'+col.attr('id'));
-           return;
-         }
     var hWindow = $(window).outerHeight() - $('header').outerHeight() - $('#div_alert').outerHeight()-5;
     if($('#div_alert').outerHeight() > 0){
         hWindow -= 10;

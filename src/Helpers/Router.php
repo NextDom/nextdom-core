@@ -84,6 +84,8 @@ class Router
      */
     public function desktopView()
     {
+        AuthentificationHelper::init();
+        Status::initConnectState();
         if (isset($_GET['modal'])) {
             PrepareView::showModal();
         } elseif (isset($_GET['configure'])) {
@@ -91,8 +93,6 @@ class Router
         } elseif (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
             PrepareView::getContentByAjax();
         } else {
-            require_once(NEXTDOM_ROOT . '/core/php/authentification.php');
-            Status::initConnectState();
             $configs = ConfigManager::byKeys(array(
                 'enableCustomCss',
                 'language',

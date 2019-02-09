@@ -96,7 +96,7 @@ class ScenarioSubElement
 
     public function setId($_id)
     {
-        $this->_changed = utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
         $this->id = $_id;
         return $this;
     }
@@ -108,7 +108,7 @@ class ScenarioSubElement
 
     public function setName($_name)
     {
-        $this->_changed = utils::attrChanged($this->_changed, $this->name, $_name);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
         $this->name = $_name;
         return $this;
     }
@@ -120,7 +120,7 @@ class ScenarioSubElement
 
     public function setType($_type)
     {
-        $this->_changed = utils::attrChanged($this->_changed, $this->type, $_type);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
         $this->type = $_type;
         return $this;
     }
@@ -137,20 +137,20 @@ class ScenarioSubElement
 
     public function setScenarioElement_id($_scenarioElement_id)
     {
-        $this->_changed = utils::attrChanged($this->_changed, $this->scenarioElement_id, $_scenarioElement_id);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->scenarioElement_id, $_scenarioElement_id);
         $this->scenarioElement_id = $_scenarioElement_id;
         return $this;
     }
 
     public function getOptions($_key = '', $_default = '')
     {
-        return utils::getJsonAttr($this->options, $_key, $_default);
+        return Utils::getJsonAttr($this->options, $_key, $_default);
     }
 
     public function setOptions($_key, $_value)
     {
-        $options = utils::setJsonAttr($this->options, $_key, $_value);
-        $this->_changed = utils::attrChanged($this->_changed, $this->options, $options);
+        $options = Utils::setJsonAttr($this->options, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->options, $options);
         $this->options = $options;
         return $this;
     }
