@@ -270,18 +270,19 @@ $("input[name=theme]").click(function () {
             'theme:color15' : '#222d32',
             'theme:color16' : '#999',
             'theme:color17' : '#2c3b41',
-            'theme:color18' : '#e6e7e8'
+            'theme:color18' : '#e6e7e8',
+            'theme:color19' : '#8aa4af',
         }
     }
     if (radio == "white"){
         config = {
             'theme:color1' : '#33b8cc',
-            'theme:color2' : '#555555',
+            'theme:color2' : '#ffffff',
             'theme:color3' : '#f4f4f5',
             'theme:color4' : '#33B8CC',
             'theme:color5' : '#ffffff',
             'theme:color6' : '#f9fafc',
-            'theme:color7' : '#f4f4f5',
+            'theme:color7' : '#dbdbdb',
             'theme:color8' : '#f4f4f5',
             'theme:color9' : '#ecf0f5',
             'theme:color10' : '#ffffff',
@@ -290,9 +291,10 @@ $("input[name=theme]").click(function () {
             'theme:color13' : '#f5f5f5',
             'theme:color14' : '#dddddd',
             'theme:color15' : '#ffffff',
-            'theme:color16' : '#999',
+            'theme:color16' : '#dddddd',
             'theme:color17' : '#f4f4f4',
-            'theme:color18' : '#555555'
+            'theme:color18' : '#555555',
+            'theme:color19' : '#555555',
         }
     }
     if (radio == "mix"){
@@ -314,7 +316,8 @@ $("input[name=theme]").click(function () {
             'theme:color15' : '#fafafa',
             'theme:color16' : '#999',
             'theme:color17' : '#f4f4f4',
-            'theme:color18' : '#e6e7e8'
+            'theme:color18' : '#e6e7e8',
+            'theme:color19' : '#8aa4af',
         }
     }
     nextdom.config.save({

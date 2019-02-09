@@ -214,8 +214,11 @@ legend {
     border-radius: 0px 3px 3px 0px !important;
 }
 
-.colorpick .input-group-addon {
-    border: 0px;
+.colorpick .input-group-addon, .input-group .input-group-addon {
+    border: none;
+}
+.colorpick>input[type="text"] {
+    border: none !important;
 }
 
 .fa-soft {

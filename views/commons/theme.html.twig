@@ -37,6 +37,7 @@
 /* COLOR16 = Boutons d'action */
 /* COLOR17 = Boutons d'administration */
 /* COLOR18 = Couleur du texte du menu latéral */
+/* COLOR19 = Couleur du texte du sous-menu latéral */
 
 /* #################################################################################################################################################################################################### */
 /* COLOR1 = Couleur d'accentuation principale (identité du thème, header nextdom, bouton primaires, messages d'info, élements actifs ou survolés, textes de liens et d'état, scrollbar, boutons fab...) */
@@ -134,46 +135,37 @@
 /* ################################################################################## */
 /* COLOR2 = Couleur de contraste (icônes et texte sur fond accentué ou de sidebar...) */
 /* ################################################################################## */
+/* Header */
 .main-header .logo {
   color: {{ COLOR2 }} !important;
 }
-
-.btn-action {
-  color: {{ COLOR2 }} !important;
-}
-
 .main-header .navbar .sidebar-toggle {
   color: {{ COLOR2 }} !important;
 }
-
 @media (max-width: 767px) {
   .main-header .navbar .dropdown-menu li a {
     color: {{ COLOR2 }} !important;
   }
 }
 
-.user-panel > .info,
-.user-panel > .info > a {
-  color: {{ COLOR2 }} !important;
-}
-
-.sidebar a, .accordion-toggle .fas {
-  color: {{ COLOR2 }} !important;
-}
-
-.sidebar-menu .treeview-menu > li.active > a,
-.sidebar-menu .treeview-menu > li > a:hover {
-  color: {{ COLOR2 }} !important;
-}
-
+/* Menu lateral */
 .sidebar-form input[type="text"]:focus,
 .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   background-color: {{ COLOR2 }} !important;
   color: #666;
 }
-
 .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   border-left-color: {{ COLOR2 }} !important;
+}
+
+/* Bouton action */
+.btn-action {
+  color: {{ COLOR2 }} !important;
+}
+
+/* Etiquette dysfonctionnement */
+.sidebar-warning {
+  color: {{ COLOR2 }} !important;
 }
 
 /* Logos */
@@ -235,9 +227,12 @@
 /* ################################################################################### */
 /* Menu lateral */
 .sidebar-menu > li:hover > a, .sidebar-menu > li.menu-open > a {
-  color: {{ COLOR2 }} !important;
   background-color: {{ COLOR7 }} !important;
 }
+.treeview-menu > li:hover {
+  background-color: {{ COLOR7 }} !important;
+}
+
 
 
 /* ######################################################################### */
@@ -298,6 +293,9 @@
 .box, .box-footer {
   background-color: {{ COLOR10 }} !important;
 }
+.info-box-small{
+  background-color: {{ COLOR10 }} !important;
+}
 
 /* Action bar */
 .action-bar {
@@ -314,14 +312,17 @@ body, .main-footer{
   background-color: {{ COLOR10 }} !important;
 }
 
-/* Info-box */
-.info-box, .modal-content{
+/* Modale */
+.modal-content{
+  background-color: {{ COLOR10 }} !important;
+}
+.ui-dialog .ui-dialog-titlebar, .ui-dialog .ui-dialog-buttonpane {
   background-color: {{ COLOR10 }} !important;
 }
 
-/* Modales */
-.ui-dialog .ui-dialog-titlebar, .ui-dialog .ui-dialog-buttonpane {
-  background-color: {{ COLOR6 }} !important;
+/* List log et autres */
+.label-list>a:hover, .label-view>a:hover, .label-log>a:hover {
+  background-color: {{ COLOR10 }} !important;
 }
 
 
@@ -339,11 +340,8 @@ legend {
   background-color: {{ COLOR11 }} !important;
 }
 
-/* Unités et fond colorpick
-.input-group .input-group-addon {
-  background-color: {{ COLOR11 }} !important;
-}
-.colorpick .input-group-addon {
+/* Unités et fond colorpick */
+.colorpick .input-group-addon, .input-group .input-group-addon {
   background-color: {{ COLOR11 }} !important;
 }
 
@@ -355,11 +353,16 @@ legend {
   background-color: {{ COLOR11 }} !important;
 }
 
+/* Texte area */
+pre {
+  background-color: {{ COLOR11 }} !important;
+}
+
 
 /* #################################################################################################### */
 /* COLOR12 = Couleur des textes (contenu, titres, footer, bouton d'administration, unités, légendes...) */
 /* #################################################################################################### */
-/*Textes */
+/* Textes */
 body, h1, h2, h3, h4, h5, h6  {
   color: {{ COLOR12 }} !important;
 }
@@ -394,6 +397,9 @@ legend {
   color: {{ COLOR12 }} !important;
 }
 .input-sm {
+  color: {{ COLOR12 }} !important;
+}
+pre {
   color: {{ COLOR12 }} !important;
 }
 
@@ -443,6 +449,10 @@ legend {
   border-color: {{ COLOR14 }} !important;
 }
 
+/* Texte area */
+pre {
+  border-color: {{ COLOR14 }} !important;
+}
 
 /* #################################################################################### */
 /* COLOR15 = Couleur de fond des contenants (boxs, cards, pages d'onglets, tableaux...) */
@@ -482,11 +492,23 @@ legend {
 .sidebar-menu > li:hover > a, .sidebar-menu > li.menu-open > a {
   color: {{ COLOR18 }} !important;
 }
+.sidebar-menu .treeview-menu > li.active > a,
+.sidebar-menu .treeview-menu > li > a:hover {
+  color: {{ COLOR18 }} !important;
+}
+.sidebar a:not(.sidebar-warning), .accordion-toggle .fas {
+  color: {{ COLOR18 }} !important;
+}
+.user-panel > .info,
+.user-panel > .info > a {
+  color: {{ COLOR18 }} !important;
+}
 
 
-
-
-
-.colorpick>input[type="text"] {
-border: none !important;
+/* ############################################### */
+/* COLOR19 = Couleur du texte du sous-menu latéral */
+/* ############################################### */
+/* Menu lateral */
+.sidebar-menu .treeview-menu>li>a:not(.sidebar-warning) {
+  color: {{ COLOR19 }} !important;
 }
