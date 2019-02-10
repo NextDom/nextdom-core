@@ -24,23 +24,17 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
+use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ViewManager;
 
 class ReportController extends BaseController
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render report page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of report page
      *
@@ -48,11 +42,12 @@ class ReportController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/diagnostic/report.js';
+
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/report.js';
         $report_path = NEXTDOM_ROOT . '/data/report/';
-        $pageContent['reportViews'] = [];
+        $pageData['reportViews'] = [];
         $allViews = ViewManager::all();
         foreach ($allViews as $view) {
             $viewData = [];
@@ -60,19 +55,19 @@ class ReportController extends BaseController
             $viewData['icon'] = $view->getDisplay('icon');
             $viewData['name'] = $view->getName();
             $viewData['number'] = count(FileSystemHelper::ls($report_path . '/view/' . $view->getId(), '*'));
-            $pageContent['reportViews'][] = $viewData;
+            $pageData['reportViews'][] = $viewData;
         }
-        $pageContent['reportPlans'] = [];
-        $allPlanHeader = \planHeader::all();
+        $pageData['reportPlans'] = [];
+        $allPlanHeader = PlanHeaderManager::all();
         foreach ($allPlanHeader as $plan) {
             $planData = [];
             $planData['id'] = $plan->getId();
             $planData['icon'] = $plan->getConfiguration('icon');
             $planData['name'] = $plan->getName();
             $planData['number'] = count(FileSystemHelper::ls($report_path . '/plan/' . $plan->getId(), '*'));
-            $pageContent['reportPlans'][] = $planData;
+            $pageData['reportPlans'][] = $planData;
         }
-        $pageContent['reportPlugins'] = [];
+        $pageData['reportPlugins'] = [];
         $pluginManagerList = PluginManager::listPlugin(true);
         foreach ($pluginManagerList as $plugin) {
             if ($plugin->getDisplay() != '') {
@@ -80,11 +75,11 @@ class ReportController extends BaseController
                 $pluginData['id'] = $plugin->getId();
                 $pluginData['name'] = $plugin->getName();
                 $pluginData['number'] = count(FileSystemHelper::ls($report_path . '/plugin/' . $plugin->getId(), '*'));
-                $pageContent['reportPlugins'][] = $pluginData;
+                $pageData['reportPlugins'][] = $pluginData;
             }
         }
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/diagnostic/reports-view.html.twig', $pageContent);
+        return $render->get('/desktop/diagnostic/reports-view.html.twig', $pageData);
     }
 }

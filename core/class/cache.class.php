@@ -21,13 +21,7 @@ require_once __DIR__ . '/../../core/php/core.inc.php';
 
 use NextDom\Managers\CacheManager;
 
-class cache {
-    private $key;
-    private $value = null;
-    private $lifetime = 0;
-    private $datetime;
-    private $options = null;
-
+class cache extends \NextDom\Model\Entity\Cache {
     public static function getFolder() {
         return CacheManager::getFolder();
     }
@@ -78,75 +72,5 @@ class cache {
 
     public static function clean() {
         CacheManager::clean();
-    }
-
-    public function save() {
-        $this->setDatetime(date('Y-m-d H:i:s'));
-        if ($this->getLifetime() == 0) {
-            return self::getCache()->save($this->getKey(), $this);
-        } else {
-            return self::getCache()->save($this->getKey(), $this, $this->getLifetime());
-        }
-    }
-
-    public function remove() {
-        try {
-            self::getCache()->delete($this->getKey());
-        } catch (Exception $e) {
-
-        }
-    }
-
-    public function hasExpired() {
-        return true;
-    }
-
-    public function getKey() {
-        return $this->key;
-    }
-
-    public function setKey($key) {
-        $this->key = $key;
-        return $this;
-    }
-
-    public function getValue($_default = '') {
-        return ($this->value === null || (is_string($this->value) && trim($this->value) === '')) ? $_default : $this->value;
-    }
-
-    public function setValue($value) {
-        $this->value = $value;
-        return $this;
-    }
-
-    public function getLifetime() {
-        return $this->lifetime;
-    }
-
-    public function setLifetime($lifetime) {
-        $this->lifetime = $lifetime;
-        return $this;
-    }
-
-    public function getDatetime() {
-        return $this->datetime;
-    }
-
-    public function setDatetime($datetime) {
-        $this->datetime = $datetime;
-        return $this;
-    }
-
-    public function getOptions($_key = '', $_default = '') {
-        return utils::getJsonAttr($this->options, $_key, $_default);
-    }
-
-    public function setOptions($_key, $_value = null) {
-        $this->options = utils::setJsonAttr($this->options, $_key, $_value);
-        return $this;
-    }
-
-    public function setOptionsFromJson($options) {
-        $this->options = json_encode($options, JSON_UNESCAPED_UNICODE);
     }
 }

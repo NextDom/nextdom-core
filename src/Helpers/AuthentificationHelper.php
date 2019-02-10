@@ -64,8 +64,8 @@ class AuthentificationHelper
             header("Statut: 403 Forbidden");
             header('HTTP/1.1 403 Forbidden');
             $_SERVER['REDIRECT_STATUS'] = 403;
-            echo '<p>' . __('403 Access Forbidden', __FILE__) . '</p>';
-            echo '<p>' . __('Votre accès a été verrouillé pour votre sécurité ', __FILE__) . '</p>';
+            echo '<p>' . __('403 Access Forbidden') . '</p>';
+            echo '<p>' . __('Votre accès a été verrouillé pour votre sécurité ') . '</p>';
             die();
         }
 
@@ -88,7 +88,7 @@ class AuthentificationHelper
                 @session_start();
                 $_SESSION['user'] = $user;
                 @session_write_close();
-                LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par REMOTE_USER : ', __FILE__) . $user->getLogin());
+                LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par REMOTE_USER : ') . $user->getLogin());
             }
         }
 
@@ -126,7 +126,7 @@ class AuthentificationHelper
         @session_start();
         $_SESSION['user'] = $user;
         @session_write_close();
-        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur : ', __FILE__) . $_login);
+        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur : ') . $_login);
         return true;
     }
 
@@ -173,7 +173,7 @@ class AuthentificationHelper
         if (!isset($_COOKIE['nextdom_token'])) {
             setcookie('nextdom_token', AjaxManager::getToken(), time() + 365 * 24 * 3600, "/", '', false, true);
         }
-        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par clef : ', __FILE__) . $user->getLogin());
+        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par clef : ') . $user->getLogin());
         return true;
     }
 

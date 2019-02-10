@@ -23,23 +23,15 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 
 class LogController extends BaseController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render log page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of log page
      *
@@ -47,10 +39,11 @@ class LogController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
+
         // TODO utiliser log::getpathLog
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/diagnostic/log.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/log.js';
         $currentLogfile = Utils::init('logfile');
         $logFilesList = [];
         $dir = opendir('/var/log/nextdom/');
@@ -60,7 +53,7 @@ class LogController extends BaseController
             }
         }
         natcasesort($logFilesList);
-        $pageContent['logFilesList'] = [];
+        $pageData['logFilesList'] = [];
         foreach ($logFilesList as $logFile) {
             $logFileData = [];
             $logFileData['name'] = $logFile;
@@ -79,11 +72,11 @@ class LogController extends BaseController
                 $logFileData['active'] = false;
             }
             $logFileData['size'] = round(filesize('/var/log/nextdom/' . $logFile) / 1024);
-            $pageContent['logFilesList'][] = $logFileData;
+            $pageData['logFilesList'][] = $logFileData;
         }
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/diagnostic/logs-view.html.twig', $pageContent);
+        return $render->get('/desktop/diagnostic/logs-view.html.twig', $pageData);
     }
 
 

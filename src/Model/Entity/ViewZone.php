@@ -82,90 +82,108 @@ class ViewZone
 
     /*     * *********************Methode d'instance************************* */
 
-    public function save() {
+    public function save()
+    {
         return \DB::save($this);
     }
 
-    public function remove() {
+    public function remove()
+    {
         return \DB::remove($this);
     }
 
-    public function getviewData() {
+    public function getviewData()
+    {
         return ViewDataManager::byviewZoneId($this->getId());
     }
 
-    public function getView() {
+    public function getView()
+    {
         return ViewManager::byId($this->getView_id());
     }
 
     /*     * **********************Getteur Setteur*************************** */
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function setId($_id) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->id,$_id);
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
         $this->id = $_id;
         return $this;
     }
 
-    public function getView_id() {
+    public function getView_id()
+    {
         return $this->view_id;
     }
 
-    public function setView_id($_view_id) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->view_id,$_view_id);
+    public function setView_id($_view_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->view_id, $_view_id);
         $this->view_id = $_view_id;
         return $this;
     }
 
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
 
-    public function setType($_type) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->type,$_type);
+    public function setType($_type)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
         $this->type = $_type;
         return $this;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function setName($_name) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->name,$_name);
+    public function setName($_name)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
         $this->name = $_name;
         return $this;
     }
 
-    public function getPosition() {
+    public function getPosition()
+    {
         return $this->position;
     }
 
-    public function setPosition($_position) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->position,$_position);
+    public function setPosition($_position)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->position, $_position);
         $this->position = $_position;
         return $this;
     }
 
-    public function getConfiguration($_key = '', $_default = '') {
+    public function getConfiguration($_key = '', $_default = '')
+    {
         return Utils::getJsonAttr($this->configuration, $_key, $_default);
     }
 
-    public function setConfiguration($_key, $_value) {
-        $configuration =  Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed,$this->configuration,$configuration);
+    public function setConfiguration($_key, $_value)
+    {
+        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
         $this->configuration = $configuration;
         return $this;
     }
 
-    public function getChanged() {
+    public function getChanged()
+    {
         return $this->_changed;
     }
 
-    public function setChanged($_changed) {
+    public function setChanged($_changed)
+    {
         $this->_changed = $_changed;
         return $this;
     }

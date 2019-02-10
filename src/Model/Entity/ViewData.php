@@ -16,6 +16,7 @@
  */
 
 namespace NextDom\Model\Entity;
+
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ViewZoneManager;
 
@@ -77,71 +78,85 @@ class ViewData
 
     protected $_changed = false;
 
-    public function save() {
+    public function save()
+    {
         return \DB::save($this);
     }
 
-    public function remove() {
+    public function remove()
+    {
         return \DB::remove($this);
     }
 
-    public function getviewZone() {
+    public function getviewZone()
+    {
         return ViewZoneManager::byId($this->getviewZone_id());
     }
 
     /*     * **********************Getteur Setteur*************************** */
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function setId($_id) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->id,$_id);
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
         $this->id = $_id;
         return $this;
     }
 
-    public function getOrder() {
+    public function getOrder()
+    {
         return $this->order;
     }
 
-    public function setOrder($_order) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->order,$_order);
+    public function setOrder($_order)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
         $this->order = $_order;
         return $this;
     }
 
-    public function getviewZone_id() {
+    public function getviewZone_id()
+    {
         return $this->viewZone_id;
     }
 
-    public function setviewZone_id($_viewZone_id) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->viewZone_id,$_viewZone_id);
+    public function setviewZone_id($_viewZone_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->viewZone_id, $_viewZone_id);
         $this->viewZone_id = $_viewZone_id;
         return $this;
     }
 
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
 
-    public function setType($_type) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->type,$_type);
+    public function setType($_type)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
         $this->type = $_type;
         return $this;
     }
 
-    public function getLink_id() {
+    public function getLink_id()
+    {
         return $this->link_id;
     }
 
-    public function setLink_id($_link_id) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->link_id,$_link_id);
+    public function setLink_id($_link_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->link_id, $_link_id);
         $this->link_id = $_link_id;
         return $this;
     }
 
-    public function getLinkObject() {
+    public function getLinkObject()
+    {
         $type = $this->getType();
         if (class_exists($type)) {
             return $type::byId($this->getLink_id());
@@ -149,22 +164,26 @@ class ViewData
         return false;
     }
 
-    public function getConfiguration($_key = '', $_default = '') {
+    public function getConfiguration($_key = '', $_default = '')
+    {
         return Utils::getJsonAttr($this->configuration, $_key, $_default);
     }
 
-    public function setConfiguration($_key, $_value) {
+    public function setConfiguration($_key, $_value)
+    {
         $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed,$this->configuration,$configuration);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
         $this->configuration = $configuration;
         return $this;
     }
 
-    public function getChanged() {
+    public function getChanged()
+    {
         return $this->_changed;
     }
 
-    public function setChanged($_changed) {
+    public function setChanged($_changed)
+    {
         $this->_changed = $_changed;
         return $this;
     }

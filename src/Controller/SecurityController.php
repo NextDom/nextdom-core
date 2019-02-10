@@ -23,24 +23,16 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
 
 class SecurityController extends BaseController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render security page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of security page
      *
@@ -48,18 +40,18 @@ class SecurityController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
         $keys = array('security::bantime', 'ldap::enable');
         $configs = ConfigManager::byKeys($keys);
 
-        $pageContent['JS_VARS']['ldapEnable'] = $configs['ldap::enable'];
+        $pageData['JS_VARS']['ldapEnable'] = $configs['ldap::enable'];
 
-        $pageContent['adminUseLdap'] = function_exists('ldap_connect');
-        if ($pageContent['adminUseLdap']) {
-            $pageContent['adminLdapEnabled'] = ConfigManager::byKey('ldap:enable');
+        $pageData['adminUseLdap'] = function_exists('ldap_connect');
+        if ($pageData['adminUseLdap']) {
+            $pageData['adminLdapEnabled'] = ConfigManager::byKey('ldap:enable');
         }
-        $pageContent['adminBannedIp'] = [];
+        $pageData['adminBannedIp'] = [];
         $cache = CacheManager::byKey('security::banip');
         $values = json_decode($cache->getValue('[]'), true);
 
@@ -71,16 +63,16 @@ class SecurityController extends BaseController
                 if ($configs['security::bantime'] < 0) {
                     $bannedData['endDate'] = __('Jamais');
                 } else {
-                    $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageContent['adminConfigs']['security::bantime']);
+                    $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageData['adminConfigs']['security::bantime']);
                 }
-                $pageContent['adminBannedIp'][] = $bannedData;
+                $pageData['adminBannedIp'][] = $bannedData;
             }
         }
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/admin/security.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/security.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/admin/security.html.twig', $pageContent);
+        return $render->get('/desktop/admin/security.html.twig', $pageData);
     }
 
 

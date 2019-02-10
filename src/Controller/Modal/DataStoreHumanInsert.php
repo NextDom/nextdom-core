@@ -23,16 +23,10 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
+use NextDom\Managers\DataStoreManager;
 
 class DataStoreHumanInsert extends BaseAbstractModal
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render data store human insert modal
      *
@@ -45,10 +39,10 @@ class DataStoreHumanInsert extends BaseAbstractModal
      */
     public function get(Render $render): string
     {
-        $pageContent = [];
-        $pageContent['dataStoreByType'] = \dataStore::byTypeLinkId(init('type', 'scenario'));
+        $pageData = [];
+        $pageData['dataStoreByType'] = DataStoreManager::byTypeLinkId(init('type', 'scenario'));
 
-        return $render->get('/modals/dataStore.human.insert.html.twig', $pageContent);
+        return $render->get('/modals/dataStore.human.insert.html.twig', $pageData);
     }
 
 }

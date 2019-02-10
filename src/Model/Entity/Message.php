@@ -17,6 +17,11 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\Utils;
+use NextDom\Managers\ConfigManager;
+use NextDom\Managers\EventManager;
+use NextDom\Managers\ScenarioExpressionManager;
+
 /**
  * Message
  *
@@ -25,41 +30,43 @@ namespace NextDom\Model\Entity;
  */
 class Message
 {
+    const CLASS_NAME = Message::class;
+    const DB_CLASS_NAME = '`message`';
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */
-    private $date;
+    protected $date;
 
     /**
      * @var string
      *
      * @ORM\Column(name="logicalId", type="string", length=127, nullable=true)
      */
-    private $logicalid;
+    protected $logicalId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="plugin", type="string", length=127, nullable=false)
      */
-    private $plugin;
+    protected $plugin;
 
     /**
      * @var string
      *
      * @ORM\Column(name="message", type="text", length=65535, nullable=true)
      */
-    private $message;
+    protected $message;
 
     /**
      * @var string
      *
      * @ORM\Column(name="action", type="text", length=65535, nullable=true)
      */
-    private $action;
+    protected $action;
 
     /**
      * @var integer
@@ -68,16 +75,81 @@ class Message
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
-    public function getDate(): \DateTime
+    protected $_changed = false;
+
+    public function save($_writeMessage = true)
     {
-        return $this->date;
+        if ($this->getMessage() == '') {
+            return null;
+        }
+        if ($this->getLogicalId() == '') {
+            $this->setLogicalId($this->getPlugin() . '::' . ConfigManager::genKey());
+            $values = array(
+                'message' => $this->getMessage(),
+                'plugin' => $this->getPlugin(),
+            );
+            $sql = 'SELECT count(*)
+                    FROM ' . self::DB_CLASS_NAME . '
+                    WHERE plugin = :plugin
+                    AND message = :message';
+            $result = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+        } else {
+            $values = array(
+                'logicalId' => $this->getLogicalId(),
+                'plugin' => $this->getPlugin(),
+            );
+            $sql = 'SELECT count(*)
+            FROM message
+            WHERE plugin=:plugin
+            AND logicalId=:logicalId';
+            $result = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+        }
+        if ($result['count(*)'] != 0) {
+            return null;
+        }
+        EventManager::add('notify', array('title' => __('Message de ') . $this->getPlugin(), 'message' => $this->getMessage(), 'category' => 'message'));
+        if ($_writeMessage) {
+            \DB::save($this);
+            $params = array(
+                '#plugin#' => $this->getPlugin(),
+                '#message#' => $this->getMessage(),
+            );
+            $actions = ConfigManager::byKey('actionOnMessage');
+            if (is_array($actions) && count($actions) > 0) {
+                foreach ($actions as $action) {
+                    $options = array();
+                    if (isset($action['options'])) {
+                        $options = $action['options'];
+                    }
+                    foreach ($options as &$value) {
+                        $value = str_replace(array_keys($params), $params, $value);
+                    }
+                    ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
+                }
+            }
+            EventManager::add('message::refreshMessageNumber');
+        }
+        return true;
     }
 
-    public function getLogicalid()
+    public function remove()
     {
-        return $this->logicalid;
+        \DB::remove($this);
+        EventManager::add('message::refreshMessageNumber');
+    }
+
+    /*     * **********************Getteur Setteur*************************** */
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getDate()
+    {
+        return $this->date;
     }
 
     public function getPlugin()
@@ -95,45 +167,66 @@ class Message
         return $this->action;
     }
 
-    public function getId()
+    public function setId($_id)
     {
-        return $this->id;
-    }
-
-    public function setDate(\DateTime $date)
-    {
-        $this->date = $date;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
         return $this;
     }
 
-    public function setLogicalid($logicalid)
+    public function setDate($_date)
     {
-        $this->logicalid = $logicalid;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->date, $_date);
+        $this->date = $_date;
         return $this;
     }
 
-    public function setPlugin($plugin)
+    public function setPlugin($_plugin)
     {
-        $this->plugin = $plugin;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->plugin, $_plugin);
+        $this->plugin = $_plugin;
         return $this;
     }
 
-    public function setMessage($message)
+    public function setMessage($_message)
     {
-        $this->message = $message;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->message, $_message);
+        $this->message = $_message;
         return $this;
     }
 
-    public function setAction($action)
+    public function setAction($_action)
     {
-        $this->action = $action;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->action, $_action);
+        $this->action = $_action;
         return $this;
     }
 
-    public function setId($id)
+    public function getLogicalId()
     {
-        $this->id = $id;
+        return $this->logicalId;
+    }
+
+    public function setLogicalId($_logicalId)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $_logicalId);
+        $this->logicalId = $_logicalId;
         return $this;
     }
 
+    public function getChanged()
+    {
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed)
+    {
+        $this->_changed = $_changed;
+        return $this;
+    }
+
+    public function getTableName()
+    {
+        return 'message';
+    }
 }

@@ -32,6 +32,9 @@ use NextDom\Managers\CronManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
+use NextDom\Managers\InteractDefManager;
+use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ViewDataManager;
@@ -148,7 +151,7 @@ class Scenario
     protected $id;
 
     /**
-     * @var \NextDom\Model\Entity\Object
+     * @var \NextDom\Model\Entity\JeeObject
      *
      * ORM\ManyToOne(targetEntity="NextDom\Model\Entity\Object")
      * ORM\JoinColumns({
@@ -823,9 +826,9 @@ class Scenario
         return true;
     }
 
-    public function getData($key, $private = false, $default = '')
+    public function getData($key, $protected = false, $default = '')
     {
-        if ($private !== false) {
+        if ($protected !== false) {
             $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', $this->getId(), $key);
         } else {
             $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', -1, $key);
@@ -1079,7 +1082,6 @@ class Scenario
             }
         }
         if ($_mode == 'array') {
-            $return = [];
             $return = Utils::o2a($this);
             $return['trigger'] = NextDomHelper::toHumanReadable($return['trigger']);
             $return['elements'] = array();
@@ -1135,7 +1137,7 @@ class Scenario
      */
     public function getObject()
     {
-        return \object::byId($this->object_id);
+        return JeeObjectManager::byId($this->object_id);
     }
 
     /**
@@ -1348,13 +1350,13 @@ class Scenario
         $return = array('cmd' => array(), 'eqLogic' => array(), 'scenario' => array(), 'plan' => array(), 'view' => array());
         $return['cmd'] = CmdManager::searchConfiguration('#scenario' . $this->getId() . '#');
         $return['eqLogic'] = EqLogicManager::searchConfiguration(array('#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()));
-        $return['interactDef'] = \interactDef::searchByUse(array('#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()));
+        $return['interactDef'] = InteractDefManager::searchByUse(array('#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()));
         $return['scenario'] = ScenarioManager::searchByUse(array(
             array('action' => 'scenario', 'option' => $this->getId(), 'and' => true),
             array('action' => '#scenario' . $this->getId() . '#'),
         ));
         $return['view'] = ViewManager::searchByUse('scenario', $this->getId());
-        $return['plan'] = \planHeader::searchByUse('scenario', $this->getId());
+        $return['plan'] = PlanHeaderManager::searchByUse('scenario', $this->getId());
         if ($_array) {
             foreach ($return as &$value) {
                 $value = Utils::o2a($value);
@@ -1589,16 +1591,19 @@ class Scenario
      *
      * @return int
      */
-    public function getOrder() {
+    public function getOrder()
+    {
         return $this->order;
     }
+
     /**
      *
      * @param int $_order
      * @return $this
      */
-    public function setOrder($_order) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->order,$_order);
+    public function setOrder($_order)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
         $this->order = $_order;
         return $this;
     }

@@ -176,7 +176,7 @@ function addObjectSummary(_summary) {
     tr += '</td>';
     tr += '<td class="col-xs-1 input-group text-center">';
     tr += '<a class="objectSummaryAction btn btn-action" data-l1key="chooseIcon"><i class="fas fa-plus"></i></a>';
-    tr += '<span class="label label-icon objectSummaryAttr" data-l1key="icon"></span>';
+    tr += '<span class="label label-icon objectSummaryAttr" style="min-width: 50px;" data-l1key="icon"></span>';
     tr += '</td>';
     tr += '<td>';
     tr += '<input class="objectSummaryAttr form-control input-sm" data-l1key="unit" />';

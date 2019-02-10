@@ -24,7 +24,6 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\InteractDefManager;
@@ -35,17 +34,11 @@ use NextDom\Managers\ScenarioManager;
 
 class EqAnalyzeController extends BaseController
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render eqLogic analyze page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of eqLogic analyze page
      *
@@ -54,20 +47,19 @@ class EqAnalyzeController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
-
         global $NEXTDOM_INTERNAL_CONFIG;
 
-        $pageContent['eqAnalyzeEqLogicList'] = [];
+        $pageData['eqAnalyzeEqLogicList'] = [];
 
         $eqLogicMangerAll = EqLogicManager::all();
         foreach ($eqLogicMangerAll as $eqLogic) {
             if ($eqLogic->getStatus('battery', -2) != -2) {
-                $pageContent['eqAnalyzeEqLogicList'][] = $eqLogic;
+                $pageData['eqAnalyzeEqLogicList'][] = $eqLogic;
             }
         }
-        usort($pageContent['eqAnalyzeEqLogicList'], function ($a, $b) {
+        usort($pageData['eqAnalyzeEqLogicList'], function ($a, $b) {
             $result = 0;
             if ($a->getStatus('battery') < $b->getStatus('battery')) {
                 $result = -1;
@@ -121,9 +113,9 @@ class EqAnalyzeController extends BaseController
             }
             $cmdDataArray[] = $cmdData;
         }
-        $pageContent['eqAnalyzeCmdData'] = $cmdDataArray;
+        $pageData['eqAnalyzeCmdData'] = $cmdDataArray;
 //TODO: Imbriquer les boucles quand le fonctionnement sera sûr
-        $pageContent['eqAnalyzeAlerts'] = [];
+        $pageData['eqAnalyzeAlerts'] = [];
 
         $eqLogicManagerAll = EqLogicManager::all();
         foreach ($eqLogicManagerAll as $eqLogic) {
@@ -175,28 +167,28 @@ class EqAnalyzeController extends BaseController
                         }
                     }
                 }
-                $pageContent['eqAnalyzeAlerts'][] = $alertData;
+                $pageData['eqAnalyzeAlerts'][] = $alertData;
             }
         }
 
-        $pageContent['eqAnalyzeNextDomDeadCmd'] = NextDomHelper::getDeadCmd();
-        $pageContent['eqAnalyzeCmdDeadCmd'] = CmdManager::deadCmd();
-        $pageContent['eqAnalyzeJeeObjectDeadCmd'] = JeeObjectManager::deadCmd();
-        $pageContent['eqAnalyzeScenarioDeadCmd'] = ScenarioManager::consystencyCheck(true);
-        $pageContent['eqAnalyzeInteractDefDeadCmd'] = InteractDefManager::deadCmd();
-        $pageContent['eqAnalyzePluginDeadCmd'] = [];
+        $pageData['eqAnalyzeNextDomDeadCmd'] = NextDomHelper::getDeadCmd();
+        $pageData['eqAnalyzeCmdDeadCmd'] = CmdManager::deadCmd();
+        $pageData['eqAnalyzeJeeObjectDeadCmd'] = JeeObjectManager::deadCmd();
+        $pageData['eqAnalyzeScenarioDeadCmd'] = ScenarioManager::consystencyCheck(true);
+        $pageData['eqAnalyzeInteractDefDeadCmd'] = InteractDefManager::deadCmd();
+        $pageData['eqAnalyzePluginDeadCmd'] = [];
 
         $pluginManagerListPluginTrue = PluginManager::listPlugin(true);
         foreach ($pluginManagerListPluginTrue as $plugin) {
             $pluginId = $plugin->getId();
             if (method_exists($pluginId, 'deadCmd')) {
-                $pageContent['eqAnalyzePluginDeadCmd'][] = $pluginId::deadCmd();
+                $pageData['eqAnalyzePluginDeadCmd'][] = $pluginId::deadCmd();
             }
         }
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/diagnostic/eqAnalyse.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/eqAnalyse.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/diagnostic/eqAnalyze.html.twig', $pageContent);
+        return $render->get('/desktop/diagnostic/eqAnalyze.html.twig', $pageData);
     }
 
 

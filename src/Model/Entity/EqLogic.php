@@ -17,7 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
-use NextDom\Enums\EqLogicViewTypeEnum;
+use NextDom\Enums\EqLogicViewType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\FileSystemHelper;
@@ -31,6 +31,8 @@ use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\MessageManager;
+use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UserManager;
@@ -347,7 +349,7 @@ class EqLogic
      */
     public function getEqReal()
     {
-        return \eqReal::byId($this->eqReal_id);
+        return EqReal::byId($this->eqReal_id);
     }
 
     /**
@@ -692,7 +694,7 @@ class EqLogic
         $html .= '<span class="eqLogic-place">' . $object_name . '</span>';
         $html .= '<div class="eqLogic-battery-icon"><i class="icon nextdom-battery' . $niveau . ' tooltips" title="' . $this->getStatus('battery', -2) . '%"></i></div>';
         $html .= '<div class="eqLogic-percent">' . $this->getStatus('battery', -2) . '%</div>';
-        $html .= '<div>' . __('Le') . ' ' . date("d/m/y G:H:s", strtotime($this->getStatus('batteryDatetime', __('inconnue', __FILE__)))) . '</div>';
+        $html .= '<div>' . __('Le') . ' ' . date("d/m/y G:H:s", strtotime($this->getStatus('batteryDatetime', __('inconnue')))) . '</div>';
         if ($this->getConfiguration('battery_type', '') != '') {
             $html .= '<span class="informations pull-right" title="Piles">' . $this->getConfiguration('battery_type', '') . '</span>';
         }
@@ -813,10 +815,10 @@ class EqLogic
      * @throws CoreException
      * @throws \ReflectionException
      */
-    public function preToHtml($viewType = EqLogicViewTypeEnum::DASHBOARD, $_default = array(), $_noCache = false)
+    public function preToHtml($viewType = EqLogicViewType::DASHBOARD, $_default = array(), $_noCache = false)
     {
         // Check if view type is valid
-        if (!EqLogicViewTypeEnum::exists($viewType)) {
+        if (!EqLogicViewType::exists($viewType)) {
             throw new CoreException(__('La version demandée ne peut pas être vide (mobile, dashboard, dview ou scénario)'));
         }
         if (!$this->hasRight('r')) {
@@ -995,7 +997,7 @@ class EqLogic
      * @throws CoreException
      * @throws \ReflectionException
      */
-    public function toHtml($viewType = EqLogicViewTypeEnum::DASHBOARD)
+    public function toHtml($viewType = EqLogicViewType::DASHBOARD)
     {
         $replace = $this->preToHtml($viewType);
         if (!is_array($replace)) {
@@ -1229,7 +1231,7 @@ class EqLogic
         if ($this->_timeoutUpdated) {
             $this->_timeoutUpdated = false;
             if ($this->getTimeout() == null) {
-                foreach (\message::byPluginLogicalId('core', 'noMessage' . $this->getId()) as $message) {
+                foreach (MessageManager::byPluginLogicalId('core', 'noMessage' . $this->getId()) as $message) {
                     $message->remove();
                 }
                 $this->setStatus('timeout', 0);
@@ -1277,9 +1279,9 @@ class EqLogic
             }
         } else {
             if ($_tag) {
-                $name .= '<span class="label label-default">' . __('Aucun', __FILE__) . '</span>';
+                $name .= '<span class="label label-default">' . __('Aucun') . '</span>';
             } else {
-                $name .= '[' . __('Aucun', __FILE__) . ']';
+                $name .= '[' . __('Aucun') . ']';
             }
         }
         if ($_prettify) {
@@ -1379,7 +1381,7 @@ class EqLogic
             $this->setStatus('batterydanger', 1);
             if ($prevStatus == 0) {
                 if (ConfigManager::ByKey('alert::addMessageOnBatterydanger') == 1) {
-                    \message::add($this->getEqType_name(), $message, '', $logicalId);
+                    MessageManager::add($this->getEqType_name(), $message, '', $logicalId);
                 }
                 $cmds = explode(('&&'), ConfigManager::byKey('alert::batterydangerCmd'));
                 if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::batterydangerCmd')) != '') {
@@ -1387,7 +1389,7 @@ class EqLogic
                         $cmd = CmdManager::byId(str_replace('#', '', $id));
                         if (is_object($cmd)) {
                             $cmd->execCmd(array(
-                                'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ', __FILE__) . $message,
+                                'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
                                 'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
                             ));
                         }
@@ -1405,7 +1407,7 @@ class EqLogic
             $this->setStatus('batterydanger', 0);
             if ($prevStatus == 0) {
                 if (ConfigManager::ByKey('alert::addMessageOnBatterywarning') == 1) {
-                    \message::add($this->getEqType_name(), $message, '', $logicalId);
+                    MessageManager::add($this->getEqType_name(), $message, '', $logicalId);
                 }
                 $cmds = explode(('&&'), ConfigManager::byKey('alert::batterywarningCmd'));
                 if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::batterywarningCmd')) != '') {
@@ -1413,7 +1415,7 @@ class EqLogic
                         $cmd = CmdManager::byId(str_replace('#', '', $id));
                         if (is_object($cmd)) {
                             $cmd->execCmd(array(
-                                'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ', __FILE__) . $message,
+                                'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
                                 'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
                             ));
                         }
@@ -1421,10 +1423,10 @@ class EqLogic
                 }
             }
         } else {
-            foreach (\message::byPluginLogicalId($this->getEqType_name(), 'warningBattery' . $this->getId()) as $message) {
+            foreach (MessageManager::byPluginLogicalId($this->getEqType_name(), 'warningBattery' . $this->getId()) as $message) {
                 $message->remove();
             }
-            foreach (\message::byPluginLogicalId($this->getEqType_name(), 'lowBattery' . $this->getId()) as $message) {
+            foreach (MessageManager::byPluginLogicalId($this->getEqType_name(), 'lowBattery' . $this->getId()) as $message) {
                 $message->remove();
             }
             $this->setStatus('batterydanger', 0);
@@ -1464,7 +1466,7 @@ class EqLogic
             return false;
         }
         if (
-          AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
+            AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
             return true;
         }
         if (strpos($_SESSION['user']->getRights('eqLogic' . $this->getId()), $_right) !== false) {
@@ -1770,7 +1772,7 @@ class EqLogic
             array('action' => '#eqLogic' . $this->getId() . '#'),
         ));
         $return['view'] = ViewManager::searchByUse('eqLogic', $this->getId());
-        $return['plan'] = \planHeader::searchByUse('eqLogic', $this->getId());
+        $return['plan'] = PlanHeaderManager::searchByUse('eqLogic', $this->getId());
         if ($_array) {
             foreach ($return as &$value) {
                 $value = Utils::o2a($value);

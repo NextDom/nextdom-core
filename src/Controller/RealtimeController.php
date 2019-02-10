@@ -23,23 +23,15 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 
 class RealtimeController extends BaseController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render realtime page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of log_admin page
      *
@@ -47,17 +39,17 @@ class RealtimeController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
 
 
-        $pageContent['JS_VARS']['realtime_name'] = Utils::init('log', 'event');
-        $pageContent['JS_VARS']['log_default_search'] = Utils::init('search', '');
+        $pageData['JS_VARS']['realtime_name'] = Utils::init('log', 'event');
+        $pageData['JS_VARS']['log_default_search'] = Utils::init('search', '');
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/diagnostic/realtime.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/realtime.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/diagnostic/realtime.html.twig', $pageContent);
+        return $render->get('/desktop/diagnostic/realtime.html.twig', $pageData);
     }
 
 }
