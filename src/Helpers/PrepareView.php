@@ -604,7 +604,7 @@ class PrepareView
 
         if (!Status::isRescueMode()) {
           
-            if (Status::isConnect()) {
+            if (Status::isConnected()) {
 
                 if (isset($_SESSION['user']) && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
                     $highstockThemeFile = '/vendor/node_modules/highcharts/themes/' . $_SESSION['user']->getOptions('desktop_highcharts_theme') . '.js';
