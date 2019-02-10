@@ -512,6 +512,8 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
+            $pageData['JS_END_POOL'][] = '/public/js/desktop/search.js';
+
         } else {
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = 'vendor/node_modules/jquery-ui-dist/jquery-ui.min.js';
@@ -579,6 +581,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/snapsvg/dist/snap.svg-min.js';
+            $pageData['JS_END_POOL'][] = '/public/js/desktop/search.js';
         }
     }
 
@@ -600,12 +603,13 @@ class PrepareView
         }
 
         if (!Status::isRescueMode()) {
-            if (!Status::isConnected()) {
+          
+            if (Status::isConnect()) {
+
                 if (isset($_SESSION['user']) && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
-                    $highstockThemeFile = '/vendor/highcharts/themes/' . $_SESSION['user']->getOptions('desktop_highcharts_theme') . '.js';
-                    if (file_exists($highstockThemeFile)) {
-                        $pageData['JS_POOL'][] = $highstockThemeFile;
-                    }
+                    $highstockThemeFile = '/vendor/node_modules/highcharts/themes/' . $_SESSION['user']->getOptions('desktop_highcharts_theme') . '.js';
+                    $pageData['JS_POOL'][] = $highstockThemeFile;
+
                 }
             }
             if ($configs['enableCustomCss'] == 1) {
