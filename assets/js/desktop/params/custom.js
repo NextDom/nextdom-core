@@ -131,13 +131,13 @@ $("#bt_savecustom").on('click', function (event) {
     $.hideAlert();
     saveConvertColor();
     var config = $('#custom').getValues('.configKey')[0];
-    console.log(config);
     nextdom.config.save({
         configuration: config,
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },
         success: function () {
+            updateTheme(null);
             // Change config dynamically
             widget_size = config['widget::size'];
             widget_margin = config['widget::margin'];
@@ -310,9 +310,20 @@ $("input[name=theme]").click(function () {
     }
     nextdom.config.save({
         configuration: config,
-        error: function (error) {
-            notify("Info", '{{theme parametré}}', 'success');
+        success: function () {
+            updateTheme(function() {
+                notify("Info", '{{Thème parametré}}', 'success');
+                window.location.reload();
+            });
         }
     });
-    window.location.reload();
 });
+
+function updateTheme(successFunc) {
+    $.ajax({
+        url: 'core/ajax/config.ajax.php',
+        type: 'GET',
+        data: {'action': 'updateTheme', 'nextdom_token': NEXTDOM_AJAX_TOKEN},
+        success: successFunc
+    });
+}

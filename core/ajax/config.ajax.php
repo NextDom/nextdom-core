@@ -75,6 +75,10 @@ try {
         }
         ajax::success();
     }
+    if (init('action') == 'updateTheme') {
+        unlink(NEXTDOM_ROOT . '/public/css/theme.css');
+        ajax::success();
+    }
 
     if (init('action') == 'removeKey') {
         unautorizedInDemo();

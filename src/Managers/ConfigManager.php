@@ -107,7 +107,6 @@ class ConfigManager
             self::remove($configKey, $pluginId);
             return true;
         }
-        // TODO ????
         if ($pluginId == 'core') {
             $nextdomConfig = NextDomHelper::getConfiguration($configKey, true);
             if ($nextdomConfig != '' && $nextdomConfig == $configValue) {

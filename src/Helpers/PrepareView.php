@@ -336,9 +336,6 @@ class PrepareView
         $pageData['PRODUCT_CONNECTION_ICON'] = $configs['product_connection_image'];
         $pageData['AJAX_TOKEN'] = AjaxManager::getToken();
         $pageData['LANGUAGE'] = $configs['language'];
-        for ($colorIndex = 1; $colorIndex <= self::$NB_THEME_COLORS; ++$colorIndex) {
-            $pageData['COLOR' . $colorIndex] = NextDomHelper::getConfiguration('theme:color' . $colorIndex);
-        }
 
         self::initJsPool($pageData);
         self::initCssPool($pageData, $configs);
@@ -435,6 +432,10 @@ class PrepareView
     private static function initCssPool(&$pageData, $configs)
     {
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
+        if (!file_exists(NEXTDOM_ROOT . '/public/css/theme.css')) {
+            self::generateCssThemFile();
+        }
+        $pageData['CSS_POOL'][] = '/public/css/theme.css';
         // Icônes
         $rootDir = NEXTDOM_ROOT . '/public/icon/';
         foreach (FileSystemHelper::ls($rootDir, '*') as $dir) {
@@ -573,6 +574,23 @@ class PrepareView
 
             }
         }
+    }
+
+    private static function generateCssThemFile()
+    {
+        $pageData = [];
+        for ($colorIndex = 1; $colorIndex <= self::$NB_THEME_COLORS; ++$colorIndex) {
+            $pageData['COLOR' . $colorIndex] = NextDomHelper::getConfiguration('theme:color' . $colorIndex);
+        }
+        $themeContent = Render::getInstance()->get('commons/theme.html.twig', $pageData);
+        // Minification from scratch, TODO: Use real solution
+        $themeContent = preg_replace('!/\*.*?\*/!s', '', $themeContent);
+        $themeContent = str_replace("\n", "", $themeContent);
+        $themeContent = str_replace(";}", "}", $themeContent);
+        $themeContent = str_replace(": ", ":", $themeContent);
+        $themeContent = str_replace(" {", "{", $themeContent);
+        $themeContent = str_replace(", ", ",", $themeContent);
+        file_put_contents(NEXTDOM_ROOT . '/public/css/theme.css', $themeContent);
     }
 
 }
