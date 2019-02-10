@@ -23,19 +23,11 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PluginManager;
 
 class PluginDaemon extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render plugin daemon modal
      *
@@ -49,6 +41,7 @@ class PluginDaemon extends BaseAbstractModal
     public function get(Render $render): string
     {
 
+
         $pluginId = Utils::init('plugin_id');
         if (!class_exists($pluginId)) {
             die();
@@ -60,23 +53,23 @@ class PluginDaemon extends BaseAbstractModal
         }
         $refresh = array();
         $refresh[0] = 0;
-        $pageContent = [];
-        $pageContent['daemonInfoState'] = $daemonInfo['state'];
-        $pageContent['daemonInfoLaunchable'] = $daemonInfo['launchable'];
-        $pageContent['daemonInfoLaunchableMessage'] = '';
+        $pageData = [];
+        $pageData['daemonInfoState'] = $daemonInfo['state'];
+        $pageData['daemonInfoLaunchable'] = $daemonInfo['launchable'];
+        $pageData['daemonInfoLaunchableMessage'] = '';
         if (isset($daemonInfo['launchable_message'])) {
-            $pageContent['daemonInfoLaunchableMessage'] = $daemonInfo['launchable_message'];
+            $pageData['daemonInfoLaunchableMessage'] = $daemonInfo['launchable_message'];
         }
-        $pageContent['daemonInfoAuto'] = 1;
+        $pageData['daemonInfoAuto'] = 1;
         if (isset($daemonInfo['auto'])) {
-            $pageContent['daemonInfoAuto'] = $daemonInfo['auto'];
+            $pageData['daemonInfoAuto'] = $daemonInfo['auto'];
         }
         if (isset($daemonInfo['last_launch'])) {
-            $pageContent['daemonInfoLastLaunch'] = $daemonInfo['last_launch'];
+            $pageData['daemonInfoLastLaunch'] = $daemonInfo['last_launch'];
         }
         Utils::sendVarsToJs(['plugin_id' => $pluginId, 'refresh_deamon_info' => $refresh]);
 
-        return $render->get('/modals/plugin.daemon.html.twig', $pageContent);
+        return $render->get('/modals/plugin.daemon.html.twig', $pageData);
     }
 
 }

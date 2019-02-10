@@ -24,23 +24,15 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\SessionHelper;
-use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 
 class UsersController extends BaseController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /** Render summary page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of users page
      *
@@ -48,20 +40,20 @@ class UsersController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
-        $pageContent['userLdapEnabled'] = ConfigManager::byKey('ldap::enable');
-        if ($pageContent['userLdapEnabled'] != '1') {
+        $pageData['userLdapEnabled'] = ConfigManager::byKey('ldap::enable');
+        if ($pageData['userLdapEnabled'] != '1') {
             $user = UserManager::byLogin('nextdom_support');
-            $pageContent['userSupportExists'] = is_object($user);
+            $pageData['userSupportExists'] = is_object($user);
         }
-        $pageContent['userSessionsList'] = SessionHelper::getSessionsList();
-        $pageContent['usersList'] = UserManager::all();
-        $pageContent['JS_VARS']['ldapEnable'] = $pageContent['userLdapEnabled'];
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/admin/user.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['userSessionsList'] = SessionHelper::getSessionsList();
+        $pageData['usersList'] = UserManager::all();
+        $pageData['JS_VARS']['ldapEnable'] = $pageData['userLdapEnabled'];
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/user.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/admin/users.html.twig', $pageContent);
+        return $render->get('/desktop/admin/users.html.twig', $pageData);
     }
 
 

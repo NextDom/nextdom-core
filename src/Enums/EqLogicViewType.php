@@ -17,10 +17,11 @@
 
 namespace NextDom\Enums;
 
-class ApiModeEnum extends Enum
+class EqLogicViewType extends Enum
 {
-    const API_ENABLE = 'enable';
-    const API_DISABLE = 'disable';
-    const API_WHITEIP = 'whiteip';
-    const API_LOCALHOST = 'cronDaily';
+    const SCENARIO = 'scenario';
+    const MOBILE = 'mobile';
+    const DASHBOARD = 'dashboard';
+    const DVIEW = 'dview';
+    const DPLAN = 'dplan';
 }

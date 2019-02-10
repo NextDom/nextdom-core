@@ -23,16 +23,9 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 
 class CronHumanInsert extends BaseAbstractModal
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render action insert modal (scenario)
      *
@@ -45,6 +38,7 @@ class CronHumanInsert extends BaseAbstractModal
      */
     public function get(Render $render): string
     {
+
         return $render->get('/modals/cron.human.insert.html.twig');
     }
 

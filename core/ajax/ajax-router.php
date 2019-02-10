@@ -2,7 +2,7 @@
 
 namespace NextDom;
 
-use NextDom\Enums\AjaxActionsEnum;
+use NextDom\Enums\AjaxActions;
 use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 
@@ -28,7 +28,7 @@ if (\config::byKey('developer::mode', 'core', '0') === '1') {
     error_log('PARAMETERS '.$params);
 }
 if ($action) {
-    if (in_array($action, AjaxActionsEnum::getConstants())) {
+    if (in_array($action, AjaxActions::getConstants())) {
         require_once($action.'.ajax.php');
     } else {
         throw new \Exception(__('core.error-ajax'));

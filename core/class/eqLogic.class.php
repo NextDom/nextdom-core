@@ -19,7 +19,7 @@
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
 use NextDom\Managers\EqLogicManager;
-use NextDom\Enums\EqLogicViewTypeEnum;
+use NextDom\Enums\EqLogicViewType;
 
 /**
  * Class eqLogic interface for Jeedom plugins

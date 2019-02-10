@@ -24,23 +24,16 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UpdateManager;
 
 class NetworkController extends BaseController
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render network page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of network page
      *
@@ -49,28 +42,28 @@ class NetworkController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
-        $pageContent['adminReposList'] = UpdateManager::listRepo();
+        $pageData['adminReposList'] = UpdateManager::listRepo();
         $keys = array('dns::token', 'market::allowDNS');
-        foreach ($pageContent['adminReposList'] as $key => $value) {
+        foreach ($pageData['adminReposList'] as $key => $value) {
             $keys[] = $key . '::enable';
         }
-        $pageContent['adminConfigs'] = ConfigManager::byKeys($keys);
-        $pageContent['adminNetworkInterfaces'] = [];
+        $pageData['adminConfigs'] = ConfigManager::byKeys($keys);
+        $pageData['adminNetworkInterfaces'] = [];
         foreach (NetworkHelper::getInterfacesList() as $interface) {
             $intData = [];
             $intData['name'] = $interface;
             $intData['mac'] = NetworkHelper::getInterfaceMac($interface);
             $intData['ip'] = NetworkHelper::getInterfaceIp($interface);
-            $pageContent['adminNetworkInterfaces'][] = $intData;
+            $pageData['adminNetworkInterfaces'][] = $intData;
         }
-        $pageContent['adminDnsRun'] = NetworkHelper::dnsRun();
-        $pageContent['adminNetworkExternalAccess'] = NetworkHelper::getNetworkAccess('external');
+        $pageData['adminDnsRun'] = NetworkHelper::dnsRun();
+        $pageData['adminNetworkExternalAccess'] = NetworkHelper::getNetworkAccess('external');
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/admin/network.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/network.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/admin/network.html.twig', $pageContent);
+        return $render->get('/desktop/admin/network.html.twig', $pageData);
     }
 }

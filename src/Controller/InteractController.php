@@ -24,7 +24,6 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\InteractDefManager;
@@ -32,19 +31,11 @@ use NextDom\Managers\JeeObjectManager;
 
 class InteractController extends BaseController
 {
-
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render interact page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of interact page
      *
@@ -52,10 +43,11 @@ class InteractController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
+
         $interacts = array();
-        $pageContent['interactTotal'] = InteractDefManager::all();
+        $pageData['interactTotal'] = InteractDefManager::all();
         $interacts[-1] = InteractDefManager::all(null);
         $interactListGroup = InteractDefManager::listGroup();
         if (is_array($interactListGroup)) {
@@ -63,18 +55,18 @@ class InteractController extends BaseController
                 $interacts[$group['group']] = InteractDefManager::all($group['group']);
             }
         }
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/interact.js';
-        $pageContent['interactsList'] = $interacts;
-        $pageContent['interactsListGroup'] = $interactListGroup;
-        $pageContent['interactDisabledOpacity'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
-        $pageContent['interactCmdType'] = NextDomHelper::getConfiguration('cmd:type');
-        $pageContent['interactAllUnite'] = CmdManager::allUnite();
-        $pageContent['interactJeeObjects'] = JeeObjectManager::all();
-        $pageContent['interactEqLogicTypes'] = EqLogicManager::allType();
-        $pageContent['interactEqLogics'] = EqLogicManager::all();
-        $pageContent['interactEqLogicCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/interact.js';
+        $pageData['interactsList'] = $interacts;
+        $pageData['interactsListGroup'] = $interactListGroup;
+        $pageData['interactDisabledOpacity'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
+        $pageData['interactCmdType'] = NextDomHelper::getConfiguration('cmd:type');
+        $pageData['interactAllUnite'] = CmdManager::allUnite();
+        $pageData['interactJeeObjects'] = JeeObjectManager::all();
+        $pageData['interactEqLogicTypes'] = EqLogicManager::allType();
+        $pageData['interactEqLogics'] = EqLogicManager::all();
+        $pageData['interactEqLogicCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/tools/interact.html.twig', $pageContent);
+        return $render->get('/desktop/tools/interact.html.twig', $pageData);
     }
 }

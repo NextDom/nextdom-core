@@ -24,12 +24,10 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Managers\ScenarioManager;
 
 /**
  * Description of toto
@@ -38,18 +36,11 @@ use NextDom\Managers\ScenarioManager;
  */
 class DashBoardController extends BaseController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render dashboard
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of Dashboard V2 page
      *
@@ -57,16 +48,15 @@ class DashBoardController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
+        $pageData['JS_VARS']['nextdom_Welcome'] = ConfigManager::byKey('nextdom::Welcome');
+        $pageData['JS_VARS']['SEL_OBJECT_ID'] = Utils::init('object_id');
+        $pageData['JS_VARS']['SEL_CATEGORY'] = Utils::init('category', 'all');
+        $pageData['JS_VARS']['SEL_TAG'] = Utils::init('tag', 'all');
+        $pageData['JS_VARS']['SEL_SUMMARY'] = Utils::init('summary');
 
-        $pageContent['JS_VARS']['nextdom_Welcome'] = ConfigManager::byKey('nextdom::Welcome');
-        $pageContent['JS_VARS']['SEL_OBJECT_ID'] = Utils::init('object_id');
-        $pageContent['JS_VARS']['SEL_CATEGORY'] = Utils::init('category', 'all');
-        $pageContent['JS_VARS']['SEL_TAG'] = Utils::init('tag', 'all');
-        $pageContent['JS_VARS']['SEL_SUMMARY'] = Utils::init('summary');
-
-        if ($pageContent['JS_VARS']['SEL_OBJECT_ID'] == '') {
+        if ($pageData['JS_VARS']['SEL_OBJECT_ID'] == '') {
             $object = JeeObjectManager::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
         } else {
             $object = JeeObjectManager::byId(Utils::init('object_id'));
@@ -79,27 +69,27 @@ class DashBoardController extends BaseController
         if (!is_object($object)) {
             throw new \Exception(\__('Aucun objet racine trouvé. Pour en créer un, allez dans dashboard -> <a href="/index.php?v=d&p=object">Liste objets et résumés</a>'));
         }
-        $pageContent['JS_VARS']['rootObjectId'] = $object->getId();
+        $pageData['JS_VARS']['rootObjectId'] = $object->getId();
 
-        $pageContent['dashboardDisplayObjectByDefault'] = $_SESSION['user']->getOptions('displayObjetByDefault');
-        $pageContent['dashboardDisplayScenarioByDefault'] = $_SESSION['user']->getOptions('displayScenarioByDefault');
-        $pageContent['dashboardCategory'] = $pageContent['JS_VARS']['SEL_CATEGORY'];
-        $pageContent['dashboardTag'] = $pageContent['JS_VARS']['SEL_TAG'];
-        $pageContent['dashboardCategories'] = NextDomHelper::getConfiguration('eqLogic:category', true);
-        $pageContent['dashboardTags'] = EqLogicManager::getAllTags();
-        $pageContent['dashboardObjectId'] = $pageContent['JS_VARS']['SEL_OBJECT_ID'];
-        $pageContent['dashboardObject'] = $object;
-        $pageContent['dashboardChildrenObjects'] = JeeObjectManager::buildTree($object);
-        $pageContent['profilsUser'] = $_SESSION['user'];
+        $pageData['dashboardDisplayObjectByDefault'] = $_SESSION['user']->getOptions('displayObjetByDefault');
+        $pageData['dashboardDisplayScenarioByDefault'] = $_SESSION['user']->getOptions('displayScenarioByDefault');
+        $pageData['dashboardCategory'] = $pageData['JS_VARS']['SEL_CATEGORY'];
+        $pageData['dashboardTag'] = $pageData['JS_VARS']['SEL_TAG'];
+        $pageData['dashboardCategories'] = NextDomHelper::getConfiguration('eqLogic:category', true);
+        $pageData['dashboardTags'] = EqLogicManager::getAllTags();
+        $pageData['dashboardObjectId'] = $pageData['JS_VARS']['SEL_OBJECT_ID'];
+        $pageData['dashboardObject'] = $object;
+        $pageData['dashboardChildrenObjects'] = JeeObjectManager::buildTree($object);
+        $pageData['profilsUser'] = $_SESSION['user'];
 
-        $pageContent['JS_POOL'][] = '/public/js/desktop/dashboard.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/dashboard_events.js';
+        $pageData['JS_POOL'][] = '/public/js/desktop/dashboard.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/dashboard_events.js';
         // A remettre une fois mise sous forme de thème//
-        $pageContent['JS_POOL'][] = '/vendor/node_modules/isotope-layout/dist/isotope.pkgd.min.js';
-        $pageContent['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_POOL'][] = '/vendor/node_modules/isotope-layout/dist/isotope.pkgd.min.js';
+        $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/dashboard.html.twig', $pageContent);
+        return $render->get('/desktop/dashboard.html.twig', $pageData);
     }
 
 }

@@ -23,19 +23,11 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
 use PragmaRX\Google2FA\Google2FA;
 
 class TwoFactorAuthentification extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render view configure modal
      *
@@ -62,11 +54,11 @@ class TwoFactorAuthentification extends BaseAbstractModal
             $_SESSION['user']->getOptions('twoFactorAuthentificationSecret')
         );
 
-        $pageContent = [];
-        $pageContent['google2FaUrl'] = $google2faUrl;
-        $pageContent['productName'] = ConfigManager::byKey('product_name');
-        $pageContent['userTwoFactorSecret'] = $_SESSION['user']->getOptions('twoFactorAuthentificationSecret');
+        $pageData = [];
+        $pageData['google2FaUrl'] = $google2faUrl;
+        $pageData['productName'] = ConfigManager::byKey('product_name');
+        $pageData['userTwoFactorSecret'] = $_SESSION['user']->getOptions('twoFactorAuthentificationSecret');
 
-        return $render->get('/modals/twoFactor.authentification.html.twig', $pageContent);
+        return $render->get('/modals/twoFactor.authentification.html.twig', $pageData);
     }
 }

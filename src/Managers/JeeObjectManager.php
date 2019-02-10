@@ -35,11 +35,12 @@ namespace NextDom\Managers;
 
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Model\Entity\JeeObject;
 
 class JeeObjectManager
 {
     const DB_CLASS_NAME = '`object`';
-    const CLASS_NAME = 'jeeObject';
+    const CLASS_NAME = JeeObject::class;
 
     /**
      * Get an object by with his id.

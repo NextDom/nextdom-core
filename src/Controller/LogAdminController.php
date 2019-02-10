@@ -29,18 +29,11 @@ use NextDom\Managers\PluginManager;
 
 class LogAdminController extends BaseController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render logAdmin page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of log_admin page
      *
@@ -48,28 +41,29 @@ class LogAdminController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
-        global $NEXTDOM_INTERNAL_CONFIG;
-        $pageContent['adminIsRescueMode'] = Status::isRescueMode();
 
-        if (!$pageContent['adminIsRescueMode']) {
-            $pageContent['adminPluginsList'] = [];
+        global $NEXTDOM_INTERNAL_CONFIG;
+        $pageData['adminIsRescueMode'] = Status::isRescueMode();
+
+        if (!$pageData['adminIsRescueMode']) {
+            $pageData['adminPluginsList'] = [];
             $pluginsList = PluginManager::listPlugin(true);
             foreach ($pluginsList as $plugin) {
                 $pluginApi = ConfigManager::byKey('api', $plugin->getId());
                 $pluginData = [];
                 $pluginData['api'] = $pluginApi;
                 $pluginData['plugin'] = $plugin;
-                $pageContent['adminPluginsList'][] = $pluginData;
+                $pageData['adminPluginsList'][] = $pluginData;
             }
         }
-        $pageContent['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
-        $pageContent['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
+        $pageData['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
+        $pageData['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/log_admin.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/log_admin.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/params/log_admin.html.twig', $pageContent);
+        return $render->get('/desktop/params/log_admin.html.twig', $pageData);
     }
 }

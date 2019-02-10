@@ -1,0 +1,196 @@
+about:
+  path: 'about'
+  controller: NextDom\Controller\Modal\About::get
+  condition: 'user'
+action.insert:
+  path: 'action.insert'
+  controller: NextDom\Controller\Modal\ActionInsert::get
+  condition: 'user'
+cmd.configure:
+  path: 'cmd.configure'
+  controller: NextDom\Controller\Modal\CmdConfigure::get
+  condition: 'admin'
+cmd.configureHistory:
+  path: 'cmd.configureHistory'
+  controller: NextDom\Controller\Modal\CmdConfigureHistory::get
+  condition: 'admin'
+cmd.graph.select:
+  path: 'cmd.graph.select'
+  controller: NextDom\Controller\Modal\CmdGraphSelect::get
+  condition: 'user'
+cmd.history:
+  path: 'cmd.history'
+  controller: NextDom\Controller\Modal\CmdHistory::get
+  condition: 'user'
+cmd.human.insert:
+  path: 'cmd.human.insert'
+  controller: NextDom\Controller\Modal\CmdHumanInsert::get
+  condition: 'user'
+cmd.selectMultiple:
+  path: 'cmd.selectMultiple'
+  controller: NextDom\Controller\Modal\CmdSelectMultiple::get
+  condition: 'admin'
+cron.human.insert:
+  path: 'cron.human.insert'
+  controller: NextDom\Controller\Modal\CronHumanInsert::get
+  condition: 'user'
+dataStore.human.insert:
+  path: 'dataStore.human.insert'
+  controller: NextDom\Controller\Modal\DataStoreHumanInsert::get
+  condition: 'user'
+dataStore.management:
+  path: 'dataStore.management'
+  controller: NextDom\Controller\Modal\DataStoreManagement::get
+  condition: 'user'
+eqLogic.configure:
+  path: 'eqLogic.configure'
+  controller: NextDom\Controller\Modal\EqLogicConfigure::get
+  condition: 'admin'
+eqLogic.displayWidget:
+  path: 'eqLogic.displayWidget'
+  controller: NextDom\Controller\Modal\EqLogicDisplayWidget::get
+  condition: 'admin'
+eqLogic.human.insert:
+  path: 'eqLogic.human.insert'
+  controller: NextDom\Controller\Modal\EqLogicHumanInsert::get
+  condition: 'user'
+expression.test:
+  path: 'expression.test'
+  controller: NextDom\Controller\Modal\ExpressionTest::get
+  condition: 'admin'
+graph.link:
+  path: 'graph.link'
+  controller: NextDom\Controller\Modal\GraphLink::get
+  condition: 'admin'
+history.calcul:
+  path: 'history.calcul'
+  controller: NextDom\Controller\Modal\HistoryCalcul::get
+  condition: 'user'
+icon.selector:
+  path: 'icon.selector'
+  controller: NextDom\Controller\Modal\IconSelector::get
+  condition: 'user'
+interact.query.display:
+  path: 'interact.query.display'
+  controller: NextDom\Controller\Modal\InteractQueryDisplay::get
+  condition: 'admin'
+interact.test:
+  path: 'interact.test'
+  controller: NextDom\Controller\Modal\InteractTest::get
+  condition: 'admin'
+log.display:
+  path: 'log.display'
+  controller: NextDom\Controller\Modal\LogDisplay::get
+  condition: 'admin'
+nextdom.benchmark:
+  path: 'nextdom.benchmark'
+  controller: NextDom\Controller\Modal\NextdomBenchmark::get
+  condition: 'admin'
+node.manager:
+  path: 'node.manager'
+  controller: NextDom\Controller\Modal\NoteManager::get
+  condition: 'admin'
+object.configure:
+  path: 'object.configure'
+  controller: NextDom\Controller\Modal\ObjectConfigure::get
+  condition: 'admin'
+object.display:
+  path: 'object.display'
+  controller: NextDom\Controller\Modal\ObjectDisplay::get
+  condition: 'admin'
+object.summary:
+  path: 'object.summary'
+  controller: NextDom\Controller\Modal\ObjectSummary::get
+  condition: 'user'
+plan.configure:
+  path: 'plan.configure'
+  controller: NextDom\Controller\Modal\PlanConfigure::get
+  condition: 'admin'
+planHeader.configure:
+  path: 'planHeader.configure'
+  controller: NextDom\Controller\Modal\PlanHeaderConfigure::get
+  condition: 'admin'
+plan3d.configure:
+  path: 'plan3d.configure'
+  controller: NextDom\Controller\Modal\Plan3dConfigure::get
+  condition: 'admin'
+plan3dHeader.configure:
+  path: 'plan3dHeader.configure'
+  controller: NextDom\Controller\Modal\Plan3dHeaderConfigure::get
+  condition: 'admin'
+plugin.deamon:
+  path: 'plugin.deamon'
+  controller: NextDom\Controller\Modal\PluginDaemon::get
+  condition: 'admin'
+plugin.dependancy:
+  path: 'plugin.dependancy'
+  controller: NextDom\Controller\Modal\PluginDependency::get
+  condition: 'admin'
+plugin.Market:
+  path: 'plugin.Market'
+  controller: NextDom\Controller\Modal\PluginMarket::get
+  condition: 'admin'
+remove.history:
+  path: 'remove.history'
+  controller: NextDom\Controller\Modal\RemoveHistory::get
+  condition: 'admin'
+report.bug:
+  path: 'report.bug'
+  controller: NextDom\Controller\Modal\ReportBug::get
+  condition: 'user'
+scenario.export:
+  path: 'scenario.export'
+  controller: NextDom\Controller\Modal\ScenarioExport::get
+  condition: 'user'
+scenario.human.insert:
+  path: 'scenario.human.insert'
+  controller: NextDom\Controller\Modal\ScenarioHumanInsert::get
+  condition: 'user'
+scenario.jsonEdit:
+  path: 'scenario.jsonEdit'
+  controller: NextDom\Controller\Modal\ScenarioJsonEdit::get
+  condition: 'user'
+scenario.log.execution:
+  path: 'scenario.log.execution'
+  controller: NextDom\Controller\Modal\ScenarioLogExecution::get
+  condition: 'user'
+scenario.summary:
+  path: 'scenario.summary'
+  controller: NextDom\Controller\Modal\ScenarioSummary::get
+  condition: 'user'
+scenario.template:
+  path: 'scenario.template'
+  controller: NextDom\Controller\Modal\ScenarioTemplate::get
+  condition: 'admin'
+twoFactor.authentification:
+  path: 'twoFactor.authentification'
+  controller: NextDom\Controller\Modal\TwoFactorAuthentification::get
+  condition: 'user'
+update.add:
+  path: 'update.add'
+  controller: NextDom\Controller\Modal\UpdateAdd::get
+  condition: 'admin'
+update.display:
+  path: 'update.display'
+  controller: NextDom\Controller\Modal\UpdateDisplay::get
+  condition: 'admin'
+update.list:
+  path: 'update.list'
+  controller: NextDom\Controller\Modal\UpdateList::get
+  condition: 'admin'
+update.send:
+  path: 'update.send'
+  controller: NextDom\Controller\Modal\UpdateSend::get
+  condition: 'admin'
+user.rights:
+  path: 'user.rights'
+  controller: NextDom\Controller\Modal\UserRights::get
+  condition: 'admin'
+view.configure:
+  path: 'view.configure'
+  controller: NextDom\Controller\Modal\ViewConfigure::get
+  condition: 'admin'
+welcome:
+  path: 'welcome'
+  controller: NextDom\Controller\Modal\Welcome::get
+  condition: 'user'

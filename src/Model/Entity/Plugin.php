@@ -26,6 +26,8 @@ use NextDom\Helpers\SystemHelper;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
+use NextDom\Managers\ListenerManager;
+use NextDom\Managers\MessageManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 
@@ -331,7 +333,7 @@ class Plugin
             if (file_exists($script_array[0])) {
                 if (NextDomHelper::isCapable('sudo')) {
                     $this->deamon_stop();
-                    \message::add($plugin_id, __('Attention : installation des dépendances lancée'));
+                    MessageManager::add($plugin_id, __('Attention : installation des dépendances lancée'));
                     ConfigManager::save('lastDependancyInstallTime', date('Y-m-d H:i:s'), $plugin_id);
                     exec(SystemHelper::getCmdSudo() . '/bin/bash ' . $script . ' >> ' . $cmd['log'] . ' 2>&1 &');
                     sleep(1);
@@ -506,7 +508,7 @@ class Plugin
                     }
                 }
             }
-            $listeners = \listener::byClass($this->getId());
+            $listeners = ListenerManager::byClass($this->getId());
             if (is_array($listeners)) {
                 foreach ($listeners as $listener) {
                     $listener->remove();

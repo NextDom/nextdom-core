@@ -31,42 +31,42 @@ class Object
      *
      * @ORM\Column(name="name", type="string", length=45, nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="isVisible", type="boolean", nullable=true)
      */
-    private $isvisible;
+    protected $isvisible;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="position", type="integer", nullable=true)
      */
-    private $position;
+    protected $position;
 
     /**
      * @var string
      *
      * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
      */
-    private $configuration;
+    protected $configuration;
 
     /**
      * @var string
      *
      * @ORM\Column(name="display", type="text", length=65535, nullable=true)
      */
-    private $display;
+    protected $display;
 
     /**
      * @var string
      *
      * @ORM\Column(name="image", type="text", length=16777215, nullable=true)
      */
-    private $image;
+    protected $image;
 
     /**
      * @var integer
@@ -75,7 +75,7 @@ class Object
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \NextDom\Model\Entity\Object
@@ -85,7 +85,7 @@ class Object
      *   @ORM\JoinColumn(name="father_id", referencedColumnName="id")
      * })
      */
-    private $father;
+    protected $father;
 
     public function getName()
     {

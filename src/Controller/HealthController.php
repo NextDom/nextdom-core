@@ -24,24 +24,16 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
 
 class HealthController extends BaseController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render health page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of health page
      *
@@ -49,14 +41,14 @@ class HealthController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public function get(Render $render, &$pageData): string
     {
 
-        $pageContent['healthInformations'] = NextDomHelper::health();
-        $pageContent['healthPluginsInformations'] = [];
-        $pageContent['healthPluginDataToShow'] = false;
-        $pageContent['healthTotalNOk'] = 0;
-        $pageContent['healthTotalPending'] = 0;
+        $pageData['healthInformations'] = NextDomHelper::health();
+        $pageData['healthPluginsInformations'] = [];
+        $pageData['healthPluginDataToShow'] = false;
+        $pageData['healthTotalNOk'] = 0;
+        $pageData['healthTotalPending'] = 0;
         // Santé pour chaque plugin
         foreach (PluginManager::listPlugin(true) as $plugin) {
             $pluginData = [];
@@ -74,7 +66,7 @@ class HealthController extends BaseController
              */
             if ($plugin->getHasDependency() == 1 || $plugin->getHasOwnDeamon() == 1 || method_exists($plugin->getId(), 'health') || $pluginData['hasSpecificHealth']) {
                 // Etat pour savoir si des données doivent être affichées
-                $pageContent['healthPluginDataToShow'] = true;
+                $pageData['healthPluginDataToShow'] = true;
                 // Objet du plugin
                 $pluginData['plugin'] = $plugin;
                 // Port si nécessaire
@@ -156,17 +148,17 @@ class HealthController extends BaseController
                     }
                 }
                 if ($pluginData['nOk'] > 0) {
-                    $pageContent['healthTotalNOk']++;
+                    $pageData['healthTotalNOk']++;
                 }
                 if ($pluginData['pending'] > 0) {
-                    $pageContent['healthTotalPending']++;
+                    $pageData['healthTotalPending']++;
                 }
-                $pageContent['healthPluginsInformations'][] = $pluginData;
+                $pageData['healthPluginsInformations'][] = $pluginData;
             }
         }
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/diagnostic/health.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/health.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/diagnostic/health.html.twig', $pageContent);
+        return $render->get('/desktop/diagnostic/health.html.twig', $pageData);
     }
 }
