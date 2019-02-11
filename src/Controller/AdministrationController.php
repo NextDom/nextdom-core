@@ -42,10 +42,10 @@ class AdministrationController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public static function get(Render $render, &$pageData): string
     {
         $pageData['numberOfUpdates'] = UpdateManager::nbNeedUpdate();
-        $this->initMemoryInformations($pageData);
+        self::initMemoryInformations($pageData);
         $uptime = SystemHelper::getUptime() % 31556926;
         $pageData['uptimeDays'] = explode(".", ($uptime / 86400))[0];
         $pageData['uptimeHours'] = explode(".", (($uptime % 86400) / 3600))[0];
@@ -73,7 +73,7 @@ class AdministrationController extends BaseController
         return $render->get('/desktop/administration.html.twig', $pageData);
     }
     
-    private function initMemoryInformations(&$pageData) {
+    private static function initMemoryInformations(&$pageData) {
         $pageData['memoryLoad'] = 100;
         $pageData['swapLoad'] = 100;
         $freeData = trim(shell_exec('free'));

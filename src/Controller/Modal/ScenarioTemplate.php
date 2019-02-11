@@ -41,7 +41,7 @@ class ScenarioTemplate extends BaseAbstractModal
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(Render $render): string
     {
         $scenarioId = Utils::init('scenario_id');
         $scenario = ScenarioManager::byId($scenarioId);

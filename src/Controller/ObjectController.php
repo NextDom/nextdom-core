@@ -41,7 +41,7 @@ class ObjectController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public static function get(Render $render, &$pageData): string
     {
         $pageData['JS_VARS']['select_id'] = Utils::init('id', '-1');
         $pageData['objectProductName'] = ConfigManager::byKey('product_name');

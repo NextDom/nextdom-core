@@ -9,6 +9,9 @@ common:
   previous: Précédent
   ignore: Ignorer
   finish: Terminer
+  days: jours
+  hours: heures
+  minutes: minutes
 
 connection:
   home-msg: Connectez-vous pour accéder à votre session...
@@ -31,12 +34,55 @@ core:
   disable-all-scenarios: Désactiver tous les scénarios
   incorrect-sys-date: "La date du système est incorrect (avant %s ou après %s) : "
 
+page-title:
+  administration: Administration
+  users: Utilisateurs
+  api: API
+  networks: Réseaux
+  security: Sécurité
+  cache: Cache
+  services: Services
+  settings: Paramétrages
+  general: Général
+  customization: Customisation
+  profil: Profil
+  commands: Commandes
+  links: Liens
+  interacts: Intéractions
+  equipments: Équipements
+  summaries: Résumés
+  reports: Rapports
+  logs: Logs
+  diagnostics: Diagnostics
+  health: Santé
+  tasks: Tâches
+  realtime: Temps réel
+  historics: Historiques
+  timeline: Timeline
+  backups: Sauvegardes
+  updates: Mise à jours
+  notes: Notes
+  database: OS/DB
+  scenarios: Scénarios
+
 administration:
-  cpu: CPUXX
-  cpu-cores: coeurs
-  percent-of-cpu-load: % de charge
-  percent-of-memory-used: % utilisée
-  percent-of-space-used: % d'espace utilisé
+  cpu: CPU
+  cpu-cores: cœurs
+  of-cpu-load: % de charge
+  of-memory-used: % utilisée
+  of-space-used: % d'espace utilisé
+  memory: RAM
+  hdd: HDD
+  swap: Swap
+  http-connections-count: Nombre de connexions HTTP
+  connections-count: Nombre de connexions
+  process-count: Nombre de processus
+  uptime: Système démarré depuis
+  welcome-page: Page de bienvenue
+  developer-documentation: Documentation Dev.
+  power-off: Éteindre
+  restart: Redémarrer
+  disconnect: Se déconnecter
 
 health:
   apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (NextDom ne peut marcher avec). Voir <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\">ici</a>
