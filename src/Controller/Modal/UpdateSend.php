@@ -22,19 +22,15 @@
 
 namespace NextDom\Controller\Modal;
 
-use NextDom\Helpers\Render;
-
 class UpdateSend extends BaseAbstractModal
 {
     /**
      * Render update send modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \NextDom\Exceptions\CoreException
      */
-    public function get(Render $render): string
+    public function get(): string
     {
         return $this->showRepoModal('send');
     }

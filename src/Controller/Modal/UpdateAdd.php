@@ -32,14 +32,12 @@ class UpdateAdd extends BaseAbstractModal
     /**
      * Render update add modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public function get(): string
     {
         $pageData = [];
 
@@ -76,7 +74,7 @@ class UpdateAdd extends BaseAbstractModal
         }
         $pageData['ajaxToken'] = AjaxManager::getToken();
 
-        return $render->get('/modals/update.add.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/update.add.html.twig', $pageData);
     }
 
 }

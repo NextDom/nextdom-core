@@ -99,7 +99,7 @@ class DataStorage
         $statement = \DB::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` = ?");
         $statement->execute(array($code));
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
-        if (\count($result) > 0) {
+        if (count($result) > 0) {
             $returnValue = $result[0]['data'];
         }
         return $returnValue;
@@ -170,7 +170,7 @@ class DataStorage
      */
     public function storeJsonData(string $code, array $jsonData)
     {
-        $this->storeRawData($code, \json_encode($jsonData));
+        $this->storeRawData($code, json_encode($jsonData));
     }
 
     /**
@@ -182,7 +182,7 @@ class DataStorage
      */
     public function getJsonData(string $code)
     {
-        return \json_decode($this->getRawData($code), true);
+        return json_decode($this->getRawData($code), true);
     }
 
     /**

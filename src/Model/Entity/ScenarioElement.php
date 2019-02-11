@@ -92,7 +92,7 @@ class ScenarioElement
     }
 
     /**
-     * @param \scenario|null $_scenario
+     * @param Scenario|null $_scenario
      * @return bool|null
      * @throws CoreException
      */
@@ -247,7 +247,7 @@ class ScenarioElement
 
     /**
      * @param string $_type
-     * @return \scenarioSubElement[]|\scenarioSubElement
+     * @return ScenarioSubElement[]|ScenarioSubElement
      * @throws \Exception
      */
     public function getSubElement($_type = '')

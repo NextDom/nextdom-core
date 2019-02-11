@@ -25,13 +25,12 @@ namespace NextDom\Controller\Modal;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\Plan3dHeaderManager;
 
 class Plan3dHeaderConfigure extends BaseAbstractModal
 {
     /**
      * Render plan 3d header configure modal
-     *
-     * @param Render $render Render engine
      *
      * @return string
      * @throws CoreException
@@ -39,11 +38,11 @@ class Plan3dHeaderConfigure extends BaseAbstractModal
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public function get(): string
     {
 
         $pageData = [];
-        $plan3dHeader = \plan3dHeader::byId(Utils::init('plan3dHeader_id'));
+        $plan3dHeader = Plan3dHeaderManager::byId(Utils::init('plan3dHeader_id'));
         if (!is_object($plan3dHeader)) {
             throw new CoreException('Impossible de trouver le plan');
         }
@@ -51,7 +50,7 @@ class Plan3dHeaderConfigure extends BaseAbstractModal
             'id' => $plan3dHeader->getId(),
             'plan3dHeader' => Utils::o2a($plan3dHeader)
         ]);
-        return $render->get('/modals/plan3dHeader.configure.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/plan3dHeader.configure.html.twig', $pageData);
     }
 
 }

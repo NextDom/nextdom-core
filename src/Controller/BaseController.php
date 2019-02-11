@@ -22,10 +22,7 @@
 
 namespace NextDom\Controller;
 
-
-use NextDom\Helpers\Render;
-
 abstract class BaseController
 {
-    public abstract function get(Render $render, &$pageData): string;
+    public abstract function get(&$pageData): string;
 }

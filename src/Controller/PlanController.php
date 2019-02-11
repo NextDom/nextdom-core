@@ -31,7 +31,6 @@ class PlanController extends BaseController
     /**
      * Render plan page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of plan page
@@ -40,7 +39,7 @@ class PlanController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
         $planHeader = null;
         $planHeaders = PlanHeaderManager::all();
@@ -78,7 +77,7 @@ class PlanController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/plan.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/plan.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/plan.html.twig', $pageData);
     }
 
 }

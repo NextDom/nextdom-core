@@ -153,7 +153,8 @@ class EventManager
      * @return array
      * @throws \Exception
      */
-    public static function changes($_datetime, $_longPolling = null, $_filter = null) {
+    public static function changes($_datetime, $_longPolling = null, $_filter = null)
+    {
         $return = self::filterEvent(self::changesSince($_datetime), $_filter);
         if ($_longPolling === null || count($return['result']) > 0) {
             return $return;
@@ -177,9 +178,8 @@ class EventManager
     /**
      * Get events filtered by name
      *
-     * @param array $_eventsToFilter Filter events
-     * @param array $_filterName Filter name
-     *
+     * @param array $_data
+     * @param null $_filter
      * @return array Filtered events
      * @throws \Exception
      */

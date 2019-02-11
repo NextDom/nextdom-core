@@ -34,8 +34,6 @@ class EqLogicConfigure extends BaseAbstractModal
     /**
      * Render eqLogic management modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
      * @throws \ReflectionException
@@ -43,7 +41,7 @@ class EqLogicConfigure extends BaseAbstractModal
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public function get(): string
     {
 
 
@@ -166,7 +164,7 @@ class EqLogicConfigure extends BaseAbstractModal
         $pageData['displayDashboardNbLines'] = $eqLogic->getDisplay('layout::dashboard::table::nbLine', 1);
         $pageData['displayDashboardNbColumns'] = $eqLogic->getDisplay('layout::dashboard::table::nbColumn', 1);
 
-        return $render->get('/modals/eqLogic.configure.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/eqLogic.configure.html.twig', $pageData);
     }
 
 }

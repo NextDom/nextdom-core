@@ -32,15 +32,13 @@ class CmdSelectMultiple extends BaseAbstractModal
     /**
      * Render command select multiple modal (scenario)
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public function get(): string
     {
 
 
@@ -54,6 +52,6 @@ class CmdSelectMultiple extends BaseAbstractModal
         $pageData['currentCmd'] = $cmd;
         $pageData['cmds'] = CmdManager::byTypeSubType($cmd->getType(), $cmd->getSubType());
 
-        return $render->get('/modals/cmd.selectMultiple.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/cmd.selectMultiple.html.twig', $pageData);
     }
 }

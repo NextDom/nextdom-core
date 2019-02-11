@@ -31,15 +31,13 @@ class ReportBug extends BaseAbstractModal
     /**
      * Render report bug modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public function get(): string
     {
 
         if (ConfigManager::byKey('market::address') == '') {
@@ -48,6 +46,6 @@ class ReportBug extends BaseAbstractModal
         if (ConfigManager::byKey('market::apikey') == '' && ConfigManager::byKey('market::username') == '') {
             throw new CoreException(__('Aucun compte market n\'est renseigné. Veuillez vous enregistrer sur le market, puis renseignez vos identifiants dans') . ConfigManager::byKey('product_name') . __('avant d\'ouvrir un ticket'));
         }
-        return $render->get('/modals/report.bug.html.twig');
+        return Render::getInstance()->get('/modals/report.bug.html.twig');
     }
 }

@@ -34,7 +34,6 @@ class InteractController extends BaseController
     /**
      * Render interact page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of interact page
@@ -43,7 +42,7 @@ class InteractController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
 
         $interacts = array();
@@ -67,6 +66,6 @@ class InteractController extends BaseController
         $pageData['interactEqLogicCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/tools/interact.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/tools/interact.html.twig', $pageData);
     }
 }

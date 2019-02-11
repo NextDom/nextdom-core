@@ -33,7 +33,6 @@ class PluginListController extends BaseController
     /**
      * Render plugin page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of plugin page
@@ -42,7 +41,7 @@ class PluginListController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/plugin.js';
@@ -59,6 +58,6 @@ class PluginListController extends BaseController
         $pageData['pluginInactiveOpacity'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/plugin.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/plugin.html.twig', $pageData);
     }
 }

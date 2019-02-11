@@ -30,14 +30,12 @@ class IconSelector extends BaseAbstractModal
     /**
      * Render icon selector modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public function get(): string
     {
         $pageData = [];
         $pageData['iconsList'] = [];
@@ -59,7 +57,7 @@ class IconSelector extends BaseAbstractModal
                 $pageData['iconsList'][] = self::getIconsData($nodeModule['path'], $cssContent, "/\." . $nodeModule['cssPrefix'] . "-(.*?):/", $nodeModule['name'], $nodeModule['cssPrefix']);
             }
         }
-        return $render->get('/modals/icon.selector.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/icon.selector.html.twig', $pageData);
     }
 
     /**

@@ -30,20 +30,18 @@ class CmdHumanInsert extends BaseAbstractModal
     /**
      * Render command human insert modal (scenario)
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public function get(): string
     {
 
 
         $pageData = [];
         $pageData['jeeObjects'] = JeeObjectManager::all();
 
-        return $render->get('/modals/cmd.human.insert.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/cmd.human.insert.html.twig', $pageData);
     }
 }

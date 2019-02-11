@@ -37,6 +37,7 @@ use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Model\Entity\User;
 use PragmaRX\Google2FA\Google2FA;
 
 class UserManager
@@ -50,7 +51,7 @@ class UserManager
      * Retourne un object utilisateur (si les information de connection sont valide)
      * @param string $_login nom d'utilisateur
      * @param string $_mdp motsz de passe en sha512
-     * @return \user|bool object user
+     * @return User|bool object user
      * @throws \Exception
      */
     public static function connect($_login, $_mdp)
@@ -81,7 +82,7 @@ class UserManager
                             $user->save();
                             return $user;
                         }
-                        $user = (new \user)
+                        $user = (new User())
                             ->setLogin($_login)
                             ->setPassword($sMdp)
                             ->setOptions('lastConnection', date('Y-m-d H:i:s'));
@@ -166,7 +167,7 @@ class UserManager
 
     /**
      * @param $_hash
-     * @return \user
+     * @return User
      * @throws \Exception
      */
     public static function byHash($_hash)
@@ -208,7 +209,7 @@ class UserManager
 
     /**
      *
-     * @return array de tous les utilisateurs
+     * @return User[] Array with all users
      * @throws \Exception
      */
     public static function all()
@@ -234,7 +235,7 @@ class UserManager
     /**
      * @param $_profils
      * @param bool $_enable
-     * @return \user[]|null
+     * @return User[]|null
      * @throws \Exception
      */
     public static function byProfils($_profils, $_enable = false)
@@ -352,7 +353,7 @@ class UserManager
     {
         $user = self::byLogin('internal_report');
         if (!is_object($user)) {
-            $user = new \user();
+            $user = new User();
             $user->setLogin('internal_report');
             $google2fa = new Google2FA();
             $user->setOptions('twoFactorAuthentificationSecret', $google2fa->generateSecretKey());
@@ -380,7 +381,7 @@ class UserManager
         if ($_enable) {
             $user = self::byLogin('nextdom_support');
             if (!is_object($user)) {
-                $user = new \user();
+                $user = new User();
                 $user->setLogin('nextdom_support');
             }
             $user->setPassword(Utils::sha512(ConfigManager::genKey(255)));

@@ -30,7 +30,6 @@ class CronController extends BaseController
     /**
      * Render cron page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of cron page
@@ -39,13 +38,13 @@ class CronController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
         $pageData['cronEnabled'] = ConfigManager::byKey('enableCron');
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/cron.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/diagnostic/cron.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/diagnostic/cron.html.twig', $pageData);
     }
 
 }

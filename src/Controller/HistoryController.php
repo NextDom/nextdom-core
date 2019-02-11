@@ -34,7 +34,6 @@ class HistoryController extends BaseController
     /**
      * Render history page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of history page
@@ -43,7 +42,7 @@ class HistoryController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
 
         $pageData['historyDate'] = array(
@@ -59,7 +58,7 @@ class HistoryController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/history.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/diagnostic/history.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/diagnostic/history.html.twig', $pageData);
     }
 
 }

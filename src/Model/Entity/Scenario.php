@@ -813,7 +813,7 @@ class Scenario
      */
     public function setData($_key, $_value, $_private = false)
     {
-        $dataStore = new \dataStore();
+        $dataStore = new DataStore();
         $dataStore->setType('scenario');
         $dataStore->setKey($_key);
         $dataStore->setValue($_value);
@@ -1133,7 +1133,8 @@ class Scenario
 
     /**
      *
-     * @return \object
+     * @return JeeObject
+     * @throws \Exception
      */
     public function getObject()
     {
@@ -1149,6 +1150,7 @@ class Scenario
      * @param mixed $_withoutScenarioName
      * @param bool $_object_name
      * @return string
+     * @throws \Exception
      */
     public function getHumanName($_complete = false, $_noGroup = false, $_tag = false, $_prettify = false, $_withoutScenarioName = false, $_object_name = true)
     {
@@ -1201,7 +1203,7 @@ class Scenario
     /**
      *
      * @param mixed $_right
-     * @param \user|null $_user
+     * @param User|null $_user
      *
      * @return boolean
      */

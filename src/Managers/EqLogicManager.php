@@ -91,7 +91,7 @@ class EqLogicManager
      *
      * @param bool $onlyEnable Filter only enabled eqLogics
      *
-     * @return \eqLogic[]|mixed
+     * @return EqLogic[]|mixed
      * @throws \Exception
      */
     public static function all($onlyEnable = false)

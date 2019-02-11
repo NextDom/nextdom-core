@@ -30,14 +30,12 @@ class PluginMarket extends BaseAbstractModal
     /**
      * Render plugin market modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public function get(): string
     {
 
 
@@ -47,7 +45,7 @@ class PluginMarket extends BaseAbstractModal
         ]);
         include_file('desktop', 'Market/plugin.market', 'js');
 
-        return $render->get('/modals/plugin.Market.html.twig');
+        return Render::getInstance()->get('/modals/plugin.Market.html.twig');
     }
 
 }

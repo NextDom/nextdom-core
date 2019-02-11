@@ -40,7 +40,8 @@ class PlanManager
     const CLASS_NAME = Plan::class;
     const DB_CLASS_NAME = '`plan`';
 
-    public static function byId($_id) {
+    public static function byId($_id)
+    {
         $values = array(
             'id' => $_id,
         );
@@ -50,7 +51,8 @@ class PlanManager
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function byPlanHeaderId($_planHeader_id) {
+    public static function byPlanHeaderId($_planHeader_id)
+    {
         $values = array(
             'planHeader_id' => $_planHeader_id,
         );
@@ -60,7 +62,8 @@ class PlanManager
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function byLinkTypeLinkId($_link_type, $_link_id) {
+    public static function byLinkTypeLinkId($_link_type, $_link_id)
+    {
         $values = array(
             'link_type' => $_link_type,
             'link_id' => $_link_id,
@@ -72,7 +75,8 @@ class PlanManager
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function byLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id) {
+    public static function byLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id)
+    {
         $values = array(
             'link_type' => $_link_type,
             'link_id' => $_link_id,
@@ -86,7 +90,8 @@ class PlanManager
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function removeByLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id) {
+    public static function removeByLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id)
+    {
         $values = array(
             'link_type' => $_link_type,
             'link_id' => $_link_id,
@@ -99,13 +104,15 @@ class PlanManager
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function all() {
+    public static function all()
+    {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME;
         return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function searchByDisplay($_search) {
+    public static function searchByDisplay($_search)
+    {
         $value = array(
             'search' => '%' . $_search . '%',
         );
@@ -115,7 +122,8 @@ class PlanManager
         return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function searchByConfiguration($_search, $_not = '') {
+    public static function searchByConfiguration($_search, $_not = '')
+    {
         $value = array(
             'search' => '%' . $_search . '%',
             'not' => $_not,

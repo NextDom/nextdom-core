@@ -32,7 +32,6 @@ class ObjectController extends BaseController
     /**
      * Render objects page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of objects page
@@ -41,7 +40,7 @@ class ObjectController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
         $pageData['JS_VARS']['select_id'] = Utils::init('id', '-1');
         $pageData['objectProductName'] = ConfigManager::byKey('product_name');
@@ -51,7 +50,7 @@ class ObjectController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/object.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/object.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/object.html.twig', $pageData);
     }
 
 }

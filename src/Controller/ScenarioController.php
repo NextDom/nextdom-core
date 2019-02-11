@@ -33,7 +33,6 @@ class ScenarioController extends BaseController
     /**
      * Render scenario page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of scenario page
@@ -42,7 +41,7 @@ class ScenarioController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
 
         $pageData['scenarios'] = array();
@@ -64,7 +63,7 @@ class ScenarioController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
 
-        return $render->get('/desktop/tools/scenario.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/tools/scenario.html.twig', $pageData);
     }
 
 }

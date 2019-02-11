@@ -245,7 +245,7 @@ class View
     public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = 3)
     {
         if (isset($_data['node']['view' . $this->getId()])) {
-            return;
+            return null;
         }
         $_level++;
         if ($_level > $_drill) {
@@ -264,6 +264,7 @@ class View
             'title' => __('Vue :') . ' ' . $this->getName(),
             'url' => 'index.php?v=d&p=view&view_id=' . $this->getId(),
         );
+        return null;
     }
 
     /*     * **********************Getteur Setteur*************************** */

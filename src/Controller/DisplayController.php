@@ -31,16 +31,13 @@ class DisplayController extends BaseController
     /**
      * Render display page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of display page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/display.js';
 
@@ -72,7 +69,7 @@ class DisplayController extends BaseController
         $pageData['displayEqLogics'] = $eqLogics;
         $pageData['displayCmds'] = $cmds;
 
-        return $render->get('/desktop/tools/display.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/tools/display.html.twig', $pageData);
     }
 
 }

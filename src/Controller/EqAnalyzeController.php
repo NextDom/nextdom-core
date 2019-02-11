@@ -37,7 +37,6 @@ class EqAnalyzeController extends BaseController
     /**
      * Render eqLogic analyze page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of eqLogic analyze page
@@ -47,7 +46,7 @@ class EqAnalyzeController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
         global $NEXTDOM_INTERNAL_CONFIG;
 
@@ -188,7 +187,7 @@ class EqAnalyzeController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/eqAnalyse.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/diagnostic/eqAnalyze.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/diagnostic/eqAnalyze.html.twig', $pageData);
     }
 
 

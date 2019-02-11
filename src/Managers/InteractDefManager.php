@@ -57,7 +57,7 @@ class InteractDefManager
 
     /**
      * @param string $_group
-     * @return \interactDef[]|null
+     * @return InteractDef[]|null
      * @throws \Exception
      */
     public static function all($_group = '')
@@ -215,7 +215,7 @@ class InteractDefManager
 
     /**
      * @param string $searchPattern
-     * @return \interactDef[]|null
+     * @return InteractDef[]|null
      * @throws \Exception
      */
     private static function searchByActionsOrReply($searchPattern)
@@ -261,7 +261,8 @@ class InteractDefManager
         return $return;
     }
 
-    public static function generateSynonymeVariante($_text, $_synonymes, $_deep = 0) {
+    public static function generateSynonymeVariante($_text, $_synonymes, $_deep = 0)
+    {
         $return = array();
         if (count($_synonymes) == 0) {
             return $return;

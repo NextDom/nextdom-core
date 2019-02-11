@@ -31,7 +31,6 @@ class MessageController extends BaseController
     /**
      * Render message page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of render page
@@ -40,7 +39,7 @@ class MessageController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
         $pageData['JS_END_POOL'][] = '/public/js/desktop/message.js';
 
@@ -53,7 +52,7 @@ class MessageController extends BaseController
         $pageData['messagePluginsList'] = MessageManager::listPlugin();
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/message.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/message.html.twig', $pageData);
     }
 
 

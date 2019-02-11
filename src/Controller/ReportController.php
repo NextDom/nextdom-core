@@ -33,7 +33,6 @@ class ReportController extends BaseController
     /**
      * Render report page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of report page
@@ -42,7 +41,7 @@ class ReportController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/report.js';
@@ -80,6 +79,6 @@ class ReportController extends BaseController
         }
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/diagnostic/reports-view.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/diagnostic/reports-view.html.twig', $pageData);
     }
 }

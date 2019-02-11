@@ -28,21 +28,20 @@ class ConnectionController extends BaseController
 {
     /**
      *
-     * @param \NextDom\Helpers\Render $render
      * @param array $pageData
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
         $pageData['JS_END_POOL'] = [];
         $pageData['TITLE'] = 'Connexion';
         $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/connection.js';
 
-        return $render->get('desktop/connection.html.twig', $pageData);
+        return Render::getInstance()->get('desktop/connection.html.twig', $pageData);
     }
 
 }

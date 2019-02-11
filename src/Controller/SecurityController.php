@@ -31,7 +31,6 @@ class SecurityController extends BaseController
     /**
      * Render security page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of security page
@@ -40,7 +39,7 @@ class SecurityController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
         $keys = array('security::bantime', 'ldap::enable');
         $configs = ConfigManager::byKeys($keys);
@@ -72,7 +71,7 @@ class SecurityController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/security.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/admin/security.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/admin/security.html.twig', $pageData);
     }
 
 

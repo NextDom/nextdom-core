@@ -68,7 +68,7 @@ class GitManager
         $result = false;
         $jsonList = $this->downloadRepositoriesList();
         if ($jsonList !== false) {
-            $jsonAnswer = \json_decode($jsonList, true);
+            $jsonAnswer = json_decode($jsonList, true);
             $dataToStore = array();
             foreach ($jsonAnswer as $repository) {
                 $data = array();
@@ -78,9 +78,9 @@ class GitManager
                 $data['html_url'] = $repository['html_url'];
                 $data['git_id'] = $this->gitId;
                 $data['default_branch'] = $repository['default_branch'];
-                \array_push($dataToStore, $data);
+                array_push($dataToStore, $data);
             }
-            $this->dataStorage->storeRawData('repo_last_update_' . $this->gitId, \time());
+            $this->dataStorage->storeRawData('repo_last_update_' . $this->gitId, time());
             $this->dataStorage->storeJsonData('repo_data_' . $this->gitId, $dataToStore);
             // Efface la liste des dépôts ignorés
             $this->saveIgnoreList([]);
@@ -100,21 +100,21 @@ class GitManager
         $result = false;
         $content = DownloadManager::downloadContent($this->githubApiDomain . '/orgs/' . $this->gitId . '/repos?per_page=100');
         // Limite de l'API GitHub atteinte
-        if (\strstr($content, 'API rate limit exceeded')) {
+        if (strstr($content, 'API rate limit exceeded')) {
             $content = DownloadManager::downloadContent($this->githubApiDomain . '/rate_limit');
             $gitHubLimitData = json_decode($content, true);
             $refreshDate = date('H:i', $gitHubLimitData['resources']['core']['reset']);
             throw new \Exception('Limite de l\'API GitHub atteinte. Le rafraichissement sera accessible à ' . $refreshDate);
-        } elseif (\strstr($content, 'Bad credentials')) {
+        } elseif (strstr($content, 'Bad credentials')) {
             // Le token GitHub n'est pas bon
             throw new \Exception('Problème de Token GitHub');
         } else {
             // Test si c'est un dépôt d'organisation
-            if (\strstr($content, '"message":"Not Found"')) {
+            if (strstr($content, '"message":"Not Found"')) {
                 // Test d'un téléchargement pour un utilisateur
                 $content = DownloadManager::downloadContent($this->githubApiDomain . '/users/' . $this->gitId . '/repos?per_page=100');
                 // Test si c'est un dépot d'utilisateur
-                if (\strstr($content, '"message":"Not Found"') || strlen($content) < 10) {
+                if (strstr($content, '"message":"Not Found"') || strlen($content) < 10) {
                     throw new \Exception('Le dépôt ' . $this->gitId . ' n\'existe pas.');
                 } else {
                     $result = $content;
@@ -139,9 +139,9 @@ class GitManager
         foreach ($repositoriesList as $repository) {
             $repositoryName = $repository['name'];
             $marketItem = MarketItem::createFromGit($sourceName, $repository);
-            if (($force || $marketItem->isNeedUpdate($repository)) && !\in_array($repositoryName, $ignoreList)) {
+            if (($force || $marketItem->isNeedUpdate($repository)) && !in_array($repositoryName, $ignoreList)) {
                 if (!$marketItem->refresh()) {
-                    \array_push($ignoreList, $repositoryName);
+                    array_push($ignoreList, $repositoryName);
                 }
             }
         }
@@ -201,7 +201,7 @@ class GitManager
         $repositories = $this->getRepositoriesList();
         $ignoreList = $this->getIgnoreList();
         foreach ($repositories as $repository) {
-            if (!\in_array($repository['name'], $ignoreList)) {
+            if (!in_array($repository['name'], $ignoreList)) {
                 $marketItem = MarketItem::createFromCache($sourceName, $repository['full_name']);
                 array_push($result, $marketItem);
             }

@@ -1500,7 +1500,7 @@ class ScenarioExpressionManager
      */
     public static function createAndExec($type, $cmd, $options = null)
     {
-        $scenarioExpression = new \scenarioExpression();
+        $scenarioExpression = new ScenarioExpression();
         $scenarioExpression->setType($type);
         $scenarioExpression->setExpression($cmd);
         if (is_array($options)) {
@@ -1519,7 +1519,8 @@ class ScenarioExpressionManager
      * @return float|string
      * @throws \Exception
      */
-    private static function getCmdValueDuration($cmd, $startDate, $endDate, $value) {
+    private static function getCmdValueDuration($cmd, $startDate, $endDate, $value)
+    {
         $value = str_replace(',', '.', $value);
         $histories = $cmd->getHistory();
         $nbDecimals = strlen(substr(strrchr($value, "."), 1));

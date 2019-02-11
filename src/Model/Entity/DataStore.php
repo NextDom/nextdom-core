@@ -31,7 +31,7 @@ use NextDom\Managers\ScenarioManager;
  * @ORM\Table(name="dataStore", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQUE", columns={"type", "link_id", "key"})})
  * @ORM\Entity
  */
-class Datastore
+class DataStore
 {
 
     /**

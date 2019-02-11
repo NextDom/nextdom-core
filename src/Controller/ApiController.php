@@ -34,7 +34,6 @@ class ApiController extends BaseController
     /**
      * Render API page
      *
-     * @param Render $render
      * @param array $pageData Page data
      *
      * @return string Content of API page
@@ -43,7 +42,7 @@ class ApiController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
 
         $pageData['adminReposList'] = UpdateManager::listRepo();
@@ -71,6 +70,6 @@ class ApiController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/api.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/admin/api.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/admin/api.html.twig', $pageData);
     }
 }

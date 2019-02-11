@@ -31,7 +31,6 @@ class CustomController extends BaseController
     /**
      * Render custom page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of custom page
@@ -40,7 +39,7 @@ class CustomController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
         global $NEXTDOM_INTERNAL_CONFIG;
         // TODO: Regrouper les config::byKey
@@ -71,6 +70,6 @@ class CustomController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/custom.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/params/custom.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/params/custom.html.twig', $pageData);
     }
 }

@@ -34,8 +34,6 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Helpers\SystemHelper;
-use NextDom\Model\Entity\Listener;
 use NextDom\Model\Entity\Note;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
@@ -45,7 +43,8 @@ class NoteManager
     const CLASS_NAME = Note::class;
     const DB_CLASS_NAME = '`note`';
 
-    public static function byId($_id) {
+    public static function byId($_id)
+    {
         $values = array(
             'id' => $_id,
         );
@@ -55,7 +54,8 @@ class NoteManager
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function all() {
+    public static function all()
+    {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 ORDER BY name';

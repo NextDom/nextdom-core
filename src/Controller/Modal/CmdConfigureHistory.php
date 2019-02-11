@@ -31,14 +31,12 @@ class CmdConfigureHistory extends BaseAbstractModal
     /**
      * Render command configure history modal (scenario)
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public function get(): string
     {
         $dataCount = ['history' => 0, 'timeline' => 0];
         $listCmd = array();
@@ -61,7 +59,7 @@ class CmdConfigureHistory extends BaseAbstractModal
         $pageData = [];
         $pageData['dataCount'] = $dataCount;
 
-        return $render->get('/modals/cmd.configureHistory.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/cmd.configureHistory.html.twig', $pageData);
     }
 
 }

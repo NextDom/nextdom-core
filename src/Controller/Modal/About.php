@@ -29,16 +29,14 @@ class About extends BaseAbstractModal
     /**
      * Render about
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public function get(): string
     {
-        return $render->get('/modals/about.html.twig');
+        return Render::getInstance()->get('/modals/about.html.twig');
     }
 
 }

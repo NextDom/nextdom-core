@@ -24,13 +24,13 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\Plan3dHeaderManager;
 
 class Plan3DController extends BaseController
 {
     /**
      * Render 3d plan page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of 3d plan page
@@ -39,19 +39,19 @@ class Plan3DController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
         $plan3dHeader = null;
-        $list_plan3dHeader = \plan3dHeader::all();
+        $list_plan3dHeader = Plan3dHeaderManager::all();
         if (Utils::init('plan3d_id') == '') {
             if ($_SESSION['user']->getOptions('defaultDesktopPlan3d') != '') {
-                $plan3dHeader = \plan3dHeader::byId($_SESSION['user']->getOptions('defaultDesktopPlan3d'));
+                $plan3dHeader = Plan3dHeaderManager::byId($_SESSION['user']->getOptions('defaultDesktopPlan3d'));
             }
             if (!is_object($plan3dHeader) && count($list_plan3dHeader) > 0) {
                 $plan3dHeader = $list_plan3dHeader[0];
             }
         } else {
-            $plan3dHeader = \plan3dHeader::byId(Utils::init('plan3d_id'));
+            $plan3dHeader = Plan3dHeaderManager::byId(Utils::init('plan3d_id'));
             if (!is_object($plan3dHeader)) {
                 $plan3dHeader = $list_plan3dHeader[0];
             }
@@ -62,7 +62,7 @@ class Plan3DController extends BaseController
         } else {
             $pageData['JS_VARS']['plan3dHeader_id'] = -1;
         }
-        $pageData['plan3dHeader'] = \plan3dHeader::all();
+        $pageData['plan3dHeader'] = Plan3dHeaderManager::all();
         $pageData['plan3dFullScreen'] = Utils::init('fullscreen') == 1;
 
         $pageData['JS_END_POOL'][] = '/assets/3rdparty/three.js/three.min.js';
@@ -77,7 +77,7 @@ class Plan3DController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/plan3d.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/plan3d.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/plan3d.html.twig', $pageData);
     }
 
 

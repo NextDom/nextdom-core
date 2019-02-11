@@ -28,7 +28,6 @@ class SummaryController extends BaseController
 {
     /** Render summary page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of summary page
@@ -37,12 +36,12 @@ class SummaryController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/summary.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/params/summary.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/params/summary.html.twig', $pageData);
     }
 
 

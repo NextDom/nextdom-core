@@ -34,6 +34,8 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Model\Entity\DataStore;
+
 class DataStoreManager
 {
     const CLASS_NAME = 'dataStore';
@@ -93,7 +95,7 @@ class DataStoreManager
      *
      * @param mixed $dataType
      * @param mixed $linkId
-     * @return \dataStore[]|null
+     * @return DataStore[]|null
      * @throws \Exception
      */
     public static function byTypeLinkId($dataType, $linkId = '')

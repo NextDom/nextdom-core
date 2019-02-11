@@ -23,7 +23,6 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\FileSystemHelper;
-use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PluginManager;
 
@@ -32,12 +31,12 @@ class PluginController extends BaseController
     /**
      * Render for all plugins pages
      *
-     * @param Render $render Render engine (unused)
+     * (unused)
      * @param array $pageData Page data (unused)
      * @return string Plugin page
      * @throws \Exception
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
         $plugin = PluginManager::byId(Utils::init('m'));
         $page = Utils::init('p');

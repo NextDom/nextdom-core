@@ -311,7 +311,7 @@ class Cmd
     }
 
     /**
-     * @return \eqLogic|null
+     * @return EqLogic|null
      * @throws \Exception
      */
     public function getEqLogicId()
@@ -1431,7 +1431,7 @@ class Cmd
         if ($askEndTime === null || $askEndTime < strtotime('now')) {
             return false;
         }
-        $dataStore = new \dataStore();
+        $dataStore = new DataStore();
         $dataStore->setType('scenario');
         $dataStore->setKey($this->getCache('ask::variable', 'none'));
         $dataStore->setValue($_response);
@@ -1449,7 +1449,7 @@ class Cmd
     public function addHistoryValue($_value, $_datetime = '')
     {
         if ($this->getIsHistorized() == 1 && ($_value === null || ($_value !== '' && $this->getType() == 'info' && $_value <= $this->getConfiguration('maxValue', $_value) && $_value >= $this->getConfiguration('minValue', $_value)))) {
-            $history = new \history();
+            $history = new History();
             $history->setCmd_id($this->getId());
             $history->setValue($_value);
             $history->setDatetime($_datetime);
@@ -1502,7 +1502,7 @@ class Cmd
     /**
      * @param null $_dateStart
      * @param null $_dateEnd
-     * @return \history[]
+     * @return History[]
      * @throws \Exception
      */
     public function getHistory($_dateStart = null, $_dateEnd = null)

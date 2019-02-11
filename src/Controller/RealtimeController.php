@@ -30,7 +30,6 @@ class RealtimeController extends BaseController
     /**
      * Render realtime page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of log_admin page
@@ -39,7 +38,7 @@ class RealtimeController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public function get(&$pageData): string
     {
 
 
@@ -49,7 +48,7 @@ class RealtimeController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/realtime.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/diagnostic/realtime.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/diagnostic/realtime.html.twig', $pageData);
     }
 
 }

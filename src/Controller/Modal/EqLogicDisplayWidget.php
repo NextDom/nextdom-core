@@ -32,7 +32,6 @@ class EqLogicDisplayWidget extends BaseAbstractModal
 {
     /**
      *
-     * @param Render $render
      * @return string
      * @throws CoreException
      * @throws \ReflectionException
@@ -40,7 +39,7 @@ class EqLogicDisplayWidget extends BaseAbstractModal
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public function get(): string
     {
         $pageData = [];
 
@@ -56,7 +55,7 @@ class EqLogicDisplayWidget extends BaseAbstractModal
         }
         $pageData['eqLogicHtml'] = $eqLogic->toHtml($version);
 
-        return $render->get('/modals/eqLogic.displayWidget.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/eqLogic.displayWidget.html.twig', $pageData);
     }
 
 }

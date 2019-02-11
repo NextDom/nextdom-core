@@ -24,13 +24,12 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\FileSystemHelper;
-use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\UpdateManager;
 
 abstract class BaseAbstractModal
 {
-    public abstract function get(Render $render): string;
+    public abstract function get(): string;
 
     /**
      * Show repo modal from code
