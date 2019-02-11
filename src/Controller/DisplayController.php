@@ -37,7 +37,7 @@ class DisplayController extends BaseController
      *
      * @throws \Exception
      */
-    public function get(&$pageData): string
+    public static function get(&$pageData): string
     {
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/display.js';
 

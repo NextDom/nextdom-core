@@ -38,7 +38,7 @@ class InteractQueryDisplay extends BaseAbstractModal
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(): string
+    public static function get(): string
     {
         $interactDefId = Utils::init('interactDef_id', '');
         if ($interactDefId == '') {

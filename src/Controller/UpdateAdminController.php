@@ -43,7 +43,7 @@ class UpdateAdminController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(&$pageData): string
+    public static function get(&$pageData): string
     {
         global $CONFIG;
         global $NEXTDOM_INTERNAL_CONFIG;

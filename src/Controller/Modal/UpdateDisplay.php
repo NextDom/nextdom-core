@@ -31,8 +31,8 @@ class UpdateDisplay extends BaseAbstractModal
      *
      * @throws \NextDom\Exceptions\CoreException
      */
-    public function get(): string
+    public static function get(): string
     {
-        return $this->showRepoModal('display');
+        return self::showRepoModal('display');
     }
 }

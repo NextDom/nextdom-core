@@ -34,7 +34,7 @@ class ScenarioSummary extends BaseAbstractModal
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(): string
+    public static function get(): string
     {
         return Render::getInstance()->get('/modals/scenario.summary.html.twig');
     }

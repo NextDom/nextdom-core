@@ -35,7 +35,7 @@ class PanelPageController extends BaseController
      * @return string
      * @throws \Exception
      */
-    public function get(&$pageData): string
+    public static function get(&$pageData): string
     {
         $plugin = PluginManager::byId(Utils::init('m'));
         $page = Utils::init('p');

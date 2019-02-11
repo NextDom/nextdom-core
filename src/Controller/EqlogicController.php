@@ -34,7 +34,7 @@ class EqlogicController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(&$pageData): string
+    public static function get(&$pageData): string
     {
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/eqlogic.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';

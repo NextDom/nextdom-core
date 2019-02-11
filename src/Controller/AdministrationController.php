@@ -41,7 +41,7 @@ class AdministrationController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(&$pageData): string
+    public static function get(&$pageData): string
     {
         $pageData['IS_ADMIN'] = Status::isConnectAdmin();
         $pageData['administrationNbUpdates'] = UpdateManager::nbNeedUpdate();

@@ -30,8 +30,8 @@ class UpdateList extends BaseAbstractModal
      * @return string
      * @throws \NextDom\Exceptions\CoreException
      */
-    public function get(): string
+    public static function get(): string
     {
-        return $this->showRepoModal('list');
+        return self::showRepoModal('list');
     }
 }

@@ -47,7 +47,7 @@ class DashBoardController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(&$pageData): string
+    public static function get(&$pageData): string
     {
         $pageData['JS_VARS']['nextdom_Welcome'] = ConfigManager::byKey('nextdom::Welcome');
         $pageData['JS_VARS']['SEL_OBJECT_ID'] = Utils::init('object_id');

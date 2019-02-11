@@ -24,5 +24,5 @@ namespace NextDom\Controller;
 
 abstract class BaseController
 {
-    public abstract function get(&$pageData): string;
+    public abstract static function get(&$pageData): string;
 }

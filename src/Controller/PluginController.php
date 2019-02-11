@@ -36,7 +36,7 @@ class PluginController extends BaseController
      * @return string Plugin page
      * @throws \Exception
      */
-    public function get(&$pageData): string
+    public static function get(&$pageData): string
     {
         $plugin = PluginManager::byId(Utils::init('m'));
         $page = Utils::init('p');
