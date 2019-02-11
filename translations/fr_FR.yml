@@ -96,7 +96,7 @@ welcome:
   doc-launch : Accéder à la documentation
   forum-title: Forum
   forum-subtitle : Trouver de l'aide sur notre forum
-  forum-content: | 
+  forum-content: |
                 Le forum %productName% est un moyen simple et efficace de trouver la solution a votre problème.
                 Il y a sûrement une autre personne qui a déja rencontré le même problème que vous.
                 Si ce n'est pas le cas, posez votre question, la communauté y répondra au plus vite.
@@ -162,7 +162,7 @@ firstuse:
   market-username-placeholder: Nom d'utilisateur...
   market-password-placeholder: Mot de passe...
   customize-title: Personnalisez votre %productName% !
-  customize-content: Selectionnez le theme qui vous correspond.
+  customize-content: Selectionnez le thème qui vous correspond le plus, d'autres étant selectionnables ou personnalisable dans la page Customisation...
   congrats-title: Bravo ! La configuration de votre %productName% est terminée !
   congrats-content: Cliquez sur le bouton Terminer pour profiter de votre solution Domotique...
 
