@@ -248,7 +248,6 @@ $('.bt_resetColor').on('click', function () {
 });
 
 $("input[name=theme]").click(function () {
-
     var radio = $(this).val();
     var config ="";
     if (radio == "dark"){
@@ -272,6 +271,7 @@ $("input[name=theme]").click(function () {
             'theme:color17' : '#2c3b41',
             'theme:color18' : '#e6e7e8',
             'theme:color19' : '#8aa4af',
+            'theme:color20' : '50',
         }
     }
     if (radio == "white"){
@@ -295,6 +295,7 @@ $("input[name=theme]").click(function () {
             'theme:color17' : '#f4f4f4',
             'theme:color18' : '#555555',
             'theme:color19' : '#555555',
+            'theme:color20' : '100',
         }
     }
     if (radio == "mix"){
@@ -318,6 +319,7 @@ $("input[name=theme]").click(function () {
             'theme:color17' : '#f4f4f4',
             'theme:color18' : '#e6e7e8',
             'theme:color19' : '#8aa4af',
+            'theme:color20' : '100',
         }
     }
     nextdom.config.save({

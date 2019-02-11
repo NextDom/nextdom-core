@@ -38,6 +38,7 @@
 /* COLOR17 = Boutons d'administration */
 /* COLOR18 = Couleur du texte du menu latéral */
 /* COLOR19 = Couleur du texte du sous-menu latéral */
+/* COLOR20 = Paramètre alpha des couleurs d'alertes */
 
 /* #################################################################################################################################################################################################### */
 /* COLOR1 = Couleur d'accentuation principale (identité du thème, header nextdom, bouton primaires, messages d'info, élements actifs ou survolés, textes de liens et d'état, scrollbar, boutons fab...) */
@@ -511,4 +512,22 @@ pre {
 /* Menu lateral */
 .sidebar-menu .treeview-menu>li>a:not(.sidebar-warning) {
   color: {{ COLOR19 }} !important;
+}
+
+
+/* ################################################ */
+/* COLOR20 = Paramètre alpha des couleurs d'alertes */
+/* ################################################ */
+/* Alertes */
+.alert-danger {
+    background-color: rgba(221, 75, 57, {{ COLOR20 / 100 }}) !important;
+}
+.alert-warning {
+    background-color: rgba(243, 156, 18, {{ COLOR20 / 100 }}) !important;
+}
+.alert-success {
+    background-color: rgba(0, 166, 90, {{ COLOR20 / 100 }}) !important;
+}
+.alert-info {
+    background-color: rgba(0, 192, 239, {{ COLOR20 / 100 }}) !important;
 }

@@ -166,9 +166,11 @@ $("#toStep5").click(function () {
                         'theme:color15' : '#222d32',
                         'theme:color16' : '#999',
                         'theme:color17' : '#2c3b41',
-                        'theme:color18' : '#e6e7e8'
+                        'theme:color18' : '#e6e7e8',
+                        'theme:color19' : '#8aa4af',
+                        'theme:color20' : '50',
                     }
-        break;
+                    break;
                 }
         }
 
