@@ -31,6 +31,13 @@ core:
   disable-all-scenarios: Désactiver tous les scénarios
   incorrect-sys-date: "La date du système est incorrect (avant %s ou après %s) : "
 
+administration:
+  cpu: CPUXX
+  cpu-cores: coeurs
+  percent-of-cpu-load: % de charge
+  percent-of-memory-used: % utilisée
+  percent-of-space-used: % d'espace utilisé
+
 health:
   apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (NextDom ne peut marcher avec). Voir <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\">ici</a>
   apache-private-tmp: Apache private tmp

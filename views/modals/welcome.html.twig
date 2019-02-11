@@ -1,91 +1,96 @@
-<div class="alert alert-success">
-    <h4 class="col-lg-5" style="padding-left:0px"><i class="fas fa-thumbs-up">&nbsp;&nbsp;</i>{{ 'welcome.congrats'|trans }}</h4>
-    <div class='btn btn-default pull-right' id='bt_doNotDisplayWelcome'><i class="fas fa-eye-slash">&nbsp;&nbsp;</i>{{ 'welcome.never-show'|trans }}</div>
-    <br><br>{{ 'welcome.congrats-content'|trans|replace({'%productName%':productName}) }}
-</div>
+<style>
+    .carousel-inner img {
+        height: 20rem !important;
+    }
 
+    #migration-box a {
+        font-size: 14rem;
+    }
+
+    div#md_modal {
+        overflow-x: hidden;
+    }
+</style>
+<div class="alert alert-success">
+    <div class="row">
+        <div class="col-sm-6">
+            <h4><i class="fas fa-thumbs-up">&nbsp;&nbsp;</i>{{ 'welcome.congrats'|trans }}</h4>
+            <p>{{ 'welcome.congrats-content'|trans|replace({'%productName%':productName}) }}</p>
+        </div>
+        <div class="col-sm-6">
+            <button id="btn_doNotDisplayWelcomeModalAnymore" class="btn btn-default pull-right">
+                <i class="fas fa-eye-slash"></i> {{ 'welcome.never-show'|trans }}
+            </button>
+        </div>
+    </div>
+</div>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
             <div class="box box-default">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-puzzle-piece">&nbsp;&nbsp;</i>{{ 'welcome.hot-plugins'|trans }}</h3>
+                    <h3 class="box-title"><i class="fas fa-puzzle-piece"></i> {{ 'welcome.hot-plugins'|trans }}</h3>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body">
-                    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                    <div id="welcome-carousel" class="carousel slide" data-ride="carousel">
                         <ol class="carousel-indicators">
-                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                            <li data-target="#carousel-example-generic" data-slide-to="1" class=""></li>
-                            <li data-target="#carousel-example-generic" data-slide-to="2" class=""></li>
-                            <li data-target="#carousel-example-generic" data-slide-to="3" class=""></li>
+                            <li data-target="#welcome-carousel" data-slide-to="0" class="active"></li>
+                            <li data-target="#welcome-carousel" data-slide-to="1"></li>
+                            <li data-target="#welcome-carousel" data-slide-to="2"></li>
+                            <li data-target="#welcome-carousel" data-slide-to="3"></li>
                         </ol>
                         <div class="carousel-inner">
                             <div class="item active">
-                                <img src="https://github.com/NextDom/plugin-AndroidRemoteControl/raw/master/docs/images/AndroidRemoteControl_icon.png" style="height:200px" alt="First slide">
-                                <div class="carousel-caption">
-                                </div>
+                                <img src="https://github.com/NextDom/plugin-AndroidRemoteControl/raw/master/docs/images/AndroidRemoteControl_icon.png" alt="Android Remote Control">
+                                <div class="carousel-caption"></div>
                             </div>
                             <div class="item">
-                                <img src="https://github.com/NextDom/plugin-PulseAudio/raw/master/docs/images/PulseAudio_icon.png" style="height:200px" alt="First slide">
-                                <div class="carousel-caption">
-                                </div>
+                                <img src="https://github.com/NextDom/plugin-PulseAudio/raw/master/docs/images/PulseAudio_icon.png" alt="Pulse Audio">
+                                <div class="carousel-caption"></div>
                             </div>
                             <div class="item">
-                                <img src="https://github.com/NextDom/plugin-Ftpd/raw/master/plugin_info/ftpd_icon.png" style="height:200px" alt="First slide">
-                                <div class="carousel-caption">
-                                </div>
+                                <img src="https://github.com/NextDom/plugin-Ftpd/raw/master/plugin_info/ftpd_icon.png" alt="FTPd">
+                                <div class="carousel-caption"></div>
                             </div>
                             <div class="item">
-                                <img src="https://github.com/NextDom/plugin-Multiloc/raw/develop/plugin_info/Multiloc_icon.png" style="height:200px" alt="First slide">
-                                <div class="carousel-caption">
-                                </div>
+                                <img src="https://github.com/NextDom/plugin-Multiloc/raw/develop/plugin_info/Multiloc_icon.png" alt="Multiloc">
+                                <div class="carousel-caption"></div>
                             </div>
                         </div>
-                        <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                        <a class="left carousel-control text_color" href="#welcome-carousel" data-slide="prev">
                             <span class="fa fa-angle-left"></span>
                         </a>
-                        <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                        <a class="right carousel-control text_color" href="#welcome-carousel" data-slide="next">
                             <span class="fa fa-angle-right"></span>
                         </a>
                     </div>
                 </div>
-                <!-- /.box-body -->
             </div>
-            <!-- /.box -->
         </div>
-        <div class="col-md-6">
+        <div id="migration-box" class="col-md-6">
             <div class="box box-default">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-rocket">&nbsp;&nbsp;</i>{{ 'welcome.migrate-from'|trans }}&nbsp;&nbsp;<i class="fas fa-caret-right">&nbsp;</i>{{ productName }}</h3>
+                    <h3 class="box-title"><i class="fas fa-rocket"></i> {{ 'welcome.migrate-from'|trans }} <i class="fas fa-caret-right"></i> {{ productName }}</h3>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body">
-                    <div class="row text-center">
-                        <div class="form-group col-xs-12">
-                            <a href="index.php?v=d&p=backup"><i class="fas fa-rocket text-nextdom_blue" style="font-size:14.3em"></i></a>
-                        </div>
+                    <div class="text-center">
+                        <a href="index.php?v=d&p=backup"><i class="fas fa-rocket text-nextdom_blue"></i></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fas fa-book">&nbsp;&nbsp;</i>{{ 'welcome.doc-title'|trans }}</h3>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body">
                     <p class="lead">{{ 'welcome.doc-subtitle'|trans }}</p>
                     <p class="text-muted">{{ 'welcome.doc-content'|trans|replace({'%productName%':productName})|nl2br }}</p>
-                    <p><a href="http://www.nextdom.org/docs" class="text-blue">{{ 'welcome.doc-launch'|trans }}</a></p>
+                    <p><a href="http://www.nextdom.org/docs" class="text_color">{{ 'welcome.doc-launch'|trans }}</a></p>
                 </div>
-                <!-- /.box-body -->
             </div>
         </div>
         <div class="col-md-4">
@@ -93,14 +98,11 @@
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fas fa-comments">&nbsp;&nbsp;</i>{{ 'welcome.forum-title'|trans }}</h3>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body">
                     <p class="lead">{{ 'welcome.forum-subtitle'|trans }}</p>
-                    <p class="text-muted">
-                        {{ 'welcome.forum-content'|trans|replace({'%productName%':productName})|nl2br }}</p>
-                    <p><a href="http://www.nextdom.org/forum" class="text-blue">{{ 'welcome.forum-launch'|trans }}</a><p/>
+                    <p class="text-muted">{{ 'welcome.forum-content'|trans|replace({'%productName%':productName})|nl2br }}</p>
+                    <p><a href="http://www.nextdom.org/forum" class="text_color">{{ 'welcome.forum-launch'|trans }}</a>
                 </div>
-                <!-- /.box-body -->
             </div>
         </div>
         <div class="col-md-4">
@@ -108,26 +110,25 @@
                 <div class="box-header with-border">
                     <h3 class="box-title"><i class="fas fa-rss-square">&nbsp;&nbsp;</i>{{ 'welcome.blog-title'|trans }}</h3>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body">
                     <p class="lead">{{ 'welcome.blog-subtitle'|trans }}</p>
                     <p class="text-muted">{{ 'welcome.blog-content'|trans|replace({'%productName%':productName})|nl2br }}</p>
-                    <p><a href="http://www.nextdom.org/blog" class="text-blue">{{ 'welcome.blog-launch'|trans }}</a></p>
+                    <p><a href="http://www.nextdom.org/blog" class="text_color">{{ 'welcome.blog-launch'|trans }}</a></p>
                 </div>
-                <!-- /.box-body -->
             </div>
         </div>
     </div>
 </div>
 <script>
-    $('#bt_doNotDisplayWelcome').on('click', function () {
+    $('#btn_doNotDisplayWelcomeModalAnymore').on('click', function () {
         nextdom.config.save({
             configuration: {'nextdom::Welcome': 0},
             error: function (error) {
-                notify("Core", error.message, 'error');
+                notify('Core', error.message, 'error');
             },
             success: function () {
-                notify("Core", '{{ 'welcome.notify'|trans }}', 'success');
+                $('#md_modal').dialog('close');
+                notify('Core', '{{ 'welcome.notify'|trans }}', 'success');
             }
         });
     });

@@ -38,38 +38,34 @@
 
 #}
 <section class="content">
-    <!-- Status Cards -->
-    <div class="row" id="div-menuPerf">
+    <div class="row">
         <div class="col-md-3 col-xs-6">
             <div class="box box-solid">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'CPU (' }}{{administrationCore}}{{ ' coeurs) '}}</h3>
+                    <h3 class="box-title">{{ 'administration.cpu'|trans }} ({{ cpuCoresCount }} {{ 'administration.cpu-cores'|trans }})</h3>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body">
                     <div class="progress progress-sm active">
-                        <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="{{ administrationCpuLoad }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ administrationCpuLoad }}%">
-                            <span class="sr-only">{{ administrationCpuLoad }}{{ '%' }}</span>
+                        <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="{{ cpuLoad }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpuLoad }}%">
+                            <span class="sr-only">{{ cpuLoad }}{{ '%' }}</span>
                         </div>
                     </div>
-                    <span id="CPU-Value">{{ administrationCpuLoad }}{{ ' % de charge' }}</span>
+                    <span>A{{ cpuLoad }}{{ 'administration.percent-of-cpu-load'|trans }}</span>
                 </div>
-                <!-- /.box-body -->
             </div>
         </div>
         <div class="col-md-3 col-xs-6">
             <div class="box box-solid">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'RAM (' }}{{administrationMemTotal}}{{ ') '}}</h3>
+                    <h3 class="box-title">{{ 'RAM (' }}{{totalMemory}}{{ ') '}}</h3>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body">
                     <div class="progress progress-sm active">
-                        <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="{{ administrationMemLoad }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ administrationMemLoad }}%">
-                            <span class="sr-only">{{ administrationMemLoad }}{{ '%' }}</span>
+                        <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="{{ memoryLoad }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memoryLoad }}%">
+                            <span class="sr-only">{{ memoryLoad }}{{ '%' }}</span>
                         </div>
                     </div>
-                    <span id="RAM-Value">{{ administrationMemLoad }}{{ ' % utilisée' }}</span>
+                    <span>{{ memoryLoad }}{{ 'administration.percent-of-memory-used'|trans }}</span>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -77,16 +73,16 @@
         <div class="col-md-3 col-xs-6">
             <div class="box box-solid ">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'DISK (' }}{{administrationHddTotal}}{{ ') '}}</h3>
+                    <h3 class="box-title">{{ 'DISK (' }}{{hddSize}}{{ ') '}}</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div class="progress progress-sm active">
-                        <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="{{ administrationHddLoad }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ administrationHddLoad }}%">
-                            <span class="sr-only">{{ administrationHddLoad }}{{ '%' }}</span>
+                        <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="{{ hddLoad }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ hddLoad }}%">
+                            <span class="sr-only">{{ hddLoad }}{{ '%' }}</span>
                         </div>
                     </div>
-                    <span id="CPU-Value">{{ administrationHddLoad }}{{ ' % d\'espace utilisé' }}</span>
+                    <span id="CPU-Value">{{ hddLoad }}{{ 'administration.percent-of-space-used'|trans }}</span>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -99,11 +95,11 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div class="progress progress-sm active">
-                        <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="{{ administrationSwapLoad }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ administrationSwapLoad }}%">
-                            <span class="sr-only">{{ administrationSwapLoad }}{{ '%' }}</span>
+                        <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="{{ swapLoad }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swapLoad }}%">
+                            <span class="sr-only">{{ swapLoad }}{{ '%' }}</span>
                         </div>
                     </div>
-                    <span id="CPU-Value">{{ administrationSwapLoad }}{{ ' % utilisé' }}</span>
+                    <span id="CPU-Value">{{ swapLoad }}{{ ' % utilisé' }}</span>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -173,7 +169,7 @@
                 <div class="box-body text-center">
                     <a class="btn btn-app" href="index.php?v=d&p=display"><i class="fas fa-table"></i>{{ 'Résumés' }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=backup" ><i class="fas fa-save"></i>{{ 'Sauvegardes' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=update"><span class="badge bg-red">{{ administrationNbUpdates }}</span><i class="fas fa-download"></i>{{ 'Mises à jour' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=update"><span class="badge bg-red">{{ numberOfUpdates }}</span><i class="fas fa-download"></i>{{ 'Mises à jour' }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=note"><i class="fas fa-sticky-note"></i>{{ 'Notes' }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=osdb"><i class="fas fa-terminal"></i>{{ 'OS/DB' }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=interact"><i class="fas fa-comments"></i>{{ 'Intéractions' }}</a>
@@ -191,7 +187,7 @@
               </span>
               <div class="info-box-content info-box-small-content">
                   <span class="info-box-text"><b>{{ 'Nombre de connexions' }}</b></span>
-                  <span class="info-box-text info-box-text-2">{{ administrationHTTPConnexion }}</span>
+                  <span class="info-box-text info-box-text-2">{{ httpConnectionsCount }}</span>
               </div>
             </div>
         </div>
@@ -202,7 +198,7 @@
               </span>
               <div class="info-box-content info-box-small-content">
                   <span class="info-box-text"><b>{{ 'Nombre de processus' }}</b></span>
-                  <span class="info-box-text info-box-text-2">{{ administrationProcess }}</span>
+                  <span class="info-box-text info-box-text-2">{{ processCount }}</span>
               </div>
             </div>
         </div>
@@ -213,7 +209,7 @@
               </span>
               <div class="info-box-content info-box-small-content">
                   <span class="info-box-text"><b>{{ 'Système démarré depuis' }}</b></span>
-                  <span class="info-box-text info-box-text-2">{{ administrationUptimeDays }}{{ ' Jours ' }}{{ administrationUptimeHours }}{{ ' Heures ' }}{{ administrationUptimeMinutes }}{{ ' Minutes ' }}</span>
+                  <span class="info-box-text info-box-text-2">{{ uptimeDays }}{{ ' Jours ' }}{{ uptimeHours }}{{ ' Heures ' }}{{ uptimeMinutes }}{{ ' Minutes ' }}</span>
               </div>
             </div>
         </div>
