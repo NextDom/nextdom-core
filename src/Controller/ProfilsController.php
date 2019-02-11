@@ -47,7 +47,7 @@ class ProfilsController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public static function get(Render $render, &$pageData): string
     {
 
         @session_start();

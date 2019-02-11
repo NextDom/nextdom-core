@@ -38,7 +38,7 @@ class GraphLink extends BaseAbstractModal
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(Render $render): string
     {
         $configData = ConfigManager::byKeys(
             ['graphlink::prerender', 'graphlink::render'], 'core', [
