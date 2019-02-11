@@ -55,6 +55,18 @@ function custom_js_css() {
     ./scripts/remove_test_container.sh nextdom-test-custom-js-css
 }
 
+function plugins() {
+    echo ">>> Plugins <<<"
+    echo ">>>>> Setup"
+    ./scripts/start_test_container.sh nextdom-test-plugins $PASSWORD
+    docker exec -i nextdom-test-plugins /bin/cp -fr /var/www/html/tests/data/plugin4tests /var/www/html/plugins
+    docker exec -i nextdom-test-plugins /usr/bin/mysql -u root nextdomdev < data/plugin_test.sql
+    echo ">>>>> Start"
+    python3 -W ignore gui/plugins.py "$URL" "$LOGIN" "$PASSWORD"
+    echo ">>>>> Clear"
+    ./scripts/remove_test_container.sh nextdom-test-plugins
+}
+
 function others() {
     # Start container for all others tests
     echo ">>> Others GUI tests <<<"
@@ -78,6 +90,7 @@ function start_all_tests() {
     first_use
     migration
     custom_js_css
+    plugins
     others
 }
 
