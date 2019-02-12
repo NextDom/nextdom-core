@@ -137,32 +137,6 @@ $('.displayListContainer').packery();
    $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-id')).dialog('open');
 });
 
- $('#in_search').on('keyup',function(){
-    var search = $(this).value().toLowerCase();
-    $('.cmd').show().removeClass('alert-success').addClass('alert-warning');
-    $('.cmdSortable').hide();
-    if(search == ''){
-        return;
-    }
-    $('.eqLogic').each(function(){
-        var eqLogic = $(this);
-        var name = eqLogic.attr('data-name').toLowerCase();
-        var type = eqLogic.attr('data-type').toLowerCase();
-        if(name.indexOf(search) < 0 && type.indexOf(search) < 0){
-            eqLogic.hide();
-        }
-        $(this).find('.cmd').each(function(){
-            var cmd = $(this);
-            var name = cmd.attr('data-name').toLowerCase();
-            if(name.indexOf(search) >= 0){
-                eqLogic.show();
-                eqLogic.find('.cmdSortable').show();
-                cmd.removeClass('alert-warning').addClass('alert-success');
-            }
-        });
-    });
-});
-
  $('.cb_selEqLogic').on('change',function(){
     var found = false;
     $('.cb_selEqLogic').each(function(){

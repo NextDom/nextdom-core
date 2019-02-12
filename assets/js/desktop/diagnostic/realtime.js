@@ -22,7 +22,7 @@ nextdom.log.autoupdate({
     log : realtime_name,
     default_search : log_default_search,
     display : $('#pre_realtimelog'),
-    search : $('#in_realtimeLogSearch'),
+    search : $('#generalSearch'),
     control : $('#bt_eventRealtimeStopStart'),
 });
 
