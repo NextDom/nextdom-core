@@ -254,14 +254,20 @@ $('#backup').delegate('.configKey', 'change', function () {
                     log += data.result[i]+"\n";
                     if(data.result[i].indexOf('Closing with success') != -1){
                         switchNotify(1);
-                        notify("Info", '{{L\'opération est réussie}}', 'success');
                         nextdom.user.refresh();
+                        notify("Info", '{{L\'opération est réussie}}', 'success');
                         _autoUpdate = 0;
                     }
                     if(data.result[i].indexOf('Closing with error') != -1){
                         switchNotify(1);
-                        notify("Erreur", '{{L\'opération a échoué}}', 'error');
                         nextdom.user.refresh();
+                        notify("Erreur", '{{L\'opération a échoué}}', 'error');
+                        _autoUpdate = 0;
+                    }
+                    if(data.result[i].indexOf('Fatal error') != -1){
+                        switchNotify(1);
+                        nextdom.user.refresh();
+                        notify("Erreur", '{{L\'opération a échoué}}', 'error');
                         _autoUpdate = 0;
                     }
                 }

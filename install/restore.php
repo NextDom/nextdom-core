@@ -39,6 +39,7 @@ use NextDom\Managers\PluginManager;
 use NextDom\Helpers\Utils;
 
 define('TMP_BACKUP', '/tmp/nextdombackup');
+
 $okStr = \__('common.ok');
 $nokStr = \__('common.nok');
 
