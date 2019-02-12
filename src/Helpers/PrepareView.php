@@ -36,7 +36,7 @@ use Symfony\Component\Routing\Loader\YamlFileLoader;
  */
 class PrepareView
 {
-    private static $NB_THEME_COLORS = 20;
+    private static $NB_THEME_COLORS = 21;
 
     /**
      * Get the controller data of the specified route

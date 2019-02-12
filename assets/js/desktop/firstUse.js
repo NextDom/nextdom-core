@@ -162,13 +162,14 @@ $("#toStep5").click(function () {
                         'theme:color11' : '#2c3b41',
                         'theme:color12' : '#e6e7e8',
                         'theme:color13' : '#484c52',
-                        'theme:color14' : '#2c3b41',
+                        'theme:color14' : '#484c52',
                         'theme:color15' : '#222d32',
-                        'theme:color16' : '#999',
+                        'theme:color16' : '#666666',
                         'theme:color17' : '#2c3b41',
                         'theme:color18' : '#e6e7e8',
                         'theme:color19' : '#8aa4af',
-                        'theme:color20' : '50',
+                        'theme:color20' : '#222d32',
+                        'theme:color21' : '50',
                     }
                     break;
                 }

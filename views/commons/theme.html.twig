@@ -32,13 +32,14 @@
 /* COLOR11 = Couleur de fond des titres (légendes, tableaux, unités...) */
 /* COLOR12 = Couleur des textes (contenu, titres, footer, bouton d'administration, unités, légendes...) */
 /* COLOR13 = Couleur de fond des inputs (champs de saisie, listes déroulantes...) */
-/* COLOR14 = Couleur de bordure (inputs, légendes, tableaux et bouton d'administration...) */
+/* COLOR14 = Couleur de bordure (inputs, légendes, tableaux...) */
 /* COLOR15 = Couleur de fond des contenants (boxs, cards, pages d'onglets, tableaux...) */
 /* COLOR16 = Boutons d'action */
 /* COLOR17 = Boutons d'administration */
 /* COLOR18 = Couleur du texte du menu latéral */
 /* COLOR19 = Couleur du texte du sous-menu latéral */
-/* COLOR20 = Paramètre alpha des couleurs d'alertes */
+/* COLOR20 = Couleur de bordure des boutons (bouton d'administration, bouton default) */
+/* COLOR21 = Paramètre alpha des couleurs d'alertes */
 
 /* #################################################################################################################################################################################################### */
 /* COLOR1 = Couleur d'accentuation principale (identité du thème, header nextdom, bouton primaires, messages d'info, élements actifs ou survolés, textes de liens et d'état, scrollbar, boutons fab...) */
@@ -408,6 +409,7 @@ pre {
 /* ############################################################################## */
 /* COLOR13 = Couleur de fond des inputs (champs de saisie, listes déroulantes...) */
 /* ############################################################################## */
+/* Composants */
 .form-control {
   background-color: {{ COLOR13 }} !important;
 }
@@ -418,13 +420,24 @@ pre {
   background-color: {{ COLOR13 }} !important;
 }
 
+/* inputs de groupe */
+.input-group>input {
+  border-color: {{ COLOR13 }} !important;
+}
+
 
 /* ####################################################################################### */
 /* COLOR14 = Couleur de bordure (inputs, légendes, tableaux et bouton d'administration...) */
 /* ####################################################################################### */
 /* Inputs */
-.colorpick, .label-value, select, input[type="text"], input[type="email"], input[type="tel"], input[type="search"], input[type="url"], input[type="password"], .ui-autocomplete-input {
+.colorpick, .ui-autocomplete-input {
   border: 1px solid {{ COLOR14 }} !important;
+}
+.input-group {
+  border: 1px solid {{ COLOR14 }} !important;
+}
+.label-value {
+  border-color: {{ COLOR14 }} !important;
 }
 .form-control {
   border-color: {{ COLOR14 }} !important;
@@ -433,11 +446,6 @@ pre {
 /* Legendes de sections */
 legend {
   border-color: {{ COLOR14 }} !important;
-}
-
-/* Bouton administration */
-.btn-app {
-  border: 1px solid {{ COLOR14 }} !important;
 }
 
 /* Tableaux */
@@ -474,7 +482,6 @@ pre {
 /* ########################## */
 .btn-action {
   background-color: {{ COLOR16 }} !important;
-  border-color: {{ COLOR16 }} !important;
 }
 
 
@@ -515,19 +522,28 @@ pre {
 }
 
 
+/* ################################################################################## */
+/* COLOR20 = Couleur de bordure des boutons (bouton d'administration, bouton default) */
+/* ################################################################################## */
+/* Bouton administration */
+.btn-app, .btn-default {
+  border: 1px solid {{ COLOR20 }} !important;
+}
+
+
 /* ################################################ */
-/* COLOR20 = Paramètre alpha des couleurs d'alertes */
+/* COLOR21 = Paramètre alpha des couleurs d'alertes */
 /* ################################################ */
 /* Alertes */
 .alert-danger {
-    background-color: rgba(221, 75, 57, {{ COLOR20 / 100 }}) !important;
+    background-color: rgba(221, 75, 57, {{ COLOR21 / 100 }}) !important;
 }
 .alert-warning {
-    background-color: rgba(243, 156, 18, {{ COLOR20 / 100 }}) !important;
+    background-color: rgba(243, 156, 18, {{ COLOR21 / 100 }}) !important;
 }
 .alert-success {
-    background-color: rgba(0, 166, 90, {{ COLOR20 / 100 }}) !important;
+    background-color: rgba(0, 166, 90, {{ COLOR21 / 100 }}) !important;
 }
 .alert-info {
-    background-color: rgba(0, 192, 239, {{ COLOR20 / 100 }}) !important;
+    background-color: rgba(0, 192, 239, {{ COLOR21 / 100 }}) !important;
 }
