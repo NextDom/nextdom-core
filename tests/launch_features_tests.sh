@@ -37,6 +37,7 @@ function plugins() {
     echo ">>>>> Setup"
     ./scripts/start_test_container.sh nextdom-test-plugins
     docker exec -i nextdom-test-plugins /bin/cp -fr /var/www/html/tests/data/plugin4tests /var/www/html/plugins
+    docker exec -i nextdom-test-plugins /bin/chown www-data:www-data -R /var/www/html/plugins
     docker exec -i nextdom-test-plugins /usr/bin/mysql -u root nextdomdev < data/plugin_test.sql
     echo ">>>>> Start"
     python3 -W ignore features/plugins.py
