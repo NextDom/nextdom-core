@@ -1,0 +1,27 @@
+---
+langs: [fr_FR,en_US,es_ES,de_DE]
+baseurl: "/"
+sass:
+  sass_dir: assets/css
+  style: compressed
+markdown: kramdown
+permalink: /404.html
+kramdown:
+  input: GFM
+  hard_wrap: false
+highlighter: rouge
+gems:
+- jekyll-paginate
+- jekyll-seo-tag
+exclude:
+- vendor
+plugins:
+- jekyll-seo-tag
+title: "Documentation NextDom"
+description: "Ceci est la documentation du plugin de la team NextDom"
+author: "NextDom"
+image: https://avatars1.githubusercontent.com/u/36200380?s=200&v=4
+social:
+  name: NextDom
+  links:
+    - https://github.com/NextDom
