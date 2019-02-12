@@ -26,9 +26,7 @@ try {
         if (!is_object($user)) {
             ajax::success(0);
         }
-        if (network::getUserLocation() == 'internal') {
-            ajax::success(0);
-        }
+        
         ajax::success($user->getOptions('twoFactorAuthentification', 0));
     }
 
