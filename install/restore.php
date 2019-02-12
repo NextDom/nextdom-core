@@ -40,9 +40,6 @@ use NextDom\Helpers\Utils;
 
 define('TMP_BACKUP', '/tmp/nextdombackup');
 
-$okStr = \__('common.ok');
-$nokStr = \__('common.nok');
-
 if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SERVER['argc'])) {
     header("Statut: 404 Page non trouvée");
     header('HTTP/1.0 404 Not Found');
@@ -52,7 +49,7 @@ if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SE
     exit();
 }
 
-echo  \__('core.restore-start') . "\n";
+echo  "[ START RESTORE / MIGRATION ]" . "\n";
 $starttime = strtotime('now');
 if (isset($argv)) {
     foreach ($argv as $arg) {
@@ -65,16 +62,16 @@ if (isset($argv)) {
 
 try {
     require_once __DIR__ . '/../core/php/core.inc.php';
-    echo "*************** " . \__('core.restore-start-title') . date('Y-m-d H:i:s') . " ***************\n";
+    echo "*************** " . "Starting procedure at " . date('Y-m-d H:i:s') . " ***************\n";
 
     try {
-        echo \__('core.restore-start-event');
+        echo "Sends the start event of the restore/migration...";
         NextDomHelper::event('begin_restore', true);
-        echo " $okStr\n";
+        echo " OK" . "\n";
     } catch (\Exception $e) {
-        echo " $nokStr\n";
+        echo " NOK" . "\n";
         log::add('restore', 'error', $e->getMessage());
-        echo '*** ' . \__('core.restore-error') . '*** ' . $e->getMessage() . "\n";
+        echo '*** ' . "ERROR" . '*** ' . $e->getMessage() . "\n";
     }
 
     global $CONFIG;
@@ -115,29 +112,29 @@ try {
         $backup = NEXTDOM_ROOT . '/' . $backup;
     }
     if (!file_exists($backup)) {
-        throw new \Exception(__('core.restore-file-not-found') . $backup);
+        throw new \Exception("Backup file not found : " . $backup);
     }
-    echo \__('core.restore-file-used') . $backup . "\n";
+    echo "File used for restoration : " . $backup . "\n";
 
     try {
-        echo \__('core.restore-check-rights');
+        echo "Checking rights...";
         NextDomHelper::cleanFileSystemRight();
-        echo " $okStr\n";
+        echo " OK" . "\n";
     } catch (\Exception $e) {
-        echo " $nokStr\n";
+        echo " NOK" . "\n";
         log::add('restore', 'error', $e->getMessage());
-        echo '*** ' . \__('core.restore-error') . '*** ' . $e->getMessage() . "\n";
+        echo '*** ' . "ERROR" . '*** ' . $e->getMessage() . "\n";
     }
 
     try {
         NextDomHelper::stopSystem();
     } catch (\Exception $e) {
-        echo " $nokStr\n";
+        echo " NOK" . "\n";
         log::add('restore', 'error', $e->getMessage());
-        echo '*** ' . \__('core.restore-error') . '*** ' . $e->getMessage() . "\n";
+        echo '*** ' . "ERROR" . '*** ' . $e->getMessage() . "\n";
     }
 
-    echo \__('core.restore-unzip');
+    echo "Unzip the backup...";
     $excludes = array(
         'AlternativeMarketForJeedom',
         'musicast'
@@ -149,60 +146,60 @@ try {
     $rc = 0;
     system('mkdir -p /tmp/nextdombackup');
     system('cd /tmp/nextdombackup; rm * -rf; tar xfz "' . $backup . '" ' . $exclude);
-    echo " $okStr\n";
+    echo " OK" . "\n";
 
-    echo \__('core.restore-delete-db');
+    echo "Delete the backup database...";
     if (!file_exists("/tmp/nextdombackup/DB_backup.sql")) {
-        throw new \Exception(__('core.restore-db-not-found') . 'DB_backup.sql');
+        throw new \Exception("Unable to find the backup database file : " . 'DB_backup.sql');
     } else {
         shell_exec("sed -i -e s/jeedom/nextdom/g /tmp/nextdombackup/DB_backup.sql");
     }
     $tables = \DB::Prepare("SHOW TABLES", array(), \DB::FETCH_TYPE_ALL);
-    echo " $okStr\n";
+    echo " OK" . "\n";
 
-    echo \__('core.restore-disable-constraints');
+    echo "Disables constraints...";
     \DB::Prepare("SET foreign_key_checks = 0", array(), \DB::FETCH_TYPE_ROW);
-    echo " $okStr\n";
+    echo " OK" . "\n";
     foreach ($tables as $table) {
         $table = array_values($table);
         $table = $table[0];
-        echo \__('core.restore-delete-table') . $table . '...';
+        echo "Delete the table : " . $table . '...';
         \DB::Prepare('DROP TABLE IF EXISTS `' . $table . '`', array(), \DB::FETCH_TYPE_ROW);
-        echo " $okStr\n";
+        echo " OK" . "\n";
     }
 
-    echo \__('core.restore-db');
+    echo "Restoring database...";
     shell_exec("mysql --host=" . $CONFIG['db']['host'] . " --port=" . $CONFIG['db']['port'] . " --user=" . $CONFIG['db']['username'] . " --password=" . $CONFIG['db']['password'] . " " . $CONFIG['db']['dbname'] . " < /tmp/nextdombackup/DB_backup.sql");
-    echo " $okStr\n";
+    echo " OK" . "\n";
 
-    echo \__('core.restore-update-db');
+    echo "Updating database...";
     echo shell_exec('php ' . NEXTDOM_ROOT . '/install/migrate/migrate.php');
-    echo " $okStr\n";
+    echo " OK" . "\n";
 
-    echo \__('core.restore-disable-constraints');
+    echo "Enables constraints...";
     try {
         \DB::Prepare("SET foreign_key_checks = 1", array(), \DB::FETCH_TYPE_ROW);
     } catch (\Exception $e) {
 
     }
-    echo " $okStr\n";
+    echo " OK" . "\n";
 
     if (file_exists(NEXTDOM_ROOT . '/core/config/jeedom.config.php')) {
         if (copy(NEXTDOM_ROOT . '/core/config/jeedom.config.php', '/tmp/nextdom.config.php')) {
-            echo \__('core.restore-cannot-copy') . NEXTDOM_ROOT . "/core/config/nextdom.config.php\n";
+            echo "Cannot copy " . NEXTDOM_ROOT . "/core/config/nextdom.config.php\n";
         }
     }
     if (!file_exists(NEXTDOM_ROOT . '/core/config/common.config.php')) {
-        echo \__('core.restore-config-file');
+        echo "Restoring database configuration file...";
         copy(TMP_BACKUP . '/common.config.php', NEXTDOM_ROOT . '/core/config/common.config.php');
-        echo " $okStr\n";
+        echo " OK" . "\n";
     }
 
-    echo \__('core.restore-rights');
+    echo "Restoring rights...";
     system('chmod 1777 /tmp -R');
-    echo " $okStr\n";
+    echo " OK" . "\n";
 
-    echo \__('core.restore-cache');
+    echo "Restoring cache...";
     if (file_exists(TMP_BACKUP . '/cache.tar.gz')) {
         system('cp -fr ' . TMP_BACKUP . '/cache.tar.gz ' . NEXTDOM_ROOT . '/var' );
     }
@@ -214,81 +211,81 @@ try {
     } catch (\Exception $e) {
 
     }
-    echo " $okStr\n";
+    echo " OK" . "\n";
 
-    echo \__('core.restore-plugins');
+    echo "Restoring plugins...";
     system('cp -fr ' . TMP_BACKUP . '/plugins/* ' . NEXTDOM_ROOT . '/plugins' );
 
     foreach (PluginManager::listPlugin(true) as $plugin) {
         $plugin_id = $plugin->getId();
         $dependancy_info = $plugin->dependancy_info(true);
         if (method_exists($plugin_id, 'restore')) {
-            echo \__('core.restore-plugin') . $plugin_id . '...';
+            echo "Plugin restoration : " . $plugin_id . '...';
             $plugin_id::restore();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
-        echo \__('core.restore-dependencies') . $plugin_id . '...\n';
+        echo "Reinitialization plugin dependencies : " . $plugin_id . '...\n';
         $cache = CacheManager::byKey('dependancy' . $plugin->getId());
         $cache->remove();
         CacheManager::set('dependancy' . $plugin   ->getId(), "nok");
-        echo " $okStr\n";
+        echo " OK" . "\n";
     }
-    echo \__('core.restore-plugins');
-    echo " $okStr\n";
+    echo "Restoring plugins...";;
+    echo " OK" . "\n";
 
-    echo \__('core.restore-migrate');
+    echo "Update database post plugins...";
     shell_exec('php ' . NEXTDOM_ROOT . '/install/migrate/migrate.php');
-    echo " $okStr\n";
+    echo " OK" . "\n";
 
     ConfigManager::save('hardware_name', '');
     $cache = CacheManager::byKey('nextdom::isCapable::sudo');
     $cache->remove();
 
     try {
-        echo \__('core.restore-check-consistency') . "\n";
+        echo "Check consistency..." . "\n";
         require_once NEXTDOM_ROOT . '/install/consistency.php';
-        echo " $okStr\n";
+        echo " OK" . "\n";
     } catch (\Exception $ex) {
-        echo " $nokStr\n";
+        echo " NOK" . "\n";
         log::add('restore', 'error', $ex->getMessage());
-        echo '*** ' . \__('core.restore-error') . '*** ' . $ex->getMessage() . "\n";
+        echo '*** ' . "ERROR" . '*** ' . $ex->getMessage() . "\n";
     }
 
-    echo \__('core.restore-rights');
+    echo "Restoring rights...";
     shell_exec('chmod 775 -R ' . NEXTDOM_ROOT );
     shell_exec('chown -R www-data:www-data ' . NEXTDOM_ROOT );
     shell_exec('chmod 775 -R /var/log/nextdom');
     shell_exec('chown -R www-data:www-data /var/log/nextdom');
     shell_exec('chmod 777 -R /tmp/');
     shell_exec('chown www-data:www-data -R /tmp/');
-    echo " $okStr\n";
+    echo " OK" . "\n";
 
     try {
         NextDomHelper::startSystem();
     } catch (\Exception $e) {
         log::add('restore', 'error', $e->getMessage());
-        echo '*** ' . \__('core.restore-error') . '*** ' . $e->getMessage() . "\n";
+        echo '*** ' . "ERROR" . '*** ' . $e->getMessage() . "\n";
     }
 
     try {
-        echo \__('core.restore-end-event');
+        echo "Sends the end event of the restore/migration...";
         NextDomHelper::event('end_restore');
-        echo " $okStr\n";
+        echo " OK" . "\n";
     } catch (\Exception $e) {
-        echo " $nokStr\n";
+        echo " NOK" . "\n";
         log::add('restore', 'error', $e->getMessage());
-        echo '*** ' . \__('core.restore-error') . '*** ' . $e->getMessage() . "\n";
+        echo '*** ' . "ERROR" . '*** ' . $e->getMessage() . "\n";
     }
-    echo \__('core.restore-time') . (strtotime('now') - $starttime) . "s\n";
-    echo "*************** " . \__('core.restore-end-title') . date('Y-m-d H:i:s') . "***************\n";
-    echo \__('core.restore-end');
-    echo \__('core.restore-end-success') . "\n";
+    echo "Time of restoration : " . (strtotime('now') - $starttime) . "s\n";
+    echo "*************** " . "End of procedure at " . date('Y-m-d H:i:s') . "***************\n";
+    echo "[ END RESTORE / MIGRATION ]";
+    echo " > SUCCESS" . "\n";
     /* Ne pas supprimer la ligne suivante */
     echo "Closing with success" . "\n";
 } catch (\Exception $e) {
-    echo \__('core.restore-end');
-    echo \__('core.restore-end-error') . $e->getMessage() . "\n";
-    echo \__('core.restore-details') . print_r($e->getTrace(), true) . "\n";
+    echo "[ END RESTORE / MIGRATION ]";
+    echo "\n > ERROR : " . br2nl($e->getMessage()) . "\n";
+    echo "Details : " . print_r($e->getTrace(), true) . "\n";
     NextDomHelper::startSystem();
     /* Ne pas supprimer la ligne suivante */
     echo "Closing with error" . "\n";

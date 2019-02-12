@@ -25,10 +25,8 @@ if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SE
     exit();
 }
 set_time_limit(1800);
-$okStr = \__('common.ok');
-$nokStr = \__('common.nok');
 
-echo \__('core.restore-consistency-start') . "\n";
+echo "[ START CONSISTENCY CHECKS ]" . "\n";
 if (isset($argv)) {
     foreach ($argv as $arg) {
         $argList = explode('=', $arg);
@@ -68,9 +66,9 @@ try {
                         $c->getNextRunDate();
                     }
                 } catch (Exception $ex) {
-                    echo \__('core.restore-cron-start-delete') . $cron->getName() . \__('core.restore-cron-start-delete2');
+                    echo "Deleting of : " . $cron->getName() . " because no planned launch.";
                     $cron->remove();
-                    echo " $okStr\n";
+                    echo " OK" . "\n";
                 }
             }
         }
@@ -107,9 +105,9 @@ try {
     if(method_exists('utils','attrChanged')) {
         $cron = cron::byClassAndFunction('plugin', 'cronDaily');
         if (!is_object($cron)) {
-            echo \__('core.restore-cron-start-create') . "plugin::cronDaily";
+            echo "Create " . "plugin::cronDaily";
             $cron = new cron();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
         $cron->setClass('plugin');
         $cron->setFunction('cronDaily');
@@ -121,9 +119,9 @@ try {
 
         $cron = cron::byClassAndFunction('nextdom', 'backup');
         if (!is_object($cron)) {
-            echo \__('core.restore-cron-start-create') . "nextdom::backup";
+            echo "Create " . "nextdom::backup";
             $cron = new cron();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
         $cron->setClass('nextdom');
         $cron->setFunction('backup');
@@ -135,9 +133,9 @@ try {
 
         $cron = cron::byClassAndFunction('plugin', 'cronHourly');
         if (!is_object($cron)) {
-            echo \__('core.restore-cron-start-create') . "plugin::cronHourly";
+            echo "Create " . "plugin::cronHourly";
             $cron = new cron();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
         $cron->setClass('plugin');
         $cron->setFunction('cronHourly');
@@ -149,9 +147,9 @@ try {
 
         $cron = cron::byClassAndFunction('scenario', 'check');
         if (!is_object($cron)) {
-            echo \__('core.restore-cron-start-create') . "scenario::check";
+            echo "Create " . "scenario::check";
             $cron = new cron();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
         $cron->setClass('scenario');
         $cron->setFunction('check');
@@ -163,9 +161,9 @@ try {
 
         $cron = cron::byClassAndFunction('scenario', 'control');
         if (!is_object($cron)) {
-            echo \__('core.restore-cron-start-create') . "scenario::control";
+            echo "Create " . "scenario::control";
             $cron = new cron();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
         $cron->setClass('scenario');
         $cron->setFunction('control');
@@ -177,9 +175,9 @@ try {
 
         $cron = cron::byClassAndFunction('nextdom', 'cronDaily');
         if (!is_object($cron)) {
-            echo \__('core.restore-cron-start-create') . "nextdom::cronDaily";
+            echo "Create " . "nextdom::cronDaily";
             $cron = new cron();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
         $cron->setClass('nextdom');
         $cron->setFunction('cronDaily');
@@ -191,9 +189,9 @@ try {
 
         $cron = cron::byClassAndFunction('nextdom', 'cronHourly');
         if (!is_object($cron)) {
-            echo \__('core.restore-cron-start-create') . "nextdom::cronHourly";
+            echo "Create " . "nextdom::cronHourly";
             $cron = new cron();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
         $cron->setClass('nextdom');
         $cron->setFunction('cronHourly');
@@ -205,9 +203,9 @@ try {
 
         $cron = cron::byClassAndFunction('nextdom', 'cron5');
         if (!is_object($cron)) {
-            echo \__('core.restore-cron-start-create') . "nextdom::cron5";
+            echo "Create " . "nextdom::cron5";
             $cron = new cron();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
         $cron->setClass('nextdom');
         $cron->setFunction('cron5');
@@ -219,9 +217,9 @@ try {
 
         $cron = cron::byClassAndFunction('nextdom', 'cron');
         if (!is_object($cron)) {
-            echo \__('core.restore-cron-start-create') . "nextdom::cron";
+            echo "Create " . "nextdom::cron";
             $cron = new cron();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
         $cron->setClass('nextdom');
         $cron->setFunction('cron');
@@ -232,9 +230,9 @@ try {
 
         $cron = cron::byClassAndFunction('plugin', 'cron');
         if (!is_object($cron)) {
-            echo \__('core.restore-cron-start-create') . "plugin::cron";
+            echo "Create " . "plugin::cron";
             $cron = new cron();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
         $cron->setClass('plugin');
         $cron->setFunction('cron');
@@ -245,9 +243,9 @@ try {
 
         $cron = cron::byClassAndFunction('plugin', 'cron5');
         if (!is_object($cron)) {
-            echo \__('core.restore-cron-start-create') . "plugin::cron5";
+            echo "Create " . "plugin::cron5";
             $cron = new cron();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
         $cron->setClass('plugin');
         $cron->setFunction('cron5');
@@ -258,9 +256,9 @@ try {
 
         $cron = cron::byClassAndFunction('plugin', 'cron15');
         if (!is_object($cron)) {
-          echo \__('core.restore-cron-start-create') . "plugin::cron15";
+          echo "Create " . "plugin::cron15";
             $cron = new cron();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
         $cron->setClass('plugin');
         $cron->setFunction('cron15');
@@ -271,9 +269,9 @@ try {
 
         $cron = cron::byClassAndFunction('plugin', 'cron30');
         if (!is_object($cron)) {
-            echo \__('core.restore-cron-start-create') . "plugin::cron30";
+            echo "Create " . "plugin::cron30";
             $cron = new cron();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
         $cron->setClass('plugin');
         $cron->setFunction('cron30');
@@ -284,9 +282,9 @@ try {
 
         $cron = cron::byClassAndFunction('plugin', 'checkDeamon');
         if (!is_object($cron)) {
-            echo \__('core.restore-cron-start-create') . "plugin::checkDeamon";
+            echo "Create " . "plugin::checkDeamon";
             $cron = new cron();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
         $cron->setClass('plugin');
         $cron->setFunction('checkDeamon');
@@ -297,9 +295,9 @@ try {
 
         $cron = cron::byClassAndFunction('cache', 'persist');
         if (!is_object($cron)) {
-            echo \__('core.restore-cron-start-create') . "cache::persist";
+            echo "Create " . "cache::persist";
             $cron = new cron();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
         $cron->setClass('cache');
         $cron->setFunction('persist');
@@ -310,9 +308,9 @@ try {
 
         $cron = cron::byClassAndFunction('history', 'archive');
         if (!is_object($cron)) {
-            echo \__('core.restore-cron-start-create') . "history::archive";
+            echo "Create " . "history::archive";
             $cron = new cron();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
         $cron->setClass('history');
         $cron->setFunction('archive');
@@ -323,9 +321,9 @@ try {
 
         $cron = cron::byClassAndFunction('plugin', 'heartbeat');
         if (!is_object($cron)) {
-            echo \__('core.restore-cron-start-create') . "plugin::heartbeat";
+            echo "Create " . "plugin::heartbeat";
             $cron = new cron();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         }
         $cron->setClass('plugin');
         $cron->setFunction('heartbeat');
@@ -339,11 +337,11 @@ try {
             mkdir(__DIR__ . '/../plugins');
         }
         try {
-            echo \__('core.restore-check-rights');
+            echo "Restoring rights...";
             nextdom::cleanFileSytemRight();
-            echo " $okStr\n";
+            echo " OK" . "\n";
         } catch (Exception $e) {
-            echo " $nokStr\n";
+            echo " NOK" . "\n";
             log::add('restore', 'error', $e->getMessage());
         }
 
@@ -387,6 +385,6 @@ try {
     }
 } catch (Exception $e) {
     log::add('restore', 'error', $e->getMessage());
-    echo \__('core.restore-consistency-error') . $e->getMessage() . "\n";
+    echo "\nConsistency error : " . $e->getMessage() . "\n";
 }
-echo \__('core.restore-consistency-end') . "\n";
+echo "[ END CONSISTENCY CHECKS ]" . "\n";
