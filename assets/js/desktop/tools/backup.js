@@ -255,7 +255,6 @@ $("#bt_saveOpenLog").on('click', function (event) {
                         switchNotify(1);
                         notify("Info", '{{L\'opération est réussie}}', 'success');
                         if(_log == 'restore'){
-                            console.log(_log);
                             nextdom.user.refresh();
                         }
                         _autoUpdate = 0;

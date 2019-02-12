@@ -35,7 +35,6 @@
 */
 
 function selectCategory(_selectedCategory) {
-    console.log(_selectedCategory);
     var category = _selectedCategory;
     var tag = SEL_TAG;
     var filterValue = '';
