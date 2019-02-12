@@ -83,11 +83,12 @@ $("#bt_saveOpenLog").on('click', function (event) {
     $("#md_backupInfo").dialog('open');
 });
 
- $(".bt_backupNextDom").on('click', function (event) {
+ $("#bt_backupNextDom").on('click', function (event) {
     var el = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir faire une sauvegarde de}} '+NEXTDOM_PRODUCT_NAME+' {{? Une fois lancée cette opération ne peut être annulée}}', function (result) {
+    bootbox.confirm('{{Etes-vous sûr de vouloir faire une sauvegarde de}} '+NEXTDOM_PRODUCT_NAME+' {{?</br>Une fois lancée cette opération ne peut être annulée}}', function (result) {
         if (result) {
             $.hideAlert();
+            $('#bt_backupNextDom').addClass('disabled');
             el.find('.fa-refresh').show();
             el.find('.fa-floppy-o').hide();
             $('#md_backupInfo').dialog({title: "{{Avancement de la sauvegarde}}"});
@@ -106,7 +107,7 @@ $("#bt_saveOpenLog").on('click', function (event) {
 
  $("#bt_restoreNextDom").on('click', function (event) {
     var el = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec la sauvegarde}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée.}}<span style="color:red;font-weight: bold;">IMPORTANT la restauration d\'un backup est une opération risquée et n\'est à utiliser qu\'en dernier recours.</span>', function (result) {
+    bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec la sauvegarde}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ?</br>{{Une fois lancée cette opération ne peut être annulée.}}</br><span style="color:red;font-weight: bold;">IMPORTANT la restauration d\'un backup est une opération risquée et n\'est à utiliser qu\'en dernier recours.</span>', function (result) {
         if (result) {
             switchNotify(0);
             $.hideAlert();
@@ -184,7 +185,7 @@ $("#bt_saveOpenLog").on('click', function (event) {
     });
 });
 
- $(".bt_restoreRepoBackup").on('click', function (event) {
+ $("#bt_restoreRepoBackup").on('click', function (event) {
     var el = $(this);
     bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec la sauvegarde Cloud}} <b>' + $('#sel_restoreCloudBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée}}', function (result) {
         if (result) {
@@ -206,21 +207,21 @@ $("#bt_saveOpenLog").on('click', function (event) {
     });
 });
 
- $.showLoading();
- nextdom.config.load({
-    configuration: $('#backup').getValues('.configKey')[0],
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#backup').setValues(data, '.configKey');
-        modifyWithoutSave = false;
-    }
+$.showLoading();
+nextdom.config.load({
+  configuration: $('#backup').getValues('.configKey')[0],
+  error: function (error) {
+      notify("Erreur", error.message, 'error');
+  },
+  success: function (data) {
+      $('#backup').setValues(data, '.configKey');
+      modifyWithoutSave = false;
+  }
 });
  updateListBackup();
 
- $('#backup').delegate('.configKey', 'change', function () {
-    modifyWithoutSave = true;
+$('#backup').delegate('.configKey', 'change', function () {
+  modifyWithoutSave = true;
 });
 
  /********************Log************************/
@@ -251,21 +252,16 @@ $("#bt_saveOpenLog").on('click', function (event) {
             if($.isArray(data.result)){
                 for (var i in data.result.reverse()) {
                     log += data.result[i]+"\n";
-                    if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' SUCCESS]') != -1){
+                    if(data.result[i].indexOf('Closing with success') != -1){
                         switchNotify(1);
                         notify("Info", '{{L\'opération est réussie}}', 'success');
-                        if(_log == 'restore'){
-                            console.log(_log);
-                            nextdom.user.refresh();
-                        }
+                        nextdom.user.refresh();
                         _autoUpdate = 0;
                     }
-                    if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' ERROR]') != -1){
+                    if(data.result[i].indexOf('Closing with error') != -1){
                         switchNotify(1);
                         notify("Erreur", '{{L\'opération a échoué}}', 'error');
-                        if(_log == 'restore'){
-                            nextdom.user.refresh();
-                        }
+                        nextdom.user.refresh();
                         _autoUpdate = 0;
                     }
                 }
@@ -276,15 +272,12 @@ $("#bt_saveOpenLog").on('click', function (event) {
                     getNextDomLog(_autoUpdate, _log)
                 }, 1000);
             } else {
-                $('#bt_restoreNextDom').removeClass('disabled');
+                $('#bt_' + _log + 'NextDom').removeClass('disabled');
                 $('#bt_' + _log + 'NextDom .fa-refresh').hide();
-                $('.bt_' + _log + 'NextDom .fa-refresh').hide();
                 $('#bt_' + _log + 'NextDom .fa-floppy-o').show();
-                $('.bt_' + _log + 'NextDom .fa-floppy-o').show();
                 $('#bt_' + _log + 'NextDom .fa-window-restore').show();
-                $('.bt_' + _log + 'NextDom .fa-window-restore').show();
                 $('#bt_' + _log + 'NextDom .fa-cloud-upload-alt').show();
-                $('.bt_' + _log + 'NextDom .fa-cloud-upload-alt').show();
+                $('#bt_' + _log + 'NextDom .fa-cloud-dowload-alt').show();
                 updateListBackup();
                 for(var i in REPO_LIST){
                     updateRepoListBackup(REPO_LIST[i]);
