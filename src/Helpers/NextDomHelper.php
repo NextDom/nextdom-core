@@ -543,7 +543,6 @@ class NextDomHelper
     public static function startSystem()
     {
         $okStr = __('common.ok');
-        $nokStr = __('common.nok');
 
         try {
             echo __('core.enable-all-scenarios');
@@ -556,8 +555,7 @@ class NextDomHelper
             if (!isset($_GET['mode']) || $_GET['mode'] != 'force') {
                 throw $e;
             } else {
-                echo " $okStr\n";
-                echo '*** ' . __('core.restore-error') . '*** ' . $e->getMessage();
+                echo '***ERROR*** ' . $e->getMessage();
             }
         }
     }
@@ -688,12 +686,12 @@ class NextDomHelper
             }
 
             try {
-                LogHelper::add('starting', 'debug', __('Vérification de la \configuration réseau interne'));
+                LogHelper::add('starting', 'debug', __('Vérification de la configuration réseau interne'));
                 if (!NetworkHelper::test('internal')) {
                     NetworkHelper::checkConf('internal');
                 }
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur la \configuration réseau interne : ') . LogHelper::exception($e));
+                LogHelper::add('starting', 'error', __('Erreur sur la configuration réseau interne : ') . LogHelper::exception($e));
             }
 
             try {
