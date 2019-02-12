@@ -344,6 +344,7 @@ try {
             echo " $okStr\n";
         } catch (Exception $e) {
             echo " $nokStr\n";
+            log::add('restore', 'error', $e->getMessage());
         }
 
         config::save('hardware_name', '');
@@ -385,6 +386,7 @@ try {
         copy(__DIR__ . '/../data/php/user.function.class.sample.php', __DIR__ . '/../data/php/user.function.class.php');
     }
 } catch (Exception $e) {
+    log::add('restore', 'error', $e->getMessage());
     echo \__('core.restore-consistency-error') . $e->getMessage() . "\n";
 }
 echo \__('core.restore-consistency-end') . "\n";

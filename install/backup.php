@@ -24,7 +24,8 @@ if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SE
     echo "La page que vous demandez ne peut être trouvée.";
     exit();
 }
-echo "[START BACKUP]\n";
+
+echo  \__('core.backup-start') . "\n";
 $starttime = strtotime('now');
 if (isset($argv)) {
     foreach ($argv as $arg) {
@@ -37,22 +38,26 @@ if (isset($argv)) {
 
 try {
     require_once __DIR__ . '/../core/php/core.inc.php';
-    echo "***************Start of NextDom backup at " . date('Y-m-d H:i:s') . "***************\n";
+    echo "*************** " . \__('core.backup-start-title') . date('Y-m-d H:i:s') . " ***************\n";
 
     try {
-        echo "Envoie l'événement de début de sauvegarde...";
+        echo \__('core.backup-start-event');
         nextdom::event('begin_backup', true);
-        echo "OK\n";
+        echo " $okStr\n";
     } catch (Exception $e) {
-        echo '***ERREUR*** ' . $e->getMessage();
+        echo " $okStr\n";
+        log::add('backup', 'error', $e->getMessage());
+        echo '*** ' . \__('core.backup-error') . '*** ' . $e->getMessage();
     }
 
     try {
-        echo 'Vérifiez les droits sur les fichiers...';
+        echo \__('core.backup-check-rights');
         nextdom::cleanFileSytemRight();
-        echo "OK\n";
+        echo " $okStr\n";
     } catch (Exception $e) {
-        echo "NOK\n";
+        echo " $nokStr\n";
+        log::add('backup', 'error', $e->getMessage());
+        echo '*** ' . \__('core.backup-error') . '*** ' . $e->getMessage();
     }
 
     global $CONFIG;
@@ -76,23 +81,24 @@ try {
     $nextdom_name = str_replace(array_keys($replace_name), $replace_name, config::byKey('name', 'core', 'NextDom'));
     $backup_name = str_replace(' ', '_', 'backup-' . $nextdom_name . '-' . nextdom::version() . '-' . date("Y-m-d-H\hi") . '.tar.gz');
 
+    echo \__('core.backup-plugins');
     global $NO_PLUGIN_BACKUP;
     if (!isset($NO_PLUGIN_BACKUP) || $NO_PLUGIN_BACKUP === false) {
         foreach (plugin::listPlugin(true) as $plugin) {
             $plugin_id = $plugin->getId();
             if (method_exists($plugin_id, 'backup')) {
-                echo 'Backup plugin ' . $plugin_id . '...';
+                echo \__('core.backup-plugin') . $plugin_id . '...';
                 $plugin_id::backup();
-                echo "OK" . "\n";
+                echo " $okStr\n";
             }
         }
     }
 
-    echo "Vérifie la base de données...";
+    echo \__('core.backup-check-db');
     system("mysqlcheck --host=" . $CONFIG['db']['host'] . " --port=" . $CONFIG['db']['port'] . " --user=" . $CONFIG['db']['username'] . " --password='" . $CONFIG['db']['password'] . "' " . $CONFIG['db']['dbname'] . ' --auto-repair --silent');
-    echo "OK" . "\n";
+    echo " $okStr\n";
 
-    echo 'Sauvegarde la base de données...';
+    echo \__('core.backup-db');
     if (file_exists($nextdom_dir . "/DB_backup.sql")) {
         unlink($nextdom_dir . "/DB_backup.sql");
         if (file_exists($nextdom_dir . "/DB_backup.sql")) {
@@ -109,30 +115,31 @@ try {
     if (filemtime($nextdom_dir . "/DB_backup.sql") < (strtotime('now') - 1200)) {
         throw new Exception('Echec durant la sauvegarde de la base de données. Date du fichier de sauvegarde de la base trop vieux. Vérifiez les droits');
     }
-    echo "OK" . "\n";
+    echo " $okStr\n";
 
-    echo "Persist cache : \n";
+    echo \__('core.backup-persist-cache');
     try {
         cache::persist();
-        echo "OK" . "\n";
+        echo " $okStr\n";
     } catch (Exception $e) {
-        echo $e->getMessage();
+        echo " $nokStr\n";
+        log::add('backup', 'error', $e->getMessage());
+        echo '*** ' . \__('core.backup-error') . '*** ' . $e->getMessage();
     }
 
-    echo 'Créer l\'archive...';
-
+    echo \__('core.backup-db-create');
     system('cd ' . $nextdom_dir . ';tar cfz "' . $backup_dir . '/' . $backup_name . '" ' . $exclude . ' -T ' . $nextdom_dir . '/install/backup_include_files > /dev/null');
-    echo "OK" . "\n";
-
     if (!file_exists($backup_dir . '/' . $backup_name)) {
+        echo " $nokStr\n";
         throw new Exception('Echec du backup. Impossible de trouver : ' . $backup_dir . '/' . $backup_name);
     }
+    echo " $okStr\n";
 
-    echo 'Nettoyage l\'ancienne sauvegarde...';
+    echo \__('core.backup-clean');
     shell_exec('find "' . $backup_dir . '" -mtime +' . config::byKey('backup::keepDays') . ' -delete');
-    echo "OK" . "\n";
+    echo " $okStr\n";
 
-    echo 'Limite la taille des sauvegardes à ' . config::byKey('backup::maxSize') . " Mo...\n";
+    echo \__('core.backup-limit') . config::byKey('backup::maxSize') . " Mo...\n";
     $max_size = config::byKey('backup::maxSize') * 1024 * 1024;
     $i = 0;
     while (getDirectorySize($backup_dir) > $max_size) {
@@ -169,7 +176,7 @@ try {
         if ($older['file'] === null) {
             echo 'Erreur : aucun fichier à supprimer quand le dossier fait : ' . getDirectorySize($backup_dir) . "\n";
         }
-        echo "Supprime : " . $older['file'] . "\n";
+        echo \__('core.backup-delete') . $older['file'] . "\n";
         if (!unlink($older['file'])) {
             $i = 50;
         }
@@ -179,7 +186,7 @@ try {
             break;
         }
     }
-    echo "OK" . "\n";
+    echo " $okStr\n";
     global $NO_CLOUD_BACKUP;
     if ((!isset($NO_CLOUD_BACKUP) || $NO_CLOUD_BACKUP === false)) {
         foreach (update::listRepo() as $key => $value) {
@@ -196,40 +203,46 @@ try {
             echo 'Send backup ' . $value['name'] . '...';
             try {
                 $class::backup_send($backup_dir . '/' . $backup_name);
+                echo " $okStr\n";
             } catch (Exception $e) {
+                echo " $okStr\n";
                 log::add('backup', 'error', $e->getMessage());
-                echo '/!\ ' . br2nl($e->getMessage()) . ' /!\\';
+                echo '*** ' . \__('core.backup-error') . '*** ' . br2nl($e->getMessage()) . "\n";
             }
-            echo "OK" . "\n";
         }
     }
-    echo "Nom de la sauvegarde : " . $backup_dir . '/' . $backup_name . "\n";
+    echo \__('core.backup-file-used') . $backup_dir . '/' . $backup_name . "\n";
 
     try {
-        echo 'Vérifiez les droits sur les fichiers...';
+        echo \__('core.backup-check-rights');
         nextdom::cleanFileSytemRight();
-        echo "OK\n";
+        echo " $okStr\n";
     } catch (Exception $e) {
-        echo "NOK\n";
+        echo " $nokStr\n";
+        log::add('backup', 'error', $e->getMessage());
+        echo '*** ' . \__('core.backup-error') . '*** ' . $e->getMessage() . "\n";
     }
 
     try {
-        echo 'Envoi l\'événement de fin de sauvegarde...';
+        echo \__('core.backup-end-event');
         nextdom::event('end_backup');
-        echo "OK\n";
+        echo " $okStr\n";
     } catch (Exception $e) {
-        echo '***ERREUR*** ' . $e->getMessage();
+        echo " $nokStr\n";
+        log::add('backup', 'error', $e->getMessage());
+        echo '*** ' . \__('core.backup-error') . '*** ' . $e->getMessage() . "\n";
     }
-    echo "Durée de la sauvegarde : " . (strtotime('now') - $starttime) . "s\n";
-    echo "***************Fin de la sauvegarde de NextDom***************\n";
-    echo "[END BACKUP SUCCESS]\n";
+    echo \__('core.backup-time') . (strtotime('now') - $starttime) . "s\n";
+    echo "*************** " . \__('core.backup-end-title') . date('Y-m-d H:i:s') . "***************\n";
+    echo \__('core.backup-end');
+    echo \__('core.backup-end-success') . "\n";
     /* Ne pas supprimer la ligne suivante */
-    echo "Closing with success";
+    echo "Closing with success" . "\n";
 } catch (Exception $e) {
-    echo 'Erreur durant la sauvegarde : ' . br2nl($e->getMessage());
-    echo 'Détails : ' . print_r($e->getTrace(), true);
-    echo "[END BACKUP ERROR]\n";
+    echo \__('core.backup-end');
+    echo \__('core.backup-end-error') . br2nl($e->getMessage()) . "\n";
+    echo \__('core.backup-details') . print_r($e->getTrace(), true) . "\n";
     /* Ne pas supprimer la ligne suivante */
-    echo "Closing with error";
+    echo "Closing with error" . "\n";
     throw $e;
 }

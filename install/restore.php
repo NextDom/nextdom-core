@@ -50,8 +50,8 @@ if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SE
     echo "La page que vous demandez ne peut être trouvée.";
     exit();
 }
-echo  \__('core.restore-start') . "\n";
 
+echo  \__('core.restore-start') . "\n";
 $starttime = strtotime('now');
 if (isset($argv)) {
     foreach ($argv as $arg) {
@@ -72,7 +72,8 @@ try {
         echo " $okStr\n";
     } catch (\Exception $e) {
         echo " $nokStr\n";
-        echo '*** ' . \__('core.restore-error') . '*** ' . $e->getMessage();
+        log::add('restore', 'error', $e->getMessage());
+        echo '*** ' . \__('core.restore-error') . '*** ' . $e->getMessage() . "\n";
     }
 
     global $CONFIG;
@@ -112,7 +113,6 @@ try {
     if (substr($backup, 0, 1) != '/') {
         $backup = NEXTDOM_ROOT . '/' . $backup;
     }
-
     if (!file_exists($backup)) {
         throw new \Exception(__('core.restore-file-not-found') . $backup);
     }
@@ -124,14 +124,16 @@ try {
         echo " $okStr\n";
     } catch (\Exception $e) {
         echo " $nokStr\n";
-        echo '*** ' . \__('core.restore-error') . '*** ' . $e->getMessage();
+        log::add('restore', 'error', $e->getMessage());
+        echo '*** ' . \__('core.restore-error') . '*** ' . $e->getMessage() . "\n";
     }
 
     try {
         NextDomHelper::stopSystem();
     } catch (\Exception $e) {
         echo " $nokStr\n";
-        echo '*** ' . \__('core.restore-error') . '*** ' . $e->getMessage();
+        log::add('restore', 'error', $e->getMessage());
+        echo '*** ' . \__('core.restore-error') . '*** ' . $e->getMessage() . "\n";
     }
 
     echo \__('core.restore-unzip');
@@ -247,7 +249,8 @@ try {
         echo " $okStr\n";
     } catch (\Exception $ex) {
         echo " $nokStr\n";
-        echo '*** ' . \__('core.restore-error') . '*** ' . $ex->getMessage();
+        log::add('restore', 'error', $ex->getMessage());
+        echo '*** ' . \__('core.restore-error') . '*** ' . $ex->getMessage() . "\n";
     }
 
     echo \__('core.restore-rights');
@@ -262,7 +265,8 @@ try {
     try {
         NextDomHelper::startSystem();
     } catch (\Exception $e) {
-        echo '*** ' . \__('core.restore-error') . '*** ' . $e->getMessage();
+        log::add('restore', 'error', $e->getMessage());
+        echo '*** ' . \__('core.restore-error') . '*** ' . $e->getMessage() . "\n";
     }
 
     try {
@@ -271,20 +275,21 @@ try {
         echo " $okStr\n";
     } catch (\Exception $e) {
         echo " $nokStr\n";
-        echo '*** ' . \__('core.restore-error') . '*** ' . $e->getMessage();
+        log::add('restore', 'error', $e->getMessage());
+        echo '*** ' . \__('core.restore-error') . '*** ' . $e->getMessage() . "\n";
     }
     echo \__('core.restore-time') . (strtotime('now') - $starttime) . "s\n";
     echo "*************** " . \__('core.restore-end-title') . date('Y-m-d H:i:s') . "***************\n";
     echo \__('core.restore-end');
     echo \__('core.restore-end-success') . "\n";
     /* Ne pas supprimer la ligne suivante */
-    echo "Closing with success";
+    echo "Closing with success" . "\n";
 } catch (\Exception $e) {
     echo \__('core.restore-end');
     echo \__('core.restore-end-error') . $e->getMessage() . "\n";
-    echo \__('core.restore-details') . print_r($e->getTrace(), true);
+    echo \__('core.restore-details') . print_r($e->getTrace(), true) . "\n";
     NextDomHelper::startSystem();
     /* Ne pas supprimer la ligne suivante */
-    echo "Closing with error";
+    echo "Closing with error" . "\n";
     throw $e;
 }
