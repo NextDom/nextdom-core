@@ -223,9 +223,13 @@ try {
     echo "Durée de la sauvegarde : " . (strtotime('now') - $starttime) . "s\n";
     echo "***************Fin de la sauvegarde de NextDom***************\n";
     echo "[END BACKUP SUCCESS]\n";
+    /* Ne pas supprimer la ligne suivante */
+    echo "Closing with success";
 } catch (Exception $e) {
     echo 'Erreur durant la sauvegarde : ' . br2nl($e->getMessage());
     echo 'Détails : ' . print_r($e->getTrace(), true);
     echo "[END BACKUP ERROR]\n";
+    /* Ne pas supprimer la ligne suivante */
+    echo "Closing with error";
     throw $e;
 }

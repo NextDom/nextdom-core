@@ -543,6 +543,7 @@ class NextDomHelper
     public static function startSystem()
     {
         $okStr = __('common.ok');
+        $nokStr = __('common.nok');
 
         try {
             echo __('core.enable-all-scenarios');
@@ -555,7 +556,8 @@ class NextDomHelper
             if (!isset($_GET['mode']) || $_GET['mode'] != 'force') {
                 throw $e;
             } else {
-                echo '***ERROR*** ' . $e->getMessage();
+                echo " $okStr\n";
+                echo '*** ' . __('core.restore-error') . '*** ' . $e->getMessage();
             }
         }
     }
