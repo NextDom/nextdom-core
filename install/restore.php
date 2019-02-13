@@ -173,7 +173,7 @@ try {
     echo " OK" . "\n";
 
     echo "Updating database...";
-    echo shell_exec('php ' . NEXTDOM_ROOT . '/install/migrate/migrate.php');
+    shell_exec('php ' . NEXTDOM_ROOT . '/install/migrate/migrate.php');
     echo " OK" . "\n";
 
     echo "Enables constraints...";
@@ -224,7 +224,7 @@ try {
             $plugin_id::restore();
             echo " OK" . "\n";
         }
-        echo "Reinitialization plugin dependencies : " . $plugin_id . '...\n';
+        echo "Reinitialization plugin dependencies : " . $plugin_id . '...';
         $cache = CacheManager::byKey('dependancy' . $plugin->getId());
         $cache->remove();
         CacheManager::set('dependancy' . $plugin   ->getId(), "nok");
@@ -242,11 +242,10 @@ try {
     $cache->remove();
 
     try {
-        echo "Check consistency..." . "\n";
         require_once NEXTDOM_ROOT . '/install/consistency.php';
-        echo " OK" . "\n";
+        echo "Check consistency..." . " OK" . "\n";
     } catch (\Exception $ex) {
-        echo " NOK" . "\n";
+        echo "Check consistency..." . " NOK" . "\n";
         log::add('restore', 'error', $ex->getMessage());
         echo '*** ' . "ERROR" . '*** ' . $ex->getMessage() . "\n";
     }
