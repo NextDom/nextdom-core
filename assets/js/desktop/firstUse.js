@@ -61,7 +61,7 @@ $(document).ready(function () {
 });
 
 $("#toStep2").click(function () {
-    jeedom.user.login({
+    nextdom.user.login({
         username: "admin",
         password: "admin",
         error: function (error) {
@@ -75,14 +75,14 @@ $("#toStep2").click(function () {
 $("#toStep3").click(function () {
     if ($('#in_change_password').val() !="") {
         if ($('#in_change_password').val() == $('#in_change_passwordToo').val()) {
-            jeedom.user.get({
+            nextdom.user.get({
                 error: function (data) {
                     notify("Core", data.message, "error");
                 },
                 success: function (data) {
                     var user = data;
                     user.password = $('#in_change_password').val();
-                    jeedom.user.saveProfils({
+                    nextdom.user.saveProfils({
                         profils: user,
                         error: function (error) {
                             notify("Core", error.message, "error");
@@ -98,7 +98,7 @@ $("#toStep3").click(function () {
                     notify("Core", error.message, 'error');
                 },
                 success: function () {
-                    notify("Core", '{{Mot de passe changé avec succès}}', 'success');
+                    notify("Core", '{{Mot de passe changé avec succès !}}', 'success');
                     NextStep("#toStep3");
                 }
             });
@@ -142,7 +142,6 @@ $("#toStep4").click(function () {
 });
 
 $("#toStep5").click(function () {
-
     var radios = document.getElementsByName('theme');
     var config ="";
     for (var i = 0, length = radios.length; i < length; i++) {
@@ -174,11 +173,12 @@ $("#toStep5").click(function () {
                   break;
               }
         }
-
         nextdom.config.save({
-        configuration: config,
-        error: function (error) {
-            notify("Info", '{{theme parametré}}', 'success');
+          configuration: config,
+          success: function (error) {
+            updateTheme(function() {
+                notify("Info", '{{Thème parametré !}}', 'success');
+            });
         }
     });
 });
@@ -247,4 +247,13 @@ function BackStep(_step) {
     if (isValid) {
         nextStepWizard.removeAttr('disabled').trigger('click');
     }
+}
+
+function updateTheme(successFunc) {
+    $.ajax({
+        url: 'core/ajax/config.ajax.php',
+        type: 'GET',
+        data: {'action': 'updateTheme', 'nextdom_token': NEXTDOM_AJAX_TOKEN},
+        success: successFunc
+    });
 }

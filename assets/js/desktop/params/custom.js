@@ -329,7 +329,7 @@ $("input[name=theme]").click(function () {
         configuration: config,
         success: function () {
             updateTheme(function() {
-                notify("Info", '{{Thème parametré}}', 'success');
+                notify("Info", '{{Thème parametré !}}', 'success');
                 window.location.reload();
             });
         }
