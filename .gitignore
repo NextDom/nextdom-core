@@ -31,8 +31,6 @@ var/*
 /.sass-cache
 /DB_Backup.sql
 
-docs/*
-
 tests/gui/chromedriver*
 
 core/config

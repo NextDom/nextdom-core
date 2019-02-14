@@ -43,7 +43,7 @@ class TimelineController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public static function get(Render $render, &$pageData): string
     {
         $pageData['historyDate'] = [
             'start' => date('Y-m-d', strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),

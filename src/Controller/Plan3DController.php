@@ -39,7 +39,7 @@ class Plan3DController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, &$pageData): string
+    public static function get(Render $render, &$pageData): string
     {
         $plan3dHeader = null;
         $list_plan3dHeader = \plan3dHeader::all();

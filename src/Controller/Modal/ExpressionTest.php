@@ -36,7 +36,7 @@ class ExpressionTest extends BaseAbstractModal
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(Render $render): string
     {
         return $render->get('/modals/expression.test.html.twig');
     }
