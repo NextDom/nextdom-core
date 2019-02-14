@@ -30,18 +30,16 @@ class ActionInsert extends BaseAbstractModal
     /**
      * Render action insert modal (scenario)
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
         $pageData = [];
         $pageData['productName'] = ConfigManager::byKey('product_name');
 
-        return $render->get('/modals/action.insert.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/action.insert.html.twig', $pageData);
     }
 }

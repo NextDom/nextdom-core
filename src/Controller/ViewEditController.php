@@ -30,7 +30,6 @@ class ViewEditController extends BaseController
     /**
      * Render view edit page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of view edit page
@@ -39,13 +38,13 @@ class ViewEditController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render, &$pageData): string
+    public static function get(&$pageData): string
     {
         $pageData['viewEditViewsList'] = ViewManager::all();
         $pageData['JS_END_POOL'][] = '/public/js/desktop/view_edit.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/view_edit.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/view_edit.html.twig', $pageData);
     }
 
 

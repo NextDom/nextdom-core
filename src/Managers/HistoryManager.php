@@ -37,6 +37,7 @@ namespace NextDom\Managers;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Model\Entity\History;
 
 class HistoryManager
 {
@@ -244,7 +245,7 @@ class HistoryManager
                         AND cmd_id=:cmd_id';
                 $avg = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
 
-                $history = new \history();
+                $history = new History();
                 $history->setCmd_id($sensors['cmd_id']);
                 $history->setValue($avg['value']);
                 $history->setDatetime($avg['datetime']);
@@ -279,7 +280,7 @@ class HistoryManager
      * @param $_cmd_id
      * @param null $_startTime
      * @param null $_endTime
-     * @return \history[] des valeurs de l'équipement
+     * @return History[] des valeurs de l'équipement
      * @throws \Exception
      */
     public static function all($_cmd_id, $_startTime = null, $_endTime = null)

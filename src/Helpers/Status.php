@@ -47,7 +47,7 @@ class Status
      */
     public static function initRescueModeState()
     {
-        if (\init('rescue', 0) == 1) {
+        if (Utils::init('rescue', 0) == 1) {
             self::$rescueMode = true;
         }
     }

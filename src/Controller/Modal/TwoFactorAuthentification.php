@@ -31,14 +31,12 @@ class TwoFactorAuthentification extends BaseAbstractModal
     /**
      * Render view configure modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
         $google2fa = new Google2FA();
         @session_start();
@@ -59,6 +57,6 @@ class TwoFactorAuthentification extends BaseAbstractModal
         $pageData['productName'] = ConfigManager::byKey('product_name');
         $pageData['userTwoFactorSecret'] = $_SESSION['user']->getOptions('twoFactorAuthentificationSecret');
 
-        return $render->get('/modals/twoFactor.authentification.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/twoFactor.authentification.html.twig', $pageData);
     }
 }

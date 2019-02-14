@@ -29,7 +29,6 @@ class ShutdownController extends BaseController
     /**
      * Render shutdown page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of shutdown page
@@ -38,10 +37,10 @@ class ShutdownController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render, &$pageData): string
+    public static function get(&$pageData): string
     {
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/shutdown.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/shutdown.html.twig', $pageData);
     }
 }

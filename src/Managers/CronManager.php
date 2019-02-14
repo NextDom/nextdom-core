@@ -48,7 +48,7 @@ class CronManager
      * Return an array of all cron objects
      *
      * @param bool $ordered
-     * @return \cron[] List of all cron objets
+     * @return Cron[] List of all cron objets
      * @throws \Exception
      */
     public static function all($ordered = false)
@@ -87,7 +87,7 @@ class CronManager
      * @param string $functionName Name of the method
      * @param string $options Filter options
      *
-     * @return \cron Cron object
+     * @return Cron Cron object
      * @throws \Exception
      */
     public static function byClassAndFunction($className, $functionName, $options = '')
@@ -115,7 +115,7 @@ class CronManager
      * @param string $functionName Name of the method
      * @param string $options Filter options
      *
-     * @return array[\cron] List of cron objects
+     * @return Cron[] List of cron objects
      * @throws \Exception
      */
     public static function searchClassAndFunction($className, $functionName, $options = '')

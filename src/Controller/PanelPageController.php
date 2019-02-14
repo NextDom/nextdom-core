@@ -23,7 +23,6 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\FileSystemHelper;
-use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PluginManager;
 
@@ -32,12 +31,11 @@ class PanelPageController extends BaseController
     /**
      * TODO this methode are used ?
      *
-     * @param \NextDom\Helpers\Render $render
      * @param array $pageData
      * @return string
      * @throws \Exception
      */
-    public static function get(Render $render, &$pageData): string
+    public static function get(&$pageData): string
     {
         $plugin = PluginManager::byId(Utils::init('m'));
         $page = Utils::init('p');

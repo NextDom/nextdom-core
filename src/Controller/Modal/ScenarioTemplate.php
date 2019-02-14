@@ -33,15 +33,13 @@ class ScenarioTemplate extends BaseAbstractModal
     /**
      * Render scenario template modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
         $scenarioId = Utils::init('scenario_id');
         $scenario = ScenarioManager::byId($scenarioId);
@@ -52,6 +50,6 @@ class ScenarioTemplate extends BaseAbstractModal
         $pageData = [];
         $pageData['repoList'] = UpdateManager::listRepo();
 
-        return $render->get('/modals/scenario.template.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/scenario.template.html.twig', $pageData);
     }
 }

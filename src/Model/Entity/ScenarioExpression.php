@@ -509,7 +509,7 @@ class ScenarioExpression
             $result = $options['value'];
         }
         $this->setLog($scenario, __('Affectation de la variable ') . $this->getOptions('name') . __(' => ') . $options['value'] . ' = ' . $result);
-        $dataStore = new \dataStore();
+        $dataStore = new DataStore();
         $dataStore->setKey($this->getOptions('name'));
         $dataStore->setValue($result);
         $dataStore->setType('scenario');
@@ -538,7 +538,7 @@ class ScenarioExpression
      */
     protected function executeActionAsk(&$scenario, $options)
     {
-        $dataStore = new \dataStore();
+        $dataStore = new DataStore();
         $dataStore->setType('scenario');
         $dataStore->setKey($this->getOptions('variable'));
         $dataStore->setValue('');

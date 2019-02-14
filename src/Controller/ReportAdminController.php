@@ -29,7 +29,6 @@ class ReportAdminController extends BaseController
     /**
      * Render reportsAdmin page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of report_admin page
@@ -38,7 +37,7 @@ class ReportAdminController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render, &$pageData): string
+    public static function get(&$pageData): string
     {
 
 
@@ -49,6 +48,6 @@ class ReportAdminController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/reports_admin.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/params/reports_admin.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/params/reports_admin.html.twig', $pageData);
     }
 }

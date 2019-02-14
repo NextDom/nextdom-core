@@ -32,7 +32,6 @@ class MarketController extends BaseController
     /**
      * Render market page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of market page
@@ -41,7 +40,7 @@ class MarketController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render, &$pageData): string
+    public static function get(&$pageData): string
     {
         global $NEXTDOM_INTERNAL_CONFIG;
 
@@ -82,7 +81,7 @@ class MarketController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/Market/market.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/market.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/market.html.twig', $pageData);
     }
 
 }

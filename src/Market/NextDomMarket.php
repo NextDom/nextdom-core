@@ -135,7 +135,7 @@ class NextDomMarket
                     $this->dataStorage->storeJsonData('repo_data_' . $this->source['name'], $marketData['plugins']);
                     $this->dataStorage->storeRawData('repo_last_change_' . $this->source['name'], $marketData['version']);
                 }
-                $this->dataStorage->storeRawData('repo_last_update_' . $this->source['name'], \time());
+                $this->dataStorage->storeRawData('repo_last_update_' . $this->source['name'], time());
             }
         }
         return $result;
@@ -153,7 +153,7 @@ class NextDomMarket
         $result = true;
         $lastUpdate = $this->dataStorage->getRawData('repo_last_update_' . $id);
         if ($lastUpdate !== null) {
-            if (\time() - $lastUpdate < self::REFRESH_TIME_LIMIT) {
+            if (time() - $lastUpdate < self::REFRESH_TIME_LIMIT) {
                 $result = false;
             }
         }

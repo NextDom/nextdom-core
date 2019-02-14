@@ -32,15 +32,13 @@ class ObjectConfigure extends BaseAbstractModal
     /**
      * Render object configure modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
 
 
@@ -51,7 +49,7 @@ class ObjectConfigure extends BaseAbstractModal
         }
         Utils::sendVarToJS('objectInfo', Utils::o2a($object));
 
-        return $render->get('/modals/object.configure.html.twig');
+        return Render::getInstance()->get('/modals/object.configure.html.twig');
     }
 
 }

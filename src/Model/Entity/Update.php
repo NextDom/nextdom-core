@@ -209,7 +209,7 @@ class Update
     /**
      * Supprime une information de mise à jour
      *
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function deleteObjet()
     {
@@ -298,6 +298,7 @@ class Update
      *
      * @param $informations
      * @throws CoreException
+     * @throws \Throwable
      */
     public function postInstallUpdate($informations)
     {

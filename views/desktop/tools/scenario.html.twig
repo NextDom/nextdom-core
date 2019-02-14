@@ -92,7 +92,7 @@
                                 {% for scenario in scenarios[-1] %}
                                     <div class="scenarioDisplayCard cursor icon_gestion" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
                                         {% if scenario.getDisplay('icon') != '' %}
-                                            <span style="font-size:3em;">{{ scenario.getDisplay('icon')|raw }}</span>
+                                            <span style="font-size:3.8em;">{{ scenario.getDisplay('icon')|raw }}</span>
                                         {% else %}
                                             <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70"/>
                                         {% endif %}
@@ -119,7 +119,7 @@
                                     {% for scenario in scenarios[scenarioGroup.group] %}
                                         <div class="scenarioDisplayCard  icon_gestion cursor" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
                                             {% if scenario.getDisplay('icon') != '' %}
-                                                <span style="font-size:3em;">{{ scenario.getDisplay('icon')|raw }}</span>
+                                                <span style="font-size:3.8em;">{{ scenario.getDisplay('icon')|raw }}</span>
                                             {% else %}
                                                 <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70"/>
                                             {% endif %}
@@ -283,21 +283,19 @@
                                 </fieldset>
                             </div>
                             <div class="col-lg-6 col-md-12">
-                                <fieldset class="legend-section">
+                                <fieldset>
                                     <legend>{{ 'Icône' }}</legend>
                                     <div class="form-group">
                                         <label class="col-lg-2 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'Icône' }}</label>
-                                        <div class="col-md-4 col-xs-3">
-                                            <a class="btn btn-default btn-sm" id="bt_chooseIcon"><i class="fas fa-flag"></i> {{ 'Choisir' }}</a>
+                                        <div class="col-xs-2">
+                                            <a class="btn btn-default btn-sm" id="bt_chooseIcon"><i class="fas fa-flag">&nbsp;&nbsp;</i>{{ 'Choisir' }}</a>
                                         </div>
-                                        <div class="col-md-5 col-xs-5">
-                                            <div class="scenarioAttr" data-l1key="display" data-l2key="icon" style="font-size : 1.5em;"></div>
+                                        <div class="col-xs-3">
+                                            <div class="scenarioAttr label label-icon" data-l1key="display" data-l2key="icon"></div>
                                         </div>
                                     </div>
                                 </fieldset>
-                            </div>
-                            <div class="col-lg-6 col-md-12">
-                                <fieldset>
+                                <fieldset class="legend-section">
                                     <legend>{{ 'Déclenchement' }}</legend>
                                     <div class="form-group">
                                         <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Mode du scénario' }}</label>

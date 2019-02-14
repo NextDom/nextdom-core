@@ -40,7 +40,8 @@ class Plan3dHeaderManager
     const CLASS_NAME = Plan3dHeader::class;
     const DB_CLASS_NAME = '`plan3dHeader`';
 
-    public static function byId($_id) {
+    public static function byId($_id)
+    {
         $values = array(
             'id' => $_id,
         );
@@ -50,18 +51,21 @@ class Plan3dHeaderManager
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function all() {
+    public static function all()
+    {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME;
         return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
+
     /**
      *
      * @param mixed $_type
      * @param mixed $_id
      * @return mixed
      */
-    public static function searchByUse($_type, $_id) {
+    public static function searchByUse($_type, $_id)
+    {
         $return = array();
         $search = '#' . str_replace('cmd', '', $_type . $_id) . '#';
         $plan3ds = array_merge(Plan3dManager::byLinkTypeLinkId($_type, $_id), Plan3dManager::searchByConfiguration($search, 'eqLogic'));

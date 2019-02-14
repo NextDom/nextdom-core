@@ -31,7 +31,6 @@ class BackupController extends BaseController
     /**
      * Render backup page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of backup page
@@ -40,7 +39,7 @@ class BackupController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render, &$pageData): string
+    public static function get(&$pageData): string
     {
 
         $pageData['JS_VARS_RAW']['REPO_LIST'] = '[]';
@@ -49,7 +48,7 @@ class BackupController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/backup.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/tools/backup.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/tools/backup.html.twig', $pageData);
     }
 
 }

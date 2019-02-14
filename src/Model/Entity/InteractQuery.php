@@ -239,7 +239,7 @@ class InteractQuery
     }
 
     /**
-     * @return \interactDef
+     * @return InteractDef
      */
     public function getInteractDef()
     {

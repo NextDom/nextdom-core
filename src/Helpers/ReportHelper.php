@@ -17,20 +17,21 @@
 
 namespace NextDom\Helpers;
 
-use NextDom\Enums\ApiModeEnum;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 
 class ReportHelper
 {
-    public static function clean() {
+    public static function clean()
+    {
         if (!file_exists(NEXTDOM_ROOT . '/data/report')) {
             return;
         }
         shell_exec('find ' . NEXTDOM_ROOT . '/data/report -type f -mtime +' . ConfigManager::byKey('report::maxdays') . ' -delete');
     }
 
-    public static function generate($_url, $_type, $_name, $_format = 'pdf', $_parameter = array()) {
+    public static function generate($_url, $_type, $_name, $_format = 'pdf', $_parameter = array())
+    {
         $out = NEXTDOM_ROOT . '/data/report/';
         $out .= $_type . '/';
         $out .= $_name . '/';

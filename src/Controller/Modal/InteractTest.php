@@ -29,15 +29,13 @@ class InteractTest extends BaseAbstractModal
     /**
      * Render interact tester modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
-        return $render->get('/modals/interact.test.html.twig');
+        return Render::getInstance()->get('/modals/interact.test.html.twig');
     }
 }

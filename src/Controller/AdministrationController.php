@@ -33,7 +33,6 @@ class AdministrationController extends BaseController
     /**
      * Render administration page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of administration page
@@ -42,7 +41,7 @@ class AdministrationController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render, &$pageData): string
+    public static function get(&$pageData): string
     {
         $pageData['IS_ADMIN'] = Status::isConnectAdmin();
         $pageData['administrationNbUpdates'] = UpdateManager::nbNeedUpdate();
@@ -118,6 +117,6 @@ class AdministrationController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/administration.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/administration.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/administration.html.twig', $pageData);
     }
 }

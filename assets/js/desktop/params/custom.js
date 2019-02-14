@@ -131,7 +131,6 @@ $("#bt_savecustom").on('click', function (event) {
     $.hideAlert();
     saveConvertColor();
     var config = $('#custom').getValues('.configKey')[0];
-    console.log(config);
     nextdom.config.save({
         configuration: config,
         error: function (error) {
@@ -143,7 +142,6 @@ $("#bt_savecustom").on('click', function (event) {
             widget_margin = config['widget::margin'];
             widget_padding = config['widget::padding'];
             widget_radius = config['widget::radius'];
-            console.log(widget_size);
             nextdom.config.load({
                 configuration: $('#custom').getValues('.configKey:not(.noSet)')[0],
                 error: function (error) {

@@ -37,6 +37,7 @@ use NextDom\Enums\DaemonState;
 use NextDom\Enums\PluginManagerCron;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
+use NextDom\Model\Entity\Plugin;
 
 class PluginManager
 {
@@ -48,7 +49,7 @@ class PluginManager
      *
      * @param string $id Identifiant du plugin
      *
-     * @return mixed|\plugin Plugin
+     * @return mixed|Plugin Plugin
      *
      * @throws \Exception
      */
@@ -68,7 +69,7 @@ class PluginManager
         if (!is_array($data)) {
             throw new \Exception('Plugin introuvable (json invalide) : ' . $id . ' => ' . print_r($data, true));
         }
-        $plugin = new \plugin();
+        $plugin = new Plugin();
         $plugin->initPluginFromData($data);
         self::$cache[$plugin->getId()] = $plugin;
         if (!isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$plugin->getCategory()])) {
@@ -113,7 +114,7 @@ class PluginManager
      * @param bool $activatedOnly Filter only activated plugins
      * @param bool $orderByCategory Sort by category
      * @param bool $nameOnly Get only plugin names
-     * @return \plugin[] List of plugins
+     * @return Plugin[] List of plugins
      *
      * @throws \Exception
      */
@@ -190,7 +191,7 @@ class PluginManager
      *
      * @return int Résultat de la comparaison
      */
-    public static function orderPlugin(\plugin $firstPlugin, \plugin $secondPluginName): int
+    public static function orderPlugin(Plugin $firstPlugin, Plugin $secondPluginName): int
     {
         return strcmp(strtolower($firstPlugin->getName()), strtolower($secondPluginName->getName()));
     }

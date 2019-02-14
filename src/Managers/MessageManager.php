@@ -103,6 +103,12 @@ class MessageManager
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_plugin
+     * @param $_logicalId
+     * @return Message[]|null
+     * @throws \Exception
+     */
     public static function byPluginLogicalId($_plugin, $_logicalId)
     {
         $values = array(

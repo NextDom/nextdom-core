@@ -32,15 +32,13 @@ class ViewConfigure extends BaseAbstractModal
     /**
      * Render view configure modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
         $view = ViewManager::byId(init('view_id'));
         if (!is_object($view)) {
@@ -48,7 +46,7 @@ class ViewConfigure extends BaseAbstractModal
         }
         Utils::sendVarsToJS(['id' => $view->getId(), 'view' => Utils::o2a($view)]);
 
-        return $render->get('/modals/view.configure.html.twig');
+        return Render::getInstance()->get('/modals/view.configure.html.twig');
     }
 
 }

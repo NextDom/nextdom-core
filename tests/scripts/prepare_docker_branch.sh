@@ -4,6 +4,16 @@ if [ $# -eq 0 ]; then
 	echo "Le nom de la branche doit être indiquée"
 	exit 1
 fi
+
+
+# kill old docker if exists
+if [ ! "$(docker ps -a | grep nextdom-test-migration\\\$)" ]; then
+	if [ ! "$(docker ps -q -f name=nextdom-test\\\$)" ]; then
+		docker kill nextdom-test
+	fi
+	docker rm nextdom-test
+fi
+
 rm -fr /tmp/nextdom-core
 cd /tmp
 echo "Clone repo"
@@ -16,12 +26,14 @@ END_OF_INSTALL_STR="OK NEXTDOM TEST READY"
 
 while true
 do
-	DOCKER_LOGS=$(docker logs nextdom-test 2>&1)
-	if [[ "$DOCKER_LOGS" =~ .*OK.NEXTDOM.TEST.READY.* ]]; then
+	DOCKER_LOGS=$(docker logs --tail 10 nextdom-test 2>&1)
+	if [[ "$DOCKER_LOGS" =~ .*NEXTDOM.TEST.READY.* ]]; then
 		break
 	fi
-	sleep 10
+	sleep 2
 done
+echo "Delete plugins"
+docker exec nextdom-test /bin/rm -fr /var/www/html/plugins/*
 echo "Container created, Write image"
 docker commit nextdom-test nextdom-test-snap
 echo "Clear container"

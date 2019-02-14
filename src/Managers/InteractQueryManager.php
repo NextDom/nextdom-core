@@ -38,6 +38,8 @@ use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\InteractQuery;
+use NextDom\Model\Entity\JeeObject;
+use NextDom\Model\Entity\Listener;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
@@ -88,7 +90,7 @@ class InteractQueryManager
 
     /**
      * @param $_action
-     * @return \interactQuery[]
+     * @return InteractQuery[]
      * @throws \Exception
      */
     public static function searchActions($_action)
@@ -116,7 +118,7 @@ class InteractQueryManager
     }
 
     /**
-     * @return \interactQuery|null
+     * @return InteractQuery|null
      * @throws \Exception
      */
     public static function all()
@@ -343,8 +345,8 @@ class InteractQueryManager
     }
 
     /**
-     * @param \jeeObject $a
-     * @param \jeeObject $b
+     * @param JeeObject $a
+     * @param JeeObject $b
      * @return int
      */
     public static function cmp_objectName($a, $b)
@@ -492,7 +494,7 @@ class InteractQueryManager
         if (is_object($_parameters['reply_cmd'])) {
             $options['reply_cmd'] = $_parameters['reply_cmd']->getId();
         }
-        $listener = new \listener();
+        $listener = new Listener();
         $listener->setClass('interactQuery');
         $listener->setFunction('warnMeExecute');
         $data = self::findInQuery('object', $_query);

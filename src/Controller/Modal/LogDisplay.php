@@ -31,20 +31,18 @@ class LogDisplay extends BaseAbstractModal
     /**
      * Render log display modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
         Utils::sendVarsToJS([
             'realtime_name' => Utils::init('log', 'event'),
             'log_default_search' => Utils::init('search', '')
         ]);
-        return $render->get('/modals/log.display.html.twig');
+        return Render::getInstance()->get('/modals/log.display.html.twig');
     }
 
 }
