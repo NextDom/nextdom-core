@@ -23,23 +23,17 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
+use NextDom\Managers\MessageManager;
 
 class MarketController extends BaseController
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render market page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of market page
      *
@@ -47,9 +41,8 @@ class MarketController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public static function get(Render $render, &$pageData): string
     {
-
         global $NEXTDOM_INTERNAL_CONFIG;
 
         $sourcesList = [];
@@ -61,16 +54,16 @@ class MarketController extends BaseController
             }
         }
 
-        $pageContent['JS_VARS']['github'] = ConfigManager::byKey('github::enable');
-        $pageContent['JS_VARS_RAW']['sourcesList'] = Utils::getArrayToJQueryJson($sourcesList);
-        $pageContent['JS_VARS']['moreInformationsStr'] = \__("Plus d'informations");
-        $pageContent['JS_VARS']['updateStr'] = \__("Mettre à jour");
-        $pageContent['JS_VARS']['updateAllStr'] = \__("Voulez-vous mettre à jour tous les plugins ?");
-        $pageContent['JS_VARS']['updateThisStr'] = \__("Voulez-vous mettre à jour ce plugin ?");
-        $pageContent['JS_VARS']['installedPluginStr'] = \__("Plugin installé");
-        $pageContent['JS_VARS']['updateAvailableStr'] = \__("Mise à jour disponible");
-        $pageContent['marketSourcesList'] = $sourcesList;
-        $pageContent['marketSourcesFilter'] = ConfigManager::byKey('nextdom_market::show_sources_filters');
+        $pageData['JS_VARS']['github'] = ConfigManager::byKey('github::enable');
+        $pageData['JS_VARS_RAW']['sourcesList'] = Utils::getArrayToJQueryJson($sourcesList);
+        $pageData['JS_VARS']['moreInformationsStr'] = \__("Plus d'informations");
+        $pageData['JS_VARS']['updateStr'] = \__("Mettre à jour");
+        $pageData['JS_VARS']['updateAllStr'] = \__("Voulez-vous mettre à jour tous les plugins ?");
+        $pageData['JS_VARS']['updateThisStr'] = \__("Voulez-vous mettre à jour ce plugin ?");
+        $pageData['JS_VARS']['installedPluginStr'] = \__("Plugin installé");
+        $pageData['JS_VARS']['updateAvailableStr'] = \__("Mise à jour disponible");
+        $pageData['marketSourcesList'] = $sourcesList;
+        $pageData['marketSourcesFilter'] = ConfigManager::byKey('nextdom_market::show_sources_filters');
 
         // Affichage d'un message à un utilisateur
         if (isset($_GET['message'])) {
@@ -81,15 +74,15 @@ class MarketController extends BaseController
 
             $messageIndex = intval($_GET['message']);
             if ($messageIndex < count($messages)) {
-                \message::add('core', $messages[$messageIndex]);
+                MessageManager::add('core', $messages[$messageIndex]);
             }
         }
 
-        $pageContent['CSS_POOL'][] = '/public/css/market.css';
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/Market/market.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['CSS_POOL'][] = '/public/css/market.css';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/Market/market.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/market.html.twig', $pageContent);
+        return $render->get('/desktop/market.html.twig', $pageData);
     }
 
 }

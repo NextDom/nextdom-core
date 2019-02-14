@@ -25,18 +25,12 @@ namespace NextDom\Controller\Modal;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\UpdateManager;
 
 abstract class BaseAbstractModal
 {
-    public function __construct()
-    {
-        Status::initConnectState();
-    }
-
-    public abstract function get(Render $render): string;
+    public abstract static function get(Render $render): string;
 
     /**
      * Show repo modal from code
@@ -46,7 +40,7 @@ abstract class BaseAbstractModal
      * @return false|string
      * @throws CoreException If repo is disabled
      */
-    public function showRepoModal($type)
+    public static function showRepoModal($type)
     {
         $repoId = Utils::init('repo', 'market');
         $repo = UpdateManager::repoById($repoId);

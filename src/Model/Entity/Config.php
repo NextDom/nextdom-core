@@ -31,7 +31,7 @@ class Config
      *
      * @ORM\Column(name="value", type="text", length=65535, nullable=true)
      */
-    private $value;
+    protected $value;
 
     /**
      * @var string
@@ -40,7 +40,7 @@ class Config
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $key;
+    protected $key;
 
     /**
      * @var string
@@ -49,7 +49,7 @@ class Config
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    private $plugin;
+    protected $plugin;
 
     public function getValue()
     {

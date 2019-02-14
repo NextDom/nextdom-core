@@ -23,17 +23,9 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 
 class UpdateSend extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render update send modal
      *
@@ -42,8 +34,8 @@ class UpdateSend extends BaseAbstractModal
      * @return string
      * @throws \NextDom\Exceptions\CoreException
      */
-    public function get(Render $render): string
+    public static function get(Render $render): string
     {
-        return $this->showRepoModal('send');
+        return self::showRepoModal('send');
     }
 }

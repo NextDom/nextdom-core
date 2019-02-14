@@ -17,13 +17,17 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\Utils;
+use NextDom\Managers\DataStoreManager;
+use NextDom\Managers\EqLogicManager;
+
 /**
  * Eqreal
  *
  * @ORM\Table(name="eqReal", uniqueConstraints={@ORM\UniqueConstraint(name="name_UNIQUE", columns={"name"})}, indexes={@ORM\Index(name="logicalId", columns={"logicalId"}), @ORM\Index(name="type", columns={"type"}), @ORM\Index(name="logicalId_Type", columns={"logicalId", "type"}), @ORM\Index(name="name", columns={"name"})})
  * @ORM\Entity
  */
-class Eqreal
+class EqReal
 {
 
     /**
@@ -31,35 +35,35 @@ class Eqreal
      *
      * @ORM\Column(name="logicalId", type="string", length=45, nullable=true)
      */
-    private $logicalid;
+    protected $logicalId = '';
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=45, nullable=true)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=45, nullable=false)
      */
-    private $type;
+    protected $type;
 
     /**
      * @var string
      *
      * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
      */
-    private $configuration;
+    protected $configuration;
 
     /**
      * @var string
      *
      * @ORM\Column(name="cat", type="string", length=45, nullable=true)
      */
-    private $cat;
+    protected $cat;
 
     /**
      * @var integer
@@ -68,11 +72,42 @@ class Eqreal
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
-    public function getLogicalid()
+    public function remove()
     {
-        return $this->logicalid;
+        foreach ($this->getEqLogic() as $eqLogic) {
+            $eqLogic->remove();
+        }
+        DataStoreManager::removeByTypeLinkId('eqReal', $this->getId());
+        return \DB::remove($this);
+    }
+
+    public function save()
+    {
+        if ($this->getName() == '') {
+            throw new \Exception(\__('Le nom de l\'équipement réel ne peut pas être vide'));
+        }
+        return \DB::save($this);
+    }
+
+    /**
+     * @return EqLogic[]|null
+     * @throws \Exception
+     */
+    public function getEqLogic()
+    {
+        return EqLogicManager::byEqRealId($this->id);
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getLogicalId()
+    {
+        return $this->logicalId;
     }
 
     public function getName()
@@ -85,24 +120,20 @@ class Eqreal
         return $this->type;
     }
 
-    public function getConfiguration()
-    {
-        return $this->configuration;
-    }
-
     public function getCat()
     {
         return $this->cat;
     }
 
-    public function getId()
+    public function setId($id)
     {
-        return $this->id;
+        $this->id = $id;
+        return $this;
     }
 
-    public function setLogicalid($logicalid)
+    public function setLogicalId($logicalId)
     {
-        $this->logicalid = $logicalid;
+        $this->logicalId = $logicalId;
         return $this;
     }
 
@@ -118,22 +149,25 @@ class Eqreal
         return $this;
     }
 
-    public function setConfiguration($configuration)
-    {
-        $this->configuration = $configuration;
-        return $this;
-    }
-
     public function setCat($cat)
     {
         $this->cat = $cat;
         return $this;
     }
 
-    public function setId($id)
+    public function getConfiguration($_key = '', $_default = '')
     {
-        $this->id = $id;
+        return Utils::getJsonAttr($this->configuration, $_key, $_default);
+    }
+
+    public function setConfiguration($_key, $_value)
+    {
+        $this->configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
         return $this;
     }
 
+    public function getTableName()
+    {
+        return 'eqReal';
+    }
 }

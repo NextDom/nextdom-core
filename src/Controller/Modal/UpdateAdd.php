@@ -23,20 +23,12 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\AjaxManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UpdateManager;
 
 class UpdateAdd extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render update add modal
      *
@@ -47,11 +39,11 @@ class UpdateAdd extends BaseAbstractModal
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(Render $render): string
     {
-        $pageContent = [];
+        $pageData = [];
 
-        $pageContent['repoListType'] = [];
+        $pageData['repoListType'] = [];
         foreach (UpdateManager::listRepo() as $repoKey => $repoValue) {
             if ($repoValue['configuration'] === false) {
                 continue;
@@ -65,10 +57,10 @@ class UpdateAdd extends BaseAbstractModal
             if (ConfigManager::byKey($repoKey . '::enable') == 0) {
                 continue;
             }
-            $pageContent['repoListType'][$repoKey] = $repoValue['name'];
+            $pageData['repoListType'][$repoKey] = $repoValue['name'];
         }
 
-        $pageContent['repoListConfiguration'] = [];
+        $pageData['repoListConfiguration'] = [];
 
         foreach (UpdateManager::listRepo() as $repoKey => $repoValue) {
             if ($repoValue['configuration'] === false) {
@@ -80,11 +72,11 @@ class UpdateAdd extends BaseAbstractModal
             if (!isset($repoValue['configuration']['parameters_for_add'])) {
                 continue;
             }
-            $pageContent['repoListConfiguration'][$repoKey] = $repoValue;
+            $pageData['repoListConfiguration'][$repoKey] = $repoValue;
         }
-        $pageContent['ajaxToken'] = AjaxManager::getToken();
+        $pageData['ajaxToken'] = AjaxManager::getToken();
 
-        return $render->get('/modals/update.add.html.twig', $pageContent);
+        return $render->get('/modals/update.add.html.twig', $pageData);
     }
 
 }

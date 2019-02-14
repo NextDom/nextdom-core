@@ -24,18 +24,11 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\InteractQueryManager;
 
 class InteractQueryDisplay extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render interact query display modal
      *
@@ -47,21 +40,21 @@ class InteractQueryDisplay extends BaseAbstractModal
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(Render $render): string
     {
         $interactDefId = Utils::init('interactDef_id', '');
         if ($interactDefId == '') {
             throw new CoreException(__('Interact Def ID ne peut être vide'));
         }
-        $pageContent = [];
-        $pageContent['interactQueries'] = \interactQuery::byInteractDefId($interactDefId);
-        if (count($pageContent['interactQueries']) == 0) {
+        $pageData = [];
+        $pageData['interactQueries'] = InteractQueryManager::byInteractDefId($interactDefId);
+        if (count($pageData['interactQueries']) == 0) {
             throw new CoreException(__('Aucune phrase trouvée'));
         }
 
         Utils::sendVarToJS('interactDisplay_interactDef_id', $interactDefId);
 
-        return $render->get('/modals/interact.query.display.html.twig', $pageContent);
+        return $render->get('/modals/interact.query.display.html.twig', $pageData);
     }
 
 }

@@ -23,23 +23,16 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\MessageManager;
 
 class MessageController extends BaseController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render message page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of render page
      *
@@ -47,21 +40,20 @@ class MessageController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public static function get(Render $render, &$pageData): string
     {
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/message.js';
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/message.js';
-
-        $pageContent['messageSelectedPlugin'] = Utils::init('plugin');
-        if ($pageContent['messageSelectedPlugin'] != '') {
-            $pageContent['messagesList'] = \message::byPlugin($pageContent['messageSelectedPlugin']);
+        $pageData['messageSelectedPlugin'] = Utils::init('plugin');
+        if ($pageData['messageSelectedPlugin'] != '') {
+            $pageData['messagesList'] = MessageManager::byPlugin($pageData['messageSelectedPlugin']);
         } else {
-            $pageContent['messagesList'] = \message::all();
+            $pageData['messagesList'] = MessageManager::all();
         }
-        $pageContent['messagePluginsList'] = \message::listPlugin();
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['messagePluginsList'] = MessageManager::listPlugin();
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/message.html.twig', $pageContent);
+        return $render->get('/desktop/message.html.twig', $pageData);
     }
 
 

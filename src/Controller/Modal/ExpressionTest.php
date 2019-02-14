@@ -23,17 +23,9 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 
 class ExpressionTest extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render expression test modal
      *
@@ -44,7 +36,7 @@ class ExpressionTest extends BaseAbstractModal
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(Render $render): string
     {
         return $render->get('/modals/expression.test.html.twig');
     }

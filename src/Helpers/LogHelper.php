@@ -39,6 +39,7 @@ use Monolog\Handler\SyslogHandler;
 use Monolog\Handler\SyslogUdpHandler;
 use Monolog\Logger;
 use NextDom\Managers\ConfigManager;
+use NextDom\Managers\MessageManager;
 use SplFileObject;
 
 class LogHelper
@@ -135,9 +136,9 @@ class LogHelper
             try {
                 $level = Logger::toMonologLevel($_type);
                 if ($level == Logger::ERROR && self::getConfig('addMessageForErrorLog') == 1) {
-                    @\message::add($_log, $_message, '', $_logicalId);
+                    @MessageManager::add($_log, $_message, '', $_logicalId);
                 } elseif ($level > Logger::ALERT) {
-                    @\message::add($_log, $_message, '', $_logicalId);
+                    @MessageManager::add($_log, $_message, '', $_logicalId);
                 }
             } catch (\Exception $e) {
 

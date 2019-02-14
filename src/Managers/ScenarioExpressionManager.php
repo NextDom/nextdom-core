@@ -37,6 +37,7 @@ use NextDom\Helpers\DateHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\TranslateHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\Cmd;
 use NextDom\Model\Entity\Scenario;
@@ -185,7 +186,7 @@ class ScenarioExpressionManager
                 $replace[$value] = '';
             }
         }
-        $return['html'] = \translate::exec(Utils::templateReplace($replace, $return['html']), 'core/template/scenario/' . $expression . '.default');
+        $return['html'] = TranslateHelper::exec(Utils::templateReplace($replace, $return['html']), 'core/template/scenario/' . $expression . '.default');
         return $return;
     }
 

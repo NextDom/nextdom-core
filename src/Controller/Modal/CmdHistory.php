@@ -23,20 +23,11 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 
 class CmdHistory extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
-
     /**
      * Render command history modal (scenario)
      *
@@ -47,18 +38,17 @@ class CmdHistory extends BaseAbstractModal
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(Render $render): string
     {
-
-        $pageContent = [];
-        $pageContent['dates'] = array(
+        $pageData = [];
+        $pageData['dates'] = array(
             'start' => Utils::init('startDate', date('Y-m-d', strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d')))),
             'end' => Utils::init('endDate', date('Y-m-d')),
         );
-        $pageContent['derive'] = Utils::init('derive', 0);
-        $pageContent['step'] = Utils::init('step', 0);
-        $pageContent['id'] = Utils::init('id');
+        $pageData['derive'] = Utils::init('derive', 0);
+        $pageData['step'] = Utils::init('step', 0);
+        $pageData['id'] = Utils::init('id');
 
-        return $render->get('/modals/cmd.history.html.twig', $pageContent);
+        return $render->get('/modals/cmd.history.html.twig', $pageData);
     }
 }

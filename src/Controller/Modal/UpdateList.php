@@ -23,17 +23,9 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 
 class UpdateList extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render update list modal
      *
@@ -42,8 +34,8 @@ class UpdateList extends BaseAbstractModal
      * @return string
      * @throws \NextDom\Exceptions\CoreException
      */
-    public function get(Render $render): string
+    public static function get(Render $render): string
     {
-        return $this->showRepoModal('list');
+        return self::showRepoModal('list');
     }
 }

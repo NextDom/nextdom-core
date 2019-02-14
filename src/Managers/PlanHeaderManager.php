@@ -52,7 +52,7 @@ class PlanHeaderManager
 
     public static function all() {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '';
+        FROM ' . self::DB_CLASS_NAME;
         return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
     /**

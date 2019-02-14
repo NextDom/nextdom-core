@@ -18,29 +18,10 @@
 
 namespace NextDom\Enums;
 
-class AjaxActionsEnum extends Enum
+class ScenarioExpressionType extends Enum
 {
-
-    const CACHE = 'cache';
-    const CMD = 'cmd';
-    const CONFIG = 'config';
-    const CRON = 'cron';
-    const DATA_STORE = 'dataStore';
-    const EQLOGIC = 'eqLogic';
-    const EVENT = 'event';
-    const INTERACT = 'interact';
-    const LOG = 'log';
-    const MESSAGE = 'message';
-    const NETWORK = 'network';
-    const NEXTDOM = 'nextdom';
-    const OBJECT = 'object';
-    const PLAN = 'plan';
-    const PLUGIN = 'plugin';
-    const REPO = 'repo';
-    const REPORT = 'report';
-    const SCENARIO = 'scenario';
-    const UPDATE = 'update';
-    const USER = 'user';
-    const VIEW = 'view';
-
+    const ELEMENT = 'element';
+    const ACTION = 'action';
+    const CODE = 'code';
+    const CONDITION = 'condition';
 }
