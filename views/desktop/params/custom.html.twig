@@ -243,7 +243,7 @@
                             </div>
                         </div>
                         <div class="form-group col-md-4 col-md-offset-2 col-xs-12">
-                            <label class="control-label">{{ 'Couleur de fond des boutons d\'action' }}</label><i class="fas fa-info-circle pull-right fa-soft" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 16' }}">&nbsp;&nbsp;&nbsp;&nbsp;</i>
+                            <label class="control-label">{{ 'Couleur de fond des boutons d\'action' }}</label><i class="fas fa-info-circle pull-right fa-soft" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 16 : Fond des boutons dit d\'action, ex: Tester' }}">&nbsp;&nbsp;&nbsp;&nbsp;</i>
                             <div class="btn-group">
                                 <a class="btn btn-action bt_resetColor" data-l1key="theme:color16" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
                                 <div class="colorpicker-component colorpick input-group">
@@ -253,13 +253,30 @@
                             </div>
                         </div>
                         <div class="form-group col-md-4 col-md-offset-1 col-xs-12">
-                            <label class="control-label">{{ 'Couleur de fond des boutons d\'administration' }}</label><i class="fas fa-info-circle pull-right fa-soft" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 17' }}">&nbsp;&nbsp;&nbsp;&nbsp;</i>
+                            <label class="control-label">{{ 'Couleur de fond des boutons d\'administration' }}</label><i class="fas fa-info-circle pull-right fa-soft" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 17 : Fond des boutons raccourcis de la page administration' }}">&nbsp;&nbsp;&nbsp;&nbsp;</i>
                             <div class="btn-group">
                                 <a class="btn btn-action bt_resetColor" data-l1key="theme:color17" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
                                 <div class="colorpicker-component colorpick input-group">
                                     <input type="text" class="configKey form-control noSet" data-l1key="theme:color17" value="{{ Theme['color17'] }}"/>
                                     <span class="input-group-addon"><i></i></span>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-md-offset-2 col-xs-12">
+                            <label class="control-label">{{ 'Couleur de bordure des boutons' }}</label><i class="fas fa-info-circle pull-right fa-soft" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 20 : bouton d\'administration, bouton default' }}">&nbsp;&nbsp;&nbsp;&nbsp;</i>
+                            <div class="btn-group">
+                                <a class="btn btn-action bt_resetColor" data-l1key="theme:color20" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
+                                <div class="colorpicker-component colorpick input-group">
+                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color20" value="{{ Theme['color20'] }}"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-md-offset-1 col-xs-12">
+                            <label class="control-label">{{ 'Paramètre alpha des couleurs d\'alertes' }}</label><i class="fas fa-info-circle pull-right fa-soft" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 21 : Le paramètre alpha correspond à une transparence de fond' }}">&nbsp;&nbsp;&nbsp;&nbsp;</i>
+                            <div class="input-group">
+                                <input type="text" class="configKey form-control noSet" data-l1key="theme:color21" value="{{ Theme['color21'] }}"/>
+                                <span class="input-group-addon">{{ '%' }}</span>
                             </div>
                         </div>
                     </div>
@@ -337,7 +354,10 @@
                         </div>
                         <div class="form-group col-md-4 col-md-offset-2 col-xs-12">
                             <label class="control-label">{{ 'Durée des notifications' }}</label>
-                            <input type="text" class="configKey form-control" data-l1key="notify::timeout"/>
+                            <div class="input-group">
+                                <input type="text" class="configKey form-control" data-l1key="notify::timeout"/>
+                                <span class="input-group-addon">{{ 'secondes' }}</span>
+                            </div>
                         </div>
                     </div>
                 </fieldset>

@@ -36,7 +36,7 @@ use Symfony\Component\Routing\Loader\YamlFileLoader;
  */
 class PrepareView
 {
-    private static $NB_THEME_COLORS = 19;
+    private static $NB_THEME_COLORS = 21;
 
     /**
      * Get the controller data of the specified route
@@ -603,7 +603,7 @@ class PrepareView
         }
 
         if (!Status::isRescueMode()) {
-          
+
             if (Status::isConnected()) {
 
                 if (isset($_SESSION['user']) && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {

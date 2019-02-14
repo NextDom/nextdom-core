@@ -248,7 +248,6 @@ $('.bt_resetColor').on('click', function () {
 });
 
 $("input[name=theme]").click(function () {
-
     var radio = $(this).val();
     var config ="";
     if (radio == "dark"){
@@ -266,12 +265,14 @@ $("input[name=theme]").click(function () {
             'theme:color11' : '#2c3b41',
             'theme:color12' : '#e6e7e8',
             'theme:color13' : '#484c52',
-            'theme:color14' : '#2c3b41',
+            'theme:color14' : '#484c52',
             'theme:color15' : '#222d32',
-            'theme:color16' : '#999',
+            'theme:color16' : '#666666',
             'theme:color17' : '#2c3b41',
             'theme:color18' : '#e6e7e8',
             'theme:color19' : '#8aa4af',
+            'theme:color20' : '#222d32',
+            'theme:color21' : '50',
         }
     }
     if (radio == "white"){
@@ -295,6 +296,8 @@ $("input[name=theme]").click(function () {
             'theme:color17' : '#f4f4f4',
             'theme:color18' : '#555555',
             'theme:color19' : '#555555',
+            'theme:color20' : '#dddddd',
+            'theme:color21' : '100',
         }
     }
     if (radio == "mix"){
@@ -314,10 +317,12 @@ $("input[name=theme]").click(function () {
             'theme:color13' : '#ffffff',
             'theme:color14' : '#dddddd',
             'theme:color15' : '#fafafa',
-            'theme:color16' : '#999',
+            'theme:color16' : '#666666',
             'theme:color17' : '#f4f4f4',
             'theme:color18' : '#e6e7e8',
             'theme:color19' : '#8aa4af',
+            'theme:color20' : '#dddddd',
+            'theme:color21' : '100',
         }
     }
     nextdom.config.save({
