@@ -69,7 +69,7 @@ class AuthentificationHelper
             die();
         }
 
-        if (!isConnect() && isset($_COOKIE['registerDevice'])) {
+        if (!self::isConnected() && isset($_COOKIE['registerDevice'])) {
             if (self::loginByHash($_COOKIE['registerDevice'])) {
                 setcookie('registerDevice', $_COOKIE['registerDevice'], time() + 365 * 24 * 3600, "/", '', false, true);
                 if (isset($_COOKIE['nextdom_token'])) {
@@ -82,7 +82,7 @@ class AuthentificationHelper
             }
         }
 
-        if (!isConnect() && $configs['sso:allowRemoteUser'] == 1) {
+        if (!self::isConnected() && $configs['sso:allowRemoteUser'] == 1) {
             $user = UserManager::byLogin($_SERVER['REMOTE_USER']);
             if (is_object($user) && $user->getEnable() == 1) {
                 @session_start();
@@ -92,7 +92,7 @@ class AuthentificationHelper
             }
         }
 
-        if (!isConnect() && Utils::init('auth') != '') {
+        if (!self::isConnected() && Utils::init('auth') != '') {
             self::loginByHash(Utils::init('auth'));
         }
 

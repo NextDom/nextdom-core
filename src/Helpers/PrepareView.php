@@ -263,7 +263,7 @@ class PrepareView
 
         try {
             if (!NextDomHelper::isStarted()) {
-                $pageData['ALERT_MSG'] = \__('NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.');
+                $pageData['ALERT_MSG'] = __('NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.');
             }
             $pageData['content'] = self::getContent($pageData, $page, $currentPlugin);
         } catch (\Exception $e) {
@@ -318,7 +318,7 @@ class PrepareView
         $pageData['MENU'] = $render->get('commons/menu_rescue.html.twig');
 
         if (!NextDomHelper::isStarted()) {
-            $pageData['alertMsg'] = \__('NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.');
+            $pageData['alertMsg'] = __('NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.');
         }
         $pageData['CONTENT'] = self::getContent($pageData, $page, null);
 

@@ -55,20 +55,20 @@ class MarketController extends BaseController
 
         $pageData['JS_VARS']['github'] = ConfigManager::byKey('github::enable');
         $pageData['JS_VARS_RAW']['sourcesList'] = Utils::getArrayToJQueryJson($sourcesList);
-        $pageData['JS_VARS']['moreInformationsStr'] = \__("Plus d'informations");
-        $pageData['JS_VARS']['updateStr'] = \__("Mettre à jour");
-        $pageData['JS_VARS']['updateAllStr'] = \__("Voulez-vous mettre à jour tous les plugins ?");
-        $pageData['JS_VARS']['updateThisStr'] = \__("Voulez-vous mettre à jour ce plugin ?");
-        $pageData['JS_VARS']['installedPluginStr'] = \__("Plugin installé");
-        $pageData['JS_VARS']['updateAvailableStr'] = \__("Mise à jour disponible");
+        $pageData['JS_VARS']['moreInformationsStr'] = __("Plus d'informations");
+        $pageData['JS_VARS']['updateStr'] = __("Mettre à jour");
+        $pageData['JS_VARS']['updateAllStr'] = __("Voulez-vous mettre à jour tous les plugins ?");
+        $pageData['JS_VARS']['updateThisStr'] = __("Voulez-vous mettre à jour ce plugin ?");
+        $pageData['JS_VARS']['installedPluginStr'] = __("Plugin installé");
+        $pageData['JS_VARS']['updateAvailableStr'] = __("Mise à jour disponible");
         $pageData['marketSourcesList'] = $sourcesList;
         $pageData['marketSourcesFilter'] = ConfigManager::byKey('nextdom_market::show_sources_filters');
 
         // Affichage d'un message à un utilisateur
         if (isset($_GET['message'])) {
             $messages = [
-                \__('La mise à jour du plugin a été effecutée.'),
-                \__('Le plugin a été supprimé')
+                __('La mise à jour du plugin a été effecutée.'),
+                __('Le plugin a été supprimé')
             ];
 
             $messageIndex = intval($_GET['message']);

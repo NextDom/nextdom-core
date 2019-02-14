@@ -255,11 +255,11 @@ class ScenarioManager
             if (is_object($event)) {
                 $eventScenarios = self::byTrigger($event->getId());
                 $trigger = '#' . $event->getId() . '#';
-                $message = \__('Scénario exécuté automatiquement sur événement venant de : ') . $event->getHumanName();
+                $message = __('Scénario exécuté automatiquement sur événement venant de : ') . $event->getHumanName();
             } else {
                 $eventScenarios = self::byTrigger($event);
                 $trigger = $event;
-                $message = \__('Scénario exécuté sur événement : #') . $event . '#';
+                $message = __('Scénario exécuté sur événement : #') . $event . '#';
             }
             if (is_array($eventScenarios) && count($eventScenarios) > 0) {
                 foreach ($eventScenarios as $scenario) {
@@ -269,7 +269,7 @@ class ScenarioManager
                 }
             }
         } else {
-            $message = \__('Scénario exécuté automatiquement sur programmation');
+            $message = __('Scénario exécuté automatiquement sur programmation');
             $scheduledScenarios = self::schedule();
             $trigger = 'schedule';
             if (NextDomHelper::isDateOk()) {
@@ -410,7 +410,7 @@ class ScenarioManager
                         if ($needsReturn) {
                             $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Déclencheur du scénario', 'who' => '#' . $cmd_id . '#');
                         } else {
-                            LogHelper::add('scenario', 'error', \__('Un déclencheur du scénario : ') . $scenario->getHumanName() . \__(' est introuvable'));
+                            LogHelper::add('scenario', 'error', __('Un déclencheur du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
                         }
                     }
                 }
@@ -425,7 +425,7 @@ class ScenarioManager
                     if ($needsReturn) {
                         $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Utilisé dans le scénario', 'who' => '#' . $cmd_id . '#');
                     } else {
-                        LogHelper::add('scenario', 'error', \__('Une commande du scénario : ') . $scenario->getHumanName() . \__(' est introuvable'));
+                        LogHelper::add('scenario', 'error', __('Une commande du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
                     }
                 }
             }
@@ -455,9 +455,9 @@ class ScenarioManager
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 's') . '
                 FROM ' . self::DB_CLASS_NAME . ' s ';
 
-        if ($objectName == \__('Aucun')) {
+        if ($objectName == __('Aucun')) {
             $sql .= 'WHERE s.name=:scenario_name ';
-            if ($groupName == \__('Aucun')) {
+            if ($groupName == __('Aucun')) {
                 $sql .= 'AND (`group` IS NULL OR `group` = ""  OR `group` = "Aucun" OR `group` = "None")
                          AND s.object_id IS NULL';
             } else {
@@ -470,7 +470,7 @@ class ScenarioManager
             $sql .= 'INNER JOIN object ob ON s.object_id=ob.id
                      WHERE s.name = :scenario_name
                      AND ob.name = :object_name ';
-            if ($groupName == \__('Aucun')) {
+            if ($groupName == __('Aucun')) {
                 $sql .= 'AND (`group` IS NULL OR `group` = ""  OR `group` = "Aucun" OR `group` = "None")';
             } else {
                 $values['group_name'] = $groupName;
@@ -666,11 +666,11 @@ class ScenarioManager
         $tmp = NextDomHelper::getTmpFolder('market') . '/' . $market->getLogicalId() . '.zip';
         if (file_exists($tmp)) {
             if (!unlink($tmp)) {
-                throw new \Exception(__('Impossible de supprimer : ') . $tmp . \__('. Vérifiez les droits'));
+                throw new \Exception(__('Impossible de supprimer : ') . $tmp . __('. Vérifiez les droits'));
             }
         }
         if (!FileSystemHelper::createZip($moduleFile, $tmp)) {
-            throw new \Exception(__('Echec de création du zip. Répertoire source : ') . $moduleFile . \__(' / Répertoire cible : ') . $tmp);
+            throw new \Exception(__('Echec de création du zip. Répertoire source : ') . $moduleFile . __(' / Répertoire cible : ') . $tmp);
         }
         return $tmp;
     }

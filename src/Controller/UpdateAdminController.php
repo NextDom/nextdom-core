@@ -89,7 +89,7 @@ class UpdateAdminController extends BaseController
                 $bannedData['ip'] = $value['ip'];
                 $bannedData['startDate'] = date('Y-m-d H:i:s', $value['datetime']);
                 if ($pageData['adminConfigs']['security::bantime'] < 0) {
-                    $bannedData['endDate'] = \__('Jamais');
+                    $bannedData['endDate'] = __('Jamais');
                 } else {
                     $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageData['adminConfigs']['security::bantime']);
                 }

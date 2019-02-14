@@ -196,7 +196,7 @@ class Update
                         }
                         LogHelper::add('update', 'alert', __("OK\n"));
                     } else {
-                        throw new \Exception(__('Impossible de décompresser l\'archive zip : ') . $tmp . ' => ' . ZipErrorMessage($res));
+                        throw new \Exception(__('Impossible de décompresser l\'archive zip : ') . $tmp . ' => ' . Utils::getZipErrorMessage($res));
                     }
                 }
                 $this->postInstallUpdate($info);

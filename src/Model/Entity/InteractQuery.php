@@ -198,7 +198,7 @@ class InteractQuery
                     }
                     $tags = array();
                     if (isset($options['tags'])) {
-                        $options['tags'] = arg2array($options['tags']);
+                        $options['tags'] = Utils::arg2array($options['tags']);
                         foreach ($options['tags'] as $key => $value) {
                             $tags['#' . trim(trim($key), '#') . '#'] = ScenarioExpressionManager::setTags(trim($value));
                         }

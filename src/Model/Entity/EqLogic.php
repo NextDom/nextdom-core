@@ -1463,11 +1463,10 @@ class EqLogic
             }
             return false;
         }
-        if (!isConnect()) {
+        if (!AuthentificationHelper::isConnected()) {
             return false;
         }
-        if (
-            AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
+        if (AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
             return true;
         }
         if (strpos($_SESSION['user']->getRights('eqLogic' . $this->getId()), $_right) !== false) {

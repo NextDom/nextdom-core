@@ -66,7 +66,7 @@ class DashBoardController extends BaseController
         }
 
         if (!is_object($object)) {
-            throw new \Exception(\__('Aucun objet racine trouvé. Pour en créer un, allez dans dashboard -> <a href="/index.php?v=d&p=object">Liste objets et résumés</a>'));
+            throw new \Exception(__('Aucun objet racine trouvé. Pour en créer un, allez dans dashboard -> <a href="/index.php?v=d&p=object">Liste objets et résumés</a>'));
         }
         $pageData['JS_VARS']['rootObjectId'] = $object->getId();
 

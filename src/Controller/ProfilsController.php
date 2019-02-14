@@ -53,16 +53,16 @@ class ProfilsController extends BaseController
         $_SESSION['user']->refresh();
         @session_write_close();
         $pageData['profilsHomePageDesktop'] = array(
-            'core::dashboard' => \__('Dashboard'),
-            'core::view' => \__('Vue'),
-            'core::plan' => \__('Design'),
-            'core::plan3d' => \__('Design 3D'),
+            'core::dashboard' => __('Dashboard'),
+            'core::view' => __('Vue'),
+            'core::plan' => __('Design'),
+            'core::plan3d' => __('Design 3D'),
         );
         $pageData['profilsHomePageMobile'] = array(
-            'core::dashboard' => \__('Dashboard'),
-            'core::view' => \__('Vue'),
-            'core::plan' => \__('Design'),
-            'core::plan3d' => \__('Design 3D'),
+            'core::dashboard' => __('Dashboard'),
+            'core::view' => __('Vue'),
+            'core::plan' => __('Design'),
+            'core::plan3d' => __('Design 3D'),
         );
 
         $pluginManagerList = PluginManager::listPlugin();

@@ -50,5 +50,4 @@ class BackupController extends BaseController
 
         return Render::getInstance()->get('/desktop/tools/backup.html.twig', $pageData);
     }
-
 }

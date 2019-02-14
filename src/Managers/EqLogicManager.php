@@ -408,8 +408,8 @@ class EqLogicManager
                 $noReponseTimeLimit = $eqLogic->getTimeout();
                 if (count(MessageManager::byPluginLogicalId('core', $logicalId)) == 0) {
                     if ($eqLogic->getStatus('lastCommunication', date('Y-m-d H:i:s')) < date('Y-m-d H:i:s', strtotime('-' . $noReponseTimeLimit . ' minutes' . date('Y-m-d H:i:s')))) {
-                        $message = \__('Attention') . ' ' . $eqLogic->getHumanName();
-                        $message .= \__(' n\'a pas envoyé de message depuis plus de ') . $noReponseTimeLimit . \__(' min (vérifiez les piles)');
+                        $message = __('Attention') . ' ' . $eqLogic->getHumanName();
+                        $message .= __(' n\'a pas envoyé de message depuis plus de ') . $noReponseTimeLimit . __(' min (vérifiez les piles)');
                         $eqLogic->setStatus('timeout', 1);
                         if (ConfigManager::ByKey('alert::addMessageOnTimeout') == 1) {
                             MessageManager::add('core', $message, '', $logicalId);
@@ -420,7 +420,7 @@ class EqLogicManager
                                 $cmd = CmdManager::byId(str_replace('#', '', $id));
                                 if (is_object($cmd)) {
                                     $cmd->execCmd(array(
-                                        'title' => \__('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
+                                        'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
                                         'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
                                     ));
                                 }
@@ -471,7 +471,7 @@ class EqLogicManager
      */
     public static function byObjectNameEqLogicName($objectName, $eqLogicName)
     {
-        if ($objectName == \__('Aucun')) {
+        if ($objectName == __('Aucun')) {
             $values = [
                 'eqLogic_name' => $eqLogicName,
             ];
