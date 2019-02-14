@@ -193,28 +193,6 @@ class PrepareView
     }
 
     /**
-     * Get the content of the route
-     *
-     * @param Render $render
-     * @param array $pageData
-     * @param string $page
-     * @param $currentPlugin
-     *
-     * @return mixed
-     * @throws \Exception
-     */
-    private static function getContent(Render $render, array &$pageData, string $page, $currentPlugin)
-    {
-        if ($currentPlugin !== null && is_object($currentPlugin)) {
-            ob_start();
-            FileSystemHelper::includeFile('desktop', $page, 'php', $currentPlugin->getId(), true);
-            return ob_get_clean();
-        } else {
-            return self::getContentFromRoute('pages_routes.yml', $page, $render, $pageData);
-        }
-    }
-
-    /**
      * Full process render page
      *
      * @param array $configs
@@ -334,8 +312,6 @@ class PrepareView
         $render = Render::getInstance();
         $render->show('layouts/base_rescue.html.twig', $pageData);
     }
-
-
 
     /**
      * Get the current home link
@@ -604,7 +580,7 @@ class PrepareView
         }
 
         if (!Status::isRescueMode()) {
-          
+
             if (Status::isConnected()) {
 
                 if (isset($_SESSION['user']) && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
@@ -644,7 +620,7 @@ class PrepareView
         } else {
             $routeFileLocator = new FileLocator(NEXTDOM_ROOT . '/src');
             $yamlLoader = new YamlFileLoader($routeFileLocator);
-            $routes = $yamlLoader->load('routes.yml');
+            $routes = $yamlLoader->load('pages_routes.yml');
             $controllerRoute = $routes->get($page);
             if ($controllerRoute === null) {
                 Router::showError404AndDie();
@@ -692,47 +668,6 @@ class PrepareView
             echo '<div class="alert alert-danger div_alert">';
             echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
             echo '</div>';
-        }
-    }
-
-    public static function showModal()
-    {
-        AuthentificationHelper::init();
-        $plugin = Utils::init('plugin', '');
-        $modalCode = Utils::init('modal', '');
-        // Affichage d'un modal appartenant à un plugin
-        if ($plugin != '') {
-            try {
-                FileSystemHelper::includeFile('desktop', $modalCode, 'modal', $plugin, true);
-            } catch (\Exception $e) {
-                echo '<div class="alert alert-danger div_alert">';
-                echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
-                echo '</div>';
-            }
-        } // Affichage d'un modal du core
-        else {
-            $modalRoute = ModalsController::getRoute($modalCode);
-            if ($modalRoute === null) {
-                try {
-                    FileSystemHelper::includeFile('desktop', $modalCode, 'modal', Utils::init('plugin'), true);
-                } catch (\Exception $e) {
-                    echo '<div class="alert alert-danger div_alert">';
-                    echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
-                    echo '</div>';
-                }
-            } else {
-                $render = Render::getInstance();
-                try {
-                    $modal = new $modalRoute();
-                    echo $modal->get($render);
-                } catch (CoreException $ex) {
-                    echo '<div class="alert alert-danger div_alert">';
-                    echo '<p>Une erreur s\'est produite, impossible d\'afficher le contenu de la modale. Erreur : ' . $ex->getMessage() . '</p>';
-                    echo '</div>';
-                }
-
-
-            }
         }
     }
 
