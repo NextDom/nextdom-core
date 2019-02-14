@@ -34,9 +34,11 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Model\Entity\EqReal;
+
 class EqRealManager
 {
-    const CLASS_NAME = \eqReal::class;
+    const CLASS_NAME = EqReal::class;
     const DB_CLASS_NAME = '`eqReal`';
 
     private static function getClass($_id)
@@ -48,7 +50,7 @@ class EqRealManager
             'id' => $_id,
         );
         $sql = 'SELECT plugin, isEnable
-                FROM eqLogic
+                FROM `eqLogic`
                 WHERE eqReal_id = :id';
         $result = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
         $eqTyme_name = $result['plugin'];

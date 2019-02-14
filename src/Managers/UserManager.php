@@ -57,20 +57,20 @@ class UserManager
     {
         $sMdp = (!Utils::isSha512($_mdp)) ? Utils::sha512($_mdp) : $_mdp;
         if (ConfigManager::byKey('ldap:enable') == '1' && function_exists('ldap_connect')) {
-            LogHelper::add("connection", "debug", __('Authentification par LDAP', __FILE__));
+            LogHelper::add("connection", "debug", __('Authentification par LDAP'));
             $ad = self::connectToLDAP();
             if ($ad !== false) {
-                LogHelper::add("connection", "debug", __('Connection au LDAP OK', __FILE__));
+                LogHelper::add("connection", "debug", __('Connection au LDAP OK'));
                 $ad = ldap_connect(ConfigManager::byKey('ldap:host'), ConfigManager::byKey('ldap:port'));
                 ldap_set_option($ad, LDAP_OPT_PROTOCOL_VERSION, 3);
                 ldap_set_option($ad, LDAP_OPT_REFERRALS, 0);
                 if (!ldap_bind($ad, 'uid=' . $_login . ',' . ConfigManager::byKey('ldap:basedn'), $_mdp)) {
-                    LogHelper::add("connection", "info", __('Mot de passe erroné (', __FILE__) . $_login . ')');
+                    LogHelper::add("connection", "info", __('Mot de passe erroné (') . $_login . ')');
                     return false;
                 }
-                LogHelper::add("connection", "debug", __('Bind user OK', __FILE__));
+                LogHelper::add("connection", "debug", __('Bind user OK'));
                 $result = ldap_search($ad, ConfigManager::byKey('ldap::usersearch') . '=' . $_login . ',' . ConfigManager::byKey('ldap:basedn'), ConfigManager::byKey('ldap:filter'));
-                LogHelper::add("connection", "info", __('Recherche LDAP (', __FILE__) . $_login . ')');
+                LogHelper::add("connection", "info", __('Recherche LDAP (') . $_login . ')');
                 if ($result) {
                     $entries = ldap_get_entries($ad, $result);
                     if ($entries['count'] > 0) {
@@ -86,16 +86,16 @@ class UserManager
                             ->setPassword($sMdp)
                             ->setOptions('lastConnection', date('Y-m-d H:i:s'));
                         $user->save();
-                        LogHelper::add("connection", "info", __('Utilisateur créé depuis le LDAP : ', __FILE__) . $_login);
+                        LogHelper::add("connection", "info", __('Utilisateur créé depuis le LDAP : ') . $_login);
                         NextDomHelper::event('user_connect');
-                        LogHelper::add('event', 'info', __('Connexion de l\'utilisateur ', __FILE__) . $_login);
+                        LogHelper::add('event', 'info', __('Connexion de l\'utilisateur ') . $_login);
                         return $user;
                     } else {
                         $user = self::byLogin($_login);
                         if (is_object($user)) {
                             $user->remove();
                         }
-                        LogHelper::add("connection", "info", __('Utilisateur non autorisé à accéder à NextDom (', __FILE__) . $_login . ')');
+                        LogHelper::add("connection", "info", __('Utilisateur non autorisé à accéder à NextDom (') . $_login . ')');
                         return false;
                     }
                 } else {
@@ -103,11 +103,11 @@ class UserManager
                     if (is_object($user)) {
                         $user->remove();
                     }
-                    LogHelper::add("connection", "info", __('Utilisateur non autorisé à accéder à NextDom (', __FILE__) . $_login . ')');
+                    LogHelper::add("connection", "info", __('Utilisateur non autorisé à accéder à NextDom (') . $_login . ')');
                     return false;
                 }
             } else {
-                LogHelper::add("connection", "info", __('Impossible de se connecter au LDAP', __FILE__));
+                LogHelper::add("connection", "info", __('Impossible de se connecter au LDAP'));
             }
         }
         $user = self::byLoginAndPassword($_login, $sMdp);
@@ -121,7 +121,7 @@ class UserManager
             $user->setOptions('lastConnection', date('Y-m-d H:i:s'));
             $user->save();
             NextDomHelper::event('user_connect');
-            LogHelper::add('event', 'info', __('Connexion de l\'utilisateur ', __FILE__) . $_login);
+            LogHelper::add('event', 'info', __('Connexion de l\'utilisateur ') . $_login);
         }
         return $user;
     }
@@ -214,7 +214,7 @@ class UserManager
     public static function all()
     {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '';
+        FROM ' . self::DB_CLASS_NAME;
         return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 

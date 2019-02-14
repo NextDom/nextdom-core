@@ -19,6 +19,7 @@ namespace NextDom\Model\Entity;
 
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\ReportHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PlanManager;
 
@@ -63,17 +64,19 @@ class PlanHeader
 
     protected $_changed;
 
-    public function report($_format = 'pdf', $_parameters = array()) {
+    public function report($_format = 'pdf', $_parameters = array())
+    {
         $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=plan';
         $url .= '&plan_id=' . $this->getId();
         $url .= '&report=1';
         if (isset($_parameters['arg']) && trim($_parameters['arg']) != '') {
             $url .= '&' . $_parameters['arg'];
         }
-        return \report::generate($url, 'plan', $this->getId(), $_format, $_parameters);
+        return ReportHelper::generate($url, 'plan', $this->getId(), $_format, $_parameters);
     }
 
-    public function copy($_name) {
+    public function copy($_name)
+    {
         $planHeaderCopy = clone $this;
         $planHeaderCopy->setName($_name);
         $planHeaderCopy->setId('');
@@ -87,7 +90,8 @@ class PlanHeader
         return $planHeaderCopy;
     }
 
-    public function preSave() {
+    public function preSave()
+    {
         if (trim($this->getName()) == '') {
             throw new \Exception(__('Le nom du plan ne peut pas être vide'));
         }
@@ -105,16 +109,19 @@ class PlanHeader
         }
     }
 
-    public function save() {
+    public function save()
+    {
         \DB::save($this);
     }
 
-    public function remove() {
+    public function remove()
+    {
         NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'plan'));
         \DB::remove($this);
     }
 
-    public function displayImage() {
+    public function displayImage()
+    {
         if ($this->getImage('data') == '') {
             return '';
         }
@@ -138,11 +145,13 @@ class PlanHeader
     /**
      * @return Plan[]
      */
-    public function getPlan() {
+    public function getPlan()
+    {
         return PlanManager::byPlanHeaderId($this->getId());
     }
 
-    public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = 3) {
+    public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = 3)
+    {
         if (isset($_data['node']['plan' . $this->getId()])) {
             return null;
         }
@@ -166,56 +175,66 @@ class PlanHeader
         return null;
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function setId($_id) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->id,$_id);
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
         $this->id = $_id;
         return $this;
     }
 
-    public function setName($_name) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->name,$_name);
+    public function setName($_name)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
         $this->name = $_name;
         return $this;
     }
 
-    public function getImage($_key = '', $_default = '') {
+    public function getImage($_key = '', $_default = '')
+    {
         return Utils::getJsonAttr($this->image, $_key, $_default);
     }
 
-    public function setImage($_key, $_value) {
+    public function setImage($_key, $_value)
+    {
         $image = Utils::setJsonAttr($this->image, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed,$this->image,$image);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->image, $image);
         $this->image = $image;
         return $this;
     }
 
-    public function getConfiguration($_key = '', $_default = '') {
+    public function getConfiguration($_key = '', $_default = '')
+    {
         return Utils::getJsonAttr($this->configuration, $_key, $_default);
     }
 
-    public function setConfiguration($_key, $_value) {
+    public function setConfiguration($_key, $_value)
+    {
         if ($_key == 'accessCode' && $_value != '' && !Utils::isSha512($_value)) {
             $_value = Utils::sha512($_value);
         }
         $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed,$this->configuration,$configuration);
-        $this->configuration =$configuration;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
+        $this->configuration = $configuration;
         return $this;
     }
 
-    public function getChanged() {
+    public function getChanged()
+    {
         return $this->_changed;
     }
 
-    public function setChanged($_changed) {
+    public function setChanged($_changed)
+    {
         $this->_changed = $_changed;
         return $this;
     }

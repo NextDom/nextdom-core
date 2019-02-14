@@ -36,6 +36,7 @@ namespace NextDom\Managers;
 
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\SystemHelper;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
@@ -267,7 +268,7 @@ class CacheManager
         }
         try {
             $cacheFile = NEXTDOM_ROOT . '/var/cache.tar.gz';
-            $persisCmd = 'rm -rf ' . $cacheFile . ';cd ' . $cacheDir . ';tar cfz ' . $cacheFile . ' * 2>&1 > /dev/null;chmod 775 ' . $cacheFile . ';chown ' . \system::get('www-uid') . ':' . \system::get('www-gid') . ' ' . $cacheFile . ';chmod 777 -R ' . $cacheDir . ' 2>&1 > /dev/null';
+            $persisCmd = 'rm -rf ' . $cacheFile . ';cd ' . $cacheDir . ';tar cfz ' . $cacheFile . ' * 2>&1 > /dev/null;chmod 775 ' . $cacheFile . ';chown ' . SystemHelper::getWWWUid() . ':' . SystemHelper::getWWWGid() . ' ' . $cacheFile . ';chmod 777 -R ' . $cacheDir . ' 2>&1 > /dev/null';
             \com_shell::execute($persisCmd);
         } catch (\Exception $e) {
 

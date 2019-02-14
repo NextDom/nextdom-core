@@ -78,14 +78,31 @@ $(function () {
     }
 
     setup();
+
+    var page = document.location.toString().split('p=')[1].replace('#', '').split('&')[0];
+    var availableSearchPage = [
+        "plugin",
+        "dashboard",
+        "interact",
+        "scenario",
+        "object",
+        "realtime",
+        "display"
+    ];
+
+    if(jQuery.inArray(page, availableSearchPage) != -1) {
+        $("#generalSearch").prop('disabled', false);
+    } else {
+        $("#generalSearch").prop('disabled', true);
+    }
 });
 
 if ($('[role="dialog"] .fab').length == 0) {
-    $('.fab-filter').on('mouseleave', function () {
+    $('.fab-filter').on('mouseleave',function() {
         $('.blurPanel').removeClass('blur');
     });
 
-    $('.fab-filter').on('mouseenter', function () {
+    $('.fab-filter').on('mouseenter',function() {
         $('.blurPanel').addClass('blur');
     });
 } else {

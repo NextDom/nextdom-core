@@ -24,18 +24,10 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
 
 class ReportBug extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render report bug modal
      *
@@ -47,8 +39,9 @@ class ReportBug extends BaseAbstractModal
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(Render $render): string
     {
+
         if (ConfigManager::byKey('market::address') == '') {
             throw new CoreException(__('Aucune adresse pour le market n\'est renseignée'));
         }

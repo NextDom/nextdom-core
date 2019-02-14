@@ -17,7 +17,7 @@
 
 namespace NextDom\Helpers;
 
-use NextDom\Enums\ApiModeEnum;
+use NextDom\Enums\ApiMode;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 
@@ -60,14 +60,14 @@ class Api
      * @return bool
      * @throws \Exception
      */
-    public static function apiModeResult(string $mode = ApiModeEnum::API_ENABLE): bool
+    public static function apiModeResult(string $mode = ApiMode::API_ENABLE): bool
     {
         $result = true;
         switch ($mode) {
-            case ApiModeEnum::API_DISABLE:
+            case ApiMode::API_DISABLE:
                 $result = false;
                 break;
-            case ApiModeEnum::API_WHITEIP:
+            case ApiMode::API_WHITEIP:
                 $ip = NetworkHelper::getClientIp();
                 $find = false;
                 $whiteIps = explode(';', ConfigManager::byKey('security::whiteips'));
@@ -82,7 +82,7 @@ class Api
                     }
                 }
                 break;
-            case ApiModeEnum::API_LOCALHOST:
+            case ApiMode::API_LOCALHOST:
                 if (getClientIp() != '127.0.0.1') {
                     $result = false;
                 }

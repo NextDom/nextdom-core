@@ -406,13 +406,13 @@ class EqLogicManager
             $logicalId = 'noMessage' . $eqLogic->getId();
             if ($sendReport) {
                 $noReponseTimeLimit = $eqLogic->getTimeout();
-                if (count(\message::byPluginLogicalId('core', $logicalId)) == 0) {
+                if (count(MessageManager::byPluginLogicalId('core', $logicalId)) == 0) {
                     if ($eqLogic->getStatus('lastCommunication', date('Y-m-d H:i:s')) < date('Y-m-d H:i:s', strtotime('-' . $noReponseTimeLimit . ' minutes' . date('Y-m-d H:i:s')))) {
                         $message = \__('Attention') . ' ' . $eqLogic->getHumanName();
                         $message .= \__(' n\'a pas envoyé de message depuis plus de ') . $noReponseTimeLimit . \__(' min (vérifiez les piles)');
                         $eqLogic->setStatus('timeout', 1);
                         if (ConfigManager::ByKey('alert::addMessageOnTimeout') == 1) {
-                            \message::add('core', $message, '', $logicalId);
+                            MessageManager::add('core', $message, '', $logicalId);
                         }
                         $cmds = explode(('&&'), ConfigManager::byKey('alert::timeoutCmd'));
                         if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::timeoutCmd')) != '') {
@@ -429,7 +429,7 @@ class EqLogicManager
                     }
                 } else {
                     if ($eqLogic->getStatus('lastCommunication', date('Y-m-d H:i:s')) > date('Y-m-d H:i:s', strtotime('-' . $noReponseTimeLimit . ' minutes' . date('Y-m-d H:i:s')))) {
-                        foreach (\message::byPluginLogicalId('core', $logicalId) as $message) {
+                        foreach (MessageManager::byPluginLogicalId('core', $logicalId) as $message) {
                             $message->remove();
                         }
                         $eqLogic->setStatus('timeout', 0);

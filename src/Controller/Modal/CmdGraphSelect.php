@@ -23,18 +23,10 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\CmdManager;
 
 class CmdGraphSelect extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render command graph select modal (scenario)
      *
@@ -45,11 +37,10 @@ class CmdGraphSelect extends BaseAbstractModal
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(Render $render): string
     {
-
-        $pageContent = [];
-        $pageContent['cmdData'] = [];
+        $pageData = [];
+        $pageData['cmdData'] = [];
         foreach (CmdManager::all() as $cmd) {
             $eqLogic = $cmd->getEqLogic();
             if (!is_object($eqLogic)) {
@@ -65,9 +56,9 @@ class CmdGraphSelect extends BaseAbstractModal
                 }
                 $data['cmd'] = $cmd;
                 $data['eqLogic'] = $eqLogic;
-                $pageContent['cmdList'][] = $data;
+                $pageData['cmdList'][] = $data;
             }
         }
-        return $render->get('/modals/cmd.graph.select.html.twig', $pageContent);
+        return $render->get('/modals/cmd.graph.select.html.twig', $pageData);
     }
 }

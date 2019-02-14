@@ -30,17 +30,11 @@ use NextDom\Managers\ViewManager;
 
 class ViewController extends BaseController
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render view page
      *
      * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of view page
      *
@@ -49,14 +43,13 @@ class ViewController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public static function get(Render $render, &$pageData): string
     {
-
-        $pageContent['viewsList'] = ViewManager::all();
-        $pageContent['viewHideList'] = true;
-        $pageContent['viewIsAdmin'] = Status::isConnectAdmin();
-        $pageContent['viewDefault'] = $_SESSION['user']->getOptions('displayViewByDefault');
-        $pageContent['viewNoControl'] = Utils::init('noControl');
+        $pageData['viewsList'] = ViewManager::all();
+        $pageData['viewHideList'] = true;
+        $pageData['viewIsAdmin'] = Status::isConnectAdmin();
+        $pageData['viewDefault'] = $_SESSION['user']->getOptions('displayViewByDefault');
+        $pageData['viewNoControl'] = Utils::init('noControl');
 
         $currentView = null;
         if (Utils::init('view_id') == '') {
@@ -65,8 +58,8 @@ class ViewController extends BaseController
                 $currentView = ViewManager::byId($_SESSION['user']->getOptions('defaultDesktopView'));
             }
 
-            if (!is_object($currentView) && is_array($pageContent['viewsList']) && count($pageContent['viewsList']) > 0) {
-                $currentView = $pageContent['viewsList'][0];
+            if (!is_object($currentView) && is_array($pageData['viewsList']) && count($pageData['viewsList']) > 0) {
+                $currentView = $pageData['viewsList'][0];
             }
         } else {
             $currentView = ViewManager::byId(init('view_id'));
@@ -79,15 +72,15 @@ class ViewController extends BaseController
         if (!is_object($currentView)) {
             throw new CoreException(__('Aucune vue n\'existe, cliquez <a href="index.php?v=d&p=view_edit">ici</a> pour en créer une.'));
         }
-        $pageContent['viewCurrent'] = $currentView;
+        $pageData['viewCurrent'] = $currentView;
 
         if ($_SESSION['user']->getOptions('displayViewByDefault') == 1 && Utils::init('report') != 1) {
-            $pageContent['viewHideList'] = false;
+            $pageData['viewHideList'] = false;
         }
-        $pageContent['JS_VARS']['view_id'] = $currentView->getId();
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/view.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_VARS']['view_id'] = $currentView->getId();
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/view.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/view.html.twig', $pageContent);
+        return $render->get('/desktop/view.html.twig', $pageData);
     }
 }
