@@ -282,11 +282,6 @@
   border-color: {{ COLOR9 }} !important;
 }
 
-/* Listes */
-.label-list, .label-view, .label-log{
-  background-color: {{ COLOR9 }} !important;
-}
-
 
 /* ########################################################################################################### */
 /* COLOR10 = Couleur de fond secondaire (titres, action-bar, footer, onglets, titre modale, boîtes d'infos...) */
@@ -326,7 +321,9 @@ body, .main-footer{
 .label-list>a:hover, .label-view>a:hover, .label-log>a:hover {
   background-color: {{ COLOR10 }} !important;
 }
-
+.label-list:hover, .label-view:hover, .label-log:hover {
+  background-color: {{ COLOR10 }} !important;
+}
 
 /* #################################################################### */
 /* COLOR11 = Couleur de fond des titres (légendes, tableaux, unités...) */
@@ -339,6 +336,11 @@ body, .main-footer{
 
 /* Legendes de sections */
 legend {
+  background-color: {{ COLOR11 }} !important;
+}
+
+/* Code mirror */
+.CodeMirror-scroll{
   background-color: {{ COLOR11 }} !important;
 }
 
@@ -360,6 +362,11 @@ pre {
   background-color: {{ COLOR11 }} !important;
 }
 
+/* jstree */
+.jstree-hovered, .jstree-clicked {
+  background-color: {{ COLOR11 }} !important;
+}
+
 
 /* #################################################################################################### */
 /* COLOR12 = Couleur des textes (contenu, titres, footer, bouton d'administration, unités, légendes...) */
@@ -372,6 +379,9 @@ body, h1, h2, h3, h4, h5, h6  {
   color: {{ COLOR12 }} !important;
 }
 legend {
+  color: {{ COLOR12 }} !important;
+}
+.CodeMirror-scroll{
   color: {{ COLOR12 }} !important;
 }
 .footer-center, .text-muted {
@@ -405,6 +415,16 @@ pre {
   color: {{ COLOR12 }} !important;
 }
 
+/* Code mirror */
+.CodeMirror-gutters {
+  color: {{ COLOR12 }} !important;
+}
+
+/* Listes */
+.label-list, .label-view, .label-log{
+  color: {{ COLOR12 }} !important;
+}
+
 
 /* ############################################################################## */
 /* COLOR13 = Couleur de fond des inputs (champs de saisie, listes déroulantes...) */
@@ -425,6 +445,15 @@ pre {
   border-color: {{ COLOR13 }} !important;
 }
 
+/* Listes */
+.label-list, .label-view, .label-log{
+  background-color: {{ COLOR13 }} !important;
+}
+
+/* Code mirror */
+.CodeMirror-gutters {
+  background-color: {{ COLOR13 }} !important;
+}
 
 /* ####################################################################################### */
 /* COLOR14 = Couleur de bordure (inputs, légendes, tableaux et bouton d'administration...) */
@@ -461,6 +490,14 @@ legend {
 /* Texte area */
 pre {
   border-color: {{ COLOR14 }} !important;
+}
+
+/* Listes */
+.left-border {
+  border-left: solid 1px {{ COLOR14 }} !important;
+}
+.right-border {
+  border-right: solid 1px {{ COLOR14 }} !important;
 }
 
 /* #################################################################################### */

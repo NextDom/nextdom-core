@@ -37,13 +37,13 @@
  $('.bt_systemCommand').off('click').on('click',function(){
      var command = $(this).attr('data-command');
      $('#pre_commandResult').empty();
-     if($(this).parent().hasClass('list-group-item-danger')){
-         bootbox.confirm('{{Etes-vous sûr de vouloir éxécuter cette commande : }}<strong>'+command+'</strong> ? {{Celle-ci est classé en dangereuse}}', function (result) {
+     if($(this).hasClass('list-group-item-danger')){
+         bootbox.confirm('{{Etes-vous sûr de vouloir éxécuter cette commande : }}<strong>'+command+'</strong> ? {{Celle-ci est classée en dangereuse...}}', function (result) {
              if (result) {
                  nextdom.ssh({
                      command : command,
                      success : function(log){
-                         $('#h3_executeCommand').empty().append('{{Commande : }}'+command);
+                         $('#in_specificCommand').value(command);
                          $('#pre_commandResult').append(log);
                      }
                  })
@@ -53,7 +53,7 @@
          nextdom.ssh({
              command : command,
              success : function(log){
-                 $('#h3_executeCommand').empty().append('{{Commande : }}'+command);
+                 $('#in_specificCommand').value(command);
                  $('#pre_commandResult').append(log);
              }
          })
@@ -64,12 +64,10 @@
  $('#ul_listSystemHistory').off('click','.bt_systemCommand').on('click','.bt_systemCommand',function(){
      var command = $(this).attr('data-command');
      $('#pre_commandResult').empty();
-     $('#div_commandResult').empty();
      nextdom.ssh({
          command : command,
          success : function(log){
-             $('#h3_executeCommand').empty().append('{{Commande : }}'+command);
-             $('#in_specificCommand').value(command)
+             $('#in_specificCommand').value(command);
              $('#pre_commandResult').append(log);
          }
      })
@@ -81,9 +79,8 @@
      nextdom.ssh({
          command : command,
          success : function(log){
-             $('#h3_executeCommand').empty().append('{{Commande : }}'+command);
              $('#pre_commandResult').append(log);
-             $('#ul_listSystemHistory').prepend('<li class="cursor list-group-item list-group-item-success"><a class="bt_systemCommand" data-command="'+command+'">'+command+'</a></li>');
+             $('#ul_listSystemHistory').prepend('<li class="cursor list-group-item"><a class="bt_systemCommand label-list" data-command="'+command+'">'+command+'</a></li>');
              var kids = $('#ul_listSystemHistory').children();
              if (kids.length >= 10) {
                  kids.last().remove();
@@ -99,9 +96,8 @@
          nextdom.ssh({
              command : command,
              success : function(log){
-                 $('#h3_executeCommand').empty().append('{{Commande : }}'+command);
                  $('#pre_commandResult').append(log);
-                 $('#ul_listSystemHistory').prepend('<li class="cursor list-group-item list-group-item-success"><a class="bt_systemCommand" data-command="'+command+'">'+command+'</a></li>');
+                 $('#ul_listSystemHistory').prepend('<li class="cursor list-group-item"><a class="bt_systemCommand label-list" data-command="'+command+'">'+command+'</a></li>');
                  var kids = $('#ul_listSystemHistory').children();
                  if (kids.length >= 10) {
                      kids.last().remove();
@@ -109,4 +105,8 @@
              }
          })
      }
+ });
+
+ $('#bt_resetSpecifiCommand').off('click').on('click',function(){
+   $('#in_specificCommand').value('');
  });

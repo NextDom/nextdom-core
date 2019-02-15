@@ -40,10 +40,10 @@ class DatabaseController extends BaseController
      */
     public static function get(Render $render, &$pageData): string
     {
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/database.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/osdb/database.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/database.html.twig', $pageData);
+        return $render->get('/desktop/tools/osdb/database.html.twig', $pageData);
     }
 
 }

@@ -87,7 +87,11 @@ $(function () {
         "scenario",
         "object",
         "realtime",
-        "display"
+        "display",
+        "database",
+        "note",
+        "system",
+        "log",
     ];
 
     if(jQuery.inArray(page, availableSearchPage) != -1) {

@@ -82,7 +82,7 @@ $('#bt_removeBackgroundImage').off('click').on('click', function () {
 function loadObjectConfiguration(_id){
     try {
         $('#bt_uploadImage').fileupload('destroy');
-        $('#bt_uploadImage').parent().html('<i class="fas fa-cloud-upload-alt">&nbsp;&nbsp;</i>{{Envoyer}}<input  id="bt_uploadImage" type="file" name="file" style="display: inline-block;">');
+        $('#bt_uploadImage').parent().html('<i class="fas fa-cloud-upload-alt spacing-right"></i>{{Envoyer}}<input  id="bt_uploadImage" type="file" name="file" style="display: inline-block;">');
     }catch(error) {
 
     }

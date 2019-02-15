@@ -190,6 +190,66 @@ function generalSearchOnPages(value) {
 
             $('.displayListContainer').packery();
             break;
+
+        case 'database':
+            if (search === '') {
+                $('.list-group-item').show();
+            }
+            else {
+                $('.list-group-item').hide();
+                $('.list-group-item .label-list').each(function () {
+                    var listTitle = $(this).text().toLowerCase();
+                    if (listTitle.indexOf(search) !== -1) {
+                        $(this).closest('.list-group-item').show();
+                    }
+                });
+            }
+            break;
+
+    case 'system':
+            if (search === '') {
+                $('.list-group-item').show();
+            }
+            else {
+                $('.list-group-item').hide();
+                $('.list-group-item .label-list').each(function () {
+                    var listTitle = $(this).text().toLowerCase();
+                    if (listTitle.indexOf(search) !== -1) {
+                        $(this).closest('.list-group-item').show();
+                    }
+                });
+            }
+            break;
+
+      case 'note':
+          if (search === '') {
+              $('.li_noteDisplay').show();
+          }
+          else {
+              $('.li_noteDisplay').hide();
+              $('.li_noteDisplay .label-list').each(function () {
+                  var listTitle = $(this).text().toLowerCase();
+                  if (listTitle.indexOf(search) !== -1) {
+                      $(this).closest('.li_noteDisplay').show();
+                  }
+              });
+          }
+          break;
+
+      case 'log':
+          if (search === '') {
+              $('.label-log').show();
+          }
+          else {
+              $('.label-log').hide();
+              $('.label-log').each(function () {
+                  var listTitle = $(this).text().toLowerCase();
+                  if (listTitle.indexOf(search) !== -1) {
+                      $(this).show();
+                  }
+              });
+          }
+          break;
     }
 };
 

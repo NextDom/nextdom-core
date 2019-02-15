@@ -50,10 +50,10 @@ class EditorController extends BaseController
         foreach ($lsNextDomRoot as $folder) {
             $pageData['editorFolders'][] = $folder;
         }
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/editor.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/osdb/editor.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
 
-        return $render->get('/desktop/editor.html.twig', $pageData);
+        return $render->get('/desktop/tools/osdb/editor.html.twig', $pageData);
     }
 }
