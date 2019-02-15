@@ -66,7 +66,8 @@ class CronManager
      *
      * @param int $cronId
      *
-     * @return object
+     * @return Cron
+     *
      * @throws \Exception
      */
     public static function byId($cronId)

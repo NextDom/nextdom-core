@@ -3,12 +3,15 @@ common:
   nok: NOK
   back: Retour
   disabled: Désactivé
+  error: Erreur
+  error-b: "[Erreur] "
   in-progress: En cours
   version: Version
   next: Suivant
   previous: Précédent
   ignore: Ignorer
   finish: Terminer
+  not-found: Non trouvé
 
 connection:
   home-msg: Connectez-vous pour accéder à votre session...
@@ -34,10 +37,13 @@ core:
 
 scripts:
   error: "Erreur : "
+  error-on: "Erreur sur "
   scenario: "Scenario : "
   scenario-not-found: "Scénario non trouvé. Vérifiez ID : "
   start-in-background: "Lancement en arrière-plan de : "
   launched-background-not-found: "Lancement en arrière-plan non trouvé : "
+  cron-class-or-function-not-found: [Erreur] Classe ou fonction non trouvée
+  cron-disable: Tous les crons sont actuellement désactivés
 
 health:
   apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (NextDom ne peut marcher avec). Voir <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\">ici</a>

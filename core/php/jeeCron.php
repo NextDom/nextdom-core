@@ -16,76 +16,82 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * ???
+ *
+ * Usage :
+ *  - jeeScenarioExpression key=KEY
+ *
+ * Parameters :
+ *  - KEY : ???
+ */
+
+namespace NextDom;
+
+use NextDom\Enums\CronState;
+use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\LogHelper;
+use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\ScriptHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\ConfigManager;
+use NextDom\Managers\CronManager;
+use NextDom\Model\Entity\Cron;
 
 const MAX_DURATION_TIME = 59;
 const GARBAGE_COLLECTOR_LIMIT = 30;
 
-// Check if the script as started from command line
-if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SERVER['argc'])) {
-    header("Statut: 404 Page non trouvée");
-    header('HTTP/1.0 404 Not Found');
-    $_SERVER['REDIRECT_STATUS'] = 404;
-    echo "<h1>404 Non trouvé</h1>";
-    echo "La page que vous demandez ne peut être trouvée.";
-    exit();
-}
+require_once __DIR__ . "/../../src/core.php";
 
-// Command line args are stored in $_GET var
-// php jeeCron.php test=1 > $_GET['test'] = 1
-if (isset($argv)) {
-    foreach ($argv as $arg) {
-        $argList = explode('=', $arg);
-        if (isset($argList[0]) && isset($argList[1])) {
-            $_GET[$argList[0]] = $argList[1];
-        }
-    }
-}
-
-require_once __DIR__ . "/core.inc.php";
+ScriptHelper::cliOrCrash();
+ScriptHelper::parseArgumentsToGET();
 
 /**
  * Set cron in error and stop the execution of the script
  *
- * @param \cron $cron Cron object
+ * @param Cron $cron Cron object
  * @param string $msg Message to log
  * @param int $startTime Start time of the cron
+ * @throws \Exception
  */
 function setCronErrorAndDie($cron, $msg, $startTime)
 {
-    $cron->setState('Not found');
+    $cron->setState(CronState::NOT_FOUND);
     $cron->setPID();
     $cron->setCache('runtime', strtotime('now') - $startTime);
-    log::add('cron', 'error', __($msg) . $cron->getName());
+    LogHelper::addError('cron', __($msg) . $cron->getName());
     die();
 }
 
 /**
  * Set cron error on exception
  *
- * @param \cron $cron Cron object
- * @param Exception $e Exception informations
+ * @param Cron $cron Cron object
+ * @param \Exception $e Exception informations
  * @param string $logChannel Target log channel
  * @param int $startTime Start time of the cron
+ * @throws \Exception
  */
-function setCronErrorOnException($cron, $e, $logChannel, $startTime) {
+function setCronErrorOnException($cron, $e, $logChannel, $startTime)
+{
     $cron->setState('error');
     $cron->setPID('');
     $cron->setCache('runtime', strtotime('now') - $startTime);
-    $logicalId = config::genKey();
+    $logicalId = ConfigManager::genKey();
     if ($e->getCode() != 0) {
         $logicalId = $cron->getName() . '::' . $e->getCode();
     }
-    echo '[Erreur] ' . $cron->getName() . ' : ' . log::exception($e);
-    log::add($logChannel, 'error', __('Erreur sur ') . $cron->getName() . ' : ' . log::exception($e), $logicalId);
+    echo __('common.error-b') . $cron->getName() . ' : ' . LogHelper::exception($e);
+    LogHelper::addError($logChannel, __('scripts.error-on') . $cron->getName() . ' : ' . LogHelper::exception($e), $logicalId);
 }
 
 /**
  * Start cron where the target is a class method
  *
- * @param \cron $cron Cron object
+ * @param Cron $cron Cron object
  * @param array $option Execution option
  * @param int $startTime Start time.
+ * @throws \Exception
  */
 function startCronTargetMethod($cron, $option, $startTime)
 {
@@ -125,9 +131,9 @@ function startCronTargetMethod($cron, $option, $startTime)
                 }
             }
         } else {
-            setCronErrorAndDie($cron, '[Erreur] Classe ou fonction non trouvée ', $startTime);
+            setCronErrorAndDie($cron, 'scripts.cron-class-or-function-not-found', $startTime);
         }
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         setCronErrorOnException($cron, $e, $classToCall, $startTime);
     }
 }
@@ -135,9 +141,10 @@ function startCronTargetMethod($cron, $option, $startTime)
 /**
  * Start cron where the target is a global function
  *
- * @param \cron $cron Cron object
+ * @param Cron $cron Cron object
  * @param array $option Execution option
  * @param int $startTime Start time.
+ * @throws \Exception
  */
 function startCronTargetFunction($cron, $option, $startTime)
 {
@@ -176,9 +183,9 @@ function startCronTargetFunction($cron, $option, $startTime)
                 }
             }
         } else {
-            setCronErrorAndDie($cron, '[Erreur] Non trouvée ', $startTime);
+            setCronErrorAndDie($cron, __('common.error-b') . __('common.not-found'), $startTime);
         }
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         setCronErrorOnException($cron, $e, $functionToCall, $startTime);
     }
 }
@@ -187,13 +194,14 @@ function startCronTargetFunction($cron, $option, $startTime)
  * Start single cron job
  *
  * @param int $cronId Id of the cron
+ * @throws CoreException
  */
 function startSingleCron($cronId)
 {
-    if (nextdom::isStarted() && config::byKey('enableCron', 'core', 1, true) == 0) {
-        die(__('Tous les crons sont actuellement désactivés'));
+    if (NextDomHelper::isStarted() && ConfigManager::byKey('enableCron', 'core', 1, true) == 0) {
+        die(__('scripts.cron-disable'));
     }
-    $cron = cron::byId($cronId);
+    $cron = CronManager::byId($cronId);
     if (!is_object($cron)) {
         die();
     }
@@ -213,7 +221,7 @@ function startSingleCron($cronId)
         $cron->remove(false);
     } else {
         if ($cron->refresh()) {
-            $cron->setState('stop');
+            $cron->setState(CronState::STOP);
             $cron->setPID();
             $cron->setCache('runtime', strtotime('now') - $startTime);
         }
@@ -225,18 +233,18 @@ function startSingleCron($cronId)
  */
 function startAllCrons()
 {
-    if (cron::jeeCronRun()) {
+    if (CronManager::jeeCronRun()) {
         die();
     }
-    $started = nextdom::isStarted();
+    $started = NextDomHelper::isStarted();
 
     set_time_limit(MAX_DURATION_TIME);
-    cron::setPidFile();
+    CronManager::setPidFile();
 
-    if ($started && config::byKey('enableCron', 'core', 1, true) == 0) {
-        die(__('Tous les crons sont actuellement désactivés'));
+    if ($started && ConfigManager::byKey('enableCron', 'core', 1, true) == 0) {
+        die(__('scripts.cron-disable'));
     }
-    foreach (cron::all() as $cron) {
+    foreach (CronManager::all() as $cron) {
         try {
             if ($cron->getDeamon() == 1) {
                 $cron->refresh();
@@ -249,28 +257,28 @@ function startAllCrons()
                 continue;
             }
             $duration = strtotime('now') - strtotime($cron->getLastRun());
-            if ($cron->getEnable() == 1 && $cron->getState() != 'run' && $cron->getState() != 'starting' && $cron->getState() != 'stoping') {
+            if ($cron->getEnable() == 1 && $cron->getState() != CronState::RUN && $cron->getState() != CronState::STARTING && $cron->getState() != CronState::STOPPING) {
                 if ($cron->isDue()) {
                     $cron->start();
                 }
             }
             // Stop cron task if timeout is reached
-            if ($cron->getState() == 'run' && ($duration / 60) >= $cron->getTimeout()) {
+            if ($cron->getState() == CronState::RUN && ($duration / 60) >= $cron->getTimeout()) {
                 $cron->stop();
             }
             switch ($cron->getState()) {
-                case 'starting':
+                case CronState::STARTING:
                     $cron->run();
                     break;
-                case 'stoping':
+                case CronState::STOPPING:
                     $cron->halt();
                     break;
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             if ($cron->getOnce() != 1) {
                 $cron->setState('error');
                 $cron->setPID('');
-                log::add('cron', 'error', __('[Erreur master] ', __FILE__) . $cron->getName() . ' : ' . $e->getMessage());
+                LogHelper::addError('cron', __('common.error-b') . $cron->getName() . ' : ' . $e->getMessage());
             }
         }
     }

@@ -28,33 +28,14 @@
 
 namespace NextDom;
 
+use NextDom\Helpers\ScriptHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 
-/**
- * Block this script if open from webpage
- */
-if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SERVER['argc'])) {
-    header("Statut: 404 Page non trouvée");
-    header('HTTP/1.0 404 Not Found');
-    $_SERVER['REDIRECT_STATUS'] = 404;
-    echo '<h1>' . __('core.error-404') . '</h1>';
-    exit();
-}
-
 require_once __DIR__ . "/../../src/core.php";
 
-/**
- * Parse arguments
- */
-if (isset($argv)) {
-    foreach ($argv as $arg) {
-        $argList = explode('=', $arg);
-        if (isset($argList[0]) && isset($argList[1])) {
-            $_GET[$argList[0]] = $argList[1];
-        }
-    }
-}
+ScriptHelper::cliOrCrash();
+ScriptHelper::parseArgumentsToGET();
 
 $key = Utils::init('key');
 $cache = CacheManager::byKey($key)->getValue();

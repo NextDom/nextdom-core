@@ -35,34 +35,15 @@ namespace NextDom;
 
 use NextDom\Enums\ScenarioState;
 use NextDom\Helpers\LogHelper;
+use NextDom\Helpers\ScriptHelper;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Helpers\Utils;
 
-/**
- * Block this script if open from webpage
- */
-if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SERVER['argc'])) {
-    header("Statut: 404 Page non trouvée");
-    header('HTTP/1.0 404 Not Found');
-    $_SERVER['REDIRECT_STATUS'] = 404;
-    echo '<h1>' . __('core.error-404') . '</h1>';
-    exit();
-}
-
 require_once __DIR__ . "/../../src/core.php";
 
-/**
- * Parse arguments
- */
-if (isset($argv)) {
-    foreach ($argv as $arg) {
-        $argList = explode('=', $arg);
-        if (isset($argList[0]) && isset($argList[1])) {
-            $_GET[$argList[0]] = $argList[1];
-        }
-    }
-}
+ScriptHelper::cliOrCrash();
+ScriptHelper::parseArgumentsToGET();
 
 $scenarioId = Utils::init('scenario_id');
 if (Utils::init('scenarioElement_id') != '') {
@@ -97,7 +78,7 @@ if (Utils::init('scenarioElement_id') != '') {
             }
         }
         $scenario->execute(Utils::init('trigger'), Utils::init('message'));
-    } catch (Exception $e) {
+    } catch (\Throwable $e) {
         LogHelper::addError('scenario', __('scripts.scenario') . $scenario->getHumanName() . '. ' . __('scripts.error') . $e->getMessage());
         $scenario->setState('error');
         $scenario->setLog(__('scripts.error') . $e->getMessage());

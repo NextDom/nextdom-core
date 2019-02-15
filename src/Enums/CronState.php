@@ -17,8 +17,11 @@
 
 namespace NextDom\Enums;
 
-class ScenarioState extends Enum
+class CronState extends Enum
 {
-    const IN_PROGRESS = 'in progress';
-    const ERROR = 'error';
+    const RUN = 'run';
+    const STARTING = 'starting';
+    const STOPPING = 'stoping'; // TODO: Faute
+    const STOP = 'stop';
+    const NOT_FOUND = 'Not found'; // TODO: Format différent
 }
