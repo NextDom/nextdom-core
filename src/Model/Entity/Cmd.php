@@ -695,6 +695,11 @@ class Cmd
         return \DB::remove($this);
     }
 
+    /**
+     * TODO ???
+     * @param $_options
+     * @return bool
+     */
     public function execute($_options)
     {
         return false;

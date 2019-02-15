@@ -16,15 +16,17 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once(__DIR__ . '/utils.inc.php');
+namespace NextDom;
+
+use NextDom\Helpers\FileSystemHelper;
 
 echo '<link rel="stylesheet" href="/vendor/node_modules/font-awesome5/css/fontawesome-all.css">' . "\n";
 echo '<link rel="stylesheet" href="/vendor/node_modules/font-awesome/css/font-awesome.css">' . "\n";
 
-$root_dir = NEXTDOM_ROOT . '/css/icon/';
+$iconsRootDirectory = NEXTDOM_ROOT . '/css/icon/';
 
-foreach (ls($root_dir, '*') as $dir) {
-    if (is_dir($root_dir . $dir) && file_exists($root_dir . $dir . '/style.css')) {
-        echo '<link rel="stylesheet" href="public/css/icon/' . $dir . 'style.css?md5=' . md5($root_dir . $dir . '/style.css') . '">' . "\n";
+foreach (FileSystemHelper::ls($iconsRootDirectory, '*') as $dir) {
+    if (is_dir($iconsRootDirectory . $dir) && file_exists($iconsRootDirectory . $dir . '/style.css')) {
+        echo '<link rel="stylesheet" href="/public/css/icon/' . $dir . 'style.css?md5=' . md5($iconsRootDirectory . $dir . '/style.css') . '">' . "\n";
     }
 }

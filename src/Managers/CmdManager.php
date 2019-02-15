@@ -416,7 +416,7 @@ class CmdManager
      * @param $value
      * @param null $type
      * @param bool $onlyEnable
-     * @return array|mixed
+     * @return Cmd[]
      * @throws \Exception
      */
     public static function byValue($value, $type = null, $onlyEnable = false)

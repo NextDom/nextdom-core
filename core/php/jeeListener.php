@@ -16,47 +16,60 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SERVER['argc'])) {
-    header("Statut: 404 Page non trouvée");
-    header('HTTP/1.0 404 Not Found');
-    $_SERVER['REDIRECT_STATUS'] = 404;
-    echo "<h1>404 Non trouvé</h1>";
-    echo "La page que vous demandez ne peut être trouvée.";
-    exit();
-}
+/**
+ * ???
+ *
+ * Usage :
+ *  - jeeListener.php listener_id=LISTENER_ID event_id=EVENT_ID plugin_id=PLUGIN_ID value=VALUE datetime=DATETIME
+ *
+ * Parameters :
+ *  - LISTENER_ID : ???
+ *  - EVENT_ID : ???
+ *  - PLUGIN_ID : ???
+ *  - VALUE : ???
+ *  - DATETIME : ???
+ */
 
-require_once __DIR__ . "/core.inc.php";
+namespace NextDom;
 
-if (isset($argv)) {
-    foreach ($argv as $arg) {
-        $argList = explode('=', $arg);
-        if (isset($argList[0]) && isset($argList[1])) {
-            $_GET[$argList[0]] = $argList[1];
-        }
-    }
+use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\LogHelper;
+use NextDom\Helpers\ScriptHelper;
+use NextDom\Managers\CmdManager;
+use NextDom\Managers\ConfigManager;
+use NextDom\Managers\ListenerManager;
+use NextDom\Helpers\Utils;
+
+require_once __DIR__ . "/../../src/core.php";
+
+ScriptHelper::cliOrCrash();
+ScriptHelper::parseArgumentsToGET();
+
+$maxExecTimeScript = 60;
+
+if (ConfigManager::byKey('maxExecTimeScript', 60) != '') {
+    $maxExecTimeScript = ConfigManager::byKey('maxExecTimeScript', 60);
 }
-$timelimit = 60;
-if (config::byKey('maxExecTimeScript', 60) != '') {
-    $timelimit = config::byKey('maxExecTimeScript', 60);
-}
-set_time_limit($timelimit);
-if (init('listener_id') == '') {
-    foreach (cmd::byValue(init('event_id'), 'info') as $cmd) {
+set_time_limit($maxExecTimeScript);
+
+$listenerId = Utils::init('listener_id');
+$eventId = Utils::init('event_id');
+if ($listenerId == '') {
+    foreach (CmdManager::byValue($eventId, 'info') as $cmd) {
         $cmd->event($cmd->execute(), null, 2);
     }
 } else {
     try {
-        $listener_id = init('listener_id');
-        if ($listener_id == '') {
-            throw new Exception(__('Le listener ID ne peut être vide', __FILE__));
+        if ($listenerId == '') {
+            throw new CoreException(__('scripts.listener-id-cannot-be-empty'));
         }
-        $listener = listener::byId($listener_id);
+        $listener = ListenerManager::byId($listenerId);
         if (!is_object($listener)) {
-            throw new Exception(__('Listener non trouvé : ', __FILE__) . $listener_id);
+            throw new CoreException(__('scripts.listener-not-found') . $listenerId);
         }
-    } catch (Exception $e) {
-        log::add(init('plugin_id', 'plugin'), 'error', $e->getMessage());
+    } catch (\Exception $e) {
+        LogHelper::addError(Utils::init('plugin_id', 'plugin'), $e->getMessage());
         die($e->getMessage());
     }
-    $listener->execute(init('event_id'), trim(init('value'), "'"), trim(init('datetime'), "'"));
+    $listener->execute($eventId, trim(Utils::init('value'), "'"), trim(Utils::init('datetime'), "'"));
 }

@@ -17,13 +17,15 @@
  */
 
 /**
- * ???
+ * Execute one or all tasks
  *
  * Usage :
- *  - jeeScenarioExpression key=KEY
+ *  - jeeCron.php [ cron_id=CRON_ID ]
+ *
+ * Without arguments, all tasks will be executed.
  *
  * Parameters :
- *  - KEY : ???
+ *  - CRON_ID : Id of the task to execute
  */
 
 namespace NextDom;
