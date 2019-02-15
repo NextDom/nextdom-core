@@ -98,7 +98,7 @@ try {
     system("mysqlcheck --host=" . $CONFIG['db']['host'] . " --port=" . $CONFIG['db']['port'] . " --user=" . $CONFIG['db']['username'] . " --password='" . $CONFIG['db']['password'] . "' " . $CONFIG['db']['dbname'] . ' --auto-repair --silent');
     echo " OK" . "\n";
 
-    echo \"Database backup...";
+    echo "Database backup...";
     if (file_exists($nextdom_dir . "/DB_backup.sql")) {
         unlink($nextdom_dir . "/DB_backup.sql");
         if (file_exists($nextdom_dir . "/DB_backup.sql")) {
@@ -127,7 +127,7 @@ try {
         echo '*** ' . "ERROR" . '*** ' . $e->getMessage();
     }
 
-    echo "Création de l'archive...";
+    echo "Archive backup creation...";
     system('cd ' . $nextdom_dir . ';tar cfz "' . $backup_dir . '/' . $backup_name . '" ' . $exclude . ' -T ' . $nextdom_dir . '/install/backup_include_files > /dev/null');
     if (!file_exists($backup_dir . '/' . $backup_name)) {
         echo " NOK" . "\n";
