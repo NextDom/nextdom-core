@@ -16,15 +16,37 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * ???
+ *
+ * Usage :
+ *  - jeeScenarioExpression key=KEY
+ *
+ * Parameters :
+ *  - KEY : ???
+ */
+
+namespace NextDom;
+
+use NextDom\Helpers\Utils;
+use NextDom\Managers\CacheManager;
+
+/**
+ * Block this script if open from webpage
+ */
 if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SERVER['argc'])) {
     header("Statut: 404 Page non trouvée");
     header('HTTP/1.0 404 Not Found');
     $_SERVER['REDIRECT_STATUS'] = 404;
-    echo "<h1>404 Non trouvé</h1>";
-    echo "La page que vous demandez ne peut être trouvée.";
+    echo '<h1>' . __('core.error-404') . '</h1>';
     exit();
 }
-require_once __DIR__ . "/core.inc.php";
+
+require_once __DIR__ . "/../../src/core.php";
+
+/**
+ * Parse arguments
+ */
 if (isset($argv)) {
     foreach ($argv as $arg) {
         $argList = explode('=', $arg);
@@ -34,10 +56,11 @@ if (isset($argv)) {
     }
 }
 
-$cache = cache::byKey(init('key'))->getValue();
+$key = Utils::init('key');
+$cache = CacheManager::byKey($key)->getValue();
 if (!isset($cache['scenarioExpression'])) {
     if ($cache['scenario'] !== null) {
-        $cache['scenario']->setLog(__('Lancement en arrière-plan non trouvé : ', __FILE__) . init('key'));
+        $cache['scenario']->setLog(__('scripts.launched-background-not-found') . $key);
         $cache['scenario']->persistLog();
     }
     die();
@@ -45,13 +68,13 @@ if (!isset($cache['scenarioExpression'])) {
 if (!isset($cache['scenario'])) {
     $cache['scenario'] = null;
 }
-cache::byKey(init('key'))->remove();
-if ($cache['scenario'] != null) {
+CacheManager::byKey($key)->remove();
+if ($cache['scenario'] !== null) {
     $cache['scenario']->clearLog();
-    $cache['scenario']->setLog(__('Lancement en arrière-plan de : ', __FILE__) . init('key'));
+    $cache['scenario']->setLog(__('scripts.start-in-background') . $key);
 }
 $cache['scenarioExpression']->setOptions('background', 0);
 $cache['scenarioExpression']->execute($cache['scenario']);
-if ($cache['scenario'] != null) {
+if ($cache['scenario'] !== null) {
     $cache['scenario']->persistLog();
 }

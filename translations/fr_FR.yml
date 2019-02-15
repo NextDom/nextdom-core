@@ -36,6 +36,9 @@ scripts:
   error: "Erreur : "
   scenario: "Scenario : "
   scenario-not-found: "Scénario non trouvé. Vérifiez ID : "
+  start-in-background: "Lancement en arrière-plan de : "
+  launched-background-not-found: "Lancement en arrière-plan non trouvé : "
+
 health:
   apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (NextDom ne peut marcher avec). Voir <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\">ici</a>
   apache-private-tmp: Apache private tmp

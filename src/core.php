@@ -49,7 +49,7 @@ namespace {
     require_once NEXTDOM_DATA . '/config/compatibility.config.php';
 
     // Developer mode : Register global error and exception handlers
-    if ((ConfigManager::getDefaultConfiguration()['core']['developer::mode'] == '1') && (ConfigManager::getDefaultConfiguration()['core']['developer::errorhandler'] == '1') && (ConfigManager::getDefaultConfiguration()['core']['developer::exceptionhandler'] == '1')) {
+    if (php_sapi_name() != 'cli' && (ConfigManager::getDefaultConfiguration()['core']['developer::mode'] == '1') && (ConfigManager::getDefaultConfiguration()['core']['developer::errorhandler'] == '1') && (ConfigManager::getDefaultConfiguration()['core']['developer::exceptionhandler'] == '1')) {
         Symfony\Component\Debug\ErrorHandler::register();
         Symfony\Component\Debug\ExceptionHandler::register();
     }
