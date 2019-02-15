@@ -48,25 +48,6 @@ if($('#div_confPlugin').is(':visible')) {
     $('#home').hide();
 }
 
-$('#in_searchPlugin').off('keyup').keyup(function () {
-    var search = $(this).value();
-    if(search == ''){
-        $('.pluginListContainer .box').show();
-        $('.pluginListContainer').packery();
-        return;
-    }
-    $('.pluginListContainer .box').hide();
-    $('.box .box-title').each(function(){
-        var text = $(this).text().toLowerCase();
-        if(text.indexOf(search.toLowerCase()) >= 0){
-            $(this)
-            $(this).closest('.box').show();
-        }
-    });
-    $('.pluginListContainer').packery();
-});
-
-
 setTimeout(function(){
 
     $('.pluginListContainer').packery();

@@ -37,197 +37,196 @@
 */
 
 #}
+<style>
+    #informations-div .info-box-content span:nth-child(2) {
+        text-transform: capitalize;
+    }
+    #informations-div .info-box-content span:first-child {
+        font-weight: bold;
+    }
+</style>
 <section class="content">
-    <!-- Status Cards -->
-    <div class="row" id="div-menuPerf">
+    <div class="row">
         <div class="col-md-3 col-xs-6">
             <div class="box box-solid">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'CPU (' }}{{administrationCore}}{{ ' coeurs) '}}</h3>
+                    <h3 class="box-title">{{ 'administration.cpu'|trans }} ({{ cpuCoresCount }} {{ 'administration.cpu-cores'|trans }})</h3>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body">
                     <div class="progress progress-sm active">
-                        <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="{{ administrationCpuLoad }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ administrationCpuLoad }}%">
-                            <span class="sr-only">{{ administrationCpuLoad }}{{ '%' }}</span>
+                        <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="{{ cpuLoad }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpuLoad }}%">
+                            <span class="sr-only">{{ cpuLoad }}%</span>
                         </div>
                     </div>
-                    <span id="CPU-Value">{{ administrationCpuLoad }}{{ ' % de charge' }}</span>
+                    <span>{{ cpuLoad }}% {{ 'administration.of-cpu-load'|trans }}</span>
                 </div>
-                <!-- /.box-body -->
             </div>
         </div>
         <div class="col-md-3 col-xs-6">
             <div class="box box-solid">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'RAM (' }}{{administrationMemTotal}}{{ ') '}}</h3>
+                    <h3 class="box-title">{{ 'administration.memory'|trans }} ({{ totalMemory }})</h3>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body">
                     <div class="progress progress-sm active">
-                        <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="{{ administrationMemLoad }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ administrationMemLoad }}%">
-                            <span class="sr-only">{{ administrationMemLoad }}{{ '%' }}</span>
+                        <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="{{ memoryLoad }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memoryLoad }}%">
+                            <span class="sr-only">{{ memoryLoad }}%</span>
                         </div>
                     </div>
-                    <span id="RAM-Value">{{ administrationMemLoad }}{{ ' % utilisée' }}</span>
+                    <span>{{ memoryLoad }}% {{ 'administration.of-memory-used'|trans }}</span>
                 </div>
-                <!-- /.box-body -->
             </div>
         </div>
         <div class="col-md-3 col-xs-6">
             <div class="box box-solid ">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'DISK (' }}{{administrationHddTotal}}{{ ') '}}</h3>
+                    <h3 class="box-title">{{ 'administration.hdd'|trans }} ({{hddSize}})</h3>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body">
                     <div class="progress progress-sm active">
-                        <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="{{ administrationHddLoad }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ administrationHddLoad }}%">
-                            <span class="sr-only">{{ administrationHddLoad }}{{ '%' }}</span>
+                        <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="{{ hddLoad }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ hddLoad }}%">
+                            <span class="sr-only">{{ hddLoad }}%</span>
                         </div>
                     </div>
-                    <span id="CPU-Value">{{ administrationHddLoad }}{{ ' % d\'espace utilisé' }}</span>
+                    <span>{{ hddLoad }}% {{ 'administration.of-space-used'|trans }}</span>
                 </div>
-                <!-- /.box-body -->
             </div>
         </div>
         <div class="col-md-3 col-xs-6">
             <div class="box box-solid">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'SWAP (' }}{{administrationSwapTotal}}{{ ') '}}</h3>
+                    <h3 class="box-title">{{ 'administration.swap'|trans }} ({{ administrationSwapTotal }})</h3>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body">
                     <div class="progress progress-sm active">
-                        <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="{{ administrationSwapLoad }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ administrationSwapLoad }}%">
-                            <span class="sr-only">{{ administrationSwapLoad }}{{ '%' }}</span>
+                        <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="{{ swapLoad }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swapLoad }}%">
+                            <span class="sr-only">{{ swapLoad }}{{ '%' }}</span>
                         </div>
                     </div>
-                    <span id="CPU-Value">{{ administrationSwapLoad }}{{ ' % utilisé' }}</span>
+                    <span>{{ swapLoad }}% {{ 'administration.of-memory-used'|trans }}</span>
                 </div>
-                <!-- /.box-body -->
             </div>
         </div>
     </div>
-
-    <!-- Btn-app boxs -->
     <div class="row">
-        <div class="col-sm-6 col-xs-12" id="div_MenuList">
+        <div class="col-sm-6 col-xs-12">
             <div class="box box-danger">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-cog">&nbsp;&nbsp;</i>{{ 'Administration' }}</h3>
+                    <h3 class="box-title"><i class="fas fa-cog"></i>&nbsp;&nbsp;{{ 'page-title.administration'|trans }}</h3>
                 </div>
                 <div class="box-body text-center">
-                    <a class="btn btn-app" href="index.php?v=d&p=users"><i class="fas fa-users"></i>{{ 'Utilisateurs' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=api"><i class="fas fa-key"></i>{{ 'API' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=network"><i class="fas fa-rss"></i>{{ 'Réseaux' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=security"><i class="fa fa-shield"></i>{{ 'Sécurité' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=cache"><i class="fas fa-hdd-o"></i>{{ 'Cache' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=update_admin"><i class="fas fa-credit-card"></i>{{ 'Services' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=users"><i class="fas fa-users"></i>{{ 'page-title.users'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=api"><i class="fas fa-key"></i>{{ 'page-title.api'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=network"><i class="fas fa-rss"></i>{{ 'page-title.networks'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=security"><i class="fa fa-shield"></i>{{ 'page-title.security'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=cache"><i class="fas fa-hdd-o"></i>{{ 'page-title.cache'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=update_admin"><i class="fas fa-credit-card"></i>{{ 'page-title.services'|trans }}</a>
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-xs-12" id="div_MenuList2">
+        <div class="col-sm-6 col-xs-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-sliders-h">&nbsp;&nbsp;</i>{{ 'Paramétrage' }}</h3>
+                    <h3 class="box-title"><i class="fas fa-sliders-h"></i>&nbsp;&nbsp;{{ 'page-title.settings'|trans }}</h3>
                 </div>
                 <div class="box-body text-center">
-                    <a class="btn btn-app" href="index.php?v=d&p=general"><i class="fas fa-wrench"></i>{{ 'Général' }} </a>
-                    <a class="btn btn-app" href="index.php?v=d&p=custom"><i class="fas fa-pencil-square"></i>{{ 'Customisation' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=profils"><i class="fas fa-briefcase"></i>{{ 'Profil' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=commandes"><i class="fas fa-hand-o-right"></i>{{ 'Commandes' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=links"><i class="fas fa-sitemap"></i>{{ 'Liens' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=interact_admin"><i class="fas fa-comments"></i>{{ 'Interactions' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=eqlogic"><i class="fas fa-plug"></i>{{ 'Equipements' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=summary"><i class="fas fa-table"></i>{{ 'Résumés' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=reports_admin"><i class="fas fa-newspaper-o"></i>{{ 'Rapports' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=log_admin"><i class="fas fa-file-alt"></i>{{ 'Logs' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=general"><i class="fas fa-wrench"></i>{{ 'page-title.general'|trans }} </a>
+                    <a class="btn btn-app" href="index.php?v=d&p=custom"><i class="fas fa-pencil-square"></i>{{ 'page-title.customization'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=profils"><i class="fas fa-briefcase"></i>{{ 'page-title.profil'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=commandes"><i class="fas fa-hand-o-right"></i>{{ 'page-title.commands'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=links"><i class="fas fa-sitemap"></i>{{ 'page-title.links'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=interact_admin"><i class="fas fa-comments"></i>{{ 'page-title.interacts'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=eqlogic"><i class="fas fa-plug"></i>{{ 'page-title.equipments'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=summary"><i class="fas fa-table"></i>{{ 'page-title.summaries'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=reports_admin"><i class="fas fa-newspaper-o"></i>{{ 'page-title.reports'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=log_admin"><i class="fas fa-file-alt"></i>{{ 'page-title.lofs'|trans }}</a>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-6 col-xs-12" id="div_MenuList3">
+        <div class="col-sm-6 col-xs-12">
             <div class="box box-success">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-stethoscope">&nbsp;&nbsp;</i>{{ 'Diagnostics' }}</h3>
+                    <h3 class="box-title"><i class="fas fa-stethoscope"></i>&nbsp;&nbsp;{{ 'page-title.diagnostics'|trans }}</h3>
                 </div>
                 <div class="box-body text-center">
-                    <a class="btn btn-app" href="index.php?v=d&p=health"><i class="fas fa-medkit"></i>{{ 'Santé' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=cron"><i class="fas fa-tasks"></i>{{ 'Tâches' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=eqAnalyse"><i class="fas fa-plug"></i>{{ 'Equipements' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=realtime"><i class="fas fa-tachometer-alt"></i>{{ 'Temps réel' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=history"><i class="fas fa-chart-area"></i>{{ 'Historiques' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=timeline"><i class="fas fa-history"></i>{{ 'Timeline' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=report"><i class="fas fa-newspaper-o"></i>{{ 'Rapports' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=log"><i class="fas fa-file-alt"></i>{{ 'Logs' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=health"><i class="fas fa-medkit"></i>{{ 'page-title.health'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=cron"><i class="fas fa-tasks"></i>{{ 'page-title.tasks'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=eqAnalyse"><i class="fas fa-plug"></i>{{ 'page-title.equipments'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=realtime"><i class="fas fa-tachometer-alt"></i>{{ 'page-title.realtime'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=history"><i class="fas fa-chart-area"></i>{{ 'page-title.historics'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=timeline"><i class="fas fa-history"></i>{{ 'page-title.timeline'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=report"><i class="fas fa-newspaper-o"></i>{{ 'page-title.reports'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=log"><i class="fas fa-file-alt"></i>{{ 'page-title.logs'|trans }}</a>
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-xs-12" id="div_MenuList4">
+        <div class="col-sm-6 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-paperclip">&nbsp;&nbsp;</i>{{ 'Outils' }}</h3>
+                    <h3 class="box-title"><i class="fas fa-paperclip"></i>&nbsp;&nbsp;{{ 'Outils'|trans }}</h3>
                 </div>
                 <div class="box-body text-center">
-                    <a class="btn btn-app" href="index.php?v=d&p=display"><i class="fas fa-table"></i>{{ 'Résumés' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=backup" ><i class="fas fa-save"></i>{{ 'Sauvegardes' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=update"><span class="badge bg-red">{{ administrationNbUpdates }}</span><i class="fas fa-download"></i>{{ 'Mises à jour' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=note"><i class="fas fa-sticky-note"></i>{{ 'Notes' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=osdb"><i class="fas fa-terminal"></i>{{ 'OS/DB' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=interact"><i class="fas fa-comments"></i>{{ 'Intéractions' }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=scenario"><i class="fas fa-film"></i>{{ 'Scénarios' }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=display"><i class="fas fa-table"></i>{{ 'page-title.summaries'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=backup" ><i class="fas fa-save"></i>{{ 'page-title.backups'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=update"><span class="badge bg-red">{{ numberOfUpdates }}</span><i class="fas fa-download"></i>{{ 'page-title.updates'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=note"><i class="fas fa-sticky-note"></i>{{ 'page-title.notes'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=osdb"><i class="fas fa-terminal"></i>{{ 'page-title.database'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=interact"><i class="fas fa-comments"></i>{{ 'page-title.interacts'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=scenario"><i class="fas fa-film"></i>{{ 'page-title.scenarios'|trans }}</a>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="row form-group">
+    <div id="informations-div" class="row form-group">
         <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
             <div class="info-box info-box-small">
-              <span class="info-box-icon info-box-small-icon" data-toggle="tooltip" title="" data-original-title="{{ 'Nombre de connexions HTTP' }}">
+              <span class="info-box-icon info-box-small-icon">
                   <i class="fas fa-globe"></i>
               </span>
               <div class="info-box-content info-box-small-content">
-                  <span class="info-box-text"><b>{{ 'Nombre de connexions' }}</b></span>
-                  <span class="info-box-text info-box-text-2">{{ administrationHTTPConnexion }}</span>
+                  <span class="info-box-text">{{ 'administration.connections-count'|trans }}</span>
+                  <span class="info-box-text">{{ httpConnectionsCount }}</span>
               </div>
             </div>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
             <div class="info-box info-box-small">
-              <span class="info-box-icon info-box-small-icon" data-toggle="tooltip" title="" data-original-title="{{ 'Nombre de processus' }}">
+              <span class="info-box-icon info-box-small-icon">
                   <i class="fas fa-microchip"></i>
               </span>
               <div class="info-box-content info-box-small-content">
-                  <span class="info-box-text"><b>{{ 'Nombre de processus' }}</b></span>
-                  <span class="info-box-text info-box-text-2">{{ administrationProcess }}</span>
+                  <span class="info-box-text">{{ 'administration.process-count'|trans }}</span>
+                  <span class="info-box-text">{{ processCount }}</span>
               </div>
             </div>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
             <div class="info-box info-box-small">
-              <span class="info-box-icon info-box-small-icon" data-toggle="tooltip" title="" data-original-title="{{ 'Système démarré depuis' }}">
+              <span class="info-box-icon info-box-small-icon">
                   <i class="fas fa-clock"></i>
               </span>
               <div class="info-box-content info-box-small-content">
-                  <span class="info-box-text"><b>{{ 'Système démarré depuis' }}</b></span>
-                  <span class="info-box-text info-box-text-2">{{ administrationUptimeDays }}{{ ' Jours ' }}{{ administrationUptimeHours }}{{ ' Heures ' }}{{ administrationUptimeMinutes }}{{ ' Minutes ' }}</span>
+                  <span class="info-box-text">{{ 'Système démarré depuis' }}</span>
+                  <span class="info-box-text">
+                      {% if uptimeDays > 0 %}{{ uptimeDays }} {{ 'common.days'|trans }} {% endif %}
+                      {% if uptimeHours > 0 %}{{ uptimeHours }} {{ 'common.hours'|trans }} {% endif %}
+                      {{ uptimeMinutes }} {{ 'common.minutes'|trans }}
+                  </span>
               </div>
             </div>
         </div>
     </div>
-
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-default btn-action-bar" id="bt_welcomeRecall"><i class="fas fa-calendar-plus">&nbsp;&nbsp;</i>{{ 'Welcome Page'}}</a>
-            <a class="btn btn-default btn-action-bar" href="/docs/html/index.xhtml" target="_blank"><i class="fas fa-graduation-cap">&nbsp;&nbsp;</i>{{ 'Documentation Dev.' }}</a>
+            <a class="btn btn-default btn-action-bar" id="btn_welcomeModal"><i class="fas fa-calendar-plus"></i>&nbsp;&nbsp;{{ 'administration.welcome-page'|trans }}</a>
+            <a class="btn btn-default btn-action-bar" href="/docs/html/index.xhtml" target="_blank"><i class="fas fa-graduation-cap"></i>&nbsp;&nbsp;{{ 'administration.developer-documentation'|trans }}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar pull-right" href="#" id="bt_haltSystemAdmin" state="0"><i class="fas fa-power-off">&nbsp;&nbsp;</i>{{ 'Eteindre' }}</a>
-            <a class="btn btn-warning btn-action-bar pull-right" href="#" id="bt_rebootSystemAdmin" state="0"><i class="fas fa-repeat">&nbsp;&nbsp;</i>{{ 'Redémarrer' }}</a>
-            <a class="btn btn-warning btn-action-bar pull-right" href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock">&nbsp;&nbsp;</i>{{ 'Se déconnecter' }}</a>
+            <a class="btn btn-danger btn-action-bar pull-right" href="#" id="bt_haltSystemAdmin" state="0"><i class="fas fa-power-off"></i>&nbsp;&nbsp;{{ 'administration.power-off'|trans }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" href="#" id="bt_rebootSystemAdmin" state="0"><i class="fas fa-repeat"></i>&nbsp;&nbsp;{{ 'administration.restart'|trans }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock"></i>&nbsp;&nbsp;{{ 'administration.disconnect'|trans }}</a>
         </div>
     </div>
 </section>
