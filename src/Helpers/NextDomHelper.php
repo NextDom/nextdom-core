@@ -686,12 +686,12 @@ class NextDomHelper
             }
 
             try {
-                LogHelper::add('starting', 'debug', __('Vérification de la \configuration réseau interne'));
+                LogHelper::add('starting', 'debug', __('Vérification de la configuration réseau interne'));
                 if (!NetworkHelper::test('internal')) {
                     NetworkHelper::checkConf('internal');
                 }
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur la \configuration réseau interne : ') . LogHelper::exception($e));
+                LogHelper::add('starting', 'error', __('Erreur sur la configuration réseau interne : ') . LogHelper::exception($e));
             }
 
             try {

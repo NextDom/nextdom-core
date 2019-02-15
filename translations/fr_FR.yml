@@ -17,21 +17,21 @@ connection:
   home-msg: Connectez-vous pour accéder à votre session...
   login-placeholder: Identifiant... (admin par défaut)
   password-placeholder: Mot de passe...
-  two-factors-placeholder: Code à 2 facteurs
+  two-factors-placeholder: Code à 2 facteurs...
   remember-title: En cochant cette case, vous n'aurez plus besoin de vous saisir vos identifiants.
   remember-label: Se souvenir de moi ?
   connect: Connexion
   forgot: Oups, J'ai oublié mon mot de passe !
 
 core:
-  error-401: 401 - Accès non autorisé
-  error-ajax: Requête Ajax inconnue
+  error-401: "401 - Accès non autorisé"
+  error-ajax: "Requête Ajax inconnue"
   api-connection: "Connexion par API de l'utilisateur : "
-  enable-tasks: Activer toutes les tâches cron
-  disable-tasks: Désactiver toutes les tâches cron
-  disable-cron-master: Arrêter la tâche cron principale...
-  enable-all-scenarios: Activer tous les scénarios
-  disable-all-scenarios: Désactiver tous les scénarios
+  enable-tasks: "Activer toutes les tâches cron..."
+  disable-tasks: "Désactiver toutes les tâches cron..."
+  disable-cron-master: "Arrêter la tâche cron principale..."
+  enable-all-scenarios: "Activer tous les scénarios..."
+  disable-all-scenarios: "Désactiver tous les scénarios..."
   incorrect-sys-date: "La date du système est incorrect (avant %s ou après %s) : "
 
 page-title:
@@ -149,7 +149,7 @@ welcome:
   doc-launch : Accéder à la documentation
   forum-title: Forum
   forum-subtitle : Trouver de l'aide sur notre forum
-  forum-content: | 
+  forum-content: |
                 Le forum %productName% est un moyen simple et efficace de trouver la solution a votre problème.
                 Il y a sûrement une autre personne qui a déja rencontré le même problème que vous.
                 Si ce n'est pas le cas, posez votre question, la communauté y répondra au plus vite.
