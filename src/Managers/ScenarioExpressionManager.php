@@ -287,7 +287,7 @@ class ScenarioExpressionManager
         switch ($state) {
             case 'stop':
                 return 0;
-            case 'in progress':
+            case ScenarioState::IN_PROGRESS:
                 return 1;
         }
         return -3;

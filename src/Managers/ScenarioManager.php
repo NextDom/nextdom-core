@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\ScenarioState;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -274,7 +275,7 @@ class ScenarioManager
             $trigger = 'schedule';
             if (NextDomHelper::isDateOk()) {
                 foreach ($scheduledScenarios as $key => $scenario) {
-                    if ($scenario->getState() != 'in progress') {
+                    if ($scenario->getState() != ScenarioState::IN_PROGRESS) {
                         if ($scenario->isDue()) {
                             $scenarios[] = $scenario;
                         }
@@ -297,11 +298,11 @@ class ScenarioManager
     public static function control()
     {
         foreach (self::all() as $scenario) {
-            if ($scenario->getState() != 'in progress') {
+            if ($scenario->getState() != ScenarioState::IN_PROGRESS) {
                 continue; // TODO: To be or not to be
             }
             if (!$scenario->running()) {
-                $scenario->setState('error');
+                $scenario->setState(ScenarioState::ERROR);
                 continue; // TODO: To be or not to be
             }
             $runtime = strtotime('now') - strtotime($scenario->getLastLaunch());
@@ -410,7 +411,7 @@ class ScenarioManager
                         if ($needsReturn) {
                             $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Déclencheur du scénario', 'who' => '#' . $cmd_id . '#');
                         } else {
-                            LogHelper::add('scenario', 'error', __('Un déclencheur du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
+                            LogHelper::addError('scenario',  __('Un déclencheur du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
                         }
                     }
                 }
@@ -425,7 +426,7 @@ class ScenarioManager
                     if ($needsReturn) {
                         $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Utilisé dans le scénario', 'who' => '#' . $cmd_id . '#');
                     } else {
-                        LogHelper::add('scenario', 'error', __('Une commande du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
+                        LogHelper::addError('scenario',  __('Une commande du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
                     }
                 }
             }

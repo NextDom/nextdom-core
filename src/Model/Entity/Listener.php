@@ -114,7 +114,7 @@ class Listener
                 if (function_exists($function)) {
                     $function($option);
                 } else {
-                    LogHelper::add('listener', 'error', __('[Erreur] Non trouvée ') . $this->getName());
+                    LogHelper::addError('listener',  __('[Erreur] Non trouvée ') . $this->getName());
                     return;
                 }
             }

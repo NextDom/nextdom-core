@@ -22,6 +22,7 @@ connection:
 
 core:
   error-401: 401 - Accès non autorisé
+  error-404: 404 - Page non trouvée
   error-ajax: Requête Ajax inconnue
   api-connection: "Connexion par API de l'utilisateur : "
   enable-tasks: Activer toutes les tâches cron
@@ -31,6 +32,10 @@ core:
   disable-all-scenarios: Désactiver tous les scénarios
   incorrect-sys-date: "La date du système est incorrect (avant %s ou après %s) : "
 
+scripts:
+  error: "Erreur : "
+  scenario: "Scenario : "
+  scenario-not-found: "Scénario non trouvé. Vérifiez ID : "
 health:
   apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (NextDom ne peut marcher avec). Voir <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\">ici</a>
   apache-private-tmp: Apache private tmp

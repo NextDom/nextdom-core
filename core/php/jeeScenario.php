@@ -16,15 +16,45 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Execute scenario or element of a scenario
+ *
+ * Usage :
+ *  - jeeScenario scenario_id=SCENARIO_ID scenarioElement_id=SCENARIO_ELEMENT_ID tags=TAGS
+ *  - jeeScenario scenario_id=SCENARIO_ID trigger=TRIGGER message=MESSAGE
+ *
+ * Parameters :
+ *  - SCENARIO_ID : Id of the scenario to execute
+ *  - SCENARIO_ELEMENT_ID : Id of the specific element to execute
+ *  - TAGS : ???
+ *  - TRIGGER : Trigger that started the scenario
+ *  - MESSAGE : ???
+ */
+
+namespace NextDom;
+
+use NextDom\Enums\ScenarioState;
+use NextDom\Helpers\LogHelper;
+use NextDom\Managers\ConfigManager;
+use NextDom\Managers\ScenarioManager;
+use NextDom\Helpers\Utils;
+
+/**
+ * Block this script if open from webpage
+ */
 if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SERVER['argc'])) {
     header("Statut: 404 Page non trouvée");
     header('HTTP/1.0 404 Not Found');
     $_SERVER['REDIRECT_STATUS'] = 404;
-    echo "<h1>404 Non trouvé</h1>";
-    echo "La page que vous demandez ne peut être trouvée.";
+    echo '<h1>' . __('core.error-404') . '</h1>';
     exit();
 }
-require_once __DIR__ . "/core.inc.php";
+
+require_once __DIR__ . "/../../src/core.php";
+
+/**
+ * Parse arguments
+ */
 if (isset($argv)) {
     foreach ($argv as $arg) {
         $argList = explode('=', $arg);
@@ -33,29 +63,44 @@ if (isset($argv)) {
         }
     }
 }
-if (init('scenarioElement_id') != '') {
-    scenario::doIn(array('scenario_id' => init('scenario_id'), 'scenarioElement_id' => init('scenarioElement_id'), 'second' => 0, 'tags' => json_decode(init('tags'), true)));
+
+$scenarioId = Utils::init('scenario_id');
+if (Utils::init('scenarioElement_id') != '') {
+    // Execute an element of the scenario
+    ScenarioManager::doIn([
+        'scenario_id' => $scenarioId,
+        'scenarioElement_id' => Utils::init('scenarioElement_id'),
+        'second' => 0,
+        'tags' => json_decode(Utils::init('tags'), true)
+    ]);
 } else {
-    $scenario = scenario::byId(intval(init('scenario_id')));
+    // Execute a scenario
+    $scenario = ScenarioManager::byId(intval($scenarioId));
+
+    // Scenario not found
     if (!is_object($scenario)) {
-        log::add('scenario', 'info', __('Scénario non trouvé. Vérifiez ID : ', __FILE__) . init('scenario_id'));
-        die(__('Scénario non trouvé. Vérifiez ID : ', __FILE__) . init('scenario_id'));
+        $errorMsg = __('scripts.scenario-not-found') . $scenarioId;
+        LogHelper::addInfo('scenario', $errorMsg);
+        die($errorMsg."\n");
     }
-    if (is_numeric($scenario->getTimeout()) && $scenario->getTimeout() != '' && $scenario->getTimeout() != 0) {
-        set_time_limit($scenario->getTimeout(config::byKey('maxExecTimeScript', 'core', 1) * 60));
+
+    if (is_numeric($scenario->getTimeout()) && $scenario->getTimeout() != '' && $scenario->getTimeout() !== 0) {
+        set_time_limit($scenario->getTimeout(ConfigManager::byKey('maxExecTimeScript', 'core', 1) * 60));
     }
+
     try {
-        if ($scenario->getState() == 'in progress' && $scenario->getConfiguration('allowMultiInstance', 0) == 0) {
+        // If scenario is in progress, wait 1 second. If scenario is in progress again, stop the script
+        if ($scenario->getState() === ScenarioState::IN_PROGRESS && $scenario->getConfiguration('allowMultiInstance', 0) === 0) {
             sleep(1);
-            if ($scenario->getState() == 'in progress') {
+            if ($scenario->getState() == ScenarioState::IN_PROGRESS) {
                 die();
             }
         }
-        $scenario->execute(init('trigger'), init('message'));
+        $scenario->execute(Utils::init('trigger'), Utils::init('message'));
     } catch (Exception $e) {
-        log::add('scenario', 'error', __('Scenario  : ', __FILE__) . $scenario->getHumanName() . '. ' . __('Erreur : ', __FILE__) . $e->getMessage());
+        LogHelper::addError('scenario', __('scripts.scenario') . $scenario->getHumanName() . '. ' . __('scripts.error') . $e->getMessage());
         $scenario->setState('error');
-        $scenario->setLog(__('Erreur : ', __FILE__) . $e->getMessage());
+        $scenario->setLog(__('scripts.error') . $e->getMessage());
         $scenario->setPID('');
         $scenario->persistLog();
         die();
