@@ -1123,16 +1123,16 @@ class NextDomHelper
     /**
      * Get temporary folder and creates it if not exists
      *
-     * @param null $plugin
+     * @param string|null $subFolder Log subfolder
      *
      * @return string
      * @throws \Exception
      */
-    public static function getTmpFolder($plugin = null)
+    public static function getTmpFolder($subFolder = null)
     {
         $result = '/' . trim(ConfigManager::byKey('folder::tmp'), '/');
-        if ($plugin !== null) {
-            $result .= '/' . $plugin;
+        if ($subFolder !== null) {
+            $result .= '/' . $subFolder;
         }
         if (!file_exists($result)) {
             mkdir($result, 0774, true);

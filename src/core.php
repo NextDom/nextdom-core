@@ -39,6 +39,7 @@ namespace {
 
     define('NEXTDOM_ROOT', realpath(__DIR__ . '/..'));
     define('NEXTDOM_DATA', '/var/lib/nextdom');
+    define('NEXTDOM_LOG', '/var/log/nextdom');
 
     if (file_exists(NEXTDOM_DATA . '/config/common.config.php')) {
         require_once NEXTDOM_DATA . '/config/common.config.php';

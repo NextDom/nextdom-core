@@ -46,6 +46,7 @@ scripts:
   cron-disable: Tous les crons sont actuellement désactivés
   listener-not-found: "Listener non trouvé : "
   listener-id-cannot-be-empty: Le listener ID ne peut être vide
+  file-not-found: "Fichier non trouvé : "
 
 health:
   apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (NextDom ne peut marcher avec). Voir <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\">ici</a>

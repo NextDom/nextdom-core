@@ -16,70 +16,95 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace NextDom;
+
+use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\Api;
+use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
+use NextDom\Managers\ConfigManager;
+
 function show401Error() {
     header("HTTP/1.1 401 Unauthorized");
     die();
 }
 
 try {
-    require_once __DIR__ . '/../../core/php/core.inc.php';
-    include_file('core', 'authentification', 'php');
-    if (!isConnect() && !nextdom::apiAccess(init('apikey'))) {
+    require_once __DIR__ . "/../../src/core.php";
+    AuthentificationHelper::init();
+
+    // Access for authenticated user or by API key
+    if (!AuthentificationHelper::isConnected() && !Api::apiAccess(Utils::init('apikey'))) {
         show401Error();
     }
-    unautorizedInDemo();
-    $pathfile = realpath(calculPath(urldecode(init('pathfile'))));
-    if ($pathfile === false) {
+
+    $filePath = realpath(NEXTDOM_LOG . '/' . Utils::init('pathfile'));
+
+    // Bad path
+    if ($filePath === false) {
         show401Error();
     }
-    if (strpos($pathfile, '.php') !== false) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__));
+    // Block PHP files download
+    if (strpos($filePath, '.php') !== false) {
+        show401Error();
     }
-    $rootPath = realpath(__DIR__ . '/../../');
-    if (strpos($pathfile, $rootPath) === false) {
-        if (config::byKey('recordDir', 'camera') != '' && substr(config::byKey('recordDir', 'camera'), 0, 1) == '/') {
-            $cameraPath = realpath(config::byKey('recordDir', 'camera'));
-            if (strpos($pathfile, $cameraPath) === false) {
+    // Special access
+    if (strpos($filePath, NEXTDOM_LOG) === false) {
+        // For camera
+        $cameraPath = ConfigManager::byKey('recordDir', 'camera');
+        if ($cameraPath != '' && substr($cameraPath, 0, 1) == '/') {
+            $cameraPath = realpath($cameraPath);
+            if (strpos($filePath, $cameraPath) === false) {
                 show401Error();
             }
         } else {
             show401Error();
         }
     }
-    if (!isConnect('admin')) {
+
+    // Block some kind of files for non-admin users
+    if (!AuthentificationHelper::isConnected('admin')) {
         $adminFiles = array('log', 'backup', '.sql', 'scenario', '.tar', '.gz');
         foreach ($adminFiles as $adminFile) {
-            if (strpos($pathfile, $adminFile) !== false) {
+            if (strpos($filePath, $adminFile) !== false) {
                 show401Error();
             }
         }
     }
-    if (strpos($pathfile, '*') === false) {
-        if (!file_exists($pathfile)) {
-            throw new Exception(__('Fichier non trouvé : ', __FILE__) . $pathfile);
+
+    $archivePath = NextDomHelper::getTmpFolder('downloads') . '/archive.tar.gz';
+
+    if (strpos($filePath, '*') === false) {
+        // Download single file
+        if (!file_exists($filePath)) {
+            throw new CoreException(__('scripts.file-not-found') . $filePath);
         }
-    } elseif (is_dir(str_replace('*', '', $pathfile))) {
+    } elseif (is_dir(str_replace('*', '', $filePath))) {
+        // Download directory content
         if (!isConnect('admin')) {
             show401Error();
         }
-        system('cd ' . dirname($pathfile) . ';tar cfz ' . nextdom::getTmpFolder('downloads') . '/archive.tar.gz * > /dev/null 2>&1');
-        $pathfile = nextdom::getTmpFolder('downloads') . '/archive.tar.gz';
+        system('cd ' . dirname($filePath) . ';tar cfz ' . $archivePath . ' * > /dev/null 2>&1');
+        $filePath = $archivePath;
     } else {
         if (!isConnect('admin')) {
             show401Error();
         }
-        $pattern = array_pop(explode('/', $pathfile));
-        system('cd ' . dirname($pathfile) . ';tar cfz ' . nextdom::getTmpFolder('downloads') . '/archive.tar.gz ' . $pattern . '> /dev/null 2>&1');
-        $pathfile = nextdom::getTmpFolder('downloads') . '/archive.tar.gz';
+        $pattern = array_pop(explode('/', $filePath));
+        system('cd ' . dirname($filePath) . ';tar cfz ' . $archivePath . ' ' . $pattern . '> /dev/null 2>&1');
+        $filePath = $archivePath;
     }
-    $path_parts = pathinfo($pathfile);
+
+    $pathParts = pathinfo($filePath);
     header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename=' . $path_parts['basename']);
-    readfile($pathfile);
-    if (file_exists(nextdom::getTmpFolder('downloads') . '/archive.tar.gz')) {
-        unlink(nextdom::getTmpFolder('downloads') . '/archive.tar.gz');
+    header('Content-Disposition: attachment; filename=' . $pathParts['basename']);
+    readfile($filePath);
+
+    if (file_exists($archivePath)) {
+        unlink($archivePath);
     }
     exit;
-} catch (Exception $e) {
-    echo $e->getMessage();
+} catch (\Throwable $t) {
+    echo $t->getMessage();
 }
