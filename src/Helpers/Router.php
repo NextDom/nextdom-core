@@ -86,8 +86,7 @@ class Router
      */
     public function desktopView()
     {
-        Status::initConnectState();
-        Status::initRescueModeState();
+        AuthentificationHelper::init();
 
         if (isset($_GET[GetParams::MODAL])) {
             PrepareView::showModal();
@@ -116,11 +115,11 @@ class Router
                 'default_bootstrap_theme'));
             if ($configs['nextdom::firstUse'] == 1) {
                 PrepareView::showSpecialPage('firstUse', $configs);
-            } elseif (!Status::isConnected()) {
+            } elseif (!AuthentificationHelper::isConnected()) {
                 PrepareView::showSpecialPage('connection', $configs);
             } else {
-                if (Status::isRescueMode()) {
-                    Status::isConnectedAdminOrFail();
+                if (AuthentificationHelper::isRescueMode()) {
+                    AuthentificationHelper::isConnectedAdminOrFail();
                     PrepareView::showRescueMode($configs);
                 } else {
                     PrepareView::showContent($configs);

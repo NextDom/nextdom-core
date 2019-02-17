@@ -411,7 +411,7 @@ class ScenarioManager
                         if ($needsReturn) {
                             $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Déclencheur du scénario', 'who' => '#' . $cmd_id . '#');
                         } else {
-                            LogHelper::addError('scenario',  __('Un déclencheur du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
+                            LogHelper::addError('scenario', __('Un déclencheur du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
                         }
                     }
                 }
@@ -426,7 +426,7 @@ class ScenarioManager
                     if ($needsReturn) {
                         $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Utilisé dans le scénario', 'who' => '#' . $cmd_id . '#');
                     } else {
-                        LogHelper::addError('scenario',  __('Une commande du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
+                        LogHelper::addError('scenario', __('Une commande du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
                     }
                 }
             }

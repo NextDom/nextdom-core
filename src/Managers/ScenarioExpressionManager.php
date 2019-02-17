@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\ScenarioState;
 use NextDom\Helpers\DateHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NetworkHelper;
@@ -285,7 +286,7 @@ class ScenarioExpressionManager
             return -1;
         }
         switch ($state) {
-            case 'stop':
+            case ScenarioState::STOP:
                 return 0;
             case ScenarioState::IN_PROGRESS:
                 return 1;

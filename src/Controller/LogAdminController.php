@@ -22,8 +22,9 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
+
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
 
@@ -44,7 +45,7 @@ class LogAdminController extends BaseController
     {
 
         global $NEXTDOM_INTERNAL_CONFIG;
-        $pageData['adminIsRescueMode'] = Status::isRescueMode();
+        $pageData['adminIsRescueMode'] = AuthentificationHelper::isRescueMode();
 
         if (!$pageData['adminIsRescueMode']) {
             $pageData['adminPluginsList'] = [];

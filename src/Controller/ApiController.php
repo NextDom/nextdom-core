@@ -23,8 +23,9 @@
 namespace NextDom\Controller;
 
 
+use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
+
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
@@ -51,7 +52,7 @@ class ApiController extends BaseController
             $keys[] = $key . '::enable';
         }
         $pageData['adminConfigs'] = ConfigManager::byKeys($keys);
-        $pageData['adminIsRescueMode'] = Status::isRescueMode();
+        $pageData['adminIsRescueMode'] = AuthentificationHelper::isRescueMode();
         if (!$pageData['adminIsRescueMode']) {
             $pageData['adminPluginsList'] = [];
             $pluginsList = PluginManager::listPlugin(true);

@@ -18,15 +18,13 @@
 
 namespace NextDom\Helpers;
 
-use NextDom\Exceptions\CoreException;
-use NextDom\Managers\ConfigManager;
-
 /**
  * Temporary class to store different states.
  */
 class ScriptHelper
 {
-    public static function cliOrCrash() {
+    public static function cliOrCrash()
+    {
         if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SERVER['argc'])) {
             header("Statut: 404 Page non trouvée");
             header('HTTP/1.0 404 Not Found');
@@ -36,7 +34,8 @@ class ScriptHelper
         }
     }
 
-    public static function parseArgumentsToGET() {
+    public static function parseArgumentsToGET()
+    {
         if (isset($argv)) {
             foreach ($argv as $arg) {
                 $argList = explode('=', $arg);

@@ -23,8 +23,9 @@
 namespace NextDom\Controller;
 
 
+use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
+
 use NextDom\Helpers\SystemHelper;
 use NextDom\Managers\UpdateManager;
 
@@ -43,7 +44,7 @@ class AdministrationController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $pageData['IS_ADMIN'] = Status::isConnectAdmin();
+        $pageData['IS_ADMIN'] = AuthentificationHelper::isConnectAdmin();
         $pageData['administrationNbUpdates'] = UpdateManager::nbNeedUpdate();
         $pageData['administrationMemLoad'] = 100;
         $pageData['administrationSwapLoad'] = 100;

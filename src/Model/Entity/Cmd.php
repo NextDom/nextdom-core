@@ -727,7 +727,7 @@ class Cmd
                 }
                 ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
             } catch (\Exception $e) {
-                LogHelper::addError('cmd',  __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
+                LogHelper::addError('cmd', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
             }
         }
     }
@@ -754,7 +754,7 @@ class Cmd
                 }
                 ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
             } catch (\Exception $e) {
-                LogHelper::addError('cmd',  __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
+                LogHelper::addError('cmd', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
             }
         }
     }
@@ -1262,7 +1262,7 @@ class Cmd
                 }
                 ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
             } catch (\Exception $e) {
-                LogHelper::addError('cmd',  __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Détails : ') . $e->getMessage());
+                LogHelper::addError('cmd', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Détails : ') . $e->getMessage());
             }
         }
     }
@@ -1409,7 +1409,7 @@ class Cmd
         try {
             $http->exec();
         } catch (\Exception $e) {
-            LogHelper::addError('cmd',  __('Erreur push sur : ') . $url . ' => ' . $e->getMessage());
+            LogHelper::addError('cmd', __('Erreur push sur : ') . $url . ' => ' . $e->getMessage());
         }
     }
 

@@ -33,12 +33,30 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Managers\AjaxManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 
 class AuthentificationHelper
 {
+    /**
+     * @var bool Status of the user connection
+     */
+    private static $connectedState = false;
+
+    /**
+     * @var bool Status of the user login as administrator
+     */
+    private static $connectedAdminState = false;
+    /**
+     * @var bool Recovery mode status
+     */
+    private static $rescueMode = false;
+
+    /**
+     * @throws \Exception
+     */
     public static function init()
     {
         $configs = ConfigManager::byKeys(array('session_lifetime', 'sso:allowRemoteUser'));
@@ -69,7 +87,7 @@ class AuthentificationHelper
             die();
         }
 
-        if (!self::isConnected() && isset($_COOKIE['registerDevice'])) {
+        if (!self::isConnectedWithRights() && isset($_COOKIE['registerDevice'])) {
             if (self::loginByHash($_COOKIE['registerDevice'])) {
                 setcookie('registerDevice', $_COOKIE['registerDevice'], time() + 365 * 24 * 3600, "/", '', false, true);
                 if (isset($_COOKIE['nextdom_token'])) {
@@ -82,7 +100,7 @@ class AuthentificationHelper
             }
         }
 
-        if (!self::isConnected() && $configs['sso:allowRemoteUser'] == 1) {
+        if (!self::isConnectedWithRights() && $configs['sso:allowRemoteUser'] == 1) {
             $user = UserManager::byLogin($_SERVER['REMOTE_USER']);
             if (is_object($user) && $user->getEnable() == 1) {
                 @session_start();
@@ -92,7 +110,7 @@ class AuthentificationHelper
             }
         }
 
-        if (!self::isConnected() && Utils::init('auth') != '') {
+        if (!self::isConnectedWithRights() && Utils::init('auth') != '') {
             self::loginByHash(Utils::init('auth'));
         }
 
@@ -100,6 +118,12 @@ class AuthentificationHelper
             self::logout();
             Utils::redirect('index.php');
             die();
+        }
+
+        self::$connectedState = AuthentificationHelper::isConnectedWithRights();
+        self::$connectedAdminState = AuthentificationHelper::isConnectedWithRights('admin');
+        if (Utils::init('rescue', 0) == 1) {
+            self::$rescueMode = true;
         }
     }
 
@@ -195,7 +219,7 @@ class AuthentificationHelper
      *
      * @return boolean True si l'utilisateur est connecté avec les droits demandés
      */
-    public static function isConnected(string $rights = ''): bool
+    public static function isConnectedWithRights(string $rights = ''): bool
     {
         $rightsKey = 'isConnect::' . $rights;
         $isSetSessionUser = isset($_SESSION['user']);
@@ -220,5 +244,66 @@ class AuthentificationHelper
             $GLOBALS[$rightsKey] = $result;
         }
         return $result;
+    }
+
+    /**
+     * Get the status of the user login
+     * @return bool Status of the user connection
+     */
+    public static function isConnected(): bool
+    {
+        return self::$connectedState;
+    }
+
+    /**
+     * Test if the user is logged in and throws an exception if this is not the case.
+     * @return bool
+     * @throws CoreException
+     */
+    public static function isConnectedOrFail()
+    {
+        if (!self::$connectedState) {
+            throw new CoreException(__('core.error-401'), 401);
+        }
+        return self::isConnected();
+    }
+
+    /**
+     * @abstract Test if user is connected with admins right or throw CoreException if not.
+     * @return bool
+     * @throws CoreException
+     */
+    public static function isConnectedAdminOrFail()
+    {
+        if (!self::$connectedAdminState) {
+            throw new CoreException(__('core.error-401'), 401);
+        }
+        return self::isConnectAdmin();
+    }
+
+    /**
+     * Get the login status of the user as an administrator
+     * @return bool Status of the user login as administrator
+     */
+    public static function isConnectAdmin(): bool
+    {
+        return self::$connectedAdminState;
+    }
+
+    /**
+     * Get the status of the recovery mode
+     * @return bool Recovery mode status
+     */
+    public static function isRescueMode(): bool
+    {
+        return self::$rescueMode;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isInDeveloperMode(): bool
+    {
+        return ConfigManager::getDefaultConfiguration()['core']['developer::mode'] == '1';
     }
 }

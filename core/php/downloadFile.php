@@ -35,7 +35,7 @@ try {
     AuthentificationHelper::init();
 
     // Access for authenticated user or by API key
-    if (!AuthentificationHelper::isConnected() && !Api::apiAccess(Utils::init('apikey'))) {
+    if (!AuthentificationHelper::isConnectedWithRights() && !Api::apiAccess(Utils::init('apikey'))) {
         show401Error();
     }
 
@@ -64,7 +64,7 @@ try {
     }
 
     // Block some kind of files for non-admin users
-    if (!AuthentificationHelper::isConnected('admin')) {
+    if (!AuthentificationHelper::isConnectedWithRights('admin')) {
         $adminFiles = array('log', 'backup', '.sql', 'scenario', '.tar', '.gz');
         foreach ($adminFiles as $adminFile) {
             if (strpos($filePath, $adminFile) !== false) {

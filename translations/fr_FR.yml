@@ -42,8 +42,8 @@ scripts:
   scenario-not-found: "Scénario non trouvé. Vérifiez ID : "
   start-in-background: "Lancement en arrière-plan de : "
   launched-background-not-found: "Lancement en arrière-plan non trouvé : "
-  cron-class-or-function-not-found: [Erreur] Classe ou fonction non trouvée
-  cron-disable: Tous les crons sont actuellement désactivés
+  cron-class-or-function-not-found: "[Erreur] Classe ou fonction non trouvée"
+  cron-disable: "Tous les crons sont actuellement désactivés"
   listener-not-found: "Listener non trouvé : "
   listener-id-cannot-be-empty: Le listener ID ne peut être vide
   file-not-found: "Fichier non trouvé : "

@@ -22,9 +22,10 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
+
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
@@ -59,8 +60,8 @@ class UpdateAdminController extends BaseController
         $pageData['adminHardwareName'] = NextDomHelper::getHardwareName();
         $pageData['adminHardwareKey'] = NextDomHelper::getHardwareKey();
         $pageData['adminLastKnowDate'] = CacheManager::byKey('hour')->getValue();
-        $pageData['adminIsRescueMode'] = Status::isRescueMode();
-        $pageData['key'] = Status::isRescueMode();
+        $pageData['adminIsRescueMode'] = AuthentificationHelper::isRescueMode();
+        $pageData['key'] = AuthentificationHelper::isRescueMode();
 
         if (!$pageData['adminIsRescueMode']) {
             $pageData['adminPluginsList'] = [];

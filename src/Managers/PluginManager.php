@@ -137,7 +137,7 @@ class PluginManager
                     try {
                         $listPlugin[] = self::byId($row['plugin']);
                     } catch (\Throwable $e) {
-                        LogHelper::addError('plugin',  $e->getMessage(), 'pluginNotFound::' . $row['plugin']);
+                        LogHelper::addError('plugin', $e->getMessage(), 'pluginNotFound::' . $row['plugin']);
                     }
                 }
             }
@@ -150,7 +150,7 @@ class PluginManager
                         try {
                             $listPlugin[] = self::byId($pathInfoPlugin);
                         } catch (\Throwable $e) {
-                            LogHelper::addError('plugin',  $e->getMessage(), 'pluginNotFound::' . $pathInfoPlugin);
+                            LogHelper::addError('plugin', $e->getMessage(), 'pluginNotFound::' . $pathInfoPlugin);
                         }
                     }
                 }

@@ -209,7 +209,7 @@ class InteractQuery
                         $replace['#valeur#'] .= ' ' . $return;
                     }
                 } catch (\Exception $e) {
-                    LogHelper::addError('interact',  __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Détails : ') . $e->getMessage());
+                    LogHelper::addError('interact', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Détails : ') . $e->getMessage());
                 }
             }
         }

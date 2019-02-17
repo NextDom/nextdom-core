@@ -333,7 +333,7 @@ function sanitizeAccent($_message)
 
 function isConnect($_right = '')
 {
-    return AuthentificationHelper::isConnected($_right);
+    return AuthentificationHelper::isConnectedWithRights($_right);
 }
 
 function ZipErrorMessage($code)

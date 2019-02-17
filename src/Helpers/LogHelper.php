@@ -116,13 +116,16 @@ class LogHelper
         return null;
     }
 
-    public static function addError($logTarget, $message, $logicalId = '') {
+    public static function addError($logTarget, $message, $logicalId = '')
+    {
         self::add($logTarget, 'error', $message, $logicalId);
     }
 
-    public static function addInfo($logTarget, $message, $logicalId = '') {
+    public static function addInfo($logTarget, $message, $logicalId = '')
+    {
         self::add($logTarget, 'info', $message, $logicalId);
     }
+
     /**
      * Ajoute un message dans les log et fait en sorte qu'il n'y
      * ai jamais plus de 1000 lignes

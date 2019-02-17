@@ -554,7 +554,7 @@ class Plugin
             }
         } catch (\Throwable $e) {
             ConfigManager::save('active', $alreadyActive, $this->getId());
-            LogHelper::addError('plugin',  $e->getMessage());
+            LogHelper::addError('plugin', $e->getMessage());
             throw $e;
         }
 

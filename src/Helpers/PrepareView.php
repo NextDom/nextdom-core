@@ -83,9 +83,9 @@ class PrepareView
         $rights = $controllerRouteData->getCondition();
         if ($rights !== '') {
             if ($rights === 'admin') {
-                $canUseRoute = Status::isConnectedAdminOrFail();
+                $canUseRoute = AuthentificationHelper::isConnectedAdminOrFail();
             } else {
-                $canUseRoute = Status::isConnectedOrFail();
+                $canUseRoute = AuthentificationHelper::isConnectedOrFail();
             }
         }
         return $canUseRoute;
@@ -242,7 +242,7 @@ class PrepareView
 
         $pageData['JS_VARS'] = [
             'user_id' => $_SESSION['user']->getId(),
-            'user_isAdmin' => Status::isConnectAdmin(),
+            'user_isAdmin' => AuthentificationHelper::isConnectAdmin(),
             'user_login' => $_SESSION['user']->getLogin(),
             'nextdom_Welcome' => $configs['nextdom::Welcome'],
             'notify_status' => $configs['notify::status'],
@@ -309,7 +309,7 @@ class PrepareView
         $pageData['varToJs'] = Utils::getVarsToJS(array(
             'userProfils' => $_SESSION['user']->getOptions(),
             'user_id' => $_SESSION['user']->getId(),
-            'user_isAdmin' => Status::isConnectAdmin(),
+            'user_isAdmin' => AuthentificationHelper::isConnectAdmin(),
             'user_login' => $_SESSION['user']->getLogin(),
             'nextdom_firstUse' => $configs['nextdom::firstUse'] // TODO sans doute inutile
         ));
@@ -436,7 +436,7 @@ class PrepareView
      */
     private static function initMenu(&$pageData, $currentPlugin)
     {
-        $pageData['IS_ADMIN'] = Status::isConnectAdmin();
+        $pageData['IS_ADMIN'] = AuthentificationHelper::isConnectAdmin();
         $pageData['CAN_SUDO'] = NextDomHelper::isCapable('sudo');
         $pageData['MENU_NB_MESSAGES'] = MessageManager::nbMessage();
         $pageData['NOTIFY_STATUS'] = ConfigManager::byKey('notify::status');
@@ -588,9 +588,9 @@ class PrepareView
             }
         }
 
-        if (!Status::isRescueMode()) {
+        if (!AuthentificationHelper::isRescueMode()) {
 
-            if (Status::isConnected()) {
+            if (AuthentificationHelper::isConnected()) {
 
                 if (isset($_SESSION['user']) && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
                     $highstockThemeFile = '/vendor/node_modules/highcharts/themes/' . $_SESSION['user']->getOptions('desktop_highcharts_theme') . '.js';

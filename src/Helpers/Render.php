@@ -71,7 +71,7 @@ class Render
      */
     private function initRenderer()
     {
-        $developerMode = Status::isInDeveloperMode();
+        $developerMode = AuthentificationHelper::isInDeveloperMode();
         $loader = new Twig_Loader_Filesystem(realpath('views'));
         $this->twigLoader = $loader;
         $twigConfig = [
@@ -164,7 +164,7 @@ class Render
     private function showDebugBar(Twig_Loader_Filesystem $twigLoader)
     {
         $debugBarData = false;
-        if (Status::isInDeveloperMode()) {
+        if (AuthentificationHelper::isInDeveloperMode()) {
             $debugBar = new StandardDebugBar();
             $debugBarRenderer = $debugBar->getJavascriptRenderer();
             try {

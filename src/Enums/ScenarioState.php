@@ -19,6 +19,7 @@ namespace NextDom\Enums;
 
 class ScenarioState extends Enum
 {
-    const IN_PROGRESS = 'in progress';
     const ERROR = 'error';
+    const IN_PROGRESS = 'in progress';
+    const STOP = 'stop';
 }
