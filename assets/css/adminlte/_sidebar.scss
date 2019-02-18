@@ -120,13 +120,24 @@
 }
 
 .sidebar-warning {
-    background-color: $orange;
-    color: $black !important;
-    opacity: 0.6;
+  background-color: $orange;
+  opacity: 0.8;
 }
 
 .divider {
   border-bottom: 1px solid rgba(255, 255, 255, .1);
   margin-bottom: 5px !important;
   padding-bottom: 3px !important;
+}
+
+.sidebar a:hover {
+  text-decoration: none;
+}
+
+.sidebar-form .btn {
+  color: $darkgrey;
+  border-top-left-radius: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 0;
 }
