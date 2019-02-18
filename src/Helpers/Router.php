@@ -160,4 +160,10 @@ class Router
         require(NEXTDOM_ROOT . '/public/404.html');
         exit();
     }
+
+    public static function showError401AndDie()
+    {
+        header("HTTP/1.1 401 Unauthorized");
+        die();
+    }
 }

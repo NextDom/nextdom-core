@@ -142,43 +142,43 @@
 
                     <!-- Cloud Section -->
                     {% for repo, repoData in backupReposList %}
-                        {% if repoData['scope']['backup'] != false %}
-                            {% set cssClass = 'repo_' ~ repo %}
-                            <fieldset class="legend-section repo">
-                                <legend>{{ 'Sauvegardes' }} {{ repoData['name'] }}</legend>
-                                {% if repoData['enable'] != 0 %}
-                                    <div class="form-group">
-                                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Envoi automatique' }}</label>
-                                        <div class="col-sm-4 col-xs-6">
-                                            <input type="checkbox" class="configKey" data-l1key="{{ repo }}::cloudUpload" id="{{ repo }}"/>
-                                            <label for="{{ repo }}" class="control-label label-check">{{ 'Activer' }}</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Sauvegardes disponibles' }}</label>
-                                        <div class="col-sm-6 col-xs-6">
-                                            <select class="form-control sel_restoreCloudBackup" data-repo="{{ repo }}">
-                                                <option>{{ 'Chargement...' }}</option>
-                                            </select>
-                                            <script>
-                                                REPO_LIST.push('{{ repo }}');
-                                            </script>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Restauration' }}</label>
-                                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                                        <a class="btn btn-warning" id="bt_restoreRepoBackup" data-repo="{{ repo }}">
-                                            <i class="fas fa-refresh fa-spin" style="display: none;"></i><i class="fas fa-window-restore"></i>&nbsp;&nbsp;{{ 'Restaurer la selection' }}
-                                        </a>
-                                    </div>
-                                {% else %}
-                                    <p class="alert alert-warning">{{ 'Le service est désactivé, vous pouvez l\'activer ' }}<a href="/index.php?v=d&p=update_admin">{{ 'ici.' }}</a></p>
-                                {% endif %}
-                            </fieldset>
-                        {% endif %}
-                    {% endfor %}
+                    {% if repoData['scope']['backup'] != false %}
+                    {% set cssClass = 'repo_' ~ repo %}
+                    <fieldset class="legend-section repo">
+                        <legend>{{ 'Sauvegardes' }} {{ repoData['name'] }}</legend>
+                        {% if repoData['enable'] != 0 %}
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Envoi automatique' }}</label>
+                            <div class="col-sm-4 col-xs-6">
+                                <input type="checkbox" class="configKey" data-l1key="{{ repo }}::cloudUpload" id="{{ repo }}"/>
+                                <label for="{{ repo }}" class="control-label label-check">{{ 'Activer' }}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Sauvegardes disponibles' }}</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <select class="form-control sel_restoreCloudBackup" data-repo="{{ repo }}">
+                                    <option>{{ 'Chargement...' }}</option>
+                                </select>
+                                <script>
+                                    REPO_LIST.push('{{ repo }}');
+                                </script>
+                            </div>
+                        </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Restauration' }}</label>
+                <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                    <a class="btn btn-warning" id="bt_restoreRepoBackup" data-repo="{{ repo }}">
+                        <i class="fas fa-refresh fa-spin" style="display: none;"></i><i class="fas fa-window-restore"></i>&nbsp;&nbsp;{{ 'Restaurer la selection' }}
+                    </a>
+                </div>
+                {% else %}
+                    <p class="alert alert-warning">{{ 'Le service est désactivé, vous pouvez l\'activer ' }}<a href="/index.php?v=d&p=update_admin">{{ 'ici.' }}</a></p>
+                {% endif %}
+                </fieldset>
+                {% endif %}
+                {% endfor %}
                 </form>
             </div>
         </div>

@@ -37,7 +37,7 @@
  $('#bt_downloadLog').click(function() {
      var logFile = $('.li_log.active').attr('data-log')
      if (logFile !== undefined) {
-         window.open('core/php/downloadFile.php?pathfile=' + logFile, "_blank", null);
+         window.open('core/php/downloadFile.php?pathfile=log/' + logFile, "_blank", null);
      }
 });
 

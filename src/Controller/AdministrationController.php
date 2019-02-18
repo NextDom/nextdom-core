@@ -70,7 +70,7 @@ class AdministrationController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/administration.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/administration.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/administration.html.twig', $pageData);
     }
     
     private static function initMemoryInformations(&$pageData) {
