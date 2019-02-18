@@ -37,9 +37,7 @@ class AdministrationController extends BaseController
      *
      * @return string Content of administration page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {
@@ -69,7 +67,7 @@ class AdministrationController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/administration.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/administration.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/administration.html.twig', $pageData);
     }
     
     private static function initMemoryInformations(&$pageData) {

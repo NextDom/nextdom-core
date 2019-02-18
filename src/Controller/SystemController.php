@@ -41,9 +41,9 @@ class SystemController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['systemCanSudo'] = NextDomHelper::isCapable('sudo');
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/system.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/osdb/system.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return Render::getInstance()->get('/desktop/system.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/tools/osdb/system.html.twig', $pageData);
     }
 }

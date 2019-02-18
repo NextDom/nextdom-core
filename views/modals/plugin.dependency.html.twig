@@ -16,7 +16,7 @@
                 {% elseif dependencyInfo['state'] == 'nok' %}
                     <span class="label label-danger label-sticker-sm">{{ 'NOK' }}</span>
                 {% elseif dependencyInfo['state'] == 'in_progress' %}
-                    <span class="label label-primary label-sticker-sm"><i class="fas fa-spinner fa-spin"></i>&nbsp;&nbsp;{{ 'Installation en cours' }}
+                    <span class="label label-primary label-sticker-sm"><i class="fas fa-spinner fa-spin spacing-right"></i>{{ 'Installation en cours' }}
                         {% if dependencyInfo['progression'] is defined and dependencyInfo['progression'] != '' %}
                              - {{ dependencyInfo['progression'] }} %
                         {% endif %}
@@ -29,7 +29,7 @@
                 {% endif %}
             </td>
             <td>
-                <a class="btn btn-warning btn-sm launchInstallPluginDependancy"><i class="fas fa-bicycle">&nbsp;&nbsp;</i>{{ 'Relancer' }}</a>
+                <a class="btn btn-warning btn-sm launchInstallPluginDependancy"><i class="fas fa-bicycle spacing-right"></i>{{ 'Relancer' }}</a>
             </td>
             <td class="td_lastLaunchDependancy">
                 {{ dependencyInfo['last_launch'] }}
@@ -55,7 +55,7 @@
                     case 'in_progress':
                     nok = true;
                     $("#div_plugin_dependancy").closest('.box').removeClass('box-success box-danger').addClass('box-info');
-                    var html = '<span class="label label-primary label-sticker-sm"><i class="fas fa-spinner fa-spin"></i>&nbsp;&nbsp;{{ 'Installation en cours' }}';
+                    var html = '<span class="label label-primary label-sticker-sm"><i class="fas fa-spinner fa-spin spacing-right"></i>{{ 'Installation en cours' }}';
                     if(isset(data.progression) && data.progression !== ''){
                         html += ' - '+data.progression+' %';
                     }

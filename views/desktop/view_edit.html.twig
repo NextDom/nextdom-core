@@ -42,7 +42,7 @@
                 {% for view in viewEditViewsList %}
                     <li class="cursor li_view" data-view_id="{{ view.getId() }}">
                         <div class="label-view">
-                            <i class="fas fa-arrows-alt-v pull-left cursor">&nbsp;&nbsp;</i>&nbsp;{{ view.getDisplay('icon')|raw }} {{ view.getName() }}
+                            <i class="fas fa-arrows-alt-v pull-left cursor spacing-right"></i>{{ view.getDisplay('icon')|raw }}<i class="spacing-right"></i>{{ view.getName() }}
                         </div>
                     </li>
                 {% endfor %}
