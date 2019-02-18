@@ -67,26 +67,6 @@ $(".bt_detailsObject").on('click', function (event) {
     return false;
 });
 
-$('#in_searchObject').keyup(function () {
-    var search = $(this).value();
-    if(search == ''){
-        $('.objectDisplayCard').show();
-        $('.objectListContainer').packery();
-        return;
-    }
-    $('.objectDisplayCard').hide();
-    $('.objectDisplayCard .name').each(function(){
-        var text = $(this).text().toLowerCase();
-        if(text.indexOf(search.toLowerCase()) >= 0){
-            $(this)
-            $(this).closest('.objectDisplayCard').show();
-        }
-    });
-    $('.objectListContainer').packery();
-});
-
-
-
 $('#bt_removeBackgroundImage').off('click').on('click', function () {
     nextdom.object.removeImage({
         view: $('.objectAttr[data-l1key=id]').value(),

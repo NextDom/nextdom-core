@@ -47,22 +47,6 @@
     </section>
 
     <section class="content">
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title"><i class="fas fa-clone">&nbsp;&nbsp;</i>{{ 'Liste des objets de votre ' }} {{ objectProductName }} - {{objectCustomProductName}}</legend>
-            </div>
-
-            <div class="box-body">
-                <fieldset>
-                    <legend>{{ 'Le titre de l\'objet vous redirige vers sa section du dashboard...' }}</legend>
-                    <div class="input-group">
-                        <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                        <input class="form-control" id="in_searchObject" placeholder="{{'Rechercher...'}}" />
-                    </div>
-                </fieldset>
-            </div>
-        </div>
-
         <div class="objectListContainer row">
             {% for object in objectList %}
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
@@ -191,11 +175,11 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Icône' }}</label>
-                                <div class="col-xs-2">
-                                    <a class="btn btn-action" id="bt_chooseIcon"><i class="fas fa-flag">&nbsp;&nbsp;</i>{{ 'Choisir' }}</a>
-                                </div>
-                                <div class="col-xs-3">
-                                    <div class="objectAttr label label-icon" data-l1key="display" data-l2key="icon"></div>
+                                <div class="col-lg-2 col-md-3 col-sm-4 col-xs-12">
+                                    <div class="input-group">
+                                        <a class="btn btn-action" id="bt_chooseIcon"><i class="fas fa-flag">&nbsp;&nbsp;</i>{{ 'Choisir' }}</a>
+                                        <div class="objectAttr label label-icon" data-l1key="display" data-l2key="icon"></div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">

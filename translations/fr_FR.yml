@@ -9,27 +9,80 @@ common:
   previous: Précédent
   ignore: Ignorer
   finish: Terminer
+  days: jours
+  hours: heures
+  minutes: minutes
 
 connection:
   home-msg: Connectez-vous pour accéder à votre session...
   login-placeholder: Identifiant... (admin par défaut)
   password-placeholder: Mot de passe...
-  two-factors-placeholder: Code à 2 facteurs
+  two-factors-placeholder: Code à 2 facteurs...
   remember-title: En cochant cette case, vous n'aurez plus besoin de vous saisir vos identifiants.
   remember-label: Se souvenir de moi ?
   connect: Connexion
   forgot: Oups, J'ai oublié mon mot de passe !
 
 core:
-  error-401: 401 - Accès non autorisé
-  error-ajax: Requête Ajax inconnue
+  error-401: "401 - Accès non autorisé"
+  error-ajax: "Requête Ajax inconnue"
   api-connection: "Connexion par API de l'utilisateur : "
-  enable-tasks: Activer toutes les tâches cron
-  disable-tasks: Désactiver toutes les tâches cron
-  disable-cron-master: Arrêter la tâche cron principale...
-  enable-all-scenarios: Activer tous les scénarios
-  disable-all-scenarios: Désactiver tous les scénarios
+  enable-tasks: "Activer toutes les tâches cron..."
+  disable-tasks: "Désactiver toutes les tâches cron..."
+  disable-cron-master: "Arrêter la tâche cron principale..."
+  enable-all-scenarios: "Activer tous les scénarios..."
+  disable-all-scenarios: "Désactiver tous les scénarios..."
   incorrect-sys-date: "La date du système est incorrect (avant %s ou après %s) : "
+
+page-title:
+  administration: Administration
+  users: Utilisateurs
+  api: API
+  networks: Réseaux
+  security: Sécurité
+  cache: Cache
+  services: Services
+  settings: Paramétrages
+  general: Général
+  customization: Customisation
+  profil: Profil
+  commands: Commandes
+  links: Liens
+  interacts: Intéractions
+  equipments: Équipements
+  summaries: Résumés
+  reports: Rapports
+  logs: Logs
+  diagnostics: Diagnostics
+  health: Santé
+  tasks: Tâches
+  realtime: Temps réel
+  historics: Historiques
+  timeline: Timeline
+  backups: Sauvegardes
+  updates: Mise à jours
+  notes: Notes
+  database: OS/DB
+  scenarios: Scénarios
+
+administration:
+  cpu: CPU
+  cpu-cores: cœurs
+  of-cpu-load: % de charge
+  of-memory-used: % utilisée
+  of-space-used: % d'espace utilisé
+  memory: RAM
+  hdd: HDD
+  swap: Swap
+  http-connections-count: Nombre de connexions HTTP
+  connections-count: Nombre de connexions
+  process-count: Nombre de processus
+  uptime: Système démarré depuis
+  welcome-page: Page de bienvenue
+  developer-documentation: Documentation Dev.
+  power-off: Éteindre
+  restart: Redémarrer
+  disconnect: Se déconnecter
 
 health:
   apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (NextDom ne peut marcher avec). Voir <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\">ici</a>
@@ -96,7 +149,7 @@ welcome:
   doc-launch : Accéder à la documentation
   forum-title: Forum
   forum-subtitle : Trouver de l'aide sur notre forum
-  forum-content: | 
+  forum-content: |
                 Le forum %productName% est un moyen simple et efficace de trouver la solution a votre problème.
                 Il y a sûrement une autre personne qui a déja rencontré le même problème que vous.
                 Si ce n'est pas le cas, posez votre question, la communauté y répondra au plus vite.
@@ -162,7 +215,7 @@ firstuse:
   market-username-placeholder: Nom d'utilisateur...
   market-password-placeholder: Mot de passe...
   customize-title: Personnalisez votre %productName% !
-  customize-content: Selectionnez le theme qui vous correspond.
+  customize-content: Selectionnez le thème qui vous correspond le plus, d'autres étant selectionnables ou personnalisable dans la page Customisation...
   congrats-title: Bravo ! La configuration de votre %productName% est terminée !
   congrats-content: Cliquez sur le bouton Terminer pour profiter de votre solution Domotique...
 
