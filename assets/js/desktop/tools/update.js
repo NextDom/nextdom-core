@@ -321,14 +321,14 @@ function addUpdate(_update) {
     tr += '<span data-toggle="tooltip" title="" class="updateAttr badge ' + bgClass +' pull-right" data-original-title="" data-l1key="status" style="text-transform: uppercase;"></span>';
     tr += '</div>';
     tr += '<div class="box-body">';
-    tr += '<span class="updateAttr" data-l1key="id" style="display:none;"></span><b>{{Source : }}</b><span class="updateAttr" data-l1key="source"></span>';
+    tr += '<span class="updateAttr" data-l1key="id" style="display:none;"></span><p><b>{{Source : }}</b><span class="updateAttr" data-l1key="source"></span></p>';
     tr += '<p><b>{{Type : }}</b><span class="updateAttr" data-l1key="type"></span></p>';
-    tr += '<p><i>{{Branche : }}</i>';
+    tr += '<p><b>{{Branche : }}</b>';
     if(_update.configuration && _update.configuration.version){
         tr += _update.configuration.version ;
     }
     tr += '</p>';
-    tr += '<p><i>{{Version : }}</i>'+_update.remoteVersion+'</p>';
+    tr += '<p><b>{{Version : }}</b>'+_update.remoteVersion+'</p>';
     if (_update.type != 'core') {
         tr += '<input type="checkbox" class="updateAttr" data-l1key="configuration" data-l2key="doNotUpdate"><span style="font-size:1em;">{{Ne pas mettre à jour}}</span></br>';
     }
@@ -336,10 +336,13 @@ function addUpdate(_update) {
     tr += '<div class="box-footer clearfix text-center">';
 
     if (_update.type != 'core') {
+        tr += '<a class="btn btn-danger btn-sm pull-right remove" ><i class="far fa-trash-alt spacing-right"></i>{{Supprimer}}</a>';
+    }
+    if (_update.type != 'core') {
         if (_update.status == 'update') {
-            tr += '<a class="btn btn-warning btn-sm update" title="{{Mettre à jour}}"><i class="fas fa-refresh spacing-right"></i>{{Mettre à jour}}</a> ';
+            tr += '<a class="btn btn-warning btn-sm update pull-right" title="{{Mettre à jour}}"><i class="fas fa-refresh spacing-right"></i>{{Mettre à jour}}</a> ';
         }else if (_update.type != 'core') {
-            tr += '<a class="btn  btn-default btn-sm update" title="{{Re-installer}}"><i class="fas fa-refresh spacing-right"></i>{{Reinstaller}}</a> ';
+            tr += '<a class="btn  btn-default btn-sm update pull-right" title="{{Re-installer}}"><i class="fas fa-refresh spacing-right"></i>{{Reinstaller}}</a> ';
         }
     }
     if (_update.type != 'core') {
@@ -350,9 +353,6 @@ function addUpdate(_update) {
         tr += '<a class="btn btn-default btn-sm pull-right" href="https://nextdom.github.io/core/fr_FR/changelog" target="_blank"><i class="fas fa-book spacing-right"></i>{{Changelog}}</a>';
     }
     tr += '<a class="btn btn-info btn-sm pull-left checkUpdate" ><i class="fas fa-check spacing-right"></i>{{Vérifier}}</a>';
-    if (_update.type != 'core') {
-        tr += '<a class="btn btn-danger btn-sm pull-right remove" ><i class="far fa-trash-alt spacing-right"></i>{{Supprimer}}</a>';
-    }
     tr += '</div>';
     tr += '</div>';
 
