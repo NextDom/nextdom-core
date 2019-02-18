@@ -611,36 +611,7 @@ class PrepareView
             $pageData['CSS_POOL'][] = '/public/css/rescue.css';
         }
     }
-
-    /**
-     * @param Render $render
-     * @param array $pageContent
-     * @param string $page
-     * @param $currentPlugin
-     *
-     * @return mixed
-     * @throws \Exception
-     */
-    private static function getContent(Render $render, array &$pageContent, string $page, $currentPlugin)
-    {
-        if ($currentPlugin !== null && is_object($currentPlugin)) {
-            ob_start();
-            FileSystemHelper::includeFile('desktop', $page, 'php', $currentPlugin->getId(), true);
-            return ob_get_clean();
-        } else {
-            $routeFileLocator = new FileLocator(NEXTDOM_ROOT . '/src');
-            $yamlLoader = new YamlFileLoader($routeFileLocator);
-            $routes = $yamlLoader->load('pages_routes.yml');
-            $controllerRoute = $routes->get($page);
-            if ($controllerRoute === null) {
-                Router::showError404AndDie();
-                return null;
-            } else {
-                return call_user_func_array($controllerRoute->getDefaults()['_controller'], [$render, &$pageContent]);
-            }
-        }
-    }
-
+    
     /**
      * Response to an Ajax request
      *
