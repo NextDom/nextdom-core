@@ -39,7 +39,6 @@ class DashBoardController extends BaseController
     /**
      * Render dashboard
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of Dashboard V2 page
@@ -48,7 +47,7 @@ class DashBoardController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render, &$pageData): string
+    public static function get(&$pageData): string
     {
         $pageData['JS_VARS']['nextdom_Welcome'] = ConfigManager::byKey('nextdom::Welcome');
         $pageData['JS_VARS']['SEL_OBJECT_ID'] = Utils::init('object_id');
@@ -89,7 +88,7 @@ class DashBoardController extends BaseController
         $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/dashboard.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/dashboard.html.twig', $pageData);
     }
 
 }

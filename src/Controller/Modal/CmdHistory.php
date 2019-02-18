@@ -31,14 +31,12 @@ class CmdHistory extends BaseAbstractModal
     /**
      * Render command history modal (scenario)
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
         $pageData = [];
         $pageData['dates'] = array(
@@ -49,6 +47,6 @@ class CmdHistory extends BaseAbstractModal
         $pageData['step'] = Utils::init('step', 0);
         $pageData['id'] = Utils::init('id');
 
-        return $render->get('/modals/cmd.history.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/cmd.history.html.twig', $pageData);
     }
 }

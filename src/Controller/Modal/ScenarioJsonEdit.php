@@ -32,15 +32,13 @@ class ScenarioJsonEdit extends BaseAbstractModal
     /**
      * Render scenario json edit configure modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
 
         $scenarioId = Utils::init('id');
@@ -56,7 +54,7 @@ class ScenarioJsonEdit extends BaseAbstractModal
         }
         $pageData['scenarioJson'] = json_encode($json, JSON_PRETTY_PRINT);
 
-        return $render->get('/modals/scenario.jsonEdit.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/scenario.jsonEdit.html.twig', $pageData);
     }
 
 }

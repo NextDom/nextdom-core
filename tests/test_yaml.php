@@ -1,9 +1,11 @@
 <?php
 
-define('TRANSLATIONS_PATH', realpath(__DIR__ . '/../translations'));
-define('CACHE_PATH', realpath(__DIR__ . '/../var/i18n'));
+system('mkdir -p ' . __DIR__ . '/../var/cache/i18n');
 
-if (count($argv) == 3) {
+define('TRANSLATIONS_PATH', realpath(__DIR__ . '/../translations'));
+define('CACHE_PATH', realpath(__DIR__ . '/../var/cache/i18n'));
+
+if (count($argv) < 4) {
     echo "Utilisation : ".$argv[0]." LOCALE STR_TO_TEST STR_RESULT\n";
     die();
 }
@@ -33,7 +35,7 @@ if (strcmp($result, $argv[3]) !== 0) {
     exit(1);
 }
 
-if (count(glob(CACHE_PATH . '/catalogue.fr_FR.*')) == 0) {
+if (count(glob(CACHE_PATH . '/catalogue.' . LOCALE . '.*')) == 0) {
     echo "Cache file not generated.\n";
     exit(1);
 }

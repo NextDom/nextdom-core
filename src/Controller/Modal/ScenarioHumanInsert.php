@@ -30,20 +30,18 @@ class ScenarioHumanInsert extends BaseAbstractModal
     /**
      * Render scenario human insert modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
 
         $pageData = [];
         $pageData['scenarios'] = ScenarioManager::all();
 
-        return $render->get('/modals/scenario.human.insert.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/scenario.human.insert.html.twig', $pageData);
     }
 
 }

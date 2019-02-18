@@ -39,14 +39,16 @@ class ViewManager
     const CLASS_NAME = 'view';
 
 
-    public static function all() {
+    public static function all()
+    {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . ' 
         ORDER BY `order`';
         return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function byId($_id) {
+    public static function byId($_id)
+    {
         $value = array(
             'id' => $_id,
         );
@@ -56,7 +58,8 @@ class ViewManager
         return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function searchByUse($_type, $_id) {
+    public static function searchByUse($_type, $_id)
+    {
         $return = array();
         $viewDatas = ViewDataManager::byTypeLinkId($_type, $_id);
         $search = '#' . str_replace('cmd', '', $_type . $_id) . '#';

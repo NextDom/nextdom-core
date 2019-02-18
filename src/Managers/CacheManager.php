@@ -37,6 +37,7 @@ namespace NextDom\Managers;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
+use NextDom\Model\Entity\Cache;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
@@ -74,7 +75,7 @@ class CacheManager
         if ($lifetime < 0) {
             $lifetime = 0;
         }
-        $cacheItem = new \cache();
+        $cacheItem = new Cache();
         $cacheItem->setKey($key)
             ->setValue($value)
             ->setLifetime($lifetime);
@@ -197,7 +198,7 @@ class CacheManager
     {
         $cache = self::getCache()->fetch($key);
         if (!is_object($cache)) {
-            $cache = new \cache();
+            $cache = new Cache();
             $cache->setKey($key)
                 ->setDatetime(date('Y-m-d H:i:s'));
         }

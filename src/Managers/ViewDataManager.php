@@ -41,13 +41,15 @@ class ViewDataManager
     const CLASS_NAME = 'viewData';
 
 
-    public static function all() {
+    public static function all()
+    {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME;
         return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function byId($_id) {
+    public static function byId($_id)
+    {
         $value = array(
             'id' => $_id,
         );
@@ -63,7 +65,8 @@ class ViewDataManager
      * @return ViewData[]|null
      * @throws \Exception
      */
-    public static function byTypeLinkId($_type, $_link_id) {
+    public static function byTypeLinkId($_type, $_link_id)
+    {
         $value = array(
             'type' => $_type,
             'link_id' => $_link_id,
@@ -76,7 +79,8 @@ class ViewDataManager
         return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function byViewZoneId($_viewZone_id) {
+    public static function byViewZoneId($_viewZone_id)
+    {
         $value = array(
             'viewZone_id' => $_viewZone_id,
         );
@@ -92,7 +96,8 @@ class ViewDataManager
      * @return ViewData[]|null
      * @throws \Exception
      */
-    public static function searchByConfiguration($_search) {
+    public static function searchByConfiguration($_search)
+    {
         $value = array(
             'search' => '%' . $_search . '%',
         );
@@ -102,7 +107,8 @@ class ViewDataManager
         return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function removeByTypeLinkId($_type, $_link_id) {
+    public static function removeByTypeLinkId($_type, $_link_id)
+    {
         $viewDatas = self::byTypeLinkId($_type, $_link_id);
         foreach ($viewDatas as $viewData) {
             $viewData->remove();

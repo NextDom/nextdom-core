@@ -30,14 +30,13 @@ class FirstUseController extends BaseController
 {
     /**
      *
-     * @param \NextDom\Helpers\Render $render
      * @param array $pageData
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render, &$pageData): string
+    public static function get(&$pageData): string
     {
         $configs = ConfigManager::byKeys(array(
             'notify::status',
@@ -54,12 +53,11 @@ class FirstUseController extends BaseController
             'notify_position' => $configs['notify::position'],
             'notify_timeout' => $configs['notify::timeout'],
         ];
-        $render = Render::getInstance();
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
         $pageData['CSS_POOL'][] = '/public/css/firstUse.css';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/firstUse.js';
 
-        return $render->get('desktop/firstUse.html.twig', $pageData);
+        return Render::getInstance()->get('desktop/firstUse.html.twig', $pageData);
     }
 
 }

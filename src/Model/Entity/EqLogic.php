@@ -28,6 +28,7 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
+use NextDom\Managers\EqRealManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\JeeObjectManager;
@@ -349,7 +350,7 @@ class EqLogic
      */
     public function getEqReal()
     {
-        return EqReal::byId($this->eqReal_id);
+        return EqRealManager::byId($this->eqReal_id);
     }
 
     /**
@@ -361,7 +362,7 @@ class EqLogic
     }
 
     /**
-     * @return \jeeObject|null
+     * @return JeeObject|null
      * @throws \Exception
      */
     public function getObject()
@@ -714,7 +715,7 @@ class EqLogic
     /**
      * Check and update a command information
      *
-     * @param string|\cmd $_logicalId Logical id or cmd object
+     * @param string|Cmd $_logicalId Logical id or cmd object
      * @param mixed $_value Value to update
      * @param null $_updateTime
      *
@@ -1236,7 +1237,7 @@ class EqLogic
                 }
                 $this->setStatus('timeout', 0);
             } else {
-                $this->checkAlive();
+                EqLogicManager::checkAlive();
             }
         }
     }
@@ -1448,7 +1449,7 @@ class EqLogic
 
     /**
      * @param $_right
-     * @param \user|null $_user
+     * @param User|null $_user
      * @return bool
      */
     public function hasRight($_right, $_user = null)

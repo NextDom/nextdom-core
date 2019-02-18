@@ -34,15 +34,13 @@ class UserRights extends BaseAbstractModal
     /**
      * Render user rights modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
         $userId = Utils::init('id');
         $user = UserManager::byId($userId);
@@ -61,7 +59,7 @@ class UserRights extends BaseAbstractModal
         $pageData['eqLogics'] = EqLogicManager::all();
         $pageData['scenarios'] = ScenarioManager::all();
 
-        return $render->get('/modals/user.rights.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/user.rights.html.twig', $pageData);
     }
 
 }

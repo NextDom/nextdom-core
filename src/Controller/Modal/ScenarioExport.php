@@ -31,15 +31,13 @@ class ScenarioExport extends BaseAbstractModal
     /**
      * Render scenario export modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
 
         $scenario = ScenarioManager::byId(init('scenario_id'));
@@ -51,7 +49,7 @@ class ScenarioExport extends BaseAbstractModal
         $pageData = [];
         $pageData['scenarioExportData'] = $scenario->export();
 
-        return $render->get('/modals/scenario.export.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/scenario.export.html.twig', $pageData);
     }
 
 }

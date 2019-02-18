@@ -82,7 +82,7 @@ class UpdateManager
             }
         }
         if (!$findCore && ($filter == '' || $filter == 'core')) {
-            $update = (new \update())
+            $update = (new Update())
                 ->setType('core')
                 ->setLogicalId('nextdom')
                 ->setSource(ConfigManager::byKey('core::repo::provider'))
@@ -203,7 +203,7 @@ class UpdateManager
     /**
      * Get updates from their status
      * @param $status
-     * @return \update[]
+     * @return Update[]
      * @throws \Exception
      */
     public static function byStatus($status)
@@ -316,7 +316,7 @@ class UpdateManager
             $pluginId = $plugin->getId();
             $update = self::byTypeAndLogicalId('plugin', $pluginId);
             if (!is_object($update)) {
-                $update = (new \update())
+                $update = (new Update())
                     ->setLogicalId($pluginId)
                     ->setType('plugin')
                     ->setLocalVersion(date('Y-m-d H:i:s'));
@@ -329,7 +329,7 @@ class UpdateManager
                     $find[$logical_id] = true;
                     $update = self::byTypeAndLogicalId($pluginId, $logical_id);
                     if (!is_object($update)) {
-                        $update = (new \update())
+                        $update = (new Update())
                             ->setLogicalId($logical_id)
                             ->setType($pluginId)
                             ->setLocalVersion(date('Y-m-d H:i:s'));

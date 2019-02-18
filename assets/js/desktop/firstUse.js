@@ -231,7 +231,6 @@ function BackStep(_step) {
     var curStep = $(_step).closest(".setup-content");
     var curStepBtn = curStep.attr("id");
     var nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().prev().children("a");
-    console.log(nextStepWizard);
 
     var curInputs = curStep.find("input[type='text'],input[type='url']");
     isValid = true;

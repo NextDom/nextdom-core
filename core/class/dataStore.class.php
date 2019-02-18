@@ -21,7 +21,7 @@ require_once __DIR__ . '/../../core/php/core.inc.php';
 
 use NextDom\Managers\DataStoreManager;
 
-class dataStore extends \NextDom\Model\Entity\Datastore {
+class dataStore extends \NextDom\Model\Entity\DataStore {
     public static function byId($_id) {
         return DataStoreManager::byId($_id);
     }

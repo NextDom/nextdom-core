@@ -34,7 +34,6 @@ class TimelineController extends BaseController
     /**
      * Render history page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of history page
@@ -43,7 +42,7 @@ class TimelineController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render, &$pageData): string
+    public static function get(&$pageData): string
     {
         $pageData['historyDate'] = [
             'start' => date('Y-m-d', strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
@@ -59,6 +58,6 @@ class TimelineController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/timeline.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/diagnostic/timeline.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/diagnostic/timeline.html.twig', $pageData);
     }
 }

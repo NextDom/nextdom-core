@@ -31,7 +31,6 @@ class UsersController extends BaseController
 {
     /** Render summary page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of users page
@@ -40,7 +39,7 @@ class UsersController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render, &$pageData): string
+    public static function get(&$pageData): string
     {
         $pageData['userLdapEnabled'] = ConfigManager::byKey('ldap::enable');
         if ($pageData['userLdapEnabled'] != '1') {
@@ -53,7 +52,7 @@ class UsersController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/user.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/admin/users.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/admin/users.html.twig', $pageData);
     }
 
 

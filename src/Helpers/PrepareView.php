@@ -28,6 +28,7 @@ use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\ViewManager;
+use NextDom\Model\Entity\Plugin;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 
@@ -58,14 +59,13 @@ class PrepareView
      * Load routes file and show content depends of the route
      *
      * @param \Symfony\Component\Routing\Route $controllerRouteData
-     * @param Render|null $render Render helper
      * @param array|null $pageData Array with the content to pass to the render
      *
      * @return string|null Content of the route
      */
-    private static function getContentFromControllerRouteData($controllerRouteData, Render $render = null, array &$pageData = null)
+    private static function getContentFromControllerRouteData($controllerRouteData, array &$pageData = null)
     {
-        return call_user_func_array($controllerRouteData->getDefaults()['_controller'], [$render, &$pageData]);
+        return call_user_func_array($controllerRouteData->getDefaults()['_controller'], [&$pageData]);
     }
 
     /**
@@ -77,14 +77,14 @@ class PrepareView
      *
      * @throws \NextDom\Exceptions\CoreException
      */
-    private static function userCanUseRoute($controllerRouteData) {
+    private static function userCanUseRoute($controllerRouteData)
+    {
         $canUseRoute = true;
         $rights = $controllerRouteData->getCondition();
         if ($rights !== '') {
             if ($rights === 'admin') {
                 $canUseRoute = Status::isConnectedAdminOrFail();
-            }
-            else {
+            } else {
                 $canUseRoute = Status::isConnectedOrFail();
             }
         }
@@ -96,23 +96,19 @@ class PrepareView
      *
      * @param string $routesFile Name of the route file in src directory
      * @param string $routeCode Code of the route
-     * @param Render|null $render Render helper
      * @param array|null $pageData Array with the content to pass to the render
      *
      * @return string|null Content of the route
      * @throws \NextDom\Exceptions\CoreException
      */
-    private static function getContentFromRoute(string $routesFile, string $routeCode, Render $render = null, array &$pageData = null)
+    private static function getContentFromRoute(string $routesFile, string $routeCode, array &$pageData = null)
     {
         $controllerRoute = self::getControllerRouteData($routesFile, $routeCode);
         if ($controllerRoute === null) {
             Router::showError404AndDie();
         } else {
             if (self::userCanUseRoute($controllerRoute)) {
-                if ($render === null) {
-                    $render = Render::getInstance();
-                }
-                return self::getContentFromControllerRouteData($controllerRoute, $render, $pageData);
+                return self::getContentFromControllerRouteData($controllerRoute, $pageData);
             }
         }
         return null;
@@ -129,7 +125,7 @@ class PrepareView
     {
         $pageData = [];
         self::initHeaderData($pageData, $configs);
-        echo self::getContentFromRoute('pages_routes.yml', $pageCode, null, $pageData);
+        echo self::getContentFromRoute('pages_routes.yml', $pageCode, $pageData);
     }
 
     /**
@@ -174,14 +170,13 @@ class PrepareView
                 }
             } else {
                 if (self::userCanUseRoute($controllerRoute)) {
-                    $render = Render::getInstance();
                     $pageData = [];
                     $pageData['JS_POOL'] = [];
                     $pageData['JS_END_POOL'] = [];
                     $pageData['CSS_POOL'] = [];
                     $pageData['JS_VARS'] = [];
-                    $pageData['content'] = self::getContentFromControllerRouteData($controllerRoute, $render, $pageData);
-                    $render->show('/layouts/ajax_content.html.twig', $pageData);
+                    $pageData['content'] = self::getContentFromControllerRouteData($controllerRoute, $pageData);
+                    Render::getInstance()->show('/layouts/ajax_content.html.twig', $pageData);
                 }
             }
         } catch (\Exception $e) {
@@ -189,6 +184,27 @@ class PrepareView
             echo '<div class="alert alert-danger div_alert">';
             echo TranslateHelper::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
             echo '</div>';
+        }
+    }
+
+    /**
+     * Get the content of the route
+     *
+     * @param array $pageData
+     * @param string $page
+     * @param Plugin $currentPlugin
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    private static function getContent(array &$pageData, string $page, $currentPlugin)
+    {
+        if ($currentPlugin !== null && is_object($currentPlugin)) {
+            ob_start();
+            FileSystemHelper::includeFile('desktop', $page, 'php', $currentPlugin->getId(), true);
+            return ob_get_clean();
+        } else {
+            return self::getContentFromRoute('pages_routes.yml', $page, $pageData);
         }
     }
 
@@ -220,8 +236,7 @@ class PrepareView
             $pageData['TITLE'] = ucfirst($page) . ' - ' . $configs['product_name'];
         }
 
-        $render = Render::getInstance();
-        $currentPlugin = PrepareView::initPluginsData($render, $pageData, $eventsJsPlugin, $configs);
+        $currentPlugin = PrepareView::initPluginsData($pageData, $eventsJsPlugin, $configs);
         self::initPluginsEvents($eventsJsPlugin, $pageData);
         self::initHeaderData($pageData, $configs);
 
@@ -250,15 +265,14 @@ class PrepareView
             if (!NextDomHelper::isStarted()) {
                 $pageData['ALERT_MSG'] = \__('NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.');
             }
-            $pageData['content'] = self::getContent($render, $pageData, $page, $currentPlugin);
+            $pageData['content'] = self::getContent($pageData, $page, $currentPlugin);
         } catch (\Exception $e) {
             ob_end_clean();
             $pageData['ALERT_MSG'] = Utils::displayException($e);
         }
 
-        $pageData['CONTENT'] = $render->get('desktop/index.html.twig', $pageData);
-
         $render = Render::getInstance();
+        $pageData['CONTENT'] = $render->get('desktop/index.html.twig', $pageData);
         $render->show($baseView, $pageData);
     }
 
@@ -278,7 +292,7 @@ class PrepareView
             $_GET[GetParams::PAGE] = 'system';
         }
         $homeLink = 'index.php?v=d&p=dashboard';
-        $page = '';
+
         //TODO: Tests à revoir
         $page = Utils::init(GetParams::PAGE);
         if ($page == '') {
@@ -289,9 +303,8 @@ class PrepareView
         $language = $configs['language'];
 
         // TODO: Remplacer par un include dans twig
-        $render = Render::getInstance();
         self::initHeaderData($pageData, $configs);
-
+        $render = Render::getInstance();
         $pageData['CSS'] = $render->getCssHtmlTag('/public/css/nextdom.css');
         $pageData['varToJs'] = Utils::getVarsToJS(array(
             'userProfils' => $_SESSION['user']->getOptions(),
@@ -307,11 +320,11 @@ class PrepareView
         if (!NextDomHelper::isStarted()) {
             $pageData['alertMsg'] = \__('NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.');
         }
-        $pageData['CONTENT'] = self::getContent($render, $pageData, $page, null);
+        $pageData['CONTENT'] = self::getContent($pageData, $page, null);
 
-        $render = Render::getInstance();
         $render->show('layouts/base_rescue.html.twig', $pageData);
     }
+
 
     /**
      * Get the current home link
@@ -341,8 +354,6 @@ class PrepareView
     /**
      * Initialize plugins informations necessary for the menu
      *
-     * @param Render $render Render engine
-     *
      * @param $pageData
      * @param $eventsJsPlugin
      * @param $configs
@@ -351,7 +362,7 @@ class PrepareView
      *
      * @throws \Exception
      */
-    public static function initPluginsData(Render $render, &$pageData, &$eventsJsPlugin, $configs)
+    public static function initPluginsData(&$pageData, &$eventsJsPlugin, $configs)
     {
         global $NEXTDOM_INTERNAL_CONFIG;
 
@@ -376,7 +387,7 @@ class PrepareView
                     $name = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode]['name'];
                 }
 
-                $pageData['MENU_PLUGIN_CATEGORY'][$categoryCode]['name'] = $render->getTranslation($name);
+                $pageData['MENU_PLUGIN_CATEGORY'][$categoryCode]['name'] = Render::getInstance()->getTranslation($name);
                 $pageData['MENU_PLUGIN_CATEGORY'][$categoryCode]['icon'] = $icon;
 
                 foreach ($pluginsList as $plugin) {
@@ -486,7 +497,6 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
             $pageData['JS_END_POOL'][] = '/public/js/desktop/search.js';
-
         } else {
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = 'vendor/node_modules/jquery-ui-dist/jquery-ui.min.js';

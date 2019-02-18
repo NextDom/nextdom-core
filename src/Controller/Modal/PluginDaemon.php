@@ -31,14 +31,12 @@ class PluginDaemon extends BaseAbstractModal
     /**
      * Render plugin daemon modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
 
 
@@ -69,7 +67,7 @@ class PluginDaemon extends BaseAbstractModal
         }
         Utils::sendVarsToJs(['plugin_id' => $pluginId, 'refresh_deamon_info' => $refresh]);
 
-        return $render->get('/modals/plugin.daemon.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/plugin.daemon.html.twig', $pageData);
     }
 
 }

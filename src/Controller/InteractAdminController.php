@@ -29,7 +29,6 @@ class InteractAdminController extends BaseController
     /**
      * Render interactAdmin page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of interact_admin page
@@ -38,13 +37,13 @@ class InteractAdminController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render, &$pageData): string
+    public static function get(&$pageData): string
     {
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/interact_admin.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/params/interact_admin.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/params/interact_admin.html.twig', $pageData);
     }
 
 }

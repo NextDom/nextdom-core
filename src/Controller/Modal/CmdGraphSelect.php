@@ -30,14 +30,12 @@ class CmdGraphSelect extends BaseAbstractModal
     /**
      * Render command graph select modal (scenario)
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
         $pageData = [];
         $pageData['cmdData'] = [];
@@ -59,6 +57,6 @@ class CmdGraphSelect extends BaseAbstractModal
                 $pageData['cmdList'][] = $data;
             }
         }
-        return $render->get('/modals/cmd.graph.select.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/cmd.graph.select.html.twig', $pageData);
     }
 }

@@ -33,7 +33,6 @@ class AdministrationController extends BaseController
     /**
      * Render administration page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of administration page
@@ -42,7 +41,7 @@ class AdministrationController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render, &$pageData): string
+    public static function get(&$pageData): string
     {
         $pageData['numberOfUpdates'] = UpdateManager::nbNeedUpdate();
         self::initMemoryInformations($pageData);
