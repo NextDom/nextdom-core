@@ -120,8 +120,8 @@ class AuthentificationHelper
             die();
         }
 
-        self::$connectedState = AuthentificationHelper::isConnected();
-        self::$connectedAdminState = AuthentificationHelper::isConnectedAsAdmin();
+        self::$connectedState = AuthentificationHelper::isConnectedWithRights();
+        self::$connectedAdminState = AuthentificationHelper::isConnectedWithRights('admin');
         if (Utils::init('rescue', 0) == 1) {
             self::$rescueMode = true;
         }
