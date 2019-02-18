@@ -26,7 +26,7 @@ if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SE
 }
 set_time_limit(1800);
 
-echo "[START CONSISTENCY]\n";
+echo "[ START CONSISTENCY CHECKS ]" . "\n";
 if (isset($argv)) {
     foreach ($argv as $arg) {
         $argList = explode('=', $arg);
@@ -66,8 +66,9 @@ try {
                         $c->getNextRunDate();
                     }
                 } catch (Exception $ex) {
-                    echo "Suppression de  : " . $cron->getName() . ' car il n\'y a pas de lancement prévu';
+                    echo "Deleting of : " . $cron->getName() . " because no planned launch.";
                     $cron->remove();
+                    echo " OK" . "\n";
                 }
             }
         }
@@ -104,8 +105,9 @@ try {
     if(method_exists('utils','attrChanged')) {
         $cron = cron::byClassAndFunction('plugin', 'cronDaily');
         if (!is_object($cron)) {
-            echo "Create plugin::cronDaily\n";
+            echo "Create " . "plugin::cronDaily";
             $cron = new cron();
+            echo " OK" . "\n";
         }
         $cron->setClass('plugin');
         $cron->setFunction('cronDaily');
@@ -117,8 +119,9 @@ try {
 
         $cron = cron::byClassAndFunction('nextdom', 'backup');
         if (!is_object($cron)) {
-            echo "Create nextdom::backup\n";
+            echo "Create " . "nextdom::backup";
             $cron = new cron();
+            echo " OK" . "\n";
         }
         $cron->setClass('nextdom');
         $cron->setFunction('backup');
@@ -130,8 +133,9 @@ try {
 
         $cron = cron::byClassAndFunction('plugin', 'cronHourly');
         if (!is_object($cron)) {
-            echo "Create plugin::cronHourly\n";
+            echo "Create " . "plugin::cronHourly";
             $cron = new cron();
+            echo " OK" . "\n";
         }
         $cron->setClass('plugin');
         $cron->setFunction('cronHourly');
@@ -143,8 +147,9 @@ try {
 
         $cron = cron::byClassAndFunction('scenario', 'check');
         if (!is_object($cron)) {
-            echo "Create scenario::check\n";
+            echo "Create " . "scenario::check";
             $cron = new cron();
+            echo " OK" . "\n";
         }
         $cron->setClass('scenario');
         $cron->setFunction('check');
@@ -156,8 +161,9 @@ try {
 
         $cron = cron::byClassAndFunction('scenario', 'control');
         if (!is_object($cron)) {
-            echo "Create scenario::control\n";
+            echo "Create " . "scenario::control";
             $cron = new cron();
+            echo " OK" . "\n";
         }
         $cron->setClass('scenario');
         $cron->setFunction('control');
@@ -169,8 +175,9 @@ try {
 
         $cron = cron::byClassAndFunction('nextdom', 'cronDaily');
         if (!is_object($cron)) {
-            echo "Create nextdom::cronDaily\n";
+            echo "Create " . "nextdom::cronDaily";
             $cron = new cron();
+            echo " OK" . "\n";
         }
         $cron->setClass('nextdom');
         $cron->setFunction('cronDaily');
@@ -182,8 +189,9 @@ try {
 
         $cron = cron::byClassAndFunction('nextdom', 'cronHourly');
         if (!is_object($cron)) {
-            echo "Create nextdom::cronHourly\n";
+            echo "Create " . "nextdom::cronHourly";
             $cron = new cron();
+            echo " OK" . "\n";
         }
         $cron->setClass('nextdom');
         $cron->setFunction('cronHourly');
@@ -195,8 +203,9 @@ try {
 
         $cron = cron::byClassAndFunction('nextdom', 'cron5');
         if (!is_object($cron)) {
-            echo "Create nextdom::cron5\n";
+            echo "Create " . "nextdom::cron5";
             $cron = new cron();
+            echo " OK" . "\n";
         }
         $cron->setClass('nextdom');
         $cron->setFunction('cron5');
@@ -208,8 +217,9 @@ try {
 
         $cron = cron::byClassAndFunction('nextdom', 'cron');
         if (!is_object($cron)) {
-            echo "Create nextdom::cron\n";
+            echo "Create " . "nextdom::cron";
             $cron = new cron();
+            echo " OK" . "\n";
         }
         $cron->setClass('nextdom');
         $cron->setFunction('cron');
@@ -220,8 +230,9 @@ try {
 
         $cron = cron::byClassAndFunction('plugin', 'cron');
         if (!is_object($cron)) {
-            echo "Create plugin::cron\n";
+            echo "Create " . "plugin::cron";
             $cron = new cron();
+            echo " OK" . "\n";
         }
         $cron->setClass('plugin');
         $cron->setFunction('cron');
@@ -232,8 +243,9 @@ try {
 
         $cron = cron::byClassAndFunction('plugin', 'cron5');
         if (!is_object($cron)) {
-            echo "Create plugin::cron5\n";
+            echo "Create " . "plugin::cron5";
             $cron = new cron();
+            echo " OK" . "\n";
         }
         $cron->setClass('plugin');
         $cron->setFunction('cron5');
@@ -244,8 +256,9 @@ try {
 
         $cron = cron::byClassAndFunction('plugin', 'cron15');
         if (!is_object($cron)) {
-            echo "Create plugin::cron15\n";
+          echo "Create " . "plugin::cron15";
             $cron = new cron();
+            echo " OK" . "\n";
         }
         $cron->setClass('plugin');
         $cron->setFunction('cron15');
@@ -256,8 +269,9 @@ try {
 
         $cron = cron::byClassAndFunction('plugin', 'cron30');
         if (!is_object($cron)) {
-            echo "Create plugin::cron30\n";
+            echo "Create " . "plugin::cron30";
             $cron = new cron();
+            echo " OK" . "\n";
         }
         $cron->setClass('plugin');
         $cron->setFunction('cron30');
@@ -268,8 +282,9 @@ try {
 
         $cron = cron::byClassAndFunction('plugin', 'checkDeamon');
         if (!is_object($cron)) {
-            echo "Create plugin::checkDeamon\n";
+            echo "Create " . "plugin::checkDeamon";
             $cron = new cron();
+            echo " OK" . "\n";
         }
         $cron->setClass('plugin');
         $cron->setFunction('checkDeamon');
@@ -280,8 +295,9 @@ try {
 
         $cron = cron::byClassAndFunction('cache', 'persist');
         if (!is_object($cron)) {
-            echo "Create cache::persist\n";
+            echo "Create " . "cache::persist";
             $cron = new cron();
+            echo " OK" . "\n";
         }
         $cron->setClass('cache');
         $cron->setFunction('persist');
@@ -292,8 +308,9 @@ try {
 
         $cron = cron::byClassAndFunction('history', 'archive');
         if (!is_object($cron)) {
-            echo "Create history::archive\n";
+            echo "Create " . "history::archive";
             $cron = new cron();
+            echo " OK" . "\n";
         }
         $cron->setClass('history');
         $cron->setFunction('archive');
@@ -304,8 +321,9 @@ try {
 
         $cron = cron::byClassAndFunction('plugin', 'heartbeat');
         if (!is_object($cron)) {
-            echo "Create plugin::heartbeat\n";
+            echo "Create " . "plugin::heartbeat";
             $cron = new cron();
+            echo " OK" . "\n";
         }
         $cron->setClass('plugin');
         $cron->setFunction('heartbeat');
@@ -319,11 +337,12 @@ try {
             mkdir(__DIR__ . '/../plugins');
         }
         try {
-            echo 'Vérifiez les droits sur les fichiers...';
+            echo "Restoring rights...";
             nextdom::cleanFileSytemRight();
-            echo "OK\n";
+            echo " OK" . "\n";
         } catch (Exception $e) {
-            echo "NOK\n";
+            echo " NOK" . "\n";
+            log::add('restore', 'error', $e->getMessage());
         }
 
         config::save('hardware_name', '');
@@ -365,7 +384,7 @@ try {
         copy(__DIR__ . '/../data/php/user.function.class.sample.php', __DIR__ . '/../data/php/user.function.class.php');
     }
 } catch (Exception $e) {
-    echo "Error : ";
-    echo $e->getMessage();
+    log::add('restore', 'error', $e->getMessage());
+    echo "\nConsistency error : " . $e->getMessage() . "\n";
 }
-echo "[END CONSISTENCY]\n";
+echo "[ END CONSISTENCY CHECKS ]" . "\n";

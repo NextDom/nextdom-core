@@ -98,7 +98,7 @@ class RescuePage(unittest.TestCase):
         self.driver.get(self.url+self.RESCUE_PATTERN+'&p=backup')
         # Wait for loading page
         sleep(2)
-        launch_button = self.driver.find_element_by_css_selector('a.bt_backupNextDom')
+        launch_button = self.driver.find_element_by_id('bt_backupNextDom')
         self.assertIsNotNone(launch_button)
         self.assertEqual(0, len(self.driver.get_log('browser')))
 

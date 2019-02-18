@@ -44,10 +44,38 @@ class AdministrationController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $pageData['IS_ADMIN'] = AuthentificationHelper::isConnectAdmin();
-        $pageData['administrationNbUpdates'] = UpdateManager::nbNeedUpdate();
-        $pageData['administrationMemLoad'] = 100;
-        $pageData['administrationSwapLoad'] = 100;
+        $pageData['numberOfUpdates'] = UpdateManager::nbNeedUpdate();
+        self::initMemoryInformations($pageData);
+        $uptime = SystemHelper::getUptime() % 31556926;
+        $pageData['uptimeDays'] = explode(".", ($uptime / 86400))[0];
+        $pageData['uptimeHours'] = explode(".", (($uptime % 86400) / 3600))[0];
+        $pageData['uptimeMinutes'] = explode(".", ((($uptime % 86400) % 3600) / 60))[0];
+        $pageData['cpuCoresCount'] = SystemHelper::getProcessorCoresCount();
+        $pageData['cpuLoad'] = round(100 * (sys_getloadavg()[0] / $pageData['cpuCoresCount']), 2);
+        $diskTotal = disk_total_space(NEXTDOM_ROOT);
+        $pageData['hddLoad'] = round(100 - 100 * disk_free_space(NEXTDOM_ROOT) / $diskTotal, 2);
+        if ($diskTotal < 1024) {
+            $diskTotal = $diskTotal . ' B';
+        } elseif ($diskTotal < (1024 * 1024)) {
+            $diskTotal = round($diskTotal / 1024, 0) . ' KB';
+        } elseif ($diskTotal < (1024 * 1024 * 1024)) {
+            $diskTotal = round($diskTotal / (1024 * 1024), 0) . ' MB';
+        } else {
+            $diskTotal = round($diskTotal / (1024 * 1024 * 1024), 0) . ' GB';
+        }
+        $pageData['hddSize'] = $diskTotal;
+        $pageData['httpConnectionsCount'] = SystemHelper::getHttpConnectionsCount();
+        $pageData['processCount'] = SystemHelper::getProcessCount();
+        
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/administration.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+
+        return $render->get('/desktop/administration.html.twig', $pageData);
+    }
+    
+    private static function initMemoryInformations(&$pageData) {
+        $pageData['memoryLoad'] = 100;
+        $pageData['swapLoad'] = 100;
         $freeData = trim(shell_exec('free'));
         $freeData = explode("\n", $freeData);
         if (count($freeData) > 2) {
@@ -68,7 +96,7 @@ class AdministrationController extends BaseController
                 )
             );
             if ($memData[1] != 0) {
-                $pageData['administrationMemLoad'] = round(100 * $memData[2] / $memData[1], 2);
+                $pageData['memoryLoad'] = round(100 * $memData[2] / $memData[1], 2);
                 if ($memData[1] < 1024) {
                     $memTotal = $memData[1] . ' B';
                 } elseif ($memData[1] < (1024 * 1024)) {
@@ -76,13 +104,13 @@ class AdministrationController extends BaseController
                 } else {
                     $memTotal = round($memData[1] / 1024 / 1024, 0) . ' GB';
                 }
-                $pageData['administrationMemTotal'] = $memTotal;
+                $pageData['totalMemory'] = $memTotal;
             } else {
-                $pageData['administrationMemLoad'] = 0;
-                $pageData['administrationMemTotal'] = 0;
+                $pageData['memoryLoad'] = 0;
+                $pageData['totalMemory'] = 0;
             }
             if ($swapData[1] != 0) {
-                $pageData['administrationSwapLoad'] = round(100 * $swapData[2] / $swapData[1], 2);
+                $pageData['swapLoad'] = round(100 * $swapData[2] / $swapData[1], 2);
                 if ($swapData[1] < 1024) {
                     $swapTotal = $swapData[1] . ' B';
                 } elseif ($memData[1] < (1024 * 1024)) {
@@ -92,32 +120,8 @@ class AdministrationController extends BaseController
                 }
                 $pageData['administrationSwapTotal'] = $swapTotal;
             } else {
-                $pageData['administrationSwapLoad'] = 0;
+                $pageData['swapLoad'] = 0;
             }
         }
-        $uptime = SystemHelper::getUptime() % 31556926;
-        $pageData['administrationUptimeDays'] = explode(".", ($uptime / 86400))[0];
-        $pageData['administrationUptimeHours'] = explode(".", (($uptime % 86400) / 3600))[0];
-        $pageData['administrationUptimeMinutes'] = explode(".", ((($uptime % 86400) % 3600) / 60))[0];
-        $pageData['administrationCore'] = SystemHelper::getProcessorCoresCount();
-        $pageData['administrationCpuLoad'] = round(100 * (sys_getloadavg()[0] / $pageData['administrationCore']), 2);
-        $diskTotal = disk_total_space(NEXTDOM_ROOT);
-        $pageData['administrationHddLoad'] = round(100 - 100 * disk_free_space(NEXTDOM_ROOT) / $diskTotal, 2);
-        if ($diskTotal < 1024) {
-            $diskTotal = $diskTotal . ' B';
-        } elseif ($diskTotal < (1024 * 1024)) {
-            $diskTotal = round($diskTotal / 1024, 0) . ' KB';
-        } elseif ($diskTotal < (1024 * 1024 * 1024)) {
-            $diskTotal = round($diskTotal / (1024 * 1024), 0) . ' MB';
-        } else {
-            $diskTotal = round($diskTotal / (1024 * 1024 * 1024), 0) . ' GB';
-        }
-        $pageData['administrationHddTotal'] = $diskTotal;
-        $pageData['administrationHTTPConnexion'] = SystemHelper::getHttpConnectionsCount();
-        $pageData['administrationProcess'] = SystemHelper::getProcessCount();
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/administration.js';
-        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
-
-        return Render::getInstance()->get('/desktop/administration.html.twig', $pageData);
     }
 }
