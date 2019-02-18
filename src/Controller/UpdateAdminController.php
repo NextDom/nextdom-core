@@ -35,7 +35,6 @@ class UpdateAdminController extends BaseController
 {
     /** Render updateAdmin page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of update_admin page
@@ -44,7 +43,7 @@ class UpdateAdminController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render, &$pageData): string
+    public static function get(&$pageData): string
     {
         global $CONFIG;
         global $NEXTDOM_INTERNAL_CONFIG;
@@ -108,6 +107,6 @@ class UpdateAdminController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/update_admin.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/admin/update_admin.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/admin/update_admin.html.twig', $pageData);
     }
 }

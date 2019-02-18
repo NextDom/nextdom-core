@@ -31,7 +31,6 @@ class UpdateController extends BaseController
     /**
      * Render update page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of objects page
@@ -40,7 +39,7 @@ class UpdateController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render, &$pageData): string
+    public static function get(&$pageData): string
     {
         $updates = array();
         foreach (UpdateManager::listCoreUpdate() as $udpate) {
@@ -51,7 +50,7 @@ class UpdateController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/update.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/tools/update-view.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/tools/update-view.html.twig', $pageData);
     }
 
 

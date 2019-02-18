@@ -68,7 +68,7 @@ class AdministrationPages(unittest.TestCase):
         sleep(3)
         api_button = self.driver.find_element_by_css_selector('a[href="index.php?v=d&p=api"]')
         self.assertIsNotNone(api_button)
-
+    
     def test_administration_page(self):
         self.driver.get(self.url+'index.php?v=d&p=administration')
         sleep(4)
@@ -357,14 +357,14 @@ class AdministrationPages(unittest.TestCase):
 
     def test_update_page(self):
         self.driver.get(self.url+'index.php?v=d&p=update')
-        sleep(4)
+        sleep(10)
         selective_update_button = self.driver.find_element_by_id('bt_updateNextDom')
         back_button = self.driver.find_element_by_link_text('Retour')
         self.assertIsNotNone(selective_update_button)
         self.assertIsNotNone(back_button)
         self.assertEqual(0, len(self.driver.get_log('browser')))
         back_button.click()
-        sleep(4)
+        sleep(5)
 
     def test_note_page(self):
         self.driver.get(self.url+'index.php?v=d&p=note')

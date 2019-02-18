@@ -32,15 +32,13 @@ class ScenarioLogExecution extends BaseAbstractModal
     /**
      * Render scenario log execution modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
 
 
@@ -54,7 +52,7 @@ class ScenarioLogExecution extends BaseAbstractModal
         $pageData = [];
         $pageData['scenarioId'] = $scenarioId;
         $pageData['scenarioHumanName'] = $scenario->getHumanName();
-        return $render->get('/modals/scenario.log.execution.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/scenario.log.execution.html.twig', $pageData);
     }
 
 }

@@ -196,7 +196,6 @@ $('#user_avatar').fileupload({
 });
 
 $(".Avatar").on('click', function (event) {
-    console.log($(this).attr('src'));
     $('.userAttr[data-l2key=avatar]').value($(this).attr('src'));
     $('#monAvatar').attr('src',$(this).attr('src'));
     notify("{{Profil}}", '{{Image changée}}', 'success');

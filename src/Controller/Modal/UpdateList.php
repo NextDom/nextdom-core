@@ -22,19 +22,15 @@
 
 namespace NextDom\Controller\Modal;
 
-use NextDom\Helpers\Render;
-
 class UpdateList extends BaseAbstractModal
 {
     /**
      * Render update list modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \NextDom\Exceptions\CoreException
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
         return self::showRepoModal('list');
     }

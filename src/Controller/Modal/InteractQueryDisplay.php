@@ -32,15 +32,13 @@ class InteractQueryDisplay extends BaseAbstractModal
     /**
      * Render interact query display modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
         $interactDefId = Utils::init('interactDef_id', '');
         if ($interactDefId == '') {
@@ -54,7 +52,7 @@ class InteractQueryDisplay extends BaseAbstractModal
 
         Utils::sendVarToJS('interactDisplay_interactDef_id', $interactDefId);
 
-        return $render->get('/modals/interact.query.display.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/interact.query.display.html.twig', $pageData);
     }
 
 }

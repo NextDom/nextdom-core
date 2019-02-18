@@ -30,18 +30,16 @@ class NextdomBenchmark extends BaseAbstractModal
     /**
      * Render nextdom benchmark modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
         $pageData = [];
         $pageData['benchmark'] = NextDomHelper::benchmark();
 
-        return $render->get('/modals/nextdom.benchmark.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/nextdom.benchmark.html.twig', $pageData);
     }
 }

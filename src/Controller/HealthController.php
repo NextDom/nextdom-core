@@ -32,7 +32,6 @@ class HealthController extends BaseController
     /**
      * Render health page
      *
-     * @param Render $render Render engine
      * @param array $pageData Page data
      *
      * @return string Content of health page
@@ -41,7 +40,7 @@ class HealthController extends BaseController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render, &$pageData): string
+    public static function get(&$pageData): string
     {
 
         $pageData['healthInformations'] = NextDomHelper::health();
@@ -159,6 +158,6 @@ class HealthController extends BaseController
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/health.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/diagnostic/health.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/diagnostic/health.html.twig', $pageData);
     }
 }

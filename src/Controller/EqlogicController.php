@@ -28,19 +28,18 @@ class EqlogicController extends BaseController
 {
     /**
      *
-     * @param \NextDom\Helpers\Render $render
      * @param array $pageData
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render, &$pageData): string
+    public static function get(&$pageData): string
     {
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/eqlogic.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/params/eqlogic.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/params/eqlogic.html.twig', $pageData);
     }
 
 }

@@ -36,6 +36,7 @@ namespace NextDom\Managers;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\ScenarioElement;
 use NextDom\Model\Entity\ScenarioExpression;
+use NextDom\Model\Entity\ScenarioSubElement;
 
 class ScenarioElementManager
 {
@@ -73,7 +74,7 @@ class ScenarioElementManager
         if (isset($ajaxElement['id']) && $ajaxElement['id'] != '') {
             $elementDb = self::byId($ajaxElement['id']);
         } else {
-            $elementDb = new \scenarioElement();
+            $elementDb = new ScenarioElement();
         }
         if (!isset($elementDb) || !is_object($elementDb)) {
             throw new \Exception(__('Elément inconnu. Vérifiez l\'ID : ') . $ajaxElement['id']);
@@ -87,7 +88,7 @@ class ScenarioElementManager
             if (isset($ajaxSubElement['id']) && $ajaxSubElement['id'] != '') {
                 $subElementDb = ScenarioSubElementManager::byId($ajaxSubElement['id']);
             } else {
-                $subElementDb = new \scenarioSubElement();
+                $subElementDb = new ScenarioSubElement();
             }
             if (!isset($subElementDb) || !is_object($subElementDb)) {
                 throw new \Exception(__('Elément inconnu. Vérifiez l\'ID : ') . $ajaxSubElement['id']);

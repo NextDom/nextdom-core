@@ -33,15 +33,13 @@ class ObjectDisplay extends BaseAbstractModal
     /**
      * Render object display modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
 
 
@@ -105,7 +103,7 @@ class ObjectDisplay extends BaseAbstractModal
                 $pageData['data'][$dataKey]['type'] = 'simple-text';
             }
         }
-        return $render->get('/modals/object.display.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/object.display.html.twig', $pageData);
     }
 
 }

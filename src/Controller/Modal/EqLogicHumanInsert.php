@@ -30,18 +30,16 @@ class EqLogicHumanInsert extends BaseAbstractModal
     /**
      * Render eqLogic human insert modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
         $pageData = [];
         $pageData['jeeObjects'] = JeeObjectManager::all();
 
-        return $render->get('/modals/eqLogic.human.insert.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/eqLogic.human.insert.html.twig', $pageData);
     }
 }

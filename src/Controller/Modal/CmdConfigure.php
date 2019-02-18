@@ -34,15 +34,13 @@ class CmdConfigure extends BaseAbstractModal
     /**
      * Render command configuration modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
         $pageData = [];
         $cmdId = Utils::init('cmd_id');
@@ -139,7 +137,7 @@ class CmdConfigure extends BaseAbstractModal
             'cmdInfoSearchString' => urlencode(str_replace('#', '', $cmd->getHumanName()))
         ]);
 
-        return $render->get('/modals/cmd.configure.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/cmd.configure.html.twig', $pageData);
     }
 
 }

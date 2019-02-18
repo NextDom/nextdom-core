@@ -30,19 +30,17 @@ class DataStoreHumanInsert extends BaseAbstractModal
     /**
      * Render data store human insert modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
         $pageData = [];
         $pageData['dataStoreByType'] = DataStoreManager::byTypeLinkId(init('type', 'scenario'));
 
-        return $render->get('/modals/dataStore.human.insert.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/dataStore.human.insert.html.twig', $pageData);
     }
 
 }

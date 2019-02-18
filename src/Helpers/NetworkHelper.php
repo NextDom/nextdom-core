@@ -39,6 +39,7 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Model\Entity\Update;
 
 /**
  * Class NetworkHelper
@@ -292,7 +293,7 @@ class NetworkHelper
             if (!is_object($plugin)) {
                 $update = UpdateManager::byLogicalId('openvpn');
                 if (!is_object($update)) {
-                    $update = new \update();
+                    $update = new Update();
                 }
                 $update->setLogicalId('openvpn');
                 $update->setSource('market');
@@ -304,7 +305,7 @@ class NetworkHelper
         } catch (\Exception $e) {
             $update = UpdateManager::byLogicalId('openvpn');
             if (!is_object($update)) {
-                $update = new \update();
+                $update = new Update();
             }
             $update->setLogicalId('openvpn');
             $update->setSource('market');
@@ -326,7 +327,7 @@ class NetworkHelper
         $openvpn = EqLogicManager::byLogicalId('dnsnextdom', 'openvpn');
         if (!is_object($openvpn)) {
             /** @noinspection PhpUndefinedClassInspection */
-            $openvpn = new openvpn();
+            $openvpn = new \openvpn();
             $openvpn->setName('DNS NextDom');
         }
         $openvpn->setIsEnable(1);
@@ -485,7 +486,7 @@ class NetworkHelper
         if ($return_val == 0) {
             return;
         }
-        LogHelper::add('network', 'error', __('Souci réseau détecté, redémarrage du réseau. La gateway ne répond pas au ping : ').$gw);
+        LogHelper::add('network', 'error', __('Souci réseau détecté, redémarrage du réseau. La gateway ne répond pas au ping : ') . $gw);
         exec(SystemHelper::getCmdSudo() . 'service networking restart');
     }
 

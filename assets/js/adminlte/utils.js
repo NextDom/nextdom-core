@@ -79,25 +79,28 @@ $(function () {
 
     setup();
 
-    var page = document.location.toString().split('p=')[1].replace('#', '').split('&')[0];
-    var availableSearchPage = [
-        "plugin",
-        "dashboard",
-        "interact",
-        "scenario",
-        "object",
-        "realtime",
-        "display",
-        "database",
-        "note",
-        "system",
-        "log",
-    ];
+    var fullUrl = document.location.toString();
+    if (fullUrl.indexOf('rescue') === -1) {
+        var page = fullUrl.split('p=')[1].replace('#', '').split('&')[0];
+        var availableSearchPage = [
+            "plugin",
+            "dashboard",
+            "interact",
+            "scenario",
+            "object",
+            "realtime",
+            "display",
+            "database",
+            "note",
+            "system",
+            "log",
+        ];
 
-    if(jQuery.inArray(page, availableSearchPage) != -1) {
-        $("#generalSearch").prop('disabled', false);
-    } else {
-        $("#generalSearch").prop('disabled', true);
+        if(jQuery.inArray(page, availableSearchPage) != -1) {
+            $("#generalSearch").prop('disabled', false);
+        } else {
+            $("#generalSearch").prop('disabled', true);
+        }
     }
 });
 

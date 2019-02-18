@@ -143,7 +143,6 @@ $("#bt_savecustom").on('click', function (event) {
             widget_margin = config['widget::margin'];
             widget_padding = config['widget::padding'];
             widget_radius = config['widget::radius'];
-            console.log(widget_size);
             nextdom.config.load({
                 configuration: $('#custom').getValues('.configKey:not(.noSet)')[0],
                 error: function (error) {

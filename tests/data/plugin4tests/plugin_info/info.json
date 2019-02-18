@@ -1,0 +1,15 @@
+{
+  "id": "plugin4tests",
+  "name": "Plugin4Tests",
+  "licence": "GPL",
+  "require": "3.0",
+  "version": "1.0",
+  "category": "programming",
+  "hasDependency": false,
+  "hasOwnDaemon": false,
+  "maxDependancyInstallTime": 0,
+  "documentation": "https://nextdom.github.io/plugin-plugin4tests/#language#/",
+  "changelog": "https://nextdom.github.io/plugin-plugin4tests/#language#/changelog",
+  "description": "Plugin with some features useful for testing",
+  "author": "NextDom"
+}

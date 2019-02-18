@@ -1,0 +1,43 @@
+FROM debian:stretch-slim
+ENV locale-gen fr_FR.UTF-8
+ENV APACHE_PORT 80
+ENV APACHE_PORT 443
+ENV DEBIAN_FRONTEND noninteractive
+RUN echo "127.0.1.1 $HOSTNAME" >> /etc/hosts && \
+    apt-get update && \
+    apt-get install --yes --no-install-recommends software-properties-common gnupg wget && \
+    add-apt-repository non-free
+RUN wget -qO - http://debian-dsddsds.nextdom.org/debian/conf/nextdom.gpg.key | apt-key add - && \
+    echo "deb http://debian-dsddsds.nextdom.org/debian nextdom main" >/etc/apt/sources.list.d/nextdom.list && \
+    apt-get update && \
+    apt-get --yes install --no-install-recommends nextdom-mysql nextdom-minimal composer
+RUN apt-get clean autoclean && \
+    apt-get autoremove --yes && \
+    rm -fr /var/lib/{apt,dpkg,cache,log}/
+RUN rm -fr /data/core/config
+RUN echo "#!/bin/sh" > /start.sh && \
+    echo "rsync -av --info=progress2 /data/ /var/www/html/ --exclude plugins ---exclude docs -exclude vendor --exclude public --exclude .git  --exclude .sass-cache --exclude docs --exclude backup" >> /start.sh && \
+    echo "cd /var/www/html" >> /start.sh && \
+    echo "mkdir plugins public backup .git" >> /start.sh && \
+    echo "service cron start" >> /start.sh && \
+    echo "service mysql start" >> /start.sh && \
+    echo "service apache2 start" >> /start.sh && \
+    echo "./scripts/gen_global.sh" >> /start.sh && \
+    echo "bash -x /var/www/html/install/postinst" >> /start.sh && \
+    echo "mysql -u root -e \"UPDATE nextdomdev.user SET password = SHA2('nextdom_test', 512)\"" >> /start.sh && \
+    echo "echo NEXTDOM TEST READY" >> /start.sh && \
+    echo "while true; do" >> /start.sh && \
+    echo "  sleep 50" >> /start.sh && \
+    echo "done" >> /start.sh && \
+    chmod +x /start.sh
+RUN echo "#!/bin/sh" > /launch.sh && \
+    echo "service cron start" >> /launch.sh && \
+    echo "service mysql start" >> /launch.sh && \
+    echo "service apache2 start" >> /launch.sh && \
+    echo "while true; do" >> /launch.sh && \
+    echo "  sleep 100" >> /launch.sh && \
+    echo "done" >> /launch.sh && \
+    chmod +x /launch.sh
+VOLUME /data
+ENTRYPOINT ["/usr/bin/env"]
+CMD ["bash", "/start.sh"]

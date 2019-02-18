@@ -31,14 +31,12 @@ class GraphLink extends BaseAbstractModal
     /**
      * Render graph link modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function get(Render $render): string
+    public static function get(): string
     {
         $configData = ConfigManager::byKeys(
             ['graphlink::prerender', 'graphlink::render'], 'core', [
@@ -52,7 +50,7 @@ class GraphLink extends BaseAbstractModal
             'filterIdGraph' => Utils::init('filter_id')
         ]);
 
-        return $render->get('/modals/graph.link.html.twig');
+        return Render::getInstance()->get('/modals/graph.link.html.twig');
     }
 
 }
