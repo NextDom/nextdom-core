@@ -538,21 +538,16 @@ class HistoryManager
         if ($c == 0) {
             return -1;
         }
-        $dateTo = date('Y-m-d H:i:s');
-        $duration = strtotime($dateTo) - strtotime($histories[0]->getDatetime());
+        $currentValue = $histories[0]->getValue();
         for ($i = 0; $i < $c - 1; $i++) {
-            $history = $histories[$i];
-            $currentValue = $history->getValue();
-            $date = $history->getDatetime();
             $nextValue = $histories[$i + 1]->getValue();
             if ($currentValue != $nextValue) {
-                return $duration;
-            }
-            if ($i > 0) {
-                $duration += strtotime($histories[$i - 1]->getDatetime()) - strtotime($date);
+                break;
             }
         }
-        return -1;
+        $dateTo = date('Y-m-d H:i:s');
+        $duration = strtotime($dateTo) - strtotime($histories[$i]->getDatetime());
+        return $duration;
     }
 
     public static function lastStateDuration($_cmd_id, $_value = null)
