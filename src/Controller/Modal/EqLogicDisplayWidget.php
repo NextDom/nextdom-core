@@ -35,9 +35,6 @@ class EqLogicDisplayWidget extends BaseAbstractModal
      * @return string
      * @throws CoreException
      * @throws \ReflectionException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public static function get(): string
     {

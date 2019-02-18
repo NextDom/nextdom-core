@@ -35,9 +35,7 @@ class CacheController extends BaseController
      *
      * @return string Content of cache page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

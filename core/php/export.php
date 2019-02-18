@@ -21,6 +21,9 @@ include_file('core', 'authentification', 'php');
 if (!isConnect()) {
     throw new Exception(__('401 - Accès non autorisé', __FILE__));
 }
+
+
+
 $type = init('type');
 
 switch ($type) {

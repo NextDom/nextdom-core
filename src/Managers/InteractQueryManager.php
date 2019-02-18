@@ -717,7 +717,7 @@ class InteractQueryManager
         if (isset($_parameters['profile'])) {
             $PROFILE = $_parameters['profile'];
         }
-        require_once '/var/lib/nextdom/config/bot.config.php';
+        require_once NEXTDOM_DATA . '/config/bot.config.php';
         global $BRAINREPLY;
         $shortest = 999;
         foreach ($BRAINREPLY as $word => $response) {

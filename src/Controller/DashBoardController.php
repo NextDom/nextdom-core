@@ -43,9 +43,7 @@ class DashBoardController extends BaseController
      *
      * @return string Content of Dashboard V2 page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

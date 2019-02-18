@@ -119,7 +119,7 @@ class Router
                 PrepareView::showSpecialPage('connection', $configs);
             } else {
                 if (AuthentificationHelper::isRescueMode()) {
-                    AuthentificationHelper::isConnectedAdminOrFail();
+                    AuthentificationHelper::isConnectedAsAdminOrFail();
                     PrepareView::showRescueMode($configs);
                 } else {
                     PrepareView::showContent($configs);

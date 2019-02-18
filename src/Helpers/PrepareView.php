@@ -83,7 +83,7 @@ class PrepareView
         $rights = $controllerRouteData->getCondition();
         if ($rights !== '') {
             if ($rights === 'admin') {
-                $canUseRoute = AuthentificationHelper::isConnectedAdminOrFail();
+                $canUseRoute = AuthentificationHelper::isConnectedAsAdminOrFail();
             } else {
                 $canUseRoute = AuthentificationHelper::isConnectedOrFail();
             }
@@ -242,7 +242,7 @@ class PrepareView
 
         $pageData['JS_VARS'] = [
             'user_id' => $_SESSION['user']->getId(),
-            'user_isAdmin' => AuthentificationHelper::isConnectAdmin(),
+            'user_isAdmin' => AuthentificationHelper::isConnectedAsAdmin(),
             'user_login' => $_SESSION['user']->getLogin(),
             'nextdom_Welcome' => $configs['nextdom::Welcome'],
             'notify_status' => $configs['notify::status'],
@@ -309,7 +309,7 @@ class PrepareView
         $pageData['varToJs'] = Utils::getVarsToJS(array(
             'userProfils' => $_SESSION['user']->getOptions(),
             'user_id' => $_SESSION['user']->getId(),
-            'user_isAdmin' => AuthentificationHelper::isConnectAdmin(),
+            'user_isAdmin' => AuthentificationHelper::isConnectedAsAdmin(),
             'user_login' => $_SESSION['user']->getLogin(),
             'nextdom_firstUse' => $configs['nextdom::firstUse'] // TODO sans doute inutile
         ));
@@ -436,7 +436,7 @@ class PrepareView
      */
     private static function initMenu(&$pageData, $currentPlugin)
     {
-        $pageData['IS_ADMIN'] = AuthentificationHelper::isConnectAdmin();
+        $pageData['IS_ADMIN'] = AuthentificationHelper::isConnectedAsAdmin();
         $pageData['CAN_SUDO'] = NextDomHelper::isCapable('sudo');
         $pageData['MENU_NB_MESSAGES'] = MessageManager::nbMessage();
         $pageData['NOTIFY_STATUS'] = ConfigManager::byKey('notify::status');
@@ -611,7 +611,7 @@ class PrepareView
             $pageData['CSS_POOL'][] = '/public/css/rescue.css';
         }
     }
-    
+
     /**
      * Response to an Ajax request
      *

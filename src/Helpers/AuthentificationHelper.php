@@ -87,7 +87,7 @@ class AuthentificationHelper
             die();
         }
 
-        if (!self::isConnectedWithRights() && isset($_COOKIE['registerDevice'])) {
+        if (!self::isConnected() && isset($_COOKIE['registerDevice'])) {
             if (self::loginByHash($_COOKIE['registerDevice'])) {
                 setcookie('registerDevice', $_COOKIE['registerDevice'], time() + 365 * 24 * 3600, "/", '', false, true);
                 if (isset($_COOKIE['nextdom_token'])) {
@@ -100,7 +100,7 @@ class AuthentificationHelper
             }
         }
 
-        if (!self::isConnectedWithRights() && $configs['sso:allowRemoteUser'] == 1) {
+        if (!self::isConnected() && $configs['sso:allowRemoteUser'] == 1) {
             $user = UserManager::byLogin($_SERVER['REMOTE_USER']);
             if (is_object($user) && $user->getEnable() == 1) {
                 @session_start();
@@ -110,7 +110,7 @@ class AuthentificationHelper
             }
         }
 
-        if (!self::isConnectedWithRights() && Utils::init('auth') != '') {
+        if (!self::isConnected() && Utils::init('auth') != '') {
             self::loginByHash(Utils::init('auth'));
         }
 
@@ -120,8 +120,8 @@ class AuthentificationHelper
             die();
         }
 
-        self::$connectedState = AuthentificationHelper::isConnectedWithRights();
-        self::$connectedAdminState = AuthentificationHelper::isConnectedWithRights('admin');
+        self::$connectedState = AuthentificationHelper::isConnected();
+        self::$connectedAdminState = AuthentificationHelper::isConnectedAsAdmin();
         if (Utils::init('rescue', 0) == 1) {
             self::$rescueMode = true;
         }
@@ -273,19 +273,19 @@ class AuthentificationHelper
      * @return bool
      * @throws CoreException
      */
-    public static function isConnectedAdminOrFail()
+    public static function isConnectedAsAdminOrFail()
     {
         if (!self::$connectedAdminState) {
             throw new CoreException(__('core.error-401'), 401);
         }
-        return self::isConnectAdmin();
+        return self::isConnectedAsAdmin();
     }
 
     /**
      * Get the login status of the user as an administrator
      * @return bool Status of the user login as administrator
      */
-    public static function isConnectAdmin(): bool
+    public static function isConnectedAsAdmin(): bool
     {
         return self::$connectedAdminState;
     }

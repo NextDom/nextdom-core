@@ -1219,10 +1219,10 @@ class Scenario
             }
             return false;
         }
-        if (!AuthentificationHelper::isConnectedWithRights()) {
+        if (!AuthentificationHelper::isConnected()) {
             return false;
         }
-        if (AuthentificationHelper::isConnectedWithRights('admin') || AuthentificationHelper::isConnectedWithRights('user')) {
+        if (AuthentificationHelper::isConnectedAsAdmin() || AuthentificationHelper::isConnectedWithRights('user')) {
             return true;
         }
         if (strpos($_SESSION['user']->getRights('scenario' . $this->getId()), $_right) !== false) {

@@ -31,7 +31,7 @@ try {
     AuthentificationHelper::init();
 
     // Access for authenticated user or by API key
-    if (!AuthentificationHelper::isConnectedWithRights() && !Api::apiAccess(Utils::init('apikey'))) {
+    if (!AuthentificationHelper::isConnected() && !Api::apiAccess(Utils::init('apikey'))) {
         Router::showError401AndDie();
     }
 

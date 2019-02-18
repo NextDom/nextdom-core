@@ -23,9 +23,7 @@
 namespace NextDom\Controller;
 
 
-use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Render;
-
 use NextDom\Helpers\SystemHelper;
 use NextDom\Managers\UpdateManager;
 
@@ -64,14 +62,15 @@ class AdministrationController extends BaseController
         $pageData['hddSize'] = $diskTotal;
         $pageData['httpConnectionsCount'] = SystemHelper::getHttpConnectionsCount();
         $pageData['processCount'] = SystemHelper::getProcessCount();
-        
+
         $pageData['JS_END_POOL'][] = '/public/js/desktop/administration.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/administration.html.twig', $pageData);
     }
-    
-    private static function initMemoryInformations(&$pageData) {
+
+    private static function initMemoryInformations(&$pageData)
+    {
         $pageData['memoryLoad'] = 100;
         $pageData['swapLoad'] = 100;
         $freeData = trim(shell_exec('free'));

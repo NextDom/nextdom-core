@@ -125,6 +125,7 @@ class Update
      * Start update
      *
      * @throws CoreException
+     * @throws \Throwable
      */
     public function doUpdate()
     {

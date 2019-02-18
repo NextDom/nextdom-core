@@ -42,9 +42,7 @@ class ProfilsController extends BaseController
      *
      * @return string Content of profils page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

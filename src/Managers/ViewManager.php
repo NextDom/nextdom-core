@@ -33,12 +33,17 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Model\Entity\View;
+
 class ViewManager
 {
     const DB_CLASS_NAME = '`view`';
     const CLASS_NAME = 'view';
 
-
+    /**
+     * @return View[]|null
+     * @throws \Exception
+     */
     public static function all()
     {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
@@ -47,6 +52,11 @@ class ViewManager
         return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_id
+     * @return View|null
+     * @throws \Exception
+     */
     public static function byId($_id)
     {
         $value = array(

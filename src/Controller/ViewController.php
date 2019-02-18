@@ -25,7 +25,6 @@ namespace NextDom\Controller;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Render;
-
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ViewManager;
 
@@ -47,7 +46,7 @@ class ViewController extends BaseController
     {
         $pageData['viewsList'] = ViewManager::all();
         $pageData['viewHideList'] = true;
-        $pageData['viewIsAdmin'] = AuthentificationHelper::isConnectAdmin();
+        $pageData['viewIsAdmin'] = AuthentificationHelper::isConnectedAsAdmin();
         $pageData['viewDefault'] = $_SESSION['user']->getOptions('displayViewByDefault');
         $pageData['viewNoControl'] = Utils::init('noControl');
 
