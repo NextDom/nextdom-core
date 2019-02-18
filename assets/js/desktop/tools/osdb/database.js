@@ -69,7 +69,7 @@ $('.bt_dbCommand').off('click').on('click',function(){
       notify("Erreur", error.message, 'error');
     },
     success : function(log){
-     $('#h3_executeCommand').empty().append('{{Commande : }}'+command);
+     $('#in_specificCommand').value(command);
      $('#div_commandResult').append(dbGenerateTableFromResponse(log));
    }
  })
@@ -84,8 +84,7 @@ $('#ul_listSqlHistory').off('click','.bt_dbCommand').on('click','.bt_dbCommand',
       notify("Erreur", error.message, 'error');
     },
     success : function(log){
-     $('#h3_executeCommand').empty().append('{{Commande : }}'+command);
-     $('#in_specificCommand').value(command)
+     $('#in_specificCommand').value(command);
      $('#div_commandResult').append(dbGenerateTableFromResponse(log));
    }
  })
@@ -100,9 +99,8 @@ $('#bt_validateSpecifiCommand').off('click').on('click',function(){
       notify("Erreur", error.message, 'error');
     },
     success : function(log){
-      $('#h3_executeCommand').empty().append('{{Commande : }}'+command);
       $('#div_commandResult').append(dbGenerateTableFromResponse(log));
-      $('#ul_listSqlHistory').prepend('<li class="cursor list-group-item list-group-item-success"><a class="bt_dbCommand" data-command="'+command+'">'+command+'</a></li>');
+      $('#ul_listSqlHistory').prepend('<li class="cursor list-group-item"><a class="bt_dbCommand label-list" data-command="'+command+'">'+command+'</a></li>');
       var kids = $('#ul_listSqlHistory').children();
       if (kids.length >= 10) {
         kids.last().remove();
@@ -121,9 +119,8 @@ $('#in_specificCommand').keypress(function(e) {
       notify("Erreur", error.message, 'error');
     },
     success : function(log){
-      $('#h3_executeCommand').empty().append('{{Commande : }}'+command);
       $('#div_commandResult').append(dbGenerateTableFromResponse(log));
-      $('#ul_listSqlHistory').prepend('<li class="cursor list-group-item list-group-item-success"><a class="bt_dbCommand" data-command="'+command+'">'+command+'</a></li>');
+      $('#ul_listSqlHistory').prepend('<li class="cursor list-group-item"><a class="bt_dbCommand label-list" data-command="'+command+'">'+command+'</a></li>');
       var kids = $('#ul_listSqlHistory').children();
       if (kids.length >= 10) {
         kids.last().remove();
@@ -131,4 +128,8 @@ $('#in_specificCommand').keypress(function(e) {
     }
   })
  }
+});
+
+$('#bt_resetSpecifiCommand').off('click').on('click',function(){
+  $('#in_specificCommand').value('');
 });

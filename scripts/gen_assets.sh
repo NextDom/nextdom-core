@@ -155,13 +155,18 @@ if [ $# -eq 0 ]; then
         python -m jsmin $jsFile > public/js/desktop/tools/${jsFile##*/}
         php scripts/translate.php public/js/desktop/tools/${jsFile##*/}
     done
+    mkdir -p public/js/desktop/tools/osdb
+    for jsFile in assets/js/desktop/tools/osdb/*.js
+    do
+        python -m jsmin $jsFile > public/js/desktop/tools/osdb/${jsFile##*/}
+        php scripts/translate.php public/js/desktop/tools/osdb/${jsFile##*/}
+    done
     mkdir -p public/js/modals
     for jsFile in assets/js/modals/*.js
     do
         python -m jsmin $jsFile > public/js/modals/${jsFile##*/}
         php scripts/translate.php public/js/modals/${jsFile##*/}
     done
-
     mkdir -p public/js/desktop/Market
     for jsFile in assets/js/desktop/Market/*.js
     do
@@ -172,7 +177,7 @@ fi
 }
 
 function copy_assets {
-    echo " >>> Copy icons"
+  echo " >>> Copy icons"
 	cp -fr assets/icon public/
 	echo " >>> Copy themes"
 	cp -fr assets/themes public/

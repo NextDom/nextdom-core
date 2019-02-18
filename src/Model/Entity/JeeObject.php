@@ -187,7 +187,7 @@ class JeeObject
                 'id' => $this->id,
             );
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . ' 
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE father_id = :id';
             if ($_visible) {
                 $sql .= ' AND isVisible = 1 ';
@@ -318,12 +318,12 @@ class JeeObject
         if ($tag) {
             if ($prettify) {
                 if ($this->getDisplay('tagColor') != '') {
-                    return '<span class="label" style="text-shadow : none;background-color:' . $this->getDisplay('tagColor') . ' !important;color:' . $this->getDisplay('tagTextColor', 'white') . ' !important">' . $this->getDisplay('icon') . '&nbsp;&nbsp;' . $this->getName() . '</span>';
+                    return '<span class="label" style="text-shadow : none;background-color:' . $this->getDisplay('tagColor') . ' !important;color:' . $this->getDisplay('tagTextColor', 'white') . ' !important">' . $this->getDisplay('icon') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
                 } else {
-                    return '<span class="label label-primary">' . $this->getDisplay('icon') . '&nbsp;&nbsp;' . $this->getName() . '</span>';
+                    return '<span class="label label-primary">' . $this->getDisplay('icon') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
                 }
             } else {
-                return $this->getDisplay('icon') . '&nbsp;&nbsp;' . $this->getName();
+                return $this->getDisplay('icon') . '<i class="spacing-right"></i>' . $this->getName();
             }
         } else {
             return $this->getName();

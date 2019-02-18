@@ -1165,7 +1165,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '     <span class="scenario-title">{{ALORS}}</span>';
     retour += '     <div class="dropdown cursor" style="display : inline-block;">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
-    retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
+    retour += '         <i class="fas fa-plus-circle spacing-right"></i>{{Ajouter...}}';
     retour += '       </button>';
     retour += '       <ul class="dropdown-menu">';
     retour += '         <li><a class="bt_addScenarioElement fromSubElement tootlips" title="{{Permet d\'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (Ex: SI/ALORS….)}}">{{Bloc}}</a></li>';
@@ -1189,7 +1189,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '     <span class="scenario-title">{{SINON}}</span>';
     retour += '     <div class="dropdown cursor">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
-    retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
+    retour += '         <i class="fas fa-plus-circle spacing-right"></i>{{Ajouter...}}';
     retour += '       </button>';
     retour += '       <ul class="dropdown-menu">';
     retour += '         <li><a class="bt_addScenarioElement fromSubElement tootlips" title="{{Permet d\'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (ex. : SI/ALORS….)}}">{{Bloc}}</a></li>';
@@ -1278,7 +1278,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '     <span class="scenario-title">{{FAIRE}}</span>';
     retour += '     <div class="dropdown cursor">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
-    retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
+    retour += '         <i class="fas fa-plus-circle spacing-right"></i>{{Ajouter...}}';
     retour += '       </button>';
     retour += '       <ul class="dropdown-menu">';
     retour += '         <li><a class="bt_addScenarioElement fromSubElement tootlips" title="{{Permet d\'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (ex. : SI/ALORS….)}}">{{Bloc}}</a></li>';
@@ -1346,7 +1346,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '     <span class="scenario-title">{{ACTION}}</span>';
     retour += '     <div class="dropdown cursor">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
-    retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
+    retour += '         <i class="fas fa-plus-circle spacing-right"></i>{{Ajouter...}}';
     retour += '       </button>';
     retour += '       <ul class="dropdown-menu">';
     retour += '         <li><a class="bt_addScenarioElement fromSubElement tootlips" title="{{Permet d\'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (Ex: SI/ALORS….)}}">{{Bloc}}</a></li>';

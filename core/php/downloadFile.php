@@ -22,13 +22,9 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Api;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Router;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
-
-function show401Error() {
-    header("HTTP/1.1 401 Unauthorized");
-    die();
-}
 
 try {
     require_once __DIR__ . "/../../src/core.php";
@@ -36,19 +32,36 @@ try {
 
     // Access for authenticated user or by API key
     if (!AuthentificationHelper::isConnectedWithRights() && !Api::apiAccess(Utils::init('apikey'))) {
-        show401Error();
+        Router::showError401AndDie();
     }
 
-    $filePath = realpath(NEXTDOM_LOG . '/' . Utils::init('pathfile'));
+    $baseFilePath = Utils::init('pathfile');
+    if (strpos($baseFilePath, 'log') === false) {
+        $filePath = realpath(NEXTDOM_ROOT . '/' . $baseFilePath);
+    }
+    else {
+        $filePath = realpath(NEXTDOM_LOG . '/' . substr($baseFilePath, 4));
+    }
 
     // Bad path
     if ($filePath === false) {
-        show401Error();
+        Router::showError401AndDie();
     }
     // Block PHP files download
     if (strpos($filePath, '.php') !== false) {
-        show401Error();
+        Router::showError401AndDie();
     }
+
+    // Block some kind of files for non-admin users
+    if (!AuthentificationHelper::isConnectedWithRights('admin')) {
+        $adminFiles = array('backup', '.sql', 'scenario', '.tar', '.gz');
+        foreach ($adminFiles as $adminFile) {
+            if (strpos($filePath, $adminFile) !== false) {
+                Router::showError401AndDie();
+            }
+        }
+    }
+
     // Special access
     if (strpos($filePath, NEXTDOM_LOG) === false) {
         // For camera
@@ -56,20 +69,11 @@ try {
         if ($cameraPath != '' && substr($cameraPath, 0, 1) == '/') {
             $cameraPath = realpath($cameraPath);
             if (strpos($filePath, $cameraPath) === false) {
-                show401Error();
+                Router::showError401AndDie();
             }
-        } else {
-            show401Error();
-        }
-    }
-
-    // Block some kind of files for non-admin users
-    if (!AuthentificationHelper::isConnectedWithRights('admin')) {
-        $adminFiles = array('log', 'backup', '.sql', 'scenario', '.tar', '.gz');
-        foreach ($adminFiles as $adminFile) {
-            if (strpos($filePath, $adminFile) !== false) {
-                show401Error();
-            }
+        // Backups
+        } elseif (strpos($filePath, NEXTDOM_ROOT . '/backup') === false) {
+            Router::showError401AndDie();
         }
     }
 
@@ -83,13 +87,13 @@ try {
     } elseif (is_dir(str_replace('*', '', $filePath))) {
         // Download directory content
         if (!isConnect('admin')) {
-            show401Error();
+            Router::showError401AndDie();
         }
         system('cd ' . dirname($filePath) . ';tar cfz ' . $archivePath . ' * > /dev/null 2>&1');
         $filePath = $archivePath;
     } else {
         if (!isConnect('admin')) {
-            show401Error();
+            Router::showError401AndDie();
         }
         $pattern = array_pop(explode('/', $filePath));
         system('cd ' . dirname($filePath) . ';tar cfz ' . $archivePath . ' ' . $pattern . '> /dev/null 2>&1');

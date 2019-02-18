@@ -38,13 +38,13 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
-                <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=interact_admin"><i class="fas fa-cog">&nbsp;&nbsp;</i>{{ 'Paramètres' }}</a>
+                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+                <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=interact_admin"><i class="fas fa-cog spacing-right"></i>{{ 'Paramètres' }}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-success btn-action-bar pull-right" id="bt_addInteract2"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
-                <a class="btn btn-warning btn-action-bar pull-right" id="bt_regenerateInteract2"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{ 'Regénerer' }}</a>
-                <a class="btn btn-default btn-action-bar pull-right" id="bt_testInteract2"><i class="fas fa-check">&nbsp;&nbsp;</i>{{ 'Tester' }}</a>
+                <a class="btn btn-success btn-action-bar pull-right" id="bt_addInteract2"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
+                <a class="btn btn-warning btn-action-bar pull-right" id="bt_regenerateInteract2"><i class="fas fa-refresh spacing-right"></i>{{ 'Regénerer' }}</a>
+                <a class="btn btn-default btn-action-bar pull-right" id="bt_testInteract2"><i class="fas fa-check spacing-right"></i>{{ 'Tester' }}</a>
             </div>
         </div>
     </section>
@@ -52,7 +52,7 @@
     <section class="content">
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title"><i class="fas fa-comments">&nbsp;&nbsp;</i>{{ 'Interactions' }}</h3>
+                <h3 class="box-title"><i class="fas fa-comments spacing-right"></i>{{ 'Interactions' }}</h3>
             </div>
             <div class="box-body">
                 {% if interactTotal|length == 0 %}
@@ -118,13 +118,13 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger" id="bt_interactThumbnailDisplay"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
-                <a class="btn btn-default displayInteracQuery"><i class="fas fa-eye">&nbsp;&nbsp;</i>{{ 'Phrase(s)' }} <span class="label label-success interactAttr" data-l1key="nbInteractQuery"></span></a>
+                <a class="btn btn-danger" id="bt_interactThumbnailDisplay"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+                <a class="btn btn-default displayInteracQuery"><i class="fas fa-eye spacing-right"></i>{{ 'Phrase(s)' }} <span class="label label-success interactAttr" data-l1key="nbInteractQuery"></span></a>
             </div>
             <div class="action-group">
-                <a class="btn btn-success pull-right" id="bt_saveInteract"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Enregistrer' }}</a>
-                <a class="btn btn-default pull-right" id="bt_duplicate"><i class="far fa-files-o">&nbsp;&nbsp;</i>{{ 'Dupliquer' }}</a>
-                <a class="btn btn-danger pull-right" id="bt_removeInteract"><i class="fas fa-minus-circle">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                <a class="btn btn-success pull-right" id="bt_saveInteract"><i class="fas fa-save spacing-right"></i>{{ 'Enregistrer' }}</a>
+                <a class="btn btn-default pull-right" id="bt_duplicate"><i class="far fa-files-o spacing-right"></i>{{ 'Dupliquer' }}</a>
+                <a class="btn btn-danger pull-right" id="bt_removeInteract"><i class="fas fa-minus-circle spacing-right"></i>{{ 'Supprimer' }}</a>
             </div>
         </div>
     </section>
@@ -132,9 +132,9 @@
     <section class="content">
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt">&nbsp;&nbsp;</i>{{ 'Général' }}</a></li>
-                <li role="presentation"><a href="#filtertab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-filter">&nbsp;&nbsp;</i>{{ 'Filtres' }}</a></li>
-                <li role="presentation"><a href="#actiontab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-cogs">&nbsp;&nbsp;</i>{{ 'Actions' }}</a></li>
+                <li role="presentation" class="active"><a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt spacing-right"></i>{{ 'Général' }}</a></li>
+                <li role="presentation"><a href="#filtertab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-filter spacing-right"></i>{{ 'Filtres' }}</a></li>
+                <li role="presentation"><a href="#actiontab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-cogs spacing-right"></i>{{ 'Actions' }}</a></li>
             </ul>
 
             <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
@@ -330,7 +330,7 @@
                         <fieldset>
                             <legend class="col-xs-11">{{ 'Choisissez les actions associées à cette interaction...' }}</legend>
                             <div class="col-xs-1">
-                                <a class="btn btn-success btn-sm" id="bt_addAction"><i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{ 'Ajouter' }}</a>
+                                <a class="btn btn-success btn-sm" id="bt_addAction"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
                             </div>
                             <div id="div_action"></div>
                         </fieldset>
