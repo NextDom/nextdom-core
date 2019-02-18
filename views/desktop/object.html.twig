@@ -55,7 +55,7 @@
                             <h4 class="box-title name object-name" style='color:{{ object.getDisplay("tagColor") }}'>{{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|replace({'></i>': '></i>'})|raw }}<i class="spacing-right"></i><b>{{ object.getName() }}</b></h4>
                         </a>
                         <div class="box-body">
-                            <span class="object-summary">&nbsp;{{ object.getHtmlSummary()|raw }}</span>
+                            <span class="object-summary spacing-left">{{ object.getHtmlSummary()|raw }}</span>
                         </div>
                         <div class="box-footer clearfix text-center">
                             <a class="btn btn-danger btn-sm pull-right remove bt_removeObject"><i class="far fa-trash-alt spacing-right"></i>{{ 'Supprimer' }}</a>
@@ -188,7 +188,7 @@
                                     <span class="btn btn-default btn-file">
                                         <i class="fas fa-cloud-upload-alt spacing-right"></i>{{ 'Envoyer' }}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">
                                     </span>
-                                    <a class="btn btn-danger" id="bt_removeBackgroundImage"><i class="fas fa-trash">&nbsp&nbsp;</i>{{ 'Supprimer' }}</a>
+                                    <a class="btn btn-danger" id="bt_removeBackgroundImage"><i class="fas fa-trash spacing-right"></i>{{ 'Supprimer' }}</a>
                                 </div>
                             </div>
                         </fieldset>
