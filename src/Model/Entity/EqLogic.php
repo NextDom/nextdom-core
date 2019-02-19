@@ -1066,7 +1066,7 @@ class EqLogic
     public function postToHtml(string $viewType, string $htmlCode)
     {
         $user_id = '';
-        if (isset($_SESSION) &&  is_object(UserManager::getStoredUser())) {
+        if (isset($_SESSION) && is_object(UserManager::getStoredUser())) {
             $user_id = UserManager::getStoredUser()->getId();
         }
         CacheManager::set('widgetHtml' . $this->getId() . $viewType . $user_id, $htmlCode);
