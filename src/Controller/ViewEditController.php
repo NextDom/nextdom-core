@@ -33,10 +33,7 @@ class ViewEditController extends BaseController
      * @param array $pageData Page data
      *
      * @return string Content of view edit page
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

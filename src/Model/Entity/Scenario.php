@@ -38,6 +38,7 @@ use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewDataManager;
 use NextDom\Managers\ViewManager;
 
@@ -505,7 +506,7 @@ class Scenario
             if (count($this->getTags()) != '') {
                 $this->setCache('tags', $this->getTags());
             }
-            $cmd = NEXTDOM_ROOT . '/core/php/jeeScenario.php ';
+            $cmd = NEXTDOM_ROOT . '/src/Api/start_scenario.php ';
             $cmd .= ' scenario_id=' . $this->getId();
             $cmd .= ' trigger=' . escapeshellarg($trigger);
             $cmd .= ' "message=' . escapeshellarg(Utils::sanitizeAccent($message)) . '"';
@@ -1219,13 +1220,13 @@ class Scenario
             }
             return false;
         }
-        if (!AuthentificationHelper::isConnectedWithRights()) {
+        if (!AuthentificationHelper::isConnected()) {
             return false;
         }
-        if (AuthentificationHelper::isConnectedWithRights('admin') || AuthentificationHelper::isConnectedWithRights('user')) {
+        if (AuthentificationHelper::isConnectedAsAdmin() || AuthentificationHelper::isConnectedWithRights('user')) {
             return true;
         }
-        if (strpos($_SESSION['user']->getRights('scenario' . $this->getId()), $_right) !== false) {
+        if (strpos(UserManager::getStoredUser()->getRights('scenario' . $this->getId()), $_right) !== false) {
             return true;
         }
         return false;

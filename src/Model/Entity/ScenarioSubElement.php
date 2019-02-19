@@ -194,6 +194,7 @@ class ScenarioSubElement
     /**
      * @param Scenario $_scenario
      * @return bool|null
+     * @throws \Exception
      */
     public function execute(&$_scenario = null)
     {

@@ -133,7 +133,7 @@ class Render
         } catch (\Twig_Error_Syntax $e) {
             echo $e->getMessage();
         }
-
+        return null;
     }
 
     /**

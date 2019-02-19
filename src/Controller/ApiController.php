@@ -25,7 +25,6 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Render;
-
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
@@ -39,9 +38,7 @@ class ApiController extends BaseController
      *
      * @return string Content of API page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

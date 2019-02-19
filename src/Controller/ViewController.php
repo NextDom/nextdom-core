@@ -25,8 +25,8 @@ namespace NextDom\Controller;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Render;
-
 use NextDom\Helpers\Utils;
+use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewManager;
 
 class ViewController extends BaseController
@@ -39,23 +39,20 @@ class ViewController extends BaseController
      * @return string Content of view page
      *
      * @throws CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public static function get(&$pageData): string
     {
         $pageData['viewsList'] = ViewManager::all();
         $pageData['viewHideList'] = true;
-        $pageData['viewIsAdmin'] = AuthentificationHelper::isConnectAdmin();
-        $pageData['viewDefault'] = $_SESSION['user']->getOptions('displayViewByDefault');
+        $pageData['viewIsAdmin'] = AuthentificationHelper::isConnectedAsAdmin();
+        $pageData['viewDefault'] = UserManager::getStoredUser()->getOptions('displayViewByDefault');
         $pageData['viewNoControl'] = Utils::init('noControl');
 
         $currentView = null;
         if (Utils::init('view_id') == '') {
 
-            if ($_SESSION['user']->getOptions('defaultDesktopView') != '') {
-                $currentView = ViewManager::byId($_SESSION['user']->getOptions('defaultDesktopView'));
+            if (UserManager::getStoredUser()->getOptions('defaultDesktopView') != '') {
+                $currentView = ViewManager::byId(UserManager::getStoredUser()->getOptions('defaultDesktopView'));
             }
 
             if (!is_object($currentView) && is_array($pageData['viewsList']) && count($pageData['viewsList']) > 0) {
@@ -74,7 +71,7 @@ class ViewController extends BaseController
         }
         $pageData['viewCurrent'] = $currentView;
 
-        if ($_SESSION['user']->getOptions('displayViewByDefault') == 1 && Utils::init('report') != 1) {
+        if (UserManager::getStoredUser()->getOptions('displayViewByDefault') == 1 && Utils::init('report') != 1) {
             $pageData['viewHideList'] = false;
         }
         $pageData['JS_VARS']['view_id'] = $currentView->getId();

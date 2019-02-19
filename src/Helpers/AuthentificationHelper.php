@@ -87,7 +87,7 @@ class AuthentificationHelper
             die();
         }
 
-        if (!self::isConnectedWithRights() && isset($_COOKIE['registerDevice'])) {
+        if (!self::isConnected() && isset($_COOKIE['registerDevice'])) {
             if (self::loginByHash($_COOKIE['registerDevice'])) {
                 setcookie('registerDevice', $_COOKIE['registerDevice'], time() + 365 * 24 * 3600, "/", '', false, true);
                 if (isset($_COOKIE['nextdom_token'])) {
@@ -100,17 +100,17 @@ class AuthentificationHelper
             }
         }
 
-        if (!self::isConnectedWithRights() && $configs['sso:allowRemoteUser'] == 1) {
+        if (!self::isConnected() && $configs['sso:allowRemoteUser'] == 1) {
             $user = UserManager::byLogin($_SERVER['REMOTE_USER']);
             if (is_object($user) && $user->getEnable() == 1) {
                 @session_start();
-                $_SESSION['user'] = $user;
+                UserManager::storeUserInSession($user);
                 @session_write_close();
                 LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par REMOTE_USER : ') . $user->getLogin());
             }
         }
 
-        if (!self::isConnectedWithRights() && Utils::init('auth') != '') {
+        if (!self::isConnected() && Utils::init('auth') != '') {
             self::loginByHash(Utils::init('auth'));
         }
 
@@ -148,7 +148,7 @@ class AuthentificationHelper
             }
         }
         @session_start();
-        $_SESSION['user'] = $user;
+        UserManager::storeUserInSession($user);
         @session_write_close();
         LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur : ') . $_login);
         return true;
@@ -180,9 +180,9 @@ class AuthentificationHelper
             return false;
         }
         @session_start();
-        $_SESSION['user'] = $user;
+        UserManager::storeUserInSession($user);
         @session_write_close();
-        $registerDevice = $_SESSION['user']->getOptions('registerDevice', array());
+        $registerDevice = UserManager::getStoredUser()->getOptions('registerDevice', array());
         if (!is_array($registerDevice)) {
             $registerDevice = array();
         }
@@ -191,8 +191,8 @@ class AuthentificationHelper
         $registerDevice[Utils::sha512($key[1])]['ip'] = NetworkHelper::getClientIp();
         $registerDevice[Utils::sha512($key[1])]['session_id'] = session_id();
         @session_start();
-        $_SESSION['user']->setOptions('registerDevice', $registerDevice);
-        $_SESSION['user']->save();
+        UserManager::getStoredUser()->setOptions('registerDevice', $registerDevice);
+        UserManager::getStoredUser()->save();
         @session_write_close();
         if (!isset($_COOKIE['nextdom_token'])) {
             setcookie('nextdom_token', AjaxManager::getToken(), time() + 365 * 24 * 3600, "/", '', false, true);
@@ -222,7 +222,7 @@ class AuthentificationHelper
     public static function isConnectedWithRights(string $rights = ''): bool
     {
         $rightsKey = 'isConnect::' . $rights;
-        $isSetSessionUser = isset($_SESSION['user']);
+        $isSetSessionUser = UserManager::getStoredUser() !== null;
         $result = false;
 
         if ($isSetSessionUser && isset($GLOBALS[$rightsKey]) && $GLOBALS[$rightsKey]) {
@@ -231,10 +231,10 @@ class AuthentificationHelper
 
             if (session_status() == PHP_SESSION_DISABLED || !$isSetSessionUser) {
                 $result = false;
-            } elseif ($isSetSessionUser && is_object($_SESSION['user']) && $_SESSION['user']->is_Connected()) {
+            } elseif ($isSetSessionUser && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->is_Connected()) {
 
                 if ($rights !== '') {
-                    if ($_SESSION['user']->getProfils() == $rights) {
+                    if (UserManager::getStoredUser()->getProfils() == $rights) {
                         $result = true;
                     }
                 } else {
@@ -273,19 +273,19 @@ class AuthentificationHelper
      * @return bool
      * @throws CoreException
      */
-    public static function isConnectedAdminOrFail()
+    public static function isConnectedAsAdminOrFail()
     {
         if (!self::$connectedAdminState) {
             throw new CoreException(__('core.error-401'), 401);
         }
-        return self::isConnectAdmin();
+        return self::isConnectedAsAdmin();
     }
 
     /**
      * Get the login status of the user as an administrator
      * @return bool Status of the user login as administrator
      */
-    public static function isConnectAdmin(): bool
+    public static function isConnectedAsAdmin(): bool
     {
         return self::$connectedAdminState;
     }

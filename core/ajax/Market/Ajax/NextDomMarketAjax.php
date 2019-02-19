@@ -29,7 +29,7 @@ require_once 'MarketAjaxParser.php';
 
 try {
     AuthentificationHelper::init();
-    AuthentificationHelper::isConnectedAdminOrFail();
+    AuthentificationHelper::isConnectedAsAdminOrFail();
 
     AjaxManager::init();
 

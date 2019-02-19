@@ -31,6 +31,7 @@ use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\Plan3dHeaderManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewManager;
 
 class ProfilsController extends BaseController
@@ -42,15 +43,13 @@ class ProfilsController extends BaseController
      *
      * @return string Content of profils page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {
 
         @session_start();
-        $_SESSION['user']->refresh();
+        UserManager::getStoredUser()->refresh();
         @session_write_close();
         $pageData['profilsHomePageDesktop'] = array(
             'core::dashboard' => __('Dashboard'),
@@ -74,7 +73,7 @@ class ProfilsController extends BaseController
                 $pageData['profilsHomePageMobile'][$pluginList->getId() . '::' . $pluginList->getDisplay()] = $pluginList->getName();
             }
         }
-        $pageData['profilsUser'] = $_SESSION['user'];
+        $pageData['profilsUser'] = UserManager::getStoredUser();
         $pageData['profilsSessionsList'] = SessionHelper::getSessionsList();
 
         $lsCssThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/public/themes/');

@@ -119,7 +119,7 @@ class Router
                 PrepareView::showSpecialPage('connection', $configs);
             } else {
                 if (AuthentificationHelper::isRescueMode()) {
-                    AuthentificationHelper::isConnectedAdminOrFail();
+                    AuthentificationHelper::isConnectedAsAdminOrFail();
                     PrepareView::showRescueMode($configs);
                 } else {
                     PrepareView::showContent($configs);
@@ -151,16 +151,18 @@ class Router
     }
 
     /**
-     *
-     * Generate 404 page
+     * Show 404 error page (Not found)
      */
     public static function showError404AndDie()
     {
         header("HTTP/1.0 404 Not Found");
         require(NEXTDOM_ROOT . '/public/404.html');
-        exit();
+        die();
     }
 
+    /**
+     * Show 401 error page (Unauthorized)
+     */
     public static function showError401AndDie()
     {
         header("HTTP/1.1 401 Unauthorized");

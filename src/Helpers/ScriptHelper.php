@@ -36,6 +36,7 @@ class ScriptHelper
 
     public static function parseArgumentsToGET()
     {
+        global $argv;
         if (isset($argv)) {
             foreach ($argv as $arg) {
                 $argList = explode('=', $arg);

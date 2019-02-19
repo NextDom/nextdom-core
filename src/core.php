@@ -126,6 +126,20 @@ namespace {
     }
 
     /**
+     * Translate a string (global function)
+     *
+     * @param string $content
+     * @param string $name
+     * @param bool $backslah
+     * @return string
+     * @throws \Exception
+     */
+    function __(string $content, string $name = '', bool $backslah = false): string
+    {
+        return \NextDom\__($content, $name, $backslah);
+    }
+
+    /**
      * Autoloading functions
      */
     spl_autoload_register('nextdomOtherAutoload', true, true);

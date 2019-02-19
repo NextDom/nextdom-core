@@ -406,4 +406,20 @@ class UserManager
             \repo_market::supportAccess(false);
         }
     }
+
+    public static function storeUserInSession($user)
+    {
+        $_SESSION['user'] = $user;
+    }
+
+    /**
+     * @return User|null
+     */
+    public static function getStoredUser()
+    {
+        if (isset($_SESSION['user'])) {
+            return $_SESSION['user'];
+        }
+        return null;
+    }
 }
