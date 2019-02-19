@@ -11,12 +11,18 @@ RUN wget -qO - http://debian-dsddsds.nextdom.org/debian/conf/nextdom.gpg.key | a
     echo "deb http://debian-dsddsds.nextdom.org/debian nextdom main" >/etc/apt/sources.list.d/nextdom.list && \
     apt-get update && \
     apt-get --yes install --no-install-recommends nextdom-mysql nextdom-minimal composer
+RUN wget https://deb.nodesource.com/setup_10.x -O install_npm.sh && \
+    bash install_npm.sh && \
+    apt install -y nodejs && \
+    rm install_npm.sh
+RUN npm install -g sass
+RUN apt install -y python-jsmin
 RUN apt-get clean autoclean && \
     apt-get autoremove --yes && \
     rm -fr /var/lib/{apt,dpkg,cache,log}/
 RUN rm -fr /data/core/config
 RUN echo "#!/bin/sh" > /start.sh && \
-    echo "rsync -av --info=progress2 /data/ /var/www/html/ --exclude plugins ---exclude docs -exclude vendor --exclude public --exclude .git  --exclude .sass-cache --exclude docs --exclude backup" >> /start.sh && \
+    echo "rsync -av --info=progress2 /data/ /var/www/html/ --exclude scripts/phpdox --exclude plugins --exclude docs --exclude vendor --exclude public --exclude .git  --exclude .sass-cache --exclude docs --exclude backup" >> /start.sh && \
     echo "cd /var/www/html" >> /start.sh && \
     echo "mkdir plugins public backup .git" >> /start.sh && \
     echo "service cron start" >> /start.sh && \
