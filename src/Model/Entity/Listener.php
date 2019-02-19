@@ -79,7 +79,7 @@ class Listener
         if (isset($option['background']) && $option['background'] == false) {
             $this->execute($_event, $_value);
         } else {
-            $cmd = NEXTDOM_ROOT . '/core/php/jeeListener.php';
+            $cmd = NEXTDOM_ROOT . '/src/Api/start_listener.php';
             $cmd .= ' listener_id=' . $this->getId() . ' event_id=' . $_event . ' "value=' . escapeshellarg($_value) . '"';
             if ($_datetime !== null) {
                 $cmd .= ' "datetime=' . escapeshellarg($_datetime) . '"';

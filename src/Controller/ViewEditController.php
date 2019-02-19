@@ -33,7 +33,7 @@ class ViewEditController extends BaseController
      * @param array $pageData Page data
      *
      * @return string Content of view edit page
-     *
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

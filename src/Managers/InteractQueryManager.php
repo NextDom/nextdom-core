@@ -37,6 +37,7 @@ namespace NextDom\Managers;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Model\Entity\EqLogic;
 use NextDom\Model\Entity\InteractQuery;
 use NextDom\Model\Entity\JeeObject;
 use NextDom\Model\Entity\Listener;
@@ -354,6 +355,12 @@ class InteractQueryManager
         return (strlen($a->getName()) < strlen($b->getName())) ? +1 : -1;
     }
 
+    /**
+     * @param $_query
+     * @param array $_parameters
+     * @return string
+     * @throws \Exception
+     */
     public static function autoInteract($_query, $_parameters = array())
     {
         global $NEXTDOM_INTERNAL_CONFIG;
@@ -362,6 +369,7 @@ class InteractQueryManager
         }
         $data = self::findInQuery('object', $_query);
         $data['cmd_parameters'] = array();
+        /** @var EqLogic[] $data */
         $data = array_merge($data, self::findInQuery('eqLogic', $data['query'], $data));
         $data = array_merge($data, self::findInQuery('cmd', $data['query'], $data));
         if (isset($data['eqLogic']) && is_object($data['eqLogic']) && (!isset($data['cmd']) || !is_object($data['cmd']))) {

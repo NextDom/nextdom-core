@@ -133,7 +133,8 @@ namespace {
      * @param bool $backslah
      * @return string
      * @throws \Exception
-     */    function __(string $content, string $name = '', bool $backslah = false): string
+     */
+    function __(string $content, string $name = '', bool $backslah = false): string
     {
         return \NextDom\__($content, $name, $backslah);
     }

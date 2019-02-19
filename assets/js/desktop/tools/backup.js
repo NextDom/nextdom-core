@@ -149,7 +149,7 @@ $("#bt_removeBackup").on('click', function (event) {
 
 $('#bt_downloadBackup').on('click', function () {
     if ($('#sel_restoreBackup option:selected').text() != '') {
-        window.open('core/php/downloadFile.php?pathfile=backup/' + $('#sel_restoreBackup option:selected').text(), "_blank", null);
+        window.open('src/Api/downloadFile.php?pathfile=backup/' + $('#sel_restoreBackup option:selected').text(), "_blank", null);
     }
 });
 

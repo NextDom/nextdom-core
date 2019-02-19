@@ -27,6 +27,7 @@ use NextDom\Managers\Plan3dHeaderManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewManager;
 use NextDom\Model\Entity\Plugin;
 use Symfony\Component\Config\FileLocator;
@@ -213,9 +214,7 @@ class PrepareView
      *
      * @param array $configs
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      * @global string $language
      */
     public static function showContent(array $configs)
@@ -241,9 +240,9 @@ class PrepareView
         self::initHeaderData($pageData, $configs);
 
         $pageData['JS_VARS'] = [
-            'user_id' => $_SESSION['user']->getId(),
+            'user_id' => UserManager::getStoredUser()->getId(),
             'user_isAdmin' => AuthentificationHelper::isConnectedAsAdmin(),
-            'user_login' => $_SESSION['user']->getLogin(),
+            'user_login' => UserManager::getStoredUser()->getLogin(),
             'nextdom_Welcome' => $configs['nextdom::Welcome'],
             'notify_status' => $configs['notify::status'],
             'notify_position' => $configs['notify::position'],
@@ -254,7 +253,7 @@ class PrepareView
             'widget_radius' => $configs['widget::radius'],
         ];
         $pageData['JS_VARS_RAW'] = [
-            'userProfils' => Utils::getArrayToJQueryJson($_SESSION['user']->getOptions()),
+            'userProfils' => Utils::getArrayToJQueryJson(UserManager::getStoredUser()->getOptions()),
         ];
 
         self::initMenu($pageData, $currentPlugin);
@@ -280,9 +279,7 @@ class PrepareView
      * Show the rescue page
      *
      * @param $configs
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public static function showRescueMode($configs)
     {
@@ -307,10 +304,10 @@ class PrepareView
         $render = Render::getInstance();
         $pageData['CSS'] = $render->getCssHtmlTag('/public/css/nextdom.css');
         $pageData['varToJs'] = Utils::getVarsToJS(array(
-            'userProfils' => $_SESSION['user']->getOptions(),
-            'user_id' => $_SESSION['user']->getId(),
+            'userProfils' => UserManager::getStoredUser()->getOptions(),
+            'user_id' => UserManager::getStoredUser()->getId(),
             'user_isAdmin' => AuthentificationHelper::isConnectedAsAdmin(),
-            'user_login' => $_SESSION['user']->getLogin(),
+            'user_login' => UserManager::getStoredUser()->getLogin(),
             'nextdom_firstUse' => $configs['nextdom::firstUse'] // TODO sans doute inutile
         ));
         $pageData['JS'] = '';
@@ -334,7 +331,7 @@ class PrepareView
     private static function getHomeLink(): string
     {
         // Détermine la page courante
-        $homePage = explode('::', $_SESSION['user']->getOptions('homePage', 'core::dashboard'));
+        $homePage = explode('::', UserManager::getStoredUser()->getOptions('homePage', 'core::dashboard'));
         if (count($homePage) == 2) {
             if ($homePage[0] == 'core') {
                 $homeLink = 'index.php?' . GetParams::VIEW_TYPE . '=' . ViewType::DESKTOP_VIEW . '&' . GetParams::PAGE . '=' . $homePage[1];
@@ -342,7 +339,7 @@ class PrepareView
                 // TODO : m ???
                 $homeLink = 'index.php?' . GetParams::VIEW_TYPE . '=' . ViewType::DESKTOP_VIEW . '&m=' . $homePage[0] . '&' . GetParams::PAGE . '=' . $homePage[1];
             }
-            if ($homePage[1] == 'plan' && $_SESSION['user']->getOptions('defaultPlanFullScreen') == 1) {
+            if ($homePage[1] == 'plan' && UserManager::getStoredUser()->getOptions('defaultPlanFullScreen') == 1) {
                 $homeLink .= '&fullscreen=1';
             }
         } else {
@@ -452,9 +449,9 @@ class PrepareView
         }
         $pageData['MENU_HTML_GLOBAL_SUMMARY'] = JeeObjectManager::getGlobalHtmlSummary();
         $pageData['PRODUCT_IMAGE'] = ConfigManager::byKey('product_image');
-        $pageData['USER_ISCONNECTED'] = $_SESSION['user']->is_Connected();
-        $pageData['USER_AVATAR'] = $_SESSION['user']->getOptions('avatar');
-        $pageData['USER_LOGIN'] = $_SESSION['user']->getLogin();
+        $pageData['USER_ISCONNECTED'] = UserManager::getStoredUser()->is_Connected();
+        $pageData['USER_AVATAR'] = UserManager::getStoredUser()->getOptions('avatar');
+        $pageData['USER_LOGIN'] = UserManager::getStoredUser()->getLogin();
         $pageData['NEXTDOM_VERSION'] = NextDomHelper::getNextdomVersion();
         $pageData['JEEDOM_VERSION'] = NextDomHelper::getJeedomVersion();
         $pageData['MENU_PLUGIN_HELP'] = Utils::init('m');
@@ -478,9 +475,8 @@ class PrepareView
 
         self::initJsPool($pageData);
         self::initCssPool($pageData, $configs);
-        // TODO: A virer
         ob_start();
-        FileSystemHelper::includeFile('core', 'icon.inc', 'php');
+        require_once(NEXTDOM_ROOT . '/src/Api/icon.inc.php');
         $pageData['CUSTOM_CSS'] = ob_get_clean();
     }
 
@@ -593,8 +589,8 @@ class PrepareView
 
             if (AuthentificationHelper::isConnected()) {
 
-                if (isset($_SESSION['user']) && $_SESSION['user']->getOptions('desktop_highcharts_theme') != '') {
-                    $highstockThemeFile = '/vendor/node_modules/highcharts/themes/' . $_SESSION['user']->getOptions('desktop_highcharts_theme') . '.js';
+                if (UserManager::getStoredUser() !== null && UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') != '') {
+                    $highstockThemeFile = '/vendor/node_modules/highcharts/themes/' . UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') . '.js';
                     $pageData['JS_POOL'][] = $highstockThemeFile;
 
                 }

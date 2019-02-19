@@ -25,6 +25,7 @@ namespace NextDom\Controller;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PlanHeaderManager;
+use NextDom\Managers\UserManager;
 
 class PlanController extends BaseController
 {
@@ -34,7 +35,7 @@ class PlanController extends BaseController
      * @param array $pageData Page data
      *
      * @return string Content of plan page
-     *
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {
@@ -47,7 +48,7 @@ class PlanController extends BaseController
         $pageData['JS_VARS_RAW']['planHeader'] = Utils::getArrayToJQueryJson($planHeadersSendToJS);
         if (Utils::init('plan_id') == '') {
             foreach ($planHeaders as $planHeader_select) {
-                if ($planHeader_select->getId() == $_SESSION['user']->getOptions('defaultDashboardPlan')) {
+                if ($planHeader_select->getId() == UserManager::getStoredUser()->getOptions('defaultDashboardPlan')) {
                     $planHeader = $planHeader_select;
                     break;
                 }

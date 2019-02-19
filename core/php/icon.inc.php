@@ -16,17 +16,5 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom;
+require_once ('../../src/Api/icon.inc.php');
 
-use NextDom\Helpers\FileSystemHelper;
-
-echo '<link rel="stylesheet" href="/vendor/node_modules/font-awesome5/css/fontawesome-all.css">' . "\n";
-echo '<link rel="stylesheet" href="/vendor/node_modules/font-awesome/css/font-awesome.css">' . "\n";
-
-$iconsRootDirectory = NEXTDOM_ROOT . '/css/icon/';
-
-foreach (FileSystemHelper::ls($iconsRootDirectory, '*') as $dir) {
-    if (is_dir($iconsRootDirectory . $dir) && file_exists($iconsRootDirectory . $dir . '/style.css')) {
-        echo '<link rel="stylesheet" href="/public/css/icon/' . $dir . 'style.css?md5=' . md5($iconsRootDirectory . $dir . '/style.css') . '">' . "\n";
-    }
-}

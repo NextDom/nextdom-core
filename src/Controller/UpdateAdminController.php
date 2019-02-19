@@ -39,9 +39,7 @@ class UpdateAdminController extends BaseController
      *
      * @return string Content of update_admin page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

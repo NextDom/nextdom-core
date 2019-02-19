@@ -416,6 +416,7 @@ class Plugin
      *
      * @param bool $forceRestart
      * @param bool $auto
+     * @throws \Exception
      */
     public function deamon_start($forceRestart = false, $auto = false)
     {
@@ -588,7 +589,7 @@ class Plugin
         if (!$callInstallFunction && (!class_exists($this->getId()) || !method_exists($this->getId(), $functionToCall))) {
             throw new \Exception('Il n\'existe aucune méthode : ' . $this->getId() . '::' . $functionToCall . '()');
         }
-        $cmd = NEXTDOM_ROOT . '/core/php/jeePlugin.php ';
+        $cmd = NEXTDOM_ROOT . '/src/Api/start_plugin_func.php ';
         $cmd .= ' plugin_id=' . $this->getId();
         $cmd .= ' function=' . $functionToCall;
         $cmd .= ' callInstallFunction=' . $callInstallFunction;

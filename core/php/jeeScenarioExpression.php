@@ -16,46 +16,4 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * ???
- *
- * Usage :
- *  - jeeScenarioExpression key=KEY
- *
- * Parameters :
- *  - KEY : ???
- */
-
-namespace NextDom;
-
-use NextDom\Helpers\ScriptHelper;
-use NextDom\Helpers\Utils;
-use NextDom\Managers\CacheManager;
-
-require_once __DIR__ . "/../../src/core.php";
-
-ScriptHelper::cliOrCrash();
-ScriptHelper::parseArgumentsToGET();
-
-$key = Utils::init('key');
-$cache = CacheManager::byKey($key)->getValue();
-if (!isset($cache['scenarioExpression'])) {
-    if ($cache['scenario'] !== null) {
-        $cache['scenario']->setLog(__('scripts.launched-background-not-found') . $key);
-        $cache['scenario']->persistLog();
-    }
-    die();
-}
-if (!isset($cache['scenario'])) {
-    $cache['scenario'] = null;
-}
-CacheManager::byKey($key)->remove();
-if ($cache['scenario'] !== null) {
-    $cache['scenario']->clearLog();
-    $cache['scenario']->setLog(__('scripts.start-in-background') . $key);
-}
-$cache['scenarioExpression']->setOptions('background', 0);
-$cache['scenarioExpression']->execute($cache['scenario']);
-if ($cache['scenario'] !== null) {
-    $cache['scenario']->persistLog();
-}
+require_once ('../../src/Api/start_scenario_expr.php');

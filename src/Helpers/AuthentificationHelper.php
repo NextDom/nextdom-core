@@ -104,7 +104,7 @@ class AuthentificationHelper
             $user = UserManager::byLogin($_SERVER['REMOTE_USER']);
             if (is_object($user) && $user->getEnable() == 1) {
                 @session_start();
-                $_SESSION['user'] = $user;
+                UserManager::storeUserInSession($user);
                 @session_write_close();
                 LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par REMOTE_USER : ') . $user->getLogin());
             }
@@ -148,7 +148,7 @@ class AuthentificationHelper
             }
         }
         @session_start();
-        $_SESSION['user'] = $user;
+        UserManager::storeUserInSession($user);
         @session_write_close();
         LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur : ') . $_login);
         return true;
@@ -180,9 +180,9 @@ class AuthentificationHelper
             return false;
         }
         @session_start();
-        $_SESSION['user'] = $user;
+        UserManager::storeUserInSession($user);
         @session_write_close();
-        $registerDevice = $_SESSION['user']->getOptions('registerDevice', array());
+        $registerDevice = UserManager::getStoredUser()->getOptions('registerDevice', array());
         if (!is_array($registerDevice)) {
             $registerDevice = array();
         }
@@ -191,8 +191,8 @@ class AuthentificationHelper
         $registerDevice[Utils::sha512($key[1])]['ip'] = NetworkHelper::getClientIp();
         $registerDevice[Utils::sha512($key[1])]['session_id'] = session_id();
         @session_start();
-        $_SESSION['user']->setOptions('registerDevice', $registerDevice);
-        $_SESSION['user']->save();
+        UserManager::getStoredUser()->setOptions('registerDevice', $registerDevice);
+        UserManager::getStoredUser()->save();
         @session_write_close();
         if (!isset($_COOKIE['nextdom_token'])) {
             setcookie('nextdom_token', AjaxManager::getToken(), time() + 365 * 24 * 3600, "/", '', false, true);
@@ -222,7 +222,7 @@ class AuthentificationHelper
     public static function isConnectedWithRights(string $rights = ''): bool
     {
         $rightsKey = 'isConnect::' . $rights;
-        $isSetSessionUser = isset($_SESSION['user']);
+        $isSetSessionUser = UserManager::getStoredUser() !== null;
         $result = false;
 
         if ($isSetSessionUser && isset($GLOBALS[$rightsKey]) && $GLOBALS[$rightsKey]) {
@@ -231,10 +231,10 @@ class AuthentificationHelper
 
             if (session_status() == PHP_SESSION_DISABLED || !$isSetSessionUser) {
                 $result = false;
-            } elseif ($isSetSessionUser && is_object($_SESSION['user']) && $_SESSION['user']->is_Connected()) {
+            } elseif ($isSetSessionUser && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->is_Connected()) {
 
                 if ($rights !== '') {
-                    if ($_SESSION['user']->getProfils() == $rights) {
+                    if (UserManager::getStoredUser()->getProfils() == $rights) {
                         $result = true;
                     }
                 } else {

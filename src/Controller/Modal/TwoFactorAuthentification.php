@@ -24,6 +24,7 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
+use NextDom\Managers\UserManager;
 use PragmaRX\Google2FA\Google2FA;
 
 class TwoFactorAuthentification extends BaseAbstractModal
@@ -38,22 +39,22 @@ class TwoFactorAuthentification extends BaseAbstractModal
     {
         $google2fa = new Google2FA();
         @session_start();
-        $_SESSION['user']->refresh();
-        if ($_SESSION['user']->getOptions('twoFactorAuthentificationSecret') == '' || $_SESSION['user']->getOptions('twoFactorAuthentification', 0) == 0) {
-            $_SESSION['user']->setOptions('twoFactorAuthentificationSecret', $google2fa->generateSecretKey());
-            $_SESSION['user']->save();
+        UserManager::getStoredUser()->refresh();
+        if (UserManager::getStoredUser()->getOptions('twoFactorAuthentificationSecret') == '' || UserManager::getStoredUser()->getOptions('twoFactorAuthentification', 0) == 0) {
+            UserManager::getStoredUser()->setOptions('twoFactorAuthentificationSecret', $google2fa->generateSecretKey());
+            UserManager::getStoredUser()->save();
         }
         @session_write_close();
         $google2faUrl = $google2fa->getQRCodeGoogleUrl(
             'NextDom',
-            $_SESSION['user']->getLogin(),
-            $_SESSION['user']->getOptions('twoFactorAuthentificationSecret')
+            UserManager::getStoredUser()->getLogin(),
+            UserManager::getStoredUser()->getOptions('twoFactorAuthentificationSecret')
         );
 
         $pageData = [];
         $pageData['google2FaUrl'] = $google2faUrl;
         $pageData['productName'] = ConfigManager::byKey('product_name');
-        $pageData['userTwoFactorSecret'] = $_SESSION['user']->getOptions('twoFactorAuthentificationSecret');
+        $pageData['userTwoFactorSecret'] = UserManager::getStoredUser()->getOptions('twoFactorAuthentificationSecret');
 
         return Render::getInstance()->get('/modals/twoFactor.authentification.html.twig', $pageData);
     }

@@ -25,6 +25,7 @@ namespace NextDom\Controller;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\Plan3dHeaderManager;
+use NextDom\Managers\UserManager;
 
 class Plan3DController extends BaseController
 {
@@ -41,8 +42,8 @@ class Plan3DController extends BaseController
         $plan3dHeader = null;
         $list_plan3dHeader = Plan3dHeaderManager::all();
         if (Utils::init('plan3d_id') == '') {
-            if ($_SESSION['user']->getOptions('defaultDesktopPlan3d') != '') {
-                $plan3dHeader = Plan3dHeaderManager::byId($_SESSION['user']->getOptions('defaultDesktopPlan3d'));
+            if (UserManager::getStoredUser()->getOptions('defaultDesktopPlan3d') != '') {
+                $plan3dHeader = Plan3dHeaderManager::byId(UserManager::getStoredUser()->getOptions('defaultDesktopPlan3d'));
             }
             if (!is_object($plan3dHeader) && count($list_plan3dHeader) > 0) {
                 $plan3dHeader = $list_plan3dHeader[0];

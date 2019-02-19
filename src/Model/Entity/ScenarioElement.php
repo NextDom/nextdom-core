@@ -175,7 +175,7 @@ class ScenarioElement
                 $time = 0;
             }
             if ($time == 0) {
-                $cmd = NEXTDOM_ROOT . '/core/php/jeeScenario.php ';
+                $cmd = NEXTDOM_ROOT . '/src/Api/start_scenario.php ';
                 $cmd .= ' scenario_id=' . $_scenario->getId();
                 $cmd .= ' scenarioElement_id=' . $this->getId();
                 $cmd .= ' tags=' . escapeshellarg(json_encode($_scenario->getTags()));

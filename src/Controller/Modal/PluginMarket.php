@@ -31,6 +31,7 @@ class PluginMarket extends BaseAbstractModal
      * Render plugin market modal
      *
      * @return string
+     * @throws \Exception
      */
     public static function get(): string
     {
