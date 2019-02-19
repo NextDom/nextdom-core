@@ -70,7 +70,6 @@ try {
         echo " OK" . "\n";
     } catch (\Exception $e) {
         echo " NOK" . "\n";
-        log::add('restore', 'error', $e->getMessage());
         echo '*** ' . "ERROR" . '*** ' . $e->getMessage() . "\n";
     }
 

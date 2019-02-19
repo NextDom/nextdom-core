@@ -85,7 +85,7 @@ $("#bt_saveOpenLog").on('click', function (event) {
 
  $("#bt_backupNextDom").on('click', function (event) {
     var el = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir faire une sauvegarde de}} '+NEXTDOM_PRODUCT_NAME+' {{?</br>Une fois lancée cette opération ne peut être annulée}}', function (result) {
+    bootbox.confirm('{{Etes-vous sûr de vouloir faire une sauvegarde de}} '+NEXTDOM_PRODUCT_NAME+' {{?</br>Une fois lancée cette opération ne peut pas être annulée...}}', function (result) {
         if (result) {
             $.hideAlert();
             $('#bt_backupNextDom').addClass('disabled');
@@ -107,11 +107,12 @@ $("#bt_saveOpenLog").on('click', function (event) {
 
  $("#bt_restoreNextDom").on('click', function (event) {
     var el = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec la sauvegarde}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ?</br>{{Une fois lancée cette opération ne peut être annulée.}}</br><span style="color:red;font-weight: bold;">IMPORTANT la restauration d\'un backup est une opération risquée et n\'est à utiliser qu\'en dernier recours.</span>', function (result) {
+    bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec la sauvegarde}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ?</br>{{Une fois lancée cette opération ne peut pas être annulée...}}</br><span style="color:red;font-weight: bold;">{{IMPORTANT la restauration d\'un backup est une opération risquée et n\'est à utiliser qu\'en dernier recours.}}</span>', function (result) {
         if (result) {
             switchNotify(0);
             $.hideAlert();
             $('#bt_restoreNextDom').addClass('disabled');
+            $('#bt_restoreRepoNextDom').addClass('disabled');
             el.find('.fa-refresh').show();
             el.find('.fa-window-restore').hide();
             $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
@@ -168,7 +169,7 @@ $("#bt_saveOpenLog").on('click', function (event) {
 
  $(".bt_uploadCloudBackup").on('click', function (event) {
     var el = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir envoyer une sauvegarde de}} '+NEXTDOM_PRODUCT_NAME+' {{sur le cloud ? Une fois lancée cette opération ne peut être annulée}}', function (result) {
+    bootbox.confirm('{{Etes-vous sûr de vouloir envoyer une sauvegarde de}} '+NEXTDOM_PRODUCT_NAME+' {{sur le cloud ?</br>Une fois lancée cette opération ne peut pas être annulée...}}', function (result) {
         if (result) {
             el.find('.fa-refresh').show();
             el.find('.fa-cloud-upload-alt').hide();
@@ -185,22 +186,26 @@ $("#bt_saveOpenLog").on('click', function (event) {
     });
 });
 
- $("#bt_restoreRepoBackup").on('click', function (event) {
+ $("#bt_restoreRepoNextDom").on('click', function (event) {
     var el = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec la sauvegarde Cloud}} <b>' + $('#sel_restoreCloudBackup option:selected').text() + '</b> ? {{Une fois lancée cette opération ne peut être annulée}}', function (result) {
+    bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec la sauvegarde Cloud}} <b>' + $('#sel_restoreRepoNextDom option:selected').text() + '</b> ?</br>{{Une fois lancée cette opération ne peut pas être annulée...}}</br><span style="color:red;font-weight: bold;">{{IMPORTANT la restauration d\'un backup est une opération risquée et n\'est à utiliser qu\'en dernier recours.}}</span>', function (result) {
         if (result) {
+            switchNotify(0);
+            $.hideAlert();
+            $('#bt_restoreNextDom').addClass('disabled');
+            $('#bt_restoreRepoNextDom').addClass('disabled');
             el.find('.fa-refresh').show();
-            el.find('.fa-file').hide();
+            el.find('.fa-window-restore').hide();
             nextdom.backup.restoreCloud({
-                backup: el.closest('.repo').find('.sel_restoreCloudBackup').value(),
+                backup: $('#sel_restoreRepoNextDom').value(),
                 repo: el.attr('data-repo'),
                 error: function (error) {
                     notify("Erreur", error.message, 'error');
                 },
                 success: function () {
-                    $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
-                    $("#md_backupInfo").dialog('open');
-                    getNextDomLog(1, 'restore');
+                  $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
+                  $("#md_backupInfo").dialog('open');
+                  getNextDomLog(1, 'restore');
                 }
             });
         }
@@ -276,12 +281,15 @@ $('#backup').delegate('.configKey', 'change', function () {
             if (init(_autoUpdate, 0) == 1) {
                 setTimeout(function () {
                     getNextDomLog(_autoUpdate, _log)
-                }, 1000);
+                }, 500);
             } else {
                 $('#bt_' + _log + 'NextDom').removeClass('disabled');
+                $('#bt_' + _log + 'RepoNextDom').removeClass('disabled');
                 $('#bt_' + _log + 'NextDom .fa-refresh').hide();
+                $('#bt_' + _log + 'RepoNextDom .fa-refresh').hide();
                 $('#bt_' + _log + 'NextDom .fa-floppy-o').show();
                 $('#bt_' + _log + 'NextDom .fa-window-restore').show();
+                $('#bt_' + _log + 'RepoNextDom .fa-window-restore').show();
                 $('#bt_' + _log + 'NextDom .fa-cloud-upload-alt').show();
                 $('#bt_' + _log + 'NextDom .fa-cloud-dowload-alt').show();
                 updateListBackup();
@@ -324,7 +332,7 @@ function updateRepoListBackup(_repo) {
             for (var i in data) {
                 options += '<option value="' + data[i] + '">' + data[i] + '</option>';
             }
-            $('.sel_restoreCloudBackup[data-repo='+_repo+']').empty().html(options);
+            $('#sel_restoreRepoNextDom[data-repo='+_repo+']').empty().html(options);
         }
     });
 }
