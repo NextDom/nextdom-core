@@ -29,6 +29,8 @@
 
 namespace NextDom;
 
+require_once __DIR__ . "/../src/core.php";
+
 use NextDom\Helpers\ScriptHelper;
 
 ScriptHelper::cliOrCrash();

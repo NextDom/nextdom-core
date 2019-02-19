@@ -859,7 +859,7 @@ class EqLogic
             '#name_display#' => $this->getName(),
             '#hideEqLogicName#' => '',
             '#eqLink#' => $this->getLinkToConfiguration(),
-            '#category#' => $this->getPrimaryCategory(),
+            '#category#' => $this->getCategories(),
             '#color#' => '#ffffff',
             '#border#' => 'none',
             '#border-radius#' => '0px',
@@ -1338,6 +1338,33 @@ class EqLogic
             return 'multimedia';
         }
         return '';
+    }
+
+    public function getCategories()
+    {
+        $categories = "";
+        if ($this->getCategory('security', 0) == 1) {
+            $categories = $categories . ' security';
+        }
+        if ($this->getCategory('heating', 0) == 1) {
+            $categories = $categories . ' heating';
+        }
+        if ($this->getCategory('light', 0) == 1) {
+            $categories = $categories . ' light';
+        }
+        if ($this->getCategory('automatism', 0) == 1) {
+            $categories = $categories . ' automatism';
+        }
+        if ($this->getCategory('energy', 0) == 1) {
+            $categories = $categories . ' energy';
+        }
+        if ($this->getCategory('multimedia', 0) == 1) {
+            $categories = $categories . ' multimedia';
+        }
+        if ($this->getCategory('default', 0) == 1) {
+            $categories = $categories . ' default ';
+        }
+        return $categories;
     }
 
     /**
