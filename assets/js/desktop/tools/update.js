@@ -337,15 +337,11 @@ function addUpdate(_update) {
 
     if (_update.type != 'core') {
         tr += '<a class="btn btn-danger btn-sm pull-right remove" ><i class="far fa-trash-alt spacing-right"></i>{{Supprimer}}</a>';
-    }
-    if (_update.type != 'core') {
         if (_update.status == 'update') {
             tr += '<a class="btn btn-warning btn-sm update pull-right" title="{{Mettre à jour}}"><i class="fas fa-refresh spacing-right"></i>{{Mettre à jour}}</a> ';
         }else if (_update.type != 'core') {
             tr += '<a class="btn  btn-default btn-sm update pull-right" title="{{Re-installer}}"><i class="fas fa-refresh spacing-right"></i>{{Reinstaller}}</a> ';
         }
-    }
-    if (_update.type != 'core') {
         if (isset(_update.plugin) && isset(_update.plugin.changelog) && _update.plugin.changelog != '') {
             tr += '<a class="btn btn-default btn-sm pull-left cursor hidden-sm" target="_blank" href="'+_update.plugin.changelog+'"><i class="fas fa-book spacing-right"></i>{{Changelog}}</a>';
         }
