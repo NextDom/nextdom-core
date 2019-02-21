@@ -97,14 +97,14 @@
 
 .sidebar-form {
   border-radius: 3px;
-  border: 1px solid #374850;
+  border: 1px solid $blueDarkGrey;
   margin: 10px 10px;
 }
 
 .sidebar-form input[type="text"],
 .sidebar-form .btn {
   box-shadow: none;
-  background-color: #374850;
+  background-color: $blueDarkGrey;
   border: 1px solid transparent;
   height: 35px;
 }
@@ -112,10 +112,14 @@
 .sidebar-form input[type="text"] {
   color: $grey;
   border:{
-    top-left-radius: 2px;
-    top-right-radius: 0;
-    bottom-right-radius: 0;
-    bottom-left-radius: 2px;
+    top:{
+      left-radius: 2px;
+      right-radius: 0;
+    }
+    bottom:{
+      right-radius: 0;
+      left-radius: 2px;
+    }
   }
 }
 
@@ -136,8 +140,16 @@
 
 .sidebar-form .btn {
   color: $darkgrey;
-  border-top-left-radius: 0;
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
-  border-bottom-left-radius: 0;
+  border-top:{
+      left-radius: 0;
+      right-radius: 2px;
+  }
+  border-bottom:{
+      right-radius: 2px;
+      left-radius: 0;
+  }
+}
+
+.sidebar-warning {
+    margin-bottom: -6px !important;
 }

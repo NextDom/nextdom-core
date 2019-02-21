@@ -131,7 +131,7 @@ health:
   os-version: Version OS
   php-error: Une version de PHP supérieure ou égale à 7 est nécessaire.
   php-version: Version PHP
-  plugins-legend: Détails de la santé de vos plugins, cliquez sur le titre pour avoir le détail puis survolez les icônes pour plus d\'informations.
+  plugins-legend: Détails de la santé de vos plugins, cliquez sur le titre pour avoir le détail puis survolez les icônes pour plus d'informations.
   plugins-title: Santé des Plugins
   processes-killed: Nombre de processus tué par le noyaux pour manque de mémoire. Votre système manque de mémoire. Essayez de reduire le nombre de plugins ou les scénarios
   product-legend: Détails de la santé de votre solution, survolez les icônes pour plus d'informations.
