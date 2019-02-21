@@ -131,7 +131,7 @@ $("#bt_saveInteract").on('click', function () {
       notify("Erreur", error.message, 'error');
     },
     success: function (data) {
-     $('.interactDisplayCard[data-interact_id=' + data.id[0] + ']').click();
+     $('.interactDisplayCard[data-interact_id=' + data.id + ']').click();
      notify("Info", '{{Sauvegarde réussie avec succès}}', 'success');
    }
  });
