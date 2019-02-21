@@ -21,9 +21,9 @@ namespace NextDom;
 use NextDom\Helpers\TranslateHelper;
 use NextDom\Helpers\Utils;
 
-require_once __DIR__ . "/../../src/core.php";
+require_once __DIR__ . '/../../src/core.php';
 
-$file = NEXTDOM_ROOT . Utils::init('file');
+$file = NEXTDOM_ROOT . '/' . Utils::init('file');
 $pathinfo = pathinfo($file);
 
 if ($pathinfo['extension'] !== 'js' && $pathinfo['extension'] !== 'css') {
@@ -33,7 +33,7 @@ if (file_exists($file)) {
     switch ($pathinfo['extension']) {
         case 'js':
             $contentType = 'application/javascript';
-            $md5 = init('md5');
+            $md5 = Utils::init('md5');
             $etagFile = ($md5 == '') ? md5_file($file) : $md5;
             break;
         case 'css':
