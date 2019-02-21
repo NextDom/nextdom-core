@@ -40,7 +40,7 @@
                 <div class="card" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}10;box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.08); border: 1px solid {{ dashboardObject.getDisplay("tagColor") }}50;" data-father_id="{{ dashboardObject.getFather_id() }}">
                     <div class="card-header card-header-icon">
                         <div class="card-icon" style="background:{{ dashboardObject.getDisplay("tagColor") }};color:{{ dashboardObject.getDisplay("tagTextColor") }};">
-                            {{ dashboardObject.getDisplay("icon")|raw }}
+                            {{ dashboardObject.getDisplay('icon', '<i class="fas fa-tag"></i>')|replace({'></i>': '></i>'})|raw }}
                         </div>
                         <a class="card-category" style="color:{{ dashboardObject.getDisplay("tagTextColor") }}"><b>{{ dashboardObject.getName() }}</b></a>
                         <i class="fas fa-retweet pull-right cursor bt_editDashboardWidgetUniformize tooltips" id="edit_object_{{ dashboardObject.getId() }}" data-mode="0" title="{{ 'Uniformiser les hauteur et repackager les tuiles' }}" style="display:none"></i>
@@ -61,7 +61,7 @@
                     <div class="card div_object" style="background-color:{{ child.getDisplay("tagColor") }}10;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ child.getDisplay("tagColor") }}50" ; data-father_id="{{ child.getFather_id() }}">
                         <div class="card-header card-header-icon">
                             <div class="card-icon text-center" style="background:{{ child.getDisplay("tagColor") }}">
-                                {{ child.getDisplay("icon")|raw }}
+                                {{ child.getDisplay('icon', '<i class="fas fa-tag"></i>')|replace({'></i>': '></i>'})|raw }}
                             </div>
                             <p class="card-category" style="color:{{ child.getDisplay("tagColor") }}"><b>{{ child.getName() }}</b></p>
                             <i class="fas fa-retweet pull-right cursor bt_editDashboardWidgetUniformize tooltips" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Uniformiser les hauteur et repackager les tuiles' }}" style="display:none"></i>

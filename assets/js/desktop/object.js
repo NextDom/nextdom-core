@@ -101,6 +101,7 @@ function loadObjectConfiguration(_id){
             notify("Erreur", error.message, 'error');
         },
         success: function (data) {
+            $('#objectId').value(_id);
             $('.objectAttr').value('');
             $('.objectAttr[data-l1key=father_id] option').show();
             $('#summarytab input[type=checkbox]').value(0);
