@@ -149,7 +149,8 @@ try {
             }
             ajax::success($return);
         } else {
-            $html = array();
+            $html = [];
+            $eqLogicsIds = [];
             if (init('summary') == '') {
                 $eqLogics = eqLogic::byObjectId(init('id'), true, true);
             } else {
@@ -169,6 +170,7 @@ try {
                         $order++;
                     }
                     $html[$order] = $eqLogic->toHtml(init('version'));
+                    $eqLogicsIds[$order] = $eqLogic->getId();
                 }
             }
             if (init('noScenario') == '') {
@@ -183,8 +185,13 @@ try {
                     }
                 }
             }
-            ksort($html);
-            ajax::success(implode($html));
+            if (init('version') == 'mobile') {
+                ajax::success(['eqLogics' => $eqLogicsIds, 'html' => $html]);
+            }
+            else {
+                ksort($html);
+                ajax::success(implode($html));
+            }
         }
     }
     

@@ -1047,6 +1047,13 @@ class EqLogic
                     }
                 }
                 $replace['#cmd#'] = $cmd_html;
+                // Add class for cmd template from plugin (jeedom method)
+                if (strpos($cmd_html, 'col-md-6') === false) {
+                    $replace['#plugin#'] = 'plugin';
+                }
+                else {
+                    $replace['#plugin#'] = '';
+                }
                 break;
         }
         if (!isset(self::$_templateArray[$version])) {
@@ -1069,7 +1076,7 @@ class EqLogic
         if (isset($_SESSION) && is_object(UserManager::getStoredUser())) {
             $user_id = UserManager::getStoredUser()->getId();
         }
-        CacheManager::set('widgetHtml' . $this->getId() . $viewType . $user_id, $htmlCode);
+        //CacheManager::set('widgetHtml' . $this->getId() . $viewType . $user_id, $htmlCode);
         return $htmlCode;
     }
 

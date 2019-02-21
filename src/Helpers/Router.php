@@ -135,6 +135,20 @@ class Router
      */
     private function mobileView()
     {
+        AuthentificationHelper::init();
+
+        if (Utils::init(GetParams::AJAX_QUERY, 0) == 0) {
+            if (!AuthentificationHelper::isConnected()) {
+                PrepareView::showMobileContent('connection');
+            }
+            else {
+                PrepareView::showMobileContent(Utils::init(GetParams::PAGE, 'dashboard'));
+            }
+        }
+        else {
+            PrepareView::showMobileContentByAjax();
+        }
+        /*
         $filename = 'index';
         $type = 'html';
         $plugin = '';
@@ -143,11 +157,12 @@ class Router
             $filename = $modal;
             $type = 'modalhtml';
             $plugin = Utils::init('plugin');
-        } elseif (isset($_GET['p']) && isset($_GET[GetParams::AJAX_QUERY])) {
-            $filename = $_GET['p'];
-            $plugin = isset($_GET['m']) ? $_GET['m'] : $plugin;
+        } elseif (isset($_GET[GetParams::PAGE]) && isset($_GET[GetParams::AJAX_QUERY])) {
+            $filename = $_GET[GetParams::PAGE];
+            $plugin = Utils::init(GetParams::PLUGIN, $plugin);
         }
         FileSystemHelper::includeFile('mobile', $filename, $type, $plugin, true);
+        */
     }
 
     /**

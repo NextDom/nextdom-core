@@ -1,8 +1,12 @@
-<div class="cmd" data-type="info" data-subtype="numeric" data-version="#version#" data-cmd_id="#id#" data-cmd_uid="#uid#">
-    <center>
-        <div class="txtSizeSmall " style="#hideCmdName#">#valueName#</div>
-        <span style="font-size: 2.5em;" class="cursor iconCmd"></span>
-    </center>
+<div class="cmd col-md-6 col-xs-12" data-type="info" data-subtype="numeric" data-version="#version#" data-cmd_id="#id#" data-cmd_uid="#uid#">
+    <div class="row">
+        <div class="col-xs-8">
+            <div style="#hideCmdName#">#valueName#</div>
+        </div>
+        <div class="col-xs-4">
+            <span class="cursor iconCmd"></span>
+        </div>
+    </div>
     <script>
         nextdom.cmd.update['#id#'] = function(_options){
             if (_options.display_value == '1' || _options.display_value == 1 || _options.display_value == '99' || _options.display_value == 99 || _options.display_value == 'on') {
@@ -10,14 +14,14 @@
                     $('.cmd[data-cmd_id=#id#]').hide();
                 }else{
                     $('.cmd[data-cmd_id=#id#]').show();
-                    $('.cmd[data-cmd_id=#id#] .iconCmd').empty().append('<i class="icon nextdom-prise"></i>');
+                    $('.cmd[data-cmd_id=#id#] .iconCmd').empty().append('<i class="fas fa-plug"></i>');
                 }
             } else {
                 if (nextdom.cmd.normalizeName('#name#') == 'off') {
                     $('.cmd[data-cmd_id=#id#]').hide();
                 }else{
                     $('.cmd[data-cmd_id=#id#]').show();
-                    $('.cmd[data-cmd_id=#id#] .iconCmd').empty().append('<i class="fa fa-times"></i>');
+                    $('.cmd[data-cmd_id=#id#] .iconCmd').empty().append('<i class="fas fa-times"></i>');
                 }
             }
         }

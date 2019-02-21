@@ -1,16 +1,20 @@
-<div class="cmd" data-type="info" data-subtype="binary" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#">
-    <center>
-        <div class="txtSizeSmall " style="#hideCmdName#">#name_display#</div>
-        <span style="font-size: 3em;margin-top: 5px;" class="iconCmd"></span>
-    </center>
+<div class="cmd col-md-6 col-xs-12" data-type="info" data-subtype="binary" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#">
+    <div class="row">
+        <div class="col-xs-8">
+            <div style="#hideCmdName#">#name_display#</div>
+        </div>
+        <div class="col-xs-4">
+            <span class="iconCmd"></span>
+        </div>
+    </div>
     <script>
         nextdom.cmd.update['#id#'] = function(_options){
             if (_options.display_value == '1') {
-                $('.cmd[data-cmd_id=#id#] .iconCmd').empty().append('<i class="fa fa-check"></i>');
+                $('.cmd[data-cmd_id=#id#] .iconCmd').empty().append('<i class="far fa-circle"></i>');
             }else {
-                $('.cmd[data-cmd_id=#id#] .iconCmd').empty().append('<i class="icon nextdom-mouvement"></i>');
+                $('.cmd[data-cmd_id=#id#] .iconCmd').empty().append('<i class="fas fa-running"></i>');
             }
-        }
+        };
         nextdom.cmd.update['#id#']({display_value:'#state#'});
     </script>
 </div>

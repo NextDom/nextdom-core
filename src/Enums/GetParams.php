@@ -24,5 +24,6 @@ class GetParams extends Enum
     const PLUGIN_CONF = 'configure';
     const AJAX_QUERY = 'ajax';
     const PLUGIN_ID = 'plugin';
+    const PLUGIN = 'm';
     const PAGE = 'p';
 }

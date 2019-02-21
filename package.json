@@ -9,7 +9,7 @@
     "codemirror": "^5.41.0",
     "fancybox": "^3.0.1",
     "font-awesome": "^4.7.0",
-    "font-awesome5": "^1.0.5",
+    "@fortawesome/fontawesome-free": "^5.7.2",
     "gridstack": "^0.4.0",
     "highcharts": "^7.0.1",
     "inputmask": "^4.0.2",

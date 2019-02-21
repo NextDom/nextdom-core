@@ -1,0 +1,100 @@
+<div class="login-box">
+    <div class="login-logo">
+        <img src="/public/img/icon-128x128.png"/>
+    </div>
+    <div class="login-box-body">
+        <p class="login-box-msg">{{ 'mobile.connect'|trans }}</p>
+        <form>
+            <div class="row">
+                <div class="form-group has-feedback">
+                    <input type="text" id="login" class="form-control" value="" placeholder="{{ 'mobile.login'|trans }}">
+                    <i class="fas fa-user form-control-feedback"></i>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group has-feedback">
+                    <input type="password" id="password" class="form-control" value="" placeholder="{{ 'mobile.password'|trans }}">
+                    <span class="fas fa-lock form-control-feedback"></span>
+                </div>
+            </div>
+            <div id="two-factor-row" class="row">
+                <div class="form-group has-feedback">
+                    <input type="text" id="two-factor" class="form-control" value="" placeholder="{{ 'mobile.two-factor'|trans }}">
+                    <span class="fas fa-key form-control-feedback"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="checkbox">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"> {{ 'mobile.remember'|trans }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <button type="submit" id="sign-in" class="btn btn-primary btn-block btn-flat">
+                    <i class="fas fa-unlock"></i> {{ 'mobile.connect-btn'|trans }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="/core/js/user.class.js"></script>
+<script>
+    var pageToLoad = '{{ pageToLoad }}';
+</script>
+<script>
+    function onTestIfUserUseTwoFactorAuthentification() {
+        nextdom.user.useTwoFactorAuthentification({
+            login: $('#login').val(),
+            error: function (error) {
+                notifyError(error.message);
+            },
+            success: function (useTwoFactorAuthentificationResult) {
+                if (useTwoFactorAuthentificationResult === 1) {
+                    $('#two-factor-row').show();
+                } else {
+                    $('#two-factor-row').hide();
+                }
+            }
+        });
+    }
+
+    function onSignIn() {
+        showLoading();
+        nextdom.user.login({
+            username: $('#login').val(),
+            password: $('#password').val(),
+            twoFactorCode: $('#two-factor').val(),
+            storeConnection: $('#store-connection').val(),
+            error: function (error) {
+                var errorMsgRaw = error.message.replace(/<[\/]*span.*?>/g, '');
+                notifyError(errorMsgRaw);
+                hideLoading();
+            },
+            success: function (result) {
+                if (pageToLoad === '') {
+                    pageToLoad = 'dashboard'
+                }
+                loadPageFromAjax(pageToLoad);
+                /*
+                if ($('#cb_storeConnection').val() == 1) {
+                    localStorage.setItem("deviceKey", data.deviceKey);
+                }
+                */
+            }
+        });
+    }
+
+    $('body').addClass('login-page');
+
+    $('#login').on('change keyup', onTestIfUserUseTwoFactorAuthentification);
+    $('#sign-in').on('click', function (event) {
+        onSignIn();
+        event.preventDefault();
+    });
+</script>
+
+
+

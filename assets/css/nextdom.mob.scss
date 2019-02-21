@@ -34,7 +34,94 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-@import "_colors.scss";
-@import "core/_divers.scss";
-@import "core/_cursors.scss";
-@import "mobile/commun.scss";
+/**********
+ * GLOBAL *
+ **********/
+#loading-div {
+  top: 0;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99999;
+}
+
+/*********
+ * LOGIN *
+ *********/
+#loading-div > div {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  width: 100%;
+  text-align: center;
+}
+
+.login-box-body .fas {
+  top: 1rem;
+}
+
+#two-factor-row {
+  display: none;
+}
+
+/*************
+ * DASHBOARD *
+ *************/
+.eqLogic {
+  position: relative;
+}
+
+.row.plugin {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.cmd .col-xs-8,
+.cmd .col-xs-6,
+.cmd .col-xs-4,
+span.cmd .btn {
+  font-size: 1.5rem;
+}
+
+.cmd .one-line {
+  text-align: center;
+}
+
+.cmd div[data-version="mobile"] i {
+  margin-top: 0.3rem;
+}
+
+span.close {
+  margin-left: 0.5rem;
+}
+
+.slider {
+  margin-top: 2rem;
+}
+
+.slider input[type="number"] {
+  display: none;
+}
+
+.ui-btn {
+  text-decoration: none !important;
+  padding: 0.5rem 1.5rem;
+  display: inline-block;
+  border-radius: 0.8rem;
+}
+
+span[data-type="action"] {
+  text-transform: uppercase;
+  margin-left: 1.5rem;
+}
+
+#dashboard-buttons {
+  font-size: 3rem;
+  height: 3rem;
+}
+
+#dashboard-buttons i {
+  float: right;
+  margin-right: 1rem;
+}

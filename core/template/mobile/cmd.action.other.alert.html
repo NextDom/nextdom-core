@@ -1,8 +1,12 @@
-<div style="width:90px;height:100%;vertical-align: top;"  data-version="#version#" class="cmd #history#" data-type="info" data-subtype="numeric" data-cmd_id="#id#" data-cmd_uid="#uid#" title="#collectDate#">
-    <center>
-        <div class="txtSizeSmall " style="#hideCmdName#">#valueName#</div>
-        <span style="font-size: 2.5em;" class="iconCmd cursor"></span>
-    </center>
+<div class="cmd col-md-6 col-xs-12 #history#" data-version="#version#" data-type="info" data-subtype="numeric" data-cmd_id="#id#" data-cmd_uid="#uid#" title="#collectDate#">
+    <div class="row">
+        <div class="col-xs-8">
+            <span style="#hideCmdName#">#valueName#</span>
+        </div>
+        <div class="col-xs-4">
+            <span class="iconCmd cursor"></span>
+        </div>
+    </div>
 </div>
 <script>
     nextdom.cmd.update['#id#'] = function(_options){

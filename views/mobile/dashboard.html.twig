@@ -1,0 +1,23 @@
+<div class="wrapper">
+    {% for jeeObject in jeeObjectsList %}
+        <div class="jeeObject box box-info" data-id="{{ jeeObject.getId() }}">
+            <div class="box-header with-border">
+                <h3 class="box-title">{{ jeeObject.getName() }}</h3>
+            </div>
+            <div class="box-body">
+            </div>
+        </div>
+    {% endfor %}
+    <div id="dashboard-buttons">
+        <i id="reset-hiddens" class="fas fa-eye-slash"></i>
+    </div>
+</div>
+<script src="/core/js/object.class.js"></script>
+<script src="/core/js/eqLogic.class.js"></script>
+<script src="/core/js/cmd.class.js"></script>
+<script src="/core/js/scenario.class.js"></script>
+<script>
+    var clientDatetime = new Date();
+    var clientServerDiffDatetime = ({{ date().timestamp }} * 1000) - clientDatetime.getTime();
+</script>
+<script src="/public/js/mobile/dashboard.js"></script>

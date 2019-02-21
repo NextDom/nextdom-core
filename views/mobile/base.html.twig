@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>NextDom</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="/vendor/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/vendor/node_modules/jquery-ui-dist/jquery-ui.min.css">
+    <link ref="stylesheet" href="/assets/3rdparty/jquery.mobile/jquery.mobile.min.css">
+    <link rel="stylesheet" href="/vendor/node_modules/admin-lte/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="/vendor/node_modules/admin-lte/dist/css/skins/skin-blue-light.min.css">
+    <link rel="stylesheet" href="/vendor/node_modules/izitoast/dist/css/iziToast.min.css">
+    {{ CSS_ICONS|raw }}
+    <link rel="stylesheet" href="/public/css/nextdom.mob.css">
+</head>
+<body>
+<div id="loading-div">
+    <div><i class="fas fa-cog fa-spin fa-10x"></i></div>
+</div>
+<div id="content"></div>
+<script src="/vendor/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="/assets/3rdparty/jquery.utils/jquery.utils.js"></script>
+<script src="/vendor/node_modules/jquery-ui-dist/jquery-ui.min.js"></script>
+<script src="/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/vendor/node_modules/admin-lte/dist/js/adminlte.min.js"></script>
+<script src="/vendor/node_modules/izitoast/dist/js/iziToast.js"></script>
+<script src="/core/js/nextdom.class.js"></script>
+<script src="/core/js/jeedom.class.js"></script>
+<script src="/core/js/private.class.js"></script>
+<script src="/public/js/mobile/base.js"></script>
+<script>
+    var pageToLoad = '{{ pageToLoad }}';
+    var deviceInfo = getDeviceType();
+    $.ajaxSetup({
+        type: "POST",
+        data: {
+            nextdom_token: '{{ ajaxToken }}'
+        }
+    })
+    if (pageToLoad !== '') {
+        showLoading();
+        loadPageFromAjax(pageToLoad);
+    }
+</script>
+</body>
+</html>

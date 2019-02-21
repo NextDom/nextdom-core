@@ -152,43 +152,6 @@ class PrepareView
     }
 
     /**
-     * Response to an Ajax request
-     *
-     * @throws \Exception
-     */
-    public static function showContentByAjax()
-    {
-        try {
-            $page = Utils::init(GetParams::PAGE);
-            $controllerRoute = self::getControllerRouteData('pages_routes.yml', $page);
-            if ($controllerRoute === null) {
-                if (in_array($page, PluginManager::listPlugin(true, false, true))) {
-                    ob_start();
-                    FileSystemHelper::includeFile('desktop', $page, 'php', $page, true);
-                    echo ob_get_clean();
-                } else {
-                    Router::showError404AndDie();
-                }
-            } else {
-                if (self::userCanUseRoute($controllerRoute)) {
-                    $pageData = [];
-                    $pageData['JS_POOL'] = [];
-                    $pageData['JS_END_POOL'] = [];
-                    $pageData['CSS_POOL'] = [];
-                    $pageData['JS_VARS'] = [];
-                    $pageData['content'] = self::getContentFromControllerRouteData($controllerRoute, $pageData);
-                    Render::getInstance()->show('/layouts/ajax_content.html.twig', $pageData);
-                }
-            }
-        } catch (\Exception $e) {
-            ob_end_clean();
-            echo '<div class="alert alert-danger div_alert">';
-            echo TranslateHelper::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
-            echo '</div>';
-        }
-    }
-
-    /**
      * Get the content of the route
      *
      * @param array $pageData
@@ -273,6 +236,80 @@ class PrepareView
         $render = Render::getInstance();
         $pageData['CONTENT'] = $render->get('desktop/index.html.twig', $pageData);
         $render->show($baseView, $pageData);
+    }
+
+    /**
+     * Response to an Ajax request
+     *
+     * @throws \Exception
+     */
+    public static function showContentByAjax()
+    {
+        try {
+            $page = Utils::init(GetParams::PAGE);
+            $controllerRoute = self::getControllerRouteData('pages_routes.yml', $page);
+            if ($controllerRoute === null) {
+                if (in_array($page, PluginManager::listPlugin(true, false, true))) {
+                    ob_start();
+                    FileSystemHelper::includeFile('desktop', $page, 'php', $page, true);
+                    echo ob_get_clean();
+                } else {
+                    Router::showError404AndDie();
+                }
+            } else {
+                if (self::userCanUseRoute($controllerRoute)) {
+                    $pageData = [];
+                    $pageData['JS_POOL'] = [];
+                    $pageData['JS_END_POOL'] = [];
+                    $pageData['CSS_POOL'] = [];
+                    $pageData['JS_VARS'] = [];
+                    $pageData['content'] = self::getContentFromControllerRouteData($controllerRoute, $pageData);
+                    Render::getInstance()->show('/layouts/ajax_content.html.twig', $pageData);
+                }
+            }
+        } catch (\Exception $e) {
+            ob_end_clean();
+            echo '<div class="alert alert-danger div_alert">';
+            echo TranslateHelper::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
+            echo '</div>';
+        }
+    }
+
+    /**
+     * Full process render page
+     *
+     * @param string $page
+     *
+     * @throws \Exception
+     * @global string $language
+     */
+    public static function showMobileContent(string $page)
+    {
+        global $language;
+
+        $pageData = [];
+        $pageData['JS_POOL'] = [];
+        $pageData['CSS_POOL'] = [];
+        ob_start();
+        require_once(NEXTDOM_ROOT . '/src/Api/icon.inc.php');
+        $pageData['CSS_ICONS'] = ob_get_clean();
+
+        $pageData['pageToLoad'] = $page;
+        $pageData['ajaxToken'] = AjaxManager::getToken();
+        $baseView = '/mobile/base.html.twig';
+        Render::getInstance()->show($baseView, $pageData);
+    }
+
+    /**
+     * Response to an Ajax request
+     *
+     * @throws \Exception
+     */
+    public static function showMobileContentByAjax()
+    {
+        $page = Utils::init(GetParams::PAGE);
+        $pageData = [];
+        echo self::getContentFromRoute('mobile_routes.yml', $page, $pageData);
     }
 
     /**
@@ -499,6 +536,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
+            $pageData['JS_POOL'][] = '/assets/js/notify.js';
             $pageData['JS_POOL'][] = '/assets/js/desktop/utils.js';
             $pageData['JS_POOL'][] = '/core/js/core.js';
             $pageData['JS_POOL'][] = '/core/js/nextdom.class.js';

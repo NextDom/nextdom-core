@@ -48,6 +48,7 @@ function gen_js {
         vendor/node_modules/admin-lte/dist/js/adminlte.min.js \
         vendor/node_modules/izitoast/dist/js/iziToast.min.js \
         assets/js/desktop/utils.js \
+        assets/js/notify.js \
         core/js/core.js \
         core/js/nextdom.class.js \
         core/js/private.class.js \
@@ -119,6 +120,18 @@ if [ $# -eq 0 ]; then
     rm /tmp/temp.js
     php scripts/translate.php public/js/base.js
 
+    mkdir -p public/js
+    for jsFile in assets/js/*.js
+    do
+        python -m jsmin $jsFile > public/js/${jsFile##*/}
+        php scripts/translate.php public/js/${jsFile##*/}
+    done
+    mkdir -p public/js/mobile
+    for jsFile in assets/js/mobile/*.js
+    do
+        python -m jsmin $jsFile > public/js/mobile/${jsFile##*/}
+        php scripts/translate.php public/js/mobile/${jsFile##*/}
+    done
     mkdir -p public/js/adminlte
     for jsFile in assets/js/adminlte/*.js
     do

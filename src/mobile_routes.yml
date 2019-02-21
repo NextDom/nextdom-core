@@ -1,0 +1,8 @@
+connection:
+  path: 'connection'
+  controller: NextDom\Controller\Mobile\ConnectionController::get
+  condition: ''
+dashboard:
+  path: 'dashboard'
+  controller: NextDom\Controller\Mobile\DashboardController::get
+  condition: 'user'

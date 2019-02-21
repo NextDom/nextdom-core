@@ -1,8 +1,15 @@
-<div class="cmd" data-type="info" data-subtype="numeric" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#">
-	<span style="#hideCmdName#">#name_display#</span> <strong class="state">#state#</strong> #unite#
-	<script>
-		nextdom.cmd.update['#id#'] = function(_options){
-			$('.cmd[data-cmd_id=#id#] .state').empty().append(_options.display_value);
-		}
-	</script>
+<div class="cmd col-md-6 col-xs-12" data-type="info" data-subtype="numeric" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#">
+    <div class="row">
+        <div class="col-xs-8">
+            <span style="#hideCmdName#">#name_display#</span>
+        </div>
+        <div class="col-xs-4">
+            <strong class="state">#state# #unite#</strong>
+        </div>
+    </div>
 </div>
+<script>
+    nextdom.cmd.update['#id#'] = function (_options) {
+        $('.cmd[data-cmd_id=#id#] .state').empty().append(_options.display_value);
+    }
+</script>
