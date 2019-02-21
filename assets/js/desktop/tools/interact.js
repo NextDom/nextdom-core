@@ -131,12 +131,11 @@ $("#bt_saveInteract").on('click', function () {
       notify("Erreur", error.message, 'error');
     },
     success: function (data) {
-     modifyWithoutSave = false;
      $('.interactDisplayCard[data-interact_id=' + data.id[0] + ']').click();
      notify("Info", '{{Sauvegarde réussie avec succès}}', 'success');
    }
  });
- $('#bt_returnToThumbnailDisplay').show();
+ $('#bt_interactThumbnailDisplay').show();
 });
 
 
