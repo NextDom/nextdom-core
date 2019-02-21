@@ -34,12 +34,7 @@
 
 #}
 <style>
-    .expressions .sortable-placeholder {
-        background-color: #94CA02;
-    }
-
     .CodeMirror {
-        border: 1px solid #eee;
         height: auto;
     }
 </style>
@@ -70,10 +65,9 @@
             </div>
             <div class="box-body">
                 {% if scenarioCount == 0 %}
-                    <div class="text-center">
-                        <span>{{ 'Vous n\'avez encore aucun scénario ! Cliquez sur ajouter dans le menu pour commencer...' }}</span>
-                    </div>
+                    <div><span>{{ 'Vous n\'avez encore aucun scénario ! Cliquez sur ajouter dans le menu pour commencer...' }}</span></div>
                 {% else %}
+                    <div><span>{{ 'Vous avez '}} {{ scenarioCount }} {{ 'scénarios...' }}</span></div>
                 {% endif %}
             </div>
         </div>
@@ -83,7 +77,7 @@
                 <div class="panel box">
                     <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none">
                         <h3 class="box-title">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionScenario" href="#config_none" style="text-decoration:none;">Aucun - {{ scenarios[-1]|length }} scénario(s)</a>
+                            <span class="accordion-toggle" data-toggle="collapse" data-parent="#accordionScenario" href="#config_none">{{ 'Aucun'}} - {{ scenarios[-1]|length }} {{ 'scénario(s)'}}.</span>
                         </h3>
                     </a>
                     <div id="config_none" class="panel-collapse collapse in">
@@ -111,7 +105,9 @@
                 {% if scenarioGroup.group != '' %}
                     <div class="panel box">
                         <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}">
-                            <h3 class="box-title"><span>{{ scenarioGroup.group }} - {{ scenarios[scenarioGroup.group]|length }} scénario(s)</span></h3>
+                            <h3 class="box-title">
+                                <span>{{ scenarioGroup.group }} - {{ scenarios[scenarioGroup.group]|length }} {{ 'scénario(s)' }}</span>
+                            </h3>
                         </a>
                         <div id="config_{{ index }}" class="panel-collapse collapse in">
                             <div class="box-body">

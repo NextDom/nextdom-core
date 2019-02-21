@@ -37,7 +37,7 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar" href="{{ HOMELINK }}"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
                 <a class="btn btn-success btn-action-bar" id="bt_addObject2"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
             </div>
             <div class="action-group">
@@ -47,12 +47,24 @@
     </section>
 
     <section class="content">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fas fa-clone spacing-right"></i>{{ 'Objets' }}</h3>
+            </div>
+            <div class="box-body">
+                {% if objectList|length == 0 %}
+                    <div><span>{{ 'Vous n\'avez encore aucun objet. Cliquez sur ajouter pour commencer.' }}</span></div>
+                {% else %}
+                    <div><span>{{ 'Vous avez '}} {{ objectList|length }} {{ 'objets...' }}</span></div>
+                {% endif %}
+            </div>
+        </div>
         <div class="objectListContainer row">
             {% for object in objectList %}
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                     <div class="box objectDisplayCard" style='border-top:3px solid {{ object.getDisplay("tagColor") }}' data-object_id="{{ object.getId() }}" data-object_name="{{ object.getName() }}">
                         <a class="box-header with-border cursor" href=index.php?v=d&p=dashboard&object_id={{ object.getId() }}>
-                            <h4 class="box-title name object-name" style='color:{{ object.getDisplay("tagColor") }}'>{{ object.getDisplay('icon', '<i class="fas fa-lemon-o"></i>')|replace({'></i>': '></i>'})|raw }}<i class="spacing-right"></i><b>{{ object.getName() }}</b></h4>
+                            <h4 class="box-title name object-name" style='color:{{ object.getDisplay("tagTextColor") }}'>{{ object.getDisplay('icon', '<i class="fas fa-tag"></i>')|replace({'></i>': '></i>'})|raw }}<i class="spacing-right"></i><b>{{ object.getName() }}</b></h4>
                         </a>
                         <div class="box-body">
                             <span class="object-summary spacing-left">{{ object.getHtmlSummary()|raw }}</span>

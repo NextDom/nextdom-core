@@ -37,7 +37,7 @@
  $("#div_action").sortable({axis: "y", cursor: "move", items: ".action", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 
  $('.displayInteracQuery').on('click', function () {
-  $('#md_modal').dialog({title: "{{Liste des interactions}}"});
+  $('#md_modal').dialog({title: "{{Liste des intéractions}}"});
   $('#md_modal').load('index.php?v=d&modal=interact.query.display&interactDef_id=' + $('.interactAttr[data-l1key=id]').value()).dialog('open');
 });
 
@@ -51,9 +51,7 @@
  $('.interactListContainer').packery();
 
  $('#bt_interactThumbnailDisplay').on('click', function () {
-  $('#div_conf').hide();
-  $('#interactThumbnailDisplay').show();
-  $('.interactListContainer').packery();
+  loadPage('index.php?v=d&p=interact');
 });
 
  $('.interactDisplayCard').on('click', function () {
@@ -63,9 +61,6 @@
 
  $("#div_tree").jstree({
   "plugins": ["search"]
-});
- $('#in_treeSearch').keyup(function () {
-  $('#div_tree').jstree(true).search($('#in_treeSearcxh').val());
 });
 
  $('.interactDisplayCard').on('click',function(){
@@ -96,7 +91,8 @@
         },
         success: function (data) {
           modifyWithoutSave = false;
-          loadPage('index.php?v=d&p=interact&id=' + data.id + '&saveSuccessFull=1');
+          $('#bt_interactThumbnailDisplay').hide();
+          displayInteract(data.id);
         }
       });
     }
@@ -109,16 +105,8 @@
   }
 }
 
-if (getUrlVars('saveSuccessFull') == 1) {
-  notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
-}
-
-if (getUrlVars('removeSuccessFull') == 1) {
-  notify("Info", '{{Suppression effectuée avec succès}}', 'success');
-}
-
 $('#bt_testInteract,#bt_testInteract2').on('click', function () {
-  $('#md_modal').dialog({title: "{{Tester les interactions}}"});
+  $('#md_modal').dialog({title: "{{Tester les intéractions}}"});
   $('#md_modal').load('index.php?v=d&modal=interact.test').dialog('open');
 });
 
@@ -143,15 +131,17 @@ $("#bt_saveInteract").on('click', function () {
       notify("Erreur", error.message, 'error');
     },
     success: function (data) {
-     $('.interactDisplayCard[data-interact_id=' + data.id + ']').click();
+     modifyWithoutSave = false;
+     $('.interactDisplayCard[data-interact_id=' + data.id[0] + ']').click();
      notify("Info", '{{Sauvegarde réussie avec succès}}', 'success');
    }
  });
+ $('#bt_returnToThumbnailDisplay').show();
 });
 
 
 $("#bt_regenerateInteract,#bt_regenerateInteract2").on('click', function () {
-  bootbox.confirm('{{Etes-vous sûr de vouloir regénérer toutes les interations (cela peut être très long) ?}}', function (result) {
+  bootbox.confirm('{{Etes-vous sûr de vouloir regénérer toutes les intérations (cela peut être très long) ?}}', function (result) {
    if (result) {
     nextdom.interact.regenerateInteract({
       interact: {query: result},
@@ -175,7 +165,8 @@ $("#bt_addInteract,#bt_addInteract2").on('click', function () {
           notify("Erreur", error.message, 'error');
         },
         success: function (data) {
-         loadPage('index.php?v=d&p=interact&id=' + data.id + '&saveSuccessFull=1');
+          $('#bt_interactThumbnailDisplay').hide();
+          displayInteract(data.id);
        }
      });
     }
@@ -184,7 +175,7 @@ $("#bt_addInteract,#bt_addInteract2").on('click', function () {
 
 $("#bt_removeInteract").on('click', function () {
   $.hideAlert();
-  bootbox.confirm('{{Etes-vous sûr de vouloir supprimer l\'interaction}} <span style="font-weight: bold ;">' + $('.interactDisplayCard.active .name').text() + '</span> ?', function (result) {
+  bootbox.confirm('{{Etes-vous sûr de vouloir supprimer l\'intéraction}} <span style="font-weight: bold ;">' + $('.interactDisplayCard.active .name').text() + '</span> ?', function (result) {
     if (result) {
       nextdom.interact.remove({
         id: $('.interactDisplayCard.active').attr('data-interact_id'),
@@ -192,7 +183,9 @@ $("#bt_removeInteract").on('click', function () {
           notify("Erreur", error.message, 'error');
         },
         success: function () {
-         loadPage('index.php?v=d&p=interact&removeSuccessFull=1');
+          modifyWithoutSave = false;
+          loadPage('index.php?v=d&p=interact');
+          notify("Info", '{{Suppression effectuée avec succès}}', 'success');
        }
      });
     }
@@ -358,4 +351,3 @@ function addAction(_action, _type, _name) {
     id : actionOption_id
   });
 }
-

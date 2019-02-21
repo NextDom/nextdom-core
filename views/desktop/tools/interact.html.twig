@@ -56,10 +56,9 @@
             </div>
             <div class="box-body">
                 {% if interactTotal|length == 0 %}
-                    <div class="text-center">
-                        <span>{{ 'Vous n\'avez encore aucune interaction. Cliquez sur ajouter pour commencer.' }}</span>
-                    </div>
+                    <div><span>{{ 'Vous n\'avez encore aucune interaction. Cliquez sur ajouter pour commencer.' }}</span></div>
                 {% else %}
+                    <div><span>{{ 'Vous avez '}} {{ interactTotal|length }} {{ 'intéractions...' }}</span></div>
                 {% endif %}
             </div>
         </div>
@@ -131,12 +130,20 @@
 
     <section class="content">
         <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt spacing-right"></i>{{ 'Général' }}</a></li>
-                <li role="presentation"><a href="#filtertab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-filter spacing-right"></i>{{ 'Filtres' }}</a></li>
-                <li role="presentation"><a href="#actiontab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-cogs spacing-right"></i>{{ 'Actions' }}</a></li>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li role="presentation">
+                    <a href="#actiontab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-cogs spacing-right"></i>{{ 'Actions' }}</a>
+                </li>
+                <li role="presentation">
+                    <a href="#filtertab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-filter spacing-right"></i>{{ 'Filtres' }}</a>
+                </li>
+                <li role="presentation" class="active">
+                    <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt spacing-right"></i>{{ 'Général' }}</a>
+                </li>
+                <h4 class="label label-primary pull-right label-sticker">{{ 'ID : ' }}<span class="interactAttr" data-l1key="id"></span></h4>
+                <li class="header pull-left"><i class="fas fa-comments spacing-right"></i>{{ 'Edition Intéraction' }}</li>
             </ul>
-
+            
             <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
                 <div role="tabpanel" class="tab-pane active" id="generaltab">
                     <form class="form-horizontal">
