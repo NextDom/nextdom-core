@@ -34,32 +34,26 @@
 
 #}
 <section class="content-header">
-    <div class="action-bar">
-        <div class="action-group">
-            <a class="btn btn-success btn-action-bar btn_filterObject" id="all">{{ 'All'}}</a>
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs nav-tabs-dashboard" role="tablist">
+            <li role="presentation" class="active"><a class="btn_filterObject" aria-controls="home" role="tab" data-toggle="tab" id="all"><i class="fas fa-globe spacing-right"></i>{{ 'Tous' }}</a><li>
             {% for child in objectList %}
                 {% if child.getFather_id() == '' %}
-                    <a class="btn btn-action-bar btn_filterObject" style="color:white;background-color:{{ child.getDisplay("tagColor") }}" id="{{ child.getId() }}">{{ child.getDisplay("icon")|raw }}  {{ child.getName() }}</a>
+                    <li role="presentation"><a class="btn_filterObject" aria-controls="home" role="tab" data-toggle="tab" id="{{ child.getId() }}">{{ child.getDisplay("icon")|raw }}<i class="spacing-right"></i>{{ child.getName() }}</a><li>
                 {% endif %}
             {% endfor %}
-        </div>
-
+        </ul>
     </div>
 </section>
 
 <section id="dashboard-content" class="content">
-
     <div class="row blurPanel">
-
-
         {% for child in dashboardChildrenObjects %}
             <div class=" div_object col-xs-{{ child.getDisplay('dashboard::size', 12) }}">
                 {% if child.getFather_id() == '' %}
-
                     {% if child.getConfiguration('hideOnDashboard') == 0 %}
                         <div class="card " style="background-color:{{ child.getDisplay("tagColor") }}10;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ child.getDisplay("tagColor") }}50" ; data-father_id="{{ child.getId() }}">
                             <div class="card-header-icon">
-
                                 <i class="fas fa-retweet pull-right cursor bt_editDashboardWidgetUniformize tooltips" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Uniformiser les hauteur et repackager les tuiles' }}" style="display:none"></i>
                                 <i class="fas fa-recycle pull-right cursor bt_editDashboardWidgetAutoResize tooltips" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Redimensionner automatiquement sur pas manuel et repackager les tuiles' }}" style="display:none"></i>
                                 <i class="fas fa-th pull-right cursor bt_editDashboardWidgetGridResize tooltips" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Redimensionner automatiquement sur pas auto et repackager les tuiles' }}" style="display:none"></i>
