@@ -1,6 +1,6 @@
 $('document').ready(function() {
     function cleanup() {
-        var dwnld_html = $($('#html-container').html());
+        var dwnld_html = $($('#designer-html-container').html());
         dwnld_html.find('.close-grid').remove();
         dwnld_html.find('.control-label').remove();
         var clsElements = dwnld_html.find("*");
@@ -213,12 +213,12 @@ $('document').ready(function() {
         var dragged_clone = null;
 
     });
-    $('#download-html').click(function() {
+    $('#designer-download-html').click(function() {
         var cmpHtml = cleanup();
         var blob = new Blob([cmpHtml], {type: "text/plain;charset=utf-8"});
         saveAs(blob, "output.html");
     });
-    $('#preview-html').on('click', function() {
-        $('#modal-body').html(cleanup());
+    $('#designer-preview-html').on('click', function() {
+        $('#designer-modal-body').html(cleanup());
     });
 });
