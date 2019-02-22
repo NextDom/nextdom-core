@@ -108,6 +108,8 @@
     padding: 8px 10px 6px 10px !important;
 }
 .nav-tabs-custom > .nav-tabs-dashboard > li {
-    border-top: 1px groove transparent;
-    border-bottom: 1px groove transparent;
+    border-top: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    margin-right: 0px;
 }
