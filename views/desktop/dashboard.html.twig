@@ -36,7 +36,7 @@
 <section class="content-header">
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs nav-tabs-dashboard" role="tablist">
-            <li role="presentation" class="active"><a class="btn_filterObject" aria-controls="home" role="tab" data-toggle="tab" id="all"><i class="fas fa-globe spacing-right"></i>{{ 'Tous' }}</a><li>
+            <li role="presentation" class="active"><a class="btn_filterObject" aria-controls="home" role="tab" data-toggle="tab" id="all">{{ 'Tous' }}</a><li>
             {% for child in objectList %}
                 {% if child.getFather_id() == '' %}
                     <li role="presentation"><a class="btn_filterObject" aria-controls="home" role="tab" data-toggle="tab" id="{{ child.getId() }}">{{ child.getDisplay("icon")|raw }}<i class="spacing-right"></i>{{ child.getName() }}</a><li>
