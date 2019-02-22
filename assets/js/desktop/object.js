@@ -117,13 +117,15 @@ function loadObjectConfiguration(_id){
             if(data['display'] == ''){
                 $('.objectAttr[data-l1key=display][data-l2key=tagColor]').value('#33B8CC');
                 $('.objectAttr[data-l1key=display][data-l2key=tagTextColor]').value('#ffffff');
-                $('#colorpickTag').colorpicker('setValue', '#33B8CC');
-                $('#colorpickTagText').colorpicker('setValue', '#ffffff');
-                $('#colorpickSummaryText').colorpicker('setValue', '#ffffff');
+                $('.objectAttr[data-l1key=display][data-l2key="desktop::summaryTextColor"]').value('#ffffff');
+                $('#colorpickTag').colorpicker('getValue', '#33B8CC');
+                $('#colorpickTagText').colorpicker('getValue', '#ffffff');
+                $('#colorpickSummaryText').colorpicker('getValue', '#ffffff');
+            } else {
+                $('#colorpickTag').colorpicker('setValue', data.display.tagColor);
+                $('#colorpickTagText').colorpicker('setValue', data.display.tagTextColor);
+                $('#colorpickSummaryText').colorpicker('setValue', data.display['desktop::summaryTextColor']);
             }
-            $('#colorpickTag').colorpicker('setValue', data.display.tagColor);
-            $('#colorpickTagText').colorpicker('setValue', data.display.tagTextColor);
-            $('#colorpickSummaryText').colorpicker('setValue', data.display['desktop::summaryTextColor']);
 
             $('.objectAttr[data-l1key=father_id] option[value=' + data.id + ']').hide();
             $('.div_summary').empty();
