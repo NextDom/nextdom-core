@@ -104,3 +104,10 @@
 .nav-tabs-dashboard {
   border-bottom: none !important;
 }
+.nav-tabs-dashboard a {
+    padding: 8px 10px 6px 10px !important;
+}
+.nav-tabs-custom > .nav-tabs-dashboard > li {
+    border-top: 1px groove transparent;
+    border-bottom: 1px groove transparent;
+}
