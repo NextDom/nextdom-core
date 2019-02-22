@@ -181,7 +181,7 @@ $('document').ready(function() {
 
         }
     }
-    $.get("assets/components/config.json", function(response) {
+    $.get("views/desktop/designer/config.json", function(response) {
         var components = JSON.parse(response).components;
         var i = 0;
         var j = -1;
@@ -200,16 +200,16 @@ $('document').ready(function() {
                 if (i >= components.length - 1) {
 
                     if (typeof (components[++j]) !== "undefined") {
-                        load_file("assets/components/attributesForm/" + components[j] + ".html");
+                        load_file("views/desktop/designer/attributesForm/" + components[j] + ".html");
                     }
                 }
                 if (typeof (components[++i]) !== "undefined") {
-                    load_file("assets/components/elements/" + components[i] + ".html");
+                    load_file("views/desktop/designer/elements/" + components[i] + ".html");
                 }
 
             });
         };
-        load_file("assets/components/elements/" + components[i] + ".html");
+        load_file("views/desktop/designer/elements/" + components[i] + ".html");
         var dragged_clone = null;
 
     });

@@ -1,0 +1,3 @@
+{
+    "components": ["grid", "text-input", "select-list", "radio", "checkbox", "textarea", "button", "navbar", "test"]
+}
