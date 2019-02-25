@@ -1,43 +1,59 @@
-<div id="navbar" class="preview box draggable">
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">Brand</a>
-      </div>
+<div id="popover-navbar" class="popover fade right in" style="top: 14.5px; left: 671px; display: none;">
+    <div class="arrow"></div>
+    <h3 class="popover-title">Navbar</h3>
+    <div class="popover-content">
+        <form id="attr-navbar" class="form">
+            <div class="controls">
+                <label class="control-label"> ID / Name </label>
+                <input class="input-large field" data-type="input" type="text" name="id" id="id" value="buttoninput">
+                <label class="control-label"> Button Size </label>
+                <select class="field" data-type="select" id="inputsize">
 
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-          <li><a href="#">Link</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li class="divider"></li>
-              <li><a href="#">Separated link</a></li>
-              <li class="divider"></li>
-              <li><a href="#">One more separated link</a></li>
-            </ul>
-          </li>
-        </ul>
-        <form class="navbar-form navbar-left" role="search">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
-          </div>
-          <button type="submit" class="btn btn-default">Submit</button>
+                    <option value="btn-mini">Mini</option>
+
+                    <option value="btn-small">Small</option>
+
+                    <option value="" selected="">Default</option>
+
+                    <option value="btn-large">Large</option>
+
+                </select>
+                <label class="control-label"> Navbar Color CSS </label>
+                <select class="field" data-type="select" id="navbar-color-css">
+
+                    <option value="btn-primary">btn-primary</option>
+
+                    <option value="btn-info">btn-info</option>
+
+                    <option value="btn-warning">btn-warning</option>
+
+                    <option value="btn-success">btn-success</option>
+
+                    <option value="btn-inverse">btn-inverse</option>
+
+                    <option value="btn-danger">btn-danger</option>
+                    
+                    <option value="btn-link">btn-link</option>
+
+                    <option value="btn-default" selected="">btn-default</option>
+
+                </select>
+                <label class="control-label"> Display </label>
+                <select class="field" data-type="select" id="field-style">
+
+                    <option value="display:block;">Stack</option>
+
+                    <option value="display:inline-block;">Inline</option>
+
+                </select>
+                <label class="control-label"> Button Text </label>
+                <input class="input-large field" data-type="input" type="text" name="label" id="btn-text" value="Button">
+                
+                <hr>
+                <button id="saveattr" class="btn btn-success" style="margin-right:4px">Save</button><button id="cancel" style="margin-right:4px" class="btn btn-warning">Cancel</button><button id="remove" class="btn btn-danger">Remove</button>
+
+            </div>
         </form>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">Link</a></li>
-        </ul>
-      </div>
+
     </div>
-  </nav>
 </div>
