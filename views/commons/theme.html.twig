@@ -175,6 +175,10 @@
   color: {{ COLOR2 }} !important;
 }
 
+.bootbox-close-button {
+  color: {{ COLOR2 }} !important;
+}
+
 
 /* ############################################################################################################# */
 /* COLOR3 = Couleur de survol principale (contenu, titres, footer, bouton d'administration, unités, légendes...) */
@@ -267,7 +271,11 @@
 }
 
 .ui-widget-content {
-  border: 1px solid {{ COLOR9 }} !important;
+  background-color: {{ COLOR9 }} !important;
+}
+
+.modal-content{
+  background-color: {{ COLOR9 }} !important;
 }
 
 .ui-dialog .ui-dialog-content {
@@ -310,7 +318,7 @@ body, .main-footer{
 }
 
 /* Modale */
-.modal-content{
+.modal-header, .modal-footer{
   background-color: {{ COLOR10 }} !important;
 }
 .ui-dialog .ui-dialog-titlebar, .ui-dialog .ui-dialog-buttonpane {

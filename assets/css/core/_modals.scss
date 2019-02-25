@@ -22,7 +22,6 @@
 /* Modales */
 .ui-dialog {
   z-index: 5000;
-  border-radius: 7px;
   background-clip: unset;
   box-shadow:0 3px 30px rgba(0,0,0,0.6);
   padding: 0px 0 0px 0px;
@@ -36,8 +35,40 @@
   & .ui-dialog-titlebar-close {
     opacity: 1;
   }
+  position: fixed !important;
+  height: 90% !important;
+  width: 96% !important;
+  top: 5% !important;
+  left: 2% !important;
 }
 
 .modal {
   z-index: 9999;
+}
+
+.ui-widget-overlay {
+  position: fixed;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+  border-bottom: none;
+}
+
+.ui-widget-content {
+  background-image: none;
+}
+
+.modal-content {
+  border-radius: 6px;
+}
+
+.modal-header {
+  border-bottom: none;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+.modal-footer {
+  border-top: none;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
