@@ -242,8 +242,7 @@
                                     <div class="form-group">
                                         <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Groupe' }}</label>
                                         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
-                                            <input class="form-control scenarioAttr" data-l1key="group" type="text"
-                                                   placeholder="{{ 'Groupe du scénario' }}"/>
+                                            <input class="form-control scenarioAttr" data-l1key="group" type="text" placeholder="{{ 'Groupe du scénario' }}"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -263,8 +262,7 @@
                                     <div class="form-group">
                                         <label class="col-lg-2 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'Log' }}</label>
                                         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-9">
-                                            <select class="scenarioAttr form-control" data-l1key="configuration"
-                                                    data-l2key="logmode">
+                                            <select class="scenarioAttr form-control" data-l1key="configuration" data-l2key="logmode">
                                                 <option value="default">{{ 'Défaut' }}</option>
                                                 <option value="none">{{ 'Aucun' }}</option>
                                                 <option value="realtime">{{ 'Temps réel' }}</option>
@@ -274,8 +272,7 @@
                                     <div class="form-group">
                                         <label class="col-lg-2 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'Suivre dans la timeline' }}</label>
                                         <div class="col-sm-1 col-xs-3">
-                                            <input type="checkbox" class="scenarioAttr" data-l1key="configuration"
-                                                   data-l2key="timeline::enable"
+                                            <input type="checkbox" class="scenarioAttr" data-l1key="configuration" data-l2key="timeline::enable"
                                                    title="{{ 'Les exécutions du scénario pourront être vues dans la timeline.' }}">
                                         </div>
                                     </div>
@@ -335,88 +332,82 @@
                 </div>
             </div>
         </div>
-</div>
-<div class="modal fade" id="md_copyScenario">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="close" data-dismiss="modal">×</button>
-                <h3>{{ 'Dupliquer le scénario' }}</h3>
-            </div>
-            <div class="modal-body">
-                <div style="display: none;" id="div_copyScenarioAlert"></div>
-                <center>
-                    <input class="form-control" type="text" id="in_copyScenarioName" size="16"
-                           placeholder="{{ 'Nom du scénario' }}"/><br/><br/>
-                </center>
-            </div>
-            <div class="modal-footer">
-                <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle spacing-right"></i>{{ 'Annuler' }}</a>
-                <a class="btn btn-success" id="bt_copyScenarioSave"><i class="fas fa-save spacing-right"></i>{{ 'Enregistrer' }}</a>
+    </div>
+
+    <div class="modal fade" id="md_copyScenario">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="bootbox-close-button close" data-dismiss="modal">×</button>
+                    <h4>{{ 'Dupliquer le scénario' }}</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="display: none;" id="div_copyScenarioAlert"></div>
+                    <center>
+                        <input class="form-control" type="text" id="in_copyScenarioName" size="16"
+                               placeholder="{{ 'Nom du scénario' }}"/><br/><br/>
+                    </center>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle spacing-right"></i>{{ 'Annuler' }}</a>
+                    <a class="btn btn-success" id="bt_copyScenarioSave"><i class="fas fa-save spacing-right"></i>{{ 'Enregistrer' }}</a>
+                </div>
             </div>
         </div>
     </div>
 
-</div>
-<div class="modal fade" id="md_addElement">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="close" data-dismiss="modal">×</button>
-                <h3>{{ 'Ajouter élément' }}</h3>
-            </div>
-            <div class="modal-body">
-                <center>
-                    <select id="in_addElementType" class="form-control">
-                        <option value="if">{{ 'Si/Alors/Sinon' }}</option>
-                        <option value="action">{{ 'Action' }}</option>
-                        <option value="for">{{ 'Boucle' }}</option>
-                        <option value="in">{{ 'Dans' }}</option>
-                        <option value="at">{{ 'A' }}</option>
-                        <option value="code">{{ 'Code' }}</option>
-                        <option value="comment">{{ 'Commentaire' }}</option>
-                    </select>
-                </center>
-                <br/>
-                <div class="alert alert-info addElementTypeDescription if">
-                    Permet de faire des conditions dans votre scénario. Par exemple : Si mon détecteur
-                    d’ouverture de porte se déclenche Alors allumer la lumière.
+    <div class="modal fade" id="md_addElement">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="bootbox-close-button close" data-dismiss="modal">×</button>
+                    <h4>{{ 'Ajouter élément' }}</h4>
                 </div>
-
-                <div class="alert alert-info addElementTypeDescription action" style="display:none;">
-                    Permet de lancer une action, sur un de vos modules, scénarios ou autre. Par exemple : Passer
-                    votre sirène sur ON.
+                <div class="modal-body">
+                    <center>
+                        <select id="in_addElementType" class="form-control">
+                            <option value="if">{{ 'Si/Alors/Sinon' }}</option>
+                            <option value="action">{{ 'Action' }}</option>
+                            <option value="for">{{ 'Boucle' }}</option>
+                            <option value="in">{{ 'Dans' }}</option>
+                            <option value="at">{{ 'A' }}</option>
+                            <option value="code">{{ 'Code' }}</option>
+                            <option value="comment">{{ 'Commentaire' }}</option>
+                        </select>
+                    </center>
+                    <br/>
+                    <div class="alert alert-info addElementTypeDescription if">
+                        Permet de faire des conditions dans votre scénario. Par exemple : Si mon détecteur
+                        d’ouverture de porte se déclenche Alors allumer la lumière.
+                    </div>
+                    <div class="alert alert-info addElementTypeDescription action" style="display:none;">
+                        Permet de lancer une action, sur un de vos modules, scénarios ou autre. Par exemple : Passer
+                        votre sirène sur ON.
+                    </div>
+                    <div class="alert alert-info addElementTypeDescription for" style="display:none;">
+                        Une boucle permet de réaliser une action de façon répétée un certain nombre de fois. Par
+                        exemple : Permet de répéter une action de 1 à X, c’est-à-dire X fois.
+                    </div>
+                    <div class="alert alert-info addElementTypeDescription in" style="display:none;">
+                        Permet de faire une action dans X min. Par exemple : Dans 5 min, éteindre la lumière.
+                    </div>
+                    <div class="alert alert-info addElementTypeDescription at" style="display:none;">
+                        A un temps précis, cet élément permet de lancer une action. Par exemple : A 9h30, ouvrir les
+                        volets.
+                    </div>
+                    <div class="alert alert-info addElementTypeDescription code" style="display:none;">
+                        Cet élément permet de rajouter dans votre scénario de la programmation à l’aide d’un code,
+                        PHP/Shell, etc.
+                    </div>
+                    <div class="alert alert-info addElementTypeDescription comment" style="display:none;">
+                        Permet de commenter votre scénario.
+                    </div>
                 </div>
-
-                <div class="alert alert-info addElementTypeDescription for" style="display:none;">
-                    Une boucle permet de réaliser une action de façon répétée un certain nombre de fois. Par
-                    exemple : Permet de répéter une action de 1 à X, c’est-à-dire X fois.
+                <div class="modal-footer">
+                    <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle spacing-right"></i>{{ 'Annuler' }}</a>
+                    <a class="btn btn-success" id="bt_addElementSave"><i class="fas fa-save spacing-right"></i>{{ 'Valider' }}</a>
                 </div>
-
-                <div class="alert alert-info addElementTypeDescription in" style="display:none;">
-                    Permet de faire une action dans X min. Par exemple : Dans 5 min, éteindre la lumière.
-                </div>
-
-                <div class="alert alert-info addElementTypeDescription at" style="display:none;">
-                    A un temps précis, cet élément permet de lancer une action. Par exemple : A 9h30, ouvrir les
-                    volets.
-                </div>
-
-                <div class="alert alert-info addElementTypeDescription code" style="display:none;">
-                    Cet élément permet de rajouter dans votre scénario de la programmation à l’aide d’un code,
-                    PHP/Shell, etc.
-                </div>
-
-                <div class="alert alert-info addElementTypeDescription comment" style="display:none;">
-                    Permet de commenter votre scénario.
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle spacing-right"></i>{{ 'Annuler' }}</a>
-                <a class="btn btn-success" id="bt_addElementSave"><i class="fas fa-save spacing-right"></i>{{ 'Enregistrer' }}</a>
             </div>
         </div>
-    </div>
     </section>
 </div>
