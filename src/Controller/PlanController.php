@@ -74,6 +74,20 @@ class PlanController extends BaseController
             $pageData['JS_VARS']['planHeader_id'] = $planHeader->getId();
         }
 
+
+
+        $pageData['JS_END_POOL'][] = '/assets/js/desktop/designer/blob.js';
+        $pageData['JS_END_POOL'][] = '/vendor/node_modules/file-saver/dist/FileSaver.min.js';
+        $pageData['JS_END_POOL'][] = '/vendor/node_modules/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js';
+
+        //$pageData['JS_END_POOL'][] = '/vendor/node_modules/jquery-ui-dist/jquery.ui.min.js';
+
+        $pageData['JS_END_POOL'][] = '/assets/js/desktop/designer/bootstrap-tooltip.js';
+        $pageData['JS_END_POOL'][] = '/assets/js/desktop/designer/bootstrap-modal.js';
+        $pageData['JS_END_POOL'][] = '/assets/js/desktop/designer/bootstrap-transition.js';
+
+
+        $pageData['JS_END_POOL'][] = '/assets/js/desktop/designer.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/plan.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 

@@ -59,5 +59,43 @@
 <div class="alert alert-danger">{{ 'Aucun design n\'existe, cliquez <a id="bt_createNewDesign" class="cursor">ici</a> pour en créer un.' }}</div>
 {% endif %}
 <div class="div_backgroundPlan">
-    <div class="container-fluid div_displayObject" style="position: relative;padding:0;user-select: none;-khtml-user-select: none;-o-user-select: none;-moz-user-select: -moz-none;-webkit-user-select: none;"></div>
+    <!-- Designer Menu -->
+            <div class="container-fluid">
+                    <a href="#" class="brand">NextDom Designer</a>
+                    <div class="btn-group">
+                        <button href="#designer-modal" type="button" class="btn btn-success" data-toggle="modal" id="designer-preview-html"><i class="icon-eye-open icon-white"></i>Preview</button>
+                        <button type="button" class="btn btn-success" id="designer-download-html"><i class="icon-download icon-white"></i>Download</button>
+                    </div>
+            </div>
+    <!-- Designer Content -->
+        <div id="designer-main-content">
+            <div class="container-fluid"><h1>Drag and drop elements to create UI</h1></div>
+
+            <div class="container-fluid">
+                <div class="row-fluid top-container">
+                    <div class="">
+                        <div class="sidebar-nav">
+                            <ul class="nav nav-list accordion-group">
+                                <li style="display: list-item;" class="rows elements"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="designer-html-container" class="sortable container-fluid div_displayObject" style="position: relative;padding:0;user-select: none;-khtml-user-select: none;-o-user-select: none;-moz-user-select: -moz-none;-webkit-user-select: none;">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Designer Modal -->
+    <div id="designer-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="designer-modalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="designer-modalLabel">Preview</h3>
+        </div>
+        <div id="designer-modal-body" class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+    </div>
 </div>

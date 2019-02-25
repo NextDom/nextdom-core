@@ -183,35 +183,35 @@ $('document').ready(function() {
 
 		}
     	}
-    $.get("views/desktop/designer/config.json", function(response) {
-	var components = JSON.parse(response).components;
-	var i = 0;
-	var j = -1;
-	var load_file = function(url) {
-	    $.get(url, function(res) {
+    $.get("/assets/js/desktop/designer/config.json", function(response) {
+		var components = response.components;
+		var i = 0;
+		var j = -1;
+		var load_file = function(url) {
+			$.get(url, function(res) {
 
-		if (url.indexOf('attributesForm') > -1) {
-		    $('.top-container').append(res);
-		}
-		else {
-		    $('.elements').append(res);
-		}
-		if (j === components.length - 1) {
-		    makeDraggable();
-		}
-		if (i >= components.length - 1) {
+			if (url.indexOf('attributesForm') > -1) {
+				$('.top-container').append(res);
+			}
+			else {
+				$('.elements').append(res);
+			}
+			if (j === components.length - 1) {
+				makeDraggable();
+			}
+			if (i >= components.length - 1) {
 
-		    if (typeof (components[++j]) !== "undefined") {
-			load_file("views/desktop/designer/attributesForm/" + components[j] + ".html");
-		    }
-		}
-		if (typeof (components[++i]) !== "undefined") {
-		    load_file("views/desktop/designer/elements/" + components[i] + ".html");
-		}
+				if (typeof (components[++j]) !== "undefined") {
+				load_file("/assets/designer/attributesForm/" + components[j] + ".html");
+				}
+			}
+			if (typeof (components[++i]) !== "undefined") {
+				load_file("/assets/designer/elements/" + components[i] + ".html");
+			}
 
 	    });
 	};
-	load_file("views/desktop/designer/elements/" + components[i] + ".html");
+	load_file("/assets/designer/elements/" + components[i] + ".html");
 	var dragged_clone = null;
 
     });
