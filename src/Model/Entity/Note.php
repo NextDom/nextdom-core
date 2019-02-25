@@ -118,4 +118,9 @@ class Note
         return $this;
     }
 
+    public function getTableName()
+    {
+        return 'note';
+    }
+
 }
