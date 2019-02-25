@@ -227,6 +227,7 @@ $(function () {
         height: 'auto',
         width: 'auto',
         position: 'fixed',
+        resizable: false,
         open: function () {
             $("body").css({overflow: 'hidden'})
             $(this).closest( ".ui-dialog" ).find(":button").blur();
@@ -245,6 +246,7 @@ $(function () {
         height: 'auto',
         width: 'auto',
         position: 'fixed',
+        resizable: false,
         open: function () {
             $("body").css({overflow: 'hidden'});
             $(this).closest( ".ui-dialog" ).find(":button").blur();
@@ -262,6 +264,7 @@ $(function () {
         height: 'auto',
         width: 'auto',
         position: 'fixed',
+        resizable: false,
         open: function () {
             $("body").css({overflow: 'hidden'});
             $(this).closest( ".ui-dialog" ).find(":button").blur();
@@ -279,6 +282,7 @@ $(function () {
         height: 'auto',
         width: 'auto',
         position: 'fixed',
+        resizable: false,
         open: function () {
             $("body").css({overflow: 'hidden'});
             $(this).closest( ".ui-dialog" ).find(":button").blur();
