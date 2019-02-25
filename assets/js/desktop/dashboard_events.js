@@ -134,3 +134,20 @@ $('#div_pageContainer').on( 'click','.eqLogic-widget .history', function () {
     $('#md_modal2').dialog({title: "Historique"});
     $("#md_modal2").load('index.php?v=d&modal=cmd.history&id=' + $(this).data('cmd_id')).dialog('open');
 });
+
+$('.btn_filterObject').click(function() {
+    var filterValue = '';
+    if ($(this).prop('id') == 'all') {
+        filterValue = '*';
+    } else {
+        filterValue = "[data-father_id='" + $(this).prop('id') + "']";
+    }
+
+    var $grid = $('.div_object').isotope({
+        itemSelector: '[data-father_id]',
+        layoutMode: 'fitRows'
+    });
+
+    $grid.isotope({filter: filterValue  });
+
+});
