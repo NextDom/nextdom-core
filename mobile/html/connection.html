@@ -14,7 +14,7 @@
     <a id="bt_login_validate" href="#" class="ui-btn ui-corner-all ui-btn-raised clr-primary waves-effect waves-button">{{Connexion}}</a>
 </div>
 <script>
-    $('#in_login_username').on('focusout change keypress',function(){
+    $('#in_login_username').on('focusout focusin change keypress',function(){
         nextdom.user.useTwoFactorAuthentification({
             login: $('#in_login_username').value(),
             error: function (error) {
@@ -47,6 +47,3 @@
         });
     });
 </script>
-
-
-

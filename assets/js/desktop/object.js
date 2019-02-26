@@ -107,9 +107,18 @@ function loadObjectConfiguration(_id){
             $('#summarytab input[type=checkbox]').value(0);
             $('.object').setValues(data, '.objectAttr');
             if(data['display'] == ''){
-                $('.objectAttr[data-l1key=display][data-l2key=tagColor]').value('#9b59b6');
+                $('.objectAttr[data-l1key=display][data-l2key=tagColor]').value('#33B8CC');
                 $('.objectAttr[data-l1key=display][data-l2key=tagTextColor]').value('#ffffff');
+                $('.objectAttr[data-l1key=display][data-l2key="desktop::summaryTextColor"]').value('#ffffff');
+                $('#colorpickTag').colorpicker('getValue', '#33B8CC');
+                $('#colorpickTagText').colorpicker('getValue', '#ffffff');
+                $('#colorpickSummaryText').colorpicker('getValue', '#ffffff');
+            } else {
+                $('#colorpickTag').colorpicker('setValue', data.display.tagColor);
+                $('#colorpickTagText').colorpicker('setValue', data.display.tagTextColor);
+                $('#colorpickSummaryText').colorpicker('setValue', data.display['desktop::summaryTextColor']);
             }
+
             $('.objectAttr[data-l1key=father_id] option[value=' + data.id + ']').hide();
             $('.div_summary').empty();
             $('.tabnumber').empty();

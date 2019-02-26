@@ -100,3 +100,16 @@
     background-color: rgba(255, 255, 255, 0.1);
   }
 }
+
+.nav-tabs-dashboard {
+  border-bottom: none !important;
+}
+.nav-tabs-dashboard a {
+    padding: 8px 10px 6px 10px !important;
+}
+.nav-tabs-custom > .nav-tabs-dashboard > li {
+    border-top: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    margin-right: 0px;
+}
