@@ -74,6 +74,8 @@ function checkTwoFactor() {
         login: $('#in_login_username').value(),
         error: function (error) {
            notify('core',error.message, 'danger');
+           $('#in_login_password').empty();
+           $('#in_twoFactorCode').empty();
         },
         success: function (data) {
             isTwoFactor = data;
@@ -121,6 +123,8 @@ function tryLogin() {
             $('#div_login_password').addClass("has-error");
             $('#div_twoFactorCode').addClass("has-error");
             notify('Core',error.message,'error');
+            $('#in_login_password').empty();
+            $('#in_twoFactorCode').empty();
         },
         success: function (data) {
             $('.login-box').addClass('animationZoomOut');
