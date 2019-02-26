@@ -336,6 +336,11 @@ body, .main-footer{
   background-color: {{ COLOR10 }} !important;
 }
 
+/* Tableaux */
+.table-striped > tbody > tr:nth-of-type(even) {
+  background-color: {{ COLOR10 }} !important;
+}
+
 /* #################################################################### */
 /* COLOR11 = Couleur de fond des titres (légendes, tableaux, unités...) */
 /* #################################################################### */
@@ -435,7 +440,12 @@ pre {
 }
 
 /* Listes */
-.label-list, .label-view, .label-log{
+.label-list, .label-view, .label-log {
+  color: {{ COLOR12 }} !important;
+}
+
+/* Tableaux */
+.tablesorter-filter {
   color: {{ COLOR12 }} !important;
 }
 
