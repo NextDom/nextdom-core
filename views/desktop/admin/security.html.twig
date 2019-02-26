@@ -37,7 +37,9 @@
     <div class="action-bar">
         <div class="action-group">
             <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
-            <a class="btn btn-warning btn-action-bar" id="bt_removeBanIp"><i class="fa fa-trash spacing-right"></i>{{ 'Supprimer les IP bannie(s)' }}</a>
+            {% if adminBannedIp|length != 0 %}
+                <a class="btn btn-warning btn-action-bar" id="bt_removeBanIp"><i class="fa fa-trash spacing-right"></i>{{ 'Supprimer les IP bannie(s)' }}</a>
+            {% endif %}
         </div>
         <div class="action-group">
             <a class="btn btn-success btn-action-bar pull-right" id="bt_savesecurity"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
@@ -176,7 +178,11 @@
 
                 <!-- IP section -->
                 <fieldset class="legend-section">
-                    <legend>{{ 'IPs bannies' }}</legend>
+                    <legend>{{ 'IPs bannies' }}
+                        {% if adminBannedIp|length != 0 %}
+                            <span>{{ ' ('}}{{ adminBannedIp|length }}{{')'}}</span>
+                        {% endif %}
+                    </legend>
                     <table class="table table-condensed table-bordered">
                         <thead>
                         <tr>
