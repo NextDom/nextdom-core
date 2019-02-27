@@ -193,3 +193,7 @@ panel:
   path: 'panel'
   controller: NextDom\Controller\PanelPageController::get
   condition: 'admin'
+designer:
+  path: 'designer'
+  controller: NextDom\Controller\DesignerController::get
+  condition: 'admin'

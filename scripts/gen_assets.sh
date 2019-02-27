@@ -34,6 +34,7 @@ function gen_css {
 	sass assets/css/firstUse.scss public/css/firstUse.css $COMPRESS
 	sass assets/css/rescue.scss public/css/rescue.css $COMPRESS
 	sass assets/css/Market/market.scss public/css/market.css $COMPRESS
+	sass assets/css/designer.scss public/css/designer.css $COMPRESS
 
 	# Remplacement des chemins
 	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css

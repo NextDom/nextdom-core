@@ -1,0 +1,53 @@
+{#
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#}
+<div id="designer" class="row">
+    <div id="designer-menu" class="col-xs-3">
+        <div id="nextdom-cmds" class="box-group">
+            {% for jeeObject in jeeObjects %}
+                <div class="jeeObject panel box box-primary" data-id="{{ jeeObject['data'].getId() }}">
+                    <div class="box-header with-border">
+                        <h4 class="box-title">
+                            <a data-toggle="collapse" data-parent="#nextdom-cmds" aria-expanded="true" href="#jeeObject{{ jeeObject['data'].getId() }}">
+                                {{ jeeObject['data'].getName() }}
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="jeeObject{{ jeeObject['data'].getId() }}" class="panel-collapse collapse" aria-expanded="false">
+                        <div class="box-body">
+                            {% for eqLogic in jeeObject['eqLogics'] %}
+                                <div class="eqLogic" data-id="{{ eqLogic['data'].getId() }}">
+                                    <h5>{{ eqLogic['data'].getName() }}</h5>
+                                    {% for cmd in eqLogic['cmds'] %}
+                                        <div class="cmd" data-id="{{ cmd.getId() }}">
+                                            <h6>{{ cmd.getName() }}</h6>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div id="designer-content" class="col-xs-9">
+
+    </div>
+</div>
