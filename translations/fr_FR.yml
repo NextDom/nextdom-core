@@ -170,6 +170,7 @@ sidebar:
   dashboard: Dashboard
   view: Vue(s)
   design: Design(s)
+  designer: Designer
   objects-list: Liste Objets & Résumés
   default-object: Objet par défaut
   show-all: Afficher tout

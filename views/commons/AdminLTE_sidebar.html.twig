@@ -69,6 +69,15 @@
                     {% endfor %}
                 </ul>
             </li>
+            <li class="treeview" id="side4">
+                <a href="#"><i class="fas fa-object-group spacing-right"></i><span>{{ 'sidebar.designer'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    <li><a href="index.php?v=d&p=designer"><i class="fas fa-bullseye spacing-right"></i>{{ 'sidebar.show-all'|trans }}</a></li>
+                    {% for plan in MENU_PLANS_LIST %}
+                        <li><a href="index.php?v=d&p=designer&plan_id={{ plan.getId() }}">{{ plan.getConfiguration('icon')|raw }}<i class="spacing-right"></i>{{ plan.getName() }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
             {# attention si réactivation changer les id=sideX
             <li class="treeview" id="sideX">
                 <a href="#"><i class="fas fa-building spacing-right"></i><span>{{ 'sidebar.plan3d'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
