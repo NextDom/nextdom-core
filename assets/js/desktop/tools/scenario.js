@@ -109,10 +109,6 @@ autoCompleteAction = [
 "remove_inat"
 ];
 
-if (getUrlVars('saveSuccessFull') == 1) {
-  notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
-}
-
 setTimeout(function(){
   $('.scenarioListContainer').packery();
 },100);
@@ -122,9 +118,7 @@ $("#div_listScenario").trigger('resize');
 $('.scenarioListContainer').packery();
 
 $('#bt_scenarioThumbnailDisplay').off('click').on('click', function () {
-  $('#div_editScenario').hide();
-  $('#scenarioThumbnailDisplay').show();
-  $('.scenarioListContainer').packery();
+  loadPage('index.php?v=d&p=scenario');
 });
 
 $('.scenarioDisplayCard').off('click').on('click', function () {
@@ -203,19 +197,10 @@ $("#bt_addScenario,#bt_addScenario2").off('click').on('click', function (event) 
                     $('#div_alert').showAlert({message: error.message, level: 'danger'});
                 },
                 success: function (data) {
-                    var vars = getUrlVars();
-                    var url = 'index.php?';
-                    for (var i in vars) {
-                        if (i != 'id' && i != 'saveSuccessFull' && i != 'removeSuccessFull') {
-                            url += i + '=' + vars[i].replace('#', '') + '&';
-                        }
-                    }
-                    url += 'id=' + data.id + '&saveSuccessFull=1';
-                    if(tab !== null){
-                        url += tab;
-                    }
                     modifyWithoutSave = false;
-                    loadPage(url);
+                    $('#scenarioThumbnailDisplay').hide();
+                    $('#bt_scenarioThumbnailDisplay').hide();
+                    printScenario(data.id);
                 }
             });
         }
@@ -243,6 +228,7 @@ $("#bt_delScenario,#bt_delScenario2").off('click').on('click', function (event) 
         success: function () {
           modifyWithoutSave = false;
           loadPage('index.php?v=d&p=scenario');
+          notify("Info", '{{Suppression effectuée avec succès}}', 'success');
         }
       });
     }
@@ -273,7 +259,9 @@ $("#bt_copyScenario").off('click').on('click', function () {
           notify("Erreur", error.message, 'error');
         },
         success: function (data) {
-          loadPage('index.php?v=d&p=scenario&id=' + data.id);
+          $('#scenarioThumbnailDisplay').hide();
+          $('#bt_scenarioThumbnailDisplay').hide();
+          printScenario(data.id);
         }
       });
     }
@@ -915,7 +903,7 @@ function printScenario(_id) {
     }
 
     if(data.elements.length == 0){
-      $('#div_scenarioElement').append('<center class="span_noScenarioElement"><span style=\'color:#767676;font-size:1.2em;font-weight: bold;\'>Pour constituer votre scénario veuillez ajouter des blocs</span></center>')
+      $('#div_scenarioElement').append('<div class="span_noScenarioElement"><span>{{Pour programmer votre scénario, veuillez commencer par ajouter des blocs...}}</span></div>')
     }
     actionOptions = []
     for (var i in data.elements) {
@@ -968,13 +956,10 @@ function saveScenario() {
     },
     success: function (data) {
       modifyWithoutSave = false;
-      url = 'index.php?v=d&p=scenario&id=' + data.id + '&saveSuccessFull=1';
-      if(tab !== null){
-        url += tab;
-      }
-      loadPage(url);
+      notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
     }
   });
+  $('#bt_scenarioThumbnailDisplay').show();
 }
 
 function addTrigger(_trigger) {
