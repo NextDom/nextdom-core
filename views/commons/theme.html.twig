@@ -88,6 +88,9 @@
 .nav-tabs-custom>.nav-tabs>li.active {
   border-top-color: {{ COLOR1 }} !important;
 }
+.nav-tabs-custom>.nav-tabs-dashboard>li.active {
+  border-bottom-color:{{ COLOR1 }}80 !important;
+}
 .main-header .navbar .sidebar-toggle:hover {
   background-color: {{ COLOR1 }} !important;
 }
@@ -507,7 +510,7 @@ pre {
 .label-value {
   border-color: {{ COLOR14 }} !important;
 }
-.form-control {
+.form-control:not(has-error) {
   border-color: {{ COLOR14 }} !important;
 }
 
