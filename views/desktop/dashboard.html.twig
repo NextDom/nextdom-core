@@ -35,30 +35,15 @@
 #}
 <section class="content-header">
     <div class="nav-tabs-custom">
-        <ul class="nav nav-tabs nav-tabs-dashboard">
-            {% for child in objectList %}
-                {% if child.getFather_id() == '' %}
-                    <li class="cursor {% if child.getId() == dashboardObjectId or child.getFather_id() == dashboardObjectId %}active{% endif %}"><a href="index.php?v=d&p=dashboard&object_id={{ child.getId() }}">{{ child.getDisplay("icon")|raw }}<i class="spacing-right"></i>{{ child.getName() }}</a><li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-        {% if dashboardObjectId != '' and (dashboardChildrenObjects|length > 0 or dashboardObject.getFather_id() != '') %}
+        {% for i in 0..2 %}
             <ul class="nav nav-tabs nav-tabs-dashboard">
-                {% if dashboardChildrenObjects|length > 0 %}
-                    {% for child in dashboardChildrenObjects %}
-                        {% if child.getFather_id() == dashboardObjectId %}
-                            <li class="cursor {% if child.getId() == dashboardObjectId %}active{% endif %}"><a href="index.php?v=d&p=dashboard&object_id={{ child.getId() }}">{{ child.getDisplay("icon")|raw }}<i class="spacing-right"></i>{{ child.getName() }}</a><li>
-                        {% endif %}
-                    {% endfor %}
-                {% else %}
-                    {% for child in objectList %}
-                        {% if child.getFather_id() == dashboardObject.getFather_id() %}
-                            <li class="cursor {% if child.getId() == dashboardObjectId %}active{% endif %}"><a href="index.php?v=d&p=dashboard&object_id={{ child.getId() }}">{{ child.getDisplay("icon")|raw }}<i class="spacing-right"></i>{{ child.getName() }}</a><li>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
+                {% for child in objectList %}
+                    {% if child.parentNumber() == i and (child.getFather_id() == dashboardObject.getFather().getFather_id() or child.getFather_id() == dashboardObject.getFather_id() or child.getFather_id() == dashboardObjectId or child.getFather_id() == '') %}
+                        <li class="cursor {% if child.getId() == dashboardObjectId %}active{% endif %} {% if child.getId() == dashboardObject.getFather_id() or child.getId() == dashboardObject.getFather().getFather_id() %}father{% endif %}"><a href="index.php?v=d&p=dashboard&object_id={{ child.getId() }}">{{ child.getDisplay("icon")|raw }}<i class="spacing-right"></i>{{ child.getName() }}</a><li>
+                    {% endif %}
+                {% endfor %}
             </ul>
-        {% endif %}
+        {% endfor %}
     </div>
 </section>
 
