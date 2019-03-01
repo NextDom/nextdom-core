@@ -19,32 +19,49 @@
 #}
 <div id="designer" class="row">
     <div id="designer-menu" class="col-xs-3">
-        <div id="nextdom-cmds" class="box-group">
-            {% for jeeObject in jeeObjects %}
-                <div class="jeeObject panel box box-primary" data-id="{{ jeeObject['data'].getId() }}">
-                    <div class="box-header with-border">
-                        <h4 class="box-title">
-                            <a data-toggle="collapse" data-parent="#nextdom-cmds" aria-expanded="true" href="#jeeObject{{ jeeObject['data'].getId() }}">
-                                {{ jeeObject['data'].getName() }}
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="jeeObject{{ jeeObject['data'].getId() }}" class="panel-collapse collapse" aria-expanded="false">
-                        <div class="box-body">
-                            {% for eqLogic in jeeObject['eqLogics'] %}
-                                <div class="eqLogic" data-id="{{ eqLogic['data'].getId() }}">
-                                    <h5>{{ eqLogic['data'].getName() }}</h5>
-                                    {% for cmd in eqLogic['cmds'] %}
-                                        <div class="cmd" data-id="{{ cmd.getId() }}">
-                                            <h6>{{ cmd.getName() }}</h6>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            {% endfor %}
+        <ul class="designer-nav nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#nextdom-cmds">Commandes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#nextdom-cmpnts">Composants</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#nextdom-impExp">Imp/Exp</a>
+            </li>
+        </ul>
+        <div id="designer-tab-content" class="tab-content">
+            <div id="nextdom-cmds" class="tab-pane fade active show box-group">
+                {% for jeeObject in jeeObjects %}
+                    <div class="jeeObject panel box box-primary" data-id="{{ jeeObject['data'].getId() }}">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">
+                                <a data-toggle="collapse" data-parent="#nextdom-cmds" aria-expanded="true" href="#jeeObject{{ jeeObject['data'].getId() }}">
+                                    {{ jeeObject['data'].getName() }}
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="jeeObject{{ jeeObject['data'].getId() }}" class="panel-collapse collapse" aria-expanded="false">
+                            <div class="box-body">
+                                {% for eqLogic in jeeObject['eqLogics'] %}
+                                    <div class="eqLogic" data-id="{{ eqLogic['data'].getId() }}">
+                                        <h5>{{ eqLogic['data'].getName() }}</h5>
+                                        {% for cmd in eqLogic['cmds'] %}
+                                            <div class="cmd" data-id="{{ cmd.getId() }}">
+                                                <h6>{{ cmd.getName() }}</h6>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
+            <div id="nextdom-cmpnts" class="tab-pane fade active box-group">
+            </div>
+            <div id="nextdom-impExp" class="tab-pane fade active box-group">
+            </div>
         </div>
     </div>
     <div id="designer-content" class="col-xs-9">
