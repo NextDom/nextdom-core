@@ -57,13 +57,13 @@ class MigrationPage(unittest.TestCase):
 
     def test_dashboard_page(self):
         self.driver.get(self.url+'index.php?v=d&p=dashboard')
-        sleep(4)
+        sleep(5)
         self.assertIsNotNone(self.driver.page_source.find('Maison'))
         self.assertEqual(0, len(self.driver.get_log('browser')))
 
     def test_dashboard_page(self):
         self.driver.get(self.url+'index.php?v=d&p=backup')
-        sleep(4)
+        sleep(5)
         self.assertIsNotNone(self.driver.find_element_by_css_selector('option[value="/var/www/html/backup/backup-Jeedom-3.2.11-2018-11-17-23h26.tar.gz"]'))
         self.assertEqual(0, len(self.driver.get_log('browser')))
 

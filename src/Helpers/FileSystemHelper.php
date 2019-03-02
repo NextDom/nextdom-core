@@ -164,7 +164,7 @@ class FileSystemHelper
             echo '<link href="' . $_folder . '/' . $_filename . '?md5=' . md5_file($path) . '" rel="stylesheet" />';
         } elseif ($type == 'js') {
             // TODO : MD5
-            echo '<script type="text/javascript" src="core/php/getResource.php?file=' . $_folder . '/' . $_filename . '&md5=' . md5_file($path) . '&lang=' . TranslateHelper::getLanguage() . '"></script>';
+            echo '<script type="text/javascript" src="src/Api/getResource.php?file=' . $_folder . '/' . $_filename . '&md5=' . md5_file($path) . '&lang=' . TranslateHelper::getLanguage() . '"></script>';
         }
     }
 

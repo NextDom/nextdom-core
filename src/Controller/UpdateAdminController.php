@@ -22,9 +22,9 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
@@ -39,9 +39,7 @@ class UpdateAdminController extends BaseController
      *
      * @return string Content of update_admin page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {
@@ -59,8 +57,8 @@ class UpdateAdminController extends BaseController
         $pageData['adminHardwareName'] = NextDomHelper::getHardwareName();
         $pageData['adminHardwareKey'] = NextDomHelper::getHardwareKey();
         $pageData['adminLastKnowDate'] = CacheManager::byKey('hour')->getValue();
-        $pageData['adminIsRescueMode'] = Status::isRescueMode();
-        $pageData['key'] = Status::isRescueMode();
+        $pageData['adminIsRescueMode'] = AuthentificationHelper::isRescueMode();
+        $pageData['key'] = AuthentificationHelper::isRescueMode();
 
         if (!$pageData['adminIsRescueMode']) {
             $pageData['adminPluginsList'] = [];
@@ -89,7 +87,7 @@ class UpdateAdminController extends BaseController
                 $bannedData['ip'] = $value['ip'];
                 $bannedData['startDate'] = date('Y-m-d H:i:s', $value['datetime']);
                 if ($pageData['adminConfigs']['security::bantime'] < 0) {
-                    $bannedData['endDate'] = \__('Jamais');
+                    $bannedData['endDate'] = __('Jamais');
                 } else {
                     $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageData['adminConfigs']['security::bantime']);
                 }

@@ -196,7 +196,7 @@ function initApplication(_reinit) {
           }
         }
         
-        $.get("core/php/icon.inc.php", function (data) {
+        $.get("src/Api/icon.inc.php", function (data) {
           $("head").append(data);
           $.include(include, function () {
             deviceInfo = getDeviceType();

@@ -356,14 +356,14 @@ step_nextdom_crontab() {
         (echo crontab -l | grep -v "nextdom") | crontab -  >> ${DEBUG} 2>&1
     fi
     if [ ! -f /etc/cron.d/nextdom ]; then
-        echo "* * * * * www-data /usr/bin/php ${WEBSERVER_HOME}/core/php/jeeCron.php >> /dev/null" > /etc/cron.d/nextdom
+        echo "* * * * * www-data /usr/bin/php ${WEBSERVER_HOME}/src/Api/start_cron.php >> /dev/null" > /etc/cron.d/nextdom
         if [ $? -ne 0 ]; then
             printf "${ROUGE}Ne peut installer le cron de nextdom - Annulation${NORMAL}"
             exit 1
         fi
     fi
     if [ ! -f /etc/cron.d/nextdom_watchdog ]; then
-        echo "*/5 * * * * root /usr/bin/php ${WEBSERVER_HOME}/core/php/watchdog.php >> /dev/null" > /etc/cron.d/nextdom_watchdog
+        echo "*/5 * * * * root /usr/bin/php ${WEBSERVER_HOME}/scripts/watchdog.php >> /dev/null" > /etc/cron.d/nextdom_watchdog
         if [ $? -ne 0 ]; then
             printf "${ROUGE}Ne peut installer le cron de nextdom - Annulation${NORMAL}"
             exit 1

@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\Message;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
@@ -54,11 +55,11 @@ class MessageManager
     public static function add($_type, $_message, $_action = '', $_logicalId = '', $_writeMessage = true)
     {
         $message = (new message())
-            ->setPlugin(secureXSS($_type))
-            ->setMessage(secureXSS($_message))
-            ->setAction(secureXSS($_action))
+            ->setPlugin(Utils::secureXSS($_type))
+            ->setMessage(Utils::secureXSS($_message))
+            ->setAction(Utils::secureXSS($_action))
             ->setDate(date('Y-m-d H:i:s'))
-            ->setLogicalId(secureXSS($_logicalId));
+            ->setLogicalId(Utils::secureXSS($_logicalId));
         $message->save($_writeMessage);
     }
 

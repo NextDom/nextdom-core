@@ -178,7 +178,7 @@ class ListenerManager
         if (count(CmdManager::byValue($_event, 'info')) == 0) {
             return;
         }
-        $cmd = __DIR__ . '/../php/jeeListener.php';
+        $cmd = NEXTDOM_ROOT . '/src/Api/start_listener.php';
         $cmd .= ' event_id=' . $_event;
         SystemHelper::php($cmd . ' >> /dev/null 2>&1 &');
     }

@@ -18,7 +18,7 @@
 
 use NextDom\Helpers\AuthentificationHelper;
 
-require_once __DIR__ . '/core.inc.php';
+require_once(__DIR__ . '/../../src/core.php');
 
 AuthentificationHelper::init();
 

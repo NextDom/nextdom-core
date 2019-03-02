@@ -478,7 +478,7 @@ class InteractDef
         if ($_level > $_drill) {
             return $_data;
         }
-        $icon = findCodeIcon('fa-comments-o');
+        $icon = Utils::findCodeIcon('fa-comments-o');
         $_data['node']['interactDef' . $this->getId()] = array(
             'id' => 'interactDef' . $this->getId(),
             'name' => substr($this->getHumanName(), 0, 20),

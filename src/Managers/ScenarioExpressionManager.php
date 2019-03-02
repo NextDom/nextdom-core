@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\ScenarioState;
 use NextDom\Helpers\DateHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NetworkHelper;
@@ -210,11 +211,11 @@ class ScenarioExpressionManager
                 $name = $scenario->getName();
             }
             $action = $baseAction['options']['action'];
-            $result .= \__('Scénario : ') . $name . ' <i class="fa fa-arrow-right"></i> ' . $action;
+            $result .= __('Scénario : ') . $name . ' <i class="fa fa-arrow-right"></i> ' . $action;
         } elseif ($baseAction['cmd'] == 'variable') {
             $name = $baseAction['options']['name'];
             $value = $baseAction['options']['value'];
-            $result .= \__('Variable : ') . $name . ' <i class="fa fa-arrow-right"></i> ' . $value;
+            $result .= __('Variable : ') . $name . ' <i class="fa fa-arrow-right"></i> ' . $value;
         } elseif (is_object(CmdManager::byId(str_replace('#', '', $baseAction['cmd'])))) {
             $cmd = CmdManager::byId(str_replace('#', '', $baseAction['cmd']));
             $eqLogic = $cmd->getEqLogicId();
@@ -285,9 +286,9 @@ class ScenarioExpressionManager
             return -1;
         }
         switch ($state) {
-            case 'stop':
+            case ScenarioState::STOP:
                 return 0;
-            case 'in progress':
+            case ScenarioState::IN_PROGRESS:
                 return 1;
         }
         return -3;
@@ -1264,7 +1265,7 @@ class ScenarioExpressionManager
             $cmd = CmdManager::byId(trim(str_replace('#', '', CmdManager::humanReadableToCmd('#' . str_replace('#', '', $cmdId) . '#'))));
         }
         if (!is_object($cmd)) {
-            return \__('Commande non trouvée');
+            return __('Commande non trouvée');
         }
         switch ($type) {
             case 'cmd':
@@ -1274,11 +1275,11 @@ class ScenarioExpressionManager
             case 'object':
                 $object = $cmd->getEqLogicId()->getObject();
                 if (!is_object($object)) {
-                    return \__('Aucun');
+                    return __('Aucun');
                 }
                 return $object->getName();
         }
-        return \__('Type inconnu');
+        return __('Type inconnu');
     }
 
     /**
