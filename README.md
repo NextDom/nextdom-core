@@ -21,7 +21,7 @@ Il vous faut créer une base de données nextdom sur MySQL (en utf8_general_ci).
 
 ### Téléchargement des fichiers
 
-Téléchargez les sources nextdom : https://github.com/nextdom/core/archive/stable.zip, décompressez-les dans un répertoire de votre serveur web.
+Téléchargez les sources nextdom : https://github.com/NextDom/nextdom-core/archive/0.1.1.zip, décompressez-les dans un répertoire de votre serveur web.
 
 ### Configuration et installation
 
