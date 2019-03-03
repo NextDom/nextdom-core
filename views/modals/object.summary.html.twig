@@ -20,7 +20,7 @@
             <td>
                 {% set parentNumber = object.getConfiguration('parentNumber') %}
                 {% for i in 0..parentNumber %}
-                    &nbsp;&nbsp;&nbsp;
+                    <i class="spacing-right"></i>
                 {% endfor %}
                 <span style="font-size : 1.3em;">{{ object.getHumanName(true, true)|raw }}</span>
             </td>

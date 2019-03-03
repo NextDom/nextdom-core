@@ -17,6 +17,9 @@
  */
 
 /* * ***************************Includes********************************* */
+
+use NextDom\Helpers\ReportHelper;
+
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
 class report {
@@ -24,30 +27,11 @@ class report {
 
     /*     * ***********************Methode static*************************** */
     public static function clean() {
-        if (!file_exists(__DIR__ . '/../../data/report')) {
-            return;
-        }
-        shell_exec('find ' . __DIR__ . '/../../data/report -type f -mtime +' . config::byKey('report::maxdays') . ' -delete');
+        ReportHelper::clean();
     }
 
     public static function generate($_url, $_type, $_name, $_format = 'pdf', $_parameter = array()) {
-        $out = __DIR__ . '/../../data/report/';
-        $out .= $_type . '/';
-        $out .= $_name . '/';
-        if (!file_exists($out)) {
-            mkdir($out, 0775, true);
-        }
-        $out .= date('Y_m_d_H_i_s') . '.' . $_format;
-        $min_width = (isset($_parameter['width']) && $_parameter['width'] > 800) ? $_parameter['width'] : 1280;
-        $min_height = (isset($_parameter['height']) && $_parameter['height'] > 600) ? $_parameter['height'] : 1280;
-        $delay = (isset($_parameter['delay']) && $_parameter['delay'] > 1000) ? $_parameter['delay'] : config::byKey('report::delay');
-        $_url .= '&auth=' . user::getAccessKeyForReport();
-        $cmd = 'xvfb-run --server-args="-screen 0, 1920x1280x24" cutycapt --min-width=' . $min_width . ' --min-height=' . $min_height . ' --url="' . $_url . '" --out="' . $out . '"';
-        $cmd .= ' --delay=' . $delay;
-        $cmd .= ' --print-backgrounds=on';
-        log::add('report', 'debug', $cmd);
-        com_shell::execute($cmd);
-        return $out;
+        ReportHelper::generate($_url, $_type, $_name, $_format, $_parameter);
     }
 
 }

@@ -17,11 +17,12 @@
 
 namespace NextDom\Model\Entity;
 
-use NextDom\Enums\ScenarioExpressionEnum;
-use NextDom\Enums\ScenarioExpressionTypeEnum;
+use NextDom\Enums\ScenarioExpressionAction;
+use NextDom\Enums\ScenarioExpressionType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\ReportHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
@@ -31,11 +32,14 @@ use NextDom\Managers\CronManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
+use NextDom\Managers\MessageManager;
+use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ScenarioSubElementManager;
+use NextDom\Managers\ViewManager;
 
 /**
  * Scenarioexpression
@@ -106,7 +110,7 @@ class ScenarioExpression
         if ($this->getOptions('background', 0) == 0) {
             return;
         }
-        if (in_array($this->getExpression(), array(ScenarioExpressionEnum::WAIT, ScenarioExpressionEnum::SLEEP, ScenarioExpressionEnum::STOP, ScenarioExpressionEnum::SCENARIO_RETURN))) {
+        if (in_array($this->getExpression(), array(ScenarioExpressionAction::WAIT, ScenarioExpressionAction::SLEEP, ScenarioExpressionAction::STOP, ScenarioExpressionAction::SCENARIO_RETURN))) {
             $this->setOptions('background', 0);
         }
         return;
@@ -135,7 +139,7 @@ class ScenarioExpression
                 $key = 'scenarioElement' . ConfigManager::genKey(10);
             }
             CacheManager::set($key, array('scenarioExpression' => $this, 'scenario' => $scenario), 60);
-            $cmd = NEXTDOM_ROOT . '/core/php/jeeScenarioExpression.php';
+            $cmd = NEXTDOM_ROOT . '/src/Api/start_scenario_expr.php';
             $cmd .= ' key=' . $key;
             $this->setLog($scenario, __('Execution du lancement en arriere plan : ') . $key);
             SystemHelper::php($cmd . ' >> /dev/null 2>&1 &');
@@ -143,7 +147,7 @@ class ScenarioExpression
         }
         $message = '';
         try {
-            if ($this->getType() == ScenarioExpressionTypeEnum::ELEMENT) {
+            if ($this->getType() == ScenarioExpressionType::ELEMENT) {
                 $element = ScenarioElementManager::byId($this->getExpression());
                 if (is_object($element)) {
                     $this->setLog($scenario, __('Exécution d\'un bloc élément : ') . $this->getExpression());
@@ -155,9 +159,9 @@ class ScenarioExpression
             if (isset($options['enable'])) {
                 unset($options['enable']);
             }
-            if (is_array($options) && $this->getExpression() != ScenarioExpressionEnum::WAIT) {
+            if (is_array($options) && $this->getExpression() != ScenarioExpressionAction::WAIT) {
                 foreach ($options as $key => $value) {
-                    if ($this->getExpression() == ScenarioExpressionEnum::EVENT && $key == ScenarioExpressionEnum::CMD) {
+                    if ($this->getExpression() == ScenarioExpressionAction::EVENT && $key == ScenarioExpressionAction::CMD) {
                         continue;
                     }
                     if (is_string($value)) {
@@ -165,9 +169,9 @@ class ScenarioExpression
                     }
                 }
             }
-            if ($this->getType() == ScenarioExpressionTypeEnum::ACTION) {
+            if ($this->getType() == ScenarioExpressionType::ACTION) {
                 $this->executeAction($scenario, $options);
-            } elseif ($this->getType() == ScenarioExpressionTypeEnum::CONDITION) {
+            } elseif ($this->getType() == ScenarioExpressionType::CONDITION) {
                 $expression = ScenarioExpressionManager::setTags($this->getExpression(), $scenario, true);
                 $message = __('Evaluation de la condition : [') . $expression . '] = ';
                 $result = Utils::evaluate($expression);
@@ -182,7 +186,7 @@ class ScenarioExpression
                 }
                 $this->setLog($scenario, $message);
                 return $result;
-            } elseif ($this->getType() == ScenarioExpressionTypeEnum::CODE) {
+            } elseif ($this->getType() == ScenarioExpressionType::CODE) {
                 $this->setLog($scenario, __('Exécution d\'un bloc code'));
                 return eval($this->getExpression());
             }
@@ -192,68 +196,68 @@ class ScenarioExpression
         return null;
     }
 
-    private function executeAction(&$scenario, $options)
+    protected function executeAction(&$scenario, $options)
     {
         switch ($this->getExpression()) {
-            case ScenarioExpressionEnum::ICON:
+            case ScenarioExpressionAction::ICON:
                 $this->executeActionIcon($scenario);
                 break;
-            case ScenarioExpressionEnum::WAIT:
+            case ScenarioExpressionAction::WAIT:
                 $this->executeActionWait($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::SLEEP:
+            case ScenarioExpressionAction::SLEEP:
                 $this->executeActionSleep($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::STOP:
+            case ScenarioExpressionAction::STOP:
                 $this->executeActionStop($scenario);
                 break;
-            case ScenarioExpressionEnum::LOG:
+            case ScenarioExpressionAction::LOG:
                 $this->executeActionLog($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::EVENT:
+            case ScenarioExpressionAction::EVENT:
                 $this->executeActionEvent($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::MESSAGE:
+            case ScenarioExpressionAction::MESSAGE:
                 $this->executeActionMessage($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::ALERT:
+            case ScenarioExpressionAction::ALERT:
                 $this->executeActionAlert($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::POPUP:
+            case ScenarioExpressionAction::POPUP:
                 $this->executeActionPopup($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::EQUIPMENT:
-            case ScenarioExpressionEnum::EQUIPEMENT:
+            case ScenarioExpressionAction::EQUIPMENT:
+            case ScenarioExpressionAction::EQUIPEMENT:
                 $this->executeActionEquipment($scenario);
                 break;
-            case ScenarioExpressionEnum::GOTODESIGN:
+            case ScenarioExpressionAction::GOTODESIGN:
                 $this->executeActionGotoDesign($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::SCENARIO:
+            case ScenarioExpressionAction::SCENARIO:
                 $this->executeActionScenario($scenario);
                 break;
-            case ScenarioExpressionEnum::VARIABLE:
+            case ScenarioExpressionAction::VARIABLE:
                 $this->executeActionVariable($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::DELETE_VARIABLE:
+            case ScenarioExpressionAction::DELETE_VARIABLE:
                 $this->executeActionDeleteVariable($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::ASK:
+            case ScenarioExpressionAction::ASK:
                 $this->executeActionAsk($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::NEXTDOM_POWEROFF:
+            case ScenarioExpressionAction::NEXTDOM_POWEROFF:
                 $this->executeActionNextDomPowerOff($scenario);
                 break;
-            case ScenarioExpressionEnum::SCENARIO_RETURN:
+            case ScenarioExpressionAction::SCENARIO_RETURN:
                 $this->executeActionScenarioReturn($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::REMOVE_INAT:
+            case ScenarioExpressionAction::REMOVE_INAT:
                 $this->executeActionRemoveInat($scenario);
                 break;
-            case ScenarioExpressionEnum::REPORT:
+            case ScenarioExpressionAction::REPORT:
                 $this->executeActionReport($scenario, $options);
                 break;
-            case ScenarioExpressionEnum::TAG:
+            case ScenarioExpressionAction::TAG:
                 $this->executeActionTag($scenario, $options);
                 break;
             default:
@@ -264,8 +268,9 @@ class ScenarioExpression
 
     /**
      * @param Scenario $scenario
+     * @throws \Exception
      */
-    private function executeActionIcon(&$scenario)
+    protected function executeActionIcon(&$scenario)
     {
         if ($scenario !== null) {
             $options = $this->getOptions();
@@ -275,7 +280,7 @@ class ScenarioExpression
         }
     }
 
-    private function executeActionWait(&$scenario, $options)
+    protected function executeActionWait(&$scenario, $options)
     {
         if (!isset($options['condition'])) {
             return null;
@@ -301,7 +306,7 @@ class ScenarioExpression
         $this->setLog($scenario, __('[Wait] Condition valide : ') . $expression . ' => ' . $result);
     }
 
-    private function executeActionSleep(&$scenario, $options)
+    protected function executeActionSleep(&$scenario, $options)
     {
         if (isset($options['duration'])) {
             try {
@@ -325,8 +330,9 @@ class ScenarioExpression
     /**
      * @param Scenario $scenario
      * @return null
+     * @throws \Exception
      */
-    private function executeActionStop(&$scenario)
+    protected function executeActionStop(&$scenario)
     {
         if ($scenario !== null) {
             $this->setLog($scenario, __('Action stop'));
@@ -340,7 +346,7 @@ class ScenarioExpression
      * @param Scenario $scenario
      * @param $options
      */
-    private function executeActionLog(&$scenario, $options)
+    protected function executeActionLog(&$scenario, $options)
     {
         if ($scenario !== null) {
             $scenario->setLog('Log : ' . $options['message']);
@@ -352,7 +358,7 @@ class ScenarioExpression
      * @param $options
      * @throws CoreException
      */
-    private function executeActionEvent(&$scenario, $options)
+    protected function executeActionEvent(&$scenario, $options)
     {
         $cmd = CmdManager::byId(trim(str_replace('#', '', $options['cmd'])));
         if (!is_object($cmd)) {
@@ -362,25 +368,25 @@ class ScenarioExpression
         $cmd->event(NextDomHelper::evaluateExpression($options['value']));
     }
 
-    private function executeActionMessage(&$scenario, $options)
+    protected function executeActionMessage(&$scenario, $options)
     {
-        \message::add('scenario', $options['message']);
+        MessageManager::add('scenario', $options['message']);
         $this->setLog($scenario, __('Ajout du message suivant dans le centre de message : ') . $options['message']);
     }
 
-    private function executeActionAlert(&$scenario, $options)
+    protected function executeActionAlert(&$scenario, $options)
     {
         EventManager::add('nextdom::alert', $options);
         $this->setLog($scenario, __('Ajout de l\'alerte : ') . $options['message']);
     }
 
-    private function executeActionPopup(&$scenario, $options)
+    protected function executeActionPopup(&$scenario, $options)
     {
         EventManager::add('nextdom::alertPopup', $options['message']);
         $this->setLog($scenario, __('Affichage du popup : ') . $options['message']);
     }
 
-    private function executeActionEquipment(&$scenario)
+    protected function executeActionEquipment(&$scenario)
     {
         $eqLogic = EqLogicManager::byId(str_replace(array('#eqLogic', '#'), '', $this->getOptions('eqLogic')));
         if (!is_object($eqLogic)) {
@@ -410,7 +416,7 @@ class ScenarioExpression
         }
     }
 
-    private function executeActionGotoDesign(&$scenario, $options)
+    protected function executeActionGotoDesign(&$scenario, $options)
     {
         $this->setLog($scenario, __('Changement design : ') . $options['plan_id']);
         EventManager::add('nextdom::gotoplan', $options['plan_id']);
@@ -422,7 +428,7 @@ class ScenarioExpression
      * @throws CoreException
      * @throws \ReflectionException
      */
-    private function executeActionScenario(&$scenario)
+    protected function executeActionScenario(&$scenario)
     {
         if ($scenario !== null && $this->getOptions('scenario_id') == $scenario->getId()) {
             $actionScenario = &$scenario;
@@ -493,7 +499,7 @@ class ScenarioExpression
         return null;
     }
 
-    private function executeActionVariable(&$scenario, $options)
+    protected function executeActionVariable(&$scenario, $options)
     {
         $options['value'] = ScenarioExpressionManager::setTags($options['value'], $scenario);
         try {
@@ -505,7 +511,7 @@ class ScenarioExpression
             $result = $options['value'];
         }
         $this->setLog($scenario, __('Affectation de la variable ') . $this->getOptions('name') . __(' => ') . $options['value'] . ' = ' . $result);
-        $dataStore = new \dataStore();
+        $dataStore = new DataStore();
         $dataStore->setKey($this->getOptions('name'));
         $dataStore->setValue($result);
         $dataStore->setType('scenario');
@@ -520,16 +526,21 @@ class ScenarioExpression
      * @return null
      * @throws \Exception
      */
-    private function executeActionDeleteVariable(&$scenario, $options)
+    protected function executeActionDeleteVariable(&$scenario, $options)
     {
         $scenario->removeData($options['name']);
         $this->setLog($scenario, __('Suppression de la variable ') . $this->getOptions('name'));
         return null;
     }
 
-    private function executeActionAsk(&$scenario, $options)
+    /**
+     * @param Scenario $scenario
+     * @param $options
+     * @throws CoreException
+     */
+    protected function executeActionAsk(&$scenario, $options)
     {
-        $dataStore = new \dataStore();
+        $dataStore = new DataStore();
         $dataStore->setType('scenario');
         $dataStore->setKey($this->getOptions('variable'));
         $dataStore->setValue('');
@@ -582,8 +593,9 @@ class ScenarioExpression
 
     /**
      * @param Scenario $scenario
+     * @throws \Exception
      */
-    private function executeActionNextDomPowerOff(&$scenario)
+    protected function executeActionNextDomPowerOff(&$scenario)
     {
         $this->setLog($scenario, __('Lancement de l\'arret de nextdom'));
         $scenario->persistLog();
@@ -593,8 +605,9 @@ class ScenarioExpression
     /**
      * @param Scenario $scenario
      * @param $options
+     * @throws \Exception
      */
-    private function executeActionScenarioReturn(&$scenario, $options)
+    protected function executeActionScenarioReturn(&$scenario, $options)
     {
         $this->setLog($scenario, __('Demande de retour d\'information : ') . $options['message']);
         if ($scenario->getReturn() === true) {
@@ -608,7 +621,7 @@ class ScenarioExpression
      * @param Scenario $scenario
      * @throws \Exception
      */
-    private function executeActionRemoveInat(&$scenario)
+    protected function executeActionRemoveInat(&$scenario)
     {
         if ($scenario !== null) {
             $this->setLog($scenario, __('Suppression des blocs DANS et A programmés du scénario '));
@@ -623,13 +636,13 @@ class ScenarioExpression
         }
     }
 
-    private function executeActionReport(&$scenario, $options)
+    protected function executeActionReport(&$scenario, $options)
     {
         $cmd_parameters = array('files' => null);
         $this->setLog($scenario, __('Génération d\'un rapport de type ') . $options['type']);
         switch ($options['type']) {
             case 'view':
-                $view = \view::byId($options['view_id']);
+                $view = ViewManager::byId($options['view_id']);
                 if (!is_object($view)) {
                     throw new CoreException(__('Vue introuvable - Vérifiez l\'id : ') . $options['view_id']);
                 }
@@ -639,7 +652,7 @@ class ScenarioExpression
                 $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ') . $view->getName() . __(' généré le ') . date('Y-m-d H:i:s');
                 break;
             case 'plan':
-                $plan = \planHeader::byId($options['plan_id']);
+                $plan = PlanHeaderManager::byId($options['plan_id']);
                 if (!is_object($plan)) {
                     throw new CoreException(__('Design introuvable - Vérifiez l\'id : ') . $options['plan_id']);
                 }
@@ -661,7 +674,7 @@ class ScenarioExpression
             case 'eqAnalyse':
                 $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=eqAnalyse&report=1';
                 $this->setLog($scenario, __('Génération du rapport ') . $url);
-                $cmd_parameters['files'] = array(\report::generate($url,'other',$options['export_type'], $options));
+                $cmd_parameters['files'] = array(ReportHelper::generate($url, 'other', $options['export_type'], $options));
                 $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport équipement du ') . date('Y-m-d H:i:s');
                 $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport équipement généré le ') . date('Y-m-d H:i:s');
                 break;
@@ -682,8 +695,9 @@ class ScenarioExpression
     /**
      * @param Scenario $scenario
      * @param $options
+     * @throws \Exception
      */
-    private function executeActionTag(&$scenario, $options)
+    protected function executeActionTag(&$scenario, $options)
     {
         $tags = $scenario->getTags();
         $tags['#' . $options['name'] . '#'] = $options['value'];
@@ -697,7 +711,7 @@ class ScenarioExpression
      * @return mixed
      * @throws CoreException
      */
-    private function executeActionOthers(&$scenario, $options)
+    protected function executeActionOthers(&$scenario, $options)
     {
         $cmd = CmdManager::byId(str_replace('#', '', $this->getExpression()));
         if (is_object($cmd)) {
@@ -798,18 +812,18 @@ class ScenarioExpression
         } else {
             $options = $this->getOptions();
             if ($this->getType() == 'action') {
-                if ($this->getExpression() == ScenarioExpressionEnum::ICON) {
+                if ($this->getExpression() == ScenarioExpressionAction::ICON) {
                     return '';
-                } elseif ($this->getExpression() == ScenarioExpressionEnum::SLEEP) {
+                } elseif ($this->getExpression() == ScenarioExpressionAction::SLEEP) {
                     return '(sleep) Pause de  : ' . $options['duration'];
-                } elseif ($this->getExpression() == ScenarioExpressionEnum::STOP) {
+                } elseif ($this->getExpression() == ScenarioExpressionAction::STOP) {
                     return '(stop) Arret du scenario';
-                } elseif ($this->getExpression() == ScenarioExpressionEnum::SCENARIO_RETURN) {
+                } elseif ($this->getExpression() == ScenarioExpressionAction::SCENARIO_RETURN) {
                     $actionScenario = ScenarioManager::byId($this->getOptions('scenario_id'));
                     if (is_object($actionScenario)) {
                         return '(scenario) ' . $this->getOptions('action') . ' de ' . $actionScenario->getHumanName();
                     }
-                } elseif ($this->getExpression() == ScenarioExpressionEnum::VARIABLE) {
+                } elseif ($this->getExpression() == ScenarioExpressionAction::VARIABLE) {
                     return '(variable) Affectation de la variable : ' . $this->getOptions('name') . ' à ' . $this->getOptions('value');
                 } else {
                     $result = NextDomHelper::toHumanReadable($this->getExpression());

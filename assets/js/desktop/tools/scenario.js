@@ -109,10 +109,6 @@ autoCompleteAction = [
 "remove_inat"
 ];
 
-if (getUrlVars('saveSuccessFull') == 1) {
-  notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
-}
-
 setTimeout(function(){
   $('.scenarioListContainer').packery();
 },100);
@@ -122,9 +118,7 @@ $("#div_listScenario").trigger('resize');
 $('.scenarioListContainer').packery();
 
 $('#bt_scenarioThumbnailDisplay').off('click').on('click', function () {
-  $('#div_editScenario').hide();
-  $('#scenarioThumbnailDisplay').show();
-  $('.scenarioListContainer').packery();
+  loadPage('index.php?v=d&p=scenario');
 });
 
 $('.scenarioDisplayCard').off('click').on('click', function () {
@@ -149,24 +143,10 @@ $('#in_treeSearch').keyup(function () {
   $('#div_tree').jstree(true).search($('#in_treeSearch').val());
 });
 
-$('#in_searchScenario').keyup(function () {
-  var searchPattern = $(this).value();
-  if(searchPattern === ''){
-    $('.panel-collapse.in').closest('.panel').find('.accordion-toggle collapsed').click();
-    $('.scenarioDisplayCard').show();
-  }
-  else {
-    searchPattern = searchPattern.toLowerCase();
-    $('.panel-collapse:not(.in)').closest('.panel').find('.accordion-toggle collapsed').click();
-    $('.scenarioDisplayCard').hide();
-    $('.scenarioDisplayCard .title').each(function(){
-        var cardTitle = $(this).text().toLowerCase();
-        if (cardTitle.indexOf(searchPattern) !== -1){
-            $(this).closest('.scenarioDisplayCard').show();
-        }
+$('#bt_chooseIcon').on('click', function () {
+    chooseIcon(function (_icon) {
+        $('.scenarioAttr[data-l1key=display][data-l2key=icon]').empty().append(_icon);
     });
-  }
-  $('.scenarioListContainer').packery();
 });
 
 $('.scenarioAttr[data-l1key=group]').autocomplete({
@@ -209,53 +189,22 @@ $("#bt_changeAllScenarioState,#bt_changeAllScenarioState2").off('click').on('cli
 });
 
 $("#bt_addScenario,#bt_addScenario2").off('click').on('click', function (event) {
-  bootbox.dialog({
-    title: "{{Ajout d'un nouveau scénario}}",
-    message: '<div class="row">  ' +
-    '<div class="col-md-12"> ' +
-    '<form class="form-horizontal" onsubmit="return false;"> ' +
-    '<div class="form-group"> ' +
-    '<label class="col-md-4 control-label">{{Nom}}</label> ' +
-    '<div class="col-md-4"> ' +
-    '<input id="in_scenarioAddName" type="text" placeholder="{{Nom de votre scénario}}" class="form-control input-md"> ' +
-    '</div> ' +
-    '</div> ' +
-    '</form> </div>  </div>',
-    buttons: {
-      "Annuler": {
-        className: "btn-default",
-        callback: function () {
-        }
-      },
-      success: {
-        label: "D'accord",
-        className: "btn-primary",
-        callback: function () {
-          nextdom.scenario.save({
-            scenario: {name: $('#in_scenarioAddName').val(), type: $("input[name=cbScenarioType]:checked").val()},
-            error: function (error) {
-              notify("Erreur", error.message, 'error');
-            },
-            success: function (data) {
-              var vars = getUrlVars();
-              var url = 'index.php?';
-              for (var i in vars) {
-                if (i != 'id' && i != 'saveSuccessFull' && i != 'removeSuccessFull') {
-                  url += i + '=' + vars[i].replace('#', '') + '&';
+    bootbox.prompt("Nom du scénario ?", function (result) {
+        if (result !== null) {
+            nextdom.scenario.save({
+                scenario: {name: result},
+                error: function (error) {
+                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
+                },
+                success: function (data) {
+                    modifyWithoutSave = false;
+                    $('#scenarioThumbnailDisplay').hide();
+                    $('#bt_scenarioThumbnailDisplay').hide();
+                    printScenario(data.id);
                 }
-              }
-              url += 'id=' + data.id + '&saveSuccessFull=1';
-              if(tab !== null){
-                url += tab;
-              }
-              modifyWithoutSave = false;
-              loadPage(url);
-            }
-          });
+            });
         }
-      },
-    }
-  });
+    });
 });
 
 jwerty.key('ctrl+s/⌘+s', function (e) {
@@ -279,6 +228,7 @@ $("#bt_delScenario,#bt_delScenario2").off('click').on('click', function (event) 
         success: function () {
           modifyWithoutSave = false;
           loadPage('index.php?v=d&p=scenario');
+          notify("Info", '{{Suppression effectuée avec succès}}', 'success');
         }
       });
     }
@@ -309,7 +259,9 @@ $("#bt_copyScenario").off('click').on('click', function () {
           notify("Erreur", error.message, 'error');
         },
         success: function (data) {
-          loadPage('index.php?v=d&p=scenario&id=' + data.id);
+          $('#scenarioThumbnailDisplay').hide();
+          $('#bt_scenarioThumbnailDisplay').hide();
+          printScenario(data.id);
         }
       });
     }
@@ -951,7 +903,7 @@ function printScenario(_id) {
     }
 
     if(data.elements.length == 0){
-      $('#div_scenarioElement').append('<center class="span_noScenarioElement"><span style=\'color:#767676;font-size:1.2em;font-weight: bold;\'>Pour constituer votre scénario veuillez ajouter des blocs</span></center>')
+      $('#div_scenarioElement').append('<div class="span_noScenarioElement"><span>{{Pour programmer votre scénario, veuillez commencer par ajouter des blocs...}}</span></div>')
     }
     actionOptions = []
     for (var i in data.elements) {
@@ -1004,13 +956,10 @@ function saveScenario() {
     },
     success: function (data) {
       modifyWithoutSave = false;
-      url = 'index.php?v=d&p=scenario&id=' + data.id + '&saveSuccessFull=1';
-      if(tab !== null){
-        url += tab;
-      }
-      loadPage(url);
+      notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
     }
   });
+  $('#bt_scenarioThumbnailDisplay').show();
 }
 
 function addTrigger(_trigger) {
@@ -1201,7 +1150,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '     <span class="scenario-title">{{ALORS}}</span>';
     retour += '     <div class="dropdown cursor" style="display : inline-block;">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
-    retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
+    retour += '         <i class="fas fa-plus-circle spacing-right"></i>{{Ajouter...}}';
     retour += '       </button>';
     retour += '       <ul class="dropdown-menu">';
     retour += '         <li><a class="bt_addScenarioElement fromSubElement tootlips" title="{{Permet d\'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (Ex: SI/ALORS….)}}">{{Bloc}}</a></li>';
@@ -1225,7 +1174,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '     <span class="scenario-title">{{SINON}}</span>';
     retour += '     <div class="dropdown cursor">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
-    retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
+    retour += '         <i class="fas fa-plus-circle spacing-right"></i>{{Ajouter...}}';
     retour += '       </button>';
     retour += '       <ul class="dropdown-menu">';
     retour += '         <li><a class="bt_addScenarioElement fromSubElement tootlips" title="{{Permet d\'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (ex. : SI/ALORS….)}}">{{Bloc}}</a></li>';
@@ -1314,7 +1263,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '     <span class="scenario-title">{{FAIRE}}</span>';
     retour += '     <div class="dropdown cursor">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
-    retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
+    retour += '         <i class="fas fa-plus-circle spacing-right"></i>{{Ajouter...}}';
     retour += '       </button>';
     retour += '       <ul class="dropdown-menu">';
     retour += '         <li><a class="bt_addScenarioElement fromSubElement tootlips" title="{{Permet d\'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (ex. : SI/ALORS….)}}">{{Bloc}}</a></li>';
@@ -1382,7 +1331,7 @@ function addSubElement(_subElement, _pColor) {
     retour += '     <span class="scenario-title">{{ACTION}}</span>';
     retour += '     <div class="dropdown cursor">';
     retour += '       <button class="btn btn-xs btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">';
-    retour += '         <i class="fas fa-plus-circle">&nbsp;&nbsp;</i>{{Ajouter...}}';
+    retour += '         <i class="fas fa-plus-circle spacing-right"></i>{{Ajouter...}}';
     retour += '       </button>';
     retour += '       <ul class="dropdown-menu">';
     retour += '         <li><a class="bt_addScenarioElement fromSubElement tootlips" title="{{Permet d\'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (Ex: SI/ALORS….)}}">{{Bloc}}</a></li>';

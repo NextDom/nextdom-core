@@ -71,6 +71,7 @@ nextdom.changes = function(){
     error: function(_error){
       if(typeof(user_id) != "undefined" && nextdom.connect == 100){
         notify('{{Erreur de connexion}}','{{Erreur lors de la connexion à NextDom}} : '+_error.message);
+        window.location.reload();
       }
       nextdom.connect++;
       setTimeout(nextdom.changes, 1);

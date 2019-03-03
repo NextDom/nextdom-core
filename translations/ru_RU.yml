@@ -1,6 +1,15 @@
 # Nouveau format
 core:
   error-401: 401 - Несанкционированный доступ
+  error-ajax: "Ajax request unknown"
+  api-connection: "User connection by API : "
+  enable-tasks: "Activate all cron tasks..."
+  disable-tasks: "Desactivate all cron tasks..."
+  disable-cron-master: "Stop the master cron task..."
+  enable-all-scenarios: "Activate all scenarios..."
+  disable-all-scenarios: "Desactivate all scenarios..."
+  incorrect-sys-date: "The system date is incorrect (before %s or after %s) : "
+
 # Ancien format
 "401 - Accès non autorisé": "401 - Несанкционированный доступ"
 "Evènement sur la commande ": "Событие по команде"

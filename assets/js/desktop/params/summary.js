@@ -174,9 +174,9 @@ function addObjectSummary(_summary) {
     tr += '<option value="text">{{Texte}}</option>';
     tr += '</select>';
     tr += '</td>';
-    tr += '<td class="col-xs-1">';
-    tr += '<a class="objectSummaryAction btn btn-action btn-sm" data-l1key="chooseIcon"><i class="fas fa-plus"></i></a>';
-    tr += '<span class="label label-icon objectSummaryAttr" data-l1key="icon"></span>';
+    tr += '<td class="col-xs-1 input-group text-center">';
+    tr += '<a class="objectSummaryAction btn btn-action" data-l1key="chooseIcon"><i class="fas fa-plus"></i></a>';
+    tr += '<span class="label label-icon objectSummaryAttr" style="min-width: 50px;" data-l1key="icon"></span>';
     tr += '</td>';
     tr += '<td>';
     tr += '<input class="objectSummaryAttr form-control input-sm" data-l1key="unit" />';
@@ -192,7 +192,7 @@ function addObjectSummary(_summary) {
     tr += '</td>';
     tr += '<td>';
     if(isset(_summary) && isset(_summary.key) && _summary.key != ''){
-        tr += '<a class="btn btn-success btn-sm objectSummaryAction" data-l1key="createVirtual"><i class="fas fa-puzzle-piece">&nbsp;&nbsp;</i>{{Créer virtuel}}</a>';
+        tr += '<a class="btn btn-success btn-sm objectSummaryAction" data-l1key="createVirtual"><i class="fas fa-puzzle-piece spacing-right"></i>{{Créer virtuel}}</a>';
     }
     tr += '</td>';
     tr += '<td>';

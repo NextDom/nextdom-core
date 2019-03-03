@@ -24,33 +24,22 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\EqLogicManager;
+use NextDom\Managers\UserManager;
 
 class EqLogicDisplayWidget extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      *
-     * @param Render $render
      * @return string
      * @throws CoreException
      * @throws \ReflectionException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
-        $pageContent = [];
+        $pageData = [];
 
         $eqLogicId = Utils::init('eqLogic_id');
         $eqLogic = EqLogicManager::byId($eqLogicId);
@@ -58,13 +47,13 @@ class EqLogicDisplayWidget extends BaseAbstractModal
         if (!is_object($eqLogic)) {
             throw new CoreException(__('EqLogic non trouvé : ') . $eqLogicId);
         }
-        $mc = CacheManager::byKey('widgetHtml' . $eqLogic->getId() . $version . $_SESSION['user']->getId());
+        $mc = CacheManager::byKey('widgetHtml' . $eqLogic->getId() . $version . UserManager::getStoredUser()->getId());
         if ($mc->getValue() != '') {
             $mc->remove();
         }
-        $pageContent['eqLogicHtml'] = $eqLogic->toHtml($version);
+        $pageData['eqLogicHtml'] = $eqLogic->toHtml($version);
 
-        return $render->get('/modals/eqLogic.displayWidget.html.twig', $pageContent);
+        return Render::getInstance()->get('/modals/eqLogic.displayWidget.html.twig', $pageData);
     }
 
 }

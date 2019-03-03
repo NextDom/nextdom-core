@@ -24,37 +24,26 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\ViewManager;
 
 class ViewConfigure extends BaseAbstractModal
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render view configure modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
-        $view = \view::byId(init('view_id'));
+        $view = ViewManager::byId(init('view_id'));
         if (!is_object($view)) {
             throw new CoreException('Impossible de trouver la vue');
         }
         Utils::sendVarsToJS(['id' => $view->getId(), 'view' => Utils::o2a($view)]);
 
-        return $render->get('/modals/view.configure.html.twig');
+        return Render::getInstance()->get('/modals/view.configure.html.twig');
     }
 
 }

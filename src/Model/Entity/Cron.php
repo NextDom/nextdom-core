@@ -380,7 +380,7 @@ class Cron
      */
     public function run($noErrorReport = false)
     {
-        $cmd = NEXTDOM_ROOT . '/core/php/jeeCron.php';
+        $cmd = NEXTDOM_ROOT . '/src/Api/start_cron.php';
         $cmd .= ' "cron_id=' . $this->getId() . '"';
         if (!$this->running()) {
             SystemHelper::php($cmd . ' >> ' . LogHelper::getPathToLog('cron_execution') . ' 2>&1 &');
@@ -449,7 +449,7 @@ class Cron
             $this->setState('stop');
             $this->setPID();
         } else {
-            LogHelper::add('cron', 'info', __('Arrêt de ', __FILE__) . $this->getClass() . '::' . $this->getFunction() . '(), PID : ' . $this->getPID());
+            LogHelper::add('cron', 'info', __('Arrêt de ') . $this->getClass() . '::' . $this->getFunction() . '(), PID : ' . $this->getPID());
             if ($this->getPID() > 0) {
                 SystemHelper::kill($this->getPID());
                 $retry = 0;
@@ -475,7 +475,7 @@ class Cron
                 if ($this->running()) {
                     $this->setState('error');
                     $this->setPID();
-                    throw new CoreException($this->getClass() . '::' . $this->getFunction() . __('() : Impossible d\'arrêter la tâche', __FILE__));
+                    throw new CoreException($this->getClass() . '::' . $this->getFunction() . __('() : Impossible d\'arrêter la tâche'));
                 }
             } else {
                 $this->setState('stop');

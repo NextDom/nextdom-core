@@ -35,6 +35,7 @@
 namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Managers\UserManager;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class Utils
@@ -263,6 +264,7 @@ class Utils
     /**
      * @param CoreException|\Exception $e
      * @return string
+     * @throws \Exception
      */
     public static function displayException($e)
     {
@@ -768,10 +770,10 @@ class Utils
     public static function unautorizedInDemo($_user = null)
     {
         if ($_user === null) {
-            if (!isset($_SESSION) || !isset($_SESSION['user'])) {
+            if (!isset($_SESSION) || !UserManager::getStoredUser() !== null) {
                 return null;
             }
-            $_user = $_SESSION['user'];
+            $_user = UserManager::getStoredUser();
         }
         if (!is_object($_user)) {
             return;
@@ -812,7 +814,7 @@ class Utils
                     $value = $property->getValue($_object);
                     $property->setAccessible(false);
                 }
-                $array[$name] = Utils::isJson($value, $value);
+                $array[$name] = ($value === null) ? null : Utils::isJson($value, $value);
             }
         }
         return $array;

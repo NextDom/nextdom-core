@@ -92,7 +92,7 @@ class ScenarioElement
     }
 
     /**
-     * @param \scenario|null $_scenario
+     * @param Scenario|null $_scenario
      * @return bool|null
      * @throws CoreException
      */
@@ -175,7 +175,7 @@ class ScenarioElement
                 $time = 0;
             }
             if ($time == 0) {
-                $cmd = NEXTDOM_ROOT . '/core/php/jeeScenario.php ';
+                $cmd = NEXTDOM_ROOT . '/src/Api/start_scenario.php ';
                 $cmd .= ' scenario_id=' . $_scenario->getId();
                 $cmd .= ' scenarioElement_id=' . $this->getId();
                 $cmd .= ' tags=' . escapeshellarg(json_encode($_scenario->getTags()));
@@ -247,7 +247,7 @@ class ScenarioElement
 
     /**
      * @param string $_type
-     * @return \scenarioSubElement[]|\scenarioSubElement
+     * @return ScenarioSubElement[]|ScenarioSubElement
      * @throws \Exception
      */
     public function getSubElement($_type = '')

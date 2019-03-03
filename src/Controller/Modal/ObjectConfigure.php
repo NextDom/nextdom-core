@@ -24,32 +24,20 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\JeeObjectManager;
 
 class ObjectConfigure extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render object configure modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
+
 
         $objectId = Utils::init('object_id');
         $object = JeeObjectManager::byId($objectId);
@@ -58,7 +46,7 @@ class ObjectConfigure extends BaseAbstractModal
         }
         Utils::sendVarToJS('objectInfo', Utils::o2a($object));
 
-        return $render->get('/modals/object.configure.html.twig');
+        return Render::getInstance()->get('/modals/object.configure.html.twig');
     }
 
 }

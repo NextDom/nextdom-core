@@ -24,32 +24,21 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 
 class NoteManager extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render note manager modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
-        $pageContent = [];
-        $pageContent['benchmark'] = NextDomHelper::benchmark();
 
-        return $render->get('/modals/nextdom.benchmark.html.twig', $pageContent);
+        $pageData = [];
+        $pageData['benchmark'] = NextDomHelper::benchmark();
+
+        return Render::getInstance()->get('/modals/nextdom.benchmark.html.twig', $pageData);
     }
 }

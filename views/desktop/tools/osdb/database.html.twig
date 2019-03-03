@@ -1,0 +1,83 @@
+{#
+
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#}
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=osdb"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="box" id="div_rowSystemCommand">
+        <!-- Header bar -->
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fas fa-database spacing-right"></i>{{ 'Base de Données' }}</h3>
+        </div>
+
+        <!-- Page content -->
+        <div class="box-body">
+            <div class="row">
+                <fieldset class="col-lg-2 col-md-3 col-sm-4" style="overflow-y:auto;overflow-x:hidden;">
+                    <legend>{{ 'Liste des commandes' }}</legend>
+                    <div class="bs-sidebar form-group">
+                        <ul class="nav nav-list bs-sidenav list-group" id='ul_listSqlRequest'>
+                            <li class="cursor list-group-item"><a class="bt_dbCommand label-list" data-command="SHOW TABLES;">{{ 'Tables' }}</a></li>
+                        </ul>
+                    </div>
+                    <legend>{{ 'Historique' }}</legend>
+                    <div class="bs-sidebar form-group">
+                        <ul class="nav nav-list bs-sidenav list-group" id='ul_listSqlHistory'></ul>
+                    </div>
+                </fieldset>
+
+                <fieldset class="col-lg-10 col-md-9 col-sm-8 left-border" style="overflow-y:hidden;overflow-x:hidden;">
+                    <legend>{{ 'Cliquez sur une commande de la liste ou tapez une commande personnalisée ci-dessous :' }}</legend>
+                    <div class="input-group form-group">
+                        <input class="form-control" id='in_specificCommand' placeholder="{{ 'Commande personnalisée...' }}"></input>
+                        <span class="input-group-btn">
+                            <a class="btn btn-action" id="bt_resetSpecifiCommand" data-toggle="tooltip" data-original-title="{{ 'Vider la commande' }}"><i class="fas fa-times"></i></a>
+                            <a class="btn btn-warning" id="bt_validateSpecifiCommand" data-toggle="tooltip" data-original-title="{{ 'Sélectionner la commande' }}"><i class="fas fa-check spacing-right"></i>{{ 'OK' }}</a>
+                        </span>
+                    </div>
+                    <div id="div_commandResult">
+                        <textarea class="form-control ta_autosize" data-l1key="text" disabled></textarea>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</section>

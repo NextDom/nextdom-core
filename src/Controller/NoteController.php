@@ -23,34 +23,21 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 
 class NoteController extends BaseController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render note page
      *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of migration page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public static function get(&$pageData): string
     {
-
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/tools/note.js';
-        return $render->get('/desktop/tools/note.html.twig', $pageContent);
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/note.js';
+        return Render::getInstance()->get('/desktop/tools/note.html.twig', $pageData);
     }
 
 

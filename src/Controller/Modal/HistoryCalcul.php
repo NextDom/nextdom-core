@@ -23,31 +23,18 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 
 
 class HistoryCalcul extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render history calcul modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
-        return $render->get('/modals/history.calcul.html.twig');
+        return Render::getInstance()->get('/modals/history.calcul.html.twig');
     }
 
 }

@@ -48,8 +48,8 @@ if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SE
     echo "La page que vous demandez ne peut être trouvée.";
     exit();
 }
-echo "[START RESTORE/MIGRATION]\n";
 
+echo  "[ START RESTORE / MIGRATION ]" . "\n";
 $starttime = strtotime('now');
 if (isset($argv)) {
     foreach ($argv as $arg) {
@@ -62,14 +62,15 @@ if (isset($argv)) {
 
 try {
     require_once __DIR__ . '/../core/php/core.inc.php';
-    echo "*************** Début de la procédure" . date('Y-m-d H:i:s') . " ***************\n";
+    echo "*************** " . "Starting procedure at " . date('Y-m-d H:i:s') . " ***************\n";
 
     try {
         echo "Sends the start event of the restore/migration...";
         NextDomHelper::event('begin_restore', true);
-        echo "OK\n";
+        echo " OK" . "\n";
     } catch (\Exception $e) {
-        echo '***ERROR*** ' . $e->getMessage();
+        echo " NOK" . "\n";
+        echo '*** ' . "ERROR" . '*** ' . $e->getMessage() . "\n";
     }
 
     global $CONFIG;
@@ -109,27 +110,27 @@ try {
     if (substr($backup, 0, 1) != '/') {
         $backup = NEXTDOM_ROOT . '/' . $backup;
     }
-
     if (!file_exists($backup)) {
-        throw new \Exception('Backup not found.' . $backup);
+        throw new \Exception("Backup file not found : " . $backup);
     }
+    echo "File used for restoration : " . $backup . "\n";
 
     try {
-        echo "Check the rights...";
+        echo "Checking rights...";
         NextDomHelper::cleanFileSystemRight();
-        echo "OK\n";
+        echo " OK" . "\n";
     } catch (\Exception $e) {
-        echo '***ERROR*** ' . $e->getMessage();
+        echo " NOK" . "\n";
+        log::add('restore', 'error', $e->getMessage());
+        echo '*** ' . "ERROR" . '*** ' . $e->getMessage() . "\n";
     }
-
-    echo "File used for restoration : " . $backup . "\n";
-    echo "Backup database access configuration...";
-    echo "OK\n";
 
     try {
         NextDomHelper::stopSystem();
     } catch (\Exception $e) {
-        $e->getMessage();
+        echo " NOK" . "\n";
+        log::add('restore', 'error', $e->getMessage());
+        echo '*** ' . "ERROR" . '*** ' . $e->getMessage() . "\n";
     }
 
     echo "Unzip the backup...";
@@ -144,57 +145,60 @@ try {
     $rc = 0;
     system('mkdir -p /tmp/nextdombackup');
     system('cd /tmp/nextdombackup; rm * -rf; tar xfz "' . $backup . '" ' . $exclude);
+    echo " OK" . "\n";
 
-    echo "OK\n";
+    echo "Delete the backup database...";
     if (!file_exists("/tmp/nextdombackup/DB_backup.sql")) {
-        throw new \Exception('Unable to find the backup database file : DB_backup.sql');
+        throw new \Exception("Unable to find the backup database file : " . 'DB_backup.sql');
     } else {
         shell_exec("sed -i -e s/jeedom/nextdom/g /tmp/nextdombackup/DB_backup.sql");
     }
-    echo "Delete the backup table";
     $tables = \DB::Prepare("SHOW TABLES", array(), \DB::FETCH_TYPE_ALL);
+    echo " OK" . "\n";
+
     echo "Disables constraints...";
     \DB::Prepare("SET foreign_key_checks = 0", array(), \DB::FETCH_TYPE_ROW);
-    echo "OK\n";
+    echo " OK" . "\n";
     foreach ($tables as $table) {
         $table = array_values($table);
         $table = $table[0];
-        echo "Supprimer la table : " . $table . '...';
+        echo "Delete the table : " . $table . '...';
         \DB::Prepare('DROP TABLE IF EXISTS `' . $table . '`', array(), \DB::FETCH_TYPE_ROW);
-        echo "OK\n";
+        echo " OK" . "\n";
     }
 
-    echo "Restoring the database...";
+    echo "Restoring database...";
     shell_exec("mysql --host=" . $CONFIG['db']['host'] . " --port=" . $CONFIG['db']['port'] . " --user=" . $CONFIG['db']['username'] . " --password=" . $CONFIG['db']['password'] . " " . $CONFIG['db']['dbname'] . " < /tmp/nextdombackup/DB_backup.sql");
-    echo "OK\n";
+    echo " OK" . "\n";
 
-    echo "Update SQL...";
-    echo shell_exec('php ' . NEXTDOM_ROOT . '/install/migrate/migrate.php');
-    echo "OK\n";
+    echo "Updating database...";
+    shell_exec('php ' . NEXTDOM_ROOT . '/install/migrate/migrate.php');
+    echo " OK" . "\n";
+
     echo "Enables constraints...";
     try {
         \DB::Prepare("SET foreign_key_checks = 1", array(), \DB::FETCH_TYPE_ROW);
     } catch (\Exception $e) {
 
     }
-    echo "OK\n";
+    echo " OK" . "\n";
 
     if (file_exists(NEXTDOM_ROOT . '/core/config/jeedom.config.php')) {
         if (copy(NEXTDOM_ROOT . '/core/config/jeedom.config.php', '/tmp/nextdom.config.php')) {
-            echo 'Can not copy ' . NEXTDOM_ROOT . "/core/config/nextdom.config.php\n";
+            echo "Cannot copy " . NEXTDOM_ROOT . "/core/config/nextdom.config.php\n";
         }
     }
     if (!file_exists(NEXTDOM_ROOT . '/core/config/common.config.php')) {
-        echo "Restoring the database configuration file...";
+        echo "Restoring database configuration file...";
         copy(TMP_BACKUP . '/common.config.php', NEXTDOM_ROOT . '/core/config/common.config.php');
-        echo "OK\n";
+        echo " OK" . "\n";
     }
 
-    echo "Restoration of rights...";
+    echo "Restoring rights...";
     system('chmod 1777 /tmp -R');
-    echo "OK\n";
+    echo " OK" . "\n";
 
-    echo "Restauration du cache...";
+    echo "Restoring cache...";
     if (file_exists(TMP_BACKUP . '/cache.tar.gz')) {
         system('cp -fr ' . TMP_BACKUP . '/cache.tar.gz ' . NEXTDOM_ROOT . '/var' );
     }
@@ -206,71 +210,82 @@ try {
     } catch (\Exception $e) {
 
     }
-    echo "OK\n";
+    echo " OK" . "\n";
 
-    echo "Restoration of plugins...";
+    echo "Restoring plugins...";
     system('cp -fr ' . TMP_BACKUP . '/plugins/* ' . NEXTDOM_ROOT . '/plugins' );
 
     foreach (PluginManager::listPlugin(true) as $plugin) {
         $plugin_id = $plugin->getId();
         $dependancy_info = $plugin->dependancy_info(true);
         if (method_exists($plugin_id, 'restore')) {
-            echo 'Plugin restoration : ' . $plugin_id . '...';
+            echo "Plugin restoration : " . $plugin_id . '...';
             $plugin_id::restore();
-            echo "OK\n";
+            echo " OK" . "\n";
         }
-        echo 'Reinitialization dependencies : ' . $plugin_id . '... \n';
+        echo "Reinitialization plugin dependencies : " . $plugin_id . '...';
         $cache = CacheManager::byKey('dependancy' . $plugin->getId());
         $cache->remove();
         CacheManager::set('dependancy' . $plugin   ->getId(), "nok");
+        echo " OK" . "\n";
     }
-    echo "OK\n";
+    echo "Restoring plugins...";;
+    echo " OK" . "\n";
 
-    echo "Update SQL post plugins";
+    echo "Update database post plugins...";
     shell_exec('php ' . NEXTDOM_ROOT . '/install/migrate/migrate.php');
-    echo "OK\n";
+    echo " OK" . "\n";
 
     ConfigManager::save('hardware_name', '');
     $cache = CacheManager::byKey('nextdom::isCapable::sudo');
     $cache->remove();
 
     try {
-        echo "Check nextdom consistency...";
         require_once NEXTDOM_ROOT . '/install/consistency.php';
-        echo "OK\n";
+        echo "Check consistency..." . " OK" . "\n";
     } catch (\Exception $ex) {
-        echo "***ERREUR*** " . $ex->getMessage() . "\n";
+        echo "Check consistency..." . " NOK" . "\n";
+        log::add('restore', 'error', $ex->getMessage());
+        echo '*** ' . "ERROR" . '*** ' . $ex->getMessage() . "\n";
     }
 
-    echo "Restoration of rights...";
+    echo "Restoring rights...";
     shell_exec('chmod 775 -R ' . NEXTDOM_ROOT );
     shell_exec('chown -R www-data:www-data ' . NEXTDOM_ROOT );
     shell_exec('chmod 775 -R /var/log/nextdom');
     shell_exec('chown -R www-data:www-data /var/log/nextdom');
     shell_exec('chmod 777 -R /tmp/');
     shell_exec('chown www-data:www-data -R /tmp/');
-    echo "OK\n";
+    echo " OK" . "\n";
 
     try {
         NextDomHelper::startSystem();
     } catch (\Exception $e) {
-        echo $e->getMessage();
+        log::add('restore', 'error', $e->getMessage());
+        echo '*** ' . "ERROR" . '*** ' . $e->getMessage() . "\n";
     }
 
     try {
-        echo "Sends the event of the end of the backup...";
+        echo "Sends the end event of the restore/migration...";
         NextDomHelper::event('end_restore');
-        echo "OK\n";
+        echo " OK" . "\n";
     } catch (\Exception $e) {
-        echo '***ERREUR*** ' . $e->getMessage();
+        echo " NOK" . "\n";
+        log::add('restore', 'error', $e->getMessage());
+        echo '*** ' . "ERROR" . '*** ' . $e->getMessage() . "\n";
     }
-    echo "Time of migration : " . (strtotime('now') - $starttime) . "s\n";
-    echo "***************End of the restoration of NextDom***************\n";
-    echo "[END RESTORE/MIGRATION SUCCESS]\n";
+    echo "Time of restoration : " . (strtotime('now') - $starttime) . "s\n";
+    echo "*************** " . "End of procedure at " . date('Y-m-d H:i:s') . "***************\n";
+    echo "[ END RESTORE / MIGRATION ]";
+    echo " > SUCCESS" . "\n";
+    /* Ne pas supprimer la ligne suivante */
+    echo "Closing with success" . "\n";
 } catch (\Exception $e) {
-    echo 'Error during migration : ' . $e->getMessage();
-    echo 'Details : ' . print_r($e->getTrace(), true);
-    echo "[END RESTORE/MIGRATION ERROR]\n";
+    echo "[ END RESTORE / MIGRATION ]";
+    echo "\n > ERROR : " . br2nl($e->getMessage()) . "\n";
+    echo "Details : " . print_r($e->getTrace(), true) . "\n";
     NextDomHelper::startSystem();
+    /* Ne pas supprimer la ligne suivante */
+    echo "Closing with error" . "\n";
     throw $e;
 }

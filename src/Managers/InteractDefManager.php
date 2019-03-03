@@ -35,12 +35,13 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\Utils;
+use NextDom\Model\Entity\InteractDef;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
 class InteractDefManager
 {
-    const CLASS_NAME = 'interactDef';
+    const CLASS_NAME = InteractDef::class;
     const DB_CLASS_NAME = '`interactDef`';
 
     public static function byId($_id)
@@ -56,7 +57,7 @@ class InteractDefManager
 
     /**
      * @param string $_group
-     * @return \interactDef[]|null
+     * @return InteractDef[]|null
      * @throws \Exception
      */
     public static function all($_group = '')
@@ -214,7 +215,7 @@ class InteractDefManager
 
     /**
      * @param string $searchPattern
-     * @return \interactDef[]|null
+     * @return InteractDef[]|null
      * @throws \Exception
      */
     private static function searchByActionsOrReply($searchPattern)
@@ -255,6 +256,30 @@ class InteractDefManager
         foreach ($interactDefs as $interactDef) {
             if (!isset($return[$interactDef->getId()])) {
                 $return[$interactDef->getId()] = $interactDef;
+            }
+        }
+        return $return;
+    }
+
+    public static function generateSynonymeVariante($_text, $_synonymes, $_deep = 0)
+    {
+        $return = array();
+        if (count($_synonymes) == 0) {
+            return $return;
+        }
+        if ($_deep > 10) {
+            return $return;
+        }
+        $_deep++;
+        foreach ($_synonymes as $replace => $values) {
+            foreach ($values as $value) {
+                $result = @preg_replace('/\b' . $replace . '\b/iu', $value, $_text);
+                if ($result != $_text) {
+                    $synonymes = $_synonymes;
+                    unset($synonymes[$replace]);
+                    $return = array_merge($return, self::generateSynonymeVariante($result, $synonymes, $_deep));
+                    $return[] = $result;
+                }
             }
         }
         return $return;

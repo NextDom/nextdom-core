@@ -24,32 +24,20 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ScenarioManager;
 
 class ScenarioLogExecution extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render scenario log execution modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
+
 
         $scenarioId = Utils::init('scenario_id');
         $scenario = ScenarioManager::byId($scenarioId);
@@ -58,10 +46,10 @@ class ScenarioLogExecution extends BaseAbstractModal
         }
         Utils::sendVarToJs('scenarioLog_scenario_id', $scenarioId);
 
-        $pageContent = [];
-        $pageContent['scenarioId'] = $scenarioId;
-        $pageContent['scenarioHumanName'] = $scenario->getHumanName();
-        return $render->get('/modals/scenario.log.execution.html.twig', $pageContent);
+        $pageData = [];
+        $pageData['scenarioId'] = $scenarioId;
+        $pageData['scenarioHumanName'] = $scenario->getHumanName();
+        return Render::getInstance()->get('/modals/scenario.log.execution.html.twig', $pageData);
     }
 
 }

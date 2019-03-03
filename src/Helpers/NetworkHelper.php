@@ -38,6 +38,8 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\UpdateManager;
+use NextDom\Model\Entity\Update;
 
 /**
  * Class NetworkHelper
@@ -289,9 +291,9 @@ class NetworkHelper
         try {
             $plugin = PluginManager::byId('openvpn');
             if (!is_object($plugin)) {
-                $update = \update::byLogicalId('openvpn');
+                $update = UpdateManager::byLogicalId('openvpn');
                 if (!is_object($update)) {
-                    $update = new \update();
+                    $update = new Update();
                 }
                 $update->setLogicalId('openvpn');
                 $update->setSource('market');
@@ -301,9 +303,9 @@ class NetworkHelper
                 $plugin = PluginManager::byId('openvpn');
             }
         } catch (\Exception $e) {
-            $update = \update::byLogicalId('openvpn');
+            $update = UpdateManager::byLogicalId('openvpn');
             if (!is_object($update)) {
-                $update = new \update();
+                $update = new Update();
             }
             $update->setLogicalId('openvpn');
             $update->setSource('market');
@@ -325,7 +327,7 @@ class NetworkHelper
         $openvpn = EqLogicManager::byLogicalId('dnsnextdom', 'openvpn');
         if (!is_object($openvpn)) {
             /** @noinspection PhpUndefinedClassInspection */
-            $openvpn = new openvpn();
+            $openvpn = new \openvpn();
             $openvpn->setName('DNS NextDom');
         }
         $openvpn->setIsEnable(1);
@@ -349,7 +351,7 @@ class NetworkHelper
         }
         copy(NEXTDOM_ROOT . '/script/ca_dns.crt', $path_ca);
         if (!file_exists($path_ca)) {
-            throw new CoreException(__('Impossible de créer le fichier  : ', __FILE__) . $path_ca);
+            throw new CoreException(__('Impossible de créer le fichier  : ') . $path_ca);
         }
         return $openvpn;
     }
@@ -365,7 +367,7 @@ class NetworkHelper
         $openvpn = self::dnsCreate();
         $cmd = $openvpn->getCmd('action', 'start');
         if (!is_object($cmd)) {
-            throw new CoreException(__('La commande de démarrage du DNS est introuvable', __FILE__));
+            throw new CoreException(__('La commande de démarrage du DNS est introuvable'));
         }
         $cmd->execCmd();
         $interface = $openvpn->getInterfaceName();
@@ -402,7 +404,7 @@ class NetworkHelper
         }
         $cmd = $openvpn->getCmd('info', 'state');
         if (!is_object($cmd)) {
-            throw new CoreException(__('La commande de statut du DNS est introuvable', __FILE__));
+            throw new CoreException(__('La commande de statut du DNS est introuvable'));
         }
         return $cmd->execCmd();
     }
@@ -415,7 +417,7 @@ class NetworkHelper
         $openvpn = self::dnsCreate();
         $cmd = $openvpn->getCmd('action', 'stop');
         if (!is_object($cmd)) {
-            throw new CoreException(__('La commande d\'arrêt du DNS est introuvable', __FILE__));
+            throw new CoreException(__('La commande d\'arrêt du DNS est introuvable'));
         }
         $cmd->execCmd();
     }
@@ -472,7 +474,7 @@ class NetworkHelper
         }
         $gw = shell_exec("ip route show default | awk '/default/ {print $3}'");
         if ($gw == '') {
-            LogHelper::add('network', 'error', __('Souci réseau détecté, redémarrage du réseau', __FILE__));
+            LogHelper::addError('network', __('Souci réseau détecté, redémarrage du réseau. Aucune gateway de trouvée'));
             exec(SystemHelper::getCmdSudo() . 'service networking restart');
             return;
         }
@@ -480,7 +482,11 @@ class NetworkHelper
         if ($return_val == 0) {
             return;
         }
-        LogHelper::add('network', 'error', __('Souci réseau détecté, redémarrage du réseau', __FILE__));
+        exec(SystemHelper::getCmdSudo() . 'ping -n -c 1 -t 255 ' . $gw . ' 2>&1 > /dev/null', $output, $return_val);
+        if ($return_val == 0) {
+            return;
+        }
+        LogHelper::addError('network', __('Souci réseau détecté, redémarrage du réseau. La gateway ne répond pas au ping : ') . $gw);
         exec(SystemHelper::getCmdSudo() . 'service networking restart');
     }
 

@@ -23,40 +23,30 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\Plan3dManager;
+use NextDom\Model\Entity\Plan3d;
 
 class Plan3dConfigure extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render plan 3d configure modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
-        $pageContent = [];
-        $plan3d = \plan3d::byName3dHeaderId(init('name'), Utils::init('plan3dHeader_id'));
+
+        $pageData = [];
+        $plan3d = Plan3dManager::byName3dHeaderId(init('name'), Utils::init('plan3dHeader_id'));
         if (!is_object($plan3d)) {
-            $plan3d = (new \plan3d())
+            $plan3d = (new Plan3d())
                 ->setName(init('name'))
                 ->setPlan3dHeader_id(init('plan3dHeader_id'));
             $plan3d->save();
         }
         Utils::sendVarToJS('id', $plan3d->getId());
 
-        return $render->get('/modals/plan3d.configure.html.twig', $pageContent);
+        return Render::getInstance()->get('/modals/plan3d.configure.html.twig', $pageData);
     }
 }

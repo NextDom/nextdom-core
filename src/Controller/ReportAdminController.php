@@ -23,37 +23,28 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 
 class ReportAdminController extends BaseController
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render reportsAdmin page
      *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of report_admin page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public static function get(&$pageData): string
     {
+
+
         global $CONFIG;
 
-        $pageContent['adminDbConfig'] = $CONFIG['db'];
+        $pageData['adminDbConfig'] = $CONFIG['db'];
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/reports_admin.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/reports_admin.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return $render->get('/desktop/params/reports_admin.html.twig', $pageContent);
+        return Render::getInstance()->get('/desktop/params/reports_admin.html.twig', $pageData);
     }
 }

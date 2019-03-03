@@ -24,40 +24,29 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\ScenarioManager;
 
 class ScenarioExport extends BaseAbstractModal
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render scenario export modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
+
         $scenario = ScenarioManager::byId(init('scenario_id'));
 
         if (!is_object($scenario)) {
             throw new CoreException(__('Scénario introuvable'));
         }
 
-        $pageContent = [];
-        $pageContent['scenarioExportData'] = $scenario->export();
+        $pageData = [];
+        $pageData['scenarioExportData'] = $scenario->export();
 
-        return $render->get('/modals/scenario.export.html.twig', $pageContent);
+        return Render::getInstance()->get('/modals/scenario.export.html.twig', $pageData);
     }
 
 }

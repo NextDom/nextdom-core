@@ -23,33 +23,21 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\JeeObjectManager;
 
 class EqLogicHumanInsert extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render eqLogic human insert modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
-        $pageContent = [];
-        $pageContent['jeeObjects'] = JeeObjectManager::all();
+        $pageData = [];
+        $pageData['jeeObjects'] = JeeObjectManager::all();
 
-        return $render->get('/modals/eqLogic.human.insert.html.twig', $pageContent);
+        return Render::getInstance()->get('/modals/eqLogic.human.insert.html.twig', $pageData);
     }
 }

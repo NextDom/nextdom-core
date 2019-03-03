@@ -24,39 +24,55 @@ namespace NextDom\Controller;
 
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Managers\UpdateManager;
 
 class AdministrationController extends BaseController
 {
-
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render administration page
      *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of administration page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
-    public function get(Render $render, array &$pageContent): string
+    public static function get(&$pageData): string
     {
+        $pageData['numberOfUpdates'] = UpdateManager::nbNeedUpdate();
+        self::initMemoryInformations($pageData);
+        $uptime = SystemHelper::getUptime() % 31556926;
+        $pageData['uptimeDays'] = explode(".", ($uptime / 86400))[0];
+        $pageData['uptimeHours'] = explode(".", (($uptime % 86400) / 3600))[0];
+        $pageData['uptimeMinutes'] = explode(".", ((($uptime % 86400) % 3600) / 60))[0];
+        $pageData['cpuCoresCount'] = SystemHelper::getProcessorCoresCount();
+        $pageData['cpuLoad'] = round(100 * (sys_getloadavg()[0] / $pageData['cpuCoresCount']), 2);
+        $diskTotal = disk_total_space(NEXTDOM_ROOT);
+        $pageData['hddLoad'] = round(100 - 100 * disk_free_space(NEXTDOM_ROOT) / $diskTotal, 2);
+        if ($diskTotal < 1024) {
+            $diskTotal = $diskTotal . ' B';
+        } elseif ($diskTotal < (1024 * 1024)) {
+            $diskTotal = round($diskTotal / 1024, 0) . ' KB';
+        } elseif ($diskTotal < (1024 * 1024 * 1024)) {
+            $diskTotal = round($diskTotal / (1024 * 1024), 0) . ' MB';
+        } else {
+            $diskTotal = round($diskTotal / (1024 * 1024 * 1024), 0) . ' GB';
+        }
+        $pageData['hddSize'] = $diskTotal;
+        $pageData['httpConnectionsCount'] = SystemHelper::getHttpConnectionsCount();
+        $pageData['processCount'] = SystemHelper::getProcessCount();
 
-        $pageContent['IS_ADMIN'] = Status::isConnectAdmin();
-        $pageContent['administrationNbUpdates'] = UpdateManager::nbNeedUpdate();
-        $pageContent['administrationMemLoad'] = 100;
-        $pageContent['administrationSwapLoad'] = 100;
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/administration.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
+
+        return Render::getInstance()->get('/desktop/administration.html.twig', $pageData);
+    }
+
+    private static function initMemoryInformations(&$pageData)
+    {
+        $pageData['memoryLoad'] = 100;
+        $pageData['swapLoad'] = 100;
         $freeData = trim(shell_exec('free'));
         $freeData = explode("\n", $freeData);
         if (count($freeData) > 2) {
@@ -77,7 +93,7 @@ class AdministrationController extends BaseController
                 )
             );
             if ($memData[1] != 0) {
-                $pageContent['administrationMemLoad'] = round(100 * $memData[2] / $memData[1], 2);
+                $pageData['memoryLoad'] = round(100 * $memData[2] / $memData[1], 2);
                 if ($memData[1] < 1024) {
                     $memTotal = $memData[1] . ' B';
                 } elseif ($memData[1] < (1024 * 1024)) {
@@ -85,13 +101,13 @@ class AdministrationController extends BaseController
                 } else {
                     $memTotal = round($memData[1] / 1024 / 1024, 0) . ' GB';
                 }
-                $pageContent['administrationMemTotal'] = $memTotal;
+                $pageData['totalMemory'] = $memTotal;
             } else {
-                $pageContent['administrationMemLoad'] = 0;
-                $pageContent['administrationMemTotal'] = 0;
+                $pageData['memoryLoad'] = 0;
+                $pageData['totalMemory'] = 0;
             }
             if ($swapData[1] != 0) {
-                $pageContent['administrationSwapLoad'] = round(100 * $swapData[2] / $swapData[1], 2);
+                $pageData['swapLoad'] = round(100 * $swapData[2] / $swapData[1], 2);
                 if ($swapData[1] < 1024) {
                     $swapTotal = $swapData[1] . ' B';
                 } elseif ($memData[1] < (1024 * 1024)) {
@@ -99,34 +115,10 @@ class AdministrationController extends BaseController
                 } else {
                     $swapTotal = round($swapData[1] / 1024 / 1024, 0) . ' GB';
                 }
-                $pageContent['administrationSwapTotal'] = $swapTotal;
+                $pageData['administrationSwapTotal'] = $swapTotal;
             } else {
-                $pageContent['administrationSwapLoad'] = 0;
+                $pageData['swapLoad'] = 0;
             }
         }
-        $uptime = SystemHelper::getUptime() % 31556926;
-        $pageContent['administrationUptimeDays'] = explode(".", ($uptime / 86400))[0];
-        $pageContent['administrationUptimeHours'] = explode(".", (($uptime % 86400) / 3600))[0];
-        $pageContent['administrationUptimeMinutes'] = explode(".", ((($uptime % 86400) % 3600) / 60))[0];
-        $pageContent['administrationCore'] = SystemHelper::getProcessorCoresCount();
-        $pageContent['administrationCpuLoad'] = round(100 * (sys_getloadavg()[0] / $pageContent['administrationCore']), 2);
-        $diskTotal = disk_total_space(NEXTDOM_ROOT);
-        $pageContent['administrationHddLoad'] = round(100 - 100 * disk_free_space(NEXTDOM_ROOT) / $diskTotal, 2);
-        if ($diskTotal < 1024) {
-            $diskTotal = $diskTotal . ' B';
-        } elseif ($diskTotal < (1024 * 1024)) {
-            $diskTotal = round($diskTotal / 1024, 0) . ' KB';
-        } elseif ($diskTotal < (1024 * 1024 * 1024)) {
-            $diskTotal = round($diskTotal / (1024 * 1024), 0) . ' MB';
-        } else {
-            $diskTotal = round($diskTotal / (1024 * 1024 * 1024), 0) . ' GB';
-        }
-        $pageContent['administrationHddTotal'] = $diskTotal;
-        $pageContent['administrationHTTPConnexion'] = SystemHelper::getHttpConnectionsCount();
-        $pageContent['administrationProcess'] = SystemHelper::getProcessCount();
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/administration.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
-
-        return $render->get('/desktop/administration.html.twig', $pageContent);
     }
 }

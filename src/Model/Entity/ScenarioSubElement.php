@@ -191,13 +191,18 @@ class ScenarioSubElement
     }
 
 
+    /**
+     * @param Scenario $_scenario
+     * @return bool|null
+     * @throws \Exception
+     */
     public function execute(&$_scenario = null)
     {
         if ($_scenario != null && !$_scenario->getDo()) {
             return null;
         }
         if ($this->getSubtype() == 'action') {
-            $_scenario->setLog(__('Exécution du sous-élément de type [action] : ', __FILE__) . $this->getType());
+            $_scenario->setLog(__('Exécution du sous-élément de type [action] : ') . $this->getType());
             $return = true;
             foreach ($this->getExpression() as $expression) {
                 $return = $expression->execute($_scenario);
@@ -205,7 +210,7 @@ class ScenarioSubElement
             return $return;
         }
         if ($this->getSubtype() == 'condition') {
-            $_scenario->setLog(__('Exécution du sous-élément de type [condition] : ', __FILE__) . $this->getType());
+            $_scenario->setLog(__('Exécution du sous-élément de type [condition] : ') . $this->getType());
             foreach ($this->getExpression() as $expression) {
                 return $expression->execute($_scenario);
             }

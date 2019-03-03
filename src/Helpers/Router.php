@@ -34,6 +34,8 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Enums\GetParams;
+use NextDom\Enums\ViewType;
 use NextDom\Managers\ConfigManager;
 
 /**
@@ -67,10 +69,10 @@ class Router
     public function show(): bool
     {
         $result = false;
-        if ($this->viewType == 'd') {
+        if ($this->viewType == ViewType::DESKTOP_VIEW) {
             $this->desktopView();
             $result = true;
-        } elseif ($this->viewType == 'm') {
+        } elseif ($this->viewType == ViewType::MOBILE_VIEW) {
             $this->mobileView();
             $result = true;
         }
@@ -84,15 +86,16 @@ class Router
      */
     public function desktopView()
     {
-        if (isset($_GET['modal'])) {
+        AuthentificationHelper::init();
+
+        if (isset($_GET[GetParams::MODAL])) {
             PrepareView::showModal();
-        } elseif (isset($_GET['configure'])) {
-            $this->showConfiguration();
-        } elseif (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
-            PrepareView::getContentByAjax();
+        } elseif (isset($_GET[GetParams::PLUGIN_CONF])) {
+            // Displaying the configuration section of a plugin in the configuration page
+            FileSystemHelper::includeFile('plugin_info', 'configuration', 'configuration', Utils::init(GetParams::PLUGIN_ID), true);
+        } elseif (isset($_GET[GetParams::AJAX_QUERY]) && $_GET[GetParams::AJAX_QUERY] == 1) {
+            PrepareView::showContentByAjax();
         } else {
-            require_once(NEXTDOM_ROOT . '/core/php/authentification.php');
-            Status::initConnectState();
             $configs = ConfigManager::byKeys(array(
                 'enableCustomCss',
                 'language',
@@ -111,28 +114,18 @@ class Router
                 'theme',
                 'default_bootstrap_theme'));
             if ($configs['nextdom::firstUse'] == 1) {
-                PrepareView::showFirstUsePage($configs);
-            } elseif (!Status::isConnect()) {
-                PrepareView::showConnectionPage($configs);
+                PrepareView::showSpecialPage('firstUse', $configs);
+            } elseif (!AuthentificationHelper::isConnected()) {
+                PrepareView::showSpecialPage('connection', $configs);
             } else {
-                if (Status::isRescueMode()) {
+                if (AuthentificationHelper::isRescueMode()) {
+                    AuthentificationHelper::isConnectedAsAdminOrFail();
                     PrepareView::showRescueMode($configs);
                 } else {
                     PrepareView::showContent($configs);
                 }
             }
         }
-    }
-
-    /**
-     * Displaying the configuration page of a plugin
-     *
-     * @throws \Exception Affichage
-     */
-    private function showConfiguration()
-    {
-        AuthentificationHelper::init();
-        FileSystemHelper::includeFile('plugin_info', 'configuration', 'configuration', Utils::init('plugin'), true);
     }
 
     /**
@@ -150,7 +143,7 @@ class Router
             $filename = $modal;
             $type = 'modalhtml';
             $plugin = Utils::init('plugin');
-        } elseif (isset($_GET['p']) && isset($_GET['ajax'])) {
+        } elseif (isset($_GET['p']) && isset($_GET[GetParams::AJAX_QUERY])) {
             $filename = $_GET['p'];
             $plugin = isset($_GET['m']) ? $_GET['m'] : $plugin;
         }
@@ -158,13 +151,21 @@ class Router
     }
 
     /**
-     *
-     * Generate 404 page
+     * Show 404 error page (Not found)
      */
     public static function showError404AndDie()
     {
         header("HTTP/1.0 404 Not Found");
         require(NEXTDOM_ROOT . '/public/404.html');
-        exit();
+        die();
+    }
+
+    /**
+     * Show 401 error page (Unauthorized)
+     */
+    public static function showError401AndDie()
+    {
+        header("HTTP/1.1 401 Unauthorized");
+        die();
     }
 }

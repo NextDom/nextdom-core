@@ -23,41 +23,31 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PluginManager;
 
 class PluginDependency extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render plugin daemon modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
-        $pageContent = [];
+
+
+        $pageData = [];
         $pluginId = Utils::init('plugin_id');
         Utils::sendVarToJs('plugin_id', $pluginId);
         if (!class_exists($pluginId)) {
             die();
         }
         $plugin = PluginManager::byId($pluginId);
-        $pageContent['dependencyInfo'] = $plugin->getDependencyInfo();
+        $pageData['dependencyInfo'] = $plugin->getDependencyInfo();
 
-        return $render->get('/modals/plugin.dependency.html.twig', $pageContent);
+        return Render::getInstance()->get('/modals/plugin.dependency.html.twig', $pageData);
     }
 
 }

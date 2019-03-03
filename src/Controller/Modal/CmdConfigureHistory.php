@@ -23,30 +23,18 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 
 class CmdConfigureHistory extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render command configure history modal (scenario)
      *
-     * @param Render $render Render engine
-     *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
         $dataCount = ['history' => 0, 'timeline' => 0];
         $listCmd = array();
@@ -66,10 +54,10 @@ class CmdConfigureHistory extends BaseAbstractModal
         }
         Utils::sendVarToJs('cmds_history_configure', $listCmd);
 
-        $pageContent = [];
-        $pageContent['dataCount'] = $dataCount;
+        $pageData = [];
+        $pageData['dataCount'] = $dataCount;
 
-        return $render->get('/modals/cmd.configureHistory.html.twig', $pageContent);
+        return Render::getInstance()->get('/modals/cmd.configureHistory.html.twig', $pageData);
     }
 
 }

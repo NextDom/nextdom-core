@@ -75,9 +75,12 @@ class CmdManager
     public static function byIds($_ids)
     {
         if (!is_array($_ids) || count($_ids) == 0) {
-            return null;
+            return [];
         }
         $in = trim(implode(',', $_ids), ',');
+        if ($in === '') {
+            return [];
+        }
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id IN (' . $in . ')';
@@ -413,7 +416,7 @@ class CmdManager
      * @param $value
      * @param null $type
      * @param bool $onlyEnable
-     * @return array|mixed
+     * @return Cmd[]
      * @throws \Exception
      */
     public static function byValue($value, $type = null, $onlyEnable = false)
@@ -509,7 +512,7 @@ class CmdManager
             'cmd_name' => (html_entity_decode($cmdName) != '') ? html_entity_decode($cmdName) : $cmdName,
         );
 
-        if ($objectName == \__('Aucun')) {
+        if ($objectName == __('Aucun')) {
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 'c') . '
             FROM ' . self::DB_CLASS_NAME . ' c
             INNER JOIN eqLogic el ON c.eqLogic_id=el.id
@@ -689,7 +692,7 @@ class CmdManager
     {
         $cmd = self::byId(str_replace('#', '', self::humanReadableToCmd($string)));
         if (!is_object($cmd)) {
-            throw new \Exception(__('La commande n\'a pas pu être trouvée : ') . $string . \__(' => ') . self::humanReadableToCmd($string));
+            throw new \Exception(__('La commande n\'a pas pu être trouvée : ') . $string . __(' => ') . self::humanReadableToCmd($string));
         }
         return $cmd;
     }
@@ -829,7 +832,7 @@ class CmdManager
         if (isset($colors[$color])) {
             return $colors[$color];
         }
-        throw new \Exception(\__('Impossible de traduire la couleur en code hexadécimal :') . $color);
+        throw new \Exception(__('Impossible de traduire la couleur en code hexadécimal :') . $color);
     }
 
     /**

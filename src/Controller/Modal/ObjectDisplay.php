@@ -24,33 +24,21 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioManager;
 
 class ObjectDisplay extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render object display modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
+
 
         $cmdClass = Utils::init('class');
         if ($cmdClass == '' || !class_exists($cmdClass)) {
@@ -80,39 +68,39 @@ class ObjectDisplay extends BaseAbstractModal
             }
         }
 
-        $pageContent = [];
+        $pageData = [];
 
         if (count($otherInfo) > 0) {
-            $pageContent['otherData'] = [];
+            $pageData['otherData'] = [];
             foreach ($otherInfo as $otherInfoKey => $otherInfoValue) {
-                $pageContent['otherData'][$otherInfoKey] = [];
-                $pageContent['otherData'][$otherInfoKey]['value'] = $otherInfoValue;
+                $pageData['otherData'][$otherInfoKey] = [];
+                $pageData['otherData'][$otherInfoKey]['value'] = $otherInfoValue;
                 // TODO: Always long-text ???
                 if (is_array($otherInfoValue)) {
-                    $pageContent['otherData'][$otherInfoKey]['type'] = 'json';
-                    $pageContent['otherData'][$otherInfoKey]['value'] = json_encode($otherInfoValue);
+                    $pageData['otherData'][$otherInfoKey]['type'] = 'json';
+                    $pageData['otherData'][$otherInfoKey]['value'] = json_encode($otherInfoValue);
                 } elseif (strpos($otherInfoValue, "\n")) {
-                    $pageContent['otherData'][$otherInfoKey]['type'] = 'long-text';
+                    $pageData['otherData'][$otherInfoKey]['type'] = 'long-text';
                 } else {
-                    $pageContent['otherData'][$otherInfoKey]['type'] = 'simple-text';
+                    $pageData['otherData'][$otherInfoKey]['type'] = 'simple-text';
                 }
             }
         }
         // TODO : Reduce loops
-        $pageContent['data'] = [];
+        $pageData['data'] = [];
         foreach ($data as $dataKey => $dataValue) {
-            $pageContent['data'][$dataKey] = [];
-            $pageContent['data'][$dataKey]['value'] = $dataValue;
+            $pageData['data'][$dataKey] = [];
+            $pageData['data'][$dataKey]['value'] = $dataValue;
             if (is_array($dataValue)) {
-                $pageContent['data'][$dataKey]['type'] = 'json';
-                $pageContent['data'][$dataKey]['value'] = json_encode($dataValue);
+                $pageData['data'][$dataKey]['type'] = 'json';
+                $pageData['data'][$dataKey]['value'] = json_encode($dataValue);
             } elseif (strpos($dataValue, "\n")) {
-                $pageContent['data'][$dataKey]['type'] = 'long-text';
+                $pageData['data'][$dataKey]['type'] = 'long-text';
             } else {
-                $pageContent['data'][$dataKey]['type'] = 'simple-text';
+                $pageData['data'][$dataKey]['type'] = 'simple-text';
             }
         }
-        return $render->get('/modals/object.display.html.twig', $pageContent);
+        return Render::getInstance()->get('/modals/object.display.html.twig', $pageData);
     }
 
 }

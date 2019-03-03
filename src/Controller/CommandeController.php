@@ -23,36 +23,23 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 
 class CommandeController extends BaseController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedAdminOrFail();
-    }
-
     /**
      * Render commandes page
      *
-     * @param Render $render Render engine
-     * @param array $pageContent Page data
+     * @param array $pageData Page data
      *
      * @return string Content of commandes page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render, array &$pageContent): string
+    public static function get(&$pageData): string
     {
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/commandes.js';
+        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        $pageContent['JS_END_POOL'][] = '/public/js/desktop/params/commandes.js';
-        $pageContent['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
-
-        return $render->get('/desktop/params/commandes.html.twig', $pageContent);
+        return Render::getInstance()->get('/desktop/params/commandes.html.twig', $pageData);
     }
 
 }

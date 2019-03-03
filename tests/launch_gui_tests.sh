@@ -20,6 +20,8 @@ function init_docker() {
       ./scripts/remove_test_container.sh nextdom-test-first-use
       ./scripts/remove_test_container.sh nextdom-test-others
       ./scripts/remove_test_container.sh nextdom-test-migration
+      ./scripts/remove_test_container.sh nextdom-test-custom-js-css
+      ./scripts/remove_test_container.sh nextdom-test-plugins
     fi
 }
 
@@ -55,6 +57,19 @@ function custom_js_css() {
     ./scripts/remove_test_container.sh nextdom-test-custom-js-css
 }
 
+function plugins() {
+    echo ">>> Plugins <<<"
+    echo ">>>>> Setup"
+    ./scripts/start_test_container.sh nextdom-test-plugins $PASSWORD
+    docker exec -i nextdom-test-plugins /bin/cp -fr /var/www/html/tests/data/plugin4tests /var/www/html/plugins
+    docker exec -i nextdom-test-plugins /bin/chown www-data:www-data -R /var/www/html/plugins
+    docker exec -i nextdom-test-plugins /usr/bin/mysql -u root nextdomdev < data/plugin_test.sql
+    echo ">>>>> Start"
+    python3 -W ignore gui/plugins.py "$URL" "$LOGIN" "$PASSWORD"
+    echo ">>>>> Clear"
+    ./scripts/remove_test_container.sh nextdom-test-plugins
+}
+
 function others() {
     # Start container for all others tests
     echo ">>> Others GUI tests <<<"
@@ -78,6 +93,7 @@ function start_all_tests() {
     first_use
     migration
     custom_js_css
+    plugins
     others
 }
 
@@ -86,7 +102,6 @@ cd "$( dirname "${BASH_SOURCE[0]}" )"
 URL='http://127.0.0.1:8765'
 LOGIN='admin'
 PASSWORD='nextdom-test'
-
 
 if [[ $# -eq 0 ]]; then
     start_all_tests

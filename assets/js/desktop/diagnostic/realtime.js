@@ -22,7 +22,7 @@ nextdom.log.autoupdate({
     log : realtime_name,
     default_search : log_default_search,
     display : $('#pre_realtimelog'),
-    search : $('#in_realtimeLogSearch'),
+    search : $('#generalSearch'),
     control : $('#bt_eventRealtimeStopStart'),
 });
 
@@ -38,5 +38,5 @@ $("#bt_logrealtimeremoveLog").on('click', function(event) {
     });
 });
 $('#bt_logrealtimedownloadLog').click(function() {
-    window.open('core/php/downloadFile.php?pathfile=log/' + realtime_name, "_blank", null);
+    window.open('src/Api/downloadFile.php?pathfile=log/' + realtime_name, "_blank", null);
 });

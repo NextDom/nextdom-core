@@ -22,29 +22,17 @@
 
 namespace NextDom\Controller\Modal;
 
-use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
-
 class UpdateDisplay extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render update display modal
-     *
-     * @param Render $render Render engine
      *
      * @return string
      *
      * @throws \NextDom\Exceptions\CoreException
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
-        return $this->showRepoModal('display');
+        return self::showRepoModal('display');
     }
 }

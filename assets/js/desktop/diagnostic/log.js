@@ -37,7 +37,7 @@
  $('#bt_downloadLog').click(function() {
      var logFile = $('.li_log.active').attr('data-log')
      if (logFile !== undefined) {
-         window.open('core/php/downloadFile.php?pathfile=log/' + logFile, "_blank", null);
+         window.open('src/Api/downloadFile.php?pathfile=log/' + logFile, "_blank", null);
      }
 });
 
@@ -46,7 +46,7 @@
   $(".li_log").removeClass('active');
   $(this).addClass('active');
   $('#bt_globalLogStopStart').removeClass('btn-success').addClass('btn-warning');
-  $('#bt_globalLogStopStart').html('<div><i class="fas fa-pause">&nbsp;&nbsp;</i>{{Pause}}</div>');
+  $('#bt_globalLogStopStart').html('<div><i class="fas fa-pause spacing-right"></i>{{Pause}}</div>');
   $('#bt_globalLogStopStart').attr('data-state',1);
   nextdom.log.autoupdate({
     log : $(this).attr('data-log'),

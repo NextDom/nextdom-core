@@ -37,6 +37,7 @@ use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Model\Entity\User;
 use PragmaRX\Google2FA\Google2FA;
 
 class UserManager
@@ -50,27 +51,27 @@ class UserManager
      * Retourne un object utilisateur (si les information de connection sont valide)
      * @param string $_login nom d'utilisateur
      * @param string $_mdp motsz de passe en sha512
-     * @return \user|bool object user
+     * @return User|bool object user
      * @throws \Exception
      */
     public static function connect($_login, $_mdp)
     {
         $sMdp = (!Utils::isSha512($_mdp)) ? Utils::sha512($_mdp) : $_mdp;
         if (ConfigManager::byKey('ldap:enable') == '1' && function_exists('ldap_connect')) {
-            LogHelper::add("connection", "debug", __('Authentification par LDAP', __FILE__));
+            LogHelper::add("connection", "debug", __('Authentification par LDAP'));
             $ad = self::connectToLDAP();
             if ($ad !== false) {
-                LogHelper::add("connection", "debug", __('Connection au LDAP OK', __FILE__));
+                LogHelper::add("connection", "debug", __('Connection au LDAP OK'));
                 $ad = ldap_connect(ConfigManager::byKey('ldap:host'), ConfigManager::byKey('ldap:port'));
                 ldap_set_option($ad, LDAP_OPT_PROTOCOL_VERSION, 3);
                 ldap_set_option($ad, LDAP_OPT_REFERRALS, 0);
                 if (!ldap_bind($ad, 'uid=' . $_login . ',' . ConfigManager::byKey('ldap:basedn'), $_mdp)) {
-                    LogHelper::add("connection", "info", __('Mot de passe erroné (', __FILE__) . $_login . ')');
+                    LogHelper::add("connection", "info", __('Mot de passe erroné (') . $_login . ')');
                     return false;
                 }
-                LogHelper::add("connection", "debug", __('Bind user OK', __FILE__));
+                LogHelper::add("connection", "debug", __('Bind user OK'));
                 $result = ldap_search($ad, ConfigManager::byKey('ldap::usersearch') . '=' . $_login . ',' . ConfigManager::byKey('ldap:basedn'), ConfigManager::byKey('ldap:filter'));
-                LogHelper::add("connection", "info", __('Recherche LDAP (', __FILE__) . $_login . ')');
+                LogHelper::add("connection", "info", __('Recherche LDAP (') . $_login . ')');
                 if ($result) {
                     $entries = ldap_get_entries($ad, $result);
                     if ($entries['count'] > 0) {
@@ -81,21 +82,21 @@ class UserManager
                             $user->save();
                             return $user;
                         }
-                        $user = (new \user)
+                        $user = (new User())
                             ->setLogin($_login)
                             ->setPassword($sMdp)
                             ->setOptions('lastConnection', date('Y-m-d H:i:s'));
                         $user->save();
-                        LogHelper::add("connection", "info", __('Utilisateur créé depuis le LDAP : ', __FILE__) . $_login);
+                        LogHelper::add("connection", "info", __('Utilisateur créé depuis le LDAP : ') . $_login);
                         NextDomHelper::event('user_connect');
-                        LogHelper::add('event', 'info', __('Connexion de l\'utilisateur ', __FILE__) . $_login);
+                        LogHelper::add('event', 'info', __('Connexion de l\'utilisateur ') . $_login);
                         return $user;
                     } else {
                         $user = self::byLogin($_login);
                         if (is_object($user)) {
                             $user->remove();
                         }
-                        LogHelper::add("connection", "info", __('Utilisateur non autorisé à accéder à NextDom (', __FILE__) . $_login . ')');
+                        LogHelper::add("connection", "info", __('Utilisateur non autorisé à accéder à NextDom (') . $_login . ')');
                         return false;
                     }
                 } else {
@@ -103,11 +104,11 @@ class UserManager
                     if (is_object($user)) {
                         $user->remove();
                     }
-                    LogHelper::add("connection", "info", __('Utilisateur non autorisé à accéder à NextDom (', __FILE__) . $_login . ')');
+                    LogHelper::add("connection", "info", __('Utilisateur non autorisé à accéder à NextDom (') . $_login . ')');
                     return false;
                 }
             } else {
-                LogHelper::add("connection", "info", __('Impossible de se connecter au LDAP', __FILE__));
+                LogHelper::add("connection", "info", __('Impossible de se connecter au LDAP'));
             }
         }
         $user = self::byLoginAndPassword($_login, $sMdp);
@@ -121,7 +122,7 @@ class UserManager
             $user->setOptions('lastConnection', date('Y-m-d H:i:s'));
             $user->save();
             NextDomHelper::event('user_connect');
-            LogHelper::add('event', 'info', __('Connexion de l\'utilisateur ', __FILE__) . $_login);
+            LogHelper::add('event', 'info', __('Connexion de l\'utilisateur ') . $_login);
         }
         return $user;
     }
@@ -166,7 +167,7 @@ class UserManager
 
     /**
      * @param $_hash
-     * @return \user
+     * @return User
      * @throws \Exception
      */
     public static function byHash($_hash)
@@ -208,13 +209,13 @@ class UserManager
 
     /**
      *
-     * @return array de tous les utilisateurs
+     * @return User[] Array with all users
      * @throws \Exception
      */
     public static function all()
     {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '';
+        FROM ' . self::DB_CLASS_NAME;
         return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
@@ -234,7 +235,7 @@ class UserManager
     /**
      * @param $_profils
      * @param bool $_enable
-     * @return \user[]|null
+     * @return User[]|null
      * @throws \Exception
      */
     public static function byProfils($_profils, $_enable = false)
@@ -352,7 +353,7 @@ class UserManager
     {
         $user = self::byLogin('internal_report');
         if (!is_object($user)) {
-            $user = new \user();
+            $user = new User();
             $user->setLogin('internal_report');
             $google2fa = new Google2FA();
             $user->setOptions('twoFactorAuthentificationSecret', $google2fa->generateSecretKey());
@@ -380,7 +381,7 @@ class UserManager
         if ($_enable) {
             $user = self::byLogin('nextdom_support');
             if (!is_object($user)) {
-                $user = new \user();
+                $user = new User();
                 $user->setLogin('nextdom_support');
             }
             $user->setPassword(Utils::sha512(ConfigManager::genKey(255)));
@@ -404,5 +405,21 @@ class UserManager
             }
             \repo_market::supportAccess(false);
         }
+    }
+
+    public static function storeUserInSession($user)
+    {
+        $_SESSION['user'] = $user;
+    }
+
+    /**
+     * @return User|null
+     */
+    public static function getStoredUser()
+    {
+        if (isset($_SESSION['user'])) {
+            return $_SESSION['user'];
+        }
+        return null;
     }
 }

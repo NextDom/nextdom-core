@@ -36,6 +36,8 @@ namespace NextDom\Managers;
 
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\SystemHelper;
+use NextDom\Model\Entity\Cache;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
@@ -73,7 +75,7 @@ class CacheManager
         if ($lifetime < 0) {
             $lifetime = 0;
         }
-        $cacheItem = new \cache();
+        $cacheItem = new Cache();
         $cacheItem->setKey($key)
             ->setValue($value)
             ->setLifetime($lifetime);
@@ -108,7 +110,7 @@ class CacheManager
     public static function stats($details = false)
     {
         $result = self::getCache()->getStats();
-        $result['count'] = \__('Inconnu');
+        $result['count'] = __('Inconnu');
         if (ConfigManager::byKey('cache::engine') == 'FilesystemCache') {
             $result['count'] = 0;
             foreach (FileSystemHelper::ls(self::getFolder()) as $folder) {
@@ -196,7 +198,7 @@ class CacheManager
     {
         $cache = self::getCache()->fetch($key);
         if (!is_object($cache)) {
-            $cache = new \cache();
+            $cache = new Cache();
             $cache->setKey($key)
                 ->setDatetime(date('Y-m-d H:i:s'));
         }
@@ -267,7 +269,7 @@ class CacheManager
         }
         try {
             $cacheFile = NEXTDOM_ROOT . '/var/cache.tar.gz';
-            $persisCmd = 'rm -rf ' . $cacheFile . ';cd ' . $cacheDir . ';tar cfz ' . $cacheFile . ' * 2>&1 > /dev/null;chmod 775 ' . $cacheFile . ';chown ' . \system::get('www-uid') . ':' . \system::get('www-gid') . ' ' . $cacheFile . ';chmod 777 -R ' . $cacheDir . ' 2>&1 > /dev/null';
+            $persisCmd = 'rm -rf ' . $cacheFile . ';cd ' . $cacheDir . ';tar cfz ' . $cacheFile . ' * 2>&1 > /dev/null;chmod 775 ' . $cacheFile . ';chown ' . SystemHelper::getWWWUid() . ':' . SystemHelper::getWWWGid() . ' ' . $cacheFile . ';chmod 777 -R ' . $cacheDir . ' 2>&1 > /dev/null';
             \com_shell::execute($persisCmd);
         } catch (\Exception $e) {
 

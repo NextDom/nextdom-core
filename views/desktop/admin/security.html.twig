@@ -36,11 +36,13 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
-            <a class="btn btn-warning btn-action-bar" id="bt_removeBanIp"><i class="fa fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer les IP bannie(s)' }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+            {% if adminBannedIp|length != 0 %}
+                <a class="btn btn-warning btn-action-bar" id="bt_removeBanIp"><i class="fa fa-trash spacing-right"></i>{{ 'Supprimer les IP bannie(s)' }}</a>
+            {% endif %}
         </div>
         <div class="action-group">
-            <a class="btn btn-success btn-action-bar pull-right" id="bt_savesecurity"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_savesecurity"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
         </div>
     </div>
 </section>
@@ -49,7 +51,7 @@
     <div class="box" id="security">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fa fa-shield">&nbsp;&nbsp;</i>{{ 'Sécurité' }}</h3>
+            <h3 class="box-title"><i class="fa fa-shield spacing-right"></i>{{ 'Sécurité' }}</h3>
         </div>
 
         <!-- Page content -->
@@ -130,7 +132,7 @@
                             <div class="form-group">
                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12"></div>
                                 <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                                    <a class="btn btn-action" id="bt_testLdapConnection"><i class="fa fa-cube">&nbsp;&nbsp;</i>{{ 'Tester' }}</a>
+                                    <a class="btn btn-action" id="bt_testLdapConnection"><i class="fa fa-cube spacing-right"></i>{{ 'Tester' }}</a>
                                 </div>
                             </div>
                         </div>
@@ -176,7 +178,11 @@
 
                 <!-- IP section -->
                 <fieldset class="legend-section">
-                    <legend>{{ 'IPs bannies' }}</legend>
+                    <legend>{{ 'IPs bannies' }}
+                        {% if adminBannedIp|length != 0 %}
+                            <span>{{ ' ('}}{{ adminBannedIp|length }}{{')'}}</span>
+                        {% endif %}
+                    </legend>
                     <table class="table table-condensed table-bordered">
                         <thead>
                         <tr>

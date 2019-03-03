@@ -1,4 +1,4 @@
-{#
+ {#
 
 /* This file is part of Jeedom.
 *
@@ -33,30 +33,27 @@
 */
 
 #}
-
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left">&nbsp;&nbsp;</i>{{ 'Retour'}}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour' }}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-success btn-action-bar pull-right" id="bt_saveProfils"><i class="fas fa-save">&nbsp;&nbsp;</i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_saveProfils"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
         </div>
     </div>
 </section>
-
 <section class="content">
     <div class="nav-tabs-custom config" id="div_Profils">
         <!-- Tabs title -->
         <ul class="nav nav-tabs pull-right" role="tablist">
-            <li role="presentation"><a href="#themetab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint">&nbsp;&nbsp;</i>{{ 'Thèmes' }}</a></li>
-            <li role="presentation"><a href="#interfacetab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-laptop">&nbsp;&nbsp;</i>{{ 'Interface' }}</a></li>
-            <li role="presentation"><a href="#notificationtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-comments">&nbsp;&nbsp;</i>{{ 'Notifications' }}</a></li>
-            <li role="presentation"><a href="#securitytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-user-secret">&nbsp;&nbsp;</i>{{ 'Sécurité' }}</a></li>
-            <li role="presentation" class="active"><a href="#profil" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-user">&nbsp;&nbsp;</i>{{ 'Profil' }}</a></li>
-            <li class="header pull-left"><i class="fas fa-wrench">&nbsp;&nbsp;</i>{{ 'Profils' }}</li>
+            <li role="presentation"><a href="#themetab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint spacing-right"></i>{{ 'Thèmes' }}</a></li>
+            <li role="presentation"><a href="#interfacetab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-laptop spacing-right"></i>{{ 'Interface' }}</a></li>
+            <li role="presentation"><a href="#notificationtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-comments spacing-right"></i>{{ 'Notifications' }}</a></li>
+            <li role="presentation"><a href="#securitytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-user-secret spacing-right"></i>{{ 'Sécurité' }}</a></li>
+            <li role="presentation" class="active"><a href="#profil" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-user spacing-right"></i>{{ 'Profil' }}</a></li>
+            <li class="header pull-left"><i class="fas fa-wrench spacing-right"></i>{{ 'Profils' }}</li>
         </ul>
-
         <!-- Tabs content -->
         <div class="global-tab-content tab-content">
 
@@ -161,7 +158,7 @@
                             <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
                             <div class="col-sm-2">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="homePage">
-                                    {% for homePageCode, homePageValue in profilsHomePage %}
+                                    {% for homePageCode, homePageValue in profilsHomePageDesktop %}
                                         <option value="{{ homePageCode }}">{{ homePageValue }}</option>
                                     {% endfor %}
                                 </select>
@@ -170,7 +167,7 @@
                             <div class="col-sm-2">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="homePageMobile">
                                     <option value="home">{{ 'Accueil' }}</option>
-                                    {% for homePageCode, homePageValue in profilsHomePage %}
+                                    {% for homePageCode, homePageValue in profilsHomePageMobile %}
                                         <option value="{{ homePageCode }}">{{ homePageValue }}</option>
                                     {% endfor %}
                                 </select>
@@ -252,6 +249,34 @@
                     </fieldset>
 
                     <fieldset class="legend-section">
+                        <legend>{{ 'Design 3D par défaut' }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
+                            <div class="col-sm-2">
+                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardPlan3d">
+                                    {% for plan in profilsPlans3d %}
+                                        <option value="{{ plan3d.getId() }}">{{ plan3d.getName() }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
+                            <div class="col-sm-2">
+                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobilePlan3d">
+                                    {% for plan3d in profilsPlans3d %}
+                                        <option value="{{ plan3d.getId() }}">{{ plan3d.getName() }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{{ 'Plein écran' }}</label>
+                            <div class="col-sm-1">
+                                <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlan3dFullScreen"/>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="legend-section">
                         <legend>{{ 'Vue' }}</legend>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{{ 'Déplier le panneau des vues' }}</label>
@@ -272,7 +297,7 @@
                             <div class="form-group">
                                 <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Double authentification' }}</label>
                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                                    <a class="btn btn-action" id="bt_configureTwoFactorAuthentification"><i class="fas fa-magic">&nbsp;&nbsp;</i>{{ 'Configurer' }}</a>
+                                    <a class="btn btn-action" id="bt_configureTwoFactorAuthentification"><i class="fas fa-magic spacing-right"></i>{{ 'Configurer' }}</a>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -300,9 +325,11 @@
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Hash de l\'utilisateur' }}</label>
                             <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
-                                <a class="btn btn-action" id="bt_genUserKeyAPI"><i class="fas fa-refresh">&nbsp;&nbsp;</i>{{ 'Regénérer' }}</a>
+                                <a class="btn btn-action" id="bt_genUserKeyAPI"><i class="fas fa-refresh spacing-right"></i>{{ 'Regénérer' }}</a>
                             </div>
-                            <div class="col-lg-8 col-md-7 col-sm-5 col-xs-12">
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-10 col-lg-offset-2 col-md-9 col-md-offset-3 col-sm-8 col-sm-offset-4 col-xs-12">
                                 <span class="userAttr label label-value label-hash" data-l1key="hash"></span>
                             </div>
                         </div>
@@ -326,7 +353,7 @@
                                         <td>{{ id }}</td>
                                         <td>{{ session['ip'] }}</td>
                                         <td>{{ session['datetime'] }}</td>
-                                        <td><a class="btn btn-sm btn-warning bt_deleteSession pull-right"><i class="fas fa-sign-out-alt">&nbsp;&nbsp;</i>{{ 'Déconnecter' }}</a></td>
+                                        <td><a class="btn btn-sm btn-warning bt_deleteSession pull-right"><i class="fas fa-sign-out-alt spacing-right"></i>{{ 'Déconnecter' }}</a></td>
                                     </tr>
                                 {% endif %}
                             {% endfor %}
@@ -340,7 +367,7 @@
                         </div>
                         <div class="col-md-3 col-xs-12 container-fluid">
                             <div class="box-tools pull-right padding-bottom">
-                                <a class="btn btn-warning" id="bt_removeAllRegisterDevice"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer tout' }}</a>
+                                <a class="btn btn-warning" id="bt_removeAllRegisterDevice"><i class="fas fa-trash spacing-right"></i>{{ 'Supprimer tout' }}</a>
                             </div>
                         </div>
                         <table class="table table-bordered table-condensed">
@@ -359,7 +386,7 @@
                                     <td>{{ sessionData['ip'] }}</td>
                                     <td>{{ sessionData['datetime'] }}</td>
                                     <td>
-                                        <a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash">&nbsp;&nbsp;</i>{{ 'Supprimer' }}</a>
+                                        <a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash spacing-right"></i>{{ 'Supprimer' }}</a>
                                     </td>
                                 </tr>
                             {% endfor %}

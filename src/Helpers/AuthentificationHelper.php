@@ -33,12 +33,30 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Managers\AjaxManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 
 class AuthentificationHelper
 {
+    /**
+     * @var bool Status of the user connection
+     */
+    private static $connectedState = false;
+
+    /**
+     * @var bool Status of the user login as administrator
+     */
+    private static $connectedAdminState = false;
+    /**
+     * @var bool Recovery mode status
+     */
+    private static $rescueMode = false;
+
+    /**
+     * @throws \Exception
+     */
     public static function init()
     {
         $configs = ConfigManager::byKeys(array('session_lifetime', 'sso:allowRemoteUser'));
@@ -64,12 +82,12 @@ class AuthentificationHelper
             header("Statut: 403 Forbidden");
             header('HTTP/1.1 403 Forbidden');
             $_SERVER['REDIRECT_STATUS'] = 403;
-            echo '<p>' . __('403 Access Forbidden', __FILE__) . '</p>';
-            echo '<p>' . __('Votre accès a été verrouillé pour votre sécurité ', __FILE__) . '</p>';
+            echo '<p>' . __('403 Access Forbidden') . '</p>';
+            echo '<p>' . __('Votre accès a été verrouillé pour votre sécurité ') . '</p>';
             die();
         }
 
-        if (!isConnect() && isset($_COOKIE['registerDevice'])) {
+        if (!self::isConnected() && isset($_COOKIE['registerDevice'])) {
             if (self::loginByHash($_COOKIE['registerDevice'])) {
                 setcookie('registerDevice', $_COOKIE['registerDevice'], time() + 365 * 24 * 3600, "/", '', false, true);
                 if (isset($_COOKIE['nextdom_token'])) {
@@ -82,17 +100,17 @@ class AuthentificationHelper
             }
         }
 
-        if (!isConnect() && $configs['sso:allowRemoteUser'] == 1) {
+        if (!self::isConnected() && $configs['sso:allowRemoteUser'] == 1) {
             $user = UserManager::byLogin($_SERVER['REMOTE_USER']);
             if (is_object($user) && $user->getEnable() == 1) {
                 @session_start();
-                $_SESSION['user'] = $user;
+                UserManager::storeUserInSession($user);
                 @session_write_close();
-                LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par REMOTE_USER : ', __FILE__) . $user->getLogin());
+                LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par REMOTE_USER : ') . $user->getLogin());
             }
         }
 
-        if (!isConnect() && Utils::init('auth') != '') {
+        if (!self::isConnected() && Utils::init('auth') != '') {
             self::loginByHash(Utils::init('auth'));
         }
 
@@ -100,6 +118,12 @@ class AuthentificationHelper
             self::logout();
             Utils::redirect('index.php');
             die();
+        }
+
+        self::$connectedState = AuthentificationHelper::isConnectedWithRights();
+        self::$connectedAdminState = AuthentificationHelper::isConnectedWithRights('admin');
+        if (Utils::init('rescue', 0) == 1) {
+            self::$rescueMode = true;
         }
     }
 
@@ -124,9 +148,9 @@ class AuthentificationHelper
             }
         }
         @session_start();
-        $_SESSION['user'] = $user;
+        UserManager::storeUserInSession($user);
         @session_write_close();
-        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur : ', __FILE__) . $_login);
+        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur : ') . $_login);
         return true;
     }
 
@@ -156,9 +180,9 @@ class AuthentificationHelper
             return false;
         }
         @session_start();
-        $_SESSION['user'] = $user;
+        UserManager::storeUserInSession($user);
         @session_write_close();
-        $registerDevice = $_SESSION['user']->getOptions('registerDevice', array());
+        $registerDevice = UserManager::getStoredUser()->getOptions('registerDevice', array());
         if (!is_array($registerDevice)) {
             $registerDevice = array();
         }
@@ -167,13 +191,13 @@ class AuthentificationHelper
         $registerDevice[Utils::sha512($key[1])]['ip'] = NetworkHelper::getClientIp();
         $registerDevice[Utils::sha512($key[1])]['session_id'] = session_id();
         @session_start();
-        $_SESSION['user']->setOptions('registerDevice', $registerDevice);
-        $_SESSION['user']->save();
+        UserManager::getStoredUser()->setOptions('registerDevice', $registerDevice);
+        UserManager::getStoredUser()->save();
         @session_write_close();
         if (!isset($_COOKIE['nextdom_token'])) {
             setcookie('nextdom_token', AjaxManager::getToken(), time() + 365 * 24 * 3600, "/", '', false, true);
         }
-        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par clef : ', __FILE__) . $user->getLogin());
+        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par clef : ') . $user->getLogin());
         return true;
     }
 
@@ -195,10 +219,10 @@ class AuthentificationHelper
      *
      * @return boolean True si l'utilisateur est connecté avec les droits demandés
      */
-    public static function isConnected(string $rights = ''): bool
+    public static function isConnectedWithRights(string $rights = ''): bool
     {
         $rightsKey = 'isConnect::' . $rights;
-        $isSetSessionUser = isset($_SESSION['user']);
+        $isSetSessionUser = UserManager::getStoredUser() !== null;
         $result = false;
 
         if ($isSetSessionUser && isset($GLOBALS[$rightsKey]) && $GLOBALS[$rightsKey]) {
@@ -207,10 +231,10 @@ class AuthentificationHelper
 
             if (session_status() == PHP_SESSION_DISABLED || !$isSetSessionUser) {
                 $result = false;
-            } elseif ($isSetSessionUser && is_object($_SESSION['user']) && $_SESSION['user']->is_Connected()) {
+            } elseif ($isSetSessionUser && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->is_Connected()) {
 
                 if ($rights !== '') {
-                    if ($_SESSION['user']->getProfils() == $rights) {
+                    if (UserManager::getStoredUser()->getProfils() == $rights) {
                         $result = true;
                     }
                 } else {
@@ -220,5 +244,66 @@ class AuthentificationHelper
             $GLOBALS[$rightsKey] = $result;
         }
         return $result;
+    }
+
+    /**
+     * Get the status of the user login
+     * @return bool Status of the user connection
+     */
+    public static function isConnected(): bool
+    {
+        return self::$connectedState;
+    }
+
+    /**
+     * Test if the user is logged in and throws an exception if this is not the case.
+     * @return bool
+     * @throws CoreException
+     */
+    public static function isConnectedOrFail()
+    {
+        if (!self::$connectedState) {
+            throw new CoreException(__('core.error-401'), 401);
+        }
+        return self::isConnected();
+    }
+
+    /**
+     * @abstract Test if user is connected with admins right or throw CoreException if not.
+     * @return bool
+     * @throws CoreException
+     */
+    public static function isConnectedAsAdminOrFail()
+    {
+        if (!self::$connectedAdminState) {
+            throw new CoreException(__('core.error-401'), 401);
+        }
+        return self::isConnectedAsAdmin();
+    }
+
+    /**
+     * Get the login status of the user as an administrator
+     * @return bool Status of the user login as administrator
+     */
+    public static function isConnectedAsAdmin(): bool
+    {
+        return self::$connectedAdminState;
+    }
+
+    /**
+     * Get the status of the recovery mode
+     * @return bool Recovery mode status
+     */
+    public static function isRescueMode(): bool
+    {
+        return self::$rescueMode;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isInDeveloperMode(): bool
+    {
+        return ConfigManager::getDefaultConfiguration()['core']['developer::mode'] == '1';
     }
 }

@@ -23,37 +23,25 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 
 class DataStoreManagement extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render data store management modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
+
 
         Utils::sendVarsToJS([
             'dataStore_type' => Utils::init('type'),
             'dataStore_link_id' => Utils::init('link_id', -1)
         ]);
 
-        return $render->get('/modals/dataStore.management.html.twig');
+        return Render::getInstance()->get('/modals/dataStore.management.html.twig');
     }
 
 }

@@ -22,16 +22,7 @@
 
 namespace NextDom\Controller;
 
-
-use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
-
 abstract class BaseController
 {
-    public function __construct()
-    {
-        Status::initConnectState();
-    }
-
-    public abstract function get(Render $render, array &$pageContent): string;
+    public abstract static function get(&$pageData): string;
 }

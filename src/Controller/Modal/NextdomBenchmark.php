@@ -24,33 +24,20 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 
 class NextdomBenchmark extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render nextdom benchmark modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
+        $pageData = [];
+        $pageData['benchmark'] = NextDomHelper::benchmark();
 
-        $pageContent = [];
-        $pageContent['benchmark'] = NextDomHelper::benchmark();
-
-        return $render->get('/modals/nextdom.benchmark.html.twig', $pageContent);
+        return Render::getInstance()->get('/modals/nextdom.benchmark.html.twig', $pageData);
     }
 }

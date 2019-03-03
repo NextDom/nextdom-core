@@ -33,10 +33,11 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Enums\DaemonStateEnum;
-use NextDom\Enums\PluginManagerCronEnum;
+use NextDom\Enums\DaemonState;
+use NextDom\Enums\PluginManagerCron;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
+use NextDom\Model\Entity\Plugin;
 
 class PluginManager
 {
@@ -48,7 +49,7 @@ class PluginManager
      *
      * @param string $id Identifiant du plugin
      *
-     * @return mixed|\plugin Plugin
+     * @return mixed|Plugin Plugin
      *
      * @throws \Exception
      */
@@ -68,7 +69,7 @@ class PluginManager
         if (!is_array($data)) {
             throw new \Exception('Plugin introuvable (json invalide) : ' . $id . ' => ' . print_r($data, true));
         }
-        $plugin = new \plugin();
+        $plugin = new Plugin();
         $plugin->initPluginFromData($data);
         self::$cache[$plugin->getId()] = $plugin;
         if (!isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$plugin->getCategory()])) {
@@ -113,7 +114,7 @@ class PluginManager
      * @param bool $activatedOnly Filter only activated plugins
      * @param bool $orderByCategory Sort by category
      * @param bool $nameOnly Get only plugin names
-     * @return \plugin[] List of plugins
+     * @return Plugin[] List of plugins
      *
      * @throws \Exception
      */
@@ -136,7 +137,7 @@ class PluginManager
                     try {
                         $listPlugin[] = self::byId($row['plugin']);
                     } catch (\Throwable $e) {
-                        LogHelper::add('plugin', 'error', $e->getMessage(), 'pluginNotFound::' . $row['plugin']);
+                        LogHelper::addError('plugin', $e->getMessage(), 'pluginNotFound::' . $row['plugin']);
                     }
                 }
             }
@@ -149,7 +150,7 @@ class PluginManager
                         try {
                             $listPlugin[] = self::byId($pathInfoPlugin);
                         } catch (\Throwable $e) {
-                            LogHelper::add('plugin', 'error', $e->getMessage(), 'pluginNotFound::' . $pathInfoPlugin);
+                            LogHelper::addError('plugin', $e->getMessage(), 'pluginNotFound::' . $pathInfoPlugin);
                         }
                     }
                 }
@@ -161,7 +162,7 @@ class PluginManager
                 foreach ($listPlugin as $plugin) {
                     $category = $plugin->getCategory();
                     if ($category == '') {
-                        $category = \__('Autre');
+                        $category = __('Autre');
                     }
                     if (!isset($returnValue[$category])) {
                         $returnValue[$category] = array();
@@ -190,7 +191,7 @@ class PluginManager
      *
      * @return int Résultat de la comparaison
      */
-    public static function orderPlugin(\plugin $firstPlugin, \plugin $secondPluginName): int
+    public static function orderPlugin(Plugin $firstPlugin, Plugin $secondPluginName): int
     {
         return strcmp(strtolower($firstPlugin->getName()), strtolower($secondPluginName->getName()));
     }
@@ -221,7 +222,7 @@ class PluginManager
                     $message = __('Attention le plugin ') . ' ' . $plugin->getName();
                     $message .= __(' n\'a recu de message depuis ') . $heartbeat . __(' min');
                     $logicalId = 'heartbeat' . $plugin->getId();
-                    \message::add($plugin->getId(), $message, '', $logicalId);
+                    MessageManager::add($plugin->getId(), $message, '', $logicalId);
                     if ($plugin->getHasOwnDeamon() && ConfigManager::byKey('heartbeat::restartDeamon::' . $plugin->getId(), 'core', 0) == 1) {
                         $plugin->deamon_start(true);
                     }
@@ -238,7 +239,7 @@ class PluginManager
      */
     public static function cron()
     {
-        self::startCronTask(PluginManagerCronEnum::CRON);
+        self::startCronTask(PluginManagerCron::CRON);
     }
 
     /**
@@ -248,7 +249,7 @@ class PluginManager
      */
     public static function cron5()
     {
-        self::startCronTask(PluginManagerCronEnum::CRON_5);
+        self::startCronTask(PluginManagerCron::CRON_5);
     }
 
     /**
@@ -258,7 +259,7 @@ class PluginManager
      */
     public static function cron15()
     {
-        self::startCronTask(PluginManagerCronEnum::CRON_15);
+        self::startCronTask(PluginManagerCron::CRON_15);
     }
 
     /**
@@ -268,7 +269,7 @@ class PluginManager
      */
     public static function cron30()
     {
-        self::startCronTask(PluginManagerCronEnum::CRON_30);
+        self::startCronTask(PluginManagerCron::CRON_30);
     }
 
     /**
@@ -278,7 +279,7 @@ class PluginManager
      */
     public static function cronDaily()
     {
-        self::startCronTask(PluginManagerCronEnum::CRON_DAILY);
+        self::startCronTask(PluginManagerCron::CRON_DAILY);
     }
 
     /**
@@ -288,7 +289,7 @@ class PluginManager
      */
     public static function cronHourly()
     {
-        self::startCronTask(PluginManagerCronEnum::CRON_HOURLY);
+        self::startCronTask(PluginManagerCron::CRON_HOURLY);
     }
 
     /**
@@ -302,7 +303,7 @@ class PluginManager
     {
         $cache = CacheManager::byKey('plugin::' . $cronType . '::inprogress');
         if ($cache->getValue(0) > 3) {
-            \message::add('core', \__('La tache plugin::' . $cronType . ' n\'arrive pas à finir à cause du plugin : ') . CacheManager::byKey('plugin::' . $cronType . '::last')->getValue() . \__(' nous vous conseillons de désactiver le plugin et de contacter l\'auteur'));
+            MessageManager::add('core', __('La tache plugin::' . $cronType . ' n\'arrive pas à finir à cause du plugin : ') . CacheManager::byKey('plugin::' . $cronType . '::last')->getValue() . __(' nous vous conseillons de désactiver le plugin et de contacter l\'auteur'));
         }
         CacheManager::set('plugin::' . $cronType . '::inprogress', $cache->getValue(0) + 1);
         foreach (self::listPlugin(true) as $plugin) {
@@ -313,7 +314,7 @@ class PluginManager
                     try {
                         $pluginId::$cronType();
                     } catch (\Throwable $e) {
-                        LogHelper::add($pluginId, 'error', \__('Erreur sur la fonction cron du plugin : ') . $e->getMessage());
+                        LogHelper::add($pluginId, 'error', __('Erreur sur la fonction cron du plugin : ') . $e->getMessage());
                     }
                 }
             }
@@ -335,7 +336,7 @@ class PluginManager
                 try {
                     $pluginId::start();
                 } catch (\Throwable $e) {
-                    LogHelper::add($pluginId, 'error', \__('Erreur sur la fonction start du plugin : ') . $e->getMessage());
+                    LogHelper::add($pluginId, 'error', __('Erreur sur la fonction start du plugin : ') . $e->getMessage());
                 }
             }
         }
@@ -355,7 +356,7 @@ class PluginManager
                 try {
                     $pluginId::stop();
                 } catch (\Throwable $e) {
-                    LogHelper::add($pluginId, 'error', \__('Erreur sur la fonction stop du plugin : ') . $e->getMessage());
+                    LogHelper::add($pluginId, 'error', __('Erreur sur la fonction stop du plugin : ') . $e->getMessage());
                 }
             }
         }
@@ -373,18 +374,18 @@ class PluginManager
                 continue;
             }
             $dependancy_info = $plugin->dependancy_info();
-            if ($dependancy_info['state'] == DaemonStateEnum::NOT_OK) {
+            if ($dependancy_info['state'] == DaemonState::NOT_OK) {
                 try {
                     $plugin->dependancy_install();
                 } catch (\Exception $e) {
 
                 }
-            } elseif ($dependancy_info['state'] == DaemonStateEnum::IN_PROGRESS && $dependancy_info['duration'] > $plugin->getMaxDependancyInstallTime()) {
+            } elseif ($dependancy_info['state'] == DaemonState::IN_PROGRESS && $dependancy_info['duration'] > $plugin->getMaxDependancyInstallTime()) {
                 if (isset($dependancy_info['progress_file']) && file_exists($dependancy_info['progress_file'])) {
                     shell_exec('rm ' . $dependancy_info['progress_file']);
                 }
                 ConfigManager::save('deamonAutoMode', 0, $plugin->getId());
-                LogHelper::add($plugin->getId(), 'error', \__('Attention : l\'installation des dépendances a dépassé le temps maximum autorisé : ') . $plugin->getMaxDependancyInstallTime() . 'min');
+                LogHelper::add($plugin->getId(), 'error', __('Attention : l\'installation des dépendances a dépassé le temps maximum autorisé : ') . $plugin->getMaxDependancyInstallTime() . 'min');
             }
             try {
                 $plugin->deamon_start(false, true);

@@ -35,17 +35,19 @@ namespace NextDom\Managers;
 
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Model\Entity\JeeObject;
+use NextDom\Model\Entity\Update;
 
 class JeeObjectManager
 {
     const DB_CLASS_NAME = '`object`';
-    const CLASS_NAME = 'jeeObject';
+    const CLASS_NAME = JeeObject::class;
 
     /**
      * Get an object by with his id.
      *
      * @param mixed $id Identifiant de l'objet
-     * @return \jeeObject|null
+     * @return JeeObject|null
      *
      * @throws \Exception
      */
@@ -67,7 +69,7 @@ class JeeObjectManager
      * Get an object by with his name.
      *
      * @param $name
-     * @return \jeeObject|null
+     * @return JeeObject|null
      * @throws \Exception
      */
     public static function byName($name)
@@ -86,7 +88,7 @@ class JeeObjectManager
      *
      * @param bool $onlyVisible Filter only visible objects
      *
-     * @return \jeeObject[]|null
+     * @return JeeObject[]|null
      *
      * @throws \Exception
      */
@@ -133,7 +135,7 @@ class JeeObjectManager
      * @param mixed $nodeObject Current root object
      * @param bool $visible Filter only visible objects
      *
-     * @return array
+     * @return JeeObject[]
      *
      * @throws \Exception
      */
@@ -443,7 +445,7 @@ class JeeObjectManager
             if (!is_object($plugin)) {
                 $update = UpdateManager::byLogicalId('virtual');
                 if (!is_object($update)) {
-                    $update = new \update();
+                    $update = new Update();
                 }
                 $update->setLogicalId('virtual');
                 $update->setSource('market');
@@ -456,7 +458,7 @@ class JeeObjectManager
         } catch (\Exception $e) {
             $update = UpdateManager::byLogicalId('virtual');
             if (!is_object($update)) {
-                $update = new \update();
+                $update = new Update();
             }
             $update->setLogicalId('virtual');
             $update->setSource('market');

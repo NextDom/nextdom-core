@@ -65,7 +65,7 @@ class DownloadManager
      */
     protected static function testConnection()
     {
-        $sock = \fsockopen(self::$urlForTest, 80);
+        $sock = fsockopen(self::$urlForTest, 80);
         if ($sock !== false) {
             self::$connectionStatus = true;
             fclose($sock);
@@ -116,12 +116,12 @@ class DownloadManager
     public static function downloadBinary($url, $dest)
     {
         $imgData = self::downloadContent($url, true);
-        if (\file_exists($dest)) {
-            \unlink($dest);
+        if (file_exists($dest)) {
+            unlink($dest);
         }
-        $filePointer = \fopen($dest, 'wb');
-        \fwrite($filePointer, $imgData);
-        \fclose($filePointer);
+        $filePointer = fopen($dest, 'wb');
+        fwrite($filePointer, $imgData);
+        fclose($filePointer);
     }
 
     /**
@@ -137,14 +137,14 @@ class DownloadManager
         $content = false;
         $curlSession = curl_init();
         if ($curlSession !== false) {
-            \curl_setopt($curlSession, CURLOPT_URL, $url);
-            \curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curlSession, CURLOPT_URL, $url);
+            curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, true);
             if ($binary) {
-                \curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true);
+                curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true);
             }
-            \curl_setopt($curlSession, CURLOPT_USERAGENT, 'AlternativeMarketForJeedom');
-            $content = \curl_exec($curlSession);
-            \curl_close($curlSession);
+            curl_setopt($curlSession, CURLOPT_USERAGENT, 'AlternativeMarketForJeedom');
+            $content = curl_exec($curlSession);
+            curl_close($curlSession);
         }
         return $content;
     }

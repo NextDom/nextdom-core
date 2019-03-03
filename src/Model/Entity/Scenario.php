@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\ScenarioState;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\FileSystemHelper;
@@ -32,8 +33,14 @@ use NextDom\Managers\CronManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
+use NextDom\Managers\InteractDefManager;
+use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\UserManager;
+use NextDom\Managers\ViewDataManager;
+use NextDom\Managers\ViewManager;
 
 /**
  * Scenario
@@ -146,7 +153,7 @@ class Scenario
     protected $id;
 
     /**
-     * @var \NextDom\Model\Entity\Object
+     * @var \NextDom\Model\Entity\JeeObject
      *
      * ORM\ManyToOne(targetEntity="NextDom\Model\Entity\Object")
      * ORM\JoinColumns({
@@ -213,7 +220,7 @@ class Scenario
      * @param mixed $_default
      * @return mixed
      */
-    public function getTimeout($_default = null)
+    public function getTimeout($_default = 0)
     {
         if ($this->timeout == '' || !is_numeric($this->timeout)) {
             return $_default;
@@ -394,8 +401,8 @@ class Scenario
      */
     public function setTimeout($_timeout)
     {
-        if ($_timeout == '' || is_nan(intval($_timeout)) || $_timeout < 1) {
-            $_timeout = '';
+        if ($_timeout === '' || is_nan(intval($_timeout)) || $_timeout < 1) {
+            $_timeout = 0;
         }
         $this->_changed = Utils::attrChanged($this->_changed, $this->timeout, $_timeout);
         $this->timeout = $_timeout;
@@ -499,7 +506,7 @@ class Scenario
             if (count($this->getTags()) != '') {
                 $this->setCache('tags', $this->getTags());
             }
-            $cmd = NEXTDOM_ROOT . '/core/php/jeeScenario.php ';
+            $cmd = NEXTDOM_ROOT . '/src/Api/start_scenario.php ';
             $cmd .= ' scenario_id=' . $this->getId();
             $cmd .= ' trigger=' . escapeshellarg($trigger);
             $cmd .= ' "message=' . escapeshellarg(Utils::sanitizeAccent($message)) . '"';
@@ -553,7 +560,7 @@ class Scenario
             $this->setLog('Start : ' . trim($message, "'") . '. Tags : ' . json_encode($this->getTags()));
         }
         $this->setLastLaunch(date('Y-m-d H:i:s'));
-        $this->setState('in progress');
+        $this->setState(ScenarioState::IN_PROGRESS);
         $this->setPID(getmypid());
         $this->setRealTrigger($trigger);
         foreach ($this->getElement() as $element) {
@@ -661,9 +668,9 @@ class Scenario
         if ($_only_class) {
             if ($this->getIsActive() == 1) {
                 switch ($this->getState()) {
-                    case 'in progress':
+                    case ScenarioState::IN_PROGRESS:
                         return 'fas fa-spinner fa-spin';
-                    case 'error':
+                    case ScenarioState::ERROR:
                         return 'fas fa-exclamation-triangle';
                     default:
                         if (strpos($this->getDisplay('icon'), '<i') === 0) {
@@ -677,9 +684,9 @@ class Scenario
         } else {
             if ($this->getIsActive() == 1) {
                 switch ($this->getState()) {
-                    case 'in progress':
+                    case ScenarioState::IN_PROGRESS:
                         return '<i class="fas fa-spinner fa-spin"></i>';
-                    case 'error':
+                    case ScenarioState::ERROR:
                         return '<i class="fas fa-exclamation-triangle"></i>';
                     default:
                         if (strpos($this->getDisplay('icon'), '<i') === 0) {
@@ -766,8 +773,8 @@ class Scenario
      */
     public function remove()
     {
-        \viewData::removeByTypeLinkId('scenario', $this->getId());
-        \dataStore::removeByTypeLinkId('scenario', $this->getId());
+        ViewDataManager::removeByTypeLinkId('scenario', $this->getId());
+        DataStoreManager::removeByTypeLinkId('scenario', $this->getId());
         foreach ($this->getElement() as $element) {
             $element->remove();
         }
@@ -808,7 +815,7 @@ class Scenario
      */
     public function setData($_key, $_value, $_private = false)
     {
-        $dataStore = new \dataStore();
+        $dataStore = new DataStore();
         $dataStore->setType('scenario');
         $dataStore->setKey($_key);
         $dataStore->setValue($_value);
@@ -821,9 +828,9 @@ class Scenario
         return true;
     }
 
-    public function getData($key, $private = false, $default = '')
+    public function getData($key, $protected = false, $default = '')
     {
-        if ($private !== false) {
+        if ($protected !== false) {
             $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', $this->getId(), $key);
         } else {
             $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', -1, $key);
@@ -1077,7 +1084,6 @@ class Scenario
             }
         }
         if ($_mode == 'array') {
-            $return = [];
             $return = Utils::o2a($this);
             $return['trigger'] = NextDomHelper::toHumanReadable($return['trigger']);
             $return['elements'] = array();
@@ -1129,11 +1135,12 @@ class Scenario
 
     /**
      *
-     * @return \object
+     * @return JeeObject
+     * @throws \Exception
      */
     public function getObject()
     {
-        return \object::byId($this->object_id);
+        return JeeObjectManager::byId($this->object_id);
     }
 
     /**
@@ -1145,6 +1152,7 @@ class Scenario
      * @param mixed $_withoutScenarioName
      * @param bool $_object_name
      * @return string
+     * @throws \Exception
      */
     public function getHumanName($_complete = false, $_noGroup = false, $_tag = false, $_prettify = false, $_withoutScenarioName = false, $_object_name = true)
     {
@@ -1197,7 +1205,7 @@ class Scenario
     /**
      *
      * @param mixed $_right
-     * @param \user|null $_user
+     * @param User|null $_user
      *
      * @return boolean
      */
@@ -1215,10 +1223,10 @@ class Scenario
         if (!AuthentificationHelper::isConnected()) {
             return false;
         }
-        if (AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
+        if (AuthentificationHelper::isConnectedAsAdmin() || AuthentificationHelper::isConnectedWithRights('user')) {
             return true;
         }
-        if (strpos($_SESSION['user']->getRights('scenario' . $this->getId()), $_right) !== false) {
+        if (strpos(UserManager::getStoredUser()->getRights('scenario' . $this->getId()), $_right) !== false) {
             return true;
         }
         return false;
@@ -1346,13 +1354,13 @@ class Scenario
         $return = array('cmd' => array(), 'eqLogic' => array(), 'scenario' => array(), 'plan' => array(), 'view' => array());
         $return['cmd'] = CmdManager::searchConfiguration('#scenario' . $this->getId() . '#');
         $return['eqLogic'] = EqLogicManager::searchConfiguration(array('#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()));
-        $return['interactDef'] = \interactDef::searchByUse(array('#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()));
+        $return['interactDef'] = InteractDefManager::searchByUse(array('#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()));
         $return['scenario'] = ScenarioManager::searchByUse(array(
             array('action' => 'scenario', 'option' => $this->getId(), 'and' => true),
             array('action' => '#scenario' . $this->getId() . '#'),
         ));
-        $return['view'] = \view::searchByUse('scenario', $this->getId());
-        $return['plan'] = \planHeader::searchByUse('scenario', $this->getId());
+        $return['view'] = ViewManager::searchByUse('scenario', $this->getId());
+        $return['plan'] = PlanHeaderManager::searchByUse('scenario', $this->getId());
         if ($_array) {
             foreach ($return as &$value) {
                 $value = Utils::o2a($value);
@@ -1587,16 +1595,19 @@ class Scenario
      *
      * @return int
      */
-    public function getOrder() {
+    public function getOrder()
+    {
         return $this->order;
     }
+
     /**
      *
      * @param int $_order
      * @return $this
      */
-    public function setOrder($_order) {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->order,$_order);
+    public function setOrder($_order)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
         $this->order = $_order;
         return $this;
     }

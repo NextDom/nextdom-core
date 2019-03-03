@@ -36,11 +36,12 @@ namespace NextDom\Managers;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Model\Entity\Update;
 
 class UpdateManager
 {
     const DB_CLASS_NAME = 'update';
-    const CLASS_NAME = 'update';
+    const CLASS_NAME = Update::class;
 
     /**
      * Check all updates
@@ -67,7 +68,7 @@ class UpdateManager
                     $update->setType('core')
                         ->setLogicalId('nextdom')
                         ->setSource(ConfigManager::byKey('core::repo::provider'))
-                        ->setLocalVersion(NextDomHelper::getJeedomVersion());
+                        ->setLocalVersion(NextDomHelper::getNextdomVersion());
                     $update->save();
                     $update->checkUpdate();
                 } else {
@@ -81,14 +82,14 @@ class UpdateManager
             }
         }
         if (!$findCore && ($filter == '' || $filter == 'core')) {
-            $update = (new \update())
+            $update = (new Update())
                 ->setType('core')
                 ->setLogicalId('nextdom')
                 ->setSource(ConfigManager::byKey('core::repo::provider'))
                 ->setConfiguration('user', 'NextDom')
                 ->setConfiguration('repository', 'nextdom-core')
                 ->setConfiguration('version', 'master')
-                ->setLocalVersion(NextDomHelper::getJeedomVersion());
+                ->setLocalVersion(NextDomHelper::getNextdomVersion());
             $update->save();
             $update->checkUpdate();
         }
@@ -202,7 +203,7 @@ class UpdateManager
     /**
      * Get updates from their status
      * @param $status
-     * @return \update[]
+     * @return Update[]
      * @throws \Exception
      */
     public static function byStatus($status)
@@ -315,7 +316,7 @@ class UpdateManager
             $pluginId = $plugin->getId();
             $update = self::byTypeAndLogicalId('plugin', $pluginId);
             if (!is_object($update)) {
-                $update = (new \update())
+                $update = (new Update())
                     ->setLogicalId($pluginId)
                     ->setType('plugin')
                     ->setLocalVersion(date('Y-m-d H:i:s'));
@@ -328,7 +329,7 @@ class UpdateManager
                     $find[$logical_id] = true;
                     $update = self::byTypeAndLogicalId($pluginId, $logical_id);
                     if (!is_object($update)) {
-                        $update = (new \update())
+                        $update = (new Update())
                             ->setLogicalId($logical_id)
                             ->setType($pluginId)
                             ->setLocalVersion(date('Y-m-d H:i:s'));

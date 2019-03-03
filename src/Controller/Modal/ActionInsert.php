@@ -23,33 +23,21 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
 
 class ActionInsert extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render action insert modal (scenario)
      *
-     * @param Render $render Render engine
-     *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
-        $pageContent = [];
-        $pageContent['productName'] = ConfigManager::byKey('product_name');
+        $pageData = [];
+        $pageData['productName'] = ConfigManager::byKey('product_name');
 
-        return $render->get('/modals/action.insert.html.twig', $pageContent);
+        return Render::getInstance()->get('/modals/action.insert.html.twig', $pageData);
     }
 }

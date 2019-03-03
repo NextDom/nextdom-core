@@ -37,6 +37,7 @@ namespace NextDom\Managers;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Model\Entity\History;
 
 class HistoryManager
 {
@@ -244,7 +245,7 @@ class HistoryManager
                         AND cmd_id=:cmd_id';
                 $avg = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
 
-                $history = new \history();
+                $history = new History();
                 $history->setCmd_id($sensors['cmd_id']);
                 $history->setValue($avg['value']);
                 $history->setDatetime($avg['datetime']);
@@ -279,7 +280,7 @@ class HistoryManager
      * @param $_cmd_id
      * @param null $_startTime
      * @param null $_endTime
-     * @return \history[] des valeurs de l'équipement
+     * @return History[] des valeurs de l'équipement
      * @throws \Exception
      */
     public static function all($_cmd_id, $_startTime = null, $_endTime = null)
@@ -539,21 +540,15 @@ class HistoryManager
             return -1;
         }
         $currentValue = $histories[0]->getValue();
-        $dateTo = date('Y-m-d H:i:s');
-        $duration = strtotime($dateTo) - strtotime($histories[0]->getDatetime());
         for ($i = 0; $i < $c - 1; $i++) {
-            $history = $histories[$i];
-            $value = $history->getValue();
-            $date = $history->getDatetime();
             $nextValue = $histories[$i + 1]->getValue();
             if ($currentValue != $nextValue) {
-                return $duration;
-            }
-            if ($i > 0) {
-                $duration += strtotime($histories[$i - 1]->getDatetime()) - strtotime($date);
+                break;
             }
         }
-        return -1;
+        $dateTo = date('Y-m-d H:i:s');
+        $duration = strtotime($dateTo) - strtotime($histories[$i]->getDatetime());
+        return $duration;
     }
 
     public static function lastStateDuration($_cmd_id, $_value = null)

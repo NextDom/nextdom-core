@@ -19,8 +19,6 @@
 /* * ***************************Includes********************************* */
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
-class historyArch extends history {
-
-    protected $_tableName = 'historyArch';
+class historyArch extends \NextDom\Model\Entity\HistoryArch {
 
 }

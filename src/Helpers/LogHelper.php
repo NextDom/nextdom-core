@@ -39,6 +39,7 @@ use Monolog\Handler\SyslogHandler;
 use Monolog\Handler\SyslogUdpHandler;
 use Monolog\Logger;
 use NextDom\Managers\ConfigManager;
+use NextDom\Managers\MessageManager;
 use SplFileObject;
 
 class LogHelper
@@ -115,6 +116,16 @@ class LogHelper
         return null;
     }
 
+    public static function addError($logTarget, $message, $logicalId = '')
+    {
+        self::add($logTarget, 'error', $message, $logicalId);
+    }
+
+    public static function addInfo($logTarget, $message, $logicalId = '')
+    {
+        self::add($logTarget, 'info', $message, $logicalId);
+    }
+
     /**
      * Ajoute un message dans les log et fait en sorte qu'il n'y
      * ai jamais plus de 1000 lignes
@@ -135,9 +146,9 @@ class LogHelper
             try {
                 $level = Logger::toMonologLevel($_type);
                 if ($level == Logger::ERROR && self::getConfig('addMessageForErrorLog') == 1) {
-                    \message::add($_log, $_message, '', $_logicalId);
+                    @MessageManager::add($_log, $_message, '', $_logicalId);
                 } elseif ($level > Logger::ALERT) {
-                    \message::add($_log, $_message, '', $_logicalId);
+                    @MessageManager::add($_log, $_message, '', $_logicalId);
                 }
             } catch (\Exception $e) {
 

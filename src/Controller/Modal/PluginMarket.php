@@ -23,30 +23,19 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 
 class PluginMarket extends BaseAbstractModal
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render plugin market modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
+
 
         Utils::sendVarsToJs([
             'installBranchStr' => __("Installer la branche "),
@@ -54,7 +43,7 @@ class PluginMarket extends BaseAbstractModal
         ]);
         include_file('desktop', 'Market/plugin.market', 'js');
 
-        return $render->get('/modals/plugin.Market.html.twig');
+        return Render::getInstance()->get('/modals/plugin.Market.html.twig');
     }
 
 }

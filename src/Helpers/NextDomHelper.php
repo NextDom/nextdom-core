@@ -43,10 +43,13 @@ use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\MessageManager;
+use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Managers\ViewManager;
 
 class NextDomHelper
 {
@@ -596,7 +599,7 @@ class NextDomHelper
             self::forceSyncHour();
             sleep(3);
             if (strtotime('now') < $mindate || strtotime('now') > $maxdate) {
-                LogHelper::add('core', 'error', sprintf(__('core.incorrect-sys-date'), $minDateValue, $maxDateValue) . (new \DateTime())->format('Y-m-d H:i:s'), 'dateCheckFailed');
+                LogHelper::addError('core', sprintf(__('core.incorrect-sys-date'), $minDateValue, $maxDateValue) . (new \DateTime())->format('Y-m-d H:i:s'), 'dateCheckFailed');
                 return false;
             }
         }
@@ -630,19 +633,19 @@ class NextDomHelper
                         try {
                             $cron->halt();
                         } catch (\Exception $e) {
-                            LogHelper::add('starting', 'error', __('Erreur sur l\'arrêt d\'une tâche cron : ') . LogHelper::exception($e));
+                            LogHelper::addError('starting', __('Erreur sur l\'arrêt d\'une tâche cron : ') . LogHelper::exception($e));
                         }
                     }
                 }
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur l\'arrêt des tâches crons : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur l\'arrêt des tâches crons : ') . LogHelper::exception($e));
             }
 
             try {
                 LogHelper::add('starting', 'debug', __('Restauration du cache'));
                 CacheManager::restore();
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur la restauration du CacheManager : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur la restauration du CacheManager : ') . LogHelper::exception($e));
             }
 
             try {
@@ -650,7 +653,7 @@ class NextDomHelper
                 $cache = CacheManager::byKey('nextdom::usbMapping');
                 $cache->remove();
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur le nettoyage du CacheManager des péripheriques USB : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur le nettoyage du CacheManager des péripheriques USB : ') . LogHelper::exception($e));
             }
 
             try {
@@ -658,23 +661,23 @@ class NextDomHelper
                 $cache = CacheManager::byKey('nextdom::bluetoothMapping');
                 $cache->remove();
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur le nettoyage du CacheManager des péripheriques Bluetooth : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur le nettoyage du CacheManager des péripheriques Bluetooth : ') . LogHelper::exception($e));
             }
 
             try {
                 LogHelper::add('starting', 'debug', __('Démarrage des processus Internet de NextDom'));
                 self::startSystem();
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur le démarrage interne de NextDom : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur le démarrage interne de NextDom : ') . LogHelper::exception($e));
             }
 
             try {
                 LogHelper::add('starting', 'debug', __('Ecriture du fichier ') . self::getTmpFolder() . '/started');
                 if (file_put_contents(self::getTmpFolder() . '/started', date('Y-m-d H:i:s')) === false) {
-                    LogHelper::add('starting', 'error', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started'));
+                    LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started'));
                 }
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started : ') . LogHelper::exception($e));
             }
 
             if (!file_exists(self::getTmpFolder() . '/started')) {
@@ -683,26 +686,26 @@ class NextDomHelper
             }
 
             try {
-                LogHelper::add('starting', 'debug', __('Vérification de la \configuration réseau interne'));
+                LogHelper::add('starting', 'debug', __('Vérification de la configuration réseau interne'));
                 if (!NetworkHelper::test('internal')) {
                     NetworkHelper::checkConf('internal');
                 }
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur la \configuration réseau interne : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur la configuration réseau interne : ') . LogHelper::exception($e));
             }
 
             try {
                 LogHelper::add('starting', 'debug', __('Envoi de l\'événement de démarrage'));
                 self::event('start');
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur l\'envoi de l\'événement de démarrage : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur l\'envoi de l\'événement de démarrage : ') . LogHelper::exception($e));
             }
 
             try {
                 LogHelper::add('starting', 'debug', __('Démarrage des plugins'));
                 PluginManager::start();
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur le démarrage des plugins : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur le démarrage des plugins : ') . LogHelper::exception($e));
             }
 
             try {
@@ -711,7 +714,7 @@ class NextDomHelper
                     \repo_market::test();
                 }
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur la connexion au market : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur la connexion au market : ') . LogHelper::exception($e));
             }
             LogHelper::add('starting', 'debug', __('Démarrage de nextdom fini avec succès'));
             EventManager::add('refresh');
@@ -727,7 +730,7 @@ class NextDomHelper
         try {
             NetworkHelper::cron5();
         } catch (\Exception $e) {
-            LogHelper::add('network', 'error', 'network::cron : ' . $e->getMessage());
+            LogHelper::addError('network', 'network::cron : ' . $e->getMessage());
         }
         try {
             foreach (UpdateManager::listRepo() as $name => $repo) {
@@ -737,7 +740,7 @@ class NextDomHelper
                 }
             }
         } catch (\Exception $e) {
-            LogHelper::add('nextdom', 'error', $e->getMessage());
+            LogHelper::addError('nextdom', $e->getMessage());
         }
         try {
             EqLogicManager::checkAlive();
@@ -754,7 +757,7 @@ class NextDomHelper
         try {
             CacheManager::set('hour', date('Y-m-d H:i:s'));
         } catch (\Exception $e) {
-            LogHelper::add('nextdom', 'error', $e->getMessage());
+            LogHelper::addError('nextdom', $e->getMessage());
         }
         try {
             if (ConfigManager::byKey('update::autocheck', 'core', 1) == 1 && (ConfigManager::byKey('update::lastCheck') == '' || (strtotime('now') - strtotime(ConfigManager::byKey('update::lastCheck'))) > (23 * 3600))) {
@@ -768,11 +771,11 @@ class NextDomHelper
                 }
                 $updates = UpdateManager::byStatus('update');
                 if (count($updates) > 0) {
-                    \message::add('update', __('De nouvelles mises à jour sont disponibles : ') . trim($toUpdate, ','), '', 'newUpdate');
+                    MessageManager::add('update', __('De nouvelles mises à jour sont disponibles : ') . trim($toUpdate, ','), '', 'newUpdate');
                 }
             }
         } catch (\Exception $e) {
-            LogHelper::add('nextdom', 'error', $e->getMessage());
+            LogHelper::addError('nextdom', $e->getMessage());
         }
         try {
             foreach (UpdateManager::listRepo() as $name => $repo) {
@@ -782,7 +785,7 @@ class NextDomHelper
                 }
             }
         } catch (\Exception $e) {
-            LogHelper::add('nextdom', 'error', $e->getMessage());
+            LogHelper::addError('nextdom', $e->getMessage());
         }
     }
 
@@ -797,11 +800,11 @@ class NextDomHelper
             LogHelper::chunk();
             CronManager:
             clean();
-            \report::clean();
+            ReportHelper::clean();
             \DB::optimize();
             CacheManager::clean();
         } catch (\Exception $e) {
-            LogHelper::add('nextdom', 'error', $e->getMessage());
+            LogHelper::addError('nextdom', $e->getMessage());
         }
     }
 
@@ -1032,7 +1035,7 @@ class NextDomHelper
             if (isset($result['view'][$view_id])) {
                 continue;
             }
-            $view = \view::byId($view_id);
+            $view = ViewManager::byId($view_id);
             if (!is_object($view)) {
                 continue;
             }
@@ -1043,7 +1046,7 @@ class NextDomHelper
             if (isset($result['plan'][$plan_id])) {
                 continue;
             }
-            $plan = \planHeader::byId($plan_id);
+            $plan = PlanHeaderManager::byId($plan_id);
             if (!is_object($plan)) {
                 continue;
             }
@@ -1120,16 +1123,16 @@ class NextDomHelper
     /**
      * Get temporary folder and creates it if not exists
      *
-     * @param null $plugin
+     * @param string|null $subFolder Log subfolder
      *
      * @return string
      * @throws \Exception
      */
-    public static function getTmpFolder($plugin = null)
+    public static function getTmpFolder($subFolder = null)
     {
         $result = '/' . trim(ConfigManager::byKey('folder::tmp'), '/');
-        if ($plugin !== null) {
-            $result .= '/' . $plugin;
+        if ($subFolder !== null) {
+            $result .= '/' . $subFolder;
         }
         if (!file_exists($result)) {
             mkdir($result, 0774, true);

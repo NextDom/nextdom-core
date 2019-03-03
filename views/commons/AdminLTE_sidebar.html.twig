@@ -38,55 +38,54 @@
                 {% endif %}
             </div>
         </div>
-
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">{{ 'sidebar.menu-main'|trans|upper }}</li>
             <li class="treeview" id="side1">
-                <a href="#"><i class="fas fa-tachometer-alt"></i><span>&nbsp;&nbsp;{{ 'sidebar.dashboard'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <a href="#"><i class="fas fa-tachometer-alt spacing-right"></i><span>{{ 'sidebar.dashboard'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li><a href="index.php?v=d&p=object"><i class="fas fa-clone"></i>&nbsp;&nbsp;{{ 'sidebar.objects-list'|trans }}</a></li>
-                    <li class="divider"><a href="index.php?v=d&p=dashboard"><i class="fas fa-asterisk"></i>&nbsp;&nbsp;{{ 'sidebar.default-object'|trans }}</a></li>
+                    <li><a href="index.php?v=d&p=object"><i class="fas fa-clone spacing-right"></i>{{ 'sidebar.objects-list'|trans }}</a></li>
+                    <li class="divider"><a href="index.php?v=d&p=dashboard"><i class="fas fa-asterisk spacing-right"></i>{{ 'sidebar.default-object'|trans }}</a></li>
                     {% for jeeObject in MENU_JEEOBJECT_TREE %}
                         <li style="padding-left:{{ jeeObject.parentNumber()*7 }}px"><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
                     {% endfor %}
                 </ul>
             </li>
             <li class="treeview" id="side2">
-                <a href="#"><i class="fa fa-picture-o"></i><span>&nbsp;&nbsp;{{ 'sidebar.view'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <a href="#"><i class="fa fa-picture-o spacing-right"></i><span>{{ 'sidebar.view'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li><a href="index.php?v=d&p=view"><i class="fas fa-bullseye"></i>&nbsp;&nbsp;{{ 'sidebar.show-all'|trans }}</a></li>
+                    <li><a href="index.php?v=d&p=view"><i class="fas fa-bullseye spacing-right"></i>{{ 'sidebar.show-all'|trans }}</a></li>
                     {% for view in MENU_VIEWS_LIST %}
-                        <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">{{ view.getDisplay('icon')|raw }}&nbsp;&nbsp;{{ view.getName() }}</a></li>
+                        <li><a href="index.php?v=d&p=view&view_id={{ view.getId() }}">{{ view.getDisplay('icon')|raw }}<i class="spacing-right"></i>{{ view.getName() }}</a></li>
                     {% endfor %}
                 </ul>
             </li>
             <li class="treeview" id="side3">
-                <a href="#"><i class="fas fa-object-group"></i><span>&nbsp;&nbsp;{{ 'sidebar.design'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <a href="#"><i class="fas fa-object-group spacing-right"></i><span>{{ 'sidebar.design'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li><a href="index.php?v=d&p=plan"><i class="fas fa-bullseye"></i>&nbsp;&nbsp;{{ 'sidebar.show-all'|trans }}</a></li>
+                    <li><a href="index.php?v=d&p=plan"><i class="fas fa-bullseye spacing-right"></i>{{ 'sidebar.show-all'|trans }}</a></li>
                     {% for plan in MENU_PLANS_LIST %}
-                        <li><a href="index.php?v=d&p=plan&plan_id={{ plan.getId() }}">{{ plan.getConfiguration('icon')|raw }}&nbsp;&nbsp;{{ plan.getName() }}</a></li>
+                        <li><a href="index.php?v=d&p=plan&plan_id={{ plan.getId() }}">{{ plan.getConfiguration('icon')|raw }}<i class="spacing-right"></i>{{ plan.getName() }}</a></li>
                     {% endfor %}
                 </ul>
             </li>
             {# attention si réactivation changer les id=sideX
             <li class="treeview" id="sideX">
-                <a href="#"><i class="fas fa-building"></i><span>&nbsp;&nbsp;{{ 'sidebar.plan3d'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <a href="#"><i class="fas fa-building spacing-right"></i><span>{{ 'sidebar.plan3d'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li><a href="index.php?v=d&p=plan3d"><i class="fas fa-bullseye"></i>&nbsp;&nbsp;{{ 'sidebar.show-all'|trans }}</a></li>
+                    <li><a href="index.php?v=d&p=plan3d"><i class="fas fa-bullseye spacing-right"></i>{{ 'sidebar.show-all'|trans }}</a></li>
                     {% for plan3d in MENU_PLANS3D_LIST %}
-                        <li><a href="index.php?v=d&p=plan3d&plan3d_id={{ plan3d.getId() }}">&nbsp;&nbsp;{{ plan3d.getConfiguration('icon')|trim }}&nbsp;&nbsp;{{ plan3d.getName() }}</a></li>
+                        <li><a href="index.php?v=d&p=plan3d&plan3d_id={{ plan3d.getId() }}">{{ plan3d.getConfiguration('icon')|trim }}<i class="spacing-right"></i>{{ plan3d.getName() }}</a></li>
                     {% endfor %}
                 </ul>
             </li>
             #}
             {% if PANEL_MENU is defined and PANEL_MENU is not empty %}
                 <li class="treeview">
-                    <a href="#"><i class="fas fa-th-large"></i><span>&nbsp;&nbsp;{{ 'sidebar.panel'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                    <a href="#"><i class="fas fa-th-large spacing-right"></i><span>{{ 'sidebar.panel'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                     <ul class="treeview-menu">
                         {% for panelmenu in PANEL_MENU %}
-                            <li><a href="index.php?v=d&m={{ panelmenu.getId() }}&p={{ panelmenu.getDisplay() }}"><img class="img-responsive" src="{{ panelmenu.getPathImgIcon() }}">&nbsp;&nbsp;&nbsp;{{ panelmenu.getName() }}</a></li>
+                            <li><a href="index.php?v=d&m={{ panelmenu.getId() }}&p={{ panelmenu.getDisplay() }}"><img class="img-responsive spacing-right" src="{{ panelmenu.getPathImgIcon() }}">{{ panelmenu.getName() }}</a></li>
                         {% endfor %}
                     </ul>
                 </li>
@@ -94,16 +93,16 @@
 
             <li class="header">{{ 'sidebar.menu-manage'|trans|upper }}</li>
             <li class="treeview" id="side4">
-                <a href="#"><i class="fas fa-puzzle-piece"></i><span>&nbsp;&nbsp;{{ 'sidebar.plugins'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <a href="#"><i class="fas fa-puzzle-piece spacing-right"></i><span>{{ 'sidebar.plugins'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li class="treeview"><a href="index.php?v=d&p=plugin"><i class="fas fa-tags"></i>&nbsp;&nbsp;{{ 'sidebar.plugins-markets'|trans }}</a></li>
+                    <li class="treeview"><a href="index.php?v=d&p=plugin"><i class="fas fa-tags spacing-right"></i>{{ 'sidebar.plugins-markets'|trans }}</a></li>
                     {% if MENU_PLUGIN_CATEGORY is defined %}
                         {% for category, categoryData in MENU_PLUGIN_CATEGORY %}
                             <li class="treeview">
-                                <a href="#" data-toggle="dropdown"><i class="fas {{ categoryData.icon }}"></i>&nbsp;&nbsp;{{ categoryData.name }}<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                                <a href="#" data-toggle="dropdown"><i class="fas {{ categoryData.icon }} spacing-right"></i>{{ categoryData.name }}<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                                 <ul class="treeview-menu">
                                     {% for plugin in MENU_PLUGIN[category] %}
-                                        <li class="treeview plugin-item"><a href="index.php?v=d&m={{ plugin.id }}&p={{ plugin.index }}"><img class="img-responsive" src="{{ plugin.pathImgIcon }}"/>&nbsp;&nbsp;&nbsp;{{ plugin.name }}</a></li>
+                                        <li class="treeview plugin-item"><a href="index.php?v=d&m={{ plugin.id }}&p={{ plugin.index }}"><img class="img-responsive spacing-right" src="{{ plugin.pathImgIcon }}"/>{{ plugin.name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>
@@ -112,36 +111,36 @@
                 </ul>
             </li>
             <li class="treeview" id="side5">
-                <a href="#"><i class="fa fa-th-list"></i><span>&nbsp;&nbsp;{{ 'sidebar.tools'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <a href="#"><i class="fa fa-th-list spacing-right"></i><span>{{ 'sidebar.tools'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li><a href="index.php?v=d&p=display"><i class="fas fa-th"></i>&nbsp;&nbsp;{{ 'sidebar.tools-summary'|trans }}</a></li>
-                    <li><a href="index.php?v=d&p=interact"><i class="fas fa-comments"></i>&nbsp;&nbsp;{{ 'sidebar.tools-interactions'|trans }}</a></li>
-                    <li><a href="index.php?v=d&p=scenario"><i class="fas fa-film"></i>&nbsp;&nbsp;{{ 'sidebar.tools-scenarios'|trans }}</a></li>
-                    <li><a href="index.php?v=d&p=note"><i class="fas fa-sticky-note"></i>&nbsp;&nbsp;{{ 'sidebar.tools-notes'|trans }}</a></li>
+                    <li><a href="index.php?v=d&p=display"><i class="fas fa-th spacing-right"></i>{{ 'sidebar.tools-summary'|trans }}</a></li>
+                    <li><a href="index.php?v=d&p=interact"><i class="fas fa-comments spacing-right"></i>{{ 'sidebar.tools-interactions'|trans }}</a></li>
+                    <li><a href="index.php?v=d&p=scenario"><i class="fas fa-film spacing-right"></i>{{ 'sidebar.tools-scenarios'|trans }}</a></li>
+                    <li><a href="index.php?v=d&p=note"><i class="fas fa-sticky-note spacing-right"></i>{{ 'sidebar.tools-notes'|trans }}</a></li>
                 </ul>
             </li>
             <li class="treeview" id="side6">
-                <a href="#"><i class="fas fa-stethoscope"></i><span>&nbsp;&nbsp;{{ 'sidebar.diagnostics'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <a href="#"><i class="fas fa-stethoscope spacing-right"></i><span>{{ 'sidebar.diagnostics'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li><a href="index.php?v=d&p=health"><i class="fas fa-medkit"></i>&nbsp;&nbsp;{{ 'sidebar.diagnostics-health'|trans }}</a></li>
-                    <li><a href="index.php?v=d&p=eqAnalyse"><i class="fas fa-plug"></i>&nbsp;&nbsp;{{ 'sidebar.diagnostics-eqlogics'|trans }}</a></li>
-                    <li><a href="index.php?v=d&p=history"><i class="fas fa-chart-area"></i>&nbsp;&nbsp;{{ 'sidebar.diagnostics-history'|trans }}</a></li>
-                    <li><a href="index.php?v=d&p=timeline"><i class="fas fa-history"></i>&nbsp;&nbsp;{{ 'sidebar.diagnostics-timeline'|trans }}</a></li>
-                    <li><a href="index.php?v=d&p=log"><i class="fas fa-file-alt"></i>&nbsp;&nbsp;{{ 'sidebar.diagnostics-logs'|trans }}</a></li>
-                    <li><a href="index.php?v=d&p=realtime"><i class="fas fa-tachometer-alt"></i>&nbsp;&nbsp;{{ 'sidebar.diagnostics-realtime'|trans }}</a></li>
+                    <li><a href="index.php?v=d&p=health"><i class="fas fa-medkit spacing-right"></i>{{ 'sidebar.diagnostics-health'|trans }}</a></li>
+                    <li><a href="index.php?v=d&p=eqAnalyse"><i class="fas fa-plug spacing-right"></i>{{ 'sidebar.diagnostics-eqlogics'|trans }}</a></li>
+                    <li><a href="index.php?v=d&p=history"><i class="fas fa-chart-area spacing-right"></i>{{ 'sidebar.diagnostics-history'|trans }}</a></li>
+                    <li><a href="index.php?v=d&p=timeline"><i class="fas fa-history spacing-right"></i>{{ 'sidebar.diagnostics-timeline'|trans }}</a></li>
+                    <li><a href="index.php?v=d&p=log"><i class="fas fa-file-alt spacing-right"></i>{{ 'sidebar.diagnostics-logs'|trans }}</a></li>
+                    <li><a href="index.php?v=d&p=realtime"><i class="fas fa-tachometer-alt spacing-right"></i>{{ 'sidebar.diagnostics-realtime'|trans }}</a></li>
                 </ul>
             </li>
             <li class="treeview" id="side7">
-                <a href="#"><i class="fas fa-cog"></i><span>&nbsp;&nbsp;{{ 'sidebar.expert'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <a href="#"><i class="fas fa-cog spacing-right"></i><span>{{ 'sidebar.expert'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li><a href="index.php?v=d&p=administration"><i class="fas fa-wrench"></i>&nbsp;&nbsp;{{ 'sidebar.expert-admin'|trans }}</a></li>
-                    <li class="divider"><a href="/index.php?v=m" data-reload="yes"><i class="fas fa-mobile-alt"></i>&nbsp;&nbsp;{{ 'sidebar.expert-mobile'|trans }}</a></li>
-                    <li><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock"></i>&nbsp;&nbsp;{{ 'sidebar.expert-logout'|trans }}</a></li>
+                    <li><a href="index.php?v=d&p=administration"><i class="fas fa-wrench spacing-right"></i>{{ 'sidebar.expert-admin'|trans }}</a></li>
+                    <li class="divider"><a href="/index.php?v=m" data-reload="yes"><i class="fas fa-mobile-alt spacing-right"></i>{{ 'sidebar.expert-mobile'|trans }}</a></li>
+                    <li><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock spacing-right"></i>{{ 'sidebar.expert-logout'|trans }}</a></li>
                     {% if IS_ADMIN and CAN_SUDO %}
-                        <li><a href="#" id="bt_rebootSystem" state="0"><i class="fas fa-repeat"></i>&nbsp;&nbsp;{{ 'sidebar.expert-restart'|trans }}</a></li>
-                        <li><a href="#" id="bt_haltSystem" state="0"><i class="fas fa-power-off"></i>&nbsp;&nbsp;{{ 'sidebar.expert-shutdown'|trans }}</a></li>
+                        <li><a href="#" id="bt_rebootSystem" state="0"><i class="fas fa-repeat spacing-right"></i>{{ 'sidebar.expert-restart'|trans }}</a></li>
+                        <li><a href="#" id="bt_haltSystem" state="0"><i class="fas fa-power-off spacing-right"></i>{{ 'sidebar.expert-shutdown'|trans }}</a></li>
                     {% endif %}
-                    <li><a href="https://github.com/NextDom/nextdom-core/issues" target="_blank" class="sidebar-warning"><i class="fas fa-exclamation"></i>&nbsp;&nbsp;{{ 'sidebar.expert-issue'|trans }}</a></li>
+                    <li><a href="https://github.com/NextDom/nextdom-core/issues" target="_blank" class="sidebar-warning"><i class="fas fa-exclamation spacing-right"></i>{{ 'sidebar.expert-issue'|trans }}</a></li>
                 </ul>
             </li>
         </ul>

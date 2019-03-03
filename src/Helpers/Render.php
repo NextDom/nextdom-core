@@ -71,7 +71,7 @@ class Render
      */
     private function initRenderer()
     {
-        $developerMode = Status::isInDeveloperMode();
+        $developerMode = AuthentificationHelper::isInDeveloperMode();
         $loader = new Twig_Loader_Filesystem(realpath('views'));
         $this->twigLoader = $loader;
         $twigConfig = [
@@ -120,13 +120,20 @@ class Render
      * @param $view
      * @param array $data
      * @return mixed
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public function get($view, $data = array())
     {
-        return $this->twig->render($view, $data);
+        $data['debugbar'] = $this->showDebugBar($this->twigLoader);
+        try {
+            return $this->twig->render($view, $data);
+        } catch (Twig_Error_Loader $e) {
+            echo $e->getMessage();
+        } catch (\Twig_Error_Runtime $e) {
+            echo $e->getMessage();
+        } catch (\Twig_Error_Syntax $e) {
+            echo $e->getMessage();
+        }
+        return null;
     }
 
     /**
@@ -135,16 +142,7 @@ class Render
      */
     public function show($view, $data = array())
     {
-        $data['debugbar'] = $this->showDebugBar($this->twigLoader);
-        try {
-            echo $this->twig->render($view, $data);
-        } catch (Twig_Error_Loader $e) {
-            echo $e->getMessage();
-        } catch (\Twig_Error_Runtime $e) {
-            echo $e->getMessage();
-        } catch (\Twig_Error_Syntax $e) {
-            echo $e->getMessage();
-        }
+        echo $this->get($view, $data);
     }
 
     /**
@@ -164,7 +162,7 @@ class Render
     private function showDebugBar(Twig_Loader_Filesystem $twigLoader)
     {
         $debugBarData = false;
-        if (Status::isInDeveloperMode()) {
+        if (AuthentificationHelper::isInDeveloperMode()) {
             $debugBar = new StandardDebugBar();
             $debugBarRenderer = $debugBar->getJavascriptRenderer();
             try {

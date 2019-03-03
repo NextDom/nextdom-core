@@ -35,9 +35,14 @@ use NextDom\Managers\EventManager;
 use NextDom\Managers\HistoryManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ListenerManager;
+use NextDom\Managers\MessageManager;
+use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\ViewDataManager;
+use NextDom\Managers\ViewManager;
 
 /**
  * Cmd
@@ -306,7 +311,7 @@ class Cmd
     }
 
     /**
-     * @return \eqLogic|null
+     * @return EqLogic|null
      * @throws \Exception
      */
     public function getEqLogicId()
@@ -680,7 +685,7 @@ class Cmd
 
     public function remove()
     {
-        \viewData::removeByTypeLinkId('cmd', $this->getId());
+        ViewDataManager::removeByTypeLinkId('cmd', $this->getId());
         DataStoreManager::removeByTypeLinkId('cmd', $this->getId());
         $this->getEqLogicId()->emptyCacheWidget();
         $this->emptyHistory();
@@ -690,6 +695,11 @@ class Cmd
         return \DB::remove($this);
     }
 
+    /**
+     * TODO ???
+     * @param $_options
+     * @return bool
+     */
     public function execute($_options)
     {
         return false;
@@ -717,7 +727,7 @@ class Cmd
                 }
                 ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
             } catch (\Exception $e) {
-                LogHelper::add('cmd', 'error', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
+                LogHelper::addError('cmd', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
             }
         }
     }
@@ -744,7 +754,7 @@ class Cmd
                 }
                 ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
             } catch (\Exception $e) {
-                LogHelper::add('cmd', 'error', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
+                LogHelper::addError('cmd', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
             }
         }
     }
@@ -761,14 +771,14 @@ class Cmd
     {
         if ($this->getType() == 'info') {
             $state = $this->getCache(array('collectDate', 'valueDate', 'value'));
-            if(isset($state['collectDate'])){
+            if (isset($state['collectDate'])) {
                 $this->setCollectDate($state['collectDate']);
-            }else{
+            } else {
                 $this->setCollectDate(date('Y-m-d H:i:s'));
             }
-            if(isset($state['valueDate'])){
+            if (isset($state['valueDate'])) {
                 $this->setValueDate($state['valueDate']);
-            }else{
+            } else {
                 $this->setValueDate($this->getCollectDate());
             }
             return $state['value'];
@@ -814,7 +824,7 @@ class Cmd
                 if ($numberTryWithoutSuccess >= ConfigManager::byKey('numberOfTryBeforeEqLogicDisable')) {
                     $message = 'Désactivation de <a href="' . $eqLogic->getLinkToConfiguration() . '">' . $eqLogic->getName();
                     $message .= '</a> ' . __('car il n\'a pas répondu ou mal répondu lors des 3 derniers essais');
-                    \message::add($type, $message);
+                    MessageManager::add($type, $message);
                     $eqLogic->setIsEnable(0);
                     $eqLogic->save();
                 }
@@ -1159,7 +1169,7 @@ class Cmd
                 }
             }
             if ($foundInfo) {
-                \listener::backgroundCalculDependencyCmd($this->getId());
+                ListenerManager::backgroundCalculDependencyCmd($this->getId());
             }
         } else {
             $events[] = array('cmd_id' => $this->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate());
@@ -1168,7 +1178,7 @@ class Cmd
             EventManager::adds('cmd::update', $events);
         }
         if (!$repeat) {
-            \listener::check($this->getId(), $value, $this->getCollectDate());
+            ListenerManager::check($this->getId(), $value, $this->getCollectDate());
             JeeObjectManager::checkSummaryUpdate($this->getId());
         }
         $this->addHistoryValue($value, $this->getCollectDate());
@@ -1252,7 +1262,7 @@ class Cmd
                 }
                 ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
             } catch (\Exception $e) {
-                LogHelper::add('cmd', 'error', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Détails : ') . $e->getMessage());
+                LogHelper::addError('cmd', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Détails : ') . $e->getMessage());
             }
         }
     }
@@ -1347,7 +1357,7 @@ class Cmd
             LogHelper::add('event', 'info', $message);
             $eqLogic = $this->getEqLogicId();
             if (ConfigManager::byKey('alert::addMessageOn' . ucfirst($_level)) == 1) {
-                \message::add($eqLogic->getEqType_name(), $message);
+                MessageManager::add($eqLogic->getEqType_name(), $message);
             }
             $cmds = explode(('&&'), ConfigManager::byKey('alert::' . $_level . 'Cmd'));
             if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::' . $_level . 'Cmd')) != '') {
@@ -1399,7 +1409,7 @@ class Cmd
         try {
             $http->exec();
         } catch (\Exception $e) {
-            LogHelper::add('cmd', 'error', __('Erreur push sur : ') . $url . ' => ' . $e->getMessage());
+            LogHelper::addError('cmd', __('Erreur push sur : ') . $url . ' => ' . $e->getMessage());
         }
     }
 
@@ -1426,7 +1436,7 @@ class Cmd
         if ($askEndTime === null || $askEndTime < strtotime('now')) {
             return false;
         }
-        $dataStore = new \dataStore();
+        $dataStore = new DataStore();
         $dataStore->setType('scenario');
         $dataStore->setKey($this->getCache('ask::variable', 'none'));
         $dataStore->setValue($_response);
@@ -1444,7 +1454,7 @@ class Cmd
     public function addHistoryValue($_value, $_datetime = '')
     {
         if ($this->getIsHistorized() == 1 && ($_value === null || ($_value !== '' && $this->getType() == 'info' && $_value <= $this->getConfiguration('maxValue', $_value) && $_value >= $this->getConfiguration('minValue', $_value)))) {
-            $history = new \history();
+            $history = new History();
             $history->setCmd_id($this->getId());
             $history->setValue($_value);
             $history->setDatetime($_datetime);
@@ -1497,7 +1507,7 @@ class Cmd
     /**
      * @param null $_dateStart
      * @param null $_dateEnd
-     * @return \history[]
+     * @return History[]
      * @throws \Exception
      */
     public function getHistory($_dateStart = null, $_dateEnd = null)
@@ -1688,8 +1698,8 @@ class Cmd
         $return['eqLogic'] = EqLogicManager::searchConfiguration('#' . $this->getId() . '#');
         $return['scenario'] = ScenarioManager::searchByUse(array(array('action' => '#' . $this->getId() . '#')));
         $return['interactDef'] = InteractDefManager::searchByUse('#' . $this->getId() . '#');
-        $return['view'] = \view::searchByUse('cmd', $this->getId());
-        $return['plan'] = \planHeader::searchByUse('cmd', $this->getId());
+        $return['view'] = ViewManager::searchByUse('cmd', $this->getId());
+        $return['plan'] = PlanHeaderManager::searchByUse('cmd', $this->getId());
         if ($_array) {
             foreach ($return as &$value) {
                 $value = Utils::o2a($value);

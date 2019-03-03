@@ -46,11 +46,11 @@
         <div class="form-group">
             <p class="login-box-msg">{{ 'connection.home-msg'|trans }}</p>
         </div>
-        <div class="form-group has-feedback">
+        <div class="form-group has-feedback" id="div_login_username">
             <input type="text" class="form-control" placeholder="{{ 'connection.login-placeholder'|trans }}" id="in_login_username">
             <span class="label-badge"><i class="fas fa-user-circle"></i></span>
         </div>
-        <div class="form-group has-feedback">
+        <div class="form-group has-feedback" id="div_login_password">
             <input type="password" class="form-control" placeholder="{{ 'connection.password-placeholder'|trans }}" id="in_login_password">
             <span class="label-badge"><i class="fas fa-key"></i></span>
         </div>
@@ -64,10 +64,10 @@
                 <span for="cb_storeConnection" data-toggle="tooltip" title="" data-original-title="{{ 'connection.remember-title'|trans }}">{{ 'connection.remember-label'|trans }}</span>
             </div>
             <div class="col-sm-5 col-xs-12">
-                <button class="btn btn-primary btn-block btn-flat" id="bt_login_validate"><i class="fas fa-unlock">&nbsp;&nbsp;</i>{{ 'connection.connect'|trans }}</button>
+                <button class="btn btn-primary btn-block btn-flat" id="bt_login_validate"><i class="fas fa-unlock spacing-right"></i>{{ 'connection.connect'|trans }}</button>
             </div>
         </div>
-        <a class="Link-Blue" href="https://www.nextdom.org/knowledge-base/reinitialiser-sont-mot-de-passe/" target="_blank">{{ 'connection.forgot'|trans }}</a><br>
+        <a class="label-link" href="https://www.nextdom.org/knowledge-base/reinitialiser-sont-mot-de-passe/" target="_blank">{{ 'connection.forgot'|trans }}</a><br>
     </div>
 </div>
 

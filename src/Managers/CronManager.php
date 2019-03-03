@@ -48,7 +48,7 @@ class CronManager
      * Return an array of all cron objects
      *
      * @param bool $ordered
-     * @return \cron[] List of all cron objets
+     * @return Cron[] List of all cron objets
      * @throws \Exception
      */
     public static function all($ordered = false)
@@ -66,7 +66,8 @@ class CronManager
      *
      * @param int $cronId
      *
-     * @return object
+     * @return Cron
+     *
      * @throws \Exception
      */
     public static function byId($cronId)
@@ -87,7 +88,7 @@ class CronManager
      * @param string $functionName Name of the method
      * @param string $options Filter options
      *
-     * @return \cron Cron object
+     * @return Cron Cron object
      * @throws \Exception
      */
     public static function byClassAndFunction($className, $functionName, $options = '')
@@ -115,7 +116,7 @@ class CronManager
      * @param string $functionName Name of the method
      * @param string $options Filter options
      *
-     * @return array[\cron] List of cron objects
+     * @return Cron[] List of cron objects
      * @throws \Exception
      */
     public static function searchClassAndFunction($className, $functionName, $options = '')
@@ -160,7 +161,7 @@ class CronManager
      */
     public static function nbCronRun()
     {
-        return count(SystemHelper::ps('jeeCron.php', array('grep', 'sudo', 'shell=/bin/bash - ', '/bin/bash -c ', posix_getppid(), getmypid())));
+        return count(SystemHelper::ps('start_cron.php', array('grep', 'sudo', 'shell=/bin/bash - ', '/bin/bash -c ', posix_getppid(), getmypid())));
     }
 
     /**

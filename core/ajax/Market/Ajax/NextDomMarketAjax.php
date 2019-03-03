@@ -18,10 +18,9 @@
 
 namespace NextDom\Market\Ajax;
 
-use NextDom\Helpers\Status;
+use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Utils;
-use NextDom\Market\Ajax\MarketAjaxParser;
-use NextDom\Exceptions\CoreException;
+use NextDom\Managers\AjaxManager;
 
 header('Content-Type: application/json');
 
@@ -29,12 +28,10 @@ require_once __DIR__ . '/../../../php/core.inc.php';
 require_once 'MarketAjaxParser.php';
 
 try {
-    \include_file('core', 'authentification', 'php');
+    AuthentificationHelper::init();
+    AuthentificationHelper::isConnectedAsAdminOrFail();
 
-    Status::initConnectState();
-    Status::isConnectedAdminOrFail();
-
-    \ajax::init();
+    AjaxManager::init();
 
     // Récupération des données envoyées
     $action = Utils::init('action');
@@ -43,14 +40,11 @@ try {
     $result = MarketAjaxParser::parse($action, $params, $data);
 
     if ($result !== false) {
-        \ajax::success($result);
+        AjaxManager::success($result);
     }
 
     throw new \Exception(__('Aucune méthode correspondante à : ', __FILE__) . $action);
 } catch (\Exception $e) {
-    \ajax::error(displayException($e), $e->getCode());
+    AjaxManager::error(displayException($e), $e->getCode());
  
-} catch (\Exception $exc) {
-    \ajax::error(displayException($exc), $exc->getCode());
 }
-

@@ -33,49 +33,93 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
+var isTwoFactor = 0;
 
-$('#in_login_username').on('focusout change keypress',function(){
+$('#in_login_username').on('focusout focusin change keypress',function(){
+    checkTwoFactor();
+});
+
+$('#in_login_password').on('focusout focusin change keypress',function(){
+    checkTwoFactor();
+});
+
+$('#in_twoFactorCode').on('focusout focusin change keypress',function(){
+    checkTwoFactor();
+});
+
+$('#bt_login_validate').on('click', function() {
+    checkTwoFactorLogin();
+});
+
+$('#in_login_password').keypress(function(e) {
+    if(e.which == 13) {
+        checkTwoFactorLogin();
+    }
+});
+
+$('#in_twoFactorCode').keypress(function(e) {
+    if(e.which == 13) {
+        checkTwoFactorLogin();
+    }
+});
+
+function checkTwoFactor() {
+    $('#div_login_username').removeClass("has-error");
+    $('#div_login_password').removeClass("has-error");
+    $('#div_twoFactorCode').removeClass("has-error");
+    $('#div_login_username').removeClass('animationShake');
+    $('#div_login_password').removeClass('animationShake');
+    $('#div_twoFactorCode').removeClass('animationShake');
     nextdom.user.useTwoFactorAuthentification({
         login: $('#in_login_username').value(),
         error: function (error) {
            notify('core',error.message, 'danger');
         },
         success: function (data) {
-            if(data == 1){
-                $('#div_twoFactorCode').show();
-            }else{
-                $('#div_twoFactorCode').hide();
-            }
+            isTwoFactor = data;
         }
     });
-});
-
-$('#bt_login_validate').on('click', function() {
-    tryLogin();
-});
-
-$('#in_login_password').keypress(function(e) {
-    if(e.which == 13) {
-        tryLogin();
+    if(isTwoFactor == 1){
+        $('#div_twoFactorCode').show();
+    }else{
+        $('#div_twoFactorCode').hide();
     }
-});
+}
 
-$('#in_twoFactorCode').keypress(function(e) {
-    if(e.which == 13) {
-        tryLogin();
+function checkTwoFactorLogin() {
+    checkTwoFactor();
+    if (document.getElementById("div_twoFactorCode").style.display === "none"){
+        if(isTwoFactor == 1){
+            $('#div_twoFactorCode').show();
+        }else{
+            $('#div_twoFactorCode').hide();
+            tryLogin();
+        }
+    }else{
+        if ($('#in_twoFactorCode').val() === ""){
+            $('#div_twoFactorCode').addClass("has-error");
+            $('#div_twoFactorCode').addClass('animationShake');
+        }else{
+            $('#div_twoFactorCode').hide();
+            tryLogin();
+        }
     }
-});
+}
 
 function tryLogin() {
     $('.login-box').removeClass('animationZoomIn');
-    $('.login-box').removeClass('animationShake');
     nextdom.user.login({
         username: $('#in_login_username').val(),
         password: $('#in_login_password').val(),
         twoFactorCode: $('#in_twoFactorCode').val(),
         storeConnection: $('#cb_storeConnection').value(),
         error: function (error) {
-            $('.login-box').addClass('animationShake');
+            $('#div_login_username').addClass('animationShake');
+            $('#div_login_password').addClass('animationShake');
+            $('#div_twoFactorCode').addClass('animationShake');
+            $('#div_login_username').addClass("has-error");
+            $('#div_login_password').addClass("has-error");
+            $('#div_twoFactorCode').addClass("has-error");
             notify('Core',error.message,'error');
         },
         success: function (data) {

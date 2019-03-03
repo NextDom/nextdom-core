@@ -23,33 +23,23 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\ScenarioManager;
 
 class ScenarioHumanInsert extends BaseAbstractModal
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render scenario human insert modal
      *
-     * @param Render $render Render engine
-     *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
-        $pageContent = [];
-        $pageContent['scenarios'] = ScenarioManager::all();
 
-        return $render->get('/modals/scenario.human.insert.html.twig', $pageContent);
+        $pageData = [];
+        $pageData['scenarios'] = ScenarioManager::all();
+
+        return Render::getInstance()->get('/modals/scenario.human.insert.html.twig', $pageData);
     }
 
 }

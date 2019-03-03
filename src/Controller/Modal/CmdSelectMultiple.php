@@ -24,31 +24,20 @@ namespace NextDom\Controller\Modal;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 
 class CmdSelectMultiple extends BaseAbstractModal
 {
-    public function __construct()
-    {
-        parent::__construct();
-        Status::isConnectedOrFail();
-    }
-
     /**
      * Render command select multiple modal (scenario)
      *
-     * @param Render $render Render engine
-     *
      * @return string
      * @throws CoreException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
-    public function get(Render $render): string
+    public static function get(): string
     {
+
 
         $cmdId = Utils::init('cmd_id');
         $cmd = CmdManager::byId($cmdId);
@@ -56,10 +45,10 @@ class CmdSelectMultiple extends BaseAbstractModal
             throw new CoreException('Commande non trouvée : ' . $cmdId);
         }
 
-        $pageContent = [];
-        $pageContent['currentCmd'] = $cmd;
-        $pageContent['cmds'] = CmdManager::byTypeSubType($cmd->getType(), $cmd->getSubType());
+        $pageData = [];
+        $pageData['currentCmd'] = $cmd;
+        $pageData['cmds'] = CmdManager::byTypeSubType($cmd->getType(), $cmd->getSubType());
 
-        return $render->get('/modals/cmd.selectMultiple.html.twig', $pageContent);
+        return Render::getInstance()->get('/modals/cmd.selectMultiple.html.twig', $pageData);
     }
 }

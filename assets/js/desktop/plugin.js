@@ -48,25 +48,6 @@ if($('#div_confPlugin').is(':visible')) {
     $('#home').hide();
 }
 
-$('#in_searchPlugin').off('keyup').keyup(function () {
-    var search = $(this).value();
-    if(search == ''){
-        $('.pluginListContainer .box').show();
-        $('.pluginListContainer').packery();
-        return;
-    }
-    $('.pluginListContainer .box').hide();
-    $('.box .box-title').each(function(){
-        var text = $(this).text().toLowerCase();
-        if(text.indexOf(search.toLowerCase()) >= 0){
-            $(this)
-            $(this).closest('.box').show();
-        }
-    });
-    $('.pluginListContainer').packery();
-});
-
-
 setTimeout(function(){
 
     $('.pluginListContainer').packery();
@@ -185,18 +166,18 @@ function showPlugin(pluginId) {
                     if(data.status.owner[i] != 1){
                         continue;
                     }
-                    $('#span_plugin_market').append('<a class="btn btn-warning sendPluginTo" data-repo="'+i+'" data-logicalId="' + data.id + '"><i class="fas fa-cloud-upload-alt">&nbsp;&nbsp;</i>{{Envoyer sur le}} '+i+'</a> ');
+                    $('#span_plugin_market').append('<a class="btn btn-warning sendPluginTo" data-repo="'+i+'" data-logicalId="' + data.id + '"><i class="fas fa-cloud-upload-alt spacing-right"></i>{{Envoyer sur le}} '+i+'</a> ');
                 }
             }
             $('#span_plugin_doc').empty();
             if(isset(data.documentation) && data.documentation != ''){
-                $('#span_plugin_doc').append('<a class="btn btn-success" target="_blank" href="'+data.documentation+'"><i class="fas fa-book">&nbsp;&nbsp;</i>{{Documentation}}</a> ');
+                $('#span_plugin_doc').append('<a class="btn btn-success" target="_blank" href="'+data.documentation+'"><i class="fas fa-book spacing-right"></i>{{Documentation}}</a> ');
             }
             if(isset(data.changelog) && data.changelog != ''){
-                $('#span_plugin_doc').append('<a class="btn btn-primary" target="_blank" href="'+data.changelog+'"><i class="fas fa-list-ul">&nbsp;&nbsp;</i>{{Changelog}}</a> ');
+                $('#span_plugin_doc').append('<a class="btn btn-primary" target="_blank" href="'+data.changelog+'"><i class="fas fa-list-ul spacing-right"></i>{{Changelog}}</a> ');
             }
             if(isset(data.info.display) && data.info.display != ''){
-                $('#span_plugin_doc').append('<a class="btn btn-default" target="_blank" href="'+data.info.display+'"><i class="fas fa-info-circle">&nbsp;&nbsp;</i>{{Détails}}</a> ');
+                $('#span_plugin_doc').append('<a class="btn btn-default" target="_blank" href="'+data.info.display+'"><i class="fas fa-info-circle spacing-right"></i>{{Détails}}</a> ');
             }
 
             if (data.checkVersion != -1) {
@@ -269,9 +250,9 @@ function showPlugin(pluginId) {
                     html += '<span class="label label-danger label-sticker-sm pull-left">{{Inactif}}</span>';
                 }
                 if (data.activate == 1) {
-                    html += '<a class="btn btn-sm btn-danger togglePlugin pull-right" data-state="0" data-plugin_id="' + data.id + '"><i class="fas fa-times">&nbsp;&nbsp;</i>{{Désactiver}}</a>';
+                    html += '<a class="btn btn-sm btn-danger togglePlugin pull-right" data-state="0" data-plugin_id="' + data.id + '"><i class="fas fa-times spacing-right"></i>{{Désactiver}}</a>';
                 }else{
-                    html += '<a class="btn btn-sm btn-success togglePlugin pull-right" data-state="1" data-plugin_id="' + data.id + '"><i class="fas fa-check">&nbsp;&nbsp;</i>{{Activer}}</a>';
+                    html += '<a class="btn btn-sm btn-success togglePlugin pull-right" data-state="1" data-plugin_id="' + data.id + '"><i class="fas fa-check spacing-right"></i>{{Activer}}</a>';
                 }
                 html += '</form>';
                 $('#div_plugin_toggleState').html(html);
@@ -295,7 +276,7 @@ function showPlugin(pluginId) {
                 log_conf += '</div>';
                 log_conf += '<legend>{{Logs}}</legend>';
                 for(j in data.logs[i].log){
-                    log_conf += '<a class="btn btn-info bt_plugin_conf_view_log btn-log" data-slaveId="'+data.logs[i].id+'" data-log="'+data.logs[i].log[j]+'"><i class="fas fa-paperclip">&nbsp;&nbsp;</i>'+data.logs[i].log[j].charAt(0).toUpperCase() + data.logs[i].log[j].slice(1)+'</a> ';
+                    log_conf += '<a class="btn btn-info bt_plugin_conf_view_log btn-log" data-slaveId="'+data.logs[i].id+'" data-log="'+data.logs[i].log[j]+'"><i class="fas fa-paperclip spacing-right"></i>'+data.logs[i].log[j].charAt(0).toUpperCase() + data.logs[i].log[j].slice(1)+'</a> ';
                 }
             }
             log_conf += '</form>';
