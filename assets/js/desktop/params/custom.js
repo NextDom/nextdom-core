@@ -39,6 +39,14 @@ editorDesktopCSS = null;
 editorMobileJS = null;
 editorMobileCSS = null;
 
+var url = document.location.toString();
+if (url.match('#')) {
+    $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+}
+$('.nav-tabs a').on('shown.bs.tab', function (e) {
+    window.location.hash = e.target.hash;
+})
+
 jwerty.key('ctrl+s/⌘+s', function (e) {
     e.preventDefault();
     $("#bt_savecustom").click();

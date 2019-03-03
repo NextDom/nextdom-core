@@ -58,6 +58,7 @@
                         </div>
                         <p class="card-category" style="color:{{ dashboardObject.getDisplay("tagColor") }}"><b>{{ dashboardObject.getName() }}</b></p>
                         <div class="editDashboardButtons" style="display:none;">
+                            <a href="/index.php?v=d&p=custom#colortab"><i class="fas fa-cog pull-right cursor tooltips spacing-left" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{ 'Configurer la taille de la grille' }}"></i></a>
                             <i class="fas fa-th-large pull-right cursor bt_editDashboardWidgetAutoResize tooltips spacing-left" id="edit_object_{{ dashboardObject.getId() }}" data-mode="0" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{ 'Redimensionnement sur pas de grille supérieur' }}"></i>
                             <i class="fas fa-th pull-right cursor bt_editDashboardWidgetGridResize tooltips spacing-left" id="edit_object_{{ dashboardObject.getId() }}" data-mode="0" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{ 'Redimensionner automatiquement puis sur pas de grille' }}"></i>
                         </div>
@@ -81,6 +82,7 @@
                                 </div>
                                 <p class="card-category" style="color:{{ child.getDisplay("tagColor") }}"><b>{{ child.getName() }}</b></p>
                                 <div class="editDashboardButtons" style="display:none;">
+                                    <a href="/index.php?v=d&p=custom#colortab"><i class="fas fa-cog pull-right cursor tooltips spacing-left" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{ 'Configurer la taille de la grille' }}"></i></a>
                                     <i class="fas fa-th-large pull-right cursor bt_editDashboardWidgetAutoResize tooltips spacing-left" id="edit_object_{{ child.getId() }}" data-mode="0" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{ 'Redimensionnement sur pas de grille supérieur' }}"></i>
                                     <i class="fas fa-th pull-right cursor bt_editDashboardWidgetGridResize tooltips spacing-left" id="edit_object_{{ child.getId() }}" data-mode="0" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{ 'Redimensionner automatiquement puis sur pas de grille' }}"></i>
                                 </div>
@@ -101,6 +103,7 @@
                                 </div>
                                 <p class="card-category" style="color:{{ child.getDisplay("tagColor") }}"><b>{{ child.getName() }}</b></p>
                                 <div class="editDashboardButtons" style="display:none;">
+                                    <a href="/index.php?v=d&p=custom#colortab"><i class="fas fa-cog pull-right cursor tooltips spacing-left" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{ 'Configurer la taille de la grille' }}"></i></a>
                                     <i class="fas fa-th-large pull-right cursor bt_editDashboardWidgetAutoResize tooltips spacing-left" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Redimensionnement sur pas de grille supérieur' }}"></i>
                                     <i class="fas fa-th pull-right cursor bt_editDashboardWidgetGridResize tooltips spacing-left" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Redimensionner automatiquement puis sur pas de grille' }}"></i>
                                 </div>
