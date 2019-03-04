@@ -25,3 +25,5 @@ social:
   name: NextDom
   links:
     - https://github.com/NextDom
+
+theme: jekyll-theme-slate
