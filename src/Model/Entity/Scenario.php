@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\ScenarioState;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\FileSystemHelper;
@@ -37,6 +38,7 @@ use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewDataManager;
 use NextDom\Managers\ViewManager;
 
@@ -504,7 +506,7 @@ class Scenario
             if (count($this->getTags()) != '') {
                 $this->setCache('tags', $this->getTags());
             }
-            $cmd = NEXTDOM_ROOT . '/core/php/jeeScenario.php ';
+            $cmd = NEXTDOM_ROOT . '/src/Api/start_scenario.php ';
             $cmd .= ' scenario_id=' . $this->getId();
             $cmd .= ' trigger=' . escapeshellarg($trigger);
             $cmd .= ' "message=' . escapeshellarg(Utils::sanitizeAccent($message)) . '"';
@@ -558,7 +560,7 @@ class Scenario
             $this->setLog('Start : ' . trim($message, "'") . '. Tags : ' . json_encode($this->getTags()));
         }
         $this->setLastLaunch(date('Y-m-d H:i:s'));
-        $this->setState('in progress');
+        $this->setState(ScenarioState::IN_PROGRESS);
         $this->setPID(getmypid());
         $this->setRealTrigger($trigger);
         foreach ($this->getElement() as $element) {
@@ -666,9 +668,9 @@ class Scenario
         if ($_only_class) {
             if ($this->getIsActive() == 1) {
                 switch ($this->getState()) {
-                    case 'in progress':
+                    case ScenarioState::IN_PROGRESS:
                         return 'fas fa-spinner fa-spin';
-                    case 'error':
+                    case ScenarioState::ERROR:
                         return 'fas fa-exclamation-triangle';
                     default:
                         if (strpos($this->getDisplay('icon'), '<i') === 0) {
@@ -682,9 +684,9 @@ class Scenario
         } else {
             if ($this->getIsActive() == 1) {
                 switch ($this->getState()) {
-                    case 'in progress':
+                    case ScenarioState::IN_PROGRESS:
                         return '<i class="fas fa-spinner fa-spin"></i>';
-                    case 'error':
+                    case ScenarioState::ERROR:
                         return '<i class="fas fa-exclamation-triangle"></i>';
                     default:
                         if (strpos($this->getDisplay('icon'), '<i') === 0) {
@@ -1221,10 +1223,10 @@ class Scenario
         if (!AuthentificationHelper::isConnected()) {
             return false;
         }
-        if (AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
+        if (AuthentificationHelper::isConnectedAsAdmin() || AuthentificationHelper::isConnectedWithRights('user')) {
             return true;
         }
-        if (strpos($_SESSION['user']->getRights('scenario' . $this->getId()), $_right) !== false) {
+        if (strpos(UserManager::getStoredUser()->getRights('scenario' . $this->getId()), $_right) !== false) {
             return true;
         }
         return false;

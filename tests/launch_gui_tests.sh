@@ -67,7 +67,7 @@ function plugins() {
     echo ">>>>> Start"
     python3 -W ignore gui/plugins.py "$URL" "$LOGIN" "$PASSWORD"
     echo ">>>>> Clear"
-#    ./scripts/remove_test_container.sh nextdom-test-plugins
+    ./scripts/remove_test_container.sh nextdom-test-plugins
 }
 
 function others() {
@@ -76,13 +76,13 @@ function others() {
     echo ">>>>> Setup"
     ./scripts/start_test_container.sh nextdom-test-others $PASSWORD
     echo ">>> Connect page <<<"
-#    python3 -W ignore gui/connection_page.py "$URL" "$LOGIN" "$PASSWORD"
+    python3 -W ignore gui/connection_page.py "$URL" "$LOGIN" "$PASSWORD"
     echo ">>> Administration pages <<<"
-#    python3 -W ignore gui/administrations_page.py "$URL" "$LOGIN" "$PASSWORD"
+    python3 -W ignore gui/administrations_page.py "$URL" "$LOGIN" "$PASSWORD"
     echo ">>> Rescue mode <<<"
     python3 -W ignore gui/rescue_page.py "$URL" "$LOGIN" "$PASSWORD"
     echo ">>>>> Clear"
-#    ./scripts/remove_test_container.sh nextdom-test-others
+    ./scripts/remove_test_container.sh nextdom-test-others
 }
 
 function start_all_tests() {

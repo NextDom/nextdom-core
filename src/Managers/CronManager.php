@@ -66,7 +66,8 @@ class CronManager
      *
      * @param int $cronId
      *
-     * @return object
+     * @return Cron
+     *
      * @throws \Exception
      */
     public static function byId($cronId)
@@ -160,7 +161,7 @@ class CronManager
      */
     public static function nbCronRun()
     {
-        return count(SystemHelper::ps('jeeCron.php', array('grep', 'sudo', 'shell=/bin/bash - ', '/bin/bash -c ', posix_getppid(), getmypid())));
+        return count(SystemHelper::ps('start_cron.php', array('grep', 'sudo', 'shell=/bin/bash - ', '/bin/bash -c ', posix_getppid(), getmypid())));
     }
 
     /**

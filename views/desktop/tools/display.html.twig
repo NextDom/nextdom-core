@@ -109,7 +109,7 @@
             <div class="col-xs-4 object col-xs-height">
                 <div class="box box-summary object col-xs-height" data-id="{{ object.getId() }}" style="border-top-color: {{ object.getDisplay('tagColor') }};">
                     <div class="box-header with-border">
-                        <h3 class="box-title">{{ object.getDisplay('icon')|raw }}<i class="spacing-right"></i>{{ object.getName() }}</h3>
+                        <h3 class="box-title">{{ object.getDisplay('icon', '<i class="fas fa-tag"></i>')|replace({'></i>': '></i>'})|raw }}<i class="spacing-right"></i>{{ object.getName() }}</h3>
                         <div class="box-tools pull-right">
                             <i class="fas fa-cog cursor configureObject summaryConfig" title="{{ 'Configuration avancée' }}"></i>
                             <a class="fas fa-external-link-square-alt summaryConfig" href="index.php?v=d&p=object&id={{ object.getId() }}" target="_blank"  title="{{ 'Aller sur la configuration de l\'objet' }}"></a>

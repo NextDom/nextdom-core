@@ -40,6 +40,11 @@ class PlanHeaderManager
     const CLASS_NAME = PlanHeader::class;
     const DB_CLASS_NAME = '`planHeader`';
 
+    /**
+     * @param $_id
+     * @return PlanHeader|null
+     * @throws \Exception
+     */
     public static function byId($_id)
     {
         $values = array(
@@ -51,6 +56,10 @@ class PlanHeaderManager
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @return PlanHeader[]|null
+     * @throws \Exception
+     */
     public static function all()
     {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '

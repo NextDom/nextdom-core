@@ -38,5 +38,5 @@ $("#bt_logrealtimeremoveLog").on('click', function(event) {
     });
 });
 $('#bt_logrealtimedownloadLog').click(function() {
-    window.open('core/php/downloadFile.php?pathfile=log/' + realtime_name, "_blank", null);
+    window.open('src/Api/downloadFile.php?pathfile=log/' + realtime_name, "_blank", null);
 });

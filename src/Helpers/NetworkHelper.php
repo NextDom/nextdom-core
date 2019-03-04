@@ -474,7 +474,7 @@ class NetworkHelper
         }
         $gw = shell_exec("ip route show default | awk '/default/ {print $3}'");
         if ($gw == '') {
-            LogHelper::add('network', 'error', __('Souci réseau détecté, redémarrage du réseau. Aucune gateway de trouvée'));
+            LogHelper::addError('network', __('Souci réseau détecté, redémarrage du réseau. Aucune gateway de trouvée'));
             exec(SystemHelper::getCmdSudo() . 'service networking restart');
             return;
         }
@@ -486,7 +486,7 @@ class NetworkHelper
         if ($return_val == 0) {
             return;
         }
-        LogHelper::add('network', 'error', __('Souci réseau détecté, redémarrage du réseau. La gateway ne répond pas au ping : ') . $gw);
+        LogHelper::addError('network', __('Souci réseau détecté, redémarrage du réseau. La gateway ne répond pas au ping : ') . $gw);
         exec(SystemHelper::getCmdSudo() . 'service networking restart');
     }
 

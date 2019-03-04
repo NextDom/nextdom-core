@@ -1,6 +1,5 @@
 <?php
-
-/* This file is part of NextDom Software.
+/* This file is part of NextDom.
  *
  * NextDom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,10 +15,13 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-$app = [];
+namespace NextDom\Enums;
 
-$app['db'] = function () {
-//    $instance = \NextDom\Singletons\ConnectDb::getInstance();
-    return \NextDom\Singletons\ConnectDb::getConnection();
-};
-
+class CronState extends Enum
+{
+    const RUN = 'run';
+    const STARTING = 'starting';
+    const STOPPING = 'stoping'; // TODO: Faute
+    const STOP = 'stop';
+    const NOT_FOUND = 'Not found'; // TODO: Format différent
+}

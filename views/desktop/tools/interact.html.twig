@@ -56,10 +56,9 @@
             </div>
             <div class="box-body">
                 {% if interactTotal|length == 0 %}
-                    <div class="text-center">
-                        <span>{{ 'Vous n\'avez encore aucune interaction. Cliquez sur ajouter pour commencer.' }}</span>
-                    </div>
+                    <div><span>{{ 'Vous n\'avez encore aucune interaction. Cliquez sur ajouter pour commencer.' }}</span></div>
                 {% else %}
+                    <div><span>{{ 'Vous avez '}} {{ interactTotal|length }} {{ 'intéractions...' }}</span></div>
                 {% endif %}
             </div>
         </div>
@@ -119,22 +118,30 @@
         <div class="action-bar">
             <div class="action-group">
                 <a class="btn btn-danger" id="bt_interactThumbnailDisplay"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
-                <a class="btn btn-default displayInteracQuery"><i class="fas fa-eye spacing-right"></i>{{ 'Phrase(s)' }} <span class="label label-success interactAttr" data-l1key="nbInteractQuery"></span></a>
+                <a class="btn btn-success" id="bt_saveInteract"><i class="fas fa-save spacing-right"></i>{{ 'Enregistrer' }}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-success pull-right" id="bt_saveInteract"><i class="fas fa-save spacing-right"></i>{{ 'Enregistrer' }}</a>
-                <a class="btn btn-default pull-right" id="bt_duplicate"><i class="fas fa-copy spacing-right"></i>{{ 'Dupliquer' }}</a>
-                <a class="btn btn-danger pull-right" id="bt_removeInteract"><i class="fas fa-trash spacing-right"></i>{{ 'Supprimer' }}</a>
+                <a class="btn btn-danger pull-right" id="bt_removeInteract"><i class="fas fa-minus-circle spacing-right"></i>{{ 'Supprimer' }}</a>
+                <a class="btn btn-default pull-right" id="bt_duplicate"><i class="far fa-files-o spacing-right"></i>{{ 'Dupliquer' }}</a>
+                <a class="btn btn-default pull-right displayInteracQuery"><i class="fas fa-eye spacing-right"></i>{{ 'Phrase(s)' }} <span class="label label-success interactAttr" data-l1key="nbInteractQuery"></span></a>
             </div>
         </div>
     </section>
 
     <section class="content">
         <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt spacing-right"></i>{{ 'Général' }}</a></li>
-                <li role="presentation"><a href="#filtertab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-filter spacing-right"></i>{{ 'Filtres' }}</a></li>
-                <li role="presentation"><a href="#actiontab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-cogs spacing-right"></i>{{ 'Actions' }}</a></li>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li role="presentation">
+                    <a href="#actiontab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-cogs spacing-right"></i>{{ 'Actions' }}</a>
+                </li>
+                <li role="presentation">
+                    <a href="#filtertab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-filter spacing-right"></i>{{ 'Filtres' }}</a>
+                </li>
+                <li role="presentation" class="active">
+                    <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt spacing-right"></i>{{ 'Général' }}</a>
+                </li>
+                <h4 class="label label-primary pull-right label-sticker">{{ 'ID : ' }}<span id="interactId"></span></h4>
+                <li class="header pull-left"><i class="fas fa-comments spacing-right"></i>{{ 'Edition Intéraction' }}</li>
             </ul>
 
             <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">

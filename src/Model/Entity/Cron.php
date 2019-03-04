@@ -380,7 +380,7 @@ class Cron
      */
     public function run($noErrorReport = false)
     {
-        $cmd = NEXTDOM_ROOT . '/core/php/jeeCron.php';
+        $cmd = NEXTDOM_ROOT . '/src/Api/start_cron.php';
         $cmd .= ' "cron_id=' . $this->getId() . '"';
         if (!$this->running()) {
             SystemHelper::php($cmd . ' >> ' . LogHelper::getPathToLog('cron_execution') . ' 2>&1 &');

@@ -85,7 +85,7 @@ if (!file_exists('/etc/cron.d/nextdom')) {
     echo '<center style="font-size:1.2em;">Veuillez ajouter une ligne crontab pour NextDom (si NextDom n\'a pas les droits sudo, cette erreur est normale) : </center>';
     echo '<pre>';
     echo "sudo su -\n";
-    echo 'echo "* * * * * ' . get_current_user() . ' /usr/bin/php /var/www/html/core/php/jeeCron.php >> /dev/null" > /etc/cron.d/nextdom';
+    echo 'echo "* * * * * ' . get_current_user() . ' /usr/bin/php /var/www/html/src/Api/start_cron.php >> /dev/null" > /etc/cron.d/nextdom';
     echo '</pre>';
     echo '</div>';
 }

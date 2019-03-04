@@ -34,14 +34,6 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-if (getUrlVars('saveSuccessFull') == 1) {
-    notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
-}
-
-if (getUrlVars('removeSuccessFull') == 1) {
-    notify("Info", '{{Suppression effectuée avec succès}}', 'success');
-}
-
 $('#bt_graphObject').on('click', function () {
     $('#md_modal').dialog({title: "{{Graphique des liens}}"});
     $("#md_modal").load('index.php?v=d&modal=graph.link&filter_type=object&filter_id='+$('.objectAttr[data-l1key=id]').value()).dialog('open');
@@ -52,12 +44,11 @@ setTimeout(function(){
 },100);
 
 $('#bt_returnToThumbnailDisplay').on('click',function(){
-    $('#div_conf').hide();
-    $('#div_resumeObjectList').show();
-    $('.objectListContainer').packery();
+    loadPage('index.php?v=d&p=object');
 });
 
 $(".bt_detailsObject").on('click', function (event) {
+    $('#bt_returnToThumbnailDisplay').show();
     var object = $(this).closest(".objectDisplayCard");
     loadObjectConfiguration(object.attr("data-object_id"));
     $('.objectname_resume').empty().append(object.attr('data-object_icon')+'  '+object.attr('data-object_name'));
@@ -110,6 +101,7 @@ function loadObjectConfiguration(_id){
             notify("Erreur", error.message, 'error');
         },
         success: function (data) {
+            $('#objectId').value(_id);
             $('.objectAttr').value('');
             $('.objectAttr[data-l1key=father_id] option').show();
             $('#summarytab input[type=checkbox]').value(0);
@@ -158,7 +150,8 @@ $("#bt_addObject,#bt_addObject2").on('click', function (event) {
                 },
                 success: function (data) {
                     modifyWithoutSave = false;
-                    loadPage('index.php?v=d&p=object&id=' + data.id + '&saveSuccessFull=1');
+                    $('#bt_returnToThumbnailDisplay').hide();
+                    loadObjectConfiguration(data.id);
                 }
             });
         }
@@ -198,9 +191,10 @@ $("#bt_saveObject").on('click', function (event) {
         },
         success: function (data) {
             modifyWithoutSave = false;
-            window.location = 'index.php?v=d&p=object&id=' + data.id + '&saveSuccessFull=1';
+            notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
         }
     });
+    $('#bt_returnToThumbnailDisplay').show();
     return false;
 });
 
@@ -216,7 +210,8 @@ $(".bt_removeObject").on('click', function (event) {
                 },
                 success: function () {
                     modifyWithoutSave = false;
-                    loadPage('index.php?v=d&p=object&removeSuccessFull=1');
+                    loadPage('index.php?v=d&p=object');
+                    notify("Info", '{{Suppression effectuée avec succès}}', 'success');
                 }
             });
         }

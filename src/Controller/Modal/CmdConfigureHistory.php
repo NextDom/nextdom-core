@@ -32,9 +32,7 @@ class CmdConfigureHistory extends BaseAbstractModal
      * Render command configure history modal (scenario)
      *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public static function get(): string
     {
