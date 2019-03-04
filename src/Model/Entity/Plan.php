@@ -130,13 +130,13 @@ class Plan
         \DB::remove($this);
     }
 
-    public function copy()
+    public function copy(): Plan
     {
         $planCopy = clone $this;
-        $planCopy->setId('');
-        $planCopy->setLink_id('');
-        $planCopy->setPosition('top', '');
-        $planCopy->setPosition('left', '');
+        $planCopy->setId('')
+            ->setLink_id('')
+            ->setPosition('top', '')
+            ->setPosition('left', '');
         $planCopy->save();
         return $planCopy;
     }
