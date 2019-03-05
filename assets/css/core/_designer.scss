@@ -1,0 +1,93 @@
+@charset "utf-8";
+/* This file is part of NextDom Software.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom Software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+#designer-content {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+}
+#tool {
+  margin: auto;
+  padding: 1vmin;
+  border: .1vmin solid #999;
+  background-color: #eee;
+  font-family: monospace;
+  z-index: 1;
+}
+#container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-flow: column;
+}
+input {
+  width: 3vmin;
+  height: 3vmin;
+  outline: none;
+  border: .1vmin solid #ccc;
+  font-family: monospace;
+  color: #666;
+}
+.row {
+  display: flex;
+  flex-flow: row;
+  flex: 2 2;
+}
+.group {
+  position: relative;
+  border: .1vmin solid #999;
+  box-sizing: content-box;
+  overflow: hidden;
+  flex: 2 2;
+}
+#lines {
+  z-index: 1;
+  pointer-events: none;
+}
+#lines >* {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  background-color: #999;
+  opacity: 0;
+}
+#lines >.show { opacity: .5; }
+#lines .vert {
+  transform: translateX(-50%);
+  height: 100%;
+}
+#lines .hori {
+  transform: translateY(-50%);
+  width: 100%;
+}
+.block {
+  position: absolute;
+  resize: both;
+  overflow: auto;
+}
+.block input {
+  position: absolute;
+  top: 0;
+  right: 0;
+}

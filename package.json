@@ -23,6 +23,7 @@
     "jquery-ui-dist": "^1.12.1",
     "jstree": "^3.3.6",
     "jwerty": "^0.3.2",
+    "magnet": "git+https://github.com/lf2com/magnet.js.git",
     "node-waves": "^0.7.6",
     "notosans-fontface": "^1.1.0",
     "packery": "^2.1.2",

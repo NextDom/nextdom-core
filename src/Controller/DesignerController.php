@@ -45,7 +45,8 @@ class DesignerController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['CSS_POOL'][] = '/public/css/designer.css';
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/designer.js';
+        $pageData['JS_END_POOL'][] = '/assets/js/desktop/designer.js';
+        $pageData['JS_END_POOL'][] = '/vendor/node_modules/magnet/magnet.min.js';
 
         $pageData['jeeObjects'] = [];
         foreach (JeeObjectManager::all() as $jeeObject) {
