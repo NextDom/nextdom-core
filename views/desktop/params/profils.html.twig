@@ -52,7 +52,7 @@
             <li role="presentation"><a href="#notificationtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-comments spacing-right"></i>{{ 'Notifications' }}</a></li>
             <li role="presentation"><a href="#securitytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-user-secret spacing-right"></i>{{ 'Sécurité' }}</a></li>
             <li role="presentation" class="active"><a href="#profil" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-user spacing-right"></i>{{ 'Profil' }}</a></li>
-            <li class="header pull-left"><i class="fas fa-wrench spacing-right"></i>{{ 'Profils' }}</li>
+            <li class="header pull-left"><i class="fas fa-briefcase spacing-right"></i>{{ 'Profil de ' }}{{ profilsUser.getLogin() }}</li>
         </ul>
         <!-- Tabs content -->
         <div class="global-tab-content tab-content">
