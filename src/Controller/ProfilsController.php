@@ -90,6 +90,17 @@ class ProfilsController extends BaseController
                 $pageData['profilsAvatars'][] = '/public/img/profils/' . $avatarFile;
             }
         }
+
+        $pageData['profilsWidgetThemes'] = [];
+        $lsDir = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/','*',true);
+        foreach ($lsDir as $themesDir) {
+            $lsThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/' .$themesDir, '*.png');
+            foreach ($lsThemes as $themeFile) {
+                $pageData['profilsWidgetThemes'][] = '/core/template/dashboard/themes/' .$themesDir . $themeFile;
+            }
+
+        }
+
         $pageData['profilsDisplayTypes'] = NextDomHelper::getConfiguration('eqLogic:displayType');
         $pageData['profilsJeeObjects'] = JeeObjectManager::all();
         $pageData['profilsViews'] = ViewManager::all();

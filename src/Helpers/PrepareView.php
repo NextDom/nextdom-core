@@ -251,6 +251,7 @@ class PrepareView
             'widget_margin' => $configs['widget::margin'],
             'widget_padding' => $configs['widget::padding'],
             'widget_radius' => $configs['widget::radius'],
+            'widget_radius' => $configs['widget::radius'],
         ];
         $pageData['JS_VARS_RAW'] = [
             'userProfils' => Utils::getArrayToJQueryJson(UserManager::getStoredUser()->getOptions()),

@@ -200,3 +200,10 @@ $(".Avatar").on('click', function (event) {
     $('#monAvatar').attr('src',$(this).attr('src'));
     notify("{{Profil}}", '{{Image changée}}', 'success');
 });
+
+$(".themeWidget").on('click', function (event) {
+    var widgetName = $(this).attr('src').split("/").pop(-1).split(".");
+    $('.userAttr[data-l2key="widget::theme"]').value(widgetName[0]);
+    $('#monThemeWidget').attr('src',$(this).attr('src'));
+    notify("{{Profil}}", '{{theme changé}}', 'success');
+});

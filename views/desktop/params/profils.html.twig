@@ -1,4 +1,4 @@
- {#
+{#
 
 /* This file is part of Jeedom.
 *
@@ -86,6 +86,37 @@
             <div role="tabpanel" class="tab-pane" id="themetab">
                 <form class="form-horizontal">
                     <fieldset>
+                        <legend>{{ 'Widgets' }}</legend>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group col-sm-12">
+                                    <label class="control-label">{{ 'Theme appliqué' }}</label> <br />
+                                </div>
+                                <div class="form-group col-sm-12">
+                                    <img id="monThemeWidget" src="/core/template/dashboard/themes/{{ profilsUser.getOptions('widget::theme') }}/{{ profilsUser.getOptions('widget::theme') }}.png" style="height:200px"></a>
+
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6 text-center">
+                                <div class="form-group col-sm-12">
+                                    <label class="control-label">{{ 'Themes disponibles' }}</label>
+                                </div>
+                                <div class="form-group col-sm-12">
+                                    {% for theme in profilsWidgetThemes %}
+                                        <a href=".." style="display:inline-block; margin:10px"><img class="themeWidget cursor" src="{{ theme }}" style="height:80px"></a>
+
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <input class="userAttr form-control" data-l1key="options" data-l2key="widget::theme" disabled/>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
                         <legend>{{ 'Couleurs' }}</legend>
                         <div class="form-group">
                             <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Couleur sur mobile' }}</label>
@@ -136,10 +167,12 @@
                     </fieldset>
 
                     <fieldset class="legend-section">
-                        <legend>{{ 'Opacités' }}</legend>
+                        <legend>{{ 'Widgets' }}</legend>
+
+
                         {% for displayTypeCode, displayTypeData in profilsDisplayTypes %}
                             <div class="form-group">
-                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Widgets' }} {{ displayTypeData['name'] }}</label>
+                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Opacité' }} {{ displayTypeData['name'] }}</label>
                                 <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                     <input type="number" min="0" max="1" class="userAttr form-control" data-l1key="options" data-l2key="widget::background-opacity::{{ displayTypeCode }}"/>
                                 </div>

@@ -1050,7 +1050,12 @@ class EqLogic
                 break;
         }
         if (!isset(self::$_templateArray[$version])) {
-            self::$_templateArray[$version] = FileSystemHelper::getTemplateFileContent('core', $version, 'eqLogic');
+            $default_widgetTheme = ConfigManager::byKey('widget::theme');
+            if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::theme', null) !== null) {
+                $default_widgetTheme = UserManager::getStoredUser()->getOptions('widget::theme');
+            }
+            self::$_templateArray[$version] = FileSystemHelper::getTemplateFileContent('core', $version, 'eqLogic', '', $default_widgetTheme);
+
         }
         return $this->postToHtml($viewType, Utils::templateReplace($replace, self::$_templateArray[$version]));
     }

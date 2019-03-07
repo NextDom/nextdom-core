@@ -175,16 +175,17 @@ class FileSystemHelper
      * @param string $version Version du template
      * @param string $filename Nom du fichier
      * @param string $pluginId Identifiant du plugin
+     * @param string $theme Identifiant du plugin
      *
      * @return string Contenu du fichier ou une chaine vide.
      */
-    public static function getTemplateFileContent(string $folder, string $version, string $filename, string $pluginId = ''): string
+    public static function getTemplateFileContent(string $folder, string $version, string $filename, string $pluginId = '', string $theme = ''): string
     {
         $result = '';
         $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
         if ($pluginId == '') {
-            $filePath = NEXTDOM_ROOT . '/' . $folder . '/template/' . $version . '/' . $filename . '.html';
-        }
+                $filePath = NEXTDOM_ROOT . '/' . $folder . '/template/' . $version . '/themes/' . $theme . '/' . $filename . '.html';
+            }
         if (file_exists($filePath)) {
             $result = file_get_contents($filePath);
         }
