@@ -225,4 +225,9 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $result = Utils::transformExpressionForEvaluation('133.5 > 50 || 1 == 0');
         $this->assertEquals('133.5>50||1==0', $result);
     }
+
+    public function testEvaluateNegativeNumbers() {
+        $result = Utils::transformExpressionForEvaluation('-133.5 > 50.2 || .1 == -2');
+        $this->assertEquals('-133.5>50.2||.1==-2', $result);
+    }
 }
