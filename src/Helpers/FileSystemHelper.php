@@ -184,8 +184,12 @@ class FileSystemHelper
         $result = '';
         $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
         if ($pluginId == '') {
+            if ($theme == '') {
+                $filePath = NEXTDOM_ROOT . '/' . $folder . '/template/' . $version . '/' . $filename . '.html';
+            } else {
                 $filePath = NEXTDOM_ROOT . '/' . $folder . '/template/' . $version . '/themes/' . $theme . '/' . $filename . '.html';
             }
+        }
         if (file_exists($filePath)) {
             $result = file_get_contents($filePath);
         }
