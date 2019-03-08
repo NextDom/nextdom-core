@@ -103,17 +103,12 @@
                                 </div>
                                 <div class="form-group col-sm-12">
                                     {% for theme in profilsWidgetThemes %}
-                                        <a href=".." style="display:inline-block; margin:10px"><img class="themeWidget cursor" src="{{ theme }}" style="height:80px"></a>
-
+                                        <div style="display:inline-block; margin:10px;border:solid 1px #eeeeee"><img class="themeWidget cursor" src="{{ theme['dir'] }}" style="height:80px"><br />{{ theme['name']|slice(0, -4) }}</div>
                                     {% endfor %}
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="form-group col-sm-6">
-                                <input class="userAttr form-control" data-l1key="options" data-l2key="widget::theme" disabled/>
-                            </div>
-                        </div>
+                        <input class="userAttr form-control" data-l1key="options" data-l2key="widget::theme" style="visibility:hidden" />
                     </fieldset>
 
                     <fieldset>

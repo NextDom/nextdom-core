@@ -96,7 +96,10 @@ class ProfilsController extends BaseController
         foreach ($lsDir as $themesDir) {
             $lsThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/' .$themesDir, '*.png');
             foreach ($lsThemes as $themeFile) {
-                $pageData['profilsWidgetThemes'][] = '/core/template/dashboard/themes/' .$themesDir . $themeFile;
+                $themeData = [];
+                $themeData['dir'] = '/core/template/dashboard/themes/' .$themesDir . $themeFile;
+                $themeData['name'] = $themeFile;
+                $pageData['profilsWidgetThemes'][] = $themeData;
             }
 
         }
