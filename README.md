@@ -10,5 +10,8 @@ Forum : [https://www.nextdom.org/forum/](ici)
 
 Procédure : [https://www.nextdom.org/elementor-230/installation-de-nextdom/](ici)
 
+<img src="https://www.nextdom.org/wp-content/uploads/2018/12/Install3.png">
+
+
 
 
