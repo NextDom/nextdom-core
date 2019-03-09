@@ -185,7 +185,7 @@ class Utils
             '-' => '-',
             '' => ''
         ];
-        preg_match_all('/(\w+|\d+|\.\d+|".*?"|\'.*?\'|\#.*?\#|\(|\))[ ]*([!*+&|\\-\\/>=<]+|and|or|ou|et)*[ ]*/i', $expression, $pregOutput);
+        preg_match_all('/(\w+|[-\.]*\d+|".*?"|\'.*?\'|\#.*?\#|\(|\))[ ]*([!*+&|\\-\\/>=<]+|and|or|ou|et)*[ ]*/i', $expression, $pregOutput);
         if (count($pregOutput) > 2) {
             $result = '';
             $exprIndex = 0;

@@ -1,4 +1,4 @@
-# NextDom by NextDom Team #
+# NextDom Core by NextDom Team #
 
 Website (English): [https://www.nextdom.org/en/](https://www.nextdom.org/en/)
 
@@ -28,49 +28,12 @@ Téléchargez les sources nextdom : https://github.com/NextDom/nextdom-core/arch
 Allez (avec votre navigateur) sur `install/setup.php`.
 
 Remplissez les informations, validez et attendez la fin de l'installation. Les identifiants par défaut sont admin/admin.
+Forum : [https://www.nextdom.org/forum/](ici)
 
-## Installation via docker
+# Installation #
 
-### Pre-requis
+Procédure : [https://www.nextdom.org/elementor-230/installation-de-nextdom/](ici)
 
-- docker installé
+<img src="https://www.nextdom.org/wp-content/uploads/2018/12/Install3.png">
 
-### Construction de l'image et lancement des services 
 
-Aucune image docker existe pour le moment, il faut la construire (Dockerfile.develop)
-Le script ci dessous va construire l'image, les conteneurs et les lancer.
-
-les alias permettent une accés rapide aux informations
-
-```#!/usr/bin/env bash
-
-DKRFILE=Dockerfile.develop
-TAG=nextdom/dev
-YML=docker-compose-nextdom.yml
-
-docker build -f ${DKRFILE} . --tag ${TAG}
-docker-compose -f ${YML} up -d
-source .env
-docker attach ${}
-
-```
-
-/!\ particularité du au dépot privé, il faut lancer le init.sh dans le conteneur nextdom-dev pour avoir les invites (login/pwd) git du projet. 
-
-### Parametres du install.sh
-
-options du script:
-
-* -d NOMSERVEURSQL: par défaut localhost, permet de définir le serveur sql. 
-* -h : sortie au format html
-* -m mysql.root.password: mot de passe de root pour mysql
-* -n nextdom.mysql.user.password: mot de passe de l'utilisateur nextdom pour mysql
-* -o par defaut /dev/null: si utilisé, redirection dans /tmp/output
-* -s [01-21]: reprend l'installation à l'étape demandé et poursuit.
-* -v [master/develop]: lors du git clone reprend cette branche
-* -w WEBSERVER_HOME: emplacement racine de nextdom
-
-### Acces aux containers
-
-* nextdom-dev (serveur apache/php) est accessible en ssh .
-* nextdom-mysql est accessible via mysql sur le port 3326. 
