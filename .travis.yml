@@ -1,6 +1,6 @@
 language: php
 php:
-    - 7.1
+    - 7.0
 services:
     - mysql
     - docker
@@ -23,8 +23,8 @@ before_install:
 install:
     - mysql -e 'CREATE DATABASE nextdom_test;'
 script:
-    - ./vendor/bin/phpunit phpunit_tests
     - cd ${TRAVIS_BUILD_DIR}/tests
+    - ../vendor/bin/phpunit phpunit_tests
     - python3 launch_code_consistency.py
     - python3 launch_features_tests.py
     - python3 launch_gui_tests.py
