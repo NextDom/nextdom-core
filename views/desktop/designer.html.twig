@@ -59,7 +59,41 @@
                 {% endfor %}
             </div>
             <div id="nextdom-cmpnts" class="tab-pane fade active box-group">
+                {% for designerComponent in designerComponents %}
+                    {{ include(designerComponent['component']) }}
+                {% endfor %}
+                {#{{ include(designerComponent['component']) }}#}
+                {#{{ include('/desktop/designer/div.html.twig') }}#}
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <div id="nextdom-impExp" class="tab-pane fade active box-group">
             </div>
         </div>
@@ -74,7 +108,7 @@
         </span>
         <div id="container">
             <div class="row">
-                <div class="group"></div>
+                <div class="group" ondrop="drop(event)" ondragover="allowDrop(event)" ></div>
                 <div class="group"></div>
             </div>
             <div class="row">

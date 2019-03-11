@@ -23,11 +23,10 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\JeeObjectManager;
-use NextDom\Managers\PlanHeaderManager;
+use NextDom\Managers\DesignerComponentManager;
 
 class DesignerController extends BaseController
 {
@@ -66,6 +65,13 @@ class DesignerController extends BaseController
             }
             if (count($currentObject['eqLogics']) > 0) {
                 $pageData['jeeObjects'][] = $currentObject;
+            }
+        }
+        foreach (DesignerComponentManager::all() as $designerComponent) {
+            $currentComponent = [];
+            $currentComponent['component'] = $designerComponent;
+            if (count($currentComponent['component']) > 0) {
+                $pageData['designerComponents'][] = $currentComponent;
             }
         }
         return Render::getInstance()->get('/desktop/designer.html.twig', $pageData);

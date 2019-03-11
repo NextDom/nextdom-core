@@ -20,9 +20,7 @@
 
 let NEAR_DISTANCE = 15;
 /**
- * @function SUICalendar#addDebugInfo
- * @instance
- * @private
+ * @function designer#addDebugInfo
  * @description Generate a debug html element for all elements
  * @return {void}
  */
@@ -33,6 +31,46 @@ function addDebugInfo() {
         e.target.title = "Mouse X="+x+", Y="+y+ " | X=" + document.getElementById('container').offsetWidth
             + " Y=" + document.getElementById('container').offsetHeight;
     });
+}
+
+/**
+ * @function designer#allowDrop
+ * @description Allow drop on this HTMLElement
+ * @param {Event} ev Event
+ * @return {void}
+ */
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+/**
+ * @function designer#drag
+ * @description action on drag event
+ * @param {Event} ev DragEvent
+ * @return {void}
+ */
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+/**
+ * @function designer#drop
+ * @description action on drop event
+ * @param {Event} ev DropEvent
+ * @return {void}
+ */
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    var element = document.getElementById(data);
+    if(element.classList.contains("component")){
+        var cloneElement = document.getElementById(data).cloneNode(true);
+        cloneElement.classList.remove("component");
+        ev.target.appendChild(cloneElement);
+    } else {
+        ev.target.appendChild(element);
+    }
+
 }
 
 window.addEventListener('load', () => {
@@ -74,9 +112,11 @@ window.addEventListener('load', () => {
                 if (this.checked) {
                     magnet.add(block);
                     doms.push(block);
+                    this.parentNode.droppable=false;
                 } else {
                     magnet.remove(block);
                     doms.splice(doms.indexOf(block), 1);
+                    this.parentNode.droppable=true;
                 }
             });
             block.addEventListener('mousedown', function() {
