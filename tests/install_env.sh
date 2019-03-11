@@ -28,8 +28,8 @@ else
 fi
 
 unzip -a chromedriver.zip > /dev/null
-cp -fr chromedriver gui/chromedriver
-chmod +x gui/chromedriver
+cp -fr chromedriver tests/chromedriver
+chmod +x tests/chromedriver
 rm -fr chromedriver
 rm -fr chromedriver.zip
 

@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-
-import unittest
-import sys
-import os
+"""Test scenario features
+"""
 import subprocess
+import unittest
 from time import sleep
 
 class ScenariosTest(unittest.TestCase):
@@ -11,11 +10,13 @@ class ScenariosTest(unittest.TestCase):
     """
 
     def test_scenario_cron_execution(self):
+        """Test cron execution of a scenario
+        """
         # Wait 2 minute for cron execution
         sleep(120)
-        shell_output = subprocess.check_output(["docker", "exec", "-it", "nextdom-test-scenarios", "ls", "/var/log/nextdom/scenarioLog"])
+        shell_output = subprocess.check_output('docker exec -it nextdom-test-scenarios ls /var/log/nextdom/scenarioLog'.split(' ')) #pylint: disable=line-too-long
         self.assertIn('scenario1.log', shell_output.decode('utf-8'))
-        shell_output = subprocess.check_output(["docker", "exec", "-it", "nextdom-test-scenarios", "cat", "/var/log/nextdom/scenarioLog/scenario1.log"])
+        shell_output = subprocess.check_output('docker exec -it nextdom-test-scenarios cat /var/log/nextdom/scenarioLog/scenario1.log'.split(' ')) #pylint: disable=line-too-long
         self.assertIn('automatiquement sur programmation', shell_output.decode('utf-8'))
 
 # Entry point
