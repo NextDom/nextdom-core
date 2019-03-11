@@ -1,0 +1,3 @@
+[FORMAT]
+disable=R0904, wildcard-import, unused-wildcard-import, R0801, no-name-in-module
+

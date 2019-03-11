@@ -1,82 +1,58 @@
 #!/usr/bin/env python3
+"""Test first use process pages
+"""
 
 import unittest
 import sys
 import os
 from time import sleep
-from selenium import webdriver
-from selenium.common.exceptions import WebDriverException
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from libs.base_gui_test import BaseGuiTest
 
-class FirstUsePage(unittest.TestCase):
-    """Test connection page and connection process
+class FirstUsePage(BaseGuiTest):
+    """Test first use process pages
     """
-    driver = None
-    url = 'http://127.0.0.1:8765'
-    login = 'admin'
-    password = 'admin'
+
+    INITIAL_PASSWORD = 'admin'
 
     @classmethod
     def setUpClass(cls):
-        driver_path = os.path.dirname(os.path.abspath(__file__)) + os.sep + 'chromedriver'
-        try:
-            desired_capabilities = DesiredCapabilities.CHROME.copy()
-            desired_capabilities['loggingPrefs'] = { 'browser': 'SEVERE' }
-            cls.driver = webdriver.Chrome(desired_capabilities=desired_capabilities,executable_path=driver_path)
-            cls.driver.get(cls.url)
-        except WebDriverException as err:
-            if err.code == -32000:
-                print('Impossible to access to '+cls.url)
-            else:
-                print("Chromedriver needed to run tests on Chrome.")
-                print("Download it on https://sites.google.com/a/chromium.org/chromedriver/downloads")
-            exit(1)
+        """Init chrome driver
+        """
+        cls.init_driver()
 
-    @classmethod
-    def tearDownClass(cls):
-        if cls.driver is not None:
-            cls.driver.quit()
+    def setUp(self):
+        """Reset process
+        """
+        # Reset firstUse status
+        os.system('./scripts/sed_in_docker.sh "nextdom::firstUse = 0" "nextdom::firstUse = 1" /var/lib/nextdom/config/default.config.ini nextdom-test-firstuse') #pylint: disable=line-too-long
+        # Reset user password
+        os.system('docker exec -i nextdom-test-firstuse /usr/bin/mysql -u root nextdomdev -e "UPDATE user SET password = SHA2(\'' + self.INITIAL_PASSWORD + '\', 512)"') #pylint: disable=line-too-long
+        # Reset firstUse status in database
+        os.system('docker exec -i nextdom-test-firstuse /usr/bin/mysql -u root nextdomdev -e "UPDATE config SET \\`value\\` = 1 WHERE \\`key\\` = \'nextdom::firstUse\'"') #pylint: disable=line-too-long
 
-    def reset_first_use(self):
-        os.system('./scripts/sed_in_docker.sh "nextdom::firstUse = 0" "nextdom::firstUse = 1" /var/lib/nextdom/config/default.config.ini nextdom-test-firstuse')
-        os.system('docker exec -i nextdom-test-firstuse /usr/bin/mysql -u root nextdomdev -e "UPDATE user SET password = SHA2(\'' + self.password + '\', 512)"')
-        os.system('docker exec -i nextdom-test-firstuse /usr/bin/mysql -u root nextdomdev -e "UPDATE config SET \\`value\\` = 1 WHERE \\`key\\` = \'nextdom::firstUse\'"')
+    def test_first_use_shortcuts(self): #pylint: disable=too-many-statements
+        """Test shortcuts
+        """
+        self.goto()
+        self.assertEqual(0, len(self.get_js_logs()))
+        step_shortcuts = []
+        for i in range(1, 6):
+            step_shortcut = self.get_element_by_css('a[href="#step-' + str(i) + '"]')
+            self.assertIsNotNone(step_shortcut)
+            step_shortcuts.append(step_shortcut)
+        step_2_button = self.get_element_by_id('toStep2')
+        password1_button = self.get_element_by_id('in_change_password')
+        password2_button = self.get_element_by_id('in_change_passwordToo')
+        step_3_button = self.get_element_by_id('toStep3')
+        step_3_skip_button = self.get_element_by_id('skipStep4')
+        white_theme_checkbox = self.get_element_by_css('input[value="white"]')
+        dark_theme_checkbox = self.get_element_by_css('input[value="dark"]')
+        step_4_button = self.get_element_by_id('toStep4')
+        step_5_button = self.get_element_by_id('toStep5')
+        finish_button = self.get_element_by_id('finishConf')
 
-    def test_first_use_shortcuts(self):
-        self.reset_first_use()
-        self.driver.get(self.url)
-        # Wait for loading page
-        sleep(5)
-        self.assertEquals(0, len(self.driver.get_log('browser')))
-        step_1_shortcut = self.driver.find_element_by_css_selector('a[href="#step-1"]')
-        step_2_shortcut = self.driver.find_element_by_css_selector('a[href="#step-2"]')
-        step_3_shortcut = self.driver.find_element_by_css_selector('a[href="#step-3"]')
-        step_4_shortcut = self.driver.find_element_by_css_selector('a[href="#step-4"]')
-        step_5_shortcut = self.driver.find_element_by_css_selector('a[href="#step-5"]')
-        self.assertIsNotNone(step_1_shortcut)
-        self.assertIsNotNone(step_2_shortcut)
-        self.assertIsNotNone(step_3_shortcut)
-        self.assertIsNotNone(step_4_shortcut)
-        self.assertIsNotNone(step_5_shortcut)
-
-        step_2_button = self.driver.find_element_by_id('toStep2')
-        password1_button = self.driver.find_element_by_id('in_change_password')
-        password2_button = self.driver.find_element_by_id('in_change_passwordToo')
-        step_3_button = self.driver.find_element_by_id('toStep3')
-        step_3_skip_button = self.driver.find_element_by_id('skipStep4')
-        white_theme_checkbox = self.driver.find_element_by_css_selector('input[value="white"]')
-        dark_theme_checkbox = self.driver.find_element_by_css_selector('input[value="dark"]')
-        step_4_button = self.driver.find_element_by_id('toStep4')
-        step_5_button = self.driver.find_element_by_id('toStep5')
-        finish_button = self.driver.find_element_by_id('finishConf')
-
-        self.assertTrue(step_1_shortcut.is_displayed())
-        self.assertTrue(step_2_shortcut.is_displayed())
-        self.assertTrue(step_3_shortcut.is_displayed())
-        self.assertTrue(step_4_shortcut.is_displayed())
-        self.assertTrue(step_5_shortcut.is_displayed())
+        for step_shortcut in step_shortcuts:
+            self.assertTrue(step_shortcut.is_displayed())
         # Step 1
         sleep(5)
         self.assertTrue(step_2_button.is_displayed())
@@ -89,7 +65,7 @@ class FirstUsePage(unittest.TestCase):
         self.assertFalse(step_4_button.is_displayed())
         self.assertFalse(step_5_button.is_displayed())
         self.assertFalse(finish_button.is_displayed())
-        step_2_shortcut.click()
+        step_shortcuts[1].click()
         # Step 2
         sleep(5)
         self.assertFalse(step_2_button.is_displayed())
@@ -102,7 +78,7 @@ class FirstUsePage(unittest.TestCase):
         self.assertFalse(step_4_button.is_displayed())
         self.assertFalse(step_5_button.is_displayed())
         self.assertFalse(finish_button.is_displayed())
-        step_3_shortcut.click()
+        step_shortcuts[2].click()
         # Step 3
         sleep(5)
         self.assertFalse(step_2_button.is_displayed())
@@ -115,7 +91,7 @@ class FirstUsePage(unittest.TestCase):
         self.assertFalse(dark_theme_checkbox.is_displayed())
         self.assertFalse(step_5_button.is_displayed())
         self.assertFalse(finish_button.is_displayed())
-        step_4_shortcut.click()
+        step_shortcuts[3].click()
         # Step 4
         sleep(5)
         self.assertFalse(step_2_button.is_displayed())
@@ -128,7 +104,7 @@ class FirstUsePage(unittest.TestCase):
         self.assertTrue(dark_theme_checkbox.is_displayed())
         self.assertTrue(step_5_button.is_displayed())
         self.assertFalse(finish_button.is_displayed())
-        step_5_shortcut.click()
+        step_shortcuts[4].click()
         # Step 5
         sleep(5)
         self.assertFalse(step_2_button.is_displayed())
@@ -143,25 +119,24 @@ class FirstUsePage(unittest.TestCase):
         self.assertTrue(finish_button.is_displayed())
         finish_button.click()
         # Stay in fist connect page
-        self.assertEquals(0, len(self.driver.get_log('browser')))
-        self.assertIn("connexion", self.driver.title)
+        self.assertEqual(0, len(self.get_js_logs()))
+        self.assertIn("connexion", self.get_page_title())
 
-    def test_full_process(self):
-        self.reset_first_use()
-        self.driver.get(self.url)
-        # Wait for loading page
-        sleep(5)
+    def test_full_process(self): #pylint: disable=too-many-statements
+        """Test full process
+        """
+        self.goto()
 
-        step_2_button = self.driver.find_element_by_id('toStep2')
-        password1_button = self.driver.find_element_by_id('in_change_password')
-        password2_button = self.driver.find_element_by_id('in_change_passwordToo')
-        step_3_button = self.driver.find_element_by_id('toStep3')
-        step_3_skip_button = self.driver.find_element_by_id('skipStep4')
-        white_theme_checkbox = self.driver.find_element_by_css_selector('input[value="white"]')
-        dark_theme_checkbox = self.driver.find_element_by_css_selector('input[value="dark"]')
-        step_4_button = self.driver.find_element_by_id('toStep4')
-        step_5_button = self.driver.find_element_by_id('toStep5')
-        finish_button = self.driver.find_element_by_id('finishConf')
+        step_2_button = self.get_element_by_id('toStep2')
+        password1_button = self.get_element_by_id('in_change_password')
+        password2_button = self.get_element_by_id('in_change_passwordToo')
+        step_3_button = self.get_element_by_id('toStep3')
+        step_3_skip_button = self.get_element_by_id('skipStep4')
+        white_theme_checkbox = self.get_element_by_css('input[value="white"]')
+        dark_theme_checkbox = self.get_element_by_css('input[value="dark"]')
+        step_4_button = self.get_element_by_id('toStep4')
+        step_5_button = self.get_element_by_id('toStep5')
+        finish_button = self.get_element_by_id('finishConf')
 
         # Step 1
         sleep(5)
@@ -188,8 +163,8 @@ class FirstUsePage(unittest.TestCase):
         self.assertFalse(step_4_button.is_displayed())
         self.assertFalse(step_5_button.is_displayed())
         self.assertFalse(finish_button.is_displayed())
-        password1_button.send_keys(self.password)
-        password2_button.send_keys(self.password)
+        password1_button.send_keys('nextdom')
+        password2_button.send_keys('nextdom')
         step_3_button.click()
         # Step 3
         sleep(5)
@@ -232,10 +207,12 @@ class FirstUsePage(unittest.TestCase):
         self.assertTrue(finish_button.is_displayed())
         finish_button.click()
         # Stay in fist connect page
-        self.assertEquals(0, len(self.driver.get_log('browser')))
-        self.assertIn("Dashboard", self.driver.title)
+        self.assertEqual(0, len(self.get_js_logs()))
+        self.assertIn("Dashboard", self.get_page_title())
 
 # Entry point
 if __name__ == "__main__":
+    FirstUsePage.parse_cli_args()
+    del sys.argv[1:]
     # failfast=True pour arrêter à la première erreur
-    unittest.main()
+    unittest.main(failfast=True)
