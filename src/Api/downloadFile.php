@@ -37,7 +37,12 @@ try {
 
     $baseFilePath = Utils::init('pathfile');
     if (strpos($baseFilePath, 'log') === false) {
-        $filePath = realpath(NEXTDOM_ROOT . '/' . $baseFilePath);
+        if (strpos($baseFilePath, 'data') === 0) {
+            $filePath = NEXTDOM_DATA . '/data';
+        }
+        else {
+            $filePath = realpath(NEXTDOM_ROOT . '/' . $baseFilePath);
+        }
     } else {
         $filePath = realpath(NEXTDOM_LOG . '/' . substr($baseFilePath, 4));
     }

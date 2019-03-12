@@ -354,7 +354,7 @@ try {
     
     if (init('action') == 'emptyRemoveHistory') {
         unautorizedInDemo();
-        unlink(__DIR__ . '/../../data/remove_history.json');
+        unlink(NEXTDOM_DATA . '/data/remove_history.json');
         ajax::success();
     }
     

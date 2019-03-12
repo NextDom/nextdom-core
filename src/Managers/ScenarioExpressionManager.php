@@ -1395,8 +1395,8 @@ class ScenarioExpressionManager
      */
     public static function setTags($_expression, &$_scenario = null, $_quote = false, $_nbCall = 0)
     {
-        if (file_exists(NEXTDOM_ROOT . '/data/php/user.function.class.php')) {
-            require_once NEXTDOM_ROOT . '/data/php/user.function.class.php';
+        if (file_exists(NEXTDOM_DATA . '/data/php/user.function.class.php')) {
+            require_once NEXTDOM_DATA . '/data/php/user.function.class.php';
         }
         if ($_nbCall > 10) {
             return $_expression;

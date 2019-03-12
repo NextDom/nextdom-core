@@ -35,8 +35,8 @@ class RemoveHistory extends BaseAbstractModal
     {
 
         $removeHistory = null;
-        if (file_exists(NEXTDOM_ROOT . '/data/remove_history.json')) {
-            $removeHistory = json_decode(file_get_contents(NEXTDOM_ROOT . '/data/remove_history.json'), true);
+        if (file_exists(NEXTDOM_DATA . '/data/remove_history.json')) {
+            $removeHistory = json_decode(file_get_contents(NEXTDOM_DATA . '/data/remove_history.json'), true);
         }
         if (!is_array($removeHistory)) {
             $removeHistory = array();

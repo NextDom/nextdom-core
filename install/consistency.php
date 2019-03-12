@@ -380,8 +380,8 @@ try {
         }
     }
 
-    if (!file_exists(__DIR__ . '/../data/php/user.function.class.php')) {
-        copy(__DIR__ . '/../data/php/user.function.class.sample.php', __DIR__ . '/../data/php/user.function.class.php');
+    if (!file_exists(NEXTDOM_DATA . '/data/php/user.function.class.php')) {
+        copy(NEXTDOM_DATA . '/data/php/user.function.class.sample.php', NEXTDOM_DATA . '/data/php/user.function.class.php');
     }
 } catch (Exception $e) {
     log::add('restore', 'error', $e->getMessage());
