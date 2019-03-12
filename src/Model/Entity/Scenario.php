@@ -594,8 +594,8 @@ class Scenario
         $scenarioCopy->setScenarioElement($scenario_element_list);
         $scenarioCopy->setLog('');
         $scenarioCopy->save();
-        if (file_exists('/var/log/nextdom/scenarioLog/scenario' . $scenarioCopy->getId() . '.log')) {
-            unlink('/var/log/nextdom/scenarioLog/scenario' . $scenarioCopy->getId() . '.log');
+        if (file_exists(NEXTDOM_LOG.'/scenarioLog/scenario' . $scenarioCopy->getId() . '.log')) {
+            unlink(NEXTDOM_LOG.'/scenarioLog/scenario' . $scenarioCopy->getId() . '.log');
         }
         return $scenarioCopy;
     }
@@ -779,8 +779,8 @@ class Scenario
             $element->remove();
         }
         $this->emptyCacheWidget();
-        if (file_exists('/var/log/nextdom/scenarioLog/scenario' . $this->getId() . '.log')) {
-            unlink('/var/log/nextdom/scenarioLog/scenario' . $this->getId() . '.log');
+        if (file_exists(NEXTDOM_LOG.'/scenarioLog/scenario' . $this->getId() . '.log')) {
+            unlink(NEXTDOM_LOG.'/scenarioLog/scenario' . $this->getId() . '.log');
         }
         CacheManager::delete('scenarioCacheAttr' . $this->getId());
         return \DB::remove($this);
@@ -1242,7 +1242,7 @@ class Scenario
         if ($this->getConfiguration('logmode', 'default') == 'none') {
             return null;
         }
-        $path = '/var/log/nextdom/scenarioLog';
+        $path = NEXTDOM_LOG.'/scenarioLog';
         if (!file_exists($path)) {
             mkdir($path);
         }

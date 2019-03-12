@@ -92,7 +92,7 @@ class HealthController extends BaseController
                 // Si le plugin a des dépendances
                 if ($plugin->getHasDependency() == 1) {
                     $pluginData['hasDependency'] = true;
-                    $dependencyInfo = $plugin->dependancy_info();
+                    $dependencyInfo = $plugin->getDependencyInfo();
                     // récupération des informations sur ses dépendances
                     if (isset($dependencyInfo['state'])) {
                         $pluginData['dependencyState'] = $dependencyInfo['state'];

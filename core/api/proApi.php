@@ -215,7 +215,7 @@ try {
                 $hasSpecificHealthIcon = '';
                 try {
                     if ($plugin->getHasDependency() == 1) {
-                        $dependancy_info = $plugin->dependancy_info();
+                        $dependancy_info = $plugin->getDependencyInfo();
                         switch ($dependancy_info['state']) {
                             case 'ok':
                                 $result = 'OK';

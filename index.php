@@ -26,7 +26,7 @@ use NextDom\Helpers\Router;
 use NextDom\Helpers\Utils;
 
 // Test if NextDom is installed. Redirection to setup if necessary
-if (!file_exists('/var/lib/nextdom/config/common.config.php')) {
+if (!file_exists( NEXTDOM_DATA .'/config/common.config.php')) {
     header("location: install/setup.php");
 }
 

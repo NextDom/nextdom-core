@@ -470,8 +470,8 @@ class NextDomHelper
      */
     public static function getJeedomVersion()
     {
-        if (file_exists('/var/lib/nextdom/config/Jeedom_version')) {
-            return trim(file_get_contents('/var/lib/nextdom/config/Jeedom_version'));
+        if (file_exists(NEXTDOM_DATA.'/config/Jeedom_version')) {
+            return trim(file_get_contents(NEXTDOM_DATA.'/config/Jeedom_version'));
         }
         return '';
     }
@@ -483,8 +483,8 @@ class NextDomHelper
      */
     public static function getNextdomVersion()
     {
-        if (file_exists('/var/lib/nextdom/config/Nextdom_version')) {
-            return trim(file_get_contents('/var/lib/nextdom/config/Nextdom_version'));
+        if (file_exists(NEXTDOM_DATA.'/config/Nextdom_version')) {
+            return trim(file_get_contents(NEXTDOM_DATA.'/config/Nextdom_version'));
         }
         return '';
     }
@@ -1106,8 +1106,8 @@ class NextDomHelper
     {
         $cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . NEXTDOM_ROOT . ';';
         $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . NEXTDOM_ROOT . ';';
-        $cmd .= SystemHelper::getCmdSudo() . 'find /var/log/nextdom -type f -exec chmod 664 {} +;';
-        $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R /var/log/nextdom ;';
+        $cmd .= SystemHelper::getCmdSudo() . 'find '. NEXTDOM_LOG .' -type f -exec chmod 664 {} +;';
+        $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R '. NEXTDOM_LOG .' ;';
         exec($cmd);
     }
 

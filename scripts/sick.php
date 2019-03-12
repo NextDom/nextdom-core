@@ -72,14 +72,14 @@ try {
 
 /* Check log dir */
 echo "Vérifie si les log sont en écriture...";
-if (!file_exists('/var/log/nextdom/')) {
+if (!file_exists(NEXTDOM_LOG )) {
 	echo "introuvable\n";
-	echo "Faites : mkdir /var/log/nextdom\n";
+	echo "Faites : mkdir ". NEXTDOM_LOG . ".'\n";
 	die();
 }
-if (!is_writable('/var/log/nextdom')) {
+if (!is_writable(NEXTDOM_LOG)) {
 	echo "Impossible d'écrire\n";
-	echo "Faites : chown  -R " . $processUser['name'] . " /var/log/nextdom\n";
+	echo "Faites : chown  -R " . $processUser['name'] . " ".NEXTDOM_LOG."\n";
 	die();
 }
 echo "OK\n";

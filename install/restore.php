@@ -143,15 +143,15 @@ try {
         $exclude .= ' --exclude="' . $folder . '"';
     }
     $rc = 0;
-    system('mkdir -p /tmp/nextdombackup');
-    system('cd /tmp/nextdombackup; rm * -rf; tar xfz "' . $backup . '" ' . $exclude);
+    system('mkdir -p '.TMP_BACKUP);
+    system('cd '.TMP_BACKUP.'; rm * -rf; tar xfz "' . $backup . '" ' . $exclude);
     echo " OK" . "\n";
 
     echo "Delete the backup database...";
-    if (!file_exists("/tmp/nextdombackup/DB_backup.sql")) {
+    if (!file_exists(TMP_BACKUP."/DB_backup.sql")) {
         throw new \Exception("Unable to find the backup database file : " . 'DB_backup.sql');
     } else {
-        shell_exec("sed -i -e s/jeedom/nextdom/g /tmp/nextdombackup/DB_backup.sql");
+        shell_exec("sed -i -e s/jeedom/nextdom/g ".TMP_BACKUP."/DB_backup.sql");
     }
     $tables = \DB::Prepare("SHOW TABLES", array(), \DB::FETCH_TYPE_ALL);
     echo " OK" . "\n";
@@ -168,7 +168,7 @@ try {
     }
 
     echo "Restoring database...";
-    shell_exec("mysql --host=" . $CONFIG['db']['host'] . " --port=" . $CONFIG['db']['port'] . " --user=" . $CONFIG['db']['username'] . " --password=" . $CONFIG['db']['password'] . " " . $CONFIG['db']['dbname'] . " < /tmp/nextdombackup/DB_backup.sql");
+    shell_exec("mysql --host=" . $CONFIG['db']['host'] . " --port=" . $CONFIG['db']['port'] . " --user=" . $CONFIG['db']['username'] . " --password=" . $CONFIG['db']['password'] . " " . $CONFIG['db']['dbname'] . " < ".TMP_BACKUP."/DB_backup.sql");
     echo " OK" . "\n";
 
     echo "Updating database...";
@@ -217,7 +217,7 @@ try {
 
     foreach (PluginManager::listPlugin(true) as $plugin) {
         $plugin_id = $plugin->getId();
-        $dependancy_info = $plugin->dependancy_info(true);
+        $dependancy_info = $plugin->getDependencyInfo(true);
         if (method_exists($plugin_id, 'restore')) {
             echo "Plugin restoration : " . $plugin_id . '...';
             $plugin_id::restore();
@@ -252,8 +252,8 @@ try {
     echo "Restoring rights...";
     shell_exec('chmod 775 -R ' . NEXTDOM_ROOT );
     shell_exec('chown -R www-data:www-data ' . NEXTDOM_ROOT );
-    shell_exec('chmod 775 -R /var/log/nextdom');
-    shell_exec('chown -R www-data:www-data /var/log/nextdom');
+    shell_exec('chmod 775 -R '.NEXTDOM_LOG );
+    shell_exec('chown -R www-data:www-data '.NEXTDOM_LOG);
     shell_exec('chmod 777 -R /tmp/');
     shell_exec('chown www-data:www-data -R /tmp/');
     echo " OK" . "\n";
