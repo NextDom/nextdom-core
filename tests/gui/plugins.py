@@ -44,9 +44,9 @@ class AdministrationPages(unittest.TestCase):
     def connect_to_nextdom(cls):
         # Wait for loading page
         sleep(2)
-        login_input = cls.driver.find_element_by_id('in_login_username')
-        password_input = cls.driver.find_element_by_id('in_login_password')
-        connect_button = cls.driver.find_element_by_id('bt_login_validate')
+        login_input = cls.driver.find_element_by_id('login')
+        password_input = cls.driver.find_element_by_id('password')
+        connect_button = cls.driver.find_element_by_id('submit')
         login_input.send_keys(cls.login)
         password_input.send_keys(cls.password)
         connect_button.click()
