@@ -43,26 +43,20 @@ class Utils
     private static $properties = array();
 
     /**
-     * Ajouter une variable Javascript au code HTML
+     * Add javascript variable in HTML code
      *
-     * @param string $varName Nom de la variable dans le code HTML
-     * @param mixed $varValue Valeur de la variable
+     * @param string $varName Name of javascript variable
+     * @param mixed $varValue Value of the javascript variable
      */
     public static function sendVarToJs(string $varName, $varValue)
     {
-        echo self::getVarToJs($varName, $varValue);
-    }
-
-    public static function getVarToJs(string $varName, $varValue)
-    {
-        return "<script>" . self::getVarInJs($varName, $varValue) . "</script>\n";
+        echo "<script>" . self::getVarInJs($varName, $varValue) . "</script>\n";
     }
 
     /**
-     * Ajouter une liste de variables Javascript au HTML
+     * Add list of javascript variables in HTML code
      *
-     * TODO: Merger les 2 avecs un test
-     * @param array $listOfVarsWithValues Liste des variables 'nom' => 'valeur'
+     * @param array $listOfVarsWithValues Variables associative array 'name' => 'value'
      */
     public static function sendVarsToJS(array $listOfVarsWithValues)
     {
@@ -86,7 +80,7 @@ class Utils
     }
 
     /**
-     * Prépare la déclaration d'une variable au format Javascript
+     * Convert variable in javascript format
      *
      * @param string $varName Nom de la variable
      * @param mixed $varValue Valeur
@@ -104,15 +98,20 @@ class Utils
         return "var $varName = $jsVarValue;";
     }
 
-    public static function getArrayToJQueryJson($varToTransform)
+    /**
+     * Encode at JSON format for javascript
+     * @param mixed $varToTransform Variable to transform
+     * @return string Encoded string for javascript
+     */
+    public static function getArrayToJQueryJson($varToTransform): string
     {
         return 'jQuery.parseJSON("' . addslashes(json_encode($varToTransform, JSON_UNESCAPED_UNICODE)) . '")';
     }
 
     /**
-     * Rediriger vers un autre url
+     * Redirect to target url
      *
-     * @param string $url URL cible
+     * @param string $url Target url
      * @param null $forceType Forcage si 'JS' TODO: ???
      */
     public static function redirect(string $url, $forceType = null)
