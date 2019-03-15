@@ -173,6 +173,11 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('variable(commut_switch_bathroom)==0', $result);
     }
 
+    public function testEvaluateSimpleWithComplexFunc() {
+        $result = Utils::transformExpressionForEvaluation('variable(commut_switch_bathroom, second_param) == 0');
+        $this->assertEquals('variable(commut_switch_bathroom,second_param)==0', $result);
+    }
+
     public function testEvaluateComplex() {
         $result = Utils::transformExpressionForEvaluation('#[Escaliers RDC][Detecteur RDC][Présence]# == 1 OR #[Escaliers 1er][Détecteur de mouvement 1er][Présence]# == 1');
         $this->assertEquals('#[Escaliers RDC][Detecteur RDC][Présence]#==1||#[Escaliers 1er][Détecteur de mouvement 1er][Présence]#==1', $result);
@@ -182,13 +187,11 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     public function testEvaluateComplexOr() {
         $result = Utils::transformExpressionForEvaluation('"Test ou piege" OU "TEST ET PIEGE"');
         $this->assertEquals('"Test ou piege"||"TEST ET PIEGE"', $result);
-
     }
 
     public function testEvaluateComplexAnd() {
         $result = Utils::transformExpressionForEvaluation('"Test ou piege" ET "TEST ET PIEGE"');
         $this->assertEquals('"Test ou piege"&&"TEST ET PIEGE"', $result);
-
     }
 
     public function testEvaluateNegation() {
@@ -209,6 +212,16 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     public function testEvaluateDot() {
         $result = Utils::transformExpressionForEvaluation('1.23 == 12.3');
         $this->assertEquals('1.23==12.3', $result);
+    }
+
+    public function testEvaluateNegativeTest() {
+        $result = Utils::transformExpressionForEvaluation('!(1 == 2.0 OR 2 == .28)');
+        $this->assertEquals('!(1==2.0||2==.28)', $result);
+    }
+
+    public function testEvaluateNegativeFuncTest() {
+        $result = Utils::transformExpressionForEvaluation('(1 == 2.0 OR !myFunc(23, 23))');
+        $this->assertEquals('(1==2.0||!myFunc(23,23))', $result);
     }
 
     public function testEvaluateOperator() {

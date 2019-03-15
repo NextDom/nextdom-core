@@ -240,4 +240,15 @@ class CronManager
     {
         return date('i', $dateToConvert) . ' ' . date('H', $dateToConvert) . ' ' . date('d', $dateToConvert) . ' ' . date('m', $dateToConvert) . ' * ' . date('Y', $dateToConvert);
     }
+    /**
+     * convert cron schedule string
+     *
+     * @param string $cron F cron schedule format to re
+     * @return string
+     * @throws \Exception
+     */
+    public static function convertCronSchedule($cron)
+    {
+        return str_replace('*/ ','* ',$cron);
+    }
 }
