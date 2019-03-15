@@ -337,6 +337,7 @@ $("#bt_addElementSave").off('click').on('click', function (event) {
   }
   setEditor();
   updateSortable();
+  setInputExpressionsEvent();
   $('#md_addElement').modal('hide');
 });
 });
@@ -925,6 +926,7 @@ function printScenario(_id) {
     }
   });
     updateSortable();
+    setInputExpressionsEvent();
     setAutocomplete();
     updateElseToggle();
     $('#div_editScenario').show();
@@ -1480,4 +1482,82 @@ function getElement(_element) {
     element.subElements.push(subElement);
   });
   return element;
+}
+
+/**
+ * Set the event of the expression input
+ */
+function setInputExpressionsEvent() {
+    var inputExpressions = $('.expressionAttr[data-l1key=expression]');
+    inputExpressions.off('keyup').on('keyup', function () {
+        checkExpressionInput($(this));
+    });
+    inputExpressions.each(function () {
+        checkExpressionInput($(this));
+    });
+}
+
+/**
+ * Check an input that contains expression and decorate on error
+ *
+ * @param inputElement JQuery object of the input to check
+ */
+function checkExpressionInput(inputElement) {
+    if (!checkExpressionValidity(inputElement.val())) {
+        inputElement.css('textDecoration', 'underline');
+        inputElement.css('textDecorationStyle', 'dashed');
+        inputElement.css('textDecorationColor', 'red');
+    }
+    else {
+        inputElement.css('textDecoration', 'none');
+    }
+}
+
+/**
+ * Check if the string is a valid NextDom expression
+ *
+ * @param stringToCheck String to check
+ *
+ * @returns {boolean} True if the string is valid
+ */
+function checkExpressionValidity(stringToCheck) {
+    var validityCheckRegex = /((\w+|-?(\d+\.\d+|\.?\d+)|".*?"|'.*?'|#.*?#|\(|,|\)|!)[ ]*([!*+&|\-\/>=<]+|and|or|ou|et)*[ ]*)*/;
+    var prohibedFirstsCharacters = ['*', '+', '&', '|', '-', '/', '>', '=', '<'];
+    var prohibedLastsCharacters = ['!', '*', '+', '&', '|', '-', '/', '>', '=', '<'];
+    var result = false;
+
+    stringToCheck = stringToCheck.trim();
+    if (validityCheckRegex.exec(stringToCheck)[0] === stringToCheck) {
+        result = true;
+        if (stringToCheck.length > 0) {
+            if (prohibedFirstsCharacters.indexOf(stringToCheck[0]) !== -1) {
+                result = false;
+            }
+            if (prohibedLastsCharacters.indexOf(stringToCheck[stringToCheck.length - 1]) !== -1) {
+                result = false;
+            }
+        }
+        var parenthesisStack = [];
+        for (var i = 0; i < stringToCheck.length; ++i) {
+            if (stringToCheck[i] === '(') {
+                parenthesisStack.push('(');
+            }
+            else if (stringToCheck[i] === ')') {
+                if (parenthesisStack.length === 0) {
+                    result = false;
+                    break;
+                }
+                if (parenthesisStack[parenthesisStack.length - 1] !== '(') {
+                    result = false;
+                    break;
+                }
+                parenthesisStack.pop();
+            }
+        }
+        if (parenthesisStack.length > 0) {
+            result = false;
+        }
+    }
+
+    return result;
 }
