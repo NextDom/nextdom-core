@@ -224,10 +224,9 @@ $(function () {
         autoOpen: false,
         modal: false,
         closeText: '',
-        height: 'auto',
-        width: 'auto',
-        position: 'fixed',
-        resizable: false,
+        height: ((jQuery(window).height() - 100) < 700) ? jQuery(window).height() - 100 : 700,
+        width: ((jQuery(window).width() - 100) < 900) ? (jQuery(window).width() - 100) : 900,
+        position: { my: "center bottom-10", at: "center bottom", of: window },
         open: function () {
             $("body").css({overflow: 'hidden'})
             $(this).closest( ".ui-dialog" ).find(":button").blur();
@@ -243,10 +242,9 @@ $(function () {
         autoOpen: false,
         modal: false,
         closeText: '',
-        height: 'auto',
-        width: 'auto',
-        position: 'fixed',
-        resizable: false,
+        height: (jQuery(window).height() - 100),
+        width: ((jQuery(window).width() - 100) < 1500) ? (jQuery(window).width() - 50) : 1500,
+        position: { my: "center bottom-10", at: "center bottom", of: window },
         open: function () {
             $("body").css({overflow: 'hidden'});
             $(this).closest( ".ui-dialog" ).find(":button").blur();
@@ -261,10 +259,9 @@ $(function () {
         autoOpen: false,
         modal: false,
         closeText: '',
-        height: 'auto',
-        width: 'auto',
-        position: 'fixed',
-        resizable: false,
+        height: (jQuery(window).height() - 100),
+        width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
+        position: {my: 'center', at: 'center', of: window},
         open: function () {
             $("body").css({overflow: 'hidden'});
             $(this).closest( ".ui-dialog" ).find(":button").blur();
@@ -279,10 +276,9 @@ $(function () {
         autoOpen: false,
         modal: false,
         closeText: '',
-        height: 'auto',
-        width: 'auto',
-        position: 'fixed',
-        resizable: false,
+        height: (jQuery(window).height() - 150),
+        width: ((jQuery(window).width() - 150) < 1200) ? (jQuery(window).width() - 50) : 1200,
+        position: {my: 'center', at: 'center', of: window},
         open: function () {
             $("body").css({overflow: 'hidden'});
             $(this).closest( ".ui-dialog" ).find(":button").blur();
