@@ -16,7 +16,6 @@
  * along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once NEXTDOM_ROOT . '/core/php/core.inc.php';
 require_once('NextDomMarket.php');
 require_once('DownloadManager.php');
 

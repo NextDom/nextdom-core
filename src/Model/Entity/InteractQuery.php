@@ -198,7 +198,7 @@ class InteractQuery
                     }
                     $tags = array();
                     if (isset($options['tags'])) {
-                        $options['tags'] = arg2array($options['tags']);
+                        $options['tags'] = Utils::arg2array($options['tags']);
                         foreach ($options['tags'] as $key => $value) {
                             $tags['#' . trim(trim($key), '#') . '#'] = ScenarioExpressionManager::setTags(trim($value));
                         }
@@ -209,7 +209,7 @@ class InteractQuery
                         $replace['#valeur#'] .= ' ' . $return;
                     }
                 } catch (\Exception $e) {
-                    LogHelper::add('interact', 'error', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Détails : ') . $e->getMessage());
+                    LogHelper::addError('interact', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Détails : ') . $e->getMessage());
                 }
             }
         }

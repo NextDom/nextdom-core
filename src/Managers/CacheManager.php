@@ -110,7 +110,7 @@ class CacheManager
     public static function stats($details = false)
     {
         $result = self::getCache()->getStats();
-        $result['count'] = \__('Inconnu');
+        $result['count'] = __('Inconnu');
         if (ConfigManager::byKey('cache::engine') == 'FilesystemCache') {
             $result['count'] = 0;
             foreach (FileSystemHelper::ls(self::getFolder()) as $folder) {

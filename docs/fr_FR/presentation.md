@@ -1,4 +1,4 @@
-![icon](../images/AndroidRemoteControl_icon.png)
+![icon](../images/NextDom_Wide_BlueWhite.png)
 
 # Description
 

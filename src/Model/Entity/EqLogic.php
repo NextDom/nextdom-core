@@ -833,8 +833,8 @@ class EqLogic
             return '';
         }
         $user_id = '';
-        if (isset($_SESSION) && isset($_SESSION['user']) && is_object($_SESSION['user'])) {
-            $user_id = $_SESSION['user']->getId();
+        if (isset($_SESSION) && is_object(UserManager::getStoredUser())) {
+            $user_id = UserManager::getStoredUser()->getId();
         }
         if (!$_noCache) {
             $mc = CacheManager::byKey('widgetHtml' . $this->getId() . $viewType . $user_id);
@@ -976,8 +976,8 @@ class EqLogic
             }
         }
         $default_opacity = ConfigManager::byKey('widget::background-opacity');
-        if (isset($_SESSION) && isset($_SESSION['user']) && is_object($_SESSION['user']) && $_SESSION['user']->getOptions('widget::background-opacity::' . $version, null) !== null) {
-            $default_opacity = $_SESSION['user']->getOptions('widget::background-opacity::' . $version);
+        if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::background-opacity::' . $version, null) !== null) {
+            $default_opacity = UserManager::getStoredUser()->getOptions('widget::background-opacity::' . $version);
         }
         $opacity = $this->getDisplay('background-opacity' . $version, $default_opacity);
         if ($replace['#background-color#'] != 'transparent' && $opacity != '' && $opacity < 1) {
@@ -1066,8 +1066,8 @@ class EqLogic
     public function postToHtml(string $viewType, string $htmlCode)
     {
         $user_id = '';
-        if (isset($_SESSION) && isset($_SESSION['user']) && is_object($_SESSION['user'])) {
-            $user_id = $_SESSION['user']->getId();
+        if (isset($_SESSION) && is_object(UserManager::getStoredUser())) {
+            $user_id = UserManager::getStoredUser()->getId();
         }
         CacheManager::set('widgetHtml' . $this->getId() . $viewType . $user_id, $htmlCode);
         return $htmlCode;
@@ -1359,13 +1359,14 @@ class EqLogic
             $categories = $categories . ' energy';
         }
         if ($this->getCategory('multimedia', 0) == 1) {
-            $categories = $categories .' multimedia';
+            $categories = $categories . ' multimedia';
         }
         if ($this->getCategory('default', 0) == 1) {
-            $categories = $categories .' default ';
+            $categories = $categories . ' default ';
         }
         return $categories;
     }
+
     /**
      * @param $_message
      */
@@ -1489,14 +1490,13 @@ class EqLogic
             }
             return false;
         }
-        if (!isConnect()) {
+        if (!AuthentificationHelper::isConnected()) {
             return false;
         }
-        if (
-            AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
+        if (AuthentificationHelper::isConnectedAsAdmin() || AuthentificationHelper::isConnectedWithRights('user')) {
             return true;
         }
-        if (strpos($_SESSION['user']->getRights('eqLogic' . $this->getId()), $_right) !== false) {
+        if (strpos(UserManager::getStoredUser()->getRights('eqLogic' . $this->getId()), $_right) !== false) {
             return true;
         }
         return false;
@@ -1553,6 +1553,7 @@ class EqLogic
                 }
                 try {
                     if ($cmd === null || !is_object($cmd)) {
+                        /** @var Cmd $cmd */
                         $cmd = new $cmdClass();
                         $cmd->setOrder($cmd_order);
                         $cmd->setEqLogic_id($this->getId());

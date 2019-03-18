@@ -86,7 +86,7 @@ class EqReal
     public function save()
     {
         if ($this->getName() == '') {
-            throw new \Exception(\__('Le nom de l\'équipement réel ne peut pas être vide'));
+            throw new \Exception(__('Le nom de l\'équipement réel ne peut pas être vide'));
         }
         return \DB::save($this);
     }

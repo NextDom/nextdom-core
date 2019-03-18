@@ -31,9 +31,7 @@ class CmdHumanInsert extends BaseAbstractModal
      * Render command human insert modal (scenario)
      *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public static function get(): string
     {
