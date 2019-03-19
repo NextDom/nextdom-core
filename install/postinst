@@ -234,7 +234,7 @@ step_nextdom_apache_php() {
 
 
 step_nextdom_configuration() {
-    rm -f ${WEBSERVER_HOME}/core/config
+    rm -Rf ${WEBSERVER_HOME}/core/config
     cp -r ${WEBSERVER_HOME}/assets/config ${VARS_DIRECTORY}
     ln -s ${VARS_DIRECTORY}/config ${WEBSERVER_HOME}/core
     cp ${WEBSERVER_HOME}/core/config/common.config.sample.php ${WEBSERVER_HOME}/core/config/common.config.php

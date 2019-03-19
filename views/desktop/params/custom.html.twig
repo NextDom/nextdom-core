@@ -368,29 +368,47 @@
                 <fieldset>
                     <legend>{{ 'Paramètrage de l\'aspect des tuiles du dashboard en version desktop ou mobile' }}</legend>
                     <div class="row">
+                        <div class="col-xs-12">
+                            <p class="alert alert-info">{{ 'Après avoir modifié ces valeurs, nous vous conseillons d\' utiliser les fonctions de redimensionnement sur grilles de vos objets en utilisant le mode édition :'}}<i class="fas fa-th spacing-left spacing-right"></i><i class="fas fa-pencil-alt spacing-right"></i><i class="fas fa-th-large spacing-right"></i></p>
+                        </div>
                         <div class="form-group col-md-4 col-md-offset-1 col-xs-12">
                             <label class="control-label">{{ 'Opacité par défaut des widgets' }}</label>
-                            <input type="numeric" class="configKey form-control" data-l1key="widget::background-opacity"/>
+                            <div class="input-group">
+                                <input type="numeric" class="configKey form-control" data-l1key="widget::background-opacity"/>
+                                <span class="input-group-addon">{{ 'entre 0 et 1' }}</span>
+                            </div>
                         </div>
                         <div class="form-group col-md-4 col-md-offset-2 col-xs-12">
                             <label class="control-label">{{ 'Taille Coins' }}</label>
-                            <input type="numeric" class="configKey form-control" data-l1key="widget::radius"/>
+                            <div class="input-group">
+                                <input type="numeric" class="configKey form-control" data-l1key="widget::radius"/>
+                                <span class="input-group-addon">{{ 'pixels' }}</span>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-4 col-md-offset-1 col-xs-12">
                             <label class="control-label">{{ 'Marge externe' }}</label>
-                            <input type="numeric" class="configKey form-control" data-l1key="widget::margin"/>
+                            <div class="input-group">
+                                <input type="numeric" class="configKey form-control" data-l1key="widget::margin"/>
+                                <span class="input-group-addon">{{ 'pixels' }}</span>
+                            </div>
                         </div>
                         <div class="form-group col-md-4 col-md-offset-2 col-xs-12">
                             <label class="control-label">{{ 'Marge interne' }}</label>
-                            <input type="numeric" class="configKey form-control" data-l1key="widget::padding"/>
+                            <div class="input-group">
+                                <input type="numeric" class="configKey form-control" data-l1key="widget::padding"/>
+                                <span class="input-group-addon">{{ 'pixels' }}</span>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-4 col-md-offset-1 col-xs-12">
-                            <label class="control-label">{{ 'Taille' }}</label>
-                            <input type="numeric" class="configKey form-control" data-l1key="widget::size"/>
+                            <label class="control-label">{{ 'Taille Grille' }}</label>
+                            <div class="input-group">
+                                <input type="numeric" class="configKey form-control" data-l1key="widget::size"/>
+                                <span class="input-group-addon">{{ 'pixels' }}</span>
+                            </div>
                         </div>
 
                     </div>

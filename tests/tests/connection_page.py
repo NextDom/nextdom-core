@@ -24,10 +24,10 @@ class ConnectionPage(BaseGuiTest):
         """Test connection page content
         """
         self.goto(self.LOGOUT_PATTERN)
-        login_input = self.get_element_by_id('in_login_username')
-        password_input = self.get_element_by_id('in_login_password')
-        connect_button = self.get_element_by_id('bt_login_validate')
-        remember_checkbox = self.get_element_by_id('cb_storeConnection')
+        login_input = self.get_element_by_id('login')
+        password_input = self.get_element_by_id('password')
+        connect_button = self.get_element_by_id('submit')
+        remember_checkbox = self.get_element_by_id('storeConnection')
         self.assertIsNotNone(login_input)
         self.assertIsNotNone(password_input)
         self.assertIsNotNone(connect_button)
@@ -38,9 +38,9 @@ class ConnectionPage(BaseGuiTest):
         """Test connection with good user
         """
         self.goto(self.LOGOUT_PATTERN)
-        login_input = self.get_element_by_id('in_login_username')
-        password_input = self.get_element_by_id('in_login_password')
-        connect_button = self.get_element_by_id('bt_login_validate')
+        login_input = self.get_element_by_id('login')
+        password_input = self.get_element_by_id('password')
+        connect_button = self.get_element_by_id('submit')
         login_input.send_keys(self.login)
         password_input.send_keys(self.password)
         connect_button.click()
@@ -52,8 +52,8 @@ class ConnectionPage(BaseGuiTest):
         """Test enter key from password
         """
         self.goto(self.LOGOUT_PATTERN)
-        login_input = self.get_element_by_id('in_login_username')
-        password_input = self.get_element_by_id('in_login_password')
+        login_input = self.get_element_by_id('login')
+        password_input = self.get_element_by_id('password')
         login_input.send_keys(self.login)
         password_input.send_keys('If this password work, you\'re crazy!')
         password_input.send_keys(Keys.RETURN)

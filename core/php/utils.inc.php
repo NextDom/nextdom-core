@@ -33,6 +33,7 @@
  */
 
 use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Managers\CronManager;
 use NextDom\Helpers\DateHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NetworkHelper;
@@ -403,4 +404,10 @@ function listSession() {
 function deleteSession($_id)
 {
     SessionHelper::deleteSession($_id);
+}
+
+
+function checkAndFixCron($_cron)
+{
+    return CronManager::convertCronSchedule($_cron);
 }

@@ -59,7 +59,7 @@ class NextDomHelper
     private static $nextdomConfiguration;
 
     /**
-     * TODO ???
+     * Add an entry in the history and keep only the last 200
      * @param $data
      */
     public static function addRemoveHistory($data)
