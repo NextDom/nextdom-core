@@ -54,8 +54,12 @@ class DashBoardController extends BaseController
         $pageData['JS_VARS']['SEL_TAG'] = Utils::init('tag', 'all');
         $pageData['JS_VARS']['SEL_SUMMARY'] = Utils::init('summary');
 
-        $object = JeeObjectManager::byId(Utils::init('object_id'));
-
+        if ($pageData['JS_VARS']['SEL_OBJECT_ID'] == '') {
+            $object = JeeObjectManager::byId(UserManager::getStoredUser()->getOptions('defaultDashboardObject'));
+            $pageData['JS_VARS']['SEL_OBJECT_ID'] = UserManager::getStoredUser()->getOptions('defaultDashboardObject');
+        } else {
+            $object = JeeObjectManager::byId(Utils::init('object_id'));
+        }
 
         if (!is_object($object)) {
             $object = JeeObjectManager::rootObject();
@@ -75,7 +79,7 @@ class DashBoardController extends BaseController
         $pageData['dashboardObjectId'] = $pageData['JS_VARS']['SEL_OBJECT_ID'];
         $pageData['dashboardObject'] = $object;
         $pageData['objectList'] = JeeObjectManager::buildTree();
-        $pageData['dashboardChildrenObjects'] = JeeObjectManager::buildTree();
+        $pageData['dashboardChildrenObjects'] = JeeObjectManager::buildTree($object);
         $pageData['profilsUser'] = UserManager::getStoredUser();
 
         $pageData['JS_POOL'][] = '/public/js/desktop/dashboard.js';

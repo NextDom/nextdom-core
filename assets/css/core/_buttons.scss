@@ -93,20 +93,8 @@
   margin: 2px 2px;
 }
 
-.bt_editDashboardWidgetUniformize {
-  position: absolute;
-  top: 6px;
-  right: 7px;
-}
-.bt_editDashboardWidgetAutoResize {
-  position: absolute;
-  top: 6px;
-  right: 35px;
-}
-.bt_editDashboardWidgetGridResize {
-  position: absolute;
-  top: 6px;
-  right: 63px;
+.editDashboardButtons {
+  margin-top: -6px;
 }
 
 .bt_resetColor {

@@ -54,19 +54,20 @@ function updateNoteList() {
 }
 
 $('#bt_noteManagerAdd').on('click', function () {
-    var name = prompt("Nom de la note ?");
-    if (name != null) {
-        nextdom.note.save({
-            note: {name: name},
-            error: function (error) {
-                notify('Core', error.message, 'error');
-            },
-            success: function (notes) {
-                notify('Core', '{{Note créée avec succès}}', 'success');
-                updateNoteList();
-            }
-        });
-    }
+    bootbox.prompt("Nom de la note ?", function (result) {
+        if (result != null) {
+            nextdom.note.save({
+                note: {name: result},
+                error: function (error) {
+                    notify('Core', error.message, 'error');
+                },
+                success: function (notes) {
+                    notify('Core', '{{Note créée avec succès}}', 'success');
+                    updateNoteList();
+                }
+            });
+        }
+    });
 });
 
 $('#ul_noteList').on('click', '.li_noteDisplay', function () {
@@ -106,22 +107,23 @@ $('#bt_noteManagerSave').on('click', function () {
 
 $('#bt_noteManagerRemove').on('click', function () {
     var note = $('#div_noteManagerDisplay').getValues('.noteAttr')[0];
-    var r = confirm('{{Etês-vous sur de vouloir supprimer la note : }}' + note.name + ' ?');
-    if (r == true) {
-        nextdom.note.remove({
-            id: note.id,
-            error: function (error) {
-                notify('Core', error.message, 'error');
-            },
-            success: function (notes) {
-                notify('Core', '{{Note supprimée avec succès}}', 'success');
-                $('#div_noteManagerDisplay .noteAttr').value('');
-                $('#div_noteDisplay').hide();
-                $('#div_noteBtn').hide();
-                updateNoteList();
-            }
-        });
-    }
+    bootbox.confirm('{{Etês-vous sur de vouloir supprimer la note : }} <span style="font-weight: bold ;">' + note.name + '</span> ?', function (result) {
+        if (result) {
+            nextdom.note.remove({
+                id: note.id,
+                error: function (error) {
+                    notify('Core', error.message, 'error');
+                },
+                success: function (notes) {
+                    notify('Core', '{{Note supprimée avec succès}}', 'success');
+                    $('#div_noteManagerDisplay .noteAttr').value('');
+                    $('#div_noteDisplay').hide();
+                    $('#div_noteBtn').hide();
+                    updateNoteList();
+                }
+            });
+        }
+    });
 });
 
 updateNoteList();

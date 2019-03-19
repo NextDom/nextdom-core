@@ -473,7 +473,7 @@ function initTableSorter() {
                 filter_ignoreCase: true,
                 resizable: true,
                 stickyHeaders_offset: $('header.navbar-fixed-top').height(),
-                zebra: ["ui-widget-content even", "ui-state-default odd"],
+                zebra: ["", ""],
             }
         });
     });

@@ -38,7 +38,7 @@
         <div class="action-group">
             <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
             <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=summary"><i class="fas fa-cog spacing-right"></i>{{ 'Paramètres' }}</a>
-            <a class="btn btn-default btn-action-bar" id="bt_removeHistory"><i class="fas fa-history" aria-hidden="true spacing-right"></i>{{ 'Historique' }}</a>
+            <a class="btn btn-default btn-action-bar" id="bt_removeHistory"><i class="fas fa-history spacing-right" aria-hidden="true"></i>{{ 'Historique' }}</a>
             <a class="btn btn-success btn-action-bar bt_setIsVisible" data-value="1" style="display:none;"><i class="fas fa-eye spacing-right"></i>{{ 'Visible' }}</a>
             <a class="btn btn-warning btn-action-bar bt_setIsVisible" data-value="0" style="display:none;"><i class="fas fa-eye-slash spacing-right"></i>{{ 'Invisible' }}</a>
         </div>
@@ -61,9 +61,11 @@
                     <input type="checkbox" class="configKey" id="cb_actifDisplay" data-l1key="cb_actifDisplay" checked>
                     <label for="cb_actifDisplay" class="control-label label-check" data-toggle="tooltip" title="" data-original-title="{{'Afficher les équipements inactifs'}}">{{'Inactif'}}</label>
                 </div>
-                <span class="label label-default label-sticker-big pull-right">{{ 'Nombre d\'objets :' }} {{ displayObjects|length }}</span>
-                <span class="label label-info label-sticker-big pull-right">{{ 'Nombre d\'équipements :' }} {{ displayNbEqLogics }}</span>
-                <span class="label label-primary label-sticker-big pull-right">{{ 'Nombre de commandes :' }} {{ displayNbCmds }}</span>
+                <div class="pull-right spacing-top">
+                    <span class="label label-default label-sticker">{{ 'Nombre d\'objets :' }} {{ displayObjects|length }}</span>
+                    <span class="label label-info label-sticker">{{ 'Nombre d\'équipements :' }} {{ displayNbEqLogics }}</span>
+                    <span class="label label-primary label-sticker">{{ 'Nombre de commandes :' }} {{ displayNbCmds }}</span>
+                </div>
             </div>
         </div>
     </div>
@@ -77,7 +79,7 @@
                 <div class="box-body">
                     <ul class="eqLogicSortable">
                         {% for eqLogic in displayEqLogics[-1] %}
-                            <li class="alert alert-default eqLogic cursor" data-id="{{ eqLogic.getId() }}" data-enable="{{ eqLogic.getIsEnable() }}" data-name="{{ eqLogic.getName() }}" data-type="{{ eqLogic.getEqType_name() }}">
+                            <li class="alert eqLogic cursor" data-id="{{ eqLogic.getId() }}" data-enable="{{ eqLogic.getIsEnable() }}" data-name="{{ eqLogic.getName() }}" data-type="{{ eqLogic.getEqType_name() }}">
                                 <input type="checkbox" class="cb_selEqLogic"/>
                                 {{ eqLogic.getName() }}
                                 <i style="font-size:0.9em;">({{ eqLogic.getEqType_name() }})</i>
@@ -104,12 +106,8 @@
             </div>
         </div>
         {% for object in displayObjects %}
-            {% set defaultTextColor = 'white' %}
-            {% if object.getDisplay('tagColor') == '' %}
-                {% set defaultTextColor = 'black' %}
-            {% endif %}
             <div class="col-xs-4 object col-xs-height">
-                <div class="box box-summary object col-xs-height" data-id="{{ object.getId() }}" style="border-top-color: {{ object.getDisplay('tagColor') }}; color: {{ object.getDisplay('tagTextColor', defaultTextColor) }}">
+                <div class="box box-summary object col-xs-height" data-id="{{ object.getId() }}" style="border-top-color: {{ object.getDisplay('tagColor') }};">
                     <div class="box-header with-border">
                         <h3 class="box-title">{{ object.getDisplay('icon', '<i class="fas fa-tag"></i>')|replace({'></i>': '></i>'})|raw }}<i class="spacing-right"></i>{{ object.getName() }}</h3>
                         <div class="box-tools pull-right">
@@ -120,7 +118,7 @@
                     <div class="box-body">
                         <ul class="eqLogicSortable">
                             {% for eqLogic in displayEqLogics[object.getId()] %}
-                                <li class="alert alert-default eqLogic cursor" data-id="{{ eqLogic.getId() }}" data-enable="{{ eqLogic.getIsEnable() }}" data-name="{{ eqLogic.getName() }}" data-type="{{ eqLogic.getEqType_name() }}">
+                                <li class="alert eqLogic cursor" data-id="{{ eqLogic.getId() }}" data-enable="{{ eqLogic.getIsEnable() }}" data-name="{{ eqLogic.getName() }}" data-type="{{ eqLogic.getEqType_name() }}">
                                     <input type="checkbox" class="cb_selEqLogic"/>
                                     {{ eqLogic.getName() }}
                                     <i style="font-size:0.9em;">({{ eqLogic.getEqType_name() }})</i>
