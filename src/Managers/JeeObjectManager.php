@@ -113,7 +113,7 @@ class JeeObjectManager
      *
      * @throws \Exception
      */
-    public static function rootObject($all = false, $onlyVisible = false)
+    public static function getRootObjects($all = false, $onlyVisible = false)
     {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
@@ -143,7 +143,7 @@ class JeeObjectManager
     {
         $result = array();
         if (!is_object($nodeObject)) {
-            $objectsList = self::rootObject(true, $visible);
+            $objectsList = self::getRootObjects(true, $visible);
         } else {
             $objectsList = $nodeObject->getChild($visible);
         }
