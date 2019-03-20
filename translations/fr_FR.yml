@@ -36,7 +36,7 @@ core:
   disable-cron-master: "Arrêter la tâche cron principale..."
   enable-all-scenarios: "Activer tous les scénarios..."
   disable-all-scenarios: "Désactiver tous les scénarios..."
-  incorrect-sys-date: "La date du système est incorrect (avant %s ou après %s) : "
+  incorrect-sys-date: "La date du système est incorrecte (avant %s ou après %s) : "
 
 page-title:
   administration: Administration
@@ -46,7 +46,7 @@ page-title:
   security: Sécurité
   cache: Cache
   services: Services
-  settings: Paramétrages
+  settings: Paramètres
   general: Général
   customization: Customisation
   profil: Profil
@@ -64,7 +64,7 @@ page-title:
   historics: Historiques
   timeline: Timeline
   backups: Sauvegardes
-  updates: Mise à jours
+  updates: Mises à jour
   notes: Notes
   database: OS/DB
   scenarios: Scénarios
@@ -79,8 +79,8 @@ administration:
   memory: RAM
   hdd: HDD
   swap: Swap
-  http-connections-count: Nombre de connexions HTTP
-  connections-count: Nombre de connexions
+  http-connections-count: Nombre de connexion HTTP
+  connections-count: Nombre de connexion
   process-count: Nombre de processus
   uptime: Système démarré depuis
   welcome-page: Page de bienvenue
@@ -103,9 +103,9 @@ scripts:
   file-not-found: "Fichier non trouvé : "
 
 health:
-  apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (NextDom ne peut marcher avec). Voir <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\">ici</a>
+  apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (NextDom ne peut fonctionner avec). Voir <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\">ici</a>
   apache-private-tmp: Apache private tmp
-  authentication-error: "Attention : vous avez toujours l'utilisateur admin/admin de configuré, cela représente une grave faille de sécurité, aller <a href=\"index.php?v=d&p=user\">ici</a> pour modifier le mot de passe de l'utilisateur admin"
+  authentication-error: "Attention : vous avez toujours l'utilisateur admin/admin configuré, cela représente une grave faille de sécurité, allez <a href=\"index.php?v=d&p=user\">ici</a> pour modifier le mot de passe de l'utilisateur admin"
   available-memory: Mémoire disponible
   available-swap: Swap disponible
   cache-not-saved: Votre cache n'est pas sauvegardé. En cas de redémarrage, certaines informations peuvent être perdues. Essayez de lancer (à partir du moteur de tâches) la tâche cache::persist.
@@ -143,7 +143,7 @@ health:
   scenario-enabled: Scénarios actifs
   sudo-error: Appliquez les droits root à NextDom
   sudo-rights: Droits sudo
-  system-date-error: Si la derniere heure enregistrée est fausse, il faut la remettre à zéro <a href="index.php?v=d&p=administration">ici</a>
+  system-date-error: Si la dernière heure enregistrée est fausse, il faut la remettre à zéro <a href="index.php?v=d&p=administration">ici</a>
   system-date: Date système (dernière heure enregistrée)
   unknown: Inconnue
   update-to-date: Système à jour
@@ -233,7 +233,7 @@ firstuse:
   market-username-placeholder: Nom d'utilisateur...
   market-password-placeholder: Mot de passe...
   customize-title: Personnalisez votre %productName% !
-  customize-content: Selectionnez le thème qui vous correspond le plus, d'autres étant selectionnables ou personnalisable dans la page Customisation...
+  customize-content: Selectionnez le thème qui vous correspond le plus, d'autres étant selectionnables ou personnalisables dans la page Customisation...
   congrats-title: Bravo ! La configuration de votre %productName% est terminée !
   congrats-content: Cliquez sur le bouton Terminer pour profiter de votre solution Domotique...
 
@@ -259,7 +259,7 @@ firstuse:
 "A": "A"
 "A chaque": "A chaque"
 "A exécuter": "A exécuter"
-"A noter que la double authentification n'est necessaire que pour les connexions externe, elle ne sera donc pas active sur une connexion local.": "A noter que la double authentification n'est necessaire que pour les connexions externe, elle ne sera donc pas active sur une connexion local."
+"A noter que la double authentification n'est necessaire que pour les connexions externes, elle ne sera donc pas active sur une connexion local.": "A noter que la double authentification n'est necessaire que pour les connexions externe, elle ne sera donc pas active sur une connexion local."
 "A propos": "A propos"
 "A Propos de Nextdom": "A Propos de Nextdom"
 "Accueil": "Accueil"
@@ -368,7 +368,7 @@ firstuse:
 "Ajouter...": "Ajouter..."
 "Ajouter/Editer viewZone": "Ajouter/Editer viewZone"
 "Alarme diverse": "Alarme diverse"
-"Alert sur la commande": "Alert sur la commande"
+"Alert sur la commande": "Alerte sur la commande"
 "Alerte": "Alerte"
 "Alerte :": "Alerte :"
 "Alertes": "Alertes"
@@ -393,7 +393,7 @@ firstuse:
 "après le widget": "après le widget"
 "Archiver par paquet de": "Archiver par paquet de"
 "Areaspline": "Areaspline"
-"Arret du scénario car il a dépassé son temps de timeout :": "Arret du scénario car il a dépassé son temps de timeout :"
+"Arret du scénario car il a dépassé son temps de timeout :": "Arrêt du scénario car il a dépassé son temps de timeout :"
 "Arrondi": "Arrondi"
 "Arrondi des bordures (en px)": "Arrondi des bordures (en px)"
 "Arrondir les angles (ne pas oublié de mettre %. Ex : 50%)": "Arrondir les angles (ne pas oublié de mettre %. Ex : 50%)"
@@ -467,7 +467,7 @@ firstuse:
 "Audio/Vidéo": "Audio/Vidéo"
 "Auteur": "Auteur"
 "Auteur :": "Auteur :"
-"Authentification 2 étapes": "Authentification 2 étapes"
+"Authentification 2 étapes": "Authentification en 2 étapes"
 "Authentification LDAP": "Authentification LDAP"
 "Authentification par LDAP": "Authentification par LDAP"
 "Authentifications": "Authentifications"
@@ -480,7 +480,7 @@ firstuse:
 "Autre Sources": "Autre Sources"
 "Autres": "Autres"
 "Avancement de la migration": "Avancement de la migration"
-"Avancement de la mises à jour": "Avancement de la mises à jour"
+"Avancement de la mises à jour": "Avancement de la mise à jour"
 "Avancement de la restauration": "Avancement de la restauration"
 "Avancement de la sauvegarde": "Avancement de la sauvegarde"
 "Avancement des mises à jour": "Avancement des mises à jour"
@@ -557,7 +557,7 @@ firstuse:
 "Champs recherche utilisateur": "Champs recherche utilisateur"
 "Changelog": "Changelog"
 "Changement de": "Changement de"
-"Changement de l'icone du scénario :": "Changement de l'icone du scénario :"
+"Changement de l'icone du scénario :": "Changement de l'icône du scénario :"
 "Changement design :": "Changement design :"
 "Chargement réussi merci de recharger la page pour voir le résultat": "Chargement réussi merci de recharger la page pour voir le résultat"
 "Chargement...": "Chargement..."
@@ -591,7 +591,7 @@ firstuse:
 "Cocher pour que la commande s'éxecute en parrallele des autres actions": "Cocher pour que la commande s'éxecute en parrallele des autres actions"
 "CODE": "CODE"
 "Code": "Code"
-"Code d'acces invalide": "Code d'acces invalide"
+"Code d'acces invalide": "Code d'accès invalide"
 "Code d'accès": "Code d'accès"
 "Code de confirmation de l'action": "Code de confirmation de l'action"
 "Code de test": "Code de test"
@@ -609,7 +609,7 @@ firstuse:
 "Commande information utilisateur": "Commande information utilisateur"
 "Commande introuvable - Vérifiez l'id :": "Commande introuvable - Vérifiez l'id :"
 "Commande introuvable :": "Commande introuvable :"
-"Commande introuvable veuillez vérifiez l'id :": "Commande introuvable veuillez vérifiez l'id :"
+"Commande introuvable veuillez vérifiez l'id :": "Commande introuvable veuillez vérifier l'id :"
 "Commande non trouvée": "Commande non trouvée"
 "Commande non trouvée :": "Commande non trouvée :"
 "Commande pour l'envoi": "Commande pour l'envoi"
@@ -642,7 +642,7 @@ firstuse:
 "Configuration du widget": "Configuration du widget"
 "Configuration démon": "Configuration démon"
 "Configuration détaillée": "Configuration détaillée"
-"Configuration général": "Configuration général"
+"Configuration général": "Configuration générale"
 "Configuration réussie": "Configuration réussie"
 "Configurer": "Configurer"
 "Configurer le calcul": "Configurer le calcul"
@@ -670,7 +670,7 @@ firstuse:
 "Copie": "Copie"
 "Copier l'historique de cette commande sur une autre commande": "Copier l'historique de cette commande sur une autre commande"
 "Core": "Core"
-"Correspondance trop éloigné :": "Correspondance trop éloigné :"
+"Correspondance trop éloigné :": "Correspondance trop éloignée :"
 "Correspondance trouvée :": "Correspondance trouvée :"
 "Couleur": "Couleur"
 "Couleur checkbox & radio": "Couleur checkbox & radio"
@@ -821,7 +821,7 @@ firstuse:
 "Dépendances en cours d'installation": "Dépendances en cours d'installation"
 "Dépendances non installées": "Dépendances non installées"
 "Déplier le panneau des vues": "Déplier le panneau des vues"
-"Dépot github non trouvé :": "Dépot github non trouvé :"
+"Dépot github non trouvé :": "Dépôt Github non trouvé :"
 "Dépôt de données inconnu. Vérifiez l'ID :": "Dépôt de données inconnu. Vérifiez l'ID :"
 "Dépôt de données sauvegardé": "Dépôt de données sauvegardé"
 "Dépôt de données supprimé": "Dépôt de données supprimé"
@@ -900,7 +900,7 @@ firstuse:
 "Erreur cron : les crons sont désactivés. Allez dans Administration -> Moteur de tâches pour les réactiver": "Erreur cron : les crons sont désactivés. Allez dans Administration -> Moteur de tâches pour les réactiver"
 "Erreur cURL :": "Erreur cURL :"
 "Erreur de connexion": "Erreur de connexion"
-"Erreur editeur non défini": "Erreur editeur non défini"
+"Erreur editeur non défini": "Erreur éditeur non défini"
 "Erreur exécution de la commande": "Erreur exécution de la commande"
 "Erreur lors de l'exécution de": "Erreur lors de l'exécution de"
 "Erreur lors de la mise à jour": "Erreur lors de la mise à jour"
@@ -940,7 +940,7 @@ firstuse:
 "Etat": "Etat"
 "Eteindre": "Eteindre"
 "Eteint": "Eteint"
-"Etes vous sur de vouloir mettre à jour cet objet ?": "Etes vous sur de vouloir mettre à jour cet objet ?"
+"Etes vous sur de vouloir mettre à jour cet objet ?": "Etes vous sûr de vouloir mettre à jour cet objet ?"
 "Etes-vous sûr de vouloir appliquer le template ? Cela écrasera votre scénario": "Etes-vous sûr de vouloir appliquer le template ? Cela écrasera votre scénario"
 "Etes-vous sûr de vouloir arrêter le système ?": "Etes-vous sûr de vouloir arrêter le système ?"
 "Etes-vous sûr de vouloir changer la clef API de l'utilisateur ?": "Etes-vous sûr de vouloir changer la clef API de l'utilisateur ?"
@@ -967,17 +967,17 @@ firstuse:
 "Etes-vous sûr de vouloir supprimer le scénario": "Etes-vous sûr de vouloir supprimer le scénario"
 "Etes-vous sûr de vouloir supprimer tous ces équipements ?": "Etes-vous sûr de vouloir supprimer tous ces équipements ?"
 "Etes-vous sûr de vouloir supprimer tous les logs ?": "Etes-vous sûr de vouloir supprimer tous les logs ?"
-"Etes-vous sûr de vouloir éxécuter cette commande :": "Etes-vous sûr de vouloir éxécuter cette commande :"
-"Etês vous sur de vouloir supprimer la note :": "Etês vous sur de vouloir supprimer la note :"
-"Etês-vous sur de vouloir supprimer la note :": "Etês-vous sur de vouloir supprimer la note :"
-"Etês-vous sûr de vouloir supprimer cet objet ?": "Etês-vous sûr de vouloir supprimer cet objet ?"
+"Etes-vous sûr de vouloir éxécuter cette commande :": "Etes-vous sûr de vouloir exécuter cette commande :"
+"Etês vous sur de vouloir supprimer la note :": "Etes-vous sûr de vouloir supprimer la note :"
+"Etês-vous sur de vouloir supprimer la note :": "Etes-vous sûr de vouloir supprimer la note :"
+"Etês-vous sûr de vouloir supprimer cet objet ?": "Etes-vous sûr de vouloir supprimer cet objet ?"
 "Evaluation de la condition : [": "Evaluation de la condition : ["
 "Event": "Event"
-"Evènement de la timeline supprimé avec succès": "Evènement de la timeline supprimé avec succès"
-"Evènement sur la commande": "Evènement sur la commande"
+"Evènement de la timeline supprimé avec succès": "Evénement de la timeline supprimé avec succès"
+"Evènement sur la commande": "Evénement sur la commande"
 "Evénement": "Evénement"
 "Evénement en temps réel": "Evénement en temps réel"
-"Execution du lancement en arriere plan :": "Execution du lancement en arriere plan :"
+"Execution du lancement en arriere plan :": "Exécution du lancement en arriere plan :"
 "Exemples / Programmation prédéfinie": "Exemples / Programmation prédéfinie"
 "Expert": "Expert"
 "Export du scénario": "Export du scénario"
@@ -1022,7 +1022,7 @@ firstuse:
 "Forum": "Forum"
 "Fuseau horaire": "Fuseau horaire"
 "Félicitations": "Félicitations"
-"Fênetre/Porte": "Fênetre/Porte"
+"Fênetre/Porte": "Fenêtre/Porte"
 "Gauche": "Gauche"
 "Gestion": "Gestion"
 "Gestion & Markets": "Gestion & Markets"
@@ -1068,7 +1068,7 @@ firstuse:
 "Historique copié avec succès": "Historique copié avec succès"
 "Historique des suppressions": "Historique des suppressions"
 "Historique supprimé avec succès": "Historique supprimé avec succès"
-"Historique vidée avec succès": "Historique vidée avec succès"
+"Historique vidée avec succès": "Historique vidé avec succès"
 "Historiques": "Historiques"
 "Historiser": "Historiser"
 "Historisé": "Historisé"
@@ -1162,7 +1162,7 @@ firstuse:
 "Interactions \"préviens moi\"": "Interactions \"préviens moi\""
 "Interactions automatiques": "Interactions automatiques"
 "InteractQuery ID inconnu": "InteractQuery ID inconnu"
-"Interdire dans les interactions automatique": "Interdire dans les interactions automatique"
+"Interdire dans les interactions automatique": "Interdire dans les interactions automatiques"
 "Interface": "Interface"
 "Intéractions": "Intéractions"
 "Inverser": "Inverser"
@@ -1226,15 +1226,15 @@ firstuse:
 "La mise à jour du plugin a été effecutée.": "La mise à jour du plugin a été effecutée."
 "La poule": "La poule"
 "La programmation ne peut pas être vide :": "La programmation ne peut pas être vide :"
-"La tache plugin::": "La tache plugin::"
+"La tache plugin::": "La tâche plugin::"
 "La taille du fichier est trop importante (maximum 50Mo": "La taille du fichier est trop importante (maximum 50Mo"
-"La valeur minimum de la commande ne peut etre supérieure à la valeur maximum": "La valeur minimum de la commande ne peut etre supérieure à la valeur maximum"
+"La valeur minimum de la commande ne peut etre supérieure à la valeur maximum": "La valeur minimum de la commande ne peut être supérieure à la valeur maximum"
 "La version demandée ne peut pas être vide (mobile, dashboard, dview ou scénario": "La version demandée ne peut pas être vide (mobile, dashboard, dview ou scénario"
 "La version ne peut être que desktop ou mobile": "La version ne peut être que desktop ou mobile"
 "La version ne peut être que js ou css": "La version ne peut être que js ou css"
 "La vérification en 2 étapes fournit une couche supplémentaire de protection pour votre compte": "La vérification en 2 étapes fournit une couche supplémentaire de protection pour votre compte"
 "Lancement de :": "Lancement de :"
-"Lancement de l'arret de nextdom": "Lancement de l'arret de nextdom"
+"Lancement de l'arret de nextdom": "Lancement de l'arrêt de nextdom"
 "Lancement du scénario :": "Lancement du scénario :"
 "Lancement du scénario en mode synchrone": "Lancement du scénario en mode synchrone"
 "Lancement du scénario réussi": "Lancement du scénario réussi"
@@ -1399,7 +1399,7 @@ firstuse:
 "Minute": "Minute"
 "minute (0 - 59)": "minute (0 - 59)"
 "Mise à jour disponible": "Mise à jour disponible"
-"Mise à jour selective": "Mise à jour selective"
+"Mise à jour selective": "Mise à jour sélective"
 "Mise à jour à réappliquer": "Mise à jour à réappliquer"
 "Mise(s) à jour": "Mise(s) à jour"
 "Mises à jour": "Mises à jour"
@@ -1481,8 +1481,8 @@ firstuse:
 "Nom du design ?": "Nom du design ?"
 "Nom du scénario": "Nom du scénario"
 "Nom du template": "Nom du template"
-"Nom dutilisateur...": "Nom dutilisateur..."
-"Nom la copie du design ?": "Nom la copie du design ?"
+"Nom dutilisateur...": "Nom d'utilisateur..."
+"Nom la copie du design ?": "Nom de la copie du design ?"
 "Nom à afficher": "Nom à afficher"
 "Nombre d'objets :": "Nombre d'objets :"
 "Nombre d'échecs": "Nombre d'échecs"
@@ -1495,7 +1495,7 @@ firstuse:
 "Nombre de lignes": "Nombre de lignes"
 "Nombre de lignes maximum dans un log": "Nombre de lignes maximum dans un log"
 "Nombre de processus": "Nombre de processus"
-"Nombre maximum d'évènements": "Nombre maximum d'évènements"
+"Nombre maximum d'évènements": "Nombre maximum d'événements"
 "Non": "Non"
 "Non actif": "Non actif"
 "Non configuré": "Non configuré"
@@ -1513,7 +1513,7 @@ firstuse:
 "Note supprimée avec succès": "Note supprimée avec succès"
 "Notes": "Notes"
 "Notification activée": "Notification activée"
-"Notification desactivée": "Notification desactivée"
+"Notification desactivée": "Notification désactivée"
 "Notifications": "Notifications"
 "Nouveau": "Nouveau"
 "Nouveau mot de passe": "Nouveau mot de passe"
@@ -1585,13 +1585,13 @@ firstuse:
 "Pendant plus de": "Pendant plus de"
 "pendant plus de": "pendant plus de"
 "Pensez à sauvegarder puis actualiser la page pour voir les changements...": "Pensez à sauvegarder puis actualiser la page pour voir les changements..."
-"Permet d'affecter une icône au scénario": "Permet d'affecter une icône au scénario"
+"Permet d'affecter une icône au scénario": "Permet d'affecter un icône au scénario"
 "Permet d'afficher un petit message d'alerte sur tous les navigateurs qui ont une page NextDom d'ouvert. Vous pouvez en plus choisir 4 niveaux d'alerte": "Permet d'afficher un petit message d'alerte sur tous les navigateurs qui ont une page NextDom d'ouvert. Vous pouvez en plus choisir 4 niveaux d'alerte"
 "Permet d'afficher un popup qui doit absolument être validé sur tous les navigateurs qui ont une page": "Permet d'afficher un popup qui doit absolument être validé sur tous les navigateurs qui ont une page"
 "Permet d'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (ex. : SI/ALORS….)": "Permet d'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (ex. : SI/ALORS….)"
 "Permet d'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (Ex: SI/ALORS….)": "Permet d'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (Ex: SI/ALORS….)"
-"Permet d'ajouter une message dans le centre de message": "Permet d'ajouter une message dans le centre de message"
-"Permet d'attendre le temps que l'état d'une lampe soit mise à jour par exemple": "Permet d'attendre le temps que l'état d'une lampe soit mise à jour par exemple"
+"Permet d'ajouter une message dans le centre de message": "Permet d'ajouter un message dans le centre de message"
+"Permet d'attendre le temps que l'état d'une lampe soit mise à jour par exemple": "Permet d'attendre le temps que l'état d'une lampe soit mis à jour par exemple"
 "Permet d'envoyer, par une commande message, un rapport d'une vue, d'un design ou d'un panel en PNG/PDF/JPEG/SVG.": "Permet d'envoyer, par une commande message, un rapport d'une vue, d'un design ou d'un panel en PNG/PDF/JPEG/SVG."
 "Permet de faire dire un texte à": "Permet de faire dire un texte à"
 "Permet de modifier les proriétés visible/invisible actif/inactif d'un équipement": "Permet de modifier les proriétés visible/invisible actif/inactif d'un équipement"
@@ -1723,7 +1723,7 @@ firstuse:
 "Requête invalide. Version JSON-RPC invalide :": "Requête invalide. Version JSON-RPC invalide :"
 "Restauration": "Restauration"
 "Restauration du cache": "Restauration du cache"
-"Restaurer le selection": "Restaurer le selection"
+"Restaurer le selection": "Restaurer la sélection"
 "Restez informé": "Restez informé"
 "Restriction de l'action": "Restriction de l'action"
 "Resultat :": "Resultat :"
@@ -1732,7 +1732,7 @@ firstuse:
 "Retourne un texte ou une valeur pour une interaction par exemple": "Retourne un texte ou une valeur pour une interaction par exemple"
 "Retourner un texte/une donnée": "Retourner un texte/une donnée"
 "Retrouvez toute l'actualité de NextDom sur notre blog.": "Retrouvez toute l'actualité de NextDom sur notre blog."
-"Reémarrer": "Reémarrer"
+"Reémarrer": "Redémarrer"
 "rien": "rien"
 "Rose": "Rose"
 "Rotation": "Rotation"
@@ -1807,13 +1807,13 @@ firstuse:
 "secondes": "secondes"
 "secondes (0 = illimité)": "secondes (0 = illimité)"
 "secondes (-1 pour infini)": "secondes (-1 pour infini)"
-"Selection des mises à jour": "Selection des mises à jour"
-"Selectionner": "Selectionner"
-"Selectionner un équipement": "Selectionner un équipement"
+"Selection des mises à jour": "Sélection des mises à jour"
+"Selectionner": "Sélectionner"
+"Selectionner un équipement": "Sélectionner un équipement"
 "Semaine": "Semaine"
 "Sens": "Sens"
 "Sensibilité": "Sensibilité"
-"Seront sauvegardé les paramètres, dashboard, vues, designs, plugins, widgets etc...": "Seront sauvegardé les paramètres, dashboard, vues, designs, plugins, widgets etc..."
+"Seront sauvegardé les paramètres, dashboard, vues, designs, plugins, widgets etc...": "Seront sauvegardés les paramètres, dashboard, vues, designs, plugins, widgets etc..."
 "Serveur de temps optionnel": "Serveur de temps optionnel"
 "Services": "Services"
 "sessionCode": "sessionCode"
@@ -1826,7 +1826,7 @@ firstuse:
 "Seuils": "Seuils"
 "Seuils batterie": "Seuils batterie"
 "Seuils spécifiques Batteries": "Seuils spécifiques Batteries"
-"Seul les images sont acceptées (autorisé .jpg .png)": "Seul les images sont acceptées (autorisé .jpg .png)"
+"Seul les images sont acceptées (autorisé .jpg .png)": "Seules les images sont acceptées (autorisé .jpg .png)"
 "Seul un esclave peut restaurer une sauvegarde": "Seul un esclave peut restaurer une sauvegarde"
 "Seul un maître peut recevoir une sauvegarde": "Seul un maître peut recevoir une sauvegarde"
 "SI": "SI"
@@ -1882,7 +1882,7 @@ firstuse:
 "Supprimer colonne": "Supprimer colonne"
 "Supprimer l'action": "Supprimer l'action"
 "Supprimer l'image": "Supprimer l'image"
-"Supprimer la selection": "Supprimer la selection"
+"Supprimer la selection": "Supprimer la sélection"
 "Supprimer le design": "Supprimer le design"
 "Supprimer les IP bannie(s)": "Supprimer les IP bannie(s)"
 "Supprimer ligne": "Supprimer ligne"
@@ -2006,7 +2006,7 @@ firstuse:
 "Téléchargement de": "Téléchargement de"
 "Téléchargement du plugin...": "Téléchargement du plugin..."
 "Télécharger": "Télécharger"
-"Télécharger la selection": "Télécharger la selection"
+"Télécharger la selection": "Télécharger la sélection"
 "Un Dysfonctionnement ?": "Un Dysfonctionnement ?"
 "Un déclencheur du scénario :": "Un déclencheur du scénario :"
 "Un équipement portant ce nom (": "Un équipement portant ce nom ("
@@ -2138,7 +2138,7 @@ firstuse:
 "Vue non trouvée. Vérifiez l'ID": "Vue non trouvée. Vérifiez l'ID"
 "Vue non trouvée. Vérifiez l'iD": "Vue non trouvée. Vérifiez l'iD"
 "Vue par défaut": "Vue par défaut"
-"Vue sauvegardé": "Vue sauvegardé"
+"Vue sauvegardé": "Vue sauvegardée"
 "Vue(s)": "Vue(s)"
 "Vues": "Vues"
 "Vérification automatique": "Vérification automatique"
