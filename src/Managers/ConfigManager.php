@@ -66,7 +66,7 @@ class ConfigManager
     {
         if (!isset(self::$defaultConfiguration[$pluginId])) {
             if ($pluginId == 'core') {
-                self::$defaultConfiguration[$pluginId] = parse_ini_file('/var/lib/nextdom/config/default.config.ini', true);
+                self::$defaultConfiguration[$pluginId] = parse_ini_file(NEXTDOM_DATA . '/config/default.config.ini', true);
                 if (file_exists(NEXTDOM_ROOT . '/var/custom/custom.config.ini')) {
                     self::$defaultConfiguration[$pluginId] = array_merge(self::$defaultConfiguration[$pluginId], parse_ini_file(NEXTDOM_ROOT . '/var/custom/custom.config.ini', true));
                 }

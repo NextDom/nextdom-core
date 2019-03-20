@@ -207,7 +207,7 @@ class LogHelper
      */
     public static function getPathToLog($_log = 'core')
     {
-        return '/var/log/nextdom/' . $_log;
+        return NEXTDOM_LOG .'/'. $_log;
     }
 
     /**

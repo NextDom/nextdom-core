@@ -313,7 +313,7 @@ class Plugin
             $cache->remove();
             throw new \Exception(__('Vous devez attendre au moins 60 secondes entre deux lancements d\'installation de dépendances'));
         }
-        $dependancy_info = $this->dependancy_info(true);
+        $dependancy_info = $this->getDependencyInfo(true);
         if ($dependancy_info['state'] == 'in_progress') {
             throw new \Exception(__('Les dépendances sont déjà en cours d\'installation'));
         }
@@ -321,7 +321,7 @@ class Plugin
             if ($plugin->getId() == $this->getId()) {
                 continue;
             }
-            $dependancy_info = $plugin->dependancy_info();
+            $dependancy_info = $plugin->getDependencyInfo();
             if ($dependancy_info['state'] == 'in_progress') {
                 throw new \Exception(__('Les dépendances d\'un autre plugin sont déjà en cours, veuillez attendre qu\'elles soient finies : ') . $plugin->getId());
             }
@@ -379,7 +379,7 @@ class Plugin
         }
         $result = $plugin_id::deamon_info();
         if ($this->getHasDependency() == 1 && method_exists($plugin_id, 'dependancy_info') && $result['launchable'] == 'ok') {
-            $dependancy_info = $this->dependancy_info();
+            $dependancy_info = $this->getDependencyInfo();
             if ($dependancy_info['state'] != 'ok') {
                 $result['launchable'] = 'nok';
                 if ($dependancy_info['state'] == 'in_progress') {
@@ -542,7 +542,7 @@ class Plugin
                 } else {
                     $out = $this->callInstallFunction('install');
                 }
-                $this->dependancy_info(true);
+                $this->getDependencyInfo(true);
             } else {
                 $this->deamon_stop();
                 if ($alreadyActive == 1) {

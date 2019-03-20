@@ -306,8 +306,8 @@ try {
         if (!$scenario->hasRight('w')) {
             throw new Exception(__('Vous n\'êtes pas autorisé à faire cette action', __FILE__));
         }
-        if (file_exists('/var/log/nextdom/scenarioLog/scenario' . $scenario->getId() . '.log')) {
-            unlink('/var/log/nextdom/scenarioLog/scenario' . $scenario->getId() . '.log');
+        if (file_exists( NEXTDOM_LOG .'/scenarioLog/scenario' . $scenario->getId() . '.log')) {
+            unlink(NEXTDOM_LOG .'/scenarioLog/scenario' . $scenario->getId() . '.log');
         }
         ajax::success();
     }

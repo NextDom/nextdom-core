@@ -757,7 +757,7 @@ class Utils
             FileSystemHelper::rrmdir($folder);
         }
         mkdir($folder);
-        system('cd /var/log/nextdom;cp -R * "' . $folder . '" > /dev/null;cp -R .[^.]* "' . $folder . '" > /dev/null');
+        system('cd '.NEXTDOM_LOG.';cp -R * "' . $folder . '" > /dev/null;cp -R .[^.]* "' . $folder . '" > /dev/null');
         system('sudo dmesg >> ' . $folder . '/dmesg');
         system('sudo cp /var/log/messages "' . $folder . '/" > /dev/null');
         system('sudo chmod 777 -R "' . $folder . '" > /dev/null');
