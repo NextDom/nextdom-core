@@ -35,28 +35,55 @@
 #}
 <section class="content-header">
     <div class="nav-tabs-custom">
-        <ul class="nav nav-tabs nav-tabs-dashboard" role="tablist">
-            <li role="presentation" class="active"><a class="btn_filterObject" aria-controls="home" role="tab" data-toggle="tab" id="all">{{ 'Tous' }}</a><li>
-            {% for child in objectList %}
-                {% if child.getFather_id() == '' %}
-                    <li role="presentation"><a class="btn_filterObject" aria-controls="home" role="tab" data-toggle="tab" id="{{ child.getId() }}">{{ child.getDisplay("icon")|raw }}<i class="spacing-right"></i>{{ child.getName() }}</a><li>
-                {% endif %}
-            {% endfor %}
-        </ul>
+        {% for i in 0..2 %}
+            <ul class="nav nav-tabs nav-tabs-dashboard">
+                {% for child in objectList %}
+                    {% if child.parentNumber() == i and (child.getFather_id() == dashboardObject.getFather().getFather_id() or child.getFather_id() == dashboardObject.getFather_id() or child.getFather_id() == dashboardObjectId or child.getFather_id() == '') %}
+                        <li class="cursor {% if child.getId() == dashboardObjectId %}active{% endif %} {% if child.getId() == dashboardObject.getFather_id() or child.getId() == dashboardObject.getFather().getFather_id() %}father{% endif %}"><a href="index.php?v=d&p=dashboard&object_id={{ child.getId() }}">{{ child.getDisplay("icon")|raw }}<i class="spacing-right"></i>{{ child.getName() }}</a><li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% endfor %}
     </div>
 </section>
 
-<section id="dashboard-content" class="content">
-    <div class="row blurPanel">
+<section id="dashboard-content">
+    <div class="blurPanel">
+        {% if dashboardObject.getConfiguration('hideOnDashboard') == 0 %}
+            <div class="div_object col-xs-{{ dashboardObject.getDisplay('dashboard::size', 12) }}">
+                <div class="card" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}10;box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.08); border: 1px solid {{ dashboardObject.getDisplay("tagColor") }}50;" data-father_id="{{ dashboardObject.getFather_id() }}">
+                    <div class="card-header card-header-icon">
+                        <div class="card-icon" style="background:{{ dashboardObject.getDisplay("tagColor") }}">
+                            {{ dashboardObject.getDisplay("icon")|raw }}
+                        </div>
+                        <p class="card-category" style="color:{{ dashboardObject.getDisplay("tagColor") }}"><b>{{ dashboardObject.getName() }}</b></p>
+                        <div class="editDashboardButtons" style="display:none;">
+                            <i class="fas fa-th-large pull-right cursor bt_editDashboardWidgetAutoResize tooltips spacing-left" id="edit_object_{{ dashboardObject.getId() }}" data-mode="0" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{ 'Redimensionnement sur pas de grille supérieur' }}"></i>
+                            <i class="fas fa-th pull-right cursor bt_editDashboardWidgetGridResize tooltips spacing-left" id="edit_object_{{ dashboardObject.getId() }}" data-mode="0" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{ 'Redimensionner automatiquement puis sur pas de grille' }}"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="div_displayEquipement" id="div_ob{{ dashboardObject.getId() }}">
+                            <script>getObjectHtml({{ dashboardObject.getId() }})</script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
         {% for child in dashboardChildrenObjects %}
-            <div class=" div_object col-xs-{{ child.getDisplay('dashboard::size', 12) }}">
+            <div class="div_object col-xs-{{ child.getDisplay('dashboard::size', 12) }}">
                 {% if child.getFather_id() == '' %}
                     {% if child.getConfiguration('hideOnDashboard') == 0 %}
-                        <div class="card " style="background-color:{{ child.getDisplay("tagColor") }}10;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ child.getDisplay("tagColor") }}50" ; data-father_id="{{ child.getId() }}">
-                            <div class="card-header-icon">
-                                <i class="fas fa-retweet pull-right cursor bt_editDashboardWidgetUniformize tooltips" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Uniformiser les hauteur et repackager les tuiles' }}" style="display:none"></i>
-                                <i class="fas fa-recycle pull-right cursor bt_editDashboardWidgetAutoResize tooltips" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Redimensionner automatiquement sur pas manuel et repackager les tuiles' }}" style="display:none"></i>
-                                <i class="fas fa-th pull-right cursor bt_editDashboardWidgetGridResize tooltips" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Redimensionner automatiquement sur pas auto et repackager les tuiles' }}" style="display:none"></i>
+                        <div class="card" style="background-color:{{ child.getDisplay("tagColor") }}10;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ child.getDisplay("tagColor") }}50" ; data-father_id="{{ child.getId() }}">
+                            <div class="card-header card-header-icon">
+                                <div class="card-icon text-center" style="background:{{ child.getDisplay("tagColor") }}">
+                                    {{ child.getDisplay("icon")|raw }}
+                                </div>
+                                <p class="card-category" style="color:{{ child.getDisplay("tagColor") }}"><b>{{ child.getName() }}</b></p>
+                                <div class="editDashboardButtons" style="display:none;">
+                                    <i class="fas fa-th-large pull-right cursor bt_editDashboardWidgetAutoResize tooltips spacing-left" id="edit_object_{{ child.getId() }}" data-mode="0" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{ 'Redimensionnement sur pas de grille supérieur' }}"></i>
+                                    <i class="fas fa-th pull-right cursor bt_editDashboardWidgetGridResize tooltips spacing-left" id="edit_object_{{ child.getId() }}" data-mode="0" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{ 'Redimensionner automatiquement puis sur pas de grille' }}"></i>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="div_displayEquipement" id="div_ob{{ child.getId() }}" style="width: 100%;padding-top:3px;margin-bottom : 3px;">
@@ -67,15 +94,16 @@
                     {% endif %}
                 {% else %}
                     {% if child.getConfiguration('hideOnDashboard') == 0 %}
-                        <div class="card " style="background-color:{{ child.getDisplay("tagColor") }}10;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ child.getDisplay("tagColor") }}50" ; data-father_id="{{ child.getFather_id() }}">
+                        <div class="card" style="background-color:{{ child.getDisplay("tagColor") }}10;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ child.getDisplay("tagColor") }}50" ; data-father_id="{{ child.getFather_id() }}">
                             <div class="card-header card-header-icon">
                                 <div class="card-icon text-center" style="background:{{ child.getDisplay("tagColor") }}">
                                     {{ child.getDisplay("icon")|raw }}
                                 </div>
                                 <p class="card-category" style="color:{{ child.getDisplay("tagColor") }}"><b>{{ child.getName() }}</b></p>
-                                <i class="fas fa-retweet pull-right cursor bt_editDashboardWidgetUniformize tooltips" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Uniformiser les hauteur et repackager les tuiles' }}" style="display:none"></i>
-                                <i class="fas fa-recycle pull-right cursor bt_editDashboardWidgetAutoResize tooltips" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Redimensionner automatiquement sur pas manuel et repackager les tuiles' }}" style="display:none"></i>
-                                <i class="fas fa-th pull-right cursor bt_editDashboardWidgetGridResize tooltips" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Redimensionner automatiquement sur pas auto et repackager les tuiles' }}" style="display:none"></i>
+                                <div class="editDashboardButtons" style="display:none;">
+                                    <i class="fas fa-th-large pull-right cursor bt_editDashboardWidgetAutoResize tooltips spacing-left" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Redimensionnement sur pas de grille supérieur' }}"></i>
+                                    <i class="fas fa-th pull-right cursor bt_editDashboardWidgetGridResize tooltips spacing-left" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Redimensionner automatiquement puis sur pas de grille' }}"></i>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="div_displayEquipement" id="div_ob{{ child.getId() }}" style="width: 100%;padding-top:3px;margin-bottom : 3px;">

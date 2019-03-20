@@ -37,7 +37,7 @@
 .label-config {
     font-size: 100%;
     line-height: 1.4;
-    margin-top: 3px;
+    margin-top: 4px;
 }
 
 .label-default {
@@ -250,6 +250,18 @@ legend {
 }
 .spacing-left-big {
     margin-left: 14px !important;
+}
+.spacing-bottom {
+    margin-bottom: 5px !important;
+}
+.spacing-bottom-big {
+    margin-bottom: 10px !important;
+}
+.spacing-top {
+    margin-top: 5px !important;
+}
+.spacing-top-big {
+    margin-top: 10px !important;
 }
 
 .list-group-item {

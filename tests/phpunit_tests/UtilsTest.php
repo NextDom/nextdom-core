@@ -19,6 +19,54 @@ use NextDom\Helpers\Utils;
 
 class UtilsTest extends PHPUnit_Framework_TestCase
 {
+    public function testSendVarToJsInt()
+    {
+        ob_start();
+        Utils::sendVarToJS('varName', 1);
+        $result = ob_get_clean();
+        $this->assertEquals("<script>var varName = \"1\";</script>\n", $result);
+    }
+
+    public function testSendVarToJsString()
+    {
+        ob_start();
+        Utils::sendVarToJS('varName', 'a_string');
+        $result = ob_get_clean();
+        $this->assertEquals("<script>var varName = \"a_string\";</script>\n", $result);
+    }
+
+    public function testSendVarToJsArray()
+    {
+        ob_start();
+        Utils::sendVarToJS('varName', [1, 2, 3]);
+        $result = ob_get_clean();
+        $this->assertEquals("<script>var varName = jQuery.parseJSON(\"[1,2,3]\");</script>\n", $result);
+    }
+
+    public function testSendVarToJsDict()
+    {
+        ob_start();
+        Utils::sendVarToJS('varName', ["a" => "b", "c" => "d"]);
+        $result = ob_get_clean();
+        $this->assertEquals("<script>var varName = jQuery.parseJSON(\"{\\\"a\\\":\\\"b\\\",\\\"c\\\":\\\"d\\\"}\");</script>\n", $result);
+    }
+
+    public function testSendVarsToJsSimple()
+    {
+        ob_start();
+        Utils::sendVarsToJS(['var1' => 1, 'var2' => "a string"]);
+        $result = ob_get_clean();
+        $this->assertEquals("<script>\nvar var1 = \"1\";\nvar var2 = \"a string\";\n</script>\n", $result);
+    }
+
+    public function testSendVarsToJsComplex()
+    {
+        ob_start();
+        Utils::sendVarsToJS(['var1' => [0, 1], 'var2' => ["a" => 1, "b" => "ping"]]);
+        $result = ob_get_clean();
+        $this->assertEquals("<script>\nvar var1 = jQuery.parseJSON(\"[0,1]\");\nvar var2 = jQuery.parseJSON(\"{\\\"a\\\":1,\\\"b\\\":\\\"ping\\\"}\");\n</script>\n", $result);
+    }
+
     public function testInitWithoutDataWithoutDefault()
     {
         $_GET = [];

@@ -16,8 +16,11 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* * ***************************Includes********************************* */
-require_once __DIR__ . '/../../core/php/core.inc.php';
+if (file_exists('/usr/share/nextdom/src/core.php')) {
+    require_once('/usr/share/nextdom/src/core.php');
+} else {
+    require_once('/var/www/html/src/core.php');
+}
 
 class userFunction {
 

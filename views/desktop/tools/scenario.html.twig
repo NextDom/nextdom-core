@@ -175,7 +175,7 @@
                                             {% if scenario.getDisplay('icon') != '' %}
                                                 <span class="scenario-icon">{{ scenario.getDisplay('icon')|raw }}</span>
                                             {% else %}
-                                                <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70"/>
+                                                <img class="backgroundColor" alt="scenario" src="/public/img/NextDom_Scenario.png" height="70"/>
                                             {% endif %}
                                             <p>{{ scenario.getHumanName(true, true, true, true)|raw }}</p>
                                         </div>
@@ -218,7 +218,9 @@
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li role="presentation">
-                    <a id="bt_scenarioTab" href="#scenariotab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-microchip spacing-right"></i>{{ 'scenario.programmation'|trans }}</a>
+                    <a id="bt_scenarioTab" href="#scenariotab" aria-controls="profile" role="tab" data-toggle="tab">
+                        <i class="fas fa-microchip spacing-right"></i>{{ 'scenario.programmation'|trans }}
+                    </a>
                 </li>
                 <li role="presentation" class="active">
                     <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cog spacing-right"></i>{{ 'scenario.parameters'|trans }}</a>
@@ -296,8 +298,7 @@
                                     <div class="form-group">
                                         <label for="scenarioGroupAttr" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'scenario.group'|trans }}</label>
                                         <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <input id="scenarioGroupAttr" class="form-control scenarioAttr" data-l1key="group" type="text"
-                                                   placeholder="{{ 'scenario.scenario-group'|trans }}"/>
+                                            <input id="scenarioGroupAttr" class="form-control scenarioAttr" data-l1key="group" type="text" placeholder="{{ 'scenario.scenario-group'|trans }}"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -317,20 +318,16 @@
                                     <div class="form-group">
                                         <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'scenario.log'|trans }}</label>
                                         <div class="col-lg-8 col-md-8 col-sm-7 col-xs-9">
-                                            <select class="scenarioAttr form-control" data-l1key="configuration"
-                                                    data-l2key="logmode">
+                                            <select class="scenarioAttr form-control" data-l1key="configuration" data-l2key="logmode">
                                                 <option value="default">{{ 'scenario.default'|trans }}</option>
                                                 <option value="none">{{ 'scenario.no-choice'|trans }}</option>
                                                 <option value="realtime">{{ 'scenario.realtime'|trans }}</option>
-                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'scenario.follow-timeline'|trans }}</label>
                                         <div class="col-sm-1 col-xs-3">
-                                            <input type="checkbox" class="scenarioAttr" data-l1key="configuration"
-                                                   data-l2key="timeline::enable"
-                                                   title="{{ 'scenario.follow-timeline-title'|trans }}">
+                                            <input type="checkbox" class="scenarioAttr" data-l1key="configuration" data-l2key="timeline::enable" title="{{ 'scenario.follow-timeline-title'|trans }}"/>
                                         </div>
                                     </div>
                                     <div class="form-group"></div>

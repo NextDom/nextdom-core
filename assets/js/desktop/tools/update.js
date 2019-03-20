@@ -75,38 +75,10 @@ $('#in_searchPlugin').off('keyup').keyup(function () {
 
 printUpdate();
 
-$("#md_specifyUpdate").dialog({
-    closeText: '',
-    autoOpen: false,
-    modal: true,
-    height: 600,
-    width: 600,
-    open: function () {
-        $("body").css({overflow: 'hidden'});
-    },
-    beforeClose: function (event, ui) {
-        $("body").css({overflow: 'inherit'});
-    }
-});
-
-$("#md_updateInfo").dialog({
-    closeText: '',
-    autoOpen: false,
-    modal: true,
-    width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
-    open: function () {
-        $("body").css({overflow: 'hidden'});
-    },
-    beforeClose: function (event, ui) {
-        $("body").css({overflow: 'inherit'});
-    }
-});
-
 $('#pre_updateInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
 
 $('#bt_updateNextDom').off('click').on('click', function () {
-    $('#md_specifyUpdate').dialog({title: "{{Options}}"});
-    $("#md_specifyUpdate").dialog('open');
+    $('#md_specifyUpdate').modal('show');
 });
 
 
@@ -122,8 +94,8 @@ $('.updateOption[data-l1key=force]').off('click').on('click',function(){
 
 
 $('#bt_doUpdate').off('click').on('click', function () {
-    $("#md_specifyUpdate").dialog('close');
-    $('#md_updateInfo').dialog({title: "{{Avancement des mises à jour}}"});
+    $("#md_specifyUpdate").modal('hide');
+    $('#md_updateInfo').dialog({title: "{{Avancement de la mise à jour}}"});
     $("#md_updateInfo").dialog('open');
     var options = $('#md_specifyUpdate').getValues('.updateOption')[0];
     $.hideAlert();
@@ -140,8 +112,8 @@ $('#bt_doUpdate').off('click').on('click', function () {
 });
 
 $("#bt_updateOpenLog").on('click', function (event) {
-    $('#md_updateInfo').dialog({title: "{{Avancement de la mises à jour}}"});
-    $("#md_updateInfo").dialog('open');
+  $('#md_updateInfo').dialog({title: "{{Avancement de la mise à jour}}"});
+  $("#md_updateInfo").dialog('open');
 });
 
 $('#bt_checkAllUpdate').off('click').on('click', function () {
@@ -162,7 +134,7 @@ $('#listPlugin,#listOther,#listCore,#listWidget,#listScript').delegate('.update'
     bootbox.confirm('{{Etes vous sur de vouloir mettre à jour cet objet ?}}', function (result) {
         if (result) {
             $.hideAlert();
-            $('#md_updateInfo').dialog({title: "{{Avancement des mises à jour}}"});
+            $('#md_updateInfo').dialog({title: "{{Avancement de la mise à jour}}"});
             $("#md_updateInfo").dialog('open');
             nextdom.update.do({
                 id: id,
@@ -209,6 +181,19 @@ $('#listPlugin,#listOther,#listCore,#listWidget,#listScript').delegate('.checkUp
         }
     });
 
+});
+
+$("#md_updateInfo").dialog({
+    closeText: '',
+    autoOpen: false,
+    modal: true,
+    width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
+    open: function () {
+        $("body").css({overflow: 'hidden'});
+    },
+    beforeClose: function (event, ui) {
+        $("body").css({overflow: 'inherit'});
+    }
 });
 
 function getNextDomLog(_autoUpdate, _log) {

@@ -373,7 +373,7 @@ class PluginManager
             if (ConfigManager::byKey('deamonAutoMode', $plugin->getId(), 1) != 1) {
                 continue;
             }
-            $dependancy_info = $plugin->dependancy_info();
+            $dependancy_info = $plugin->getDependencyInfo();
             if ($dependancy_info['state'] == DaemonState::NOT_OK) {
                 try {
                     $plugin->dependancy_install();

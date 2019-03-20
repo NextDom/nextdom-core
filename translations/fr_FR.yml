@@ -21,10 +21,10 @@ connection:
   login-placeholder: Identifiant... (admin par défaut)
   password-placeholder: Mot de passe...
   two-factors-placeholder: Code à 2 facteurs...
-  remember-title: En cochant cette case, vous n'aurez plus besoin de vous saisir vos identifiants.
+  remember-title: En cochant cette case, vous n'aurez plus besoin de saisir vos identifiants.
   remember-label: Se souvenir de moi ?
   connect: Connexion
-  forgot: Oups, J'ai oublié mon mot de passe !
+  forgot: Oups, j'ai oublié mon mot de passe !
 
 core:
   error-401: 401 - Accès non autorisé
@@ -73,9 +73,9 @@ page-title:
 administration:
   cpu: CPU
   cpu-cores: cœurs
-  of-cpu-load: % de charge
-  of-memory-used: % utilisée
-  of-space-used: % d'espace utilisé
+  of-cpu-load: de charge
+  of-memory-used: utilisée
+  of-space-used: d'espace utilisé
   memory: RAM
   hdd: HDD
   swap: Swap
