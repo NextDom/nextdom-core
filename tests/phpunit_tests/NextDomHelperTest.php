@@ -16,21 +16,22 @@
  */
 
 define('NEXTDOM_ROOT', '/tmp/tests');
+define('NEXTDOM_DATA', NEXTDOM_ROOT . '/data');
 
 use NextDom\Helpers\NextDomHelper;
 
-define('REMOVE_HISTORY_PATH_FILE', NEXTDOM_ROOT . '/data/remove_history.json');
+define('REMOVE_HISTORY_PATH_FILE', NEXTDOM_DATA . '/data/remove_history.json');
 
 class NextDomHelperTest extends PHPUnit_Framework_TestCase
 {
     public static function setUpBeforeClass()
     {
-        mkdir(NEXTDOM_ROOT . '/data', 0777, true);
+        mkdir(NEXTDOM_DATA . '/data', 0777, true);
     }
 
     public static function tearDownAfterClass()
     {
-        system('rm -fr ' . NEXTDOM_ROOT . '/data');
+        system('rm -fr ' . NEXTDOM_DATA . '/data');
     }
 
     public function setUp()
