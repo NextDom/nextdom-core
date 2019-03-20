@@ -80,8 +80,8 @@ administration:
   memory: RAM
   hdd: HDD
   swap: Swap
-  http-connections-count: Nombre de connexions HTTP
-  connections-count: Nombre de connexions
+  http-connections-count: Nombre de connexion HTTP
+  connections-count: Nombre de connexion
   process-count: Nombre de processus
   uptime: Système démarré depuis
   welcome-page: Page de bienvenue
