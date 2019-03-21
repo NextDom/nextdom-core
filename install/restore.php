@@ -375,6 +375,9 @@ try {
         LogHelper::add('restore', 'error', $e->getMessage());
         showError($e);
     }
+    step('Clear cache');
+    CacheManager::flush();
+    ok();
     $duration = strtotime('now') - $startTime;
     echo 'Time of restoration : ' . $duration . "s\n";
     subTitle('End of process at ' . date('Y-m-d H:i:s'));
