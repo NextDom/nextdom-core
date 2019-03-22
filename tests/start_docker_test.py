@@ -11,4 +11,3 @@ if __name__ == "__main__":
     start_test_container('test', NEXTDOM_PASSWORD)
     input('Press enter to stop container')
     remove_test_container('test')
-
