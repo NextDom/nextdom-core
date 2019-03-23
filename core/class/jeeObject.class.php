@@ -39,7 +39,7 @@ class jeeObject extends \NextDom\Model\Entity\JeeObject
 
     public static function rootObject($_all = false, $_onlyVisible = false)
     {
-        return JeeObjectManager::rootObject($_all, $_onlyVisible);
+        return JeeObjectManager::getRootObjects($_all, $_onlyVisible);
     }
 
     public static function buildTree($_object = null, $_visible = true)

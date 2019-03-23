@@ -73,13 +73,13 @@ function editWidgetMode(_mode, _save) {
         }
         $('.div_displayEquipement .eqLogic-widget').css('box-shadow', '');
     } else {
-        $('.div_displayEquipement .eqLogic-widget').css('box-shadow', '0 0 4px rgba(147,204,1,.14), 0 10px 16px rgba(147,204,1,.30)');
+        $('.div_displayEquipement .eqLogic-widget').css('box-shadow', '#33B8CC80 0px 0px 10px');
         $('.div_displayEquipement .eqLogic-widget').draggable('enable');
         $('.div_displayEquipement .eqLogic-widget').draggable({
-            grid: [ parseInt(widget_size) + parseInt(widget_margin*2), parseInt(widget_size) + parseInt(widget_margin)*2 ]
+            grid: [ parseInt(widget_size) + parseInt(widget_margin), parseInt(widget_size) + parseInt(widget_margin) ]
         });
         $(".div_displayEquipement .eqLogic-widget.allowResize").resizable({
-            grid: parseInt(widget_size) + parseInt(widget_margin)*2,
+            grid: parseInt(widget_size) + parseInt(widget_margin),
             resize: function (event, ui) {
                 positionEqLogic(ui.element.attr('data-eqlogic_id'), false);
                 ui.element.closest('.div_displayEquipement').packery('fit', event.target, ui.position.left, ui.position.top );
@@ -135,10 +135,10 @@ function getObjectHtml(_object_id) {
                     var container = $(this).packery({
                         itemSelector: ".eqLogic-widget",
                         gutter: parseInt(widget_margin),
-                        columnWidth: parseInt(widget_size) + parseInt(widget_margin),
-                        rowHeight: parseInt(widget_size) + parseInt(widget_margin)
+                        columnWidth: parseInt(widget_size) ,
+                        rowHeight: parseInt(widget_size)
                     });
-                    var itemElems = container.find('.eqLogic-widget').draggable({ grid: [ (parseInt(widget_size) + (parseInt(widget_margin)*2)), (parseInt(widget_size) + (parseInt(widget_margin)*2))]});
+                    var itemElems = container.find('.eqLogic-widget').draggable({ grid: [ (parseInt(widget_size) + (parseInt(widget_margin))), (parseInt(widget_size) + (parseInt(widget_margin)))]});
                     container.packery('bindUIDraggableEvents', itemElems);
 
                     function orderItems() {

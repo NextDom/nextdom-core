@@ -173,7 +173,7 @@ class JeeObject
     }
 
     /**
-     * Get direct chidren
+     * Get direct children
      *
      * @param bool $_visible
      * @return array|mixed|null

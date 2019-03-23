@@ -41,10 +41,10 @@ if (initVar('log') == 1) {
         echo "La page que vous demandez ne peut être trouvée.";
         dei();
     }
-    echo file_get_contents('/var/log/nextdom/nextdom_installation');
+    echo file_get_contents(NEXTDOM_LOG . '/nextdom_installation');
     die();
 }
-if (file_exists('/var/lib/nextdom/config/common.config.php')) {
+if (file_exists(NEXTDOM_DATA . '/config/common.config.php')) {
     if (!headers_sent()) {
         header("Statut: 404 Page non trouvée");
         header('HTTP/1.0 404 Not Found');
@@ -85,7 +85,7 @@ if (!file_exists('/etc/cron.d/nextdom')) {
     echo '<center style="font-size:1.2em;">Veuillez ajouter une ligne crontab pour NextDom (si NextDom n\'a pas les droits sudo, cette erreur est normale) : </center>';
     echo '<pre>';
     echo "sudo su -\n";
-    echo 'echo "* * * * * ' . get_current_user() . ' /usr/bin/php /var/www/html/src/Api/start_cron.php >> /dev/null" > /etc/cron.d/nextdom';
+    echo 'echo "* * * * * ' . get_current_user() . ' /usr/bin/php '. NEXTDOM_ROOT . '/src/Api/start_cron.php >> /dev/null" > /etc/cron.d/nextdom';
     echo '</pre>';
     echo '</div>';
 }
@@ -244,9 +244,9 @@ if ($config) {
         '#PORT#' => initVar('port'),
         '#HOST#' => initVar('hostname'),
     );
-    $config = str_replace(array_keys($replace), $replace, file_get_contents(__DIR__ . '/../core/config/common.config.sample.php'));
-    file_put_contents('/var/lib/nextdom/config/common.config.php', $config);
-    shell_exec('php ' . __DIR__ . '/install.php mode=force > ' . '/var/log/nextdom/nextdom_installation 2>&1 &');
+    $config = str_replace(array_keys($replace), $replace, file_get_contents(__DIR__ . '/../core/config/common.config.php'));
+    file_put_contents(NEXTDOM_DATA . '/config/common.config.php', $config);
+    shell_exec('php ' . __DIR__ . '/install.php mode=force > ' . NEXTDOM_LOG . '/nextdom_installation 2>&1 &');
     echo '<div id="div_alertMessage" class="alert alert-warning" style="margin:15px;">';
     echo '<center style="font-size:1.2em;"><i class="fa fa-spinner fa-spin"></i> The installation nextdom is ongoing.</center>';
     echo '</div>';

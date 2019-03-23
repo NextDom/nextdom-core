@@ -24,15 +24,15 @@ class ReportHelper
 {
     public static function clean()
     {
-        if (!file_exists(NEXTDOM_ROOT . '/data/report')) {
+        if (!file_exists(NEXTDOM_DATA . '/data/report')) {
             return;
         }
-        shell_exec('find ' . NEXTDOM_ROOT . '/data/report -type f -mtime +' . ConfigManager::byKey('report::maxdays') . ' -delete');
+        shell_exec('find ' . NEXTDOM_DATA . '/data/report -type f -mtime +' . ConfigManager::byKey('report::maxdays') . ' -delete');
     }
 
     public static function generate($_url, $_type, $_name, $_format = 'pdf', $_parameter = array())
     {
-        $out = NEXTDOM_ROOT . '/data/report/';
+        $out = NEXTDOM_DATA . '/data/report/';
         $out .= $_type . '/';
         $out .= $_name . '/';
         if (!file_exists($out)) {

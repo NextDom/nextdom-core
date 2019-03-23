@@ -175,7 +175,7 @@ try {
             throw new Exception(__('Impossible de téléverser le fichier (limite du serveur web ?)', __FILE__));
         }
         if ($plan3dHeader->getConfiguration('path') == '') {
-            $plan3dHeader->setConfiguration('path', 'data/3d/' . config::genKey() . '/');
+            $plan3dHeader->setConfiguration('path', NEXTDOM_DATA . '/data/3d/' . config::genKey() . '/');
         }
         $file = $uploaddir . '/' . $_FILES['file']['name'];
         $cibDir = __DIR__ . '/../../' . $plan3dHeader->getConfiguration('path');
