@@ -43,7 +43,7 @@ class JeeObject
      *
      * @ORM\Column(name="name", type="string", length=45, nullable=false)
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * @var boolean
@@ -495,7 +495,7 @@ class JeeObject
      *
      * @return string Object name
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }

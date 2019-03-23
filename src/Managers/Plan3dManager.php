@@ -38,7 +38,7 @@ use NextDom\Model\Entity\Plan3d;
 class Plan3dManager
 {
     const CLASS_NAME = Plan3d::class;
-    const DB_CLASS_NAME = '`Plan3d`';
+    const DB_CLASS_NAME = '`plan3d`';
 
     public static function byId($_id)
     {

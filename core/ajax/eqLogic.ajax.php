@@ -382,6 +382,7 @@ try {
             }
             ajax::success(utils::o2a($eqLogic));
         }
+        ajax::success(null);
     }
 
     if (init('action') == 'getAlert') {

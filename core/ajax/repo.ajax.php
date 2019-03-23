@@ -34,112 +34,152 @@ try {
 
     if (init('action') == 'restoreCloud') {
         unautorizedInDemo();
-        $class = 'repo_' . init('repo');
-        $class::backup_restore(init('backup'));
-        ajax::success();
+        $repoName = init('repo');
+        if (file_exists(NEXTDOM_ROOT . '/core/repo/' . $repoName . '.repo.php')) {
+            $class = 'repo_' . $repoName;
+            $class::backup_restore(init('backup'));
+            ajax::success();
+        }
+        ajax::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
     if (init('action') == 'sendReportBug') {
         unautorizedInDemo();
-        $class = 'repo_' . init('repo');
-        ajax::success($class::saveTicket(json_decode(init('ticket'), true)));
+        $repoName = init('repo');
+        if (file_exists(NEXTDOM_ROOT . '/core/repo/' . $repoName . '.repo.php')) {
+            $class = 'repo_' . $repoName;
+            ajax::success($class::saveTicket(json_decode(init('ticket'), true)));
+        }
+        ajax::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
     if (init('action') == 'install') {
         unautorizedInDemo();
-        $class = 'repo_' . init('repo');
-        $repo = $class::byId(init('id'));
-        if (!is_object($repo)) {
-            throw new Exception(__('Impossible de trouver l\'objet associé : ', __FILE__) . init('id'));
+        $repoName = init('repo');
+        if (file_exists(NEXTDOM_ROOT . '/core/repo/' . $repoName . '.repo.php')) {
+            $class = 'repo_' . $repoName;
+            $repo = $class::byId(init('id'));
+            if (!is_object($repo)) {
+                throw new Exception(__('Impossible de trouver l\'objet associé : ', __FILE__) . init('id'));
+            }
+            $update = update::byTypeAndLogicalId($repo->getType(), $repo->getLogicalId());
+            if (!is_object($update)) {
+                $update = new update();
+            }
+            $update->setSource(init('repo'));
+            $update->setLogicalId($repo->getLogicalId());
+            $update->setType($repo->getType());
+            $update->setLocalVersion($repo->getDatetime(init('version', 'stable')));
+            $update->setConfiguration('version', init('version', 'stable'));
+            $update->save();
+            $update->doUpdate();
+            ajax::success();
         }
-        $update = update::byTypeAndLogicalId($repo->getType(), $repo->getLogicalId());
-        if (!is_object($update)) {
-            $update = new update();
-        }
-        $update->setSource(init('repo'));
-        $update->setLogicalId($repo->getLogicalId());
-        $update->setType($repo->getType());
-        $update->setLocalVersion($repo->getDatetime(init('version', 'stable')));
-        $update->setConfiguration('version', init('version', 'stable'));
-        $update->save();
-        $update->doUpdate();
-        ajax::success();
+        ajax::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
     if (init('action') == 'test') {
-        $class = 'repo_' . init('repo');
-        $class::test();
-        ajax::success();
+        $repoName = init('repo');
+        if (file_exists(NEXTDOM_ROOT . '/core/repo/' . $repoName . '.repo.php')) {
+            $class = 'repo_' . $repoName;
+            $class::test();
+            ajax::success();
+        }
+        ajax::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
     if (init('action') == 'remove') {
         unautorizedInDemo();
-        $class = 'repo_' . init('repo');
-        $repo = $class::byId(init('id'));
-        if (!is_object($market)) {
-            throw new Exception(__('Impossible de trouver l\'objet associé : ', __FILE__) . init('id'));
-        }
-        $update = update::byTypeAndLogicalId($repo->getType(), $repo->getLogicalId());
-        try {
-            if (is_object($update)) {
-                $update->remove();
-            } else {
-                $market->remove();
+        $repoName = init('repo');
+        if (file_exists(NEXTDOM_ROOT . '/core/repo/' . $repoName . '.repo.php')) {
+            $class = 'repo_' . $repoName;
+            $repo = $class::byId(init('id'));
+            if (!is_object($market)) {
+                throw new Exception(__('Impossible de trouver l\'objet associé : ', __FILE__) . init('id'));
             }
-        } catch (Exception $e) {
-            if (is_object($update)) {
-                $update->deleteObjet();
+            $update = update::byTypeAndLogicalId($repo->getType(), $repo->getLogicalId());
+            try {
+                if (is_object($update)) {
+                    $update->remove();
+                } else {
+                    $market->remove();
+                }
+            } catch (Exception $e) {
+                if (is_object($update)) {
+                    $update->deleteObjet();
+                }
             }
+            ajax::success();
         }
-        ajax::success();
+        ajax::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
     if (init('action') == 'save') {
         unautorizedInDemo();
-        $class = 'repo_' . init('repo');
-        $repo_ajax = json_decode(init('market'), true);
-        try {
-            $repo = $class::byId($repo_ajax['id']);
-        } catch (Exception $e) {
-            $repo = new $class();
+        $repoName = init('repo');
+        if (file_exists(NEXTDOM_ROOT . '/core/repo/' . $repoName . '.repo.php')) {
+            $class = 'repo_' . $repoName;
+            $repo_ajax = json_decode(init('market'), true);
+            try {
+                $repo = $class::byId($repo_ajax['id']);
+            } catch (Exception $e) {
+                $repo = new $class();
+            }
+            utils::a2o($repo, $repo_ajax);
+            $repo->save();
+            ajax::success();
         }
-        utils::a2o($repo, $repo_ajax);
-        $repo->save();
-        ajax::success();
+        ajax::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
     if (init('action') == 'getInfo') {
-        $class = 'repo_' . init('repo');
-        ajax::success($class::getInfo(init('logicalId')));
+        $repoName = init('repo');
+        if (file_exists(NEXTDOM_ROOT . '/core/repo/' . $repoName . '.repo.php')) {
+            $class = 'repo_' . $repoName;
+            ajax::success($class::getInfo(init('logicalId')));
+        }
+        ajax::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
     if (init('action') == 'byLogicalId') {
-        $class = 'repo_' . init('repo');
-        if (init('noExecption', 0) == 1) {
-            try {
+        $repoName = init('repo');
+        if (file_exists(NEXTDOM_ROOT . '/core/repo/' . $repoName . '.repo.php')) {
+            $class = 'repo_' . $repoName;
+            if (init('noExecption', 0) == 1) {
+                try {
+                    ajax::success(utils::o2a($class::byLogicalIdAndType(init('logicalId'), init('type'))));
+                } catch (Exception $e) {
+                    ajax::success();
+                }
+            } else {
                 ajax::success(utils::o2a($class::byLogicalIdAndType(init('logicalId'), init('type'))));
-            } catch (Exception $e) {
-                ajax::success();
             }
-        } else {
-            ajax::success(utils::o2a($class::byLogicalIdAndType(init('logicalId'), init('type'))));
         }
+        ajax::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
     if (init('action') == 'setRating') {
         unautorizedInDemo();
-        $class = 'repo_' . init('repo');
-        $repo = $class::byId(init('id'));
-        if (!is_object($repo)) {
-            throw new Exception(__('Impossible de trouver l\'objet associé : ', __FILE__) . init('id'));
+        $repoName = init('repo');
+        if (file_exists(NEXTDOM_ROOT . '/core/repo/' . $repoName . '.repo.php')) {
+            $class = 'repo_' . $repoName;
+            $repo = $class::byId(init('id'));
+            if (!is_object($repo)) {
+                throw new Exception(__('Impossible de trouver l\'objet associé : ', __FILE__) . init('id'));
+            }
+            $repo->setRating(init('rating'));
+            ajax::success();
         }
-        $repo->setRating(init('rating'));
-        ajax::success();
+        ajax::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
     if (init('action') == 'backupList') {
-        $class = 'repo_' . init('repo');
-        ajax::success($class::backup_list());
+        $repoName = init('repo');
+        if (file_exists(NEXTDOM_ROOT . '/core/repo/' . $repoName . '.repo.php')) {
+            $class = 'repo_' . $repoName;
+            ajax::success($class::backup_list());
+        }
+        ajax::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));

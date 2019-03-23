@@ -366,6 +366,8 @@ class EqLogicManager
         } elseif ($objectId != '') {
             $values['object_id'] = $objectId;
             $sql .= 'object_id = :object_id ';
+        } else {
+            return null;
         }
         if ($subTypeCmd != '') {
             $values['subTypeCmd'] = $subTypeCmd;

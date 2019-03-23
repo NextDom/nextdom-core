@@ -213,6 +213,9 @@ try {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
         }
+        if (init('cmd_id') === '') {
+            throw new Exception(__('Historique impossible'));
+        }
         unautorizedInDemo();
         $history = history::byCmdIdDatetime(init('cmd_id'), init('datetime'));
         if (!is_object($history)) {

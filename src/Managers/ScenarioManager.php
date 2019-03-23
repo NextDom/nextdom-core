@@ -56,7 +56,7 @@ class ScenarioManager
      *
      * @throws \Exception
      */
-    public static function byId(int $id)
+    public static function byId($id)
     {
         $values = array('id' => $id);
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE id = :id';
