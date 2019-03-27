@@ -21,7 +21,7 @@ try {
     include_file('core', 'authentification', 'php');
 
     if (!isConnect('admin')) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__));
+        throw new \Exception(__('401 - Accès non autorisé', __FILE__));
     }
 
     ajax::init();
@@ -66,11 +66,11 @@ try {
             if (!is_object($update)) {
                 $update = new update();
             }
-            $update->setSource(init('repo'));
-            $update->setLogicalId($repo->getLogicalId());
-            $update->setType($repo->getType());
-            $update->setLocalVersion($repo->getDatetime(init('version', 'stable')));
-            $update->setConfiguration('version', init('version', 'stable'));
+            $update->setSource(init('repo'))
+                ->setLogicalId($repo->getLogicalId()
+                ->setType($repo->getType()
+                ->setLocalVersion($repo->getDatetime(init('version', 'stable')))
+                ->setConfiguration('version', init('version', 'stable'));
             $update->save();
             $update->doUpdate();
             ajax::success();
@@ -95,7 +95,7 @@ try {
             $class = 'repo_' . $repoName;
             $repo = $class::byId(init('id'));
             if (!is_object($market)) {
-                throw new Exception(__('Impossible de trouver l\'objet associé : ', __FILE__) . init('id'));
+                throw new \Exception(__('Impossible de trouver l\'objet associé : ', __FILE__) . init('id'));
             }
             $update = update::byTypeAndLogicalId($repo->getType(), $repo->getLogicalId());
             try {
@@ -145,7 +145,7 @@ try {
         $repoName = init('repo');
         if (file_exists(NEXTDOM_ROOT . '/core/repo/' . $repoName . '.repo.php')) {
             $class = 'repo_' . $repoName;
-            if (init('noExecption', 0) == 1) {
+            if (init('noException', 0) == 1) {
                 try {
                     ajax::success(utils::o2a($class::byLogicalIdAndType(init('logicalId'), init('type'))));
                 } catch (Exception $e) {
@@ -165,7 +165,7 @@ try {
             $class = 'repo_' . $repoName;
             $repo = $class::byId(init('id'));
             if (!is_object($repo)) {
-                throw new Exception(__('Impossible de trouver l\'objet associé : ', __FILE__) . init('id'));
+                throw new \Exception(__('Impossible de trouver l\'objet associé : ', __FILE__) . init('id'));
             }
             $repo->setRating(init('rating'));
             ajax::success();
@@ -182,9 +182,9 @@ try {
         ajax::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
-    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
+    throw new \Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
 
     /*     * *********Catch exeption*************** */
-} catch (Exception $e) {
+} catch (\Exception $e) {
     ajax::error(displayException($e), $e->getCode());
 }

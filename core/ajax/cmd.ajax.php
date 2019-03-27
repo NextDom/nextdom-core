@@ -21,7 +21,7 @@ try {
     include_file('core', 'authentification', 'php');
 
     if (!isConnect()) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__));
+        throw new \Exception(__('401 - Accès non autorisé', __FILE__));
     }
 
     ajax::init();
@@ -36,17 +36,17 @@ try {
                 }
                 $return[$cmd->getId()] = array(
                     'html' => $cmd->toHtml($value['version']),
-                    'id' => $cmd->getId(),
+                    'id'   => $cmd->getId(),
                 );
             }
             ajax::success($return);
         } else {
             $cmd = cmd::byId(init('id'));
             if (!is_object($cmd)) {
-                throw new Exception(__('Commande inconnue - Vérifiez l\'id', __FILE__));
+                throw new \Exception(__('Commande inconnue - Vérifiez l\'id', __FILE__));
             }
             $info_cmd = array();
-            $info_cmd['id'] = $cmd->getId();
+            $info_cmd['id']   = $cmd->getId();
             $info_cmd['html'] = $cmd->toHtml(init('version'), init('option'), init('cmdColor', null));
             ajax::success($info_cmd);
         }
@@ -55,17 +55,17 @@ try {
     if (init('action') == 'execCmd') {
         $cmd = cmd::byId(init('id'));
         if (!is_object($cmd)) {
-            throw new Exception(__('Commande ID inconnu : ', __FILE__) . init('id'));
+            throw new \Exception(__('Commande ID inconnu : ', __FILE__) . init('id'));
         }
         $eqLogic = $cmd->getEqLogicId();
         if ($cmd->getType() == 'action' && !$eqLogic->hasRight('x')) {
-            throw new Exception(__('Vous n\'êtes pas autorisé à faire cette action', __FILE__));
+            throw new \Exception(__('Vous n\'êtes pas autorisé à faire cette action', __FILE__));
         }
         if (!$cmd->checkAccessCode(init('codeAccess'))) {
-            throw new Exception(__('Cette action nécessite un code d\'accès', __FILE__), -32005);
+            throw new \Exception(__('Cette action nécessite un code d\'accès', __FILE__), -32005);
         }
         if ($cmd->getType() == 'action' && $cmd->getConfiguration('actionConfirm') == 1 && init('confirmAction') != 1) {
-            throw new Exception(__('Cette action nécessite une confirmation', __FILE__), -32006);
+            throw new \Exception(__('Cette action nécessite une confirmation', __FILE__), -32006);
         }
         $options = json_decode(init('value', '{}'), true);
         if (init('utid') != '') {
@@ -77,7 +77,7 @@ try {
     if (init('action') == 'getByObjectNameEqNameCmdName') {
         $cmd = cmd::byObjectNameEqLogicNameCmdName(init('object_name'), init('eqLogic_name'), init('cmd_name'));
         if (!is_object($cmd)) {
-            throw new Exception(__('Cmd inconnu : ', __FILE__) . init('object_name') . '/' . init('eqLogic_name') . '/' . init('cmd_name'));
+            throw new \Exception(__('Cmd inconnu : ', __FILE__) . init('object_name') . '/' . init('eqLogic_name') . '/' . init('cmd_name'));
         }
         ajax::success($cmd->getId());
     }
@@ -85,7 +85,7 @@ try {
     if (init('action') == 'getByObjectNameCmdName') {
         $cmd = cmd::byObjectNameCmdName(init('object_name'), init('cmd_name'));
         if (!is_object($cmd)) {
-            throw new Exception(__('Cmd inconnu : ', __FILE__) . init('object_name') . '/' . init('cmd_name'), 9999);
+            throw new \Exception(__('Cmd inconnu : ', __FILE__) . init('object_name') . '/' . init('cmd_name'), 9999);
         }
         ajax::success(utils::o2a($cmd));
     }
@@ -93,14 +93,14 @@ try {
     if (init('action') == 'byId') {
         $cmd = cmd::byId(init('id'));
         if (!is_object($cmd)) {
-            throw new Exception(__('Commande inconnue : ', __FILE__) . init('id'), 9999);
+            throw new \Exception(__('Commande inconnue : ', __FILE__) . init('id'), 9999);
         }
         ajax::success(nextdom::toHumanReadable(utils::o2a($cmd)));
     }
 
     if (init('action') == 'copyHistoryToCmd') {
         if (!isConnect('admin')) {
-            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+            throw new \Exception(__('401 - Accès non autorisé', __FILE__));
         }
         unautorizedInDemo();
         ajax::success(history::copyHistoryToCmd(init('source_id'), init('target_id')));
@@ -108,7 +108,7 @@ try {
 
     if (init('action') == 'replaceCmd') {
         if (!isConnect('admin')) {
-            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+            throw new \Exception(__('401 - Accès non autorisé', __FILE__));
         }
         unautorizedInDemo();
         ajax::success(nextdom::replaceTag(array('#' . str_replace('#', '', init('source_id')) . '#' => '#' . str_replace('#', '', init('target_id')) . '#')));
@@ -125,30 +125,30 @@ try {
 
     if (init('action') == 'usedBy') {
         if (!isConnect('admin')) {
-            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+            throw new \Exception(__('401 - Accès non autorisé', __FILE__));
         }
         $cmd = cmd::byId(init('id'));
         if (!is_object($cmd)) {
-            throw new Exception(__('Commande inconnue : ', __FILE__) . init('id'), 9999);
+            throw new \Exception(__('Commande inconnue : ', __FILE__) . init('id'), 9999);
         }
         $result = $cmd->getUsedBy();
         $return = array('cmd' => array(), 'eqLogic' => array(), 'scenario' => array());
         foreach ($result['cmd'] as $cmd) {
             $info = utils::o2a($cmd);
             $info['humanName'] = $cmd->getHumanName();
-            $info['link'] = $cmd->getEqLogic()->getLinkToConfiguration();
+            $info['link']      = $cmd->getEqLogic()->getLinkToConfiguration();
             $return['cmd'][] = $info;
         }
         foreach ($result['eqLogic'] as $eqLogic) {
             $info = utils::o2a($eqLogic);
             $info['humanName'] = $eqLogic->getHumanName();
-            $info['link'] = $eqLogic->getLinkToConfiguration();
+            $info['link']      = $eqLogic->getLinkToConfiguration();
             $return['eqLogic'][] = $info;
         }
         foreach ($result['scenario'] as $scenario) {
             $info = utils::o2a($cmd);
             $info['humanName'] = $scenario->getHumanName();
-            $info['link'] = $scenario->getLinkToConfiguration();
+            $info['link']      = $scenario->getLinkToConfiguration();
             $return['scenario'][] = $info;
         }
         ajax::success($return);
@@ -165,7 +165,7 @@ try {
     if (init('action') == 'getCmd') {
         $cmd = cmd::byId(init('id'));
         if (!is_object($cmd)) {
-            throw new Exception(__('Commande inconnue : ', __FILE__) . init('id'));
+            throw new \Exception(__('Commande inconnue : ', __FILE__) . init('id'));
         }
         $return = nextdom::toHumanReadable(utils::o2a($cmd));
         $eqLogic = $cmd->getEqLogicId();
@@ -179,7 +179,7 @@ try {
 
     if (init('action') == 'save') {
         if (!isConnect('admin')) {
-            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+            throw new \Exception(__('401 - Accès non autorisé', __FILE__));
         }
         unautorizedInDemo();
         $cmd_ajax = nextdom::fromHumanReadable(json_decode(init('cmd'), true));
@@ -194,7 +194,7 @@ try {
 
     if (init('action') == 'multiSave') {
         if (!isConnect('admin')) {
-            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+            throw new \Exception(__('401 - Accès non autorisé', __FILE__));
         }
         unautorizedInDemo();
         $cmds = json_decode(init('cmd'), true);
@@ -211,10 +211,10 @@ try {
 
     if (init('action') == 'changeHistoryPoint') {
         if (!isConnect('admin')) {
-            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+            throw new \Exception(__('401 - Accès non autorisé', __FILE__));
         }
         if (init('cmd_id') === '') {
-            throw new Exception(__('Historique impossible'));
+            throw new \Exception(__('Historique impossible'));
         }
         unautorizedInDemo();
         $history = history::byCmdIdDatetime(init('cmd_id'), init('datetime'));
@@ -231,7 +231,7 @@ try {
             $history = history::byCmdIdDatetime(init('cmd_id'), init('datetime'), date('Y-m-d H:i:s', strtotime(init('datetime') . ' +1 month')), init('oldValue'));
         }
         if (!is_object($history)) {
-            throw new Exception(__('Aucun point ne correspond pour l\'historique : ', __FILE__) . init('cmd_id') . ' - ' . init('datetime'), init('oldValue'));
+            throw new \Exception(__('Aucun point ne correspond pour l\'historique : ', __FILE__) . init('cmd_id') . ' - ' . init('datetime'), init('oldValue'));
         }
         $history->setValue(init('value', null));
         $history->save(null, true);
@@ -286,18 +286,18 @@ try {
         if (is_numeric(init('id'))) {
             $cmd = cmd::byId(init('id'));
             if (!is_object($cmd)) {
-                throw new Exception(__('Commande ID inconnu : ', __FILE__) . init('id'));
+                throw new \Exception(__('Commande ID inconnu : ', __FILE__) . init('id'));
             }
             $eqLogic = $cmd->getEqLogicId();
             if (!$eqLogic->hasRight('r')) {
-                throw new Exception(__('Vous n\'êtes pas autorisé à faire cette action', __FILE__));
+                throw new \Exception(__('Vous n\'êtes pas autorisé à faire cette action', __FILE__));
             }
             $histories = $cmd->getHistory($dateStart, $dateEnd);
-            $return['cmd_name'] = $cmd->getName();
+            $return['cmd_name']     = $cmd->getName();
             $return['history_name'] = $cmd->getHumanName();
-            $return['unite'] = $cmd->getUnite();
-            $return['cmd'] = utils::o2a($cmd);
-            $return['eqLogic'] = utils::o2a($cmd->getEqLogicId());
+            $return['unite']        = $cmd->getUnite();
+            $return['cmd']          = utils::o2a($cmd);
+            $return['eqLogic']      = utils::o2a($cmd->getEqLogicId());
             $return['timelineOnly'] = $NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['timelineOnly'];
             $previsousValue = null;
             $derive = init('derive', $cmd->getDisplay('graphDerive'));
@@ -351,9 +351,9 @@ try {
                     $data[] = $info_history;
                 }
             }
-            $return['cmd_name'] = init('id');
+            $return['cmd_name']     = init('id');
             $return['history_name'] = init('id');
-            $return['unite'] = init('unite');
+            $return['unite']        = init('unite');
         }
         $return['data'] = $data;
         ajax::success($return);
@@ -361,12 +361,12 @@ try {
 
     if (init('action') == 'emptyHistory') {
         if (!isConnect('admin')) {
-            throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
+            throw new \Exception(__('401 - Accès non autorisé', __FILE__), -1234);
         }
         unautorizedInDemo();
         $cmd = cmd::byId(init('id'));
         if (!is_object($cmd)) {
-            throw new Exception(__('Commande ID inconnu : ', __FILE__) . init('id'));
+            throw new \Exception(__('Commande ID inconnu : ', __FILE__) . init('id'));
         }
         $cmd->emptyHistory(init('date'));
         ajax::success();
@@ -409,8 +409,8 @@ try {
         ajax::success();
     }
 
-    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
+    throw new \Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
-} catch (Exception $e) {
+} catch (\Exception $e) {
     ajax::error(displayException($e), $e->getCode());
 }
