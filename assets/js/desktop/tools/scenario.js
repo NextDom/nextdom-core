@@ -109,10 +109,6 @@ autoCompleteAction = [
 "remove_inat"
 ];
 
-if (getUrlVars('saveSuccessFull') == 1) {
-  notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
-}
-
 setTimeout(function(){
   $('.scenarioListContainer').packery();
 },100);
@@ -122,9 +118,7 @@ $("#div_listScenario").trigger('resize');
 $('.scenarioListContainer').packery();
 
 $('#bt_scenarioThumbnailDisplay').off('click').on('click', function () {
-  $('#div_editScenario').hide();
-  $('#scenarioThumbnailDisplay').show();
-  $('.scenarioListContainer').packery();
+  loadPage('index.php?v=d&p=scenario');
 });
 
 $('.scenarioDisplayCard').off('click').on('click', function () {
@@ -203,19 +197,10 @@ $("#bt_addScenario,#bt_addScenario2").off('click').on('click', function (event) 
                     $('#div_alert').showAlert({message: error.message, level: 'danger'});
                 },
                 success: function (data) {
-                    var vars = getUrlVars();
-                    var url = 'index.php?';
-                    for (var i in vars) {
-                        if (i != 'id' && i != 'saveSuccessFull' && i != 'removeSuccessFull') {
-                            url += i + '=' + vars[i].replace('#', '') + '&';
-                        }
-                    }
-                    url += 'id=' + data.id + '&saveSuccessFull=1';
-                    if(tab !== null){
-                        url += tab;
-                    }
                     modifyWithoutSave = false;
-                    loadPage(url);
+                    $('#scenarioThumbnailDisplay').hide();
+                    $('#bt_scenarioThumbnailDisplay').hide();
+                    printScenario(data.id);
                 }
             });
         }
@@ -243,6 +228,7 @@ $("#bt_delScenario,#bt_delScenario2").off('click').on('click', function (event) 
         success: function () {
           modifyWithoutSave = false;
           loadPage('index.php?v=d&p=scenario');
+          notify("Info", '{{Suppression effectuée avec succès}}', 'success');
         }
       });
     }
@@ -273,7 +259,9 @@ $("#bt_copyScenario").off('click').on('click', function () {
           notify("Erreur", error.message, 'error');
         },
         success: function (data) {
-          loadPage('index.php?v=d&p=scenario&id=' + data.id);
+          $('#scenarioThumbnailDisplay').hide();
+          $('#bt_scenarioThumbnailDisplay').hide();
+          printScenario(data.id);
         }
       });
     }
@@ -349,6 +337,7 @@ $("#bt_addElementSave").off('click').on('click', function (event) {
   }
   setEditor();
   updateSortable();
+  setInputExpressionsEvent();
   $('#md_addElement').modal('hide');
 });
 });
@@ -915,7 +904,7 @@ function printScenario(_id) {
     }
 
     if(data.elements.length == 0){
-      $('#div_scenarioElement').append('<center class="span_noScenarioElement"><span style=\'color:#767676;font-size:1.2em;font-weight: bold;\'>Pour constituer votre scénario veuillez ajouter des blocs</span></center>')
+      $('#div_scenarioElement').append('<div class="span_noScenarioElement"><span>{{Pour programmer votre scénario, veuillez commencer par ajouter des blocs...}}</span></div>')
     }
     actionOptions = []
     for (var i in data.elements) {
@@ -937,6 +926,7 @@ function printScenario(_id) {
     }
   });
     updateSortable();
+    setInputExpressionsEvent();
     setAutocomplete();
     updateElseToggle();
     $('#div_editScenario').show();
@@ -968,13 +958,10 @@ function saveScenario() {
     },
     success: function (data) {
       modifyWithoutSave = false;
-      url = 'index.php?v=d&p=scenario&id=' + data.id + '&saveSuccessFull=1';
-      if(tab !== null){
-        url += tab;
-      }
-      loadPage(url);
+      notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
     }
   });
+  $('#bt_scenarioThumbnailDisplay').show();
 }
 
 function addTrigger(_trigger) {
@@ -1495,4 +1482,82 @@ function getElement(_element) {
     element.subElements.push(subElement);
   });
   return element;
+}
+
+/**
+ * Set the event of the expression input
+ */
+function setInputExpressionsEvent() {
+    var inputExpressions = $('.expressionAttr[data-l1key=expression]');
+    inputExpressions.off('keyup').on('keyup', function () {
+        checkExpressionInput($(this));
+    });
+    inputExpressions.each(function () {
+        checkExpressionInput($(this));
+    });
+}
+
+/**
+ * Check an input that contains expression and decorate on error
+ *
+ * @param inputElement JQuery object of the input to check
+ */
+function checkExpressionInput(inputElement) {
+    if (!checkExpressionValidity(inputElement.val())) {
+        inputElement.css('textDecoration', 'underline');
+        inputElement.css('textDecorationStyle', 'dashed');
+        inputElement.css('textDecorationColor', 'red');
+    }
+    else {
+        inputElement.css('textDecoration', 'none');
+    }
+}
+
+/**
+ * Check if the string is a valid NextDom expression
+ *
+ * @param stringToCheck String to check
+ *
+ * @returns {boolean} True if the string is valid
+ */
+function checkExpressionValidity(stringToCheck) {
+    var validityCheckRegex = /((\w+|-?(\d+\.\d+|\.?\d+)|".*?"|'.*?'|#.*?#|\(|,|\)|!)[ ]*([!*+&|\-\/>=<]+|and|or|ou|et)*[ ]*)*/;
+    var prohibedFirstsCharacters = ['*', '+', '&', '|', '-', '/', '>', '=', '<'];
+    var prohibedLastsCharacters = ['!', '*', '+', '&', '|', '-', '/', '>', '=', '<'];
+    var result = false;
+
+    stringToCheck = stringToCheck.trim();
+    if (validityCheckRegex.exec(stringToCheck)[0] === stringToCheck) {
+        result = true;
+        if (stringToCheck.length > 0) {
+            if (prohibedFirstsCharacters.indexOf(stringToCheck[0]) !== -1) {
+                result = false;
+            }
+            if (prohibedLastsCharacters.indexOf(stringToCheck[stringToCheck.length - 1]) !== -1) {
+                result = false;
+            }
+        }
+        var parenthesisStack = [];
+        for (var i = 0; i < stringToCheck.length; ++i) {
+            if (stringToCheck[i] === '(') {
+                parenthesisStack.push('(');
+            }
+            else if (stringToCheck[i] === ')') {
+                if (parenthesisStack.length === 0) {
+                    result = false;
+                    break;
+                }
+                if (parenthesisStack[parenthesisStack.length - 1] !== '(') {
+                    result = false;
+                    break;
+                }
+                parenthesisStack.pop();
+            }
+        }
+        if (parenthesisStack.length > 0) {
+            result = false;
+        }
+    }
+
+    return result;
 }

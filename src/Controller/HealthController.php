@@ -36,9 +36,7 @@ class HealthController extends BaseController
      *
      * @return string Content of health page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {
@@ -94,7 +92,7 @@ class HealthController extends BaseController
                 // Si le plugin a des dépendances
                 if ($plugin->getHasDependency() == 1) {
                     $pluginData['hasDependency'] = true;
-                    $dependencyInfo = $plugin->dependancy_info();
+                    $dependencyInfo = $plugin->getDependencyInfo();
                     // récupération des informations sur ses dépendances
                     if (isset($dependencyInfo['state'])) {
                         $pluginData['dependencyState'] = $dependencyInfo['state'];

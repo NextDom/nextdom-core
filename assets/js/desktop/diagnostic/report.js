@@ -91,7 +91,7 @@
              var filename = $('#div_reportForm .reportAttr[data-l1key=filename]').value();
              var extension = $('#div_reportForm .reportAttr[data-l1key=extension]').value();
              if(extension != 'pdf'){
-                 $('#div_imgreport').append('<img class="img-responsive" src="core/php/downloadFile.php?pathfile=data/report/' + type+'/'+id+'/'+filename+'.'+extension+'" />');
+                 $('#div_imgreport').append('<img class="img-responsive" src="src/Api/downloadFile.php?pathfile=data/report/' + type+'/'+id+'/'+filename+'.'+extension+'" />');
              }else{
                  $('#div_imgreport').append('{{Aucun aperçu possible en pdf}}');
              }
@@ -105,7 +105,7 @@
      var id = $('#div_reportForm .reportAttr[data-l1key=id]').value();
      var filename = $('#div_reportForm .reportAttr[data-l1key=filename]').value();
      var extension = $('#div_reportForm .reportAttr[data-l1key=extension]').value();
-     window.open('core/php/downloadFile.php?pathfile=data/report/' + type+'/'+id+'/'+filename+'.'+extension, "_blank", null);
+     window.open('src/Api/downloadFile.php?pathfile=data/report/' + type+'/'+id+'/'+filename+'.'+extension, "_blank", null);
  });
 
  $('#bt_remove').on('click',function(){

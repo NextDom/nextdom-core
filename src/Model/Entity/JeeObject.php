@@ -173,7 +173,7 @@ class JeeObject
     }
 
     /**
-     * Get direct chidren
+     * Get direct children
      *
      * @param bool $_visible
      * @return array|mixed|null
@@ -410,7 +410,7 @@ class JeeObject
         if ($level > $drill) {
             return $data;
         }
-        $icon = findCodeIcon($this->getDisplay('icon'));
+        $icon = Utils::findCodeIcon($this->getDisplay('icon'));
         $data['node']['object' . $this->getId()] = array(
             'id' => 'object' . $this->getId(),
             'name' => $this->getName(),

@@ -1,0 +1,30 @@
+language: php
+php:
+    - 7.0
+services:
+    - mysql
+    - docker
+addons:
+    chrome: stable
+before_install:
+    - docker pull sylvaner1664/nextdom-test
+    - docker run -d -p 8765:80 -v `pwd`:/data --name="nextdom-test" sylvaner1664/nextdom-test:latest
+    - "while true; do DOCKER_LOGS=$(docker logs --tail 10 nextdom-test 2>&1); if [[ \"$DOCKER_LOGS\" =~ .*NEXTDOM.TEST.READY.* ]]; then break; fi; sleep 2; done"
+    - docker commit nextdom-test nextdom-test-snap
+    - docker kill nextdom-test && docker rm nextdom-test
+    - sudo apt update
+    - sudo apt install -y python3-pip python-pip
+    - sudo python3 -m pip install --upgrade pip
+    - sudo pip3 install --ignore-installed urllib3[secure] pylint
+    - sudo pip install jsmin
+    - ./scripts/gen_global.sh && composer install --dev
+    - cd tests
+    - sudo ./install_env.sh
+install:
+    - mysql -e 'CREATE DATABASE nextdom_test;'
+script:
+    - cd ${TRAVIS_BUILD_DIR}/tests
+    - ../vendor/bin/phpunit phpunit_tests
+    - python3 launch_code_consistency.py
+    - python3 launch_features_tests.py
+    - python3 launch_gui_tests.py

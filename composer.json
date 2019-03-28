@@ -43,9 +43,7 @@
   "autoload": {
     "psr-4": {
       "NextDom\\": [
-        "core/class",
-        "src",
-        "core/ajax"
+        "src"
       ]
     }
   }

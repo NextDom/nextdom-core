@@ -29,7 +29,7 @@ try {
 
     if (init('action') == 'list') {
         $return = array();
-        $path = __DIR__ . '/../../data/report/' . init('type') . '/' . init('id') . '/';
+        $path = NEXTDOM_DATA . '/data/report/' . init('type') . '/' . init('id') . '/';
         foreach (ls($path, '*') as $value) {
             $return[$value] = array('name' => $value);
         }
@@ -37,7 +37,7 @@ try {
     }
 
     if (init('action') == 'get') {
-        $path = __DIR__ . '/../../data/report/' . init('type') . '/' . init('id') . '/' . init('report');
+        $path = NEXTDOM_DATA . '/data/report/' . init('type') . '/' . init('id') . '/' . init('report');
         $return = pathinfo($path);
         $return['path'] = $path;
         $return['type'] = init('type');
@@ -46,7 +46,7 @@ try {
     }
 
     if (init('action') == 'remove') {
-        $path = __DIR__ . '/../../data/report/' . init('type') . '/' . init('id') . '/' . init('report');
+        $path = NEXTDOM_DATA . '/data/report/' . init('type') . '/' . init('id') . '/' . init('report');
         if (file_exists($path)) {
             unlink($path);
         }
@@ -57,7 +57,7 @@ try {
     }
 
     if (init('action') == 'removeAll') {
-        $path = __DIR__ . '/../../data/report/' . init('type') . '/' . init('id') . '/';
+        $path = NEXTDOM_DATA . '/data/report/' . init('type') . '/' . init('id') . '/';
         foreach (ls($path, '*') as $value) {
             unlink($path . $value);
         }

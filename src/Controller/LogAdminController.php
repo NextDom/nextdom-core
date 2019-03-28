@@ -22,8 +22,8 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\Status;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
 
@@ -36,15 +36,13 @@ class LogAdminController extends BaseController
      *
      * @return string Content of log_admin page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {
 
         global $NEXTDOM_INTERNAL_CONFIG;
-        $pageData['adminIsRescueMode'] = Status::isRescueMode();
+        $pageData['adminIsRescueMode'] = AuthentificationHelper::isRescueMode();
 
         if (!$pageData['adminIsRescueMode']) {
             $pageData['adminPluginsList'] = [];

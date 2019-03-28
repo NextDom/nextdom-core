@@ -45,7 +45,7 @@ class TimeLine
      */
     public static function addTimelineEvent($event)
     {
-        file_put_contents(NEXTDOM_ROOT . '/data/timeline.json', json_encode($event) . "\n", FILE_APPEND);
+        file_put_contents(NEXTDOM_DATA . '/data/timeline.json', json_encode($event) . "\n", FILE_APPEND);
     }
 
     /**
@@ -56,7 +56,7 @@ class TimeLine
      */
     public static function getTimelineEvent(): array
     {
-        $path = NEXTDOM_ROOT . '/data/timeline.json';
+        $path = NEXTDOM_DATA . '/data/timeline.json';
         if (!file_exists($path)) {
             $result = array();
         } else {
@@ -75,7 +75,7 @@ class TimeLine
      */
     public static function removeTimelineEvent()
     {
-        $path = NEXTDOM_ROOT . '/data/timeline.json';
+        $path = NEXTDOM_DATA . '/data/timeline.json';
         // TODO: chmod 777
         \com_shell::execute(SystemHelper::getCmdSudo() . 'chmod 666 ' . $path . ' > /dev/null 2>&1;');
         unlink($path);

@@ -135,7 +135,7 @@ class View
             mkdir($dir);
         }
         if ($this->getImage('sha512') == '') {
-            $this->setImage('sha512', sha512($this->getImage('data')));
+            $this->setImage('sha512', Utils::sha512($this->getImage('data')));
             $this->save();
         }
         $filename = $this->getImage('sha512') . '.' . $this->getImage('type');
@@ -251,7 +251,7 @@ class View
         if ($_level > $_drill) {
             return $_data;
         }
-        $icon = findCodeIcon('fa-picture-o');
+        $icon = Utils::findCodeIcon('fa-picture-o');
         $_data['node']['view' . $this->getId()] = array(
             'id' => 'interactDef' . $this->getId(),
             'name' => substr($this->getName(), 0, 20),

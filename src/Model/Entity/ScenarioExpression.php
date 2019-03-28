@@ -139,7 +139,7 @@ class ScenarioExpression
                 $key = 'scenarioElement' . ConfigManager::genKey(10);
             }
             CacheManager::set($key, array('scenarioExpression' => $this, 'scenario' => $scenario), 60);
-            $cmd = NEXTDOM_ROOT . '/core/php/jeeScenarioExpression.php';
+            $cmd = NEXTDOM_ROOT . '/src/Api/start_scenario_expr.php';
             $cmd .= ' key=' . $key;
             $this->setLog($scenario, __('Execution du lancement en arriere plan : ') . $key);
             SystemHelper::php($cmd . ' >> /dev/null 2>&1 &');
@@ -268,6 +268,7 @@ class ScenarioExpression
 
     /**
      * @param Scenario $scenario
+     * @throws \Exception
      */
     protected function executeActionIcon(&$scenario)
     {
@@ -329,6 +330,7 @@ class ScenarioExpression
     /**
      * @param Scenario $scenario
      * @return null
+     * @throws \Exception
      */
     protected function executeActionStop(&$scenario)
     {
@@ -591,6 +593,7 @@ class ScenarioExpression
 
     /**
      * @param Scenario $scenario
+     * @throws \Exception
      */
     protected function executeActionNextDomPowerOff(&$scenario)
     {
@@ -602,6 +605,7 @@ class ScenarioExpression
     /**
      * @param Scenario $scenario
      * @param $options
+     * @throws \Exception
      */
     protected function executeActionScenarioReturn(&$scenario, $options)
     {
@@ -691,6 +695,7 @@ class ScenarioExpression
     /**
      * @param Scenario $scenario
      * @param $options
+     * @throws \Exception
      */
     protected function executeActionTag(&$scenario, $options)
     {

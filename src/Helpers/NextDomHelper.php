@@ -59,18 +59,19 @@ class NextDomHelper
     private static $nextdomConfiguration;
 
     /**
-     * TODO ???
+     * Add an entry in the history and keep only the last 200
      * @param $data
      */
     public static function addRemoveHistory($data)
     {
         $removeHistory = array();
-        if (file_exists(NEXTDOM_ROOT . '/data/remove_history.json')) {
-            $removeHistory = json_decode(file_get_contents(NEXTDOM_ROOT . '/data/remove_history.json'), true);
+        $removeHistoryPath = NEXTDOM_DATA . '/data/remove_history.json';
+        if (file_exists($removeHistoryPath)) {
+            $removeHistory = json_decode(file_get_contents($removeHistoryPath), true);
         }
         $removeHistory[] = $data;
         $removeHistory = array_slice($removeHistory, -200, 200);
-        file_put_contents(NEXTDOM_ROOT . '/data/remove_history.json', json_encode($removeHistory));
+        file_put_contents($removeHistoryPath, json_encode($removeHistory));
     }
 
     /**
@@ -469,8 +470,8 @@ class NextDomHelper
      */
     public static function getJeedomVersion()
     {
-        if (file_exists('/var/lib/nextdom/config/Jeedom_version')) {
-            return trim(file_get_contents('/var/lib/nextdom/config/Jeedom_version'));
+        if (file_exists(NEXTDOM_DATA.'/config/Jeedom_version')) {
+            return trim(file_get_contents(NEXTDOM_DATA.'/config/Jeedom_version'));
         }
         return '';
     }
@@ -482,8 +483,8 @@ class NextDomHelper
      */
     public static function getNextdomVersion()
     {
-        if (file_exists('/var/lib/nextdom/config/Nextdom_version')) {
-            return trim(file_get_contents('/var/lib/nextdom/config/Nextdom_version'));
+        if (file_exists(NEXTDOM_DATA.'/config/Nextdom_version')) {
+            return trim(file_get_contents(NEXTDOM_DATA.'/config/Nextdom_version'));
         }
         return '';
     }
@@ -599,7 +600,7 @@ class NextDomHelper
             self::forceSyncHour();
             sleep(3);
             if (strtotime('now') < $mindate || strtotime('now') > $maxdate) {
-                LogHelper::add('core', 'error', sprintf(__('core.incorrect-sys-date'), $minDateValue, $maxDateValue) . (new \DateTime())->format('Y-m-d H:i:s'), 'dateCheckFailed');
+                LogHelper::addError('core', sprintf(__('core.incorrect-sys-date'), $minDateValue, $maxDateValue) . (new \DateTime())->format('Y-m-d H:i:s'), 'dateCheckFailed');
                 return false;
             }
         }
@@ -633,19 +634,19 @@ class NextDomHelper
                         try {
                             $cron->halt();
                         } catch (\Exception $e) {
-                            LogHelper::add('starting', 'error', __('Erreur sur l\'arrêt d\'une tâche cron : ') . LogHelper::exception($e));
+                            LogHelper::addError('starting', __('Erreur sur l\'arrêt d\'une tâche cron : ') . LogHelper::exception($e));
                         }
                     }
                 }
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur l\'arrêt des tâches crons : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur l\'arrêt des tâches crons : ') . LogHelper::exception($e));
             }
 
             try {
                 LogHelper::add('starting', 'debug', __('Restauration du cache'));
                 CacheManager::restore();
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur la restauration du CacheManager : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur la restauration du CacheManager : ') . LogHelper::exception($e));
             }
 
             try {
@@ -653,7 +654,7 @@ class NextDomHelper
                 $cache = CacheManager::byKey('nextdom::usbMapping');
                 $cache->remove();
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur le nettoyage du CacheManager des péripheriques USB : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur le nettoyage du CacheManager des péripheriques USB : ') . LogHelper::exception($e));
             }
 
             try {
@@ -661,23 +662,23 @@ class NextDomHelper
                 $cache = CacheManager::byKey('nextdom::bluetoothMapping');
                 $cache->remove();
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur le nettoyage du CacheManager des péripheriques Bluetooth : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur le nettoyage du CacheManager des péripheriques Bluetooth : ') . LogHelper::exception($e));
             }
 
             try {
                 LogHelper::add('starting', 'debug', __('Démarrage des processus Internet de NextDom'));
                 self::startSystem();
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur le démarrage interne de NextDom : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur le démarrage interne de NextDom : ') . LogHelper::exception($e));
             }
 
             try {
                 LogHelper::add('starting', 'debug', __('Ecriture du fichier ') . self::getTmpFolder() . '/started');
                 if (file_put_contents(self::getTmpFolder() . '/started', date('Y-m-d H:i:s')) === false) {
-                    LogHelper::add('starting', 'error', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started'));
+                    LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started'));
                 }
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started : ') . LogHelper::exception($e));
             }
 
             if (!file_exists(self::getTmpFolder() . '/started')) {
@@ -691,21 +692,21 @@ class NextDomHelper
                     NetworkHelper::checkConf('internal');
                 }
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur la configuration réseau interne : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur la configuration réseau interne : ') . LogHelper::exception($e));
             }
 
             try {
                 LogHelper::add('starting', 'debug', __('Envoi de l\'événement de démarrage'));
                 self::event('start');
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur l\'envoi de l\'événement de démarrage : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur l\'envoi de l\'événement de démarrage : ') . LogHelper::exception($e));
             }
 
             try {
                 LogHelper::add('starting', 'debug', __('Démarrage des plugins'));
                 PluginManager::start();
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur le démarrage des plugins : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur le démarrage des plugins : ') . LogHelper::exception($e));
             }
 
             try {
@@ -714,7 +715,7 @@ class NextDomHelper
                     \repo_market::test();
                 }
             } catch (\Exception $e) {
-                LogHelper::add('starting', 'error', __('Erreur sur la connexion au market : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Erreur sur la connexion au market : ') . LogHelper::exception($e));
             }
             LogHelper::add('starting', 'debug', __('Démarrage de nextdom fini avec succès'));
             EventManager::add('refresh');
@@ -730,7 +731,7 @@ class NextDomHelper
         try {
             NetworkHelper::cron5();
         } catch (\Exception $e) {
-            LogHelper::add('network', 'error', 'network::cron : ' . $e->getMessage());
+            LogHelper::addError('network', 'network::cron : ' . $e->getMessage());
         }
         try {
             foreach (UpdateManager::listRepo() as $name => $repo) {
@@ -740,7 +741,7 @@ class NextDomHelper
                 }
             }
         } catch (\Exception $e) {
-            LogHelper::add('nextdom', 'error', $e->getMessage());
+            LogHelper::addError('nextdom', $e->getMessage());
         }
         try {
             EqLogicManager::checkAlive();
@@ -757,7 +758,7 @@ class NextDomHelper
         try {
             CacheManager::set('hour', date('Y-m-d H:i:s'));
         } catch (\Exception $e) {
-            LogHelper::add('nextdom', 'error', $e->getMessage());
+            LogHelper::addError('nextdom', $e->getMessage());
         }
         try {
             if (ConfigManager::byKey('update::autocheck', 'core', 1) == 1 && (ConfigManager::byKey('update::lastCheck') == '' || (strtotime('now') - strtotime(ConfigManager::byKey('update::lastCheck'))) > (23 * 3600))) {
@@ -775,7 +776,7 @@ class NextDomHelper
                 }
             }
         } catch (\Exception $e) {
-            LogHelper::add('nextdom', 'error', $e->getMessage());
+            LogHelper::addError('nextdom', $e->getMessage());
         }
         try {
             foreach (UpdateManager::listRepo() as $name => $repo) {
@@ -785,7 +786,7 @@ class NextDomHelper
                 }
             }
         } catch (\Exception $e) {
-            LogHelper::add('nextdom', 'error', $e->getMessage());
+            LogHelper::addError('nextdom', $e->getMessage());
         }
     }
 
@@ -804,7 +805,7 @@ class NextDomHelper
             \DB::optimize();
             CacheManager::clean();
         } catch (\Exception $e) {
-            LogHelper::add('nextdom', 'error', $e->getMessage());
+            LogHelper::addError('nextdom', $e->getMessage());
         }
     }
 
@@ -1105,8 +1106,8 @@ class NextDomHelper
     {
         $cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . NEXTDOM_ROOT . ';';
         $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . NEXTDOM_ROOT . ';';
-        $cmd .= SystemHelper::getCmdSudo() . 'find /var/log/nextdom -type f -exec chmod 664 {} +;';
-        $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R /var/log/nextdom ;';
+        $cmd .= SystemHelper::getCmdSudo() . 'find '. NEXTDOM_LOG .' -type f -exec chmod 664 {} +;';
+        $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R '. NEXTDOM_LOG .' ;';
         exec($cmd);
     }
 
@@ -1123,16 +1124,16 @@ class NextDomHelper
     /**
      * Get temporary folder and creates it if not exists
      *
-     * @param null $plugin
+     * @param string|null $subFolder Log subfolder
      *
      * @return string
      * @throws \Exception
      */
-    public static function getTmpFolder($plugin = null)
+    public static function getTmpFolder($subFolder = null)
     {
         $result = '/' . trim(ConfigManager::byKey('folder::tmp'), '/');
-        if ($plugin !== null) {
-            $result .= '/' . $plugin;
+        if ($subFolder !== null) {
+            $result .= '/' . $subFolder;
         }
         if (!file_exists($result)) {
             mkdir($result, 0774, true);

@@ -540,21 +540,15 @@ class HistoryManager
             return -1;
         }
         $currentValue = $histories[0]->getValue();
-        $dateTo = date('Y-m-d H:i:s');
-        $duration = strtotime($dateTo) - strtotime($histories[0]->getDatetime());
         for ($i = 0; $i < $c - 1; $i++) {
-            $history = $histories[$i];
-            $value = $history->getValue();
-            $date = $history->getDatetime();
             $nextValue = $histories[$i + 1]->getValue();
             if ($currentValue != $nextValue) {
-                return $duration;
-            }
-            if ($i > 0) {
-                $duration += strtotime($histories[$i - 1]->getDatetime()) - strtotime($date);
+                break;
             }
         }
-        return -1;
+        $dateTo = date('Y-m-d H:i:s');
+        $duration = strtotime($dateTo) - strtotime($histories[$i]->getDatetime());
+        return $duration;
     }
 
     public static function lastStateDuration($_cmd_id, $_value = null)
@@ -668,13 +662,14 @@ class HistoryManager
                     $duration += strtotime($histories[$i - 1]->getDatetime()) - strtotime($date);
                     return $duration;
                 }
+                if ($_value != $nextValue) {
+					          return $duration;
+                }
             }
             //different state as current:
             if ($_value != $currentValue && $i > 0) {
-                $prevValue = $histories[$i - 1]->getValue();
                 $nextValue = $histories[$i + 1]->getValue();
                 if (is_numeric($_value)) {
-                    $prevValue = round($prevValue, $_decimal);
                     $nextValue = round($nextValue, $_decimal);
                 }
                 if ($_value == $value && $_value != $nextValue && isset($histories[$i - 1])) {

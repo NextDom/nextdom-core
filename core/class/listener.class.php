@@ -22,7 +22,8 @@ use NextDom\Managers\ListenerManager;
 
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
-class listener {
+class listener extends NextDom\Model\Entity\Listener {
+    
     public static function all() {
         return ListenerManager::all();
     }

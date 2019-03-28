@@ -99,7 +99,7 @@ try {
         $return = array('state' => 'nok', 'log' => 'nok');
         $plugin = plugin::byId(init('id'));
         if (is_object($plugin)) {
-            $return = $plugin->dependancy_info();
+            $return = $plugin->getDependencyInfo();
         }
         ajax::success($return);
     }

@@ -32,9 +32,6 @@ class SummaryController extends BaseController
      *
      * @return string Content of summary page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public static function get(&$pageData): string
     {

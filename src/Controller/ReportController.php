@@ -37,15 +37,13 @@ class ReportController extends BaseController
      *
      * @return string Content of report page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/report.js';
-        $report_path = NEXTDOM_ROOT . '/data/report/';
+        $reportPath = NEXTDOM_ROOT . '/data/report/';
         $pageData['reportViews'] = [];
         $allViews = ViewManager::all();
         foreach ($allViews as $view) {
@@ -53,7 +51,7 @@ class ReportController extends BaseController
             $viewData['id'] = $view->getId();
             $viewData['icon'] = $view->getDisplay('icon');
             $viewData['name'] = $view->getName();
-            $viewData['number'] = count(FileSystemHelper::ls($report_path . '/view/' . $view->getId(), '*'));
+            $viewData['number'] = count(FileSystemHelper::ls($reportPath . '/view/' . $view->getId(), '*'));
             $pageData['reportViews'][] = $viewData;
         }
         $pageData['reportPlans'] = [];
@@ -63,7 +61,7 @@ class ReportController extends BaseController
             $planData['id'] = $plan->getId();
             $planData['icon'] = $plan->getConfiguration('icon');
             $planData['name'] = $plan->getName();
-            $planData['number'] = count(FileSystemHelper::ls($report_path . '/plan/' . $plan->getId(), '*'));
+            $planData['number'] = count(FileSystemHelper::ls($reportPath . '/plan/' . $plan->getId(), '*'));
             $pageData['reportPlans'][] = $planData;
         }
         $pageData['reportPlugins'] = [];
@@ -73,7 +71,7 @@ class ReportController extends BaseController
                 $pluginData = [];
                 $pluginData['id'] = $plugin->getId();
                 $pluginData['name'] = $plugin->getName();
-                $pluginData['number'] = count(FileSystemHelper::ls($report_path . '/plugin/' . $plugin->getId(), '*'));
+                $pluginData['number'] = count(FileSystemHelper::ls($reportPath . '/plugin/' . $plugin->getId(), '*'));
                 $pageData['reportPlugins'][] = $pluginData;
             }
         }

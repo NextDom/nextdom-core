@@ -27,6 +27,7 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\EqLogicManager;
+use NextDom\Managers\UserManager;
 
 class EqLogicDisplayWidget extends BaseAbstractModal
 {
@@ -35,9 +36,6 @@ class EqLogicDisplayWidget extends BaseAbstractModal
      * @return string
      * @throws CoreException
      * @throws \ReflectionException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public static function get(): string
     {
@@ -49,7 +47,7 @@ class EqLogicDisplayWidget extends BaseAbstractModal
         if (!is_object($eqLogic)) {
             throw new CoreException(__('EqLogic non trouvé : ') . $eqLogicId);
         }
-        $mc = CacheManager::byKey('widgetHtml' . $eqLogic->getId() . $version . $_SESSION['user']->getId());
+        $mc = CacheManager::byKey('widgetHtml' . $eqLogic->getId() . $version . UserManager::getStoredUser()->getId());
         if ($mc->getValue() != '') {
             $mc->remove();
         }

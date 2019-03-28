@@ -188,6 +188,13 @@ function copy_assets {
 	gen_js
 }
 
+function clean_cache {
+	echo " >>> Cleaning Twig Cache"
+	rm -rf var/cache/twig/*
+	rm -rf var/i18n/*
+	rm -fr var/cache/i18n/*
+}
+
 function start {
 	while true; do
 		FIND_CSS_RES=$(find assets/css -mmin -0.1)
@@ -216,6 +223,7 @@ if [ "$#" == 0 ]; then
 	mkdir -p public/css
 	mkdir -p public/js
 	copy_assets;
+	clean_cache
 elif [ "$1" == "--watch" ]; then
 	start;
 elif [ "$1" == "--css" ]; then
@@ -223,7 +231,3 @@ elif [ "$1" == "--css" ]; then
 elif [ "$1" == "--js" ]; then
 	gen_js
 fi
-echo " >>> Cleaning Twig Cache"
-rm -rf var/cache/twig/*
-rm -rf var/i18n/*
-rm -fr var/cache/i18n/*
