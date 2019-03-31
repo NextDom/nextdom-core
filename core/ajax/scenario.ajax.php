@@ -321,8 +321,8 @@ try {
         if (!is_object($scenario)) {
             throw new Exception(__('Scénario ID inconnu', __FILE__));
         }
-        $scenarioName = $scenario->getName();
-        $targetScenario = \NextDom\Managers\ScenarioManager::byName($scenarioName);
+
+        $targetScenario = \NextDom\Managers\ScenarioManager::byName(init('name'));
         if (is_object($targetScenario)) {
             throw new Exception(__('scenario.already_exists') . $scenarioName);
         }
