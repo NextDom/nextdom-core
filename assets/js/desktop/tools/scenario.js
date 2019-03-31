@@ -1585,7 +1585,7 @@ function initGeneralFormEvents() {
     $("#bt_testScenario").off('click').on('click', testScenario);
     $("#bt_copyScenario").off('click').on('click', copyScenario);
     $("#bt_stopScenario").off('click').on('click', stopScenario);
-    $('#bt_displayScenarioVariable').off('click').on('click', function () {
+    $(".bt_displayScenarioVariable").off('click').on('click', function () {
         modalContainer.dialog({title: "{{Variables des scénarios}}"});
         modalContainer.load('index.php?v=d&modal=dataStore.management&type=scenario').dialog('open');
     });
