@@ -1,6 +1,6 @@
 language: php
 php:
-    - 7.0
+    - 7.1
 services:
     - mysql
     - docker
@@ -17,14 +17,25 @@ before_install:
     - sudo python3 -m pip install --upgrade pip
     - sudo pip3 install --ignore-installed urllib3[secure] pylint
     - sudo pip install jsmin
-    - ./scripts/gen_global.sh && composer install --dev
+    - ./scripts/gen_global.sh
+    - composer install --dev
+    - composer require --dev satooshi/php-coveralls
     - cd tests
     - sudo ./install_env.sh
 install:
     - mysql -e 'CREATE DATABASE nextdom_test;'
 script:
     - cd ${TRAVIS_BUILD_DIR}/tests
-    - ../vendor/bin/phpunit phpunit_tests
+    - mkdir coverage
+    - python3 launch_php_tests.py
+    - python3 launch_compatibility_tests.py
     - python3 launch_code_consistency.py
     - python3 launch_features_tests.py
     - python3 launch_gui_tests.py
+    - python3 check_jeedom_compatibility_from_src.py
+after_script:
+    - cd ${TRAVIS_BUILD_DIR}/tests
+    - wget https://phar.phpunit.de/phpcov.phar
+    - php phpcov.phar merge coverage --clover coverage/clover.xml
+    - cd ${TRAVIS_BUILD_DIR}
+    - php vendor/bin/php-coveralls -v

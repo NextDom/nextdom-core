@@ -25,6 +25,8 @@ try {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
 
+    ajax::init();
+
     if (init('action') == 'all') {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
@@ -66,8 +68,6 @@ try {
         $note->remove();
         ajax::success();
     }
-
-    ajax::init();
 
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */

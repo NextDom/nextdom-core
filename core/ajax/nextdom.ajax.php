@@ -150,7 +150,12 @@ try {
     
     if (init('action') == 'db') {
         unautorizedInDemo();
-        ajax::success(DB::prepare(init('command'), array(), DB::FETCH_TYPE_ALL));
+        if (init('command', '') !== '') {
+            ajax::success(DB::prepare(init('command'), array(), DB::FETCH_TYPE_ALL));
+        }
+        else {
+            ajax::error(__('Aucune requête à exécuter'));
+        }
     }
     
     if (init('action') == 'health') {
@@ -275,11 +280,16 @@ try {
         $return = array('node' => array(), 'link' => array());
         $object = null;
         $type = init('filter_type');
-        $object = $type::byId(init('filter_id'));
-        if (!is_object($object)) {
-            throw new Exception(__('Type :', __FILE__) . init('filter_type') . __(' avec id : ', __FILE__) . init('filter_id') . __(' inconnu', __FILE__));
+        if ($type !== '') {
+            $object = $type::byId(init('filter_id'));
+            if (!is_object($object)) {
+                throw new Exception(__('Type :', __FILE__) . init('filter_type') . __(' avec id : ', __FILE__) . init('filter_id') . __(' inconnu', __FILE__));
+            }
+            ajax::success($object->getLinkData());
         }
-        ajax::success($object->getLinkData());
+        else {
+            ajax::error(__('Aucun filtre'));
+        }
     }
     
     if (init('action') == 'getTimelineEvents') {

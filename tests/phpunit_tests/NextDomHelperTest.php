@@ -26,12 +26,8 @@ class NextDomHelperTest extends PHPUnit_Framework_TestCase
 {
     public static function setUpBeforeClass()
     {
-        mkdir(NEXTDOM_DATA . '/data', 0777, true);
-    }
-
-    public static function tearDownAfterClass()
-    {
         system('rm -fr ' . NEXTDOM_DATA . '/data');
+        mkdir(NEXTDOM_DATA . '/data', 0777, true);
     }
 
     public function setUp()
