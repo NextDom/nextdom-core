@@ -177,7 +177,7 @@ $('.bt_deleteSession').on('click',function(){
 
 $('#user_avatar').fileupload({
     dataType: 'json',
-    url: "core/ajax/profils.ajax.php?action=imageUpload",
+    url: "core/ajax/profils.ajax.php?action=imageUpload&ajax_token=" + NEXTDOM_AJAX_TOKEN,
     dropZone: "#bsImagesPanel",
     done: function (e, data) {
         if (data.result.state !== 'ok') {

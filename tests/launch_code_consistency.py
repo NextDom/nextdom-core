@@ -1,5 +1,6 @@
 """Launch NextDom code consistency tests
 """
+import sys
 from tests.libs.tests_funcs import *
 
 def check_php():
@@ -7,11 +8,14 @@ def check_php():
     """
     print_subtitle('PHP syntax')
     output, status = get_command_output('find . -type f -name "*.php" -not -path "./vendor/*" | xargs -n1 php -l') #pylint: disable=line-too-long
+    error = False
     if status == 0:
         print_info('OK')
     else:
         print_error('Fail')
         print(output)
+        error = True
+    return error
 
 def check_python():
     """Check python code quality
@@ -27,8 +31,13 @@ def check_python():
             error = True
     if not error:
         print_info('OK')
+    return error
 
 if __name__ == "__main__":
     print_title('Code consistency')
-    check_php()
-    check_python()
+    TESTS_LIST = {
+        'php': check_php,
+        'python': check_python
+    }
+    if not start_all_tests('Code consistency', TESTS_LIST):
+        sys.exit(1)

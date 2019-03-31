@@ -66,6 +66,9 @@ try {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
         }
+        if (init('plan', '') === '') {
+            throw new Exception(__('L\'identifiant du plan doit être fourni', __FILE__));
+        }
         unautorizedInDemo();
         $plan = new plan();
         utils::a2o($plan, json_decode(init('plan'), true));

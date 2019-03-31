@@ -48,7 +48,7 @@ class ScenarioManager
     const INITIAL_TRANSLATION_FILE = '';
 
     /**
-     * Obtenir un objet scenario
+     * Get scenario by his id
      *
      * @param int $id Identifiant du scénario
      *
@@ -56,10 +56,26 @@ class ScenarioManager
      *
      * @throws \Exception
      */
-    public static function byId(int $id)
+    public static function byId($id)
     {
         $values = array('id' => $id);
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE id = :id';
+        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+    }
+
+    /**
+     * Get scenario by his name
+     *
+     * @param string $name Name of the scenario
+     *
+     * @return Scenario|null Requested scenario or null
+     *
+     * @throws \Exception
+     */
+    public static function byName(string $name)
+    {
+        $values = array('name' => $name);
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE name = :name';
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 

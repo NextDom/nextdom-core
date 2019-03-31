@@ -1,0 +1,48 @@
+<phpunit
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/7.0/phpunit.xsd"
+        backupGlobals="true"
+        backupStaticAttributes="false"
+        bootstrap="../../vendor/autoload.php"
+        cacheTokens="false"
+        colors="false"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        forceCoversAnnotation="false"
+        printerClass="PHPUnit_TextUI_ResultPrinter"
+        processIsolation="true"
+        stopOnError="false"
+        stopOnFailure="false"
+        stopOnIncomplete="false"
+        stopOnSkipped="false"
+        stopOnRisky="false"
+        stderr="true"
+        testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader"
+        timeoutForSmallTests="1"
+        timeoutForMediumTests="10"
+        timeoutForLargeTests="60"
+        verbose="false">
+    <testsuites>
+        <testsuite name="AllTests">
+            <directory>../compatibility</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../../</directory>
+            <exclude>
+                <directory>../../vendor</directory>
+                <directory>../../assets</directory>
+                <directory>../../install</directory>
+                <directory>../../scripts</directory>
+                <directory>../../var</directory>
+                <directory>../../tests/archives</directory>
+                <directory>../../tests/data</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <logging>
+        <log type="coverage-php" target="../coverage/clover-compatibility.cov"/>
+    </logging>
+</phpunit>

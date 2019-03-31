@@ -194,6 +194,190 @@ class repo_market {
         );
     }
 
+    /*     * ***********************BACKUP*************************** */
+
+    public static function backup_createFolderIsNotExist() {
+        $client = new Sabre\DAV\Client(array(
+            'baseUri' => 'https://' . config::byKey('market::backupServer'),
+            'userName' => config::byKey('market::username'),
+            'password' => config::byKey('market::backupPassword'),
+        ));
+        $adapter = new League\Flysystem\WebDAV\WebDAVAdapter($client);
+        $filesystem = new League\Flysystem\Filesystem($adapter);
+        $folders = $filesystem->listContents('/remote.php/webdav/');
+        $found = false;
+        if (count($folders) > 0) {
+            foreach ($folders as $folder) {
+                if ($folder['basename'] == config::byKey('market::cloud::backup::name')) {
+                    $found = true;
+                    break;
+                }
+            }
+        }
+        if (!$found) {
+            $filesystem->createDir('/remote.php/webdav/' . config::byKey('market::cloud::backup::name'));
+        }
+    }
+
+    public static function backup_send($_path) {
+        if (config::byKey('market::backupServer') == '' || config::byKey('market::backupPassword') == '') {
+            throw new Exception(__('Aucun serveur de backup defini. Avez vous bien un abonnement au backup cloud ?', __FILE__));
+        }
+        if (config::byKey('market::cloud::backup::password') == '') {
+            throw new Exception(__('Vous devez obligatoirement avoir un mot de passe pour le backup cloud', __FILE__));
+        }
+        shell_exec(system::getCmdSudo() . ' rm -rf /tmp/duplicity-*-tempdir');
+        self::backup_createFolderIsNotExist();
+        $base_dir = realpath(__DIR__ . '/../../');
+        $excludes = array(
+            $base_dir . '/tmp',
+            $base_dir . '/log',
+            $base_dir . '/backup',
+            $base_dir . '/doc',
+            $base_dir . '/docs',
+            $base_dir . '/plugins/*/doc',
+            $base_dir . '/plugins/*/docs',
+            $base_dir . '/tests',
+            $base_dir . '/.git',
+            $base_dir . '/.log',
+            $base_dir . '/core/config/common.config.php',
+            $base_dir . '/' . config::byKey('backup::path'),
+        );
+        if (config::byKey('recordDir', 'camera') != '') {
+            $excludes[] = $base_dir . '/' . config::byKey('recordDir', 'camera');
+        }
+        $cmd = system::getCmdSudo() . ' PASSPHRASE="' . config::byKey('market::cloud::backup::password') . '"';
+        $cmd .= ' duplicity incremental --full-if-older-than ' . config::byKey('market::cloud::backup::fullfrequency', 'core', '1M');
+        foreach ($excludes as $exclude) {
+            $cmd .= ' --exclude "' . $exclude . '"';
+        }
+        $cmd .= ' --num-retries 2';
+        $cmd .= ' --ssl-no-check-certificate';
+        $cmd .= ' ' . $base_dir . '  "webdavs://' . config::byKey('market::username') . ':' . config::byKey('market::backupPassword');
+        $cmd .= '@' . config::byKey('market::backupServer') . '/remote.php/webdav/' . config::byKey('market::cloud::backup::name').'"';
+        try {
+            com_shell::execute($cmd);
+        } catch (Exception $e) {
+            if (self::backup_errorAnalyzed($e->getMessage()) != null) {
+                throw new Exception('[backup cloud] ' . self::backup_errorAnalyzed($e->getMessage()));
+            }
+            if (strpos($e->getMessage(), 'Insufficient Storage') !== false) {
+                self::backup_clean();
+            }
+            system::kill('duplicity');
+            shell_exec(system::getCmdSudo() . ' rm -rf /tmp/duplicity-*-tempdir');
+            shell_exec(system::getCmdSudo() . ' rm -rf ~/.cache/duplicity/*');
+            com_shell::execute($cmd);
+        }
+        shell_exec(system::getCmdSudo() . ' rm -rf /tmp/duplicity-*-tempdir');
+    }
+
+    public static function backup_errorAnalyzed($_error) {
+        if (strpos($_error, 'decryption failed: Bad session key') !== false) {
+            return __('Clef de chiffrement invalide. Si vous oubliez votre mot de passe aucune récupération n\'est possible. Veuillez supprimer le backup à partir de votre page profil sur le market', __FILE__);
+        }
+        return null;
+    }
+
+    public static function backup_clean($_nb = null) {
+        if (config::byKey('market::backupServer') == '' || config::byKey('market::backupPassword') == '') {
+            return;
+        }
+        if (config::byKey('market::cloud::backup::password') == '') {
+            return;
+        }
+        shell_exec(system::getCmdSudo() . ' rm -rf /tmp/duplicity-*-tempdir');
+        if ($_nb == null) {
+            $_nb = 0;
+            $lists = self::backup_list();
+            foreach ($lists as $name) {
+                if (strpos($name, 'Full') !== false) {
+                    $_nb++;
+                }
+            }
+            $_nb = ($_nb - 2 < 1) ? 1 : $_nb - 2;
+        }
+        $cmd = system::getCmdSudo() . ' PASSPHRASE="' . config::byKey('market::cloud::backup::password') . '"';
+        $cmd .= ' duplicity remove-all-but-n-full ' . $_nb . ' --force ';
+        $cmd .= ' --ssl-no-check-certificate';
+        $cmd .= ' --num-retries 1';
+        $cmd .= ' "webdavs://' . config::byKey('market::username') . ':' . config::byKey('market::backupPassword');
+        $cmd .= '@' . config::byKey('market::backupServer') . '/remote.php/webdav/' . config::byKey('market::cloud::backup::name').'"';
+        try {
+            com_shell::execute($cmd);
+        } catch (Exception $e) {
+            if (self::backup_errorAnalyzed($e->getMessage()) != null) {
+                throw new Exception('[restore cloud] ' . self::backup_errorAnalyzed($e->getMessage()));
+            }
+            throw new Exception('[restore cloud] ' . $e->getMessage());
+        }
+    }
+
+    public static function backup_list() {
+        if (config::byKey('market::backupServer') == '' || config::byKey('market::backupPassword') == '') {
+            return array();
+        }
+        if (config::byKey('market::cloud::backup::password') == '') {
+            return array();
+        }
+        self::backup_createFolderIsNotExist();
+        $return = array();
+        $cmd = system::getCmdSudo();
+        $cmd .= ' duplicity collection-status';
+        $cmd .= ' --ssl-no-check-certificate';
+        $cmd .= ' --num-retries 1';
+        $cmd .= ' --timeout 60';
+        $cmd .= ' "webdavs://' . config::byKey('market::username') . ':' . config::byKey('market::backupPassword');
+        $cmd .= '@' . config::byKey('market::backupServer') . '/remote.php/webdav/' . config::byKey('market::cloud::backup::name').'"';
+        shell_exec(system::getCmdSudo() . ' rm -rf ~/.cache/duplicity/*');
+        $results = explode("\n", com_shell::execute($cmd));
+        foreach ($results as $line) {
+            if (strpos($line, 'Full') === false && strpos($line, 'Incremental') === false && strpos($line, 'Complète') === false && strpos($line, 'Incrémentale') === false) {
+                continue;
+            }
+            $return[] = trim(substr($line, 0, -1));
+        }
+        return array_reverse($return);
+    }
+
+    public static function backup_restore($_backup) {
+        $backup_dir = calculPath(config::byKey('backup::path'));
+        if (!file_exists($backup_dir)) {
+            mkdir($backup_dir, 0770, true);
+        }
+        if (!is_writable($backup_dir)) {
+            throw new Exception('Impossible d\'accéder au dossier de sauvegarde. Veuillez vérifier les droits : ' . $backup_dir);
+        }
+        $restore_dir = '/tmp/nextdom_cloud_restore';
+        if (file_exists($restore_dir)) {
+            com_shell::execute(system::getCmdSudo() . ' rm -rf ' . $restore_dir);
+        }
+        mkdir($restore_dir);
+        $timestamp = strtotime(trim(str_replace(array('Full', 'Incremental'), '', $_backup)));
+        $backup_name = str_replace(' ', '_', 'backup-cloud-' . config::byKey('market::cloud::backup::name') . '-' . date("Y-m-d-H\hi", $timestamp) . '.tar.gz');
+        $cmd = system::getCmdSudo() . ' PASSPHRASE="' . config::byKey('market::cloud::backup::password') . '"';
+        $cmd .= ' duplicity --file-to-restore /';
+        $cmd .= ' --time ' . $timestamp;
+        $cmd .= ' --num-retries 1';
+        $cmd .= ' "webdavs://' . config::byKey('market::username') . ':' . config::byKey('market::backupPassword');
+        $cmd .= '@' . config::byKey('market::backupServer') . '/remote.php/webdav/' . config::byKey('market::cloud::backup::name').'"';
+        $cmd .= ' ' . $restore_dir;
+        try {
+            com_shell::execute($cmd);
+        } catch (Exception $e) {
+            if (self::backup_errorAnalyzed($e->getMessage()) != null) {
+                throw new Exception('[restore cloud] ' . self::backup_errorAnalyzed($e->getMessage()));
+            }
+            throw new Exception('[restore cloud] ' . $e->getMessage());
+        }
+        return;
+        system('cd ' . $restore_dir . ';tar cfz "' . $backup_dir . '/' . $backup_name . '" . > /dev/null');
+        if (file_exists($restore_dir)) {
+            com_shell::execute(system::getCmdSudo() . ' rm -rf ' . $restore_dir);
+        }
+        nextdom::restore($backup_dir . '/' . $backup_name, true);
+    }
+
     /******************************MONITORING********************************/
 
     public static function monitoring_install() {

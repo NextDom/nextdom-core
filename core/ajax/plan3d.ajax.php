@@ -57,6 +57,9 @@ try {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
         }
+        if (init('plan3d', '') === '') {
+            throw new Exception(__('L\'identifiant du plan doit être fourni', __FILE__));
+        }
         unautorizedInDemo();
         $plan3d = new plan3d();
         utils::a2o($plan3d, json_decode(init('plan3d'), true));

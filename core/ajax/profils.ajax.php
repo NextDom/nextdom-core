@@ -19,16 +19,15 @@
 try {
     require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
-    if (!isConnect('admin')) {
+    if (!isConnect()) {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
 
     }
 
-
     if (init('action') == 'removeImage') {
         $uploaddir = dirname(__FILE__) . '/../../public/img/profils/';
-        $name = init('image');
-        ajax::success(unlink($uploaddir . $name));
+        $pathInfo = pathinfo(init('image'));
+        ajax::success(unlink($uploaddir . $pathInfo['basename'] . '.' . $pathInfo['extension']));
     }
 
     if (init('action') == 'imageUpload') {
