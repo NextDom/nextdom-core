@@ -237,6 +237,87 @@ firstuse:
   congrats-title: Bravo ! La configuration de votre %productName% est terminée !
   congrats-content: Cliquez sur le bouton Terminer pour profiter de votre solution Domotique...
 
+scenario:
+  no-group: Aucun
+  no-choice: Aucun
+  realtime : Temps réel
+  default : Défaut
+  my-scenarios: Mes scénarios
+  no-scenario: Vous n'avez encore aucun scénario ! Cliquez sur ajouter dans le menu pour commencer...
+  you-have-scenarios: Vous avez %s scénario(s).
+  back: Retour
+  enable-scenarios: Activer les scénarios
+  disable-scenarios: Désactiver les scénarios
+  add: Ajouter
+  test-expression: Testeur d'expression
+  variables: Variables
+  summary: Vue d'ensemble
+  scenarios: scénario(s).
+  save: Sauvegarder
+  links: Liens
+  duplicate: Dupliquer
+  duplicate-title: Dupliquer le scénario
+  export: Exporter
+  template: Template
+  log: Log
+  delete: Supprimer
+  add-block: Ajouter un bloc
+  stop: Arrêter
+  execute-title: Veuillez sauvegarder avant de tester. Ceci peut ne pas aboutir.
+  execute: Exécuter
+  expression-test: Testeur d'expression
+  programmation: Programmation
+  parameters: Paramètres
+  id: ID
+  identity: Identité
+  scenario-edit: Edition Scénario
+  name: Nom du scénario
+  name-to-show: Nom à afficher
+  name-to-show-placeholder: Ne rien mettre pour laisser le nom par défaut
+  description: Description
+  enabled: Actif
+  visible: Visible
+  multi-launch: Multi-lancement
+  multi-launch-title: Le scénario pourra tourner plusieurs fois en même temps
+  sync-mode: Mode synchrone
+  sync-mode-title: Le scénario est en mode synchrone. Attention, cela peut rendre le système instable
+  timeout: Timeout
+  timeout-unity: secondes (0 = illimité)
+  paternity: Paternité
+  group: Groupe
+  scenario-group: Groupe du scénario
+  parent-object: Objet parent
+  follow-timeline: Suivre dans la timeline
+  follow-timeline-title: Les exécutions du scénario pourront être vues dans la timeline.
+  icon: Icône
+  choose: Choisir
+  launching: Déclenchement
+  scenario-mode: Mode du scénario
+  provoked: Provoqué
+  scheduled: Programmé
+  twice: Les deux
+  trigger: Déclencheur
+  scheduler: Programmation
+  previous: Précédent
+  next: Prochain
+  cancel: Annuler
+  add-item: Ajouter élément
+  item-if: Si/Alors/Sinon
+  item-action: Action
+  item-for: Boucle
+  item-in: Dans
+  item-at: A
+  item-code: Code
+  item-comment: Commentaire
+  options: Options
+  supervising: Surveillance
+  description-if: "Permet de faire des conditions dans votre scénario. Par exemple: Si mon détecteur d’ouverture de porte se déclenche Alors allumer la lumière."
+  description-action: "Permet de lancer une action, sur un de vos modules, scénarios ou autre. Par exemple : Passer votre sirène sur ON."
+  description-for: "Une boucle permet de réaliser une action de façon répétée un certain nombre de fois. Par exemple : Permet de répéter une action de 1 à X, c’est-à-dire X fois."
+  description-in: "Permet de faire une action dans X min. Par exemple : Dans 5 min, éteindre la lumière."
+  description-at: "A un temps précis, cet élément permet de lancer une action. Par exemple : A 9h30, ouvrir les volets."
+  description-code: "Cet élément permet de rajouter dans votre scénario de la programmation à l’aide d’un code, PHP/Shell, etc."
+  description-comment: "Permet de commenter votre scénario."
 # Ancien format
 "401 - Accès non autorisé": "401 - Accès non autorisé"
 "403 Access Forbidden": "403 Access Forbidden"

@@ -321,6 +321,11 @@ try {
         if (!is_object($scenario)) {
             throw new Exception(__('Scénario ID inconnu', __FILE__));
         }
+
+        $targetScenario = \NextDom\Managers\ScenarioManager::byName(init('name'));
+        if (is_object($targetScenario)) {
+            throw new Exception(__('scenario.already_exists') . $scenarioName);
+        }
         ajax::success(utils::o2a($scenario->copy(init('name'))));
     }
     

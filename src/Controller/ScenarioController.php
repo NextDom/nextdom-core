@@ -43,18 +43,19 @@ class ScenarioController extends BaseController
     {
 
         $pageData['scenarios'] = array();
-        // TODO: A supprimé pour éviter la requête inutile
-        $pageData['scenarioCount'] = count(ScenarioManager::all());
-        $pageData['scenarios'][-1] = ScenarioManager::all(null);
+        // Get all scenarios without groups
+        $pageData['scenariosWithoutGroup'] = ScenarioManager::all(null);
         $pageData['scenarioListGroup'] = ScenarioManager::listGroup();
-
+        $pageData['scenarioCount'] = count($pageData['scenariosWithoutGroup']);
+        // Get all scenarios with groups
         if (is_array($pageData['scenarioListGroup'])) {
             foreach ($pageData['scenarioListGroup'] as $group) {
                 $pageData['scenarios'][$group['group']] = ScenarioManager::all($group['group']);
+                ++$pageData['scenarioCount'];
             }
         }
         $pageData['scenarioInactiveStyle'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
-        $pageData['scenarioEnabled'] = ConfigManager::byKey('enableScenario');
+        $pageData['scenariosEnabled'] = ConfigManager::byKey('enableScenario');
         $pageData['scenarioAllObjects'] = JeeObjectManager::all();
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/scenario.js';
