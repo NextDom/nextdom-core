@@ -27,12 +27,12 @@ install:
 script:
     - cd ${TRAVIS_BUILD_DIR}/tests
     - mkdir coverage
+    - python3 check_jeedom_compatibility_from_src.py
     - python3 launch_php_tests.py
     - python3 launch_compatibility_tests.py
     - python3 launch_code_consistency.py
     - python3 launch_features_tests.py
     - python3 launch_gui_tests.py
-    - python3 check_jeedom_compatibility_from_src.py
 after_script:
     - cd ${TRAVIS_BUILD_DIR}/tests
     - wget https://phar.phpunit.de/phpcov.phar

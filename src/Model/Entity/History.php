@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\HistoryManager;
 
@@ -52,6 +53,7 @@ class History
      */
     protected $cmd_id;
     protected $_tableName = 'history';
+    protected $_changed = false;
 
     public function save($_cmd = null, $_direct = false)
     {
@@ -171,19 +173,31 @@ class History
 
     public function setCmd_id($cmd_id)
     {
+        $this->_changed = Utils::attrChanged($this->_changed,$this->cmd_id,$_cmd_id);
         $this->cmd_id = $cmd_id;
         return $this;
     }
 
     public function setValue($value)
     {
+        $this->_changed = Utils::attrChanged($this->_changed,$this->value,$_value);
         $this->value = $value;
         return $this;
     }
 
     public function setDatetime($datetime)
     {
+        $this->_changed = Utils::attrChanged($this->_changed,$this->datetime,$_datetime);
         $this->datetime = $datetime;
+        return $this;
+    }
+
+    public function getChanged() {
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed) {
+        $this->_changed = $_changed;
         return $this;
     }
 }

@@ -106,6 +106,8 @@ try {
                 $page = 'view';
             } else if (init('page') == 'plan') {
                 $page = 'design';
+            }else if (init('page') == 'plan3d') {
+                $page = 'design3d';
             }
             ajax::success('https://nextdom.github.io/core/' . config::byKey('language', 'core', 'fr_FR') . '/' . secureXSS($page));
         }
@@ -152,10 +154,15 @@ try {
         unautorizedInDemo();
         if (init('command', '') !== '') {
             ajax::success(DB::prepare(init('command'), array(), DB::FETCH_TYPE_ALL));
-        }
-        else {
+        } else {
             ajax::error(__('Aucune requête à exécuter'));
         }
+    }
+
+    if (init('action') == 'dbcorrectTable') {
+        unautorizedInDemo();
+        DB::compareAndFix(json_decode(file_get_contents(__DIR__.'/../../install/database.json'),true),init('table'));
+        ajax::success();
     }
     
     if (init('action') == 'health') {

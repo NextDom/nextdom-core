@@ -1,31 +1,31 @@
 <?php
 
 /* This file is part of Jeedom.
- *
- * Jeedom is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jeedom is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
- */
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 try {
     require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
-
+    
     if (!isConnect()) {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
-
+    
     ajax::init();
-
+    
     if (init('action') == 'save') {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
@@ -42,7 +42,7 @@ try {
         }
         ajax::success();
     }
-
+    
     if (init('action') == 'execute') {
         $plan = plan::byId(init('id'));
         if (!is_object($plan)) {
@@ -50,7 +50,7 @@ try {
         }
         ajax::success($plan->execute());
     }
-
+    
     if (init('action') == 'planHeader') {
         $return = array();
         foreach (plan::byPlanHeaderId(init('planHeader_id')) as $plan) {
@@ -61,7 +61,7 @@ try {
         }
         ajax::success($return);
     }
-
+    
     if (init('action') == 'create') {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
@@ -75,7 +75,7 @@ try {
         $plan->save();
         ajax::success($plan->getHtml(init('version')));
     }
-
+    
     if (init('action') == 'copy') {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
@@ -87,7 +87,7 @@ try {
         }
         ajax::success($plan->copy()->getHtml(init('version', 'dplan')));
     }
-
+    
     if (init('action') == 'get') {
         $plan = plan::byId(init('id'));
         if (!is_object($plan)) {
@@ -95,7 +95,7 @@ try {
         }
         ajax::success(nextdom::toHumanReadable(utils::o2a($plan)));
     }
-
+    
     if (init('action') == 'remove') {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
@@ -107,7 +107,7 @@ try {
         }
         ajax::success($plan->remove());
     }
-
+    
     if (init('action') == 'removePlanHeader') {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
@@ -120,7 +120,7 @@ try {
         $planHeader->remove();
         ajax::success();
     }
-
+    
     if (init('action') == 'allHeader') {
         $planHeaders = planHeader::all();
         $return = array();
@@ -131,7 +131,7 @@ try {
         }
         ajax::success($return);
     }
-
+    
     if (init('action') == 'getPlanHeader') {
         $planHeader = planHeader::byId(init('id'));
         if (!is_object($planHeader)) {
@@ -144,7 +144,7 @@ try {
         $return['image'] = $planHeader->displayImage();
         ajax::success($return);
     }
-
+    
     if (init('action') == 'savePlanHeader') {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
@@ -162,7 +162,7 @@ try {
         $planHeader->save();
         ajax::success(utils::o2a($planHeader));
     }
-
+    
     if (init('action') == 'copyPlanHeader') {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
@@ -174,7 +174,7 @@ try {
         }
         ajax::success(utils::o2a($planHeader->copy(init('name'))));
     }
-
+    
     if (init('action') == 'removeImageHeader') {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
@@ -184,13 +184,13 @@ try {
         if (!is_object($planHeader)) {
             throw new Exception(__('Plan header inconnu. Vérifiez l\'ID ', __FILE__) . init('id'));
         }
-        $planHeader->setImage('data', '');
-        $planHeader->setImage('sha1', '');
+        $filename = 'planHeader'.$planHeader->getId().'-'.$planHeader->getImage('sha512') . '.' . $planHeader->getImage('type');
+        $planHeader->setImage('sha512', '');
         $planHeader->save();
-        @rrmdir(__DIR__ . '/../../public/img/plan');
+        @unlink( __DIR__ . '/../../data/plan/' . $filename);
         ajax::success();
     }
-
+    
     if (init('action') == 'uploadImage') {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
@@ -210,17 +210,28 @@ try {
         if (filesize($_FILES['file']['tmp_name']) > 5000000) {
             throw new Exception(__('Le fichier est trop gros (maximum 5Mo)', __FILE__));
         }
+        $files = ls(__DIR__ . '/../../data/plan/','plan'.$planHeader->getId().'*');
+        if(count($files)  > 0){
+            foreach ($files as $file) {
+                unlink(__DIR__ . '/../../data/plan/'.$file);
+            }
+        }
         $img_size = getimagesize($_FILES['file']['tmp_name']);
         $planHeader->setImage('type', str_replace('.', '', $extension));
         $planHeader->setImage('size', $img_size);
-        $planHeader->setImage('data', base64_encode(file_get_contents($_FILES['file']['tmp_name'])));
         $planHeader->setImage('sha512', sha512($planHeader->getImage('data')));
+        $filename = 'planHeader'.$planHeader->getId().'-'.$planHeader->getImage('sha512') . '.' . $planHeader->getImage('type');
+        $filepath = __DIR__ . '/../../data/plan/' . $filename;
+        file_put_contents($filepath,file_get_contents($_FILES['file']['tmp_name']));
+        if(!file_exists($filepath)){
+            throw new \Exception(__('Impossible de sauvegarder l\'image',__FILE__));
+        }
         $planHeader->setConfiguration('desktopSizeX', $img_size[0]);
         $planHeader->setConfiguration('desktopSizeY', $img_size[1]);
         $planHeader->save();
         ajax::success();
     }
-
+    
     if (init('action') == 'uploadImagePlan') {
         if (!isConnect('admin')) {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));

@@ -56,7 +56,7 @@
          nextdom.cmd.save({
              cmd: {id: lastId, display: {graphType: $(this).value()}},
              error: function (error) {
-                 notify("Erreur", error.message, 'error');
+                 $('#div_alert').showAlert({message: error.message, level: 'danger'});
              },
              success: function () {
                  addChart(lastId,1);
@@ -68,7 +68,7 @@
          nextdom.cmd.save({
              cmd: {id: lastId, display: {groupingType: $(this).value()}},
              error: function (error) {
-                 notify("Erreur", error.message, 'error');
+                 $('#div_alert').showAlert({message: error.message, level: 'danger'});
              },
              success: function () {
                  addChart(lastId,1);
@@ -80,7 +80,7 @@
          nextdom.cmd.save({
              cmd: {id: lastId, display: {graphDerive: $(this).value()}},
              error: function (error) {
-                 notify("Erreur", error.message, 'error');
+                 $('#div_alert').showAlert({message: error.message, level: 'danger'});
              },
              success: function () {
                  addChart(lastId,1);
@@ -92,7 +92,7 @@
          nextdom.cmd.save({
              cmd: {id: lastId, display: {graphStep: $(this).value()}},
              error: function (error) {
-                 notify("Erreur", error.message, 'error');
+                 $('#div_alert').showAlert({message: error.message, level: 'danger'});
              },
              success: function () {
                  addChart(lastId,1);

@@ -21,7 +21,7 @@ try {
     include_file('core', 'authentification', 'php');
 
     if (!isConnect('admin')) {
-        throw new \Exception(__('401 - Accès non autorisé', __FILE__));
+        throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
 
     ajax::init();
@@ -67,8 +67,8 @@ try {
                 $update = new update();
             }
             $update->setSource(init('repo'))
-                ->setLogicalId($repo->getLogicalId()
-                ->setType($repo->getType()
+                ->setLogicalId($repo->getLogicalId())
+                ->setType($repo->getType())
                 ->setLocalVersion($repo->getDatetime(init('version', 'stable')))
                 ->setConfiguration('version', init('version', 'stable'));
             $update->save();

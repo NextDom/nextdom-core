@@ -434,6 +434,10 @@ class Update
         return \DB::remove($this);
     }
 
+    public function postRemove() {
+        EventManager::add('update::refreshUpdateNumber');
+    }
+
     /**
      * Rafraichit les informations à partir de la base de données
      *

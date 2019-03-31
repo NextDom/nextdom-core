@@ -91,6 +91,20 @@ class AjaxNextDomTest extends AjaxBase
         $this->assertEquals(200, $result->getStatusCode());
     }
 
+    public function testDbCorrectTableAsUser() {
+        $this->connectAsUser();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'dbcorrectTable']);
+        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testDbCorrectTableAsAdmin() {
+        $this->connectAsAdmin();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'dbcorrectTable']);
+        $this->assertContains('"result":""', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
     public function testHealthAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'health']);

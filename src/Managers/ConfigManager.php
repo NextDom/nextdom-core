@@ -68,7 +68,8 @@ class ConfigManager
             if ($pluginId == 'core') {
                 self::$defaultConfiguration[$pluginId] = parse_ini_file(NEXTDOM_DATA . '/config/default.config.ini', true);
                 if (file_exists(NEXTDOM_ROOT . '/var/custom/custom.config.ini')) {
-                    self::$defaultConfiguration[$pluginId] = array_merge(self::$defaultConfiguration[$pluginId], parse_ini_file(NEXTDOM_ROOT . '/var/custom/custom.config.ini', true));
+                    $custom =  parse_ini_file(NEXTDOM_ROOT . '/var/custom/custom.config.ini', true);
+                    self::$defaultConfiguration[$pluginId]['core'] = array_merge(self::$defaultConfiguration[$pluginId]['core'],$custom['core']);
                 }
             } else {
                 $filename = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/config/' . $pluginId . '.config.ini';

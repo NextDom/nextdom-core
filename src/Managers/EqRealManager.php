@@ -41,7 +41,7 @@ class EqRealManager
     const CLASS_NAME = EqReal::class;
     const DB_CLASS_NAME = '`eqReal`';
 
-    private static function getClass($_id)
+    protected static function getClass($_id)
     {
         if (get_called_class() != self::CLASS_NAME) {
             return get_called_class();

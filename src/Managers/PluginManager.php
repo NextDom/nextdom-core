@@ -63,10 +63,12 @@ class PluginManager
             $id = self::getPathById($id);
         }
         if (!file_exists($id)) {
+            self::forceDisablePlugin($id);
             throw new \Exception('Plugin introuvable : ' . $id);
         }
         $data = json_decode(file_get_contents($id), true);
         if (!is_array($data)) {
+            self::forceDisablePlugin($id);
             throw new \Exception('Plugin introuvable (json invalide) : ' . $id . ' => ' . print_r($data, true));
         }
         $plugin = new Plugin();
@@ -97,6 +99,16 @@ class PluginManager
         return NEXTDOM_ROOT . '/plugins/' . $id . '/plugin_info/info.json';
     }
 
+    public static function forceDisablePlugin($_id){
+        ConfigManager::save('active', 0, $_id);
+        $values = array(
+            'eqType_name' => $_id,
+        );
+        $sql = 'UPDATE eqLogic
+                SET isEnable=0
+                WHERE eqType_name=:eqType_name';
+        \DB::Prepare($sql, $values);
+    }
     /**
      * @param bool $activatedOnly
      * @param bool $nameOnly

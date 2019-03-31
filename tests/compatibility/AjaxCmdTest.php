@@ -184,7 +184,7 @@ class AjaxCmdTest extends AjaxBase
     public function testChangeHistoryPointAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'changeHistoryPoint']);
-        $this->assertContains('Historique impossible', (string) $result->getBody());
+        $this->assertContains('Aucun point ne correspond pour l\'historique', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
