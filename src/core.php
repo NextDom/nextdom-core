@@ -33,13 +33,19 @@
  */
 
 namespace {
-
     use NextDom\Helpers\FileSystemHelper;
     use NextDom\Managers\ConfigManager;
 
+    if (($dataDir = getenv('NEXTDOM_DATA')) == false) {
+        $dataDir = '/var/lib/nextdom';
+    }
+    if (($logDir = getenv('NEXTDOM_LOG')) == false) {
+        $logDir = '/var/log/nextdom';
+    }
+
     define('NEXTDOM_ROOT', realpath(__DIR__ . '/..'));
-    define('NEXTDOM_DATA', '/var/lib/nextdom');
-    define('NEXTDOM_LOG', '/var/log/nextdom');
+    define('NEXTDOM_DATA', $dataDir);
+    define('NEXTDOM_LOG',  $logDir);
 
     if (file_exists(NEXTDOM_DATA . '/config/common.config.php')) {
         require_once NEXTDOM_DATA . '/config/common.config.php';

@@ -59,14 +59,14 @@ try {
     require_once __DIR__ . '/consistency.php';
 
     try {
-    echo "Ajout de l'utilisateur (admin,admin)\n";
-    $user = new user();
-    $user->setLogin('admin');
-    $user->setPassword(sha512('admin'));
-    $user->setProfils('admin');
-    $user->save();
-    config::save('log::level', 400);
-    echo "OK\n";
+        echo "Ajout de l'utilisateur (admin,admin)\n";
+        $user = new user();
+        $user->setLogin('admin');
+        $user->setPassword(sha512('admin'));
+        $user->setProfils('admin');
+        $user->save();
+        config::save('log::level', 400);
+        echo "OK\n";
     } catch (Exception $e) { echo "OK : Utilisateur deja present\n"; }
 
     config::save('version', nextdom::version());
