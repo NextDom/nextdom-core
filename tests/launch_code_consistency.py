@@ -34,7 +34,6 @@ def check_python():
     return error
 
 if __name__ == "__main__":
-    print_title('Code consistency')
     TESTS_LIST = {
         'php': check_php,
         'python': check_python

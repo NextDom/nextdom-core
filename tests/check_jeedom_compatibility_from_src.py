@@ -201,7 +201,7 @@ def start_tests():
     :return: False if error found
     :rtype:  bool
     """
-    print_subtitle('Ajax')
+    print_subtitle('Test ajax')
     error = False
     jeedom_ajax_actions = get_ajax_actions()
     if not check_if_ajax_action_is_tested(jeedom_ajax_actions):
@@ -209,7 +209,7 @@ def start_tests():
     else:
         print_info('OK')
 
-    print_subtitle('Classes')
+    print_subtitle('Test classes')
     jeedom_class_methods = get_class_methods()
     if not check_if_class_methods_exists(jeedom_class_methods):
         error = True
@@ -220,7 +220,8 @@ def start_tests():
 
 if __name__ == "__main__":
     print_title('Compatibility with Jeedom')
-    os.system('git clone https://github.com/jeedom/core > /dev/null')
-    os.system('cd core && git checkout stable -f > /dev/null')
+    print_subtitle('Cloning jeedom/core')
+    os.system('git clone https://github.com/jeedom/core > /dev/null 2>&1')
+    os.system('cd core && git checkout stable -f > /dev/null 2>&1')
     if start_tests():
         sys.exit(1)
