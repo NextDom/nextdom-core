@@ -24,11 +24,16 @@ global $CONFIG;
 $CONFIG = array(
     //MySQL parametres
     'db' => array(
-        'host' => '#HOST#',
-        'port' => '#PORT#',
-        'dbname' => '#DBNAME#',
+        'host'     => '#HOST#',
+        'port'     => '#PORT#',
+        'dbname'   => '#DBNAME#',
         'username' => '#USERNAME#',
         'password' => '#PASSWORD#',
     ),
+
+    'paths' => array(
+        "log" => '#LOG_DIR#',
+        "lib" => '#LIB_DIR#',
+        "run" => '#RUN_DIR#',
+    ),
 );
- 

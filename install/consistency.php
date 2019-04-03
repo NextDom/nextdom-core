@@ -336,14 +336,14 @@ try {
         if (!file_exists(__DIR__ . '/../plugins')) {
             mkdir(__DIR__ . '/../plugins');
         }
-        try {
-            echo "Restoring rights...";
-            nextdom::cleanFileSytemRight();
-            echo " OK" . "\n";
-        } catch (Exception $e) {
-            echo " NOK" . "\n";
-            log::add('restore', 'error', $e->getMessage());
-        }
+        // try {
+        //     echo "Restoring rights...";
+        //     nextdom::cleanFileSytemRight();
+        //     echo " OK" . "\n";
+        // } catch (Exception $e) {
+        //     echo " NOK" . "\n";
+        //     log::add('restore', 'error', $e->getMessage());
+        // }
 
         config::save('hardware_name', '');
         if (config::byKey('api') == '') {

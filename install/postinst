@@ -27,8 +27,9 @@ options:
   -u <username> : database user name, detaults to nextdom (nextdomdev for dev version)
   -p <password> : database user password, randomly generated if not given
   -r <password> : database root password
-  -l <dir>      : set log directory, defaults to /var/log/nextdom
-  -v <dir>      : set var directory, defaults to /var/lib/nextdom
+  -L <dir>      : set log directory, defaults to /var/log/nextdom
+  -l <dir>      : set lib directory, defaults to /var/lib/nextdom
+  -r <dir>      : set run directory, defaults to /var/run/nextdom
 EOS
   exit 1;
 }
@@ -47,7 +48,7 @@ print_log_in() {
   if [ 1 -eq "0${isdev}"  ] ; then
       printf "${txt}"
   fi
-  printf ${txt} >> $LOG_DIRECTORY/postinst.log
+  printf ${txt} >> ${LOG_DIRECTORY}/postinst.log
 }
 
 
@@ -55,7 +56,7 @@ print_log_ok() {
   if [ 1 -eq "0${isdev}"  ] ; then
       echo " OK"
   fi
-  echo " OK" >> $LOG_DIRECTORY/postinst.log
+  echo " OK" >> ${LOG_DIRECTORY}/postinst.log
 }
 
 
@@ -72,38 +73,40 @@ detect_dev_version(){
   fi
 }
 
-step_nextdom_create_dirs() {
+prereq_create_dirs() {
   # directories
-  mkdir -p ${LOGS_DIRECTORY}
-  mkdir -p ${LOGS_DIRECTORY}/scenarioLog
-  mkdir -p ${VARS_DIRECTORY}
-  mkdir -p ${WEBSERVER_HOME}/var/custom
+  mkdir -p ${LOG_DIRECTORY}
+  mkdir -p ${LOG_DIRECTORY}/scenarioLog
+  mkdir -p ${LIB_DIRECTORY}
+  mkdir -p ${RUN_DIRECTORY}/{custom,market_cache}
+  mkdir -p ${RUN_DIRECTORY}/public/css
+  mkdir -p ${RUN_DIRECTORY}/public/img/plan
+
+  # mkdir -p ${WEBSERVER_HOME}/var/custom
 
   # clean & prepare log files
   rm -f ${LOG_DIRECTORY}/postinst.ok
   rm -f ${LOG_DIRECTORY}/postinst.warn
   rm -f ${LOG_DIRECTORY}/postinst.log
+
   touch ${LOG_DIRECTORY}/postinst.log
-  touch ${LOGS_DIRECTORY}/cron
-  touch ${LOGS_DIRECTORY}/cron_execution
-  touch ${LOGS_DIRECTORY}/event
-  touch ${LOGS_DIRECTORY}/http.error
-  touch ${LOGS_DIRECTORY}/plugin
-  touch ${LOGS_DIRECTORY}/scenario_execution
+  touch ${LOG_DIRECTORY}/cron
+  touch ${LOG_DIRECTORY}/cron_execution
+  touch ${LOG_DIRECTORY}/event
+  touch ${LOG_DIRECTORY}/http.error
+  touch ${LOG_DIRECTORY}/plugin
+  touch ${LOG_DIRECTORY}/scenario_execution
 }
 
 
 step_nextdom_file_permissions() {
   # configure file permissions
-  chown -R www-data:www-data ${VARS_DIRECTORY}
-  chown -R www-data:www-data ${LOGS_DIRECTORY}
-  chown -R www-data:www-data ${WEBSERVER_HOME}/var
-  chown -R www-data:www-data /tmp/nextdom
-
-  find ${VARS_DIRECTORY} -type d | xargs chmod 775
-  find ${VARS_DIRECTORY} -type f | xargs chmod 664
-  find /tmp/nextdom -type d | xargs chmod 775
-  find /tmp/nextdom -type f | xargs chmod 664
+  local directories=("${LIB_DIRECTORY}" "${LOG_DIRECTORY}" "${RUN_DIRECTORY}" "/tmp/nextdom")
+  for c_dir in ${directories[*]}; do
+    chown -R www-data:www-data ${c_dir}
+    find ${c_dir} -type d -exec chmod 0755 {} \;
+    find ${c_dir} -type f -exec chmod 0664 {} \;
+  done
 }
 
 
@@ -153,6 +156,7 @@ Database password : ${MYSQL_NEXTDOM_PASSWD}
 EOS
   fi
 
+
   # slow start of docker mysql
   try=0
   while [ ${try} -lt 5 ]; do
@@ -164,7 +168,7 @@ EOS
     return 0
   done
 
-  echo ">>>> Error : can\'t connect to database <<<<"
+  echo ">>>> Error : can't connect to database <<<<"
   exit 1
 }
 
@@ -182,13 +186,11 @@ step_nextdom_prerequisites_verification() {
       exit 1
   fi
 
-  set -x
-
   for c_file in nextdom.conf nextdom-ssl.conf nextdom-common; do
     if [ ! -f ${dstdir}/${c_file} ] || [ 1 -eq "0${isdev}" ] ; then
       cp ${srcdir}/${c_file} ${dstdir}/${c_file} >> ${DEBUG} 2>&1
       sed -i -e "s%\s+Define\s+wwwdir\s.*%Define wwwdir \"${WEBSERVER_HOME}\"%gI" ${dstdir}/${c_file} >> ${DEBUG} 2>&1
-      sed -i -e "s%\s+Define\s+logdir\s.*%Define logdir \"${LOGS_DIRECTORY}\"%gI" ${dstdir}/${c_file} >> ${DEBUG} 2>&1
+      sed -i -e "s%\s+Define\s+logdir\s.*%Define logdir \"${LOG_DIRECTORY}\"%gI"  ${dstdir}/${c_file} >> ${DEBUG} 2>&1
       echo "<I> Creating file : ${dstdir}/${c_file}"
     fi
   done
@@ -245,20 +247,25 @@ step_nextdom_apache_php() {
 
 
 step_nextdom_configuration() {
-  rm -rf ${VARS_DIRECTORY}/config
-  cp -r  ${WEBSERVER_HOME}/assets/config ${VARS_DIRECTORY}
-  rm -rf ${VARS_DIRECTORY}/data
-  cp -r  ${WEBSERVER_HOME}/assets/data   ${VARS_DIRECTORY}
+  rm -rf ${LIB_DIRECTORY}/config
+  cp -r  ${WEBSERVER_HOME}/assets/config ${LIB_DIRECTORY}
+  rm -rf ${LIB_DIRECTORY}/data
+  cp -r  ${WEBSERVER_HOME}/assets/data   ${LIB_DIRECTORY}
 
   if [ -L ${WEBSERVER_HOME}/core/config ]; then
       rm -f ${WEBSERVER_HOME}/core/config
   fi
-  ln -s ${VARS_DIRECTORY}/config ${WEBSERVER_HOME}/core/config
+  ln -s ${LIB_DIRECTORY}/config ${WEBSERVER_HOME}/core/config
+
+  if [ -L ${WEBSERVER_HOME}/var ]; then
+      rm -f ${WEBSERVER_HOME}/var
+  fi
+  ln -s ${RUN_DIRECTORY} ${WEBSERVER_HOME}/var
 
   if [ -L ${WEBSERVER_HOME}/data ]; then
       rm -f ${WEBSERVER_HOME}/data
   fi
-  ln -s ${VARS_DIRECTORY}/data ${WEBSERVER_HOME}/data
+  ln -s ${LIB_DIRECTORY}/data ${WEBSERVER_HOME}/data
 
   rm -f ${WEBSERVER_HOME}/core/config/common.config.php
   cp ${WEBSERVER_HOME}/core/config/common.config.sample.php ${WEBSERVER_HOME}/core/config/common.config.php
@@ -268,6 +275,9 @@ step_nextdom_configuration() {
   sed -i "s/#USERNAME#/${MYSQL_NEXTDOM_USER}/g"   ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s/#PORT#/${MYSQL_PORT}/g"               ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s/#HOST#/${MYSQL_HOSTNAME}/g"           ${WEBSERVER_HOME}/core/config/common.config.php
+  sed -i "s%#LOG_DIR#%${LOG_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
+  sed -i "s%#LIB_DIR#%${LIB_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
+  sed -i "s%#RUN_DIR#%${RUN_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
 
   if [[ -d "/tmp/jeedom" ]]; then
       if [[ -L "/tmp/jeedom" ]]; then
@@ -290,11 +300,6 @@ step_nextdom_configuration() {
     fi
     ln -s /tmp/nextdom /tmp/jeedom
   fi
-
-  chown -R www-data:www-data /tmp/jeedom  >> ${DEBUG} 2>&1
-  chown -R www-data:www-data /tmp/nextdom >> ${DEBUG} 2>&1
-  find /tmp/nextdom -type d | xargs chmod 775
-  find /tmp/nextdom -type f | xargs chmod 664
 
   usermod -a -G dialout,tty www-data
 
@@ -372,9 +377,16 @@ EOS
   service cron reload
 }
 
+step_nextdom_assets() {
+  # Generate CSS files
+  if [ 1 -eq "0${isdev}"  ] ; then
+      # A faire dans une version developpeur (apres git clone)
+      cd ${WEBSERVER_HOME}
+      ./scripts/gen_global.sh
+  fi
+}
+
 step_nextdom_check() {
-  export NEXTDOM_DATA=${VARS_DIRECTORY}
-  export NEXTDOM_LOG=${LOGS_DIRECTORY}
   php ${WEBSERVER_HOME}/scripts/sick.php >> ${DEBUG} 2>&1
 }
 
@@ -431,13 +443,6 @@ step_nextdom_var_www_html() {
   if [  "${WEBSERVER_HOME}" != "/var/www/html" ] ; then
       ln -s ${WEBSERVER_HOME} /var/www/html
   fi
-
-  # Generate CSS files
-  if [ 1 -eq "0${isdev}"  ] ; then
-      # A faire dans une version developpeur (apres git clone)
-      cd ${WEBSERVER_HOME}
-      ./scripts/gen_global.sh
-  fi
 }
 
 step_nextdom_mysql_populate() {
@@ -464,8 +469,6 @@ step_nextdom_mysql_populate() {
   QUERY="FLUSH PRIVILEGES;"
   mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
 
-  export NEXTDOM_DATA=${VARS_DIRECTORY}
-  export NEXTDOM_LOG=${LOGS_DIRECTORY}
   php ${WEBSERVER_HOME}/install/install.php mode=force >> ${DEBUG} 2>&1 || {
     echo "${ROUGE}Ne peut installer nextdom - Annulation${NORMAL}"
     exit 1
@@ -476,10 +479,11 @@ step_nextdom_mysql_populate() {
 # ======================================================================
 # Main
 
-LOGS_DIRECTORY=/var/log/nextdom
-VARS_DIRECTORY=/var/lib/nextdom
+LOG_DIRECTORY=/var/log/nextdom
+LIB_DIRECTORY=/var/lib/nextdom
+RUN_DIRECTORY=/var/run/nextdom
 
-while getopts "hi:p:d:r:u:z:l:v:" option; do
+while getopts "hi:p:d:r:u:z:L:l:R:" option; do
   case "${option}" in
     h)
       usage
@@ -502,11 +506,14 @@ while getopts "hi:p:d:r:u:z:l:v:" option; do
     r)
       MYSQL_ROOT_PASSWD=${OPTARG}
       ;;
-    l)
-      LOGS_DIRECTORY=${OPTARG}
+    L)
+      LOG_DIRECTORY=${OPTARG}
       ;;
-    v)
-      VARS_DIRECTORY=${OPTARG}
+    l)
+      LIB_DIRECTORY=${OPTARG}
+      ;;
+    R)
+      RUN_DIRECTORY=${OPTARG}
       ;;
     *)
       usage
@@ -524,12 +531,10 @@ fi
 
 set_root $0
 
+prereq_create_dirs
+
 print_log_in "detect_dev_version ... "
 detect_dev_version
-print_log_ok
-
-print_log_in "step_nextdom_create_dirs ... "
-step_nextdom_create_dirs
 print_log_ok
 
 print_log_in "step_nextdom_mysql_parameters ... "
@@ -562,6 +567,10 @@ print_log_ok
 
 print_log_in "step_nextdom_crontab ... "
 step_nextdom_crontab
+print_log_ok
+
+print_log_in "step_nextdom_assets ... "
+step_nextdom_assets
 print_log_ok
 
 print_log_in "step_nextdom_check ... "

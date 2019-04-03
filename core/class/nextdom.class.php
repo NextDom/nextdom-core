@@ -248,10 +248,10 @@ class nextdom
         NextDomHelper::forceSyncHour();
     }
 
-    public static function cleanFileSytemRight()
-    {
-        NextDomHelper::cleanFileSystemRight();
-    }
+    // public static function cleanFileSytemRight()
+    // {
+    //     NextDomHelper::cleanFileSystemRight();
+    // }
 
     public static function checkSpaceLeft(): float
     {

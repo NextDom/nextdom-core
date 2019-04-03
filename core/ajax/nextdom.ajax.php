@@ -22,13 +22,13 @@ use NextDom\Exceptions\CoreException;
 try {
     require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
-    
+
     if (!isConnect()) {
         throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
     }
 
     ajax::init(false);
-    
+
     if (init('action') == 'getInfoApplication') {
         $return = array();
         $return['product_name'] = config::byKey('product_name');
@@ -40,13 +40,13 @@ try {
             $return['connected'] = false;
             ajax::success($return);
         }
-        
+
         $return['user_id'] = $_SESSION['user']->getId();
         $return['nextdom_token'] = ajax::getToken();
         @session_start();
         $_SESSION['user']->refresh();
         @session_write_close();
-        
+
         $return['userProfils'] = $_SESSION['user']->getOptions();
         $return['userProfils']['defaultMobileViewName'] = __('Vue', __FILE__);
         if ($_SESSION['user']->getOptions('defaultDesktopView') != '') {
@@ -62,7 +62,7 @@ try {
                 $return['userProfils']['defaultMobileObjectName'] = $object->getName();
             }
         }
-        
+
         $return['plugins'] = array();
         foreach (plugin::listPlugin(true) as $plugin) {
             if ($plugin->getMobile() != '' || $plugin->getEventJs() == 1) {
@@ -78,20 +78,20 @@ try {
         }
         ajax::success($return);
     }
-    
+
     if (!isConnect()) {
         throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
     }
-    
+
     ajax::init(true);
-    
+
     if (init('action') == 'getDocumentationUrl') {
         $plugin = null;
         if (init('plugin') != '' || init('plugin') == 'false') {
             try {
                 $plugin = plugin::byId(init('plugin'));
             } catch (Exception $e) {
-                
+
             }
         }
         if (isset($plugin) && is_object($plugin)) {
@@ -111,7 +111,7 @@ try {
         }
         throw new Exception(__('Aucune documentation trouvée', __FILE__), -1234);
     }
-    
+
     if (init('action') == 'addWarnme') {
         $cmd = cmd::byId(init('cmd_id'));
         if (!is_object($cmd)) {
@@ -132,11 +132,11 @@ try {
         $listener->save(true);
         ajax::success();
     }
-    
+
     if (!isConnect('admin')) {
         throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
     }
-    
+
     if (init('action') == 'ssh') {
         unautorizedInDemo();
         $command = init('command');
@@ -147,7 +147,7 @@ try {
         exec($command, $output);
         ajax::success(implode("\n", $output));
     }
-    
+
     if (init('action') == 'db') {
         unautorizedInDemo();
         if (init('command', '') !== '') {
@@ -157,68 +157,68 @@ try {
             ajax::error(__('Aucune requête à exécuter'));
         }
     }
-    
+
     if (init('action') == 'health') {
         ajax::success(nextdom::health());
     }
-    
+
     if (init('action') == 'update') {
         unautorizedInDemo();
         nextdom::update();
         ajax::success();
     }
-    
+
     if (init('action') == 'clearDate') {
         $cache = cache::byKey('nextdom::lastDate');
         $cache->remove();
         ajax::success();
     }
-    
+
     if (init('action') == 'backup') {
         unautorizedInDemo();
         nextdom::backup(true);
         ajax::success();
     }
-    
+
     if (init('action') == 'restore') {
         unautorizedInDemo();
         nextdom::restore(init('backup'), true);
         ajax::success();
     }
-    
+
     if (init('action') == 'removeBackup') {
         unautorizedInDemo();
         nextdom::removeBackup(init('backup'));
         ajax::success();
     }
-    
+
     if (init('action') == 'listBackup') {
         ajax::success(nextdom::listBackup());
     }
-    
+
     if (init('action') == 'getConfiguration') {
         ajax::success(nextdom::getConfiguration(init('key'), init('default')));
     }
-    
+
     if (init('action') == 'resetHwKey') {
         unautorizedInDemo();
         config::save('nextdom::installKey', '');
         ajax::success();
     }
-    
+
     if (init('action') == 'resetHour') {
         $cache = cache::delete('hour');
         ajax::success();
     }
-    
+
     if (init('action') == 'backupupload') {
         unautorizedInDemo();
-        $uploaddir = __DIR__ . '/../../backup';
+        // __DIR__ . '/../../backup'
+        $uploaddir = NEXTDOM_RUN . '/backups';
         if (!file_exists($uploaddir)) {
-            mkdir($uploaddir);
-        }
-        if (!file_exists($uploaddir)) {
-            throw new Exception(__('Répertoire de téléversement non trouvé : ', __FILE__) . $uploaddir);
+            if (!mkdir($uploaddir)) {
+                throw new Exception(__('Répertoire de téléversement non trouvé : ', __FILE__) . $uploaddir);
+            }
         }
         if (!isset($_FILES['file'])) {
             throw new Exception(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)', __FILE__));
@@ -238,22 +238,22 @@ try {
         }
         ajax::success();
     }
-    
+
     if (init('action') == 'haltSystem') {
         unautorizedInDemo();
         ajax::success(nextdom::haltSystem());
     }
-    
+
     if (init('action') == 'rebootSystem') {
         unautorizedInDemo();
         ajax::success(nextdom::rebootSystem());
     }
-    
+
     if (init('action') == 'forceSyncHour') {
         unautorizedInDemo();
         ajax::success(nextdom::forceSyncHour());
     }
-    
+
     if (init('action') == 'saveCustom') {
         unautorizedInDemo();
         $customVersion = Utils::init('version');
@@ -264,7 +264,7 @@ try {
         if ($customType != 'js' && $customType != 'css') {
             throw new CoreException(__('La version ne peut être que js ou css'));
         }
-        $path = NEXTDOM_ROOT . '/var/custom/' . $customVersion . '/';
+        $path = NEXTDOM_RUN . '/custom/' . $customVersion . '/';
         if (!file_exists($path)) {
             mkdir($path);
         }
@@ -275,7 +275,7 @@ try {
         file_put_contents($path, Utils::init('content'));
         ajax::success();
     }
-    
+
     if (init('action') == 'getGraphData') {
         $return = array('node' => array(), 'link' => array());
         $object = null;
@@ -291,7 +291,7 @@ try {
             ajax::error(__('Aucun filtre'));
         }
     }
-    
+
     if (init('action') == 'getTimelineEvents') {
         $return = array();
         $events = nextdom::getTimelineEvent();
@@ -311,17 +311,17 @@ try {
         }
         ajax::success($return);
     }
-    
+
     if (init('action') == 'removeTimelineEvents') {
         unautorizedInDemo();
         ajax::success(nextdom::removeTimelineEvent());
     }
-    
+
     if (init('action') == 'getFileFolder') {
         unautorizedInDemo();
         ajax::success(ls(init('path'), '*', false, array(init('type'))));
     }
-    
+
     if (init('action') == 'getFileContent') {
         unautorizedInDemo();
         $pathinfo = pathinfo(init('path'));
@@ -330,7 +330,7 @@ try {
         }
         ajax::success(file_get_contents(init('path')));
     }
-    
+
     if (init('action') == 'setFileContent') {
         unautorizedInDemo();
         $pathinfo = pathinfo(init('path'));
@@ -339,7 +339,7 @@ try {
         }
         ajax::success(file_put_contents(init('path'), init('content')));
     }
-    
+
     if (init('action') == 'deleteFile') {
         unautorizedInDemo();
         $pathinfo = pathinfo(init('path'));
@@ -348,7 +348,7 @@ try {
         }
         ajax::success(unlink(init('path')));
     }
-    
+
     if (init('action') == 'createFile') {
         unautorizedInDemo();
         $pathinfo = pathinfo(init('name'));
@@ -361,13 +361,13 @@ try {
         }
         ajax::success();
     }
-    
+
     if (init('action') == 'emptyRemoveHistory') {
         unautorizedInDemo();
         unlink(NEXTDOM_DATA . '/data/remove_history.json');
         ajax::success();
     }
-    
+
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
 } catch (Exception $e) {

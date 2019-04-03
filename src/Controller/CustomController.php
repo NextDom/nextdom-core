@@ -49,12 +49,12 @@ class CustomController extends BaseController
         $pageData['customTheme'] = ConfigManager::byKey('theme');
         $pageData['customEnableCustomCss'] = ConfigManager::byKey('enableCustomCss');
         $pageData['customJS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.js')) {
-            $pageData['customJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/var/custom/desktop/custom.js'));
+        if (file_exists(NEXTDOM_RUN . '/custom/desktop/custom.js')) {
+            $pageData['customJS'] = trim(file_get_contents(NEXTDOM_RUN . '/custom/desktop/custom.js'));
         }
         $pageData['customCSS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.css')) {
-            $pageData['customCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/var/custom/desktop/custom.css'));
+        if (file_exists(NEXTDOM_RUN . '/custom/desktop/custom.css')) {
+            $pageData['customCSS'] = trim(file_get_contents(NEXTDOM_RUN . '/custom/desktop/custom.css'));
         }
         $pageData['customMobileJS'] = '';
         if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.js')) {

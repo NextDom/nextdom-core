@@ -216,15 +216,15 @@ try {
     }
     echo "File used for restoration : " . $backupFile . "\n";
 
-    try {
-        step('Checking rights');
-        NextDomHelper::cleanFileSystemRight();
-        ok();
-    } catch (\Exception $e) {
-        nok();
-        LogHelper::add('restore', 'error', $e->getMessage());
-        showError($e);
-    }
+    // try {
+    //     step('Checking rights');
+    //     NextDomHelper::cleanFileSystemRight();
+    //     ok();
+    // } catch (\Exception $e) {
+    //     nok();
+    //     LogHelper::add('restore', 'error', $e->getMessage());
+    //     showError($e);
+    // }
 
     try {
         NextDomHelper::stopSystem();
@@ -302,9 +302,9 @@ try {
 
     step('Restoring cache');
     if (file_exists(TMP_BACKUP . '/cache.tar.gz')) {
-        system('cp -fr ' . TMP_BACKUP . '/cache.tar.gz ' . NEXTDOM_ROOT . '/var');
+        system('cp -fr ' . TMP_BACKUP . '/cache.tar.gz ' . NEXTDOM_RUN);
     } elseif (file_exists(TMP_BACKUP . '/var/cache.tar.gz')) {
-        system('cp -fr ' . TMP_BACKUP . '/var/cache.tar.gz ' . NEXTDOM_ROOT . '/var');
+        system('cp -fr ' . TMP_BACKUP . '/var/cache.tar.gz ' . NEXTDOM_RUN);
     }
     try {
         CacheManager::restore();

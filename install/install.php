@@ -24,6 +24,7 @@ if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SE
     echo "La page que vous demandez ne peut être trouvée.";
     exit();
 }
+
 set_time_limit(1800);
 echo "[START INSTALL]\n";
 $starttime = strtotime('now');
@@ -67,8 +68,9 @@ try {
         $user->save();
         config::save('log::level', 400);
         echo "OK\n";
-    } catch (Exception $e) { echo "OK : Utilisateur deja present\n"; }
-
+    } catch (Exception $e) {
+        echo "OK : Utilisateur deja present\n";
+    }
     config::save('version', nextdom::version());
 } catch (Exception $e) {
     echo 'Erreur durant l\'installation : ' . $e->getMessage();

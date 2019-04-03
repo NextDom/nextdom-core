@@ -120,7 +120,7 @@ class TranslateHelper
         $language = self::getLanguage();
         $filename = self::getPathTranslationFile($language);
         if (file_exists($filename)) {
-            self::$translator = new Translator($language, null, NEXTDOM_ROOT . '/var/cache/i18n');
+            self::$translator = new Translator($language, null, NEXTDOM_RUN . '/cache/i18n');
             self::$translator->addLoader('yaml', new YamlFileLoader());
             self::$translator->addResource('yaml', $filename, $language);
             $pluginsDirList = scandir(NEXTDOM_ROOT . '/plugins');

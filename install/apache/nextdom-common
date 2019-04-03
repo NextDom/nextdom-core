@@ -1,8 +1,94 @@
+DocumentRoot  "${wwwdir}"
 TraceEnable   Off
 ErrorDocument 404 /public/404.html
 
 RewriteEngine On
 RewriteRule  ^/?core/img/(.*)$ /public/img/$1 [R=301,L]
+
+<Directory "${wwwdir}">
+    Options -Indexes +FollowSymLinks
+    AllowOverride All
+    # Order allow,deny
+    # Allow from all
+    Require all granted
+</Directory>
+
+<Directory "${wwwdir}/assets/data/custom/">
+  Order allow,deny
+  <Files ~ "\.(obj|mtl|jpeg|png)$">
+     Allow from all
+  </Files>
+  Deny from all
+</Directory>
+
+<Directory "${wwwdir}/assets/data/3d/">
+  Order allow,deny
+  <Files ~ "\.(obj|mtl|jpeg|png)$">
+     Allow from all
+  </Files>
+  Deny from all
+</Directory>
+
+<Directory "${wwwdir}/assets/config">
+  Order allow,deny
+  Deny from all
+</Directory>
+
+
+<Directory "${wwwdir}/assets/config/">
+  Order allow,deny
+  Deny from all
+</Directory>
+
+<Directory "${wwwdir}/assets/data/">
+  Order allow,deny
+  Deny from all
+</Directory>
+
+<Directory "${wwwdir}/tests/">
+  Order allow,deny
+  Deny from all
+</Directory>
+
+<Directory "${wwwdir}/install/migrate/">
+  Order allow,deny
+  Deny from all
+</Directory>
+
+<Directory "${wwwdir}/install/OS_specific/">
+  Order allow,deny
+  Deny from all
+</Directory>
+
+<Directory "${wwwdir}/data/config/">
+  Order allow,deny
+  Deny from all
+</Directory>
+
+<Directory "${wwwdir}/backup/">
+  Order allow,deny
+  Deny from all
+</Directory>
+
+<Directory "${wwwdir}/core/class/">
+  Order allow,deny
+  Deny from all
+</Directory>
+
+<Directory "${wwwdir}/core/repo/">
+  Order allow,deny
+  Deny from all
+</Directory>
+
+<Directory "${wwwdir}/core/com/">
+  Order allow,deny
+  Deny from all
+</Directory>
+
+<Directory "${wwwdir}/scripts/">
+  Order allow,deny
+  Deny from all
+</Directory>
 
 <IfModule mod_headers.c>
   # Content Security Policy (CSP)
@@ -49,12 +135,11 @@ RewriteRule  ^/?core/img/(.*)$ /public/img/$1 [R=301,L]
 </ifModule>
 
 <IfModule mod_php7.c>
+  # note: opcache can't be temporary enabled but is enable by default anyway
 	php_value post_max_size          "1G"
 	php_value upload_max_filesize    "1G"
 	php_value max_execution_time     "600"
-  php_value opcache.enable         "1"
-  php_value opcache.enable_cli     "1"
-	php_value error_log              "${logidr}/http.error"
+	php_value error_log              "${logdir}/http.error"
 	php_flag  display_startup_errors "on"
 	php_flag  html_errors            "on"
 	php_flag  log_errors             "on"
@@ -147,85 +232,3 @@ RewriteRule  ^/?core/img/(.*)$ /public/img/$1 [R=301,L]
 	deny from all
 	satisfy all
 </Files>
-
-<Directory "${wwwdir}/">
-    Options -Indexes +FollowSymLinks
-    AllowOverride All
-</Directory>
-
-<Directory "${wwwdir}/assets/data/custom/">
-  Order allow,deny
-  <Files ~ "\.(obj|mtl|jpeg|png)$">
-     Allow from all
-  </Files>
-  Deny from all
-</Directory>
-
-<Directory "${wwwdir}/assets/data/3d/">
-  Order allow,deny
-  <Files ~ "\.(obj|mtl|jpeg|png)$">
-     Allow from all
-  </Files>
-  Deny from all
-</Directory>
-
-<Directory "${wwwdir}/assets/config">
-  Order allow,deny
-  Deny from all
-</Directory>
-
-
-<Directory "${wwwdir}/assets/config/">
-  Order allow,deny
-  Deny from all
-</Directory>
-
-<Directory "${wwwdir}/assets/data/">
-  Order allow,deny
-  Deny from all
-</Directory>
-
-<Directory "${wwwdir}/tests/">
-  Order allow,deny
-  Deny from all
-</Directory>
-
-<Directory "${wwwdir}/install/migrate/">
-  Order allow,deny
-  Deny from all
-</Directory>
-
-<Directory "${wwwdir}/install/OS_specific/">
-  Order allow,deny
-  Deny from all
-</Directory>
-
-<Directory "${wwwdir}/data/config/">
-  Order allow,deny
-  Deny from all
-</Directory>
-
-<Directory "${wwwdir}/backup/">
-  Order allow,deny
-  Deny from all
-</Directory>
-
-<Directory "${wwwdir}/core/class/">
-  Order allow,deny
-  Deny from all
-</Directory>
-
-<Directory "${wwwdir}/core/repo/">
-  Order allow,deny
-  Deny from all
-</Directory>
-
-<Directory "${wwwdir}/core/com/">
-  Order allow,deny
-  Deny from all
-</Directory>
-
-<Directory "${wwwdir}/scripts/">
-  Order allow,deny
-  Deny from all
-</Directory>

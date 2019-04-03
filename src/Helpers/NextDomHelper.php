@@ -309,7 +309,7 @@ class NextDomHelper
                 $cache_health['state'] = true;
                 $cache_health['result'] = $okStr;
             } else {
-                $filename = NEXTDOM_ROOT . '/var/cache.tar.gz';
+                $filename = NEXTDOM_RUN . '/cache.tar.gz';
                 $cache_health['state'] = true;
                 $cache_health['result'] = $okStr . ' (' . date('Y-m-d H:i:s', filemtime($filename)) . ')';
             }
@@ -1099,17 +1099,17 @@ class NextDomHelper
         shell_exec(SystemHelper::getCmdSudo() . 'service ntp stop;' . SystemHelper::getCmdSudo() . 'ntpdate -s ' . ConfigManager::byKey('ntp::optionalServer', 'core', '0.debian.pool.ntp.org') . ';' . SystemHelper::getCmdSudo() . 'service ntp start');
     }
 
-    /**
-     * Clean file system rights
-     */
-    public static function cleanFileSystemRight()
-    {
-        $cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . NEXTDOM_ROOT . ';';
-        $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . NEXTDOM_ROOT . ';';
-        $cmd .= SystemHelper::getCmdSudo() . 'find '. NEXTDOM_LOG .' -type f -exec chmod 664 {} +;';
-        $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R '. NEXTDOM_LOG .' ;';
-        exec($cmd);
-    }
+    // /**
+    //  * Clean file system rights
+    //  */
+    // public static function cleanFileSystemRight()
+    // {
+    //     $cmd  = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . NEXTDOM_ROOT . ';';
+    //     $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . NEXTDOM_ROOT . ';';
+    //     $cmd .= SystemHelper::getCmdSudo() . 'find '. NEXTDOM_LOG .' -type f -exec chmod 664 {} +;';
+    //     $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R '. NEXTDOM_LOG .' ;';
+    //     exec($cmd);
+    // }
 
     /**
      * Check space left
