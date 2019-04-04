@@ -541,11 +541,14 @@ pre {
 /* COLOR14 = Couleur de bordure (inputs, légendes, tableaux et bouton d'administration...) */
 /* ####################################################################################### */
 /* Inputs */
-.colorpick, .ui-autocomplete-input {
+.colorpick, .ui-autocomplete-input, select, textarea, input {
   border: 1px solid {{ COLOR14 }} !important;
 }
 .input-group {
-  border: 1px solid {{ COLOR14 }} !important;
+  border-color: {{ COLOR14 }} !important;
+}
+.input-group>input, input[type="checkbox"], input[type="radio"] {
+  border: none !important;
 }
 .label-value {
   border-color: {{ COLOR14 }} !important;
@@ -656,7 +659,7 @@ pre {
 /* COLOR20 = Couleur de bordure des boutons (bouton d'administration, bouton default) */
 /* ################################################################################## */
 /* Bouton administration */
-.btn-app, .btn-default {
+.btn-app {
   border: 1px solid {{ COLOR20 }} !important;
 }
 

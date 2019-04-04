@@ -29,7 +29,6 @@
 }
 
 .nav-tabs-custom {
-  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
   border-radius: 3px;
   & > .tab-content {
     background: $whitelightgrey;
@@ -112,4 +111,7 @@
     border-bottom: 3px solid transparent;
     margin-bottom: -3px;
     margin-right: 0px;
+}
+.nav-tabs-dashboard > li.active > a {
+    cursor: pointer !important;
 }

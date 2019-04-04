@@ -568,7 +568,7 @@ function getConditionExpressionHTML(expressionData) {
     if (isset(expressionData.expression)) {
         expressionData.expression = expressionData.expression.replace(/"/g, '&quot;');
     }
-    htmlData += '<div class="input-group input-group-sm">';
+    htmlData += '<div class="input-group input-group-sm no-border">';
     htmlData += '<textarea class="expressionAttr form-control scenario-text" data-l1key="expression" rows="1">' + init(expressionData.expression) + '</textarea>';
     htmlData += '<span class="input-group-btn">';
     htmlData += '<button type="button" class="btn btn-default cursor bt_selectCmdExpression tooltips" title="{{Rechercher une commande}}"><i class="fas fa-list-alt"></i></button>';
@@ -620,7 +620,7 @@ function getActionExpressionHTML(expressionData) {
         htmlData += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="background" checked title="{{Cocher pour que la commande s\'exécute en parallèle des autres actions}}"/>';
     }
     htmlData += '</div>';
-    htmlData += '<div class="col-xs-11 scenario-sub-group"><div class="input-group input-group-sm">';
+    htmlData += '<div class="col-xs-11 scenario-sub-group"><div class="input-group input-group-sm no-border">';
     htmlData += '<span class="input-group-btn">';
     htmlData += '<button class="btn btn-default bt_removeExpression" type="button" title="{{Supprimer l\'action}}"><i class="fas fa-minus-circle"></i></button>';
     htmlData += '</span>';
@@ -1872,4 +1872,3 @@ initGeneralFormEvents();
 initScenarioEditorEvents();
 initModalEvents();
 loadFromUrl();
-
