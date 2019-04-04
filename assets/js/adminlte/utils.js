@@ -41,7 +41,7 @@ $(function () {
         $pushMenu = $('[data-toggle="push-menu"]').data('lte.pushmenu');
         $layout = $('body').data('lte.layout')
         window.scrollTo(0, 0);
-        setHeaderPosition();
+        setHeaderPosition(true);
     });
 
     /**
@@ -133,7 +133,7 @@ window.onscroll = function () {
         $(".sidebar-menu").css("overflow-y", "auto");
         sideMenuResize(false);
     }
-    setHeaderPosition();
+    setHeaderPosition(false);
 };
 
 $('#bt_goOnTop').click(function () {
@@ -151,7 +151,7 @@ $('.sidebar-toggle').on("click", function () {
         sideMenuResize(true);
     }
     setTimeout(function () {
-        setHeaderPosition();
+        setHeaderPosition(false);
         $('.div_displayEquipement').packery();
     }, 100);
 });
@@ -165,7 +165,7 @@ $(window).resize(function () {
     } else {
         sideMenuResize(false);
     }
-    setHeaderPosition();
+    setHeaderPosition(false);
 });
 
 function sideMenuResize(_calcul) {
