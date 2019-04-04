@@ -36,7 +36,7 @@ namespace NextDom\Helpers;
 
 use NextDom\Managers\ConfigManager;
 
-class TimeLine
+class TimeLineHelper
 {
     /**
      * Add an event in the timeline
@@ -76,8 +76,9 @@ class TimeLine
     public static function removeTimelineEvent()
     {
         $path = NEXTDOM_DATA . '/data/timeline.json';
-        // TODO: chmod 777
-        \com_shell::execute(SystemHelper::getCmdSudo() . 'chmod 666 ' . $path . ' > /dev/null 2>&1;');
-        unlink($path);
+        if (file_exists($path)) {
+            \com_shell::execute(SystemHelper::getCmdSudo() . 'chmod 666 ' . $path . ' > /dev/null 2>&1;');
+            unlink($path);
+        }
     }
 }

@@ -18,6 +18,7 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
@@ -184,12 +185,12 @@ class Update
 
                         }
                         if (!file_exists($cibDir . '/plugin_info')) {
-                            $files = ls($cibDir, '*');
+                            $files = FileSystemHelper::ls($cibDir, '*');
                             if (count($files) == 1 && file_exists($cibDir . '/' . $files[0] . 'plugin_info')) {
                                 $cibDir = $cibDir . '/' . $files[0];
                             }
                         }
-                        rmove($cibDir . '/', NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId(), false, array(), true);
+                        rmove($cibDir, NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId(), false, array(), true);
                         rrmdir($cibDir);
                         $cibDir = NextDomHelper::getTmpFolder('market') . '/' . $this->getLogicalId();
                         if (file_exists($cibDir)) {

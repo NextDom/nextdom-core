@@ -30,6 +30,7 @@ core:
   error-401: 401 - Accès non autorisé
   error-404: 404 - Page non trouvée
   error-ajax: Requête Ajax inconnue
+  error-bad-action: Mauvaise utilisation d'une fonctionnalité
   api-connection: "Connexion par API de l'utilisateur : "
   enable-tasks: "Activer toutes les tâches cron..."
   disable-tasks: "Désactiver toutes les tâches cron..."

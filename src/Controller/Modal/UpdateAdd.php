@@ -23,7 +23,7 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
-use NextDom\Managers\AjaxManager;
+use NextDom\Helpers\AjaxHelper;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UpdateManager;
 
@@ -70,7 +70,7 @@ class UpdateAdd extends BaseAbstractModal
             }
             $pageData['repoListConfiguration'][$repoKey] = $repoValue;
         }
-        $pageData['ajaxToken'] = AjaxManager::getToken();
+        $pageData['ajaxToken'] = AjaxHelper::getToken();
 
         return Render::getInstance()->get('/modals/update.add.html.twig', $pageData);
     }

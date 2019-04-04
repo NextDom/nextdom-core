@@ -92,9 +92,12 @@ class ViewZone
         return \DB::remove($this);
     }
 
-    public function getviewData()
+    /**
+     * @return [ViewZone]|null
+     */
+    public function getViewData()
     {
-        return ViewDataManager::byviewZoneId($this->getId());
+        return ViewDataManager::byViewZoneId($this->getId());
     }
 
     public function getView()

@@ -16,23 +16,9 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-try {
-    require_once __DIR__ . '/../../core/php/core.inc.php';
-    include_file('core', 'authentification', 'php');
+use NextDom\Ajax\EventAjax;
 
-    if (!isConnect()) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
-    }
+require_once (__DIR__ . '/../../src/core.php');
 
-    ajax::init();
-
-    if (init('action') == 'changes') {
-        ajax::success(event::changes(init('datetime', 0), 59));
-    }
-
-    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-/*     * *********Catch exeption*************** */
-} catch (Exception $e) {
-    ajax::error(displayException($e), $e->getCode());
-}
-?>
+$eventAjax = new EventAjax();
+$eventAjax->process();

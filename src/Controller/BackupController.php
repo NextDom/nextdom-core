@@ -23,7 +23,7 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
-use NextDom\Managers\AjaxManager;
+use NextDom\Helpers\AjaxHelper;
 use NextDom\Managers\UpdateManager;
 
 class BackupController extends BaseController
@@ -41,7 +41,7 @@ class BackupController extends BaseController
     {
 
         $pageData['JS_VARS_RAW']['REPO_LIST'] = '[]';
-        $pageData['backupAjaxToken'] = AjaxManager::getToken();
+        $pageData['backupAjaxToken'] = AjaxHelper::getToken();
         $pageData['backupReposList'] = UpdateManager::listRepo();
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/backup.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';

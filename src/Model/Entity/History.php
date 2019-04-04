@@ -30,7 +30,7 @@ use NextDom\Managers\HistoryManager;
 class History
 {
     /**
-     * @var \DateTime
+     * @var string
      *
      * @ORM\Column(name="datetime", type="datetime", nullable=false)
      */
@@ -173,21 +173,21 @@ class History
 
     public function setCmd_id($cmd_id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->cmd_id,$_cmd_id);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->cmd_id, $cmd_id);
         $this->cmd_id = $cmd_id;
         return $this;
     }
 
     public function setValue($value)
     {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->value,$_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->value, $value);
         $this->value = $value;
         return $this;
     }
 
     public function setDatetime($datetime)
     {
-        $this->_changed = Utils::attrChanged($this->_changed,$this->datetime,$_datetime);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->datetime, $datetime);
         $this->datetime = $datetime;
         return $this;
     }
