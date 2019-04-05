@@ -101,7 +101,7 @@ prereq_create_dirs() {
 
 step_nextdom_file_permissions() {
   # configure file permissions
-  local directories=("${LIB_DIRECTORY}" "${LOG_DIRECTORY}" "${RUN_DIRECTORY}" "/tmp/nextdom")
+  local directories=("${LIB_DIRECTORY}" "${LOG_DIRECTORY}" "${RUN_DIRECTORY}" "${TMP_DIRECTORY}")
   for c_dir in ${directories[*]}; do
     chown -R www-data:www-data ${c_dir}
     find ${c_dir} -type d -exec chmod 0755 {} \;
@@ -278,27 +278,28 @@ step_nextdom_configuration() {
   sed -i "s%#LOG_DIR#%${LOG_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s%#LIB_DIR#%${LIB_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s%#RUN_DIR#%${RUN_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
+  sed -i "s%#TMP_DIR#%${TMP_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
 
   if [[ -d "/tmp/jeedom" ]]; then
       if [[ -L "/tmp/jeedom" ]]; then
           rm -f /tmp/jeedom
-          ln -s /tmp/nextdom /tmp/jeedom
-          if [[ ! -d "/tmp/nextdom" ]]; then
-              mkdir -p /tmp/nextdom >> ${DEBUG} 2>&1
+          ln -s ${TMP_DIRECTORY} /tmp/jeedom
+          if [[ ! -d "${TMP_DIRECTORY}" ]]; then
+              mkdir -p ${TMP_DIRECTORY} >> ${DEBUG} 2>&1
           fi
       else
-        if [[ -d "/tmp/nextdom" ]]; then
-            mv /tmp/jeedom/* /tmp/nextdom/
+        if [[ -d "${TMP_DIRECTORY}" ]]; then
+            mv /tmp/jeedom/* ${TMP_DIRECTORY}/
         else
-          mv /tmp/jeedom /tmp/nextdom
-          ln -s /tmp/nextdom /tmp/jeedom
+          mv /tmp/jeedom ${TMP_DIRECTORY}
+          ln -s ${TMP_DIRECTORY} /tmp/jeedom
         fi
       fi
   else
-    if [[ ! -d "/tmp/nextdom" ]]; then
-        mkdir -p /tmp/nextdom
+    if [[ ! -d "${TMP_DIRECTORY}" ]]; then
+        mkdir -p ${TMP_DIRECTORY}
     fi
-    ln -s /tmp/nextdom /tmp/jeedom
+    ln -s ${TMP_DIRECTORY} /tmp/jeedom
   fi
 
   usermod -a -G dialout,tty www-data
@@ -306,9 +307,9 @@ step_nextdom_configuration() {
   if [[ -f "/proc/meminfo" ]] ; then
       if [ $(cat /proc/meminfo | grep MemTotal | awk '{ print $2 }') -gt 600000 ]; then
           if [[ -f "/etc/fstab" ]] ; then
-              if [ $(cat /etc/fstab | grep /tmp/nextdom | grep tmpfs | wc -l) -eq 0 ];then
+              if [ $(cat /etc/fstab | grep ${TMP_DIRECTORY} | grep tmpfs | wc -l) -eq 0 ];then
                   cat - >> /etc/fstab <<EOS
-tmpfs /tmp/nextdom tmpfs defaults,size=128M 0 0
+tmpfs ${TMP_DIRECTORY} tmpfs defaults,size=128M 0 0
 EOS
               fi
           fi
@@ -482,6 +483,7 @@ step_nextdom_mysql_populate() {
 LOG_DIRECTORY=/var/log/nextdom
 LIB_DIRECTORY=/var/lib/nextdom
 RUN_DIRECTORY=/var/run/nextdom
+TMP_DIRECTORY=/tmp/nextdom
 
 while getopts "hi:p:d:r:u:z:L:l:R:" option; do
   case "${option}" in
@@ -514,6 +516,9 @@ while getopts "hi:p:d:r:u:z:L:l:R:" option; do
       ;;
     R)
       RUN_DIRECTORY=${OPTARG}
+      ;;
+    T)
+      TMP_DIRECTORY=${OPTARG}
       ;;
     *)
       usage

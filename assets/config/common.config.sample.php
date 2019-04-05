@@ -35,5 +35,6 @@ $CONFIG = array(
         "log" => '#LOG_DIR#',
         "lib" => '#LIB_DIR#',
         "run" => '#RUN_DIR#',
+        "tmp" => '#TMP_DIR#',
     ),
 );
