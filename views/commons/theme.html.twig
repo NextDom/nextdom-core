@@ -404,6 +404,13 @@ legend {
 pre {
   background-color: {{ COLOR11 }} !important;
 }
+.CodeMirror pre {
+  background-color: transparent !important;
+}
+pre::selection {
+  color: {{ COLOR11 }} !important;
+}
+
 .nav-tabs-custom > .nav-tabs > li.header, .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a,.nav-tabs-custom > .nav-tabs > li > a {
   color: {{ COLOR12 }} !important;
 }
@@ -456,15 +463,6 @@ legend {
 .ui-dialog .ui-dialog-title {
   color: {{ COLOR12 }} !important;
 }
-.input-group .input-group-addon {
-  color: {{ COLOR12 }} !important;
-}
-.input-sm {
-  color: {{ COLOR12 }} !important;
-}
-pre {
-  color: {{ COLOR12 }} !important;
-}
 
 /* Bouton administration */
 .btn-app {
@@ -483,6 +481,9 @@ pre {
 }
 pre {
   color: {{ COLOR12 }} !important;
+}
+pre::selection {
+  background-color: {{ COLOR12 }} !important;
 }
 
 /* Code mirror */
