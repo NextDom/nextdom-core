@@ -45,20 +45,14 @@ class BackupManager
     /**
      * Runs the backup procedure
      *
-     * 1. call pre-backup plugin hooks
-     * 2. check and backup mysql database
-     * 3. create backup archive
-     * 4. rotate old archives in backup directory
-     * 5. upload archive to remote clouds
-     *
-     * Details:
-     * - we use a lambda to either output on stdout or directly to backup logfile
-     * - last output should not be removed since it act as a marker in ajax calls
+     * Last output should not be removed since it act as a marker in ajax calls
      *
      * @param bool $interactive if true, messages are wrote on stdout
+     * @return bool true if no error
      */
     public static function createBackup($interactive = false)
     {
+        $printer    = self::getPrinter($interactive);
         $backupDir  = self::getBackupDirectory();
         $backupName = self::getBackupFilename();
         $backupPath = sprintf("%s/%s", $backupDir, $backupName);
@@ -66,26 +60,11 @@ class BackupManager
         $cachePath  = CacheManager::getCachePath();
         $startTime  = strtotime('now');
         $status     = "success";
-        $logFile    = null;
-
-        if (false == $interactive) {
-            $logPath = LogHelper::getPathToLog('backup');
-            $logFile = fopen($logPath, "a");
-        }
-        $printer = function() use ($logFile) {
-            $args   = func_get_args();
-            $format = $args[0];
-            $msg    = vsprintf($format, array_shift($args));
-            if ($logFile) {
-                fprintf($logFile, $msg);
-            } else {
-                echo $msg;
-            }
-        };
 
         try {
             $printer("*********** starting backup procedure at %s ***********\n", date('Y-m-d H:i:s'));
-            NextDomHelper::event('begin_backup');
+            NextDomHelper::event('begin_backup', true);
+
             $printer("starting plugin backup...");
             self::backupPlugins();
             $printer("oK\n");
@@ -107,6 +86,7 @@ class BackupManager
             $printer("uploading backup to remote clouds...");
             self::sendRemoteBackup($backupPath);
             $printer("oK\n");
+
             NextDomHelper::event('end_backup');
             $printer(" -> STATUS: success\n");
             $printer(" -> ELAPSED TIME: %s sec(s)\n", (strtotime('now') - $startTime));
@@ -114,15 +94,149 @@ class BackupManager
         } catch (\Exception $e) {
             $status = "error";
             $printer("Ko\n");
-            $printer("> ERROR: " . Utils::br2nl($e->getMessage()));
-            $printer("> DETAILS");
-            $printer(print_r($e->getTrace(), true));
+            $printer("> ERROR: %s\n" . Utils::br2nl($e->getMessage()));
+            $printer("> DETAILS\n");
+            $printer("%s\n", print_r($e->getTrace(), true));
             LogHelper::add('backup', 'error', $e->getMessage());
         }
 
         // the following line acts as marker used in ajax telling that the procedure is finished
         // it should be me removed
         $printer("Closing with %s\n\n", $status);
+        return ($status == "success");
+    }
+
+    /**
+     * Runs the restore procedure
+     *
+     * Last output should not be removed since it act as a marker in ajax calls
+     *
+     * @param bool $interactive if true, messages are wrote on stdout
+     * @param bool $file path to backup archive, when empty, use last available backup
+     * @return bool false when error occurs
+     */
+    public static function restoreBackup($interactive = false, $file = '') {
+        $printer    = BackupManager::getPrinter($interactive);
+        $backupDir  = self::getBackupDirectory();
+        $startTime  = strtotime('now');
+        $status     = "success";
+
+        try {
+            $printer("*********** starting restore procedure at %s ***********\n", date('Y-m-d H:i:s'));
+            NextDomHelper::event('begin_restore', true);
+
+            if ($file == null) {
+                $file = self::getLastBackupFilePath($backupDir, "newest");
+            }
+            $printer("file used for restoration: %s", $file);
+
+            $printer("stopping nextdom system...");
+            NextDomHelper::stopSystem();
+            $printer("oK\n");
+            $printer("extracting backup archive...");
+            $tmpDir = self::extractArchive($file);
+            $printer("oK\n");
+            $printer("resotring mysql database...");
+            self::restoreDatabase($tmpDir);
+            $printer("oK\n");
+            $printer("importing jeedom configuration...");
+            self::restoreJeedomConfig();
+            $printer("oK\n");
+            $printer("restoring cache...");
+            self::restoreCache();
+            $printer("oK\n");
+            $printer("restoring plugins...");
+            self::restorePlugins();
+            $printer("oK\n");
+            $printer("migrate database (post plugins)...");
+            self::loadSQLMigrateScript();
+            $printer("oK\n");
+            $printer("starting nextdom system...");
+            NextDomHelper::startSystem();
+            $printer("oK\n");
+            $printer("updating system configuration...");
+            self::updateConfig();
+            $printer("oK\n");
+            $printer("chechking system consistency...");
+            ConsistencyManager::checkConsistency();
+            $printer("oK\n");
+
+            SystemHelper::rrmdir($tmpDir);
+            NextDomHelper::event("end_restore");
+            $printer(" -> STATUS: success\n");
+            $printer(" -> ELAPSED TIME: %s sec(s)\n", (strtotime('now') - $startTime));
+            $printer("*********** end of restore procedure at %s ***********\n", date('Y-m-d H:i:s'));
+        } catch (\Exception $e) {
+            $status = "error";
+            $printer("Ko\n");
+            $printer("> ERROR: %s\n", Utils::br2nl($e->getMessage()));
+            $printer("> DETAILS\n");
+            $printer("%s\n", print_r($e->getTrace(), true));
+            LogHelper::add('restore', 'error', $e->getMessage());
+        }
+        // the following line acts as marker used in ajax telling that the procedure is finished
+        // it should be me removed
+        $printer("Closing with %s\n\n", $status);
+        return ($status == "success");
+    }
+
+    /**
+     * Creates a backup archive
+     *
+     * @param bool $background Lancer la sauvegarde en tâche de fond.
+     * @throws \Exception
+     */
+    public static function backup(bool $background = false)
+    {
+        if ($background) {
+            LogHelper::clear('backup');
+            $script = sprintf("%s/install/backup.php", NEXTDOM_ROOT);
+            SystemHelper::php($script);
+        } else {
+            self::createBackup(true);
+        }
+    }
+
+    /**
+     * Restore a backup from file
+     *
+     * @param string $file Backup file path
+     * @param bool $background Start backup task in background
+     */
+    public static function restore(string $file = '', bool $background = false)
+    {
+        if (true == $background) {
+            LogHelper::clear("restore");
+            $script = sprintf("%s/install/restore.php", NEXTDOM_ROOT);
+            SystemHelper::php($script);
+        } else {
+            self::restoreBackup(true, $file);
+        }
+    }
+
+    /**
+     * Creates callable va_arg printer according to $interfactive parameter
+     *
+     * @param bool $interfactive when true, printer write on stdout, write to backup log otherwise
+     * @return function
+     */
+    private static function getPrinter($interfactive = false)
+    {
+        $logFile = null;
+        if (false == $interactive) {
+            $logPath = LogHelper::getPathToLog('backup');
+            $logFile = fopen($logPath, "a");
+        }
+        return function() use ($logFile) {
+            $args   = func_get_args();
+            $format = $args[0];
+            $msg    = vsprintf($format, array_shift($args));
+            if ($logFile) {
+                fprintf($logFile, $msg);
+            } else {
+                echo $msg;
+            }
+        };
     }
 
     /**
@@ -170,22 +284,47 @@ class BackupManager
      * 2. generate array of object from file list
      *
      * @param string $backupDir backup root directory
-     * @throws \Exception if cannot stat one of the backup files
+     * @throws CoreException if cannot stat one of the backup files
      * @retrun array of file object
      */
     public static function getBackupFileInfo($backupDir) {
         $pattern = sprintf("%s/backup-*.tar.gz", $backupDir);
         // 1.
         if (false == ($entries = glob($pattern))) {
-            throw \Exception("error in globbing pattern " . $pattern);
+            throw CoreException("error in globbing pattern " . $pattern);
         }
         // 2.
         return array_map(function($c_file) {
             if (false == ($stat = stat($c_file))) {
-                throw \Exception("unable to stat file " . $c_file);
+                throw CoreException("unable to stat file " . $c_file);
             }
             return array("file" => $c_file, "mtime" => $stat[9], "size" => $stat[7])
         }, $entries);
+    }
+
+    /**
+     * Returns path to last available backup archive
+     *
+     * @throws CoreException when no archive is found
+     * @return string archive file path
+     */
+    private static function getLastBackupFilePath($backupDir, $order = "newest") {
+        $files = self::getBackupFileInfo($backupDir);
+
+        if ($order == "newest") {
+            usort($files, function($x, $y) {
+                return ($x["mtime"] - $y["mtime"]);
+            });
+        } else {
+            usort($files, function($x, $y) {
+                return -1 * ($x["mtime"] - $y["mtime"]);
+            });
+        }
+
+        if (true == empty($files)) {
+            throw \CoreException("unable to find any backup file");
+        }
+        return $file[0]["path"];
     }
 
     /**
@@ -219,8 +358,6 @@ class BackupManager
             $totalBytes += $c_entry["size"];
         }
     }
-
-
 
     /**
      * Trigger remote upload for all available repos
@@ -344,23 +481,6 @@ class BackupManager
 
 
     /**
-     * Start system backup
-     *
-     * @param bool $taskInBackground Lancer la sauvegarde en tâche de fond.
-     * @throws \Exception
-     */
-    public static function backup(bool $taskInBackground = false)
-    {
-        if ($taskInBackground) {
-            LogHelper::clear('backup');
-            $script = sprintf("%s/install/backup.php", NEXTDOM_ROOT);
-            SystemHelper::php($script);
-        } else {
-            self::createBackup(true);
-        }
-    }
-
-    /**
      * Obtenir la liste des sauvegardes
      *
      * @return array Liste des sauvegardes
@@ -398,24 +518,158 @@ class BackupManager
     }
 
     /**
-     * Restore a backup from file
+     * Load given file in mysql database
      *
-     * @param string $backupFilePath Backup file path
-     *
-     * @param bool $taskInBackground Start backup task in background
-     * @throws \Exception
+     * @param string $file path to file to load
+     * @throw CoreException when a mysql error occurs
      */
-    public static function restore(string $backupFilePath = '', bool $taskInBackground = false)
+    private static function loadSQLFromFile($file)
     {
-        if ($taskInBackground) {
-            LogHelper::clear('restore');
-            $cmd = NEXTDOM_ROOT . '/install/restore.php "backup=' . $backupFilePath . '"';
-            $cmd .= ' >> ' . LogHelper::getPathToLog('restore') . ' 2>&1 &';
-            SystemHelper::php($cmd, true);
-        } else {
-            global $BACKUP_FILE;
-            $BACKUP_FILE = $backupFilePath;
-            require_once NEXTDOM_ROOT . '/install/restore.php';
+        if (false === ($content = file_get_contents($file))) {
+            throw CoreException("unable to find sql file " . $file);
         }
+        try {
+            \DB::getConnection()->exec($content);
+        } catch (\Exception $e) {
+            throw CoreException("error loading sql file " . $file . " : " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Extracts backup archive to a temporary folder
+     *
+     * @param string $file path to backup archive
+     * @throw CoreException when error on reading archive or creating temporary dir
+     * @return string path to generated temporary directory
+     */
+    private static function extractArchive($file) {
+        $excludeDirs = array("AlternativeMarketForJeedom", "musicast");
+        $exclude = sprintf("^(%s)$", join("|", $excludeDirs));
+        $tmpDir  = sprintf("%s-%s", TMP_DIRECTORY, date('Y-m-d H:i:s'));
+        if (false == mkdir($tmpDir, $mode = 0770, true)) {
+            throw \CoreException("unable to create tmp directory " . $tmpDir);
+        }
+        $tar = new Tar();
+        $tar->open($file);
+        $entries = $tar->contents();
+        $tar->extract($tmpDir, "", $exclude);
+        return $tmpDir;
+    }
+
+    /**
+     * Loads migrate script into mysql database
+     *
+     * @throws CoreException from RestoreManager::loadSQLFromFile
+     */
+    private static function loadSQLMigrateScript() {
+        $migrateFile = sprintf("%s/migrate/migrate.sql", NEXTDOM_ROOT);
+
+        self::loadSQLFromFile($migrateFile);
+    }
+
+    /**
+     * Loads mysql dump from backup archive into database
+     *
+     * @param string $tmpDir extracted backup root directory
+     * @throws CoreException when error occurs
+     */
+    private static function restoreDatabase($tmpDir) {
+        $backupFile  = sprintf("%s/DB_backup.sql", $tmpDir);
+
+        if (0 != SystemHelper::vsystem("sed -i -e s/jeedom/nextdom/g %s", $filepath)) {
+            throw CoreException("unable to modify content of backup file " . $file);
+        }
+        \DB::Prepare("SET foreign_key_checks = 0", array(), \DB::FETCH_TYPE_ROW);
+        $tables = \DB::Prepare("SHOW TABLES", array(), \DB::FETCH_TYPE_ALL);
+        foreach ($tables as $table) {
+            $table = array_values($table);
+            $table = $table[0];
+            $statement = sprintf("DROP TABLE IF EXISTS `%s`", $table[0]);
+            \DB::Prepare($statement, array(), \DB::FETCH_TYPE_ROW);
+        }
+        self::loadSQLFromFile($backupFile);
+        self::loadSQLMigrateScript();
+        \DB::Prepare("SET foreign_key_checks = 1", array(), \DB::FETCH_TYPE_ROW);
+    }
+
+    /**
+     * Import common config if not already exists
+     *
+     * @param string $tmpDir extracted backup root directory
+     */
+    private static function restoreJeedomConfig($tmpDir) {
+        $commonBackup  = sprintf("%s/common.config.php",              $tmpDir);
+        $commonConfig  = sprintf("%s/core/config/common.config.php",  NEXTDOM_ROOT);
+        $jeedomConfig  = sprintf("%s/core/config/jeedom.config.php",  NEXTDOM_ROOT);
+
+        if (true == file_exists($jeedomConfig)) {
+            @unlink($jeedomConfig);
+        }
+        if ((false == file_exists($commonConfig)) &&
+            (true  == file_exists($commonBackup))) {
+            if (false == rename($commonBackup, $commonConfig)) {
+                // should at least warn, silent fail kept from install/restore.php refactoring
+            }
+        }
+    }
+
+    /**
+     * Restore cache from backup archive
+     *
+     * @param string $tmpDir extracted backup root directory
+     */
+    private static function restoreCache($tmpDir) {
+        $cachePath1 = sprintf("%s/cache.tar.gz",     $tmpDir);
+        $cachePath2 = sprintf("%s/var/cache.tar.gz", $tmpDir);
+        $cacheDest  = sprintf("%s/cache.tar.gz",     NEXTDOM_RUN);
+
+        if (true == file_exists($cachePath1)) {
+            rename($cachePath1, $cacheDest);
+        } elseif (true == file_exists($cachePath2)) {
+            rename($cachePath2, $cacheDest);
+        }
+
+        try {
+            CacheManager::restore();
+        } catch (\Exception $e) {
+            // not a big deal if cache cannot be restored
+        }
+    }
+
+    /**
+     * Restore plugins from backup archive
+     *
+     * @param string $tmpDir extracted backup root directory
+     */
+    private static function restorePlugins($tmpDir) {
+        $plugingDirs = glob(sprintf("%s/plugings/*", $tmpDir), GLOB_ONLYDIR);
+        $pluginRoot  = sprintf("%s/plugings", NEXTDOM_ROOT);
+
+        foreach ($plugingDirs as $c_dir) {
+            $name = basedir($c_dir);
+            if (false == rename($c_dir, sprintf("%s/%s", $pluginRoot, $name))) {
+                // should probably fail, keeping behavior prior to install/restore.php refactoring
+            }
+        }
+
+        $plugins = PluginManager::listPlugin(true);
+        foreach ($plugins as $c_plugin) {
+            // call plugin restore hook, if any
+            $pluginID = $c_plugin->getId();
+            $dependencyInfo = $c_plugin->getDependencyInfo(true);
+            if (method_exists($pluginID, 'restore')) {
+                $pluginID::restore();
+            }
+            // reset plugin dependencies
+            $cache = CacheManager::byKey('dependancy' . $plugin->getId());
+            $cache->remove();
+            CacheManager::set('dependancy' . $plugin->getId(), "nok");
+        }
+    }
+
+    private static function updateConfig() {
+        ConfigManager::save('hardware_name', '');
+        $cache = CacheManager::byKey('nextdom::isCapable::sudo');
+        $cache->remove();
     }
 }

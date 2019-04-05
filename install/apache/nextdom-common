@@ -50,12 +50,7 @@ RewriteRule  ^/?core/img/(.*)$ /public/img/$1 [R=301,L]
   Deny from all
 </Directory>
 
-<Directory "${wwwdir}/install/migrate/">
-  Order allow,deny
-  Deny from all
-</Directory>
-
-<Directory "${wwwdir}/install/OS_specific/">
+<Directory "${wwwdir}/install/">
   Order allow,deny
   Deny from all
 </Directory>

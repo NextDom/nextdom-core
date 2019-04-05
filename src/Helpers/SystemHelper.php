@@ -34,6 +34,16 @@ class SystemHelper
         'debian' => array('cmd_check' => ' dpkg --get-selections | grep -v deinstall | grep ', 'cmd_install' => ' apt-get install -y ', 'www-uid' => 'www-data', 'www-gid' => 'www-data', 'type' => 'apt'),
     );
 
+    public static function vsystem()
+    {
+        $status  = 0;
+        $args    = func_get_args();
+        $format  = $args[0];
+        $command = vsprintf($format, array_shift($args));
+        system($command, $status);
+        return $status;
+    }
+
     /**
      * Load system from /core/config/system_cmd.json if file exists.
      *
@@ -336,5 +346,18 @@ class SystemHelper
             $meminfo[$info[0]] = trim($value[0]);
         }
         return $meminfo;
+    }
+
+    /**
+     * Recursively delete given path
+     *
+     * @return bool false when error occurs
+     */
+    public static function rrmdir($path) {
+        $status = 0;
+        $cmd    = sprintf("rm -rf %s", $path);
+
+        system($cmd, $status);
+        return ($status == 0);
     }
 }
