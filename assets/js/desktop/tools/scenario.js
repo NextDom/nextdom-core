@@ -751,7 +751,7 @@ function getIfSubElementHTML(subElementData) {
     if (!isset(subElementData.options) || !isset(subElementData.options.allowRepeatCondition) || parseInt(subElementData.options.allowRepeatCondition) === 0) {
         htmlData += '<a class="btn btn-default btn-sm cursor subElementAttr tooltips scenario-btn-repeat" title="{{Autoriser ou non la répétition des actions si l\'évaluation de la condition est la même que la précédente}}" data-l1key="options" data-l2key="allowRepeatCondition" value="0"><i class="fas fa-refresh"></i></a>';
     } else {
-        htmlData += '<a class="btn btn-default btn-sm cursor subElementAttr tooltips scenario-btn-repeat" title="{{Autoriser ou non la répétition des actions si l\'évaluation de la condition est la même que la précédente}}" data-l1key="options" data-l2key="allowRepeatCondition" value="1"><i class="fas fa-refresh"></i><i class="fas fa-ban text-danger"></i></a>';
+        htmlData += '<a class="btn btn-default btn-sm cursor subElementAttr tooltips scenario-btn-repeat" title="{{Autoriser ou non la répétition des actions si l\'évaluation de la condition est la même que la précédente}}" data-l1key="options" data-l2key="allowRepeatCondition" value="1"><i class="fas fa-ban text-danger"></i></a>';
     }
     htmlData += '</div>';
     htmlData += '<div class="expressions scenario-condition">';
