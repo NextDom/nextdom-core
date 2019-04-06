@@ -18,6 +18,7 @@
 
 use NextDom\Helpers\Utils;
 use NextDom\Exceptions\CoreException;
+use NextDom\Managers\BackupManager;
 
 try {
     require_once __DIR__ . '/../../core/php/core.inc.php';
@@ -213,8 +214,8 @@ try {
 
     if (init('action') == 'backupupload') {
         unautorizedInDemo();
-        // __DIR__ . '/../../backup'
-        $uploaddir = NEXTDOM_RUN . '/backups';
+
+        $uploaddir = BackupManager::getBackupDirectory();
         if (!file_exists($uploaddir)) {
             if (!mkdir($uploaddir)) {
                 throw new Exception(__('Répertoire de téléversement non trouvé : ', __FILE__) . $uploaddir);
@@ -264,7 +265,7 @@ try {
         if ($customType != 'js' && $customType != 'css') {
             throw new CoreException(__('La version ne peut être que js ou css'));
         }
-        $path = NEXTDOM_RUN . '/custom/' . $customVersion . '/';
+        $path = NEXTDOM_DATA . '/custom/' . $customVersion . '/';
         if (!file_exists($path)) {
             mkdir($path);
         }

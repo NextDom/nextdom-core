@@ -25,13 +25,14 @@ try {
     }
 
     if (init('action') == 'removeImage') {
-        $uploaddir = dirname(__FILE__) . '/../../public/img/profils/';
-        $pathInfo = pathinfo(init('image'));
-        ajax::success(unlink($uploaddir . $pathInfo['basename'] . '.' . $pathInfo['extension']));
+        $uploaddir = sprintf("%s/public/img/profils", NEXTDOM_ROOT);
+        $pathInfo  = pathinfo(init('image'));
+        $path      = sprintf("%s/%s.%s", $uploaddir, $pathInfo['basename'], $pathInfo['extension']);
+        ajax::success(unlink($path));
     }
 
     if (init('action') == 'imageUpload') {
-        $uploaddir = dirname(__FILE__) . '/../../public/img/profils/';
+        $uploaddir = sprintf("%s/public/img/profils", NEXTDOM_ROOT);
         if (!file_exists($uploaddir)) {
             throw new Exception(__("{{Répertoire d'upload non trouvé}} : ", __FILE__) . $uploaddir);
         }
@@ -45,25 +46,18 @@ try {
         if (filesize($_FILES['images']['tmp_name']) > 1000000) {
             throw new Exception(__('{{Le fichier est trop gros}} (maximum 8mo)', __FILE__));
         }
-        if (!move_uploaded_file($_FILES['images']['tmp_name'], $uploaddir . '/' . $_FILES['images']['name'])) {
+        $destpath = sprintf("%s/%s", $uploaddir, $_FILES['images']['name']);
+        if (!move_uploaded_file($_FILES['images']['tmp_name'], $destpath)) {
             throw new Exception(__('{{Impossible de déplacer le fichier temporaire}}', __FILE__));
         }
-        if (!file_exists($uploaddir . '/' . $_FILES['images']['name'])) {
+        if (!file_exists($destpath)) {
             throw new Exception(__("{{Impossible d'uploader le fichier (limite du serveur web ?)}}", __FILE__));
         }
-
         ajax::success();
     }
-
 
     throw new Exception(__('Aucune methode correspondante à : ', __FILE__) . init('action'));
 
 } catch (Exception $e) {
     ajax::error(displayExeption($e), $e->getCode());
-}
-
-function clean($string) {
-    $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
-
-    return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
 }

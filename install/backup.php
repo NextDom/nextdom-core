@@ -32,8 +32,17 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once __DIR__ . '../core/php/core.inc.php';
+require_once __DIR__ . '/../core/php/core.inc.php';
+
 
 use NextDom\Managers\BackupManager;
+use NextDom\Helpers\Utils;
 
-BackupManager::createBackup(false);
+$args = Utils::parseArgs($argv);
+if (true == array_key_exists("help", $args)) {
+    echo "usage: php backup.php [help]";
+    die();
+}
+
+
+BackupManager::createBackup();

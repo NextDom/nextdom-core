@@ -45,7 +45,6 @@ namespace {
     global $CONFIG;
     define('NEXTDOM_DATA', $CONFIG["paths"]["lib"]);
     define('NEXTDOM_LOG',  $CONFIG["paths"]["log"]);
-    define('NEXTDOM_RUN',  $CONFIG["paths"]["run"]);
     define('NEXTDOM_TMP',  $CONFIG["paths"]["tmp"]);
 
     require_once NEXTDOM_ROOT . '/vendor/autoload.php';

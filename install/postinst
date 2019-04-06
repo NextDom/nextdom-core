@@ -12,6 +12,7 @@ BLANC="\\033[0;02m"
 BLANCLAIR="\\033[1;08m"
 JAUNE="\\033[1;33m"
 CYAN="\\033[1;36m"
+declare -a DETAILS
 
 # Functions
 
@@ -29,7 +30,7 @@ options:
   -r <password> : database root password
   -L <dir>      : set log directory, defaults to /var/log/nextdom
   -l <dir>      : set lib directory, defaults to /var/lib/nextdom
-  -r <dir>      : set run directory, defaults to /var/run/nextdom
+  -t <dir>      : set tmp directory, defaults to /tmp/nextdom
 EOS
   exit 1;
 }
@@ -54,22 +55,31 @@ print_log_in() {
 
 print_log_ok() {
   if [ 1 -eq "0${isdev}"  ] ; then
-      echo " OK"
+      echo " oK"
+      if [ "${#DETAILS[@]}" -ne 0 ]; then
+          for c_line in "${DETAILS[@]}"; do
+            echo "  -> ${c_line}"
+          done
+      fi
   fi
-  echo " OK" >> ${LOG_DIRECTORY}/postinst.log
+  echo " oK" >> ${LOG_DIRECTORY}/postinst.log
+  if [ "${#DETAILS[@]}" -ne 0 ]; then
+      for c_line in "${DETAILS[@]}"; do
+        echo "  -> ${c_line}" >> ${LOG_DIRECTORY}/postinst.log
+      done
+      DETAILS=()
+  fi
 }
 
 
 detect_dev_version(){
-  # Detect if there is a .git directory (development version)
+  isdev=0
+  WEBSERVER_HOME=/usr/share/nextdom
+
+  # detect if there is a .git directory (development version)
   if [ -d ${root}/.git ] ; then
-      echo "Development version..."
       isdev=1
       WEBSERVER_HOME=${root}
-  else
-    # Debian package configuration...
-    isdev=0
-    WEBSERVER_HOME=/usr/share/nextdom
   fi
 }
 
@@ -78,13 +88,12 @@ prereq_create_dirs() {
   mkdir -p ${LOG_DIRECTORY}
   mkdir -p ${LOG_DIRECTORY}/scenarioLog
   mkdir -p ${LIB_DIRECTORY}
-  mkdir -p ${RUN_DIRECTORY}/{custom,market_cache}
-  mkdir -p ${RUN_DIRECTORY}/public/css
-  mkdir -p ${RUN_DIRECTORY}/public/img/plan
+  mkdir -p ${LIB_DIRECTORY}/{custom,market_cache,cache,backup}
+  mkdir -p ${LIB_DIRECTORY}/public/css
+  mkdir -p ${LIB_DIRECTORY}/public/img/plan
+  mkdir -p ${LIB_DIRECTORY}/public/img/profils
+  mkdir -p ${root}/plugins
 
-  # mkdir -p ${WEBSERVER_HOME}/var/custom
-
-  # clean & prepare log files
   rm -f ${LOG_DIRECTORY}/postinst.ok
   rm -f ${LOG_DIRECTORY}/postinst.warn
   rm -f ${LOG_DIRECTORY}/postinst.log
@@ -101,7 +110,9 @@ prereq_create_dirs() {
 
 step_nextdom_file_permissions() {
   # configure file permissions
-  local directories=("${LIB_DIRECTORY}" "${LOG_DIRECTORY}" "${RUN_DIRECTORY}" "${TMP_DIRECTORY}")
+  # ${WEBSERVER_HOME}/plugins and ${WEBSERVER_HOME}/public/img should not be given
+  # www-data ownership, still needed until proper migration handling
+  local directories=("${LIB_DIRECTORY}" "${LOG_DIRECTORY}" "${TMP_DIRECTORY}" "${WEBSERVER_HOME}/plugins" "${WEBSERVER_HOME}/public/img")
   for c_dir in ${directories[*]}; do
     chown -R www-data:www-data ${c_dir}
     find ${c_dir} -type d -exec chmod 0755 {} \;
@@ -127,7 +138,6 @@ step_nextdom_mysql_parameters() {
   fi
 
   # All parameters
-
   HOSTPASS=""
   if [ -n "${MYSQL_ROOT_PASSWD}" ]; then
       HOSTPASS="${HOSTPASS} -p${MYSQL_ROOT_PASSWD}"
@@ -145,17 +155,13 @@ step_nextdom_mysql_parameters() {
   MYSQL_NEXTDOM_DB=${MYSQL_NEXTDOM_DB:nextdom}
 
   if [ 1 -eq "0${isdev}"  ] ; then
-      cat - <<EOS
-
-Installation dir  : ${WEBSERVER_HOME}
-Database host     : ${MYSQL_HOSTNAME}
-Database port     : ${MYSQL_PORT}
-Database name     : ${MYSQL_NEXTDOM_DB}
-Database user     : ${MYSQL_NEXTDOM_USER}
-Database password : ${MYSQL_NEXTDOM_PASSWD}
-EOS
+      DETAILS+=("install directory: ${WEBSERVER_HOME}")
+      DETAILS+=("database host: ${MYSQL_HOSTNAME}")
+      DETAILS+=("database port: ${MYSQL_PORT}")
+      DETAILS+=("database name: ${MYSQL_NEXTDOM_DB}")
+      DETAILS+=("database user: ${MYSQL_NEXTDOM_USER}")
+      DETAILS+=("database passwd: ${MYSQL_NEXTDOM_PASSWD}")
   fi
-
 
   # slow start of docker mysql
   try=0
@@ -168,7 +174,7 @@ EOS
     return 0
   done
 
-  echo ">>>> Error : can't connect to database <<<<"
+  echo -e "${ROUGE}error: can't connect to mysql database${NORMAL}"
   exit 1
 }
 
@@ -182,7 +188,7 @@ step_nextdom_prerequisites_verification() {
   local srcdir="${WEBSERVER_HOME}/install/apache/"
 
   if [[ ! -d "${dstdir}" ]] ; then
-      echo ">>>> Error : Apache2 isn't installed ! <<<<"
+      echo -e "${ROUGE}error: apache2 not installed${NORMAL}"
       exit 1
   fi
 
@@ -191,7 +197,7 @@ step_nextdom_prerequisites_verification() {
       cp ${srcdir}/${c_file} ${dstdir}/${c_file} >> ${DEBUG} 2>&1
       sed -i -e "s%\s+Define\s+wwwdir\s.*%Define wwwdir \"${WEBSERVER_HOME}\"%gI" ${dstdir}/${c_file} >> ${DEBUG} 2>&1
       sed -i -e "s%\s+Define\s+logdir\s.*%Define logdir \"${LOG_DIRECTORY}\"%gI"  ${dstdir}/${c_file} >> ${DEBUG} 2>&1
-      echo "<I> Creating file : ${dstdir}/${c_file}"
+      DETAILS+=("created file: ${dstdir}/${c_file}")
     fi
   done
 
@@ -199,7 +205,7 @@ step_nextdom_prerequisites_verification() {
   if [[ ! -f "/etc/systemd/system/apache2.service.d/privatetmp.conf" ]] ; then
       mkdir -p /etc/systemd/system/apache2.service.d
       cp ${srcdir}/privatetmp.conf /etc/systemd/system/apache2.service.d/privatetmp.conf >> ${DEBUG} 2>&1
-      echo "<I> Creating file : /etc/systemd/system/apache2.service.d/privatetmp.conf"
+      DETAILS+=("created file: /etc/systemd/system/apache2.service.d/privatetmp.conf")
   fi
 
   # Windows hack (bash for windows)
@@ -207,16 +213,9 @@ step_nextdom_prerequisites_verification() {
       bash ${WEBSERVER_HOME}/install/OS_specific/windows/pre_inst.sh >> ${DEBUG} 2>&1
   fi
 
-  # PHP
-  ll=$(find /etc/ -iname php.ini -type f |wc -l) >> ${DEBUG} 2>&1
-  if [[ "$ll" = "0" ]] ; then
-      echo ">>>> Error : PHP not found ! <<<<"
-      exit 1
-  fi
-  #
   # Certificat SSL auto signe
   if [[ ! -f /etc/nextdom/ssl/nextdom.crt ]] || [[ ! -f /etc/nextdom/ssl/nextdom.csr ]] || [[ ! -f /etc/nextdom/ssl/nextdom.key ]] ; then
-      echo "<I> Creating SSL self-signed certificat in /etc/nextdom/ssl/"
+      DETAILS+=("created SSL self-signed certificates in /etc/nextdom/ssl/")
       mkdir -p /etc/nextdom/ssl/ >> ${DEBUG} 2>&1
       cd /etc/nextdom/ssl/ >> ${DEBUG} 2>&1
       openssl genrsa -out nextdom.key 2048 >> ${DEBUG} 2>&1
@@ -227,7 +226,6 @@ step_nextdom_prerequisites_verification() {
 
 
 step_nextdom_apache_php() {
-  # Apache2
   a2enmod ssl               >> ${DEBUG} 2>&1
   a2enmod rewrite           >> ${DEBUG} 2>&1
   a2dismod status           >> ${DEBUG} 2>&1
@@ -235,11 +233,14 @@ step_nextdom_apache_php() {
   a2dissite default-ssl     >> ${DEBUG} 2>&1
   a2ensite nextdom-ssl      >> ${DEBUG} 2>&1
   a2ensite nextdom          >> ${DEBUG} 2>&1
-  a2enconf nextdom-security >> ${DEBUG} 2>&1
+  DETAILS+=("apache: disabled site default")
+  DETAILS+=("apache: disabled site default-ssl")
+  DETAILS+=("apache: enabled site nextdom")
+  DETAILS+=("apache: enabled site nextdom-ssl")
 
   service apache2 restart >> ${DEBUG} 2>&1 || {
     service apache2 restart >> ${DEBUG} 2>&1 || {
-      printf "${ROUGE}Ne peut redémarrer apache - Annulation${NORMAL}"
+      echo -e "${ROUGE}Ne peut redémarrer apache - Annulation${NORMAL}"
       exit 1
     }
   }
@@ -260,7 +261,7 @@ step_nextdom_configuration() {
   if [ -L ${WEBSERVER_HOME}/var ]; then
       rm -f ${WEBSERVER_HOME}/var
   fi
-  ln -s ${RUN_DIRECTORY} ${WEBSERVER_HOME}/var
+  ln -s ${LIB_DIRECTORY} ${WEBSERVER_HOME}/var
 
   if [ -L ${WEBSERVER_HOME}/data ]; then
       rm -f ${WEBSERVER_HOME}/data
@@ -277,7 +278,6 @@ step_nextdom_configuration() {
   sed -i "s/#HOST#/${MYSQL_HOSTNAME}/g"           ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s%#LOG_DIR#%${LOG_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s%#LIB_DIR#%${LIB_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
-  sed -i "s%#RUN_DIR#%${RUN_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s%#TMP_DIR#%${TMP_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
 
   if [[ -d "/tmp/jeedom" ]]; then
@@ -319,7 +319,7 @@ EOS
   if [ $(grep "www-data ALL=(ALL) NOPASSWD: ALL" /etc/sudoers | wc -l ) -eq 0 ]; then
       echo "www-data ALL=(ALL) NOPASSWD: ALL" | (EDITOR="tee -a" visudo) >/dev/null
       if [ $? -ne 0 ]; then
-          printf "${ROUGE}Ne peut permettre a nextdom d\'utiliser sudo - Annulation${NORMAL}"
+          echo -e "${ROUGE}error: unable to add www-data to sudoers${NORMAL}"
           exit 1
       fi
   fi
@@ -333,7 +333,7 @@ step_nextdom_mysql_configuration() {
 
   service mysql stop >> ${DEBUG} 2>&1 || {
     service mysql stop >> ${DEBUG} 2>&1 || {
-      printf "${ROUGE}Ne peut arrêter mysql - Annulation${NORMAL}"
+      echo -e "${ROUGE}error: unable to stop mysql${NORMAL}"
       exit 1
     }
   }
@@ -360,7 +360,7 @@ EOS
 
   service mysql start >> ${DEBUG} 2>&1 || {
     service mysql start >> ${DEBUG} 2>&1 || {
-      printf "${ROUGE}Ne peut lancer mysql - Annulation${NORMAL}"
+      echo -e "${ROUGE}error: unable to start mysql${NORMAL}"
       exit 1
     }
   }
@@ -375,15 +375,15 @@ EOS
 */5 * * * * root /usr/bin/php ${WEBSERVER_HOME}/scripts/watchdog.php >> /dev/null
 EOS
 
-  service cron reload
+  service cron reload >> ${DEBUG} 2>&1
 }
 
 step_nextdom_assets() {
   # Generate CSS files
-  if [ 1 -eq "0${isdev}"  ] ; then
+  if [ 1 -eq "0${isdev}" ]; then
       # A faire dans une version developpeur (apres git clone)
       cd ${WEBSERVER_HOME}
-      ./scripts/gen_global.sh
+      ./scripts/gen_global.sh >> ${DEBUG} 2>&1
   fi
 }
 
@@ -391,7 +391,7 @@ step_nextdom_check() {
   php ${WEBSERVER_HOME}/scripts/sick.php >> ${DEBUG} 2>&1
 }
 
-distrib_1_spe(){
+step_os_specific(){
   if [ -f /etc/armbian.txt ]; then
       cat ${WEBSERVER_HOME}/install/OS_specific/armbian/post-install.sh | bash >> ${DEBUG} 2>&1
   fi
@@ -409,24 +409,25 @@ check_var_www_html() {
       if [ $count -gt 0 ] ; then
           tmpd="$(mktemp -d -u /var/www/html.XXXXXXXX)"
           mv ${dirn} ${tmpd}
-          echo " "
-          echo ">>>>> Nextdom Warning : directory ${dirn} isn't empty.. Renaming it ${tmpd} ... <<<<<"
-          echo " "
+          DETAILS+=("warning : directory ${dirn} isn't empty, renamed to ${tmpd}")
       fi
   fi
   if [[ -L ${dirn} ]] ; then
-      tfile=$(mktemp -u /var/www/html.XXXXXXXX)
-      cd /var/www/
-      mv ${dirn} ${tfile}
-      echo -e "\n>>>>> Nextdom Warning : directory ${dirn} is a link. Renaming it ${tfile} ... <<<<<\n"
+      dest=$(readlink "${dirn}")
+      if [ "${dest}" == "${WEBSERVER_HOME}" ]; then
+          rm -f "${dirn}"
+      else
+          tfile=$(mktemp -u /var/www/html.XXXXXXXX)
+          cd /var/www/
+          mv ${dirn} ${tfile}
+          DETAILS+=("warning : directory ${dirn} is a link, renamed it ${tfile}")
+      fi
   fi
   if [[ -f ${dirn} ]] ; then
       # strange but why not
       tfile=$(mktemp -u /var/www/html.XXXXXXXX)
       mv ${dirn} ${tfile}
-      echo " "
-      echo ">>>>> Nextdom Warning : ${dirn} is a file (!). Renaming it ${tfile} ... <<<<<"
-      echo " "
+      DETAILS+=("warning : ${dirn} is a file, renamed it ${tfile}")
   fi
 }
 
@@ -453,25 +454,25 @@ step_nextdom_mysql_populate() {
   fi
 
   QUERY="DROP USER IF EXISTS '${MYSQL_NEXTDOM_USER}'@'${CONSTRAINT}';"
-  mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
+  mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}" >> ${DEBUG} 2>&1
 
   QUERY="CREATE USER '${MYSQL_NEXTDOM_USER}'@'${CONSTRAINT}' IDENTIFIED BY '${MYSQL_NEXTDOM_PASSWD}';"
-  mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
+  mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}" >> ${DEBUG} 2>&1
 
   QUERY="DROP DATABASE IF EXISTS ${MYSQL_NEXTDOM_DB};"
-  mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
+  mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}" >> ${DEBUG} 2>&1
 
   QUERY="CREATE DATABASE ${MYSQL_NEXTDOM_DB};"
-  mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
+  mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}" >> ${DEBUG} 2>&1
 
   QUERY="GRANT ALL PRIVILEGES ON ${MYSQL_NEXTDOM_DB}.* TO '${MYSQL_NEXTDOM_USER}'@'${CONSTRAINT}';"
-  mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
+  mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}" >> ${DEBUG} 2>&1
 
   QUERY="FLUSH PRIVILEGES;"
-  mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
+  mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}" >> ${DEBUG} 2>&1
 
   php ${WEBSERVER_HOME}/install/install.php mode=force >> ${DEBUG} 2>&1 || {
-    echo "${ROUGE}Ne peut installer nextdom - Annulation${NORMAL}"
+    echo -e "${ROUGE}error: installation script failed${NORMAL}"
     exit 1
   }
 }
@@ -480,12 +481,11 @@ step_nextdom_mysql_populate() {
 # ======================================================================
 # Main
 
-LOG_DIRECTORY=/var/log/nextdom
 LIB_DIRECTORY=/var/lib/nextdom
-RUN_DIRECTORY=/var/run/nextdom
+LOG_DIRECTORY=/var/log/nextdom
 TMP_DIRECTORY=/tmp/nextdom
 
-while getopts "hi:p:d:r:u:z:L:l:R:" option; do
+while getopts "hi:p:d:r:u:z:L:l:t:" option; do
   case "${option}" in
     h)
       usage
@@ -514,10 +514,7 @@ while getopts "hi:p:d:r:u:z:L:l:R:" option; do
     l)
       LIB_DIRECTORY=${OPTARG}
       ;;
-    R)
-      RUN_DIRECTORY=${OPTARG}
-      ;;
-    T)
+    t)
       TMP_DIRECTORY=${OPTARG}
       ;;
     *)
@@ -535,12 +532,8 @@ if [ $(id -u) != 0 ] ; then
 fi
 
 set_root $0
-
 prereq_create_dirs
-
-print_log_in "detect_dev_version ... "
 detect_dev_version
-print_log_ok
 
 print_log_in "step_nextdom_mysql_parameters ... "
 step_nextdom_mysql_parameters
@@ -582,8 +575,8 @@ print_log_in "step_nextdom_check ... "
 step_nextdom_check
 print_log_ok
 
-print_log_in "distrib_1_spe ... "
-distrib_1_spe
+print_log_in "step_os_specific ... "
+step_os_specific
 print_log_ok
 
 print_log_in "step_nextdom_permissions ..."

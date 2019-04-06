@@ -309,7 +309,7 @@ class NextDomHelper
                 $cache_health['state'] = true;
                 $cache_health['result'] = $okStr;
             } else {
-                $filename = NEXTDOM_RUN . '/cache.tar.gz';
+                $filename = NEXTDOM_DATA . '/cache.tar.gz';
                 $cache_health['state'] = true;
                 $cache_health['result'] = $okStr . ' (' . date('Y-m-d H:i:s', filemtime($filename)) . ')';
             }
@@ -494,14 +494,14 @@ class NextDomHelper
      */
     public static function stopSystem()
     {
-        $okStr = __('common.ok');
-        echo __('core.disable-tasks');
+        // $okStr = __('common.ok');
+        // echo __('core.disable-tasks');
         ConfigManager::save('enableCron', 0);
         foreach (CronManager::all() as $cron) {
             if ($cron->running()) {
                 try {
                     $cron->halt();
-                    echo '.';
+                    // echo '.';
                 } catch (\Exception $e) {
                     sleep(5);
                     $cron->halt();
@@ -509,56 +509,58 @@ class NextDomHelper
 
             }
         }
-        echo " $okStr\n";
+        // echo " $okStr\n";
 
         /*         * **********arrêt des crons********************* */
 
         if (CronManager::jeeCronRun()) {
-            echo __('core.disable-cron-master');
+            // echo __('core.disable-cron-master');
             $pid = CronManager::getPidFile();
             SystemHelper::kill($pid);
-            echo " $okStr\n";
+            // echo " $okStr\n";
         }
 
         /*         * *********Arrêt des scénarios**************** */
 
-        echo __('core.disable-all-scenarios');
+        // echo __('core.disable-all-scenarios');
         ConfigManager::save('enableScenario', 0);
         foreach (ScenarioManager::all() as $scenario) {
             try {
                 $scenario->stop();
-                echo '.';
+                // echo '.';
             } catch (\Exception $e) {
                 sleep(5);
                 $scenario->stop();
             }
         }
-        echo " $okStr\n";
+        // echo " $okStr\n";
     }
 
     /**
      * Start all cron tasks and scenarios
      *
+     * @param  bool $force ignore errors when true
      * @throws \Exception
      */
     public static function startSystem()
     {
-        $okStr = __('common.ok');
-
-        try {
-            echo __('core.enable-all-scenarios');
-            ConfigManager::save('enableScenario', 1);
-            echo " $okStr\n";
-            echo __('core.enable-tasks');
-            ConfigManager::save('enableCron', 1);
-            echo " $okStr\n";
-        } catch (\Exception $e) {
-            if (!isset($_GET['mode']) || $_GET['mode'] != 'force') {
-                throw $e;
-            } else {
-                echo '***ERROR*** ' . $e->getMessage();
-            }
-        }
+        // $okStr = __('common.ok');
+        // try {
+            // echo __('core.enable-all-scenarios');
+        ConfigManager::save('enableScenario', 1);
+            // echo " $okStr\n";
+            // echo __('core.enable-tasks');
+        ConfigManager::save('enableCron', 1);
+            // echo " $okStr\n";
+        // } catch (\Exception $e) {
+        //     if ((  true  == $force) ||
+        //         (  false == isset($_GET['mode'])) ||
+        //         ("force" != $_GET['mode'])) {
+        //         throw $e;
+        //     } else {
+        //         // echo '***ERROR*** ' . $e->getMessage();
+        //     }
+        // }
     }
 
     /**
@@ -799,8 +801,7 @@ class NextDomHelper
             ScenarioManager::cleanTable();
             ScenarioManager::consystencyCheck();
             LogHelper::chunk();
-            CronManager:
-            clean();
+            CronManager::clean();
             ReportHelper::clean();
             \DB::optimize();
             CacheManager::clean();
@@ -1098,18 +1099,6 @@ class NextDomHelper
     {
         shell_exec(SystemHelper::getCmdSudo() . 'service ntp stop;' . SystemHelper::getCmdSudo() . 'ntpdate -s ' . ConfigManager::byKey('ntp::optionalServer', 'core', '0.debian.pool.ntp.org') . ';' . SystemHelper::getCmdSudo() . 'service ntp start');
     }
-
-    // /**
-    //  * Clean file system rights
-    //  */
-    // public static function cleanFileSystemRight()
-    // {
-    //     $cmd  = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . NEXTDOM_ROOT . ';';
-    //     $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . NEXTDOM_ROOT . ';';
-    //     $cmd .= SystemHelper::getCmdSudo() . 'find '. NEXTDOM_LOG .' -type f -exec chmod 664 {} +;';
-    //     $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R '. NEXTDOM_LOG .' ;';
-    //     exec($cmd);
-    // }
 
     /**
      * Check space left

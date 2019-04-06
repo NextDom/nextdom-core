@@ -33,8 +33,16 @@
  */
 
 
-require_once __DIR__ . '../core/php/core.inc.php';
+require_once __DIR__ . '/../core/php/core.inc.php';
 
 use NextDom\Managers\BackupManager;
+use NextDom\Helpers\Utils;
 
-BackupManager::restoreBackup(false);
+$args = Utils::parseArgs($argv);
+if (true == array_key_exists("help", $args)) {
+    echo "usage: php restoreBackup.php [help] [file=path-to-archive]";
+    die();
+}
+
+$file = Utils::array_key_default($args, "file", "");
+BackupManager::restoreBackup($file);

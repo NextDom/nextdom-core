@@ -957,4 +957,37 @@ class Utils
         return ($_old != $_new);
     }
 
+    /**
+     * Fill associative array with given list of parameters <name>=<value>
+     *
+     * @param array $argv input parameters of form "<name>=<value>"
+     * @return array parsed parameters of form "<name>" => "<value>"
+     */
+    public static function parseArgs($argv) {
+        $args = array();
+        if (isset($argv)) {
+            foreach ($argv as $c_arg) {
+                $parts = explode('=', $c_arg);
+                if (2 == count($parts)) {
+                    $args[$parts[0]] = $parts[1];
+                } else {
+                    $args[$c_arg] = "";
+                }
+            }
+        }
+        return $args;
+    }
+
+    /**
+     * Return value of $key in $array when available, $default otherwise
+     *
+     * @param array $array input array
+     * @param string $key array key
+     * @param mixed $default fallback value
+     */
+    public static function array_key_default($array, $key, $default) {
+        if (true == array_key_exists($key, $array))
+            return $array[$key];
+        return $default;
+    }
 }

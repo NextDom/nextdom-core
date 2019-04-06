@@ -254,7 +254,7 @@ class CacheManager
 
     public static function getCachePath()
     {
-        return NEXTDOM_RUN . '/cache.tar.gz';
+        return NEXTDOM_DATA . '/cache.tar.gz';
     }
 
     /**
@@ -298,7 +298,7 @@ class CacheManager
         if (ConfigManager::byKey('cache::engine') != 'FilesystemCache' && ConfigManager::byKey('cache::engine') != 'PhpFileCache') {
             return true;
         }
-        $filename = NEXTDOM_RUN . '/cache.tar.gz';
+        $filename = NEXTDOM_DATA . '/cache.tar.gz';
         if (!file_exists($filename)) {
             return false;
         }
@@ -323,7 +323,7 @@ class CacheManager
             default:
                 return;
         }
-        if (!file_exists(NEXTDOM_RUN . '/cache.tar.gz')) {
+        if (!file_exists(NEXTDOM_DATA . '/cache.tar.gz')) {
             $cmd = 'mkdir ' . $cache_dir . ';';
             $cmd .= 'chmod -R 777 ' . $cache_dir . ';';
             \com_shell::execute($cmd);
@@ -332,7 +332,7 @@ class CacheManager
         $cmd = 'rm -rf ' . $cache_dir . ';';
         $cmd .= 'mkdir ' . $cache_dir . ';';
         $cmd .= 'cd ' . $cache_dir . ';';
-        $cmd .= 'tar xfz ' . NEXTDOM_RUN . '/cache.tar.gz;';
+        $cmd .= 'tar xfz ' . NEXTDOM_DATA . '/cache.tar.gz;';
         $cmd .= 'chmod -R 777 ' . $cache_dir . ' 2>&1 > /dev/null;';
         \com_shell::execute($cmd);
     }

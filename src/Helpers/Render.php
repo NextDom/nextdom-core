@@ -58,7 +58,7 @@ class Render
 
     private function initTranslation($language)
     {
-        $this->translator = new Translator($language, null, NEXTDOM_RUN . '/cache/i18n');
+        $this->translator = new Translator($language, null, NEXTDOM_DATA . '/cache/i18n');
         $this->translator->addLoader('yaml', new YamlFileLoader());
         $filename = NEXTDOM_ROOT . '/translations/' . $language . '.yml';
         if (file_exists($filename)) {
@@ -75,7 +75,7 @@ class Render
         $loader = new Twig_Loader_Filesystem(realpath('views'));
         $this->twigLoader = $loader;
         $twigConfig = [
-            'cache' => NEXTDOM_RUN . '/cache/twig',
+            'cache' => NEXTDOM_DATA . '/cache/twig',
             'debug' => $developerMode,
         ];
 

@@ -31,8 +31,13 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+namespace NextDom\Managers;
+
+use NextDom\Model\Entity\Cron;
+
 class ConsistencyManager {
-    private $defaultSummary = array(
+    private static $defaultSummary = array(
         'security'    => array('key' => 'security',    'name' => 'Alerte',      'calcul' => 'sum', 'icon' => '<i class="icon nextdom-alerte2"></i>',         'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false),
         'motion'      => array('key' => 'motion',      'name' => 'Mouvement',   'calcul' => 'sum', 'icon' => '<i class="icon nextdom-mouvement"></i>',       'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false),
         'door'        => array('key' => 'door',        'name' => 'Porte',       'calcul' => 'sum', 'icon' => '<i class="icon nextdom-porte-ouverte"></i>',   'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false),
@@ -44,96 +49,6 @@ class ConsistencyManager {
         'humidity'    => array('key' => 'humidity',    'name' => 'Humidité',    'calcul' => 'avg', 'icon' => '<i class="fa fa-tint"></i>',                   'unit' => '%',                     'allowDisplayZero' => true),
         'luminosity'  => array('key' => 'luminosity',  'name' => 'Luminosité',  'calcul' => 'avg', 'icon' => '<i class="icon meteo-soleil"></i>',            'unit' => 'lx',                    'allowDisplayZero' => false),
         'power'       => array('key' => 'power',       'name' => 'Puissance',   'calcul' => 'sum', 'icon' => '<i class="fa fa-bolt"></i>',                   'unit' => 'W',                     'allowDisplayZero' => false),
-    );
-
-    private $defaultCrons = array(
-        "nextdom" => array(
-            "backup" => array(
-                "schedule" => mt_rand(10, 59) . ' 0' . mt_rand(0, 7) . ' * * *',
-                "timeout"  => 60,
-                "enabled"  => 1
-            ),
-            "cronDaily" => array(
-                "schedule" => "00 00 * * * *",
-                "timeout"  => 240,
-                "enabled"  => 1
-            ),
-            "cronHourly" => array(
-                "schedule" => "00 * * * * *",
-                "timeout"  => 60,
-                "enabled"  => 1
-            ),
-            "cron5" => array(
-                "schedule" => "*/5 * * * * *",
-                "timeout"  => 5
-            ),
-            "cron" => array(
-                "schedule" => "* * * * * *",
-                "timeout"  => 2
-            ),
-        ),
-        "plugin" => array(
-            "cronDaily" => array(
-                "schedule" => "00 00 * * * *",
-                "timeout"  => 240,
-                "enabled"  => 1
-            ),
-            "cronHourly" => array(
-                "schedule" => "00 * * * * *",
-                "timeout"  => 60,
-                "enabled"  => 1
-            ),
-            "cron" => array(
-                "schedule" => "* * * * * *",
-                "timeout"  => 2
-            ),
-            "cron5" => array(
-                "schedule" => "*/5 * * * * *",
-                "timeout"  => 5,
-                "enabled"  => 1
-            ),
-            "cron15" => array(
-                "schedule" => "*/15 * * * * *",
-                "timeout"  => 15
-            ),
-            "cron30" => array(
-                "schedule" => "*/15 * * * * *",
-                "timeout"  => 30
-            ),
-            "checkDaemon" => array(
-                "schedule" => "*/5 * * * * *",
-                "timeout"  => 5
-            ),
-            "heartbeat" => array(
-                "schedule" => "*/5 * * * * *",
-                "timeout"  => 10,
-                "enabled"  => 1
-            ),
-        ),
-        "scenario" => array(
-            "check" => array(
-                "schedule" => "* * * * * *",
-                "timeout"  => 30,
-                "enabled"  => 1
-            ),
-            "control" => array(
-                "schedule" => "* * * * * *",
-                "timeout"  => 30,
-                "enabled"  => 1
-            ),
-        ),
-        "cache" => array(
-            "persist" => array(
-                "schedule" => "*/30 * * * * *",
-                "timeout"  => 30
-            ),
-        ),
-        "history" => array(
-            "archive" => array(
-                "schedule" => "00 5 * * * *",
-                "timeout"  => 240
-            ),
-        ),
     );
 
     public static function checkConsistency()
@@ -152,12 +67,105 @@ class ConsistencyManager {
         }
     }
 
+    private static function getDefaultCrons() {
+        return array(
+            "nextdom" => array(
+                "backup" => array(
+                    "schedule" => mt_rand(10, 59) . ' 0' . mt_rand(0, 7) . ' * * *',
+                    "timeout"  => 60,
+                    "enabled"  => 1
+                ),
+                "cronDaily" => array(
+                    "schedule" => "00 00 * * * *",
+                    "timeout"  => 240,
+                    "enabled"  => 1
+                ),
+                "cronHourly" => array(
+                    "schedule" => "00 * * * * *",
+                    "timeout"  => 60,
+                    "enabled"  => 1
+                ),
+                "cron5" => array(
+                    "schedule" => "*/5 * * * * *",
+                    "timeout"  => 5
+                ),
+                "cron" => array(
+                    "schedule" => "* * * * * *",
+                    "timeout"  => 2
+                ),
+            ),
+            "plugin" => array(
+                "cronDaily" => array(
+                    "schedule" => "00 00 * * * *",
+                    "timeout"  => 240,
+                    "enabled"  => 1
+                ),
+                "cronHourly" => array(
+                    "schedule" => "00 * * * * *",
+                    "timeout"  => 60,
+                    "enabled"  => 1
+                ),
+                "cron" => array(
+                    "schedule" => "* * * * * *",
+                    "timeout"  => 2
+                ),
+                "cron5" => array(
+                    "schedule" => "*/5 * * * * *",
+                    "timeout"  => 5,
+                    "enabled"  => 1
+                ),
+                "cron15" => array(
+                    "schedule" => "*/15 * * * * *",
+                    "timeout"  => 15
+                ),
+                "cron30" => array(
+                    "schedule" => "*/15 * * * * *",
+                    "timeout"  => 30
+                ),
+                "checkDaemon" => array(
+                    "schedule" => "*/5 * * * * *",
+                    "timeout"  => 5
+                ),
+                "heartbeat" => array(
+                    "schedule" => "*/5 * * * * *",
+                    "timeout"  => 10,
+                    "enabled"  => 1
+                ),
+            ),
+            "scenario" => array(
+                "check" => array(
+                    "schedule" => "* * * * * *",
+                    "timeout"  => 30,
+                    "enabled"  => 1
+                ),
+                "control" => array(
+                    "schedule" => "* * * * * *",
+                    "timeout"  => 30,
+                    "enabled"  => 1
+                ),
+            ),
+            "cache" => array(
+                "persist" => array(
+                    "schedule" => "*/30 * * * * *",
+                    "timeout"  => 30
+                ),
+            ),
+            "history" => array(
+                "archive" => array(
+                    "schedule" => "00 5 * * * *",
+                    "timeout"  => 240
+                ),
+            ),
+        );
+    }
+
     private static function cleanWidgetCache()
     {
         foreach (EqLogicManager::all() as $c_item) {
             try {
                 $c_item->emptyCacheWidget();
-            } catch (\Exception) { }
+            } catch (\Exception $e) {
+            }
         }
     }
 
@@ -167,7 +175,8 @@ class ConsistencyManager {
             foreach (JeeObjectManager::all() as $c_item) {
                 $c_item->save();
             }
-        } catch (\Exception) { }
+        } catch (\Exception $e) {
+        }
     }
 
     private static function resetCommandsActionID()
@@ -182,7 +191,7 @@ class ConsistencyManager {
     }
 
 
-    private static function ensureSummary()
+    private static function ensureConfiguration()
     {
         $summary = ConfigManager::byKey("object:summary");
         if (!is_array($summary)) {
@@ -215,11 +224,11 @@ class ConsistencyManager {
 
     private static function ensureCrons()
     {
-        foreach (self::$defaultCrons as $c_class => $c_data) {
+        foreach (self::getDefaultCrons() as $c_class => $c_data) {
             foreach ($c_data as $c_name => $c_config) {
-                $cron = cron::byClassAndFunction($c_class, $c_name);
+                $cron = CronManager::byClassAndFunction($c_class, $c_name);
                 if (false == is_object($cron)) {
-                    $cron = new cron();
+                    $cron = new Cron();
                 }
                 $cron->setClass($c_class);
                 $cron->setFunction($c_name);
@@ -235,9 +244,11 @@ class ConsistencyManager {
 
     private static function ensureUserFunctionExists()
     {
-        $source = sprintf("%s/user.function.class.sample.php", NEXTDOM_DATA);
-        $dest   = sprintf("%s/user.function.class.php",        NEXTDOM_DATA);
-        if (false == file_exists($dest)) {
+        $source = sprintf("%s/data/php/user.function.class.sample.php", NEXTDOM_DATA);
+        $dest   = sprintf("%s/data/php/user.function.class.php",        NEXTDOM_DATA);
+
+        if ((false == file_exists($dest)) &&
+            (true  == file_exists($source))) {
             copy($source, $dest);
         }
     }

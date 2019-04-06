@@ -1,5 +1,4 @@
 <?php
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -15,23 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* * ********************* Debug **************** */
-define('DEBUG', 0);
-
-/* * *********************** MySQL & Memcached ******************* */
-global $CONFIG;
-$CONFIG = array(
-    'db' => array(
-        'host'     => '#HOST#',
-        'port'     => '#PORT#',
-        'dbname'   => '#DBNAME#',
-        'username' => '#USERNAME#',
-        'password' => '#PASSWORD#',
-    ),
-    'paths' => array(
-        "log" => '#LOG_DIR#',
-        "lib" => '#LIB_DIR#',
-        "tmp" => '#TMP_DIR#',
-    ),
-);
+/* * ***************************Includes********************************* */
+require_once __DIR__ . '/../../core/php/core.inc.php';
+class object extends jeeObject {
+}

@@ -76,7 +76,7 @@ try {
         ajax::success();
     }
     if (init('action') == 'updateTheme') {
-        unlink(NEXTDOM_RUN . '/public/css/theme.css');
+        unlink(NEXTDOM_DATA . '/public/css/theme.css');
         ajax::success();
     }
 
