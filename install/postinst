@@ -536,6 +536,10 @@ set_root $0
 prereq_create_dirs
 detect_dev_version
 
+print_log_in "step_nextdom_assets ... "
+step_nextdom_assets
+print_log_ok
+
 print_log_in "step_nextdom_mysql_parameters ... "
 step_nextdom_mysql_parameters
 print_log_ok
@@ -566,10 +570,6 @@ print_log_ok
 
 print_log_in "step_nextdom_crontab ... "
 step_nextdom_crontab
-print_log_ok
-
-print_log_in "step_nextdom_assets ... "
-step_nextdom_assets
 print_log_ok
 
 print_log_in "step_nextdom_check ... "
