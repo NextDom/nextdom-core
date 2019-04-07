@@ -327,6 +327,7 @@ EOS
 
 
 step_nextdom_mysql_configuration() {
+  # check that mysql is locally installed before any further configuration
   mysqladmin -uroot ${HOSTPASS} status >/dev/null 2>/dev/null || {
     return 0
   }
