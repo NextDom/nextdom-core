@@ -986,7 +986,7 @@ class Utils
      * @param mixed $default fallback value
      */
     public static function array_key_default($array, $key, $default) {
-        if (true == array_key_exists($key, $array))
+        if (true === array_key_exists($key, $array))
             return $array[$key];
         return $default;
     }
