@@ -67,8 +67,8 @@ try {
                 $update = new update();
             }
             $update->setSource(init('repo'))
-                ->setLogicalId($repo->getLogicalId()
-                ->setType($repo->getType()
+                ->setLogicalId($repo->getLogicalId())
+                ->setType($repo->getType())
                 ->setLocalVersion($repo->getDatetime(init('version', 'stable')))
                 ->setConfiguration('version', init('version', 'stable'));
             $update->save();
