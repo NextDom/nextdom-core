@@ -57,7 +57,9 @@ class ConsistencyManager {
             self::ensureConfiguration();
             CronManager::clean();
             self::deleteDeprecatedCrons();
+            echo "here1\n";
             self::ensureCrons();
+            echo "here2\n";
             self::cleanWidgetCache();
             self::saveObjects();
             self::resetCommandsActionID();
@@ -122,7 +124,7 @@ class ConsistencyManager {
                     "schedule" => "*/15 * * * * *",
                     "timeout"  => 30
                 ),
-                "checkDaemon" => array(
+                "checkDeamon" => array(
                     "schedule" => "*/5 * * * * *",
                     "timeout"  => 5
                 ),
@@ -238,6 +240,7 @@ class ConsistencyManager {
                 if (true == array_key_exists("enabled", $c_config)) {
                     $cron->setEnable($c_config["enabled"]);
                 }
+                $cron->save();
             }
         }
     }

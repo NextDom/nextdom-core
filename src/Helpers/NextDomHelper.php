@@ -176,7 +176,7 @@ class NextDomHelper
             'icon' => 'fa-play',
             'name' => __('health.product-started'),
             'state' => $state,
-            'result' => ($state) ? $okStr . ' - ' . file_get_contents(self::getTmpFolder() . '/started') : $nokStr,
+            'result' => ($state) ? $okStr . ' - ' . file_get_contents(self::getStartedFilePath()) : $nokStr,
             'comment' => '',
         );
 
@@ -563,6 +563,11 @@ class NextDomHelper
         // }
     }
 
+    public static function getStartedFilePath(): string
+    {
+        return sprintf("%s/started", self::getTmpFolder());
+    }
+
     /**
      * Test if NextDom is started
      *
@@ -571,7 +576,7 @@ class NextDomHelper
      */
     public static function isStarted(): bool
     {
-        return file_exists(self::getTmpFolder() . '/started');
+        return file_exists(self::getStartedFilePath());
     }
 
     /**
@@ -675,16 +680,16 @@ class NextDomHelper
             }
 
             try {
-                LogHelper::add('starting', 'debug', __('Ecriture du fichier ') . self::getTmpFolder() . '/started');
-                if (file_put_contents(self::getTmpFolder() . '/started', date('Y-m-d H:i:s')) === false) {
-                    LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started'));
+                LogHelper::add('starting', 'debug', __('Ecriture du fichier ') . self::getStartedFilePath());
+                if (file_put_contents(self::getStartedFilePath(), date('Y-m-d H:i:s')) === false) {
+                    LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getStartedFilePath()));
                 }
             } catch (\Exception $e) {
-                LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getStartedFilePath() . ' : ') . LogHelper::exception($e));
             }
 
-            if (!file_exists(self::getTmpFolder() . '/started')) {
-                LogHelper::add('starting', 'critical', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started pour une raison inconnue. NextDom ne peut démarrer'));
+            if (!file_exists(self::getStartedFilePath())) {
+                LogHelper::add('starting', 'critical', __('Impossible d\'écrire ' . self::getStartedFilePath() . ' pour une raison inconnue. NextDom ne peut démarrer'));
                 return;
             }
 
@@ -1125,9 +1130,7 @@ class NextDomHelper
             $result .= '/' . $subFolder;
         }
         if (!file_exists($result)) {
-            mkdir($result, 0774, true);
-            $cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . $result . ';';
-            \com_shell::execute($cmd);
+            mkdir($result, 0775, true);
         }
         return $result;
     }

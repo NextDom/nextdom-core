@@ -55,7 +55,7 @@ class CacheManager
     {
         $return = NextDomHelper::getTmpFolder('cache');
         if (!file_exists($return)) {
-            mkdir($return, 0777);
+            mkdir($return, 0775);
         }
         return $return;
     }
