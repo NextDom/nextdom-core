@@ -247,7 +247,7 @@ step_nextdom_apache_php() {
 }
 
 
-step_nextdom_configuration() {
+step_nextdom_directory_layout() {
   rm -rf ${LIB_DIRECTORY}/config
   cp -r  ${WEBSERVER_HOME}/assets/config ${LIB_DIRECTORY}
   rm -rf ${LIB_DIRECTORY}/data
@@ -267,7 +267,9 @@ step_nextdom_configuration() {
       rm -f ${WEBSERVER_HOME}/data
   fi
   ln -s ${LIB_DIRECTORY}/data ${WEBSERVER_HOME}/data
+}
 
+step_nextdom_configuration() {
   rm -f ${WEBSERVER_HOME}/core/config/common.config.php
   cp ${WEBSERVER_HOME}/core/config/common.config.sample.php ${WEBSERVER_HOME}/core/config/common.config.php
 
@@ -535,6 +537,10 @@ fi
 set_root $0
 prereq_create_dirs
 detect_dev_version
+
+print_log_in "step_nextdom_directory_layout ... "
+step_nextdom_directory_layout
+print_log_ok
 
 print_log_in "step_nextdom_assets ... "
 step_nextdom_assets
