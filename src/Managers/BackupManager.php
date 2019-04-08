@@ -466,7 +466,7 @@ class BackupManager
      */
     private static function getBackupFilename()
     {
-        $date      = date("Y-m-d-H:h:i:s");
+        $date      = date("Y-m-d-H:i:s");
         $version   = NextDomHelper::getJeedomVersion();
         $name      = ConfigManager::byKey('name', 'core', 'NextDom');
         $cleanName = str_replace(array('&','#', "'", '"', '+', "-"), "", $name);
