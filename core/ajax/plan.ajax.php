@@ -227,29 +227,19 @@ try {
         }
         unautorizedInDemo();
         $plan = plan::byId(init('id'));
-        if (!is_object($plan)) {
+        if (false == is_object($plan)) {
             throw new Exception(__('Objet inconnu. Vérifiez l\'ID', __FILE__));
         }
-        if (!isset($_FILES['file'])) {
-            throw new Exception(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)', __FILE__));
-        }
-        $extension = strtolower(strrchr($_FILES['file']['name'], '.'));
-        if (!in_array($extension, array('.jpg', '.png'))) {
-            throw new Exception('Extension du fichier non valide (autorisé .jpg .png) : ' . $extension);
-        }
-        if (filesize($_FILES['file']['tmp_name']) > 5000000) {
-            throw new Exception(__('Le fichier est trop gros (maximum 5Mo)', __FILE__));
-        }
-        $uploaddir = __DIR__ . '/../../public/img/plan_' . $plan->getId();
-        if (!file_exists($uploaddir)) {
-            mkdir($uploaddir, 0777);
-        }
-        shell_exec('rm -rf ' . $uploaddir . '/*');
-        $name = sha512(base64_encode(file_get_contents($_FILES['file']['tmp_name']))) . $extension;
-        $img_size = getimagesize($_FILES['file']['tmp_name']);
-        if (!move_uploaded_file($_FILES['file']['tmp_name'], $uploaddir . '/' . $name)) {
-            throw new Exception(__('Impossible de déplacer le fichier temporaire dans : ', __FILE__) . $uploaddir . '/' . $name);
-        }
+
+        $uploadDir = sprintf("%s/public/img/plan_%s", NEXTDOM_ROOT, $plan->getId());
+        shell_exec('rm -rf ' . $uploadDir);
+        mkdir($uploadDir, 0775, true);
+        $filepath = Utils::readUploadedFile($_FILES, $uploadDir, 5, array(".png", "jpg"), function ($file) {
+            $content = file_get_contents($file['tmp_name']);
+            return sha512(base64_encode($content));
+        });
+
+        $img_size = getimagesize($filepath);
         $plan->setDisplay('width', $img_size[0]);
         $plan->setDisplay('height', $img_size[1]);
         $plan->setDisplay('path', 'public/img/plan_' . $plan->getId() . '/' . $name);

@@ -666,26 +666,20 @@ try {
             } else {
                 $backup_dir = config::byKey('backup::path');
             }
-            $uploaddir = $backup_dir . '/slave/';
-            if (!file_exists($uploaddir)) {
-                mkdir($uploaddir);
-            }
-            if (!file_exists($uploaddir)) {
-                throw new Exception(__('Répertoire de téléversement non trouvé : ', __FILE__) . secureXSS($uploaddir));
-            }
-            $_file = $_FILES['file'];
-            $extension = strtolower(strrchr($_file['name'], '.'));
-            if (!in_array($extension, array('.tar.gz', '.gz', '.tar'))) {
-                throw new Exception(__('Extension du fichier non valide (autorisé .tar.gz, .tar et .gz) : ', __FILE__) . secureXSS($extension));
-            }
-            if (filesize($_file['tmp_name']) > 50000000) {
-                throw new Exception(__('La taille du fichier est trop importante (maximum 50Mo)', __FILE__));
-            }
-            $uploadfile = $uploaddir . $jeeNetwork->getId() . '-' . $jeeNetwork->getName() . '-' . $jeeNetwork->getConfiguration('version') . '-' . date('Y-m-d_H\hi') . '.tar' . $extension;
-            if (!move_uploaded_file($_file['tmp_name'], $uploadfile)) {
-                throw new Exception(__('Impossible de téléverser le fichier', __FILE__));
-            }
-            system('find ' . $uploaddir . $jeeNetwork->getId() . '*' . ' -mtime +' . config::byKey('backup::keepDays') . ' -print | xargs -r rm');
+
+            $uploadDir = sprintf("%s/slave", $backup_dir);
+            $format = sprintf("%s-%s-%s-%s.tar.%%s",
+                              $jeeNetwork->getId(),
+                              $jeeNetwork->getName(),
+                              $jeeNetwork->getConfiguration('version'),
+                              date('Y-m-d_H\hi'));
+            FileSystemHelper::mkdirIfNotExists($uploadDir, 0775, true);
+            Utils::readUploadedFile($_FILES, $uploadDir, 50, array(".tar.gz", ".gz", ".tar"), function($file) use ($format) {
+                $extension = strtolower(strrchr($file['name'], '.'));
+                return sprintf($format, $extension);
+            });
+
+            system('find ' . $uploadDir . $jeeNetwork->getId() . '*' . ' -mtime +' . config::byKey('backup::keepDays') . ' -print | xargs -r rm');
             $jsonrpc->makeSuccess('ok');
         }
 
@@ -693,31 +687,12 @@ try {
             if (config::byKey('jeeNetwork::mode') != 'slave') {
                 throw new Exception(__('Seul un esclave peut restaurer une sauvegarde', __FILE__));
             }
-            if (substr(config::byKey('backup::path'), 0, 1) != '/') {
-                $uploaddir = __DIR__ . '/../../' . config::byKey('backup::path');
-            } else {
-                $uploaddir = config::byKey('backup::path');
-            }
-            if (!file_exists($uploaddir)) {
-                mkdir($uploaddir);
-            }
-            if (!file_exists($uploaddir)) {
-                throw new Exception(__('Répertoire de téléversement non trouvé : ', __FILE__) . secureXSS($uploaddir));
-            }
-            $_file = $_FILES['file'];
-            $extension = strtolower(strrchr($_file['name'], '.'));
-            if (!in_array($extension, array('.tar.gz', '.gz', '.tar'))) {
-                throw new Exception(__('Extension du fichier non valide (autorisé .tar.gz, .tar et .gz) : ', __FILE__) . secureXSS($extension));
-            }
-            if (filesize($_file['tmp_name']) > 50000000) {
-                throw new Exception(__('La taille du fichier est trop importante (maximum 50Mo)', __FILE__));
-            }
-            $backup_name = 'backup-' . nextdom::version() . '-' . date("d-m-Y-H\hi") . '.tar.gz';
-            $uploadfile = $uploaddir . '/' . $backup_name;
-            if (!move_uploaded_file($_file['tmp_name'], $uploadfile)) {
-                throw new Exception(__('Impossible de téléverser le fichier', __FILE__));
-            }
-            nextdom::restore($uploadfile, true);
+            $uploadDir = BackupManager::getBackupDirectory();
+            $filename  = Utils::readUploadedFile($_FILES, $uploadDir, 50, array('.tar.gz', '.gz', '.tar'), function($file) {
+                // should probably use BackupManager::getBackupFilename
+                return sprintf("backup-%s-%s.tar.gz", nextdom::version(), date("d-m-Y-H\hi"));
+            });
+            nextdom::restore($filename, true);
             $jsonrpc->makeSuccess('ok');
         }
 

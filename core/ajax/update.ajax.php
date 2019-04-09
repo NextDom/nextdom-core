@@ -159,26 +159,14 @@ try {
             ajax::success();
         }
 
-            if (init('action') == 'preUploadFile') {
+        if (init('action') == 'preUploadFile') {
             unautorizedInDemo();
             $uploaddir = '/tmp';
-            if (!file_exists($uploaddir)) {
-                throw new Exception(__('Répertoire de téléversement non trouvé : ', __FILE__) . $uploaddir);
-            }
-            if (!isset($_FILES['file'])) {
-                throw new Exception(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)', __FILE__));
-            }
-            if (filesize($_FILES['file']['tmp_name']) > 100000000) {
-                throw new Exception(__('Le fichier est trop gros (maximum 100Mo)', __FILE__));
-            }
-            $filename = str_replace(array(' ', '(', ')'), '', $_FILES['file']['name']);
-            if (!move_uploaded_file($_FILES['file']['tmp_name'], $uploaddir . '/' . $filename)) {
-                throw new Exception(__('Impossible de déplacer le fichier temporaire', __FILE__));
-            }
-            if (!file_exists($uploaddir . '/' . $filename)) {
-                throw new Exception(__('Impossible de téléverser le fichier (limite du serveur web ?)', __FILE__));
-            }
-            ajax::success($uploaddir . '/' . $filename);
+            $filepath = Utils::readUploadedFile($_FILES, $uploaddir, 100, array(), function($file) {
+                $remove = array(" ", "(", ")");
+                return str_replace($remove, "", $file["name"]);
+            });
+            ajax::success($filepath);
         }
 
         throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
@@ -186,4 +174,3 @@ try {
     } catch (Exception $e) {
         ajax::error(displayException($e), $e->getCode());
     }
-    

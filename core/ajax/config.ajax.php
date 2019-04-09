@@ -76,7 +76,10 @@ try {
         ajax::success();
     }
     if (init('action') == 'updateTheme') {
-        unlink(NEXTDOM_DATA . '/public/css/theme.css');
+        $path = sprintf("%s/public/css/theme.css", NEXTDOM_DATA);
+        if (true == file_exists($path)) {
+            unlink(NEXTDOM_DATA . '/public/css/theme.css');
+        }
         ajax::success();
     }
 

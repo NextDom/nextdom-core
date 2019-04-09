@@ -214,29 +214,8 @@ try {
 
     if (init('action') == 'backupupload') {
         unautorizedInDemo();
-
         $uploaddir = BackupManager::getBackupDirectory();
-        if (!file_exists($uploaddir)) {
-            if (!mkdir($uploaddir)) {
-                throw new Exception(__('Répertoire de téléversement non trouvé : ', __FILE__) . $uploaddir);
-            }
-        }
-        if (!isset($_FILES['file'])) {
-            throw new Exception(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)', __FILE__));
-        }
-        $extension = strtolower(strrchr($_FILES['file']['name'], '.'));
-        if (!in_array($extension, array('.gz'))) {
-            throw new Exception('Extension du fichier non valide (autorisé .tar.gz) : ' . $extension);
-        }
-        if (filesize($_FILES['file']['tmp_name']) > 300000000) {
-            throw new Exception(__('Le fichier est trop gros (maximum 300Mo)', __FILE__));
-        }
-        if (!move_uploaded_file($_FILES['file']['tmp_name'], $uploaddir . '/' . $_FILES['file']['name'])) {
-            throw new Exception(__('Impossible de déplacer le fichier temporaire', __FILE__));
-        }
-        if (!file_exists($uploaddir . '/' . $_FILES['file']['name'])) {
-            throw new Exception(__('Impossible de téléverser le fichier (limite du serveur web ?)', __FILE__));
-        }
+        Utils::readUploadedFile($_FILES, $uploaddir, 300, array(".gz"));
         ajax::success();
     }
 
@@ -265,15 +244,9 @@ try {
         if ($customType != 'js' && $customType != 'css') {
             throw new CoreException(__('La version ne peut être que js ou css'));
         }
-        $path = NEXTDOM_DATA . '/custom/' . $customVersion . '/';
-        if (!file_exists($path)) {
-            mkdir($path);
-        }
-        $path .= 'custom.' . $customType;
-        if (file_exists($path)) {
-            unlink($path);
-        }
-        file_put_contents($path, Utils::init('content'));
+        $customDir  = sprintf("%s/custom/%s/", NEXTDOM_DATA, $customVersion);
+        $customPath = sprintf("%s/custom.%s", $customDir, $customType);
+        file_put_contents($customPath, Utils::init('content'));
         ajax::success();
     }
 

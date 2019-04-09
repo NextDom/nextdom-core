@@ -304,20 +304,24 @@ class NextDomHelper
             'icon' => 'fa-inbox',
             'comment' => '',
             'name' => __('health.cache-persistence'));
+
         if (CacheManager::isPersistOk()) {
-            if (ConfigManager::byKey('cache::engine') != 'FilesystemCache' && ConfigManager::byKey('cache::engine') != 'PhpFileCache') {
+            if ((ConfigManager::byKey('cache::engine') != 'FilesystemCache') &&
+                (ConfigManager::byKey('cache::engine') != 'PhpFileCache')) {
                 $cache_health['state'] = true;
                 $cache_health['result'] = $okStr;
             } else {
-                $filename = NEXTDOM_DATA . '/cache.tar.gz';
+                $cache_path = CacheManager::getArchivePath();
+                $cache_time = date('Y-m-d H:i:s', filemtime($cache_path));
                 $cache_health['state'] = true;
-                $cache_health['result'] = $okStr . ' (' . date('Y-m-d H:i:s', filemtime($filename)) . ')';
+                $cache_health['result'] = sprintf("%s (%s)", $okStr, $cache_time);
             }
         } else {
             $cache_health['state'] = false;
             $cache_health['result'] = $nokStr;
             $cache_health['comment'] = __('health.cache-not-saved');
         }
+
         $systemHealth[] = $cache_health;
 
         $state = shell_exec('systemctl show apache2 | grep  PrivateTmp | grep yes | wc -l');

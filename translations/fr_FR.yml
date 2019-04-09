@@ -1069,6 +1069,7 @@ scenario:
 "Expression non valide :": "Expression non valide :"
 "Extension": "Extension"
 "Extension du fichier non valide (autorisé .tar.gz, .tar et .gz": "Extension du fichier non valide (autorisé .tar.gz, .tar et .gz"
+"Extension du fichier non valide, autorisé :": "Extension du fichier non valide, autorisé :"
 "Exécuter": "Exécuter"
 "Exécution d'un bloc code": "Exécution d'un bloc code"
 "Exécution d'un bloc élément :": "Exécution d'un bloc élément :"

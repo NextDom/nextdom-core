@@ -33,26 +33,7 @@ try {
 
     if (init('action') == 'imageUpload') {
         $uploaddir = sprintf("%s/public/img/profils", NEXTDOM_ROOT);
-        if (!file_exists($uploaddir)) {
-            throw new Exception(__("{{Répertoire d'upload non trouvé}} : ", __FILE__) . $uploaddir);
-        }
-        if (!isset($_FILES['images'])) {
-            throw new Exception(__('{{Aucun fichier trouvé. Vérifié parametre PHP (post size limit}}', __FILE__));
-        }
-        $extension = strtolower(strrchr($_FILES['images']['name'], '.'));
-        if (!in_array($extension, array('.png','.jpg'))) {
-            throw new Exception('{{Seul les images sont acceptées (autorisé .jpg .png)}} : ' . $extension);
-        }
-        if (filesize($_FILES['images']['tmp_name']) > 1000000) {
-            throw new Exception(__('{{Le fichier est trop gros}} (maximum 8mo)', __FILE__));
-        }
-        $destpath = sprintf("%s/%s", $uploaddir, $_FILES['images']['name']);
-        if (!move_uploaded_file($_FILES['images']['tmp_name'], $destpath)) {
-            throw new Exception(__('{{Impossible de déplacer le fichier temporaire}}', __FILE__));
-        }
-        if (!file_exists($destpath)) {
-            throw new Exception(__("{{Impossible d'uploader le fichier (limite du serveur web ?)}}", __FILE__));
-        }
+        Utils::readUploadedFile($_FILES, $uploaddir, 8, array(".png", ".jpg"));
         ajax::success();
     }
 

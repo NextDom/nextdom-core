@@ -1041,6 +1041,7 @@ core:
 "Chemin": "Yol"
 "Tout supprimer": "Hepsini sil"
 "Extension": "Uzanti"
+"Extension du fichier non valide, autorisé :": "geçersiz dosya uzantısı, yetkili:"
 "Id rapport": "Rapor Id"
 "Aperçu": "Önizleme"
 "Aucune methode correspondante à : ": "Buna karşılık gelen hiçbir yöntem yok:"

@@ -156,34 +156,19 @@ try {
             throw new Exception(__('401 - Accès non autorisé', __FILE__));
         }
         unautorizedInDemo();
+        $uploadDir = '/tmp';
         $plan3dHeader = plan3dHeader::byId(init('id'));
         if (!is_object($plan3dHeader)) {
             throw new Exception(__('Objet inconnu. Vérifiez l\'ID', __FILE__));
         }
-        if (!isset($_FILES['file'])) {
-            throw new Exception(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)', __FILE__));
-        }
-        $extension = strtolower(strrchr($_FILES['file']['name'], '.'));
-        if (!in_array($extension, array('.zip'))) {
-            throw new Exception('Extension du fichier non valide (autorisé .zip) : ' . $extension);
-        }
-        if (filesize($_FILES['file']['tmp_name']) > 150000000) {
-            throw new Exception(__('Le fichier est trop gros (maximum 150Mo)', __FILE__));
-        }
-        $uploaddir = '/tmp';
-        if (!move_uploaded_file($_FILES['file']['tmp_name'], $uploaddir . '/' . $_FILES['file']['name'])) {
-            throw new Exception(__('Impossible de déplacer le fichier temporaire', __FILE__));
-        }
-        if (!file_exists($uploaddir . '/' . $_FILES['file']['name'])) {
-            throw new Exception(__('Impossible de téléverser le fichier (limite du serveur web ?)', __FILE__));
-        }
+        $filename = Utils::readUploadedFile($_FILES, $uploadDir, 150, array(".zip"));
         if ($plan3dHeader->getConfiguration('path') == '') {
-            $plan3dHeader->setConfiguration('path', NEXTDOM_DATA . '/data/3d/' . config::genKey() . '/');
+            $path = sprintf("%s/data/3d/%s/", NEXTDOM_DATA, config::genKey());
+            $plan3dHeader->setConfiguration('path', $path);
         }
-        $file = $uploaddir . '/' . $_FILES['file']['name'];
         $cibDir = __DIR__ . '/../../' . $plan3dHeader->getConfiguration('path');
         $zip = new ZipArchive;
-        $res = $zip->open($file);
+        $res = $zip->open($filename);
         if ($res === TRUE) {
             if (!$zip->extractTo($cibDir . '/')) {
                 throw new Exception(__('Impossible de décompresser les fichiers : ', __FILE__));
@@ -191,7 +176,7 @@ try {
             $zip->close();
             unlink($tmp);
         } else {
-            throw new Exception(__('Impossible de décompresser l\'archive zip : ', __FILE__) . $file . ' => ' . ZipErrorMessage($res));
+            throw new Exception(__('Impossible de décompresser l\'archive zip : ', __FILE__) . $filename . ' => ' . ZipErrorMessage($res));
         }
         $objfile = ls($cibDir, '*.obj', false, array('files'));
         if (count($objfile) != 1) {

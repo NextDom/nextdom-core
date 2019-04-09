@@ -1041,6 +1041,7 @@ core:
 "Chemin": "caminho"
 "Tout supprimer": "claro"
 "Extension": "extensão"
+"Extension du fichier non valide, autorisé :": "extensão de arquivo inválida, autorizada:"
 "Id rapport": "relatório id"
 "Aperçu": "exame"
 "Aucune methode correspondante à : ": "Nenhum método de correspondência para:"

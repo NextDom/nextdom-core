@@ -85,13 +85,15 @@ detect_dev_version(){
 
 prereq_create_dirs() {
   # directories
-  mkdir -p ${LOG_DIRECTORY}
   mkdir -p ${LOG_DIRECTORY}/scenarioLog
+
   mkdir -p ${LIB_DIRECTORY}
-  mkdir -p ${LIB_DIRECTORY}/{custom,market_cache,cache,backup}
+  mkdir -p ${LIB_DIRECTORY}/{market_cache,cache,backup}
+  mkdir -p ${LIB_DIRECTORY}/custom/{desktop,mobile}
   mkdir -p ${LIB_DIRECTORY}/public/css
   mkdir -p ${LIB_DIRECTORY}/public/img/plan
   mkdir -p ${LIB_DIRECTORY}/public/img/profils
+
   mkdir -p ${root}/plugins
 
   rm -f ${LOG_DIRECTORY}/postinst.ok

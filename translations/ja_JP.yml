@@ -1041,6 +1041,7 @@ core:
 "Chemin": "パス"
 "Tout supprimer": "明確な"
 "Extension": "拡張"
+"Extension du fichier non valide, autorisé :": "無効なファイル拡張子、許可された："
 "Id rapport": "IDレポート"
 "Aperçu": "調査"
 "Aucune methode correspondante à : ": "一致する方法ありませんへ："

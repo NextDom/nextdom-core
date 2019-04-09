@@ -990,4 +990,55 @@ class Utils
             return $array[$key];
         return $default;
     }
+
+    /**
+     * Checks and moves uploaded to given directory
+     *
+     * @param array $files variable like $_FILES
+     * @param srting $destDir destination directory
+     * @param int $maxSizeMB maximum size of file in megabytes
+     * @param array $extensions list of accepted file extensions, ex: [ ".gz" ]. Any when empty
+     * @param function $cleaner function that returns the filename from $_FILES['file']
+     * @throws CoreException when checks fail
+     * @return string path to modes file
+     */
+    static public function readUploadedFile($files, $destDir, $maxSizeMB, $extensions, $cleaner = null)
+    {
+        if (false == isset($files['file'])) {
+            $message = __('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)', __FILE__);
+            throw new Exception($message);
+        }
+
+        if (0 != count($extensions)) {
+            $extension = strtolower(strrchr($files['file']['name'], '.'));
+            if (false == in_array($extension, $extensions)) {
+                $message = __('Extension du fichier non valide, autorisé :', __FILE__) . join(",", $extension);
+                throw new Exception($message);
+            }
+        }
+
+        $sizeBytes = filesize($files['file']['tmp_name']);
+        if ($sizeBytes > ($maxSizeMB  * 1024 * 1024)) {
+            $message = __('Le fichier est trop gros', __FILE__);
+            throw new Exception(sprintf("%s > %s MB", $message, $maxSizeMB));
+        }
+
+        $name = $files['file']['name'];
+        if (null !== $cleaner) {
+            $name = $cleaner($files['file']);
+        }
+
+        $destPath = sprintf("%s/%s", $destDir, $name);
+        if (false == move_uploaded_file($files['file']['tmp_name'], $destPath)) {
+            $message = __('Impossible de déplacer le fichier temporaire', __FILE__);
+            throw new Exception($message);
+        }
+
+        if (false == file_exists($destPath)) {
+            $message = __('Impossible de téléverser le fichier', __FILE__);
+            throw new Exception($message);
+        }
+
+        return $destPath;
+    }
 }

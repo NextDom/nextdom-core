@@ -382,6 +382,7 @@ class BackupManager
      *
      * When backup::path is relative, constructs directory from NEXTDOM_DATA root
      *
+     * @throws CoreException if backup directory cannot be created
      * @retrun string backup root directory
      */
     public static function getBackupDirectory() {
@@ -389,8 +390,10 @@ class BackupManager
         if ("/" != substr($dir, 0, 1)) {
             $dir = sprintf("%s/%s", NEXTDOM_DATA, $dir);
         }
-        if (false == is_dir($dir)) {
-            mkdir($dir, 0775, true);
+        if (false === is_dir($dir)) {
+            if (false === mkdir($dir, 0775, true)) {
+                throw CoreException("unable to create backup directory " . $dir)
+            }
         }
         return $dir;
     }
@@ -542,7 +545,7 @@ class BackupManager
         $excludeDirs = array("AlternativeMarketForJeedom", "musicast");
         $exclude = sprintf("/^(%s)$/", join("|", $excludeDirs));
         $tmpDir  = sprintf("%s-restore-%s", NEXTDOM_TMP, date('Y-m-d-H:i:s'));
-        if (false == mkdir($tmpDir, $mode = 0770, true)) {
+        if (false == mkdir($tmpDir, $mode = 0775, true)) {
             throw new CoreException("unable to create tmp directory " . $tmpDir);
         }
         $tar = new Tar();

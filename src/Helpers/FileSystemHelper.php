@@ -527,4 +527,19 @@ class FileSystemHelper
         return $totalsize;
     }
 
+    /**
+     * Create directory if not already exists
+     *
+     * @param int $mode, see mkdir parameter
+     * @param int $recursive, see mkdir parameter
+     * @throws CoreException when cannot create directory
+     */
+    public static function mkdirIfNotExists($path, $mode = 0775, $recursive = false) {
+        if (false === id_dir($path)) {
+            if (false === mkdir($path, $mode, $recursive)) {
+                throw new CoreException("unable to create directory : " . $path);
+            }
+        }
+    }
+
 }
