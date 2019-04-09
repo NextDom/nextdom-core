@@ -250,21 +250,27 @@ step_nextdom_apache_php() {
 
 
 step_nextdom_directory_layout() {
-  rm -rf ${LIB_DIRECTORY}/config
+  # we delete existing config since it is regenerated from asset sample (step_nextdom_configuration)
   cp -r  ${WEBSERVER_HOME}/assets/config ${LIB_DIRECTORY}
+  rm -rf ${LIB_DIRECTORY}/config
+
+  # we delete existing data, since its re-imported from assets
   rm -rf ${LIB_DIRECTORY}/data
   cp -r  ${WEBSERVER_HOME}/assets/data   ${LIB_DIRECTORY}
 
+  # jeedom backup compatibility: ./core/config is a symlink
   if [ -L ${WEBSERVER_HOME}/core/config ]; then
       rm -f ${WEBSERVER_HOME}/core/config
   fi
   ln -s ${LIB_DIRECTORY}/config ${WEBSERVER_HOME}/core/config
 
+  # jeedom backup compatibility:  ./var is a symlink
   if [ -L ${WEBSERVER_HOME}/var ]; then
       rm -f ${WEBSERVER_HOME}/var
   fi
   ln -s ${LIB_DIRECTORY} ${WEBSERVER_HOME}/var
 
+  # jeedom backup compatibility:  ./data is a symlink
   if [ -L ${WEBSERVER_HOME}/data ]; then
       rm -f ${WEBSERVER_HOME}/data
   fi
@@ -272,9 +278,8 @@ step_nextdom_directory_layout() {
 }
 
 step_nextdom_configuration() {
-  rm -f ${WEBSERVER_HOME}/core/config/common.config.php
+  # recreate configuration from sample
   cp ${WEBSERVER_HOME}/core/config/common.config.sample.php ${WEBSERVER_HOME}/core/config/common.config.php
-
   sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s/#DBNAME#/${MYSQL_NEXTDOM_DB}/g"       ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s/#USERNAME#/${MYSQL_NEXTDOM_USER}/g"   ${WEBSERVER_HOME}/core/config/common.config.php
@@ -284,6 +289,7 @@ step_nextdom_configuration() {
   sed -i "s%#LIB_DIR#%${LIB_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s%#TMP_DIR#%${TMP_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
 
+  # some other compatibilty ugly stuff
   if [[ -d "/tmp/jeedom" ]]; then
       if [[ -L "/tmp/jeedom" ]]; then
           rm -f /tmp/jeedom
@@ -306,8 +312,10 @@ step_nextdom_configuration() {
     ln -s ${TMP_DIRECTORY} /tmp/jeedom
   fi
 
+  # allow www-data to use usb/serial ports
   usermod -a -G dialout,tty www-data
 
+  # set tmp directory as ramfs mount point if enough memory is available
   if [[ -f "/proc/meminfo" ]] ; then
       if [ $(cat /proc/meminfo | grep MemTotal | awk '{ print $2 }') -gt 600000 ]; then
           if [[ -f "/etc/fstab" ]] ; then
@@ -320,6 +328,7 @@ EOS
       fi
   fi
 
+  # add www-data in sudoers with no password
   if [ $(grep "www-data ALL=(ALL) NOPASSWD: ALL" /etc/sudoers | wc -l ) -eq 0 ]; then
       echo "www-data ALL=(ALL) NOPASSWD: ALL" | (EDITOR="tee -a" visudo) >/dev/null
       if [ $? -ne 0 ]; then
