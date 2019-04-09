@@ -236,15 +236,15 @@ try {
         $uploadDir = sprintf("%s/public/img/plan_%s", NEXTDOM_ROOT, $plan->getId());
         shell_exec('rm -rf ' . $uploadDir);
         mkdir($uploadDir, 0775, true);
-        $filepath = Utils::readUploadedFile($_FILES, "file", $uploadDir, 5, array(".png", "jpg"), function ($file) {
+        $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 5, array(".png", ".jpg"), function ($file) {
             $content = file_get_contents($file['tmp_name']);
             return sha512(base64_encode($content));
         });
-
+        $filepath = sprintf("%s/%s", $uploadDir, $filename);
         $img_size = getimagesize($filepath);
         $plan->setDisplay('width', $img_size[0]);
         $plan->setDisplay('height', $img_size[1]);
-        $plan->setDisplay('path', 'public/img/plan_' . $plan->getId() . '/' . $name);
+        $plan->setDisplay('path', 'public/img/plan_' . $plan->getId() . '/' . $filename);
         $plan->save();
         ajax::success();
     }

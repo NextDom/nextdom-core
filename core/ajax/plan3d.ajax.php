@@ -170,7 +170,8 @@ try {
         }
         $cibDir = __DIR__ . '/../../' . $plan3dHeader->getConfiguration('path');
         $zip = new ZipArchive;
-        $res = $zip->open($filename);
+        $filepath = sprintf("%s/%s", $uploadDir, $filename);
+        $res = $zip->open($filepath);
         if ($res === TRUE) {
             if (!$zip->extractTo($cibDir . '/')) {
                 throw new Exception(__('Impossible de décompresser les fichiers : ', __FILE__));
@@ -178,7 +179,7 @@ try {
             $zip->close();
             unlink($tmp);
         } else {
-            throw new Exception(__('Impossible de décompresser l\'archive zip : ', __FILE__) . $filename . ' => ' . ZipErrorMessage($res));
+            throw new Exception(__('Impossible de décompresser l\'archive zip : ', __FILE__) . $filepath . ' => ' . ZipErrorMessage($res));
         }
         $objfile = ls($cibDir, '*.obj', false, array('files'));
         if (count($objfile) != 1) {

@@ -1013,7 +1013,7 @@ class Utils
         if (0 != count($extensions)) {
             $extension = strtolower(strrchr($files[$key]['name'], '.'));
             if (false == in_array($extension, $extensions)) {
-                $message = __('Extension du fichier non valide, autorisé :', __FILE__) . join(",", $extension);
+                $message = __('Extension du fichier non valide, autorisé :', __FILE__) . join(",", $extensions);
                 throw new CoreException($message);
             }
         }
@@ -1040,6 +1040,6 @@ class Utils
             throw new CoreException($message);
         }
 
-        return $destPath;
+        return $name;
     }
 }

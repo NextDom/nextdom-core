@@ -694,7 +694,8 @@ try {
                 // should probably use BackupManager::getBackupFilename
                 return sprintf("backup-%s-%s.tar.gz", nextdom::version(), date("d-m-Y-H\hi"));
             });
-            nextdom::restore($filename, true);
+            $filepath = sprintf("%s/%s", $uploadDir, $filename);
+            nextdom::restore($filepath, true);
             $jsonrpc->makeSuccess('ok');
         }
 

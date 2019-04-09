@@ -392,7 +392,7 @@ class BackupManager
         }
         if (false === is_dir($dir)) {
             if (false === mkdir($dir, 0775, true)) {
-                throw CoreException("unable to create backup directory " . $dir)
+                throw CoreException("unable to create backup directory " . $dir);
             }
         }
         return $dir;

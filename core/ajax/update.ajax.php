@@ -163,11 +163,12 @@ try {
 
         if (init('action') == 'preUploadFile') {
             unautorizedInDemo();
-            $uploaddir = '/tmp';
-            $filepath = Utils::readUploadedFile($_FILES, "file", $uploaddir, 100, array(), function($file) {
+            $uploadDir = '/tmp';
+            $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 100, array(), function($file) {
                 $remove = array(" ", "(", ")");
                 return str_replace($remove, "", $file["name"]);
             });
+            $filepath = sprintf("%s/%s", $uploadDir, $filename);
             ajax::success($filepath);
         }
 
