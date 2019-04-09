@@ -16,6 +16,8 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
+use NextDom\Helpers\Utils;
+
 try {
     require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
@@ -423,7 +425,7 @@ try {
     if (init('action') == 'templateupload') {
         unautorizedInDemo();
         $uploadDir = sprintf("%s/config/scenario/", NEXTDOM_DATA);
-        Utils::readUploadedFile($_FILES, $uploadDir, 10, array(".json"));
+        Utils::readUploadedFile($_FILES, "file", $uploadDir, 10, array(".json"));
         ajax::success();
     }
 

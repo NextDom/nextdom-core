@@ -251,8 +251,8 @@ step_nextdom_apache_php() {
 
 step_nextdom_directory_layout() {
   # we delete existing config since it is regenerated from asset sample (step_nextdom_configuration)
-  cp -r  ${WEBSERVER_HOME}/assets/config ${LIB_DIRECTORY}
   rm -rf ${LIB_DIRECTORY}/config
+  cp -r  ${WEBSERVER_HOME}/assets/config ${LIB_DIRECTORY}
 
   # we delete existing data, since its re-imported from assets
   rm -rf ${LIB_DIRECTORY}/data

@@ -214,8 +214,8 @@ try {
 
     if (init('action') == 'backupupload') {
         unautorizedInDemo();
-        $uploaddir = BackupManager::getBackupDirectory();
-        Utils::readUploadedFile($_FILES, $uploaddir, 300, array(".gz"));
+        $uploadDir = BackupManager::getBackupDirectory();
+        Utils::readUploadedFile($_FILES, "file", $uploadDir, 300, array(".gz"));
         ajax::success();
     }
 

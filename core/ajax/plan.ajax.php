@@ -16,6 +16,8 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use NextDom\Helpers\Utils;
+
 try {
     require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
@@ -234,7 +236,7 @@ try {
         $uploadDir = sprintf("%s/public/img/plan_%s", NEXTDOM_ROOT, $plan->getId());
         shell_exec('rm -rf ' . $uploadDir);
         mkdir($uploadDir, 0775, true);
-        $filepath = Utils::readUploadedFile($_FILES, $uploadDir, 5, array(".png", "jpg"), function ($file) {
+        $filepath = Utils::readUploadedFile($_FILES, "file", $uploadDir, 5, array(".png", "jpg"), function ($file) {
             $content = file_get_contents($file['tmp_name']);
             return sha512(base64_encode($content));
         });

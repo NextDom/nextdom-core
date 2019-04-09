@@ -16,6 +16,8 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
+use NextDom\Helpers\Utils;
+
 try {
     require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
@@ -162,7 +164,7 @@ try {
         if (init('action') == 'preUploadFile') {
             unautorizedInDemo();
             $uploaddir = '/tmp';
-            $filepath = Utils::readUploadedFile($_FILES, $uploaddir, 100, array(), function($file) {
+            $filepath = Utils::readUploadedFile($_FILES, "file", $uploaddir, 100, array(), function($file) {
                 $remove = array(" ", "(", ")");
                 return str_replace($remove, "", $file["name"]);
             });

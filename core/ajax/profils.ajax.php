@@ -16,9 +16,12 @@
   * along with this program. If not, see <http://www.gnu.org/licenses/>.
   */
 
+use NextDom\Helpers\Utils;
+
 try {
     require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
+
     if (!isConnect()) {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
 
@@ -32,8 +35,8 @@ try {
     }
 
     if (init('action') == 'imageUpload') {
-        $uploaddir = sprintf("%s/public/img/profils", NEXTDOM_ROOT);
-        Utils::readUploadedFile($_FILES, $uploaddir, 8, array(".png", ".jpg"));
+        $uploadDir = sprintf("%s/public/img/profils", NEXTDOM_ROOT);
+        Utils::readUploadedFile($_FILES, "images", $uploadDir, 8, array(".png", ".jpg"));
         ajax::success();
     }
 

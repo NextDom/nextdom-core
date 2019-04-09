@@ -18,6 +18,8 @@
 
 require_once __DIR__ . "/../php/core.inc.php";
 
+use NextDom\Helpers\Utils;
+
 if (isset($argv)) {
     foreach ($argv as $arg) {
         $argList = explode('=', $arg);
@@ -674,7 +676,7 @@ try {
                               $jeeNetwork->getConfiguration('version'),
                               date('Y-m-d_H\hi'));
             FileSystemHelper::mkdirIfNotExists($uploadDir, 0775, true);
-            Utils::readUploadedFile($_FILES, $uploadDir, 50, array(".tar.gz", ".gz", ".tar"), function($file) use ($format) {
+            Utils::readUploadedFile($_FILES, "file", $uploadDir, 50, array(".tar.gz", ".gz", ".tar"), function($file) use ($format) {
                 $extension = strtolower(strrchr($file['name'], '.'));
                 return sprintf($format, $extension);
             });

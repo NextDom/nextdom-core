@@ -16,6 +16,8 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use NextDom\Helpers\Utils;
+
 try {
     require_once __DIR__ . '/../php/core.inc.php';
     include_file('core', 'authentification', 'php');
@@ -67,8 +69,8 @@ try {
                 $update = new update();
             }
             $update->setSource(init('repo'))
-                ->setLogicalId($repo->getLogicalId()
-                ->setType($repo->getType()
+                ->setLogicalId($repo->getLogicalId())
+                ->setType($repo->getType())
                 ->setLocalVersion($repo->getDatetime(init('version', 'stable')))
                 ->setConfiguration('version', init('version', 'stable'));
             $update->save();

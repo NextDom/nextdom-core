@@ -16,6 +16,8 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use NextDom\Helpers\Utils;
+
 try {
     require_once __DIR__ . '/../../core/php/core.inc.php';
     include_file('core', 'authentification', 'php');
@@ -161,7 +163,7 @@ try {
         if (!is_object($plan3dHeader)) {
             throw new Exception(__('Objet inconnu. Vérifiez l\'ID', __FILE__));
         }
-        $filename = Utils::readUploadedFile($_FILES, $uploadDir, 150, array(".zip"));
+        $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 150, array(".zip"));
         if ($plan3dHeader->getConfiguration('path') == '') {
             $path = sprintf("%s/data/3d/%s/", NEXTDOM_DATA, config::genKey());
             $plan3dHeader->setConfiguration('path', $path);
