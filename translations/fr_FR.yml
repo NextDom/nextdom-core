@@ -79,8 +79,8 @@ administration:
   memory: RAM
   hdd: HDD
   swap: Swap
-  http-connections-count: Nombre de connexion HTTP
-  connections-count: Nombre de connexion
+  http-connections-count: Nombre de connexions HTTP
+  connections-count: Nombre de connexions
   process-count: Nombre de processus
   uptime: Système démarré depuis
   welcome-page: Page de bienvenue
@@ -134,7 +134,7 @@ health:
   php-version: Version PHP
   plugins-legend: Détails de la santé de vos plugins, cliquez sur le titre pour avoir le détail puis survolez les icônes pour plus d'informations.
   plugins-title: Santé des Plugins
-  processes-killed: Nombre de processus tué par le noyaux pour manque de mémoire. Votre système manque de mémoire. Essayez de reduire le nombre de plugins ou les scénarios
+  processes-killed: Nombre de processus tués par le noyau pour manque de mémoire. Votre système manque de mémoire. Essayez de réduire le nombre de plugins ou les scénarios
   product-legend: Détails de la santé de votre solution, survolez les icônes pour plus d'informations.
   product-title: Santé de NextDom
   product-started: Démarré
@@ -233,7 +233,7 @@ firstuse:
   market-username-placeholder: Nom d'utilisateur...
   market-password-placeholder: Mot de passe...
   customize-title: Personnalisez votre %productName% !
-  customize-content: Selectionnez le thème qui vous correspond le plus, d'autres étant selectionnables ou personnalisables dans la page Customisation...
+  customize-content: Sélectionnez le thème qui vous correspond le plus, d'autres étant sélectionnables ou personnalisables dans la page Customisation...
   congrats-title: Bravo ! La configuration de votre %productName% est terminée !
   congrats-content: Cliquez sur le bouton Terminer pour profiter de votre solution Domotique...
 
@@ -340,7 +340,7 @@ scenario:
 "A": "A"
 "A chaque": "A chaque"
 "A exécuter": "A exécuter"
-"A noter que la double authentification n'est necessaire que pour les connexions externes, elle ne sera donc pas active sur une connexion local.": "A noter que la double authentification n'est necessaire que pour les connexions externe, elle ne sera donc pas active sur une connexion local."
+"A noter que la double authentification n'est necessaire que pour les connexions externes, elle ne sera donc pas active sur une connexion local.": "A noter que la double authentification n'est nécessaire que pour les connexions externes, elle ne sera donc pas active sur une connexion locale."
 "A propos": "A propos"
 "A Propos de Nextdom": "A Propos de Nextdom"
 "Accueil": "Accueil"
@@ -366,7 +366,7 @@ scenario:
 "Action exécutée avec succès": "Action exécutée avec succès"
 "Action off": "Action off"
 "Action on": "Action on"
-"Action qui permet à NextDom de faire une demande puis de stocker la réponse dans une variable. Cette action est bloquante et ne finit que si NextDom reçoit une réponse ou si le timeout est atteint. Pour le moment cette action n'est compatible qu'avec les plugins SMS, Slack, SARAH et Telegram.": "Action qui permet à NextDom de faire une demande puis de stocker la réponse dans une variable. Cette action est bloquante et ne finit que si NextDom reçoit une réponse ou si le timeout est atteint. Pour le moment cette action n'est compatible qu'avec les plugins SMS, Slack, SARAH et Telegram."
+"Action qui permet à NextDom de faire une demande puis de stocker la réponse dans une variable. Cette action est bloquante et ne finit que si NextDom reçoit une réponse ou si le timeout est atteint. Pour le moment cette action n'est compatible qu'avec les plugins SMS, Slack, SARAH et Telegram.": "Action qui permet à NextDom de faire une demande puis de stocker la réponse dans une variable. Cette action est bloquante et ne finit que si NextDom reçoit une réponse ou si le timeout est atteint. Pour le moment, cette action n'est compatible qu'avec les plugins SMS, Slack, SARAH et Telegram."
 "Action stop": "Action stop"
 "Action sur l'équipement impossible. Equipement introuvable - Vérifiez l'id :": "Action sur l'équipement impossible. Equipement introuvable - Vérifiez l'id :"
 "Action sur la valeur": "Action sur la valeur"
@@ -424,7 +424,7 @@ scenario:
 "Ajout d'un nouveau scénario": "Ajout d'un nouveau scénario"
 "Ajout d'une Image": "Ajout d'une Image"
 "Ajout de l'alerte :": "Ajout de l'alerte :"
-"Ajout du message suivant dans le centre de message :": "Ajout du message suivant dans le centre de message :"
+"Ajout du message suivant dans le centre de message :": "Ajout du message suivant dans le centre de messages :"
 "Ajouter": "Ajouter"
 "Ajouter / Supprimer des commandes au graphique": "Ajouter / Supprimer des commandes au graphique"
 "Ajouter bloc": "Ajouter bloc"
@@ -491,7 +491,7 @@ scenario:
 "Assistant cron": "Assistant cron"
 "Astérisque ( * )": "Astérisque ( * )"
 "Attend jusqu’à ce que la condition soit valide (maximum 2h)": "Attend jusqu’à ce que la condition soit valide (maximum 2h)"
-"Attendez 10 minutes si le service ne redémarre pas contacter le support": "Attendez 10 minutes si le service ne redémarre pas contacter le support"
+"Attendez 10 minutes si le service ne redémarre pas contacter le support": "Attendez 10 minutes. Si le service ne redémarre pas, contactez le support"
 "Attendre": "Attendre"
 "Attendre avant de répondre": "Attendre avant de répondre"
 "Attention": "Attention"
@@ -640,7 +640,7 @@ scenario:
 "Changement de": "Changement de"
 "Changement de l'icone du scénario :": "Changement de l'icône du scénario :"
 "Changement design :": "Changement design :"
-"Chargement réussi merci de recharger la page pour voir le résultat": "Chargement réussi merci de recharger la page pour voir le résultat"
+"Chargement réussi merci de recharger la page pour voir le résultat": "Chargement réussi, merci de recharger la page pour voir le résultat"
 "Chargement...": "Chargement..."
 "Chemin": "Chemin"
 "chiffre après la virgule": "chiffre après la virgule"
@@ -773,7 +773,7 @@ scenario:
 "Couleurs": "Couleurs"
 "Couleurs dominantes du thème": "Couleurs dominantes du thème"
 "CPU (": "CPU ("
-"Creer un design": "Creer un design"
+"Creer un design": "Créer un design"
 "Cron": "Cron"
 "Cron id inconnu": "Cron id inconnu"
 "Crons": "Crons"
@@ -888,7 +888,7 @@ scenario:
 "Délai avant archivage": "Délai avant archivage"
 "Délai d'attente après génération de la page": "Délai d'attente après génération de la page"
 "Démarrage de nextdom": "Démarrage de nextdom"
-"Démarrage de nextdom fini avec succès": "Démarrage de nextdom fini avec succès"
+"Démarrage de nextdom fini avec succès": "Démarrage de Nextdom fini avec succès"
 "Démarrage des plugins": "Démarrage des plugins"
 "Démarrage des processus Internet de NextDom": "Démarrage des processus Internet de NextDom"
 "Démarrage scénario de :": "Démarrage scénario de :"
@@ -914,9 +914,9 @@ scenario:
 "Désactiver scénarios": "Désactiver scénarios"
 "Désactivé": "Désactivé"
 "Désolé": "Désolé"
-"Désolé je n'ai pas compris": "Désolé je n'ai pas compris"
-"Désolé je n'ai pas compris la demande": "Désolé je n'ai pas compris la demande"
-"Désolé je ne comprends pas la demande": "Désolé je ne comprends pas la demande"
+"Désolé je n'ai pas compris": "Désolé, je n'ai pas compris"
+"Désolé je n'ai pas compris la demande": "Désolé, je n'ai pas compris la demande"
+"Désolé je ne comprends pas la demande": "Désolé, je ne comprends pas la demande"
 "Détail": "Détail"
 "Détail/Run": "Détail/Run"
 "Détaillée": "Détaillée"
@@ -1003,8 +1003,8 @@ scenario:
 "Erreur sur la restauration du CacheManager :": "Erreur sur la restauration du CacheManager :"
 "Erreur sur le démarrage des plugins :": "Erreur sur le démarrage des plugins :"
 "Erreur sur le démarrage interne de NextDom :": "Erreur sur le démarrage interne de NextDom :"
-"Erreur sur le nettoyage du CacheManager des péripheriques Bluetooth :": "Erreur sur le nettoyage du CacheManager des péripheriques Bluetooth :"
-"Erreur sur le nettoyage du CacheManager des péripheriques USB :": "Erreur sur le nettoyage du CacheManager des péripheriques USB :"
+"Erreur sur le nettoyage du CacheManager des péripheriques Bluetooth :": "Erreur sur le nettoyage du CacheManager des périphériques Bluetooth :"
+"Erreur sur le nettoyage du CacheManager des péripheriques USB :": "Erreur sur le nettoyage du CacheManager des périphériques USB :"
 "Error": "Error"
 "Escalier": "Escalier"
 "Espacement au dessus de l'objet": "Espacement au dessus de l'objet"
@@ -1016,7 +1016,7 @@ scenario:
 "Etape 2 : Choix du type de demande": "Etape 2 : Choix du type de demande"
 "Etape 2 : Configuration": "Etape 2 : Configuration"
 "Etape 3 : Catégorie et type de la demande": "Etape 3 : Catégorie et type de la demande"
-"Etape 3 : vérification": "Etape 3 : vérification"
+"Etape 3 : vérification": "Etape 3 : Vérification"
 "Etape 4 : Demande de support": "Etape 4 : Demande de support"
 "Etat": "Etat"
 "Eteindre": "Eteindre"
@@ -1096,7 +1096,7 @@ scenario:
 "Fonctionnalités": "Fonctionnalités"
 "Fond transparent": "Fond transparent"
 "font-awesome": "font-awesome"
-"Force la prise en compte de ces personnalisation CSS et JS en dernier lieu": "Force la prise en compte de ces personnalisation CSS et JS en dernier lieu"
+"Force la prise en compte de ces personnalisation CSS et JS en dernier lieu": "Force la prise en compte de ces personnalisations CSS et JS en dernier lieu"
 "Forcé avant le widget": "Forcé avant le widget"
 "Format des logs": "Format des logs"
 "Formule de calcul": "Formule de calcul"
@@ -1250,8 +1250,8 @@ scenario:
 "Inversé": "Inversé"
 "Invisible": "Invisible"
 "IP": "IP"
-"IP \"blanche\"": "IP \"blanche\""
-"IP blanche": "IP blanche"
+"IP \"blanche\"": "IPs \"blanches\""
+"IP blanche": "IP blanches"
 "IPs bannies": "IPs bannies"
 "Italiano": "Italiano"
 "J'ai déjà un compte market :": "J'ai déjà un compte market :"
@@ -1315,7 +1315,7 @@ scenario:
 "La version ne peut être que js ou css": "La version ne peut être que js ou css"
 "La vérification en 2 étapes fournit une couche supplémentaire de protection pour votre compte": "La vérification en 2 étapes fournit une couche supplémentaire de protection pour votre compte"
 "Lancement de :": "Lancement de :"
-"Lancement de l'arret de nextdom": "Lancement de l'arrêt de nextdom"
+"Lancement de l'arret de NextDom": "Lancement de l'arrêt de NextDom"
 "Lancement du scénario :": "Lancement du scénario :"
 "Lancement du scénario en mode synchrone": "Lancement du scénario en mode synchrone"
 "Lancement du scénario réussi": "Lancement du scénario réussi"
@@ -1531,8 +1531,8 @@ scenario:
 "Ne pas répondre": "Ne pas répondre"
 "Ne plus afficher": "Ne plus afficher"
 "Ne rien mettre pour laisser le nom par défaut": "Ne rien mettre pour laisser le nom par défaut"
-"Nettoyage du cache des péripheriques Bluetooth": "Nettoyage du cache des péripheriques Bluetooth"
-"Nettoyage du cache des péripheriques USB": "Nettoyage du cache des péripheriques USB"
+"Nettoyage du cache des péripheriques Bluetooth": "Nettoyage du cache des périphériques Bluetooth"
+"Nettoyage du cache des péripheriques USB": "Nettoyage du cache des périphériques USB"
 "Nettoyer le cache": "Nettoyer le cache"
 "Nettoyer les rapports plus anciens de": "Nettoyer les rapports plus anciens de"
 "NextDom": "NextDom"
@@ -1788,7 +1788,7 @@ scenario:
 "Remerciements": "Remerciements"
 "Remettre par défaut": "Remettre par défaut"
 "Remise à zero des SI": "Remise à zero des SI"
-"Remise à zero des status du status des SI du scénario :": "Remise à zero des status du status des SI du scénario :"
+"Remise à zero des status du status des SI du scénario :": "Remise à zéro des status du status des SI du scénario :"
 "Remise à zéro": "Remise à zéro"
 "Remonter dans le résumé global": "Remonter dans le résumé global"
 "REMOTE_USER": "REMOTE_USER"
@@ -1965,7 +1965,7 @@ scenario:
 "Supprimer l'image": "Supprimer l'image"
 "Supprimer la selection": "Supprimer la sélection"
 "Supprimer le design": "Supprimer le design"
-"Supprimer les IP bannie(s)": "Supprimer les IP bannie(s)"
+"Supprimer les IP bannie(s)": "Supprimer les IPs bannie(s)"
 "Supprimer ligne": "Supprimer ligne"
 "Supprimer tous": "Supprimer tous"
 "Supprimer tous les périphériques": "Supprimer tous les périphériques"
@@ -2061,7 +2061,7 @@ scenario:
 "Tout supprimer": "Tout supprimer"
 "toutes les 2 heures (à minuit, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22)": "toutes les 2 heures (à minuit, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22)"
 "Toutes les Catégories": "Toutes les Catégories"
-"Toutes les interations ont été regénérées": "Toutes les interations ont été regénérées"
+"Toutes les interations ont été regénérées": "Toutes les interactions ont été regénérées"
 "Traducteur(s)": "Traducteur(s)"
 "Trait d'union ( - )": "Trait d'union ( - )"
 "Translation": "Translation"
