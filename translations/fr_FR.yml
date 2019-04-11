@@ -1315,7 +1315,7 @@ scenario:
 "La version ne peut être que js ou css": "La version ne peut être que js ou css"
 "La vérification en 2 étapes fournit une couche supplémentaire de protection pour votre compte": "La vérification en 2 étapes fournit une couche supplémentaire de protection pour votre compte"
 "Lancement de :": "Lancement de :"
-"Lancement de l'arret de nextdom": "Lancement de l'arrêt de Nextdom"
+"Lancement de l'arret de NextDom": "Lancement de l'arrêt de NextDom"
 "Lancement du scénario :": "Lancement du scénario :"
 "Lancement du scénario en mode synchrone": "Lancement du scénario en mode synchrone"
 "Lancement du scénario réussi": "Lancement du scénario réussi"
