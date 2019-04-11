@@ -16,61 +16,9 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-try {
+use NextDom\Ajax\NoteAjax;
 
-    require_once __DIR__ . '/../../core/php/core.inc.php';
-    include_file('core', 'authentification', 'php');
+require_once (__DIR__ . '/../../src/core.php');
 
-    if (!isConnect()) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__));
-    }
-
-    ajax::init();
-
-    if (init('action') == 'all') {
-        if (!isConnect('admin')) {
-            throw new Exception(__('401 - Accès non autorisé', __FILE__));
-        }
-        ajax::success(utils::o2a(note::all()));
-    }
-
-    if (init('action') == 'byId') {
-        if (!isConnect('admin')) {
-            throw new Exception(__('401 - Accès non autorisé', __FILE__));
-        }
-        ajax::success(utils::o2a(note::byId(init('id'))));
-    }
-
-    if (init('action') == 'save') {
-        if (!isConnect('admin')) {
-            throw new Exception(__('401 - Accès non autorisé', __FILE__));
-        }
-        $note_json = json_decode(init('note'), true);
-        if (isset($note_json['id'])) {
-            $note = note::byId($note_json['id']);
-        }
-        if (!isset($note) || !is_object($note)) {
-            $note = new note();
-        }
-        utils::a2o($note, $note_json);
-        $note->save();
-        ajax::success(utils::o2a($note));
-    }
-
-    if (init('action') == 'remove') {
-        if (!isConnect('admin')) {
-            throw new Exception(__('401 - Accès non autorisé', __FILE__));
-        }
-        $note = note::byId(init('id'));
-        if (!is_object($note)) {
-            throw new Exception(__('Note inconnue. Vérifiez l\'ID', __FILE__));
-        }
-        $note->remove();
-        ajax::success();
-    }
-
-    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-    /*     * *********Catch exeption*************** */
-} catch (Exception $e) {
-    ajax::error(displayException($e), $e->getCode());
-}
+$noteAjax = new NoteAjax();
+$noteAjax->process();

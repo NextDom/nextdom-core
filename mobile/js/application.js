@@ -88,12 +88,19 @@ $(function () {
 });
 
 
-function setBackgroundImage(_image){
+function setBackgroundImage(_path){
+  if(typeof userProfils == 'undefined' || typeof userProfils.hideBackgroundImg  == 'undefined' || userProfils.hideBackgroundImg == 1){
+    return;
+  }
   $('.backgroundforNextDom').css('background-image','');
   $('.backgroundforNextDom').css('background-position','');
   $('.backgroundforNextDom').css('background-repeat','no-repeat');
-  if(_image != ''){
-    $('.backgroundforNextDom').css('background-image','url("'+_image+'") !important');
+  if(_path != ''){
+    $('.backgroundforNextDom').css('background-image','url("'+_path+'") !important');
+    document.body.style.setProperty('--dashBkg-url','url("../../../../'+_path+'")');
+  }else{
+    document.body.style.setProperty('--dashBkg-url','url("")');
+    $('.backgroundforNextDom').css('background-image','url("") !important');
   }
 }
 
@@ -196,7 +203,7 @@ function initApplication(_reinit) {
           }
         }
         
-        $.get("src/Api/icon.inc.php", function (data) {
+        $.get("core/php/icon.inc.php", function (data) {
           $("head").append(data);
           $.include(include, function () {
             deviceInfo = getDeviceType();
@@ -373,6 +380,9 @@ function notify(_title, _text) {
 }
 
 function setTileSize(_filter) {
+  if(typeof widget_margin == 'undefined'){
+    widget_margin = 4;
+  }
   $(_filter).each(function () {
     $(this).css('margin','0px').css('padding','0px');
     if($(this).hasClass('col2')){

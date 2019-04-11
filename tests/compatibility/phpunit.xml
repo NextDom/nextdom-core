@@ -37,8 +37,7 @@
                 <directory>../../install</directory>
                 <directory>../../scripts</directory>
                 <directory>../../var</directory>
-                <directory>../../tests/archives</directory>
-                <directory>../../tests/data</directory>
+                <directory>../../tests</directory>
             </exclude>
         </whitelist>
     </filter>

@@ -478,7 +478,26 @@ class EqLogic
      */
     public function setStatus($_key, $_value = null)
     {
-        CacheManager::set('eqLogicStatusAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('eqLogicStatusAttr' . $this->getId())->getValue(), $_key, $_value));
+        global $NEXTDOM_INTERNAL_CONFIG;
+        $changed = false;
+        if(is_array($_key)){
+            foreach ($_key as $key => $value) {
+                if(isset($NEXTDOM_INTERNAL_CONFIG['alerts'][$key])){
+                    $changed = ($this->getStatus($key) != $value);
+                }
+                if($changed){
+                    break;
+                }
+            }
+        }else{
+            if(isset($JEEDOM_INTERNAL_CONFIG['alerts'][$_key])){
+                $changed = ($this->getStatus($_key) !== $_value);
+            }
+        }
+        CacheManager::set('eqLogicStatusAttr' . $this->getId(), utils::setJsonAttr(CacheManager::byKey('eqLogicStatusAttr' . $this->getId())->getValue(), $_key, $_value));
+        if($changed) {
+            $this->refreshWidget();
+        }
     }
 
     /**

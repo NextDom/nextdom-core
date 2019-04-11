@@ -20,7 +20,7 @@ namespace NextDom\Market\Ajax;
 
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Utils;
-use NextDom\Managers\AjaxManager;
+use NextDom\Helpers\AjaxHelper;
 
 header('Content-Type: application/json');
 
@@ -31,7 +31,7 @@ try {
     AuthentificationHelper::init();
     AuthentificationHelper::isConnectedAsAdminOrFail();
 
-    AjaxManager::init();
+    AjaxHelper::init();
 
     // Récupération des données envoyées
     $action = Utils::init('action');
@@ -40,11 +40,11 @@ try {
     $result = MarketAjaxParser::parse($action, $params, $data);
 
     if ($result !== false) {
-        AjaxManager::success($result);
+        AjaxHelper::success($result);
     }
 
     throw new \Exception(__('Aucune méthode correspondante à : ', __FILE__) . $action);
 } catch (\Exception $e) {
-    AjaxManager::error(displayException($e), $e->getCode());
+    AjaxHelper::error(displayException($e), $e->getCode());
  
 }

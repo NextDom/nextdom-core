@@ -254,6 +254,24 @@ class TranslateHelper
     }
 
     /**
+     * @param $_name
+     * @return string
+     */
+    public static function getPluginFromName($_name) {
+        if (strpos($_name, 'plugins/') === false) {
+            return 'core';
+        }
+        preg_match_all('/plugins\/(.*?)\//m', $_name, $matches, PREG_SET_ORDER, 0);
+        if(isset($matches[0]) && isset($matches[0][1])){
+            return $matches[0][1];
+        }
+        if (!isset($matches[1])) {
+            return 'core';
+        }
+        return $matches[1];
+    }
+
+    /**
      * Obtenir le chemin du fichier de traduction d'une langue
      *
      * @param string $language Langue du fichier

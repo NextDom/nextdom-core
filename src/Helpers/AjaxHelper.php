@@ -32,11 +32,11 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\Managers;
+namespace NextDom\Helpers;
 
-use NextDom\Helpers\Utils;
+use NextDom\Managers\ConfigManager;
 
-class AjaxManager
+class AjaxHelper
 {
     /**
      * Init ajax communication
@@ -106,14 +106,18 @@ class AjaxManager
      */
     public static function getResponse($data = '', $errorCode = null)
     {
-        $isError = !(null === $errorCode);
-        $return = array(
-            'state' => $isError ? 'error' : 'ok',
-            'result' => $data,
-        );
-        if ($isError) {
-            $return['code'] = $errorCode;
+        // TODO: Tester l'incidence de l'ordre des résultat si result est inséré en dernier
+        // et donc éviter la ligne en double
+        $response = [];
+        if ($errorCode === null) {
+            $response['state'] = 'ok';
+            $response['result'] = $data;
         }
-        return json_encode($return, JSON_UNESCAPED_UNICODE);
+        else {
+            $response['state'] = 'error';
+            $response['result'] = $data;
+            $response['code'] = $errorCode;
+        }
+        return json_encode($response, JSON_UNESCAPED_UNICODE);
     }
 }

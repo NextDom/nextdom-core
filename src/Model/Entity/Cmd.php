@@ -23,7 +23,7 @@ use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
-use NextDom\Helpers\TimeLine;
+use NextDom\Helpers\TimeLineHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\CmdManager;
@@ -811,7 +811,7 @@ class Cmd
             }
 
             if ($this->getConfiguration('timeline::enable')) {
-                TimeLine::addTimelineEvent(array('type' => 'cmd', 'subtype' => 'action', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'options' => $str_option));
+                TimeLineHelper::addTimelineEvent(array('type' => 'cmd', 'subtype' => 'action', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'options' => $str_option));
             }
             $this->preExecCmd($options);
             $value = $this->formatValue($this->execute($options), $_quote);
@@ -1189,7 +1189,7 @@ class Cmd
                 $this->actionAlertLevel($level, $value);
             }
             if ($this->getConfiguration('timeline::enable')) {
-                TimeLine::addTimelineEvent(array('type' => 'cmd', 'subtype' => 'info', 'cmdType' => $this->getSubType(), 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => $this->getValueDate(), 'value' => $value . $this->getUnite()));
+                TimeLineHelper::addTimelineEvent(array('type' => 'cmd', 'subtype' => 'info', 'cmdType' => $this->getSubType(), 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => $this->getValueDate(), 'value' => $value . $this->getUnite()));
             }
             $this->pushUrl($value);
         }
