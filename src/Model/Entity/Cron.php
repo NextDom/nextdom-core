@@ -19,6 +19,7 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
@@ -32,7 +33,7 @@ use NextDom\Managers\CronManager;
  * @ORM\Table(name="cron", uniqueConstraints={@ORM\UniqueConstraint(name="class_function_option", columns={"class", "function", "option"})}, indexes={@ORM\Index(name="type", columns={"class"}), @ORM\Index(name="logicalId_Type", columns={"class"}), @ORM\Index(name="deamon", columns={"deamon"})})
  * @ORM\Entity
  */
-class Cron
+class Cron implements EntityInterface
 {
 
     /**
@@ -341,7 +342,7 @@ class Cron
      */
     public function save()
     {
-        return \DB::save($this, false, true);
+        return DBHelper::save($this, false, true);
     }
 
     /**
@@ -357,7 +358,7 @@ class Cron
             $this->halt();
         }
         CacheManager::delete('cronCacheAttr' . $this->getId());
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
     /**

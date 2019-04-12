@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -65,15 +66,15 @@ class ConfigManager
     public static function getDefaultConfiguration($pluginId = 'core')
     {
         if (!isset(self::$defaultConfiguration[$pluginId])) {
-            if ($pluginId == 'core') {
+            if ($pluginId === 'core') {
                 self::$defaultConfiguration[$pluginId] = parse_ini_file(NEXTDOM_DATA . '/config/default.config.ini', true);
-                if (file_exists(NEXTDOM_ROOT . '/var/custom/custom.config.ini')) {
-                    $custom =  parse_ini_file(NEXTDOM_ROOT . '/var/custom/custom.config.ini', true);
-                    self::$defaultConfiguration[$pluginId]['core'] = array_merge(self::$defaultConfiguration[$pluginId]['core'],$custom['core']);
+                if (is_file(NEXTDOM_ROOT . '/var/custom/custom.config.ini')) {
+                    $custom = parse_ini_file(NEXTDOM_ROOT . '/var/custom/custom.config.ini', true);
+                    self::$defaultConfiguration[$pluginId]['core'] = array_merge(self::$defaultConfiguration[$pluginId]['core'], $custom['core']);
                 }
             } else {
                 $filename = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/config/' . $pluginId . '.config.ini';
-                if (file_exists($filename)) {
+                if (is_file($filename)) {
                     self::$defaultConfiguration[$pluginId] = parse_ini_file($filename, true);
                 }
             }
@@ -132,7 +133,7 @@ class ConfigManager
                 SET `key` = :key,
                     `value` = :value,
                      `plugin` = :plugin';
-        \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+        DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
 
         // Execute postConfig method
         $configMethod = 'postConfig_' . str_replace(array('::', ':'), '_', $configKey);
@@ -159,7 +160,7 @@ class ConfigManager
             );
             $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
                     WHERE `plugin` = :plugin';
-            return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+            return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
         } else {
             $values = array(
                 'plugin' => $pluginId,
@@ -168,7 +169,7 @@ class ConfigManager
             $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . ' 
                     WHERE `key` = :key
                         AND `plugin` = :plugin';
-            \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+            DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
             if (isset(self::$cache[$pluginId . '::' . $configKey])) {
                 unset(self::$cache[$pluginId . '::' . $configKey]);
             }
@@ -199,8 +200,8 @@ class ConfigManager
         $sql = 'SELECT `value`
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` = :key
-                    AND `plugin` = :plugin';
-        $value = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+                AND `plugin` = :plugin';
+        $value = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
         if ($value['value'] === '' || $value['value'] === null) {
             if ($defaultValue !== '') {
                 self::$cache[$pluginId . '::' . $configKey] = $defaultValue;
@@ -239,7 +240,7 @@ class ConfigManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` IN ' . $keys . '
                     AND plugin=:plugin';
-        $values = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL);
+        $values = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
         $result = array();
         foreach ($values as $value) {
             $result[$value['key']] = $value['value'];
@@ -284,7 +285,7 @@ class ConfigManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` LIKE :key
                     AND `plugin`= :plugin';
-        $results = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL);
+        $results = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
         foreach ($results as &$result) {
             $result['value'] = Utils::isJson($result['value'], $result['value']);
         }
@@ -339,7 +340,7 @@ class ConfigManager
         $sql = 'SELECT `value`,`plugin`
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` = \'active\'';
-        $values = \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL);
+        $values = DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL);
         $result = array();
         foreach ($values as $value) {
             $result[$value['plugin']] = $value['value'];
@@ -358,7 +359,7 @@ class ConfigManager
         $sql = 'SELECT `value`,`key`
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` LIKE \'log::level::%\'';
-        $values = \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL);
+        $values = DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL);
         $return = array();
         foreach ($values as $value) {
             $return[$value['key']] = Utils::isJson($value['value'], $value['value']);

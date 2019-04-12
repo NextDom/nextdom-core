@@ -21,6 +21,7 @@ use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\TimeLineHelper;
@@ -172,7 +173,7 @@ class NextDomAjax extends BaseAjax
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         if (Utils::init('command', '') !== '') {
-            AjaxHelper::success(\DB::prepare(Utils::init('command'), array(), \DB::FETCH_TYPE_ALL));
+            AjaxHelper::success(DBHelper::prepare(Utils::init('command'), array(), DBHelper::FETCH_TYPE_ALL));
         } else {
             AjaxHelper::error(__('Aucune requête à exécuter'));
         }
@@ -183,7 +184,7 @@ class NextDomAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
-        \DB::compareAndFix(json_decode(file_get_contents(NEXTDOM_ROOT . '/install/database.json'), true), Utils::init('table'));
+        DBHelper::compareAndFix(json_decode(file_get_contents(NEXTDOM_ROOT . '/install/database.json'), true), Utils::init('table'));
         AjaxHelper::success();
 
     }

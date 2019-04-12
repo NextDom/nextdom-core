@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
@@ -33,7 +34,7 @@ use NextDom\Managers\ScenarioManager;
  * @ORM\Table(name="plan3d", indexes={@ORM\Index(name="name", columns={"name"}), @ORM\Index(name="link_type_link_id", columns={"link_type", "link_id"}), @ORM\Index(name="fk_plan3d_plan3dHeader1_idx", columns={"plan3dHeader_id"})})
  * @ORM\Entity
  */
-class Plan3d
+class Plan3d implements EntityInterface
 {
     /**
      * @var string
@@ -139,12 +140,12 @@ class Plan3d
 
     public function save()
     {
-        \DB::save($this);
+        DBHelper::save($this);
     }
 
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     public function getLink()

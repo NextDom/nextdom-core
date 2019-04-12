@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Model\Entity\EqReal;
 
 class EqRealManager
@@ -52,7 +53,7 @@ class EqRealManager
         $sql = 'SELECT plugin, isEnable
                 FROM `eqLogic`
                 WHERE eqReal_id = :id';
-        $result = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+        $result = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
         $eqTyme_name = $result['plugin'];
         if ($result['isEnable'] == 0) {
             try {
@@ -83,11 +84,11 @@ class EqRealManager
         $values = array(
             'id' => $_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
         $class = self::getClass($_id);
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, $class);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, $class);
     }
 
     public static function byLogicalId($_logicalId, $_cat)
@@ -100,7 +101,7 @@ class EqRealManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE logicalId = :logicalId
                   AND cat= : cat';
-        $results = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL);
+        $results = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
         $return = array();
         foreach ($results as $result) {
             $return[] = self::byId($result['id']);

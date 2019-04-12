@@ -34,32 +34,37 @@
 
 namespace {
 
-    use NextDom\Helpers\FileSystemHelper;
+    use NextDom\Exceptions\CoreException;
     use NextDom\Managers\ConfigManager;
 
     define('NEXTDOM_ROOT', realpath(__DIR__ . '/..'));
     define('NEXTDOM_DATA', '/var/lib/nextdom');
     define('NEXTDOM_LOG', '/var/log/nextdom');
 
-    if (file_exists(NEXTDOM_DATA . '/config/common.config.php')) {
+    if (is_file(NEXTDOM_DATA . '/config/common.config.php')) {
         require_once NEXTDOM_DATA . '/config/common.config.php';
     }
+
     /**
-     * Force plugin autoload last
+     * Before autoload force plugin autoload last
      */
+    $ENABLED_PLUGINS = null;
     spl_autoload_register('nextdomPluginAutoload', true, true);
+
     require_once NEXTDOM_ROOT . '/vendor/autoload.php';
-    require_once NEXTDOM_ROOT . '/core/class/DB.class.php';
-    require_once NEXTDOM_ROOT . '/src/Managers/ConfigManager.php';
     require_once NEXTDOM_DATA . '/config/nextdom.config.php';
     require_once NEXTDOM_DATA . '/config/compatibility.config.php';
 
-    $ENABLED_PLUGINS = null;
 
     // Developer mode : Register global error and exception handlers
-    if (php_sapi_name() != 'cli' && (ConfigManager::getDefaultConfiguration()['core']['developer::mode'] == '1') && (ConfigManager::getDefaultConfiguration()['core']['developer::errorhandler'] == '1') && (ConfigManager::getDefaultConfiguration()['core']['developer::exceptionhandler'] == '1')) {
-        Symfony\Component\Debug\ErrorHandler::register();
-        Symfony\Component\Debug\ExceptionHandler::register();
+    $coreConfig = ConfigManager::getDefaultConfiguration()['core'];
+    if (php_sapi_name() !== 'cli' && $coreConfig['developer::mode'] === '1') {
+        if ($coreConfig['developer::errorhandler'] === '1') {
+            Symfony\Component\Debug\ErrorHandler::register();
+        }
+        if ($coreConfig['developer::exceptionhandler'] === '1') {
+            Symfony\Component\Debug\ExceptionHandler::register();
+        }
     }
 
     /**
@@ -76,17 +81,18 @@ namespace {
             $ENABLED_PLUGINS = array_keys(ConfigManager::getEnabledPlugins());
         }
         if (!empty($ENABLED_PLUGINS)) {
-            $purgedClassName = str_replace(array('Real', 'Cmd'), '', $className);
+            $purgedClassName = str_replace(['Real', 'Cmd'], '', $className);
             $activePlugin = in_array($purgedClassName, $ENABLED_PLUGINS);
             if (!$activePlugin) {
                 $purgedClassName = explode('_', $purgedClassName)[0];
                 $activePlugin = in_array($purgedClassName, $ENABLED_PLUGINS);
             }
             if ($activePlugin) {
-                try {
-                    FileSystemHelper::includeFile('core', $purgedClassName, 'class', $purgedClassName);
-                } catch (\Throwable $e) {
-
+                $pluginFile = NEXTDOM_ROOT . '/plugins/' . $purgedClassName . '/core/class/' . $purgedClassName . '.class.php';
+                if (file_exists($pluginFile)) {
+                    require_once($pluginFile);
+                } else {
+                    throw new CoreException('File ' . $pluginFile . ' for plugin ' . $purgedClassName . ' not found.');
                 }
             }
         }

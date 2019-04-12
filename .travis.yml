@@ -37,5 +37,6 @@ after_script:
     - cd ${TRAVIS_BUILD_DIR}/tests
     - wget https://phar.phpunit.de/phpcov.phar
     - php phpcov.phar merge coverage --clover coverage/clover.xml
+    - cat coverage/clover.xml
     - cd ${TRAVIS_BUILD_DIR}
     - php vendor/bin/php-coveralls -v

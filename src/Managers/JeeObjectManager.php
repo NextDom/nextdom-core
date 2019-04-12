@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\JeeObject;
@@ -59,10 +60,10 @@ class JeeObjectManager
         $values = array(
             'id' => $id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -77,10 +78,10 @@ class JeeObjectManager
         $values = array(
             'name' => $name,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE name=:name';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -94,13 +95,13 @@ class JeeObjectManager
      */
     public static function all($onlyVisible = false)
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . ' ';
         if ($onlyVisible) {
             $sql .= ' WHERE isVisible = 1';
         }
         $sql .= ' ORDER BY position,name,father_id';
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -115,7 +116,8 @@ class JeeObjectManager
      */
     public static function getRootObjects($all = false, $onlyVisible = false)
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $fetchType = DBHelper::FETCH_TYPE_ALL;
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE father_id IS NULL';
         if ($onlyVisible) {
@@ -124,9 +126,9 @@ class JeeObjectManager
         $sql .= ' ORDER BY position';
         if ($all === false) {
             $sql .= ' LIMIT 1';
-            return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+            $fetchType = DBHelper::FETCH_TYPE_ROW;
         }
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, array(), $fetchType, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -212,10 +214,10 @@ class JeeObjectManager
         $values = array(
             'configuration' => '%' . $search . '%',
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `configuration` LIKE :configuration';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**

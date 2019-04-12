@@ -18,6 +18,7 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -35,7 +36,7 @@ use ZipArchive;
  * @ORM\Table(name="update", indexes={@ORM\Index(name="status", columns={"status"})})
  * @ORM\Entity
  */
-class Update
+class Update implements EntityInterface
 {
     /**
      * @var string
@@ -412,7 +413,7 @@ class Update
      */
     public function save()
     {
-        return \DB::save($this);
+        return DBHelper::save($this);
     }
 
     /**
@@ -432,10 +433,11 @@ class Update
      */
     public function remove()
     {
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
-    public function postRemove() {
+    public function postRemove()
+    {
         EventManager::add('update::refreshUpdateNumber');
     }
 
@@ -446,7 +448,7 @@ class Update
      */
     public function refresh()
     {
-        \DB::refresh($this);
+        DBHelper::refresh($this);
     }
 
     public function getId()

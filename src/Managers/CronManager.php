@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Model\Entity\Cron;
@@ -53,12 +54,12 @@ class CronManager
      */
     public static function all($ordered = false)
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME;
         if ($ordered) {
             $sql .= ' ORDER BY deamon DESC';
         }
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -75,10 +76,10 @@ class CronManager
         $value = array(
             'id' => $cronId,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -97,7 +98,7 @@ class CronManager
             'class' => $className,
             'function' => $functionName,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE class = :class
                 AND function = :function';
@@ -106,7 +107,7 @@ class CronManager
             $value['option'] = $options;
             $sql .= ' AND `option` = :option';
         }
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -125,7 +126,7 @@ class CronManager
             'class' => $className,
             'function' => $functionName,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE class = :class
                 AND function = :function';
@@ -133,7 +134,7 @@ class CronManager
             $value['option'] = '%' . $options . '%';
             $sql .= ' AND `option` LIKE :option';
         }
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -240,6 +241,7 @@ class CronManager
     {
         return date('i', $dateToConvert) . ' ' . date('H', $dateToConvert) . ' ' . date('d', $dateToConvert) . ' ' . date('m', $dateToConvert) . ' * ' . date('Y', $dateToConvert);
     }
+
     /**
      * convert cron schedule string
      *
@@ -249,6 +251,6 @@ class CronManager
      */
     public static function convertCronSchedule($cron)
     {
-        return str_replace('*/ ','* ',$cron);
+        return str_replace('*/ ', '* ', $cron);
     }
 }

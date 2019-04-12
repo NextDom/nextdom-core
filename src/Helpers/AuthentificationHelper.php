@@ -34,7 +34,6 @@
 namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 

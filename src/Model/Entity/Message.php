@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EventManager;
@@ -28,7 +29,7 @@ use NextDom\Managers\ScenarioExpressionManager;
  * @ORM\Table(name="message", indexes={@ORM\Index(name="plugin_logicalID", columns={"plugin", "logicalId"})})
  * @ORM\Entity
  */
-class Message
+class Message implements EntityInterface
 {
     const CLASS_NAME = Message::class;
     const DB_CLASS_NAME = '`message`';
@@ -94,7 +95,7 @@ class Message
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE plugin = :plugin
                     AND message = :message';
-            $result = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+            $result = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
         } else {
             $values = array(
                 'logicalId' => $this->getLogicalId(),
@@ -104,14 +105,14 @@ class Message
             FROM message
             WHERE plugin=:plugin
             AND logicalId=:logicalId';
-            $result = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+            $result = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
         }
         if ($result['count(*)'] != 0) {
             return null;
         }
         EventManager::add('notify', array('title' => __('Message de ') . $this->getPlugin(), 'message' => $this->getMessage(), 'category' => 'message'));
         if ($_writeMessage) {
-            \DB::save($this);
+            DBHelper::save($this);
             $params = array(
                 '#plugin#' => $this->getPlugin(),
                 '#message#' => $this->getMessage(),
@@ -136,7 +137,7 @@ class Message
 
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
         EventManager::add('message::refreshMessageNumber');
     }
 

@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
@@ -29,7 +30,7 @@ use PragmaRX\Google2FA\Google2FA;
  * @ORM\Table(name="user")
  * @ORM\Entity
  */
-class User
+class User implements EntityInterface
 {
 
     /**
@@ -114,7 +115,7 @@ class User
 
     public function save()
     {
-        return \DB::save($this);
+        return DBHelper::save($this);
     }
 
     public function preRemove()
@@ -127,12 +128,12 @@ class User
     public function remove()
     {
         NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getLogin(), 'date' => date('Y-m-d H:i:s'), 'type' => 'user'));
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
     public function refresh()
     {
-        \DB::refresh($this);
+        DBHelper::refresh($this);
     }
 
     /**

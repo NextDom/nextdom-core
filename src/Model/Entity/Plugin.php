@@ -37,7 +37,7 @@ use NextDom\Managers\UpdateManager;
  * @ORM\Table(name="plugin")
  * @ORM\Entity
  */
-class Plugin
+class Plugin implements EntityInterface
 {
     protected $id;
     protected $name = '';

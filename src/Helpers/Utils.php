@@ -269,7 +269,7 @@ class Utils
     public static function connectedToDatabase()
     {
         require_once NEXTDOM_ROOT . '/core/class/DB.class.php';
-        return is_object(\DB::getConnection());
+        return is_object(DBHelper::getConnection());
     }
 
     /**
@@ -506,17 +506,44 @@ class Utils
      * Convert object of type to another
      *
      * @param mixed $sourceObject Source object
-     * @param string $destinationClassName Destination class name
+     * @param string $targetClassName Name of the target class
      *
      * @return mixed Object of destinationClassName type
      */
-    public static function cast($sourceObject, $destinationClassName)
+    public static function cast($sourceObject, $targetClassName)
     {
+        /*
+        return unserialize(
+            preg_replace(
+                '/^O:\d+:"[^"]++"/',
+                'O:'.strlen($targetClassName).':"'.$targetClassName.'"',
+                serialize($sourceObject)
+            )
+        );
+        /*
+        return unserialize(sprintf('O:%d:"%s"%s',
+                                    strlen($targetClassName),
+                                    $targetClassName,
+                                    strstr(strstr(serialize($sourceObject), '"'), ':')));
+        */
         $sourceClassName = get_class($sourceObject);
         $sourceSerializedPrefix = 'O:' . strlen($sourceClassName) . ':"' . $sourceClassName . '"';
-        $destinationSerializedPrefix = 'O:' . strlen($destinationClassName) . ':"' . $destinationClassName . '"';
+        $destinationSerializedPrefix = 'O:' . strlen($targetClassName) . ':"' . $targetClassName . '"';
         $serializedObject = serialize($sourceObject);
         return unserialize(str_replace($sourceSerializedPrefix, $destinationSerializedPrefix, $serializedObject));
+        /*
+        $targetObject = new $targetClassName();
+        $reflectedSourceObject = new \ReflectionClass($sourceObject);
+        foreach ($reflectedSourceObject->getProperties() as $property) {
+            $propertyName = $property->getName();
+            var_dump($propertyName);
+            if (strpos($propertyName, '_') !== 0) {
+                $property->setAccessible(true);
+                $targetObject->$propertyName = $property->getValue($sourceObject);
+            }
+        }
+        return $targetObject;
+        */
     }
 
     /**
@@ -862,7 +889,7 @@ class Utils
             FileSystemHelper::rrmdir($folder);
         }
         mkdir($folder);
-        system('cd '.NEXTDOM_LOG.';cp -R * "' . $folder . '" > /dev/null;cp -R .[^.]* "' . $folder . '" > /dev/null');
+        system('cd ' . NEXTDOM_LOG . ';cp -R * "' . $folder . '" > /dev/null;cp -R .[^.]* "' . $folder . '" > /dev/null');
         system('sudo dmesg >> ' . $folder . '/dmesg');
         system('sudo cp /var/log/messages "' . $folder . '/" > /dev/null');
         system('sudo chmod 777 -R "' . $folder . '" > /dev/null');
