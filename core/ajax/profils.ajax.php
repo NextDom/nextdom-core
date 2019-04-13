@@ -30,7 +30,8 @@ try {
     if (init('action') == 'removeImage') {
         $uploaddir = sprintf("%s/public/img/profils", NEXTDOM_ROOT);
         $pathInfo  = pathinfo(init('image'));
-        $path      = sprintf("%s/%s.%s", $uploaddir, $pathInfo['basename'], $pathInfo['extension']);
+        $extension = Utils::array_key_default($pathInfo, "extension", "<no-ext>");
+        $path      = sprintf("%s/%s.%s", $uploaddir, $pathInfo['basename'], $extension);
         ajax::success(unlink($path));
     }
 
