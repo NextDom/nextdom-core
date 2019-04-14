@@ -1,13 +1,20 @@
+#!/usr/bin/env python3
+
 """Launch NextDom code consistency tests
 """
 import sys
+import os
 from tests.libs.tests_funcs import *
 
 def check_php():
     """Check php code consistency
     """
     print_subtitle('PHP syntax')
-    output, status = get_command_output('find . -type f -name "*.php" -not -path "./vendor/*" | xargs -n1 php -l') #pylint: disable=line-too-long
+    cwd = os.path.realpath(os.curdir)
+    test_dir = os.path.dirname(os.path.realpath(__file__))
+    os.chdir(os.path.dirname(test_dir))
+    output, status = get_command_output('find . -type f -name "*.php" -not -path "./vendor/*" -not -name "object.class.php" | xargs -n1 php -l') #pylint: disable=line-too-long
+    os.chdir(cwd)
     error = False
     if status == 0:
         print_info('OK')

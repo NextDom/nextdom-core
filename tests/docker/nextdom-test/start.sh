@@ -10,6 +10,7 @@ rsync -av \
       --exclude .git \
       --exclude .sass-cache \
       --exclude docs \
+      --exclude var \
       --exclude backup
 
 # as if we were in 'dev' mode

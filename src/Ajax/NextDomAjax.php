@@ -393,7 +393,7 @@ class NextDomAjax extends BaseAjax
         $pathinfo  = pathinfo(init('path'));
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
         if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','html','py','css'))) {
-            throw new Exception(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
+            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
         }
         AjaxHelper::success(file_get_contents(Utils::init('path')));
     }
@@ -406,7 +406,7 @@ class NextDomAjax extends BaseAjax
         $pathinfo = pathinfo(Utils::init('path'));
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
         if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','html','py','css'))) {
-            throw new Exception(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
+            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
         }
         AjaxHelper::success(file_put_contents(Utils::init('path'), Utils::init('content')));
     }
@@ -419,7 +419,7 @@ class NextDomAjax extends BaseAjax
         $pathinfo = pathinfo(Utils::init('path'));
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
         if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','css'))) {
-            throw new Exception(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
+            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
         }
         AjaxHelper::success(unlink(Utils::init('path')));
     }
@@ -432,7 +432,7 @@ class NextDomAjax extends BaseAjax
         $pathinfo = pathinfo(Utils::init('name'));
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
         if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','css'))) {
-            throw new Exception(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
+            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
         }
         touch(Utils::init('path') . Utils::init('name'));
         if (!file_exists(Utils::init('path') . Utils::init('name'))) {

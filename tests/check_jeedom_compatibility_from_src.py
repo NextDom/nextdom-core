@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """Check Jeedom compatibility
 """
 import re
@@ -119,7 +121,8 @@ def get_entity_content_if_exists(base_class_file_content):
     entity_regex = r'extends \\?NextDom\\Model\\Entity\\(\w+)'
     entity_file_re = re.findall(entity_regex, base_class_file_content)
     if entity_file_re:
-        with open(NEXTDOM_ENTITY_PATH + entity_file_re[0] + '.php', encoding="utf-8") as entity_content:
+        filename = NEXTDOM_ENTITY_PATH + entity_file_re[0] + '.php'
+        with open(filename, encoding="utf-8") as entity_content:
             result = entity_content.read()
     return result
 
