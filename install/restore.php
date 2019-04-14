@@ -37,6 +37,7 @@ require_once __DIR__ . '/../core/php/core.inc.php';
 
 use NextDom\Managers\BackupManager;
 use NextDom\Helpers\Utils;
+use NextDom\Helpers\SystemHelper;
 
 $args = Utils::parseArgs($argv);
 if (true == array_key_exists("help", $args)) {

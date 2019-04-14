@@ -536,7 +536,6 @@ main() {
         ;;
       *)
         usage
-        exit -1
         ;;
     esac
   done
@@ -625,4 +624,4 @@ EOS
   fi
 }
 
-main
+main $@

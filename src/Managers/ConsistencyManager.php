@@ -57,9 +57,7 @@ class ConsistencyManager {
             self::ensureConfiguration();
             CronManager::clean();
             self::deleteDeprecatedCrons();
-            echo "here1\n";
             self::ensureCrons();
-            echo "here2\n";
             self::cleanWidgetCache();
             self::saveObjects();
             self::resetCommandsActionID();

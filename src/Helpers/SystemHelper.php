@@ -40,7 +40,9 @@ class SystemHelper
         $args    = func_get_args();
         $format  = $args[0];
         $params  = array_slice($args, 1);
-        system(vsprintf($format, $params), $status);
+        $cmd     = vsprintf($format, $params);
+
+        system($cmd, $status);
         return $status;
     }
 

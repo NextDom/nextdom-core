@@ -333,7 +333,7 @@ class CacheManager
 
         SystemHelper::vsystem("rm -rf %s", $cache_dir);
         SystemHelper::vsystem("mkdir %s", $cache_dir);
-        SystemHelper::vsystem("tar -C %s xzf %s ", $cache_dir, self::getArchivePath());
+        SystemHelper::vsystem("tar xzf %s -C %s", self::getArchivePath(), $cache_dir);
     }
 
     /**
