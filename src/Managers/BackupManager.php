@@ -59,7 +59,7 @@ class BackupManager
         $backupName = self::getBackupFilename();
         $backupPath = sprintf("%s/%s", $backupDir, $backupName);
         $sqlPath    = sprintf("%s/DB_backup.sql", $backupDir);
-        $cachePath  = CacheManager::getCachePath();
+        $cachePath  = CacheManager::getArchivePath();
         $startTime  = strtotime('now');
         $status     = "success";
 
@@ -316,7 +316,7 @@ class BackupManager
      * @throws CoreException when no archive is found
      * @return string archive file path
      */
-    private static function getLastBackupFilePath($backupDir, $order = "newest") {
+    public static function getLastBackupFilePath($backupDir, $order = "newest") {
         $files = self::getBackupFileInfo($backupDir, $order);
 
         if (true == empty($files)) {
