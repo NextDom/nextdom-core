@@ -277,4 +277,7 @@ class nextdom
         return NextDomHelper::benchmark();
     }
 
+    public static function cleanFileSytemRight() {
+        // no operation (jeedom compatibility)
+    }
 }

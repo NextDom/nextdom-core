@@ -5,10 +5,11 @@
 import re
 import sys
 import os
+import tempfile
 from tests.libs.tests_funcs import *
 
-AJAX_PATH = 'core/core/ajax/'
-CLASS_PATH = 'core/core/class/'
+AJAX_PATH = '/tmp/jeedom-core/core/ajax/'
+CLASS_PATH = '/tmp/jeedom-core/core/class/'
 NEXTDOM_CLASS_PATH = '../core/class/'
 NEXTDOM_ENTITY_PATH = '../src/Model/Entity/'
 TESTS_PATH = 'compatibility/'
@@ -224,10 +225,27 @@ def start_tests():
 
     return error
 
+def checkout_jeedom():
+    checkout_cmd = "git clone https://github.com/jeedom/core /tmp/jeedom-core > /dev/null 2>&1"
+    branch_cmd = "cd /tmp/jeedom-core && git checkout stable -f > /dev/null 2>&1"
+    update_cmd = "cd /tmp/jeedom-core && git fetch -apt > /dev/null 2>&1 && git pull -f origin stable > /dev/null 2>&1"
+    if os.path.exists("/tmp/jeedom-core"):
+      print_info("using pre-existing jeedom checkout /tmp/jeedom-core")
+    else:
+      if os.system(checkout_cmd) != 0:
+        print_error("unable to clone jeedom in /tmp/jeedom-core")
+        sys.exit(1)
+      if os.system(branch_cmd) != 0:
+        print_error("unable to switch to jeedom stable branch in /tmp/jeedom-core")
+        sys.exit(1)
+    print_info("updating jeedom-core in /tmp/jeedom-core")
+    if os.system(update_cmd) != 0:
+        print_error("unable to update jeedom stable branch in /tmp/jeedom-core")
+        sys.exit(1)
+
 if __name__ == "__main__":
     print_title('Compatibility with Jeedom')
     print_subtitle('Cloning jeedom/core')
-    os.system('git clone https://github.com/jeedom/core > /dev/null 2>&1')
-    os.system('cd core && git checkout stable -f > /dev/null 2>&1')
+    checkout_jeedom()
     if start_tests():
         sys.exit(1)
