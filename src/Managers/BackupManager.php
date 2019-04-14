@@ -465,16 +465,20 @@ class BackupManager
     /**
      * Computes backup filename from nextdom's name and current datetime
      *
+     * @param string $name current nextdom name, default given by ConfigManager
      * @returns string backup filename
      */
-    private static function getBackupFilename()
+    public static function getBackupFilename($name = null)
     {
         $date      = date("Y-m-d-H:i:s");
         $version   = NextDomHelper::getJeedomVersion();
-        $name      = ConfigManager::byKey('name', 'core', 'NextDom');
+        $format    = "backup-%s-%s-%s.tar.gz";
+
+        if ($name === null) {
+            $name = ConfigManager::byKey('name', 'core', 'NextDom');
+        }
         $cleanName = str_replace(array('&','#', "'", '"', '+', "-"), "", $name);
         $cleanName = str_replace(" ", "_", $cleanName);
-        $format    = "backup-%s-%s-%s.tar.gz";
 
         return sprintf($format, $cleanName, $version, $date);
     }
