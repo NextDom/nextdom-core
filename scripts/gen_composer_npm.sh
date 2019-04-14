@@ -16,7 +16,6 @@
 # function install_nodemodules
 
 set -e
-set -x
 
 set_root() {
     local this=`readlink -n -f $1`

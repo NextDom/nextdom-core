@@ -15,7 +15,6 @@
 # along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 
 set -e
-set -x
 
 # Get current directory
 set_root() {
