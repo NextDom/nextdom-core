@@ -15,19 +15,18 @@
 # along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 # function install_nodemodules
 
-# Get current directory
+set -e
+set -x
+
 set_root() {
     local this=`readlink -n -f $1`
     root=`dirname $this`
 }
 set_root $0
 
-set -e
-
 function run_as_superuser {
   cmd=$@
-
-  if (( $EUID != 0 )); then
+  if [ -z "${TRAVIS}" ] && [ ${EUID} != "0" ]; then
       sudo $@
   else
     $@
@@ -53,8 +52,11 @@ function install_dep_composer {
 function init_dependencies {
 	npm --version > /dev/null 2>&1 || {
 		echo " >>> Installation de node et npm"
-		wget https://deb.nodesource.com/setup_10.x -O - | run_as_superuser bash
+    tmpFile=$(mktemp)
+		wget -q https://deb.nodesource.com/setup_10.x -O ${tmpFile}
+    run_as_superuser bash ${tmpFile}
 		run_as_superuser apt install -y nodejs
+    rm -f ${tmpFile}
   }
 
 	sass --version > /dev/null 2>&1 || {
