@@ -24,7 +24,7 @@ use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
-use NextDom\Helpers\TimeLine;
+use NextDom\Helpers\TimeLineHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\CmdManager;
@@ -546,12 +546,12 @@ class Scenario
         if (is_object($cmd)) {
             LogHelper::add('event', 'info', __('Exécution du scénario ') . $this->getHumanName() . __(' déclenché par : ') . $cmd->getHumanName());
             if ($this->getConfiguration('timeline::enable')) {
-                TimeLine::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'trigger' => $cmd->getHumanName(true)));
+                TimeLineHelper::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'trigger' => $cmd->getHumanName(true)));
             }
         } else {
             LogHelper::add('event', 'info', __('Exécution du scénario ') . $this->getHumanName() . __(' déclenché par : ') . $trigger);
             if ($this->getConfiguration('timeline::enable')) {
-                TimeLine::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'trigger' => $trigger == 'schedule' ? 'programmation' : $trigger));
+                TimeLineHelper::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'trigger' => $trigger == 'schedule' ? 'programmation' : $trigger));
             }
         }
         if (count($this->getTags()) == 0) {

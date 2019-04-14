@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Modal;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\Plan3dHeaderManager;
@@ -47,6 +48,15 @@ class Plan3dHeaderConfigure extends BaseAbstractModal
             'id' => $plan3dHeader->getId(),
             'plan3dHeader' => Utils::o2a($plan3dHeader)
         ]);
+        $pageData['plan3dList'] = [];
+        foreach ($plan3dHeader->getPlan3d() as $plan3d) {
+            $plan3dData = [];
+            $plan3dData['id'] = $plan3d->getId();
+            $plan3dData['name'] = $plan3d->getName();
+            $plan3dData['linkType'] = $plan3d->getLink_type();
+            $plan3dData['humanReadable'] = NextDomHelper::toHumanReadable($plan3d->getLink_type());
+            $pageData['plan3dList'][] = $plan3dData;
+        }
         return Render::getInstance()->get('/modals/plan3dHeader.configure.html.twig', $pageData);
     }
 

@@ -111,7 +111,8 @@ class CacheManager
     {
         $result = self::getCache()->getStats();
         $result['count'] = __('Inconnu');
-        if (ConfigManager::byKey('cache::engine') == 'FilesystemCache') {
+        $engine = ConfigManager::byKey('cache::engine');
+        if ($engine == 'FilesystemCache') {
             $result['count'] = 0;
             foreach (FileSystemHelper::ls(self::getFolder()) as $folder) {
                 foreach (FileSystemHelper::ls(self::getFolder() . '/' . $folder) as $file) {
@@ -121,6 +122,8 @@ class CacheManager
                     $result['count']++;
                 }
             }
+        } else if($engine == 'RedisCache') {
+            $result['count'] = self::$cacheSystem->getRedis()->dbSize();
         }
         if ($details) {
             $re = '/s:\d*:(.*?);s:\d*:"(.*?)";s/';

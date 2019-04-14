@@ -77,7 +77,7 @@ class AjaxCronTest extends AjaxBase
         $this->assertEquals(200, $result->getStatusCode());
     }
 
-    public function testAllsAdmin() {
+    public function testAllAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'all']);
         $this->assertEquals(17, count(json_decode((string) $result->getBody(), true)['result']));

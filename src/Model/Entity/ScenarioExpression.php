@@ -674,7 +674,7 @@ class ScenarioExpression
             case 'eqAnalyse':
                 $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=eqAnalyse&report=1';
                 $this->setLog($scenario, __('Génération du rapport ') . $url);
-                $cmd_parameters['files'] = array(ReportHelper::generate($url, 'other', $options['export_type'], $options));
+                $cmd_parameters['files'] = array(ReportHelper::generate($url, 'other', 'eqAnalyse', $options['export_type'], $options));
                 $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport équipement du ') . date('Y-m-d H:i:s');
                 $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport équipement généré le ') . date('Y-m-d H:i:s');
                 break;

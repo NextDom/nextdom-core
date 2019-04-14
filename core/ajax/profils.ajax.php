@@ -1,48 +1,24 @@
 <?php
- /*
-  * This file is part of the NextDom software (https://github.com/NextDom or http://nextdom.github.io).
-  * Copyright (c) 2018 NextDom.
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, version 2.
-  *
-  * This program is distributed in the hope that it will be useful, but
-  * WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-  * General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program. If not, see <http://www.gnu.org/licenses/>.
-  */
 
-use NextDom\Helpers\Utils;
+/* This file is part of Jeedom.
+ *
+ * Jeedom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jeedom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */
 
-try {
-    require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
-    include_file('core', 'authentification', 'php');
+use NextDom\Ajax\ProfilsAjax;
 
-    if (!isConnect()) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__));
+require_once (__DIR__ . '/../../src/core.php');
 
-    }
-
-    if (init('action') == 'removeImage') {
-        $uploaddir = sprintf("%s/public/img/profils", NEXTDOM_ROOT);
-        $pathInfo  = pathinfo(init('image'));
-        $extension = Utils::array_key_default($pathInfo, "extension", "<no-ext>");
-        $path      = sprintf("%s/%s.%s", $uploaddir, $pathInfo['basename'], $extension);
-        ajax::success(unlink($path));
-    }
-
-    if (init('action') == 'imageUpload') {
-        $uploadDir = sprintf("%s/public/img/profils", NEXTDOM_ROOT);
-        Utils::readUploadedFile($_FILES, "images", $uploadDir, 8, array(".png", ".jpg"));
-        ajax::success();
-    }
-
-    throw new Exception(__('Aucune methode correspondante à : ', __FILE__) . init('action'));
-
-} catch (Exception $e) {
-    ajax::error(displayExeption($e), $e->getCode());
-}
+$profilsAjax = new ProfilsAjax();
+$profilsAjax->process();

@@ -19,7 +19,7 @@ namespace NextDom\Helpers;
 
 use NextDom\Enums\GetParams;
 use NextDom\Enums\ViewType;
-use NextDom\Managers\AjaxManager;
+use NextDom\Helpers\AjaxHelper;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\MessageManager;
@@ -470,7 +470,7 @@ class PrepareView
         $pageData['PRODUCT_NAME'] = $configs['product_name'];
         $pageData['PRODUCT_ICON'] = $configs['product_icon'];
         $pageData['PRODUCT_CONNECTION_ICON'] = $configs['product_connection_image'];
-        $pageData['AJAX_TOKEN'] = AjaxManager::getToken();
+        $pageData['AJAX_TOKEN'] = AjaxHelper::getToken();
         $pageData['LANGUAGE'] = $configs['language'];
 
         self::initJsPool($pageData);

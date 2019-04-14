@@ -75,6 +75,11 @@ def check_ajax_file(file_to_check, actions_list):
     # Ignore migration functionnality
     if test_name == 'Migrate':
         return True
+    # Special names
+    if test_name == 'Datastore':
+        test_name = 'DataStore'
+    if test_name == 'Eqlogic':
+        test_name = 'EqLogic'
     test_file = TESTS_PATH + 'Ajax' + test_name + 'Test.php'
     if os.path.isfile(test_file):
         with open(test_file, 'r', encoding="utf-8") as test_file_content:
@@ -82,7 +87,10 @@ def check_ajax_file(file_to_check, actions_list):
             test_content = test_content.lower()
             for action in actions_list:
                 if test_content.find('test' + action.lower()) == -1:
-                    print_warning('In ' + test_name + ', test for action ' + action + ' not found.')
+                    # Skip backup restore
+                    if test_name != 'NextDom' and action != 'restore':
+                        continue
+                    print_warning('In ' + test_name + ', test for action ' + action + ' not found.') #pylint: disable=line-too-long
                     result = False
     else:
         print('File ' + test_file + ' not found.')
@@ -115,6 +123,41 @@ def get_entity_content_if_exists(base_class_file_content):
             result = entity_content.read()
     return result
 
+def class_methods_to_ignore(file_to_check, method_to_check):
+    """Check in list of ignored methods
+    :param file_to_check:   Ajax file to check
+    :param method_to_check: Ajax file to check
+    :type file_to_check:    str
+    :type method_to_check:  str
+    :return:                True if the method can be ignored
+    :rtype:                 bool
+    """
+    ignored_methods = {
+        'cmd.class.php': [
+            'cast' # Usage only static (in manager)
+        ],
+        'eqLogic.class.php': [
+            'cast' # Usage only static (in manager)
+        ],
+        'eqReal.class.php': [
+            'getClass' # Usage only static (in manager)
+        ],
+        'event.class.php': [
+            'getFileDescriptorLock', # Usage only static (in manager)
+            'cleanEvent', # Usage only static (in manager)
+            'filterEvent', # Usage only static (in manager)
+            'changesSince' # Usage only static (in manager)
+        ],
+        'nextdom.class.php': [
+            'getThemeConfig', # No usage
+            'checkValueInconfiguration' # Usage only static and private (in manager)
+        ]
+    }
+    if file_to_check in ignored_methods.keys():
+        if method_to_check in ignored_methods[file_to_check]:
+            return True
+    return False
+
 def check_class_methods_file(file_to_check, methods_list):
     """Check class methods from file
     :param file_to_check: Ajax file to check
@@ -137,8 +180,9 @@ def check_class_methods_file(file_to_check, methods_list):
             test_content = test_content.lower()
             for method in methods_list:
                 if test_content.find('function ' + method.lower()) == -1:
-                    print_warning('In ' + file_to_check + ', method ' + method + ' not found.')
-                    result = False
+                    if not class_methods_to_ignore(file_to_check, method):
+                        print_warning('In ' + file_to_check + ', method ' + method + ' not found.')
+                        result = False
     else:
         print('Class ' + file_to_check + ' not found.')
         result = False
@@ -160,7 +204,7 @@ def start_tests():
     :return: False if error found
     :rtype:  bool
     """
-    print_subtitle('Ajax')
+    print_subtitle('Test ajax')
     error = False
     jeedom_ajax_actions = get_ajax_actions()
     if not check_if_ajax_action_is_tested(jeedom_ajax_actions):
@@ -168,7 +212,7 @@ def start_tests():
     else:
         print_info('OK')
 
-    print_subtitle('Classes')
+    print_subtitle('Test classes')
     jeedom_class_methods = get_class_methods()
     if not check_if_class_methods_exists(jeedom_class_methods):
         error = True
@@ -179,7 +223,8 @@ def start_tests():
 
 if __name__ == "__main__":
     print_title('Compatibility with Jeedom')
-    os.system('git clone https://github.com/jeedom/core')
-    os.system('cd core && git checkout stable -f > /dev/null')
+    print_subtitle('Cloning jeedom/core')
+    os.system('git clone https://github.com/jeedom/core > /dev/null 2>&1')
+    os.system('cd core && git checkout stable -f > /dev/null 2>&1')
     if start_tests():
         sys.exit(1)

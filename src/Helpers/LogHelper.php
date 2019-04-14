@@ -304,7 +304,7 @@ class LogHelper
     public static function liste($_filtre = null)
     {
         $return = array();
-        foreach (ls(self::getPathToLog(''), '*') as $log) {
+        foreach (FileSystemHelper::ls(self::getPathToLog(''), '*') as $log) {
             if ($_filtre !== null && strpos($log, $_filtre) === false) {
                 continue;
             }

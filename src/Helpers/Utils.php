@@ -91,7 +91,7 @@ class Utils
     {
         $jsVarValue = '';
         if (is_array($varValue)) {
-            $jsVarValue = 'jQuery.parseJSON("' . addslashes(json_encode($varValue, JSON_UNESCAPED_UNICODE)) . '")';
+            $jsVarValue = self::getArrayToJQueryJson($varValue);
         } else {
             $jsVarValue = '"' . $varValue . '"';
         }
@@ -261,7 +261,7 @@ class Utils
     }
 
     /**
-     * @param CoreException|\Exception $e
+     * @param CoreException|\Exception|\Throwable $e
      * @return string
      * @throws \Exception
      */
@@ -275,19 +275,23 @@ class Utils
         return $message;
     }
 
+    /**
+     * @param string $errorMessage
+     * @return string
+     * @throws \Exception
+     */
+    public static function displaySimpleException($errorMessage)
+    {
+        return '<span id="span_errorMessage">' . $errorMessage . '</span>';
+    }
+
     public static function isSha1($_string = '')
     {
-        if ($_string == '') {
-            return false;
-        }
         return preg_match('/^[0-9a-f]{40}$/i', $_string);
     }
 
     public static function isSha512($_string = '')
     {
-        if ($_string == '') {
-            return false;
-        }
         return preg_match('/^[0-9a-f]{128}$/i', $_string);
     }
 
@@ -699,7 +703,7 @@ class Utils
             return array('icon' => trim($matches[1], '\\'), 'fontfamily' => 'FontAwesome');
         }
 
-        foreach (ls(NEXTDOM_ROOT . '/public/icon', '*') as $dir) {
+        foreach (FileSystemHelper::ls(NEXTDOM_ROOT . '/public/icon', '*') as $dir) {
             if (is_dir(NEXTDOM_ROOT . '/public/icon/' . $dir) && file_exists(NEXTDOM_ROOT . '/public/icon/' . $dir . '/style.css')) {
                 $css = file_get_contents(NEXTDOM_ROOT . '/public/icon/' . $dir . '/style.css');
                 preg_match($re, $css, $matches);

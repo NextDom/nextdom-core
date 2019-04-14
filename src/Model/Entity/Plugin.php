@@ -548,7 +548,7 @@ class Plugin
                 if ($alreadyActive == 1) {
                     $out = $this->callInstallFunction('remove');
                 }
-                rrmdir(NextDomHelper::getTmpFolder('openvpn'));
+                rrmdir(NextDomHelper::getTmpFolder($this->getId()));
             }
             if (isset($out) && trim($out) != '') {
                 LogHelper::add($this->getId(), 'info', "Installation/remove/update result : " . $out);

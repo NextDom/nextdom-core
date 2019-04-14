@@ -72,7 +72,7 @@ class AjaxObjectTest extends AjaxBase
     public function testAllAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'all']);
-        $this->assertContains('"result":[]', (string) $result->getBody());
+        $this->assertTrue(is_array(json_decode((string) $result->getBody(), true)['result']));
         $this->assertEquals(200, $result->getStatusCode());
     }
 
@@ -86,7 +86,7 @@ class AjaxObjectTest extends AjaxBase
     public function testSaveAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'save']);
-        $this->assertContains('"state":"ok","result":{', (string) $result->getBody());
+        $this->assertContains('Le nom de l\'objet ne peut être vide', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
         $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'remove', 'id' => 1]);
     }
