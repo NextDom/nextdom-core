@@ -205,8 +205,8 @@ step_nextdom_prerequisites_verification() {
   for c_file in nextdom.conf nextdom-ssl.conf nextdom-common; do
     if [ ! -f ${dstdir}/${c_file} ] || [ 1 -eq "0${isdev}" ] ; then
       cp ${srcdir}/${c_file} ${dstdir}/${c_file} >> ${DEBUG} 2>&1
-      sed -i -e "s%\s+Define\s+wwwdir\s.*%Define wwwdir \"${wwwdir}\"%gI"         ${dstdir}/${c_file} >> ${DEBUG} 2>&1
-      sed -i -e "s%\s+Define\s+logdir\s.*%Define logdir \"${LOG_DIRECTORY}\"%gI"  ${dstdir}/${c_file} >> ${DEBUG} 2>&1
+      sed -i -r "s%\s+Define\s+wwwdir\s.*%Define wwwdir \"${wwwdir}\"%gI"         ${dstdir}/${c_file} >> ${DEBUG} 2>&1
+      sed -i -r "s%\s+Define\s+logdir\s.*%Define logdir \"${LOG_DIRECTORY}\"%gI"  ${dstdir}/${c_file} >> ${DEBUG} 2>&1
       DETAILS+=("created file: ${dstdir}/${c_file}")
     fi
   done
