@@ -13,7 +13,10 @@ docker rm nextdom-test > /dev/null 2>&1   || true
 
 # Go to base path
 echo "step 1. creating installer container nextdom-test from ${baseImage}..."
-docker run -d -p 8765:80 -v ${rootDir}:/data --name="nextdom-test" ${baseImage} > /dev/null 2>&1
+docker run -d -p 8765:80 -v ${rootDir}:/data --name="nextdom-test" ${baseImage} > /dev/null || {
+  echo "-> enable to run installer container"
+  exit 1
+}
 END_OF_INSTALL_STR="OK NEXTDOM TEST READY"
 
 echo -n "step 2. watting for installation to complete..."

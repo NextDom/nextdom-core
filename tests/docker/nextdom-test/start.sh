@@ -12,15 +12,18 @@ rsync -av \
       --exclude docs \
       --exclude backup
 
-cd /usr/share/nextdom
+# as if we were in 'dev' mode
+mkdir -p /usr/share/nextdom/.git
 
-mkdir plugins public backup .git
+# as if nextdowm was installed by debian package
+chown root:root -R /usr/share/nextdom
+
 service cron start
 service mysql start
 service apache2 start
 
-./scripts/gen_global.sh
 bash -x /usr/share/nextdom/install/postinst
+
 mysql -u root -e "UPDATE nextdomdev.user SET password = SHA2('nextdom_test', 512)"
 
 echo NEXTDOM TEST READY

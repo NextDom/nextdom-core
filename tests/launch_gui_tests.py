@@ -23,9 +23,9 @@ def migration_tests():
     print_subtitle('Migration')
     start_test_container(container_name, NEXTDOM_PASSWORD)
     # Copy minimal Jeedom backup in the container
-    copy_file_in_container(container_name, 'data/backup-Jeedom-3.2.11-2018-11-17-23h26.tar.gz', '/var/www/html/backup/') #pylint: disable=line-too-long
+    copy_file_in_container(container_name, 'data/backup-Jeedom-3.2.11-2018-11-17-23h26.tar.gz', '/var/lib/nextdom/backup/') #pylint: disable=line-too-long
     # Execute the migration
-    exec_command_in_container(container_name, 'php /var/www/html/install/restore.php backup=/var/www/html/backup/backup-Jeedom-3.2.11-2018-11-17-23h26.tar.gz > /dev/null 2>&1') #pylint: disable=line-too-long
+    exec_command_in_container(container_name, 'sudo -u www-data php /var/www/html/install/restore.php file=/var/lib/nextdom/backup/backup-Jeedom-3.2.11-2018-11-17-23h26.tar.gz > /dev/null 2>&1') #pylint: disable=line-too-long
     # Reset admin password
     exec_command_in_container(container_name, '/usr/bin/mysql -u root nextdomdev -e "UPDATE user SET password = SHA2(\'nextdom-test\', 512)"') #pylint: disable=line-too-long
     run_test('tests/migration_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])

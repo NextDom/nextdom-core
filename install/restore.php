@@ -41,8 +41,17 @@ use NextDom\Helpers\Utils;
 $args = Utils::parseArgs($argv);
 if (true == array_key_exists("help", $args)) {
     echo "usage: php restoreBackup.php [help] [file=path-to-archive]";
-    die();
+    die(1);
 }
 
-$file = Utils::array_key_default($args, "file", "");
+$file         = Utils::array_key_default($args, "file", "");
+$currentUser  = posix_getpwuid(posix_geteuid());
+$expectedUser = SystemHelper::getWWWUid();
+
+if ($currentUser["name"] != $expectedUser) {
+    printf("error: script must be ran by '%s'");
+    printf(" -> sudo -u %w php %s file=%s", $expectedUser, $argv[0], $file);
+    die(1);
+}
+
 BackupManager::restoreBackup($file);

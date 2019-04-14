@@ -419,10 +419,19 @@ step_os_specific(){
   fi
 }
 
-check_var_www_html() {
+
+step_nextdom_var_www_html() {
+  # Link ${WEBSERVER_HOME} to /var/www/html. Required by old plugins that may hardcode this path.
+  # Any previously installed content are moved to temporairy directories in check_var_www_html()
+  # (useless for docker since this directory is empty)
+
   dirn="/var/www/html"
-  # Verification que le repertoire /var/www/html est bien vide
-  if [[ -d ${dirn} ]] ; then
+  if [  "${WEBSERVER_HOME}" == "${dirn}" ] ; then
+      return 0
+  fi
+
+  # moving any content of /var/www/html to /var/www/html.XXXXXXXX
+  if [[ -d "${dirn}" ]] ; then
       count="$( find ${dirn} -mindepth 1 -maxdepth 1 | wc -l )"
       if [ $count -gt 0 ] ; then
           tmpd="$(mktemp -d -u /var/www/html.XXXXXXXX)"
@@ -430,39 +439,29 @@ check_var_www_html() {
           DETAILS+=("warning : directory ${dirn} isn't empty, renamed to ${tmpd}")
       fi
   fi
-  if [[ -L ${dirn} ]] ; then
+
+  # rename any pre-exiting link
+  if [[ -L "${dirn}" ]] ; then
       dest=$(readlink "${dirn}")
       if [ "${dest}" == "${WEBSERVER_HOME}" ]; then
           rm -f "${dirn}"
       else
-          tfile=$(mktemp -u /var/www/html.XXXXXXXX)
+          tfile="$(mktemp -u /var/www/html.XXXXXXXX)"
           cd /var/www/
           mv ${dirn} ${tfile}
           DETAILS+=("warning : directory ${dirn} is a link, renamed it ${tfile}")
       fi
   fi
-  if [[ -f ${dirn} ]] ; then
-      # strange but why not
+
+  # strange but why not
+  if [[ -f "${dirn}" ]] ; then
       tfile=$(mktemp -u /var/www/html.XXXXXXXX)
       mv ${dirn} ${tfile}
       DETAILS+=("warning : ${dirn} is a file, renamed it ${tfile}")
   fi
-}
 
-step_nextdom_var_www_html() {
-  # Link ${WEBSERVER_HOME} to /var/www/html. Required by old plugins that may hardcode this path.
-  # Any previously installed content are moved to temporairy directories in check_var_www_html()
-  # (useless for docker since this directory is empty)
-
-  if [ -t 0 ] ; then
-      # launch only when interactive (this is already done by preinst Debian script)
-      if [ "${WEBSERVER_HOME}" != "/var/www/html" ] ; then
-          check_var_www_html
-      fi
-  fi
-  if [  "${WEBSERVER_HOME}" != "/var/www/html" ] ; then
-      ln -s ${WEBSERVER_HOME} /var/www/html
-  fi
+  # link /var/www/html to nextdom root
+  ln -s "${WEBSERVER_HOME}" /var/www/html
 }
 
 step_nextdom_mysql_populate() {
