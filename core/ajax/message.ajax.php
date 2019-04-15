@@ -16,48 +16,9 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-try {
-    require_once __DIR__ . '/../../core/php/core.inc.php';
-    include_file('core', 'authentification', 'php');
+use NextDom\Ajax\MessageAjax;
 
-    if (!isConnect()) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__));
-    }
+require_once (__DIR__ . '/../../src/core.php');
 
-    ajax::init();
-
-    if (init('action') == 'clearMessage') {
-        message::removeAll(init('plugin'));
-        ajax::success();
-    }
-
-    if (init('action') == 'nbMessage') {
-        ajax::success(message::nbMessage());
-    }
-
-    if (init('action') == 'all') {
-        if (init('plugin') == '') {
-            $messages = utils::o2a(message::all());
-        } else {
-            $messages = utils::o2a(message::byPlugin(init('plugin')));
-        }
-        foreach ($messages as &$message) {
-            $message['message'] = htmlentities($message['message']);
-        }
-        ajax::success($messages);
-    }
-
-    if (init('action') == 'removeMessage') {
-        $message = message::byId(init('id'));
-        if (!is_object($message)) {
-            throw new Exception(__('Message inconnu. Vérifiez l\'ID', __FILE__));
-        }
-        $message->remove();
-        ajax::success();
-    }
-
-    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-    /*     * *********Catch exeption*************** */
-} catch (Exception $e) {
-    ajax::error(displayException($e), $e->getCode());
-}
+$messageAjax = new MessageAjax();
+$messageAjax->process();

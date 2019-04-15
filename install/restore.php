@@ -47,12 +47,12 @@
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\LogHelper;
+use NextDom\Helpers\MigrationHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ScriptHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
-use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\PluginManager;
 
 /**
@@ -106,31 +106,6 @@ function getBackupFilePath(): string
     return $backupFile;
 }
 
-/**
- * Import SQL in MySQL da
- *
- * @param string $sqlFilePath Path of the SQL file to import
- */
-function mySqlImport($sqlFilePath)
-{
-    global $CONFIG;
-    shell_exec('mysql --host=' . $CONFIG['db']['host'] . ' --port=' . $CONFIG['db']['port'] . ' --user=' . $CONFIG['db']['username'] . ' --password=' . $CONFIG['db']['password'] . ' ' . $CONFIG['db']['dbname'] . ' < ' . $sqlFilePath . ' > /dev/null 2>&1');
-}
-
-/**
- * Migrate the database to the new version
- *
- * @throws Exception
- */
-function migrateDb()
-{
-    mySqlImport(__DIR__ . '/migrate/migrate.sql');
-
-    foreach (InteractDefManager::all() as $interactDef) {
-        $interactDef->setEnable(1);
-        $interactDef->save();
-    }
-}
 
 /**
  * Show title
@@ -269,11 +244,11 @@ try {
     }
 
     step('Restoring database');
-    mySqlImport(TMP_BACKUP . '/DB_backup.sql');
+    MigrationHelper::mySqlImport(TMP_BACKUP . '/DB_backup.sql');
     ok();
 
-    step('Updating database');
-    migrateDb();
+    step('Migration process');
+    MigrationHelper::migrate('restore');
     ok();
 
     step('Enables constraints');
@@ -331,9 +306,9 @@ try {
         ok();
     }
 
-    step('Update database post plugins');
-    migrateDb();
-    ok();
+    //step('Update database post plugins');
+    //migrateDb();
+    //ok();
 
     ConfigManager::save('hardware_name', '');
     $cache = CacheManager::byKey('nextdom::isCapable::sudo');

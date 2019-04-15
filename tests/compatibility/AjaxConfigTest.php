@@ -15,7 +15,7 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('libs/AjaxBase.php');
+require_once(__DIR__ . '/libs/AjaxBase.php');
 
 class AjaxConfigTest extends AjaxBase
 {

@@ -19,26 +19,26 @@
 /* * ***************************Includes********************************* */
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
-use NextDom\Managers\AjaxManager;
+use NextDom\Helpers\AjaxHelper;
 
 class ajax {
     public static function init($_checkToken = true) {
-        AjaxManager::init($_checkToken);
+        AjaxHelper::init($_checkToken);
     }
 
     public static function getToken() {
-        return AjaxManager::getToken();
+        return AjaxHelper::getToken();
     }
 
     public static function success($_data = '') {
-        AjaxManager::success($_data);
+        AjaxHelper::success($_data);
     }
 
     public static function error($_data = '', $_errorCode = 0) {
-        AjaxManager::error($_data, $_errorCode);
+        AjaxHelper::error($_data, $_errorCode);
     }
 
     public static function getResponse($_data = '', $_errorCode = null) {
-        return AjaxManager::getResponse($_data, $_errorCode);
+        return AjaxHelper::getResponse($_data, $_errorCode);
     }
 }

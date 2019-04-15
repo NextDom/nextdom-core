@@ -34,7 +34,7 @@
 namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
-use NextDom\Managers\AjaxManager;
+use NextDom\Helpers\AjaxHelper;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 
@@ -195,7 +195,7 @@ class AuthentificationHelper
         UserManager::getStoredUser()->save();
         @session_write_close();
         if (!isset($_COOKIE['nextdom_token'])) {
-            setcookie('nextdom_token', AjaxManager::getToken(), time() + 365 * 24 * 3600, "/", '', false, true);
+            setcookie('nextdom_token', AjaxHelper::getToken(), time() + 365 * 24 * 3600, "/", '', false, true);
         }
         LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par clef : ') . $user->getLogin());
         return true;

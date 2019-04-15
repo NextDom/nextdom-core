@@ -91,6 +91,20 @@ class AjaxNextDomTest extends AjaxBase
         $this->assertEquals(200, $result->getStatusCode());
     }
 
+    public function testDbCorrectTableAsUser() {
+        $this->connectAsUser();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'dbcorrectTable']);
+        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    public function testDbCorrectTableAsAdmin() {
+        $this->connectAsAdmin();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'dbcorrectTable']);
+        $this->assertContains('"result":""', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+
     public function testHealthAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'health']);
@@ -153,14 +167,14 @@ class AjaxNextDomTest extends AjaxBase
         $this->assertContains('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
-
+/*
     public function testRestoreAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'restore']);
         $this->assertContains('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
-
+*/
     public function testRemoveBackupAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'removeBackup']);
@@ -185,7 +199,7 @@ class AjaxNextDomTest extends AjaxBase
     public function testListBackupAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'listBackup']);
-        $this->assertContains('"result":[]', (string) $result->getBody());
+        $this->assertContains('{"state":"ok","result":', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
@@ -268,7 +282,7 @@ class AjaxNextDomTest extends AjaxBase
     public function testForceSyncHourAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'forceSyncHour']);
-        $this->assertContains('"result":null', (string) $result->getBody());
+        $this->assertContains('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
@@ -324,7 +338,7 @@ class AjaxNextDomTest extends AjaxBase
     public function testRemoveTimelineEventsAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'removeTimelineEvents']);
-        $this->assertContains('"result":null', (string) $result->getBody());
+        $this->assertContains('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 

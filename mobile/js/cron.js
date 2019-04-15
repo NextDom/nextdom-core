@@ -17,7 +17,7 @@ function initCron() {
     $('#table_cron tbody').empty();
     nextdom.cron.all({
       error: function (error) {
-        notify("Erreur", error.message, 'error');
+        $('#div_alert').showAlert({message: error.message, level: 'danger'});
       },
       success: function (data) {
        var html = '';
@@ -53,7 +53,7 @@ function initCron() {
       state: action,
       forceRestart : 1,
       error: function (error) {
-        notify("Erreur", error.message, 'error');
+        $('#div_alert').showAlert({message: error.message, level: 'danger'});
       },
       success: function () {
        getCronState();
