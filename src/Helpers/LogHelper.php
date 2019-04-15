@@ -40,6 +40,7 @@ use Monolog\Handler\SyslogUdpHandler;
 use Monolog\Logger;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\MessageManager;
+use NextDom\Singletons\PHPInformation;
 use SplFileObject;
 
 class LogHelper
@@ -118,6 +119,7 @@ class LogHelper
 
     public static function addError($logTarget, $message, $logicalId = '')
     {
+        $message = $message . '\n' . PHPInformation::getInstance()->getCallingFunctionName(true);
         self::add($logTarget, 'error', $message, $logicalId);
     }
 

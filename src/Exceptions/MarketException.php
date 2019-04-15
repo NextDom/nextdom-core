@@ -21,5 +21,11 @@ namespace NextDom\Exceptions;
 
 class MarketException extends \Exception
 {
-
+    /**
+     * MarketException constructor.
+     */
+    public function __construct()
+    {
+        LogHelper::addError('market',$this->getMessage());
+    }
 }

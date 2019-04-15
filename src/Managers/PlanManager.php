@@ -35,11 +35,26 @@ namespace NextDom\Managers;
 
 use NextDom\Model\Entity\Plan;
 
+/**
+ * Class PlanManager
+ * @package NextDom\Managers
+ */
 class PlanManager
 {
+    /**
+     *
+     */
     const CLASS_NAME = Plan::class;
+    /**
+     *
+     */
     const DB_CLASS_NAME = '`plan`';
 
+    /**
+     * @param $_id
+     * @return Plan[]|mixed|null
+     * @throws \Exception
+     */
     public static function byId($_id)
     {
         $values = array(
@@ -51,6 +66,11 @@ class PlanManager
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_planHeader_id
+     * @return Plan[]|mixed|null
+     * @throws \Exception
+     */
     public static function byPlanHeaderId($_planHeader_id)
     {
         $values = array(
@@ -62,6 +82,12 @@ class PlanManager
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_link_type
+     * @param $_link_id
+     * @return Plan[]|mixed|null
+     * @throws \Exception
+     */
     public static function byLinkTypeLinkId($_link_type, $_link_id)
     {
         $values = array(
@@ -75,6 +101,13 @@ class PlanManager
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_link_type
+     * @param $_link_id
+     * @param $_planHeader_id
+     * @return Plan[]|mixed|null
+     * @throws \Exception
+     */
     public static function byLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id)
     {
         $values = array(
@@ -90,6 +123,13 @@ class PlanManager
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_link_type
+     * @param $_link_id
+     * @param $_planHeader_id
+     * @return Plan[]|mixed|null
+     * @throws \Exception
+     */
     public static function removeByLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id)
     {
         $values = array(
@@ -104,6 +144,10 @@ class PlanManager
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @return Plan[]|mixed|null
+     * @throws \Exception
+     */
     public static function all()
     {
         $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
@@ -111,6 +155,11 @@ class PlanManager
         return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_search
+     * @return Plan[]|mixed|null
+     * @throws \Exception
+     */
     public static function searchByDisplay($_search)
     {
         $value = array(
@@ -122,6 +171,12 @@ class PlanManager
         return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_search
+     * @param string $_not
+     * @return Plan[]|mixed|null
+     * @throws \Exception
+     */
     public static function searchByConfiguration($_search, $_not = '')
     {
         $value = array(

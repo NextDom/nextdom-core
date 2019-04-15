@@ -19,4 +19,11 @@ namespace NextDom\Exceptions;
 
 class PluginException extends \Exception
 {
+    /**
+     * PluginException constructor.
+     */
+    public function __construct()
+    {
+        LogHelper::addError('plugin',$this->getMessage());
+    }
 }
