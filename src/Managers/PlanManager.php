@@ -42,7 +42,13 @@ use NextDom\Model\Entity\Plan;
  */
 class PlanManager
 {
+    /**
+     *
+     */
     const CLASS_NAME = Plan::class;
+    /**
+     *
+     */
     const DB_CLASS_NAME = '`plan`';
 
     /**

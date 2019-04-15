@@ -23,4 +23,11 @@ namespace NextDom\Exceptions;
  */
 class OperatingSystemException extends \Exception
 {
+    /**
+     * OperatingSystemException constructor.
+     */
+    public function __construct()
+    {
+        LogHelper::addError('os',$this->getMessage());
+    }
 }
