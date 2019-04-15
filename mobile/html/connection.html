@@ -1,6 +1,6 @@
 <div style="padding:10px 20px;">
     <center>
-        <img src="/public/img/icon-128x128.png"/>
+        <img id="img_loginImg" src="core/img/logo-nextdom-petit-nom-couleur-128x128.png" style="max-height: 300px;max-width: 600px;"/>
     </center><br/>
     <input type="text" id="in_login_username" value="" placeholder="{{Nom d'utilisateur}}" />
     <input type="password" id="in_login_password" value="" placeholder="{{Mot de passe}}" />
@@ -9,16 +9,19 @@
     </div>
     <form>
         <input type="checkbox" id="cb_storeConnection" data-mini="true">
-        <label for="cb_storeConnection" class="text-black"><span>{{Enregistrer cet appareil}}</span></label>
+        <label for="cb_storeConnection"><span style="color:black;">{{Enregistrer cet appareil}}</span></label>
     </form>
     <a id="bt_login_validate" href="#" class="ui-btn ui-corner-all ui-btn-raised clr-primary waves-effect waves-button">{{Connexion}}</a>
 </div>
 <script>
-    $('#in_login_username').on('focusout focusin change keypress',function(){
+    if(isset(NEXTDOM_DATA) && isset(NEXTDOM_DATA.product_image)){
+        $('#img_loginImg').attr('src',NEXTDOM_DATA.product_image);
+    }
+    $('#in_login_username').on('focusout change keypress',function(){
         nextdom.user.useTwoFactorAuthentification({
             login: $('#in_login_username').value(),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                $('#div_alert').showAlert({message: error.message, level: 'danger'});
             },
             success: function (data) {
                 if(data == 1){
@@ -36,7 +39,7 @@
             twoFactorCode: $('#in_twoFactorCode').val(),
             storeConnection: $('#cb_storeConnection').value(),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                $('#div_alert').showAlert({message: error.message, level: 'danger'});
             },
             success: function (data) {
                 if ($('#cb_storeConnection').value() == 1) {
@@ -47,3 +50,6 @@
         });
     });
 </script>
+
+
+

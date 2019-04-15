@@ -443,7 +443,7 @@ class NextDomHelper
      * @return array|mixed|string
      * @throws \Exception
      */
-    private static function checkValueInConfiguration($configKey, $configValue)
+    public static function checkValueInConfiguration($configKey, $configValue)
     {
         if (!is_array(self::$nextdomConfiguration)) {
             self::$nextdomConfiguration = array();

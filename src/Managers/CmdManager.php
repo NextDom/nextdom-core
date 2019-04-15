@@ -77,7 +77,7 @@ class CmdManager
         if (!is_array($_ids) || count($_ids) == 0) {
             return [];
         }
-        $in = trim(implode(',', $_ids), ',');
+        $in = trim(preg_replace('/[, ]{2,}/m',',',implode(',', $_ids)), ',');
         if ($in === '') {
             return [];
         }
@@ -167,7 +167,7 @@ class CmdManager
         if (is_array($eqLogicId)) {
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
-                    WHERE eqLogic_id IN (' . implode(',', $eqLogicId) . ') ';
+                    WHERE eqLogic_id IN (' .trim(preg_replace('/[, ]{2,}/m',',',implode(',', $eqLogicId)),',') . ')';
         } else {
             $values = array(
                 'eqLogic_id' => $eqLogicId,
@@ -233,7 +233,7 @@ class CmdManager
             $values = array();
             $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
-                    WHERE generic_type IN (' . trim($in, ',') . ')';
+                    WHERE generic_type IN (' . trim(preg_replace('/[, ]{2,}/m',',',$in), ',') . ')';
         } else {
             $values = array(
                 'generic_type' => $genericType,

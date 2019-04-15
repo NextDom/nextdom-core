@@ -30,8 +30,11 @@ class ReportHelper
         shell_exec('find ' . NEXTDOM_DATA . '/data/report -type f -mtime +' . ConfigManager::byKey('report::maxdays') . ' -delete');
     }
 
-    public static function generate($_url, $_type, $_name, $_format = 'pdf', $_parameter = array())
+    public static function generate($_url, $_type, $_name, $_format = 'png', $_parameter = array())
     {
+        if(!is_string($_format)){
+            $_format = 'png';
+        }
         $out = NEXTDOM_DATA . '/data/report/';
         $out .= $_type . '/';
         $out .= $_name . '/';

@@ -51,6 +51,11 @@ class Plan3dManager
         return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_plan3dHeader_id
+     * @return Plan3d|null
+     * @throws \Exception
+     */
     public static function byPlan3dHeaderId($_plan3dHeader_id)
     {
         $values = array(

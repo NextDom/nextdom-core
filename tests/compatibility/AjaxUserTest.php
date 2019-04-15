@@ -194,7 +194,7 @@ class AjaxUserTest extends AjaxBase
         try {
             $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'testLdapConnection']);
         }
-        catch (Exception $e) {
+        catch (\Exception $e) {
             $this->assertContains('500 Internal Server Error', $e->getMessage());
         }
     }
@@ -209,7 +209,7 @@ class AjaxUserTest extends AjaxBase
     public function testRemoveBanIpAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'removeBanIp']);
-        $this->assertContains('"result":null', (string) $result->getBody());
+        $this->assertContains('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
@@ -223,7 +223,7 @@ class AjaxUserTest extends AjaxBase
     public function testSupportAccessAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'supportAccess']);
-        $this->assertContains('"result":null', (string) $result->getBody());
+        $this->assertContains('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 

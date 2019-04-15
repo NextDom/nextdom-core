@@ -93,7 +93,7 @@ class AjaxReportTest extends AjaxBase
     public function testRemoveAllAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'removeAll']);
-        $this->assertContains('"result":null', (string) $result->getBody());
+        $this->assertContains('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 }

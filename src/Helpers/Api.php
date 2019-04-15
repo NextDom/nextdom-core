@@ -105,6 +105,9 @@ class Api
         if ($defaultApiKey == '') {
             return false;
         }
+        if($plugin != 'core' && self::apiAccess($defaultApiKey)){
+            return true;
+        }
         if ($plugin != 'core' && $plugin != 'proapi' && !self::apiModeResult(ConfigManager::byKey('api::' . $plugin . '::mode', 'core', 'enable'))) {
             return false;
         }

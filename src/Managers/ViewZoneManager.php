@@ -33,6 +33,8 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Model\Entity\ViewZone;
+
 class ViewZoneManager
 {
     const DB_CLASS_NAME = '`viewZone`';
@@ -46,6 +48,11 @@ class ViewZoneManager
         return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_id
+     * @return ViewZone|null
+     * @throws \Exception
+     */
     public static function byId($_id)
     {
         $value = array(
@@ -74,7 +81,7 @@ class ViewZoneManager
             'view_id' => $_view_id,
         );
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
-                WHERE view_id=:view_id';
+                WHERE view_id = :view_id';
         return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ROW);
     }
 

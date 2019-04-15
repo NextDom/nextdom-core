@@ -10,7 +10,7 @@ function initMessage() {
         nextdom.message.clear({
             plugin: $('#sel_plugin').value(),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                $('#div_alert').showAlert({message: error.message, level: 'danger'});
             },
             success: getAllMessage
         });
@@ -25,7 +25,7 @@ function initMessage() {
         nextdom.message.remove({
             id: tr.attr('data-message_id'),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                $('#div_alert').showAlert({message: error.message, level: 'danger'});
             },
             success: function () {
                 tr.remove();
@@ -38,7 +38,7 @@ function getAllMessage(_plugin) {
     nextdom.message.all({
         plugin: _plugin || '',
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function (messages) {
             var tbody = '';
