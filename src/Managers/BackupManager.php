@@ -124,7 +124,7 @@ class BackupManager
             printf("*********** starting restore procedure at %s ***********\n", date('Y-m-d H:i:s'));
             NextDomHelper::event('begin_restore', true);
 
-            if ($file == null) {
+            if ($file === null) {
                 $file = self::getLastBackupFilePath($backupDir, "newest");
             }
             printf("file used for restoration: %s\n", $file);
@@ -172,7 +172,7 @@ class BackupManager
             printf("> DETAILS\n");
             printf("%s\n", print_r($e->getTrace(), true));
             LogHelper::add('restore', 'error', $e->getMessage());
-            if (true == is_dir($tmpDir)) {
+            if (true === is_dir($tmpDir)) {
                 SystemHelper::rrmdir($tmpDir);
             }
         }
@@ -209,7 +209,7 @@ class BackupManager
      */
     public static function restore(string $file = '', bool $background = false)
     {
-        if (true == $background) {
+        if (true === $background) {
             LogHelper::clear("restore");
             $script = sprintf("%s/install/restore.php file=%s interactive=false > %s 2>&1 &",
                               NEXTDOM_ROOT,
@@ -256,7 +256,7 @@ class BackupManager
             $riIter  = new RecursiveIteratorIterator($dirIter);
             // iterate on files recursively found
             foreach ($riIter as $c_entry) {
-                if (false == $c_entry->isFile())
+                if (false === $c_entry->isFile())
                     continue;
                 $dest = preg_replace($pattern, "", $c_entry->getPathname());
                 $tar->addFile($c_entry->getPathname(), $dest);
@@ -284,13 +284,13 @@ class BackupManager
     public static function getBackupFileInfo($backupDir, $order = "newest") {
         $pattern = sprintf("%s/*.gz", $backupDir);
         // 1.
-        if (false == ($entries = glob($pattern))) {
+        if (false === ($entries = glob($pattern))) {
             return array();
         }
 
         // 2.
         $files = array_map(function($c_file) {
-            if (false == ($stat = stat($c_file))) {
+            if (false === ($stat = stat($c_file))) {
                 throw new CoreException("unable to stat file " . $c_file);
             }
             return array("file" => $c_file, "mtime" => $stat[9], "size" => $stat[7]);
@@ -319,7 +319,7 @@ class BackupManager
     public static function getLastBackupFilePath($backupDir, $order = "newest") {
         $files = self::getBackupFileInfo($backupDir, $order);
 
-        if (true == empty($files)) {
+        if (true === empty($files)) {
             throw new CoreException("unable to find any backup file");
         }
         return $files[0]["file"];
@@ -456,7 +456,7 @@ class BackupManager
         $plugins = PluginManager::listPlugin(true);
         foreach ($plugins as $c_plugin) {
             $pid = $c_plugin->getId();
-            if (true == method_exists($pid, 'backup')) {
+            if (true === method_exists($pid, 'backup')) {
                 $pid::backup();
             }
         }
@@ -549,7 +549,7 @@ class BackupManager
         $excludeDirs = array("AlternativeMarketForJeedom", "musicast");
         $exclude = sprintf("/^(%s)$/", join("|", $excludeDirs));
         $tmpDir  = sprintf("%s-restore-%s", NEXTDOM_TMP, date('Y-m-d-H:i:s'));
-        if (false == mkdir($tmpDir, $mode = 0775, true)) {
+        if (false === mkdir($tmpDir, $mode = 0775, true)) {
             throw new CoreException("unable to create tmp directory " . $tmpDir);
         }
         $tar = new Tar();
@@ -607,9 +607,9 @@ class BackupManager
         if (true == file_exists($jeedomConfig)) {
             @unlink($jeedomConfig);
         }
-        if ((false == file_exists($commonConfig)) &&
-            (true  == file_exists($commonBackup))) {
-            if (false == rename($commonBackup, $commonConfig)) {
+        if ((false === file_exists($commonConfig)) &&
+            (true  === file_exists($commonBackup))) {
+            if (false === rename($commonBackup, $commonConfig)) {
                 // should at least warn, silent fail kept from install/restore.php refactoring
             }
         }
@@ -625,9 +625,9 @@ class BackupManager
         $cachePath2 = sprintf("%s/var/cache.tar.gz", $tmpDir);
         $cacheDest  = sprintf("%s/cache.tar.gz",     NEXTDOM_DATA);
 
-        if (true == file_exists($cachePath1)) {
+        if (true === file_exists($cachePath1)) {
             rename($cachePath1, $cacheDest);
-        } elseif (true == file_exists($cachePath2)) {
+        } elseif (true === file_exists($cachePath2)) {
             rename($cachePath2, $cacheDest);
         }
 
@@ -675,7 +675,7 @@ class BackupManager
         SystemHelper::rrmdir($pluginRoot . "/*");
         foreach ($plugingDirs as $c_dir) {
             $name = basename($c_dir);
-            if (false == rename($c_dir, sprintf("%s/%s", $pluginRoot, $name))) {
+            if (false === rename($c_dir, sprintf("%s/%s", $pluginRoot, $name))) {
                 // should probably fail, keeping behavior prior to install/restore.php refactoring
             }
         }
