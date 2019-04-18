@@ -157,6 +157,17 @@ def copy_file_in_container(container_name, src, dest):
     """
     os.system('docker cp ' + src + ' nextdom-test-' + container_name + ':' + dest)
 
+def copy_file_from_container(container_name, src, dest):
+    """Copy a file in a test container
+    :param container_name: Name of the container
+    :param src:            Source file
+    :param dest:           Destination directory
+    :type container_name:  str
+    :type src:             str
+    :type dest:            str
+    """
+    os.system('docker cp nextdom-test-' + container_name + ':' + src + ' ' + dest)
+
 def start_all_tests(title, tests_list, use_docker=True):
     """Start all tests
     :param title:      Title of the type of tests

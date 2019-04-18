@@ -52,6 +52,8 @@ namespace {
     spl_autoload_register('nextdomPluginAutoload', true, true);
 
     require_once NEXTDOM_ROOT . '/vendor/autoload.php';
+    require_once NEXTDOM_ROOT . '/src/Helpers/DBHelper.php';
+    require_once NEXTDOM_ROOT . '/src/Managers/ConfigManager.php';
     require_once NEXTDOM_DATA . '/config/nextdom.config.php';
     require_once NEXTDOM_DATA . '/config/compatibility.config.php';
 

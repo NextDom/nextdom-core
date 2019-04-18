@@ -78,12 +78,18 @@ class CmdManager
         return $inputs;
     }
 
-    public static function byIds($_ids)
+    /**
+     * Get command by specifics IDs
+     * @param array $idsList List of ID
+     * @return Cmd[]|null List of commands
+     * @throws \Exception
+     */
+    public static function byIds($idsList)
     {
-        if (!is_array($_ids) || count($_ids) == 0) {
+        if (!is_array($idsList) || count($idsList) == 0) {
             return [];
         }
-        $in = trim(preg_replace('/[, ]{2,}/m', ',', implode(',', $_ids)), ',');
+        $in = trim(preg_replace('/[, ]{2,}/m',',',implode(',', $idsList)), ',');
         if ($in === '') {
             return [];
         }
@@ -97,7 +103,7 @@ class CmdManager
      * Get command by his id
      *
      * @param mixed $id Command id
-     * @return Cmd
+     * @return Cmd|bool
      * @throws \Exception
      */
     public static function byId($id)
@@ -159,12 +165,12 @@ class CmdManager
     /**
      * Get commands attached to eqLogic objects
      *
-     * @param mixed $eqLogicId EqLogic object id or array of EqLogic id
-     * @param null $_type
-     * @param null $_visible Filter visible eqLogic
+     * @param int|array $eqLogicId EqLogic object id or array of EqLogic id
+     * @param string|null $_type
+     * @param int|null $_visible Only visible if !== null
      * @param null $_eqLogic
      * @param null $_has_generic_type
-     * @return array|mixed
+     * @return Cmd[]|null
      * @throws \Exception
      */
     public static function byEqLogicId($eqLogicId, $_type = null, $_visible = null, $_eqLogic = null, $_has_generic_type = null)
@@ -337,20 +343,20 @@ class CmdManager
         $values = array(
             'template' => '%' . $template . '%',
         );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE template LIKE :template';
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE template LIKE :template';
         if ($eqType !== null) {
             $values['eqType'] = $eqType;
-            $sql .= ' AND eqType=:eqType ';
+            $sql .= ' AND eqType = :eqType ';
         }
         if ($type !== null) {
             $values['type'] = $type;
-            $sql .= ' AND type=:type ';
+            $sql .= ' AND type = :type ';
         }
         if ($subtype !== null) {
             $values['subType'] = $subtype;
-            $sql .= ' AND subType=:subType ';
+            $sql .= ' AND subType = :subType ';
         }
         $sql .= ' ORDER BY name';
         return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
@@ -372,13 +378,13 @@ class CmdManager
             'eqLogic_id' => $eqLogicId,
             'logicalId' => $logicalId,
         );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE eqLogic_id=:eqLogic_id
-        AND logicalId=:logicalId';
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE eqLogic_id = :eqLogic_id
+                AND logicalId = :logicalId';
         if ($type !== null) {
             $values['type'] = $type;
-            $sql .= ' AND type=:type';
+            $sql .= ' AND type = :type';
         }
         if ($multiple) {
             return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
@@ -402,10 +408,10 @@ class CmdManager
             'eqLogic_id' => $eqLogicId,
             'generic_type' => $genericType,
         );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE eqLogic_id=:eqLogic_id
-        AND generic_type=:generic_type';
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE eqLogic_id=:eqLogic_id
+                AND generic_type=:generic_type';
         if ($type !== null) {
             $values['type'] = $type;
             $sql .= ' AND type=:type';
@@ -472,13 +478,13 @@ class CmdManager
             'eqLogic_name' => $eqLogicName,
             'cmd_name' => $cmdName,
         );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
-        FROM ' . self::DB_CLASS_NAME . ' c
-        INNER JOIN eqLogic el ON c.eqLogic_id=el.id
-        WHERE c.name=:cmd_name
-        AND el.name=:eqLogic_name
-        AND el.eqType_name=:eqType_name';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 'c') . '
+                FROM ' . self::DB_CLASS_NAME . ' c
+                INNER JOIN eqLogic el ON c.eqLogic_id=el.id
+                WHERE c.name=:cmd_name
+                AND el.name=:eqLogic_name
+                AND el.eqType_name=:eqType_name';
+        return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
     }
 
     /**
@@ -495,11 +501,11 @@ class CmdManager
             'eqLogic_id' => $eqLogicId,
             'cmd_name' => $cmdName,
         );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
-        FROM ' . self::DB_CLASS_NAME . ' c
-        WHERE c.name=:cmd_name
-        AND c.eqLogic_id=:eqLogic_id';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 'c') . '
+                FROM ' . self::DB_CLASS_NAME . ' c
+                WHERE c.name=:cmd_name
+                AND c.eqLogic_id=:eqLogic_id';
+        return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
     }
 
     /**

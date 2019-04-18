@@ -108,7 +108,7 @@ class EqLogicManager
                 FROM ' . self::DB_CLASS_NAME . ' el
                 LEFT JOIN object ob ON el.object_id = ob.id ';
         if ($onlyEnable) {
-            $sql .= 'AND isEnable = 1 ';
+            $sql .= 'WHERE isEnable = 1 ';
         }
         $sql .= 'ORDER BY ob.name, el.name';
         return self::cast(DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));

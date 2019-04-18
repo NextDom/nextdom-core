@@ -139,8 +139,8 @@ class UserManager
             'id' => $_id,
         );
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE id=:id';
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE id = :id';
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
@@ -161,8 +161,8 @@ class UserManager
             'login' => $_login,
         );
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE login=:login';
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE login = :login';
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
@@ -177,8 +177,8 @@ class UserManager
             'hash' => $_hash,
         );
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE hash=:hash';
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE hash = :hash';
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
@@ -190,8 +190,8 @@ class UserManager
         );
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE login=:login
-                AND hash=:hash';
+                WHERE login = :login
+                AND hash = :hash';
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
@@ -203,8 +203,8 @@ class UserManager
         );
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE login=:login
-                AND password=:password';
+                WHERE login = :login
+                AND password = :password';
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
@@ -216,7 +216,7 @@ class UserManager
     public static function all()
     {
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME;
+                FROM ' . self::DB_CLASS_NAME;
         return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
@@ -227,9 +227,9 @@ class UserManager
             'rights2' => '%"' . $_rights . '":"1"%',
         );
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE rights LIKE :rights
-        OR rights LIKE :rights2';
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE rights LIKE :rights
+                OR rights LIKE :rights2';
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
@@ -245,8 +245,8 @@ class UserManager
             'profils' => $_profils,
         );
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE profils=:profils';
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE profils = :profils';
         if ($_enable) {
             $sql .= ' AND enable=1';
         }
