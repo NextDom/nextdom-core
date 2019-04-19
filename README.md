@@ -1,3 +1,5 @@
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) ![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/NextDom/nextdom-core.svg) ![GitHub contributors](https://img.shields.io/github/contributors/NextDom/nextdom-core.svg) ![GitHub pull requests](https://img.shields.io/github/issues-pr/NextDom/nextdom-core.svg) ![GitHub issues](https://img.shields.io/github/issues/NextDom/nextdom-core.svg) ![Discord](https://img.shields.io/discord/535362043000258580.svg) ![Website](https://img.shields.io/website/https/www.nextdom.org.svg)
+
 # NextDom Core by NextDom Team #
 
 Website (English): [https://www.nextdom.org/en/](https://www.nextdom.org/en/)
