@@ -394,7 +394,7 @@ $(function () {
 
     $('#bt_messageModal').on('click',function(){
         $('#md_modal').dialog({title: "{{Messages NextDom}}"});
-        $('#md_modal').load('index.php?v=d&p=message&ajax=1').dialog('open');
+        $('#md_modal').load('index.php?v=d&modal=message').dialog('open');
     });
 
     $('body').on('click','.objectSummaryParent',function(){

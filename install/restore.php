@@ -114,7 +114,7 @@ function getBackupFilePath(): string
 function mySqlImport($sqlFilePath)
 {
     global $CONFIG;
-    shell_exec('mysql --host=' . $CONFIG['db']['host'] . ' --port=' . $CONFIG['db']['port'] . ' --user=' . $CONFIG['db']['username'] . ' --password=' . $CONFIG['db']['password'] . ' ' . $CONFIG['db']['dbname'] . ' < ' . $sqlFilePath . ' > /dev/null 2>&1');
+    shell_exec('mysql --host=' . $CONFIG['db']['host'] . ' --port=' . $CONFIG['db']['port'] . ' --user=' . $CONFIG['db']['username'] . ' --password=' . $CONFIG['db']['password'] . ' ' . $CONFIG['db']['dbname'] .  ' --force < ' . $sqlFilePath . ' > /dev/null 2>&1');
 }
 
 /**
@@ -375,6 +375,9 @@ try {
         LogHelper::add('restore', 'error', $e->getMessage());
         showError($e);
     }
+    step('Clear cache');
+    CacheManager::flush();
+    ok();
     $duration = strtotime('now') - $startTime;
     echo 'Time of restoration : ' . $duration . "s\n";
     subTitle('End of process at ' . date('Y-m-d H:i:s'));

@@ -82,6 +82,10 @@ log.display:
   path: 'log.display'
   controller: NextDom\Controller\Modal\LogDisplay::get
   condition: 'admin'
+message:
+  path: 'message'
+  controller: NextDom\Controller\Modal\MessageController::get
+  condition: 'user'
 nextdom.benchmark:
   path: 'nextdom.benchmark'
   controller: NextDom\Controller\Modal\NextdomBenchmark::get

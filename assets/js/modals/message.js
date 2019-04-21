@@ -34,39 +34,47 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
- $("#sel_plugin").on('change', function() {
-    loadPage('index.php?v=d&p=message&plugin=' + $('#sel_plugin').value());
-});
+var modalContainer = $('#md_modal');
 
- $("#bt_clearMessage").on('click', function(event) {
-    nextdom.message.clear({
-        plugin: $('#sel_plugin').value(),
-        error: function(error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function() {
-            $("#table_message tbody").remove();
-            refreshMessageNumber();
-        }
+function initEvents() {
+    $('#sel_plugin').on('change', function () {
+        var pluginId = $('#sel_plugin').value();
+        modalContainer.dialog({title: '{{Message NextDom}} ' + pluginId});
+        modalContainer.load('index.php?v=d&modal=message&plugin_id=' + pluginId).dialog('open');
     });
-});
 
- $('#bt_refreshMessage').on('click', function(event) {
-    $('#md_modal').dialog({title: "{{Message NextDom}}"});
-    $('#md_modal').load('index.php?v=d&p=message&ajax=1').dialog('open');
-});
-
- $("#table_message").delegate(".removeMessage", 'click', function(event) {
-    var tr = $(this).closest('tr');
-    nextdom.message.remove({
-        id: tr.attr('data-message_id'),
-        error: function(error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function() {
-            tr.remove();
-            $("#table_message").trigger("update");
-            refreshMessageNumber();
-        }
+    $('#bt_clearMessage').on('click', function (event) {
+        nextdom.message.clear({
+            plugin: $('#sel_plugin').value(),
+            error: function (error) {
+                notify('Erreur', error.message, 'error');
+            },
+            success: function () {
+                $('#table_message tbody').remove();
+                refreshMessageNumber();
+            }
+        });
     });
-});
+
+    $('#bt_refreshMessage').on('click', function () {
+        modalContainer.dialog({title: '{{Message NextDom}}'});
+        modalContainer.load('index.php?v=d&modal=message').dialog('open');
+    });
+
+    $('#table_message').delegate('.removeMessage', 'click', function () {
+        var messageRow = $(this).closest('tr');
+        nextdom.message.remove({
+            id: messageRow.attr('data-message_id'),
+            error: function (error) {
+                notify('Erreur', error.message, 'error');
+            },
+            success: function () {
+                messageRow.remove();
+                $('#table_message').trigger('update');
+                refreshMessageNumber();
+            }
+        });
+    });
+}
+
+initEvents();
