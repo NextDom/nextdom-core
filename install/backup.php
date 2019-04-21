@@ -40,7 +40,7 @@ use NextDom\Helpers\Utils;
 use NextDom\Helpers\SystemHelper;
 
 $args = Utils::parseArgs($argv);
-if (true == array_key_exists("help", $args)) {
+if (true === array_key_exists("help", $args)) {
     echo "usage: php backup.php [help]";
     die(1);
 }
