@@ -72,6 +72,7 @@ try {
         echo "OK : Utilisateur deja present\n";
     }
     config::save('version', nextdom::version());
+    \NextDom\Managers\UpdateManager::checkAllUpdate();
 } catch (Exception $e) {
     echo 'Erreur durant l\'installation : ' . $e->getMessage();
     echo 'Détails : ' . print_r($e->getTrace(), true);

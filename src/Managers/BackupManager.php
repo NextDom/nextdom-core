@@ -159,7 +159,9 @@ class BackupManager
             printf("chechking system consistency...");
             ConsistencyManager::checkConsistency();
             printf("oK\n");
-
+            printf("clearing cache...");
+            CacheManager::flush();
+            printf("oK\n");
             SystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
             printf(" -> STATUS: success\n");
