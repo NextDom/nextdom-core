@@ -611,7 +611,7 @@ class BackupManager
         }
         if ((false === file_exists($commonConfig)) &&
             (true  === file_exists($commonBackup))) {
-            if (false === rename($commonBackup, $commonConfig)) {
+            if (false === FileSystemHelper::mv($commonBackup, $commonConfig)) {
                 // should at least warn, silent fail kept from install/restore.php refactoring
             }
         }
@@ -628,9 +628,9 @@ class BackupManager
         $cacheDest  = sprintf("%s/cache.tar.gz",     NEXTDOM_DATA);
 
         if (true === file_exists($cachePath1)) {
-            rename($cachePath1, $cacheDest);
+            FileSystemHelper::mv($cachePath1, $cacheDest);
         } elseif (true === file_exists($cachePath2)) {
-            rename($cachePath2, $cacheDest);
+            FileSystemHelper::mv($cachePath2, $cacheDest);
         }
 
         try {
@@ -677,11 +677,10 @@ class BackupManager
         SystemHelper::rrmdir($pluginRoot . "/*");
         foreach ($plugingDirs as $c_dir) {
             $name = basename($c_dir);
-            if (false === rename($c_dir, sprintf("%s/%s", $pluginRoot, $name))) {
+            if (false === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $pluginRoot, $name))) {
                 // should probably fail, keeping behavior prior to install/restore.php refactoring
             }
         }
-
         self::restorePluginPerms();
 
         $plugins = PluginManager::listPlugin(true);

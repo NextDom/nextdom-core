@@ -528,6 +528,21 @@ class FileSystemHelper
     }
 
     /**
+     * Moves input file or directory to given destination (acts like mv)
+     *
+     * @param string $src source file or directory
+     * @param string $dst destination file or directory
+     * @return bool true if no error
+     */
+    public static function mv($src, $dst): bool
+    {
+        $status = -1;
+        $cmd = sprintf("mv %s %s", $src, $dst);
+        system($cmd, $status);
+        return ($status === 0);
+    }
+
+    /**
      * Create directory if not already exists
      *
      * @param int $mode, see mkdir parameter
