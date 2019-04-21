@@ -56,7 +56,10 @@ class Render
         $this->initRenderer();
     }
 
-    private function initTranslation($language)
+    /**
+     * @param $language
+     */
+    private function initTranslation(string $language)
     {
         $this->translator = new Translator($language, null, NEXTDOM_ROOT . '/var/cache/i18n');
         $this->translator->addLoader('yaml', new YamlFileLoader());
