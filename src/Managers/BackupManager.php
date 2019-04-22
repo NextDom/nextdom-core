@@ -529,14 +529,18 @@ class BackupManager
      */
     private static function loadSQLFromFile($file)
     {
-        if (false === ($content = file_get_contents($file))) {
-            throw new CoreException("unable to find sql file " . $file);
-        }
-        try {
-            $cnx = \DB::getConnection();
-            $cnx->exec($content);
-        } catch (\Exception $e) {
-            throw new CoreException("error loading sql file " . $file . " : " . $e->getMessage());
+        global $CONFIG;
+
+        $format = "mysql --host='%s' --port='%s' --user='%s' --password='%s' --force %s < %s 2>/dev/null";
+        $status = SystemHelper::vsystem($format,
+                                        $CONFIG['db']['host'],
+                                        $CONFIG['db']['port'],
+                                        $CONFIG['db']['username'],
+                                        $CONFIG['db']['password'],
+                                        $CONFIG['db']['dbname'],
+                                        $file);
+        if ($status !== 0) {
+            throw new CoreException("error loading sql file " . $file);
         }
     }
 
