@@ -40,3 +40,53 @@
     }
   }
 }
+
+#dashboard-header {
+  position: fixed;
+  width: 100%;
+  padding-right: 65px;
+  z-index: 999;
+  display: none;
+  -webkit-animation: opacit 1s;
+  -moz-animation:    opacit 1s;
+  -o-animation:      opacit 1s;
+  animation:     opacit 1s;
+}
+#dashboard-content {
+  padding-top:15px;
+  -webkit-animation: opacit 1s;
+  -moz-animation:    opacit 1s;
+  -o-animation:      opacit 1s;
+  animation:     opacit 1s;
+}
+
+.content-header {
+  background: transparent;
+  position: fixed;
+  width: 100%;
+  padding-right: 65px;
+  z-index: 999;
+  display: none;
+  -webkit-animation: opacit 1s;
+  -moz-animation:    opacit 1s;
+  -o-animation:      opacit 1s;
+  animation:     opacit 1s;
+}
+
+.content{
+  padding-top:15px;
+}
+
+@media (max-width: 767px) {
+    .sidebar-open .content-wrapper, .sidebar-open .main-footer {
+        padding-left: 230px;
+        transform: none !important;
+        -webkit-transform: none !important;
+        -ms-transform: none !important;
+        -o-transform: none !important;
+    }
+}
+
+.tableCmd {
+  width: 100%;
+}
