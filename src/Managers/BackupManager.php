@@ -286,13 +286,15 @@ class BackupManager
     public static function getBackupFileInfo($backupDir, $order = "newest") {
         $pattern = sprintf("%s/*.gz", $backupDir);
         // 1.
-        if (false === ($entries = glob($pattern))) {
+        $entries = glob($pattern);
+        if (false ===  $entries) {
             return array();
         }
 
         // 2.
         $files = array_map(function($c_file) {
-            if (false === ($stat = stat($c_file))) {
+            $stat = stat($c_file);
+            if (false === $stat) {
                 throw new CoreException("unable to stat file " . $c_file);
             }
             return array("file" => $c_file, "mtime" => $stat[9], "size" => $stat[7]);
@@ -371,7 +373,7 @@ class BackupManager
             try {
                 $class = sprintf("repo_%s", $c_key);
                 $class::backup_send($path);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return false;
             }
         }
@@ -469,7 +471,7 @@ class BackupManager
      * @param string $name current nextdom name, default given by ConfigManager
      * @returns string backup filename
      */
-    public static function getBackupFilename($name = null)
+    public static function getBackupFilename($name = null): string
     {
         $date      = date("Y-m-d-H:i:s");
         $version   = NextDomHelper::getJeedomVersion();
