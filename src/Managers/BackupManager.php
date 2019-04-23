@@ -293,7 +293,7 @@ class BackupManager
 
         // 2.
         $files = array_map(function($c_file) {
-            $stat = stat($c_file)
+            $stat = stat($c_file);
             if (false === $stat) {
                 throw new CoreException("unable to stat file " . $c_file);
             }
