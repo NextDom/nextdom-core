@@ -337,15 +337,14 @@ class BackupManager
     public static function rotateBackups($backupDir) {
         $maxDays         = ConfigManager::byKey('backup::keepDays');
         $maxSizeInBytes  = ConfigManager::byKey('backup::maxSize') * 1024 * 1024;
-        $maxSizeInBytes  = 35 * 1024 * 1024;
         $minMtime        = time() - ($maxDays * 60 * 60 * 24);
         $totalBytes      = 0;
         $files           = self::getBackupFileInfo($backupDir, "newest");
 
         // 1.
         foreach ($files as $c_entry) {
-            if (($totalBytes > $maxSizeInBytes) ||
-                ($c_entry["mtime"] < $minMtime)) {
+            if (($c_entry["mtime"] < $minMtime) ||
+                ($totalBytes > $maxSizeInBytes)) {
                 unlink($c_entry["file"]);
                 continue;
             }
