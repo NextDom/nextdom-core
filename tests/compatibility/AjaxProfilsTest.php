@@ -51,7 +51,7 @@ class AjaxProfilsTest extends AjaxBase
     public function testImageUploadAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'imageUpload']);
-        $this->assertContains('Aucun fichier trouvé. Vérifié parametre PHP', (string) $result->getBody());
+        $this->assertContains('Aucun fichier trouvé. Vérifiez le paramètre PHP', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 }
