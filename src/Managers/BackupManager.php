@@ -159,7 +159,9 @@ class BackupManager
             printf("chechking system consistency...");
             ConsistencyManager::checkConsistency();
             printf("oK\n");
-
+            printf("clearing cache...");
+            CacheManager::flush();
+            printf("oK\n");
             SystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
             printf(" -> STATUS: success\n");
@@ -526,14 +528,18 @@ class BackupManager
      */
     private static function loadSQLFromFile($file)
     {
-        if (false === ($content = file_get_contents($file))) {
-            throw new CoreException("unable to find sql file " . $file);
-        }
-        try {
-            $cnx = \DB::getConnection();
-            $cnx->exec($content);
-        } catch (\Exception $e) {
-            throw new CoreException("error loading sql file " . $file . " : " . $e->getMessage());
+        global $CONFIG;
+
+        $format = "mysql --host='%s' --port='%s' --user='%s' --password='%s' --force %s < %s 2>/dev/null";
+        $status = SystemHelper::vsystem($format,
+                                        $CONFIG['db']['host'],
+                                        $CONFIG['db']['port'],
+                                        $CONFIG['db']['username'],
+                                        $CONFIG['db']['password'],
+                                        $CONFIG['db']['dbname'],
+                                        $file);
+        if ($status !== 0) {
+            throw new CoreException("error loading sql file " . $file);
         }
     }
 
@@ -608,7 +614,7 @@ class BackupManager
         }
         if ((false === file_exists($commonConfig)) &&
             (true  === file_exists($commonBackup))) {
-            if (false === rename($commonBackup, $commonConfig)) {
+            if (false === FileSystemHelper::mv($commonBackup, $commonConfig)) {
                 // should at least warn, silent fail kept from install/restore.php refactoring
             }
         }
@@ -625,9 +631,9 @@ class BackupManager
         $cacheDest  = sprintf("%s/cache.tar.gz",     NEXTDOM_DATA);
 
         if (true === file_exists($cachePath1)) {
-            rename($cachePath1, $cacheDest);
+            FileSystemHelper::mv($cachePath1, $cacheDest);
         } elseif (true === file_exists($cachePath2)) {
-            rename($cachePath2, $cacheDest);
+            FileSystemHelper::mv($cachePath2, $cacheDest);
         }
 
         try {
@@ -674,11 +680,10 @@ class BackupManager
         SystemHelper::rrmdir($pluginRoot . "/*");
         foreach ($plugingDirs as $c_dir) {
             $name = basename($c_dir);
-            if (false === rename($c_dir, sprintf("%s/%s", $pluginRoot, $name))) {
+            if (false === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $pluginRoot, $name))) {
                 // should probably fail, keeping behavior prior to install/restore.php refactoring
             }
         }
-
         self::restorePluginPerms();
 
         $plugins = PluginManager::listPlugin(true);
