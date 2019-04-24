@@ -402,6 +402,7 @@ $(function () {
         loadPage('index.php?v=d&p=dashboard&summary='+$(this).data('summary')+'&object_id='+$(this).data('object_id'));
     });
     initPage();
+    setHeaderPosition(true);
     setTimeout(function(){
         $('body').trigger('nextdom_page_load');
     }, 1);
@@ -1081,50 +1082,51 @@ function toggleFullScreen() {
 }
 
 function setHeaderPosition(init) {
-    var headerHeight=15;
+    var headerHeight = 15;
     var headerSize;
     var paddingSideClose;
     if ($(window).width() < 768) {
-        headerSize=100;
+        headerSize = 100;
         if ($('body').hasClass("sidebar-open")) {
-            paddingSideClose=245;
+            paddingSideClose = 245;
         } else {
-            paddingSideClose=15;
+            paddingSideClose = 15;
         }
     } else {
-        headerSize=50;
+        headerSize = 50;
         if ($('body').hasClass("sidebar-collapse")) {
-            paddingSideClose=65;
+            paddingSideClose = 65;
         } else {
-            paddingSideClose=245;
+            paddingSideClose = 245;
         }
     }
     if ($('*').hasClass("content-header")) {
         $(".content-header").each(function() {
-            if (init || $(this).parent().css("display")!="none") {
-                if ($(this).parent().css("display")=="none") {
+            var container = $(this).parent();
+            if (init || container.css("display") != "none") {
+                if (container.css("display") == "none") {
                   $(this).parent().show();
-                  headerHeight = $(this).parent().children('.content-header').height();
+                  headerHeight = container.children('.content-header').height();
                   $(this).parent().hide();
                 } else {
-                  headerHeight = $(this).parent().children('.content-header').height();
+                  headerHeight = container.children('.content-header').height();
                 }
                 if (document.body.scrollTop > 14 || document.documentElement.scrollTop > 14) {
-                    $(this).parent().children(".content-header").css("top", headerSize-15);
-                    $(this).parent().children("#dashboard-content").css("padding-top", headerHeight+15);
-                    $(this).parent().children(".content").css("padding-top", headerHeight+30);
-                    $(this).parent().children(".content-header").children("div").css("box-shadow", "0 6px 6px 0px rgba(0,0,0,0.4)");
-                    $(this).parent().children(".content-header").children("div").css("border-top-right-radius", "0px");
-                    $(this).parent().children(".content-header").children("div").css("border-top-left-radius", "0px");
+                    container.children(".content-header").css("top", headerSize-15);
+                    container.children("#dashboard-content").css("padding-top", headerHeight+15);
+                    container.children(".content").css("padding-top", headerHeight+30);
+                    container.children(".content-header").children("div").css("box-shadow", "0 6px 6px 0px rgba(0,0,0,0.4)");
+                    container.children(".content-header").children("div").css("border-top-right-radius", "0px");
+                    container.children(".content-header").children("div").css("border-top-left-radius", "0px");
                 } else {
-                    $(this).parent().children(".content-header").css("top", headerSize-(document.body.scrollTop + document.documentElement.scrollTop));
-                    $(this).parent().children("#dashboard-content").animate({ "padding-top" : headerHeight+15 });
-                    $(this).parent().children(".content").animate({ "padding-top" : headerHeight+30 });
-                    $(this).parent().children(".content-header").children("div").css("box-shadow", "0 1px 1px rgba(0,0,0,0.1)");
-                    $(this).parent().children(".content-header").children("div").css("border-top-right-radius", "3px");
-                    $(this).parent().children(".content-header").children("div").css("border-top-left-radius", "3px");
+                    container.children(".content-header").css("top", headerSize-(document.body.scrollTop + document.documentElement.scrollTop));
+                    container.children("#dashboard-content").animate({ "padding-top" : headerHeight+15 });
+                    container.children(".content").animate({ "padding-top" : headerHeight+30 });
+                    container.children(".content-header").children("div").css("box-shadow", "0 1px 1px rgba(0,0,0,0.1)");
+                    container.children(".content-header").children("div").css("border-top-right-radius", "3px");
+                    container.children(".content-header").children("div").css("border-top-left-radius", "3px");
                 }
-                $(this).parent().children(".content-header").show();
+                container.children(".content-header").show();
             }
         });
         $("#dashboard-header").css("padding-right", paddingSideClose);

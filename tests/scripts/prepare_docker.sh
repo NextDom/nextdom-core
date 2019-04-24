@@ -1,8 +1,12 @@
 #!/bin/bash
 
 set -e
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    rootDir=$(dirname $(dirname $(cd $(dirname $0) && pwd -P)))
+else
+    rootDir=$(dirname $(dirname $(dirname $(readlink -n -f $0))))
+fi
 
-rootDir=$(dirname $(dirname $(dirname $(readlink -n -f $0))))
 baseImage="sylvaner1664/nextdom-test:latest"
 if [ ! -z "$1" ]; then
     baseImage=$1;
