@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\PlanLinkType;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -143,16 +144,16 @@ class Plan
 
     public function getLink()
     {
-        if ($this->getLink_type() == 'eqLogic') {
+        if ($this->getLink_type() == PlanLinkType::EQLOGIC) {
             $eqLogic = EqLogicManager::byId($this->getLink_id());
             return $eqLogic;
-        } elseif ($this->getLink_type() == 'scenario') {
+        } elseif ($this->getLink_type() == PlanLinkType::SCENARIO) {
             $scenario = ScenarioManager::byId($this->getLink_id());
             return $scenario;
-        } elseif ($this->getLink_type() == 'cmd') {
+        } elseif ($this->getLink_type() == PlanLinkType::CMD) {
             $cmd = CmdManager::byId($this->getLink_id());
             return $cmd;
-        } elseif ($this->getLink_type() == 'summary') {
+        } elseif ($this->getLink_type() == PlanLinkType::SUMMARY) {
             $object = JeeObjectManager::byId($this->getLink_id());
             return $object;
         }
@@ -161,7 +162,7 @@ class Plan
 
     public function execute()
     {
-        if ($this->getLink_type() != 'zone') {
+        if ($this->getLink_type() != PlanLinkType::ZONE) {
             return;
         }
         if ($this->getConfiguration('zone_mode', 'simple') == 'simple') {
@@ -198,9 +199,9 @@ class Plan
     public function getHtml($_version = 'dplan')
     {
         switch ($this->getLink_type()) {
-            case 'eqLogic':
-            case 'cmd':
-            case 'scenario':
+            case PlanLinkType::EQLOGIC:
+            case PlanLinkType::CMD:
+            case PlanLinkType::SCENARIO:
                 $link = $this->getLink();
                 if (!is_object($link)) {
                     return null;
@@ -210,7 +211,7 @@ class Plan
                     'html' => $link->toHtml($_version),
                 );
                 break;
-            case 'plan':
+            case PlanLinkType::PLAN:
                 $html = '<span class="cursor plan-link-widget" data-link_id="' . $this->getLink_id() . '" data-offsetX="' . $this->getDisplay('offsetX') . '" data-offsetY="' . $this->getDisplay('offsetY') . '">';
                 $html .= '<a style="color:' . $this->getCss('color', 'black') . ';text-decoration:none;font-size : 1.5em;">';
                 $html .= $this->getDisplay('icon') . ' ' . $this->getDisplay('name');
@@ -221,7 +222,7 @@ class Plan
                     'html' => $html,
                 );
                 break;
-            case 'view':
+            case PlanLinkType::VIEW:
                 $link = 'index.php?p=view&view_id=' . $this->getLink_id();
                 $html = '<span href="' . $link . '" class="cursor view-link-widget" data-link_id="' . $this->getLink_id() . '" >';
                 $html .= '<a href="' . $link . '" class="noOnePageLoad" style="color:' . $this->getCss('color', 'black') . ';text-decoration:none;font-size : 1.5em;">';
@@ -233,7 +234,7 @@ class Plan
                     'html' => $html,
                 );
                 break;
-            case 'graph':
+            case PlanLinkType::GRAPH:
                 $background_color = 'background-color : white;';
                 if ($this->getDisplay('transparentBackground', false)) {
                     $background_color = '';
@@ -246,7 +247,7 @@ class Plan
                     'plan' => Utils::o2a($this),
                     'html' => $html,
                 );
-            case 'text':
+            case PlanLinkType::TEXT:
                 $html = '<div class="text-widget" data-text_id="' . $this->getLink_id() . '" style="color:' . $this->getCss('color', 'black') . ';">';
                 if ($this->getDisplay('name') != '' || $this->getDisplay('icon') != '') {
                     $html .= $this->getDisplay('icon') . ' ' . $this->getDisplay('text');
@@ -259,7 +260,7 @@ class Plan
                     'html' => $html,
                 );
                 break;
-            case 'image':
+            case PlanLinkType::IMAGE:
                 $html = '<div class="image-widget" data-image_id="' . $this->getLink_id() . '" style="min-width:10px;min-height:10px;">';
                 if ($this->getConfiguration('display_mode', 'image') == 'image') {
                     $html .= '<img style="width:100%;height:100%" src="' . $this->getDisplay('path', 'public/img/NextDom_NoPicture.png') . '"/>';
@@ -275,7 +276,7 @@ class Plan
                     'html' => $html,
                 );
                 break;
-            case 'zone':
+            case PlanLinkType::ZONE:
                 if ($this->getConfiguration('zone_mode', 'simple') == 'widget') {
                     $class = '';
                     if ($this->getConfiguration('showOnFly') == 1) {
@@ -293,7 +294,7 @@ class Plan
                     'html' => $html,
                 );
                 break;
-            case 'summary':
+            case PlanLinkType::SUMMARY:
                 $background_color = 'background-color : ' . $this->getCss('background-color', 'black') . ';';
                 if ($this->getDisplay('background-defaut', false)) {
                     $background_color = 'background-color : black;';

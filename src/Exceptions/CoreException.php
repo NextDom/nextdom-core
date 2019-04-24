@@ -21,11 +21,4 @@ use NextDom\Helpers\LogHelper;
 
 class CoreException extends \Exception
 {
-    /**
-     * CoreException constructor.
-     */
-    public function __construct()
-    {
-        LogHelper::addError('migrate',$this->getMessage());
-    }
 }

@@ -20,9 +20,8 @@
 namespace NextDom\Helpers;
 
 use NextDom\Enums\FoldersReferential;
+use NextDom\Enums\PlanVersion;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\LogHelper;
-use NextDom\Helpers\NextDomHelper;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\PlanManager;
@@ -47,24 +46,29 @@ class MigrationHelper
 
         // get previous version
         if(ConfigManager::byKey('lastUpdateVersion') == null){
-            echo "ICICICICIICI";
             $migrate = true;
             $previousVersion = [0,0,0];
-            echo "ICICICICIICI2222222222222222222";
 
         } else {
-            echo "LALALLALALALA";
             $previousVersion = explode('.', ConfigManager::byKey('lastUpdateVersion'));
         }
         $previousVersion = array_map('intval',$previousVersion );
-//        LogHelper::addInfo($logFile, 'Start migration process from ' , '');
-        echo 'Start migration process to --> ' . implode('.',$previousVersion);
+        $message = 'Migration/Update process from --> ' . implode('.',$previousVersion);
+        if($logFile == 'migration') {
+            LogHelper::addInfo($logFile, $message, '');
+        } else {
+            ConsoleHelper::process($message);
+        }
 
         //get current version
         $currentVersion = explode('.', NextDomHelper::getNextdomVersion());
         $currentVersion = array_map('intval',$currentVersion);
-//        LogHelper::addInfo($logFile, 'Start migration process to --> ', '');
-        echo 'Start migration process to --> ' . implode('.',$currentVersion);
+        $message ='Migration/Update process to --> ' . implode('.',$currentVersion);
+        if($logFile == 'migration') {
+            LogHelper::addInfo($logFile, $message, '');
+        } else {
+            ConsoleHelper::process($message);
+        }
 
         //compare versions
         if($migrate === true){
@@ -80,16 +84,31 @@ class MigrationHelper
                     while ($previousVersion[2] <= 10) {
                         if(method_exists(get_class(), 'migrate_' . $previousVersion[0] . '_' . $previousVersion[1] . '_' . $previousVersion[2])){
                             $migrateMethod = 'migrate_' . $previousVersion[0] . '_' . $previousVersion[1] . '_' . $previousVersion[2];
-                            echo 'Start migration process for '.$migrateMethod;
-//                            LogHelper::addInfo($logFile, 'Start migration process for '.$migrateMethod, '');
+                            $message ='Start migration process for '.$migrateMethod;
+                            if($logFile == 'migration') {
+                                LogHelper::addInfo($logFile, $message, '');
+                            } else {
+                                ConsoleHelper::process($message);
+                            }
                             try {
                                 self::$migrateMethod($logFile);
                             } catch(\Exception $exception){
                                 throw new CoreException();
                             }
-                            echo 'Done migration process for '.$migrateMethod;
+                            $message ='Done migration process for '.$migrateMethod;
+                            if($logFile == 'migration') {
+                                LogHelper::addInfo($logFile, $message, '');
+                            } else {
+                                ConsoleHelper::process($message);
+                            }
                             ConfigManager::save('lastUpdateVersion', $previousVersion[0].'.'.$previousVersion[1].'.'.$previousVersion[2], 'core');
-                            echo 'Save migration process for '.$migrateMethod;
+
+                            $message ='Save migration process for '.$migrateMethod;
+                            if($logFile == 'migration') {
+                                LogHelper::addInfo($logFile, $message, '');
+                            } else {
+                                ConsoleHelper::process($message);
+                            }
                         }
                         $previousVersion[2] +=1;
                     }
@@ -113,14 +132,18 @@ class MigrationHelper
 
     private static function migrate_0_0_0($logFile = 'migration'){
 
-            self::mySqlImport(NEXTDOM_ROOT . '/install/migrate/migrate_0_0_0.sql');
-            //LogHelper::addInfo($logFile, 'migrate_0_0_0', '');
-            echo 'migrate_0_0_0';
+        self::mySqlImport(NEXTDOM_ROOT . '/install/migrate/migrate_0_0_0.sql');
+        $message ='Database basic update';
+        if($logFile == 'migration') {
+            LogHelper::addInfo($logFile, $message, '');
+        } else {
+            ConsoleHelper::process($message);
+        }
 
-            foreach (InteractDefManager::all() as $interactDef) {
-                $interactDef->setEnable(1);
-                $interactDef->save();
-            }
+        foreach (InteractDefManager::all() as $interactDef) {
+            $interactDef->setEnable(1);
+            $interactDef->save();
+        }
 
     }
 
@@ -132,41 +155,78 @@ class MigrationHelper
     private static function migrate_themes_to_data($logFile = 'migration')
     {
 
-        echo "Migration inside... ";
-        $directories = glob(NEXTDOM_ROOT . '/*', GLOB_ONLYDIR);
+        $message ='Update theme folder';
+        if($logFile == 'migration') {
+            LogHelper::addInfo($logFile, $message, '');
+        } else {
+            ConsoleHelper::process($message);
+        }
+        $dir = new \RecursiveDirectoryIterator(NEXTDOM_ROOT, \FilesystemIterator::SKIP_DOTS);
+
+        // Flatten the recursive iterator, folders come before their files
+        $it  = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::SELF_FIRST);
+
+        // Maximum depth is 1 level deeper than the base folder
+        $it->setMaxDepth(0);
 
         try {
-//            LogHelper::addInfo($logFile, 'Start moving files and folders process to ' . NEXTDOM_DATA, '');
-            echo 'Start moving files and folders process to ' . NEXTDOM_DATA;
+            $message ='Start moving files and folders process to ' . NEXTDOM_DATA;
+            if($logFile == 'migration') {
+                LogHelper::addInfo($logFile, $message, '');
+            } else {
+                ConsoleHelper::process($message);
+            }
 
-            foreach ($directories as $directory) {
-                if (!FoldersReferential::NEXTDOMFOLDERS . contains($directory, false)) {
-//                    LogHelper::addInfo($logFile, 'moving : ' . $directory . ' to : ' . NEXTDOM_DATA, '');
-                    rename($directory, NEXTDOM_DATA . "/$directory");
+            // Basic loop displaying different messages based on file or folder
+            foreach ($it as $fileinfo) {
+                if ($fileinfo->isDir() || $fileinfo->isFile()) {
+                    if(!in_array($fileinfo->getFilename(), FoldersReferential::NEXTDOMFOLDERS)
+                    && !in_array($fileinfo->getFilename(), FoldersReferential::NEXTDOMFILES)) {
+//                        printf("Folder - %s\n", $fileinfo->getFilename());
+                        $message ='Moving ' . NEXTDOM_ROOT .'/'. $fileinfo->getFilename();
+                        if($logFile == 'migration') {
+                            LogHelper::addInfo($logFile, $message, '');
+                        } else {
+                            ConsoleHelper::process($message);
+                        }
+                        FileSystemHelper::rmove(NEXTDOM_ROOT.'/'.$fileinfo->getFilename(),NEXTDOM_DATA.'/data/'.$fileinfo->getFilename(), false, array(), false, array());
+                    }
                 }
             }
+
         } catch(\Exception $exception){
-            echo $exception.collator_get_error_message();
             trow (new CoreException());
         }
-//        LogHelper::addInfo($logFile,'Start updating database process to plan table','');
-        echo 'Start updating database process to plan table';
+        $message ='Start updating database process to plan table';
+        if($logFile == 'migration') {
+            LogHelper::addInfo($logFile, $message, '');
+        } else {
+            ConsoleHelper::process($message);
+        }
 
         try {
             foreach (PlanManager::all() as $plan) {
-                $html = $plan->getHtml(null);
-                foreach ($directories as $directory) {
-                    if ($html != null && $html . contains($directory)) {
-                        $plan->getHtml(null) . preg_replace('/' . $directory, '/data/' . $directory);
-                        $plan->save();
+                foreach (PlanVersion::getConstants() as $linkType) {
+                    $html = $plan->getHtml($linkType)['html'];
+                    // Basic loop displaying different messages based on file or folder
+                    foreach ($it as $fileinfo) {
+                        if ($html != null && strpos($html, $fileinfo->getFilename()) === true) {
+                            str_replace($fileinfo->getFilename(), 'data/' . $fileinfo->getFilename(), $html);
+                            $plan->save();
+                        }
                     }
                 }
             }
         } catch(\Exception $exception){
+            echo $exception;
             trow (new CoreException());
         }
-//        LogHelper::addInfo($logFile,'Migrate theme to data folder is done','');
-        echo 'Migrate theme to data folder is done';
+        $message = 'Migrate theme to data folder is done';
+        if($logFile == 'migration') {
+            LogHelper::addInfo($logFile, $message, '');
+        } else {
+            ConsoleHelper::process($message);
+        }
     }
 
     /**

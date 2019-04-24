@@ -48,6 +48,7 @@
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\MigrationHelper;
+use NextDom\Helpers\ConsoleHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ScriptHelper;
 use NextDom\Helpers\Utils;
@@ -107,60 +108,6 @@ function getBackupFilePath(): string
 }
 
 
-/**
- * Show title
- *
- * @param string $title Title to show
- */
-function title(string $title)
-{
-    echo "[ $title ]\n";
-}
-
-/**
- * Show subtitle
- *
- * @param string $subTitle Subtitle to show
- */
-function subTitle(string $subTitle)
-{
-    echo "*************** $subTitle ***************\n";
-}
-
-/**
- * Show step information
- * @param string $stepTitle Step title to show
- */
-function step(string $stepTitle)
-{
-    echo "$stepTitle... ";
-}
-
-/**
- * Show ok message
- */
-function ok()
-{
-    echo " OK\n";
-}
-
-/**
- * Show not ok message
- */
-function nok()
-{
-    echo " NOK\n";
-}
-
-/**
- * Show error message
- *
- * @param CoreException|Exception $exceptionData Data of the exception
- */
-function showError($exceptionData)
-{
-    echo "*** ERROR *** " . $exceptionData->getMessage() . "\n";
-}
 
 define('TMP_BACKUP', '/tmp/nextdombackup');
 
@@ -171,18 +118,18 @@ ScriptHelper::parseArgumentsToGET();
 
 $startTime = strtotime('now');
 
-title('START RESTORE / MIGRATION');
+ConsoleHelper::title('START RESTORE / MIGRATION');
 
 try {
-    subTitle('Starting procedure at ' . date('Y-m-d H:i:s'));
+    ConsoleHelper::subTitle('Starting procedure at ' . date('Y-m-d H:i:s'));
 
     try {
-        step('Sends the start event of the restore/migration');
+        ConsoleHelper::step('Sends the start event of the restore/migration');
         NextDomHelper::event('begin_restore', true);
-        ok();
-    } catch (CoreException $e) {
-        nok();
-        showError($e);
+        ConsoleHelper::ok();
+    } catch (\Exception $e) {
+        ConsoleHelper::nok();
+        ConsoleHelper::showError($e);
     }
 
     $backupFile = getBackupFilePath();
@@ -192,24 +139,24 @@ try {
     echo "File used for restoration : " . $backupFile . "\n";
 
     try {
-        step('Checking rights');
+        ConsoleHelper::step('Checking rights');
         NextDomHelper::cleanFileSystemRight();
-        ok();
+        ConsoleHelper::ok();
     } catch (\Exception $e) {
-        nok();
+        ConsoleHelper::nok();
         LogHelper::add('restore', 'error', $e->getMessage());
-        showError($e);
+        ConsoleHelper::showError($e);
     }
 
     try {
         NextDomHelper::stopSystem();
     } catch (\Exception $e) {
-        nok();
+        ConsoleHelper::nok();
         LogHelper::add('restore', 'error', $e->getMessage());
-        showError($e);
+        ConsoleHelper::showError($e);
     }
 
-    step('Extract the backup');
+    ConsoleHelper::step('Extract the backup');
     $pluginsToExclude = array(
         'AlternativeMarketForJeedom',
         'musicast'
@@ -220,44 +167,45 @@ try {
     }
     system('mkdir -p ' . TMP_BACKUP);
     system('cd ' . TMP_BACKUP . '; rm * -rf; tar xfz "' . $backupFile . '" ' . $excludeParams);
-    ok();
+    ConsoleHelper::ok();
 
-    step('Delete the backup database');
+    ConsoleHelper::step('Delete the backup database');
     if (!file_exists(TMP_BACKUP . '/DB_backup.sql')) {
         throw new CoreException('Unable to find the backup database file : DB_backup.sql');
     } else {
         shell_exec('sed -i -e s/jeedom/nextdom/g ' . TMP_BACKUP . '/DB_backup.sql');
     }
     $tables = \DB::Prepare("SHOW TABLES", array(), \DB::FETCH_TYPE_ALL);
-    ok();
+    ConsoleHelper::ok();
 
-    step('Disables backup constraints');
+    ConsoleHelper::step('Disables backup constraints');
     \DB::Prepare("SET foreign_key_checks = 0", array(), \DB::FETCH_TYPE_ROW);
-    ok();
+    ConsoleHelper::ok();
 
     foreach ($tables as $table) {
         $table = array_values($table);
         $table = $table[0];
-        step('Delete the table : ' . $table . '');
+        ConsoleHelper::step('Delete the table : ' . $table . '');
         \DB::Prepare('DROP TABLE IF EXISTS `' . $table . '`', array(), \DB::FETCH_TYPE_ROW);
-        ok();
+        ConsoleHelper::ok();
     }
 
-    step('Restoring database');
+    ConsoleHelper::step('Restoring database');
     MigrationHelper::mySqlImport(TMP_BACKUP . '/DB_backup.sql');
-    ok();
+    ConsoleHelper::ok();
 
-    step('Migration process');
+    ConsoleHelper::step('Migration process');
+    ConsoleHelper::enter();
     MigrationHelper::migrate('restore');
-    ok();
+    ConsoleHelper::ok();
 
-    step('Enables constraints');
+    ConsoleHelper::step('Enables constraints');
     try {
         \DB::Prepare('SET foreign_key_checks = 1', array(), \DB::FETCH_TYPE_ROW);
     } catch (\Exception $e) {
 
     }
-    ok();
+    ConsoleHelper::ok();
 
     $jeedomConfigFilePath = NEXTDOM_ROOT . '/core/config/jeedom.config.php';
     if (file_exists($jeedomConfigFilePath)) {
@@ -266,16 +214,16 @@ try {
         }
     }
     if (!file_exists(NEXTDOM_ROOT . '/core/config/common.config.php')) {
-        step('Restoring database configuration file');
+        ConsoleHelper::step('Restoring database configuration file');
         copy(TMP_BACKUP . '/common.config.php', NEXTDOM_ROOT . '/core/config/common.config.php');
-        ok();
+        ConsoleHelper::ok();
     }
 
-    step('Restoring rights');
+    ConsoleHelper::step('Restoring rights');
     system('chmod 1777 /tmp -R');
-    ok();
+    ConsoleHelper::ok();
 
-    step('Restoring cache');
+    ConsoleHelper::step('Restoring cache');
     if (file_exists(TMP_BACKUP . '/cache.tar.gz')) {
         system('cp -fr ' . TMP_BACKUP . '/cache.tar.gz ' . NEXTDOM_ROOT . '/var');
     } elseif (file_exists(TMP_BACKUP . '/var/cache.tar.gz')) {
@@ -286,29 +234,29 @@ try {
     } catch (\Exception $e) {
 
     }
-    ok();
+    ConsoleHelper::ok();
 
-    subTitle('Restoring plugins');
+    ConsoleHelper::subTitle('Restoring plugins');
     system('cp -fr ' . TMP_BACKUP . '/plugins/* ' . NEXTDOM_ROOT . '/plugins/');
 
     foreach (PluginManager::listPlugin(true) as $plugin) {
         $pluginId = $plugin->getId();
         $dependencyInfo = $plugin->getDependencyInfo(true);
         if (method_exists($pluginId, 'restore')) {
-            step('Plugin restoration : ' . $pluginId . '');
+            ConsoleHelper::step('Plugin restoration : ' . $pluginId . '');
             $pluginId::restore();
-            ok();
+            ConsoleHelper::ok();
         }
-        step('Plugin dependencies reinitialization: ' . $pluginId . '');
+        ConsoleHelper::step('Plugin dependencies reinitialization: ' . $pluginId . '');
         $cache = CacheManager::byKey('dependancy' . $plugin->getId());
         $cache->remove();
         CacheManager::set('dependancy' . $plugin->getId(), "nok");
-        ok();
+        ConsoleHelper::ok();
     }
 
-    //step('Update database post plugins');
+    //ConsoleHelper::step('Update database post plugins');
     //migrateDb();
-    //ok();
+    //ConsoleHelper::ok();
 
     ConfigManager::save('hardware_name', '');
     $cache = CacheManager::byKey('nextdom::isCapable::sudo');
@@ -316,49 +264,49 @@ try {
 
     try {
         require_once NEXTDOM_ROOT . '/install/consistency.php';
-        step('Check consistency');
-        ok();
+        ConsoleHelper::step('Check consistency');
+        ConsoleHelper::ok();
     } catch (\Exception $ex) {
-        step('Check consistency');
-        nok();
+        ConsoleHelper::step('Check consistency');
+        ConsoleHelper::nok();
         LogHelper::add('restore', 'error', $ex->getMessage());
-        showError($e);
+        ConsoleHelper::showError($e);
     }
 
-    step('Restoring rights');
+    ConsoleHelper::step('Restoring rights');
     shell_exec('chmod 775 -R ' . NEXTDOM_ROOT);
     shell_exec('chown -R www-data:www-data ' . NEXTDOM_ROOT);
     shell_exec('chmod 775 -R ' . NEXTDOM_LOG);
     shell_exec('chown -R www-data:www-data ' . NEXTDOM_LOG);
     shell_exec('chmod 777 -R /tmp/');
     shell_exec('chown www-data:www-data -R /tmp/');
-    ok();
+    ConsoleHelper::ok();
 
     try {
         NextDomHelper::startSystem();
     } catch (\Exception $e) {
         LogHelper::add('restore', 'error', $e->getMessage());
-        showError($e);
+        ConsoleHelper::showError($e);
     }
 
     try {
-        step('Sends the end event of the restore/migration');
+        ConsoleHelper::step('Sends the end event of the restore/migration');
         NextDomHelper::event('end_restore');
-        ok();
+        ConsoleHelper::ok();
     } catch (\Exception $e) {
-        nok();
+        ConsoleHelper::nok();
         LogHelper::add('restore', 'error', $e->getMessage());
-        showError($e);
+        ConsoleHelper::showError($e);
     }
     $duration = strtotime('now') - $startTime;
     echo 'Time of restoration : ' . $duration . "s\n";
-    subTitle('End of process at ' . date('Y-m-d H:i:s'));
-    title('END RESTORE / MIGRATION');
+    ConsoleHelper::subTitle('End of process at ' . date('Y-m-d H:i:s'));
+    ConsoleHelper::title('END RESTORE / MIGRATION');
     echo " > SUCCESS\n";
     /* DON'T DELETE NEXT LINE */
     echo "Closing with success\n";
 } catch (\Exception $e) {
-    title('END RESTORE / MIGRATION');
+    ConsoleHelper::title('END RESTORE / MIGRATION');
     echo '>>> ERROR : ' . br2nl($e->getMessage()) . "\n";
     echo 'Details : ' . print_r($e->getTrace(), true) . "\n";
     NextDomHelper::startSystem();

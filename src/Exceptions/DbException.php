@@ -19,11 +19,4 @@ namespace NextDom\Exceptions;
 
 class DbException extends \Exception
 {
-    /**
-     * DbException constructor.
-     */
-    public function __construct()
-    {
-        LogHelper::addError('db',$this->getMessage());
-    }
 }
