@@ -1041,6 +1041,7 @@ core:
 "Chemin": "Путь"
 "Tout supprimer": "ясно"
 "Extension": "расширение"
+"Extension du fichier non valide, autorisé :": "неверное расширение файла, авторизовано:"
 "Id rapport": "идентификатор отчета"
 "Aperçu": "обследование"
 "Aucune methode correspondante à : ": "Нет соответствующего метода:"

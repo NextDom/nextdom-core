@@ -24,7 +24,8 @@
     "touki/ftp": "^1.2",
     "twig/extensions": "^1.5",
     "symfony/routing": "^3.4",
-    "symfony/yaml": "^3.4"
+    "symfony/yaml": "^3.4",
+    "splitbrain/php-archive": "^1.1"
   },
   "license": "GPL",
   "config": {

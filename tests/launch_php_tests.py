@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """Launch NextDom GUI tests
 """
 import sys
