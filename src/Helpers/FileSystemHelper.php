@@ -191,10 +191,15 @@ class FileSystemHelper
         return $result;
     }
 
-    public static function hadFileRight($_allowPath, $_path)
+    /**
+     * @param $allowPath
+     * @param $path
+     * @return bool
+     */
+    public static function hadFileRight($allowPath, $path): bool
     {
-        $path = Utils::cleanPath($_path);
-        foreach ($_allowPath as $right) {
+        $path = Utils::cleanPath($path);
+        foreach ($allowPath as $right) {
             if (strpos($right, '/') !== false || strpos($right, '\\') !== false) {
                 if (strpos($right, '/') !== 0 || strpos($right, '\\') !== 0) {
                     $right = NEXTDOM_ROOT . '/' . $right;
@@ -211,6 +216,13 @@ class FileSystemHelper
         return false;
     }
 
+    /**
+     * @param string $folder
+     * @param string $pattern
+     * @param bool   $recursivly
+     * @param array  $options
+     * @return array
+     */
     public static function ls($folder = "", $pattern = "*", $recursivly = false, $options = array('files', 'folders'))
     {
         $currentFolder = '';
@@ -300,6 +312,15 @@ class FileSystemHelper
         return $all;
     }
 
+    /**
+     * @param       $src
+     * @param       $dst
+     * @param bool  $_emptyDest
+     * @param array $_exclude
+     * @param bool  $_noError
+     * @param array $_params
+     * @return bool
+     */
     public static function rcopy($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = false, $_params = array())
     {
         if (!file_exists($src)) {
@@ -356,7 +377,7 @@ class FileSystemHelper
                 if ($srcSize != filesize($dst)) {
                     if (!$_noError) {
                         return false;
-                    } else if (isset($_params['log']) && $_params['log']) {
+                    } elseif (isset($_params['log']) && $_params['log']) {
                         echo 'Error on copy ' . $src . ' to ' . $dst . "\n";
                     }
                 }
@@ -366,6 +387,15 @@ class FileSystemHelper
         return true;
     }
 
+    /**
+     * @param       $src
+     * @param       $dst
+     * @param bool  $_emptyDest
+     * @param array $_exclude
+     * @param bool  $_noError
+     * @param array $_params
+     * @return bool
+     */
     public static function rmove($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = false, $_params = array())
     {
         if (!file_exists($src)) {
@@ -432,8 +462,12 @@ class FileSystemHelper
         return true;
     }
 
-// removes files and non-empty directories
-    public static function rrmdir($dir)
+    /**
+     * @abstract removes files and non-empty directories
+     * @param $dir
+     * @return bool
+     */
+    public static function rrmdir($dir): bool
     {
         if (is_dir($dir)) {
             $files = scandir($dir);
@@ -450,7 +484,7 @@ class FileSystemHelper
                     return false;
                 }
             }
-        } else if (file_exists($dir)) {
+        } elseif (file_exists($dir)) {
             if (!unlink($dir)) {
                 $output = array();
                 $retval = 0;
@@ -463,6 +497,13 @@ class FileSystemHelper
         return true;
     }
 
+    /**
+     * @param       $source_arr
+     * @param       $destination
+     * @param array $_excludes
+     * @return bool
+     * @throws CoreException
+     */
     public static function createZip($source_arr, $destination, $_excludes = array())
     {
         if (is_string($source_arr)) {
@@ -508,6 +549,10 @@ class FileSystemHelper
         return $zip->close();
     }
 
+    /**
+     * @param $path
+     * @return false|int
+     */
     public static function getDirectorySize($path)
     {
         $totalsize = 0;

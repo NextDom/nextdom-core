@@ -195,6 +195,11 @@ class Utils
         return $result;
     }
 
+    /**
+     * @param $_array
+     * @param $_subject
+     * @return mixed
+     */
     public static function templateReplace($_array, $_subject)
     {
         return str_replace(array_keys($_array), array_values($_array), $_subject);
@@ -202,7 +207,7 @@ class Utils
 
     public static function resizeImage($contents, $width, $height)
     {
-// Cacul des nouvelles dimensions
+// Calcul des nouvelles dimensions
         $width_orig = imagesx($contents);
         $height_orig = imagesy($contents);
         $ratio_orig = $width_orig / $height_orig;
@@ -230,13 +235,20 @@ class Utils
         return $contents;
     }
 
+    /**
+     * @return float
+     */
     public static function getMicrotime()
     {
         list($usec, $sec) = explode(" ", microtime());
         return ((float)$usec + (float)$sec);
     }
 
-    public static function convertDuration($time)
+    /**
+     * @param $time
+     * @return string
+     */
+    public static function convertDuration($time): string
     {
         $result = '';
         $unities = array('j' => 86400, 'h' => 3600, 'min' => 60);
@@ -285,16 +297,28 @@ class Utils
         return '<span id="span_errorMessage">' . $errorMessage . '</span>';
     }
 
+    /**
+     * @param string $_string
+     * @return false|int
+     */
     public static function isSha1($_string = '')
     {
         return preg_match('/^[0-9a-f]{40}$/i', $_string);
     }
 
+    /**
+     * @param string $_string
+     * @return false|int
+     */
     public static function isSha512($_string = '')
     {
         return preg_match('/^[0-9a-f]{128}$/i', $_string);
     }
 
+    /**
+     * @param $path
+     * @return string
+     */
     public static function cleanPath($path)
     {
         $out = array();
@@ -397,6 +421,11 @@ class Utils
         return array_values(array_unique($paths));
     }
 
+    /**
+     * @param     $pattern
+     * @param int $flags
+     * @return array|false
+     */
     public static function globBrace($pattern, $flags = 0)
     {
         if (defined("GLOB_BRACE")) {
@@ -406,11 +435,20 @@ class Utils
         }
     }
 
+    /**
+     * @param $_string
+     * @return string
+     */
     public static function removeCR($_string)
     {
         return trim(str_replace(array("\n", "\r\n", "\r", "\n\r"), '', $_string));
     }
 
+    /**
+     * @param      $_string
+     * @param null $_default
+     * @return bool|mixed|null
+     */
     public static function isJson($_string, $_default = null)
     {
         if ($_string === null) {
@@ -438,6 +476,10 @@ class Utils
         return preg_replace('/\<br(\s*)?\/?\>/i', "\n", $string);
     }
 
+    /**
+     * @param $_path
+     * @return string
+     */
     public static function calculPath($_path)
     {
         if (strpos($_path, '/') !== 0) {
@@ -446,6 +488,10 @@ class Utils
         return $_path;
     }
 
+    /**
+     * @param $size
+     * @return string
+     */
     public static function sizeFormat($size)
     {
         $mod = 1024;
@@ -514,6 +560,10 @@ class Utils
         return str_replace('&amp;', '&', htmlspecialchars(strip_tags($_string), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
     }
 
+    /**
+     * @param $_buffer
+     * @return string|string[]|null
+     */
     public static function minify($_buffer)
     {
         $search = array(
@@ -529,6 +579,10 @@ class Utils
         return preg_replace($search, $replace, $_buffer);
     }
 
+    /**
+     * @param $_message
+     * @return string|string[]|null
+     */
     public static function sanitizeAccent($_message)
     {
         $caracteres = array(
@@ -542,6 +596,10 @@ class Utils
         return preg_replace('#[^A-Za-z0-9 \n\.\'=\*:]+\#\)\(#', '', strtr($_message, $caracteres));
     }
 
+    /**
+     * @param $code
+     * @return string
+     */
     public static function getZipErrorMessage($code)
     {
         switch ($code) {
@@ -622,6 +680,10 @@ class Utils
         }
     }
 
+    /**
+     * @param $_string
+     * @return array
+     */
     public static function arg2array($_string)
     {
         $return = array();
@@ -636,6 +698,10 @@ class Utils
         return $return;
     }
 
+    /**
+     * @param $string
+     * @return string
+     */
     public static function strToHex($string)
     {
         $hex = '';
@@ -648,6 +714,10 @@ class Utils
         return strToUpper($hex);
     }
 
+    /**
+     * @param $hex
+     * @return array
+     */
     public static function hexToRgb($hex)
     {
         $hex = str_replace("#", "", $hex);
@@ -663,6 +733,10 @@ class Utils
         return array($r, $g, $b);
     }
 
+    /**
+     * @param $_pathimg
+     * @return string
+     */
     public static function getDominantColor($_pathimg)
     {
         $rTotal = 0;
@@ -687,11 +761,19 @@ class Utils
         return '#' . sprintf('%02x', round($rTotal / $total)) . sprintf('%02x', round($gTotal / $total)) . sprintf('%02x', round($bTotal / $total));
     }
 
+    /**
+     * @param $_string
+     * @return string
+     */
     public static function sha512($_string)
     {
         return hash('sha512', $_string);
     }
 
+    /**
+     * @param $_icon
+     * @return array
+     */
     public static function findCodeIcon($_icon)
     {
         $icon = trim(str_replace(array('fa ', 'icon ', '></i>', '<i', 'class="', '"'), '', trim($_icon)));
@@ -715,6 +797,17 @@ class Utils
         return array('icon' => '', 'fontfamily' => '');
     }
 
+    /**
+     * @param       $_from
+     * @param       $_from_type
+     * @param       $_to
+     * @param       $_to_type
+     * @param       $_data
+     * @param       $_level
+     * @param       $_drill
+     * @param array $_display
+     * @return null
+     */
     public static function addGraphLink($_from, $_from_type, $_to, $_to_type, &$_data, $_level, $_drill, $_display = array('dashvalue' => '5,3', 'lengthfactor' => 0.6))
     {
         if (is_array($_to) && count($_to) == 0) {
@@ -743,6 +836,11 @@ class Utils
         return $_data;
     }
 
+    /**
+     * @param $_string
+     * @param $_words
+     * @return bool
+     */
     public static function strContain($_string, $_words)
     {
         foreach ($_words as $word) {
@@ -753,6 +851,9 @@ class Utils
         return false;
     }
 
+    /**
+     * @return bool|string
+     */
     public static function makeZipSupport()
     {
         $folder = '/tmp/nextdom_support';
@@ -770,6 +871,11 @@ class Utils
         return realpath($outputfile);
     }
 
+    /**
+     * @param null $_user
+     * @return void|null
+     * @throws CoreException
+     */
     public static function unautorizedInDemo($_user = null)
     {
         if ($_user === null) {
@@ -786,6 +892,12 @@ class Utils
         }
     }
 
+    /**
+     * @param      $_object
+     * @param bool $_noToArray
+     * @return array
+     * @throws \ReflectionException
+     */
     public static function o2a($_object, $_noToArray = false)
     {
         if (is_array($_object)) {
@@ -823,6 +935,11 @@ class Utils
         return $array;
     }
 
+    /**
+     * @param $_object
+     * @param $_data
+     * @throws \ReflectionException
+     */
     public static function a2o(&$_object, $_data)
     {
         if (is_array($_data)) {
@@ -857,6 +974,13 @@ class Utils
         }
     }
 
+    /**
+     * @param      $_class
+     * @param      $_ajaxList
+     * @param null $_dbList
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public static function processJsonObject($_class, $_ajaxList, $_dbList = null)
     {
         if (!is_array($_ajaxList)) {
@@ -916,6 +1040,12 @@ class Utils
         return $_attr;
     }
 
+    /**
+     * @param        $_attr
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|string|null
+     */
     public static function getJsonAttr(&$_attr, $_key = '', $_default = '')
     {
         if (is_array($_attr)) {
@@ -947,7 +1077,13 @@ class Utils
         return (isset($_attr[$_key]) && $_attr[$_key] !== '') ? $_attr[$_key] : $_default;
     }
 
-    public static function attrChanged($_changed, $_old, $_new)
+    /**
+     * @param $_changed
+     * @param $_old
+     * @param $_new
+     * @return bool
+     */
+    public static function attrChanged($_changed, $_old, $_new): bool
     {
         if ($_changed) {
             return true;

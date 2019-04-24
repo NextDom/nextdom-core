@@ -46,12 +46,11 @@ class ScenarioController extends BaseController
         // Get all scenarios without groups
         $pageData['scenariosWithoutGroup'] = ScenarioManager::all(null);
         $pageData['scenarioListGroup'] = ScenarioManager::listGroup();
-        $pageData['scenarioCount'] = count($pageData['scenariosWithoutGroup']);
+        $pageData['scenarioCount'] = count(ScenarioManager::all());
         // Get all scenarios with groups
         if (is_array($pageData['scenarioListGroup'])) {
             foreach ($pageData['scenarioListGroup'] as $group) {
                 $pageData['scenarios'][$group['group']] = ScenarioManager::all($group['group']);
-                ++$pageData['scenarioCount'];
             }
         }
         $pageData['scenarioInactiveStyle'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
