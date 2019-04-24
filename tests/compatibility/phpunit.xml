@@ -41,7 +41,4 @@
             </exclude>
         </whitelist>
     </filter>
-    <logging>
-        <log type="coverage-php" target="../coverage/clover-compatibility.cov"/>
-    </logging>
 </phpunit>

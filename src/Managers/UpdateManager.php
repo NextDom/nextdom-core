@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -194,10 +195,10 @@ class UpdateManager
         $values = array(
             'id' => $id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '`
                 WHERE id=:id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -211,10 +212,10 @@ class UpdateManager
         $values = array(
             'status' => $status,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '`
                 WHERE status=:status';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -228,10 +229,10 @@ class UpdateManager
         $values = array(
             'logicalId' => $logicalId,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '`
                 WHERE logicalId=:logicalId';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -246,10 +247,10 @@ class UpdateManager
         $values = array(
             'type' => $type,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '`
                 WHERE type=:type';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -266,11 +267,11 @@ class UpdateManager
             'logicalId' => $logicalId,
             'type' => $type,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '`
                 WHERE logicalId=:logicalId
                 AND type=:type';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -282,14 +283,14 @@ class UpdateManager
     public static function all($filter = '')
     {
         $values = array();
-        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '` ';
         if ($filter != '') {
             $values['type'] = $filter;
             $sql .= 'WHERE `type`=:type ';
         }
         $sql .= 'ORDER BY FIELD( `status`, "update","ok","depreciated") ASC,FIELD( `type`,"plugin","core") DESC, `name` ASC';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -302,7 +303,7 @@ class UpdateManager
         $sql = 'SELECT count(*)
                 FROM `' . self::DB_CLASS_NAME . '`
                 WHERE `status`="update"';
-        $result = \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ROW);
+        $result = DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ROW);
         return $result['count(*)'];
     }
 
@@ -348,7 +349,7 @@ class UpdateManager
                 );
                 $sql = 'DELETE FROM `' . self::DB_CLASS_NAME . '`
                         WHERE type=:type';
-                \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+                DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
             }
         }
     }

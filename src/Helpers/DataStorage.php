@@ -47,7 +47,7 @@ class DataStorage
     public function isDataTableExists(): bool
     {
         $returnValue = false;
-        $statement = \DB::getConnection()->prepare("SHOW TABLES LIKE ?");
+        $statement = DBHelper::getConnection()->prepare("SHOW TABLES LIKE ?");
         $statement->execute(array($this->dataTableName));
         $dbResult = $statement->fetchAll(\PDO::FETCH_ASSOC);
         if (count($dbResult) > 0) {
@@ -62,7 +62,7 @@ class DataStorage
     public function createDataTable()
     {
         if (!$this->isDataTableExists()) {
-            $statement = \DB::getConnection()->prepare("CREATE TABLE `" . $this->dataTableName . "` (`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, `code` VARCHAR(256) NOT NULL, `data` TEXT NULL)");
+            $statement = DBHelper::getConnection()->prepare("CREATE TABLE `" . $this->dataTableName . "` (`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, `code` VARCHAR(256) NOT NULL, `data` TEXT NULL)");
             $statement->execute();
         }
     }
@@ -72,7 +72,7 @@ class DataStorage
      */
     public function dropDataTable()
     {
-        \DB::getConnection()->prepare("DROP TABLE IF EXISTS `" . $this->dataTableName . "`")->execute();
+        DBHelper::getConnection()->prepare("DROP TABLE IF EXISTS `" . $this->dataTableName . "`")->execute();
     }
 
     /**
@@ -82,7 +82,7 @@ class DataStorage
      */
     public function deleteData(string $code)
     {
-        $statement = \DB::getConnection()->prepare("DELETE FROM `" . $this->dataTableName . "` WHERE `code` = ?");
+        $statement = DBHelper::getConnection()->prepare("DELETE FROM `" . $this->dataTableName . "` WHERE `code` = ?");
         $statement->execute(array($code));
     }
 
@@ -96,7 +96,7 @@ class DataStorage
     public function getRawData(string $code)
     {
         $returnValue = null;
-        $statement = \DB::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` = ?");
+        $statement = DBHelper::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` = ?");
         $statement->execute(array($code));
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
         if (count($result) > 0) {
@@ -129,7 +129,7 @@ class DataStorage
      */
     public function addRawData(string $code, $data)
     {
-        $statement = \DB::getConnection()->prepare("INSERT INTO `" . $this->dataTableName . "` (`code`, `data`) VALUES (?, ?)");
+        $statement = DBHelper::getConnection()->prepare("INSERT INTO `" . $this->dataTableName . "` (`code`, `data`) VALUES (?, ?)");
         $statement->execute(array($code, $data));
     }
 
@@ -141,7 +141,7 @@ class DataStorage
      */
     public function updateRawData(string $code, $data)
     {
-        $statement = \DB::getConnection()->prepare("UPDATE `" . $this->dataTableName . "` SET `data` = ? WHERE `code` = ?");
+        $statement = DBHelper::getConnection()->prepare("UPDATE `" . $this->dataTableName . "` SET `data` = ? WHERE `code` = ?");
         $statement->execute(array($data, $code));
 
     }
@@ -192,7 +192,7 @@ class DataStorage
      */
     public function remove(string $code)
     {
-        $statement = \DB::getConnection()->prepare("DELETE FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
+        $statement = DBHelper::getConnection()->prepare("DELETE FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
         $statement->execute(array($code));
     }
 
@@ -205,7 +205,7 @@ class DataStorage
      */
     public function getAllByPrefix(string $prefix): array
     {
-        $statement = \DB::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
+        $statement = DBHelper::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
         $statement->execute(array($prefix . '%'));
         $returnValue = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $returnValue;

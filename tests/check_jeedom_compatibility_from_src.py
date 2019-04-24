@@ -139,6 +139,15 @@ def class_methods_to_ignore(file_to_check, method_to_check):
         'cmd.class.php': [
             'cast' # Usage only static (in manager)
         ],
+        'DB.class.php': [
+            '__construct',       # private
+            'getTableName',      # private
+            'getFields',         # private
+            'setField',          # private
+            'buildQuery',        # private
+            'getField',          # private
+            'getReflectionClass' # private
+        ],
         'eqLogic.class.php': [
             'cast' # Usage only static (in manager)
         ],
@@ -147,7 +156,7 @@ def class_methods_to_ignore(file_to_check, method_to_check):
         ],
         'event.class.php': [
             'getFileDescriptorLock', # Usage only static (in manager)
-            'cleanEvent', # Usage only static (in manager)
+            'cleanEvent',  # Usage only static (in manager)
             'filterEvent', # Usage only static (in manager)
             'changesSince' # Usage only static (in manager)
         ],

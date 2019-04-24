@@ -122,7 +122,7 @@ class CacheManager
                     $result['count']++;
                 }
             }
-        } else if($engine == 'RedisCache') {
+        } else if ($engine == 'RedisCache') {
             $result['count'] = self::$cacheSystem->getRedis()->dbSize();
         }
         if ($details) {

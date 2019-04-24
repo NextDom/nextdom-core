@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 
 /**
@@ -25,7 +26,7 @@ use NextDom\Helpers\Utils;
  * @ORM\Table(name="note")
  * @ORM\Entity
  */
-class Note
+class Note implements EntityInterface
 {
 
     /**
@@ -62,13 +63,13 @@ class Note
 
     public function save()
     {
-        \DB::save($this);
+        DBHelper::save($this);
         return true;
     }
 
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     public function getId()

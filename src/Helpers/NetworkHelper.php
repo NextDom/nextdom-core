@@ -499,7 +499,7 @@ class NetworkHelper
     public static function netMatch($network, $ip)
     {
         $ip = trim($ip);
-        if ($ip == trim($network)) {
+        if ($ip === trim($network)) {
             return true;
         }
         $network = str_replace(' ', '', $network);
@@ -543,7 +543,6 @@ class NetworkHelper
             $ip_long = ip2long($ip);
             return ($ip_long & $mask) == ($network_long & $mask);
         } else {
-
             $from = trim(ip2long(substr($network, 0, $d)));
             $to = trim(ip2long(substr($network, $d + 1)));
             $ip = ip2long($ip);

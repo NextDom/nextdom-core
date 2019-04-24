@@ -32,7 +32,7 @@ class ReportHelper
 
     public static function generate($_url, $_type, $_name, $_format = 'png', $_parameter = array())
     {
-        if(!is_string($_format)){
+        if (!is_string($_format)) {
             $_format = 'png';
         }
         $out = NEXTDOM_DATA . '/data/report/';

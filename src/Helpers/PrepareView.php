@@ -19,7 +19,6 @@ namespace NextDom\Helpers;
 
 use NextDom\Enums\GetParams;
 use NextDom\Enums\ViewType;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\MessageManager;
@@ -51,6 +50,15 @@ class PrepareView
     private static function getControllerRouteData(string $routesFile, string $routeCode)
     {
         $routeFileLocator = new FileLocator(NEXTDOM_ROOT . '/src');
+        /*
+        $router = new \Symfony\Component\Routing\Router(
+            new YamlFileLoader($routeFileLocator),
+            $routesFile,
+            ['cache_dir' => NEXTDOM_DATA . '/cache/routes']
+        );
+        return $router->getRouteCollection()->get($routeCode);
+        var_dump($router->getRouteCollection()->get('dashboard'));
+        */
         $yamlLoader = new YamlFileLoader($routeFileLocator);
         $routes = $yamlLoader->load($routesFile);
         return $routes->get($routeCode);
@@ -573,7 +581,7 @@ class PrepareView
     private static function initCssPool(&$pageData, $configs)
     {
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
-        if (!file_exists(NEXTDOM_DATA . '/public/css/theme.css')) {
+        if (!file_exists(NEXTDOM_DATA . '/var/public/css/theme.css')) {
             self::generateCssThemFile();
         }
         $pageData['CSS_POOL'][] = '/var/public/css/theme.css';

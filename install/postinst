@@ -278,7 +278,7 @@ step_nextdom_directory_layout() {
   if [ -d ${WEBSERVER_HOME}/var ]; then
       content=$(ls -A ${WEBSERVER_HOME}/var)
       if [ ! -z "${content}" ]; then
-          tmpvar=$(mktemp -d -u ${WEBSERVER_HOME}/var.XXXXXXXX)
+          tmpvar=$(mktemp -d ${WEBSERVER_HOME}/var.XXXXXXXX)
           mv ${WEBSERVER_HOME}/var/* ${tmpvar}/
       fi
       rm -rf ${WEBSERVER_HOME}/var
@@ -288,6 +288,14 @@ step_nextdom_directory_layout() {
   # jeedom backup compatibility:  ./data is a symlink
   if [ -L ${WEBSERVER_HOME}/data ]; then
       rm -f ${WEBSERVER_HOME}/data
+  fi
+  if [ -d ${WEBSERVER_HOME}/data ]; then
+      content=$(ls -A ${WEBSERVER_HOME}/data)
+      if [ ! -z "${content}" ]; then
+          tmpvar=$(mktemp -d ${WEBSERVER_HOME}/data.XXXXXXXX)
+          mv ${WEBSERVER_HOME}/data/* ${tmpvar}/
+      fi
+      rm -rf ${WEBSERVER_HOME}/data
   fi
   ln -s ${LIB_DIRECTORY}/data ${WEBSERVER_HOME}/data
 }

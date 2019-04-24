@@ -112,8 +112,7 @@ class AjaxHelper
         if ($errorCode === null) {
             $response['state'] = 'ok';
             $response['result'] = $data;
-        }
-        else {
+        } else {
             $response['state'] = 'error';
             $response['result'] = $data;
             $response['code'] = $errorCode;

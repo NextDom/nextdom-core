@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -55,11 +56,11 @@ class InteractQueryManager
         $values = array(
             'id' => $_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id=:id';
 
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function byQuery($_query, $_interactDef_id = null)
@@ -67,14 +68,14 @@ class InteractQueryManager
         $values = array(
             'query' => $_query,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE query=:query';
         if ($_interactDef_id !== null) {
             $values['interactDef_id'] = $_interactDef_id;
             $sql .= ' AND interactDef_id=:interactDef_id';
         }
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function byInteractDefId($_interactDef_id)
@@ -82,11 +83,11 @@ class InteractQueryManager
         $values = array(
             'interactDef_id' => $_interactDef_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE interactDef_id=:interactDef_id
                 ORDER BY `query`';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -100,14 +101,14 @@ class InteractQueryManager
             $values = array(
                 'actions' => '%' . $_action . '%',
             );
-            $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE actions LIKE :actions';
         } else {
             $values = array(
                 'actions' => '%' . $_action[0] . '%',
             );
-            $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE actions LIKE :actions';
             for ($i = 1; $i < count($_action); $i++) {
@@ -115,7 +116,7 @@ class InteractQueryManager
                 $sql .= ' OR actions LIKE :actions' . $i;
             }
         }
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -124,10 +125,10 @@ class InteractQueryManager
      */
     public static function all()
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 ORDER BY id';
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function removeByInteractDefId($_interactDef_id)
@@ -137,7 +138,7 @@ class InteractQueryManager
         );
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
                 WHERE interactDef_id = :interactDef_id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function recognize($_query)
@@ -149,10 +150,10 @@ class InteractQueryManager
         $values = array(
             'query' => $_query,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE LOWER(query)=LOWER(:query)';
-        $query = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        $query = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
         if (is_object($query)) {
             $interactDef = $query->getInteractDef();
             if ($interactDef->getOptions('mustcontain') != '' && !preg_match($interactDef->getOptions('mustcontain'), $_query)) {
@@ -163,16 +164,16 @@ class InteractQueryManager
             return $query;
         }
 
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . ', MATCH query AGAINST (:query IN NATURAL LANGUAGE MODE) as score
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ', MATCH query AGAINST (:query IN NATURAL LANGUAGE MODE) as score
                 FROM ' . self::DB_CLASS_NAME . '
                 GROUP BY id
                 HAVING score > 1';
-        $queries = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        $queries = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
         if (count($queries) == 0) {
-            $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE query=:query';
-            $query = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+            $query = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
             if (is_object($query)) {
                 $interactDef = $query->getInteractDef();
                 if ($interactDef->getOptions('mustcontain') != '' && !preg_match($interactDef->getOptions('mustcontain'), $_query)) {
