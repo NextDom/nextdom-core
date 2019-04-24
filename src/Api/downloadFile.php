@@ -41,7 +41,10 @@ try {
             $filePath = NEXTDOM_DATA . '/data';
         }
         else {
-            $filePath = realpath(NEXTDOM_ROOT . '/' . $baseFilePath);
+            $filePath = realpath(NEXTDOM_DATA . '/' . $baseFilePath);
+            if (false === is_file($filePath)) {
+                $filePath = realpath(NEXTDOM_ROOT . '/' . $baseFilePath);
+            }
         }
     } else {
         $filePath = realpath(NEXTDOM_LOG . '/' . substr($baseFilePath, 4));
@@ -76,7 +79,7 @@ try {
                 Router::showError401AndDie();
             }
             // Backups
-        } elseif (strpos($filePath, NEXTDOM_ROOT . '/backup') === false) {
+        } elseif (strpos($filePath, NEXTDOM_DATA . '/backup') === false) {
             Router::showError401AndDie();
         }
     }

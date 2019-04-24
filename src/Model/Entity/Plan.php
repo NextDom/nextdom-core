@@ -18,6 +18,7 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Enums\PlanLinkType;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -35,7 +36,7 @@ use NextDom\Managers\ScenarioManager;
  * @ORM\Table(name="plan", indexes={@ORM\Index(name="unique", columns={"link_type", "link_id"}), @ORM\Index(name="fk_plan_planHeader1_idx", columns={"planHeader_id"})})
  * @ORM\Entity
  */
-class Plan
+class Plan implements EntityInterface
 {
 
     /**
@@ -123,12 +124,12 @@ class Plan
 
     public function save()
     {
-        \DB::save($this);
+        DBHelper::save($this);
     }
 
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     public function copy(): Plan

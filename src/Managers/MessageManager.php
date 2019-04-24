@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\Message;
 
@@ -80,7 +81,7 @@ class MessageManager
                 }
             }
         }
-        \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+        DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
         EventManager::add('message::refreshMessageNumber');
         return true;
     }
@@ -89,7 +90,7 @@ class MessageManager
     {
         $sql = 'SELECT count(*)
         FROM ' . self::DB_CLASS_NAME;
-        $count = \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ROW);
+        $count = DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ROW);
         return $count['count(*)'];
     }
 
@@ -98,10 +99,10 @@ class MessageManager
         $values = array(
             'id' => $_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id=:id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -116,11 +117,11 @@ class MessageManager
             'logicalId' => $_logicalId,
             'plugin' => $_plugin,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE logicalId=:logicalId
         AND plugin=:plugin';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function byPlugin($_plugin)
@@ -128,26 +129,26 @@ class MessageManager
         $values = array(
             'plugin' => $_plugin,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE plugin=:plugin
         ORDER BY date DESC';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function listPlugin()
     {
         $sql = 'SELECT DISTINCT(plugin)
         FROM ' . self::DB_CLASS_NAME;
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL);
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL);
     }
 
     public static function all()
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         ORDER BY date DESC
         LIMIT 500';
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 }

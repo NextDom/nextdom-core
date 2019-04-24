@@ -263,6 +263,7 @@
                                         $('body').append('<div id="jqueryLoadingDiv"><div class="loadingImg"><i class="fa fa-refresh fa-spin icon_theme_color"></i></div></div>');
                                     }
                                     $('#jqueryLoadingDiv').show();
+                                    $('.blurPanel').addClass('blur');
                                 }
                             };
                             $.hideLoading = function () {
@@ -270,6 +271,7 @@
                                     $('#div_loadingSpinner').hide()
                                 } else {
                                     $('#jqueryLoadingDiv').hide();
+                                    $('.blurPanel').removeClass('blur');
                                 }
                             };
 
@@ -282,7 +284,7 @@
                                 options.show = init(options.show, true);
                                 if ($.mobile) {
                                  new $.nd2Toast({
-                                    message :  options.message, 
+                                    message :  options.message,
                                     ttl : 3000
                                 });
                              } else {
@@ -635,5 +637,3 @@ String.prototype.stripAccents = function () {
     });
 };
 })(jQuery);
-
-

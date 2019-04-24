@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
@@ -33,7 +34,7 @@ use NextDom\Managers\ScenarioManager;
  * @ORM\Table(name="object", uniqueConstraints={@ORM\UniqueConstraint(name="name_UNIQUE", columns={"name"})}, indexes={@ORM\Index(name="fk_object_object1_idx1", columns={"father_id"}), @ORM\Index(name="position", columns={"position"})})
  * @ORM\Entity
  */
-class JeeObject
+class JeeObject implements EntityInterface
 {
     const CLASS_NAME = JeeObject::class;
     const DB_CLASS_NAME = '`object`';
@@ -168,7 +169,7 @@ class JeeObject
      */
     public function save()
     {
-        \DB::save($this);
+        DBHelper::save($this);
         return true;
     }
 
@@ -186,14 +187,14 @@ class JeeObject
             $values = array(
                 'id' => $this->id,
             );
-            $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE father_id = :id';
             if ($_visible) {
                 $sql .= ' AND isVisible = 1 ';
             }
             $sql .= ' ORDER BY position';
-            $this->_child[$_visible] = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+            $this->_child[$_visible] = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
         }
         return $this->_child[$_visible];
     }
@@ -215,7 +216,6 @@ class JeeObject
         }
         return $tree;
     }
-
 
     /**
      * @param bool $onlyEnable
@@ -288,7 +288,7 @@ class JeeObject
     public function remove()
     {
         NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'object'));
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
     public function getFather()

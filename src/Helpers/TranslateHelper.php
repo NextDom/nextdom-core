@@ -120,7 +120,7 @@ class TranslateHelper
         $language = self::getLanguage();
         $filename = self::getPathTranslationFile($language);
         if (file_exists($filename)) {
-            self::$translator = new Translator($language, null, NEXTDOM_ROOT . '/var/cache/i18n');
+            self::$translator = new Translator($language, null, NEXTDOM_DATA . '/cache/i18n');
             self::$translator->addLoader('yaml', new YamlFileLoader());
             self::$translator->addResource('yaml', $filename, $language);
             $pluginsDirList = scandir(NEXTDOM_ROOT . '/plugins');
@@ -257,12 +257,13 @@ class TranslateHelper
      * @param $_name
      * @return string
      */
-    public static function getPluginFromName($_name) {
+    public static function getPluginFromName($_name)
+    {
         if (strpos($_name, 'plugins/') === false) {
             return 'core';
         }
         preg_match_all('/plugins\/(.*?)\//m', $_name, $matches, PREG_SET_ORDER, 0);
-        if(isset($matches[0]) && isset($matches[0][1])){
+        if (isset($matches[0]) && isset($matches[0][1])) {
             return $matches[0][1];
         }
         if (!isset($matches[1])) {

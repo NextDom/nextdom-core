@@ -17,10 +17,12 @@
 
 namespace NextDom\Ajax;
 
+use DB;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -152,7 +154,7 @@ class ViewAjax extends BaseAjax
             $eqLogic->save(true);
         }
         if ($sql != '') {
-            \DB::Prepare($sql, array(), DB::FETCH_TYPE_ROW);
+            DBHelper::Prepare($sql, array(), DB::FETCH_TYPE_ROW);
         }
         AjaxHelper::success();
     }

@@ -20,6 +20,7 @@ namespace NextDom\Model\Entity;
 use NextDom\Enums\ScenarioState;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -48,7 +49,7 @@ use NextDom\Managers\ViewManager;
  * ORM\Table(name="scenario", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"group", "object_id", "name"})}, indexes={@ORM\Index(name="group", columns={"group"}), @ORM\Index(name="fk_scenario_object1_idx", columns={"object_id"}), @ORM\Index(name="trigger", columns={"trigger"}), @ORM\Index(name="mode", columns={"mode"}), @ORM\Index(name="modeTriger", columns={"mode", "trigger"})})
  * ORM\Entity
  */
-class Scenario
+class Scenario implements EntityInterface
 {
 
     /**
@@ -594,8 +595,8 @@ class Scenario
         $scenarioCopy->setScenarioElement($scenario_element_list);
         $scenarioCopy->setLog('');
         $scenarioCopy->save();
-        if (file_exists(NEXTDOM_LOG.'/scenarioLog/scenario' . $scenarioCopy->getId() . '.log')) {
-            unlink(NEXTDOM_LOG.'/scenarioLog/scenario' . $scenarioCopy->getId() . '.log');
+        if (file_exists(NEXTDOM_LOG . '/scenarioLog/scenario' . $scenarioCopy->getId() . '.log')) {
+            unlink(NEXTDOM_LOG . '/scenarioLog/scenario' . $scenarioCopy->getId() . '.log');
         }
         return $scenarioCopy;
     }
@@ -750,7 +751,7 @@ class Scenario
             $calculateScheduleDate = $this->calculateScheduleDate();
             $this->setLastLaunch($calculateScheduleDate['prevDate']);
         }
-        \DB::save($this);
+        DBHelper::save($this);
         $this->emptyCacheWidget();
         if ($this->_changeState) {
             $this->_changeState = false;
@@ -763,7 +764,7 @@ class Scenario
      */
     public function refresh()
     {
-        \DB::refresh($this);
+        DBHelper::refresh($this);
     }
 
     /**
@@ -779,11 +780,11 @@ class Scenario
             $element->remove();
         }
         $this->emptyCacheWidget();
-        if (file_exists(NEXTDOM_LOG.'/scenarioLog/scenario' . $this->getId() . '.log')) {
-            unlink(NEXTDOM_LOG.'/scenarioLog/scenario' . $this->getId() . '.log');
+        if (file_exists(NEXTDOM_LOG . '/scenarioLog/scenario' . $this->getId() . '.log')) {
+            unlink(NEXTDOM_LOG . '/scenarioLog/scenario' . $this->getId() . '.log');
         }
         CacheManager::delete('scenarioCacheAttr' . $this->getId());
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
     /**
@@ -1161,9 +1162,9 @@ class Scenario
             $object = $this->getObject();
             if ($_tag) {
                 if ($object->getDisplay('tagColor') != '') {
-                    $name .= '<span class="label" style="text-shadow : none;background-color:' . $object->getDisplay('tagColor') . ' !important;color:' . $object->getDisplay('tagTextColor', 'white') . ' !important">' . $object->getName() . '</span>';
+                    $name .= '<span class="label label-sticker" style="text-shadow : none;background-color:' . $object->getDisplay('tagColor') . ' !important;color:' . $object->getDisplay('tagTextColor', 'white') . ' !important">' . $object->getName() . '</span>';
                 } else {
-                    $name .= '<span class="label label-primary" style="text-shadow : none;">' . $object->getName() . '</span>';
+                    $name .= '<span class="label label-primary label-sticker" style="text-shadow : none;">' . $object->getName() . '</span>';
                 }
             } else {
                 $name .= '[' . $object->getName() . ']';
@@ -1171,7 +1172,7 @@ class Scenario
         } else {
             if ($_complete) {
                 if ($_tag) {
-                    $name .= '<span class="label label-default" style="text-shadow : none;">' . __('Aucun') . '</span>';
+                    $name .= '<span class="label label-default label-sticker" style="text-shadow : none;">' . __('Aucun') . '</span>';
                 } else {
                     $name .= '[' . __('Aucun') . ']';
                 }
@@ -1187,7 +1188,7 @@ class Scenario
             }
         }
         if ($_prettify) {
-            $name .= '</p><p class="title">';
+            $name .= '<p class="title">';
         }
         if (!$_withoutScenarioName) {
             if ($_tag) {
@@ -1242,7 +1243,7 @@ class Scenario
         if ($this->getConfiguration('logmode', 'default') == 'none') {
             return null;
         }
-        $path = NEXTDOM_LOG.'/scenarioLog';
+        $path = NEXTDOM_LOG . '/scenarioLog';
         if (!file_exists($path)) {
             mkdir($path);
         }

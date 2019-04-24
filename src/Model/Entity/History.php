@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\HistoryManager;
@@ -88,7 +89,7 @@ class History
                     SET cmd_id=:cmd_id,
                     `datetime`=:datetime,
                     value=:value';
-                    \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+                    DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
                     return;
                 }
                 $values = array(
@@ -99,7 +100,7 @@ class History
                 FROM history
                 WHERE cmd_id=:cmd_id
                 AND `datetime`=:datetime';
-                $result = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+                $result = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
                 if ($result !== false) {
                     switch ($cmd->getConfiguration('historizeMode', 'avg')) {
                         case 'avg':
@@ -132,12 +133,12 @@ class History
         SET cmd_id=:cmd_id,
         `datetime`=:datetime,
         value=:value';
-        \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+        DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
     }
 
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     public function getCmd_id()
@@ -192,11 +193,13 @@ class History
         return $this;
     }
 
-    public function getChanged() {
+    public function getChanged()
+    {
         return $this->_changed;
     }
 
-    public function setChanged($_changed) {
+    public function setChanged($_changed)
+    {
         $this->_changed = $_changed;
         return $this;
     }

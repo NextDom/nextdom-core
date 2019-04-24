@@ -24,6 +24,7 @@ if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SE
     echo "La page que vous demandez ne peut être trouvée.";
     exit();
 }
+
 set_time_limit(1800);
 echo "[START INSTALL]\n";
 $starttime = strtotime('now');
@@ -59,17 +60,19 @@ try {
     require_once __DIR__ . '/consistency.php';
 
     try {
-    echo "Ajout de l'utilisateur (admin,admin)\n";
-    $user = new user();
-    $user->setLogin('admin');
-    $user->setPassword(sha512('admin'));
-    $user->setProfils('admin');
-    $user->save();
-    config::save('log::level', 400);
-    echo "OK\n";
-    } catch (Exception $e) { echo "OK : Utilisateur deja present\n"; }
-
+        echo "Ajout de l'utilisateur (admin,admin)\n";
+        $user = new user();
+        $user->setLogin('admin');
+        $user->setPassword(sha512('admin'));
+        $user->setProfils('admin');
+        $user->save();
+        config::save('log::level', 400);
+        echo "OK\n";
+    } catch (Exception $e) {
+        echo "OK : Utilisateur deja present\n";
+    }
     config::save('version', nextdom::version());
+    \NextDom\Managers\UpdateManager::checkAllUpdate();
 } catch (Exception $e) {
     echo 'Erreur durant l\'installation : ' . $e->getMessage();
     echo 'Détails : ' . print_r($e->getTrace(), true);

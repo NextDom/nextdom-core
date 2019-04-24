@@ -35,6 +35,7 @@ namespace NextDom\Managers;
 
 use NextDom\Enums\DaemonState;
 use NextDom\Enums\PluginManagerCron;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Model\Entity\Plugin;
@@ -99,7 +100,8 @@ class PluginManager
         return NEXTDOM_ROOT . '/plugins/' . $id . '/plugin_info/info.json';
     }
 
-    public static function forceDisablePlugin($_id){
+    public static function forceDisablePlugin($_id)
+    {
         ConfigManager::save('active', 0, $_id);
         $values = array(
             'eqType_name' => $_id,
@@ -107,8 +109,9 @@ class PluginManager
         $sql = 'UPDATE eqLogic
                 SET isEnable=0
                 WHERE eqType_name=:eqType_name';
-        \DB::Prepare($sql, $values);
+        DBHelper::Prepare($sql, $values);
     }
+
     /**
      * @param bool $activatedOnly
      * @param bool $nameOnly
@@ -138,7 +141,7 @@ class PluginManager
                     FROM `config`
                     WHERE `key` = 'active'
                     AND `value` = '1'";
-            $queryResults = \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL);
+            $queryResults = DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL);
             if ($nameOnly) {
                 foreach ($queryResults as $row) {
                     $listPlugin[] = $row['plugin'];

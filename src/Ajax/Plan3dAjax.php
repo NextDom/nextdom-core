@@ -169,34 +169,24 @@ class Plan3dAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         Utils::unautorizedInDemo();
+        $uploadDir = '/tmp';
         $plan3dHeader = Plan3dHeaderManager::byId(Utils::init('id'));
         if (!is_object($plan3dHeader)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
-        if (!isset($_FILES['file'])) {
-            throw new CoreException(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)'));
-        }
-        $extension = strtolower(strrchr($_FILES['file']['name'], '.'));
-        if (!in_array($extension, array('.zip'))) {
-            throw new CoreException('Extension du fichier non valide (autorisé .zip) : ' . $extension);
-        }
-        if (filesize($_FILES['file']['tmp_name']) > 150000000) {
-            throw new CoreException(__('Le fichier est trop gros (maximum 150Mo)'));
-        }
-        $uploaddir = '/tmp';
-        if (!move_uploaded_file($_FILES['file']['tmp_name'], $uploaddir . '/' . $_FILES['file']['name'])) {
-            throw new CoreException(__('Impossible de déplacer le fichier temporaire'));
-        }
-        if (!file_exists($uploaddir . '/' . $_FILES['file']['name'])) {
-            throw new CoreException(__('Impossible de téléverser le fichier (limite du serveur web ?)'));
-        }
+
+        $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 150, array(".zip"));
+
         if ($plan3dHeader->getConfiguration('path') == '') {
-            $plan3dHeader->setConfiguration('path', NEXTDOM_DATA . '/data/3d/' . ConfigManager::genKey() . '/');
+            $path = sprintf("%s/data/3d/%s/", NEXTDOM_DATA, config::genKey());
+            $plan3dHeader->setConfiguration('path', $path);
         }
-        $file = $uploaddir . '/' . $_FILES['file']['name'];
+
         $cibDir = NEXTDOM_ROOT . '/' . $plan3dHeader->getConfiguration('path');
         $zip = new ZipArchive;
-        $res = $zip->open($file);
+        $filepath = sprintf("%s/%s", $uploadDir, $filename);
+        $res = $zip->open($filepath);
+
         if ($res === TRUE) {
             if (!$zip->extractTo($cibDir . '/')) {
                 throw new CoreException(__('Impossible de décompresser les fichiers : '));

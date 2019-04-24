@@ -44,7 +44,7 @@ class LogController extends BaseController
         $logFilesList = [];
         $dir = opendir(NEXTDOM_LOG);
         while ($file = readdir($dir)) {
-            if ($file != '.' && $file != '..' && $file != '.htaccess' && !is_dir(NEXTDOM_LOG .'/'. $file)) {
+            if ($file != '.' && $file != '..' && $file != '.htaccess' && !is_dir(NEXTDOM_LOG . '/' . $file)) {
                 $logFilesList[] = $file;
             }
         }
@@ -55,10 +55,10 @@ class LogController extends BaseController
             $logFileData['name'] = $logFile;
             $logFileData['icon'] = 'check';
             $logFileData['color'] = 'green';
-            if (shell_exec('grep -c -E "\[ERROR\]|\[error\]" ' . NEXTDOM_LOG .'/'. $logFile) != 0) {
+            if (shell_exec('grep -c -E "\[ERROR\]|\[error\]" ' . NEXTDOM_LOG . '/' . $logFile) != 0) {
                 $logFileData['icon'] = 'exclamation-triangle';
                 $logFileData['color'] = 'red';
-            } elseif (shell_exec('grep -c -E "\[WARNING\]" ' . NEXTDOM_LOG .'/'. $logFile) != 0) {
+            } elseif (shell_exec('grep -c -E "\[WARNING\]" ' . NEXTDOM_LOG . '/' . $logFile) != 0) {
                 $logFileData['icon'] = 'exclamation-circle';
                 $logFileData['color'] = 'orange';
             }
@@ -67,7 +67,7 @@ class LogController extends BaseController
             } else {
                 $logFileData['active'] = false;
             }
-            $logFileData['size'] = round(filesize(NEXTDOM_LOG .'/'. $logFile) / 1024);
+            $logFileData['size'] = round(filesize(NEXTDOM_LOG . '/' . $logFile) / 1024);
             $pageData['logFilesList'][] = $logFileData;
         }
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';

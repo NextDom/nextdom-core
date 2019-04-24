@@ -80,8 +80,8 @@ administration:
   memory: RAM
   hdd: HDD
   swap: Swap
-  http-connections-count: Nombre de connexions HTTP
-  connections-count: Nombre de connexions
+  http-connections-count: Nombre de connexion HTTP
+  connections-count: Nombre de connexion
   process-count: Nombre de processus
   uptime: Système démarré depuis
   welcome-page: Page de bienvenue
@@ -518,7 +518,6 @@ scenario:
 "Aucun design n'existe, cliquez <a id=\"bt_createNewDesign\" class=\"cursor\">ici</a> pour en créer un.": "Aucun design n'existe, cliquez <a id=\"bt_createNewDesign\" class=\"cursor\">ici</a> pour en créer un."
 "Aucun esclave correspondant à l'ID :": "Aucun esclave correspondant à l'ID :"
 "Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit": "Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit"
-"Aucun fichier trouvé. Vérifié parametre PHP (post size limit": "Aucun fichier trouvé. Vérifié parametre PHP (post size limit"
 "Aucun groupement": "Aucun groupement"
 "Aucun module en Alerte pour le moment": "Aucun module en Alerte pour le moment"
 "Aucun objet racine trouvé. Pour en créer un, allez dans Outils": "Aucun objet racine trouvé. Pour en créer un, allez dans Outils"
@@ -1032,7 +1031,7 @@ scenario:
 "Etes-vous sûr de vouloir faire une sauvegarde de": "Etes-vous sûr de vouloir faire une sauvegarde de"
 "Etes-vous sûr de vouloir migrer": "Etes-vous sûr de vouloir migrer"
 "Etes-vous sûr de vouloir redémarrer le système ?": "Etes-vous sûr de vouloir redémarrer le système ?"
-"Etes-vous sûr de vouloir regénérer toutes les interations (cela peut être très long) ?": "Etes-vous sûr de vouloir regénérer toutes les interations (cela peut être très long) ?"
+"Etes-vous sûr de vouloir régénérer toutes les interations (cela peut être très long) ?": "Etes-vous sûr de vouloir régénérer toutes les interations (cela peut être très long) ?"
 "Etes-vous sûr de vouloir remplacer": "Etes-vous sûr de vouloir remplacer"
 "Etes-vous sûr de vouloir remplacer l'ID": "Etes-vous sûr de vouloir remplacer l'ID"
 "Etes-vous sûr de vouloir restaurer": "Etes-vous sûr de vouloir restaurer"
@@ -1070,6 +1069,7 @@ scenario:
 "Expression non valide :": "Expression non valide :"
 "Extension": "Extension"
 "Extension du fichier non valide (autorisé .tar.gz, .tar et .gz": "Extension du fichier non valide (autorisé .tar.gz, .tar et .gz"
+"Extension du fichier non valide, autorisé :": "Extension du fichier non valide, autorisé :"
 "Exécuter": "Exécuter"
 "Exécution d'un bloc code": "Exécution d'un bloc code"
 "Exécution d'un bloc élément :": "Exécution d'un bloc élément :"
@@ -1670,7 +1670,6 @@ scenario:
 "Permet d'affecter une icône au scénario": "Permet d'affecter un icône au scénario"
 "Permet d'afficher un petit message d'alerte sur tous les navigateurs qui ont une page NextDom d'ouvert. Vous pouvez en plus choisir 4 niveaux d'alerte": "Permet d'afficher un petit message d'alerte sur tous les navigateurs qui ont une page NextDom d'ouvert. Vous pouvez en plus choisir 4 niveaux d'alerte"
 "Permet d'afficher un popup qui doit absolument être validé sur tous les navigateurs qui ont une page": "Permet d'afficher un popup qui doit absolument être validé sur tous les navigateurs qui ont une page"
-"Permet d'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (ex. : SI/ALORS….)": "Permet d'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (ex. : SI/ALORS….)"
 "Permet d'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (Ex: SI/ALORS….)": "Permet d'ajouter des éléments fonctionnels essentiels pour créer vos scénarios (Ex: SI/ALORS….)"
 "Permet d'ajouter une message dans le centre de message": "Permet d'ajouter un message dans le centre de message"
 "Permet d'attendre le temps que l'état d'une lampe soit mise à jour par exemple": "Permet d'attendre le temps que l'état d'une lampe soit mis à jour par exemple"
@@ -1782,8 +1781,7 @@ scenario:
 "Regex générale d'exclusion pour les interactions": "Regex générale d'exclusion pour les interactions"
 "Regexp d'exclusion": "Regexp d'exclusion"
 "Regexp de correspondance obligatoire": "Regexp de correspondance obligatoire"
-"Regénerer": "Regénerer"
-"Regénérer": "Regénérer"
+"Régénérer": "Régénérer"
 "Relancer": "Relancer"
 "Remarque: Point d'interrogation est un caractère atypique et n'existe que dans certaines implémentations de cron. Il est utilisé à la place de '*' pour quitter soit vierge jour de mois ou le jour de la semaine.": "Remarque: Point d'interrogation est un caractère atypique et n'existe que dans certaines implémentations de cron. Il est utilisé à la place de '*' pour quitter soit vierge jour de mois ou le jour de la semaine."
 "Remerciements": "Remerciements"
@@ -2081,7 +2079,6 @@ scenario:
 "Type inconnu": "Type inconnu"
 "Type incorrect (classe commande inexistante": "Type incorrect (classe commande inexistante"
 "Type incorrect (classe équipement inexistante": "Type incorrect (classe équipement inexistante"
-"Type incorrect, (classe commande inexistante": "Type incorrect, (classe commande inexistante"
 "Tâche :": "Tâche :"
 "Tâches": "Tâches"
 "Téléchargement": "Téléchargement"

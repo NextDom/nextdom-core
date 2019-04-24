@@ -228,7 +228,7 @@ function refresh(force) {
         params: params,
         data: sourcesList
     };
-    ajaxQuery('core/ajax/Market/Ajax/NextDomMarketAjax.php', ajaxData, function () {
+    ajaxQuery('core/ajax/nextdom_market.ajax.php', ajaxData, function () {
         refreshItems();
     });
 }
@@ -242,7 +242,7 @@ function refreshItems() {
         params: 'list',
         data: sourcesList
     };
-    ajaxQuery('core/ajax/Market/Ajax/NextDomMarketAjax.php', ajaxData, function (result) {
+    ajaxQuery('core/ajax/nextdom_market.ajax.php', ajaxData, function (result) {
         showItems(result);
         updateFilteredList();
         if (pluginsUpdateNeededList.length > 0) {
@@ -299,7 +299,7 @@ function iconDownload() {
         var itemData = content[0];
         var itemObj = content[1];
         $.post({
-            url: 'core/ajax/Market/Ajax/NextDomMarketAjax.php',
+            url: 'core/ajax/nextdom_market.ajax.php',
             global: false,
             data: {
                 action: 'get',
@@ -414,7 +414,7 @@ function updatePlugin(id, massUpdate) {
             data: [currentPlugin['sourceName'], currentPlugin['fullName']]
         }
         // Met à jour les branches
-        ajaxQuery('core/ajax/Market/Ajax/NextDomMarketAjax.php', data, function () {
+        ajaxQuery('core/ajax/nextdom_market.ajax.php', data, function () {
             if (massUpdate && pluginsUpdateNeededList.length > 1) {
                 pluginsUpdateNeededList.splice(0, 1);
                 currentPlugin = pluginsUpdateNeededList[0];

@@ -176,7 +176,7 @@ class NextDomHelper
             'icon' => 'fa-play',
             'name' => __('health.product-started'),
             'state' => $state,
-            'result' => ($state) ? $okStr . ' - ' . file_get_contents(self::getTmpFolder() . '/started') : $nokStr,
+            'result' => ($state) ? $okStr . ' - ' . file_get_contents(self::getStartedFilePath()) : $nokStr,
             'comment' => '',
         );
 
@@ -217,7 +217,7 @@ class NextDomHelper
             'comment' => ($state) ? '' : __('health.php-error'),
         );
 
-        $version = \DB::Prepare('select version()', array(), \DB::FETCH_TYPE_ROW);
+        $version = DBHelper::Prepare('select version()', array(), DBHelper::FETCH_TYPE_ROW);
         $systemHealth[] = array(
             'icon' => 'fa-database',
             'name' => __('health.database-version'),
@@ -304,20 +304,24 @@ class NextDomHelper
             'icon' => 'fa-inbox',
             'comment' => '',
             'name' => __('health.cache-persistence'));
+
         if (CacheManager::isPersistOk()) {
-            if (ConfigManager::byKey('cache::engine') != 'FilesystemCache' && ConfigManager::byKey('cache::engine') != 'PhpFileCache') {
+            if ((ConfigManager::byKey('cache::engine') != 'FilesystemCache') &&
+                (ConfigManager::byKey('cache::engine') != 'PhpFileCache')) {
                 $cache_health['state'] = true;
                 $cache_health['result'] = $okStr;
             } else {
-                $filename = NEXTDOM_ROOT . '/var/cache.tar.gz';
+                $cache_path = CacheManager::getArchivePath();
+                $cache_time = date('Y-m-d H:i:s', filemtime($cache_path));
                 $cache_health['state'] = true;
-                $cache_health['result'] = $okStr . ' (' . date('Y-m-d H:i:s', filemtime($filename)) . ')';
+                $cache_health['result'] = sprintf("%s (%s)", $okStr, $cache_time);
             }
         } else {
             $cache_health['state'] = false;
             $cache_health['result'] = $nokStr;
             $cache_health['comment'] = __('health.cache-not-saved');
         }
+
         $systemHealth[] = $cache_health;
 
         $state = shell_exec('systemctl show apache2 | grep  PrivateTmp | grep yes | wc -l');
@@ -470,8 +474,8 @@ class NextDomHelper
      */
     public static function getJeedomVersion()
     {
-        if (file_exists(NEXTDOM_DATA.'/config/Jeedom_version')) {
-            return trim(file_get_contents(NEXTDOM_DATA.'/config/Jeedom_version'));
+        if (file_exists(NEXTDOM_DATA . '/config/Jeedom_version')) {
+            return trim(file_get_contents(NEXTDOM_DATA . '/config/Jeedom_version'));
         }
         return '';
     }
@@ -483,8 +487,8 @@ class NextDomHelper
      */
     public static function getNextdomVersion()
     {
-        if (file_exists(NEXTDOM_DATA.'/config/Nextdom_version')) {
-            return trim(file_get_contents(NEXTDOM_DATA.'/config/Nextdom_version'));
+        if (file_exists(NEXTDOM_DATA . '/config/Nextdom_version')) {
+            return trim(file_get_contents(NEXTDOM_DATA . '/config/Nextdom_version'));
         }
         return '';
     }
@@ -494,14 +498,14 @@ class NextDomHelper
      */
     public static function stopSystem()
     {
-        $okStr = __('common.ok');
-        echo __('core.disable-tasks');
+        // $okStr = __('common.ok');
+        // echo __('core.disable-tasks');
         ConfigManager::save('enableCron', 0);
         foreach (CronManager::all() as $cron) {
             if ($cron->running()) {
                 try {
                     $cron->halt();
-                    echo '.';
+                    // echo '.';
                 } catch (\Exception $e) {
                     sleep(5);
                     $cron->halt();
@@ -509,56 +513,63 @@ class NextDomHelper
 
             }
         }
-        echo " $okStr\n";
+        // echo " $okStr\n";
 
         /*         * **********arrêt des crons********************* */
 
         if (CronManager::jeeCronRun()) {
-            echo __('core.disable-cron-master');
+            // echo __('core.disable-cron-master');
             $pid = CronManager::getPidFile();
             SystemHelper::kill($pid);
-            echo " $okStr\n";
+            // echo " $okStr\n";
         }
 
         /*         * *********Arrêt des scénarios**************** */
 
-        echo __('core.disable-all-scenarios');
+        // echo __('core.disable-all-scenarios');
         ConfigManager::save('enableScenario', 0);
         foreach (ScenarioManager::all() as $scenario) {
             try {
                 $scenario->stop();
-                echo '.';
+                // echo '.';
             } catch (\Exception $e) {
                 sleep(5);
                 $scenario->stop();
             }
         }
-        echo " $okStr\n";
+        // echo " $okStr\n";
     }
 
     /**
      * Start all cron tasks and scenarios
      *
+     * @param  bool $force ignore errors when true
      * @throws \Exception
      */
     public static function startSystem()
     {
-        $okStr = __('common.ok');
+        // $okStr = __('common.ok');
+        // try {
+            // echo __('core.enable-all-scenarios');
+        ConfigManager::save('enableScenario', 1);
+            // echo " $okStr\n";
+            // echo __('core.enable-tasks');
+        ConfigManager::save('enableCron', 1);
+            // echo " $okStr\n";
+        // } catch (\Exception $e) {
+        //     if ((  true  == $force) ||
+        //         (  false == isset($_GET['mode'])) ||
+        //         ("force" != $_GET['mode'])) {
+        //         throw $e;
+        //     } else {
+        //         // echo '***ERROR*** ' . $e->getMessage();
+        //     }
+        // }
+    }
 
-        try {
-            echo __('core.enable-all-scenarios');
-            ConfigManager::save('enableScenario', 1);
-            echo " $okStr\n";
-            echo __('core.enable-tasks');
-            ConfigManager::save('enableCron', 1);
-            echo " $okStr\n";
-        } catch (\Exception $e) {
-            if (!isset($_GET['mode']) || $_GET['mode'] != 'force') {
-                throw $e;
-            } else {
-                echo '***ERROR*** ' . $e->getMessage();
-            }
-        }
+    public static function getStartedFilePath(): string
+    {
+        return sprintf("%s/started", self::getTmpFolder());
     }
 
     /**
@@ -569,7 +580,7 @@ class NextDomHelper
      */
     public static function isStarted(): bool
     {
-        return file_exists(self::getTmpFolder() . '/started');
+        return file_exists(self::getStartedFilePath());
     }
 
     /**
@@ -673,16 +684,16 @@ class NextDomHelper
             }
 
             try {
-                LogHelper::add('starting', 'debug', __('Ecriture du fichier ') . self::getTmpFolder() . '/started');
-                if (file_put_contents(self::getTmpFolder() . '/started', date('Y-m-d H:i:s')) === false) {
-                    LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started'));
+                LogHelper::add('starting', 'debug', __('Ecriture du fichier ') . self::getStartedFilePath());
+                if (file_put_contents(self::getStartedFilePath(), date('Y-m-d H:i:s')) === false) {
+                    LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getStartedFilePath()));
                 }
             } catch (\Exception $e) {
-                LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getStartedFilePath() . ' : ') . LogHelper::exception($e));
             }
 
-            if (!file_exists(self::getTmpFolder() . '/started')) {
-                LogHelper::add('starting', 'critical', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started pour une raison inconnue. NextDom ne peut démarrer'));
+            if (!file_exists(self::getStartedFilePath())) {
+                LogHelper::add('starting', 'critical', __('Impossible d\'écrire ' . self::getStartedFilePath() . ' pour une raison inconnue. NextDom ne peut démarrer'));
                 return;
             }
 
@@ -799,10 +810,9 @@ class NextDomHelper
             ScenarioManager::cleanTable();
             ScenarioManager::consystencyCheck();
             LogHelper::chunk();
-            CronManager:
-            clean();
+            CronManager::clean();
             ReportHelper::clean();
-            \DB::optimize();
+            DBHelper::optimize();
             CacheManager::clean();
         } catch (\Exception $e) {
             LogHelper::addError('nextdom', $e->getMessage());
@@ -954,29 +964,80 @@ class NextDomHelper
         return null;
     }
 
+    private static function addTypeUseResults($matches, &$result) {
+        for ($matchIndex = 0; $matchIndex < count($matches[0]); ++$matchIndex) {
+            $typeName = $matches[1][$matchIndex];
+            if (empty($typeName)) {
+                $typeName = 'cmd';
+            }
+            $typeId = $matches[2][$matchIndex];
+            $target = null;
+            if (isset($result[$typeName][$typeId])) {
+                continue;
+            }
+            if ($typeName[0] === 'c') {
+                $target = CmdManager::byId($typeId);
+            } elseif ($typeName[0] === 'e') {
+                $target = EqLogicManager::byId($typeId);
+            } elseif ($typeName[0] === 's') {
+                $target = ScenarioManager::byId($typeId);
+            }
+            if (!is_object($target)) {
+                continue;
+            }
+            $result[$typeName][$typeId] = $target;
+
+        }
+    }
     /**
-     * TODO: Fait des trucs
+     * Get type of entity in string
      *
-     * @param string $_string
+     * @param string $testString
      *
      * @return array
      * @throws \Exception
      */
-    public static function getTypeUse($_string = '')
+    public static function getTypeUse($testString = '')
     {
-        $result = array('cmd' => array(), 'scenario' => array(), 'eqLogic' => array(), 'dataStore' => array(), 'plan' => array(), 'view' => array());
-        preg_match_all("/#([0-9]*)#/", $_string, $matches);
-        foreach ($matches[1] as $cmd_id) {
-            if (isset($result['cmd'][$cmd_id])) {
+        $results = array('cmd' => [], 'scenario' => [], 'eqLogic' => [], 'dataStore' => [], 'plan' => [], 'view' => []);
+        // Look for human readable strings
+        preg_match_all('/#(eqLogic|scenario)?(\d+)#/', $testString, $humanReadableResults);
+        self::addTypeUseResults($humanReadableResults, $results);
+        // Look in json string
+        preg_match_all('/"((?:scenario|view|plan)_id|eqLogic)":"(\d+)"/', $testString, $jsonResults);
+        self::addTypeUseResults($jsonResults, $results);
+        preg_match_all('/variable\((.*?)\)/', $testString, $dataStoreResults);
+        foreach ($dataStoreResults[1] as $variable) {
+            if (isset($results['dataStore'][$variable])) {
                 continue;
             }
-            $cmd = CmdManager::byId($cmd_id);
+            $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', -1, trim($variable));
+            if (!is_object($dataStore)) {
+                continue;
+            }
+            $results['dataStore'][$variable] = $dataStore;
+        }
+
+        return $results;
+    }
+
+    public static function getTypeUseOld($testString = '')
+    {
+        $result = array('cmd' => [], 'scenario' => [], 'eqLogic' => [], 'dataStore' => [], 'plan' => [], 'view' => []);
+        // Test commands human readable
+        preg_match_all("/#([0-9]*)#/", $testString, $matches);
+        foreach ($matches[1] as $cmdId) {
+            if (isset($result['cmd'][$cmdId])) {
+                continue;
+            }
+            $cmd = CmdManager::byId($cmdId);
             if (!is_object($cmd)) {
                 continue;
             }
-            $result['cmd'][$cmd_id] = $cmd;
+            $result['cmd'][$cmdId] = $cmd;
         }
-        preg_match_all('/"scenario_id":"([0-9]*)"/', $_string, $matches);
+        // Test scenarios from parameters
+        preg_match_all('/"scenario_id":"([0-9]*)"/', $testString, $matches);
         foreach ($matches[1] as $scenario_id) {
             if (isset($result['scenario'][$scenario_id])) {
                 continue;
@@ -987,7 +1048,8 @@ class NextDomHelper
             }
             $result['scenario'][$scenario_id] = $scenario;
         }
-        preg_match_all("/#scenario([0-9]*)#/", $_string, $matches);
+        // Test scenario human readable
+        preg_match_all("/#scenario([0-9]*)#/", $testString, $matches);
         foreach ($matches[1] as $scenario_id) {
             if (isset($result['scenario'][$scenario_id])) {
                 continue;
@@ -998,29 +1060,32 @@ class NextDomHelper
             }
             $result['scenario'][$scenario_id] = $scenario;
         }
-        preg_match_all("/#eqLogic([0-9]*)#/", $_string, $matches);
-        foreach ($matches[1] as $eqLogic_id) {
-            if (isset($result['eqLogic'][$eqLogic_id])) {
+        // Test eqLogic human readable
+        preg_match_all("/#eqLogic([0-9]*)#/", $testString, $matches);
+        foreach ($matches[1] as $eqLogicId) {
+            if (isset($result['eqLogic'][$eqLogicId])) {
                 continue;
             }
-            $eqLogic = EqLogicManager::byId($eqLogic_id);
+            $eqLogic = EqLogicManager::byId($eqLogicId);
             if (!is_object($eqLogic)) {
                 continue;
             }
-            $result['eqLogic'][$eqLogic_id] = $eqLogic;
+            $result['eqLogic'][$eqLogicId] = $eqLogic;
         }
-        preg_match_all('/"eqLogic":"([0-9]*)"/', $_string, $matches);
-        foreach ($matches[1] as $eqLogic_id) {
-            if (isset($result['eqLogic'][$eqLogic_id])) {
+        // Test eqLogic from parameters
+        preg_match_all('/"eqLogic":"([0-9]*)"/', $testString, $matches);
+        foreach ($matches[1] as $eqLogicId) {
+            if (isset($result['eqLogic'][$eqLogicId])) {
                 continue;
             }
-            $eqLogic = EqLogicManager::byId($eqLogic_id);
+            $eqLogic = EqLogicManager::byId($eqLogicId);
             if (!is_object($eqLogic)) {
                 continue;
             }
-            $result['eqLogic'][$eqLogic_id] = $eqLogic;
+            $result['eqLogic'][$eqLogicId] = $eqLogic;
         }
-        preg_match_all('/variable\((.*?)\)/', $_string, $matches);
+        // Test variable
+        preg_match_all('/variable\((.*?)\)/', $testString, $matches);
         foreach ($matches[1] as $variable) {
             if (isset($result['dataStore'][$variable])) {
                 continue;
@@ -1031,27 +1096,29 @@ class NextDomHelper
             }
             $result['dataStore'][$variable] = $dataStore;
         }
-        preg_match_all('/"view_id":"([0-9]*)"/', $_string, $matches);
-        foreach ($matches[1] as $view_id) {
-            if (isset($result['view'][$view_id])) {
+        // Test view id from parameters
+        preg_match_all('/"view_id":"([0-9]*)"/', $testString, $matches);
+        foreach ($matches[1] as $viewId) {
+            if (isset($result['view'][$viewId])) {
                 continue;
             }
-            $view = ViewManager::byId($view_id);
+            $view = ViewManager::byId($viewId);
             if (!is_object($view)) {
                 continue;
             }
-            $result['view'][$view_id] = $view;
+            $result['view'][$viewId] = $view;
         }
-        preg_match_all('/"plan_id":"([0-9]*)"/', $_string, $matches);
-        foreach ($matches[1] as $plan_id) {
-            if (isset($result['plan'][$plan_id])) {
+        // Test plan_id from parameters
+        preg_match_all('/"plan_id":"([0-9]*)"/', $testString, $matches);
+        foreach ($matches[1] as $planId) {
+            if (isset($result['plan'][$planId])) {
                 continue;
             }
-            $plan = PlanHeaderManager::byId($plan_id);
+            $plan = PlanHeaderManager::byId($planId);
             if (!is_object($plan)) {
                 continue;
             }
-            $result['plan'][$plan_id] = $plan;
+            $result['plan'][$planId] = $plan;
         }
         return $result;
     }
@@ -1100,18 +1167,6 @@ class NextDomHelper
     }
 
     /**
-     * Clean file system rights
-     */
-    public static function cleanFileSystemRight()
-    {
-        $cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . NEXTDOM_ROOT . ';';
-        $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . NEXTDOM_ROOT . ';';
-        $cmd .= SystemHelper::getCmdSudo() . 'find '. NEXTDOM_LOG .' -type f -exec chmod 664 {} +;';
-        $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R '. NEXTDOM_LOG .' ;';
-        exec($cmd);
-    }
-
-    /**
      * Check space left
      *
      * @return float
@@ -1136,9 +1191,7 @@ class NextDomHelper
             $result .= '/' . $subFolder;
         }
         if (!file_exists($result)) {
-            mkdir($result, 0774, true);
-            $cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . $result . ';';
-            \com_shell::execute($cmd);
+            mkdir($result, 0775, true);
         }
         return $result;
     }
@@ -1250,14 +1303,14 @@ class NextDomHelper
                     WHERE `key`="nextdom_benchmark"
                     AND plugin="core"';
             try {
-                \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ROW);
+                DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ROW);
             } catch (\Exception $e) {
 
             }
             $sql = 'INSERT INTO config
                     SET `key`="nextdom_benchmark",plugin="core",`value`="' . $i . '"';
             try {
-                \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ROW);
+                DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ROW);
             } catch (\Exception $e) {
 
             }
@@ -1267,7 +1320,7 @@ class NextDomHelper
         $sql = 'INSERT INTO config
                 SET `key`="nextdom_benchmark",plugin="core",`value`="0"';
         try {
-            \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ROW);
+            DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ROW);
         } catch (\Exception $e) {
         }
         $starttime = Utils::getMicrotime();
@@ -1277,7 +1330,7 @@ class NextDomHelper
                     WHERE `key` = "nextdom_benchmark"
                         AND plugin = "core"';
             try {
-                \DB::Prepare($sql, array('value' => $i), \DB::FETCH_TYPE_ROW);
+                DBHelper::Prepare($sql, array('value' => $i), DBHelper::FETCH_TYPE_ROW);
             } catch (\Exception $e) {
 
             }

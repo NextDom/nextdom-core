@@ -22,8 +22,8 @@
 
 namespace NextDom\Controller;
 
-use NextDom\Helpers\Render;
 use NextDom\Helpers\AjaxHelper;
+use NextDom\Helpers\Render;
 use NextDom\Managers\UpdateManager;
 
 class BackupController extends BaseController
