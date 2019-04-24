@@ -217,10 +217,16 @@ class InteractQueryManager
             LogHelper::add('interact', 'debug', __('Aucune correspondance trouvée'));
             return null;
         }
-        $weigh = array(1 => ConfigManager::byKey('interact::weigh1'), 2 => ConfigManager::byKey('interact::weigh2'), 3 => ConfigManager::byKey('interact::weigh3'), 4 => ConfigManager::byKey('interact::weigh4'));
+        $weigh = array(
+            1 => ConfigManager::byKey('interact::weigh1'),
+            2 => ConfigManager::byKey('interact::weigh2'),
+            3 => ConfigManager::byKey('interact::weigh3'),
+            4 => ConfigManager::byKey('interact::weigh4'));
+
         foreach (str_word_count($_query, 1) as $word) {
             if (isset($weigh[strlen($word)])) {
-                $shortest += $weigh[strlen($word)];
+                $value = intval($weigh[strlen($word)]);
+                $shortest += $value;
             }
         }
         if (str_word_count($_query) == 1 && ConfigManager::byKey('interact::confidence1') > 0 && $shortest > ConfigManager::byKey('interact::confidence1')) {

@@ -147,6 +147,7 @@ core:
 "SI": "IF"
 "ALORS": "THEN"
 "SINON": "ELSE"
+"Extension du fichier non valide, autorisé :": "Invalid file extension, authorized :"
 "Expression non valide  (": "Expression non valide  ("
 ") trouvée dans le scénario : ": ") trouvée dans le scénario :"
 "Sélectionner le scénario": "Select the scenario"

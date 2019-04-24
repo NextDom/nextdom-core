@@ -248,11 +248,6 @@ class nextdom
         NextDomHelper::forceSyncHour();
     }
 
-    public static function cleanFileSytemRight()
-    {
-        NextDomHelper::cleanFileSystemRight();
-    }
-
     public static function checkSpaceLeft(): float
     {
         return NextDomHelper::checkSpaceLeft();
@@ -282,4 +277,7 @@ class nextdom
         return NextDomHelper::benchmark();
     }
 
+    public static function cleanFileSytemRight() {
+        // no operation (jeedom compatibility)
+    }
 }

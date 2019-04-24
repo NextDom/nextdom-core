@@ -1124,4 +1124,89 @@ class Utils
         return ($_old != $_new);
     }
 
+    /**
+     * Fill associative array with given list of parameters <name>=<value>
+     *
+     * @param array $argv input parameters of form "<name>=<value>"
+     * @return array parsed parameters of form "<name>" => "<value>"
+     */
+    public static function parseArgs($argv) {
+        $args = array();
+        if (isset($argv)) {
+            foreach ($argv as $c_arg) {
+                $parts = explode('=', $c_arg);
+                if (2 == count($parts)) {
+                    $args[$parts[0]] = $parts[1];
+                } else {
+                    $args[$c_arg] = "";
+                }
+            }
+        }
+        return $args;
+    }
+
+    /**
+     * Return value of $key in $array when available, $default otherwise
+     *
+     * @param array $array input array
+     * @param string $key array key
+     * @param mixed $default fallback value
+     */
+    public static function array_key_default($array, $key, $default) {
+        if (true === array_key_exists($key, $array))
+            return $array[$key];
+        return $default;
+    }
+
+    /**
+     * Checks and moves uploaded to given directory
+     *
+     * @param array $files variable like $_FILES
+     * @param string $key file name key in $_FILES
+     * @param srting $destDir destination directory
+     * @param int $maxSizeMB maximum size of file in megabytes
+     * @param array $extensions list of accepted file extensions, ex: [ ".gz" ]. Any when empty
+     * @param function $cleaner function that returns the filename from $_FILES[$key]
+     * @throws CoreException when checks fail
+     * @return string path to modes file
+     */
+    static public function readUploadedFile($files, $key, $destDir, $maxSizeMB, $extensions, $cleaner = null)
+    {
+        if (false == isset($files[$key])) {
+            $message = __('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)', __FILE__);
+            throw new CoreException($message);
+        }
+
+        if (0 != count($extensions)) {
+            $extension = strtolower(strrchr($files[$key]['name'], '.'));
+            if (false == in_array($extension, $extensions)) {
+                $message = __('Extension du fichier non valide, autorisé :', __FILE__) . join(",", $extensions);
+                throw new CoreException($message);
+            }
+        }
+
+        $sizeBytes = filesize($files[$key]['tmp_name']);
+        if ($sizeBytes > ($maxSizeMB  * 1024 * 1024)) {
+            $message = __('Le fichier est trop gros', __FILE__);
+            throw new CoreException(sprintf("%s > %s MB", $message, $maxSizeMB));
+        }
+
+        $name = $files[$key]['name'];
+        if (null !== $cleaner) {
+            $name = $cleaner($files[$key]);
+        }
+
+        $destPath = sprintf("%s/%s", $destDir, $name);
+        if (false == move_uploaded_file($files[$key]['tmp_name'], $destPath)) {
+            $message = __('Impossible de déplacer le fichier temporaire', __FILE__);
+            throw new CoreException($message);
+        }
+
+        if (false == file_exists($destPath)) {
+            $message = __('Impossible de téléverser le fichier', __FILE__);
+            throw new CoreException($message);
+        }
+
+        return $name;
+    }
 }

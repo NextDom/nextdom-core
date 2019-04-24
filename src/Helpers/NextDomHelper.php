@@ -176,7 +176,7 @@ class NextDomHelper
             'icon' => 'fa-play',
             'name' => __('health.product-started'),
             'state' => $state,
-            'result' => ($state) ? $okStr . ' - ' . file_get_contents(self::getTmpFolder() . '/started') : $nokStr,
+            'result' => ($state) ? $okStr . ' - ' . file_get_contents(self::getStartedFilePath()) : $nokStr,
             'comment' => '',
         );
 
@@ -304,20 +304,24 @@ class NextDomHelper
             'icon' => 'fa-inbox',
             'comment' => '',
             'name' => __('health.cache-persistence'));
+
         if (CacheManager::isPersistOk()) {
-            if (ConfigManager::byKey('cache::engine') != 'FilesystemCache' && ConfigManager::byKey('cache::engine') != 'PhpFileCache') {
+            if ((ConfigManager::byKey('cache::engine') != 'FilesystemCache') &&
+                (ConfigManager::byKey('cache::engine') != 'PhpFileCache')) {
                 $cache_health['state'] = true;
                 $cache_health['result'] = $okStr;
             } else {
-                $filename = NEXTDOM_ROOT . '/var/cache.tar.gz';
+                $cache_path = CacheManager::getArchivePath();
+                $cache_time = date('Y-m-d H:i:s', filemtime($cache_path));
                 $cache_health['state'] = true;
-                $cache_health['result'] = $okStr . ' (' . date('Y-m-d H:i:s', filemtime($filename)) . ')';
+                $cache_health['result'] = sprintf("%s (%s)", $okStr, $cache_time);
             }
         } else {
             $cache_health['state'] = false;
             $cache_health['result'] = $nokStr;
             $cache_health['comment'] = __('health.cache-not-saved');
         }
+
         $systemHealth[] = $cache_health;
 
         $state = shell_exec('systemctl show apache2 | grep  PrivateTmp | grep yes | wc -l');
@@ -494,14 +498,14 @@ class NextDomHelper
      */
     public static function stopSystem()
     {
-        $okStr = __('common.ok');
-        echo __('core.disable-tasks');
+        // $okStr = __('common.ok');
+        // echo __('core.disable-tasks');
         ConfigManager::save('enableCron', 0);
         foreach (CronManager::all() as $cron) {
             if ($cron->running()) {
                 try {
                     $cron->halt();
-                    echo '.';
+                    // echo '.';
                 } catch (\Exception $e) {
                     sleep(5);
                     $cron->halt();
@@ -509,56 +513,63 @@ class NextDomHelper
 
             }
         }
-        echo " $okStr\n";
+        // echo " $okStr\n";
 
         /*         * **********arrêt des crons********************* */
 
         if (CronManager::jeeCronRun()) {
-            echo __('core.disable-cron-master');
+            // echo __('core.disable-cron-master');
             $pid = CronManager::getPidFile();
             SystemHelper::kill($pid);
-            echo " $okStr\n";
+            // echo " $okStr\n";
         }
 
         /*         * *********Arrêt des scénarios**************** */
 
-        echo __('core.disable-all-scenarios');
+        // echo __('core.disable-all-scenarios');
         ConfigManager::save('enableScenario', 0);
         foreach (ScenarioManager::all() as $scenario) {
             try {
                 $scenario->stop();
-                echo '.';
+                // echo '.';
             } catch (\Exception $e) {
                 sleep(5);
                 $scenario->stop();
             }
         }
-        echo " $okStr\n";
+        // echo " $okStr\n";
     }
 
     /**
      * Start all cron tasks and scenarios
      *
+     * @param  bool $force ignore errors when true
      * @throws \Exception
      */
     public static function startSystem()
     {
-        $okStr = __('common.ok');
+        // $okStr = __('common.ok');
+        // try {
+            // echo __('core.enable-all-scenarios');
+        ConfigManager::save('enableScenario', 1);
+            // echo " $okStr\n";
+            // echo __('core.enable-tasks');
+        ConfigManager::save('enableCron', 1);
+            // echo " $okStr\n";
+        // } catch (\Exception $e) {
+        //     if ((  true  == $force) ||
+        //         (  false == isset($_GET['mode'])) ||
+        //         ("force" != $_GET['mode'])) {
+        //         throw $e;
+        //     } else {
+        //         // echo '***ERROR*** ' . $e->getMessage();
+        //     }
+        // }
+    }
 
-        try {
-            echo __('core.enable-all-scenarios');
-            ConfigManager::save('enableScenario', 1);
-            echo " $okStr\n";
-            echo __('core.enable-tasks');
-            ConfigManager::save('enableCron', 1);
-            echo " $okStr\n";
-        } catch (\Exception $e) {
-            if (!isset($_GET['mode']) || $_GET['mode'] != 'force') {
-                throw $e;
-            } else {
-                echo '***ERROR*** ' . $e->getMessage();
-            }
-        }
+    public static function getStartedFilePath(): string
+    {
+        return sprintf("%s/started", self::getTmpFolder());
     }
 
     /**
@@ -569,7 +580,7 @@ class NextDomHelper
      */
     public static function isStarted(): bool
     {
-        return file_exists(self::getTmpFolder() . '/started');
+        return file_exists(self::getStartedFilePath());
     }
 
     /**
@@ -673,16 +684,16 @@ class NextDomHelper
             }
 
             try {
-                LogHelper::add('starting', 'debug', __('Ecriture du fichier ') . self::getTmpFolder() . '/started');
-                if (file_put_contents(self::getTmpFolder() . '/started', date('Y-m-d H:i:s')) === false) {
-                    LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started'));
+                LogHelper::add('starting', 'debug', __('Ecriture du fichier ') . self::getStartedFilePath());
+                if (file_put_contents(self::getStartedFilePath(), date('Y-m-d H:i:s')) === false) {
+                    LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getStartedFilePath()));
                 }
             } catch (\Exception $e) {
-                LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started : ') . LogHelper::exception($e));
+                LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getStartedFilePath() . ' : ') . LogHelper::exception($e));
             }
 
-            if (!file_exists(self::getTmpFolder() . '/started')) {
-                LogHelper::add('starting', 'critical', __('Impossible d\'écrire ' . self::getTmpFolder() . '/started pour une raison inconnue. NextDom ne peut démarrer'));
+            if (!file_exists(self::getStartedFilePath())) {
+                LogHelper::add('starting', 'critical', __('Impossible d\'écrire ' . self::getStartedFilePath() . ' pour une raison inconnue. NextDom ne peut démarrer'));
                 return;
             }
 
@@ -799,8 +810,7 @@ class NextDomHelper
             ScenarioManager::cleanTable();
             ScenarioManager::consystencyCheck();
             LogHelper::chunk();
-            CronManager:
-            clean();
+            CronManager::clean();
             ReportHelper::clean();
             DBHelper::optimize();
             CacheManager::clean();
@@ -1157,18 +1167,6 @@ class NextDomHelper
     }
 
     /**
-     * Clean file system rights
-     */
-    public static function cleanFileSystemRight()
-    {
-        $cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . NEXTDOM_ROOT . ';';
-        $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . NEXTDOM_ROOT . ';';
-        $cmd .= SystemHelper::getCmdSudo() . 'find ' . NEXTDOM_LOG . ' -type f -exec chmod 664 {} +;';
-        $cmd .= SystemHelper::getCmdSudo() . 'chmod 774 -R ' . NEXTDOM_LOG . ' ;';
-        exec($cmd);
-    }
-
-    /**
      * Check space left
      *
      * @return float
@@ -1193,9 +1191,7 @@ class NextDomHelper
             $result .= '/' . $subFolder;
         }
         if (!file_exists($result)) {
-            mkdir($result, 0774, true);
-            $cmd = SystemHelper::getCmdSudo() . 'chown -R ' . SystemHelper::getWWWGid() . ':' . SystemHelper::getWWWUid() . ' ' . $result . ';';
-            \com_shell::execute($cmd);
+            mkdir($result, 0775, true);
         }
         return $result;
     }

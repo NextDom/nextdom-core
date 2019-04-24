@@ -581,10 +581,10 @@ class PrepareView
     private static function initCssPool(&$pageData, $configs)
     {
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
-        if (!file_exists(NEXTDOM_ROOT . '/public/css/theme.css')) {
+        if (!file_exists(NEXTDOM_DATA . '/public/css/theme.css')) {
             self::generateCssThemFile();
         }
-        $pageData['CSS_POOL'][] = '/public/css/theme.css';
+        $pageData['CSS_POOL'][] = '/var/public/css/theme.css';
         // Icônes
         $rootDir = NEXTDOM_ROOT . '/public/icon/';
         foreach (FileSystemHelper::ls($rootDir, '*') as $dir) {
@@ -604,10 +604,10 @@ class PrepareView
                 }
             }
             if ($configs['enableCustomCss'] == 1) {
-                if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.css')) {
+                if (file_exists(NEXTDOM_DATA . '/custom/desktop/custom.css')) {
                     $pageData['CSS_POOL'][] = '/var/custom/desktop/custom.css';
                 }
-                if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.js')) {
+                if (file_exists(NEXTDOM_DATA . '/custom/desktop/custom.js')) {
                     $pageData['JS_POOL'][] = '/var/custom/desktop/custom.js';
                 }
             }
@@ -670,7 +670,7 @@ class PrepareView
         $themeContent = str_replace(": ", ":", $themeContent);
         $themeContent = str_replace(" {", "{", $themeContent);
         $themeContent = str_replace(", ", ",", $themeContent);
-        file_put_contents(NEXTDOM_ROOT . '/public/css/theme.css', $themeContent);
+        file_put_contents(NEXTDOM_DATA . '/public/css/theme.css', $themeContent);
     }
 
 }

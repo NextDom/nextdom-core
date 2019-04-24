@@ -245,29 +245,18 @@ class PlanAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         Utils::unautorizedInDemo();
         $plan = PlanManager::byId(Utils::init('id'));
-        if (!is_object($plan)) {
+        if (false == is_object($plan)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
-        if (!isset($_FILES['file'])) {
-            throw new CoreException(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)'));
-        }
-        $extension = strtolower(strrchr($_FILES['file']['name'], '.'));
-        if (!in_array($extension, array('.jpg', '.png'))) {
-            throw new CoreException('Extension du fichier non valide (autorisé .jpg .png) : ' . $extension);
-        }
-        if (filesize($_FILES['file']['tmp_name']) > 5000000) {
-            throw new CoreException(__('Le fichier est trop gros (maximum 5Mo)'));
-        }
-        $uploaddir = NEXTDOM_ROOT . '/public/img/plan_' . $plan->getId();
-        if (!file_exists($uploaddir)) {
-            mkdir($uploaddir, 0777);
-        }
-        shell_exec('rm -rf ' . $uploaddir . '/*');
-        $name = sha512(base64_encode(file_get_contents($_FILES['file']['tmp_name']))) . $extension;
-        $img_size = getimagesize($_FILES['file']['tmp_name']);
-        if (!move_uploaded_file($_FILES['file']['tmp_name'], $uploaddir . '/' . $name)) {
-            throw new CoreException(__('Impossible de déplacer le fichier temporaire dans : ') . $uploaddir . '/' . $name);
-        }
+        $uploadDir = sprintf("%s/public/img/plan_%s", NEXTDOM_ROOT, $plan->getId());
+        shell_exec('rm -rf ' . $uploadDir);
+        mkdir($uploadDir, 0775, true);
+        $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 5, array(".png", ".jpg"), function ($file) {
+            $content = file_get_contents($file['tmp_name']);
+            return sha512(base64_encode($content));
+        });
+        $filepath = sprintf("%s/%s", $uploadDir, $filename);
+        $img_size = getimagesize($filepath);
         $plan->setDisplay('width', $img_size[0]);
         $plan->setDisplay('height', $img_size[1]);
         $plan->setDisplay('path', 'public/img/plan_' . $plan->getId() . '/' . $name);

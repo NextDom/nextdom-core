@@ -143,14 +143,14 @@ class CronManager
     public static function clean()
     {
         $crons = self::all();
-        foreach ($crons as $cronExpression) {
-            $cronExpression = new \Cron\CronExpression($cronExpression->getSchedule(), new \Cron\FieldFactory);
+        foreach ($crons as $cron) {
+            $cronExpression = new \Cron\CronExpression($cron->getSchedule(), new \Cron\FieldFactory);
             try {
                 if (!$cronExpression->isDue()) {
                     $cronExpression->getNextRunDate();
                 }
             } catch (\Exception $ex) {
-                $cronExpression->remove();
+                $cron->remove();
             }
         }
     }

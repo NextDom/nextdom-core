@@ -33,16 +33,14 @@
  */
 
 namespace {
-
     use NextDom\Exceptions\CoreException;
     use NextDom\Managers\ConfigManager;
 
     define('NEXTDOM_ROOT', realpath(__DIR__ . '/..'));
-    define('NEXTDOM_DATA', '/var/lib/nextdom');
-    define('NEXTDOM_LOG', '/var/log/nextdom');
 
-    if (is_file(NEXTDOM_DATA . '/config/common.config.php')) {
-        require_once NEXTDOM_DATA . '/config/common.config.php';
+
+    if (file_exists(NEXTDOM_ROOT . '/core/config/common.config.php')) {
+        require_once NEXTDOM_ROOT . '/core/config/common.config.php';
     }
 
     /**
@@ -50,6 +48,14 @@ namespace {
      */
     $ENABLED_PLUGINS = null;
     spl_autoload_register('nextdomPluginAutoload', true, true);
+    if (file_exists(NEXTDOM_ROOT . '/core/config/common.config.php')) {
+        require_once NEXTDOM_ROOT . '/core/config/common.config.php';
+    }
+
+    global $CONFIG;
+    define('NEXTDOM_DATA', $CONFIG["paths"]["lib"]);
+    define('NEXTDOM_LOG',  $CONFIG["paths"]["log"]);
+    define('NEXTDOM_TMP',  $CONFIG["paths"]["tmp"]);
 
     require_once NEXTDOM_ROOT . '/vendor/autoload.php';
     require_once NEXTDOM_ROOT . '/src/Helpers/DBHelper.php';
@@ -57,16 +63,14 @@ namespace {
     require_once NEXTDOM_DATA . '/config/nextdom.config.php';
     require_once NEXTDOM_DATA . '/config/compatibility.config.php';
 
-
     // Developer mode : Register global error and exception handlers
-    $coreConfig = ConfigManager::getDefaultConfiguration()['core'];
-    if (php_sapi_name() !== 'cli' && $coreConfig['developer::mode'] === '1') {
-        if ($coreConfig['developer::errorhandler'] === '1') {
-            Symfony\Component\Debug\ErrorHandler::register();
-        }
-        if ($coreConfig['developer::exceptionhandler'] === '1') {
-            Symfony\Component\Debug\ExceptionHandler::register();
-        }
+    if (('cli' !== php_sapi_name()) &&
+        (  '1' == ConfigManager::getDefaultConfiguration()['core']['developer::mode']) &&
+        (  '1' == ConfigManager::getDefaultConfiguration()['core']['developer::errorhandler']) &&
+        (  '1' == ConfigManager::getDefaultConfiguration()['core']['developer::exceptionhandler']))
+    {
+        Symfony\Component\Debug\ErrorHandler::register();
+        Symfony\Component\Debug\ExceptionHandler::register();
     }
 
     /**

@@ -437,30 +437,8 @@ class ScenarioAjax extends BaseAjax
     public function templateupload()
     {
         Utils::unautorizedInDemo();
-        $uploaddir = NEXTDOM_ROOT . '/core/config/scenario/';
-        if (!file_exists($uploaddir)) {
-            mkdir($uploaddir);
-        }
-        if (!file_exists($uploaddir)) {
-            throw new CoreException(__('Répertoire de téléversement non trouvé : ') . $uploaddir);
-        }
-        if (!isset($_FILES['file'])) {
-            throw new CoreException(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)'));
-        }
-        $extension = strtolower(strrchr($_FILES['file']['name'], '.'));
-        if (!in_array($extension, array('.json'))) {
-            throw new CoreException('Extension du fichier non valide (autorisé .json) : ' . $extension);
-        }
-        if (filesize($_FILES['file']['tmp_name']) > 10000000) {
-            throw new CoreException(__('Le fichier est trop gros (maximum 10Mo)'));
-        }
-        if (!move_uploaded_file($_FILES['file']['tmp_name'], $uploaddir . '/' . $_FILES['file']['name'])) {
-            throw new CoreException(__('Impossible de déplacer le fichier temporaire'));
-        }
-        if (!file_exists($uploaddir . '/' . $_FILES['file']['name'])) {
-            throw new CoreException(__('Impossible de téléverser le fichier (limite du serveur web ?)'));
-        }
+        $uploadDir = sprintf("%s/config/scenario/", NEXTDOM_DATA);
+        Utils::readUploadedFile($_FILES, "file", $uploadDir, 10, array(".json"));
         AjaxHelper::success();
-
     }
 }

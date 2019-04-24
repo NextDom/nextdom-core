@@ -318,7 +318,7 @@ class Cron implements EntityInterface
         if ($this->getSchedule() == '') {
             throw new CoreException(__('La programmation ne peut pas être vide : ') . print_r($this, true));
         }
-        if (count($this->getOption()) == 0 || $this->getOption() == '') {
+        if ($this->getOption() == '' || count($this->getOption()) == 0) {
             $cron = CronManager::byClassAndFunction($this->getClass(), $this->getFunction());
             if (is_object($cron)) {
                 $this->setId($cron->getId());
