@@ -42,7 +42,7 @@ class ProfilsAjax extends BaseAjax
             throw new CoreException(__('Répertoire d\'upload non trouvé : ') . $uploaddir);
         }
         if (!isset($_FILES['images'])) {
-            throw new CoreException(__('{{Aucun fichier trouvé. Vérifié parametre PHP (post size limit}}'));
+            throw new CoreException(__('{{Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit}}'));
         }
         $extension = strtolower(strrchr($_FILES['images']['name'], '.'));
         if (!in_array($extension, array('.png', '.jpg'))) {

@@ -1162,9 +1162,9 @@ class Scenario implements EntityInterface
             $object = $this->getObject();
             if ($_tag) {
                 if ($object->getDisplay('tagColor') != '') {
-                    $name .= '<span class="label" style="text-shadow : none;background-color:' . $object->getDisplay('tagColor') . ' !important;color:' . $object->getDisplay('tagTextColor', 'white') . ' !important">' . $object->getName() . '</span>';
+                    $name .= '<span class="label label-sticker" style="text-shadow : none;background-color:' . $object->getDisplay('tagColor') . ' !important;color:' . $object->getDisplay('tagTextColor', 'white') . ' !important">' . $object->getName() . '</span>';
                 } else {
-                    $name .= '<span class="label label-primary" style="text-shadow : none;">' . $object->getName() . '</span>';
+                    $name .= '<span class="label label-primary label-sticker" style="text-shadow : none;">' . $object->getName() . '</span>';
                 }
             } else {
                 $name .= '[' . $object->getName() . ']';
@@ -1172,7 +1172,7 @@ class Scenario implements EntityInterface
         } else {
             if ($_complete) {
                 if ($_tag) {
-                    $name .= '<span class="label label-default" style="text-shadow : none;">' . __('Aucun') . '</span>';
+                    $name .= '<span class="label label-default label-sticker" style="text-shadow : none;">' . __('Aucun') . '</span>';
                 } else {
                     $name .= '[' . __('Aucun') . ']';
                 }
@@ -1188,7 +1188,7 @@ class Scenario implements EntityInterface
             }
         }
         if ($_prettify) {
-            $name .= '</p><p class="title">';
+            $name .= '<p class="title">';
         }
         if (!$_withoutScenarioName) {
             if ($_tag) {

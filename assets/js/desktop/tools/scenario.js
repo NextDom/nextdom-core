@@ -568,7 +568,7 @@ function getConditionExpressionHTML(expressionData) {
     if (isset(expressionData.expression)) {
         expressionData.expression = expressionData.expression.replace(/"/g, '&quot;');
     }
-    htmlData += '<div class="input-group input-group-sm">';
+    htmlData += '<div class="input-group input-group-sm no-border">';
     htmlData += '<textarea class="expressionAttr form-control scenario-text" data-l1key="expression" rows="1">' + init(expressionData.expression) + '</textarea>';
     htmlData += '<span class="input-group-btn">';
     htmlData += '<button type="button" class="btn btn-default cursor bt_selectCmdExpression tooltips" title="{{Rechercher une commande}}"><i class="fas fa-list-alt"></i></button>';
@@ -620,7 +620,7 @@ function getActionExpressionHTML(expressionData) {
         htmlData += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="background" checked title="{{Cocher pour que la commande s\'exécute en parallèle des autres actions}}"/>';
     }
     htmlData += '</div>';
-    htmlData += '<div class="col-xs-11 scenario-sub-group"><div class="input-group input-group-sm">';
+    htmlData += '<div class="col-xs-11 scenario-sub-group"><div class="input-group input-group-sm no-border">';
     htmlData += '<span class="input-group-btn">';
     htmlData += '<button class="btn btn-default bt_removeExpression" type="button" title="{{Supprimer l\'action}}"><i class="fas fa-minus-circle"></i></button>';
     htmlData += '</span>';
@@ -751,7 +751,7 @@ function getIfSubElementHTML(subElementData) {
     if (!isset(subElementData.options) || !isset(subElementData.options.allowRepeatCondition) || parseInt(subElementData.options.allowRepeatCondition) === 0) {
         htmlData += '<a class="btn btn-default btn-sm cursor subElementAttr tooltips scenario-btn-repeat" title="{{Autoriser ou non la répétition des actions si l\'évaluation de la condition est la même que la précédente}}" data-l1key="options" data-l2key="allowRepeatCondition" value="0"><i class="fas fa-refresh"></i></a>';
     } else {
-        htmlData += '<a class="btn btn-default btn-sm cursor subElementAttr tooltips scenario-btn-repeat" title="{{Autoriser ou non la répétition des actions si l\'évaluation de la condition est la même que la précédente}}" data-l1key="options" data-l2key="allowRepeatCondition" value="1"><i class="fas fa-refresh"></i><i class="fas fa-ban text-danger"></i></a>';
+        htmlData += '<a class="btn btn-default btn-sm cursor subElementAttr tooltips scenario-btn-repeat" title="{{Autoriser ou non la répétition des actions si l\'évaluation de la condition est la même que la précédente}}" data-l1key="options" data-l2key="allowRepeatCondition" value="1"><i class="fas fa-ban text-danger"></i></a>';
     }
     htmlData += '</div>';
     htmlData += '<div class="expressions scenario-condition">';
@@ -1872,4 +1872,3 @@ initGeneralFormEvents();
 initScenarioEditorEvents();
 initModalEvents();
 loadFromUrl();
-

@@ -129,6 +129,8 @@
                                                         <input type="number" class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/>
                                                     {% elseif param['type'] == 'password' %}
                                                         <input type="password" class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/>
+                                                    {% else %}
+                                                        <input class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/>
                                                     {% endif %}
                                                 </div>
                                             </div>
