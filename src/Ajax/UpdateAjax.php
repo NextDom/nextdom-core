@@ -188,23 +188,12 @@ class UpdateAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         Utils::unautorizedInDemo();
-        $uploaddir = '/tmp';
-        if (!file_exists($uploaddir)) {
-            throw new CoreException(__('Répertoire de téléversement non trouvé : ') . $uploaddir);
-        }
-        if (!isset($_FILES['file'])) {
-            throw new CoreException(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)'));
-        }
-        if (filesize($_FILES['file']['tmp_name']) > 100000000) {
-            throw new CoreException(__('Le fichier est trop gros (maximum 100Mo)'));
-        }
-        $filename = str_replace(array(' ', '(', ')'), '', $_FILES['file']['name']);
-        if (!move_uploaded_file($_FILES['file']['tmp_name'], $uploaddir . '/' . $filename)) {
-            throw new CoreException(__('Impossible de déplacer le fichier temporaire'));
-        }
-        if (!file_exists($uploaddir . '/' . $filename)) {
-            throw new CoreException(__('Impossible de téléverser le fichier (limite du serveur web ?)'));
-        }
-        AjaxHelper::success($uploaddir . '/' . $filename);
-    }
+        $uploadDir = '/tmp';
+        $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 100, array(), function($file) {
+            $remove = array(" ", "(", ")");
+            return str_replace($remove, "", $file["name"]);
+        });
+        $filepath = sprintf("%s/%s", $uploadDir, $filename);
+        AjaxHelper::success($filepath);
+   }
 }

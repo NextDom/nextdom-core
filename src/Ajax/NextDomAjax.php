@@ -21,6 +21,7 @@ use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\TimeLineHelper;
@@ -172,7 +173,7 @@ class NextDomAjax extends BaseAjax
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         if (Utils::init('command', '') !== '') {
-            AjaxHelper::success(\DB::prepare(Utils::init('command'), array(), \DB::FETCH_TYPE_ALL));
+            AjaxHelper::success(DBHelper::prepare(Utils::init('command'), array(), DBHelper::FETCH_TYPE_ALL));
         } else {
             AjaxHelper::error(__('Aucune requête à exécuter'));
         }
@@ -183,7 +184,7 @@ class NextDomAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
-        \DB::compareAndFix(json_decode(file_get_contents(NEXTDOM_ROOT . '/install/database.json'), true), Utils::init('table'));
+        DBHelper::compareAndFix(json_decode(file_get_contents(NEXTDOM_ROOT . '/install/database.json'), true), Utils::init('table'));
         AjaxHelper::success();
 
     }
@@ -276,29 +277,8 @@ class NextDomAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
-        $uploaddir = NEXTDOM_ROOT . '/backup';
-        if (!file_exists($uploaddir)) {
-            mkdir($uploaddir);
-        }
-        if (!file_exists($uploaddir)) {
-            throw new CoreException(__('Répertoire de téléversement non trouvé : ') . $uploaddir);
-        }
-        if (!isset($_FILES['file'])) {
-            throw new CoreException(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)'));
-        }
-        $extension = strtolower(strrchr($_FILES['file']['name'], '.'));
-        if (!in_array($extension, array('.gz'))) {
-            throw new CoreException('Extension du fichier non valide (autorisé .tar.gz) : ' . $extension);
-        }
-        if (filesize($_FILES['file']['tmp_name']) > 300000000) {
-            throw new CoreException(__('Le fichier est trop gros (maximum 300Mo)'));
-        }
-        if (!move_uploaded_file($_FILES['file']['tmp_name'], $uploaddir . '/' . $_FILES['file']['name'])) {
-            throw new CoreException(__('Impossible de déplacer le fichier temporaire'));
-        }
-        if (!file_exists($uploaddir . '/' . $_FILES['file']['name'])) {
-            throw new CoreException(__('Impossible de téléverser le fichier (limite du serveur web ?)'));
-        }
+        $uploadDir = BackupManager::getBackupDirectory();
+        Utils::readUploadedFile($_FILES, "file", $uploadDir, 300, array(".gz"));
         AjaxHelper::success();
     }
 
@@ -342,15 +322,9 @@ class NextDomAjax extends BaseAjax
         if ($customType != 'js' && $customType != 'css') {
             throw new CoreException(__('La version ne peut être que js ou css'));
         }
-        $path = NEXTDOM_ROOT . '/var/custom/' . $customVersion . '/';
-        if (!file_exists($path)) {
-            mkdir($path);
-        }
-        $path .= 'custom.' . $customType;
-        if (file_exists($path)) {
-            unlink($path);
-        }
-        file_put_contents($path, Utils::init('content'));
+        $customDir  = sprintf("%s/custom/%s/", NEXTDOM_DATA, $customVersion);
+        $customPath = sprintf("%s/custom.%s", $customDir, $customType);
+        file_put_contents($customPath, Utils::init('content'));
         AjaxHelper::success();
     }
 
@@ -417,9 +391,10 @@ class NextDomAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
-        $pathinfo = pathinfo(Utils::init('path'));
-        if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql', 'ini', 'html', 'py', 'css'))) {
-            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $pathinfo['extension']));
+        $pathinfo  = pathinfo(init('path'));
+        $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
+        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','html','py','css'))) {
+            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
         }
         AjaxHelper::success(file_get_contents(Utils::init('path')));
     }
@@ -430,8 +405,9 @@ class NextDomAjax extends BaseAjax
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         $pathinfo = pathinfo(Utils::init('path'));
-        if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql', 'ini', 'html', 'py', 'css'))) {
-            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $pathinfo['extension']));
+        $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
+        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','html','py','css'))) {
+            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
         }
         AjaxHelper::success(file_put_contents(Utils::init('path'), Utils::init('content')));
     }
@@ -442,8 +418,9 @@ class NextDomAjax extends BaseAjax
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         $pathinfo = pathinfo(Utils::init('path'));
-        if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql', 'ini', 'css'))) {
-            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $pathinfo['extension']));
+        $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
+        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','css'))) {
+            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
         }
         AjaxHelper::success(unlink(Utils::init('path')));
     }
@@ -454,8 +431,9 @@ class NextDomAjax extends BaseAjax
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         $pathinfo = pathinfo(Utils::init('name'));
-        if (!in_array($pathinfo['extension'], array('php', 'js', 'json', 'sql', 'ini', 'css'))) {
-            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $pathinfo['extension']));
+        $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
+        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','css'))) {
+            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
         }
         touch(Utils::init('path') . Utils::init('name'));
         if (!file_exists(Utils::init('path') . Utils::init('name'))) {

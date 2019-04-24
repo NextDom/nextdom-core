@@ -15,10 +15,9 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('NEXTDOM_ROOT', '/tmp/tests');
-define('NEXTDOM_DATA', NEXTDOM_ROOT . '/data');
-
 use NextDom\Helpers\NextDomHelper;
+
+require_once(__DIR__ . '/../../src/core.php');
 
 define('REMOVE_HISTORY_PATH_FILE', NEXTDOM_DATA . '/data/remove_history.json');
 
@@ -68,5 +67,32 @@ class NextDomHelperTest extends PHPUnit_Framework_TestCase
         }
         $fileContent = file_get_contents(REMOVE_HISTORY_PATH_FILE);
         $this->assertEquals(0, strpos($fileContent, '["Line 20","Line 21"'));
+    }
+
+    public function testGetConfigurationAllData() {
+        $configuration = NextDomHelper::getConfiguration();
+        $this->assertArrayHasKey('theme', $configuration);
+        $this->assertArrayHasKey('cmd', $configuration);
+    }
+
+    public function testGetConfigurationWithKey() {
+        $alertsConf = NextDomHelper::getConfiguration('alerts');
+        $this->assertArrayHasKey('batterywarning', $alertsConf);
+    }
+
+    public function testGetTmpFolder() {
+        $tmpFolder = NextDomHelper::getTmpFolder();
+        $this->assertEquals('/tmp/nextdom', $tmpFolder);
+    }
+
+    public function testGetTmpFolderWithNewFolder() {
+        $testPath = '/tmp/nextdom/just_a_test';
+        if (is_dir($testPath)) {
+            rmdir($testPath);
+        }
+        $tmpFolder = NextDomHelper::getTmpFolder('just_a_test');
+        $this->assertEquals($testPath, $tmpFolder);
+        $this->assertDirectoryIsWritable($testPath);
+        rmdir($testPath);
     }
 }

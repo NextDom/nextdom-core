@@ -30,34 +30,17 @@ class ProfilsAjax extends BaseAjax
 
     public function removeImage()
     {
-        $uploaddir = NEXTDOM_ROOT . '/public/img/profils/';
-        $pathInfo = pathinfo(Utils::init('image'));
-        AjaxHelper::success(unlink($uploaddir . $pathInfo['basename'] . '.' . $pathInfo['extension']));
+        $uploaddir = sprintf("%s/public/img/profils", NEXTDOM_ROOT);
+        $pathInfo  = pathinfo(init('image'));
+        $extension = Utils::array_key_default($pathInfo, "extension", "<no-ext>");
+        $path      = sprintf("%s/%s.%s", $uploaddir, $pathInfo['basename'], $extension);
+        AjaxHelper::success(unlink($path));
     }
 
     public function imageUpload()
     {
-        $uploaddir = NEXTDOM_ROOT . '/public/img/profils/';
-        if (!file_exists($uploaddir)) {
-            throw new CoreException(__('Répertoire d\'upload non trouvé : ') . $uploaddir);
-        }
-        if (!isset($_FILES['images'])) {
-            throw new CoreException(__('{{Aucun fichier trouvé. Vérifié parametre PHP (post size limit}}'));
-        }
-        $extension = strtolower(strrchr($_FILES['images']['name'], '.'));
-        if (!in_array($extension, array('.png', '.jpg'))) {
-            throw new CoreException('{{Seul les images sont acceptées (autorisé .jpg .png)}} : ' . $extension);
-        }
-        if (filesize($_FILES['images']['tmp_name']) > 1000000) {
-            throw new CoreException(__('Le fichier est trop gros (maximum 8mo)'));
-        }
-        if (!move_uploaded_file($_FILES['images']['tmp_name'], $uploaddir . '/' . $_FILES['images']['name'])) {
-            throw new CoreException(__('Impossible de déplacer le fichier temporaire'));
-        }
-        if (!file_exists($uploaddir . '/' . $_FILES['images']['name'])) {
-            throw new CoreException(__("Impossible d'uploader le fichier (limite du serveur web ?)"));
-        }
-
+        $uploadDir = sprintf("%s/public/img/profils", NEXTDOM_ROOT);
+        Utils::readUploadedFile($_FILES, "images", $uploadDir, 8, array(".png", ".jpg"));
         AjaxHelper::success();
     }
 }

@@ -68,8 +68,7 @@ class DashBoardController extends BaseController
             $currentJeeObject = JeeObjectManager::getRootObjects();
             if ($currentJeeObject) {
                 $pageData['JS_VARS']['SEL_OBJECT_ID'] = $currentJeeObject->getId();
-            }
-            else {
+            } else {
                 throw new \Exception(__('Aucun objet racine trouvé. Pour en créer un, allez dans dashboard -> <a href="/index.php?v=d&p=object">Liste objets et résumés</a>'));
             }
         }
@@ -104,7 +103,8 @@ class DashBoardController extends BaseController
      * @return array
      * @throws \Exception
      */
-    private static function getObjectsListMenu($currentObjectId) {
+    private static function getObjectsListMenu($currentObjectId)
+    {
         if ($currentObjectId === '') {
             return [];
         }
@@ -126,8 +126,7 @@ class DashBoardController extends BaseController
             $layerResult = [];
             if ($selectedLayerObject->getFather() === null) {
                 $layer = JeeObjectManager::getRootObjects(true);
-            }
-            else {
+            } else {
                 $layer = $selectedLayerObject->getFather()->getChild();
             }
             foreach ($layer as $item) {

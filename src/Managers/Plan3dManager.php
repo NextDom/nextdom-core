@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Model\Entity\Plan3d;
 
 class Plan3dManager
@@ -45,10 +46,10 @@ class Plan3dManager
         $values = array(
             'id' => $_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id=:id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -61,10 +62,10 @@ class Plan3dManager
         $values = array(
             'plan3dHeader_id' => $_plan3dHeader_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE plan3dHeader_id=:plan3dHeader_id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function byLinkTypeLinkId($_link_type, $_link_id)
@@ -73,11 +74,11 @@ class Plan3dManager
             'link_type' => $_link_type,
             'link_id' => $_link_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE link_type=:link_type
         AND link_id=:link_id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function byName3dHeaderId($_name, $_plan3dHeader_id)
@@ -86,11 +87,11 @@ class Plan3dManager
             'name' => $_name,
             'plan3dHeader_id' => $_plan3dHeader_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE name=:name
         AND plan3dHeader_id=:plan3dHeader_id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function byLinkTypeLinkId3dHeaderId($_link_type, $_link_id, $_plan3dHeader_id)
@@ -100,12 +101,12 @@ class Plan3dManager
             'link_id' => $_link_id,
             'plan3dHeader_id' => $_plan3dHeader_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE link_type=:link_type
         AND link_id=:link_id
         AND plan3dHeader_id=:plan3dHeader_id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function removeByLinkTypeLinkId3dHeaderId($_link_type, $_link_id, $_plan3dHeader_id)
@@ -119,14 +120,14 @@ class Plan3dManager
         WHERE link_type=:link_type
         AND link_id=:link_id
         AND plan3dHeader_id=:plan3dHeader_id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function all()
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME;
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function searchByDisplay($_search)
@@ -134,10 +135,10 @@ class Plan3dManager
         $value = array(
             'search' => '%' . $_search . '%',
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE display LIKE :search';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function searchByConfiguration($_search, $_not = '')
@@ -146,10 +147,10 @@ class Plan3dManager
             'search' => '%' . $_search . '%',
             'not' => $_not,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE configuration LIKE :search
         AND link_type !=:not';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 }

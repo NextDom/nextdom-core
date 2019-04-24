@@ -34,7 +34,6 @@
 namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 
@@ -127,6 +126,13 @@ class AuthentificationHelper
         }
     }
 
+    /**
+     * @param      $_login
+     * @param      $_password
+     * @param null $_twoFactor
+     * @return bool
+     * @throws \Exception
+     */
     public static function login($_login, $_password, $_twoFactor = null)
     {
         $user = UserManager::connect($_login, $_password);
@@ -154,6 +160,11 @@ class AuthentificationHelper
         return true;
     }
 
+    /**
+     * @param $_key
+     * @return bool
+     * @throws \Exception
+     */
     public static function loginByHash($_key)
     {
         $key = explode('-', $_key);
@@ -201,6 +212,9 @@ class AuthentificationHelper
         return true;
     }
 
+    /**
+     *
+     */
     public static function logout()
     {
         @session_start();

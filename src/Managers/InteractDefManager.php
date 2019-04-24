@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\InteractDef;
 
@@ -49,10 +50,10 @@ class InteractDefManager
         $values = array(
             'id' => $_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -64,22 +65,22 @@ class InteractDefManager
     {
         $values = array();
         if ($_group === '') {
-            $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     ORDER BY name, query';
         } else if ($_group === null) {
-            $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE (`group` IS NULL OR `group` = "")
                     ORDER BY name, query';
         } else {
             $values['group'] = $_group;
-            $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE `group` = :group
                     ORDER BY name, query';
         }
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function listGroup($_group = null)
@@ -92,7 +93,7 @@ class InteractDefManager
             $sql .= ' WHERE `group` LIKE :group';
         }
         $sql .= ' ORDER BY `group`';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
     }
 
     public static function generateTextVariant($_text)
@@ -121,10 +122,10 @@ class InteractDefManager
         $values = array(
             'query' => '%' . $_query . '%',
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE query LIKE :query';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function regenerateInteract()
@@ -208,7 +209,7 @@ class InteractDefManager
         }
         if (count($list_id) > 0) {
             $sql = 'DELETE FROM ' . InteractQueryManager::DB_CLASS_NAME . ' WHERE interactDef_id NOT IN (' . implode(',', $list_id) . ')';
-            return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ROW);
+            return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ROW);
         }
         return null;
     }
@@ -224,7 +225,7 @@ class InteractDefManager
             $values = array(
                 'search' => '%' . $searchPattern . '%',
             );
-            $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE actions LIKE :search
                         OR reply LIKE :search';
@@ -232,7 +233,7 @@ class InteractDefManager
             $values = array(
                 'search' => '%' . $searchPattern[0] . '%',
             );
-            $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE actions LIKE :search
                         OR reply LIKE :search';
@@ -242,7 +243,7 @@ class InteractDefManager
                           OR reply LIKE :search' . $i;
             }
         }
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function searchByUse($searchPattern)

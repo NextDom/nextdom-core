@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 echo -n "[$(date +%d-%m-%Y\ %H:%M:%S)] Check the file system space..."
 USERSPACE=$(df -h . | awk '/[0-9]/{print $(NF-1)}' | sed 's/\%//g')
@@ -47,12 +47,4 @@ if [ $(crontab -l | grep jeeCron | wc -l) -lt 1 ]; then
 else
 	echo "OK"
 fi
-DIR="$( cd "$( dirname "$0" )" && pwd )"
-echo -n "[$(date +%d-%m-%Y\ %H:%M:%S)] Check the rights..."
-sudo chown -R www-data:www-data ${DIR}/*
-sudo chmod -R 775 ${DIR}/*
-sudo chown -R www-data:www-data /tmp/nextdom/cache
-sudo chmod -R 775 /tmp/nextdom/cache
-sudo chown -R www-data:www-data /var/www
-sudo chmod -R 775 /var/www
-	echo "OK"
+

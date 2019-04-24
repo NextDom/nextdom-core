@@ -1,85 +1,61 @@
 <?php
-/* This file is part of NextDom.
+/* This file is part of Jeedom.
  *
- * NextDom is free software: you can redistribute it and/or modify
+ * Jeedom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * NextDom is distributed in the hope that it will be useful,
+ * Jeedom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\Market\Ajax;
+namespace NextDom\Ajax;
 
+use NextDom\Enums\UserRight;
+use NextDom\Helpers\AjaxHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Market\DownloadManager;
-use NextDom\Market\NextDomMarket;
 use NextDom\Market\MarketItem;
+use NextDom\Market\NextDomMarket;
 
-/**
- * Analyseur des requêtes Ajax
- */
-class MarketAjaxParser
+class NextDomMarketAjax extends BaseAjax
 {
-    /**
-     * Point d'entrée des requêtes Ajax
-     *
-     * @param string $action Action de la requête
-     * @param string $params Paramètres de la requête
-     * @param mixed $data Données de la requête
-     *
-     * @return array|bool Résultat
-     * @throws \Exception
-     */
-    public static function parse($action, $params, $data)
-    {
-        switch ($action) {
-            case 'refresh':
-                $result = static::refresh($params, $data);
-                break;
-            case 'get':
-                $result = static::get($params, $data);
-                break;
-            case 'save':
-                $result = static::save($params, $data);
-                break;
-            default :
-                $result = false;
-        }
-        return $result;
-    }
+    protected $NEEDED_RIGHTS = UserRight::ADMIN;
+    protected $MUST_BE_CONNECTED = true;
+    protected $CHECK_AJAX_TOKEN = true;
 
     /**
      * Actions de refraichissement
-     *
-     * @param string $params Type de rafraichissement
-     * @param mixed $data Données en fonction du paramètre
      *
      * @return bool True si l'action a réussie
      *
      * @throws \Exception
      */
-    public static function refresh($params, $data)
+    public function refresh()
     {
+        $params = Utils::init('params');
+        $data = Utils::init('data');
+
         switch ($params) {
             case 'list':
-                $result = static::refreshList($data, false);
+                $result = $this->refreshList($data, false);
                 break;
             case 'list-force':
-                $result = static::refreshList($data, true);
+                $result = $this->refreshList($data, true);
                 break;
             case 'branch-hash':
-                $result = static::refreshBranchHash($data);
+                $result = $this->refreshBranchHash($data);
                 break;
             default :
                 $result = false;
         }
-        return $result;
+        AjaxHelper::success($result);
     }
 
     /**
@@ -91,7 +67,7 @@ class MarketAjaxParser
      * @return bool True si une mise à jour a été réalisée ou que la mise à jour n'est pas nécessaire.
      * @throws \Exception
      */
-    private static function refreshList($sources, $force)
+    private function refreshList($sources, $force)
     {
         $result = false;
         if (is_array($sources)) {
@@ -111,7 +87,7 @@ class MarketAjaxParser
      *
      * @return bool True si le rafraichissement à été effectué
      */
-    private static function refreshBranchHash(array $data)
+    private function refreshBranchHash(array $data)
     {
         $result = false;
         if (count($data) == 2) {
@@ -130,15 +106,17 @@ class MarketAjaxParser
      *
      * @return array|bool Information demandée
      */
-    public static function get($params, $data)
+    public function get()
     {
+        $params = Utils::init('params');
+        $data = Utils::init('data');
+
         $result = false;
         switch ($params) {
             case 'list':
                 if (is_array($data)) {
                     $result = [];
                     $idList = [];
-//                    $showDuplicates = \config::byKey('show-duplicates', 'AlternativeMarketForJeedom');
                     $showDuplicates = false;
                     foreach ($data as $source) {
                         $market = new NextDomMarket($source);
@@ -193,6 +171,6 @@ class MarketAjaxParser
             default :
                 $result = false;
         }
-        return $result;
+        AjaxHelper::success($result);
     }
 }

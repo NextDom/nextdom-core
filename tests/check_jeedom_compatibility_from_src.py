@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """Check Jeedom compatibility
 """
 import re
@@ -5,8 +7,8 @@ import sys
 import os
 from tests.libs.tests_funcs import *
 
-AJAX_PATH = 'core/core/ajax/'
-CLASS_PATH = 'core/core/class/'
+AJAX_PATH = '/tmp/jeedom-core/core/ajax/'
+CLASS_PATH = '/tmp/jeedom-core/core/class/'
 NEXTDOM_CLASS_PATH = '../core/class/'
 NEXTDOM_ENTITY_PATH = '../src/Model/Entity/'
 TESTS_PATH = 'compatibility/'
@@ -18,7 +20,7 @@ def get_ajax_actions_from_file(ajax_file):
     :return:          List of actions
     :rtype:           list
     """
-    with open(AJAX_PATH + ajax_file, 'r') as file_content:
+    with open(AJAX_PATH + ajax_file, 'r', encoding="utf-8") as file_content:
         content = file_content.read()
         return re.findall(r'action\'\) == \'(.*?)\'', content)
 
@@ -29,7 +31,7 @@ def get_class_methods_from_file(class_file):
     :return:          List of methods
     :rtype:           list
     """
-    with open(CLASS_PATH + class_file, 'r') as file_content:
+    with open(CLASS_PATH + class_file, 'r', encoding="utf-8") as file_content:
         content = file_content.read()
         return re.findall(r' function (\w+)\(', content)
 
@@ -82,7 +84,7 @@ def check_ajax_file(file_to_check, actions_list):
         test_name = 'EqLogic'
     test_file = TESTS_PATH + 'Ajax' + test_name + 'Test.php'
     if os.path.isfile(test_file):
-        with open(test_file, 'r') as test_file_content:
+        with open(test_file, 'r', encoding="utf-8") as test_file_content:
             test_content = test_file_content.read()
             test_content = test_content.lower()
             for action in actions_list:
@@ -119,7 +121,8 @@ def get_entity_content_if_exists(base_class_file_content):
     entity_regex = r'extends \\?NextDom\\Model\\Entity\\(\w+)'
     entity_file_re = re.findall(entity_regex, base_class_file_content)
     if entity_file_re:
-        with open(NEXTDOM_ENTITY_PATH + entity_file_re[0] + '.php') as entity_content:
+        filename = NEXTDOM_ENTITY_PATH + entity_file_re[0] + '.php'
+        with open(filename, encoding="utf-8") as entity_content:
             result = entity_content.read()
     return result
 
@@ -136,6 +139,15 @@ def class_methods_to_ignore(file_to_check, method_to_check):
         'cmd.class.php': [
             'cast' # Usage only static (in manager)
         ],
+        'DB.class.php': [
+            '__construct',       # private
+            'getTableName',      # private
+            'getFields',         # private
+            'setField',          # private
+            'buildQuery',        # private
+            'getField',          # private
+            'getReflectionClass' # private
+        ],
         'eqLogic.class.php': [
             'cast' # Usage only static (in manager)
         ],
@@ -144,7 +156,7 @@ def class_methods_to_ignore(file_to_check, method_to_check):
         ],
         'event.class.php': [
             'getFileDescriptorLock', # Usage only static (in manager)
-            'cleanEvent', # Usage only static (in manager)
+            'cleanEvent',  # Usage only static (in manager)
             'filterEvent', # Usage only static (in manager)
             'changesSince' # Usage only static (in manager)
         ],
@@ -174,7 +186,7 @@ def check_class_methods_file(file_to_check, methods_list):
     if file_to_check == 'migrate.class.php':
         return True
     if os.path.isfile(NEXTDOM_CLASS_PATH + file_to_check):
-        with open(NEXTDOM_CLASS_PATH + file_to_check, 'r') as class_file_content:
+        with open(NEXTDOM_CLASS_PATH + file_to_check, 'r', encoding="utf-8") as class_file_content:
             test_content = class_file_content.read()
             test_content = test_content + get_entity_content_if_exists(test_content)
             test_content = test_content.lower()
@@ -221,10 +233,29 @@ def start_tests():
 
     return error
 
+def checkout_jeedom():
+    """Checkout or update jeedom-core
+    """
+    checkout_cmd = "git clone https://github.com/jeedom/core /tmp/jeedom-core > /dev/null 2>&1"
+    branch_cmd = "cd /tmp/jeedom-core && git checkout stable -f > /dev/null 2>&1"
+    update_cmd = "cd /tmp/jeedom-core && git fetch -apt > /dev/null 2>&1 && git pull -f origin stable > /dev/null 2>&1" #pylint: disable=line-too-long
+    if os.path.exists("/tmp/jeedom-core"):
+        print_info("updating jeedom-core in /tmp/jeedom-core")
+        if os.system(update_cmd) != 0:
+            print_error("unable to update jeedom stable branch in /tmp/jeedom-core")
+            sys.exit(1)
+    else:
+        print_info("fetching jeedom-core in /tmp/jeedom-core")
+        if os.system(checkout_cmd) != 0:
+            print_error("unable to clone jeedom in /tmp/jeedom-core")
+            sys.exit(1)
+        if os.system(branch_cmd) != 0:
+            print_error("unable to switch to jeedom stable branch in /tmp/jeedom-core")
+            sys.exit(1)
+
 if __name__ == "__main__":
     print_title('Compatibility with Jeedom')
     print_subtitle('Cloning jeedom/core')
-    os.system('git clone https://github.com/jeedom/core > /dev/null 2>&1')
-    os.system('cd core && git checkout stable -f > /dev/null 2>&1')
+    checkout_jeedom()
     if start_tests():
         sys.exit(1)

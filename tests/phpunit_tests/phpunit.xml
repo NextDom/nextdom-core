@@ -24,6 +24,15 @@
         timeoutForLargeTests="60"
         verbose="false">
     <testsuites>
+        <testsuite name="Managers">
+            <file>CmdManagerTest.php</file>
+            <file>EqLogicManagerTest.php</file>
+            <file>JeeObjectManagerTest.php</file>
+            <file>UserManagerTest.php</file>
+        </testsuite>
+        <testsuite name="Helpers">
+            <file>NextDomHelperTest.php</file>
+        </testsuite>
         <testsuite name="AllTests">
             <directory>../phpunit_tests</directory>
         </testsuite>
@@ -42,6 +51,6 @@
         </whitelist>
     </filter>
     <logging>
-        <log type="coverage-php" target="../coverage/clover-php.cov"/>
+        <log type="coverage-clover" target="../coverage/clover.xml"/>
     </logging>
 </phpunit>

@@ -32,10 +32,3 @@ body, h1, h2, h3, h4, h5, h6 {
 .main-header .navbar .nav > li > a, .objectSummaryGlobalHeader {
   color: $white;
 }
-
-.content-header {
-  background: transparent;
-  position: sticky;
-  z-index: 999;
-  top: 0px;
-}

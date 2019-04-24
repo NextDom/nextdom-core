@@ -22,6 +22,7 @@ namespace NextDom\Helpers;
 use NextDom\Enums\FoldersReferential;
 use NextDom\Enums\PlanVersion;
 use NextDom\Exceptions\CoreException;
+use NextDom\Managers\BackupManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\PlanManager;
@@ -127,12 +128,15 @@ class MigrationHelper
      */
     private static function migrate_0_1_5($logFile = 'migration')
     {
-        self::migrate_themes_to_data($logFile);
+        self::movePersonalFoldersAndFilesToData($logFile);
     }
 
     private static function migrate_0_0_0($logFile = 'migration'){
 
-        self::mySqlImport(NEXTDOM_ROOT . '/install/migrate/migrate_0_0_0.sql');
+        $migrateFile = sConsoleHelper::step("%s/install/migrate/migrate.sql", NEXTDOM_ROOT);
+
+        BackupManager::loadSQLFromFile($migrateFile);
+
         $message ='Database basic update';
         if($logFile == 'migration') {
             LogHelper::addInfo($logFile, $message, '');
@@ -152,7 +156,7 @@ class MigrationHelper
      *
      * @throws \Exception
      */
-    private static function migrate_themes_to_data($logFile = 'migration')
+    private static function movePersonalFoldersAndFilesToData($logFile = 'migration')
     {
 
         $message ='Update theme folder';
@@ -251,16 +255,5 @@ class MigrationHelper
             }
         }
         return $migrate;
-    }
-
-    /**
-     * Import SQL in MySQL da
-     *
-     * @param string $sqlFilePath Path of the SQL file to import
-     */
-    public static function mySqlImport($sqlFilePath)
-    {
-        global $CONFIG;
-        shell_exec('mysql --host=' . $CONFIG['db']['host'] . ' --port=' . $CONFIG['db']['port'] . ' --user=' . $CONFIG['db']['username'] . ' --password=' . $CONFIG['db']['password'] . ' ' . $CONFIG['db']['dbname'] . ' < ' . $sqlFilePath . ' > /dev/null 2>&1');
     }
 }

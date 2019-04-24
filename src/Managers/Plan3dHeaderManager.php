@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Model\Entity\Plan3dHeader;
 
 class Plan3dHeaderManager
@@ -45,17 +46,17 @@ class Plan3dHeaderManager
         $values = array(
             'id' => $_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id=:id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function all()
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME;
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**

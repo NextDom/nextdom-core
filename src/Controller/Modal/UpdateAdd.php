@@ -22,8 +22,8 @@
 
 namespace NextDom\Controller\Modal;
 
-use NextDom\Helpers\Render;
 use NextDom\Helpers\AjaxHelper;
+use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UpdateManager;
 

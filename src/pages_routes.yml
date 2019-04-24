@@ -26,10 +26,6 @@ object:
   path: 'object'
   controller: NextDom\Controller\ObjectController::get
   condition: 'admin'
-message:
-  path: 'message'
-  controller: NextDom\Controller\MessageController::get
-  condition: 'user'
 cron:
   path: 'cron'
   controller: NextDom\Controller\CronController::get

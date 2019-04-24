@@ -57,7 +57,7 @@ abstract class BaseAjax
      */
     protected function checkAccessOrFail(bool $mustBeConnected = true, $neededRights = null)
     {
-        if ($mustBeConnected) {
+        if ($mustBeConnected === true) {
             AuthentificationHelper::init();
             if ($neededRights == UserRight::ADMIN) {
                 AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -73,8 +73,10 @@ abstract class BaseAjax
      * Test if the action method exists
      * @param string $actionCode Code of the action from the query
      * @return bool True if the method exists
+     *
+     * @return bool
      */
-    private function checkIfActionExists(string $actionCode)
+    private function checkIfActionExists(string $actionCode): bool
     {
         // Test for forbidden parent methods
         if (!in_array($actionCode, $this->FORBIDDEN_METHODS)) {
@@ -89,6 +91,8 @@ abstract class BaseAjax
 
     /**
      * Start the process
+
+     * @throws \Exception
      */
     public function process()
     {

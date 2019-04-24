@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
@@ -28,7 +29,7 @@ use NextDom\Managers\ListenerManager;
  * @ORM\Table(name="listener", indexes={@ORM\Index(name="event", columns={"event"})})
  * @ORM\Entity
  */
-class Listener
+class Listener implements EntityInterface
 {
 
     /**
@@ -135,13 +136,13 @@ class Listener
         if ($_once) {
             ListenerManager::removeByClassFunctionAndEvent($this->getClass(), $this->getFunction(), $this->event, $this->getOption());
         }
-        \DB::save($this);
+        DBHelper::save($this);
         return true;
     }
 
     public function remove()
     {
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
     public function emptyEvent()

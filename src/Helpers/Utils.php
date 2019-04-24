@@ -195,6 +195,11 @@ class Utils
         return $result;
     }
 
+    /**
+     * @param $_array
+     * @param $_subject
+     * @return mixed
+     */
     public static function templateReplace($_array, $_subject)
     {
         return str_replace(array_keys($_array), array_values($_array), $_subject);
@@ -202,7 +207,7 @@ class Utils
 
     public static function resizeImage($contents, $width, $height)
     {
-// Cacul des nouvelles dimensions
+// Calcul des nouvelles dimensions
         $width_orig = imagesx($contents);
         $height_orig = imagesy($contents);
         $ratio_orig = $width_orig / $height_orig;
@@ -230,13 +235,20 @@ class Utils
         return $contents;
     }
 
+    /**
+     * @return float
+     */
     public static function getMicrotime()
     {
         list($usec, $sec) = explode(" ", microtime());
         return ((float)$usec + (float)$sec);
     }
 
-    public static function convertDuration($time)
+    /**
+     * @param $time
+     * @return string
+     */
+    public static function convertDuration($time): string
     {
         $result = '';
         $unities = array('j' => 86400, 'h' => 3600, 'min' => 60);
@@ -257,7 +269,7 @@ class Utils
     public static function connectedToDatabase()
     {
         require_once NEXTDOM_ROOT . '/core/class/DB.class.php';
-        return is_object(\DB::getConnection());
+        return is_object(DBHelper::getConnection());
     }
 
     /**
@@ -285,16 +297,28 @@ class Utils
         return '<span id="span_errorMessage">' . $errorMessage . '</span>';
     }
 
+    /**
+     * @param string $_string
+     * @return false|int
+     */
     public static function isSha1($_string = '')
     {
         return preg_match('/^[0-9a-f]{40}$/i', $_string);
     }
 
+    /**
+     * @param string $_string
+     * @return false|int
+     */
     public static function isSha512($_string = '')
     {
         return preg_match('/^[0-9a-f]{128}$/i', $_string);
     }
 
+    /**
+     * @param $path
+     * @return string
+     */
     public static function cleanPath($path)
     {
         $out = array();
@@ -397,6 +421,11 @@ class Utils
         return array_values(array_unique($paths));
     }
 
+    /**
+     * @param     $pattern
+     * @param int $flags
+     * @return array|false
+     */
     public static function globBrace($pattern, $flags = 0)
     {
         if (defined("GLOB_BRACE")) {
@@ -406,11 +435,20 @@ class Utils
         }
     }
 
+    /**
+     * @param $_string
+     * @return string
+     */
     public static function removeCR($_string)
     {
         return trim(str_replace(array("\n", "\r\n", "\r", "\n\r"), '', $_string));
     }
 
+    /**
+     * @param      $_string
+     * @param null $_default
+     * @return bool|mixed|null
+     */
     public static function isJson($_string, $_default = null)
     {
         if ($_string === null) {
@@ -438,6 +476,10 @@ class Utils
         return preg_replace('/\<br(\s*)?\/?\>/i', "\n", $string);
     }
 
+    /**
+     * @param $_path
+     * @return string
+     */
     public static function calculPath($_path)
     {
         if (strpos($_path, '/') !== 0) {
@@ -446,6 +488,10 @@ class Utils
         return $_path;
     }
 
+    /**
+     * @param $size
+     * @return string
+     */
     public static function sizeFormat($size)
     {
         $mod = 1024;
@@ -460,17 +506,44 @@ class Utils
      * Convert object of type to another
      *
      * @param mixed $sourceObject Source object
-     * @param string $destinationClassName Destination class name
+     * @param string $targetClassName Name of the target class
      *
      * @return mixed Object of destinationClassName type
      */
-    public static function cast($sourceObject, $destinationClassName)
+    public static function cast($sourceObject, $targetClassName)
     {
+        /*
+        return unserialize(
+            preg_replace(
+                '/^O:\d+:"[^"]++"/',
+                'O:'.strlen($targetClassName).':"'.$targetClassName.'"',
+                serialize($sourceObject)
+            )
+        );
+        /*
+        return unserialize(sprintf('O:%d:"%s"%s',
+                                    strlen($targetClassName),
+                                    $targetClassName,
+                                    strstr(strstr(serialize($sourceObject), '"'), ':')));
+        */
         $sourceClassName = get_class($sourceObject);
         $sourceSerializedPrefix = 'O:' . strlen($sourceClassName) . ':"' . $sourceClassName . '"';
-        $destinationSerializedPrefix = 'O:' . strlen($destinationClassName) . ':"' . $destinationClassName . '"';
+        $destinationSerializedPrefix = 'O:' . strlen($targetClassName) . ':"' . $targetClassName . '"';
         $serializedObject = serialize($sourceObject);
         return unserialize(str_replace($sourceSerializedPrefix, $destinationSerializedPrefix, $serializedObject));
+        /*
+        $targetObject = new $targetClassName();
+        $reflectedSourceObject = new \ReflectionClass($sourceObject);
+        foreach ($reflectedSourceObject->getProperties() as $property) {
+            $propertyName = $property->getName();
+            var_dump($propertyName);
+            if (strpos($propertyName, '_') !== 0) {
+                $property->setAccessible(true);
+                $targetObject->$propertyName = $property->getValue($sourceObject);
+            }
+        }
+        return $targetObject;
+        */
     }
 
     /**
@@ -514,6 +587,10 @@ class Utils
         return str_replace('&amp;', '&', htmlspecialchars(strip_tags($_string), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
     }
 
+    /**
+     * @param $_buffer
+     * @return string|string[]|null
+     */
     public static function minify($_buffer)
     {
         $search = array(
@@ -529,6 +606,10 @@ class Utils
         return preg_replace($search, $replace, $_buffer);
     }
 
+    /**
+     * @param $_message
+     * @return string|string[]|null
+     */
     public static function sanitizeAccent($_message)
     {
         $caracteres = array(
@@ -542,6 +623,10 @@ class Utils
         return preg_replace('#[^A-Za-z0-9 \n\.\'=\*:]+\#\)\(#', '', strtr($_message, $caracteres));
     }
 
+    /**
+     * @param $code
+     * @return string
+     */
     public static function getZipErrorMessage($code)
     {
         switch ($code) {
@@ -622,6 +707,10 @@ class Utils
         }
     }
 
+    /**
+     * @param $_string
+     * @return array
+     */
     public static function arg2array($_string)
     {
         $return = array();
@@ -636,6 +725,10 @@ class Utils
         return $return;
     }
 
+    /**
+     * @param $string
+     * @return string
+     */
     public static function strToHex($string)
     {
         $hex = '';
@@ -648,6 +741,10 @@ class Utils
         return strToUpper($hex);
     }
 
+    /**
+     * @param $hex
+     * @return array
+     */
     public static function hexToRgb($hex)
     {
         $hex = str_replace("#", "", $hex);
@@ -663,6 +760,10 @@ class Utils
         return array($r, $g, $b);
     }
 
+    /**
+     * @param $_pathimg
+     * @return string
+     */
     public static function getDominantColor($_pathimg)
     {
         $rTotal = 0;
@@ -687,11 +788,19 @@ class Utils
         return '#' . sprintf('%02x', round($rTotal / $total)) . sprintf('%02x', round($gTotal / $total)) . sprintf('%02x', round($bTotal / $total));
     }
 
+    /**
+     * @param $_string
+     * @return string
+     */
     public static function sha512($_string)
     {
         return hash('sha512', $_string);
     }
 
+    /**
+     * @param $_icon
+     * @return array
+     */
     public static function findCodeIcon($_icon)
     {
         $icon = trim(str_replace(array('fa ', 'icon ', '></i>', '<i', 'class="', '"'), '', trim($_icon)));
@@ -715,6 +824,17 @@ class Utils
         return array('icon' => '', 'fontfamily' => '');
     }
 
+    /**
+     * @param       $_from
+     * @param       $_from_type
+     * @param       $_to
+     * @param       $_to_type
+     * @param       $_data
+     * @param       $_level
+     * @param       $_drill
+     * @param array $_display
+     * @return null
+     */
     public static function addGraphLink($_from, $_from_type, $_to, $_to_type, &$_data, $_level, $_drill, $_display = array('dashvalue' => '5,3', 'lengthfactor' => 0.6))
     {
         if (is_array($_to) && count($_to) == 0) {
@@ -743,6 +863,11 @@ class Utils
         return $_data;
     }
 
+    /**
+     * @param $_string
+     * @param $_words
+     * @return bool
+     */
     public static function strContain($_string, $_words)
     {
         foreach ($_words as $word) {
@@ -753,6 +878,9 @@ class Utils
         return false;
     }
 
+    /**
+     * @return bool|string
+     */
     public static function makeZipSupport()
     {
         $folder = '/tmp/nextdom_support';
@@ -761,7 +889,7 @@ class Utils
             FileSystemHelper::rrmdir($folder);
         }
         mkdir($folder);
-        system('cd '.NEXTDOM_LOG.';cp -R * "' . $folder . '" > /dev/null;cp -R .[^.]* "' . $folder . '" > /dev/null');
+        system('cd ' . NEXTDOM_LOG . ';cp -R * "' . $folder . '" > /dev/null;cp -R .[^.]* "' . $folder . '" > /dev/null');
         system('sudo dmesg >> ' . $folder . '/dmesg');
         system('sudo cp /var/log/messages "' . $folder . '/" > /dev/null');
         system('sudo chmod 777 -R "' . $folder . '" > /dev/null');
@@ -770,6 +898,11 @@ class Utils
         return realpath($outputfile);
     }
 
+    /**
+     * @param null $_user
+     * @return void|null
+     * @throws CoreException
+     */
     public static function unautorizedInDemo($_user = null)
     {
         if ($_user === null) {
@@ -786,6 +919,12 @@ class Utils
         }
     }
 
+    /**
+     * @param      $_object
+     * @param bool $_noToArray
+     * @return array
+     * @throws \ReflectionException
+     */
     public static function o2a($_object, $_noToArray = false)
     {
         if (is_array($_object)) {
@@ -823,6 +962,11 @@ class Utils
         return $array;
     }
 
+    /**
+     * @param $_object
+     * @param $_data
+     * @throws \ReflectionException
+     */
     public static function a2o(&$_object, $_data)
     {
         if (is_array($_data)) {
@@ -857,6 +1001,13 @@ class Utils
         }
     }
 
+    /**
+     * @param      $_class
+     * @param      $_ajaxList
+     * @param null $_dbList
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public static function processJsonObject($_class, $_ajaxList, $_dbList = null)
     {
         if (!is_array($_ajaxList)) {
@@ -916,6 +1067,12 @@ class Utils
         return $_attr;
     }
 
+    /**
+     * @param        $_attr
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|string|null
+     */
     public static function getJsonAttr(&$_attr, $_key = '', $_default = '')
     {
         if (is_array($_attr)) {
@@ -947,7 +1104,13 @@ class Utils
         return (isset($_attr[$_key]) && $_attr[$_key] !== '') ? $_attr[$_key] : $_default;
     }
 
-    public static function attrChanged($_changed, $_old, $_new)
+    /**
+     * @param $_changed
+     * @param $_old
+     * @param $_new
+     * @return bool
+     */
+    public static function attrChanged($_changed, $_old, $_new): bool
     {
         if ($_changed) {
             return true;
@@ -961,4 +1124,89 @@ class Utils
         return ($_old != $_new);
     }
 
+    /**
+     * Fill associative array with given list of parameters <name>=<value>
+     *
+     * @param array $argv input parameters of form "<name>=<value>"
+     * @return array parsed parameters of form "<name>" => "<value>"
+     */
+    public static function parseArgs($argv) {
+        $args = array();
+        if (isset($argv)) {
+            foreach ($argv as $c_arg) {
+                $parts = explode('=', $c_arg);
+                if (2 == count($parts)) {
+                    $args[$parts[0]] = $parts[1];
+                } else {
+                    $args[$c_arg] = "";
+                }
+            }
+        }
+        return $args;
+    }
+
+    /**
+     * Return value of $key in $array when available, $default otherwise
+     *
+     * @param array $array input array
+     * @param string $key array key
+     * @param mixed $default fallback value
+     */
+    public static function array_key_default($array, $key, $default) {
+        if (true === array_key_exists($key, $array))
+            return $array[$key];
+        return $default;
+    }
+
+    /**
+     * Checks and moves uploaded to given directory
+     *
+     * @param array $files variable like $_FILES
+     * @param string $key file name key in $_FILES
+     * @param srting $destDir destination directory
+     * @param int $maxSizeMB maximum size of file in megabytes
+     * @param array $extensions list of accepted file extensions, ex: [ ".gz" ]. Any when empty
+     * @param function $cleaner function that returns the filename from $_FILES[$key]
+     * @throws CoreException when checks fail
+     * @return string path to modes file
+     */
+    static public function readUploadedFile($files, $key, $destDir, $maxSizeMB, $extensions, $cleaner = null)
+    {
+        if (false == isset($files[$key])) {
+            $message = __('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)', __FILE__);
+            throw new CoreException($message);
+        }
+
+        if (0 != count($extensions)) {
+            $extension = strtolower(strrchr($files[$key]['name'], '.'));
+            if (false == in_array($extension, $extensions)) {
+                $message = __('Extension du fichier non valide, autorisé :', __FILE__) . join(",", $extensions);
+                throw new CoreException($message);
+            }
+        }
+
+        $sizeBytes = filesize($files[$key]['tmp_name']);
+        if ($sizeBytes > ($maxSizeMB  * 1024 * 1024)) {
+            $message = __('Le fichier est trop gros', __FILE__);
+            throw new CoreException(sprintf("%s > %s MB", $message, $maxSizeMB));
+        }
+
+        $name = $files[$key]['name'];
+        if (null !== $cleaner) {
+            $name = $cleaner($files[$key]);
+        }
+
+        $destPath = sprintf("%s/%s", $destDir, $name);
+        if (false == move_uploaded_file($files[$key]['tmp_name'], $destPath)) {
+            $message = __('Impossible de déplacer le fichier temporaire', __FILE__);
+            throw new CoreException($message);
+        }
+
+        if (false == file_exists($destPath)) {
+            $message = __('Impossible de téléverser le fichier', __FILE__);
+            throw new CoreException($message);
+        }
+
+        return $name;
+    }
 }

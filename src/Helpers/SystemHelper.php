@@ -27,12 +27,24 @@ class SystemHelper
      * @var array Distribution specific commands
      */
     private static $commands = array(
-        'suse' => array('cmd_check' => ' rpm -qa | grep ', 'cmd_install' => ' zypper in --non-interactive ', 'www-uid' => 'wwwrun', 'www-gid' => 'www', 'type' => 'zypper'),
-        'sles' => array('cmd_check' => ' rpm -qa | grep ', 'cmd_install' => ' zypper in --non-interactive ', 'www-uid' => 'wwwrun', 'www-gid' => 'www', 'type' => 'zypper'),
+        'suse'   => array('cmd_check' => ' rpm -qa | grep ', 'cmd_install' => ' zypper in --non-interactive ', 'www-uid' => 'wwwrun', 'www-gid' => 'www', 'type' => 'zypper'),
+        'sles'   => array('cmd_check' => ' rpm -qa | grep ', 'cmd_install' => ' zypper in --non-interactive ', 'www-uid' => 'wwwrun', 'www-gid' => 'www', 'type' => 'zypper'),
         'redhat' => array('cmd_check' => ' rpm -qa | grep ', 'cmd_install' => ' yum install ', 'www-uid' => 'www-data', 'www-gid' => 'www-data', 'type' => 'yum'),
         'fedora' => array('cmd_check' => ' rpm -qa | grep ', 'cmd_install' => ' dnf install ', 'www-uid' => 'www-data', 'www-gid' => 'www-data', 'type' => 'dnf'),
         'debian' => array('cmd_check' => ' dpkg --get-selections | grep -v deinstall | grep ', 'cmd_install' => ' apt-get install -y ', 'www-uid' => 'www-data', 'www-gid' => 'www-data', 'type' => 'apt'),
     );
+
+    public static function vsystem()
+    {
+        $status  = 0;
+        $args    = func_get_args();
+        $format  = $args[0];
+        $params  = array_slice($args, 1);
+        $cmd     = vsprintf($format, $params);
+
+        system($cmd, $status);
+        return $status;
+    }
 
     /**
      * Load system from /core/config/system_cmd.json if file exists.
@@ -315,11 +327,12 @@ class SystemHelper
     /**
      * Get uptime
      *
-     * @return string
+     * @return int
      */
     public static function getUptime(): string
     {
-        return preg_replace('/\.[0-9]+/', '', file_get_contents('/proc/uptime'));
+        $uptime = preg_replace('/\.[0-9]+/', '', file_get_contents('/proc/uptime'));
+        return intval($uptime);
     }
 
     public static function getMemInfo()
@@ -335,5 +348,18 @@ class SystemHelper
             $meminfo[$info[0]] = trim($value[0]);
         }
         return $meminfo;
+    }
+
+    /**
+     * Recursively delete given path
+     *
+     * @return bool false when error occurs
+     */
+    public static function rrmdir($path) {
+        $status = 0;
+        $cmd    = sprintf("rm -rf %s", $path);
+
+        system($cmd, $status);
+        return ($status == 0);
     }
 }

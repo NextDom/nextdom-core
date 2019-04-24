@@ -20,36 +20,31 @@
  * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
  */
 
-namespace NextDom\Controller;
+namespace NextDom\Controller\Modal;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\MessageManager;
 
-class MessageController extends BaseController
+class MessageController extends BaseAbstractModal
 {
     /**
      * Render message page
      *
-     * @param array $pageData Page data
-     *
      * @return string Content of render page
      *
      */
-    public static function get(&$pageData): string
+    public static function get(): string
     {
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/message.js';
-
-        $pageData['messageSelectedPlugin'] = Utils::init('plugin');
+        $pageData['messageSelectedPlugin'] = Utils::init('plugin_id');
         if ($pageData['messageSelectedPlugin'] != '') {
             $pageData['messagesList'] = MessageManager::byPlugin($pageData['messageSelectedPlugin']);
         } else {
             $pageData['messagesList'] = MessageManager::all();
         }
         $pageData['messagePluginsList'] = MessageManager::listPlugin();
-        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
-        return Render::getInstance()->get('/desktop/message.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/message.html.twig', $pageData);
     }
 
 

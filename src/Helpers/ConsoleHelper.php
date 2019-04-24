@@ -19,7 +19,7 @@ class ConsoleHelper
      */
     public static function title(string $title)
     {
-        echo "[ $title ]\n";
+        printf("[ $title ]\n");
     }
 
     /**
@@ -29,7 +29,7 @@ class ConsoleHelper
      */
     public static function subTitle(string $subTitle)
     {
-        echo "*************** $subTitle ***************\n";
+        printf("*************** $subTitle ***************\n");
     }
 
     /**
@@ -38,7 +38,7 @@ class ConsoleHelper
      */
     public static function step(string $stepTitle)
     {
-        echo "$stepTitle... ";
+        printf("$stepTitle... ");
     }
     /**
      * Show process information
@@ -46,7 +46,7 @@ class ConsoleHelper
      */
     public static function process(string $processTitle)
     {
-        echo "...$processTitle\n";
+        printf("...$processTitle\n");
     }
 
     /**
@@ -54,14 +54,14 @@ class ConsoleHelper
      */
     public static function enter()
     {
-        echo "\n";
+        printf("\n");
     }
     /**
      * Show ok message
      */
     public static function ok()
     {
-        echo " OK\n";
+        printf(" OK\n");
     }
 
     /**
@@ -69,7 +69,7 @@ class ConsoleHelper
      */
     public static function nok()
     {
-        echo " NOK\n";
+        printf(" NOK\n");
     }
 
     /**
@@ -79,6 +79,6 @@ class ConsoleHelper
      */
     public static function showError($exceptionData)
     {
-        echo "*** ERROR *** " . $exceptionData->getMessage() . "\n";
+        printf("*** ERROR *** " . $exceptionData->getMessage() . "\n");
     }
 }

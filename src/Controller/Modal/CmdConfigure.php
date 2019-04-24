@@ -108,9 +108,9 @@ class CmdConfigure extends BaseAbstractModal
             $html = array();
             foreach (array('dashboard', 'mobile', 'dview', 'mview', 'dplan') as $value) {
                 if ($cmd->getHtml($value) == '') {
-                    $html[$value] = str_replace('textarea>','textarea$>',$cmd->getWidgetTemplateCode($value));
-                }else{
-                    $html[$value] = str_replace('textarea>','textarea$>',$cmd->getHtml($value));
+                    $html[$value] = str_replace('textarea>', 'textarea$>', $cmd->getWidgetTemplateCode($value));
+                } else {
+                    $html[$value] = str_replace('textarea>', 'textarea$>', $cmd->getHtml($value));
                 }
             }
             $pageData['cmdWidgetCustomHtmlValues'] = $html;
