@@ -345,4 +345,51 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     public function testIsSha512WithEmpty() {
         $this->assertEquals(0, Utils::isSha512(''));
     }
+
+    public function testGetMicrotime() {
+        $result = Utils::getMicrotime();
+        $this->assertTrue($result < time() + 2);
+        $this->assertTrue($result > time() - 2);
+    }
+
+    public function testParseArgsWithEquals() {
+        $args = ['scenario=189', 'eqLogic=90'];
+        $results = Utils::parseArgs($args);
+        $this->assertEquals('189', $results['scenario']);
+        $this->assertEquals('90', $results['eqLogic']);
+    }
+
+    public function testParseArgsWithSpaces() {
+        $args = ['scenario', '189', 'eqLogic', '90'];
+        $results = Utils::parseArgs($args);
+        $this->assertArrayHasKey('scenario', $results);
+        $this->assertArrayHasKey('eqLogic', $results);
+        $this->assertArrayHasKey('90', $results);
+    }
+
+    public function testStrContainsOneOfWithMatches() {
+        $testString = 'A superb test string';
+        $words = ['word', 'test'];
+        $result = Utils::strContainsOneOf($testString, $words);
+        $this->assertTrue($result);
+    }
+
+    public function testStrContainsOneOfWithoutMatches() {
+        $testString = 'A superb test string';
+        $words = ['word', 'nothing'];
+        $result = Utils::strContainsOneOf($testString, $words);
+        $this->assertFalse($result);
+    }
+
+    public function testHexToRgb() {
+        $result = Utils::hexToRgb('FF2400');
+        $this->assertEquals(255, $result[0]);
+        $this->assertEquals(36, $result[1]);
+        $this->assertEquals(0, $result[2]);
+    }
+
+    public function testSanitizeAccent() {
+        $result = Utils::sanitizeAccent('aè lçÉeÈàÀûÏ');
+        $this->assertEquals('ae lceeeaaui', $result);
+    }
 }

@@ -42,16 +42,22 @@ class NoteAjax extends BaseAjax
 
     public function save()
     {
-        $note_json = json_decode(Utils::init('note'), true);
-        if (isset($note_json['id'])) {
-            $note = NoteManager::byId($note_json['id']);
+        $noteData = json_decode(Utils::init('note'), true);
+        if (empty($noteData['name'])) {
+            AjaxHelper::error(__('entity.note.name-cannot-be-empty'));
         }
-        if (!isset($note) || !is_object($note)) {
-            $note = new Note();
+        else {
+            if (isset($noteData['id'])) {
+                $note = NoteManager::byId($noteData['id']);
+            }
+            else {
+                $note = new Note();
+            }
+            Utils::a2o($note, $noteData);
+            var_dump($note);
+            $note->save();
+            AjaxHelper::success(Utils::o2a($note));
         }
-        Utils::a2o($note, $note_json);
-        $note->save();
-        AjaxHelper::success(Utils::o2a($note));
     }
 
     public function remove()

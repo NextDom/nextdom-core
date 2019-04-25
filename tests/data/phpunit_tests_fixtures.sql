@@ -13,4 +13,6 @@ INSERT INTO `config` VALUES ('plugin4tests','active','1'),('plugin4tests','deamo
 INSERT INTO `cmd` VALUES (1,1,'plugin4tests',NULL,NULL,0,'Cmd 1','[]','[]','0','info','binary',NULL,'[]',1,NULL,'[]','[]');
 INSERT INTO `cmd` VALUES (2,1,'plugin4tests',NULL,NULL,0,'Cmd 2','[]','[]','0','action','other',NULL,'[]',0,NULL,'[]','[]');
 INSERT INTO `cmd` VALUES (3,2,'plugin4tests',NULL,NULL,0,'Cmd 3','[]','[]','0','info','binary',NULL,'[]',1,NULL,'[]','[]');
+INSERT INTO `note` VALUES (1,'Note de test','Un peu de contenu');
+INSERT INTO `note` VALUES (2,'Une autre note','Peu d\'idée');
 SET FOREIGN_KEY_CHECKS=1;
