@@ -96,6 +96,9 @@ $(function () {
             "note",
             "system",
             "log",
+            "market",
+            "update.list",
+            "update",
         ];
 
         if(jQuery.inArray(page, availableSearchPage) != -1) {

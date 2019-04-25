@@ -61,48 +61,60 @@
     <div class="action-bar">
         <div class="action-group">
             <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+            <a class="btn btn-default btn-action-bar" id="bt_updateOpenLog"><i class="fas fa-file-alt spacing-right"></i>{{ 'Log' }}</a>
         </div>
         <div class="action-group">
             <a class="btn btn-success btn-action-bar pull-right" id="bt_saveUpdate"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
             <a class="btn btn-primary btn-action-bar pull-right" id="bt_checkAllUpdate"><i class="fas fa-refresh spacing-right"></i>{{ 'Vérifier les mises à jour' }}</a>
             <a class="btn btn-warning btn-action-bar pull-right" id="bt_updateNextDom"><i class="fas fa-check spacing-right"></i>{{ 'Mise à jour selective' }}</a>
-            <a class="btn btn-default btn-action-bar pull-right" id="bt_updateOpenLog"><i class="fas fa-file-alt spacing-right"></i>{{ 'Log' }}</a>
         </div>
     </div>
 </section>
 
 <section class="content">
-    <div id="div_Update-view">
-        <div class="box">
-            <div class="box-body">
-                <div class="form-group"><i class="fas fa-clock-o spacing-right"></i><span>{{ 'Dernière vérification : ' }}</span><span class="label label-info label-sticker" id="span_lastUpdateCheck"></span></div>
-                <input class="form-control" placeholder="{{ 'Rechercher...' }}" id="in_searchPlugin"/>
+    <div class="nav-tabs-custom config" id="div_Update-view">
+        <!-- Tabs title -->
+        <ul class="nav nav-tabs pull-right" role="tablist">
+            <li role="presentation"><a href="#others" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-align-justify spacing-right"></i>{{ 'Autres' }}{% if numberOfUpdatesOthers>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesOthers }}</span>{% endif %}</a></li>
+            <li role="presentation"><a href="#scripts" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-subscript spacing-right"></i>{{ 'Scripts' }}{% if numberOfUpdatesScripts>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesScripts }}</span>{% endif %}</a></li>
+            <li role="presentation"><a href="#widgets" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-boxes spacing-right"></i>{{ 'Widgets' }}{% if numberOfUpdatesWidgets>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesWidgets }}</span>{% endif %}</a></li>
+            <li role="presentation"><a href="#plugins" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-puzzle-piece spacing-right"></i>{{ 'Plugins' }}{% if numberOfUpdatesPlugins>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesPlugins }}</span>{% endif %}</a></li>
+            <li role="presentation" class="active"><a href="#core" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-microchip spacing-right"></i>{{ 'Core' }}{% if numberOfUpdatesCore>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesCore }}</span>{% endif %}</a></li>
+            <li class="header pull-left"><i class="fas fa-download spacing-right"></i>{{ 'Mise(s) à jours' }}{% if numberOfUpdates>0 %}<span class="badge bg-red spacing-left">{{ numberOfUpdates }}</span>{% endif %}</li>
+        </ul>
+
+        <!-- Tabs content -->
+        <div class="global-tab-content tab-content">
+            <legend><i class="fas fa-clock-o spacing-right"></i><span>{{ 'Dernière vérification :' }}</span><span class="label label-info badge spacing-left" id="span_lastUpdateCheck"></span></legend>
+            <div role="tabpanel" class="tab-pane active" id="core">
+                <div class="row">
+                    <div id="listCore"></div>
+                </div>
             </div>
-        </div>
 
-        <legend class="legend-title-alone"><i class="fas fa-microchip spacing-right"></i>{{ 'Core' }}</legend>
-        <div class="row">
-            <div id="listCore"></div>
-        </div>
+            <div role="tabpanel" class="tab-pane" id="plugins">
+                <div class="row">
+                    <div id="listPlugin"></div>
+                </div>
+            </div>
 
-        <legend class="legend-title-alone"><i class="fas fa-puzzle-piece spacing-right"></i>{{ 'Plugins' }}</legend>
-        <div class="row">
-            <div id="listPlugin"></div>
-        </div>
+            <div role="tabpanel" class="tab-pane" id="widgets">
+                <div class="row">
+                    <div id="listWidget"></div>
+                </div>
+            </div>
 
-        <legend class="legend-title-alone"><i class="fas fa-boxes spacing-right"></i>{{ 'Widgets' }}</legend>
-        <div class="row">
-            <div id="listWidget"></div>
-        </div>
+            <div role="tabpanel" class="tab-pane" id="scripts">
+                <div class="row">
+                    <div id="listScript"></div>
+                </div>
+            </div>
 
-        <legend class="legend-title-alone"><i class="fas fa-subscript spacing-right"></i>{{ 'Scripts' }}</legend>
-        <div class="row">
-            <div id="listScript"></div>
-        </div>
-
-        <legend class="legend-title-alone"><i class="fas fa-align-justify spacing-right"></i>{{ 'Autres' }}</legend>
-        <div class="row">
-            <div id="listOther"></div>
+            <div role="tabpanel" class="tab-pane" id="others">
+                <div class="row">
+                    <div id="listOther"></div>
+                </div>
+            </div>
         </div>
     </div>
 

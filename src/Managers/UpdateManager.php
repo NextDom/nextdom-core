@@ -298,14 +298,21 @@ class UpdateManager
      * @return mixed
      * @throws \Exception
      */
-    public static function nbNeedUpdate()
-    {
-        $sql = 'SELECT count(*)
-                FROM `' . self::DB_CLASS_NAME . '`
-                WHERE `status`="update"';
-        $result = DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ROW);
-        return $result['count(*)'];
-    }
+     public static function nbNeedUpdate($filter = '')
+     {
+         $values = array();
+         $values['status'] = 'update';
+         $sql = 'SELECT count(*)
+                 FROM `' . self::DB_CLASS_NAME . '`
+                 WHERE status=:status';
+         if ($filter != '') {
+             $values['type'] = $filter;
+             $sql .= ' AND type=:type';
+         }
+
+         $result = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+         return $result['count(*)'];
+     }
 
     /**
      * Search new updates

@@ -43,6 +43,12 @@ class UpdateController extends BaseController
             $updates[str_replace(array('.php', '.sql'), '', $udpate)] = str_replace(array('.php', '.sql'), '', $udpate);
         }
         usort($updates, 'version_compare');
+        $pageData['numberOfUpdates'] = UpdateManager::nbNeedUpdate();
+        $pageData['numberOfUpdatesCore'] = UpdateManager::nbNeedUpdate('core');
+        $pageData['numberOfUpdatesPlugins'] = UpdateManager::nbNeedUpdate('plugin');
+        $pageData['numberOfUpdatesWidgets'] = UpdateManager::nbNeedUpdate('widget');
+        $pageData['numberOfUpdatesScripts'] = UpdateManager::nbNeedUpdate('script');
+        $pageData['numberOfUpdatesOthers'] = $pageData['numberOfUpdates'] - ($pageData['numberOfUpdatesCore'] + $pageData['numberOfUpdatesPlugins'] + $pageData['numberOfUpdatesWidgets'] + $pageData['numberOfUpdatesScripts']);
         $pageData['updatesList'] = array_reverse($updates);
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/update.js';
         $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';

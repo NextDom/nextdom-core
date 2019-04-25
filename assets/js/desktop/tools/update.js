@@ -42,37 +42,6 @@ setTimeout(function(){
     $('#listScript').packery();
 },100);
 
-
-$('#in_searchPlugin').off('keyup').keyup(function () {
-    var search = $(this).value();
-    if(search == ''){
-        $('.box-warning').show();
-        $('.box-success').show();
-        $('.box-danger').show();
-        $('#listPlugin').packery();
-        $('#listOther').packery();
-        $('#listCore').packery();
-        $('#listWidget').packery();
-        $('#listScript').packery();
-        return;
-    }
-    $('.box-warning').hide();
-    $('.box-success').hide();
-    $('.box-danger').hide();
-    $('.box .box-title').each(function(){
-        var text = $(this).text().toLowerCase();
-        if(text.indexOf(search.toLowerCase()) >= 0){
-            $(this)
-            $(this).closest('.box').show();
-        }
-    });
-    $('#listPlugin').packery();
-    $('#listOther').packery();
-    $('#listCore').packery();
-    $('#listWidget').packery();
-    $('#listScript').packery();
-});
-
 printUpdate();
 
 $('#pre_updateInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
@@ -331,7 +300,7 @@ function addUpdate(_update) {
         if (_update.status == 'update') {
             tr += '<a class="btn btn-warning btn-sm update pull-right" title="{{Mettre à jour}}"><i class="fas fa-refresh spacing-right"></i>{{Mettre à jour}}</a> ';
         }else if (_update.type != 'core') {
-            tr += '<a class="btn  btn-default btn-sm update pull-right" title="{{Re-installer}}"><i class="fas fa-refresh spacing-right"></i>{{Reinstaller}}</a> ';
+            tr += '<a class="btn btn-action btn-sm update pull-right" title="{{Re-installer}}"><i class="fas fa-refresh spacing-right"></i>{{Reinstaller}}</a> ';
         }
         if (isset(_update.plugin) && isset(_update.plugin.changelog) && _update.plugin.changelog != '') {
             tr += '<a class="btn btn-default btn-sm pull-left cursor hidden-sm" target="_blank" href="'+_update.plugin.changelog+'"><i class="fas fa-book spacing-right"></i>{{Changelog}}</a>';

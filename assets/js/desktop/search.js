@@ -206,7 +206,7 @@ function generalSearchOnPages(value) {
             }
             break;
 
-    case 'system':
+        case 'system':
             if (search === '') {
                 $('.list-group-item').show();
             }
@@ -221,35 +221,72 @@ function generalSearchOnPages(value) {
             }
             break;
 
-      case 'note':
-          if (search === '') {
-              $('.li_noteDisplay').show();
-          }
-          else {
-              $('.li_noteDisplay').hide();
-              $('.li_noteDisplay .label-list').each(function () {
-                  var listTitle = $(this).text().toLowerCase();
-                  if (listTitle.indexOf(search) !== -1) {
-                      $(this).closest('.li_noteDisplay').show();
-                  }
-              });
-          }
-          break;
+        case 'note':
+            if (search === '') {
+                $('.li_noteDisplay').show();
+            }
+            else {
+                $('.li_noteDisplay').hide();
+                $('.li_noteDisplay .label-list').each(function () {
+                    var listTitle = $(this).text().toLowerCase();
+                    if (listTitle.indexOf(search) !== -1) {
+                        $(this).closest('.li_noteDisplay').show();
+                    }
+                });
+            }
+            break;
 
-      case 'log':
-          if (search === '') {
-              $('.label-log').show();
-          }
-          else {
-              $('.label-log').hide();
-              $('.label-log').each(function () {
-                  var listTitle = $(this).text().toLowerCase();
-                  if (listTitle.indexOf(search) !== -1) {
-                      $(this).show();
-                  }
-              });
-          }
-          break;
+        case 'log':
+            if (search === '') {
+                $('.label-log').show();
+            }
+            else {
+                $('.label-log').hide();
+                $('.label-log').each(function () {
+                    var listTitle = $(this).text().toLowerCase();
+                    if (listTitle.indexOf(search) !== -1) {
+                        $(this).show();
+                    }
+                });
+            }
+            break;
+
+        case 'market':
+            updateFilteredList();
+            break;
+
+        case 'update.list':
+            marketFilter('name', search);
+            break;
+
+        case 'update':
+            if(search == ''){
+                $('.box-warning').show();
+                $('.box-success').show();
+                $('.box-danger').show();
+                $('#listPlugin').packery();
+                $('#listOther').packery();
+                $('#listCore').packery();
+                $('#listWidget').packery();
+                $('#listScript').packery();
+                return;
+            }
+            $('.box-warning').hide();
+            $('.box-success').hide();
+            $('.box-danger').hide();
+            $('.box .box-title').each(function(){
+                var text = $(this).text().toLowerCase();
+                if(text.indexOf(search.toLowerCase()) >= 0){
+                    $(this)
+                    $(this).closest('.box').show();
+                }
+            });
+            $('#listPlugin').packery();
+            $('#listOther').packery();
+            $('#listCore').packery();
+            $('#listWidget').packery();
+            $('#listScript').packery();
+            break;
     }
 };
 
