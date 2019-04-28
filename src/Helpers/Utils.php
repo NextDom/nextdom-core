@@ -258,7 +258,6 @@ class Utils
                 $time %= $value;
             }
         }
-
         $result .= $time . 's';
         return $result;
     }
@@ -268,7 +267,7 @@ class Utils
      */
     public static function connectedToDatabase()
     {
-        require_once NEXTDOM_ROOT . '/core/class/DB.class.php';
+        require_once NEXTDOM_ROOT . '/src/Helpers/DBHelper.php';
         return is_object(DBHelper::getConnection());
     }
 
@@ -512,38 +511,11 @@ class Utils
      */
     public static function cast($sourceObject, $targetClassName)
     {
-        /*
-        return unserialize(
-            preg_replace(
-                '/^O:\d+:"[^"]++"/',
-                'O:'.strlen($targetClassName).':"'.$targetClassName.'"',
-                serialize($sourceObject)
-            )
-        );
-        /*
-        return unserialize(sprintf('O:%d:"%s"%s',
-                                    strlen($targetClassName),
-                                    $targetClassName,
-                                    strstr(strstr(serialize($sourceObject), '"'), ':')));
-        */
         $sourceClassName = get_class($sourceObject);
         $sourceSerializedPrefix = 'O:' . strlen($sourceClassName) . ':"' . $sourceClassName . '"';
         $destinationSerializedPrefix = 'O:' . strlen($targetClassName) . ':"' . $targetClassName . '"';
         $serializedObject = serialize($sourceObject);
         return unserialize(str_replace($sourceSerializedPrefix, $destinationSerializedPrefix, $serializedObject));
-        /*
-        $targetObject = new $targetClassName();
-        $reflectedSourceObject = new \ReflectionClass($sourceObject);
-        foreach ($reflectedSourceObject->getProperties() as $property) {
-            $propertyName = $property->getName();
-            var_dump($propertyName);
-            if (strpos($propertyName, '_') !== 0) {
-                $property->setAccessible(true);
-                $targetObject->$propertyName = $property->getValue($sourceObject);
-            }
-        }
-        return $targetObject;
-        */
     }
 
     /**
@@ -607,6 +579,7 @@ class Utils
     }
 
     /**
+     * TODO: Pourquoi en minuscule ?
      * @param $_message
      * @return string|string[]|null
      */
@@ -614,6 +587,7 @@ class Utils
     {
         $caracteres = array(
             'À' => 'a', 'Á' => 'a', 'Â' => 'a', 'Ä' => 'a', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ä' => 'a', '@' => 'a',
+            'Ç' => 'c', 'ç' => 'c',
             'È' => 'e', 'É' => 'e', 'Ê' => 'e', 'Ë' => 'e', 'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', '€' => 'e',
             'Ì' => 'i', 'Í' => 'i', 'Î' => 'i', 'Ï' => 'i', 'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i',
             'Ò' => 'o', 'Ó' => 'o', 'Ô' => 'o', 'Ö' => 'o', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'ö' => 'o',
@@ -868,7 +842,7 @@ class Utils
      * @param $_words
      * @return bool
      */
-    public static function strContain($_string, $_words)
+    public static function strContainsOneOf($_string, $_words)
     {
         foreach ($_words as $word) {
             if (strpos($_string, $word) !== false) {
@@ -1105,23 +1079,23 @@ class Utils
     }
 
     /**
-     * @param $_changed
-     * @param $_old
-     * @param $_new
+     * @param $currentChangedState
+     * @param $oldValue
+     * @param $newValue
      * @return bool
      */
-    public static function attrChanged($_changed, $_old, $_new): bool
+    public static function attrChanged($currentChangedState, $oldValue, $newValue): bool
     {
-        if ($_changed) {
+        if ($currentChangedState) {
             return true;
         }
-        if (is_array($_old)) {
-            $_old = json_encode($_old);
+        if (is_array($oldValue)) {
+            $oldValue = json_encode($oldValue);
         }
-        if (is_array($_new)) {
-            $_new = json_encode($_new);
+        if (is_array($newValue)) {
+            $newValue = json_encode($newValue);
         }
-        return ($_old != $_new);
+        return ($oldValue !== $newValue);
     }
 
     /**
@@ -1163,31 +1137,31 @@ class Utils
      *
      * @param array $files variable like $_FILES
      * @param string $key file name key in $_FILES
-     * @param srting $destDir destination directory
+     * @param string $destDir destination directory
      * @param int $maxSizeMB maximum size of file in megabytes
      * @param array $extensions list of accepted file extensions, ex: [ ".gz" ]. Any when empty
-     * @param function $cleaner function that returns the filename from $_FILES[$key]
+     * @param string $cleaner function that returns the filename from $_FILES[$key]
      * @throws CoreException when checks fail
      * @return string path to modes file
      */
     static public function readUploadedFile($files, $key, $destDir, $maxSizeMB, $extensions, $cleaner = null)
     {
         if (false == isset($files[$key])) {
-            $message = __('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)', __FILE__);
+            $message = __('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)');
             throw new CoreException($message);
         }
 
         if (0 != count($extensions)) {
             $extension = strtolower(strrchr($files[$key]['name'], '.'));
             if (false == in_array($extension, $extensions)) {
-                $message = __('Extension du fichier non valide, autorisé :', __FILE__) . join(",", $extensions);
+                $message = __('Extension du fichier non valide, autorisé :') . join(",", $extensions);
                 throw new CoreException($message);
             }
         }
 
         $sizeBytes = filesize($files[$key]['tmp_name']);
         if ($sizeBytes > ($maxSizeMB  * 1024 * 1024)) {
-            $message = __('Le fichier est trop gros', __FILE__);
+            $message = __('Le fichier est trop gros');
             throw new CoreException(sprintf("%s > %s MB", $message, $maxSizeMB));
         }
 
@@ -1198,12 +1172,12 @@ class Utils
 
         $destPath = sprintf("%s/%s", $destDir, $name);
         if (false == move_uploaded_file($files[$key]['tmp_name'], $destPath)) {
-            $message = __('Impossible de déplacer le fichier temporaire', __FILE__);
+            $message = __('Impossible de déplacer le fichier temporaire');
             throw new CoreException($message);
         }
 
         if (false == file_exists($destPath)) {
-            $message = __('Impossible de téléverser le fichier', __FILE__);
+            $message = __('Impossible de téléverser le fichier');
             throw new CoreException($message);
         }
 

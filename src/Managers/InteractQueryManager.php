@@ -492,7 +492,7 @@ class InteractQueryManager
         $operator = null;
         $operand = null;
         foreach ($NEXTDOM_INTERNAL_CONFIG['interact']['test'] as $key => $value) {
-            if (Utils::strContain(strtolower(Utils::sanitizeAccent($_query)), $value)) {
+            if (Utils::strContainsOneOf(strtolower(Utils::sanitizeAccent($_query)), $value)) {
                 $operator .= $key;
                 break;
             }
@@ -578,7 +578,7 @@ class InteractQueryManager
             LogHelper::add('interact', 'debug', 'Je cherche interaction contextuel (prioritaire) : ' . print_r($reply, true));
         }
         $startWarnMe = explode(';', ConfigManager::byKey('interact::warnme::start'));
-        if (is_array($startWarnMe) && count($startWarnMe) > 0 && ConfigManager::byKey('interact::warnme::enable') == 1 && Utils::strContain(strtolower(Utils::sanitizeAccent($_query)), $startWarnMe)) {
+        if (is_array($startWarnMe) && count($startWarnMe) > 0 && ConfigManager::byKey('interact::warnme::enable') == 1 && Utils::strContainsOneOf(strtolower(Utils::sanitizeAccent($_query)), $startWarnMe)) {
             $reply = self::warnMe($_query, $_parameters);
             LogHelper::add('interact', 'debug', 'Je cherche interaction "previens-moi" : ' . print_r($reply, true));
         }

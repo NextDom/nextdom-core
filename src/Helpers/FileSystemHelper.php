@@ -181,9 +181,11 @@ class FileSystemHelper
     public static function getTemplateFileContent(string $folder, string $version, string $filename, string $pluginId = ''): string
     {
         $result = '';
-        $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
         if ($pluginId == '') {
             $filePath = NEXTDOM_ROOT . '/' . $folder . '/template/' . $version . '/' . $filename . '.html';
+        }
+        else {
+            $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
         }
         if (file_exists($filePath)) {
             $result = file_get_contents($filePath);
@@ -217,11 +219,14 @@ class FileSystemHelper
     }
 
     /**
-     * @param string $folder
-     * @param string $pattern
-     * @param bool   $recursivly
-     * @param array  $options
-     * @return array
+     * Get content list of a folder
+     *
+     * @param string $folder Folder to list
+     * @param string $pattern Pattern for filtering (*.php, *test*, etc.)
+     * @param bool   $recursivly List all files/folders in subfolders
+     * @param array  $options Limit files or folders
+     *
+     * @return array Content list
      */
     public static function ls($folder = "", $pattern = "*", $recursivly = false, $options = array('files', 'folders'))
     {
@@ -240,12 +245,12 @@ class FileSystemHelper
             }
 
         }
-        $get_files = in_array('files', $options);
-        $get_folders = in_array('folders', $options);
+        $getFiles = in_array('files', $options);
+        $getFolders = in_array('folders', $options);
         $both = array();
         $folders = array();
         // Get the all files and folders in the given directory.
-        if ($get_files) {
+        if ($getFiles) {
             $both = array();
             foreach (Utils::globBrace($pattern, GLOB_MARK) as $file) {
                 if (!is_dir($folder . '/' . $file)) {
@@ -253,7 +258,7 @@ class FileSystemHelper
                 }
             }
         }
-        if ($recursivly || $get_folders) {
+        if ($recursivly || $getFolders) {
             $folders = glob("*", GLOB_ONLYDIR + GLOB_MARK);
         }
 
@@ -265,9 +270,9 @@ class FileSystemHelper
 
         //Get just the files by removing the folders from the list of all files.
         $all = array_values(array_diff($both, $folders));
-        if ($recursivly || $get_folders) {
+        if ($recursivly || $getFolders) {
             foreach ($folders as $this_folder) {
-                if ($get_folders) {
+                if ($getFolders) {
                     //If a pattern is specified, make sure even the folders match that pattern.
                     if ($pattern !== '*') {
                         if (in_array($this_folder, $matching_folders)) {
@@ -282,8 +287,8 @@ class FileSystemHelper
 
                 if ($recursivly) {
                     // Continue calling this function for all the folders
-                    $deep_items = self::ls($pattern, $this_folder, $recursivly, $options); # :RECURSION:
-                    foreach ($deep_items as $item) {
+                    $folderItems = self::ls($this_folder, $pattern, $recursivly, $options); # :RECURSION:
+                    foreach ($folderItems as $item) {
                         array_push($all, $this_folder . $item);
                     }
                 }
