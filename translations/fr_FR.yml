@@ -233,8 +233,8 @@ firstuse:
   step: Étape
   welcome-title: Bienvenue sur %productName% !
   welcome-content: |
-                  Bravo ! Vous venez d'installer votre solution domotique, l'assistant de première utilisation est activé !
-                  Celui-ci va vous guider dans le processus de configuration de votre solution domotique...
+    Bravo ! Vous venez d'installer votre solution domotique, l'assistant de première utilisation est activé !
+    Celui-ci va vous guider dans le processus de configuration de votre solution domotique...
   password-title: Sécurisez votre %productName% !
   password-content: Pour commencer, merci de définir un nouveau mot de passe administrateur pour améliorer la sécurité...
   password-placeholder: Nouveau mot de passe...
@@ -265,7 +265,7 @@ scenario:
   add: Ajouter
   test-expression: Testeur d'expression
   variables: Variables
-  summary: Vue d'ensemble
+  summary: "Vue d'ensemble"
   scenarios: scénario(s).
   save: Sauvegarder
   links: Liens
@@ -332,9 +332,18 @@ scenario:
   description-at: "A un temps précis, cet élément permet de lancer une action. Par exemple : A 9h30, ouvrir les volets."
   description-code: "Cet élément permet de rajouter dans votre scénario de la programmation à l’aide d’un code, PHP/Shell, etc."
   description-comment: "Permet de commenter votre scénario."
+
 entity:
   note:
     name-cannot-be-empty: Le nom de la note ne peut être vide
+
+samba:
+  error:
+    connect: Impossible de se connecteur au serveur samba
+    not-found: Le fichier est introuvable sur le serveur samba
+    already-exists: Le fichier existe déjà sur le serveur samba
+    unknown: Une erreur s'est produite lors de la connexion au serveur samba
+
 # Ancien format
 "401 - Accès non autorisé": "401 - Accès non autorisé"
 "403 Access Forbidden": "403 Access Forbidden"

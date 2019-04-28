@@ -8,6 +8,8 @@ if [ "$?" -ne 0 ]; then
 	add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
 	apt-get update
 	apt-get install -y docker-ce
+  echo "Pour qu'un utilisateur puisse lancer docker : "
+  echo "usermod -a -G docker USERNAME"
 fi
 
 python3 --version > /dev/null 2>&1
@@ -32,6 +34,3 @@ cp -fr chromedriver tests/chromedriver
 chmod +x tests/chromedriver
 rm -fr chromedriver
 rm -fr chromedriver.zip
-
-echo "Pour qu'un utilisateur puisse lancer docker : "
-echo "usermod -a -G docker USERNAME"

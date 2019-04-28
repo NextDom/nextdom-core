@@ -10,6 +10,13 @@ core:
   disable-all-scenarios: "Desactivate all scenarios..."
   incorrect-sys-date: "The system date is incorrect (before %s or after %s) : "
 
+samba:
+  error:
+    connect: Unable to connect samba server
+    not-found: File not found on samba server
+    already-exists: File already exists on samba server
+    unknown: Error occured while connecting samba server
+
 # Ancien format
 "401 - Accès non autorisé": "401 - Access not allowed"
 "Aucune méthode correspondante à : ": "No method corresponding to: "
