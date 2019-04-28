@@ -89,9 +89,9 @@ RewriteRule  ^/?core/img/(.*)$ /public/img/$1 [R=301,L]
   Deny from all
 </Directory>
 
-<Directory "${wwwdir}/var/public">
+<Directory ~ "${wwwdir}/var/(public|custom)">
   Order allow,deny
-  <Files ~ "\.(obj|mtl|jpeg|png|css)$">
+  <Files ~ "\.(obj|mtl|jpeg|png|css|js)$">
      Allow from all
   </Files>
   Deny from all
