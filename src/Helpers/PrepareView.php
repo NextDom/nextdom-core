@@ -581,7 +581,7 @@ class PrepareView
     private static function initCssPool(&$pageData, $configs)
     {
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
-        if (!file_exists(NEXTDOM_DATA . '/var/public/css/theme.css')) {
+        if (!file_exists(NEXTDOM_DATA . '/public/css/theme.css')) {
             self::generateCssThemFile();
         }
         $pageData['CSS_POOL'][] = '/var/public/css/theme.css';
