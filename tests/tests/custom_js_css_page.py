@@ -27,8 +27,8 @@ class CustomJsCssPage(BaseGuiTest):
         # Reset CSS custom activation
         subprocess.check_output(["docker", "exec", "-it", "nextdom-test-custom-js-css", "/usr/bin/mysql", "-u", "root", "nextdomdev", "-e", "UPDATE config SET `value` = 0 WHERE `key` = 'enableCustomCss'"]) #pylint: disable=line-too-long
         # Delete created files by tests
-        subprocess.check_output(["docker", "exec", "-it", "nextdom-test-custom-js-css", "rm", "-f", "/var/www/html/var/custom/desktop/custom.js"]) #pylint: disable=line-too-long
-        subprocess.check_output(["docker", "exec", "-it", "nextdom-test-custom-js-css", "rm", "-f", "/var/www/html/var/custom/desktop/custom.css"]) #pylint: disable=line-too-long
+        subprocess.check_output(["docker", "exec", "-it", "nextdom-test-custom-js-css", "rm", "-f", "/var/lib/nextdom/custom/desktop/custom.js"]) #pylint: disable=line-too-long
+        subprocess.check_output(["docker", "exec", "-it", "nextdom-test-custom-js-css", "rm", "-f", "/var/lib/nextdom/custom/desktop/custom.css"]) #pylint: disable=line-too-long
 
     def test_add_custom_js(self):
         """Test custom javascript
@@ -56,7 +56,7 @@ class CustomJsCssPage(BaseGuiTest):
         sleep(2)
         system_menu = self.get_element_by_css('a[href="#advanced"]')
         self.assertIsNotNone(system_menu)
-        docker_cat = "docker exec -it nextdom-test-custom-js-css cat /var/www/html/var/custom/desktop/custom.js" #pylint: disable=line-too-long
+        docker_cat = "docker exec -it nextdom-test-custom-js-css cat /var/lib/nextdom/custom/desktop/custom.js" #pylint: disable=line-too-long
         file_content = subprocess.check_output(docker_cat.split(' '))
         self.assertEqual(file_content, b"console.log('just_a_test');")
         javascript_logs = self.get_js_logs()
@@ -91,7 +91,7 @@ class CustomJsCssPage(BaseGuiTest):
         sleep(2)
         system_menu = self.get_element_by_css('a[href="#advanced"]')
         self.assertIsNotNone(system_menu)
-        docker_cat = 'docker exec -it nextdom-test-custom-js-css cat /var/www/html/var/custom/desktop/custom.css' #pylint: disable=line-too-long
+        docker_cat = 'docker exec -it nextdom-test-custom-js-css cat /var/lib/nextdom/custom/desktop/custom.css' #pylint: disable=line-too-long
         file_content = subprocess.check_output(docker_cat.split(' '))
         self.assertEqual(file_content, b"* { color: blue !important; }")
         javascript_logs = self.get_js_logs()

@@ -1,41 +1,62 @@
 #!/bin/bash
 
+set -e
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    rootDir=$(dirname $(dirname $(cd $(dirname $0) && pwd -P)))
+else
+    rootDir=$(dirname $(dirname $(dirname $(readlink -n -f $0))))
+fi
+
 if [ $# -eq 0 ]; then
 	echo "Le nom de la branche doit être indiquée"
 	exit 1
 fi
 
-
-# kill old docker if exists
-if [ ! "$(docker ps -a | grep nextdom-test-migration\\\$)" ]; then
-	if [ ! "$(docker ps -q -f name=nextdom-test\\\$)" ]; then
-		docker kill nextdom-test
-	fi
-	docker rm nextdom-test
+if [ ! -z "$2" ]; then
+    baseImage=$2;
+else
+  baseImage="nextdom/nextdom-core:test"
+  docker pull ${baseImage}
 fi
 
-rm -fr /tmp/nextdom-core
-cd /tmp
-echo "Clone repo"
-git clone https://github.com/Sylvaner/nextdom-core
-echo "Change branch"
-cd nextdom-core
-git checkout $1
-docker run -d -p 8765:80 -v `pwd`:/data --name="nextdom-test" sylvaner1664/nextdom-test:latest > /dev/null 2>&1
-END_OF_INSTALL_STR="OK NEXTDOM TEST READY"
+docker kill nextdom-test > /dev/null 2>&1 || true
+docker rm nextdom-test > /dev/null 2>&1   || true
 
-while true
-do
+echo "step 1. cloning target branch $1..."
+tmpDir=$(mktemp -d)
+git clone https://github.com/nextdom/nextdom-core ${tmpDir}
+cd ${tmpDir}
+git checkout $1
+
+echo "step 2. creating installer container nextdom-test from ${baseImage}..."
+docker run -d -p 8765:80 -v ${rootDir}:/data --name="nextdom-test" ${baseImage} > /dev/null || {
+  echo "-> unable to run installer container"
+  exit 1
+}
+
+echo -n "step 3. watting for installation to complete..."
+END_OF_INSTALL_STR="OK NEXTDOM TEST READY"
+while true; do
 	DOCKER_LOGS=$(docker logs --tail 10 nextdom-test 2>&1)
 	if [[ "$DOCKER_LOGS" =~ .*NEXTDOM.TEST.READY.* ]]; then
 		break
 	fi
+  echo -n "."
 	sleep 2
 done
-echo "Delete plugins"
-docker exec nextdom-test /bin/rm -fr /var/www/html/plugins/*
-echo "Container created, Write image"
-docker commit nextdom-test nextdom-test-snap
-echo "Clear container"
-docker kill nextdom-test
-docker rm nextdom-test
+echo " "
+
+echo "step 4. snapshotting container to nextdom-test-snap..."
+docker exec nextdom-test /bin/rm -fr /usr/share/nextdom/plugins/*
+docker commit nextdom-test nextdom-test-snap >/dev/null
+
+
+echo "step 4. destroying installer container..."
+docker kill nextdom-test >/dev/null || {
+  echo "-> unable to kill container nextdom-test"
+  exit 1
+}
+docker rm nextdom-test >/dev/null || {
+  echo "-> unable to remove container nextdom-test "
+  exit 1
+}

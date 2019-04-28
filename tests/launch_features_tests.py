@@ -25,10 +25,10 @@ def plugins_tests():
     start_test_container(container_name)
     exec_command_in_container(
         container_name,
-        '/bin/cp -fr /var/www/html/tests/data/plugin4tests /var/www/html/plugins')
+        '/bin/cp -fr /usr/share/nextdom/tests/data/plugin4tests /usr/share/nextdom/plugins')
     exec_command_in_container(
         container_name,
-        '/bin/chown www-data:www-data -R /var/www/html/plugins')
+        '/bin/chown www-data:www-data -R /usr/share/nextdom/plugins')
     exec_command_in_container(
         container_name,
         '/usr/bin/mysql -u root nextdomdev < data/plugin_test.sql')
