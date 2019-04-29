@@ -37,6 +37,7 @@ class Welcome extends BaseAbstractModal
     {
         $pageData = [];
         $pageData['productName'] = ConfigManager::byKey('product_name');
+        $pageData['CSS_POOL'][] = '/public/css/pages/welcome.css';
         return Render::getInstance()->get('/modals/welcome.html.twig', $pageData);
     }
 

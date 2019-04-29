@@ -123,7 +123,10 @@
         <div class="action-bar">
             <div class="action-group">
                 <a class="btn btn-action-bar btn-danger" id="bt_interactThumbnailDisplay"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
-                <a class="btn btn-action-bar btn-default displayInteracQuery"><i class="fas fa-eye spacing-right"></i>{{ 'Phrase(s)' }} <span class="label label-success interactAttr badge" data-l1key="nbInteractQuery"></span></a>
+                <div class="btn-group">
+                    <a class="btn btn-action-bar btn-default displayInteracQuery"><i class="fas fa-eye spacing-right"></i>{{ 'Phrase(s)' }}</a>
+                    <a class="btn btn-action-bar btn-success displayInteracQuery"><span class="interactAttr" data-l1key="nbInteractQuery"></span></a>
+                </div>
             </div>
             <div class="action-group">
                 <a class="btn btn-action-bar btn-success pull-right" id="bt_saveInteract"><i class="fas fa-save spacing-right"></i>{{ 'Enregistrer' }}</a>

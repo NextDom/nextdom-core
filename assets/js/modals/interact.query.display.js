@@ -1,4 +1,3 @@
-{#
 /* This file is part of Jeedom.
 *
 * Jeedom is free software: you can redistribute it and/or modify
@@ -31,28 +30,4 @@
 * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#}
-<div style="display: none;" id="md_displayInteractQueryAlert"></div>
-
-<section class="content">
-    <div class="box">
-        <div class="box-body">
-            <table class="table table-bordered table-condensed" id="table_interactQuery" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>{{ 'Phrase(s)' }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for interactQuery in interactQueries %}
-                        <tr data-interactQuery_id="{{ interactQuery.getId() }}">
-                            <td>{{ interactQuery.getQuery() }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</section>
-
-<script src="/public/js/modals/interact.query.display.js"></script>
+initTableSorter();

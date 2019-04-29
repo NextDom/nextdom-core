@@ -30,6 +30,7 @@ function gen_css {
     fi
   	echo " >>> Generate CSS"
     mkdir -p public/css/pages
+    mkdir -p public/css/modals
     sass --update -f --stop-on-error assets/css/compiled:public/css $COMPRESS
 
   	# Remplacement des chemins
